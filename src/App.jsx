@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { getSupabaseAccessToken, isSupabaseConfigured } from "./lib/supabaseClient.js";
+import { getSupabaseAccessToken, isSupabaseConfigured, supabase } from "./lib/supabaseClient.js";
 
 // ═══════════════════════════════════════════════════════════════
 // PERSISTENT STORAGE
@@ -30,6 +30,87 @@ const DB = {
   async getDailyChallenge() { try { const r=await storageGet("daily"); return r?JSON.parse(r.value):null; } catch { return null; }},
   async saveDailyChallenge(d) { try { await storageSet("daily",JSON.stringify(d)); } catch {}},
 };
+
+const normalizeEmail = email => (email || "").trim().toLowerCase();
+
+function getPasswordIssue(password) {
+  if (password.length < 8) return "Password must be at least 8 characters.";
+  if (!/[A-Z]/.test(password)) return "Password must include at least one uppercase letter.";
+  if (!/[a-z]/.test(password)) return "Password must include at least one lowercase letter.";
+  if (!/[0-9]/.test(password)) return "Password must include at least one number.";
+  if (!/[^A-Za-z0-9]/.test(password)) return "Password must include at least one special character.";
+  return "";
+}
+
+function profileName(authUser) {
+  const meta = authUser?.user_metadata || {};
+  return meta.full_name || meta.name || authUser?.email?.split("@")[0] || "SecurePlus User";
+}
+
+async function getSupabaseProfile(authUser) {
+  if (!supabase || !authUser) return null;
+  const { data } = await supabase
+    .from("profiles")
+    .select("id,email,tier,subscription_status")
+    .eq("id", authUser.id)
+    .maybeSingle();
+
+  return {
+    id: authUser.id,
+    email: data?.email || authUser.email,
+    name: profileName(authUser),
+    tier: data?.tier === "pro" && ["active", "trialing"].includes(data?.subscription_status) ? "pro" : "free",
+    subscriptionStatus: data?.subscription_status || null,
+    authProvider: "supabase",
+  };
+}
+
+function fromSupabaseAttempt(row) {
+  const base = {
+    qid: row.question_id,
+    correct: row.correct,
+    title: row.title,
+    ch: row.chapter,
+    domain: row.domain,
+    createdAt: row.created_at,
+  };
+  if (row.question_type === "pbq") return { ...base, pbq: true, type: row.domain, score: row.score };
+  return { ...base, mcq: true };
+}
+
+function toSupabaseAttempt(userId, attempt) {
+  return {
+    user_id: userId,
+    question_id: attempt.qid,
+    question_type: attempt.pbq ? "pbq" : "mcq",
+    title: attempt.title || "",
+    domain: attempt.domain || "",
+    chapter: attempt.ch || null,
+    correct: Boolean(attempt.correct),
+    score: typeof attempt.score === "number" ? attempt.score : null,
+  };
+}
+
+async function loadSupabaseAttempts(userId) {
+  if (!supabase || !userId) return [];
+  const { data, error } = await supabase
+    .from("attempts")
+    .select("question_id,question_type,title,domain,chapter,correct,score,created_at")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(200);
+  if (error) {
+    console.warn("Unable to load attempts", error);
+    return [];
+  }
+  return (data || []).map(fromSupabaseAttempt);
+}
+
+async function saveSupabaseAttempt(userId, attempt) {
+  if (!supabase || !userId) return;
+  const { error } = await supabase.from("attempts").insert(toSupabaseAttempt(userId, attempt));
+  if (error) console.warn("Unable to save attempt", error);
+}
 
 // ═══════════════════════════════════════════════════════════════
 // THEME
@@ -2140,29 +2221,87 @@ function AuthView({onLogin,t,onDaily}) {
   const [ok,setOk]=useState("");
   const [loading,setLoading]=useState(false);
   const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
+  const resetMessages=()=>{setErr("");setOk("");};
   const handle=async()=>{
-    setErr("");setOk("");setLoading(true);
-    await new Promise(r=>setTimeout(r,500));
+    resetMessages();setLoading(true);
     try{
-      if(mode==="login"){
-        const user=await DB.getUser(form.email);
-        if(!user||user.password!==form.pass){setErr("Email or password is incorrect.");setLoading(false);return;}
-        await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
-        onLogin(user);
+      const email=normalizeEmail(form.email);
+      if(!email){setErr("Please enter your email.");setLoading(false);return;}
+
+      if(isSupabaseConfigured){
+        if(mode==="reset"){
+          const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+          if(error) throw error;
+          setOk("Password reset email sent. Check your inbox.");
+          setLoading(false);
+          return;
+        }
+
+        if(mode==="login"){
+          const { data, error } = await supabase.auth.signInWithPassword({ email, password: form.pass });
+          if(error) throw error;
+          const appUser=await getSupabaseProfile(data.user);
+          onLogin(appUser);
+        } else {
+          if(!form.name||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
+          if(form.pass!==form.confirm){setErr("Passwords do not match.");setLoading(false);return;}
+          const passwordIssue=getPasswordIssue(form.pass);
+          if(passwordIssue){setErr(passwordIssue);setLoading(false);return;}
+
+          const { data, error } = await supabase.auth.signUp({
+            email,
+            password: form.pass,
+            options: {
+              data: { name: form.name, full_name: form.name },
+              emailRedirectTo: window.location.origin,
+            },
+          });
+          if(error) throw error;
+          if(data.session?.user){
+            const appUser=await getSupabaseProfile(data.session.user);
+            setOk("Account created! Welcome to SecurePlus.");
+            onLogin(appUser);
+          } else {
+            setOk("Almost done. Check your email, click Confirm signup, then come back here to sign in.");
+          }
+        }
       } else {
-        if(!form.name||!form.email||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
-        if(form.pass!==form.confirm){setErr("Passwords do not match.");setLoading(false);return;}
-        if(form.pass.length<6){setErr("Password must be at least 6 characters.");setLoading(false);return;}
-        const exists=await DB.getUser(form.email);
-        if(exists){setErr("An account with this email already exists.");setLoading(false);return;}
-        const user={name:form.name,email:form.email,password:form.pass,tier:"free",joined:new Date().toISOString(),streak:0};
-        await DB.saveUser(user);
-        await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
-        setOk("Account created! Welcome to SecurePlus.");
-        setTimeout(()=>onLogin(user),800);
+        await new Promise(r=>setTimeout(r,400));
+        if(mode==="reset"){setErr("Password reset requires Supabase environment variables.");setLoading(false);return;}
+        if(mode==="login"){
+          const user=await DB.getUser(email);
+          if(!user||user.password!==form.pass){setErr("Email or password is incorrect.");setLoading(false);return;}
+          await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
+          onLogin(user);
+        } else {
+          if(!form.name||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
+          if(form.pass!==form.confirm){setErr("Passwords do not match.");setLoading(false);return;}
+          const passwordIssue=getPasswordIssue(form.pass);
+          if(passwordIssue){setErr(passwordIssue);setLoading(false);return;}
+          const exists=await DB.getUser(email);
+          if(exists){setErr("An account with this email already exists.");setLoading(false);return;}
+          const user={name:form.name,email,password:form.pass,tier:"free",joined:new Date().toISOString(),streak:0};
+          await DB.saveUser(user);
+          await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
+          setOk("Account created! Welcome to SecurePlus.");
+          setTimeout(()=>onLogin(user),800);
+        }
       }
-    } catch(e){setErr("Something went wrong. Please try again.");}
+    } catch(e){setErr(e.message||"Something went wrong. Please try again.");}
     setLoading(false);
+  };
+  const handleGoogle=async()=>{
+    resetMessages();setLoading(true);
+    try{
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: window.location.origin },
+      });
+      if(error) throw error;
+    } catch(e){
+      setErr(e.message||"Unable to start Google sign in.");
+      setLoading(false);
+    }
   };
 
   return(
@@ -2212,7 +2351,7 @@ function AuthView({onLogin,t,onDaily}) {
         <div className="card" style={{padding:"28px 28px"}}>
           <div style={{display:"flex",borderBottom:`1px solid ${t.border}`,marginBottom:24}}>
             {["login","signup"].map(m=>(
-              <div key={m} className={`tab ${mode===m?"act":""}`} style={{flex:1,textAlign:"center"}} onClick={()=>{setMode(m);setErr("");setOk("");}}>
+              <div key={m} className={`tab ${mode===m?"act":""}`} style={{flex:1,textAlign:"center"}} onClick={()=>{setMode(m);resetMessages();}}>
                 {m==="login"?"Sign In":"Create Account"}
               </div>
             ))}
@@ -2226,17 +2365,39 @@ function AuthView({onLogin,t,onDaily}) {
             )}
             <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Email</label>
               <input className="input" type="email" placeholder="you@example.com" value={form.email} onChange={set("email")} onKeyDown={e=>e.key==="Enter"&&handle()}/></div>
-            <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Password</label>
-              <input className="input" type="password" placeholder="••••••••" value={form.pass} onChange={set("pass")} onKeyDown={e=>e.key==="Enter"&&handle()}/></div>
+            {mode!=="reset"&&(
+              <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Password</label>
+                <input className="input" type="password" placeholder="At least 8 characters" value={form.pass} onChange={set("pass")} onKeyDown={e=>e.key==="Enter"&&handle()}/></div>
+            )}
             {mode==="signup"&&(
+              <>
               <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Confirm Password</label>
                 <input className="input" type="password" placeholder="••••••••" value={form.confirm} onChange={set("confirm")} onKeyDown={e=>e.key==="Enter"&&handle()}/></div>
+              <div style={{fontSize:12,color:t.textDim,lineHeight:1.6}}>
+                Use 8+ characters with uppercase, lowercase, a number, and a special character.
+              </div>
+              </>
             )}
             <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"11px",marginTop:4}} onClick={handle} disabled={loading}>
-              {loading?"Processing...":mode==="login"?"Sign In":"Create Account"}
+              {loading?"Processing...":mode==="login"?"Sign In":mode==="reset"?"Send Reset Email":"Create Account"}
             </button>
+            {isSupabaseConfigured&&mode!=="reset"&&(
+              <button className="btn btn-outline" style={{width:"100%",justifyContent:"center",padding:"10px"}} onClick={handleGoogle} disabled={loading}>
+                Continue with Google
+              </button>
+            )}
+            {mode==="login"&&(
+              <button className="btn btn-ghost" style={{justifyContent:"center",fontSize:12}} onClick={()=>{setMode("reset");resetMessages();}} disabled={loading}>
+                Forgot password?
+              </button>
+            )}
+            {mode==="reset"&&(
+              <button className="btn btn-ghost" style={{justifyContent:"center",fontSize:12}} onClick={()=>{setMode("login");resetMessages();}} disabled={loading}>
+                Back to sign in
+              </button>
+            )}
           </div>
-          {mode==="login"&&(
+          {!isSupabaseConfigured&&mode==="login"&&(
             <div style={{marginTop:16,padding:"12px 14px",background:t.panel,borderRadius:8,border:`1px solid ${t.border}`}}>
               <div style={{fontSize:12,fontWeight:600,color:t.textDim,marginBottom:4}}>DEMO ACCOUNT</div>
               <div className="mono" style={{fontSize:12,color:t.textSec}}>Email: demo@secureplus.io · Password: demo123</div>
@@ -3116,6 +3277,57 @@ function ObjectivesPage({t}) {
   );
 }
 
+function PasswordUpdateView({t,onDone}) {
+  const [form,setForm]=useState({pass:"",confirm:""});
+  const [err,setErr]=useState("");
+  const [ok,setOk]=useState("");
+  const [loading,setLoading]=useState(false);
+  const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
+  const submit=async()=>{
+    setErr("");setOk("");
+    if(form.pass!==form.confirm){setErr("Passwords do not match.");return;}
+    const passwordIssue=getPasswordIssue(form.pass);
+    if(passwordIssue){setErr(passwordIssue);return;}
+    setLoading(true);
+    try{
+      const { error } = await supabase.auth.updateUser({ password: form.pass });
+      if(error) throw error;
+      setOk("Password updated. You can continue to SecurePlus.");
+      setTimeout(onDone,700);
+    }catch(e){
+      setErr(e.message||"Unable to update password.");
+    }finally{
+      setLoading(false);
+    }
+  };
+
+  return(
+    <div style={{minHeight:"100vh",display:"grid",placeItems:"center",padding:24}}>
+      <div className="card" style={{width:"100%",maxWidth:430,padding:"28px 28px"}}>
+        <div style={{display:"inline-flex",alignItems:"center",gap:10,padding:"7px 11px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel,marginBottom:20}}>
+          <span>🔐</span>
+          <span style={{fontWeight:800,color:t.text}}>SecurePlus</span>
+        </div>
+        <h1 style={{fontSize:26,color:t.text,marginBottom:8}}>Set a new password</h1>
+        <p style={{fontSize:13,color:t.textSec,lineHeight:1.6,marginBottom:18}}>
+          Use 8+ characters with uppercase, lowercase, a number, and a special character.
+        </p>
+        <Alert msg={err} type="error" t={t}/>
+        <Alert msg={ok} type="success" t={t}/>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>
+          <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>New Password</label>
+            <input className="input" type="password" placeholder="At least 8 characters" value={form.pass} onChange={set("pass")} onKeyDown={e=>e.key==="Enter"&&submit()}/></div>
+          <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Confirm Password</label>
+            <input className="input" type="password" placeholder="••••••••" value={form.confirm} onChange={set("confirm")} onKeyDown={e=>e.key==="Enter"&&submit()}/></div>
+          <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"11px"}} onClick={submit} disabled={loading}>
+            {loading?"Updating...":"Update Password"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════
 // APP ROOT
 // ═══════════════════════════════════════════════════════════════
@@ -3128,22 +3340,57 @@ export default function App() {
   const [pbqQ,setPbqQ]=useState(null);
   const [showDaily,setShowDaily]=useState(false);
   const [billingLoading,setBillingLoading]=useState(false);
+  const [passwordRecovery,setPasswordRecovery]=useState(false);
 
   const t=darkMode?THEMES.dark:THEMES.light;
 
   useEffect(()=>{
+    let active=true;
+
+    if(isSupabaseConfigured){
+      const applySupabaseSession=async session=>{
+        if(!active)return;
+        if(!session?.user){
+          setUser(null);
+          setAttempts([]);
+          setLoading(false);
+          return;
+        }
+        const appUser=await getSupabaseProfile(session.user);
+        const savedAttempts=await loadSupabaseAttempts(session.user.id);
+        if(!active)return;
+        setUser(appUser);
+        setAttempts(savedAttempts);
+        setLoading(false);
+      };
+
+      supabase.auth.getSession().then(({ data })=>applySupabaseSession(data.session));
+      const { data: listener } = supabase.auth.onAuthStateChange((event, session)=>{
+        if(event==="PASSWORD_RECOVERY") setPasswordRecovery(true);
+        applySupabaseSession(session);
+      });
+      return()=>{
+        active=false;
+        listener?.subscription?.unsubscribe();
+      };
+    }
+
     (async()=>{
       const sess=await DB.getSession();
       if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){setUser(u);const a=await DB.getAttempts(u.email);setAttempts(a);}}
       setLoading(false);
     })();
+    return()=>{active=false;};
   },[]);
 
   const handleLogin=useCallback(async u=>{
-    setUser(u);const a=await DB.getAttempts(u.email);setAttempts(a);setView("dashboard");setShowDaily(false);
+    setUser(u);
+    const a=u?.authProvider==="supabase" ? await loadSupabaseAttempts(u.id) : await DB.getAttempts(u.email);
+    setAttempts(a);setView("dashboard");setShowDaily(false);
   },[]);
   const handleLogout=useCallback(async()=>{
-    await DB.clearSession();setUser(null);setAttempts([]);setView("dashboard");
+    if(isSupabaseConfigured) await supabase.auth.signOut();
+    await DB.clearSession();setPasswordRecovery(false);setUser(null);setAttempts([]);setView("dashboard");
   },[]);
   const handleCancelMembership=useCallback(async()=>{
     if(!isSupabaseConfigured){
@@ -3240,10 +3487,17 @@ export default function App() {
     }
   },[user]);
   const handleSaveAttempt=useCallback(async r=>{
-    if(!user)return;await DB.saveAttempt(user.email,r);setAttempts(a=>[r,...a]);
+    if(!user)return;
+    if(user.authProvider==="supabase") await saveSupabaseAttempt(user.id,r);
+    else await DB.saveAttempt(user.email,r);
+    setAttempts(a=>[r,...a]);
   },[user]);
   const handlePBQDone=useCallback(async result=>{
-    if(result&&user){await DB.saveAttempt(user.email,result);setAttempts(a=>[result,...a]);}
+    if(result&&user){
+      if(user.authProvider==="supabase") await saveSupabaseAttempt(user.id,result);
+      else await DB.saveAttempt(user.email,result);
+      setAttempts(a=>[result,...a]);
+    }
     setPbqQ(null);setView("pbq");
   },[user]);
 
@@ -3254,6 +3508,15 @@ export default function App() {
       <style>{CSS}</style>
       <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:t.bg}}>
         <div style={{color:t.textDim,fontSize:15}}>Loading...</div>
+      </div>
+    </>
+  );
+
+  if(passwordRecovery) return(
+    <>
+      <style>{CSS}</style>
+      <div style={{background:t.bg,minHeight:"100vh"}}>
+        <PasswordUpdateView t={t} onDone={()=>{setPasswordRecovery(false);setView("dashboard");}}/>
       </div>
     </>
   );

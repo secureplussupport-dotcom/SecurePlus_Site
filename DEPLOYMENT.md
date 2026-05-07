@@ -11,9 +11,23 @@ Use this checklist when moving SecurePlus from local development to a hosted sit
    - Enable email/password.
    - Enable Google only if you have Google OAuth credentials.
    - Keep Apple disabled unless you join Apple Developer Program.
-5. Add site URLs:
-   - Local: `http://127.0.0.1:5173`
-   - Vercel preview/live URLs after deployment.
+5. Add site URLs in Authentication -> URL Configuration:
+   - Site URL: `https://secure-plus-site.vercel.app`
+   - Redirect URL: `https://secure-plus-site.vercel.app/**`
+   - Redirect URL: `http://127.0.0.1:5173/**`
+6. In Authentication -> Email Templates -> Confirm signup, make sure the button/link uses:
+
+```html
+<a href="{{ .ConfirmationURL }}">Confirm signup</a>
+```
+
+Do the same pattern for Reset password:
+
+```html
+<a href="{{ .ConfirmationURL }}">Reset password</a>
+```
+
+If a confirmation email opens a page of raw HTML, the most common causes are a bad Site URL, missing Redirect URL, or a broken email template link.
 
 ## 2. Google OAuth
 
