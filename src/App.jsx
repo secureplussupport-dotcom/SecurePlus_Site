@@ -29,6 +29,8 @@ const DB = {
   async saveAttempt(e,a) { try { const p=await DB.getAttempts(e); p.unshift(a); await storageSet(`att:${e}`,JSON.stringify(p.slice(0,200))); } catch {}},
   async getDailyChallenge() { try { const r=await storageGet("daily"); return r?JSON.parse(r.value):null; } catch { return null; }},
   async saveDailyChallenge(d) { try { await storageSet("daily",JSON.stringify(d)); } catch {}},
+  async getOnboardingSeen(e) { try { const r=await storageGet(`onboarded:${normalizeEmail(e)}`); return Boolean(r?.value); } catch { return false; }},
+  async saveOnboardingSeen(e) { try { await storageSet(`onboarded:${normalizeEmail(e)}`,"true"); } catch {}},
 };
 
 const normalizeEmail = email => (email || "").trim().toLowerCase();
@@ -2108,6 +2110,18 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .app-main{flex:1;overflow-y:auto;min-width:0;}
 .mobile-topbar{display:none;}
 .auth-layout{width:100%;max-width:980px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:stretch;}
+.landing-page{min-height:100vh;padding:22px 24px 40px;background:transparent;}
+.landing-header{max-width:1120px;margin:0 auto 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.landing-main{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:22px;}
+.landing-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:22px;align-items:center;padding:34px 0 10px;}
+.landing-title{font-size:52px;line-height:1.02;font-weight:900;letter-spacing:0;color:${t.text};max-width:720px;}
+.landing-copy{color:${t.textSec};font-size:17px;line-height:1.75;max-width:620px;margin-top:16px;}
+.landing-preview{display:flex;flex-direction:column;gap:14px;}
+.landing-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.landing-feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+.landing-auth-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,430px);gap:22px;align-items:start;padding:10px 0 20px;}
+.onboarding-overlay{position:fixed;inset:0;z-index:80;background:rgba(4,8,18,.72);backdrop-filter:blur(10px);display:grid;place-items:center;padding:20px;animation:fadeUp .22s ease both;}
+.onboarding-modal{width:min(100%,520px);padding:28px 30px;position:relative;box-shadow:0 30px 90px rgba(0,0,0,.36);}
 @media (max-width: 860px){
   html,body,#root{max-width:100%;overflow-x:hidden;}
   body{font-size:14px;}
@@ -2135,6 +2149,17 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
   .auth-stat-card div:first-child{font-size:22px!important;}
   .auth-stat-card .label{font-size:10px!important;letter-spacing:0!important;}
   .tab{padding:9px 10px!important;font-size:12px!important;}
+  .landing-page{padding:16px 16px 88px!important;}
+  .landing-header{align-items:flex-start;margin-bottom:18px!important;}
+  .landing-header > div:last-child{width:100%;justify-content:flex-start!important;}
+  .landing-hero{grid-template-columns:1fr!important;padding-top:10px!important;gap:16px!important;}
+  .landing-title{font-size:34px!important;line-height:1.08!important;}
+  .landing-copy{font-size:14px!important;}
+  .landing-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
+  .landing-feature-grid,.landing-auth-section{grid-template-columns:1fr!important;}
+  .landing-auth-section{gap:14px!important;}
+  .onboarding-overlay{align-items:end;padding:12px;}
+  .onboarding-modal{padding:24px 22px;max-height:92vh;overflow-y:auto;}
 }
 `;
 
@@ -2341,6 +2366,10 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
   const [loading,setLoading]=useState(false);
   const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
   const resetMessages=()=>{setErr("");setOk("");};
+  const jumpToAuth=nextMode=>{
+    setMode(nextMode);
+    setTimeout(()=>document.getElementById("landing-auth")?.scrollIntoView({behavior:"smooth",block:"start"}),30);
+  };
   const handle=async()=>{
     resetMessages();setLoading(true);
     try{
@@ -2424,50 +2453,88 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
   };
 
   return(
-    <div style={{minHeight:"100vh",display:"grid",placeItems:"center",padding:"24px",background:"transparent"}}>
-      <div className="auth-layout fu">
-        <section className="card" style={{padding:"34px 34px",display:"flex",flexDirection:"column",justifyContent:"space-between",overflow:"hidden",position:"relative"}}>
-          <div style={{position:"absolute",inset:"auto -80px -120px auto",width:260,height:260,borderRadius:"50%",background:`${t.accent}16`}} />
-          <div style={{position:"relative"}}>
-            <div style={{display:"inline-flex",alignItems:"center",gap:10,padding:"7px 11px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel,marginBottom:24}}>
-              <span>🔐</span>
-              <span style={{fontWeight:800,color:t.text}}>SecurePlus</span>
-            </div>
-            <h1 style={{fontSize:40,lineHeight:1.05,fontWeight:800,color:t.text,marginBottom:14,letterSpacing:0}}>
-              Security+ practice that feels like the exam room.
-            </h1>
-            <p style={{color:t.textSec,fontSize:16,lineHeight:1.7,maxWidth:520}}>
-              CompTIA Security+ drills, PBQ simulations, daily challenges, and progress signals in one focused workspace.
-            </p>
+    <div className="landing-page fu">
+      <header className="landing-header">
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <span style={{fontSize:24}}>🔐</span>
+          <div>
+            <div style={{fontWeight:900,color:t.text,fontSize:18}}>SecurePlus</div>
+            <div style={{fontSize:12,color:t.textDim}}>CompTIA Security+ PBQ / MCQ practice</div>
           </div>
-          <div className="auth-stats" style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:10,marginTop:34,position:"relative"}}>
-            {[
-              {v:MCQ_BANK.length,l:"MCQs"},
-              {v:PBQ_BANK.length,l:"PBQs"},
-              {v:"5",l:"Domains"},
-            ].map(s=>(
-              <div key={s.l} className="auth-stat-card" style={{padding:"14px 14px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel,minWidth:0}}>
-                <div style={{fontSize:24,fontWeight:800,color:t.text}}>{s.v}</div>
-                <div className="label" style={{whiteSpace:"normal"}}>{s.l}</div>
+        </div>
+        <div style={{display:"flex",gap:10,flexWrap:"wrap",justifyContent:"flex-end"}}>
+          <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>jumpToAuth("login")}>Sign In</button>
+          <button className="btn btn-primary" style={{fontSize:13}} onClick={()=>jumpToAuth("signup")}>Create Free Account</button>
+        </div>
+      </header>
+
+      <main className="landing-main">
+        <section className="landing-hero">
+          <div>
+            <div className="badge" style={{background:`${t.accent}14`,color:t.accent,border:`1px solid ${t.accent}28`,marginBottom:18}}>
+              PBQ + MCQ practice in one workspace
+            </div>
+            <h1 className="landing-title">
+              Practice Security+ before the exam tests you.
+            </h1>
+            <p className="landing-copy">
+              Try a small daily challenge without an account, then create a free account to unlock the full MCQ bank, save progress, and build exam readiness.
+            </p>
+            <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:22}}>
+              <button className="btn btn-primary" style={{padding:"12px 20px"}} onClick={onDaily}>Try Daily Challenge</button>
+              <button className="btn btn-outline" style={{padding:"12px 20px"}} onClick={()=>jumpToAuth("signup")}>Create Free Account</button>
+            </div>
+          </div>
+
+          <div className="landing-preview">
+            <div className="card card-hover" style={{padding:"18px 20px",borderColor:`${t.accent}40`,cursor:"pointer"}} onClick={onDaily}>
+              <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <span style={{fontSize:28}}>🎯</span>
+                <div style={{flex:1}}>
+                  <div style={{fontWeight:800,color:t.text,fontSize:15}}>Today's Free Daily Challenge</div>
+                  <div style={{fontSize:13,color:t.textSec}}>No account required. A limited practice sample.</div>
+                </div>
+                <span style={{color:t.accent,fontSize:20}}>→</span>
               </div>
-            ))}
+            </div>
+            <div className="landing-stat-grid">
+              {[
+                {v:MCQ_BANK.length,l:"MCQs"},
+                {v:PBQ_BANK.length,l:"PBQs"},
+                {v:"$4.99",l:"per year Pro"},
+              ].map(s=>(
+                <div key={s.l} className="card" style={{padding:"16px",minWidth:0}}>
+                  <div style={{fontSize:24,fontWeight:900,color:t.text}}>{s.v}</div>
+                  <div className="label" style={{whiteSpace:"normal"}}>{s.l}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* Daily challenge link */}
-        <section>
-        <div className="card" style={{padding:"14px 18px",marginBottom:16,cursor:"pointer",borderColor:`${t.accent}40`}} onClick={onDaily}>
-          <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <span style={{fontSize:24}}>🎯</span>
-            <div>
-              <div style={{fontWeight:600,fontSize:14,color:t.text}}>Try Today's Free Daily Challenge</div>
-              <div style={{fontSize:12,color:t.textSec}}>No account required — 5 questions daily</div>
+        <section className="landing-feature-grid">
+          {[
+            {icon:"📝",title:"Free MCQ Practice",body:"Use the full MCQ bank to learn the five Security+ objective areas."},
+            {icon:"💡",title:"PBQ Simulation",body:"Pro adds terminal, log analysis, ordering, hotspot, and drag/drop style practice."},
+            {icon:"📈",title:"Smart Review",body:"Wrong answers are prioritised with SM-2 style spacing to strengthen retention."},
+          ].map(card=>(
+            <div key={card.title} className="card" style={{padding:"18px 20px"}}>
+              <div style={{fontSize:24,marginBottom:10}}>{card.icon}</div>
+              <div style={{fontWeight:800,color:t.text,marginBottom:6}}>{card.title}</div>
+              <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{card.body}</div>
             </div>
-            <span style={{marginLeft:"auto",color:t.accent,fontSize:18}}>→</span>
-          </div>
-        </div>
+          ))}
+        </section>
 
-        <div className="card" style={{padding:"28px 28px"}}>
+        <section id="landing-auth" className="landing-auth-section">
+          <div>
+            <h2 style={{fontSize:24,color:t.text,marginBottom:8}}>Start with a free account</h2>
+            <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,maxWidth:520}}>
+              Save your attempts, see weak areas, and keep practising from any device. Pro is optional and unlocks PBQ simulations for roughly $0.40/month when billed yearly.
+            </p>
+          </div>
+
+          <div className="card" style={{padding:"28px 28px"}}>
           <div style={{display:"flex",borderBottom:`1px solid ${t.border}`,marginBottom:24}}>
             {["login","signup"].map(m=>(
               <div key={m} className={`tab ${mode===m?"act":""}`} style={{flex:1,textAlign:"center"}} onClick={()=>{setMode(m);resetMessages();}}>
@@ -2539,7 +2606,7 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
           </button>
         </div>
         </section>
-      </div>
+      </main>
     </div>
   );
 }
@@ -3556,6 +3623,82 @@ function LegalPage({type,t}) {
   );
 }
 
+// ═══════════════════════════════════════════════════════════════
+// ONBOARDING
+// ═══════════════════════════════════════════════════════════════
+function OnboardingModal({user,t,onClose,onPricing}) {
+  const [step,setStep]=useState(0);
+  const slides=[
+    {
+      icon:"👋",
+      title:`Welcome${user?.name ? `, ${user.name.split(" ")[0]}` : ""}`,
+      body:"SecurePlus is built to turn Security+ practice into a repeatable workflow: answer questions, review explanations, and come back to weak areas.",
+      bullets:["Your dashboard tracks readiness and accuracy.","Your attempts are saved so practice can get smarter.","Start with MCQs, then add PBQs when you want exam-style simulation."],
+    },
+    {
+      icon:"📝",
+      title:"Where to practise",
+      body:"Use the bottom or side navigation to move around the app.",
+      bullets:["MCQ Practice gives access to all multiple-choice questions.","Daily Challenge gives a short focused drill.","PBQ Simulator contains performance-based simulations for Pro users."],
+    },
+    {
+      icon:"📋",
+      title:"What Security+ covers",
+      body:"CompTIA Security+ tests broad security knowledge across concepts, threats, architecture, operations, and governance.",
+      bullets:["Expect both MCQs and performance-based questions.","PBQs may ask you to interpret logs, configure controls, order steps, or solve scenario tasks.","SecurePlus helps solidify skills through practice, feedback, and review."],
+    },
+    {
+      icon:"💳",
+      title:"When Pro helps",
+      body:"The free plan is useful for MCQ practice. Pro is for students who want PBQ simulation practice too.",
+      bullets:["Unlock all PBQ simulations.","Practise terminal, log analysis, ordering, hotspot, and drag/drop-style tasks.","Costs $4.99/year, roughly $0.40/month."],
+    },
+  ];
+  const slide=slides[step];
+  const last=step===slides.length-1;
+
+  return(
+    <div className="onboarding-overlay" role="dialog" aria-modal="true" aria-label="SecurePlus onboarding">
+      <div className="onboarding-modal card">
+        <button className="btn btn-ghost" style={{position:"absolute",top:14,right:14,minHeight:32,padding:"4px 10px",fontSize:12}} onClick={onClose}>
+          Skip
+        </button>
+        <div style={{fontSize:42,marginBottom:14}}>{slide.icon}</div>
+        <h2 style={{fontSize:24,fontWeight:900,color:t.text,marginBottom:8}}>{slide.title}</h2>
+        <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:18}}>{slide.body}</p>
+        <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:22}}>
+          {slide.bullets.map(item=>(
+            <div key={item} style={{display:"flex",gap:10,alignItems:"flex-start",fontSize:13,color:t.textSec,lineHeight:1.6}}>
+              <span style={{color:t.green,fontWeight:900}}>✓</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{display:"flex",gap:7,marginBottom:20}}>
+          {slides.map((_,i)=>(
+            <div key={i} style={{height:7,flex:1,borderRadius:99,background:i<=step?t.accent:t.border}}/>
+          ))}
+        </div>
+        <div style={{display:"flex",gap:10,justifyContent:"space-between",flexWrap:"wrap"}}>
+          <button className="btn btn-ghost" onClick={()=>setStep(s=>Math.max(0,s-1))} disabled={step===0}>
+            Back
+          </button>
+          <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+            {last&&(
+              <button className="btn btn-outline" onClick={()=>{onClose();onPricing();}}>
+                View Pro
+              </button>
+            )}
+            <button className="btn btn-primary" onClick={()=>last?onClose():setStep(s=>s+1)}>
+              {last ? "Start Practising" : "Next"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PasswordUpdateView({t,onDone}) {
   const [form,setForm]=useState({pass:"",confirm:""});
   const [err,setErr]=useState("");
@@ -3620,6 +3763,7 @@ export default function App() {
   const [showDaily,setShowDaily]=useState(false);
   const [billingLoading,setBillingLoading]=useState(false);
   const [passwordRecovery,setPasswordRecovery]=useState(false);
+  const [showOnboarding,setShowOnboarding]=useState(false);
 
   const t=darkMode?THEMES.dark:THEMES.light;
 
@@ -3640,6 +3784,8 @@ export default function App() {
         if(!active)return;
         setUser(appUser);
         setAttempts(savedAttempts);
+        const seen=await DB.getOnboardingSeen(appUser.email);
+        if(active&&!seen) setShowOnboarding(true);
         setLoading(false);
       };
 
@@ -3656,7 +3802,7 @@ export default function App() {
 
     (async()=>{
       const sess=await DB.getSession();
-      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){setUser(u);const a=await DB.getAttempts(u.email);setAttempts(a);}}
+      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){setUser(u);const a=await DB.getAttempts(u.email);setAttempts(a);const seen=await DB.getOnboardingSeen(u.email);if(!seen)setShowOnboarding(true);}}
       setLoading(false);
     })();
     return()=>{active=false;};
@@ -3665,12 +3811,18 @@ export default function App() {
   const handleLogin=useCallback(async u=>{
     setUser(u);
     const a=u?.authProvider==="supabase" ? await loadSupabaseAttempts(u.id) : await DB.getAttempts(u.email);
+    const seen=await DB.getOnboardingSeen(u.email);
+    if(!seen) setShowOnboarding(true);
     setAttempts(a);setView("dashboard");setShowDaily(false);
   },[]);
   const handleLogout=useCallback(async()=>{
     if(isSupabaseConfigured) await supabase.auth.signOut();
-    await DB.clearSession();setPasswordRecovery(false);setUser(null);setAttempts([]);setView("dashboard");
+    await DB.clearSession();setPasswordRecovery(false);setShowOnboarding(false);setUser(null);setAttempts([]);setView("dashboard");
   },[]);
+  const closeOnboarding=useCallback(async()=>{
+    if(user?.email) await DB.saveOnboardingSeen(user.email);
+    setShowOnboarding(false);
+  },[user]);
   const handleCancelMembership=useCallback(async()=>{
     if(!isSupabaseConfigured){
       alert("Membership cancellation will use Stripe's billing portal once Supabase and Stripe env vars are configured. For now, contact secureplus.support@gmail.com.");
@@ -3924,6 +4076,14 @@ export default function App() {
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
         </main>
+        {showOnboarding&&(
+          <OnboardingModal
+            user={user}
+            t={t}
+            onClose={closeOnboarding}
+            onPricing={()=>setView("pricing")}
+          />
+        )}
       </div>
     </>
   );
