@@ -112,6 +112,91 @@ async function saveSupabaseAttempt(userId, attempt) {
   if (error) console.warn("Unable to save attempt", error);
 }
 
+function getAttemptDate(attempt) {
+  const value = attempt.createdAt || attempt.created_at || attempt.date;
+  const date = value ? new Date(value) : new Date();
+  return Number.isNaN(date.getTime()) ? new Date() : date;
+}
+
+function calculateSm2State(history) {
+  const sorted = [...history].sort((a,b)=>getAttemptDate(a)-getAttemptDate(b));
+  let repetitions = 0;
+  let interval = 0;
+  let easeFactor = 2.5;
+  let dueAt = new Date(0);
+  let lastCorrect = null;
+
+  sorted.forEach(attempt=>{
+    const quality = attempt.correct ? 4 : 2;
+    const attemptDate = getAttemptDate(attempt);
+
+    if(quality < 3){
+      repetitions = 0;
+      interval = 1;
+    } else {
+      repetitions += 1;
+      if(repetitions === 1) interval = 1;
+      else if(repetitions === 2) interval = 6;
+      else interval = Math.max(1, Math.round(interval * easeFactor));
+    }
+
+    const diff = 5 - quality;
+    easeFactor = Math.max(1.3, easeFactor + (0.1 - diff * (0.08 + diff * 0.02)));
+    dueAt = new Date(attemptDate.getTime() + interval * 24 * 60 * 60 * 1000);
+    lastCorrect = attempt.correct;
+  });
+
+  return { repetitions, interval, easeFactor, dueAt, lastCorrect, attempts: sorted.length };
+}
+
+function rankQuestionsBySm2(questions, attempts) {
+  const now = new Date();
+  const grouped = new Map();
+  attempts.filter(a=>a.mcq).forEach(attempt=>{
+    if(!grouped.has(attempt.qid)) grouped.set(attempt.qid, []);
+    grouped.get(attempt.qid).push(attempt);
+  });
+
+  return [...questions].sort((a,b)=>{
+    const aState = calculateSm2State(grouped.get(a.id) || []);
+    const bState = calculateSm2State(grouped.get(b.id) || []);
+    const aNew = aState.attempts === 0;
+    const bNew = bState.attempts === 0;
+    const aDue = !aNew && aState.dueAt <= now;
+    const bDue = !bNew && bState.dueAt <= now;
+    const aWrong = aState.lastCorrect === false;
+    const bWrong = bState.lastCorrect === false;
+
+    const aScore = (aWrong?0:1000) + (aDue?0:500) + (aNew?750:0) + aState.easeFactor * 10 + aState.dueAt.getTime() / 86400000;
+    const bScore = (bWrong?0:1000) + (bDue?0:500) + (bNew?750:0) + bState.easeFactor * 10 + bState.dueAt.getTime() / 86400000;
+    return aScore - bScore;
+  });
+}
+
+function getReviewSummary(attempts) {
+  const now = new Date();
+  const grouped = new Map();
+  attempts.filter(a=>a.mcq).forEach(attempt=>{
+    if(!grouped.has(attempt.qid)) grouped.set(attempt.qid, []);
+    grouped.get(attempt.qid).push(attempt);
+  });
+
+  let due = 0;
+  let weak = 0;
+  grouped.forEach(history=>{
+    const state = calculateSm2State(history);
+    if(state.dueAt <= now) due += 1;
+    if(state.lastCorrect === false) weak += 1;
+  });
+
+  return {
+    due,
+    weak,
+    learned: grouped.size,
+    untouched: Math.max(0, MCQ_BANK.length - grouped.size),
+  };
+}
+
 // ═══════════════════════════════════════════════════════════════
 // THEME
 // ═══════════════════════════════════════════════════════════════
@@ -2564,8 +2649,10 @@ function Dashboard({user,attempts,onNav,t}) {
           {/* Upgrade if free */}
           {!isPro&&(
             <div className="card" style={{padding:"18px 20px",borderColor:`${t.amber}40`,background:`${t.amber}06`}}>
-              <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:4}}>Unlock PBQ Simulations</div>
-              <div style={{fontSize:13,color:t.textSec,marginBottom:12}}>{PBQ_BANK.length} performance-based questions with terminal, drag & drop, log analysis and more.</div>
+              <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:4}}>Ready for PBQs?</div>
+              <div style={{fontSize:13,color:t.textSec,marginBottom:12}}>
+                Keep using all MCQs for free. Pro adds {PBQ_BANK.length} performance-based questions with terminal, drag & drop, log analysis and more.
+              </div>
               <button className="btn btn-primary" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("pricing")}>
                 Upgrade — $4.99/year
               </button>
@@ -2598,10 +2685,11 @@ function Dashboard({user,attempts,onNav,t}) {
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
-function MCQPractice({user,onSave,t}) {
+function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
   const [chFilter,setChFilter]=useState("all");
   const [diffFilter,setDiffFilter]=useState("all");
   const [topicFilter,setTopicFilter]=useState("all");
+  const [reviewMode,setReviewMode]=useState("smart");
   const [started,setStarted]=useState(false);
   const [questions,setQuestions]=useState([]);
   const [qi,setQi]=useState(0);
@@ -2619,9 +2707,13 @@ function MCQPractice({user,onSave,t}) {
     if(topicFilter!=="all"&&q.topic!==topicFilter)return false;
     return true;
   });
+  const reviewSummary = getReviewSummary(attempts);
 
   const startQuiz=()=>{
-    const pool=[...filtered].sort(()=>Math.random()-.5).slice(0,Math.min(10,filtered.length));
+    const ordered = reviewMode==="smart"
+      ? rankQuestionsBySm2(filtered, attempts)
+      : [...filtered].sort(()=>Math.random()-.5);
+    const pool=ordered.slice(0,Math.min(10,filtered.length));
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setResults([]);setDone(false);setStarted(true);
   };
 
@@ -2630,7 +2722,7 @@ function MCQPractice({user,onSave,t}) {
   const submitQ=()=>{
     if(selected===null)return;
     const correct=selected===current.correct;
-    const r={qid:current.id,correct,selected,title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",mcq:true};
+    const r={qid:current.id,correct,selected,title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",mcq:true,createdAt:new Date().toISOString()};
     setResults(rs=>[...rs,r]);
     onSave(r);
     setSubmitted(true);setShowWrong(false);
@@ -2646,6 +2738,45 @@ function MCQPractice({user,onSave,t}) {
     <div style={{padding:"24px",maxWidth:800,margin:"0 auto"}}>
       <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:4}}>MCQ Practice</h2>
       <p style={{color:t.textSec,marginBottom:20,fontSize:14}}>{MCQ_BANK.length} questions across all 5 CompTIA Security+ chapters</p>
+
+      <div className="card" style={{padding:"18px 22px",marginBottom:16,borderColor:`${t.green}30`,background:`${t.green}06`}}>
+        <div style={{display:"flex",justifyContent:"space-between",gap:14,alignItems:"center",flexWrap:"wrap"}}>
+          <div style={{flex:1,minWidth:220}}>
+            <div style={{fontWeight:700,fontSize:14,color:t.text,marginBottom:4}}>Smart Review uses SM-2 spacing</div>
+            <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
+              Wrong answers come back first. Correct answers are spaced farther apart, like Anki, so practice targets retention instead of only random questions.
+            </div>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,auto)",gap:8}}>
+            {[
+              {label:"Due",value:reviewSummary.due,color:t.amber},
+              {label:"Weak",value:reviewSummary.weak,color:t.red},
+              {label:"New",value:reviewSummary.untouched,color:t.accent},
+            ].map(item=>(
+              <div key={item.label} style={{minWidth:64,padding:"8px 10px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel,textAlign:"center"}}>
+                <div style={{fontSize:18,fontWeight:800,color:item.color}}>{item.value}</div>
+                <div className="label">{item.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{display:"flex",gap:8,marginTop:14,flexWrap:"wrap"}}>
+          <button className={`btn ${reviewMode==="smart"?"btn-primary":"btn-outline"}`} style={{fontSize:12}} onClick={()=>setReviewMode("smart")}>Smart Review</button>
+          <button className={`btn ${reviewMode==="random"?"btn-primary":"btn-outline"}`} style={{fontSize:12}} onClick={()=>setReviewMode("random")}>Random Practice</button>
+        </div>
+      </div>
+
+      {user.tier==="free"&&(
+        <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.accent}30`,background:`${t.accent}06`}}>
+          <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+            <div style={{flex:1}}>
+              <div style={{fontWeight:600,fontSize:14,color:t.text}}>MCQs stay free. Pro adds exam-style PBQs.</div>
+              <div style={{fontSize:13,color:t.textSec}}>When you are ready to practise terminal, log, ordering, and drag/drop simulations, Pro is $4.99/year.</div>
+            </div>
+            <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={onUpgrade}>See Pro PBQs</button>
+          </div>
+        </div>
+      )}
 
       <div className="card" style={{padding:"20px 24px",marginBottom:16}}>
         <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:14}}>Filter Questions</div>
@@ -2677,7 +2808,7 @@ function MCQPractice({user,onSave,t}) {
           </div>
         </div>
         <div style={{marginTop:16,padding:"12px 14px",background:t.panel,borderRadius:7,fontSize:13,color:t.textSec}}>
-          {filtered.length} questions match your filters · Up to 10 will be selected
+          {filtered.length} questions match your filters · Up to 10 will be selected · {reviewMode==="smart"?"SM-2 priority order":"Random order"}
         </div>
       </div>
 
@@ -2719,6 +2850,15 @@ function MCQPractice({user,onSave,t}) {
           </div>
         ))}
       </div>
+      {user.tier==="free"&&(
+        <div className="card" style={{padding:"16px 20px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
+          <div style={{fontWeight:700,color:t.text,fontSize:14,marginBottom:4}}>Want the PBQ side of the exam too?</div>
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:10}}>
+            Your MCQ practice stays free. Pro adds hands-on PBQ simulations for roughly $0.40/month when billed yearly.
+          </div>
+          <button className="btn btn-outline" style={{fontSize:12}} onClick={onUpgrade}>Preview Pro PBQs</button>
+        </div>
+      )}
       <div style={{display:"flex",gap:10,justifyContent:"center"}}>
         <button className="btn btn-primary" onClick={()=>{setStarted(false);setDone(false);}}>New Quiz →</button>
         <button className="btn btn-ghost" onClick={startQuiz}>Retry Same →</button>
@@ -2798,6 +2938,7 @@ function MCQPractice({user,onSave,t}) {
 function PBQBank({user,attempts,onStart,onUpgrade,t}) {
   const [chFilter,setChFilter]=useState("all");
   const [typeFilter,setTypeFilter]=useState("all");
+  const [lockedQuestion,setLockedQuestion]=useState(null);
   const isPro=user.tier==="pro";
   const attempted=new Set(attempts.map(a=>a.qid));
   const correct=new Set(attempts.filter(a=>a.correct).map(a=>a.qid));
@@ -2835,9 +2976,27 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
           <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
             <div style={{flex:1}}>
               <div style={{fontWeight:600,fontSize:15,color:t.text,marginBottom:4}}>Pro Required for PBQ Access</div>
-              <div style={{fontSize:13,color:t.textSec}}>Upgrade to access all PBQ simulations with terminal commands, drag & drop, log analysis, and more.</div>
+              <div style={{fontSize:13,color:t.textSec}}>MCQs are free. Pro unlocks all {PBQ_BANK.length} PBQ simulations with terminal commands, drag & drop, log analysis, and more.</div>
             </div>
             <button className="btn btn-primary" style={{flexShrink:0}} onClick={onUpgrade}>Upgrade — $4.99/year →</button>
+          </div>
+        </div>
+      )}
+
+      {!isPro&&lockedQuestion&&(
+        <div className="card" style={{padding:"18px 22px",marginBottom:20,borderColor:`${t.accent}40`,background:`${t.accent}08`}}>
+          <div style={{display:"flex",gap:12,alignItems:"flex-start",flexWrap:"wrap"}}>
+            <span style={{fontSize:24}}>🔒</span>
+            <div style={{flex:1,minWidth:220}}>
+              <div style={{fontWeight:700,fontSize:15,color:t.text,marginBottom:4}}>{lockedQuestion.title} is a Pro PBQ</div>
+              <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
+                This is the kind of performance-based simulation that helps SecurePlus stand out from normal MCQ-only practice. Upgrade when you want full PBQ practice.
+              </div>
+            </div>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+              <button className="btn btn-primary" style={{fontSize:13}} onClick={onUpgrade}>Unlock PBQs</button>
+              <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>setLockedQuestion(null)}>Not now</button>
+            </div>
           </div>
         </div>
       )}
@@ -2876,7 +3035,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
           const ok=correct.has(q.id);
           const ch=CHAPTERS.find(c=>c.id===q.ch);
           return(
-            <div key={q.id} className={`card card-hover`} style={{padding:"14px 18px",display:"flex",alignItems:"center",gap:12,cursor:isPro?"pointer":"default",opacity:isPro?1:.75}} onClick={()=>isPro&&onStart(q)}>
+            <div key={q.id} className={`card card-hover`} style={{padding:"14px 18px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",opacity:isPro?1:.75}} onClick={()=>isPro?onStart(q):setLockedQuestion(q)}>
               <span style={{fontSize:22,flexShrink:0}}>{q.emoji||"📌"}</span>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,marginBottom:5,flexWrap:"wrap"}}>
@@ -3748,7 +3907,7 @@ export default function App() {
             </button>
           </div>
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
-          {view==="mcq"&&<MCQPractice user={user} onSave={handleSaveAttempt} t={t}/>}
+          {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t}/>}
           {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
