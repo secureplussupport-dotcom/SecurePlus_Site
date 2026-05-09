@@ -102,7 +102,7 @@ The schema includes:
 
 ## Stripe Setup
 
-Create a recurring Stripe price for Pro, then set:
+Create a yearly recurring Stripe price for Pro (`$4.99 USD / year`), then set:
 
 ```bash
 STRIPE_PRICE_PRO=price_xxx

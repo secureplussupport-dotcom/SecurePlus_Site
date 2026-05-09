@@ -2534,7 +2534,7 @@ function Dashboard({user,attempts,onNav,t}) {
               <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:4}}>Unlock PBQ Simulations</div>
               <div style={{fontSize:13,color:t.textSec,marginBottom:12}}>{PBQ_BANK.length} performance-based questions with terminal, drag & drop, log analysis and more.</div>
               <button className="btn btn-primary" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("pricing")}>
-                Upgrade — $4.99/month
+                Upgrade — $4.99/year
               </button>
             </div>
           )}
@@ -2762,7 +2762,7 @@ function MCQPractice({user,onSave,t}) {
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK
 // ═══════════════════════════════════════════════════════════════
-function PBQBank({user,attempts,onStart,t}) {
+function PBQBank({user,attempts,onStart,onUpgrade,t}) {
   const [chFilter,setChFilter]=useState("all");
   const [typeFilter,setTypeFilter]=useState("all");
   const isPro=user.tier==="pro";
@@ -2804,7 +2804,7 @@ function PBQBank({user,attempts,onStart,t}) {
               <div style={{fontWeight:600,fontSize:15,color:t.text,marginBottom:4}}>Pro Required for PBQ Access</div>
               <div style={{fontSize:13,color:t.textSec}}>Upgrade to access all PBQ simulations with terminal commands, drag & drop, log analysis, and more.</div>
             </div>
-            <button className="btn btn-primary" style={{flexShrink:0}} onClick={()=>{}}>Upgrade — $4.99/mo →</button>
+            <button className="btn btn-primary" style={{flexShrink:0}} onClick={onUpgrade}>Upgrade — $4.99/year →</button>
           </div>
         </div>
       )}
@@ -3136,7 +3136,7 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,t,billingLoa
     <div style={{padding:"32px 24px",maxWidth:700,margin:"0 auto"}}>
       <div style={{textAlign:"center",marginBottom:32}}>
         <h2 style={{fontSize:26,fontWeight:700,color:t.text,marginBottom:8}}>Simple Pricing</h2>
-        <p style={{color:t.textSec,fontSize:14}}>7-day money-back guarantee · Cancel anytime</p>
+        <p style={{color:t.textSec,fontSize:14}}>Annual billing · 7-day money-back guarantee · Cancel anytime</p>
       </div>
 
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:32}}>
@@ -3168,7 +3168,8 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,t,billingLoa
           </div>
           <div className="label" style={{marginBottom:8}}>Pro</div>
           <div style={{fontSize:36,fontWeight:700,color:t.accent,marginBottom:4}}>$4.99</div>
-          <div style={{fontSize:13,color:t.textDim,marginBottom:20}}>per month</div>
+          <div style={{fontSize:13,color:t.textDim,marginBottom:4}}>per year</div>
+          <div style={{fontSize:13,color:t.green,fontWeight:600,marginBottom:18}}>Roughly only $0.40/month</div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
             {["Everything in Free","All 50 PBQ simulations","Unlimited MCQ questions","8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Per-question feedback"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
@@ -3178,7 +3179,7 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,t,billingLoa
           </div>
           {user.tier==="pro"?<button className="btn btn-ghost" style={{width:"100%",justifyContent:"center"}} disabled>Current Plan</button>
             :<button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"12px"}} onClick={()=>onUpgrade("pro")} disabled={billingLoading}>
-              {billingLoading?"Opening Stripe...":"Upgrade to Pro →"}
+              {billingLoading?"Opening Stripe...":"Upgrade yearly →"}
             </button>}
         </div>
       </div>
@@ -3623,7 +3624,7 @@ export default function App() {
           </div>
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
           {view==="mcq"&&<MCQPractice user={user} onSave={handleSaveAttempt} t={t}/>}
-          {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"?setView("pricing"):setPbqQ(q)} t={t}/>}
+          {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t}/>}
           {view==="daily"&&<DailyChallenge t={t} onLogin={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} t={t} billingLoading={billingLoading}/>}
           {view==="objectives"&&<ObjectivesPage t={t}/>}

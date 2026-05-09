@@ -43,7 +43,7 @@ If a confirmation email opens a page of raw HTML, the most common causes are a b
 
 1. Stay in test mode while building.
 2. Create SecurePlus Pro product.
-3. Create monthly recurring price.
+3. Create yearly recurring price: `$4.99 USD / year`.
 4. Copy the price ID into `STRIPE_PRICE_PRO`.
 5. Add webhook endpoint after Vercel deploy:
 
