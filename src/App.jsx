@@ -2109,6 +2109,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .mobile-topbar{display:none;}
 .auth-layout{width:100%;max-width:980px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:stretch;}
 @media (max-width: 860px){
+  html,body,#root{max-width:100%;overflow-x:hidden;}
   body{font-size:14px;}
   .app-shell{display:block;padding-bottom:72px;}
   .sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%;height:64px;min-height:64px;border-right:0;border-top:1px solid ${t.border};z-index:20;}
@@ -2117,15 +2118,23 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
   .nav-lnk{min-width:58px;flex-direction:column;gap:2px;padding:7px 9px;font-size:10px;text-align:center;}
   .nav-lnk span:first-child{font-size:15px!important;}
   .mobile-topbar{display:flex;position:sticky;top:0;z-index:15;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:${t.panel}f2;backdrop-filter:blur(14px);border-bottom:1px solid ${t.border};}
-  main > div{padding-left:16px!important;padding-right:16px!important;}
+  main > div{padding-left:16px!important;padding-right:16px!important;max-width:100%!important;}
   [style*="grid-template-columns:1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr"]{grid-template-columns:1fr!important;}
   [style*="grid-template-columns:repeat(4,1fr)"],[style*="gridTemplateColumns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
   [style*="grid-template-columns:1fr 1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr 1fr"]{grid-template-columns:1fr!important;}
+  .pricing-grid{grid-template-columns:1fr!important;}
   .card{box-shadow:0 10px 26px rgba(7,12,24,.08);}
   .btn{width:auto;white-space:normal;}
-  .auth-layout{grid-template-columns:1fr!important;}
-  .auth-layout > section:first-child h1{font-size:30px!important;}
+  .auth-layout{grid-template-columns:minmax(0,1fr)!important;width:min(100%,calc(100vw - 48px))!important;max-width:calc(100vw - 48px)!important;min-width:0!important;gap:16px!important;overflow:hidden!important;}
+  .auth-layout > section{min-width:0!important;width:100%!important;max-width:100%!important;overflow:hidden!important;}
+  .auth-layout > section:first-child h1{font-size:28px!important;line-height:1.14!important;overflow-wrap:break-word!important;}
   .auth-layout > section:first-child{padding:24px!important;}
+  .auth-layout > section:first-child p{font-size:14px!important;}
+  .auth-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;margin-top:24px!important;}
+  .auth-stat-card{padding:12px 10px!important;}
+  .auth-stat-card div:first-child{font-size:22px!important;}
+  .auth-stat-card .label{font-size:10px!important;letter-spacing:0!important;}
+  .tab{padding:9px 10px!important;font-size:12px!important;}
 }
 `;
 
@@ -2431,15 +2440,15 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
               CompTIA Security+ drills, PBQ simulations, daily challenges, and progress signals in one focused workspace.
             </p>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginTop:34,position:"relative"}}>
+          <div className="auth-stats" style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:10,marginTop:34,position:"relative"}}>
             {[
               {v:MCQ_BANK.length,l:"MCQs"},
               {v:PBQ_BANK.length,l:"PBQs"},
               {v:"5",l:"Domains"},
             ].map(s=>(
-              <div key={s.l} style={{padding:"14px 14px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel}}>
+              <div key={s.l} className="auth-stat-card" style={{padding:"14px 14px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel,minWidth:0}}>
                 <div style={{fontSize:24,fontWeight:800,color:t.text}}>{s.v}</div>
-                <div className="label">{s.l}</div>
+                <div className="label" style={{whiteSpace:"normal"}}>{s.l}</div>
               </div>
             ))}
           </div>
@@ -3331,7 +3340,7 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,onNavigate,t
         <p style={{color:t.textSec,fontSize:14}}>Annual billing · Cancel anytime</p>
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:32}}>
+      <div className="pricing-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:32}}>
         {/* FREE */}
         <div className="card" style={{padding:"28px 24px"}}>
           <div className="label" style={{marginBottom:8}}>Free</div>

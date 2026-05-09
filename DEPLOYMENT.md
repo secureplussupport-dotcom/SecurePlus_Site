@@ -15,17 +15,18 @@ Use this checklist when moving SecurePlus from local development to a hosted sit
    - Site URL: `https://secure-plus-site.vercel.app`
    - Redirect URL: `https://secure-plus-site.vercel.app/**`
    - Redirect URL: `http://127.0.0.1:5173/**`
-6. In Authentication -> Email Templates -> Confirm signup, make sure the button/link uses:
+6. In Authentication -> Emails -> Templates, use the branded templates in `supabase/email-templates`:
+   - `confirm-signup.html` for Confirm signup.
+   - `reset-password.html` for Reset password.
 
-```html
-<a href="{{ .ConfirmationURL }}">Confirm signup</a>
+The subjects should be:
+
+```txt
+Confirm your SecurePlus account
+Reset your SecurePlus password
 ```
 
-Do the same pattern for Reset password:
-
-```html
-<a href="{{ .ConfirmationURL }}">Reset password</a>
-```
+Keep `{{ .ConfirmationURL }}` exactly as written in both templates. Supabase replaces it with the secure verification or password-reset link.
 
 If a confirmation email opens a page of raw HTML, the most common causes are a bad Site URL, missing Redirect URL, or a broken email template link.
 
