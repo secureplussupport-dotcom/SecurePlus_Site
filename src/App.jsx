@@ -2073,7 +2073,7 @@ function Alert({msg,type="error",t}) {
 // ═══════════════════════════════════════════════════════════════
 // DAILY CHALLENGE VIEW (no login required)
 // ═══════════════════════════════════════════════════════════════
-function DailyChallenge({t,onLogin}) {
+function DailyChallenge({t,onLogin,user=null}) {
   const challenge = getTodayChallenge();
   const [step, setStep] = useState("intro"); // intro | quiz | done
   const [qIndex, setQIndex] = useState(0);
@@ -2090,6 +2090,7 @@ function DailyChallenge({t,onLogin}) {
     : null;
 
   const current = questions[qIndex];
+  const totalQuestions = challenge.type==="pbq" ? 1 : questions.length;
 
   const submitQ = () => {
     if(selected===null) return;
@@ -2108,7 +2109,9 @@ function DailyChallenge({t,onLogin}) {
     <div style={{padding:"32px 24px",maxWidth:600,margin:"0 auto",textAlign:"center"}} className="fu">
       <div style={{fontSize:48,marginBottom:16}}>🎯</div>
       <h2 style={{fontSize:26,fontWeight:700,marginBottom:8,color:t.text}}>Daily Challenge</h2>
-      <p style={{color:t.textSec,marginBottom:6}}>No account needed. One free challenge every day.</p>
+      <p style={{color:t.textSec,marginBottom:6}}>
+        {user ? "Practice today's focused challenge from your account." : "No account needed. One free challenge every day."}
+      </p>
       <div className="card" style={{padding:"20px 24px",margin:"24px 0",textAlign:"left"}}>
         <div style={{fontSize:20,marginBottom:8}}>{challenge.type==="pbq"?"💡":"📝"}</div>
         <div style={{fontWeight:600,fontSize:16,marginBottom:6,color:t.text}}>{challenge.title}</div>
@@ -2118,33 +2121,33 @@ function DailyChallenge({t,onLogin}) {
       <button className="btn btn-primary" style={{padding:"12px 32px",fontSize:15,width:"100%"}} onClick={()=>setStep("quiz")}>
         Start Today's Challenge →
       </button>
-      <div style={{marginTop:16,color:t.textDim,fontSize:13}}>
+      {!user&&<div style={{marginTop:16,color:t.textDim,fontSize:13}}>
         Want unlimited practice?{" "}
         <span style={{color:t.accent,cursor:"pointer",fontWeight:500}} onClick={onLogin}>Create a free account →</span>
-      </div>
+      </div>}
     </div>
   );
 
   if(step==="done") return (
     <div style={{padding:"32px 24px",maxWidth:500,margin:"0 auto",textAlign:"center"}} className="fu">
-      <div style={{fontSize:48,marginBottom:16}}>{correctCount===questions.length?"🏆":correctCount>=3?"✅":"📚"}</div>
+      <div style={{fontSize:48,marginBottom:16}}>{correctCount===totalQuestions?"🏆":correctCount>=Math.ceil(totalQuestions*.6)?"✅":"📚"}</div>
       <h2 style={{fontSize:24,fontWeight:700,marginBottom:8,color:t.text}}>Challenge Complete!</h2>
-      <div style={{fontSize:40,fontWeight:700,color:correctCount>=4?t.green:correctCount>=3?t.amber:t.red,marginBottom:8}}>
-        {correctCount}/{questions.length}
+      <div style={{fontSize:40,fontWeight:700,color:correctCount===totalQuestions?t.green:correctCount>=Math.ceil(totalQuestions*.6)?t.amber:t.red,marginBottom:8}}>
+        {correctCount}/{totalQuestions}
       </div>
       <p style={{color:t.textSec,marginBottom:24}}>Come back tomorrow for a new challenge!</p>
-      <div className="card" style={{padding:"16px 20px",marginBottom:20,textAlign:"left"}}>
+      {!user&&<div className="card" style={{padding:"16px 20px",marginBottom:20,textAlign:"left"}}>
         <div className="label" style={{marginBottom:10}}>Unlock more with a free account</div>
         {["100 MCQs across all 5 exam domains","50 PBQ simulations with 8 question types","Progress tracking and weak area analysis","Chapter-by-chapter study organisation"].map((f,i)=>(
           <div key={i} style={{display:"flex",gap:8,alignItems:"center",fontSize:13,color:t.textSec,padding:"4px 0"}}>
             <span style={{color:t.green}}>✓</span>{f}
           </div>
         ))}
-      </div>
+      </div>}
       <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"12px"}} onClick={onLogin}>
-        Create Free Account →
+        {user ? "Back to Dashboard →" : "Create Free Account →"}
       </button>
-      <div style={{marginTop:10,color:t.textDim,fontSize:12}}>Already have an account? <span style={{color:t.accent,cursor:"pointer"}} onClick={onLogin}>Sign in</span></div>
+      {!user&&<div style={{marginTop:10,color:t.textDim,fontSize:12}}>Already have an account? <span style={{color:t.accent,cursor:"pointer"}} onClick={onLogin}>Sign in</span></div>}
     </div>
   );
 
@@ -2208,13 +2211,35 @@ function DailyChallenge({t,onLogin}) {
     </div>
   );
 
-  return <div style={{padding:24,color:t.textSec}}>Challenge loading...</div>;
+  if(challenge.type==="pbq" && pbq) return (
+    <PBQSim
+      q={pbq}
+      t={t}
+      onDone={result=>{
+        setResults([{qid:result.qid,correct:result.correct,selected:null}]);
+        setStep("done");
+      }}
+    />
+  );
+
+  return (
+    <div style={{padding:"32px 24px",maxWidth:520,margin:"0 auto",textAlign:"center"}} className="fu">
+      <div style={{fontSize:40,marginBottom:12}}>🎯</div>
+      <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:8}}>Daily Challenge unavailable</h2>
+      <p style={{color:t.textSec,marginBottom:18,fontSize:14}}>
+        Today's challenge could not be loaded, so use the MCQ bank while we refresh it.
+      </p>
+      <button className="btn btn-primary" style={{justifyContent:"center"}} onClick={onLogin}>
+        {user ? "Go to Dashboard" : "Sign In / Register"}
+      </button>
+    </div>
+  );
 }
 
 // ═══════════════════════════════════════════════════════════════
 // AUTH VIEW
 // ═══════════════════════════════════════════════════════════════
-function AuthView({onLogin,t,onDaily}) {
+function AuthView({onLogin,t,onDaily,onNavigate}) {
   const [mode,setMode]=useState("login");
   const [form,setForm]=useState({name:"",email:"",pass:"",confirm:""});
   const [err,setErr]=useState("");
@@ -2410,6 +2435,14 @@ function AuthView({onLogin,t,onDaily}) {
               }}>Open demo workspace →</button>
             </div>
           )}
+        </div>
+        <div style={{display:"flex",gap:12,justifyContent:"center",marginTop:14,flexWrap:"wrap"}}>
+          <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>onNavigate("privacy")}>
+            Privacy Policy
+          </button>
+          <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>onNavigate("terms")}>
+            Terms of Service
+          </button>
         </div>
         </section>
       </div>
@@ -3131,12 +3164,12 @@ function PBQSim({q,onDone,t}) {
 // ═══════════════════════════════════════════════════════════════
 // PRICING
 // ═══════════════════════════════════════════════════════════════
-function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,t,billingLoading=false}) {
+function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
   return(
     <div style={{padding:"32px 24px",maxWidth:700,margin:"0 auto"}}>
       <div style={{textAlign:"center",marginBottom:32}}>
         <h2 style={{fontSize:26,fontWeight:700,color:t.text,marginBottom:8}}>Simple Pricing</h2>
-        <p style={{color:t.textSec,fontSize:14}}>Annual billing · 7-day money-back guarantee · Cancel anytime</p>
+        <p style={{color:t.textSec,fontSize:14}}>Annual billing · Cancel anytime</p>
       </div>
 
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:32}}>
@@ -3146,12 +3179,12 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,t,billingLoa
           <div style={{fontSize:36,fontWeight:700,color:t.text,marginBottom:4}}>$0</div>
           <div style={{fontSize:13,color:t.textDim,marginBottom:20}}>Forever</div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
-            {["Daily Challenge (no login)","5 free MCQs per day","Basic score tracking","Access to study guide"].map(f=>(
+            {["All MCQ practice questions","Daily Challenge","Basic score tracking","Access to study guide"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
                 <span style={{color:t.green}}>✓</span>{f}
               </div>
             ))}
-            {["PBQ simulations","Unlimited MCQs","Progress analytics","Chapter breakdowns"].map(f=>(
+            {["PBQ simulations","Progress analytics","Chapter breakdowns"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textDim}}>
                 <span>✕</span><span style={{textDecoration:"line-through"}}>{f}</span>
               </div>
@@ -3164,14 +3197,14 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,t,billingLoa
         {/* PRO */}
         <div className="card" style={{padding:"28px 24px",borderColor:t.accent,boxShadow:`0 4px 24px ${t.accent}18`,position:"relative"}}>
           <div style={{position:"absolute",top:-12,left:"50%",transform:"translateX(-50%)"}}>
-            <span style={{background:t.accent,color:"#fff",padding:"3px 14px",borderRadius:99,fontSize:12,fontWeight:600}}>Most Popular</span>
+            <span style={{background:t.accent,color:"#fff",padding:"3px 14px",borderRadius:99,fontSize:12,fontWeight:600,whiteSpace:"nowrap"}}>Most Popular</span>
           </div>
           <div className="label" style={{marginBottom:8}}>Pro</div>
           <div style={{fontSize:36,fontWeight:700,color:t.accent,marginBottom:4}}>$4.99</div>
           <div style={{fontSize:13,color:t.textDim,marginBottom:4}}>per year</div>
           <div style={{fontSize:13,color:t.green,fontWeight:600,marginBottom:18}}>Roughly only $0.40/month</div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
-            {["Everything in Free","All 50 PBQ simulations","Unlimited MCQ questions","8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Per-question feedback"].map(f=>(
+            {["Everything in Free","All 50 PBQ simulations","8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Per-question feedback"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
                 <span style={{color:t.green}}>✓</span>{f}
               </div>
@@ -3203,6 +3236,12 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,t,billingLoa
           </button>
           <button className="btn btn-danger" style={{fontSize:13}} onClick={onDeleteAccount}>
             Delete account
+          </button>
+          <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>onNavigate("privacy")}>
+            Privacy policy
+          </button>
+          <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>onNavigate("terms")}>
+            Terms of Service
           </button>
         </div>
       </div>
@@ -3273,6 +3312,77 @@ function ObjectivesPage({t}) {
           For account, billing, content, or technical questions, email{" "}
           <a href="mailto:secureplus.support@gmail.com" style={{color:t.accent,fontWeight:700}}>secureplus.support@gmail.com</a>.
         </p>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PRIVACY + TERMS
+// ═══════════════════════════════════════════════════════════════
+function LegalPage({type,t}) {
+  const isPrivacy = type === "privacy";
+  const sections = isPrivacy ? [
+    {
+      title:"Information we collect",
+      body:"We collect account details such as your email address, authentication provider, subscription status, and practice activity so SecurePlus can save your progress and unlock the correct features.",
+    },
+    {
+      title:"How we use information",
+      body:"We use your information to provide the practice platform, authenticate your account, process subscriptions through Stripe, send account emails through Supabase or our email provider, improve the product, and respond to support requests.",
+    },
+    {
+      title:"Payments",
+      body:"Payments are handled by Stripe. SecurePlus does not store your card number. Stripe may process payment details, billing information, and subscription events according to Stripe's own privacy and security practices.",
+    },
+    {
+      title:"Data sharing",
+      body:"We share data only with service providers needed to run the site, such as Supabase, Stripe, Vercel, email delivery providers, and analytics or security tools we choose to enable. We do not sell personal information.",
+    },
+    {
+      title:"Your choices",
+      body:"You can request help, billing support, or account deletion by contacting secureplus.support@gmail.com. If you delete your account, saved profile and practice data may be removed according to our database retention settings.",
+    },
+  ] : [
+    {
+      title:"Use of SecurePlus",
+      body:"SecurePlus provides CompTIA Security+ practice content for study and preparation. You agree to use the site lawfully and not abuse, scrape, resell, reverse engineer, or interfere with the platform.",
+    },
+    {
+      title:"Accounts",
+      body:"You are responsible for keeping your login information secure. You should use a real email address so you can verify your account, reset your password, and receive account notices.",
+    },
+    {
+      title:"Subscriptions",
+      body:"Paid access is billed through Stripe. Subscription features are unlocked only when Stripe and Supabase show an active or trialing subscription. You can cancel through the billing portal when available or by contacting support.",
+    },
+    {
+      title:"Educational content",
+      body:"SecurePlus is an independent study tool and is not affiliated with or endorsed by CompTIA. Exam names and trademarks belong to their respective owners. Practice questions are for learning and are not real exam questions.",
+    },
+    {
+      title:"Limitations",
+      body:"We work to keep the site accurate and available, but we do not guarantee exam results, uninterrupted service, or error-free content. Use SecurePlus as one part of your broader study plan.",
+    },
+  ];
+
+  return(
+    <div style={{padding:"28px 24px",maxWidth:780,margin:"0 auto"}}>
+      <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:6}}>
+        {isPrivacy ? "Privacy Policy" : "Terms of Service"}
+      </h2>
+      <p style={{color:t.textSec,fontSize:14,marginBottom:20}}>
+        Last updated: May 9, 2026. Questions? Contact{" "}
+        <a href="mailto:secureplus.support@gmail.com" style={{color:t.accent,fontWeight:700}}>secureplus.support@gmail.com</a>.
+      </p>
+
+      <div style={{display:"flex",flexDirection:"column",gap:12}}>
+        {sections.map(section=>(
+          <section key={section.title} className="card" style={{padding:"18px 20px"}}>
+            <h3 style={{fontSize:15,fontWeight:700,color:t.text,marginBottom:6}}>{section.title}</h3>
+            <p style={{fontSize:13,color:t.textSec,lineHeight:1.75}}>{section.body}</p>
+          </section>
+        ))}
       </div>
     </div>
   );
@@ -3538,10 +3648,23 @@ export default function App() {
     </>
   );
 
+  if(!user&&(view==="privacy"||view==="terms")) return(
+    <>
+      <style>{CSS}</style>
+      <div style={{background:t.bg,minHeight:"100vh"}}>
+        <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <span style={{fontWeight:700,fontSize:15,color:t.text}}>🔐 SecurePlus</span>
+          <button className="btn btn-outline" style={{fontSize:12}} onClick={()=>setView("dashboard")}>Sign In / Register</button>
+        </div>
+        <LegalPage type={view} t={t}/>
+      </div>
+    </>
+  );
+
   if(!user) return(
     <>
       <style>{CSS}</style>
-      <AuthView onLogin={handleLogin} t={t} onDaily={()=>setShowDaily(true)}/>
+      <AuthView onLogin={handleLogin} t={t} onDaily={()=>setShowDaily(true)} onNavigate={setView}/>
     </>
   );
 
@@ -3561,6 +3684,8 @@ export default function App() {
     {id:"daily",emoji:"🎯",label:"Daily Challenge"},
     {id:"pricing",emoji:"💳",label:"Pricing"},
     {id:"objectives",emoji:"📋",label:"Objectives"},
+    {id:"privacy",emoji:"🔒",label:"Privacy Policy"},
+    {id:"terms",emoji:"📄",label:"Terms of Service"},
   ];
 
   return(
@@ -3625,9 +3750,11 @@ export default function App() {
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
           {view==="mcq"&&<MCQPractice user={user} onSave={handleSaveAttempt} t={t}/>}
           {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t}/>}
-          {view==="daily"&&<DailyChallenge t={t} onLogin={()=>setView("dashboard")}/>}
-          {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} t={t} billingLoading={billingLoading}/>}
+          {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")}/>}
+          {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
           {view==="objectives"&&<ObjectivesPage t={t}/>}
+          {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
+          {view==="terms"&&<LegalPage type="terms" t={t}/>}
         </main>
       </div>
     </>
