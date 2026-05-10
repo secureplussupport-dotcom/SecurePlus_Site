@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">SecurePlus logo</title>
+  <desc id="desc">A blue shield with a check mark for SecurePlus.</desc>
+  <rect width="160" height="160" rx="36" fill="#0b1020"/>
+  <path d="M80 20 124 36v36c0 28-17 53-44 68-27-15-44-40-44-68V36l44-16Z" fill="#2f7df6"/>
+  <path d="M80 32 113 44v28c0 21-12 40-33 53-21-13-33-32-33-53V44l33-12Z" fill="#12213a"/>
+  <path d="m65 80 11 11 24-29" fill="none" stroke="#14b8a6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M80 20 124 36v36c0 28-17 53-44 68-27-15-44-40-44-68V36l44-16Z" fill="none" stroke="#93c5fd" stroke-width="4"/>
+</svg>

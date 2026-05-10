@@ -56,6 +56,18 @@ function getStoredReferralCode() {
   }
 }
 
+function shouldShowPBQUpgradePrompt() {
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const key = "secureplus_pbq_prompt_date";
+    if (window.localStorage?.getItem(key) === today) return false;
+    window.localStorage?.setItem(key, today);
+    return true;
+  } catch {
+    return true;
+  }
+}
+
 function getPasswordIssue(password) {
   if (password.length < 8) return "Password must be at least 8 characters.";
   if (!/[A-Z]/.test(password)) return "Password must include at least one uppercase letter.";
@@ -2259,6 +2271,17 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 function ProgBar({v,c,h=8}) {
   return <div className="prog-track" style={{height:h}}><div className="prog-fill" style={{width:`${Math.min(v,100)}%`,background:c,height:h}}/></div>;
 }
+function BrandMark({size=30}) {
+  return (
+    <img
+      src="/secureplus-logo.svg"
+      alt="SecurePlus"
+      width={size}
+      height={size}
+      style={{borderRadius:Math.max(6,Math.round(size*.22)),display:"block",flexShrink:0}}
+    />
+  );
+}
 function SimBadge({type,t}) {
   const s=Object.values(SIM_TYPES).find(x=>x.id===type)||SIM_TYPES.TERMINAL;
   return <span className="chip" style={{background:`${s.color}15`,color:s.color,borderColor:`${s.color}30`}}>{s.emoji} {s.label}</span>;
@@ -2557,7 +2580,7 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
     <div className="landing-page fu">
       <header className="landing-header">
         <div style={{display:"flex",alignItems:"center",gap:10}}>
-          <span style={{fontSize:24}}>🔐</span>
+          <BrandMark size={32}/>
           <div>
             <div style={{fontWeight:900,color:t.text,fontSize:18}}>SecurePlus</div>
             <div style={{fontSize:12,color:t.textDim}}>CompTIA Security+ PBQ / MCQ practice</div>
@@ -2573,10 +2596,10 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
         <section className="landing-hero">
           <div>
             <div className="badge" style={{background:`${t.accent}14`,color:t.accent,border:`1px solid ${t.accent}28`,marginBottom:18}}>
-              PBQ + MCQ practice in one workspace
+              PBQ simulations + MCQ practice in one workspace
             </div>
             <h1 className="landing-title">
-              Practice Security+ before the exam tests you.
+              Practice Security+ with PBQ simulations before the exam tests you.
             </h1>
             <p className="landing-copy">
               Try a small daily challenge without an account, then create a free account to unlock the full MCQ bank, save progress, and build exam readiness.
@@ -2602,7 +2625,7 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
               {[
                 {v:MCQ_BANK.length,l:"MCQs"},
                 {v:PBQ_BANK.length,l:"PBQs"},
-                {v:"$4.99",l:"per year Pro"},
+                {v:"$4.99",l:"annual Pro"},
               ].map(s=>(
                 <div key={s.l} className="card" style={{padding:"16px",minWidth:0}}>
                   <div style={{fontSize:24,fontWeight:900,color:t.text}}>{s.v}</div>
@@ -2739,7 +2762,7 @@ function Dashboard({user,attempts,onNav,t}) {
       {/* Welcome */}
       <div style={{marginBottom:28}}>
         <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:4}}>
-          Welcome back, {user.name.split(" ")[0]} 👋
+          Welcome back, {user.name.split(" ")[0]}
         </h2>
         <p style={{color:t.textSec,fontSize:14}}>
           {total===0?"Start practising to see your progress here.":
@@ -3130,6 +3153,10 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
     if(typeFilter!=="all"&&q.type!==typeFilter)return false;
     return true;
   });
+  const openLockedPrompt=q=>{
+    capture("pbq_locked_clicked", { question_id: q.id, type: q.type, chapter: q.ch });
+    if(shouldShowPBQUpgradePrompt()) setLockedQuestion(q);
+  };
 
   return(
     <div style={{padding:"24px",maxWidth:900,margin:"0 auto"}}>
@@ -3217,7 +3244,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
           const ok=correct.has(q.id);
           const ch=CHAPTERS.find(c=>c.id===q.ch);
           return(
-            <div key={q.id} className={`card card-hover`} style={{padding:"14px 18px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",opacity:isPro?1:.75}} onClick={()=>{if(isPro){capture("pbq_started", { question_id: q.id, type: q.type, chapter: q.ch, tier: user.tier });onStart(q);}else{capture("pbq_locked_clicked", { question_id: q.id, type: q.type, chapter: q.ch });setLockedQuestion(q);}}}>
+            <div key={q.id} className={`card card-hover`} style={{padding:"14px 18px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",opacity:isPro?1:.75}} onClick={()=>{if(isPro){capture("pbq_started", { question_id: q.id, type: q.type, chapter: q.ch, tier: user.tier });onStart(q);}else{openLockedPrompt(q);}}}>
               <span style={{fontSize:22,flexShrink:0}}>{q.emoji||"📌"}</span>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,marginBottom:5,flexWrap:"wrap"}}>
@@ -3514,7 +3541,9 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
     <div style={{padding:"32px 24px",maxWidth:700,margin:"0 auto"}}>
       <div style={{textAlign:"center",marginBottom:32}}>
         <h2 style={{fontSize:26,fontWeight:700,color:t.text,marginBottom:8}}>Upgrade</h2>
-        <p style={{color:t.textSec,fontSize:14}}>Annual billing · Cancel anytime</p>
+        <p style={{color:t.textSec,fontSize:14}}>
+          <strong style={{color:t.green}}>Annual plan only:</strong> $4.99 per year · Cancel anytime
+        </p>
       </div>
 
       <div className="pricing-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:32}}>
@@ -3546,8 +3575,8 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           </div>
           <div className="label" style={{marginBottom:8}}>Pro</div>
           <div style={{fontSize:36,fontWeight:700,color:t.accent,marginBottom:4}}>$4.99</div>
-          <div style={{fontSize:13,color:t.textDim,marginBottom:4}}>per year</div>
-          <div style={{fontSize:13,color:t.green,fontWeight:600,marginBottom:18}}>Roughly only $0.40/month</div>
+          <div style={{fontSize:15,color:t.text,fontWeight:900,marginBottom:4,textTransform:"uppercase"}}>per year / annual billing</div>
+          <div style={{fontSize:13,color:t.green,fontWeight:800,marginBottom:18}}>Works out to roughly $0.40/month</div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
             {["Everything in Free","All 50 PBQ simulations","8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Per-question feedback"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
@@ -3917,7 +3946,7 @@ function PasswordUpdateView({t,onDone}) {
     <div style={{minHeight:"100vh",display:"grid",placeItems:"center",padding:24}}>
       <div className="card" style={{width:"100%",maxWidth:430,padding:"28px 28px"}}>
         <div style={{display:"inline-flex",alignItems:"center",gap:10,padding:"7px 11px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel,marginBottom:20}}>
-          <span>🔐</span>
+          <BrandMark size={28}/>
           <span style={{fontWeight:800,color:t.text}}>SecurePlus</span>
         </div>
         <h1 style={{fontSize:26,color:t.text,marginBottom:8}}>Set a new password</h1>
@@ -4200,7 +4229,7 @@ export default function App() {
       <style>{CSS}</style>
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <span style={{fontWeight:700,fontSize:15,color:t.text}}>🔐 SecurePlus</span>
+          <div style={{display:"flex",alignItems:"center",gap:8}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:15,color:t.text}}>SecurePlus</span></div>
           <div style={{display:"flex",gap:8}}>
             <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>setShowDaily(false)}>← Back</button>
             <button className="btn btn-outline" style={{fontSize:12}} onClick={()=>setShowDaily(false)}>Sign In / Register</button>
@@ -4216,7 +4245,7 @@ export default function App() {
       <style>{CSS}</style>
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <span style={{fontWeight:700,fontSize:15,color:t.text}}>🔐 SecurePlus</span>
+          <div style={{display:"flex",alignItems:"center",gap:8}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:15,color:t.text}}>SecurePlus</span></div>
           <button className="btn btn-outline" style={{fontSize:12}} onClick={()=>setView("dashboard")}>Sign In / Register</button>
         </div>
         <LegalPage type={view} t={t}/>
@@ -4260,7 +4289,7 @@ export default function App() {
         <aside className="sidebar">
           {/* Logo */}
           <div style={{padding:"18px 16px",borderBottom:`1px solid ${t.border}`}}>
-            <div style={{fontWeight:700,fontSize:16,color:t.text}}>🔐 SecurePlus</div>
+            <div style={{display:"flex",alignItems:"center",gap:9,fontWeight:700,fontSize:16,color:t.text}}><BrandMark size={30}/> SecurePlus</div>
             <div style={{fontSize:11,color:t.textDim,marginTop:2}}>CompTIA Security+ Practice Platform</div>
           </div>
 
@@ -4304,7 +4333,7 @@ export default function App() {
         <main className="app-main fu">
           <div className="mobile-topbar">
             <div>
-              <div style={{fontWeight:800,fontSize:15,color:t.text}}>🔐 SecurePlus</div>
+              <div style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text}}><BrandMark size={28}/> SecurePlus</div>
               <div style={{fontSize:11,color:t.textDim}}>CompTIA Security+ Practice</div>
             </div>
             <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
