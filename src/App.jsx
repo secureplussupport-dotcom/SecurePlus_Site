@@ -56,6 +56,22 @@ function getStoredReferralCode() {
   }
 }
 
+function rememberReferralFromUrl() {
+  const referralCode = getStoredReferralCode();
+  if (!referralCode) return "";
+
+  try {
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("ref")) {
+      url.searchParams.delete("ref");
+      const cleanUrl = `${url.pathname}${url.search}${url.hash}`;
+      window.history.replaceState({}, "", cleanUrl || "/");
+    }
+  } catch {}
+
+  return referralCode;
+}
+
 async function getReferralDetails() {
   if (!isSupabaseConfigured) return null;
   const token = await getSupabaseAccessToken();
@@ -149,9 +165,12 @@ async function claimReferralIfPresent(authUser) {
     const data = await response.json().catch(()=>({}));
     if (response.ok) {
       capture("referral_claimed", { referral_code: referralCode });
-      window.localStorage?.removeItem("secureplus_referral_code");
+      if (data.proTrialUntil || data.alreadyClaimed) {
+        window.localStorage?.removeItem("secureplus_referral_code");
+      }
       return data;
     }
+    console.warn("Referral claim was not applied", data.error || response.status);
   } catch (error) {
     console.warn("Unable to claim referral", error);
   }
@@ -3712,6 +3731,15 @@ function ReferralPage({user,t}) {
         </p>
       </div>
 
+      {details.proTrialUntil&&new Date(details.proTrialUntil).getTime()>Date.now()&&(
+        <div className="card" style={{padding:"16px 18px",marginBottom:16,borderColor:`${t.green}40`,background:`${t.green}08`}}>
+          <div style={{fontWeight:800,color:t.text,marginBottom:4}}>Referral Pro trial active</div>
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
+            Your referral trial runs until {new Date(details.proTrialUntil).toLocaleDateString()}.
+          </div>
+        </div>
+      )}
+
       <div className="card" style={{padding:"22px 24px",marginBottom:16,borderColor:`${t.accent}38`}}>
         <div className="label" style={{marginBottom:8}}>Your referral link</div>
         {error&&<Alert msg={error} type="warn" t={t}/>}
@@ -4023,6 +4051,11 @@ export default function App() {
   useEffect(()=>{
     if(user) identifyUser(user);
   },[user]);
+
+  useEffect(()=>{
+    const referralCode = rememberReferralFromUrl();
+    if (referralCode) capture("referral_link_opened", { referral_code: referralCode });
+  },[]);
 
   useEffect(()=>{
     capture("app_viewed", { view, signed_in: Boolean(user), tier: user?.tier || "guest" });
