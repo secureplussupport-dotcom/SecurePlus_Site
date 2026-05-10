@@ -147,6 +147,7 @@ STRIPE_PRICE_PRO=price_xxx
 API routes:
 
 - `POST /api/stripe/checkout`: creates a subscription Checkout Session for the logged-in Supabase user
+- `POST /api/stripe/sync`: verifies the logged-in user's Stripe subscription and updates Supabase after Checkout returns
 - `POST /api/stripe/portal`: opens Stripe Billing Portal for cancellation/membership management
 - `POST /api/stripe/webhook`: verifies Stripe webhook signatures and updates `profiles.tier`
 - `POST /api/account/delete`: deletes the logged-in Supabase user; profile/attempts cascade through Supabase
@@ -154,6 +155,7 @@ API routes:
 Stripe webhook events:
 
 - `checkout.session.completed`
+- `customer.subscription.created`
 - `customer.subscription.updated`
 - `customer.subscription.deleted`
 - `invoice.payment_failed`

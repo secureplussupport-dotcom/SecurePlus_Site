@@ -56,6 +56,7 @@ https://your-domain.com/api/stripe/webhook
 Events:
 
 - `checkout.session.completed`
+- `customer.subscription.created`
 - `customer.subscription.updated`
 - `customer.subscription.deleted`
 - `invoice.payment_failed`

@@ -124,7 +124,7 @@ begin
     add constraint profiles_subscription_status_check
     check (
       subscription_status is null
-      or subscription_status in ('active', 'trialing', 'past_due', 'canceled', 'unpaid', 'incomplete')
+      or subscription_status in ('active', 'trialing', 'past_due', 'canceled', 'unpaid', 'incomplete', 'incomplete_expired', 'paused')
     );
   end if;
 

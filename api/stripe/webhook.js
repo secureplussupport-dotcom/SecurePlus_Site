@@ -76,6 +76,7 @@ export default async function handler(req, res) {
     }
 
     if (
+      event.type === "customer.subscription.created" ||
       event.type === "customer.subscription.updated" ||
       event.type === "customer.subscription.deleted"
     ) {

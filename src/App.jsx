@@ -70,6 +70,22 @@ function profileName(authUser) {
   return meta.full_name || meta.name || authUser?.email?.split("@")[0] || "SecurePlus User";
 }
 
+function appUserFromProfile(authUser, profile) {
+  const trialUntil = profile?.pro_trial_until ? new Date(profile.pro_trial_until) : null;
+  const hasReferralTrial = trialUntil && trialUntil.getTime() > Date.now();
+
+  return {
+    id: authUser.id,
+    email: profile?.email || authUser.email,
+    name: profileName(authUser),
+    tier: (profile?.tier === "pro" && ["active", "trialing"].includes(profile?.subscription_status)) || hasReferralTrial ? "pro" : "free",
+    subscriptionStatus: profile?.subscription_status || null,
+    proTrialUntil: profile?.pro_trial_until || null,
+    referralCode: profile?.referral_code || "",
+    authProvider: "supabase",
+  };
+}
+
 async function getSupabaseProfile(authUser) {
   if (!supabase || !authUser) return null;
   const { data } = await supabase
@@ -77,19 +93,8 @@ async function getSupabaseProfile(authUser) {
     .select("id,email,tier,subscription_status,pro_trial_until,referral_code")
     .eq("id", authUser.id)
     .maybeSingle();
-  const trialUntil = data?.pro_trial_until ? new Date(data.pro_trial_until) : null;
-  const hasReferralTrial = trialUntil && trialUntil.getTime() > Date.now();
 
-  return {
-    id: authUser.id,
-    email: data?.email || authUser.email,
-    name: profileName(authUser),
-    tier: (data?.tier === "pro" && ["active", "trialing"].includes(data?.subscription_status)) || hasReferralTrial ? "pro" : "free",
-    subscriptionStatus: data?.subscription_status || null,
-    proTrialUntil: data?.pro_trial_until || null,
-    referralCode: data?.referral_code || "",
-    authProvider: "supabase",
-  };
+  return appUserFromProfile(authUser, data);
 }
 
 async function claimReferralIfPresent(authUser) {
@@ -117,6 +122,29 @@ async function claimReferralIfPresent(authUser) {
     console.warn("Unable to claim referral", error);
   }
   return null;
+}
+
+async function syncStripeProfile(authUser, sessionId = "") {
+  if (!isSupabaseConfigured || !authUser?.id) return null;
+  try {
+    const token = await getSupabaseAccessToken();
+    if (!token) return null;
+    const response = await fetch("/api/stripe/sync", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ sessionId }),
+    });
+    const data = await response.json().catch(()=>({}));
+    if (!response.ok || !data.profile) return null;
+    capture("billing_synced", { subscription_status: data.profile.subscription_status });
+    return appUserFromProfile(authUser, data.profile);
+  } catch (error) {
+    console.warn("Unable to sync Stripe subscription", error);
+    return null;
+  }
 }
 
 function fromSupabaseAttempt(row) {
@@ -3936,10 +3964,20 @@ export default function App() {
           return;
         }
         const appUser=await getSupabaseProfile(session.user);
+        let displayUser=appUser;
+        const params = new URLSearchParams(window.location.search);
+        if(params.get("checkout")==="success" || params.get("billing")==="return"){
+          const syncedUser = await syncStripeProfile(session.user, params.get("session_id") || "");
+          if(syncedUser) {
+            displayUser = syncedUser;
+            const cleanUrl = `${window.location.origin}${window.location.pathname}`;
+            window.history.replaceState({}, "", cleanUrl);
+          }
+        }
         const savedAttempts=await loadSupabaseAttempts(session.user.id);
         if(!active)return;
-        const referralClaim = await claimReferralIfPresent(appUser);
-        const displayUser = referralClaim?.proTrialUntil ? { ...appUser, tier: "pro", proTrialUntil: referralClaim.proTrialUntil } : appUser;
+        const referralClaim = await claimReferralIfPresent(displayUser);
+        if(referralClaim?.proTrialUntil) displayUser = { ...displayUser, tier: "pro", proTrialUntil: referralClaim.proTrialUntil };
         setUser(displayUser);
         identifyUser(displayUser);
         setAttempts(savedAttempts);
