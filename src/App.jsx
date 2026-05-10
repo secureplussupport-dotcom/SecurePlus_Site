@@ -3500,7 +3500,7 @@ function PBQSim({q,onDone,t}) {
 // ═══════════════════════════════════════════════════════════════
 // PRICING
 // ═══════════════════════════════════════════════════════════════
-function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
+function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
   return(
     <div style={{padding:"32px 24px",maxWidth:700,margin:"0 auto"}}>
       <div style={{textAlign:"center",marginBottom:32}}>
@@ -3550,6 +3550,11 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,onNavigate,t
             :<button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"12px"}} onClick={()=>{capture("upgrade_button_clicked", { source: "upgrade_page", tier: user.tier });onUpgrade("pro");}} disabled={billingLoading}>
               {billingLoading?"Opening Stripe...":"Upgrade yearly →"}
             </button>}
+          {user.tier==="free"&&(
+            <button className="btn btn-outline" style={{width:"100%",justifyContent:"center",padding:"10px",marginTop:10}} onClick={onSyncBilling} disabled={billingLoading}>
+              Refresh Pro status
+            </button>
+          )}
         </div>
       </div>
 
@@ -4050,6 +4055,32 @@ export default function App() {
       setBillingLoading(false);
     }
   },[]);
+  const handleSyncBilling=useCallback(async()=>{
+    if(!user)return;
+    if(!isSupabaseConfigured || user.authProvider!=="supabase"){
+      alert("Billing sync requires a live Supabase account.");
+      return;
+    }
+    setBillingLoading(true);
+    try{
+      const { data } = await supabase.auth.getUser();
+      const authUser = data?.user;
+      if(!authUser){
+        alert("Please sign in again before refreshing Pro status.");
+        return;
+      }
+      const syncedUser = await syncStripeProfile(authUser);
+      if(!syncedUser){
+        alert("No active Stripe subscription was found for this account yet. If you just paid, wait 30 seconds and try again.");
+        return;
+      }
+      setUser(syncedUser);
+      identifyUser(syncedUser);
+      alert(syncedUser.tier==="pro" ? "Pro status refreshed. Your account is Pro now." : "Stripe synced, but this account is not showing an active subscription.");
+    }finally{
+      setBillingLoading(false);
+    }
+  },[user]);
   const handleDeleteAccount=useCallback(async()=>{
     if(!user)return;
     const confirmed=window.confirm("Delete this SecurePlus account and saved progress? This cannot be undone.");
@@ -4275,7 +4306,7 @@ export default function App() {
           {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t}/>}
           {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")}/>}
-          {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
+          {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
           {view==="referrals"&&<ReferralPage user={user} t={t}/>}
           {view==="objectives"&&<ObjectivesPage t={t}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
