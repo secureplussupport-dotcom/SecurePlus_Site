@@ -38,6 +38,25 @@ export function getBearerToken(req) {
   return match?.[1] || null;
 }
 
+export async function getJsonBody(req) {
+  if (req.body && typeof req.body === "object") return req.body;
+  if (typeof req.body === "string") {
+    try {
+      return JSON.parse(req.body);
+    } catch {
+      return {};
+    }
+  }
+
+  try {
+    const rawBody = await getRawBody(req);
+    if (!rawBody.length) return {};
+    return JSON.parse(rawBody.toString("utf8"));
+  } catch {
+    return {};
+  }
+}
+
 export async function getRawBody(req) {
   const chunks = [];
   for await (const chunk of req) chunks.push(Buffer.from(chunk));

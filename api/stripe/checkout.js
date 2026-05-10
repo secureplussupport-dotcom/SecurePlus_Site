@@ -1,10 +1,21 @@
 import {
   getBearerToken,
+  getJsonBody,
   getStripe,
   getSupabaseAdmin,
   json,
   requireEnv,
 } from "../_utils.js";
+
+function successUrl(appUrl) {
+  const base = process.env.STRIPE_SUCCESS_URL || `${appUrl}/?checkout=success`;
+  const withCheckout = base.includes("checkout=")
+    ? base
+    : `${base}${base.includes("?") ? "&" : "?"}checkout=success`;
+  return withCheckout.includes("{CHECKOUT_SESSION_ID}")
+    ? withCheckout
+    : `${withCheckout}${withCheckout.includes("?") ? "&" : "?"}session_id={CHECKOUT_SESSION_ID}`;
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -15,7 +26,8 @@ export default async function handler(req, res) {
   try {
     const token = getBearerToken(req);
     if (!token) return json(res, 401, { error: "Sign in before upgrading." });
-    const referralCode = String(req.body?.referralCode || "")
+    const body = await getJsonBody(req);
+    const referralCode = String(body.referralCode || "")
       .trim()
       .toUpperCase()
       .replace(/[^A-Z0-9_-]/g, "")
@@ -83,8 +95,7 @@ export default async function handler(req, res) {
           quantity: 1,
         },
       ],
-      success_url:
-        process.env.STRIPE_SUCCESS_URL || `${appUrl}/?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+      success_url: successUrl(appUrl),
       cancel_url: process.env.STRIPE_CANCEL_URL || `${appUrl}/?checkout=cancelled`,
       metadata: {
         supabase_user_id: authUser.id,

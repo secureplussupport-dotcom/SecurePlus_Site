@@ -88,13 +88,22 @@ function appUserFromProfile(authUser, profile) {
 
 async function getSupabaseProfile(authUser) {
   if (!supabase || !authUser) return null;
-  const { data } = await supabase
+  const full = await supabase
     .from("profiles")
     .select("id,email,tier,subscription_status,pro_trial_until,referral_code")
     .eq("id", authUser.id)
     .maybeSingle();
 
-  return appUserFromProfile(authUser, data);
+  if (!full.error) return appUserFromProfile(authUser, full.data);
+
+  const basic = await supabase
+    .from("profiles")
+    .select("id,email,tier,subscription_status")
+    .eq("id", authUser.id)
+    .maybeSingle();
+
+  if (basic.error) console.warn("Unable to load profile", basic.error);
+  return appUserFromProfile(authUser, basic.data);
 }
 
 async function claimReferralIfPresent(authUser) {

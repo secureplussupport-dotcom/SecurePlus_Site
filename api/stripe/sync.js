@@ -1,5 +1,6 @@
 import {
   getBearerToken,
+  getJsonBody,
   getStripe,
   getSupabaseAdmin,
   json,
@@ -22,7 +23,7 @@ async function updateProfile(supabase, userId, patch) {
     .from("profiles")
     .update({ ...patch, updated_at: new Date().toISOString() })
     .eq("id", userId)
-    .select("id,email,tier,subscription_status,stripe_customer_id,stripe_subscription_id,pro_trial_until,referral_code")
+    .select("id,email,tier,subscription_status,stripe_customer_id,stripe_subscription_id")
     .maybeSingle();
 
   if (error) throw error;
@@ -48,7 +49,8 @@ export default async function handler(req, res) {
     }
 
     const authUser = authData.user;
-    const { sessionId } = req.body || {};
+    const body = await getJsonBody(req);
+    const sessionId = body.sessionId || "";
 
     const { data: profile, error: profileError } = await supabase
       .from("profiles")

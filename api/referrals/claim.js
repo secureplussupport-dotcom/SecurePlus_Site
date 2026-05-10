@@ -1,5 +1,6 @@
 import {
   getBearerToken,
+  getJsonBody,
   getSupabaseAdmin,
   json,
 } from "../_utils.js";
@@ -33,7 +34,8 @@ export default async function handler(req, res) {
     const token = getBearerToken(req);
     if (!token) return json(res, 401, { error: "Sign in before using a referral." });
 
-    const { referralCode: rawReferralCode } = req.body || {};
+    const body = await getJsonBody(req);
+    const rawReferralCode = body.referralCode || "";
     const referralCode = cleanCode(rawReferralCode);
     if (!referralCode) return json(res, 400, { error: "Referral code is required." });
 
