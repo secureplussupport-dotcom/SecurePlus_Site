@@ -2230,6 +2230,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .log-block{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:${t.inputBg};border:1px solid ${t.border};border-radius:8px;padding:16px;color:${t.textSec};line-height:1.9;white-space:pre-wrap;overflow-x:auto;}
 .drag-item{padding:10px 14px;background:${t.surface};border:1.5px solid ${t.border};border-radius:7px;cursor:grab;user-select:none;transition:all .2s;font-size:13px;color:${t.text};}
 .drag-item:hover{border-color:${t.accent};}
+.drag-item.selected{border-color:${t.accent};background:${t.accent}12;box-shadow:0 0 0 3px ${t.accent}16;}
 .drop-zone{min-height:44px;border:2px dashed ${t.border};border-radius:7px;padding:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;}
 .drop-zone.over{border-color:${t.accent};background:${t.accent}08;}
 .order-item{padding:10px 14px;background:${t.surface};border:1.5px solid ${t.border};border-radius:7px;display:flex;align-items:center;gap:10px;font-size:13px;cursor:default;transition:border-color .2s;color:${t.text};}
@@ -2254,6 +2255,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .landing-feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
 .landing-auth-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,430px);gap:22px;align-items:start;padding:10px 0 20px;}
 .referral-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.pricing-pro-card,.pricing-free-card{min-width:0;}
 .onboarding-overlay{position:fixed;inset:0;z-index:80;background:rgba(4,8,18,.72);backdrop-filter:blur(10px);display:grid;place-items:center;padding:20px;animation:fadeUp .22s ease both;}
 .onboarding-modal{width:min(100%,520px);padding:28px 30px;position:relative;box-shadow:0 30px 90px rgba(0,0,0,.36);}
 @media (max-width: 860px){
@@ -2271,6 +2273,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
   [style*="grid-template-columns:repeat(4,1fr)"],[style*="gridTemplateColumns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
   [style*="grid-template-columns:1fr 1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr 1fr"]{grid-template-columns:1fr!important;}
   .pricing-grid{grid-template-columns:1fr!important;}
+  .pricing-pro-card{order:-1;}
   .card{box-shadow:0 10px 26px rgba(7,12,24,.08);}
   .btn{width:auto;white-space:normal;}
   .auth-layout{grid-template-columns:minmax(0,1fr)!important;width:min(100%,calc(100vw - 48px))!important;max-width:calc(100vw - 48px)!important;min-width:0!important;gap:16px!important;overflow:hidden!important;}
@@ -2369,6 +2372,7 @@ function DailyChallenge({t,onLogin,user=null}) {
   };
 
   const correctCount = results.filter(r=>r.correct).length;
+  const canSeeFeedback = user?.tier === "pro";
 
   if(step==="intro") return (
     <div style={{padding:"32px 24px",maxWidth:600,margin:"0 auto",textAlign:"center"}} className="fu">
@@ -2461,8 +2465,14 @@ function DailyChallenge({t,onLogin,user=null}) {
             <div style={{fontWeight:600,color:selected===current.correct?t.green:t.red,marginBottom:8,fontSize:15}}>
               {selected===current.correct?"✓ Correct!":"✗ Incorrect"}
             </div>
-            <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>{current.exp}</p>
-            {selected!==current.correct&&current.wrongFeedback&&(
+            {canSeeFeedback?(
+              <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>{current.exp}</p>
+            ):(
+              <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+                Detailed explanations are part of Pro. Keep practising the daily challenge, then upgrade when you want full feedback.
+              </p>
+            )}
+            {canSeeFeedback&&selected!==current.correct&&current.wrongFeedback&&(
               <div style={{marginTop:10,padding:"10px 12px",background:`${t.red}08`,borderRadius:6,fontSize:12,color:t.red}}>
                 <strong>Why your answer was wrong:</strong> {current.wrongFeedback[selected]}
               </div>
@@ -2970,6 +2980,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
   };
 
   const correctCount=results.filter(r=>r.correct).length;
+  const canSeeFeedback = user.tier === "pro";
 
   if(!started) return(
     <div style={{padding:"24px",maxWidth:800,margin:"0 auto"}}>
@@ -3152,8 +3163,19 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
             <div style={{fontWeight:700,color:selected===current.correct?t.green:t.red,marginBottom:10,fontSize:16}}>
               {selected===current.correct?"✓ Correct!":"✗ Incorrect"}
             </div>
-            <p style={{fontSize:13,color:t.textSec,lineHeight:1.75}}>{current.exp}</p>
-            {selected!==current.correct&&current.wrongFeedback&&current.wrongFeedback[selected]&&(
+            {canSeeFeedback?(
+              <p style={{fontSize:13,color:t.textSec,lineHeight:1.75}}>{current.exp}</p>
+            ):(
+              <div>
+                <p style={{fontSize:13,color:t.textSec,lineHeight:1.75,marginBottom:10}}>
+                  Detailed explanations and per-question feedback are available with Pro.
+                </p>
+                <button className="btn btn-outline" style={{fontSize:12}} onClick={onUpgrade}>
+                  Unlock feedback
+                </button>
+              </div>
+            )}
+            {canSeeFeedback&&selected!==current.correct&&current.wrongFeedback&&current.wrongFeedback[selected]&&(
               <div style={{marginTop:12,padding:"12px 14px",background:`${t.red}08`,borderRadius:7,border:`1px solid ${t.red}25`}}>
                 <div style={{fontSize:12,fontWeight:600,color:t.red,marginBottom:4}}>Why option {String.fromCharCode(65+selected)} is wrong:</div>
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>{current.wrongFeedback[selected]}</div>
@@ -3312,6 +3334,7 @@ function PBQSim({q,onDone,t}) {
   const [blanks,setBlanks]=useState(()=>q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{}); 
   const [dragOver,setDragOver]=useState(null);
   const [dragged,setDragged]=useState(null);
+  const [tapDragItem,setTapDragItem]=useState(null);
   const [showHint,setShowHint]=useState(false);
 
   const isCorrect=()=>{
@@ -3342,6 +3365,17 @@ function PBQSim({q,onDone,t}) {
   };
 
   const simType=Object.values(SIM_TYPES).find(s=>s.id===q.type)||SIM_TYPES.TERMINAL;
+  const placeDragItem=(item,targetId)=>{
+    if(!item)return;
+    setMapping(m=>{
+      const n={...m};
+      Object.keys(n).forEach(k=>{if(n[k]===targetId)delete n[k];});
+      n[item.id]=targetId;
+      return n;
+    });
+    setTapDragItem(null);
+    setDragged(null);
+  };
 
   return(
     <div style={{padding:"24px",maxWidth:860,margin:"0 auto"}}>
@@ -3423,13 +3457,22 @@ function PBQSim({q,onDone,t}) {
       {/* DRAG & DROP */}
       {q.type==="DRAG & DROP"&&!submitted&&(
         <div style={{marginBottom:18}}>
-          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:12}}>Drag each item to its matching target</div>
+          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:6}}>Match each item to its target</div>
+          <div style={{fontSize:12,color:t.textDim,marginBottom:12}}>On mobile, tap an item, then tap its target.</div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
             <div>
               <div className="label" style={{marginBottom:8}}>Items</div>
               <div style={{display:"flex",flexDirection:"column",gap:6}}>
                 {q.items.filter(item=>!Object.keys(mapping).includes(item.id)).map(item=>(
-                  <div key={item.id} className={`drag-item ${dragged?.id===item.id?"":""}`} draggable onDragStart={()=>setDragged(item)} onDragEnd={()=>setDragged(null)}>
+                  <div
+                    key={item.id}
+                    className={`drag-item ${tapDragItem?.id===item.id||dragged?.id===item.id?"selected":""}`}
+                    draggable
+                    onClick={()=>setTapDragItem(item)}
+                    onDragStart={()=>setDragged(item)}
+                    onDragEnd={()=>setDragged(null)}
+                    style={{touchAction:"manipulation"}}
+                  >
                     {item.label}
                   </div>
                 ))}
@@ -3444,14 +3487,15 @@ function PBQSim({q,onDone,t}) {
                     <div key={target.id}>
                       <div style={{fontSize:11,color:t.textDim,marginBottom:3}}>{target.label}</div>
                       <div className={`drop-zone ${dragOver===target.id?"over":""} ${placed?"filled":""}`}
+                        onClick={()=>tapDragItem&&placeDragItem(tapDragItem,target.id)}
                         onDragOver={e=>{e.preventDefault();setDragOver(target.id);}}
                         onDragLeave={()=>setDragOver(null)}
                         onDrop={()=>{
-                          if(dragged){setMapping(m=>{const n={...m};Object.keys(n).forEach(k=>{if(n[k]===target.id)delete n[k];});n[dragged.id]=target.id;return n;});}
+                          if(dragged) placeDragItem(dragged,target.id);
                           setDragOver(null);setDragged(null);
                         }}>
-                        {placed?<div className="drag-item" style={{width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,color:t.text}}>{placed.label}</div>
-                          :<span style={{fontSize:11,color:t.textDim}}>Drop here</span>}
+                        {placed?<div className="drag-item" style={{width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,color:t.text,cursor:"pointer",touchAction:"manipulation"}} onClick={e=>{e.stopPropagation();setMapping(m=>{const n={...m};delete n[placed.id];return n;});}}>{placed.label}</div>
+                          :<span style={{fontSize:11,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place here":"Drop or tap here"}</span>}
                       </div>
                     </div>
                   );
@@ -3552,7 +3596,7 @@ function PBQSim({q,onDone,t}) {
             )}
           </div>
           <div style={{display:"flex",gap:10,justifyContent:"flex-end"}}>
-            <button className="btn btn-ghost" onClick={()=>{setSubmitted(false);setSelected(null);setTermHistory([]);setMapping({});setOrderItems(q.items?[...q.items].sort(()=>Math.random()-.5):[]);setBlanks(q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{})}}>
+            <button className="btn btn-ghost" onClick={()=>{setSubmitted(false);setSelected(null);setTermHistory([]);setMapping({});setTapDragItem(null);setOrderItems(q.items?[...q.items].sort(()=>Math.random()-.5):[]);setBlanks(q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{})}}>
               Try Again
             </button>
             <button className="btn btn-primary" onClick={()=>onDone({qid:q.id,correct:isCorrect(),type:q.type,title:q.title,ch:q.ch,domain:q.cat,pbq:true})}>
@@ -3579,29 +3623,8 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
       </div>
 
       <div className="pricing-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:32}}>
-        {/* FREE */}
-        <div className="card" style={{padding:"28px 24px"}}>
-          <div className="label" style={{marginBottom:8}}>Free</div>
-          <div style={{fontSize:36,fontWeight:700,color:t.text,marginBottom:4}}>$0</div>
-          <div style={{fontSize:13,color:t.textDim,marginBottom:20}}>Forever</div>
-          <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
-            {["All MCQ practice questions","Daily Challenge","Basic score tracking","Access to study guide"].map(f=>(
-              <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
-                <span style={{color:t.green}}>✓</span>{f}
-              </div>
-            ))}
-            {["PBQ simulations","Progress analytics","Chapter breakdowns"].map(f=>(
-              <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textDim}}>
-                <span>✕</span><span style={{textDecoration:"line-through"}}>{f}</span>
-              </div>
-            ))}
-          </div>
-          {user.tier==="free"?<button className="btn btn-ghost" style={{width:"100%",justifyContent:"center"}} disabled>Current Plan</button>
-            :<button className="btn btn-ghost" style={{width:"100%",justifyContent:"center"}} onClick={()=>onUpgrade("free")}>Downgrade</button>}
-        </div>
-
         {/* PRO */}
-        <div className="card" style={{padding:"28px 24px",borderColor:t.accent,boxShadow:`0 4px 24px ${t.accent}18`,position:"relative"}}>
+        <div className="card pricing-pro-card" style={{padding:"28px 24px",borderColor:t.accent,boxShadow:`0 4px 24px ${t.accent}18`,position:"relative"}}>
           <div style={{position:"absolute",top:-12,left:"50%",transform:"translateX(-50%)"}}>
             <span style={{background:t.accent,color:"#fff",padding:"3px 14px",borderRadius:99,fontSize:12,fontWeight:600,whiteSpace:"nowrap"}}>Most Popular</span>
           </div>
@@ -3610,7 +3633,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           <div style={{fontSize:15,color:t.text,fontWeight:900,marginBottom:4,textTransform:"uppercase"}}>per year / annual billing</div>
           <div style={{fontSize:13,color:t.green,fontWeight:800,marginBottom:18}}>Works out to roughly $0.40/month</div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
-            {["Everything in Free","All 50 PBQ simulations","8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Per-question feedback"].map(f=>(
+            {["Everything in Free","All 50 PBQ simulations","8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Detailed per-question feedback"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
                 <span style={{color:t.green}}>✓</span>{f}
               </div>
@@ -3625,6 +3648,27 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
               Refresh Pro status
             </button>
           )}
+        </div>
+
+        {/* FREE */}
+        <div className="card pricing-free-card" style={{padding:"28px 24px"}}>
+          <div className="label" style={{marginBottom:8}}>Free</div>
+          <div style={{fontSize:36,fontWeight:700,color:t.text,marginBottom:4}}>$0</div>
+          <div style={{fontSize:13,color:t.textDim,marginBottom:20}}>Forever</div>
+          <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
+            {["All MCQ practice questions","Daily Challenge","Basic score tracking","Access to study guide"].map(f=>(
+              <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
+                <span style={{color:t.green}}>✓</span>{f}
+              </div>
+            ))}
+            {["PBQ simulations","Progress analytics","Detailed per-question feedback"].map(f=>(
+              <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textDim}}>
+                <span>✕</span><span style={{textDecoration:"line-through"}}>{f}</span>
+              </div>
+            ))}
+          </div>
+          {user.tier==="free"&&<button className="btn btn-ghost" style={{width:"100%",justifyContent:"center"}} disabled>Current Plan</button>}
+          {user.tier==="pro"&&<button className="btn btn-ghost" style={{width:"100%",justifyContent:"center"}} disabled>Included in Pro</button>}
         </div>
       </div>
 
@@ -3677,101 +3721,14 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
 // REFERRALS
 // ═══════════════════════════════════════════════════════════════
 function ReferralPage({user,t}) {
-  const [copied,setCopied]=useState(false);
-  const [details,setDetails]=useState({
-    referralCode: user.referralCode || "",
-    invitedCount: null,
-    proTrialUntil: user.proTrialUntil || null,
-  });
-  const [loading,setLoading]=useState(isSupabaseConfigured);
-  const [error,setError]=useState("");
-
-  useEffect(()=>{
-    let active=true;
-    (async()=>{
-      setError("");
-      try{
-        if(isSupabaseConfigured && user?.authProvider==="supabase"){
-          const serverDetails=await getReferralDetails();
-          if(active)setDetails(d=>({...d,...serverDetails}));
-        } else if(user?.email){
-          const code=await DB.getReferralCode(user.email);
-          if(active)setDetails(d=>({...d,referralCode:code,invitedCount:0}));
-        }
-      }catch(err){
-        if(active)setError(err.message || "Unable to load referral details.");
-      }finally{
-        if(active)setLoading(false);
-      }
-    })();
-    return()=>{active=false;};
-  },[user?.email,user?.authProvider]);
-
-  const code = details.referralCode || "";
-  const link = `${window.location.origin}/?ref=${encodeURIComponent(code)}`;
-
-  const copyLink=async()=>{
-    if(!code)return;
-    try{
-      await navigator.clipboard.writeText(link);
-      setCopied(true);
-      capture("referral_link_copied", { tier: user.tier });
-      setTimeout(()=>setCopied(false),1600);
-    }catch{
-      window.prompt("Copy this referral link:", link);
-    }
-  };
-
   return(
-    <div style={{padding:"28px 24px",maxWidth:840,margin:"0 auto"}}>
-      <div style={{marginBottom:22}}>
-        <h2 style={{fontSize:24,fontWeight:800,color:t.text,marginBottom:6}}>Referral Program</h2>
+    <div style={{padding:"28px 24px",maxWidth:720,margin:"0 auto"}}>
+      <div className="card" style={{padding:"28px 30px",borderColor:`${t.accent}35`,textAlign:"center"}}>
+        <div style={{fontSize:40,marginBottom:12}}>🔗</div>
+        <div className="label" style={{marginBottom:8}}>Coming soon</div>
+        <h2 style={{fontSize:24,fontWeight:800,color:t.text,marginBottom:10}}>Referral Programme</h2>
         <p style={{fontSize:14,color:t.textSec,lineHeight:1.7}}>
-          Share SecurePlus with a friend. When they sign up with your link, both of you get a free 7-day Pro trial.
-        </p>
-      </div>
-
-      {details.proTrialUntil&&new Date(details.proTrialUntil).getTime()>Date.now()&&(
-        <div className="card" style={{padding:"16px 18px",marginBottom:16,borderColor:`${t.green}40`,background:`${t.green}08`}}>
-          <div style={{fontWeight:800,color:t.text,marginBottom:4}}>Referral Pro trial active</div>
-          <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
-            Your referral trial runs until {new Date(details.proTrialUntil).toLocaleDateString()}.
-          </div>
-        </div>
-      )}
-
-      <div className="card" style={{padding:"22px 24px",marginBottom:16,borderColor:`${t.accent}38`}}>
-        <div className="label" style={{marginBottom:8}}>Your referral link</div>
-        {error&&<Alert msg={error} type="warn" t={t}/>}
-        <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}>
-          <input className="input mono" readOnly value={loading?"Loading referral link...":code?link:"Referral setup needed"} style={{flex:"1 1 320px",fontSize:13}}/>
-          <button className="btn btn-primary" onClick={copyLink} disabled={!code||loading}>{copied?"Copied":"Copy Link"}</button>
-        </div>
-        <div style={{fontSize:12,color:t.textDim,marginTop:10}}>
-          Referral code: <span className="mono" style={{color:t.textSec}}>{code || "Not ready"}</span>
-          {details.invitedCount!==null&&<span> · Successful referrals: {details.invitedCount}</span>}
-        </div>
-      </div>
-
-      <div className="referral-grid" style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:12,marginBottom:16}}>
-        {[
-          {title:"Share",body:"Send your link to a study group, Discord, Reddit thread, or classmate."},
-          {title:"They sign up",body:"The referral code is saved when they create a SecurePlus account."},
-          {title:"Both get Pro",body:"Each account receives 7 days of Pro PBQ access as a trial."},
-        ].map(item=>(
-          <div key={item.title} className="card" style={{padding:"18px 20px"}}>
-            <div style={{fontWeight:800,color:t.text,marginBottom:6}}>{item.title}</div>
-            <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{item.body}</div>
-          </div>
-        ))}
-      </div>
-
-      <div className="card" style={{padding:"18px 20px",background:error?`${t.amber}07`:`${t.green}07`,borderColor:error?`${t.amber}36`:`${t.green}36`}}>
-        <div style={{fontWeight:700,color:t.text,marginBottom:6}}>{error?"Setup needed":"Ready to share"}</div>
-        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-          {error
-            ? "Run the referral SQL once in Supabase, then redeploy or refresh this page."
-            : "This referral link is server-backed. If a friend signs up with it, both accounts receive a 7-day Pro trial."}
+          Coming soon! The SecurePlus Referral Programme is planned to release soon. It will let students invite friends and earn Pro trial time together.
         </p>
       </div>
     </div>
@@ -4342,7 +4299,6 @@ export default function App() {
     {id:"pbq",emoji:"💡",label:"PBQ Simulator"},
     {id:"daily",emoji:"🎯",label:"Daily Challenge"},
     {id:"pricing",emoji:"⬆️",label:"Upgrade"},
-    {id:"referrals",emoji:"🔗",label:"Referrals"},
     {id:"objectives",emoji:"📋",label:"Objectives"},
     {id:"privacy",emoji:"🔒",label:"Privacy Policy"},
     {id:"terms",emoji:"📄",label:"Terms of Service"},
@@ -4403,9 +4359,14 @@ export default function App() {
               <div style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text}}><BrandMark size={28}/> SecurePlus</div>
               <div style={{fontSize:11,color:t.textDim}}>CompTIA Security+ Practice</div>
             </div>
-            <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
-              {darkMode?"Light":"Dark"}
-            </button>
+            <div style={{display:"flex",gap:6,alignItems:"center",flexShrink:0}}>
+              <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
+                {darkMode?"Light":"Dark"}
+              </button>
+              <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px",color:t.textDim}} onClick={handleLogout}>
+                Sign out
+              </button>
+            </div>
           </div>
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
           {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t}/>}
