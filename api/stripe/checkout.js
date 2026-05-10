@@ -15,6 +15,11 @@ export default async function handler(req, res) {
   try {
     const token = getBearerToken(req);
     if (!token) return json(res, 401, { error: "Sign in before upgrading." });
+    const referralCode = String(req.body?.referralCode || "")
+      .trim()
+      .toUpperCase()
+      .replace(/[^A-Z0-9_-]/g, "")
+      .slice(0, 32);
 
     const stripe = getStripe();
     const supabase = getSupabaseAdmin();
@@ -84,11 +89,13 @@ export default async function handler(req, res) {
       metadata: {
         supabase_user_id: authUser.id,
         plan: "pro",
+        referral_code: referralCode,
       },
       subscription_data: {
         metadata: {
           supabase_user_id: authUser.id,
           plan: "pro",
+          referral_code: referralCode,
         },
       },
     });

@@ -10,6 +10,7 @@ Support: `secureplus.support@gmail.com`
 - Hosting target: Vercel
 - Auth/database: Supabase
 - Payments: Stripe Checkout + Stripe Billing Portal
+- Analytics: PostHog
 - API runtime: Vercel serverless functions in `api/`
 
 ## Repository Structure
@@ -25,6 +26,7 @@ src/
   App.jsx
   main.jsx
   lib/supabaseClient.js
+  lib/analytics.js
 supabase/
   schema.sql
 .env.example
@@ -67,12 +69,17 @@ STRIPE_WEBHOOK_SECRET=
 APP_URL=
 STRIPE_SUCCESS_URL=
 STRIPE_CANCEL_URL=
+
+VITE_PUBLIC_POSTHOG_TOKEN=
+VITE_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 ```
 
 Frontend-safe:
 
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
+- `VITE_PUBLIC_POSTHOG_TOKEN`
+- `VITE_PUBLIC_POSTHOG_HOST`
 
 Server-only:
 
@@ -90,6 +97,7 @@ Never expose server-only keys in browser code or commit them to GitHub.
 4. Confirm these tables exist:
    - `profiles`
    - `attempts`
+   - `referrals`
 5. Enable only the auth providers you actually use. Current plan: Email + Google.
 
 The schema includes:
@@ -97,8 +105,36 @@ The schema includes:
 - `profiles.tier` with allowed values `free` and `pro`
 - Stripe customer/subscription fields
 - `attempts` for quiz/PBQ history
+- `referrals` for the referral free-trial program
 - Row Level Security policies
 - Signup trigger that creates a Free profile automatically
+
+## Analytics Setup
+
+Create a free PostHog project, then add these to Vercel:
+
+```bash
+VITE_PUBLIC_POSTHOG_TOKEN=phc_xxx
+VITE_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+```
+
+The app tracks safe product events such as signup, Daily Challenge starts, MCQ answers, locked PBQ clicks, upgrade clicks, checkout starts, and referral link copies. It does not track passwords or card details.
+
+Recommended PostHog funnels:
+
+- Landing page -> signup -> MCQ quiz started.
+- PBQ locked clicked -> upgrade clicked -> checkout started.
+- MCQ quiz started -> MCQ quiz completed.
+
+## Referral Program
+
+Users can open the Referrals page and copy a link like:
+
+```txt
+https://secureplusprep.com/?ref=ABC123
+```
+
+When a new user signs up with the link, `/api/referrals/claim` grants both users a 7-day Pro trial in Supabase. Run the latest `supabase/schema.sql` before launching this feature.
 
 ## Stripe Setup
 

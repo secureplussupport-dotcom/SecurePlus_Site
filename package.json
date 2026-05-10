@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "latest",
+    "posthog-js": "^1.372.10",
     "react": "latest",
     "react-dom": "latest",
     "stripe": "latest"

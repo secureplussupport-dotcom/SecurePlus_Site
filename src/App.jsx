@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { capture, identifyUser, resetAnalytics } from "./lib/analytics.js";
 import { getSupabaseAccessToken, isSupabaseConfigured, supabase } from "./lib/supabaseClient.js";
 
 // ═══════════════════════════════════════════════════════════════
@@ -31,9 +32,29 @@ const DB = {
   async saveDailyChallenge(d) { try { await storageSet("daily",JSON.stringify(d)); } catch {}},
   async getOnboardingSeen(e) { try { const r=await storageGet(`onboarded:${normalizeEmail(e)}`); return Boolean(r?.value); } catch { return false; }},
   async saveOnboardingSeen(e) { try { await storageSet(`onboarded:${normalizeEmail(e)}`,"true"); } catch {}},
+  async getReferralCode(e) { try { const key=`refcode:${normalizeEmail(e)}`; let r=await storageGet(key); if(r?.value)return r.value; const code=makeReferralCode(e); await storageSet(key,code); return code; } catch { return makeReferralCode(e); }},
 };
 
 const normalizeEmail = email => (email || "").trim().toLowerCase();
+
+function makeReferralCode(seed="secureplus") {
+  const clean = normalizeEmail(seed).replace(/[^a-z0-9]/g, "").slice(0, 6) || "secure";
+  return `${clean}${Math.random().toString(36).slice(2, 6)}`.toUpperCase();
+}
+
+function getStoredReferralCode() {
+  try {
+    const url = new URL(window.location.href);
+    const ref = (url.searchParams.get("ref") || "").trim().toUpperCase();
+    if (ref) {
+      window.localStorage?.setItem("secureplus_referral_code", ref);
+      return ref;
+    }
+    return window.localStorage?.getItem("secureplus_referral_code") || "";
+  } catch {
+    return "";
+  }
+}
 
 function getPasswordIssue(password) {
   if (password.length < 8) return "Password must be at least 8 characters.";
@@ -53,18 +74,49 @@ async function getSupabaseProfile(authUser) {
   if (!supabase || !authUser) return null;
   const { data } = await supabase
     .from("profiles")
-    .select("id,email,tier,subscription_status")
+    .select("id,email,tier,subscription_status,pro_trial_until,referral_code")
     .eq("id", authUser.id)
     .maybeSingle();
+  const trialUntil = data?.pro_trial_until ? new Date(data.pro_trial_until) : null;
+  const hasReferralTrial = trialUntil && trialUntil.getTime() > Date.now();
 
   return {
     id: authUser.id,
     email: data?.email || authUser.email,
     name: profileName(authUser),
-    tier: data?.tier === "pro" && ["active", "trialing"].includes(data?.subscription_status) ? "pro" : "free",
+    tier: (data?.tier === "pro" && ["active", "trialing"].includes(data?.subscription_status)) || hasReferralTrial ? "pro" : "free",
     subscriptionStatus: data?.subscription_status || null,
+    proTrialUntil: data?.pro_trial_until || null,
+    referralCode: data?.referral_code || "",
     authProvider: "supabase",
   };
+}
+
+async function claimReferralIfPresent(authUser) {
+  if (!isSupabaseConfigured || !authUser?.authProvider || authUser.authProvider !== "supabase") return null;
+  const referralCode = getStoredReferralCode();
+  if (!referralCode) return null;
+  try {
+    const token = await getSupabaseAccessToken();
+    if (!token) return null;
+    const response = await fetch("/api/referrals/claim", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ referralCode }),
+    });
+    const data = await response.json().catch(()=>({}));
+    if (response.ok) {
+      capture("referral_claimed", { referral_code: referralCode });
+      window.localStorage?.removeItem("secureplus_referral_code");
+      return data;
+    }
+  } catch (error) {
+    console.warn("Unable to claim referral", error);
+  }
+  return null;
 }
 
 function fromSupabaseAttempt(row) {
@@ -2120,6 +2172,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .landing-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
 .landing-feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
 .landing-auth-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,430px);gap:22px;align-items:start;padding:10px 0 20px;}
+.referral-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
 .onboarding-overlay{position:fixed;inset:0;z-index:80;background:rgba(4,8,18,.72);backdrop-filter:blur(10px);display:grid;place-items:center;padding:20px;animation:fadeUp .22s ease both;}
 .onboarding-modal{width:min(100%,520px);padding:28px 30px;position:relative;box-shadow:0 30px 90px rgba(0,0,0,.36);}
 @media (max-width: 860px){
@@ -2156,7 +2209,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
   .landing-title{font-size:34px!important;line-height:1.08!important;}
   .landing-copy{font-size:14px!important;}
   .landing-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
-  .landing-feature-grid,.landing-auth-section{grid-template-columns:1fr!important;}
+  .landing-feature-grid,.landing-auth-section,.referral-grid{grid-template-columns:1fr!important;}
   .landing-auth-section{gap:14px!important;}
   .onboarding-overlay{align-items:end;padding:12px;}
   .onboarding-modal{padding:24px 22px;max-height:92vh;overflow-y:auto;}
@@ -2214,6 +2267,7 @@ function DailyChallenge({t,onLogin,user=null}) {
   const submitQ = () => {
     if(selected===null) return;
     const correct = selected === current.correct;
+    capture("daily_question_answered", { question_id: current.id, correct, signed_in: Boolean(user) });
     setResults(r=>[...r,{qid:current.id,correct,selected}]);
     setSubmitted(true);
   };
@@ -2237,7 +2291,7 @@ function DailyChallenge({t,onLogin,user=null}) {
         <div style={{color:t.textSec,fontSize:14}}>{challenge.description}</div>
         <div style={{marginTop:12,color:t.textDim,fontSize:13}}>{challenge.type==="mcq5"?"5 multiple-choice questions":"1 performance-based question"}</div>
       </div>
-      <button className="btn btn-primary" style={{padding:"12px 32px",fontSize:15,width:"100%"}} onClick={()=>setStep("quiz")}>
+      <button className="btn btn-primary" style={{padding:"12px 32px",fontSize:15,width:"100%"}} onClick={()=>{capture("daily_challenge_started", { challenge_type: challenge.type, signed_in: Boolean(user) });setStep("quiz");}}>
         Start Today's Challenge →
       </button>
       {!user&&<div style={{marginTop:16,color:t.textDim,fontSize:13}}>
@@ -2335,6 +2389,7 @@ function DailyChallenge({t,onLogin,user=null}) {
       q={pbq}
       t={t}
       onDone={result=>{
+        capture("daily_challenge_completed", { challenge_type: "pbq", correct: result.correct, signed_in: Boolean(user) });
         setResults([{qid:result.qid,correct:result.correct,selected:null}]);
         setStep("done");
       }}
@@ -2380,6 +2435,7 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
         if(mode==="reset"){
           const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
           if(error) throw error;
+          capture("password_reset_requested");
           setOk("Password reset email sent. Check your inbox.");
           setLoading(false);
           return;
@@ -2389,8 +2445,10 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
           const { data, error } = await supabase.auth.signInWithPassword({ email, password: form.pass });
           if(error) throw error;
           const appUser=await getSupabaseProfile(data.user);
+          capture("login_completed", { method: "password" });
           onLogin(appUser);
         } else {
+          capture("signup_started", { method: "password", has_referral: Boolean(getStoredReferralCode()) });
           if(!form.name||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
           if(form.pass!==form.confirm){setErr("Passwords do not match.");setLoading(false);return;}
           const passwordIssue=getPasswordIssue(form.pass);
@@ -2408,8 +2466,10 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
           if(data.session?.user){
             const appUser=await getSupabaseProfile(data.session.user);
             setOk("Account created! Welcome to SecurePlus.");
+            capture("signup_completed", { method: "password", confirmed_immediately: true, has_referral: Boolean(getStoredReferralCode()) });
             onLogin(appUser);
           } else {
+            capture("signup_email_confirmation_required", { has_referral: Boolean(getStoredReferralCode()) });
             setOk("Almost done. Check your email, click Confirm signup, then come back here to sign in.");
           }
         }
@@ -2420,8 +2480,10 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
           const user=await DB.getUser(email);
           if(!user||user.password!==form.pass){setErr("Email or password is incorrect.");setLoading(false);return;}
           await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
+          capture("login_completed", { method: "local_demo" });
           onLogin(user);
         } else {
+          capture("signup_started", { method: "local_demo" });
           if(!form.name||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
           if(form.pass!==form.confirm){setErr("Passwords do not match.");setLoading(false);return;}
           const passwordIssue=getPasswordIssue(form.pass);
@@ -2432,6 +2494,7 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
           await DB.saveUser(user);
           await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
           setOk("Account created! Welcome to SecurePlus.");
+          capture("signup_completed", { method: "local_demo" });
           setTimeout(()=>onLogin(user),800);
         }
       }
@@ -2441,6 +2504,7 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
   const handleGoogle=async()=>{
     resetMessages();setLoading(true);
     try{
+      capture("login_started", { method: "google" });
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo: window.location.origin },
@@ -2790,6 +2854,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
       ? rankQuestionsBySm2(filtered, attempts)
       : [...filtered].sort(()=>Math.random()-.5);
     const pool=ordered.slice(0,Math.min(10,filtered.length));
+    capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: diffFilter, topic: topicFilter, question_count: pool.length, tier: user.tier });
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setResults([]);setDone(false);setStarted(true);
   };
 
@@ -2799,13 +2864,17 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
     if(selected===null)return;
     const correct=selected===current.correct;
     const r={qid:current.id,correct,selected,title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",mcq:true,createdAt:new Date().toISOString()};
+    capture("mcq_question_answered", { question_id: current.id, chapter: current.ch, difficulty: current.difficulty, topic: current.topic, correct, tier: user.tier });
     setResults(rs=>[...rs,r]);
     onSave(r);
     setSubmitted(true);setShowWrong(false);
   };
   const nextQ=()=>{
     if(qi<questions.length-1){setQi(i=>i+1);setSelected(null);setSubmitted(false);setShowWrong(false);}
-    else setDone(true);
+    else {
+      capture("mcq_quiz_completed", { correct_count: correctCount, question_count: questions.length, tier: user.tier });
+      setDone(true);
+    }
   };
 
   const correctCount=results.filter(r=>r.correct).length;
@@ -3054,7 +3123,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
               <div style={{fontWeight:600,fontSize:15,color:t.text,marginBottom:4}}>Pro Required for PBQ Access</div>
               <div style={{fontSize:13,color:t.textSec}}>MCQs are free. Pro unlocks all {PBQ_BANK.length} PBQ simulations with terminal commands, drag & drop, log analysis, and more.</div>
             </div>
-            <button className="btn btn-primary" style={{flexShrink:0}} onClick={onUpgrade}>Upgrade — $4.99/year →</button>
+            <button className="btn btn-primary" style={{flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_access_banner", tier: user.tier });onUpgrade();}}>Upgrade — $4.99/year →</button>
           </div>
         </div>
       )}
@@ -3070,7 +3139,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
               </div>
             </div>
             <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-              <button className="btn btn-primary" style={{fontSize:13}} onClick={onUpgrade}>Unlock PBQs</button>
+              <button className="btn btn-primary" style={{fontSize:13}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "locked_pbq_prompt", question_id: lockedQuestion.id, tier: user.tier });onUpgrade();}}>Unlock PBQs</button>
               <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>setLockedQuestion(null)}>Not now</button>
             </div>
           </div>
@@ -3111,7 +3180,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
           const ok=correct.has(q.id);
           const ch=CHAPTERS.find(c=>c.id===q.ch);
           return(
-            <div key={q.id} className={`card card-hover`} style={{padding:"14px 18px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",opacity:isPro?1:.75}} onClick={()=>isPro?onStart(q):setLockedQuestion(q)}>
+            <div key={q.id} className={`card card-hover`} style={{padding:"14px 18px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",opacity:isPro?1:.75}} onClick={()=>{if(isPro){capture("pbq_started", { question_id: q.id, type: q.type, chapter: q.ch, tier: user.tier });onStart(q);}else{capture("pbq_locked_clicked", { question_id: q.id, type: q.type, chapter: q.ch });setLockedQuestion(q);}}}>
               <span style={{fontSize:22,flexShrink:0}}>{q.emoji||"📌"}</span>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,marginBottom:5,flexWrap:"wrap"}}>
@@ -3157,7 +3226,11 @@ function PBQSim({q,onDone,t}) {
     return false;
   };
 
-  const submit=()=>setSubmitted(true);
+  const submit=()=>{
+    const correct = isCorrect();
+    capture("pbq_question_answered", { question_id: q.id, type: q.type, chapter: q.ch, correct });
+    setSubmitted(true);
+  };
 
   const runTerminal=()=>{
     const cmd=termInput.trim();
@@ -3403,7 +3476,7 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,onNavigate,t
   return(
     <div style={{padding:"32px 24px",maxWidth:700,margin:"0 auto"}}>
       <div style={{textAlign:"center",marginBottom:32}}>
-        <h2 style={{fontSize:26,fontWeight:700,color:t.text,marginBottom:8}}>Simple Pricing</h2>
+        <h2 style={{fontSize:26,fontWeight:700,color:t.text,marginBottom:8}}>Upgrade</h2>
         <p style={{color:t.textSec,fontSize:14}}>Annual billing · Cancel anytime</p>
       </div>
 
@@ -3446,7 +3519,7 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,onNavigate,t
             ))}
           </div>
           {user.tier==="pro"?<button className="btn btn-ghost" style={{width:"100%",justifyContent:"center"}} disabled>Current Plan</button>
-            :<button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"12px"}} onClick={()=>onUpgrade("pro")} disabled={billingLoading}>
+            :<button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"12px"}} onClick={()=>{capture("upgrade_button_clicked", { source: "upgrade_page", tier: user.tier });onUpgrade("pro");}} disabled={billingLoading}>
               {billingLoading?"Opening Stripe...":"Upgrade yearly →"}
             </button>}
         </div>
@@ -3454,7 +3527,7 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,onNavigate,t
 
       {/* Stripe note */}
       <div className="card" style={{padding:"18px 22px"}}>
-        <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:8}}>💳 Payment via Stripe</div>
+        <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:8}}>Payment via Stripe</div>
         <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
           In the live site, clicking Upgrade creates a Stripe Checkout session at <code style={{fontFamily:"'JetBrains Mono',monospace",background:t.panel,padding:"1px 6px",borderRadius:4}}>/api/stripe/checkout</code>. Payments are processed securely — we never store card details.
         </p>
@@ -3492,6 +3565,81 @@ function Pricing({user,onUpgrade,onCancelMembership,onDeleteAccount,onNavigate,t
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// REFERRALS
+// ═══════════════════════════════════════════════════════════════
+function ReferralPage({user,t}) {
+  const [copied,setCopied]=useState(false);
+  const [localCode,setLocalCode]=useState(user.referralCode || "");
+
+  useEffect(()=>{
+    let active=true;
+    (async()=>{
+      if(!localCode && user?.email){
+        const code=await DB.getReferralCode(user.email);
+        if(active)setLocalCode(code);
+      }
+    })();
+    return()=>{active=false;};
+  },[localCode,user?.email]);
+
+  const code = user.referralCode || localCode || "RUN-SUPABASE-SQL";
+  const link = `${window.location.origin}/?ref=${encodeURIComponent(code)}`;
+
+  const copyLink=async()=>{
+    try{
+      await navigator.clipboard.writeText(link);
+      setCopied(true);
+      capture("referral_link_copied", { tier: user.tier });
+      setTimeout(()=>setCopied(false),1600);
+    }catch{
+      window.prompt("Copy this referral link:", link);
+    }
+  };
+
+  return(
+    <div style={{padding:"28px 24px",maxWidth:840,margin:"0 auto"}}>
+      <div style={{marginBottom:22}}>
+        <h2 style={{fontSize:24,fontWeight:800,color:t.text,marginBottom:6}}>Referral Program</h2>
+        <p style={{fontSize:14,color:t.textSec,lineHeight:1.7}}>
+          Share SecurePlus with a friend. When they sign up with your link, both of you get a free 7-day Pro trial.
+        </p>
+      </div>
+
+      <div className="card" style={{padding:"22px 24px",marginBottom:16,borderColor:`${t.accent}38`}}>
+        <div className="label" style={{marginBottom:8}}>Your referral link</div>
+        <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}>
+          <input className="input mono" readOnly value={link} style={{flex:"1 1 320px",fontSize:13}}/>
+          <button className="btn btn-primary" onClick={copyLink}>{copied?"Copied":"Copy Link"}</button>
+        </div>
+        <div style={{fontSize:12,color:t.textDim,marginTop:10}}>
+          Referral code: <span className="mono" style={{color:t.textSec}}>{code}</span>
+        </div>
+      </div>
+
+      <div className="referral-grid" style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:12,marginBottom:16}}>
+        {[
+          {title:"Share",body:"Send your link to a study group, Discord, Reddit thread, or classmate."},
+          {title:"They sign up",body:"The referral code is saved when they create a SecurePlus account."},
+          {title:"Both get Pro",body:"Each account receives 7 days of Pro PBQ access as a trial."},
+        ].map(item=>(
+          <div key={item.title} className="card" style={{padding:"18px 20px"}}>
+            <div style={{fontWeight:800,color:t.text,marginBottom:6}}>{item.title}</div>
+            <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{item.body}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="card" style={{padding:"18px 20px",background:`${t.amber}07`,borderColor:`${t.amber}36`}}>
+        <div style={{fontWeight:700,color:t.text,marginBottom:6}}>Setup note</div>
+        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+          For live referrals, run the updated Supabase SQL in <span className="mono">supabase/schema.sql</span>. That creates referral codes and keeps users from giving themselves free Pro access.
+        </p>
       </div>
     </div>
   );
@@ -3648,7 +3796,7 @@ function OnboardingModal({user,t,onClose,onPricing}) {
       bullets:["Expect both MCQs and performance-based questions.","PBQs may ask you to interpret logs, configure controls, order steps, or solve scenario tasks.","SecurePlus helps solidify skills through practice, feedback, and review."],
     },
     {
-      icon:"💳",
+      icon:"⬆️",
       title:"When Pro helps",
       body:"The free plan is useful for MCQ practice. Pro is for students who want PBQ simulation practice too.",
       bullets:["Unlock all PBQ simulations.","Practise terminal, log analysis, ordering, hotspot, and drag/drop-style tasks.","Costs $4.99/year, roughly $0.40/month."],
@@ -3768,6 +3916,14 @@ export default function App() {
   const t=darkMode?THEMES.dark:THEMES.light;
 
   useEffect(()=>{
+    if(user) identifyUser(user);
+  },[user]);
+
+  useEffect(()=>{
+    capture("app_viewed", { view, signed_in: Boolean(user), tier: user?.tier || "guest" });
+  },[view,user?.tier]);
+
+  useEffect(()=>{
     let active=true;
 
     if(isSupabaseConfigured){
@@ -3782,7 +3938,10 @@ export default function App() {
         const appUser=await getSupabaseProfile(session.user);
         const savedAttempts=await loadSupabaseAttempts(session.user.id);
         if(!active)return;
-        setUser(appUser);
+        const referralClaim = await claimReferralIfPresent(appUser);
+        const displayUser = referralClaim?.proTrialUntil ? { ...appUser, tier: "pro", proTrialUntil: referralClaim.proTrialUntil } : appUser;
+        setUser(displayUser);
+        identifyUser(displayUser);
         setAttempts(savedAttempts);
         const seen=await DB.getOnboardingSeen(appUser.email);
         if(active&&!seen) setShowOnboarding(true);
@@ -3809,14 +3968,18 @@ export default function App() {
   },[]);
 
   const handleLogin=useCallback(async u=>{
-    setUser(u);
+    const referralClaim=await claimReferralIfPresent(u);
+    const displayUser=referralClaim?.proTrialUntil ? { ...u, tier: "pro", proTrialUntil: referralClaim.proTrialUntil } : u;
+    setUser(displayUser);
+    identifyUser(displayUser);
     const a=u?.authProvider==="supabase" ? await loadSupabaseAttempts(u.id) : await DB.getAttempts(u.email);
-    const seen=await DB.getOnboardingSeen(u.email);
+    const seen=await DB.getOnboardingSeen(displayUser.email);
     if(!seen) setShowOnboarding(true);
     setAttempts(a);setView("dashboard");setShowDaily(false);
   },[]);
   const handleLogout=useCallback(async()=>{
     if(isSupabaseConfigured) await supabase.auth.signOut();
+    resetAnalytics();
     await DB.clearSession();setPasswordRecovery(false);setShowOnboarding(false);setUser(null);setAttempts([]);setView("dashboard");
   },[]);
   const closeOnboarding=useCallback(async()=>{
@@ -3830,6 +3993,7 @@ export default function App() {
     }
     setBillingLoading(true);
     try{
+      capture("checkout_started", { tier: user.tier, has_referral: Boolean(getStoredReferralCode()) });
       const token=await getSupabaseAccessToken();
       if(!token){
         alert("Please sign in with Supabase before managing billing.");
@@ -3907,6 +4071,7 @@ export default function App() {
           "content-type":"application/json",
           authorization:`Bearer ${token}`,
         },
+        body: JSON.stringify({ referralCode: getStoredReferralCode() }),
       });
       const data=await response.json().catch(()=>({}));
       if(!response.ok||!data.url) throw new Error(data.error||"Unable to start Checkout.");
@@ -4002,7 +4167,8 @@ export default function App() {
     {id:"mcq",emoji:"📝",label:"MCQ Practice"},
     {id:"pbq",emoji:"💡",label:"PBQ Simulator"},
     {id:"daily",emoji:"🎯",label:"Daily Challenge"},
-    {id:"pricing",emoji:"💳",label:"Pricing"},
+    {id:"pricing",emoji:"⬆️",label:"Upgrade"},
+    {id:"referrals",emoji:"🔗",label:"Referrals"},
     {id:"objectives",emoji:"📋",label:"Objectives"},
     {id:"privacy",emoji:"🔒",label:"Privacy Policy"},
     {id:"terms",emoji:"📄",label:"Terms of Service"},
@@ -4072,6 +4238,7 @@ export default function App() {
           {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
+          {view==="referrals"&&<ReferralPage user={user} t={t}/>}
           {view==="objectives"&&<ObjectivesPage t={t}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}

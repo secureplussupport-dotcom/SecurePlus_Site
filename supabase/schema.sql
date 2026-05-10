@@ -8,8 +8,27 @@ create table if not exists profiles (
   stripe_customer_id text,
   stripe_subscription_id text,
   subscription_status text,
+  referral_code text,
+  pro_trial_until timestamptz,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
+);
+
+alter table profiles
+add column if not exists stripe_customer_id text,
+add column if not exists stripe_subscription_id text,
+add column if not exists subscription_status text,
+add column if not exists referral_code text,
+add column if not exists pro_trial_until timestamptz;
+
+create table if not exists referrals (
+  id uuid primary key default gen_random_uuid(),
+  referrer_id uuid not null references auth.users(id) on delete cascade,
+  referred_user_id uuid not null references auth.users(id) on delete cascade,
+  referral_code text not null,
+  status text default 'trial_granted',
+  created_at timestamptz default now(),
+  unique (referred_user_id)
 );
 
 create table if not exists attempts (
@@ -27,6 +46,7 @@ create table if not exists attempts (
 
 alter table profiles enable row level security;
 alter table attempts enable row level security;
+alter table referrals enable row level security;
 
 drop policy if exists "Users can update own profile" on profiles;
 
@@ -57,14 +77,28 @@ with check (
   and (score is null or (score >= 0 and score <= 100))
 );
 
+drop policy if exists "Users can view own referrals" on referrals;
+create policy "Users can view own referrals"
+on referrals for select
+to authenticated
+using (
+  auth.uid() is not null
+  and (auth.uid() = referrer_id or auth.uid() = referred_user_id)
+);
+
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer
 as $$
 begin
-  insert into public.profiles (id, email, tier)
-  values (new.id, new.email, 'free')
+  insert into public.profiles (id, email, tier, referral_code)
+  values (
+    new.id,
+    new.email,
+    'free',
+    upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 10))
+  )
   on conflict (id) do nothing;
 
   return new;
@@ -111,7 +145,23 @@ begin
       and (chapter is null or length(chapter) <= 40)
     );
   end if;
+
+  if not exists (select 1 from pg_constraint where conname = 'profiles_referral_code_key') then
+    alter table profiles
+    add constraint profiles_referral_code_key
+    unique (referral_code);
+  end if;
+
+  if not exists (select 1 from pg_constraint where conname = 'referrals_no_self_referral_check') then
+    alter table referrals
+    add constraint referrals_no_self_referral_check
+    check (referrer_id <> referred_user_id);
+  end if;
 end $$;
+
+update profiles
+set referral_code = upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 10))
+where referral_code is null;
 
 create index if not exists profiles_stripe_customer_id_idx
 on profiles (stripe_customer_id);
@@ -121,3 +171,9 @@ on profiles (stripe_subscription_id);
 
 create index if not exists attempts_user_id_created_at_idx
 on attempts (user_id, created_at desc);
+
+create index if not exists profiles_referral_code_idx
+on profiles (referral_code);
+
+create index if not exists referrals_referrer_id_created_at_idx
+on referrals (referrer_id, created_at desc);

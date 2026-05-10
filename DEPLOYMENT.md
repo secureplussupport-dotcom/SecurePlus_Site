@@ -12,7 +12,8 @@ Use this checklist when moving SecurePlus from local development to a hosted sit
    - Enable Google only if you have Google OAuth credentials.
    - Keep Apple disabled unless you join Apple Developer Program.
 5. Add site URLs in Authentication -> URL Configuration:
-   - Site URL: `https://secure-plus-site.vercel.app`
+   - Site URL: `https://secureplusprep.com`
+   - Redirect URL: `https://secureplusprep.com/**`
    - Redirect URL: `https://secure-plus-site.vercel.app/**`
    - Redirect URL: `http://127.0.0.1:5173/**`
 6. In Authentication -> Emails -> Templates, use the branded templates in `supabase/email-templates`:
@@ -76,12 +77,68 @@ STRIPE_WEBHOOK_SECRET=
 APP_URL=
 STRIPE_SUCCESS_URL=
 STRIPE_CANCEL_URL=
+VITE_PUBLIC_POSTHOG_TOKEN=
+VITE_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 ```
 
 4. Deploy.
 5. Test signup, login, Google login, checkout, billing portal, account deletion.
 
-## 5. Production Readiness
+## 5. PostHog Analytics
+
+Use PostHog first because it gives you funnels, user paths, question events, and drop-off visibility in one free-tier dashboard.
+
+1. Create a free PostHog Cloud project.
+2. Copy the Project API Key into Vercel as `VITE_PUBLIC_POSTHOG_TOKEN`.
+3. Set `VITE_PUBLIC_POSTHOG_HOST` to the host shown in PostHog, usually `https://us.i.posthog.com`.
+4. Redeploy Vercel after adding the variables.
+5. In PostHog, create funnels such as:
+   - Landing viewed -> Signup completed -> MCQ quiz started.
+   - PBQ locked clicked -> Upgrade button clicked -> Checkout started.
+   - MCQ quiz started -> MCQ quiz completed.
+
+Useful custom events already sent by the app:
+
+- `app_viewed`
+- `signup_started`
+- `signup_completed`
+- `daily_challenge_started`
+- `mcq_question_answered`
+- `mcq_quiz_completed`
+- `pbq_locked_clicked`
+- `checkout_started`
+- `referral_link_copied`
+- `referral_claimed`
+
+## 6. SEO
+
+The app includes static landing content in `index.html`, meta description, Open Graph tags, structured data, `robots.txt`, `sitemap.xml`, and an Open Graph image.
+
+After your custom domain is live:
+
+1. Confirm `https://secureplusprep.com/sitemap.xml` opens.
+2. Add `secureplusprep.com` to Google Search Console.
+3. Submit the sitemap URL.
+4. Search Console may take days or weeks to show impressions. That delay is normal.
+
+For stronger SEO later, migrate the public marketing pages to Next.js or another server-rendered/static-rendered framework. The app now has the basic static SEO layer, but blog/content pages will help ranking much more than the dashboard app alone.
+
+## 7. Referral Program
+
+The referral program gives both users 7 days of Pro trial access:
+
+1. Run the latest `supabase/schema.sql`.
+2. Deploy the Vercel API route `/api/referrals/claim`.
+3. Users can copy links from the Referrals page.
+4. A link looks like:
+
+```txt
+https://secureplusprep.com/?ref=ABC123
+```
+
+The server checks the referral code and blocks self-referrals.
+
+## 8. Production Readiness
 
 Before accepting real payments:
 
