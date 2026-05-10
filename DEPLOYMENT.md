@@ -128,8 +128,8 @@ For stronger SEO later, migrate the public marketing pages to Next.js or another
 
 The referral program gives both users 7 days of Pro trial access:
 
-1. Run the latest `supabase/schema.sql`.
-2. Deploy the Vercel API route `/api/referrals/claim`.
+1. Run the latest `supabase/schema.sql`, or run `supabase/referrals.sql` if your main tables already exist.
+2. Deploy the Vercel API routes `/api/referrals/me` and `/api/referrals/claim`.
 3. Users can copy links from the Referrals page.
 4. A link looks like:
 

@@ -56,6 +56,19 @@ function getStoredReferralCode() {
   }
 }
 
+async function getReferralDetails() {
+  if (!isSupabaseConfigured) return null;
+  const token = await getSupabaseAccessToken();
+  if (!token) return null;
+  const response = await fetch("/api/referrals/me", {
+    method: "POST",
+    headers: { authorization: `Bearer ${token}` },
+  });
+  const data = await response.json().catch(()=>({}));
+  if (!response.ok) throw new Error(data.error || "Unable to load referral details.");
+  return data;
+}
+
 function shouldShowPBQUpgradePrompt() {
   try {
     const today = new Date().toISOString().slice(0, 10);
@@ -3646,23 +3659,40 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
 // ═══════════════════════════════════════════════════════════════
 function ReferralPage({user,t}) {
   const [copied,setCopied]=useState(false);
-  const [localCode,setLocalCode]=useState(user.referralCode || "");
+  const [details,setDetails]=useState({
+    referralCode: user.referralCode || "",
+    invitedCount: null,
+    proTrialUntil: user.proTrialUntil || null,
+  });
+  const [loading,setLoading]=useState(isSupabaseConfigured);
+  const [error,setError]=useState("");
 
   useEffect(()=>{
     let active=true;
     (async()=>{
-      if(!localCode && user?.email){
-        const code=await DB.getReferralCode(user.email);
-        if(active)setLocalCode(code);
+      setError("");
+      try{
+        if(isSupabaseConfigured && user?.authProvider==="supabase"){
+          const serverDetails=await getReferralDetails();
+          if(active)setDetails(d=>({...d,...serverDetails}));
+        } else if(user?.email){
+          const code=await DB.getReferralCode(user.email);
+          if(active)setDetails(d=>({...d,referralCode:code,invitedCount:0}));
+        }
+      }catch(err){
+        if(active)setError(err.message || "Unable to load referral details.");
+      }finally{
+        if(active)setLoading(false);
       }
     })();
     return()=>{active=false;};
-  },[localCode,user?.email]);
+  },[user?.email,user?.authProvider]);
 
-  const code = user.referralCode || localCode || "RUN-SUPABASE-SQL";
+  const code = details.referralCode || "";
   const link = `${window.location.origin}/?ref=${encodeURIComponent(code)}`;
 
   const copyLink=async()=>{
+    if(!code)return;
     try{
       await navigator.clipboard.writeText(link);
       setCopied(true);
@@ -3684,12 +3714,14 @@ function ReferralPage({user,t}) {
 
       <div className="card" style={{padding:"22px 24px",marginBottom:16,borderColor:`${t.accent}38`}}>
         <div className="label" style={{marginBottom:8}}>Your referral link</div>
+        {error&&<Alert msg={error} type="warn" t={t}/>}
         <div style={{display:"flex",gap:10,alignItems:"center",flexWrap:"wrap"}}>
-          <input className="input mono" readOnly value={link} style={{flex:"1 1 320px",fontSize:13}}/>
-          <button className="btn btn-primary" onClick={copyLink}>{copied?"Copied":"Copy Link"}</button>
+          <input className="input mono" readOnly value={loading?"Loading referral link...":code?link:"Referral setup needed"} style={{flex:"1 1 320px",fontSize:13}}/>
+          <button className="btn btn-primary" onClick={copyLink} disabled={!code||loading}>{copied?"Copied":"Copy Link"}</button>
         </div>
         <div style={{fontSize:12,color:t.textDim,marginTop:10}}>
-          Referral code: <span className="mono" style={{color:t.textSec}}>{code}</span>
+          Referral code: <span className="mono" style={{color:t.textSec}}>{code || "Not ready"}</span>
+          {details.invitedCount!==null&&<span> · Successful referrals: {details.invitedCount}</span>}
         </div>
       </div>
 
@@ -3706,10 +3738,12 @@ function ReferralPage({user,t}) {
         ))}
       </div>
 
-      <div className="card" style={{padding:"18px 20px",background:`${t.amber}07`,borderColor:`${t.amber}36`}}>
-        <div style={{fontWeight:700,color:t.text,marginBottom:6}}>Setup note</div>
+      <div className="card" style={{padding:"18px 20px",background:error?`${t.amber}07`:`${t.green}07`,borderColor:error?`${t.amber}36`:`${t.green}36`}}>
+        <div style={{fontWeight:700,color:t.text,marginBottom:6}}>{error?"Setup needed":"Ready to share"}</div>
         <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-          For live referrals, run the updated Supabase SQL in <span className="mono">supabase/schema.sql</span>. That creates referral codes and keeps users from giving themselves free Pro access.
+          {error
+            ? "Run the referral SQL once in Supabase, then redeploy or refresh this page."
+            : "This referral link is server-backed. If a friend signs up with it, both accounts receive a 7-day Pro trial."}
         </p>
       </div>
     </div>

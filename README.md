@@ -136,6 +136,14 @@ https://secureplusprep.com/?ref=ABC123
 
 When a new user signs up with the link, `/api/referrals/claim` grants both users a 7-day Pro trial in Supabase. Run the latest `supabase/schema.sql` before launching this feature.
 
+If the rest of the database is already set up, you can run only:
+
+```txt
+supabase/referrals.sql
+```
+
+The Referrals page calls `/api/referrals/me`, which creates or returns the user's real Supabase referral code. Do not use browser-only/local referral codes for live referrals.
+
 ## Stripe Setup
 
 Create a yearly recurring Stripe price for Pro (`$4.99 USD / year`), then set:

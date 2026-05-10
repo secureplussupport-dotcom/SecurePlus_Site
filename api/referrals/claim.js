@@ -24,6 +24,39 @@ function extendTrialFrom(value) {
   return addDays(base, TRIAL_DAYS).toISOString();
 }
 
+function makeCode() {
+  return crypto.randomUUID().replace(/-/g, "").slice(0, 10).toUpperCase();
+}
+
+function isMissingReferralSchema(error) {
+  return error?.code === "42703" || error?.code === "42P01";
+}
+
+async function ensureReferredProfile(supabase, authUser) {
+  const { data: existing, error: selectError } = await supabase
+    .from("profiles")
+    .select("id,pro_trial_until")
+    .eq("id", authUser.id)
+    .maybeSingle();
+
+  if (selectError) throw selectError;
+  if (existing) return existing;
+
+  const { data: inserted, error: insertError } = await supabase
+    .from("profiles")
+    .insert({
+      id: authUser.id,
+      email: authUser.email || "",
+      tier: "free",
+      referral_code: makeCode(),
+    })
+    .select("id,pro_trial_until")
+    .maybeSingle();
+
+  if (insertError) throw insertError;
+  return inserted;
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("allow", "POST");
@@ -64,14 +97,20 @@ export default async function handler(req, res) {
       .eq("referred_user_id", referredUser.id)
       .maybeSingle();
     if (existingError) throw existingError;
-    if (existingReferral) return json(res, 200, { ok: true, alreadyClaimed: true });
+    if (existingReferral) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("pro_trial_until")
+        .eq("id", referredUser.id)
+        .maybeSingle();
+      return json(res, 200, {
+        ok: true,
+        alreadyClaimed: true,
+        proTrialUntil: profile?.pro_trial_until || null,
+      });
+    }
 
-    const { data: referredProfile, error: profileError } = await supabase
-      .from("profiles")
-      .select("id,pro_trial_until")
-      .eq("id", referredUser.id)
-      .maybeSingle();
-    if (profileError) throw profileError;
+    const referredProfile = await ensureReferredProfile(supabase, referredUser);
 
     const referredTrialUntil = extendTrialFrom(referredProfile?.pro_trial_until);
     const referrerTrialUntil = extendTrialFrom(referrer.pro_trial_until);
@@ -99,6 +138,11 @@ export default async function handler(req, res) {
     return json(res, 200, { ok: true, trialDays: TRIAL_DAYS, proTrialUntil: referredTrialUntil });
   } catch (error) {
     console.error("Referral claim failed:", error);
+    if (isMissingReferralSchema(error)) {
+      return json(res, 409, {
+        error: "Referral database setup is missing. Run supabase/referrals.sql in Supabase SQL Editor.",
+      });
+    }
     return json(res, 500, { error: "Unable to apply referral." });
   }
 }
