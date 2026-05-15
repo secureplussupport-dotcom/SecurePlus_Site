@@ -124,6 +124,7 @@ function appUserFromProfile(authUser, profile) {
     proTrialUntil: profile?.pro_trial_until || null,
     referralCode: profile?.referral_code || "",
     authProvider: "supabase",
+    loginMethod: authUser?.app_metadata?.provider || "email",
   };
 }
 
@@ -5505,6 +5506,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .nav-glyph span,.nav-glyph::before,.nav-glyph::after{content:"";position:absolute;display:block;transition:all .25s ease;}
 .nav-glyph-dashboard span{width:10px;height:8px;border:2px solid currentColor;border-top:0;bottom:5px;border-radius:1px;}
 .nav-glyph-dashboard::before{width:12px;height:12px;border-left:2px solid currentColor;border-top:2px solid currentColor;transform:rotate(45deg);top:3px;}
+.nav-lnk:hover .nav-glyph-dashboard,.nav-glyph-dashboard.active{color:#f59e0b;background:#f59e0b18;border-color:#f59e0b55;box-shadow:0 0 18px #f59e0b40;}
+.nav-lnk:hover .nav-glyph-dashboard::before,.nav-glyph-dashboard.active::before{animation:roofDrop .55s ease both;}
 .nav-glyph-mcq span{width:11px;height:14px;border:2px solid currentColor;border-radius:2px;}
 .nav-glyph-mcq::before{width:6px;height:2px;background:currentColor;top:8px;}
 .nav-glyph-mcq::after{width:6px;height:2px;background:currentColor;top:13px;}
@@ -5513,8 +5516,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .nav-glyph-pbq::after{width:5px;height:2px;background:currentColor;bottom:2px;border-radius:4px;}
 .nav-glyph-pbq.active{color:#f59e0b;background:#f59e0b18;border-color:#f59e0b55;box-shadow:0 0 18px #f59e0b45;}
 .nav-glyph-pbq.active span{background:#f59e0b22;animation:bulbPulse 1.2s ease infinite alternate;}
-.nav-glyph-daily span{width:13px;height:13px;border:2px solid currentColor;border-radius:50%;}
+.nav-glyph-daily span{width:14px;height:14px;border:2px solid currentColor;border-radius:50%;}
 .nav-glyph-daily::before{width:5px;height:5px;background:currentColor;border-radius:50%;}
+.nav-glyph-daily::after{width:10px;height:2px;background:currentColor;left:2px;top:5px;transform:translateX(-10px) rotate(-20deg);opacity:0;border-radius:2px;}
+.nav-lnk:hover .nav-glyph-daily,.nav-glyph-daily.active{color:#ef4444;background:#ef444418;border-color:#ef444455;box-shadow:0 0 18px #ef444440;}
+.nav-lnk:hover .nav-glyph-daily::after,.nav-glyph-daily.active::after{animation:arrowShot .6s ease both;}
 .nav-glyph-pricing span{width:11px;height:11px;border-top:2px solid currentColor;border-right:2px solid currentColor;transform:rotate(-45deg);top:8px;}
 .nav-glyph-pricing::before{width:2px;height:13px;background:currentColor;top:5px;}
 .nav-glyph-objectives span{width:13px;height:13px;border:2px solid currentColor;border-radius:3px;}
@@ -5527,6 +5533,43 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .nav-glyph-terms span{width:12px;height:15px;border:2px solid currentColor;border-radius:2px;}
 .nav-glyph-terms::before{width:5px;height:5px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;right:4px;top:4px;transform:rotate(-45deg);}
 .nav-lnk:hover .nav-glyph,.nav-lnk.act .nav-glyph{transform:translateY(-1px);}
+.chapter-icon,.sim-icon{width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;color:var(--icon-color);background:color-mix(in srgb,var(--icon-color) 12%, transparent);border:1px solid color-mix(in srgb,var(--icon-color) 34%, transparent);transition:transform .2s,box-shadow .2s,background .2s,border-color .2s;}
+.chapter-icon span,.chapter-icon::before,.chapter-icon::after,.sim-icon span,.sim-icon::before,.sim-icon::after{content:"";position:absolute;display:block;transition:all .25s ease;}
+.chapter-icon:hover,.sim-icon:hover,.chapter-card:hover .chapter-icon,.sim-card:hover .sim-icon,.card-hover:hover .sim-icon{transform:translateY(-2px) scale(1.03);box-shadow:0 12px 26px color-mix(in srgb,var(--icon-color) 28%, transparent);background:color-mix(in srgb,var(--icon-color) 18%, transparent);border-color:color-mix(in srgb,var(--icon-color) 52%, transparent);}
+.chapter-icon-1 span{width:15px;height:18px;border:2px solid currentColor;border-radius:8px 8px 4px 4px;bottom:6px;}
+.chapter-icon-1::before{width:12px;height:10px;border:2px solid currentColor;border-bottom:0;border-radius:10px 10px 0 0;top:5px;}
+.chapter-icon-1::after{width:4px;height:4px;background:currentColor;border-radius:50%;}
+.chapter-icon-2 span{width:17px;height:17px;border:2px solid currentColor;clip-path:polygon(50% 0,100% 90%,0 90%);}
+.chapter-icon-2::before{width:3px;height:9px;background:currentColor;top:10px;border-radius:3px;}
+.chapter-icon-2::after{width:3px;height:3px;background:currentColor;border-radius:50%;bottom:8px;}
+.chapter-icon-3 span{width:18px;height:14px;border:2px solid currentColor;border-radius:3px;bottom:8px;}
+.chapter-icon-3::before{width:22px;height:12px;border-left:2px solid currentColor;border-top:2px solid currentColor;transform:rotate(45deg);top:5px;}
+.chapter-icon-4 span{width:18px;height:12px;border:2px solid currentColor;border-radius:3px;top:8px;}
+.chapter-icon-4::before{width:2px;height:8px;background:currentColor;bottom:6px;}
+.chapter-icon-4::after{width:12px;height:2px;background:currentColor;bottom:5px;border-radius:2px;}
+.chapter-icon-5 span{width:16px;height:18px;border:2px solid currentColor;border-radius:3px;}
+.chapter-icon-5::before{width:8px;height:2px;background:currentColor;top:10px;}
+.chapter-icon-5::after{width:8px;height:2px;background:currentColor;top:16px;}
+.sim-icon-terminal span{width:18px;height:14px;border:2px solid currentColor;border-radius:3px;}
+.sim-icon-terminal::before{width:6px;height:2px;background:currentColor;left:9px;top:13px;box-shadow:6px 0 0 currentColor;}
+.sim-icon-drag span{width:7px;height:7px;border:2px solid currentColor;border-radius:2px;left:7px;top:7px;box-shadow:13px 13px 0 -2px transparent,13px 13px 0 0 currentColor;}
+.sim-icon-drag::before{width:13px;height:2px;background:currentColor;transform:rotate(45deg);}
+.sim-icon-hotspot span{width:17px;height:17px;border:2px solid currentColor;border-radius:50%;}
+.sim-icon-hotspot::before{width:7px;height:7px;background:currentColor;border-radius:50%;}
+.sim-icon-ordering span{width:16px;height:2px;background:currentColor;top:10px;box-shadow:0 6px 0 currentColor,0 12px 0 currentColor;}
+.sim-icon-ordering::before{width:4px;height:4px;background:currentColor;border-radius:50%;left:7px;top:9px;box-shadow:0 6px 0 currentColor,0 12px 0 currentColor;}
+.sim-icon-fill span{width:18px;height:2px;background:currentColor;bottom:9px;}
+.sim-icon-fill::before{width:15px;height:6px;border:2px solid currentColor;border-top:0;transform:rotate(-35deg);top:10px;}
+.sim-icon-config span{width:16px;height:16px;border:2px solid currentColor;border-radius:50%;}
+.sim-icon-config::before{width:4px;height:4px;background:currentColor;border-radius:50%;}
+.sim-icon-log span{width:18px;height:14px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;}
+.sim-icon-log::before{width:3px;height:7px;background:currentColor;bottom:9px;left:11px;box-shadow:6px -4px 0 currentColor,12px -1px 0 currentColor;}
+.sim-icon-scenario span{width:16px;height:18px;border:2px solid currentColor;border-radius:3px;}
+.sim-icon-scenario::before{width:8px;height:2px;background:currentColor;top:11px;box-shadow:0 5px 0 currentColor;}
+.profile-menu{position:relative;}
+.profile-popover{position:absolute;left:0;top:calc(100% + 8px);z-index:70;width:min(340px,calc(100vw - 28px));padding:16px;background:${t.surface};border:1px solid ${t.border};border-radius:8px;box-shadow:0 20px 50px rgba(0,0,0,.24);}
+.sidebar .profile-popover{left:14px;}
+.mobile-profile .profile-popover{right:0;left:auto;}
 .term-wrap{position:relative;display:inline-block;}
 .term-link{border:0;background:transparent;color:${t.accent};font:inherit;font-weight:700;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;cursor:pointer;padding:0 1px;}
 .term-pop{position:absolute;z-index:50;left:0;top:1.7em;width:min(280px,78vw);padding:10px 12px;border:1px solid;border-radius:8px;box-shadow:0 16px 34px rgba(0,0,0,.18);font-size:12px;line-height:1.55;}
@@ -5555,6 +5598,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 @keyframes shimmer{from{opacity:.6}to{opacity:1}}
 @keyframes bulbPulse{from{box-shadow:0 0 0 #f59e0b00;}to{box-shadow:0 0 18px #f59e0b99;}}
 @keyframes lockClose{0%{transform:translateY(-5px) rotate(-18deg);}70%{transform:translateY(1px) rotate(3deg);}100%{transform:translateY(0) rotate(0);}}
+@keyframes roofDrop{0%{top:-8px;opacity:0;}70%{top:5px;opacity:1;}100%{top:3px;opacity:1;}}
+@keyframes arrowShot{0%{transform:translateX(-12px) rotate(-20deg);opacity:0;}65%{transform:translateX(7px) rotate(-20deg);opacity:1;}100%{transform:translateX(5px) rotate(-20deg);opacity:1;}}
 .fu{animation:fadeUp .35s cubic-bezier(.16,1,.3,1) both;}
 .chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700;border:1px solid;line-height:1.4;}
 .app-shell{display:flex;min-height:100vh;background:transparent;}
@@ -5637,7 +5682,7 @@ function BrandMark({size=30}) {
 }
 function SimBadge({type,t}) {
   const s=Object.values(SIM_TYPES).find(x=>x.id===type)||SIM_TYPES.TERMINAL;
-  return <span className="chip" style={{background:`${s.color}15`,color:s.color,borderColor:`${s.color}30`}}>{s.emoji} {s.label}</span>;
+  return <span className="chip" style={{background:`${s.color}15`,color:s.color,borderColor:`${s.color}30`}}><SimIcon type={type} size={18}/> {s.label}</span>;
 }
 function DiffBadge({d,t}) {
   const map={easy:{c:"#10b981",label:"Easy"},medium:{c:"#f59e0b",label:"Medium"},hard:{c:"#ef4444",label:"Hard"}};
@@ -5678,15 +5723,134 @@ function GlossaryText({text,t,style}) {
 function ChBadge({chId,t}) {
   const ch=CHAPTERS.find(c=>c.id===chId);
   if(!ch) return null;
-  return <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}25`,fontSize:11}}>{ch.emoji} Ch.{ch.id}</span>;
+  const color=chapterColor(ch.id);
+  return <span className="chip" style={{background:`${color}14`,color,borderColor:`${color}30`,fontSize:11}}><ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}</span>;
 }
 function NavGlyph({type,active}) {
   return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true"><span/></span>;
+}
+function chapterColor(id) {
+  return ({1:"#2f7df6",2:"#ef4444",3:"#14b8a6",4:"#a78bfa",5:"#f59e0b"})[id] || "#2f7df6";
+}
+function ChapterIcon({id,size=34}) {
+  return <span className={`chapter-icon chapter-icon-${id}`} style={{"--icon-color":chapterColor(id),width:size,height:size,borderRadius:Math.max(6,Math.round(size*.28))}} aria-hidden="true"><span/></span>;
+}
+function simIconClass(type) {
+  return ({
+    "TERMINAL SIM":"terminal",
+    "DRAG & DROP":"drag",
+    HOTSPOT:"hotspot",
+    ORDERING:"ordering",
+    "FILL BLANK":"fill",
+    "CONFIG/ACL":"config",
+    "LOG ANALYSIS":"log",
+    SCENARIO:"scenario",
+  })[type] || "scenario";
+}
+function SimIcon({type,size=34}) {
+  const s=Object.values(SIM_TYPES).find(x=>x.id===type)||SIM_TYPES.TERMINAL;
+  return <span className={`sim-icon sim-icon-${simIconClass(type)}`} style={{"--icon-color":s.color,width:size,height:size,borderRadius:Math.max(6,Math.round(size*.28))}} aria-hidden="true"><span/></span>;
 }
 function Alert({msg,type="error",t}) {
   if(!msg) return null;
   const c=type==="success"?t.green:type==="warn"?t.amber:t.red;
   return <div style={{padding:"10px 14px",borderRadius:8,background:`${c}12`,border:`1px solid ${c}30`,color:c,fontSize:13,marginBottom:12}}>{msg}</div>;
+}
+function loginMethodLabel(user) {
+  const method=(user?.loginMethod || user?.authProvider || "local").toLowerCase();
+  if(method.includes("google")) return "Google SSO";
+  if(method.includes("email")) return "Email and password";
+  if(method.includes("supabase")) return "Supabase email login";
+  return "Local demo account";
+}
+function ProfileMenu({user,t,onUpdateProfile,onChangePassword,onLogout,compact=false}) {
+  const [open,setOpen]=useState(false);
+  const [name,setName]=useState(user?.name||"");
+  const [password,setPassword]=useState("");
+  const [confirm,setConfirm]=useState("");
+  const [msg,setMsg]=useState("");
+  const [err,setErr]=useState("");
+  const [saving,setSaving]=useState(false);
+  const isGoogle=(user?.loginMethod||"").toLowerCase().includes("google");
+
+  useEffect(()=>setName(user?.name||""),[user?.name]);
+
+  const saveName=async()=>{
+    setErr("");setMsg("");
+    const clean=name.trim();
+    if(!clean){setErr("Name cannot be empty.");return;}
+    setSaving(true);
+    try{
+      await onUpdateProfile(clean);
+      setMsg("Username updated.");
+    }catch(e){
+      setErr(e.message||"Unable to update username.");
+    }finally{setSaving(false);}
+  };
+  const savePassword=async()=>{
+    setErr("");setMsg("");
+    if(isGoogle){setErr("This account uses Google SSO. Change your password in your Google account.");return;}
+    if(password!==confirm){setErr("Passwords do not match.");return;}
+    const issue=getPasswordIssue(password);
+    if(issue){setErr(issue);return;}
+    setSaving(true);
+    try{
+      await onChangePassword(password);
+      setPassword("");setConfirm("");setMsg("Password updated.");
+    }catch(e){
+      setErr(e.message||"Unable to update password.");
+    }finally{setSaving(false);}
+  };
+
+  return(
+    <div className={`profile-menu ${compact?"mobile-profile":""}`}>
+      <button className="btn btn-ghost" style={{width:compact?36:"100%",minHeight:compact?36:44,padding:compact?0:"7px 8px",justifyContent:compact?"center":"flex-start"}} onClick={()=>setOpen(o=>!o)} aria-label="Open profile settings">
+        <span style={{width:30,height:30,borderRadius:"50%",background:`${t.accent}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:t.accent,flexShrink:0}}>
+          {user.name[0]?.toUpperCase()}
+        </span>
+        {!compact&&(
+          <span style={{minWidth:0,textAlign:"left"}}>
+            <span style={{display:"block",fontSize:13,fontWeight:700,color:t.text,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{user.name}</span>
+            <span style={{display:"block",fontSize:10,fontWeight:700,color:user.tier==="pro"?t.accent:t.textDim,textTransform:"uppercase"}}>{user.tier}</span>
+          </span>
+        )}
+      </button>
+      {open&&(
+        <div className="profile-popover">
+          <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"flex-start",marginBottom:12}}>
+            <div>
+              <div style={{fontWeight:800,color:t.text,fontSize:15}}>Profile</div>
+              <div style={{fontSize:12,color:t.textDim}}>{loginMethodLabel(user)}</div>
+            </div>
+            <button className="btn btn-ghost" style={{fontSize:12,minHeight:30,padding:"4px 9px"}} onPointerUp={e=>{e.preventDefault();e.stopPropagation();setOpen(false);}} onClick={e=>{e.preventDefault();e.stopPropagation();setOpen(false);}}>Close</button>
+          </div>
+          <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginBottom:12}}>
+            Signed in as <strong style={{color:t.text}}>{user.email}</strong>
+          </div>
+          <Alert msg={err} type="error" t={t}/>
+          <Alert msg={msg} type="success" t={t}/>
+          <div style={{display:"grid",gap:12}}>
+            <div>
+              <label className="label" style={{display:"block",marginBottom:6}}>Username</label>
+              <div style={{display:"flex",gap:8}}>
+                <input className="input" value={name} onChange={e=>setName(e.target.value)} placeholder="Your display name"/>
+                <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={saveName} disabled={saving}>Save</button>
+              </div>
+            </div>
+            <div style={{borderTop:`1px solid ${t.border}`,paddingTop:12}}>
+              <label className="label" style={{display:"block",marginBottom:6}}>Change password</label>
+              <div style={{display:"grid",gap:8}}>
+                <input className="input" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder={isGoogle?"Managed by Google":"New password"}/>
+                <input className="input" type="password" value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Confirm new password"/>
+                <button className="btn btn-primary" style={{fontSize:12}} onClick={savePassword} disabled={saving||isGoogle}>{isGoogle?"Use Google account settings":"Update Password"}</button>
+              </div>
+            </div>
+            <button className="btn btn-ghost" style={{fontSize:12,justifyContent:"center",color:t.textDim}} onClick={onLogout}>Sign Out</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -5944,7 +6108,7 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
           if(passwordIssue){setErr(passwordIssue);setLoading(false);return;}
           const exists=await DB.getUser(email);
           if(exists){setErr("An account with this email already exists.");setLoading(false);return;}
-          const user={name:form.name,email,password:form.pass,tier:"free",joined:new Date().toISOString(),streak:0};
+          const user={name:form.name,email,password:form.pass,tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local"};
           await DB.saveUser(user);
           await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
           setOk("Account created! Welcome to SecurePlus.");
@@ -6107,7 +6271,7 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
               <div className="mono" style={{fontSize:12,color:t.textSec}}>Email: demo@secureplus.io · Password: demo123</div>
               <button className="btn btn-ghost" style={{fontSize:12,marginTop:8,padding:"5px 10px"}} onClick={async()=>{
                 let u=await DB.getUser("demo@secureplus.io");
-                if(!u){u={name:"Demo User",email:"demo@secureplus.io",password:"demo123",tier:"pro",joined:new Date().toISOString(),streak:14};await DB.saveUser(u);}
+                if(!u){u={name:"Demo User",email:"demo@secureplus.io",password:"demo123",tier:"pro",joined:new Date().toISOString(),streak:14,authProvider:"local",loginMethod:"local"};await DB.saveUser(u);}
                 setForm(f=>({...f,email:"demo@secureplus.io",pass:"demo123"}));
                 await DB.saveSession({email:u.email,name:u.name,tier:u.tier,loggedIn:true});
                 onLogin(u);
@@ -6215,7 +6379,7 @@ function Dashboard({user,attempts,onNav,t}) {
                 return(
                   <div key={ch.id}>
                     <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
-                      <span style={{fontSize:12,color:t.textSec}}>{ch.emoji} {ch.title.split(",")[0]}</span>
+                      <span style={{fontSize:12,color:t.textSec,display:"inline-flex",alignItems:"center",gap:6}}><ChapterIcon id={ch.id} size={20}/> {ch.title.split(",")[0]}</span>
                       <span style={{fontSize:12,fontWeight:600,color:p>=75?t.green:p>=50?t.amber:t.red}}>{p}%</span>
                     </div>
                     <ProgBar v={p} c={p>=75?t.green:p>=50?t.amber:t.red} h={6}/>
@@ -6442,7 +6606,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
             <select className="input" value={chFilter} onChange={e=>setChFilter(e.target.value)}>
               <option value="all">All Chapters ({MCQ_BANK.length})</option>
               {CHAPTERS.map(ch=>(
-                <option key={ch.id} value={ch.id}>{ch.emoji} Ch.{ch.id}: {ch.title.slice(0,25)}... ({MCQ_BANK.filter(q=>q.ch===ch.id).length})</option>
+                <option key={ch.id} value={ch.id}>Ch.{ch.id}: {ch.title.slice(0,25)}... ({MCQ_BANK.filter(q=>q.ch===ch.id).length})</option>
               ))}
             </select>
           </div>
@@ -6450,9 +6614,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
             <label className="label" style={{display:"block",marginBottom:6}}>Difficulty</label>
             <select className="input" value={diffFilter} onChange={e=>setDiffFilter(e.target.value)}>
               <option value="all">All Difficulties</option>
-              <option value="easy">🟢 Easy</option>
-              <option value="medium">🟡 Medium</option>
-              <option value="hard">🔴 Hard</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
             </select>
           </div>
           <div>
@@ -6489,8 +6653,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
         <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:14}}>Chapter Overview</div>
         <div style={{display:"flex",flexDirection:"column",gap:10}}>
           {CHAPTERS.map(ch=>(
-            <div key={ch.id} style={{display:"flex",gap:12,alignItems:"center",padding:"10px 14px",borderRadius:8,background:chFilter===ch.id?`${t.accent}10`:t.panel,cursor:"pointer",border:`1px solid ${chFilter===ch.id?t.accent:t.border}`,transition:"all .15s"}} onClick={()=>setChFilter(ch.id===chFilter?"all":ch.id)}>
-              <span style={{fontSize:22}}>{ch.emoji}</span>
+            <div key={ch.id} className="chapter-card" style={{display:"flex",gap:12,alignItems:"center",padding:"10px 14px",borderRadius:8,background:chFilter===ch.id?`${chapterColor(ch.id)}12`:t.panel,cursor:"pointer",border:`1px solid ${chFilter===ch.id?chapterColor(ch.id):t.border}`,transition:"all .15s"}} onClick={()=>setChFilter(ch.id===chFilter?"all":ch.id)}>
+              <ChapterIcon id={ch.id}/>
               <div style={{flex:1}}>
                 <div style={{fontSize:13,fontWeight:600,color:t.text}}>Ch.{ch.id}: {ch.title}</div>
                 <div style={{fontSize:11,color:t.textDim}}>{ch.weight}% of exam · {MCQ_BANK.filter(q=>q.ch===ch.id).length} questions available</div>
@@ -6773,8 +6937,8 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
           const count=PBQ_BANK.filter(q=>q.type===s.id).length;
           const active=typeFilter===s.id;
           return(
-            <div key={s.id} className="card" style={{padding:"14px 16px",cursor:"pointer",borderColor:active?s.color:t.border,background:active?`${s.color}10`:t.surface,transition:"all .15s"}} onClick={()=>setTypeFilter(active?"all":s.id)}>
-              <div style={{fontSize:24,marginBottom:6}}>{s.emoji}</div>
+            <div key={s.id} className="card sim-card" style={{padding:"14px 16px",cursor:"pointer",borderColor:active?s.color:t.border,background:active?`${s.color}10`:t.surface,transition:"all .15s"}} onClick={()=>setTypeFilter(active?"all":s.id)}>
+              <div style={{marginBottom:8}}><SimIcon type={s.id}/></div>
               <div style={{fontSize:12,fontWeight:600,color:active?s.color:t.text}}>{s.label}</div>
               <div style={{fontSize:11,color:t.textDim,marginTop:2}}>{count} question{count!==1?"s":""}</div>
             </div>
@@ -6786,7 +6950,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
       <div style={{display:"flex",gap:8,marginBottom:14,flexWrap:"wrap"}}>
         {CHAPTERS.map(ch=>(
           <button key={ch.id} className="btn" style={{fontSize:11,padding:"5px 12px",background:chFilter===ch.id?`${t.accent}15`:"transparent",color:chFilter===ch.id?t.accent:t.textSec,border:`1px solid ${chFilter===ch.id?t.accent:t.border}`,transition:"all .15s"}} onClick={()=>setChFilter(chFilter===ch.id?"all":ch.id)}>
-            {ch.emoji} Ch.{ch.id}
+            <ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}
           </button>
         ))}
         {chFilter!=="all"&&<button className="btn btn-ghost" style={{fontSize:11,padding:"5px 10px"}} onClick={()=>setChFilter("all")}>Clear ✕</button>}
@@ -6802,12 +6966,12 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
           const ch=CHAPTERS.find(c=>c.id===q.ch);
           return(
             <div key={q.id} className={`card card-hover`} style={{padding:"14px 18px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",opacity:isPro?1:.75}} onClick={()=>{if(isPro){capture("pbq_started", { question_id: q.id, type: q.type, chapter: q.ch, tier: user.tier });onStart(q);}else{openLockedPrompt(q);}}}>
-              <span style={{fontSize:22,flexShrink:0}}>{q.emoji||"📌"}</span>
+              <SimIcon type={q.type}/>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,marginBottom:5,flexWrap:"wrap"}}>
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
-                  {ch&&<span style={{fontSize:11,color:t.textDim}}>{ch.emoji} Ch.{ch.id}</span>}
+                  {ch&&<span style={{fontSize:11,color:t.textDim,display:"inline-flex",alignItems:"center",gap:4}}><ChapterIcon id={ch.id} size={16}/> Ch.{ch.id}</span>}
                 </div>
                 <div style={{fontSize:14,fontWeight:500,color:t.text}}>{q.title}</div>
                 <div style={{fontSize:12,color:t.textDim,marginTop:2}}>{q.cat}</div>
@@ -6896,7 +7060,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
       {/* Header */}
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:18,flexWrap:"wrap"}}>
         <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>onDone(null)}>← Back to PBQ Bank</button>
-        <span style={{fontSize:20}}>{q.emoji||simType.emoji}</span>
+        <SimIcon type={q.type}/>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontWeight:600,fontSize:15,color:t.text}}>{q.title}</div>
           <div style={{display:"flex",gap:8,marginTop:4}}><SimBadge type={q.type} t={t}/><DiffBadge d={q.difficulty} t={t}/></div>
@@ -7271,9 +7435,9 @@ function ObjectivesPage({t}) {
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:12,marginBottom:20}}>
         {CHAPTERS.map(ch=>(
-          <div key={ch.id} className="card" style={{padding:"18px 20px"}}>
+          <div key={ch.id} className="card chapter-card" style={{padding:"18px 20px"}}>
             <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"flex-start",marginBottom:8}}>
-              <div style={{fontWeight:700,color:t.text,fontSize:14}}>{ch.emoji} {ch.title}</div>
+              <div style={{fontWeight:700,color:t.text,fontSize:14,display:"flex",alignItems:"center",gap:10}}><ChapterIcon id={ch.id}/> {ch.title}</div>
               <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}30`}}>{ch.weight}%</span>
             </div>
             <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
@@ -7610,6 +7774,35 @@ export default function App() {
     resetAnalytics();
     await DB.clearSession();setPasswordRecovery(false);setShowOnboarding(false);setUser(null);setAttempts([]);setView("dashboard");
   },[]);
+  const handleUpdateProfile=useCallback(async name=>{
+    if(!user)return;
+    const clean=name.trim();
+    if(user.authProvider==="supabase"){
+      const { data, error } = await supabase.auth.updateUser({ data: { full_name: clean, name: clean } });
+      if(error) throw error;
+      const updated={...user,name:clean,loginMethod:data?.user?.app_metadata?.provider || user.loginMethod || "email"};
+      setUser(updated);identifyUser(updated);
+      return;
+    }
+    const updated={...user,name:clean,authProvider:user.authProvider||"local",loginMethod:user.loginMethod||"local"};
+    await DB.saveUser(updated);
+    await DB.saveSession({email:updated.email,name:updated.name,tier:updated.tier,loggedIn:true});
+    setUser(updated);identifyUser(updated);
+  },[user]);
+  const handleChangePassword=useCallback(async password=>{
+    if(!user)return;
+    if((user.loginMethod||"").toLowerCase().includes("google")){
+      throw new Error("This account uses Google SSO. Change your password in your Google account.");
+    }
+    if(user.authProvider==="supabase"){
+      const { error } = await supabase.auth.updateUser({ password });
+      if(error) throw error;
+      return;
+    }
+    const updated={...user,password,authProvider:user.authProvider||"local",loginMethod:user.loginMethod||"local"};
+    await DB.saveUser(updated);
+    setUser(updated);
+  },[user]);
   const closeOnboarding=useCallback(async()=>{
     if(user?.email) await DB.saveOnboardingSeen(user.email);
     setShowOnboarding(false);
@@ -7852,17 +8045,7 @@ export default function App() {
 
           {/* User */}
           <div style={{padding:"12px 14px",borderBottom:`1px solid ${t.border}`}}>
-            <div style={{display:"flex",alignItems:"center",gap:8}}>
-              <div style={{width:30,height:30,borderRadius:"50%",background:`${t.accent}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,color:t.accent}}>
-                {user.name[0]?.toUpperCase()}
-              </div>
-              <div style={{minWidth:0}}>
-                <div style={{fontSize:13,fontWeight:500,color:t.text,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{user.name}</div>
-                <span style={{fontSize:10,fontWeight:600,color:user.tier==="pro"?t.accent:t.textDim,textTransform:"uppercase"}}>
-                  {user.tier}
-                </span>
-              </div>
-            </div>
+            <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onChangePassword={handleChangePassword} onLogout={handleLogout}/>
           </div>
 
           {/* Nav */}
@@ -7897,9 +8080,7 @@ export default function App() {
               <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
                 {darkMode?"Light":"Dark"}
               </button>
-              <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px",color:t.textDim}} onClick={handleLogout}>
-                Sign out
-              </button>
+              <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onChangePassword={handleChangePassword} onLogout={handleLogout} compact/>
             </div>
           </div>
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
