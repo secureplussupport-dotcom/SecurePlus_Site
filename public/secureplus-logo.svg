@@ -1,9 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
   <title id="title">SecurePlus logo</title>
-  <desc id="desc">A blue shield with a check mark for SecurePlus.</desc>
-  <rect width="160" height="160" rx="36" fill="#0b1020"/>
-  <path d="M80 20 124 36v36c0 28-17 53-44 68-27-15-44-40-44-68V36l44-16Z" fill="#2f7df6"/>
-  <path d="M80 32 113 44v28c0 21-12 40-33 53-21-13-33-32-33-53V44l33-12Z" fill="#12213a"/>
-  <path d="m65 80 11 11 24-29" fill="none" stroke="#14b8a6" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M80 20 124 36v36c0 28-17 53-44 68-27-15-44-40-44-68V36l44-16Z" fill="none" stroke="#93c5fd" stroke-width="4"/>
+  <desc id="desc">A modern blue and teal shield with a plus symbol for SecurePlus.</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="10" x2="142" y2="150" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#101a35"/>
+      <stop offset=".48" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#082f35"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="42" y1="24" x2="118" y2="136" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#60a5fa"/>
+      <stop offset=".5" stop-color="#2f7df6"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="51" y1="35" x2="105" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".38"/>
+      <stop offset=".62" stop-color="#ffffff" stop-opacity=".06"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#020617" flood-opacity=".38"/>
+    </filter>
+  </defs>
+
+  <rect width="160" height="160" rx="34" fill="url(#bg)"/>
+  <path d="M24 126c21-9 35-7 53 2 21 10 39 8 59-3" fill="none" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" opacity=".18"/>
+  <path d="M30 34c18 6 36 5 50-4 14 9 32 10 50 4v37c0 31-18 57-50 74-32-17-50-43-50-74V34Z" fill="#020617" opacity=".42"/>
+
+  <g filter="url(#shadow)">
+    <path d="M80 20c15 9 31 14 48 15v37c0 29-17 53-48 69-31-16-48-40-48-69V35c17-1 33-6 48-15Z" fill="url(#shield)"/>
+    <path d="M80 33c12 7 24 11 38 12v27c0 23-13 42-38 56-25-14-38-33-38-56V45c14-1 26-5 38-12Z" fill="#07111f" opacity=".82"/>
+    <path d="M80 33c12 7 24 11 38 12v27c0 23-13 42-38 56V33Z" fill="url(#shine)"/>
+    <path d="M80 20c15 9 31 14 48 15v37c0 29-17 53-48 69-31-16-48-40-48-69V35c17-1 33-6 48-15Z" fill="none" stroke="#93c5fd" stroke-width="3" opacity=".72"/>
+  </g>
+
+  <g transform="translate(80 79)">
+    <circle r="28" fill="#0f172a" opacity=".74"/>
+    <circle r="24" fill="#ffffff" opacity=".08"/>
+    <path d="M0-15v30M-15 0h30" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+    <path d="M0-15v30M-15 0h30" fill="none" stroke="#14b8a6" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <circle cx="118" cy="34" r="4" fill="#f59e0b"/>
+  <circle cx="35" cy="116" r="3" fill="#60a5fa" opacity=".8"/>
 </svg>
