@@ -380,6 +380,45 @@ const SIM_TYPES = {
   SCENARIO: { id:"SCENARIO",     label:"Scenario",      emoji:"📖", color:"#06b6d4" },
 };
 
+const GLOSSARY_TERMS = {
+  "ALE": "Annual Loss Expectancy: the expected yearly cost of a risk. Formula: SLE x ARO.",
+  "SLE": "Single Loss Expectancy: the expected cost each time one incident occurs.",
+  "ARO": "Annualized Rate of Occurrence: how often an incident is expected to happen per year.",
+  "RTO": "Recovery Time Objective: the maximum acceptable time to restore a system after an outage.",
+  "RPO": "Recovery Point Objective: the maximum acceptable data loss measured in time.",
+  "PKI": "Public Key Infrastructure: certificates, keys, and authorities used to prove identity and enable encryption.",
+  "CSR": "Certificate Signing Request: the file sent to a Certificate Authority to request a TLS certificate.",
+  "OCSP": "Online Certificate Status Protocol: a real-time check to see whether a certificate has been revoked.",
+  "CRL": "Certificate Revocation List: a published list of revoked certificates.",
+  "MFA": "Multi-factor Authentication: login using two or more factor types, such as password plus authenticator app.",
+  "SSO": "Single Sign-On: one login that grants access to multiple connected applications.",
+  "RBAC": "Role-Based Access Control: permissions are assigned to roles, then users are placed into roles.",
+  "ABAC": "Attribute-Based Access Control: access decisions use attributes such as user, device, location, and resource.",
+  "DAC": "Discretionary Access Control: the resource owner can decide who gets access.",
+  "MAC": "Mandatory Access Control: the system enforces access based on labels and clearances.",
+  "SIEM": "Security Information and Event Management: a platform that collects and correlates security logs.",
+  "EDR": "Endpoint Detection and Response: tooling that monitors endpoints and helps investigate suspicious activity.",
+  "XDR": "Extended Detection and Response: detection and response across endpoints, network, identity, cloud, and more.",
+  "DLP": "Data Loss Prevention: controls that detect or stop sensitive data from leaving approved locations.",
+  "CASB": "Cloud Access Security Broker: security enforcement between users and cloud services.",
+  "SASE": "Secure Access Service Edge: cloud-delivered networking and security, often combining SD-WAN and SSE.",
+  "CVSS": "Common Vulnerability Scoring System: a standard severity score for vulnerabilities.",
+  "BIA": "Business Impact Analysis: identifies critical processes and the impact of disruption.",
+  "MTTD": "Mean Time To Detect: average time needed to discover an incident.",
+  "MTTR": "Mean Time To Respond or Recover: average time needed to contain or restore after an incident.",
+  "WAF": "Web Application Firewall: a control that filters malicious web requests before they reach an app.",
+  "IDS": "Intrusion Detection System: detects suspicious activity and alerts.",
+  "IPS": "Intrusion Prevention System: detects suspicious activity and can block it.",
+  "HSM": "Hardware Security Module: tamper-resistant hardware for protecting cryptographic keys.",
+  "KMS": "Key Management Service: a system for creating, storing, rotating, and controlling encryption keys.",
+  "DDoS": "Distributed Denial of Service: many systems flood a target to make it unavailable.",
+  "SQL injection": "A vulnerability where attacker-controlled input changes a SQL query.",
+  "Zero Trust": "A security model that continuously verifies users, devices, and access instead of trusting by location.",
+  "Tokenization": "Replacing sensitive data with a non-sensitive token while storing the real value separately.",
+  "Hashing": "A one-way transformation used to verify integrity or store passwords safely when done with salts and slow algorithms.",
+  "Encryption": "A reversible protection method that converts readable data into ciphertext using a key.",
+};
+
 // ═══════════════════════════════════════════════════════════════
 // MCQ BANK — original, accurate, Security+ aligned, not copyrighted
 // Easy, medium, and hard mix across all 5 domains
@@ -5409,16 +5448,28 @@ function getTodayChallenge() {
   return DAILY_CHALLENGES.find(c=>c.date===day)||DAILY_CHALLENGES[0];
 }
 
+function getNextRelatedPBQ(current, attempts=[]) {
+  if(!current) return null;
+  const correctIds=new Set(attempts.filter(a=>a.pbq&&a.correct).map(a=>a.qid));
+  const candidates=PBQ_BANK.filter(q=>q.id!==current.id&&q.ch===current.ch&&q.type===current.type&&!correctIds.has(q.id));
+  if(candidates.length) return candidates[0];
+  const sameChapter=PBQ_BANK.filter(q=>q.id!==current.id&&q.ch===current.ch&&!correctIds.has(q.id));
+  if(sameChapter.length) return sameChapter[0];
+  const index=PBQ_BANK.findIndex(q=>q.id===current.id);
+  return PBQ_BANK[(index+1)%PBQ_BANK.length]||null;
+}
+
 // ═══════════════════════════════════════════════════════════════
 // CSS — Clean light/dark design
 // ═══════════════════════════════════════════════════════════════
 const makeCSS = (t) => `
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{background:${t.bg};}
 body{background:
 radial-gradient(circle at top left, ${t.accent}18, transparent 34rem),
-linear-gradient(180deg, ${t.bg}, ${t.bg});color:${t.text};font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;font-size:15px;line-height:1.6;transition:background .3s,color .3s;}
+linear-gradient(180deg, ${t.bg}, ${t.bg});color:${t.text};font-family:'Plus Jakarta Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;font-size:15px;line-height:1.6;letter-spacing:0;transition:background .3s,color .3s;}
+h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;letter-spacing:0;}
 button,input,select{font:inherit;}
 button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-visible,.opt:focus-visible{outline:3px solid ${t.accent}38;outline-offset:2px;}
 ::-webkit-scrollbar{width:5px;}
@@ -5430,7 +5481,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:${t.textDim};}
 .mono{font-family:'JetBrains Mono',monospace;}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:9px 16px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif;white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:9px 16px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;}
 .btn-primary{background:${t.accent};color:#fff;}
 .btn-primary:hover{background:${t.accentHover};box-shadow:0 10px 22px ${t.accent}35;}
 .btn:disabled,.btn-primary:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none;}
@@ -5441,7 +5492,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .btn-danger{background:transparent;color:${t.red};border:1px solid ${t.red}44;}
 .btn-danger:hover{background:${t.red}12;}
 .btn:active{transform:scale(.97);}
-.input{width:100%;background:${t.inputBg};border:1.5px solid ${t.border};border-radius:8px;padding:11px 14px;font-size:14px;color:${t.text};font-family:'Inter',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;}
+.input{width:100%;background:${t.inputBg};border:1.5px solid ${t.border};border-radius:8px;padding:11px 14px;font-size:14px;color:${t.text};font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;}
 .input:focus{border-color:${t.accent};box-shadow:0 0 0 3px ${t.accent}20;}
 .input::placeholder{color:${t.textDim};}
 .tab{padding:9px 18px;cursor:pointer;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:${t.textSec};transition:all .15s;white-space:nowrap;}
@@ -5450,6 +5501,35 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .nav-lnk{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13px;font-weight:700;color:${t.textSec};cursor:pointer;transition:all .15s;}
 .nav-lnk:hover{color:${t.text};background:${t.panel};}
 .nav-lnk.act{color:${t.text};background:${t.accent}18;border:1px solid ${t.accent}28;}
+.nav-glyph{width:22px;height:22px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;background:${t.panel};border:1px solid ${t.border};transition:transform .2s,background .2s,border-color .2s,box-shadow .2s;}
+.nav-glyph span,.nav-glyph::before,.nav-glyph::after{content:"";position:absolute;display:block;transition:all .25s ease;}
+.nav-glyph-dashboard span{width:10px;height:8px;border:2px solid currentColor;border-top:0;bottom:5px;border-radius:1px;}
+.nav-glyph-dashboard::before{width:12px;height:12px;border-left:2px solid currentColor;border-top:2px solid currentColor;transform:rotate(45deg);top:3px;}
+.nav-glyph-mcq span{width:11px;height:14px;border:2px solid currentColor;border-radius:2px;}
+.nav-glyph-mcq::before{width:6px;height:2px;background:currentColor;top:8px;}
+.nav-glyph-mcq::after{width:6px;height:2px;background:currentColor;top:13px;}
+.nav-glyph-pbq span{width:9px;height:11px;border-radius:50% 50% 46% 46%;border:2px solid currentColor;top:3px;}
+.nav-glyph-pbq::before{width:8px;height:2px;background:currentColor;bottom:5px;border-radius:4px;}
+.nav-glyph-pbq::after{width:5px;height:2px;background:currentColor;bottom:2px;border-radius:4px;}
+.nav-glyph-pbq.active{color:#f59e0b;background:#f59e0b18;border-color:#f59e0b55;box-shadow:0 0 18px #f59e0b45;}
+.nav-glyph-pbq.active span{background:#f59e0b22;animation:bulbPulse 1.2s ease infinite alternate;}
+.nav-glyph-daily span{width:13px;height:13px;border:2px solid currentColor;border-radius:50%;}
+.nav-glyph-daily::before{width:5px;height:5px;background:currentColor;border-radius:50%;}
+.nav-glyph-pricing span{width:11px;height:11px;border-top:2px solid currentColor;border-right:2px solid currentColor;transform:rotate(-45deg);top:8px;}
+.nav-glyph-pricing::before{width:2px;height:13px;background:currentColor;top:5px;}
+.nav-glyph-objectives span{width:13px;height:13px;border:2px solid currentColor;border-radius:3px;}
+.nav-glyph-objectives::before{width:7px;height:2px;background:currentColor;top:8px;}
+.nav-glyph-objectives::after{width:7px;height:2px;background:currentColor;top:13px;}
+.nav-glyph-privacy span{width:13px;height:10px;border:2px solid currentColor;border-radius:2px;bottom:4px;}
+.nav-glyph-privacy::before{width:10px;height:9px;border:2px solid currentColor;border-bottom:0;border-radius:9px 9px 0 0;top:3px;transform-origin:85% 100%;}
+.nav-glyph-privacy.active{color:${t.green};background:${t.green}14;border-color:${t.green}50;box-shadow:0 0 16px ${t.green}30;}
+.nav-glyph-privacy.active::before{animation:lockClose .55s ease both;}
+.nav-glyph-terms span{width:12px;height:15px;border:2px solid currentColor;border-radius:2px;}
+.nav-glyph-terms::before{width:5px;height:5px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;right:4px;top:4px;transform:rotate(-45deg);}
+.nav-lnk:hover .nav-glyph,.nav-lnk.act .nav-glyph{transform:translateY(-1px);}
+.term-wrap{position:relative;display:inline-block;}
+.term-link{border:0;background:transparent;color:${t.accent};font:inherit;font-weight:700;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;cursor:pointer;padding:0 1px;}
+.term-pop{position:absolute;z-index:50;left:0;top:1.7em;width:min(280px,78vw);padding:10px 12px;border:1px solid;border-radius:8px;box-shadow:0 16px 34px rgba(0,0,0,.18);font-size:12px;line-height:1.55;}
 .prog-track{background:${t.border};border-radius:99px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.16,1,.3,1);}
 .opt{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:8px;border:1.5px solid ${t.border};cursor:pointer;transition:background .18s,border-color .18s,transform .18s; background:${t.surface};min-width:0;}
@@ -5473,6 +5553,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .order-item:hover{border-color:${t.accent}44;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shimmer{from{opacity:.6}to{opacity:1}}
+@keyframes bulbPulse{from{box-shadow:0 0 0 #f59e0b00;}to{box-shadow:0 0 18px #f59e0b99;}}
+@keyframes lockClose{0%{transform:translateY(-5px) rotate(-18deg);}70%{transform:translateY(1px) rotate(3deg);}100%{transform:translateY(0) rotate(0);}}
 .fu{animation:fadeUp .35s cubic-bezier(.16,1,.3,1) both;}
 .chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700;border:1px solid;line-height:1.4;}
 .app-shell{display:flex;min-height:100vh;background:transparent;}
@@ -5562,10 +5644,44 @@ function DiffBadge({d,t}) {
   const {c,label}=map[d]||map.easy;
   return <span className="chip" style={{background:`${c}15`,color:c,borderColor:`${c}30`}}>{label}</span>;
 }
+function GlossaryText({text,t,style}) {
+  const [openTerm,setOpenTerm]=useState(null);
+  const value=String(text||"");
+  const terms=Object.keys(GLOSSARY_TERMS).sort((a,b)=>b.length-a.length);
+  const pattern=new RegExp(`\\b(${terms.map(term=>term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")})\\b`,"gi");
+  const parts=value.split(pattern).filter(part=>part!=="");
+  const normalize=part=>terms.find(term=>term.toLowerCase()===part.toLowerCase());
+
+  return(
+    <span style={style}>
+      {parts.map((part,index)=>{
+        const term=normalize(part);
+        if(!term) return <span key={`${part}-${index}`}>{part}</span>;
+        const key=`${term}-${index}`;
+        return(
+          <span key={key} className="term-wrap">
+            <button type="button" className="term-link" onClick={e=>{e.stopPropagation();setOpenTerm(openTerm===key?null:key);}}>
+              {part}
+            </button>
+            {openTerm===key&&(
+              <span className="term-pop" style={{background:t.surface,borderColor:t.border,color:t.text}}>
+                <strong style={{color:t.accent}}>{term}</strong>
+                <span style={{display:"block",marginTop:4,color:t.textSec}}>{GLOSSARY_TERMS[term]}</span>
+              </span>
+            )}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
 function ChBadge({chId,t}) {
   const ch=CHAPTERS.find(c=>c.id===chId);
   if(!ch) return null;
   return <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}25`,fontSize:11}}>{ch.emoji} Ch.{ch.id}</span>;
+}
+function NavGlyph({type,active}) {
+  return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true"><span/></span>;
 }
 function Alert({msg,type="error",t}) {
   if(!msg) return null;
@@ -6189,6 +6305,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
   });
   const reviewSummary = getReviewSummary(attempts);
   const quizSizes = [10,20,30,40,50];
+  const missedMcqIds=[...new Set(attempts.filter(a=>a.mcq&&!a.correct).map(a=>a.qid))];
+  const missedQuestions=MCQ_BANK.filter(q=>missedMcqIds.includes(q.id));
 
   useEffect(()=>{
     const available = quizSizes.filter(size=>filtered.length>=size);
@@ -6201,6 +6319,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
       : [...filtered].sort(()=>Math.random()-.5);
     const pool=ordered.slice(0,Math.min(quizCount,filtered.length));
     capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: diffFilter, topic: topicFilter, question_count: pool.length, tier: user.tier });
+    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);
+  };
+  const startMissedQuiz=()=>{
+    const pool=rankQuestionsBySm2(missedQuestions,attempts).slice(0,Math.min(50,missedQuestions.length));
+    capture("mcq_missed_review_started", { question_count: pool.length, tier: user.tier });
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);
   };
 
@@ -6296,6 +6419,17 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
               <div style={{fontSize:13,color:t.textSec}}>When you are ready to practise terminal, log, ordering, and drag/drop simulations, Pro is $4.99/year.</div>
             </div>
             <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={onUpgrade}>See Pro PBQs</button>
+          </div>
+        </div>
+      )}
+      {user.tier==="pro"&&missedQuestions.length>0&&(
+        <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.red}28`,background:`${t.red}06`}}>
+          <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+            <div style={{flex:1,minWidth:220}}>
+              <div style={{fontWeight:700,fontSize:14,color:t.text}}>Retry missed MCQs</div>
+              <div style={{fontSize:13,color:t.textSec}}>You have {missedQuestions.length} MCQ{missedQuestions.length!==1?"s":""} answered incorrectly. Try them again in one focused set.</div>
+            </div>
+            <button className="btn btn-primary" style={{fontSize:12,flexShrink:0}} onClick={startMissedQuiz}>Review Missed MCQs</button>
           </div>
         </div>
       )}
@@ -6475,7 +6609,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
           <DiffBadge d={current.difficulty} t={t}/>
           <span className="chip" style={{background:`${t.accent}10`,color:t.textSec,borderColor:t.border,fontSize:11}}>{current.topic}</span>
         </div>
-        <p style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:400}}>{current.q}</p>
+        <p style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:500}}>
+          <GlossaryText text={current.q} t={t}/>
+        </p>
       </div>
 
       {/* Options */}
@@ -6487,7 +6623,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
           return(
             <div key={i} className={cls} onClick={()=>{if(submitted)return;setSelected(i);setDraftSelections(prev=>{const next=[...prev];next[qi]=i;return next;});}}>
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
-              <span style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}>{opt}</span>
+              <span style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
               {submitted&&i===current.correct&&<span style={{color:t.green,fontSize:14,flexShrink:0,fontWeight:800}}>✓</span>}
               {submitted&&i===selected&&i!==current.correct&&<span style={{color:t.red,fontSize:14,flexShrink:0,fontWeight:800}}>✕</span>}
             </div>
@@ -6543,14 +6679,21 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
   const [chFilter,setChFilter]=useState("all");
   const [typeFilter,setTypeFilter]=useState("all");
   const [lockedQuestion,setLockedQuestion]=useState(null);
+  const [showMissedOnly,setShowMissedOnly]=useState(false);
   const isPro=user.tier==="pro";
   const attempted=new Set(attempts.map(a=>a.qid));
   const correct=new Set(attempts.filter(a=>a.correct).map(a=>a.qid));
+  const missedPbqIds=[...new Set(attempts.filter(a=>a.pbq&&!a.correct).map(a=>a.qid))];
 
   const filtered=PBQ_BANK.filter(q=>{
     if(chFilter!=="all"&&q.ch!==chFilter)return false;
     if(typeFilter!=="all"&&q.type!==typeFilter)return false;
+    if(showMissedOnly&&!missedPbqIds.includes(q.id))return false;
     return true;
+  });
+  const displayQuestions=[...filtered].sort((a,b)=>{
+    const rank=q=>correct.has(q.id)?2:attempted.has(q.id)?0:1;
+    return rank(a)-rank(b);
   });
   const openLockedPrompt=q=>{
     capture("pbq_locked_clicked", { question_id: q.id, type: q.type, chapter: q.ch });
@@ -6608,6 +6751,21 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
           </div>
         </div>
       )}
+      {isPro&&(
+        <div className="card" style={{padding:"16px 20px",marginBottom:18,borderColor:showMissedOnly?`${t.red}35`:t.border,background:showMissedOnly?`${t.red}06`:t.surface}}>
+          <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+            <div style={{flex:1,minWidth:220}}>
+              <div style={{fontWeight:700,fontSize:14,color:t.text}}>Retry missed PBQs</div>
+              <div style={{fontSize:13,color:t.textSec}}>
+                {missedPbqIds.length>0?`You have ${missedPbqIds.length} PBQ${missedPbqIds.length!==1?"s":""} answered incorrectly. Filter them here and try again.`:"No missed PBQs yet. Incorrect PBQs will appear here for focused review."}
+              </div>
+            </div>
+            <button className={`btn ${showMissedOnly?"btn-primary":"btn-outline"}`} style={{fontSize:12,flexShrink:0}} disabled={missedPbqIds.length===0} onClick={()=>setShowMissedOnly(v=>!v)}>
+              {showMissedOnly?"Show All PBQs":"Review Missed PBQs"}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Sim type cards */}
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:10,marginBottom:20}}>
@@ -6634,11 +6792,11 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
         {chFilter!=="all"&&<button className="btn btn-ghost" style={{fontSize:11,padding:"5px 10px"}} onClick={()=>setChFilter("all")}>Clear ✕</button>}
       </div>
 
-      <div style={{fontSize:13,color:t.textDim,marginBottom:12}}>Showing {filtered.length} questions</div>
+      <div style={{fontSize:13,color:t.textDim,marginBottom:12}}>Showing {displayQuestions.length} questions · correctly answered PBQs are kept lower in the list</div>
 
       {/* Question list */}
       <div style={{display:"flex",flexDirection:"column",gap:8}}>
-        {filtered.map(q=>{
+        {displayQuestions.map(q=>{
           const done=attempted.has(q.id);
           const ok=correct.has(q.id);
           const ch=CHAPTERS.find(c=>c.id===q.ch);
@@ -6669,7 +6827,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
 // ═══════════════════════════════════════════════════════════════
 // PBQ SIMULATOR
 // ═══════════════════════════════════════════════════════════════
-function PBQSim({q,onDone,t}) {
+function PBQSim({q,onDone,onNext,nextQuestion,t}) {
   const [termInput,setTermInput]=useState("");
   const [termHistory,setTermHistory]=useState([]);
   const [selected,setSelected]=useState(null);
@@ -6721,6 +6879,17 @@ function PBQSim({q,onDone,t}) {
     setTapDragItem(null);
     setDragged(null);
   };
+  const updatePointerDropTarget=e=>{
+    const el=document.elementFromPoint(e.clientX,e.clientY)?.closest?.("[data-drop-target]");
+    setDragOver(el?.dataset?.dropTarget||null);
+    return el?.dataset?.dropTarget||null;
+  };
+  const finishPointerDrag=(e,item)=>{
+    const targetId=updatePointerDropTarget(e);
+    if(targetId) placeDragItem(item,targetId);
+    setDragOver(null);
+    setDragged(null);
+  };
 
   return(
     <div style={{padding:"24px",maxWidth:860,margin:"0 auto"}}>
@@ -6737,7 +6906,7 @@ function PBQSim({q,onDone,t}) {
       {/* Scenario */}
       <div className="card" style={{padding:"18px 22px",marginBottom:18,borderLeft:`3px solid ${simType.color}`}}>
         <div className="label" style={{marginBottom:8}}>Scenario</div>
-        <p style={{fontSize:14,color:t.textSec,lineHeight:1.75}}>{q.scenario}</p>
+        <p style={{fontSize:14,color:t.textSec,lineHeight:1.75}}><GlossaryText text={q.scenario} t={t}/></p>
         {q.steps&&<div style={{marginTop:12}}>
           {q.steps.map((s,i)=><div key={i} style={{fontSize:12,color:t.textDim,padding:"2px 0"}}><span style={{color:simType.color,fontWeight:600,marginRight:8}}>{i+1}.</span>{s}</div>)}
         </div>}
@@ -6795,7 +6964,7 @@ function PBQSim({q,onDone,t}) {
       {q.type==="SCENARIO"&&(
         <div style={{marginBottom:18}}>
           <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:8}}>Full Scenario</div>
-          <div className="card" style={{padding:"16px 20px",fontSize:13,color:t.textSec,lineHeight:1.8,whiteSpace:"pre-wrap"}}>{q.scenario}</div>
+          <div className="card" style={{padding:"16px 20px",fontSize:13,color:t.textSec,lineHeight:1.8,whiteSpace:"pre-wrap"}}><GlossaryText text={q.scenario} t={t}/></div>
         </div>
       )}
 
@@ -6816,7 +6985,10 @@ function PBQSim({q,onDone,t}) {
                     onClick={()=>setTapDragItem(item)}
                     onDragStart={()=>setDragged(item)}
                     onDragEnd={()=>setDragged(null)}
-                    style={{touchAction:"manipulation"}}
+                    onPointerDown={e=>{if(e.pointerType!=="mouse"){setDragged(item);setTapDragItem(item);e.currentTarget.setPointerCapture?.(e.pointerId);}}}
+                    onPointerMove={e=>{if(dragged?.id===item.id||tapDragItem?.id===item.id) updatePointerDropTarget(e);}}
+                    onPointerUp={e=>{if(e.pointerType!=="mouse") finishPointerDrag(e,item);}}
+                    style={{touchAction:"none"}}
                   >
                     {item.label}
                   </div>
@@ -6832,6 +7004,7 @@ function PBQSim({q,onDone,t}) {
                     <div key={target.id}>
                       <div style={{fontSize:11,color:t.textDim,marginBottom:3}}>{target.label}</div>
                       <div className={`drop-zone ${dragOver===target.id?"over":""} ${placed?"filled":""}`}
+                        data-drop-target={target.id}
                         onClick={()=>tapDragItem&&placeDragItem(tapDragItem,target.id)}
                         onDragOver={e=>{e.preventDefault();setDragOver(target.id);}}
                         onDragLeave={()=>setDragOver(null)}
@@ -6889,7 +7062,7 @@ function PBQSim({q,onDone,t}) {
       {/* MCQ for most types */}
       {(q.choices||q.options)&&(
         <div style={{marginBottom:18}}>
-          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:10}}>{q.question||"Select the best answer:"}</div>
+          <div style={{fontWeight:700,fontSize:13,color:t.text,marginBottom:10}}><GlossaryText text={q.question||"Select the best answer:"} t={t}/></div>
           <div style={{display:"flex",flexDirection:"column",gap:9}}>
             {(q.choices||q.options||[]).map((choice,i)=>{
               let cls="opt";
@@ -6898,7 +7071,7 @@ function PBQSim({q,onDone,t}) {
               return(
                 <div key={i} className={cls} onClick={()=>!submitted&&setSelected(i)}>
                   <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
-                  <span style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}>{choice}</span>
+                  <span style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={choice} t={t}/></span>
                   {submitted&&i===q.correct&&<span style={{color:t.green,fontSize:16,flexShrink:0}}>✓</span>}
                   {submitted&&i===selected&&i!==q.correct&&<span style={{color:t.red,fontSize:16,flexShrink:0}}>✗</span>}
                 </div>
@@ -6945,8 +7118,13 @@ function PBQSim({q,onDone,t}) {
               Try Again
             </button>
             <button className="btn btn-primary" onClick={()=>onDone({qid:q.id,correct:isCorrect(),type:q.type,title:q.title,ch:q.ch,domain:q.cat,pbq:true})}>
-              Continue →
+              Back to PBQ Bank
             </button>
+            {nextQuestion&&(
+              <button className="btn btn-primary" onClick={()=>onNext({qid:q.id,correct:isCorrect(),type:q.type,title:q.title,ch:q.ch,domain:q.cat,pbq:true})}>
+                Next related question →
+              </button>
+            )}
           </div>
         </>
       )}
@@ -7564,11 +7742,16 @@ export default function App() {
     else await DB.saveAttempt(user.email,r);
     setAttempts(a=>[r,...a]);
   },[user]);
-  const handlePBQDone=useCallback(async result=>{
+  const handlePBQDone=useCallback(async (result,options={})=>{
     if(result&&user){
       if(user.authProvider==="supabase") await saveSupabaseAttempt(user.id,result);
       else await DB.saveAttempt(user.email,result);
       setAttempts(a=>[result,...a]);
+    }
+    if(options.nextQuestion){
+      setPbqQ(options.nextQuestion);
+      setView("pbq");
+      return;
     }
     setPbqQ(null);setView("pbq");
   },[user]);
@@ -7633,20 +7816,26 @@ export default function App() {
     <>
       <style>{CSS}</style>
       <div style={{background:t.bg,minHeight:"100vh"}}>
-        <PBQSim q={pbqQ} onDone={handlePBQDone} t={t}/>
+        <PBQSim
+          q={pbqQ}
+          nextQuestion={getNextRelatedPBQ(pbqQ,attempts)}
+          onDone={handlePBQDone}
+          onNext={(result)=>handlePBQDone(result,{nextQuestion:getNextRelatedPBQ(pbqQ,attempts)})}
+          t={t}
+        />
       </div>
     </>
   );
 
   const navItems=[
-    {id:"dashboard",emoji:"🏠",label:"Dashboard"},
-    {id:"mcq",emoji:"📝",label:"MCQ Practice"},
-    {id:"pbq",emoji:"💡",label:"PBQ Simulator"},
-    {id:"daily",emoji:"🎯",label:"Daily Challenge"},
-    {id:"pricing",emoji:"⬆️",label:"Upgrade"},
-    {id:"objectives",emoji:"📋",label:"Objectives"},
-    {id:"privacy",emoji:"🔒",label:"Privacy Policy"},
-    {id:"terms",emoji:"📄",label:"Terms of Service"},
+    {id:"dashboard",icon:"dashboard",label:"Dashboard"},
+    {id:"mcq",icon:"mcq",label:"MCQ Practice"},
+    {id:"pbq",icon:"pbq",label:"PBQ Simulator"},
+    {id:"daily",icon:"daily",label:"Daily Challenge"},
+    {id:"pricing",icon:"pricing",label:"Upgrade"},
+    {id:"objectives",icon:"objectives",label:"Objectives"},
+    {id:"privacy",icon:"privacy",label:"Privacy Policy"},
+    {id:"terms",icon:"terms",label:"Terms of Service"},
   ];
 
   return(
@@ -7680,7 +7869,7 @@ export default function App() {
           <nav style={{flex:1,padding:"10px 10px",display:"flex",flexDirection:"column",gap:2}}>
             {navItems.map(n=>(
               <div key={n.id} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>setView(n.id)}>
-                <span style={{fontSize:16}}>{n.emoji}</span>
+                <NavGlyph type={n.icon} active={view===n.id}/>
                 <span>{n.label}</span>
               </div>
             ))}
