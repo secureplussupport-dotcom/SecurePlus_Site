@@ -5433,7 +5433,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:9px 16px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif;white-space:nowrap;}
 .btn-primary{background:${t.accent};color:#fff;}
 .btn-primary:hover{background:${t.accentHover};box-shadow:0 10px 22px ${t.accent}35;}
-.btn-primary:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;}
+.btn:disabled,.btn-primary:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none;}
 .btn-outline{background:transparent;color:${t.accent};border:1.5px solid ${t.accent};}
 .btn-outline:hover{background:${t.accent}12;}
 .btn-ghost{background:transparent;color:${t.textSec};border:1px solid ${t.border};}
@@ -5452,16 +5452,16 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .nav-lnk.act{color:${t.text};background:${t.accent}18;border:1px solid ${t.accent}28;}
 .prog-track{background:${t.border};border-radius:99px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.16,1,.3,1);}
-.opt{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border-radius:8px;border:1.5px solid ${t.border};cursor:pointer;transition:all .18s;background:${t.surface};min-width:0;}
-.opt:hover:not(.done){border-color:${t.accent};background:${t.accent}08;}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:8px;border:1.5px solid ${t.border};cursor:pointer;transition:background .18s,border-color .18s,transform .18s; background:${t.surface};min-width:0;}
+.opt:hover:not(.done){border-color:${t.accent};background:${t.accent}08;transform:translateY(-1px);}
 .opt.sel{border-color:${t.accent};background:${t.accent}10;}
-.opt.ok{border-color:${t.green}!important;background:${t.green}0d!important;}
-.opt.bad{border-color:${t.red}!important;background:${t.red}0d!important;}
+.opt.ok{border-color:${t.green}70!important;background:${t.green}08!important;}
+.opt.bad{border-color:${t.red}60!important;background:${t.red}07!important;}
 .opt.done{cursor:default;}
-.opt-ltr{width:30px;height:30px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;border:1.5px solid ${t.border};color:${t.textDim};transition:all .18s;}
+.opt-ltr{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:1.5px solid ${t.border};color:${t.textDim};transition:all .18s;background:${t.panel};}
 .opt:hover:not(.done) .opt-ltr,.opt.sel .opt-ltr{border-color:${t.accent};color:${t.accent};}
-.opt.ok .opt-ltr{border-color:${t.green};color:${t.green};}
-.opt.bad .opt-ltr{border-color:${t.red};color:${t.red};}
+.opt.ok .opt-ltr{border-color:${t.green}70;color:${t.green};background:${t.green}10;}
+.opt.bad .opt-ltr{border-color:${t.red}60;color:${t.red};background:${t.red}0d;}
 .terminal{background:#0d1117;border:1px solid #30363d;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#c9d1d9;padding:16px;overflow-y:auto;max-height:280px;line-height:1.7;}
 .log-block{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:${t.inputBg};border:1px solid ${t.border};border-radius:8px;padding:16px;color:${t.textSec};line-height:1.9;white-space:pre-wrap;overflow-x:auto;}
 .drag-item{padding:10px 14px;background:${t.surface};border:1.5px solid ${t.border};border-radius:7px;cursor:grab;user-select:none;transition:all .2s;font-size:13px;color:${t.text};}
@@ -6168,11 +6168,13 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
   const [diffFilter,setDiffFilter]=useState("all");
   const [topicFilter,setTopicFilter]=useState("all");
   const [reviewMode,setReviewMode]=useState("smart");
+  const [quizCount,setQuizCount]=useState(10);
   const [started,setStarted]=useState(false);
   const [questions,setQuestions]=useState([]);
   const [qi,setQi]=useState(0);
   const [selected,setSelected]=useState(null);
   const [submitted,setSubmitted]=useState(false);
+  const [draftSelections,setDraftSelections]=useState([]);
   const [results,setResults]=useState([]);
   const [done,setDone]=useState(false);
   const [showWrong,setShowWrong]=useState(false);
@@ -6186,37 +6188,73 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
     return true;
   });
   const reviewSummary = getReviewSummary(attempts);
+  const quizSizes = [10,20,30,40,50];
+
+  useEffect(()=>{
+    const available = quizSizes.filter(size=>filtered.length>=size);
+    if(available.length && !available.includes(quizCount)) setQuizCount(available[available.length-1]);
+  },[filtered.length,quizCount]);
 
   const startQuiz=()=>{
     const ordered = reviewMode==="smart"
       ? rankQuestionsBySm2(filtered, attempts)
       : [...filtered].sort(()=>Math.random()-.5);
-    const pool=ordered.slice(0,Math.min(10,filtered.length));
+    const pool=ordered.slice(0,Math.min(quizCount,filtered.length));
     capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: diffFilter, topic: topicFilter, question_count: pool.length, tier: user.tier });
-    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setResults([]);setDone(false);setStarted(true);
+    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);
   };
 
   const current=questions[qi];
+  const answeredCount=results.filter(Boolean).length;
+  const allAnswered=questions.length>0&&answeredCount===questions.length;
+  const goToQuestion=index=>{
+    if(index<0||index>=questions.length)return;
+    setQi(index);
+    setSelected(results[index]?.selected ?? draftSelections[index] ?? null);
+    setSubmitted(Boolean(results[index]));
+    setShowWrong(false);
+  };
 
   const submitQ=()=>{
     if(selected===null)return;
     const correct=selected===current.correct;
-    const r={qid:current.id,correct,selected,title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",mcq:true,createdAt:new Date().toISOString()};
+    const r={qid:current.id,correct,selected,title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",topic:current.topic,difficulty:current.difficulty,mcq:true,createdAt:new Date().toISOString()};
     capture("mcq_question_answered", { question_id: current.id, chapter: current.ch, difficulty: current.difficulty, topic: current.topic, correct, tier: user.tier });
-    setResults(rs=>[...rs,r]);
-    onSave(r);
+    setResults(rs=>{const next=[...rs];next[qi]=r;return next;});
+    if(!results[qi]) onSave(r);
     setSubmitted(true);setShowWrong(false);
   };
   const nextQ=()=>{
-    if(qi<questions.length-1){setQi(i=>i+1);setSelected(null);setSubmitted(false);setShowWrong(false);}
+    if(qi<questions.length-1) goToQuestion(qi+1);
     else {
       capture("mcq_quiz_completed", { correct_count: correctCount, question_count: questions.length, tier: user.tier });
       setDone(true);
     }
   };
+  const finishQuiz=()=>{
+    if(!allAnswered){
+      const firstUnanswered=questions.findIndex((_,index)=>!results[index]);
+      goToQuestion(firstUnanswered>=0?firstUnanswered:0);
+      return;
+    }
+    capture("mcq_quiz_completed", { correct_count: correctCount, question_count: questions.length, tier: user.tier });
+    setDone(true);
+  };
+  const retakeCurrentQuiz=()=>{
+    setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setShowWrong(false);
+  };
 
-  const correctCount=results.filter(r=>r.correct).length;
+  const correctCount=results.filter(r=>r?.correct).length;
+  const scorePct=questions.length?correctCount/questions.length:0;
   const canSeeFeedback = user.tier === "pro";
+  const chapterEvaluation=CHAPTERS.map(ch=>{
+    const chapterResults=results.map((r,index)=>r?{...r,question:questions[index]}:null).filter(r=>r&&r.ch===ch.id);
+    const missed=chapterResults.filter(r=>!r.correct);
+    const topicCounts=missed.reduce((acc,r)=>{const topic=r.topic||r.question?.topic||"Core concepts";acc[topic]=(acc[topic]||0)+1;return acc;},{});
+    const focusTopics=Object.entries(topicCounts).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([topic])=>topic);
+    return {chapter:ch,total:chapterResults.length,correct:chapterResults.filter(r=>r.correct).length,missed:missed.length,focusTopics};
+  }).filter(item=>item.total>0).sort((a,b)=>(a.correct/a.total)-(b.correct/b.total));
+  const weakChapters=chapterEvaluation.filter(item=>item.missed>0).slice(0,3);
 
   if(!started) return(
     <div style={{padding:"24px",maxWidth:800,margin:"0 auto"}}>
@@ -6291,8 +6329,24 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
             </select>
           </div>
         </div>
+        <div style={{marginTop:16}}>
+          <label className="label" style={{display:"block",marginBottom:8}}>Quiz Length</label>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8}}>
+            {quizSizes.map(size=>(
+              <button
+                key={size}
+                className={`btn ${quizCount===size?"btn-primary":"btn-ghost"}`}
+                style={{fontSize:12,padding:"8px 10px",minHeight:36}}
+                disabled={filtered.length<size}
+                onClick={()=>setQuizCount(size)}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        </div>
         <div style={{marginTop:16,padding:"12px 14px",background:t.panel,borderRadius:7,fontSize:13,color:t.textSec}}>
-          {filtered.length} questions match your filters · Up to 10 will be selected · {reviewMode==="smart"?"SM-2 priority order":"Random order"}
+          {filtered.length} questions match your filters · {filtered.length>=10?`${quizCount} will be selected`:"choose broader filters to reach the 10-question minimum"} · {reviewMode==="smart"?"SM-2 priority order":"Random order"}
         </div>
       </div>
 
@@ -6313,17 +6367,17 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
         </div>
       </div>
 
-      <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"13px",fontSize:15}} onClick={startQuiz} disabled={filtered.length===0}>
-        Start Quiz ({Math.min(10,filtered.length)} Questions) →
+      <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"13px",fontSize:15}} onClick={startQuiz} disabled={filtered.length<10}>
+        Start Quiz ({quizCount} Questions) →
       </button>
     </div>
   );
 
   if(done) return(
-    <div style={{padding:"24px",maxWidth:600,margin:"0 auto",textAlign:"center"}} className="fu">
-      <div style={{fontSize:48,marginBottom:12}}>{correctCount>=8?"🏆":correctCount>=5?"✅":"📚"}</div>
+    <div style={{padding:"24px",maxWidth:760,margin:"0 auto",textAlign:"center"}} className="fu">
+      <div style={{fontSize:48,marginBottom:12}}>{scorePct>=.8?"🏆":scorePct>=.5?"✅":"📚"}</div>
       <h2 style={{fontSize:24,fontWeight:700,color:t.text,marginBottom:8}}>Quiz Complete!</h2>
-      <div style={{fontSize:42,fontWeight:700,color:correctCount>=8?t.green:correctCount>=5?t.amber:t.red,marginBottom:16}}>
+      <div style={{fontSize:42,fontWeight:700,color:scorePct>=.8?t.green:scorePct>=.5?t.amber:t.red,marginBottom:16}}>
         {correctCount}/{questions.length}
       </div>
       <div className="card" style={{padding:"16px 20px",marginBottom:16,textAlign:"left"}}>
@@ -6334,6 +6388,48 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
           </div>
         ))}
       </div>
+      {user.tier==="pro"?(
+        <div className="card" style={{padding:"18px 20px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}28`,background:`${t.accent}05`}}>
+          <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:12,flexWrap:"wrap"}}>
+            <div>
+              <div style={{fontWeight:800,color:t.text,fontSize:15}}>Chapter Improvement Plan</div>
+              <div style={{fontSize:12,color:t.textDim}}>Based on this quiz only</div>
+            </div>
+            <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}25`}}>Pro evaluation</span>
+          </div>
+          {weakChapters.length===0?(
+            <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+              Strong set. You did not miss any chapters in this quiz. Keep using Smart Review so older correct answers are spaced out and weak areas return later.
+            </div>
+          ):(
+            <div style={{display:"grid",gap:10}}>
+              {weakChapters.map(item=>{
+                const accuracy=Math.round((item.correct/item.total)*100);
+                const topics=item.focusTopics.length?item.focusTopics.join(" and "):item.chapter.title;
+                return(
+                  <div key={item.chapter.id} style={{padding:"12px 14px",border:`1px solid ${t.border}`,borderRadius:8,background:t.surface}}>
+                    <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:6}}>
+                      <div style={{fontSize:13,fontWeight:700,color:t.text}}>Ch.{item.chapter.id}: {item.chapter.title}</div>
+                      <div style={{fontSize:12,fontWeight:700,color:accuracy>=75?t.green:accuracy>=50?t.amber:t.red}}>{accuracy}%</div>
+                    </div>
+                    <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
+                      Next action: read up more on {topics}, then run Smart Review again with Chapter {item.chapter.id} selected.
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      ):(
+        <div className="card" style={{padding:"16px 20px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
+          <div style={{fontWeight:700,color:t.text,fontSize:14,marginBottom:4}}>Pro unlocks your improvement plan</div>
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:10}}>
+            After each MCQ test, Pro shows which chapters need work and suggests what to study next, such as PKI, access control, or incident response concepts.
+          </div>
+          <button className="btn btn-outline" style={{fontSize:12}} onClick={onUpgrade}>See Pro</button>
+        </div>
+      )}
       {user.tier==="free"&&(
         <div className="card" style={{padding:"16px 20px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
           <div style={{fontWeight:700,color:t.text,fontSize:14,marginBottom:4}}>Want the PBQ side of the exam too?</div>
@@ -6345,7 +6441,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
       )}
       <div style={{display:"flex",gap:10,justifyContent:"center"}}>
         <button className="btn btn-primary" onClick={()=>{setStarted(false);setDone(false);}}>New Quiz →</button>
-        <button className="btn btn-ghost" onClick={startQuiz}>Retry Same →</button>
+        <button className="btn btn-ghost" onClick={retakeCurrentQuiz}>Retry Same →</button>
       </div>
     </div>
   );
@@ -6356,10 +6452,20 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}>
         <div style={{display:"flex",gap:5}}>
           {questions.map((_,i)=>(
-            <div key={i} style={{width:9,height:9,borderRadius:"50%",background:i<qi?(results[i]?.correct?t.green:t.red):i===qi?t.accent:t.border,transition:"background .3s"}}/>
+            <button
+              key={i}
+              aria-label={`Go to question ${i+1}`}
+              onClick={()=>goToQuestion(i)}
+              style={{width:10,height:10,borderRadius:"50%",border:"none",padding:0,cursor:"pointer",background:results[i]?(results[i]?.correct?t.green:t.red):i===qi?t.accent:draftSelections[i]!==undefined?`${t.amber}`:t.border,transition:"background .3s, transform .18s"}}
+            />
           ))}
         </div>
-        <span style={{fontSize:13,color:t.textSec,marginLeft:"auto"}}>Question {qi+1} of {questions.length}</span>
+        <span style={{fontSize:13,color:t.textSec,marginLeft:"auto"}}>Question {qi+1} of {questions.length} · {answeredCount} answered</span>
+      </div>
+
+      <div style={{display:"flex",gap:10,justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+        <button className="btn btn-ghost" style={{fontSize:12}} disabled={qi===0} onClick={()=>goToQuestion(qi-1)}>← Previous</button>
+        <button className="btn btn-ghost" style={{fontSize:12}} disabled={qi===questions.length-1} onClick={()=>goToQuestion(qi+1)}>Next →</button>
       </div>
 
       {/* Question card */}
@@ -6379,11 +6485,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
           if(submitted){cls+=" done"; if(i===current.correct)cls+=" ok"; else if(i===selected&&i!==current.correct)cls+=" bad";}
           else if(selected===i)cls+=" sel";
           return(
-            <div key={i} className={cls} onClick={()=>!submitted&&setSelected(i)}>
+            <div key={i} className={cls} onClick={()=>{if(submitted)return;setSelected(i);setDraftSelections(prev=>{const next=[...prev];next[qi]=i;return next;});}}>
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
               <span style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}>{opt}</span>
-              {submitted&&i===current.correct&&<span style={{color:t.green,fontSize:16,flexShrink:0}}>✓</span>}
-              {submitted&&i===selected&&i!==current.correct&&<span style={{color:t.red,fontSize:16,flexShrink:0}}>✗</span>}
+              {submitted&&i===current.correct&&<span style={{color:t.green,fontSize:14,flexShrink:0,fontWeight:800}}>✓</span>}
+              {submitted&&i===selected&&i!==current.correct&&<span style={{color:t.red,fontSize:14,flexShrink:0,fontWeight:800}}>✕</span>}
             </div>
           );
         })}
@@ -6395,9 +6501,12 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
         </button>
       ):(
         <>
-          <div className="card" style={{padding:"18px 22px",marginBottom:14,borderColor:selected===current.correct?t.green:t.red}}>
-            <div style={{fontWeight:700,color:selected===current.correct?t.green:t.red,marginBottom:10,fontSize:16}}>
-              {selected===current.correct?"✓ Correct!":"✗ Incorrect"}
+          <div className="card" style={{padding:"16px 18px",marginBottom:14,borderColor:selected===current.correct?`${t.green}42`:`${t.red}42`,background:selected===current.correct?`${t.green}08`:`${t.red}08`,boxShadow:"none"}}>
+            <div style={{display:"flex",alignItems:"center",gap:10,fontWeight:800,color:t.text,marginBottom:10,fontSize:15}}>
+              <span style={{width:26,height:26,borderRadius:"50%",display:"inline-flex",alignItems:"center",justifyContent:"center",background:selected===current.correct?`${t.green}18`:`${t.red}18`,color:selected===current.correct?t.green:t.red}}>
+                {selected===current.correct?"✓":"✕"}
+              </span>
+              {selected===current.correct?"Nice work":"Not quite"}
             </div>
             {canSeeFeedback?(
               <p style={{fontSize:13,color:t.textSec,lineHeight:1.75}}>{current.exp}</p>
@@ -6418,8 +6527,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
               </div>
             )}
           </div>
-          <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={nextQ}>
-            {qi<questions.length-1?"Next Question →":"See Results →"}
+          <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={qi<questions.length-1?nextQ:finishQuiz}>
+            {qi<questions.length-1?"Next Question →":allAnswered?"See Results →":"Review Unanswered →"}
           </button>
         </>
       )}
