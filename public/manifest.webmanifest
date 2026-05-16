@@ -1,0 +1,57 @@
+{
+  "name": "SecurePlus Security+ Practice",
+  "short_name": "SecurePlus",
+  "description": "CompTIA Security+ practice questions with MCQs, PBQ simulations, daily challenges, and Smart Review.",
+  "id": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#0b1020",
+  "theme_color": "#0b1020",
+  "categories": ["education", "productivity"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/favicon-v2-48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-v2-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/maskable-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Daily Challenge",
+      "short_name": "Daily",
+      "description": "Open SecurePlus Daily Challenge.",
+      "url": "/security-plus-daily-challenge/",
+      "icons": [{ "src": "/favicon-v2-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "MCQ Practice",
+      "short_name": "MCQ",
+      "description": "Open Security+ MCQ practice.",
+      "url": "/security-plus-mcq-practice/",
+      "icons": [{ "src": "/favicon-v2-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

@@ -189,6 +189,26 @@ Any CVC
 https://your-domain.com/api/stripe/webhook
 ```
 
+## Mobile App Install
+
+SecurePlus is configured as an installable Progressive Web App (PWA). After Vercel deploys it, students can add it to their phone home screen.
+
+iPhone:
+
+1. Open `https://www.secureplusprep.com` in Safari.
+2. Tap the Share button.
+3. Tap `Add to Home Screen`.
+4. Confirm the name `SecurePlus`.
+
+Android:
+
+1. Open `https://www.secureplusprep.com` in Chrome.
+2. Tap the three-dot menu.
+3. Tap `Add to Home screen` or `Install app`.
+4. Confirm the install.
+
+The PWA uses `public/manifest.webmanifest`, `public/sw.js`, and the app icons in `public/`. For App Store or Play Store distribution later, wrap the same React app with Capacitor.
+
 ## Security Notes
 
 - RLS prevents users from reading another user's `profiles` or `attempts`.
