@@ -5526,6 +5526,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .nav-glyph-objectives span{width:13px;height:13px;border:2px solid currentColor;border-radius:3px;}
 .nav-glyph-objectives::before{width:7px;height:2px;background:currentColor;top:8px;}
 .nav-glyph-objectives::after{width:7px;height:2px;background:currentColor;top:13px;}
+.nav-glyph-exam span{width:15px;height:18px;border:2px solid currentColor;border-radius:3px;}
+.nav-glyph-exam::before{width:9px;height:9px;border:2px solid currentColor;border-radius:50%;right:2px;bottom:1px;background:${t.panel};}
+.nav-glyph-exam::after{width:5px;height:2px;background:currentColor;right:5px;bottom:6px;transform-origin:right center;transform:rotate(-45deg);}
+.nav-lnk:hover .nav-glyph-exam,.nav-glyph-exam.active{color:#14b8a6;background:#14b8a618;border-color:#14b8a655;box-shadow:0 0 18px #14b8a640;}
 .nav-glyph-privacy span{width:13px;height:10px;border:2px solid currentColor;border-radius:2px;bottom:4px;}
 .nav-glyph-privacy::before{width:10px;height:9px;border:2px solid currentColor;border-bottom:0;border-radius:9px 9px 0 0;top:3px;transform-origin:85% 100%;}
 .nav-glyph-privacy.active{color:${t.green};background:${t.green}14;border-color:${t.green}50;box-shadow:0 0 16px ${t.green}30;}
@@ -7297,6 +7301,354 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// EXAM MODE
+// ═══════════════════════════════════════════════════════════════
+function ExamMode({user,onSave,onUpgrade,t}) {
+  const [questionCount,setQuestionCount]=useState(20);
+  const [started,setStarted]=useState(false);
+  const [done,setDone]=useState(false);
+  const [questions,setQuestions]=useState([]);
+  const [answers,setAnswers]=useState({});
+  const [qi,setQi]=useState(0);
+  const [flagged,setFlagged]=useState({});
+  const [timeLeft,setTimeLeft]=useState(3600);
+  const [saved,setSaved]=useState(false);
+
+  const isPro=user?.tier==="pro";
+  const sizes=[10,20,30,40,50];
+  const current=questions[qi];
+  const answer=answers[qi]||{};
+
+  const shuffle=arr=>[...arr].sort(()=>Math.random()-.5);
+  const formatTime=s=>{
+    const m=Math.floor(s/60);
+    const sec=s%60;
+    return `${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
+  };
+  const initAnswer=item=>{
+    if(item.kind==="mcq") return {selected:null};
+    const q=item.q;
+    return {
+      selected:null,
+      mapping:{},
+      orderItems:q.type==="ORDERING"&&q.items?shuffle(q.items):[],
+      blanks:q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{},
+      tapDragItem:null,
+      termInput:"",
+    };
+  };
+  const startExam=()=>{
+    const pbqCount=Math.max(1,Math.round(questionCount*.1));
+    const mcqCount=questionCount-pbqCount;
+    const examReadyPbqs=PBQ_BANK.filter(q=>q.type!=="TERMINAL SIM"||q.choices||q.options);
+    const pickedPbq=shuffle(examReadyPbqs).slice(0,pbqCount).map(q=>({kind:"pbq",q}));
+    const pickedMcq=shuffle(MCQ_BANK).slice(0,mcqCount).map(q=>({kind:"mcq",q}));
+    const examQs=[...pickedPbq,...pickedMcq];
+    setQuestions(examQs);
+    setAnswers(Object.fromEntries(examQs.map((item,index)=>[index,initAnswer(item)])));
+    setFlagged({});
+    setQi(0);
+    setTimeLeft(3600);
+    setDone(false);
+    setSaved(false);
+    setStarted(true);
+    capture("exam_mode_started", { question_count: questionCount, pbq_count: pbqCount, tier: user.tier });
+  };
+  const updateAnswer=patch=>setAnswers(prev=>({...prev,[qi]:{...(prev[qi]||{}),...patch}}));
+  const setAnswerAt=(index,patch)=>setAnswers(prev=>({...prev,[index]:{...(prev[index]||{}),...patch}}));
+  const pbqCorrect=(q,a={})=>{
+    if(["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type)) return a.selected===q.correct;
+    if(q.type==="DRAG & DROP") return q.items?.every(item=>a.mapping?.[item.id]===q.correctMapping?.[item.id]);
+    if(q.type==="ORDERING") return q.correctOrder?.every((id,i)=>a.orderItems?.[i]?.id===id);
+    if(q.type==="FILL BLANK") return q.blanks?.every(b=>(a.blanks?.[b.id]||"").trim().toLowerCase()===b.answer.toLowerCase());
+    return false;
+  };
+  const isCorrect=(item,a={})=>item.kind==="mcq" ? a.selected===item.q.correct : pbqCorrect(item.q,a);
+  const isAnswered=(item,a={})=>{
+    if(item.kind==="mcq") return a.selected!==null&&a.selected!==undefined;
+    const q=item.q;
+    if((q.choices||q.options)&&["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type)) return a.selected!==null&&a.selected!==undefined;
+    if(q.type==="DRAG & DROP") return Object.keys(a.mapping||{}).length>0;
+    if(q.type==="FILL BLANK") return q.blanks?.some(b=>(a.blanks?.[b.id]||"").trim());
+    if(q.type==="ORDERING") return Boolean(a.orderItems?.length);
+    return Boolean(a.termInput);
+  };
+  const answeredCount=questions.filter((item,index)=>isAnswered(item,answers[index])).length;
+  const correctCount=questions.filter((item,index)=>isCorrect(item,answers[index])).length;
+  const score=questions.length?Math.round((correctCount/questions.length)*100):0;
+
+  function submitExam(auto=false) {
+    if(done) return;
+    const rows=questions.map((item,index)=>{
+      const q=item.q;
+      return {
+        qid:q.id,
+        correct:isCorrect(item,answers[index]),
+        selected:answers[index]?.selected,
+        title:(item.kind==="mcq"?q.q:q.title).slice(0,80),
+        ch:q.ch,
+        domain:item.kind==="mcq"?(CHAPTERS.find(c=>c.id===q.ch)?.title||""):q.cat,
+        topic:item.kind==="mcq"?q.topic:q.type,
+        difficulty:q.difficulty,
+        mcq:item.kind==="mcq",
+        pbq:item.kind==="pbq",
+        exam:true,
+        createdAt:new Date().toISOString(),
+      };
+    });
+    if(!saved){
+      rows.forEach(row=>onSave(row));
+      setSaved(true);
+    }
+    capture("exam_mode_completed", { question_count: questions.length, correct_count: rows.filter(r=>r.correct).length, score, auto_submitted: auto, tier: user.tier });
+    setDone(true);
+  }
+
+  useEffect(()=>{
+    if(!started||done)return;
+    if(timeLeft<=0){submitExam(true);return;}
+    const id=setInterval(()=>setTimeLeft(s=>Math.max(0,s-1)),1000);
+    return()=>clearInterval(id);
+  },[started,done,timeLeft]);
+
+  const placeDragItem=(item,targetId)=>{
+    if(!item)return;
+    const mapping={...(answer.mapping||{})};
+    Object.keys(mapping).forEach(key=>{if(mapping[key]===targetId)delete mapping[key];});
+    mapping[item.id]=targetId;
+    updateAnswer({mapping,tapDragItem:null});
+  };
+
+  if(!isPro) return(
+    <div style={{padding:"28px 24px",maxWidth:760,margin:"0 auto"}}>
+      <div className="card" style={{padding:"24px",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
+        <div style={{display:"flex",gap:14,alignItems:"center",marginBottom:10}}>
+          <NavGlyph type="exam" active/>
+          <h2 style={{fontSize:22,color:t.text}}>Exam Mode is Pro-only</h2>
+        </div>
+        <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:16}}>
+          Exam Mode mixes MCQs and PBQs, adds a timer, lets you flag questions, and gives a full answer review after submission.
+        </p>
+        <button className="btn btn-primary" onClick={onUpgrade}>Upgrade to Pro</button>
+      </div>
+    </div>
+  );
+
+  if(!started) return(
+    <div style={{padding:"28px 24px",maxWidth:820,margin:"0 auto"}}>
+      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:18}}>
+        <NavGlyph type="exam" active/>
+        <div>
+          <h2 style={{fontSize:24,color:t.text}}>Exam Mode</h2>
+          <p style={{fontSize:14,color:t.textSec}}>Timed mixed practice for Pro users.</p>
+        </div>
+      </div>
+      <div className="card" style={{padding:"20px 22px",marginBottom:16}}>
+        <div style={{fontWeight:800,color:t.text,marginBottom:8}}>Exam setup</div>
+        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:16}}>
+          Your exam will be 90% MCQ and 10% PBQ. PBQs appear first. Timer is fixed at 1 hour.
+        </p>
+        <label className="label" style={{display:"block",marginBottom:8}}>Total questions</label>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8,marginBottom:16}}>
+          {sizes.map(size=>(
+            <button key={size} className={`btn ${questionCount===size?"btn-primary":"btn-ghost"}`} onClick={()=>setQuestionCount(size)}>{size}</button>
+          ))}
+        </div>
+        <div style={{fontSize:13,color:t.textSec,background:t.panel,border:`1px solid ${t.border}`,borderRadius:8,padding:"12px 14px"}}>
+          {Math.max(1,Math.round(questionCount*.1))} PBQ first · {questionCount-Math.max(1,Math.round(questionCount*.1))} MCQ after · 1 hour timer
+        </div>
+      </div>
+      <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
+        <div style={{fontWeight:800,color:t.text,fontSize:14,marginBottom:4}}>Pass/fail disclaimer</div>
+        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+          SecurePlus uses 80% as a practice pass mark here. This is not an accurate CompTIA scoring model. In the real exam, PBQs can carry more weight and the exam has more questions.
+        </p>
+      </div>
+      <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"13px"}} onClick={startExam}>
+        Start Exam →
+      </button>
+    </div>
+  );
+
+  if(done) return(
+    <div style={{padding:"28px 24px",maxWidth:900,margin:"0 auto"}}>
+      <div className="card" style={{padding:"22px 24px",marginBottom:16,textAlign:"center",borderColor:score>=80?`${t.green}45`:`${t.red}45`,background:score>=80?`${t.green}07`:`${t.red}07`}}>
+        <div style={{fontSize:13,fontWeight:800,color:score>=80?t.green:t.red,textTransform:"uppercase",marginBottom:6}}>{score>=80?"Practice Pass":"Practice Fail"}</div>
+        <h2 style={{fontSize:32,color:t.text,marginBottom:4}}>{score}%</h2>
+        <div style={{fontSize:14,color:t.textSec}}>{correctCount}/{questions.length} correct</div>
+      </div>
+      <div className="card" style={{padding:"16px 20px",marginBottom:18,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
+        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+          Disclaimer: the 80% pass/fail mark is only for SecurePlus practice. The real Security+ exam uses a different scoring model, PBQs can carry more weight, and the real exam has more questions.
+        </p>
+      </div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,marginBottom:12,flexWrap:"wrap"}}>
+        <h3 style={{fontSize:18,color:t.text}}>Answer Review</h3>
+        <button className="btn btn-outline" onClick={()=>{setStarted(false);setDone(false);}}>New Exam</button>
+      </div>
+      <div style={{display:"grid",gap:12}}>
+        {questions.map((item,index)=>{
+          const q=item.q;
+          const a=answers[index]||{};
+          const ok=isCorrect(item,a);
+          const title=item.kind==="mcq"?q.q:q.title;
+          return(
+            <div key={`${item.kind}-${q.id}`} className="card" style={{padding:"16px 18px",borderColor:ok?`${t.green}35`:`${t.red}35`}}>
+              <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:8,flexWrap:"wrap"}}>
+                <span style={{fontWeight:900,color:ok?t.green:t.red}}>{ok?"Correct":"Incorrect"}</span>
+                {item.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
+                {flagged[index]&&<span className="chip" style={{background:`${t.amber}14`,color:t.amber,borderColor:`${t.amber}35`}}>Flagged</span>}
+              </div>
+              <div style={{fontSize:14,fontWeight:700,color:t.text,lineHeight:1.6,marginBottom:10}}><GlossaryText text={title} t={t}/></div>
+              {item.kind==="mcq"&&(
+                <div style={{fontSize:13,color:t.textSec,marginBottom:10}}>
+                  Your answer: {a.selected!==null&&a.selected!==undefined ? `${String.fromCharCode(65+a.selected)}. ${q.opts[a.selected]}` : "Not answered"}<br/>
+                  Correct answer: {String.fromCharCode(65+q.correct)}. {q.opts[q.correct]}
+                </div>
+              )}
+              <div style={{fontSize:13,color:t.textSec,lineHeight:1.75}}>
+                <strong style={{color:t.text}}>Solution: </strong>{item.kind==="mcq"?q.exp:q.explanation}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const q=current?.q;
+  return(
+    <div style={{padding:"24px",maxWidth:960,margin:"0 auto"}}>
+      <div className="card" style={{padding:"14px 16px",marginBottom:16,display:"flex",gap:12,alignItems:"center",flexWrap:"wrap",position:"sticky",top:12,zIndex:40}}>
+        <div style={{fontWeight:900,color:timeLeft<300?t.red:t.text,fontSize:20}}>{formatTime(timeLeft)}</div>
+        <div style={{fontSize:13,color:t.textSec}}>Question {qi+1} of {questions.length} · {answeredCount} answered</div>
+        <button className={`btn ${flagged[qi]?"btn-primary":"btn-ghost"}`} style={{marginLeft:"auto",fontSize:12}} onClick={()=>setFlagged(f=>({...f,[qi]:!f[qi]}))}>
+          {flagged[qi]?"Flagged":"Flag for review"}
+        </button>
+        <button className="btn btn-primary" style={{fontSize:12}} onClick={()=>submitExam(false)}>Submit Exam</button>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) 180px",gap:16}}>
+        <div>
+          <div style={{display:"flex",justifyContent:"space-between",gap:10,marginBottom:12}}>
+            <button className="btn btn-ghost" disabled={qi===0} onClick={()=>setQi(i=>Math.max(0,i-1))}>← Previous</button>
+            <button className="btn btn-ghost" disabled={qi===questions.length-1} onClick={()=>setQi(i=>Math.min(questions.length-1,i+1))}>Next →</button>
+          </div>
+          <div className="card" style={{padding:"20px 22px",marginBottom:16}}>
+            <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
+              {current.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
+              <DiffBadge d={q.difficulty} t={t}/>
+              <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{current.kind==="mcq"?"MCQ":"PBQ"}</span>
+            </div>
+            <div style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:700}}>
+              <GlossaryText text={current.kind==="mcq"?q.q:(q.question||q.title)} t={t}/>
+            </div>
+            {current.kind==="pbq"&&q.scenario&&(
+              <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginTop:12}}><GlossaryText text={q.scenario} t={t}/></p>
+            )}
+          </div>
+
+          {current.kind==="pbq"&&q.logData&&<div className="log-block" style={{marginBottom:16}}>{q.logData}</div>}
+          {current.kind==="pbq"&&q.diagram&&<pre className="log-block" style={{marginBottom:16}}>{q.diagram}</pre>}
+          {current.kind==="pbq"&&q.currentConfig&&<div className="terminal" style={{marginBottom:16,color:"#e6c07b"}}>{q.currentConfig}</div>}
+
+          {current.kind==="mcq"&&(
+            <div style={{display:"grid",gap:9}}>
+              {q.opts.map((opt,index)=>(
+                <div key={index} className={`opt ${answer.selected===index?"sel":""}`} onClick={()=>updateAnswer({selected:index})}>
+                  <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
+                  <span style={{fontSize:14,color:t.text,lineHeight:1.55}}><GlossaryText text={opt} t={t}/></span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {current.kind==="pbq"&&(q.choices||q.options)&&(
+            <div style={{display:"grid",gap:9}}>
+              {(q.choices||q.options||[]).map((choice,index)=>(
+                <div key={index} className={`opt ${answer.selected===index?"sel":""}`} onClick={()=>updateAnswer({selected:index})}>
+                  <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
+                  <span style={{fontSize:14,color:t.text,lineHeight:1.55}}><GlossaryText text={choice} t={t}/></span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {current.kind==="pbq"&&q.type==="DRAG & DROP"&&(
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+              <div>
+                <div className="label" style={{marginBottom:8}}>Items</div>
+                <div style={{display:"grid",gap:7}}>
+                  {q.items.filter(item=>!Object.keys(answer.mapping||{}).includes(item.id)).map(item=>(
+                    <button key={item.id} className={`btn ${answer.tapDragItem?.id===item.id?"btn-primary":"btn-ghost"}`} style={{justifyContent:"flex-start",fontSize:12}} onClick={()=>updateAnswer({tapDragItem:item})}>{item.label}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div className="label" style={{marginBottom:8}}>Targets</div>
+                <div style={{display:"grid",gap:7}}>
+                  {q.targets?.map(target=>{
+                    const placed=q.items.find(item=>answer.mapping?.[item.id]===target.id);
+                    return(
+                      <div key={target.id} className="drop-zone" onClick={()=>answer.tapDragItem&&placeDragItem(answer.tapDragItem,target.id)} style={{justifyContent:"flex-start",cursor:"pointer"}}>
+                        <span style={{fontSize:12,color:t.textSec}}>{target.label}: </span>
+                        <strong style={{fontSize:12,color:t.text,marginLeft:6}}>{placed?.label||"Choose item"}</strong>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {current.kind==="pbq"&&q.type==="ORDERING"&&(
+            <div style={{display:"grid",gap:7}}>
+              {(answer.orderItems||[]).map((item,index)=>(
+                <div key={item.id} className="order-item">
+                  <span style={{fontWeight:900,color:t.accent}}>{index+1}</span>
+                  <span style={{flex:1}}>{item.label}</span>
+                  <button className="btn btn-ghost" disabled={index===0} onClick={()=>{const next=[...(answer.orderItems||[])];[next[index],next[index-1]]=[next[index-1],next[index]];updateAnswer({orderItems:next});}}>↑</button>
+                  <button className="btn btn-ghost" disabled={index===(answer.orderItems||[]).length-1} onClick={()=>{const next=[...(answer.orderItems||[])];[next[index],next[index+1]]=[next[index+1],next[index]];updateAnswer({orderItems:next});}}>↓</button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {current.kind==="pbq"&&q.type==="FILL BLANK"&&(
+            <div style={{display:"grid",gap:10}}>
+              {q.blanks?.map(blank=>(
+                <div key={blank.id} className="card" style={{padding:"14px 16px"}}>
+                  <div style={{fontSize:13,color:t.textSec,lineHeight:1.6,marginBottom:8}}>{blank.sentence}</div>
+                  <input className="input" value={answer.blanks?.[blank.id]||""} onChange={e=>updateAnswer({blanks:{...(answer.blanks||{}),[blank.id]:e.target.value}})} placeholder="Your answer"/>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="card" style={{padding:"14px",height:"fit-content",position:"sticky",top:96}}>
+          <div className="label" style={{marginBottom:10}}>Question map</div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:6}}>
+            {questions.map((item,index)=>{
+              const active=index===qi;
+              const answered=isAnswered(item,answers[index]);
+              return(
+                <button key={index} className={`btn ${active?"btn-primary":"btn-ghost"}`} style={{minHeight:34,padding:0,fontSize:12,borderColor:flagged[index]?t.amber:undefined,color:!active&&flagged[index]?t.amber:undefined}} onClick={()=>setQi(index)}>
+                  {index+1}{answered?"":"*"}
+                </button>
+              );
+            })}
+          </div>
+          <div style={{fontSize:11,color:t.textDim,lineHeight:1.6,marginTop:10}}>
+            * not answered. Amber outline means flagged.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
 // PRICING
 // ═══════════════════════════════════════════════════════════════
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
@@ -8024,6 +8376,7 @@ export default function App() {
     {id:"dashboard",icon:"dashboard",label:"Dashboard"},
     {id:"mcq",icon:"mcq",label:"MCQ Practice"},
     {id:"pbq",icon:"pbq",label:"PBQ Simulator"},
+    {id:"exam",icon:"exam",label:"Exam Mode"},
     {id:"daily",icon:"daily",label:"Daily Challenge"},
     {id:"pricing",icon:"pricing",label:"Upgrade"},
     {id:"objectives",icon:"objectives",label:"Objectives"},
@@ -8086,6 +8439,7 @@ export default function App() {
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
           {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t}/>}
           {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t}/>}
+          {view==="exam"&&<ExamMode user={user} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
           {view==="referrals"&&<ReferralPage user={user} t={t}/>}
