@@ -9239,13 +9239,13 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
   return(
     <div className="landing-page fu">
       <header className="landing-header">
-        <div style={{display:"flex",alignItems:"center",gap:10}}>
+        <button type="button" onClick={()=>{onNavigate("dashboard");window.scrollTo({top:0,behavior:"smooth"});}} style={{display:"flex",alignItems:"center",gap:10,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}>
           <BrandMark size={32}/>
           <div>
             <div style={{fontWeight:900,color:t.text,fontSize:18}}>SecurePlus</div>
             <div style={{fontSize:12,color:t.textDim}}>CompTIA Security+ PBQ / MCQ practice</div>
           </div>
-        </div>
+        </button>
         <nav className="landing-nav-center" aria-label="Landing page sections">
           <a href="#features">Features</a>
           <a href="#pricing">Pricing</a>
@@ -9615,11 +9615,13 @@ function Dashboard({user,attempts,onNav,t}) {
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
-function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
+function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
+  const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
+  const requestSignup=onSignup||onUpgrade;
   const [chFilter,setChFilter]=useState("all");
   const [diffFilter,setDiffFilter]=useState("all");
   const [topicFilter,setTopicFilter]=useState("all");
-  const [reviewMode,setReviewMode]=useState("smart");
+  const [reviewMode,setReviewMode]=useState(isGuest?"random":"smart");
   const [quizCount,setQuizCount]=useState(10);
   const [started,setStarted]=useState(false);
   const [questions,setQuestions]=useState([]);
@@ -9643,6 +9645,14 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
   const quizSizes = [10,20,30,40,50];
   const missedMcqIds=[...new Set(attempts.filter(a=>a.mcq&&!a.correct).map(a=>a.qid))];
   const missedQuestions=MCQ_BANK.filter(q=>missedMcqIds.includes(q.id));
+
+  useEffect(()=>{
+    if(!isGuest)return;
+    setChFilter("all");
+    setDiffFilter("all");
+    setTopicFilter("all");
+    setReviewMode("random");
+  },[isGuest]);
 
   useEffect(()=>{
     const available = quizSizes.filter(size=>filtered.length>=size);
@@ -9714,6 +9724,22 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
     return {chapter:ch,total:chapterResults.length,correct:chapterResults.filter(r=>r.correct).length,missed:missed.length,focusTopics};
   }).filter(item=>item.total>0).sort((a,b)=>(a.correct/a.total)-(b.correct/b.total));
   const weakChapters=chapterEvaluation.filter(item=>item.missed>0).slice(0,3);
+  const guestSignupPrompt=(
+    <div className="card" style={{padding:"18px 20px",marginBottom:16,borderColor:`${t.accent}55`,background:`linear-gradient(135deg, ${t.accent}18, ${t.surface} 58%, ${t.green}10)`,boxShadow:`0 18px 42px ${t.accent}18`,textAlign:"left"}}>
+      <div style={{display:"flex",gap:14,alignItems:"center",flexWrap:"wrap"}}>
+        <div style={{width:48,height:48,borderRadius:14,background:`${t.accent}18`,border:`1px solid ${t.accent}38`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+          <NavGlyph type="mcq" active/>
+        </div>
+        <div style={{flex:1,minWidth:240}}>
+          <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:4}}>Create a free account to personalise MCQ practice</div>
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
+            Guests can practise the full MCQ bank, but accounts can choose chapters, difficulty, and specific topics, then save progress for Smart Review.
+          </div>
+        </div>
+        <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={requestSignup}>Create Free Account</button>
+      </div>
+    </div>
+  );
 
   if(!started) return(
     <div style={{padding:"24px",maxWidth:800,margin:"0 auto"}}>
@@ -9722,6 +9748,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
         <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>MCQ Practice</h2>
       </div>
       <p style={{color:t.textSec,marginBottom:20,fontSize:14}}>{MCQ_BANK.length} questions across all 5 CompTIA Security+ chapters</p>
+
+      {isGuest&&guestSignupPrompt}
 
       <div className="card" style={{padding:"18px 22px",marginBottom:16,borderColor:`${t.green}30`,background:`${t.green}06`}}>
         <div style={{display:"flex",justifyContent:"space-between",gap:14,alignItems:"center",flexWrap:"wrap"}}>
@@ -9745,9 +9773,14 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
           </div>
         </div>
         <div style={{display:"flex",gap:8,marginTop:14,flexWrap:"wrap"}}>
-          <button className={`btn ${reviewMode==="smart"?"btn-primary":"btn-outline"}`} style={{fontSize:12}} onClick={()=>setReviewMode("smart")}>Smart Review</button>
+          <button className={`btn ${reviewMode==="smart"?"btn-primary":"btn-outline"}`} style={{fontSize:12}} disabled={isGuest} onClick={()=>setReviewMode("smart")}>Smart Review</button>
           <button className={`btn ${reviewMode==="random"?"btn-primary":"btn-outline"}`} style={{fontSize:12}} onClick={()=>setReviewMode("random")}>Random Practice</button>
         </div>
+        {isGuest&&(
+          <div style={{marginTop:12,padding:"10px 12px",borderRadius:7,background:t.panel,border:`1px solid ${t.border}`,fontSize:12,color:t.textSec,lineHeight:1.6}}>
+            Smart Review is disabled in guest mode because it needs saved attempt history. Create a free account to turn it on.
+          </div>
+        )}
       </div>
 
       {user.tier==="free"&&(
@@ -9778,7 +9811,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
           <div>
             <label className="label" style={{display:"block",marginBottom:6}}>Chapter</label>
-            <select className="input" value={chFilter} onChange={e=>setChFilter(e.target.value)}>
+            <select className="input" value={chFilter} disabled={isGuest} onChange={e=>setChFilter(e.target.value)}>
               <option value="all">All Chapters ({MCQ_BANK.length})</option>
               {CHAPTERS.map(ch=>(
                 <option key={ch.id} value={ch.id}>Ch.{ch.id}: {ch.title.slice(0,25)}... ({MCQ_BANK.filter(q=>q.ch===ch.id).length})</option>
@@ -9787,7 +9820,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
           </div>
           <div>
             <label className="label" style={{display:"block",marginBottom:6}}>Difficulty</label>
-            <select className="input" value={diffFilter} onChange={e=>setDiffFilter(e.target.value)}>
+            <select className="input" value={diffFilter} disabled={isGuest} onChange={e=>setDiffFilter(e.target.value)}>
               <option value="all">All Difficulties</option>
               <option value="easy">Easy</option>
               <option value="medium">Medium</option>
@@ -9796,12 +9829,17 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
           </div>
           <div>
             <label className="label" style={{display:"block",marginBottom:6}}>Topic</label>
-            <select className="input" value={topicFilter} onChange={e=>setTopicFilter(e.target.value)}>
+            <select className="input" value={topicFilter} disabled={isGuest} onChange={e=>setTopicFilter(e.target.value)}>
               <option value="all">All Topics</option>
               {allTopics.map(tp=><option key={tp} value={tp}>{tp}</option>)}
             </select>
           </div>
         </div>
+        {isGuest&&(
+          <div style={{marginTop:14,padding:"12px 14px",borderRadius:7,background:`${t.accent}08`,border:`1px solid ${t.accent}25`,fontSize:13,color:t.textSec,lineHeight:1.6}}>
+            Chapter, difficulty, and topic selection are account features. Sign up free to create targeted MCQ sets.
+          </div>
+        )}
         <div style={{marginTop:16}}>
           <label className="label" style={{display:"block",marginBottom:8}}>Quiz Length</label>
           <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8}}>
@@ -9828,7 +9866,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
         <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:14}}>Chapter Overview</div>
         <div style={{display:"flex",flexDirection:"column",gap:10}}>
           {CHAPTERS.map(ch=>(
-            <div key={ch.id} className="chapter-card" style={{display:"flex",gap:12,alignItems:"center",padding:"10px 14px",borderRadius:8,background:chFilter===ch.id?`${chapterColor(ch.id)}12`:t.panel,cursor:"pointer",border:`1px solid ${chFilter===ch.id?chapterColor(ch.id):t.border}`,transition:"all .15s"}} onClick={()=>setChFilter(ch.id===chFilter?"all":ch.id)}>
+            <div key={ch.id} className="chapter-card" style={{display:"flex",gap:12,alignItems:"center",padding:"10px 14px",borderRadius:8,background:chFilter===ch.id?`${chapterColor(ch.id)}12`:t.panel,cursor:isGuest?"not-allowed":"pointer",opacity:isGuest?0.82:1,border:`1px solid ${chFilter===ch.id?chapterColor(ch.id):t.border}`,transition:"all .15s"}} onClick={()=>{if(!isGuest)setChFilter(ch.id===chFilter?"all":ch.id);}}>
               <ChapterIcon id={ch.id}/>
               <div style={{flex:1}}>
                 <div style={{fontSize:13,fontWeight:600,color:t.text}}>Ch.{ch.id}: {ch.title}</div>
@@ -9853,6 +9891,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
       <div style={{fontSize:42,fontWeight:700,color:scorePct>=.8?t.green:scorePct>=.5?t.amber:t.red,marginBottom:16}}>
         {correctCount}/{questions.length}
       </div>
+      {isGuest&&guestSignupPrompt}
       <div className="card" style={{padding:"16px 20px",marginBottom:16,textAlign:"left"}}>
         {results.map((r,i)=>(
           <div key={i} style={{display:"flex",gap:8,alignItems:"center",padding:"6px 0",borderBottom:i<results.length-1?`1px solid ${t.border}`:"none"}}>
@@ -9990,8 +10029,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
                 <p style={{fontSize:13,color:t.textSec,lineHeight:1.75,marginBottom:10}}>
                   Detailed explanations and per-question feedback are available with Pro.
                 </p>
-                <button className="btn btn-outline" style={{fontSize:12}} onClick={onUpgrade}>
-                  Unlock feedback
+                <button className="btn btn-outline" style={{fontSize:12}} onClick={isGuest?requestSignup:onUpgrade}>
+                  {isGuest?"Create free account":"Unlock feedback"}
                 </button>
               </div>
             )}
@@ -11540,15 +11579,18 @@ export default function App() {
 
   if(!user&&view==="mcq"){
     const guestUser={name:"Guest",email:"guest@secureplus.local",tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"guest",loginMethod:"guest"};
+    const goToSignup=()=>{setAuthStartMode("signup");setView("dashboard");};
     return(
       <>
         <style>{CSS}</style>
         <div style={{background:t.bg,minHeight:"100vh"}}>
           <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}>
-            <div style={{display:"flex",alignItems:"center",gap:8}}><BrandMark size={28}/><span style={{fontWeight:800,fontSize:15,color:t.text}}>SecurePlus MCQ Practice</span></div>
+            <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}>
+              <BrandMark size={28}/><span style={{fontWeight:800,fontSize:15,color:t.text}}>SecurePlus MCQ Practice</span>
+            </button>
             <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
               <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>setView("dashboard")}>Back to Home</button>
-              <button className="btn btn-primary" style={{fontSize:12}} onClick={()=>{setAuthStartMode("signup");setView("dashboard");}}>Create Free Account</button>
+              <button className="btn btn-primary" style={{fontSize:12}} onClick={goToSignup}>Create Free Account</button>
             </div>
           </div>
           <div style={{padding:"16px 24px 0",maxWidth:1000,margin:"0 auto"}}>
@@ -11556,7 +11598,7 @@ export default function App() {
               Guest mode: you can access all MCQ questions, but answers and progress are not saved. Create a free account when you want SecurePlus to remember your work.
             </div>
           </div>
-          <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={()=>setView("dashboard")} t={t}/>
+          <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} t={t}/>
         </div>
       </>
     );
