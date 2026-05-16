@@ -8465,25 +8465,26 @@ function getNextRelatedPBQ(current, attempts=[]) {
 // CSS — Clean light/dark design
 // ═══════════════════════════════════════════════════════════════
 const makeCSS = (t) => `
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{background:${t.bg};}
 body{background:
 radial-gradient(circle at top left, ${t.accent}18, transparent 34rem),
-linear-gradient(180deg, ${t.bg}, ${t.bg});color:${t.text};font-family:'Plus Jakarta Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;font-size:15px;line-height:1.6;letter-spacing:0;transition:background .3s,color .3s;}
-h1,h2,h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;letter-spacing:0;}
+radial-gradient(circle at 85% 12%, ${t.green}10, transparent 26rem),
+linear-gradient(180deg, ${t.bg}, ${t.bg});color:${t.text};font-family:'Manrope',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;font-size:15px;line-height:1.6;letter-spacing:0;transition:background .3s,color .3s;}
+h1,h2,h3{font-family:'Sora','Manrope',system-ui,sans-serif;font-weight:800;letter-spacing:0;}
 button,input,select{font:inherit;}
 button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-visible,.opt:focus-visible{outline:3px solid ${t.accent}38;outline-offset:2px;}
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:${t.bg};}
 ::-webkit-scrollbar-thumb{background:${t.border};border-radius:3px;}
-.card{background:${t.surface};border:1px solid ${t.border};border-radius:8px;box-shadow:0 14px 36px rgba(7,12,24,.10);}
-.card-hover{transition:border-color .2s,box-shadow .2s,transform .2s;}
-.card-hover:hover{border-color:${t.accent};box-shadow:0 16px 36px ${t.accent}16;transform:translateY(-1px);}
+.card{background:linear-gradient(180deg, ${t.surface}, ${t.surface}f2);border:1px solid ${t.border};border-radius:8px;box-shadow:0 14px 36px rgba(7,12,24,.10);}
+.card-hover{transition:border-color .2s,box-shadow .2s,transform .2s,background .2s;}
+.card-hover:hover{border-color:${t.accent};box-shadow:0 16px 36px ${t.accent}16;transform:translateY(-1px);background:linear-gradient(180deg, ${t.surface}, ${t.accent}08);}
 .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:${t.textDim};}
 .mono{font-family:'JetBrains Mono',monospace;}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:9px 16px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:9px 16px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;font-family:'Manrope',sans-serif;white-space:nowrap;}
 .btn-primary{background:${t.accent};color:#fff;}
 .btn-primary:hover{background:${t.accentHover};box-shadow:0 10px 22px ${t.accent}35;}
 .btn:disabled,.btn-primary:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none;}
@@ -8494,15 +8495,15 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .btn-danger{background:transparent;color:${t.red};border:1px solid ${t.red}44;}
 .btn-danger:hover{background:${t.red}12;}
 .btn:active{transform:scale(.97);}
-.input{width:100%;background:${t.inputBg};border:1.5px solid ${t.border};border-radius:8px;padding:11px 14px;font-size:14px;color:${t.text};font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;}
+.input{width:100%;background:${t.inputBg};border:1.5px solid ${t.border};border-radius:8px;padding:11px 14px;font-size:14px;color:${t.text};font-family:'Manrope',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;}
 .input:focus{border-color:${t.accent};box-shadow:0 0 0 3px ${t.accent}20;}
 .input::placeholder{color:${t.textDim};}
 .tab{padding:9px 18px;cursor:pointer;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:${t.textSec};transition:all .15s;white-space:nowrap;}
 .tab:hover{color:${t.text};}
 .tab.act{color:${t.accent};border-bottom-color:${t.accent};}
-.nav-lnk{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13px;font-weight:700;color:${t.textSec};cursor:pointer;transition:all .15s;}
-.nav-lnk:hover{color:${t.text};background:${t.panel};}
-.nav-lnk.act{color:${t.text};background:${t.accent}18;border:1px solid ${t.accent}28;}
+.nav-lnk{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13px;font-weight:800;color:${t.textSec};cursor:pointer;transition:all .15s;border:1px solid transparent;}
+.nav-lnk:hover{color:${t.text};background:${t.panel};box-shadow:inset 0 0 0 1px ${t.border};}
+.nav-lnk.act{color:${t.text};background:linear-gradient(135deg, ${t.accent}1f, ${t.green}10);border-color:${t.accent}28;box-shadow:0 10px 22px ${t.accent}10;}
 .nav-glyph{width:22px;height:22px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;background:${t.panel};border:1px solid ${t.border};transition:transform .2s,background .2s,border-color .2s,box-shadow .2s;}
 .nav-glyph span,.nav-glyph::before,.nav-glyph::after{content:"";position:absolute;display:block;transition:all .25s ease;}
 .nav-glyph-dashboard span{width:10px;height:8px;border:2px solid currentColor;border-top:0;bottom:5px;border-radius:1px;}
@@ -8512,6 +8513,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .nav-glyph-mcq span{width:11px;height:14px;border:2px solid currentColor;border-radius:2px;}
 .nav-glyph-mcq::before{width:6px;height:2px;background:currentColor;top:8px;}
 .nav-glyph-mcq::after{width:6px;height:2px;background:currentColor;top:13px;}
+.nav-lnk:hover .nav-glyph-mcq,.nav-glyph-mcq.active{color:#3b82f6;background:#3b82f618;border-color:#3b82f655;box-shadow:0 0 18px #3b82f640;}
+.nav-lnk:hover .nav-glyph-mcq span,.nav-glyph-mcq.active span{animation:paperLift .58s ease both;}
+.nav-lnk:hover .nav-glyph-mcq::before,.nav-glyph-mcq.active::before{animation:lineCheck .58s ease both;}
+.nav-lnk:hover .nav-glyph-mcq::after,.nav-glyph-mcq.active::after{animation:lineCheck .58s ease .08s both;}
 .nav-glyph-pbq span{width:9px;height:11px;border-radius:50% 50% 46% 46%;border:2px solid currentColor;top:3px;}
 .nav-glyph-pbq::before{width:8px;height:2px;background:currentColor;bottom:5px;border-radius:4px;}
 .nav-glyph-pbq::after{width:5px;height:2px;background:currentColor;bottom:2px;border-radius:4px;}
@@ -8524,20 +8529,43 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .nav-lnk:hover .nav-glyph-daily::after,.nav-glyph-daily.active::after{animation:arrowShot .6s ease both;}
 .nav-glyph-pricing span{width:11px;height:11px;border-top:2px solid currentColor;border-right:2px solid currentColor;transform:rotate(-45deg);top:8px;}
 .nav-glyph-pricing::before{width:2px;height:13px;background:currentColor;top:5px;}
+.nav-glyph-pricing::after{width:9px;height:2px;background:currentColor;bottom:5px;border-radius:2px;opacity:.55;}
+.nav-lnk:hover .nav-glyph-pricing,.nav-glyph-pricing.active{color:#22c55e;background:#22c55e18;border-color:#22c55e55;box-shadow:0 0 18px #22c55e40;}
+.nav-lnk:hover .nav-glyph-pricing span,.nav-glyph-pricing.active span{animation:upgradeHead .55s cubic-bezier(.16,1,.3,1) both;}
+.nav-lnk:hover .nav-glyph-pricing::before,.nav-glyph-pricing.active::before{animation:upgradeStem .55s cubic-bezier(.16,1,.3,1) both;}
+.nav-lnk:hover .nav-glyph-pricing::after,.nav-glyph-pricing.active::after{animation:upgradeTrail .55s cubic-bezier(.16,1,.3,1) both;}
 .nav-glyph-objectives span{width:13px;height:13px;border:2px solid currentColor;border-radius:3px;}
 .nav-glyph-objectives::before{width:7px;height:2px;background:currentColor;top:8px;}
 .nav-glyph-objectives::after{width:7px;height:2px;background:currentColor;top:13px;}
+.nav-lnk:hover .nav-glyph-objectives,.nav-glyph-objectives.active{color:#8b5cf6;background:#8b5cf618;border-color:#8b5cf655;box-shadow:0 0 18px #8b5cf640;}
+.nav-lnk:hover .nav-glyph-objectives span,.nav-glyph-objectives.active span{animation:objectiveCard .55s ease both;}
+.nav-lnk:hover .nav-glyph-objectives::before,.nav-glyph-objectives.active::before{animation:objectiveTick .55s ease both;}
+.nav-lnk:hover .nav-glyph-objectives::after,.nav-glyph-objectives.active::after{animation:objectiveTick .55s ease .08s both;}
 .nav-glyph-exam span{width:15px;height:18px;border:2px solid currentColor;border-radius:3px;}
 .nav-glyph-exam::before{width:9px;height:9px;border:2px solid currentColor;border-radius:50%;right:2px;bottom:1px;background:${t.panel};}
 .nav-glyph-exam::after{width:5px;height:2px;background:currentColor;right:5px;bottom:6px;transform-origin:right center;transform:rotate(-45deg);}
 .nav-lnk:hover .nav-glyph-exam,.nav-glyph-exam.active{color:#14b8a6;background:#14b8a618;border-color:#14b8a655;box-shadow:0 0 18px #14b8a640;}
+.nav-lnk:hover .nav-glyph-exam::before,.nav-glyph-exam.active::before{animation:examScan .7s ease both;}
+.nav-lnk:hover .nav-glyph-exam::after,.nav-glyph-exam.active::after{animation:examHandle .7s ease both;}
 .nav-glyph-privacy span{width:13px;height:10px;border:2px solid currentColor;border-radius:2px;bottom:4px;}
 .nav-glyph-privacy::before{width:10px;height:9px;border:2px solid currentColor;border-bottom:0;border-radius:9px 9px 0 0;top:3px;transform-origin:85% 100%;}
 .nav-glyph-privacy.active{color:${t.green};background:${t.green}14;border-color:${t.green}50;box-shadow:0 0 16px ${t.green}30;}
 .nav-glyph-privacy.active::before{animation:lockClose .55s ease both;}
 .nav-glyph-terms span{width:12px;height:15px;border:2px solid currentColor;border-radius:2px;}
 .nav-glyph-terms::before{width:5px;height:5px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;right:4px;top:4px;transform:rotate(-45deg);}
+.nav-glyph-terms::after{width:8px;height:2px;background:currentColor;bottom:6px;border-radius:2px;}
+.nav-lnk:hover .nav-glyph-terms,.nav-glyph-terms.active{color:#ec4899;background:#ec489918;border-color:#ec489955;box-shadow:0 0 18px #ec489940;}
+.nav-lnk:hover .nav-glyph-terms span,.nav-glyph-terms.active span{animation:termsPage .58s ease both;}
+.nav-lnk:hover .nav-glyph-terms::after,.nav-glyph-terms.active::after{animation:termsSign .58s ease both;}
 .nav-lnk:hover .nav-glyph,.nav-lnk.act .nav-glyph{transform:translateY(-1px);}
+.page-title-row{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+.page-title-row .nav-glyph{width:34px;height:34px;border-radius:10px;}
+.page-title-row .nav-glyph-mcq span{width:15px;height:19px;}
+.page-title-row .nav-glyph-pricing span{width:15px;height:15px;top:12px;}
+.page-title-row .nav-glyph-pricing::before{height:18px;top:8px;}
+.page-title-row .nav-glyph-objectives span{width:18px;height:18px;}
+.page-title-row .nav-glyph-exam span{width:20px;height:23px;}
+.page-title-row .nav-glyph-terms span{width:17px;height:21px;}
 .chapter-icon,.sim-icon{width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;color:var(--icon-color);background:color-mix(in srgb,var(--icon-color) 12%, transparent);border:1px solid color-mix(in srgb,var(--icon-color) 34%, transparent);transition:transform .2s,box-shadow .2s,background .2s,border-color .2s;}
 .chapter-icon span,.chapter-icon::before,.chapter-icon::after,.sim-icon span,.sim-icon::before,.sim-icon::after{content:"";position:absolute;display:block;transition:all .25s ease;}
 .chapter-icon:hover,.sim-icon:hover,.chapter-card:hover .chapter-icon,.sim-card:hover .sim-icon,.card-hover:hover .sim-icon{transform:translateY(-2px) scale(1.03);box-shadow:0 12px 26px color-mix(in srgb,var(--icon-color) 28%, transparent);background:color-mix(in srgb,var(--icon-color) 18%, transparent);border-color:color-mix(in srgb,var(--icon-color) 52%, transparent);}
@@ -8608,10 +8636,21 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 @keyframes lockClose{0%{transform:translateY(-5px) rotate(-18deg);}70%{transform:translateY(1px) rotate(3deg);}100%{transform:translateY(0) rotate(0);}}
 @keyframes roofDrop{0%{top:-8px;opacity:0;}70%{top:5px;opacity:1;}100%{top:3px;opacity:1;}}
 @keyframes arrowShot{0%{transform:translateX(-12px) rotate(-20deg);opacity:0;}65%{transform:translateX(7px) rotate(-20deg);opacity:1;}100%{transform:translateX(5px) rotate(-20deg);opacity:1;}}
+@keyframes paperLift{0%{transform:translateY(0) rotate(0);}60%{transform:translateY(-3px) rotate(-5deg);}100%{transform:translateY(-1px) rotate(0);}}
+@keyframes lineCheck{0%{width:0;opacity:.3;}100%{width:6px;opacity:1;}}
+@keyframes upgradeHead{0%{transform:translateY(0) rotate(-45deg);}68%{transform:translateY(-6px) rotate(-45deg);}100%{transform:translateY(-3px) rotate(-45deg);}}
+@keyframes upgradeStem{0%{transform:translateY(0);}68%{transform:translateY(-6px);}100%{transform:translateY(-3px);}}
+@keyframes upgradeTrail{0%{opacity:0;transform:translateY(4px) scaleX(.45);}70%{opacity:1;transform:translateY(0) scaleX(1);}100%{opacity:.65;transform:translateY(1px) scaleX(.7);}}
+@keyframes objectiveCard{0%{transform:rotate(0) scale(1);}55%{transform:rotate(-5deg) scale(1.06);}100%{transform:rotate(0) scale(1);}}
+@keyframes objectiveTick{0%{transform:translateX(-5px);opacity:0;width:0;}100%{transform:translateX(0);opacity:1;width:7px;}}
+@keyframes examScan{0%{right:8px;bottom:7px;transform:scale(.85);}55%{right:0;bottom:0;transform:scale(1.05);}100%{right:2px;bottom:1px;transform:scale(1);}}
+@keyframes examHandle{0%{transform:rotate(-20deg);opacity:.3;}55%{transform:rotate(-60deg);opacity:1;}100%{transform:rotate(-45deg);opacity:1;}}
+@keyframes termsPage{0%{transform:rotateY(0);}55%{transform:rotateY(-28deg) translateX(-1px);}100%{transform:rotateY(0);}}
+@keyframes termsSign{0%{width:0;opacity:.2;}100%{width:8px;opacity:1;}}
 .fu{animation:fadeUp .35s cubic-bezier(.16,1,.3,1) both;}
 .chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700;border:1px solid;line-height:1.4;}
 .app-shell{display:flex;min-height:100vh;background:transparent;}
-.sidebar{width:226px;min-height:100vh;background:${t.panel};border-right:1px solid ${t.border};display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;z-index:120;overflow:visible;}
+.sidebar{width:226px;min-height:100vh;background:linear-gradient(180deg, ${t.panel}, ${t.panel}f2);border-right:1px solid ${t.border};display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;z-index:120;overflow:visible;box-shadow:12px 0 34px rgba(7,12,24,.08);}
 .app-main{flex:1;overflow-y:auto;min-width:0;}
 .mobile-topbar{display:none;}
 .auth-layout{width:100%;max-width:980px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:stretch;}
@@ -9295,7 +9334,7 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
             Privacy Policy
           </button>
           <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>onNavigate("terms")}>
-            Terms of Service
+            Terms & Conditions
           </button>
         </div>
         </section>
@@ -9556,7 +9595,10 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t}) {
 
   if(!started) return(
     <div style={{padding:"24px",maxWidth:800,margin:"0 auto"}}>
-      <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:4}}>MCQ Practice</h2>
+      <div className="page-title-row">
+        <NavGlyph type="mcq" active/>
+        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>MCQ Practice</h2>
+      </div>
       <p style={{color:t.textSec,marginBottom:20,fontSize:14}}>{MCQ_BANK.length} questions across all 5 CompTIA Security+ chapters</p>
 
       <div className="card" style={{padding:"18px 22px",marginBottom:16,borderColor:`${t.green}30`,background:`${t.green}06`}}>
@@ -10436,9 +10478,9 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   if(!isPro) return(
     <div style={{padding:"28px 24px",maxWidth:760,margin:"0 auto"}}>
       <div className="card" style={{padding:"24px",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
-        <div style={{display:"flex",gap:14,alignItems:"center",marginBottom:10}}>
+        <div className="page-title-row" style={{marginBottom:10}}>
           <NavGlyph type="exam" active/>
-          <h2 style={{fontSize:22,color:t.text}}>Exam Mode is Pro-only</h2>
+          <h2 style={{fontSize:24,color:t.text}}>Exam Mode is Pro-only</h2>
         </div>
         <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:16}}>
           Exam Mode mixes MCQs and PBQs, adds a timer, lets you flag questions, and gives a full answer review after submission.
@@ -10450,10 +10492,10 @@ function ExamMode({user,onSave,onUpgrade,t}) {
 
   if(!started) return(
     <div style={{padding:"28px 24px",maxWidth:820,margin:"0 auto"}}>
-      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:18}}>
+      <div className="page-title-row" style={{marginBottom:18}}>
         <NavGlyph type="exam" active/>
         <div>
-          <h2 style={{fontSize:24,color:t.text}}>Exam Mode</h2>
+          <h2 style={{fontSize:26,color:t.text}}>Exam Mode</h2>
           <p style={{fontSize:14,color:t.textSec}}>Timed mixed practice for Pro users.</p>
         </div>
       </div>
@@ -10669,7 +10711,10 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
   return(
     <div style={{padding:"32px 24px",maxWidth:700,margin:"0 auto"}}>
       <div style={{textAlign:"center",marginBottom:32}}>
-        <h2 style={{fontSize:26,fontWeight:700,color:t.text,marginBottom:8}}>Upgrade</h2>
+        <div className="page-title-row" style={{justifyContent:"center"}}>
+          <NavGlyph type="pricing" active/>
+          <h2 style={{fontSize:28,fontWeight:800,color:t.text}}>Upgrade</h2>
+        </div>
         <p style={{color:t.textSec,fontSize:14}}>
           <strong style={{color:t.green}}>Annual plan only:</strong> $4.99 per year · Cancel anytime
         </p>
@@ -10749,7 +10794,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
             Privacy policy
           </button>
           <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>onNavigate("terms")}>
-            Terms of Service
+            Terms & Conditions
           </button>
         </div>
       </div>
@@ -10794,7 +10839,10 @@ function ReferralPage({user,t}) {
 function ObjectivesPage({t}) {
   return(
     <div style={{padding:"28px 24px",maxWidth:860,margin:"0 auto"}}>
-      <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:4}}>CompTIA Security+ (V7) Exam Objectives</h2>
+      <div className="page-title-row">
+        <NavGlyph type="objectives" active/>
+        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>CompTIA Security+ (V7) Exam Objectives</h2>
+      </div>
       <p style={{color:t.textSec,fontSize:14,marginBottom:20}}>
         SecurePlus is organised around the current Security+ domain structure. This page avoids locking the product name to a single exam code, since exam versions can change over time.
       </p>
@@ -10894,9 +10942,12 @@ function LegalPage({type,t}) {
 
   return(
     <div style={{padding:"28px 24px",maxWidth:780,margin:"0 auto"}}>
-      <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:6}}>
-        {isPrivacy ? "Privacy Policy" : "Terms of Service"}
-      </h2>
+      <div className="page-title-row">
+        <NavGlyph type={isPrivacy ? "privacy" : "terms"} active/>
+        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>
+          {isPrivacy ? "Privacy Policy" : "Terms & Conditions"}
+        </h2>
+      </div>
       <p style={{color:t.textSec,fontSize:14,marginBottom:20}}>
         Last updated: May 9, 2026. Questions? Contact{" "}
         <a href="mailto:secureplus.support@gmail.com" style={{color:t.accent,fontWeight:700}}>secureplus.support@gmail.com</a>.
@@ -11395,7 +11446,7 @@ export default function App() {
     {id:"pricing",icon:"pricing",label:"Upgrade"},
     {id:"objectives",icon:"objectives",label:"Objectives"},
     {id:"privacy",icon:"privacy",label:"Privacy Policy"},
-    {id:"terms",icon:"terms",label:"Terms of Service"},
+    {id:"terms",icon:"terms",label:"Terms & Conditions"},
   ];
 
   return(
