@@ -7284,11 +7284,11 @@ Certificate: RSA 2048-bit, SHA-256, expires in 90 days`,
       "title": "Exploit and remediate a stored XSS vulnerability",
       "scenario": "A penetration tester is testing a comment field on a product review page. Other users' browsers render these comments.",
       "question": "Which payload would confirm a Stored XSS vulnerability, and which RESPONSE header would be the MOST effective mitigation?",
-      "explanation": "Stored XSS persists in the database and executes for every user who views the page. The img onerror payload is XSS without a script tag — bypasses naive script-tag filters. CSP (Content-Security-Policy) is the most effective defensive header — restricting script-src prevents the fetch() from executing even if XSS is injected. However, the ROOT CAUSE fix is output encoding (converting HttpOnly cookies prevent JavaScript cookie theft even if XSS executes.",
+      "explanation": "Stored XSS persists in the database and executes for every user who views the affected page. The img onerror payload is a harmless proof-of-concept because it triggers JavaScript without using a script tag, bypassing naive script-tag filters. A Content-Security-Policy header such as script-src 'self' without unsafe-inline blocks inline event handlers, but the root-cause fix is output encoding so characters like < and > render as text instead of HTML. HttpOnly cookies reduce cookie theft impact, but they do not stop XSS execution.",
       "hint": "Select the command that produces the secure result requested by the prompt.",
-      "answer": "POST /api/reviews HTTP/1.1\nContent-Type: application/json\n{\"product_id\": 42, \"comment\": \"___PAYLOAD___\"}\n\nGoal: Confirm stored XSS AND identify the best preventive header\n\n[XSS CONFIRMED] Comment stored and rendered:\n\nBrowser executes fetch() → sends session cookies to attacker\nAll users viewing this product page are affected\n\n[MITIGATIONS]\n1. Output encoding: htmlspecialchars() all stored content before rendering\n2. Content-Security-Policy: script-src 'self'; prevents external fetch()\n3. HttpOnly cookie flag: prevents JavaScript cookie access entirely\n4. Input validation: reject HTML tags in review fields",
+      "answer": "POST /api/reviews HTTP/1.1\nContent-Type: application/json\n{\"product_id\": 42, \"comment\": \"<img src=x onerror=alert('xss')>\"}\n\nGoal: Confirm stored XSS AND identify the best preventive header\n\n[XSS CONFIRMED] Comment stored and rendered:\n\nBrowser executes the harmless alert proof-of-concept when users view the review.\nAll users viewing this product page are affected.\n\n[MITIGATIONS]\n1. Output encoding: htmlspecialchars() all stored content before rendering\n2. Content-Security-Policy: script-src 'self'; blocks inline event-handler execution when unsafe-inline is absent\n3. HttpOnly cookie flag: reduces cookie theft impact but does not fix XSS\n4. Input validation: reject or strictly allowlist HTML where rich text is required",
       "choices": [
-        "Payload:  | Header: Content-Security-Policy: script-src 'self'; img-src 'self'",
+        "Payload: <img src=x onerror=alert('xss')> | Header: Content-Security-Policy: script-src 'self'; img-src 'self'",
         "Payload: 1' OR 1=1 -- | Header: X-Frame-Options: DENY",
         "Payload: ../../../etc/passwd | Header: Strict-Transport-Security: max-age=31536000",
         "Payload: bold text | Header: X-Content-Type-Options: nosniff"
@@ -11592,15 +11592,23 @@ export default function App() {
   },[user]);
   const handleSaveAttempt=useCallback(async r=>{
     if(!user)return;
-    if(user.authProvider==="supabase") await saveSupabaseAttempt(user.id,r);
-    else await DB.saveAttempt(user.email,r);
     setAttempts(a=>[r,...a]);
+    try{
+      if(user.authProvider==="supabase") await saveSupabaseAttempt(user.id,r);
+      else await DB.saveAttempt(user.email,r);
+    }catch(error){
+      console.warn("Unable to save attempt remotely", error);
+    }
   },[user]);
   const handlePBQDone=useCallback(async (result,options={})=>{
     if(result&&user){
-      if(user.authProvider==="supabase") await saveSupabaseAttempt(user.id,result);
-      else await DB.saveAttempt(user.email,result);
       setAttempts(a=>[result,...a]);
+      try{
+        if(user.authProvider==="supabase") await saveSupabaseAttempt(user.id,result);
+        else await DB.saveAttempt(user.email,result);
+      }catch(error){
+        console.warn("Unable to save PBQ attempt remotely", error);
+      }
     }
     if(options.nextQuestion){
       setPbqQ(options.nextQuestion);
@@ -11696,6 +11704,7 @@ export default function App() {
       <style>{CSS}</style>
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <PBQSim
+          key={pbqQ.id}
           q={pbqQ}
           nextQuestion={getNextRelatedPBQ(pbqQ,attempts)}
           onDone={handlePBQDone}
