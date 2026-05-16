@@ -5566,8 +5566,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .sim-icon-log::before{width:3px;height:7px;background:currentColor;bottom:9px;left:11px;box-shadow:6px -4px 0 currentColor,12px -1px 0 currentColor;}
 .sim-icon-scenario span{width:16px;height:18px;border:2px solid currentColor;border-radius:3px;}
 .sim-icon-scenario::before{width:8px;height:2px;background:currentColor;top:11px;box-shadow:0 5px 0 currentColor;}
-.profile-menu{position:relative;}
-.profile-popover{position:absolute;left:0;top:calc(100% + 8px);z-index:70;width:min(340px,calc(100vw - 28px));padding:16px;background:${t.surface};border:1px solid ${t.border};border-radius:8px;box-shadow:0 20px 50px rgba(0,0,0,.24);}
+.profile-menu{position:relative;z-index:220;}
+.profile-popover{position:absolute;left:0;top:calc(100% + 8px);z-index:999;width:min(340px,calc(100vw - 28px));padding:16px;background:${t.surface};border:1px solid ${t.border};border-radius:8px;box-shadow:0 20px 50px rgba(0,0,0,.24);}
 .sidebar .profile-popover{left:14px;}
 .mobile-profile .profile-popover{right:0;left:auto;}
 .term-wrap{position:relative;display:inline-block;}
@@ -5603,7 +5603,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .fu{animation:fadeUp .35s cubic-bezier(.16,1,.3,1) both;}
 .chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700;border:1px solid;line-height:1.4;}
 .app-shell{display:flex;min-height:100vh;background:transparent;}
-.sidebar{width:226px;min-height:100vh;background:${t.panel};border-right:1px solid ${t.border};display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;}
+.sidebar{width:226px;min-height:100vh;background:${t.panel};border-right:1px solid ${t.border};display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;z-index:120;overflow:visible;}
 .app-main{flex:1;overflow-y:auto;min-width:0;}
 .mobile-topbar{display:none;}
 .auth-layout{width:100%;max-width:980px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:stretch;}
@@ -5630,7 +5630,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
   .sidebar nav{flex-direction:row!important;overflow-x:auto;padding:8px!important;gap:6px!important;}
   .nav-lnk{min-width:58px;flex-direction:column;gap:2px;padding:7px 9px;font-size:10px;text-align:center;}
   .nav-lnk span:first-child{font-size:15px!important;}
-  .mobile-topbar{display:flex;position:sticky;top:0;z-index:15;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:${t.panel}f2;backdrop-filter:blur(14px);border-bottom:1px solid ${t.border};}
+  .mobile-topbar{display:flex;position:sticky;top:0;z-index:130;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:${t.panel}f2;backdrop-filter:blur(14px);border-bottom:1px solid ${t.border};}
   main > div{padding-left:16px!important;padding-right:16px!important;max-width:100%!important;}
   [style*="grid-template-columns:1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr"]{grid-template-columns:1fr!important;}
   [style*="grid-template-columns:repeat(4,1fr)"],[style*="gridTemplateColumns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
