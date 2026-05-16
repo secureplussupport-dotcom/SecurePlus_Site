@@ -10731,7 +10731,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           <div style={{fontSize:15,color:t.text,fontWeight:900,marginBottom:4,textTransform:"uppercase"}}>per year / annual billing</div>
           <div style={{fontSize:13,color:t.green,fontWeight:800,marginBottom:18}}>Works out to roughly $0.40/month</div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
-            {["Everything in Free",`${PBQ_BANK.length} PBQ simulations`,"8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Detailed per-question feedback"].map(f=>(
+            {["Everything in Free",`${PBQ_BANK.length} PBQ simulations`,"Exam Mode with mixed MCQ/PBQ practice","8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Detailed per-question feedback"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
                 <span style={{color:t.green}}>✓</span>{f}
               </div>
