@@ -8467,7 +8467,7 @@ function getNextRelatedPBQ(current, attempts=[]) {
 const makeCSS = (t) => `
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{background:${t.bg};}
+html{background:${t.bg};scroll-behavior:smooth;}
 body{background:
 radial-gradient(circle at top left, ${t.accent}18, transparent 34rem),
 radial-gradient(circle at 85% 12%, ${t.green}10, transparent 26rem),
@@ -8654,16 +8654,46 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .app-main{flex:1;overflow-y:auto;min-width:0;}
 .mobile-topbar{display:none;}
 .auth-layout{width:100%;max-width:980px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:stretch;}
-.landing-page{min-height:100vh;padding:22px 24px 40px;background:transparent;}
-.landing-header{max-width:1120px;margin:0 auto 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.landing-page{min-height:100vh;padding:0 24px 44px;background:transparent;}
+.landing-header{position:sticky;top:0;z-index:150;max-width:1120px;margin:0 auto 28px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;padding:14px 0;background:${t.bg}e8;backdrop-filter:blur(16px);border-bottom:1px solid ${t.border};}
+.landing-nav-center{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;}
+.landing-nav-center a{color:${t.textSec};font-size:13px;font-weight:800;text-decoration:none;padding:8px 10px;border-radius:8px;transition:background .18s,color .18s;}
+.landing-nav-center a:hover{color:${t.text};background:${t.panel};}
+.landing-nav-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;}
 .landing-main{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:22px;}
+.landing-section{scroll-margin-top:92px;}
 .landing-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:22px;align-items:center;padding:34px 0 10px;}
 .landing-title{font-size:52px;line-height:1.02;font-weight:900;letter-spacing:0;color:${t.text};max-width:720px;}
 .landing-copy{color:${t.textSec};font-size:17px;line-height:1.75;max-width:620px;margin-top:16px;}
 .landing-preview{display:flex;flex-direction:column;gap:14px;}
+.landing-demo-card{padding:14px;border-color:${t.accent}35;overflow:hidden;}
+.landing-demo-gif{display:block;width:100%;aspect-ratio:13/8;object-fit:cover;border-radius:7px;border:1px solid ${t.border};background:#0b1220;}
 .landing-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-.landing-feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
-.landing-auth-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,430px);gap:22px;align-items:start;padding:10px 0 20px;}
+.landing-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.landing-feature-card{padding:20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;}
+.landing-split-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);gap:16px;align-items:stretch;}
+.landing-pricing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.landing-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.landing-auth-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,430px);gap:22px;align-items:start;padding:24px;border:1px solid ${t.border};border-radius:8px;background:linear-gradient(135deg, ${t.accent}10, ${t.surface}f0 42%, ${t.green}0d);box-shadow:0 18px 42px rgba(7,12,24,.08);}
+.pillar-icon{width:46px;height:46px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;color:var(--pillar-color);background:color-mix(in srgb,var(--pillar-color) 13%, transparent);border:1px solid color-mix(in srgb,var(--pillar-color) 38%, transparent);transition:transform .2s,box-shadow .2s,background .2s;}
+.pillar-icon span,.pillar-icon::before,.pillar-icon::after{content:"";position:absolute;display:block;transition:all .25s ease;}
+.landing-feature-card:hover .pillar-icon{transform:translateY(-2px) scale(1.04);box-shadow:0 14px 30px color-mix(in srgb,var(--pillar-color) 28%, transparent);background:color-mix(in srgb,var(--pillar-color) 19%, transparent);}
+.pillar-icon-mcq span{width:22px;height:26px;border:2px solid currentColor;border-radius:3px;}
+.pillar-icon-mcq::before{width:12px;height:2px;background:currentColor;top:16px;box-shadow:0 7px 0 currentColor;}
+.pillar-icon-mcq::after{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);bottom:10px;}
+.landing-feature-card:hover .pillar-icon-mcq span{animation:paperLift .58s ease both;}
+.pillar-icon-pbq span{width:12px;height:12px;border:2px solid currentColor;border-radius:3px;left:10px;top:10px;box-shadow:17px 17px 0 -2px transparent,17px 17px 0 0 currentColor;}
+.pillar-icon-pbq::before{width:19px;height:2px;background:currentColor;transform:rotate(45deg);}
+.pillar-icon-pbq::after{width:9px;height:9px;border:2px solid currentColor;border-radius:50%;right:8px;top:8px;}
+.landing-feature-card:hover .pillar-icon-pbq::before{animation:arrowShot .65s ease both;}
+.pillar-icon-review span{width:24px;height:24px;border:2px solid currentColor;border-radius:50%;}
+.pillar-icon-review::before{width:6px;height:6px;background:currentColor;border-radius:50%;}
+.pillar-icon-review::after{width:18px;height:2px;background:currentColor;right:8px;bottom:10px;transform:rotate(45deg);}
+.landing-feature-card:hover .pillar-icon-review span{animation:examScan .7s ease both;}
+.pillar-icon-exam span{width:24px;height:28px;border:2px solid currentColor;border-radius:4px;}
+.pillar-icon-exam::before{width:12px;height:2px;background:currentColor;top:16px;box-shadow:0 7px 0 currentColor;}
+.pillar-icon-exam::after{width:10px;height:5px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);bottom:10px;}
+.landing-feature-card:hover .pillar-icon-exam::after{animation:objectiveTick .55s ease both;}
 .referral-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
 .pricing-pro-card,.pricing-free-card{min-width:0;}
 .onboarding-overlay{position:fixed;inset:0;z-index:80;background:rgba(4,8,18,.72);backdrop-filter:blur(10px);display:grid;place-items:center;padding:20px;animation:fadeUp .22s ease both;}
@@ -8697,13 +8727,15 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
   .auth-stat-card .label{font-size:10px!important;letter-spacing:0!important;}
   .tab{padding:9px 10px!important;font-size:12px!important;}
   .landing-page{padding:16px 16px 88px!important;}
-  .landing-header{align-items:flex-start;margin-bottom:18px!important;}
-  .landing-header > div:last-child{width:100%;justify-content:flex-start!important;}
+  .landing-header{grid-template-columns:1fr!important;align-items:flex-start;margin-bottom:18px!important;padding-top:10px!important;}
+  .landing-nav-center{justify-content:flex-start!important;overflow-x:auto;width:100%;padding-bottom:2px;}
+  .landing-nav-actions{width:100%;justify-content:flex-start!important;}
   .landing-hero{grid-template-columns:1fr!important;padding-top:10px!important;gap:16px!important;}
   .landing-title{font-size:34px!important;line-height:1.08!important;}
   .landing-copy{font-size:14px!important;}
   .landing-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
-  .landing-feature-grid,.landing-auth-section,.referral-grid{grid-template-columns:1fr!important;}
+  .landing-feature-grid,.landing-split-section,.landing-pricing-grid,.landing-faq-grid,.landing-auth-section,.referral-grid{grid-template-columns:1fr!important;}
+  .landing-feature-card{grid-template-columns:1fr!important;}
   .landing-auth-section{gap:14px!important;}
   .exam-layout{grid-template-columns:1fr!important;}
   .exam-map{order:-1;position:relative!important;top:auto!important;width:100%;padding:12px!important;}
@@ -8800,6 +8832,9 @@ function simIconClass(type) {
 function SimIcon({type,size=34}) {
   const s=Object.values(SIM_TYPES).find(x=>x.id===type)||SIM_TYPES.TERMINAL;
   return <span className={`sim-icon sim-icon-${simIconClass(type)}`} style={{"--icon-color":s.color,width:size,height:size,borderRadius:Math.max(6,Math.round(size*.28))}} aria-hidden="true"><span/></span>;
+}
+function PillarIcon({type,color}) {
+  return <span className={`pillar-icon pillar-icon-${type}`} style={{"--pillar-color":color}} aria-hidden="true"><span/></span>;
 }
 function Alert({msg,type="error",t}) {
   if(!msg) return null;
@@ -9081,8 +9116,8 @@ function DailyChallenge({t,onLogin,user=null}) {
 // ═══════════════════════════════════════════════════════════════
 // AUTH VIEW
 // ═══════════════════════════════════════════════════════════════
-function AuthView({onLogin,t,onDaily,onNavigate}) {
-  const [mode,setMode]=useState("login");
+function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login"}) {
+  const [mode,setMode]=useState(initialMode);
   const [form,setForm]=useState({name:"",email:"",pass:"",confirm:""});
   const [err,setErr]=useState("");
   const [ok,setOk]=useState("");
@@ -9184,6 +9219,23 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
     }
   };
 
+  const featureCards=[
+    {type:"mcq",color:"#2f7df6",title:"Full MCQ practice",body:"Guests and free accounts can access every MCQ question. Create an account when you want answers, scores, and progress to follow you."},
+    {type:"pbq",color:"#f59e0b",title:"PBQ simulations",body:"Practice firewall decisions, terminal logs, drag/drop, ordering, hotspot, and scenario tasks before exam day pressure."},
+    {type:"review",color:"#14b8a6",title:"Smart Review",body:"SecurePlus brings missed questions back first and spaces out correct questions, so your weak areas get the most attention."},
+    {type:"exam",color:"#8b5cf6",title:"Exam-style mode",body:"Pro users can run timed mixed MCQ/PBQ sets, flag questions, review detailed solutions, and estimate readiness."},
+  ];
+  const faqItems=[
+    {q:"Are the questions identical to the real exam?",a:"No. SecurePlus uses original practice questions. It is for learning and exam preparation, not real exam dumps."},
+    {q:"Which exam version is supported?",a:"The current question bank is built for CompTIA Security+ (SY0-701)."},
+    {q:"How often is the question bank updated?",a:"The bank is reviewed and expanded as Security+ objectives and student weak areas change."},
+    {q:"Is there a mobile-friendly layout?",a:"Yes. The app is designed for phones, tablets, and desktop browsers, including mobile practice sessions."},
+    {q:"Can I practise without creating an account?",a:"Yes. Visitors can access all MCQ questions, but progress and review history are not saved until they sign up."},
+    {q:"What does Smart Review do?",a:"It uses an SM-2 inspired review model to prioritise wrong answers and bring topics back at better intervals."},
+    {q:"What does Pro unlock?",a:"Pro adds PBQ simulations, Exam Mode, deeper review guidance, and stronger readiness tools for $4.99 per year."},
+    {q:"Is SecurePlus affiliated with CompTIA?",a:"No. CompTIA and Security+ are trademarks of CompTIA. SecurePlus is an independent practice platform."},
+  ];
+
   return(
     <div className="landing-page fu">
       <header className="landing-header">
@@ -9194,9 +9246,15 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
             <div style={{fontSize:12,color:t.textDim}}>CompTIA Security+ PBQ / MCQ practice</div>
           </div>
         </div>
-        <div style={{display:"flex",gap:10,flexWrap:"wrap",justifyContent:"flex-end"}}>
-          <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>jumpToAuth("login")}>Sign In</button>
-          <button className="btn btn-primary" style={{fontSize:13}} onClick={()=>jumpToAuth("signup")}>Create Free Account</button>
+        <nav className="landing-nav-center" aria-label="Landing page sections">
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#daily-challenge">Daily Challenge</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <div className="landing-nav-actions">
+          <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>jumpToAuth("login")}>Log In</button>
+          <button className="btn btn-primary" style={{fontSize:13}} onClick={()=>jumpToAuth("signup")}>Sign Up Free</button>
         </div>
       </header>
 
@@ -9204,29 +9262,40 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
         <section className="landing-hero">
           <div>
             <div className="badge" style={{background:`${t.accent}14`,color:t.accent,border:`1px solid ${t.accent}28`,marginBottom:18}}>
-              PBQ simulations + MCQ practice in one workspace
+              Supports CompTIA Security+ (SY0-701)
             </div>
             <h1 className="landing-title">
-              Practice Security+ with PBQ simulations before the exam tests you.
+              Security+ practice questions with PBQ simulations.
             </h1>
             <p className="landing-copy">
-              Try a small daily challenge without an account, then create a free account to unlock the full MCQ bank, save progress, and build exam readiness.
+              Practise the full MCQ bank without an account, try a daily challenge, then create a free account to save progress. Smart Review helps you spend more time on weak chapters instead of repeating what you already know.
             </p>
             <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:22}}>
-              <button className="btn btn-primary" style={{padding:"12px 20px"}} onClick={onDaily}>Try Daily Challenge</button>
-              <button className="btn btn-outline" style={{padding:"12px 20px"}} onClick={()=>jumpToAuth("signup")}>Create Free Account</button>
+              <button className="btn btn-primary" style={{padding:"12px 20px"}} onClick={()=>jumpToAuth("signup")}>Create Free Account</button>
+              <button className="btn btn-outline" style={{padding:"12px 20px"}} onClick={onPracticeMcq}>Practise MCQs Free</button>
+              <button className="btn btn-ghost" style={{padding:"12px 20px"}} onClick={onDaily}>Try Daily Challenge</button>
             </div>
           </div>
 
           <div className="landing-preview">
-            <div className="card card-hover" style={{padding:"18px 20px",borderColor:`${t.accent}40`,cursor:"pointer"}} onClick={onDaily}>
+            <div className="card landing-demo-card">
+              <img className="landing-demo-gif" src="/secureplus-ui-demo.gif" alt="Looping SecurePlus practice demo showing a drag and drop firewall task"/>
+              <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginTop:12}}>
+                <div>
+                  <div style={{fontWeight:900,color:t.text,fontSize:15}}>Interactive PBQ-style practice</div>
+                  <div style={{fontSize:12,color:t.textSec}}>A 5-second loop of a firewall drag/drop workflow.</div>
+                </div>
+                <span className="chip" style={{borderColor:`${t.green}44`,color:t.green,background:`${t.green}10`}}>SY0-701</span>
+              </div>
+            </div>
+            <div id="daily-challenge" className="card card-hover landing-section" style={{padding:"18px 20px",borderColor:`${t.accent}40`,cursor:"pointer"}} onClick={onDaily}>
               <div style={{display:"flex",alignItems:"center",gap:12}}>
-                <span style={{fontSize:28}}>🎯</span>
+                <NavGlyph type="daily" active/>
                 <div style={{flex:1}}>
                   <div style={{fontWeight:800,color:t.text,fontSize:15}}>Today's Free Daily Challenge</div>
                   <div style={{fontSize:13,color:t.textSec}}>No account required. A limited practice sample.</div>
                 </div>
-                <span style={{color:t.accent,fontSize:20}}>→</span>
+                <span style={{color:t.accent,fontSize:20}}>{'->'}</span>
               </div>
             </div>
             <div className="landing-stat-grid">
@@ -9244,23 +9313,76 @@ function AuthView({onLogin,t,onDaily,onNavigate}) {
           </div>
         </section>
 
-        <section className="landing-feature-grid">
-          {[
-            {icon:"📝",title:"Free MCQ Practice",body:"Use the full MCQ bank to learn the five Security+ objective areas."},
-            {icon:"💡",title:"PBQ Simulation",body:"Pro adds terminal, log analysis, ordering, hotspot, and drag/drop style practice."},
-            {icon:"📈",title:"Smart Review",body:"Wrong answers are prioritised with SM-2 style spacing to strengthen retention."},
-          ].map(card=>(
-            <div key={card.title} className="card" style={{padding:"18px 20px"}}>
-              <div style={{fontSize:24,marginBottom:10}}>{card.icon}</div>
-              <div style={{fontWeight:800,color:t.text,marginBottom:6}}>{card.title}</div>
+        <section id="features" className="landing-feature-grid landing-section">
+          {featureCards.map(card=>(
+            <div key={card.title} className="card card-hover landing-feature-card">
+              <PillarIcon type={card.type} color={card.color}/>
+              <div>
+              <div style={{fontWeight:900,color:t.text,marginBottom:6}}>{card.title}</div>
               <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{card.body}</div>
+              </div>
             </div>
           ))}
         </section>
 
+        <section className="landing-split-section landing-section">
+          <div className="card" style={{padding:"24px"}}>
+            <div className="label" style={{color:t.accent,marginBottom:8}}>Smart Review benefit</div>
+            <h2 style={{fontSize:26,color:t.text,marginBottom:10}}>Turn missed questions into a focused study plan.</h2>
+            <p style={{fontSize:14,color:t.textSec,lineHeight:1.75}}>
+              Smart Review watches what you miss, groups weak chapters, and brings those questions back earlier. Correct answers are spaced out so you practise for retention, not just short-term memory.
+            </p>
+          </div>
+          <div className="card" style={{padding:"20px",display:"grid",gap:10}}>
+            {["Wrong answers move higher in your review queue","Correct answers return later, like spaced repetition","Chapter feedback points you toward what to study next"].map(item=>(
+              <div key={item} style={{display:"flex",gap:10,alignItems:"flex-start",fontSize:13,color:t.textSec,lineHeight:1.6}}>
+                <span style={{width:22,height:22,borderRadius:7,background:`${t.green}12`,border:`1px solid ${t.green}35`,color:t.green,display:"inline-flex",alignItems:"center",justifyContent:"center",fontWeight:900,flexShrink:0}}>✓</span>
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="pricing" className="landing-pricing-grid landing-section">
+          <div className="card pricing-free-card" style={{padding:"22px"}}>
+            <div className="label" style={{marginBottom:8}}>Free</div>
+            <h2 style={{fontSize:24,color:t.text,marginBottom:4}}>$0</h2>
+            <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Best for starting Security+ practice.</p>
+            {["All MCQ questions","Daily Challenge","Create an account to save progress","Basic practice history"].map(item=>(
+              <div key={item} style={{fontSize:13,color:t.textSec,lineHeight:1.8}}>✓ {item}</div>
+            ))}
+            <button className="btn btn-outline" style={{width:"100%",marginTop:18}} onClick={onPracticeMcq}>Practise MCQs Free</button>
+          </div>
+          <div className="card pricing-pro-card" style={{padding:"22px",borderColor:`${t.accent}55`,background:`linear-gradient(180deg, ${t.accent}10, ${t.surface})`}}>
+            <div className="chip" style={{borderColor:`${t.accent}44`,color:t.accent,background:`${t.accent}10`,marginBottom:10}}>Most popular</div>
+            <h2 style={{fontSize:24,color:t.text,marginBottom:4}}>$4.99/year</h2>
+            <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Roughly $0.40/month, billed annually.</p>
+            {["PBQ simulations","Exam Mode with MCQ + PBQ mix","Detailed solutions and weak-chapter guidance","Smart Review for missed questions"].map(item=>(
+              <div key={item} style={{fontSize:13,color:t.textSec,lineHeight:1.8}}>✓ {item}</div>
+            ))}
+            <button className="btn btn-primary" style={{width:"100%",marginTop:18}} onClick={()=>jumpToAuth("signup")}>Sign Up Free</button>
+          </div>
+        </section>
+
+        <section id="faq" className="landing-section">
+          <div style={{marginBottom:12}}>
+            <div className="label" style={{color:t.accent}}>FAQ</div>
+            <h2 style={{fontSize:26,color:t.text}}>Common questions</h2>
+          </div>
+          <div className="landing-faq-grid">
+            {faqItems.map(item=>(
+              <div key={item.q} className="card" style={{padding:"18px"}}>
+                <div style={{fontWeight:900,color:t.text,marginBottom:6}}>{item.q}</div>
+                <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{item.a}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section id="landing-auth" className="landing-auth-section">
           <div>
-            <h2 style={{fontSize:24,color:t.text,marginBottom:8}}>Start with a free account</h2>
+            <div className="label" style={{color:t.accent,marginBottom:8}}>Get Started Now</div>
+            <h2 style={{fontSize:28,color:t.text,marginBottom:8}}>Create a free SecurePlus account</h2>
             <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,maxWidth:520}}>
               Save your attempts, see weak areas, and keep practising from any device. Pro is optional and unlocks PBQ simulations for roughly $0.40/month when billed yearly.
             </p>
@@ -11106,6 +11228,7 @@ export default function App() {
   const [billingLoading,setBillingLoading]=useState(false);
   const [passwordRecovery,setPasswordRecovery]=useState(false);
   const [showOnboarding,setShowOnboarding]=useState(false);
+  const [authStartMode,setAuthStartMode]=useState("login");
 
   const t=darkMode?THEMES.dark:THEMES.light;
 
@@ -11415,10 +11538,34 @@ export default function App() {
     </>
   );
 
+  if(!user&&view==="mcq"){
+    const guestUser={name:"Guest",email:"guest@secureplus.local",tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"guest",loginMethod:"guest"};
+    return(
+      <>
+        <style>{CSS}</style>
+        <div style={{background:t.bg,minHeight:"100vh"}}>
+          <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}>
+            <div style={{display:"flex",alignItems:"center",gap:8}}><BrandMark size={28}/><span style={{fontWeight:800,fontSize:15,color:t.text}}>SecurePlus MCQ Practice</span></div>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+              <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>setView("dashboard")}>Back to Home</button>
+              <button className="btn btn-primary" style={{fontSize:12}} onClick={()=>{setAuthStartMode("signup");setView("dashboard");}}>Create Free Account</button>
+            </div>
+          </div>
+          <div style={{padding:"16px 24px 0",maxWidth:1000,margin:"0 auto"}}>
+            <div className="card" style={{padding:"14px 16px",borderColor:`${t.accent}30`,background:`${t.accent}08`,fontSize:13,color:t.textSec,lineHeight:1.6}}>
+              Guest mode: you can access all MCQ questions, but answers and progress are not saved. Create a free account when you want SecurePlus to remember your work.
+            </div>
+          </div>
+          <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={()=>setView("dashboard")} t={t}/>
+        </div>
+      </>
+    );
+  }
+
   if(!user) return(
     <>
       <style>{CSS}</style>
-      <AuthView onLogin={handleLogin} t={t} onDaily={()=>setShowDaily(true)} onNavigate={setView}/>
+      <AuthView onLogin={handleLogin} t={t} onDaily={()=>setShowDaily(true)} onNavigate={setView} onPracticeMcq={()=>setView("mcq")} initialMode={authStartMode}/>
     </>
   );
 
