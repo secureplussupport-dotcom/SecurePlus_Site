@@ -8520,8 +8520,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .nav-glyph-pbq span{width:9px;height:11px;border-radius:50% 50% 46% 46%;border:2px solid currentColor;top:3px;}
 .nav-glyph-pbq::before{width:8px;height:2px;background:currentColor;bottom:5px;border-radius:4px;}
 .nav-glyph-pbq::after{width:5px;height:2px;background:currentColor;bottom:2px;border-radius:4px;}
-.nav-glyph-pbq.active{color:#f59e0b;background:#f59e0b18;border-color:#f59e0b55;box-shadow:0 0 18px #f59e0b45;}
-.nav-glyph-pbq.active span{background:#f59e0b22;animation:bulbPulse 1.2s ease infinite alternate;}
+.nav-lnk:hover .nav-glyph-pbq,.nav-glyph-pbq.active{color:#f59e0b;background:#f59e0b18;border-color:#f59e0b55;box-shadow:0 0 18px #f59e0b45;}
+.nav-lnk:hover .nav-glyph-pbq span,.nav-glyph-pbq.active span{background:#f59e0b22;animation:bulbPulse 1.2s ease infinite alternate;}
 .nav-glyph-daily span{width:14px;height:14px;border:2px solid currentColor;border-radius:50%;}
 .nav-glyph-daily::before{width:5px;height:5px;background:currentColor;border-radius:50%;}
 .nav-glyph-daily::after{width:10px;height:2px;background:currentColor;left:2px;top:5px;transform:translateX(-10px) rotate(-20deg);opacity:0;border-radius:2px;}
@@ -8549,8 +8549,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .nav-lnk:hover .nav-glyph-exam::after,.nav-glyph-exam.active::after{animation:examHandle .7s ease both;}
 .nav-glyph-privacy span{width:13px;height:10px;border:2px solid currentColor;border-radius:2px;bottom:4px;}
 .nav-glyph-privacy::before{width:10px;height:9px;border:2px solid currentColor;border-bottom:0;border-radius:9px 9px 0 0;top:3px;transform-origin:85% 100%;}
-.nav-glyph-privacy.active{color:${t.green};background:${t.green}14;border-color:${t.green}50;box-shadow:0 0 16px ${t.green}30;}
-.nav-glyph-privacy.active::before{animation:lockClose .55s ease both;}
+.nav-lnk:hover .nav-glyph-privacy,.nav-glyph-privacy.active{color:${t.green};background:${t.green}14;border-color:${t.green}50;box-shadow:0 0 16px ${t.green}30;}
+.nav-lnk:hover .nav-glyph-privacy::before,.nav-glyph-privacy.active::before{animation:lockClose .55s ease both;}
 .nav-glyph-terms span{width:12px;height:15px;border:2px solid currentColor;border-radius:2px;}
 .nav-glyph-terms::before{width:5px;height:5px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;right:4px;top:4px;transform:rotate(-45deg);}
 .nav-glyph-terms::after{width:8px;height:2px;background:currentColor;bottom:6px;border-radius:2px;}
@@ -8628,10 +8628,21 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .drag-item.selected{border-color:${t.accent};background:${t.accent}12;box-shadow:0 0 0 3px ${t.accent}16;}
 .drop-zone{min-height:44px;border:2px dashed ${t.border};border-radius:7px;padding:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;}
 .drop-zone.over{border-color:${t.accent};background:${t.accent}08;}
-.order-item{padding:10px 14px;background:${t.surface};border:1.5px solid ${t.border};border-radius:7px;display:flex;align-items:center;gap:10px;font-size:13px;cursor:default;transition:border-color .2s;color:${t.text};}
+.order-item{padding:10px 14px;background:${t.surface};border:1.5px solid ${t.border};border-radius:7px;display:flex;align-items:center;gap:10px;font-size:13px;cursor:default;transition:border-color .2s,background .2s,transform .18s,box-shadow .18s;color:${t.text};}
 .order-item:hover{border-color:${t.accent}44;}
+.order-draggable{cursor:grab;user-select:none;touch-action:none;}
+.order-draggable:active{cursor:grabbing;}
+.order-draggable.dragging{border-color:${t.accent};background:${t.accent}12;box-shadow:0 14px 30px ${t.accent}20;transform:scale(1.015);}
+.order-draggable.over{border-color:${t.green}70;}
+.order-grip{width:26px;height:26px;border-radius:8px;border:1px solid ${t.border};display:inline-flex;align-items:center;justify-content:center;color:${t.textDim};background:${t.panel};font-size:15px;line-height:1;flex-shrink:0;}
+.answer-feedback{animation:feedbackIn .42s cubic-bezier(.16,1,.3,1) both;}
+.btn-signout{color:${t.red}!important;border-color:${t.red}55!important;background:${t.red}0d!important;box-shadow:0 0 18px ${t.red}18!important;}
+.btn-signout:hover{background:${t.red}18!important;box-shadow:0 0 24px ${t.red}35!important;}
+.loading-ring{width:62px;height:62px;border-radius:50%;border:5px solid ${t.border};border-top-color:${t.accent};border-right-color:${t.green};animation:irregularSpin 1.65s cubic-bezier(.4,0,.2,1) infinite;box-shadow:0 0 28px ${t.accent}20;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes feedbackIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes shimmer{from{opacity:.6}to{opacity:1}}
+@keyframes irregularSpin{0%{transform:rotate(0deg)}18%{transform:rotate(75deg)}31%{transform:rotate(118deg)}55%{transform:rotate(245deg)}72%{transform:rotate(286deg)}100%{transform:rotate(360deg)}}
 @keyframes bulbPulse{from{box-shadow:0 0 0 #f59e0b00;}to{box-shadow:0 0 18px #f59e0b99;}}
 @keyframes lockClose{0%{transform:translateY(-5px) rotate(-18deg);}70%{transform:translateY(1px) rotate(3deg);}100%{transform:translateY(0) rotate(0);}}
 @keyframes roofDrop{0%{top:-8px;opacity:0;}70%{top:5px;opacity:1;}100%{top:3px;opacity:1;}}
@@ -8841,6 +8852,84 @@ function Alert({msg,type="error",t}) {
   const c=type==="success"?t.green:type==="warn"?t.amber:t.red;
   return <div style={{padding:"10px 14px",borderRadius:8,background:`${c}12`,border:`1px solid ${c}30`,color:c,fontSize:13,marginBottom:12}}>{msg}</div>;
 }
+function LoadingScreen({t}) {
+  const quotes=[
+    "Small reps compound into exam confidence.",
+    "Strong security instincts are built one scenario at a time.",
+    "Review the misses. That is where the score moves.",
+    "A calm analyst notices what a rushed analyst misses.",
+    "Practise like the PBQ is trying to trick you.",
+  ];
+  const [quote,setQuote]=useState(()=>quotes[Math.floor(Math.random()*quotes.length)]);
+  useEffect(()=>{
+    let timer;
+    const cycle=()=>{
+      timer=setTimeout(()=>{
+        setQuote(quotes[Math.floor(Math.random()*quotes.length)]);
+        cycle();
+      },1600+Math.random()*1800);
+    };
+    cycle();
+    return()=>clearTimeout(timer);
+  },[]);
+  return(
+    <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:t.bg,padding:24}}>
+      <div style={{display:"grid",justifyItems:"center",gap:18,textAlign:"center"}}>
+        <div className="loading-ring" aria-label="Loading"/>
+        <div style={{fontWeight:900,color:t.text,fontSize:18}}>Loading SecurePlus</div>
+        <div className="fu" key={quote} style={{color:t.textSec,fontSize:14,maxWidth:360,lineHeight:1.7}}>{quote}</div>
+      </div>
+    </div>
+  );
+}
+function moveArrayItem(items,from,to) {
+  if(from===to||from<0||to<0||from>=items.length||to>=items.length)return items;
+  const next=[...items];
+  const [picked]=next.splice(from,1);
+  next.splice(to,0,picked);
+  return next;
+}
+function SortableOrderList({items,onChange,t}) {
+  const [dragId,setDragId]=useState(null);
+  const [overIndex,setOverIndex]=useState(null);
+  const moveDraggedTo=targetIndex=>{
+    if(!dragId)return;
+    const from=items.findIndex(item=>item.id===dragId);
+    if(from<0||targetIndex<0||from===targetIndex)return;
+    onChange(moveArrayItem(items,from,targetIndex));
+    setOverIndex(targetIndex);
+  };
+  const targetIndexFromPoint=e=>{
+    const el=document.elementFromPoint(e.clientX,e.clientY)?.closest?.("[data-order-index]");
+    return el?Number(el.dataset.orderIndex):-1;
+  };
+  const endDrag=()=>{setDragId(null);setOverIndex(null);};
+  return(
+    <div style={{display:"flex",flexDirection:"column",gap:7}}>
+      {items.map((item,index)=>(
+        <div
+          key={item.id}
+          data-order-index={index}
+          className={`order-item order-draggable ${dragId===item.id?"dragging":""} ${overIndex===index?"over":""}`}
+          draggable
+          onDragStart={e=>{setDragId(item.id);setOverIndex(index);e.dataTransfer.effectAllowed="move";}}
+          onDragOver={e=>{e.preventDefault();moveDraggedTo(index);}}
+          onDragEnter={e=>{e.preventDefault();moveDraggedTo(index);}}
+          onDragEnd={endDrag}
+          onDrop={e=>{e.preventDefault();endDrag();}}
+          onPointerDown={e=>{setDragId(item.id);setOverIndex(index);e.currentTarget.setPointerCapture?.(e.pointerId);}}
+          onPointerMove={e=>{if(!dragId)return;e.preventDefault();const target=targetIndexFromPoint(e);if(target>=0)moveDraggedTo(target);}}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+        >
+          <span className="order-grip" aria-hidden="true">≡</span>
+          <span style={{fontSize:14,fontWeight:900,color:t.accent,minWidth:24}}>{index+1}</span>
+          <span style={{flex:1,fontSize:13,color:t.text,lineHeight:1.45}}>{item.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 function loginMethodLabel(user) {
   const method=(user?.loginMethod || user?.authProvider || "local").toLowerCase();
   if(method.includes("google")) return "Google SSO";
@@ -8849,6 +8938,7 @@ function loginMethodLabel(user) {
   return "Local demo account";
 }
 function ProfileMenu({user,t,onUpdateProfile,onChangePassword,onLogout,compact=false}) {
+  const menuRef=useRef(null);
   const [open,setOpen]=useState(false);
   const [name,setName]=useState(user?.name||"");
   const [password,setPassword]=useState("");
@@ -8859,6 +8949,14 @@ function ProfileMenu({user,t,onUpdateProfile,onChangePassword,onLogout,compact=f
   const isGoogle=(user?.loginMethod||"").toLowerCase().includes("google");
 
   useEffect(()=>setName(user?.name||""),[user?.name]);
+  useEffect(()=>{
+    if(!open)return;
+    const closeOnOutside=e=>{
+      if(menuRef.current&&!menuRef.current.contains(e.target))setOpen(false);
+    };
+    document.addEventListener("pointerdown",closeOnOutside);
+    return()=>document.removeEventListener("pointerdown",closeOnOutside);
+  },[open]);
 
   const saveName=async()=>{
     setErr("");setMsg("");
@@ -8888,7 +8986,7 @@ function ProfileMenu({user,t,onUpdateProfile,onChangePassword,onLogout,compact=f
   };
 
   return(
-    <div className={`profile-menu ${compact?"mobile-profile":""}`}>
+    <div ref={menuRef} className={`profile-menu ${compact?"mobile-profile":""}`}>
       <button className="btn btn-ghost" style={{width:compact?36:"100%",minHeight:compact?36:44,padding:compact?0:"7px 8px",justifyContent:compact?"center":"flex-start"}} onClick={()=>setOpen(o=>!o)} aria-label="Open profile settings">
         <span style={{width:30,height:30,borderRadius:"50%",background:`${t.accent}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:t.accent,flexShrink:0}}>
           {user.name[0]?.toUpperCase()}
@@ -8930,7 +9028,7 @@ function ProfileMenu({user,t,onUpdateProfile,onChangePassword,onLogout,compact=f
                 <button className="btn btn-primary" style={{fontSize:12}} onClick={savePassword} disabled={saving||isGoogle}>{isGoogle?"Use Google account settings":"Update Password"}</button>
               </div>
             </div>
-            <button className="btn btn-ghost" style={{fontSize:12,justifyContent:"center",color:t.textDim}} onClick={onLogout}>Sign Out</button>
+            <button className="btn btn-signout" style={{fontSize:12,justifyContent:"center"}} onClick={onLogout}>Sign Out</button>
           </div>
         </div>
       )}
@@ -10015,7 +10113,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
         </button>
       ):(
         <>
-          <div className="card" style={{padding:"16px 18px",marginBottom:14,borderColor:selected===current.correct?`${t.green}42`:`${t.red}42`,background:selected===current.correct?`${t.green}08`:`${t.red}08`,boxShadow:"none"}}>
+          <div className="card answer-feedback" style={{padding:"16px 18px",marginBottom:14,borderColor:selected===current.correct?`${t.green}42`:`${t.red}42`,background:selected===current.correct?`${t.green}08`:`${t.red}08`,boxShadow:"none"}}>
             <div style={{display:"flex",alignItems:"center",gap:10,fontWeight:800,color:t.text,marginBottom:10,fontSize:15}}>
               <span style={{width:26,height:26,borderRadius:"50%",display:"inline-flex",alignItems:"center",justifyContent:"center",background:selected===current.correct?`${t.green}18`:`${t.red}18`,color:selected===current.correct?t.green:t.red}}>
                 {selected===current.correct?"✓":"✕"}
@@ -10405,19 +10503,9 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
       {/* ORDERING */}
       {q.type==="ORDERING"&&!submitted&&(
         <div style={{marginBottom:18}}>
-          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:12}}>Arrange in the correct order using the arrows</div>
-          <div style={{display:"flex",flexDirection:"column",gap:7}}>
-            {orderItems.map((item,i)=>(
-              <div key={item.id} className="order-item">
-                <span style={{fontSize:14,fontWeight:700,color:t.accent,minWidth:26}}>{i+1}</span>
-                <span style={{flex:1,fontSize:13,color:t.text}}>{item.label}</span>
-                <div style={{display:"flex",gap:4}}>
-                  <button className="btn btn-ghost" style={{fontSize:12,padding:"3px 9px"}} onClick={()=>{if(i>0){const n=[...orderItems];[n[i],n[i-1]]=[n[i-1],n[i]];setOrderItems(n);}}}> ↑ </button>
-                  <button className="btn btn-ghost" style={{fontSize:12,padding:"3px 9px"}} onClick={()=>{if(i<orderItems.length-1){const n=[...orderItems];[n[i],n[i+1]]=[n[i+1],n[i]];setOrderItems(n);}}}> ↓ </button>
-                </div>
-              </div>
-            ))}
-          </div>
+          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:6}}>Drag each answer to rank it from top to bottom</div>
+          <div style={{fontSize:12,color:t.textDim,marginBottom:12}}>Works with mouse, trackpad, and touch.</div>
+          <SortableOrderList items={orderItems} onChange={setOrderItems} t={t}/>
         </div>
       )}
 
@@ -10468,7 +10556,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
         </div>
       ):(
         <>
-          <div className="card" style={{padding:"18px 22px",marginBottom:14,borderColor:isCorrect()?t.green:t.red}}>
+          <div className="card answer-feedback" style={{padding:"18px 22px",marginBottom:14,borderColor:isCorrect()?t.green:t.red}}>
             <div style={{fontWeight:700,fontSize:16,color:isCorrect()?t.green:t.red,marginBottom:10}}>
               {isCorrect()?"✓ Correct!":"✗ Incorrect"}
             </div>
@@ -10819,15 +10907,9 @@ function ExamMode({user,onSave,onUpgrade,t}) {
           )}
 
           {current.kind==="pbq"&&q.type==="ORDERING"&&(
-            <div style={{display:"grid",gap:7}}>
-              {(answer.orderItems||[]).map((item,index)=>(
-                <div key={item.id} className="order-item">
-                  <span style={{fontWeight:900,color:t.accent}}>{index+1}</span>
-                  <span style={{flex:1}}>{item.label}</span>
-                  <button className="btn btn-ghost" disabled={index===0} onClick={()=>{const next=[...(answer.orderItems||[])];[next[index],next[index-1]]=[next[index-1],next[index]];updateAnswer({orderItems:next});}}>↑</button>
-                  <button className="btn btn-ghost" disabled={index===(answer.orderItems||[]).length-1} onClick={()=>{const next=[...(answer.orderItems||[])];[next[index],next[index+1]]=[next[index+1],next[index]];updateAnswer({orderItems:next});}}>↓</button>
-                </div>
-              ))}
+            <div>
+              <div style={{fontSize:12,color:t.textDim,marginBottom:10}}>Drag each answer to rank it from top to bottom.</div>
+              <SortableOrderList items={answer.orderItems||[]} onChange={next=>updateAnswer({orderItems:next})} t={t}/>
             </div>
           )}
 
@@ -11533,9 +11615,7 @@ export default function App() {
   if(loading) return(
     <>
       <style>{CSS}</style>
-      <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:t.bg}}>
-        <div style={{color:t.textDim,fontSize:15}}>Loading...</div>
-      </div>
+      <LoadingScreen t={t}/>
     </>
   );
 
@@ -11670,7 +11750,7 @@ export default function App() {
             <button className="btn btn-ghost" style={{fontSize:12,justifyContent:"flex-start"}} onClick={()=>setDarkMode(d=>!d)}>
               {darkMode?"☀️ Light Mode":"🌙 Dark Mode"}
             </button>
-            <button className="btn btn-ghost" style={{fontSize:12,justifyContent:"flex-start",color:t.textDim}} onClick={handleLogout}>
+            <button className="btn btn-signout" style={{fontSize:12,justifyContent:"flex-start"}} onClick={handleLogout}>
               Sign Out
             </button>
           </div>
