@@ -1,45 +1,64 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
   <title id="title">SecurePlus logo</title>
-  <desc id="desc">A modern blue and teal shield with a plus symbol for SecurePlus.</desc>
+  <desc id="desc">A modern SecurePlus S plus monogram with circuit nodes and a glowing learning orbit.</desc>
   <defs>
-    <linearGradient id="bg" x1="18" y1="10" x2="142" y2="150" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#101a35"/>
-      <stop offset=".48" stop-color="#07111f"/>
-      <stop offset="1" stop-color="#082f35"/>
+    <linearGradient id="bg" x1="18" y1="12" x2="144" y2="148" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#16213f"/>
+      <stop offset=".44" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#062f34"/>
     </linearGradient>
-    <linearGradient id="shield" x1="42" y1="24" x2="118" y2="136" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#60a5fa"/>
-      <stop offset=".5" stop-color="#2f7df6"/>
+    <linearGradient id="tile" x1="34" y1="22" x2="128" y2="139" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1d4ed8"/>
+      <stop offset=".52" stop-color="#2563eb"/>
       <stop offset="1" stop-color="#14b8a6"/>
     </linearGradient>
-    <linearGradient id="shine" x1="51" y1="35" x2="105" y2="116" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ffffff" stop-opacity=".38"/>
-      <stop offset=".62" stop-color="#ffffff" stop-opacity=".06"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    <linearGradient id="mark" x1="47" y1="39" x2="116" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset=".58" stop-color="#dbeafe"/>
+      <stop offset="1" stop-color="#99f6e4"/>
     </linearGradient>
-    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#020617" flood-opacity=".38"/>
+    <linearGradient id="orbit" x1="30" y1="39" x2="132" y2="121" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset=".45" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="14" flood-color="#020617" flood-opacity=".42"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
     </filter>
   </defs>
 
-  <rect width="160" height="160" rx="34" fill="url(#bg)"/>
-  <path d="M24 126c21-9 35-7 53 2 21 10 39 8 59-3" fill="none" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" opacity=".18"/>
-  <path d="M30 34c18 6 36 5 50-4 14 9 32 10 50 4v37c0 31-18 57-50 74-32-17-50-43-50-74V34Z" fill="#020617" opacity=".42"/>
+  <rect width="160" height="160" rx="36" fill="url(#bg)"/>
+  <path d="M23 46c20-12 42-18 66-18 20 0 36 4 48 13" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" opacity=".16"/>
+  <path d="M25 121c21 9 43 12 66 8 18-3 33-9 45-18" fill="none" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" opacity=".16"/>
 
-  <g filter="url(#shadow)">
-    <path d="M80 20c15 9 31 14 48 15v37c0 29-17 53-48 69-31-16-48-40-48-69V35c17-1 33-6 48-15Z" fill="url(#shield)"/>
-    <path d="M80 33c12 7 24 11 38 12v27c0 23-13 42-38 56-25-14-38-33-38-56V45c14-1 26-5 38-12Z" fill="#07111f" opacity=".82"/>
-    <path d="M80 33c12 7 24 11 38 12v27c0 23-13 42-38 56V33Z" fill="url(#shine)"/>
-    <path d="M80 20c15 9 31 14 48 15v37c0 29-17 53-48 69-31-16-48-40-48-69V35c17-1 33-6 48-15Z" fill="none" stroke="#93c5fd" stroke-width="3" opacity=".72"/>
+  <g filter="url(#softShadow)">
+    <rect x="30" y="25" width="100" height="110" rx="30" fill="url(#tile)"/>
+    <rect x="38" y="33" width="84" height="94" rx="24" fill="#07111f" opacity=".72"/>
+    <path d="M47 111c18 14 47 13 63-1 13-12 7-31-11-34l-30-5c-16-3-19-19-7-28 13-10 36-8 51 5" fill="none" stroke="url(#mark)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M102 48v37M84 66h36" fill="none" stroke="#14b8a6" stroke-width="10" stroke-linecap="round"/>
+    <path d="M102 48v37M84 66h36" fill="none" stroke="#f8fafc" stroke-width="4" stroke-linecap="round" opacity=".72"/>
   </g>
 
-  <g transform="translate(80 79)">
-    <circle r="28" fill="#0f172a" opacity=".74"/>
-    <circle r="24" fill="#ffffff" opacity=".08"/>
-    <path d="M0-15v30M-15 0h30" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
-    <path d="M0-15v30M-15 0h30" fill="none" stroke="#14b8a6" stroke-width="5" stroke-linecap="round"/>
+  <g fill="none" stroke="url(#orbit)" stroke-linecap="round" filter="url(#glow)">
+    <path d="M33 94c21 23 59 29 88 8" stroke-width="4" opacity=".9"/>
+    <path d="M127 51c-19-18-50-25-79-12" stroke-width="3" opacity=".62"/>
   </g>
 
-  <circle cx="118" cy="34" r="4" fill="#f59e0b"/>
-  <circle cx="35" cy="116" r="3" fill="#60a5fa" opacity=".8"/>
+  <g fill="#f8fafc">
+    <circle cx="39" cy="94" r="5"/>
+    <circle cx="121" cy="102" r="5"/>
+    <circle cx="128" cy="51" r="4"/>
+    <circle cx="48" cy="39" r="4"/>
+  </g>
+  <g fill="#f59e0b">
+    <circle cx="117" cy="34" r="3"/>
+    <circle cx="34" cy="122" r="3"/>
+  </g>
 </svg>
