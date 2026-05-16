@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap');
+*{box-sizing:border-box}
+html{background:#0b1020}
+body{margin:0;background:radial-gradient(circle at 14% 0,#2563eb26,transparent 28rem),radial-gradient(circle at 90% 18%,#14b8a618,transparent 24rem),#0b1020;color:#f8fafc;font-family:Manrope,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.7}
+h1,h2,h3{font-family:Sora,Manrope,system-ui,sans-serif;line-height:1.12;letter-spacing:0;margin:0;color:#fff}
+a{color:#93c5fd;text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{width:min(1080px,calc(100% - 36px));margin:0 auto}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:20px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;color:#fff}
+.brand img{width:36px;height:36px;border-radius:8px}
+.navlinks{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}
+.hero{padding:62px 0 34px}
+.eyebrow{color:#60a5fa;font-weight:900;text-transform:uppercase;font-size:13px;letter-spacing:.08em;margin-bottom:14px}
+h1{font-size:clamp(34px,6vw,64px);max-width:850px}
+.lead{font-size:18px;color:#cbd5e1;max-width:760px;margin:20px 0 26px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 16px;border-radius:8px;font-weight:900;border:1px solid #3b82f6;background:#2563eb;color:#fff}
+.btn.alt{background:transparent;color:#dbeafe;border-color:#334155}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:26px 0}
+.two{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr);gap:18px}
+.card{background:linear-gradient(180deg,#111827,#0f172a);border:1px solid #243044;border-radius:8px;padding:20px;box-shadow:0 18px 40px rgba(0,0,0,.22)}
+.card h3{font-size:18px;margin-bottom:8px}
+.card p,.card li{color:#cbd5e1}
+.chip{display:inline-flex;border:1px solid #334155;border-radius:999px;padding:4px 10px;color:#bfdbfe;font-size:12px;font-weight:800;margin:4px 6px 4px 0}
+.question{border-left:3px solid #3b82f6}
+.answer{color:#bbf7d0;font-weight:900}
+.muted{color:#94a3b8}
+section{padding:22px 0}
+footer{border-top:1px solid #1f2937;margin-top:34px;padding:28px 0;color:#94a3b8;font-size:13px}
+@media(max-width:760px){
+  .nav{align-items:flex-start;flex-direction:column}
+  .navlinks{gap:10px}
+  .hero{padding-top:34px}
+  .grid,.two{grid-template-columns:1fr}
+  .card{padding:18px}
+}
