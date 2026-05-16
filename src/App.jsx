@@ -5577,6 +5577,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .term-wrap{position:relative;display:inline-block;}
 .term-link{border:0;background:transparent;color:${t.accent};font:inherit;font-weight:700;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;cursor:pointer;padding:0 1px;}
 .term-pop{position:absolute;z-index:50;left:0;top:1.7em;width:min(280px,78vw);padding:10px 12px;border:1px solid;border-radius:8px;box-shadow:0 16px 34px rgba(0,0,0,.18);font-size:12px;line-height:1.55;}
+.exam-layout{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:16px;}
+.exam-map{padding:14px;height:fit-content;position:sticky;top:96px;}
+.exam-map-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
 .prog-track{background:${t.border};border-radius:99px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.16,1,.3,1);}
 .opt{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:8px;border:1.5px solid ${t.border};cursor:pointer;transition:background .18s,border-color .18s,transform .18s; background:${t.surface};min-width:0;}
@@ -5662,6 +5665,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
   .landing-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
   .landing-feature-grid,.landing-auth-section,.referral-grid{grid-template-columns:1fr!important;}
   .landing-auth-section{gap:14px!important;}
+  .exam-layout{grid-template-columns:1fr!important;}
+  .exam-map{order:-1;position:relative!important;top:auto!important;width:100%;padding:12px!important;}
+  .exam-map-grid{grid-template-columns:repeat(10,minmax(30px,1fr))!important;}
   .onboarding-overlay{align-items:end;padding:12px;}
   .onboarding-modal{padding:24px 22px;max-height:92vh;overflow-y:auto;}
 }
@@ -7318,11 +7324,14 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   const sizes=[10,20,30,40,50];
   const current=questions[qi];
   const answer=answers[qi]||{};
+  const examDuration=questionCount*72;
 
   const shuffle=arr=>[...arr].sort(()=>Math.random()-.5);
   const formatTime=s=>{
-    const m=Math.floor(s/60);
+    const h=Math.floor(s/3600);
+    const m=Math.floor((s%3600)/60);
     const sec=s%60;
+    if(h>0) return `${h}:${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
     return `${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
   };
   const initAnswer=item=>{
@@ -7348,7 +7357,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
     setAnswers(Object.fromEntries(examQs.map((item,index)=>[index,initAnswer(item)])));
     setFlagged({});
     setQi(0);
-    setTimeLeft(3600);
+    setTimeLeft(examDuration);
     setDone(false);
     setSaved(false);
     setStarted(true);
@@ -7379,6 +7388,10 @@ function ExamMode({user,onSave,onUpgrade,t}) {
 
   function submitExam(auto=false) {
     if(done) return;
+    if(!auto&&answeredCount<questions.length){
+      const ok=window.confirm("You haven't completed all the questions. Are you sure you want to submit?");
+      if(!ok) return;
+    }
     const rows=questions.map((item,index)=>{
       const q=item.q;
       return {
@@ -7446,7 +7459,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
       <div className="card" style={{padding:"20px 22px",marginBottom:16}}>
         <div style={{fontWeight:800,color:t.text,marginBottom:8}}>Exam setup</div>
         <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:16}}>
-          Your exam will be 90% MCQ and 10% PBQ. PBQs appear first. Timer is fixed at 1 hour.
+          Your exam will be 90% MCQ and 10% PBQ. PBQs appear first. The timer scales by exam length: 50 questions gives 1 hour, 10 questions gives 12 minutes.
         </p>
         <label className="label" style={{display:"block",marginBottom:8}}>Total questions</label>
         <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8,marginBottom:16}}>
@@ -7455,7 +7468,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
           ))}
         </div>
         <div style={{fontSize:13,color:t.textSec,background:t.panel,border:`1px solid ${t.border}`,borderRadius:8,padding:"12px 14px"}}>
-          {Math.max(1,Math.round(questionCount*.1))} PBQ first · {questionCount-Math.max(1,Math.round(questionCount*.1))} MCQ after · 1 hour timer
+          {Math.max(1,Math.round(questionCount*.1))} PBQ first · {questionCount-Math.max(1,Math.round(questionCount*.1))} MCQ after · {formatTime(examDuration)} timer
         </div>
       </div>
       <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
@@ -7499,7 +7512,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
                 {item.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
                 {flagged[index]&&<span className="chip" style={{background:`${t.amber}14`,color:t.amber,borderColor:`${t.amber}35`}}>Flagged</span>}
               </div>
-              <div style={{fontSize:14,fontWeight:700,color:t.text,lineHeight:1.6,marginBottom:10}}><GlossaryText text={title} t={t}/></div>
+              <div style={{fontSize:14,fontWeight:700,color:t.text,lineHeight:1.6,marginBottom:10}}>{title}</div>
               {item.kind==="mcq"&&(
                 <div style={{fontSize:13,color:t.textSec,marginBottom:10}}>
                   Your answer: {a.selected!==null&&a.selected!==undefined ? `${String.fromCharCode(65+a.selected)}. ${q.opts[a.selected]}` : "Not answered"}<br/>
@@ -7528,7 +7541,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
         <button className="btn btn-primary" style={{fontSize:12}} onClick={()=>submitExam(false)}>Submit Exam</button>
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) 180px",gap:16}}>
+      <div className="exam-layout">
         <div>
           <div style={{display:"flex",justifyContent:"space-between",gap:10,marginBottom:12}}>
             <button className="btn btn-ghost" disabled={qi===0} onClick={()=>setQi(i=>Math.max(0,i-1))}>← Previous</button>
@@ -7541,10 +7554,10 @@ function ExamMode({user,onSave,onUpgrade,t}) {
               <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{current.kind==="mcq"?"MCQ":"PBQ"}</span>
             </div>
             <div style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:700}}>
-              <GlossaryText text={current.kind==="mcq"?q.q:(q.question||q.title)} t={t}/>
+              {current.kind==="mcq"?q.q:(q.question||q.title)}
             </div>
             {current.kind==="pbq"&&q.scenario&&(
-              <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginTop:12}}><GlossaryText text={q.scenario} t={t}/></p>
+              <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginTop:12}}>{q.scenario}</p>
             )}
           </div>
 
@@ -7557,7 +7570,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
               {q.opts.map((opt,index)=>(
                 <div key={index} className={`opt ${answer.selected===index?"sel":""}`} onClick={()=>updateAnswer({selected:index})}>
                   <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
-                  <span style={{fontSize:14,color:t.text,lineHeight:1.55}}><GlossaryText text={opt} t={t}/></span>
+                  <span style={{fontSize:14,color:t.text,lineHeight:1.55}}>{opt}</span>
                 </div>
               ))}
             </div>
@@ -7568,7 +7581,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
               {(q.choices||q.options||[]).map((choice,index)=>(
                 <div key={index} className={`opt ${answer.selected===index?"sel":""}`} onClick={()=>updateAnswer({selected:index})}>
                   <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
-                  <span style={{fontSize:14,color:t.text,lineHeight:1.55}}><GlossaryText text={choice} t={t}/></span>
+                  <span style={{fontSize:14,color:t.text,lineHeight:1.55}}>{choice}</span>
                 </div>
               ))}
             </div>
@@ -7626,14 +7639,14 @@ function ExamMode({user,onSave,onUpgrade,t}) {
           )}
         </div>
 
-        <div className="card" style={{padding:"14px",height:"fit-content",position:"sticky",top:96}}>
-          <div className="label" style={{marginBottom:10}}>Question map</div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:6}}>
+        <div className="card exam-map">
+          <div className="label" style={{marginBottom:10}}>Answer map</div>
+          <div className="exam-map-grid">
             {questions.map((item,index)=>{
               const active=index===qi;
               const answered=isAnswered(item,answers[index]);
               return(
-                <button key={index} className={`btn ${active?"btn-primary":"btn-ghost"}`} style={{minHeight:34,padding:0,fontSize:12,borderColor:flagged[index]?t.amber:undefined,color:!active&&flagged[index]?t.amber:undefined}} onClick={()=>setQi(index)}>
+                <button key={index} className={`btn ${active?"btn-primary":"btn-ghost"}`} style={{minHeight:34,padding:0,fontSize:12,fontWeight:answered?500:900,borderColor:flagged[index]?t.amber:undefined,color:!active&&flagged[index]?t.amber:undefined}} onClick={()=>setQi(index)}>
                   {index+1}{answered?"":"*"}
                 </button>
               );
@@ -8404,7 +8417,7 @@ export default function App() {
           {/* Nav */}
           <nav style={{flex:1,padding:"10px 10px",display:"flex",flexDirection:"column",gap:2}}>
             {navItems.map(n=>(
-              <div key={n.id} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>setView(n.id)}>
+              <div key={n.id} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>setView(n.id==="exam"&&user.tier!=="pro"?"pricing":n.id)}>
                 <NavGlyph type={n.icon} active={view===n.id}/>
                 <span>{n.label}</span>
               </div>
