@@ -33,6 +33,8 @@ const DB = {
   async getOnboardingSeen(e) { try { const r=await storageGet(`onboarded:${normalizeEmail(e)}`); return Boolean(r?.value); } catch { return false; }},
   async saveOnboardingSeen(e) { try { await storageSet(`onboarded:${normalizeEmail(e)}`,"true"); } catch {}},
   async getReferralCode(e) { try { const key=`refcode:${normalizeEmail(e)}`; let r=await storageGet(key); if(r?.value)return r.value; const code=makeReferralCode(e); await storageSet(key,code); return code; } catch { return makeReferralCode(e); }},
+  async getDailyStreak(key) { try { const r=await storageGet(`daily-streak:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
+  async saveDailyStreak(key,data) { try { await storageSet(`daily-streak:${key}`,JSON.stringify(data)); } catch {}},
 };
 
 const normalizeEmail = email => (email || "").trim().toLowerCase();
@@ -95,6 +97,48 @@ function shouldShowPBQUpgradePrompt() {
   } catch {
     return true;
   }
+}
+
+const dailyStreakOwner = user => normalizeEmail(user?.email || "") || "guest";
+function localDateKey(date=new Date()) {
+  const year=date.getFullYear();
+  const month=String(date.getMonth()+1).padStart(2,"0");
+  const day=String(date.getDate()).padStart(2,"0");
+  return `${year}-${month}-${day}`;
+}
+function previousDateKey(dateKey) {
+  const date=new Date(`${dateKey}T00:00:00`);
+  date.setDate(date.getDate()-1);
+  return localDateKey(date);
+}
+async function loadDailyStreak(user) {
+  const fallback={streak:0,best:0,lastCompletedDate:"",completedToday:false};
+  const data=await DB.getDailyStreak(dailyStreakOwner(user));
+  if(!data) return fallback;
+  const today=localDateKey();
+  return {
+    streak:Number(data.streak)||0,
+    best:Number(data.best)||0,
+    lastCompletedDate:data.lastCompletedDate||"",
+    completedToday:data.lastCompletedDate===today,
+  };
+}
+async function completeDailyStreak(user) {
+  const key=dailyStreakOwner(user);
+  const today=localDateKey();
+  const yesterday=previousDateKey(today);
+  const current=await DB.getDailyStreak(key)||{};
+  const last=current.lastCompletedDate||"";
+  const alreadyCompleted=last===today;
+  const streak=alreadyCompleted
+    ? Number(current.streak)||1
+    : last===yesterday
+      ? (Number(current.streak)||0)+1
+      : 1;
+  const best=Math.max(Number(current.best)||0,streak);
+  const next={streak,best,lastCompletedDate:today,updatedAt:new Date().toISOString()};
+  await DB.saveDailyStreak(key,next);
+  return {...next,completedToday:true,alreadyCompleted,previousStreak:Number(current.streak)||0};
 }
 
 function getPasswordIssue(password) {
@@ -8425,20 +8469,24 @@ const DAILY_CHALLENGES = [
     title:"5-Question Daily Challenge",
     description:"Test your Security+ knowledge with today's five questions.",
     qids:["m001","m009","m014","m022","m028"] },
-  { date:"mon", type:"pbq", qid:"p002", title:"Daily PBQ: File Integrity Check",
-    description:"Verify a downloaded file's integrity using a hash command." },
-  { date:"tue", type:"pbq", qid:"p006", title:"Daily PBQ: Threat Actor Matching",
-    description:"Can you match every threat actor to their motivation?" },
+  { date:"mon", type:"mcq5", title:"Monday Security Warmup",
+    description:"Start the week with five mixed Security+ questions.",
+    qids:["m001","m006","m011","m018","m029"] },
+  { date:"tue", type:"mcq5", title:"Tuesday Threat Hunt",
+    description:"Five questions focused on attacks, actors, and mitigation thinking.",
+    qids:["m009","m013","m015","m020","m026"] },
   { date:"wed", type:"mcq5", title:"Wednesday Challenge",
     description:"Five questions focused on Cryptography and PKI.",
     qids:["m004","m005","m007","m008","m019"] },
-  { date:"thu", type:"pbq", qid:"p007", title:"Daily PBQ: Alert Triage",
-    description:"Which alert needs immediate action? Practice incident prioritisation." },
+  { date:"thu", type:"mcq5", title:"Thursday Operations Drill",
+    description:"Five questions on monitoring, response, identity, and hardening.",
+    qids:["m022","m023","m024","m026","m027"] },
   { date:"fri", type:"mcq5", title:"Friday Review",
     description:"Mixed questions across all five domains.",
     qids:["m002","m011","m017","m024","m029"] },
-  { date:"sat", type:"pbq", qid:"p012", title:"Weekend PBQ: Social Engineering",
-    description:"Fill in the social engineering attack types from context clues." },
+  { date:"sat", type:"mcq5", title:"Saturday Scenario Set",
+    description:"Five scenario-style questions to keep your exam instincts warm.",
+    qids:["m003","m012","m021","m025","m031"] },
   { date:"sun", type:"mcq5", title:"Sunday Practice",
     description:"Governance, risk, and compliance focus.",
     qids:["m028","m029","m030","m031","m032"] },
@@ -8639,10 +8687,18 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .btn-signout{color:${t.red}!important;border-color:${t.red}55!important;background:${t.red}0d!important;box-shadow:0 0 18px ${t.red}18!important;}
 .btn-signout:hover{background:${t.red}18!important;box-shadow:0 0 24px ${t.red}35!important;}
 .loading-ring{width:62px;height:62px;border-radius:50%;border:5px solid ${t.border};border-top-color:${t.accent};border-right-color:${t.green};animation:irregularSpin 1.65s cubic-bezier(.4,0,.2,1) infinite;box-shadow:0 0 28px ${t.accent}20;}
+.streak-overlay{position:fixed;inset:0;z-index:500;background:rgba(2,6,23,.78);backdrop-filter:blur(12px);display:grid;place-items:center;padding:18px;animation:fadeUp .24s ease both;}
+.streak-modal{width:min(100%,500px);position:relative;overflow:hidden;padding:28px;border:1px solid ${t.accent}38;border-radius:8px;background:linear-gradient(160deg,#08111f 0%,${t.surface} 48%,${t.accent}12 100%);box-shadow:0 28px 90px rgba(0,0,0,.42);}
+.streak-code{height:154px;border:1px solid ${t.border};border-radius:8px;background:#050a14;overflow:hidden;padding:14px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.55;color:${t.green};text-align:left;position:relative;}
+.streak-code::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,${t.accent}10 48%,transparent);animation:scanLine 1.8s linear infinite;}
+.streak-burst{position:absolute;inset:-20%;background:radial-gradient(circle at 20% 20%,${t.green}24,transparent 22%),radial-gradient(circle at 82% 18%,${t.accent}22,transparent 24%),radial-gradient(circle at 50% 90%,#f59e0b22,transparent 26%);opacity:.9;animation:streakPulse 1.8s ease infinite alternate;pointer-events:none;}
+.streak-number{font-size:68px;line-height:1;font-weight:900;color:${t.text};text-shadow:0 0 30px ${t.accent}55;font-family:'Sora','Manrope',sans-serif;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes feedbackIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes shimmer{from{opacity:.6}to{opacity:1}}
 @keyframes irregularSpin{0%{transform:rotate(0deg)}18%{transform:rotate(75deg)}31%{transform:rotate(118deg)}55%{transform:rotate(245deg)}72%{transform:rotate(286deg)}100%{transform:rotate(360deg)}}
+@keyframes scanLine{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
+@keyframes streakPulse{from{transform:scale(1);opacity:.6}to{transform:scale(1.05);opacity:1}}
 @keyframes bulbPulse{from{box-shadow:0 0 0 #f59e0b00;}to{box-shadow:0 0 18px #f59e0b99;}}
 @keyframes lockClose{0%{transform:translateY(-5px) rotate(-18deg);}70%{transform:translateY(1px) rotate(3deg);}100%{transform:translateY(0) rotate(0);}}
 @keyframes roofDrop{0%{top:-8px;opacity:0;}70%{top:5px;opacity:1;}100%{top:3px;opacity:1;}}
@@ -8930,6 +8986,75 @@ function SortableOrderList({items,onChange,t}) {
     </div>
   );
 }
+function StreakCelebrationModal({streak,best,alreadyCompleted,onClose,t}) {
+  const messages=[
+    "Congratulations!",
+    "Keep it up!",
+    "You can do this!",
+    "I trust you!",
+    "Your exam momentum is building.",
+    "One more day locked in.",
+    "That is how readiness is built.",
+  ];
+  const [phase,setPhase]=useState("decrypt");
+  const [message,setMessage]=useState(()=>messages[Math.floor(Math.random()*messages.length)]);
+  const [code,setCode]=useState("");
+  useEffect(()=>{
+    const chars="01{}[]<>/=$#@SECUREPLUS_AUTH_TOKEN_CHAIN_PBQ_MCQ";
+    const makeLine=()=>Array.from({length:52},()=>chars[Math.floor(Math.random()*chars.length)]).join("");
+    const interval=setInterval(()=>{
+      setCode(Array.from({length:7},makeLine).join("\n"));
+      if(Math.random()>.55)setMessage(messages[Math.floor(Math.random()*messages.length)]);
+    },115);
+    const reveal=setTimeout(()=>{
+      setPhase("reveal");
+      setCode([
+        "> decrypt daily_challenge.streak",
+        "> verifying 5/5 answers submitted",
+        "> habit chain intact",
+        `> STREAK_CONFIRMED = ${streak} DAY${streak===1?"":"S"}`,
+        `> BEST_STREAK = ${best} DAY${best===1?"":"S"}`,
+      ].join("\n"));
+    },1500);
+    return()=>{clearInterval(interval);clearTimeout(reveal);};
+  },[streak,best]);
+  return(
+    <div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Daily Challenge streak celebration" onClick={onClose}>
+      <div className="streak-modal" onClick={e=>e.stopPropagation()}>
+        <div className="streak-burst"/>
+        <div style={{position:"relative"}}>
+          <div className="streak-code" style={{marginBottom:18,whiteSpace:"pre-wrap"}}>{code||"initialising streak protocol..."}</div>
+          {phase==="reveal"&&(
+            <div className="fu" style={{textAlign:"center"}}>
+              <div className="label" style={{color:t.green,marginBottom:8}}>
+                {alreadyCompleted?"Today's streak is already safe":"Daily streak extended"}
+              </div>
+              <div className="streak-number">{streak}</div>
+              <div style={{fontSize:16,fontWeight:900,color:t.text,marginBottom:6}}>
+                {streak===1?"day streak":"day streak"}
+              </div>
+              <div style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:14}}>
+                {message} Complete tomorrow's 5-question challenge to keep the chain alive.
+              </div>
+              <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap",marginBottom:16}}>
+                <span className="chip" style={{background:`${t.accent}12`,borderColor:`${t.accent}32`,color:t.accent}}>Best: {best}</span>
+                <span className="chip" style={{background:`${t.green}12`,borderColor:`${t.green}32`,color:t.green}}>5/5 submitted</span>
+              </div>
+              <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={onClose}>
+                Continue
+              </button>
+            </div>
+          )}
+          {phase!=="reveal"&&(
+            <div style={{textAlign:"center",color:t.textSec,fontSize:13,fontWeight:800}}>
+              decrypting your streak...
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 function loginMethodLabel(user) {
   const method=(user?.loginMethod || user?.authProvider || "local").toLowerCase();
   if(method.includes("google")) return "Google SSO";
@@ -9047,6 +9172,9 @@ function DailyChallenge({t,onLogin,user=null}) {
   const [submitted, setSubmitted] = useState(false);
   const [results, setResults] = useState([]);
   const [showWrong, setShowWrong] = useState(false);
+  const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
+  const [streakCelebration,setStreakCelebration]=useState(null);
+  const streakRecordedRef=useRef(false);
 
   const questions = challenge.type==="mcq5"
     ? MCQ_BANK.filter(q=>challenge.qids.includes(q.id))
@@ -9057,6 +9185,22 @@ function DailyChallenge({t,onLogin,user=null}) {
 
   const current = questions[qIndex];
   const totalQuestions = challenge.type==="pbq" ? 1 : questions.length;
+
+  useEffect(()=>{
+    let active=true;
+    loadDailyStreak(user).then(info=>{if(active)setStreakInfo(info);});
+    return()=>{active=false;};
+  },[user?.email]);
+
+  useEffect(()=>{
+    if(step!=="done"||streakRecordedRef.current||totalQuestions!==5||results.length<5)return;
+    streakRecordedRef.current=true;
+    completeDailyStreak(user).then(info=>{
+      setStreakInfo(info);
+      setStreakCelebration(info);
+      capture("daily_streak_completed", { streak: info.streak, best: info.best, already_completed: info.alreadyCompleted, signed_in: Boolean(user) });
+    });
+  },[step,totalQuestions,results.length,user?.email]);
 
   const submitQ = () => {
     if(selected===null) return;
@@ -9078,13 +9222,26 @@ function DailyChallenge({t,onLogin,user=null}) {
       <div style={{fontSize:48,marginBottom:16}}>🎯</div>
       <h2 style={{fontSize:26,fontWeight:700,marginBottom:8,color:t.text}}>Daily Challenge</h2>
       <p style={{color:t.textSec,marginBottom:6}}>
-        {user ? "Practice today's focused challenge from your account." : "No account needed. One free challenge every day."}
+        {user ? "Practice today's 5-question challenge from your account." : "No account needed. One free 5-question challenge every day."}
       </p>
+      <div style={{display:"flex",justifyContent:"center",gap:8,flexWrap:"wrap",marginTop:14}}>
+        <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}30`}}>
+          Current streak: {streakInfo.streak}
+        </span>
+        <span className="chip" style={{background:`${t.green}12`,color:t.green,borderColor:`${t.green}30`}}>
+          Best: {streakInfo.best}
+        </span>
+        {streakInfo.completedToday&&(
+          <span className="chip" style={{background:`${t.amber}12`,color:t.amber,borderColor:`${t.amber}30`}}>
+            Today secured
+          </span>
+        )}
+      </div>
       <div className="card" style={{padding:"20px 24px",margin:"24px 0",textAlign:"left"}}>
-        <div style={{fontSize:20,marginBottom:8}}>{challenge.type==="pbq"?"💡":"📝"}</div>
+        <div style={{fontSize:20,marginBottom:8}}>⌁</div>
         <div style={{fontWeight:600,fontSize:16,marginBottom:6,color:t.text}}>{challenge.title}</div>
         <div style={{color:t.textSec,fontSize:14}}>{challenge.description}</div>
-        <div style={{marginTop:12,color:t.textDim,fontSize:13}}>{challenge.type==="mcq5"?"5 multiple-choice questions":"1 performance-based question"}</div>
+        <div style={{marginTop:12,color:t.textDim,fontSize:13}}>Complete all 5 questions to extend your streak.</div>
       </div>
       <button className="btn btn-primary" style={{padding:"12px 32px",fontSize:15,width:"100%"}} onClick={()=>{capture("daily_challenge_started", { challenge_type: challenge.type, signed_in: Boolean(user) });setStep("quiz");}}>
         Start Today's Challenge →
@@ -9097,6 +9254,7 @@ function DailyChallenge({t,onLogin,user=null}) {
   );
 
   if(step==="done") return (
+    <>
     <div style={{padding:"32px 24px",maxWidth:500,margin:"0 auto",textAlign:"center"}} className="fu">
       <div style={{fontSize:48,marginBottom:16}}>{correctCount===totalQuestions?"🏆":correctCount>=Math.ceil(totalQuestions*.6)?"✅":"📚"}</div>
       <h2 style={{fontSize:24,fontWeight:700,marginBottom:8,color:t.text}}>Challenge Complete!</h2>
@@ -9104,6 +9262,11 @@ function DailyChallenge({t,onLogin,user=null}) {
         {correctCount}/{totalQuestions}
       </div>
       <p style={{color:t.textSec,marginBottom:24}}>Come back tomorrow for a new challenge!</p>
+      <div className="card" style={{padding:"16px 18px",marginBottom:18,borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
+        <div className="label" style={{color:t.accent,marginBottom:8}}>Streak status</div>
+        <div style={{fontSize:28,fontWeight:900,color:t.text}}>{streakInfo.streak} day{streakInfo.streak===1?"":"s"}</div>
+        <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>Answer all 5 Daily Challenge questions tomorrow to keep the chain alive.</div>
+      </div>
       {!user&&<div className="card" style={{padding:"16px 20px",marginBottom:20,textAlign:"left"}}>
         <div className="label" style={{marginBottom:10}}>Unlock more with a free account</div>
         {[`${MCQ_BANK.length} MCQs across all 5 exam domains`,`${PBQ_BANK.length} PBQ simulations with 8 question types`,"Progress tracking and weak area analysis","Chapter-by-chapter study organisation"].map((f,i)=>(
@@ -9117,6 +9280,16 @@ function DailyChallenge({t,onLogin,user=null}) {
       </button>
       {!user&&<div style={{marginTop:10,color:t.textDim,fontSize:12}}>Already have an account? <span style={{color:t.accent,cursor:"pointer"}} onClick={onLogin}>Sign in</span></div>}
     </div>
+    {streakCelebration&&(
+      <StreakCelebrationModal
+        streak={streakCelebration.streak}
+        best={streakCelebration.best}
+        alreadyCompleted={streakCelebration.alreadyCompleted}
+        onClose={()=>setStreakCelebration(null)}
+        t={t}
+      />
+    )}
+    </>
   );
 
   // MCQ quiz flow for daily challenge
