@@ -81,7 +81,7 @@ export default async function handler(req, res) {
     const referredUser = authData.user;
     const { data: referrer, error: referrerError } = await supabase
       .from("profiles")
-      .select("id,referral_code,pro_trial_until")
+      .select("id,referral_code,tier,subscription_status,pro_trial_until")
       .eq("referral_code", referralCode)
       .maybeSingle();
 
@@ -89,6 +89,17 @@ export default async function handler(req, res) {
     if (!referrer) return json(res, 404, { error: "Referral code was not found." });
     if (referrer.id === referredUser.id) {
       return json(res, 400, { error: "You cannot use your own referral code." });
+    }
+
+    const { data: referrerExistingReferral, error: referrerExistingError } = await supabase
+      .from("referrals")
+      .select("id")
+      .eq("referrer_id", referrer.id)
+      .limit(1)
+      .maybeSingle();
+    if (referrerExistingError) throw referrerExistingError;
+    if (referrerExistingReferral) {
+      return json(res, 409, { error: "This referral code has already been used." });
     }
 
     const { data: existingReferral, error: existingError } = await supabase
@@ -113,13 +124,15 @@ export default async function handler(req, res) {
     const referredProfile = await ensureReferredProfile(supabase, referredUser);
 
     const referredTrialUntil = extendTrialFrom(referredProfile?.pro_trial_until);
-    const referrerTrialUntil = extendTrialFrom(referrer.pro_trial_until);
+    const referrerHasPaidPro =
+      referrer.tier === "pro" && ["active", "trialing"].includes(referrer.subscription_status || "");
+    const referrerTrialUntil = referrerHasPaidPro ? referrer.pro_trial_until : extendTrialFrom(referrer.pro_trial_until);
 
     const { error: insertError } = await supabase.from("referrals").insert({
       referrer_id: referrer.id,
       referred_user_id: referredUser.id,
       referral_code: referralCode,
-      status: "trial_granted",
+      status: referrerHasPaidPro ? "referred_trial_granted" : "trial_granted",
     });
     if (insertError) throw insertError;
 
@@ -129,13 +142,20 @@ export default async function handler(req, res) {
       .eq("id", referredUser.id);
     if (referredUpdateError) throw referredUpdateError;
 
-    const { error: referrerUpdateError } = await supabase
-      .from("profiles")
-      .update({ pro_trial_until: referrerTrialUntil, updated_at: new Date().toISOString() })
-      .eq("id", referrer.id);
-    if (referrerUpdateError) throw referrerUpdateError;
+    if (!referrerHasPaidPro) {
+      const { error: referrerUpdateError } = await supabase
+        .from("profiles")
+        .update({ pro_trial_until: referrerTrialUntil, updated_at: new Date().toISOString() })
+        .eq("id", referrer.id);
+      if (referrerUpdateError) throw referrerUpdateError;
+    }
 
-    return json(res, 200, { ok: true, trialDays: TRIAL_DAYS, proTrialUntil: referredTrialUntil });
+    return json(res, 200, {
+      ok: true,
+      trialDays: TRIAL_DAYS,
+      proTrialUntil: referredTrialUntil,
+      referrerRewardGranted: !referrerHasPaidPro,
+    });
   } catch (error) {
     console.error("Referral claim failed:", error);
     if (isMissingReferralSchema(error)) {

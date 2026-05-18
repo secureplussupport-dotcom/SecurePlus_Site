@@ -51,6 +51,9 @@ on profiles (referral_code);
 create index if not exists referrals_referrer_id_created_at_idx
 on referrals (referrer_id, created_at desc);
 
+create unique index if not exists referrals_one_new_user_per_referrer_idx
+on referrals (referrer_id);
+
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql

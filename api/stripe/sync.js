@@ -23,7 +23,7 @@ async function updateProfile(supabase, userId, patch) {
     .from("profiles")
     .update({ ...patch, updated_at: new Date().toISOString() })
     .eq("id", userId)
-    .select("id,email,tier,subscription_status,stripe_customer_id,stripe_subscription_id")
+    .select("id,email,tier,subscription_status,stripe_customer_id,stripe_subscription_id,pro_trial_until,referral_code")
     .maybeSingle();
 
   if (error) throw error;

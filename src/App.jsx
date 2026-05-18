@@ -58,6 +58,15 @@ function getStoredReferralCode() {
   }
 }
 
+function saveReferralCode(value) {
+  const code = String(value || "").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0, 32);
+  try {
+    if (code) window.localStorage?.setItem("secureplus_referral_code", code);
+    else window.localStorage?.removeItem("secureplus_referral_code");
+  } catch {}
+  return code;
+}
+
 function rememberReferralFromUrl() {
   const referralCode = getStoredReferralCode();
   if (!referralCode) return "";
@@ -166,6 +175,7 @@ function appUserFromProfile(authUser, profile) {
     tier: (profile?.tier === "pro" && ["active", "trialing"].includes(profile?.subscription_status)) || hasReferralTrial ? "pro" : "free",
     subscriptionStatus: profile?.subscription_status || null,
     proTrialUntil: profile?.pro_trial_until || null,
+    referralTrialExpired: Boolean(trialUntil && trialUntil.getTime() <= Date.now() && profile?.tier !== "pro"),
     referralCode: profile?.referral_code || "",
     authProvider: "supabase",
     loginMethod: authUser?.app_metadata?.provider || "email",
@@ -9389,7 +9399,7 @@ function DailyChallenge({t,onLogin,user=null}) {
 // ═══════════════════════════════════════════════════════════════
 function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login"}) {
   const [mode,setMode]=useState(initialMode);
-  const [form,setForm]=useState({name:"",email:"",pass:"",confirm:""});
+  const [form,setForm]=useState({name:"",email:"",pass:"",confirm:"",referral:getStoredReferralCode()});
   const [err,setErr]=useState("");
   const [ok,setOk]=useState("");
   const [loading,setLoading]=useState(false);
@@ -9422,7 +9432,8 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           capture("login_completed", { method: "password" });
           onLogin(appUser);
         } else {
-          capture("signup_started", { method: "password", has_referral: Boolean(getStoredReferralCode()) });
+          const referralCode = saveReferralCode(form.referral);
+          capture("signup_started", { method: "password", has_referral: Boolean(referralCode) });
           if(!form.name||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
           if(form.pass!==form.confirm){setErr("Passwords do not match.");setLoading(false);return;}
           const passwordIssue=getPasswordIssue(form.pass);
@@ -9440,10 +9451,10 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           if(data.session?.user){
             const appUser=await getSupabaseProfile(data.session.user);
             setOk("Account created! Welcome to SecurePlus.");
-            capture("signup_completed", { method: "password", confirmed_immediately: true, has_referral: Boolean(getStoredReferralCode()) });
+            capture("signup_completed", { method: "password", confirmed_immediately: true, has_referral: Boolean(referralCode) });
             onLogin(appUser);
           } else {
-            capture("signup_email_confirmation_required", { has_referral: Boolean(getStoredReferralCode()) });
+            capture("signup_email_confirmation_required", { has_referral: Boolean(referralCode) });
             setOk("Almost done. Check your email, click Confirm signup, then come back here to sign in.");
           }
         }
@@ -9458,13 +9469,15 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           onLogin(user);
         } else {
           capture("signup_started", { method: "local_demo" });
+          const referralCode = saveReferralCode(form.referral);
           if(!form.name||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
           if(form.pass!==form.confirm){setErr("Passwords do not match.");setLoading(false);return;}
           const passwordIssue=getPasswordIssue(form.pass);
           if(passwordIssue){setErr(passwordIssue);setLoading(false);return;}
           const exists=await DB.getUser(email);
           if(exists){setErr("An account with this email already exists.");setLoading(false);return;}
-          const user={name:form.name,email,password:form.pass,tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local"};
+          const trialUntil = referralCode ? new Date(Date.now()+7*24*60*60*1000).toISOString() : null;
+          const user={name:form.name,email,password:form.pass,tier:trialUntil?"pro":"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:trialUntil,referralCode:makeReferralCode(email)};
           await DB.saveUser(user);
           await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
           setOk("Account created! Welcome to SecurePlus.");
@@ -9478,6 +9491,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
   const handleGoogle=async()=>{
     resetMessages();setLoading(true);
     try{
+      saveReferralCode(form.referral);
       capture("login_started", { method: "google" });
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
@@ -9684,6 +9698,13 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
               <>
               <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Confirm Password</label>
                 <input className="input" type="password" placeholder="••••••••" value={form.confirm} onChange={set("confirm")} onKeyDown={e=>e.key==="Enter"&&handle()}/></div>
+              <div>
+                <label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Referral code</label>
+                <input className="input" placeholder="Optional code from a friend" value={form.referral} onChange={e=>setForm(f=>({...f,referral:e.target.value.toUpperCase()}))}/>
+                <div style={{fontSize:12,color:t.textDim,lineHeight:1.6,marginTop:6}}>
+                  Optional. A valid referral gives you 7 days of Pro after signup. Your friend gets 7 days too, unless they already have Pro.
+                </div>
+              </div>
               <div style={{fontSize:12,color:t.textDim,lineHeight:1.6}}>
                 Use 8+ characters with uppercase, lowercase, a number, and a special character.
               </div>
@@ -11123,6 +11144,105 @@ function ExamMode({user,onSave,onUpgrade,t}) {
 // ═══════════════════════════════════════════════════════════════
 // PRICING
 // ═══════════════════════════════════════════════════════════════
+function ReferralUpgradeBanner({user,t}) {
+  const [details,setDetails]=useState(null);
+  const [error,setError]=useState("");
+  const [copied,setCopied]=useState(false);
+  const [loading,setLoading]=useState(false);
+
+  useEffect(()=>{
+    let active=true;
+    if(!user) return;
+    setError("");
+    setLoading(true);
+    getReferralDetails()
+      .then(data=>{if(active)setDetails(data);})
+      .catch(err=>{if(active)setError(err.message || "Unable to load your referral link.");})
+      .finally(()=>{if(active)setLoading(false);});
+    return()=>{active=false;};
+  },[user?.id,user?.email]);
+
+  const code=details?.referralCode || user?.referralCode || "";
+  const shareUrl=code ? `${window.location.origin}/?ref=${encodeURIComponent(code)}` : "";
+  const invitedCount=details?.invitedCount || 0;
+  const referralUsed=invitedCount >= 1;
+  const isPaidPro = user?.tier === "pro" && ["active","trialing"].includes(user?.subscriptionStatus);
+
+  const copyLink=async()=>{
+    if(!shareUrl)return;
+    try{
+      await navigator.clipboard?.writeText(shareUrl);
+      setCopied(true);
+      capture("referral_link_copied", { source: "upgrade_page", referral_used: referralUsed });
+      setTimeout(()=>setCopied(false),1800);
+    }catch{
+      window.prompt("Copy your referral link", shareUrl);
+    }
+  };
+
+  return(
+    <div className="card" style={{padding:"22px 24px",marginBottom:18,borderColor:`${t.green}45`,background:`linear-gradient(135deg, ${t.green}12, ${t.accent}10 70%, ${t.surface})`}}>
+      <div style={{display:"flex",gap:16,alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap"}}>
+        <div style={{flex:"1 1 260px"}}>
+          <div className="label" style={{color:t.green,marginBottom:8}}>Referral Programme</div>
+          <h3 style={{fontSize:22,fontWeight:900,color:t.text,marginBottom:8}}>Share the joy of learning</h3>
+          <p style={{fontSize:13,color:t.textSec,lineHeight:1.75,marginBottom:12}}>
+            Share your link with one new student. When they create an account using your code, they get 7 days of Pro and you get 7 days too. If you already have an active Pro plan, your friend still receives the trial while your account stays on Pro.
+          </p>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+            <span className="chip" style={{background:`${t.green}12`,borderColor:`${t.green}35`,color:t.green}}>Friend gets 7 days Pro</span>
+            <span className="chip" style={{background:`${t.accent}12`,borderColor:`${t.accent}35`,color:t.accent}}>You can refer 1 user</span>
+            {isPaidPro&&<span className="chip" style={{background:`${t.amber}12`,borderColor:`${t.amber}35`,color:t.amber}}>Paid Pro: no extra trial needed</span>}
+          </div>
+        </div>
+        <div style={{flex:"1 1 260px",minWidth:0}}>
+          <div style={{fontSize:12,fontWeight:800,color:t.textDim,marginBottom:6}}>Your referral link</div>
+          <div style={{display:"flex",gap:8,alignItems:"stretch"}}>
+            <input className="input" readOnly value={loading?"Loading referral link...":error||shareUrl||"Referral setup needed"} style={{fontSize:12,fontFamily:"'JetBrains Mono',monospace"}}/>
+            <button className="btn btn-primary" style={{fontSize:13,whiteSpace:"nowrap"}} onClick={copyLink} disabled={!shareUrl||referralUsed}>
+              {copied?"Copied":"Copy"}
+            </button>
+          </div>
+          <div style={{fontSize:12,color:referralUsed?t.amber:t.textDim,lineHeight:1.6,marginTop:8}}>
+            {referralUsed
+              ? "Your one referral reward has already been used."
+              : "The landing page will open with your referral code already filled in."}
+          </div>
+          {error&&(
+            <div style={{fontSize:12,color:t.amber,lineHeight:1.6,marginTop:8}}>
+              Run the latest referral SQL in Supabase if this message stays.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TrialExpiredPrompt({t,onUpgrade,onClose}) {
+  return(
+    <div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Referral trial ended" onClick={onClose}>
+      <div className="streak-modal" style={{maxWidth:460}} onClick={e=>e.stopPropagation()}>
+        <div style={{position:"relative",textAlign:"center"}}>
+          <div className="label" style={{color:t.amber,marginBottom:8}}>Pro trial ended</div>
+          <h2 style={{fontSize:26,fontWeight:900,color:t.text,marginBottom:10}}>Ready to keep Pro?</h2>
+          <p style={{fontSize:14,color:t.textSec,lineHeight:1.75,marginBottom:18}}>
+            Your 7-day referral trial has expired. Upgrade to the annual Pro plan to keep PBQ simulations, Exam Mode, Smart Review, and detailed solutions.
+          </p>
+          <div className="card" style={{padding:"14px 16px",marginBottom:18,background:`${t.accent}10`,borderColor:`${t.accent}35`}}>
+            <div style={{fontSize:28,fontWeight:900,color:t.accent}}>$4.99/year</div>
+            <div style={{fontSize:13,color:t.green,fontWeight:800}}>roughly $0.40/month</div>
+          </div>
+          <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+            <button className="btn btn-primary" style={{flex:1,justifyContent:"center"}} onClick={onUpgrade}>Upgrade yearly</button>
+            <button className="btn btn-outline" style={{flex:1,justifyContent:"center"}} onClick={onClose}>Maybe later</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
   return(
     <div style={{padding:"32px 24px",maxWidth:700,margin:"0 auto"}}>
@@ -11135,6 +11255,8 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           <strong style={{color:t.green}}>Annual plan only:</strong> $4.99 per year · Cancel anytime
         </p>
       </div>
+
+      <ReferralUpgradeBanner user={user} t={t}/>
 
       <div className="pricing-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:32}}>
         {/* PRO */}
@@ -11523,12 +11645,24 @@ export default function App() {
   const [passwordRecovery,setPasswordRecovery]=useState(false);
   const [showOnboarding,setShowOnboarding]=useState(false);
   const [authStartMode,setAuthStartMode]=useState("login");
+  const [showTrialExpiredPrompt,setShowTrialExpiredPrompt]=useState(false);
 
   const t=darkMode?THEMES.dark:THEMES.light;
 
   useEffect(()=>{
     if(user) identifyUser(user);
   },[user]);
+
+  useEffect(()=>{
+    if(!user?.referralTrialExpired)return;
+    const key=`trial-expired-prompt:${user.id || user.email}`;
+    try {
+      if(window.sessionStorage?.getItem(key)) return;
+      window.sessionStorage?.setItem(key,"true");
+    } catch {}
+    setShowTrialExpiredPrompt(true);
+    setView("pricing");
+  },[user?.id,user?.email,user?.referralTrialExpired]);
 
   useEffect(()=>{
     const referralCode = rememberReferralFromUrl();
@@ -11969,6 +12103,13 @@ export default function App() {
             t={t}
             onClose={closeOnboarding}
             onPricing={()=>setView("pricing")}
+          />
+        )}
+        {showTrialExpiredPrompt&&(
+          <TrialExpiredPrompt
+            t={t}
+            onClose={()=>setShowTrialExpiredPrompt(false)}
+            onUpgrade={()=>{setShowTrialExpiredPrompt(false);handleUpgrade("pro");}}
           />
         )}
       </div>
