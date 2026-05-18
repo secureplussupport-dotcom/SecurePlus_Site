@@ -167,6 +167,7 @@ function profileName(authUser) {
 function appUserFromProfile(authUser, profile) {
   const trialUntil = profile?.pro_trial_until ? new Date(profile.pro_trial_until) : null;
   const hasReferralTrial = trialUntil && trialUntil.getTime() > Date.now();
+  const pendingReferralCode = String(authUser?.user_metadata?.pending_referral_code || "").trim().toUpperCase();
 
   return {
     id: authUser.id,
@@ -177,6 +178,7 @@ function appUserFromProfile(authUser, profile) {
     proTrialUntil: profile?.pro_trial_until || null,
     referralTrialExpired: Boolean(trialUntil && trialUntil.getTime() <= Date.now() && profile?.tier !== "pro"),
     referralCode: profile?.referral_code || "",
+    pendingReferralCode,
     authProvider: "supabase",
     loginMethod: authUser?.app_metadata?.provider || "email",
   };
@@ -204,7 +206,7 @@ async function getSupabaseProfile(authUser) {
 
 async function claimReferralIfPresent(authUser) {
   if (!isSupabaseConfigured || !authUser?.authProvider || authUser.authProvider !== "supabase") return null;
-  const referralCode = getStoredReferralCode();
+  const referralCode = getStoredReferralCode() || String(authUser?.pendingReferralCode || authUser?.user_metadata?.pending_referral_code || "").trim().toUpperCase();
   if (!referralCode) return null;
   try {
     const token = await getSupabaseAccessToken();
@@ -9456,7 +9458,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             email,
             password: form.pass,
             options: {
-              data: { name: form.name, full_name: form.name },
+              data: { name: form.name, full_name: form.name, pending_referral_code: referralCode },
               emailRedirectTo: window.location.origin,
             },
           });
