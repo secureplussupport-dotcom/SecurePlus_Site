@@ -225,11 +225,24 @@ async function claimReferralIfPresent(authUser) {
       }
       return data;
     }
-    console.warn("Referral claim was not applied", data.error || response.status);
+    const message = data.error || `Referral claim failed with status ${response.status}.`;
+    console.warn("Referral claim was not applied", message);
+    return { ok: false, error: message, referralCode };
   } catch (error) {
     console.warn("Unable to claim referral", error);
+    return { ok: false, error: error.message || "Unable to claim referral.", referralCode };
   }
   return null;
+}
+
+function showReferralClaimErrorOnce(result) {
+  if (!result?.error) return;
+  const key = `referral-claim-error:${result.referralCode}:${result.error}`;
+  try {
+    if (window.sessionStorage?.getItem(key)) return;
+    window.sessionStorage?.setItem(key, "true");
+  } catch {}
+  alert(`Referral code was not applied: ${result.error}`);
 }
 
 async function syncStripeProfile(authUser, sessionId = "") {
@@ -11699,6 +11712,7 @@ export default function App() {
         const savedAttempts=await loadSupabaseAttempts(session.user.id);
         if(!active)return;
         const referralClaim = await claimReferralIfPresent(displayUser);
+        showReferralClaimErrorOnce(referralClaim);
         if(referralClaim?.proTrialUntil) displayUser = { ...displayUser, tier: "pro", proTrialUntil: referralClaim.proTrialUntil };
         setUser(displayUser);
         identifyUser(displayUser);
@@ -11729,6 +11743,7 @@ export default function App() {
 
   const handleLogin=useCallback(async u=>{
     const referralClaim=await claimReferralIfPresent(u);
+    showReferralClaimErrorOnce(referralClaim);
     const displayUser=referralClaim?.proTrialUntil ? { ...u, tier: "pro", proTrialUntil: referralClaim.proTrialUntil } : u;
     setUser(displayUser);
     identifyUser(displayUser);
