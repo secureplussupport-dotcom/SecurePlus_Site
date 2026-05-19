@@ -8631,6 +8631,21 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 ::-webkit-scrollbar-track{background:${t.bg};}
 ::-webkit-scrollbar-thumb{background:${t.border};border-radius:3px;}
 .card{background:linear-gradient(180deg, ${t.surface}, ${t.surface}f2);border:1px solid ${t.border};border-radius:8px;box-shadow:0 14px 36px rgba(7,12,24,.10);}
+.game-hero{position:relative;overflow:hidden;border-radius:10px;padding:24px;border:1px solid ${t.accent}30;background:linear-gradient(135deg, ${t.accent}18, ${t.surface} 44%, ${t.green}12);box-shadow:0 22px 54px ${t.accent}12;}
+.game-hero::after{content:"";position:absolute;right:-56px;top:-70px;width:190px;height:190px;border-radius:50%;border:28px solid ${t.accent}10;}
+.game-stat{position:relative;overflow:hidden;padding:16px 18px;border-radius:10px;background:linear-gradient(180deg, ${t.surface}, ${t.panel});border:1px solid ${t.border};box-shadow:0 12px 28px rgba(7,12,24,.08);transition:transform .18s,border-color .18s,box-shadow .18s;}
+.game-stat:hover{transform:translateY(-2px);border-color:${t.accent}55;box-shadow:0 18px 38px ${t.accent}14;}
+.game-stat-icon{width:36px;height:36px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;background:var(--game-color);color:#fff;font-weight:900;box-shadow:0 10px 22px color-mix(in srgb,var(--game-color) 32%, transparent);}
+.quest-card{display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:10px;border:1px solid ${t.border};background:${t.panel};transition:transform .18s,border-color .18s,background .18s;}
+.quest-card:hover{transform:translateY(-1px);border-color:${t.accent}45;background:${t.accent}08;}
+.quest-medal{width:40px;height:40px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;background:var(--quest-color);color:#fff;font-weight:900;box-shadow:0 10px 20px color-mix(in srgb,var(--quest-color) 28%, transparent);}
+.skill-path{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;}
+.skill-node{position:relative;min-height:74px;border-radius:12px;border:1px solid ${t.border};background:${t.panel};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:transform .2s,border-color .2s,background .2s;}
+.skill-node.done{background:${t.green}10;border-color:${t.green}45;}
+.skill-node.active{background:${t.accent}12;border-color:${t.accent}60;box-shadow:0 16px 34px ${t.accent}15;}
+.skill-node:hover{transform:translateY(-2px);}
+.skill-node-dot{width:24px;height:24px;border-radius:50%;background:var(--node-color);box-shadow:0 0 0 5px color-mix(in srgb,var(--node-color) 14%, transparent);}
+.reward-pop{animation:rewardPop .7s cubic-bezier(.16,1,.3,1) both;}
 .card-hover{transition:border-color .2s,box-shadow .2s,transform .2s,background .2s;}
 .card-hover:hover{border-color:${t.accent};box-shadow:0 16px 36px ${t.accent}16;transform:translateY(-1px);background:linear-gradient(180deg, ${t.surface}, ${t.accent}08);}
 .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:${t.textDim};}
@@ -8803,6 +8818,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 @keyframes irregularSpin{0%{transform:rotate(0deg)}18%{transform:rotate(75deg)}31%{transform:rotate(118deg)}55%{transform:rotate(245deg)}72%{transform:rotate(286deg)}100%{transform:rotate(360deg)}}
 @keyframes scanLine{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
 @keyframes streakPulse{from{transform:scale(1);opacity:.6}to{transform:scale(1.05);opacity:1}}
+@keyframes rewardPop{0%{transform:scale(.96);opacity:0}55%{transform:scale(1.025);opacity:1}100%{transform:scale(1);opacity:1}}
 @keyframes bulbPulse{from{box-shadow:0 0 0 #f59e0b00;}to{box-shadow:0 0 18px #f59e0b99;}}
 @keyframes lockClose{0%{transform:translateY(-5px) rotate(-18deg);}70%{transform:translateY(1px) rotate(3deg);}100%{transform:translateY(0) rotate(0);}}
 @keyframes roofDrop{0%{top:-8px;opacity:0;}70%{top:5px;opacity:1;}100%{top:3px;opacity:1;}}
@@ -8883,6 +8899,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
   [style*="grid-template-columns:1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr"]{grid-template-columns:1fr!important;}
   [style*="grid-template-columns:repeat(4,1fr)"],[style*="gridTemplateColumns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
   [style*="grid-template-columns:1fr 1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr 1fr"]{grid-template-columns:1fr!important;}
+  .game-hero{padding:20px!important;}
+  .game-hero > div{grid-template-columns:1fr!important;}
+  .quest-card{align-items:flex-start!important;}
+  .skill-path{grid-template-columns:repeat(5,minmax(58px,1fr))!important;overflow-x:auto;padding-bottom:4px;}
+  .skill-node{min-width:58px;}
   .pricing-grid{grid-template-columns:1fr!important;}
   .pricing-pro-card{order:-1;}
   .card{box-shadow:0 10px 26px rgba(7,12,24,.08);}
@@ -9866,6 +9887,22 @@ function Dashboard({user,attempts,onNav,t}) {
   const readiness = Math.min(100, Math.round(accuracy*0.75 + Math.min(questionsDone,50)/50*25));
   const isPro = user.tier==="pro";
   const challenge = getTodayChallenge();
+  const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
+  useEffect(()=>{
+    let active=true;
+    loadDailyStreak(user).then(info=>{if(active)setStreakInfo(info);});
+    return()=>{active=false;};
+  },[user?.email]);
+  const xp=mcqAttempts.length*10+pbqAttempts.length*25+totalCorrect*5;
+  const level=Math.max(1,Math.floor(xp/250)+1);
+  const levelXp=xp%250;
+  const levelProgress=Math.round((levelXp/250)*100);
+  const uniquePbqs=new Set(pbqAttempts.map(a=>a.qid)).size;
+  const nextQuest=questionsDone<10
+    ? "Complete 10 unique questions to unlock your first study rhythm."
+    : accuracy<75
+      ? "Run Smart Review and repair weak topics for a stronger score."
+      : "Try an Exam Mode set to check real readiness.";
 
   // Chapter performance
   const chStats = {};
@@ -9877,40 +9914,77 @@ function Dashboard({user,attempts,onNav,t}) {
   });
 
   return(
-    <div style={{padding:"28px 24px",maxWidth:1000,margin:"0 auto"}}>
-      {/* Welcome */}
-      <div style={{marginBottom:28}}>
-        <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:4}}>
-          Welcome back, {user.name.split(" ")[0]}
-        </h2>
-        <p style={{color:t.textSec,fontSize:14}}>
-          {questionsDone===0?"Start practising to see your progress here.":
-          readiness>=75?"You're on track for exam day — keep it up!":
-          "Keep practising to improve your readiness score."}
-        </p>
+    <div style={{padding:"28px 24px",maxWidth:1080,margin:"0 auto"}}>
+      <div className="game-hero reward-pop" style={{marginBottom:18}}>
+        <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:18,alignItems:"center"}}>
+          <div>
+            <div className="label" style={{color:t.accent,marginBottom:8}}>Learning path</div>
+            <h2 style={{fontSize:30,fontWeight:900,color:t.text,marginBottom:8}}>
+              Welcome back, {user.name.split(" ")[0]}
+            </h2>
+            <p style={{color:t.textSec,fontSize:14,lineHeight:1.7,maxWidth:640}}>
+              {questionsDone===0?"Start your Security+ path with one short lesson set.":
+              readiness>=75?"You are building strong exam readiness. Keep the streak alive and protect the score.":
+              "Keep earning XP, repair missed questions, and move chapter by chapter."}
+            </p>
+            <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:16}}>
+              <button className="btn btn-primary" onClick={()=>onNav("mcq")}>Start lesson</button>
+              <button className="btn btn-outline" onClick={()=>onNav("daily")}>Daily challenge</button>
+              {isPro?<button className="btn btn-ghost" onClick={()=>onNav("exam")}>Exam run</button>:<button className="btn btn-ghost" onClick={()=>onNav("pricing")}>Unlock PBQs</button>}
+            </div>
+          </div>
+          <div className="card" style={{position:"relative",zIndex:1,padding:"16px 18px",minWidth:190,borderColor:`${t.green}35`,background:`${t.green}08`}}>
+            <div className="label" style={{marginBottom:8}}>Level {level}</div>
+            <div style={{fontSize:34,fontWeight:900,color:t.green,lineHeight:1}}>{xp}</div>
+            <div style={{fontSize:12,color:t.textSec,margin:"6px 0 10px"}}>total XP earned</div>
+            <ProgBar v={levelProgress} c={t.green} h={8}/>
+            <div style={{fontSize:11,color:t.textDim,marginTop:6}}>{levelXp}/250 XP to next level</div>
+          </div>
+        </div>
       </div>
 
-      {/* Stat row */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:12,marginBottom:24}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:12,marginBottom:18}}>
         {[
-          {label:"Readiness",value:`${readiness}%`,color:readiness>=75?t.green:readiness>=50?t.amber:t.red},
-          {label:"Accuracy",value:`${accuracy}%`,color:t.accent},
-          {label:"Questions Done",value:questionsDone,color:t.text},
-          {label:"PBQs Complete",value:new Set(pbqAttempts.map(a=>a.qid)).size,color:t.text},
+          {label:"Readiness",value:`${readiness}%`,color:readiness>=75?t.green:readiness>=50?t.amber:t.red,icon:"R"},
+          {label:"Accuracy",value:`${accuracy}%`,color:t.accent,icon:"A"},
+          {label:"Questions Done",value:questionsDone,color:"#8b5cf6",icon:"Q"},
+          {label:"Daily Streak",value:streakInfo.streak,color:t.amber,icon:"S"},
+          {label:"PBQs Complete",value:uniquePbqs,color:t.green,icon:"P"},
         ].map(s=>(
-          <div key={s.label} className="card" style={{padding:"18px 20px"}}>
-            <div className="label" style={{marginBottom:6}}>{s.label}</div>
-            <div style={{fontSize:26,fontWeight:700,color:s.color}}>{s.value}</div>
+          <div key={s.label} className="game-stat">
+            <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:10}}>
+              <div className="label">{s.label}</div>
+              <span className="game-stat-icon" style={{"--game-color":s.color}}>{s.icon}</span>
+            </div>
+            <div style={{fontSize:30,fontWeight:900,color:s.color,lineHeight:1}}>{s.value}</div>
           </div>
         ))}
       </div>
 
-      {/* Readiness bar + CTA */}
+      <div className="card" style={{padding:"18px 20px",marginBottom:18,borderColor:`${t.accent}25`}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:10}}>
+          {[
+            {title:"Daily quest",body:streakInfo.completedToday?"Daily challenge secured. Come back tomorrow.":"Finish today's 5-question challenge.",action:"Open",nav:"daily",color:t.amber},
+            {title:"Smart review",body:nextQuest,action:"Practice",nav:"mcq",color:t.accent},
+            {title:isPro?"PBQ mission":"Pro mission",body:isPro?"Try one performance-based simulation.":"Unlock PBQ simulations and Exam Mode.",action:isPro?"Start":"Upgrade",nav:isPro?"pbq":"pricing",color:t.green},
+          ].map(q=>(
+            <div key={q.title} className="quest-card">
+              <span className="quest-medal" style={{"--quest-color":q.color}}>{q.title[0]}</span>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontWeight:900,color:t.text,fontSize:13}}>{q.title}</div>
+                <div style={{fontSize:12,color:t.textSec,lineHeight:1.5}}>{q.body}</div>
+              </div>
+              <button className="btn btn-ghost" style={{fontSize:12,padding:"6px 10px",minHeight:32}} onClick={()=>onNav(q.nav)}>{q.action}</button>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="card" style={{padding:"20px 24px",marginBottom:20}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12,flexWrap:"wrap",gap:10}}>
           <div>
-            <div style={{fontWeight:600,fontSize:15,color:t.text,marginBottom:2}}>Exam Readiness</div>
-            <div style={{fontSize:13,color:t.textSec}}>Target: 75% or above</div>
+            <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:2}}>Exam readiness path</div>
+            <div style={{fontSize:13,color:t.textSec}}>Reach 75% to enter the ready zone.</div>
           </div>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
             <button className="btn btn-primary" style={{fontSize:13}} onClick={()=>onNav("mcq")}>Practice MCQs</button>
@@ -9922,6 +9996,32 @@ function Dashboard({user,attempts,onNav,t}) {
           <span style={{fontSize:11,color:t.textDim}}>0%</span>
           <span style={{fontSize:11,color:t.amber}}>75% target</span>
           <span style={{fontSize:11,color:t.textDim}}>100%</span>
+        </div>
+      </div>
+
+      <div className="card" style={{padding:"18px 20px",marginBottom:20}}>
+        <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:14}}>
+          <div>
+            <div style={{fontWeight:900,color:t.text,fontSize:15}}>Security+ chapter path</div>
+            <div style={{fontSize:12,color:t.textSec}}>Each node lights up as you complete work in that chapter.</div>
+          </div>
+          <span className="chip" style={{background:`${t.accent}10`,color:t.accent,borderColor:`${t.accent}28`}}>{questionsDone}/{MCQ_BANK.length+PBQ_BANK.length} unique</span>
+        </div>
+        <div className="skill-path">
+          {CHAPTERS.map(ch=>{
+            const s=chStats[ch.id];
+            const count=s?.t||0;
+            const p=s?Math.round((s.c/s.t)*100):0;
+            const done=count>=10&&p>=70;
+            const active=count>0&&!done;
+            return(
+              <button key={ch.id} className={`skill-node ${done?"done":active?"active":""}`} onClick={()=>onNav("mcq")} title={ch.title}>
+                <span className="skill-node-dot" style={{"--node-color":chapterColor(ch.id)}}/>
+                <span style={{fontSize:11,fontWeight:900,color:t.text}}>Ch.{ch.id}</span>
+                <span style={{fontSize:10,color:t.textDim}}>{count?`${p}%`:"Start"}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
