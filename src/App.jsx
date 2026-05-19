@@ -8638,6 +8638,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .game-stat-icon{width:36px;height:36px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;background:var(--game-color);color:#fff;font-weight:900;box-shadow:0 10px 22px color-mix(in srgb,var(--game-color) 32%, transparent);}
 .quest-card{display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:10px;border:1px solid ${t.border};background:${t.panel};transition:transform .18s,border-color .18s,background .18s;}
 .quest-card:hover{transform:translateY(-1px);border-color:${t.accent}45;background:${t.accent}08;}
+.quest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
 .quest-medal{width:40px;height:40px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;background:var(--quest-color);color:#fff;font-weight:900;box-shadow:0 10px 20px color-mix(in srgb,var(--quest-color) 28%, transparent);}
 .skill-path{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;}
 .skill-node{position:relative;min-height:74px;border-radius:12px;border:1px solid ${t.border};background:${t.panel};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:transform .2s,border-color .2s,background .2s;}
@@ -8901,7 +8902,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
   [style*="grid-template-columns:1fr 1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr 1fr"]{grid-template-columns:1fr!important;}
   .game-hero{padding:20px!important;}
   .game-hero > div{grid-template-columns:1fr!important;}
+  .quest-grid{grid-template-columns:1fr!important;}
   .quest-card{align-items:flex-start!important;}
+  .quest-card .btn{margin-left:auto;white-space:nowrap!important;flex-shrink:0;}
   .skill-path{grid-template-columns:repeat(5,minmax(58px,1fr))!important;overflow-x:auto;padding-bottom:4px;}
   .skill-node{min-width:58px;}
   .pricing-grid{grid-template-columns:1fr!important;}
@@ -9962,7 +9965,7 @@ function Dashboard({user,attempts,onNav,t}) {
       </div>
 
       <div className="card" style={{padding:"18px 20px",marginBottom:18,borderColor:`${t.accent}25`}}>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:10}}>
+        <div className="quest-grid">
           {[
             {title:"Daily quest",body:streakInfo.completedToday?"Daily challenge secured. Come back tomorrow.":"Finish today's 5-question challenge.",action:"Open",nav:"daily",color:t.amber},
             {title:"Smart review",body:nextQuest,action:"Practice",nav:"mcq",color:t.accent},
