@@ -27,7 +27,7 @@ const DB = {
   async clearSession() { try { await storageDelete("sess"); } catch {}},
   async deleteUser(e) { try { await storageDelete(`u:${e}`); await storageDelete(`att:${e}`); } catch {}},
   async getAttempts(e) { try { const r=await storageGet(`att:${e}`); return r?JSON.parse(r.value):[]; } catch { return []; }},
-  async saveAttempt(e,a) { try { const p=await DB.getAttempts(e); p.unshift(a); await storageSet(`att:${e}`,JSON.stringify(p.slice(0,200))); } catch {}},
+  async saveAttempt(e,a) { try { const p=await DB.getAttempts(e); p.unshift(a); await storageSet(`att:${e}`,JSON.stringify(p.slice(0,1000))); } catch {}},
   async getDailyChallenge() { try { const r=await storageGet("daily"); return r?JSON.parse(r.value):null; } catch { return null; }},
   async saveDailyChallenge(d) { try { await storageSet("daily",JSON.stringify(d)); } catch {}},
   async getOnboardingSeen(e) { try { const r=await storageGet(`onboarded:${normalizeEmail(e)}`); return Boolean(r?.value); } catch { return false; }},
@@ -348,7 +348,7 @@ async function loadSupabaseAttempts(userId) {
     .select("question_id,question_type,title,domain,chapter,correct,score,created_at")
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
-    .limit(200);
+    .limit(1000);
   if (error) {
     console.warn("Unable to load attempts", error);
     return [];
@@ -421,6 +421,40 @@ function rankQuestionsBySm2(questions, attempts) {
     const bScore = (bWrong?0:1000) + (bDue?0:500) + (bNew?750:0) + bState.easeFactor * 10 + bState.dueAt.getTime() / 86400000;
     return aScore - bScore;
   });
+}
+
+function buildMcqPracticePool(questions, attempts, count, mode="smart") {
+  const histories = new Map();
+  attempts.filter(a=>a.mcq).forEach(attempt=>{
+    if(!histories.has(attempt.qid)) histories.set(attempt.qid, []);
+    histories.get(attempt.qid).push(attempt);
+  });
+  const shuffle = arr => [...arr].sort(()=>Math.random()-.5);
+  const unseen = shuffle(questions.filter(q=>!histories.has(q.id)));
+  const weak = rankQuestionsBySm2(
+    questions.filter(q=>{
+      const history=histories.get(q.id)||[];
+      return history.length && calculateSm2State(history).lastCorrect===false;
+    }),
+    attempts
+  );
+  const review = rankQuestionsBySm2(
+    questions.filter(q=>histories.has(q.id)&&!weak.some(w=>w.id===q.id)),
+    attempts
+  );
+
+  if(mode!=="smart") return shuffle(questions).slice(0,count);
+
+  const weakLimit = Math.min(Math.ceil(count*.3), weak.length);
+  const picked = [...weak.slice(0,weakLimit)];
+  const used = new Set(picked.map(q=>q.id));
+  [...unseen, ...review, ...weak.slice(weakLimit)].forEach(q=>{
+    if(picked.length<count && !used.has(q.id)) {
+      picked.push(q);
+      used.add(q.id);
+    }
+  });
+  return picked;
 }
 
 function getReviewSummary(attempts) {
@@ -9825,9 +9859,11 @@ function Dashboard({user,attempts,onNav,t}) {
   const mcqAttempts = attempts.filter(a=>a.mcq);
   const pbqAttempts = attempts.filter(a=>a.pbq);
   const totalCorrect = attempts.filter(a=>a.correct).length;
+  const uniqueQuestionIds = new Set(attempts.map(a=>`${a.pbq?"pbq":"mcq"}:${a.qid || a.title || a.createdAt}`));
   const total = attempts.length;
+  const questionsDone = uniqueQuestionIds.size;
   const accuracy = total ? Math.round((totalCorrect/total)*100) : 0;
-  const readiness = Math.min(100, Math.round(accuracy*0.75 + Math.min(total,50)/50*25));
+  const readiness = Math.min(100, Math.round(accuracy*0.75 + Math.min(questionsDone,50)/50*25));
   const isPro = user.tier==="pro";
   const challenge = getTodayChallenge();
 
@@ -9848,7 +9884,7 @@ function Dashboard({user,attempts,onNav,t}) {
           Welcome back, {user.name.split(" ")[0]}
         </h2>
         <p style={{color:t.textSec,fontSize:14}}>
-          {total===0?"Start practising to see your progress here.":
+          {questionsDone===0?"Start practising to see your progress here.":
           readiness>=75?"You're on track for exam day — keep it up!":
           "Keep practising to improve your readiness score."}
         </p>
@@ -9859,8 +9895,8 @@ function Dashboard({user,attempts,onNav,t}) {
         {[
           {label:"Readiness",value:`${readiness}%`,color:readiness>=75?t.green:readiness>=50?t.amber:t.red},
           {label:"Accuracy",value:`${accuracy}%`,color:t.accent},
-          {label:"Questions Done",value:total,color:t.text},
-          {label:"PBQs Complete",value:`${pbqAttempts.length}`,color:t.text},
+          {label:"Questions Done",value:questionsDone,color:t.text},
+          {label:"PBQs Complete",value:new Set(pbqAttempts.map(a=>a.qid)).size,color:t.text},
         ].map(s=>(
           <div key={s.label} className="card" style={{padding:"18px 20px"}}>
             <div className="label" style={{marginBottom:6}}>{s.label}</div>
@@ -10016,10 +10052,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
   },[filtered.length,quizCount]);
 
   const startQuiz=()=>{
-    const ordered = reviewMode==="smart"
-      ? rankQuestionsBySm2(filtered, attempts)
-      : [...filtered].sort(()=>Math.random()-.5);
-    const pool=ordered.slice(0,Math.min(quizCount,filtered.length)).map(shuffleMcqOptions);
+    const pool=buildMcqPracticePool(filtered, attempts, Math.min(quizCount,filtered.length), reviewMode).map(shuffleMcqOptions);
     capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: diffFilter, topic: topicFilter, question_count: pool.length, tier: user.tier });
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);
   };
