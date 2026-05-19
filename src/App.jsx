@@ -177,6 +177,29 @@ function shuffleMcqOptions(question) {
     originalCorrect: question.correct,
   };
 }
+function playAnswerSound(correct=true) {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if(!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const now = ctx.currentTime;
+    const gain = ctx.createGain();
+    gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(correct ? 0.08 : 0.055, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + (correct ? 0.42 : 0.28));
+    const tones = correct ? [523.25, 659.25, 783.99] : [220, 174.61];
+    tones.forEach((freq,index)=>{
+      const osc = ctx.createOscillator();
+      osc.type = correct ? "sine" : "triangle";
+      osc.frequency.setValueAtTime(freq, now + index * 0.08);
+      osc.connect(gain);
+      osc.start(now + index * 0.08);
+      osc.stop(now + index * 0.08 + (correct ? 0.18 : 0.16));
+    });
+    setTimeout(()=>ctx.close?.(), 650);
+  } catch {}
+}
 async function completeDailyStreak(user) {
   const key=dailyStreakOwner(user);
   const today=localDateKey();
@@ -8789,6 +8812,14 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .opt:hover:not(.done) .opt-ltr,.opt.sel .opt-ltr{border-color:${t.accent};color:${t.accent};}
 .opt.ok .opt-ltr{border-color:${t.green}70;color:${t.green};background:${t.green}10;}
 .opt.bad .opt-ltr{border-color:${t.red}60;color:${t.red};background:${t.red}0d;}
+.answer-burst{position:fixed;left:50%;bottom:22px;z-index:480;width:min(440px,calc(100vw - 28px));transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;border:1px solid;background:${t.surface};box-shadow:0 22px 56px rgba(0,0,0,.24);animation:answerBurstIn .42s cubic-bezier(.16,1,.3,1) both;}
+.answer-burst.correct{border-color:${t.green}55;background:linear-gradient(135deg, ${t.green}18, ${t.surface});}
+.answer-burst.wrong{border-color:${t.red}50;background:linear-gradient(135deg, ${t.red}14, ${t.surface});}
+.answer-burst-icon{width:42px;height:42px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:20px;flex-shrink:0;animation:rewardPop .52s cubic-bezier(.16,1,.3,1) both;}
+.answer-burst.correct .answer-burst-icon{background:${t.green};box-shadow:0 12px 26px ${t.green}32;}
+.answer-burst.wrong .answer-burst-icon{background:${t.red};box-shadow:0 12px 26px ${t.red}28;}
+.answer-burst-title{font-weight:900;color:${t.text};font-size:15px;}
+.answer-burst-body{font-size:12px;color:${t.textSec};line-height:1.45;}
 .terminal{background:#0d1117;border:1px solid #30363d;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#c9d1d9;padding:16px;overflow-y:auto;max-height:280px;line-height:1.7;}
 .log-block{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:${t.inputBg};border:1px solid ${t.border};border-radius:8px;padding:16px;color:${t.textSec};line-height:1.9;white-space:pre-wrap;overflow-x:auto;}
 .drag-item{padding:10px 14px;background:${t.surface};border:1.5px solid ${t.border};border-radius:7px;cursor:grab;user-select:none;transition:all .2s;font-size:13px;color:${t.text};}
@@ -8815,6 +8846,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .streak-number{font-size:68px;line-height:1;font-weight:900;color:${t.text};text-shadow:0 0 30px ${t.accent}55;font-family:'Sora','Manrope',sans-serif;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes feedbackIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes answerBurstIn{0%{opacity:0;transform:translate(-50%,18px) scale(.96)}65%{opacity:1;transform:translate(-50%,-3px) scale(1.015)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
 @keyframes shimmer{from{opacity:.6}to{opacity:1}}
 @keyframes irregularSpin{0%{transform:rotate(0deg)}18%{transform:rotate(75deg)}31%{transform:rotate(118deg)}55%{transform:rotate(245deg)}72%{transform:rotate(286deg)}100%{transform:rotate(360deg)}}
 @keyframes scanLine{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
@@ -9035,6 +9067,21 @@ function Alert({msg,type="error",t}) {
   if(!msg) return null;
   const c=type==="success"?t.green:type==="warn"?t.amber:t.red;
   return <div style={{padding:"10px 14px",borderRadius:8,background:`${c}12`,border:`1px solid ${c}30`,color:c,fontSize:13,marginBottom:12}}>{msg}</div>;
+}
+function AnswerBurst({result,t}) {
+  if(!result) return null;
+  const correct=result.correct;
+  return(
+    <div className={`answer-burst ${correct?"correct":"wrong"}`} role="status" aria-live="polite">
+      <div className="answer-burst-icon">{correct?"✓":"×"}</div>
+      <div style={{minWidth:0,flex:1}}>
+        <div className="answer-burst-title">{correct ? "Nice work!" : "Almost. Keep going."}</div>
+        <div className="answer-burst-body">
+          {correct ? "XP secured. Your review path is getting stronger." : "Mistakes are review fuel. Check the explanation, then repair it."}
+        </div>
+      </div>
+    </div>
+  );
 }
 function LoadingScreen({t}) {
   const quotes=[
@@ -9292,6 +9339,7 @@ function DailyChallenge({t,onLogin,user=null}) {
   const [showWrong, setShowWrong] = useState(false);
   const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
   const [streakCelebration,setStreakCelebration]=useState(null);
+  const [answerBurst,setAnswerBurst]=useState(null);
   const streakRecordedRef=useRef(false);
 
   const questions = useMemo(()=>challenge.type==="mcq5"
@@ -9325,6 +9373,9 @@ function DailyChallenge({t,onLogin,user=null}) {
     const correct = selected === current.correct;
     capture("daily_question_answered", { question_id: current.id, correct, signed_in: Boolean(user) });
     setResults(r=>[...r,{qid:current.id,correct,selected}]);
+    playAnswerSound(correct);
+    setAnswerBurst({correct,key:Date.now()});
+    setTimeout(()=>setAnswerBurst(null),1700);
     setSubmitted(true);
   };
   const nextQ = () => {
@@ -9482,6 +9533,7 @@ function DailyChallenge({t,onLogin,user=null}) {
           <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={nextQ}>
             {qIndex<questions.length-1?"Next Question →":"See Results →"}
           </button>
+          <AnswerBurst result={answerBurst} t={t}/>
         </>
       )}
     </div>
@@ -10126,6 +10178,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
   const [done,setDone]=useState(false);
   const [showWrong,setShowWrong]=useState(false);
   const [resumeAvailable,setResumeAvailable]=useState(false);
+  const [answerBurst,setAnswerBurst]=useState(null);
 
   const allTopics=[...new Set(MCQ_BANK.map(q=>q.topic))].sort();
 
@@ -10210,6 +10263,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
     capture("mcq_question_answered", { question_id: current.id, chapter: current.ch, difficulty: current.difficulty, topic: current.topic, correct, tier: user.tier });
     setResults(rs=>{const next=[...rs];next[qi]=r;return next;});
     if(!results[qi]) onSave(r);
+    playAnswerSound(correct);
+    setAnswerBurst({correct,key:Date.now()});
+    setTimeout(()=>setAnswerBurst(null),1700);
     setSubmitted(true);setShowWrong(false);
   };
   const nextQ=()=>{
@@ -10584,6 +10640,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
               </div>
             )}
           </div>
+          <AnswerBurst result={answerBurst} t={t}/>
           <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={qi<questions.length-1?nextQ:finishQuiz}>
             {qi<questions.length-1?"Next Question →":allAnswered?"See Results →":"Review Unanswered →"}
           </button>
@@ -10771,6 +10828,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
   const [dragged,setDragged]=useState(null);
   const [tapDragItem,setTapDragItem]=useState(null);
   const [showHint,setShowHint]=useState(false);
+  const [answerBurst,setAnswerBurst]=useState(null);
 
   const isCorrect=()=>{
     if(["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type))return selected===q.correct;
@@ -10783,6 +10841,9 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
   const submit=()=>{
     const correct = isCorrect();
     capture("pbq_question_answered", { question_id: q.id, type: q.type, chapter: q.ch, correct });
+    playAnswerSound(correct);
+    setAnswerBurst({correct,key:Date.now()});
+    setTimeout(()=>setAnswerBurst(null),1700);
     setSubmitted(true);
   };
 
@@ -11036,6 +11097,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
             )}
           </div>
           <div style={{display:"flex",gap:10,justifyContent:"flex-end"}}>
+            <AnswerBurst result={answerBurst} t={t}/>
             <button className="btn btn-ghost" onClick={()=>{setSubmitted(false);setSelected(null);setTermHistory([]);setMapping({});setTapDragItem(null);setOrderItems(q.items?[...q.items].sort(()=>Math.random()-.5):[]);setBlanks(q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{})}}>
               Try Again
             </button>
