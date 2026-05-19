@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { capture, identifyUser, resetAnalytics } from "./lib/analytics.js";
 import { getSupabaseAccessToken, isSupabaseConfigured, supabase } from "./lib/supabaseClient.js";
 
@@ -35,6 +35,9 @@ const DB = {
   async getReferralCode(e) { try { const key=`refcode:${normalizeEmail(e)}`; let r=await storageGet(key); if(r?.value)return r.value; const code=makeReferralCode(e); await storageSet(key,code); return code; } catch { return makeReferralCode(e); }},
   async getDailyStreak(key) { try { const r=await storageGet(`daily-streak:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
   async saveDailyStreak(key,data) { try { await storageSet(`daily-streak:${key}`,JSON.stringify(data)); } catch {}},
+  async getPracticeSession(key) { try { const r=await storageGet(`practice-session:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
+  async savePracticeSession(key,data) { try { await storageSet(`practice-session:${key}`,JSON.stringify(data)); } catch {}},
+  async clearPracticeSession(key) { try { await storageDelete(`practice-session:${key}`); } catch {}},
 };
 
 const normalizeEmail = email => (email || "").trim().toLowerCase();
@@ -109,6 +112,7 @@ function shouldShowPBQUpgradePrompt() {
 }
 
 const dailyStreakOwner = user => normalizeEmail(user?.email || "") || "guest";
+const practiceSessionOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
 function localDateKey(date=new Date()) {
   const year=date.getFullYear();
   const month=String(date.getMonth()+1).padStart(2,"0");
@@ -122,7 +126,14 @@ function previousDateKey(dateKey) {
 }
 async function loadDailyStreak(user) {
   const fallback={streak:0,best:0,lastCompletedDate:"",completedToday:false};
-  const data=await DB.getDailyStreak(dailyStreakOwner(user));
+  let data=await DB.getDailyStreak(dailyStreakOwner(user));
+  if(!data&&user) {
+    const guestData=await DB.getDailyStreak("guest");
+    if(guestData) {
+      data=guestData;
+      await DB.saveDailyStreak(dailyStreakOwner(user), guestData);
+    }
+  }
   if(!data) return fallback;
   const today=localDateKey();
   return {
@@ -130,6 +141,40 @@ async function loadDailyStreak(user) {
     best:Number(data.best)||0,
     lastCompletedDate:data.lastCompletedDate||"",
     completedToday:data.lastCompletedDate===today,
+  };
+}
+function dailyEncouragementForDate(dateKey=localDateKey()) {
+  const messages=[
+    "Congratulations!",
+    "Keep it up!",
+    "You can do this!",
+    "I trust you!",
+    "Your exam momentum is building.",
+    "One more day locked in.",
+    "That is how readiness is built.",
+  ];
+  const score=[...dateKey].reduce((sum,char)=>sum+char.charCodeAt(0),0);
+  return messages[score%messages.length];
+}
+function getWrongOptionFeedback(question,index) {
+  if(question?.wrongFeedback?.[index]) return question.wrongFeedback[index];
+  const correctText=question?.opts?.[question.correct] || "the correct option";
+  return `This option is not the best answer for the scenario. The better answer is ${String.fromCharCode(65+(question?.correct||0))}: ${correctText}. ${question?.exp||""}`.trim();
+}
+function shuffleMcqOptions(question) {
+  if(!question?.opts?.length) return question;
+  const original=question.opts.map((text,index)=>({text,index}));
+  const shuffled=[...original].sort(()=>Math.random()-.5);
+  const wrongFeedback={};
+  shuffled.forEach((entry,newIndex)=>{
+    if(question.wrongFeedback?.[entry.index]) wrongFeedback[newIndex]=question.wrongFeedback[entry.index];
+  });
+  return {
+    ...question,
+    opts: shuffled.map(entry=>entry.text),
+    correct: shuffled.findIndex(entry=>entry.index===question.correct),
+    wrongFeedback,
+    originalCorrect: question.correct,
   };
 }
 async function completeDailyStreak(user) {
@@ -9012,24 +9057,14 @@ function SortableOrderList({items,onChange,t}) {
   );
 }
 function StreakCelebrationModal({streak,best,alreadyCompleted,onClose,t}) {
-  const messages=[
-    "Congratulations!",
-    "Keep it up!",
-    "You can do this!",
-    "I trust you!",
-    "Your exam momentum is building.",
-    "One more day locked in.",
-    "That is how readiness is built.",
-  ];
   const [phase,setPhase]=useState("decrypt");
-  const [message,setMessage]=useState(()=>messages[Math.floor(Math.random()*messages.length)]);
+  const [message]=useState(()=>dailyEncouragementForDate());
   const [code,setCode]=useState("");
   useEffect(()=>{
     const chars="01{}[]<>/=$#@SECUREPLUS_AUTH_TOKEN_CHAIN_PBQ_MCQ";
     const makeLine=()=>Array.from({length:52},()=>chars[Math.floor(Math.random()*chars.length)]).join("");
     const interval=setInterval(()=>{
       setCode(Array.from({length:7},makeLine).join("\n"));
-      if(Math.random()>.55)setMessage(messages[Math.floor(Math.random()*messages.length)]);
     },115);
     const reveal=setTimeout(()=>{
       setPhase("reveal");
@@ -9201,9 +9236,9 @@ function DailyChallenge({t,onLogin,user=null}) {
   const [streakCelebration,setStreakCelebration]=useState(null);
   const streakRecordedRef=useRef(false);
 
-  const questions = challenge.type==="mcq5"
-    ? MCQ_BANK.filter(q=>challenge.qids.includes(q.id))
-    : [];
+  const questions = useMemo(()=>challenge.type==="mcq5"
+    ? MCQ_BANK.filter(q=>challenge.qids.includes(q.id)).map(shuffleMcqOptions)
+    : [], [challenge.date,challenge.type]);
   const pbq = challenge.type==="pbq"
     ? PBQ_BANK.find(p=>p.id===challenge.qid)
     : null;
@@ -9290,6 +9325,7 @@ function DailyChallenge({t,onLogin,user=null}) {
       <div className="card" style={{padding:"16px 18px",marginBottom:18,borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
         <div className="label" style={{color:t.accent,marginBottom:8}}>Streak status</div>
         <div style={{fontSize:28,fontWeight:900,color:t.text}}>{streakInfo.streak} day{streakInfo.streak===1?"":"s"}</div>
+        <div style={{fontSize:14,fontWeight:800,color:t.accent,lineHeight:1.6,marginTop:4}}>{dailyEncouragementForDate()}</div>
         <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>Answer all 5 Daily Challenge questions tomorrow to keep the chain alive.</div>
       </div>
       {!user&&<div className="card" style={{padding:"16px 20px",marginBottom:20,textAlign:"left"}}>
@@ -9369,9 +9405,19 @@ function DailyChallenge({t,onLogin,user=null}) {
                 Detailed explanations are part of Pro. Keep practising the daily challenge, then upgrade when you want full feedback.
               </p>
             )}
-            {canSeeFeedback&&selected!==current.correct&&current.wrongFeedback&&(
+            {canSeeFeedback&&selected!==current.correct&&(
               <div style={{marginTop:10,padding:"10px 12px",background:`${t.red}08`,borderRadius:6,fontSize:12,color:t.red}}>
-                <strong>Why your answer was wrong:</strong> {current.wrongFeedback[selected]}
+                <strong>Why your answer was wrong:</strong> {getWrongOptionFeedback(current, selected)}
+              </div>
+            )}
+            {canSeeFeedback&&(
+              <div style={{marginTop:12,padding:"10px 12px",background:t.panel,borderRadius:6,border:`1px solid ${t.border}`}}>
+                <div style={{fontSize:12,fontWeight:800,color:t.text,marginBottom:6}}>Why the other options are wrong</div>
+                {current.opts.map((opt,i)=>i===current.correct?null:(
+                  <div key={i} style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:5}}>
+                    <strong style={{color:t.text}}>{String.fromCharCode(65+i)}.</strong> {getWrongOptionFeedback(current,i)}
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -9924,6 +9970,7 @@ function Dashboard({user,attempts,onNav,t}) {
 // ═══════════════════════════════════════════════════════════════
 function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
+  const sessionKey=`mcq:${practiceSessionOwner(user)}`;
   const requestSignup=onSignup||onUpgrade;
   const [chFilter,setChFilter]=useState("all");
   const [diffFilter,setDiffFilter]=useState("all");
@@ -9939,6 +9986,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
   const [results,setResults]=useState([]);
   const [done,setDone]=useState(false);
   const [showWrong,setShowWrong]=useState(false);
+  const [resumeAvailable,setResumeAvailable]=useState(false);
 
   const allTopics=[...new Set(MCQ_BANK.map(q=>q.topic))].sort();
 
@@ -9950,7 +9998,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
   });
   const reviewSummary = getReviewSummary(attempts);
   const quizSizes = [10,20,30,40,50];
-  const missedMcqIds=[...new Set(attempts.filter(a=>a.mcq&&!a.correct).map(a=>a.qid))];
+  const resolvedCorrectMcqIds=new Set(attempts.filter(a=>a.mcq&&a.correct).map(a=>a.qid));
+  const missedMcqIds=[...new Set(attempts.filter(a=>a.mcq&&!a.correct&&!resolvedCorrectMcqIds.has(a.qid)).map(a=>a.qid))];
   const missedQuestions=MCQ_BANK.filter(q=>missedMcqIds.includes(q.id));
 
   useEffect(()=>{
@@ -9970,14 +10019,41 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
     const ordered = reviewMode==="smart"
       ? rankQuestionsBySm2(filtered, attempts)
       : [...filtered].sort(()=>Math.random()-.5);
-    const pool=ordered.slice(0,Math.min(quizCount,filtered.length));
+    const pool=ordered.slice(0,Math.min(quizCount,filtered.length)).map(shuffleMcqOptions);
     capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: diffFilter, topic: topicFilter, question_count: pool.length, tier: user.tier });
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);
   };
   const startMissedQuiz=()=>{
-    const pool=rankQuestionsBySm2(missedQuestions,attempts).slice(0,Math.min(50,missedQuestions.length));
+    const pool=rankQuestionsBySm2(missedQuestions,attempts).slice(0,Math.min(50,missedQuestions.length)).map(shuffleMcqOptions);
     capture("mcq_missed_review_started", { question_count: pool.length, tier: user.tier });
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);
+  };
+
+  useEffect(()=>{
+    let active=true;
+    DB.getPracticeSession(sessionKey).then(saved=>{
+      if(active)setResumeAvailable(Boolean(saved&&!saved.done&&saved.questions?.length));
+    });
+    return()=>{active=false;};
+  },[sessionKey]);
+
+  useEffect(()=>{
+    if(!started||done||!questions.length)return;
+    DB.savePracticeSession(sessionKey,{questions,qi,selected,submitted,draftSelections,results,done:false,updatedAt:new Date().toISOString()});
+  },[sessionKey,started,done,questions,qi,selected,submitted,draftSelections,results]);
+
+  const continueQuiz=async()=>{
+    const saved=await DB.getPracticeSession(sessionKey);
+    if(!saved?.questions?.length)return;
+    setQuestions(saved.questions);
+    setQi(saved.qi||0);
+    setSelected(saved.selected ?? saved.draftSelections?.[saved.qi||0] ?? null);
+    setSubmitted(Boolean(saved.submitted));
+    setDraftSelections(saved.draftSelections||[]);
+    setResults(saved.results||[]);
+    setDone(false);
+    setStarted(true);
+    setShowWrong(false);
   };
 
   const current=questions[qi];
@@ -10004,6 +10080,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
     if(qi<questions.length-1) goToQuestion(qi+1);
     else {
       capture("mcq_quiz_completed", { correct_count: correctCount, question_count: questions.length, tier: user.tier });
+      DB.clearPracticeSession(sessionKey);
       setDone(true);
     }
   };
@@ -10014,6 +10091,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
       return;
     }
     capture("mcq_quiz_completed", { correct_count: correctCount, question_count: questions.length, tier: user.tier });
+    DB.clearPracticeSession(sessionKey);
     setDone(true);
   };
   const retakeCurrentQuiz=()=>{
@@ -10057,6 +10135,18 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
       <p style={{color:t.textSec,marginBottom:20,fontSize:14}}>{MCQ_BANK.length} questions across all 5 CompTIA Security+ chapters</p>
 
       {isGuest&&guestSignupPrompt}
+
+      {resumeAvailable&&(
+        <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
+          <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+            <div style={{flex:1,minWidth:220}}>
+              <div style={{fontWeight:800,fontSize:14,color:t.text}}>Unfinished MCQ practice found</div>
+              <div style={{fontSize:13,color:t.textSec}}>Continue where you left off, even after switching tabs or logging back in.</div>
+            </div>
+            <button className="btn btn-primary" style={{fontSize:12,flexShrink:0}} onClick={continueQuiz}>Continue</button>
+          </div>
+        </div>
+      )}
 
       <div className="card" style={{padding:"18px 22px",marginBottom:16,borderColor:`${t.green}30`,background:`${t.green}06`}}>
         <div style={{display:"flex",justifyContent:"space-between",gap:14,alignItems:"center",flexWrap:"wrap"}}>
@@ -10341,10 +10431,20 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
                 </button>
               </div>
             )}
-            {canSeeFeedback&&selected!==current.correct&&current.wrongFeedback&&current.wrongFeedback[selected]&&(
+            {canSeeFeedback&&selected!==current.correct&&(
               <div style={{marginTop:12,padding:"12px 14px",background:`${t.red}08`,borderRadius:7,border:`1px solid ${t.red}25`}}>
                 <div style={{fontSize:12,fontWeight:600,color:t.red,marginBottom:4}}>Why option {String.fromCharCode(65+selected)} is wrong:</div>
-                <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>{current.wrongFeedback[selected]}</div>
+                <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>{getWrongOptionFeedback(current, selected)}</div>
+              </div>
+            )}
+            {canSeeFeedback&&(
+              <div style={{marginTop:12,padding:"12px 14px",background:t.panel,borderRadius:7,border:`1px solid ${t.border}`}}>
+                <div style={{fontSize:12,fontWeight:800,color:t.text,marginBottom:6}}>Why the other options are wrong</div>
+                {current.opts.map((opt,i)=>i===current.correct?null:(
+                  <div key={i} style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:6}}>
+                    <strong style={{color:t.text}}>{String.fromCharCode(65+i)}.</strong> {getWrongOptionFeedback(current,i)}
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -10366,8 +10466,8 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
   const [lockedQuestion,setLockedQuestion]=useState(null);
   const [showMissedOnly,setShowMissedOnly]=useState(false);
   const isPro=user.tier==="pro";
-  const attempted=new Set(attempts.map(a=>a.qid));
-  const correct=new Set(attempts.filter(a=>a.correct).map(a=>a.qid));
+  const attempted=new Set(attempts.filter(a=>a.pbq).map(a=>a.qid));
+  const correct=new Set(attempts.filter(a=>a.pbq&&a.correct).map(a=>a.qid));
   const missedPbqIds=[...new Set(attempts.filter(a=>a.pbq&&!a.correct).map(a=>a.qid))];
 
   const filtered=PBQ_BANK.filter(q=>{
@@ -10383,6 +10483,14 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
   const openLockedPrompt=q=>{
     capture("pbq_locked_clicked", { question_id: q.id, type: q.type, chapter: q.ch });
     if(shouldShowPBQUpgradePrompt()) setLockedQuestion(q);
+  };
+  const practiceRandomPbq=()=>{
+    const notDone=PBQ_BANK.filter(q=>!attempted.has(q.id));
+    const missed=PBQ_BANK.filter(q=>missedPbqIds.includes(q.id));
+    const pool=notDone.length?notDone:missed.length?missed:[PBQ_BANK[PBQ_BANK.length-1]];
+    const picked=pool[Math.floor(Math.random()*pool.length)];
+    capture("pbq_random_practice_started", { question_id: picked.id, pool: notDone.length?"new":missed.length?"missed":"newest", tier: user.tier });
+    onStart(picked);
   };
 
   return(
@@ -10440,11 +10548,14 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
         <div className="card" style={{padding:"16px 20px",marginBottom:18,borderColor:showMissedOnly?`${t.red}35`:t.border,background:showMissedOnly?`${t.red}06`:t.surface}}>
           <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
             <div style={{flex:1,minWidth:220}}>
-              <div style={{fontWeight:700,fontSize:14,color:t.text}}>Retry missed PBQs</div>
+              <div style={{fontWeight:700,fontSize:14,color:t.text}}>Practice PBQ</div>
               <div style={{fontSize:13,color:t.textSec}}>
-                {missedPbqIds.length>0?`You have ${missedPbqIds.length} PBQ${missedPbqIds.length!==1?"s":""} answered incorrectly. Filter them here and try again.`:"No missed PBQs yet. Incorrect PBQs will appear here for focused review."}
+                Start one random PBQ you have not done before. If all are done, SecurePlus prioritises missed PBQs, then the newest PBQ.
               </div>
             </div>
+            <button className="btn btn-primary" style={{fontSize:12,flexShrink:0}} onClick={practiceRandomPbq}>
+              Practice PBQ
+            </button>
             <button className={`btn ${showMissedOnly?"btn-primary":"btn-outline"}`} style={{fontSize:12,flexShrink:0}} disabled={missedPbqIds.length===0} onClick={()=>setShowMissedOnly(v=>!v)}>
               {showMissedOnly?"Show All PBQs":"Review Missed PBQs"}
             </button>
@@ -10797,7 +10908,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
             </button>
             {nextQuestion&&(
               <button className="btn btn-primary" onClick={()=>onNext({qid:q.id,correct:isCorrect(),type:q.type,title:q.title,ch:q.ch,domain:q.cat,pbq:true})}>
-                Next related question →
+                Try a different PBQ →
               </button>
             )}
           </div>
@@ -10811,6 +10922,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
 // EXAM MODE
 // ═══════════════════════════════════════════════════════════════
 function ExamMode({user,onSave,onUpgrade,t}) {
+  const sessionKey=`exam:${practiceSessionOwner(user)}`;
   const [questionCount,setQuestionCount]=useState(20);
   const [started,setStarted]=useState(false);
   const [done,setDone]=useState(false);
@@ -10820,6 +10932,8 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   const [flagged,setFlagged]=useState({});
   const [timeLeft,setTimeLeft]=useState(3600);
   const [saved,setSaved]=useState(false);
+  const [resumeAvailable,setResumeAvailable]=useState(false);
+  const [expandedReview,setExpandedReview]=useState({});
 
   const isPro=user?.tier==="pro";
   const sizes=[10,20,30,40,50];
@@ -10852,7 +10966,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
     const mcqCount=questionCount-pbqCount;
     const examReadyPbqs=PBQ_BANK.filter(q=>q.type!=="TERMINAL SIM"||q.choices||q.options);
     const pickedPbq=shuffle(examReadyPbqs).slice(0,pbqCount).map(q=>({kind:"pbq",q}));
-    const pickedMcq=shuffle(MCQ_BANK).slice(0,mcqCount).map(q=>({kind:"mcq",q}));
+    const pickedMcq=shuffle(MCQ_BANK).slice(0,mcqCount).map(q=>({kind:"mcq",q:shuffleMcqOptions(q)}));
     const examQs=[...pickedPbq,...pickedMcq];
     setQuestions(examQs);
     setAnswers(Object.fromEntries(examQs.map((item,index)=>[index,initAnswer(item)])));
@@ -10863,6 +10977,33 @@ function ExamMode({user,onSave,onUpgrade,t}) {
     setSaved(false);
     setStarted(true);
     capture("exam_mode_started", { question_count: questionCount, pbq_count: pbqCount, tier: user.tier });
+  };
+
+  useEffect(()=>{
+    let active=true;
+    DB.getPracticeSession(sessionKey).then(saved=>{
+      if(active)setResumeAvailable(Boolean(saved&&!saved.done&&saved.questions?.length));
+    });
+    return()=>{active=false;};
+  },[sessionKey]);
+
+  useEffect(()=>{
+    if(!started||done||!questions.length)return;
+    DB.savePracticeSession(sessionKey,{questionCount,questions,answers,qi,flagged,timeLeft,done:false,updatedAt:new Date().toISOString()});
+  },[sessionKey,started,done,questionCount,questions,answers,qi,flagged,timeLeft]);
+
+  const continueExam=async()=>{
+    const saved=await DB.getPracticeSession(sessionKey);
+    if(!saved?.questions?.length)return;
+    setQuestionCount(saved.questionCount||saved.questions.length||20);
+    setQuestions(saved.questions);
+    setAnswers(saved.answers||{});
+    setQi(saved.qi||0);
+    setFlagged(saved.flagged||{});
+    setTimeLeft(saved.timeLeft||examDuration);
+    setDone(false);
+    setSaved(false);
+    setStarted(true);
   };
   const updateAnswer=patch=>setAnswers(prev=>({...prev,[qi]:{...(prev[qi]||{}),...patch}}));
   const setAnswerAt=(index,patch)=>setAnswers(prev=>({...prev,[index]:{...(prev[index]||{}),...patch}}));
@@ -10915,6 +11056,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
       setSaved(true);
     }
     capture("exam_mode_completed", { question_count: questions.length, correct_count: rows.filter(r=>r.correct).length, score, auto_submitted: auto, tier: user.tier });
+    DB.clearPracticeSession(sessionKey);
     setDone(true);
   }
 
@@ -10972,6 +11114,17 @@ function ExamMode({user,onSave,onUpgrade,t}) {
           {Math.max(1,Math.round(questionCount*.1))} PBQ first · {questionCount-Math.max(1,Math.round(questionCount*.1))} MCQ after · {formatTime(examDuration)} timer
         </div>
       </div>
+      {resumeAvailable&&(
+        <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
+          <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+            <div style={{flex:1,minWidth:220}}>
+              <div style={{fontWeight:800,color:t.text,fontSize:14}}>Unfinished exam found</div>
+              <div style={{fontSize:13,color:t.textSec}}>Continue your previous exam with answers, flags, and timer restored.</div>
+            </div>
+            <button className="btn btn-primary" style={{fontSize:12}} onClick={continueExam}>Continue</button>
+          </div>
+        </div>
+      )}
       <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
         <div style={{fontWeight:800,color:t.text,fontSize:14,marginBottom:4}}>Pass/fail disclaimer</div>
         <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
@@ -11001,19 +11154,24 @@ function ExamMode({user,onSave,onUpgrade,t}) {
         <button className="btn btn-outline" onClick={()=>{setStarted(false);setDone(false);}}>New Exam</button>
       </div>
       <div style={{display:"grid",gap:12}}>
-        {questions.map((item,index)=>{
+        {questions.map((item,index)=>({item,index,ok:isCorrect(item,answers[index]||{})}))
+          .sort((a,b)=>Number(a.ok)-Number(b.ok)||a.index-b.index)
+          .map(({item,index,ok})=>{
           const q=item.q;
           const a=answers[index]||{};
-          const ok=isCorrect(item,a);
           const title=item.kind==="mcq"?q.q:q.title;
+          const expanded=Boolean(expandedReview[index]);
           return(
-            <div key={`${item.kind}-${q.id}`} className="card" style={{padding:"16px 18px",borderColor:ok?`${t.green}35`:`${t.red}35`}}>
+            <div key={`${item.kind}-${q.id}`} className="card" style={{padding:"16px 18px",borderColor:ok?`${t.green}35`:`${t.red}35`,cursor:"pointer"}} onClick={()=>setExpandedReview(prev=>({...prev,[index]:!prev[index]}))}>
               <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:8,flexWrap:"wrap"}}>
                 <span style={{fontWeight:900,color:ok?t.green:t.red}}>{ok?"Correct":"Incorrect"}</span>
                 {item.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
                 {flagged[index]&&<span className="chip" style={{background:`${t.amber}14`,color:t.amber,borderColor:`${t.amber}35`}}>Flagged</span>}
+                <span className="chip" style={{marginLeft:"auto",background:t.panel,color:t.textSec,borderColor:t.border}}>{expanded?"Hide full question":"Tap to view full question"}</span>
               </div>
-              <div style={{fontSize:14,fontWeight:700,color:t.text,lineHeight:1.6,marginBottom:10}}>{title}</div>
+              <div style={{fontSize:14,fontWeight:700,color:t.text,lineHeight:1.6,marginBottom:10}}>
+                {expanded ? title : `${title.slice(0,140)}${title.length>140?"...":""}`}
+              </div>
               {item.kind==="mcq"&&(
                 <div style={{fontSize:13,color:t.textSec,marginBottom:10}}>
                   Your answer: {a.selected!==null&&a.selected!==undefined ? `${String.fromCharCode(65+a.selected)}. ${q.opts[a.selected]}` : "Not answered"}<br/>
@@ -11661,11 +11819,25 @@ export default function App() {
   const [showOnboarding,setShowOnboarding]=useState(false);
   const [authStartMode,setAuthStartMode]=useState("login");
   const [showTrialExpiredPrompt,setShowTrialExpiredPrompt]=useState(false);
+  const [deleteAccountVerified,setDeleteAccountVerified]=useState(false);
 
   const t=darkMode?THEMES.dark:THEMES.light;
 
   useEffect(()=>{
     if(user) identifyUser(user);
+  },[user]);
+
+  useEffect(()=>{
+    if(!user)return;
+    const params=new URLSearchParams(window.location.search);
+    if(params.get("delete_account")==="confirm"){
+      setDeleteAccountVerified(true);
+      params.delete("delete_account");
+      const clean=`${window.location.origin}${window.location.pathname}${params.toString()?`?${params.toString()}`:""}`;
+      window.history.replaceState({}, "", clean);
+      alert("Email verified. You can now press Delete account again to complete deletion.");
+      setView("pricing");
+    }
   },[user]);
 
   useEffect(()=>{
@@ -11757,7 +11929,7 @@ export default function App() {
   const handleLogout=useCallback(async()=>{
     if(isSupabaseConfigured) await supabase.auth.signOut();
     resetAnalytics();
-    await DB.clearSession();setPasswordRecovery(false);setShowOnboarding(false);setUser(null);setAttempts([]);setView("dashboard");
+    await DB.clearSession();setPasswordRecovery(false);setShowOnboarding(false);setDeleteAccountVerified(false);setUser(null);setAttempts([]);setView("dashboard");
   },[]);
   const handleUpdateProfile=useCallback(async name=>{
     if(!user)return;
@@ -11846,10 +12018,10 @@ export default function App() {
   },[user]);
   const handleDeleteAccount=useCallback(async()=>{
     if(!user)return;
-    const confirmed=window.confirm("Delete this SecurePlus account and saved progress? This cannot be undone.");
-    if(!confirmed)return;
 
     if(!isSupabaseConfigured){
+      const confirmed=window.confirm("Delete this local demo account and saved progress? This cannot be undone.");
+      if(!confirmed)return;
       await DB.deleteUser(user.email);
       await DB.clearSession();
       setUser(null);setAttempts([]);setView("dashboard");
@@ -11863,6 +12035,19 @@ export default function App() {
         alert("Please sign in with Supabase before deleting your account.");
         return;
       }
+      if(!deleteAccountVerified){
+        const confirmed=window.confirm(`For safety, SecurePlus will email ${user.email} a verification link before deleting this account. Continue?`);
+        if(!confirmed)return;
+        const { error } = await supabase.auth.signInWithOtp({
+          email: user.email,
+          options: { emailRedirectTo: `${window.location.origin}/?delete_account=confirm` },
+        });
+        if(error) throw error;
+        alert("Verification email sent. Open the email link, then press Delete account again.");
+        return;
+      }
+      const confirmed=window.confirm("Email verified. Permanently delete this SecurePlus account and saved progress? This cannot be undone.");
+      if(!confirmed)return;
       const response=await fetch("/api/account/delete",{
         method:"POST",
         headers:{authorization:`Bearer ${token}`},
@@ -11870,12 +12055,12 @@ export default function App() {
       const data=await response.json().catch(()=>({}));
       if(!response.ok) throw new Error(data.error||"Unable to delete account.");
       await DB.clearSession();
-      setUser(null);setAttempts([]);setView("dashboard");
+      setDeleteAccountVerified(false);setUser(null);setAttempts([]);setView("dashboard");
       alert("Account deleted.");
     }catch(error){
       alert(error.message||"Unable to delete account. Contact secureplus.support@gmail.com.");
     }
-  },[user]);
+  },[user,deleteAccountVerified]);
   const handleUpgrade=useCallback(async tier=>{
     if(!user)return;
     if(tier==="free"){
