@@ -595,7 +595,7 @@ const GLOSSARY_TERMS = {
 // MCQ BANK — original, accurate, Security+ aligned, not copyrighted
 // Easy, medium, and hard mix across all 5 domains
 // ═══════════════════════════════════════════════════════════════
-const MCQ_BANK = [
+const MCQ_BANK_RAW = [
   // ── CHAPTER 1: General Security Concepts ────────────────────
   { id:"m001", ch:"1", difficulty:"easy", topic:"Security Controls",
     q:"A motion-sensor flood light activates whenever someone enters the car park after dark. Which control type BEST describes this?",
@@ -5709,6 +5709,20 @@ const MCQ_BANK = [
     }
 ];
 
+const LOW_QUALITY_MCQ_IDS = new Set([
+  "m150","m156","m162","m167","m178","m192","m197","m209","m213","m219","m220","m223",
+  "m225","m228","m230","m231","m233","m236","m240","m246","m249","m254","m255","m257",
+  "m264","m265","m269","m273","m274","m276","m277","m279","m281","m289","m293","m295",
+  "m297","m300","m301","m303","m304","m307","m308","m311","m313","m315","m316","m317",
+  "m320","m323","m324","m325","m326","m327","m328","m329","m330","m331","m332","m335",
+  "m336","m337","m338","m339","m341","m342","m344","m345","m346","m347","m348","m350",
+  "m351","m353","m354","m357","m358","m359","m360","m362","m363","m364","m365","m367",
+  "m368","m369","m370","m372","m375","m377","m378","m380","m381","m382","m383","m384",
+  "m385","m386","m387","m388","m390","m391","m392","m394","m395","m396","m397","m400"
+]);
+
+const MCQ_BANK = MCQ_BANK_RAW.filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id));
+
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK — original, accurate, clearly scoped content
 // ═══════════════════════════════════════════════════════════════
@@ -9543,16 +9557,6 @@ function DailyChallenge({t,onLogin,user=null}) {
                 <strong>Why your answer was wrong:</strong> {getWrongOptionFeedback(current, selected)}
               </div>
             )}
-            {canSeeFeedback&&(
-              <div style={{marginTop:12,padding:"10px 12px",background:t.panel,borderRadius:6,border:`1px solid ${t.border}`}}>
-                <div style={{fontSize:12,fontWeight:800,color:t.text,marginBottom:6}}>Why the other options are wrong</div>
-                {current.opts.map((opt,i)=>i===current.correct?null:(
-                  <div key={i} style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:5}}>
-                    <strong style={{color:t.text}}>{String.fromCharCode(65+i)}.</strong> {getWrongOptionFeedback(current,i)}
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
           <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={nextQ}>
             {qIndex<questions.length-1?"Next Question →":"See Results →"}
@@ -10651,16 +10655,6 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
               <div style={{marginTop:12,padding:"12px 14px",background:`${t.red}08`,borderRadius:7,border:`1px solid ${t.red}25`}}>
                 <div style={{fontSize:12,fontWeight:600,color:t.red,marginBottom:4}}>Why option {String.fromCharCode(65+selected)} is wrong:</div>
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>{getWrongOptionFeedback(current, selected)}</div>
-              </div>
-            )}
-            {canSeeFeedback&&(
-              <div style={{marginTop:12,padding:"12px 14px",background:t.panel,borderRadius:7,border:`1px solid ${t.border}`}}>
-                <div style={{fontSize:12,fontWeight:800,color:t.text,marginBottom:6}}>Why the other options are wrong</div>
-                {current.opts.map((opt,i)=>i===current.correct?null:(
-                  <div key={i} style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:6}}>
-                    <strong style={{color:t.text}}>{String.fromCharCode(65+i)}.</strong> {getWrongOptionFeedback(current,i)}
-                  </div>
-                ))}
               </div>
             )}
           </div>
