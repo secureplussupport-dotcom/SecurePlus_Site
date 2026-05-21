@@ -218,6 +218,28 @@ async function completeDailyStreak(user) {
   return {...next,completedToday:true,alreadyCompleted,previousStreak:Number(current.streak)||0};
 }
 
+function expectedExamSeconds(item) {
+  if(item?.kind==="pbq") return 180;
+  const difficulty=(item?.q?.difficulty||"medium").toLowerCase();
+  if(difficulty==="easy") return 45;
+  if(difficulty==="hard") return 105;
+  return 75;
+}
+function examTimeGuidance(item, seconds=0, correct=false) {
+  const target=expectedExamSeconds(item);
+  const topic=item?.kind==="mcq" ? item.q.topic : item?.q?.type || "this PBQ type";
+  const chapter=item?.q?.ch ? `Chapter ${item.q.ch}` : "this area";
+  if(!correct) return `Review ${topic} in ${chapter}; accuracy matters before speed. Aim for about ${formatSecondsShort(target)} once the concept feels stable.`;
+  if(seconds>target*1.45) return `Correct, but slow. Drill ${topic} so you can recognise the pattern closer to ${formatSecondsShort(target)}.`;
+  if(seconds<Math.max(12,target*.35)) return `Very fast. Good if confident, but reread key words on ${topic} to avoid careless misses.`;
+  return `Good pace for ${topic}. Keep this timing pattern.`;
+}
+function formatSecondsShort(seconds=0) {
+  const s=Math.max(0,Math.round(seconds));
+  if(s>=60) return `${Math.floor(s/60)}m ${String(s%60).padStart(2,"0")}s`;
+  return `${s}s`;
+}
+
 function getPasswordIssue(password) {
   if (password.length < 8) return "Password must be at least 8 characters.";
   if (!/[A-Z]/.test(password)) return "Password must include at least one uppercase letter.";
@@ -11385,7 +11407,7 @@ function AnswerBurst({result,t}) {
       <div style={{minWidth:0,flex:1}}>
         <div className="answer-burst-title">{correct ? "Nice work!" : "Almost. Keep going."}</div>
         <div className="answer-burst-body">
-          {correct ? "XP secured. Your review path is getting stronger." : "Mistakes are review fuel. Check the explanation, then repair it."}
+          {correct ? "Correct pattern recognised. Your review path is getting stronger." : "Mistakes are review fuel. Check the explanation, then repair it."}
         </div>
       </div>
     </div>
@@ -11668,6 +11690,8 @@ function DailyChallenge({t,onLogin,user=null}) {
 
   useEffect(()=>{
     if(step!=="done"||streakRecordedRef.current||totalQuestions!==5||results.length<5)return;
+    const correctInChallenge=results.filter(r=>r.correct).length;
+    if(correctInChallenge<3)return;
     streakRecordedRef.current=true;
     completeDailyStreak(user).then(info=>{
       setStreakInfo(info);
@@ -11696,7 +11720,11 @@ function DailyChallenge({t,onLogin,user=null}) {
 
   if(step==="intro") return (
     <div style={{padding:"32px 24px",maxWidth:600,margin:"0 auto",textAlign:"center"}} className="fu">
-      <div style={{fontSize:48,marginBottom:16}}>🎯</div>
+      <div style={{display:"flex",justifyContent:"center",marginBottom:16}}>
+        <span style={{width:56,height:56,borderRadius:16,display:"inline-flex",alignItems:"center",justifyContent:"center",background:`${t.red}12`,border:`1px solid ${t.red}35`,color:t.red}}>
+          <NavGlyph type="daily" active/>
+        </span>
+      </div>
       <h2 style={{fontSize:26,fontWeight:700,marginBottom:8,color:t.text}}>Daily Challenge</h2>
       <p style={{color:t.textSec,marginBottom:6}}>
         {user ? "Practice today's 5-question challenge from your account." : "No account needed. One free 5-question challenge every day."}
@@ -11718,7 +11746,7 @@ function DailyChallenge({t,onLogin,user=null}) {
         <div style={{fontSize:20,marginBottom:8}}>⌁</div>
         <div style={{fontWeight:600,fontSize:16,marginBottom:6,color:t.text}}>{challenge.title}</div>
         <div style={{color:t.textSec,fontSize:14}}>{challenge.description}</div>
-        <div style={{marginTop:12,color:t.textDim,fontSize:13}}>Complete all 5 questions to extend your streak.</div>
+        <div style={{marginTop:12,color:t.textDim,fontSize:13}}>Answer all 5 questions and score at least 3/5 to extend your streak.</div>
       </div>
       <button className="btn btn-primary" style={{padding:"12px 32px",fontSize:15,width:"100%"}} onClick={()=>{capture("daily_challenge_started", { challenge_type: challenge.type, signed_in: Boolean(user) });setStep("quiz");}}>
         Start Today's Challenge →
@@ -11743,7 +11771,9 @@ function DailyChallenge({t,onLogin,user=null}) {
         <div className="label" style={{color:t.accent,marginBottom:8}}>Streak status</div>
         <div style={{fontSize:28,fontWeight:900,color:t.text}}>{streakInfo.streak} day{streakInfo.streak===1?"":"s"}</div>
         <div style={{fontSize:14,fontWeight:800,color:t.accent,lineHeight:1.6,marginTop:4}}>{dailyEncouragementForDate()}</div>
-        <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>Answer all 5 Daily Challenge questions tomorrow to keep the chain alive.</div>
+        <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
+          {correctCount>=3 ? "Score at least 3/5 again tomorrow to keep the chain alive." : "Score 3/5 or higher tomorrow to extend your streak."}
+        </div>
       </div>
       {!user&&<div className="card" style={{padding:"16px 20px",marginBottom:20,textAlign:"left"}}>
         <div className="label" style={{marginBottom:10}}>Unlock more with a free account</div>
@@ -12246,10 +12276,6 @@ function Dashboard({user,attempts,onNav,t}) {
     loadDailyStreak(user).then(info=>{if(active)setStreakInfo(info);});
     return()=>{active=false;};
   },[user?.email]);
-  const xp=mcqAttempts.length*10+pbqAttempts.length*25+totalCorrect*5;
-  const level=Math.max(1,Math.floor(xp/250)+1);
-  const levelXp=xp%250;
-  const levelProgress=Math.round((levelXp/250)*100);
   const uniquePbqs=new Set(pbqAttempts.map(a=>a.qid)).size;
   const nextQuest=questionsDone<10
     ? "Complete 10 unique questions to unlock your first study rhythm."
@@ -12278,7 +12304,7 @@ function Dashboard({user,attempts,onNav,t}) {
             <p style={{color:t.textSec,fontSize:14,lineHeight:1.7,maxWidth:640}}>
               {questionsDone===0?"Start your Security+ path with one short lesson set.":
               readiness>=75?"You are building strong exam readiness. Keep the streak alive and protect the score.":
-              "Keep earning XP, repair missed questions, and move chapter by chapter."}
+              "Repair missed questions and move chapter by chapter."}
             </p>
             <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:16}}>
               <button className="btn btn-primary" onClick={()=>onNav("mcq")}>Start lesson</button>
@@ -12287,11 +12313,11 @@ function Dashboard({user,attempts,onNav,t}) {
             </div>
           </div>
           <div className="card" style={{position:"relative",zIndex:1,padding:"16px 18px",minWidth:190,borderColor:`${t.green}35`,background:`${t.green}08`}}>
-            <div className="label" style={{marginBottom:8}}>Level {level}</div>
-            <div style={{fontSize:34,fontWeight:900,color:t.green,lineHeight:1}}>{xp}</div>
-            <div style={{fontSize:12,color:t.textSec,margin:"6px 0 10px"}}>total XP earned</div>
-            <ProgBar v={levelProgress} c={t.green} h={8}/>
-            <div style={{fontSize:11,color:t.textDim,marginTop:6}}>{levelXp}/250 XP to next level</div>
+            <div className="label" style={{marginBottom:8}}>Focus score</div>
+            <div style={{fontSize:34,fontWeight:900,color:t.green,lineHeight:1}}>{readiness}%</div>
+            <div style={{fontSize:12,color:t.textSec,margin:"6px 0 10px"}}>readiness estimate</div>
+            <ProgBar v={readiness} c={t.green} h={8}/>
+            <div style={{fontSize:11,color:t.textDim,marginTop:6}}>Based on accuracy and unique practice.</div>
           </div>
         </div>
       </div>
@@ -13253,7 +13279,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
       {q.type==="DRAG & DROP"&&!submitted&&(
         <div style={{marginBottom:18}}>
           <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:6}}>Match each item to its target</div>
-          <div style={{fontSize:12,color:t.textDim,marginBottom:12}}>On mobile, tap an item, then tap its target.</div>
+          <div style={{fontSize:12,color:t.textDim,marginBottom:12}}>Drag items into the matching target. Placed items can be dragged again if you change your mind.</div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
             <div>
               <div className="label" style={{marginBottom:8}}>Items</div>
@@ -13293,7 +13319,18 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
                           if(dragged) placeDragItem(dragged,target.id);
                           setDragOver(null);setDragged(null);
                         }}>
-                        {placed?<div className="drag-item" style={{width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,color:t.text,cursor:"pointer",touchAction:"manipulation"}} onClick={e=>{e.stopPropagation();setMapping(m=>{const n={...m};delete n[placed.id];return n;});}}>{placed.label}</div>
+                        {placed?<div
+                          className={`drag-item ${dragged?.id===placed.id?"selected":""}`}
+                          draggable
+                          style={{width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,color:t.text,cursor:"grab",touchAction:"none"}}
+                          onClick={e=>{e.stopPropagation();setTapDragItem(placed);}}
+                          onDragStart={e=>{e.stopPropagation();setDragged(placed);}}
+                          onDragEnd={()=>{setDragged(null);setDragOver(null);}}
+                          onPointerDown={e=>{setDragged(placed);setTapDragItem(placed);e.currentTarget.setPointerCapture?.(e.pointerId);}}
+                          onPointerMove={e=>{if(dragged?.id===placed.id||tapDragItem?.id===placed.id) updatePointerDropTarget(e);}}
+                          onPointerUp={e=>finishPointerDrag(e,placed)}
+                          onPointerCancel={()=>{setDragged(null);setDragOver(null);}}
+                        >{placed.label}</div>
                           :<span style={{fontSize:11,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place here":"Drop or tap here"}</span>}
                       </div>
                     </div>
@@ -13417,6 +13454,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   const [qi,setQi]=useState(0);
   const [flagged,setFlagged]=useState({});
   const [timeLeft,setTimeLeft]=useState(3600);
+  const [timeSpent,setTimeSpent]=useState({});
   const [saved,setSaved]=useState(false);
   const [resumeAvailable,setResumeAvailable]=useState(false);
   const [expandedReview,setExpandedReview]=useState({});
@@ -13457,6 +13495,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
     setQuestions(examQs);
     setAnswers(Object.fromEntries(examQs.map((item,index)=>[index,initAnswer(item)])));
     setFlagged({});
+    setTimeSpent({});
     setQi(0);
     setTimeLeft(examDuration);
     setDone(false);
@@ -13475,8 +13514,8 @@ function ExamMode({user,onSave,onUpgrade,t}) {
 
   useEffect(()=>{
     if(!started||done||!questions.length)return;
-    DB.savePracticeSession(sessionKey,{questionCount,questions,answers,qi,flagged,timeLeft,done:false,updatedAt:new Date().toISOString()});
-  },[sessionKey,started,done,questionCount,questions,answers,qi,flagged,timeLeft]);
+    DB.savePracticeSession(sessionKey,{questionCount,questions,answers,qi,flagged,timeLeft,timeSpent,done:false,updatedAt:new Date().toISOString()});
+  },[sessionKey,started,done,questionCount,questions,answers,qi,flagged,timeLeft,timeSpent]);
 
   const continueExam=async()=>{
     const saved=await DB.getPracticeSession(sessionKey);
@@ -13487,6 +13526,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
     setQi(saved.qi||0);
     setFlagged(saved.flagged||{});
     setTimeLeft(saved.timeLeft||examDuration);
+    setTimeSpent(saved.timeSpent||{});
     setDone(false);
     setSaved(false);
     setStarted(true);
@@ -13534,6 +13574,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
         mcq:item.kind==="mcq",
         pbq:item.kind==="pbq",
         exam:true,
+        timeSpentSeconds:timeSpent[index]||0,
         createdAt:new Date().toISOString(),
       };
     });
@@ -13549,16 +13590,30 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   useEffect(()=>{
     if(!started||done)return;
     if(timeLeft<=0){submitExam(true);return;}
-    const id=setInterval(()=>setTimeLeft(s=>Math.max(0,s-1)),1000);
+    const id=setInterval(()=>{
+      setTimeLeft(s=>Math.max(0,s-1));
+      setTimeSpent(prev=>({...prev,[qi]:(prev[qi]||0)+1}));
+    },1000);
     return()=>clearInterval(id);
-  },[started,done,timeLeft]);
+  },[started,done,timeLeft,qi]);
 
   const placeDragItem=(item,targetId)=>{
     if(!item)return;
     const mapping={...(answer.mapping||{})};
     Object.keys(mapping).forEach(key=>{if(mapping[key]===targetId)delete mapping[key];});
     mapping[item.id]=targetId;
-    updateAnswer({mapping,tapDragItem:null});
+    updateAnswer({mapping,tapDragItem:null,dragged:null,dragOver:null});
+  };
+  const updateExamPointerDropTarget=e=>{
+    const el=document.elementFromPoint(e.clientX,e.clientY)?.closest?.("[data-exam-drop-target]");
+    const dragOver=el?.dataset?.examDropTarget||null;
+    updateAnswer({dragOver});
+    return dragOver;
+  };
+  const finishExamPointerDrag=(e,item)=>{
+    const targetId=updateExamPointerDropTarget(e);
+    if(targetId) placeDragItem(item,targetId);
+    else updateAnswer({dragged:null,dragOver:null});
   };
 
   if(!isPro) return(
@@ -13623,6 +13678,25 @@ function ExamMode({user,onSave,onUpgrade,t}) {
     </div>
   );
 
+  const examReviewRows=questions.map((item,index)=>({
+    item,
+    index,
+    ok:isCorrect(item,answers[index]||{}),
+    seconds:timeSpent[index]||0,
+    target:expectedExamSeconds(item),
+  }));
+  const timingFocus=Object.values(examReviewRows.reduce((acc,row)=>{
+    const q=row.item.q;
+    const key=row.item.kind==="mcq" ? `Ch.${q.ch}: ${q.topic}` : `PBQ: ${q.type}`;
+    if(!acc[key]) acc[key]={key,total:0,slow:0,missed:0,seconds:0,target:0};
+    acc[key].total++;
+    acc[key].seconds+=row.seconds;
+    acc[key].target+=row.target;
+    if(!row.ok) acc[key].missed++;
+    if(row.seconds>row.target*1.35) acc[key].slow++;
+    return acc;
+  },{})).filter(item=>item.missed||item.slow).sort((a,b)=>(b.missed+b.slow)-(a.missed+a.slow)).slice(0,4);
+
   if(done) return(
     <div style={{padding:"28px 24px",maxWidth:900,margin:"0 auto"}}>
       <div className="card" style={{padding:"22px 24px",marginBottom:16,textAlign:"center",borderColor:score>=80?`${t.green}45`:`${t.red}45`,background:score>=80?`${t.green}07`:`${t.red}07`}}>
@@ -13635,14 +13709,43 @@ function ExamMode({user,onSave,onUpgrade,t}) {
           Disclaimer: the 80% pass/fail mark is only for SecurePlus practice. The real Security+ exam uses a different scoring model, PBQs can carry more weight, and the real exam has more questions.
         </p>
       </div>
+      <div className="card" style={{padding:"18px 20px",marginBottom:18,borderColor:`${t.accent}28`,background:`${t.accent}05`}}>
+        <div style={{fontWeight:900,color:t.text,fontSize:16,marginBottom:4}}>Timing and topic analysis</div>
+        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:12}}>
+          Easy MCQs should feel quick, medium questions need more reading time, hard questions can take longer, and PBQs need the most time.
+        </p>
+        {timingFocus.length?(
+          <div style={{display:"grid",gap:10}}>
+            {timingFocus.map(item=>{
+              const avg=Math.round(item.seconds/item.total);
+              const expected=Math.round(item.target/item.total);
+              return(
+                <div key={item.key} style={{padding:"12px 14px",border:`1px solid ${t.border}`,borderRadius:8,background:t.surface}}>
+                  <div style={{display:"flex",justifyContent:"space-between",gap:10,flexWrap:"wrap",marginBottom:5}}>
+                    <div style={{fontSize:13,fontWeight:800,color:t.text}}>{item.key}</div>
+                    <div style={{fontSize:12,fontWeight:800,color:item.missed?t.red:t.amber}}>
+                      {item.missed} missed · {item.slow} slow
+                    </div>
+                  </div>
+                  <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
+                    Average time {formatSecondsShort(avg)} vs target {formatSecondsShort(expected)}. Review this area, then retry similar questions with a calm but stricter pace.
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ):(
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>Strong pacing. No major slow or missed topic cluster stood out in this exam.</div>
+        )}
+      </div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,marginBottom:12,flexWrap:"wrap"}}>
         <h3 style={{fontSize:18,color:t.text}}>Answer Review</h3>
         <button className="btn btn-outline" onClick={()=>{setStarted(false);setDone(false);}}>New Exam</button>
       </div>
       <div style={{display:"grid",gap:12}}>
-        {questions.map((item,index)=>({item,index,ok:isCorrect(item,answers[index]||{})}))
+        {examReviewRows
           .sort((a,b)=>Number(a.ok)-Number(b.ok)||a.index-b.index)
-          .map(({item,index,ok})=>{
+          .map(({item,index,ok,seconds,target})=>{
           const q=item.q;
           const a=answers[index]||{};
           const title=item.kind==="mcq"?q.q:q.title;
@@ -13653,11 +13756,32 @@ function ExamMode({user,onSave,onUpgrade,t}) {
                 <span style={{fontWeight:900,color:ok?t.green:t.red}}>{ok?"Correct":"Incorrect"}</span>
                 {item.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
                 {flagged[index]&&<span className="chip" style={{background:`${t.amber}14`,color:t.amber,borderColor:`${t.amber}35`}}>Flagged</span>}
+                <span className="chip" style={{background:seconds>target*1.35?`${t.amber}14`:t.panel,color:seconds>target*1.35?t.amber:t.textSec,borderColor:seconds>target*1.35?`${t.amber}35`:t.border}}>
+                  {formatSecondsShort(seconds)} / target {formatSecondsShort(target)}
+                </span>
                 <span className="chip" style={{marginLeft:"auto",background:t.panel,color:t.textSec,borderColor:t.border}}>{expanded?"Hide full question":"Tap to view full question"}</span>
               </div>
               <div style={{fontSize:14,fontWeight:700,color:t.text,lineHeight:1.6,marginBottom:10}}>
                 {expanded ? title : `${title.slice(0,140)}${title.length>140?"...":""}`}
               </div>
+              {expanded&&item.kind==="pbq"&&(
+                <div style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:10}}>
+                  {q.scenario&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Scenario: </strong>{q.scenario}</div>}
+                  {q.question&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Question: </strong>{q.question}</div>}
+                  {q.items&&q.targets&&(
+                    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:8}}>
+                      <div>
+                        <strong style={{color:t.text}}>Items</strong>
+                        {q.items.map(item=><div key={item.id}>- {item.label}</div>)}
+                      </div>
+                      <div>
+                        <strong style={{color:t.text}}>Targets</strong>
+                        {q.targets.map(target=><div key={target.id}>- {target.label}</div>)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
               {item.kind==="mcq"&&(
                 <div style={{fontSize:13,color:t.textSec,marginBottom:10}}>
                   Your answer: {a.selected!==null&&a.selected!==undefined ? `${String.fromCharCode(65+a.selected)}. ${q.opts[a.selected]}` : "Not answered"}<br/>
@@ -13666,6 +13790,9 @@ function ExamMode({user,onSave,onUpgrade,t}) {
               )}
               <div style={{fontSize:13,color:t.textSec,lineHeight:1.75}}>
                 <strong style={{color:t.text}}>Solution: </strong>{item.kind==="mcq"?q.exp:q.explanation}
+              </div>
+              <div style={{fontSize:12,color:t.textDim,lineHeight:1.6,marginTop:8}}>
+                {examTimeGuidance(item,seconds,ok)}
               </div>
             </div>
           );
@@ -13738,7 +13865,19 @@ function ExamMode({user,onSave,onUpgrade,t}) {
                 <div className="label" style={{marginBottom:8}}>Items</div>
                 <div style={{display:"grid",gap:7}}>
                   {q.items.filter(item=>!Object.keys(answer.mapping||{}).includes(item.id)).map(item=>(
-                    <button key={item.id} className={`btn ${answer.tapDragItem?.id===item.id?"btn-primary":"btn-ghost"}`} style={{justifyContent:"flex-start",fontSize:12}} onClick={()=>updateAnswer({tapDragItem:item})}>{item.label}</button>
+                    <div
+                      key={item.id}
+                      className={`drag-item ${answer.tapDragItem?.id===item.id||answer.dragged?.id===item.id?"selected":""}`}
+                      draggable
+                      style={{touchAction:"none"}}
+                      onClick={()=>updateAnswer({tapDragItem:item})}
+                      onDragStart={()=>updateAnswer({dragged:item})}
+                      onDragEnd={()=>updateAnswer({dragged:null,dragOver:null})}
+                      onPointerDown={e=>{updateAnswer({dragged:item,tapDragItem:item});e.currentTarget.setPointerCapture?.(e.pointerId);}}
+                      onPointerMove={e=>{if(answer.dragged?.id===item.id||answer.tapDragItem?.id===item.id) updateExamPointerDropTarget(e);}}
+                      onPointerUp={e=>finishExamPointerDrag(e,item)}
+                      onPointerCancel={()=>updateAnswer({dragged:null,dragOver:null})}
+                    >{item.label}</div>
                   ))}
                 </div>
               </div>
@@ -13748,9 +13887,33 @@ function ExamMode({user,onSave,onUpgrade,t}) {
                   {q.targets?.map(target=>{
                     const placed=q.items.find(item=>answer.mapping?.[item.id]===target.id);
                     return(
-                      <div key={target.id} className="drop-zone" onClick={()=>answer.tapDragItem&&placeDragItem(answer.tapDragItem,target.id)} style={{justifyContent:"flex-start",cursor:"pointer"}}>
+                      <div
+                        key={target.id}
+                        className={`drop-zone ${answer.dragOver===target.id?"over":""}`}
+                        data-exam-drop-target={target.id}
+                        onClick={()=>answer.tapDragItem&&placeDragItem(answer.tapDragItem,target.id)}
+                        onDragOver={e=>{e.preventDefault();updateAnswer({dragOver:target.id});}}
+                        onDragLeave={()=>updateAnswer({dragOver:null})}
+                        onDrop={e=>{e.preventDefault();if(answer.dragged)placeDragItem(answer.dragged,target.id);}}
+                        style={{justifyContent:"flex-start",cursor:"pointer",display:"block"}}
+                      >
                         <span style={{fontSize:12,color:t.textSec}}>{target.label}: </span>
-                        <strong style={{fontSize:12,color:t.text,marginLeft:6}}>{placed?.label||"Choose item"}</strong>
+                        {placed?(
+                          <div
+                            className={`drag-item ${answer.dragged?.id===placed.id?"selected":""}`}
+                            draggable
+                            style={{marginTop:6,width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,touchAction:"none"}}
+                            onClick={e=>{e.stopPropagation();updateAnswer({tapDragItem:placed});}}
+                            onDragStart={e=>{e.stopPropagation();updateAnswer({dragged:placed});}}
+                            onDragEnd={()=>updateAnswer({dragged:null,dragOver:null})}
+                            onPointerDown={e=>{updateAnswer({dragged:placed,tapDragItem:placed});e.currentTarget.setPointerCapture?.(e.pointerId);}}
+                            onPointerMove={e=>{if(answer.dragged?.id===placed.id||answer.tapDragItem?.id===placed.id) updateExamPointerDropTarget(e);}}
+                            onPointerUp={e=>finishExamPointerDrag(e,placed)}
+                            onPointerCancel={()=>updateAnswer({dragged:null,dragOver:null})}
+                          >{placed.label}</div>
+                        ):(
+                          <strong style={{fontSize:12,color:t.text,marginLeft:6}}>{answer.tapDragItem?"Drop here":"Choose item"}</strong>
+                        )}
                       </div>
                     );
                   })}
