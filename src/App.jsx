@@ -11009,6 +11009,17 @@ select.input{appearance:none;-webkit-appearance:none;background-image:linear-gra
 select.input:hover{border-color:${t.accent}55;background-image:linear-gradient(45deg,transparent 50%,${t.accentHover} 50%),linear-gradient(135deg,${t.accentHover} 50%,transparent 50%),linear-gradient(180deg,${t.surface},${t.accent}08);}
 select.input:disabled{cursor:not-allowed;opacity:.62;background-image:linear-gradient(45deg,transparent 50%,${t.textDim} 50%),linear-gradient(135deg,${t.textDim} 50%,transparent 50%),linear-gradient(180deg,${t.panel},${t.inputBg});}
 select.input option{background:${t.surface};color:${t.text};font-family:'Manrope',sans-serif;font-weight:700;}
+.custom-select{position:relative;width:100%;}
+.custom-select-btn{width:100%;min-height:46px;border:1.5px solid ${t.border};border-radius:10px;background:linear-gradient(180deg,${t.surface},${t.inputBg});color:${t.text};font-family:'Manrope',sans-serif;font-size:14px;font-weight:800;padding:11px 42px 11px 14px;text-align:left;cursor:pointer;transition:border-color .18s,box-shadow .18s,background .18s;position:relative;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.custom-select-btn::after{content:"";position:absolute;right:15px;top:50%;width:9px;height:9px;border-right:2px solid ${t.accent};border-bottom:2px solid ${t.accent};transform:translateY(-68%) rotate(45deg);transition:transform .18s;}
+.custom-select.open .custom-select-btn{border-color:${t.accent};box-shadow:0 0 0 3px ${t.accent}20;background:linear-gradient(180deg,${t.surface},${t.accent}08);}
+.custom-select.open .custom-select-btn::after{transform:translateY(-28%) rotate(225deg);}
+.custom-select-btn:disabled{cursor:not-allowed;opacity:.62;color:${t.textDim};}
+.custom-select-menu{position:absolute;left:0;right:0;top:calc(100% + 7px);z-index:320;max-height:min(280px,48vh);overflow:auto;padding:6px;border:1px solid ${t.border};border-radius:12px;background:linear-gradient(180deg,${t.surface},${t.panel});box-shadow:0 22px 52px rgba(0,0,0,.32);animation:feedbackIn .18s cubic-bezier(.16,1,.3,1) both;}
+.custom-select-option{width:100%;border:0;background:transparent;color:${t.textSec};font-family:'Manrope',sans-serif;font-size:13px;font-weight:800;text-align:left;padding:10px 11px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;line-height:1.35;}
+.custom-select-option:hover,.custom-select-option.active{background:${t.accent}12;color:${t.text};}
+.custom-select-option.active::before{content:"";width:8px;height:8px;border-radius:50%;background:${t.accent};box-shadow:0 0 0 4px ${t.accent}18;flex-shrink:0;}
+.custom-select-option:not(.active)::before{content:"";width:8px;height:8px;border-radius:50%;background:${t.border};opacity:.65;flex-shrink:0;}
 .tab{padding:9px 18px;cursor:pointer;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:${t.textSec};transition:all .15s;white-space:nowrap;}
 .tab:hover{color:${t.text};}
 .tab.act{color:${t.accent};border-bottom-color:${t.accent};}
@@ -11401,6 +11412,56 @@ function Alert({msg,type="error",t}) {
   if(!msg) return null;
   const c=type==="success"?t.green:type==="warn"?t.amber:t.red;
   return <div style={{padding:"10px 14px",borderRadius:8,background:`${c}12`,border:`1px solid ${c}30`,color:c,fontSize:13,marginBottom:12}}>{msg}</div>;
+}
+function FilterSelect({value,onChange,options,disabled=false,label="Select"}) {
+  const [open,setOpen]=useState(false);
+  const ref=useRef(null);
+  const selected=options.find(option=>option.value===value)||options[0];
+  useEffect(()=>{
+    if(!open)return;
+    const close=e=>{if(ref.current&&!ref.current.contains(e.target))setOpen(false);};
+    const onKey=e=>{if(e.key==="Escape")setOpen(false);};
+    document.addEventListener("pointerdown",close);
+    document.addEventListener("keydown",onKey);
+    return()=>{
+      document.removeEventListener("pointerdown",close);
+      document.removeEventListener("keydown",onKey);
+    };
+  },[open]);
+  return(
+    <div ref={ref} className={`custom-select ${open?"open":""}`}>
+      <button
+        type="button"
+        className="custom-select-btn"
+        disabled={disabled}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label={label}
+        onClick={()=>!disabled&&setOpen(o=>!o)}
+      >
+        {selected?.label}
+      </button>
+      {open&&(
+        <div className="custom-select-menu" role="listbox">
+          {options.map(option=>(
+            <button
+              key={option.value}
+              type="button"
+              className={`custom-select-option ${option.value===value?"active":""}`}
+              role="option"
+              aria-selected={option.value===value}
+              onClick={()=>{
+                onChange(option.value);
+                setOpen(false);
+              }}
+            >
+              <span style={{minWidth:0,overflow:"hidden",textOverflow:"ellipsis"}}>{option.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 function AnswerBurst({result,t}) {
   if(!result) return null;
@@ -12509,6 +12570,20 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
   const [answerBurst,setAnswerBurst]=useState(null);
 
   const allTopics=[...new Set(MCQ_BANK.map(q=>q.topic))].sort();
+  const chapterOptions=[
+    {value:"all",label:`All Chapters (${MCQ_BANK.length})`},
+    ...CHAPTERS.map(ch=>({value:ch.id,label:`Ch.${ch.id}: ${ch.title} (${MCQ_BANK.filter(q=>q.ch===ch.id).length})`})),
+  ];
+  const difficultyOptions=[
+    {value:"all",label:"All Difficulties"},
+    {value:"easy",label:"Easy"},
+    {value:"medium",label:"Medium"},
+    {value:"hard",label:"Hard"},
+  ];
+  const topicOptions=[
+    {value:"all",label:"All Topics"},
+    ...allTopics.map(tp=>({value:tp,label:tp})),
+  ];
 
   const filtered=MCQ_BANK.filter(q=>{
     if(chFilter!=="all"&&q.ch!==chFilter)return false;
@@ -12728,28 +12803,15 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
           <div>
             <label className="label" style={{display:"block",marginBottom:6}}>Chapter</label>
-            <select className="input" value={chFilter} disabled={isGuest} onChange={e=>setChFilter(e.target.value)}>
-              <option value="all">All Chapters ({MCQ_BANK.length})</option>
-              {CHAPTERS.map(ch=>(
-                <option key={ch.id} value={ch.id}>Ch.{ch.id}: {ch.title.slice(0,25)}... ({MCQ_BANK.filter(q=>q.ch===ch.id).length})</option>
-              ))}
-            </select>
+            <FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} disabled={isGuest} label="Chapter filter"/>
           </div>
           <div>
             <label className="label" style={{display:"block",marginBottom:6}}>Difficulty</label>
-            <select className="input" value={diffFilter} disabled={isGuest} onChange={e=>setDiffFilter(e.target.value)}>
-              <option value="all">All Difficulties</option>
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
+            <FilterSelect value={diffFilter} onChange={setDiffFilter} options={difficultyOptions} disabled={isGuest} label="Difficulty filter"/>
           </div>
           <div>
             <label className="label" style={{display:"block",marginBottom:6}}>Topic</label>
-            <select className="input" value={topicFilter} disabled={isGuest} onChange={e=>setTopicFilter(e.target.value)}>
-              <option value="all">All Topics</option>
-              {allTopics.map(tp=><option key={tp} value={tp}>{tp}</option>)}
-            </select>
+            <FilterSelect value={topicFilter} onChange={setTopicFilter} options={topicOptions} disabled={isGuest} label="Topic filter"/>
           </div>
         </div>
         {isGuest&&(
