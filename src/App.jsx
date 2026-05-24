@@ -38,6 +38,8 @@ const DB = {
   async getPracticeSession(key) { try { const r=await storageGet(`practice-session:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
   async savePracticeSession(key,data) { try { await storageSet(`practice-session:${key}`,JSON.stringify(data)); } catch {}},
   async clearPracticeSession(key) { try { await storageDelete(`practice-session:${key}`); } catch {}},
+  async getStarred(key) { try { const r=await storageGet(`starred:${key}`); return r?JSON.parse(r.value):[]; } catch { return []; }},
+  async saveStarred(key,items) { try { await storageSet(`starred:${key}`,JSON.stringify(items)); } catch {}},
 };
 
 const normalizeEmail = email => (email || "").trim().toLowerCase();
@@ -113,6 +115,8 @@ function shouldShowPBQUpgradePrompt() {
 
 const dailyStreakOwner = user => normalizeEmail(user?.email || "") || "guest";
 const practiceSessionOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
+const starOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
+const starKey = (type,id) => `${type}:${id}`;
 function localDateKey(date=new Date()) {
   const year=date.getFullYear();
   const month=String(date.getMonth()+1).padStart(2,"0");
@@ -407,6 +411,41 @@ async function saveSupabaseAttempt(userId, attempt) {
   if (error) console.warn("Unable to save attempt", error);
 }
 
+async function loadSupabaseStarred(userId) {
+  if (!supabase || !userId) return null;
+  const { data, error } = await supabase
+    .from("starred_questions")
+    .select("question_key")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+  if (error) {
+    console.warn("Unable to load starred questions", error);
+    return null;
+  }
+  return (data || []).map(row=>row.question_key).filter(Boolean);
+}
+
+async function saveSupabaseStar(userId, type, id, shouldStar) {
+  if (!supabase || !userId) return;
+  const question_key = starKey(type, id);
+  if (shouldStar) {
+    const { error } = await supabase.from("starred_questions").upsert({
+      user_id: userId,
+      question_key,
+      question_type: type,
+      question_id: id,
+    });
+    if (error) console.warn("Unable to save starred question", error);
+    return;
+  }
+  const { error } = await supabase
+    .from("starred_questions")
+    .delete()
+    .eq("user_id", userId)
+    .eq("question_key", question_key);
+  if (error) console.warn("Unable to remove starred question", error);
+}
+
 function getAttemptDate(attempt) {
   const value = attempt.createdAt || attempt.created_at || attempt.date;
   const date = value ? new Date(value) : new Date();
@@ -444,7 +483,7 @@ function calculateSm2State(history) {
   return { repetitions, interval, easeFactor, dueAt, lastCorrect, attempts: sorted.length };
 }
 
-function rankQuestionsBySm2(questions, attempts) {
+function rankQuestionsBySm2(questions, attempts, starredIds=new Set()) {
   const now = new Date();
   const grouped = new Map();
   attempts.filter(a=>a.mcq).forEach(attempt=>{
@@ -462,13 +501,15 @@ function rankQuestionsBySm2(questions, attempts) {
     const aWrong = aState.lastCorrect === false;
     const bWrong = bState.lastCorrect === false;
 
-    const aScore = (aWrong?0:1000) + (aDue?0:500) + (aNew?750:0) + aState.easeFactor * 10 + aState.dueAt.getTime() / 86400000;
-    const bScore = (bWrong?0:1000) + (bDue?0:500) + (bNew?750:0) + bState.easeFactor * 10 + bState.dueAt.getTime() / 86400000;
+    const aStar = starredIds.has(a.id);
+    const bStar = starredIds.has(b.id);
+    const aScore = (aStar?-250:0) + (aWrong?0:1000) + (aDue?0:500) + (aNew?750:0) + aState.easeFactor * 10 + aState.dueAt.getTime() / 86400000;
+    const bScore = (bStar?-250:0) + (bWrong?0:1000) + (bDue?0:500) + (bNew?750:0) + bState.easeFactor * 10 + bState.dueAt.getTime() / 86400000;
     return aScore - bScore;
   });
 }
 
-function buildMcqPracticePool(questions, attempts, count, mode="smart") {
+function buildMcqPracticePool(questions, attempts, count, mode="smart", starredIds=new Set()) {
   const histories = new Map();
   attempts.filter(a=>a.mcq).forEach(attempt=>{
     if(!histories.has(attempt.qid)) histories.set(attempt.qid, []);
@@ -481,11 +522,18 @@ function buildMcqPracticePool(questions, attempts, count, mode="smart") {
       const history=histories.get(q.id)||[];
       return history.length && calculateSm2State(history).lastCorrect===false;
     }),
-    attempts
+    attempts,
+    starredIds
+  );
+  const starred = rankQuestionsBySm2(
+    questions.filter(q=>starredIds.has(q.id)&&!weak.some(w=>w.id===q.id)),
+    attempts,
+    starredIds
   );
   const review = rankQuestionsBySm2(
-    questions.filter(q=>histories.has(q.id)&&!weak.some(w=>w.id===q.id)),
-    attempts
+    questions.filter(q=>histories.has(q.id)&&!weak.some(w=>w.id===q.id)&&!starred.some(s=>s.id===q.id)),
+    attempts,
+    starredIds
   );
 
   if(mode!=="smart") return shuffle(questions).slice(0,count);
@@ -493,7 +541,7 @@ function buildMcqPracticePool(questions, attempts, count, mode="smart") {
   const weakLimit = Math.min(Math.ceil(count*.3), weak.length);
   const picked = [...weak.slice(0,weakLimit)];
   const used = new Set(picked.map(q=>q.id));
-  [...unseen, ...review, ...weak.slice(weakLimit)].forEach(q=>{
+  [...starred, ...unseen, ...review, ...weak.slice(weakLimit)].forEach(q=>{
     if(picked.length<count && !used.has(q.id)) {
       picked.push(q);
       used.add(q.id);
@@ -11020,6 +11068,12 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
 .custom-select-option:hover,.custom-select-option.active{background:${t.accent}12;color:${t.text};}
 .custom-select-option.active::before{content:"";width:8px;height:8px;border-radius:50%;background:${t.accent};box-shadow:0 0 0 4px ${t.accent}18;flex-shrink:0;}
 .custom-select-option:not(.active)::before{content:"";width:8px;height:8px;border-radius:50%;background:${t.border};opacity:.65;flex-shrink:0;}
+.difficulty-chip{font-weight:900;}
+.star-btn{min-width:38px;min-height:38px;padding:0 10px;border-radius:10px;border:1px solid ${t.border};background:${t.panel};color:${t.textDim};font-size:18px;font-weight:900;cursor:pointer;transition:transform .18s,border-color .18s,background .18s,color .18s,box-shadow .18s;}
+.star-btn:hover{transform:translateY(-1px);border-color:#f59e0b66;color:#f59e0b;background:#f59e0b12;}
+.star-btn.active{border-color:#f59e0b88;color:#f59e0b;background:#f59e0b18;box-shadow:0 0 22px #f59e0b30;text-shadow:0 0 14px #f59e0b99;}
+.exam-timer{transition:color .18s,text-shadow .18s,transform .18s;}
+.exam-timer.glow{color:${t.red}!important;text-shadow:0 0 12px ${t.red},0 0 26px ${t.red}99;animation:timerGlow .9s ease-in-out infinite alternate;}
 .tab{padding:9px 18px;cursor:pointer;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:${t.textSec};transition:all .15s;white-space:nowrap;}
 .tab:hover{color:${t.text};}
 .tab.act{color:${t.accent};border-bottom-color:${t.accent};}
@@ -11186,6 +11240,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
 @keyframes nodePulse{0%,100%{box-shadow:0 0 0 5px color-mix(in srgb,var(--node-color) 14%, transparent)}50%{box-shadow:0 0 0 9px color-mix(in srgb,var(--node-color) 6%, transparent),0 0 22px color-mix(in srgb,var(--node-color) 30%, transparent)}}
 @keyframes doneBounce{0%{transform:scale(.92)}58%{transform:scale(1.08)}100%{transform:scale(1)}}
 @keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes timerGlow{from{transform:scale(1);filter:saturate(1)}to{transform:scale(1.035);filter:saturate(1.35)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes feedbackIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes answerBurstIn{0%{opacity:0;transform:translate(-50%,-18px) scale(.96)}65%{opacity:1;transform:translate(-50%,3px) scale(1.015)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
@@ -11338,10 +11393,16 @@ function SimBadge({type,t}) {
   const s=Object.values(SIM_TYPES).find(x=>x.id===type)||SIM_TYPES.TERMINAL;
   return <span className="chip" style={{background:`${s.color}15`,color:s.color,borderColor:`${s.color}30`}}><SimIcon type={type} size={18}/> {s.label}</span>;
 }
+function difficultyMeta(d) {
+  return ({
+    easy:{c:"#10b981",label:"Easy",glow:"0 0 14px rgba(16,185,129,.55)"},
+    medium:{c:"#f59e0b",label:"Medium",glow:"0 0 14px rgba(245,158,11,.55)"},
+    hard:{c:"#ef4444",label:"Hard",glow:"0 0 14px rgba(239,68,68,.55)"},
+  })[String(d||"").toLowerCase()] || {c:"#10b981",label:"Easy",glow:"0 0 14px rgba(16,185,129,.55)"};
+}
 function DiffBadge({d,t}) {
-  const map={easy:{c:"#10b981",label:"Easy"},medium:{c:"#f59e0b",label:"Medium"},hard:{c:"#ef4444",label:"Hard"}};
-  const {c,label}=map[d]||map.easy;
-  return <span className="chip" style={{background:`${c}15`,color:c,borderColor:`${c}30`}}>{label}</span>;
+  const {c,label,glow}=difficultyMeta(d);
+  return <span className="chip difficulty-chip" style={{background:`${c}15`,color:c,borderColor:`${c}45`,textShadow:glow,boxShadow:`inset 0 0 0 1px ${c}10, 0 0 18px ${c}18`}}>{label}</span>;
 }
 function GlossaryText({text,t,style}) {
   const [openTerm,setOpenTerm]=useState(null);
@@ -11439,7 +11500,9 @@ function FilterSelect({value,onChange,options,disabled=false,label="Select"}) {
         aria-label={label}
         onClick={()=>!disabled&&setOpen(o=>!o)}
       >
-        {selected?.label}
+        <span style={(selected?.color||selected?.c)?{color:selected.color||selected.c,textShadow:selected.glow||"none"}:undefined}>
+          {selected?.label}
+        </span>
       </button>
       {open&&(
         <div className="custom-select-menu" role="listbox">
@@ -11448,6 +11511,7 @@ function FilterSelect({value,onChange,options,disabled=false,label="Select"}) {
               key={option.value}
               type="button"
               className={`custom-select-option ${option.value===value?"active":""}`}
+              style={(option.color||option.c)?{color:option.color||option.c,textShadow:option.glow||"none"}:undefined}
               role="option"
               aria-selected={option.value===value}
               onClick={()=>{
@@ -11461,6 +11525,20 @@ function FilterSelect({value,onChange,options,disabled=false,label="Select"}) {
         </div>
       )}
     </div>
+  );
+}
+function StarButton({active,onToggle,label="Star question"}) {
+  return(
+    <button
+      type="button"
+      className={`star-btn ${active?"active":""}`}
+      aria-pressed={active}
+      aria-label={active?"Unstar question":label}
+      title={active?"Unstar question":label}
+      onClick={e=>{e.stopPropagation();onToggle?.();}}
+    >
+      {active?"★":"☆"}
+    </button>
   );
 }
 function AnswerBurst({result,t}) {
@@ -12548,7 +12626,7 @@ function Dashboard({user,attempts,onNav,t}) {
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
-function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
+function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onToggleStar}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
   const sessionKey=`mcq:${practiceSessionOwner(user)}`;
   const requestSignup=onSignup||onUpgrade;
@@ -12568,6 +12646,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
   const [showWrong,setShowWrong]=useState(false);
   const [resumeAvailable,setResumeAvailable]=useState(false);
   const [answerBurst,setAnswerBurst]=useState(null);
+  const [starredView,setStarredView]=useState(false);
+  const starredSet=useMemo(()=>new Set(starred),[starred]);
+  const starredMcqs=MCQ_BANK.filter(q=>starredSet.has(starKey("mcq",q.id)));
 
   const allTopics=[...new Set(MCQ_BANK.map(q=>q.topic))].sort();
   const chapterOptions=[
@@ -12576,9 +12657,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
   ];
   const difficultyOptions=[
     {value:"all",label:"All Difficulties"},
-    {value:"easy",label:"Easy"},
-    {value:"medium",label:"Medium"},
-    {value:"hard",label:"Hard"},
+    {value:"easy",label:"Easy",...difficultyMeta("easy")},
+    {value:"medium",label:"Medium",...difficultyMeta("medium")},
+    {value:"hard",label:"Hard",...difficultyMeta("hard")},
   ];
   const topicOptions=[
     {value:"all",label:"All Topics"},
@@ -12611,7 +12692,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
   },[filtered.length,quizCount]);
 
   const startQuiz=()=>{
-    const pool=buildMcqPracticePool(filtered, attempts, Math.min(quizCount,filtered.length), reviewMode).map(shuffleMcqOptions);
+    const pool=buildMcqPracticePool(filtered, attempts, Math.min(quizCount,filtered.length), reviewMode, new Set(starredMcqs.map(q=>q.id))).map(shuffleMcqOptions);
     capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: diffFilter, topic: topicFilter, question_count: pool.length, tier: user.tier });
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);
   };
@@ -12619,6 +12700,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
     const pool=rankQuestionsBySm2(missedQuestions,attempts).slice(0,Math.min(50,missedQuestions.length)).map(shuffleMcqOptions);
     capture("mcq_missed_review_started", { question_count: pool.length, tier: user.tier });
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);
+  };
+  const startStarredQuiz=()=>{
+    const pool=rankQuestionsBySm2(starredMcqs,attempts,new Set(starredMcqs.map(q=>q.id))).slice(0,Math.min(50,starredMcqs.length)).map(shuffleMcqOptions);
+    capture("mcq_starred_review_started", { question_count: pool.length, tier: user.tier });
+    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setStarredView(false);
   };
 
   useEffect(()=>{
@@ -12721,6 +12807,43 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
     </div>
   );
 
+  if(starredView) return(
+    <div style={{padding:"24px",maxWidth:860,margin:"0 auto"}}>
+      <div className="page-title-row" style={{marginBottom:12}}>
+        <NavGlyph type="mcq" active/>
+        <div>
+          <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>Starred MCQs</h2>
+          <p style={{fontSize:13,color:t.textSec}}>Questions you saved for future review.</p>
+        </div>
+      </div>
+      <div style={{display:"flex",gap:10,marginBottom:16,flexWrap:"wrap"}}>
+        <button className="btn btn-ghost" onClick={()=>setStarredView(false)}>← Back to MCQ Practice</button>
+        <button className="btn btn-primary" disabled={!starredMcqs.length} onClick={startStarredQuiz}>Practise Starred</button>
+      </div>
+      {starredMcqs.length?(
+        <div style={{display:"grid",gap:10}}>
+          {starredMcqs.map(q=>(
+            <div key={q.id} className="card card-hover" style={{padding:"14px 16px",display:"flex",gap:12,alignItems:"flex-start"}}>
+              <StarButton active onToggle={()=>onToggleStar?.("mcq",q.id)} label="Unstar question"/>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
+                  <ChBadge chId={q.ch} t={t}/>
+                  <DiffBadge d={q.difficulty} t={t}/>
+                  <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{q.topic}</span>
+                </div>
+                <div style={{fontSize:14,color:t.text,lineHeight:1.65,fontWeight:700}}>{q.q}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ):(
+        <div className="card" style={{padding:"20px 22px",color:t.textSec,fontSize:14,lineHeight:1.7}}>
+          No starred MCQs yet. Press the star while doing a question to save it here.
+        </div>
+      )}
+    </div>
+  );
+
   if(!started) return(
     <div style={{padding:"24px",maxWidth:800,margin:"0 auto"}}>
       <div className="page-title-row">
@@ -12796,6 +12919,17 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
             <button className="btn btn-primary" style={{fontSize:12,flexShrink:0}} onClick={startMissedQuiz}>Review Missed MCQs</button>
           </div>
         </div>
+      )}
+      {!isGuest&&(
+      <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}28`,background:`${t.amber}06`}}>
+        <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+          <div style={{flex:1,minWidth:220}}>
+            <div style={{fontWeight:800,fontSize:14,color:t.text}}>Starred MCQs</div>
+            <div style={{fontSize:13,color:t.textSec}}>You have {starredMcqs.length} saved MCQ{starredMcqs.length!==1?"s":""}. Starred MCQs are included in Smart Review until you unstar them.</div>
+          </div>
+          <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={()=>setStarredView(true)}>View Starred</button>
+        </div>
+      </div>
       )}
 
       <div className="card" style={{padding:"20px 24px",marginBottom:16}}>
@@ -12965,6 +13099,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
           <ChBadge chId={current.ch} t={t}/>
           <DiffBadge d={current.difficulty} t={t}/>
           <span className="chip" style={{background:`${t.accent}10`,color:t.textSec,borderColor:t.border,fontSize:11}}>{current.topic}</span>
+          {!isGuest&&(
+            <span style={{marginLeft:"auto"}}>
+              <StarButton active={starredSet.has(starKey("mcq",current.id))} onToggle={()=>onToggleStar?.("mcq",current.id)} label="Star MCQ"/>
+            </span>
+          )}
         </div>
         <p style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:500}}>
           <GlossaryText text={current.q} t={t}/>
@@ -13033,15 +13172,18 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup}) {
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK
 // ═══════════════════════════════════════════════════════════════
-function PBQBank({user,attempts,onStart,onUpgrade,t}) {
+function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
   const [chFilter,setChFilter]=useState("all");
   const [typeFilter,setTypeFilter]=useState("all");
   const [lockedQuestion,setLockedQuestion]=useState(null);
   const [showMissedOnly,setShowMissedOnly]=useState(false);
+  const [starredView,setStarredView]=useState(false);
   const isPro=user.tier==="pro";
+  const starredSet=useMemo(()=>new Set(starred),[starred]);
   const attempted=new Set(attempts.filter(a=>a.pbq).map(a=>a.qid));
   const correct=new Set(attempts.filter(a=>a.pbq&&a.correct).map(a=>a.qid));
   const missedPbqIds=[...new Set(attempts.filter(a=>a.pbq&&!a.correct).map(a=>a.qid))];
+  const starredPbqs=PBQ_BANK.filter(q=>starredSet.has(starKey("pbq",q.id)));
 
   const filtered=PBQ_BANK.filter(q=>{
     if(chFilter!=="all"&&q.ch!==chFilter)return false;
@@ -13065,6 +13207,41 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
     capture("pbq_random_practice_started", { question_id: picked.id, pool: notDone.length?"new":missed.length?"missed":"newest", tier: user.tier });
     onStart(picked);
   };
+
+  if(starredView) return(
+    <div style={{padding:"24px",maxWidth:900,margin:"0 auto"}}>
+      <div className="page-title-row" style={{marginBottom:12}}>
+        <NavGlyph type="pbq" active/>
+        <div>
+          <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>Starred PBQs</h2>
+          <p style={{fontSize:13,color:t.textSec}}>Performance-based questions saved for another pass.</p>
+        </div>
+      </div>
+      <button className="btn btn-ghost" style={{marginBottom:16}} onClick={()=>setStarredView(false)}>← Back to PBQ Bank</button>
+      {starredPbqs.length?(
+        <div style={{display:"grid",gap:10}}>
+          {starredPbqs.map(q=>(
+            <div key={q.id} className="card card-hover" style={{padding:"14px 18px",display:"flex",gap:12,alignItems:"flex-start",cursor:isPro?"pointer":"default"}} onClick={()=>isPro&&onStart(q)}>
+              <StarButton active onToggle={()=>onToggleStar?.("pbq",q.id)} label="Unstar PBQ"/>
+              <SimIcon type={q.type}/>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
+                  <SimBadge type={q.type} t={t}/>
+                  <DiffBadge d={q.difficulty} t={t}/>
+                </div>
+                <div style={{fontSize:14,fontWeight:800,color:t.text}}>{q.title}</div>
+                <div style={{fontSize:12,color:t.textSec,marginTop:3}}>{q.cat}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ):(
+        <div className="card" style={{padding:"20px 22px",color:t.textSec,fontSize:14,lineHeight:1.7}}>
+          No starred PBQs yet. Press the star while doing a PBQ to save it here.
+        </div>
+      )}
+    </div>
+  );
 
   return(
     <div style={{padding:"24px",maxWidth:900,margin:"0 auto"}}>
@@ -13132,6 +13309,9 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
             <button className={`btn ${showMissedOnly?"btn-primary":"btn-outline"}`} style={{fontSize:12,flexShrink:0}} disabled={missedPbqIds.length===0} onClick={()=>setShowMissedOnly(v=>!v)}>
               {showMissedOnly?"Show All PBQs":"Review Missed PBQs"}
             </button>
+            <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={()=>setStarredView(true)}>
+              Starred PBQs ({starredPbqs.length})
+            </button>
           </div>
         </div>
       )}
@@ -13182,6 +13362,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
                 <div style={{fontSize:12,color:t.textDim,marginTop:2}}>{q.cat}</div>
               </div>
               <div style={{flexShrink:0,display:"flex",gap:8,alignItems:"center"}}>
+                <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
                 {done?<span style={{color:ok?t.green:t.red,fontSize:15}}>{ok?"✓":"✗"}</span>:<span style={{fontSize:12,color:t.textDim}}>○</span>}
                 {isPro?<span style={{color:t.accent,fontSize:16}}>▶</span>:<span style={{fontSize:13}}>🔒</span>}
               </div>
@@ -13196,7 +13377,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t}) {
 // ═══════════════════════════════════════════════════════════════
 // PBQ SIMULATOR
 // ═══════════════════════════════════════════════════════════════
-function PBQSim({q,onDone,onNext,nextQuestion,t}) {
+function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar}) {
   const [termInput,setTermInput]=useState("");
   const [termHistory,setTermHistory]=useState([]);
   const [selected,setSelected]=useState(null);
@@ -13209,6 +13390,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
   const [tapDragItem,setTapDragItem]=useState(null);
   const [showHint,setShowHint]=useState(false);
   const [answerBurst,setAnswerBurst]=useState(null);
+  const starredSet=useMemo(()=>new Set(starred),[starred]);
 
   const isCorrect=()=>{
     if(["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type))return selected===q.correct;
@@ -13274,6 +13456,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t}) {
           <div style={{fontWeight:600,fontSize:15,color:t.text}}>{q.title}</div>
           <div style={{display:"flex",gap:8,marginTop:4}}><SimBadge type={q.type} t={t}/><DiffBadge d={q.difficulty} t={t}/></div>
         </div>
+        <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
       </div>
 
       {/* Scenario */}
@@ -13706,6 +13889,12 @@ function ExamMode({user,onSave,onUpgrade,t}) {
           <p style={{fontSize:14,color:t.textSec}}>Timed mixed practice for Pro users.</p>
         </div>
       </div>
+      <div className="card" style={{padding:"10px",marginBottom:16,display:"flex",gap:8,flexWrap:"wrap"}}>
+        <button className="btn btn-primary" style={{fontSize:12}}>Practice Exam</button>
+        <button className="btn btn-ghost" style={{fontSize:12,opacity:.72,cursor:"not-allowed"}} disabled title="Coming soon">
+          Concept Deep Dives · Coming soon
+        </button>
+      </div>
       <div className="card" style={{padding:"20px 22px",marginBottom:16}}>
         <div style={{fontWeight:800,color:t.text,marginBottom:8}}>Exam setup</div>
         <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:16}}>
@@ -13868,10 +14057,11 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   );
 
   const q=current?.q;
+  const timerGlow=timeLeft<=60 || (timeLeft>0&&timeLeft%60===0);
   return(
     <div style={{padding:"24px",maxWidth:960,margin:"0 auto"}}>
       <div className="card" style={{padding:"14px 16px",marginBottom:16,display:"flex",gap:12,alignItems:"center",flexWrap:"wrap",position:"sticky",top:12,zIndex:40}}>
-        <div style={{fontWeight:900,color:timeLeft<300?t.red:t.text,fontSize:20}}>{formatTime(timeLeft)}</div>
+        <div className={`exam-timer ${timerGlow?"glow":""}`} style={{fontWeight:900,color:timeLeft<300?t.red:t.text,fontSize:20}}>{formatTime(timeLeft)}</div>
         <div style={{fontSize:13,color:t.textSec}}>Question {qi+1} of {questions.length} · {answeredCount} answered</div>
         <button className={`btn ${flagged[qi]?"btn-primary":"btn-ghost"}`} style={{marginLeft:"auto",fontSize:12}} onClick={()=>setFlagged(f=>({...f,[qi]:!f[qi]}))}>
           {flagged[qi]?"Flagged":"Flag for review"}
@@ -14272,6 +14462,15 @@ function ObjectivesPage({t}) {
       <p style={{color:t.textSec,fontSize:14,marginBottom:20}}>
         SecurePlus is organised around the current Security+ domain structure. This page avoids locking the product name to a single exam code, since exam versions can change over time.
       </p>
+      <a
+        className="btn btn-primary"
+        href="https://www.comptia.org/en/certifications/security/"
+        target="_blank"
+        rel="noreferrer"
+        style={{display:"inline-flex",marginBottom:20,textDecoration:"none"}}
+      >
+        Find out more
+      </a>
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:12,marginBottom:20}}>
         {CHAPTERS.map(ch=>(
@@ -14527,6 +14726,7 @@ export default function App() {
   const [loading,setLoading]=useState(true);
   const [view,setView]=useState("dashboard");
   const [attempts,setAttempts]=useState([]);
+  const [starred,setStarred]=useState([]);
   const [pbqQ,setPbqQ]=useState(null);
   const [showDaily,setShowDaily]=useState(false);
   const [billingLoading,setBillingLoading]=useState(false);
@@ -14584,6 +14784,7 @@ export default function App() {
         if(!session?.user){
           setUser(null);
           setAttempts([]);
+          setStarred([]);
           setLoading(false);
           return;
         }
@@ -14603,9 +14804,11 @@ export default function App() {
         const referralClaim = await claimReferralIfPresent(displayUser);
         showReferralClaimErrorOnce(referralClaim);
         if(referralClaim?.proTrialUntil) displayUser = { ...displayUser, tier: "pro", proTrialUntil: referralClaim.proTrialUntil };
+        const savedStarred=(await loadSupabaseStarred(session.user.id)) ?? await DB.getStarred(starOwner(displayUser));
         setUser(displayUser);
         identifyUser(displayUser);
         setAttempts(savedAttempts);
+        setStarred(savedStarred);
         const seen=await DB.getOnboardingSeen(appUser.email);
         if(active&&!seen) setShowOnboarding(true);
         setLoading(false);
@@ -14624,7 +14827,7 @@ export default function App() {
 
     (async()=>{
       const sess=await DB.getSession();
-      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){setUser(u);const a=await DB.getAttempts(u.email);setAttempts(a);const seen=await DB.getOnboardingSeen(u.email);if(!seen)setShowOnboarding(true);}}
+      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){setUser(u);const a=await DB.getAttempts(u.email);const s=await DB.getStarred(starOwner(u));setAttempts(a);setStarred(s);const seen=await DB.getOnboardingSeen(u.email);if(!seen)setShowOnboarding(true);}}
       setLoading(false);
     })();
     return()=>{active=false;};
@@ -14637,14 +14840,15 @@ export default function App() {
     setUser(displayUser);
     identifyUser(displayUser);
     const a=u?.authProvider==="supabase" ? await loadSupabaseAttempts(u.id) : await DB.getAttempts(u.email);
+    const s=u?.authProvider==="supabase" ? ((await loadSupabaseStarred(u.id)) ?? await DB.getStarred(starOwner(displayUser))) : await DB.getStarred(starOwner(displayUser));
     const seen=await DB.getOnboardingSeen(displayUser.email);
     if(!seen) setShowOnboarding(true);
-    setAttempts(a);setView("dashboard");setShowDaily(false);
+    setAttempts(a);setStarred(s);setView("dashboard");setShowDaily(false);
   },[]);
   const handleLogout=useCallback(async()=>{
     if(isSupabaseConfigured) await supabase.auth.signOut();
     resetAnalytics();
-    await DB.clearSession();setPasswordRecovery(false);setShowOnboarding(false);setDeleteAccountVerified(false);setUser(null);setAttempts([]);setView("dashboard");
+    await DB.clearSession();setPasswordRecovery(false);setShowOnboarding(false);setDeleteAccountVerified(false);setUser(null);setAttempts([]);setStarred([]);setView("dashboard");
   },[]);
   const handleUpdateProfile=useCallback(async name=>{
     if(!user)return;
@@ -14737,9 +14941,10 @@ export default function App() {
     if(!isSupabaseConfigured){
       const confirmed=window.confirm("Delete this local demo account and saved progress? This cannot be undone.");
       if(!confirmed)return;
+      await DB.saveStarred(starOwner(user),[]);
       await DB.deleteUser(user.email);
       await DB.clearSession();
-      setUser(null);setAttempts([]);setView("dashboard");
+      setUser(null);setAttempts([]);setStarred([]);setView("dashboard");
       alert("Local demo account deleted from this browser.");
       return;
     }
@@ -14769,8 +14974,9 @@ export default function App() {
       });
       const data=await response.json().catch(()=>({}));
       if(!response.ok) throw new Error(data.error||"Unable to delete account.");
+      await DB.saveStarred(starOwner(user),[]);
       await DB.clearSession();
-      setDeleteAccountVerified(false);setUser(null);setAttempts([]);setView("dashboard");
+      setDeleteAccountVerified(false);setUser(null);setAttempts([]);setStarred([]);setView("dashboard");
       alert("Account deleted.");
     }catch(error){
       alert(error.message||"Unable to delete account. Contact secureplus.support@gmail.com.");
@@ -14823,6 +15029,18 @@ export default function App() {
     }catch(error){
       console.warn("Unable to save attempt remotely", error);
     }
+  },[user]);
+  const handleToggleStar=useCallback((type,id)=>{
+    if(!user)return;
+    const key=starKey(type,id);
+    setStarred(prev=>{
+      const exists=prev.includes(key);
+      const next=exists?prev.filter(item=>item!==key):[key,...prev];
+      DB.saveStarred(starOwner(user),next);
+      if(user.authProvider==="supabase") saveSupabaseStar(user.id,type,id,!exists);
+      capture("question_star_toggled", { type, id, starred: !exists, tier: user.tier });
+      return next;
+    });
   },[user]);
   const handlePBQDone=useCallback(async (result,options={})=>{
     if(result&&user){
@@ -14910,7 +15128,7 @@ export default function App() {
               Guest mode: you can access all MCQ questions, but answers and progress are not saved. Create a free account when you want SecurePlus to remember your work.
             </div>
           </div>
-          <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} t={t}/>
+          <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} t={t} starred={[]}/>
         </div>
       </>
     );
@@ -14934,6 +15152,8 @@ export default function App() {
           onDone={handlePBQDone}
           onNext={(result)=>handlePBQDone(result,{nextQuestion:getNextRelatedPBQ(pbqQ,attempts)})}
           t={t}
+          starred={starred}
+          onToggleStar={handleToggleStar}
         />
       </div>
     </>
@@ -15004,8 +15224,8 @@ export default function App() {
             </div>
           </div>
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
-          {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t}/>}
-          {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t}/>}
+          {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar}/>}
+          {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar}/>}
           {view==="exam"&&<ExamMode user={user} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}

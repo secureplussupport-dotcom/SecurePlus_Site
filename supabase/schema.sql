@@ -44,9 +44,19 @@ create table if not exists attempts (
   created_at timestamptz default now()
 );
 
+create table if not exists starred_questions (
+  user_id uuid not null references auth.users(id) on delete cascade,
+  question_key text not null,
+  question_type text not null,
+  question_id text not null,
+  created_at timestamptz default now(),
+  primary key (user_id, question_key)
+);
+
 alter table profiles enable row level security;
 alter table attempts enable row level security;
 alter table referrals enable row level security;
+alter table starred_questions enable row level security;
 
 drop policy if exists "Users can update own profile" on profiles;
 
@@ -76,6 +86,30 @@ with check (
   and (chapter is null or length(chapter) <= 40)
   and (score is null or (score >= 0 and score <= 100))
 );
+
+drop policy if exists "Users can view own starred questions" on starred_questions;
+create policy "Users can view own starred questions"
+on starred_questions for select
+to authenticated
+using (auth.uid() is not null and auth.uid() = user_id);
+
+drop policy if exists "Users can insert own starred questions" on starred_questions;
+create policy "Users can insert own starred questions"
+on starred_questions for insert
+to authenticated
+with check (
+  auth.uid() is not null
+  and auth.uid() = user_id
+  and question_type in ('mcq', 'pbq')
+  and length(question_id) between 1 and 80
+  and question_key = question_type || ':' || question_id
+);
+
+drop policy if exists "Users can delete own starred questions" on starred_questions;
+create policy "Users can delete own starred questions"
+on starred_questions for delete
+to authenticated
+using (auth.uid() is not null and auth.uid() = user_id);
 
 drop policy if exists "Users can view own referrals" on referrals;
 create policy "Users can view own referrals"
@@ -146,6 +180,16 @@ begin
     );
   end if;
 
+  if not exists (select 1 from pg_constraint where conname = 'starred_questions_type_check') then
+    alter table starred_questions
+    add constraint starred_questions_type_check
+    check (
+      question_type in ('mcq', 'pbq')
+      and length(question_id) between 1 and 80
+      and question_key = question_type || ':' || question_id
+    );
+  end if;
+
   if not exists (select 1 from pg_constraint where conname = 'profiles_referral_code_key') then
     alter table profiles
     add constraint profiles_referral_code_key
@@ -171,6 +215,9 @@ on profiles (stripe_subscription_id);
 
 create index if not exists attempts_user_id_created_at_idx
 on attempts (user_id, created_at desc);
+
+create index if not exists starred_questions_user_id_created_at_idx
+on starred_questions (user_id, created_at desc);
 
 create index if not exists profiles_referral_code_idx
 on profiles (referral_code);
