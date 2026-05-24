@@ -11038,6 +11038,12 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .practice-summary{margin-top:16px;padding:12px 14px;background:${t.panel};border:1px solid ${t.border};border-radius:8px;font-size:13px;color:${t.textSec};display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .practice-summary strong{color:${t.text};font-weight:900;}
 .practice-action-bar{position:relative;z-index:10;margin-top:10px;padding:10px;border:1px solid ${t.border};border-radius:10px;background:${t.surface}eb;backdrop-filter:blur(16px);box-shadow:0 14px 30px rgba(0,0,0,.12);display:flex;gap:10px;justify-content:center;align-items:center;}
+.question-card{padding:28px 30px!important;margin-bottom:20px!important;background:linear-gradient(180deg,${t.surface},${t.panel})!important;border-color:${t.accent}26!important;box-shadow:0 18px 44px rgba(7,12,24,.12)!important;}
+.question-text{font-family:'Sora','Manrope',system-ui,sans-serif!important;font-size:21px!important;line-height:1.72!important;color:${t.text}!important;font-weight:800!important;letter-spacing:0!important;overflow-wrap:anywhere;}
+.scenario-text{font-size:16px!important;line-height:1.8!important;color:${t.textSec}!important;overflow-wrap:anywhere;}
+.question-prompt{font-family:'Sora','Manrope',system-ui,sans-serif!important;font-size:18px!important;line-height:1.65!important;color:${t.text}!important;font-weight:800!important;margin-bottom:14px!important;}
+.option-text{font-size:17px!important;line-height:1.68!important;color:${t.text}!important;font-weight:700!important;overflow-wrap:anywhere;}
+.compact-question-text{font-size:16px!important;line-height:1.7!important;color:${t.text}!important;font-weight:750!important;}
 .question-dots{display:flex;gap:6px;flex-wrap:wrap;}
 .question-dot{width:11px;height:11px;border-radius:50%;border:0;padding:0;cursor:pointer;transition:transform .18s,box-shadow .18s,background .2s;}
 .question-dot:hover{transform:scale(1.25);box-shadow:0 0 0 5px ${t.accent}14;}
@@ -11208,13 +11214,13 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
 .prog-track{background:${t.border};border-radius:99px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;}
 .prog-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:barShine 1.8s linear infinite;}
-.opt{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:8px;border:1.5px solid ${t.border};cursor:pointer;transition:background .18s,border-color .18s,transform .18s; background:${t.surface};min-width:0;}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border-radius:9px;border:1.5px solid ${t.border};cursor:pointer;transition:background .18s,border-color .18s,transform .18s; background:${t.surface};min-width:0;}
 .opt:hover:not(.done){border-color:${t.accent};background:${t.accent}08;transform:translateY(-1px);}
 .opt.sel{border-color:${t.accent};background:${t.accent}10;animation:selectPulse .28s ease both;}
 .opt.ok{border-color:${t.green}70!important;background:${t.green}08!important;animation:answerPop .34s cubic-bezier(.16,1,.3,1) both;}
 .opt.bad{border-color:${t.red}60!important;background:${t.red}07!important;animation:shakeLite .32s ease both;}
 .opt.done{cursor:default;}
-.opt-ltr{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:1.5px solid ${t.border};color:${t.textDim};transition:all .18s;background:${t.panel};}
+.opt-ltr{width:34px;height:34px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;border:1.5px solid ${t.border};color:${t.textDim};transition:all .18s;background:${t.panel};}
 .opt:hover:not(.done) .opt-ltr,.opt.sel .opt-ltr{border-color:${t.accent};color:${t.accent};}
 .opt.ok .opt-ltr{border-color:${t.green}70;color:${t.green};background:${t.green}10;}
 .opt.bad .opt-ltr{border-color:${t.red}60;color:${t.red};background:${t.red}0d;}
@@ -11228,12 +11234,12 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
 .answer-burst-body{font-size:12px;color:${t.textSec};line-height:1.45;}
 .terminal{background:#0d1117;border:1px solid #30363d;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#c9d1d9;padding:16px;overflow-y:auto;max-height:280px;line-height:1.7;}
 .log-block{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:${t.inputBg};border:1px solid ${t.border};border-radius:8px;padding:16px;color:${t.textSec};line-height:1.9;white-space:pre-wrap;overflow-x:auto;}
-.drag-item{padding:10px 14px;background:${t.surface};border:1.5px solid ${t.border};border-radius:7px;cursor:grab;user-select:none;transition:all .2s;font-size:13px;color:${t.text};}
+.drag-item{padding:12px 15px;background:${t.surface};border:1.5px solid ${t.border};border-radius:7px;cursor:grab;user-select:none;transition:all .2s;font-size:15px;line-height:1.5;color:${t.text};}
 .drag-item:hover{border-color:${t.accent};}
 .drag-item.selected{border-color:${t.accent};background:${t.accent}12;box-shadow:0 0 0 3px ${t.accent}16;}
 .drop-zone{min-height:44px;border:2px dashed ${t.border};border-radius:7px;padding:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;}
 .drop-zone.over{border-color:${t.accent};background:${t.accent}08;}
-.order-item{padding:10px 14px;background:${t.surface};border:1.5px solid ${t.border};border-radius:7px;display:flex;align-items:center;gap:10px;font-size:13px;cursor:default;transition:border-color .2s,background .2s,transform .18s,box-shadow .18s;color:${t.text};}
+.order-item{padding:12px 15px;background:${t.surface};border:1.5px solid ${t.border};border-radius:7px;display:flex;align-items:center;gap:10px;font-size:15px;line-height:1.5;cursor:default;transition:border-color .2s,background .2s,transform .18s,box-shadow .18s;color:${t.text};}
 .order-item:hover{border-color:${t.accent}44;}
 .order-draggable{cursor:grab;user-select:none;touch-action:none;}
 .order-draggable:active{cursor:grabbing;}
@@ -11356,6 +11362,13 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
   .practice-summary{align-items:flex-start!important;}
   .practice-action-bar{position:sticky;bottom:78px;margin-left:-2px;margin-right:-2px;border-radius:12px;box-shadow:0 18px 42px rgba(0,0,0,.18);}
   .practice-action-bar .btn{width:100%;white-space:nowrap;}
+  .question-card{padding:22px 20px!important;}
+  .question-text{font-size:19px!important;line-height:1.68!important;}
+  .question-prompt{font-size:17px!important;line-height:1.6!important;}
+  .scenario-text{font-size:15px!important;line-height:1.75!important;}
+  .option-text{font-size:16px!important;line-height:1.62!important;}
+  .opt{padding:15px 14px!important;gap:12px!important;}
+  .opt-ltr{width:32px!important;height:32px!important;}
   [style*="grid-template-columns:1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr"]{grid-template-columns:1fr!important;}
   [style*="grid-template-columns:repeat(4,1fr)"],[style*="gridTemplateColumns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
   [style*="grid-template-columns:1fr 1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr 1fr"]{grid-template-columns:1fr!important;}
@@ -11985,13 +11998,13 @@ function DailyChallenge({t,onLogin,user=null}) {
         <span style={{fontSize:13,color:t.textSec}}>{qIndex+1} / {questions.length}</span>
       </div>
 
-      <div className="card" style={{padding:"20px 24px",marginBottom:18}}>
+      <div className="card question-card" style={{padding:"20px 24px",marginBottom:18}}>
         <div style={{display:"flex",gap:8,marginBottom:10,flexWrap:"wrap"}}>
           <ChBadge chId={current.ch} t={t}/>
           <DiffBadge d={current.difficulty} t={t}/>
           <span className="chip" style={{background:`${t.accent}10`,color:t.textSec,borderColor:t.border,fontSize:11}}>{current.topic}</span>
         </div>
-        <p style={{fontSize:15,lineHeight:1.7,color:t.text}}>{current.q}</p>
+        <p className="question-text" style={{fontSize:15,lineHeight:1.7,color:t.text}}>{current.q}</p>
       </div>
 
       <div style={{display:"flex",flexDirection:"column",gap:9,marginBottom:20}}>
@@ -12002,7 +12015,7 @@ function DailyChallenge({t,onLogin,user=null}) {
           return(
             <div key={i} className={cls} onClick={()=>!submitted&&setSelected(i)}>
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
-              <span style={{fontSize:14,flex:1,lineHeight:1.5}}>{opt}</span>
+              <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.5}}>{opt}</span>
               {submitted&&i===current.correct&&<span style={{color:t.green,fontSize:16,flexShrink:0}}>✓</span>}
               {submitted&&i===selected&&i!==current.correct&&<span style={{color:t.red,fontSize:16,flexShrink:0}}>✗</span>}
             </div>
@@ -13159,7 +13172,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
       </div>
 
       {/* Question card */}
-      <div className="card" style={{padding:"22px 26px",marginBottom:18}}>
+      <div className="card question-card" style={{padding:"22px 26px",marginBottom:18}}>
         <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
           <ChBadge chId={current.ch} t={t}/>
           <DiffBadge d={current.difficulty} t={t}/>
@@ -13170,7 +13183,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
             </span>
           )}
         </div>
-        <p style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:500}}>
+        <p className="question-text" style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:500}}>
           <GlossaryText text={current.q} t={t}/>
         </p>
       </div>
@@ -13184,7 +13197,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
           return(
             <div key={i} className={cls} onClick={()=>{if(submitted)return;setSelected(i);setDraftSelections(prev=>{const next=[...prev];next[qi]=i;return next;});}}>
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
-              <span style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
+              <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
               {submitted&&i===current.correct&&<span style={{color:t.green,fontSize:14,flexShrink:0,fontWeight:800}}>✓</span>}
               {submitted&&i===selected&&i!==current.correct&&<span style={{color:t.red,fontSize:14,flexShrink:0,fontWeight:800}}>✕</span>}
             </div>
@@ -13531,9 +13544,9 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar}) {
       </div>
 
       {/* Scenario */}
-      <div className="card" style={{padding:"18px 22px",marginBottom:18,borderLeft:`3px solid ${simType.color}`}}>
+      <div className="card question-card" style={{padding:"18px 22px",marginBottom:18,borderLeft:`3px solid ${simType.color}`}}>
         <div className="label" style={{marginBottom:8}}>Scenario</div>
-        <p style={{fontSize:14,color:t.textSec,lineHeight:1.75}}><GlossaryText text={q.scenario} t={t}/></p>
+        <p className="scenario-text" style={{fontSize:14,color:t.textSec,lineHeight:1.75}}><GlossaryText text={q.scenario} t={t}/></p>
         {q.steps&&<div style={{marginTop:12}}>
           {q.steps.map((s,i)=><div key={i} style={{fontSize:12,color:t.textDim,padding:"2px 0"}}><span style={{color:simType.color,fontWeight:600,marginRight:8}}>{i+1}.</span>{s}</div>)}
         </div>}
@@ -13591,7 +13604,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar}) {
       {q.type==="SCENARIO"&&(
         <div style={{marginBottom:18}}>
           <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:8}}>Full Scenario</div>
-          <div className="card" style={{padding:"16px 20px",fontSize:13,color:t.textSec,lineHeight:1.8,whiteSpace:"pre-wrap"}}><GlossaryText text={q.scenario} t={t}/></div>
+          <div className="card scenario-text" style={{padding:"16px 20px",fontSize:13,color:t.textSec,lineHeight:1.8,whiteSpace:"pre-wrap"}}><GlossaryText text={q.scenario} t={t}/></div>
         </div>
       )}
 
@@ -13678,7 +13691,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar}) {
           <div style={{display:"flex",flexDirection:"column",gap:12}}>
             {q.blanks?.map(b=>(
               <div key={b.id} className="card" style={{padding:"14px 18px"}}>
-                <div style={{fontSize:14,color:t.text,marginBottom:8,lineHeight:1.65}}>{b.sentence}</div>
+                <div className="compact-question-text" style={{fontSize:14,color:t.text,marginBottom:8,lineHeight:1.65}}>{b.sentence}</div>
                 <div style={{fontSize:11,color:t.textDim,marginBottom:6}}>Hint: {b.hint}</div>
                 <input className="input" placeholder="Your answer..." value={blanks[b.id]||""} onChange={e=>setBlanks(bl=>({...bl,[b.id]:e.target.value}))} style={{fontSize:13}}/>
               </div>
@@ -13690,7 +13703,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar}) {
       {/* MCQ for most types */}
       {(q.choices||q.options)&&(
         <div style={{marginBottom:18}}>
-          <div style={{fontWeight:700,fontSize:13,color:t.text,marginBottom:10}}><GlossaryText text={q.question||"Select the best answer:"} t={t}/></div>
+          <div className="question-prompt" style={{fontWeight:700,fontSize:13,color:t.text,marginBottom:10}}><GlossaryText text={q.question||"Select the best answer:"} t={t}/></div>
           <div style={{display:"flex",flexDirection:"column",gap:9}}>
             {(q.choices||q.options||[]).map((choice,i)=>{
               let cls="opt";
@@ -13699,7 +13712,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar}) {
               return(
                 <div key={i} className={cls} onClick={()=>!submitted&&setSelected(i)}>
                   <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
-                  <span style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={choice} t={t}/></span>
+                  <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={choice} t={t}/></span>
                   {submitted&&i===q.correct&&<span style={{color:t.green,fontSize:16,flexShrink:0}}>✓</span>}
                   {submitted&&i===selected&&i!==q.correct&&<span style={{color:t.red,fontSize:16,flexShrink:0}}>✗</span>}
                 </div>
@@ -14087,7 +14100,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
                 </span>
                 <span className="chip" style={{marginLeft:"auto",background:t.panel,color:t.textSec,borderColor:t.border}}>{expanded?"Hide full question":"Tap to view full question"}</span>
               </div>
-              <div style={{fontSize:14,fontWeight:700,color:t.text,lineHeight:1.6,marginBottom:10}}>
+              <div className="compact-question-text" style={{fontSize:14,fontWeight:700,color:t.text,lineHeight:1.6,marginBottom:10}}>
                 {expanded ? title : `${title.slice(0,140)}${title.length>140?"...":""}`}
               </div>
               {expanded&&item.kind==="pbq"&&(
@@ -14146,17 +14159,17 @@ function ExamMode({user,onSave,onUpgrade,t}) {
             <button className="btn btn-ghost" disabled={qi===0} onClick={()=>setQi(i=>Math.max(0,i-1))}>← Previous</button>
             <button className="btn btn-ghost" disabled={qi===questions.length-1} onClick={()=>setQi(i=>Math.min(questions.length-1,i+1))}>Next →</button>
           </div>
-          <div className="card" style={{padding:"20px 22px",marginBottom:16}}>
+          <div className="card question-card" style={{padding:"20px 22px",marginBottom:16}}>
             <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
               {current.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
               <DiffBadge d={q.difficulty} t={t}/>
               <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{current.kind==="mcq"?"MCQ":"PBQ"}</span>
             </div>
-            <div style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:700}}>
+            <div className="question-text" style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:700}}>
               {current.kind==="mcq"?q.q:(q.question||q.title)}
             </div>
             {current.kind==="pbq"&&q.scenario&&(
-              <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginTop:12}}>{q.scenario}</p>
+              <p className="scenario-text" style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginTop:12}}>{q.scenario}</p>
             )}
           </div>
 
@@ -14169,7 +14182,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
               {q.opts.map((opt,index)=>(
                 <div key={index} className={`opt ${answer.selected===index?"sel":""}`} onClick={()=>updateAnswer({selected:index})}>
                   <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
-                  <span style={{fontSize:14,color:t.text,lineHeight:1.55}}>{opt}</span>
+                  <span className="option-text" style={{fontSize:14,color:t.text,lineHeight:1.55}}>{opt}</span>
                 </div>
               ))}
             </div>
@@ -14180,7 +14193,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
               {(q.choices||q.options||[]).map((choice,index)=>(
                 <div key={index} className={`opt ${answer.selected===index?"sel":""}`} onClick={()=>updateAnswer({selected:index})}>
                   <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
-                  <span style={{fontSize:14,color:t.text,lineHeight:1.55}}>{choice}</span>
+                  <span className="option-text" style={{fontSize:14,color:t.text,lineHeight:1.55}}>{choice}</span>
                 </div>
               ))}
             </div>
