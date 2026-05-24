@@ -11008,11 +11008,18 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 ::-webkit-scrollbar-track{background:${t.bg};}
 ::-webkit-scrollbar-thumb{background:${t.border};border-radius:3px;}
 .card{background:linear-gradient(180deg, ${t.surface}, ${t.surface}f2);border:1px solid ${t.border};border-radius:8px;box-shadow:0 14px 36px rgba(7,12,24,.10);animation:softRise .38s cubic-bezier(.16,1,.3,1) both;}
+.card::selection{background:${t.accent}30;}
 .card:nth-of-type(2){animation-delay:.03s;}
 .card:nth-of-type(3){animation-delay:.06s;}
 .card:nth-of-type(4){animation-delay:.09s;}
+.dashboard-shell{padding:28px 24px;max-width:1120px;margin:0 auto;}
+.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.dashboard-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px;}
 .game-hero{position:relative;overflow:hidden;border-radius:10px;padding:24px;border:1px solid ${t.accent}30;background:linear-gradient(135deg, ${t.accent}18, ${t.surface} 44%, ${t.green}12);box-shadow:0 22px 54px ${t.accent}12;}
 .game-hero::after{content:"";position:absolute;right:-56px;top:-70px;width:190px;height:190px;border-radius:50%;border:28px solid ${t.accent}10;}
+.mission-banner{position:relative;overflow:hidden;padding:16px 18px;border-radius:10px;border:1px solid ${t.accent}2f;background:linear-gradient(135deg,${t.accent}12,${t.surface} 54%,${t.green}0f);box-shadow:0 14px 32px ${t.accent}0e;}
+.mission-banner::before{content:"";position:absolute;left:-18%;top:-90%;width:52%;height:280%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transform:rotate(18deg);animation:missionSweep 5.5s ease-in-out infinite;}
+.mission-badge{width:44px;height:44px;border-radius:13px;display:inline-flex;align-items:center;justify-content:center;background:${t.accent};color:#fff;font-weight:900;box-shadow:0 14px 30px ${t.accent}30;flex-shrink:0;}
 .game-stat{position:relative;overflow:hidden;padding:16px 18px;border-radius:10px;background:linear-gradient(180deg, ${t.surface}, ${t.panel});border:1px solid ${t.border};box-shadow:0 12px 28px rgba(7,12,24,.08);transition:transform .18s,border-color .18s,box-shadow .18s;animation:softRise .42s cubic-bezier(.16,1,.3,1) both;}
 .game-stat::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent,${t.accent}10,transparent);transform:translateX(-130%);transition:transform .65s ease;pointer-events:none;}
 .game-stat:hover::after{transform:translateX(130%);}
@@ -11023,6 +11030,19 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .quest-card:hover .quest-medal{animation:rewardPop .52s cubic-bezier(.16,1,.3,1) both;}
 .quest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
 .quest-medal{width:40px;height:40px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;background:var(--quest-color);color:#fff;font-weight:900;box-shadow:0 10px 20px color-mix(in srgb,var(--quest-color) 28%, transparent);}
+.setup-hero{position:relative;overflow:hidden;padding:20px 22px;border-radius:10px;border:1px solid ${t.accent}33;background:linear-gradient(135deg,${t.accent}12,${t.surface} 52%,${t.green}0f);box-shadow:0 18px 42px ${t.accent}10;}
+.setup-hero::after{content:"";position:absolute;right:-42px;bottom:-62px;width:150px;height:150px;border-radius:50%;border:24px solid ${t.green}10;pointer-events:none;}
+.setup-stats{display:grid;grid-template-columns:repeat(3,minmax(0,auto));gap:8px;}
+.setup-stat{min-width:64px;padding:8px 10px;border:1px solid ${t.border};border-radius:9px;background:${t.panel};text-align:center;}
+.practice-filter-card{position:relative;overflow:visible;}
+.practice-summary{margin-top:16px;padding:12px 14px;background:${t.panel};border:1px solid ${t.border};border-radius:8px;font-size:13px;color:${t.textSec};display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.practice-summary strong{color:${t.text};font-weight:900;}
+.practice-action-bar{position:relative;z-index:10;margin-top:10px;padding:10px;border:1px solid ${t.border};border-radius:10px;background:${t.surface}eb;backdrop-filter:blur(16px);box-shadow:0 14px 30px rgba(0,0,0,.12);display:flex;gap:10px;justify-content:center;align-items:center;}
+.question-dots{display:flex;gap:6px;flex-wrap:wrap;}
+.question-dot{width:11px;height:11px;border-radius:50%;border:0;padding:0;cursor:pointer;transition:transform .18s,box-shadow .18s,background .2s;}
+.question-dot:hover{transform:scale(1.25);box-shadow:0 0 0 5px ${t.accent}14;}
+.recent-row{display:flex;gap:10px;align-items:center;padding:9px 12px;border-radius:8px;border:1px solid transparent;transition:background .18s,border-color .18s,transform .18s;}
+.recent-row:hover{transform:translateX(2px);border-color:${t.border};}
 .skill-path{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;}
 .skill-node{position:relative;min-height:74px;border-radius:12px;border:1px solid ${t.border};background:${t.panel};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:transform .2s,border-color .2s,background .2s;}
 .skill-node.done{background:${t.green}10;border-color:${t.green}45;}
@@ -11234,6 +11254,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
 @keyframes softRise{from{opacity:0;transform:translateY(10px) scale(.992)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes softGlow{0%,100%{box-shadow:0 10px 22px ${t.accent}10;}50%{box-shadow:0 12px 28px ${t.accent}22;}}
 @keyframes barShine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+@keyframes missionSweep{0%,55%{transform:translateX(-120%) rotate(18deg)}80%,100%{transform:translateX(270%) rotate(18deg)}}
 @keyframes selectPulse{0%{transform:scale(.992)}70%{transform:scale(1.006)}100%{transform:scale(1)}}
 @keyframes answerPop{0%{transform:scale(.99)}62%{transform:scale(1.012)}100%{transform:scale(1)}}
 @keyframes shakeLite{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}55%{transform:translateX(2px)}78%{transform:translateX(-1px)}}
@@ -11326,6 +11347,15 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
   .nav-lnk span:first-child{font-size:15px!important;}
   .mobile-topbar{display:flex;position:sticky;top:0;z-index:130;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:${t.panel}f2;backdrop-filter:blur(14px);border-bottom:1px solid ${t.border};}
   main > div{padding-left:16px!important;padding-right:16px!important;max-width:100%!important;}
+  .dashboard-shell{padding:18px 16px 88px!important;}
+  .dashboard-grid{grid-template-columns:1fr!important;}
+  .dashboard-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .setup-hero{padding:18px!important;}
+  .setup-hero > div{grid-template-columns:1fr!important;}
+  .setup-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
+  .practice-summary{align-items:flex-start!important;}
+  .practice-action-bar{position:sticky;bottom:78px;margin-left:-2px;margin-right:-2px;border-radius:12px;box-shadow:0 18px 42px rgba(0,0,0,.18);}
+  .practice-action-bar .btn{width:100%;white-space:nowrap;}
   [style*="grid-template-columns:1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr"]{grid-template-columns:1fr!important;}
   [style*="grid-template-columns:repeat(4,1fr)"],[style*="gridTemplateColumns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
   [style*="grid-template-columns:1fr 1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr 1fr"]{grid-template-columns:1fr!important;}
@@ -12436,7 +12466,7 @@ function Dashboard({user,attempts,onNav,t}) {
   });
 
   return(
-    <div style={{padding:"28px 24px",maxWidth:1080,margin:"0 auto"}}>
+    <div className="dashboard-shell">
       <div className="game-hero reward-pop" style={{marginBottom:18}}>
         <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:18,alignItems:"center"}}>
           <div>
@@ -12465,7 +12495,7 @@ function Dashboard({user,attempts,onNav,t}) {
         </div>
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:12,marginBottom:18}}>
+      <div className="dashboard-stat-grid">
         {[
           {label:"Readiness",value:`${readiness}%`,color:readiness>=75?t.green:readiness>=50?t.amber:t.red,icon:"R"},
           {label:"Accuracy",value:`${accuracy}%`,color:t.accent,icon:"A"},
@@ -12499,6 +12529,26 @@ function Dashboard({user,attempts,onNav,t}) {
               <button className="btn btn-ghost" style={{fontSize:12,padding:"6px 10px",minHeight:32}} onClick={()=>onNav(q.nav)}>{q.action}</button>
             </div>
           ))}
+        </div>
+      </div>
+
+      <div className="mission-banner" style={{marginBottom:20}}>
+        <div style={{position:"relative",zIndex:1,display:"flex",gap:14,alignItems:"center",flexWrap:"wrap"}}>
+          <span className="mission-badge">{readiness>=75?"R":accuracy<65?"F":"N"}</span>
+          <div style={{flex:1,minWidth:240}}>
+            <div className="label" style={{color:t.accent,marginBottom:3}}>Next best action</div>
+            <div style={{fontWeight:900,color:t.text,fontSize:16}}>
+              {readiness>=75?"Keep readiness sharp with a timed exam set":accuracy<65?"Rebuild accuracy with Smart Review":"Build momentum with one focused MCQ set"}
+            </div>
+            <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
+              {readiness>=75?"You are in the ready zone. Use Exam Mode to practise pacing and review missed concepts.":
+              accuracy<65?"Your quickest gain is repairing missed topics before adding more new questions.":
+              "A short set keeps progress moving without overwhelming your review queue."}
+            </div>
+          </div>
+          <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={()=>onNav(readiness>=75&&isPro?"exam":"mcq")}>
+            {readiness>=75&&isPro?"Start Exam Mode":"Start Focus Set"}
+          </button>
         </div>
       </div>
 
@@ -12547,7 +12597,7 @@ function Dashboard({user,attempts,onNav,t}) {
         </div>
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:20}}>
+      <div className="dashboard-grid">
         {/* Chapter performance */}
         <div className="card" style={{padding:"20px 22px"}}>
           <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:14}}>Performance by Chapter</div>
@@ -12576,7 +12626,7 @@ function Dashboard({user,attempts,onNav,t}) {
         {/* Daily challenge + recent */}
         <div style={{display:"flex",flexDirection:"column",gap:12}}>
           {/* Daily challenge card */}
-          <div className="card" style={{padding:"18px 20px",borderColor:`${t.accent}30`,cursor:"pointer"}} onClick={()=>onNav("daily")}>
+          <div className="card card-hover" style={{padding:"18px 20px",borderColor:`${t.accent}30`,cursor:"pointer"}} onClick={()=>onNav("daily")}>
             <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
               <span style={{fontSize:28}}>🎯</span>
               <div style={{flex:1}}>
@@ -12608,7 +12658,7 @@ function Dashboard({user,attempts,onNav,t}) {
           <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:14}}>Recent Activity</div>
           <div style={{display:"flex",flexDirection:"column",gap:8}}>
             {attempts.slice(0,6).map((a,i)=>(
-              <div key={i} style={{display:"flex",gap:10,alignItems:"center",padding:"8px 12px",borderRadius:7,background:a.correct?`${t.green}08`:`${t.red}08`}}>
+              <div key={i} className="recent-row" style={{background:a.correct?`${t.green}08`:`${t.red}08`}}>
                 <span style={{color:a.correct?t.green:t.red,fontSize:15,flexShrink:0}}>{a.correct?"✓":"✗"}</span>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{fontSize:13,color:t.text,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{a.title||"Question"}</div>
@@ -12866,30 +12916,31 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
         </div>
       )}
 
-      <div className="card" style={{padding:"18px 22px",marginBottom:16,borderColor:`${t.green}30`,background:`${t.green}06`}}>
-        <div style={{display:"flex",justifyContent:"space-between",gap:14,alignItems:"center",flexWrap:"wrap"}}>
+      <div className="setup-hero" style={{marginBottom:16}}>
+        <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:16,alignItems:"center"}}>
           <div style={{flex:1,minWidth:220}}>
-            <div style={{fontWeight:700,fontSize:14,color:t.text,marginBottom:4}}>Smart Review uses SM-2 spacing</div>
+            <div className="label" style={{color:t.green,marginBottom:5}}>Adaptive practice</div>
+            <div style={{fontWeight:900,fontSize:18,color:t.text,marginBottom:4}}>Smart Review uses SM-2 spacing</div>
             <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
               Wrong answers come back first. Correct answers are spaced farther apart, like Anki, so practice targets retention instead of only random questions.
             </div>
+            <div style={{display:"flex",gap:8,marginTop:14,flexWrap:"wrap"}}>
+              <button className={`btn ${reviewMode==="smart"?"btn-primary":"btn-outline"}`} style={{fontSize:12}} disabled={isGuest} onClick={()=>setReviewMode("smart")}>Smart Review</button>
+              <button className={`btn ${reviewMode==="random"?"btn-primary":"btn-outline"}`} style={{fontSize:12}} onClick={()=>setReviewMode("random")}>Random Practice</button>
+            </div>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,auto)",gap:8}}>
+          <div className="setup-stats">
             {[
               {label:"Due",value:reviewSummary.due,color:t.amber},
               {label:"Weak",value:reviewSummary.weak,color:t.red},
               {label:"New",value:reviewSummary.untouched,color:t.accent},
             ].map(item=>(
-              <div key={item.label} style={{minWidth:64,padding:"8px 10px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel,textAlign:"center"}}>
+              <div key={item.label} className="setup-stat">
                 <div style={{fontSize:18,fontWeight:800,color:item.color}}>{item.value}</div>
                 <div className="label">{item.label}</div>
               </div>
             ))}
           </div>
-        </div>
-        <div style={{display:"flex",gap:8,marginTop:14,flexWrap:"wrap"}}>
-          <button className={`btn ${reviewMode==="smart"?"btn-primary":"btn-outline"}`} style={{fontSize:12}} disabled={isGuest} onClick={()=>setReviewMode("smart")}>Smart Review</button>
-          <button className={`btn ${reviewMode==="random"?"btn-primary":"btn-outline"}`} style={{fontSize:12}} onClick={()=>setReviewMode("random")}>Random Practice</button>
         </div>
         {isGuest&&(
           <div style={{marginTop:12,padding:"10px 12px",borderRadius:7,background:t.panel,border:`1px solid ${t.border}`,fontSize:12,color:t.textSec,lineHeight:1.6}}>
@@ -12932,8 +12983,14 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
       </div>
       )}
 
-      <div className="card" style={{padding:"20px 24px",marginBottom:16}}>
-        <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:14}}>Filter Questions</div>
+      <div className="card practice-filter-card" style={{padding:"20px 24px",marginBottom:16}}>
+        <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"flex-start",marginBottom:14,flexWrap:"wrap"}}>
+          <div>
+            <div style={{fontWeight:900,fontSize:15,color:t.text}}>Build your set</div>
+            <div style={{fontSize:12,color:t.textSec}}>Choose the scope, then start when the match count looks right.</div>
+          </div>
+          <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}28`}}>{quizCount} questions</span>
+        </div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
           <div>
             <label className="label" style={{display:"block",marginBottom:6}}>Chapter</label>
@@ -12969,8 +13026,13 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
             ))}
           </div>
         </div>
-        <div style={{marginTop:16,padding:"12px 14px",background:t.panel,borderRadius:7,fontSize:13,color:t.textSec}}>
-          {filtered.length} questions match your filters · {filtered.length>=10?`${quizCount} will be selected`:"choose broader filters to reach the 10-question minimum"} · {reviewMode==="smart"?"SM-2 priority order":"Random order"}
+        <div className="practice-summary">
+          <span>
+            <strong>{filtered.length}</strong> match your filters · {filtered.length>=10?`${quizCount} selected`:"broaden filters to reach 10"} · {reviewMode==="smart"?"SM-2 priority":"Random order"}
+          </span>
+          <button className="btn btn-primary" style={{fontSize:12,padding:"7px 12px",minHeight:34}} onClick={startQuiz} disabled={filtered.length<10}>
+            Start now
+          </button>
         </div>
       </div>
 
@@ -12991,9 +13053,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
         </div>
       </div>
 
-      <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"13px",fontSize:15}} onClick={startQuiz} disabled={filtered.length<10}>
-        Start Quiz ({quizCount} Questions) →
-      </button>
+      <div className="practice-action-bar">
+        <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"13px",fontSize:15}} onClick={startQuiz} disabled={filtered.length<10}>
+          Start Quiz ({quizCount} Questions) →
+        </button>
+      </div>
     </div>
   );
 
@@ -13075,13 +13139,14 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
     <div style={{padding:"24px",maxWidth:700,margin:"0 auto"}} className="fu" key={qi}>
       {/* Progress */}
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}>
-        <div style={{display:"flex",gap:5}}>
+        <div className="question-dots">
           {questions.map((_,i)=>(
             <button
               key={i}
+              className="question-dot"
               aria-label={`Go to question ${i+1}`}
               onClick={()=>goToQuestion(i)}
-              style={{width:10,height:10,borderRadius:"50%",border:"none",padding:0,cursor:"pointer",background:results[i]?(results[i]?.correct?t.green:t.red):i===qi?t.accent:draftSelections[i]!==undefined?`${t.amber}`:t.border,transition:"background .3s, transform .18s"}}
+              style={{background:results[i]?(results[i]?.correct?t.green:t.red):i===qi?t.accent:draftSelections[i]!==undefined?`${t.amber}`:t.border}}
             />
           ))}
         </div>
@@ -13128,9 +13193,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
       </div>
 
       {!submitted?(
-        <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} disabled={selected===null} onClick={submitQ}>
-          Submit Answer
-        </button>
+        <div className="practice-action-bar">
+          <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} disabled={selected===null} onClick={submitQ}>
+            Submit Answer
+          </button>
+        </div>
       ):(
         <>
           <div className="card answer-feedback" style={{padding:"16px 18px",marginBottom:14,borderColor:selected===current.correct?`${t.green}42`:`${t.red}42`,background:selected===current.correct?`${t.green}08`:`${t.red}08`,boxShadow:"none"}}>
@@ -13160,9 +13227,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
             )}
           </div>
           <AnswerBurst result={answerBurst} t={t}/>
-          <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={qi<questions.length-1?nextQ:finishQuiz}>
-            {qi<questions.length-1?"Next Question →":allAnswered?"See Results →":"Review Unanswered →"}
-          </button>
+          <div className="practice-action-bar">
+            <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={qi<questions.length-1?nextQ:finishQuiz}>
+              {qi<questions.length-1?"Next Question →":allAnswered?"See Results →":"Review Unanswered →"}
+            </button>
+          </div>
         </>
       )}
     </div>
@@ -13295,10 +13364,12 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
         </div>
       )}
       {isPro&&(
-        <div className="card" style={{padding:"16px 20px",marginBottom:18,borderColor:showMissedOnly?`${t.red}35`:t.border,background:showMissedOnly?`${t.red}06`:t.surface}}>
+        <div className="setup-hero" style={{marginBottom:18,borderColor:showMissedOnly?`${t.red}35`:`${t.green}35`,background:showMissedOnly?`${t.red}06`:undefined}}>
           <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+            <span className="mission-badge" style={{background:showMissedOnly?t.red:t.green}}>P</span>
             <div style={{flex:1,minWidth:220}}>
-              <div style={{fontWeight:700,fontSize:14,color:t.text}}>Practice PBQ</div>
+              <div className="label" style={{color:showMissedOnly?t.red:t.green,marginBottom:4}}>PBQ mission</div>
+              <div style={{fontWeight:900,fontSize:15,color:t.text}}>Practice PBQ</div>
               <div style={{fontSize:13,color:t.textSec}}>
                 Start one random PBQ you have not done before. If all are done, SecurePlus prioritises missed PBQs, then the newest PBQ.
               </div>
@@ -13350,7 +13421,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
           const ok=correct.has(q.id);
           const ch=CHAPTERS.find(c=>c.id===q.ch);
           return(
-            <div key={q.id} className={`card card-hover`} style={{padding:"14px 18px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",opacity:isPro?1:.75}} onClick={()=>{if(isPro){capture("pbq_started", { question_id: q.id, type: q.type, chapter: q.ch, tier: user.tier });onStart(q);}else{openLockedPrompt(q);}}}>
+            <div key={q.id} className={`card card-hover`} style={{padding:"15px 18px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",opacity:isPro?1:.75,borderColor:ok?`${t.green}30`:done?`${t.red}25`:undefined}} onClick={()=>{if(isPro){capture("pbq_started", { question_id: q.id, type: q.type, chapter: q.ch, tier: user.tier });onStart(q);}else{openLockedPrompt(q);}}}>
               <SimIcon type={q.type}/>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,marginBottom:5,flexWrap:"wrap"}}>
@@ -13640,7 +13711,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar}) {
 
       {/* Submit / feedback */}
       {!submitted?(
-        <div style={{display:"flex",gap:10,justifyContent:"flex-end"}}>
+        <div className="practice-action-bar" style={{justifyContent:"flex-end"}}>
           <button className="btn btn-primary" disabled={selected===null&&q.type!=="DRAG & DROP"&&q.type!=="ORDERING"&&q.type!=="FILL BLANK"} onClick={submit}>
             Submit Answer
           </button>
@@ -13670,7 +13741,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar}) {
               </div>
             )}
           </div>
-          <div style={{display:"flex",gap:10,justifyContent:"flex-end"}}>
+          <div className="practice-action-bar" style={{justifyContent:"flex-end",flexWrap:"wrap"}}>
             <AnswerBurst result={answerBurst} t={t}/>
             <button className="btn btn-ghost" onClick={()=>{setSubmitted(false);setSelected(null);setTermHistory([]);setMapping({});setTapDragItem(null);setOrderItems(q.items?[...q.items].sort(()=>Math.random()-.5):[]);setBlanks(q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{})}}>
               Try Again
