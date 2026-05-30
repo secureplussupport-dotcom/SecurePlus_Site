@@ -286,7 +286,7 @@ async function getSupabaseProfile(authUser) {
     .eq("id", authUser.id)
     .maybeSingle();
 
-  if (!full.error) return appUserFromProfile(authUser, full.data);
+  if (!full.error) return full.data ? appUserFromProfile(authUser, full.data) : null;
 
   const basic = await supabase
     .from("profiles")
@@ -295,7 +295,16 @@ async function getSupabaseProfile(authUser) {
     .maybeSingle();
 
   if (basic.error) console.warn("Unable to load profile", basic.error);
-  return appUserFromProfile(authUser, basic.data);
+  return basic.data ? appUserFromProfile(authUser, basic.data) : null;
+}
+
+async function waitForSupabaseProfile(authUser, attempts=4) {
+  for (let i=0;i<attempts;i+=1) {
+    const profile=await getSupabaseProfile(authUser);
+    if(profile)return profile;
+    await new Promise(resolve=>setTimeout(resolve,250));
+  }
+  return null;
 }
 
 async function claimReferralIfPresent(authUser) {
@@ -12131,7 +12140,8 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
         if(mode==="login"){
           const { data, error } = await supabase.auth.signInWithPassword({ email, password: form.pass });
           if(error) throw error;
-          const appUser=await getSupabaseProfile(data.user);
+          const appUser=await waitForSupabaseProfile(data.user);
+          if(!appUser) throw new Error("This account profile could not be loaded. Please contact support if this continues.");
           capture("login_completed", { method: "password" });
           onLogin(appUser);
         } else {
@@ -12152,7 +12162,8 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           });
           if(error) throw error;
           if(data.session?.user){
-            const appUser=await getSupabaseProfile(data.session.user);
+            const appUser=await waitForSupabaseProfile(data.session.user);
+            if(!appUser) throw new Error("Your account was created, but the profile is still loading. Please sign in again in a moment.");
             setOk("Account created! Welcome to SecurePlus.");
             capture("signup_completed", { method: "password", confirmed_immediately: true, has_referral: Boolean(referralCode) });
             onLogin(appUser);
@@ -14978,6 +14989,29 @@ export default function App() {
     if(user) identifyUser(user);
   },[user]);
 
+  const clearLocalAuthState=useCallback(async()=>{
+    resetAnalytics();
+    await DB.clearSession();
+    setPasswordRecovery(false);
+    setShowOnboarding(false);
+    setShowTrialExpiredPrompt(false);
+    setReferralClaimPrompt(null);
+    setDeleteAccountVerified(false);
+    setUser(null);
+    setAttempts([]);
+    setStarred([]);
+    setPbqQ(null);
+    setView("dashboard");
+  },[]);
+
+  const forceSupabaseSignOut=useCallback(async()=>{
+    if(isSupabaseConfigured){
+      await supabase.auth.signOut({ scope: "global" }).catch(()=>{});
+      await supabase.auth.signOut({ scope: "local" }).catch(()=>{});
+    }
+    await clearLocalAuthState();
+  },[clearLocalAuthState]);
+
   useEffect(()=>{
     if(!user)return;
     const params=new URLSearchParams(window.location.search);
@@ -15002,6 +15036,24 @@ export default function App() {
     setView("pricing");
   },[user?.id,user?.email,user?.referralTrialExpired]);
 
+  useEffect(()=>{
+    if(!isSupabaseConfigured)return undefined;
+    const verifyRestoredSession=async event=>{
+      if(!event.persisted)return;
+      const { data } = await supabase.auth.getSession();
+      if(!data.session)return;
+      const { data: verified, error } = await supabase.auth.getUser();
+      if(error || !verified?.user){
+        await forceSupabaseSignOut();
+        return;
+      }
+      const profile=await waitForSupabaseProfile(verified.user, 1);
+      if(!profile) await forceSupabaseSignOut();
+    };
+    window.addEventListener("pageshow", verifyRestoredSession);
+    return()=>window.removeEventListener("pageshow", verifyRestoredSession);
+  },[forceSupabaseSignOut]);
+
   const handleTrialExpired=useCallback(()=>{
     setUser(u=>u ? { ...u, tier: "free", referralTrialExpired: true } : u);
     setShowTrialExpiredPrompt(true);
@@ -15024,24 +15076,34 @@ export default function App() {
       const applySupabaseSession=async session=>{
         if(!active)return;
         if(!session?.user){
-          setUser(null);
-          setAttempts([]);
-          setStarred([]);
+          await clearLocalAuthState();
           setLoading(false);
           return;
         }
-        const appUser=await getSupabaseProfile(session.user);
+        const { data: verified, error: verifyError } = await supabase.auth.getUser();
+        if(verifyError || !verified?.user){
+          await forceSupabaseSignOut();
+          if(active)setLoading(false);
+          return;
+        }
+        const verifiedUser=verified.user;
+        const appUser=await waitForSupabaseProfile(verifiedUser);
+        if(!appUser){
+          await forceSupabaseSignOut();
+          if(active)setLoading(false);
+          return;
+        }
         let displayUser=appUser;
         const params = new URLSearchParams(window.location.search);
         if(params.get("checkout")==="success" || params.get("billing")==="return"){
-          const syncedUser = await syncStripeProfile(session.user, params.get("session_id") || "");
+          const syncedUser = await syncStripeProfile(verifiedUser, params.get("session_id") || "");
           if(syncedUser) {
             displayUser = syncedUser;
             const cleanUrl = `${window.location.origin}${window.location.pathname}`;
             window.history.replaceState({}, "", cleanUrl);
           }
         }
-        const savedAttempts=await loadSupabaseAttempts(session.user.id);
+        const savedAttempts=await loadSupabaseAttempts(verifiedUser.id);
         if(!active)return;
         const referralClaim = await claimReferralIfPresent(displayUser);
         showReferralClaimErrorOnce(referralClaim);
@@ -15049,7 +15111,7 @@ export default function App() {
           displayUser = { ...displayUser, tier: "pro", proTrialUntil: referralClaim.proTrialUntil };
           if(!referralClaim.alreadyClaimed) setReferralClaimPrompt(referralClaim);
         }
-        const savedStarred=(await loadSupabaseStarred(session.user.id)) ?? await DB.getStarred(starOwner(displayUser));
+        const savedStarred=(await loadSupabaseStarred(verifiedUser.id)) ?? await DB.getStarred(starOwner(displayUser));
         setUser(displayUser);
         identifyUser(displayUser);
         setAttempts(savedAttempts);
@@ -15076,7 +15138,7 @@ export default function App() {
       setLoading(false);
     })();
     return()=>{active=false;};
-  },[]);
+  },[clearLocalAuthState,forceSupabaseSignOut]);
 
   const handleLogin=useCallback(async u=>{
     const referralClaim=await claimReferralIfPresent(u);
@@ -15092,10 +15154,8 @@ export default function App() {
     setAttempts(a);setStarred(s);setView("dashboard");setShowDaily(false);
   },[]);
   const handleLogout=useCallback(async()=>{
-    if(isSupabaseConfigured) await supabase.auth.signOut();
-    resetAnalytics();
-    await DB.clearSession();setPasswordRecovery(false);setShowOnboarding(false);setDeleteAccountVerified(false);setUser(null);setAttempts([]);setStarred([]);setView("dashboard");
-  },[]);
+    await forceSupabaseSignOut();
+  },[forceSupabaseSignOut]);
   const handleUpdateProfile=useCallback(async name=>{
     if(!user)return;
     const clean=name.trim();
@@ -15221,13 +15281,15 @@ export default function App() {
       const data=await response.json().catch(()=>({}));
       if(!response.ok) throw new Error(data.error||"Unable to delete account.");
       await DB.saveStarred(starOwner(user),[]);
-      await DB.clearSession();
-      setDeleteAccountVerified(false);setUser(null);setAttempts([]);setStarred([]);setView("dashboard");
-      alert("Account deleted.");
+      await forceSupabaseSignOut();
+      const cleanUrl=`${window.location.origin}${window.location.pathname}`;
+      window.history.replaceState({}, "", cleanUrl);
+      alert("Account deleted. You have been signed out on this browser and other sessions.");
+      window.location.replace("/");
     }catch(error){
       alert(error.message||"Unable to delete account. Contact secureplus.support@gmail.com.");
     }
-  },[user,deleteAccountVerified]);
+  },[user,deleteAccountVerified,forceSupabaseSignOut]);
   const handleUpgrade=useCallback(async tier=>{
     if(!user)return;
     if(tier==="free"){
