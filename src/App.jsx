@@ -15202,14 +15202,14 @@ export default function App() {
         return;
       }
       if(!deleteAccountVerified){
-        const confirmed=window.confirm(`For safety, SecurePlus will email ${user.email} a verification link before deleting this account. Continue?`);
+        const confirmed=window.confirm(`For safety, SecurePlus will email ${user.email} a deletion verification link. Only continue if you personally want to delete this account. If you did not request deletion, cancel now and change your password.`);
         if(!confirmed)return;
         const { error } = await supabase.auth.signInWithOtp({
           email: user.email,
           options: { emailRedirectTo: `${window.location.origin}/?delete_account=confirm` },
         });
         if(error) throw error;
-        alert("Verification email sent. Open the email link, then press Delete account again.");
+        alert("Deletion verification email sent. Only press the red verification button if you requested account deletion. After verifying, come back here and press Delete account again.");
         return;
       }
       const confirmed=window.confirm("Email verified. Permanently delete this SecurePlus account and saved progress? This cannot be undone.");

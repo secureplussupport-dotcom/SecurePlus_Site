@@ -19,15 +19,17 @@ Use this checklist when moving SecurePlus from local development to a hosted sit
 6. In Authentication -> Emails -> Templates, use the branded templates in `supabase/email-templates`:
    - `confirm-signup.html` for Confirm signup.
    - `reset-password.html` for Reset password.
+   - `magic-link.html` for Magic Link. SecurePlus uses this email to verify account deletion requests.
 
 The subjects should be:
 
 ```txt
-Confirm your SecurePlus account
+Verify your SecurePlus account
 Reset your SecurePlus password
+Confirm SecurePlus account deletion
 ```
 
-Keep `{{ .ConfirmationURL }}` exactly as written in both templates. Supabase replaces it with the secure verification or password-reset link.
+Keep `{{ .ConfirmationURL }}` exactly as written in the templates. Supabase replaces it with the secure verification, password-reset, or deletion-verification link.
 
 If a confirmation email opens a page of raw HTML, the most common causes are a bad Site URL, missing Redirect URL, or a broken email template link.
 
