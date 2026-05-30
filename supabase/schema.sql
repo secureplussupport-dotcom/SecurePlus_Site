@@ -124,6 +124,7 @@ create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer
+set search_path = public
 as $$
 begin
   insert into public.profiles (id, email, tier, referral_code)
@@ -139,11 +140,18 @@ begin
 end;
 $$;
 
-drop trigger if exists on_auth_user_created on auth.users;
-
-create trigger on_auth_user_created
-after insert on auth.users
-for each row execute procedure public.handle_new_user();
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_trigger
+    where tgname = 'on_auth_user_created'
+  ) then
+    create trigger on_auth_user_created
+    after insert on auth.users
+    for each row execute procedure public.handle_new_user();
+  end if;
+end $$;
 
 do $$
 begin
@@ -224,3 +232,6 @@ on profiles (referral_code);
 
 create index if not exists referrals_referrer_id_created_at_idx
 on referrals (referrer_id, created_at desc);
+
+create unique index if not exists referrals_one_new_user_per_referrer_idx
+on referrals (referrer_id);

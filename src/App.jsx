@@ -11136,6 +11136,13 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
 .nav-lnk:hover .nav-glyph-pricing span,.nav-glyph-pricing.active span{animation:upgradeHead .55s cubic-bezier(.16,1,.3,1) both;}
 .nav-lnk:hover .nav-glyph-pricing::before,.nav-glyph-pricing.active::before{animation:upgradeStem .55s cubic-bezier(.16,1,.3,1) both;}
 .nav-lnk:hover .nav-glyph-pricing::after,.nav-glyph-pricing.active::after{animation:upgradeTrail .55s cubic-bezier(.16,1,.3,1) both;}
+.nav-glyph-referrals span{width:11px;height:11px;border:2px solid currentColor;border-radius:50%;left:4px;top:5px;}
+.nav-glyph-referrals::before{width:11px;height:11px;border:2px solid currentColor;border-radius:50%;right:4px;bottom:5px;}
+.nav-glyph-referrals::after{width:8px;height:2px;background:currentColor;transform:rotate(-28deg);border-radius:2px;}
+.nav-lnk:hover .nav-glyph-referrals,.nav-glyph-referrals.active{color:#14b8a6;background:#14b8a618;border-color:#14b8a655;box-shadow:0 0 18px #14b8a640;}
+.nav-lnk:hover .nav-glyph-referrals span,.nav-glyph-referrals.active span{animation:referralPulse .65s ease both;}
+.nav-lnk:hover .nav-glyph-referrals::before,.nav-glyph-referrals.active::before{animation:referralPulse .65s ease .08s both;}
+.nav-lnk:hover .nav-glyph-referrals::after,.nav-glyph-referrals.active::after{animation:referralLink .65s ease both;}
 .nav-glyph-objectives span{width:13px;height:13px;border:2px solid currentColor;border-radius:3px;}
 .nav-glyph-objectives::before{width:7px;height:2px;background:currentColor;top:8px;}
 .nav-glyph-objectives::after{width:7px;height:2px;background:currentColor;top:13px;}
@@ -11285,6 +11292,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
 @keyframes upgradeHead{0%{transform:translateY(0) rotate(-45deg);}68%{transform:translateY(-6px) rotate(-45deg);}100%{transform:translateY(-3px) rotate(-45deg);}}
 @keyframes upgradeStem{0%{transform:translateY(0);}68%{transform:translateY(-6px);}100%{transform:translateY(-3px);}}
 @keyframes upgradeTrail{0%{opacity:0;transform:translateY(4px) scaleX(.45);}70%{opacity:1;transform:translateY(0) scaleX(1);}100%{opacity:.65;transform:translateY(1px) scaleX(.7);}}
+@keyframes referralPulse{0%{transform:scale(.9);opacity:.65;}65%{transform:scale(1.12);opacity:1;}100%{transform:scale(1);opacity:1;}}
+@keyframes referralLink{0%{transform:rotate(-28deg) scaleX(.3);opacity:.35;}100%{transform:rotate(-28deg) scaleX(1);opacity:1;}}
 @keyframes objectiveCard{0%{transform:rotate(0) scale(1);}55%{transform:rotate(-5deg) scale(1.06);}100%{transform:rotate(0) scale(1);}}
 @keyframes objectiveTick{0%{transform:translateX(-5px);opacity:0;width:0;}100%{transform:translateX(0);opacity:1;width:7px;}}
 @keyframes examScan{0%{right:8px;bottom:7px;transform:scale(.85);}55%{right:0;bottom:0;transform:scale(1.05);}100%{right:2px;bottom:1px;transform:scale(1);}}
@@ -14405,6 +14414,37 @@ function TrialExpiredPrompt({t,onUpgrade,onClose}) {
   );
 }
 
+function ReferralClaimPrompt({result,t,onUpgrade,onClose}) {
+  const until = result?.proTrialUntil
+    ? new Date(result.proTrialUntil).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
+    : "";
+  return(
+    <div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Referral trial activated" onClick={onClose}>
+      <div className="streak-modal" style={{maxWidth:480}} onClick={e=>e.stopPropagation()}>
+        <div style={{position:"relative",textAlign:"center"}}>
+          <div className="label" style={{color:t.green,marginBottom:8}}>Referral reward activated</div>
+          <h2 style={{fontSize:26,fontWeight:900,color:t.text,marginBottom:10}}>You unlocked 7 days of Pro</h2>
+          <p style={{fontSize:14,color:t.textSec,lineHeight:1.75,marginBottom:18}}>
+            Your referral code worked. PBQ simulations, Exam Mode, Smart Review, and detailed solutions are available during your trial{until ? ` until ${until}` : ""}.
+          </p>
+          <div className="card" style={{padding:"14px 16px",marginBottom:18,background:`${t.green}10`,borderColor:`${t.green}35`}}>
+            <div style={{fontSize:28,fontWeight:900,color:t.green}}>7 days Pro</div>
+            <div style={{fontSize:13,color:t.textSec,fontWeight:800}}>
+              {result?.referrerRewardGranted === false
+                ? "Your friend already has paid Pro, so only your trial was added."
+                : "Your friend gets the same reward too."}
+            </div>
+          </div>
+          <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+            <button className="btn btn-primary" style={{flex:1,justifyContent:"center"}} onClick={onClose}>Start practising</button>
+            <button className="btn btn-outline" style={{flex:1,justifyContent:"center"}} onClick={onUpgrade}>View Pro plan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
   return(
     <div style={{padding:"32px 24px",maxWidth:700,margin:"0 auto"}}>
@@ -14520,14 +14560,49 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
 // ═══════════════════════════════════════════════════════════════
 function ReferralPage({user,t}) {
   return(
-    <div style={{padding:"28px 24px",maxWidth:720,margin:"0 auto"}}>
-      <div className="card" style={{padding:"28px 30px",borderColor:`${t.accent}35`,textAlign:"center"}}>
-        <div style={{fontSize:40,marginBottom:12}}>🔗</div>
-        <div className="label" style={{marginBottom:8}}>Coming soon</div>
-        <h2 style={{fontSize:24,fontWeight:800,color:t.text,marginBottom:10}}>Referral Programme</h2>
-        <p style={{fontSize:14,color:t.textSec,lineHeight:1.7}}>
-          Coming soon! The SecurePlus Referral Programme is planned to release soon. It will let students invite friends and earn Pro trial time together.
-        </p>
+    <div style={{padding:"28px 24px",maxWidth:820,margin:"0 auto"}}>
+      <div className="page-title-row">
+        <NavGlyph type="referrals" active/>
+        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>Referral Programme</h2>
+      </div>
+      <p style={{color:t.textSec,fontSize:14,lineHeight:1.7,marginBottom:20}}>
+        Share SecurePlus with one new student. They receive 7 days of Pro after signup, and you receive 7 days too unless you already have an active paid Pro plan.
+      </p>
+
+      <ReferralUpgradeBanner user={user} t={t}/>
+
+      <div className="referral-grid" style={{marginBottom:18}}>
+        {[
+          ["1", "Copy your link", "Use the link above from your account, not a manually typed code."],
+          ["2", "Friend signs up", "The referral code is filled in automatically from the link."],
+          ["3", "Trial unlocks", "Both eligible accounts receive a 7-day Pro trial."],
+        ].map(([num,title,body])=>(
+          <div key={title} className="card card-hover" style={{padding:"18px 20px"}}>
+            <div style={{width:34,height:34,borderRadius:10,background:`${t.accent}16`,border:`1px solid ${t.accent}36`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:900,color:t.accent,marginBottom:12}}>
+              {num}
+            </div>
+            <div style={{fontWeight:900,color:t.text,marginBottom:6}}>{title}</div>
+            <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{body}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="card" style={{padding:"20px 22px",borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
+        <div style={{fontWeight:900,color:t.text,marginBottom:8}}>Referral rules</div>
+        <div style={{display:"grid",gap:8}}>
+          {[
+            "Each account can refer only one new user.",
+            "Users cannot use their own referral code.",
+            "A new user can claim only one referral reward.",
+            "If the referrer already has paid Pro, only the new user receives the free trial.",
+            "When the trial ends, the user is prompted to upgrade to the annual Pro plan.",
+          ].map(rule=>(
+            <div key={rule} style={{display:"flex",gap:10,fontSize:13,color:t.textSec,lineHeight:1.65}}>
+              <span style={{color:t.green,fontWeight:900}}>✓</span>
+              <span>{rule}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -14818,6 +14893,7 @@ export default function App() {
   const [showOnboarding,setShowOnboarding]=useState(false);
   const [authStartMode,setAuthStartMode]=useState("login");
   const [showTrialExpiredPrompt,setShowTrialExpiredPrompt]=useState(false);
+  const [referralClaimPrompt,setReferralClaimPrompt]=useState(null);
   const [deleteAccountVerified,setDeleteAccountVerified]=useState(false);
 
   const t=darkMode?THEMES.dark:THEMES.light;
@@ -14887,7 +14963,10 @@ export default function App() {
         if(!active)return;
         const referralClaim = await claimReferralIfPresent(displayUser);
         showReferralClaimErrorOnce(referralClaim);
-        if(referralClaim?.proTrialUntil) displayUser = { ...displayUser, tier: "pro", proTrialUntil: referralClaim.proTrialUntil };
+        if(referralClaim?.proTrialUntil) {
+          displayUser = { ...displayUser, tier: "pro", proTrialUntil: referralClaim.proTrialUntil };
+          if(!referralClaim.alreadyClaimed) setReferralClaimPrompt(referralClaim);
+        }
         const savedStarred=(await loadSupabaseStarred(session.user.id)) ?? await DB.getStarred(starOwner(displayUser));
         setUser(displayUser);
         identifyUser(displayUser);
@@ -14920,6 +14999,7 @@ export default function App() {
   const handleLogin=useCallback(async u=>{
     const referralClaim=await claimReferralIfPresent(u);
     showReferralClaimErrorOnce(referralClaim);
+    if(referralClaim?.proTrialUntil && !referralClaim.alreadyClaimed) setReferralClaimPrompt(referralClaim);
     const displayUser=referralClaim?.proTrialUntil ? { ...u, tier: "pro", proTrialUntil: referralClaim.proTrialUntil } : u;
     setUser(displayUser);
     identifyUser(displayUser);
@@ -15250,6 +15330,7 @@ export default function App() {
     {id:"exam",icon:"exam",label:"Exam Mode"},
     {id:"daily",icon:"daily",label:"Daily Challenge"},
     {id:"pricing",icon:"pricing",label:"Upgrade"},
+    {id:"referrals",icon:"referrals",label:"Referrals"},
     {id:"objectives",icon:"objectives",label:"Objectives"},
     {id:"privacy",icon:"privacy",label:"Privacy Policy"},
     {id:"terms",icon:"terms",label:"Terms & Conditions"},
@@ -15331,6 +15412,14 @@ export default function App() {
             t={t}
             onClose={()=>setShowTrialExpiredPrompt(false)}
             onUpgrade={()=>{setShowTrialExpiredPrompt(false);handleUpgrade("pro");}}
+          />
+        )}
+        {referralClaimPrompt&&(
+          <ReferralClaimPrompt
+            result={referralClaimPrompt}
+            t={t}
+            onClose={()=>setReferralClaimPrompt(null)}
+            onUpgrade={()=>{setReferralClaimPrompt(null);setView("pricing");}}
           />
         )}
       </div>
