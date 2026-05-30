@@ -11038,6 +11038,12 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .practice-summary{margin-top:16px;padding:12px 14px;background:${t.panel};border:1px solid ${t.border};border-radius:8px;font-size:13px;color:${t.textSec};display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .practice-summary strong{color:${t.text};font-weight:900;}
 .practice-action-bar{position:relative;z-index:10;margin-top:10px;padding:10px;border:1px solid ${t.border};border-radius:10px;background:${t.surface}eb;backdrop-filter:blur(16px);box-shadow:0 14px 30px rgba(0,0,0,.12);display:flex;gap:10px;justify-content:center;align-items:center;}
+.trial-countdown-banner{margin:18px auto 0;width:min(920px,calc(100% - 48px));padding:18px 20px;border:1px solid ${t.green}38;border-radius:10px;background:linear-gradient(135deg,${t.green}12,${t.surface} 48%,${t.accent}0f);box-shadow:0 16px 38px rgba(7,12,24,.12);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.trial-countdown-copy{flex:1 1 270px;min-width:0;}
+.trial-countdown-grid{display:grid;grid-template-columns:repeat(4,minmax(54px,1fr));gap:8px;flex:0 1 330px;}
+.trial-countdown-unit{padding:10px 9px;border:1px solid ${t.border};border-radius:9px;background:${t.panel};text-align:center;min-width:0;}
+.trial-countdown-value{font-family:'Sora','Manrope',system-ui,sans-serif;font-size:22px;font-weight:900;color:${t.green};line-height:1;}
+.trial-countdown-label{font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:${t.textDim};margin-top:5px;}
 .question-card{padding:28px 30px!important;margin-bottom:20px!important;background:linear-gradient(180deg,${t.surface},${t.panel})!important;border-color:${t.accent}26!important;box-shadow:0 18px 44px rgba(7,12,24,.12)!important;}
 .question-text{font-family:'Sora','Manrope',system-ui,sans-serif!important;font-size:21px!important;line-height:1.72!important;color:${t.text}!important;font-weight:800!important;letter-spacing:0!important;overflow-wrap:anywhere;}
 .scenario-text{font-size:16px!important;line-height:1.8!important;color:${t.textSec}!important;overflow-wrap:anywhere;}
@@ -11371,6 +11377,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
   .practice-summary{align-items:flex-start!important;}
   .practice-action-bar{position:sticky;bottom:78px;margin-left:-2px;margin-right:-2px;border-radius:12px;box-shadow:0 18px 42px rgba(0,0,0,.18);}
   .practice-action-bar .btn{width:100%;white-space:nowrap;}
+  .trial-countdown-banner{width:calc(100% - 32px);margin-top:14px;padding:16px;}
+  .trial-countdown-grid{grid-template-columns:repeat(4,minmax(0,1fr));flex-basis:100%;}
+  .trial-countdown-value{font-size:19px;}
   .question-card{padding:22px 20px!important;}
   .question-text{font-size:19px!important;line-height:1.68!important;}
   .question-prompt{font-size:17px!important;line-height:1.6!important;}
@@ -14445,6 +14454,73 @@ function ReferralClaimPrompt({result,t,onUpgrade,onClose}) {
   );
 }
 
+function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
+  const [now,setNow]=useState(()=>Date.now());
+  const expiredRef=useRef(false);
+  const trialUntilMs=user?.proTrialUntil ? new Date(user.proTrialUntil).getTime() : 0;
+  const hasPaidSubscription=user?.tier==="pro" && ["active","trialing"].includes(user?.subscriptionStatus || "");
+  const shouldShow=Boolean(trialUntilMs && !hasPaidSubscription);
+  const msLeft=shouldShow ? Math.max(0, trialUntilMs-now) : 0;
+
+  useEffect(()=>{
+    expiredRef.current=false;
+  },[trialUntilMs]);
+
+  useEffect(()=>{
+    if(!shouldShow)return;
+    const timer=setInterval(()=>setNow(Date.now()),1000);
+    return()=>clearInterval(timer);
+  },[shouldShow,trialUntilMs]);
+
+  useEffect(()=>{
+    if(!shouldShow || msLeft>0 || expiredRef.current)return;
+    expiredRef.current=true;
+    onExpired?.();
+  },[shouldShow,msLeft,onExpired]);
+
+  if(!shouldShow || msLeft<=0)return null;
+
+  const totalSeconds=Math.floor(msLeft/1000);
+  const days=Math.floor(totalSeconds/86400);
+  const hours=Math.floor((totalSeconds%86400)/3600);
+  const minutes=Math.floor((totalSeconds%3600)/60);
+  const seconds=totalSeconds%60;
+  const trialEnd=new Date(trialUntilMs).toLocaleString(undefined, {
+    month:"short",
+    day:"numeric",
+    hour:"numeric",
+    minute:"2-digit",
+  });
+
+  return(
+    <div className="trial-countdown-banner" role="status" aria-live="polite">
+      <div className="trial-countdown-copy">
+        <div className="label" style={{color:t.green,marginBottom:6}}>Referral Pro trial active</div>
+        <div style={{fontWeight:900,color:t.text,fontSize:18,marginBottom:5}}>Your 7-day Pro trial ends in</div>
+        <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
+          Trial ends {trialEnd}. Upgrade yearly to keep PBQ simulations, Exam Mode, Smart Review, and detailed solutions.
+        </div>
+      </div>
+      <div className="trial-countdown-grid" aria-label={`Trial time left: ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`}>
+        {[
+          ["Days",days],
+          ["Hours",hours],
+          ["Mins",minutes],
+          ["Secs",seconds],
+        ].map(([label,value])=>(
+          <div key={label} className="trial-countdown-unit">
+            <div className="trial-countdown-value">{String(value).padStart(label==="Days"?1:2,"0")}</div>
+            <div className="trial-countdown-label">{label}</div>
+          </div>
+        ))}
+      </div>
+      <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={onUpgrade}>
+        Keep Pro yearly
+      </button>
+    </div>
+  );
+}
+
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
   return(
     <div style={{padding:"32px 24px",maxWidth:700,margin:"0 auto"}}>
@@ -14926,6 +15002,12 @@ export default function App() {
     setView("pricing");
   },[user?.id,user?.email,user?.referralTrialExpired]);
 
+  const handleTrialExpired=useCallback(()=>{
+    setUser(u=>u ? { ...u, tier: "free", referralTrialExpired: true } : u);
+    setShowTrialExpiredPrompt(true);
+    setView("pricing");
+  },[]);
+
   useEffect(()=>{
     const referralCode = rememberReferralFromUrl();
     if (referralCode) capture("referral_link_opened", { referral_code: referralCode });
@@ -15388,6 +15470,12 @@ export default function App() {
               <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onChangePassword={handleChangePassword} onLogout={handleLogout} compact/>
             </div>
           </div>
+          <TrialCountdownBanner
+            user={user}
+            t={t}
+            onExpired={handleTrialExpired}
+            onUpgrade={()=>setView("pricing")}
+          />
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
           {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar}/>}
           {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar}/>}
