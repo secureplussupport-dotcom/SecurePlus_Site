@@ -5,57 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm SecurePlus account deletion</title>
   </head>
-  <body style="margin:0;padding:0;background:#fff1f2;font-family:Inter,Arial,sans-serif;color:#111827;">
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#fff1f2;margin:0;padding:32px 12px;">
+  <body style="margin:0;padding:0;background:#fff1f2;font-family:Inter,Segoe UI,Arial,sans-serif;color:#111827;">
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">
+      A deletion request was made for your SecurePlus account. Only verify this if you requested it yourself.
+    </div>
+
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#fff1f2;margin:0;padding:34px 12px;">
       <tr>
         <td align="center">
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:#ffffff;border:1px solid #fecdd3;border-radius:14px;overflow:hidden;box-shadow:0 18px 48px rgba(127,29,29,.12);">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#ffffff;border:1px solid #fecdd3;border-radius:18px;overflow:hidden;box-shadow:0 24px 70px rgba(127,29,29,.16);">
             <tr>
-              <td style="background:#7f1d1d;padding:30px;color:#ffffff;">
-                <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 0 14px;">
+              <td style="background:#7f1d1d;padding:0;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#7f1d1d;">
                   <tr>
-                    <td style="padding:0 12px 0 0;">
-                      <img src="https://secureplusprep.com/secureplus-logo.svg" width="42" height="42" alt="SecurePlus" style="display:block;border-radius:10px;">
-                    </td>
-                    <td>
-                      <div style="font-size:15px;font-weight:800;color:#ffffff;">SecurePlus</div>
-                      <div style="font-size:12px;color:#fecaca;">Account security confirmation</div>
+                    <td style="padding:30px;">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                        <tr>
+                          <td style="vertical-align:middle;">
+                            <table role="presentation" cellspacing="0" cellpadding="0">
+                              <tr>
+                                <td style="padding:0 12px 0 0;">
+                                  <img src="https://secureplusprep.com/secureplus-logo.svg" width="44" height="44" alt="SecurePlus" style="display:block;border-radius:12px;background:#450a0a;">
+                                </td>
+                                <td>
+                                  <div style="font-size:17px;font-weight:900;color:#ffffff;">SecurePlus</div>
+                                  <div style="font-size:12px;color:#fecaca;margin-top:2px;">Account security confirmation</div>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                          <td align="right" style="vertical-align:middle;">
+                            <span style="display:inline-block;padding:7px 10px;border:1px solid rgba(254,202,202,.42);border-radius:999px;color:#fee2e2;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;">High impact action</span>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <h1 style="margin:30px 0 0;font-size:32px;line-height:1.15;font-weight:900;color:#ffffff;">Confirm that you requested account deletion</h1>
+                      <p style="margin:14px 0 0;font-size:15px;line-height:1.75;color:#fee2e2;max-width:535px;">This verification protects your account from accidental or unauthorized deletion. Do not continue unless you personally started this request inside SecurePlus.</p>
                     </td>
                   </tr>
                 </table>
-                <h1 style="margin:10px 0 0;font-size:28px;line-height:1.22;font-weight:900;">Confirm account deletion</h1>
-                <p style="margin:12px 0 0;font-size:15px;line-height:1.7;color:#fee2e2;">Only continue if you personally requested to delete your SecurePlus account.</p>
               </td>
             </tr>
+
             <tr>
-              <td style="padding:30px;">
-                <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#374151;">Hi there,</p>
-                <p style="margin:0 0 18px;font-size:15px;line-height:1.7;color:#374151;">A request was made to delete the SecurePlus account linked to <strong>{{ .Email }}</strong>. This email verifies that the request came from someone with access to this inbox.</p>
+              <td style="padding:32px 30px 28px;">
+                <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#334155;">Hi there,</p>
+                <p style="margin:0 0 20px;font-size:15px;line-height:1.75;color:#334155;">A request was made to delete the SecurePlus account linked to <strong>{{ .Email }}</strong>. Verification is required before the account can be deleted.</p>
 
-                <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:10px;padding:16px 18px;margin:0 0 22px;">
-                  <p style="margin:0 0 8px;font-size:14px;line-height:1.65;color:#991b1b;font-weight:900;">Warning before pressing the button:</p>
-                  <p style="margin:0;font-size:13px;line-height:1.65;color:#991b1b;">Pressing this button confirms that you voluntarily requested account deletion. After verification, you must return to SecurePlus and press Delete account again. Deletion may remove your profile, saved progress, attempts, and account access.</p>
-                </div>
-
-                <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 0 24px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 24px;">
                   <tr>
-                    <td style="border-radius:9px;background:#dc2626;">
-                      <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:14px 24px;color:#ffffff;text-decoration:none;font-size:15px;font-weight:900;border-radius:9px;">I requested this - verify deletion</a>
+                    <td style="background:#fff1f2;border:1px solid #fecdd3;border-radius:14px;padding:18px;">
+                      <div style="font-size:14px;font-weight:900;color:#991b1b;margin-bottom:10px;">Before pressing the red button, confirm all 3 statements are true:</div>
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                        <tr>
+                          <td style="padding:0 0 10px;font-size:13px;line-height:1.65;color:#7f1d1d;"><strong>1.</strong> I personally requested account deletion from SecurePlus.</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0 0 10px;font-size:13px;line-height:1.65;color:#7f1d1d;"><strong>2.</strong> I understand deletion may remove my saved progress, attempts, stars, referral trial, and account access.</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0;font-size:13px;line-height:1.65;color:#7f1d1d;"><strong>3.</strong> I understand this email only verifies the request; I must return to SecurePlus and press Delete account again to finish.</td>
+                        </tr>
+                      </table>
                     </td>
                   </tr>
                 </table>
 
-                <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:16px 18px;margin:0 0 22px;">
-                  <p style="margin:0 0 8px;font-size:13px;font-weight:900;color:#0f172a;">If you did not request this:</p>
-                  <p style="margin:0 0 8px;font-size:13px;line-height:1.65;color:#475569;">1. Do not press the red button.</p>
-                  <p style="margin:0 0 8px;font-size:13px;line-height:1.65;color:#475569;">2. Sign in to SecurePlus and change your password immediately.</p>
-                  <p style="margin:0;font-size:13px;line-height:1.65;color:#475569;">3. Contact secureplus.support@gmail.com if you need help securing your account.</p>
-                </div>
+                <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 0 26px;">
+                  <tr>
+                    <td style="border-radius:11px;background:#dc2626;box-shadow:0 12px 26px rgba(220,38,38,.30);">
+                      <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:15px 26px;color:#ffffff;text-decoration:none;font-size:15px;font-weight:900;border-radius:11px;">I requested this - verify deletion</a>
+                    </td>
+                  </tr>
+                </table>
 
-                <p style="margin:0 0 14px;font-size:13px;line-height:1.7;color:#6b7280;">If the button does not work, copy and paste this link into your browser only if you requested deletion:</p>
-                <p style="margin:0 0 20px;font-size:12px;line-height:1.6;color:#b91c1c;word-break:break-all;">{{ .ConfirmationURL }}</p>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 24px;">
+                  <tr>
+                    <td width="50%" style="padding:0 6px 0 0;">
+                      <div style="border:1px solid #e5e7eb;border-radius:12px;padding:15px;background:#f8fafc;">
+                        <div style="font-size:12px;font-weight:900;color:#0f172a;margin-bottom:7px;text-transform:uppercase;letter-spacing:.06em;">If this was you</div>
+                        <div style="font-size:13px;line-height:1.65;color:#475569;">Press the red button, return to SecurePlus, then confirm deletion inside the app.</div>
+                      </div>
+                    </td>
+                    <td width="50%" style="padding:0 0 0 6px;">
+                      <div style="border:1px solid #fecdd3;border-radius:12px;padding:15px;background:#fff7f7;">
+                        <div style="font-size:12px;font-weight:900;color:#991b1b;margin-bottom:7px;text-transform:uppercase;letter-spacing:.06em;">If this was not you</div>
+                        <div style="font-size:13px;line-height:1.65;color:#7f1d1d;">Do not press the button. Sign in, change your password, and contact support.</div>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
 
-                <p style="margin:0;font-size:13px;line-height:1.7;color:#6b7280;">Need help? Contact secureplus.support@gmail.com.</p>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 24px;">
+                  <tr>
+                    <td style="background:#0f172a;border-radius:14px;padding:18px;">
+                      <div style="font-size:14px;font-weight:900;color:#ffffff;margin-bottom:10px;">Recommended security steps if you did not request this</div>
+                      <p style="margin:0 0 8px;font-size:13px;line-height:1.65;color:#cbd5e1;">1. Ignore this email and do not use the deletion link.</p>
+                      <p style="margin:0 0 8px;font-size:13px;line-height:1.65;color:#cbd5e1;">2. Change your SecurePlus password immediately.</p>
+                      <p style="margin:0 0 8px;font-size:13px;line-height:1.65;color:#cbd5e1;">3. Review your Google account security if you use Google sign-in.</p>
+                      <p style="margin:0;font-size:13px;line-height:1.65;color:#cbd5e1;">4. Contact <a href="mailto:secureplus.support@gmail.com" style="color:#93c5fd;text-decoration:none;font-weight:800;">secureplus.support@gmail.com</a> if you need help.</p>
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="margin:0 0 12px;font-size:13px;line-height:1.7;color:#64748b;">If the button does not work, copy and paste this link only if you requested deletion:</p>
+                <p style="margin:0 0 22px;font-size:12px;line-height:1.6;color:#b91c1c;word-break:break-all;">{{ .ConfirmationURL }}</p>
+
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-top:1px solid #e5e7eb;padding-top:18px;">
+                  <tr>
+                    <td style="font-size:12px;line-height:1.65;color:#64748b;">
+                      SecurePlus account security email for {{ .Email }}.
+                      <br>If you did not request deletion, ignoring this email will not delete the account.
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
           </table>
