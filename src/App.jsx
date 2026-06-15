@@ -964,11 +964,26 @@ const MCQ_BANK_RAW = [
     exp:"Baiting uses physical media (USB drives) or enticing offers to lure victims into taking a security-compromising action. The label exploits curiosity without the attacker being present.",
     wrongFeedback:{ 0:"Phishing uses electronic messages — this attack uses a physical object.", 2:"Pretexting involves constructing a fabricated scenario and communicating directly with the target.", 3:"A watering hole attack compromises a website — this attack uses a physical device." }},
 
-  { id:"m048", ch:"2", difficulty:"medium", topic:"Malware Types",
-    q:"After a disgruntled employee is terminated, payroll records are deleted three months later. Investigation reveals code planted before departure set to trigger on a specific date. What malware type is this?",
-    opts:["Trojan","Logic bomb","Ransomware","Rootkit"], correct:1,
-    exp:"A logic bomb remains dormant until a specific condition is met (a date, event, or account deletion). It is a common insider threat tool — planted before departure to cause damage later.",
-    wrongFeedback:{ 0:"A Trojan disguises itself as legitimate software — it doesn't rely on a trigger condition.", 2:"Ransomware encrypts files and demands payment. Records here are deleted, not encrypted.", 3:"A rootkit hides malware at a deep OS level — a concealment mechanism, not a timed destruction tool." }},
+  {
+    "id": "m048",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Malware Types",
+    "q": "After a disgruntled employee is terminated, payroll records are deleted three months later. Investigation reveals code planted before departure set to trigger on a specific date. What malware type is this?",
+    "opts": [
+      "Trojan — disguises itself as legitimate software the victim is tricked into installing",
+      "Logic bomb — dormant code inserted before departure that activates on a predefined trigger condition",
+      "Worm — autonomously propagates across networked systems without requiring user interaction",
+      "Ransomware — encrypts victim files and presents a ransom demand for the decryption credential"
+    ],
+    "correct": 1,
+    "exp": "A logic bomb remains dormant until a specific condition is met (a date, event, or account deletion). It is a common insider threat tool — planted before departure to cause damage later.",
+    "wrongFeedback": {
+      "0": "A Trojan is disguised as legitimate software and relies on a user installing it. It is not defined by dormant code that activates when a condition is met.",
+      "2": "A worm spreads automatically between systems. The scenario describes code already planted in one system and waiting for a specific trigger.",
+      "3": "Ransomware encrypts data and demands payment. The scenario instead describes trigger-based destructive code without a ransom demand."
+    }
+  },
 
   { id:"m049", ch:"2", difficulty:"medium", topic:"Network Attacks",
     q:"An attacker exploits DNS implementations by sending a small query (60 bytes) that triggers a 3,000-byte response directed at a victim's IP, amplifying bandwidth by 50x. Which attack is this?",
@@ -2081,20 +2096,20 @@ const MCQ_BANK_RAW = [
       "exp": "IPSec Transport mode encrypts only the IP payload (data), leaving the original IP header intact. It is used for direct host-to-host communication where both endpoints support IPSec. Tunnel mode encapsulates the entire original packet (header + payload) in a new IP packet — used for site-to-site VPNs. AH provides authentication and integrity but not confidentiality. GRE is a tunneling protocol, not an IPSec mode."
     },
     {
-      "id": "m154",
-      "ch": "3",
-      "difficulty": "hard",
-      "topic": "Infrastructure Security",
-      "q": "A healthcare organisation connects medical IoT devices (infusion pumps, patient monitors) to its network. These devices cannot be patched and run embedded operating systems. Which architecture decision provides the MOST effective security?",
-      "opts": [
-        "Connect them to the main corporate network with antivirus",
-        "Place them on a dedicated, isolated VLAN with strict firewall rules allowing only necessary clinical system communication",
-        "Disable all network features on the medical devices",
-        "Apply GPO policies to the devices"
-      ],
-      "correct": 1,
-      "exp": "Placing unpatched IoT/medical devices on a dedicated isolated VLAN with strict firewall rules (allowing only required clinical system ports) is the most effective control. This network segmentation limits exposure — if a device is compromised, the attacker cannot reach other systems. IoT devices often cannot run antivirus or accept GPOs. Disabling network features defeats clinical functionality."
-    },
+    "id": "m154",
+    "ch": "3",
+    "difficulty": "hard",
+    "topic": "Infrastructure Security",
+    "q": "A healthcare organisation connects medical IoT devices (infusion pumps, patient monitors) to its network. These devices cannot be patched and run embedded operating systems. Which architecture decision provides the MOST effective security?",
+    "opts": [
+      "Connect medical devices to the main corporate network and rely on signature-based antivirus for protection",
+      "Place devices on a dedicated isolated VLAN with strict firewall rules permitting only required clinical system traffic",
+      "Disable all network-enabled features on each medical device to prevent them from transmitting any data",
+      "Apply standard Group Policy Objects to the embedded operating systems running on the medical devices"
+    ],
+    "correct": 1,
+    "exp": "Placing unpatched IoT/medical devices on a dedicated isolated VLAN with strict firewall rules (allowing only required clinical system ports) is the most effective control. This network segmentation limits exposure — if a device is compromised, the attacker cannot reach other systems. IoT devices often cannot run antivirus or accept GPOs. Disabling network features defeats clinical functionality."
+  },
     {
       "id": "m155",
       "ch": "3",
@@ -2471,20 +2486,20 @@ const MCQ_BANK_RAW = [
       "exp": "Anomaly-based (behavioural) detection establishes a baseline of normal network behaviour and alerts on deviations. It can detect novel, previously unseen attacks that have no signature. The trade-off is higher false positive rates — normal but unusual activity may trigger alerts. Signature-based detection matches known attack patterns. Heuristic analysis evaluates code behaviour. Protocol analysis validates protocol conformance."
     },
     {
-      "id": "m180",
-      "ch": "4",
-      "difficulty": "hard",
-      "topic": "Identity Management",
-      "q": "An organisation implements a Privileged Access Management (PAM) solution. Which capability MOST directly reduces the risk of privileged credential theft?",
-      "opts": [
-        "Requiring administrators to use their normal user accounts for all tasks",
-        "Vaulting privileged account credentials, checking them out for individual sessions, and automatically rotating them after use",
-        "Renaming the default Administrator account",
-        "Requiring 16-character passwords for privileged accounts"
-      ],
-      "correct": 1,
-      "exp": "PAM credential vaulting and rotation means privileged passwords are stored in an encrypted vault, checked out for individual sessions, and automatically rotated after use — attackers who steal a credential find it already rotated and useless. This eliminates persistent privileged credentials. Renaming admin accounts is trivially defeated. Long passwords help against brute force but don't address credential theft. Using normal accounts for all tasks removes necessary administrative capability."
-    },
+    "id": "m180",
+    "ch": "4",
+    "difficulty": "hard",
+    "topic": "Identity Management",
+    "q": "An organisation implements a Privileged Access Management (PAM) solution. Which capability MOST directly reduces the risk of privileged credential theft?",
+    "opts": [
+      "Requiring administrators to use their standard user accounts for all privileged tasks without elevation",
+      "Vaulting privileged credentials, issuing them per-session with check-in/check-out, and rotating them automatically after use",
+      "Renaming the built-in default Administrator account to a non-obvious name to reduce automated attack success",
+      "Enforcing a minimum 16-character password length policy for all accounts with privileged role assignments"
+    ],
+    "correct": 1,
+    "exp": "PAM credential vaulting and rotation means privileged passwords are stored in an encrypted vault, checked out for individual sessions, and automatically rotated after use — attackers who steal a credential find it already rotated and useless. This eliminates persistent privileged credentials. Renaming admin accounts is trivially defeated. Long passwords help against brute force but don't address credential theft. Using normal accounts for all tasks removes necessary administrative capability."
+  },
     {
       "id": "m181",
       "ch": "4",
@@ -2621,20 +2636,20 @@ const MCQ_BANK_RAW = [
       "exp": "ALE = SLE × ARO. First: SLE = Asset Value × Exposure Factor = £500,000 × 0.40 = £200,000. Then: ALE = SLE × ARO = £200,000 × 0.25 = £50,000. ALE represents the expected annual loss from this risk. This figure is used to justify security investments — a control costing less than £50,000/year that eliminates this risk is cost-effective."
     },
     {
-      "id": "m190",
-      "ch": "5",
-      "difficulty": "hard",
-      "topic": "Risk Management",
-      "q": "An organisation outsources its payroll processing to a third-party vendor. The vendor suffers a data breach exposing employee PII. The organisation faces regulatory fines. Which principle does this illustrate regarding third-party risk?",
-      "opts": [
-        "Organisations can transfer all legal liability to vendors through contracts",
-        "Organisations cannot fully transfer regulatory responsibility — they remain accountable for data they control, even when processed by third parties",
-        "The vendor is solely responsible for all consequences",
-        "Regulatory fines only apply to the party that was directly breached"
-      ],
-      "correct": 1,
-      "exp": "Regulatory responsibility cannot be fully outsourced. Under GDPR, the data controller (the organisation) remains accountable for the processing performed by data processors (vendors) on their behalf. Regulators hold the controller accountable for due diligence in vendor selection and ongoing oversight. Contractual liability (DPA/indemnities) addresses financial recovery from the vendor but does not shield the organisation from regulatory action."
-    },
+    "id": "m190",
+    "ch": "5",
+    "difficulty": "hard",
+    "topic": "Risk Management",
+    "q": "An organisation outsources its payroll processing to a third-party vendor. The vendor suffers a data breach exposing employee PII. The organisation faces regulatory fines. Which principle does this illustrate regarding third-party risk?",
+    "opts": [
+      "Organisations can fully transfer legal and regulatory liability to vendors through appropriately worded contracts",
+      "Organisations retain regulatory accountability for data they control even when processing is outsourced to a vendor",
+      "The vendor that experienced the breach is solely responsible for all regulatory fines and legal consequences",
+      "Regulatory penalties are only enforceable against the organisation that was directly the subject of the breach"
+    ],
+    "correct": 1,
+    "exp": "Regulatory responsibility cannot be fully outsourced. Under GDPR, the data controller (the organisation) remains accountable for the processing performed by data processors (vendors) on their behalf. Regulators hold the controller accountable for due diligence in vendor selection and ongoing oversight. Contractual liability (DPA/indemnities) addresses financial recovery from the vendor but does not shield the organisation from regulatory action."
+  },
     {
       "id": "m191",
       "ch": "5",
@@ -2937,20 +2952,20 @@ const MCQ_BANK_RAW = [
       "exp": "Shor's algorithm can efficiently factor large integers and compute discrete logarithms, directly breaking RSA (and ECC, DH) whose security relies on these mathematical hardness assumptions. AES-256 and SHA-3 are symmetric/hash functions — Grover's algorithm only halves their effective security (128-bit equivalent for AES-256). HMAC-SHA256 remains secure against quantum attacks. NIST's post-quantum standards (CRYSTALS-Kyber, CRYSTALS-Dilithium) replace RSA and ECC."
     },
     {
-      "id": "m211",
-      "ch": "1",
-      "difficulty": "easy",
-      "topic": "Cryptography Concepts",
-      "q": "What is the PRIMARY purpose of adding a salt to a password before hashing it?",
-      "opts": [
-        "To make the hash longer and harder to brute-force",
-        "To prevent two users with identical passwords from having identical hashes, defeating precomputed rainbow table attacks",
-        "To encrypt the password so it can be recovered by administrators",
-        "To comply with FIPS 140-2 requirements"
-      ],
-      "correct": 1,
-      "exp": "A salt is a random value unique to each user, prepended to the password before hashing. This ensures two users with \"Password123\" have completely different stored hashes, making precomputed rainbow tables useless — an attacker must brute-force each hash individually. The salt is stored alongside the hash in plaintext; its secrecy is not required."
-    },
+    "id": "m211",
+    "ch": "1",
+    "difficulty": "easy",
+    "topic": "Cryptography Concepts",
+    "q": "What is the PRIMARY purpose of adding a salt to a password before hashing it?",
+    "opts": [
+      "To extend the resulting hash output to a longer bit-length, increasing resistance to collision attacks",
+      "To ensure two users with identical passwords produce different stored hashes, defeating precomputed rainbow table lookups",
+      "To allow administrators to recover the original password value when a user requests a reset",
+      "To satisfy a FIPS 140-2 module validation requirement for compliant password storage implementations"
+    ],
+    "correct": 1,
+    "exp": "A salt is a random value unique to each user, prepended to the password before hashing. This ensures two users with \"Password123\" have completely different stored hashes, making precomputed rainbow tables useless — an attacker must brute-force each hash individually. The salt is stored alongside the hash in plaintext; its secrecy is not required."
+  },
     {
       "id": "m212",
       "ch": "1",
@@ -3252,20 +3267,20 @@ const MCQ_BANK_RAW = [
       "exp": "An AUP is an administrative control — it establishes expectations and liability but relies on human compliance. Effective AUPs require signed acknowledgement (establishing informed consent) and are reinforced by technical controls (web content filtering, DLP). Administrative controls alone are insufficient; defence in depth uses both administrative and technical controls."
     },
     {
-      "id": "m232",
-      "ch": "1",
-      "difficulty": "medium",
-      "topic": "Security Policies & Procedures",
-      "q": "During a planned database migration, the change advisory board (CAB) approves the change after reviewing a detailed implementation plan. Forty-eight hours before the scheduled change, a critical vulnerability is discovered in the database version being migrated to. What should happen next?",
-      "opts": [
-        "Proceed as planned — CAB approval is final",
-        "Abort the change entirely without further process",
-        "Raise an emergency change or submit a change modification to the CAB, presenting the new vulnerability information before proceeding",
-        "Proceed but schedule a separate change to patch the vulnerability immediately after migration"
-      ],
-      "correct": 2,
-      "exp": "Approved changes assume the conditions at approval time. A significant new variable (critical vulnerability in the target version) invalidates the original risk assessment. The change should be modified or re-reviewed by the CAB before proceeding. Most change management frameworks have an emergency change path for time-sensitive situations. Proceeding knowingly into a vulnerable state without CAB awareness bypasses governance."
-    },
+    "id": "m232",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Security Policies & Procedures",
+    "q": "During a planned database migration, the change advisory board (CAB) approves the change after reviewing a detailed implementation plan. Forty-eight hours before the scheduled change, a critical vulnerability is discovered in the database version being migrated to. What should happen next?",
+    "opts": [
+      "Proceed as planned — the CAB approval was already granted after the detailed plan review",
+      "Cancel the change entirely and restart the approval process from the initial scoping stage",
+      "Raise an emergency change or change modification to the CAB before proceeding, presenting the new vulnerability data",
+      "Proceed with the migration and raise a separate change to patch the discovered vulnerability immediately after"
+    ],
+    "correct": 2,
+    "exp": "Approved changes assume the conditions at approval time. A significant new variable (critical vulnerability in the target version) invalidates the original risk assessment. The change should be modified or re-reviewed by the CAB before proceeding. Most change management frameworks have an emergency change path for time-sensitive situations. Proceeding knowingly into a vulnerable state without CAB awareness bypasses governance."
+  },
     {
       "id": "m233",
       "ch": "1",
@@ -3432,20 +3447,20 @@ const MCQ_BANK_RAW = [
       "exp": "Threat intelligence tiers: Strategic: high-level trends, geopolitical context, for executives and board. Operational: specific campaigns, actor motivations, planned attack details. Tactical: TTPs, attack patterns, MITRE ATT&CK mappings, STIX-formatted IoCs for detection rules. Technical: specific IoCs (IPs, hashes) for immediate blocking. The described report — TTPs + STIX IoCs + actor profiles — is primarily tactical."
     },
     {
-      "id": "m244",
-      "ch": "2",
-      "difficulty": "easy",
-      "topic": "Vulnerability Types",
-      "q": "A vulnerability scanner reports that a web server is running a version of OpenSSL that contains a known vulnerability. The server is on an internal network with no internet exposure. According to risk-based vulnerability management, which factor MOST reduces the effective priority of this finding?",
-      "opts": [
-        "The age of the vulnerability — older vulnerabilities are less likely to be exploited",
-        "The low network exposure — the attack vector is limited to internal network access only, reducing the exploitability",
-        "The cost of patching OpenSSL",
-        "The vendor's response time to issue a patch"
-      ],
-      "correct": 1,
-      "exp": "CVSS Environmental Metrics allow organisations to adjust the base score based on their specific context. Network exposure is one of the most significant factors — a vulnerability requiring network access from the internet (Attack Vector: Network) is far less exploitable when the system is isolated on an internal network. Risk-based VM considers CVSS Base Score + exploitability context + business criticality."
-    },
+    "id": "m244",
+    "ch": "2",
+    "difficulty": "easy",
+    "topic": "Vulnerability Types",
+    "q": "A vulnerability scanner reports that a web server is running a version of OpenSSL that contains a known vulnerability. The server is on an internal network with no internet exposure. According to risk-based vulnerability management, which factor MOST reduces the effective priority of this finding?",
+    "opts": [
+      "The age of the vulnerability — older findings are statistically less likely to be actively exploited",
+      "The limited network exposure — the attack vector is restricted to internal access only, reducing exploitability",
+      "The estimated cost of applying the patch to the affected OpenSSL library on this server",
+      "The vendor's current response timeline for issuing a remediation patch for this version"
+    ],
+    "correct": 1,
+    "exp": "CVSS Environmental Metrics allow organisations to adjust the base score based on their specific context. Network exposure is one of the most significant factors — a vulnerability requiring network access from the internet (Attack Vector: Network) is far less exploitable when the system is isolated on an internal network. Risk-based VM considers CVSS Base Score + exploitability context + business criticality."
+  },
     {
       "id": "m245",
       "ch": "2",
@@ -3702,20 +3717,20 @@ const MCQ_BANK_RAW = [
       "exp": "WAF evasion through encoding is a known technique. The fix is input normalisation — the WAF decodes Base64, URL-encoding, HTML entities, and other encodings before applying detection rules. This ensures that \"U0VMRUNUICo=\" (Base64 for \"SELECT *\") is evaluated as \"SELECT *\" against detection rules. A WAF that applies rules only to raw input is trivially bypassed by encoding."
     },
     {
-      "id": "m262",
-      "ch": "2",
-      "difficulty": "hard",
-      "topic": "Mitigation Techniques",
-      "q": "An organisation wants to implement patch management SLAs. According to common industry frameworks, which is the MOST defensible SLA for critical (CVSS 9.0+) vulnerabilities on internet-facing systems?",
-      "opts": [
-        "Patch within 180 days of vendor release",
-        "Patch within 15-30 days of vendor release — with compensating controls implemented within 24-72 hours for actively exploited vulnerabilities",
-        "Patch during the next quarterly maintenance window",
-        "Patch only when automated testing confirms no compatibility issues"
-      ],
-      "correct": 1,
-      "exp": "Industry standards (PCI DSS, CIS Controls, NIST) recommend patching critical vulnerabilities within 15-30 days on high-risk systems. For actively exploited vulnerabilities (CISA KEV), federal agencies must remediate within 15 days (BOD 22-01). The 24-72 hour compensating control (WAF virtual patch, network restriction) provides protection while formal patching is prepared and tested. 180 days and quarterly windows leave organisations exposed for far too long given real-world exploitation timelines."
-    },
+    "id": "m262",
+    "ch": "2",
+    "difficulty": "hard",
+    "topic": "Mitigation Techniques",
+    "q": "An organisation wants to implement patch management SLAs. According to common industry frameworks, which is the MOST defensible SLA for critical (CVSS 9.0+) vulnerabilities on internet-facing systems?",
+    "opts": [
+      "Remediate within 180 days of vendor release — aligning with annual compliance audit scheduling windows",
+      "Remediate within 15–30 days, with compensating controls deployed within 24–72 hours for actively exploited CVEs",
+      "Remediate during the next quarterly maintenance window regardless of the vulnerability's CVSS score",
+      "Remediate only after automated regression testing confirms no compatibility conflicts with existing applications"
+    ],
+    "correct": 1,
+    "exp": "Industry standards (PCI DSS, CIS Controls, NIST) recommend patching critical vulnerabilities within 15-30 days on high-risk systems. For actively exploited vulnerabilities (CISA KEV), federal agencies must remediate within 15 days (BOD 22-01). The 24-72 hour compensating control (WAF virtual patch, network restriction) provides protection while formal patching is prepared and tested. 180 days and quarterly windows leave organisations exposed for far too long given real-world exploitation timelines."
+  },
     {
       "id": "m263",
       "ch": "2",
@@ -3777,20 +3792,20 @@ const MCQ_BANK_RAW = [
       "exp": "Password spraying: few passwords tried against many accounts, staying below per-account lockout thresholds. Typical passwords: seasonal (\"Winter2024!\"), company name, \"Password1\". Differs from credential stuffing (which uses specific breached pairs). Detection: look for distributed low-rate failures across many accounts. Mitigation: MFA, CAPTCHA, impossible travel detection, breach password screening."
     },
     {
-      "id": "m267",
-      "ch": "2",
-      "difficulty": "hard",
-      "topic": "Vulnerability Types",
-      "q": "A penetration tester discovers that a web application processes XML input and the XML parser has external entity processing enabled. What type of vulnerability exists and what is the risk?",
-      "opts": [
-        "SQL injection — the XML is passed to a database query",
-        "XML External Entity (XXE) injection — attackers can define external entities to read local files, perform SSRF, or cause denial of service",
-        "Cross-site scripting — the XML is reflected in the browser",
-        "Command injection — XML input is passed to the OS shell"
-      ],
-      "correct": 1,
-      "exp": "XXE (XML External Entity) injection exploits XML parsers that process external entity declarations. An attacker defines:  and uses &xxe; in the XML. The server fetches and includes /etc/passwd in the response. Risks: local file disclosure, SSRF (using \"file://\" or \"http://internal-server\"), DoS (billion laughs attack). Fix: disable external entity processing in the XML parser (implementation varies by language/library)."
-    },
+    "id": "m267",
+    "ch": "2",
+    "difficulty": "hard",
+    "topic": "Vulnerability Types",
+    "q": "A penetration tester discovers that a web application processes XML input and the XML parser has external entity processing enabled. What type of vulnerability exists and what is the risk?",
+    "opts": [
+      "SQL injection — the XML input is concatenated into a database query without sanitisation",
+      "XML External Entity (XXE) injection — external entities can read local files, trigger SSRF, or cause DoS",
+      "Reflected cross-site scripting — the parsed XML content is rendered unsanitised in the browser response",
+      "OS command injection — the XML parser passes unsanitised input directly to a system shell command"
+    ],
+    "correct": 1,
+    "exp": "XXE (XML External Entity) injection exploits XML parsers that process external entity declarations. An attacker defines: and uses &xxe; in the XML. The server fetches and includes /etc/passwd in the response. Risks: local file disclosure, SSRF (using \"file://\" or \"http://internal-server\"), DoS (billion laughs attack). Fix: disable external entity processing in the XML parser (implementation varies by language/library)."
+  },
     {
       "id": "m268",
       "ch": "2",
@@ -4047,20 +4062,20 @@ const MCQ_BANK_RAW = [
       "exp": "Attack surface reduction: every running service is a potential attack vector. Services not needed in production should be disabled and removed entirely. FTP, Telnet, and rsh transmit credentials in cleartext and have known vulnerabilities. Disabling them eliminates their attack surface completely — the most effective hardening measure. This aligns with CIS Benchmarks and DISA STIG guidance."
     },
     {
-      "id": "m285",
-      "ch": "2",
-      "difficulty": "hard",
-      "topic": "Common Threats",
-      "q": "A security operations team detects that an endpoint is making DNS queries for domains matching the pattern: [random-8-char-string].update-service.com at regular intervals. What technique does this MOST likely indicate?",
-      "opts": [
-        "Normal Windows Update — the random strings are unique per-device identifiers",
-        "Domain Generation Algorithm (DGA) — malware uses a deterministic algorithm to generate many domains, allowing C2 communication even if some domains are blocked",
-        "DNS cache poisoning — the attacker is injecting fake DNS responses",
-        "DNSSEC validation failure — the client is checking multiple DNSSEC records"
-      ],
-      "correct": 1,
-      "exp": "DGA (Domain Generation Algorithm): malware generates a large number of pseudo-random domain names using a seed (often current date/time). Attacker only registers a small subset. If one C2 domain is blocked, the malware tries the next generated domain. Detection: machine learning on DNS traffic (high query volume, consistent random-looking patterns, NXDOMAIN responses). Countermeasure: detect algorithmically, block entire DGA families using threat intelligence."
-    },
+    "id": "m285",
+    "ch": "2",
+    "difficulty": "hard",
+    "topic": "Common Threats",
+    "q": "A security operations team detects that an endpoint is making DNS queries for domains matching the pattern: [random-8-char-string].update-service.com at regular intervals. What technique does this MOST likely indicate?",
+    "opts": [
+      "Normal Windows Update traffic — random substrings are per-device identifiers embedded in update requests",
+      "Domain Generation Algorithm (DGA) C2 — malware algorithmically generates domains to maintain resilient command-and-control",
+      "DNS cache poisoning — the attacker is injecting forged responses to redirect internal resolution requests",
+      "DNSSEC validation failure — the resolver is querying multiple alternative records during signature verification"
+    ],
+    "correct": 1,
+    "exp": "DGA (Domain Generation Algorithm): malware generates a large number of pseudo-random domain names using a seed (often current date/time). Attacker only registers a small subset. If one C2 domain is blocked, the malware tries the next generated domain. Detection: machine learning on DNS traffic (high query volume, consistent random-looking patterns, NXDOMAIN responses). Countermeasure: detect algorithmically, block entire DGA families using threat intelligence."
+  },
     {
       "id": "m286",
       "ch": "2",
@@ -4407,20 +4422,20 @@ const MCQ_BANK_RAW = [
       "exp": "Stateful firewalls maintain a connection state table — they know which connections are legitimate (three-way handshake completed). Packets claiming to be part of connections that don't exist in the state table are rejected. This prevents IP spoofing, SYN-ACK packets without a matching SYN, and various session hijacking attempts. Stateless packet filtering is susceptible to these attacks because it evaluates each packet independently."
     },
     {
-      "id": "m309",
-      "ch": "3",
-      "difficulty": "hard",
-      "topic": "Cloud Security",
-      "q": "An organisation uses Terraform to provision infrastructure. A developer's Terraform plan includes: resource \"aws_security_group_rule\" { type=\"ingress\" from_port=0 to_port=65535 protocol=\"-1\" cidr_blocks=[\"0.0.0.0/0\"]}. What is the risk?",
-      "opts": [
-        "The Terraform plan will fail because of invalid port range syntax",
-        "This security group rule allows ALL inbound traffic from any IP on all ports and protocols — a critical misconfiguration equivalent to no inbound filtering",
-        "The rule only applies to EC2 instances in the default VPC",
-        "This is a valid rule for a load balancer that needs to accept connections from the internet"
-      ],
-      "correct": 1,
-      "exp": "Protocol \"-1\" = all protocols. from_port=0, to_port=65535 = all ports. cidr_blocks=[\"0.0.0.0/0\"] = all internet IPs. This is effectively no inbound filtering — any attacker on the internet can connect to any port of any resource in this security group. This is a critical IaC misconfiguration. Prevent with: IaC security scanning (Checkov, tfsec, Terrascan) in CI/CD, and AWS Organizations SCPs preventing overly permissive security groups."
-    },
+    "id": "m309",
+    "ch": "3",
+    "difficulty": "hard",
+    "topic": "Cloud Security",
+    "q": "An organisation uses Terraform to provision infrastructure. A developer's Terraform plan includes: resource \"aws_security_group_rule\" { type=\"ingress\" from_port=0 to_port=65535 protocol=\"-1\" cidr_blocks=[\"0.0.0.0/0\"]}. What is the risk?",
+    "opts": [
+      "The Terraform plan will fail at validation because the port range syntax does not conform to AWS API requirements",
+      "This rule allows ALL inbound traffic from any source on all ports and protocols — equivalent to disabling inbound filtering entirely",
+      "The rule only applies to EC2 instances inside the default VPC and has no effect on custom VPC security groups",
+      "This is an appropriate rule for a public-facing load balancer that must accept inbound connections from any source"
+    ],
+    "correct": 1,
+    "exp": "Protocol \"-1\" = all protocols. from_port=0, to_port=65535 = all ports. cidr_blocks=[\"0.0.0.0/0\"] = all internet IPs. This is effectively no inbound filtering — any attacker on the internet can connect to any port of any resource in this security group. This is a critical IaC misconfiguration. Prevent with: IaC security scanning (Checkov, tfsec, Terrascan) in CI/CD, and AWS Organizations SCPs preventing overly permissive security groups."
+  },
     {
       "id": "m310",
       "ch": "3",
@@ -4452,20 +4467,20 @@ const MCQ_BANK_RAW = [
       "exp": "In tap/passive mode, the IDS receives a copy of traffic (via port mirror/SPAN or network tap) but is not in the traffic path. This means: (1) It cannot block traffic. (2) By the time an alert fires, the malicious packet has already been delivered. The advantage: no latency impact, no single point of failure. An inline IPS is in the traffic path and can drop malicious packets in real-time — but adds latency and becomes a single point of failure."
     },
     {
-      "id": "m312",
-      "ch": "3",
-      "difficulty": "medium",
-      "topic": "Cloud Security",
-      "q": "Which AWS security service continuously monitors API activity in an AWS account, recording all API calls to CloudTrail logs, and can alert on unusual API activity using machine learning?",
-      "opts": [
-        "AWS WAF — web application firewall for HTTP filtering",
-        "AWS Shield — DDoS protection service",
-        "Amazon GuardDuty — threat detection service that analyzes CloudTrail, VPC Flow Logs, and DNS logs for malicious activity",
-        "AWS Inspector — vulnerability scanning for EC2 and containers"
-      ],
-      "correct": 2,
-      "exp": "Amazon GuardDuty is a threat detection service that uses ML, anomaly detection, and threat intelligence to analyse CloudTrail API activity, VPC Flow Logs, and DNS query logs. It detects: crypto mining, unusual API calls from unknown IPs, credential theft (calls from TOR exit nodes), account compromise. CloudTrail records API calls. WAF filters HTTP. Shield protects against DDoS. Inspector finds vulnerabilities."
-    },
+    "id": "m312",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Cloud Security",
+    "q": "Which AWS security service continuously monitors API activity in an AWS account, recording all API calls to CloudTrail logs, and can alert on unusual API activity using machine learning?",
+    "opts": [
+      "AWS WAF — an application-layer firewall that inspects and filters HTTP/HTTPS requests to web applications",
+      "AWS Shield — a managed DDoS protection service that defends against volumetric and protocol-based attacks",
+      "Amazon GuardDuty — a threat detection service analysing CloudTrail, VPC Flow Logs, and DNS logs for anomalies",
+      "AWS Inspector — a vulnerability scanning service that assesses EC2 instances and container images for findings"
+    ],
+    "correct": 2,
+    "exp": "Amazon GuardDuty is a threat detection service that uses ML, anomaly detection, and threat intelligence to analyse CloudTrail API activity, VPC Flow Logs, and DNS query logs. It detects: crypto mining, unusual API calls from unknown IPs, credential theft (calls from TOR exit nodes), account compromise. CloudTrail records API calls. WAF filters HTTP. Shield protects against DDoS. Inspector finds vulnerabilities."
+  },
     {
       "id": "m313",
       "ch": "3",
@@ -4542,20 +4557,20 @@ const MCQ_BANK_RAW = [
       "exp": "Double-tagging VLAN hopping: an attacker on an access VLAN sends a frame with two 802.1Q tags. The first switch strips the outer tag (matching the native VLAN) and forwards the frame. The second switch sees the inner tag and delivers to the target VLAN — bypassing the inter-VLAN firewall. Mitigation: (1) Change the native VLAN to an unused VLAN (not VLAN 1). (2) Explicitly tag the native VLAN. (3) Use VLAN 1 for nothing. (4) Disable DTP on all access ports."
     },
     {
-      "id": "m318",
-      "ch": "3",
-      "difficulty": "easy",
-      "topic": "Cloud Security",
-      "q": "An organisation's AWS environment has no MFA on the root account. A CIS AWS Foundations Benchmark assessment would rate this as:",
-      "opts": [
-        "Low risk — root account is rarely used",
-        "Acceptable — IAM users with admin rights are equivalent to root",
-        "A critical finding — the root account has unrestricted access and should be protected by MFA and its access keys should be deleted",
-        "Medium risk — only relevant if the root account password is weak"
-      ],
-      "correct": 2,
-      "exp": "The AWS root account has unrestricted access to everything in the account and cannot be restricted by IAM policies. Its compromise means complete account loss. CIS AWS Foundations Benchmark Control 1.4: \"Ensure access keys are rotated every 90 days\" and Control 1.5: \"Ensure MFA is enabled for the root account\" are critical (Level 1) requirements. Best practice: enable MFA, delete root access keys, and never use the root account for routine operations."
-    },
+    "id": "m318",
+    "ch": "3",
+    "difficulty": "easy",
+    "topic": "Cloud Security",
+    "q": "An organisation's AWS environment has no MFA on the root account. A CIS AWS Foundations Benchmark assessment would rate this as:",
+    "opts": [
+      "Low risk — root account credentials are rarely used in day-to-day operations by most AWS administrators",
+      "Acceptable — IAM users with AdministratorAccess policy permissions are functionally equivalent to the root account",
+      "Critical finding — root has unrestricted account access and requires MFA; access keys must be deleted immediately",
+      "Medium risk — the lack of MFA is only a concern if the root account password itself is considered weak"
+    ],
+    "correct": 2,
+    "exp": "The AWS root account has unrestricted access to everything in the account and cannot be restricted by IAM policies. Its compromise means complete account loss. CIS AWS Foundations Benchmark Control 1.4: \"Ensure access keys are rotated every 90 days\" and Control 1.5: \"Ensure MFA is enabled for the root account\" are critical (Level 1) requirements. Best practice: enable MFA, delete root access keys, and never use the root account for routine operations."
+  },
     {
       "id": "m319",
       "ch": "3",
@@ -4587,35 +4602,35 @@ const MCQ_BANK_RAW = [
       "exp": "OOB (Out-of-Band) management uses a physically or logically separate network path for administrative access (console access, iDRAC/iLO, IPMI, SSH management). Benefits: (1) Security: management credentials and traffic are isolated from the production network — an attacker on the production network cannot capture management credentials. (2) Availability: manage systems even when the production network is down or under attack. A standard baseline control for data centres."
     },
     {
-      "id": "m321",
-      "ch": "3",
-      "difficulty": "hard",
-      "topic": "Cloud Security",
-      "q": "An organisation implements a Cloud Access Security Broker (CASB). Which CASB deployment mode inspects cloud traffic inline — between users and cloud services — allowing real-time blocking of policy violations?",
-      "opts": [
-        "API mode — integrates with cloud service APIs to scan data at rest",
-        "Log collection mode — analyses cloud provider audit logs",
-        "Reverse proxy mode — intercepts traffic from managed devices by routing them through the CASB before they reach the cloud service",
-        "Email gateway mode — scans cloud email services"
-      ],
-      "correct": 2,
-      "exp": "CASB deployment modes: (1) API mode: integrates with cloud provider APIs (Office 365, Google Workspace) — scans data at rest, discovers sharing policies, investigates historical events. Cannot block in real-time. (2) Forward proxy mode: device configured to route cloud traffic through CASB — real-time blocking. (3) Reverse proxy mode: cloud apps configured to route traffic through CASB — enforces controls without requiring device config, useful for BYOD. Real-time blocking capability distinguishes proxy modes from API mode."
-    },
+    "id": "m321",
+    "ch": "3",
+    "difficulty": "hard",
+    "topic": "Cloud Security",
+    "q": "An organisation implements a Cloud Access Security Broker (CASB). Which CASB deployment mode inspects cloud traffic inline — between users and cloud services — allowing real-time blocking of policy violations?",
+    "opts": [
+      "API mode — integrates directly with cloud service provider APIs to scan stored data and configurations at rest",
+      "Log collection mode — retrieves and analyses cloud provider audit and activity logs on a scheduled polling basis",
+      "Reverse proxy mode — intercepts all traffic from managed devices and routes it through the CASB before reaching cloud services",
+      "Email gateway mode — scans inbound and outbound cloud email traffic for policy violations and data leakage"
+    ],
+    "correct": 2,
+    "exp": "CASB deployment modes: (1) API mode: integrates with cloud provider APIs (Office 365, Google Workspace) — scans data at rest, discovers sharing policies, investigates historical events. Cannot block in real-time. (2) Forward proxy mode: device configured to route cloud traffic through CASB — real-time blocking. (3) Reverse proxy mode: cloud apps configured to route traffic through CASB — enforces controls without requiring device config, useful for BYOD. Real-time blocking capability distinguishes proxy modes from API mode."
+  },
     {
-      "id": "m322",
-      "ch": "3",
-      "difficulty": "easy",
-      "topic": "Application Architecture",
-      "q": "A software development team adopts DevSecOps practices. Which of the following BEST describes the \"shift left\" principle in this context?",
-      "opts": [
-        "Moving security operations from the right side of the organization chart to the left",
-        "Integrating security testing and requirements into the earliest phases of the development process rather than treating security as a final gate before release",
-        "Shifting security responsibilities from the security team to left-handed developers",
-        "Moving security controls to the left side of the network topology"
-      ],
-      "correct": 1,
-      "exp": "\"Shift left\" refers to moving activities earlier in the SDLC timeline (left on a Gantt chart). For security: rather than pen testing only before release, security is integrated from: requirements (threat modelling), design (security architecture review), coding (SAST in IDE), build (dependency scanning, secrets scanning), test (DAST, integration testing). Cost of fixing vulnerabilities increases 5-10x per SDLC phase — catching them in design is far cheaper than fixing in production."
-    },
+    "id": "m322",
+    "ch": "3",
+    "difficulty": "easy",
+    "topic": "Application Architecture",
+    "q": "A software development team adopts DevSecOps practices. Which of the following BEST describes the \"shift left\" principle in this context?",
+    "opts": [
+      "Moving security operations from the right side of the organisational chart to the left-hand business units",
+      "Integrating security testing and requirements into the earliest SDLC phases rather than applying them only at release",
+      "Shifting security responsibilities away from the dedicated security team toward left-handed developers on the team",
+      "Moving security controls from the right side of the network topology to the left-side perimeter boundary"
+    ],
+    "correct": 1,
+    "exp": "\"Shift left\" refers to moving activities earlier in the SDLC timeline (left on a Gantt chart). For security: rather than pen testing only before release, security is integrated from: requirements (threat modelling), design (security architecture review), coding (SAST in IDE), build (dependency scanning, secrets scanning), test (DAST, integration testing). Cost of fixing vulnerabilities increases 5-10x per SDLC phase — catching them in design is far cheaper than fixing in production."
+  },
     {
       "id": "m323",
       "ch": "3",
@@ -5007,20 +5022,20 @@ const MCQ_BANK_RAW = [
       "exp": "Windows Prefetch: Windows creates .pf files to speed up application launch by preloading components. Forensically valuable: (1) Execution evidence: if MALWARE.EXE.pf exists, malware.exe was executed (even if malware.exe was deleted). (2) Timestamps: last execution time, up to 8 run timestamps in Win8+. (3) Run count: how many times executed. (4) File references: DLLs and resources loaded during execution. Prefetch is enabled by default on workstations but often disabled on servers."
     },
     {
-      "id": "m349",
-      "ch": "4",
-      "difficulty": "easy",
-      "topic": "Vulnerability Management",
-      "q": "A vulnerability assessment differs from a penetration test in what CRITICAL way?",
-      "opts": [
-        "Vulnerability assessments are always conducted externally; penetration tests are always internal",
-        "Vulnerability assessments identify and rank vulnerabilities without exploiting them; penetration tests actively attempt to exploit vulnerabilities to demonstrate real-world attack impact",
-        "Vulnerability assessments are manual; penetration tests use automated tools",
-        "Vulnerability assessments are only performed on networks; penetration tests focus on applications"
-      ],
-      "correct": 1,
-      "exp": "Vulnerability Assessment: systematic identification, classification, and reporting of vulnerabilities. Tools: Nessus, Qualys, OpenVAS. Output: list of vulnerabilities with severity ratings. Does NOT involve exploitation. Penetration Test: simulates a real attacker by attempting to exploit vulnerabilities, chain multiple vulnerabilities, move laterally, and achieve specific objectives (access sensitive data, domain admin). Shows real-world business impact. Pen tests require explicit written authorisation."
-    },
+    "id": "m349",
+    "ch": "4",
+    "difficulty": "easy",
+    "topic": "Vulnerability Management",
+    "q": "A vulnerability assessment differs from a penetration test in what CRITICAL way?",
+    "opts": [
+      "Vulnerability assessments are always conducted from external network positions; penetration tests are always internal",
+      "Vulnerability assessments identify and rank weaknesses without exploitation; penetration tests actively exploit to prove impact",
+      "Vulnerability assessments rely entirely on manual techniques; penetration tests rely exclusively on automated tooling",
+      "Vulnerability assessments only apply to network infrastructure; penetration tests apply only to web applications"
+    ],
+    "correct": 1,
+    "exp": "Vulnerability Assessment: systematic identification, classification, and reporting of vulnerabilities. Tools: Nessus, Qualys, OpenVAS. Output: list of vulnerabilities with severity ratings. Does NOT involve exploitation. Penetration Test: simulates a real attacker by attempting to exploit vulnerabilities, chain multiple vulnerabilities, move laterally, and achieve specific objectives (access sensitive data, domain admin). Shows real-world business impact. Pen tests require explicit written authorisation."
+  },
     {
       "id": "m350",
       "ch": "4",
@@ -5112,20 +5127,20 @@ const MCQ_BANK_RAW = [
       "exp": "Privilege creep: over time, users accumulate access from multiple roles as they change positions. Without a formal deprovisioning process triggered by role changes, old access is never removed. The employee now has both sales and HR data access — violating least privilege. Prevention: automated JML (Joiner-Mover-Leaver) process that removes old access when provisioning new access, and periodic access reviews (recertification campaigns) to identify and remove unnecessary access."
     },
     {
-      "id": "m356",
-      "ch": "4",
-      "difficulty": "medium",
-      "topic": "Security Monitoring",
-      "q": "A network security analyst notices that a server is sending unusually large amounts of data to an external IP address via HTTPS (port 443). Standard DLP tools cannot inspect the content due to encryption. Which control would enable inspection of this traffic?",
-      "opts": [
-        "Block all HTTPS outbound traffic — this prevents data exfiltration",
-        "Deploy a full SSL/TLS inspection proxy — the proxy decrypts, inspects, and re-encrypts traffic; detected policy violations can be blocked",
-        "Deploy DNSSEC — this prevents DNS hijacking that could redirect the traffic",
-        "Implement port-based blocking of port 443"
-      ],
-      "correct": 1,
-      "exp": "SSL/TLS inspection (HTTPS inspection): a proxy terminates the TLS session, decrypts the content, applies DLP/AV/URL filtering, then re-encrypts and forwards. Requires deploying the proxy's CA certificate to all managed devices. Concerns: (1) Privacy — employee personal banking traffic is also inspected. (2) Performance — decryption/re-encryption is CPU-intensive. (3) Certificate handling — pinned apps fail. Best practice: exclude sensitive categories (banking, healthcare), log that inspection occurred."
-    },
+    "id": "m356",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Monitoring",
+    "q": "A network security analyst notices that a server is sending unusually large amounts of data to an external IP address via HTTPS (port 443). Standard DLP tools cannot inspect the content due to encryption. Which control would enable inspection of this traffic?",
+    "opts": [
+      "Block all outbound HTTPS traffic at the perimeter firewall to eliminate the encrypted exfiltration channel entirely",
+      "Deploy an SSL/TLS inspection proxy that decrypts, inspects for policy violations, and re-encrypts outbound traffic",
+      "Deploy DNSSEC validation to prevent DNS hijacking that could be used to redirect the suspicious outbound traffic",
+      "Implement port-based blocking of TCP port 443 at the network boundary to prevent all HTTPS egress traffic"
+    ],
+    "correct": 1,
+    "exp": "SSL/TLS inspection (HTTPS inspection): a proxy terminates the TLS session, decrypts the content, applies DLP/AV/URL filtering, then re-encrypts and forwards. Requires deploying the proxy's CA certificate to all managed devices. Concerns: (1) Privacy — employee personal banking traffic is also inspected. (2) Performance — decryption/re-encryption is CPU-intensive. (3) Certificate handling — pinned apps fail. Best practice: exclude sensitive categories (banking, healthcare), log that inspection occurred."
+  },
     {
       "id": "m357",
       "ch": "4",
@@ -5262,20 +5277,20 @@ const MCQ_BANK_RAW = [
       "exp": "SAML 2.0: XML-based, complex, heavy, well-established in enterprise (especially legacy web apps). IdP redirects browser with XML assertions. Strong for browser-based SSO. OIDC (OpenID Connect): built on OAuth 2.0, uses JSON/JWT tokens, RESTful, lightweight. Better for: modern web apps (SPAs), mobile apps, APIs, microservices. Both provide SSO; OIDC is generally preferred for new implementations due to developer ergonomics and API compatibility."
     },
     {
-      "id": "m366",
-      "ch": "4",
-      "difficulty": "hard",
-      "topic": "Security Monitoring",
-      "q": "A SOC analyst uses Splunk to investigate an alert. The query: index=windows EventCode=4688 | where CommandLine like \"%powershell%\" AND CommandLine like \"%-enc%\" | stats count by Computer, Account. What is this query designed to detect?",
-      "opts": [
-        "All PowerShell executions across the environment",
-        "Systems with PowerShell installed but never used",
-        "PowerShell processes spawned with encoded commands (-enc / -EncodedCommand) — a common technique for obfuscating malicious scripts",
-        "Administrator accounts that have executed PowerShell"
-      ],
-      "correct": 2,
-      "exp": "EventCode 4688 = New Process Creation (requires Process Command Line Audit to be enabled). CommandLine like \"%powershell%\" = any PowerShell execution. CommandLine like \"%-enc%\" = PowerShell executed with -EncodedCommand (or -enc shorthand), which Base64-encodes the command to obfuscate it. This is MITRE T1059.001 (PowerShell) + T1027 (Obfuscated Files). The stats summarise by Computer and Account to identify which systems and users are executing obfuscated PowerShell."
-    },
+    "id": "m366",
+    "ch": "4",
+    "difficulty": "hard",
+    "topic": "Security Monitoring",
+    "q": "A SOC analyst uses Splunk to investigate an alert. The query: index=windows EventCode=4688 | where CommandLine like \"%powershell%\" AND CommandLine like \"%-enc%\" | stats count by Computer, Account. What is this query designed to detect?",
+    "opts": [
+      "All PowerShell process executions across the environment regardless of the command-line arguments used",
+      "Systems where PowerShell is installed but has never been executed according to the Windows event log data",
+      "PowerShell processes launched with encoded commands (-enc flag) — a common obfuscation technique in malicious scripts",
+      "Administrator accounts that have executed any PowerShell command during the monitored time window"
+    ],
+    "correct": 2,
+    "exp": "EventCode 4688 = New Process Creation (requires Process Command Line Audit to be enabled). CommandLine like \"%powershell%\" = any PowerShell execution. CommandLine like \"%-enc%\" = PowerShell executed with -EncodedCommand (or -enc shorthand), which Base64-encodes the command to obfuscate it. This is MITRE T1059.001 (PowerShell) + T1027 (Obfuscated Files). The stats summarise by Computer and Account to identify which systems and users are executing obfuscated PowerShell."
+  },
     {
       "id": "m367",
       "ch": "4",
@@ -5607,20 +5622,20 @@ const MCQ_BANK_RAW = [
       "exp": "PCI DSS Requirement 3.3: sensitive authentication data (SAD — full card number, CVV, PIN) must not be stored after authorisation. If the full PAN must be stored (for recurring billing, etc.), it must be rendered unreadable by: strong cryptography (AES-256), one-way hashing, tokenisation, or truncation. The golden rule: if you don't need to store it, don't. Tokenisation (replace PAN with a token) is the most common approach for recurring billing, eliminating PAN storage."
     },
     {
-      "id": "m389",
-      "ch": "5",
-      "difficulty": "medium",
-      "topic": "Data Privacy",
-      "q": "An organisation wants to use production customer data for software testing. What is the MOST secure approach to protect this data while enabling realistic testing?",
-      "opts": [
-        "Use a copy of production data — it is already collected, so using it for testing doesn't increase risk",
-        "Implement data masking or data anonymisation on the dataset before using it for testing — replacing real names, emails, and financial data with realistic but fictional values",
-        "Restrict test team access to the production database — read-only access is sufficient",
-        "Use live production data briefly and delete it after testing"
-      ],
-      "correct": 1,
-      "exp": "Data masking / anonymisation for testing: replace real PII with realistic fake data (realistic names, valid-format (but fake) card numbers, valid-format email addresses). Developers get realistic test data without exposure to real customer information. Techniques: pseudonymisation (replace with consistent fake values), randomisation, shuffling, character masking. This reduces: (1) Risk of test data breach. (2) Regulatory scope (GDPR — test environments with real PII require full GDPR controls). (3) Insider threat exposure."
-    },
+    "id": "m389",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Data Privacy",
+    "q": "An organisation wants to use production customer data for software testing. What is the MOST secure approach to protect this data while enabling realistic testing?",
+    "opts": [
+      "Use a copy of the production dataset directly — the data is already collected, so no additional risk is introduced",
+      "Apply data masking or anonymisation before testing — replacing real PII with realistic but entirely fictional values",
+      "Grant the test team read-only access to the live production database so they cannot modify the data directly",
+      "Use live production data briefly during a short test window and delete the dataset immediately after completion"
+    ],
+    "correct": 1,
+    "exp": "Data masking / anonymisation for testing: replace real PII with realistic fake data (realistic names, valid-format (but fake) card numbers, valid-format email addresses). Developers get realistic test data without exposure to real customer information. Techniques: pseudonymisation (replace with consistent fake values), randomisation, shuffling, character masking. This reduces: (1) Risk of test data breach. (2) Regulatory scope (GDPR — test environments with real PII require full GDPR controls). (3) Insider threat exposure."
+  },
     {
       "id": "m390",
       "ch": "5",
