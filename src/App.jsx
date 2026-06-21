@@ -594,12 +594,16 @@ const THEMES = {
     text:"#f6f8fc", textSec:"#a7b0c4", textDim:"#68738d",
     accent:"#2f7df6", accentHover:"#1d66d3", green:"#14b8a6", red:"#f43f5e", amber:"#f59e0b",
     cardBg:"#121a2b", inputBg:"#0b1220",
+    codeBg:"#050814", codePanel:"#0a1020", codeBorder:"#27344d", codeText:"#d6e2ff",
+    codeMuted:"#7f8ba6", codePrompt:"#5eead4", codeCommand:"#93c5fd", codeError:"#fb7185", codeWarn:"#fbbf24",
   },
   light: {
     bg:"#f6f8fb", surface:"#ffffff", panel:"#eef3f8", border:"#dce4ee",
     text:"#111827", textSec:"#4b5563", textDim:"#8792a6",
     accent:"#1769e0", accentHover:"#0f55bd", green:"#0f9f8f", red:"#dc274d", amber:"#c77700",
     cardBg:"#ffffff", inputBg:"#f8f9fc",
+    codeBg:"#ffffff", codePanel:"#f3f7ff", codeBorder:"#b9c8dd", codeText:"#102033",
+    codeMuted:"#5d6b82", codePrompt:"#007f73", codeCommand:"#174ea6", codeError:"#b4233c", codeWarn:"#9a5b00",
   }
 };
 
@@ -11271,8 +11275,10 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
 .answer-burst.wrong .answer-burst-icon{background:${t.red};box-shadow:0 12px 26px ${t.red}28;}
 .answer-burst-title{font-weight:900;color:${t.text};font-size:15px;}
 .answer-burst-body{font-size:12px;color:${t.textSec};line-height:1.45;}
-.terminal{background:#0d1117;border:1px solid #30363d;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#c9d1d9;padding:16px;overflow-y:auto;max-height:280px;line-height:1.7;}
-.log-block{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:${t.inputBg};border:1px solid ${t.border};border-radius:8px;padding:16px;color:${t.textSec};line-height:1.9;white-space:pre-wrap;overflow-x:auto;}
+.terminal{background:${t.codeBg};border:1px solid ${t.codeBorder};border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px;color:${t.codeText};padding:16px;overflow-y:auto;max-height:280px;line-height:1.7;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
+.terminal::selection,.log-block::selection,.streak-code::selection{background:${t.accent}28;}
+.log-block{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:${t.codePanel};border:1px solid ${t.codeBorder};border-radius:8px;padding:16px;color:${t.codeText};line-height:1.9;white-space:pre-wrap;overflow-x:auto;}
+.inline-code,code{font-family:'JetBrains Mono',monospace;background:${t.codePanel};border:1px solid ${t.codeBorder};color:${t.codeCommand};padding:1px 6px;border-radius:5px;font-size:.92em;}
 .drag-item{padding:13px 15px;background:linear-gradient(180deg,${t.surface},${t.panel});border:1.5px solid ${t.border};border-radius:7px;cursor:grab;user-select:none;transition:all .2s;font-size:15px;line-height:1.55;color:${t.text};box-shadow:0 8px 18px rgba(7,12,24,.055);}
 .drag-item:hover{border-color:${t.accent};}
 .drag-item.selected{border-color:${t.accent};background:${t.accent}12;box-shadow:0 0 0 3px ${t.accent}16;}
@@ -11292,7 +11298,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
 .loading-ring{width:62px;height:62px;border-radius:50%;border:5px solid ${t.border};border-top-color:${t.accent};border-right-color:${t.green};animation:irregularSpin 1.65s cubic-bezier(.4,0,.2,1) infinite;box-shadow:0 0 28px ${t.accent}20;}
 .streak-overlay{position:fixed;inset:0;z-index:500;background:rgba(2,6,23,.78);backdrop-filter:blur(12px);display:grid;place-items:center;padding:18px;animation:fadeUp .24s ease both;}
 .streak-modal{width:min(100%,500px);position:relative;overflow:hidden;padding:28px;border:1px solid ${t.accent}38;border-radius:8px;background:linear-gradient(160deg,#08111f 0%,${t.surface} 48%,${t.accent}12 100%);box-shadow:0 28px 90px rgba(0,0,0,.42);}
-.streak-code{height:154px;border:1px solid ${t.border};border-radius:8px;background:#050a14;overflow:hidden;padding:14px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.55;color:${t.green};text-align:left;position:relative;}
+.streak-code{height:154px;border:1px solid ${t.codeBorder};border-radius:8px;background:${t.codeBg};overflow:hidden;padding:14px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.55;color:${t.codePrompt};text-align:left;position:relative;}
 .streak-code::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,${t.accent}10 48%,transparent);animation:scanLine 1.8s linear infinite;}
 .streak-burst{position:absolute;inset:-20%;background:radial-gradient(circle at 20% 20%,${t.green}24,transparent 22%),radial-gradient(circle at 82% 18%,${t.accent}22,transparent 24%),radial-gradient(circle at 50% 90%,#f59e0b22,transparent 26%);opacity:.9;animation:streakPulse 1.8s ease infinite alternate;pointer-events:none;}
 .streak-number{font-size:68px;line-height:1;font-weight:900;color:${t.text};text-shadow:0 0 30px ${t.accent}55;font-family:'Sora','Manrope',sans-serif;}
@@ -13611,10 +13617,10 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
         <div style={{marginBottom:18}}>
           <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:8}}>Terminal</div>
           <div className="terminal" style={{minHeight:160}}>
-            {termHistory.length===0&&<div style={{color:"#8b949e"}}>Type a command and press Enter. {q.hint}</div>}
+            {termHistory.length===0&&<div style={{color:t.codeMuted}}>Type a command and press Enter. {q.hint}</div>}
             {termHistory.map((h,i)=>(
-              <div key={i} style={{color:h.type==="cmd"?"#79c0ff":h.type==="error"?"#f85149":"#c9d1d9"}}>
-                {h.type==="cmd"&&<span style={{color:"#56d364",marginRight:8}}>$</span>}
+              <div key={i} style={{color:h.type==="cmd"?t.codeCommand:h.type==="error"?t.codeError:t.codeText}}>
+                {h.type==="cmd"&&<span style={{color:t.codePrompt,marginRight:8}}>$</span>}
                 {h.text}
               </div>
             ))}
@@ -13642,7 +13648,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       {q.type==="CONFIG/ACL"&&(
         <div style={{marginBottom:18}}>
           <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:8}}>Current Configuration (has issues)</div>
-          <div className="terminal" style={{color:"#e6c07b",fontSize:12,minHeight:80}}>{q.currentConfig}</div>
+          <div className="terminal" style={{color:t.codeWarn,fontSize:12,minHeight:80}}>{q.currentConfig}</div>
         </div>
       )}
 
@@ -14293,7 +14299,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
 
           {current.kind==="pbq"&&q.logData&&<div className="log-block" style={{marginBottom:16}}>{q.logData}</div>}
           {current.kind==="pbq"&&q.diagram&&<pre className="log-block" style={{marginBottom:16}}>{q.diagram}</pre>}
-          {current.kind==="pbq"&&q.currentConfig&&<div className="terminal" style={{marginBottom:16,color:"#e6c07b"}}>{q.currentConfig}</div>}
+          {current.kind==="pbq"&&q.currentConfig&&<div className="terminal" style={{marginBottom:16,color:t.codeWarn}}>{q.currentConfig}</div>}
 
           {current.kind==="mcq"&&(
             <div style={{display:"grid",gap:9}}>
@@ -14690,7 +14696,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
       <div className="card" style={{padding:"18px 22px"}}>
         <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:8}}>Payment via Stripe</div>
         <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-          In the live site, clicking Upgrade creates a Stripe Checkout session at <code style={{fontFamily:"'JetBrains Mono',monospace",background:t.panel,padding:"1px 6px",borderRadius:4}}>/api/stripe/checkout</code>. Payments are processed securely — we never store card details.
+          In the live site, clicking Upgrade creates a Stripe Checkout session at <code>/api/stripe/checkout</code>. Payments are processed securely — we never store card details.
         </p>
       </div>
 
@@ -14722,7 +14728,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           <div>
             <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:4}}>Coming Soon: Concept Deep Dives</div>
             <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-              A dedicated subdomain <code style={{fontFamily:"'JetBrains Mono',monospace",background:t.panel,padding:"1px 6px",borderRadius:4}}>concepts.secureplus.io</code> is planned for in-depth explanations of key topics like salting vs peppering, symmetric vs asymmetric encryption, and more. Work in progress — check back soon.
+              A dedicated subdomain <code>concepts.secureplus.io</code> is planned for in-depth explanations of key topics like salting vs peppering, symmetric vs asymmetric encryption, and more. Work in progress — check back soon.
             </div>
           </div>
         </div>
