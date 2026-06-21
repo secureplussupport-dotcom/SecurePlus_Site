@@ -13850,6 +13850,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
 function ExamMode({user,onSave,onUpgrade,t}) {
   const sessionKey=`exam:${practiceSessionOwner(user)}`;
   const [questionCount,setQuestionCount]=useState(20);
+  const [pbqCount,setPbqCount]=useState(2);
   const [started,setStarted]=useState(false);
   const [done,setDone]=useState(false);
   const [questions,setQuestions]=useState([]);
@@ -13867,6 +13868,9 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   const current=questions[qi];
   const answer=answers[qi]||{};
   const examDuration=questionCount*72;
+  const mcqCount=Math.max(0,questionCount-pbqCount);
+  const pbqPercent=questionCount?Math.round((pbqCount/questionCount)*100):0;
+  const mcqPercent=100-pbqPercent;
 
   const shuffle=arr=>[...arr].sort(()=>Math.random()-.5);
   const formatTime=s=>{
@@ -13888,9 +13892,11 @@ function ExamMode({user,onSave,onUpgrade,t}) {
       termInput:"",
     };
   };
+  const updateQuestionCount=size=>{
+    setQuestionCount(size);
+    setPbqCount(prev=>Math.min(size,Math.max(0,Math.round(size*(prev/Math.max(1,questionCount))))));
+  };
   const startExam=()=>{
-    const pbqCount=Math.max(1,Math.round(questionCount*.1));
-    const mcqCount=questionCount-pbqCount;
     const examReadyPbqs=PBQ_BANK.filter(q=>q.type!=="TERMINAL SIM"||q.choices||q.options);
     const pickedPbq=shuffle(examReadyPbqs).slice(0,pbqCount).map(q=>({kind:"pbq",q}));
     const pickedMcq=shuffle(MCQ_BANK).slice(0,mcqCount).map(q=>({kind:"mcq",q:shuffleMcqOptions(q)}));
@@ -13917,13 +13923,14 @@ function ExamMode({user,onSave,onUpgrade,t}) {
 
   useEffect(()=>{
     if(!started||done||!questions.length)return;
-    DB.savePracticeSession(sessionKey,{questionCount,questions,answers,qi,flagged,timeLeft,timeSpent,done:false,updatedAt:new Date().toISOString()});
-  },[sessionKey,started,done,questionCount,questions,answers,qi,flagged,timeLeft,timeSpent]);
+    DB.savePracticeSession(sessionKey,{questionCount,pbqCount,questions,answers,qi,flagged,timeLeft,timeSpent,done:false,updatedAt:new Date().toISOString()});
+  },[sessionKey,started,done,questionCount,pbqCount,questions,answers,qi,flagged,timeLeft,timeSpent]);
 
   const continueExam=async()=>{
     const saved=await DB.getPracticeSession(sessionKey);
     if(!saved?.questions?.length)return;
     setQuestionCount(saved.questionCount||saved.questions.length||20);
+    setPbqCount(Number.isInteger(saved.pbqCount)?saved.pbqCount:saved.questions.filter(item=>item.kind==="pbq").length);
     setQuestions(saved.questions);
     setAnswers(saved.answers||{});
     setQi(saved.qi||0);
@@ -14057,11 +14064,45 @@ function ExamMode({user,onSave,onUpgrade,t}) {
         <label className="label" style={{display:"block",marginBottom:8}}>Total questions</label>
         <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8,marginBottom:16}}>
           {sizes.map(size=>(
-            <button key={size} className={`btn ${questionCount===size?"btn-primary":"btn-ghost"}`} onClick={()=>setQuestionCount(size)}>{size}</button>
+            <button key={size} className={`btn ${questionCount===size?"btn-primary":"btn-ghost"}`} onClick={()=>updateQuestionCount(size)}>{size}</button>
           ))}
         </div>
-        <div style={{fontSize:13,color:t.textSec,background:t.panel,border:`1px solid ${t.border}`,borderRadius:8,padding:"12px 14px"}}>
-          {Math.max(1,Math.round(questionCount*.1))} PBQ first · {questionCount-Math.max(1,Math.round(questionCount*.1))} MCQ after · {formatTime(examDuration)} timer
+        <div style={{marginTop:4}}>
+          <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:10,flexWrap:"wrap"}}>
+            <div>
+              <div className="label" style={{marginBottom:3}}>Exam composition</div>
+              <div style={{fontSize:13,color:t.textSec}}>
+                {pbqCount} PBQ first · {mcqCount} MCQ after · {formatTime(examDuration)} timer
+              </div>
+            </div>
+            <div style={{display:"flex",gap:8,alignItems:"center",fontSize:12,fontWeight:900}}>
+              <span style={{color:t.amber}}>{pbqPercent}% PBQ</span>
+              <span style={{color:t.textDim}}>·</span>
+              <span style={{color:t.accent}}>{mcqPercent}% MCQ</span>
+            </div>
+          </div>
+          <div style={{position:"relative",padding:"16px 0 6px"}}>
+            <div style={{height:18,borderRadius:99,overflow:"hidden",display:"flex",border:`1px solid ${t.border}`,boxShadow:`inset 0 0 0 1px ${t.surface}`}}>
+              <div style={{width:`${pbqPercent}%`,background:`linear-gradient(90deg, ${t.amber}cc, ${t.amber}88)`,transition:"width .18s"}}/>
+              <div style={{width:`${mcqPercent}%`,background:`linear-gradient(90deg, ${t.accent}99, ${t.accent}dd)`,transition:"width .18s"}}/>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max={questionCount}
+              step="1"
+              value={pbqCount}
+              aria-label="PBQ count"
+              onChange={e=>setPbqCount(Number(e.target.value))}
+              style={{position:"absolute",left:0,right:0,top:6,width:"100%",height:38,opacity:.001,cursor:"ew-resize"}}
+            />
+            <div style={{position:"absolute",top:8,left:`clamp(0px, calc(${pbqPercent}% - 11px), calc(100% - 22px))`,width:22,height:34,borderRadius:99,background:t.surface,border:`2px solid ${t.text}`,boxShadow:"0 8px 20px rgba(0,0,0,.22)",pointerEvents:"none",transition:"left .18s"}}/>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:t.textDim,marginTop:4}}>
+            <span>100% MCQ</span>
+            <span>Balanced</span>
+            <span>100% PBQ</span>
+          </div>
         </div>
       </div>
       {resumeAvailable&&(
@@ -14076,9 +14117,12 @@ function ExamMode({user,onSave,onUpgrade,t}) {
         </div>
       )}
       <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
-        <div style={{fontWeight:800,color:t.text,fontSize:14,marginBottom:4}}>Pass/fail disclaimer</div>
+        <div style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,color:t.amber,fontSize:14,marginBottom:4}}>
+          <span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}45`}}>Practice score</span>
+          <span>Pass/fail disclaimer</span>
+        </div>
         <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-          SecurePlus uses 80% as a practice pass mark here. This is not an accurate CompTIA scoring model. In the real exam, PBQs can carry more weight and the exam has more questions.
+          SecurePlus uses <strong style={{color:t.amber}}>80%</strong> as a practice pass mark here. This is not an accurate CompTIA scoring model. The real Security+ exam uses a proprietary scaled score from 100 to 900, and PBQs can carry different weight.
         </p>
       </div>
       <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"13px"}} onClick={startExam}>
@@ -14114,8 +14158,12 @@ function ExamMode({user,onSave,onUpgrade,t}) {
         <div style={{fontSize:14,color:t.textSec}}>{correctCount}/{questions.length} correct</div>
       </div>
       <div className="card" style={{padding:"16px 20px",marginBottom:18,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
+          <span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}45`}}>Practice score</span>
+          <span style={{fontSize:13,fontWeight:800,color:t.amber}}>Pass/fail disclaimer</span>
+        </div>
         <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-          Disclaimer: the 80% pass/fail mark is only for SecurePlus practice. The real Security+ exam uses a different scoring model, PBQs can carry more weight, and the real exam has more questions.
+          Disclaimer: the <strong style={{color:t.amber}}>80%</strong> pass/fail mark is only for SecurePlus practice. The real Security+ exam uses a proprietary scaled score from 100 to 900, PBQs can carry different weight, and the real exam has more questions.
         </p>
       </div>
       <div className="card" style={{padding:"18px 20px",marginBottom:18,borderColor:`${t.accent}28`,background:`${t.accent}05`}}>
