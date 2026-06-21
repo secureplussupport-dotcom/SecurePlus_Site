@@ -13858,6 +13858,74 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
 // ═══════════════════════════════════════════════════════════════
 // EXAM MODE
 // ═══════════════════════════════════════════════════════════════
+function ExamModeGuideModal({t,onClose}) {
+  const [step,setStep]=useState(0);
+  const slides=[
+    {
+      label:"Setup",
+      title:"Build your exam before you start",
+      body:"Choose 10 to 50 total questions, then use the split bar to decide how many PBQs and MCQs you want. PBQs appear first, just like a focused exam warm-up.",
+      bullets:["Slide toward PBQ for simulation-heavy practice.","Slide toward MCQ for faster knowledge checks.","Timer length scales with total question count."],
+    },
+    {
+      label:"During",
+      title:"Use exam tools while answering",
+      body:"The timer, answer map, previous/next buttons, and flag button stay available while you work through the exam.",
+      bullets:["Use the answer map to jump to any question.","Bold numbers are unanswered questions.","Amber outlines mean a question is flagged."],
+    },
+    {
+      label:"Eliminate",
+      title:"Cross out weak MCQ options",
+      body:"For MCQs, right-click an option to cross it out. On mobile, long-press an option. This is useful when you narrow the answer down before choosing.",
+      bullets:["Crossed-out options stay visible but faded.","Tap or click an option normally to select it.","Right-click or long-press again to undo the cross-out."],
+    },
+    {
+      label:"Review",
+      title:"Flag questions for final review",
+      body:"Press Flag for review when you want to return later. A corner ribbon appears on the question so it is hard to miss.",
+      bullets:["Submit warns you if anything is flagged or unanswered.","After submission, flagged questions remain marked in review.","Incorrect answers are bumped upward for easier review."],
+    },
+  ];
+  const current=slides[step];
+  const last=step===slides.length-1;
+
+  return(
+    <div className="onboarding-overlay" role="dialog" aria-modal="true" aria-label="Exam Mode guide">
+      <div className="onboarding-modal card">
+        <button className="btn btn-ghost" style={{position:"absolute",top:14,right:14,minHeight:32,padding:"4px 10px",fontSize:12}} onClick={onClose}>
+          Skip
+        </button>
+        <div className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}35`,marginBottom:14}}>
+          {current.label}
+        </div>
+        <h2 style={{fontSize:24,fontWeight:900,color:t.text,marginBottom:8}}>{current.title}</h2>
+        <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:18}}>{current.body}</p>
+        <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:22}}>
+          {current.bullets.map(item=>(
+            <div key={item} style={{display:"flex",gap:10,alignItems:"flex-start",fontSize:13,color:t.textSec,lineHeight:1.6}}>
+              <span style={{color:t.green,fontWeight:900}}>✓</span>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{display:"flex",gap:7,marginBottom:20}}>
+          {slides.map((_,i)=>(
+            <div key={i} style={{height:7,flex:1,borderRadius:99,background:i<=step?t.accent:t.border}}/>
+          ))}
+        </div>
+        <div style={{display:"flex",gap:10,justifyContent:"space-between",flexWrap:"wrap"}}>
+          <button className="btn btn-ghost" onClick={()=>setStep(s=>Math.max(0,s-1))} disabled={step===0}>
+            Back
+          </button>
+          <button className="btn btn-primary" onClick={()=>last?onClose():setStep(s=>s+1)}>
+            {last ? "Got it" : "Next"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ExamMode({user,onSave,onUpgrade,t}) {
   const sessionKey=`exam:${practiceSessionOwner(user)}`;
   const [questionCount,setQuestionCount]=useState(20);
@@ -13873,6 +13941,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   const [saved,setSaved]=useState(false);
   const [resumeAvailable,setResumeAvailable]=useState(false);
   const [expandedReview,setExpandedReview]=useState({});
+  const [showExamGuide,setShowExamGuide]=useState(false);
   const longPressTimers=useRef({});
   const longPressActivated=useRef({});
 
@@ -13884,6 +13953,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   const mcqCount=Math.max(0,questionCount-pbqCount);
   const pbqPercent=questionCount?Math.round((pbqCount/questionCount)*100):0;
   const mcqPercent=100-pbqPercent;
+  const examGuideKey=`exam-guide-seen:${practiceSessionOwner(user)}`;
 
   const shuffle=arr=>[...arr].sort(()=>Math.random()-.5);
   const formatTime=s=>{
@@ -14064,6 +14134,20 @@ function ExamMode({user,onSave,onUpgrade,t}) {
     if(targetId) placeDragItem(item,targetId);
     else updateAnswer({dragged:null,dragOver:null});
   };
+  const closeExamGuide=async()=>{
+    setShowExamGuide(false);
+    try{await storageSet(examGuideKey,"true");}catch{}
+    capture("exam_mode_guide_closed", { tier: user?.tier || "unknown" });
+  };
+
+  useEffect(()=>{
+    if(!isPro)return;
+    let active=true;
+    storageGet(examGuideKey).then(value=>{
+      if(active&&!value?.value) setShowExamGuide(true);
+    }).catch(()=>{if(active)setShowExamGuide(true);});
+    return()=>{active=false;};
+  },[examGuideKey,isPro]);
 
   if(!isPro) return(
     <div style={{padding:"28px 24px",maxWidth:760,margin:"0 auto"}}>
@@ -14081,6 +14165,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   );
 
   if(!started) return(
+    <>
     <div style={{padding:"28px 24px",maxWidth:820,margin:"0 auto"}}>
       <div className="page-title-row" style={{marginBottom:18}}>
         <NavGlyph type="exam" active/>
@@ -14098,7 +14183,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
       <div className="card" style={{padding:"20px 22px",marginBottom:16}}>
         <div style={{fontWeight:800,color:t.text,marginBottom:8}}>Exam setup</div>
         <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:16}}>
-          Your exam will be 90% MCQ and 10% PBQ. PBQs appear first. The timer scales by exam length: 50 questions gives 1 hour, 10 questions gives 12 minutes.
+          Choose the exam length and adjust the MCQ/PBQ split. PBQs appear first. The timer scales by exam length: 50 questions gives 1 hour, 10 questions gives 12 minutes.
         </p>
         <label className="label" style={{display:"block",marginBottom:8}}>Total questions</label>
         <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8,marginBottom:16}}>
@@ -14168,6 +14253,8 @@ function ExamMode({user,onSave,onUpgrade,t}) {
         Start Exam →
       </button>
     </div>
+    {showExamGuide&&<ExamModeGuideModal t={t} onClose={closeExamGuide}/>}
+    </>
   );
 
   const examReviewRows=questions.map((item,index)=>({
