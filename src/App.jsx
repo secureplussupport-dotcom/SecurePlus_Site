@@ -113,6 +113,8 @@ function shouldShowPBQUpgradePrompt() {
   }
 }
 
+const FREE_PBQ_PREVIEW_ID = "p001";
+const isFreePBQPreview = question => question?.id === FREE_PBQ_PREVIEW_ID;
 const dailyStreakOwner = user => normalizeEmail(user?.email || "") || "guest";
 const practiceSessionOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
 const starOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
@@ -13349,11 +13351,12 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
       {starredPbqs.length?(
         <div style={{display:"grid",gap:10}}>
           {starredPbqs.map(q=>(
-            <div key={q.id} className="card card-hover" style={{padding:"14px 18px",display:"flex",gap:12,alignItems:"flex-start",cursor:isPro?"pointer":"default"}} onClick={()=>isPro&&onStart(q)}>
+            <div key={q.id} className="card card-hover" style={{padding:"14px 18px",display:"flex",gap:12,alignItems:"flex-start",cursor:(isPro||isFreePBQPreview(q))?"pointer":"default"}} onClick={()=>{if(isPro||isFreePBQPreview(q))onStart(q);}}>
               <StarButton active onToggle={()=>onToggleStar?.("pbq",q.id)} label="Unstar PBQ"/>
               <SimIcon type={q.type}/>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
+                  {!isPro&&isFreePBQPreview(q)&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}40`}}>Preview</span>}
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
                 </div>
@@ -13397,8 +13400,10 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
         <div className="card" style={{padding:"18px 22px",marginBottom:20,borderColor:`${t.amber}40`,background:`${t.amber}06`}}>
           <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
             <div style={{flex:1}}>
-              <div style={{fontWeight:600,fontSize:15,color:t.text,marginBottom:4}}>Pro Required for PBQ Access</div>
-              <div style={{fontSize:13,color:t.textSec}}>MCQs are free. Pro unlocks all {PBQ_BANK.length} PBQ simulations with terminal commands, drag & drop, log analysis, and more.</div>
+              <div style={{fontWeight:600,fontSize:15,color:t.text,marginBottom:4}}>Try one PBQ preview for free</div>
+              <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
+                Free users can attempt the PBQ marked <strong style={{color:t.amber}}>Preview</strong>. Pro unlocks all {PBQ_BANK.length} PBQ simulations with terminal commands, drag & drop, log analysis, and more.
+              </div>
             </div>
             <button className="btn btn-primary" style={{flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_access_banner", tier: user.tier });onUpgrade();}}>Upgrade — $4.99/year →</button>
           </div>
@@ -13478,12 +13483,15 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
         {displayQuestions.map(q=>{
           const done=attempted.has(q.id);
           const ok=correct.has(q.id);
+          const preview=isFreePBQPreview(q);
+          const canOpen=isPro||preview;
           const ch=CHAPTERS.find(c=>c.id===q.ch);
           return(
-            <div key={q.id} className={`card card-hover`} style={{padding:"15px 18px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",opacity:isPro?1:.75,borderColor:ok?`${t.green}30`:done?`${t.red}25`:undefined}} onClick={()=>{if(isPro){capture("pbq_started", { question_id: q.id, type: q.type, chapter: q.ch, tier: user.tier });onStart(q);}else{openLockedPrompt(q);}}}>
+            <div key={q.id} className={`card card-hover`} style={{padding:"15px 18px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",opacity:canOpen?1:.75,borderColor:preview?`${t.amber}55`:ok?`${t.green}30`:done?`${t.red}25`:undefined,background:preview&&!isPro?`linear-gradient(135deg, ${t.amber}0d, ${t.surface})`:undefined}} onClick={()=>{if(canOpen){capture(preview&&!isPro?"pbq_preview_started":"pbq_started", { question_id: q.id, type: q.type, chapter: q.ch, tier: user.tier });onStart(q);}else{openLockedPrompt(q);}}}>
               <SimIcon type={q.type}/>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,marginBottom:5,flexWrap:"wrap"}}>
+                  {preview&&!isPro&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}40`}}>Preview</span>}
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
                   {ch&&<span style={{fontSize:11,color:t.textDim,display:"inline-flex",alignItems:"center",gap:4}}><ChapterIcon id={ch.id} size={16}/> Ch.{ch.id}</span>}
@@ -13494,7 +13502,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
               <div style={{flexShrink:0,display:"flex",gap:8,alignItems:"center"}}>
                 <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
                 {done?<span style={{color:ok?t.green:t.red,fontSize:15}}>{ok?"✓":"✗"}</span>:<span style={{fontSize:12,color:t.textDim}}>○</span>}
-                {isPro?<span style={{color:t.accent,fontSize:16}}>▶</span>:<span style={{fontSize:13}}>🔒</span>}
+                {canOpen?<span style={{color:preview&&!isPro?t.amber:t.accent,fontSize:16}}>▶</span>:<span style={{fontSize:13}}>🔒</span>}
               </div>
             </div>
           );
@@ -13507,7 +13515,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
 // ═══════════════════════════════════════════════════════════════
 // PBQ SIMULATOR
 // ═══════════════════════════════════════════════════════════════
-function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar}) {
+function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewMode=false,onUpgrade}) {
   const [termInput,setTermInput]=useState("");
   const [termHistory,setTermHistory]=useState([]);
   const [selected,setSelected]=useState(null);
@@ -13800,6 +13808,22 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar}) {
               </div>
             )}
           </div>
+          {previewMode&&(
+            <div className="card" style={{padding:"18px 22px",marginBottom:14,borderColor:`${t.amber}45`,background:`linear-gradient(135deg, ${t.amber}10, ${t.surface})`}}>
+              <div style={{display:"flex",gap:12,alignItems:"flex-start",flexWrap:"wrap"}}>
+                <span className="mission-badge" style={{background:t.amber}}>P</span>
+                <div style={{flex:1,minWidth:220}}>
+                  <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:4}}>That was your free PBQ preview</div>
+                  <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
+                    Pro unlocks the full PBQ simulator bank, Exam Mode, and deeper review tools for $4.99/year, roughly $0.40/month.
+                  </div>
+                </div>
+                <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_preview_complete", question_id: q.id });onUpgrade?.();}}>
+                  Unlock all PBQs
+                </button>
+              </div>
+            </div>
+          )}
           <div className="practice-action-bar" style={{justifyContent:"flex-end",flexWrap:"wrap"}}>
             <AnswerBurst result={answerBurst} t={t}/>
             <button className="btn btn-ghost" onClick={()=>{setSubmitted(false);setSelected(null);setTermHistory([]);setMapping({});setTapDragItem(null);setOrderItems(q.items?[...q.items].sort(()=>Math.random()-.5):[]);setBlanks(q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{})}}>
@@ -15466,6 +15490,8 @@ export default function App() {
     </>
   );
 
+  const pbqPreviewMode=user?.tier!=="pro"&&isFreePBQPreview(pbqQ);
+
   if(pbqQ) return(
     <>
       <style>{CSS}</style>
@@ -15473,12 +15499,14 @@ export default function App() {
         <PBQSim
           key={pbqQ.id}
           q={pbqQ}
-          nextQuestion={getNextRelatedPBQ(pbqQ,attempts)}
+          nextQuestion={pbqPreviewMode?null:getNextRelatedPBQ(pbqQ,attempts)}
           onDone={handlePBQDone}
-          onNext={(result)=>handlePBQDone(result,{nextQuestion:getNextRelatedPBQ(pbqQ,attempts)})}
+          onNext={(result)=>handlePBQDone(result,{nextQuestion:pbqPreviewMode?null:getNextRelatedPBQ(pbqQ,attempts)})}
           t={t}
           starred={starred}
           onToggleStar={handleToggleStar}
+          previewMode={pbqPreviewMode}
+          onUpgrade={()=>setView("pricing")}
         />
       </div>
     </>
@@ -15557,7 +15585,7 @@ export default function App() {
           />
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
           {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar}/>}
-          {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar}/>}
+          {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar}/>}
           {view==="exam"&&<ExamMode user={user} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
