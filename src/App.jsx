@@ -13944,6 +13944,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   const [showExamGuide,setShowExamGuide]=useState(false);
   const longPressTimers=useRef({});
   const longPressActivated=useRef({});
+  const rightClickHandled=useRef({});
 
   const isPro=user?.tier==="pro";
   const sizes=[10,20,30,40,50];
@@ -14426,7 +14427,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
           {current.kind==="mcq"&&(
             <div style={{display:"grid",gap:9}}>
               <div style={{fontSize:12,color:t.textDim,lineHeight:1.6}}>
-                Right-click an option, or long-press on mobile, to cross it out.
+                Right-click an option, long-press on mobile, or use Strike to cross it out.
               </div>
               {q.opts.map((opt,index)=>{
                 const eliminated=Boolean(answer.eliminated?.[index]);
@@ -14435,15 +14436,39 @@ function ExamMode({user,onSave,onUpgrade,t}) {
                   key={index}
                   className={`opt ${answer.selected===index?"sel":""} ${eliminated?"eliminated":""}`}
                   onClick={()=>{if(longPressActivated.current[index]){delete longPressActivated.current[index];return;}updateAnswer({selected:index});}}
-                  onContextMenu={e=>{e.preventDefault();toggleEliminatedOption(index);}}
-                  onPointerDown={e=>{if(e.pointerType==="touch"||e.pointerType==="pen")startOptionLongPress(index,e);}}
+                  onContextMenu={e=>{
+                    e.preventDefault();
+                    if(rightClickHandled.current[index]){
+                      delete rightClickHandled.current[index];
+                      return;
+                    }
+                    toggleEliminatedOption(index);
+                  }}
+                  onPointerDown={e=>{
+                    if(e.pointerType==="mouse"&&e.button===2){
+                      e.preventDefault();
+                      rightClickHandled.current[index]=true;
+                      toggleEliminatedOption(index);
+                      return;
+                    }
+                    if(e.pointerType==="touch"||e.pointerType==="pen")startOptionLongPress(index,e);
+                  }}
                   onPointerUp={()=>clearOptionLongPress(index)}
                   onPointerCancel={()=>clearOptionLongPress(index)}
                   onPointerLeave={()=>clearOptionLongPress(index)}
-                  title="Right-click or long-press to cross out"
+                  title="Right-click, long-press, or use Strike to cross out"
                 >
                   <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
                   <span className="option-text" style={{fontSize:14,color:t.text,lineHeight:1.55}}>{opt}</span>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    style={{marginLeft:"auto",fontSize:11,minHeight:30,padding:"4px 8px",flexShrink:0,color:eliminated?t.accent:t.textDim,borderColor:eliminated?`${t.accent}70`:t.border}}
+                    onClick={e=>{e.stopPropagation();toggleEliminatedOption(index);}}
+                    aria-label={`${eliminated?"Undo elimination for":"Eliminate"} option ${String.fromCharCode(65+index)}`}
+                  >
+                    {eliminated?"Undo":"Strike"}
+                  </button>
                 </div>
               )})}
             </div>
