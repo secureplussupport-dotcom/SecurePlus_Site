@@ -11254,6 +11254,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
 .exam-layout{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:16px;}
 .exam-map{padding:14px;height:fit-content;position:sticky;top:96px;}
 .exam-map-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+.exam-flag-ribbon{position:absolute;top:0;right:0;width:104px;height:104px;overflow:hidden;pointer-events:none;border-top-right-radius:8px;}
+.exam-flag-ribbon span{position:absolute;right:-34px;top:17px;width:132px;transform:rotate(45deg);background:${t.amber};color:#111827;text-align:center;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;padding:5px 0;box-shadow:0 8px 18px ${t.amber}30;}
 .prog-track{background:${t.border};border-radius:99px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;}
 .prog-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:barShine 1.8s linear infinite;}
@@ -11262,6 +11264,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Manrope
 .opt.sel{border-color:${t.accent};background:${t.accent}10;animation:selectPulse .28s ease both;}
 .opt.ok{border-color:${t.green}70!important;background:${t.green}08!important;animation:answerPop .34s cubic-bezier(.16,1,.3,1) both;}
 .opt.bad{border-color:${t.red}60!important;background:${t.red}07!important;animation:shakeLite .32s ease both;}
+.opt.eliminated{opacity:.54;background:${t.panel}!important;border-style:dashed;}
+.opt.eliminated .option-text{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:${t.red}cc;color:${t.textDim}!important;}
+.opt.eliminated .opt-ltr{border-color:${t.red}50;color:${t.red};background:${t.red}0d;}
 .opt.done{cursor:default;}
 .opt-ltr{width:34px;height:34px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;border:1.5px solid ${t.border};color:${t.textDim};transition:all .18s;background:${t.panel};}
 .opt:hover:not(.done) .opt-ltr,.opt.sel .opt-ltr{border-color:${t.accent};color:${t.accent};}
@@ -13868,6 +13873,8 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   const [saved,setSaved]=useState(false);
   const [resumeAvailable,setResumeAvailable]=useState(false);
   const [expandedReview,setExpandedReview]=useState({});
+  const longPressTimers=useRef({});
+  const longPressActivated=useRef({});
 
   const isPro=user?.tier==="pro";
   const sizes=[10,20,30,40,50];
@@ -13887,7 +13894,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
     return `${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
   };
   const initAnswer=item=>{
-    if(item.kind==="mcq") return {selected:null};
+    if(item.kind==="mcq") return {selected:null,eliminated:{}};
     const q=item.q;
     return {
       selected:null,
@@ -13949,6 +13956,26 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   };
   const updateAnswer=patch=>setAnswers(prev=>({...prev,[qi]:{...(prev[qi]||{}),...patch}}));
   const setAnswerAt=(index,patch)=>setAnswers(prev=>({...prev,[index]:{...(prev[index]||{}),...patch}}));
+  const toggleEliminatedOption=(optionIndex,questionIndex=qi)=>{
+    setAnswers(prev=>{
+      const currentAnswer=prev[questionIndex]||{};
+      const eliminated={...(currentAnswer.eliminated||{})};
+      if(eliminated[optionIndex]) delete eliminated[optionIndex];
+      else eliminated[optionIndex]=true;
+      return {...prev,[questionIndex]:{...currentAnswer,eliminated}};
+    });
+  };
+  const startOptionLongPress=(optionIndex,e)=>{
+    longPressTimers.current[optionIndex]=window.setTimeout(()=>{
+      longPressActivated.current[optionIndex]=true;
+      toggleEliminatedOption(optionIndex);
+      if(navigator.vibrate) navigator.vibrate(12);
+    },520);
+  };
+  const clearOptionLongPress=optionIndex=>{
+    window.clearTimeout(longPressTimers.current[optionIndex]);
+    delete longPressTimers.current[optionIndex];
+  };
   const pbqCorrect=(q,a={})=>{
     if(["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type)) return a.selected===q.correct;
     if(q.type==="DRAG & DROP") return q.items?.every(item=>a.mapping?.[item.id]===q.correctMapping?.[item.id]);
@@ -13972,9 +13999,15 @@ function ExamMode({user,onSave,onUpgrade,t}) {
 
   function submitExam(auto=false) {
     if(done) return;
-    if(!auto&&answeredCount<questions.length){
-      const ok=window.confirm("You haven't completed all the questions. Are you sure you want to submit?");
-      if(!ok) return;
+    if(!auto){
+      const flaggedCount=Object.values(flagged).filter(Boolean).length;
+      const warnings=[];
+      if(answeredCount<questions.length) warnings.push(`${questions.length-answeredCount} unanswered question${questions.length-answeredCount===1?"":"s"}`);
+      if(flaggedCount) warnings.push(`${flaggedCount} flagged question${flaggedCount===1?"":"s"} for review`);
+      if(warnings.length){
+        const ok=window.confirm(`Final review checkpoint: you still have ${warnings.join(" and ")}. Are you sure you want to submit?`);
+        if(!ok) return;
+      }
     }
     const rows=questions.map((item,index)=>{
       const q=item.q;
@@ -14283,11 +14316,13 @@ function ExamMode({user,onSave,onUpgrade,t}) {
             <button className="btn btn-ghost" disabled={qi===0} onClick={()=>setQi(i=>Math.max(0,i-1))}>← Previous</button>
             <button className="btn btn-ghost" disabled={qi===questions.length-1} onClick={()=>setQi(i=>Math.min(questions.length-1,i+1))}>Next →</button>
           </div>
-          <div className="card question-card" style={{padding:"20px 22px",marginBottom:16}}>
+          <div className="card question-card" style={{padding:"20px 22px",marginBottom:16,position:"relative",overflow:"hidden"}}>
+            {flagged[qi]&&<div className="exam-flag-ribbon"><span>Review</span></div>}
             <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
               {current.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
               <DiffBadge d={q.difficulty} t={t}/>
               <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{current.kind==="mcq"?"MCQ":"PBQ"}</span>
+              {flagged[qi]&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}45`}}>Flagged for review</span>}
             </div>
             <div className="question-text" style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:700}}>
               {current.kind==="mcq"?q.q:(q.question||q.title)}
@@ -14303,12 +14338,27 @@ function ExamMode({user,onSave,onUpgrade,t}) {
 
           {current.kind==="mcq"&&(
             <div style={{display:"grid",gap:9}}>
-              {q.opts.map((opt,index)=>(
-                <div key={index} className={`opt ${answer.selected===index?"sel":""}`} onClick={()=>updateAnswer({selected:index})}>
+              <div style={{fontSize:12,color:t.textDim,lineHeight:1.6}}>
+                Right-click an option, or long-press on mobile, to cross it out.
+              </div>
+              {q.opts.map((opt,index)=>{
+                const eliminated=Boolean(answer.eliminated?.[index]);
+                return(
+                <div
+                  key={index}
+                  className={`opt ${answer.selected===index?"sel":""} ${eliminated?"eliminated":""}`}
+                  onClick={()=>{if(longPressActivated.current[index]){delete longPressActivated.current[index];return;}updateAnswer({selected:index});}}
+                  onContextMenu={e=>{e.preventDefault();toggleEliminatedOption(index);}}
+                  onPointerDown={e=>{if(e.pointerType==="touch"||e.pointerType==="pen")startOptionLongPress(index,e);}}
+                  onPointerUp={()=>clearOptionLongPress(index)}
+                  onPointerCancel={()=>clearOptionLongPress(index)}
+                  onPointerLeave={()=>clearOptionLongPress(index)}
+                  title="Right-click or long-press to cross out"
+                >
                   <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
                   <span className="option-text" style={{fontSize:14,color:t.text,lineHeight:1.55}}>{opt}</span>
                 </div>
-              ))}
+              )})}
             </div>
           )}
 
