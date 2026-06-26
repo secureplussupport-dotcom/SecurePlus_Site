@@ -11387,14 +11387,24 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .landing-secondary-links button:hover{color:${t.accent};}
 .landing-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
 .landing-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
-.landing-feature-card{padding:20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;animation:softRise .44s cubic-bezier(.16,1,.3,1) both;}
+.landing-feature-card{position:relative;padding:20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;animation:softRise .44s cubic-bezier(.16,1,.3,1) both;}
 .landing-feature-card[data-plan="free"]{border-color:${t.green}36;background:linear-gradient(180deg,${t.green}08,${t.surface});}
-.landing-feature-card[data-plan="pro"]{border-color:${t.amber}40;background:linear-gradient(180deg,${t.amber}0b,${t.surface});}
+.landing-feature-card[data-plan="pro"]{border-color:${t.amber}70;background:linear-gradient(180deg,${t.amber}14,${t.surface});box-shadow:0 16px 34px ${t.amber}10;}
 .plan-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;}
 .plan-badge.free{color:${t.green};background:${t.green}12;border:1px solid ${t.green}35;}
-.plan-badge.pro{color:${t.amber};background:${t.amber}12;border:1px solid ${t.amber}35;}
+.plan-badge.pro{color:#111827;background:${t.amber};border:1px solid ${t.amber};box-shadow:0 8px 20px ${t.amber}24;}
+.landing-feature-card[data-plan="pro"] .plan-badge{position:absolute;right:14px;top:14px;margin:0;}
+.landing-feature-card[data-plan="pro"] > div:last-child{padding-top:18px;}
 .smart-example{margin-top:16px;padding:14px;border:1px solid ${t.accent}35;border-radius:8px;background:linear-gradient(135deg,${t.accent}10,${t.panel});font-size:13px;color:${t.textSec};line-height:1.65;}
 .smart-example strong{color:${t.text};}
+.smart-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.smart-compare-card{padding:16px;border-radius:8px;border:1px solid ${t.border};background:${t.panel};min-height:132px;}
+.smart-compare-card.with{border-color:${t.green}45;background:linear-gradient(180deg,${t.green}10,${t.panel});}
+.smart-compare-title{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;}
+.smart-queue{display:grid;gap:7px;}
+.smart-queue-row{display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:8px;background:${t.surface};font-size:12px;color:${t.textSec};font-weight:800;}
+.smart-queue-dot{width:10px;height:10px;border-radius:50%;background:${t.border};flex-shrink:0;}
+.smart-compare-card.with .smart-queue-dot{background:${t.green};box-shadow:0 0 0 4px ${t.green}18;}
 .landing-split-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);gap:16px;align-items:stretch;}
 .landing-pricing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
 .landing-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
@@ -11488,6 +11498,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .landing-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
   .landing-feature-grid,.landing-split-section,.landing-pricing-grid,.landing-faq-grid,.landing-auth-section,.referral-grid{grid-template-columns:1fr!important;}
   .landing-feature-card{grid-template-columns:1fr!important;}
+  .landing-feature-card[data-plan="pro"] > div:last-child{padding-top:26px!important;}
+  .smart-compare{grid-template-columns:1fr!important;}
+  .smart-compare-card{min-height:auto!important;}
   .landing-auth-section{gap:14px!important;}
   .exam-layout{grid-template-columns:1fr!important;}
   .exam-map{order:-1;position:relative!important;top:auto!important;width:100%;padding:12px!important;}
@@ -12419,13 +12432,31 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
               <strong>Example:</strong> Got 2.4 wrong? It comes back tomorrow. Got it right? It waits a week.
             </div>
           </div>
-          <div className="card" style={{padding:"20px",display:"grid",gap:10}}>
-            {["Wrong answers move higher in your review queue","Correct answers return later, like spaced repetition","Chapter feedback points you toward what to study next"].map(item=>(
-              <div key={item} style={{display:"flex",gap:10,alignItems:"flex-start",fontSize:13,color:t.textSec,lineHeight:1.6}}>
-                <span style={{width:22,height:22,borderRadius:7,background:`${t.green}12`,border:`1px solid ${t.green}35`,color:t.green,display:"inline-flex",alignItems:"center",justifyContent:"center",fontWeight:900,flexShrink:0}}>✓</span>
-                <span>{item}</span>
+          <div className="card" style={{padding:"20px"}}>
+            <div className="smart-compare">
+              <div className="smart-compare-card">
+                <div className="smart-compare-title" style={{color:t.textDim}}>Without Smart Review</div>
+                <div className="smart-queue">
+                  {["Random question","Random question","Random question"].map(item=>(
+                    <div key={item} className="smart-queue-row">
+                      <span className="smart-queue-dot"/>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
+              <div className="smart-compare-card with">
+                <div className="smart-compare-title" style={{color:t.green}}>With Smart Review</div>
+                <div className="smart-queue">
+                  {["Your weak topics first","Missed 2.4 tomorrow","Correct ones next week"].map(item=>(
+                    <div key={item} className="smart-queue-row">
+                      <span className="smart-queue-dot"/>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
