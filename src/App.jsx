@@ -11311,6 +11311,12 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes softGlow{0%,100%{box-shadow:0 10px 22px ${t.accent}10;}50%{box-shadow:0 12px 28px ${t.accent}22;}}
 @keyframes barShine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 @keyframes missionSweep{0%,55%{transform:translateX(-120%) rotate(18deg)}80%,100%{transform:translateX(270%) rotate(18deg)}}
+@keyframes demoGlow{0%,100%{transform:translate(0,0) scale(1);opacity:.75;}50%{transform:translate(70%,20%) scale(1.18);opacity:1;}}
+@keyframes demoProgress{0%,22%{width:28%;}48%,100%{width:72%;}}
+@keyframes demoAnswerIdle{0%,44%{border-color:${t.border};background:${t.surface};transform:translateY(0);}54%,82%{border-color:${t.border};background:${t.surface};transform:translateY(0);}88%,100%{border-color:${t.border};background:${t.surface};transform:translateY(0);}}
+@keyframes demoAnswerCorrect{0%,38%{border-color:${t.border};background:${t.surface};transform:translateY(0);box-shadow:none;}48%,82%{border-color:${t.green}65;background:${t.green}12;transform:translateY(-1px);box-shadow:0 14px 30px ${t.green}16;}90%,100%{border-color:${t.border};background:${t.surface};transform:translateY(0);box-shadow:none;}}
+@keyframes demoLetterCorrect{0%,38%{background:transparent;color:${t.textDim};border-color:${t.border};}48%,82%{background:${t.green};color:#fff;border-color:${t.green};}90%,100%{background:transparent;color:${t.textDim};border-color:${t.border};}}
+@keyframes demoFeedback{0%,42%{opacity:0;transform:translateY(8px);}52%,82%{opacity:1;transform:translateY(0);}92%,100%{opacity:0;transform:translateY(8px);}}
 @keyframes selectPulse{0%{transform:scale(.992)}70%{transform:scale(1.006)}100%{transform:scale(1)}}
 @keyframes answerPop{0%{transform:scale(.99)}62%{transform:scale(1.012)}100%{transform:scale(1)}}
 @keyframes shakeLite{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}55%{transform:translateX(2px)}78%{transform:translateX(-1px)}}
@@ -11364,6 +11370,21 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .landing-preview{display:flex;flex-direction:column;gap:14px;}
 .landing-demo-card{padding:14px;border-color:${t.accent}35;overflow:hidden;animation:floatCard 5.2s ease-in-out infinite;}
 .landing-demo-gif{display:block;width:100%;aspect-ratio:13/8;object-fit:cover;border-radius:7px;border:1px solid ${t.border};background:#0b1220;}
+.landing-quiz-demo{position:relative;min-height:330px;padding:18px;border:1px solid ${t.accent}35;border-radius:8px;background:linear-gradient(160deg,${t.surface},${t.panel} 54%,${t.accent}0d);overflow:hidden;box-shadow:0 24px 54px rgba(7,12,24,.16);animation:floatCard 5.2s ease-in-out infinite;}
+.landing-quiz-demo::before{content:"";position:absolute;inset:-30% auto auto -20%;width:58%;height:80%;background:radial-gradient(circle,${t.accent}18,transparent 64%);animation:demoGlow 5s ease-in-out infinite;pointer-events:none;}
+.demo-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;position:relative;z-index:1;}
+.demo-progress{height:8px;border-radius:99px;background:${t.border};overflow:hidden;flex:1;}
+.demo-progress span{display:block;height:100%;width:72%;border-radius:inherit;background:linear-gradient(90deg,${t.accent},${t.green});animation:demoProgress 5s ease-in-out infinite;}
+.demo-question{position:relative;z-index:1;padding:16px;border:1px solid ${t.border};border-radius:8px;background:${t.panel}c8;margin-bottom:12px;}
+.demo-answer-list{position:relative;z-index:1;display:grid;gap:9px;}
+.demo-answer{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid ${t.border};border-radius:8px;background:${t.surface};color:${t.textSec};font-size:13px;font-weight:700;line-height:1.45;animation:demoAnswerIdle 5s ease-in-out infinite;}
+.demo-answer:nth-child(2){animation-name:demoAnswerCorrect;}
+.demo-answer-letter{width:28px;height:28px;border-radius:8px;border:1px solid ${t.border};display:inline-flex;align-items:center;justify-content:center;color:${t.textDim};font-weight:900;flex-shrink:0;}
+.demo-answer:nth-child(2) .demo-answer-letter{animation:demoLetterCorrect 5s ease-in-out infinite;}
+.demo-feedback{position:relative;z-index:1;margin-top:12px;padding:12px;border-radius:8px;border:1px solid ${t.green}45;background:${t.green}10;color:${t.text};font-size:13px;font-weight:800;opacity:0;transform:translateY(8px);animation:demoFeedback 5s ease-in-out infinite;}
+.landing-secondary-links{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;}
+.landing-secondary-links button{background:transparent;border:0;padding:0;color:${t.textSec};font:inherit;font-size:13px;font-weight:800;text-decoration:underline;text-underline-offset:4px;cursor:pointer;}
+.landing-secondary-links button:hover{color:${t.accent};}
 .landing-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
 .landing-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
 .landing-feature-card{padding:20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;animation:softRise .44s cubic-bezier(.16,1,.3,1) both;}
@@ -12297,24 +12318,49 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
               Security+ practice questions with PBQ simulations.
             </h1>
             <p className="landing-copy">
-              Practise the full MCQ bank without an account, try a daily challenge, then create a free account to save progress. Smart Review helps you spend more time on weak chapters instead of repeating what you already know.
+              400 MCQs + 100 PBQs. Free to start. No account needed.
             </p>
-            <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:22}}>
-              <button className="btn btn-primary" style={{padding:"12px 20px"}} onClick={()=>jumpToAuth("signup")}>Create Free Account</button>
-              <button className="btn btn-outline" style={{padding:"12px 20px"}} onClick={onPracticeMcq}>Practise MCQs Free</button>
-              <button className="btn btn-ghost" style={{padding:"12px 20px"}} onClick={onDaily}>Try Daily Challenge</button>
+            <div style={{marginTop:22}}>
+              <button className="btn btn-primary" style={{padding:"13px 22px",fontSize:15}} onClick={onPracticeMcq}>Start Practising Free →</button>
+              <div className="landing-secondary-links" aria-label="Secondary actions">
+                <button type="button" onClick={()=>jumpToAuth("signup")}>Create account to save progress</button>
+                <button type="button" onClick={onDaily}>Try Daily Challenge</button>
+              </div>
             </div>
           </div>
 
           <div className="landing-preview">
-            <div className="card landing-demo-card">
-              <img className="landing-demo-gif" src="/secureplus-ui-demo.gif" alt="Looping SecurePlus practice demo showing a drag and drop firewall task"/>
-              <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginTop:12}}>
-                <div>
-                  <div style={{fontWeight:900,color:t.text,fontSize:15}}>Interactive PBQ-style practice</div>
-                  <div style={{fontSize:12,color:t.textSec}}>A 5-second loop of a firewall drag/drop workflow.</div>
+            <div className="landing-quiz-demo" aria-label="Animated SecurePlus quiz demo">
+              <div className="demo-topbar">
+                <span className="chip" style={{borderColor:`${t.accent}44`,color:t.accent,background:`${t.accent}10`}}>MCQ Practice</span>
+                <div className="demo-progress"><span /></div>
+                <span style={{fontSize:12,color:t.textDim,fontWeight:900}}>4 / 10</span>
+              </div>
+              <div className="demo-question">
+                <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
+                  <span className="chip" style={{borderColor:`${t.green}44`,color:t.green,background:`${t.green}10`}}>Ch.3</span>
+                  <span className="chip" style={{borderColor:`${t.amber}44`,color:t.amber,background:`${t.amber}10`}}>Medium</span>
                 </div>
-                <span className="chip" style={{borderColor:`${t.green}44`,color:t.green,background:`${t.green}10`}}>SY0-701</span>
+                <div style={{fontSize:17,lineHeight:1.55,fontWeight:900,color:t.text}}>
+                  Which control best prevents an attacker from reusing captured login traffic?
+                </div>
+              </div>
+              <div className="demo-answer-list">
+                <div className="demo-answer">
+                  <span className="demo-answer-letter">A</span>
+                  <span>Static passwords with longer complexity rules</span>
+                </div>
+                <div className="demo-answer">
+                  <span className="demo-answer-letter">B</span>
+                  <span>Mutual authentication with fresh nonces</span>
+                </div>
+                <div className="demo-answer">
+                  <span className="demo-answer-letter">C</span>
+                  <span>Allowlisting the user’s browser version</span>
+                </div>
+              </div>
+              <div className="demo-feedback">
+                Correct. Fresh nonces make replayed authentication messages invalid.
               </div>
             </div>
             <div id="daily-challenge" className="card card-hover landing-section" style={{padding:"18px 20px",borderColor:`${t.accent}40`,cursor:"pointer"}} onClick={onDaily}>
