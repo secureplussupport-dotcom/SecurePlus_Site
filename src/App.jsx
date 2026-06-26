@@ -11388,6 +11388,13 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .landing-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
 .landing-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
 .landing-feature-card{padding:20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;animation:softRise .44s cubic-bezier(.16,1,.3,1) both;}
+.landing-feature-card[data-plan="free"]{border-color:${t.green}36;background:linear-gradient(180deg,${t.green}08,${t.surface});}
+.landing-feature-card[data-plan="pro"]{border-color:${t.amber}40;background:linear-gradient(180deg,${t.amber}0b,${t.surface});}
+.plan-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;}
+.plan-badge.free{color:${t.green};background:${t.green}12;border:1px solid ${t.green}35;}
+.plan-badge.pro{color:${t.amber};background:${t.amber}12;border:1px solid ${t.amber}35;}
+.smart-example{margin-top:16px;padding:14px;border:1px solid ${t.accent}35;border-radius:8px;background:linear-gradient(135deg,${t.accent}10,${t.panel});font-size:13px;color:${t.textSec};line-height:1.65;}
+.smart-example strong{color:${t.text};}
 .landing-split-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);gap:16px;align-items:stretch;}
 .landing-pricing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
 .landing-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
@@ -12270,10 +12277,10 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
   };
 
   const featureCards=[
-    {type:"mcq",color:"#2f7df6",title:"Full MCQ practice",body:"Guests and free accounts can access every MCQ question. Create an account when you want answers, scores, and progress to follow you."},
-    {type:"pbq",color:"#f59e0b",title:"PBQ simulations",body:"Practice firewall decisions, terminal logs, drag/drop, ordering, hotspot, and scenario tasks before exam day pressure."},
-    {type:"review",color:"#14b8a6",title:"Smart Review",body:"SecurePlus brings missed questions back first and spaces out correct questions, so your weak areas get the most attention."},
-    {type:"exam",color:"#8b5cf6",title:"Exam-style mode",body:"Pro users can run timed mixed MCQ/PBQ sets, flag questions, review detailed solutions, and estimate readiness."},
+    {type:"mcq",plan:"free",color:"#2f7df6",title:"Full MCQ practice",body:"Guests and free accounts can access every MCQ question. Create an account when you want answers, scores, and progress to follow you."},
+    {type:"pbq",plan:"pro",color:"#f59e0b",title:"PBQ simulations",body:"Practice firewall decisions, terminal logs, drag/drop, ordering, hotspot, and scenario tasks before exam day pressure."},
+    {type:"review",plan:"free",color:"#14b8a6",title:"Smart Review",body:"SecurePlus brings missed questions back first and spaces out correct questions, so your weak areas get the most attention."},
+    {type:"exam",plan:"pro",color:"#8b5cf6",title:"Exam-style mode",body:"Pro users can run timed mixed MCQ/PBQ sets, flag questions, review detailed solutions, and estimate readiness."},
   ];
   const faqItems=[
     {q:"Are the questions identical to the real exam?",a:"No. SecurePlus uses original practice questions. It is for learning and exam preparation, not real exam dumps."},
@@ -12281,7 +12288,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
     {q:"How often is the question bank updated?",a:"The bank is reviewed and expanded as Security+ objectives and student weak areas change."},
     {q:"Is there a mobile-friendly layout?",a:"Yes. The app is designed for phones, tablets, and desktop browsers, including mobile practice sessions."},
     {q:"Can I practise without creating an account?",a:"Yes. Visitors can access all MCQ questions, but progress and review history are not saved until they sign up."},
-    {q:"What does Smart Review do?",a:"It uses an SM-2 inspired review model to prioritise wrong answers and bring topics back at better intervals."},
+    {q:"What does Smart Review do?",a:"It uses an SM-2 inspired review model to prioritise wrong answers and bring topics back at better intervals. Example: got 2.4 wrong? It comes back tomorrow. Got it right? It waits a week."},
     {q:"What does Pro unlock?",a:"Pro adds PBQ simulations, Exam Mode, deeper review guidance, and stronger readiness tools for $4.99 per year."},
     {q:"Is SecurePlus affiliated with CompTIA?",a:"No. CompTIA and Security+ are trademarks of CompTIA. SecurePlus is an independent practice platform."},
   ];
@@ -12390,11 +12397,12 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
 
         <section id="features" className="landing-feature-grid landing-section">
           {featureCards.map(card=>(
-            <div key={card.title} className="card card-hover landing-feature-card">
+            <div key={card.title} className="card card-hover landing-feature-card" data-plan={card.plan}>
               <PillarIcon type={card.type} color={card.color}/>
               <div>
-              <div style={{fontWeight:900,color:t.text,marginBottom:6}}>{card.title}</div>
-              <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{card.body}</div>
+                <span className={`plan-badge ${card.plan}`}>{card.plan==="free"?"Free":"Pro"}</span>
+                <div style={{fontWeight:900,color:t.text,marginBottom:6}}>{card.title}</div>
+                <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{card.body}</div>
               </div>
             </div>
           ))}
@@ -12407,6 +12415,9 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             <p style={{fontSize:14,color:t.textSec,lineHeight:1.75}}>
               Smart Review watches what you miss, groups weak chapters, and brings those questions back earlier. Correct answers are spaced out so you practise for retention, not just short-term memory.
             </p>
+            <div className="smart-example">
+              <strong>Example:</strong> Got 2.4 wrong? It comes back tomorrow. Got it right? It waits a week.
+            </div>
           </div>
           <div className="card" style={{padding:"20px",display:"grid",gap:10}}>
             {["Wrong answers move higher in your review queue","Correct answers return later, like spaced repetition","Chapter feedback points you toward what to study next"].map(item=>(
