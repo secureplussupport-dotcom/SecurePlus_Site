@@ -12377,7 +12377,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
               {[
                 {v:MCQ_BANK.length,l:"MCQs"},
                 {v:PBQ_BANK.length,l:"PBQs"},
-                {v:"$4.99",l:"annual Pro"},
+                {v:"$4.99/year",l:"Pro plan"},
               ].map(s=>(
                 <div key={s.l} className="card" style={{padding:"16px",minWidth:0}}>
                   <div style={{fontSize:24,fontWeight:900,color:t.text}}>{s.v}</div>
@@ -12431,7 +12431,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           <div className="card pricing-pro-card" style={{padding:"22px",borderColor:`${t.accent}55`,background:`linear-gradient(180deg, ${t.accent}10, ${t.surface})`}}>
             <div className="chip" style={{borderColor:`${t.accent}44`,color:t.accent,background:`${t.accent}10`,marginBottom:10}}>Most popular</div>
             <h2 style={{fontSize:24,color:t.text,marginBottom:4}}>$4.99/year</h2>
-            <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Roughly $0.40/month, billed annually.</p>
+            <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Annual Pro access for one clear yearly price.</p>
             {["PBQ simulations","Exam Mode with MCQ + PBQ mix","Detailed solutions and weak-chapter guidance","Smart Review for missed questions"].map(item=>(
               <div key={item} style={{fontSize:13,color:t.textSec,lineHeight:1.8}}>✓ {item}</div>
             ))}
@@ -12459,7 +12459,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             <div className="label" style={{color:t.accent,marginBottom:8}}>Get Started Now</div>
             <h2 style={{fontSize:28,color:t.text,marginBottom:8}}>Create a free SecurePlus account</h2>
             <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,maxWidth:520}}>
-              Save your attempts, see weak areas, and keep practising from any device. Pro is optional and unlocks PBQ simulations for roughly $0.40/month when billed yearly.
+              Save your attempts, see weak areas, and keep practising from any device. Pro is optional and unlocks PBQ simulations for $4.99/year.
             </p>
           </div>
 
@@ -13241,7 +13241,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
         <div className="card" style={{padding:"16px 20px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
           <div style={{fontWeight:700,color:t.text,fontSize:14,marginBottom:4}}>Want the PBQ side of the exam too?</div>
           <div style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:10}}>
-            Your MCQ practice stays free. Pro adds hands-on PBQ simulations for roughly $0.40/month when billed yearly.
+            Your MCQ practice stays free. Pro adds hands-on PBQ simulations for $4.99/year.
           </div>
           <button className="btn btn-outline" style={{fontSize:12}} onClick={onUpgrade}>Preview Pro PBQs</button>
         </div>
@@ -13872,7 +13872,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                 <div style={{flex:1,minWidth:220}}>
                   <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:4}}>That was your free PBQ preview</div>
                   <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                    Pro unlocks the full PBQ simulator bank, Exam Mode, and deeper review tools for $4.99/year, roughly $0.40/month.
+                    Pro unlocks the full PBQ simulator bank, Exam Mode, and deeper review tools for $4.99/year.
                   </div>
                 </div>
                 <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_preview_complete", question_id: q.id });onUpgrade?.();}}>
@@ -14725,7 +14725,7 @@ function TrialExpiredPrompt({t,onUpgrade,onClose}) {
           </p>
           <div className="card" style={{padding:"14px 16px",marginBottom:18,background:`${t.accent}10`,borderColor:`${t.accent}35`}}>
             <div style={{fontSize:28,fontWeight:900,color:t.accent}}>$4.99/year</div>
-            <div style={{fontSize:13,color:t.green,fontWeight:800}}>roughly $0.40/month</div>
+            <div style={{fontSize:13,color:t.green,fontWeight:800}}>$4.99/year</div>
           </div>
           <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
             <button className="btn btn-primary" style={{flex:1,justifyContent:"center"}} onClick={onUpgrade}>Upgrade yearly</button>
@@ -14859,7 +14859,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           <div className="label" style={{marginBottom:8}}>Pro</div>
           <div style={{fontSize:36,fontWeight:700,color:t.accent,marginBottom:4}}>$4.99</div>
           <div style={{fontSize:15,color:t.text,fontWeight:900,marginBottom:4,textTransform:"uppercase"}}>per year / annual billing</div>
-          <div style={{fontSize:13,color:t.green,fontWeight:800,marginBottom:18}}>Works out to roughly $0.40/month</div>
+          <div style={{fontSize:13,color:t.green,fontWeight:800,marginBottom:18}}>Annual Pro access for $4.99/year</div>
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
             {["Everything in Free",`${PBQ_BANK.length} PBQ simulations`,"Exam Mode with mixed MCQ/PBQ practice","8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Detailed per-question feedback"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
@@ -15167,7 +15167,7 @@ function OnboardingModal({user,t,onClose,onPricing}) {
       icon:"⬆️",
       title:"When Pro helps",
       body:"The free plan is useful for MCQ practice. Pro is for students who want PBQ simulation practice too.",
-      bullets:["Unlock all PBQ simulations.","Practise terminal, log analysis, ordering, hotspot, and drag/drop-style tasks.","Costs $4.99/year, roughly $0.40/month."],
+      bullets:["Unlock all PBQ simulations.","Practise terminal, log analysis, ordering, hotspot, and drag/drop-style tasks.","Costs $4.99/year."],
     },
   ];
   const slide=slides[step];
