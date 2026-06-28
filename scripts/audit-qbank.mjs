@@ -116,9 +116,12 @@ function push(errorList, id, message) {
 }
 
 const rawMcqs = evaluateLiteral("MCQ_BANK_RAW");
+const importedMcqs = evaluateLiteral("IMPORTED_MCQ_BANK");
 const lowQualityIds = new Set(evaluateLiteral("LOW_QUALITY_MCQ_IDS"));
-const mcqs = rawMcqs.filter(q => !lowQualityIds.has(q.id));
-const pbqs = evaluateLiteral("PBQ_BANK");
+const mcqs = [...rawMcqs, ...importedMcqs].filter(q => !lowQualityIds.has(q.id));
+const basePbqs = evaluateLiteral("PBQ_BANK_BASE");
+const importedPbqs = evaluateLiteral("IMPORTED_PBQ_BANK");
+const pbqs = [...basePbqs, ...importedPbqs];
 const errors = [];
 const warnings = [];
 
@@ -130,7 +133,7 @@ for (const [id] of findDuplicates(pbqs, q => q.id)) push(errors, id, "duplicate 
 for (const [, first, second] of findDuplicates(mcqs, q => normalize(q.q))) {
   push(warnings, second.id, `duplicate MCQ question text also used by ${first.id}`);
 }
-for (const [, first, second] of findDuplicates(pbqs, q => normalize(q.question || q.title))) {
+for (const [, first, second] of findDuplicates(pbqs, q => normalize(`${q.title || ""} ${q.scenario || ""} ${q.question || ""}`))) {
   push(warnings, second.id, `duplicate PBQ prompt/title also used by ${first.id}`);
 }
 
@@ -176,8 +179,8 @@ for (const q of pbqs) {
 }
 
 console.log(`Question bank audit`);
-console.log(`- Active MCQs: ${mcqs.length} (${rawMcqs.length} raw, ${lowQualityIds.size} hidden low-quality)`);
-console.log(`- PBQs: ${pbqs.length}`);
+console.log(`- Active MCQs: ${mcqs.length} (${rawMcqs.length} base, ${importedMcqs.length} imported, ${lowQualityIds.size} hidden low-quality)`);
+console.log(`- PBQs: ${pbqs.length} (${basePbqs.length} base, ${importedPbqs.length} imported)`);
 console.log(`- MCQ duplicate IDs/text: 0 expected`);
 console.log(`- PBQ duplicate IDs/prompts: 0 expected`);
 

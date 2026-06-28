@@ -8088,15 +8088,2225 @@ const LOW_QUALITY_MCQ_IDS = new Set([
   "m336","m337","m338","m339","m341","m342","m344","m345","m346","m347","m348","m350",
   "m351","m353","m354","m357","m358","m359","m360","m362","m363","m364","m365","m367",
   "m368","m369","m370","m372","m375","m377","m378","m380","m381","m382","m383","m384",
-  "m385","m386","m387","m388","m390","m391","m392","m394","m395","m396","m397","m400"
+  "m385","m386","m387","m388","m390","m391","m392","m394","m395","m396","m397","m400",
+  // Hidden because the correct option is substantially longer than the distractors.
+  "m146","m164","m199","m237","m239","m245","m247","m263","m302","m310"
 ]);
 
-const MCQ_BANK = MCQ_BANK_RAW.filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id));
+const IMPORTED_MCQ_BANK = [
+  {
+    "id": "m601",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "A security architect requires all corporate authentication flows to incorporate an alphanumeric password alongside a physical cryptographic hardware token. Which option correctly identifies the control types and authentication factors utilized?",
+    "opts": [
+      "Technical control using Something You Know and Something You Have",
+      "Operational control using Something You Have and Something You Are",
+      "Managerial control using Something You Know and Somewhere You Are",
+      "Physical control using Something You Are and Something You Do"
+    ],
+    "correct": 0,
+    "exp": "Passwords are knowledge factors (Something You Know), and a cryptographic hardware token is a possession factor (Something You Have). Enforcing this combination via system logic constitutes a technical control.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Technical control using Something You Know and Something You Have. Passwords are knowledge factors (Something You Know), and a cryptographic hardware token is a possession factor (Something You Have). Enforcing this combination via system logic constitutes a technical control.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Technical control using Something You Know and Something You Have. Passwords are knowledge factors (Something You Know), and a cryptographic hardware token is a possession factor (Something You Have). Enforcing this combination via system logic constitutes a technical control.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Technical control using Something You Know and Something You Have. Passwords are knowledge factors (Something You Know), and a cryptographic hardware token is a possession factor (Something You Have). Enforcing this combination via system logic constitutes a technical control."
+    },
+    "source": "QB1 question 1"
+  },
+  {
+    "id": "m602",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "To stop unauthorized users from trailing behind an employee through a secure data center perimeter, an enterprise wants to deploy a physical configuration consisting of two interlocking doors where one door must fully close before the next can open. Which control best meets this requirement?",
+    "opts": [
+      "Turnstile gate",
+      "Access control vestibule",
+      "Proximity sensor system",
+      "Perimeter bollard line"
+    ],
+    "correct": 1,
+    "exp": "An access control vestibule uses interlocking doors to restrict access, preventing unauthorized personnel from tailgating behind an employee.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Access control vestibule. An access control vestibule uses interlocking doors to restrict access, preventing unauthorized personnel from tailgating behind an employee.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Access control vestibule. An access control vestibule uses interlocking doors to restrict access, preventing unauthorized personnel from tailgating behind an employee.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Access control vestibule. An access control vestibule uses interlocking doors to restrict access, preventing unauthorized personnel from tailgating behind an employee."
+    },
+    "source": "QB1 question 2"
+  },
+  {
+    "id": "m603",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Concepts",
+    "q": "An administrative policy mandates that a warning message must display before a user authenticates to any corporate workstation, stating that network activity is subject to logging and unauthorized use is prosecuted. What type of control type is a login banner?",
+    "opts": [
+      "Directive control",
+      "Detective control",
+      "Corrective control",
+      "Deterrent control"
+    ],
+    "correct": 3,
+    "exp": "A login banner acts as a deterrent control by warning unauthorized users of the legal consequences of intrusion, aiming to discourage malicious attempts.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is D: Deterrent control. A login banner acts as a deterrent control by warning unauthorized users of the legal consequences of intrusion, aiming to discourage malicious attempts.",
+      "1": "This option does not best match the scenario. The stronger answer is D: Deterrent control. A login banner acts as a deterrent control by warning unauthorized users of the legal consequences of intrusion, aiming to discourage malicious attempts.",
+      "2": "This option does not best match the scenario. The stronger answer is D: Deterrent control. A login banner acts as a deterrent control by warning unauthorized users of the legal consequences of intrusion, aiming to discourage malicious attempts."
+    },
+    "source": "QB1 question 3"
+  },
+  {
+    "id": "m604",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "A company determines that the cost of completely engineering a mitigation for a low-probability software flaw exceeds potential damages. Consequently, the enterprise chooses to purchase a comprehensive third-party cybersecurity insurance policy. Which risk management strategy does this action illustrate?",
+    "opts": [
+      "Risk Avoidance",
+      "Risk Mitigation",
+      "Risk Transference",
+      "Risk Acceptance"
+    ],
+    "correct": 2,
+    "exp": "Purchasing cybersecurity insurance shifts the financial impact of a risk to a third party, which defines risk transference.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Risk Transference. Purchasing cybersecurity insurance shifts the financial impact of a risk to a third party, which defines risk transference.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Risk Transference. Purchasing cybersecurity insurance shifts the financial impact of a risk to a third party, which defines risk transference.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Risk Transference. Purchasing cybersecurity insurance shifts the financial impact of a risk to a third party, which defines risk transference."
+    },
+    "source": "QB1 question 4"
+  },
+  {
+    "id": "m605",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "During an annual steering board workshop, executives document the definitive threshold of risk the organization is willing to take on across various computing initiatives to pursue its financial goals. What term defines this strategic parameter?",
+    "opts": [
+      "Risk Appetite",
+      "Risk Tolerance",
+      "Risk Matrix Baseline",
+      "Risk Avoidance Index"
+    ],
+    "correct": 0,
+    "exp": "Risk appetite represents the strategic level of risk an organization is willing to accept to meet its goals.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Risk Appetite. Risk appetite represents the strategic level of risk an organization is willing to accept to meet its goals.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Risk Appetite. Risk appetite represents the strategic level of risk an organization is willing to accept to meet its goals.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Risk Appetite. Risk appetite represents the strategic level of risk an organization is willing to accept to meet its goals."
+    },
+    "source": "QB1 question 5"
+  },
+  {
+    "id": "m606",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "A network engineering group implements Advanced Encryption Standard (AES) with a 256-bit key length across all laptop storage blocks. Which core component of the CIA triad does this control primarily preserve?",
+    "opts": [
+      "Non-repudiation",
+      "Confidentiality",
+      "Integrity",
+      "Availability"
+    ],
+    "correct": 1,
+    "exp": "Encryption scrambles plaintext into ciphertext, preventing unauthorized entities from reading sensitive files. This directly preserves confidentiality.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Confidentiality. Encryption scrambles plaintext into ciphertext, preventing unauthorized entities from reading sensitive files. This directly preserves confidentiality.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Confidentiality. Encryption scrambles plaintext into ciphertext, preventing unauthorized entities from reading sensitive files. This directly preserves confidentiality.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Confidentiality. Encryption scrambles plaintext into ciphertext, preventing unauthorized entities from reading sensitive files. This directly preserves confidentiality."
+    },
+    "source": "QB1 question 6"
+  },
+  {
+    "id": "m607",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Security Concepts",
+    "q": "A third-party security tester gathers information about a client organization by querying open-source code repositories, public WHOIS registration data, and regional DNS zones without transmitting packets directly to any target network interface. Which option best describes this activity?",
+    "opts": [
+      "Active vulnerability scanning",
+      "Passive reconnaissance",
+      "Direct penetration testing",
+      "Logic mapping"
+    ],
+    "correct": 1,
+    "exp": "Passive reconnaissance involves gathering open-source intelligence (OSINT) and publicly available records without interacting directly with the target infrastructure.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Passive reconnaissance. Passive reconnaissance involves gathering open-source intelligence (OSINT) and publicly available records without interacting directly with the target infrastructure.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Passive reconnaissance. Passive reconnaissance involves gathering open-source intelligence (OSINT) and publicly available records without interacting directly with the target infrastructure.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Passive reconnaissance. Passive reconnaissance involves gathering open-source intelligence (OSINT) and publicly available records without interacting directly with the target infrastructure."
+    },
+    "source": "QB1 question 7"
+  },
+  {
+    "id": "m608",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Threats & Vulnerabilities",
+    "q": "An administrative assistant receives an email designed to look like an official notice from a regional delivery vendor. The message claims a package cannot be dropped off until the recipient selects an embedded link and logs in. What type of attack vector is this?",
+    "opts": [
+      "Phishing",
+      "Vishing",
+      "Watering hole attack",
+      "On-path intervention"
+    ],
+    "correct": 0,
+    "exp": "Broadly targeted malicious email communications disguised as trusted vendors are phishing attacks.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Phishing. Broadly targeted malicious email communications disguised as trusted vendors are phishing attacks.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Phishing. Broadly targeted malicious email communications disguised as trusted vendors are phishing attacks.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Phishing. Broadly targeted malicious email communications disguised as trusted vendors are phishing attacks."
+    },
+    "source": "QB1 question 8"
+  },
+  {
+    "id": "m609",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "Several corporate staff report receiving inbound voice calls on office lines where an interactive system claims their corporate banking access has been frozen. The system prompts them to type in their card numbers and PIN keys. What attack vector is this?",
+    "opts": [
+      "Smishing",
+      "Whaling",
+      "Spear Phishing",
+      "Vishing"
+    ],
+    "correct": 3,
+    "exp": "Social engineering conducted using voice phone calls is voice phishing, or vishing. --- PAGE 19 ---",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is D: Vishing. Social engineering conducted using voice phone calls is voice phishing, or vishing. --- PAGE 19 ---",
+      "1": "This option does not best match the scenario. The stronger answer is D: Vishing. Social engineering conducted using voice phone calls is voice phishing, or vishing. --- PAGE 19 ---",
+      "2": "This option does not best match the scenario. The stronger answer is D: Vishing. Social engineering conducted using voice phone calls is voice phishing, or vishing. --- PAGE 19 ---"
+    },
+    "source": "QB1 question 9"
+  },
+  {
+    "id": "m610",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Threats & Vulnerabilities",
+    "q": "While assessing an office network, an analyst notices that an attacker has established a rogue device that silently captures and relays transmissions between corporate endpoints and the primary gateway switch to manipulate raw data streams. What attack type is this?",
+    "opts": [
+      "Distributed Denial of Service (DDoS)",
+      "On-path attack",
+      "Deauthentication campaign",
+      "Directory traversal exploit"
+    ],
+    "correct": 1,
+    "exp": "An on-path attack involves an intercepting device positioned between endpoints to capture, log, or modify data packets.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: On-path attack. An on-path attack involves an intercepting device positioned between endpoints to capture, log, or modify data packets.",
+      "2": "This option does not best match the scenario. The stronger answer is B: On-path attack. An on-path attack involves an intercepting device positioned between endpoints to capture, log, or modify data packets.",
+      "3": "This option does not best match the scenario. The stronger answer is B: On-path attack. An on-path attack involves an intercepting device positioned between endpoints to capture, log, or modify data packets."
+    },
+    "source": "QB1 question 10"
+  },
+  {
+    "id": "m611",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Security Concepts",
+    "q": "An application reviewer finds a flaw where entering specific alphanumeric sequences into a web form text field appends backend queries, exposing unauthorized database tables. What category of exploit does this illustrate?",
+    "opts": [
+      "Cross-Site Scripting (XSS)",
+      "SQL Injection",
+      "Buffer Overflow",
+      "Replay Attack"
+    ],
+    "correct": 1,
+    "exp": "SQL injection vulnerabilities occur when user input is concatenated directly into backend database commands without validation.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: SQL Injection. SQL injection vulnerabilities occur when user input is concatenated directly into backend database commands without validation.",
+      "2": "This option does not best match the scenario. The stronger answer is B: SQL Injection. SQL injection vulnerabilities occur when user input is concatenated directly into backend database commands without validation.",
+      "3": "This option does not best match the scenario. The stronger answer is B: SQL Injection. SQL injection vulnerabilities occur when user input is concatenated directly into backend database commands without validation."
+    },
+    "source": "QB1 question 11"
+  },
+  {
+    "id": "m612",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Threats & Vulnerabilities",
+    "q": "A programming engineering group observes that a custom database system consistently encounters fatal memory faults when two internal processing threads try to write to the exact same memory coordinate at the same time. What type of flaw is this?",
+    "opts": [
+      "Memory Injection",
+      "Resource Exhaustion",
+      "Race Condition",
+      "Input Validation Flaw"
+    ],
+    "correct": 2,
+    "exp": "A race condition happens when multiple processing threads conflict over a shared resource, leading to software instability or crashes.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Race Condition. A race condition happens when multiple processing threads conflict over a shared resource, leading to software instability or crashes.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Race Condition. A race condition happens when multiple processing threads conflict over a shared resource, leading to software instability or crashes.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Race Condition. A race condition happens when multiple processing threads conflict over a shared resource, leading to software instability or crashes."
+    },
+    "source": "QB1 question 12"
+  },
+  {
+    "id": "m613",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "An enterprise network is breached because an attacker used a software vulnerability that was discovered and exploited before the software developer could create and distribute a fix. What term best defines this threat?",
+    "opts": [
+      "Zero-day vulnerability",
+      "Legacy application liability",
+      "Logic bomb intervention",
+      "Race condition vector"
+    ],
+    "correct": 0,
+    "exp": "A zero-day exploit targets a software vulnerability before a patch or signature is available from the vendor.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Zero-day vulnerability. A zero-day exploit targets a software vulnerability before a patch or signature is available from the vendor.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Zero-day vulnerability. A zero-day exploit targets a software vulnerability before a patch or signature is available from the vendor.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Zero-day vulnerability. A zero-day exploit targets a software vulnerability before a patch or signature is available from the vendor."
+    },
+    "source": "QB1 question 13"
+  },
+  {
+    "id": "m614",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "A system audit reveals that a malicious script was run using the network credentials of a researcher who left the organization three months prior. Which operational control process failed to prevent this?",
+    "opts": [
+      "Onboarding control",
+      "Offboarding procedure",
+      "Change management validation",
+      "Account lockout timing"
+    ],
+    "correct": 1,
+    "exp": "Offboarding procedures must ensure that access rights and accounts are disabled immediately when an employee departs the organization.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Offboarding procedure. Offboarding procedures must ensure that access rights and accounts are disabled immediately when an employee departs the organization.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Offboarding procedure. Offboarding procedures must ensure that access rights and accounts are disabled immediately when an employee departs the organization.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Offboarding procedure. Offboarding procedures must ensure that access rights and accounts are disabled immediately when an employee departs the organization."
+    },
+    "source": "QB1 question 14"
+  },
+  {
+    "id": "m615",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Threats & Vulnerabilities",
+    "q": "A commercial website is knocked offline by an influx of garbage data traffic coming from thousands of separate consumer smart devices scattered worldwide. What type of security event is this?",
+    "opts": [
+      "Buffer Overflow",
+      "Replay Attack",
+      "Distributed Denial of Service (DDoS)",
+      "DNS Poisoning"
+    ],
+    "correct": 2,
+    "exp": "A distributed denial of service (DDoS) attack coordinates traffic from a botnet of compromised hosts to overwhelm a target service.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Distributed Denial of Service (DDoS). A distributed denial of service (DDoS) attack coordinates traffic from a botnet of compromised hosts to overwhelm a target service.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Distributed Denial of Service (DDoS). A distributed denial of service (DDoS) attack coordinates traffic from a botnet of compromised hosts to overwhelm a target service.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Distributed Denial of Service (DDoS). A distributed denial of service (DDoS) attack coordinates traffic from a botnet of compromised hosts to overwhelm a target service."
+    },
+    "source": "QB1 question 15"
+  },
+  {
+    "id": "m616",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Security Concepts",
+    "q": "A security gateway flags inbound messages because the originating server's IP address is not listed in the sender's DNS record that explicitly names authorized outbound mail servers. Which protocol handles this verification step?",
+    "opts": [
+      "Sender Policy Framework (SPF)",
+      "DomainKeys Identified Mail (DKIM)",
+      "Domain-based Message Authentication, Reporting, and Conformance (DMARC)",
+      "Network Access Control (NAC)"
+    ],
+    "correct": 0,
+    "exp": "SPF records published in DNS specify which server IP addresses are authorized to send email for a given domain.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Sender Policy Framework (SPF). SPF records published in DNS specify which server IP addresses are authorized to send email for a given domain.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Sender Policy Framework (SPF). SPF records published in DNS specify which server IP addresses are authorized to send email for a given domain.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Sender Policy Framework (SPF). SPF records published in DNS specify which server IP addresses are authorized to send email for a given domain."
+    },
+    "source": "QB1 question 16"
+  },
+  {
+    "id": "m617",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Security Concepts",
+    "q": "Which threat actor is characterized by high funding levels and the strategic intent to conduct long-term cyber espionage campaigns against critical infrastructure for national leverage rather than quick financial gain?",
+    "opts": [
+      "Hacktivist collective",
+      "Organized crime syndicate",
+      "Nation-state / Advanced Persistent Threat (APT)",
+      "Shadow IT actor"
+    ],
+    "correct": 2,
+    "exp": "Nation-state threat actors possess significant funding and focus on long-term cyber espionage or disruptions against target infrastructure for geopolitical objectives.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Nation-state / Advanced Persistent Threat (APT). Nation-state threat actors possess significant funding and focus on long-term cyber espionage or disruptions against target infrastructure for geopolitical objectives.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Nation-state / Advanced Persistent Threat (APT). Nation-state threat actors possess significant funding and focus on long-term cyber espionage or disruptions against target infrastructure for geopolitical objectives.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Nation-state / Advanced Persistent Threat (APT). Nation-state threat actors possess significant funding and focus on long-term cyber espionage or disruptions against target infrastructure for geopolitical objectives."
+    },
+    "source": "QB1 question 17"
+  },
+  {
+    "id": "m618",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "A security team wants to deploy a central system that collects, normalizes, and retains log data from routers, switches, firewalls, and endpoints to enable real-time alert correlation. What system is needed?",
+    "opts": [
+      "Security Information and Event Management (SIEM)",
+      "Next-Generation Firewall (NGFW)",
+      "Endpoint Detection and Response (EDR)",
+      "Unified Threat Management (UTM)"
+    ],
+    "correct": 0,
+    "exp": "A SIEM engine ingests, aggregates, and correlates log telemetry across an enterprise landscape to support real-time event detection.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Security Information and Event Management (SIEM). A SIEM engine ingests, aggregates, and correlates log telemetry across an enterprise landscape to support real-time event detection.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Security Information and Event Management (SIEM). A SIEM engine ingests, aggregates, and correlates log telemetry across an enterprise landscape to support real-time event detection.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Security Information and Event Management (SIEM). A SIEM engine ingests, aggregates, and correlates log telemetry across an enterprise landscape to support real-time event detection."
+    },
+    "source": "QB1 question 18"
+  },
+  {
+    "id": "m619",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Architecture",
+    "q": "An engineer configures a single physical corporate switch appliance to host separate logical segments for accounting and manufacturing traffic, preventing cross-communication without using separate hardware. What technology is this?",
+    "opts": [
+      "Software-Defined Networking (SDN)",
+      "Virtual Local Area Network (VLAN)",
+      "Air Gap Segmentation",
+      "Software-Defined Wide Area Network (SD-WAN)"
+    ],
+    "correct": 1,
+    "exp": "A Virtual Local Area Network (VLAN) allows an administrator to separate a physical switch infrastructure into distinct logical network segments.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Virtual Local Area Network (VLAN). A Virtual Local Area Network (VLAN) allows an administrator to separate a physical switch infrastructure into distinct logical network segments.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Virtual Local Area Network (VLAN). A Virtual Local Area Network (VLAN) allows an administrator to separate a physical switch infrastructure into distinct logical network segments.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Virtual Local Area Network (VLAN). A Virtual Local Area Network (VLAN) allows an administrator to separate a physical switch infrastructure into distinct logical network segments."
+    },
+    "source": "QB1 question 19"
+  },
+  {
+    "id": "m620",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Architecture",
+    "q": "An organization migrates a workflow to a public cloud under an Infrastructure as a Service (IaaS) model. Which of the following layers is the customer completely responsible for patching and securing?",
+    "opts": [
+      "Physical host hardware interfaces",
+      "Hypervisor core virtualization layers",
+      "Guest operating system and application stack",
+      "Storage area network physical disk blocks"
+    ],
+    "correct": 2,
+    "exp": "Under the IaaS cloud model, the provider manages the host hardware and virtualization layers, while the customer remains responsible for securing and patching the guest operating system.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Guest operating system and application stack. Under the IaaS cloud model, the provider manages the host hardware and virtualization layers, while the customer remains responsible for securing and patching the guest operating system.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Guest operating system and application stack. Under the IaaS cloud model, the provider manages the host hardware and virtualization layers, while the customer remains responsible for securing and patching the guest operating system.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Guest operating system and application stack. Under the IaaS cloud model, the provider manages the host hardware and virtualization layers, while the customer remains responsible for securing and patching the guest operating system."
+    },
+    "source": "QB1 question 20"
+  },
+  {
+    "id": "m621",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "A network security framework requires that every request for system resources must be dynamically authenticated, authorized, and validated based on device posture before access is granted. No user is trusted by default based on location. What framework is this?",
+    "opts": [
+      "Public Key Infrastructure (PKI)",
+      "Zero Trust Architecture",
+      "Federation Identity Lifecycle",
+      "Discretionary Access Control"
+    ],
+    "correct": 1,
+    "exp": "Zero Trust Architecture removes implicit trust based on network perimeter location, requiring continuous verification for every access attempt.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Zero Trust Architecture. Zero Trust Architecture removes implicit trust based on network perimeter location, requiring continuous verification for every access attempt.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Zero Trust Architecture. Zero Trust Architecture removes implicit trust based on network perimeter location, requiring continuous verification for every access attempt.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Zero Trust Architecture. Zero Trust Architecture removes implicit trust based on network perimeter location, requiring continuous verification for every access attempt."
+    },
+    "source": "QB1 question 21"
+  },
+  {
+    "id": "m622",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "A high-volume web portal uses a dedicated cryptographic hardware appliance to safely offload, store, and manage private keys for its transport layer security certificates. What is this device?",
+    "opts": [
+      "Trusted Platform Module (TPM)",
+      "Hardware Security Module (HSM)",
+      "Next-Generation Firewall (NGFW)",
+      "Secure Enclave Processor"
+    ],
+    "correct": 1,
+    "exp": "A Hardware Security Module (HSM) is a dedicated physical security processor that manages and accelerates cryptographic keys across enterprise infrastructure.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Hardware Security Module (HSM). A Hardware Security Module (HSM) is a dedicated physical security processor that manages and accelerates cryptographic keys across enterprise infrastructure.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Hardware Security Module (HSM). A Hardware Security Module (HSM) is a dedicated physical security processor that manages and accelerates cryptographic keys across enterprise infrastructure.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Hardware Security Module (HSM). A Hardware Security Module (HSM) is a dedicated physical security processor that manages and accelerates cryptographic keys across enterprise infrastructure."
+    },
+    "source": "QB1 question 22"
+  },
+  {
+    "id": "m623",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "An IT department wants to deploy a mobile device management policy that automatically applies security configurations, enforces device encryption, and allows remote wiping for all corporately owned mobile phones. What system handles this?",
+    "opts": [
+      "Unified Threat Management (UTM)",
+      "Mobile Device Manager (MDM)",
+      "Network Access Control (NAC)",
+      "Extended Detection and Response (XDR)"
+    ],
+    "correct": 1,
+    "exp": "Mobile Device Managers (MDMs) are centralized consoles used to distribute security policies, configuration baselines, and wipe commands to mobile device fleets.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Mobile Device Manager (MDM). Mobile Device Managers (MDMs) are centralized consoles used to distribute security policies, configuration baselines, and wipe commands to mobile device fleets.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Mobile Device Manager (MDM). Mobile Device Managers (MDMs) are centralized consoles used to distribute security policies, configuration baselines, and wipe commands to mobile device fleets.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Mobile Device Manager (MDM). Mobile Device Managers (MDMs) are centralized consoles used to distribute security policies, configuration baselines, and wipe commands to mobile device fleets."
+    },
+    "source": "QB1 question 23"
+  },
+  {
+    "id": "m624",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "An application developer wants to protect stored credentials against precomputed hash dictionary style matching attacks. They modify the registration routine to inject random character strings into user passwords before calculating the cryptographic hash. What is this technique?",
+    "opts": [
+      "Key Stretching",
+      "Salting",
+      "Obfuscation",
+      "Digital Signing"
+    ],
+    "correct": 1,
+    "exp": "Salting appends random characters to a password before hashing, creating unique hashes even for identical passwords to counter rainbow tables.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Salting. Salting appends random characters to a password before hashing, creating unique hashes even for identical passwords to counter rainbow tables.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Salting. Salting appends random characters to a password before hashing, creating unique hashes even for identical passwords to counter rainbow tables.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Salting. Salting appends random characters to a password before hashing, creating unique hashes even for identical passwords to counter rainbow tables."
+    },
+    "source": "QB1 question 24"
+  },
+  {
+    "id": "m625",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "A security researcher embeds a sensitive configuration script file within the pixel metadata of an innocent image asset file so that the file's visual presentation remains unchanged. What term describes this?",
+    "opts": [
+      "Steganography",
+      "Data Masking",
+      "Symmetric Key Exchange",
+      "Collision Engineering"
+    ],
+    "correct": 0,
+    "exp": "Steganography is the practice of hiding information within an innocent host file without altering its outer presentation.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Steganography. Steganography is the practice of hiding information within an innocent host file without altering its outer presentation.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Steganography. Steganography is the practice of hiding information within an innocent host file without altering its outer presentation.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Steganography. Steganography is the practice of hiding information within an innocent host file without altering its outer presentation."
+    },
+    "source": "QB1 question 25"
+  },
+  {
+    "id": "m626",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "In an asymmetric cryptographic deployment, which key should be made accessible to anyone to encrypt data intended for a specific recipient?",
+    "opts": [
+      "Shared pre-shared key",
+      "Recipient's public key",
+      "Recipient's private key",
+      "Certificate authority key"
+    ],
+    "correct": 1,
+    "exp": "In asymmetric cryptography, anyone can use the recipient's public key to encrypt a message, but only the recipient's corresponding private key can decrypt it.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Recipient's public key. In asymmetric cryptography, anyone can use the recipient's public key to encrypt a message, but only the recipient's corresponding private key can decrypt it.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Recipient's public key. In asymmetric cryptography, anyone can use the recipient's public key to encrypt a message, but only the recipient's corresponding private key can decrypt it.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Recipient's public key. In asymmetric cryptography, anyone can use the recipient's public key to encrypt a message, but only the recipient's corresponding private key can decrypt it."
+    },
+    "source": "QB1 question 26"
+  },
+  {
+    "id": "m627",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "During an active ransomware event, a responder disconnects infected computers from the local switch to stop malicious software from spreading to network storage shares. Which phase of the incident response lifecycle does this illustrate?",
+    "opts": [
+      "Detection & Analysis",
+      "Containment",
+      "Eradication",
+      "Recovery"
+    ],
+    "correct": 1,
+    "exp": "Isolating an infected system from the local area network helps restrict a security event, representing the containment phase of the incident response lifecycle.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Containment. Isolating an infected system from the local area network helps restrict a security event, representing the containment phase of the incident response lifecycle.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Containment. Isolating an infected system from the local area network helps restrict a security event, representing the containment phase of the incident response lifecycle.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Containment. Isolating an infected system from the local area network helps restrict a security event, representing the containment phase of the incident response lifecycle."
+    },
+    "source": "QB1 question 27"
+  },
+  {
+    "id": "m628",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Governance & Compliance",
+    "q": "An enterprise vulnerability scanner reports that all systems are secure. However, a follow-up configuration audit reveals that two web servers are missing critical security updates. What type of scanner result occurred?",
+    "opts": [
+      "False Positive",
+      "True Positive",
+      "False Negative",
+      "True Negative"
+    ],
+    "correct": 2,
+    "exp": "A false negative occurs when a security scanner fails to report an actual vulnerability present on a target system. --- PAGE 20 ---",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: False Negative. A false negative occurs when a security scanner fails to report an actual vulnerability present on a target system. --- PAGE 20 ---",
+      "1": "This option does not best match the scenario. The stronger answer is C: False Negative. A false negative occurs when a security scanner fails to report an actual vulnerability present on a target system. --- PAGE 20 ---",
+      "3": "This option does not best match the scenario. The stronger answer is C: False Negative. A false negative occurs when a security scanner fails to report an actual vulnerability present on a target system. --- PAGE 20 ---"
+    },
+    "source": "QB1 question 28"
+  },
+  {
+    "id": "m629",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "Following a major cyber incident, stakeholders gather to document timeline gaps, review playbook performance, and identify technical corrections to prevent a recurrence of the event. What phase of the incident response lifecycle is this?",
+    "opts": [
+      "Eradication",
+      "Preparation",
+      "Containment",
+      "Lessons Learned"
+    ],
+    "correct": 3,
+    "exp": "The lessons learned phase involves analyzing a past incident to identify technical or operational updates to improve future playbooks.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is D: Lessons Learned. The lessons learned phase involves analyzing a past incident to identify technical or operational updates to improve future playbooks.",
+      "1": "This option does not best match the scenario. The stronger answer is D: Lessons Learned. The lessons learned phase involves analyzing a past incident to identify technical or operational updates to improve future playbooks.",
+      "2": "This option does not best match the scenario. The stronger answer is D: Lessons Learned. The lessons learned phase involves analyzing a past incident to identify technical or operational updates to improve future playbooks."
+    },
+    "source": "QB1 question 29"
+  },
+  {
+    "id": "m630",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "An organization brings senior managers and technical staff together for a structured workshop where they verbally step through an incident response scenario to evaluate role definitions and coordination procedures without altering live production configurations. What is this type of exercise?",
+    "opts": [
+      "Tabletop exercise",
+      "Simulation exercise",
+      "Parallel recovery exercise",
+      "Penetration test exercise"
+    ],
+    "correct": 0,
+    "exp": "A tabletop exercise is a discussion-based review where participants evaluate playbooks and scenario response plans around a table without altering systems.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Tabletop exercise. A tabletop exercise is a discussion-based review where participants evaluate playbooks and scenario response plans around a table without altering systems.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Tabletop exercise. A tabletop exercise is a discussion-based review where participants evaluate playbooks and scenario response plans around a table without altering systems.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Tabletop exercise. A tabletop exercise is a discussion-based review where participants evaluate playbooks and scenario response plans around a table without altering systems."
+    },
+    "source": "QB1 question 30"
+  },
+  {
+    "id": "m631",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "A storage technician wants to ensure that data on decommissioned magnetic hard drives cannot be extracted by any third-party forensic tool. Which method uses a powerful electromagnetic field to disrupt the drive's magnetic coatings, rendering the disk completely blank and un-usable?",
+    "opts": [
+      "Overwriting",
+      "Degaussing",
+      "Shredding",
+      "Purging"
+    ],
+    "correct": 1,
+    "exp": "Degaussing strips the magnetic orientation from hard drive platters, permanently erasing the data and rendering the storage drive unusable.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Degaussing. Degaussing strips the magnetic orientation from hard drive platters, permanently erasing the data and rendering the storage drive unusable.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Degaussing. Degaussing strips the magnetic orientation from hard drive platters, permanently erasing the data and rendering the storage drive unusable.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Degaussing. Degaussing strips the magnetic orientation from hard drive platters, permanently erasing the data and rendering the storage drive unusable."
+    },
+    "source": "QB1 question 31"
+  },
+  {
+    "id": "m632",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "A Linux system log shows thousands of failed root login password attempts originating from a foreign IP address within a short period of time. What type of attack vector is being observed?",
+    "opts": [
+      "Password Spraying attack",
+      "Brute-force attack",
+      "Downgrade attack",
+      "SQL Injection attack"
+    ],
+    "correct": 1,
+    "exp": "A brute-force attack involves systematically testing multiple passwords against a single target user account in rapid succession.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Brute-force attack. A brute-force attack involves systematically testing multiple passwords against a single target user account in rapid succession.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Brute-force attack. A brute-force attack involves systematically testing multiple passwords against a single target user account in rapid succession.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Brute-force attack. A brute-force attack involves systematically testing multiple passwords against a single target user account in rapid succession."
+    },
+    "source": "QB1 question 32"
+  },
+  {
+    "id": "m633",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "Users attempting to reach a public corporate web interface are redirected to an unauthorized clone of the site. A security review shows that an attacker gained unauthorized access to the domain registrar account and altered the authoritative name server records. What type of exploit occurred?",
+    "opts": [
+      "DNS Poisoning",
+      "Domain Hijacking",
+      "URL Typosquatting",
+      "On-path intervention"
+    ],
+    "correct": 1,
+    "exp": "Domain hijacking occurs when an attacker alters domain registration settings at the registrar level, directing public traffic away from authorized servers.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Domain Hijacking. Domain hijacking occurs when an attacker alters domain registration settings at the registrar level, directing public traffic away from authorized servers.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Domain Hijacking. Domain hijacking occurs when an attacker alters domain registration settings at the registrar level, directing public traffic away from authorized servers.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Domain Hijacking. Domain hijacking occurs when an attacker alters domain registration settings at the registrar level, directing public traffic away from authorized servers."
+    },
+    "source": "QB1 question 33"
+  },
+  {
+    "id": "m634",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "An administrative system tests an endpoint's antivirus baseline, patch level, and local firewall settings before allowing the device to access the internal corporate network. What process is this?",
+    "opts": [
+      "Vulnerability scanning",
+      "Posture assessment",
+      "Zero-trust modeling",
+      "Data loss prevention"
+    ],
+    "correct": 1,
+    "exp": "A posture assessment evaluates an endpoint's security configurations, patch levels, and software compliance before granting network access.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Posture assessment. A posture assessment evaluates an endpoint's security configurations, patch levels, and software compliance before granting network access.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Posture assessment. A posture assessment evaluates an endpoint's security configurations, patch levels, and software compliance before granting network access.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Posture assessment. A posture assessment evaluates an endpoint's security configurations, patch levels, and software compliance before granting network access."
+    },
+    "source": "QB1 question 34"
+  },
+  {
+    "id": "m635",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "A disaster recovery policy states that following a system outage, technical services must be successfully restored within a maximum window of 6 hours. What metric concept does this timeframe represent?",
+    "opts": [
+      "Recovery Point Objective (RPO)",
+      "Recovery Time Objective (RTO)",
+      "Mean Time To Repair (MTTR)",
+      "Annual Rate of Occurrence (ARO)"
+    ],
+    "correct": 1,
+    "exp": "Recovery Time Objective (RTO) defines the target maximum acceptable duration of system downtime after a failure before services must be fully operational.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Recovery Time Objective (RTO). Recovery Time Objective (RTO) defines the target maximum acceptable duration of system downtime after a failure before services must be fully operational.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Recovery Time Objective (RTO). Recovery Time Objective (RTO) defines the target maximum acceptable duration of system downtime after a failure before services must be fully operational.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Recovery Time Objective (RTO). Recovery Time Objective (RTO) defines the target maximum acceptable duration of system downtime after a failure before services must be fully operational."
+    },
+    "source": "QB1 question 35"
+  },
+  {
+    "id": "m636",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "A systems administrator needs to create an outbound firewall rule that allows administrators to securely access a remote server's interactive command line shell. Which port and protocol should be permitted?",
+    "opts": [
+      "Port TCP/23",
+      "Port TCP/22",
+      "Port UDP/53",
+      "Port TCP/443"
+    ],
+    "correct": 1,
+    "exp": "SSH provides a secure command-line interface over TCP port 22, replacing cleartext telnet over port 23.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Port TCP/22. SSH provides a secure command-line interface over TCP port 22, replacing cleartext telnet over port 23.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Port TCP/22. SSH provides a secure command-line interface over TCP port 22, replacing cleartext telnet over port 23.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Port TCP/22. SSH provides a secure command-line interface over TCP port 22, replacing cleartext telnet over port 23."
+    },
+    "source": "QB1 question 36"
+  },
+  {
+    "id": "m637",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "A network security tool blocks an outbound email attachment because it detects a pattern that matches corporate credit card strings. Which type of tool generated this alert?",
+    "opts": [
+      "Intrusion Prevention System (IPS)",
+      "Data Loss Prevention (DLP)",
+      "Unified Threat Management (UTM)",
+      "Next-Generation Firewall (NGFW)"
+    ],
+    "correct": 1,
+    "exp": "Data Loss Prevention (DLP) tools scan network payloads for explicit patterns (such as credit card numbers or PII) to prevent unauthorized exfiltration.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Data Loss Prevention (DLP). Data Loss Prevention (DLP) tools scan network payloads for explicit patterns (such as credit card numbers or PII) to prevent unauthorized exfiltration.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Data Loss Prevention (DLP). Data Loss Prevention (DLP) tools scan network payloads for explicit patterns (such as credit card numbers or PII) to prevent unauthorized exfiltration.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Data Loss Prevention (DLP). Data Loss Prevention (DLP) tools scan network payloads for explicit patterns (such as credit card numbers or PII) to prevent unauthorized exfiltration."
+    },
+    "source": "QB1 question 37"
+  },
+  {
+    "id": "m638",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Architecture",
+    "q": "An enterprise automates infrastructure provisioning by defining networking, firewalls, and server parameters in machine-readable definition files. What practice is this?",
+    "opts": [
+      "Software-Defined Networking (SDN)",
+      "Infrastructure as Code (IaC)",
+      "Continuous Integration (CI)",
+      "Automation Playbooks"
+    ],
+    "correct": 1,
+    "exp": "Infrastructure as Code (IaC) uses machine-readable configuration code files to automate the deployment and scaling of virtual infrastructure parameters.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Infrastructure as Code (IaC). Infrastructure as Code (IaC) uses machine-readable configuration code files to automate the deployment and scaling of virtual infrastructure parameters.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Infrastructure as Code (IaC). Infrastructure as Code (IaC) uses machine-readable configuration code files to automate the deployment and scaling of virtual infrastructure parameters.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Infrastructure as Code (IaC). Infrastructure as Code (IaC) uses machine-readable configuration code files to automate the deployment and scaling of virtual infrastructure parameters."
+    },
+    "source": "QB1 question 38"
+  },
+  {
+    "id": "m639",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "An engineering change request requires a step-by-step procedure detailing how to reverse configuration changes and restore the stable previous state if a scheduled production upgrade fails. What is this procedure called?",
+    "opts": [
+      "Backout plan",
+      "Impact analysis plan",
+      "Continuity plan",
+      "Playbook strategy"
+    ],
+    "correct": 0,
+    "exp": "A backout plan provides a recovery roadmap to undo failed production updates and safely return systems to a stable baseline state.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Backout plan. A backout plan provides a recovery roadmap to undo failed production updates and safely return systems to a stable baseline state.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Backout plan. A backout plan provides a recovery roadmap to undo failed production updates and safely return systems to a stable baseline state.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Backout plan. A backout plan provides a recovery roadmap to undo failed production updates and safely return systems to a stable baseline state."
+    },
+    "source": "QB1 question 39"
+  },
+  {
+    "id": "m640",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "Which organizational role is responsible for establishing data classification labels, determining access rights, and defining retention requirements based on business needs?",
+    "opts": [
+      "Data Processor",
+      "Data Custodian",
+      "Data Owner",
+      "Data Controller"
+    ],
+    "correct": 2,
+    "exp": "The data owner is responsible for defining data classification labels, access requirements, and compliance lifecycles for business data assets.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Data Owner. The data owner is responsible for defining data classification labels, access requirements, and compliance lifecycles for business data assets.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Data Owner. The data owner is responsible for defining data classification labels, access requirements, and compliance lifecycles for business data assets.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Data Owner. The data owner is responsible for defining data classification labels, access requirements, and compliance lifecycles for business data assets."
+    },
+    "source": "QB1 question 40"
+  },
+  {
+    "id": "m641",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "A healthcare organization must implement AES encryption for all patient medical history records to comply with legal mandates. What type of compliance driver is this?",
+    "opts": [
+      "Regulatory requirement",
+      "Corporate risk tolerance initiative",
+      "SLA obligation",
+      "Industry benchmark recommendation"
+    ],
+    "correct": 0,
+    "exp": "Legal frameworks and government-enforced mandates dictate mandatory compliance configurations known as regulatory requirements.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Regulatory requirement. Legal frameworks and government-enforced mandates dictate mandatory compliance configurations known as regulatory requirements.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Regulatory requirement. Legal frameworks and government-enforced mandates dictate mandatory compliance configurations known as regulatory requirements.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Regulatory requirement. Legal frameworks and government-enforced mandates dictate mandatory compliance configurations known as regulatory requirements."
+    },
+    "source": "QB1 question 41"
+  },
+  {
+    "id": "m642",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "A physical access policy requires two separate security guards to rotate individual keys at the exact same time to unlock a high-security storage room. What personnel safety concept is this?",
+    "opts": [
+      "Dual Control / Separation of Duties",
+      "Mandatory Vacation implementation",
+      "Least Privilege alignment",
+      "Least Privilege enforcement"
+    ],
+    "correct": 0,
+    "exp": "Dual control requires two separate authorized entities to operate controls simultaneously to execute a high-risk operation, preventing individual privilege abuse.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Dual Control / Separation of Duties. Dual control requires two separate authorized entities to operate controls simultaneously to execute a high-risk operation, preventing individual privilege abuse.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Dual Control / Separation of Duties. Dual control requires two separate authorized entities to operate controls simultaneously to execute a high-risk operation, preventing individual privilege abuse.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Dual Control / Separation of Duties. Dual control requires two separate authorized entities to operate controls simultaneously to execute a high-risk operation, preventing individual privilege abuse."
+    },
+    "source": "QB1 question 42"
+  },
+  {
+    "id": "m643",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "An organization conducts an evaluation to verify that its operational access control configurations match documented security policies and regulatory baselines. What oversight activity is this?",
+    "opts": [
+      "Internal Security Audit",
+      "Risk Appetite review",
+      "Tabletop Exercise validation",
+      "Change Management audit"
+    ],
+    "correct": 0,
+    "exp": "An internal security audit evaluates system configurations against corporate policies to ensure compliance and identify operational gaps.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Internal Security Audit. An internal security audit evaluates system configurations against corporate policies to ensure compliance and identify operational gaps.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Internal Security Audit. An internal security audit evaluates system configurations against corporate policies to ensure compliance and identify operational gaps.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Internal Security Audit. An internal security audit evaluates system configurations against corporate policies to ensure compliance and identify operational gaps."
+    },
+    "source": "QB1 question 43"
+  },
+  {
+    "id": "m644",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "An analyst estimates the financial impact to an organization if a primary data center facility is damaged by a single environmental disaster event. What metric represents this single-event financial loss value?",
+    "opts": [
+      "Annualized Loss Expectancy (ALE)",
+      "Single Loss Expectancy (SLE)",
+      "Annualized Rate of Occurrence (ARO)",
+      "Exposure Factor Index (EFI)"
+    ],
+    "correct": 1,
+    "exp": "Single Loss Expectancy (SLE) represents the estimated monetary loss to an organization from a single event affecting an asset.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Single Loss Expectancy (SLE). Single Loss Expectancy (SLE) represents the estimated monetary loss to an organization from a single event affecting an asset.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Single Loss Expectancy (SLE). Single Loss Expectancy (SLE) represents the estimated monetary loss to an organization from a single event affecting an asset.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Single Loss Expectancy (SLE). Single Loss Expectancy (SLE) represents the estimated monetary loss to an organization from a single event affecting an asset."
+    },
+    "source": "QB1 question 44"
+  },
+  {
+    "id": "m645",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Governance & Compliance",
+    "q": "A formal document between a logistics enterprise and a third-party managed services vendor outlines explicit performance metrics, network availability definitions, and financial penalties for downtime. What is this agreement?",
+    "opts": [
+      "Memorandum of Understanding (MOU)",
+      "Non-Disclosure Agreement (NDA)",
+      "Service Level Agreement (SLA)",
+      "Statement of Work (SOW)"
+    ],
+    "correct": 2,
+    "exp": "A Service Level Agreement (SLA) defines explicit performance targets, service availability thresholds, and remediation penalties between a provider and customer.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Service Level Agreement (SLA). A Service Level Agreement (SLA) defines explicit performance targets, service availability thresholds, and remediation penalties between a provider and customer.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Service Level Agreement (SLA). A Service Level Agreement (SLA) defines explicit performance targets, service availability thresholds, and remediation penalties between a provider and customer.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Service Level Agreement (SLA). A Service Level Agreement (SLA) defines explicit performance targets, service availability thresholds, and remediation penalties between a provider and customer."
+    },
+    "source": "QB1 question 45"
+  },
+  {
+    "id": "m646",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Threats & Vulnerabilities",
+    "q": "A security awareness campaign creates training modules specifically teaching senior executives how to spot highly targeted emails engineered to steal high-level corporate credentials. What threat model is this?",
+    "opts": [
+      "Whaling",
+      "Smishing",
+      "Password Spraying",
+      "Vishing"
+    ],
+    "correct": 0,
+    "exp": "Whaling describes high-impact phishing campaigns that target high-profile executives like the CEO or CFO.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Whaling. Whaling describes high-impact phishing campaigns that target high-profile executives like the CEO or CFO.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Whaling. Whaling describes high-impact phishing campaigns that target high-profile executives like the CEO or CFO.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Whaling. Whaling describes high-impact phishing campaigns that target high-profile executives like the CEO or CFO."
+    },
+    "source": "QB1 question 46"
+  },
+  {
+    "id": "m647",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "A development group integrates an automated tool that reviews source code files for structural flaws, common vulnerabilities, and logic bugs without compiling or running the code. What testing method is this?",
+    "opts": [
+      "Dynamic Application Security Testing (DAST)",
+      "Static Application Security Testing (SAST)",
+      "Fuzzing analysis",
+      "Penetration testing"
+    ],
+    "correct": 1,
+    "exp": "Static Application Security Testing (SAST) evaluates application source code files for common vulnerabilities and design flaws without compiling or running the software. --- PAGE 21 ---",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Static Application Security Testing (SAST). Static Application Security Testing (SAST) evaluates application source code files for common vulnerabilities and design flaws without compiling or running the software. --- PAGE 21 ---",
+      "2": "This option does not best match the scenario. The stronger answer is B: Static Application Security Testing (SAST). Static Application Security Testing (SAST) evaluates application source code files for common vulnerabilities and design flaws without compiling or running the software. --- PAGE 21 ---",
+      "3": "This option does not best match the scenario. The stronger answer is B: Static Application Security Testing (SAST). Static Application Security Testing (SAST) evaluates application source code files for common vulnerabilities and design flaws without compiling or running the software. --- PAGE 21 ---"
+    },
+    "source": "QB1 question 47"
+  },
+  {
+    "id": "m648",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "A database protection policy replaces raw credit card numbers with non-sensitive placeholders. These placeholders can only be mapped back to the original card data by authorized applications querying a separate secure vault. What is this practice?",
+    "opts": [
+      "Data Masking",
+      "Hashing",
+      "Tokenization",
+      "Steganography"
+    ],
+    "correct": 2,
+    "exp": "Tokenization replaces sensitive data elements with non-sensitive reference tokens that map back to the primary data via an external secure token database.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Tokenization. Tokenization replaces sensitive data elements with non-sensitive reference tokens that map back to the primary data via an external secure token database.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Tokenization. Tokenization replaces sensitive data elements with non-sensitive reference tokens that map back to the primary data via an external secure token database.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Tokenization. Tokenization replaces sensitive data elements with non-sensitive reference tokens that map back to the primary data via an external secure token database."
+    },
+    "source": "QB1 question 48"
+  },
+  {
+    "id": "m649",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "An external security auditor validates change management logs. Which parameter should they verify to ensure a critical production patch deployment was authorized?",
+    "opts": [
+      "The specific hash value of the patch tool executable",
+      "Documented approval from the Change Advisory Board (CAB)",
+      "The specific system availability score during the patch routine",
+      "The total number of alerts generated by the local SIEM platform"
+    ],
+    "correct": 1,
+    "exp": "Auditors check Change Advisory Board (CAB) approval trails to confirm that modifications to corporate production systems were formally reviewed and authorized.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Documented approval from the Change Advisory Board (CAB). Auditors check Change Advisory Board (CAB) approval trails to confirm that modifications to corporate production systems were formally reviewed and authorized.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Documented approval from the Change Advisory Board (CAB). Auditors check Change Advisory Board (CAB) approval trails to confirm that modifications to corporate production systems were formally reviewed and authorized.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Documented approval from the Change Advisory Board (CAB). Auditors check Change Advisory Board (CAB) approval trails to confirm that modifications to corporate production systems were formally reviewed and authorized."
+    },
+    "source": "QB1 question 49"
+  },
+  {
+    "id": "m650",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Architecture",
+    "q": "A company deploys data configurations in a hybrid environment across local systems and public cloud systems. Which resource clarifies whether the cloud customer or provider is responsible for securing specific architectural layers?",
+    "opts": [
+      "Shared Responsibility Matrix / Shared Responsibility Model",
+      "Corporate Risk Appetite definition statement",
+      "Service Level Agreement (SLA) penalty clause",
+      "Statement of Work (SOW) specification document"
+    ],
+    "correct": 0,
+    "exp": "The Shared Responsibility Model explicitly defines which operational, infrastructural, and computational security layers belong to the cloud provider versus the customer across various cloud deployments.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Shared Responsibility Matrix / Shared Responsibility Model. The Shared Responsibility Model explicitly defines which operational, infrastructural, and computational security layers belong to the cloud provider versus the customer across various cloud deployments.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Shared Responsibility Matrix / Shared Responsibility Model. The Shared Responsibility Model explicitly defines which operational, infrastructural, and computational security layers belong to the cloud provider versus the customer across various cloud deployments.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Shared Responsibility Matrix / Shared Responsibility Model. The Shared Responsibility Model explicitly defines which operational, infrastructural, and computational security layers belong to the cloud provider versus the customer across various cloud deployments."
+    },
+    "source": "QB1 question 50"
+  },
+  {
+    "id": "m651",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "A risk manager calculates that a primary web instance faces a 10% chance of a severe data outage each year, with localized event costs reaching $200,000. If the organization chooses to purchase an alternate active firewall appliance for $5,000 to drop this probability down to 1%, which statement correctly presents the new financial parameter calculations?",
+    "opts": [
+      "The single loss expectancy (SLE) drops to $20,000.",
+      "The annualized loss expectancy (ALE) mitigation yields an ultimate net savings of $13,000.",
+      "The annualized rate of occurrence (ARO) scales to exactly 1.0.",
+      "The risk value represents an unmitigated posture of complete risk avoidance."
+    ],
+    "correct": 1,
+    "exp": "Original ALE = $200,000 * 0.10 = $20,000. New ALE = $200,000 * 0.01 = $2,000. Mitigated savings = $20,000 - $2,000 = $18,000. Factoring the cost of the control ($5,000), the net annual cost benefit equals $13,000. All alternative calculations are mathematically flawed.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: The annualized loss expectancy (ALE) mitigation yields an ultimate net savings of $13,000.. Original ALE = $200,000 * 0.10 = $20,000. New ALE = $200,000 * 0.01 = $2,000. Mitigated savings = $20,000 - $2,000 = $18,000. Factoring the cost of the control ($5,000), the net annual cost benefit equals $13,000. All alternative calculations are mathematically flawed.",
+      "2": "This option does not best match the scenario. The stronger answer is B: The annualized loss expectancy (ALE) mitigation yields an ultimate net savings of $13,000.. Original ALE = $200,000 * 0.10 = $20,000. New ALE = $200,000 * 0.01 = $2,000. Mitigated savings = $20,000 - $2,000 = $18,000. Factoring the cost of the control ($5,000), the net annual cost benefit equals $13,000. All alternative calculations are mathematically flawed.",
+      "3": "This option does not best match the scenario. The stronger answer is B: The annualized loss expectancy (ALE) mitigation yields an ultimate net savings of $13,000.. Original ALE = $200,000 * 0.10 = $20,000. New ALE = $200,000 * 0.01 = $2,000. Mitigated savings = $20,000 - $2,000 = $18,000. Factoring the cost of the control ($5,000), the net annual cost benefit equals $13,000. All alternative calculations are mathematically flawed."
+    },
+    "source": "QB2 question 1"
+  },
+  {
+    "id": "m652",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "To guarantee full absolute structural non-repudiation during automated programmatic data updates between distributed ledgers, which cryptographic pipeline design combination must be implemented?",
+    "opts": [
+      "Symmetrically encrypting the record arrays using advanced AES-GCM 256 keys.",
+      "Hashing payloads with SHA-256 and signing the product using the sender's private key.",
+      "Encrypting transmission streams with the recipient's publicly available key block.",
+      "Salting password sequences randomly before applying a standardized MD5 hash layer."
+    ],
+    "correct": 1,
+    "exp": "Non-repudiation requires confirming message origin and tracking modification boundaries. Applying a SHA-256 hash yields data integrity verification, while encrypting that specific hash block with the sender's unique private key ensures authentic proof of authorship via digital signature logic.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Hashing payloads with SHA-256 and signing the product using the sender's private key.. Non-repudiation requires confirming message origin and tracking modification boundaries. Applying a SHA-256 hash yields data integrity verification, while encrypting that specific hash block with the sender's unique private key ensures authentic proof of authorship via digital signature logic.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Hashing payloads with SHA-256 and signing the product using the sender's private key.. Non-repudiation requires confirming message origin and tracking modification boundaries. Applying a SHA-256 hash yields data integrity verification, while encrypting that specific hash block with the sender's unique private key ensures authentic proof of authorship via digital signature logic.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Hashing payloads with SHA-256 and signing the product using the sender's private key.. Non-repudiation requires confirming message origin and tracking modification boundaries. Applying a SHA-256 hash yields data integrity verification, while encrypting that specific hash block with the sender's unique private key ensures authentic proof of authorship via digital signature logic."
+    },
+    "source": "QB2 question 2"
+  },
+  {
+    "id": "m653",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "An internal network audit team discovers that a legacy administrative file share permits all authenticated corporate accounts to read and write payroll spreadsheet documents. Which core security management guideline was broken?",
+    "opts": [
+      "Implicit Deny defaults",
+      "Least Privilege alignment",
+      "Mandatory Access Control (MAC)",
+      "Separation of Duties isolation"
+    ],
+    "correct": 1,
+    "exp": "The principle of Least Privilege mandates providing user accounts with the absolute minimum authorization access boundaries necessary to execute specified job duties. Giving generic accounts wide read/write clearance to payroll repositories directly violates this baseline rule.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Least Privilege alignment. The principle of Least Privilege mandates providing user accounts with the absolute minimum authorization access boundaries necessary to execute specified job duties. Giving generic accounts wide read/write clearance to payroll repositories directly violates this baseline rule.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Least Privilege alignment. The principle of Least Privilege mandates providing user accounts with the absolute minimum authorization access boundaries necessary to execute specified job duties. Giving generic accounts wide read/write clearance to payroll repositories directly violates this baseline rule.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Least Privilege alignment. The principle of Least Privilege mandates providing user accounts with the absolute minimum authorization access boundaries necessary to execute specified job duties. Giving generic accounts wide read/write clearance to payroll repositories directly violates this baseline rule."
+    },
+    "source": "QB2 question 3"
+  },
+  {
+    "id": "m654",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "A developer configures an external deployment pipeline using an administrative policy file that explicitly commands the system to terminate operations and drop connections immediately if any unvalidated software library signature is discovered. What control type category classification does this represent?",
+    "opts": [
+      "Directive Control",
+      "Compensating Control",
+      "Detective Control",
+      "Deterrent Control"
+    ],
+    "correct": 0,
+    "exp": "Directive controls utilize administrative mandates, policy scripts, rules, and governance guidelines to compel specific security behavior or configuration compliance limits within an infrastructure layout.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Directive Control. Directive controls utilize administrative mandates, policy scripts, rules, and governance guidelines to compel specific security behavior or configuration compliance limits within an infrastructure layout.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Directive Control. Directive controls utilize administrative mandates, policy scripts, rules, and governance guidelines to compel specific security behavior or configuration compliance limits within an infrastructure layout.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Directive Control. Directive controls utilize administrative mandates, policy scripts, rules, and governance guidelines to compel specific security behavior or configuration compliance limits within an infrastructure layout."
+    },
+    "source": "QB2 question 4"
+  },
+  {
+    "id": "m655",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "An enterprise decides to abandon the developmental creation of a high-risk consumer application feature due to severe regulatory privacy compliance liabilities. Which risk management framework decision strategy was executed?",
+    "opts": [
+      "Risk Mitigation",
+      "Risk Transference",
+      "Risk Avoidance",
+      "Risk Acceptance"
+    ],
+    "correct": 2,
+    "exp": "Risk Avoidance involves completely eliminating an organization's exposure to a risk event by terminating or altering the underlying business activity that produces the vulnerability profile.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Risk Avoidance. Risk Avoidance involves completely eliminating an organization's exposure to a risk event by terminating or altering the underlying business activity that produces the vulnerability profile.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Risk Avoidance. Risk Avoidance involves completely eliminating an organization's exposure to a risk event by terminating or altering the underlying business activity that produces the vulnerability profile.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Risk Avoidance. Risk Avoidance involves completely eliminating an organization's exposure to a risk event by terminating or altering the underlying business activity that produces the vulnerability profile."
+    },
+    "source": "QB2 question 5"
+  },
+  {
+    "id": "m656",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "A core routing network engine implements a configuration that cryptographically checks packet header integrity blocks at every hop to ensure packets are not altered in transit. Which leg of the CIA triad does this preserve?",
+    "opts": [
+      "Availability",
+      "Confidentiality",
+      "Integrity",
+      "Authenticity"
+    ],
+    "correct": 2,
+    "exp": "Data integrity ensures information remains unedited, complete, and un-tampered with while moving through transport systems or storage arrays. Packet header hashing validation directly preserves this exact property.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Integrity. Data integrity ensures information remains unedited, complete, and un-tampered with while moving through transport systems or storage arrays. Packet header hashing validation directly preserves this exact property.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Integrity. Data integrity ensures information remains unedited, complete, and un-tampered with while moving through transport systems or storage arrays. Packet header hashing validation directly preserves this exact property.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Integrity. Data integrity ensures information remains unedited, complete, and un-tampered with while moving through transport systems or storage arrays. Packet header hashing validation directly preserves this exact property."
+    },
+    "source": "QB2 question 6"
+  },
+  {
+    "id": "m657",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "A tactical threat evaluation engineer gathers corporate infrastructure data by analyzing publicly accessible corporate DNS zone text files, open registrar database structures, and historical third-party internet cache dumps without transmitting a single packet directly to the target network. What activity is this?",
+    "opts": [
+      "Active Vulnerability Scanning",
+      "Passive Reconnaissance",
+      "Fuzzing Integration",
+      "Grey-Box Penetration Evaluation"
+    ],
+    "correct": 1,
+    "exp": "Passive reconnaissance involves gathering structural data, system paths, open records, and target properties from existing historical repositories and public --- PAGE 21 --- documentation without directly scanning or communicating with the target network endpoints.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Passive Reconnaissance. Passive reconnaissance involves gathering structural data, system paths, open records, and target properties from existing historical repositories and public --- PAGE 21 --- documentation without directly scanning or communicating with the target network endpoints.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Passive Reconnaissance. Passive reconnaissance involves gathering structural data, system paths, open records, and target properties from existing historical repositories and public --- PAGE 21 --- documentation without directly scanning or communicating with the target network endpoints.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Passive Reconnaissance. Passive reconnaissance involves gathering structural data, system paths, open records, and target properties from existing historical repositories and public --- PAGE 21 --- documentation without directly scanning or communicating with the target network endpoints."
+    },
+    "source": "QB2 question 7"
+  },
+  {
+    "id": "m658",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "A department manager receives a carefully formatted email engineered to mirror an internal HR performance notification. The message addresses the manager directly by their full legal corporate title and requests them to access an unindexed web link to input portal authenticators. Which threat vector profile does this match?",
+    "opts": [
+      "Generic Bulk Phishing",
+      "Spear Phishing",
+      "Watering Hole Engagement",
+      "Smishing Intervention"
+    ],
+    "correct": 1,
+    "exp": "Spear Phishing represents a targeted social engineering campaign engineered to trick a specific corporate user or department profile by leveraging customized context details relevant to their job title or tasks.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Spear Phishing. Spear Phishing represents a targeted social engineering campaign engineered to trick a specific corporate user or department profile by leveraging customized context details relevant to their job title or tasks.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Spear Phishing. Spear Phishing represents a targeted social engineering campaign engineered to trick a specific corporate user or department profile by leveraging customized context details relevant to their job title or tasks.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Spear Phishing. Spear Phishing represents a targeted social engineering campaign engineered to trick a specific corporate user or department profile by leveraging customized context details relevant to their job title or tasks."
+    },
+    "source": "QB2 question 8"
+  },
+  {
+    "id": "m659",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Threats & Vulnerabilities",
+    "q": "A group of teleworkers report receiving direct corporate cell phone text communications claiming that their corporate travel claims have encountered accounting issues, demanding immediate interaction with an appended shortened URL. Which threat vector is this?",
+    "opts": [
+      "Vishing Campaign",
+      "Smishing Attack",
+      "Whaling Execution",
+      "Domain Hijacking"
+    ],
+    "correct": 1,
+    "exp": "Phishing campaigns launched and delivered across mobile SMS short-messaging platforms are smishing attacks.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Smishing Attack. Phishing campaigns launched and delivered across mobile SMS short-messaging platforms are smishing attacks.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Smishing Attack. Phishing campaigns launched and delivered across mobile SMS short-messaging platforms are smishing attacks.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Smishing Attack. Phishing campaigns launched and delivered across mobile SMS short-messaging platforms are smishing attacks."
+    },
+    "source": "QB2 question 9"
+  },
+  {
+    "id": "m660",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Threats & Vulnerabilities",
+    "q": "A security researcher identifies a hardware rig covertly attached onto an internal communications line that systematically clones and inspects data packets passing between the corporate directory server and edge routing devices. Which infrastructure attack type is occurring?",
+    "opts": [
+      "Distributed Denial of Service (DDoS)",
+      "Directory Traversal Exploit",
+      "On-Path Interposition Attack",
+      "Buffer Overflow Campaign"
+    ],
+    "correct": 2,
+    "exp": "An On-Path attack layout requires positioning an unauthorized system interface directly between network communication nodes to transparently capture, mirror, log, or edit the moving data payload streams in real-time.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: On-Path Interposition Attack. An On-Path attack layout requires positioning an unauthorized system interface directly between network communication nodes to transparently capture, mirror, log, or edit the moving data payload streams in real-time.",
+      "1": "This option does not best match the scenario. The stronger answer is C: On-Path Interposition Attack. An On-Path attack layout requires positioning an unauthorized system interface directly between network communication nodes to transparently capture, mirror, log, or edit the moving data payload streams in real-time.",
+      "3": "This option does not best match the scenario. The stronger answer is C: On-Path Interposition Attack. An On-Path attack layout requires positioning an unauthorized system interface directly between network communication nodes to transparently capture, mirror, log, or edit the moving data payload streams in real-time."
+    },
+    "source": "QB2 question 10"
+  },
+  {
+    "id": "m661",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Threats & Vulnerabilities",
+    "q": "A software engineer notices that inputting long, unbroken arrays of hexadecimal data parameters into a legacy text field results in memory memory leakage and executes arbitrary command lines in the application space. What baseline flaw type does this illustrate?",
+    "opts": [
+      "SQL Injection (SQLi)",
+      "Buffer Overflow",
+      "Cross-Site Request Forgery (CSRF)",
+      "Cryptographic Collision Failure"
+    ],
+    "correct": 1,
+    "exp": "A Buffer Overflow happens when application code fails to check input string lengths, permitting excess parameter data to overflow default stack memory allocation spaces, corrupting system data or injecting arbitrary execution code blocks.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Buffer Overflow. A Buffer Overflow happens when application code fails to check input string lengths, permitting excess parameter data to overflow default stack memory allocation spaces, corrupting system data or injecting arbitrary execution code blocks.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Buffer Overflow. A Buffer Overflow happens when application code fails to check input string lengths, permitting excess parameter data to overflow default stack memory allocation spaces, corrupting system data or injecting arbitrary execution code blocks.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Buffer Overflow. A Buffer Overflow happens when application code fails to check input string lengths, permitting excess parameter data to overflow default stack memory allocation spaces, corrupting system data or injecting arbitrary execution code blocks."
+    },
+    "source": "QB2 question 11"
+  },
+  {
+    "id": "m662",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "An incident analyst discovers that two distinct background processing scripts crash consistently when updating a shared configuration text file simultaneously because neither script locks the file resource before executing a write command. What structural application flaw is this?",
+    "opts": [
+      "Race Condition",
+      "Resource Exhaustion",
+      "Integer Overflow",
+      "Memory Injection"
+    ],
+    "correct": 0,
+    "exp": "A Race Condition happens when multi-threaded processing tasks attempt to access or edit a shared infrastructure asset at the same absolute execution instance, causing logical collision errors or memory failures due to lack of thread locking validation.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Race Condition. A Race Condition happens when multi-threaded processing tasks attempt to access or edit a shared infrastructure asset at the same absolute execution instance, causing logical collision errors or memory failures due to lack of thread locking validation.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Race Condition. A Race Condition happens when multi-threaded processing tasks attempt to access or edit a shared infrastructure asset at the same absolute execution instance, causing logical collision errors or memory failures due to lack of thread locking validation.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Race Condition. A Race Condition happens when multi-threaded processing tasks attempt to access or edit a shared infrastructure asset at the same absolute execution instance, causing logical collision errors or memory failures due to lack of thread locking validation."
+    },
+    "source": "QB2 question 12"
+  },
+  {
+    "id": "m663",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Threats & Vulnerabilities",
+    "q": "A global infrastructure network encounters an exploit targeting a core library logic issue that was uncovered by attackers before the vendor base could formulate or issue a software patch. What vulnerability profile matches this event?",
+    "opts": [
+      "Zero-Day Vulnerability",
+      "Legacy Operating Liability",
+      "Default Configuration Omission",
+      "Input Validation Deficiency"
+    ],
+    "correct": 0,
+    "exp": "Zero-Day threats target zero-day software programming flaws discovered and utilized by attackers before the original engineering vendor base becomes aware of the issue or builds a matching patch remediation.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Zero-Day Vulnerability. Zero-Day threats target zero-day software programming flaws discovered and utilized by attackers before the original engineering vendor base becomes aware of the issue or builds a matching patch remediation.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Zero-Day Vulnerability. Zero-Day threats target zero-day software programming flaws discovered and utilized by attackers before the original engineering vendor base becomes aware of the issue or builds a matching patch remediation.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Zero-Day Vulnerability. Zero-Day threats target zero-day software programming flaws discovered and utilized by attackers before the original engineering vendor base becomes aware of the issue or builds a matching patch remediation."
+    },
+    "source": "QB2 question 13"
+  },
+  {
+    "id": "m664",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "An automated access control log reveals that a decommissioned account belonging to a developer who separated from the firm four months ago successfully logged into a secure source repository. Which management workflow failed?",
+    "opts": [
+      "Onboarding Lifecycle Governance",
+      "Offboarding Procedure Execution",
+      "Software Change Control Audit",
+      "Identity Attestation Validation"
+    ],
+    "correct": 1,
+    "exp": "Offboarding workflows are administrative security procedures mandated to fully isolate, deactivate, and remove all identity privilege access entitlements and login credentials immediately when an individual separates from the firm.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Offboarding Procedure Execution. Offboarding workflows are administrative security procedures mandated to fully isolate, deactivate, and remove all identity privilege access entitlements and login credentials immediately when an individual separates from the firm.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Offboarding Procedure Execution. Offboarding workflows are administrative security procedures mandated to fully isolate, deactivate, and remove all identity privilege access entitlements and login credentials immediately when an individual separates from the firm.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Offboarding Procedure Execution. Offboarding workflows are administrative security procedures mandated to fully isolate, deactivate, and remove all identity privilege access entitlements and login credentials immediately when an individual separates from the firm."
+    },
+    "source": "QB2 question 14"
+  },
+  {
+    "id": "m665",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Threats & Vulnerabilities",
+    "q": "A banking web platform is knocked completely offline when millions of IoT systems scattered across different countries saturate the public-facing load balancers with junk connection requests. What threat type does this match?",
+    "opts": [
+      "Replay Interposition Attack",
+      "Distributed Denial of Service (DDoS)",
+      "DNS Cache Poisoning",
+      "Dynamic Resource Inversion"
+    ],
+    "correct": 1,
+    "exp": "Distributed Denial of Service (DDoS) campaigns harness distributed collections of remote infected nodes (botnets) to flood network services, causing availability outages via resource saturation.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Distributed Denial of Service (DDoS). Distributed Denial of Service (DDoS) campaigns harness distributed collections of remote infected nodes (botnets) to flood network services, causing availability outages via resource saturation.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Distributed Denial of Service (DDoS). Distributed Denial of Service (DDoS) campaigns harness distributed collections of remote infected nodes (botnets) to flood network services, causing availability outages via resource saturation.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Distributed Denial of Service (DDoS). Distributed Denial of Service (DDoS) campaigns harness distributed collections of remote infected nodes (botnets) to flood network services, causing availability outages via resource saturation."
+    },
+    "source": "QB2 question 15"
+  },
+  {
+    "id": "m666",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Architecture",
+    "q": "An inbound message firewall flags an incoming email communications array because the originating server's physical IP configuration fails to align with the authoritative TXT cryptographic record set published in the sender's public DNS zone. Which framework handled this?",
+    "opts": [
+      "Sender Policy Framework (SPF)",
+      "DomainKeys Identified Mail (DKIM)",
+      "Network Access Control (NAC)",
+      "Transport Layer Security (TLS)"
+    ],
+    "correct": 0,
+    "exp": "SPF enables network domain administrators to publish authoritative lists of authorized source IP configurations permitted to output corporate email communications, which allows receiving filters to drop spoofed payloads.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Sender Policy Framework (SPF). SPF enables network domain administrators to publish authoritative lists of authorized source IP configurations permitted to output corporate email communications, which allows receiving filters to drop spoofed payloads.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Sender Policy Framework (SPF). SPF enables network domain administrators to publish authoritative lists of authorized source IP configurations permitted to output corporate email communications, which allows receiving filters to drop spoofed payloads.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Sender Policy Framework (SPF). SPF enables network domain administrators to publish authoritative lists of authorized source IP configurations permitted to output corporate email communications, which allows receiving filters to drop spoofed payloads."
+    },
+    "source": "QB2 question 16"
+  },
+  {
+    "id": "m667",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Security Concepts",
+    "q": "Which threat actor identity category is distinguished by massive foundational capitalization levels, exceptional geopolitical stealth requirements, and long-term infrastructure persistence intents aimed at espionage rather than fast financial extraction?",
+    "opts": [
+      "Hacktivist Collective Group",
+      "State-Sponsored Advanced Persistent Threat (APT)",
+      "Shadow IT Engineering Unit",
+      "Industrial Competitor Actor"
+    ],
+    "correct": 1,
+    "exp": "State-sponsored APT threat actor syndicates are driven by long-term strategic geopolitical leverage targets, possessing high technical execution capacities and multi-year funding loops to run quiet persistence campaigns against infrastructure.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: State-Sponsored Advanced Persistent Threat (APT). State-sponsored APT threat actor syndicates are driven by long-term strategic geopolitical leverage targets, possessing high technical execution capacities and multi-year funding loops to run quiet persistence campaigns against infrastructure.",
+      "2": "This option does not best match the scenario. The stronger answer is B: State-Sponsored Advanced Persistent Threat (APT). State-sponsored APT threat actor syndicates are driven by long-term strategic geopolitical leverage targets, possessing high technical execution capacities and multi-year funding loops to run quiet persistence campaigns against infrastructure.",
+      "3": "This option does not best match the scenario. The stronger answer is B: State-Sponsored Advanced Persistent Threat (APT). State-sponsored APT threat actor syndicates are driven by long-term strategic geopolitical leverage targets, possessing high technical execution capacities and multi-year funding loops to run quiet persistence campaigns against infrastructure."
+    },
+    "source": "QB2 question 17"
+  },
+  {
+    "id": "m668",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "A central security team deploys an analytical log platform that collects, formats, and correlates real-time event logs across firewalls, server appliances, and hypervisors to enable automated threat correlation alerts. What platform is this?",
+    "opts": [
+      "Security Information and Event Management (SIEM)",
+      "Next-Generation Edge Firewall (NGFW)",
+      "Unified Threat Management Gateway (UTM)",
+      "Extended Endpoint Architecture (EDR)"
+    ],
+    "correct": 0,
+    "exp": "SIEM systems collect, ingest, index, parse, and analyze log telemetry blocks from network hardware and software applications globally to facilitate real-time security incident correlation analysis.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Security Information and Event Management (SIEM). SIEM systems collect, ingest, index, parse, and analyze log telemetry blocks from network hardware and software applications globally to facilitate real-time security incident correlation analysis.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Security Information and Event Management (SIEM). SIEM systems collect, ingest, index, parse, and analyze log telemetry blocks from network hardware and software applications globally to facilitate real-time security incident correlation analysis.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Security Information and Event Management (SIEM). SIEM systems collect, ingest, index, parse, and analyze log telemetry blocks from network hardware and software applications globally to facilitate real-time security incident correlation analysis."
+    },
+    "source": "QB2 question 18"
+  },
+  {
+    "id": "m669",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Architecture",
+    "q": "A network systems architect configures a core physical distribution switch unit to separate distinct engineering and customer care communications flows onto unique logical network partitions without deploying separate hardware cabling infrastructure. What technology is this?",
+    "opts": [
+      "Software-Defined Networking (SDN)",
+      "Virtual Local Area Network (VLAN)",
+      "Air Gap physical isolation",
+      "Software-Defined WAN (SD-WAN)"
+    ],
+    "correct": 1,
+    "exp": "Virtual Local Area Network (VLAN) framing mechanisms allow system engineers to mathematically segment a single physical local switch backbone into separated logical security networks, preventing unauthorized lateral communication without extra hardware arrays.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Virtual Local Area Network (VLAN). Virtual Local Area Network (VLAN) framing mechanisms allow system engineers to mathematically segment a single physical local switch backbone into separated logical security networks, preventing unauthorized lateral communication without extra hardware arrays.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Virtual Local Area Network (VLAN). Virtual Local Area Network (VLAN) framing mechanisms allow system engineers to mathematically segment a single physical local switch backbone into separated logical security networks, preventing unauthorized lateral communication without extra hardware arrays.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Virtual Local Area Network (VLAN). Virtual Local Area Network (VLAN) framing mechanisms allow system engineers to mathematically segment a single physical local switch backbone into separated logical security networks, preventing unauthorized lateral communication without extra hardware arrays."
+    },
+    "source": "QB2 question 19"
+  },
+  {
+    "id": "m670",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Architecture",
+    "q": "An organization shifts its analytical workloads into a public cloud environment using an Infrastructure as a Service (IaaS) delivery layout model. Under the standard shared responsibility model, which architectural piece remains the sole obligation of the customer to manage and patch?",
+    "opts": [
+      "Underlying Virtualization Hypervisor Layers",
+      "Physical Datacenter Power and Storage Hardware",
+      "Guest Operating System (OS) and Application Execution Space",
+      "Network Core Distribution Backbones"
+    ],
+    "correct": 2,
+    "exp": "Under standard Infrastructure as a Service (IaaS) cloud architecture agreements, the hosting provider secures the host machine, hypervisor, and data facilities, while --- PAGE 22 --- the customer maintains the absolute duty to patch and manage the guest OS, configurations, and data arrays.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Guest Operating System (OS) and Application Execution Space. Under standard Infrastructure as a Service (IaaS) cloud architecture agreements, the hosting provider secures the host machine, hypervisor, and data facilities, while --- PAGE 22 --- the customer maintains the absolute duty to patch and manage the guest OS, configurations, and data arrays.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Guest Operating System (OS) and Application Execution Space. Under standard Infrastructure as a Service (IaaS) cloud architecture agreements, the hosting provider secures the host machine, hypervisor, and data facilities, while --- PAGE 22 --- the customer maintains the absolute duty to patch and manage the guest OS, configurations, and data arrays.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Guest Operating System (OS) and Application Execution Space. Under standard Infrastructure as a Service (IaaS) cloud architecture agreements, the hosting provider secures the host machine, hypervisor, and data facilities, while --- PAGE 22 --- the customer maintains the absolute duty to patch and manage the guest OS, configurations, and data arrays."
+    },
+    "source": "QB2 question 20"
+  },
+  {
+    "id": "m671",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "A modern enterprise architecture commands that any request for network asset interaction must be dynamically checked, contextually evaluated for endpoint risk health, and authorized on a case-by-case basis, completely ignoring legacy perimeter trust boundaries. What model is this?",
+    "opts": [
+      "Public Key Infrastructure Lifecycle",
+      "Zero Trust Architecture (ZTA)",
+      "Federated Single Sign-On Identity Model",
+      "Discretionary Access Control Framework"
+    ],
+    "correct": 1,
+    "exp": "Zero Trust Architecture (ZTA) updates network security logic by completely eliminating implicit trust boundaries derived from localized network location parameters. It mandates constant, parameter-driven identity and device posture authorization for every resource request transaction.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Zero Trust Architecture (ZTA). Zero Trust Architecture (ZTA) updates network security logic by completely eliminating implicit trust boundaries derived from localized network location parameters. It mandates constant, parameter-driven identity and device posture authorization for every resource request transaction.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Zero Trust Architecture (ZTA). Zero Trust Architecture (ZTA) updates network security logic by completely eliminating implicit trust boundaries derived from localized network location parameters. It mandates constant, parameter-driven identity and device posture authorization for every resource request transaction.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Zero Trust Architecture (ZTA). Zero Trust Architecture (ZTA) updates network security logic by completely eliminating implicit trust boundaries derived from localized network location parameters. It mandates constant, parameter-driven identity and device posture authorization for every resource request transaction."
+    },
+    "source": "QB2 question 21"
+  },
+  {
+    "id": "m672",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "A financial transactions application requires a specialized, tamper-evident physical hardware card module to generate, manage, and safely store the master private root signing keys for web server certificates. What hardware device is required?",
+    "opts": [
+      "Trusted Platform Module (TPM)",
+      "Hardware Security Module (HSM)",
+      "Secure Enclave System Processor",
+      "Unified Threat Control Board"
+    ],
+    "correct": 1,
+    "exp": "Hardware Security Modules (HSMs) are highly specialized physical cryptographic hardware processor appliances built specifically to manage, accelerate, and store private security signing root keys within an enterprise data system environment.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Hardware Security Module (HSM). Hardware Security Modules (HSMs) are highly specialized physical cryptographic hardware processor appliances built specifically to manage, accelerate, and store private security signing root keys within an enterprise data system environment.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Hardware Security Module (HSM). Hardware Security Modules (HSMs) are highly specialized physical cryptographic hardware processor appliances built specifically to manage, accelerate, and store private security signing root keys within an enterprise data system environment.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Hardware Security Module (HSM). Hardware Security Modules (HSMs) are highly specialized physical cryptographic hardware processor appliances built specifically to manage, accelerate, and store private security signing root keys within an enterprise data system environment."
+    },
+    "source": "QB2 question 22"
+  },
+  {
+    "id": "m673",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "An IT department implements a centralized administrative software system to remotely deploy security profiles, push full device encryption mandates, and push remote sanitization wipes to mobile tablets in the field. What system is this?",
+    "opts": [
+      "Mobile Device Management (MDM)",
+      "Network Access Control Enforcement (NAC)",
+      "Extended Response Architecture (XDR)",
+      "Unified Endpoint Detection (UED)"
+    ],
+    "correct": 0,
+    "exp": "MDM platforms give network systems administrators a unified administrative interface to deploy security rules, push configuration updates, enforce endpoint storage encryption, and issue remote sanitization wipes to corporate tablets and smartphones across wireless networks.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Mobile Device Management (MDM). MDM platforms give network systems administrators a unified administrative interface to deploy security rules, push configuration updates, enforce endpoint storage encryption, and issue remote sanitization wipes to corporate tablets and smartphones across wireless networks.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Mobile Device Management (MDM). MDM platforms give network systems administrators a unified administrative interface to deploy security rules, push configuration updates, enforce endpoint storage encryption, and issue remote sanitization wipes to corporate tablets and smartphones across wireless networks.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Mobile Device Management (MDM). MDM platforms give network systems administrators a unified administrative interface to deploy security rules, push configuration updates, enforce endpoint storage encryption, and issue remote sanitization wipes to corporate tablets and smartphones across wireless networks."
+    },
+    "source": "QB2 question 23"
+  },
+  {
+    "id": "m674",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "An application security specialist wants to immunize password database storage pools from precomputed rainbow table file lookups. They add random data inputs to passwords before generating the matching cryptographic hash strings. What technique is this?",
+    "opts": [
+      "Key Stretching Acceleration",
+      "Cryptographic Salting",
+      "Data Obfuscation Masking",
+      "Nonce Rotation Engineering"
+    ],
+    "correct": 1,
+    "exp": "Cryptographic salting injects specialized random character arrays into cleartext passphrases before the application runs matching hashing algorithms, resulting in a unique output string that nullifies precomputed dictionary rainbow table file matches.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Cryptographic Salting. Cryptographic salting injects specialized random character arrays into cleartext passphrases before the application runs matching hashing algorithms, resulting in a unique output string that nullifies precomputed dictionary rainbow table file matches.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Cryptographic Salting. Cryptographic salting injects specialized random character arrays into cleartext passphrases before the application runs matching hashing algorithms, resulting in a unique output string that nullifies precomputed dictionary rainbow table file matches.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Cryptographic Salting. Cryptographic salting injects specialized random character arrays into cleartext passphrases before the application runs matching hashing algorithms, resulting in a unique output string that nullifies precomputed dictionary rainbow table file matches."
+    },
+    "source": "QB2 question 24"
+  },
+  {
+    "id": "m675",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "A security analyst embeds a high-value plaintext configuration password script hidden completely inside the image metadata blocks of an innocent JPEG file, keeping the image visual rendering unchanged. What term fits this action?",
+    "opts": [
+      "Steganography",
+      "Tokenization Layering",
+      "Dynamic Data Masking",
+      "Hash Collision Mapping"
+    ],
+    "correct": 0,
+    "exp": "Steganography is the technical configuration practice of concealing secret plaintext payloads or data scripts inside an innocent-looking carrier file asset (such as image pixel blocks or audio arrays) without shifting the asset's outward appearance.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Steganography. Steganography is the technical configuration practice of concealing secret plaintext payloads or data scripts inside an innocent-looking carrier file asset (such as image pixel blocks or audio arrays) without shifting the asset's outward appearance.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Steganography. Steganography is the technical configuration practice of concealing secret plaintext payloads or data scripts inside an innocent-looking carrier file asset (such as image pixel blocks or audio arrays) without shifting the asset's outward appearance.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Steganography. Steganography is the technical configuration practice of concealing secret plaintext payloads or data scripts inside an innocent-looking carrier file asset (such as image pixel blocks or audio arrays) without shifting the asset's outward appearance."
+    },
+    "source": "QB2 question 25"
+  },
+  {
+    "id": "m676",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Security Concepts",
+    "q": "Within an asymmetric key infrastructure deployment layout, which key block parameter must be made completely public to enable users to encrypt a confidential file intended for a specific target manager?",
+    "opts": [
+      "The sender's private key",
+      "The recipient's public key",
+      "The recipient's private key",
+      "The root certificate authority key"
+    ],
+    "correct": 1,
+    "exp": "Within asymmetric public-key cryptographic processing frameworks, any user can utilize a target manager's publicly published key block to encrypt a confidential transport file. However, that specific file asset can only be unpacked and decrypted by utilizing the recipient's matching private key block.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: The recipient's public key. Within asymmetric public-key cryptographic processing frameworks, any user can utilize a target manager's publicly published key block to encrypt a confidential transport file. However, that specific file asset can only be unpacked and decrypted by utilizing the recipient's matching private key block.",
+      "2": "This option does not best match the scenario. The stronger answer is B: The recipient's public key. Within asymmetric public-key cryptographic processing frameworks, any user can utilize a target manager's publicly published key block to encrypt a confidential transport file. However, that specific file asset can only be unpacked and decrypted by utilizing the recipient's matching private key block.",
+      "3": "This option does not best match the scenario. The stronger answer is B: The recipient's public key. Within asymmetric public-key cryptographic processing frameworks, any user can utilize a target manager's publicly published key block to encrypt a confidential transport file. However, that specific file asset can only be unpacked and decrypted by utilizing the recipient's matching private key block."
+    },
+    "source": "QB2 question 26"
+  },
+  {
+    "id": "m677",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "During an active malware incident, an engineering responder disconnects an affected production database system from the local area network switch core to prevent horizontal worm transmission. Which phase of the Incident Response life cycle is this?",
+    "opts": [
+      "Detection and Isolation Analysis",
+      "Containment Mitigation Operations",
+      "Eradication of Malware Elements",
+      "System Baseline Recovery"
+    ],
+    "correct": 1,
+    "exp": "The Containment phase within the standardized Incident Response lifecycle focuses entirely on isolating compromised network endpoints from production switches to halt lateral threat translation and minimize structural data breach scopes.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Containment Mitigation Operations. The Containment phase within the standardized Incident Response lifecycle focuses entirely on isolating compromised network endpoints from production switches to halt lateral threat translation and minimize structural data breach scopes.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Containment Mitigation Operations. The Containment phase within the standardized Incident Response lifecycle focuses entirely on isolating compromised network endpoints from production switches to halt lateral threat translation and minimize structural data breach scopes.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Containment Mitigation Operations. The Containment phase within the standardized Incident Response lifecycle focuses entirely on isolating compromised network endpoints from production switches to halt lateral threat translation and minimize structural data breach scopes."
+    },
+    "source": "QB2 question 27"
+  },
+  {
+    "id": "m678",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Concepts",
+    "q": "A system configuration manager runs an unauthenticated vulnerability scan across a server pool. The report states all systems are secure, but a manual inspection finds two web hosts are missing critical kernel patches. What error type is this?",
+    "opts": [
+      "False Positive Alert",
+      "True Positive Status",
+      "False Negative Omission",
+      "True Negative Validation"
+    ],
+    "correct": 2,
+    "exp": "A False Negative state occurs when a configuration validation tool or vulnerability scanner evaluates a target machine and incorrectly outputs a normal security score while an unmitigated threat parameter remains present on the system.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: False Negative Omission. A False Negative state occurs when a configuration validation tool or vulnerability scanner evaluates a target machine and incorrectly outputs a normal security score while an unmitigated threat parameter remains present on the system.",
+      "1": "This option does not best match the scenario. The stronger answer is C: False Negative Omission. A False Negative state occurs when a configuration validation tool or vulnerability scanner evaluates a target machine and incorrectly outputs a normal security score while an unmitigated threat parameter remains present on the system.",
+      "3": "This option does not best match the scenario. The stronger answer is C: False Negative Omission. A False Negative state occurs when a configuration validation tool or vulnerability scanner evaluates a target machine and incorrectly outputs a normal security score while an unmitigated threat parameter remains present on the system."
+    },
+    "source": "QB2 question 28"
+  },
+  {
+    "id": "m679",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "Following the resolution of a network breach, corporate executives and engineering teams assemble to dissect the exact event timeline, evaluate playbook effectiveness, and document permanent architectural corrections. Which Incident Response phase is this?",
+    "opts": [
+      "Eradication Analysis",
+      "Incident Preparation Testing",
+      "Post-Incident Lessons Learned",
+      "System Recovery Validation"
+    ],
+    "correct": 3,
+    "exp": "Post-incident lessons learned workshops gather engineering teams and business directors together after a technical breach to formally analyze timeline logs, identify playbook flaws, and implement long-term security configuration improvements.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is D: System Recovery Validation. Post-incident lessons learned workshops gather engineering teams and business directors together after a technical breach to formally analyze timeline logs, identify playbook flaws, and implement long-term security configuration improvements.",
+      "1": "This option does not best match the scenario. The stronger answer is D: System Recovery Validation. Post-incident lessons learned workshops gather engineering teams and business directors together after a technical breach to formally analyze timeline logs, identify playbook flaws, and implement long-term security configuration improvements.",
+      "2": "This option does not best match the scenario. The stronger answer is D: System Recovery Validation. Post-incident lessons learned workshops gather engineering teams and business directors together after a technical breach to formally analyze timeline logs, identify playbook flaws, and implement long-term security configuration improvements."
+    },
+    "source": "QB2 question 29"
+  },
+  {
+    "id": "m680",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "An organization coordinates an administrative simulation where technical leads and business executives step through an operational disaster scenario verbally to evaluate emergency playbooks without disrupting production systems. What type of exercise is this?",
+    "opts": [
+      "Tabletop Exercise",
+      "Parallel Migration Simulation",
+      "Full-Scale Cutover Test",
+      "Active Penetration Drill"
+    ],
+    "correct": 0,
+    "exp": "Tabletop exercises are group scenario review workshops where system engineers and administration leaders walk through a hypothetical security emergency verbally around a table to critique operational playbooks without modifying any active live system infrastructure parameters.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Tabletop Exercise. Tabletop exercises are group scenario review workshops where system engineers and administration leaders walk through a hypothetical security emergency verbally around a table to critique operational playbooks without modifying any active live system infrastructure parameters.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Tabletop Exercise. Tabletop exercises are group scenario review workshops where system engineers and administration leaders walk through a hypothetical security emergency verbally around a table to critique operational playbooks without modifying any active live system infrastructure parameters.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Tabletop Exercise. Tabletop exercises are group scenario review workshops where system engineers and administration leaders walk through a hypothetical security emergency verbally around a table to critique operational playbooks without modifying any active live system infrastructure parameters."
+    },
+    "source": "QB2 question 30"
+  },
+  {
+    "id": "m681",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "A technician wants to eliminate trace magnetic data from decommissioned backup hard disk drive units. They place the hardware inside a device that generates an intense electromagnetic pulse, rendering the media blank and permanently un-usable. What sanitization method is this?",
+    "opts": [
+      "Drive Overwriting Protocol",
+      "Magnetic Degaussing",
+      "Automated Drive Shredding",
+      "Cryptographic Eradication"
+    ],
+    "correct": 1,
+    "exp": "Magnetic degaussing is a storage sanitization process that channels high-intensity magnetic energy fields through hard drive disk platters, destroying the underlying alignment of the magnetic storage medium, which clears all recorded data sectors and leaves --- PAGE 23 --- the hardware permanently unusable.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Magnetic Degaussing. Magnetic degaussing is a storage sanitization process that channels high-intensity magnetic energy fields through hard drive disk platters, destroying the underlying alignment of the magnetic storage medium, which clears all recorded data sectors and leaves --- PAGE 23 --- the hardware permanently unusable.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Magnetic Degaussing. Magnetic degaussing is a storage sanitization process that channels high-intensity magnetic energy fields through hard drive disk platters, destroying the underlying alignment of the magnetic storage medium, which clears all recorded data sectors and leaves --- PAGE 23 --- the hardware permanently unusable.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Magnetic Degaussing. Magnetic degaussing is a storage sanitization process that channels high-intensity magnetic energy fields through hard drive disk platters, destroying the underlying alignment of the magnetic storage medium, which clears all recorded data sectors and leaves --- PAGE 23 --- the hardware permanently unusable."
+    },
+    "source": "QB2 question 31"
+  },
+  {
+    "id": "m682",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "A network server log records 15,000 failed remote root administrative SSH connection attempts coming from a single external IP address across an extremely compressed timeframe. What infrastructure attack vector is being seen?",
+    "opts": [
+      "Password Spraying Attack",
+      "Brute-Force Authentication Attempt",
+      "Cryptographic Downgrade Attack",
+      "SQL Injection Probe"
+    ],
+    "correct": 1,
+    "exp": "Brute-Force authentication attacks systematically execute rapid arrays of random or dictionary password strings against a specific root administrative account interface to breach authentication checks by sheer volume of guessing.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Brute-Force Authentication Attempt. Brute-Force authentication attacks systematically execute rapid arrays of random or dictionary password strings against a specific root administrative account interface to breach authentication checks by sheer volume of guessing.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Brute-Force Authentication Attempt. Brute-Force authentication attacks systematically execute rapid arrays of random or dictionary password strings against a specific root administrative account interface to breach authentication checks by sheer volume of guessing.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Brute-Force Authentication Attempt. Brute-Force authentication attacks systematically execute rapid arrays of random or dictionary password strings against a specific root administrative account interface to breach authentication checks by sheer volume of guessing."
+    },
+    "source": "QB2 question 32"
+  },
+  {
+    "id": "m683",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "Users attempting to access a public corporate web portal are directed to an illegitimate clone site. Investigation reveals that an adversary compromised the registrar account and changed the authoritative name server addresses. What exploit happened?",
+    "opts": [
+      "DNS Cache Poisoning",
+      "Domain Hijacking Attack",
+      "URL Typosquatting Manipulation",
+      "On-Path Route Poisoning"
+    ],
+    "correct": 1,
+    "exp": "Domain Hijacking occurs when an external adversary acquires unauthorized access to a company's registry account control parameters, changing authoritative name server properties to redirect global user traffic to malicious external spoof environments.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Domain Hijacking Attack. Domain Hijacking occurs when an external adversary acquires unauthorized access to a company's registry account control parameters, changing authoritative name server properties to redirect global user traffic to malicious external spoof environments.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Domain Hijacking Attack. Domain Hijacking occurs when an external adversary acquires unauthorized access to a company's registry account control parameters, changing authoritative name server properties to redirect global user traffic to malicious external spoof environments.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Domain Hijacking Attack. Domain Hijacking occurs when an external adversary acquires unauthorized access to a company's registry account control parameters, changing authoritative name server properties to redirect global user traffic to malicious external spoof environments."
+    },
+    "source": "QB2 question 33"
+  },
+  {
+    "id": "m684",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "An inline edge authentication gateway measures a device's operating system build version, local firewall parameters, and anti-malware definition signatures before granting network resource clearance. What process is being executed?",
+    "opts": [
+      "Vulnerability Identification Scan",
+      "Endpoint Posture Assessment",
+      "Zero Trust Segmentation Mapping",
+      "Data Exfiltration Prevention Filter"
+    ],
+    "correct": 1,
+    "exp": "Endpoint Posture Assessments dynamically evaluate an incoming device's client configuration parameters, OS security patch validation scores, local firewall operational states, and anti-malware definition logs against corporate policies before granting access to network resources.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Endpoint Posture Assessment. Endpoint Posture Assessments dynamically evaluate an incoming device's client configuration parameters, OS security patch validation scores, local firewall operational states, and anti-malware definition logs against corporate policies before granting access to network resources.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Endpoint Posture Assessment. Endpoint Posture Assessments dynamically evaluate an incoming device's client configuration parameters, OS security patch validation scores, local firewall operational states, and anti-malware definition logs against corporate policies before granting access to network resources.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Endpoint Posture Assessment. Endpoint Posture Assessments dynamically evaluate an incoming device's client configuration parameters, OS security patch validation scores, local firewall operational states, and anti-malware definition logs against corporate policies before granting access to network resources."
+    },
+    "source": "QB2 question 34"
+  },
+  {
+    "id": "m685",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Security Concepts",
+    "q": "A business continuity guideline demands that following a severe primary datacenter service failure, the technical operations team must bring core transactional software modules back online within a maximum window of 4 hours. What metric parameter is this?",
+    "opts": [
+      "Recovery Point Objective (RPO)",
+      "Recovery Time Objective (RTO)",
+      "Mean Time to Repair (MTTR)",
+      "Annual Rate of Occurrence (ARO)"
+    ],
+    "correct": 1,
+    "exp": "Recovery Time Objective (RTO) dictates the maximum allowable time parameter an enterprise framework can tolerate for technical system outages before operational software segments must be fully functional and available to users.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Recovery Time Objective (RTO). Recovery Time Objective (RTO) dictates the maximum allowable time parameter an enterprise framework can tolerate for technical system outages before operational software segments must be fully functional and available to users.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Recovery Time Objective (RTO). Recovery Time Objective (RTO) dictates the maximum allowable time parameter an enterprise framework can tolerate for technical system outages before operational software segments must be fully functional and available to users.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Recovery Time Objective (RTO). Recovery Time Objective (RTO) dictates the maximum allowable time parameter an enterprise framework can tolerate for technical system outages before operational software segments must be fully functional and available to users."
+    },
+    "source": "QB2 question 35"
+  },
+  {
+    "id": "m686",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Architecture",
+    "q": "A system manager needs to adjust an outbound firewall rule base to allow administrative technicians to establish secure, encrypted shell terminal command interfaces to remote external Linux nodes. Which port protocol parameter must be opened?",
+    "opts": [
+      "Port TCP/23",
+      "Port TCP/22",
+      "Port UDP/53",
+      "Port TCP/443"
+    ],
+    "correct": 1,
+    "exp": "Secure Shell (SSH) interactive terminal interfaces provide cryptographically encrypted command console routing channels to remote nodes, functioning natively over default network port TCP/22.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Port TCP/22. Secure Shell (SSH) interactive terminal interfaces provide cryptographically encrypted command console routing channels to remote nodes, functioning natively over default network port TCP/22.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Port TCP/22. Secure Shell (SSH) interactive terminal interfaces provide cryptographically encrypted command console routing channels to remote nodes, functioning natively over default network port TCP/22.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Port TCP/22. Secure Shell (SSH) interactive terminal interfaces provide cryptographically encrypted command console routing channels to remote nodes, functioning natively over default network port TCP/22."
+    },
+    "source": "QB2 question 36"
+  },
+  {
+    "id": "m687",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "A network monitoring system alerts and blocks an outbound email payload file because the internal data payload contains explicit combinations of numbers matching corporate Social Security Number layout rules. What tool architecture is this?",
+    "opts": [
+      "Intrusion Prevention System (IPS)",
+      "Data Loss Prevention (DLP)",
+      "Next-Generation Firewall Rule (NGFW)",
+      "Unified Threat Gateway Filter"
+    ],
+    "correct": 1,
+    "exp": "Data Loss Prevention (DLP) framework mechanisms actively track and scan data streams and network transaction payloads for explicit pattern arrays matching protected configurations (like PII formatting or SSNs) to block unauthorized data exfiltration loops.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Data Loss Prevention (DLP). Data Loss Prevention (DLP) framework mechanisms actively track and scan data streams and network transaction payloads for explicit pattern arrays matching protected configurations (like PII formatting or SSNs) to block unauthorized data exfiltration loops.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Data Loss Prevention (DLP). Data Loss Prevention (DLP) framework mechanisms actively track and scan data streams and network transaction payloads for explicit pattern arrays matching protected configurations (like PII formatting or SSNs) to block unauthorized data exfiltration loops.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Data Loss Prevention (DLP). Data Loss Prevention (DLP) framework mechanisms actively track and scan data streams and network transaction payloads for explicit pattern arrays matching protected configurations (like PII formatting or SSNs) to block unauthorized data exfiltration loops."
+    },
+    "source": "QB2 question 37"
+  },
+  {
+    "id": "m688",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Architecture",
+    "q": "An enterprise automates full cluster infrastructure deployment by orchestrating networking, load balancers, and security configuration settings through declarative, machine-readable JSON script models. What methodology is this?",
+    "opts": [
+      "Software-Defined Network Topologies",
+      "Infrastructure as Code (IaC)",
+      "Continuous Delivery Pipelines",
+      "Scripted Automation Workbooks"
+    ],
+    "correct": 1,
+    "exp": "Infrastructure as Code (IaC) lets administrators write declarative code script models to fully automate, version-control, and provision cloud system topologies, network firewalls, and storage server instances without manual hardware interaction.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Infrastructure as Code (IaC). Infrastructure as Code (IaC) lets administrators write declarative code script models to fully automate, version-control, and provision cloud system topologies, network firewalls, and storage server instances without manual hardware interaction.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Infrastructure as Code (IaC). Infrastructure as Code (IaC) lets administrators write declarative code script models to fully automate, version-control, and provision cloud system topologies, network firewalls, and storage server instances without manual hardware interaction.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Infrastructure as Code (IaC). Infrastructure as Code (IaC) lets administrators write declarative code script models to fully automate, version-control, and provision cloud system topologies, network firewalls, and storage server instances without manual hardware interaction."
+    },
+    "source": "QB2 question 38"
+  },
+  {
+    "id": "m689",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "A configuration adjustment document requires a comprehensive, detailed technical roadmap on how to completely reverse a scheduled system database patch if the upgrade encounters runtime processing issues. What is this roadmap?",
+    "opts": [
+      "Backout Plan",
+      "Impact Analysis Matrix",
+      "Operations Continuity Document",
+      "Disaster Playbook Strategy"
+    ],
+    "correct": 0,
+    "exp": "A Backout Plan provides a highly detailed engineering rollback roadmap outlining explicit operational phases required to completely undo failed configuration modifications and safely return production infrastructure back to its last known stable baseline status.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Backout Plan. A Backout Plan provides a highly detailed engineering rollback roadmap outlining explicit operational phases required to completely undo failed configuration modifications and safely return production infrastructure back to its last known stable baseline status.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Backout Plan. A Backout Plan provides a highly detailed engineering rollback roadmap outlining explicit operational phases required to completely undo failed configuration modifications and safely return production infrastructure back to its last known stable baseline status.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Backout Plan. A Backout Plan provides a highly detailed engineering rollback roadmap outlining explicit operational phases required to completely undo failed configuration modifications and safely return production infrastructure back to its last known stable baseline status."
+    },
+    "source": "QB2 question 39"
+  },
+  {
+    "id": "m690",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "Which specific corporate identity role bears the ultimate business accountability for determining data access privileges, defining preservation lifetimes, and assigning initial classification labels?",
+    "opts": [
+      "Data Processor Agent",
+      "Data Custodian Administrator",
+      "Data Owner Corporate Executive",
+      "Data Controller System Manager"
+    ],
+    "correct": 2,
+    "exp": "The Data Owner is an executive data stakeholder who bears ultimate structural accountability for evaluating data importance classification tiers, authorising directory access rights, and defining retention lifecycles based on business objectives.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Data Owner Corporate Executive. The Data Owner is an executive data stakeholder who bears ultimate structural accountability for evaluating data importance classification tiers, authorising directory access rights, and defining retention lifecycles based on business objectives.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Data Owner Corporate Executive. The Data Owner is an executive data stakeholder who bears ultimate structural accountability for evaluating data importance classification tiers, authorising directory access rights, and defining retention lifecycles based on business objectives.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Data Owner Corporate Executive. The Data Owner is an executive data stakeholder who bears ultimate structural accountability for evaluating data importance classification tiers, authorising directory access rights, and defining retention lifecycles based on business objectives."
+    },
+    "source": "QB2 question 40"
+  },
+  {
+    "id": "m691",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Cryptography & PKI",
+    "q": "A regional healthcare provider must introduce strict end-to-end storage block encryption across all databases holding patient record matrices to conform with national healthcare legislation mandates. What classification of compliance engine driver is this?",
+    "opts": [
+      "Regulatory Requirement Compliance",
+      "Internal Risk Tolerance Management",
+      "Service Level Agreement Obligation",
+      "Industry Benchmark Best Practice"
+    ],
+    "correct": 0,
+    "exp": "Regulatory requirements are government-legislated legal mandates and compliance frameworks that impose explicit, mandatory cybersecurity data protection configurations onto operational business industries.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Regulatory Requirement Compliance. Regulatory requirements are government-legislated legal mandates and compliance frameworks that impose explicit, mandatory cybersecurity data protection configurations onto operational business industries.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Regulatory Requirement Compliance. Regulatory requirements are government-legislated legal mandates and compliance frameworks that impose explicit, mandatory cybersecurity data protection configurations onto operational business industries.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Regulatory Requirement Compliance. Regulatory requirements are government-legislated legal mandates and compliance frameworks that impose explicit, mandatory cybersecurity data protection configurations onto operational business industries."
+    },
+    "source": "QB2 question 41"
+  },
+  {
+    "id": "m692",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "A technical security policy requires that two separate authorised system technicians must type in separate biometric validation keys simultaneously to unlock a master root certificate authority server vault. What identity security control concept is this?",
+    "opts": [
+      "Dual Control Access Management",
+      "Mandatory Job Rotation Enforcement",
+      "Least Privilege Access Boundary",
+      "Role-Based Identity Matrix"
+    ],
+    "correct": 0,
+    "exp": "Dual Control authorization models dictate that two distinct authorized system operators must execute validation keys simultaneously to perform a critical, high-risk infrastructure control activity, preventing single-user privilege abuse or security overrides.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Dual Control Access Management. Dual Control authorization models dictate that two distinct authorized system operators must execute validation keys simultaneously to perform a critical, high-risk infrastructure control activity, preventing single-user privilege abuse or security overrides.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Dual Control Access Management. Dual Control authorization models dictate that two distinct authorized system operators must execute validation keys simultaneously to perform a critical, high-risk infrastructure control activity, preventing single-user privilege abuse or security overrides.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Dual Control Access Management. Dual Control authorization models dictate that two distinct authorized system operators must execute validation keys simultaneously to perform a critical, high-risk infrastructure control activity, preventing single-user privilege abuse or security overrides."
+    },
+    "source": "QB2 question 42"
+  },
+  {
+    "id": "m693",
+    "ch": "5",
+    "difficulty": "medium",
+    "topic": "Governance & Compliance",
+    "q": "An external governance organization conducts a formal review to verify that a financial firm's actual technical configuration parameter settings match its stated corporate policies and relevant regulatory standards. What activity is being executed?",
+    "opts": [
+      "Internal Management Scan",
+      "Risk Appetite Quantification Review",
+      "Security Compliance Audit",
+      "Change Advisory Management Validation"
+    ],
+    "correct": 2,
+    "exp": "Security compliance audits are administrative and technical reviews executed to meticulously measure an enterprise's production configuration settings against --- PAGE 24 --- corporate policies, industry baselines, and legal regulatory frameworks.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Security Compliance Audit. Security compliance audits are administrative and technical reviews executed to meticulously measure an enterprise's production configuration settings against --- PAGE 24 --- corporate policies, industry baselines, and legal regulatory frameworks.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Security Compliance Audit. Security compliance audits are administrative and technical reviews executed to meticulously measure an enterprise's production configuration settings against --- PAGE 24 --- corporate policies, industry baselines, and legal regulatory frameworks.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Security Compliance Audit. Security compliance audits are administrative and technical reviews executed to meticulously measure an enterprise's production configuration settings against --- PAGE 24 --- corporate policies, industry baselines, and legal regulatory frameworks."
+    },
+    "source": "QB2 question 43"
+  },
+  {
+    "id": "m694",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Risk Management",
+    "q": "An insurance actuarial analyst quantifies the exact financial loss impact to the firm's physical real estate asset if a single high-impact coastal storm event floods the server distribution basement floor. What metric is this?",
+    "opts": [
+      "Annualized Loss Expectancy (ALE)",
+      "Single Loss Expectancy (SLE)",
+      "Annual Rate of Occurrence (ARO)",
+      "Exposure Factor Index Baseline"
+    ],
+    "correct": 1,
+    "exp": "Single Loss Expectancy (SLE) calculates the definitive estimated monetary loss value suffered by an enterprise from a single, isolated threat occurrence or environmental disaster event affecting a specific corporate asset.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Single Loss Expectancy (SLE). Single Loss Expectancy (SLE) calculates the definitive estimated monetary loss value suffered by an enterprise from a single, isolated threat occurrence or environmental disaster event affecting a specific corporate asset.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Single Loss Expectancy (SLE). Single Loss Expectancy (SLE) calculates the definitive estimated monetary loss value suffered by an enterprise from a single, isolated threat occurrence or environmental disaster event affecting a specific corporate asset.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Single Loss Expectancy (SLE). Single Loss Expectancy (SLE) calculates the definitive estimated monetary loss value suffered by an enterprise from a single, isolated threat occurrence or environmental disaster event affecting a specific corporate asset."
+    },
+    "source": "QB2 question 44"
+  },
+  {
+    "id": "m695",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Architecture",
+    "q": "A contract document signed between an enterprise group and a cloud hosting vendor details explicit system uptime guarantees, network availability metrics, and financial reimbursement penalties for service outages. What document is this?",
+    "opts": [
+      "Memorandum of Understanding (MOU)",
+      "Non-Disclosure Agreement (NDA)",
+      "Service Level Agreement (SLA)",
+      "Statement of Work Specifications (SOW)"
+    ],
+    "correct": 2,
+    "exp": "Service Level Agreements (SLAs) are formal contractual documents defining precise system performance benchmarks, target network availability percentages, and exact financial compensation penalties for hosting downtime agreed upon by a service vendor and customer.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Service Level Agreement (SLA). Service Level Agreements (SLAs) are formal contractual documents defining precise system performance benchmarks, target network availability percentages, and exact financial compensation penalties for hosting downtime agreed upon by a service vendor and customer.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Service Level Agreement (SLA). Service Level Agreements (SLAs) are formal contractual documents defining precise system performance benchmarks, target network availability percentages, and exact financial compensation penalties for hosting downtime agreed upon by a service vendor and customer.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Service Level Agreement (SLA). Service Level Agreements (SLAs) are formal contractual documents defining precise system performance benchmarks, target network availability percentages, and exact financial compensation penalties for hosting downtime agreed upon by a service vendor and customer."
+    },
+    "source": "QB2 question 45"
+  },
+  {
+    "id": "m696",
+    "ch": "2",
+    "difficulty": "medium",
+    "topic": "Threats & Vulnerabilities",
+    "q": "A corporate cybersecurity campaign implements specialized instructional simulation training targeting the Chief Financial Officer (CFO) to help them detect highly tailored social engineering emails designed to siphon administrative cash funds. What attack profile is being trained against?",
+    "opts": [
+      "Whaling Attack Profile",
+      "Smishing Threat Vector",
+      "Password Spraying Campaign",
+      "Voice Vishing Engineering"
+    ],
+    "correct": 0,
+    "exp": "Whaling describes a subset of hyper-targeted spear-phishing social engineering campaigns crafted exclusively to deceive high-profile corporate leaders, executive directors, or C-suite officers into compromising corporate assets or releasing large cash funds.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Whaling Attack Profile. Whaling describes a subset of hyper-targeted spear-phishing social engineering campaigns crafted exclusively to deceive high-profile corporate leaders, executive directors, or C-suite officers into compromising corporate assets or releasing large cash funds.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Whaling Attack Profile. Whaling describes a subset of hyper-targeted spear-phishing social engineering campaigns crafted exclusively to deceive high-profile corporate leaders, executive directors, or C-suite officers into compromising corporate assets or releasing large cash funds.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Whaling Attack Profile. Whaling describes a subset of hyper-targeted spear-phishing social engineering campaigns crafted exclusively to deceive high-profile corporate leaders, executive directors, or C-suite officers into compromising corporate assets or releasing large cash funds."
+    },
+    "source": "QB2 question 46"
+  },
+  {
+    "id": "m697",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "A developmental quality testing unit embeds an automated inspection tool into the repository that reviews uncompiled source code lines for logical bugs, injection flaws, and security oversights before compiling the software. What testing methodology is this?",
+    "opts": [
+      "Dynamic Application Security Testing (DAST)",
+      "Static Application Security Testing (SAST)",
+      "Application Fuzzing Evaluation",
+      "Black-Box Execution Analysis"
+    ],
+    "correct": 1,
+    "exp": "Static Application Security Testing (SAST) tools parse and analyze uncompiled source code lines for security vulnerabilities, memory vulnerabilities, and coding flaws from the inside out before the software application is compiled or executed.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Static Application Security Testing (SAST). Static Application Security Testing (SAST) tools parse and analyze uncompiled source code lines for security vulnerabilities, memory vulnerabilities, and coding flaws from the inside out before the software application is compiled or executed.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Static Application Security Testing (SAST). Static Application Security Testing (SAST) tools parse and analyze uncompiled source code lines for security vulnerabilities, memory vulnerabilities, and coding flaws from the inside out before the software application is compiled or executed.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Static Application Security Testing (SAST). Static Application Security Testing (SAST) tools parse and analyze uncompiled source code lines for security vulnerabilities, memory vulnerabilities, and coding flaws from the inside out before the software application is compiled or executed."
+    },
+    "source": "QB2 question 47"
+  },
+  {
+    "id": "m698",
+    "ch": "1",
+    "difficulty": "medium",
+    "topic": "Identity & Access",
+    "q": "A customer information protection system strips out raw customer identification strings and maps them onto non-sensitive alphanumeric reference markers that can only be matched back via an external cryptographic index vault. What database practice is this?",
+    "opts": [
+      "Dynamic Data Masking",
+      "Cryptographic Hashing",
+      "Tokenization Isolation",
+      "Steganographic Concealment"
+    ],
+    "correct": 2,
+    "exp": "Tokenization systems substitute sensitive cleartext database records with mathematically non-sensitive, random alphanumeric reference tokens that can only be resolved back to authentic source strings by querying an isolated data vault.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Tokenization Isolation. Tokenization systems substitute sensitive cleartext database records with mathematically non-sensitive, random alphanumeric reference tokens that can only be resolved back to authentic source strings by querying an isolated data vault.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Tokenization Isolation. Tokenization systems substitute sensitive cleartext database records with mathematically non-sensitive, random alphanumeric reference tokens that can only be resolved back to authentic source strings by querying an isolated data vault.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Tokenization Isolation. Tokenization systems substitute sensitive cleartext database records with mathematically non-sensitive, random alphanumeric reference tokens that can only be resolved back to authentic source strings by querying an isolated data vault."
+    },
+    "source": "QB2 question 48"
+  },
+  {
+    "id": "m699",
+    "ch": "4",
+    "difficulty": "medium",
+    "topic": "Security Operations",
+    "q": "A regulatory infrastructure auditor inspects application change management tracking logs. Which structural item parameter provides the primary evidence confirming a critical server production patch was properly vetted and authorized before release?",
+    "opts": [
+      "The SHA-256 validation hash of the patch installer module",
+      "Documented approval signatures from the corporate Change Advisory Board (CAB)",
+      "The system availability performance scores monitored during patch rollout",
+      "The volume of historical analytical alerts tracked by the central SIEM console"
+    ],
+    "correct": 1,
+    "exp": "System compliance auditors inspect Change Advisory Board (CAB) validation approval documents to secure structural administrative proof confirming that production system modifications were reviewed, tested, and authorized according to change management guidelines.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Documented approval signatures from the corporate Change Advisory Board (CAB). System compliance auditors inspect Change Advisory Board (CAB) validation approval documents to secure structural administrative proof confirming that production system modifications were reviewed, tested, and authorized according to change management guidelines.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Documented approval signatures from the corporate Change Advisory Board (CAB). System compliance auditors inspect Change Advisory Board (CAB) validation approval documents to secure structural administrative proof confirming that production system modifications were reviewed, tested, and authorized according to change management guidelines.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Documented approval signatures from the corporate Change Advisory Board (CAB). System compliance auditors inspect Change Advisory Board (CAB) validation approval documents to secure structural administrative proof confirming that production system modifications were reviewed, tested, and authorized according to change management guidelines."
+    },
+    "source": "QB2 question 49"
+  },
+  {
+    "id": "m700",
+    "ch": "3",
+    "difficulty": "medium",
+    "topic": "Security Architecture",
+    "q": "An enterprise coordinates storage partitions in a hybrid multi-cloud infrastructure layout across on-premise systems and external provider storage systems. Which foundational operational model clarifies exactly which physical and logical security layers belong to the firm versus the hosting provider?",
+    "opts": [
+      "Shared Responsibility Model / Responsibility Matrix",
+      "Corporate Risk Appetite Specification Statement",
+      "Service Level Agreement Penalty Clauses Matrix",
+      "Statement of Work Architectural Plan"
+    ],
+    "correct": 0,
+    "exp": "The Shared Responsibility Model provides a definitive cloud computing roadmap defining exactly which physical infrastructure, virtualization hypervisors, and logical storage configuration layers remain the protection responsibility of the public cloud provider versus the corporate client across various deployment options.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Shared Responsibility Model / Responsibility Matrix. The Shared Responsibility Model provides a definitive cloud computing roadmap defining exactly which physical infrastructure, virtualization hypervisors, and logical storage configuration layers remain the protection responsibility of the public cloud provider versus the corporate client across various deployment options.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Shared Responsibility Model / Responsibility Matrix. The Shared Responsibility Model provides a definitive cloud computing roadmap defining exactly which physical infrastructure, virtualization hypervisors, and logical storage configuration layers remain the protection responsibility of the public cloud provider versus the corporate client across various deployment options.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Shared Responsibility Model / Responsibility Matrix. The Shared Responsibility Model provides a definitive cloud computing roadmap defining exactly which physical infrastructure, virtualization hypervisors, and logical storage configuration layers remain the protection responsibility of the public cloud provider versus the corporate client across various deployment options."
+    },
+    "source": "QB2 question 50"
+  },
+  {
+    "id": "m701",
+    "ch": "3",
+    "difficulty": "hard",
+    "topic": "Identity & Access",
+    "q": "An enterprise is designing a highly secure cloud native environment and wants to enforce microsegmentation across containerized microservices. The architecture must dynamically validate device identity, user authorization, and real-time security posture before granting connection tokens, removing any implicit trust based on network location. Which of the following models best meets these design goals?",
+    "opts": [
+      "Perimeter-Defense Security Model with Next-Generation Firewalls (NGFW)",
+      "Zero Trust Architecture (ZTA) using a Policy Enforcement Point (PEP)",
+      "Software-Defined Wide Area Network (SD-WAN) with edge-to-edge IPsec meshes",
+      "Defense-in-Depth utilizing centralized Virtual Local Area Networks (VLANs)"
+    ],
+    "correct": 1,
+    "exp": "Zero Trust Architecture removes implicit trust and evaluates real-time telemetry at the PEP before establishing dynamic access boundaries.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Zero Trust Architecture (ZTA) using a Policy Enforcement Point (PEP). Zero Trust Architecture removes implicit trust and evaluates real-time telemetry at the PEP before establishing dynamic access boundaries.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Zero Trust Architecture (ZTA) using a Policy Enforcement Point (PEP). Zero Trust Architecture removes implicit trust and evaluates real-time telemetry at the PEP before establishing dynamic access boundaries.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Zero Trust Architecture (ZTA) using a Policy Enforcement Point (PEP). Zero Trust Architecture removes implicit trust and evaluates real-time telemetry at the PEP before establishing dynamic access boundaries."
+    },
+    "source": "QB3 question 1"
+  },
+  {
+    "id": "m702",
+    "ch": "2",
+    "difficulty": "hard",
+    "topic": "Risk Management",
+    "q": "During a forensic investigation, a security analyst discovers that an attacker subverted a web application's authentication mechanics without generating errors or triggering traditional input validation alerts. The attacker intercepted a valid user's session identifier, calculated the cryptographic step delta, and predicted the subsequent session tokens using a pseudo-random number generator (PRNG) state reconstruction attack. What type of vulnerability did the attacker exploit?",
+    "opts": [
+      "Insufficient Session Entropy / Predictable Token Generation",
+      "Time-of-Check to Time-of-Use (TOCTOU) Race Condition",
+      "Cross-Site Request Forgery (CSRF)",
+      "Insecure Direct Object References (IDOR)"
+    ],
+    "correct": 0,
+    "exp": "Insufficient session entropy allows attackers to determine PRNG states and predict future cryptographic tokens.",
+    "wrongFeedback": {
+      "1": "This option does not best match the scenario. The stronger answer is A: Insufficient Session Entropy / Predictable Token Generation. Insufficient session entropy allows attackers to determine PRNG states and predict future cryptographic tokens.",
+      "2": "This option does not best match the scenario. The stronger answer is A: Insufficient Session Entropy / Predictable Token Generation. Insufficient session entropy allows attackers to determine PRNG states and predict future cryptographic tokens.",
+      "3": "This option does not best match the scenario. The stronger answer is A: Insufficient Session Entropy / Predictable Token Generation. Insufficient session entropy allows attackers to determine PRNG states and predict future cryptographic tokens."
+    },
+    "source": "QB3 question 2"
+  },
+  {
+    "id": "m703",
+    "ch": "4",
+    "difficulty": "hard",
+    "topic": "Security Concepts",
+    "q": "A security operations center (SOC) engineer detects fileless malware executing on a critical domain controller. The malicious process resides purely within memory (RAM) and injects shellcode directly into a legitimate system process host (lsass.exe) via API calls. Which of the following detection strategies is most effective at identifying this specific threat vector?",
+    "opts": [
+      "Signature-based endpoint antivirus scanning of local storage volumes",
+      "Reviewing traditional network perimeter firewall access control logs",
+      "Endpoint Detection and Response (EDR) memory monitoring and behavioral analysis",
+      "File Integrity Monitoring (FIM) of system binaries located in the system32 directory"
+    ],
+    "correct": 2,
+    "exp": "EDR platforms monitor active memory states, runtime process injections, and behavioral anomalies, making them effective against fileless malware.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Endpoint Detection and Response (EDR) memory monitoring and behavioral analysis. EDR platforms monitor active memory states, runtime process injections, and behavioral anomalies, making them effective against fileless malware.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Endpoint Detection and Response (EDR) memory monitoring and behavioral analysis. EDR platforms monitor active memory states, runtime process injections, and behavioral anomalies, making them effective against fileless malware.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Endpoint Detection and Response (EDR) memory monitoring and behavioral analysis. EDR platforms monitor active memory states, runtime process injections, and behavioral anomalies, making them effective against fileless malware."
+    },
+    "source": "QB3 question 3"
+  },
+  {
+    "id": "m704",
+    "ch": "5",
+    "difficulty": "hard",
+    "topic": "Cryptography & PKI",
+    "q": "An international financial institution is subject to both the European Union's General Data Protection Regulation (GDPR) and local data sovereignty laws that prohibit the cross-border transmission of citizens' financial telemetry. The company is adopting a public cloud service provider. Which architectural strategy provides the necessary assurance to remain compliant with both frameworks?",
+    "opts": [
+      "Implementing Transport Layer Security (TLS) across all public APIs",
+      "Deploying a regional cloud architecture with localized data storage and Bring Your Own Key (BYOK) envelope encryption",
+      "Creating a standardized Memorandum of Understanding (MOU) with the third-party cloud vendor",
+      "Utilizing automated Static Application Security Testing (SAST) during deployment pipelines"
+    ],
+    "correct": 1,
+    "exp": "Regional data residency isolated with BYOK envelope encryption ensures local control and prevents unauthorized cross-border compliance violations.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is B: Deploying a regional cloud architecture with localized data storage and Bring Your Own Key (BYOK) envelope encryption. Regional data residency isolated with BYOK envelope encryption ensures local control and prevents unauthorized cross-border compliance violations.",
+      "2": "This option does not best match the scenario. The stronger answer is B: Deploying a regional cloud architecture with localized data storage and Bring Your Own Key (BYOK) envelope encryption. Regional data residency isolated with BYOK envelope encryption ensures local control and prevents unauthorized cross-border compliance violations.",
+      "3": "This option does not best match the scenario. The stronger answer is B: Deploying a regional cloud architecture with localized data storage and Bring Your Own Key (BYOK) envelope encryption. Regional data residency isolated with BYOK envelope encryption ensures local control and prevents unauthorized cross-border compliance violations."
+    },
+    "source": "QB3 question 4"
+  },
+  {
+    "id": "m705",
+    "ch": "1",
+    "difficulty": "hard",
+    "topic": "Cryptography & PKI",
+    "q": "A cryptography engineer needs to deploy a key exchange mechanism that ensures that even if an attacker compromises the server's long-term private key in the future, they will still be completely unable to decrypt any past network communication sessions captured via packet sniffing. Which of the following cryptographic properties must be enforced?",
+    "opts": [
+      "High Symmetry Diffusion",
+      "Non-repudiation with Digital Signatures",
+      "Perfect Forward Secrecy (PFS) using Ephemeral Diffie-Hellman (DHE/ECDHE)",
+      "Key Stretching using PBKDF2"
+    ],
+    "correct": 2,
+    "exp": "Perfect Forward Secrecy generates unique, temporary keys for every individual session, isolating past traffic from future long-term key compromises.",
+    "wrongFeedback": {
+      "0": "This option does not best match the scenario. The stronger answer is C: Perfect Forward Secrecy (PFS) using Ephemeral Diffie-Hellman (DHE/ECDHE). Perfect Forward Secrecy generates unique, temporary keys for every individual session, isolating past traffic from future long-term key compromises.",
+      "1": "This option does not best match the scenario. The stronger answer is C: Perfect Forward Secrecy (PFS) using Ephemeral Diffie-Hellman (DHE/ECDHE). Perfect Forward Secrecy generates unique, temporary keys for every individual session, isolating past traffic from future long-term key compromises.",
+      "3": "This option does not best match the scenario. The stronger answer is C: Perfect Forward Secrecy (PFS) using Ephemeral Diffie-Hellman (DHE/ECDHE). Perfect Forward Secrecy generates unique, temporary keys for every individual session, isolating past traffic from future long-term key compromises."
+    },
+    "source": "QB3 question 5"
+  }
+];
+
+const MCQ_BANK = [...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id));
 
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK — original, accurate, clearly scoped content
 // ═══════════════════════════════════════════════════════════════
-const PBQ_BANK = [
+const PBQ_BANK_BASE = [
   // ── TERMINAL SIMS ──────────────────────────────────────────
   { id:"p001", type:"TERMINAL SIM", ch:"4", cat:"Network Security", difficulty:"medium",
     title:"Identify open ports using a port scanner",
@@ -10971,6 +13181,474 @@ Certificate: RSA 2048-bit, SHA-256, expires in 90 days`,
       "correct": 0
     }
 ];
+
+
+const IMPORTED_PBQ_BANK = [
+  {
+    "id": "p201",
+    "ch": "3",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "hard",
+    "cat": "Firewall Rules",
+    "title": "Configure firewall rules for DMZ/internal servers",
+    "scenario": "An administrator needs stateful firewall rules for DMZ and internal systems. Select the correctly completed rule set.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "The correct matrix blocks cleartext HTTP from the DMZ web server to the internal database, permits HTTPS file transfer, and permits SSH management. HTTP uses TCP/80, HTTPS uses TCP/443, and SSH uses TCP/22.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "An administrator needs stateful firewall rules for DMZ and internal systems. Select the correctly completed rule set.",
+    "choices": [
+      "Rule 1: 10.1.1.2 to 10.2.1.20 TCP 80 Block; Rule 2: 10.2.1.33 to 10.1.1.7 TCP 443 Allow; Rule 3: 10.2.1.47 to 10.1.1.3 TCP 22 Allow.",
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 0
+  },
+  {
+    "id": "p202",
+    "ch": "2",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "Social Engineering",
+    "title": "Map social engineering attacks to scenarios",
+    "scenario": "Match the social engineering attack vector to the enterprise scenario.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Whaling targets executives, vishing uses voice calls, smishing uses SMS, and spear phishing is targeted email using context about the victim.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Match the social engineering attack vector to the enterprise scenario.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "CFO legal-wire email = Whaling; automated phone credential call = Vishing; SMS shift-schedule link = Smishing; project-specific malicious attachment = Spear phishing.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 1
+  },
+  {
+    "id": "p203",
+    "ch": "4",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "Incident Response",
+    "title": "Sequence the incident response lifecycle",
+    "scenario": "Place the standard incident response process in order.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "The standard incident response lifecycle starts with preparation, then detection and analysis, containment, eradication, recovery, and a lessons learned review.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Place the standard incident response process in order.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "Preparation -> Detection & Analysis -> Containment -> Eradication -> Recovery -> Lessons Learned.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 2
+  },
+  {
+    "id": "p204",
+    "ch": "1",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "hard",
+    "cat": "Cryptography",
+    "title": "Match cryptographic mechanisms to requirements",
+    "scenario": "Select the correct cryptographic mechanism mapping.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Perfect Forward Secrecy uses ephemeral session keys, salting changes hash inputs, digital signatures sign hashes with private keys, and steganography conceals payloads.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct cryptographic mechanism mapping.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls.",
+      "PFS protects past sessions after long-term key compromise; salting defeats rainbow tables; digital signatures provide authentication, integrity, and non-repudiation; steganography hides data in another medium."
+    ],
+    "correct": 3
+  },
+  {
+    "id": "p205",
+    "ch": "1",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "Security Controls",
+    "title": "Classify control category and type",
+    "scenario": "Select the correct classification for the listed controls.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Control category describes who/what implements it, while type describes its purpose. Logging detects, policy directs, ACLs prevent, and audits detect gaps.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct classification for the listed controls.",
+    "choices": [
+      "Log anomaly scripts = Technical/Detective; retention policy = Managerial/Directive; ACL isolation = Technical/Preventive; permission audit = Operational/Detective.",
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 0
+  },
+  {
+    "id": "p206",
+    "ch": "3",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "easy",
+    "cat": "Data Protection",
+    "title": "Identify data states",
+    "scenario": "Select the correct data state mapping.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Data in use is actively processed, data at rest is stored, and data in transit moves across a network.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct data state mapping.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "RAM transaction validation = data in use; encrypted SAN backup = data at rest; IPsec upload = data in transit.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 1
+  },
+  {
+    "id": "p207",
+    "ch": "1",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "easy",
+    "cat": "Authentication",
+    "title": "Map authentication factors",
+    "scenario": "Select the correct authentication factor mapping.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Authentication factors include knowledge, possession, inherence, and location context.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct authentication factor mapping.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "TOTP fob = something you have; PIN = something you know; retina/fingerprint = something you are; authorized facility IP range = somewhere you are.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 2
+  },
+  {
+    "id": "p208",
+    "ch": "4",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "Business Continuity",
+    "title": "Match DR testing models",
+    "scenario": "Select the correct disaster recovery exercise mapping.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Tabletop is discussion only, parallel testing runs alternate systems without interrupting production, and full-scale/cutover tests production failover.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct disaster recovery exercise mapping.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls.",
+      "Verbal playbook review = Tabletop; backup systems with sample workloads = Parallel; primary shut down and failover used = Full-scale/Cutover."
+    ],
+    "correct": 3
+  },
+  {
+    "id": "p209",
+    "ch": "3",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "easy",
+    "cat": "Cloud Security",
+    "title": "Apply IaaS shared responsibility",
+    "scenario": "Select the correct party for each IaaS layer.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "In IaaS, the provider secures the physical and virtualization infrastructure; the customer secures OS, apps, identities, and data.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct party for each IaaS layer.",
+    "choices": [
+      "Provider: physical data center and underlying compute/network/storage hardware. Customer: guest OS patching, local users, application configuration, identity, and data classification.",
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 0
+  },
+  {
+    "id": "p210",
+    "ch": "1",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "PKI",
+    "title": "Map PKI components to functions",
+    "scenario": "Select the correct PKI component mapping.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "PKI separates certificate signing, identity proofing, batch revocation lists, and real-time revocation checking.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct PKI component mapping.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "CA signs certificates; RA verifies applicant identity; CRL publishes revoked serials periodically; OCSP provides real-time certificate status.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 1
+  },
+  {
+    "id": "p211",
+    "ch": "3",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "hard",
+    "cat": "Storage Resilience",
+    "title": "Choose RAID levels for requirements",
+    "scenario": "Select the correct RAID mapping for the storage requirements.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "RAID 10 stripes mirrored pairs, RAID 5 uses single distributed parity, and RAID 6 uses dual distributed parity.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct RAID mapping for the storage requirements.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "High-performance mirrored logs = RAID 10; balanced single-parity file server = RAID 5; dual-failure archive vault = RAID 6.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 2
+  },
+  {
+    "id": "p212",
+    "ch": "3",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "Secure Protocols",
+    "title": "Map secure protocols to ports",
+    "scenario": "Select the correct secure protocol and port mapping.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "SFTP rides over SSH on 22, LDAPS uses 636, and IMAPS uses 993.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct secure protocol and port mapping.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls.",
+      "SFTP = TCP 22; LDAPS = TCP 636; IMAPS = TCP 993."
+    ],
+    "correct": 3
+  },
+  {
+    "id": "p213",
+    "ch": "3",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "hard",
+    "cat": "Data Loss Prevention",
+    "title": "Choose DLP matching methods",
+    "scenario": "Select the correct DLP matching technique for each data category.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Different DLP methods fit different data patterns: regex for structured numbers, fingerprinting for known documents, and EDM for exact database-backed records.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct DLP matching technique for each data category.",
+    "choices": [
+      "Credit cards = Pattern Matching/Regex with Luhn validation; product blueprints = Document Fingerprinting; live customer accounts = Exact Data Matching/Database Lookup.",
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 0
+  },
+  {
+    "id": "p214",
+    "ch": "2",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "hard",
+    "cat": "Threat Actors",
+    "title": "Attribute threat actors",
+    "scenario": "Select the correct threat actor attribution.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Motivation, resources, and access determine attribution: APTs have advanced resources, insiders abuse trusted access, and hacktivists act for ideology.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct threat actor attribution.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "Multi-year aerospace zero-day campaign = State-Sponsored APT; malicious privileged sysadmin = Insider Threat; ideological website defacement = Hacktivist Collective.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 1
+  },
+  {
+    "id": "p215",
+    "ch": "4",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "Vulnerability Management",
+    "title": "Order vulnerability management phases",
+    "scenario": "Place the vulnerability management lifecycle in order.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "A vulnerability program first discovers assets/issues, assesses and prioritizes risk, remediates, verifies fixes, then reports continuously.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Place the vulnerability management lifecycle in order.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "Identify/Discover -> Assess Flaws -> Prioritize Risks -> Remediate/Mitigate -> Verify Resolution -> Continuous Reporting.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 2
+  },
+  {
+    "id": "p216",
+    "ch": "1",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "Access Control",
+    "title": "Match access control models",
+    "scenario": "Select the correct access control model mapping.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "MAC uses labels, ABAC evaluates attributes, and RBAC grants access based on roles.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct access control model mapping.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls.",
+      "Clearance label matching = MAC; doctor/time/device/location conditions = ABAC; payroll clerk job profile permissions = RBAC."
+    ],
+    "correct": 3
+  },
+  {
+    "id": "p217",
+    "ch": "3",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "Network Security",
+    "title": "Place sensors and controls",
+    "scenario": "Select the correct placement topology.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Blocking controls must sit inline, while detection-only sensors can passively observe mirrored traffic.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct placement topology.",
+    "choices": [
+      "NIPS = Inline deployment; NIDS = Passive/SPAN/TAP deployment; WAF = Inline deployment.",
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 0
+  },
+  {
+    "id": "p218",
+    "ch": "5",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "Change Management",
+    "title": "Order change management phases",
+    "scenario": "Place the formal change process in order.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Change control starts with a request, then risk review and testing, approval, and controlled implementation with rollback validation.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Place the formal change process in order.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "Formal request submission -> Risk & impact analysis -> Technical sandbox testing -> CAB approval -> Production implementation & backout validation.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 1
+  },
+  {
+    "id": "p219",
+    "ch": "2",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "Web Vulnerabilities",
+    "title": "Match payloads to web vulnerabilities",
+    "scenario": "Select the correct vulnerability mapping for the captured payloads.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Path traversal uses directory escape sequences, SQLi alters database queries, and XSS injects browser-executed script.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct vulnerability mapping for the captured payloads.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "../../../../etc/passwd = Directory Traversal; admin'-- = SQL Injection; <script>document.cookie</script> = Cross-Site Scripting.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 2
+  },
+  {
+    "id": "p220",
+    "ch": "3",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "medium",
+    "cat": "Physical Security",
+    "title": "Map data center controls",
+    "scenario": "Select the correct environmental/physical control mapping.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Pre-action systems prevent accidental discharge, Faraday cages reduce electromagnetic leakage, and hot/cold aisles manage airflow.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct environmental/physical control mapping.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls.",
+      "Dry-pipe water protection = Pre-action fire suppression; wireless/EM shielding = Faraday cage; cooling optimization = Hot/cold aisles."
+    ],
+    "correct": 3
+  },
+  {
+    "id": "p221",
+    "ch": "3",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "hard",
+    "cat": "Firewall & IPS",
+    "title": "Apply firewall and IPS rules",
+    "scenario": "Select the rule set that best protects the multi-tier environment.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "The design permits required encrypted services while applying IPS inspection/rate limiting and default-denying everything else.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the rule set that best protects the multi-tier environment.",
+    "choices": [
+      "Internet to reverse proxy TCP 443 = Allow with SQLi IPS/DPI; DB core to legacy ERP TCP 14330 = Allow stateful only; jump box to DMZ web cluster TCP 22 = Allow with rate limiting; all else = implicit deny.",
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 0
+  },
+  {
+    "id": "p222",
+    "ch": "1",
+    "type": "SCENARIO",
+    "emoji": "📋",
+    "difficulty": "hard",
+    "cat": "Cryptographic Attacks",
+    "title": "Identify cryptographic attacks",
+    "scenario": "Select the correct cryptographic attack mapping.",
+    "question": "Which completed answer set is correct?",
+    "explanation": "Side channels leak through implementation behavior, collisions break uniqueness assumptions, and weak IVs undermine WEP key security.",
+    "hint": "Select the answer set that fully satisfies the scenario, not just one row.",
+    "diagram": "Select the correct cryptographic attack mapping.",
+    "choices": [
+      "A mapping that permits unnecessary cleartext or unauthorised traffic and does not enforce least privilege.",
+      "Timing variations during RSA decryption = Side-channel timing attack; two files with same hash = cryptographic collision; short cleartext WEP IV = IV weakness/WEP exploitation.",
+      "A mapping that chooses the right technology family but assigns one or more ports, phases, or responsibilities incorrectly.",
+      "A mapping that reverses the operational order or treats detective controls as preventive controls."
+    ],
+    "correct": 1
+  }
+];
+
+const PBQ_BANK = [...PBQ_BANK_BASE, ...IMPORTED_PBQ_BANK];
 
 // ═══════════════════════════════════════════════════════════════
 // DAILY CHALLENGE DATA
