@@ -15,14 +15,14 @@
     "audit:qbank:strict": "node scripts/audit-qbank.mjs --strict"
   },
   "dependencies": {
-    "@supabase/supabase-js": "latest",
-    "posthog-js": "^1.372.10",
-    "react": "latest",
-    "react-dom": "latest",
-    "stripe": "latest"
+    "@supabase/supabase-js": "2.105.3",
+    "posthog-js": "1.395.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "stripe": "22.1.1"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "latest",
-    "vite": "latest"
+    "@vitejs/plugin-react": "6.0.1",
+    "vite": "8.1.0"
   }
 }
