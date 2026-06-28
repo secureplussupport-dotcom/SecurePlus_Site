@@ -164,9 +164,21 @@ function dailyEncouragementForDate(dateKey=localDateKey()) {
   return messages[score%messages.length];
 }
 function getWrongOptionFeedback(question,index) {
-  if(question?.wrongFeedback?.[index]) return question.wrongFeedback[index];
+  if(question?.wrongFeedback?.[index] && String(question.wrongFeedback[index]).length>=25) return question.wrongFeedback[index];
   const correctText=question?.opts?.[question.correct] || "the correct option";
   return `This option is not the best answer for the scenario. The better answer is ${String.fromCharCode(65+(question?.correct||0))}: ${correctText}. ${question?.exp||""}`.trim();
+}
+function ensureMcqWrongFeedback(question) {
+  if(!Array.isArray(question?.opts)) return question;
+  const wrongFeedback={...(question.wrongFeedback||{})};
+  const correctText=question.opts[question.correct] || "the correct answer";
+  question.opts.forEach((_,index)=>{
+    if(index===question.correct) return;
+    const existing=wrongFeedback[index]||wrongFeedback[String(index)];
+    if(existing&&String(existing).length>=25) return;
+    wrongFeedback[index]=`This option does not best satisfy the scenario. The stronger answer is ${String.fromCharCode(65+question.correct)}: ${correctText}. ${question.exp||""}`.trim();
+  });
+  return {...question,wrongFeedback};
 }
 function reportQuestionIssue({kind,question,selected,correct}) {
   const id=question?.id||"unknown";
@@ -10328,7 +10340,7 @@ const IMPORTED_MCQ_BANK = [
   }
 ];
 
-const MCQ_BANK = [...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id));
+const MCQ_BANK = [...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id)).map(ensureMcqWrongFeedback);
 
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK — original, accurate, clearly scoped content

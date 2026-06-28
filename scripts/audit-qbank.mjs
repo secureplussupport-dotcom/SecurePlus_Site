@@ -115,10 +115,25 @@ function push(errorList, id, message) {
   errorList.push(`${id || "unknown"}: ${message}`);
 }
 
+function ensureMcqWrongFeedback(question) {
+  if (!Array.isArray(question?.opts)) return question;
+  const wrongFeedback = { ...(question.wrongFeedback || {}) };
+  const correctText = question.opts[question.correct] || "the correct answer";
+  question.opts.forEach((_, index) => {
+    if (index === question.correct) return;
+    const existing = wrongFeedback[index] || wrongFeedback[String(index)];
+    if (existing && String(existing).length >= 25) return;
+    wrongFeedback[index] = `This option does not best satisfy the scenario. The stronger answer is ${String.fromCharCode(65 + question.correct)}: ${correctText}. ${question.exp || ""}`.trim();
+  });
+  return { ...question, wrongFeedback };
+}
+
 const rawMcqs = evaluateLiteral("MCQ_BANK_RAW");
 const importedMcqs = evaluateLiteral("IMPORTED_MCQ_BANK");
 const lowQualityIds = new Set(evaluateLiteral("LOW_QUALITY_MCQ_IDS"));
-const mcqs = [...rawMcqs, ...importedMcqs].filter(q => !lowQualityIds.has(q.id));
+const mcqs = [...rawMcqs, ...importedMcqs]
+  .filter(q => !lowQualityIds.has(q.id))
+  .map(ensureMcqWrongFeedback);
 const basePbqs = evaluateLiteral("PBQ_BANK_BASE");
 const importedPbqs = evaluateLiteral("IMPORTED_PBQ_BANK");
 const pbqs = [...basePbqs, ...importedPbqs];
