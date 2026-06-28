@@ -225,7 +225,16 @@ Known limitation before production:
 ## Build
 
 ```bash
+npm run audit:qbank
 npm run build
+```
+
+`npm run audit:qbank` checks the embedded MCQ/PBQ banks for launch-blocking structure problems such as low counts, duplicate IDs, invalid answer keys, and missing explanations. It also prints quality warnings for items that should be improved over time, such as imported MCQs that still need custom feedback for each wrong option.
+
+For a stricter release gate that fails on quality warnings too:
+
+```bash
+npm run audit:qbank:strict
 ```
 
 Preview production build:
@@ -239,6 +248,7 @@ npm run preview
 Before pushing:
 
 ```bash
+npm run audit:qbank
 npm run build
 ```
 
