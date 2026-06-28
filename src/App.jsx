@@ -8129,7 +8129,11 @@ const LOW_QUALITY_MCQ_IDS = new Set([
   "m368","m369","m370","m372","m375","m377","m378","m380","m381","m382","m383","m384",
   "m385","m386","m387","m388","m390","m391","m392","m394","m395","m396","m397","m400",
   // Hidden because the correct option is substantially longer than the distractors.
-  "m146","m164","m199","m237","m239","m245","m247","m263","m302","m310"
+  "m146","m164","m199","m237","m239","m245","m247","m263","m302","m310",
+  // Hidden because the stem/options are too long and saturated for a smooth MCQ experience.
+  "m412","m421","m422","m430","m445","m447","m452","m455","m457","m462","m466","m467","m471",
+  "m474","m480","m481","m482","m483","m484","m485","m486","m487","m488","m489","m491",
+  "m492","m495","m496","m497","m498","m500","m503","m504","m505","m508","m702"
 ]);
 
 const IMPORTED_MCQ_BANK = [

@@ -139,6 +139,9 @@ const importedPbqs = evaluateLiteral("IMPORTED_PBQ_BANK");
 const pbqs = [...basePbqs, ...importedPbqs];
 const errors = [];
 const warnings = [];
+const MAX_MCQ_STEM_LENGTH = 420;
+const MAX_MCQ_OPTION_LENGTH = 205;
+const MAX_MCQ_TOTAL_LENGTH = 1050;
 
 if (mcqs.length < 400) push(errors, "MCQ_BANK", `expected at least 400 active MCQs, found ${mcqs.length}`);
 if (pbqs.length < 100) push(errors, "PBQ_BANK", `expected at least 100 PBQs, found ${pbqs.length}`);
@@ -161,6 +164,19 @@ for (const q of mcqs) {
   if (!Array.isArray(q.opts) || q.opts.length !== 4) push(errors, q.id, "must have exactly 4 answer options");
   if (!Number.isInteger(q.correct) || q.correct < 0 || q.correct >= (q.opts?.length || 0)) push(errors, q.id, "correct index is invalid");
   if (!q.exp || q.exp.length < 60) push(errors, q.id, "missing or very short correct-answer explanation");
+  if (q.q && q.q.length > MAX_MCQ_STEM_LENGTH) {
+    push(warnings, q.id, `question stem is too long for smooth MCQ practice (${q.q.length}/${MAX_MCQ_STEM_LENGTH} chars)`);
+  }
+  if (Array.isArray(q.opts)) {
+    const longestOption = Math.max(...q.opts.map(option => String(option).length));
+    const totalPromptLength = q.q.length + q.opts.map(String).join(" ").length;
+    if (longestOption > MAX_MCQ_OPTION_LENGTH) {
+      push(warnings, q.id, `answer option is too long (${longestOption}/${MAX_MCQ_OPTION_LENGTH} chars)`);
+    }
+    if (totalPromptLength > MAX_MCQ_TOTAL_LENGTH) {
+      push(warnings, q.id, `question plus options are too saturated (${totalPromptLength}/${MAX_MCQ_TOTAL_LENGTH} chars)`);
+    }
+  }
 
   const wrongFeedback = q.wrongFeedback || {};
   if (!wrongFeedback || typeof wrongFeedback !== "object") push(warnings, q.id, "missing wrongFeedback object");
