@@ -15016,7 +15016,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
               Security+ practice questions with PBQ simulations.
             </h1>
             <p className="landing-copy">
-              400 MCQs + 100 PBQs. Free to start. No account needed.
+              {MCQ_BANK.length}+ MCQs + {PBQ_BANK.length} PBQs. Free to start. No account needed.
             </p>
             <div style={{marginTop:22}}>
               <button className="btn btn-primary" style={{padding:"13px 22px",fontSize:15}} onClick={onPracticeMcq}>Start Practising Free →</button>
