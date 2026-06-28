@@ -7,8 +7,9 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "audit": "npm run audit:launch && npm run audit:seo && npm run audit:qbank:strict",
+    "audit": "npm run audit:launch && npm run audit:seo && npm run audit:pwa && npm run audit:qbank:strict",
     "audit:launch": "node scripts/audit-launch.mjs",
+    "audit:pwa": "node scripts/audit-pwa.mjs",
     "audit:seo": "node scripts/audit-seo.mjs",
     "audit:qbank": "node scripts/audit-qbank.mjs",
     "audit:qbank:strict": "node scripts/audit-qbank.mjs --strict"
