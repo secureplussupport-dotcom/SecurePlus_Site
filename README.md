@@ -27,6 +27,9 @@ src/
   main.jsx
   lib/supabaseClient.js
   lib/analytics.js
+docs/
+  launch-runbook.md
+  github-actions-verify-template.yml
 supabase/
   schema.sql
 .env.example
@@ -38,7 +41,7 @@ vite.config.js
 ## Local Setup
 
 ```bash
-npm install
+npm ci
 cp .env.example .env.local
 npm run dev
 ```
@@ -225,15 +228,21 @@ Known limitation before production:
 ## Build
 
 ```bash
-npm run audit:qbank
+npm run audit
 npm run build
 ```
 
-`npm run audit:qbank` checks the embedded MCQ/PBQ banks for launch-blocking structure problems such as low counts, duplicate IDs, invalid answer keys, and missing explanations. It also prints quality warnings for items that should be improved over time, such as imported MCQs that still need custom feedback for each wrong option.
+`npm run audit` runs all launch checks:
 
-For a stricter release gate that fails on quality warnings too:
+- `audit:launch` for subscription/security guardrails
+- `audit:seo` for public SEO pages and sitemap coverage
+- `audit:pwa` for mobile/PWA install readiness
+- `audit:qbank:strict` for MCQ/PBQ quality gates
+
+For question-bank-only checks:
 
 ```bash
+npm run audit:qbank
 npm run audit:qbank:strict
 ```
 
@@ -248,8 +257,9 @@ npm run preview
 Before pushing:
 
 ```bash
-npm run audit:qbank
+npm run audit
 npm run build
+npm audit --audit-level=moderate
 ```
 
 Check that these are not committed:
@@ -260,6 +270,12 @@ Check that these are not committed:
 - `dist/`
 - screenshots
 - standalone `securityplus-FINAL.html`
+
+For the step-by-step beginner launch checklist, see:
+
+```txt
+docs/launch-runbook.md
+```
 
 Recommended first commit:
 
