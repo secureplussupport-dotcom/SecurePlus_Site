@@ -114,6 +114,7 @@ function shouldShowPBQUpgradePrompt() {
 }
 
 const FREE_PBQ_PREVIEW_ID = "p001";
+const SUPPORT_EMAIL = "secureplus.support@gmail.com";
 const isFreePBQPreview = question => question?.id === FREE_PBQ_PREVIEW_ID;
 const dailyStreakOwner = user => normalizeEmail(user?.email || "") || "guest";
 const practiceSessionOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
@@ -166,6 +167,32 @@ function getWrongOptionFeedback(question,index) {
   if(question?.wrongFeedback?.[index]) return question.wrongFeedback[index];
   const correctText=question?.opts?.[question.correct] || "the correct option";
   return `This option is not the best answer for the scenario. The better answer is ${String.fromCharCode(65+(question?.correct||0))}: ${correctText}. ${question?.exp||""}`.trim();
+}
+function reportQuestionIssue({kind,question,selected,correct}) {
+  const id=question?.id||"unknown";
+  const title=question?.q||question?.question||question?.title||"Question";
+  const subject=`SecurePlus question report: ${kind?.toUpperCase?.()||"QUESTION"} ${id}`;
+  const body=[
+    "Hi SecurePlus team,",
+    "",
+    "I want to report a possible issue with this question.",
+    "",
+    `Question type: ${kind||"question"}`,
+    `Question ID: ${id}`,
+    `Chapter: ${question?.ch||"not shown"}`,
+    `Difficulty: ${question?.difficulty||"not shown"}`,
+    `Title/question: ${title}`,
+    selected!==undefined&&selected!==null ? `My selected answer: ${String.fromCharCode(65+selected)}` : "",
+    correct!==undefined&&correct!==null ? `Correct answer shown: ${String.fromCharCode(65+correct)}` : "",
+    "",
+    "Issue type: inaccurate answer / obvious answer / typo / confusing explanation / other",
+    "What I noticed:",
+    "",
+    "",
+    `Page: ${typeof window!=="undefined"?window.location.href:""}`,
+  ].filter(Boolean).join("\n");
+  capture("question_report_clicked", { question_id:id, question_type:kind||"question" });
+  window.location.href=`mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 function shuffleMcqOptions(question) {
   if(!question?.opts?.length) return question;
@@ -16063,6 +16090,15 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>{getWrongOptionFeedback(current, selected)}</div>
               </div>
             )}
+            <div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}>
+              <button
+                className="btn btn-ghost"
+                style={{fontSize:12,minHeight:34,padding:"7px 10px"}}
+                onClick={()=>reportQuestionIssue({kind:"mcq",question:current,selected,correct:current.correct})}
+              >
+                Report question
+              </button>
+            </div>
           </div>
           <AnswerBurst result={answerBurst} t={t}/>
           <div className="practice-action-bar">
@@ -16584,6 +16620,15 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                 })}
               </div>
             )}
+            <div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}>
+              <button
+                className="btn btn-ghost"
+                style={{fontSize:12,minHeight:34,padding:"7px 10px"}}
+                onClick={()=>reportQuestionIssue({kind:"pbq",question:q,selected,correct:q.correct})}
+              >
+                Report question
+              </button>
+            </div>
           </div>
           {previewMode&&(
             <div className="card" style={{padding:"18px 22px",marginBottom:14,borderColor:`${t.amber}45`,background:`linear-gradient(135deg, ${t.amber}10, ${t.surface})`}}>
