@@ -13725,7 +13725,7 @@ let PBQ_BANK = BASE_PBQ_BANK;
 
 function applyQuestionOverrides(rows=[]) {
   const mergeBank=(base,kind)=>{
-    const byId=new Map(base.map(q=>[q.id,q]));
+    const byId=new Map(base.map((q,index)=>[q.id,{...q,_baseOrder:index+1}]));
     rows
       .filter(row=>row.status==="active"&&row.question_kind===kind)
       .forEach(row=>{
@@ -13737,10 +13737,16 @@ function applyQuestionOverrides(rows=[]) {
         }
         const payload={...(row.payload||{})};
         if(payload.id&&payload.id!==id) payload.id=id;
+        const sortOrder=Number(row.sort_order);
         const next={...(byId.get(id)||{}),...payload,id};
+        if(Number.isFinite(sortOrder)&&sortOrder>0) next._adminOrder=sortOrder;
         byId.set(id, kind==="mcq" ? ensureMcqWrongFeedback(next) : next);
       });
-    return [...byId.values()];
+    return [...byId.values()].sort((a,b)=>{
+      const ao=Number.isFinite(Number(a._adminOrder))?Number(a._adminOrder):Number.MAX_SAFE_INTEGER;
+      const bo=Number.isFinite(Number(b._adminOrder))?Number(b._adminOrder):Number.MAX_SAFE_INTEGER;
+      return ao-bo || (a._baseOrder||Number.MAX_SAFE_INTEGER)-(b._baseOrder||Number.MAX_SAFE_INTEGER) || String(a.id).localeCompare(String(b.id));
+    });
   };
   MCQ_BANK=mergeBank(BASE_MCQ_BANK,"mcq");
   PBQ_BANK=mergeBank(BASE_PBQ_BANK,"pbq");
@@ -17881,81 +17887,176 @@ function AdminFeedbackPage({user,t}) {
   );
 }
 
+function makeAdminQuestionTemplate(kind, nextOrder=1) {
+  const stamp=Date.now().toString().slice(-6);
+  if(kind==="pbq") {
+    return {
+      id:`p-custom-${stamp}`,
+      title:"",
+      type:"SCENARIO",
+      ch:"1",
+      cat:"General Security Concepts",
+      difficulty:"medium",
+      order:String(nextOrder),
+      scenario:"",
+      question:"",
+      choices:["","","",""],
+      correct:0,
+      explanation:""
+    };
+  }
+  return {
+    id:`m-custom-${stamp}`,
+    ch:"1",
+    topic:"General Security Concepts",
+    difficulty:"medium",
+    order:String(nextOrder),
+    q:"",
+    opts:["","","",""],
+    correct:0,
+    exp:"",
+    wrongFeedback:{0:"",1:"",2:"",3:""}
+  };
+}
+
+function questionToAdminForm(question,kind,index) {
+  const order=String(question?._adminOrder || question?.adminOrder || index + 1);
+  if(kind==="pbq") {
+    return {
+      id:question.id||"",
+      title:question.title||"",
+      type:question.type||"SCENARIO",
+      ch:String(question.ch||"1"),
+      cat:question.cat||question.domain||"",
+      difficulty:String(question.difficulty||"medium").toLowerCase(),
+      order,
+      scenario:question.scenario||"",
+      question:question.question||question.prompt||"",
+      choices:Array.isArray(question.choices)?[...question.choices].slice(0,8):["","","",""],
+      correct:Number.isInteger(question.correct)?question.correct:0,
+      explanation:question.explanation||question.exp||""
+    };
+  }
+  return {
+    id:question.id||"",
+    ch:String(question.ch||"1"),
+    topic:question.topic||question.cat||"",
+    difficulty:String(question.difficulty||"medium").toLowerCase(),
+    order,
+    q:question.q||question.question||"",
+    opts:Array.isArray(question.opts)?[...question.opts].slice(0,4):["","","",""],
+    correct:Number.isInteger(question.correct)?question.correct:0,
+    exp:question.exp||question.explanation||"",
+    wrongFeedback:{
+      0:question.wrongFeedback?.[0]||"",
+      1:question.wrongFeedback?.[1]||"",
+      2:question.wrongFeedback?.[2]||"",
+      3:question.wrongFeedback?.[3]||""
+    }
+  };
+}
+
+function cleanAdminQuestionPayload(form,kind) {
+  const id=String(form.id||"").trim();
+  const difficulty=String(form.difficulty||"medium").toLowerCase();
+  const sortOrder=Math.max(1,Number.parseInt(form.order,10)||1);
+  if(!id) throw new Error("Question ID is required.");
+  if(!["easy","medium","hard"].includes(difficulty)) throw new Error("Difficulty must be Easy, Medium, or Hard.");
+  if(kind==="mcq") {
+    const opts=(form.opts||[]).map(opt=>String(opt||"").trim());
+    if(String(form.q||"").trim().length<20) throw new Error("MCQ question must be at least 20 characters.");
+    if(opts.length!==4||opts.some(opt=>opt.length<1)) throw new Error("All 4 MCQ answer choices must be filled in.");
+    if(!Number.isInteger(Number(form.correct))||Number(form.correct)<0||Number(form.correct)>3) throw new Error("Pick the correct MCQ answer.");
+    if(String(form.exp||"").trim().length<20) throw new Error("The correct-answer explanation must be at least 20 characters.");
+    return {
+      question: ensureMcqWrongFeedback({
+        id,
+        ch:String(form.ch||"1"),
+        difficulty,
+        topic:String(form.topic||"General Security Concepts").trim(),
+        q:String(form.q||"").trim(),
+        opts,
+        correct:Number(form.correct),
+        exp:String(form.exp||"").trim(),
+        wrongFeedback:form.wrongFeedback||{}
+      }),
+      sortOrder
+    };
+  }
+  const choices=(form.choices||[]).map(choice=>String(choice||"").trim()).filter(Boolean);
+  if(String(form.title||"").trim().length<8) throw new Error("PBQ title must be at least 8 characters.");
+  if(String(form.scenario||"").trim().length<20) throw new Error("PBQ scenario must be at least 20 characters.");
+  if(String(form.question||"").trim().length<10) throw new Error("PBQ task/question must be at least 10 characters.");
+  if(String(form.explanation||"").trim().length<20) throw new Error("PBQ solution explanation must be at least 20 characters.");
+  return {
+    question:{
+      id,
+      type:String(form.type||"SCENARIO").trim().toUpperCase(),
+      ch:String(form.ch||"1"),
+      cat:String(form.cat||"General Security Concepts").trim(),
+      difficulty,
+      title:String(form.title||"").trim(),
+      scenario:String(form.scenario||"").trim(),
+      question:String(form.question||"").trim(),
+      choices,
+      correct:Math.max(0,Math.min(Number(form.correct)||0,Math.max(choices.length-1,0))),
+      explanation:String(form.explanation||"").trim()
+    },
+    sortOrder
+  };
+}
+
 function AdminQuestionManagerPage({user,t,onQuestionBankRefresh}) {
   const [kind,setKind]=useState("mcq");
   const [selectedId,setSelectedId]=useState("");
-  const [jsonText,setJsonText]=useState("");
+  const [form,setForm]=useState(()=>makeAdminQuestionTemplate("mcq",MCQ_BANK.length+1));
   const [saving,setSaving]=useState(false);
   const [status,setStatus]=useState("");
   const [error,setError]=useState("");
   const bank=kind==="mcq"?MCQ_BANK:PBQ_BANK;
-  const selectedQuestion=bank.find(q=>q.id===selectedId);
+  const selectedIndex=bank.findIndex(q=>q.id===selectedId);
+  const selectedQuestion=selectedIndex>=0?bank[selectedIndex]:null;
+  const isEditing=Boolean(selectedQuestion);
+  const difficultyColor=form.difficulty==="easy"?t.green:form.difficulty==="hard"?t.red:t.amber;
 
-  const mcqTemplate={
-    id:"m-custom-001",
-    ch:"1",
-    difficulty:"medium",
-    topic:"Security Controls",
-    q:"Write the question stem here.",
-    opts:["Option A","Option B","Option C","Option D"],
-    correct:0,
-    exp:"Explain why the correct answer is right.",
-    wrongFeedback:{
-      1:"Explain why option B is wrong.",
-      2:"Explain why option C is wrong.",
-      3:"Explain why option D is wrong."
-    }
-  };
-  const pbqTemplate={
-    id:"p-custom-001",
-    type:"SCENARIO",
-    ch:"4",
-    cat:"Security Operations",
-    difficulty:"medium",
-    title:"Write PBQ title here",
-    scenario:"Write the scenario here.",
-    question:"Write the task/question here.",
-    choices:["Option A","Option B","Option C","Option D"],
-    correct:0,
-    explanation:"Explain the solution here."
-  };
-
-  const loadSelected=useCallback(()=>{
-    const source=selectedQuestion || (kind==="mcq"?mcqTemplate:pbqTemplate);
-    setJsonText(JSON.stringify(source,null,2));
+  const resetToNew=useCallback((nextKind=kind)=>{
+    const nextBank=nextKind==="mcq"?MCQ_BANK:PBQ_BANK;
+    setSelectedId("");
+    setForm(makeAdminQuestionTemplate(nextKind,nextBank.length+1));
     setError("");
     setStatus("");
-  },[kind,selectedQuestion]);
+  },[kind]);
+
+  const loadSelected=useCallback(()=>{
+    if(selectedQuestion) {
+      setForm(questionToAdminForm(selectedQuestion,kind,selectedIndex));
+    } else {
+      resetToNew(kind);
+    }
+    setError("");
+    setStatus("");
+  },[kind,resetToNew,selectedIndex,selectedQuestion]);
 
   useEffect(()=>{loadSelected();},[loadSelected]);
 
-  const parseQuestion=()=>{
-    let parsed;
-    try{
-      parsed=JSON.parse(jsonText);
-    }catch{
-      throw new Error("JSON is invalid. Check commas, quotes, and brackets.");
-    }
-    const id=String(parsed.id||"").trim();
-    if(!id) throw new Error("Question JSON needs an id.");
-    if(!["easy","medium","hard"].includes(String(parsed.difficulty||"").toLowerCase())) throw new Error("Difficulty must be easy, medium, or hard.");
-    if(kind==="mcq"){
-      if(!parsed.q||String(parsed.q).trim().length<20) throw new Error("MCQ question stem must be at least 20 characters.");
-      if(!Array.isArray(parsed.opts)||parsed.opts.length!==4) throw new Error("MCQ opts must contain exactly 4 answer options.");
-      if(!Number.isInteger(parsed.correct)||parsed.correct<0||parsed.correct>3) throw new Error("MCQ correct must be 0, 1, 2, or 3.");
-      if(!parsed.exp||String(parsed.exp).trim().length<20) throw new Error("MCQ explanation must be at least 20 characters.");
-      return ensureMcqWrongFeedback({...parsed,id,difficulty:String(parsed.difficulty).toLowerCase()});
-    }
-    if(!parsed.title||String(parsed.title).trim().length<8) throw new Error("PBQ title must be at least 8 characters.");
-    if(!parsed.explanation||String(parsed.explanation).trim().length<20) throw new Error("PBQ explanation must be at least 20 characters.");
-    return {...parsed,id,difficulty:String(parsed.difficulty).toLowerCase()};
+  const updateField=(field,value)=>setForm(prev=>({...prev,[field]:value}));
+  const updateArray=(field,index,value)=>setForm(prev=>{
+    const next=[...(prev[field]||[])];
+    next[index]=value;
+    return {...prev,[field]:next};
+  });
+  const updateWrongFeedback=(index,value)=>setForm(prev=>({...prev,wrongFeedback:{...(prev.wrongFeedback||{}),[index]:value}}));
+
+  const changeKind=(nextKind)=>{
+    setKind(nextKind);
+    resetToNew(nextKind);
   };
 
   const saveQuestion=async()=>{
     setSaving(true);setError("");setStatus("");
     try{
       if(!isSupabaseConfigured) throw new Error("Supabase is not configured.");
-      const question=parseQuestion();
+      const {question,sortOrder}=cleanAdminQuestionPayload(form,kind);
       const { error:upsertError } = await supabase
         .from("question_overrides")
         .upsert({
@@ -17963,6 +18064,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh}) {
           question_id:question.id,
           action:"upsert",
           payload:question,
+          sort_order:sortOrder,
           status:"active",
           updated_by:user.id,
           updated_at:new Date().toISOString(),
@@ -17970,8 +18072,8 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh}) {
       if(upsertError) throw upsertError;
       setSelectedId(question.id);
       await onQuestionBankRefresh?.();
-      setStatus("Question saved. The live bank has been refreshed on this browser.");
-      capture("admin_question_saved", { kind, question_id: question.id });
+      setStatus("Saved. The live question bank has been refreshed in this browser.");
+      capture("admin_question_saved", { kind, question_id: question.id, sort_order: sortOrder });
     }catch(err){
       setError(err.message||"Unable to save question.");
     }finally{
@@ -17980,9 +18082,9 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh}) {
   };
 
   const disableQuestion=async()=>{
-    const targetId=selectedId || (()=>{try{return JSON.parse(jsonText).id;}catch{return "";}})();
-    if(!targetId){setError("Select or enter a question id first.");return;}
-    const ok=window.confirm(`Disable ${kind.toUpperCase()} ${targetId}? It will be removed from practice after the bank refreshes.`);
+    const targetId=selectedId || form.id;
+    if(!targetId){setError("Select a question first.");return;}
+    const ok=window.confirm(`Delete ${kind.toUpperCase()} ${targetId} from the live bank? This hides it from users but keeps an admin record.`);
     if(!ok)return;
     setSaving(true);setError("");setStatus("");
     try{
@@ -17993,70 +18095,233 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh}) {
           question_id:targetId,
           action:"disable",
           payload:{ id:targetId },
+          sort_order:null,
           status:"active",
           updated_by:user.id,
           updated_at:new Date().toISOString(),
         }, { onConflict:"question_kind,question_id" });
       if(disableError) throw disableError;
       await onQuestionBankRefresh?.();
-      setStatus(`${targetId} disabled from the live bank.`);
+      setStatus(`${targetId} has been hidden from the live bank.`);
+      resetToNew(kind);
       capture("admin_question_disabled", { kind, question_id: targetId });
     }catch(err){
-      setError(err.message||"Unable to disable question.");
+      setError(err.message||"Unable to delete question.");
     }finally{
       setSaving(false);
     }
   };
 
+  const moveOrder=(delta)=>updateField("order",String(Math.max(1,(Number.parseInt(form.order,10)||1)+delta)));
+
+  const Field=({label,children})=>(
+    <div>
+      <label className="label" style={{display:"block",marginBottom:7}}>{label}</label>
+      {children}
+    </div>
+  );
+  const TextInput=({label,value,onChange,placeholder,type="text"})=>(
+    <Field label={label}>
+      <input className="input" type={type} value={value} placeholder={placeholder||""} onChange={e=>onChange(e.target.value)}/>
+    </Field>
+  );
+  const TextArea=({label,value,onChange,placeholder,rows=4})=>(
+    <Field label={label}>
+      <textarea className="input" value={value} placeholder={placeholder||""} rows={rows} onChange={e=>onChange(e.target.value)} style={{resize:"vertical",lineHeight:1.55}}/>
+    </Field>
+  );
+
   return(
-    <div className="feedback-page" style={{padding:"24px",maxWidth:1040,margin:"0 auto"}}>
+    <div className="feedback-page" style={{padding:"24px",maxWidth:1180,margin:"0 auto"}}>
       <div className="page-title-row" style={{marginBottom:16}}>
         <NavGlyph type="objectives" active/>
         <div>
           <h2 style={{fontSize:24,color:t.text}}>Question Manager</h2>
-          <p style={{fontSize:13,color:t.textSec}}>Root-only editor for adding, modifying, or disabling live MCQ/PBQ questions.</p>
+          <p style={{fontSize:13,color:t.textSec}}>Root-only visual editor for adding, changing, reordering, previewing, or deleting MCQ/PBQ questions.</p>
         </div>
       </div>
-      <div className="card" style={{padding:"18px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
+
+      <div className="card" style={{padding:"18px 20px",marginBottom:16,borderColor:`${t.green}35`,background:`${t.green}07`}}>
         <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-          Edit carefully: saved JSON is loaded by the live practice and exam banks. This uses parameterized Supabase writes and admin RLS; it does not expose code editing to normal users.
+          Use the form below like a normal admin panel. The site stores your changes safely in Supabase; regular users cannot edit these records.
         </div>
       </div>
+
       <div className="card" style={{padding:"18px 20px",marginBottom:16}}>
-        <div style={{display:"grid",gridTemplateColumns:"140px minmax(0,1fr) auto",gap:10,alignItems:"end"}}>
-          <div>
-            <label className="label" style={{display:"block",marginBottom:7}}>Bank</label>
-            <select className="input" value={kind} onChange={e=>{setKind(e.target.value);setSelectedId("");}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:10,alignItems:"end"}}>
+          <Field label="Question type">
+            <select className="input" value={kind} onChange={e=>changeKind(e.target.value)}>
               <option value="mcq">MCQ</option>
               <option value="pbq">PBQ</option>
             </select>
-          </div>
-          <div>
-            <label className="label" style={{display:"block",marginBottom:7}}>Existing question</label>
+          </Field>
+          <Field label="Choose existing question">
             <select className="input" value={selectedId} onChange={e=>setSelectedId(e.target.value)}>
-              <option value="">New question template</option>
-              {bank.map(q=><option key={q.id} value={q.id}>{q.id} · {kind==="mcq"?(q.q||"").slice(0,90):(q.title||"").slice(0,90)}</option>)}
+              <option value="">Create a new question</option>
+              {bank.map((q,index)=><option key={q.id} value={q.id}>#{q._adminOrder||index+1} · {q.id} · {kind==="mcq"?(q.q||"").slice(0,80):(q.title||"").slice(0,80)}</option>)}
             </select>
-          </div>
-          <button className="btn btn-outline" onClick={loadSelected}>Reload JSON</button>
+          </Field>
+          <button className="btn btn-outline" onClick={loadSelected}>Load</button>
+          <button className="btn btn-primary" onClick={()=>resetToNew(kind)}>New</button>
         </div>
       </div>
-      <div className="card" style={{padding:"18px 20px"}}>
-        <label className="label" style={{display:"block",marginBottom:8}}>Question JSON</label>
-        <textarea
-          className="input"
-          value={jsonText}
-          onChange={e=>setJsonText(e.target.value)}
-          rows={22}
-          spellCheck={false}
-          style={{fontFamily:"'JetBrains Mono', monospace",fontSize:12,lineHeight:1.55,resize:"vertical"}}
-        />
-        <Alert msg={error} t={t}/>
-        <Alert msg={status} type="success" t={t}/>
-        <div style={{display:"flex",gap:10,justifyContent:"flex-end",flexWrap:"wrap",marginTop:12}}>
-          <button className="btn btn-ghost" disabled={saving} onClick={disableQuestion}>Disable question</button>
-          <button className="btn btn-outline" disabled={saving} onClick={()=>onQuestionBankRefresh?.()}>Refresh live bank</button>
-          <button className="btn btn-primary" disabled={saving} onClick={saveQuestion}>{saving?"Saving...":"Save question"}</button>
+
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",gap:16,alignItems:"start"}}>
+        <div className="card" style={{padding:"18px 20px"}}>
+          <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:16,flexWrap:"wrap"}}>
+            <div>
+              <h3 style={{fontSize:18,color:t.text,marginBottom:4}}>{isEditing?"Edit question":"Add new question"}</h3>
+              <div style={{fontSize:12,color:t.textDim}}>No code needed. Fill the fields, check the preview, then save.</div>
+            </div>
+            <span className="chip" style={{background:`${difficultyColor}14`,borderColor:`${difficultyColor}44`,color:difficultyColor,textTransform:"capitalize"}}>{form.difficulty}</span>
+          </div>
+
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(145px,1fr))",gap:10,marginBottom:12}}>
+            <TextInput label="Question ID" value={form.id} onChange={v=>updateField("id",v)} placeholder={kind==="mcq"?"m-custom-001":"p-custom-001"}/>
+            <TextInput label="Chapter" value={form.ch} onChange={v=>updateField("ch",v)} placeholder="1"/>
+            <Field label="Difficulty">
+              <select className="input" value={form.difficulty} onChange={e=>updateField("difficulty",e.target.value)} style={{color:difficultyColor,fontWeight:900}}>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </Field>
+            <Field label="Order">
+              <div style={{display:"flex",gap:6}}>
+                <button className="btn btn-ghost" type="button" style={{minWidth:42,padding:"8px 10px"}} onClick={()=>moveOrder(-1)}>Up</button>
+                <input className="input" type="number" min="1" value={form.order} onChange={e=>updateField("order",e.target.value)} style={{textAlign:"center",padding:"10px 8px"}}/>
+                <button className="btn btn-ghost" type="button" style={{minWidth:42,padding:"8px 10px"}} onClick={()=>moveOrder(1)}>Down</button>
+              </div>
+            </Field>
+          </div>
+
+          {kind==="mcq" ? (
+            <>
+              <TextInput label="Topic" value={form.topic} onChange={v=>updateField("topic",v)} placeholder="Network Security"/>
+              <div style={{height:12}}/>
+              <TextArea label="Question" value={form.q} onChange={v=>updateField("q",v)} placeholder="Write the MCQ question here." rows={5}/>
+              <div style={{height:12}}/>
+              <div style={{display:"grid",gap:10}}>
+                {form.opts.map((opt,index)=>(
+                    <div key={index} style={{display:"grid",gridTemplateColumns:"80px minmax(0,1fr)",gap:10,alignItems:"start"}}>
+                    <Field label={index===0?"Correct?":" "}>
+                      <button
+                        type="button"
+                        className={Number(form.correct)===index?"btn btn-primary":"btn btn-outline"}
+                        onClick={()=>updateField("correct",index)}
+                        style={{width:"100%"}}
+                      >
+                        {String.fromCharCode(65+index)}
+                      </button>
+                    </Field>
+                    <TextInput label={`Answer ${String.fromCharCode(65+index)}`} value={opt} onChange={v=>updateArray("opts",index,v)} placeholder={`Answer option ${String.fromCharCode(65+index)}`}/>
+                  </div>
+                ))}
+              </div>
+              <div style={{height:12}}/>
+              <TextArea label="Correct-answer explanation" value={form.exp} onChange={v=>updateField("exp",v)} placeholder="Explain clearly why the correct option is right." rows={5}/>
+              <div style={{height:12}}/>
+              <div className="card" style={{padding:14,background:`${t.panel}66`}}>
+                <div style={{fontWeight:900,color:t.text,marginBottom:10}}>Why wrong answers are wrong</div>
+                <div style={{display:"grid",gap:10}}>
+                  {form.opts.map((_,index)=>Number(form.correct)===index?null:(
+                    <TextArea
+                      key={index}
+                      label={`If user chooses ${String.fromCharCode(65+index)}`}
+                      value={form.wrongFeedback?.[index]||""}
+                      onChange={v=>updateWrongFeedback(index,v)}
+                      placeholder="Optional, but helpful for learning."
+                      rows={2}
+                    />
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10}}>
+                <TextInput label="PBQ title" value={form.title} onChange={v=>updateField("title",v)} placeholder="Firewall rule review"/>
+                <TextInput label="PBQ type" value={form.type} onChange={v=>updateField("type",v)} placeholder="SCENARIO"/>
+              </div>
+              <div style={{height:12}}/>
+              <TextInput label="Category" value={form.cat} onChange={v=>updateField("cat",v)} placeholder="Security Operations"/>
+              <div style={{height:12}}/>
+              <TextArea label="Scenario" value={form.scenario} onChange={v=>updateField("scenario",v)} placeholder="Explain the environment or situation." rows={5}/>
+              <div style={{height:12}}/>
+              <TextArea label="Task for the student" value={form.question} onChange={v=>updateField("question",v)} placeholder="Tell the student what to do." rows={4}/>
+              <div style={{height:12}}/>
+              <div className="card" style={{padding:14,background:`${t.panel}66`}}>
+                <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}>
+                  <div style={{fontWeight:900,color:t.text}}>Answer choices</div>
+                  <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>updateField("choices",[...(form.choices||[]),""])}>Add choice</button>
+                </div>
+                <div style={{display:"grid",gap:10}}>
+                  {(form.choices||[]).map((choice,index)=>(
+                    <div key={index} style={{display:"grid",gridTemplateColumns:"90px minmax(0,1fr) auto",gap:10,alignItems:"start"}}>
+                      <button type="button" className={Number(form.correct)===index?"btn btn-primary":"btn btn-outline"} onClick={()=>updateField("correct",index)}>{String.fromCharCode(65+index)}</button>
+                      <input className="input" value={choice} placeholder={`Choice ${String.fromCharCode(65+index)}`} onChange={e=>updateArray("choices",index,e.target.value)}/>
+                      <button className="btn btn-ghost" type="button" onClick={()=>updateField("choices",(form.choices||[]).filter((_,i)=>i!==index))}>Remove</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div style={{height:12}}/>
+              <TextArea label="Solution explanation" value={form.explanation} onChange={v=>updateField("explanation",v)} placeholder="Explain how to solve the PBQ." rows={5}/>
+            </>
+          )}
+
+          <Alert msg={error} t={t}/>
+          <Alert msg={status} type="success" t={t}/>
+          <div style={{display:"flex",gap:10,justifyContent:"flex-end",flexWrap:"wrap",marginTop:16}}>
+            <button className="btn btn-danger" disabled={saving||!form.id} onClick={disableQuestion}>Delete from live bank</button>
+            <button className="btn btn-outline" disabled={saving} onClick={()=>onQuestionBankRefresh?.()}>Refresh live bank</button>
+            <button className="btn btn-primary" disabled={saving} onClick={saveQuestion}>{saving?"Saving...":"Preview checked - save"}</button>
+          </div>
+        </div>
+
+        <div className="card" style={{padding:"18px 20px",position:"sticky",top:18}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:14}}>
+            <h3 style={{fontSize:18,color:t.text}}>Preview</h3>
+            <span className="chip" style={{background:`${difficultyColor}12`,borderColor:`${difficultyColor}44`,color:difficultyColor}}>Order #{form.order||"?"}</span>
+          </div>
+          <div className="question-card" style={{padding:18,background:t.surface,border:`1px solid ${t.border}`,borderRadius:12}}>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14}}>
+              <span className="chip">Ch.{form.ch||"?"}</span>
+              <span className="chip" style={{color:difficultyColor,borderColor:`${difficultyColor}44`,background:`${difficultyColor}10`,textTransform:"capitalize"}}>{form.difficulty}</span>
+              <span className="chip">{kind.toUpperCase()}</span>
+            </div>
+            {kind==="mcq" ? (
+              <>
+                <div style={{fontSize:20,fontWeight:900,color:t.text,lineHeight:1.45,marginBottom:16}}>{form.q||"Your MCQ question will appear here."}</div>
+                <div style={{display:"grid",gap:10}}>
+                  {form.opts.map((opt,index)=>(
+                    <div key={index} style={{padding:"12px 14px",borderRadius:10,border:`1.5px solid ${Number(form.correct)===index?t.green:t.border}`,background:Number(form.correct)===index?`${t.green}10`:t.panel,color:t.text}}>
+                      <strong style={{marginRight:8}}>{String.fromCharCode(65+index)}.</strong>{opt||`Answer ${String.fromCharCode(65+index)}`}
+                    </div>
+                  ))}
+                </div>
+                <div style={{marginTop:16,padding:12,borderRadius:10,background:`${t.green}0d`,color:t.textSec,fontSize:13,lineHeight:1.6}}>
+                  <strong style={{color:t.green}}>Explanation:</strong> {form.exp||"Correct-answer explanation preview."}
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{fontSize:18,fontWeight:900,color:t.text,marginBottom:8}}>{form.title||"PBQ title preview"}</div>
+                <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:12}}>{form.scenario||"Scenario preview will appear here."}</p>
+                <div style={{fontSize:16,fontWeight:800,color:t.text,lineHeight:1.5,marginBottom:12}}>{form.question||"Task preview will appear here."}</div>
+                <div style={{display:"grid",gap:8}}>
+                  {(form.choices||[]).filter(Boolean).map((choice,index)=>(
+                    <div key={index} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${Number(form.correct)===index?t.green:t.border}`,background:Number(form.correct)===index?`${t.green}10`:t.panel,color:t.text}}>
+                      <strong>{String.fromCharCode(65+index)}.</strong> {choice}
+                    </div>
+                  ))}
+                </div>
+                <div style={{marginTop:16,padding:12,borderRadius:10,background:`${t.green}0d`,color:t.textSec,fontSize:13,lineHeight:1.6}}>
+                  <strong style={{color:t.green}}>Solution:</strong> {form.explanation||"Solution explanation preview."}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -18626,7 +18891,7 @@ export default function App() {
     try{
       const { data, error } = await supabase
         .from("question_overrides")
-        .select("question_kind,question_id,action,payload,status,updated_at")
+        .select("question_kind,question_id,action,payload,status,sort_order,updated_at")
         .eq("status","active");
       if(error) throw error;
       applyQuestionOverrides(data||[]);

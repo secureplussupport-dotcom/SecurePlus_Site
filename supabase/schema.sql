@@ -91,12 +91,16 @@ create table if not exists question_overrides (
   question_id text not null,
   action text not null default 'upsert',
   payload jsonb not null default '{}'::jsonb,
+  sort_order integer,
   status text not null default 'active',
   updated_by uuid references auth.users(id) on delete set null,
   created_at timestamptz default now(),
   updated_at timestamptz default now(),
   unique (question_kind, question_id)
 );
+
+alter table question_overrides
+add column if not exists sort_order integer;
 
 alter table profiles enable row level security;
 alter table attempts enable row level security;
@@ -410,6 +414,7 @@ begin
     add constraint question_overrides_size_check
     check (
       length(question_id) between 1 and 120
+      and (sort_order is null or sort_order between 1 and 10000)
       and pg_column_size(payload) <= 50000
     );
   end if;
