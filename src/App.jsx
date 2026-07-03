@@ -693,38 +693,168 @@ const SIM_TYPES = {
   SCENARIO: { id:"SCENARIO",     label:"Scenario",      emoji:"📖", color:"#06b6d4" },
 };
 
+const ACRONYM_GLOSSARY_TERMS = {
+  "AAA": { fullName:"Authentication, Authorization, and Accounting", definition:"Identity management framework that verifies users, grants privileges, and tracks activity." },
+  "ABAC": { fullName:"Attribute-Based Access Control", definition:"Fine-grained access control using attributes such as user, resource, action, location, and device state." },
+  "ACL": { fullName:"Access Control List", definition:"Permit/deny rules used in firewalls, routers, and file systems to control access." },
+  "AES": { fullName:"Advanced Encryption Standard", definition:"Symmetric block cipher using 128, 192, or 256-bit keys for storage and transit encryption." },
+  "AH": { fullName:"Authentication Header", definition:"IPsec protocol that provides integrity and authentication, but not confidentiality." },
+  "ALE": { fullName:"Annualized Loss Expectancy", definition:"Expected financial loss per year for a risk. Formula: SLE x ARO." },
+  "AP": { fullName:"Access Point", definition:"Wireless infrastructure node that connects Wi-Fi clients to a wired local network." },
+  "API": { fullName:"Application Programming Interface", definition:"Programmatic pathway that lets software systems exchange data or request services." },
+  "APT": { fullName:"Advanced Persistent Threat", definition:"Sophisticated, resource-rich threat actor, often state-sponsored, pursuing long-term objectives." },
+  "ARO": { fullName:"Annualized Rate of Occurrence", definition:"Estimated frequency of a threat event occurring within one year." },
+  "ARP": { fullName:"Address Resolution Protocol", definition:"Maps IPv4 addresses to MAC addresses; vulnerable to spoofing and poisoning attacks." },
+  "ASLR": { fullName:"Address Space Layout Randomization", definition:"Memory protection that randomizes address locations to make exploitation harder." },
+  "ATT&CK": { fullName:"Adversarial Tactics, Techniques, and Common Knowledge", definition:"MITRE matrix that documents real-world adversary behaviors and attack steps." },
+  "AUP": { fullName:"Acceptable Use Policy", definition:"Organizational policy defining permitted and prohibited use of company systems." },
+  "AV": { fullName:"Anti-Virus / Asset Value", definition:"Either malware-scanning software or, in risk analysis, the value of an asset." },
+  "BCP": { fullName:"Business Continuity Plan", definition:"Strategic plan for keeping critical business processes running during major disruption." },
+  "BGP": { fullName:"Border Gateway Protocol", definition:"Core internet routing protocol used between autonomous systems." },
+  "BIA": { fullName:"Business Impact Analysis", definition:"Continuity process identifying critical operations, dependencies, downtime limits, and business impact." },
+  "BIOS": { fullName:"Basic Input/Output System", definition:"Legacy firmware that initializes hardware at startup; largely succeeded by UEFI." },
+  "BPA": { fullName:"Business Partnership Agreement", definition:"Legal agreement defining operations, governance, and profit/loss sharing between partners." },
+  "BYOD": { fullName:"Bring Your Own Device", definition:"Model where employees use personal devices for work access." },
+  "CA": { fullName:"Certificate Authority", definition:"Trusted PKI entity that verifies identities and signs digital certificates." },
+  "CASB": { fullName:"Cloud Access Security Broker", definition:"Security control point between users and cloud services that enforces policy." },
+  "CBC": { fullName:"Cipher Block Chaining", definition:"Block cipher mode where each plaintext block is combined with the previous ciphertext block." },
+  "CCMP": { fullName:"Counter Mode with Cipher Block Chaining Message Authentication Code Protocol", definition:"AES-based wireless encryption and integrity protocol used by WPA2." },
+  "CCTV": { fullName:"Closed-Circuit Television", definition:"Physical surveillance system used as a detective and deterrent control." },
+  "CIA": { fullName:"Confidentiality, Integrity, and Availability", definition:"Foundational security triad describing core protection goals for information systems." },
+  "CISO": { fullName:"Chief Information Security Officer", definition:"Executive responsible for leading an organization's security and risk program." },
+  "COOP": { fullName:"Continuity of Operations Planning", definition:"Plans that keep mission-critical functions operating during localized crises or facility loss." },
+  "COPE": { fullName:"Corporate-Owned Personally Enabled", definition:"Device model where the organization owns the device but permits some personal use." },
+  "CORS": { fullName:"Cross-Origin Resource Sharing", definition:"Browser mechanism that uses HTTP headers to control cross-origin resource access." },
+  "CRL": { fullName:"Certificate Revocation List", definition:"Published list of certificates revoked before expiration." },
+  "CSIRT": { fullName:"Computer Security Incident Response Team", definition:"Team responsible for triage, containment, mitigation, and closure of security incidents." },
+  "CSR": { fullName:"Certificate Signing Request", definition:"Request containing a public key and identity details sent to a CA for certificate issuance." },
+  "CSRF": { fullName:"Cross-Site Request Forgery", definition:"Attack that tricks a victim's browser into sending unauthorized requests to a trusted app." },
+  "CVE": { fullName:"Common Vulnerabilities and Exposures", definition:"Standard identifier system for publicly disclosed security vulnerabilities." },
+  "CVSS": { fullName:"Common Vulnerability Scoring System", definition:"Framework that scores vulnerability severity, commonly from 0.0 to 10.0." },
+  "CYOD": { fullName:"Choose Your Own Device", definition:"Device model where employees choose from approved enterprise-owned devices." },
+  "DAC": { fullName:"Discretionary Access Control", definition:"Access model where resource owners can decide who gets access." },
+  "DAST": { fullName:"Dynamic Application Security Testing", definition:"Black-box testing of a running application to find security weaknesses." },
+  "DDoS": { fullName:"Distributed Denial of Service", definition:"Attack using many systems to overwhelm a target and disrupt availability." },
+  "DEP": { fullName:"Data Execution Prevention", definition:"Memory protection that marks areas as non-executable to block shellcode execution." },
+  "DER": { fullName:"Distinguished Encoding Rules", definition:"Binary encoding format commonly used for X.509 certificates." },
+  "DH": { fullName:"Diffie-Hellman", definition:"Key exchange algorithm for establishing shared secrets over untrusted networks." },
+  "DHE": { fullName:"Diffie-Hellman Ephemeral", definition:"Ephemeral Diffie-Hellman key exchange that supports forward secrecy." },
+  "DHCP": { fullName:"Dynamic Host Configuration Protocol", definition:"Protocol that automatically assigns IP addressing settings to network clients." },
+  "DKIM": { fullName:"DomainKeys Identified Mail", definition:"Email authentication method that uses cryptographic signatures to verify message origin." },
+  "DLP": { fullName:"Data Loss Prevention", definition:"Controls that detect or block unauthorized movement of sensitive data." },
+  "DMARC": { fullName:"Domain-based Message Authentication, Reporting, and Conformance", definition:"Email governance framework that coordinates SPF and DKIM checks and handling policy." },
+  "DNAT": { fullName:"Destination Network Address Translation", definition:"Translation of inbound public traffic to specific internal hosts or services." },
+  "DNSSEC": { fullName:"Domain Name System Security Extensions", definition:"Cryptographic extensions that help validate DNS responses and detect tampering." },
+  "DRP": { fullName:"Disaster Recovery Plan", definition:"Detailed plan for restoring damaged services after an emergency." },
+  "EAP": { fullName:"Extensible Authentication Protocol", definition:"Authentication framework commonly used with 802.1X and wireless access." },
+  "ECC": { fullName:"Elliptic Curve Cryptography", definition:"Asymmetric cryptography using elliptic curves to provide strong security with smaller keys." },
+  "EDR": { fullName:"Endpoint Detection and Response", definition:"Endpoint monitoring and response tooling for detecting, investigating, and containing threats." },
+  "FDE": { fullName:"Full Disk Encryption", definition:"Encryption of an entire storage drive to protect data at rest." },
+  "FIM": { fullName:"File Integrity Monitoring", definition:"Monitoring that compares files against trusted baselines and alerts on changes." },
+  "FRR": { fullName:"False Rejection Rate", definition:"Biometric metric for legitimate users incorrectly rejected by the system." },
+  "FAR": { fullName:"False Acceptance Rate", definition:"Biometric metric for unauthorized users incorrectly accepted by the system." },
+  "GCM": { fullName:"Galois/Counter Mode", definition:"Efficient symmetric encryption mode that provides confidentiality and integrity." },
+  "GDPR": { fullName:"General Data Protection Regulation", definition:"European Union privacy regulation governing personal data protection and processing." },
+  "GPO": { fullName:"Group Policy Object", definition:"Microsoft Active Directory configuration mechanism for enforcing system settings." },
+  "GRC": { fullName:"Governance, Risk, and Compliance", definition:"Program area aligning IT/security practices with legal, business, and risk requirements." },
+  "HIDS": { fullName:"Host-based Intrusion Detection System", definition:"Endpoint tool that monitors local activity and alerts on suspicious behavior." },
+  "HIPS": { fullName:"Host-based Intrusion Prevention System", definition:"Endpoint tool that can block suspicious local activity." },
+  "HMAC": { fullName:"Hash-based Message Authentication Code", definition:"Integrity and authenticity mechanism combining a hash function with a shared secret key." },
+  "HOTP": { fullName:"HMAC-based One-Time Password", definition:"Counter-based one-time password algorithm used for MFA tokens." },
+  "TOTP": { fullName:"Time-based One-Time Password", definition:"Time-based one-time password algorithm used by authenticator apps." },
+  "HSM": { fullName:"Hardware Security Module", definition:"Tamper-resistant hardware used to generate, store, and protect cryptographic keys." },
+  "HVAC": { fullName:"Heating, Ventilation, and Air Conditioning", definition:"Facility environmental systems that support availability for hardware and data centers." },
+  "IaaS": { fullName:"Infrastructure as a Service", definition:"Cloud model where the provider supplies raw compute, storage, and networking while the customer manages operating systems and apps." },
+  "IAM": { fullName:"Identity and Access Management", definition:"Systems and processes that manage identities, authentication, authorization, and access rights." },
+  "ICMP": { fullName:"Internet Control Message Protocol", definition:"Network diagnostic and error-reporting protocol used by tools such as ping." },
+  "IdP": { fullName:"Identity Provider", definition:"Federation service that authenticates users and issues identity assertions or tokens." },
+  "IoC": { fullName:"Indicator of Compromise", definition:"Evidence such as hashes, IPs, domains, or artifacts suggesting a successful intrusion." },
+  "IPsec": { fullName:"Internet Protocol Security", definition:"Protocol suite for authenticated and encrypted VPN communications using AH and ESP." },
+  "KDC": { fullName:"Key Distribution Center", definition:"Kerberos service that issues authentication tickets." },
+  "LDAP": { fullName:"Lightweight Directory Access Protocol", definition:"Protocol for querying and managing directory services." },
+  "LDAPS": { fullName:"Lightweight Directory Access Protocol Secure", definition:"LDAP protected with TLS encryption." },
+  "MAC": { fullName:"Mandatory Access Control / Media Access Control", definition:"Either a label-based access model or a network hardware address, depending on context." },
+  "MAM": { fullName:"Mobile Application Management", definition:"Management and control of enterprise apps and data on mobile devices." },
+  "MD5": { fullName:"Message Digest 5", definition:"Legacy 128-bit hash algorithm now considered broken due to collision weaknesses." },
+  "MDM": { fullName:"Mobile Device Management", definition:"Platform for enforcing mobile device policies, pushing software, and performing remote wipe." },
+  "MFA": { fullName:"Multi-Factor Authentication", definition:"Authentication requiring multiple factor types, such as knowledge, possession, and inherence." },
+  "MITM": { fullName:"Man-in-the-Middle / On-Path Attack", definition:"Attack where an adversary intercepts or alters communications between endpoints." },
+  "MOU": { fullName:"Memorandum of Understanding", definition:"Non-binding agreement describing shared objectives between organizations." },
+  "MOA": { fullName:"Memorandum of Agreement", definition:"Agreement documenting cooperation, responsibilities, and shared objectives." },
+  "MTBF": { fullName:"Mean Time Between Failures", definition:"Reliability metric for average time between failures of repairable systems." },
+  "MTTF": { fullName:"Mean Time To Failure", definition:"Reliability metric for average lifespan of non-repairable components." },
+  "MTTD": { fullName:"Mean Time To Detect", definition:"Average time needed to discover an incident or threat." },
+  "MTTR": { fullName:"Mean Time To Repair / Mean Time To Respond", definition:"Average time to restore failed equipment or respond to an active incident." },
+  "NAC": { fullName:"Network Access Control", definition:"Security platform that checks endpoint health and identity before allowing network access." },
+  "NAT": { fullName:"Network Address Translation", definition:"Routing method that maps private IP addresses to public addresses." },
+  "PAT": { fullName:"Port Address Translation", definition:"NAT variant that maps many internal connections using port numbers." },
+  "NDA": { fullName:"Non-Disclosure Agreement", definition:"Legal agreement requiring parties to protect confidential information." },
+  "NGFW": { fullName:"Next-Generation Firewall", definition:"Firewall combining packet filtering with deep inspection, application awareness, and IPS features." },
+  "NIDS": { fullName:"Network-based Intrusion Detection System", definition:"Network sensor that detects suspicious packet or traffic patterns." },
+  "NIPS": { fullName:"Network-based Intrusion Prevention System", definition:"Network inline sensor that can block suspicious traffic." },
+  "NIST": { fullName:"National Institute of Standards and Technology", definition:"U.S. agency that publishes widely used cybersecurity standards and frameworks." },
+  "NTP": { fullName:"Network Time Protocol", definition:"Protocol for synchronizing system time, important for logs, tickets, and forensics." },
+  "OAuth": { fullName:"Open Authorization", definition:"Token delegation standard that lets services grant access without sharing passwords." },
+  "OCSP": { fullName:"Online Certificate Status Protocol", definition:"Real-time protocol for checking whether a digital certificate is valid or revoked." },
+  "OIDC": { fullName:"OpenID Connect", definition:"Identity layer built on OAuth 2.0 for user authentication and profile claims." },
+  "OSINT": { fullName:"Open-Source Intelligence", definition:"Reconnaissance using publicly available information such as websites, DNS, repositories, and records." },
+  "OWASP": { fullName:"Open Web Application Security Project", definition:"Community authority for web application security, known for the OWASP Top 10." },
+  "PaaS": { fullName:"Platform as a Service", definition:"Cloud model providing managed runtimes and platforms while developers deploy applications." },
+  "PAM": { fullName:"Privileged Access Management", definition:"Controls for managing, monitoring, and auditing privileged accounts and credentials." },
+  "PCI-DSS": { fullName:"Payment Card Industry Data Security Standard", definition:"Security standard for organizations that handle payment card data." },
+  "PEM": { fullName:"Privacy-Enhanced Mail", definition:"Base64 text certificate format with recognizable header and footer lines." },
+  "PFS": { fullName:"Perfect Forward Secrecy", definition:"Property ensuring past sessions remain protected even if long-term keys are later compromised." },
+  "PFX": { fullName:"Personal Information Exchange", definition:"Binary certificate archive format that can include certificates and private keys." },
+  "P12": { fullName:"PKCS #12", definition:"Certificate archive format often used to bundle certificates with password-protected private keys." },
+  "PHI": { fullName:"Protected Health Information", definition:"Health information tied to an individual and subject to strong regulatory protection." },
+  "PII": { fullName:"Personally Identifiable Information", definition:"Information that can identify, contact, or locate a specific person." },
+  "PKI": { fullName:"Public Key Infrastructure", definition:"Framework of CAs, certificates, policies, and keys that supports asymmetric digital identity and encryption." },
+  "RAID": { fullName:"Redundant Array of Independent Disks", definition:"Storage layout combining drives for performance, parity, or fault tolerance." },
+  "RAT": { fullName:"Remote Access Trojan", definition:"Malware that gives an attacker remote control over a compromised endpoint." },
+  "RBAC": { fullName:"Role-Based Access Control / Rule-Based Access Control", definition:"Access model using roles tied to job duties, or rule logic for system access decisions." },
+  "RCE": { fullName:"Remote Code Execution", definition:"Severe vulnerability that lets an attacker run code or commands on a remote system." },
+  "RPO": { fullName:"Recovery Point Objective", definition:"Maximum acceptable data loss measured in time." },
+  "RTO": { fullName:"Recovery Time Objective", definition:"Maximum acceptable time to restore service after an outage." },
+  "RSA": { fullName:"Rivest, Shamir, and Adleman", definition:"Classic public-key cryptographic algorithm based on factoring large prime numbers." },
+  "S/MIME": { fullName:"Secure/Multipurpose Internet Mail Extensions", definition:"Email security standard adding public key encryption and digital signatures." },
+  "SaaS": { fullName:"Software as a Service", definition:"Cloud model where the vendor manages the full stack and users access the application." },
+  "SAML": { fullName:"Security Assertion Markup Language", definition:"XML-based standard for exchanging authentication and authorization assertions, often for SSO." },
+  "SAN": { fullName:"Storage Area Network / Subject Alternative Name", definition:"Either a dedicated block storage network or a certificate field listing additional covered names." },
+  "SASE": { fullName:"Secure Access Service Edge", definition:"Cloud-delivered architecture combining network routing and edge security services." },
+  "SCADA": { fullName:"Supervisory Control and Data Acquisition", definition:"Industrial control system for monitoring and managing utilities, manufacturing, and infrastructure." },
+  "SDN": { fullName:"Software-Defined Networking", definition:"Network architecture separating the control plane from forwarding hardware." },
+  "SIEM": { fullName:"Security Information and Event Management", definition:"Central log aggregation and correlation platform for detecting security events." },
+  "SLA": { fullName:"Service Level Agreement", definition:"Contract defining vendor performance metrics such as uptime and response times." },
+  "SLE": { fullName:"Single Loss Expectancy", definition:"Expected financial loss from one occurrence of a threat event." },
+  "SOAR": { fullName:"Security Orchestration, Automation, and Response", definition:"Security operations platform that automates and coordinates incident response playbooks." },
+  "SOC": { fullName:"Security Operations Center / Service Organization Control", definition:"Either a team/facility monitoring security telemetry, or a class of audit reports such as SOC 2." },
+  "SOW": { fullName:"Statement of Work", definition:"Project document defining tasks, deliverables, timelines, and expectations." },
+  "SQLi": { fullName:"SQL Injection", definition:"Web vulnerability where attacker input changes backend database queries." },
+  "SRTP": { fullName:"Secure Real-time Transport Protocol", definition:"Encrypted transport for securing real-time voice and media streams." },
+  "SSH": { fullName:"Secure Shell", definition:"Encrypted remote administration protocol replacing insecure cleartext terminal access." },
+  "SSID": { fullName:"Service Set Identifier", definition:"Human-readable wireless network name broadcast by access points." },
+  "SSO": { fullName:"Single Sign-On", definition:"Centralized authentication that lets a user access multiple apps with one login session." },
+  "SSRF": { fullName:"Server-Side Request Forgery", definition:"Attack that tricks a server into sending unintended requests to internal or external resources." },
+  "STIX": { fullName:"Structured Threat Information Expression", definition:"Standard format for representing cyber threat intelligence." },
+  "TAXII": { fullName:"Trusted Automated Exchange of Intelligence Information", definition:"Protocol for exchanging cyber threat intelligence between tools and organizations." },
+  "SWG": { fullName:"Secure Web Gateway", definition:"Internet gateway/proxy that filters web traffic and enforces acceptable use policies." },
+  "TACACS+": { fullName:"Terminal Access Controller Access-Control System Plus", definition:"Cisco AAA protocol for network device administration with separated authorization and encrypted payloads." },
+  "TLS": { fullName:"Transport Layer Security", definition:"Modern cryptographic protocol securing internet communications; successor to SSL." },
+  "TPM": { fullName:"Trusted Platform Module", definition:"Hardware chip for secure key storage, measured boot, and local cryptographic operations." },
+  "TTP": { fullName:"Tactics, Techniques, and Procedures", definition:"Behavior patterns describing how threat actors operate." },
+  "UDP": { fullName:"User Datagram Protocol", definition:"Connectionless transport protocol optimized for speed but vulnerable to spoofing and amplification abuse." },
+  "UEFI": { fullName:"Unified Extensible Firmware Interface", definition:"Modern firmware interface with features such as Secure Boot." },
+  "VDI": { fullName:"Virtual Desktop Infrastructure", definition:"Centralized desktop hosting where users access virtual desktops remotely." },
+  "VPC": { fullName:"Virtual Private Cloud", definition:"Isolated private network segment inside a public cloud environment." },
+  "VPN": { fullName:"Virtual Private Network", definition:"Encrypted logical connection over an untrusted network." },
+  "WAF": { fullName:"Web Application Firewall", definition:"Layer 7 filter that detects and blocks malicious web requests such as XSS or SQL injection." },
+  "XDR": { fullName:"Extended Detection and Response", definition:"Integrated detection and response across endpoints, networks, cloud, and other telemetry sources." },
+  "XSS": { fullName:"Cross-Site Scripting", definition:"Web injection attack where malicious scripts run in another user's browser." },
+  "ZTA": { fullName:"Zero Trust Architecture", definition:"Architecture based on never trust, always verify for each access request." },
+};
+
 const GLOSSARY_TERMS = {
-  "ALE": "Annual Loss Expectancy: the expected yearly cost of a risk. Formula: SLE x ARO.",
-  "SLE": "Single Loss Expectancy: the expected cost each time one incident occurs.",
-  "ARO": "Annualized Rate of Occurrence: how often an incident is expected to happen per year.",
-  "RTO": "Recovery Time Objective: the maximum acceptable time to restore a system after an outage.",
-  "RPO": "Recovery Point Objective: the maximum acceptable data loss measured in time.",
-  "PKI": "Public Key Infrastructure: certificates, keys, and authorities used to prove identity and enable encryption.",
-  "CSR": "Certificate Signing Request: the file sent to a Certificate Authority to request a TLS certificate.",
-  "OCSP": "Online Certificate Status Protocol: a real-time check to see whether a certificate has been revoked.",
-  "CRL": "Certificate Revocation List: a published list of revoked certificates.",
-  "MFA": "Multi-factor Authentication: login using two or more factor types, such as password plus authenticator app.",
-  "SSO": "Single Sign-On: one login that grants access to multiple connected applications.",
-  "RBAC": "Role-Based Access Control: permissions are assigned to roles, then users are placed into roles.",
-  "ABAC": "Attribute-Based Access Control: access decisions use attributes such as user, device, location, and resource.",
-  "DAC": "Discretionary Access Control: the resource owner can decide who gets access.",
-  "MAC": "Mandatory Access Control: the system enforces access based on labels and clearances.",
-  "SIEM": "Security Information and Event Management: a platform that collects and correlates security logs.",
-  "EDR": "Endpoint Detection and Response: tooling that monitors endpoints and helps investigate suspicious activity.",
-  "XDR": "Extended Detection and Response: detection and response across endpoints, network, identity, cloud, and more.",
-  "DLP": "Data Loss Prevention: controls that detect or stop sensitive data from leaving approved locations.",
-  "CASB": "Cloud Access Security Broker: security enforcement between users and cloud services.",
-  "SASE": "Secure Access Service Edge: cloud-delivered networking and security, often combining SD-WAN and SSE.",
-  "CVSS": "Common Vulnerability Scoring System: a standard severity score for vulnerabilities.",
-  "BIA": "Business Impact Analysis: identifies critical processes and the impact of disruption.",
-  "MTTD": "Mean Time To Detect: average time needed to discover an incident.",
-  "MTTR": "Mean Time To Respond or Recover: average time needed to contain or restore after an incident.",
-  "WAF": "Web Application Firewall: a control that filters malicious web requests before they reach an app.",
-  "IDS": "Intrusion Detection System: detects suspicious activity and alerts.",
-  "IPS": "Intrusion Prevention System: detects suspicious activity and can block it.",
-  "HSM": "Hardware Security Module: tamper-resistant hardware for protecting cryptographic keys.",
-  "KMS": "Key Management Service: a system for creating, storing, rotating, and controlling encryption keys.",
-  "DDoS": "Distributed Denial of Service: many systems flood a target to make it unavailable.",
+  ...ACRONYM_GLOSSARY_TERMS,
   "SQL injection": "A vulnerability where attacker-controlled input changes a SQL query.",
   "Zero Trust": "A security model that continuously verifies users, devices, and access instead of trusting by location.",
   "Tokenization": "Replacing sensitive data with a non-sensitive token while storing the real value separately.",
@@ -14045,8 +14175,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .sidebar .profile-popover{left:14px;}
 .mobile-profile .profile-popover{right:0;left:auto;}
 .term-wrap{position:relative;display:inline-block;}
-.term-link{border:0;background:transparent;color:${t.accent};font:inherit;font-weight:700;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;cursor:pointer;padding:0 1px;}
-.term-pop{position:absolute;z-index:50;left:0;top:1.7em;width:min(280px,78vw);padding:10px 12px;border:1px solid;border-radius:8px;box-shadow:0 16px 34px rgba(0,0,0,.18);font-size:12px;line-height:1.55;}
+.term-link{border:0;background:transparent;color:inherit;font:inherit;font-weight:inherit;text-decoration:underline;text-decoration-style:dotted;text-decoration-color:${t.accent}75;text-underline-offset:3px;cursor:pointer;padding:0 1px;border-radius:4px;transition:background .15s,color .15s,text-decoration-color .15s;}
+.term-link:hover,.term-link:focus{color:${t.accent};background:${t.accent}10;text-decoration-color:${t.accent};outline:none;}
+.term-pop{position:absolute;z-index:50;left:0;top:1.7em;width:min(320px,82vw);padding:11px 13px;border:1px solid;border-radius:8px;box-shadow:0 16px 34px rgba(0,0,0,.18);font-size:12px;line-height:1.55;}
 .exam-layout{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:16px;}
 .exam-map{padding:14px;height:fit-content;position:sticky;top:96px;}
 .exam-map-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
@@ -14360,25 +14491,48 @@ function GlossaryText({text,t,style}) {
   const [openTerm,setOpenTerm]=useState(null);
   const value=String(text||"");
   const terms=Object.keys(GLOSSARY_TERMS).sort((a,b)=>b.length-a.length);
-  const pattern=new RegExp(`\\b(${terms.map(term=>term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")})\\b`,"gi");
-  const parts=value.split(pattern).filter(part=>part!=="");
+  const pattern=new RegExp(`(^|[^A-Za-z0-9])(${terms.map(term=>term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")})(?=$|[^A-Za-z0-9])`,"gi");
+  const parts=[];
+  let cursor=0;
+  for(const match of value.matchAll(pattern)){
+    const prefix=match[1]||"";
+    const matched=match[2]||"";
+    const termStart=match.index + prefix.length;
+    if(termStart>cursor) parts.push({text:value.slice(cursor,termStart),term:false});
+    parts.push({text:matched,term:true});
+    cursor=termStart+matched.length;
+  }
+  if(cursor<value.length) parts.push({text:value.slice(cursor),term:false});
+  if(!parts.length) parts.push({text:value,term:false});
   const normalize=part=>terms.find(term=>term.toLowerCase()===part.toLowerCase());
+  const getEntry=term=>{
+    const entry=GLOSSARY_TERMS[term];
+    if(!entry)return {fullName:"",definition:""};
+    if(typeof entry==="string") {
+      const [maybeName,...rest]=entry.split(":");
+      return rest.length
+        ? {fullName:maybeName.trim(),definition:rest.join(":").trim()}
+        : {fullName:"",definition:entry};
+    }
+    return {fullName:entry.fullName||"",definition:entry.definition||""};
+  };
 
   return(
     <span style={style}>
       {parts.map((part,index)=>{
-        const term=normalize(part);
-        if(!term) return <span key={`${part}-${index}`}>{part}</span>;
+        const term=part.term?normalize(part.text):null;
+        if(!term) return <span key={`${part.text}-${index}`}>{part.text}</span>;
         const key=`${term}-${index}`;
         return(
           <span key={key} className="term-wrap">
             <button type="button" className="term-link" onClick={e=>{e.stopPropagation();setOpenTerm(openTerm===key?null:key);}}>
-              {part}
+              {part.text}
             </button>
             {openTerm===key&&(
               <span className="term-pop" style={{background:t.surface,borderColor:t.border,color:t.text}}>
                 <strong style={{color:t.accent}}>{term}</strong>
-                <span style={{display:"block",marginTop:4,color:t.textSec}}>{GLOSSARY_TERMS[term]}</span>
+                {getEntry(term).fullName&&<span style={{display:"block",marginTop:2,fontWeight:800,color:t.text}}>{getEntry(term).fullName}</span>}
+                <span style={{display:"block",marginTop:5,color:t.textSec}}>{getEntry(term).definition}</span>
               </span>
             )}
           </span>
