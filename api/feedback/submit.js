@@ -39,7 +39,12 @@ function escapeHtml(value) {
 }
 
 function isMissingFeedbackSchema(error) {
-  return error?.code === "42P01" || error?.code === "42703";
+  return (
+    error?.code === "42P01" ||
+    error?.code === "42703" ||
+    error?.code === "PGRST205" ||
+    /feedback_reports|app_admins|schema cache|relation/i.test(error?.message || "")
+  );
 }
 
 async function sendFeedbackNotification(report) {
