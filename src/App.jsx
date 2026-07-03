@@ -17957,7 +17957,7 @@ function QuestionReportModal({report,user,t,onClose}) {
   );
 }
 
-function AdminFeedbackPage({user,t}) {
+function AdminFeedbackPage({user,t,onEditQuestion}) {
   const [reports,setReports]=useState([]);
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState("");
@@ -18029,6 +18029,17 @@ function AdminFeedbackPage({user,t}) {
                 <div style={{overflowWrap:"anywhere"}}>Page: {report.page_url||"-"}</div>
               </div>
               <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+                <button
+                  className="btn btn-outline"
+                  style={{fontSize:12}}
+                  onClick={()=>onEditQuestion?.({
+                    kind:String(report.question_kind||"mcq").toLowerCase()==="pbq"?"pbq":"mcq",
+                    id:report.question_id,
+                    reportId:report.id,
+                  })}
+                >
+                  Edit question
+                </button>
                 <button className="btn btn-outline" style={{fontSize:12}} disabled={report.status==="reviewing"} onClick={()=>updateStatus(report.id,"reviewing")}>Mark reviewing</button>
                 <button className="btn btn-primary" style={{fontSize:12}} disabled={report.status==="resolved"} onClick={()=>updateStatus(report.id,"resolved")}>Mark resolved</button>
                 <button className="btn btn-ghost" style={{fontSize:12}} disabled={report.status==="open"} onClick={()=>updateStatus(report.id,"open")}>Reopen</button>
@@ -18160,7 +18171,7 @@ function cleanAdminQuestionPayload(form,kind) {
   };
 }
 
-function AdminQuestionManagerPage({user,t,onQuestionBankRefresh}) {
+function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) {
   const [kind,setKind]=useState("mcq");
   const [selectedId,setSelectedId]=useState("");
   const [form,setForm]=useState(()=>makeAdminQuestionTemplate("mcq",MCQ_BANK.length+1));
@@ -18182,16 +18193,28 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh}) {
   },[kind]);
 
   const loadSelected=useCallback(()=>{
+    if(initialTarget?.id && selectedId!==initialTarget.id)return;
     if(selectedQuestion) {
       setForm(questionToAdminForm(selectedQuestion,kind,selectedIndex));
+    } else if(initialTarget?.id && selectedId===initialTarget.id) {
+      setError(`Could not find ${kind.toUpperCase()} ${initialTarget.id} in the live question bank. It may already be hidden or the report may reference an old question.`);
     } else {
       resetToNew(kind);
     }
-    setError("");
+    if(selectedQuestion || !initialTarget?.id) setError("");
     setStatus("");
-  },[kind,resetToNew,selectedIndex,selectedQuestion]);
+  },[initialTarget?.id,kind,resetToNew,selectedId,selectedIndex,selectedQuestion]);
 
   useEffect(()=>{loadSelected();},[loadSelected]);
+
+  useEffect(()=>{
+    if(!initialTarget?.id)return;
+    const nextKind=initialTarget.kind==="pbq"?"pbq":"mcq";
+    setKind(nextKind);
+    setSelectedId(initialTarget.id);
+    setStatus(`Loaded ${nextKind.toUpperCase()} ${initialTarget.id} from internal feedback.`);
+    setError("");
+  },[initialTarget?.id,initialTarget?.kind,initialTarget?.nonce]);
 
   const updateField=(field,value)=>setForm(prev=>({...prev,[field]:value}));
   const updateArray=(field,index,value)=>setForm(prev=>{
@@ -19032,6 +19055,7 @@ export default function App() {
   const [deleteAccountVerified,setDeleteAccountVerified]=useState(false);
   const [questionReport,setQuestionReport]=useState(null);
   const [questionBankVersion,setQuestionBankVersion]=useState(0);
+  const [adminQuestionTarget,setAdminQuestionTarget]=useState(null);
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
@@ -19450,6 +19474,12 @@ export default function App() {
     capture("question_report_opened", { question_id:report.questionId, question_type:report.questionKind, tier: user?.tier||"guest" });
     setQuestionReport(report);
   },[user?.tier]);
+  const handleEditReportedQuestion=useCallback(target=>{
+    if(!target?.id)return;
+    setAdminQuestionTarget({...target,nonce:Date.now()});
+    setView("question-admin");
+    capture("admin_feedback_edit_question_clicked", { question_id: target.id, question_type: target.kind, report_id: target.reportId });
+  },[]);
   const handlePBQDone=useCallback(async (result,options={})=>{
     if(result&&user){
       setAttempts(a=>[result,...a]);
@@ -19659,8 +19689,8 @@ export default function App() {
           {view==="objectives"&&<ObjectivesPage t={t}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
-          {view==="feedback"&&<AdminFeedbackPage user={user} t={t}/>}
-          {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides}/>}
+          {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
+          {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} initialTarget={adminQuestionTarget}/>}
         </main>
         {showOnboarding&&(
           <OnboardingModal
