@@ -14199,6 +14199,10 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .pricing-pro-card,.pricing-free-card{min-width:0;}
 .onboarding-overlay{position:fixed;inset:0;z-index:80;background:rgba(4,8,18,.72);backdrop-filter:blur(10px);display:grid;place-items:center;padding:20px;animation:fadeUp .22s ease both;}
 .onboarding-modal{width:min(100%,520px);padding:28px 30px;position:relative;box-shadow:0 30px 90px rgba(0,0,0,.36);}
+.feedback-modal{width:min(100%,560px);max-height:min(92vh,760px);padding:0!important;display:flex;flex-direction:column;overflow:hidden;}
+.feedback-modal-header{position:sticky;top:0;z-index:2;padding:24px 26px 12px;background:${t.surface};border-bottom:1px solid ${t.border};}
+.feedback-modal-body{padding:16px 26px 18px;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;}
+.feedback-modal-footer{position:sticky;bottom:0;z-index:2;padding:12px 26px calc(12px + env(safe-area-inset-bottom));background:${t.surface};border-top:1px solid ${t.border};display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;}
 @media (max-width: 860px){
   html,body,#root{max-width:100%;overflow-x:hidden;}
   body{font-size:14px;}
@@ -14276,6 +14280,11 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .exam-map-grid{grid-template-columns:repeat(10,minmax(30px,1fr))!important;}
   .onboarding-overlay{align-items:end;padding:12px;}
   .onboarding-modal{padding:24px 22px;max-height:92vh;overflow-y:auto;}
+  .feedback-modal{width:100%!important;max-height:88vh!important;}
+  .feedback-modal-header{padding:20px 18px 10px!important;}
+  .feedback-modal-body{padding:14px 18px 16px!important;}
+  .feedback-modal-footer{padding:12px 18px calc(12px + env(safe-area-inset-bottom))!important;}
+  .feedback-modal-footer .btn{flex:1;white-space:nowrap;}
 }
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
@@ -17698,13 +17707,16 @@ function QuestionReportModal({report,user,t,onClose}) {
 
   return(
     <div className="onboarding-overlay" role="dialog" aria-modal="true" aria-label="Report question issue">
-      <div className="onboarding-modal card" style={{maxWidth:560}}>
+      <div className="onboarding-modal card feedback-modal">
+        <div className="feedback-modal-header">
         <button className="btn btn-ghost" style={{position:"absolute",top:14,right:14,minHeight:32,padding:"4px 10px",fontSize:12}} onClick={onClose}>Close</button>
         <div className="label" style={{color:t.accent,marginBottom:8}}>In-app report</div>
         <h2 style={{fontSize:24,fontWeight:900,color:t.text,marginBottom:8}}>Report this question</h2>
         <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:14}}>
           This sends feedback inside SecurePlus. The owner will receive a notification and can review all reports from the root feedback dashboard.
         </p>
+        </div>
+        <div className="feedback-modal-body">
         <div className="card" style={{padding:"12px 14px",marginBottom:14,boxShadow:"none"}}>
           <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
             <span className="chip meta-chip">{report.questionKind.toUpperCase()}</span>
@@ -17738,7 +17750,8 @@ function QuestionReportModal({report,user,t,onClose}) {
         <input className="input" value={contactEmail} onChange={e=>setContactEmail(e.target.value)} placeholder="you@example.com" style={{marginBottom:12}}/>
         <Alert msg={error} t={t}/>
         <Alert msg={status} type="success" t={t}/>
-        <div style={{display:"flex",gap:10,justifyContent:"flex-end",flexWrap:"wrap"}}>
+        </div>
+        <div className="feedback-modal-footer">
           <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
           <button className="btn btn-primary" disabled={submitting} onClick={submit}>{submitting?"Submitting...":"Submit feedback"}</button>
         </div>
