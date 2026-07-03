@@ -85,12 +85,26 @@ create table if not exists feedback_reports (
   resolved_at timestamptz
 );
 
+create table if not exists question_overrides (
+  id uuid primary key default gen_random_uuid(),
+  question_kind text not null,
+  question_id text not null,
+  action text not null default 'upsert',
+  payload jsonb not null default '{}'::jsonb,
+  status text not null default 'active',
+  updated_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  unique (question_kind, question_id)
+);
+
 alter table profiles enable row level security;
 alter table attempts enable row level security;
 alter table referrals enable row level security;
 alter table starred_questions enable row level security;
 alter table app_admins enable row level security;
 alter table feedback_reports enable row level security;
+alter table question_overrides enable row level security;
 
 drop policy if exists "Users can update own profile" on profiles;
 
@@ -206,6 +220,55 @@ with check (
     where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
   )
   and status in ('open', 'reviewing', 'resolved')
+);
+
+drop policy if exists "Anyone can read active question overrides" on question_overrides;
+create policy "Anyone can read active question overrides"
+on question_overrides for select
+to anon, authenticated
+using (status = 'active');
+
+drop policy if exists "Admins can insert question overrides" on question_overrides;
+create policy "Admins can insert question overrides"
+on question_overrides for insert
+to authenticated
+with check (
+  exists (
+    select 1
+    from app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+);
+
+drop policy if exists "Admins can update question overrides" on question_overrides;
+create policy "Admins can update question overrides"
+on question_overrides for update
+to authenticated
+using (
+  exists (
+    select 1
+    from app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+)
+with check (
+  exists (
+    select 1
+    from app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+);
+
+drop policy if exists "Admins can delete question overrides" on question_overrides;
+create policy "Admins can delete question overrides"
+on question_overrides for delete
+to authenticated
+using (
+  exists (
+    select 1
+    from app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
 );
 
 create or replace function public.handle_new_user()
@@ -324,6 +387,33 @@ begin
     and (user_agent is null or length(user_agent) <= 500)
   );
 
+  if not exists (select 1 from pg_constraint where conname = 'question_overrides_kind_check') then
+    alter table question_overrides
+    add constraint question_overrides_kind_check
+    check (question_kind in ('mcq', 'pbq'));
+  end if;
+
+  if not exists (select 1 from pg_constraint where conname = 'question_overrides_action_check') then
+    alter table question_overrides
+    add constraint question_overrides_action_check
+    check (action in ('upsert', 'disable'));
+  end if;
+
+  if not exists (select 1 from pg_constraint where conname = 'question_overrides_status_check') then
+    alter table question_overrides
+    add constraint question_overrides_status_check
+    check (status in ('active', 'archived'));
+  end if;
+
+  if not exists (select 1 from pg_constraint where conname = 'question_overrides_size_check') then
+    alter table question_overrides
+    add constraint question_overrides_size_check
+    check (
+      length(question_id) between 1 and 120
+      and pg_column_size(payload) <= 50000
+    );
+  end if;
+
   if not exists (select 1 from pg_constraint where conname = 'profiles_referral_code_key') then
     alter table profiles
     add constraint profiles_referral_code_key
@@ -371,5 +461,13 @@ on feedback_reports (status, created_at desc);
 create index if not exists feedback_reports_question_idx
 on feedback_reports (question_kind, question_id);
 
+create index if not exists question_overrides_status_idx
+on question_overrides (status, question_kind);
+
+create index if not exists question_overrides_updated_at_idx
+on question_overrides (updated_at desc);
+
 grant select on app_admins to authenticated;
 grant select, insert, update on feedback_reports to authenticated;
+grant select on question_overrides to anon, authenticated;
+grant insert, update, delete on question_overrides to authenticated;

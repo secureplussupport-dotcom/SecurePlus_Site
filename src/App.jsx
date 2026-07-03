@@ -10366,7 +10366,8 @@ const IMPORTED_MCQ_BANK = [
   }
 ];
 
-const MCQ_BANK = [...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id)).map(ensureMcqWrongFeedback);
+const BASE_MCQ_BANK = [...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id)).map(ensureMcqWrongFeedback);
+let MCQ_BANK = BASE_MCQ_BANK;
 
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK — original, accurate, clearly scoped content
@@ -13719,7 +13720,31 @@ const LOW_QUALITY_PBQ_IDS = new Set([
   "p092","p093","p097","p098","p100"
 ]);
 
-const PBQ_BANK = [...PBQ_BANK_BASE, ...IMPORTED_PBQ_BANK].filter(q=>!LOW_QUALITY_PBQ_IDS.has(q.id));
+const BASE_PBQ_BANK = [...PBQ_BANK_BASE, ...IMPORTED_PBQ_BANK].filter(q=>!LOW_QUALITY_PBQ_IDS.has(q.id));
+let PBQ_BANK = BASE_PBQ_BANK;
+
+function applyQuestionOverrides(rows=[]) {
+  const mergeBank=(base,kind)=>{
+    const byId=new Map(base.map(q=>[q.id,q]));
+    rows
+      .filter(row=>row.status==="active"&&row.question_kind===kind)
+      .forEach(row=>{
+        const id=row.question_id;
+        if(!id)return;
+        if(row.action==="disable"){
+          byId.delete(id);
+          return;
+        }
+        const payload={...(row.payload||{})};
+        if(payload.id&&payload.id!==id) payload.id=id;
+        const next={...(byId.get(id)||{}),...payload,id};
+        byId.set(id, kind==="mcq" ? ensureMcqWrongFeedback(next) : next);
+      });
+    return [...byId.values()];
+  };
+  MCQ_BANK=mergeBank(BASE_MCQ_BANK,"mcq");
+  PBQ_BANK=mergeBank(BASE_PBQ_BANK,"pbq");
+}
 
 // ═══════════════════════════════════════════════════════════════
 // DAILY CHALLENGE DATA
@@ -17856,6 +17881,188 @@ function AdminFeedbackPage({user,t}) {
   );
 }
 
+function AdminQuestionManagerPage({user,t,onQuestionBankRefresh}) {
+  const [kind,setKind]=useState("mcq");
+  const [selectedId,setSelectedId]=useState("");
+  const [jsonText,setJsonText]=useState("");
+  const [saving,setSaving]=useState(false);
+  const [status,setStatus]=useState("");
+  const [error,setError]=useState("");
+  const bank=kind==="mcq"?MCQ_BANK:PBQ_BANK;
+  const selectedQuestion=bank.find(q=>q.id===selectedId);
+
+  const mcqTemplate={
+    id:"m-custom-001",
+    ch:"1",
+    difficulty:"medium",
+    topic:"Security Controls",
+    q:"Write the question stem here.",
+    opts:["Option A","Option B","Option C","Option D"],
+    correct:0,
+    exp:"Explain why the correct answer is right.",
+    wrongFeedback:{
+      1:"Explain why option B is wrong.",
+      2:"Explain why option C is wrong.",
+      3:"Explain why option D is wrong."
+    }
+  };
+  const pbqTemplate={
+    id:"p-custom-001",
+    type:"SCENARIO",
+    ch:"4",
+    cat:"Security Operations",
+    difficulty:"medium",
+    title:"Write PBQ title here",
+    scenario:"Write the scenario here.",
+    question:"Write the task/question here.",
+    choices:["Option A","Option B","Option C","Option D"],
+    correct:0,
+    explanation:"Explain the solution here."
+  };
+
+  const loadSelected=useCallback(()=>{
+    const source=selectedQuestion || (kind==="mcq"?mcqTemplate:pbqTemplate);
+    setJsonText(JSON.stringify(source,null,2));
+    setError("");
+    setStatus("");
+  },[kind,selectedQuestion]);
+
+  useEffect(()=>{loadSelected();},[loadSelected]);
+
+  const parseQuestion=()=>{
+    let parsed;
+    try{
+      parsed=JSON.parse(jsonText);
+    }catch{
+      throw new Error("JSON is invalid. Check commas, quotes, and brackets.");
+    }
+    const id=String(parsed.id||"").trim();
+    if(!id) throw new Error("Question JSON needs an id.");
+    if(!["easy","medium","hard"].includes(String(parsed.difficulty||"").toLowerCase())) throw new Error("Difficulty must be easy, medium, or hard.");
+    if(kind==="mcq"){
+      if(!parsed.q||String(parsed.q).trim().length<20) throw new Error("MCQ question stem must be at least 20 characters.");
+      if(!Array.isArray(parsed.opts)||parsed.opts.length!==4) throw new Error("MCQ opts must contain exactly 4 answer options.");
+      if(!Number.isInteger(parsed.correct)||parsed.correct<0||parsed.correct>3) throw new Error("MCQ correct must be 0, 1, 2, or 3.");
+      if(!parsed.exp||String(parsed.exp).trim().length<20) throw new Error("MCQ explanation must be at least 20 characters.");
+      return ensureMcqWrongFeedback({...parsed,id,difficulty:String(parsed.difficulty).toLowerCase()});
+    }
+    if(!parsed.title||String(parsed.title).trim().length<8) throw new Error("PBQ title must be at least 8 characters.");
+    if(!parsed.explanation||String(parsed.explanation).trim().length<20) throw new Error("PBQ explanation must be at least 20 characters.");
+    return {...parsed,id,difficulty:String(parsed.difficulty).toLowerCase()};
+  };
+
+  const saveQuestion=async()=>{
+    setSaving(true);setError("");setStatus("");
+    try{
+      if(!isSupabaseConfigured) throw new Error("Supabase is not configured.");
+      const question=parseQuestion();
+      const { error:upsertError } = await supabase
+        .from("question_overrides")
+        .upsert({
+          question_kind:kind,
+          question_id:question.id,
+          action:"upsert",
+          payload:question,
+          status:"active",
+          updated_by:user.id,
+          updated_at:new Date().toISOString(),
+        }, { onConflict:"question_kind,question_id" });
+      if(upsertError) throw upsertError;
+      setSelectedId(question.id);
+      await onQuestionBankRefresh?.();
+      setStatus("Question saved. The live bank has been refreshed on this browser.");
+      capture("admin_question_saved", { kind, question_id: question.id });
+    }catch(err){
+      setError(err.message||"Unable to save question.");
+    }finally{
+      setSaving(false);
+    }
+  };
+
+  const disableQuestion=async()=>{
+    const targetId=selectedId || (()=>{try{return JSON.parse(jsonText).id;}catch{return "";}})();
+    if(!targetId){setError("Select or enter a question id first.");return;}
+    const ok=window.confirm(`Disable ${kind.toUpperCase()} ${targetId}? It will be removed from practice after the bank refreshes.`);
+    if(!ok)return;
+    setSaving(true);setError("");setStatus("");
+    try{
+      const { error:disableError } = await supabase
+        .from("question_overrides")
+        .upsert({
+          question_kind:kind,
+          question_id:targetId,
+          action:"disable",
+          payload:{ id:targetId },
+          status:"active",
+          updated_by:user.id,
+          updated_at:new Date().toISOString(),
+        }, { onConflict:"question_kind,question_id" });
+      if(disableError) throw disableError;
+      await onQuestionBankRefresh?.();
+      setStatus(`${targetId} disabled from the live bank.`);
+      capture("admin_question_disabled", { kind, question_id: targetId });
+    }catch(err){
+      setError(err.message||"Unable to disable question.");
+    }finally{
+      setSaving(false);
+    }
+  };
+
+  return(
+    <div className="feedback-page" style={{padding:"24px",maxWidth:1040,margin:"0 auto"}}>
+      <div className="page-title-row" style={{marginBottom:16}}>
+        <NavGlyph type="objectives" active/>
+        <div>
+          <h2 style={{fontSize:24,color:t.text}}>Question Manager</h2>
+          <p style={{fontSize:13,color:t.textSec}}>Root-only editor for adding, modifying, or disabling live MCQ/PBQ questions.</p>
+        </div>
+      </div>
+      <div className="card" style={{padding:"18px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
+        <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+          Edit carefully: saved JSON is loaded by the live practice and exam banks. This uses parameterized Supabase writes and admin RLS; it does not expose code editing to normal users.
+        </div>
+      </div>
+      <div className="card" style={{padding:"18px 20px",marginBottom:16}}>
+        <div style={{display:"grid",gridTemplateColumns:"140px minmax(0,1fr) auto",gap:10,alignItems:"end"}}>
+          <div>
+            <label className="label" style={{display:"block",marginBottom:7}}>Bank</label>
+            <select className="input" value={kind} onChange={e=>{setKind(e.target.value);setSelectedId("");}}>
+              <option value="mcq">MCQ</option>
+              <option value="pbq">PBQ</option>
+            </select>
+          </div>
+          <div>
+            <label className="label" style={{display:"block",marginBottom:7}}>Existing question</label>
+            <select className="input" value={selectedId} onChange={e=>setSelectedId(e.target.value)}>
+              <option value="">New question template</option>
+              {bank.map(q=><option key={q.id} value={q.id}>{q.id} · {kind==="mcq"?(q.q||"").slice(0,90):(q.title||"").slice(0,90)}</option>)}
+            </select>
+          </div>
+          <button className="btn btn-outline" onClick={loadSelected}>Reload JSON</button>
+        </div>
+      </div>
+      <div className="card" style={{padding:"18px 20px"}}>
+        <label className="label" style={{display:"block",marginBottom:8}}>Question JSON</label>
+        <textarea
+          className="input"
+          value={jsonText}
+          onChange={e=>setJsonText(e.target.value)}
+          rows={22}
+          spellCheck={false}
+          style={{fontFamily:"'JetBrains Mono', monospace",fontSize:12,lineHeight:1.55,resize:"vertical"}}
+        />
+        <Alert msg={error} t={t}/>
+        <Alert msg={status} type="success" t={t}/>
+        <div style={{display:"flex",gap:10,justifyContent:"flex-end",flexWrap:"wrap",marginTop:12}}>
+          <button className="btn btn-ghost" disabled={saving} onClick={disableQuestion}>Disable question</button>
+          <button className="btn btn-outline" disabled={saving} onClick={()=>onQuestionBankRefresh?.()}>Refresh live bank</button>
+          <button className="btn btn-primary" disabled={saving} onClick={saveQuestion}>{saving?"Saving...":"Save question"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ReferralClaimPrompt({result,t,onUpgrade,onClose}) {
   const until = result?.proTrialUntil
     ? new Date(result.proTrialUntil).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
@@ -18405,6 +18612,7 @@ export default function App() {
   const [referralClaimPrompt,setReferralClaimPrompt]=useState(null);
   const [deleteAccountVerified,setDeleteAccountVerified]=useState(false);
   const [questionReport,setQuestionReport]=useState(null);
+  const [questionBankVersion,setQuestionBankVersion]=useState(0);
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
@@ -18412,6 +18620,25 @@ export default function App() {
   useEffect(()=>{
     if(user) identifyUser(user);
   },[user]);
+
+  const refreshQuestionBankOverrides=useCallback(async()=>{
+    if(!isSupabaseConfigured)return;
+    try{
+      const { data, error } = await supabase
+        .from("question_overrides")
+        .select("question_kind,question_id,action,payload,status,updated_at")
+        .eq("status","active");
+      if(error) throw error;
+      applyQuestionOverrides(data||[]);
+      setQuestionBankVersion(v=>v+1);
+    }catch(error){
+      console.warn("Unable to load question overrides", error);
+    }
+  },[]);
+
+  useEffect(()=>{
+    refreshQuestionBankOverrides();
+  },[refreshQuestionBankOverrides]);
 
   const clearLocalAuthState=useCallback(async()=>{
     resetAnalytics();
@@ -18940,7 +19167,10 @@ export default function App() {
     {id:"privacy",icon:"privacy",label:"Privacy Policy"},
     {id:"terms",icon:"terms",label:"Terms & Conditions"},
   ];
-  if(isRootUser) navItems.push({id:"feedback",icon:"objectives",label:"Internal Feedback"});
+  if(isRootUser) {
+    navItems.push({id:"feedback",icon:"objectives",label:"Internal Feedback"});
+    navItems.push({id:"question-admin",icon:"mcq",label:"Question Manager"});
+  }
 
   return(
     <>
@@ -19011,6 +19241,7 @@ export default function App() {
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t}/>}
+          {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides}/>}
         </main>
         {showOnboarding&&(
           <OnboardingModal
