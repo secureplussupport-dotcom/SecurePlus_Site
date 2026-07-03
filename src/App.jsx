@@ -116,6 +116,7 @@ function shouldShowPBQUpgradePrompt() {
 const FREE_PBQ_PREVIEW_ID = "p001";
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
 const DELETED_ACCOUNT_KEY = "secureplus_deleted_account";
+const FEEDBACK_DESCRIPTION_MIN_LENGTH = 20;
 const isFreePBQPreview = question => question?.id === FREE_PBQ_PREVIEW_ID;
 const dailyStreakOwner = user => normalizeEmail(user?.email || "") || "guest";
 const practiceSessionOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
@@ -14199,10 +14200,11 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .pricing-pro-card,.pricing-free-card{min-width:0;}
 .onboarding-overlay{position:fixed;inset:0;z-index:80;background:rgba(4,8,18,.72);backdrop-filter:blur(10px);display:grid;place-items:center;padding:20px;animation:fadeUp .22s ease both;}
 .onboarding-modal{width:min(100%,520px);padding:28px 30px;position:relative;box-shadow:0 30px 90px rgba(0,0,0,.36);}
-.feedback-modal{width:min(100%,560px);max-height:min(92vh,760px);padding:0!important;display:flex;flex-direction:column;overflow:hidden;}
+.feedback-modal{width:min(100%,560px);max-height:min(92dvh,760px);padding:0!important;display:flex!important;flex-direction:column;overflow:hidden!important;}
 .feedback-modal-header{position:sticky;top:0;z-index:2;padding:24px 26px 12px;background:${t.surface};border-bottom:1px solid ${t.border};}
-.feedback-modal-body{padding:16px 26px 18px;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;}
+.feedback-modal-body{padding:16px 26px 18px;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;flex:1 1 auto;}
 .feedback-modal-footer{position:sticky;bottom:0;z-index:2;padding:12px 26px calc(12px + env(safe-area-inset-bottom));background:${t.surface};border-top:1px solid ${t.border};display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;}
+.feedback-page{padding-bottom:128px!important;min-height:100dvh;}
 @media (max-width: 860px){
   html,body,#root{max-width:100%;overflow-x:hidden;}
   body{font-size:14px;}
@@ -14280,7 +14282,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .exam-map-grid{grid-template-columns:repeat(10,minmax(30px,1fr))!important;}
   .onboarding-overlay{align-items:end;padding:12px;}
   .onboarding-modal{padding:24px 22px;max-height:92vh;overflow-y:auto;}
-  .feedback-modal{width:100%!important;max-height:88vh!important;}
+  .feedback-modal{width:100%!important;max-height:88dvh!important;overflow:hidden!important;display:flex!important;}
   .feedback-modal-header{padding:20px 18px 10px!important;}
   .feedback-modal-body{padding:14px 18px 16px!important;}
   .feedback-modal-footer{padding:12px 18px calc(12px + env(safe-area-inset-bottom))!important;}
@@ -17673,8 +17675,9 @@ function QuestionReportModal({report,user,t,onClose}) {
   const submit=async()=>{
     setError("");
     setStatus("");
-    if(message.trim().length<8){
-      setError("Please describe what looks wrong so the owner can review it properly.");
+    const cleanMessage=message.trim();
+    if(cleanMessage.length<FEEDBACK_DESCRIPTION_MIN_LENGTH){
+      setError(`Description must be at least ${FEEDBACK_DESCRIPTION_MIN_LENGTH} characters.`);
       return;
     }
     setSubmitting(true);
@@ -17689,12 +17692,17 @@ function QuestionReportModal({report,user,t,onClose}) {
         body:JSON.stringify({
           ...report,
           issueType,
-          message,
+          message:cleanMessage,
           contactEmail,
         }),
       });
       const data=await response.json().catch(()=>({}));
-      if(!response.ok) throw new Error(data.error||"Unable to submit feedback.");
+      if(!response.ok) {
+        const setupHint=response.status===409
+          ? "Feedback database is not set up yet. Run supabase/feedback.sql in Supabase SQL Editor, then try again."
+          : data.error||"Unable to submit feedback.";
+        throw new Error(setupHint);
+      }
       capture("question_report_submitted", { question_id: report.questionId, question_type: report.questionKind, issue_type: issueType, notification_sent: Boolean(data.notificationSent) });
       setStatus("Feedback submitted. The owner will see it in the internal feedback dashboard.");
       setTimeout(onClose,1100);
@@ -17737,15 +17745,19 @@ function QuestionReportModal({report,user,t,onClose}) {
           <option value="technical_bug">Technical bug</option>
           <option value="other">Other</option>
         </select>
-        <label className="label" style={{display:"block",marginBottom:7}}>What should the owner review?</label>
+        <label className="label" style={{display:"block",marginBottom:7}}>Description</label>
         <textarea
           className="input"
           value={message}
           onChange={e=>setMessage(e.target.value)}
           placeholder="Example: The correct answer seems wrong because..."
           rows={5}
-          style={{resize:"vertical",marginBottom:12}}
+          maxLength={4000}
+          style={{resize:"vertical",marginBottom:6}}
         />
+        <div style={{fontSize:12,color:message.trim().length<FEEDBACK_DESCRIPTION_MIN_LENGTH?t.amber:t.textDim,marginBottom:12}}>
+          {message.trim().length}/{FEEDBACK_DESCRIPTION_MIN_LENGTH} characters minimum
+        </div>
         <label className="label" style={{display:"block",marginBottom:7}}>Contact email optional</label>
         <input className="input" value={contactEmail} onChange={e=>setContactEmail(e.target.value)} placeholder="you@example.com" style={{marginBottom:12}}/>
         <Alert msg={error} t={t}/>
@@ -17798,7 +17810,7 @@ function AdminFeedbackPage({user,t}) {
   };
 
   return(
-    <div style={{padding:"24px",maxWidth:1040,margin:"0 auto"}}>
+    <div className="feedback-page" style={{padding:"24px",maxWidth:1040,margin:"0 auto"}}>
       <div className="page-title-row" style={{marginBottom:16}}>
         <NavGlyph type="objectives" active/>
         <div>

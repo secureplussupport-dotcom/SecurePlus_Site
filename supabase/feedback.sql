@@ -54,7 +54,7 @@ with check (
   and length(question_kind) between 1 and 20
   and length(question_id) between 1 and 80
   and length(title) between 1 and 500
-  and length(message) between 8 and 4000
+  and length(message) between 20 and 4000
   and status = 'open'
 );
 
@@ -114,20 +114,21 @@ begin
     );
   end if;
 
-  if not exists (select 1 from pg_constraint where conname = 'feedback_reports_size_check') then
-    alter table feedback_reports
-    add constraint feedback_reports_size_check
-    check (
-      length(question_kind) between 1 and 20
-      and length(question_id) between 1 and 80
-      and (chapter is null or length(chapter) <= 40)
-      and (difficulty is null or length(difficulty) <= 40)
-      and length(title) between 1 and 500
-      and length(message) between 8 and 4000
-      and (page_url is null or length(page_url) <= 900)
-      and (user_agent is null or length(user_agent) <= 500)
-    );
-  end if;
+  alter table feedback_reports
+  drop constraint if exists feedback_reports_size_check;
+
+  alter table feedback_reports
+  add constraint feedback_reports_size_check
+  check (
+    length(question_kind) between 1 and 20
+    and length(question_id) between 1 and 80
+    and (chapter is null or length(chapter) <= 40)
+    and (difficulty is null or length(difficulty) <= 40)
+    and length(title) between 1 and 500
+    and length(message) between 20 and 4000
+    and (page_url is null or length(page_url) <= 900)
+    and (user_agent is null or length(user_agent) <= 500)
+  );
 end $$;
 
 create index if not exists feedback_reports_created_at_idx

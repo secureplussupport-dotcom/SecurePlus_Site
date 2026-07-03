@@ -6,6 +6,7 @@ import {
 } from "../_utils.js";
 
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
+const FEEDBACK_DESCRIPTION_MIN_LENGTH = 20;
 
 function cleanText(value, max = 1000) {
   return String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
@@ -105,8 +106,8 @@ export default async function handler(req, res) {
   try {
     const body = await getJsonBody(req);
     const message = cleanMultiline(body.message, 4000);
-    if (message.length < 8) {
-      return json(res, 400, { error: "Feedback message is too short." });
+    if (message.length < FEEDBACK_DESCRIPTION_MIN_LENGTH) {
+      return json(res, 400, { error: `Description must be at least ${FEEDBACK_DESCRIPTION_MIN_LENGTH} characters.` });
     }
 
     const supabase = getSupabaseAdmin();
