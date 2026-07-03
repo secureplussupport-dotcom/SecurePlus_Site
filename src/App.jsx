@@ -115,11 +115,39 @@ function shouldShowPBQUpgradePrompt() {
 
 const FREE_PBQ_PREVIEW_ID = "p001";
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
+const DELETED_ACCOUNT_KEY = "secureplus_deleted_account";
 const isFreePBQPreview = question => question?.id === FREE_PBQ_PREVIEW_ID;
 const dailyStreakOwner = user => normalizeEmail(user?.email || "") || "guest";
 const practiceSessionOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
 const starOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
 const starKey = (type,id) => `${type}:${id}`;
+function rememberDeletedAccount(account) {
+  try {
+    window.localStorage?.setItem(DELETED_ACCOUNT_KEY, JSON.stringify({
+      id: account?.id || "",
+      email: normalizeEmail(account?.email),
+      deletedAt: Date.now(),
+    }));
+  } catch {}
+}
+function isRecentlyDeletedAccount(account) {
+  try {
+    const raw=window.localStorage?.getItem(DELETED_ACCOUNT_KEY);
+    if(!raw)return false;
+    const deleted=JSON.parse(raw);
+    if(!deleted?.deletedAt)return false;
+    const thirtyDays=30*24*60*60*1000;
+    if(Date.now()-deleted.deletedAt>thirtyDays){
+      window.localStorage?.removeItem(DELETED_ACCOUNT_KEY);
+      return false;
+    }
+    const email=normalizeEmail(account?.email);
+    if(deleted.id && account?.id) return account.id===deleted.id;
+    return Boolean(deleted.email && email && deleted.email===email);
+  } catch {
+    return false;
+  }
+}
 function localDateKey(date=new Date()) {
   const year=date.getFullYear();
   const month=String(date.getMonth()+1).padStart(2,"0");
@@ -180,31 +208,19 @@ function ensureMcqWrongFeedback(question) {
   });
   return {...question,wrongFeedback};
 }
-function reportQuestionIssue({kind,question,selected,correct}) {
+function buildQuestionReport({kind,question,selected,correct}) {
   const id=question?.id||"unknown";
   const title=question?.q||question?.question||question?.title||"Question";
-  const subject=`SecurePlus question report: ${kind?.toUpperCase?.()||"QUESTION"} ${id}`;
-  const body=[
-    "Hi SecurePlus team,",
-    "",
-    "I want to report a possible issue with this question.",
-    "",
-    `Question type: ${kind||"question"}`,
-    `Question ID: ${id}`,
-    `Chapter: ${question?.ch||"not shown"}`,
-    `Difficulty: ${question?.difficulty||"not shown"}`,
-    `Title/question: ${title}`,
-    selected!==undefined&&selected!==null ? `My selected answer: ${String.fromCharCode(65+selected)}` : "",
-    correct!==undefined&&correct!==null ? `Correct answer shown: ${String.fromCharCode(65+correct)}` : "",
-    "",
-    "Issue type: inaccurate answer / obvious answer / typo / confusing explanation / other",
-    "What I noticed:",
-    "",
-    "",
-    `Page: ${typeof window!=="undefined"?window.location.href:""}`,
-  ].filter(Boolean).join("\n");
-  capture("question_report_clicked", { question_id:id, question_type:kind||"question" });
-  window.location.href=`mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return {
+    questionKind:kind||"question",
+    questionId:id,
+    chapter:question?.ch||"",
+    difficulty:question?.difficulty||"",
+    title,
+    selectedAnswer:selected!==undefined&&selected!==null ? String.fromCharCode(65+selected) : "",
+    correctAnswer:correct!==undefined&&correct!==null ? String.fromCharCode(65+correct) : "",
+    pageUrl:typeof window!=="undefined"?window.location.href:"",
+  };
 }
 function shuffleMcqOptions(question) {
   if(!question?.opts?.length) return question;
@@ -8133,7 +8149,12 @@ const LOW_QUALITY_MCQ_IDS = new Set([
   // Hidden because the stem/options are too long and saturated for a smooth MCQ experience.
   "m412","m421","m422","m430","m445","m447","m452","m455","m457","m462","m466","m467","m471",
   "m474","m480","m481","m482","m483","m484","m485","m486","m487","m488","m489","m491",
-  "m492","m495","m496","m497","m498","m500","m503","m504","m505","m508","m702"
+  "m492","m495","m496","m497","m498","m500","m503","m504","m505","m508","m702",
+  // Hidden by the stricter mobile readability pass.
+  "m409","m414","m415","m419","m424","m428","m429","m431","m434","m435","m436","m438",
+  "m440","m444","m446","m448","m449","m450","m453","m454","m458","m459","m460","m461",
+  "m463","m464","m465","m468","m469","m470","m472","m473","m475","m476","m477","m478",
+  "m479","m490","m493","m494","m499","m501","m506","m507","m701","m703","m704"
 ]);
 
 const IMPORTED_MCQ_BANK = [
@@ -13691,7 +13712,13 @@ const IMPORTED_PBQ_BANK = [
   }
 ];
 
-const PBQ_BANK = [...PBQ_BANK_BASE, ...IMPORTED_PBQ_BANK];
+const LOW_QUALITY_PBQ_IDS = new Set([
+  // Hidden because the prompt or explanation is too long for a smooth PBQ practice flow.
+  "p053","p059","p063","p065","p071","p072","p076","p081","p087","p088","p090","p091",
+  "p092","p093","p097","p098","p100"
+]);
+
+const PBQ_BANK = [...PBQ_BANK_BASE, ...IMPORTED_PBQ_BANK].filter(q=>!LOW_QUALITY_PBQ_IDS.has(q.id));
 
 // ═══════════════════════════════════════════════════════════════
 // DAILY CHALLENGE DATA
@@ -13795,11 +13822,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .trial-countdown-unit{padding:10px 9px;border:1px solid ${t.border};border-radius:9px;background:${t.panel};text-align:center;min-width:0;}
 .trial-countdown-value{font-family:'Montserrat',system-ui,sans-serif;font-size:22px;font-weight:900;color:${t.green};line-height:1;}
 .trial-countdown-label{font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:${t.textDim};margin-top:5px;}
-.question-card{padding:30px 32px!important;margin-bottom:22px!important;background:linear-gradient(180deg,${t.surface},${t.panel})!important;border-color:${t.accent}2e!important;box-shadow:0 16px 36px rgba(7,12,24,.10)!important;}
-.question-text{font-family:'Montserrat',system-ui,sans-serif!important;font-size:21px!important;line-height:1.72!important;color:${t.text}!important;font-weight:800!important;letter-spacing:0!important;overflow-wrap:anywhere;}
+.question-card{padding:22px 24px!important;margin-bottom:16px!important;background:linear-gradient(180deg,${t.surface},${t.panel})!important;border-color:${t.accent}26!important;box-shadow:0 14px 30px rgba(7,12,24,.09)!important;}
+.question-text{font-family:'Montserrat',system-ui,sans-serif!important;font-size:20px!important;line-height:1.62!important;color:${t.bg==="#0b1020"?"#E2E8F0":t.text}!important;font-weight:800!important;letter-spacing:0!important;overflow-wrap:anywhere;}
 .scenario-text{font-size:16px!important;line-height:1.8!important;color:${t.textSec}!important;overflow-wrap:anywhere;}
 .question-prompt{font-family:'Montserrat',system-ui,sans-serif!important;font-size:18px!important;line-height:1.65!important;color:${t.text}!important;font-weight:800!important;margin-bottom:14px!important;}
-.option-text{font-size:17px!important;line-height:1.68!important;color:${t.text}!important;font-weight:700!important;overflow-wrap:anywhere;}
+.option-text{font-size:17px!important;line-height:1.62!important;color:${t.text}!important;font-weight:700!important;overflow-wrap:anywhere;}
 .compact-question-text{font-size:16px!important;line-height:1.7!important;color:${t.text}!important;font-weight:750!important;}
 .question-dots{display:flex;gap:6px;flex-wrap:wrap;}
 .question-dot{width:11px;height:11px;border-radius:50%;border:0;padding:0;cursor:pointer;transition:transform .18s,box-shadow .18s,background .2s;}
@@ -13852,18 +13879,34 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .custom-select-option.active::before{content:"";width:8px;height:8px;border-radius:50%;background:${t.accent};box-shadow:0 0 0 4px ${t.accent}18;flex-shrink:0;}
 .custom-select-option:not(.active)::before{content:"";width:8px;height:8px;border-radius:50%;background:${t.border};opacity:.65;flex-shrink:0;}
 .difficulty-chip{font-weight:900;}
-.star-btn{min-width:38px;min-height:38px;padding:0 10px;border-radius:10px;border:1px solid ${t.border};background:${t.panel};color:${t.textDim};font-size:18px;font-weight:900;cursor:pointer;transition:transform .18s,border-color .18s,background .18s,color .18s,box-shadow .18s;}
-.star-btn:hover{transform:translateY(-1px);border-color:#f59e0b66;color:#f59e0b;background:#f59e0b12;}
-.star-btn.active{border-color:#f59e0b88;color:#f59e0b;background:#f59e0b18;box-shadow:0 0 22px #f59e0b30;text-shadow:0 0 14px #f59e0b99;}
+.meta-chip{background:${t.panel}!important;color:${t.textSec}!important;border-color:${t.border}!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035);}
+.star-btn{min-width:38px;min-height:38px;padding:0 10px;border-radius:999px;border:0;background:transparent;color:${t.textDim};font-size:21px;font-weight:900;cursor:pointer;transition:transform .18s,background .18s,color .18s,box-shadow .18s;}
+.star-btn:hover{transform:translateY(-1px) scale(1.04);color:#f59e0b;background:#f59e0b12;box-shadow:0 0 18px #f59e0b18;}
+.star-btn.active{color:#f59e0b;background:#f59e0b16;box-shadow:0 0 22px #f59e0b26;text-shadow:0 0 14px #f59e0b88;}
 .exam-timer{transition:color .18s,text-shadow .18s,transform .18s;}
 .exam-timer.glow{color:${t.red}!important;text-shadow:0 0 12px ${t.red},0 0 26px ${t.red}99;animation:timerGlow .9s ease-in-out infinite alternate;}
+.top-progress{position:sticky;top:0;z-index:90;height:4px;background:${t.border}88;border-radius:999px;overflow:hidden;margin:-10px 0 14px;}
+.top-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,${t.accent},${t.green});transition:width .22s ease;}
+.exam-score-card{position:relative;overflow:visible;padding:24px;text-align:center;border-radius:12px;}
+.radial-score{width:156px;height:156px;margin:8px auto 10px;display:block;}
+.radial-score .score-progress{transition:stroke-dashoffset .75s cubic-bezier(.16,1,.3,1);}
+.score-actions{position:sticky;top:10px;z-index:45;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:0 0 18px;padding:10px;border:1px solid ${t.border};border-radius:12px;background:${t.surface}ed;backdrop-filter:blur(16px);box-shadow:0 14px 30px rgba(7,12,24,.12);}
+.info-popover{position:relative;display:inline-flex;align-items:center;}
+.info-btn{width:24px;height:24px;border-radius:999px;border:1px solid ${t.border};background:${t.panel};color:${t.textSec};font-size:13px;font-weight:900;cursor:pointer;}
+.info-btn:hover{color:${t.accent};border-color:${t.accent}60;background:${t.accent}10;}
+.info-tooltip{position:absolute;left:50%;top:calc(100% + 10px);transform:translateX(-50%);width:min(330px,calc(100vw - 38px));padding:12px 14px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};box-shadow:0 22px 48px rgba(0,0,0,.28);color:${t.textSec};font-size:12px;line-height:1.65;text-align:left;z-index:80;}
+.analytics-grid{display:grid;gap:10px;}
+.telemetry-card{padding:13px 14px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};}
+.telemetry-meter{height:7px;border-radius:999px;background:${t.border};overflow:hidden;}
+.telemetry-meter span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,${t.red},${t.amber},${t.green});}
 .tab{padding:9px 18px;cursor:pointer;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:${t.textSec};transition:all .15s;white-space:nowrap;}
 .tab:hover{color:${t.text};}
 .tab.act{color:${t.accent};border-bottom-color:${t.accent};}
-.nav-lnk{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13px;font-weight:800;color:${t.textSec};cursor:pointer;transition:all .15s;border:1px solid transparent;min-height:42px;}
+.nav-lnk{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:800;color:${t.textSec};cursor:pointer;transition:all .18s;border:1px solid transparent;min-height:42px;}
 .nav-lnk:hover{color:${t.text};background:${t.panel};box-shadow:inset 0 0 0 1px ${t.border};}
-.nav-lnk.act{color:${t.text};background:linear-gradient(135deg, ${t.accent}22, ${t.green}10);border-color:${t.accent}34;box-shadow:0 10px 22px ${t.accent}10;animation:softGlow 2.8s ease-in-out infinite;}
-.nav-glyph{width:22px;height:22px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;background:${t.panel};border:1px solid ${t.border};transition:transform .2s,background .2s,border-color .2s,box-shadow .2s;}
+.nav-lnk.act{color:${t.text};background:linear-gradient(135deg, ${t.accent}24, ${t.green}0f);border-color:${t.accent}38;box-shadow:0 12px 26px ${t.accent}16, inset 0 0 0 1px ${t.accent}18;animation:softGlow 2.8s ease-in-out infinite;}
+.nav-lnk.act span:last-child{color:${t.text};text-shadow:0 0 16px ${t.accent}55;}
+.nav-glyph{width:22px;height:22px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;background:transparent;border:1px solid transparent;transition:transform .2s,background .2s,border-color .2s,box-shadow .2s;}
 .nav-glyph span,.nav-glyph::before,.nav-glyph::after{content:"";position:absolute;display:block;transition:all .25s ease;}
 .nav-glyph-dashboard span{width:10px;height:8px;border:2px solid currentColor;border-top:0;bottom:5px;border-radius:1px;}
 .nav-glyph-dashboard::before{width:12px;height:12px;border-left:2px solid currentColor;border-top:2px solid currentColor;transform:rotate(45deg);top:3px;}
@@ -13980,19 +14023,22 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .prog-track{background:${t.border};border-radius:99px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;}
 .prog-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:barShine 1.8s linear infinite;}
-.opt{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-radius:9px;border:1.5px solid ${t.border};cursor:pointer;transition:background .18s,border-color .18s,transform .18s,box-shadow .18s; background:linear-gradient(180deg,${t.surface},${t.panel});min-width:0;box-shadow:0 8px 18px rgba(7,12,24,.055);}
-.opt:hover:not(.done){border-color:${t.accent};background:linear-gradient(180deg,${t.accent}10,${t.surface});transform:translateY(-1px);box-shadow:0 14px 28px ${t.accent}12;}
-.opt.sel{border-color:${t.accent};background:${t.accent}10;animation:selectPulse .28s ease both;}
-.opt.ok{border-color:${t.green}70!important;background:${t.green}08!important;animation:answerPop .34s cubic-bezier(.16,1,.3,1) both;}
-.opt.bad{border-color:${t.red}60!important;background:${t.red}07!important;animation:shakeLite .32s ease both;}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:17px 19px;border-radius:12px;border:1.5px solid ${t.border};cursor:pointer;transition:background .18s,border-color .18s,transform .18s,box-shadow .18s; background:linear-gradient(180deg,${t.surface},${t.panel});min-width:0;box-shadow:0 8px 18px rgba(7,12,24,.045);}
+.opt:hover:not(.done){border-color:${t.accent}7a;background:linear-gradient(180deg,${t.accent}10,${t.surface});transform:translateY(-1px);box-shadow:0 15px 30px ${t.accent}16;}
+.opt.sel{border-color:${t.accent}!important;border-width:2px;background:linear-gradient(135deg,${t.accent}28,${t.surface} 62%,${t.accent}10);box-shadow:0 0 0 3px ${t.accent}18,0 16px 34px ${t.accent}18;animation:selectPulse .28s ease both;}
+.opt.ok{border-color:${t.green}80!important;background:${t.green}10!important;box-shadow:0 0 0 3px ${t.green}16!important;animation:answerPop .34s cubic-bezier(.16,1,.3,1) both;}
+.opt.bad{border-color:${t.red}70!important;background:${t.red}0a!important;box-shadow:0 0 0 3px ${t.red}14!important;animation:shakeLite .32s ease both;}
 .opt.eliminated{opacity:.54;background:${t.panel}!important;border-style:dashed;}
 .opt.eliminated .option-text{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:${t.red}cc;color:${t.textDim}!important;}
 .opt.eliminated .opt-ltr{border-color:${t.red}50;color:${t.red};background:${t.red}0d;}
 .opt.done{cursor:default;}
-.opt-ltr{width:34px;height:34px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;border:1.5px solid ${t.border};color:${t.textDim};transition:all .18s;background:${t.panel};}
-.opt:hover:not(.done) .opt-ltr,.opt.sel .opt-ltr{border-color:${t.accent};color:${t.accent};}
-.opt.ok .opt-ltr{border-color:${t.green}70;color:${t.green};background:${t.green}10;}
-.opt.bad .opt-ltr{border-color:${t.red}60;color:${t.red};background:${t.red}0d;}
+.opt-ltr{width:36px;height:36px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;border:1.5px solid ${t.border};color:${t.textDim};transition:all .18s;background:${t.panel};}
+.opt:hover:not(.done) .opt-ltr{border-color:${t.accent};color:${t.accent};box-shadow:0 0 0 4px ${t.accent}12;}
+.opt.sel .opt-ltr{border-color:${t.accent};color:#fff;background:${t.accent};box-shadow:0 0 0 5px ${t.accent}18;}
+.opt.ok .opt-ltr{border-color:${t.green};color:#fff;background:${t.green};box-shadow:0 0 0 5px ${t.green}18;}
+.opt.ok .opt-ltr::before{content:"✓";font-size:15px;}
+.opt.ok .opt-ltr{font-size:0;}
+.opt.bad .opt-ltr{border-color:${t.red};color:#fff;background:${t.red};box-shadow:0 0 0 5px ${t.red}16;}
 .answer-burst{position:fixed;left:50%;top:18px;z-index:480;width:min(440px,calc(100vw - 28px));transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;border:1px solid;background:${t.surface};box-shadow:0 22px 56px rgba(0,0,0,.24);animation:answerBurstIn .42s cubic-bezier(.16,1,.3,1) both;}
 .answer-burst.correct{border-color:${t.green}55;background:linear-gradient(135deg, ${t.green}18, ${t.surface});}
 .answer-burst.wrong{border-color:${t.red}50;background:linear-gradient(135deg, ${t.red}14, ${t.surface});}
@@ -14178,13 +14224,15 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .trial-countdown-banner{width:calc(100% - 32px);margin-top:14px;padding:16px;}
   .trial-countdown-grid{grid-template-columns:repeat(4,minmax(0,1fr));flex-basis:100%;}
   .trial-countdown-value{font-size:19px;}
-  .question-card{padding:22px 20px!important;}
-  .question-text{font-size:19px!important;line-height:1.68!important;}
+  .question-card{padding:18px 18px!important;}
+  .question-text{font-size:18px!important;line-height:1.58!important;}
   .question-prompt{font-size:17px!important;line-height:1.6!important;}
   .scenario-text{font-size:15px!important;line-height:1.75!important;}
   .option-text{font-size:16px!important;line-height:1.62!important;}
-  .opt{padding:15px 14px!important;gap:12px!important;}
-  .opt-ltr{width:32px!important;height:32px!important;}
+  .opt{padding:15px 14px!important;gap:12px!important;border-radius:12px!important;}
+  .opt-ltr{width:34px!important;height:34px!important;border-radius:999px!important;}
+  .top-progress{margin:-4px 0 12px!important;}
+  .score-actions{top:8px!important;}
   [style*="grid-template-columns:1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr"]{grid-template-columns:1fr!important;}
   [style*="grid-template-columns:repeat(4,1fr)"],[style*="gridTemplateColumns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
   [style*="grid-template-columns:1fr 1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr 1fr"]{grid-template-columns:1fr!important;}
@@ -14253,7 +14301,7 @@ function BrandMark({size=30}) {
 }
 function SimBadge({type,t}) {
   const s=Object.values(SIM_TYPES).find(x=>x.id===type)||SIM_TYPES.TERMINAL;
-  return <span className="chip" style={{background:`${s.color}15`,color:s.color,borderColor:`${s.color}30`}}><SimIcon type={type} size={18}/> {s.label}</span>;
+  return <span className="chip meta-chip"><SimIcon type={type} size={18}/> {s.label}</span>;
 }
 function difficultyMeta(d) {
   return ({
@@ -14300,8 +14348,7 @@ function GlossaryText({text,t,style}) {
 function ChBadge({chId,t}) {
   const ch=CHAPTERS.find(c=>c.id===chId);
   if(!ch) return null;
-  const color=chapterColor(ch.id);
-  return <span className="chip" style={{background:`${color}14`,color,borderColor:`${color}30`,fontSize:11}}><ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}</span>;
+  return <span className="chip meta-chip" style={{fontSize:11}}><ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}</span>;
 }
 function NavGlyph({type,active}) {
   return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true"><span/></span>;
@@ -14401,6 +14448,36 @@ function StarButton({active,onToggle,label="Star question"}) {
     >
       {active?"★":"☆"}
     </button>
+  );
+}
+function RadialScore({score,correct,total,t}) {
+  const passed=score>=80;
+  const color=passed?"#10B981":"#EF4444";
+  const radius=58;
+  const circumference=2*Math.PI*radius;
+  const offset=circumference-(Math.max(0,Math.min(score,100))/100)*circumference;
+  return(
+    <div>
+      <svg className="radial-score" viewBox="0 0 156 156" role="img" aria-label={`${score}% score`}>
+        <circle cx="78" cy="78" r={radius} fill="none" stroke={t.border} strokeWidth="14"/>
+        <circle
+          className="score-progress"
+          cx="78"
+          cy="78"
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth="14"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          transform="rotate(-90 78 78)"
+        />
+        <text x="78" y="73" textAnchor="middle" fill={t.text} fontSize="30" fontWeight="900">{score}%</text>
+        <text x="78" y="95" textAnchor="middle" fill={t.textDim} fontSize="12" fontWeight="800">SCORE</text>
+      </svg>
+      <div style={{fontSize:14,color:"#94A3B8",fontWeight:800}}>{correct} / {total} correct</div>
+    </div>
   );
 }
 function AnswerBurst({result,t}) {
@@ -14821,7 +14898,7 @@ function DailyChallenge({t,onLogin,user=null}) {
         <div style={{display:"flex",gap:8,marginBottom:10,flexWrap:"wrap"}}>
           <ChBadge chId={current.ch} t={t}/>
           <DiffBadge d={current.difficulty} t={t}/>
-          <span className="chip" style={{background:`${t.accent}10`,color:t.textSec,borderColor:t.border,fontSize:11}}>{current.topic}</span>
+          <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
         </div>
         <p className="question-text" style={{fontSize:15,lineHeight:1.7,color:t.text}}>{current.q}</p>
       </div>
@@ -15557,7 +15634,7 @@ function Dashboard({user,attempts,onNav,t}) {
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
-function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onToggleStar}) {
+function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onToggleStar,onReportQuestion}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
   const sessionKey=`mcq:${practiceSessionOwner(user)}`;
   const requestSignup=onSignup||onUpgrade;
@@ -16018,6 +16095,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
 
   return(
     <div style={{padding:"24px",maxWidth:700,margin:"0 auto"}} className="fu" key={qi}>
+      <div className="top-progress" aria-hidden="true"><span style={{width:`${((qi+1)/questions.length)*100}%`}}/></div>
       {/* Progress */}
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}>
         <div className="question-dots">
@@ -16044,7 +16122,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
         <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
           <ChBadge chId={current.ch} t={t}/>
           <DiffBadge d={current.difficulty} t={t}/>
-          <span className="chip" style={{background:`${t.accent}10`,color:t.textSec,borderColor:t.border,fontSize:11}}>{current.topic}</span>
+          <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
           {!isGuest&&(
             <span style={{marginLeft:"auto"}}>
               <StarButton active={starredSet.has(starKey("mcq",current.id))} onToggle={()=>onToggleStar?.("mcq",current.id)} label="Star MCQ"/>
@@ -16106,15 +16184,15 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>{getWrongOptionFeedback(current, selected)}</div>
               </div>
             )}
-            <div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}>
+            {onReportQuestion&&<div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}>
               <button
                 className="btn btn-ghost"
                 style={{fontSize:12,minHeight:34,padding:"7px 10px"}}
-                onClick={()=>reportQuestionIssue({kind:"mcq",question:current,selected,correct:current.correct})}
+                onClick={()=>onReportQuestion?.({kind:"mcq",question:current,selected,correct:current.correct})}
               >
                 Report question
               </button>
-            </div>
+            </div>}
           </div>
           <AnswerBurst result={answerBurst} t={t}/>
           <div className="practice-action-bar">
@@ -16344,7 +16422,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
 // ═══════════════════════════════════════════════════════════════
 // PBQ SIMULATOR
 // ═══════════════════════════════════════════════════════════════
-function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewMode=false,onUpgrade}) {
+function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewMode=false,onUpgrade,onReportQuestion}) {
   const [termInput,setTermInput]=useState("");
   const [termHistory,setTermHistory]=useState([]);
   const [selected,setSelected]=useState(null);
@@ -16636,15 +16714,15 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                 })}
               </div>
             )}
-            <div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}>
+            {onReportQuestion&&<div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}>
               <button
                 className="btn btn-ghost"
                 style={{fontSize:12,minHeight:34,padding:"7px 10px"}}
-                onClick={()=>reportQuestionIssue({kind:"pbq",question:q,selected,correct:q.correct})}
+                onClick={()=>onReportQuestion?.({kind:"pbq",question:q,selected,correct:q.correct})}
               >
                 Report question
               </button>
-            </div>
+            </div>}
           </div>
           {previewMode&&(
             <div className="card" style={{padding:"18px 22px",marginBottom:14,borderColor:`${t.amber}45`,background:`linear-gradient(135deg, ${t.amber}10, ${t.surface})`}}>
@@ -16769,6 +16847,8 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   const [resumeAvailable,setResumeAvailable]=useState(false);
   const [expandedReview,setExpandedReview]=useState({});
   const [showExamGuide,setShowExamGuide]=useState(false);
+  const [submittingExam,setSubmittingExam]=useState(false);
+  const [showScoreDisclaimer,setShowScoreDisclaimer]=useState(false);
   const longPressTimers=useRef({});
   const longPressActivated=useRef({});
   const rightClickHandled=useRef({});
@@ -16854,13 +16934,24 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   };
   const updateAnswer=patch=>setAnswers(prev=>({...prev,[qi]:{...(prev[qi]||{}),...patch}}));
   const setAnswerAt=(index,patch)=>setAnswers(prev=>({...prev,[index]:{...(prev[index]||{}),...patch}}));
+  const selectMcqOption=optionIndex=>{
+    const eliminated={...(answer.eliminated||{})};
+    delete eliminated[optionIndex];
+    updateAnswer({selected:optionIndex,eliminated});
+  };
   const toggleEliminatedOption=(optionIndex,questionIndex=qi)=>{
     setAnswers(prev=>{
       const currentAnswer=prev[questionIndex]||{};
       const eliminated={...(currentAnswer.eliminated||{})};
-      if(eliminated[optionIndex]) delete eliminated[optionIndex];
-      else eliminated[optionIndex]=true;
-      return {...prev,[questionIndex]:{...currentAnswer,eliminated}};
+      const alreadyEliminated=Boolean(eliminated[optionIndex]);
+      if(alreadyEliminated) delete eliminated[optionIndex];
+      else {
+        const eliminatedCount=Object.values(eliminated).filter(Boolean).length;
+        if(eliminatedCount>=3) return prev;
+        eliminated[optionIndex]=true;
+      }
+      const selected=currentAnswer.selected===optionIndex&&!alreadyEliminated ? null : currentAnswer.selected;
+      return {...prev,[questionIndex]:{...currentAnswer,selected,eliminated}};
     });
   };
   const startOptionLongPress=(optionIndex,e)=>{
@@ -16896,7 +16987,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   const score=questions.length?Math.round((correctCount/questions.length)*100):0;
 
   function submitExam(auto=false) {
-    if(done) return;
+    if(done||submittingExam) return;
     if(!auto){
       const flaggedCount=Object.values(flagged).filter(Boolean).length;
       const warnings=[];
@@ -16907,42 +16998,46 @@ function ExamMode({user,onSave,onUpgrade,t}) {
         if(!ok) return;
       }
     }
-    const rows=questions.map((item,index)=>{
-      const q=item.q;
-      return {
-        qid:q.id,
-        correct:isCorrect(item,answers[index]),
-        selected:answers[index]?.selected,
-        title:(item.kind==="mcq"?q.q:q.title).slice(0,80),
-        ch:q.ch,
-        domain:item.kind==="mcq"?(CHAPTERS.find(c=>c.id===q.ch)?.title||""):q.cat,
-        topic:item.kind==="mcq"?q.topic:q.type,
-        difficulty:q.difficulty,
-        mcq:item.kind==="mcq",
-        pbq:item.kind==="pbq",
-        exam:true,
-        timeSpentSeconds:timeSpent[index]||0,
-        createdAt:new Date().toISOString(),
-      };
-    });
-    if(!saved){
-      rows.forEach(row=>onSave(row));
-      setSaved(true);
-    }
-    capture("exam_mode_completed", { question_count: questions.length, correct_count: rows.filter(r=>r.correct).length, score, auto_submitted: auto, tier: user.tier });
-    DB.clearPracticeSession(sessionKey);
-    setDone(true);
+    setSubmittingExam(true);
+    window.setTimeout(()=>{
+      const rows=questions.map((item,index)=>{
+        const q=item.q;
+        return {
+          qid:q.id,
+          correct:isCorrect(item,answers[index]),
+          selected:answers[index]?.selected,
+          title:(item.kind==="mcq"?q.q:q.title).slice(0,80),
+          ch:q.ch,
+          domain:item.kind==="mcq"?(CHAPTERS.find(c=>c.id===q.ch)?.title||""):q.cat,
+          topic:item.kind==="mcq"?q.topic:q.type,
+          difficulty:q.difficulty,
+          mcq:item.kind==="mcq",
+          pbq:item.kind==="pbq",
+          exam:true,
+          timeSpentSeconds:timeSpent[index]||0,
+          createdAt:new Date().toISOString(),
+        };
+      });
+      if(!saved){
+        rows.forEach(row=>onSave(row));
+        setSaved(true);
+      }
+      capture("exam_mode_completed", { question_count: questions.length, correct_count: rows.filter(r=>r.correct).length, score, auto_submitted: auto, tier: user.tier });
+      DB.clearPracticeSession(sessionKey);
+      setDone(true);
+      setSubmittingExam(false);
+    },900);
   }
 
   useEffect(()=>{
-    if(!started||done)return;
+    if(!started||done||submittingExam)return;
     if(timeLeft<=0){submitExam(true);return;}
     const id=setInterval(()=>{
       setTimeLeft(s=>Math.max(0,s-1));
       setTimeSpent(prev=>({...prev,[qi]:(prev[qi]||0)+1}));
     },1000);
     return()=>clearInterval(id);
-  },[started,done,timeLeft,qi]);
+  },[started,done,submittingExam,timeLeft,qi]);
 
   const placeDragItem=(item,targetId)=>{
     if(!item)return;
@@ -17085,6 +17180,8 @@ function ExamMode({user,onSave,onUpgrade,t}) {
     </>
   );
 
+  if(submittingExam) return <LoadingScreen t={t}/>;
+
   const examReviewRows=questions.map((item,index)=>({
     item,
     index,
@@ -17103,43 +17200,75 @@ function ExamMode({user,onSave,onUpgrade,t}) {
     if(row.seconds>row.target*1.35) acc[key].slow++;
     return acc;
   },{})).filter(item=>item.missed||item.slow).sort((a,b)=>(b.missed+b.slow)-(a.missed+a.slow)).slice(0,4);
+  const incorrectExamRows=examReviewRows.filter(row=>!row.ok);
+  const retakeIncorrectExam=()=>{
+    const missed=incorrectExamRows.map(row=>row.item);
+    if(!missed.length)return;
+    setQuestions(missed);
+    setAnswers(Object.fromEntries(missed.map((item,index)=>[index,initAnswer(item)])));
+    setFlagged({});
+    setTimeSpent({});
+    setExpandedReview({});
+    setQi(0);
+    setQuestionCount(missed.length);
+    setPbqCount(missed.filter(item=>item.kind==="pbq").length);
+    setTimeLeft(Math.max(1,missed.length)*72);
+    setDone(false);
+    setSaved(false);
+    setSubmittingExam(false);
+    setStarted(true);
+    capture("exam_retake_incorrect_started", { question_count: missed.length, tier: user.tier });
+  };
 
   if(done) return(
     <div style={{padding:"28px 24px",maxWidth:900,margin:"0 auto"}}>
-      <div className="card" style={{padding:"22px 24px",marginBottom:16,textAlign:"center",borderColor:score>=80?`${t.green}45`:`${t.red}45`,background:score>=80?`${t.green}07`:`${t.red}07`}}>
-        <div style={{fontSize:13,fontWeight:800,color:score>=80?t.green:t.red,textTransform:"uppercase",marginBottom:6}}>{score>=80?"Practice Pass":"Practice Fail"}</div>
-        <h2 style={{fontSize:32,color:t.text,marginBottom:4}}>{score}%</h2>
-        <div style={{fontSize:14,color:t.textSec}}>{correctCount}/{questions.length} correct</div>
-      </div>
-      <div className="card" style={{padding:"16px 20px",marginBottom:18,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
-        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
-          <span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}45`}}>Practice score</span>
-          <span style={{fontSize:13,fontWeight:800,color:t.amber}}>Pass/fail disclaimer</span>
+      <div className="card exam-score-card" style={{marginBottom:12,borderColor:score>=80?`${t.green}45`:`${t.red}45`,background:score>=80?`${t.green}07`:`${t.red}07`}}>
+        <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8,position:"relative"}}>
+          <div style={{fontSize:13,fontWeight:900,color:score>=80?"#10B981":"#EF4444",textTransform:"uppercase",letterSpacing:".06em"}}>
+            {score>=80?"Practice Passed":"Practice Failed"}
+          </div>
+          <span className="info-popover">
+            <button className="info-btn" type="button" aria-label="Practice score disclaimer" onClick={()=>setShowScoreDisclaimer(v=>!v)}>i</button>
+            {showScoreDisclaimer&&(
+              <span className="info-tooltip">
+                SecurePlus uses 80% as a practice pass mark here. This is not an accurate CompTIA scoring model. The real Security+ exam uses a proprietary scaled score from 100 to 900, PBQs can carry different weight, and the real exam has more questions.
+              </span>
+            )}
+          </span>
         </div>
-        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-          Disclaimer: the <strong style={{color:t.amber}}>80%</strong> pass/fail mark is only for SecurePlus practice. The real Security+ exam uses a proprietary scaled score from 100 to 900, PBQs can carry different weight, and the real exam has more questions.
-        </p>
+        <RadialScore score={score} correct={correctCount} total={questions.length} t={t}/>
+      </div>
+      <div className="score-actions">
+        <button className="btn btn-primary" disabled={!incorrectExamRows.length} onClick={retakeIncorrectExam}>
+          Retake Incorrect Questions
+        </button>
+        <button className="btn btn-outline" onClick={()=>{setStarted(false);setDone(false);}}>
+          New Full Exam
+        </button>
+        <button className="btn btn-ghost" onClick={()=>setStarted(false)}>
+          Back to Exam Setup
+        </button>
       </div>
       <div className="card" style={{padding:"18px 20px",marginBottom:18,borderColor:`${t.accent}28`,background:`${t.accent}05`}}>
         <div style={{fontWeight:900,color:t.text,fontSize:16,marginBottom:4}}>Timing and topic analysis</div>
-        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:12}}>
-          Easy MCQs should feel quick, medium questions need more reading time, hard questions can take longer, and PBQs need the most time.
-        </p>
         {timingFocus.length?(
-          <div style={{display:"grid",gap:10}}>
+          <div className="analytics-grid">
             {timingFocus.map(item=>{
               const avg=Math.round(item.seconds/item.total);
               const expected=Math.round(item.target/item.total);
+              const pacing=Math.min(100,Math.round((expected/Math.max(avg,1))*100));
               return(
-                <div key={item.key} style={{padding:"12px 14px",border:`1px solid ${t.border}`,borderRadius:8,background:t.surface}}>
-                  <div style={{display:"flex",justifyContent:"space-between",gap:10,flexWrap:"wrap",marginBottom:5}}>
+                <div key={item.key} className="telemetry-card">
+                  <div style={{display:"flex",justifyContent:"space-between",gap:10,flexWrap:"wrap",marginBottom:8}}>
                     <div style={{fontSize:13,fontWeight:800,color:t.text}}>{item.key}</div>
                     <div style={{fontSize:12,fontWeight:800,color:item.missed?t.red:t.amber}}>
                       {item.missed} missed · {item.slow} slow
                     </div>
                   </div>
-                  <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                    Average time {formatSecondsShort(avg)} vs target {formatSecondsShort(expected)}. Review this area, then retry similar questions with a calm but stricter pace.
+                  <div style={{display:"grid",gridTemplateColumns:"auto 1fr auto",gap:10,alignItems:"center"}}>
+                    <span style={{fontSize:12,color:t.textDim,fontWeight:800}}>Pace</span>
+                    <div className="telemetry-meter"><span style={{width:`${pacing}%`}}/></div>
+                    <span style={{fontSize:12,color:t.textSec,fontWeight:900}}>{formatSecondsShort(avg)} / {formatSecondsShort(expected)}</span>
                   </div>
                 </div>
               );
@@ -17216,6 +17345,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
   const timerGlow=timeLeft<=60 || (timeLeft>0&&timeLeft%60===0);
   return(
     <div style={{padding:"24px",maxWidth:960,margin:"0 auto"}}>
+      <div className="top-progress" aria-hidden="true"><span style={{width:`${((qi+1)/questions.length)*100}%`}}/></div>
       <div className="card" style={{padding:"14px 16px",marginBottom:16,display:"flex",gap:12,alignItems:"center",flexWrap:"wrap",position:"sticky",top:12,zIndex:40}}>
         <div className={`exam-timer ${timerGlow?"glow":""}`} style={{fontWeight:900,color:timeLeft<300?t.red:t.text,fontSize:20}}>{formatTime(timeLeft)}</div>
         <div style={{fontSize:13,color:t.textSec}}>Question {qi+1} of {questions.length} · {answeredCount} answered</div>
@@ -17236,7 +17366,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
             <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
               {current.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
               <DiffBadge d={q.difficulty} t={t}/>
-              <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{current.kind==="mcq"?"MCQ":"PBQ"}</span>
+              <span className="chip meta-chip">{current.kind==="mcq"?"MCQ":"PBQ"}</span>
               {flagged[qi]&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}45`}}>Flagged for review</span>}
             </div>
             <div className="question-text" style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:700}}>
@@ -17258,11 +17388,13 @@ function ExamMode({user,onSave,onUpgrade,t}) {
               </div>
               {q.opts.map((opt,index)=>{
                 const eliminated=Boolean(answer.eliminated?.[index]);
+                const eliminatedCount=Object.values(answer.eliminated||{}).filter(Boolean).length;
+                const strikeDisabled=!eliminated&&eliminatedCount>=3;
                 return(
                 <div
                   key={index}
-                  className={`opt ${answer.selected===index?"sel":""} ${eliminated?"eliminated":""}`}
-                  onClick={()=>{if(longPressActivated.current[index]){delete longPressActivated.current[index];return;}updateAnswer({selected:index});}}
+                  className={`opt ${answer.selected===index&&!eliminated?"sel":""} ${eliminated?"eliminated":""}`}
+                  onClick={()=>{if(longPressActivated.current[index]){delete longPressActivated.current[index];return;}selectMcqOption(index);}}
                   onContextMenu={e=>{
                     e.preventDefault();
                     if(rightClickHandled.current[index]){
@@ -17290,9 +17422,11 @@ function ExamMode({user,onSave,onUpgrade,t}) {
                   <button
                     type="button"
                     className="btn btn-ghost"
-                    style={{marginLeft:"auto",fontSize:11,minHeight:30,padding:"4px 8px",flexShrink:0,color:eliminated?t.accent:t.textDim,borderColor:eliminated?`${t.accent}70`:t.border}}
+                    style={{marginLeft:"auto",fontSize:11,minHeight:30,padding:"4px 8px",flexShrink:0,color:eliminated?t.accent:t.textDim,borderColor:eliminated?`${t.accent}70`:t.border,opacity:strikeDisabled ? .55 : 1,cursor:strikeDisabled?"not-allowed":"pointer"}}
                     onClick={e=>{e.stopPropagation();toggleEliminatedOption(index);}}
+                    disabled={strikeDisabled}
                     aria-label={`${eliminated?"Undo elimination for":"Eliminate"} option ${String.fromCharCode(65+index)}`}
+                    title={strikeDisabled ? "At least one answer must remain unstruck." : `${eliminated?"Undo":"Strike"} option ${String.fromCharCode(65+index)}`}
                   >
                     {eliminated?"Undo":"Strike"}
                   </button>
@@ -17514,6 +17648,185 @@ function TrialExpiredPrompt({t,onUpgrade,onClose}) {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function QuestionReportModal({report,user,t,onClose}) {
+  const [issueType,setIssueType]=useState("inaccurate_answer");
+  const [message,setMessage]=useState("");
+  const [contactEmail,setContactEmail]=useState(user?.email||"");
+  const [submitting,setSubmitting]=useState(false);
+  const [status,setStatus]=useState("");
+  const [error,setError]=useState("");
+  if(!report)return null;
+
+  const submit=async()=>{
+    setError("");
+    setStatus("");
+    if(message.trim().length<8){
+      setError("Please describe what looks wrong so the owner can review it properly.");
+      return;
+    }
+    setSubmitting(true);
+    try{
+      const token=isSupabaseConfigured ? await getSupabaseAccessToken() : "";
+      const response=await fetch("/api/feedback/submit",{
+        method:"POST",
+        headers:{
+          "content-type":"application/json",
+          ...(token?{authorization:`Bearer ${token}`}:{})
+        },
+        body:JSON.stringify({
+          ...report,
+          issueType,
+          message,
+          contactEmail,
+        }),
+      });
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok) throw new Error(data.error||"Unable to submit feedback.");
+      capture("question_report_submitted", { question_id: report.questionId, question_type: report.questionKind, issue_type: issueType, notification_sent: Boolean(data.notificationSent) });
+      setStatus("Feedback submitted. The owner will see it in the internal feedback dashboard.");
+      setTimeout(onClose,1100);
+    }catch(err){
+      setError(err.message||"Unable to submit feedback.");
+    }finally{
+      setSubmitting(false);
+    }
+  };
+
+  return(
+    <div className="onboarding-overlay" role="dialog" aria-modal="true" aria-label="Report question issue">
+      <div className="onboarding-modal card" style={{maxWidth:560}}>
+        <button className="btn btn-ghost" style={{position:"absolute",top:14,right:14,minHeight:32,padding:"4px 10px",fontSize:12}} onClick={onClose}>Close</button>
+        <div className="label" style={{color:t.accent,marginBottom:8}}>In-app report</div>
+        <h2 style={{fontSize:24,fontWeight:900,color:t.text,marginBottom:8}}>Report this question</h2>
+        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:14}}>
+          This sends feedback inside SecurePlus. The owner will receive a notification and can review all reports from the root feedback dashboard.
+        </p>
+        <div className="card" style={{padding:"12px 14px",marginBottom:14,boxShadow:"none"}}>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
+            <span className="chip meta-chip">{report.questionKind.toUpperCase()}</span>
+            <span className="chip meta-chip">{report.questionId}</span>
+            {report.chapter&&<span className="chip meta-chip">Ch.{report.chapter}</span>}
+          </div>
+          <div style={{fontSize:13,color:t.text,lineHeight:1.55,fontWeight:700}}>
+            {String(report.title||"Question").slice(0,220)}{String(report.title||"").length>220?"...":""}
+          </div>
+        </div>
+        <label className="label" style={{display:"block",marginBottom:7}}>Issue type</label>
+        <select className="input" value={issueType} onChange={e=>setIssueType(e.target.value)} style={{marginBottom:12}}>
+          <option value="inaccurate_answer">Inaccurate answer</option>
+          <option value="obvious_answer">Answer is too obvious</option>
+          <option value="confusing_context">Confusing context</option>
+          <option value="typo">Typo or grammar issue</option>
+          <option value="bad_explanation">Explanation issue</option>
+          <option value="technical_bug">Technical bug</option>
+          <option value="other">Other</option>
+        </select>
+        <label className="label" style={{display:"block",marginBottom:7}}>What should the owner review?</label>
+        <textarea
+          className="input"
+          value={message}
+          onChange={e=>setMessage(e.target.value)}
+          placeholder="Example: The correct answer seems wrong because..."
+          rows={5}
+          style={{resize:"vertical",marginBottom:12}}
+        />
+        <label className="label" style={{display:"block",marginBottom:7}}>Contact email optional</label>
+        <input className="input" value={contactEmail} onChange={e=>setContactEmail(e.target.value)} placeholder="you@example.com" style={{marginBottom:12}}/>
+        <Alert msg={error} t={t}/>
+        <Alert msg={status} type="success" t={t}/>
+        <div style={{display:"flex",gap:10,justifyContent:"flex-end",flexWrap:"wrap"}}>
+          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
+          <button className="btn btn-primary" disabled={submitting} onClick={submit}>{submitting?"Submitting...":"Submit feedback"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdminFeedbackPage({user,t}) {
+  const [reports,setReports]=useState([]);
+  const [loading,setLoading]=useState(true);
+  const [error,setError]=useState("");
+  const loadReports=useCallback(async()=>{
+    setLoading(true);
+    setError("");
+    try{
+      if(!isSupabaseConfigured) throw new Error("Supabase is not configured.");
+      const { data, error:selectError } = await supabase
+        .from("feedback_reports")
+        .select("*")
+        .order("created_at", { ascending:false })
+        .limit(100);
+      if(selectError) throw selectError;
+      setReports(data||[]);
+    }catch(err){
+      setError(err.message||"Unable to load feedback reports.");
+    }finally{
+      setLoading(false);
+    }
+  },[]);
+  useEffect(()=>{loadReports();},[loadReports]);
+
+  const updateStatus=async(id,status)=>{
+    try{
+      const { error:updateError } = await supabase
+        .from("feedback_reports")
+        .update({ status, resolved_at:status==="resolved"?new Date().toISOString():null })
+        .eq("id", id);
+      if(updateError) throw updateError;
+      setReports(prev=>prev.map(item=>item.id===id?{...item,status,resolved_at:status==="resolved"?new Date().toISOString():null}:item));
+    }catch(err){
+      alert(err.message||"Unable to update report.");
+    }
+  };
+
+  return(
+    <div style={{padding:"24px",maxWidth:1040,margin:"0 auto"}}>
+      <div className="page-title-row" style={{marginBottom:16}}>
+        <NavGlyph type="objectives" active/>
+        <div>
+          <h2 style={{fontSize:24,color:t.text}}>Internal Feedback</h2>
+          <p style={{fontSize:13,color:t.textSec}}>Root dashboard for question reports and user feedback.</p>
+        </div>
+        <button className="btn btn-outline" style={{marginLeft:"auto",fontSize:12}} onClick={loadReports}>Refresh</button>
+      </div>
+      {loading&&<div className="card" style={{padding:"18px 20px",color:t.textSec}}>Loading feedback...</div>}
+      <Alert msg={error} t={t}/>
+      {!loading&&!error&&(
+        <div style={{display:"grid",gap:12}}>
+          {reports.length===0&&<div className="card" style={{padding:"18px 20px",color:t.textSec}}>No feedback reports yet.</div>}
+          {reports.map(report=>(
+            <div key={report.id} className="card" style={{padding:"16px 18px"}}>
+              <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center",marginBottom:10}}>
+                <span className="chip meta-chip">{report.question_kind?.toUpperCase?.()||"QUESTION"}</span>
+                <span className="chip meta-chip">{report.question_id}</span>
+                <span className="chip" style={{background:report.status==="resolved"?`${t.green}12`:`${t.amber}12`,color:report.status==="resolved"?t.green:t.amber,borderColor:report.status==="resolved"?`${t.green}35`:`${t.amber}35`}}>{report.status||"open"}</span>
+                <span style={{fontSize:12,color:t.textDim,marginLeft:"auto"}}>{new Date(report.created_at).toLocaleString()}</span>
+              </div>
+              <div style={{fontSize:14,fontWeight:900,color:t.text,lineHeight:1.5,marginBottom:7}}>{report.title}</div>
+              <div style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:10}}>
+                <strong style={{color:t.text}}>Issue:</strong> {String(report.issue_type||"").replaceAll("_"," ")}<br/>
+                <strong style={{color:t.text}}>Message:</strong> {report.message}
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:8,fontSize:12,color:t.textDim,marginBottom:12}}>
+                <div>Reporter: {report.user_email||report.contact_email||"guest/unknown"}</div>
+                <div>Selected: {report.selected_answer||"-"} · Correct: {report.correct_answer||"-"}</div>
+                <div>Chapter: {report.chapter||"-"} · Difficulty: {report.difficulty||"-"}</div>
+                <div style={{overflowWrap:"anywhere"}}>Page: {report.page_url||"-"}</div>
+              </div>
+              <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+                <button className="btn btn-outline" style={{fontSize:12}} disabled={report.status==="reviewing"} onClick={()=>updateStatus(report.id,"reviewing")}>Mark reviewing</button>
+                <button className="btn btn-primary" style={{fontSize:12}} disabled={report.status==="resolved"} onClick={()=>updateStatus(report.id,"resolved")}>Mark resolved</button>
+                <button className="btn btn-ghost" style={{fontSize:12}} disabled={report.status==="open"} onClick={()=>updateStatus(report.id,"open")}>Reopen</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -18066,8 +18379,10 @@ export default function App() {
   const [showTrialExpiredPrompt,setShowTrialExpiredPrompt]=useState(false);
   const [referralClaimPrompt,setReferralClaimPrompt]=useState(null);
   const [deleteAccountVerified,setDeleteAccountVerified]=useState(false);
+  const [questionReport,setQuestionReport]=useState(null);
 
   const t=darkMode?THEMES.dark:THEMES.light;
+  const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
 
   useEffect(()=>{
     if(user) identifyUser(user);
@@ -18122,8 +18437,7 @@ export default function App() {
 
   useEffect(()=>{
     if(!isSupabaseConfigured)return undefined;
-    const verifyRestoredSession=async event=>{
-      if(!event.persisted)return;
+    const verifyCurrentSupabaseSession=async()=>{
       const { data } = await supabase.auth.getSession();
       if(!data.session)return;
       const { data: verified, error } = await supabase.auth.getUser();
@@ -18131,11 +18445,27 @@ export default function App() {
         await forceSupabaseSignOut();
         return;
       }
+      if(isRecentlyDeletedAccount(verified.user)){
+        await forceSupabaseSignOut();
+        return;
+      }
       const profile=await waitForSupabaseProfile(verified.user, 1);
       if(!profile) await forceSupabaseSignOut();
     };
+    const verifyRestoredSession=event=>{
+      if(event.persisted) verifyCurrentSupabaseSession();
+    };
+    const verifyVisibleSession=()=>{
+      if(document.visibilityState==="visible") verifyCurrentSupabaseSession();
+    };
     window.addEventListener("pageshow", verifyRestoredSession);
-    return()=>window.removeEventListener("pageshow", verifyRestoredSession);
+    document.addEventListener("visibilitychange", verifyVisibleSession);
+    window.addEventListener("focus", verifyCurrentSupabaseSession);
+    return()=>{
+      window.removeEventListener("pageshow", verifyRestoredSession);
+      document.removeEventListener("visibilitychange", verifyVisibleSession);
+      window.removeEventListener("focus", verifyCurrentSupabaseSession);
+    };
   },[forceSupabaseSignOut]);
 
   const handleTrialExpired=useCallback(()=>{
@@ -18171,6 +18501,11 @@ export default function App() {
           return;
         }
         const verifiedUser=verified.user;
+        if(isRecentlyDeletedAccount(verifiedUser)){
+          await forceSupabaseSignOut();
+          if(active)setLoading(false);
+          return;
+        }
         const appUser=await waitForSupabaseProfile(verifiedUser);
         if(!appUser){
           await forceSupabaseSignOut();
@@ -18225,6 +18560,10 @@ export default function App() {
   },[clearLocalAuthState,forceSupabaseSignOut]);
 
   const handleLogin=useCallback(async u=>{
+    if(isRecentlyDeletedAccount(u)){
+      await forceSupabaseSignOut();
+      return;
+    }
     const referralClaim=await claimReferralIfPresent(u);
     showReferralClaimErrorOnce(referralClaim);
     if(referralClaim?.proTrialUntil && !referralClaim.alreadyClaimed) setReferralClaimPrompt(referralClaim);
@@ -18236,7 +18575,7 @@ export default function App() {
     const seen=await DB.getOnboardingSeen(displayUser.email);
     if(!seen) setShowOnboarding(true);
     setAttempts(a);setStarred(s);setView("dashboard");setShowDaily(false);
-  },[]);
+  },[forceSupabaseSignOut]);
   const handleLogout=useCallback(async()=>{
     await forceSupabaseSignOut();
   },[forceSupabaseSignOut]);
@@ -18364,6 +18703,7 @@ export default function App() {
       });
       const data=await response.json().catch(()=>({}));
       if(!response.ok) throw new Error(data.error||"Unable to delete account.");
+      rememberDeletedAccount(user);
       await DB.saveStarred(starOwner(user),[]);
       await forceSupabaseSignOut();
       const cleanUrl=`${window.location.origin}${window.location.pathname}`;
@@ -18434,6 +18774,11 @@ export default function App() {
       return next;
     });
   },[user]);
+  const handleReportQuestion=useCallback(details=>{
+    const report=buildQuestionReport(details);
+    capture("question_report_opened", { question_id:report.questionId, question_type:report.questionKind, tier: user?.tier||"guest" });
+    setQuestionReport(report);
+  },[user?.tier]);
   const handlePBQDone=useCallback(async (result,options={})=>{
     if(result&&user){
       setAttempts(a=>[result,...a]);
@@ -18520,8 +18865,9 @@ export default function App() {
               Guest mode: you can access all MCQ questions, but answers and progress are not saved. Create a free account when you want SecurePlus to remember your work.
             </div>
           </div>
-          <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} t={t} starred={[]}/>
+          <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} t={t} starred={[]} onReportQuestion={handleReportQuestion}/>
         </div>
+        {questionReport&&<QuestionReportModal report={questionReport} user={null} t={t} onClose={()=>setQuestionReport(null)}/>}
       </>
     );
   }
@@ -18550,8 +18896,10 @@ export default function App() {
           onToggleStar={handleToggleStar}
           previewMode={pbqPreviewMode}
           onUpgrade={()=>setView("pricing")}
+          onReportQuestion={handleReportQuestion}
         />
       </div>
+      {questionReport&&<QuestionReportModal report={questionReport} user={user} t={t} onClose={()=>setQuestionReport(null)}/>}
     </>
   );
 
@@ -18567,6 +18915,7 @@ export default function App() {
     {id:"privacy",icon:"privacy",label:"Privacy Policy"},
     {id:"terms",icon:"terms",label:"Terms & Conditions"},
   ];
+  if(isRootUser) navItems.push({id:"feedback",icon:"objectives",label:"Internal Feedback"});
 
   return(
     <>
@@ -18627,7 +18976,7 @@ export default function App() {
             onUpgrade={()=>setView("pricing")}
           />
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
-          {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar}/>}
+          {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion}/>}
           {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar}/>}
           {view==="exam"&&<ExamMode user={user} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")}/>}
@@ -18636,6 +18985,7 @@ export default function App() {
           {view==="objectives"&&<ObjectivesPage t={t}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
+          {view==="feedback"&&<AdminFeedbackPage user={user} t={t}/>}
         </main>
         {showOnboarding&&(
           <OnboardingModal
@@ -18660,6 +19010,7 @@ export default function App() {
             onUpgrade={()=>{setReferralClaimPrompt(null);setView("pricing");}}
           />
         )}
+        {questionReport&&<QuestionReportModal report={questionReport} user={user} t={t} onClose={()=>setQuestionReport(null)}/>}
       </div>
     </>
   );

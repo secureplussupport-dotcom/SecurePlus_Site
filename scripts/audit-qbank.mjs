@@ -136,12 +136,15 @@ const mcqs = [...rawMcqs, ...importedMcqs]
   .map(ensureMcqWrongFeedback);
 const basePbqs = evaluateLiteral("PBQ_BANK_BASE");
 const importedPbqs = evaluateLiteral("IMPORTED_PBQ_BANK");
-const pbqs = [...basePbqs, ...importedPbqs];
+const lowQualityPbqIds = new Set(evaluateLiteral("LOW_QUALITY_PBQ_IDS"));
+const pbqs = [...basePbqs, ...importedPbqs].filter(q => !lowQualityPbqIds.has(q.id));
 const errors = [];
 const warnings = [];
-const MAX_MCQ_STEM_LENGTH = 420;
-const MAX_MCQ_OPTION_LENGTH = 205;
-const MAX_MCQ_TOTAL_LENGTH = 1050;
+const MAX_MCQ_STEM_LENGTH = 360;
+const MAX_MCQ_OPTION_LENGTH = 180;
+const MAX_MCQ_TOTAL_LENGTH = 900;
+const MAX_PBQ_PROMPT_LENGTH = 1000;
+const MAX_PBQ_EXPLANATION_LENGTH = 620;
 
 if (mcqs.length < 400) push(errors, "MCQ_BANK", `expected at least 400 active MCQs, found ${mcqs.length}`);
 if (pbqs.length < 100) push(errors, "PBQ_BANK", `expected at least 100 PBQs, found ${pbqs.length}`);
@@ -197,6 +200,13 @@ for (const q of pbqs) {
   if (!q.title || q.title.length < 10) push(errors, q.id, "missing or very short title");
   if (!q.question && !q.scenario) push(errors, q.id, "missing question/scenario prompt");
   if (!q.explanation || q.explanation.length < 60) push(errors, q.id, "missing or very short explanation");
+  const promptLength = [q.title, q.scenario, q.question, q.diagram, q.logData].filter(Boolean).join(" ").length;
+  if (promptLength > MAX_PBQ_PROMPT_LENGTH) {
+    push(warnings, q.id, `PBQ prompt is too long for smooth practice (${promptLength}/${MAX_PBQ_PROMPT_LENGTH} chars)`);
+  }
+  if (q.explanation && q.explanation.length > MAX_PBQ_EXPLANATION_LENGTH) {
+    push(warnings, q.id, `PBQ explanation is too long (${q.explanation.length}/${MAX_PBQ_EXPLANATION_LENGTH} chars)`);
+  }
 
   if (q.type === "DRAG & DROP") {
     if (!Array.isArray(q.items) || !Array.isArray(q.targets) || !q.correctMapping) push(errors, q.id, "drag/drop PBQ needs items, targets, and correctMapping");
@@ -211,7 +221,7 @@ for (const q of pbqs) {
 
 console.log(`Question bank audit`);
 console.log(`- Active MCQs: ${mcqs.length} (${rawMcqs.length} base, ${importedMcqs.length} imported, ${lowQualityIds.size} hidden low-quality)`);
-console.log(`- PBQs: ${pbqs.length} (${basePbqs.length} base, ${importedPbqs.length} imported)`);
+console.log(`- PBQs: ${pbqs.length} (${basePbqs.length} base, ${importedPbqs.length} imported, ${lowQualityPbqIds.size} hidden low-quality)`);
 console.log(`- MCQ duplicate IDs/text: 0 expected`);
 console.log(`- PBQ duplicate IDs/prompts: 0 expected`);
 
