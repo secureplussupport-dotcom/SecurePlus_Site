@@ -14025,6 +14025,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .input{width:100%;background:linear-gradient(180deg,${t.surface},${t.inputBg});border:1.5px solid ${t.border};border-radius:8px;padding:12px 14px;font-size:14px;color:${t.text};font-family:'Montserrat',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s,background .2s;}
 .input:focus{border-color:${t.accent};box-shadow:0 0 0 3px ${t.accent}20;}
 .input::placeholder{color:${t.textDim};}
+.input[contenteditable="true"]:empty::before{content:attr(data-placeholder);color:${t.textDim};pointer-events:none;}
+.input[contenteditable="true"] strong{font-weight:900;}
+.input[contenteditable="true"] mark{background:${t.amber}30;color:${t.text};border-radius:5px;padding:0 .18em;}
+.input[contenteditable="true"] u{text-underline-offset:3px;text-decoration-thickness:2px;}
 select.input{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,${t.accent} 50%),linear-gradient(135deg,${t.accent} 50%,transparent 50%),linear-gradient(180deg,${t.surface},${t.inputBg});background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%,0 0;background-size:6px 6px,6px 6px,100% 100%;background-repeat:no-repeat;padding-right:42px;cursor:pointer;font-weight:700;color:${t.text};box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
 select.input:hover{border-color:${t.accent}55;background-image:linear-gradient(45deg,transparent 50%,${t.accentHover} 50%),linear-gradient(135deg,${t.accentHover} 50%,transparent 50%),linear-gradient(180deg,${t.surface},${t.accent}08);}
 select.input:disabled{cursor:not-allowed;opacity:.62;background-image:linear-gradient(45deg,transparent 50%,${t.textDim} 50%),linear-gradient(135deg,${t.textDim} 50%,transparent 50%),linear-gradient(180deg,${t.panel},${t.inputBg});}
@@ -18256,32 +18260,78 @@ function AdminField({label,children}) {
   );
 }
 
-function applyAdminInlineFormat(input, value, onChange, marker) {
-  const start=input?.selectionStart ?? value.length;
-  const end=input?.selectionEnd ?? value.length;
-  const selected=value.slice(start,end) || "text";
-  const next=`${value.slice(0,start)}${marker}${selected}${marker}${value.slice(end)}`;
-  onChange(next);
-  setTimeout(()=>{
-    input?.focus?.();
-    const nextStart=start+marker.length;
-    const nextEnd=nextStart+selected.length;
-    input?.setSelectionRange?.(nextStart,nextEnd);
-  },0);
+function buildAdminRichNodes(value) {
+  const fragment=document.createDocumentFragment();
+  parseInlineFormats(value).forEach(segment=>{
+    if(!segment.bold&&!segment.underline&&!segment.highlight) {
+      fragment.appendChild(document.createTextNode(segment.text));
+      return;
+    }
+    const element=document.createElement(segment.bold?"strong":segment.underline?"u":"mark");
+    element.textContent=segment.text;
+    if(segment.highlight) element.style.background="rgba(245, 158, 11, .35)";
+    fragment.appendChild(element);
+  });
+  return fragment;
 }
 
-function AdminFormatToolbar({inputRef,value,onChange}) {
+function serializeAdminRichNode(node) {
+  if(node.nodeType===Node.TEXT_NODE) return node.textContent || "";
+  if(node.nodeType!==Node.ELEMENT_NODE) return "";
+  const tag=node.tagName.toLowerCase();
+  const inner=[...node.childNodes].map(serializeAdminRichNode).join("");
+  if(tag==="strong"||tag==="b") return `**${inner}**`;
+  if(tag==="u") return `__${inner}__`;
+  if(tag==="mark" || node.style?.backgroundColor) return `==${inner}==`;
+  const suffix=(tag==="div"||tag==="p"||tag==="br") ? "\n" : "";
+  return inner + suffix;
+}
+
+function serializeAdminRichEditor(editor) {
+  return [...(editor?.childNodes||[])].map(serializeAdminRichNode).join("").replace(/\n+$/,"");
+}
+
+function AdminFormatToolbar({editorRef,selectionRef,onChange}) {
   const buttonStyle={fontSize:12,minHeight:30,padding:"5px 10px"};
-  const format=(marker)=>applyAdminInlineFormat(inputRef.current,String(value||""),onChange,marker);
+  const format=(tag)=>{
+    const editor=editorRef.current;
+    if(!editor)return;
+    editor.focus();
+    const selection=window.getSelection?.();
+    if(selectionRef.current&&selection) {
+      selection.removeAllRanges();
+      selection.addRange(selectionRef.current);
+    }
+    const activeSelection=window.getSelection?.();
+    const range=activeSelection?.rangeCount ? activeSelection.getRangeAt(0) : null;
+    const wrapper=document.createElement(tag);
+    if(tag==="mark") wrapper.style.background="rgba(245, 158, 11, .35)";
+    if(!range || !editor.contains(range.commonAncestorContainer)) {
+      wrapper.textContent="text";
+      editor.appendChild(wrapper);
+    } else if(range.collapsed) {
+      wrapper.textContent="text";
+      range.insertNode(wrapper);
+    } else {
+      wrapper.appendChild(range.extractContents());
+      range.insertNode(wrapper);
+    }
+    const nextRange=document.createRange();
+    nextRange.selectNodeContents(wrapper);
+    activeSelection?.removeAllRanges();
+    activeSelection?.addRange(nextRange);
+    selectionRef.current=nextRange.cloneRange();
+    onChange(serializeAdminRichEditor(editor));
+  };
   return(
     <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:7}}>
-      <button className="btn btn-outline" type="button" style={buttonStyle} onClick={()=>format("**")} title="Bold selected text">
+      <button className="btn btn-outline" type="button" style={buttonStyle} onMouseDown={e=>e.preventDefault()} onClick={()=>format("strong")} title="Bold selected text">
         <strong>B</strong>
       </button>
-      <button className="btn btn-outline" type="button" style={buttonStyle} onClick={()=>format("==")} title="Highlight selected text">
+      <button className="btn btn-outline" type="button" style={buttonStyle} onMouseDown={e=>e.preventDefault()} onClick={()=>format("mark")} title="Highlight selected text">
         Highlight
       </button>
-      <button className="btn btn-outline" type="button" style={buttonStyle} onClick={()=>format("__")} title="Underline selected text">
+      <button className="btn btn-outline" type="button" style={buttonStyle} onMouseDown={e=>e.preventDefault()} onClick={()=>format("u")} title="Underline selected text">
         <span style={{textDecoration:"underline",textUnderlineOffset:3}}>U</span>
       </button>
     </div>
@@ -18289,21 +18339,92 @@ function AdminFormatToolbar({inputRef,value,onChange}) {
 }
 
 function AdminTextInput({label,value,onChange,placeholder,type="text",format=false}) {
-  const inputRef=useRef(null);
+  const editorRef=useRef(null);
+  const selectionRef=useRef(null);
+  const saveSelection=()=> {
+    const selection=window.getSelection?.();
+    if(selection?.rangeCount&&editorRef.current?.contains(selection.anchorNode)) {
+      selectionRef.current=selection.getRangeAt(0).cloneRange();
+    }
+  };
+  useEffect(()=>{
+    if(!format)return;
+    const editor=editorRef.current;
+    if(!editor || document.activeElement===editor)return;
+    editor.replaceChildren(buildAdminRichNodes(value));
+  },[format,value]);
+  if(format) {
+    return(
+      <AdminField label={label}>
+        <AdminFormatToolbar editorRef={editorRef} selectionRef={selectionRef} onChange={onChange}/>
+        <div
+          ref={editorRef}
+          className="input"
+          contentEditable
+          suppressContentEditableWarning
+          role="textbox"
+          aria-label={label}
+          data-placeholder={placeholder||""}
+          onInput={()=>onChange(serializeAdminRichEditor(editorRef.current))}
+          onBlur={()=>onChange(serializeAdminRichEditor(editorRef.current))}
+          onMouseUp={saveSelection}
+          onKeyUp={saveSelection}
+          onFocus={saveSelection}
+          onKeyDown={e=>{if(e.key==="Enter")e.preventDefault();}}
+          onPaste={e=>{e.preventDefault();document.execCommand("insertText",false,e.clipboardData.getData("text/plain"));}}
+          style={{minHeight:42,lineHeight:1.55,whiteSpace:"pre-wrap",overflowWrap:"anywhere"}}
+        />
+      </AdminField>
+    );
+  }
   return (
     <AdminField label={label}>
-      {format&&<AdminFormatToolbar inputRef={inputRef} value={value} onChange={onChange}/>}
-      <input ref={inputRef} className="input" type={type} value={value} placeholder={placeholder||""} onChange={e=>onChange(e.target.value)}/>
+      <input className="input" type={type} value={value} placeholder={placeholder||""} onChange={e=>onChange(e.target.value)}/>
     </AdminField>
   );
 }
 
 function AdminTextArea({label,value,onChange,placeholder,rows=4,format=true}) {
-  const inputRef=useRef(null);
+  const editorRef=useRef(null);
+  const selectionRef=useRef(null);
+  const saveSelection=()=> {
+    const selection=window.getSelection?.();
+    if(selection?.rangeCount&&editorRef.current?.contains(selection.anchorNode)) {
+      selectionRef.current=selection.getRangeAt(0).cloneRange();
+    }
+  };
+  useEffect(()=>{
+    if(!format)return;
+    const editor=editorRef.current;
+    if(!editor || document.activeElement===editor)return;
+    editor.replaceChildren(buildAdminRichNodes(value));
+  },[format,value]);
+  if(format) {
+    return(
+      <AdminField label={label}>
+        <AdminFormatToolbar editorRef={editorRef} selectionRef={selectionRef} onChange={onChange}/>
+        <div
+          ref={editorRef}
+          className="input"
+          contentEditable
+          suppressContentEditableWarning
+          role="textbox"
+          aria-label={label}
+          data-placeholder={placeholder||""}
+          onInput={()=>onChange(serializeAdminRichEditor(editorRef.current))}
+          onBlur={()=>onChange(serializeAdminRichEditor(editorRef.current))}
+          onMouseUp={saveSelection}
+          onKeyUp={saveSelection}
+          onFocus={saveSelection}
+          onPaste={e=>{e.preventDefault();document.execCommand("insertText",false,e.clipboardData.getData("text/plain"));}}
+          style={{minHeight:Math.max(42,rows*25),lineHeight:1.55,whiteSpace:"pre-wrap",overflowWrap:"anywhere",resize:"vertical",overflow:"auto"}}
+        />
+      </AdminField>
+    );
+  }
   return (
     <AdminField label={label}>
-      {format&&<AdminFormatToolbar inputRef={inputRef} value={value} onChange={onChange}/>}
-      <textarea ref={inputRef} className="input" value={value} placeholder={placeholder||""} rows={rows} onChange={e=>onChange(e.target.value)} style={{resize:"vertical",lineHeight:1.55}}/>
+      <textarea className="input" value={value} placeholder={placeholder||""} rows={rows} onChange={e=>onChange(e.target.value)} style={{resize:"vertical",lineHeight:1.55}}/>
     </AdminField>
   );
 }
