@@ -981,6 +981,14 @@ function isFillBlankAnswerCorrect(input, blank) {
   return expected.some(answer=>normalizeFillBlankAnswer(answer)===normalizedInput);
 }
 
+function parseAcceptedAnswers(value) {
+  if(Array.isArray(value)) return value.map(answer=>String(answer||"").trim()).filter(Boolean);
+  return String(value||"")
+    .split(/[\n,]+/)
+    .map(answer=>answer.trim())
+    .filter(Boolean);
+}
+
 // ═══════════════════════════════════════════════════════════════
 // MCQ BANK — original, accurate, Security+ aligned, not copyrighted
 // Easy, medium, and hard mix across all 5 domains
@@ -18436,7 +18444,7 @@ function makeAdminQuestionTemplate(kind, nextOrder=1) {
       targets:[{id:"t0",label:""}],
       correctMapping:{},
       correctOrder:["i0"],
-      blanks:[{id:"b0",sentence:"",answer:"",hint:""}]
+      blanks:[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:""}]
     };
   }
   return {
@@ -18480,7 +18488,7 @@ function questionToAdminForm(question,kind,index) {
       targets:Array.isArray(question.targets)?question.targets.map((target,index)=>({id:target.id||`t${index}`,label:target.label||""})):[{id:"t0",label:""}],
       correctMapping:question.correctMapping||{},
       correctOrder:Array.isArray(question.correctOrder)?question.correctOrder:[],
-      blanks:Array.isArray(question.blanks)?question.blanks.map((blank,index)=>({id:blank.id||`b${index}`,sentence:blank.sentence||"",answer:blank.answer||"",hint:blank.hint||""})):[{id:"b0",sentence:"",answer:"",hint:""}]
+      blanks:Array.isArray(question.blanks)?question.blanks.map((blank,index)=>({id:blank.id||`b${index}`,sentence:blank.sentence||"",answer:blank.answer||"",acceptedAnswers:[...(blank.acceptedAnswers||[]),...(blank.aliases||[])].join("\n"),hint:blank.hint||""})):[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:""}]
     };
   }
   return {
@@ -18577,7 +18585,13 @@ function cleanAdminQuestionPayload(form,kind) {
     question.items=items;
     question.correctOrder=items.map(item=>item.id);
   } else if(pbqType==="FILL BLANK") {
-    const blanks=(form.blanks||[]).map((blank,index)=>({id:String(blank.id||`b${index}`).trim()||`b${index}`,sentence:String(blank.sentence||"").trim(),answer:String(blank.answer||"").trim(),hint:String(blank.hint||"").trim()})).filter(blank=>blank.sentence||blank.answer);
+    const blanks=(form.blanks||[]).map((blank,index)=>({
+      id:String(blank.id||`b${index}`).trim()||`b${index}`,
+      sentence:String(blank.sentence||"").trim(),
+      answer:String(blank.answer||"").trim(),
+      acceptedAnswers:parseAcceptedAnswers(blank.acceptedAnswers),
+      hint:String(blank.hint||"").trim()
+    })).filter(blank=>blank.sentence||blank.answer||blank.acceptedAnswers.length);
     if(!blanks.length) throw new Error("Fill Blank PBQs need at least one blank.");
     if(blanks.some(blank=>!blank.sentence||!blank.answer)) throw new Error("Every Fill Blank row needs a sentence and answer.");
     question.blanks=blanks;
@@ -18917,7 +18931,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const difficultyColor=form.difficulty==="easy"?t.green:form.difficulty==="hard"?t.red:t.amber;
   const detectedAcronyms=useMemo(()=>kind==="mcq"
     ? extractAcronymsFromText(form.q,form.opts||[],form.exp,Object.values(form.wrongFeedback||{}))
-    : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation,form.answer,form.logData,form.diagram,form.currentConfig,(form.items||[]).map(item=>item.label),(form.targets||[]).map(target=>target.label),(form.blanks||[]).flatMap(blank=>[blank.sentence,blank.answer,blank.hint])),
+    : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation,form.answer,form.logData,form.diagram,form.currentConfig,(form.items||[]).map(item=>item.label),(form.targets||[]).map(target=>target.label),(form.blanks||[]).flatMap(blank=>[blank.sentence,blank.answer,blank.acceptedAnswers,blank.hint])),
   [form,kind]);
 
   const resetToNew=useCallback((nextKind=kind)=>{
@@ -18981,7 +18995,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const addPbqItem=field=>setForm(prev=>{
     const next=[...(prev[field]||[])];
     const prefix=field==="targets"?"t":field==="blanks"?"b":"i";
-    next.push(field==="blanks"?{id:`${prefix}${next.length}`,sentence:"",answer:"",hint:""}:{id:`${prefix}${next.length}`,label:""});
+    next.push(field==="blanks"?{id:`${prefix}${next.length}`,sentence:"",answer:"",acceptedAnswers:"",hint:""}:{id:`${prefix}${next.length}`,label:""});
     return {...prev,[field]:next,correctOrder:field==="items"?next.map(item=>item.id):prev.correctOrder};
   });
   const removePbqItem=(field,index)=>setForm(prev=>{
@@ -19326,6 +19340,19 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                           <AdminTextInput label="Correct answer" value={blank.answer||""} onChange={v=>updateObjectArray("blanks",index,"answer",v)} placeholder="Honeynet"/>
                           <AdminTextInput label="Hint" value={blank.hint||""} onChange={v=>updateObjectArray("blanks",index,"hint",v)} placeholder="Optional learning hint"/>
                         </div>
+                        <div style={{marginTop:10}}>
+                          <AdminTextArea
+                            label="Accepted alternate answers"
+                            value={blank.acceptedAnswers||""}
+                            onChange={v=>updateObjectArray("blanks",index,"acceptedAnswers",v)}
+                            placeholder={"One per line, or separate with commas\nExample: User and Entity Behavioral Analytics\nUEBA"}
+                            rows={2}
+                            format={false}
+                          />
+                          <div style={{fontSize:11,color:t.textDim,marginTop:5,lineHeight:1.5}}>
+                            These are accepted in addition to the main answer. Capitalisation and British/American spelling are still handled automatically.
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -19464,6 +19491,11 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                       <div key={blank.id||index} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${t.border}`,background:t.panel}}>
                         <div style={{fontSize:13,color:t.text,lineHeight:1.55}}><GlossaryText text={blank.sentence||`Blank ${index+1} sentence`} t={t}/></div>
                         <div style={{fontSize:12,color:t.textSec,marginTop:5}}>Answer: <strong style={{color:t.green}}>{blank.answer||"Not set"}</strong></div>
+                        {parseAcceptedAnswers(blank.acceptedAnswers).length>0&&(
+                          <div style={{fontSize:12,color:t.textSec,marginTop:4}}>
+                            Also accepted: {parseAcceptedAnswers(blank.acceptedAnswers).join(", ")}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
