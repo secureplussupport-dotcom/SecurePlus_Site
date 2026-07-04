@@ -18230,6 +18230,29 @@ function AdminTextArea({label,value,onChange,placeholder,rows=4}) {
   );
 }
 
+async function saveQuestionOverrideRequest({kind,question,sortOrder,action="upsert"}) {
+  if(!isSupabaseConfigured) throw new Error("Supabase is not configured.");
+  const token=await getSupabaseAccessToken();
+  if(!token) throw new Error("Please sign in again before saving question changes.");
+  const response=await fetch("/api/question-overrides/save",{
+    method:"POST",
+    headers:{
+      "content-type":"application/json",
+      authorization:`Bearer ${token}`,
+    },
+    body:JSON.stringify({
+      questionKind:kind,
+      questionId:question.id,
+      action,
+      payload:question,
+      sortOrder,
+    }),
+  });
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok) throw new Error(data.error||"Unable to save question change.");
+  return data;
+}
+
 function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) {
   const [kind,setKind]=useState("mcq");
   const [selectedId,setSelectedId]=useState("");
@@ -18308,21 +18331,8 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const saveQuestion=async()=>{
     setSaving(true);setError("");setStatus("");
     try{
-      if(!isSupabaseConfigured) throw new Error("Supabase is not configured.");
       const {question,sortOrder}=cleanAdminQuestionPayload(form,kind);
-      const { error:upsertError } = await supabase
-        .from("question_overrides")
-        .upsert({
-          question_kind:kind,
-          question_id:question.id,
-          action:"upsert",
-          payload:question,
-          sort_order:sortOrder,
-          status:"active",
-          updated_by:user.id,
-          updated_at:new Date().toISOString(),
-        }, { onConflict:"question_kind,question_id" });
-      if(upsertError) throw upsertError;
+      await saveQuestionOverrideRequest({kind,question,sortOrder,action:"upsert"});
       setSelectedId(question.id);
       await onQuestionBankRefresh?.();
       setStatus("Saved. The live question bank has been refreshed in this browser.");
@@ -18341,19 +18351,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
     if(!ok)return;
     setSaving(true);setError("");setStatus("");
     try{
-      const { error:disableError } = await supabase
-        .from("question_overrides")
-        .upsert({
-          question_kind:kind,
-          question_id:targetId,
-          action:"disable",
-          payload:{ id:targetId },
-          sort_order:null,
-          status:"active",
-          updated_by:user.id,
-          updated_at:new Date().toISOString(),
-        }, { onConflict:"question_kind,question_id" });
-      if(disableError) throw disableError;
+      await saveQuestionOverrideRequest({kind,question:{id:targetId},sortOrder:null,action:"disable"});
       await onQuestionBankRefresh?.();
       setStatus(`${targetId} has been hidden from the live bank.`);
       resetToNew(kind);

@@ -31,6 +31,14 @@ add column if not exists sort_order integer;
 alter table app_admins enable row level security;
 alter table question_overrides enable row level security;
 
+drop policy if exists "Admins can view own admin marker" on app_admins;
+create policy "Admins can view own admin marker"
+on app_admins for select
+to authenticated
+using (
+  lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+);
+
 drop policy if exists "Anyone can read active question overrides" on question_overrides;
 create policy "Anyone can read active question overrides"
 on question_overrides for select
@@ -121,3 +129,5 @@ on question_overrides (updated_at desc);
 grant select on question_overrides to anon, authenticated;
 grant insert, update, delete on question_overrides to authenticated;
 grant select on app_admins to authenticated;
+grant all on question_overrides to service_role;
+grant select on app_admins to service_role;

@@ -629,3 +629,5 @@ grant select on app_admins to authenticated;
 grant select, insert, update on feedback_reports to authenticated;
 grant select on question_overrides to anon, authenticated;
 grant insert, update, delete on question_overrides to authenticated;
+grant all on question_overrides to service_role;
+grant select on app_admins to service_role;
