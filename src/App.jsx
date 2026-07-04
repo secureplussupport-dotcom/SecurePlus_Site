@@ -920,6 +920,67 @@ function stripPbqHintsForExam(value) {
   return value;
 }
 
+const FILL_BLANK_SPELLING_VARIANTS = {
+  "accessorise":"accessorize",
+  "authorisation":"authorization",
+  "authorisations":"authorizations",
+  "authorise":"authorize",
+  "authorised":"authorized",
+  "behaviour":"behavior",
+  "behaviours":"behaviors",
+  "behavioural":"behavioral",
+  "cancelled":"canceled",
+  "catalogue":"catalog",
+  "centralised":"centralized",
+  "centralisation":"centralization",
+  "centre":"center",
+  "defence":"defense",
+  "demilitarised":"demilitarized",
+  "emphasise":"emphasize",
+  "enrolment":"enrollment",
+  "favour":"favor",
+  "favourite":"favorite",
+  "federated":"federated",
+  "grey":"gray",
+  "honour":"honor",
+  "labelled":"labeled",
+  "licence":"license",
+  "modelling":"modeling",
+  "organisation":"organization",
+  "organisations":"organizations",
+  "organisational":"organizational",
+  "organise":"organize",
+  "organised":"organized",
+  "prioritise":"prioritize",
+  "realise":"realize",
+  "recognise":"recognize",
+  "recognised":"recognized",
+  "specialised":"specialized",
+  "standardise":"standardize",
+  "unauthorised":"unauthorized",
+  "utilise":"utilize",
+  "visualise":"visualize"
+};
+
+function normalizeFillBlankAnswer(value) {
+  return String(value||"")
+    .trim()
+    .toLowerCase()
+    .replace(/[’']/g,"")
+    .replace(/[-_/]+/g," ")
+    .replace(/[^\p{L}\p{N}\s]/gu,"")
+    .replace(/\s+/g," ")
+    .split(" ")
+    .map(word=>FILL_BLANK_SPELLING_VARIANTS[word]||word)
+    .join(" ");
+}
+
+function isFillBlankAnswerCorrect(input, blank) {
+  const expected=[blank?.answer, ...(blank?.acceptedAnswers||[]), ...(blank?.aliases||[])];
+  const normalizedInput=normalizeFillBlankAnswer(input);
+  return expected.some(answer=>normalizeFillBlankAnswer(answer)===normalizedInput);
+}
+
 // ═══════════════════════════════════════════════════════════════
 // MCQ BANK — original, accurate, Security+ aligned, not copyrighted
 // Easy, medium, and hard mix across all 5 domains
@@ -16826,7 +16887,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
     if(["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type))return selected===q.correct;
     if(q.type==="DRAG & DROP")return q.items?.every(item=>mapping[item.id]===q.correctMapping?.[item.id]);
     if(q.type==="ORDERING")return q.correctOrder?.every((id,i)=>orderItems[i]?.id===id);
-    if(q.type==="FILL BLANK")return q.blanks?.every(b=>blanks[b.id]?.trim().toLowerCase()===b.answer.toLowerCase());
+    if(q.type==="FILL BLANK")return q.blanks?.every(b=>isFillBlankAnswerCorrect(blanks[b.id],b));
     return false;
   };
 
@@ -17359,7 +17420,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
     if(["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type)) return a.selected===q.correct;
     if(q.type==="DRAG & DROP") return q.items?.every(item=>a.mapping?.[item.id]===q.correctMapping?.[item.id]);
     if(q.type==="ORDERING") return q.correctOrder?.every((id,i)=>a.orderItems?.[i]?.id===id);
-    if(q.type==="FILL BLANK") return q.blanks?.every(b=>(a.blanks?.[b.id]||"").trim().toLowerCase()===b.answer.toLowerCase());
+    if(q.type==="FILL BLANK") return q.blanks?.every(b=>isFillBlankAnswerCorrect(a.blanks?.[b.id],b));
     return false;
   };
   const isCorrect=(item,a={})=>item.kind==="mcq" ? a.selected===item.q.correct : pbqCorrect(item.q,a);
