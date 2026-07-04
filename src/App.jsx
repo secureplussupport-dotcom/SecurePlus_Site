@@ -17868,18 +17868,27 @@ function ReferralUpgradeBanner({user,t,onFindOutMore}) {
           )}
         </div>
         <div style={{flex:"1 1 260px",minWidth:0}}>
-          <div style={{fontSize:12,fontWeight:800,color:t.textDim,marginBottom:6}}>Your referral link</div>
-          <div style={{display:"flex",gap:8,alignItems:"stretch"}}>
-            <input className="input" readOnly value={loading?"Loading referral link...":error||shareUrl||"Referral setup needed"} style={{fontSize:12,fontFamily:"'JetBrains Mono',monospace"}}/>
-            <button className="btn btn-primary" style={{fontSize:13,whiteSpace:"nowrap"}} onClick={copyLink} disabled={!shareUrl||referralUsed}>
-              {copied?"Copied":"Copy"}
-            </button>
-          </div>
-          <div style={{fontSize:12,color:referralUsed?t.amber:t.textDim,lineHeight:1.6,marginTop:8}}>
-            {referralUsed
-              ? "Your one referral reward has already been used."
-              : "The landing page will open with your referral code already filled in."}
-          </div>
+          {referralUsed ? (
+            <div className="card" style={{padding:"14px 16px",boxShadow:"none",background:`${t.amber}10`,borderColor:`${t.amber}35`}}>
+              <div style={{fontWeight:900,color:t.amber,marginBottom:6}}>Referral already used</div>
+              <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
+                Your one referral reward has already been used, so the referral link is hidden.
+              </div>
+            </div>
+          ) : (
+            <>
+              <div style={{fontSize:12,fontWeight:800,color:t.textDim,marginBottom:6}}>Your referral link</div>
+              <div style={{display:"flex",gap:8,alignItems:"stretch"}}>
+                <input className="input" readOnly value={loading?"Loading referral link...":error||shareUrl||"Referral setup needed"} style={{fontSize:12,fontFamily:"'JetBrains Mono',monospace"}}/>
+                <button className="btn btn-primary" style={{fontSize:13,whiteSpace:"nowrap"}} onClick={copyLink} disabled={!shareUrl}>
+                  {copied?"Copied":"Copy"}
+                </button>
+              </div>
+              <div style={{fontSize:12,color:t.textDim,lineHeight:1.6,marginTop:8}}>
+                The landing page will open with your referral code already filled in.
+              </div>
+            </>
+          )}
           {error&&(
             <div style={{fontSize:12,color:t.amber,lineHeight:1.6,marginTop:8}}>
               Referral launch SQL may not be installed yet. Run <code>supabase/referrals.sql</code> in Supabase SQL Editor if this message stays.
@@ -18862,6 +18871,11 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
 }
 
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
+  const referralSectionRef=useRef(null);
+  const scrollToReferral=()=>{
+    referralSectionRef.current?.scrollIntoView({behavior:"smooth",block:"start"});
+    capture("referral_hint_clicked", { source:"upgrade_page", tier:user?.tier || "guest" });
+  };
   return(
     <div style={{padding:"32px 24px",maxWidth:700,margin:"0 auto"}}>
       <div style={{textAlign:"center",marginBottom:32}}>
@@ -18872,9 +18886,15 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         <p style={{color:t.textSec,fontSize:14}}>
           <strong style={{color:t.green}}>Annual plan only:</strong> $4.99 per year · Cancel anytime
         </p>
+        <button
+          type="button"
+          className="btn btn-outline"
+          style={{marginTop:14,fontSize:13,justifyContent:"center"}}
+          onClick={scrollToReferral}
+        >
+          Referral bonus: give 7 days Pro, get 7 days Pro
+        </button>
       </div>
-
-      <ReferralUpgradeBanner user={user} t={t} onFindOutMore={()=>onNavigate("referrals")}/>
 
       <div className="pricing-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:32}}>
         {/* PRO */}
@@ -18924,6 +18944,10 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           {user.tier==="free"&&<button className="btn btn-ghost" style={{width:"100%",justifyContent:"center"}} disabled>Current Plan</button>}
           {user.tier==="pro"&&<button className="btn btn-ghost" style={{width:"100%",justifyContent:"center"}} disabled>Included in Pro</button>}
         </div>
+      </div>
+
+      <div ref={referralSectionRef} style={{scrollMarginTop:90}}>
+        <ReferralUpgradeBanner user={user} t={t} onFindOutMore={()=>onNavigate("referrals")}/>
       </div>
 
       {/* Stripe note */}
