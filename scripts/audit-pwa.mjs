@@ -108,7 +108,7 @@ if (!errors.length) {
     "/favicon-v2-192.png",
     "/icon-512.png",
     "/maskable-icon-512.png",
-    "/secureplus-logo.svg",
+    "/secureplus-logo.png",
   ]) {
     if (!serviceWorker.includes(`"${asset}"`)) push(errors, "public/sw.js", `app shell should cache ${asset}`);
   }

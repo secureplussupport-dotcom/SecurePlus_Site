@@ -1,14 +1,14 @@
-const CACHE_NAME = "secureplus-pwa-v1";
+const CACHE_NAME = "secureplus-pwa-v2";
 const APP_SHELL = [
   "/",
   "/manifest.webmanifest",
-  "/favicon-v2.svg",
   "/favicon-v2-48.png",
   "/favicon-v2-192.png",
   "/apple-touch-icon-v2.png",
   "/icon-512.png",
   "/maskable-icon-512.png",
-  "/secureplus-logo.svg",
+  "/secureplus-logo.png",
+  "/og-image.png",
   "/secureplus-ui-demo.gif"
 ];
 

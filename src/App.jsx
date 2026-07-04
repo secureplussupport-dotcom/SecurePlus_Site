@@ -14470,11 +14470,11 @@ function ProgBar({v,c,h=8}) {
 function BrandMark({size=30}) {
   return (
     <img
-      src="/secureplus-logo.svg"
+      src="/secureplus-logo.png"
       alt="SecurePlus"
       width={size}
       height={size}
-      style={{borderRadius:Math.max(6,Math.round(size*.22)),display:"block",flexShrink:0}}
+      style={{borderRadius:Math.max(6,Math.round(size*.22)),display:"block",flexShrink:0,objectFit:"cover"}}
     />
   );
 }
