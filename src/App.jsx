@@ -13984,11 +13984,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .trial-countdown-unit{padding:10px 9px;border:1px solid ${t.border};border-radius:9px;background:${t.panel};text-align:center;min-width:0;}
 .trial-countdown-value{font-family:'Montserrat',system-ui,sans-serif;font-size:22px;font-weight:900;color:${t.green};line-height:1;}
 .trial-countdown-label{font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:${t.textDim};margin-top:5px;}
-.question-card{padding:22px 24px!important;margin-bottom:16px!important;background:linear-gradient(180deg,${t.surface},${t.panel})!important;border-color:${t.accent}26!important;box-shadow:0 14px 30px rgba(7,12,24,.09)!important;}
-.question-text{font-family:'Montserrat',system-ui,sans-serif!important;font-size:20px!important;line-height:1.62!important;color:${t.bg==="#0b1020"?"#E2E8F0":t.text}!important;font-weight:800!important;letter-spacing:0!important;overflow-wrap:anywhere;}
+.question-card{padding:24px 26px!important;margin-bottom:18px!important;background:linear-gradient(180deg,${t.surface},${t.panel})!important;border-color:${t.accent}26!important;box-shadow:0 14px 30px rgba(7,12,24,.09)!important;}
+.question-text{font-family:'Montserrat',system-ui,sans-serif!important;font-size:20px!important;line-height:1.7!important;color:${t.bg==="#0b1020"?"#E2E8F0":t.text}!important;font-weight:800!important;letter-spacing:0!important;overflow-wrap:anywhere;}
 .scenario-text{font-size:16px!important;line-height:1.8!important;color:${t.textSec}!important;overflow-wrap:anywhere;}
 .question-prompt{font-family:'Montserrat',system-ui,sans-serif!important;font-size:18px!important;line-height:1.65!important;color:${t.text}!important;font-weight:800!important;margin-bottom:14px!important;}
-.option-text{font-size:17px!important;line-height:1.62!important;color:${t.text}!important;font-weight:700!important;overflow-wrap:anywhere;}
+.option-text{font-size:17px!important;line-height:1.58!important;color:${t.text}!important;font-weight:750!important;overflow-wrap:anywhere;}
 .compact-question-text{font-size:16px!important;line-height:1.7!important;color:${t.text}!important;font-weight:750!important;}
 .question-dots{display:flex;gap:6px;flex-wrap:wrap;}
 .question-dot{width:11px;height:11px;border-radius:50%;border:0;padding:0;cursor:pointer;transition:transform .18s,box-shadow .18s,background .2s;}
@@ -14181,12 +14181,18 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .exam-layout{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:16px;}
 .exam-map{padding:14px;height:fit-content;position:sticky;top:96px;}
 .exam-map-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+.exam-map-btn{min-height:36px;padding:0!important;font-size:12px!important;border-radius:9px!important;border:1.5px solid ${t.border}!important;box-shadow:none!important;}
+.exam-map-btn.answered{background:${t.panel}!important;color:${t.textDim}!important;font-weight:650!important;border-color:${t.border}!important;}
+.exam-map-btn.unanswered{background:linear-gradient(135deg,${t.amber}2b,${t.amber}10)!important;color:${t.amber}!important;font-weight:950!important;border-color:${t.amber}80!important;box-shadow:0 0 0 3px ${t.amber}16,0 10px 24px ${t.amber}14!important;}
+.exam-map-btn.active{background:linear-gradient(135deg,${t.accent},${t.accentHover})!important;color:#fff!important;border-color:${t.accent}!important;box-shadow:0 0 0 3px ${t.accent}20,0 12px 24px ${t.accent}18!important;}
+.exam-map-btn.flagged{border-color:${t.amber}!important;}
+.exam-map-btn.answered.flagged:not(.active){color:${t.amber}!important;background:${t.amber}0d!important;}
 .exam-flag-ribbon{position:absolute;top:0;right:0;width:104px;height:104px;overflow:hidden;pointer-events:none;border-top-right-radius:8px;}
 .exam-flag-ribbon span{position:absolute;right:-34px;top:17px;width:132px;transform:rotate(45deg);background:${t.amber};color:#111827;text-align:center;font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;padding:5px 0;box-shadow:0 8px 18px ${t.amber}30;}
 .prog-track{background:${t.border};border-radius:99px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;}
 .prog-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:barShine 1.8s linear infinite;}
-.opt{display:flex;align-items:flex-start;gap:14px;padding:17px 19px;border-radius:12px;border:1.5px solid ${t.border};cursor:pointer;transition:background .18s,border-color .18s,transform .18s,box-shadow .18s; background:linear-gradient(180deg,${t.surface},${t.panel});min-width:0;box-shadow:0 8px 18px rgba(7,12,24,.045);}
+.opt{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:flex-start;gap:15px;padding:18px 20px;border-radius:13px;border:1.5px solid ${t.border};cursor:pointer;transition:background .18s,border-color .18s,transform .18s,box-shadow .18s; background:linear-gradient(180deg,${t.surface},${t.panel});min-width:0;box-shadow:0 8px 18px rgba(7,12,24,.045);}
 .opt:hover:not(.done){border-color:${t.accent}7a;background:linear-gradient(180deg,${t.accent}10,${t.surface});transform:translateY(-1px);box-shadow:0 15px 30px ${t.accent}16;}
 .opt.sel{border-color:${t.accent}!important;border-width:2px;background:linear-gradient(135deg,${t.accent}28,${t.surface} 62%,${t.accent}10);box-shadow:0 0 0 3px ${t.accent}18,0 16px 34px ${t.accent}18;animation:selectPulse .28s ease both;}
 .opt.ok{border-color:${t.green}80!important;background:${t.green}10!important;box-shadow:0 0 0 3px ${t.green}16!important;animation:answerPop .34s cubic-bezier(.16,1,.3,1) both;}
@@ -14486,6 +14492,10 @@ function difficultyMeta(d) {
 function DiffBadge({d,t}) {
   const {c,label,glow}=difficultyMeta(d);
   return <span className="chip difficulty-chip" style={{background:`${c}15`,color:c,borderColor:`${c}45`,textShadow:glow,boxShadow:`inset 0 0 0 1px ${c}10, 0 0 18px ${c}18`}}>{label}</span>;
+}
+function QuestionCodeChip({id,t}) {
+  if(!id)return null;
+  return <span className="chip meta-chip" style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,letterSpacing:".02em",background:`${t.amber}10`,borderColor:`${t.amber}35`,color:t.amber}}>Code: {id}</span>;
 }
 function GlossaryText({text,t,style}) {
   const [openTerm,setOpenTerm]=useState(null);
@@ -14937,7 +14947,7 @@ function ProfileMenu({user,t,onUpdateProfile,onChangePassword,onLogout,compact=f
 // ═══════════════════════════════════════════════════════════════
 // DAILY CHALLENGE VIEW (no login required)
 // ═══════════════════════════════════════════════════════════════
-function DailyChallenge({t,onLogin,user=null}) {
+function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
   const challenge = getTodayChallenge();
   const [step, setStep] = useState("intro"); // intro | quiz | done
   const [qIndex, setQIndex] = useState(0);
@@ -15093,6 +15103,7 @@ function DailyChallenge({t,onLogin,user=null}) {
       <div className="card question-card" style={{padding:"20px 24px",marginBottom:18}}>
         <div style={{display:"flex",gap:8,marginBottom:10,flexWrap:"wrap"}}>
           <ChBadge chId={current.ch} t={t}/>
+          {showQuestionCodes&&<QuestionCodeChip id={current.id} t={t}/>}
           <DiffBadge d={current.difficulty} t={t}/>
           <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
         </div>
@@ -15149,6 +15160,7 @@ function DailyChallenge({t,onLogin,user=null}) {
     <PBQSim
       q={pbq}
       t={t}
+      showQuestionCodes={showQuestionCodes}
       onDone={result=>{
         capture("daily_challenge_completed", { challenge_type: "pbq", correct: result.correct, signed_in: Boolean(user) });
         setResults([{qid:result.qid,correct:result.correct,selected:null}]);
@@ -15830,7 +15842,7 @@ function Dashboard({user,attempts,onNav,t}) {
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
-function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onToggleStar,onReportQuestion}) {
+function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
   const sessionKey=`mcq:${practiceSessionOwner(user)}`;
   const requestSignup=onSignup||onUpgrade;
@@ -16032,6 +16044,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
                   <ChBadge chId={q.ch} t={t}/>
+                  {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
                   <DiffBadge d={q.difficulty} t={t}/>
                   <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{q.topic}</span>
                 </div>
@@ -16317,6 +16330,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
       <div className="card question-card" style={{padding:"22px 26px",marginBottom:18}}>
         <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
           <ChBadge chId={current.ch} t={t}/>
+          {showQuestionCodes&&<QuestionCodeChip id={current.id} t={t}/>}
           <DiffBadge d={current.difficulty} t={t}/>
           <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
           {!isGuest&&(
@@ -16405,7 +16419,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK
 // ═══════════════════════════════════════════════════════════════
-function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
+function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,showQuestionCodes=false}) {
   const [chFilter,setChFilter]=useState("all");
   const [typeFilter,setTypeFilter]=useState("all");
   const [lockedQuestion,setLockedQuestion]=useState(null);
@@ -16460,6 +16474,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
                   {!isPro&&isFreePBQPreview(q)&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}40`}}>Preview</span>}
+                  {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
                 </div>
@@ -16595,6 +16610,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,marginBottom:5,flexWrap:"wrap"}}>
                   {preview&&!isPro&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}40`}}>Preview</span>}
+                  {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
                   {ch&&<span style={{fontSize:11,color:t.textDim,display:"inline-flex",alignItems:"center",gap:4}}><ChapterIcon id={ch.id} size={16}/> Ch.{ch.id}</span>}
@@ -16618,7 +16634,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar}) {
 // ═══════════════════════════════════════════════════════════════
 // PBQ SIMULATOR
 // ═══════════════════════════════════════════════════════════════
-function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewMode=false,onUpgrade,onReportQuestion}) {
+function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewMode=false,onUpgrade,onReportQuestion,showQuestionCodes=false}) {
   const [termInput,setTermInput]=useState("");
   const [termHistory,setTermHistory]=useState([]);
   const [selected,setSelected]=useState(null);
@@ -16695,7 +16711,11 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
         <SimIcon type={q.type}/>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontWeight:600,fontSize:15,color:t.text}}>{q.title}</div>
-          <div style={{display:"flex",gap:8,marginTop:4}}><SimBadge type={q.type} t={t}/><DiffBadge d={q.difficulty} t={t}/></div>
+          <div style={{display:"flex",gap:8,marginTop:4,flexWrap:"wrap"}}>
+            {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
+            <SimBadge type={q.type} t={t}/>
+            <DiffBadge d={q.difficulty} t={t}/>
+          </div>
         </div>
         <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
       </div>
@@ -17027,7 +17047,7 @@ function ExamModeGuideModal({t,onClose}) {
   );
 }
 
-function ExamMode({user,onSave,onUpgrade,t}) {
+function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
   const sessionKey=`exam:${practiceSessionOwner(user)}`;
   const [questionCount,setQuestionCount]=useState(20);
   const [pbqCount,setPbqCount]=useState(2);
@@ -17490,6 +17510,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
             <div key={`${item.kind}-${q.id}`} className="card" style={{padding:"16px 18px",borderColor:ok?`${t.green}35`:`${t.red}35`,cursor:"pointer"}} onClick={()=>setExpandedReview(prev=>({...prev,[index]:!prev[index]}))}>
               <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:8,flexWrap:"wrap"}}>
                 <span style={{fontWeight:900,color:ok?t.green:t.red}}>{ok?"Correct":"Incorrect"}</span>
+                {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
                 {item.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
                 {flagged[index]&&<span className="chip" style={{background:`${t.amber}14`,color:t.amber,borderColor:`${t.amber}35`}}>Flagged</span>}
                 <span className="chip" style={{background:seconds>target*1.35?`${t.amber}14`:t.panel,color:seconds>target*1.35?t.amber:t.textSec,borderColor:seconds>target*1.35?`${t.amber}35`:t.border}}>
@@ -17561,6 +17582,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
             {flagged[qi]&&<div className="exam-flag-ribbon"><span>Review</span></div>}
             <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
               {current.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
+              {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
               <DiffBadge d={q.difficulty} t={t}/>
               <span className="chip meta-chip">{current.kind==="mcq"?"MCQ":"PBQ"}</span>
               {flagged[qi]&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}45`}}>Flagged for review</span>}
@@ -17731,14 +17753,19 @@ function ExamMode({user,onSave,onUpgrade,t}) {
               const active=index===qi;
               const answered=isAnswered(item,answers[index]);
               return(
-                <button key={index} className={`btn ${active?"btn-primary":"btn-ghost"}`} style={{minHeight:34,padding:0,fontSize:12,fontWeight:answered?500:900,borderColor:flagged[index]?t.amber:undefined,color:!active&&flagged[index]?t.amber:undefined}} onClick={()=>setQi(index)}>
-                  {index+1}{answered?"":"*"}
+                <button
+                  key={index}
+                  className={`btn exam-map-btn ${active?"active":answered?"answered":"unanswered"} ${flagged[index]?"flagged":""}`}
+                  aria-label={`Question ${index+1}${answered?", answered":", unanswered"}${flagged[index]?", flagged":""}`}
+                  onClick={()=>setQi(index)}
+                >
+                  {index+1}
                 </button>
               );
             })}
           </div>
           <div style={{fontSize:11,color:t.textDim,lineHeight:1.6,marginTop:10}}>
-            * not answered. Amber outline means flagged.
+            Amber boxes need attention. Muted boxes are answered. Amber outline means flagged.
           </div>
         </div>
       </div>
@@ -17749,7 +17776,7 @@ function ExamMode({user,onSave,onUpgrade,t}) {
 // ═══════════════════════════════════════════════════════════════
 // PRICING
 // ═══════════════════════════════════════════════════════════════
-function ReferralUpgradeBanner({user,t}) {
+function ReferralUpgradeBanner({user,t,onFindOutMore}) {
   const [details,setDetails]=useState(null);
   const [error,setError]=useState("");
   const [copied,setCopied]=useState(false);
@@ -17799,6 +17826,11 @@ function ReferralUpgradeBanner({user,t}) {
             <span className="chip" style={{background:`${t.accent}12`,borderColor:`${t.accent}35`,color:t.accent}}>You can refer 1 user</span>
             {isPaidPro&&<span className="chip" style={{background:`${t.amber}12`,borderColor:`${t.amber}35`,color:t.amber}}>Paid Pro: no extra trial needed</span>}
           </div>
+          {onFindOutMore&&(
+            <button className="btn btn-outline" style={{fontSize:12,marginTop:14}} onClick={onFindOutMore}>
+              Find out more
+            </button>
+          )}
         </div>
         <div style={{flex:"1 1 260px",minWidth:0}}>
           <div style={{fontSize:12,fontWeight:800,color:t.textDim,marginBottom:6}}>Your referral link</div>
@@ -18178,7 +18210,24 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const [saving,setSaving]=useState(false);
   const [status,setStatus]=useState("");
   const [error,setError]=useState("");
+  const [codeSearch,setCodeSearch]=useState("");
+  const [sortMode,setSortMode]=useState("order");
   const bank=kind==="mcq"?MCQ_BANK:PBQ_BANK;
+  const visibleBank=useMemo(()=>{
+    const query=codeSearch.trim().toLowerCase();
+    const list=bank.filter(q=>!query||String(q.id||"").toLowerCase().includes(query));
+    return [...list].sort((a,b)=>{
+      if(sortMode==="code-asc") return String(a.id).localeCompare(String(b.id),undefined,{numeric:true,sensitivity:"base"});
+      if(sortMode==="code-desc") return String(b.id).localeCompare(String(a.id),undefined,{numeric:true,sensitivity:"base"});
+      if(sortMode==="difficulty") {
+        const rank={easy:1,medium:2,hard:3};
+        return (rank[a.difficulty]||9)-(rank[b.difficulty]||9)||String(a.id).localeCompare(String(b.id),undefined,{numeric:true,sensitivity:"base"});
+      }
+      const ao=Number(a._adminOrder||a._baseOrder||Number.MAX_SAFE_INTEGER);
+      const bo=Number(b._adminOrder||b._baseOrder||Number.MAX_SAFE_INTEGER);
+      return ao-bo||String(a.id).localeCompare(String(b.id),undefined,{numeric:true,sensitivity:"base"});
+    });
+  },[bank,codeSearch,sortMode]);
   const selectedIndex=bank.findIndex(q=>q.id===selectedId);
   const selectedQuestion=selectedIndex>=0?bank[selectedIndex]:null;
   const isEditing=Boolean(selectedQuestion);
@@ -18332,10 +18381,19 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
               <option value="pbq">PBQ</option>
             </select>
           </Field>
+          <TextInput label="Search code" value={codeSearch} onChange={setCodeSearch} placeholder={kind==="mcq"?"m101":"p042"}/>
+          <Field label="Sort">
+            <select className="input" value={sortMode} onChange={e=>setSortMode(e.target.value)}>
+              <option value="order">Current order</option>
+              <option value="code-asc">Question code A-Z</option>
+              <option value="code-desc">Question code Z-A</option>
+              <option value="difficulty">Difficulty</option>
+            </select>
+          </Field>
           <Field label="Choose existing question">
             <select className="input" value={selectedId} onChange={e=>setSelectedId(e.target.value)}>
               <option value="">Create a new question</option>
-              {bank.map((q,index)=><option key={q.id} value={q.id}>#{q._adminOrder||index+1} · {q.id} · {kind==="mcq"?(q.q||"").slice(0,80):(q.title||"").slice(0,80)}</option>)}
+              {visibleBank.map((q,index)=><option key={q.id} value={q.id}>#{q._adminOrder||q._baseOrder||index+1} · {q.id} · {kind==="mcq"?(q.q||"").slice(0,80):(q.title||"").slice(0,80)}</option>)}
             </select>
           </Field>
           <button className="btn btn-outline" onClick={loadSelected}>Load</button>
@@ -18616,7 +18674,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         </p>
       </div>
 
-      <ReferralUpgradeBanner user={user} t={t}/>
+      <ReferralUpgradeBanner user={user} t={t} onFindOutMore={()=>onNavigate("referrals")}/>
 
       <div className="pricing-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:32}}>
         {/* PRO */}
@@ -19521,7 +19579,7 @@ export default function App() {
       <style>{CSS}</style>
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <div style={{display:"flex",alignItems:"center",gap:8}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:15,color:t.text}}>SecurePlus</span></div>
+          <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:15,color:t.text}}>SecurePlus</span></button>
           <div style={{display:"flex",gap:8}}>
             <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>setShowDaily(false)}>← Back</button>
             <button className="btn btn-outline" style={{fontSize:12}} onClick={()=>setShowDaily(false)}>Sign In / Register</button>
@@ -19537,7 +19595,7 @@ export default function App() {
       <style>{CSS}</style>
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <div style={{display:"flex",alignItems:"center",gap:8}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:15,color:t.text}}>SecurePlus</span></div>
+          <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:15,color:t.text}}>SecurePlus</span></button>
           <button className="btn btn-outline" style={{fontSize:12}} onClick={()=>setView("dashboard")}>Sign In / Register</button>
         </div>
         <LegalPage type={view} t={t}/>
@@ -19586,6 +19644,11 @@ export default function App() {
     <>
       <style>{CSS}</style>
       <div style={{background:t.bg,minHeight:"100vh"}}>
+        <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <button type="button" onClick={()=>{setPbqQ(null);setView("dashboard");}} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}>
+            <BrandMark size={28}/><span style={{fontWeight:800,fontSize:15,color:t.text}}>SecurePlus</span>
+          </button>
+        </div>
         <PBQSim
           key={pbqQ.id}
           q={pbqQ}
@@ -19598,6 +19661,7 @@ export default function App() {
           previewMode={pbqPreviewMode}
           onUpgrade={()=>setView("pricing")}
           onReportQuestion={handleReportQuestion}
+          showQuestionCodes={isRootUser}
         />
       </div>
       {questionReport&&<QuestionReportModal report={questionReport} user={user} t={t} onClose={()=>setQuestionReport(null)}/>}
@@ -19611,7 +19675,6 @@ export default function App() {
     {id:"exam",icon:"exam",label:"Exam Mode"},
     {id:"daily",icon:"daily",label:"Daily Challenge"},
     {id:"pricing",icon:"pricing",label:"Upgrade"},
-    {id:"referrals",icon:"referrals",label:"Referrals"},
     {id:"objectives",icon:"objectives",label:"Objectives"},
     {id:"privacy",icon:"privacy",label:"Privacy Policy"},
     {id:"terms",icon:"terms",label:"Terms & Conditions"},
@@ -19629,7 +19692,7 @@ export default function App() {
         <aside className="sidebar">
           {/* Logo */}
           <div style={{padding:"18px 16px",borderBottom:`1px solid ${t.border}`}}>
-            <div style={{display:"flex",alignItems:"center",gap:9,fontWeight:700,fontSize:16,color:t.text}}><BrandMark size={30}/> SecurePlus</div>
+            <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:9,fontWeight:700,fontSize:16,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={30}/> SecurePlus</button>
             <div style={{fontSize:11,color:t.textDim,marginTop:2}}>CompTIA Security+ Practice Platform</div>
           </div>
 
@@ -19663,7 +19726,7 @@ export default function App() {
         <main className="app-main fu">
           <div className="mobile-topbar">
             <div>
-              <div style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text}}><BrandMark size={28}/> SecurePlus</div>
+              <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> SecurePlus</button>
               <div style={{fontSize:11,color:t.textDim}}>CompTIA Security+ Practice</div>
             </div>
             <div style={{display:"flex",gap:6,alignItems:"center",flexShrink:0}}>
@@ -19680,10 +19743,10 @@ export default function App() {
             onUpgrade={()=>setView("pricing")}
           />
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
-          {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion}/>}
-          {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar}/>}
-          {view==="exam"&&<ExamMode user={user} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t}/>}
-          {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")}/>}
+          {view==="mcq"&&<MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser}/>}
+          {view==="pbq"&&<PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser}/>}
+          {view==="exam"&&<ExamMode user={user} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} showQuestionCodes={isRootUser}/>}
+          {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
           {view==="referrals"&&<ReferralPage user={user} t={t}/>}
           {view==="objectives"&&<ObjectivesPage t={t}/>}
