@@ -14497,23 +14497,30 @@ function QuestionCodeChip({id,t}) {
   if(!id)return null;
   return <span className="chip meta-chip" style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,letterSpacing:".02em",background:`${t.amber}10`,borderColor:`${t.amber}35`,color:t.amber}}>Code: {id}</span>;
 }
+function parseInlineFormats(value) {
+  const text=String(value||"");
+  const pattern=/(\*\*[^*]+?\*\*|__[^_]+?__|==[^=]+?==)/g;
+  const segments=[];
+  let cursor=0;
+  for(const match of text.matchAll(pattern)){
+    if(match.index>cursor) segments.push({text:text.slice(cursor,match.index)});
+    const raw=match[0];
+    const marker=raw.slice(0,2);
+    segments.push({
+      text:raw.slice(2,-2),
+      bold:marker==="**",
+      underline:marker==="__",
+      highlight:marker==="==",
+    });
+    cursor=match.index+raw.length;
+  }
+  if(cursor<text.length) segments.push({text:text.slice(cursor)});
+  return segments.length?segments:[{text}];
+}
 function GlossaryText({text,t,style}) {
   const [openTerm,setOpenTerm]=useState(null);
-  const value=String(text||"");
   const terms=Object.keys(GLOSSARY_TERMS).sort((a,b)=>b.length-a.length);
   const pattern=new RegExp(`(^|[^A-Za-z0-9])(${terms.map(term=>term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")})(?=$|[^A-Za-z0-9])`,"gi");
-  const parts=[];
-  let cursor=0;
-  for(const match of value.matchAll(pattern)){
-    const prefix=match[1]||"";
-    const matched=match[2]||"";
-    const termStart=match.index + prefix.length;
-    if(termStart>cursor) parts.push({text:value.slice(cursor,termStart),term:false});
-    parts.push({text:matched,term:true});
-    cursor=termStart+matched.length;
-  }
-  if(cursor<value.length) parts.push({text:value.slice(cursor),term:false});
-  if(!parts.length) parts.push({text:value,term:false});
   const normalize=part=>terms.find(term=>term.toLowerCase()===part.toLowerCase());
   const getEntry=term=>{
     const entry=GLOSSARY_TERMS[term];
@@ -14526,15 +14533,41 @@ function GlossaryText({text,t,style}) {
     }
     return {fullName:entry.fullName||"",definition:entry.definition||""};
   };
+  const splitGlossaryParts=(value,format)=>{
+    const parts=[];
+    let cursor=0;
+    for(const match of value.matchAll(pattern)){
+      const prefix=match[1]||"";
+      const matched=match[2]||"";
+      const termStart=match.index + prefix.length;
+      if(termStart>cursor) parts.push({text:value.slice(cursor,termStart),term:false,...format});
+      parts.push({text:matched,term:true,...format});
+      cursor=termStart+matched.length;
+    }
+    if(cursor<value.length) parts.push({text:value.slice(cursor),term:false,...format});
+    if(!parts.length) parts.push({text:value,term:false,...format});
+    return parts;
+  };
+  const parts=parseInlineFormats(text).flatMap(segment=>splitGlossaryParts(segment.text,segment));
+  const formatStyle=part=>({
+    fontWeight:part.bold?900:undefined,
+    textDecoration:part.underline?"underline":undefined,
+    textDecorationThickness:part.underline?"2px":undefined,
+    textUnderlineOffset:part.underline?"3px":undefined,
+    background:part.highlight?`${t.amber}30`:undefined,
+    color:part.highlight?t.text:undefined,
+    borderRadius:part.highlight?5:undefined,
+    padding:part.highlight?"0 .18em":undefined,
+  });
 
   return(
     <span style={style}>
       {parts.map((part,index)=>{
         const term=part.term?normalize(part.text):null;
-        if(!term) return <span key={`${part.text}-${index}`}>{part.text}</span>;
+        if(!term) return <span key={`${part.text}-${index}`} style={formatStyle(part)}>{part.text}</span>;
         const key=`${term}-${index}`;
         return(
-          <span key={key} className="term-wrap">
+          <span key={key} className="term-wrap" style={formatStyle(part)}>
             <button type="button" className="term-link" onClick={e=>{e.stopPropagation();setOpenTerm(openTerm===key?null:key);}}>
               {part.text}
             </button>
@@ -15107,7 +15140,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
           <DiffBadge d={current.difficulty} t={t}/>
           <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
         </div>
-        <p className="question-text" style={{fontSize:15,lineHeight:1.7,color:t.text}}>{current.q}</p>
+        <p className="question-text" style={{fontSize:15,lineHeight:1.7,color:t.text}}><GlossaryText text={current.q} t={t}/></p>
       </div>
 
       <div style={{display:"flex",flexDirection:"column",gap:9,marginBottom:20}}>
@@ -15118,7 +15151,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
           return(
             <div key={i} className={cls} onClick={()=>!submitted&&setSelected(i)}>
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
-              <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.5}}>{opt}</span>
+              <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.5}}><GlossaryText text={opt} t={t}/></span>
               {submitted&&i===current.correct&&<span style={{color:t.green,fontSize:16,flexShrink:0}}>✓</span>}
               {submitted&&i===selected&&i!==current.correct&&<span style={{color:t.red,fontSize:16,flexShrink:0}}>✗</span>}
             </div>
@@ -15135,7 +15168,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
               {selected===current.correct?"✓ Correct!":"✗ Incorrect"}
             </div>
             {canSeeFeedback?(
-              <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>{current.exp}</p>
+              <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}><GlossaryText text={current.exp} t={t}/></p>
             ):(
               <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
                 Detailed explanations are part of Pro. Keep practising the daily challenge, then upgrade when you want full feedback.
@@ -16048,7 +16081,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
                   <DiffBadge d={q.difficulty} t={t}/>
                   <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{q.topic}</span>
                 </div>
-                <div style={{fontSize:14,color:t.text,lineHeight:1.65,fontWeight:700}}>{q.q}</div>
+                <div style={{fontSize:14,color:t.text,lineHeight:1.65,fontWeight:700}}><GlossaryText text={q.q} t={t}/></div>
               </div>
             </div>
           ))}
@@ -16377,7 +16410,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
               {selected===current.correct?"Nice work":"Not quite"}
             </div>
             {canSeeFeedback?(
-              <p style={{fontSize:13,color:t.textSec,lineHeight:1.75}}>{current.exp}</p>
+              <p style={{fontSize:13,color:t.textSec,lineHeight:1.75}}><GlossaryText text={current.exp} t={t}/></p>
             ):(
               <div>
                 <p style={{fontSize:13,color:t.textSec,lineHeight:1.75,marginBottom:10}}>
@@ -16478,8 +16511,8 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
                 </div>
-                <div style={{fontSize:14,fontWeight:800,color:t.text}}>{q.title}</div>
-                <div style={{fontSize:12,color:t.textSec,marginTop:3}}>{q.cat}</div>
+                <div style={{fontSize:14,fontWeight:800,color:t.text}}><GlossaryText text={q.title} t={t}/></div>
+                <div style={{fontSize:12,color:t.textSec,marginTop:3}}><GlossaryText text={q.cat} t={t}/></div>
               </div>
             </div>
           ))}
@@ -16615,8 +16648,8 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
                   <DiffBadge d={q.difficulty} t={t}/>
                   {ch&&<span style={{fontSize:11,color:t.textDim,display:"inline-flex",alignItems:"center",gap:4}}><ChapterIcon id={ch.id} size={16}/> Ch.{ch.id}</span>}
                 </div>
-                <div style={{fontSize:14,fontWeight:500,color:t.text}}>{q.title}</div>
-                <div style={{fontSize:12,color:t.textDim,marginTop:2}}>{q.cat}</div>
+                <div style={{fontSize:14,fontWeight:500,color:t.text}}><GlossaryText text={q.title} t={t}/></div>
+                <div style={{fontSize:12,color:t.textDim,marginTop:2}}><GlossaryText text={q.cat} t={t}/></div>
               </div>
               <div style={{flexShrink:0,display:"flex",gap:8,alignItems:"center"}}>
                 <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
@@ -16710,7 +16743,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
         <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>onDone(null)}>← Back to PBQ Bank</button>
         <SimIcon type={q.type}/>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontWeight:600,fontSize:15,color:t.text}}>{q.title}</div>
+          <div style={{fontWeight:600,fontSize:15,color:t.text}}><GlossaryText text={q.title} t={t}/></div>
           <div style={{display:"flex",gap:8,marginTop:4,flexWrap:"wrap"}}>
             {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
             <SimBadge type={q.type} t={t}/>
@@ -16912,7 +16945,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
             <div style={{fontWeight:700,fontSize:16,color:isCorrect()?t.green:t.red,marginBottom:10}}>
               {isCorrect()?"✓ Correct!":"✗ Incorrect"}
             </div>
-            <p style={{fontSize:13,color:t.textSec,lineHeight:1.75}}>{q.explanation}</p>
+            <p style={{fontSize:13,color:t.textSec,lineHeight:1.75}}><GlossaryText text={q.explanation} t={t}/></p>
             {/* Wrong answer feedback */}
             {!isCorrect()&&q.wrongFeedback&&selected!==null&&q.wrongFeedback[selected]&&(
               <div style={{marginTop:12,padding:"12px 14px",background:`${t.red}08`,borderRadius:7,border:`1px solid ${t.red}25`}}>
@@ -17523,8 +17556,8 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
               </div>
               {expanded&&item.kind==="pbq"&&(
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:10}}>
-                  {q.scenario&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Scenario: </strong>{q.scenario}</div>}
-                  {q.question&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Question: </strong>{q.question}</div>}
+                  {q.scenario&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Scenario: </strong><GlossaryText text={q.scenario} t={t}/></div>}
+                  {q.question&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Question: </strong><GlossaryText text={q.question} t={t}/></div>}
                   {q.items&&q.targets&&(
                     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:8}}>
                       <div>
@@ -17588,10 +17621,10 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
               {flagged[qi]&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}45`}}>Flagged for review</span>}
             </div>
             <div className="question-text" style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:700}}>
-              {current.kind==="mcq"?q.q:(q.question||q.title)}
+              <GlossaryText text={current.kind==="mcq"?q.q:(q.question||q.title)} t={t}/>
             </div>
             {current.kind==="pbq"&&q.scenario&&(
-              <p className="scenario-text" style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginTop:12}}>{q.scenario}</p>
+              <p className="scenario-text" style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginTop:12}}><GlossaryText text={q.scenario} t={t}/></p>
             )}
           </div>
 
@@ -17636,7 +17669,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
                   title="Right-click, long-press, or use Strike to cross out"
                 >
                   <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
-                  <span className="option-text" style={{fontSize:14,color:t.text,lineHeight:1.55}}>{opt}</span>
+                  <span className="option-text" style={{fontSize:14,color:t.text,lineHeight:1.55}}><GlossaryText text={opt} t={t}/></span>
                   <button
                     type="button"
                     className="btn btn-ghost"
@@ -17658,7 +17691,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
               {(q.choices||q.options||[]).map((choice,index)=>(
                 <div key={index} className={`opt ${answer.selected===index?"sel":""}`} onClick={()=>updateAnswer({selected:index})}>
                   <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
-                  <span className="option-text" style={{fontSize:14,color:t.text,lineHeight:1.55}}>{choice}</span>
+                  <span className="option-text" style={{fontSize:14,color:t.text,lineHeight:1.55}}><GlossaryText text={choice} t={t}/></span>
                 </div>
               ))}
             </div>
@@ -18214,18 +18247,54 @@ function AdminField({label,children}) {
   );
 }
 
-function AdminTextInput({label,value,onChange,placeholder,type="text"}) {
+function applyAdminInlineFormat(input, value, onChange, marker) {
+  const start=input?.selectionStart ?? value.length;
+  const end=input?.selectionEnd ?? value.length;
+  const selected=value.slice(start,end) || "text";
+  const next=`${value.slice(0,start)}${marker}${selected}${marker}${value.slice(end)}`;
+  onChange(next);
+  setTimeout(()=>{
+    input?.focus?.();
+    const nextStart=start+marker.length;
+    const nextEnd=nextStart+selected.length;
+    input?.setSelectionRange?.(nextStart,nextEnd);
+  },0);
+}
+
+function AdminFormatToolbar({inputRef,value,onChange}) {
+  const buttonStyle={fontSize:12,minHeight:30,padding:"5px 10px"};
+  const format=(marker)=>applyAdminInlineFormat(inputRef.current,String(value||""),onChange,marker);
+  return(
+    <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:7}}>
+      <button className="btn btn-outline" type="button" style={buttonStyle} onClick={()=>format("**")} title="Bold selected text">
+        <strong>B</strong>
+      </button>
+      <button className="btn btn-outline" type="button" style={buttonStyle} onClick={()=>format("==")} title="Highlight selected text">
+        Highlight
+      </button>
+      <button className="btn btn-outline" type="button" style={buttonStyle} onClick={()=>format("__")} title="Underline selected text">
+        <span style={{textDecoration:"underline",textUnderlineOffset:3}}>U</span>
+      </button>
+    </div>
+  );
+}
+
+function AdminTextInput({label,value,onChange,placeholder,type="text",format=false}) {
+  const inputRef=useRef(null);
   return (
     <AdminField label={label}>
-      <input className="input" type={type} value={value} placeholder={placeholder||""} onChange={e=>onChange(e.target.value)}/>
+      {format&&<AdminFormatToolbar inputRef={inputRef} value={value} onChange={onChange}/>}
+      <input ref={inputRef} className="input" type={type} value={value} placeholder={placeholder||""} onChange={e=>onChange(e.target.value)}/>
     </AdminField>
   );
 }
 
-function AdminTextArea({label,value,onChange,placeholder,rows=4}) {
+function AdminTextArea({label,value,onChange,placeholder,rows=4,format=true}) {
+  const inputRef=useRef(null);
   return (
     <AdminField label={label}>
-      <textarea className="input" value={value} placeholder={placeholder||""} rows={rows} onChange={e=>onChange(e.target.value)} style={{resize:"vertical",lineHeight:1.55}}/>
+      {format&&<AdminFormatToolbar inputRef={inputRef} value={value} onChange={onChange}/>}
+      <textarea ref={inputRef} className="input" value={value} placeholder={placeholder||""} rows={rows} onChange={e=>onChange(e.target.value)} style={{resize:"vertical",lineHeight:1.55}}/>
     </AdminField>
   );
 }
@@ -18457,7 +18526,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                         {String.fromCharCode(65+index)}
                       </button>
                     </AdminField>
-                    <AdminTextInput label={`Answer ${String.fromCharCode(65+index)}`} value={opt} onChange={v=>updateArray("opts",index,v)} placeholder={`Answer option ${String.fromCharCode(65+index)}`}/>
+                    <AdminTextInput label={`Answer ${String.fromCharCode(65+index)}`} value={opt} onChange={v=>updateArray("opts",index,v)} placeholder={`Answer option ${String.fromCharCode(65+index)}`} format/>
                   </div>
                 ))}
               </div>
@@ -18483,11 +18552,11 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
           ) : (
             <>
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10}}>
-                <AdminTextInput label="PBQ title" value={form.title} onChange={v=>updateField("title",v)} placeholder="Firewall rule review"/>
+                <AdminTextInput label="PBQ title" value={form.title} onChange={v=>updateField("title",v)} placeholder="Firewall rule review" format/>
                 <AdminTextInput label="PBQ type" value={form.type} onChange={v=>updateField("type",v)} placeholder="SCENARIO"/>
               </div>
               <div style={{height:12}}/>
-              <AdminTextInput label="Category" value={form.cat} onChange={v=>updateField("cat",v)} placeholder="Security Operations"/>
+              <AdminTextInput label="Category" value={form.cat} onChange={v=>updateField("cat",v)} placeholder="Security Operations" format/>
               <div style={{height:12}}/>
               <AdminTextArea label="Scenario" value={form.scenario} onChange={v=>updateField("scenario",v)} placeholder="Explain the environment or situation." rows={5}/>
               <div style={{height:12}}/>
@@ -18502,7 +18571,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                   {(form.choices||[]).map((choice,index)=>(
                     <div key={index} style={{display:"grid",gridTemplateColumns:"90px minmax(0,1fr) auto",gap:10,alignItems:"start"}}>
                       <button type="button" className={Number(form.correct)===index?"btn btn-primary":"btn btn-outline"} onClick={()=>updateField("correct",index)}>{String.fromCharCode(65+index)}</button>
-                      <input className="input" value={choice} placeholder={`Choice ${String.fromCharCode(65+index)}`} onChange={e=>updateArray("choices",index,e.target.value)}/>
+                      <AdminTextInput label={`Choice ${String.fromCharCode(65+index)}`} value={choice} placeholder={`Choice ${String.fromCharCode(65+index)}`} onChange={v=>updateArray("choices",index,v)} format/>
                       <button className="btn btn-ghost" type="button" onClick={()=>updateField("choices",(form.choices||[]).filter((_,i)=>i!==index))}>Remove</button>
                     </div>
                   ))}
@@ -18535,32 +18604,32 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
             </div>
             {kind==="mcq" ? (
               <>
-                <div style={{fontSize:20,fontWeight:900,color:t.text,lineHeight:1.45,marginBottom:16}}>{form.q||"Your MCQ question will appear here."}</div>
+                <div style={{fontSize:20,fontWeight:900,color:t.text,lineHeight:1.45,marginBottom:16}}><GlossaryText text={form.q||"Your MCQ question will appear here."} t={t}/></div>
                 <div style={{display:"grid",gap:10}}>
                   {form.opts.map((opt,index)=>(
                     <div key={index} style={{padding:"12px 14px",borderRadius:10,border:`1.5px solid ${Number(form.correct)===index?t.green:t.border}`,background:Number(form.correct)===index?`${t.green}10`:t.panel,color:t.text}}>
-                      <strong style={{marginRight:8}}>{String.fromCharCode(65+index)}.</strong>{opt||`Answer ${String.fromCharCode(65+index)}`}
+                      <strong style={{marginRight:8}}>{String.fromCharCode(65+index)}.</strong><GlossaryText text={opt||`Answer ${String.fromCharCode(65+index)}`} t={t}/>
                     </div>
                   ))}
                 </div>
                 <div style={{marginTop:16,padding:12,borderRadius:10,background:`${t.green}0d`,color:t.textSec,fontSize:13,lineHeight:1.6}}>
-                  <strong style={{color:t.green}}>Explanation:</strong> {form.exp||"Correct-answer explanation preview."}
+                  <strong style={{color:t.green}}>Explanation:</strong> <GlossaryText text={form.exp||"Correct-answer explanation preview."} t={t}/>
                 </div>
               </>
             ) : (
               <>
-                <div style={{fontSize:18,fontWeight:900,color:t.text,marginBottom:8}}>{form.title||"PBQ title preview"}</div>
-                <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:12}}>{form.scenario||"Scenario preview will appear here."}</p>
-                <div style={{fontSize:16,fontWeight:800,color:t.text,lineHeight:1.5,marginBottom:12}}>{form.question||"Task preview will appear here."}</div>
+                <div style={{fontSize:18,fontWeight:900,color:t.text,marginBottom:8}}><GlossaryText text={form.title||"PBQ title preview"} t={t}/></div>
+                <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:12}}><GlossaryText text={form.scenario||"Scenario preview will appear here."} t={t}/></p>
+                <div style={{fontSize:16,fontWeight:800,color:t.text,lineHeight:1.5,marginBottom:12}}><GlossaryText text={form.question||"Task preview will appear here."} t={t}/></div>
                 <div style={{display:"grid",gap:8}}>
                   {(form.choices||[]).filter(Boolean).map((choice,index)=>(
                     <div key={index} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${Number(form.correct)===index?t.green:t.border}`,background:Number(form.correct)===index?`${t.green}10`:t.panel,color:t.text}}>
-                      <strong>{String.fromCharCode(65+index)}.</strong> {choice}
+                      <strong>{String.fromCharCode(65+index)}.</strong> <GlossaryText text={choice} t={t}/>
                     </div>
                   ))}
                 </div>
                 <div style={{marginTop:16,padding:12,borderRadius:10,background:`${t.green}0d`,color:t.textSec,fontSize:13,lineHeight:1.6}}>
-                  <strong style={{color:t.green}}>Solution:</strong> {form.explanation||"Solution explanation preview."}
+                  <strong style={{color:t.green}}>Solution:</strong> <GlossaryText text={form.explanation||"Solution explanation preview."} t={t}/>
                 </div>
               </>
             )}
