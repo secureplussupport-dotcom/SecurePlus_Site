@@ -908,6 +908,18 @@ function getPbqAcronyms(question) {
   );
 }
 
+function stripPbqHintsForExam(value) {
+  if(Array.isArray(value)) return value.map(stripPbqHintsForExam);
+  if(value&&typeof value==="object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([key])=>key!=="hint")
+        .map(([key,nextValue])=>[key,stripPbqHintsForExam(nextValue)])
+    );
+  }
+  return value;
+}
+
 // ═══════════════════════════════════════════════════════════════
 // MCQ BANK — original, accurate, Security+ aligned, not copyrighted
 // Easy, medium, and hard mix across all 5 domains
@@ -17267,7 +17279,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
   };
   const startExam=()=>{
     const examReadyPbqs=PBQ_BANK.filter(q=>!q.beyondTextbook&&(q.type!=="TERMINAL SIM"||q.choices||q.options));
-    const pickedPbq=shuffle(examReadyPbqs).slice(0,pbqCount).map(q=>({kind:"pbq",q}));
+    const pickedPbq=shuffle(examReadyPbqs).slice(0,pbqCount).map(q=>({kind:"pbq",q:stripPbqHintsForExam(q)}));
     const pickedMcq=shuffle(MCQ_BANK.filter(q=>!q.beyondTextbook)).slice(0,mcqCount).map(q=>({kind:"mcq",q:shuffleMcqOptions(q)}));
     const examQs=[...pickedPbq,...pickedMcq];
     setQuestions(examQs);
