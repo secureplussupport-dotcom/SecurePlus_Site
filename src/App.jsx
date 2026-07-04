@@ -18325,6 +18325,39 @@ function serializeAdminRichEditor(editor) {
   return [...(editor?.childNodes||[])].map(serializeAdminRichNode).join("").replace(/\n+$/,"");
 }
 
+function adminFormatMatches(node,tag) {
+  if(!node || node.nodeType!==Node.ELEMENT_NODE)return false;
+  const nodeTag=node.tagName.toLowerCase();
+  if(tag==="strong")return nodeTag==="strong"||nodeTag==="b";
+  if(tag==="mark")return nodeTag==="mark"||Boolean(node.style?.backgroundColor);
+  return nodeTag===tag;
+}
+
+function findAdminFormatAncestor(node,tag,editor) {
+  let current=node?.nodeType===Node.ELEMENT_NODE?node:node?.parentElement;
+  while(current&&current!==editor) {
+    if(adminFormatMatches(current,tag))return current;
+    current=current.parentElement;
+  }
+  return null;
+}
+
+function unwrapAdminFormatElement(element) {
+  const parent=element?.parentNode;
+  if(!parent)return null;
+  const range=document.createRange();
+  range.setStartBefore(element);
+  while(element.firstChild) parent.insertBefore(element.firstChild,element);
+  const endNode=element.previousSibling || parent;
+  parent.removeChild(element);
+  if(endNode.nodeType===Node.TEXT_NODE) {
+    range.setEnd(endNode,endNode.textContent.length);
+  } else {
+    range.setEndAfter(endNode);
+  }
+  return range;
+}
+
 function AdminFormatToolbar({editorRef,selectionRef,onChange}) {
   const buttonStyle={fontSize:12,minHeight:30,padding:"5px 10px"};
   const format=(tag)=>{
@@ -18338,6 +18371,22 @@ function AdminFormatToolbar({editorRef,selectionRef,onChange}) {
     }
     const activeSelection=window.getSelection?.();
     const range=activeSelection?.rangeCount ? activeSelection.getRangeAt(0) : null;
+    if(range&&editor.contains(range.commonAncestorContainer)) {
+      const existing=
+        findAdminFormatAncestor(range.commonAncestorContainer,tag,editor) ||
+        findAdminFormatAncestor(range.startContainer,tag,editor) ||
+        findAdminFormatAncestor(range.endContainer,tag,editor);
+      if(existing) {
+        const nextRange=unwrapAdminFormatElement(existing);
+        activeSelection?.removeAllRanges();
+        if(nextRange) {
+          activeSelection?.addRange(nextRange);
+          selectionRef.current=nextRange.cloneRange();
+        }
+        onChange(serializeAdminRichEditor(editor));
+        return;
+      }
+    }
     const wrapper=document.createElement(tag);
     if(tag==="mark") wrapper.style.background="rgba(245, 158, 11, .35)";
     if(!range || !editor.contains(range.commonAncestorContainer)) {
