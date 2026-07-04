@@ -18537,6 +18537,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const [sortMode,setSortMode]=useState("order");
   const [history,setHistory]=useState([]);
   const [historyLoading,setHistoryLoading]=useState(false);
+  const [historyError,setHistoryError]=useState("");
   const bank=kind==="mcq"?MCQ_BANK:PBQ_BANK;
   const visibleBank=useMemo(()=>{
     const query=codeSearch.trim().toLowerCase();
@@ -18593,10 +18594,11 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const loadHistory=useCallback(async()=>{
     if(!isSupabaseConfigured)return;
     setHistoryLoading(true);
+    setHistoryError("");
     try{
       setHistory(await loadQuestionOverrideHistoryRequest());
     }catch(err){
-      setError(err.message||"Unable to load question history.");
+      setHistoryError(err.message||"Unable to load question history.");
     }finally{
       setHistoryLoading(false);
     }
@@ -18699,9 +18701,15 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
             {historyLoading?"Loading...":"Refresh history"}
           </button>
         </div>
+        <Alert msg={historyError} t={t}/>
+        {historyError && (
+          <div style={{fontSize:12,color:t.textSec,lineHeight:1.65,marginBottom:12,padding:"10px 12px",border:`1px solid ${t.amber}35`,borderRadius:12,background:`${t.amber}10`}}>
+            Run the latest <code>supabase/question-admin.sql</code> in Supabase SQL Editor, then make one new question save/delete. History starts from new changes after the table is installed, so older edits will not appear retroactively.
+          </div>
+        )}
         {history.length===0 ? (
           <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-            {historyLoading?"Loading question history...":"No question changes have been logged yet. New changes will appear here after you run the updated Supabase SQL."}
+            {historyLoading?"Loading question history...":"No history yet. After the latest Supabase SQL is installed, save or delete a question once and that new change will appear here."}
           </div>
         ) : (
           <div style={{display:"grid",gap:10}}>

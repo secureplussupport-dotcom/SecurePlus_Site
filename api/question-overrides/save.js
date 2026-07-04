@@ -28,8 +28,9 @@ function isMissingQuestionAdminSchema(error) {
   return (
     error?.code === "42P01" ||
     error?.code === "42703" ||
+    error?.code === "PGRST204" ||
     error?.code === "PGRST205" ||
-    /question_overrides|app_admins|schema cache|relation/i.test(error?.message || "")
+    /question_override_history|question_overrides|app_admins|schema cache|relation/i.test(error?.message || "")
   );
 }
 
