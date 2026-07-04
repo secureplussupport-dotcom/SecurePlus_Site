@@ -870,6 +870,44 @@ const GLOSSARY_TERMS = {
   "Encryption": "A reversible protection method that converts readable data into ciphertext using a key.",
 };
 
+const ACRONYM_TERMS_SORTED = Object.keys(ACRONYM_GLOSSARY_TERMS).sort((a,b)=>b.length-a.length);
+
+function extractAcronymsFromText(...values) {
+  const found=new Set();
+  const text=values.flat(Infinity).filter(value=>value!==null&&value!==undefined).map(value=>String(value)).join(" ");
+  if(!text.trim())return [];
+  ACRONYM_TERMS_SORTED.forEach(term=>{
+    const escaped=term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+    const pattern=new RegExp(`(^|[^A-Za-z0-9])${escaped}(?=$|[^A-Za-z0-9])`,"i");
+    if(pattern.test(text)) found.add(term);
+  });
+  return [...found].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:"base"}));
+}
+
+function getMcqAcronyms(question) {
+  return extractAcronymsFromText(
+    question?.q,
+    question?.opts || [],
+    question?.exp,
+    Object.values(question?.wrongFeedback || {})
+  );
+}
+
+function getPbqAcronyms(question) {
+  return extractAcronymsFromText(
+    question?.title,
+    question?.cat,
+    question?.scenario,
+    question?.question,
+    question?.choices || [],
+    question?.explanation,
+    question?.steps || [],
+    question?.logData,
+    question?.diagram,
+    question?.currentConfig
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════
 // MCQ BANK — original, accurate, Security+ aligned, not copyrighted
 // Easy, medium, and hard mix across all 5 domains
@@ -18304,19 +18342,21 @@ function cleanAdminQuestionPayload(form,kind) {
     if(opts.length!==4||opts.some(opt=>opt.length<1)) throw new Error("All 4 MCQ answer choices must be filled in.");
     if(!Number.isInteger(Number(form.correct))||Number(form.correct)<0||Number(form.correct)>3) throw new Error("Pick the correct MCQ answer.");
     if(String(form.exp||"").trim().length<20) throw new Error("The correct-answer explanation must be at least 20 characters.");
+    const question=ensureMcqWrongFeedback({
+      id,
+      ch:String(form.ch||"1"),
+      difficulty,
+      beyondTextbook:Boolean(form.beyondTextbook),
+      topic:String(form.topic||"General Security Concepts").trim(),
+      q:String(form.q||"").trim(),
+      opts,
+      correct:Number(form.correct),
+      exp:String(form.exp||"").trim(),
+      wrongFeedback:form.wrongFeedback||{}
+    });
+    question.acronyms=getMcqAcronyms(question);
     return {
-      question: ensureMcqWrongFeedback({
-        id,
-        ch:String(form.ch||"1"),
-        difficulty,
-        beyondTextbook:Boolean(form.beyondTextbook),
-        topic:String(form.topic||"General Security Concepts").trim(),
-        q:String(form.q||"").trim(),
-        opts,
-        correct:Number(form.correct),
-        exp:String(form.exp||"").trim(),
-        wrongFeedback:form.wrongFeedback||{}
-      }),
+      question,
       sortOrder
     };
   }
@@ -18325,21 +18365,23 @@ function cleanAdminQuestionPayload(form,kind) {
   if(String(form.scenario||"").trim().length<20) throw new Error("PBQ scenario must be at least 20 characters.");
   if(String(form.question||"").trim().length<10) throw new Error("PBQ task/question must be at least 10 characters.");
   if(String(form.explanation||"").trim().length<20) throw new Error("PBQ solution explanation must be at least 20 characters.");
+  const question={
+    id,
+    type:String(form.type||"SCENARIO").trim().toUpperCase(),
+    ch:String(form.ch||"1"),
+    cat:String(form.cat||"General Security Concepts").trim(),
+    difficulty,
+    beyondTextbook:Boolean(form.beyondTextbook),
+    title:String(form.title||"").trim(),
+    scenario:String(form.scenario||"").trim(),
+    question:String(form.question||"").trim(),
+    choices,
+    correct:Math.max(0,Math.min(Number(form.correct)||0,Math.max(choices.length-1,0))),
+    explanation:String(form.explanation||"").trim()
+  };
+  question.acronyms=getPbqAcronyms(question);
   return {
-    question:{
-      id,
-      type:String(form.type||"SCENARIO").trim().toUpperCase(),
-      ch:String(form.ch||"1"),
-      cat:String(form.cat||"General Security Concepts").trim(),
-      difficulty,
-      beyondTextbook:Boolean(form.beyondTextbook),
-      title:String(form.title||"").trim(),
-      scenario:String(form.scenario||"").trim(),
-      question:String(form.question||"").trim(),
-      choices,
-      correct:Math.max(0,Math.min(Number(form.correct)||0,Math.max(choices.length-1,0))),
-      explanation:String(form.explanation||"").trim()
-    },
+    question,
     sortOrder
   };
 }
@@ -18666,6 +18708,10 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const selectedQuestion=selectedIndex>=0?bank[selectedIndex]:null;
   const isEditing=Boolean(selectedQuestion);
   const difficultyColor=form.difficulty==="easy"?t.green:form.difficulty==="hard"?t.red:t.amber;
+  const detectedAcronyms=useMemo(()=>kind==="mcq"
+    ? extractAcronymsFromText(form.q,form.opts||[],form.exp,Object.values(form.wrongFeedback||{}))
+    : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation),
+  [form,kind]);
 
   const resetToNew=useCallback((nextKind=kind)=>{
     const nextBank=nextKind==="mcq"?MCQ_BANK:PBQ_BANK;
@@ -18923,6 +18969,20 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
               </span>
             </span>
           </label>
+          <div className="card" style={{padding:"12px 14px",marginBottom:12,background:t.panel,borderColor:t.border}}>
+            <div style={{fontSize:12,fontWeight:900,color:t.text,marginBottom:7}}>Auto-detected acronyms</div>
+            {detectedAcronyms.length?(
+              <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                {detectedAcronyms.map(term=>(
+                  <span key={term} className="chip" style={{background:`${t.accent}10`,borderColor:`${t.accent}30`,color:t.accent}}>{term}</span>
+                ))}
+              </div>
+            ):(
+              <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>
+                None detected yet. Known acronyms will be saved as tags and underlined automatically in practice pages.
+              </div>
+            )}
+          </div>
 
           {kind==="mcq" ? (
             <>
