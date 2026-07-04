@@ -14540,12 +14540,12 @@ function GlossaryText({text,t,style}) {
       const prefix=match[1]||"";
       const matched=match[2]||"";
       const termStart=match.index + prefix.length;
-      if(termStart>cursor) parts.push({text:value.slice(cursor,termStart),term:false,...format});
-      parts.push({text:matched,term:true,...format});
+      if(termStart>cursor) parts.push({...format,text:value.slice(cursor,termStart),term:false});
+      parts.push({...format,text:matched,term:true});
       cursor=termStart+matched.length;
     }
-    if(cursor<value.length) parts.push({text:value.slice(cursor),term:false,...format});
-    if(!parts.length) parts.push({text:value,term:false,...format});
+    if(cursor<value.length) parts.push({...format,text:value.slice(cursor),term:false});
+    if(!parts.length) parts.push({...format,text:value,term:false});
     return parts;
   };
   const parts=parseInlineFormats(text).flatMap(segment=>splitGlossaryParts(segment.text,segment));
