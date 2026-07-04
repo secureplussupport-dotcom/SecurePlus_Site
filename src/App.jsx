@@ -18426,7 +18426,17 @@ function makeAdminQuestionTemplate(kind, nextOrder=1) {
       question:"",
       choices:["","","",""],
       correct:0,
-      explanation:""
+      explanation:"",
+      hint:"",
+      answer:"",
+      logData:"",
+      diagram:"",
+      currentConfig:"",
+      items:[{id:"i0",label:""}],
+      targets:[{id:"t0",label:""}],
+      correctMapping:{},
+      correctOrder:["i0"],
+      blanks:[{id:"b0",sentence:"",answer:"",hint:""}]
     };
   }
   return {
@@ -18460,7 +18470,17 @@ function questionToAdminForm(question,kind,index) {
       question:question.question||question.prompt||"",
       choices:Array.isArray(question.choices)?[...question.choices].slice(0,8):["","","",""],
       correct:Number.isInteger(question.correct)?question.correct:0,
-      explanation:question.explanation||question.exp||""
+      explanation:question.explanation||question.exp||"",
+      hint:question.hint||"",
+      answer:question.answer||"",
+      logData:question.logData||"",
+      diagram:question.diagram||"",
+      currentConfig:question.currentConfig||"",
+      items:Array.isArray(question.items)?question.items.map((item,index)=>({id:item.id||`i${index}`,label:item.label||""})):[{id:"i0",label:""}],
+      targets:Array.isArray(question.targets)?question.targets.map((target,index)=>({id:target.id||`t${index}`,label:target.label||""})):[{id:"t0",label:""}],
+      correctMapping:question.correctMapping||{},
+      correctOrder:Array.isArray(question.correctOrder)?question.correctOrder:[],
+      blanks:Array.isArray(question.blanks)?question.blanks.map((blank,index)=>({id:blank.id||`b${index}`,sentence:blank.sentence||"",answer:blank.answer||"",hint:blank.hint||""})):[{id:"b0",sentence:"",answer:"",hint:""}]
     };
   }
   return {
@@ -18514,24 +18534,58 @@ function cleanAdminQuestionPayload(form,kind) {
     };
   }
   const choices=(form.choices||[]).map(choice=>String(choice||"").trim()).filter(Boolean);
+  const pbqType=String(form.type||"SCENARIO").trim().toUpperCase();
+  const scenarioText=String(form.scenario||"").trim();
+  const taskText=String(form.question||"").trim();
   if(String(form.title||"").trim().length<8) throw new Error("PBQ title must be at least 8 characters.");
-  if(String(form.scenario||"").trim().length<20) throw new Error("PBQ scenario must be at least 20 characters.");
-  if(String(form.question||"").trim().length<10) throw new Error("PBQ task/question must be at least 10 characters.");
+  if(scenarioText.length<10&&taskText.length<10) throw new Error("PBQ needs either a scenario or a task prompt.");
+  if(!["DRAG & DROP","ORDERING","FILL BLANK"].includes(pbqType)&&taskText.length<10) throw new Error("PBQ task/question must be at least 10 characters.");
   if(String(form.explanation||"").trim().length<20) throw new Error("PBQ solution explanation must be at least 20 characters.");
   const question={
     id,
-    type:String(form.type||"SCENARIO").trim().toUpperCase(),
+    type:pbqType,
     ch:String(form.ch||"1"),
     cat:String(form.cat||"General Security Concepts").trim(),
     difficulty,
     beyondTextbook:Boolean(form.beyondTextbook),
     title:String(form.title||"").trim(),
-    scenario:String(form.scenario||"").trim(),
-    question:String(form.question||"").trim(),
-    choices,
-    correct:Math.max(0,Math.min(Number(form.correct)||0,Math.max(choices.length-1,0))),
+    scenario:scenarioText,
+    question:taskText,
     explanation:String(form.explanation||"").trim()
   };
+  if(pbqType==="TERMINAL SIM") {
+    question.hint=String(form.hint||"").trim();
+    question.answer=String(form.answer||"").trim();
+  }
+  if(pbqType==="LOG ANALYSIS") question.logData=String(form.logData||"").trim();
+  if(pbqType==="HOTSPOT") question.diagram=String(form.diagram||"").trim();
+  if(pbqType==="CONFIG/ACL") question.currentConfig=String(form.currentConfig||"").trim();
+  if(pbqType==="DRAG & DROP") {
+    const items=(form.items||[]).map((item,index)=>({id:String(item.id||`i${index}`).trim()||`i${index}`,label:String(item.label||"").trim()})).filter(item=>item.label);
+    const targets=(form.targets||[]).map((target,index)=>({id:String(target.id||`t${index}`).trim()||`t${index}`,label:String(target.label||"").trim()})).filter(target=>target.label);
+    if(items.length<2||targets.length<2) throw new Error("Drag & Drop PBQs need at least 2 items and 2 targets.");
+    const targetIds=new Set(targets.map(target=>target.id));
+    const correctMapping={};
+    items.forEach(item=>{if(targetIds.has(form.correctMapping?.[item.id])) correctMapping[item.id]=form.correctMapping[item.id];});
+    if(Object.keys(correctMapping).length!==items.length) throw new Error("Map every Drag & Drop item to a correct target.");
+    question.items=items;
+    question.targets=targets;
+    question.correctMapping=correctMapping;
+  } else if(pbqType==="ORDERING") {
+    const items=(form.items||[]).map((item,index)=>({id:String(item.id||`i${index}`).trim()||`i${index}`,label:String(item.label||"").trim()})).filter(item=>item.label);
+    if(items.length<2) throw new Error("Ordering PBQs need at least 2 ordered items.");
+    question.items=items;
+    question.correctOrder=items.map(item=>item.id);
+  } else if(pbqType==="FILL BLANK") {
+    const blanks=(form.blanks||[]).map((blank,index)=>({id:String(blank.id||`b${index}`).trim()||`b${index}`,sentence:String(blank.sentence||"").trim(),answer:String(blank.answer||"").trim(),hint:String(blank.hint||"").trim()})).filter(blank=>blank.sentence||blank.answer);
+    if(!blanks.length) throw new Error("Fill Blank PBQs need at least one blank.");
+    if(blanks.some(blank=>!blank.sentence||!blank.answer)) throw new Error("Every Fill Blank row needs a sentence and answer.");
+    question.blanks=blanks;
+  } else {
+    if(choices.length<2) throw new Error("This PBQ type needs at least 2 answer choices.");
+    question.choices=choices;
+    question.correct=Math.max(0,Math.min(Number(form.correct)||0,Math.max(choices.length-1,0)));
+  }
   question.acronyms=getPbqAcronyms(question);
   return {
     question,
@@ -18863,7 +18917,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const difficultyColor=form.difficulty==="easy"?t.green:form.difficulty==="hard"?t.red:t.amber;
   const detectedAcronyms=useMemo(()=>kind==="mcq"
     ? extractAcronymsFromText(form.q,form.opts||[],form.exp,Object.values(form.wrongFeedback||{}))
-    : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation),
+    : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation,form.answer,form.logData,form.diagram,form.currentConfig,(form.items||[]).map(item=>item.label),(form.targets||[]).map(target=>target.label),(form.blanks||[]).flatMap(blank=>[blank.sentence,blank.answer,blank.hint])),
   [form,kind]);
 
   const resetToNew=useCallback((nextKind=kind)=>{
@@ -18919,6 +18973,31 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
     next[index]=value;
     return {...prev,[field]:next};
   });
+  const updateObjectArray=(field,index,key,value)=>setForm(prev=>{
+    const next=[...(prev[field]||[])];
+    next[index]={...(next[index]||{}),[key]:value};
+    return {...prev,[field]:next};
+  });
+  const addPbqItem=field=>setForm(prev=>{
+    const next=[...(prev[field]||[])];
+    const prefix=field==="targets"?"t":field==="blanks"?"b":"i";
+    next.push(field==="blanks"?{id:`${prefix}${next.length}`,sentence:"",answer:"",hint:""}:{id:`${prefix}${next.length}`,label:""});
+    return {...prev,[field]:next,correctOrder:field==="items"?next.map(item=>item.id):prev.correctOrder};
+  });
+  const removePbqItem=(field,index)=>setForm(prev=>{
+    const removed=prev[field]?.[index];
+    const next=(prev[field]||[]).filter((_,i)=>i!==index);
+    const patch={...prev,[field]:next};
+    if(field==="items") {
+      patch.correctOrder=next.map(item=>item.id);
+      patch.correctMapping=Object.fromEntries(Object.entries(prev.correctMapping||{}).filter(([itemId])=>itemId!==removed?.id));
+    }
+    if(field==="targets") {
+      patch.correctMapping=Object.fromEntries(Object.entries(prev.correctMapping||{}).filter(([,targetId])=>targetId!==removed?.id));
+    }
+    return patch;
+  });
+  const changePbqType=type=>setForm(prev=>({...prev,type}));
   const updateWrongFeedback=(index,value)=>setForm(prev=>({...prev,wrongFeedback:{...(prev.wrongFeedback||{}),[index]:value}}));
 
   const changeKind=(nextKind)=>{
@@ -18981,6 +19060,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   };
 
   const moveOrder=(delta)=>updateField("order",String(Math.max(1,(Number.parseInt(form.order,10)||1)+delta)));
+  const pbqChoiceTypes=["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"];
 
   return(
     <div className="feedback-page" style={{padding:"24px",maxWidth:1180,margin:"0 auto"}}>
@@ -19183,30 +19263,156 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
             <>
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10}}>
                 <AdminTextInput label="PBQ title" value={form.title} onChange={v=>updateField("title",v)} placeholder="Firewall rule review" format/>
-                <AdminTextInput label="PBQ type" value={form.type} onChange={v=>updateField("type",v)} placeholder="SCENARIO"/>
+                <AdminField label="PBQ type">
+                  <select className="input" value={form.type} onChange={e=>changePbqType(e.target.value)}>
+                    {Object.values(SIM_TYPES).map(type=><option key={type.id} value={type.id}>{type.label}</option>)}
+                  </select>
+                </AdminField>
               </div>
               <div style={{height:12}}/>
               <AdminTextInput label="Category" value={form.cat} onChange={v=>updateField("cat",v)} placeholder="Security Operations" format/>
               <div style={{height:12}}/>
               <AdminTextArea label="Scenario" value={form.scenario} onChange={v=>updateField("scenario",v)} placeholder="Explain the environment or situation." rows={5}/>
-              <div style={{height:12}}/>
-              <AdminTextArea label="Task for the student" value={form.question} onChange={v=>updateField("question",v)} placeholder="Tell the student what to do." rows={4}/>
-              <div style={{height:12}}/>
-              <div className="card" style={{padding:14,background:`${t.panel}66`}}>
-                <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}>
-                  <div style={{fontWeight:900,color:t.text}}>Answer choices</div>
-                  <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>updateField("choices",[...(form.choices||[]),""])}>Add choice</button>
-                </div>
-                <div style={{display:"grid",gap:10}}>
-                  {(form.choices||[]).map((choice,index)=>(
-                    <div key={index} style={{display:"grid",gridTemplateColumns:"90px minmax(0,1fr) auto",gap:10,alignItems:"start"}}>
-                      <button type="button" className={Number(form.correct)===index?"btn btn-primary":"btn btn-outline"} onClick={()=>updateField("correct",index)}>{String.fromCharCode(65+index)}</button>
-                      <AdminTextInput label={`Choice ${String.fromCharCode(65+index)}`} value={choice} placeholder={`Choice ${String.fromCharCode(65+index)}`} onChange={v=>updateArray("choices",index,v)} format/>
-                      <button className="btn btn-ghost" type="button" onClick={()=>updateField("choices",(form.choices||[]).filter((_,i)=>i!==index))}>Remove</button>
+              {form.type!=="DRAG & DROP"&&form.type!=="ORDERING"&&form.type!=="FILL BLANK"&&(
+                <>
+                  <div style={{height:12}}/>
+                  <AdminTextArea label="Task for the student" value={form.question} onChange={v=>updateField("question",v)} placeholder="Tell the student what to do." rows={4}/>
+                </>
+              )}
+              {form.type==="TERMINAL SIM"&&(
+                <>
+                  <div style={{height:12}}/>
+                  <AdminTextInput label="Command hint" value={form.hint} onChange={v=>updateField("hint",v)} placeholder="Use: scan -sV 10.0.0.20"/>
+                  <div style={{height:12}}/>
+                  <AdminTextArea label="Terminal output / answer" value={form.answer} onChange={v=>updateField("answer",v)} placeholder="Command output shown after a useful command." rows={6} format={false}/>
+                </>
+              )}
+              {form.type==="LOG ANALYSIS"&&(
+                <>
+                  <div style={{height:12}}/>
+                  <AdminTextArea label="Log data" value={form.logData} onChange={v=>updateField("logData",v)} placeholder="Paste the log block users should inspect." rows={7} format={false}/>
+                </>
+              )}
+              {form.type==="HOTSPOT"&&(
+                <>
+                  <div style={{height:12}}/>
+                  <AdminTextArea label="Diagram / hotspot text" value={form.diagram} onChange={v=>updateField("diagram",v)} placeholder="Paste the diagram, dashboard, code, or labelled options." rows={7} format={false}/>
+                </>
+              )}
+              {form.type==="CONFIG/ACL"&&(
+                <>
+                  <div style={{height:12}}/>
+                  <AdminTextArea label="Current configuration" value={form.currentConfig} onChange={v=>updateField("currentConfig",v)} placeholder="Paste firewall rules, config, ACL, or policy table." rows={7} format={false}/>
+                </>
+              )}
+              {form.type==="FILL BLANK"&&(
+                <div className="card" style={{padding:14,background:`${t.panel}66`,marginTop:12}}>
+                  <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}>
+                    <div>
+                      <div style={{fontWeight:900,color:t.text}}>Fill-in-the-blank rows</div>
+                      <div style={{fontSize:12,color:t.textSec}}>Each row becomes one blank with its own accepted answer.</div>
                     </div>
-                  ))}
+                    <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("blanks")}>Add blank</button>
+                  </div>
+                  <div style={{display:"grid",gap:12}}>
+                    {(form.blanks||[]).map((blank,index)=>(
+                      <div key={blank.id||index} className="card" style={{padding:12,background:t.surface}}>
+                        <div style={{display:"grid",gridTemplateColumns:"80px minmax(0,1fr) auto",gap:10,alignItems:"start"}}>
+                          <AdminTextInput label="ID" value={blank.id||""} onChange={v=>updateObjectArray("blanks",index,"id",v)} placeholder={`b${index}`}/>
+                          <AdminTextArea label={`Blank ${index+1} sentence`} value={blank.sentence||""} onChange={v=>updateObjectArray("blanks",index,"sentence",v)} placeholder="A ___ is used to..." rows={2}/>
+                          <button className="btn btn-ghost" type="button" onClick={()=>removePbqItem("blanks",index)}>Remove</button>
+                        </div>
+                        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:10}}>
+                          <AdminTextInput label="Correct answer" value={blank.answer||""} onChange={v=>updateObjectArray("blanks",index,"answer",v)} placeholder="Honeynet"/>
+                          <AdminTextInput label="Hint" value={blank.hint||""} onChange={v=>updateObjectArray("blanks",index,"hint",v)} placeholder="Optional learning hint"/>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+              {form.type==="DRAG & DROP"&&(
+                <div className="card" style={{padding:14,background:`${t.panel}66`,marginTop:12}}>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+                    <div>
+                      <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:8}}>
+                        <div style={{fontWeight:900,color:t.text}}>Items</div>
+                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("items")}>Add item</button>
+                      </div>
+                      <div style={{display:"grid",gap:10}}>
+                        {(form.items||[]).map((item,index)=>(
+                          <div key={item.id||index} className="card" style={{padding:10,background:t.surface}}>
+                            <div style={{display:"grid",gridTemplateColumns:"70px minmax(0,1fr) auto",gap:8,alignItems:"start"}}>
+                              <AdminTextInput label="ID" value={item.id||""} onChange={v=>updateObjectArray("items",index,"id",v)} placeholder={`i${index}`}/>
+                              <AdminTextInput label="Label" value={item.label||""} onChange={v=>updateObjectArray("items",index,"label",v)} placeholder="Item shown to user" format/>
+                              <button className="btn btn-ghost" type="button" onClick={()=>removePbqItem("items",index)}>Remove</button>
+                            </div>
+                            <AdminField label="Correct target">
+                              <select className="input" value={form.correctMapping?.[item.id]||""} onChange={e=>updateField("correctMapping",{...(form.correctMapping||{}),[item.id]:e.target.value})}>
+                                <option value="">Choose target</option>
+                                {(form.targets||[]).map(target=><option key={target.id} value={target.id}>{target.label||target.id}</option>)}
+                              </select>
+                            </AdminField>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:8}}>
+                        <div style={{fontWeight:900,color:t.text}}>Targets</div>
+                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("targets")}>Add target</button>
+                      </div>
+                      <div style={{display:"grid",gap:10}}>
+                        {(form.targets||[]).map((target,index)=>(
+                          <div key={target.id||index} style={{display:"grid",gridTemplateColumns:"70px minmax(0,1fr) auto",gap:8,alignItems:"start"}}>
+                            <AdminTextInput label="ID" value={target.id||""} onChange={v=>updateObjectArray("targets",index,"id",v)} placeholder={`t${index}`}/>
+                            <AdminTextInput label="Label" value={target.label||""} onChange={v=>updateObjectArray("targets",index,"label",v)} placeholder="Target shown to user" format/>
+                            <button className="btn btn-ghost" type="button" onClick={()=>removePbqItem("targets",index)}>Remove</button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {form.type==="ORDERING"&&(
+                <div className="card" style={{padding:14,background:`${t.panel}66`,marginTop:12}}>
+                  <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}>
+                    <div>
+                      <div style={{fontWeight:900,color:t.text}}>Correct order</div>
+                      <div style={{fontSize:12,color:t.textSec}}>Rows are saved in this exact top-to-bottom order.</div>
+                    </div>
+                    <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("items")}>Add step</button>
+                  </div>
+                  <div style={{display:"grid",gap:10}}>
+                    {(form.items||[]).map((item,index)=>(
+                      <div key={item.id||index} style={{display:"grid",gridTemplateColumns:"54px 72px minmax(0,1fr) auto",gap:8,alignItems:"start"}}>
+                        <div className="chip" style={{justifyContent:"center",marginTop:26}}>#{index+1}</div>
+                        <AdminTextInput label="ID" value={item.id||""} onChange={v=>updateObjectArray("items",index,"id",v)} placeholder={`i${index}`}/>
+                        <AdminTextInput label="Step text" value={item.label||""} onChange={v=>updateObjectArray("items",index,"label",v)} placeholder="First action in sequence" format/>
+                        <button className="btn btn-ghost" type="button" onClick={()=>removePbqItem("items",index)}>Remove</button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {pbqChoiceTypes.includes(form.type)&&(
+                <div className="card" style={{padding:14,background:`${t.panel}66`,marginTop:12}}>
+                  <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}>
+                    <div style={{fontWeight:900,color:t.text}}>Answer choices</div>
+                    <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>updateField("choices",[...(form.choices||[]),""])}>Add choice</button>
+                  </div>
+                  <div style={{display:"grid",gap:10}}>
+                    {(form.choices||[]).map((choice,index)=>(
+                      <div key={index} style={{display:"grid",gridTemplateColumns:"90px minmax(0,1fr) auto",gap:10,alignItems:"start"}}>
+                        <button type="button" className={Number(form.correct)===index?"btn btn-primary":"btn btn-outline"} onClick={()=>updateField("correct",index)}>{String.fromCharCode(65+index)}</button>
+                        <AdminTextInput label={`Choice ${String.fromCharCode(65+index)}`} value={choice} placeholder={`Choice ${String.fromCharCode(65+index)}`} onChange={v=>updateArray("choices",index,v)} format/>
+                        <button className="btn btn-ghost" type="button" onClick={()=>updateField("choices",(form.choices||[]).filter((_,i)=>i!==index))}>Remove</button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div style={{height:12}}/>
               <AdminTextArea label="Solution explanation" value={form.explanation} onChange={v=>updateField("explanation",v)} placeholder="Explain how to solve the PBQ." rows={5}/>
             </>
@@ -19252,6 +19458,33 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                 <div style={{fontSize:18,fontWeight:900,color:t.text,marginBottom:8}}><GlossaryText text={form.title||"PBQ title preview"} t={t}/></div>
                 <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:12}}><GlossaryText text={form.scenario||"Scenario preview will appear here."} t={t}/></p>
                 <div style={{fontSize:16,color:t.text,lineHeight:1.5,marginBottom:12}}><QuestionStemText text={form.question||"Task preview will appear here."} t={t} compact/></div>
+                {form.type==="FILL BLANK"&&(
+                  <div style={{display:"grid",gap:8,marginBottom:12}}>
+                    {(form.blanks||[]).map((blank,index)=>(
+                      <div key={blank.id||index} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${t.border}`,background:t.panel}}>
+                        <div style={{fontSize:13,color:t.text,lineHeight:1.55}}><GlossaryText text={blank.sentence||`Blank ${index+1} sentence`} t={t}/></div>
+                        <div style={{fontSize:12,color:t.textSec,marginTop:5}}>Answer: <strong style={{color:t.green}}>{blank.answer||"Not set"}</strong></div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {form.type==="DRAG & DROP"&&(
+                  <div style={{display:"grid",gap:8,marginBottom:12}}>
+                    {(form.items||[]).map(item=>{
+                      const target=(form.targets||[]).find(tg=>tg.id===form.correctMapping?.[item.id]);
+                      return <div key={item.id} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${t.border}`,background:t.panel,fontSize:13,color:t.textSec}}><strong style={{color:t.text}}>{item.label||item.id}</strong> → {target?.label||"No target selected"}</div>;
+                    })}
+                  </div>
+                )}
+                {form.type==="ORDERING"&&(
+                  <div style={{display:"grid",gap:6,marginBottom:12}}>
+                    {(form.items||[]).map((item,index)=><div key={item.id||index} style={{fontSize:13,color:t.textSec}}><span style={{color:t.accent,fontWeight:900,marginRight:8}}>{index+1}.</span><GlossaryText text={item.label||"Step text"} t={t}/></div>)}
+                  </div>
+                )}
+                {form.type==="LOG ANALYSIS"&&form.logData&&<pre className="log-block" style={{fontSize:12,marginBottom:12}}>{form.logData}</pre>}
+                {form.type==="HOTSPOT"&&form.diagram&&<pre className="log-block" style={{fontSize:12,marginBottom:12}}>{form.diagram}</pre>}
+                {form.type==="CONFIG/ACL"&&form.currentConfig&&<pre className="log-block" style={{fontSize:12,marginBottom:12}}>{form.currentConfig}</pre>}
+                {form.type==="TERMINAL SIM"&&form.answer&&<pre className="terminal" style={{fontSize:12,marginBottom:12}}>{form.answer}</pre>}
                 <div style={{display:"grid",gap:8}}>
                   {(form.choices||[]).filter(Boolean).map((choice,index)=>(
                     <div key={index} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${Number(form.correct)===index?t.green:t.border}`,background:Number(form.correct)===index?`${t.green}10`:t.panel,color:t.text}}>
