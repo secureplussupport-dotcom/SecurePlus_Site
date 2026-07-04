@@ -16890,10 +16890,61 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
     if(q.type==="FILL BLANK")return q.blanks?.every(b=>isFillBlankAnswerCorrect(blanks[b.id],b));
     return false;
   };
+  const partResults=useMemo(()=>{
+    if(q.type==="FILL BLANK") {
+      return (q.blanks||[]).map((blank,index)=>({
+        id:blank.id||index,
+        label:`Blank ${index+1}`,
+        prompt:blank.sentence,
+        userAnswer:blanks[blank.id]||"",
+        correctAnswer:blank.answer,
+        correct:isFillBlankAnswerCorrect(blanks[blank.id],blank),
+      }));
+    }
+    if(q.type==="DRAG & DROP") {
+      return (q.items||[]).map(item=>{
+        const userTargetId=mapping[item.id];
+        const expectedTargetId=q.correctMapping?.[item.id];
+        const userTarget=q.targets?.find(target=>target.id===userTargetId);
+        const expectedTarget=q.targets?.find(target=>target.id===expectedTargetId);
+        return {
+          id:item.id,
+          label:item.label,
+          userAnswer:userTarget?.label||"Not placed",
+          correctAnswer:expectedTarget?.label||"Unmapped",
+          correct:userTargetId===expectedTargetId,
+        };
+      });
+    }
+    if(q.type==="ORDERING") {
+      return (q.correctOrder||[]).map((expectedId,index)=>{
+        const expectedItem=q.items?.find(item=>item.id===expectedId);
+        const userItem=orderItems[index];
+        return {
+          id:expectedId,
+          label:`Position ${index+1}`,
+          userAnswer:userItem?.label||"No item",
+          correctAnswer:expectedItem?.label||"Unknown",
+          correct:userItem?.id===expectedId,
+        };
+      });
+    }
+    if(q.choices||q.options) {
+      return [{
+        id:"choice",
+        label:"Selected answer",
+        userAnswer:selected!==null&&selected!==undefined?`${String.fromCharCode(65+selected)}. ${(q.choices||q.options||[])[selected]}`:"Not answered",
+        correctAnswer:`${String.fromCharCode(65+q.correct)}. ${(q.choices||q.options||[])[q.correct]}`,
+        correct:selected===q.correct,
+      }];
+    }
+    return [];
+  },[q,blanks,mapping,orderItems,selected]);
+  const partCorrectCount=partResults.filter(part=>part.correct).length;
 
   const submit=()=>{
     const correct = isCorrect();
-    capture("pbq_question_answered", { question_id: q.id, type: q.type, chapter: q.ch, correct });
+    capture("pbq_question_answered", { question_id: q.id, type: q.type, chapter: q.ch, correct, part_correct_count: partCorrectCount, part_count: partResults.length });
     playAnswerSound(correct);
     setAnswerBurst({correct,key:Date.now()});
     setTimeout(()=>setAnswerBurst(null),1700);
@@ -17155,6 +17206,35 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>{q.wrongFeedback[selected]}</div>
               </div>
             )}
+            {(q.type==="FILL BLANK"||partResults.length>1)&&(
+              <div style={{marginTop:12,padding:"12px 14px",background:t.panel,borderRadius:8,border:`1px solid ${t.border}`}}>
+                <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:8,flexWrap:"wrap"}}>
+                  <div style={{fontSize:12,fontWeight:900,color:t.text}}>Part-by-part marking</div>
+                  <span className="chip" style={{background:`${partCorrectCount===partResults.length?t.green:t.amber}12`,borderColor:`${partCorrectCount===partResults.length?t.green:t.amber}35`,color:partCorrectCount===partResults.length?t.green:t.amber}}>
+                    {partCorrectCount}/{partResults.length} parts correct
+                  </span>
+                </div>
+                <div style={{display:"grid",gap:8}}>
+                  {partResults.map(part=>(
+                    <div key={part.id} style={{padding:"10px 12px",borderRadius:8,border:`1px solid ${part.correct?t.green:t.red}35`,background:`${part.correct?t.green:t.red}08`}}>
+                      <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:4,flexWrap:"wrap"}}>
+                        <span style={{fontSize:13,fontWeight:900,color:part.correct?t.green:t.red}}>{part.correct?"Correct":"Incorrect"}</span>
+                        <span style={{fontSize:12,fontWeight:800,color:t.text}}>{part.label}</span>
+                      </div>
+                      {part.prompt&&<div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginBottom:5}}><GlossaryText text={part.prompt} t={t}/></div>}
+                      <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>
+                        Your answer: <strong style={{color:t.text}}>{part.userAnswer||"Blank"}</strong>
+                      </div>
+                      {!part.correct&&(
+                        <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>
+                          Correct answer: <strong style={{color:t.green}}>{part.correctAnswer}</strong>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             {/* Show correct drag order / blanks */}
             {q.type==="ORDERING"&&!isCorrect()&&(
               <div style={{marginTop:12}}>
@@ -17196,11 +17276,11 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
             <button className="btn btn-ghost" onClick={()=>{setSubmitted(false);setSelected(null);setTermHistory([]);setMapping({});setTapDragItem(null);setOrderItems(q.items?[...q.items].sort(()=>Math.random()-.5):[]);setBlanks(q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{})}}>
               Try Again
             </button>
-            <button className="btn btn-primary" onClick={()=>onDone({qid:q.id,correct:isCorrect(),type:q.type,title:q.title,ch:q.ch,domain:q.cat,pbq:true})}>
+            <button className="btn btn-primary" onClick={()=>onDone({qid:q.id,correct:isCorrect(),score:partResults.length?partCorrectCount/partResults.length:undefined,partCorrectCount,partCount:partResults.length,type:q.type,title:q.title,ch:q.ch,domain:q.cat,pbq:true})}>
               Back to PBQ Bank
             </button>
             {nextQuestion&&(
-              <button className="btn btn-primary" onClick={()=>onNext({qid:q.id,correct:isCorrect(),type:q.type,title:q.title,ch:q.ch,domain:q.cat,pbq:true})}>
+              <button className="btn btn-primary" onClick={()=>onNext({qid:q.id,correct:isCorrect(),score:partResults.length?partCorrectCount/partResults.length:undefined,partCorrectCount,partCount:partResults.length,type:q.type,title:q.title,ch:q.ch,domain:q.cat,pbq:true})}>
                 Try a different PBQ →
               </button>
             )}
