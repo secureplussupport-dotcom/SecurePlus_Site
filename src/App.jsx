@@ -14558,6 +14558,7 @@ function parseInlineFormats(value) {
 }
 function GlossaryText({text,t,style}) {
   const [openTerm,setOpenTerm]=useState(null);
+  const wrapRef=useRef(null);
   const terms=Object.keys(GLOSSARY_TERMS).sort((a,b)=>b.length-a.length);
   const pattern=new RegExp(`(^|[^A-Za-z0-9])(${terms.map(term=>term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")})(?=$|[^A-Za-z0-9])`,"gi");
   const normalize=part=>terms.find(term=>term.toLowerCase()===part.toLowerCase());
@@ -14588,6 +14589,14 @@ function GlossaryText({text,t,style}) {
     return parts;
   };
   const parts=parseInlineFormats(text).flatMap(segment=>splitGlossaryParts(segment.text,segment));
+  useEffect(()=>{
+    if(!openTerm)return;
+    const close=e=>{
+      if(wrapRef.current&&!wrapRef.current.contains(e.target))setOpenTerm(null);
+    };
+    document.addEventListener("pointerdown",close,true);
+    return()=>document.removeEventListener("pointerdown",close,true);
+  },[openTerm]);
   const formatStyle=part=>({
     fontWeight:part.bold?900:undefined,
     textDecoration:part.underline?"underline":undefined,
@@ -14600,7 +14609,7 @@ function GlossaryText({text,t,style}) {
   });
 
   return(
-    <span style={style}>
+    <span ref={wrapRef} style={style}>
       {parts.map((part,index)=>{
         const term=part.term?normalize(part.text):null;
         if(!term) return <span key={`${part.text}-${index}`} style={formatStyle(part)}>{part.text}</span>;
@@ -14611,7 +14620,7 @@ function GlossaryText({text,t,style}) {
               {part.text}
             </button>
             {openTerm===key&&(
-              <span className="term-pop" style={{background:t.surface,borderColor:t.border,color:t.text}}>
+              <span className="term-pop" style={{background:t.surface,borderColor:t.border,color:t.text}} onClick={e=>e.stopPropagation()}>
                 <strong style={{color:t.accent}}>{term}</strong>
                 {getEntry(term).fullName&&<span style={{display:"block",marginTop:2,fontWeight:800,color:t.text}}>{getEntry(term).fullName}</span>}
                 <span style={{display:"block",marginTop:5,color:t.textSec}}>{getEntry(term).definition}</span>
