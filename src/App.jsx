@@ -603,7 +603,15 @@ function buildMcqPracticePool(questions, attempts, count, mode="smart", starredI
     starredIds
   );
 
-  if(mode!=="smart") return shuffle(questions).slice(0,count);
+  const limitBeyond = pool => {
+    const beyondLimit=Math.max(1,Math.floor(count*.1));
+    const mustKeep=pool.filter(q=>starredIds.has(q.id));
+    const regular=pool.filter(q=>!q.beyondTextbook&&!starredIds.has(q.id));
+    const beyond=pool.filter(q=>q.beyondTextbook&&!starredIds.has(q.id)).slice(0,beyondLimit);
+    return [...mustKeep,...regular,...beyond].slice(0,count);
+  };
+
+  if(mode!=="smart") return limitBeyond(shuffle(questions));
 
   const weakLimit = Math.min(Math.ceil(count*.3), weak.length);
   const picked = [...weak.slice(0,weakLimit)];
@@ -614,7 +622,7 @@ function buildMcqPracticePool(questions, attempts, count, mode="smart", starredI
       used.add(q.id);
     }
   });
-  return picked;
+  return limitBeyond(picked);
 }
 
 function getReviewSummary(attempts) {
@@ -14501,6 +14509,33 @@ function QuestionCodeChip({id,t}) {
   if(!id)return null;
   return <span className="chip meta-chip" style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,letterSpacing:".02em",background:`${t.amber}10`,borderColor:`${t.amber}35`,color:t.amber}}>Code: {id}</span>;
 }
+function BeyondTextbookTag({question,t}) {
+  const [open,setOpen]=useState(false);
+  if(!question?.beyondTextbook)return null;
+  return (
+    <span style={{position:"relative",display:"inline-flex"}}>
+      <button
+        type="button"
+        className="chip"
+        onClick={e=>{e.stopPropagation();setOpen(v=>!v);}}
+        style={{background:`${t.amber}14`,borderColor:`${t.amber}45`,color:t.amber,cursor:"pointer"}}
+        aria-expanded={open}
+        aria-label="Beyond the textbook explanation"
+      >
+        Beyond the textbook
+      </button>
+      {open&&(
+        <span
+          className="card"
+          style={{position:"absolute",left:0,top:"calc(100% + 8px)",zIndex:80,width:260,padding:"10px 12px",fontSize:12,lineHeight:1.55,color:t.textSec,boxShadow:"0 18px 40px rgba(0,0,0,.24)"}}
+          onClick={e=>e.stopPropagation()}
+        >
+          This question is not listed in the CompTIA Security+ (SY0-701) exam objectives. It is included sparingly for broader security awareness.
+        </span>
+      )}
+    </span>
+  );
+}
 function parseInlineFormats(value) {
   const text=String(value||"");
   const pattern=/(\*\*[^*]+?\*\*|__[^_]+?__|==[^=]+?==)/g;
@@ -15177,6 +15212,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
           {showQuestionCodes&&<QuestionCodeChip id={current.id} t={t}/>}
           <DiffBadge d={current.difficulty} t={t}/>
           <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
+          <BeyondTextbookTag question={current} t={t}/>
         </div>
         <div className="question-text" style={{fontSize:15,lineHeight:1.7,color:t.text}}><QuestionStemText text={current.q} t={t}/></div>
       </div>
@@ -16118,6 +16154,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
                   {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
                   <DiffBadge d={q.difficulty} t={t}/>
                   <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{q.topic}</span>
+                  <BeyondTextbookTag question={q} t={t}/>
                 </div>
                 <div style={{fontSize:14,color:t.text,lineHeight:1.65}}><QuestionStemText text={q.q} t={t} compact/></div>
               </div>
@@ -16404,6 +16441,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
           {showQuestionCodes&&<QuestionCodeChip id={current.id} t={t}/>}
           <DiffBadge d={current.difficulty} t={t}/>
           <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
+          <BeyondTextbookTag question={current} t={t}/>
           {!isGuest&&(
             <span style={{marginLeft:"auto"}}>
               <StarButton active={starredSet.has(starKey("mcq",current.id))} onToggle={()=>onToggleStar?.("mcq",current.id)} label="Star MCQ"/>
@@ -16520,7 +16558,10 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
   const practiceRandomPbq=()=>{
     const notDone=PBQ_BANK.filter(q=>!attempted.has(q.id));
     const missed=PBQ_BANK.filter(q=>missedPbqIds.includes(q.id));
-    const pool=notDone.length?notDone:missed.length?missed:[PBQ_BANK[PBQ_BANK.length-1]];
+    const rawPool=notDone.length?notDone:missed.length?missed:[PBQ_BANK[PBQ_BANK.length-1]];
+    const regular=rawPool.filter(q=>!q.beyondTextbook);
+    const beyond=rawPool.filter(q=>q.beyondTextbook);
+    const pool=regular.length && beyond.length && Math.random()>.15 ? regular : rawPool;
     const picked=pool[Math.floor(Math.random()*pool.length)];
     capture("pbq_random_practice_started", { question_id: picked.id, pool: notDone.length?"new":missed.length?"missed":"newest", tier: user.tier });
     onStart(picked);
@@ -16548,6 +16589,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
                   {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
+                  <BeyondTextbookTag question={q} t={t}/>
                 </div>
                 <div style={{fontSize:14,fontWeight:800,color:t.text}}><GlossaryText text={q.title} t={t}/></div>
                 <div style={{fontSize:12,color:t.textSec,marginTop:3}}><GlossaryText text={q.cat} t={t}/></div>
@@ -16684,6 +16726,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
                   {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
+                  <BeyondTextbookTag question={q} t={t}/>
                   {ch&&<span style={{fontSize:11,color:t.textDim,display:"inline-flex",alignItems:"center",gap:4}}><ChapterIcon id={ch.id} size={16}/> Ch.{ch.id}</span>}
                 </div>
                 <div style={{fontSize:14,fontWeight:500,color:t.text}}><GlossaryText text={q.title} t={t}/></div>
@@ -16786,6 +16829,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
             {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
             <SimBadge type={q.type} t={t}/>
             <DiffBadge d={q.difficulty} t={t}/>
+            <BeyondTextbookTag question={q} t={t}/>
           </div>
         </div>
         <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
@@ -17175,9 +17219,9 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
     setPbqCount(prev=>Math.min(size,Math.max(0,Math.round(size*(prev/Math.max(1,questionCount))))));
   };
   const startExam=()=>{
-    const examReadyPbqs=PBQ_BANK.filter(q=>q.type!=="TERMINAL SIM"||q.choices||q.options);
+    const examReadyPbqs=PBQ_BANK.filter(q=>!q.beyondTextbook&&(q.type!=="TERMINAL SIM"||q.choices||q.options));
     const pickedPbq=shuffle(examReadyPbqs).slice(0,pbqCount).map(q=>({kind:"pbq",q}));
-    const pickedMcq=shuffle(MCQ_BANK).slice(0,mcqCount).map(q=>({kind:"mcq",q:shuffleMcqOptions(q)}));
+    const pickedMcq=shuffle(MCQ_BANK.filter(q=>!q.beyondTextbook)).slice(0,mcqCount).map(q=>({kind:"mcq",q:shuffleMcqOptions(q)}));
     const examQs=[...pickedPbq,...pickedMcq];
     setQuestions(examQs);
     setAnswers(Object.fromEntries(examQs.map((item,index)=>[index,initAnswer(item)])));
@@ -18176,6 +18220,7 @@ function makeAdminQuestionTemplate(kind, nextOrder=1) {
       ch:"1",
       cat:"General Security Concepts",
       difficulty:"medium",
+      beyondTextbook:false,
       order:String(nextOrder),
       scenario:"",
       question:"",
@@ -18189,6 +18234,7 @@ function makeAdminQuestionTemplate(kind, nextOrder=1) {
     ch:"1",
     topic:"General Security Concepts",
     difficulty:"medium",
+    beyondTextbook:false,
     order:String(nextOrder),
     q:"",
     opts:["","","",""],
@@ -18208,6 +18254,7 @@ function questionToAdminForm(question,kind,index) {
       ch:String(question.ch||"1"),
       cat:question.cat||question.domain||"",
       difficulty:String(question.difficulty||"medium").toLowerCase(),
+      beyondTextbook:Boolean(question.beyondTextbook),
       order,
       scenario:question.scenario||"",
       question:question.question||question.prompt||"",
@@ -18221,6 +18268,7 @@ function questionToAdminForm(question,kind,index) {
     ch:String(question.ch||"1"),
     topic:question.topic||question.cat||"",
     difficulty:String(question.difficulty||"medium").toLowerCase(),
+    beyondTextbook:Boolean(question.beyondTextbook),
     order,
     q:question.q||question.question||"",
     opts:Array.isArray(question.opts)?[...question.opts].slice(0,4):["","","",""],
@@ -18252,6 +18300,7 @@ function cleanAdminQuestionPayload(form,kind) {
         id,
         ch:String(form.ch||"1"),
         difficulty,
+        beyondTextbook:Boolean(form.beyondTextbook),
         topic:String(form.topic||"General Security Concepts").trim(),
         q:String(form.q||"").trim(),
         opts,
@@ -18274,6 +18323,7 @@ function cleanAdminQuestionPayload(form,kind) {
       ch:String(form.ch||"1"),
       cat:String(form.cat||"General Security Concepts").trim(),
       difficulty,
+      beyondTextbook:Boolean(form.beyondTextbook),
       title:String(form.title||"").trim(),
       scenario:String(form.scenario||"").trim(),
       question:String(form.question||"").trim(),
@@ -18850,6 +18900,20 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
               </div>
             </AdminField>
           </div>
+          <label className="card" style={{display:"flex",gap:10,alignItems:"flex-start",padding:"12px 14px",marginBottom:12,cursor:"pointer",background:form.beyondTextbook?`${t.amber}0f`:t.panel,borderColor:form.beyondTextbook?`${t.amber}45`:t.border}}>
+            <input
+              type="checkbox"
+              checked={Boolean(form.beyondTextbook)}
+              onChange={e=>updateField("beyondTextbook",e.target.checked)}
+              style={{marginTop:3,accentColor:t.amber}}
+            />
+            <span>
+              <span style={{display:"block",fontSize:13,fontWeight:900,color:form.beyondTextbook?t.amber:t.text}}>Beyond the textbook</span>
+              <span style={{display:"block",fontSize:12,color:t.textSec,lineHeight:1.55}}>
+                Mark this if the question is useful but not part of the CompTIA Security+ (SY0-701) exam objectives. It will appear sparingly in practice and never in Exam Mode.
+              </span>
+            </span>
+          </label>
 
           {kind==="mcq" ? (
             <>
@@ -18945,6 +19009,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
               <span className="chip">Ch.{form.ch||"?"}</span>
               <span className="chip" style={{color:difficultyColor,borderColor:`${difficultyColor}44`,background:`${difficultyColor}10`,textTransform:"capitalize"}}>{form.difficulty}</span>
               <span className="chip">{kind.toUpperCase()}</span>
+              <BeyondTextbookTag question={form} t={t}/>
             </div>
             {kind==="mcq" ? (
               <>
