@@ -17819,10 +17819,12 @@ function ReferralUpgradeBanner({user,t,onFindOutMore}) {
           <div className="label" style={{color:t.green,marginBottom:8}}>Referral Programme</div>
           <h3 style={{fontSize:22,fontWeight:900,color:t.text,marginBottom:8}}>Share the joy of learning</h3>
           <p style={{fontSize:13,color:t.textSec,lineHeight:1.75,marginBottom:12}}>
-            Share your link with one new student. When they create an account using your code, they get 7 days of Pro and you get 7 days too. If you already have an active Pro plan, your friend still receives the trial while your account stays on Pro.
+            Referral rewards are live. Share your link with one new student. When they create an account using your code, they get 7 days of Pro and you get 7 days too. If you already have an active Pro plan, your friend still receives the trial while your account stays on Pro.
           </p>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+            <span className="chip" style={{background:`${t.green}18`,borderColor:`${t.green}55`,color:t.green}}>Live now</span>
             <span className="chip" style={{background:`${t.green}12`,borderColor:`${t.green}35`,color:t.green}}>Friend gets 7 days Pro</span>
+            <span className="chip" style={{background:`${t.green}12`,borderColor:`${t.green}35`,color:t.green}}>You get 7 days Pro</span>
             <span className="chip" style={{background:`${t.accent}12`,borderColor:`${t.accent}35`,color:t.accent}}>You can refer 1 user</span>
             {isPaidPro&&<span className="chip" style={{background:`${t.amber}12`,borderColor:`${t.amber}35`,color:t.amber}}>Paid Pro: no extra trial needed</span>}
           </div>
@@ -17847,7 +17849,7 @@ function ReferralUpgradeBanner({user,t,onFindOutMore}) {
           </div>
           {error&&(
             <div style={{fontSize:12,color:t.amber,lineHeight:1.6,marginTop:8}}>
-              Run the latest referral SQL in Supabase if this message stays.
+              Referral launch SQL may not be installed yet. Run <code>supabase/referrals.sql</code> in Supabase SQL Editor if this message stays.
             </div>
           )}
         </div>
@@ -18782,7 +18784,7 @@ function ReferralPage({user,t}) {
         <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>Referral Programme</h2>
       </div>
       <p style={{color:t.textSec,fontSize:14,lineHeight:1.7,marginBottom:20}}>
-        Share SecurePlus with one new student. They receive 7 days of Pro after signup, and you receive 7 days too unless you already have an active paid Pro plan.
+        The referral programme is live. Share SecurePlus with one new student. They receive 7 days of Pro after signup, and you receive 7 days too unless you already have an active paid Pro plan.
       </p>
 
       <ReferralUpgradeBanner user={user} t={t}/>
