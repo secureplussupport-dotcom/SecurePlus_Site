@@ -14588,6 +14588,40 @@ function GlossaryText({text,t,style}) {
     </span>
   );
 }
+function splitQuestionStem(text) {
+  const value=String(text||"").trim();
+  if(!value)return {context:"",question:""};
+  const questionEnd=value.indexOf("?");
+  if(questionEnd<0)return {context:"",question:value};
+  const before=value.slice(0,questionEnd+1);
+  const after=value.slice(questionEnd+1).trim();
+  const sentenceStart=Math.max(
+    before.lastIndexOf(". "),
+    before.lastIndexOf("! "),
+    before.lastIndexOf("? "),
+    before.lastIndexOf("\n")
+  );
+  const start=sentenceStart>=0 ? sentenceStart+(before[sentenceStart]==="\n"?1:2) : 0;
+  const context=value.slice(0,start).trim();
+  const question=(value.slice(start,questionEnd+1)+(after?` ${after}`:"")).trim();
+  return {context,question};
+}
+function QuestionStemText({text,t,style,compact=false}) {
+  const {context,question}=splitQuestionStem(text);
+  if(!context) {
+    return <span style={{fontWeight:900,color:t.text,...style}}><GlossaryText text={question} t={t}/></span>;
+  }
+  return(
+    <span style={style}>
+      <span style={{display:"block",fontWeight:compact?600:650,color:t.textSec,lineHeight:1.72,marginBottom:compact?6:10}}>
+        <GlossaryText text={context} t={t}/>
+      </span>
+      <span style={{display:"block",fontWeight:950,color:t.text,lineHeight:1.58}}>
+        <GlossaryText text={question} t={t}/>
+      </span>
+    </span>
+  );
+}
 function ChBadge({chId,t}) {
   const ch=CHAPTERS.find(c=>c.id===chId);
   if(!ch) return null;
@@ -15144,7 +15178,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
           <DiffBadge d={current.difficulty} t={t}/>
           <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
         </div>
-        <p className="question-text" style={{fontSize:15,lineHeight:1.7,color:t.text}}><GlossaryText text={current.q} t={t}/></p>
+        <div className="question-text" style={{fontSize:15,lineHeight:1.7,color:t.text}}><QuestionStemText text={current.q} t={t}/></div>
       </div>
 
       <div style={{display:"flex",flexDirection:"column",gap:9,marginBottom:20}}>
@@ -16085,7 +16119,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
                   <DiffBadge d={q.difficulty} t={t}/>
                   <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{q.topic}</span>
                 </div>
-                <div style={{fontSize:14,color:t.text,lineHeight:1.65,fontWeight:700}}><GlossaryText text={q.q} t={t}/></div>
+                <div style={{fontSize:14,color:t.text,lineHeight:1.65}}><QuestionStemText text={q.q} t={t} compact/></div>
               </div>
             </div>
           ))}
@@ -16376,9 +16410,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
             </span>
           )}
         </div>
-        <p className="question-text" style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:500}}>
-          <GlossaryText text={current.q} t={t}/>
-        </p>
+        <div className="question-text" style={{fontSize:16,lineHeight:1.75,color:t.text}}>
+          <QuestionStemText text={current.q} t={t}/>
+        </div>
       </div>
 
       {/* Options */}
@@ -16917,7 +16951,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       {/* MCQ for most types */}
       {(q.choices||q.options)&&(
         <div style={{marginBottom:18}}>
-          <div className="question-prompt" style={{fontWeight:700,fontSize:13,color:t.text,marginBottom:10}}><GlossaryText text={q.question||"Select the best answer:"} t={t}/></div>
+          <div className="question-prompt" style={{fontSize:13,color:t.text,marginBottom:10}}><QuestionStemText text={q.question||"Select the best answer:"} t={t} compact/></div>
           <div style={{display:"flex",flexDirection:"column",gap:9}}>
             {(q.choices||q.options||[]).map((choice,i)=>{
               let cls="opt";
@@ -17556,7 +17590,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
                 <span className="chip" style={{marginLeft:"auto",background:t.panel,color:t.textSec,borderColor:t.border}}>{expanded?"Hide full question":"Tap to view full question"}</span>
               </div>
               <div className="compact-question-text" style={{fontSize:14,fontWeight:700,color:t.text,lineHeight:1.6,marginBottom:10}}>
-                {expanded ? title : `${title.slice(0,140)}${title.length>140?"...":""}`}
+                {expanded ? <QuestionStemText text={title} t={t} compact/> : `${title.slice(0,140)}${title.length>140?"...":""}`}
               </div>
               {expanded&&item.kind==="pbq"&&(
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:10}}>
@@ -17625,7 +17659,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
               {flagged[qi]&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}45`}}>Flagged for review</span>}
             </div>
             <div className="question-text" style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:700}}>
-              <GlossaryText text={current.kind==="mcq"?q.q:(q.question||q.title)} t={t}/>
+              <QuestionStemText text={current.kind==="mcq"?q.q:(q.question||q.title)} t={t}/>
             </div>
             {current.kind==="pbq"&&q.scenario&&(
               <p className="scenario-text" style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginTop:12}}><GlossaryText text={q.scenario} t={t}/></p>
@@ -18857,7 +18891,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
             </div>
             {kind==="mcq" ? (
               <>
-                <div style={{fontSize:20,fontWeight:900,color:t.text,lineHeight:1.45,marginBottom:16}}><GlossaryText text={form.q||"Your MCQ question will appear here."} t={t}/></div>
+                <div style={{fontSize:20,color:t.text,lineHeight:1.45,marginBottom:16}}><QuestionStemText text={form.q||"Your MCQ question will appear here."} t={t}/></div>
                 <div style={{display:"grid",gap:10}}>
                   {form.opts.map((opt,index)=>(
                     <div key={index} style={{padding:"12px 14px",borderRadius:10,border:`1.5px solid ${Number(form.correct)===index?t.green:t.border}`,background:Number(form.correct)===index?`${t.green}10`:t.panel,color:t.text}}>
@@ -18873,7 +18907,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
               <>
                 <div style={{fontSize:18,fontWeight:900,color:t.text,marginBottom:8}}><GlossaryText text={form.title||"PBQ title preview"} t={t}/></div>
                 <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:12}}><GlossaryText text={form.scenario||"Scenario preview will appear here."} t={t}/></p>
-                <div style={{fontSize:16,fontWeight:800,color:t.text,lineHeight:1.5,marginBottom:12}}><GlossaryText text={form.question||"Task preview will appear here."} t={t}/></div>
+                <div style={{fontSize:16,color:t.text,lineHeight:1.5,marginBottom:12}}><QuestionStemText text={form.question||"Task preview will appear here."} t={t} compact/></div>
                 <div style={{display:"grid",gap:8}}>
                   {(form.choices||[]).filter(Boolean).map((choice,index)=>(
                     <div key={index} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${Number(form.correct)===index?t.green:t.border}`,background:Number(form.correct)===index?`${t.green}10`:t.panel,color:t.text}}>
