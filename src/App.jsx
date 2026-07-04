@@ -18205,6 +18205,31 @@ function cleanAdminQuestionPayload(form,kind) {
   };
 }
 
+function AdminField({label,children}) {
+  return (
+    <div>
+      <label className="label" style={{display:"block",marginBottom:7}}>{label}</label>
+      {children}
+    </div>
+  );
+}
+
+function AdminTextInput({label,value,onChange,placeholder,type="text"}) {
+  return (
+    <AdminField label={label}>
+      <input className="input" type={type} value={value} placeholder={placeholder||""} onChange={e=>onChange(e.target.value)}/>
+    </AdminField>
+  );
+}
+
+function AdminTextArea({label,value,onChange,placeholder,rows=4}) {
+  return (
+    <AdminField label={label}>
+      <textarea className="input" value={value} placeholder={placeholder||""} rows={rows} onChange={e=>onChange(e.target.value)} style={{resize:"vertical",lineHeight:1.55}}/>
+    </AdminField>
+  );
+}
+
 function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) {
   const [kind,setKind]=useState("mcq");
   const [selectedId,setSelectedId]=useState("");
@@ -18342,23 +18367,6 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
 
   const moveOrder=(delta)=>updateField("order",String(Math.max(1,(Number.parseInt(form.order,10)||1)+delta)));
 
-  const Field=({label,children})=>(
-    <div>
-      <label className="label" style={{display:"block",marginBottom:7}}>{label}</label>
-      {children}
-    </div>
-  );
-  const TextInput=({label,value,onChange,placeholder,type="text"})=>(
-    <Field label={label}>
-      <input className="input" type={type} value={value} placeholder={placeholder||""} onChange={e=>onChange(e.target.value)}/>
-    </Field>
-  );
-  const TextArea=({label,value,onChange,placeholder,rows=4})=>(
-    <Field label={label}>
-      <textarea className="input" value={value} placeholder={placeholder||""} rows={rows} onChange={e=>onChange(e.target.value)} style={{resize:"vertical",lineHeight:1.55}}/>
-    </Field>
-  );
-
   return(
     <div className="feedback-page" style={{padding:"24px",maxWidth:1180,margin:"0 auto"}}>
       <div className="page-title-row" style={{marginBottom:16}}>
@@ -18377,27 +18385,27 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
 
       <div className="card" style={{padding:"18px 20px",marginBottom:16}}>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:10,alignItems:"end"}}>
-          <Field label="Question type">
+          <AdminField label="Question type">
             <select className="input" value={kind} onChange={e=>changeKind(e.target.value)}>
               <option value="mcq">MCQ</option>
               <option value="pbq">PBQ</option>
             </select>
-          </Field>
-          <TextInput label="Search code" value={codeSearch} onChange={setCodeSearch} placeholder={kind==="mcq"?"m101":"p042"}/>
-          <Field label="Sort">
+          </AdminField>
+          <AdminTextInput label="Search code" value={codeSearch} onChange={setCodeSearch} placeholder={kind==="mcq"?"m101":"p042"}/>
+          <AdminField label="Sort">
             <select className="input" value={sortMode} onChange={e=>setSortMode(e.target.value)}>
               <option value="order">Current order</option>
               <option value="code-asc">Question code A-Z</option>
               <option value="code-desc">Question code Z-A</option>
               <option value="difficulty">Difficulty</option>
             </select>
-          </Field>
-          <Field label="Choose existing question">
+          </AdminField>
+          <AdminField label="Choose existing question">
             <select className="input" value={selectedId} onChange={e=>setSelectedId(e.target.value)}>
               <option value="">Create a new question</option>
               {visibleBank.map((q,index)=><option key={q.id} value={q.id}>#{q._adminOrder||q._baseOrder||index+1} · {q.id} · {kind==="mcq"?(q.q||"").slice(0,80):(q.title||"").slice(0,80)}</option>)}
             </select>
-          </Field>
+          </AdminField>
           <button className="btn btn-outline" onClick={loadSelected}>Load</button>
           <button className="btn btn-primary" onClick={()=>resetToNew(kind)}>New</button>
         </div>
@@ -18414,34 +18422,34 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
           </div>
 
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(145px,1fr))",gap:10,marginBottom:12}}>
-            <TextInput label="Question ID" value={form.id} onChange={v=>updateField("id",v)} placeholder={kind==="mcq"?"m-custom-001":"p-custom-001"}/>
-            <TextInput label="Chapter" value={form.ch} onChange={v=>updateField("ch",v)} placeholder="1"/>
-            <Field label="Difficulty">
+            <AdminTextInput label="Question ID" value={form.id} onChange={v=>updateField("id",v)} placeholder={kind==="mcq"?"m-custom-001":"p-custom-001"}/>
+            <AdminTextInput label="Chapter" value={form.ch} onChange={v=>updateField("ch",v)} placeholder="1"/>
+            <AdminField label="Difficulty">
               <select className="input" value={form.difficulty} onChange={e=>updateField("difficulty",e.target.value)} style={{color:difficultyColor,fontWeight:900}}>
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
               </select>
-            </Field>
-            <Field label="Order">
+            </AdminField>
+            <AdminField label="Order">
               <div style={{display:"flex",gap:6}}>
                 <button className="btn btn-ghost" type="button" style={{minWidth:42,padding:"8px 10px"}} onClick={()=>moveOrder(-1)}>Up</button>
                 <input className="input" type="number" min="1" value={form.order} onChange={e=>updateField("order",e.target.value)} style={{textAlign:"center",padding:"10px 8px"}}/>
                 <button className="btn btn-ghost" type="button" style={{minWidth:42,padding:"8px 10px"}} onClick={()=>moveOrder(1)}>Down</button>
               </div>
-            </Field>
+            </AdminField>
           </div>
 
           {kind==="mcq" ? (
             <>
-              <TextInput label="Topic" value={form.topic} onChange={v=>updateField("topic",v)} placeholder="Network Security"/>
+              <AdminTextInput label="Topic" value={form.topic} onChange={v=>updateField("topic",v)} placeholder="Network Security"/>
               <div style={{height:12}}/>
-              <TextArea label="Question" value={form.q} onChange={v=>updateField("q",v)} placeholder="Write the MCQ question here." rows={5}/>
+              <AdminTextArea label="Question" value={form.q} onChange={v=>updateField("q",v)} placeholder="Write the MCQ question here." rows={5}/>
               <div style={{height:12}}/>
               <div style={{display:"grid",gap:10}}>
                 {form.opts.map((opt,index)=>(
                     <div key={index} style={{display:"grid",gridTemplateColumns:"80px minmax(0,1fr)",gap:10,alignItems:"start"}}>
-                    <Field label={index===0?"Correct?":" "}>
+                    <AdminField label={index===0?"Correct?":" "}>
                       <button
                         type="button"
                         className={Number(form.correct)===index?"btn btn-primary":"btn btn-outline"}
@@ -18450,19 +18458,19 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                       >
                         {String.fromCharCode(65+index)}
                       </button>
-                    </Field>
-                    <TextInput label={`Answer ${String.fromCharCode(65+index)}`} value={opt} onChange={v=>updateArray("opts",index,v)} placeholder={`Answer option ${String.fromCharCode(65+index)}`}/>
+                    </AdminField>
+                    <AdminTextInput label={`Answer ${String.fromCharCode(65+index)}`} value={opt} onChange={v=>updateArray("opts",index,v)} placeholder={`Answer option ${String.fromCharCode(65+index)}`}/>
                   </div>
                 ))}
               </div>
               <div style={{height:12}}/>
-              <TextArea label="Correct-answer explanation" value={form.exp} onChange={v=>updateField("exp",v)} placeholder="Explain clearly why the correct option is right." rows={5}/>
+              <AdminTextArea label="Correct-answer explanation" value={form.exp} onChange={v=>updateField("exp",v)} placeholder="Explain clearly why the correct option is right." rows={5}/>
               <div style={{height:12}}/>
               <div className="card" style={{padding:14,background:`${t.panel}66`}}>
                 <div style={{fontWeight:900,color:t.text,marginBottom:10}}>Why wrong answers are wrong</div>
                 <div style={{display:"grid",gap:10}}>
                   {form.opts.map((_,index)=>Number(form.correct)===index?null:(
-                    <TextArea
+                    <AdminTextArea
                       key={index}
                       label={`If user chooses ${String.fromCharCode(65+index)}`}
                       value={form.wrongFeedback?.[index]||""}
@@ -18477,15 +18485,15 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
           ) : (
             <>
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10}}>
-                <TextInput label="PBQ title" value={form.title} onChange={v=>updateField("title",v)} placeholder="Firewall rule review"/>
-                <TextInput label="PBQ type" value={form.type} onChange={v=>updateField("type",v)} placeholder="SCENARIO"/>
+                <AdminTextInput label="PBQ title" value={form.title} onChange={v=>updateField("title",v)} placeholder="Firewall rule review"/>
+                <AdminTextInput label="PBQ type" value={form.type} onChange={v=>updateField("type",v)} placeholder="SCENARIO"/>
               </div>
               <div style={{height:12}}/>
-              <TextInput label="Category" value={form.cat} onChange={v=>updateField("cat",v)} placeholder="Security Operations"/>
+              <AdminTextInput label="Category" value={form.cat} onChange={v=>updateField("cat",v)} placeholder="Security Operations"/>
               <div style={{height:12}}/>
-              <TextArea label="Scenario" value={form.scenario} onChange={v=>updateField("scenario",v)} placeholder="Explain the environment or situation." rows={5}/>
+              <AdminTextArea label="Scenario" value={form.scenario} onChange={v=>updateField("scenario",v)} placeholder="Explain the environment or situation." rows={5}/>
               <div style={{height:12}}/>
-              <TextArea label="Task for the student" value={form.question} onChange={v=>updateField("question",v)} placeholder="Tell the student what to do." rows={4}/>
+              <AdminTextArea label="Task for the student" value={form.question} onChange={v=>updateField("question",v)} placeholder="Tell the student what to do." rows={4}/>
               <div style={{height:12}}/>
               <div className="card" style={{padding:14,background:`${t.panel}66`}}>
                 <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}>
@@ -18503,7 +18511,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                 </div>
               </div>
               <div style={{height:12}}/>
-              <TextArea label="Solution explanation" value={form.explanation} onChange={v=>updateField("explanation",v)} placeholder="Explain how to solve the PBQ." rows={5}/>
+              <AdminTextArea label="Solution explanation" value={form.explanation} onChange={v=>updateField("explanation",v)} placeholder="Explain how to solve the PBQ." rows={5}/>
             </>
           )}
 
