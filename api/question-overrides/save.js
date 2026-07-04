@@ -33,6 +33,18 @@ function isMissingQuestionAdminSchema(error) {
   );
 }
 
+function overrideSnapshot(row) {
+  if (!row) return null;
+  return {
+    question_kind: row.question_kind,
+    question_id: row.question_id,
+    action: row.action,
+    payload: row.payload || {},
+    sort_order: row.sort_order ?? null,
+    status: row.status || "active",
+  };
+}
+
 async function requireAdmin(supabase, token) {
   if (!token) return { ok: false, status: 401, error: "Sign in before using Question Manager." };
 
@@ -77,15 +89,27 @@ export default async function handler(req, res) {
     if (!questionId) return json(res, 400, { error: "Question ID is required." });
     if (action === "upsert" && !payload.id) return json(res, 400, { error: "Question payload is missing its ID." });
 
+    const { data: previousRow, error: previousError } = await supabase
+      .from("question_overrides")
+      .select("question_kind,question_id,action,payload,sort_order,status")
+      .eq("question_kind", questionKind)
+      .eq("question_id", questionId)
+      .maybeSingle();
+    if (previousError) throw previousError;
+
+    const nextOverride = {
+      question_kind: questionKind,
+      question_id: questionId,
+      action,
+      payload: action === "disable" ? { id: questionId } : payload,
+      sort_order: action === "disable" ? null : sortOrder,
+      status: "active",
+    };
+
     const { data, error } = await supabase
       .from("question_overrides")
       .upsert({
-        question_kind: questionKind,
-        question_id: questionId,
-        action,
-        payload: action === "disable" ? { id: questionId } : payload,
-        sort_order: action === "disable" ? null : sortOrder,
-        status: "active",
+        ...nextOverride,
         updated_by: admin.user.id,
         updated_at: new Date().toISOString(),
       }, { onConflict: "question_kind,question_id" })
@@ -93,6 +117,20 @@ export default async function handler(req, res) {
       .maybeSingle();
 
     if (error) throw error;
+
+    const changeType = action === "disable" ? "delete" : previousRow ? "change" : "add";
+    const { error: historyError } = await supabase
+      .from("question_override_history")
+      .insert({
+        question_kind: questionKind,
+        question_id: questionId,
+        change_type: changeType,
+        previous_override: overrideSnapshot(previousRow),
+        next_override: nextOverride,
+        changed_by: admin.user.id,
+        changed_by_email: admin.user.email || "",
+      });
+    if (historyError) throw historyError;
 
     return json(res, 200, { ok: true, override: data });
   } catch (error) {

@@ -18322,6 +18322,46 @@ async function saveQuestionOverrideRequest({kind,question,sortOrder,action="upse
   return data;
 }
 
+async function loadQuestionOverrideHistoryRequest() {
+  if(!isSupabaseConfigured) throw new Error("Supabase is not configured.");
+  const token=await getSupabaseAccessToken();
+  if(!token) throw new Error("Please sign in again before loading question history.");
+  const response=await fetch("/api/question-overrides/history?limit=20",{
+    method:"GET",
+    headers:{authorization:`Bearer ${token}`},
+  });
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok) throw new Error(data.error||"Unable to load question history.");
+  return data.history||[];
+}
+
+async function revertQuestionOverrideRequest(historyId) {
+  if(!isSupabaseConfigured) throw new Error("Supabase is not configured.");
+  const token=await getSupabaseAccessToken();
+  if(!token) throw new Error("Please sign in again before reverting question changes.");
+  const response=await fetch("/api/question-overrides/revert",{
+    method:"POST",
+    headers:{
+      "content-type":"application/json",
+      authorization:`Bearer ${token}`,
+    },
+    body:JSON.stringify({historyId}),
+  });
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok) throw new Error(data.error||"Unable to revert question change.");
+  return data;
+}
+
+function questionHistoryLabel(item) {
+  const label=({
+    add:"Added",
+    change:"Changed",
+    delete:"Deleted",
+    revert:"Reverted",
+  })[item?.change_type] || "Changed";
+  return `${label} ${String(item?.question_kind||"").toUpperCase()} ${item?.question_id||""}`;
+}
+
 function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) {
   const [kind,setKind]=useState("mcq");
   const [selectedId,setSelectedId]=useState("");
@@ -18331,6 +18371,8 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const [error,setError]=useState("");
   const [codeSearch,setCodeSearch]=useState("");
   const [sortMode,setSortMode]=useState("order");
+  const [history,setHistory]=useState([]);
+  const [historyLoading,setHistoryLoading]=useState(false);
   const bank=kind==="mcq"?MCQ_BANK:PBQ_BANK;
   const visibleBank=useMemo(()=>{
     const query=codeSearch.trim().toLowerCase();
@@ -18384,6 +18426,20 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
     setError("");
   },[initialTarget?.id,initialTarget?.kind,initialTarget?.nonce]);
 
+  const loadHistory=useCallback(async()=>{
+    if(!isSupabaseConfigured)return;
+    setHistoryLoading(true);
+    try{
+      setHistory(await loadQuestionOverrideHistoryRequest());
+    }catch(err){
+      setError(err.message||"Unable to load question history.");
+    }finally{
+      setHistoryLoading(false);
+    }
+  },[]);
+
+  useEffect(()=>{loadHistory();},[loadHistory]);
+
   const updateField=(field,value)=>setForm(prev=>({...prev,[field]:value}));
   const updateArray=(field,index,value)=>setForm(prev=>{
     const next=[...(prev[field]||[])];
@@ -18404,6 +18460,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
       await saveQuestionOverrideRequest({kind,question,sortOrder,action:"upsert"});
       setSelectedId(question.id);
       await onQuestionBankRefresh?.();
+      await loadHistory();
       setStatus("Saved. The live question bank has been refreshed in this browser.");
       capture("admin_question_saved", { kind, question_id: question.id, sort_order: sortOrder });
     }catch(err){
@@ -18422,11 +18479,29 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
     try{
       await saveQuestionOverrideRequest({kind,question:{id:targetId},sortOrder:null,action:"disable"});
       await onQuestionBankRefresh?.();
+      await loadHistory();
       setStatus(`${targetId} has been hidden from the live bank.`);
       resetToNew(kind);
       capture("admin_question_disabled", { kind, question_id: targetId });
     }catch(err){
       setError(err.message||"Unable to delete question.");
+    }finally{
+      setSaving(false);
+    }
+  };
+
+  const revertHistoryItem=async(item)=>{
+    const ok=window.confirm(`Revert ${questionHistoryLabel(item)}? This restores the previous saved version for that question.`);
+    if(!ok)return;
+    setSaving(true);setError("");setStatus("");
+    try{
+      await revertQuestionOverrideRequest(item.id);
+      await onQuestionBankRefresh?.();
+      await loadHistory();
+      setStatus(`${String(item.question_kind).toUpperCase()} ${item.question_id} was reverted.`);
+      capture("admin_question_reverted", { kind:item.question_kind, question_id:item.question_id, history_id:item.id });
+    }catch(err){
+      setError(err.message||"Unable to revert question change.");
     }finally{
       setSaving(false);
     }
@@ -18448,6 +18523,54 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
         <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
           Use the form below like a normal admin panel. The site stores your changes safely in Supabase; regular users cannot edit these records.
         </div>
+      </div>
+
+      <div className="card" style={{padding:"18px 20px",marginBottom:16}}>
+        <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:12,flexWrap:"wrap"}}>
+          <div>
+            <h3 style={{fontSize:18,color:t.text,marginBottom:4}}>Question change history</h3>
+            <div style={{fontSize:12,color:t.textDim}}>Review recent adds, edits, deletes, and reverts. Only the latest 3 changes can be reverted.</div>
+          </div>
+          <button className="btn btn-outline" style={{fontSize:12}} disabled={historyLoading} onClick={loadHistory}>
+            {historyLoading?"Loading...":"Refresh history"}
+          </button>
+        </div>
+        {history.length===0 ? (
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+            {historyLoading?"Loading question history...":"No question changes have been logged yet. New changes will appear here after you run the updated Supabase SQL."}
+          </div>
+        ) : (
+          <div style={{display:"grid",gap:10}}>
+            {history.map((item,index)=>{
+              const canRevert=index<3 && item.change_type!=="revert";
+              const nextTitle=item.next_override?.payload?.q || item.next_override?.payload?.title || item.next_override?.payload?.question || "";
+              const previousTitle=item.previous_override?.payload?.q || item.previous_override?.payload?.title || item.previous_override?.payload?.question || "";
+              const summary=nextTitle || previousTitle || "Question override record";
+              const accent=item.change_type==="delete"?t.red:item.change_type==="revert"?t.amber:item.change_type==="add"?t.green:t.accent;
+              return(
+                <div key={item.id} className="card" style={{padding:"12px 14px",boxShadow:"none",background:t.panel}}>
+                  <div style={{display:"flex",gap:10,alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap"}}>
+                    <div style={{minWidth:0,flex:"1 1 260px"}}>
+                      <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap",marginBottom:6}}>
+                        <span className="chip" style={{background:`${accent}12`,borderColor:`${accent}42`,color:accent}}>{questionHistoryLabel(item)}</span>
+                        <span style={{fontSize:11,color:t.textDim}}>{new Date(item.created_at).toLocaleString()}</span>
+                      </div>
+                      <div style={{fontSize:13,color:t.textSec,lineHeight:1.6,overflowWrap:"anywhere"}}>
+                        {summary.slice(0,180)}{summary.length>180?"...":""}
+                      </div>
+                      <div style={{fontSize:11,color:t.textDim,marginTop:5}}>
+                        By {item.changed_by_email || "root account"}
+                      </div>
+                    </div>
+                    <button className="btn btn-outline" style={{fontSize:12}} disabled={!canRevert||saving} onClick={()=>revertHistoryItem(item)} title={canRevert?"Restore previous version":"Only the latest 3 non-revert changes can be reverted"}>
+                      {canRevert?"Revert":"Locked"}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <div className="card" style={{padding:"18px 20px",marginBottom:16}}>
