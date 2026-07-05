@@ -19761,31 +19761,23 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                       <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>Create draggable items on the left, create drop targets on the right, then map each item to its correct target.</div>
                     </div>
                   </div>
-                  <div style={{display:"grid",gridTemplateColumns:"minmax(0,1.15fr) minmax(260px,.85fr)",gap:14,alignItems:"start"}}>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr",gap:14,alignItems:"start"}}>
                     <div>
                       <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:10}}>
                         <div>
-                          <div style={{fontWeight:900,color:t.text}}>Draggable items</div>
-                          <div style={{fontSize:11,color:t.textDim,marginTop:2}}>These are the cards users drag into targets.</div>
+                          <div style={{fontWeight:900,color:t.text}}>Drop targets</div>
+                          <div style={{fontSize:11,color:t.textDim,marginTop:2}}>Create the columns or boxes users drop items into first.</div>
                         </div>
-                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("items")}>Add item</button>
+                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("targets")}>Add target</button>
                       </div>
                       <div style={{display:"grid",gap:10}}>
-                        {(form.items||[]).map((item,index)=>(
-                          <div key={item.id||index} className="card" style={{padding:12,background:t.surface,borderColor:`${t.accent}24`,boxShadow:"none"}}>
-                            <div style={{display:"grid",gridTemplateColumns:"74px minmax(0,1fr) auto",gap:10,alignItems:"start"}}>
-                              <AdminTextInput label="ID" value={item.id||""} onChange={v=>updateObjectArray("items",index,"id",v)} placeholder={`i${index}`}/>
-                              <AdminTextArea label={`Item ${index+1} text`} value={item.label||""} onChange={v=>updateObjectArray("items",index,"label",v)} placeholder="Item shown to user" rows={2} format/>
-                              <button className="btn btn-ghost" type="button" style={{marginTop:26}} onClick={()=>removePbqItem("items",index)}>Remove</button>
+                        {(form.targets||[]).map((target,index)=>(
+                          <div key={target.id||index} className="card" style={{padding:12,background:t.surface,borderColor:`${t.green}24`,boxShadow:"none"}}>
+                            <div style={{display:"grid",gridTemplateColumns:"92px auto",gap:10,alignItems:"end",marginBottom:10}}>
+                              <AdminTextInput label="ID" value={target.id||""} onChange={v=>updateObjectArray("targets",index,"id",v)} placeholder={`t${index}`}/>
+                              <button className="btn btn-ghost" type="button" style={{justifySelf:"end"}} onClick={()=>removePbqItem("targets",index)}>Remove</button>
                             </div>
-                            <div style={{marginTop:10,paddingTop:10,borderTop:`1px solid ${t.border}`}}>
-                              <AdminField label="Correct drop target">
-                                <select className="input" value={form.correctMapping?.[item.id]||""} onChange={e=>updateField("correctMapping",{...(form.correctMapping||{}),[item.id]:e.target.value})}>
-                                  <option value="">Choose target</option>
-                                  {(form.targets||[]).map(target=><option key={target.id} value={target.id}>{target.label||target.id}</option>)}
-                                </select>
-                              </AdminField>
-                            </div>
+                            <AdminTextArea label={`Target ${index+1} text`} value={target.label||""} onChange={v=>updateObjectArray("targets",index,"label",v)} placeholder="Target shown to user" rows={2} format/>
                           </div>
                         ))}
                       </div>
@@ -19793,18 +19785,26 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                     <div>
                       <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:10}}>
                         <div>
-                          <div style={{fontWeight:900,color:t.text}}>Drop targets</div>
-                          <div style={{fontSize:11,color:t.textDim,marginTop:2}}>These are the columns or boxes users drop items into.</div>
+                          <div style={{fontWeight:900,color:t.text}}>Draggable items</div>
+                          <div style={{fontSize:11,color:t.textDim,marginTop:2}}>Add each item, then choose its correct target.</div>
                         </div>
-                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("targets")}>Add target</button>
+                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("items")}>Add item</button>
                       </div>
                       <div style={{display:"grid",gap:10}}>
-                        {(form.targets||[]).map((target,index)=>(
-                          <div key={target.id||index} className="card" style={{padding:12,background:t.surface,borderColor:`${t.green}24`,boxShadow:"none"}}>
-                            <div style={{display:"grid",gridTemplateColumns:"74px minmax(0,1fr) auto",gap:10,alignItems:"start"}}>
-                              <AdminTextInput label="ID" value={target.id||""} onChange={v=>updateObjectArray("targets",index,"id",v)} placeholder={`t${index}`}/>
-                              <AdminTextArea label={`Target ${index+1} text`} value={target.label||""} onChange={v=>updateObjectArray("targets",index,"label",v)} placeholder="Target shown to user" rows={2} format/>
-                              <button className="btn btn-ghost" type="button" style={{marginTop:26}} onClick={()=>removePbqItem("targets",index)}>Remove</button>
+                        {(form.items||[]).map((item,index)=>(
+                          <div key={item.id||index} className="card" style={{padding:12,background:t.surface,borderColor:`${t.accent}24`,boxShadow:"none"}}>
+                            <div style={{display:"grid",gridTemplateColumns:"92px auto",gap:10,alignItems:"end",marginBottom:10}}>
+                              <AdminTextInput label="ID" value={item.id||""} onChange={v=>updateObjectArray("items",index,"id",v)} placeholder={`i${index}`}/>
+                              <button className="btn btn-ghost" type="button" style={{justifySelf:"end"}} onClick={()=>removePbqItem("items",index)}>Remove</button>
+                            </div>
+                            <AdminTextArea label={`Item ${index+1} text`} value={item.label||""} onChange={v=>updateObjectArray("items",index,"label",v)} placeholder="Item shown to user" rows={2} format/>
+                            <div style={{marginTop:10,paddingTop:10,borderTop:`1px solid ${t.border}`}}>
+                              <AdminField label="Correct drop target">
+                                <select className="input" value={form.correctMapping?.[item.id]||""} onChange={e=>updateField("correctMapping",{...(form.correctMapping||{}),[item.id]:e.target.value})}>
+                                  <option value="">Choose target</option>
+                                  {(form.targets||[]).map(target=><option key={target.id} value={target.id}>{target.label||target.id}</option>)}
+                                </select>
+                              </AdminField>
                             </div>
                           </div>
                         ))}
