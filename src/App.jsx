@@ -17293,7 +17293,6 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
     if(!item)return;
     setMapping(m=>{
       const n={...m};
-      Object.keys(n).forEach(k=>{if(n[k]===targetId)delete n[k];});
       n[item.id]=targetId;
       return n;
     });
@@ -17423,14 +17422,14 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
               </div>
             </div>
             <div>
-              <div className="label" style={{marginBottom:8}}>Targets</div>
+              <div className="label" style={{marginBottom:8}}>Columns</div>
               <div style={{display:"flex",flexDirection:"column",gap:6}}>
                 {q.targets?.map(target=>{
-                  const placed=q.items.find(i=>mapping[i.id]===target.id);
+                  const placedItems=q.items.filter(i=>mapping[i.id]===target.id);
                   return(
                     <div key={target.id}>
                       <div style={{fontSize:11,color:t.textDim,marginBottom:3}}>{target.label}</div>
-                      <div className={`drop-zone ${dragOver===target.id?"over":""} ${placed?"filled":""}`}
+                      <div className={`drop-zone ${dragOver===target.id?"over":""} ${placedItems.length?"filled":""}`}
                         data-drop-target={target.id}
                         onClick={()=>tapDragItem&&placeDragItem(tapDragItem,target.id)}
                         onDragOver={e=>{e.preventDefault();setDragOver(target.id);}}
@@ -17439,19 +17438,25 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                           if(dragged) placeDragItem(dragged,target.id);
                           setDragOver(null);setDragged(null);
                         }}>
-                        {placed?<div
-                          className={`drag-item ${dragged?.id===placed.id?"selected":""}`}
-                          draggable
-                          style={{width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,color:t.text,cursor:"grab",touchAction:"none"}}
-                          onClick={e=>{e.stopPropagation();setTapDragItem(placed);}}
-                          onDragStart={e=>{e.stopPropagation();setDragged(placed);}}
-                          onDragEnd={()=>{setDragged(null);setDragOver(null);}}
-                          onPointerDown={e=>{setDragged(placed);setTapDragItem(placed);e.currentTarget.setPointerCapture?.(e.pointerId);}}
-                          onPointerMove={e=>{if(dragged?.id===placed.id||tapDragItem?.id===placed.id) updatePointerDropTarget(e);}}
-                          onPointerUp={e=>finishPointerDrag(e,placed)}
-                          onPointerCancel={()=>{setDragged(null);setDragOver(null);}}
-                        >{placed.label}</div>
-                          :<span style={{fontSize:11,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place here":"Drop or tap here"}</span>}
+                        {placedItems.length?(
+                          <div style={{display:"grid",gap:6,width:"100%"}}>
+                            {placedItems.map(placed=>(
+                              <div
+                                key={placed.id}
+                                className={`drag-item ${dragged?.id===placed.id?"selected":""}`}
+                                draggable
+                                style={{width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,color:t.text,cursor:"grab",touchAction:"none"}}
+                                onClick={e=>{e.stopPropagation();setTapDragItem(placed);}}
+                                onDragStart={e=>{e.stopPropagation();setDragged(placed);}}
+                                onDragEnd={()=>{setDragged(null);setDragOver(null);}}
+                                onPointerDown={e=>{setDragged(placed);setTapDragItem(placed);e.currentTarget.setPointerCapture?.(e.pointerId);}}
+                                onPointerMove={e=>{if(dragged?.id===placed.id||tapDragItem?.id===placed.id) updatePointerDropTarget(e);}}
+                                onPointerUp={e=>finishPointerDrag(e,placed)}
+                                onPointerCancel={()=>{setDragged(null);setDragOver(null);}}
+                              >{placed.label}</div>
+                            ))}
+                          </div>
+                        ):<span style={{fontSize:11,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place here":"Drop or tap here"}</span>}
                       </div>
                     </div>
                   );
@@ -17897,7 +17902,6 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
   const placeDragItem=(item,targetId)=>{
     if(!item)return;
     const mapping={...(answer.mapping||{})};
-    Object.keys(mapping).forEach(key=>{if(mapping[key]===targetId)delete mapping[key];});
     mapping[item.id]=targetId;
     updateAnswer({mapping,tapDragItem:null,dragged:null,dragOver:null});
   };
@@ -18326,10 +18330,10 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
                 </div>
               </div>
               <div>
-                <div className="label" style={{marginBottom:8}}>Targets</div>
+                <div className="label" style={{marginBottom:8}}>Columns</div>
                 <div style={{display:"grid",gap:7}}>
                   {q.targets?.map(target=>{
-                    const placed=q.items.find(item=>answer.mapping?.[item.id]===target.id);
+                    const placedItems=q.items.filter(item=>answer.mapping?.[item.id]===target.id);
                     return(
                       <div
                         key={target.id}
@@ -18339,22 +18343,27 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
                         onDragOver={e=>{e.preventDefault();updateAnswer({dragOver:target.id});}}
                         onDragLeave={()=>updateAnswer({dragOver:null})}
                         onDrop={e=>{e.preventDefault();if(answer.dragged)placeDragItem(answer.dragged,target.id);}}
-                        style={{justifyContent:"flex-start",cursor:"pointer",display:"block"}}
+                        style={{justifyContent:"flex-start",cursor:"pointer",display:"block",minHeight:82}}
                       >
                         <span style={{fontSize:12,color:t.textSec}}>{target.label}: </span>
-                        {placed?(
-                          <div
-                            className={`drag-item ${answer.dragged?.id===placed.id?"selected":""}`}
-                            draggable
-                            style={{marginTop:6,width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,touchAction:"none"}}
-                            onClick={e=>{e.stopPropagation();updateAnswer({tapDragItem:placed});}}
-                            onDragStart={e=>{e.stopPropagation();updateAnswer({dragged:placed});}}
-                            onDragEnd={()=>updateAnswer({dragged:null,dragOver:null})}
-                            onPointerDown={e=>{updateAnswer({dragged:placed,tapDragItem:placed});e.currentTarget.setPointerCapture?.(e.pointerId);}}
-                            onPointerMove={e=>{if(answer.dragged?.id===placed.id||answer.tapDragItem?.id===placed.id) updateExamPointerDropTarget(e);}}
-                            onPointerUp={e=>finishExamPointerDrag(e,placed)}
-                            onPointerCancel={()=>updateAnswer({dragged:null,dragOver:null})}
-                          >{placed.label}</div>
+                        {placedItems.length?(
+                          <div style={{display:"grid",gap:6,marginTop:6}}>
+                            {placedItems.map(placed=>(
+                              <div
+                                key={placed.id}
+                                className={`drag-item ${answer.dragged?.id===placed.id?"selected":""}`}
+                                draggable
+                                style={{width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,touchAction:"none"}}
+                                onClick={e=>{e.stopPropagation();updateAnswer({tapDragItem:placed});}}
+                                onDragStart={e=>{e.stopPropagation();updateAnswer({dragged:placed});}}
+                                onDragEnd={()=>updateAnswer({dragged:null,dragOver:null})}
+                                onPointerDown={e=>{updateAnswer({dragged:placed,tapDragItem:placed});e.currentTarget.setPointerCapture?.(e.pointerId);}}
+                                onPointerMove={e=>{if(answer.dragged?.id===placed.id||answer.tapDragItem?.id===placed.id) updateExamPointerDropTarget(e);}}
+                                onPointerUp={e=>finishExamPointerDrag(e,placed)}
+                                onPointerCancel={()=>updateAnswer({dragged:null,dragOver:null})}
+                              >{placed.label}</div>
+                            ))}
+                          </div>
                         ):(
                           <strong style={{fontSize:12,color:t.text,marginLeft:6}}>{answer.tapDragItem?"Drop here":"Choose item"}</strong>
                         )}
@@ -18888,11 +18897,11 @@ function cleanAdminQuestionPayload(form,kind) {
   if(pbqType==="DRAG & DROP") {
     const items=(form.items||[]).map((item,index)=>({id:String(item.id||`i${index}`).trim()||`i${index}`,label:String(item.label||"").trim()})).filter(item=>item.label);
     const targets=(form.targets||[]).map((target,index)=>({id:String(target.id||`t${index}`).trim()||`t${index}`,label:String(target.label||"").trim()})).filter(target=>target.label);
-    if(items.length<2||targets.length<2) throw new Error("Drag & Drop PBQs need at least 2 items and 2 targets.");
+    if(items.length<2||targets.length<2) throw new Error("Drag & Drop PBQs need at least 2 draggable items and 2 drop columns.");
     const targetIds=new Set(targets.map(target=>target.id));
     const correctMapping={};
     items.forEach(item=>{if(targetIds.has(form.correctMapping?.[item.id])) correctMapping[item.id]=form.correctMapping[item.id];});
-    if(Object.keys(correctMapping).length!==items.length) throw new Error("Map every Drag & Drop item to a correct target.");
+    if(Object.keys(correctMapping).length!==items.length) throw new Error("Map every Drag & Drop item to a correct column.");
     question.items=items;
     question.targets=targets;
     question.correctMapping=correctMapping;
@@ -19758,17 +19767,17 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                   <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"flex-start",marginBottom:12,flexWrap:"wrap"}}>
                     <div>
                       <div style={{fontWeight:900,color:t.text}}>Drag & Drop builder</div>
-                      <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>Create draggable items on the left, create drop targets on the right, then map each item to its correct target.</div>
+                      <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>Create columns such as Attack Type and Mitigation, then map each draggable answer into the correct column.</div>
                     </div>
                   </div>
                   <div style={{display:"grid",gridTemplateColumns:"1fr",gap:14,alignItems:"start"}}>
                     <div>
                       <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:10}}>
                         <div>
-                          <div style={{fontWeight:900,color:t.text}}>Drop targets</div>
-                          <div style={{fontSize:11,color:t.textDim,marginTop:2}}>Create the columns or boxes users drop items into first.</div>
+                          <div style={{fontWeight:900,color:t.text}}>Drop columns</div>
+                          <div style={{fontSize:11,color:t.textDim,marginTop:2}}>These are the columns users drag answers into.</div>
                         </div>
-                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("targets")}>Add target</button>
+                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("targets")}>Add column</button>
                       </div>
                       <div style={{display:"grid",gap:10}}>
                         {(form.targets||[]).map((target,index)=>(
@@ -19777,7 +19786,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                               <AdminTextInput label="ID" value={target.id||""} onChange={v=>updateObjectArray("targets",index,"id",v)} placeholder={`t${index}`}/>
                               <button className="btn btn-ghost" type="button" style={{justifySelf:"end"}} onClick={()=>removePbqItem("targets",index)}>Remove</button>
                             </div>
-                            <AdminTextArea label={`Target ${index+1} text`} value={target.label||""} onChange={v=>updateObjectArray("targets",index,"label",v)} placeholder="Target shown to user" rows={2} format/>
+                            <AdminTextArea label={`Column ${index+1} name`} value={target.label||""} onChange={v=>updateObjectArray("targets",index,"label",v)} placeholder="Example: Attack type" rows={2} format/>
                           </div>
                         ))}
                       </div>
@@ -19799,9 +19808,9 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                             </div>
                             <AdminTextArea label={`Item ${index+1} text`} value={item.label||""} onChange={v=>updateObjectArray("items",index,"label",v)} placeholder="Item shown to user" rows={2} format/>
                             <div style={{marginTop:10,paddingTop:10,borderTop:`1px solid ${t.border}`}}>
-                              <AdminField label="Correct drop target">
+                              <AdminField label="Correct column">
                                 <select className="input" value={form.correctMapping?.[item.id]||""} onChange={e=>updateField("correctMapping",{...(form.correctMapping||{}),[item.id]:e.target.value})}>
-                                  <option value="">Choose target</option>
+                                  <option value="">Choose column</option>
                                   {(form.targets||[]).map(target=><option key={target.id} value={target.id}>{target.label||target.id}</option>)}
                                 </select>
                               </AdminField>
@@ -19913,10 +19922,26 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                 )}
                 {form.type==="DRAG & DROP"&&(
                   <div style={{display:"grid",gap:8,marginBottom:12}}>
-                    {(form.items||[]).map(item=>{
-                      const target=(form.targets||[]).find(tg=>tg.id===form.correctMapping?.[item.id]);
-                      return <div key={item.id} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${t.border}`,background:t.panel,fontSize:13,color:t.textSec}}><strong style={{color:t.text}}>{item.label||item.id}</strong> → {target?.label||"No target selected"}</div>;
+                    {(form.targets||[]).map(target=>{
+                      const itemsForColumn=(form.items||[]).filter(item=>form.correctMapping?.[item.id]===target.id);
+                      return(
+                        <div key={target.id} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${t.border}`,background:t.panel,fontSize:13,color:t.textSec}}>
+                          <strong style={{color:t.text}}>{target.label||target.id}</strong>
+                          {itemsForColumn.length?(
+                            <div style={{display:"grid",gap:5,marginTop:7}}>
+                              {itemsForColumn.map(item=><div key={item.id}>- {item.label||item.id}</div>)}
+                            </div>
+                          ):(
+                            <div style={{marginTop:7,color:t.textDim}}>No items mapped to this column yet.</div>
+                          )}
+                        </div>
+                      );
                     })}
+                    {(form.items||[]).some(item=>!form.correctMapping?.[item.id])&&(
+                      <div style={{padding:"10px 12px",borderRadius:10,border:`1px dashed ${t.amber}55`,background:`${t.amber}08`,fontSize:13,color:t.amber}}>
+                        Some draggable items are not mapped to a column yet.
+                      </div>
+                    )}
                   </div>
                 )}
                 {form.type==="ORDERING"&&(
