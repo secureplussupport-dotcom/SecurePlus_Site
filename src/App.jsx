@@ -14439,6 +14439,22 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .landing-demo-gif{display:block;width:100%;aspect-ratio:13/8;object-fit:cover;border-radius:7px;border:1px solid ${t.border};background:#0b1220;}
 .landing-quiz-demo{position:relative;min-height:330px;padding:18px;border:1px solid ${t.accent}35;border-radius:8px;background:linear-gradient(160deg,${t.surface},${t.panel} 54%,${t.accent}0d);overflow:hidden;box-shadow:0 24px 54px rgba(7,12,24,.16);animation:floatCard 5.2s ease-in-out infinite;}
 .landing-quiz-demo::before{content:"";position:absolute;inset:-30% auto auto -20%;width:58%;height:80%;background:radial-gradient(circle,${t.accent}18,transparent 64%);animation:demoGlow 5s ease-in-out infinite;pointer-events:none;}
+.landing-challenge-card{position:relative;min-height:370px;padding:18px;border:1px solid ${t.accent}35;border-radius:8px;background:linear-gradient(160deg,${t.surface},${t.panel} 54%,${t.accent}0d);overflow:hidden;box-shadow:0 24px 54px rgba(7,12,24,.16);}
+.landing-challenge-card::before{content:"";position:absolute;inset:-28% auto auto -18%;width:56%;height:76%;background:radial-gradient(circle,${t.accent}16,transparent 64%);pointer-events:none;}
+.landing-challenge-card > *{position:relative;z-index:1;}
+.landing-challenge-modal{position:fixed;inset:0;z-index:520;display:grid;place-items:center;background:rgba(2,6,23,.78);backdrop-filter:blur(14px);padding:18px;animation:fadeUp .18s ease both;}
+.landing-challenge-expanded{width:min(100%,760px);max-height:92dvh;overflow-y:auto;padding:22px;}
+.landing-challenge-question{font-size:17px;line-height:1.55;font-weight:900;color:${t.text};}
+.landing-challenge-small .landing-challenge-question{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;}
+.landing-challenge-option{width:100%;display:flex;align-items:flex-start;gap:10px;text-align:left;padding:11px 12px;border:1px solid ${t.border};border-radius:8px;background:${t.surface};color:${t.textSec};font-weight:800;line-height:1.45;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,box-shadow .16s;}
+.landing-challenge-option:hover{transform:translateY(-1px);border-color:${t.accent}55;background:${t.accent}08;box-shadow:0 12px 24px ${t.accent}10;}
+.landing-challenge-option.selected{border-color:${t.accent};background:${t.accent}14;color:${t.text};box-shadow:0 0 0 3px ${t.accent}18;}
+.landing-challenge-option.correct{border-color:${t.green};background:${t.green}12;color:${t.text};}
+.landing-challenge-option.wrong{border-color:${t.red};background:${t.red}10;color:${t.text};}
+.landing-challenge-letter{width:28px;height:28px;border-radius:999px;border:1px solid ${t.border};display:inline-flex;align-items:center;justify-content:center;color:${t.textDim};font-weight:900;flex-shrink:0;}
+.landing-challenge-option.selected .landing-challenge-letter{border-color:${t.accent};background:${t.accent};color:#fff;}
+.landing-challenge-option.correct .landing-challenge-letter{border-color:${t.green};background:${t.green};color:#fff;}
+.landing-challenge-option.wrong .landing-challenge-letter{border-color:${t.red};background:${t.red};color:#fff;}
 .demo-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;position:relative;z-index:1;}
 .demo-progress{height:8px;border-radius:99px;background:${t.border};overflow:hidden;flex:1;}
 .demo-progress span{display:block;height:100%;width:72%;border-radius:inherit;background:linear-gradient(90deg,${t.accent},${t.green});animation:demoProgress 5s ease-in-out infinite;}
@@ -15418,6 +15434,166 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
   );
 }
 
+function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
+  const challenge=getTodayChallenge();
+  const questions=useMemo(()=>challenge.type==="mcq5"
+    ? MCQ_BANK.filter(q=>challenge.qids.includes(q.id)).map(shuffleMcqOptions)
+    : [], [challenge.date,challenge.type]);
+  const [qIndex,setQIndex]=useState(0);
+  const [selected,setSelected]=useState(null);
+  const [submitted,setSubmitted]=useState(false);
+  const [results,setResults]=useState([]);
+  const [expanded,setExpanded]=useState(false);
+  const current=questions[qIndex];
+  const correctCount=results.filter(result=>result.correct).length;
+  const isDone=questions.length>0&&results.length>=questions.length;
+
+  const submit=()=>{
+    if(selected===null||!current)return;
+    const correct=selected===current.correct;
+    capture("landing_daily_question_answered",{question_id:current.id,correct});
+    playAnswerSound(correct);
+    setResults(prev=>[...prev,{qid:current.id,correct,selected}]);
+    setSubmitted(true);
+  };
+  const next=()=>{
+    if(qIndex<questions.length-1){
+      setQIndex(index=>index+1);
+      setSelected(null);
+      setSubmitted(false);
+    }
+  };
+  const restart=()=>{
+    setQIndex(0);
+    setSelected(null);
+    setSubmitted(false);
+    setResults([]);
+  };
+  const openExpanded=()=>{
+    capture("landing_daily_challenge_expanded");
+    setExpanded(true);
+  };
+
+  const renderPanel=({large=false}={})=>(
+    <div className={large?"landing-challenge-expanded card":"landing-challenge-card landing-challenge-small"} aria-label="Today's Daily Challenge preview">
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:14}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,minWidth:0}}>
+          <NavGlyph type="daily" active/>
+          <div style={{minWidth:0}}>
+            <div style={{fontSize:12,color:t.accent,fontWeight:900,textTransform:"uppercase",letterSpacing:".04em"}}>Today's Challenge</div>
+            <div style={{fontSize:large?18:15,color:t.text,fontWeight:900,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{challenge.title}</div>
+          </div>
+        </div>
+        {!large&&(
+          <button className="btn btn-outline" type="button" style={{fontSize:12,whiteSpace:"nowrap"}} onClick={openExpanded}>
+            Expand
+          </button>
+        )}
+      </div>
+
+      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}>
+        {questions.map((_,index)=>(
+          <span key={index} style={{height:8,flex:1,borderRadius:99,background:index<results.length?(results[index]?.correct?t.green:t.red):index===qIndex?t.accent:t.border}}/>
+        ))}
+        <span style={{fontSize:12,color:t.textDim,fontWeight:900,minWidth:42,textAlign:"right"}}>
+          {Math.min(qIndex+1,questions.length)} / {questions.length||5}
+        </span>
+      </div>
+
+      {isDone ? (
+        <div className="card" style={{padding:large?"22px":"16px",background:`${t.panel}c8`,borderColor:correctCount>=3?`${t.green}44`:`${t.amber}44`}}>
+          <div style={{fontSize:12,color:t.textDim,fontWeight:900,textTransform:"uppercase",letterSpacing:".04em",marginBottom:6}}>Score</div>
+          <div style={{fontSize:large?44:34,fontWeight:900,color:correctCount>=3?t.green:t.amber,lineHeight:1}}>{correctCount}/{questions.length}</div>
+          <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginTop:10}}>
+            Create a free account to save progress, personalise chapters, and unlock Smart Review.
+          </p>
+          <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:14}}>
+            <button className="btn btn-primary" type="button" onClick={onSignup}>Create Free Account</button>
+            <button className="btn btn-outline" type="button" onClick={restart}>Try Again</button>
+          </div>
+        </div>
+      ) : current ? (
+        <>
+          <div className="demo-question" style={{marginBottom:12}}>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
+              <ChBadge chId={current.ch} t={t}/>
+              <DiffBadge d={current.difficulty} t={t}/>
+              <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
+            </div>
+            <div className="landing-challenge-question"><QuestionStemText text={current.q} t={t}/></div>
+          </div>
+          <div style={{display:"grid",gap:9}}>
+            {current.opts.map((opt,index)=>{
+              const state=submitted
+                ? index===current.correct
+                  ? " correct"
+                  : index===selected
+                    ? " wrong"
+                    : ""
+                : selected===index
+                  ? " selected"
+                  : "";
+              return (
+                <button
+                  key={index}
+                  type="button"
+                  className={`landing-challenge-option${state}`}
+                  onClick={()=>!submitted&&setSelected(index)}
+                >
+                  <span className="landing-challenge-letter">{String.fromCharCode(65+index)}</span>
+                  <span style={{flex:1}}><GlossaryText text={opt} t={t}/></span>
+                </button>
+              );
+            })}
+          </div>
+          {submitted&&(
+            <div className="card" style={{padding:"12px 14px",marginTop:12,borderColor:selected===current.correct?`${t.green}55`:`${t.red}55`,background:selected===current.correct?`${t.green}0f`:`${t.red}0d`,animation:"feedbackIn .24s ease both"}}>
+              <div style={{fontWeight:900,color:selected===current.correct?t.green:t.red,fontSize:13}}>
+                {selected===current.correct?"Correct":"Not quite"}
+              </div>
+              <div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:3}}>
+                {selected===current.correct?"Nice. Keep going to finish today's set.":"The correct option is highlighted. Make a free account to save weak areas."}
+              </div>
+            </div>
+          )}
+          <div style={{display:"flex",gap:10,marginTop:14,flexWrap:"wrap"}}>
+            {!submitted?(
+              <button className="btn btn-primary" type="button" style={{flex:1,justifyContent:"center"}} disabled={selected===null} onClick={submit}>Submit</button>
+            ):(
+              <button className="btn btn-primary" type="button" style={{flex:1,justifyContent:"center"}} onClick={next}>
+                {qIndex<questions.length-1?"Next Question":"Finish"}
+              </button>
+            )}
+            {large&&<button className="btn btn-outline" type="button" onClick={onOpenDaily}>Open Daily Page</button>}
+          </div>
+        </>
+      ) : (
+        <div className="card" style={{padding:16,background:t.panel}}>
+          <div style={{fontWeight:900,color:t.text,marginBottom:6}}>Challenge loading issue</div>
+          <p style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>Open the full Daily Challenge page while we refresh this preview.</p>
+          <button className="btn btn-primary" type="button" style={{marginTop:12}} onClick={onOpenDaily}>Open Daily Challenge</button>
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <>
+      {renderPanel()}
+      {expanded&&(
+        <div className="landing-challenge-modal" role="dialog" aria-modal="true" aria-label="Expanded Daily Challenge" onClick={()=>setExpanded(false)}>
+          <div onClick={event=>event.stopPropagation()}>
+            <div style={{display:"flex",justifyContent:"flex-end",marginBottom:10}}>
+              <button className="btn btn-outline" type="button" onClick={()=>setExpanded(false)}>Close</button>
+            </div>
+            {renderPanel({large:true})}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════
 // AUTH VIEW
 // ═══════════════════════════════════════════════════════════════
@@ -15591,48 +15767,12 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           </div>
 
           <div className="landing-preview">
-            <div className="landing-quiz-demo" aria-label="Animated SecurePlus quiz demo">
-              <div className="demo-topbar">
-                <span className="chip" style={{borderColor:`${t.accent}44`,color:t.accent,background:`${t.accent}10`}}>MCQ Practice</span>
-                <div className="demo-progress"><span /></div>
-                <span style={{fontSize:12,color:t.textDim,fontWeight:900}}>4 / 10</span>
-              </div>
-              <div className="demo-question">
-                <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
-                  <span className="chip" style={{borderColor:`${t.green}44`,color:t.green,background:`${t.green}10`}}>Ch.3</span>
-                  <span className="chip" style={{borderColor:`${t.amber}44`,color:t.amber,background:`${t.amber}10`}}>Medium</span>
-                </div>
-                <div style={{fontSize:17,lineHeight:1.55,fontWeight:900,color:t.text}}>
-                  Which control best prevents an attacker from reusing captured login traffic?
-                </div>
-              </div>
-              <div className="demo-answer-list">
-                <div className="demo-answer">
-                  <span className="demo-answer-letter">A</span>
-                  <span>Static passwords with longer complexity rules</span>
-                </div>
-                <div className="demo-answer">
-                  <span className="demo-answer-letter">B</span>
-                  <span>Mutual authentication with fresh nonces</span>
-                </div>
-                <div className="demo-answer">
-                  <span className="demo-answer-letter">C</span>
-                  <span>Allowlisting the user’s browser version</span>
-                </div>
-              </div>
-              <div className="demo-feedback">
-                Correct. Fresh nonces make replayed authentication messages invalid.
-              </div>
-            </div>
-            <div id="daily-challenge" className="card card-hover landing-section" style={{padding:"18px 20px",borderColor:`${t.accent}40`,cursor:"pointer"}} onClick={onDaily}>
-              <div style={{display:"flex",alignItems:"center",gap:12}}>
-                <NavGlyph type="daily" active/>
-                <div style={{flex:1}}>
-                  <div style={{fontWeight:800,color:t.text,fontSize:15}}>Today's Free Daily Challenge</div>
-                  <div style={{fontSize:13,color:t.textSec}}>No account required. A limited practice sample.</div>
-                </div>
-                <span style={{color:t.accent,fontSize:20}}>{'->'}</span>
-              </div>
+            <div id="daily-challenge" className="landing-section">
+              <LandingDailyChallengeWidget
+                t={t}
+                onSignup={()=>jumpToAuth("signup")}
+                onOpenDaily={onDaily}
+              />
             </div>
             <div className="landing-stat-grid">
               {[
