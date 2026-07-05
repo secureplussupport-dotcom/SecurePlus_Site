@@ -17440,12 +17440,12 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
 
           <div>
             <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:10}}>Drop columns</div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:14}}>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,320px),1fr))",gap:16}}>
               {q.targets?.map(target=>{
                 const placedItems=q.items.filter(i=>mapping[i.id]===target.id);
                 return(
-                  <div key={target.id} style={{border:`1px solid ${placedItems.length?t.green:t.border}`,borderRadius:10,background:`linear-gradient(180deg, ${t.surface}, ${placedItems.length?t.green+"08":t.panel})`,padding:12,boxShadow:placedItems.length?`0 0 0 3px ${t.green}10, 0 16px 34px ${t.green}10`:"none"}}>
-                    <div style={{fontSize:15,fontWeight:900,color:t.text,marginBottom:8,lineHeight:1.45}}><GlossaryText text={target.label} t={t}/></div>
+                  <div key={target.id} style={{border:`1px solid ${placedItems.length?t.green:t.border}`,borderRadius:10,background:`linear-gradient(180deg, ${t.surface}, ${placedItems.length?t.green+"08":t.panel})`,padding:16,boxShadow:placedItems.length?`0 0 0 3px ${t.green}10, 0 16px 34px ${t.green}10`:"none",minHeight:260}}>
+                    <div style={{fontSize:17,fontWeight:900,color:t.text,marginBottom:12,lineHeight:1.5}}><GlossaryText text={target.label} t={t}/></div>
                     <div className={`drop-zone ${dragOver===target.id?"over":""} ${placedItems.length?"filled":""}`}
                       data-drop-target={target.id}
                       onClick={()=>tapDragItem&&placeDragItem(tapDragItem,target.id)}
@@ -17455,7 +17455,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                         if(dragged) placeDragItem(dragged,target.id);
                         setDragOver(null);setDragged(null);
                       }}
-                      style={{minHeight:150,alignItems:"stretch",justifyContent:placedItems.length?"flex-start":"center",background:dragOver===target.id?`${t.accent}12`:`${t.inputBg}`,borderColor:dragOver===target.id?t.accent:placedItems.length?`${t.green}55`:t.border}}>
+                      style={{minHeight:190,alignItems:"stretch",justifyContent:placedItems.length?"flex-start":"center",background:dragOver===target.id?`${t.accent}12`:`${t.inputBg}`,borderColor:dragOver===target.id?t.accent:placedItems.length?`${t.green}55`:t.border}}>
                       {placedItems.length?(
                         <div style={{display:"grid",gap:8,width:"100%"}}>
                           {placedItems.map(placed=>(
@@ -17463,7 +17463,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                               key={placed.id}
                               className={`drag-item ${dragged?.id===placed.id?"selected":""}`}
                               draggable
-                              style={{width:"100%",background:`linear-gradient(135deg, ${t.green}16, ${t.surface})`,borderColor:`${t.green}55`,color:t.text,cursor:"grab",touchAction:"none",fontSize:15,fontWeight:800,boxShadow:`0 10px 24px ${t.green}12`}}
+                              style={{width:"100%",background:`linear-gradient(135deg, ${t.green}16, ${t.surface})`,borderColor:`${t.green}55`,color:t.text,cursor:"grab",touchAction:"none",fontSize:16,fontWeight:900,lineHeight:1.6,boxShadow:`0 10px 24px ${t.green}12`}}
                               onClick={e=>{e.stopPropagation();setTapDragItem(placed);}}
                               onDragStart={e=>{e.stopPropagation();setDragged(placed);}}
                               onDragEnd={()=>{setDragged(null);setDragOver(null);}}
@@ -17474,7 +17474,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                             ><GlossaryText text={placed.label} t={t}/></div>
                           ))}
                         </div>
-                      ):<span style={{fontSize:13,fontWeight:900,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place selected option here":"Drop option here"}</span>}
+                      ):<span style={{fontSize:14,fontWeight:900,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place selected option here":"Drop option here"}</span>}
                     </div>
                   </div>
                 );
