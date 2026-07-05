@@ -17403,71 +17403,82 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       {/* DRAG & DROP */}
       {q.type==="DRAG & DROP"&&!submitted&&(
         <div style={{marginBottom:18}}>
-          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:6}}>Match each item to its target</div>
-          <div style={{fontSize:12,color:t.textDim,marginBottom:12}}>Drag items into the matching target. Placed items can be dragged again if you change your mind.</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
-            <div>
-              <div className="label" style={{marginBottom:8}}>Items</div>
-              <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                {q.items.filter(item=>!Object.keys(mapping).includes(item.id)).map(item=>(
-                  <div
-                    key={item.id}
-                    className={`drag-item ${tapDragItem?.id===item.id||dragged?.id===item.id?"selected":""}`}
-                    draggable
-                    onClick={()=>setTapDragItem(item)}
-                    onDragStart={()=>setDragged(item)}
-                    onDragEnd={()=>setDragged(null)}
-                    onPointerDown={e=>{if(e.pointerType!=="mouse"){setDragged(item);setTapDragItem(item);e.currentTarget.setPointerCapture?.(e.pointerId);}}}
-                    onPointerMove={e=>{if(dragged?.id===item.id||tapDragItem?.id===item.id) updatePointerDropTarget(e);}}
-                    onPointerUp={e=>{if(e.pointerType!=="mouse") finishPointerDrag(e,item);}}
-                    style={{touchAction:"none"}}
-                  >
-                    {item.label}
-                  </div>
-                ))}
-              </div>
+          <div className="card" style={{padding:"16px 18px",marginBottom:14,borderColor:`${simType.color}55`,background:`linear-gradient(135deg, ${simType.color}12, ${t.surface} 68%, ${t.green}08)`}}>
+            <div style={{fontWeight:900,fontSize:18,color:t.text,marginBottom:6}}>Match each option to the correct column</div>
+            <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>Drag options from the tray into the column below. Placed options can be dragged again if you change your mind.</div>
+          </div>
+
+          <div style={{padding:"16px",borderRadius:10,border:`1px solid ${t.accent}35`,background:`linear-gradient(135deg, ${t.accent}12, ${t.panel})`,marginBottom:16,boxShadow:`0 16px 36px ${t.accent}10`}}>
+            <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10,flexWrap:"wrap"}}>
+              <div style={{fontWeight:900,fontSize:15,color:t.text}}>Options to place</div>
+              <div style={{fontSize:12,color:t.textDim}}>{q.items.filter(item=>!Object.keys(mapping).includes(item.id)).length} remaining</div>
             </div>
-            <div>
-              <div className="label" style={{marginBottom:8}}>Columns</div>
-              <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                {q.targets?.map(target=>{
-                  const placedItems=q.items.filter(i=>mapping[i.id]===target.id);
-                  return(
-                    <div key={target.id}>
-                      <div style={{fontSize:11,color:t.textDim,marginBottom:3}}>{target.label}</div>
-                      <div className={`drop-zone ${dragOver===target.id?"over":""} ${placedItems.length?"filled":""}`}
-                        data-drop-target={target.id}
-                        onClick={()=>tapDragItem&&placeDragItem(tapDragItem,target.id)}
-                        onDragOver={e=>{e.preventDefault();setDragOver(target.id);}}
-                        onDragLeave={()=>setDragOver(null)}
-                        onDrop={()=>{
-                          if(dragged) placeDragItem(dragged,target.id);
-                          setDragOver(null);setDragged(null);
-                        }}>
-                        {placedItems.length?(
-                          <div style={{display:"grid",gap:6,width:"100%"}}>
-                            {placedItems.map(placed=>(
-                              <div
-                                key={placed.id}
-                                className={`drag-item ${dragged?.id===placed.id?"selected":""}`}
-                                draggable
-                                style={{width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,color:t.text,cursor:"grab",touchAction:"none"}}
-                                onClick={e=>{e.stopPropagation();setTapDragItem(placed);}}
-                                onDragStart={e=>{e.stopPropagation();setDragged(placed);}}
-                                onDragEnd={()=>{setDragged(null);setDragOver(null);}}
-                                onPointerDown={e=>{setDragged(placed);setTapDragItem(placed);e.currentTarget.setPointerCapture?.(e.pointerId);}}
-                                onPointerMove={e=>{if(dragged?.id===placed.id||tapDragItem?.id===placed.id) updatePointerDropTarget(e);}}
-                                onPointerUp={e=>finishPointerDrag(e,placed)}
-                                onPointerCancel={()=>{setDragged(null);setDragOver(null);}}
-                              >{placed.label}</div>
-                            ))}
-                          </div>
-                        ):<span style={{fontSize:11,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place here":"Drop or tap here"}</span>}
-                      </div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:10}}>
+              {q.items.filter(item=>!Object.keys(mapping).includes(item.id)).map(item=>(
+                <div
+                  key={item.id}
+                  className={`drag-item ${tapDragItem?.id===item.id||dragged?.id===item.id?"selected":""}`}
+                  draggable
+                  onClick={()=>setTapDragItem(item)}
+                  onDragStart={()=>setDragged(item)}
+                  onDragEnd={()=>setDragged(null)}
+                  onPointerDown={e=>{if(e.pointerType!=="mouse"){setDragged(item);setTapDragItem(item);e.currentTarget.setPointerCapture?.(e.pointerId);}}}
+                  onPointerMove={e=>{if(dragged?.id===item.id||tapDragItem?.id===item.id) updatePointerDropTarget(e);}}
+                  onPointerUp={e=>{if(e.pointerType!=="mouse") finishPointerDrag(e,item);}}
+                  style={{touchAction:"none",fontSize:16,fontWeight:800,lineHeight:1.55,color:t.text,background:`linear-gradient(180deg, ${t.surface}, ${t.accent}0d)`,borderColor:tapDragItem?.id===item.id?`${t.accent}`:`${t.accent}30`}}
+                >
+                  <GlossaryText text={item.label} t={t}/>
+                </div>
+              ))}
+              {q.items.filter(item=>!Object.keys(mapping).includes(item.id)).length===0&&(
+                <div style={{padding:"14px 16px",borderRadius:8,border:`1px solid ${t.green}35`,background:`${t.green}10`,color:t.green,fontWeight:900,fontSize:14}}>
+                  All options have been placed. Drag any option below to move it.
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:10}}>Drop columns</div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:14}}>
+              {q.targets?.map(target=>{
+                const placedItems=q.items.filter(i=>mapping[i.id]===target.id);
+                return(
+                  <div key={target.id} style={{border:`1px solid ${placedItems.length?t.green:t.border}`,borderRadius:10,background:`linear-gradient(180deg, ${t.surface}, ${placedItems.length?t.green+"08":t.panel})`,padding:12,boxShadow:placedItems.length?`0 0 0 3px ${t.green}10, 0 16px 34px ${t.green}10`:"none"}}>
+                    <div style={{fontSize:15,fontWeight:900,color:t.text,marginBottom:8,lineHeight:1.45}}><GlossaryText text={target.label} t={t}/></div>
+                    <div className={`drop-zone ${dragOver===target.id?"over":""} ${placedItems.length?"filled":""}`}
+                      data-drop-target={target.id}
+                      onClick={()=>tapDragItem&&placeDragItem(tapDragItem,target.id)}
+                      onDragOver={e=>{e.preventDefault();setDragOver(target.id);}}
+                      onDragLeave={()=>setDragOver(null)}
+                      onDrop={()=>{
+                        if(dragged) placeDragItem(dragged,target.id);
+                        setDragOver(null);setDragged(null);
+                      }}
+                      style={{minHeight:150,alignItems:"stretch",justifyContent:placedItems.length?"flex-start":"center",background:dragOver===target.id?`${t.accent}12`:`${t.inputBg}`,borderColor:dragOver===target.id?t.accent:placedItems.length?`${t.green}55`:t.border}}>
+                      {placedItems.length?(
+                        <div style={{display:"grid",gap:8,width:"100%"}}>
+                          {placedItems.map(placed=>(
+                            <div
+                              key={placed.id}
+                              className={`drag-item ${dragged?.id===placed.id?"selected":""}`}
+                              draggable
+                              style={{width:"100%",background:`linear-gradient(135deg, ${t.green}16, ${t.surface})`,borderColor:`${t.green}55`,color:t.text,cursor:"grab",touchAction:"none",fontSize:15,fontWeight:800,boxShadow:`0 10px 24px ${t.green}12`}}
+                              onClick={e=>{e.stopPropagation();setTapDragItem(placed);}}
+                              onDragStart={e=>{e.stopPropagation();setDragged(placed);}}
+                              onDragEnd={()=>{setDragged(null);setDragOver(null);}}
+                              onPointerDown={e=>{setDragged(placed);setTapDragItem(placed);e.currentTarget.setPointerCapture?.(e.pointerId);}}
+                              onPointerMove={e=>{if(dragged?.id===placed.id||tapDragItem?.id===placed.id) updatePointerDropTarget(e);}}
+                              onPointerUp={e=>finishPointerDrag(e,placed)}
+                              onPointerCancel={()=>{setDragged(null);setDragOver(null);}}
+                            ><GlossaryText text={placed.label} t={t}/></div>
+                          ))}
+                        </div>
+                      ):<span style={{fontSize:13,fontWeight:900,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place selected option here":"Drop option here"}</span>}
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -17566,8 +17577,8 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                         </div>
                       )}
                       {part.solution&&(
-                        <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginTop:6,padding:"8px 10px",borderRadius:7,background:t.surface,border:`1px solid ${t.border}`}}>
-                          <strong style={{color:t.text}}>Part solution: </strong><GlossaryText text={part.solution} t={t}/>
+                        <div style={{fontSize:13,color:t.text,lineHeight:1.65,marginTop:8,padding:"10px 12px",borderRadius:8,background:`linear-gradient(135deg, ${t.green}18, ${t.surface})`,border:`1px solid ${t.green}55`,boxShadow:`0 0 0 3px ${t.green}10, 0 12px 24px ${t.green}12`}}>
+                          <strong style={{color:t.green}}>Part solution: </strong><GlossaryText text={part.solution} t={t}/>
                         </div>
                       )}
                     </div>
