@@ -20971,14 +20971,13 @@ export default function App() {
     const guestUser={name:"Guest",email:"guest@secureplus.local",tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"guest",loginMethod:"guest"};
     const goToSignup=()=>{setAuthStartMode("signup");setView("auth");};
     const goToLogin=()=>{setAuthStartMode("login");setView("auth");};
-    const allowedGuestViews=new Set(["dashboard","mcq","daily"]);
+    const allowedGuestViews=new Set(["dashboard","mcq","daily","objectives"]);
     const guestNavItems=[
       {id:"dashboard",icon:"dashboard",label:"Dashboard"},
       {id:"mcq",icon:"mcq",label:"MCQ Practice"},
       {id:"pbq",icon:"pbq",label:"PBQ Simulator"},
       {id:"exam",icon:"exam",label:"Exam Mode"},
       {id:"daily",icon:"daily",label:"Daily Challenge"},
-      {id:"pricing",icon:"pricing",label:"Upgrade"},
       {id:"objectives",icon:"objectives",label:"Objectives"},
     ];
     const guestGo=id=>{
@@ -21061,6 +21060,7 @@ export default function App() {
             {view==="daily"&&(
               <DailyChallenge t={t} onLogin={goToSignup}/>
             )}
+            {view==="objectives"&&<ObjectivesPage t={t}/>}
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
             )}
