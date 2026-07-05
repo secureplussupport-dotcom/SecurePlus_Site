@@ -15277,6 +15277,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
   const totalQuestions = challenge.type==="pbq" ? 1 : questions.length;
 
   useEffect(()=>{
+    if(!user){setStreakInfo({streak:0,best:0,completedToday:false});return;}
     let active=true;
     loadDailyStreak(user).then(info=>{if(active)setStreakInfo(info);});
     return()=>{active=false;};
@@ -15284,6 +15285,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
 
   useEffect(()=>{
     if(step!=="done"||streakRecordedRef.current||totalQuestions!==5||results.length<5)return;
+    if(!user)return;
     const correctInChallenge=results.filter(r=>r.correct).length;
     if(correctInChallenge<3)return;
     streakRecordedRef.current=true;
@@ -15369,8 +15371,9 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
           {correctCount>=3 ? "Score at least 3/5 again tomorrow to keep the chain alive." : "Score 3/5 or higher tomorrow to extend your streak."}
         </div>
       </div>
-      {!user&&<div className="card" style={{padding:"16px 20px",marginBottom:20,textAlign:"left"}}>
-        <div className="label" style={{marginBottom:10}}>Unlock more with a free account</div>
+      {!user&&<div className="card" style={{padding:"16px 20px",marginBottom:20,textAlign:"left",borderColor:`${t.accent}45`,background:`${t.accent}08`}}>
+        <div className="label" style={{marginBottom:10,color:t.accent}}>Save this challenge progress</div>
+        <div style={{fontSize:14,fontWeight:900,color:t.text,marginBottom:8}}>Create a free account or sign in so today&apos;s effort is not lost.</div>
         {[`${MCQ_BANK.length} MCQs across all 5 exam domains`,`${PBQ_BANK.length} PBQ simulations with 8 question types`,"Progress tracking and weak area analysis","Chapter-by-chapter study organisation"].map((f,i)=>(
           <div key={i} style={{display:"flex",gap:8,alignItems:"center",fontSize:13,color:t.textSec,padding:"4px 0"}}>
             <span style={{color:t.green}}>✓</span>{f}
@@ -15378,7 +15381,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
         ))}
       </div>}
       <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"12px"}} onClick={onLogin}>
-        {user ? "Back to Dashboard →" : "Create Free Account →"}
+        {user ? "Back to Dashboard →" : "Create Free Account / Sign In →"}
       </button>
       {!user&&<div style={{marginTop:10,color:t.textDim,fontSize:12}}>Already have an account? <span style={{color:t.accent,cursor:"pointer"}} onClick={onLogin}>Sign in</span></div>}
     </div>
@@ -16270,6 +16273,88 @@ function Dashboard({user,attempts,onNav,t}) {
   );
 }
 
+function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
+  return (
+    <div className="dashboard-shell">
+      <div className="game-hero reward-pop" style={{marginBottom:18}}>
+        <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:18,alignItems:"center"}}>
+          <div>
+            <div className="label" style={{color:t.accent,marginBottom:8}}>Free preview</div>
+            <h2 style={{fontSize:30,fontWeight:900,color:t.text,marginBottom:8}}>
+              Try SecurePlus first. Save progress when you are ready.
+            </h2>
+            <p style={{color:t.textSec,fontSize:14,lineHeight:1.75,maxWidth:680}}>
+              You can practise MCQs and complete today&apos;s Daily Challenge without registering. Your answers, streaks, weak topics, and Smart Review queue are only saved after you create a free account or sign in.
+            </p>
+            <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:16}}>
+              <button className="btn btn-primary" onClick={onPractice}>Start MCQ Practice</button>
+              <button className="btn btn-outline" onClick={onDaily}>Try Daily Challenge</button>
+              <button className="btn btn-ghost" onClick={onSignup}>Create account to save progress</button>
+            </div>
+          </div>
+          <div className="card" style={{position:"relative",zIndex:1,padding:"16px 18px",minWidth:210,borderColor:`${t.accent}35`,background:`${t.accent}08`}}>
+            <div className="label" style={{marginBottom:8}}>Saved after signup</div>
+            {["Scores and attempts","Daily streaks","Smart Review queue","Weak chapter history"].map(item=>(
+              <div key={item} style={{fontSize:13,color:t.textSec,lineHeight:1.9}}>✓ {item}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="card" style={{padding:"22px",marginBottom:18,borderColor:`${t.green}35`,background:`linear-gradient(135deg, ${t.green}10, ${t.surface} 58%, ${t.accent}0d)`}}>
+        <div style={{display:"flex",gap:14,alignItems:"center",flexWrap:"wrap"}}>
+          <span className="mission-badge" style={{background:t.green}}>S</span>
+          <div style={{flex:1,minWidth:240}}>
+            <div style={{fontWeight:900,color:t.text,fontSize:17,marginBottom:4}}>SecurePlus gives before asking.</div>
+            <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+              Use the free practice experience first. When you finish a quiz or challenge, we will remind you to create an account so that effort is not lost.
+            </div>
+          </div>
+          <button className="btn btn-primary" onClick={onSignup}>Sign Up Free</button>
+          <button className="btn btn-outline" onClick={onLogin}>Log In</button>
+        </div>
+      </div>
+
+      <div className="quest-grid">
+        {[
+          {title:"MCQ Practice",body:`Access all ${MCQ_BANK.length} MCQs as a guest. Sign up to save results.`,action:"Start",onClick:onPractice,color:t.accent},
+          {title:"Daily Challenge",body:"Try today's short challenge. Sign up afterward to save streaks.",action:"Open",onClick:onDaily,color:t.amber},
+          {title:"Saved Progress",body:"Accounts unlock saved attempts, Smart Review, and personal weak areas.",action:"Create account",onClick:onSignup,color:t.green},
+        ].map(card=>(
+          <div key={card.title} className="quest-card">
+            <span className="quest-medal" style={{"--quest-color":card.color}}>{card.title[0]}</span>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{fontWeight:900,color:t.text,fontSize:13}}>{card.title}</div>
+              <div style={{fontSize:12,color:t.textSec,lineHeight:1.5}}>{card.body}</div>
+            </div>
+            <button className="btn btn-ghost" style={{fontSize:12,padding:"6px 10px",minHeight:32}} onClick={card.onClick}>{card.action}</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function GuestLockedPage({t,onSignup,onLogin,onPractice,onDaily,title="Save your progress first"}) {
+  return (
+    <div style={{padding:"24px",maxWidth:760,margin:"0 auto"}}>
+      <div className="card" style={{padding:"28px",borderColor:`${t.accent}45`,background:`linear-gradient(135deg, ${t.accent}12, ${t.surface} 62%, ${t.green}0d)`}}>
+        <div className="label" style={{color:t.accent,marginBottom:8}}>Account feature</div>
+        <h2 style={{fontSize:26,color:t.text,marginBottom:8}}>{title}</h2>
+        <p style={{fontSize:14,color:t.textSec,lineHeight:1.75,marginBottom:18}}>
+          Guests can freely try MCQ Practice and Daily Challenge. Create a free account or sign in to save progress, unlock personalised review, and access the rest of SecurePlus.
+        </p>
+        <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+          <button className="btn btn-primary" onClick={onSignup}>Create Free Account</button>
+          <button className="btn btn-outline" onClick={onLogin}>Log In</button>
+          <button className="btn btn-ghost" onClick={onPractice}>Practise MCQs</button>
+          <button className="btn btn-ghost" onClick={onDaily}>Daily Challenge</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
@@ -16355,17 +16440,19 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
   };
 
   useEffect(()=>{
+    if(isGuest){setResumeAvailable(false);return;}
     let active=true;
     DB.getPracticeSession(sessionKey).then(saved=>{
       if(active)setResumeAvailable(Boolean(saved&&!saved.done&&saved.questions?.length));
     });
     return()=>{active=false;};
-  },[sessionKey]);
+  },[isGuest,sessionKey]);
 
   useEffect(()=>{
+    if(isGuest)return;
     if(!started||done||!questions.length)return;
     DB.savePracticeSession(sessionKey,{questions,qi,selected,submitted,draftSelections,results,done:false,updatedAt:new Date().toISOString()});
-  },[sessionKey,started,done,questions,qi,selected,submitted,draftSelections,results]);
+  },[isGuest,sessionKey,started,done,questions,qi,selected,submitted,draftSelections,results]);
 
   const continueQuiz=async()=>{
     const saved=await DB.getPracticeSession(sessionKey);
@@ -16444,12 +16531,12 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
           <NavGlyph type="mcq" active/>
         </div>
         <div style={{flex:1,minWidth:240}}>
-          <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:4}}>Create a free account to personalise MCQ practice</div>
+          <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:4}}>Save this MCQ progress with a free account</div>
           <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-            Guests can practise the full MCQ bank, but accounts can choose chapters, difficulty, and specific topics, then save progress for Smart Review.
+            Guests can practise the full MCQ bank, but this session is not saved. Create an account or sign in to keep your score, weak topics, and Smart Review history.
           </div>
         </div>
-        <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={requestSignup}>Create Free Account</button>
+        <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={requestSignup}>Save Progress</button>
       </div>
     </div>
   );
@@ -20873,40 +20960,116 @@ export default function App() {
     </>
   );
 
-  if(!user&&view==="mcq"){
+  if(!user&&view==="auth") return(
+    <>
+      <style>{CSS}</style>
+      <AuthView onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={setView} onPracticeMcq={()=>setView("mcq")} initialMode={authStartMode}/>
+    </>
+  );
+
+  if(!user){
     const guestUser={name:"Guest",email:"guest@secureplus.local",tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"guest",loginMethod:"guest"};
-    const goToSignup=()=>{setAuthStartMode("signup");setView("dashboard");};
+    const goToSignup=()=>{setAuthStartMode("signup");setView("auth");};
+    const goToLogin=()=>{setAuthStartMode("login");setView("auth");};
+    const allowedGuestViews=new Set(["dashboard","mcq","daily"]);
+    const guestNavItems=[
+      {id:"dashboard",icon:"dashboard",label:"Dashboard"},
+      {id:"mcq",icon:"mcq",label:"MCQ Practice"},
+      {id:"pbq",icon:"pbq",label:"PBQ Simulator"},
+      {id:"exam",icon:"exam",label:"Exam Mode"},
+      {id:"daily",icon:"daily",label:"Daily Challenge"},
+      {id:"pricing",icon:"pricing",label:"Upgrade"},
+      {id:"objectives",icon:"objectives",label:"Objectives"},
+    ];
+    const guestGo=id=>{
+      if(allowedGuestViews.has(id)) setView(id);
+      else {
+        capture("guest_locked_nav_clicked", { target:id });
+        setView(id);
+      }
+    };
+    const lockedTitle={
+      pbq:"Create an account to unlock PBQ previews",
+      exam:"Create an account before Exam Mode",
+      pricing:"Sign up before upgrading",
+      objectives:"Create an account to save your study path",
+    }[view] || "Create an account to save progress";
     return(
       <>
         <style>{CSS}</style>
-        <div style={{background:t.bg,minHeight:"100vh"}}>
-          <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}>
-            <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}>
-              <BrandMark size={28}/><span style={{fontWeight:800,fontSize:15,color:t.text}}>SecurePlus MCQ Practice</span>
+        <div className="app-shell">
+          {sidebarHidden&&(
+            <button className="sidebar-restore" type="button" onClick={()=>setSidebarHidden(false)}>
+              <NavGlyph type="dashboard" active/>
+              Show menu
             </button>
-            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-              <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>setView("dashboard")}>Back to Home</button>
-              <button className="btn btn-primary" style={{fontSize:12}} onClick={goToSignup}>Create Free Account</button>
+          )}
+          <aside className={`sidebar ${sidebarHidden?"hidden":""}`}>
+            <div style={{padding:"18px 16px",borderBottom:`1px solid ${t.border}`}}>
+              <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:9,fontWeight:700,fontSize:16,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={30}/> SecurePlus</button>
+              <div style={{fontSize:11,color:t.textDim,marginTop:2}}>Free preview mode</div>
+              <button className="btn btn-ghost" type="button" style={{fontSize:12,justifyContent:"flex-start",width:"100%",marginTop:12}} onClick={()=>setSidebarHidden(true)}>
+                Hide sidebar
+              </button>
             </div>
-          </div>
-          <div style={{padding:"16px 24px 0",maxWidth:1000,margin:"0 auto"}}>
-            <div className="card" style={{padding:"14px 16px",borderColor:`${t.accent}30`,background:`${t.accent}08`,fontSize:13,color:t.textSec,lineHeight:1.6}}>
-              Guest mode: you can access all MCQ questions, but answers and progress are not saved. Create a free account when you want SecurePlus to remember your work.
+            <div style={{padding:"12px 14px",borderBottom:`1px solid ${t.border}`}}>
+              <div className="card" style={{padding:"12px",background:`${t.accent}08`,borderColor:`${t.accent}28`,boxShadow:"none"}}>
+                <div style={{fontSize:13,fontWeight:900,color:t.text}}>Guest mode</div>
+                <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>Practise freely. Sign up to save progress.</div>
+                <button className="btn btn-primary" style={{fontSize:12,width:"100%",justifyContent:"center",marginTop:10}} onClick={goToSignup}>Save Progress</button>
+              </div>
             </div>
-          </div>
-          <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} t={t} starred={[]} onReportQuestion={handleReportQuestion}/>
+            <nav style={{flex:1,padding:"10px 10px",display:"flex",flexDirection:"column",gap:2}}>
+              {guestNavItems.map(n=>{
+                const locked=!allowedGuestViews.has(n.id);
+                return(
+                  <div key={n.id} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>guestGo(n.id)} style={locked?{opacity:.72}:undefined}>
+                    <NavGlyph type={n.icon} active={view===n.id}/>
+                    <span>{n.label}{locked?" · sign up":""}</span>
+                  </div>
+                );
+              })}
+            </nav>
+            <div style={{padding:"12px 14px",borderTop:`1px solid ${t.border}`,display:"flex",flexDirection:"column",gap:6}}>
+              <button className="btn btn-ghost" style={{fontSize:12,justifyContent:"flex-start"}} onClick={()=>setDarkMode(d=>!d)}>
+                {darkMode?"Light Mode":"Dark Mode"}
+              </button>
+              <button className="btn btn-outline" style={{fontSize:12,justifyContent:"flex-start"}} onClick={goToLogin}>
+                Log In
+              </button>
+            </div>
+          </aside>
+          <main className="app-main fu">
+            <div className="mobile-topbar">
+              <div>
+                <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> SecurePlus</button>
+                <div style={{fontSize:11,color:t.textDim}}>Guest preview</div>
+              </div>
+              <div style={{display:"flex",gap:6,alignItems:"center",flexShrink:0}}>
+                <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
+                  {darkMode?"Light":"Dark"}
+                </button>
+                <button className="btn btn-primary" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToSignup}>Save</button>
+              </div>
+            </div>
+            {view==="dashboard"&&(
+              <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
+            )}
+            {view==="mcq"&&(
+              <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} t={t} starred={[]} onReportQuestion={handleReportQuestion}/>
+            )}
+            {view==="daily"&&(
+              <DailyChallenge t={t} onLogin={goToSignup}/>
+            )}
+            {!allowedGuestViews.has(view)&&(
+              <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
+            )}
+          </main>
+          {questionReport&&<QuestionReportModal report={questionReport} user={null} t={t} onClose={()=>setQuestionReport(null)}/>}
         </div>
-        {questionReport&&<QuestionReportModal report={questionReport} user={null} t={t} onClose={()=>setQuestionReport(null)}/>}
       </>
     );
   }
-
-  if(!user) return(
-    <>
-      <style>{CSS}</style>
-      <AuthView onLogin={handleLogin} t={t} onDaily={()=>setShowDaily(true)} onNavigate={setView} onPracticeMcq={()=>setView("mcq")} initialMode={authStartMode}/>
-    </>
-  );
 
   const pbqPreviewMode=user?.tier!=="pro"&&isFreePBQPreview(pbqQ);
 
