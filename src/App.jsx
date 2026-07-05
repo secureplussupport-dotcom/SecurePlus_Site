@@ -32,6 +32,8 @@ const DB = {
   async saveDailyChallenge(d) { try { await storageSet("daily",JSON.stringify(d)); } catch {}},
   async getOnboardingSeen(e) { try { const r=await storageGet(`onboarded:${normalizeEmail(e)}`); return Boolean(r?.value); } catch { return false; }},
   async saveOnboardingSeen(e) { try { await storageSet(`onboarded:${normalizeEmail(e)}`,"true"); } catch {}},
+  async getDiagnosticDone(e) { try { const r=await storageGet(`diagnostic:${normalizeEmail(e)}`); return Boolean(r?.value); } catch { return false; }},
+  async saveDiagnosticDone(e) { try { await storageSet(`diagnostic:${normalizeEmail(e)}`,"true"); } catch {}},
   async getReferralCode(e) { try { const key=`refcode:${normalizeEmail(e)}`; let r=await storageGet(key); if(r?.value)return r.value; const code=makeReferralCode(e); await storageSet(key,code); return code; } catch { return makeReferralCode(e); }},
   async getDailyStreak(key) { try { const r=await storageGet(`daily-streak:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
   async saveDailyStreak(key,data) { try { await storageSet(`daily-streak:${key}`,JSON.stringify(data)); } catch {}},
@@ -623,6 +625,32 @@ function buildMcqPracticePool(questions, attempts, count, mode="smart", starredI
     }
   });
   return limitBeyond(picked);
+}
+
+function buildDiagnosticQuestions() {
+  const picked=[];
+  CHAPTERS.forEach(ch=>{
+    const chapterPool=MCQ_BANK
+      .filter(q=>q.ch===ch.id&&q.difficulty!=="hard")
+      .sort((a,b)=>{
+        const difficultyRank={easy:1,medium:2};
+        return (difficultyRank[b.difficulty]||0)-(difficultyRank[a.difficulty]||0)||String(a.topic).localeCompare(String(b.topic));
+      });
+    const usedTopics=new Set();
+    const chapterPicked=[];
+    chapterPool.forEach(q=>{
+      if(chapterPicked.length>=2)return;
+      if(usedTopics.has(q.topic))return;
+      chapterPicked.push(q);
+      usedTopics.add(q.topic);
+    });
+    chapterPool.forEach(q=>{
+      if(chapterPicked.length>=2)return;
+      if(!chapterPicked.some(item=>item.id===q.id)) chapterPicked.push(q);
+    });
+    picked.push(...chapterPicked);
+  });
+  return picked.slice(0,10).map(shuffleMcqOptions);
 }
 
 function getReviewSummary(attempts) {
@@ -20391,6 +20419,147 @@ function OnboardingModal({user,t,onClose,onPricing}) {
   );
 }
 
+function DiagnosticQuiz({user,t,onComplete}) {
+  const questions=useMemo(()=>buildDiagnosticQuestions(),[]);
+  const [index,setIndex]=useState(0);
+  const [selected,setSelected]=useState(null);
+  const [submitted,setSubmitted]=useState(false);
+  const [results,setResults]=useState([]);
+  const [saving,setSaving]=useState(false);
+  const current=questions[index];
+  const correctCount=results.filter(r=>r.correct).length;
+  const done=questions.length>0&&results.length===questions.length;
+  const chapterResults=CHAPTERS.map(ch=>{
+    const rows=results.filter(r=>r.ch===ch.id);
+    return {chapter:ch,total:rows.length,correct:rows.filter(r=>r.correct).length,missed:rows.filter(r=>!r.correct)};
+  }).filter(item=>item.total>0);
+  const weakChapters=chapterResults.filter(item=>item.correct<item.total).sort((a,b)=>(a.correct/a.total)-(b.correct/b.total));
+
+  const submit=()=>{
+    if(selected===null||!current)return;
+    const correct=selected===current.correct;
+    const attempt={
+      qid:current.id,
+      correct,
+      selected,
+      title:current.q.slice(0,60),
+      ch:current.ch,
+      domain:CHAPTERS.find(ch=>ch.id===current.ch)?.title||"",
+      topic:current.topic,
+      difficulty:current.difficulty,
+      mcq:true,
+      diagnostic:true,
+      createdAt:new Date().toISOString()
+    };
+    setResults(prev=>[...prev,attempt]);
+    playAnswerSound(correct);
+    capture("diagnostic_question_answered", { question_id: current.id, chapter: current.ch, topic: current.topic, correct });
+    setSubmitted(true);
+  };
+
+  const next=()=>{
+    if(index<questions.length-1){
+      setIndex(i=>i+1);
+      setSelected(null);
+      setSubmitted(false);
+    }
+  };
+
+  const finish=async()=>{
+    setSaving(true);
+    await onComplete(results);
+    setSaving(false);
+  };
+
+  if(done) return (
+    <div style={{minHeight:"100vh",background:t.bg,padding:"28px 20px",display:"grid",placeItems:"center"}}>
+      <div className="card" style={{width:"100%",maxWidth:720,padding:"26px"}}>
+        <div className="label" style={{color:t.accent,marginBottom:8}}>Baseline complete</div>
+        <h2 style={{fontSize:28,color:t.text,marginBottom:8}}>Your Smart Review is now personalised.</h2>
+        <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:18}}>
+          You answered {correctCount}/{questions.length}. SecurePlus will use these results to bring missed concepts back earlier in MCQ Practice.
+        </p>
+        <div style={{display:"grid",gap:10,marginBottom:18}}>
+          {chapterResults.map(item=>{
+            const pct=Math.round((item.correct/item.total)*100);
+            const color=pct>=80?t.green:pct>=50?t.amber:t.red;
+            return(
+              <div key={item.chapter.id} style={{padding:"12px 14px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel}}>
+                <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:6}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8,fontSize:13,fontWeight:900,color:t.text}}>
+                    <ChapterIcon id={item.chapter.id} size={22}/> Ch.{item.chapter.id}: {item.chapter.title}
+                  </div>
+                  <span style={{fontSize:13,fontWeight:900,color}}>{item.correct}/{item.total}</span>
+                </div>
+                <ProgBar v={pct} c={color} h={7}/>
+              </div>
+            );
+          })}
+        </div>
+        <div className="card" style={{padding:"14px 16px",background:`${t.accent}08`,borderColor:`${t.accent}30`,boxShadow:"none",marginBottom:18}}>
+          <div style={{fontWeight:900,color:t.text,fontSize:14,marginBottom:4}}>Recommended first move</div>
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
+            {weakChapters.length
+              ? `Start Smart Review with ${weakChapters.slice(0,2).map(item=>`Chapter ${item.chapter.id}`).join(" and ")}. Missed diagnostic questions will be prioritised.`
+              : "Strong baseline. Start Smart Review to keep these topics fresh over time."}
+          </div>
+        </div>
+        <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"12px"}} disabled={saving} onClick={finish}>
+          {saving?"Saving baseline...":"Start Smart Review →"}
+        </button>
+      </div>
+    </div>
+  );
+
+  if(!current) return null;
+
+  return (
+    <div style={{minHeight:"100vh",background:t.bg,padding:"28px 20px",display:"grid",placeItems:"center"}}>
+      <div className="card" style={{width:"100%",maxWidth:760,padding:"24px"}}>
+        <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:16,flexWrap:"wrap"}}>
+          <div>
+            <div className="label" style={{color:t.accent,marginBottom:6}}>New account baseline</div>
+            <h2 style={{fontSize:24,color:t.text}}>Mini mock test</h2>
+            <div style={{fontSize:13,color:t.textSec}}>10 medium-or-easier questions across all 5 chapters.</div>
+          </div>
+          <span className="chip" style={{background:`${t.accent}10`,borderColor:`${t.accent}35`,color:t.accent}}>Question {index+1}/{questions.length}</span>
+        </div>
+        <div className="top-progress" aria-hidden="true"><span style={{width:`${((index+1)/questions.length)*100}%`}}/></div>
+        <div className="card question-card" style={{padding:"20px 22px",marginBottom:16,background:t.panel}}>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
+            <ChBadge chId={current.ch} t={t}/>
+            <DiffBadge d={current.difficulty} t={t}/>
+            <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
+          </div>
+          <div className="question-text" style={{fontSize:17,lineHeight:1.7,color:t.text}}>
+            <QuestionStemText text={current.q} t={t}/>
+          </div>
+        </div>
+        <div style={{display:"grid",gap:9,marginBottom:16}}>
+          {current.opts.map((opt,i)=>{
+            let cls="opt";
+            if(submitted){cls+=" done"; if(i===current.correct)cls+=" ok"; else if(i===selected&&i!==current.correct)cls+=" bad";}
+            else if(selected===i)cls+=" sel";
+            return(
+              <button key={i} type="button" className={cls} style={{textAlign:"left"}} onClick={()=>!submitted&&setSelected(i)}>
+                <span className="opt-ltr">{String.fromCharCode(65+i)}</span>
+                <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
+              </button>
+            );
+          })}
+        </div>
+        {!submitted?(
+          <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} disabled={selected===null} onClick={submit}>Submit Answer</button>
+        ):(
+          <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={index<questions.length-1?next:()=>{}}>
+            {index<questions.length-1?"Next Question →":"See Baseline →"}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function PasswordUpdateView({t,onDone}) {
   const [form,setForm]=useState({pass:"",confirm:""});
   const [err,setErr]=useState("");
@@ -20459,6 +20628,7 @@ export default function App() {
   const [showDaily,setShowDaily]=useState(false);
   const [billingLoading,setBillingLoading]=useState(false);
   const [passwordRecovery,setPasswordRecovery]=useState(false);
+  const [showDiagnostic,setShowDiagnostic]=useState(false);
   const [showOnboarding,setShowOnboarding]=useState(false);
   const [authStartMode,setAuthStartMode]=useState("login");
   const [showTrialExpiredPrompt,setShowTrialExpiredPrompt]=useState(false);
@@ -20502,6 +20672,7 @@ export default function App() {
     resetAnalytics();
     await DB.clearSession();
     setPasswordRecovery(false);
+    setShowDiagnostic(false);
     setShowOnboarding(false);
     setShowTrialExpiredPrompt(false);
     setReferralClaimPrompt(null);
@@ -20645,8 +20816,10 @@ export default function App() {
         identifyUser(displayUser);
         setAttempts(savedAttempts);
         setStarred(savedStarred);
+        const diagnosticDone=await DB.getDiagnosticDone(appUser.email);
         const seen=await DB.getOnboardingSeen(appUser.email);
-        if(active&&!seen) setShowOnboarding(true);
+        if(active&&!diagnosticDone&&savedAttempts.length===0) setShowDiagnostic(true);
+        else if(active&&!seen) setShowOnboarding(true);
         setLoading(false);
       };
 
@@ -20663,7 +20836,7 @@ export default function App() {
 
     (async()=>{
       const sess=await DB.getSession();
-      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){setUser(u);const a=await DB.getAttempts(u.email);const s=await DB.getStarred(starOwner(u));setAttempts(a);setStarred(s);const seen=await DB.getOnboardingSeen(u.email);if(!seen)setShowOnboarding(true);}}
+      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){setUser(u);const a=await DB.getAttempts(u.email);const s=await DB.getStarred(starOwner(u));setAttempts(a);setStarred(s);const diagnosticDone=await DB.getDiagnosticDone(u.email);const seen=await DB.getOnboardingSeen(u.email);if(!diagnosticDone&&a.length===0)setShowDiagnostic(true);else if(!seen)setShowOnboarding(true);}}
       setLoading(false);
     })();
     return()=>{active=false;};
@@ -20682,8 +20855,10 @@ export default function App() {
     identifyUser(displayUser);
     const a=u?.authProvider==="supabase" ? await loadSupabaseAttempts(u.id) : await DB.getAttempts(u.email);
     const s=u?.authProvider==="supabase" ? ((await loadSupabaseStarred(u.id)) ?? await DB.getStarred(starOwner(displayUser))) : await DB.getStarred(starOwner(displayUser));
+    const diagnosticDone=await DB.getDiagnosticDone(displayUser.email);
     const seen=await DB.getOnboardingSeen(displayUser.email);
-    if(!seen) setShowOnboarding(true);
+    if(!diagnosticDone&&a.length===0) setShowDiagnostic(true);
+    else if(!seen) setShowOnboarding(true);
     setAttempts(a);setStarred(s);setView("dashboard");setShowDaily(false);
   },[forceSupabaseSignOut]);
   const handleLogout=useCallback(async()=>{
@@ -20870,6 +21045,29 @@ export default function App() {
       else await DB.saveAttempt(user.email,r);
     }catch(error){
       console.warn("Unable to save attempt remotely", error);
+    }
+  },[user]);
+  const handleDiagnosticComplete=useCallback(async results=>{
+    if(!user)return;
+    const saved=[...results].reverse();
+    setAttempts(prev=>[...saved,...prev]);
+    try{
+      if(user.authProvider==="supabase") {
+        await Promise.all(saved.map(result=>saveSupabaseAttempt(user.id,result)));
+      } else {
+        for (const result of saved) await DB.saveAttempt(user.email,result);
+      }
+      await DB.saveDiagnosticDone(user.email);
+      const seen=await DB.getOnboardingSeen(user.email);
+      setShowDiagnostic(false);
+      if(!seen) setShowOnboarding(true);
+      setView("mcq");
+      capture("diagnostic_completed", { correct_count: results.filter(r=>r.correct).length, question_count: results.length, tier: user.tier });
+    }catch(error){
+      console.warn("Unable to save diagnostic results", error);
+      await DB.saveDiagnosticDone(user.email);
+      setShowDiagnostic(false);
+      setView("mcq");
     }
   },[user]);
   const handleToggleStar=useCallback((type,id)=>{
@@ -21070,6 +21268,13 @@ export default function App() {
       </>
     );
   }
+
+  if(user&&showDiagnostic) return(
+    <>
+      <style>{CSS}</style>
+      <DiagnosticQuiz user={user} t={t} onComplete={handleDiagnosticComplete}/>
+    </>
+  );
 
   const pbqPreviewMode=user?.tier!=="pro"&&isFreePBQPreview(pbqQ);
 
