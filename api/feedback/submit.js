@@ -7,6 +7,7 @@ import {
 
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
 const FEEDBACK_DESCRIPTION_MIN_LENGTH = 20;
+const FEEDBACK_DESCRIPTION_MIN_WORDS = 5;
 
 function cleanText(value, max = 1000) {
   return String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
@@ -28,6 +29,10 @@ function cleanIssueType(value) {
   ]);
   const issueType = cleanText(value, 40);
   return allowed.has(issueType) ? issueType : "other";
+}
+
+function countWords(value) {
+  return String(value || "").trim().split(/\s+/).filter(Boolean).length;
 }
 
 function escapeHtml(value) {
@@ -108,6 +113,9 @@ export default async function handler(req, res) {
     const message = cleanMultiline(body.message, 4000);
     if (message.length < FEEDBACK_DESCRIPTION_MIN_LENGTH) {
       return json(res, 400, { error: `Description must be at least ${FEEDBACK_DESCRIPTION_MIN_LENGTH} characters.` });
+    }
+    if (countWords(message) < FEEDBACK_DESCRIPTION_MIN_WORDS) {
+      return json(res, 400, { error: `Description must be at least ${FEEDBACK_DESCRIPTION_MIN_WORDS} words.` });
     }
 
     const supabase = getSupabaseAdmin();

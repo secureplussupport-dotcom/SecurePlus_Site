@@ -119,6 +119,7 @@ const FREE_PBQ_PREVIEW_ID = "p001";
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
 const DELETED_ACCOUNT_KEY = "secureplus_deleted_account";
 const FEEDBACK_DESCRIPTION_MIN_LENGTH = 20;
+const FEEDBACK_DESCRIPTION_MIN_WORDS = 5;
 const isFreePBQPreview = question => question?.id === FREE_PBQ_PREVIEW_ID;
 const dailyStreakOwner = user => normalizeEmail(user?.email || "") || "guest";
 const practiceSessionOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
@@ -14923,6 +14924,9 @@ function Alert({msg,type="error",t}) {
   const c=type==="success"?t.green:type==="warn"?t.amber:t.red;
   return <div style={{padding:"10px 14px",borderRadius:8,background:`${c}12`,border:`1px solid ${c}30`,color:c,fontSize:13,marginBottom:12}}>{msg}</div>;
 }
+function countWords(value) {
+  return String(value || "").trim().split(/\s+/).filter(Boolean).length;
+}
 function FilterSelect({value,onChange,options,disabled=false,label="Select"}) {
   const [open,setOpen]=useState(false);
   const ref=useRef(null);
@@ -18546,14 +18550,18 @@ function QuestionReportModal({report,user,t,onClose}) {
   const [submitting,setSubmitting]=useState(false);
   const [status,setStatus]=useState("");
   const [error,setError]=useState("");
+  const [submitted,setSubmitted]=useState(false);
   if(!report)return null;
+  const cleanMessage=message.trim();
+  const wordCount=countWords(cleanMessage);
+  const needsMoreWords=wordCount<FEEDBACK_DESCRIPTION_MIN_WORDS;
+  const needsMoreCharacters=cleanMessage.length<FEEDBACK_DESCRIPTION_MIN_LENGTH;
 
   const submit=async()=>{
     setError("");
     setStatus("");
-    const cleanMessage=message.trim();
-    if(cleanMessage.length<FEEDBACK_DESCRIPTION_MIN_LENGTH){
-      setError(`Description must be at least ${FEEDBACK_DESCRIPTION_MIN_LENGTH} characters.`);
+    if(needsMoreWords||needsMoreCharacters){
+      setError("");
       return;
     }
     setSubmitting(true);
@@ -18580,8 +18588,8 @@ function QuestionReportModal({report,user,t,onClose}) {
         throw new Error(setupHint);
       }
       capture("question_report_submitted", { question_id: report.questionId, question_type: report.questionKind, issue_type: issueType, notification_sent: Boolean(data.notificationSent) });
-      setStatus("Feedback submitted. The owner will see it in the internal feedback dashboard.");
-      setTimeout(onClose,1100);
+      setSubmitted(true);
+      setStatus("Report submitted successfully. The owner will see it in the internal feedback dashboard.");
     }catch(err){
       setError(err.message||"Unable to submit feedback.");
     }finally{
@@ -18601,6 +18609,9 @@ function QuestionReportModal({report,user,t,onClose}) {
         </p>
         </div>
         <div className="feedback-modal-body">
+        {submitted&&(
+          <Alert msg={status||"Report submitted successfully."} type="success" t={t}/>
+        )}
         <div className="card" style={{padding:"12px 14px",marginBottom:14,boxShadow:"none"}}>
           <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
             <span className="chip meta-chip">{report.questionKind.toUpperCase()}</span>
@@ -18625,23 +18636,28 @@ function QuestionReportModal({report,user,t,onClose}) {
         <textarea
           className="input"
           value={message}
-          onChange={e=>setMessage(e.target.value)}
+          onChange={e=>{setMessage(e.target.value);setStatus("");setSubmitted(false);}}
           placeholder="Example: The correct answer seems wrong because..."
           rows={5}
           maxLength={4000}
           style={{resize:"vertical",marginBottom:6}}
         />
-        <div style={{fontSize:12,color:message.trim().length<FEEDBACK_DESCRIPTION_MIN_LENGTH?t.amber:t.textDim,marginBottom:12}}>
-          {message.trim().length}/{FEEDBACK_DESCRIPTION_MIN_LENGTH} characters minimum
+        <div style={{fontSize:12,color:needsMoreWords||needsMoreCharacters?t.amber:t.textDim,marginBottom:6,lineHeight:1.55}}>
+          {wordCount}/{FEEDBACK_DESCRIPTION_MIN_WORDS} words minimum · {cleanMessage.length}/{FEEDBACK_DESCRIPTION_MIN_LENGTH} characters minimum
         </div>
+        {(needsMoreWords||needsMoreCharacters)&&(
+          <div style={{fontSize:12,color:t.amber,marginBottom:12,lineHeight:1.55}}>
+            You have not reached the minimum word count yet. Please add a little more detail before submitting.
+          </div>
+        )}
         <label className="label" style={{display:"block",marginBottom:7}}>Contact email optional</label>
         <input className="input" value={contactEmail} onChange={e=>setContactEmail(e.target.value)} placeholder="you@example.com" style={{marginBottom:12}}/>
         <Alert msg={error} t={t}/>
-        <Alert msg={status} type="success" t={t}/>
+        {!submitted&&<Alert msg={status} type="success" t={t}/>}
         </div>
         <div className="feedback-modal-footer">
-          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button className="btn btn-primary" disabled={submitting} onClick={submit}>{submitting?"Submitting...":"Submit feedback"}</button>
+          <button className="btn btn-ghost" onClick={onClose}>{submitted?"Close":"Cancel"}</button>
+          <button className="btn btn-primary" disabled={submitting||submitted||needsMoreWords||needsMoreCharacters} onClick={submit}>{submitting?"Submitting...":submitted?"Submitted":"Submit feedback"}</button>
         </div>
       </div>
     </div>
