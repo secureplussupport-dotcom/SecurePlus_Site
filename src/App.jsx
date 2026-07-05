@@ -17316,6 +17316,14 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
     setDragOver(null);
     setDragged(null);
   };
+  const dragDropTargets=q.targets||[];
+  const isDragDropTable=q.type==="DRAG & DROP" && (
+    q.targetLayout?.type==="table" ||
+    dragDropTargets.some(target=>Number.isInteger(target.row)&&Number.isInteger(target.col))
+  );
+  const dragDropRows=Math.max(1,q.targetLayout?.rows||Math.max(1,...dragDropTargets.map(target=>Number.isInteger(target.row)?target.row+1:0)));
+  const dragDropCols=Math.max(1,q.targetLayout?.cols||Math.max(1,...dragDropTargets.map(target=>Number.isInteger(target.col)?target.col+1:0)));
+  const getDragDropCell=(row,col)=>dragDropTargets.find(target=>target.row===row&&target.col===col);
 
   return(
     <div style={{padding:"24px",maxWidth:860,margin:"0 auto"}}>
@@ -17439,9 +17447,67 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
           </div>
 
           <div>
-            <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:10}}>Drop columns</div>
+            <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:10}}>{isDragDropTable?"Answer table":"Drop columns"}</div>
+            {isDragDropTable ? (
+              <div style={{overflowX:"auto",border:`1px solid ${t.border}`,borderRadius:10,background:t.panel}}>
+                <div style={{display:"grid",gridTemplateColumns:`repeat(${dragDropCols}, minmax(180px, 1fr))`,minWidth:Math.max(520,dragDropCols*180)}}>
+                  {Array.from({length:dragDropRows*dragDropCols}).map((_,cellIndex)=>{
+                    const row=Math.floor(cellIndex/dragDropCols);
+                    const col=cellIndex%dragDropCols;
+                    const target=getDragDropCell(row,col);
+                    if(!target) {
+                      return <div key={`empty-${row}-${col}`} style={{minHeight:128,borderRight:col<dragDropCols-1?`1px solid ${t.border}`:0,borderBottom:row<dragDropRows-1?`1px solid ${t.border}`:0,background:`${t.surface}66`}}/>;
+                    }
+                    const isDropCell=target.droppable!==false;
+                    const placedItems=q.items.filter(i=>mapping[i.id]===target.id);
+                    if(!isDropCell) {
+                      return(
+                        <div key={target.id} style={{minHeight:128,padding:"18px 16px",display:"flex",alignItems:"center",justifyContent:"center",textAlign:"center",borderRight:col<dragDropCols-1?`1px solid ${t.border}`:0,borderBottom:row<dragDropRows-1?`1px solid ${t.border}`:0,background:`linear-gradient(135deg, ${t.accent}10, ${t.surface})`}}>
+                          <div style={{fontSize:16,fontWeight:900,color:t.text,lineHeight:1.55}}><GlossaryText text={target.label||" "} t={t}/></div>
+                        </div>
+                      );
+                    }
+                    return(
+                      <div key={target.id} style={{minHeight:180,padding:12,borderRight:col<dragDropCols-1?`1px solid ${t.border}`:0,borderBottom:row<dragDropRows-1?`1px solid ${t.border}`:0,background:placedItems.length?`${t.green}08`:t.panel}}>
+                        {target.label&&<div style={{fontSize:13,fontWeight:900,color:t.text,marginBottom:8,lineHeight:1.45}}><GlossaryText text={target.label} t={t}/></div>}
+                        <div className={`drop-zone ${dragOver===target.id?"over":""} ${placedItems.length?"filled":""}`}
+                          data-drop-target={target.id}
+                          onClick={()=>tapDragItem&&placeDragItem(tapDragItem,target.id)}
+                          onDragOver={e=>{e.preventDefault();setDragOver(target.id);}}
+                          onDragLeave={()=>setDragOver(null)}
+                          onDrop={()=>{
+                            if(dragged) placeDragItem(dragged,target.id);
+                            setDragOver(null);setDragged(null);
+                          }}
+                          style={{minHeight:target.label?118:150,alignItems:"stretch",justifyContent:placedItems.length?"flex-start":"center",background:dragOver===target.id?`${t.accent}12`:`${t.inputBg}`,borderColor:dragOver===target.id?t.accent:placedItems.length?`${t.green}55`:t.border}}>
+                          {placedItems.length?(
+                            <div style={{display:"grid",gap:8,width:"100%"}}>
+                              {placedItems.map(placed=>(
+                                <div
+                                  key={placed.id}
+                                  className={`drag-item ${dragged?.id===placed.id?"selected":""}`}
+                                  draggable
+                                  style={{width:"100%",background:`linear-gradient(135deg, ${t.green}16, ${t.surface})`,borderColor:`${t.green}55`,color:t.text,cursor:"grab",touchAction:"none",fontSize:15,fontWeight:900,lineHeight:1.55,boxShadow:`0 10px 24px ${t.green}12`}}
+                                  onClick={e=>{e.stopPropagation();setTapDragItem(placed);}}
+                                  onDragStart={e=>{e.stopPropagation();setDragged(placed);}}
+                                  onDragEnd={()=>{setDragged(null);setDragOver(null);}}
+                                  onPointerDown={e=>{setDragged(placed);setTapDragItem(placed);e.currentTarget.setPointerCapture?.(e.pointerId);}}
+                                  onPointerMove={e=>{if(dragged?.id===placed.id||tapDragItem?.id===placed.id) updatePointerDropTarget(e);}}
+                                  onPointerUp={e=>finishPointerDrag(e,placed)}
+                                  onPointerCancel={()=>{setDragged(null);setDragOver(null);}}
+                                ><GlossaryText text={placed.label} t={t}/></div>
+                              ))}
+                            </div>
+                          ):<span style={{fontSize:13,fontWeight:900,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place selected option here":"Empty answer cell"}</span>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,320px),1fr))",gap:16}}>
-              {q.targets?.map(target=>{
+              {dragDropTargets.filter(target=>target.droppable!==false).map(target=>{
                 const placedItems=q.items.filter(i=>mapping[i.id]===target.id);
                 return(
                   <div key={target.id} style={{border:`1px solid ${placedItems.length?t.green:t.border}`,borderRadius:10,background:`linear-gradient(180deg, ${t.surface}, ${placedItems.length?t.green+"08":t.panel})`,padding:16,boxShadow:placedItems.length?`0 0 0 3px ${t.green}10, 0 16px 34px ${t.green}10`:"none",minHeight:260}}>
@@ -17480,6 +17546,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                 );
               })}
             </div>
+            )}
           </div>
         </div>
       )}
@@ -18801,7 +18868,7 @@ function makeAdminQuestionTemplate(kind, nextOrder=1, sourceBank=[]) {
       diagram:"",
       currentConfig:"",
       items:[{id:"i0",label:"",explanation:""}],
-      targets:[{id:"t0",label:""}],
+      targets:[{id:"t0",label:"",droppable:true}],
       tableRows:"2",
       tableCols:"2",
       correctMapping:{},
@@ -18847,7 +18914,7 @@ function questionToAdminForm(question,kind,index) {
       diagram:question.diagram||"",
       currentConfig:question.currentConfig||"",
       items:Array.isArray(question.items)?question.items.map((item,index)=>({id:item.id||`i${index}`,label:item.label||"",explanation:item.explanation||item.solution||""})):[{id:"i0",label:"",explanation:""}],
-      targets:Array.isArray(question.targets)?question.targets.map((target,index)=>({id:target.id||`t${index}`,label:target.label||"",row:Number.isInteger(target.row)?target.row:null,col:Number.isInteger(target.col)?target.col:null})):[{id:"t0",label:""}],
+      targets:Array.isArray(question.targets)?question.targets.map((target,index)=>({id:target.id||`t${index}`,label:target.label||"",row:Number.isInteger(target.row)?target.row:null,col:Number.isInteger(target.col)?target.col:null,droppable:target.droppable!==false})):[{id:"t0",label:"",droppable:true}],
       tableRows:String(question.targetLayout?.rows || Math.max(2, ...((question.targets||[]).map(target=>Number.isInteger(target.row)?target.row+1:0)), 2)),
       tableCols:String(question.targetLayout?.cols || Math.max(2, ...((question.targets||[]).map(target=>Number.isInteger(target.col)?target.col+1:0)), 2)),
       correctMapping:question.correctMapping||{},
@@ -18941,13 +19008,15 @@ function cleanAdminQuestionPayload(form,kind) {
       id:String(target.id||`t${index}`).trim()||`t${index}`,
       label:String(target.label||"").trim(),
       row:Number.isInteger(target.row)?target.row:null,
-      col:Number.isInteger(target.col)?target.col:null
-    })).filter(target=>target.label);
-    if(items.length<2||targets.length<2) throw new Error("Drag & Drop PBQs need at least 2 draggable items and 2 drop columns.");
-    const targetIds=new Set(targets.map(target=>target.id));
+      col:Number.isInteger(target.col)?target.col:null,
+      droppable:target.droppable!==false
+    })).filter(target=>target.label||target.droppable);
+    const dropTargets=targets.filter(target=>target.droppable!==false);
+    if(items.length<2||dropTargets.length<1) throw new Error("Drag & Drop PBQs need at least 2 draggable items and at least 1 drop cell.");
+    const targetIds=new Set(dropTargets.map(target=>target.id));
     const correctMapping={};
     items.forEach(item=>{if(targetIds.has(form.correctMapping?.[item.id])) correctMapping[item.id]=form.correctMapping[item.id];});
-    if(Object.keys(correctMapping).length!==items.length) throw new Error("Map every Drag & Drop item to a correct column.");
+    if(Object.keys(correctMapping).length!==items.length) throw new Error("Map every Drag & Drop item to a correct drop cell.");
     question.items=items;
     question.targets=targets;
     question.correctMapping=correctMapping;
@@ -19395,11 +19464,12 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
           id,
           row,
           col,
-          label:existing?.label || `Row ${row+1}, Column ${col+1}`,
+          label:existing?.label || "",
+          droppable:existing?.droppable!==false,
         });
       }
     }
-    const nextTargetIds=new Set(nextTargets.map(target=>target.id));
+    const nextTargetIds=new Set(nextTargets.filter(target=>target.droppable!==false).map(target=>target.id));
     return {
       ...prev,
       tableRows:String(rows),
@@ -19883,11 +19953,20 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                       <div style={{display:"grid",gap:10}}>
                         {(form.targets||[]).map((target,index)=>(
                           <div key={target.id||index} className="card" style={{padding:12,background:t.surface,borderColor:`${t.green}24`,boxShadow:"none"}}>
-                            <div style={{display:"grid",gridTemplateColumns:"92px auto",gap:10,alignItems:"end",marginBottom:10}}>
+                            <div style={{display:"grid",gridTemplateColumns:"92px minmax(160px,1fr) auto",gap:10,alignItems:"end",marginBottom:10}}>
                               <AdminTextInput label="ID" value={target.id||""} onChange={v=>updateObjectArray("targets",index,"id",v)} placeholder={`t${index}`}/>
+                              <AdminField label="Cell type">
+                                <select className="input" value={target.droppable===false?"static":"drop"} onChange={e=>updateObjectArray("targets",index,"droppable",e.target.value==="drop")}>
+                                  <option value="drop">Empty drop cell</option>
+                                  <option value="static">Static label / question cell</option>
+                                </select>
+                              </AdminField>
                               <button className="btn btn-ghost" type="button" style={{justifySelf:"end"}} onClick={()=>removePbqItem("targets",index)}>Remove</button>
                             </div>
                             <AdminTextArea label={`Cell ${index+1} label`} value={target.label||""} onChange={v=>updateObjectArray("targets",index,"label",v)} placeholder="Example: Attack type" rows={2} format/>
+                            <div style={{fontSize:11,color:t.textDim,lineHeight:1.5,marginTop:6}}>
+                              Static cells display this label only. Drop cells can be left blank and will accept dragged answers.
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -19921,7 +20000,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                               <AdminField label="Correct table cell">
                                 <select className="input" value={form.correctMapping?.[item.id]||""} onChange={e=>updateField("correctMapping",{...(form.correctMapping||{}),[item.id]:e.target.value})}>
                                   <option value="">Choose cell</option>
-                                  {(form.targets||[]).map(target=><option key={target.id} value={target.id}>{target.label||target.id}</option>)}
+                                  {(form.targets||[]).filter(target=>target.droppable!==false).map(target=><option key={target.id} value={target.id}>{target.label||`${target.id} (empty cell)`}</option>)}
                                 </select>
                               </AdminField>
                             </div>
@@ -20039,10 +20118,16 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                   <div style={{display:"grid",gap:8,marginBottom:12}}>
                     {(form.targets||[]).map(target=>{
                       const itemsForColumn=(form.items||[]).filter(item=>form.correctMapping?.[item.id]===target.id);
+                      const isDropCell=target.droppable!==false;
                       return(
                         <div key={target.id} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${t.border}`,background:t.panel,fontSize:13,color:t.textSec}}>
                           <strong style={{color:t.text}}>{target.label||target.id}</strong>
-                          {itemsForColumn.length?(
+                          <span className="chip" style={{marginLeft:8,background:isDropCell?`${t.green}12`:`${t.accent}12`,borderColor:isDropCell?`${t.green}35`:`${t.accent}35`,color:isDropCell?t.green:t.accent}}>
+                            {isDropCell?"Drop cell":"Static cell"}
+                          </span>
+                          {!isDropCell ? (
+                            <div style={{marginTop:7,color:t.textDim}}>This cell is display-only. Users cannot drop options here.</div>
+                          ) : itemsForColumn.length?(
                             <div style={{display:"grid",gap:5,marginTop:7}}>
                               {itemsForColumn.map(item=>(
                                 <div key={item.id}>
