@@ -14471,7 +14471,10 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700;border:1px solid;line-height:1.4;}
 .app-shell{display:flex;min-height:100vh;background:transparent;}
 .sidebar{width:236px;min-height:100vh;background:linear-gradient(180deg, ${t.panel}, ${t.panel}f2);border-right:1px solid ${t.border};display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;z-index:120;overflow:visible;box-shadow:10px 0 28px rgba(7,12,24,.07);}
+.sidebar.hidden{display:none;}
 .app-main{flex:1;overflow-y:auto;min-width:0;}
+.sidebar-restore{position:fixed;left:14px;top:14px;z-index:180;display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;border:1px solid ${t.border};background:${t.surface}e8;color:${t.text};box-shadow:0 12px 28px rgba(7,12,24,.14);backdrop-filter:blur(14px);font-size:12px;font-weight:900;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s;}
+.sidebar-restore:hover{transform:translateY(-1px);border-color:${t.accent}55;box-shadow:0 16px 34px ${t.accent}16;}
 .mobile-topbar{display:none;}
 .auth-layout{width:100%;max-width:980px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:stretch;}
 .landing-page{min-height:100vh;padding:0 24px 44px;background:transparent;}
@@ -14576,6 +14579,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   body{font-size:14px;}
   .app-shell{display:block;padding-bottom:72px;}
   .sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%;height:74px;min-height:74px;border-right:0;border-top:1px solid ${t.border};z-index:20;box-shadow:0 -12px 28px rgba(7,12,24,.16);}
+  .sidebar.hidden{display:flex!important;}
+  .sidebar-restore{display:none!important;}
   .sidebar > div{display:none!important;}
   .sidebar nav{flex-direction:row!important;overflow-x:auto;padding:9px 10px!important;gap:7px!important;scrollbar-width:none;}
   .sidebar nav::-webkit-scrollbar{display:none;}
@@ -20355,6 +20360,9 @@ function PasswordUpdateView({t,onDone}) {
 // ═══════════════════════════════════════════════════════════════
 export default function App() {
   const [darkMode,setDarkMode]=useState(true);
+  const [sidebarHidden,setSidebarHidden]=useState(()=>{
+    try{return window.localStorage?.getItem("secureplus-sidebar-hidden")==="true";}catch{return false;}
+  });
   const [user,setUser]=useState(null);
   const [loading,setLoading]=useState(true);
   const [view,setView]=useState("dashboard");
@@ -20375,6 +20383,10 @@ export default function App() {
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
+
+  useEffect(()=>{
+    try{window.localStorage?.setItem("secureplus-sidebar-hidden",sidebarHidden?"true":"false");}catch{}
+  },[sidebarHidden]);
 
   useEffect(()=>{
     if(user) identifyUser(user);
@@ -20946,12 +20958,21 @@ export default function App() {
     <>
       <style>{CSS}</style>
       <div className="app-shell">
+        {sidebarHidden&&(
+          <button className="sidebar-restore" type="button" onClick={()=>setSidebarHidden(false)}>
+            <NavGlyph type="dashboard" active/>
+            Show menu
+          </button>
+        )}
         {/* Sidebar */}
-        <aside className="sidebar">
+        <aside className={`sidebar ${sidebarHidden?"hidden":""}`}>
           {/* Logo */}
           <div style={{padding:"18px 16px",borderBottom:`1px solid ${t.border}`}}>
             <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:9,fontWeight:700,fontSize:16,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={30}/> SecurePlus</button>
             <div style={{fontSize:11,color:t.textDim,marginTop:2}}>CompTIA Security+ Practice Platform</div>
+            <button className="btn btn-ghost" type="button" style={{fontSize:12,justifyContent:"flex-start",width:"100%",marginTop:12}} onClick={()=>setSidebarHidden(true)}>
+              Hide sidebar
+            </button>
           </div>
 
           {/* User */}
