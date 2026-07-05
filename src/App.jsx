@@ -18897,7 +18897,6 @@ function cleanAdminQuestionPayload(form,kind) {
   if(String(form.title||"").trim().length<8) throw new Error("PBQ title must be at least 8 characters.");
   if(scenarioText.length<10&&taskText.length<10) throw new Error("PBQ needs either a scenario or a task prompt.");
   if(!["DRAG & DROP","ORDERING","FILL BLANK"].includes(pbqType)&&taskText.length<10) throw new Error("PBQ task/question must be at least 10 characters.");
-  if(String(form.explanation||"").trim().length<20) throw new Error("PBQ solution explanation must be at least 20 characters.");
   const question={
     id,
     type:pbqType,
