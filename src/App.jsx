@@ -687,6 +687,57 @@ const CHAPTERS = [
     topics:["Governance","Risk Management","Compliance & Privacy","Security Policies","Business Continuity","Third-Party Risk"] },
 ];
 
+function getChapterById(chId) {
+  return CHAPTERS.find(ch=>ch.id===String(chId)) || CHAPTERS[0];
+}
+
+function getNextQuestionCode(kind, bank=[]) {
+  const prefix=kind==="pbq" ? "p" : "m";
+  let maxNumber=0;
+  let width=3;
+  bank.forEach(question=>{
+    const match=String(question?.id||"").match(new RegExp(`^${prefix}[^0-9]*([0-9]+)$`,"i"));
+    if(!match)return;
+    const number=Number.parseInt(match[1],10);
+    if(Number.isFinite(number)) {
+      maxNumber=Math.max(maxNumber,number);
+      width=Math.max(width,match[1].length);
+    }
+  });
+  return `${prefix}${String(maxNumber+1).padStart(width,"0")}`;
+}
+
+function getAdminTopicOptions(kind, chId, bank=[], currentValue="") {
+  const chapter=getChapterById(chId);
+  const existing=bank
+    .filter(question=>String(question.ch||"")===String(chId))
+    .map(question=>kind==="mcq" ? question.topic : question.cat)
+    .filter(Boolean);
+  const values=[...chapter.topics, ...existing, currentValue].filter(Boolean);
+  return [...new Set(values)].sort((a,b)=>{
+    const chapterA=chapter.topics.indexOf(a);
+    const chapterB=chapter.topics.indexOf(b);
+    if(chapterA>=0||chapterB>=0) return (chapterA>=0?chapterA:999)-(chapterB>=0?chapterB:999);
+    return String(a).localeCompare(String(b),undefined,{sensitivity:"base"});
+  });
+}
+
+function buildQuestionBankBreakdown(kind, bank=[]) {
+  return CHAPTERS.map(ch=>{
+    const questions=bank.filter(question=>String(question.ch||"")===ch.id);
+    const topicCounts=questions.reduce((acc,question)=>{
+      const topic=(kind==="mcq" ? question.topic : question.cat) || "Uncategorised";
+      acc[topic]=(acc[topic]||0)+1;
+      return acc;
+    },{});
+    return {
+      chapter:ch,
+      count:questions.length,
+      topics:Object.entries(topicCounts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],undefined,{sensitivity:"base"}))
+    };
+  });
+}
+
 // ═══════════════════════════════════════════════════════════════
 // PBQ SIM TYPES with emojis
 // ═══════════════════════════════════════════════════════════════
@@ -18558,15 +18609,16 @@ function AdminFeedbackPage({user,t,onEditQuestion}) {
   );
 }
 
-function makeAdminQuestionTemplate(kind, nextOrder=1) {
-  const stamp=Date.now().toString().slice(-6);
+function makeAdminQuestionTemplate(kind, nextOrder=1, sourceBank=[]) {
+  const nextCode=getNextQuestionCode(kind,sourceBank);
+  const chapter=getChapterById("1");
   if(kind==="pbq") {
     return {
-      id:`p-custom-${stamp}`,
+      id:nextCode,
       title:"",
       type:"SCENARIO",
-      ch:"1",
-      cat:"General Security Concepts",
+      ch:chapter.id,
+      cat:chapter.topics[0],
       difficulty:"medium",
       beyondTextbook:false,
       order:String(nextOrder),
@@ -18588,9 +18640,9 @@ function makeAdminQuestionTemplate(kind, nextOrder=1) {
     };
   }
   return {
-    id:`m-custom-${stamp}`,
-    ch:"1",
-    topic:"General Security Concepts",
+    id:nextCode,
+    ch:chapter.id,
+    topic:chapter.topics[0],
     difficulty:"medium",
     beyondTextbook:false,
     order:String(nextOrder),
@@ -19040,16 +19092,18 @@ function questionHistoryLabel(item) {
 function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) {
   const [kind,setKind]=useState("mcq");
   const [selectedId,setSelectedId]=useState("");
-  const [form,setForm]=useState(()=>makeAdminQuestionTemplate("mcq",MCQ_BANK.length+1));
+  const [form,setForm]=useState(()=>makeAdminQuestionTemplate("mcq",MCQ_BANK.length+1,MCQ_BANK));
   const [saving,setSaving]=useState(false);
   const [status,setStatus]=useState("");
   const [error,setError]=useState("");
   const [codeSearch,setCodeSearch]=useState("");
   const [sortMode,setSortMode]=useState("order");
+  const [showBankDashboard,setShowBankDashboard]=useState(false);
   const [history,setHistory]=useState([]);
   const [historyLoading,setHistoryLoading]=useState(false);
   const [historyError,setHistoryError]=useState("");
   const bank=kind==="mcq"?MCQ_BANK:PBQ_BANK;
+  const bankBreakdown=useMemo(()=>buildQuestionBankBreakdown(kind,bank),[kind,bank]);
   const visibleBank=useMemo(()=>{
     const query=codeSearch.trim().toLowerCase();
     const list=bank.filter(q=>!query||String(q.id||"").toLowerCase().includes(query));
@@ -19069,6 +19123,8 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const selectedQuestion=selectedIndex>=0?bank[selectedIndex]:null;
   const isEditing=Boolean(selectedQuestion);
   const difficultyColor=form.difficulty==="easy"?t.green:form.difficulty==="hard"?t.red:t.amber;
+  const selectedChapter=getChapterById(form.ch);
+  const topicOptions=getAdminTopicOptions(kind,form.ch,bank,kind==="mcq"?form.topic:form.cat);
   const detectedAcronyms=useMemo(()=>kind==="mcq"
     ? extractAcronymsFromText(form.q,form.opts||[],form.exp,Object.values(form.wrongFeedback||{}))
     : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation,form.answer,form.logData,form.diagram,form.currentConfig,(form.items||[]).map(item=>item.label),(form.targets||[]).map(target=>target.label),(form.blanks||[]).flatMap(blank=>[blank.sentence,blank.answer,blank.acceptedAnswers,blank.hint])),
@@ -19077,7 +19133,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const resetToNew=useCallback((nextKind=kind)=>{
     const nextBank=nextKind==="mcq"?MCQ_BANK:PBQ_BANK;
     setSelectedId("");
-    setForm(makeAdminQuestionTemplate(nextKind,nextBank.length+1));
+    setForm(makeAdminQuestionTemplate(nextKind,nextBank.length+1,nextBank));
     setError("");
     setStatus("");
   },[kind]);
@@ -19122,6 +19178,14 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   useEffect(()=>{loadHistory();},[loadHistory]);
 
   const updateField=(field,value)=>setForm(prev=>({...prev,[field]:value}));
+  const changeChapter=chId=>setForm(prev=>{
+    const topicOptions=getAdminTopicOptions(kind,chId,bank,kind==="mcq"?prev.topic:prev.cat);
+    const currentTopic=kind==="mcq"?prev.topic:prev.cat;
+    const nextTopic=topicOptions.includes(currentTopic) ? currentTopic : topicOptions[0] || "";
+    return kind==="mcq"
+      ? {...prev,ch:chId,topic:nextTopic}
+      : {...prev,ch:chId,cat:nextTopic};
+  });
   const updateArray=(field,index,value)=>setForm(prev=>{
     const next=[...(prev[field]||[])];
     next[index]=value;
@@ -19232,6 +19296,56 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
         </div>
       </div>
 
+      <div className="card" style={{padding:"16px 18px",marginBottom:16}}>
+        <button
+          type="button"
+          onClick={()=>setShowBankDashboard(value=>!value)}
+          style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}
+        >
+          <div>
+            <h3 style={{fontSize:17,color:t.text,marginBottom:4}}>Question bank snapshot</h3>
+            <div style={{fontSize:12,color:t.textDim}}>
+              {bank.length} {kind.toUpperCase()} questions across {bankBreakdown.filter(item=>item.count>0).length} chapters. Expand to see chapter and topic counts.
+            </div>
+          </div>
+          <span className="chip" style={{background:`${t.accent}10`,borderColor:`${t.accent}35`,color:t.accent}}>
+            {showBankDashboard?"Hide":"Expand"}
+          </span>
+        </button>
+        {showBankDashboard&&(
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:10,marginTop:14}}>
+            {bankBreakdown.map(item=>(
+              <div key={item.chapter.id} className="card" style={{padding:"12px 14px",background:t.panel,boxShadow:"none",borderColor:item.count?`${chapterColor(item.chapter.id)}40`:t.border}}>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,marginBottom:8}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8,minWidth:0}}>
+                    <ChapterIcon id={item.chapter.id} size={24}/>
+                    <div style={{fontSize:13,fontWeight:900,color:t.text,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
+                      Ch.{item.chapter.id}: {item.chapter.title}
+                    </div>
+                  </div>
+                  <span className="chip" style={{fontSize:11,background:`${chapterColor(item.chapter.id)}12`,borderColor:`${chapterColor(item.chapter.id)}36`,color:chapterColor(item.chapter.id)}}>{item.count}</span>
+                </div>
+                {item.topics.length?(
+                  <div style={{display:"grid",gap:6}}>
+                    {item.topics.slice(0,8).map(([topic,count])=>(
+                      <div key={topic} style={{display:"flex",justifyContent:"space-between",gap:8,fontSize:12,color:t.textSec,lineHeight:1.45}}>
+                        <span style={{minWidth:0,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{topic}</span>
+                        <strong style={{color:t.text}}>{count}</strong>
+                      </div>
+                    ))}
+                    {item.topics.length>8&&(
+                      <div style={{fontSize:11,color:t.textDim}}>+{item.topics.length-8} more topics</div>
+                    )}
+                  </div>
+                ):(
+                  <div style={{fontSize:12,color:t.textDim}}>No questions yet.</div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       <div className="card" style={{padding:"18px 20px",marginBottom:16}}>
         <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:12,flexWrap:"wrap"}}>
           <div>
@@ -19326,7 +19440,15 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
 
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(145px,1fr))",gap:10,marginBottom:12}}>
             <AdminTextInput label="Question ID" value={form.id} onChange={v=>updateField("id",v)} placeholder={kind==="mcq"?"m-custom-001":"p-custom-001"}/>
-            <AdminTextInput label="Chapter" value={form.ch} onChange={v=>updateField("ch",v)} placeholder="1"/>
+            <AdminField label="Chapter / domain">
+              <select className="input" value={form.ch} onChange={e=>changeChapter(e.target.value)}>
+                {CHAPTERS.map(ch=>(
+                  <option key={ch.id} value={ch.id}>
+                    Ch.{ch.id} ({ch.code}) - {ch.title}
+                  </option>
+                ))}
+              </select>
+            </AdminField>
             <AdminField label="Difficulty">
               <select className="input" value={form.difficulty} onChange={e=>updateField("difficulty",e.target.value)} style={{color:difficultyColor,fontWeight:900}}>
                 <option value="easy">Easy</option>
@@ -19373,7 +19495,11 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
 
           {kind==="mcq" ? (
             <>
-              <AdminTextInput label="Topic" value={form.topic} onChange={v=>updateField("topic",v)} placeholder="Network Security"/>
+              <AdminField label={`Topic in Ch.${selectedChapter.id}`}>
+                <select className="input" value={form.topic} onChange={e=>updateField("topic",e.target.value)}>
+                  {topicOptions.map(topic=><option key={topic} value={topic}>{topic}</option>)}
+                </select>
+              </AdminField>
               <div style={{height:12}}/>
               <AdminTextArea label="Question" value={form.q} onChange={v=>updateField("q",v)} placeholder="Write the MCQ question here." rows={5}/>
               <div style={{height:12}}/>
@@ -19424,7 +19550,11 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                 </AdminField>
               </div>
               <div style={{height:12}}/>
-              <AdminTextInput label="Category" value={form.cat} onChange={v=>updateField("cat",v)} placeholder="Security Operations" format/>
+              <AdminField label={`Topic / category in Ch.${selectedChapter.id}`}>
+                <select className="input" value={form.cat} onChange={e=>updateField("cat",e.target.value)}>
+                  {topicOptions.map(topic=><option key={topic} value={topic}>{topic}</option>)}
+                </select>
+              </AdminField>
               <div style={{height:12}}/>
               <AdminTextArea label="Scenario" value={form.scenario} onChange={v=>updateField("scenario",v)} placeholder="Explain the environment or situation." rows={5}/>
               {form.type!=="DRAG & DROP"&&form.type!=="ORDERING"&&form.type!=="FILL BLANK"&&(
