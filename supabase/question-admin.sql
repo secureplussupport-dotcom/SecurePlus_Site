@@ -11,6 +11,9 @@ insert into app_admins (email)
 values ('secureplus.support@gmail.com')
 on conflict (email) do nothing;
 
+-- If the owner uses another login email, add it here too:
+-- insert into app_admins (email) values ('owner@example.com') on conflict (email) do nothing;
+
 create table if not exists question_overrides (
   id uuid primary key default gen_random_uuid(),
   question_kind text not null,
@@ -171,7 +174,7 @@ on question_override_history (question_kind, question_id, created_at desc);
 
 grant select on question_overrides to anon, authenticated;
 grant insert, update, delete on question_overrides to authenticated;
-grant select on question_override_history to authenticated;
+grant select, insert on question_override_history to authenticated;
 grant select on app_admins to authenticated;
 grant all on question_overrides to service_role;
 grant all on question_override_history to service_role;

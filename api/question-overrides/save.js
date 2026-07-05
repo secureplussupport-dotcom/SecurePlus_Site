@@ -2,7 +2,9 @@ import {
   getBearerToken,
   getJsonBody,
   getSupabaseAdmin,
+  isQuestionAdminSchemaError,
   json,
+  requireQuestionAdmin,
 } from "../_utils.js";
 
 function cleanText(value, max = 1000) {
@@ -24,16 +26,6 @@ function cleanPayload(value) {
   return value;
 }
 
-function isMissingQuestionAdminSchema(error) {
-  return (
-    error?.code === "42P01" ||
-    error?.code === "42703" ||
-    error?.code === "PGRST204" ||
-    error?.code === "PGRST205" ||
-    /question_override_history|question_overrides|app_admins|schema cache|relation/i.test(error?.message || "")
-  );
-}
-
 function overrideSnapshot(row) {
   if (!row) return null;
   return {
@@ -46,28 +38,6 @@ function overrideSnapshot(row) {
   };
 }
 
-async function requireAdmin(supabase, token) {
-  if (!token) return { ok: false, status: 401, error: "Sign in before using Question Manager." };
-
-  const { data: authData, error: authError } = await supabase.auth.getUser(token);
-  if (authError || !authData.user) {
-    return { ok: false, status: 401, error: "Your login session expired. Sign in again." };
-  }
-
-  const email = String(authData.user.email || "").trim().toLowerCase();
-  const { data: adminRow, error: adminError } = await supabase
-    .from("app_admins")
-    .select("email")
-    .eq("email", email)
-    .maybeSingle();
-  if (adminError) throw adminError;
-  if (!adminRow) {
-    return { ok: false, status: 403, error: "This account is not allowed to edit questions." };
-  }
-
-  return { ok: true, user: authData.user };
-}
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("allow", "POST");
@@ -76,7 +46,7 @@ export default async function handler(req, res) {
 
   try {
     const supabase = getSupabaseAdmin();
-    const admin = await requireAdmin(supabase, getBearerToken(req));
+    const admin = await requireQuestionAdmin(supabase, getBearerToken(req), "edit questions");
     if (!admin.ok) return json(res, admin.status, { error: admin.error });
 
     const body = await getJsonBody(req);
@@ -136,7 +106,7 @@ export default async function handler(req, res) {
     return json(res, 200, { ok: true, override: data });
   } catch (error) {
     console.error("Question override save failed:", error);
-    if (isMissingQuestionAdminSchema(error)) {
+    if (isQuestionAdminSchemaError(error)) {
       return json(res, 409, {
         error: "Question Manager database setup is missing. Run supabase/question-admin.sql in Supabase SQL Editor.",
       });
