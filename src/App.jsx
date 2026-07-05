@@ -18802,6 +18802,8 @@ function makeAdminQuestionTemplate(kind, nextOrder=1, sourceBank=[]) {
       currentConfig:"",
       items:[{id:"i0",label:"",explanation:""}],
       targets:[{id:"t0",label:""}],
+      tableRows:"2",
+      tableCols:"2",
       correctMapping:{},
       correctOrder:["i0"],
       blanks:[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:"",explanation:""}]
@@ -18845,7 +18847,9 @@ function questionToAdminForm(question,kind,index) {
       diagram:question.diagram||"",
       currentConfig:question.currentConfig||"",
       items:Array.isArray(question.items)?question.items.map((item,index)=>({id:item.id||`i${index}`,label:item.label||"",explanation:item.explanation||item.solution||""})):[{id:"i0",label:"",explanation:""}],
-      targets:Array.isArray(question.targets)?question.targets.map((target,index)=>({id:target.id||`t${index}`,label:target.label||""})):[{id:"t0",label:""}],
+      targets:Array.isArray(question.targets)?question.targets.map((target,index)=>({id:target.id||`t${index}`,label:target.label||"",row:Number.isInteger(target.row)?target.row:null,col:Number.isInteger(target.col)?target.col:null})):[{id:"t0",label:""}],
+      tableRows:String(question.targetLayout?.rows || Math.max(2, ...((question.targets||[]).map(target=>Number.isInteger(target.row)?target.row+1:0)), 2)),
+      tableCols:String(question.targetLayout?.cols || Math.max(2, ...((question.targets||[]).map(target=>Number.isInteger(target.col)?target.col+1:0)), 2)),
       correctMapping:question.correctMapping||{},
       correctOrder:Array.isArray(question.correctOrder)?question.correctOrder:[],
       blanks:Array.isArray(question.blanks)?question.blanks.map((blank,index)=>({id:blank.id||`b${index}`,sentence:blank.sentence||"",answer:blank.answer||"",acceptedAnswers:[...(blank.acceptedAnswers||[]),...(blank.aliases||[])].join("\n"),hint:blank.hint||"",explanation:blank.explanation||blank.solution||""})):[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:"",explanation:""}]
@@ -18933,7 +18937,12 @@ function cleanAdminQuestionPayload(form,kind) {
       label:String(item.label||"").trim(),
       explanation:String(item.explanation||"").trim()
     })).filter(item=>item.label);
-    const targets=(form.targets||[]).map((target,index)=>({id:String(target.id||`t${index}`).trim()||`t${index}`,label:String(target.label||"").trim()})).filter(target=>target.label);
+    const targets=(form.targets||[]).map((target,index)=>({
+      id:String(target.id||`t${index}`).trim()||`t${index}`,
+      label:String(target.label||"").trim(),
+      row:Number.isInteger(target.row)?target.row:null,
+      col:Number.isInteger(target.col)?target.col:null
+    })).filter(target=>target.label);
     if(items.length<2||targets.length<2) throw new Error("Drag & Drop PBQs need at least 2 draggable items and 2 drop columns.");
     const targetIds=new Set(targets.map(target=>target.id));
     const correctMapping={};
@@ -18942,6 +18951,11 @@ function cleanAdminQuestionPayload(form,kind) {
     question.items=items;
     question.targets=targets;
     question.correctMapping=correctMapping;
+    const tableRows=Math.max(1,Math.min(8,Number.parseInt(form.tableRows,10)||0));
+    const tableCols=Math.max(1,Math.min(8,Number.parseInt(form.tableCols,10)||0));
+    if(targets.some(target=>Number.isInteger(target.row)&&Number.isInteger(target.col))) {
+      question.targetLayout={type:"table",rows:tableRows,cols:tableCols};
+    }
   } else if(pbqType==="ORDERING") {
     const items=(form.items||[]).map((item,index)=>({id:String(item.id||`i${index}`).trim()||`i${index}`,label:String(item.label||"").trim()})).filter(item=>item.label);
     if(items.length<2) throw new Error("Ordering PBQs need at least 2 ordered items.");
@@ -19367,6 +19381,32 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
     const next=[...(prev[field]||[])];
     next[index]={...(next[index]||{}),[key]:value};
     return {...prev,[field]:next};
+  });
+  const generateDragDropTable=()=>setForm(prev=>{
+    const rows=Math.max(1,Math.min(8,Number.parseInt(prev.tableRows,10)||2));
+    const cols=Math.max(1,Math.min(8,Number.parseInt(prev.tableCols,10)||2));
+    const previousTargets=prev.targets||[];
+    const nextTargets=[];
+    for(let row=0;row<rows;row+=1) {
+      for(let col=0;col<cols;col+=1) {
+        const id=`r${row+1}c${col+1}`;
+        const existing=previousTargets.find(target=>target.id===id || (target.row===row&&target.col===col));
+        nextTargets.push({
+          id,
+          row,
+          col,
+          label:existing?.label || `Row ${row+1}, Column ${col+1}`,
+        });
+      }
+    }
+    const nextTargetIds=new Set(nextTargets.map(target=>target.id));
+    return {
+      ...prev,
+      tableRows:String(rows),
+      tableCols:String(cols),
+      targets:nextTargets,
+      correctMapping:Object.fromEntries(Object.entries(prev.correctMapping||{}).filter(([,targetId])=>nextTargetIds.has(targetId))),
+    };
   });
   const addPbqItem=field=>setForm(prev=>{
     const next=[...(prev[field]||[])];
@@ -19821,10 +19861,24 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                     <div>
                       <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:10}}>
                         <div>
-                          <div style={{fontWeight:900,color:t.text}}>Drop columns</div>
-                          <div style={{fontSize:11,color:t.textDim,marginTop:2}}>These are the columns users drag answers into.</div>
+                          <div style={{fontWeight:900,color:t.text}}>Drop table / cells</div>
+                          <div style={{fontSize:11,color:t.textDim,marginTop:2}}>Choose a table size, then edit each cell label. Each cell becomes a drop target.</div>
                         </div>
-                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("targets")}>Add column</button>
+                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("targets")}>Add loose cell</button>
+                      </div>
+                      <div className="card" style={{padding:12,background:`${t.green}08`,borderColor:`${t.green}25`,boxShadow:"none",marginBottom:10}}>
+                        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(120px,1fr)) auto",gap:10,alignItems:"end"}}>
+                          <AdminField label="Rows">
+                            <input className="input" type="number" min="1" max="8" value={form.tableRows||"2"} onChange={e=>updateField("tableRows",e.target.value)} style={{padding:"10px 12px"}}/>
+                          </AdminField>
+                          <AdminField label="Columns">
+                            <input className="input" type="number" min="1" max="8" value={form.tableCols||"2"} onChange={e=>updateField("tableCols",e.target.value)} style={{padding:"10px 12px"}}/>
+                          </AdminField>
+                          <button className="btn btn-primary" type="button" style={{fontSize:12,whiteSpace:"nowrap"}} onClick={generateDragDropTable}>Generate table cells</button>
+                        </div>
+                        <div style={{fontSize:11,color:t.textDim,lineHeight:1.5,marginTop:8}}>
+                          Tip: use cells for prompts such as “Attack type”, “Mitigation”, or “Firewall rule result”. Existing mappings are kept only when the same cell IDs still exist.
+                        </div>
                       </div>
                       <div style={{display:"grid",gap:10}}>
                         {(form.targets||[]).map((target,index)=>(
@@ -19833,7 +19887,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                               <AdminTextInput label="ID" value={target.id||""} onChange={v=>updateObjectArray("targets",index,"id",v)} placeholder={`t${index}`}/>
                               <button className="btn btn-ghost" type="button" style={{justifySelf:"end"}} onClick={()=>removePbqItem("targets",index)}>Remove</button>
                             </div>
-                            <AdminTextArea label={`Column ${index+1} name`} value={target.label||""} onChange={v=>updateObjectArray("targets",index,"label",v)} placeholder="Example: Attack type" rows={2} format/>
+                            <AdminTextArea label={`Cell ${index+1} label`} value={target.label||""} onChange={v=>updateObjectArray("targets",index,"label",v)} placeholder="Example: Attack type" rows={2} format/>
                           </div>
                         ))}
                       </div>
@@ -19864,9 +19918,9 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                               />
                             </div>
                             <div style={{marginTop:10,paddingTop:10,borderTop:`1px solid ${t.border}`}}>
-                              <AdminField label="Correct column">
+                              <AdminField label="Correct table cell">
                                 <select className="input" value={form.correctMapping?.[item.id]||""} onChange={e=>updateField("correctMapping",{...(form.correctMapping||{}),[item.id]:e.target.value})}>
-                                  <option value="">Choose column</option>
+                                  <option value="">Choose cell</option>
                                   {(form.targets||[]).map(target=><option key={target.id} value={target.id}>{target.label||target.id}</option>)}
                                 </select>
                               </AdminField>
@@ -20002,14 +20056,14 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                               ))}
                             </div>
                           ):(
-                            <div style={{marginTop:7,color:t.textDim}}>No items mapped to this column yet.</div>
+                            <div style={{marginTop:7,color:t.textDim}}>No items mapped to this cell yet.</div>
                           )}
                         </div>
                       );
                     })}
                     {(form.items||[]).some(item=>!form.correctMapping?.[item.id])&&(
                       <div style={{padding:"10px 12px",borderRadius:10,border:`1px dashed ${t.amber}55`,background:`${t.amber}08`,fontSize:13,color:t.amber}}>
-                        Some draggable items are not mapped to a column yet.
+                        Some draggable items are not mapped to a table cell yet.
                       </div>
                     )}
                   </div>
