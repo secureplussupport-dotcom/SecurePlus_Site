@@ -15690,6 +15690,11 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
   const [err,setErr]=useState("");
   const [ok,setOk]=useState("");
   const [loading,setLoading]=useState(false);
+  useEffect(()=>{
+    setMode(initialMode);
+    setErr("");
+    setOk("");
+  },[initialMode]);
   const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
   const resetMessages=()=>{setErr("");setOk("");};
   const jumpToAuth=nextMode=>{
