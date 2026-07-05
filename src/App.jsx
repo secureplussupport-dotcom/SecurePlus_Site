@@ -17226,6 +17226,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
         prompt:blank.sentence,
         userAnswer:blanks[blank.id]||"",
         correctAnswer:blank.answer,
+        solution:blank.explanation||blank.solution||"",
         correct:isFillBlankAnswerCorrect(blanks[blank.id],blank),
       }));
     }
@@ -17240,6 +17241,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
           label:item.label,
           userAnswer:userTarget?.label||"Not placed",
           correctAnswer:expectedTarget?.label||"Unmapped",
+          solution:item.explanation||item.solution||"",
           correct:userTargetId===expectedTargetId,
         };
       });
@@ -17561,6 +17563,11 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                       {!part.correct&&(
                         <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>
                           Correct answer: <strong style={{color:t.green}}>{part.correctAnswer}</strong>
+                        </div>
+                      )}
+                      {part.solution&&(
+                        <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginTop:6,padding:"8px 10px",borderRadius:7,background:t.surface,border:`1px solid ${t.border}`}}>
+                          <strong style={{color:t.text}}>Part solution: </strong><GlossaryText text={part.solution} t={t}/>
                         </div>
                       )}
                     </div>
@@ -18782,11 +18789,11 @@ function makeAdminQuestionTemplate(kind, nextOrder=1, sourceBank=[]) {
       logData:"",
       diagram:"",
       currentConfig:"",
-      items:[{id:"i0",label:""}],
+      items:[{id:"i0",label:"",explanation:""}],
       targets:[{id:"t0",label:""}],
       correctMapping:{},
       correctOrder:["i0"],
-      blanks:[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:""}]
+      blanks:[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:"",explanation:""}]
     };
   }
   return {
@@ -18826,11 +18833,11 @@ function questionToAdminForm(question,kind,index) {
       logData:question.logData||"",
       diagram:question.diagram||"",
       currentConfig:question.currentConfig||"",
-      items:Array.isArray(question.items)?question.items.map((item,index)=>({id:item.id||`i${index}`,label:item.label||""})):[{id:"i0",label:""}],
+      items:Array.isArray(question.items)?question.items.map((item,index)=>({id:item.id||`i${index}`,label:item.label||"",explanation:item.explanation||item.solution||""})):[{id:"i0",label:"",explanation:""}],
       targets:Array.isArray(question.targets)?question.targets.map((target,index)=>({id:target.id||`t${index}`,label:target.label||""})):[{id:"t0",label:""}],
       correctMapping:question.correctMapping||{},
       correctOrder:Array.isArray(question.correctOrder)?question.correctOrder:[],
-      blanks:Array.isArray(question.blanks)?question.blanks.map((blank,index)=>({id:blank.id||`b${index}`,sentence:blank.sentence||"",answer:blank.answer||"",acceptedAnswers:[...(blank.acceptedAnswers||[]),...(blank.aliases||[])].join("\n"),hint:blank.hint||""})):[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:""}]
+      blanks:Array.isArray(question.blanks)?question.blanks.map((blank,index)=>({id:blank.id||`b${index}`,sentence:blank.sentence||"",answer:blank.answer||"",acceptedAnswers:[...(blank.acceptedAnswers||[]),...(blank.aliases||[])].join("\n"),hint:blank.hint||"",explanation:blank.explanation||blank.solution||""})):[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:"",explanation:""}]
     };
   }
   return {
@@ -18911,7 +18918,11 @@ function cleanAdminQuestionPayload(form,kind) {
   if(pbqType==="HOTSPOT") question.diagram=String(form.diagram||"").trim();
   if(pbqType==="CONFIG/ACL") question.currentConfig=String(form.currentConfig||"").trim();
   if(pbqType==="DRAG & DROP") {
-    const items=(form.items||[]).map((item,index)=>({id:String(item.id||`i${index}`).trim()||`i${index}`,label:String(item.label||"").trim()})).filter(item=>item.label);
+    const items=(form.items||[]).map((item,index)=>({
+      id:String(item.id||`i${index}`).trim()||`i${index}`,
+      label:String(item.label||"").trim(),
+      explanation:String(item.explanation||"").trim()
+    })).filter(item=>item.label);
     const targets=(form.targets||[]).map((target,index)=>({id:String(target.id||`t${index}`).trim()||`t${index}`,label:String(target.label||"").trim()})).filter(target=>target.label);
     if(items.length<2||targets.length<2) throw new Error("Drag & Drop PBQs need at least 2 draggable items and 2 drop columns.");
     const targetIds=new Set(targets.map(target=>target.id));
@@ -18932,7 +18943,8 @@ function cleanAdminQuestionPayload(form,kind) {
       sentence:String(blank.sentence||"").trim(),
       answer:String(blank.answer||"").trim(),
       acceptedAnswers:parseAcceptedAnswers(blank.acceptedAnswers),
-      hint:String(blank.hint||"").trim()
+      hint:String(blank.hint||"").trim(),
+      explanation:String(blank.explanation||"").trim()
     })).filter(blank=>blank.sentence||blank.answer||blank.acceptedAnswers.length);
     if(!blanks.length) throw new Error("Fill Blank PBQs need at least one blank.");
     if(blanks.some(blank=>!blank.sentence||!blank.answer)) throw new Error("Every Fill Blank row needs a sentence and answer.");
@@ -19349,7 +19361,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const addPbqItem=field=>setForm(prev=>{
     const next=[...(prev[field]||[])];
     const prefix=field==="targets"?"t":field==="blanks"?"b":"i";
-    next.push(field==="blanks"?{id:`${prefix}${next.length}`,sentence:"",answer:"",acceptedAnswers:"",hint:""}:{id:`${prefix}${next.length}`,label:""});
+    next.push(field==="blanks"?{id:`${prefix}${next.length}`,sentence:"",answer:"",acceptedAnswers:"",hint:"",explanation:""}:{id:`${prefix}${next.length}`,label:"",explanation:""});
     return {...prev,[field]:next,correctOrder:field==="items"?next.map(item=>item.id):prev.correctOrder};
   });
   const removePbqItem=(field,index)=>setForm(prev=>{
@@ -19762,6 +19774,15 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                         </div>
                         <div style={{marginTop:10}}>
                           <AdminTextArea
+                            label={`Blank ${index+1} solution`}
+                            value={blank.explanation||""}
+                            onChange={v=>updateObjectArray("blanks",index,"explanation",v)}
+                            placeholder="Explain why this blank uses this answer."
+                            rows={2}
+                          />
+                        </div>
+                        <div style={{marginTop:10}}>
+                          <AdminTextArea
                             label="Accepted alternate answers"
                             value={blank.acceptedAnswers||""}
                             onChange={v=>updateObjectArray("blanks",index,"acceptedAnswers",v)}
@@ -19823,6 +19844,15 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                               <button className="btn btn-ghost" type="button" style={{justifySelf:"end"}} onClick={()=>removePbqItem("items",index)}>Remove</button>
                             </div>
                             <AdminTextArea label={`Item ${index+1} text`} value={item.label||""} onChange={v=>updateObjectArray("items",index,"label",v)} placeholder="Item shown to user" rows={2} format/>
+                            <div style={{marginTop:10}}>
+                              <AdminTextArea
+                                label={`Item ${index+1} solution`}
+                                value={item.explanation||""}
+                                onChange={v=>updateObjectArray("items",index,"explanation",v)}
+                                placeholder="Explain why this item belongs in its correct column."
+                                rows={2}
+                              />
+                            </div>
                             <div style={{marginTop:10,paddingTop:10,borderTop:`1px solid ${t.border}`}}>
                               <AdminField label="Correct column">
                                 <select className="input" value={form.correctMapping?.[item.id]||""} onChange={e=>updateField("correctMapping",{...(form.correctMapping||{}),[item.id]:e.target.value})}>
@@ -19927,6 +19957,11 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                       <div key={blank.id||index} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${t.border}`,background:t.panel}}>
                         <div style={{fontSize:13,color:t.text,lineHeight:1.55}}><GlossaryText text={blank.sentence||`Blank ${index+1} sentence`} t={t}/></div>
                         <div style={{fontSize:12,color:t.textSec,marginTop:5}}>Answer: <strong style={{color:t.green}}>{blank.answer||"Not set"}</strong></div>
+                        {blank.explanation&&(
+                          <div style={{fontSize:12,color:t.textSec,marginTop:4}}>
+                            Solution: <GlossaryText text={blank.explanation} t={t}/>
+                          </div>
+                        )}
                         {parseAcceptedAnswers(blank.acceptedAnswers).length>0&&(
                           <div style={{fontSize:12,color:t.textSec,marginTop:4}}>
                             Also accepted: {parseAcceptedAnswers(blank.acceptedAnswers).join(", ")}
@@ -19945,7 +19980,16 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                           <strong style={{color:t.text}}>{target.label||target.id}</strong>
                           {itemsForColumn.length?(
                             <div style={{display:"grid",gap:5,marginTop:7}}>
-                              {itemsForColumn.map(item=><div key={item.id}>- {item.label||item.id}</div>)}
+                              {itemsForColumn.map(item=>(
+                                <div key={item.id}>
+                                  <div>- {item.label||item.id}</div>
+                                  {item.explanation&&(
+                                    <div style={{fontSize:12,color:t.textDim,marginLeft:12,marginTop:2}}>
+                                      Solution: <GlossaryText text={item.explanation} t={t}/>
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
                             </div>
                           ):(
                             <div style={{marginTop:7,color:t.textDim}}>No items mapped to this column yet.</div>
