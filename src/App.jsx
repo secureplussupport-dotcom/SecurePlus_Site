@@ -14147,8 +14147,10 @@ const makeCSS = (t) => `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{background:${t.bg};scroll-behavior:smooth;}
 body{background:
-linear-gradient(180deg, ${t.bg} 0%, ${t.bg} 54%, ${t.panel} 100%),
-linear-gradient(120deg, ${t.accent}0d, transparent 38%, ${t.green}0a 78%, transparent);color:${t.text};font-family:'Montserrat',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;font-size:15px;line-height:1.6;letter-spacing:0;transition:background .3s,color .3s;}
+linear-gradient(180deg, ${t.bg} 0%, ${t.bg} 52%, ${t.panel} 100%),
+linear-gradient(120deg, ${t.accent}0d, transparent 36%, ${t.green}0a 78%, transparent),
+linear-gradient(${t.border}24 1px, transparent 1px),
+linear-gradient(90deg, ${t.border}1c 1px, transparent 1px);background-size:auto,auto,44px 44px,44px 44px;color:${t.text};font-family:'Montserrat',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;font-size:15px;line-height:1.6;letter-spacing:0;transition:background .3s,color .3s;}
 h1,h2,h3{font-family:'Montserrat',system-ui,sans-serif;font-weight:800;letter-spacing:0;}
 button,input,select{font:inherit;}
 button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-visible,.opt:focus-visible{outline:3px solid ${t.accent}38;outline-offset:2px;}
@@ -14157,14 +14159,26 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 ::-webkit-scrollbar-thumb{background:${t.border};border-radius:3px;}
 .card{background:linear-gradient(180deg, ${t.surface}, ${t.panel}f6);border:1px solid ${t.border};border-radius:8px;box-shadow:0 12px 28px rgba(7,12,24,.09);animation:softRise .38s cubic-bezier(.16,1,.3,1) both;}
 .card:hover{border-color:${t.accent}30;}
+.surface-panel{border:1px solid ${t.border};border-radius:8px;background:linear-gradient(180deg,${t.surface},${t.panel});box-shadow:0 14px 30px rgba(7,12,24,.08);}
 .card::selection{background:${t.accent}30;}
 .card:nth-of-type(2){animation-delay:.03s;}
 .card:nth-of-type(3){animation-delay:.06s;}
 .card:nth-of-type(4){animation-delay:.09s;}
 .dashboard-shell{padding:30px 24px;max-width:1180px;margin:0 auto;}
+.dashboard-kicker{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid ${t.accent}30;border-radius:999px;background:${t.accent}0f;color:${t.accent};font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+.dashboard-action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.dashboard-focus-card{position:relative;z-index:1;padding:16px 18px;min-width:210px;border-color:${t.green}35!important;background:linear-gradient(180deg,${t.green}0f,${t.surface})!important;}
+.dashboard-focus-card::after{content:"";position:absolute;left:16px;right:16px;bottom:0;height:3px;border-radius:99px;background:linear-gradient(90deg,${t.green},${t.accent});}
+.dashboard-plan-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;margin-bottom:18px;}
+.dashboard-plan-card{padding:18px 20px;border-color:${t.accent}26;background:linear-gradient(135deg,${t.accent}0f,${t.surface} 58%,${t.green}09);}
+.dashboard-plan-card strong{color:${t.text};}
+.dashboard-plan-steps{display:grid;gap:9px;}
+.dashboard-plan-step{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid ${t.border};border-radius:8px;background:${t.panel};}
+.dashboard-plan-index{width:24px;height:24px;border-radius:999px;background:${t.accent};color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex-shrink:0;}
 .dashboard-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:18px;margin-bottom:20px;}
 .dashboard-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:13px;margin-bottom:18px;}
-.game-hero{position:relative;overflow:hidden;border-radius:8px;padding:28px;border:1px solid ${t.accent}34;background:linear-gradient(135deg, ${t.accent}18, ${t.surface} 46%, ${t.green}12);box-shadow:0 22px 48px ${t.accent}12;}
+.game-hero{position:relative;overflow:hidden;border-radius:8px;padding:30px;border:1px solid ${t.accent}34;background:linear-gradient(135deg, ${t.accent}18, ${t.surface} 46%, ${t.green}12);box-shadow:0 22px 48px ${t.accent}12;}
+.game-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,${t.accent}0b,transparent);transform:translateX(-100%);animation:heroSweep 8s ease-in-out infinite;pointer-events:none;}
 .game-hero::after{content:"";position:absolute;inset:auto -1px -1px -1px;height:3px;background:linear-gradient(90deg,${t.accent},${t.green},#f59e0b);opacity:.9;}
 .mission-banner{position:relative;overflow:hidden;padding:16px 18px;border-radius:10px;border:1px solid ${t.accent}2f;background:linear-gradient(135deg,${t.accent}12,${t.surface} 54%,${t.green}0f);box-shadow:0 14px 32px ${t.accent}0e;}
 .mission-banner::before{content:"";position:absolute;left:-18%;top:-90%;width:52%;height:280%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transform:rotate(18deg);animation:missionSweep 5.5s ease-in-out infinite;}
@@ -14485,6 +14499,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .streak-number{font-size:68px;line-height:1;font-weight:900;color:${t.text};text-shadow:0 0 30px ${t.accent}55;font-family:'Montserrat',sans-serif;}
 @keyframes softRise{from{opacity:0;transform:translateY(10px) scale(.992)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes softGlow{0%,100%{box-shadow:0 10px 22px ${t.accent}10;}50%{box-shadow:0 12px 28px ${t.accent}22;}}
+@keyframes heroSweep{0%,62%{transform:translateX(-110%)}82%,100%{transform:translateX(110%)}}
 @keyframes barShine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 @keyframes missionSweep{0%,55%{transform:translateX(-120%) rotate(18deg)}80%,100%{transform:translateX(270%) rotate(18deg)}}
 @keyframes demoGlow{0%,100%{transform:translate(0,0) scale(1);opacity:.75;}50%{transform:translate(70%,20%) scale(1.18);opacity:1;}}
@@ -14535,17 +14550,25 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .sidebar-restore:hover{transform:translateY(-1px);border-color:${t.accent}55;box-shadow:0 16px 34px ${t.accent}16;}
 .mobile-topbar{display:none;}
 .auth-layout{width:100%;max-width:980px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:stretch;}
-.landing-page{min-height:100vh;padding:0 24px 44px;background:transparent;}
-.landing-header{position:sticky;top:0;z-index:150;max-width:1120px;margin:0 auto 28px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;padding:14px 0;background:${t.bg}e8;backdrop-filter:blur(16px);border-bottom:1px solid ${t.border};}
+.landing-page{min-height:100vh;padding:0 24px 54px;background:transparent;}
+.landing-header{position:sticky;top:10px;z-index:150;max-width:1120px;margin:0 auto 28px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;padding:12px 14px;background:${t.bg}e8;backdrop-filter:blur(16px);border:1px solid ${t.border};border-radius:8px;box-shadow:0 14px 34px rgba(7,12,24,.1);}
 .landing-nav-center{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;}
 .landing-nav-center a{color:${t.textSec};font-size:13px;font-weight:800;text-decoration:none;padding:8px 10px;border-radius:8px;transition:background .18s,color .18s;}
 .landing-nav-center a:hover{color:${t.text};background:${t.panel};}
 .landing-nav-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;}
-.landing-main{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:22px;}
+.landing-main{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:24px;}
 .landing-section{scroll-margin-top:92px;}
-.landing-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:22px;align-items:center;padding:34px 0 10px;}
-.landing-title{font-size:clamp(40px,5vw,56px);line-height:1.02;font-weight:900;letter-spacing:0;color:${t.text};max-width:760px;}
+.landing-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:26px;align-items:center;padding:26px 0 10px;}
+.landing-title{font-size:clamp(40px,5vw,58px);line-height:1.02;font-weight:900;letter-spacing:0;color:${t.text};max-width:760px;text-wrap:balance;}
 .landing-copy{color:${t.textSec};font-size:17px;line-height:1.75;max-width:620px;margin-top:16px;}
+.landing-benefit-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.landing-benefit-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid ${t.border};border-radius:999px;background:${t.panel};color:${t.textSec};font-size:12px;font-weight:850;}
+.landing-benefit-pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--benefit-color,${t.accent});box-shadow:0 0 0 4px color-mix(in srgb,var(--benefit-color,${t.accent}) 14%, transparent);}
+.landing-primary-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:22px;}
+.landing-proof-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:18px;max-width:640px;}
+.landing-proof-item{padding:10px 11px;border:1px solid ${t.border};border-radius:8px;background:${t.panel};}
+.landing-proof-label{font-size:10px;font-weight:900;color:${t.textDim};text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;}
+.landing-proof-value{font-size:13px;color:${t.text};font-weight:900;line-height:1.35;}
 .landing-preview{display:flex;flex-direction:column;gap:14px;}
 .landing-demo-card{padding:14px;border-color:${t.accent}35;overflow:hidden;animation:floatCard 5.2s ease-in-out infinite;}
 .landing-demo-gif{display:block;width:100%;aspect-ratio:13/8;object-fit:cover;border-radius:7px;border:1px solid ${t.border};background:#0b1220;}
@@ -14581,10 +14604,14 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .landing-secondary-links button{background:transparent;border:0;padding:0;color:${t.textSec};font:inherit;font-size:13px;font-weight:800;text-decoration:underline;text-underline-offset:4px;cursor:pointer;}
 .landing-secondary-links button:hover{color:${t.accent};}
 .landing-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.landing-stat-card{position:relative;overflow:hidden;padding:16px;min-width:0;}
+.landing-stat-card::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--stat-color),transparent);}
+.landing-stat-value{font-size:24px;font-weight:950;color:var(--stat-color);line-height:1.05;margin-bottom:4px;}
 .landing-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
-.landing-feature-card{position:relative;padding:20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;animation:softRise .44s cubic-bezier(.16,1,.3,1) both;}
+.landing-feature-card{position:relative;padding:20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;animation:softRise .44s cubic-bezier(.16,1,.3,1) both;min-height:154px;}
 .landing-feature-card[data-plan="free"]{border-color:${t.green}36;background:linear-gradient(180deg,${t.green}08,${t.surface});}
 .landing-feature-card[data-plan="pro"]{border-color:${t.amber}70;background:linear-gradient(180deg,${t.amber}14,${t.surface});box-shadow:0 16px 34px ${t.amber}10;}
+.landing-feature-card::after{content:"";position:absolute;left:16px;right:16px;bottom:0;height:3px;border-radius:99px;background:linear-gradient(90deg,var(--feature-color,${t.accent}),transparent);opacity:.75;}
 .plan-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;}
 .plan-badge.free{color:${t.green};background:${t.green}12;border:1px solid ${t.green}35;}
 .plan-badge.pro{color:#111827;background:${t.amber};border:1px solid ${t.amber};box-shadow:0 8px 20px ${t.amber}24;}
@@ -14602,6 +14629,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .smart-compare-card.with .smart-queue-dot{background:${t.green};box-shadow:0 0 0 4px ${t.green}18;}
 .landing-split-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);gap:16px;align-items:stretch;}
 .landing-pricing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.pricing-feature-row{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:${t.textSec};line-height:1.65;margin:7px 0;}
+.pricing-feature-row span:first-child{width:19px;height:19px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:${t.green}14;color:${t.green};font-size:11px;font-weight:900;flex-shrink:0;margin-top:1px;}
 .landing-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
 .landing-auth-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,430px);gap:22px;align-items:start;padding:26px;border:1px solid ${t.border};border-radius:8px;background:linear-gradient(135deg, ${t.accent}10, ${t.surface}f0 42%, ${t.green}0d);box-shadow:0 16px 36px rgba(7,12,24,.08);}
 .pillar-icon{width:46px;height:46px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;color:var(--pillar-color);background:color-mix(in srgb,var(--pillar-color) 13%, transparent);border:1px solid color-mix(in srgb,var(--pillar-color) 38%, transparent);transition:transform .2s,box-shadow .2s,background .2s;}
@@ -14650,6 +14679,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .dashboard-shell{padding:18px 16px 98px!important;}
   .dashboard-grid{grid-template-columns:1fr!important;}
   .dashboard-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .dashboard-plan-grid{grid-template-columns:1fr!important;}
+  .dashboard-action-row .btn{flex:1 1 160px;}
+  .dashboard-focus-card{min-width:0!important;}
   .setup-hero{padding:18px!important;}
   .setup-hero > div{grid-template-columns:1fr!important;}
   .setup-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
@@ -14706,6 +14738,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .landing-hero{grid-template-columns:1fr!important;padding-top:10px!important;gap:16px!important;}
   .landing-title{font-size:34px!important;line-height:1.08!important;}
   .landing-copy{font-size:14px!important;}
+  .landing-primary-actions .btn{width:100%;}
+  .landing-proof-strip{grid-template-columns:1fr!important;}
   .landing-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
   .landing-feature-grid,.landing-split-section,.landing-pricing-grid,.landing-faq-grid,.landing-auth-section,.referral-grid{grid-template-columns:1fr!important;}
   .landing-feature-card{grid-template-columns:1fr!important;}
@@ -15903,12 +15937,33 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             <p className="landing-copy">
               {MCQ_BANK.length}+ MCQs + {PBQ_BANK.length} PBQs. Free to start. No account needed.
             </p>
-            <div style={{marginTop:22}}>
+            <div className="landing-benefit-row" aria-label="SecurePlus benefits">
+              {[
+                {label:"Full MCQ bank free",color:t.accent},
+                {label:"PBQ simulations for Pro",color:t.amber},
+                {label:"Smart Review remembers misses",color:t.green},
+              ].map(item=>(
+                <span key={item.label} className="landing-benefit-pill" style={{"--benefit-color":item.color}}>{item.label}</span>
+              ))}
+            </div>
+            <div className="landing-primary-actions">
               <button className="btn btn-primary" style={{padding:"13px 22px",fontSize:15}} onClick={onPracticeMcq}>Start Practising Free →</button>
               <div className="landing-secondary-links" aria-label="Secondary actions">
                 <button type="button" onClick={()=>jumpToAuth("signup")}>Create account to save progress</button>
                 <button type="button" onClick={onDaily}>Try Daily Challenge</button>
               </div>
+            </div>
+            <div className="landing-proof-strip">
+              {[
+                {label:"Question style",value:"MCQ + PBQ"},
+                {label:"Practice model",value:"Weak topics first"},
+                {label:"Price clarity",value:"$4.99 per year"},
+              ].map(item=>(
+                <div key={item.label} className="landing-proof-item">
+                  <div className="landing-proof-label">{item.label}</div>
+                  <div className="landing-proof-value">{item.value}</div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -15922,12 +15977,12 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             </div>
             <div className="landing-stat-grid">
               {[
-                {v:MCQ_BANK.length,l:"MCQs"},
-                {v:PBQ_BANK.length,l:"PBQs"},
-                {v:"$4.99/year",l:"Pro plan"},
+                {v:MCQ_BANK.length,l:"MCQs",color:t.accent},
+                {v:PBQ_BANK.length,l:"PBQs",color:t.green},
+                {v:"$4.99/year",l:"Pro plan",color:t.amber},
               ].map(s=>(
-                <div key={s.l} className="card" style={{padding:"16px",minWidth:0}}>
-                  <div style={{fontSize:24,fontWeight:900,color:t.text}}>{s.v}</div>
+                <div key={s.l} className="card landing-stat-card" style={{"--stat-color":s.color}}>
+                  <div className="landing-stat-value">{s.v}</div>
                   <div className="label" style={{whiteSpace:"normal"}}>{s.l}</div>
                 </div>
               ))}
@@ -15935,9 +15990,17 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           </div>
         </section>
 
+        <div className="surface-panel" style={{padding:"16px 18px",display:"flex",justifyContent:"space-between",gap:14,alignItems:"center",flexWrap:"wrap"}}>
+          <div>
+            <div className="label" style={{color:t.accent}}>Designed for long-term retention</div>
+            <div style={{fontWeight:900,color:t.text,fontSize:16}}>Practise free, then create an account when you want your progress saved.</div>
+          </div>
+          <button className="btn btn-outline" style={{fontSize:13}} onClick={()=>jumpToAuth("signup")}>Save Progress Free</button>
+        </div>
+
         <section id="features" className="landing-feature-grid landing-section">
           {featureCards.map(card=>(
-            <div key={card.title} className="card card-hover landing-feature-card" data-plan={card.plan}>
+            <div key={card.title} className="card card-hover landing-feature-card" data-plan={card.plan} style={{"--feature-color":card.color}}>
               <PillarIcon type={card.type} color={card.color}/>
               <div>
                 <span className={`plan-badge ${card.plan}`}>{card.plan==="free"?"Free":"Pro"}</span>
@@ -15993,7 +16056,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             <h2 style={{fontSize:24,color:t.text,marginBottom:4}}>$0</h2>
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Best for starting Security+ practice.</p>
             {["All MCQ questions","Daily Challenge","Create an account to save progress","Basic practice history"].map(item=>(
-              <div key={item} style={{fontSize:13,color:t.textSec,lineHeight:1.8}}>✓ {item}</div>
+              <div key={item} className="pricing-feature-row"><span>✓</span><div>{item}</div></div>
             ))}
             <button className="btn btn-outline" style={{width:"100%",marginTop:18}} onClick={onPracticeMcq}>Practise MCQs Free</button>
           </div>
@@ -16002,7 +16065,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             <h2 style={{fontSize:24,color:t.text,marginBottom:4}}>$4.99/year</h2>
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Annual Pro access for one clear yearly price.</p>
             {["PBQ simulations","Exam Mode with MCQ + PBQ mix","Detailed solutions and weak-chapter guidance","Smart Review for missed questions"].map(item=>(
-              <div key={item} style={{fontSize:13,color:t.textSec,lineHeight:1.8}}>✓ {item}</div>
+              <div key={item} className="pricing-feature-row"><span>✓</span><div>{item}</div></div>
             ))}
             <button className="btn btn-primary" style={{width:"100%",marginTop:18}} onClick={()=>jumpToAuth("signup")}>Sign Up Free</button>
           </div>
@@ -16157,7 +16220,7 @@ function Dashboard({user,attempts,onNav,t}) {
       <div className="game-hero reward-pop" style={{marginBottom:18}}>
         <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:18,alignItems:"center"}}>
           <div>
-            <div className="label" style={{color:t.accent,marginBottom:8}}>Learning path</div>
+            <div className="dashboard-kicker">Learning path</div>
             <h2 style={{fontSize:30,fontWeight:900,color:t.text,marginBottom:8}}>
               Welcome back, {user.name.split(" ")[0]}
             </h2>
@@ -16166,13 +16229,13 @@ function Dashboard({user,attempts,onNav,t}) {
               readiness>=75?"You are building strong exam readiness. Keep the streak alive and protect the score.":
               "Repair missed questions and move chapter by chapter."}
             </p>
-            <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:16}}>
+            <div className="dashboard-action-row">
               <button className="btn btn-primary" onClick={()=>onNav("mcq")}>Start lesson</button>
               <button className="btn btn-outline" onClick={()=>onNav("daily")}>Daily challenge</button>
               {isPro?<button className="btn btn-ghost" onClick={()=>onNav("exam")}>Exam run</button>:<button className="btn btn-ghost" onClick={()=>onNav("pricing")}>Unlock PBQs</button>}
             </div>
           </div>
-          <div className="card" style={{position:"relative",zIndex:1,padding:"16px 18px",minWidth:190,borderColor:`${t.green}35`,background:`${t.green}08`}}>
+          <div className="card dashboard-focus-card">
             <div className="label" style={{marginBottom:8}}>Focus score</div>
             <div style={{fontSize:34,fontWeight:900,color:t.green,lineHeight:1}}>{readiness}%</div>
             <div style={{fontSize:12,color:t.textSec,margin:"6px 0 10px"}}>readiness estimate</div>
@@ -16198,6 +16261,44 @@ function Dashboard({user,attempts,onNav,t}) {
             <div style={{fontSize:30,fontWeight:900,color:s.color,lineHeight:1}}>{s.value}</div>
           </div>
         ))}
+      </div>
+
+      <div className="dashboard-plan-grid">
+        <div className="card dashboard-plan-card">
+          <div className="label" style={{color:t.accent,marginBottom:7}}>Recommended today</div>
+          <div style={{fontWeight:950,color:t.text,fontSize:19,marginBottom:6}}>
+            {readiness>=75?"Run one timed set and protect pacing.":accuracy<65?"Repair missed concepts before adding new topics.":"Keep momentum with a focused practice set."}
+          </div>
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+            {readiness>=75?"Exam Mode helps you practise pressure, flags, elimination, and review timing.":
+            accuracy<65?"Smart Review puts weak areas first so your next session has a higher chance of moving the score.":
+            "A shorter focused set is enough to keep the habit strong without bloating your review queue."}
+          </div>
+          <div className="dashboard-action-row" style={{marginTop:14}}>
+            <button className="btn btn-primary" style={{fontSize:13}} onClick={()=>onNav(readiness>=75&&isPro?"exam":"mcq")}>
+              {readiness>=75&&isPro?"Start Exam Mode":"Start Focus Set"}
+            </button>
+            <button className="btn btn-outline" style={{fontSize:13}} onClick={()=>onNav("daily")}>Do Daily Challenge</button>
+          </div>
+        </div>
+        <div className="card" style={{padding:"18px 20px"}}>
+          <div className="label" style={{color:t.green,marginBottom:10}}>3-step study loop</div>
+          <div className="dashboard-plan-steps">
+            {[
+              {title:"Answer",body:"Complete one focused MCQ or PBQ set."},
+              {title:"Review",body:"Read the missed explanations while fresh."},
+              {title:"Return",body:"Let Smart Review bring weak topics back."},
+            ].map((step,index)=>(
+              <div key={step.title} className="dashboard-plan-step">
+                <span className="dashboard-plan-index">{index+1}</span>
+                <div>
+                  <div style={{fontWeight:900,color:t.text,fontSize:13}}>{step.title}</div>
+                  <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>{step.body}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="card" style={{padding:"18px 20px",marginBottom:18,borderColor:`${t.accent}25`}}>
@@ -16315,7 +16416,7 @@ function Dashboard({user,attempts,onNav,t}) {
           {/* Daily challenge card */}
           <div className="card card-hover" style={{padding:"18px 20px",borderColor:`${t.accent}30`,cursor:"pointer"}} onClick={()=>onNav("daily")}>
             <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
-              <span style={{fontSize:28}}>🎯</span>
+              <span className="mission-badge" style={{background:"#ef4444",width:42,height:42}}>D</span>
               <div style={{flex:1}}>
                 <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:3}}>{challenge.title}</div>
                 <div style={{fontSize:12,color:t.textSec,marginBottom:10}}>{challenge.description}</div>
@@ -16366,23 +16467,51 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
       <div className="game-hero reward-pop" style={{marginBottom:18}}>
         <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:18,alignItems:"center"}}>
           <div>
-            <div className="label" style={{color:t.accent,marginBottom:8}}>Free preview</div>
+            <div className="dashboard-kicker">Free preview</div>
             <h2 style={{fontSize:30,fontWeight:900,color:t.text,marginBottom:8}}>
               Try SecurePlus first. Save progress when you are ready.
             </h2>
             <p style={{color:t.textSec,fontSize:14,lineHeight:1.75,maxWidth:680}}>
               You can practise MCQs and complete today&apos;s Daily Challenge without registering. Your answers, streaks, weak topics, and Smart Review queue are only saved after you create a free account or sign in.
             </p>
-            <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:16}}>
+            <div className="dashboard-action-row">
               <button className="btn btn-primary" onClick={onPractice}>Start MCQ Practice</button>
               <button className="btn btn-outline" onClick={onDaily}>Try Daily Challenge</button>
               <button className="btn btn-ghost" onClick={onSignup}>Create account to save progress</button>
             </div>
           </div>
-          <div className="card" style={{position:"relative",zIndex:1,padding:"16px 18px",minWidth:210,borderColor:`${t.accent}35`,background:`${t.accent}08`}}>
+          <div className="card dashboard-focus-card" style={{borderColor:`${t.accent}35`,background:`${t.accent}08`}}>
             <div className="label" style={{marginBottom:8}}>Saved after signup</div>
             {["Scores and attempts","Daily streaks","Smart Review queue","Weak chapter history"].map(item=>(
               <div key={item} style={{fontSize:13,color:t.textSec,lineHeight:1.9}}>✓ {item}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="dashboard-plan-grid">
+        <div className="card dashboard-plan-card">
+          <div className="label" style={{color:t.accent,marginBottom:7}}>Guest experience</div>
+          <div style={{fontWeight:950,color:t.text,fontSize:19,marginBottom:6}}>You can try the learning flow before creating an account.</div>
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+            MCQ Practice and Daily Challenge are open immediately. After you finish a set, SecurePlus will ask you to sign up only if you want to save progress and personalise future practice.
+          </div>
+        </div>
+        <div className="card" style={{padding:"18px 20px"}}>
+          <div className="label" style={{color:t.green,marginBottom:10}}>What changes after signup</div>
+          <div className="dashboard-plan-steps">
+            {[
+              {title:"Progress saved",body:"Scores and missed questions stay attached to your account."},
+              {title:"Smart Review starts",body:"Weak topics come back earlier instead of random repetition."},
+              {title:"Upgrade path clear",body:"Pro stays optional for PBQs and Exam Mode."},
+            ].map((step,index)=>(
+              <div key={step.title} className="dashboard-plan-step">
+                <span className="dashboard-plan-index">{index+1}</span>
+                <div>
+                  <div style={{fontWeight:900,color:t.text,fontSize:13}}>{step.title}</div>
+                  <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>{step.body}</div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
