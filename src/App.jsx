@@ -982,6 +982,8 @@ function getPbqAcronyms(question) {
     question?.choices || [],
     question?.explanation,
     question?.steps || [],
+    question?.codeLanguage,
+    question?.codeBlock,
     question?.logData,
     question?.diagram,
     question?.currentConfig
@@ -14924,6 +14926,20 @@ function Alert({msg,type="error",t}) {
   const c=type==="success"?t.green:type==="warn"?t.amber:t.red;
   return <div style={{padding:"10px 14px",borderRadius:8,background:`${c}12`,border:`1px solid ${c}30`,color:c,fontSize:13,marginBottom:12}}>{msg}</div>;
 }
+function CodeSnippetBlock({code,language="",t,title="Code sample"}) {
+  const text=String(code||"").trim();
+  const lang=String(language||"").trim();
+  if(!text) return null;
+  return (
+    <div style={{marginBottom:18}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:8}}>
+        <div style={{fontWeight:800,fontSize:13,color:t.text}}>{title}</div>
+        {lang&&<span className="chip" style={{background:`${t.accent}12`,borderColor:`${t.accent}35`,color:t.accent,textTransform:"uppercase",letterSpacing:.4}}>{lang}</span>}
+      </div>
+      <pre className="log-block" style={{fontSize:13,lineHeight:1.65,whiteSpace:"pre-wrap",overflowX:"auto",margin:0}}>{text}</pre>
+    </div>
+  );
+}
 function countWords(value) {
   return String(value || "").trim().split(/\s+/).filter(Boolean).length;
 }
@@ -17351,6 +17367,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
           {q.steps.map((s,i)=><div key={i} style={{fontSize:12,color:t.textDim,padding:"2px 0"}}><span style={{color:simType.color,fontWeight:600,marginRight:8}}>{i+1}.</span>{s}</div>)}
         </div>}
       </div>
+      <CodeSnippetBlock code={q.codeBlock} language={q.codeLanguage} t={t}/>
 
       {/* TERMINAL */}
       {q.type==="TERMINAL SIM"&&(
@@ -18327,6 +18344,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
             )}
           </div>
 
+          {current.kind==="pbq"&&q.codeBlock&&<CodeSnippetBlock code={q.codeBlock} language={q.codeLanguage} t={t}/>}
           {current.kind==="pbq"&&q.logData&&<div className="log-block" style={{marginBottom:16}}>{q.logData}</div>}
           {current.kind==="pbq"&&q.diagram&&<pre className="log-block" style={{marginBottom:16}}>{q.diagram}</pre>}
           {current.kind==="pbq"&&q.currentConfig&&<div className="terminal" style={{marginBottom:16,color:t.codeWarn}}>{q.currentConfig}</div>}
@@ -18864,6 +18882,8 @@ function makeAdminQuestionTemplate(kind, nextOrder=1, sourceBank=[]) {
       explanation:"",
       hint:"",
       answer:"",
+      codeLanguage:"",
+      codeBlock:"",
       logData:"",
       diagram:"",
       currentConfig:"",
@@ -18910,6 +18930,8 @@ function questionToAdminForm(question,kind,index) {
       explanation:question.explanation||question.exp||"",
       hint:question.hint||"",
       answer:question.answer||"",
+      codeLanguage:question.codeLanguage||question.language||"",
+      codeBlock:question.codeBlock||question.code||"",
       logData:question.logData||"",
       diagram:question.diagram||"",
       currentConfig:question.currentConfig||"",
@@ -18991,6 +19013,11 @@ function cleanAdminQuestionPayload(form,kind) {
     question:taskText,
     explanation:String(form.explanation||"").trim()
   };
+  const codeBlock=String(form.codeBlock||"").trim();
+  if(codeBlock) {
+    question.codeLanguage=String(form.codeLanguage||"").trim().slice(0,40);
+    question.codeBlock=codeBlock;
+  }
   if(pbqType==="TERMINAL SIM") {
     question.hint=String(form.hint||"").trim();
     question.answer=String(form.answer||"").trim();
@@ -19382,7 +19409,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const topicOptions=getAdminTopicOptions(kind,form.ch,bank,kind==="mcq"?form.topic:form.cat);
   const detectedAcronyms=useMemo(()=>kind==="mcq"
     ? extractAcronymsFromText(form.q,form.opts||[],form.exp,Object.values(form.wrongFeedback||{}))
-    : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation,form.answer,form.logData,form.diagram,form.currentConfig,(form.items||[]).map(item=>item.label),(form.targets||[]).map(target=>target.label),(form.blanks||[]).flatMap(blank=>[blank.sentence,blank.answer,blank.acceptedAnswers,blank.hint])),
+    : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation,form.answer,form.codeLanguage,form.codeBlock,form.logData,form.diagram,form.currentConfig,(form.items||[]).map(item=>item.label),(form.targets||[]).map(target=>target.label),(form.blanks||[]).flatMap(blank=>[blank.sentence,blank.answer,blank.acceptedAnswers,blank.hint])),
   [form,kind]);
 
   const resetToNew=useCallback((nextKind=kind)=>{
@@ -19839,6 +19866,15 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
               </AdminField>
               <div style={{height:12}}/>
               <AdminTextArea label="Scenario" value={form.scenario} onChange={v=>updateField("scenario",v)} placeholder="Explain the environment or situation." rows={5}/>
+              <div className="card" style={{padding:14,background:`${t.panel}66`,marginTop:12}}>
+                <div style={{fontWeight:900,color:t.text,marginBottom:8}}>Code sample (optional)</div>
+                <div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginBottom:10}}>
+                  Use this when the PBQ scenario needs to show SQL, Bash, Python, JSON, firewall rules, or another code/config block.
+                </div>
+                <AdminTextInput label="Code language" value={form.codeLanguage} onChange={v=>updateField("codeLanguage",v)} placeholder="SQL, Bash, Python, JSON..."/>
+                <div style={{height:12}}/>
+                <AdminTextArea label="Code block" value={form.codeBlock} onChange={v=>updateField("codeBlock",v)} placeholder={"Example:\nSELECT * FROM users WHERE username = '$input';"} rows={7} format={false}/>
+              </div>
               {form.type!=="DRAG & DROP"&&form.type!=="ORDERING"&&form.type!=="FILL BLANK"&&(
                 <>
                   <div style={{height:12}}/>
@@ -20094,6 +20130,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                 <div style={{fontSize:18,fontWeight:900,color:t.text,marginBottom:8}}><GlossaryText text={form.title||"PBQ title preview"} t={t}/></div>
                 <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:12}}><GlossaryText text={form.scenario||"Scenario preview will appear here."} t={t}/></p>
                 <div style={{fontSize:16,color:t.text,lineHeight:1.5,marginBottom:12}}><QuestionStemText text={form.question||"Task preview will appear here."} t={t} compact/></div>
+                <CodeSnippetBlock code={form.codeBlock} language={form.codeLanguage} t={t} title="Code sample preview"/>
                 {form.type==="FILL BLANK"&&(
                   <div style={{display:"grid",gap:8,marginBottom:12}}>
                     {(form.blanks||[]).map((blank,index)=>(
