@@ -14266,6 +14266,33 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .radial-score{width:156px;height:156px;margin:8px auto 10px;display:block;}
 .radial-score .score-progress{transition:stroke-dashoffset .75s cubic-bezier(.16,1,.3,1);}
 .score-actions{position:sticky;top:10px;z-index:45;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:0 0 18px;padding:10px;border:1px solid ${t.border};border-radius:12px;background:${t.surface}ed;backdrop-filter:blur(16px);box-shadow:0 14px 30px rgba(7,12,24,.12);}
+.results-shell{padding:28px 24px 110px;max-width:980px;margin:0 auto;}
+.results-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 0;}
+.results-summary-tile{padding:13px 14px;border:1px solid ${t.border};border-radius:12px;background:${t.panel};text-align:left;}
+.results-summary-label{font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:${t.textDim};margin-bottom:5px;}
+.results-summary-value{font-size:20px;font-weight:950;color:${t.text};line-height:1.1;}
+.review-toolbar{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin:24px 0 12px;flex-wrap:wrap;}
+.review-count-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid ${t.border};border-radius:999px;background:${t.panel};color:${t.textSec};font-size:12px;font-weight:850;}
+.exam-review-card{position:relative;padding:0!important;border-radius:14px!important;overflow:hidden;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s,background .18s;}
+.exam-review-card:hover{transform:translateY(-1px);box-shadow:0 16px 36px rgba(7,12,24,.12);}
+.exam-review-card.correct{border-color:${t.green}38!important;background:linear-gradient(135deg,${t.green}08,${t.surface} 44%);}
+.exam-review-card.incorrect{border-color:${t.red}42!important;background:linear-gradient(135deg,${t.red}08,${t.surface} 44%);}
+.exam-review-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--review-color);}
+.exam-review-main{padding:16px 18px 14px 20px;}
+.exam-review-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:flex-start;margin-bottom:10px;}
+.exam-review-status{width:38px;height:38px;border-radius:999px;display:grid;place-items:center;background:var(--review-color);color:white;font-size:18px;font-weight:950;box-shadow:0 0 0 6px color-mix(in srgb,var(--review-color) 14%, transparent);}
+.exam-review-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0;}
+.exam-review-title{font-size:15px;font-weight:850;color:${t.text};line-height:1.62;overflow-wrap:anywhere;}
+.exam-review-toggle{align-self:center;white-space:nowrap;color:${t.textSec};background:${t.panel};border:1px solid ${t.border};border-radius:999px;padding:8px 10px;font-size:12px;font-weight:850;}
+.answer-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 12px;}
+.answer-compare-box{padding:11px 12px;border:1px solid ${t.border};border-radius:11px;background:${t.panel};font-size:13px;color:${t.textSec};line-height:1.55;min-width:0;}
+.answer-compare-box strong{display:block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;}
+.answer-compare-box.yours{border-color:${t.red}35;background:${t.red}07;}
+.answer-compare-box.correct{border-color:${t.green}35;background:${t.green}07;}
+.answer-compare-box.yours strong{color:${t.red};}
+.answer-compare-box.correct strong{color:${t.green};}
+.solution-panel{padding:13px 14px;border-radius:12px;background:${t.accent}08;border:1px solid ${t.accent}22;color:${t.textSec};font-size:13px;line-height:1.75;}
+.guidance-panel{margin-top:9px;padding:10px 12px;border-radius:10px;background:${t.amber}09;border:1px solid ${t.amber}22;color:${t.textSec};font-size:12px;line-height:1.65;}
 .info-popover{position:relative;display:inline-flex;align-items:center;}
 .info-btn{width:24px;height:24px;border-radius:999px;border:1px solid ${t.border};background:${t.panel};color:${t.textSec};font-size:13px;font-weight:900;cursor:pointer;}
 .info-btn:hover{color:${t.accent};border-color:${t.accent}60;background:${t.accent}10;}
@@ -14641,6 +14668,13 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .opt-ltr{width:34px!important;height:34px!important;border-radius:999px!important;}
   .top-progress{margin:-4px 0 12px!important;}
   .score-actions{top:8px!important;}
+  .results-shell{padding:18px 16px 100px!important;}
+  .results-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .results-summary-tile{padding:12px!important;}
+  .exam-score-card{padding:18px!important;}
+  .exam-review-head{grid-template-columns:auto minmax(0,1fr)!important;}
+  .exam-review-toggle{grid-column:1 / -1;justify-self:flex-start;}
+  .answer-compare{grid-template-columns:1fr!important;}
   [style*="grid-template-columns:1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr"]{grid-template-columns:1fr!important;}
   [style*="grid-template-columns:repeat(4,1fr)"],[style*="gridTemplateColumns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important;}
   [style*="grid-template-columns:1fr 1fr 1fr"],[style*="gridTemplateColumns:1fr 1fr 1fr"]{grid-template-columns:1fr!important;}
@@ -18166,6 +18200,9 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
     return acc;
   },{})).filter(item=>item.missed||item.slow).sort((a,b)=>(b.missed+b.slow)-(a.missed+a.slow)).slice(0,4);
   const incorrectExamRows=examReviewRows.filter(row=>!row.ok);
+  const flaggedCount=Object.values(flagged).filter(Boolean).length;
+  const avgExamSeconds=examReviewRows.length?Math.round(examReviewRows.reduce((sum,row)=>sum+row.seconds,0)/examReviewRows.length):0;
+  const slowCount=examReviewRows.filter(row=>row.seconds>row.target*1.35).length;
   const retakeIncorrectExam=()=>{
     const missed=incorrectExamRows.map(row=>row.item);
     if(!missed.length)return;
@@ -18186,7 +18223,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
   };
 
   if(done) return(
-    <div style={{padding:"28px 24px",maxWidth:900,margin:"0 auto"}}>
+    <div className="results-shell">
       <div className="card exam-score-card" style={{marginBottom:12,borderColor:score>=80?`${t.green}45`:`${t.red}45`,background:score>=80?`${t.green}07`:`${t.red}07`}}>
         <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8,position:"relative"}}>
           <div style={{fontSize:13,fontWeight:900,color:score>=80?"#10B981":"#EF4444",textTransform:"uppercase",letterSpacing:".06em"}}>
@@ -18202,6 +18239,24 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
           </span>
         </div>
         <RadialScore score={score} correct={correctCount} total={questions.length} t={t}/>
+        <div className="results-summary-grid">
+          <div className="results-summary-tile">
+            <div className="results-summary-label">Missed</div>
+            <div className="results-summary-value" style={{color:incorrectExamRows.length?t.red:t.green}}>{incorrectExamRows.length}</div>
+          </div>
+          <div className="results-summary-tile">
+            <div className="results-summary-label">Flagged</div>
+            <div className="results-summary-value" style={{color:flaggedCount?t.amber:t.text}}>{flaggedCount}</div>
+          </div>
+          <div className="results-summary-tile">
+            <div className="results-summary-label">Avg time</div>
+            <div className="results-summary-value">{formatSecondsShort(avgExamSeconds)}</div>
+          </div>
+          <div className="results-summary-tile">
+            <div className="results-summary-label">Slow answers</div>
+            <div className="results-summary-value" style={{color:slowCount?t.amber:t.green}}>{slowCount}</div>
+          </div>
+        </div>
       </div>
       <div className="score-actions">
         <button className="btn btn-primary" disabled={!incorrectExamRows.length} onClick={retakeIncorrectExam}>
@@ -18243,8 +18298,12 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
           <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>Strong pacing. No major slow or missed topic cluster stood out in this exam.</div>
         )}
       </div>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,marginBottom:12,flexWrap:"wrap"}}>
-        <h3 style={{fontSize:18,color:t.text}}>Answer Review</h3>
+      <div className="review-toolbar">
+        <div>
+          <h3 style={{fontSize:20,color:t.text,marginBottom:4}}>Answer Review</h3>
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>Missed questions appear first so you can repair weak spots quickly.</div>
+        </div>
+        <span className="review-count-pill">{incorrectExamRows.length} missed · {questions.length} total</span>
         <button className="btn btn-outline" onClick={()=>{setStarted(false);setDone(false);}}>New Exam</button>
       </div>
       <div style={{display:"grid",gap:12}}>
@@ -18255,21 +18314,35 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
           const a=answers[index]||{};
           const title=item.kind==="mcq"?q.q:q.title;
           const expanded=Boolean(expandedReview[index]);
+          const reviewColor=ok?t.green:t.red;
+          const selectedLabel=a.selected!==null&&a.selected!==undefined ? `${String.fromCharCode(65+a.selected)}. ${q.opts?.[a.selected]||""}` : "Not answered";
+          const correctLabel=item.kind==="mcq" ? `${String.fromCharCode(65+q.correct)}. ${q.opts[q.correct]}` : "See solution below";
           return(
-            <div key={`${item.kind}-${q.id}`} className="card" style={{padding:"16px 18px",borderColor:ok?`${t.green}35`:`${t.red}35`,cursor:"pointer"}} onClick={()=>setExpandedReview(prev=>({...prev,[index]:!prev[index]}))}>
-              <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:8,flexWrap:"wrap"}}>
-                <span style={{fontWeight:900,color:ok?t.green:t.red}}>{ok?"Correct":"Incorrect"}</span>
-                {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
-                {item.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
-                {flagged[index]&&<span className="chip" style={{background:`${t.amber}14`,color:t.amber,borderColor:`${t.amber}35`}}>Flagged</span>}
-                <span className="chip" style={{background:seconds>target*1.35?`${t.amber}14`:t.panel,color:seconds>target*1.35?t.amber:t.textSec,borderColor:seconds>target*1.35?`${t.amber}35`:t.border}}>
-                  {formatSecondsShort(seconds)} / target {formatSecondsShort(target)}
-                </span>
-                <span className="chip" style={{marginLeft:"auto",background:t.panel,color:t.textSec,borderColor:t.border}}>{expanded?"Hide full question":"Tap to view full question"}</span>
-              </div>
-              <div className="compact-question-text" style={{fontSize:14,fontWeight:700,color:t.text,lineHeight:1.6,marginBottom:10}}>
-                {expanded ? <QuestionStemText text={title} t={t} compact/> : `${title.slice(0,140)}${title.length>140?"...":""}`}
-              </div>
+            <div
+              key={`${item.kind}-${q.id}`}
+              className={`card exam-review-card ${ok?"correct":"incorrect"}`}
+              style={{"--review-color":reviewColor}}
+              onClick={()=>setExpandedReview(prev=>({...prev,[index]:!prev[index]}))}
+            >
+              <div className="exam-review-main">
+                <div className="exam-review-head">
+                  <div className="exam-review-status">{ok?"✓":"!"}</div>
+                  <div style={{minWidth:0}}>
+                    <div className="exam-review-meta">
+                      <span style={{fontWeight:950,color:reviewColor}}>{ok?"Correct":"Needs review"}</span>
+                      {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
+                      {item.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
+                      {flagged[index]&&<span className="chip" style={{background:`${t.amber}14`,color:t.amber,borderColor:`${t.amber}35`}}>Flagged</span>}
+                      <span className="chip" style={{background:seconds>target*1.35?`${t.amber}14`:t.panel,color:seconds>target*1.35?t.amber:t.textSec,borderColor:seconds>target*1.35?`${t.amber}35`:t.border}}>
+                        {formatSecondsShort(seconds)} / target {formatSecondsShort(target)}
+                      </span>
+                    </div>
+                    <div className="exam-review-title" style={{marginTop:8}}>
+                      {expanded ? <QuestionStemText text={title} t={t} compact/> : `${title.slice(0,150)}${title.length>150?"...":""}`}
+                    </div>
+                  </div>
+                  <div className="exam-review-toggle">{expanded?"Hide details":"View details"}</div>
+                </div>
               {expanded&&item.kind==="pbq"&&(
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:10}}>
                   {q.scenario&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Scenario: </strong><GlossaryText text={q.scenario} t={t}/></div>}
@@ -18289,16 +18362,23 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
                 </div>
               )}
               {item.kind==="mcq"&&(
-                <div style={{fontSize:13,color:t.textSec,marginBottom:10}}>
-                  Your answer: {a.selected!==null&&a.selected!==undefined ? `${String.fromCharCode(65+a.selected)}. ${q.opts[a.selected]}` : "Not answered"}<br/>
-                  Correct answer: {String.fromCharCode(65+q.correct)}. {q.opts[q.correct]}
+                <div className="answer-compare">
+                  <div className={`answer-compare-box ${ok?"correct":"yours"}`}>
+                    <strong>{ok?"Your answer":"Your answer"}</strong>
+                    {selectedLabel}
+                  </div>
+                  <div className="answer-compare-box correct">
+                    <strong>Correct answer</strong>
+                    {correctLabel}
+                  </div>
                 </div>
               )}
-              <div style={{fontSize:13,color:t.textSec,lineHeight:1.75}}>
+              <div className="solution-panel">
                 <strong style={{color:t.text}}>Solution: </strong>{item.kind==="mcq"?q.exp:q.explanation}
               </div>
-              <div style={{fontSize:12,color:t.textDim,lineHeight:1.6,marginTop:8}}>
+              <div className="guidance-panel">
                 {examTimeGuidance(item,seconds,ok)}
+              </div>
               </div>
             </div>
           );
