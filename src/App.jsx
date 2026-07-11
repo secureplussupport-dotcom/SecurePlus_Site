@@ -212,6 +212,59 @@ function ensureMcqWrongFeedback(question) {
   });
   return {...question,wrongFeedback};
 }
+function normalizeQuestionStem(value) {
+  return String(value||"")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g," ")
+    .trim();
+}
+function analyzeMcqQuality(question,bank=[]) {
+  const issues=[];
+  const stem=String(question?.q||"").trim();
+  const options=Array.isArray(question?.opts)?question.opts.map(option=>String(option||"").trim()):[];
+  const correct=Number(question?.correct);
+  const correctLength=options[correct]?.length||0;
+  const distractorLengths=options.filter((_,index)=>index!==correct).map(option=>option.length).filter(Boolean);
+  const averageDistractorLength=distractorLengths.length
+    ? distractorLengths.reduce((sum,length)=>sum+length,0)/distractorLengths.length
+    : 0;
+  const missingWrongFeedback=options.reduce((missing,_,index)=>{
+    if(index===correct)return missing;
+    const feedback=String(question?.wrongFeedback?.[index]||question?.wrongFeedback?.[String(index)]||"").trim();
+    if(feedback.length<25)missing.push(String.fromCharCode(65+index));
+    return missing;
+  },[]);
+  const genericWrongFeedback=options.reduce((generic,_,index)=>{
+    if(index===correct)return generic;
+    const feedback=String(question?.wrongFeedback?.[index]||question?.wrongFeedback?.[String(index)]||"").trim();
+    if(/^(this option (does not best satisfy|is not the best answer)|the stronger answer is)/i.test(feedback)) {
+      generic.push(String.fromCharCode(65+index));
+    }
+    return generic;
+  },[]);
+  const normalized=normalizeQuestionStem(stem);
+  const duplicate=normalized&&bank.some(candidate=>candidate?.id!==question?.id&&normalizeQuestionStem(candidate?.q)===normalized);
+
+  if(stem.length>340) issues.push({code:"long-stem",level:"warning",label:`Long question stem (${stem.length} characters)`});
+  if(correctLength>80&&averageDistractorLength&&correctLength>averageDistractorLength*1.45) {
+    issues.push({code:"answer-length",level:"warning",label:"Correct answer is much longer than the distractors"});
+  }
+  if(missingWrongFeedback.length) {
+    issues.push({code:"feedback",level:"error",label:`Missing useful feedback for option${missingWrongFeedback.length>1?"s":""} ${missingWrongFeedback.join(", ")}`});
+  }
+  if(genericWrongFeedback.length) {
+    issues.push({code:"generic-feedback",level:"warning",label:`Generic wrong-answer feedback for option${genericWrongFeedback.length>1?"s":""} ${genericWrongFeedback.join(", ")}`});
+  }
+  if(duplicate) issues.push({code:"duplicate",level:"error",label:"Duplicate question stem already exists"});
+  if(!String(question?.ch||"").trim()||!String(question?.topic||"").trim()) {
+    issues.push({code:"metadata",level:"error",label:"Chapter or topic is missing"});
+  }
+  return {
+    issues,
+    needsReview:issues.length>0,
+    blocking:issues.some(issue=>issue.level==="error"),
+  };
+}
 function buildQuestionReport({kind,question,selected,correct}) {
   const id=question?.id||"unknown";
   const title=question?.q||question?.question||question?.title||"Question";
@@ -229,7 +282,11 @@ function buildQuestionReport({kind,question,selected,correct}) {
 function shuffleMcqOptions(question) {
   if(!question?.opts?.length) return question;
   const original=question.opts.map((text,index)=>({text,index}));
-  const shuffled=[...original].sort(()=>Math.random()-.5);
+  const shuffled=[...original];
+  for(let index=shuffled.length-1;index>0;index-=1) {
+    const swapIndex=Math.floor(Math.random()*(index+1));
+    [shuffled[index],shuffled[swapIndex]]=[shuffled[swapIndex],shuffled[index]];
+  }
   const wrongFeedback={};
   shuffled.forEach((entry,newIndex)=>{
     if(question.wrongFeedback?.[entry.index]) wrongFeedback[newIndex]=question.wrongFeedback[entry.index];
@@ -14165,6 +14222,77 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-vis
 .card:nth-of-type(3){animation-delay:.06s;}
 .card:nth-of-type(4){animation-delay:.09s;}
 .dashboard-shell{padding:30px 24px;max-width:1180px;margin:0 auto;}
+.home-hero{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:center;margin-bottom:18px;padding:34px;border:1px solid ${t.accent}35;border-radius:18px;background:
+radial-gradient(circle at 14% 18%, ${t.accent}20, transparent 34%),
+radial-gradient(circle at 84% 16%, ${t.green}19, transparent 30%),
+linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px 70px rgba(7,12,24,.18);}
+.home-hero::before{content:"";position:absolute;inset:-1px;background:linear-gradient(105deg,transparent 0 34%,rgba(255,255,255,.12) 45%,transparent 56%);transform:translateX(-100%);animation:heroSweep 7s ease-in-out infinite;pointer-events:none;}
+.home-hero::after{content:"";position:absolute;left:24px;right:24px;bottom:0;height:4px;border-radius:999px;background:linear-gradient(90deg,${t.accent},${t.green},${t.amber},#8b5cf6);}
+.home-hero-copy,.home-hero-panel{position:relative;z-index:1;}
+.home-title{font-size:clamp(34px,5vw,58px);line-height:1.02;font-weight:950;color:${t.text};max-width:780px;margin:0 0 14px;}
+.home-subtitle{font-size:16px;line-height:1.75;color:${t.textSec};max-width:680px;margin:0;}
+.home-cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+.home-trust-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px;}
+.home-trust-row span{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;border:1px solid ${t.border};background:${t.panel}cc;color:${t.textSec};font-size:12px;font-weight:800;}
+.home-hero-panel{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:stretch;}
+.readiness-orbit{position:relative;min-height:190px;border-radius:22px;display:grid;place-items:center;background:conic-gradient(${t.green} var(--readiness), ${t.border} var(--readiness));box-shadow:inset 0 0 0 1px ${t.border},0 18px 45px ${t.green}12;}
+.readiness-orbit::before{content:"";position:absolute;inset:12px;border-radius:18px;background:linear-gradient(180deg,${t.surface},${t.panel});border:1px solid ${t.border};}
+.readiness-orbit div{position:relative;text-align:center;}
+.readiness-orbit span{display:block;font-size:34px;font-weight:950;color:${t.green};line-height:1;}
+.readiness-orbit small{display:block;margin-top:6px;font-size:11px;font-weight:900;text-transform:uppercase;color:${t.textDim};letter-spacing:.05em;}
+.home-live-card{display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:18px;border:1px solid ${t.border};background:linear-gradient(180deg,${t.surface}f2,${t.panel});box-shadow:0 18px 46px rgba(7,12,24,.16);}
+.home-live-top{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:900;text-transform:uppercase;color:${t.textDim};letter-spacing:.04em;}
+.home-live-top strong{margin-left:auto;font-size:11px;}
+.home-live-dot{width:9px;height:9px;border-radius:999px;background:${t.green};box-shadow:0 0 0 5px ${t.green}18;}
+.home-live-card h3{font-size:20px;line-height:1.2;color:${t.text};margin:0;}
+.home-live-card p{font-size:13px;line-height:1.65;color:${t.textSec};margin:0;}
+.home-live-answer{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid ${t.border};border-radius:14px;background:${t.panel};}
+.home-live-answer.selected{border-color:${t.accent}55;background:${t.accent}0e;box-shadow:0 0 0 4px ${t.accent}0d;}
+.home-live-answer span,.mini-option span{width:28px;height:28px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:${t.accent};color:#fff;font-weight:950;flex-shrink:0;}
+.home-live-answer strong{display:block;color:${t.text};font-size:13px;}
+.home-live-answer small{display:block;color:${t.textSec};font-size:12px;line-height:1.45;margin-top:2px;}
+.mission-board{margin-bottom:18px;padding:20px;border-radius:18px;border:1px solid ${t.border};background:linear-gradient(180deg,${t.surface}cc,${t.panel}f2);box-shadow:0 18px 46px rgba(7,12,24,.1);}
+.mission-board-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap;}
+.mission-board-head h2{font-size:22px;line-height:1.2;color:${t.text};margin-top:2px;}
+.streak-strip{display:flex;gap:7px;padding:9px 10px;border-radius:999px;background:${t.panel};border:1px solid ${t.border};}
+.streak-strip span{width:18px;height:18px;border-radius:999px;background:${t.border};box-shadow:inset 0 0 0 1px ${t.textDim}20;}
+.streak-strip span.active{background:linear-gradient(180deg,${t.amber},#f97316);box-shadow:0 0 0 4px ${t.amber}16;}
+.mission-card-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.home-mission-card{position:relative;overflow:hidden;text-align:left;min-height:168px;padding:16px;border-radius:16px;border:1px solid ${t.border};background:linear-gradient(180deg,${t.panel},${t.surface});cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s,background .2s;}
+.home-mission-card::after{content:"";position:absolute;inset:auto 12px 12px 12px;height:3px;border-radius:999px;background:var(--mission-color);opacity:.35;transition:opacity .2s,transform .2s;}
+.home-mission-card:hover,.home-mission-card.active{transform:translateY(-3px);border-color:var(--mission-color);box-shadow:0 18px 42px color-mix(in srgb,var(--mission-color) 18%, transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--mission-color) 11%, ${t.surface}),${t.panel});}
+.home-mission-card:hover::after,.home-mission-card.active::after{opacity:1;transform:scaleX(.96);}
+.home-mission-icon{width:42px;height:42px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;background:var(--mission-color);color:#fff;font-weight:950;box-shadow:0 12px 26px color-mix(in srgb,var(--mission-color) 28%, transparent);margin-bottom:12px;}
+.home-mission-copy strong{display:block;color:${t.text};font-size:14px;line-height:1.25;margin-bottom:6px;}
+.home-mission-copy small{display:block;color:${t.textSec};font-size:12px;line-height:1.55;}
+.home-mission-meta{position:absolute;top:14px;right:14px;padding:5px 8px;border-radius:999px;background:${t.panel};border:1px solid ${t.border};color:var(--mission-color);font-size:10px;font-weight:950;text-transform:uppercase;}
+.home-duo-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:18px;margin-bottom:20px;}
+.home-route-card,.home-path-card{padding:22px;}
+.home-route-card h3,.home-path-card h3{font-size:21px;color:${t.text};line-height:1.25;margin:7px 0 8px;}
+.home-route-card p{font-size:13px;line-height:1.75;color:${t.textSec};margin:0 0 16px;}
+.home-step-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0;}
+.home-step{padding:12px;border-radius:14px;border:1px solid ${t.border};background:${t.panel};}
+.home-step span{width:24px;height:24px;border-radius:999px;background:${t.accent};color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:950;margin-bottom:8px;}
+.home-step strong{display:block;color:${t.text};font-size:12px;margin-bottom:2px;}
+.home-step small{display:block;color:${t.textSec};font-size:11px;line-height:1.45;}
+.guest-home-hero .home-title{font-size:clamp(32px,4.5vw,52px);}
+.home-preview-tabs{display:flex;gap:8px;grid-column:1 / -1;flex-wrap:wrap;}
+.home-preview-tabs button{border:1px solid ${t.border};border-radius:999px;background:${t.panel};color:${t.textSec};font-size:12px;font-weight:900;padding:8px 11px;cursor:pointer;}
+.home-preview-tabs button.active{border-color:var(--mission-color);color:var(--mission-color);background:color-mix(in srgb,var(--mission-color) 12%, ${t.panel});}
+.public-preview{grid-column:1 / -1;}
+.mini-question-preview{display:grid;gap:8px;padding:12px;border-radius:14px;background:${t.bg}66;border:1px solid ${t.border};}
+.mini-question-stem{font-size:13px;font-weight:900;color:${t.text};line-height:1.45;}
+.mini-option{display:flex;gap:9px;align-items:center;padding:9px;border-radius:11px;border:1px solid ${t.border};background:${t.surface};font-size:12px;font-weight:800;color:${t.textSec};}
+.mini-option.selected{border-color:${t.green}55;background:${t.green}0f;color:${t.text};}
+.mini-option.selected span{background:${t.green};}
+.home-value-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.home-value-card{padding:15px;border-radius:16px;border:1px solid ${t.border};background:${t.panel};}
+.home-value-card span{width:30px;height:30px;border-radius:10px;background:${t.accent};color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:950;margin-bottom:10px;}
+.home-value-card strong{display:block;color:${t.text};font-size:13px;margin-bottom:5px;}
+.home-value-card small{display:block;color:${t.textSec};font-size:12px;line-height:1.55;}
+.home-save-prompt{display:grid;gap:6px;padding:14px;border-radius:14px;border:1px solid ${t.amber}38;background:${t.amber}0d;}
+.home-save-prompt strong{font-size:14px;color:${t.text};}
+.home-save-prompt small{font-size:12px;color:${t.textSec};}
 .dashboard-kicker{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid ${t.accent}30;border-radius:999px;background:${t.accent}0f;color:${t.accent};font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
 .dashboard-action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
 .dashboard-focus-card{position:relative;z-index:1;padding:16px 18px;min-width:210px;border-color:${t.green}35!important;background:linear-gradient(180deg,${t.green}0f,${t.surface})!important;}
@@ -14633,6 +14761,44 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .pricing-feature-row span:first-child{width:19px;height:19px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:${t.green}14;color:${t.green};font-size:11px;font-weight:900;flex-shrink:0;margin-top:1px;}
 .landing-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
 .landing-auth-section{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,430px);gap:22px;align-items:start;padding:26px;border:1px solid ${t.border};border-radius:8px;background:linear-gradient(135deg, ${t.accent}10, ${t.surface}f0 42%, ${t.green}0d);box-shadow:0 16px 36px rgba(7,12,24,.08);}
+.brilliant-hero{position:relative;grid-template-columns:minmax(0,1fr) minmax(360px,470px);gap:46px;align-items:center;padding:54px 0 22px;}
+.brilliant-hero::before{content:"";position:absolute;left:50%;top:18%;width:520px;height:520px;transform:translate(-50%,-50%);background:radial-gradient(circle,${t.accent}10,transparent 64%);pointer-events:none;animation:demoGlow 7s ease-in-out infinite;}
+.brilliant-hero-copy{position:relative;z-index:1;max-width:680px;}
+.brilliant-eyebrow{border-radius:999px;background:${t.green}12!important;color:${t.green}!important;border:1px solid ${t.green}2f!important;padding:7px 12px;font-size:12px;font-weight:950;}
+.brilliant-title{font-size:clamp(46px,7vw,78px);line-height:.98;letter-spacing:-.02em;font-weight:950;margin:0;text-wrap:balance;}
+.brilliant-copy{font-size:19px;line-height:1.7;max-width:580px;color:${t.textSec};}
+.brilliant-action-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:26px;}
+.brilliant-primary-cta{border-radius:999px;padding:14px 24px!important;font-size:15px!important;box-shadow:0 16px 34px ${t.accent}28;}
+.brilliant-secondary-cta{border-radius:999px;padding:13px 20px!important;}
+.brilliant-proof-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;}
+.brilliant-proof-row span{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid ${t.border};border-radius:999px;background:${t.surface};color:${t.textSec};font-size:12px;font-weight:850;box-shadow:0 8px 18px rgba(7,12,24,.05);}
+.brilliant-proof-row span::before{content:"";width:8px;height:8px;border-radius:50%;background:${t.green};box-shadow:0 0 0 4px ${t.green}18;}
+.brilliant-lesson-shell{position:relative;z-index:1;padding:18px;border-radius:28px;border:1px solid ${t.border};background:linear-gradient(180deg,${t.surface},${t.panel});box-shadow:0 30px 80px rgba(7,12,24,.18);animation:floatCard 6s ease-in-out infinite;}
+.brilliant-lesson-shell::before{content:"";position:absolute;inset:-1px;border-radius:inherit;background:linear-gradient(135deg,${t.accent}45,transparent 28%,${t.green}35 74%,transparent);z-index:-1;opacity:.55;}
+.brilliant-lesson-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px;padding:4px 2px 10px;border-bottom:1px solid ${t.border};}
+.brilliant-lesson-top strong{display:block;color:${t.text};font-size:15px;line-height:1.3;}
+.brilliant-lesson-top span{padding:6px 10px;border-radius:999px;background:${t.green}12;color:${t.green};font-size:12px;font-weight:950;white-space:nowrap;}
+.brilliant-daily-wrap .landing-challenge-card{min-height:0;border-radius:22px;border-color:${t.border};box-shadow:none;background:linear-gradient(180deg,${t.surface},${t.panel});}
+.brilliant-daily-wrap .landing-challenge-card::before{display:none;}
+.brilliant-daily-wrap .landing-challenge-small .landing-challenge-question{-webkit-line-clamp:4;}
+.brilliant-daily-wrap .landing-challenge-option{border-radius:16px;padding:12px 13px;}
+.brilliant-path-section{padding:28px;border-radius:28px;border:1px solid ${t.border};background:linear-gradient(180deg,${t.surface}f2,${t.panel});box-shadow:0 22px 54px rgba(7,12,24,.1);}
+.brilliant-section-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:18px;flex-wrap:wrap;}
+.brilliant-section-head h2{font-size:30px;line-height:1.15;color:${t.text};margin-top:4px;letter-spacing:-.01em;}
+.brilliant-path-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+.brilliant-path-card{position:relative;text-align:left;min-height:210px;padding:20px;border-radius:24px;border:1px solid ${t.border};background:${t.surface};cursor:pointer;overflow:hidden;transition:transform .22s,border-color .22s,box-shadow .22s,background .22s;}
+.brilliant-path-card::before{content:"";position:absolute;right:-42px;bottom:-48px;width:132px;height:132px;border-radius:38px;background:color-mix(in srgb,var(--path-color) 15%, transparent);transform:rotate(14deg);transition:transform .24s,opacity .24s;opacity:.7;}
+.brilliant-path-card::after{content:"";position:absolute;left:20px;right:20px;bottom:18px;height:5px;border-radius:999px;background:var(--path-color);opacity:.28;transition:opacity .22s,transform .22s;}
+.brilliant-path-card:hover,.brilliant-path-card.active{transform:translateY(-4px);border-color:var(--path-color);box-shadow:0 24px 54px color-mix(in srgb,var(--path-color) 18%, transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--path-color) 8%, ${t.surface}),${t.surface});}
+.brilliant-path-card:hover::before,.brilliant-path-card.active::before{transform:rotate(8deg) scale(1.08);opacity:1;}
+.brilliant-path-card:hover::after,.brilliant-path-card.active::after{opacity:1;transform:scaleX(.96);}
+.brilliant-path-tag{position:relative;z-index:1;display:inline-flex;padding:6px 10px;border-radius:999px;background:color-mix(in srgb,var(--path-color) 13%, ${t.panel});color:var(--path-color);border:1px solid color-mix(in srgb,var(--path-color) 35%, transparent);font-size:11px;font-weight:950;text-transform:uppercase;margin-bottom:16px;}
+.brilliant-path-card strong{position:relative;z-index:1;display:block;color:${t.text};font-size:20px;line-height:1.2;margin-bottom:9px;}
+.brilliant-path-card small{position:relative;z-index:1;display:block;color:${t.textSec};font-size:13px;line-height:1.65;max-width:280px;}
+.brilliant-path-card em{position:absolute;z-index:1;left:20px;bottom:34px;font-style:normal;color:var(--path-color);font-size:12px;font-weight:950;}
+.landing-feature-grid{gap:18px;}
+.landing-feature-card{border-radius:22px;box-shadow:0 18px 42px rgba(7,12,24,.08);}
+.landing-split-section .card,.landing-pricing-grid .card,.landing-faq-grid .card,.landing-auth-section{border-radius:24px;}
 .pillar-icon{width:46px;height:46px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;color:var(--pillar-color);background:color-mix(in srgb,var(--pillar-color) 13%, transparent);border:1px solid color-mix(in srgb,var(--pillar-color) 38%, transparent);transition:transform .2s,box-shadow .2s,background .2s;}
 .pillar-icon span,.pillar-icon::before,.pillar-icon::after{content:"";position:absolute;display:block;transition:all .25s ease;}
 .landing-feature-card:hover .pillar-icon{transform:translateY(-2px) scale(1.04);box-shadow:0 14px 30px color-mix(in srgb,var(--pillar-color) 28%, transparent);background:color-mix(in srgb,var(--pillar-color) 19%, transparent);}
@@ -14654,6 +14820,14 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .landing-feature-card:hover .pillar-icon-exam::after{animation:objectiveTick .55s ease both;}
 .referral-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
 .pricing-pro-card,.pricing-free-card{min-width:0;}
+.upgrade-secondary-stack{display:grid;gap:10px;margin-top:18px;}
+.upgrade-secondary{border:1px solid ${t.border};border-radius:10px;background:${t.surface};box-shadow:0 10px 24px rgba(7,12,24,.07);overflow:hidden;}
+.upgrade-secondary summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;padding:15px 18px;font-size:13px;font-weight:900;color:${t.text};list-style:none;}
+.upgrade-secondary summary::-webkit-details-marker{display:none;}
+.upgrade-secondary summary::after{content:"+";width:24px;height:24px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:${t.panel};border:1px solid ${t.border};color:${t.accent};font-weight:900;flex-shrink:0;}
+.upgrade-secondary[open] summary::after{content:"-";}
+.upgrade-secondary-content{padding:0 18px 18px;font-size:13px;line-height:1.7;color:${t.textSec};}
+.upgrade-secondary-content p{margin:0;}
 .onboarding-overlay{position:fixed;inset:0;z-index:80;background:rgba(4,8,18,.72);backdrop-filter:blur(10px);display:grid;place-items:center;padding:20px;animation:fadeUp .22s ease both;}
 .onboarding-modal{width:min(100%,520px);padding:28px 30px;position:relative;box-shadow:0 30px 90px rgba(0,0,0,.36);}
 .feedback-modal{width:min(100%,560px);max-height:min(92dvh,760px);padding:0!important;display:flex!important;flex-direction:column;overflow:hidden!important;}
@@ -14677,6 +14851,25 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .mobile-topbar{display:flex;position:sticky;top:0;z-index:130;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;background:${t.panel}f5;backdrop-filter:blur(14px);border-bottom:1px solid ${t.border};box-shadow:0 10px 26px rgba(7,12,24,.08);}
   main > div{padding-left:16px!important;padding-right:16px!important;max-width:100%!important;}
   .dashboard-shell{padding:18px 16px 98px!important;}
+  .home-hero{grid-template-columns:1fr!important;padding:22px!important;border-radius:16px!important;gap:18px!important;}
+  .home-title{font-size:34px!important;line-height:1.06!important;}
+  .home-subtitle{font-size:14px!important;line-height:1.65!important;}
+  .home-cta-row .btn{flex:1 1 180px;}
+  .home-hero-panel{grid-template-columns:1fr!important;}
+  .readiness-orbit{min-height:148px!important;}
+  .home-live-card{padding:16px!important;}
+  .mission-board{padding:16px!important;border-radius:16px!important;}
+  .mission-card-grid{grid-template-columns:1fr!important;}
+  .home-mission-card{min-height:132px!important;}
+  .home-duo-grid{grid-template-columns:1fr!important;}
+  .home-step-row{grid-template-columns:1fr!important;}
+  .home-value-grid{grid-template-columns:1fr!important;}
+  .home-preview-tabs{overflow-x:auto;flex-wrap:nowrap!important;padding-bottom:2px;}
+  .home-preview-tabs button{flex:0 0 auto;}
+  .guest-home-hero .home-trust-row{display:none!important;}
+  .guest-home-hero .mini-option:not(.selected){display:none!important;}
+  .guest-home-hero .mini-question-preview{padding:10px!important;}
+  .guest-home-hero .home-live-card p{font-size:12px!important;line-height:1.5!important;}
   .dashboard-grid{grid-template-columns:1fr!important;}
   .dashboard-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .dashboard-plan-grid{grid-template-columns:1fr!important;}
@@ -14686,8 +14879,12 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .setup-hero > div{grid-template-columns:1fr!important;}
   .setup-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
   .practice-summary{align-items:flex-start!important;}
-  .practice-action-bar{position:sticky;bottom:78px;margin-left:-2px;margin-right:-2px;border-radius:12px;box-shadow:0 18px 42px rgba(0,0,0,.18);}
+  .practice-action-bar{position:sticky;bottom:calc(78px + env(safe-area-inset-bottom));margin-left:-2px;margin-right:-2px;border-radius:12px;box-shadow:0 18px 42px rgba(0,0,0,.18);}
   .practice-action-bar .btn{width:100%;white-space:nowrap;}
+  .app-shell.practice-focus-mode{padding-bottom:0;}
+  .app-shell.practice-focus-mode .sidebar{display:none!important;}
+  .app-shell.practice-focus-mode .active-practice-screen{padding-bottom:calc(104px + env(safe-area-inset-bottom))!important;}
+  .app-shell.practice-focus-mode .practice-action-bar{bottom:calc(12px + env(safe-area-inset-bottom));}
   .trial-countdown-banner{width:calc(100% - 32px);margin-top:14px;padding:16px;}
   .trial-countdown-grid{grid-template-columns:repeat(4,minmax(0,1fr));flex-basis:100%;}
   .trial-countdown-value{font-size:19px;}
@@ -14738,6 +14935,18 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .landing-hero{grid-template-columns:1fr!important;padding-top:10px!important;gap:16px!important;}
   .landing-title{font-size:34px!important;line-height:1.08!important;}
   .landing-copy{font-size:14px!important;}
+  .brilliant-hero{padding:20px 0 8px!important;gap:22px!important;}
+  .brilliant-title{font-size:40px!important;line-height:1.02!important;}
+  .brilliant-copy{font-size:15px!important;line-height:1.65!important;}
+  .brilliant-action-row .btn{width:100%;justify-content:center;}
+  .brilliant-proof-row span{flex:1 1 100%;justify-content:center;}
+  .brilliant-lesson-shell{padding:12px!important;border-radius:22px!important;}
+  .brilliant-path-section{padding:18px!important;border-radius:22px!important;}
+  .brilliant-section-head{align-items:flex-start!important;}
+  .brilliant-section-head h2{font-size:25px!important;}
+  .brilliant-path-grid{grid-template-columns:1fr!important;}
+  .brilliant-path-card{min-height:178px!important;}
+  .brilliant-path-card em{position:relative!important;left:auto!important;bottom:auto!important;display:block;margin-top:16px;}
   .landing-primary-actions .btn{width:100%;}
   .landing-proof-strip{grid-template-columns:1fr!important;}
   .landing-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
@@ -14906,9 +15115,21 @@ function GlossaryText({text,t,style}) {
         const key=`${term}-${index}`;
         return(
           <span key={key} className="term-wrap" style={formatStyle(part)}>
-            <button type="button" className="term-link" onClick={e=>{e.stopPropagation();setOpenTerm(openTerm===key?null:key);}}>
+            <span
+              role="button"
+              tabIndex={0}
+              className="term-link"
+              aria-expanded={openTerm===key}
+              onClick={e=>{e.stopPropagation();setOpenTerm(openTerm===key?null:key);}}
+              onKeyDown={e=>{
+                if(e.key!=="Enter"&&e.key!==" ")return;
+                e.preventDefault();
+                e.stopPropagation();
+                setOpenTerm(openTerm===key?null:key);
+              }}
+            >
               {part.text}
-            </button>
+            </span>
             {openTerm===key&&(
               <span className="term-pop" style={{background:t.surface,borderColor:t.border,color:t.text}} onClick={e=>e.stopPropagation()}>
                 <strong style={{color:t.accent}}>{term}</strong>
@@ -15774,6 +15995,7 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
 // ═══════════════════════════════════════════════════════════════
 function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login"}) {
   const [mode,setMode]=useState(initialMode);
+  const [activePath,setActivePath]=useState("mcq");
   const [form,setForm]=useState({name:"",email:"",pass:"",confirm:"",referral:getStoredReferralCode()});
   const [err,setErr]=useState("");
   const [ok,setOk]=useState("");
@@ -15902,6 +16124,12 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
     {q:"What does Pro unlock?",a:"Pro adds PBQ simulations, Exam Mode, deeper review guidance, and stronger readiness tools for $4.99 per year."},
     {q:"Is SecurePlus affiliated with CompTIA?",a:"No. CompTIA and Security+ are trademarks of CompTIA. SecurePlus is an independent practice platform."},
   ];
+  const learningPaths=[
+    {id:"mcq",label:"MCQ foundations",tag:"Free",color:t.accent,body:"Build confidence across all five SY0-701 chapters with short interactive sets.",meta:`${MCQ_BANK.length} questions`,action:onPracticeMcq},
+    {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"A quick 5-question loop that creates a reason to come back tomorrow.",meta:"5 questions/day",action:onDaily},
+    {id:"pbq",label:"PBQ simulations",tag:"Pro",color:t.amber,body:"Practise applied scenarios, logs, drag/drop tasks, and terminal-style questions.",meta:`${PBQ_BANK.length} PBQs`,action:()=>jumpToAuth("signup")},
+  ];
+  const activeLearningPath=learningPaths.find(path=>path.id===activePath)||learningPaths[0];
 
   return(
     <div className="landing-page fu">
@@ -15915,6 +16143,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
         </button>
         <nav className="landing-nav-center" aria-label="Landing page sections">
           <a href="#features">Features</a>
+          <a href="#learning-paths">Paths</a>
           <a href="#pricing">Pricing</a>
           <a href="#daily-challenge">Daily Challenge</a>
           <a href="#faq">FAQ</a>
@@ -15926,77 +16155,72 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
       </header>
 
       <main className="landing-main">
-        <section className="landing-hero">
-          <div>
-            <div className="badge" style={{background:`${t.accent}14`,color:t.accent,border:`1px solid ${t.accent}28`,marginBottom:18}}>
-              Supports CompTIA Security+ (SY0-701)
+        <section className="landing-hero brilliant-hero">
+          <div className="brilliant-hero-copy">
+            <div className="badge brilliant-eyebrow">
+              CompTIA Security+ (SY0-701)
             </div>
-            <h1 className="landing-title">
-              Security+ practice questions with PBQ simulations.
+            <h1 className="landing-title brilliant-title">
+              Learn Security+ by doing, not by staring at notes.
             </h1>
-            <p className="landing-copy">
-              {MCQ_BANK.length}+ MCQs + {PBQ_BANK.length} PBQs. Free to start. No account needed.
+            <p className="landing-copy brilliant-copy">
+              Interactive MCQs, PBQ simulations, and Smart Review that turns mistakes into your next study plan.
             </p>
-            <div className="landing-benefit-row" aria-label="SecurePlus benefits">
-              {[
-                {label:"Full MCQ bank free",color:t.accent},
-                {label:"PBQ simulations for Pro",color:t.amber},
-                {label:"Smart Review remembers misses",color:t.green},
-              ].map(item=>(
-                <span key={item.label} className="landing-benefit-pill" style={{"--benefit-color":item.color}}>{item.label}</span>
-              ))}
+            <div className="brilliant-action-row">
+              <button className="btn btn-primary brilliant-primary-cta" onClick={onPracticeMcq}>Start Practising Free →</button>
+              <button className="btn btn-ghost brilliant-secondary-cta" onClick={()=>jumpToAuth("signup")}>Save progress later</button>
             </div>
-            <div className="landing-primary-actions">
-              <button className="btn btn-primary" style={{padding:"13px 22px",fontSize:15}} onClick={onPracticeMcq}>Start Practising Free →</button>
-              <div className="landing-secondary-links" aria-label="Secondary actions">
-                <button type="button" onClick={()=>jumpToAuth("signup")}>Create account to save progress</button>
-                <button type="button" onClick={onDaily}>Try Daily Challenge</button>
-              </div>
-            </div>
-            <div className="landing-proof-strip">
-              {[
-                {label:"Question style",value:"MCQ + PBQ"},
-                {label:"Practice model",value:"Weak topics first"},
-                {label:"Price clarity",value:"$4.99 per year"},
-              ].map(item=>(
-                <div key={item.label} className="landing-proof-item">
-                  <div className="landing-proof-label">{item.label}</div>
-                  <div className="landing-proof-value">{item.value}</div>
-                </div>
-              ))}
+            <div className="brilliant-proof-row">
+              <span>{MCQ_BANK.length} MCQs</span>
+              <span>{PBQ_BANK.length} PBQs</span>
+              <span>No account needed to start</span>
             </div>
           </div>
 
-          <div className="landing-preview">
-            <div id="daily-challenge" className="landing-section">
+          <div className="brilliant-lesson-shell">
+            <div className="brilliant-lesson-top">
+              <div>
+                <div className="label" style={{color:t.accent}}>Interactive lesson</div>
+                <strong>Today's Security+ warm-up</strong>
+              </div>
+              <span>2 min</span>
+            </div>
+            <div id="daily-challenge" className="landing-section brilliant-daily-wrap">
               <LandingDailyChallengeWidget
                 t={t}
                 onSignup={()=>jumpToAuth("signup")}
                 onOpenDaily={onDaily}
               />
             </div>
-            <div className="landing-stat-grid">
-              {[
-                {v:MCQ_BANK.length,l:"MCQs",color:t.accent},
-                {v:PBQ_BANK.length,l:"PBQs",color:t.green},
-                {v:"$4.99/year",l:"Pro plan",color:t.amber},
-              ].map(s=>(
-                <div key={s.l} className="card landing-stat-card" style={{"--stat-color":s.color}}>
-                  <div className="landing-stat-value">{s.v}</div>
-                  <div className="label" style={{whiteSpace:"normal"}}>{s.l}</div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
-        <div className="surface-panel" style={{padding:"16px 18px",display:"flex",justifyContent:"space-between",gap:14,alignItems:"center",flexWrap:"wrap"}}>
-          <div>
-            <div className="label" style={{color:t.accent}}>Designed for long-term retention</div>
-            <div style={{fontWeight:900,color:t.text,fontSize:16}}>Practise free, then create an account when you want your progress saved.</div>
+        <section id="learning-paths" className="brilliant-path-section landing-section">
+          <div className="brilliant-section-head">
+            <div>
+              <div className="label" style={{color:t.accent}}>Choose a path</div>
+              <h2>Start small. Build real exam confidence.</h2>
+            </div>
+            <button className="btn btn-outline" onClick={activeLearningPath.action}>{activeLearningPath.id==="pbq"?"Create account":"Open selected path"}</button>
           </div>
-          <button className="btn btn-outline" style={{fontSize:13}} onClick={()=>jumpToAuth("signup")}>Save Progress Free</button>
-        </div>
+          <div className="brilliant-path-grid">
+            {learningPaths.map(path=>(
+              <button
+                key={path.id}
+                className={`brilliant-path-card ${activePath===path.id?"active":""}`}
+                style={{"--path-color":path.color}}
+                onMouseEnter={()=>setActivePath(path.id)}
+                onFocus={()=>setActivePath(path.id)}
+                onClick={path.action}
+              >
+                <span className="brilliant-path-tag">{path.tag}</span>
+                <strong>{path.label}</strong>
+                <small>{path.body}</small>
+                <em>{path.meta}</em>
+              </button>
+            ))}
+          </div>
+        </section>
 
         <section id="features" className="landing-feature-grid landing-section">
           {featureCards.map(card=>(
@@ -16183,6 +16407,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
 // DASHBOARD
 // ═══════════════════════════════════════════════════════════════
 function Dashboard({user,attempts,onNav,t}) {
+  const [activeMission,setActiveMission]=useState("mcq");
   const mcqAttempts = attempts.filter(a=>a.mcq);
   const pbqAttempts = attempts.filter(a=>a.pbq);
   const totalCorrect = attempts.filter(a=>a.correct).length;
@@ -16205,6 +16430,15 @@ function Dashboard({user,attempts,onNav,t}) {
     : accuracy<75
       ? "Run Smart Review and repair weak topics for a stronger score."
       : "Try an Exam Mode set to check real readiness.";
+  const weakSignal = accuracy < 70 ? "Review weak topics first" : readiness >= 75 ? "Ready for timed practice" : "Build one more focused set";
+  const missionCards=[
+    {id:"mcq",label:"MCQ Practice",title:"Start a focused set",body:"Adaptive ordering prioritises weak and starred questions so each session feels useful.",nav:"mcq",color:t.accent,meta:`${MCQ_BANK.length} questions`},
+    {id:"daily",label:"Daily Challenge",title:streakInfo.completedToday?"Daily complete":"Protect the streak",body:streakInfo.completedToday?"Today is already secured. Return tomorrow for the next streak point.":"Five questions, quick feedback, and a streak moment after completion.",nav:"daily",color:t.amber,meta:`${streakInfo.streak} day streak`},
+    {id:"pbq",label:"PBQ Simulator",title:isPro?"Practise one PBQ":"Try the PBQ preview",body:isPro?"Terminal, table, drag and drop, ordering, and incident-response style simulations.":"Preview one PBQ for free, then unlock the full simulator with Pro.",nav:"pbq",color:t.green,meta:`${PBQ_BANK.length} PBQs`},
+    {id:"exam",label:"Exam Mode",title:isPro?"Run a timed exam":"Pro exam mode",body:isPro?"Mixed MCQ/PBQ sets with flags, elimination, timing, and post-exam review.":"Upgrade to access timed mixed exams and deeper result analysis.",nav:isPro?"exam":"pricing",color:"#8b5cf6",meta:isPro?"Timed mode":"Pro feature"},
+  ];
+  const activeMissionCard=missionCards.find(card=>card.id===activeMission)||missionCards[0];
+  const weekDots=Array.from({length:7},(_,index)=>index<Math.min(7,streakInfo.streak));
 
   // Chapter performance
   const chStats = {};
@@ -16217,33 +16451,55 @@ function Dashboard({user,attempts,onNav,t}) {
 
   return(
     <div className="dashboard-shell">
-      <div className="game-hero reward-pop" style={{marginBottom:18}}>
-        <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:18,alignItems:"center"}}>
-          <div>
-            <div className="dashboard-kicker">Learning path</div>
-            <h2 style={{fontSize:30,fontWeight:900,color:t.text,marginBottom:8}}>
-              Welcome back, {user.name.split(" ")[0]}
-            </h2>
-            <p style={{color:t.textSec,fontSize:14,lineHeight:1.7,maxWidth:640}}>
-              {questionsDone===0?"Start your Security+ path with one short lesson set.":
-              readiness>=75?"You are building strong exam readiness. Keep the streak alive and protect the score.":
-              "Repair missed questions and move chapter by chapter."}
-            </p>
-            <div className="dashboard-action-row">
-              <button className="btn btn-primary" onClick={()=>onNav("mcq")}>Start lesson</button>
-              <button className="btn btn-outline" onClick={()=>onNav("daily")}>Daily challenge</button>
-              {isPro?<button className="btn btn-ghost" onClick={()=>onNav("exam")}>Exam run</button>:<button className="btn btn-ghost" onClick={()=>onNav("pricing")}>Unlock PBQs</button>}
-            </div>
+      <section className="home-hero">
+        <div className="home-hero-copy">
+          <div className="dashboard-kicker">CompTIA Security+ command center</div>
+          <h1 className="home-title">Welcome back, {user.name.split(" ")[0]}</h1>
+          <p className="home-subtitle">
+            {questionsDone===0
+              ? "Start with a short guided set. SecurePlus will turn your answers into a personalised review path."
+              : readiness>=75
+                ? "Your readiness is trending well. Keep pressure-testing with timed practice and PBQ simulations."
+                : "Your next gain is targeted practice. Focus on weak topics, then let Smart Review bring them back."}
+          </p>
+          <div className="home-cta-row">
+            <button className="btn btn-primary" onClick={()=>onNav("mcq")}>Start practice</button>
+            <button className="btn btn-outline" onClick={()=>onNav("daily")}>Daily challenge</button>
+            <button className="btn btn-ghost" onClick={()=>onNav(isPro?"exam":"pricing")}>{isPro?"Exam mode":"See Pro"}</button>
           </div>
-          <div className="card dashboard-focus-card">
-            <div className="label" style={{marginBottom:8}}>Focus score</div>
-            <div style={{fontSize:34,fontWeight:900,color:t.green,lineHeight:1}}>{readiness}%</div>
-            <div style={{fontSize:12,color:t.textSec,margin:"6px 0 10px"}}>readiness estimate</div>
-            <ProgBar v={readiness} c={t.green} h={8}/>
-            <div style={{fontSize:11,color:t.textDim,marginTop:6}}>Based on accuracy and unique practice.</div>
+          <div className="home-trust-row">
+            <span>{MCQ_BANK.length} MCQs</span>
+            <span>{PBQ_BANK.length} PBQs</span>
+            <span>Smart Review</span>
+            <span>{isPro?"Pro active":"Free plan"}</span>
           </div>
         </div>
-      </div>
+        <div className="home-hero-panel">
+          <div className="readiness-orbit" style={{"--readiness":`${readiness}%`}}>
+            <div>
+              <span>{readiness}%</span>
+              <small>readiness</small>
+            </div>
+          </div>
+          <div className="home-live-card">
+            <div className="home-live-top">
+              <span className="home-live-dot"/>
+              <span>{activeMissionCard.label}</span>
+              <strong style={{color:activeMissionCard.color}}>{activeMissionCard.meta}</strong>
+            </div>
+            <h3>{activeMissionCard.title}</h3>
+            <p>{activeMissionCard.body}</p>
+            <div className="home-live-answer selected">
+              <span>A</span>
+              <div>
+                <strong>{weakSignal}</strong>
+                <small>{nextQuest}</small>
+              </div>
+            </div>
+            <button className="btn btn-primary" onClick={()=>onNav(activeMissionCard.nav)}>Open {activeMissionCard.label}</button>
+          </div>
+        </div>
+      </section>
 
       <div className="dashboard-stat-grid">
         {[
@@ -16263,60 +16519,84 @@ function Dashboard({user,attempts,onNav,t}) {
         ))}
       </div>
 
-      <div className="dashboard-plan-grid">
-        <div className="card dashboard-plan-card">
-          <div className="label" style={{color:t.accent,marginBottom:7}}>Recommended today</div>
-          <div style={{fontWeight:950,color:t.text,fontSize:19,marginBottom:6}}>
-            {readiness>=75?"Run one timed set and protect pacing.":accuracy<65?"Repair missed concepts before adding new topics.":"Keep momentum with a focused practice set."}
+      <section className="mission-board">
+        <div className="mission-board-head">
+          <div>
+            <div className="label" style={{color:t.accent}}>Choose your next move</div>
+            <h2>Interactive study missions</h2>
           </div>
-          <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+          <div className="streak-strip" aria-label="Weekly streak progress">
+            {weekDots.map((active,index)=><span key={index} className={active?"active":""}/>)}
+          </div>
+        </div>
+        <div className="mission-card-grid">
+          {missionCards.map(card=>(
+            <button
+              key={card.id}
+              className={`home-mission-card ${activeMission===card.id?"active":""}`}
+              style={{"--mission-color":card.color}}
+              onMouseEnter={()=>setActiveMission(card.id)}
+              onFocus={()=>setActiveMission(card.id)}
+              onClick={()=>onNav(card.nav)}
+            >
+              <span className="home-mission-icon">{card.label.slice(0,1)}</span>
+              <span className="home-mission-copy">
+                <strong>{card.title}</strong>
+                <small>{card.body}</small>
+              </span>
+              <span className="home-mission-meta">{card.meta}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <div className="home-duo-grid">
+        <div className="card home-route-card">
+          <div className="label" style={{color:t.green}}>Recommended today</div>
+          <h3>
+            {readiness>=75?"Run one timed set and protect pacing.":accuracy<65?"Repair missed concepts before adding new topics.":"Keep momentum with a focused practice set."}
+          </h3>
+          <p>
             {readiness>=75?"Exam Mode helps you practise pressure, flags, elimination, and review timing.":
             accuracy<65?"Smart Review puts weak areas first so your next session has a higher chance of moving the score.":
             "A shorter focused set is enough to keep the habit strong without bloating your review queue."}
-          </div>
-          <div className="dashboard-action-row" style={{marginTop:14}}>
-            <button className="btn btn-primary" style={{fontSize:13}} onClick={()=>onNav(readiness>=75&&isPro?"exam":"mcq")}>
-              {readiness>=75&&isPro?"Start Exam Mode":"Start Focus Set"}
-            </button>
-            <button className="btn btn-outline" style={{fontSize:13}} onClick={()=>onNav("daily")}>Do Daily Challenge</button>
-          </div>
-        </div>
-        <div className="card" style={{padding:"18px 20px"}}>
-          <div className="label" style={{color:t.green,marginBottom:10}}>3-step study loop</div>
-          <div className="dashboard-plan-steps">
+          </p>
+          <div className="home-step-row">
             {[
-              {title:"Answer",body:"Complete one focused MCQ or PBQ set."},
-              {title:"Review",body:"Read the missed explanations while fresh."},
-              {title:"Return",body:"Let Smart Review bring weak topics back."},
-            ].map((step,index)=>(
-              <div key={step.title} className="dashboard-plan-step">
-                <span className="dashboard-plan-index">{index+1}</span>
-                <div>
-                  <div style={{fontWeight:900,color:t.text,fontSize:13}}>{step.title}</div>
-                  <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>{step.body}</div>
-                </div>
+              ["Answer","Complete one focused set"],
+              ["Review","Read missed explanations"],
+              ["Return","Let SM-2 bring it back"],
+            ].map(([title,body],index)=>(
+              <div key={title} className="home-step">
+                <span>{index+1}</span>
+                <strong>{title}</strong>
+                <small>{body}</small>
               </div>
             ))}
           </div>
+          <button className="btn btn-primary" onClick={()=>onNav(readiness>=75&&isPro?"exam":"mcq")}>
+            {readiness>=75&&isPro?"Start Exam Mode":"Start Focus Set"}
+          </button>
         </div>
-      </div>
-
-      <div className="card" style={{padding:"18px 20px",marginBottom:18,borderColor:`${t.accent}25`}}>
-        <div className="quest-grid">
-          {[
-            {title:"Daily quest",body:streakInfo.completedToday?"Daily challenge secured. Come back tomorrow.":"Finish today's 5-question challenge.",action:"Open",nav:"daily",color:t.amber},
-            {title:"Smart review",body:nextQuest,action:"Practice",nav:"mcq",color:t.accent},
-            {title:isPro?"PBQ mission":"Pro mission",body:isPro?"Try one performance-based simulation.":"Unlock PBQ simulations and Exam Mode.",action:isPro?"Start":"Upgrade",nav:isPro?"pbq":"pricing",color:t.green},
-          ].map(q=>(
-            <div key={q.title} className="quest-card">
-              <span className="quest-medal" style={{"--quest-color":q.color}}>{q.title[0]}</span>
-              <div style={{flex:1,minWidth:0}}>
-                <div style={{fontWeight:900,color:t.text,fontSize:13}}>{q.title}</div>
-                <div style={{fontSize:12,color:t.textSec,lineHeight:1.5}}>{q.body}</div>
-              </div>
-              <button className="btn btn-ghost" style={{fontSize:12,padding:"6px 10px",minHeight:32}} onClick={()=>onNav(q.nav)}>{q.action}</button>
-            </div>
-          ))}
+        <div className="card home-path-card">
+          <div className="label" style={{color:t.accent}}>Security+ map</div>
+          <h3>Chapter path</h3>
+          <div className="skill-path">
+            {CHAPTERS.map(ch=>{
+              const s=chStats[ch.id];
+              const count=s?.t||0;
+              const p=s?Math.round((s.c/s.t)*100):0;
+              const done=count>=10&&p>=70;
+              const active=count>0&&!done;
+              return(
+                <button key={ch.id} className={`skill-node ${done?"done":active?"active":""}`} onClick={()=>onNav("mcq")} title={ch.title}>
+                  <span className="skill-node-dot" style={{"--node-color":chapterColor(ch.id)}}/>
+                  <span style={{fontSize:11,fontWeight:900,color:t.text}}>Ch.{ch.id}</span>
+                  <span style={{fontSize:10,color:t.textDim}}>{count?`${p}%`:"Start"}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -16337,51 +16617,6 @@ function Dashboard({user,attempts,onNav,t}) {
           <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={()=>onNav(readiness>=75&&isPro?"exam":"mcq")}>
             {readiness>=75&&isPro?"Start Exam Mode":"Start Focus Set"}
           </button>
-        </div>
-      </div>
-
-      <div className="card" style={{padding:"20px 24px",marginBottom:20}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12,flexWrap:"wrap",gap:10}}>
-          <div>
-            <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:2}}>Exam readiness path</div>
-            <div style={{fontSize:13,color:t.textSec}}>Reach 75% to enter the ready zone.</div>
-          </div>
-          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-            <button className="btn btn-primary" style={{fontSize:13}} onClick={()=>onNav("mcq")}>Practice MCQs</button>
-            {isPro&&<button className="btn btn-outline" style={{fontSize:13}} onClick={()=>onNav("pbq")}>PBQ Simulator</button>}
-          </div>
-        </div>
-        <ProgBar v={readiness} c={readiness>=75?t.green:readiness>=50?t.amber:t.red} h={10}/>
-        <div style={{display:"flex",justifyContent:"space-between",marginTop:6}}>
-          <span style={{fontSize:11,color:t.textDim}}>0%</span>
-          <span style={{fontSize:11,color:t.amber}}>75% target</span>
-          <span style={{fontSize:11,color:t.textDim}}>100%</span>
-        </div>
-      </div>
-
-      <div className="card" style={{padding:"18px 20px",marginBottom:20}}>
-        <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:14}}>
-          <div>
-            <div style={{fontWeight:900,color:t.text,fontSize:15}}>Security+ chapter path</div>
-            <div style={{fontSize:12,color:t.textSec}}>Each node lights up as you complete work in that chapter.</div>
-          </div>
-          <span className="chip" style={{background:`${t.accent}10`,color:t.accent,borderColor:`${t.accent}28`}}>{questionsDone}/{MCQ_BANK.length+PBQ_BANK.length} unique</span>
-        </div>
-        <div className="skill-path">
-          {CHAPTERS.map(ch=>{
-            const s=chStats[ch.id];
-            const count=s?.t||0;
-            const p=s?Math.round((s.c/s.t)*100):0;
-            const done=count>=10&&p>=70;
-            const active=count>0&&!done;
-            return(
-              <button key={ch.id} className={`skill-node ${done?"done":active?"active":""}`} onClick={()=>onNav("mcq")} title={ch.title}>
-                <span className="skill-node-dot" style={{"--node-color":chapterColor(ch.id)}}/>
-                <span style={{fontSize:11,fontWeight:900,color:t.text}}>Ch.{ch.id}</span>
-                <span style={{fontSize:10,color:t.textDim}}>{count?`${p}%`:"Start"}</span>
-              </button>
-            );
-          })}
         </div>
       </div>
 
@@ -16462,90 +16697,94 @@ function Dashboard({user,attempts,onNav,t}) {
 }
 
 function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
+  const [activePath,setActivePath]=useState("mcq");
+  const learningPaths=[
+    {id:"mcq",label:"MCQ foundations",tag:"Free",color:t.accent,body:`Start with all ${MCQ_BANK.length} MCQs. No account required.`,meta:"Practice now",action:onPractice},
+    {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"Finish a short challenge and build a repeatable study rhythm.",meta:"5 questions/day",action:onDaily},
+    {id:"pbq",label:"PBQ simulations",tag:"Pro",color:t.amber,body:`Preview the style, then unlock ${PBQ_BANK.length} performance-based simulations.`,meta:"Applied practice",action:onSignup},
+  ];
+  const activeLearningPath=learningPaths.find(path=>path.id===activePath)||learningPaths[0];
   return (
     <div className="dashboard-shell">
-      <div className="game-hero reward-pop" style={{marginBottom:18}}>
-        <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:18,alignItems:"center"}}>
+      <section className="home-hero guest-home-hero brilliant-hero">
+        <div className="home-hero-copy brilliant-hero-copy">
+          <div className="badge brilliant-eyebrow">CompTIA Security+ (SY0-701)</div>
+          <h1 className="home-title brilliant-title">Learn Security+ by doing.</h1>
+          <p className="home-subtitle brilliant-copy">
+            Interactive MCQs, PBQ simulations, and Smart Review for students who want practice that feels clear, modern, and useful.
+          </p>
+          <div className="home-cta-row brilliant-action-row">
+            <button className="btn btn-primary brilliant-primary-cta" onClick={onPractice}>Start practising free →</button>
+            <button className="btn btn-ghost brilliant-secondary-cta" onClick={onLogin}>Log in</button>
+          </div>
+          <div className="brilliant-proof-row">
+            <span>{MCQ_BANK.length} MCQs</span>
+            <span>{PBQ_BANK.length} PBQs</span>
+            <span>No account needed to start</span>
+          </div>
+        </div>
+        <div className="brilliant-lesson-shell">
+          <div className="brilliant-lesson-top">
+            <div>
+              <div className="label" style={{color:t.accent}}>Try it now</div>
+              <strong>Today's Security+ warm-up</strong>
+            </div>
+            <span>2 min</span>
+          </div>
+          <div className="brilliant-daily-wrap">
+            <LandingDailyChallengeWidget
+              t={t}
+              onSignup={onSignup}
+              onOpenDaily={onDaily}
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="brilliant-path-section landing-section">
+        <div className="brilliant-section-head">
           <div>
-            <div className="dashboard-kicker">Free preview</div>
-            <h2 style={{fontSize:30,fontWeight:900,color:t.text,marginBottom:8}}>
-              Try SecurePlus first. Save progress when you are ready.
-            </h2>
-            <p style={{color:t.textSec,fontSize:14,lineHeight:1.75,maxWidth:680}}>
-              You can practise MCQs and complete today&apos;s Daily Challenge without registering. Your answers, streaks, weak topics, and Smart Review queue are only saved after you create a free account or sign in.
-            </p>
-            <div className="dashboard-action-row">
-              <button className="btn btn-primary" onClick={onPractice}>Start MCQ Practice</button>
-              <button className="btn btn-outline" onClick={onDaily}>Try Daily Challenge</button>
-              <button className="btn btn-ghost" onClick={onSignup}>Create account to save progress</button>
-            </div>
+            <div className="label" style={{color:t.accent}}>Choose your path</div>
+            <h2>Start small. Build real exam confidence.</h2>
           </div>
-          <div className="card dashboard-focus-card" style={{borderColor:`${t.accent}35`,background:`${t.accent}08`}}>
-            <div className="label" style={{marginBottom:8}}>Saved after signup</div>
-            {["Scores and attempts","Daily streaks","Smart Review queue","Weak chapter history"].map(item=>(
-              <div key={item} style={{fontSize:13,color:t.textSec,lineHeight:1.9}}>✓ {item}</div>
-            ))}
-          </div>
+          <button className="btn btn-outline" onClick={activeLearningPath.action}>Open selected path</button>
         </div>
-      </div>
+        <div className="brilliant-path-grid">
+          {learningPaths.map(path=>(
+            <button
+              key={path.id}
+              className={`brilliant-path-card ${activePath===path.id?"active":""}`}
+              style={{"--path-color":path.color}}
+              onMouseEnter={()=>setActivePath(path.id)}
+              onFocus={()=>setActivePath(path.id)}
+              onClick={path.action}
+            >
+              <span className="brilliant-path-tag">{path.tag}</span>
+              <strong>{path.label}</strong>
+              <small>{path.body}</small>
+              <em>{path.meta}</em>
+            </button>
+          ))}
+        </div>
+      </section>
 
-      <div className="dashboard-plan-grid">
-        <div className="card dashboard-plan-card">
-          <div className="label" style={{color:t.accent,marginBottom:7}}>Guest experience</div>
-          <div style={{fontWeight:950,color:t.text,fontSize:19,marginBottom:6}}>You can try the learning flow before creating an account.</div>
-          <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-            MCQ Practice and Daily Challenge are open immediately. After you finish a set, SecurePlus will ask you to sign up only if you want to save progress and personalise future practice.
+      <div className="home-duo-grid">
+        <div className="card home-route-card">
+          <div className="label" style={{color:t.green}}>Learn first</div>
+          <h3>A free start that does not feel blocked.</h3>
+          <p>Unregistered users can access MCQ Practice, Daily Challenge, and Objectives. Create an account when you want saved progress and personalisation.</p>
+          <button className="btn btn-primary" onClick={onPractice}>Enter MCQ Practice</button>
+        </div>
+        <div className="card home-route-card">
+          <div className="label" style={{color:t.amber}}>Then save</div>
+          <h3>Your progress becomes the product.</h3>
+          <p>After a quiz, SecurePlus prompts users to save effort into streaks, weak topics, and a Smart Review queue.</p>
+          <div className="home-save-prompt">
+            <strong>Save progress?</strong>
+            <small>Keep weak topics, streaks, and review history.</small>
+            <button className="btn btn-outline" onClick={onSignup}>Save progress</button>
           </div>
         </div>
-        <div className="card" style={{padding:"18px 20px"}}>
-          <div className="label" style={{color:t.green,marginBottom:10}}>What changes after signup</div>
-          <div className="dashboard-plan-steps">
-            {[
-              {title:"Progress saved",body:"Scores and missed questions stay attached to your account."},
-              {title:"Smart Review starts",body:"Weak topics come back earlier instead of random repetition."},
-              {title:"Upgrade path clear",body:"Pro stays optional for PBQs and Exam Mode."},
-            ].map((step,index)=>(
-              <div key={step.title} className="dashboard-plan-step">
-                <span className="dashboard-plan-index">{index+1}</span>
-                <div>
-                  <div style={{fontWeight:900,color:t.text,fontSize:13}}>{step.title}</div>
-                  <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>{step.body}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="card" style={{padding:"22px",marginBottom:18,borderColor:`${t.green}35`,background:`linear-gradient(135deg, ${t.green}10, ${t.surface} 58%, ${t.accent}0d)`}}>
-        <div style={{display:"flex",gap:14,alignItems:"center",flexWrap:"wrap"}}>
-          <span className="mission-badge" style={{background:t.green}}>S</span>
-          <div style={{flex:1,minWidth:240}}>
-            <div style={{fontWeight:900,color:t.text,fontSize:17,marginBottom:4}}>SecurePlus gives before asking.</div>
-            <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-              Use the free practice experience first. When you finish a quiz or challenge, we will remind you to create an account so that effort is not lost.
-            </div>
-          </div>
-          <button className="btn btn-primary" onClick={onSignup}>Sign Up Free</button>
-          <button className="btn btn-outline" onClick={onLogin}>Log In</button>
-        </div>
-      </div>
-
-      <div className="quest-grid">
-        {[
-          {title:"MCQ Practice",body:`Access all ${MCQ_BANK.length} MCQs as a guest. Sign up to save results.`,action:"Start",onClick:onPractice,color:t.accent},
-          {title:"Daily Challenge",body:"Try today's short challenge. Sign up afterward to save streaks.",action:"Open",onClick:onDaily,color:t.amber},
-          {title:"Saved Progress",body:"Accounts unlock saved attempts, Smart Review, and personal weak areas.",action:"Create account",onClick:onSignup,color:t.green},
-        ].map(card=>(
-          <div key={card.title} className="quest-card">
-            <span className="quest-medal" style={{"--quest-color":card.color}}>{card.title[0]}</span>
-            <div style={{flex:1,minWidth:0}}>
-              <div style={{fontWeight:900,color:t.text,fontSize:13}}>{card.title}</div>
-              <div style={{fontSize:12,color:t.textSec,lineHeight:1.5}}>{card.body}</div>
-            </div>
-            <button className="btn btn-ghost" style={{fontSize:12,padding:"6px 10px",minHeight:32}} onClick={card.onClick}>{card.action}</button>
-          </div>
-        ))}
       </div>
     </div>
   );
@@ -16574,7 +16813,7 @@ function GuestLockedPage({t,onSignup,onLogin,onPractice,onDaily,title="Save your
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
-function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false}) {
+function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
   const sessionKey=`mcq:${practiceSessionOwner(user)}`;
   const requestSignup=onSignup||onUpgrade;
@@ -16633,6 +16872,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
     setTopicFilter("all");
     setReviewMode("random");
   },[isGuest]);
+
+  useEffect(()=>{
+    onFocusModeChange?.(isVisible && started && !done);
+    return()=>onFocusModeChange?.(false);
+  },[isVisible,started,done,onFocusModeChange]);
 
   useEffect(()=>{
     const available = quizSizes.filter(size=>filtered.length>=size);
@@ -16803,8 +17047,6 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
         <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>MCQ Practice</h2>
       </div>
       <p style={{color:t.textSec,marginBottom:20,fontSize:14}}>{MCQ_BANK.length} questions across all 5 CompTIA Security+ chapters</p>
-
-      {isGuest&&guestSignupPrompt}
 
       {resumeAvailable&&(
         <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
@@ -17038,7 +17280,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,starred=[],onTog
   );
 
   return(
-    <div style={{padding:"24px",maxWidth:700,margin:"0 auto"}} className="fu" key={qi}>
+    <div style={{padding:"24px",maxWidth:700,margin:"0 auto"}} className="fu active-practice-screen" key={qi}>
       <div className="top-progress" aria-hidden="true"><span style={{width:`${((qi+1)/questions.length)*100}%`}}/></div>
       {/* Progress */}
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}>
@@ -19185,6 +19427,16 @@ function cleanAdminQuestionPayload(form,kind) {
     if(opts.length!==4||opts.some(opt=>opt.length<1)) throw new Error("All 4 MCQ answer choices must be filled in.");
     if(!Number.isInteger(Number(form.correct))||Number(form.correct)<0||Number(form.correct)>3) throw new Error("Pick the correct MCQ answer.");
     if(String(form.exp||"").trim().length<20) throw new Error("The correct-answer explanation must be at least 20 characters.");
+    const missingWrongFeedback=opts.reduce((missing,_,index)=>{
+      if(index===Number(form.correct))return missing;
+      if(String(form.wrongFeedback?.[index]||form.wrongFeedback?.[String(index)]||"").trim().length<25) {
+        missing.push(String.fromCharCode(65+index));
+      }
+      return missing;
+    },[]);
+    if(missingWrongFeedback.length) {
+      throw new Error(`Add a specific explanation for wrong option${missingWrongFeedback.length>1?"s":""} ${missingWrongFeedback.join(", ")} (at least 25 characters each).`);
+    }
     const question=ensureMcqWrongFeedback({
       id,
       ch:String(form.ch||"1"),
@@ -19589,16 +19841,36 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const [error,setError]=useState("");
   const [codeSearch,setCodeSearch]=useState("");
   const [sortMode,setSortMode]=useState("order");
+  const [qualityFilter,setQualityFilter]=useState("all");
   const [showBankDashboard,setShowBankDashboard]=useState(false);
   const [history,setHistory]=useState([]);
   const [historyLoading,setHistoryLoading]=useState(false);
   const [historyError,setHistoryError]=useState("");
   const bank=kind==="mcq"?MCQ_BANK:PBQ_BANK;
   const bankBreakdown=useMemo(()=>buildQuestionBankBreakdown(kind,bank),[kind,bank]);
+  const mcqQualityById=useMemo(()=>kind==="mcq"
+    ? new Map(bank.map(question=>[question.id,analyzeMcqQuality(question,bank)]))
+    : new Map(),
+  [bank,kind]);
+  const qualityReviewCount=useMemo(()=>kind==="mcq"
+    ? [...mcqQualityById.values()].filter(result=>result.needsReview).length
+    : 0,
+  [kind,mcqQualityById]);
   const visibleBank=useMemo(()=>{
     const query=codeSearch.trim().toLowerCase();
-    const list=bank.filter(q=>!query||String(q.id||"").toLowerCase().includes(query));
+    const list=bank.filter(q=>{
+      const matchesSearch=!query
+        ||String(q.id||"").toLowerCase().includes(query)
+        ||String(q.q||q.title||"").toLowerCase().includes(query);
+      const matchesQuality=kind!=="mcq"||qualityFilter==="all"||mcqQualityById.get(q.id)?.needsReview;
+      return matchesSearch&&matchesQuality;
+    });
     return [...list].sort((a,b)=>{
+      if(sortMode==="quality"&&kind==="mcq") {
+        const aIssues=mcqQualityById.get(a.id)?.issues.length||0;
+        const bIssues=mcqQualityById.get(b.id)?.issues.length||0;
+        return bIssues-aIssues||String(a.id).localeCompare(String(b.id),undefined,{numeric:true,sensitivity:"base"});
+      }
       if(sortMode==="code-asc") return String(a.id).localeCompare(String(b.id),undefined,{numeric:true,sensitivity:"base"});
       if(sortMode==="code-desc") return String(b.id).localeCompare(String(a.id),undefined,{numeric:true,sensitivity:"base"});
       if(sortMode==="difficulty") {
@@ -19609,13 +19881,14 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
       const bo=Number(b._adminOrder||b._baseOrder||Number.MAX_SAFE_INTEGER);
       return ao-bo||String(a.id).localeCompare(String(b.id),undefined,{numeric:true,sensitivity:"base"});
     });
-  },[bank,codeSearch,sortMode]);
+  },[bank,codeSearch,kind,mcqQualityById,qualityFilter,sortMode]);
   const selectedIndex=bank.findIndex(q=>q.id===selectedId);
   const selectedQuestion=selectedIndex>=0?bank[selectedIndex]:null;
   const isEditing=Boolean(selectedQuestion);
   const difficultyColor=form.difficulty==="easy"?t.green:form.difficulty==="hard"?t.red:t.amber;
   const selectedChapter=getChapterById(form.ch);
   const topicOptions=getAdminTopicOptions(kind,form.ch,bank,kind==="mcq"?form.topic:form.cat);
+  const formQuality=useMemo(()=>kind==="mcq"?analyzeMcqQuality(form,bank):null,[bank,form,kind]);
   const detectedAcronyms=useMemo(()=>kind==="mcq"
     ? extractAcronymsFromText(form.q,form.opts||[],form.exp,Object.values(form.wrongFeedback||{}))
     : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation,form.answer,form.codeLanguage,form.codeBlock,form.logData,form.diagram,form.currentConfig,(form.items||[]).map(item=>item.label),(form.targets||[]).map(target=>target.label),(form.blanks||[]).flatMap(blank=>[blank.sentence,blank.answer,blank.acceptedAnswers,blank.hint])),
@@ -19745,6 +20018,15 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
     setSaving(true);setError("");setStatus("");
     try{
       const {question,sortOrder}=cleanAdminQuestionPayload(form,kind);
+      if(kind==="mcq") {
+        const quality=analyzeMcqQuality(question,bank);
+        const blockingIssue=quality.issues.find(issue=>issue.level==="error");
+        if(blockingIssue) throw new Error(blockingIssue.label);
+        if(quality.needsReview) {
+          const proceed=window.confirm(`Quality review found:\n\n${quality.issues.map(issue=>`- ${issue.label}`).join("\n")}\n\nSave this question anyway?`);
+          if(!proceed)return;
+        }
+      }
       await saveQuestionOverrideRequest({kind,question,sortOrder,action:"upsert"});
       setSelectedId(question.id);
       await onQuestionBankRefresh?.();
@@ -19864,6 +20146,32 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
         )}
       </div>
 
+      {kind==="mcq"&&(
+        <div className="card" style={{padding:"16px 18px",marginBottom:16,borderColor:qualityReviewCount?`${t.amber}38`:`${t.green}35`,background:qualityReviewCount?`${t.amber}07`:`${t.green}07`}}>
+          <div style={{display:"flex",gap:14,alignItems:"center",justifyContent:"space-between",flexWrap:"wrap"}}>
+            <div style={{minWidth:0,flex:"1 1 320px"}}>
+              <div className="label" style={{color:qualityReviewCount?t.amber:t.green,marginBottom:5}}>Quality review queue</div>
+              <h3 style={{fontSize:17,color:t.text,marginBottom:5}}>
+                {qualityReviewCount
+                  ? `${qualityReviewCount} MCQs need an owner review`
+                  : "No automated quality warnings"}
+              </h3>
+              <div style={{fontSize:12,color:t.textSec,lineHeight:1.65}}>
+                Checks cover long stems, answer-length clues, missing wrong-option explanations, duplicate stems, and incomplete chapter/topic metadata.
+              </div>
+            </div>
+            <button
+              className={qualityFilter==="needs-review"?"btn btn-primary":"btn btn-outline"}
+              type="button"
+              onClick={()=>setQualityFilter(value=>value==="needs-review"?"all":"needs-review")}
+              style={{fontSize:12,whiteSpace:"nowrap"}}
+            >
+              {qualityFilter==="needs-review"?"Show all questions":"Review flagged questions"}
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="card" style={{padding:"18px 20px",marginBottom:16}}>
         <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:12,flexWrap:"wrap"}}>
           <div>
@@ -19930,6 +20238,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
           <AdminField label="Sort">
             <select className="input" value={sortMode} onChange={e=>setSortMode(e.target.value)}>
               <option value="order">Current order</option>
+              {kind==="mcq"&&<option value="quality">Most quality warnings</option>}
               <option value="code-asc">Question code A-Z</option>
               <option value="code-desc">Question code Z-A</option>
               <option value="difficulty">Difficulty</option>
@@ -19938,7 +20247,10 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
           <AdminField label="Choose existing question">
             <select className="input" value={selectedId} onChange={e=>setSelectedId(e.target.value)}>
               <option value="">Create a new question</option>
-              {visibleBank.map((q,index)=><option key={q.id} value={q.id}>#{q._adminOrder||q._baseOrder||index+1} · {q.id} · {kind==="mcq"?(q.q||"").slice(0,80):(q.title||"").slice(0,80)}</option>)}
+              {visibleBank.map((q,index)=>{
+                const issueCount=kind==="mcq"?(mcqQualityById.get(q.id)?.issues.length||0):0;
+                return <option key={q.id} value={q.id}>{issueCount?`Review ${issueCount} · `:""}#{q._adminOrder||q._baseOrder||index+1} · {q.id} · {kind==="mcq"?(q.q||"").slice(0,80):(q.title||"").slice(0,80)}</option>;
+              })}
             </select>
           </AdminField>
           <button className="btn btn-outline" onClick={loadSelected}>Load</button>
@@ -19955,6 +20267,29 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
             </div>
             <span className="chip" style={{background:`${difficultyColor}14`,borderColor:`${difficultyColor}44`,color:difficultyColor,textTransform:"capitalize"}}>{form.difficulty}</span>
           </div>
+
+          {kind==="mcq"&&formQuality&&String(form.q||"").trim()&&(
+            <div className="card" style={{padding:"12px 14px",marginBottom:14,boxShadow:"none",background:formQuality.needsReview?`${t.amber}0c`:`${t.green}0b`,borderColor:formQuality.needsReview?`${t.amber}3f`:`${t.green}35`}}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:formQuality.needsReview?8:0}}>
+                <div style={{fontSize:12,fontWeight:900,color:formQuality.needsReview?t.amber:t.green}}>
+                  {formQuality.needsReview?"Quality checks to review":"Quality checks passed"}
+                </div>
+                <span className="chip" style={{fontSize:10,background:t.panel,borderColor:t.border,color:t.textSec}}>
+                  {formQuality.issues.length} warning{formQuality.issues.length===1?"":"s"}
+                </span>
+              </div>
+              {formQuality.needsReview&&(
+                <div style={{display:"grid",gap:6}}>
+                  {formQuality.issues.map(issue=>(
+                    <div key={issue.code} style={{display:"flex",gap:8,alignItems:"flex-start",fontSize:12,lineHeight:1.5,color:issue.level==="error"?t.red:t.textSec}}>
+                      <span aria-hidden="true">{issue.level==="error"?"!":"i"}</span>
+                      <span>{issue.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(145px,1fr))",gap:10,marginBottom:12}}>
             <AdminTextInput label="Question ID" value={form.id} onChange={v=>updateField("id",v)} placeholder={kind==="mcq"?"m-custom-001":"p-custom-001"}/>
@@ -20605,46 +20940,47 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         <ReferralUpgradeBanner user={user} t={t} onFindOutMore={()=>onNavigate("referrals")}/>
       </div>
 
-      {/* Stripe note */}
-      <div className="card" style={{padding:"18px 22px"}}>
-        <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:8}}>Payment via Stripe</div>
-        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-          In the live site, clicking Upgrade creates a Stripe Checkout session at <code>/api/stripe/checkout</code>. Payments are processed securely — we never store card details.
-        </p>
-      </div>
+      <div className="upgrade-secondary-stack">
+        <details className="upgrade-secondary">
+          <summary>Payment security</summary>
+          <div className="upgrade-secondary-content">
+            <p>
+              Upgrade opens Stripe Checkout at <code>/api/stripe/checkout</code>. Payments are processed by Stripe, and SecurePlus does not store card details.
+            </p>
+          </div>
+        </details>
 
-      <div className="card" style={{padding:"18px 22px",marginTop:16}}>
-        <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:8}}>Account & support</div>
-        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:14}}>
-          Need help? Contact <a href="mailto:secureplus.support@gmail.com" style={{color:t.accent}}>secureplus.support@gmail.com</a>.
-        </p>
-        <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-          <button className="btn btn-outline" style={{fontSize:13}} onClick={onCancelMembership} disabled={billingLoading}>
-            Cancel membership
-          </button>
-          <button className="btn btn-danger" style={{fontSize:13}} onClick={onDeleteAccount}>
-            Delete account
-          </button>
-          <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>onNavigate("privacy")}>
-            Privacy policy
-          </button>
-          <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>onNavigate("terms")}>
-            Terms & Conditions
-          </button>
-        </div>
-      </div>
-
-      {/* Concept page teaser */}
-      <div className="card" style={{padding:"18px 22px",marginTop:16,borderStyle:"dashed",borderColor:t.accent}}>
-        <div style={{display:"flex",gap:12,alignItems:"flex-start"}}>
-          <span style={{fontSize:28}}>🚧</span>
-          <div>
-            <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:4}}>Coming Soon: Concept Deep Dives</div>
-            <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-              A dedicated subdomain <code>concepts.secureplus.io</code> is planned for in-depth explanations of key topics like salting vs peppering, symmetric vs asymmetric encryption, and more. Work in progress — check back soon.
+        <details className="upgrade-secondary">
+          <summary>Account, support, and legal</summary>
+          <div className="upgrade-secondary-content">
+            <p>
+              Need help? Contact <a href="mailto:secureplus.support@gmail.com" style={{color:t.accent}}>secureplus.support@gmail.com</a>.
+            </p>
+            <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:12}}>
+              <button className="btn btn-outline" style={{fontSize:13}} onClick={onCancelMembership} disabled={billingLoading}>
+                Cancel membership
+              </button>
+              <button className="btn btn-danger" style={{fontSize:13}} onClick={onDeleteAccount}>
+                Delete account
+              </button>
+              <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>onNavigate("privacy")}>
+                Privacy policy
+              </button>
+              <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>onNavigate("terms")}>
+                Terms & Conditions
+              </button>
             </div>
           </div>
-        </div>
+        </details>
+
+        <details className="upgrade-secondary">
+          <summary>Coming soon: Concept Deep Dives</summary>
+          <div className="upgrade-secondary-content">
+            <p>
+              A future section is planned for in-depth explanations of key topics like salting vs peppering, symmetric vs asymmetric encryption, and common exam traps.
+            </p>
+          </div>
+        </details>
       </div>
     </div>
   );
@@ -21138,6 +21474,7 @@ export default function App() {
   const [questionReport,setQuestionReport]=useState(null);
   const [questionBankVersion,setQuestionBankVersion]=useState(0);
   const [adminQuestionTarget,setAdminQuestionTarget]=useState(null);
+  const [practiceFocusMode,setPracticeFocusMode]=useState(false);
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
@@ -21264,6 +21601,10 @@ export default function App() {
   useEffect(()=>{
     capture("app_viewed", { view, signed_in: Boolean(user), tier: user?.tier || "guest" });
   },[view,user?.tier]);
+
+  useEffect(()=>{
+    if(view!=="mcq") setPracticeFocusMode(false);
+  },[view]);
 
   useEffect(()=>{
     let active=true;
@@ -21695,7 +22036,7 @@ export default function App() {
     return(
       <>
         <style>{CSS}</style>
-        <div className="app-shell">
+        <div className={`app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
           {sidebarHidden&&(
             <button className="sidebar-restore" type="button" onClick={()=>setSidebarHidden(false)}>
               <NavGlyph type="dashboard" active/>
@@ -21754,7 +22095,7 @@ export default function App() {
               <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
             )}
             {view==="mcq"&&(
-              <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} t={t} starred={[]} onReportQuestion={handleReportQuestion}/>
+              <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion}/>
             )}
             {view==="daily"&&(
               <DailyChallenge t={t} onLogin={goToSignup}/>
@@ -21826,7 +22167,7 @@ export default function App() {
   return(
     <>
       <style>{CSS}</style>
-      <div className="app-shell">
+      <div className={`app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
         {sidebarHidden&&(
           <button className="sidebar-restore" type="button" onClick={()=>setSidebarHidden(false)}>
             <NavGlyph type="dashboard" active/>
@@ -21892,7 +22233,7 @@ export default function App() {
           />
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
-            <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser}/>
+            <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser}/>
           </div>
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser}/>
