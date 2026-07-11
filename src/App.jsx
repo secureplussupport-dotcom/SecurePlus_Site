@@ -1,4 +1,50 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import {
+  BookOpenCheck,
+  Brain,
+  Check,
+  CheckCircle2,
+  ChartNoAxesColumnIncreasing,
+  Circle,
+  CircleGauge,
+  ClipboardCheck,
+  ClipboardList,
+  Crosshair,
+  FileText,
+  Flame,
+  Gauge,
+  GraduationCap,
+  House,
+  Lightbulb,
+  ListChecks,
+  ListOrdered,
+  ListPlus,
+  LockKeyhole,
+  LogOut,
+  MessageSquareWarning,
+  MonitorCog,
+  Moon,
+  Move,
+  Network,
+  PenLine,
+  Play,
+  Puzzle,
+  Route,
+  Share2,
+  ShieldCheck,
+  SlidersHorizontal,
+  SquareTerminal,
+  Sparkles,
+  Star,
+  Sun,
+  Target,
+  TextCursorInput,
+  TrendingUp,
+  TriangleAlert,
+  Trophy,
+  X,
+  XCircle,
+} from "lucide-react";
 import { capture, identifyUser, resetAnalytics } from "./lib/analytics.js";
 import { getSupabaseAccessToken, isSupabaseConfigured, supabase } from "./lib/supabaseClient.js";
 
@@ -740,17 +786,17 @@ function getReviewSummary(attempts) {
 // ═══════════════════════════════════════════════════════════════
 const THEMES = {
   dark: {
-    bg:"#0b1020", surface:"#121a2b", panel:"#0f1726", border:"#263247",
-    text:"#f6f8fc", textSec:"#a7b0c4", textDim:"#68738d",
-    accent:"#2f7df6", accentHover:"#1d66d3", green:"#14b8a6", red:"#f43f5e", amber:"#f59e0b",
-    cardBg:"#121a2b", inputBg:"#0b1220",
+    bg:"#0c111b", surface:"#171e2b", panel:"#111824", border:"#2b3748",
+    text:"#f7f9fc", textSec:"#b2bdcf", textDim:"#77849a",
+    accent:"#4f8cff", accentHover:"#3476ed", green:"#20c997", red:"#ff5d73", amber:"#ffb020",
+    cardBg:"#171e2b", inputBg:"#0e1521",
     codeBg:"#050814", codePanel:"#0a1020", codeBorder:"#27344d", codeText:"#d6e2ff",
     codeMuted:"#7f8ba6", codePrompt:"#5eead4", codeCommand:"#93c5fd", codeError:"#fb7185", codeWarn:"#fbbf24",
   },
   light: {
-    bg:"#f6f8fb", surface:"#ffffff", panel:"#eef3f8", border:"#dce4ee",
-    text:"#111827", textSec:"#4b5563", textDim:"#8792a6",
-    accent:"#1769e0", accentHover:"#0f55bd", green:"#0f9f8f", red:"#dc274d", amber:"#c77700",
+    bg:"#f7f9fc", surface:"#ffffff", panel:"#f0f4f8", border:"#d8e0eb",
+    text:"#152033", textSec:"#526176", textDim:"#8290a4",
+    accent:"#246bfe", accentHover:"#1457d8", green:"#0aa67d", red:"#dd3657", amber:"#b96800",
     cardBg:"#ffffff", inputBg:"#f8f9fc",
     codeBg:"#ffffff", codePanel:"#f3f7ff", codeBorder:"#b9c8dd", codeText:"#102033",
     codeMuted:"#5d6b82", codePrompt:"#007f73", codeCommand:"#174ea6", codeError:"#b4233c", codeWarn:"#9a5b00",
@@ -11824,19 +11870,19 @@ FIX: Synchronise the client's clock with the NTP server.
     emoji:"📊",
     logData:`AWS CloudTrail Log — S3 Bucket: company-hr-data
 
-2024-01-15 09:00:01  PutBucketACL  User: admin@company.com  
+2024-01-15 09:00:01  PutBucketACL  User: admin@company.com
                      ACL: public-read  ← bucket made PUBLIC
 
-2024-01-15 09:00:15  GetObject  IP: 203.0.113.45  
+2024-01-15 09:00:15  GetObject  IP: 203.0.113.45
                      User: ANONYMOUS  File: employee_salaries_2024.csv  ← External download
 
-2024-01-15 09:00:17  GetObject  IP: 185.220.101.10  
+2024-01-15 09:00:17  GetObject  IP: 185.220.101.10
                      User: ANONYMOUS  File: hr_database_full_export.sql
 
-2024-01-15 09:01:44  GetObject  IP: 198.51.100.23  
+2024-01-15 09:01:44  GetObject  IP: 198.51.100.23
                      User: ANONYMOUS  File: employee_ssn_list.xlsx
 
-2024-01-15 09:15:00  PutBucketACL  User: admin@company.com  
+2024-01-15 09:15:00  PutBucketACL  User: admin@company.com
                      ACL: private  ← bucket made private again (too late)
 
 Total anonymous downloads: 147 files in 15 minutes`,
@@ -14446,7 +14492,10 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .tab{padding:9px 18px;cursor:pointer;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:${t.textSec};transition:all .15s;white-space:nowrap;}
 .tab:hover{color:${t.text};}
 .tab.act{color:${t.accent};border-bottom-color:${t.accent};}
-.nav-lnk{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:800;color:${t.textSec};cursor:pointer;transition:all .18s;border:1px solid transparent;min-height:42px;}
+.nav-lnk{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:800;color:${t.textSec};cursor:pointer;transition:all .18s;border:1px solid transparent;min-height:42px;}
+.nav-lnk.locked{opacity:.68;}
+.nav-lock-indicator{margin-left:auto;color:${t.textDim};flex-shrink:0;}
+.nav-label-mobile{display:none;}
 .nav-lnk:hover{color:${t.text};background:${t.panel};box-shadow:inset 0 0 0 1px ${t.border};}
 .nav-lnk.act{color:${t.text};background:linear-gradient(135deg, ${t.accent}24, ${t.green}0f);border-color:${t.accent}38;box-shadow:0 12px 26px ${t.accent}16, inset 0 0 0 1px ${t.accent}18;animation:softGlow 2.8s ease-in-out infinite;}
 .nav-lnk.act span:last-child{color:${t.text};text-shadow:0 0 16px ${t.accent}55;}
@@ -14552,6 +14601,20 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .sim-icon-log::before{width:3px;height:7px;background:currentColor;bottom:9px;left:11px;box-shadow:6px -4px 0 currentColor,12px -1px 0 currentColor;}
 .sim-icon-scenario span{width:16px;height:18px;border:2px solid currentColor;border-radius:3px;}
 .sim-icon-scenario::before{width:8px;height:2px;background:currentColor;top:11px;box-shadow:0 5px 0 currentColor;}
+.nav-glyph::before,.nav-glyph::after,
+.chapter-icon::before,.chapter-icon::after,
+.sim-icon::before,.sim-icon::after,
+.pillar-icon::before,.pillar-icon::after{display:none!important;content:none!important;}
+.glyph-svg{display:block;position:relative;z-index:1;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;transform-origin:center;transition:transform .2s ease,filter .2s ease;}
+.nav-lnk:hover .nav-glyph .glyph-svg,.nav-glyph.active .glyph-svg{animation:glyphLift .42s cubic-bezier(.16,1,.3,1) both;filter:drop-shadow(0 0 5px currentColor);}
+.chapter-icon:hover .glyph-svg,.chapter-card:hover .chapter-icon .glyph-svg,
+.sim-icon:hover .glyph-svg,.sim-card:hover .sim-icon .glyph-svg,.card-hover:hover .sim-icon .glyph-svg,
+.landing-feature-card:hover .pillar-icon .glyph-svg{animation:glyphLift .42s cubic-bezier(.16,1,.3,1) both;filter:drop-shadow(0 0 5px currentColor);}
+.page-title-row .nav-glyph .glyph-svg{width:21px;height:21px;}
+.section-icon{width:40px;height:40px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--section-color);background:color-mix(in srgb,var(--section-color) 13%,transparent);border:1px solid color-mix(in srgb,var(--section-color) 38%,transparent);box-shadow:0 10px 22px color-mix(in srgb,var(--section-color) 16%,transparent);flex-shrink:0;}
+.completion-icon{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--completion-color);background:color-mix(in srgb,var(--completion-color) 13%,${t.surface});border:1px solid color-mix(in srgb,var(--completion-color) 45%,transparent);box-shadow:0 14px 34px color-mix(in srgb,var(--completion-color) 22%,transparent);animation:rewardPop .55s cubic-bezier(.16,1,.3,1) both;}
+.game-stat-icon svg,.mission-badge svg,.section-icon svg,.completion-icon svg{display:block;}
+@keyframes glyphLift{0%{transform:translateY(0) scale(1)}55%{transform:translateY(-2px) scale(1.08)}100%{transform:translateY(0) scale(1)}}
 .profile-menu{position:relative;z-index:220;}
 .profile-popover{position:absolute;left:0;top:calc(100% + 8px);z-index:999;width:min(340px,calc(100vw - 28px));padding:16px;background:${t.surface};border:1px solid ${t.border};border-radius:8px;box-shadow:0 20px 50px rgba(0,0,0,.24);}
 .sidebar .profile-popover{left:14px;}
@@ -14835,23 +14898,119 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .feedback-modal-body{padding:16px 26px 18px;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;flex:1 1 auto;}
 .feedback-modal-footer{position:sticky;bottom:0;z-index:2;padding:12px 26px calc(12px + env(safe-area-inset-bottom));background:${t.surface};border-top:1px solid ${t.border};display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;}
 .feedback-page{padding-bottom:128px!important;min-height:100dvh;}
+
+/* Learning product refresh: one visual language across discovery, practice, and review. */
+body{background:
+  radial-gradient(circle at 10% -8%,${t.accent}16,transparent 31%),
+  radial-gradient(circle at 92% 4%,${t.green}0f,transparent 27%),
+  linear-gradient(180deg,${t.bg},${t.panel} 155%)!important;}
+.app-main{background:linear-gradient(180deg,transparent,${t.surface}08);}
+.card,.surface-panel{border-radius:8px;box-shadow:0 12px 32px rgba(3,8,20,.11);}
+.card:hover{border-color:${t.accent}42;}
+.sidebar{width:252px;padding:12px;background:color-mix(in srgb,${t.panel} 94%,transparent);border-right:1px solid ${t.border};box-shadow:12px 0 34px rgba(3,8,20,.12);backdrop-filter:blur(18px);}
+.sidebar nav{gap:5px!important;}
+.nav-lnk{min-height:46px;padding:10px 12px;border-radius:8px;color:${t.textSec};}
+.nav-lnk:hover{background:${t.surface};box-shadow:none;border-color:${t.border};}
+.nav-lnk.act{background:${t.accent}16;border-color:${t.accent}55;box-shadow:inset 3px 0 0 ${t.accent};animation:none;}
+.nav-lnk.act span:last-child{text-shadow:none;}
+.nav-glyph{width:30px!important;height:30px!important;border-radius:8px!important;}
+.btn{min-height:44px;padding:11px 18px;border-radius:8px;box-shadow:none;}
+.btn-primary{background:${t.accent};box-shadow:0 6px 0 color-mix(in srgb,${t.accentHover} 88%,#000),0 13px 24px ${t.accent}20;transform:translateY(-2px);}
+.btn-primary:hover{background:${t.accentHover};box-shadow:0 7px 0 color-mix(in srgb,${t.accentHover} 82%,#000),0 16px 28px ${t.accent}2b;transform:translateY(-3px);}
+.btn-primary:active{box-shadow:0 2px 0 color-mix(in srgb,${t.accentHover} 82%,#000);transform:translateY(2px);}
+.btn-outline,.btn-ghost{border-width:1.5px;}
+.chip{min-height:27px;padding:4px 9px;border-radius:999px;}
+.dashboard-shell{padding:34px 30px 112px;max-width:1240px;}
+.home-hero{border-radius:8px;padding:38px;background:linear-gradient(135deg,${t.accent}16,${t.surface} 46%,${t.green}0d);}
+.home-title,.landing-title{font-weight:900;text-wrap:balance;}
+.home-subtitle,.landing-copy{max-width:62ch;}
+.mission-board,.home-mission-card,.home-live-card,.home-route-card,.home-path-card{border-radius:8px;}
+.home-mission-card{min-height:176px;padding:18px;}
+.home-mission-icon{border-radius:8px;}
+.game-stat,.quest-card,.setup-hero,.practice-action-bar,.results-summary-tile{border-radius:8px;}
+.page-title-row{align-items:center!important;gap:12px!important;margin-bottom:8px!important;}
+.page-title-row h2{font-size:28px!important;line-height:1.15!important;}
+.setup-hero{padding:24px 26px;border-color:${t.green}38;background:linear-gradient(135deg,${t.green}10,${t.surface} 52%,${t.accent}0d);}
+.setup-hero-grid{min-width:0;}
+.setup-hero-grid>*{min-width:0;}
+.setup-stat{padding:12px;border-radius:8px;background:${t.bg}66;}
+.practice-filter-card{padding:24px!important;}
+.practice-filter-grid>*{min-width:0;}
+.quiz-length-grid{min-width:0;}
+.practice-filter-card .label{margin-bottom:8px!important;}
+.practice-summary{padding:14px 16px;border-radius:8px;}
+.chapter-card{min-height:62px;padding:13px 14px!important;}
+.top-progress{height:9px;border-radius:999px;background:${t.border};overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.2);}
+.top-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,${t.accent},${t.green});transition:width .45s cubic-bezier(.16,1,.3,1);position:relative;}
+.top-progress span::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);animation:barShine 1.8s linear infinite;}
+.question-dots{gap:8px;}
+.question-dot{width:12px;height:12px;}
+.question-card{padding:24px 26px!important;border-left:4px solid ${t.accent}!important;background:${t.surface}!important;box-shadow:0 16px 36px rgba(3,8,20,.13)!important;}
+.question-text{font-size:21px!important;line-height:1.62!important;font-weight:800!important;}
+.opt{min-height:68px;padding:17px 18px;border-radius:8px;border:2px solid ${t.border};background:${t.surface};box-shadow:0 4px 0 color-mix(in srgb,${t.border} 80%,transparent);}
+.opt:hover:not(.done){border-color:${t.accent}80;background:${t.accent}0b;transform:translateY(-2px);box-shadow:0 6px 0 ${t.accent}35,0 15px 30px ${t.accent}12;}
+.opt.sel{border-color:${t.accent}!important;background:${t.accent}18!important;box-shadow:0 5px 0 ${t.accent}55,0 0 0 3px ${t.accent}12!important;}
+.opt.ok{border-color:${t.green}!important;background:${t.green}12!important;box-shadow:0 5px 0 ${t.green}52!important;}
+.opt.bad{border-color:${t.red}!important;background:${t.red}0e!important;box-shadow:0 5px 0 ${t.red}48!important;}
+.opt-ltr{width:38px;height:38px;font-size:14px;}
+.option-text{font-size:17px!important;line-height:1.55!important;font-weight:700!important;}
+.answer-feedback{padding:19px 20px!important;border-width:2px!important;box-shadow:0 14px 32px rgba(3,8,20,.1)!important;}
+.answer-burst{top:18px!important;bottom:auto!important;}
+.mcq-setup-screen,.pbq-bank-screen,.exam-setup-screen{padding:32px 28px 112px!important;max-width:940px!important;margin:0 auto;}
+.mcq-question-screen,.pbq-question-screen{padding:28px 24px 118px!important;max-width:780px!important;margin:0 auto;}
+.mcq-results-screen{padding:34px 24px 120px!important;max-width:820px!important;margin:0 auto;text-align:left!important;}
+.practice-result-hero{display:grid;grid-template-columns:170px minmax(0,1fr);gap:28px;align-items:center;padding:26px;margin-bottom:18px;border:1px solid ${t.border};border-radius:8px;background:linear-gradient(135deg,${t.surface},${t.panel});box-shadow:0 18px 42px rgba(3,8,20,.12);}
+.practice-score-ring{--score:0;--ring:${t.accent};position:relative;width:150px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--ring) calc(var(--score)*1%),${t.border} 0);box-shadow:0 18px 34px color-mix(in srgb,var(--ring) 18%,transparent);animation:resultRingIn .75s cubic-bezier(.16,1,.3,1) both;}
+.practice-score-ring::before{content:"";position:absolute;inset:13px;border-radius:50%;background:${t.surface};box-shadow:inset 0 0 0 1px ${t.border};}
+.practice-score-ring strong{position:relative;font-size:35px;line-height:1;color:${t.text};}
+.practice-score-ring small{position:absolute;top:94px;font-size:11px;color:${t.textSec};font-weight:800;}
+.practice-result-copy h2{font-size:30px;color:${t.text};line-height:1.15;margin:4px 0 9px;}
+.practice-result-copy p{color:${t.textSec};font-size:14px;line-height:1.7;max-width:54ch;}
+.practice-result-kicker{font-size:11px;font-weight:900;text-transform:uppercase;color:var(--result-color);}
+.practice-result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.practice-review-list{padding:8px!important;}
+.practice-review-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:11px;align-items:center;padding:12px;border-radius:8px;}
+.practice-review-row+.practice-review-row{border-top:1px solid ${t.border};}
+.practice-review-status{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:var(--review-color);color:#fff;}
+.practice-review-row span:nth-child(2){font-size:13px;color:${t.text};line-height:1.45;}
+.practice-review-row small{font-size:11px;font-weight:800;color:var(--review-color);}
+.landing-header{border-radius:8px;padding:10px 12px;}
+.landing-main{gap:34px;}
+.brilliant-hero{padding:30px 0 22px;}
+.guest-home-hero .landing-challenge-options{grid-template-columns:repeat(2,minmax(0,1fr));}
+.guest-home-hero .landing-challenge-option{min-height:48px;padding:9px 10px;}
+.brilliant-title{font-size:clamp(46px,6vw,72px);line-height:.99;}
+.brilliant-path-section,.brilliant-path-card,.landing-feature-card,.landing-split-section .card,.landing-pricing-grid .card,.landing-faq-grid .card,.landing-auth-section,.brilliant-lesson-shell{border-radius:8px;}
+.brilliant-path-card{min-height:220px;}
+.landing-feature-card[data-plan="pro"]{border-color:${t.accent}55;box-shadow:0 15px 38px ${t.accent}10;}
+.landing-feature-card[data-plan="free"]{border-color:${t.green}3f;}
+.landing-faq-grid details{border-radius:8px;}
+@keyframes resultRingIn{from{opacity:0;transform:scale(.82) rotate(-18deg)}to{opacity:1;transform:scale(1) rotate(0)}}
 @media (max-width: 860px){
   html,body,#root{max-width:100%;overflow-x:hidden;}
   body{font-size:14px;}
   .app-shell{display:block;padding-bottom:72px;}
-  .sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%;height:74px;min-height:74px;border-right:0;border-top:1px solid ${t.border};z-index:20;box-shadow:0 -12px 28px rgba(7,12,24,.16);}
+  .sidebar{position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));top:auto;width:auto;height:70px;min-height:70px;padding:6px;border:1px solid ${t.border};border-radius:8px;z-index:120;box-shadow:0 -4px 30px rgba(3,8,20,.28);background:${t.panel}f2;backdrop-filter:blur(20px);}
   .sidebar.hidden{display:flex!important;}
   .sidebar-restore{display:none!important;}
   .sidebar > div{display:none!important;}
-  .sidebar nav{flex-direction:row!important;overflow-x:auto;padding:9px 10px!important;gap:7px!important;scrollbar-width:none;}
+  .sidebar nav{flex-direction:row!important;overflow-x:auto;padding:0!important;gap:4px!important;scrollbar-width:none;}
   .sidebar nav::-webkit-scrollbar{display:none;}
-  .nav-lnk{min-width:64px;flex-direction:column;gap:3px;padding:8px 8px;font-size:10px;text-align:center;min-height:55px;}
+  .nav-lnk{min-width:52px;flex:1 0 52px;flex-direction:column;gap:2px;padding:6px 4px;font-size:9px;text-align:center;min-height:56px;border-radius:8px;}
+  .nav-lnk.locked{opacity:.82;}
+  .nav-label{display:block;width:100%;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .nav-label-desktop{display:none;}
+  .nav-label-mobile{display:inline;}
+  .nav-lock-indicator{position:absolute;right:5px;top:5px;width:11px;height:11px;margin:0;color:${t.textDim};}
+  .nav-lnk.act{box-shadow:inset 0 -3px 0 ${t.accent};}
   .nav-lnk .nav-glyph{width:24px;height:24px;}
   .nav-lnk span:first-child{font-size:15px!important;}
-  .mobile-topbar{display:flex;position:sticky;top:0;z-index:130;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;background:${t.panel}f5;backdrop-filter:blur(14px);border-bottom:1px solid ${t.border};box-shadow:0 10px 26px rgba(7,12,24,.08);}
+  .mobile-topbar{display:flex;position:sticky;top:0;z-index:130;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px;background:${t.bg}e8;backdrop-filter:blur(18px);border-bottom:1px solid ${t.border};box-shadow:0 8px 24px rgba(3,8,20,.12);}
   main > div{padding-left:16px!important;padding-right:16px!important;max-width:100%!important;}
-  .dashboard-shell{padding:18px 16px 98px!important;}
-  .home-hero{grid-template-columns:1fr!important;padding:22px!important;border-radius:16px!important;gap:18px!important;}
+  .dashboard-shell{padding:18px 16px 108px!important;}
+  .home-hero{grid-template-columns:minmax(0,1fr)!important;padding:22px!important;border-radius:8px!important;gap:18px!important;}
+  .home-hero>*{min-width:0!important;max-width:100%!important;}
+  .guest-home-hero .brilliant-lesson-shell{width:100%!important;min-width:0!important;}
   .home-title{font-size:34px!important;line-height:1.06!important;}
   .home-subtitle{font-size:14px!important;line-height:1.65!important;}
   .home-cta-row .btn{flex:1 1 180px;}
@@ -14888,16 +15047,32 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .trial-countdown-banner{width:calc(100% - 32px);margin-top:14px;padding:16px;}
   .trial-countdown-grid{grid-template-columns:repeat(4,minmax(0,1fr));flex-basis:100%;}
   .trial-countdown-value{font-size:19px;}
-  .question-card{padding:18px 18px!important;}
-  .question-text{font-size:18px!important;line-height:1.58!important;}
+  .question-card{padding:18px 17px!important;border-left-width:3px!important;}
+  .question-text{font-size:19px!important;line-height:1.58!important;}
   .question-prompt{font-size:17px!important;line-height:1.6!important;}
   .scenario-text{font-size:15px!important;line-height:1.75!important;}
   .option-text{font-size:16px!important;line-height:1.62!important;}
-  .opt{padding:15px 14px!important;gap:12px!important;border-radius:12px!important;}
+  .opt{min-height:64px;padding:14px 13px!important;gap:11px!important;border-radius:8px!important;}
   .opt-ltr{width:34px!important;height:34px!important;border-radius:999px!important;}
   .top-progress{margin:-4px 0 12px!important;}
   .score-actions{top:8px!important;}
   .results-shell{padding:18px 16px 100px!important;}
+  .mcq-setup-screen,.pbq-bank-screen,.exam-setup-screen{padding:18px 16px 108px!important;}
+  .setup-hero-grid{grid-template-columns:minmax(0,1fr)!important;}
+  .setup-stats{width:100%;grid-template-columns:repeat(3,minmax(0,1fr))!important;}
+  .practice-filter-grid{grid-template-columns:minmax(0,1fr)!important;}
+  .practice-filter-grid>div{width:100%;min-width:0;}
+  .quiz-length-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:6px!important;}
+  .quiz-length-grid .btn{min-width:0!important;padding:8px 4px!important;}
+  .practice-filter-card{padding:18px!important;overflow:hidden!important;}
+  .mcq-question-screen,.pbq-question-screen{padding:16px 14px 112px!important;}
+  .mcq-results-screen{padding:18px 16px 112px!important;}
+  .practice-result-hero{grid-template-columns:1fr;text-align:center;padding:22px 18px;gap:18px;}
+  .practice-score-ring{width:138px;margin:0 auto;}
+  .practice-result-copy p{margin:0 auto;}
+  .practice-result-actions{justify-content:center;}
+  .practice-review-row{grid-template-columns:32px minmax(0,1fr);}
+  .practice-review-row small{grid-column:2;}
   .results-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .results-summary-tile{padding:12px!important;}
   .exam-score-card{padding:18px!important;}
@@ -14928,14 +15103,15 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   .auth-stat-card div:first-child{font-size:22px!important;}
   .auth-stat-card .label{font-size:10px!important;letter-spacing:0!important;}
   .tab{padding:9px 10px!important;font-size:12px!important;}
-  .landing-page{padding:16px 16px 98px!important;}
+  .landing-page{padding:10px 16px 106px!important;}
   .landing-header{grid-template-columns:1fr!important;align-items:flex-start;margin-bottom:18px!important;padding-top:10px!important;}
   .landing-nav-center{justify-content:flex-start!important;overflow-x:auto;width:100%;padding-bottom:2px;}
   .landing-nav-actions{width:100%;justify-content:flex-start!important;}
   .landing-hero{grid-template-columns:1fr!important;padding-top:10px!important;gap:16px!important;}
   .landing-title{font-size:34px!important;line-height:1.08!important;}
   .landing-copy{font-size:14px!important;}
-  .brilliant-hero{padding:20px 0 8px!important;gap:22px!important;}
+  .brilliant-hero{min-height:auto!important;padding:26px 0 14px!important;gap:24px!important;grid-template-columns:minmax(0,1fr)!important;}
+  .guest-home-hero .landing-challenge-options{grid-template-columns:minmax(0,1fr)!important;}
   .brilliant-title{font-size:40px!important;line-height:1.02!important;}
   .brilliant-copy{font-size:15px!important;line-height:1.65!important;}
   .brilliant-action-row .btn{width:100%;justify-content:center;}
@@ -15183,13 +15359,29 @@ function ChBadge({chId,t}) {
   return <span className="chip meta-chip" style={{fontSize:11}}><ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}</span>;
 }
 function NavGlyph({type,active}) {
-  return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true"><span/></span>;
+  const Icon={
+    dashboard:House,
+    mcq:BookOpenCheck,
+    pbq:Lightbulb,
+    daily:Target,
+    pricing:TrendingUp,
+    referrals:Share2,
+    objectives:ListChecks,
+    exam:ClipboardCheck,
+    privacy:LockKeyhole,
+    terms:FileText,
+    feedback:MessageSquareWarning,
+    "question-admin":ListPlus,
+  }[type]||ShieldCheck;
+  return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true"><Icon className="glyph-svg" size={19} strokeWidth={2.15}/></span>;
 }
 function chapterColor(id) {
   return ({1:"#2f7df6",2:"#ef4444",3:"#14b8a6",4:"#a78bfa",5:"#f59e0b"})[id] || "#2f7df6";
 }
 function ChapterIcon({id,size=34}) {
-  return <span className={`chapter-icon chapter-icon-${id}`} style={{"--icon-color":chapterColor(id),width:size,height:size,borderRadius:Math.max(6,Math.round(size*.28))}} aria-hidden="true"><span/></span>;
+  const Icon=({1:ShieldCheck,2:TriangleAlert,3:Network,4:MonitorCog,5:ClipboardList})[id]||ShieldCheck;
+  const glyphSize=Math.max(13,Math.round(size*.55));
+  return <span className={`chapter-icon chapter-icon-${id}`} style={{"--icon-color":chapterColor(id),width:size,height:size,borderRadius:Math.max(6,Math.round(size*.28))}} aria-hidden="true"><Icon className="glyph-svg" size={glyphSize} strokeWidth={2.15}/></span>;
 }
 function simIconClass(type) {
   return ({
@@ -15205,10 +15397,22 @@ function simIconClass(type) {
 }
 function SimIcon({type,size=34}) {
   const s=Object.values(SIM_TYPES).find(x=>x.id===type)||SIM_TYPES.TERMINAL;
-  return <span className={`sim-icon sim-icon-${simIconClass(type)}`} style={{"--icon-color":s.color,width:size,height:size,borderRadius:Math.max(6,Math.round(size*.28))}} aria-hidden="true"><span/></span>;
+  const Icon={
+    "TERMINAL SIM":SquareTerminal,
+    "DRAG & DROP":Move,
+    HOTSPOT:Crosshair,
+    ORDERING:ListOrdered,
+    "FILL BLANK":TextCursorInput,
+    "CONFIG/ACL":SlidersHorizontal,
+    "LOG ANALYSIS":ChartNoAxesColumnIncreasing,
+    SCENARIO:Route,
+  }[type]||Route;
+  const glyphSize=Math.max(13,Math.round(size*.55));
+  return <span className={`sim-icon sim-icon-${simIconClass(type)}`} style={{"--icon-color":s.color,width:size,height:size,borderRadius:Math.max(6,Math.round(size*.28))}} aria-hidden="true"><Icon className="glyph-svg" size={glyphSize} strokeWidth={2.15}/></span>;
 }
 function PillarIcon({type,color}) {
-  return <span className={`pillar-icon pillar-icon-${type}`} style={{"--pillar-color":color}} aria-hidden="true"><span/></span>;
+  const Icon={mcq:BookOpenCheck,pbq:Lightbulb,review:Brain,exam:ClipboardCheck}[type]||ShieldCheck;
+  return <span className={`pillar-icon pillar-icon-${type}`} style={{"--pillar-color":color}} aria-hidden="true"><Icon className="glyph-svg" size={24} strokeWidth={2.15}/></span>;
 }
 function Alert({msg,type="error",t}) {
   if(!msg) return null;
@@ -15295,7 +15499,7 @@ function StarButton({active,onToggle,label="Star question"}) {
       title={active?"Unstar question":label}
       onClick={e=>{e.stopPropagation();onToggle?.();}}
     >
-      {active?"★":"☆"}
+      <Star size={18} strokeWidth={2.2} fill={active?"currentColor":"none"}/>
     </button>
   );
 }
@@ -15334,7 +15538,7 @@ function AnswerBurst({result,t}) {
   const correct=result.correct;
   return(
     <div className={`answer-burst ${correct?"correct":"wrong"}`} role="status" aria-live="polite">
-      <div className="answer-burst-icon">{correct?"✓":"×"}</div>
+      <div className="answer-burst-icon">{correct?<Check size={22} strokeWidth={3}/>:<X size={22} strokeWidth={3}/>}</div>
       <div style={{minWidth:0,flex:1}}>
         <div className="answer-burst-title">{correct ? "Nice work!" : "Almost. Keep going."}</div>
         <div className="answer-burst-body">
@@ -15676,7 +15880,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
         )}
       </div>
       <div className="card" style={{padding:"20px 24px",margin:"24px 0",textAlign:"left"}}>
-        <div style={{fontSize:20,marginBottom:8}}>⌁</div>
+        <div className="section-icon" style={{"--section-color":t.red,marginBottom:10}}><Target size={21} strokeWidth={2.2}/></div>
         <div style={{fontWeight:600,fontSize:16,marginBottom:6,color:t.text}}>{challenge.title}</div>
         <div style={{color:t.textSec,fontSize:14}}>{challenge.description}</div>
         <div style={{marginTop:12,color:t.textDim,fontSize:13}}>Answer all 5 questions and score at least 3/5 to extend your streak.</div>
@@ -15694,7 +15898,9 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
   if(step==="done") return (
     <>
     <div style={{padding:"32px 24px",maxWidth:500,margin:"0 auto",textAlign:"center"}} className="fu">
-      <div style={{fontSize:48,marginBottom:16}}>{correctCount===totalQuestions?"🏆":correctCount>=Math.ceil(totalQuestions*.6)?"✅":"📚"}</div>
+      <div className="completion-icon" style={{"--completion-color":correctCount===totalQuestions?t.amber:correctCount>=Math.ceil(totalQuestions*.6)?t.green:t.accent}}>
+        {correctCount===totalQuestions?<Trophy size={36} strokeWidth={2.1}/>:correctCount>=Math.ceil(totalQuestions*.6)?<CheckCircle2 size={36} strokeWidth={2.1}/>:<BookOpenCheck size={36} strokeWidth={2.1}/>}
+      </div>
       <h2 style={{fontSize:24,fontWeight:700,marginBottom:8,color:t.text}}>Challenge Complete!</h2>
       <div style={{fontSize:40,fontWeight:700,color:correctCount===totalQuestions?t.green:correctCount>=Math.ceil(totalQuestions*.6)?t.amber:t.red,marginBottom:8}}>
         {correctCount}/{totalQuestions}
@@ -15713,7 +15919,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
         <div style={{fontSize:14,fontWeight:900,color:t.text,marginBottom:8}}>Create a free account or sign in so today&apos;s effort is not lost.</div>
         {[`${MCQ_BANK.length} MCQs across all 5 exam domains`,`${PBQ_BANK.length} PBQ simulations with 8 question types`,"Progress tracking and weak area analysis","Chapter-by-chapter study organisation"].map((f,i)=>(
           <div key={i} style={{display:"flex",gap:8,alignItems:"center",fontSize:13,color:t.textSec,padding:"4px 0"}}>
-            <span style={{color:t.green}}>✓</span>{f}
+            <Check size={16} color={t.green} strokeWidth={2.6}/>{f}
           </div>
         ))}
       </div>}
@@ -15766,8 +15972,8 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
             <div key={i} className={cls} onClick={()=>!submitted&&setSelected(i)}>
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
               <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.5}}><GlossaryText text={opt} t={t}/></span>
-              {submitted&&i===current.correct&&<span style={{color:t.green,fontSize:16,flexShrink:0}}>✓</span>}
-              {submitted&&i===selected&&i!==current.correct&&<span style={{color:t.red,fontSize:16,flexShrink:0}}>✗</span>}
+              {submitted&&i===current.correct&&<Check size={18} color={t.green} strokeWidth={2.8}/>}
+              {submitted&&i===selected&&i!==current.correct&&<X size={18} color={t.red} strokeWidth={2.8}/>}
             </div>
           );
         })}
@@ -15778,8 +15984,8 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
       ):(
         <>
           <div className="card" style={{padding:"16px 20px",marginBottom:14,borderColor:selected===current.correct?t.green:t.red}}>
-            <div style={{fontWeight:600,color:selected===current.correct?t.green:t.red,marginBottom:8,fontSize:15}}>
-              {selected===current.correct?"✓ Correct!":"✗ Incorrect"}
+            <div style={{display:"flex",alignItems:"center",gap:8,fontWeight:700,color:selected===current.correct?t.green:t.red,marginBottom:8,fontSize:15}}>
+              {selected===current.correct?<CheckCircle2 size={18}/>:<XCircle size={18}/>} {selected===current.correct?"Correct":"Incorrect"}
             </div>
             {canSeeFeedback?(
               <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}><GlossaryText text={current.exp} t={t}/></p>
@@ -15818,7 +16024,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
 
   return (
     <div style={{padding:"32px 24px",maxWidth:520,margin:"0 auto",textAlign:"center"}} className="fu">
-      <div style={{fontSize:40,marginBottom:12}}>🎯</div>
+      <div className="completion-icon" style={{"--completion-color":t.accent}}><Target size={36} strokeWidth={2.1}/></div>
       <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:8}}>Daily Challenge unavailable</h2>
       <p style={{color:t.textSec,marginBottom:18,fontSize:14}}>
         Today's challenge could not be loaded, so use the MCQ bank while we refresh it.
@@ -15918,7 +16124,7 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
             </div>
             <div className="landing-challenge-question"><QuestionStemText text={current.q} t={t}/></div>
           </div>
-          <div style={{display:"grid",gap:9}}>
+          <div className="landing-challenge-options" style={{display:"grid",gap:9}}>
             {current.opts.map((opt,index)=>{
               const state=submitted
                 ? index===current.correct
@@ -16280,7 +16486,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             <h2 style={{fontSize:24,color:t.text,marginBottom:4}}>$0</h2>
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Best for starting Security+ practice.</p>
             {["All MCQ questions","Daily Challenge","Create an account to save progress","Basic practice history"].map(item=>(
-              <div key={item} className="pricing-feature-row"><span>✓</span><div>{item}</div></div>
+              <div key={item} className="pricing-feature-row"><Check size={16} strokeWidth={2.6}/><div>{item}</div></div>
             ))}
             <button className="btn btn-outline" style={{width:"100%",marginTop:18}} onClick={onPracticeMcq}>Practise MCQs Free</button>
           </div>
@@ -16289,7 +16495,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             <h2 style={{fontSize:24,color:t.text,marginBottom:4}}>$4.99/year</h2>
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Annual Pro access for one clear yearly price.</p>
             {["PBQ simulations","Exam Mode with MCQ + PBQ mix","Detailed solutions and weak-chapter guidance","Smart Review for missed questions"].map(item=>(
-              <div key={item} className="pricing-feature-row"><span>✓</span><div>{item}</div></div>
+              <div key={item} className="pricing-feature-row"><Check size={16} strokeWidth={2.6}/><div>{item}</div></div>
             ))}
             <button className="btn btn-primary" style={{width:"100%",marginTop:18}} onClick={()=>jumpToAuth("signup")}>Sign Up Free</button>
           </div>
@@ -16432,10 +16638,10 @@ function Dashboard({user,attempts,onNav,t}) {
       : "Try an Exam Mode set to check real readiness.";
   const weakSignal = accuracy < 70 ? "Review weak topics first" : readiness >= 75 ? "Ready for timed practice" : "Build one more focused set";
   const missionCards=[
-    {id:"mcq",label:"MCQ Practice",title:"Start a focused set",body:"Adaptive ordering prioritises weak and starred questions so each session feels useful.",nav:"mcq",color:t.accent,meta:`${MCQ_BANK.length} questions`},
-    {id:"daily",label:"Daily Challenge",title:streakInfo.completedToday?"Daily complete":"Protect the streak",body:streakInfo.completedToday?"Today is already secured. Return tomorrow for the next streak point.":"Five questions, quick feedback, and a streak moment after completion.",nav:"daily",color:t.amber,meta:`${streakInfo.streak} day streak`},
-    {id:"pbq",label:"PBQ Simulator",title:isPro?"Practise one PBQ":"Try the PBQ preview",body:isPro?"Terminal, table, drag and drop, ordering, and incident-response style simulations.":"Preview one PBQ for free, then unlock the full simulator with Pro.",nav:"pbq",color:t.green,meta:`${PBQ_BANK.length} PBQs`},
-    {id:"exam",label:"Exam Mode",title:isPro?"Run a timed exam":"Pro exam mode",body:isPro?"Mixed MCQ/PBQ sets with flags, elimination, timing, and post-exam review.":"Upgrade to access timed mixed exams and deeper result analysis.",nav:isPro?"exam":"pricing",color:"#8b5cf6",meta:isPro?"Timed mode":"Pro feature"},
+    {id:"mcq",label:"MCQ Practice",title:"Start a focused set",body:"Adaptive ordering prioritises weak and starred questions so each session feels useful.",nav:"mcq",color:t.accent,meta:`${MCQ_BANK.length} questions`,Icon:BookOpenCheck},
+    {id:"daily",label:"Daily Challenge",title:streakInfo.completedToday?"Daily complete":"Protect the streak",body:streakInfo.completedToday?"Today is already secured. Return tomorrow for the next streak point.":"Five questions, quick feedback, and a streak moment after completion.",nav:"daily",color:t.amber,meta:`${streakInfo.streak} day streak`,Icon:Target},
+    {id:"pbq",label:"PBQ Simulator",title:isPro?"Practise one PBQ":"Try the PBQ preview",body:isPro?"Terminal, table, drag and drop, ordering, and incident-response style simulations.":"Preview one PBQ for free, then unlock the full simulator with Pro.",nav:"pbq",color:t.green,meta:`${PBQ_BANK.length} PBQs`,Icon:Puzzle},
+    {id:"exam",label:"Exam Mode",title:isPro?"Run a timed exam":"Pro exam mode",body:isPro?"Mixed MCQ/PBQ sets with flags, elimination, timing, and post-exam review.":"Upgrade to access timed mixed exams and deeper result analysis.",nav:isPro?"exam":"pricing",color:"#8b5cf6",meta:isPro?"Timed mode":"Pro feature",Icon:ClipboardCheck},
   ];
   const activeMissionCard=missionCards.find(card=>card.id===activeMission)||missionCards[0];
   const weekDots=Array.from({length:7},(_,index)=>index<Math.min(7,streakInfo.streak));
@@ -16503,16 +16709,16 @@ function Dashboard({user,attempts,onNav,t}) {
 
       <div className="dashboard-stat-grid">
         {[
-          {label:"Readiness",value:`${readiness}%`,color:readiness>=75?t.green:readiness>=50?t.amber:t.red,icon:"R"},
-          {label:"Accuracy",value:`${accuracy}%`,color:t.accent,icon:"A"},
-          {label:"Questions Done",value:questionsDone,color:"#8b5cf6",icon:"Q"},
-          {label:"Daily Streak",value:streakInfo.streak,color:t.amber,icon:"S"},
-          {label:"PBQs Complete",value:uniquePbqs,color:t.green,icon:"P"},
+          {label:"Readiness",value:`${readiness}%`,color:readiness>=75?t.green:readiness>=50?t.amber:t.red,Icon:Gauge},
+          {label:"Accuracy",value:`${accuracy}%`,color:t.accent,Icon:Target},
+          {label:"Questions Done",value:questionsDone,color:"#8b5cf6",Icon:BookOpenCheck},
+          {label:"Daily Streak",value:streakInfo.streak,color:t.amber,Icon:Flame},
+          {label:"PBQs Complete",value:uniquePbqs,color:t.green,Icon:Puzzle},
         ].map(s=>(
           <div key={s.label} className="game-stat">
             <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:10}}>
               <div className="label">{s.label}</div>
-              <span className="game-stat-icon" style={{"--game-color":s.color}}>{s.icon}</span>
+              <span className="game-stat-icon" style={{"--game-color":s.color}}><s.Icon size={19} strokeWidth={2.2}/></span>
             </div>
             <div style={{fontSize:30,fontWeight:900,color:s.color,lineHeight:1}}>{s.value}</div>
           </div>
@@ -16539,7 +16745,7 @@ function Dashboard({user,attempts,onNav,t}) {
               onFocus={()=>setActiveMission(card.id)}
               onClick={()=>onNav(card.nav)}
             >
-              <span className="home-mission-icon">{card.label.slice(0,1)}</span>
+              <span className="home-mission-icon"><card.Icon size={21} strokeWidth={2.3}/></span>
               <span className="home-mission-copy">
                 <strong>{card.title}</strong>
                 <small>{card.body}</small>
@@ -16602,7 +16808,7 @@ function Dashboard({user,attempts,onNav,t}) {
 
       <div className="mission-banner" style={{marginBottom:20}}>
         <div style={{position:"relative",zIndex:1,display:"flex",gap:14,alignItems:"center",flexWrap:"wrap"}}>
-          <span className="mission-badge">{readiness>=75?"R":accuracy<65?"F":"N"}</span>
+          <span className="mission-badge">{readiness>=75?<CircleGauge size={22} strokeWidth={2.3}/>:accuracy<65?<Brain size={22} strokeWidth={2.3}/>:<BookOpenCheck size={22} strokeWidth={2.3}/>}</span>
           <div style={{flex:1,minWidth:240}}>
             <div className="label" style={{color:t.accent,marginBottom:3}}>Next best action</div>
             <div style={{fontWeight:900,color:t.text,fontSize:16}}>
@@ -16651,7 +16857,7 @@ function Dashboard({user,attempts,onNav,t}) {
           {/* Daily challenge card */}
           <div className="card card-hover" style={{padding:"18px 20px",borderColor:`${t.accent}30`,cursor:"pointer"}} onClick={()=>onNav("daily")}>
             <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
-              <span className="mission-badge" style={{background:"#ef4444",width:42,height:42}}>D</span>
+              <span className="mission-badge" style={{background:"#ef4444",width:42,height:42}}><Target size={21} strokeWidth={2.3}/></span>
               <div style={{flex:1}}>
                 <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:3}}>{challenge.title}</div>
                 <div style={{fontSize:12,color:t.textSec,marginBottom:10}}>{challenge.description}</div>
@@ -16682,7 +16888,7 @@ function Dashboard({user,attempts,onNav,t}) {
           <div style={{display:"flex",flexDirection:"column",gap:8}}>
             {attempts.slice(0,6).map((a,i)=>(
               <div key={i} className="recent-row" style={{background:a.correct?`${t.green}08`:`${t.red}08`}}>
-                <span style={{color:a.correct?t.green:t.red,fontSize:15,flexShrink:0}}>{a.correct?"✓":"✗"}</span>
+                {a.correct?<CheckCircle2 size={18} color={t.green}/>:<XCircle size={18} color={t.red}/>}
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{fontSize:13,color:t.text,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{a.title||"Question"}</div>
                   <div style={{fontSize:11,color:t.textDim}}>{a.pbq?"PBQ":"MCQ"} · {a.domain||a.ch||""}</div>
@@ -17041,7 +17247,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
   );
 
   if(!started) return(
-    <div style={{padding:"24px",maxWidth:800,margin:"0 auto"}}>
+    <div className="mcq-setup-screen fu" style={{padding:"24px",maxWidth:800,margin:"0 auto"}}>
       <div className="page-title-row">
         <NavGlyph type="mcq" active/>
         <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>MCQ Practice</h2>
@@ -17061,7 +17267,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
       )}
 
       <div className="setup-hero" style={{marginBottom:16}}>
-        <div style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:16,alignItems:"center"}}>
+        <div className="setup-hero-grid" style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:16,alignItems:"center"}}>
           <div style={{flex:1,minWidth:220}}>
             <div className="label" style={{color:t.green,marginBottom:5}}>Adaptive practice</div>
             <div style={{fontWeight:900,fontSize:18,color:t.text,marginBottom:4}}>Smart Review uses SM-2 spacing</div>
@@ -17135,7 +17341,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
           </div>
           <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}28`}}>{quizCount} questions</span>
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
+        <div className="practice-filter-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
           <div>
             <label className="label" style={{display:"block",marginBottom:6}}>Chapter</label>
             <FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} disabled={isGuest} label="Chapter filter"/>
@@ -17156,7 +17362,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
         )}
         <div style={{marginTop:16}}>
           <label className="label" style={{display:"block",marginBottom:8}}>Quiz Length</label>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8}}>
+          <div className="quiz-length-grid" style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8}}>
             {quizSizes.map(size=>(
               <button
                 key={size}
@@ -17206,18 +17412,40 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
   );
 
   if(done) return(
-    <div style={{padding:"24px",maxWidth:760,margin:"0 auto",textAlign:"center"}} className="fu">
-      <div style={{fontSize:48,marginBottom:12}}>{scorePct>=.8?"🏆":scorePct>=.5?"✅":"📚"}</div>
-      <h2 style={{fontSize:24,fontWeight:700,color:t.text,marginBottom:8}}>Quiz Complete!</h2>
-      <div style={{fontSize:42,fontWeight:700,color:scorePct>=.8?t.green:scorePct>=.5?t.amber:t.red,marginBottom:16}}>
-        {correctCount}/{questions.length}
-      </div>
+    <div className="fu mcq-results-screen" style={{padding:"24px",maxWidth:760,margin:"0 auto",textAlign:"center"}}>
+      <section className="practice-result-hero" style={{"--result-color":scorePct>=.8?t.green:scorePct>=.5?t.amber:t.red}}>
+        <div className="practice-score-ring" style={{"--score":Math.round(scorePct*100),"--ring":scorePct>=.8?t.green:scorePct>=.5?t.amber:t.red}}>
+          <strong>{Math.round(scorePct*100)}%</strong>
+          <small>{correctCount} / {questions.length} correct</small>
+        </div>
+        <div className="practice-result-copy">
+          <div className="practice-result-kicker">Practice complete</div>
+          <h2>{scorePct>=.8?"Strong work.":scorePct>=.5?"Good progress.":"A useful first pass."}</h2>
+          <p>{scorePct>=.8
+            ?"You are showing solid recall across this set. Keep the momentum by spacing the next review."
+            :scorePct>=.5
+              ?"You have a good base. Review the misses below, then try a focused set while the ideas are fresh."
+              :"Mistakes are useful data. Review the missed concepts now and they will become easier to recognise next time."}</p>
+          <div className="practice-result-actions">
+            <button className="btn btn-primary" onClick={retakeCurrentQuiz}>Retry this set</button>
+            <button className="btn btn-ghost" onClick={()=>{setStarted(false);setDone(false);}}>Build a new quiz</button>
+          </div>
+        </div>
+      </section>
       {isGuest&&guestSignupPrompt}
-      <div className="card" style={{padding:"16px 20px",marginBottom:16,textAlign:"left"}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,margin:"22px 0 10px",textAlign:"left"}}>
+        <div>
+          <div style={{fontSize:11,fontWeight:900,textTransform:"uppercase",color:t.accent}}>Answer review</div>
+          <h3 style={{fontSize:19,color:t.text}}>See what to keep and what to revisit</h3>
+        </div>
+        <span className="chip" style={{color:t.textSec,borderColor:t.border,background:t.panel}}>{results.length} answered</span>
+      </div>
+      <div className="card practice-review-list" style={{padding:"16px 20px",marginBottom:16,textAlign:"left"}}>
         {results.map((r,i)=>(
-          <div key={i} style={{display:"flex",gap:8,alignItems:"center",padding:"6px 0",borderBottom:i<results.length-1?`1px solid ${t.border}`:"none"}}>
-            <span style={{color:r.correct?t.green:t.red,fontSize:14}}>{r.correct?"✓":"✗"}</span>
-            <span style={{fontSize:13,color:t.text,flex:1}}>{questions[i]?.q?.slice(0,60)}...</span>
+          <div key={i} className="practice-review-row" style={{"--review-color":r.correct?t.green:t.red}}>
+            <span className="practice-review-status">{r.correct?<Check size={16} strokeWidth={3}/>:<X size={16} strokeWidth={3}/>}</span>
+            <span>{questions[i]?.q?.slice(0,88)}{questions[i]?.q?.length>88?"...":""}</span>
+            <small>{r.correct?"Mastered":"Review"}</small>
           </div>
         ))}
       </div>
@@ -17272,15 +17500,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
           <button className="btn btn-outline" style={{fontSize:12}} onClick={onUpgrade}>Preview Pro PBQs</button>
         </div>
       )}
-      <div style={{display:"flex",gap:10,justifyContent:"center"}}>
-        <button className="btn btn-primary" onClick={()=>{setStarted(false);setDone(false);}}>New Quiz →</button>
-        <button className="btn btn-ghost" onClick={retakeCurrentQuiz}>Retry Same →</button>
-      </div>
     </div>
   );
 
   return(
-    <div style={{padding:"24px",maxWidth:700,margin:"0 auto"}} className="fu active-practice-screen" key={qi}>
+    <div style={{padding:"24px",maxWidth:700,margin:"0 auto"}} className="fu active-practice-screen mcq-question-screen" key={qi}>
       <div className="top-progress" aria-hidden="true"><span style={{width:`${((qi+1)/questions.length)*100}%`}}/></div>
       {/* Progress */}
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}>
@@ -17329,11 +17553,24 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
           if(submitted){cls+=" done"; if(i===current.correct)cls+=" ok"; else if(i===selected&&i!==current.correct)cls+=" bad";}
           else if(selected===i)cls+=" sel";
           return(
-            <div key={i} className={cls} onClick={()=>{if(submitted)return;setSelected(i);setDraftSelections(prev=>{const next=[...prev];next[qi]=i;return next;});}}>
+            <div
+              key={i}
+              className={cls}
+              role="button"
+              tabIndex={submitted?-1:0}
+              aria-pressed={!submitted&&selected===i}
+              onKeyDown={event=>{
+                if(submitted||(event.key!=="Enter"&&event.key!==" "))return;
+                event.preventDefault();
+                setSelected(i);
+                setDraftSelections(prev=>{const next=[...prev];next[qi]=i;return next;});
+              }}
+              onClick={()=>{if(submitted)return;setSelected(i);setDraftSelections(prev=>{const next=[...prev];next[qi]=i;return next;});}}
+            >
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
               <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
-              {submitted&&i===current.correct&&<span style={{color:t.green,fontSize:14,flexShrink:0,fontWeight:800}}>✓</span>}
-              {submitted&&i===selected&&i!==current.correct&&<span style={{color:t.red,fontSize:14,flexShrink:0,fontWeight:800}}>✕</span>}
+              {submitted&&i===current.correct&&<Check size={18} color={t.green} strokeWidth={2.8}/>}
+              {submitted&&i===selected&&i!==current.correct&&<X size={18} color={t.red} strokeWidth={2.8}/>}
             </div>
           );
         })}
@@ -17350,7 +17587,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
           <div className="card answer-feedback" style={{padding:"16px 18px",marginBottom:14,borderColor:selected===current.correct?`${t.green}42`:`${t.red}42`,background:selected===current.correct?`${t.green}08`:`${t.red}08`,boxShadow:"none"}}>
             <div style={{display:"flex",alignItems:"center",gap:10,fontWeight:800,color:t.text,marginBottom:10,fontSize:15}}>
               <span style={{width:26,height:26,borderRadius:"50%",display:"inline-flex",alignItems:"center",justifyContent:"center",background:selected===current.correct?`${t.green}18`:`${t.red}18`,color:selected===current.correct?t.green:t.red}}>
-                {selected===current.correct?"✓":"✕"}
+                {selected===current.correct?<Check size={16} strokeWidth={3}/>:<X size={16} strokeWidth={3}/>}
               </span>
               {selected===current.correct?"Nice work":"Not quite"}
             </div>
@@ -17475,7 +17712,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
   );
 
   return(
-    <div style={{padding:"24px",maxWidth:900,margin:"0 auto"}}>
+    <div className="pbq-bank-screen fu" style={{padding:"24px",maxWidth:900,margin:"0 auto"}}>
       <div style={{marginBottom:20}}>
         <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:4}}>PBQ Simulator</h2>
         <p style={{color:t.textSec,fontSize:14}}>Performance-based questions across 8 simulation types</p>
@@ -17513,7 +17750,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
       {!isPro&&lockedQuestion&&(
         <div className="card" style={{padding:"18px 22px",marginBottom:20,borderColor:`${t.accent}40`,background:`${t.accent}08`}}>
           <div style={{display:"flex",gap:12,alignItems:"flex-start",flexWrap:"wrap"}}>
-            <span style={{fontSize:24}}>🔒</span>
+            <span className="section-icon" style={{"--section-color":t.accent}}><LockKeyhole size={21} strokeWidth={2.2}/></span>
             <div style={{flex:1,minWidth:220}}>
               <div style={{fontWeight:700,fontSize:15,color:t.text,marginBottom:4}}>{lockedQuestion.title} is a Pro PBQ</div>
               <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
@@ -17530,7 +17767,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
       {isPro&&(
         <div className="setup-hero" style={{marginBottom:18,borderColor:showMissedOnly?`${t.red}35`:`${t.green}35`,background:showMissedOnly?`${t.red}06`:undefined}}>
           <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
-            <span className="mission-badge" style={{background:showMissedOnly?t.red:t.green}}>P</span>
+            <span className="mission-badge" style={{background:showMissedOnly?t.red:t.green}}><Puzzle size={22} strokeWidth={2.3}/></span>
             <div style={{flex:1,minWidth:220}}>
               <div className="label" style={{color:showMissedOnly?t.red:t.green,marginBottom:4}}>PBQ mission</div>
               <div style={{fontWeight:900,fontSize:15,color:t.text}}>Practice PBQ</div>
@@ -17573,7 +17810,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
             <ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}
           </button>
         ))}
-        {chFilter!=="all"&&<button className="btn btn-ghost" style={{fontSize:11,padding:"5px 10px"}} onClick={()=>setChFilter("all")}>Clear ✕</button>}
+        {chFilter!=="all"&&<button className="btn btn-ghost" style={{fontSize:11,padding:"5px 10px"}} onClick={()=>setChFilter("all")}><X size={14}/> Clear</button>}
       </div>
 
       <div style={{fontSize:13,color:t.textDim,marginBottom:12}}>Showing {displayQuestions.length} questions · correctly answered PBQs are kept lower in the list</div>
@@ -17603,8 +17840,14 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
               </div>
               <div style={{flexShrink:0,display:"flex",gap:8,alignItems:"center"}}>
                 <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
-                {done?<span style={{color:ok?t.green:t.red,fontSize:15}}>{ok?"✓":"✗"}</span>:<span style={{fontSize:12,color:t.textDim}}>○</span>}
-                {canOpen?<span style={{color:preview&&!isPro?t.amber:t.accent,fontSize:16}}>▶</span>:<span style={{fontSize:13}}>🔒</span>}
+                {done
+                  ? ok?<CheckCircle2 size={18} color={t.green} strokeWidth={2.4}/>:<XCircle size={18} color={t.red} strokeWidth={2.4}/>
+                  : <Circle size={17} color={t.textDim} strokeWidth={1.8}/>
+                }
+                {canOpen
+                  ? <Play size={18} color={preview&&!isPro?t.amber:t.accent} fill="currentColor" strokeWidth={2}/>
+                  : <LockKeyhole size={17} color={t.textDim} strokeWidth={2.2}/>
+                }
               </div>
             </div>
           );
@@ -17624,7 +17867,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
   const [submitted,setSubmitted]=useState(false);
   const [mapping,setMapping]=useState({});
   const [orderItems,setOrderItems]=useState(()=>q.items?[...q.items].sort(()=>Math.random()-.5):[]);
-  const [blanks,setBlanks]=useState(()=>q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{}); 
+  const [blanks,setBlanks]=useState(()=>q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{});
   const [dragOver,setDragOver]=useState(null);
   const [dragged,setDragged]=useState(null);
   const [tapDragItem,setTapDragItem]=useState(null);
@@ -17747,7 +17990,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
   const getDragDropCell=(row,col)=>dragDropTargets.find(target=>target.row===row&&target.col===col);
 
   return(
-    <div style={{padding:"24px",maxWidth:860,margin:"0 auto"}}>
+    <div className="pbq-question-screen fu active-practice-screen" style={{padding:"24px",maxWidth:860,margin:"0 auto"}}>
       {/* Header */}
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:18,flexWrap:"wrap"}}>
         <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>onDone(null)}>← Back to PBQ Bank</button>
@@ -18011,8 +18254,8 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                 <div key={i} className={cls} onClick={()=>!submitted&&setSelected(i)}>
                   <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
                   <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={choice} t={t}/></span>
-                  {submitted&&i===q.correct&&<span style={{color:t.green,fontSize:16,flexShrink:0}}>✓</span>}
-                  {submitted&&i===selected&&i!==q.correct&&<span style={{color:t.red,fontSize:16,flexShrink:0}}>✗</span>}
+                  {submitted&&i===q.correct&&<Check size={18} color={t.green} strokeWidth={2.8}/>}
+                  {submitted&&i===selected&&i!==q.correct&&<X size={18} color={t.red} strokeWidth={2.8}/>}
                 </div>
               );
             })}
@@ -18030,8 +18273,8 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       ):(
         <>
           <div className="card answer-feedback" style={{padding:"18px 22px",marginBottom:14,borderColor:isCorrect()?t.green:t.red}}>
-            <div style={{fontWeight:700,fontSize:16,color:isCorrect()?t.green:t.red,marginBottom:10}}>
-              {isCorrect()?"✓ Correct!":"✗ Incorrect"}
+            <div style={{display:"flex",alignItems:"center",gap:8,fontWeight:700,fontSize:16,color:isCorrect()?t.green:t.red,marginBottom:10}}>
+              {isCorrect()?<CheckCircle2 size={19}/>:<XCircle size={19}/>} {isCorrect()?"Correct":"Incorrect"}
             </div>
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.75}}><GlossaryText text={q.explanation} t={t}/></p>
             {/* Wrong answer feedback */}
@@ -18179,7 +18422,7 @@ function ExamModeGuideModal({t,onClose}) {
         <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:22}}>
           {current.bullets.map(item=>(
             <div key={item} style={{display:"flex",gap:10,alignItems:"flex-start",fontSize:13,color:t.textSec,lineHeight:1.6}}>
-              <span style={{color:t.green,fontWeight:900}}>✓</span>
+              <Check size={16} color={t.green} strokeWidth={2.6}/>
               <span>{item}</span>
             </div>
           ))}
@@ -18443,7 +18686,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
   },[examGuideKey,isPro]);
 
   if(!isPro) return(
-    <div style={{padding:"28px 24px",maxWidth:760,margin:"0 auto"}}>
+    <div className="exam-setup-screen fu" style={{padding:"28px 24px",maxWidth:760,margin:"0 auto"}}>
       <div className="card" style={{padding:"24px",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
         <div className="page-title-row" style={{marginBottom:10}}>
           <NavGlyph type="exam" active/>
@@ -18459,7 +18702,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
 
   if(!started) return(
     <>
-    <div style={{padding:"28px 24px",maxWidth:820,margin:"0 auto"}}>
+    <div className="exam-setup-screen fu" style={{padding:"28px 24px",maxWidth:820,margin:"0 auto"}}>
       <div className="page-title-row" style={{marginBottom:18}}>
         <NavGlyph type="exam" active/>
         <div>
@@ -18697,7 +18940,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
             >
               <div className="exam-review-main">
                 <div className="exam-review-head">
-                  <div className="exam-review-status">{ok?"✓":"!"}</div>
+                  <div className="exam-review-status">{ok?<Check size={17} strokeWidth={3}/>:<X size={17} strokeWidth={3}/>}</div>
                   <div style={{minWidth:0}}>
                     <div className="exam-review-meta">
                       <span style={{fontWeight:950,color:reviewColor}}>{ok?"Correct":"Needs review"}</span>
@@ -20899,7 +21142,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
             {["Everything in Free",`${PBQ_BANK.length} PBQ simulations`,"Exam Mode with mixed MCQ/PBQ practice","8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Detailed per-question feedback"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
-                <span style={{color:t.green}}>✓</span>{f}
+                <Check size={16} color={t.green} strokeWidth={2.6}/>{f}
               </div>
             ))}
           </div>
@@ -20922,12 +21165,12 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
             {["All MCQ practice questions","Daily Challenge","Basic score tracking","Access to study guide"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
-                <span style={{color:t.green}}>✓</span>{f}
+                <Check size={16} color={t.green} strokeWidth={2.6}/>{f}
               </div>
             ))}
             {["PBQ simulations","Progress analytics","Detailed per-question feedback"].map(f=>(
               <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textDim}}>
-                <span>✕</span><span style={{textDecoration:"line-through"}}>{f}</span>
+                <X size={16} strokeWidth={2.6}/><span style={{textDecoration:"line-through"}}>{f}</span>
               </div>
             ))}
           </div>
@@ -21029,7 +21272,7 @@ function ReferralPage({user,t}) {
             "When the trial ends, the user is prompted to upgrade to the annual Pro plan.",
           ].map(rule=>(
             <div key={rule} style={{display:"flex",gap:10,fontSize:13,color:t.textSec,lineHeight:1.65}}>
-              <span style={{color:t.green,fontWeight:900}}>✓</span>
+              <Check size={16} color={t.green} strokeWidth={2.6}/>
               <span>{rule}</span>
             </div>
           ))}
@@ -21187,25 +21430,25 @@ function OnboardingModal({user,t,onClose,onPricing}) {
   const [step,setStep]=useState(0);
   const slides=[
     {
-      icon:"👋",
+      Icon:Sparkles,
       title:`Welcome${user?.name ? `, ${user.name.split(" ")[0]}` : ""}`,
       body:"SecurePlus is built to turn Security+ practice into a repeatable workflow: answer questions, review explanations, and come back to weak areas.",
       bullets:["Your dashboard tracks readiness and accuracy.","Your attempts are saved so practice can get smarter.","Start with MCQs, then add PBQs when you want exam-style simulation."],
     },
     {
-      icon:"📝",
+      Icon:PenLine,
       title:"Where to practise",
       body:"Use the bottom or side navigation to move around the app.",
       bullets:["MCQ Practice gives access to all multiple-choice questions.","Daily Challenge gives a short focused drill.","PBQ Simulator contains performance-based simulations for Pro users."],
     },
     {
-      icon:"📋",
+      Icon:GraduationCap,
       title:"What Security+ covers",
       body:"CompTIA Security+ tests broad security knowledge across concepts, threats, architecture, operations, and governance.",
       bullets:["Expect both MCQs and performance-based questions.","PBQs may ask you to interpret logs, configure controls, order steps, or solve scenario tasks.","SecurePlus helps solidify skills through practice, feedback, and review."],
     },
     {
-      icon:"⬆️",
+      Icon:TrendingUp,
       title:"When Pro helps",
       body:"The free plan is useful for MCQ practice. Pro is for students who want PBQ simulation practice too.",
       bullets:["Unlock all PBQ simulations.","Practise terminal, log analysis, ordering, hotspot, and drag/drop-style tasks.","Costs $4.99/year."],
@@ -21220,13 +21463,13 @@ function OnboardingModal({user,t,onClose,onPricing}) {
         <button className="btn btn-ghost" style={{position:"absolute",top:14,right:14,minHeight:32,padding:"4px 10px",fontSize:12}} onClick={onClose}>
           Skip
         </button>
-        <div style={{fontSize:42,marginBottom:14}}>{slide.icon}</div>
+        <div className="completion-icon" style={{"--completion-color":t.accent,margin:"0 0 16px"}}><slide.Icon size={34} strokeWidth={2.1}/></div>
         <h2 style={{fontSize:24,fontWeight:900,color:t.text,marginBottom:8}}>{slide.title}</h2>
         <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:18}}>{slide.body}</p>
         <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:22}}>
           {slide.bullets.map(item=>(
             <div key={item} style={{display:"flex",gap:10,alignItems:"flex-start",fontSize:13,color:t.textSec,lineHeight:1.6}}>
-              <span style={{color:t.green,fontWeight:900}}>✓</span>
+              <Check size={16} color={t.green} strokeWidth={2.6}/>
               <span>{item}</span>
             </div>
           ))}
@@ -22013,12 +22256,12 @@ export default function App() {
     const goToLogin=()=>{setAuthStartMode("login");setView("auth");};
     const allowedGuestViews=new Set(["dashboard","mcq","daily","objectives"]);
     const guestNavItems=[
-      {id:"dashboard",icon:"dashboard",label:"Dashboard"},
-      {id:"mcq",icon:"mcq",label:"MCQ Practice"},
-      {id:"pbq",icon:"pbq",label:"PBQ Simulator"},
-      {id:"exam",icon:"exam",label:"Exam Mode"},
-      {id:"daily",icon:"daily",label:"Daily Challenge"},
-      {id:"objectives",icon:"objectives",label:"Objectives"},
+      {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},
+      {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
+      {id:"pbq",icon:"pbq",label:"PBQ Simulator",mobileLabel:"PBQ"},
+      {id:"exam",icon:"exam",label:"Exam Mode",mobileLabel:"Exam"},
+      {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
+      {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
     ];
     const guestGo=id=>{
       if(allowedGuestViews.has(id)) setView(id);
@@ -22062,16 +22305,17 @@ export default function App() {
               {guestNavItems.map(n=>{
                 const locked=!allowedGuestViews.has(n.id);
                 return(
-                  <div key={n.id} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>guestGo(n.id)} style={locked?{opacity:.72}:undefined}>
+                  <div key={n.id} className={`nav-lnk ${view===n.id?"act":""} ${locked?"locked":""}`} onClick={()=>guestGo(n.id)}>
                     <NavGlyph type={n.icon} active={view===n.id}/>
-                    <span>{n.label}{locked?" · sign up":""}</span>
+                    <span className="nav-label"><span className="nav-label-desktop">{n.label}</span><span className="nav-label-mobile">{n.mobileLabel}</span></span>
+                    {locked&&<LockKeyhole className="nav-lock-indicator" size={13} strokeWidth={2.4} aria-hidden="true"/>}
                   </div>
                 );
               })}
             </nav>
             <div style={{padding:"12px 14px",borderTop:`1px solid ${t.border}`,display:"flex",flexDirection:"column",gap:6}}>
               <button className="btn btn-ghost" style={{fontSize:12,justifyContent:"flex-start"}} onClick={()=>setDarkMode(d=>!d)}>
-                {darkMode?"Light Mode":"Dark Mode"}
+                {darkMode?<><Sun size={16}/> Light Mode</>:<><Moon size={16}/> Dark Mode</>}
               </button>
               <button className="btn btn-outline" style={{fontSize:12,justifyContent:"flex-start"}} onClick={goToLogin}>
                 Log In
@@ -22086,7 +22330,7 @@ export default function App() {
               </div>
               <div style={{display:"flex",gap:6,alignItems:"center",flexShrink:0}}>
                 <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
-                  {darkMode?"Light":"Dark"}
+                  {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
                 </button>
                 <button className="btn btn-primary" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToSignup}>Save</button>
               </div>
@@ -22149,19 +22393,19 @@ export default function App() {
   );
 
   const navItems=[
-    {id:"dashboard",icon:"dashboard",label:"Dashboard"},
-    {id:"mcq",icon:"mcq",label:"MCQ Practice"},
-    {id:"pbq",icon:"pbq",label:"PBQ Simulator"},
-    {id:"exam",icon:"exam",label:"Exam Mode"},
-    {id:"daily",icon:"daily",label:"Daily Challenge"},
-    {id:"pricing",icon:"pricing",label:"Upgrade"},
-    {id:"objectives",icon:"objectives",label:"Objectives"},
-    {id:"privacy",icon:"privacy",label:"Privacy Policy"},
-    {id:"terms",icon:"terms",label:"Terms & Conditions"},
+    {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},
+    {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
+    {id:"pbq",icon:"pbq",label:"PBQ Simulator",mobileLabel:"PBQ"},
+    {id:"exam",icon:"exam",label:"Exam Mode",mobileLabel:"Exam"},
+    {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
+    {id:"pricing",icon:"pricing",label:"Upgrade",mobileLabel:"Upgrade"},
+    {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
+    {id:"privacy",icon:"privacy",label:"Privacy Policy",mobileLabel:"Privacy"},
+    {id:"terms",icon:"terms",label:"Terms & Conditions",mobileLabel:"Terms"},
   ];
   if(isRootUser) {
-    navItems.push({id:"feedback",icon:"objectives",label:"Internal Feedback"});
-    navItems.push({id:"question-admin",icon:"mcq",label:"Question Manager"});
+    navItems.push({id:"feedback",icon:"feedback",label:"Internal Feedback",mobileLabel:"Feedback"});
+    navItems.push({id:"question-admin",icon:"question-admin",label:"Question Manager",mobileLabel:"Manager"});
   }
 
   return(
@@ -22195,7 +22439,7 @@ export default function App() {
             {navItems.map(n=>(
               <div key={n.id} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>setView(n.id==="exam"&&user.tier!=="pro"?"pricing":n.id)}>
                 <NavGlyph type={n.icon} active={view===n.id}/>
-                <span>{n.label}</span>
+                <span className="nav-label"><span className="nav-label-desktop">{n.label}</span><span className="nav-label-mobile">{n.mobileLabel}</span></span>
               </div>
             ))}
           </nav>
@@ -22203,10 +22447,10 @@ export default function App() {
           {/* Dark mode + logout */}
           <div style={{padding:"12px 14px",borderTop:`1px solid ${t.border}`,display:"flex",flexDirection:"column",gap:6}}>
             <button className="btn btn-ghost" style={{fontSize:12,justifyContent:"flex-start"}} onClick={()=>setDarkMode(d=>!d)}>
-              {darkMode?"☀️ Light Mode":"🌙 Dark Mode"}
+              {darkMode?<><Sun size={16}/> Light Mode</>:<><Moon size={16}/> Dark Mode</>}
             </button>
             <button className="btn btn-signout" style={{fontSize:12,justifyContent:"flex-start"}} onClick={handleLogout}>
-              Sign Out
+              <LogOut size={16}/> Sign Out
             </button>
           </div>
         </aside>
@@ -22220,7 +22464,7 @@ export default function App() {
             </div>
             <div style={{display:"flex",gap:6,alignItems:"center",flexShrink:0}}>
               <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
-                {darkMode?"Light":"Dark"}
+                {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
               </button>
               <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onChangePassword={handleChangePassword} onLogout={handleLogout} compact/>
             </div>
