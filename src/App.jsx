@@ -16596,8 +16596,8 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
               <div className="smart-compare-card">
                 <div className="smart-compare-title" style={{color:t.textDim}}>Without Smart Review</div>
                 <div className="smart-queue">
-                  {["Random question","Random question","Random question"].map(item=>(
-                    <div key={item} className="smart-queue-row">
+                  {["Random question","Random question","Random question"].map((item,index)=>(
+                    <div key={`${item}-${index}`} className="smart-queue-row">
                       <span className="smart-queue-dot"/>
                       <span>{item}</span>
                     </div>
