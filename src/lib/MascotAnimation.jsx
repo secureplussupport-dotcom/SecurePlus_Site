@@ -32,7 +32,7 @@ export function MascotAnimation({
 
   return (
     <span
-      className={`cipher-mascot ${className}`.trim()}
+      className={`cipher-mascot cipher-motion-${animation} ${className}`.trim()}
       role="img"
       aria-label={accessibleLabel}
       style={{
@@ -40,6 +40,8 @@ export function MascotAnimation({
         "--cipher-size": typeof size === "number" ? `${size}px` : size,
         ...style,
       }}
-    />
+    >
+      <span className="cipher-mascot-sprite" aria-hidden="true" />
+    </span>
   );
 }

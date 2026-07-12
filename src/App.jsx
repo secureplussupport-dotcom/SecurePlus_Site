@@ -14664,13 +14664,25 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .answer-burst.wrong .answer-burst-icon{background:${t.red};box-shadow:0 12px 26px ${t.red}28;}
 .answer-burst-title{font-weight:900;color:${t.text};font-size:15px;}
 .answer-burst-body{font-size:12px;color:${t.textSec};line-height:1.45;}
-.cipher-mascot{--cipher-row:0;--cipher-size:96px;--cipher-row-y:calc(var(--cipher-row) * 14.285714%);display:inline-block;width:var(--cipher-size);aspect-ratio:4 / 3;background-image:url('/mascots/cipher-animation-sheet.png');background-size:400% 800%;background-position:0% var(--cipher-row-y);background-repeat:no-repeat;image-rendering:auto;filter:drop-shadow(0 12px 24px ${t.accent}24);animation:cipherSprite 1.05s steps(4) infinite;}
-.cipher-mascot.slow{animation-duration:1.45s;}
-.cipher-mascot.fast{animation-duration:.75s;}
-.cipher-mascot.once{animation-iteration-count:1;}
+.cipher-mascot{--cipher-row:0;--cipher-size:96px;--cipher-row-y:calc(var(--cipher-row) * 14.285714%);--cipher-frame-duration:1.05s;--cipher-motion-duration:2.8s;position:relative;display:inline-block;width:var(--cipher-size);aspect-ratio:4 / 3;transform-origin:50% 88%;will-change:transform;filter:drop-shadow(0 12px 24px ${t.accent}24);animation:cipherIdleMotion var(--cipher-motion-duration) cubic-bezier(.45,0,.25,1) infinite;}
+.cipher-mascot-sprite{position:absolute;inset:0;z-index:1;background-image:url('/mascots/cipher-animation-sheet.png');background-size:400% 800%;background-position:0% var(--cipher-row-y);background-repeat:no-repeat;image-rendering:auto;animation:cipherSprite var(--cipher-frame-duration) linear infinite;}
+.cipher-mascot::after{content:"";position:absolute;z-index:0;left:50%;bottom:5%;width:42%;height:7%;border-radius:50%;background:radial-gradient(ellipse,rgba(3,8,20,.48),transparent 72%);transform:translateX(-50%);animation:cipherGroundShadow var(--cipher-motion-duration) ease-in-out infinite;}
+.cipher-mascot::before{content:"";position:absolute;z-index:0;inset:10% 12%;border-radius:50%;background:radial-gradient(circle,${t.accent}34,transparent 68%);opacity:0;transform:scale(.8);pointer-events:none;}
+.cipher-motion-blink{--cipher-motion-duration:2.2s;animation-name:cipherBlinkMotion;}
+.cipher-motion-correct{--cipher-motion-duration:1.25s;animation-name:cipherCorrectMotion;animation-timing-function:cubic-bezier(.34,1.35,.64,1);}
+.cipher-motion-wrong{--cipher-motion-duration:1.5s;animation-name:cipherWrongMotion;animation-timing-function:ease-in-out;}
+.cipher-motion-unlock{--cipher-motion-duration:1.8s;animation-name:cipherUnlockMotion;}
+.cipher-motion-unlock::before,.cipher-motion-streak::before{animation:cipherAuraPulse var(--cipher-motion-duration) ease-in-out infinite;}
+.cipher-motion-streak{--cipher-motion-duration:1.45s;animation-name:cipherStreakMotion;animation-timing-function:cubic-bezier(.34,1.3,.64,1);}
+.cipher-motion-thinking{--cipher-motion-duration:2.35s;animation-name:cipherThinkingMotion;animation-timing-function:ease-in-out;}
+.cipher-motion-tip{--cipher-motion-duration:1.9s;animation-name:cipherTipMotion;animation-timing-function:ease-in-out;}
+.cipher-mascot.slow{--cipher-frame-duration:1.5s;--cipher-motion-duration:3.6s;}
+.cipher-mascot.fast{--cipher-frame-duration:.72s;--cipher-motion-duration:1.25s;}
+.cipher-mascot.once,.cipher-mascot.once .cipher-mascot-sprite{animation-iteration-count:1;animation-fill-mode:both;}
 .cipher-mascot.answer-burst-mascot{flex-shrink:0;margin:-12px -5px -12px -9px;}
 .cipher-mascot.loading-mascot{filter:drop-shadow(0 18px 34px ${t.accent}35);}
 .cipher-mascot.streak-mascot{filter:drop-shadow(0 20px 42px ${t.green}32);}
+@media (prefers-reduced-motion:reduce){.cipher-mascot,.cipher-mascot-sprite,.cipher-mascot::before,.cipher-mascot::after{animation:none!important;}.cipher-mascot-sprite{background-position:0% var(--cipher-row-y);}}
 .terminal{background:${t.codeBg};border:1px solid ${t.codeBorder};border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px;color:${t.codeText};padding:16px;overflow-y:auto;max-height:280px;line-height:1.7;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
 .terminal::selection,.log-block::selection,.streak-code::selection{background:${t.accent}28;}
 .log-block{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:${t.codePanel};border:1px solid ${t.codeBorder};border-radius:8px;padding:16px;color:${t.codeText};line-height:1.9;white-space:pre-wrap;overflow-x:auto;}
@@ -14720,7 +14732,73 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes modalPop{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes feedbackIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes answerBurstIn{0%{opacity:0;transform:translate(-50%,-18px) scale(.96)}65%{opacity:1;transform:translate(-50%,3px) scale(1.015)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
-@keyframes cipherSprite{from{background-position:0% var(--cipher-row-y)}to{background-position:100% var(--cipher-row-y)}}
+@keyframes cipherSprite{
+  0%,24.99%{background-position:0% var(--cipher-row-y)}
+  25%,49.99%{background-position:33.333333% var(--cipher-row-y)}
+  50%,74.99%{background-position:66.666667% var(--cipher-row-y)}
+  75%,100%{background-position:100% var(--cipher-row-y)}
+}
+@keyframes cipherIdleMotion{
+  0%,100%{transform:translate3d(0,0,0) rotate(-.6deg) scale(1)}
+  25%{transform:translate3d(0,-3%,0) rotate(.7deg) scale(1.012,.99)}
+  52%{transform:translate3d(0,-1%,0) rotate(-.3deg) scale(.995,1.012)}
+  76%{transform:translate3d(0,-4%,0) rotate(.8deg) scale(1.008,.996)}
+}
+@keyframes cipherBlinkMotion{
+  0%,100%{transform:translate3d(0,0,0) rotate(0)}
+  18%{transform:translate3d(-1%,-2%,0) rotate(-1.5deg)}
+  42%{transform:translate3d(1%,1%,0) rotate(1.2deg) scaleY(.985)}
+  68%{transform:translate3d(0,-3%,0) rotate(-.6deg) scaleY(1.01)}
+}
+@keyframes cipherCorrectMotion{
+  0%,100%{transform:translate3d(0,0,0) rotate(0) scale(1)}
+  16%{transform:translate3d(0,4%,0) rotate(-3deg) scale(1.05,.92)}
+  42%{transform:translate3d(0,-19%,0) rotate(5deg) scale(.96,1.07)}
+  62%{transform:translate3d(0,-11%,0) rotate(-2deg) scale(1.02,.98)}
+  80%{transform:translate3d(0,2%,0) rotate(1deg) scale(1.055,.94)}
+}
+@keyframes cipherWrongMotion{
+  0%,100%{transform:translate3d(0,0,0) rotate(0)}
+  16%{transform:translate3d(-5%,0,0) rotate(-4deg)}
+  34%{transform:translate3d(5%,1%,0) rotate(4deg)}
+  52%{transform:translate3d(-3%,2%,0) rotate(-2.5deg)}
+  72%{transform:translate3d(2%,4%,0) rotate(1.5deg) scale(.985,.97)}
+}
+@keyframes cipherUnlockMotion{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  28%{transform:translate3d(-2%,-3%,0) rotate(-2deg) scale(1.02)}
+  55%{transform:translate3d(2%,-7%,0) rotate(2deg) scale(1.08)}
+  78%{transform:translate3d(0,-2%,0) scale(1.025)}
+}
+@keyframes cipherStreakMotion{
+  0%,100%{transform:translate3d(0,0,0) rotate(0) scale(1)}
+  14%{transform:translate3d(0,5%,0) rotate(-4deg) scale(1.07,.91)}
+  38%{transform:translate3d(-3%,-18%,0) rotate(-7deg) scale(.94,1.08)}
+  58%{transform:translate3d(4%,-15%,0) rotate(7deg) scale(1.02)}
+  78%{transform:translate3d(0,2%,0) rotate(-1deg) scale(1.08,.92)}
+}
+@keyframes cipherThinkingMotion{
+  0%,100%{transform:translate3d(-2%,0,0) rotate(-2deg)}
+  25%{transform:translate3d(1%,-3%,0) rotate(1deg)}
+  50%{transform:translate3d(3%,-1%,0) rotate(2.5deg)}
+  75%{transform:translate3d(0,-4%,0) rotate(-.5deg)}
+}
+@keyframes cipherTipMotion{
+  0%,100%{transform:translate3d(0,0,0) rotate(0)}
+  20%{transform:translate3d(-2%,1%,0) rotate(-2deg) scale(.99)}
+  42%{transform:translate3d(3%,-6%,0) rotate(3deg) scale(1.035)}
+  64%{transform:translate3d(1%,-2%,0) rotate(1deg)}
+  82%{transform:translate3d(-1%,-4%,0) rotate(-1deg) scale(1.015)}
+}
+@keyframes cipherGroundShadow{
+  0%,100%{transform:translateX(-50%) scaleX(1);opacity:.3}
+  45%{transform:translateX(-50%) scaleX(.68);opacity:.16}
+  78%{transform:translateX(-50%) scaleX(1.08);opacity:.34}
+}
+@keyframes cipherAuraPulse{
+  0%,100%{opacity:.08;transform:scale(.8)}
+  50%{opacity:.3;transform:scale(1.12)}
+}
 @keyframes shimmer{from{opacity:.6}to{opacity:1}}
 @keyframes irregularSpin{0%{transform:rotate(0deg)}18%{transform:rotate(75deg)}31%{transform:rotate(118deg)}55%{transform:rotate(245deg)}72%{transform:rotate(286deg)}100%{transform:rotate(360deg)}}
 @keyframes scanLine{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
