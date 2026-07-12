@@ -676,3 +676,83 @@ grant select on question_override_history to authenticated;
 grant all on question_overrides to service_role;
 grant all on question_override_history to service_role;
 grant select on app_admins to service_role;
+
+-- Global mascot placements managed from the root-only Mascot Manager.
+create table if not exists mascot_placements (
+  page_key text primary key,
+  enabled boolean not null default false,
+  animation text not null default 'idle',
+  anchor text not null default 'bottom-right',
+  size integer not null default 112,
+  speed text not null default 'normal',
+  x_offset integer not null default 0,
+  y_offset integer not null default 0,
+  message text not null default '',
+  updated_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  check (page_key in ('dashboard','mcq','pbq','exam','daily','pricing','objectives')),
+  check (animation in ('idle','blink','correct','wrong','unlock','streak','thinking','tip')),
+  check (anchor in ('top-left','top-center','top-right','middle-left','middle-center','middle-right','bottom-left','bottom-center','bottom-right')),
+  check (size between 64 and 180),
+  check (speed in ('slow','normal','fast')),
+  check (x_offset between -120 and 120),
+  check (y_offset between -120 and 120),
+  check (char_length(message) <= 120)
+);
+
+alter table mascot_placements enable row level security;
+
+drop policy if exists "Visitors can read published mascot placements" on mascot_placements;
+create policy "Visitors can read published mascot placements"
+on mascot_placements for select
+to anon, authenticated
+using (enabled = true);
+
+drop policy if exists "Admins can read all mascot placements" on mascot_placements;
+create policy "Admins can read all mascot placements"
+on mascot_placements for select
+to authenticated
+using (
+  exists (
+    select 1 from app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+);
+
+drop policy if exists "Admins can insert mascot placements" on mascot_placements;
+create policy "Admins can insert mascot placements"
+on mascot_placements for insert
+to authenticated
+with check (
+  exists (
+    select 1 from app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+  and updated_by = (select auth.uid())
+);
+
+drop policy if exists "Admins can update mascot placements" on mascot_placements;
+create policy "Admins can update mascot placements"
+on mascot_placements for update
+to authenticated
+using (
+  exists (
+    select 1 from app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+)
+with check (
+  exists (
+    select 1 from app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+  and updated_by = (select auth.uid())
+);
+
+create index if not exists mascot_placements_enabled_idx
+on mascot_placements (enabled, page_key);
+
+grant select on mascot_placements to anon, authenticated;
+grant insert, update on mascot_placements to authenticated;
+grant all on mascot_placements to service_role;

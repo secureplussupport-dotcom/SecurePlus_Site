@@ -26,6 +26,7 @@ import {
   Moon,
   Move,
   Network,
+  Palette,
   PenLine,
   Play,
   Puzzle,
@@ -42,6 +43,7 @@ import {
   TrendingUp,
   TriangleAlert,
   Trophy,
+  WandSparkles,
   X,
   XCircle,
 } from "lucide-react";
@@ -14946,6 +14948,46 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .feedback-modal-body{padding:16px 26px 18px;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;flex:1 1 auto;}
 .feedback-modal-footer{position:sticky;bottom:0;z-index:2;padding:12px 26px calc(12px + env(safe-area-inset-bottom));background:${t.surface};border-top:1px solid ${t.border};display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;}
 .feedback-page{padding-bottom:128px!important;min-height:100dvh;}
+.mascot-manager-layout{display:grid;grid-template-columns:minmax(310px,.82fr) minmax(380px,1.18fr);gap:18px;align-items:start;}
+.mascot-editor-panel{padding:20px;display:grid;gap:18px;}
+.mascot-control-group{display:grid;gap:9px;}
+.mascot-choice-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.mascot-choice{min-width:0;padding:9px 6px;border:1px solid ${t.border};border-radius:8px;background:${t.panel};color:${t.textSec};font:inherit;font-size:11px;font-weight:850;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease,color .16s ease;}
+.mascot-choice:hover{transform:translateY(-2px);border-color:${t.accent}70;color:${t.text};}
+.mascot-choice.active{border-color:${t.accent};background:${t.accent}18;color:${t.accent};box-shadow:0 0 0 2px ${t.accent}12;}
+.mascot-library-choice{display:grid;place-items:center;gap:5px;min-height:104px;}
+.mascot-library-choice .cipher-mascot{pointer-events:none;}
+.mascot-position-grid{width:174px;aspect-ratio:1;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:8px;border:1px solid ${t.border};border-radius:10px;background:${t.bg};}
+.mascot-position-dot{border:1px solid ${t.border};border-radius:7px;background:${t.surface};cursor:pointer;position:relative;transition:border-color .16s ease,background .16s ease,transform .16s ease;}
+.mascot-position-dot::after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:${t.textDim};}
+.mascot-position-dot:hover{transform:scale(1.04);border-color:${t.accent}70;}
+.mascot-position-dot.active{border-color:${t.accent};background:${t.accent}18;box-shadow:0 0 0 2px ${t.accent}12;}
+.mascot-position-dot.active::after{background:${t.accent};box-shadow:0 0 12px ${t.accent};}
+.mascot-preview-card{position:sticky;top:20px;padding:18px;overflow:hidden;}
+.mascot-preview-browser{position:relative;min-height:500px;border:1px solid ${t.border};border-radius:10px;overflow:hidden;background:${t.bg};isolation:isolate;}
+.mascot-preview-bar{height:42px;display:flex;align-items:center;gap:6px;padding:0 14px;border-bottom:1px solid ${t.border};background:${t.surface};}
+.mascot-preview-bar span{width:8px;height:8px;border-radius:50%;background:${t.textDim};opacity:.55;}
+.mascot-preview-content{padding:30px 26px;display:grid;gap:13px;}
+.mascot-preview-line{height:12px;border-radius:5px;background:${t.border};opacity:.75;}
+.mascot-preview-line.short{width:46%;}
+.mascot-preview-blocks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:8px;}
+.mascot-preview-block{height:112px;border:1px solid ${t.border};border-radius:8px;background:${t.surface};}
+.site-mascot-placement{position:absolute;z-index:28;display:flex;align-items:center;gap:10px;pointer-events:none;transform:translate(var(--mascot-x),var(--mascot-y));max-width:min(310px,46vw);}
+.site-mascot-placement[data-horizontal="right"]{flex-direction:row-reverse;}
+.site-mascot-placement .cipher-mascot{filter:drop-shadow(0 12px 22px rgba(0,0,0,.28));flex:0 0 auto;}
+.site-mascot-message{padding:9px 11px;border:1px solid ${t.border};border-radius:9px;background:color-mix(in srgb,${t.surface} 94%,transparent);box-shadow:0 12px 30px rgba(0,0,0,.18);color:${t.text};font-size:11px;font-weight:850;line-height:1.45;backdrop-filter:blur(10px);}
+.site-mascot-placement.anchor-top-left{top:22px;left:22px;}
+.site-mascot-placement.anchor-top-center{top:22px;left:50%;translate:-50% 0;}
+.site-mascot-placement.anchor-top-right{top:22px;right:22px;}
+.site-mascot-placement.anchor-middle-left{top:50%;left:22px;translate:0 -50%;}
+.site-mascot-placement.anchor-middle-center{top:50%;left:50%;translate:-50% -50%;}
+.site-mascot-placement.anchor-middle-right{top:50%;right:22px;translate:0 -50%;}
+.site-mascot-placement.anchor-bottom-left{bottom:22px;left:22px;}
+.site-mascot-placement.anchor-bottom-center{bottom:22px;left:50%;translate:-50% 0;}
+.site-mascot-placement.anchor-bottom-right{right:22px;bottom:22px;}
+.app-main>.site-mascot-placement{position:fixed;}
+.app-shell:not(.practice-focus-mode) .app-main>.site-mascot-placement.anchor-top-left,.app-shell:not(.practice-focus-mode) .app-main>.site-mascot-placement.anchor-middle-left,.app-shell:not(.practice-focus-mode) .app-main>.site-mascot-placement.anchor-bottom-left{left:calc(var(--sidebar-w) + 22px);}
+.mascot-publish-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:4px;}
 
 /* Learning product refresh: one visual language across discovery, practice, and review. */
 body{background:
@@ -15202,6 +15244,16 @@ body{background:
   .feedback-modal-body{padding:14px 18px 16px!important;}
   .feedback-modal-footer{padding:12px 18px calc(12px + env(safe-area-inset-bottom))!important;}
   .feedback-modal-footer .btn{flex:1;white-space:nowrap;}
+  .mascot-manager-layout{grid-template-columns:1fr!important;}
+  .mascot-preview-card{position:relative!important;top:auto!important;}
+  .mascot-preview-browser{min-height:420px!important;}
+  .mascot-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .site-mascot-placement{max-width:70vw!important;}
+  .site-mascot-placement .cipher-mascot{--cipher-size:min(var(--mascot-mobile-size),92px)!important;}
+  .app-main>.site-mascot-placement.anchor-top-left,.app-main>.site-mascot-placement.anchor-middle-left,.app-main>.site-mascot-placement.anchor-bottom-left{left:12px!important;}
+  .app-main>.site-mascot-placement.anchor-top-right,.app-main>.site-mascot-placement.anchor-middle-right,.app-main>.site-mascot-placement.anchor-bottom-right{right:12px!important;}
+  .app-main>.site-mascot-placement.anchor-top-left,.app-main>.site-mascot-placement.anchor-top-center,.app-main>.site-mascot-placement.anchor-top-right{top:76px!important;}
+  .app-main>.site-mascot-placement.anchor-bottom-left,.app-main>.site-mascot-placement.anchor-bottom-center,.app-main>.site-mascot-placement.anchor-bottom-right{bottom:92px!important;}
 }
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
@@ -15432,6 +15484,7 @@ function NavGlyph({type,active}) {
     terms:FileText,
     feedback:MessageSquareWarning,
     "question-admin":ListPlus,
+    "mascot-admin":Palette,
   }[type]||ShieldCheck;
   return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true"><Icon className="glyph-svg" size={19} strokeWidth={2.15}/></span>;
 }
@@ -19414,6 +19467,263 @@ function TrialExpiredPrompt({t,onUpgrade,onClose}) {
   );
 }
 
+const MASCOT_PAGE_OPTIONS = [
+  {id:"dashboard",label:"Dashboard",description:"Welcome and progress overview"},
+  {id:"mcq",label:"MCQ Practice",description:"Question setup and practice flow"},
+  {id:"pbq",label:"PBQ Simulator",description:"PBQ library and selection"},
+  {id:"exam",label:"Exam Mode",description:"Exam setup and test area"},
+  {id:"daily",label:"Daily Challenge",description:"Daily practice and streaks"},
+  {id:"pricing",label:"Upgrade",description:"Plan and referral page"},
+  {id:"objectives",label:"Objectives",description:"SY0-701 objective guide"},
+];
+const MASCOT_ANIMATION_OPTIONS = [
+  {id:"idle",label:"Idle",description:"Calm welcome"},
+  {id:"blink",label:"Blink",description:"Friendly attention"},
+  {id:"correct",label:"Correct",description:"Success moment"},
+  {id:"wrong",label:"Try again",description:"Gentle recovery"},
+  {id:"unlock",label:"Unlock",description:"Pro access"},
+  {id:"streak",label:"Streak",description:"Daily celebration"},
+  {id:"thinking",label:"Thinking",description:"Loading or review"},
+  {id:"tip",label:"Tip",description:"Helpful guidance"},
+];
+const MASCOT_ANCHORS = [
+  "top-left","top-center","top-right",
+  "middle-left","middle-center","middle-right",
+  "bottom-left","bottom-center","bottom-right",
+];
+const DEFAULT_MASCOT_PLACEMENT = Object.freeze({
+  page_key:"dashboard",
+  enabled:true,
+  animation:"idle",
+  anchor:"bottom-right",
+  size:112,
+  speed:"normal",
+  x_offset:0,
+  y_offset:0,
+  message:"Ready for a quick practice session?",
+});
+
+function normalizeMascotPlacement(value={}) {
+  const animation=MASCOT_ANIMATION_OPTIONS.some(item=>item.id===value.animation)?value.animation:"idle";
+  const anchor=MASCOT_ANCHORS.includes(value.anchor)?value.anchor:"bottom-right";
+  const speed=["slow","normal","fast"].includes(value.speed)?value.speed:"normal";
+  const size=Math.min(180,Math.max(64,Number(value.size)||112));
+  const offset=valueKey=>Math.min(120,Math.max(-120,Number(value[valueKey])||0));
+  return {
+    ...DEFAULT_MASCOT_PLACEMENT,
+    ...value,
+    enabled:value.enabled!==false,
+    animation,
+    anchor,
+    speed,
+    size,
+    x_offset:offset("x_offset"),
+    y_offset:offset("y_offset"),
+    message:String(value.message||"").slice(0,120),
+  };
+}
+
+function MascotPlacement({placement,preview=false}) {
+  if(!placement)return null;
+  const config=normalizeMascotPlacement(placement);
+  if(!config.enabled)return null;
+  const horizontal=config.anchor.endsWith("right")?"right":"left";
+  const speedClass=config.speed==="normal"?"":config.speed;
+  return(
+    <div
+      className={`site-mascot-placement anchor-${config.anchor}`}
+      data-horizontal={horizontal}
+      style={{
+        "--mascot-x":`${config.x_offset}px`,
+        "--mascot-y":`${config.y_offset}px`,
+        "--mascot-mobile-size":`${Math.round(config.size*.78)}px`,
+      }}
+      aria-hidden={preview?"true":undefined}
+    >
+      <MascotAnimation
+        key={`${config.animation}-${config.speed}`}
+        animation={config.animation}
+        size={preview?Math.min(config.size,126):config.size}
+        className={speedClass}
+        label={`Cipher mascot: ${config.animation}`}
+      />
+      {config.message&&<span className="site-mascot-message">{config.message}</span>}
+    </div>
+  );
+}
+
+function AdminMascotManagerPage({user,t,placements,onPublished}) {
+  const [pageKey,setPageKey]=useState("dashboard");
+  const [draft,setDraft]=useState(()=>normalizeMascotPlacement(DEFAULT_MASCOT_PLACEMENT));
+  const [saving,setSaving]=useState(false);
+  const [status,setStatus]=useState("");
+  const [error,setError]=useState("");
+
+  useEffect(()=>{
+    const saved=placements.find(item=>item.page_key===pageKey);
+    setDraft(normalizeMascotPlacement(saved||{...DEFAULT_MASCOT_PLACEMENT,page_key:pageKey,enabled:false,message:""}));
+    setStatus("");
+    setError("");
+  },[pageKey,placements]);
+
+  const update=(key,value)=>setDraft(current=>normalizeMascotPlacement({...current,[key]:value,page_key:pageKey}));
+  const save=async(nextDraft=draft)=>{
+    setSaving(true);
+    setStatus("");
+    setError("");
+    try{
+      if(!isSupabaseConfigured)throw new Error("Supabase is not configured for this site.");
+      const payload=normalizeMascotPlacement({...nextDraft,page_key:pageKey});
+      const { data, error:saveError }=await supabase
+        .from("mascot_placements")
+        .upsert({
+          page_key:payload.page_key,
+          enabled:payload.enabled,
+          animation:payload.animation,
+          anchor:payload.anchor,
+          size:payload.size,
+          speed:payload.speed,
+          x_offset:payload.x_offset,
+          y_offset:payload.y_offset,
+          message:payload.message,
+          updated_by:user?.id||null,
+          updated_at:new Date().toISOString(),
+        },{onConflict:"page_key"})
+        .select("*")
+        .single();
+      if(saveError)throw saveError;
+      setDraft(normalizeMascotPlacement(data));
+      await onPublished?.();
+      setStatus(payload.enabled?`${MASCOT_PAGE_OPTIONS.find(item=>item.id===pageKey)?.label} mascot published.`:"Mascot hidden on this page.");
+      capture("admin_mascot_placement_saved",{page:pageKey,animation:payload.animation,anchor:payload.anchor,enabled:payload.enabled});
+    }catch(err){
+      const missingTable=err?.code==="PGRST205"||String(err?.message||"").includes("mascot_placements");
+      setError(missingTable
+        ? "Mascot database setup is not installed yet. Run supabase/mascot-manager.sql in the Supabase SQL Editor, then return here."
+        : err.message||"Unable to publish mascot settings.");
+    }finally{
+      setSaving(false);
+    }
+  };
+
+  const hide=()=>{
+    const next=normalizeMascotPlacement({...draft,enabled:false});
+    setDraft(next);
+    save(next);
+  };
+  const selectedPage=MASCOT_PAGE_OPTIONS.find(item=>item.id===pageKey);
+
+  return(
+    <div className="feedback-page" style={{padding:"24px",maxWidth:1240,margin:"0 auto"}}>
+      <div className="page-title-row" style={{marginBottom:16}}>
+        <NavGlyph type="mascot-admin" active/>
+        <div>
+          <h2 style={{fontSize:24,color:t.text}}>Mascot Manager</h2>
+          <p style={{fontSize:13,color:t.textSec}}>Choose where Cipher appears, how it moves, and what it says. Preview every change before publishing.</p>
+        </div>
+      </div>
+
+      <div className="card" style={{padding:"14px 16px",marginBottom:16,borderColor:`${t.accent}35`,background:`${t.accent}08`}}>
+        <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
+          <WandSparkles size={19} color={t.accent} style={{flexShrink:0,marginTop:2}}/>
+          <div style={{fontSize:12,color:t.textSec,lineHeight:1.65}}>
+            Changes are page-specific. Keep the mascot away from answer buttons and navigation, then check both desktop and mobile before publishing.
+          </div>
+        </div>
+      </div>
+
+      <div className="mascot-manager-layout">
+        <section className="card mascot-editor-panel">
+          <div className="mascot-control-group">
+            <label className="label">Page to design</label>
+            <select className="input" value={pageKey} onChange={event=>setPageKey(event.target.value)}>
+              {MASCOT_PAGE_OPTIONS.map(page=><option key={page.id} value={page.id}>{page.label} - {page.description}</option>)}
+            </select>
+          </div>
+
+          <div className="mascot-control-group">
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
+              <label className="label">Animation library</label>
+              <span style={{fontSize:11,color:t.textDim}}>8 animations</span>
+            </div>
+            <div className="mascot-choice-grid">
+              {MASCOT_ANIMATION_OPTIONS.map(item=>(
+                <button key={item.id} type="button" className={`mascot-choice mascot-library-choice ${draft.animation===item.id?"active":""}`} onClick={()=>update("animation",item.id)} title={item.description}>
+                  <MascotAnimation animation={item.id} size={62} className="fast"/>
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mascot-control-group">
+            <label className="label">Placement</label>
+            <div style={{display:"flex",gap:18,alignItems:"center",flexWrap:"wrap"}}>
+              <div className="mascot-position-grid" aria-label="Mascot position">
+                {MASCOT_ANCHORS.map(anchor=><button key={anchor} type="button" className={`mascot-position-dot ${draft.anchor===anchor?"active":""}`} onClick={()=>update("anchor",anchor)} aria-label={anchor.replaceAll("-"," ")} title={anchor.replaceAll("-"," ")}/>) }
+              </div>
+              <div style={{display:"grid",gap:10,flex:"1 1 180px"}}>
+                <label style={{fontSize:12,color:t.textSec}}>Horizontal fine-tune: <strong style={{color:t.text}}>{draft.x_offset}px</strong></label>
+                <input type="range" min="-120" max="120" step="4" value={draft.x_offset} onChange={event=>update("x_offset",event.target.value)}/>
+                <label style={{fontSize:12,color:t.textSec}}>Vertical fine-tune: <strong style={{color:t.text}}>{draft.y_offset}px</strong></label>
+                <input type="range" min="-120" max="120" step="4" value={draft.y_offset} onChange={event=>update("y_offset",event.target.value)}/>
+              </div>
+            </div>
+          </div>
+
+          <div className="mascot-control-group">
+            <label className="label">Size: {draft.size}px</label>
+            <input type="range" min="64" max="180" step="4" value={draft.size} onChange={event=>update("size",event.target.value)}/>
+          </div>
+
+          <div className="mascot-control-group">
+            <label className="label">Animation speed</label>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8}}>
+              {["slow","normal","fast"].map(speed=><button key={speed} type="button" className={`mascot-choice ${draft.speed===speed?"active":""}`} onClick={()=>update("speed",speed)}>{speed[0].toUpperCase()+speed.slice(1)}</button>)}
+            </div>
+          </div>
+
+          <div className="mascot-control-group">
+            <label className="label">Speech bubble optional</label>
+            <textarea className="input" rows={3} maxLength={120} value={draft.message} onChange={event=>update("message",event.target.value)} placeholder="Example: Ready to strengthen your weakest topic?" style={{resize:"vertical"}}/>
+            <div style={{fontSize:11,color:t.textDim,textAlign:"right"}}>{draft.message.length}/120</div>
+          </div>
+
+          <div className="mascot-publish-bar">
+            <button className="btn btn-primary" type="button" disabled={saving} onClick={()=>save({...draft,enabled:true})}>
+              <CheckCircle2 size={16}/>{saving?"Publishing...":"Publish to page"}
+            </button>
+            <button className="btn btn-outline" type="button" disabled={saving||!placements.some(item=>item.page_key===pageKey&&item.enabled)} onClick={hide}>Hide from page</button>
+          </div>
+          <Alert msg={error} t={t}/>
+          <Alert msg={status} type="success" t={t}/>
+        </section>
+
+        <aside className="card mascot-preview-card">
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:12}}>
+            <div>
+              <div className="label" style={{color:t.accent,marginBottom:3}}>Live preview</div>
+              <div style={{fontSize:13,fontWeight:850,color:t.text}}>{selectedPage?.label}</div>
+            </div>
+            <span className="chip" style={{color:draft.enabled?t.green:t.textDim,borderColor:draft.enabled?`${t.green}40`:t.border,background:draft.enabled?`${t.green}10`:t.panel}}>{draft.enabled?"Currently visible":"Currently hidden"}</span>
+          </div>
+          <div className="mascot-preview-browser">
+            <div className="mascot-preview-bar"><span/><span/><span/></div>
+            <div className="mascot-preview-content">
+              <div className="mascot-preview-line short"/>
+              <div className="mascot-preview-line"/>
+              <div className="mascot-preview-line" style={{width:"72%"}}/>
+              <div className="mascot-preview-blocks"><div className="mascot-preview-block"/><div className="mascot-preview-block"/></div>
+            </div>
+            <MascotPlacement placement={{...draft,enabled:true}} preview/>
+          </div>
+          <p style={{fontSize:11,color:t.textDim,lineHeight:1.6,marginTop:12}}>The preview updates instantly. Publishing makes this placement visible to visitors on the selected page.</p>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
 function QuestionReportModal({report,user,t,onClose}) {
   const [issueType,setIssueType]=useState("inaccurate_answer");
   const [message,setMessage]=useState("");
@@ -21844,6 +22154,7 @@ export default function App() {
   const [questionBankVersion,setQuestionBankVersion]=useState(0);
   const [adminQuestionTarget,setAdminQuestionTarget]=useState(null);
   const [practiceFocusMode,setPracticeFocusMode]=useState(false);
+  const [mascotPlacements,setMascotPlacements]=useState([]);
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
@@ -21874,6 +22185,24 @@ export default function App() {
   useEffect(()=>{
     refreshQuestionBankOverrides();
   },[refreshQuestionBankOverrides]);
+
+  const refreshMascotPlacements=useCallback(async()=>{
+    if(!isSupabaseConfigured)return;
+    try{
+      const { data, error }=await supabase
+        .from("mascot_placements")
+        .select("page_key,enabled,animation,anchor,size,speed,x_offset,y_offset,message,updated_at")
+        .order("page_key",{ascending:true});
+      if(error)throw error;
+      setMascotPlacements((data||[]).map(normalizeMascotPlacement));
+    }catch(error){
+      if(error?.code!=="PGRST205")console.warn("Unable to load mascot placements",error);
+    }
+  },[]);
+
+  useEffect(()=>{
+    refreshMascotPlacements();
+  },[refreshMascotPlacements]);
 
   const clearLocalAuthState=useCallback(async()=>{
     resetAnalytics();
@@ -22474,6 +22803,7 @@ export default function App() {
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
             )}
+            <MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>
           </main>
           {questionReport&&<QuestionReportModal report={questionReport} user={null} t={t} onClose={()=>setQuestionReport(null)}/>}
         </div>
@@ -22532,6 +22862,7 @@ export default function App() {
   if(isRootUser) {
     navItems.push({id:"feedback",icon:"feedback",label:"Internal Feedback",mobileLabel:"Feedback"});
     navItems.push({id:"question-admin",icon:"question-admin",label:"Question Manager",mobileLabel:"Manager"});
+    navItems.push({id:"mascot-admin",icon:"mascot-admin",label:"Mascot Manager",mobileLabel:"Mascot"});
   }
 
   return(
@@ -22617,6 +22948,8 @@ export default function App() {
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} initialTarget={adminQuestionTarget}/>}
+          {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
+          {view!=="mascot-admin"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
         </main>
         {showOnboarding&&(
           <OnboardingModal
