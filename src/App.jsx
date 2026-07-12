@@ -14664,25 +14664,81 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .answer-burst.wrong .answer-burst-icon{background:${t.red};box-shadow:0 12px 26px ${t.red}28;}
 .answer-burst-title{font-weight:900;color:${t.text};font-size:15px;}
 .answer-burst-body{font-size:12px;color:${t.textSec};line-height:1.45;}
-.cipher-mascot{--cipher-row:0;--cipher-size:96px;--cipher-row-y:calc(var(--cipher-row) * 14.285714%);--cipher-frame-duration:1.05s;--cipher-motion-duration:2.8s;position:relative;display:inline-block;width:var(--cipher-size);aspect-ratio:4 / 3;transform-origin:50% 88%;will-change:transform;filter:drop-shadow(0 12px 24px ${t.accent}24);animation:cipherIdleMotion var(--cipher-motion-duration) cubic-bezier(.45,0,.25,1) infinite;}
-.cipher-mascot-sprite{position:absolute;inset:0;z-index:1;background-image:url('/mascots/cipher-animation-sheet.png');background-size:400% 800%;background-position:0% var(--cipher-row-y);background-repeat:no-repeat;image-rendering:auto;animation:cipherSprite var(--cipher-frame-duration) linear infinite;}
-.cipher-mascot::after{content:"";position:absolute;z-index:0;left:50%;bottom:5%;width:42%;height:7%;border-radius:50%;background:radial-gradient(ellipse,rgba(3,8,20,.48),transparent 72%);transform:translateX(-50%);animation:cipherGroundShadow var(--cipher-motion-duration) ease-in-out infinite;}
-.cipher-mascot::before{content:"";position:absolute;z-index:0;inset:10% 12%;border-radius:50%;background:radial-gradient(circle,${t.accent}34,transparent 68%);opacity:0;transform:scale(.8);pointer-events:none;}
+.cipher-mascot{--cipher-size:96px;--cipher-motion-duration:2.8s;--pet-cycle:2.8s;position:relative;display:inline-block;width:var(--cipher-size);aspect-ratio:4 / 3;transform-origin:50% 88%;will-change:transform;filter:drop-shadow(0 12px 24px ${t.accent}24);animation:cipherIdleMotion var(--cipher-motion-duration) cubic-bezier(.45,0,.25,1) infinite;}
+.cipher-rig{position:absolute;inset:0;isolation:isolate;}
+.cipher-aura{position:absolute;z-index:0;inset:6% 16%;border-radius:50%;background:radial-gradient(circle,${t.accent}32,transparent 68%);opacity:.08;animation:cipherAuraBreathe var(--pet-cycle) ease-in-out infinite;}
+.cipher-ground-shadow{position:absolute;z-index:0;left:50%;bottom:5%;width:38%;height:7%;border-radius:50%;background:radial-gradient(ellipse,rgba(3,8,20,.54),transparent 72%);transform:translateX(-50%);animation:cipherGroundShadow var(--cipher-motion-duration) ease-in-out infinite;}
+.cipher-head{position:absolute;z-index:6;left:27%;top:8%;width:46%;height:45%;clip-path:polygon(50% 0,91% 18%,88% 72%,50% 100%,12% 72%,9% 18%);background:linear-gradient(145deg,#79a7ff 0%,#3979f4 38%,#1d4ed8 72%,#153995 100%);filter:drop-shadow(0 5px 0 #0c2877) drop-shadow(0 9px 13px rgba(16,72,190,.3));transform-origin:50% 82%;animation:cipherHeadFloat var(--pet-cycle) ease-in-out infinite;}
+.cipher-head::before{content:"";position:absolute;inset:6%;clip-path:inherit;background:linear-gradient(160deg,rgba(255,255,255,.35),transparent 31%,rgba(4,18,56,.28) 82%);}
+.cipher-screen{position:absolute;z-index:2;left:18%;top:24%;width:64%;height:45%;border-radius:38% 38% 31% 31%;background:linear-gradient(180deg,#081b43,#06122f);box-shadow:inset 0 0 0 2px rgba(6,18,50,.7),inset 0 -5px 12px rgba(4,10,28,.7),0 2px 0 rgba(150,191,255,.2);overflow:hidden;}
+.cipher-eye{position:absolute;top:42%;width:18%;height:8%;border-radius:999px;background:#67f5ff;box-shadow:0 0 7px #25d9ff;transform-origin:center;animation:cipherEyeBlink 4.2s ease-in-out infinite;}
+.cipher-eye-left{left:21%;transform:rotate(8deg);}
+.cipher-eye-right{right:21%;transform:rotate(-8deg);}
+.cipher-mouth{position:absolute;left:43%;bottom:17%;width:14%;height:5%;border-radius:999px;background:#67f5ff;box-shadow:0 0 5px #25d9ff;opacity:.72;}
+.cipher-spark{position:absolute;z-index:7;right:3%;top:2%;width:18%;aspect-ratio:1;display:grid;place-items:center;color:#79f5ff;font-size:calc(var(--cipher-size) * .16);font-weight:900;text-shadow:0 0 8px #2adfff,2px 2px 0 #155bd7;animation:cipherSparkTwinkle 1.8s ease-in-out infinite;}
+.cipher-body{position:absolute;z-index:4;left:38%;top:48%;width:24%;height:34%;border-radius:35% 35% 26% 26%;background:linear-gradient(145deg,#5593ff,#2563eb 54%,#1745b5);box-shadow:inset 3px 2px 0 rgba(255,255,255,.22),inset -3px -4px 0 rgba(8,35,115,.36),0 5px 0 #10388f;transform-origin:50% 18%;animation:cipherBodyBreathe var(--pet-cycle) ease-in-out infinite;}
+.cipher-chest{position:absolute;left:27%;top:18%;width:46%;aspect-ratio:1;display:grid;place-items:center;clip-path:polygon(50% 0,91% 18%,86% 72%,50% 100%,14% 72%,9% 18%);background:linear-gradient(145deg,#68f0ff,#1689f5);box-shadow:0 0 14px rgba(57,211,255,.65);}
+.cipher-chest span{display:grid;place-items:center;width:54%;height:54%;border:1px solid rgba(255,255,255,.92);border-radius:50%;color:#fff;font-size:calc(var(--cipher-size) * .085);font-weight:900;line-height:1;}
+.cipher-arm{position:absolute;z-index:3;top:50%;width:8%;height:27%;border-radius:999px;background:linear-gradient(90deg,#1646b7,#4383ff 46%,#1d55d1);box-shadow:inset 2px 0 0 rgba(255,255,255,.18),0 3px 0 #0f358f;transform-origin:50% 10%;animation-duration:var(--pet-cycle);animation-timing-function:ease-in-out;animation-iteration-count:infinite;}
+.cipher-arm-left{left:31%;transform:rotate(18deg);animation-name:cipherArmLeftIdle;}
+.cipher-arm-right{right:31%;transform:rotate(-18deg);animation-name:cipherArmRightIdle;}
+.cipher-hand{position:absolute;left:2%;bottom:-5%;width:96%;aspect-ratio:1;border-radius:50%;background:linear-gradient(145deg,#5b96ff,#1f5ee0);box-shadow:0 2px 0 #10378f;}
+.cipher-leg{position:absolute;z-index:2;top:73%;width:9%;height:19%;border-radius:999px;background:linear-gradient(90deg,#1744ad,#3f7cf3 52%,#1644ac);box-shadow:inset 2px 0 0 rgba(255,255,255,.16);transform-origin:50% 8%;animation-duration:var(--pet-cycle);animation-timing-function:ease-in-out;animation-iteration-count:infinite;}
+.cipher-leg-left{left:41%;animation-name:cipherLegLeftIdle;}
+.cipher-leg-right{right:41%;animation-name:cipherLegRightIdle;}
+.cipher-foot{position:absolute;bottom:-5%;width:138%;height:36%;border-radius:60% 55% 40% 45%;background:linear-gradient(180deg,#3f7cf3,#123b9a);box-shadow:0 2px 0 #09286f;}
+.cipher-leg-left .cipher-foot{right:8%;}
+.cipher-leg-right .cipher-foot{left:8%;transform:scaleX(-1);}
+.cipher-effect{position:absolute;z-index:8;display:grid;place-items:center;opacity:0;pointer-events:none;font-weight:950;}
+.cipher-effect-check{right:8%;top:30%;width:22%;aspect-ratio:1;border-radius:50%;background:#22c55e;color:#fff;font-size:calc(var(--cipher-size) * .17);box-shadow:0 0 20px rgba(34,197,94,.66);}
+.cipher-effect-alert{right:8%;top:28%;width:20%;aspect-ratio:1;border:3px solid #f59e0b;clip-path:polygon(50% 0,100% 100%,0 100%);color:#fbbf24;font-size:calc(var(--cipher-size) * .13);padding-top:3%;filter:drop-shadow(0 0 8px rgba(245,158,11,.6));}
+.cipher-effect-lock{right:4%;top:41%;width:19%;height:15%;border:3px solid #52d8ff;border-radius:15%;font-size:0;box-shadow:0 0 14px rgba(82,216,255,.65);}
+.cipher-effect-lock::before{content:"";position:absolute;left:20%;top:-68%;width:60%;height:80%;border:3px solid #52d8ff;border-bottom:0;border-radius:999px 999px 0 0;transform-origin:90% 100%;}
+.cipher-effect-flame{right:8%;top:27%;color:#55d9ff;font-size:calc(var(--cipher-size) * .2);text-shadow:0 0 15px #229cff;}
+.cipher-effect-thought{right:6%;top:22%;padding:4% 6%;border:2px solid #5ce9ff;border-radius:25%;background:#08204c;color:#72f4ff;font-size:calc(var(--cipher-size) * .08);letter-spacing:.05em;box-shadow:0 0 14px rgba(65,215,255,.45);}
+.cipher-effect-tip{right:5%;top:20%;color:#fde047;font-size:calc(var(--cipher-size) * .22);text-shadow:0 0 14px #f59e0b;}
 .cipher-motion-blink{--cipher-motion-duration:2.2s;animation-name:cipherBlinkMotion;}
 .cipher-motion-correct{--cipher-motion-duration:1.25s;animation-name:cipherCorrectMotion;animation-timing-function:cubic-bezier(.34,1.35,.64,1);}
 .cipher-motion-wrong{--cipher-motion-duration:1.5s;animation-name:cipherWrongMotion;animation-timing-function:ease-in-out;}
 .cipher-motion-unlock{--cipher-motion-duration:1.8s;animation-name:cipherUnlockMotion;}
-.cipher-motion-unlock::before,.cipher-motion-streak::before{animation:cipherAuraPulse var(--cipher-motion-duration) ease-in-out infinite;}
 .cipher-motion-streak{--cipher-motion-duration:1.45s;animation-name:cipherStreakMotion;animation-timing-function:cubic-bezier(.34,1.3,.64,1);}
 .cipher-motion-thinking{--cipher-motion-duration:2.35s;animation-name:cipherThinkingMotion;animation-timing-function:ease-in-out;}
 .cipher-motion-tip{--cipher-motion-duration:1.9s;animation-name:cipherTipMotion;animation-timing-function:ease-in-out;}
-.cipher-mascot.slow{--cipher-frame-duration:1.5s;--cipher-motion-duration:3.6s;}
-.cipher-mascot.fast{--cipher-frame-duration:.72s;--cipher-motion-duration:1.25s;}
-.cipher-mascot.once,.cipher-mascot.once .cipher-mascot-sprite{animation-iteration-count:1;animation-fill-mode:both;}
+.cipher-motion-blink .cipher-eye{animation-name:cipherEyeBlinkFocus;animation-duration:2.2s;}
+.cipher-motion-correct .cipher-head,.cipher-motion-streak .cipher-head{animation-name:cipherHeadCelebrate;}
+.cipher-motion-correct .cipher-body,.cipher-motion-streak .cipher-body{animation-name:cipherBodyCelebrate;}
+.cipher-motion-correct .cipher-arm-left,.cipher-motion-streak .cipher-arm-left{animation-name:cipherArmCelebrateLeft;}
+.cipher-motion-correct .cipher-arm-right,.cipher-motion-streak .cipher-arm-right{animation-name:cipherArmCelebrateRight;}
+.cipher-motion-correct .cipher-leg-left,.cipher-motion-streak .cipher-leg-left{animation-name:cipherLegKickLeft;}
+.cipher-motion-correct .cipher-leg-right,.cipher-motion-streak .cipher-leg-right{animation-name:cipherLegKickRight;}
+.cipher-motion-correct .cipher-effect-check{animation:cipherEffectPop var(--pet-cycle) cubic-bezier(.2,1.5,.4,1) infinite;}
+.cipher-motion-streak .cipher-effect-flame{animation:cipherEffectOrbit var(--pet-cycle) ease-in-out infinite;}
+.cipher-motion-wrong .cipher-head{animation-name:cipherHeadWrong;}
+.cipher-motion-wrong .cipher-arm-left{animation-name:cipherArmWrongLeft;}
+.cipher-motion-wrong .cipher-arm-right{animation-name:cipherArmWrongRight;}
+.cipher-motion-wrong .cipher-eye{animation:none;}
+.cipher-motion-wrong .cipher-eye-left{transform:rotate(-16deg);}
+.cipher-motion-wrong .cipher-eye-right{transform:rotate(16deg);}
+.cipher-motion-wrong .cipher-mouth{height:11%;bottom:11%;background:transparent;border-radius:50% 50% 0 0;border-top:2px solid #67f5ff;box-shadow:none;}
+.cipher-motion-wrong .cipher-effect-alert{animation:cipherEffectPop var(--pet-cycle) ease-in-out infinite;}
+.cipher-motion-unlock .cipher-head{animation-name:cipherHeadUnlock;}
+.cipher-motion-unlock .cipher-arm-right{animation-name:cipherArmUnlock;}
+.cipher-motion-unlock .cipher-effect-lock{animation:cipherLockOpen var(--pet-cycle) ease-in-out infinite;}
+.cipher-motion-unlock .cipher-aura,.cipher-motion-streak .cipher-aura{animation-name:cipherAuraCelebrate;}
+.cipher-motion-thinking .cipher-head{animation-name:cipherHeadThink;}
+.cipher-motion-thinking .cipher-arm-right{animation-name:cipherArmThink;}
+.cipher-motion-thinking .cipher-effect-thought{animation:cipherThoughtFloat var(--pet-cycle) ease-in-out infinite;}
+.cipher-motion-thinking .cipher-mouth{width:8%;left:46%;}
+.cipher-motion-tip .cipher-head{animation-name:cipherHeadTip;}
+.cipher-motion-tip .cipher-arm-right{animation-name:cipherArmPoint;}
+.cipher-motion-tip .cipher-effect-tip{animation:cipherTipGlow var(--pet-cycle) ease-in-out infinite;}
+.cipher-mascot.slow{--cipher-motion-duration:3.6s;--pet-cycle:3.6s;}
+.cipher-mascot.fast{--cipher-motion-duration:1.25s;--pet-cycle:1.25s;}
+.cipher-mascot.once,.cipher-mascot.once .cipher-rig *{animation-iteration-count:1;animation-fill-mode:both;}
 .cipher-mascot.answer-burst-mascot{flex-shrink:0;margin:-12px -5px -12px -9px;}
 .cipher-mascot.loading-mascot{filter:drop-shadow(0 18px 34px ${t.accent}35);}
 .cipher-mascot.streak-mascot{filter:drop-shadow(0 20px 42px ${t.green}32);}
-@media (prefers-reduced-motion:reduce){.cipher-mascot,.cipher-mascot-sprite,.cipher-mascot::before,.cipher-mascot::after{animation:none!important;}.cipher-mascot-sprite{background-position:0% var(--cipher-row-y);}}
+@media (prefers-reduced-motion:reduce){.cipher-mascot,.cipher-rig *{animation:none!important;}}
 .terminal{background:${t.codeBg};border:1px solid ${t.codeBorder};border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px;color:${t.codeText};padding:16px;overflow-y:auto;max-height:280px;line-height:1.7;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
 .terminal::selection,.log-block::selection,.streak-code::selection{background:${t.accent}28;}
 .log-block{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:${t.codePanel};border:1px solid ${t.codeBorder};border-radius:8px;padding:16px;color:${t.codeText};line-height:1.9;white-space:pre-wrap;overflow-x:auto;}
@@ -14732,12 +14788,37 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes modalPop{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes feedbackIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes answerBurstIn{0%{opacity:0;transform:translate(-50%,-18px) scale(.96)}65%{opacity:1;transform:translate(-50%,3px) scale(1.015)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
-@keyframes cipherSprite{
-  0%,24.99%{background-position:0% var(--cipher-row-y)}
-  25%,49.99%{background-position:33.333333% var(--cipher-row-y)}
-  50%,74.99%{background-position:66.666667% var(--cipher-row-y)}
-  75%,100%{background-position:100% var(--cipher-row-y)}
-}
+@keyframes cipherHeadFloat{0%,100%{transform:translateY(0) rotate(-1deg)}35%{transform:translateY(-4%) rotate(1.5deg)}70%{transform:translateY(-1%) rotate(-.5deg)}}
+@keyframes cipherBodyBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035,.975) translateY(1%)}}
+@keyframes cipherArmLeftIdle{0%,100%{transform:rotate(18deg)}50%{transform:rotate(8deg) translateY(-3%)}}
+@keyframes cipherArmRightIdle{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(-8deg) translateY(-3%)}}
+@keyframes cipherLegLeftIdle{0%,100%{transform:rotate(2deg) translateY(0)}50%{transform:rotate(-3deg) translateY(-3%)}}
+@keyframes cipherLegRightIdle{0%,100%{transform:rotate(-2deg) translateY(-3%)}50%{transform:rotate(3deg) translateY(0)}}
+@keyframes cipherEyeBlink{0%,42%,48%,100%{transform:scaleY(1)}45%,46%{transform:scaleY(.12)}}
+@keyframes cipherEyeBlinkFocus{0%,25%,62%,100%{transform:scaleY(1)}36%,52%{transform:scaleY(.08)}}
+@keyframes cipherSparkTwinkle{0%,100%{transform:rotate(-8deg) scale(.82);opacity:.68}50%{transform:rotate(8deg) scale(1.16);opacity:1}}
+@keyframes cipherAuraBreathe{0%,100%{opacity:.07;transform:scale(.82)}50%{opacity:.18;transform:scale(1.02)}}
+@keyframes cipherAuraCelebrate{0%,100%{opacity:.12;transform:scale(.72)}45%{opacity:.5;transform:scale(1.2)}70%{opacity:.2;transform:scale(.92)}}
+@keyframes cipherHeadCelebrate{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-9%) rotate(-7deg)}56%{transform:translateY(-13%) rotate(7deg)}78%{transform:translateY(2%) rotate(-2deg)}}
+@keyframes cipherBodyCelebrate{0%,100%{transform:scale(1)}25%{transform:scale(1.08,.91)}50%{transform:scale(.94,1.09) translateY(-5%)}78%{transform:scale(1.06,.94)}}
+@keyframes cipherArmCelebrateLeft{0%,100%{transform:rotate(18deg)}32%,62%{transform:rotate(150deg) translateY(-6%)}80%{transform:rotate(36deg)}}
+@keyframes cipherArmCelebrateRight{0%,100%{transform:rotate(-18deg)}32%,62%{transform:rotate(-150deg) translateY(-6%)}80%{transform:rotate(-36deg)}}
+@keyframes cipherLegKickLeft{0%,100%{transform:rotate(2deg)}42%{transform:rotate(26deg) translateY(-12%)}72%{transform:rotate(-7deg)}}
+@keyframes cipherLegKickRight{0%,100%{transform:rotate(-2deg)}42%{transform:rotate(-22deg) translateY(-8%)}72%{transform:rotate(8deg)}}
+@keyframes cipherHeadWrong{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(4%) rotate(-7deg)}55%{transform:translateY(7%) rotate(5deg)}78%{transform:translateY(5%) rotate(-3deg)}}
+@keyframes cipherArmWrongLeft{0%,100%{transform:rotate(18deg)}45%,75%{transform:rotate(34deg) translateY(4%)}}
+@keyframes cipherArmWrongRight{0%,100%{transform:rotate(-18deg)}45%,75%{transform:rotate(-34deg) translateY(4%)}}
+@keyframes cipherHeadUnlock{0%,100%{transform:translateY(0) rotate(0)}28%{transform:translateY(-3%) rotate(-4deg)}55%{transform:translateY(-7%) rotate(5deg)}78%{transform:translateY(-2%) rotate(-1deg)}}
+@keyframes cipherArmUnlock{0%,100%{transform:rotate(-18deg)}30%{transform:rotate(-72deg)}55%,72%{transform:rotate(-118deg) translateY(-6%)}86%{transform:rotate(-48deg)}}
+@keyframes cipherHeadThink{0%,100%{transform:translate(-2%,0) rotate(-5deg)}45%{transform:translate(2%,-4%) rotate(6deg)}70%{transform:translate(1%,-2%) rotate(3deg)}}
+@keyframes cipherArmThink{0%,100%{transform:rotate(-18deg)}35%,72%{transform:rotate(-112deg) translate(4%,-8%)}}
+@keyframes cipherHeadTip{0%,100%{transform:translateY(0) rotate(-2deg)}38%{transform:translateY(-5%) rotate(5deg)}66%{transform:translateY(-2%) rotate(2deg)}}
+@keyframes cipherArmPoint{0%,100%{transform:rotate(-18deg)}34%,70%{transform:rotate(-132deg) translateY(-5%)}84%{transform:rotate(-52deg)}}
+@keyframes cipherEffectPop{0%,12%,100%{opacity:0;transform:scale(.35) rotate(-16deg)}34%,76%{opacity:1;transform:scale(1.05) rotate(4deg)}58%{transform:scale(.92) rotate(-2deg)}}
+@keyframes cipherEffectOrbit{0%,100%{opacity:.25;transform:translate(0,8%) rotate(-12deg) scale(.72)}42%{opacity:1;transform:translate(14%,-18%) rotate(12deg) scale(1.12)}72%{opacity:.8;transform:translate(-8%,-7%) rotate(-4deg) scale(.92)}}
+@keyframes cipherLockOpen{0%,18%,100%{opacity:0;transform:translateY(10%) scale(.7)}36%,76%{opacity:1;transform:translateY(0) scale(1)}56%{transform:translateY(-5%) rotate(-6deg) scale(1.06)}}
+@keyframes cipherThoughtFloat{0%,100%{opacity:.35;transform:translateY(8%) scale(.8)}38%,72%{opacity:1;transform:translateY(-9%) scale(1.04)}}
+@keyframes cipherTipGlow{0%,100%{opacity:.3;transform:scale(.65) rotate(-14deg)}42%,72%{opacity:1;transform:scale(1.16) rotate(10deg)}}
 @keyframes cipherIdleMotion{
   0%,100%{transform:translate3d(0,0,0) rotate(-.6deg) scale(1)}
   25%{transform:translate3d(0,-3%,0) rotate(.7deg) scale(1.012,.99)}
