@@ -5,4 +5,6 @@ dist
 .env.local
 .env.*.local
 *.png
+!public/mascots/
+!public/mascots/*.png
 securityplus-FINAL.html

@@ -46,6 +46,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { capture, identifyUser, resetAnalytics } from "./lib/analytics.js";
+import { MascotAnimation } from "./lib/MascotAnimation.jsx";
 import { getSupabaseAccessToken, isSupabaseConfigured, supabase } from "./lib/supabaseClient.js";
 
 // ═══════════════════════════════════════════════════════════════
@@ -14661,6 +14662,13 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .answer-burst.wrong .answer-burst-icon{background:${t.red};box-shadow:0 12px 26px ${t.red}28;}
 .answer-burst-title{font-weight:900;color:${t.text};font-size:15px;}
 .answer-burst-body{font-size:12px;color:${t.textSec};line-height:1.45;}
+.cipher-mascot{--cipher-row:0;--cipher-size:96px;--cipher-row-y:calc(var(--cipher-row) * 14.285714%);display:inline-block;width:var(--cipher-size);aspect-ratio:4 / 3;background-image:url('/mascots/cipher-animation-sheet.png');background-size:400% 800%;background-position:0% var(--cipher-row-y);background-repeat:no-repeat;image-rendering:auto;filter:drop-shadow(0 12px 24px ${t.accent}24);animation:cipherSprite 1.05s steps(4) infinite;}
+.cipher-mascot.slow{animation-duration:1.45s;}
+.cipher-mascot.fast{animation-duration:.75s;}
+.cipher-mascot.once{animation-iteration-count:1;}
+.cipher-mascot.answer-burst-mascot{flex-shrink:0;margin:-12px -5px -12px -9px;}
+.cipher-mascot.loading-mascot{filter:drop-shadow(0 18px 34px ${t.accent}35);}
+.cipher-mascot.streak-mascot{filter:drop-shadow(0 20px 42px ${t.green}32);}
 .terminal{background:${t.codeBg};border:1px solid ${t.codeBorder};border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:13px;color:${t.codeText};padding:16px;overflow-y:auto;max-height:280px;line-height:1.7;box-shadow:inset 0 1px 0 rgba(255,255,255,.04);}
 .terminal::selection,.log-block::selection,.streak-code::selection{background:${t.accent}28;}
 .log-block{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:${t.codePanel};border:1px solid ${t.codeBorder};border-radius:8px;padding:16px;color:${t.codeText};line-height:1.9;white-space:pre-wrap;overflow-x:auto;}
@@ -14709,6 +14717,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes feedbackIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes answerBurstIn{0%{opacity:0;transform:translate(-50%,-18px) scale(.96)}65%{opacity:1;transform:translate(-50%,3px) scale(1.015)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes cipherSprite{from{background-position:0% var(--cipher-row-y)}to{background-position:100% var(--cipher-row-y)}}
 @keyframes shimmer{from{opacity:.6}to{opacity:1}}
 @keyframes irregularSpin{0%{transform:rotate(0deg)}18%{transform:rotate(75deg)}31%{transform:rotate(118deg)}55%{transform:rotate(245deg)}72%{transform:rotate(286deg)}100%{transform:rotate(360deg)}}
 @keyframes scanLine{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
@@ -15589,7 +15598,12 @@ function AnswerBurst({result,t}) {
   const correct=result.correct;
   return(
     <div className={`answer-burst ${correct?"correct":"wrong"}`} role="status" aria-live="polite">
-      <div className="answer-burst-icon">{correct?<Check size={22} strokeWidth={3}/>:<X size={22} strokeWidth={3}/>}</div>
+      <MascotAnimation
+        animation={correct ? "correct" : "wrong"}
+        size={70}
+        className="answer-burst-mascot fast"
+        label={correct ? "Cipher celebrates a correct answer" : "Cipher reacts to an incorrect answer"}
+      />
       <div style={{minWidth:0,flex:1}}>
         <div className="answer-burst-title">{correct ? "Nice work!" : "Almost. Keep going."}</div>
         <div className="answer-burst-body">
@@ -15622,7 +15636,7 @@ function LoadingScreen({t}) {
   return(
     <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:t.bg,padding:24}}>
       <div style={{display:"grid",justifyItems:"center",gap:18,textAlign:"center"}}>
-        <div className="loading-ring" aria-label="Loading"/>
+        <MascotAnimation animation="thinking" size={118} className="loading-mascot slow" label="Cipher is loading SecurePlus"/>
         <div style={{fontWeight:900,color:t.text,fontSize:18}}>Loading SecurePlus</div>
         <div className="fu" key={quote} style={{color:t.textSec,fontSize:14,maxWidth:360,lineHeight:1.7}}>{quote}</div>
       </div>
@@ -15704,6 +15718,14 @@ function StreakCelebrationModal({streak,best,alreadyCompleted,onClose,t}) {
       <div className="streak-modal" onClick={e=>e.stopPropagation()}>
         <div className="streak-burst"/>
         <div style={{position:"relative"}}>
+          <div style={{display:"flex",justifyContent:"center",marginBottom:14}}>
+            <MascotAnimation
+              animation={phase==="reveal" ? "streak" : "thinking"}
+              size={120}
+              className="streak-mascot"
+              label={phase==="reveal" ? "Cipher celebrates the daily streak" : "Cipher is decrypting the streak"}
+            />
+          </div>
           <div className="streak-code" style={{marginBottom:18,whiteSpace:"pre-wrap"}}>{code||"initialising streak protocol..."}</div>
           {phase==="reveal"&&(
             <div className="fu" style={{textAlign:"center"}}>
