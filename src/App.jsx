@@ -14891,6 +14891,45 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-secondary[open] summary::after{content:"-";}
 .upgrade-secondary-content{padding:0 18px 18px;font-size:13px;line-height:1.7;color:${t.textSec};}
 .upgrade-secondary-content p{margin:0;}
+.upgrade-page{padding:32px 24px 120px;max-width:860px;margin:0 auto;}
+.upgrade-hero{text-align:center;margin-bottom:26px;}
+.upgrade-hero h2{font-size:32px;font-weight:950;color:${t.text};margin:10px 0 8px;text-wrap:balance;}
+.upgrade-hero p{max-width:620px;margin:0 auto;color:${t.textSec};font-size:14px;line-height:1.7;}
+.upgrade-plan-note{display:inline-flex;align-items:center;gap:7px;margin-top:14px;padding:8px 12px;border:1px solid ${t.green}35;border-radius:999px;background:${t.green}0d;color:${t.green};font-size:12px;font-weight:900;}
+.upgrade-outcome-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 18px;}
+.upgrade-outcome{padding:16px;border:1px solid ${t.border};border-radius:8px;background:${t.surface};min-width:0;}
+.upgrade-outcome-head{display:flex;align-items:center;gap:9px;margin-bottom:8px;color:${t.text};font-size:13px;font-weight:950;}
+.upgrade-outcome-icon{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:color-mix(in srgb,var(--outcome-color) 14%,transparent);color:var(--outcome-color);flex-shrink:0;}
+.upgrade-outcome p{margin:0;color:${t.textSec};font-size:12px;line-height:1.6;}
+.upgrade-decision-card{position:relative;overflow:hidden;padding:28px;border:1.5px solid ${t.accent};border-radius:8px;background:linear-gradient(145deg,${t.accent}10,${t.surface} 48%,${t.green}08);box-shadow:0 22px 50px ${t.accent}16;margin-bottom:18px;}
+.upgrade-decision-card::before{content:"";position:absolute;right:-70px;top:-86px;width:210px;height:210px;border-radius:50%;border:38px solid ${t.accent}09;pointer-events:none;}
+.upgrade-decision-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.72fr);gap:30px;align-items:center;}
+.upgrade-plan-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:${t.accent};color:#fff;font-size:11px;font-weight:950;text-transform:uppercase;}
+.upgrade-price-row{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin:16px 0 5px;}
+.upgrade-price{font-size:44px;line-height:1;font-weight:950;color:${t.text};}
+.upgrade-price-cycle{font-size:14px;line-height:1.4;color:${t.textSec};font-weight:850;padding-bottom:4px;}
+.upgrade-equivalent{font-size:12px;color:${t.textSec};margin-bottom:18px;}
+.upgrade-equivalent strong{color:${t.green};}
+.upgrade-feature-list{display:grid;gap:10px;}
+.upgrade-feature{display:flex;align-items:flex-start;gap:9px;color:${t.textSec};font-size:13px;line-height:1.5;}
+.upgrade-feature svg{color:${t.green};flex-shrink:0;margin-top:1px;}
+.upgrade-action-panel{padding:18px;border:1px solid ${t.border};border-radius:8px;background:${t.panel};}
+.upgrade-action-panel h3{font-size:18px;line-height:1.3;color:${t.text};margin-bottom:7px;}
+.upgrade-action-panel p{font-size:12px;line-height:1.6;color:${t.textSec};margin-bottom:14px;}
+.upgrade-primary-cta{width:100%;justify-content:center;min-height:50px;font-size:14px;}
+.upgrade-trust-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:13px;}
+.upgrade-trust-item{display:flex;align-items:center;justify-content:center;gap:5px;color:${t.textDim};font-size:10px;font-weight:800;text-align:center;}
+.upgrade-free-note{margin-top:12px;text-align:center;color:${t.textDim};font-size:11px;line-height:1.5;}
+.upgrade-compare{padding:20px;border:1px solid ${t.border};border-radius:8px;background:${t.surface};margin-bottom:24px;}
+.upgrade-compare h3{font-size:18px;color:${t.text};margin-bottom:5px;}
+.upgrade-compare > p{font-size:12px;color:${t.textSec};margin-bottom:14px;}
+.upgrade-compare-row{display:grid;grid-template-columns:minmax(180px,1.25fr) repeat(2,minmax(100px,.55fr));gap:8px;align-items:center;padding:10px 0;border-top:1px solid ${t.border};font-size:12px;}
+.upgrade-compare-row:first-of-type{border-top:0;}
+.upgrade-compare-label{color:${t.textSec};font-weight:800;}
+.upgrade-compare-value{display:flex;align-items:center;justify-content:center;gap:5px;color:${t.textDim};text-align:center;}
+.upgrade-compare-value.pro{color:${t.green};font-weight:900;}
+.upgrade-referral-wrap{scroll-margin-top:90px;}
+.upgrade-mobile-cta{display:none;}
 .onboarding-overlay{position:fixed;inset:0;z-index:80;background:rgba(4,8,18,.72);backdrop-filter:blur(10px);display:grid;place-items:center;padding:20px;animation:fadeUp .22s ease both;}
 .onboarding-modal{width:min(100%,520px);padding:28px 30px;position:relative;box-shadow:0 30px 90px rgba(0,0,0,.36);}
 .feedback-modal{width:min(100%,560px);max-height:min(92dvh,760px);padding:0!important;display:flex!important;flex-direction:column;overflow:hidden!important;}
@@ -15132,6 +15171,18 @@ body{background:
   .smart-compare{grid-template-columns:1fr!important;}
   .smart-compare-card{min-height:auto!important;}
   .landing-auth-section{gap:14px!important;}
+  .upgrade-page{padding:24px 16px 132px!important;}
+  .upgrade-hero h2{font-size:27px!important;}
+  .upgrade-outcome-grid{grid-template-columns:1fr!important;}
+  .upgrade-decision-card{padding:20px!important;}
+  .upgrade-decision-grid{grid-template-columns:1fr!important;gap:20px!important;}
+  .upgrade-price{font-size:39px!important;}
+  .upgrade-trust-row{grid-template-columns:1fr!important;gap:9px!important;}
+  .upgrade-trust-item{justify-content:flex-start!important;}
+  .upgrade-compare{padding:16px!important;overflow-x:auto;}
+  .upgrade-compare-row{grid-template-columns:minmax(150px,1.2fr) repeat(2,minmax(84px,.55fr));min-width:360px;}
+  .upgrade-mobile-cta{position:fixed;display:flex;left:12px;right:12px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:39;padding:9px;background:color-mix(in srgb,${t.surface} 94%,transparent);border:1px solid ${t.border};border-radius:10px;box-shadow:0 18px 46px rgba(0,0,0,.28);backdrop-filter:blur(16px);}
+  .upgrade-mobile-cta .btn{width:100%;justify-content:center;}
   .exam-layout{grid-template-columns:1fr!important;}
   .exam-map{order:-1;position:relative!important;top:auto!important;width:100%;padding:12px!important;}
   .exam-map-grid{grid-template-columns:repeat(10,minmax(30px,1fr))!important;}
@@ -16493,11 +16544,12 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           <div className="card pricing-pro-card" style={{padding:"22px",borderColor:`${t.accent}55`,background:`linear-gradient(180deg, ${t.accent}10, ${t.surface})`}}>
             <div className="chip" style={{borderColor:`${t.accent}44`,color:t.accent,background:`${t.accent}10`,marginBottom:10}}>Most popular</div>
             <h2 style={{fontSize:24,color:t.text,marginBottom:4}}>$4.99/year</h2>
-            <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Annual Pro access for one clear yearly price.</p>
-            {["PBQ simulations","Exam Mode with MCQ + PBQ mix","Detailed solutions and weak-chapter guidance","Smart Review for missed questions"].map(item=>(
+            <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>About $0.42/month, billed once yearly as $4.99.</p>
+            {["Practise applied skills with PBQ simulations","Rehearse under pressure in Exam Mode","Turn results into weak-chapter guidance","Bring missed and starred questions back sooner"].map(item=>(
               <div key={item} className="pricing-feature-row"><Check size={16} strokeWidth={2.6}/><div>{item}</div></div>
             ))}
-            <button className="btn btn-primary" style={{width:"100%",marginTop:18}} onClick={()=>jumpToAuth("signup")}>Sign Up Free</button>
+            <button className="btn btn-primary" style={{width:"100%",marginTop:18,justifyContent:"center"}} onClick={()=>jumpToAuth("signup")}>Create account to unlock Pro</button>
+            <div style={{fontSize:11,color:t.textDim,textAlign:"center",marginTop:10}}>No monthly charge. Cancel before the next yearly renewal.</div>
           </div>
         </section>
 
@@ -21105,81 +21157,125 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
 
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
   const referralSectionRef=useRef(null);
+  const isPro=user?.tier==="pro";
+  useEffect(()=>{
+    capture("upgrade_page_viewed", { tier:user?.tier || "guest", plan:"annual_4_99" });
+  },[user?.tier]);
   const scrollToReferral=()=>{
     referralSectionRef.current?.scrollIntoView({behavior:"smooth",block:"start"});
     capture("referral_hint_clicked", { source:"upgrade_page", tier:user?.tier || "guest" });
   };
+  const startUpgrade=()=>{
+    capture("upgrade_button_clicked", { source:"upgrade_page", tier:user?.tier || "guest" });
+    onUpgrade("pro");
+  };
+  const outcomes=[
+    {title:"Find the weak spot",body:"Use chapter analytics and Smart Review to decide what to study next.",color:t.accent,Icon:Target},
+    {title:"Practise the real skill",body:`Work through ${PBQ_BANK.length} applied simulations instead of relying on recognition alone.`,color:t.green,Icon:Puzzle},
+    {title:"Rehearse exam pressure",body:"Run timed MCQ and PBQ exams with flags, review tools, and detailed results.",color:t.amber,Icon:ClipboardCheck},
+  ];
+  const features=[
+    "Everything in Free, including the full MCQ bank",
+    `${PBQ_BANK.length} performance-based simulations across 8 task types`,
+    "Timed Exam Mode with mixed MCQ and PBQ practice",
+    "Smart Review that prioritises missed and starred questions",
+    "Detailed solutions, chapter analytics, and next-step guidance",
+  ];
+  const comparison=[
+    ["All MCQ practice","Included","Included"],
+    ["Daily Challenge","Included","Included"],
+    ["Save basic progress","Included","Included"],
+    ["PBQ simulations","Preview",`${PBQ_BANK.length} PBQs`],
+    ["Timed Exam Mode","—","Included"],
+    ["Smart Review + deep analysis","—","Included"],
+  ];
   return(
-    <div style={{padding:"32px 24px",maxWidth:700,margin:"0 auto"}}>
-      <div style={{textAlign:"center",marginBottom:32}}>
-        <div className="page-title-row" style={{justifyContent:"center"}}>
-          <NavGlyph type="pricing" active/>
-          <h2 style={{fontSize:28,fontWeight:800,color:t.text}}>Upgrade</h2>
-        </div>
-        <p style={{color:t.textSec,fontSize:14}}>
-          <strong style={{color:t.green}}>Annual plan only:</strong> $4.99 per year · Cancel anytime
+    <div className="upgrade-page">
+      <div className="upgrade-hero">
+        <div className="page-title-row" style={{justifyContent:"center"}}><NavGlyph type="pricing" active/></div>
+        <h2>Turn practice into a focused exam plan.</h2>
+        <p>
+          Free gives you every MCQ. Pro adds the applied practice, timed rehearsal, and feedback loop that help you decide what to improve next.
         </p>
+        <div className="upgrade-plan-note"><ShieldCheck size={14}/> One annual plan · $4.99/year · Cancel anytime</div>
         <button
           type="button"
-          className="btn btn-outline"
-          style={{marginTop:14,fontSize:13,justifyContent:"center"}}
+          className="btn btn-ghost"
+          style={{marginTop:10,fontSize:12,justifyContent:"center"}}
           onClick={scrollToReferral}
         >
-          Referral bonus: give 7 days Pro, get 7 days Pro
+          Have a friend studying too? See the 7-day referral reward ↓
         </button>
       </div>
 
-      <div className="pricing-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:32}}>
-        {/* PRO */}
-        <div className="card pricing-pro-card" style={{padding:"28px 24px",borderColor:t.accent,boxShadow:`0 4px 24px ${t.accent}18`,position:"relative"}}>
-          <div style={{position:"absolute",top:-12,left:"50%",transform:"translateX(-50%)"}}>
-            <span style={{background:t.accent,color:"#fff",padding:"3px 14px",borderRadius:99,fontSize:12,fontWeight:600,whiteSpace:"nowrap"}}>Most Popular</span>
+      <div className="upgrade-outcome-grid" aria-label="What Pro helps you do">
+        {outcomes.map(({title,body,color,Icon})=>(
+          <div key={title} className="upgrade-outcome" style={{"--outcome-color":color}}>
+            <div className="upgrade-outcome-head"><span className="upgrade-outcome-icon"><Icon size={18}/></span>{title}</div>
+            <p>{body}</p>
           </div>
-          <div className="label" style={{marginBottom:8}}>Pro</div>
-          <div style={{fontSize:36,fontWeight:700,color:t.accent,marginBottom:4}}>$4.99</div>
-          <div style={{fontSize:15,color:t.text,fontWeight:900,marginBottom:4,textTransform:"uppercase"}}>per year / annual billing</div>
-          <div style={{fontSize:13,color:t.green,fontWeight:800,marginBottom:18}}>Annual Pro access for $4.99/year</div>
-          <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
-            {["Everything in Free",`${PBQ_BANK.length} PBQ simulations`,"Exam Mode with mixed MCQ/PBQ practice","8 simulation types","Full progress analytics","Chapter-by-chapter tracking","Detailed per-question feedback"].map(f=>(
-              <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
-                <Check size={16} color={t.green} strokeWidth={2.6}/>{f}
-              </div>
-            ))}
-          </div>
-          {user.tier==="pro"?<button className="btn btn-ghost" style={{width:"100%",justifyContent:"center"}} disabled>Current Plan</button>
-            :<button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"12px"}} onClick={()=>{capture("upgrade_button_clicked", { source: "upgrade_page", tier: user.tier });onUpgrade("pro");}} disabled={billingLoading}>
-              {billingLoading?"Opening Stripe...":"Upgrade yearly →"}
-            </button>}
-          {user.tier==="free"&&(
-            <button className="btn btn-outline" style={{width:"100%",justifyContent:"center",padding:"10px",marginTop:10}} onClick={onSyncBilling} disabled={billingLoading}>
-              Refresh Pro status
-            </button>
-          )}
-        </div>
+        ))}
+      </div>
 
-        {/* FREE */}
-        <div className="card pricing-free-card" style={{padding:"28px 24px"}}>
-          <div className="label" style={{marginBottom:8}}>Free</div>
-          <div style={{fontSize:36,fontWeight:700,color:t.text,marginBottom:4}}>$0</div>
-          <div style={{fontSize:13,color:t.textDim,marginBottom:20}}>Forever</div>
-          <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:24}}>
-            {["All MCQ practice questions","Daily Challenge","Basic score tracking","Access to study guide"].map(f=>(
-              <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textSec}}>
-                <Check size={16} color={t.green} strokeWidth={2.6}/>{f}
-              </div>
-            ))}
-            {["PBQ simulations","Progress analytics","Detailed per-question feedback"].map(f=>(
-              <div key={f} style={{display:"flex",gap:8,fontSize:13,color:t.textDim}}>
-                <X size={16} strokeWidth={2.6}/><span style={{textDecoration:"line-through"}}>{f}</span>
-              </div>
-            ))}
+      <div className="upgrade-decision-card">
+        <div className="upgrade-decision-grid">
+          <div>
+            <span className="upgrade-plan-badge"><Sparkles size={13}/> SecurePlus Pro</span>
+            <div className="upgrade-price-row">
+              <div className="upgrade-price">$4.99</div>
+              <div className="upgrade-price-cycle">USD per year<br/>billed annually</div>
+            </div>
+            <div className="upgrade-equivalent"><strong>About $0.42/month</strong> for comparison, charged as one $4.99 yearly payment.</div>
+            <div className="upgrade-feature-list">
+              {features.map(feature=>(
+                <div key={feature} className="upgrade-feature"><CheckCircle2 size={17}/><span>{feature}</span></div>
+              ))}
+            </div>
           </div>
-          {user.tier==="free"&&<button className="btn btn-ghost" style={{width:"100%",justifyContent:"center"}} disabled>Current Plan</button>}
-          {user.tier==="pro"&&<button className="btn btn-ghost" style={{width:"100%",justifyContent:"center"}} disabled>Included in Pro</button>}
+
+          <div className="upgrade-action-panel">
+            <h3>{isPro?"Your Pro tools are active":"Ready for more than answer checking?"}</h3>
+            <p>{isPro?"Keep building your readiness with PBQs, timed exams, and targeted review.":"Unlock the practice loop designed to show you what to work on next."}</p>
+            {isPro?(
+              <button className="btn btn-ghost upgrade-primary-cta" disabled><CheckCircle2 size={17}/> Current plan</button>
+            ):(
+              <button className="btn btn-primary upgrade-primary-cta" onClick={startUpgrade} disabled={billingLoading}>
+                {billingLoading?"Opening secure checkout...":"Unlock Pro for $4.99/year →"}
+              </button>
+            )}
+            <div className="upgrade-trust-row">
+              <div className="upgrade-trust-item"><ShieldCheck size={13}/> Stripe checkout</div>
+              <div className="upgrade-trust-item"><Check size={13}/> Cancel anytime</div>
+              <div className="upgrade-trust-item"><LockKeyhole size={13}/> No card stored here</div>
+            </div>
+            {!isPro&&<div className="upgrade-free-note">Your free MCQ access stays available whether you upgrade or not.</div>}
+            {!isPro&&(
+              <button className="btn btn-ghost" style={{width:"100%",justifyContent:"center",fontSize:11,marginTop:8}} onClick={onSyncBilling} disabled={billingLoading}>
+                Already paid? Refresh Pro status
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
-      <div ref={referralSectionRef} style={{scrollMarginTop:90}}>
+      <div className="upgrade-compare">
+        <h3>Choose by how you want to practise</h3>
+        <p>Free remains useful. Upgrade when applied simulations and deeper feedback become part of your study plan.</p>
+        <div className="upgrade-compare-row" aria-hidden="true">
+          <div/>
+          <div className="upgrade-compare-value" style={{fontWeight:950,color:t.text}}>Free</div>
+          <div className="upgrade-compare-value pro" style={{color:t.accent}}>Pro</div>
+        </div>
+        {comparison.map(([label,free,pro])=>(
+          <div key={label} className="upgrade-compare-row">
+            <div className="upgrade-compare-label">{label}</div>
+            <div className="upgrade-compare-value">{free}</div>
+            <div className="upgrade-compare-value pro"><Check size={13}/>{pro}</div>
+          </div>
+        ))}
+      </div>
+
+      <div ref={referralSectionRef} className="upgrade-referral-wrap">
         <ReferralUpgradeBanner user={user} t={t} onFindOutMore={()=>onNavigate("referrals")}/>
       </div>
 
@@ -21225,6 +21321,14 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           </div>
         </details>
       </div>
+
+      {!isPro&&(
+        <div className="upgrade-mobile-cta">
+          <button className="btn btn-primary" onClick={startUpgrade} disabled={billingLoading}>
+            {billingLoading?"Opening checkout...":"Unlock Pro · $4.99/year"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
