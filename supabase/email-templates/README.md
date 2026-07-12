@@ -1,33 +1,58 @@
 # SecurePlus Supabase Email Templates
 
-Supabase hosted projects do not read these files directly. These templates are here so the project has a saved copy you can paste into the Supabase dashboard.
+These files are the source copies for SecurePlus authentication emails. Hosted Supabase projects do not read them automatically; paste each template into the Supabase dashboard.
 
-## Where To Paste
+## Templates To Install
+
+| Supabase template | Subject | File |
+| --- | --- | --- |
+| Confirm signup | `Verify your email for SecurePlus` | `confirm-signup.html` |
+| Reset password | `Reset your SecurePlus password` | `reset-password.html` |
+| Password changed notification | `Your SecurePlus password was changed` | `password-changed.html` |
+| Magic Link | `Confirm SecurePlus account deletion` | `magic-link.html` |
+
+## Install In Supabase
 
 1. Open Supabase Dashboard.
 2. Go to `Authentication` -> `Emails` -> `Templates`.
-3. Open `Confirm signup`.
-4. Set subject to:
-   `Verify your SecurePlus account`
-5. Paste `confirm-signup.html` into the message/body editor.
-6. Open `Reset password`.
-7. Set subject to:
-   `Reset your SecurePlus password`
-8. Paste `reset-password.html` into the message/body editor.
-9. Open `Magic Link`.
-10. Set subject to:
-   `Confirm SecurePlus account deletion`
-11. Paste `magic-link.html` into the message/body editor.
-12. Save each template.
+3. Select the matching template from the table above.
+4. Replace its subject and body with the listed subject and file contents.
+5. Save before moving to the next template.
+6. Under `Authentication` -> `Emails` -> `Security Notifications`, enable `Password changed`, paste `password-changed.html`, and save.
 
-## Important Note About Account Deletion
+Keep `{{ .ConfirmationURL }}` exactly as written. Supabase replaces it with the secure action URL.
 
-SecurePlus currently uses Supabase `signInWithOtp` only to verify account deletion requests. That means the Supabase `Magic Link` template is written as an account deletion confirmation email.
+## Production Delivery Checklist
 
-If you later add passwordless magic-link login, do not reuse this deletion wording for normal login. At that point, create a dedicated custom deletion email through Resend or another transactional email provider.
+Good HTML cannot guarantee inbox placement. Complete these delivery controls:
 
-## Important
+1. Use custom SMTP in `Authentication` -> `SMTP Settings`. The Supabase default sender is for testing and is heavily rate-limited.
+2. Keep the current verified sender as `no-reply@secureplusprep.com`. If a dedicated `auth.secureplusprep.com` sending domain is added later, verify it separately with the SMTP provider before using it.
+3. Verify SPF and DKIM records supplied by the SMTP provider.
+4. Publish a DMARC record for the sending domain. Start with monitoring, then strengthen the policy after reviewing reports.
+5. Disable click tracking and open tracking for authentication email. Rewritten links can break Supabase confirmation URLs.
+6. Keep the From name stable, such as `SecurePlus`.
+7. Use a real Reply-To or clearly state that the mailbox is not monitored.
+8. Test signup, password reset, and password-changed notification with Gmail, Outlook, and Apple Mail.
+9. Add CAPTCHA to signup and password-reset forms before increasing email rate limits.
 
-Keep `{{ .ConfirmationURL }}` exactly as written. Supabase replaces it with the secure verification or password-reset link.
+## Content Decisions
 
-Source: Supabase email template docs list `{{ .ConfirmationURL }}`, `{{ .Email }}`, `{{ .SiteURL }}`, and other supported variables for auth emails.
+- No remote images or tracking pixels.
+- One primary action in each action email.
+- No promotional claims, pricing, urgency, emojis, or large marketing sections.
+- Short subjects that state the account action clearly.
+- A plain-text fallback URL for action emails.
+- Security guidance for requests the recipient did not initiate.
+
+## Account Deletion Note
+
+SecurePlus currently uses Supabase `signInWithOtp` only to verify account deletion requests. The `Magic Link` template therefore contains account-deletion wording. If passwordless sign-in is added later, move deletion verification to a dedicated transactional email instead of reusing the Magic Link template.
+
+## Recommended Sender Settings
+
+- Sender name: `SecurePlus`
+- Sender address: `no-reply@secureplusprep.com`
+- Reply-To: `secureplus.support@gmail.com`
+- Authentication Site URL: `https://secureplusprep.com`
+- Allowed redirect URL: `https://secureplusprep.com/**`
