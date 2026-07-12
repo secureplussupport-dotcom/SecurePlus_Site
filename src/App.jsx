@@ -14497,7 +14497,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .tab.act{color:${t.accent};border-bottom-color:${t.accent};}
 .nav-lnk{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:800;color:${t.textSec};cursor:pointer;transition:all .18s;border:1px solid transparent;min-height:42px;}
 .nav-lnk.locked{opacity:.68;}
-.nav-lock-indicator{margin-left:auto;color:${t.textDim};flex-shrink:0;}
+.nav-lock-indicator{margin-left:auto;color:${t.amber};flex-shrink:0;filter:drop-shadow(0 0 7px ${t.amber}45);}
 .nav-label-mobile{display:none;}
 .nav-lnk:hover{color:${t.text};background:${t.panel};box-shadow:inset 0 0 0 1px ${t.border};}
 .nav-lnk.act{color:${t.text};background:linear-gradient(135deg, ${t.accent}24, ${t.green}0f);border-color:${t.accent}38;box-shadow:0 12px 26px ${t.accent}16, inset 0 0 0 1px ${t.accent}18;animation:softGlow 2.8s ease-in-out infinite;}
@@ -14717,6 +14717,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 @keyframes timerGlow{from{transform:scale(1);filter:saturate(1)}to{transform:scale(1.035);filter:saturate(1.35)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes modalPop{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes feedbackIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes answerBurstIn{0%{opacity:0;transform:translate(-50%,-18px) scale(.96)}65%{opacity:1;transform:translate(-50%,3px) scale(1.015)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
 @keyframes cipherSprite{from{background-position:0% var(--cipher-row-y)}to{background-position:100% var(--cipher-row-y)}}
@@ -14808,6 +14809,19 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .landing-secondary-links{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;}
 .landing-secondary-links button{background:transparent;border:0;padding:0;color:${t.textSec};font:inherit;font-size:13px;font-weight:800;text-decoration:underline;text-underline-offset:4px;cursor:pointer;}
 .landing-secondary-links button:hover{color:${t.accent};}
+.landing-login-link{appearance:none;border:0;background:transparent;color:${t.textSec};font:inherit;font-size:13px;font-weight:850;padding:9px 2px;cursor:pointer;text-decoration:underline;text-decoration-color:${t.accent}70;text-underline-offset:5px;transition:color .18s,transform .18s;}
+.landing-login-link:hover{color:${t.accent};transform:translateY(-1px);}
+.landing-login-overlay{position:fixed;inset:0;z-index:560;display:grid;place-items:center;padding:18px;background:rgba(2,6,23,.72);backdrop-filter:blur(14px);animation:fadeUp .2s ease both;}
+.landing-login-modal{position:relative;width:min(100%,430px);padding:30px;max-height:92dvh;overflow-y:auto;box-shadow:0 34px 100px rgba(0,0,0,.38);animation:modalPop .28s cubic-bezier(.16,1,.3,1) both;}
+.landing-login-modal h2{font-size:25px;line-height:1.2;color:${t.text};text-align:center;margin:8px 0;}
+.landing-login-modal>p{font-size:13px;line-height:1.65;color:${t.textSec};text-align:center;margin-bottom:18px;}
+.landing-login-brand{display:flex;justify-content:center;margin-bottom:10px;}
+.landing-login-close{position:absolute;right:12px;top:12px;width:36px;height:36px;border-radius:50%;border:1px solid ${t.border};background:${t.panel};color:${t.textSec};font-size:23px;line-height:1;cursor:pointer;}
+.landing-login-close:hover{border-color:${t.accent};color:${t.text};}
+.landing-login-fields{display:grid;gap:12px;margin-bottom:14px;}
+.landing-login-fields label{display:grid;gap:6px;color:${t.text};font-size:12px;font-weight:850;}
+.landing-login-footer{display:flex;justify-content:space-between;gap:12px;margin-top:16px;}
+.landing-login-footer button{appearance:none;border:0;background:transparent;padding:0;color:${t.accent};font:inherit;font-size:12px;font-weight:850;cursor:pointer;}
 .landing-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
 .landing-stat-card{position:relative;overflow:hidden;padding:16px;min-width:0;}
 .landing-stat-card::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--stat-color),transparent);}
@@ -14843,7 +14857,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .brilliant-hero-copy{position:relative;z-index:1;max-width:680px;}
 .brilliant-eyebrow{border-radius:999px;background:${t.green}12!important;color:${t.green}!important;border:1px solid ${t.green}2f!important;padding:7px 12px;font-size:12px;font-weight:950;}
 .brilliant-title{font-size:clamp(46px,7vw,78px);line-height:.98;letter-spacing:-.02em;font-weight:950;margin:0;text-wrap:balance;}
-.brilliant-copy{font-size:19px;line-height:1.7;max-width:580px;color:${t.textSec};}
+.brilliant-copy{font-size:19px;line-height:1.72;max-width:580px;color:${t.textSec};font-weight:600;margin-top:22px;}
 .brilliant-action-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:26px;}
 .brilliant-primary-cta{border-radius:999px;padding:14px 24px!important;font-size:15px!important;box-shadow:0 16px 34px ${t.accent}28;}
 .brilliant-secondary-cta{border-radius:999px;padding:13px 20px!important;}
@@ -14855,6 +14869,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .brilliant-lesson-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px;padding:4px 2px 10px;border-bottom:1px solid ${t.border};}
 .brilliant-lesson-top strong{display:block;color:${t.text};font-size:15px;line-height:1.3;}
 .brilliant-lesson-top span{padding:6px 10px;border-radius:999px;background:${t.green}12;color:${t.green};font-size:12px;font-weight:950;white-space:nowrap;}
+.brilliant-lesson-top .brilliant-lesson-kicker{padding:0;border-radius:0;background:transparent;color:${t.accent};font-size:11px;font-weight:950;}
+.brilliant-lesson-top .brilliant-lesson-duration{background:${t.green};color:#062e25;border:1px solid ${t.green};box-shadow:0 7px 18px ${t.green}22;}
+.guest-home-hero{margin-left:-30px;margin-right:-30px;padding-left:38px!important;padding-right:38px!important;border-left:0!important;border-right:0!important;border-radius:0!important;background:linear-gradient(90deg,transparent 0%,${t.accent}12 9%,${t.surface} 32%,${t.surface} 68%,${t.green}0c 91%,transparent 100%)!important;}
 .brilliant-daily-wrap .landing-challenge-card{min-height:0;border-radius:22px;border-color:${t.border};box-shadow:none;background:linear-gradient(180deg,${t.surface},${t.panel});}
 .brilliant-daily-wrap .landing-challenge-card::before{display:none;}
 .brilliant-daily-wrap .landing-challenge-small .landing-challenge-question{-webkit-line-clamp:4;}
@@ -15094,7 +15111,7 @@ body{background:
   .nav-label{display:block;width:100%;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .nav-label-desktop{display:none;}
   .nav-label-mobile{display:inline;}
-  .nav-lock-indicator{position:absolute;right:5px;top:5px;width:11px;height:11px;margin:0;color:${t.textDim};}
+  .nav-lock-indicator{position:absolute;right:5px;top:5px;width:11px;height:11px;margin:0;color:${t.amber};}
   .nav-lnk.act{box-shadow:inset 0 -3px 0 ${t.accent};}
   .nav-lnk .nav-glyph{width:24px;height:24px;}
   .nav-lnk span:first-child{font-size:15px!important;}
@@ -15102,6 +15119,7 @@ body{background:
   main > div{padding-left:16px!important;padding-right:16px!important;max-width:100%!important;}
   .dashboard-shell{padding:18px 16px 108px!important;}
   .home-hero{grid-template-columns:minmax(0,1fr)!important;padding:22px!important;border-radius:8px!important;gap:18px!important;}
+  .guest-home-hero{margin-left:-16px!important;margin-right:-16px!important;padding-left:22px!important;padding-right:22px!important;border-radius:0!important;}
   .home-hero>*{min-width:0!important;max-width:100%!important;}
   .guest-home-hero .brilliant-lesson-shell{width:100%!important;min-width:0!important;}
   .home-title{font-size:34px!important;line-height:1.06!important;}
@@ -15982,7 +16000,6 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
   };
 
   const correctCount = results.filter(r=>r.correct).length;
-  const canSeeFeedback = user?.tier === "pro";
 
   if(step==="intro") return (
     <div style={{padding:"32px 24px",maxWidth:600,margin:"0 auto",textAlign:"center"}} className="fu">
@@ -16116,14 +16133,8 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
             <div style={{display:"flex",alignItems:"center",gap:8,fontWeight:700,color:selected===current.correct?t.green:t.red,marginBottom:8,fontSize:15}}>
               {selected===current.correct?<CheckCircle2 size={18}/>:<XCircle size={18}/>} {selected===current.correct?"Correct":"Incorrect"}
             </div>
-            {canSeeFeedback?(
-              <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}><GlossaryText text={current.exp} t={t}/></p>
-            ):(
-              <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-                Detailed explanations are part of Pro. Keep practising the daily challenge, then upgrade when you want full feedback.
-              </p>
-            )}
-            {canSeeFeedback&&selected!==current.correct&&(
+            <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}><GlossaryText text={current.exp} t={t}/></p>
+            {selected!==current.correct&&(
               <div style={{marginTop:10,padding:"10px 12px",background:`${t.red}08`,borderRadius:6,fontSize:12,color:t.red}}>
                 <strong>Why your answer was wrong:</strong> {getWrongOptionFeedback(current, selected)}
               </div>
@@ -16174,7 +16185,6 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
   const [selected,setSelected]=useState(null);
   const [submitted,setSubmitted]=useState(false);
   const [results,setResults]=useState([]);
-  const [expanded,setExpanded]=useState(false);
   const current=questions[qIndex];
   const correctCount=results.filter(result=>result.correct).length;
   const isDone=questions.length>0&&results.length>=questions.length;
@@ -16202,7 +16212,7 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
   };
   const openExpanded=()=>{
     capture("landing_daily_challenge_expanded");
-    setExpanded(true);
+    onOpenDaily();
   };
 
   const renderPanel=({large=false}={})=>(
@@ -16283,8 +16293,13 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
                 {selected===current.correct?"Correct":"Not quite"}
               </div>
               <div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:3}}>
-                {selected===current.correct?"Nice. Keep going to finish today's set.":"The correct option is highlighted. Make a free account to save weak areas."}
+                <GlossaryText text={current.exp} t={t}/>
               </div>
+              {selected!==current.correct&&(
+                <div style={{fontSize:12,color:t.red,lineHeight:1.55,marginTop:7}}>
+                  <strong>Why your choice was wrong:</strong> {getWrongOptionFeedback(current,selected)}
+                </div>
+              )}
             </div>
           )}
           <div style={{display:"flex",gap:10,marginTop:14,flexWrap:"wrap"}}>
@@ -16308,21 +16323,7 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
     </div>
   );
 
-  return (
-    <>
-      {renderPanel()}
-      {expanded&&(
-        <div className="landing-challenge-modal" role="dialog" aria-modal="true" aria-label="Expanded Daily Challenge" onClick={()=>setExpanded(false)}>
-          <div onClick={event=>event.stopPropagation()}>
-            <div style={{display:"flex",justifyContent:"flex-end",marginBottom:10}}>
-              <button className="btn btn-outline" type="button" onClick={()=>setExpanded(false)}>Close</button>
-            </div>
-            {renderPanel({large:true})}
-          </div>
-        </div>
-      )}
-    </>
-  );
+  return renderPanel();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -16330,6 +16331,7 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
 // ═══════════════════════════════════════════════════════════════
 function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login"}) {
   const [mode,setMode]=useState(initialMode);
+  const [showLoginModal,setShowLoginModal]=useState(initialMode==="login");
   const [activePath,setActivePath]=useState("mcq");
   const [form,setForm]=useState({name:"",email:"",pass:"",confirm:"",referral:getStoredReferralCode()});
   const [err,setErr]=useState("");
@@ -16337,6 +16339,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
   const [loading,setLoading]=useState(false);
   useEffect(()=>{
     setMode(initialMode);
+    setShowLoginModal(initialMode==="login");
     setErr("");
     setOk("");
   },[initialMode]);
@@ -16344,8 +16347,18 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
   const resetMessages=()=>{setErr("");setOk("");};
   const jumpToAuth=nextMode=>{
     setMode(nextMode);
+    if(nextMode==="login"){
+      setShowLoginModal(true);
+      return;
+    }
     setTimeout(()=>document.getElementById("landing-auth")?.scrollIntoView({behavior:"smooth",block:"start"}),30);
   };
+  useEffect(()=>{
+    if(!showLoginModal)return;
+    const closeOnEscape=event=>{if(event.key==="Escape")setShowLoginModal(false);};
+    document.addEventListener("keydown",closeOnEscape);
+    return()=>document.removeEventListener("keydown",closeOnEscape);
+  },[showLoginModal]);
   const handle=async()=>{
     resetMessages();setLoading(true);
     try{
@@ -16464,8 +16477,6 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
     {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"A quick 5-question loop that creates a reason to come back tomorrow.",meta:"5 questions/day",action:onDaily},
     {id:"pbq",label:"PBQ simulations",tag:"Pro",color:t.amber,body:"Practise applied scenarios, logs, drag/drop tasks, and terminal-style questions.",meta:`${PBQ_BANK.length} PBQs`,action:()=>jumpToAuth("signup")},
   ];
-  const activeLearningPath=learningPaths.find(path=>path.id===activePath)||learningPaths[0];
-
   return(
     <div className="landing-page fu">
       <header className="landing-header">
@@ -16503,7 +16514,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             </p>
             <div className="brilliant-action-row">
               <button className="btn btn-primary brilliant-primary-cta" onClick={onPracticeMcq}>Start Practising Free →</button>
-              <button className="btn btn-ghost brilliant-secondary-cta" onClick={()=>jumpToAuth("signup")}>Save progress later</button>
+              <button className="landing-login-link" onClick={()=>jumpToAuth("login")}>Already have an account? Log in</button>
             </div>
             <div className="brilliant-proof-row">
               <span>{MCQ_BANK.length} MCQs</span>
@@ -16515,10 +16526,10 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           <div className="brilliant-lesson-shell">
             <div className="brilliant-lesson-top">
               <div>
-                <div className="label" style={{color:t.accent}}>Interactive lesson</div>
+                <div className="label brilliant-lesson-kicker">Try it now</div>
                 <strong>Today's Security+ warm-up</strong>
               </div>
-              <span>2 min</span>
+              <span className="brilliant-lesson-duration">2 min</span>
             </div>
             <div id="daily-challenge" className="landing-section brilliant-daily-wrap">
               <LandingDailyChallengeWidget
@@ -16536,7 +16547,6 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
               <div className="label" style={{color:t.accent}}>Choose a path</div>
               <h2>Start small. Build real exam confidence.</h2>
             </div>
-            <button className="btn btn-outline" onClick={activeLearningPath.action}>{activeLearningPath.id==="pbq"?"Create account":"Open selected path"}</button>
           </div>
           <div className="brilliant-path-grid">
             {learningPaths.map(path=>(
@@ -16551,7 +16561,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
                 <span className="brilliant-path-tag">{path.tag}</span>
                 <strong>{path.label}</strong>
                 <small>{path.body}</small>
-                <em>{path.meta}</em>
+                <em>{path.meta} →</em>
               </button>
             ))}
           </div>
@@ -16734,6 +16744,31 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           </button>
         </div>
         </section>
+        {showLoginModal&&(
+          <div className="landing-login-overlay" role="dialog" aria-modal="true" aria-label="Sign in to SecurePlus" onMouseDown={()=>setShowLoginModal(false)}>
+            <div className="landing-login-modal card" onMouseDown={event=>event.stopPropagation()}>
+              <button className="landing-login-close" type="button" aria-label="Close sign in" onClick={()=>setShowLoginModal(false)}>×</button>
+              <div className="landing-login-brand"><BrandMark size={42}/></div>
+              <div className="label" style={{color:t.accent,textAlign:"center"}}>Welcome back</div>
+              <h2>Continue your Security+ practice</h2>
+              <p>Your progress, streaks, and Smart Review queue are waiting.</p>
+              <Alert msg={err} type="error" t={t}/>
+              <Alert msg={ok} type="success" t={t}/>
+              <div className="landing-login-fields">
+                <label>Email<input className="input" type="email" autoFocus placeholder="you@example.com" value={form.email} onChange={set("email")}/></label>
+                <label>Password<input className="input" type="password" placeholder="Your password" value={form.pass} onChange={set("pass")} onKeyDown={event=>event.key==="Enter"&&handle()}/></label>
+              </div>
+              <button className="btn btn-primary" type="button" style={{width:"100%",justifyContent:"center"}} onClick={handle} disabled={loading}>{loading?"Signing in...":"Log In"}</button>
+              {isSupabaseConfigured&&(
+                <button className="btn btn-outline" type="button" style={{width:"100%",justifyContent:"center",marginTop:10}} onClick={handleGoogle} disabled={loading}>Continue with Google</button>
+              )}
+              <div className="landing-login-footer">
+                <button type="button" onClick={()=>{setShowLoginModal(false);setMode("reset");setTimeout(()=>document.getElementById("landing-auth")?.scrollIntoView({behavior:"smooth"}),30);}}>Forgot password?</button>
+                <button type="button" onClick={()=>{setShowLoginModal(false);jumpToAuth("signup");}}>Create free account</button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
@@ -17039,7 +17074,6 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
     {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"Finish a short challenge and build a repeatable study rhythm.",meta:"5 questions/day",action:onDaily},
     {id:"pbq",label:"PBQ simulations",tag:"Pro",color:t.amber,body:`Preview the style, then unlock ${PBQ_BANK.length} performance-based simulations.`,meta:"Applied practice",action:onSignup},
   ];
-  const activeLearningPath=learningPaths.find(path=>path.id===activePath)||learningPaths[0];
   return (
     <div className="dashboard-shell">
       <section className="home-hero guest-home-hero brilliant-hero">
@@ -17051,7 +17085,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
           </p>
           <div className="home-cta-row brilliant-action-row">
             <button className="btn btn-primary brilliant-primary-cta" onClick={onPractice}>Start practising free →</button>
-            <button className="btn btn-ghost brilliant-secondary-cta" onClick={onLogin}>Log in</button>
+            <button className="landing-login-link" onClick={onLogin}>Already have an account? Log in</button>
           </div>
           <div className="brilliant-proof-row">
             <span>{MCQ_BANK.length} MCQs</span>
@@ -17062,10 +17096,10 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
         <div className="brilliant-lesson-shell">
           <div className="brilliant-lesson-top">
             <div>
-              <div className="label" style={{color:t.accent}}>Try it now</div>
+              <div className="label brilliant-lesson-kicker">Try it now</div>
               <strong>Today's Security+ warm-up</strong>
             </div>
-            <span>2 min</span>
+            <span className="brilliant-lesson-duration">2 min</span>
           </div>
           <div className="brilliant-daily-wrap">
             <LandingDailyChallengeWidget
@@ -17083,7 +17117,6 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
             <div className="label" style={{color:t.accent}}>Choose your path</div>
             <h2>Start small. Build real exam confidence.</h2>
           </div>
-          <button className="btn btn-outline" onClick={activeLearningPath.action}>Open selected path</button>
         </div>
         <div className="brilliant-path-grid">
           {learningPaths.map(path=>(
@@ -17098,7 +17131,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
               <span className="brilliant-path-tag">{path.tag}</span>
               <strong>{path.label}</strong>
               <small>{path.body}</small>
-              <em>{path.meta}</em>
+              <em>{path.meta} →</em>
             </button>
           ))}
         </div>
@@ -17106,20 +17139,14 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
 
       <div className="home-duo-grid">
         <div className="card home-route-card">
-          <div className="label" style={{color:t.green}}>Learn first</div>
-          <h3>A free start that does not feel blocked.</h3>
+          <div className="label" style={{color:t.green}}>Start instantly</div>
+          <h3>Instant access. No sign-up required.</h3>
           <p>Unregistered users can access MCQ Practice, Daily Challenge, and Objectives. Create an account when you want saved progress and personalisation.</p>
-          <button className="btn btn-primary" onClick={onPractice}>Enter MCQ Practice</button>
         </div>
         <div className="card home-route-card">
-          <div className="label" style={{color:t.amber}}>Then save</div>
-          <h3>Your progress becomes the product.</h3>
-          <p>After a quiz, SecurePlus prompts users to save effort into streaks, weak topics, and a Smart Review queue.</p>
-          <div className="home-save-prompt">
-            <strong>Save progress?</strong>
-            <small>Keep weak topics, streaks, and review history.</small>
-            <button className="btn btn-outline" onClick={onSignup}>Save progress</button>
-          </div>
+          <div className="label" style={{color:t.amber}}>Keep momentum</div>
+          <h3>Never lose your study momentum.</h3>
+          <p>Create a free account when you are ready to keep streaks, weak topics, and your Smart Review queue across devices.</p>
         </div>
       </div>
     </div>
@@ -22747,17 +22774,10 @@ export default function App() {
           <aside className={`sidebar ${sidebarHidden?"hidden":""}`}>
             <div style={{padding:"18px 16px",borderBottom:`1px solid ${t.border}`}}>
               <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:9,fontWeight:700,fontSize:16,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={30}/> SecurePlus</button>
-              <div style={{fontSize:11,color:t.textDim,marginTop:2}}>Free preview mode</div>
+              <div style={{fontSize:11,color:t.textDim,marginTop:4}}>Guest mode · progress is not saved</div>
               <button className="btn btn-ghost" type="button" style={{fontSize:12,justifyContent:"flex-start",width:"100%",marginTop:12}} onClick={()=>setSidebarHidden(true)}>
                 Hide sidebar
               </button>
-            </div>
-            <div style={{padding:"12px 14px",borderBottom:`1px solid ${t.border}`}}>
-              <div className="card" style={{padding:"12px",background:`${t.accent}08`,borderColor:`${t.accent}28`,boxShadow:"none"}}>
-                <div style={{fontSize:13,fontWeight:900,color:t.text}}>Guest mode</div>
-                <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>Practise freely. Sign up to save progress.</div>
-                <button className="btn btn-primary" style={{fontSize:12,width:"100%",justifyContent:"center",marginTop:10}} onClick={goToSignup}>Save Progress</button>
-              </div>
             </div>
             <nav style={{flex:1,padding:"10px 10px",display:"flex",flexDirection:"column",gap:2}}>
               {guestNavItems.map(n=>{
@@ -22784,13 +22804,13 @@ export default function App() {
             <div className="mobile-topbar">
               <div>
                 <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> SecurePlus</button>
-                <div style={{fontSize:11,color:t.textDim}}>Guest preview</div>
+                <div style={{fontSize:11,color:t.textDim}}>Progress is not saved</div>
               </div>
               <div style={{display:"flex",gap:6,alignItems:"center",flexShrink:0}}>
                 <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
                   {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
                 </button>
-                <button className="btn btn-primary" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToSignup}>Save</button>
+                <button className="btn btn-primary" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToSignup}>Sign up</button>
               </div>
             </div>
             {view==="dashboard"&&(
