@@ -22,7 +22,7 @@ const DEFAULT_REACTION_ANIMATIONS = Object.freeze(["surprised", "dance", "cheer"
 export const mascotAnimations = Object.freeze({
   cipher: {
     name: "Cipher",
-    renderMode: "layered-rig",
+    renderMode: "pixel-rig",
     frameAspectRatio: "4 / 3",
     animations: CIPHER_ANIMATION_ROWS,
   },
