@@ -14378,6 +14378,112 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .practice-summary{margin-top:16px;padding:12px 14px;background:${t.panel};border:1px solid ${t.border};border-radius:8px;font-size:13px;color:${t.textSec};display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .practice-summary strong{color:${t.text};font-weight:900;}
 .practice-action-bar{position:relative;z-index:10;margin-top:10px;padding:10px;border:1px solid ${t.border};border-radius:10px;background:${t.surface}eb;backdrop-filter:blur(16px);box-shadow:0 14px 30px rgba(0,0,0,.12);display:flex;gap:10px;justify-content:center;align-items:center;}
+.practice-page-head{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid ${t.border};}
+.practice-page-heading{display:flex;align-items:center;gap:13px;min-width:0;}
+.practice-page-icon{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,${t.accent},${t.green});color:#fff;box-shadow:0 14px 28px ${t.accent}24;flex-shrink:0;}
+.practice-page-head h2{font-size:28px;line-height:1.15;color:${t.text};margin:0 0 4px;}
+.practice-page-head p{font-size:13px;line-height:1.55;color:${t.textSec};margin:0;}
+.practice-page-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+.practice-meta-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid ${t.border};border-radius:999px;background:${t.panel};color:${t.textSec};font-size:11px;font-weight:850;white-space:nowrap;}
+.practice-meta-pill strong{color:${t.text};}
+.practice-setup-hero{position:relative;overflow:hidden;padding:24px;border:1px solid ${t.accent}38;border-radius:10px;background:linear-gradient(135deg,${t.accent}11,${t.surface} 48%,${t.green}0b);box-shadow:0 20px 46px rgba(7,12,24,.11);margin-bottom:16px;}
+.practice-setup-hero::after{content:"";position:absolute;right:-58px;top:-74px;width:190px;height:190px;border:30px solid ${t.green}0b;border-radius:50%;pointer-events:none;}
+.practice-setup-copy{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:16px;}
+.practice-setup-copy h3{font-size:21px;line-height:1.25;color:${t.text};margin:3px 0 5px;}
+.practice-setup-copy p{font-size:12px;line-height:1.65;color:${t.textSec};max-width:590px;}
+.practice-mode-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.practice-mode-card{appearance:none;display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:11px;align-items:center;min-width:0;padding:13px;text-align:left;border:1.5px solid ${t.border};border-radius:9px;background:${t.surface};color:${t.text};cursor:pointer;transition:transform .18s,border-color .18s,background .18s,box-shadow .18s;}
+.practice-mode-card:hover:not(:disabled){transform:translateY(-2px);border-color:var(--mode-color);box-shadow:0 14px 30px color-mix(in srgb,var(--mode-color) 16%,transparent);}
+.practice-mode-card.active{border-color:var(--mode-color);background:color-mix(in srgb,var(--mode-color) 11%,${t.surface});box-shadow:0 0 0 3px color-mix(in srgb,var(--mode-color) 10%,transparent);}
+.practice-mode-card:disabled{opacity:.56;cursor:not-allowed;}
+.practice-mode-icon{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--mode-color) 15%,transparent);color:var(--mode-color);}
+.practice-mode-card strong{display:block;font-size:13px;line-height:1.25;margin-bottom:2px;}
+.practice-mode-card small{display:block;color:${t.textSec};font-size:10px;line-height:1.45;}
+.practice-mode-check{width:22px;height:22px;border-radius:999px;border:1px solid ${t.border};display:grid;place-items:center;color:transparent;background:${t.panel};}
+.practice-mode-card.active .practice-mode-check{border-color:var(--mode-color);background:var(--mode-color);color:#fff;}
+.practice-builder-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px;}
+.practice-builder-head h3{font-size:19px;color:${t.text};margin-bottom:3px;}
+.practice-builder-head p{font-size:12px;color:${t.textSec};line-height:1.55;}
+.practice-builder-step{padding:16px 0;border-top:1px solid ${t.border};}
+.practice-builder-step:first-of-type{border-top:0;padding-top:0;}
+.practice-step-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.practice-step-index{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:${t.accent};color:#fff;font-size:11px;font-weight:950;box-shadow:0 8px 18px ${t.accent}22;}
+.practice-step-head strong{font-size:13px;color:${t.text};}
+.practice-step-head span:last-child{font-size:11px;color:${t.textDim};margin-left:auto;}
+.practice-builder-footer{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;margin-top:4px;padding:15px;border:1px solid ${t.accent}35;border-radius:9px;background:linear-gradient(135deg,${t.accent}0d,${t.panel});}
+.practice-builder-result{display:flex;align-items:center;gap:12px;min-width:0;}
+.practice-builder-count{font-size:28px;line-height:1;font-weight:950;color:${t.accent};}
+.practice-builder-result strong{display:block;color:${t.text};font-size:12px;margin-bottom:2px;}
+.practice-builder-result small{display:block;color:${t.textSec};font-size:10px;line-height:1.4;}
+.practice-secondary{margin-bottom:20px;border:1px solid ${t.border};border-radius:9px;background:${t.surface};overflow:hidden;}
+.practice-secondary summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;cursor:pointer;list-style:none;color:${t.text};font-size:13px;font-weight:900;}
+.practice-secondary summary::-webkit-details-marker{display:none;}
+.practice-secondary summary::after{content:"+";width:26px;height:26px;border-radius:999px;display:grid;place-items:center;border:1px solid ${t.border};background:${t.panel};color:${t.accent};font-size:18px;}
+.practice-secondary[open] summary::after{content:"−";}
+.practice-secondary-content{padding:0 18px 18px;}
+.practice-chapter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.practice-session-header{position:sticky;top:12px;z-index:40;margin-bottom:18px;padding:14px;border:1px solid ${t.border};border-radius:10px;background:color-mix(in srgb,${t.surface} 92%,transparent);box-shadow:0 18px 42px rgba(3,8,20,.16);backdrop-filter:blur(18px);}
+.practice-session-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.practice-session-name{display:flex;align-items:center;gap:9px;color:${t.text};font-size:13px;font-weight:900;}
+.practice-session-name span{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:${t.accent}16;color:${t.accent};}
+.practice-session-count{font-size:11px;color:${t.textSec};font-weight:850;white-space:nowrap;}
+.practice-session-progress{height:8px;border-radius:999px;background:${t.border};overflow:hidden;margin-bottom:11px;}
+.practice-session-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,${t.accent},${t.green});transition:width .35s ease;}
+.practice-question-nav{display:flex;gap:6px;overflow-x:auto;padding:2px 1px 5px;scrollbar-width:thin;}
+.practice-question-index{appearance:none;width:32px;height:32px;flex:0 0 32px;border-radius:8px;border:1px solid ${t.border};background:${t.panel};color:${t.textDim};font-size:11px;font-weight:900;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,color .16s;}
+.practice-question-index:hover{transform:translateY(-1px);border-color:${t.accent};color:${t.text};}
+.practice-question-index.current{border-color:${t.accent};background:${t.accent};color:#fff;box-shadow:0 7px 16px ${t.accent}25;}
+.practice-question-index.correct{border-color:${t.green};background:${t.green}14;color:${t.green};}
+.practice-question-index.wrong{border-color:${t.red};background:${t.red}12;color:${t.red};}
+.practice-question-index.draft{border-color:${t.amber};color:${t.amber};background:${t.amber}0d;}
+.practice-session-controls{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;margin-top:9px;}
+.practice-session-controls span{color:${t.textDim};font-size:10px;font-weight:800;text-align:center;}
+.practice-action-copy{flex:1;min-width:0;padding:0 6px;color:${t.textSec};font-size:11px;line-height:1.45;}
+.practice-action-copy strong{display:block;color:${t.text};font-size:12px;margin-bottom:1px;}
+.pbq-bank-hero{position:relative;overflow:hidden;padding:24px;border:1px solid ${t.green}38;border-radius:10px;background:linear-gradient(130deg,${t.green}10,${t.surface} 48%,${t.accent}0d);box-shadow:0 20px 46px rgba(7,12,24,.1);margin-bottom:18px;}
+.pbq-bank-hero::after{content:"";position:absolute;right:-56px;top:-68px;width:180px;height:180px;border-radius:50%;border:30px solid ${t.accent}09;pointer-events:none;}
+.pbq-bank-hero-copy{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:18px;}
+.pbq-bank-hero-copy h3{font-size:22px;color:${t.text};line-height:1.2;margin:4px 0 5px;}
+.pbq-bank-hero-copy p{max-width:580px;font-size:12px;color:${t.textSec};line-height:1.65;}
+.pbq-metric-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;}
+.pbq-metric-card{padding:12px;border:1px solid ${t.border};border-radius:8px;background:color-mix(in srgb,${t.surface} 90%,transparent);}
+.pbq-metric-card strong{display:block;font-size:21px;line-height:1.1;color:var(--metric-color);}
+.pbq-metric-card span{display:block;margin-top:4px;color:${t.textDim};font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+.pbq-type-section{margin-bottom:18px;padding:18px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};}
+.pbq-type-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px;}
+.pbq-type-section-head h3{font-size:15px;color:${t.text};}
+.pbq-type-section-head span{font-size:11px;color:${t.textDim};}
+.pbq-type-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.pbq-type-card{appearance:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:center;min-width:0;padding:11px;text-align:left;border:1px solid ${t.border};border-radius:8px;background:${t.panel};cursor:pointer;transition:transform .17s,border-color .17s,background .17s;}
+.pbq-type-card:hover{transform:translateY(-2px);border-color:var(--type-color);}
+.pbq-type-card.active{border-color:var(--type-color);background:color-mix(in srgb,var(--type-color) 11%,${t.surface});box-shadow:0 0 0 3px color-mix(in srgb,var(--type-color) 9%,transparent);}
+.pbq-type-card strong{display:block;color:${t.text};font-size:10px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;}
+.pbq-type-card small{display:block;color:${t.textDim};font-size:9px;margin-top:2px;}
+.pbq-filter-panel{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;padding:13px 14px;border:1px solid ${t.border};border-radius:9px;background:${t.panel};}
+.pbq-chapter-filters{display:flex;gap:7px;flex-wrap:wrap;}
+.pbq-result-summary{font-size:11px;color:${t.textSec};font-weight:800;white-space:nowrap;}
+.pbq-question-list{display:grid;gap:9px;}
+.pbq-list-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:13px;align-items:center;padding:15px 17px!important;cursor:pointer;}
+.pbq-list-card:focus-visible{outline:3px solid ${t.accent}38;outline-offset:2px;}
+.pbq-list-title{font-size:14px;font-weight:850;line-height:1.45;color:${t.text};}
+.pbq-list-subtitle{font-size:11px;color:${t.textDim};margin-top:3px;}
+.pbq-list-actions{display:flex;align-items:center;gap:7px;}
+.pbq-open-indicator{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:${t.accent}12;color:${t.accent};}
+.pbq-open-indicator.locked{background:${t.panel};color:${t.textDim};border:1px solid ${t.border};}
+.pbq-session-header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;margin-bottom:16px;padding:13px 14px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};box-shadow:0 14px 34px rgba(3,8,20,.1);}
+.pbq-session-title{min-width:0;}
+.pbq-session-title strong{display:block;color:${t.text};font-size:14px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pbq-session-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;}
+.pbq-scenario-card{position:relative;overflow:hidden;padding:22px 24px!important;border-left:4px solid var(--sim-color)!important;background:linear-gradient(135deg,color-mix(in srgb,var(--sim-color) 8%,${t.surface}),${t.surface})!important;}
+.pbq-scenario-label{display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--sim-color);font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.05em;}
+.pbq-scenario-label span{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:color-mix(in srgb,var(--sim-color) 14%,transparent);}
+.pbq-step-list{display:grid;gap:7px;margin-top:14px;padding-top:13px;border-top:1px solid ${t.border};}
+.pbq-step-row{display:grid;grid-template-columns:24px minmax(0,1fr);gap:9px;align-items:start;color:${t.textSec};font-size:12px;line-height:1.55;}
+.pbq-step-row span{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:color-mix(in srgb,var(--sim-color) 13%,transparent);color:var(--sim-color);font-weight:950;}
+.pbq-workspace-section{margin-bottom:18px;padding:18px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};box-shadow:0 12px 28px rgba(3,8,20,.07);}
+.pbq-workspace-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
+.pbq-workspace-head h3{font-size:15px;color:${t.text};line-height:1.3;}
+.pbq-workspace-head p{font-size:11px;color:${t.textDim};line-height:1.5;margin-top:2px;}
 .trial-countdown-banner{margin:18px auto 0;width:min(920px,calc(100% - 48px));padding:18px 20px;border:1px solid ${t.green}38;border-radius:10px;background:linear-gradient(135deg,${t.green}12,${t.surface} 48%,${t.accent}0f);box-shadow:0 16px 38px rgba(7,12,24,.12);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
 .trial-countdown-copy{flex:1 1 270px;min-width:0;}
 .trial-countdown-grid{display:grid;grid-template-columns:repeat(4,minmax(54px,1fr));gap:8px;flex:0 1 330px;}
@@ -14390,6 +14496,8 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .question-prompt{font-family:'Montserrat',system-ui,sans-serif!important;font-size:18px!important;line-height:1.65!important;color:${t.text}!important;font-weight:800!important;margin-bottom:14px!important;}
 .option-text{font-size:17px!important;line-height:1.58!important;color:${t.text}!important;font-weight:750!important;overflow-wrap:anywhere;}
 .compact-question-text{font-size:16px!important;line-height:1.7!important;color:${t.text}!important;font-weight:750!important;}
+.practice-option-list .opt,.pbq-workspace-section .opt{width:100%;text-align:left;font:inherit;color:inherit;}
+.practice-option-list .opt:disabled,.pbq-workspace-section .opt:disabled{opacity:1;cursor:default;}
 .question-dots{display:flex;gap:6px;flex-wrap:wrap;}
 .question-dot{width:11px;height:11px;border-radius:50%;border:0;padding:0;cursor:pointer;transition:transform .18s,box-shadow .18s,background .2s;}
 .question-dot:hover{transform:scale(1.25);box-shadow:0 0 0 5px ${t.accent}14;}
@@ -15350,8 +15458,37 @@ body{background:
   .setup-hero > div{grid-template-columns:1fr!important;}
   .setup-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
   .practice-summary{align-items:flex-start!important;}
-  .practice-action-bar{position:sticky;bottom:calc(78px + env(safe-area-inset-bottom));margin-left:-2px;margin-right:-2px;border-radius:12px;box-shadow:0 18px 42px rgba(0,0,0,.18);}
+  .practice-page-head{display:block!important;}
+  .practice-page-meta{justify-content:flex-start!important;margin-top:14px;}
+  .practice-page-head h2{font-size:25px!important;}
+  .practice-setup-hero,.pbq-bank-hero{padding:18px!important;}
+  .practice-setup-copy,.pbq-bank-hero-copy{display:block!important;}
+  .practice-setup-copy .setup-stats{margin-top:14px;}
+  .pbq-bank-hero-copy .btn{width:100%;margin-top:14px;}
+  .practice-mode-grid{grid-template-columns:minmax(0,1fr)!important;}
+  .practice-builder-head{display:block!important;}
+  .practice-builder-head .btn{margin-top:10px;}
+  .practice-builder-footer{grid-template-columns:minmax(0,1fr)!important;}
+  .practice-builder-footer .btn{width:100%;}
+  .practice-chapter-grid{grid-template-columns:minmax(0,1fr)!important;}
+  .practice-session-header{top:8px;padding:11px!important;margin-left:-2px;margin-right:-2px;}
+  .practice-session-controls{grid-template-columns:1fr 1fr!important;}
+  .practice-session-controls span{display:none!important;}
+  .practice-session-controls .btn{width:100%;}
+  .practice-action-bar{position:sticky;bottom:calc(78px + env(safe-area-inset-bottom));margin-left:-2px;margin-right:-2px;border-radius:12px;box-shadow:0 18px 42px rgba(0,0,0,.18);flex-direction:column;align-items:stretch!important;}
+  .practice-action-copy{padding:2px 4px 4px!important;}
   .practice-action-bar .btn{width:100%;white-space:nowrap;}
+  .pbq-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .pbq-type-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .pbq-filter-panel{align-items:flex-start!important;flex-direction:column!important;}
+  .pbq-chapter-filters{width:100%;}
+  .pbq-result-summary{white-space:normal!important;}
+  .pbq-list-card{grid-template-columns:auto minmax(0,1fr)!important;align-items:flex-start!important;}
+  .pbq-list-actions{grid-column:2;justify-content:flex-end!important;}
+  .pbq-session-header{grid-template-columns:minmax(0,1fr) auto!important;}
+  .pbq-session-header>.btn:first-child{grid-column:1 / -1;justify-self:start;}
+  .pbq-scenario-card{padding:19px 18px!important;}
+  .pbq-workspace-section{padding:15px!important;}
   .app-shell.practice-focus-mode{padding-bottom:0;}
   .app-shell.practice-focus-mode .sidebar{display:none!important;}
   .app-shell.practice-focus-mode .active-practice-screen{padding-bottom:calc(104px + env(safe-area-inset-bottom))!important;}
@@ -17686,11 +17823,21 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
 
   if(!started) return(
     <div className="mcq-setup-screen fu" style={{padding:"24px",maxWidth:800,margin:"0 auto"}}>
-      <div className="page-title-row">
-        <NavGlyph type="mcq" active/>
-        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>MCQ Practice</h2>
-      </div>
-      <p style={{color:t.textSec,marginBottom:20,fontSize:14}}>{MCQ_BANK.length} questions across all 5 CompTIA Security+ chapters</p>
+      <header className="practice-page-head">
+        <div className="practice-page-heading">
+          <div className="practice-page-icon"><BookOpenCheck size={23} strokeWidth={2.3}/></div>
+          <div>
+            <div className="label" style={{color:t.accent}}>Knowledge practice</div>
+            <h2>MCQ Practice</h2>
+            <p>Build a focused question set and get clear feedback as you work.</p>
+          </div>
+        </div>
+        <div className="practice-page-meta">
+          <span className="practice-meta-pill"><strong>{MCQ_BANK.length}</strong> questions</span>
+          <span className="practice-meta-pill"><strong>5</strong> chapters</span>
+          <span className="practice-meta-pill">SY0-701</span>
+        </div>
+      </header>
 
       {resumeAvailable&&(
         <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
@@ -17704,38 +17851,46 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
         </div>
       )}
 
-      <div className="setup-hero" style={{marginBottom:16}}>
-        <div className="setup-hero-grid" style={{position:"relative",zIndex:1,display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:16,alignItems:"center"}}>
-          <div style={{flex:1,minWidth:220}}>
-            <div className="label" style={{color:t.green,marginBottom:5}}>Adaptive practice</div>
-            <div style={{fontWeight:900,fontSize:18,color:t.text,marginBottom:4}}>Smart Review uses SM-2 spacing</div>
-            <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
-              Wrong answers come back first. Correct answers are spaced farther apart, like Anki, so practice targets retention instead of only random questions.
-            </div>
-            <div style={{display:"flex",gap:8,marginTop:14,flexWrap:"wrap"}}>
-              <button className={`btn ${reviewMode==="smart"?"btn-primary":"btn-outline"}`} style={{fontSize:12}} disabled={isGuest} onClick={()=>setReviewMode("smart")}>Smart Review</button>
-              <button className={`btn ${reviewMode==="random"?"btn-primary":"btn-outline"}`} style={{fontSize:12}} onClick={()=>setReviewMode("random")}>Random Practice</button>
-            </div>
+      <section className="practice-setup-hero">
+        <div className="practice-setup-copy">
+          <div>
+            <div className="label" style={{color:t.green}}>Step 1 · Choose your practice style</div>
+            <h3>How should SecurePlus choose your questions?</h3>
+            <p>Use Smart Review to revisit weak or due topics, or choose Random Practice for a fresh mixed set.</p>
           </div>
-          <div className="setup-stats">
-            {[
-              {label:"Due",value:reviewSummary.due,color:t.amber},
-              {label:"Weak",value:reviewSummary.weak,color:t.red},
-              {label:"New",value:reviewSummary.untouched,color:t.accent},
-            ].map(item=>(
-              <div key={item.label} className="setup-stat">
-                <div style={{fontSize:18,fontWeight:800,color:item.color}}>{item.value}</div>
-                <div className="label">{item.label}</div>
-              </div>
-            ))}
-          </div>
+          {!isGuest&&(
+            <div className="setup-stats">
+              {[
+                {label:"Due",value:reviewSummary.due,color:t.amber},
+                {label:"Weak",value:reviewSummary.weak,color:t.red},
+                {label:"New",value:reviewSummary.untouched,color:t.accent},
+              ].map(item=>(
+                <div key={item.label} className="setup-stat">
+                  <div style={{fontSize:18,fontWeight:800,color:item.color}}>{item.value}</div>
+                  <div className="label">{item.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="practice-mode-grid">
+          <button className={`practice-mode-card ${reviewMode==="smart"?"active":""}`} style={{"--mode-color":t.green}} disabled={isGuest} onClick={()=>setReviewMode("smart")} aria-pressed={reviewMode==="smart"}>
+            <span className="practice-mode-icon"><Brain size={19}/></span>
+            <span><strong>Smart Review</strong><small>Prioritises due, missed, and starred questions.</small></span>
+            <span className="practice-mode-check"><Check size={13} strokeWidth={3}/></span>
+          </button>
+          <button className={`practice-mode-card ${reviewMode==="random"?"active":""}`} style={{"--mode-color":t.accent}} onClick={()=>setReviewMode("random")} aria-pressed={reviewMode==="random"}>
+            <span className="practice-mode-icon"><Sparkles size={19}/></span>
+            <span><strong>Random Practice</strong><small>Creates a fresh set from your selected scope.</small></span>
+            <span className="practice-mode-check"><Check size={13} strokeWidth={3}/></span>
+          </button>
         </div>
         {isGuest&&(
-          <div style={{marginTop:12,padding:"10px 12px",borderRadius:7,background:t.panel,border:`1px solid ${t.border}`,fontSize:12,color:t.textSec,lineHeight:1.6}}>
-            Smart Review is disabled in guest mode because it needs saved attempt history. Create a free account to turn it on.
+          <div style={{position:"relative",zIndex:1,marginTop:12,padding:"10px 12px",borderRadius:7,background:t.panel,border:`1px solid ${t.border}`,fontSize:12,color:t.textSec,lineHeight:1.6}}>
+            Smart Review needs saved attempt history. Create a free account when you want personalised question ordering.
           </div>
         )}
-      </div>
+      </section>
 
       {user.tier==="free"&&(
         <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.accent}30`,background:`${t.accent}06`}}>
@@ -17772,34 +17927,40 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
       )}
 
       <div className="card practice-filter-card" style={{padding:"20px 24px",marginBottom:16}}>
-        <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"flex-start",marginBottom:14,flexWrap:"wrap"}}>
+        <div className="practice-builder-head">
           <div>
-            <div style={{fontWeight:900,fontSize:15,color:t.text}}>Build your set</div>
-            <div style={{fontSize:12,color:t.textSec}}>Choose the scope, then start when the match count looks right.</div>
+            <div className="label" style={{color:t.accent}}>Steps 2–3</div>
+            <h3>Build your practice set</h3>
+            <p>Choose what to practise, then pick a session length that fits your time.</p>
           </div>
-          <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}28`}}>{quizCount} questions</span>
+          {(chFilter!=="all"||diffFilter!=="all"||topicFilter!=="all")&&(
+            <button className="btn btn-ghost" style={{fontSize:11,minHeight:34,padding:"7px 10px"}} onClick={()=>{setChFilter("all");setDiffFilter("all");setTopicFilter("all");}}><X size={14}/> Reset filters</button>
+          )}
         </div>
-        <div className="practice-filter-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
-          <div>
-            <label className="label" style={{display:"block",marginBottom:6}}>Chapter</label>
-            <FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} disabled={isGuest} label="Chapter filter"/>
+        <div className="practice-builder-step">
+          <div className="practice-step-head"><span className="practice-step-index">2</span><strong>Choose your focus</strong><span>{filtered.length} matching questions</span></div>
+          <div className="practice-filter-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
+            <div>
+              <label className="label" style={{display:"block",marginBottom:6}}>Chapter</label>
+              <FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} disabled={isGuest} label="Chapter filter"/>
+            </div>
+            <div>
+              <label className="label" style={{display:"block",marginBottom:6}}>Difficulty</label>
+              <FilterSelect value={diffFilter} onChange={setDiffFilter} options={difficultyOptions} disabled={isGuest} label="Difficulty filter"/>
+            </div>
+            <div>
+              <label className="label" style={{display:"block",marginBottom:6}}>Topic</label>
+              <FilterSelect value={topicFilter} onChange={setTopicFilter} options={topicOptions} disabled={isGuest} label="Topic filter"/>
+            </div>
           </div>
-          <div>
-            <label className="label" style={{display:"block",marginBottom:6}}>Difficulty</label>
-            <FilterSelect value={diffFilter} onChange={setDiffFilter} options={difficultyOptions} disabled={isGuest} label="Difficulty filter"/>
-          </div>
-          <div>
-            <label className="label" style={{display:"block",marginBottom:6}}>Topic</label>
-            <FilterSelect value={topicFilter} onChange={setTopicFilter} options={topicOptions} disabled={isGuest} label="Topic filter"/>
-          </div>
+          {isGuest&&(
+            <div style={{marginTop:14,padding:"12px 14px",borderRadius:7,background:`${t.accent}08`,border:`1px solid ${t.accent}25`,fontSize:12,color:t.textSec,lineHeight:1.6}}>
+              Targeted filters are a free-account feature. Guest sessions use the full mixed question bank.
+            </div>
+          )}
         </div>
-        {isGuest&&(
-          <div style={{marginTop:14,padding:"12px 14px",borderRadius:7,background:`${t.accent}08`,border:`1px solid ${t.accent}25`,fontSize:13,color:t.textSec,lineHeight:1.6}}>
-            Chapter, difficulty, and topic selection are account features. Sign up free to create targeted MCQ sets.
-          </div>
-        )}
-        <div style={{marginTop:16}}>
-          <label className="label" style={{display:"block",marginBottom:8}}>Quiz Length</label>
+        <div className="practice-builder-step">
+          <div className="practice-step-head"><span className="practice-step-index">3</span><strong>Choose session length</strong><span>{quizCount} selected</span></div>
           <div className="quiz-length-grid" style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8}}>
             {quizSizes.map(size=>(
               <button
@@ -17809,25 +17970,26 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
                 disabled={filtered.length<size}
                 onClick={()=>setQuizCount(size)}
               >
-                {size}
+                {size}<span style={{fontSize:9,opacity:.7}}> Qs</span>
               </button>
             ))}
           </div>
         </div>
-        <div className="practice-summary">
-          <span>
-            <strong>{filtered.length}</strong> match your filters · {filtered.length>=10?`${quizCount} selected`:"broaden filters to reach 10"} · {reviewMode==="smart"?"SM-2 priority":"Random order"}
-          </span>
-          <button className="btn btn-primary" style={{fontSize:12,padding:"7px 12px",minHeight:34}} onClick={startQuiz} disabled={filtered.length<10}>
-            Start now
+        <div className="practice-builder-footer">
+          <div className="practice-builder-result">
+            <div className="practice-builder-count">{quizCount}</div>
+            <div><strong>{reviewMode==="smart"?"Smart Review set":"Random practice set"}</strong><small>{filtered.length>=10?`${filtered.length} questions match your focus`:`Only ${filtered.length} match — broaden your filters`}</small></div>
+          </div>
+          <button className="btn btn-primary" style={{minWidth:170}} onClick={startQuiz} disabled={filtered.length<10}>
+            Start {quizCount}-question set →
           </button>
         </div>
       </div>
 
       {/* Chapter overview */}
-      <div className="card" style={{padding:"20px 24px",marginBottom:20}}>
-        <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:14}}>Chapter Overview</div>
-        <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      <details className="practice-secondary">
+        <summary><span>Browse all five exam chapters</span><span style={{fontSize:11,color:t.textDim,fontWeight:700}}>Optional</span></summary>
+        <div className="practice-secondary-content practice-chapter-grid">
           {CHAPTERS.map(ch=>(
             <div key={ch.id} className="chapter-card" style={{display:"flex",gap:12,alignItems:"center",padding:"10px 14px",borderRadius:8,background:chFilter===ch.id?`${chapterColor(ch.id)}12`:t.panel,cursor:isGuest?"not-allowed":"pointer",opacity:isGuest?0.82:1,border:`1px solid ${chFilter===ch.id?chapterColor(ch.id):t.border}`,transition:"all .15s"}} onClick={()=>{if(!isGuest)setChFilter(ch.id===chFilter?"all":ch.id);}}>
               <ChapterIcon id={ch.id}/>
@@ -17839,13 +18001,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="practice-action-bar">
-        <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"13px",fontSize:15}} onClick={startQuiz} disabled={filtered.length<10}>
-          Start Quiz ({quizCount} Questions) →
-        </button>
-      </div>
+      </details>
     </div>
   );
 
@@ -17943,30 +18099,33 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
 
   return(
     <div style={{padding:"24px",maxWidth:700,margin:"0 auto"}} className="fu active-practice-screen mcq-question-screen" key={qi}>
-      <div className="top-progress" aria-hidden="true"><span style={{width:`${((qi+1)/questions.length)*100}%`}}/></div>
-      {/* Progress */}
-      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20}}>
-        <div className="question-dots">
+      <header className="practice-session-header">
+        <div className="practice-session-top">
+          <div className="practice-session-name"><span><BookOpenCheck size={16}/></span>MCQ Practice</div>
+          <div className="practice-session-count">Question {qi+1} of {questions.length} · {answeredCount} answered</div>
+        </div>
+        <div className="practice-session-progress" aria-label={`${Math.round(((qi+1)/questions.length)*100)}% through this practice set`}><span style={{width:`${((qi+1)/questions.length)*100}%`}}/></div>
+        <nav className="practice-question-nav" aria-label="Questions in this practice set">
           {questions.map((_,i)=>(
             <button
               key={i}
-              className="question-dot"
+              className={`practice-question-index ${i===qi?"current":results[i]?.correct?"correct":results[i]?"wrong":draftSelections[i]!==undefined?"draft":""}`}
               aria-label={`Go to question ${i+1}`}
+              aria-current={i===qi?"step":undefined}
               onClick={()=>goToQuestion(i)}
-              style={{background:results[i]?(results[i]?.correct?t.green:t.red):i===qi?t.accent:draftSelections[i]!==undefined?`${t.amber}`:t.border}}
-            />
+            >{i+1}</button>
           ))}
+        </nav>
+        <div className="practice-session-controls">
+          <button className="btn btn-ghost" style={{fontSize:11,minHeight:34,padding:"7px 10px"}} disabled={qi===0} onClick={()=>goToQuestion(qi-1)}>← Previous</button>
+          <span>{allAnswered?"All questions answered":"You can return to drafted answers anytime"}</span>
+          <button className="btn btn-ghost" style={{fontSize:11,minHeight:34,padding:"7px 10px"}} disabled={qi===questions.length-1} onClick={()=>goToQuestion(qi+1)}>Next →</button>
         </div>
-        <span style={{fontSize:13,color:t.textSec,marginLeft:"auto"}}>Question {qi+1} of {questions.length} · {answeredCount} answered</span>
-      </div>
-
-      <div style={{display:"flex",gap:10,justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-        <button className="btn btn-ghost" style={{fontSize:12}} disabled={qi===0} onClick={()=>goToQuestion(qi-1)}>← Previous</button>
-        <button className="btn btn-ghost" style={{fontSize:12}} disabled={qi===questions.length-1} onClick={()=>goToQuestion(qi+1)}>Next →</button>
-      </div>
+      </header>
 
       {/* Question card */}
       <div className="card question-card" style={{padding:"22px 26px",marginBottom:18}}>
+        <div className="label" style={{color:t.accent,marginBottom:9}}>Question {qi+1}</div>
         <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
           <ChBadge chId={current.ch} t={t}/>
           {showQuestionCodes&&<QuestionCodeChip id={current.id} t={t}/>}
@@ -17985,39 +18144,34 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
       </div>
 
       {/* Options */}
-      <div style={{display:"flex",flexDirection:"column",gap:9,marginBottom:20}}>
+      <div className="practice-option-list" style={{display:"flex",flexDirection:"column",gap:9,marginBottom:20}}>
         {current.opts.map((opt,i)=>{
           let cls="opt";
           if(submitted){cls+=" done"; if(i===current.correct)cls+=" ok"; else if(i===selected&&i!==current.correct)cls+=" bad";}
           else if(selected===i)cls+=" sel";
           return(
-            <div
+            <button
+              type="button"
               key={i}
               className={cls}
-              role="button"
-              tabIndex={submitted?-1:0}
               aria-pressed={!submitted&&selected===i}
-              onKeyDown={event=>{
-                if(submitted||(event.key!=="Enter"&&event.key!==" "))return;
-                event.preventDefault();
-                setSelected(i);
-                setDraftSelections(prev=>{const next=[...prev];next[qi]=i;return next;});
-              }}
+              disabled={submitted}
               onClick={()=>{if(submitted)return;setSelected(i);setDraftSelections(prev=>{const next=[...prev];next[qi]=i;return next;});}}
             >
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
               <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
               {submitted&&i===current.correct&&<Check size={18} color={t.green} strokeWidth={2.8}/>}
               {submitted&&i===selected&&i!==current.correct&&<X size={18} color={t.red} strokeWidth={2.8}/>}
-            </div>
+            </button>
           );
         })}
       </div>
 
       {!submitted?(
         <div className="practice-action-bar">
-          <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} disabled={selected===null} onClick={submitQ}>
-            Submit Answer
+          <div className="practice-action-copy"><strong>{selected===null?"Choose one answer":"Answer selected"}</strong>{selected===null?"Select the option you think is strongest.":`Option ${String.fromCharCode(65+selected)} is ready to submit.`}</div>
+          <button className="btn btn-primary" style={{minWidth:190}} disabled={selected===null} onClick={submitQ}>
+            Check my answer →
           </button>
         </div>
       ):(
@@ -18059,7 +18213,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
           </div>
           <AnswerBurst result={answerBurst} t={t}/>
           <div className="practice-action-bar">
-            <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={qi<questions.length-1?nextQ:finishQuiz}>
+            <div className="practice-action-copy"><strong>{selected===current.correct?"Keep the momentum":"Use the feedback, then continue"}</strong>{qi<questions.length-1?"Your next question is ready.":allAnswered?"Your result summary is ready.":"Some questions still need answers."}</div>
+            <button className="btn btn-primary" style={{minWidth:190}} onClick={qi<questions.length-1?nextQ:finishQuiz}>
               {qi<questions.length-1?"Next Question →":allAnswered?"See Results →":"Review Unanswered →"}
             </button>
           </div>
@@ -18092,6 +18247,10 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
     return true;
   });
   const displayQuestions=[...filtered].sort((a,b)=>{
+    if(!isPro){
+      if(isFreePBQPreview(a)&&!isFreePBQPreview(b))return -1;
+      if(!isFreePBQPreview(a)&&isFreePBQPreview(b))return 1;
+    }
     const rank=q=>correct.has(q.id)?2:attempted.has(q.id)?0:1;
     return rank(a)-rank(b);
   });
@@ -18151,25 +18310,44 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
 
   return(
     <div className="pbq-bank-screen fu" style={{padding:"24px",maxWidth:900,margin:"0 auto"}}>
-      <div style={{marginBottom:20}}>
-        <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:4}}>PBQ Simulator</h2>
-        <p style={{color:t.textSec,fontSize:14}}>Performance-based questions across 8 simulation types</p>
-      </div>
-
-      {/* Stats */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10,marginBottom:20}}>
-        {[
-          {label:"Total PBQs",value:PBQ_BANK.length,color:t.accent},
-          {label:"Sim Types",value:Object.keys(SIM_TYPES).length,color:t.text},
-          {label:"Attempted",value:attempts.filter(a=>a.pbq).length,color:t.amber},
-          {label:"Correct",value:attempts.filter(a=>a.pbq&&a.correct).length,color:t.green},
-        ].map(s=>(
-          <div key={s.label} className="card" style={{padding:"14px 16px"}}>
-            <div style={{fontSize:22,fontWeight:700,color:s.color}}>{s.value}</div>
-            <div className="label">{s.label}</div>
+      <header className="practice-page-head">
+        <div className="practice-page-heading">
+          <div className="practice-page-icon"><Puzzle size={23} strokeWidth={2.3}/></div>
+          <div>
+            <div className="label" style={{color:t.green}}>Applied practice</div>
+            <h2>PBQ Simulator</h2>
+            <p>Practise the decisions, tools, and workflows behind exam scenarios.</p>
           </div>
-        ))}
-      </div>
+        </div>
+        <div className="practice-page-meta">
+          <span className="practice-meta-pill"><strong>{PBQ_BANK.length}</strong> PBQs</span>
+          <span className="practice-meta-pill"><strong>{Object.keys(SIM_TYPES).length}</strong> formats</span>
+          <span className="practice-meta-pill">{isPro?"Pro access":"1 free preview"}</span>
+        </div>
+      </header>
+
+      <section className="pbq-bank-hero">
+        <div className="pbq-bank-hero-copy">
+          <div>
+            <div className="label" style={{color:t.green}}>Your PBQ workspace</div>
+            <h3>Choose a format, then practise one complete scenario.</h3>
+            <p>Use the filters below to focus on a simulation type or exam chapter. Attempted questions stay visible, with missed work prioritised for review.</p>
+          </div>
+          {isPro&&<button className="btn btn-primary" onClick={practiceRandomPbq}><Sparkles size={16}/> Start a recommended PBQ</button>}
+        </div>
+        <div className="pbq-metric-grid">
+          {[
+            {label:"Total PBQs",value:PBQ_BANK.length,color:t.accent},
+            {label:"Simulation types",value:Object.keys(SIM_TYPES).length,color:t.text},
+            {label:"Attempted",value:attempted.size,color:t.amber},
+            {label:"Correct",value:correct.size,color:t.green},
+          ].map(s=>(
+            <div key={s.label} className="pbq-metric-card" style={{"--metric-color":s.color}}>
+              <strong>{s.value}</strong><span>{s.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {!isPro&&(
         <div className="card" style={{padding:"18px 22px",marginBottom:20,borderColor:`${t.amber}40`,background:`${t.amber}06`}}>
@@ -18203,58 +18381,54 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
         </div>
       )}
       {isPro&&(
-        <div className="setup-hero" style={{marginBottom:18,borderColor:showMissedOnly?`${t.red}35`:`${t.green}35`,background:showMissedOnly?`${t.red}06`:undefined}}>
-          <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
-            <span className="mission-badge" style={{background:showMissedOnly?t.red:t.green}}><Puzzle size={22} strokeWidth={2.3}/></span>
-            <div style={{flex:1,minWidth:220}}>
-              <div className="label" style={{color:showMissedOnly?t.red:t.green,marginBottom:4}}>PBQ mission</div>
-              <div style={{fontWeight:900,fontSize:15,color:t.text}}>Practice PBQ</div>
-              <div style={{fontSize:13,color:t.textSec}}>
-                Start one random PBQ you have not done before. If all are done, SecurePlus prioritises missed PBQs, then the newest PBQ.
-              </div>
-            </div>
-            <button className="btn btn-primary" style={{fontSize:12,flexShrink:0}} onClick={practiceRandomPbq}>
-              Practice PBQ
-            </button>
+        <div className="pbq-filter-panel">
+          <div>
+            <div style={{fontWeight:900,fontSize:13,color:t.text}}>Review shortcuts</div>
+            <div style={{fontSize:11,color:t.textDim}}>Jump back into questions that need attention.</div>
+          </div>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap",justifyContent:"flex-end"}}>
             <button className={`btn ${showMissedOnly?"btn-primary":"btn-outline"}`} style={{fontSize:12,flexShrink:0}} disabled={missedPbqIds.length===0} onClick={()=>setShowMissedOnly(v=>!v)}>
-              {showMissedOnly?"Show All PBQs":"Review Missed PBQs"}
+              {showMissedOnly?"Show all PBQs":`Missed (${missedPbqIds.length})`}
             </button>
             <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={()=>setStarredView(true)}>
-              Starred PBQs ({starredPbqs.length})
+              <Star size={14}/> Starred ({starredPbqs.length})
             </button>
           </div>
         </div>
       )}
 
       {/* Sim type cards */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:10,marginBottom:20}}>
-        {Object.values(SIM_TYPES).map(s=>{
-          const count=PBQ_BANK.filter(q=>q.type===s.id).length;
-          const active=typeFilter===s.id;
-          return(
-            <div key={s.id} className="card sim-card" style={{padding:"14px 16px",cursor:"pointer",borderColor:active?s.color:t.border,background:active?`${s.color}10`:t.surface,transition:"all .15s"}} onClick={()=>setTypeFilter(active?"all":s.id)}>
-              <div style={{marginBottom:8}}><SimIcon type={s.id}/></div>
-              <div style={{fontSize:12,fontWeight:600,color:active?s.color:t.text}}>{s.label}</div>
-              <div style={{fontSize:11,color:t.textDim,marginTop:2}}>{count} question{count!==1?"s":""}</div>
-            </div>
-          );
-        })}
-      </div>
+      <section className="pbq-type-section">
+        <div className="pbq-type-section-head"><h3>Choose a simulation format</h3><span>{typeFilter==="all"?"All formats selected":Object.values(SIM_TYPES).find(item=>item.id===typeFilter)?.label}</span></div>
+        <div className="pbq-type-grid">
+          {Object.values(SIM_TYPES).map(s=>{
+            const count=PBQ_BANK.filter(q=>q.type===s.id).length;
+            const active=typeFilter===s.id;
+            return(
+              <button type="button" key={s.id} className={`pbq-type-card ${active?"active":""}`} style={{"--type-color":s.color}} aria-pressed={active} onClick={()=>setTypeFilter(active?"all":s.id)}>
+                <SimIcon type={s.id}/>
+                <span><strong>{s.label}</strong><small>{count} question{count!==1?"s":""}</small></span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
 
       {/* Filters */}
-      <div style={{display:"flex",gap:8,marginBottom:14,flexWrap:"wrap"}}>
-        {CHAPTERS.map(ch=>(
-          <button key={ch.id} className="btn" style={{fontSize:11,padding:"5px 12px",background:chFilter===ch.id?`${t.accent}15`:"transparent",color:chFilter===ch.id?t.accent:t.textSec,border:`1px solid ${chFilter===ch.id?t.accent:t.border}`,transition:"all .15s"}} onClick={()=>setChFilter(chFilter===ch.id?"all":ch.id)}>
-            <ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}
-          </button>
-        ))}
-        {chFilter!=="all"&&<button className="btn btn-ghost" style={{fontSize:11,padding:"5px 10px"}} onClick={()=>setChFilter("all")}><X size={14}/> Clear</button>}
+      <div className="pbq-filter-panel">
+        <div className="pbq-chapter-filters" aria-label="Filter PBQs by chapter">
+          {CHAPTERS.map(ch=>(
+            <button key={ch.id} className="btn" style={{fontSize:11,padding:"5px 12px",background:chFilter===ch.id?`${t.accent}15`:"transparent",color:chFilter===ch.id?t.accent:t.textSec,border:`1px solid ${chFilter===ch.id?t.accent:t.border}`,transition:"all .15s"}} aria-pressed={chFilter===ch.id} onClick={()=>setChFilter(chFilter===ch.id?"all":ch.id)}>
+              <ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}
+            </button>
+          ))}
+          {(chFilter!=="all"||typeFilter!=="all"||showMissedOnly)&&<button className="btn btn-ghost" style={{fontSize:11,padding:"5px 10px"}} onClick={()=>{setChFilter("all");setTypeFilter("all");setShowMissedOnly(false);}}><X size={14}/> Clear all</button>}
+        </div>
+        <div className="pbq-result-summary">{displayQuestions.length} result{displayQuestions.length!==1?"s":""}</div>
       </div>
 
-      <div style={{fontSize:13,color:t.textDim,marginBottom:12}}>Showing {displayQuestions.length} questions · correctly answered PBQs are kept lower in the list</div>
-
       {/* Question list */}
-      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+      <div className="pbq-question-list">
         {displayQuestions.map(q=>{
           const done=attempted.has(q.id);
           const ok=correct.has(q.id);
@@ -18262,7 +18436,16 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
           const canOpen=isPro||preview;
           const ch=CHAPTERS.find(c=>c.id===q.ch);
           return(
-            <div key={q.id} className={`card card-hover`} style={{padding:"15px 18px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",opacity:canOpen?1:.75,borderColor:preview?`${t.amber}55`:ok?`${t.green}30`:done?`${t.red}25`:undefined,background:preview&&!isPro?`linear-gradient(135deg, ${t.amber}0d, ${t.surface})`:undefined}} onClick={()=>{if(canOpen){capture(preview&&!isPro?"pbq_preview_started":"pbq_started", { question_id: q.id, type: q.type, chapter: q.ch, tier: user.tier });onStart(q);}else{openLockedPrompt(q);}}}>
+            <div
+              key={q.id}
+              className="card card-hover pbq-list-card"
+              role="button"
+              tabIndex={0}
+              aria-label={`${canOpen?"Open":"Locked"} PBQ: ${q.title}`}
+              style={{opacity:canOpen?1:.75,borderColor:preview?`${t.amber}55`:ok?`${t.green}30`:done?`${t.red}25`:undefined,background:preview&&!isPro?`linear-gradient(135deg, ${t.amber}0d, ${t.surface})`:undefined}}
+              onKeyDown={event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();if(canOpen){capture(preview&&!isPro?"pbq_preview_started":"pbq_started", { question_id:q.id,type:q.type,chapter:q.ch,tier:user.tier });onStart(q);}else openLockedPrompt(q);}}
+              onClick={()=>{if(canOpen){capture(preview&&!isPro?"pbq_preview_started":"pbq_started", { question_id: q.id, type: q.type, chapter: q.ch, tier: user.tier });onStart(q);}else{openLockedPrompt(q);}}}
+            >
               <SimIcon type={q.type}/>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,marginBottom:5,flexWrap:"wrap"}}>
@@ -18273,23 +18456,24 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
                   <BeyondTextbookTag question={q} t={t}/>
                   {ch&&<span style={{fontSize:11,color:t.textDim,display:"inline-flex",alignItems:"center",gap:4}}><ChapterIcon id={ch.id} size={16}/> Ch.{ch.id}</span>}
                 </div>
-                <div style={{fontSize:14,fontWeight:500,color:t.text}}><GlossaryText text={q.title} t={t}/></div>
-                <div style={{fontSize:12,color:t.textDim,marginTop:2}}><GlossaryText text={q.cat} t={t}/></div>
+                <div className="pbq-list-title"><GlossaryText text={q.title} t={t}/></div>
+                <div className="pbq-list-subtitle"><GlossaryText text={q.cat} t={t}/>{done?` · ${ok?"Completed correctly":"Needs another pass"}`:" · Not attempted"}</div>
               </div>
-              <div style={{flexShrink:0,display:"flex",gap:8,alignItems:"center"}}>
+              <div className="pbq-list-actions">
                 <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
-                {done
-                  ? ok?<CheckCircle2 size={18} color={t.green} strokeWidth={2.4}/>:<XCircle size={18} color={t.red} strokeWidth={2.4}/>
-                  : <Circle size={17} color={t.textDim} strokeWidth={1.8}/>
-                }
-                {canOpen
-                  ? <Play size={18} color={preview&&!isPro?t.amber:t.accent} fill="currentColor" strokeWidth={2}/>
-                  : <LockKeyhole size={17} color={t.textDim} strokeWidth={2.2}/>
-                }
+                <span aria-label={done?(ok?"Completed correctly":"Answered incorrectly"):"Not attempted"}>{done?ok?<CheckCircle2 size={18} color={t.green} strokeWidth={2.4}/>:<XCircle size={18} color={t.red} strokeWidth={2.4}/>:<Circle size={17} color={t.textDim} strokeWidth={1.8}/>}</span>
+                <span className={`pbq-open-indicator ${canOpen?"":"locked"}`}>{canOpen?<Play size={16} fill="currentColor" strokeWidth={2}/>:<LockKeyhole size={16} strokeWidth={2.2}/>}</span>
               </div>
             </div>
           );
         })}
+        {displayQuestions.length===0&&(
+          <div className="card" style={{padding:"26px",textAlign:"center",color:t.textSec}}>
+            <div style={{fontWeight:900,color:t.text,marginBottom:5}}>No PBQs match these filters</div>
+            <div style={{fontSize:12,marginBottom:14}}>Clear the filters to return to the full simulator bank.</div>
+            <button className="btn btn-outline" onClick={()=>{setChFilter("all");setTypeFilter("all");setShowMissedOnly(false);}}>Clear filters</button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -18426,16 +18610,22 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
   const dragDropRows=Math.max(1,q.targetLayout?.rows||Math.max(1,...dragDropTargets.map(target=>Number.isInteger(target.row)?target.row+1:0)));
   const dragDropCols=Math.max(1,q.targetLayout?.cols||Math.max(1,...dragDropTargets.map(target=>Number.isInteger(target.col)?target.col+1:0)));
   const getDragDropCell=(row,col)=>dragDropTargets.find(target=>target.row===row&&target.col===col);
+  const canSubmit=q.type==="DRAG & DROP"
+    ? Boolean(q.items?.length)&&q.items.every(item=>mapping[item.id])
+    : q.type==="FILL BLANK"
+      ? Boolean(q.blanks?.length)&&q.blanks.every(blank=>String(blanks[blank.id]||"").trim())
+      : q.type==="ORDERING"
+        ? Boolean(orderItems.length)
+        : selected!==null;
 
   return(
     <div className="pbq-question-screen fu active-practice-screen" style={{padding:"24px",maxWidth:860,margin:"0 auto"}}>
       {/* Header */}
-      <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:18,flexWrap:"wrap"}}>
+      <header className="pbq-session-header">
         <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>onDone(null)}>← Back to PBQ Bank</button>
-        <SimIcon type={q.type}/>
-        <div style={{flex:1,minWidth:0}}>
-          <div style={{fontWeight:600,fontSize:15,color:t.text}}><GlossaryText text={q.title} t={t}/></div>
-          <div style={{display:"flex",gap:8,marginTop:4,flexWrap:"wrap"}}>
+        <div className="pbq-session-title">
+          <strong><GlossaryText text={q.title} t={t}/></strong>
+          <div className="pbq-session-meta">
             {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
             <SimBadge type={q.type} t={t}/>
             <DiffBadge d={q.difficulty} t={t}/>
@@ -18443,22 +18633,22 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
           </div>
         </div>
         <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
-      </div>
+      </header>
 
       {/* Scenario */}
-      <div className="card question-card" style={{padding:"18px 22px",marginBottom:18,borderLeft:`3px solid ${simType.color}`}}>
-        <div className="label" style={{marginBottom:8}}>Scenario</div>
+      <div className="card question-card pbq-scenario-card" style={{"--sim-color":simType.color}}>
+        <div className="pbq-scenario-label"><span><FileText size={14}/></span>Read the scenario</div>
         <p className="scenario-text" style={{fontSize:14,color:t.textSec,lineHeight:1.75}}><GlossaryText text={q.scenario} t={t}/></p>
-        {q.steps&&<div style={{marginTop:12}}>
-          {q.steps.map((s,i)=><div key={i} style={{fontSize:12,color:t.textDim,padding:"2px 0"}}><span style={{color:simType.color,fontWeight:600,marginRight:8}}>{i+1}.</span>{s}</div>)}
+        {q.steps&&<div className="pbq-step-list" style={{"--sim-color":simType.color}}>
+          {q.steps.map((s,i)=><div key={i} className="pbq-step-row"><span>{i+1}</span><div>{s}</div></div>)}
         </div>}
       </div>
       <CodeSnippetBlock code={q.codeBlock} language={q.codeLanguage} t={t}/>
 
       {/* TERMINAL */}
       {q.type==="TERMINAL SIM"&&(
-        <div style={{marginBottom:18}}>
-          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:8}}>Terminal</div>
+        <section className="pbq-workspace-section">
+          <div className="pbq-workspace-head"><div><h3>Terminal workspace</h3><p>Run a relevant command, review the output, then choose your answer.</p></div><SquareTerminal size={20} color={simType.color}/></div>
           <div className="terminal" style={{minHeight:160}}>
             {termHistory.length===0&&<div style={{color:t.codeMuted}}>Type a command and press Enter. {q.hint}</div>}
             {termHistory.map((h,i)=>(
@@ -18476,39 +18666,31 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
             {showHint?"Hide hint":"Show hint"}
           </button>
           {showHint&&<div style={{fontSize:12,color:t.textDim,marginTop:6,padding:"8px 12px",background:t.panel,borderRadius:6}}>{q.hint}</div>}
-        </div>
+        </section>
       )}
 
       {/* LOG ANALYSIS */}
       {q.type==="LOG ANALYSIS"&&(
-        <div style={{marginBottom:18}}>
-          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:8}}>Log Data</div>
+        <section className="pbq-workspace-section">
+          <div className="pbq-workspace-head"><div><h3>Log evidence</h3><p>Inspect the events before choosing the strongest conclusion.</p></div><ListOrdered size={20} color={simType.color}/></div>
           <div className="log-block">{q.logData}</div>
-        </div>
+        </section>
       )}
 
       {/* CONFIG/ACL */}
       {q.type==="CONFIG/ACL"&&(
-        <div style={{marginBottom:18}}>
-          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:8}}>Current Configuration (has issues)</div>
+        <section className="pbq-workspace-section">
+          <div className="pbq-workspace-head"><div><h3>Configuration review</h3><p>This configuration contains an issue. Find the best correction.</p></div><MonitorCog size={20} color={simType.color}/></div>
           <div className="terminal" style={{color:t.codeWarn,fontSize:12,minHeight:80}}>{q.currentConfig}</div>
-        </div>
+        </section>
       )}
 
       {/* HOTSPOT */}
       {q.type==="HOTSPOT"&&(
-        <div style={{marginBottom:18}}>
-          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:8}}>Scenario Details</div>
+        <section className="pbq-workspace-section">
+          <div className="pbq-workspace-head"><div><h3>Scenario map</h3><p>Review each detail before selecting the best response.</p></div><Crosshair size={20} color={simType.color}/></div>
           <pre className="log-block" style={{fontSize:13}}>{q.diagram}</pre>
-        </div>
-      )}
-
-      {/* SCENARIO */}
-      {q.type==="SCENARIO"&&(
-        <div style={{marginBottom:18}}>
-          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:8}}>Full Scenario</div>
-          <div className="card scenario-text" style={{padding:"16px 20px",fontSize:13,color:t.textSec,lineHeight:1.8,whiteSpace:"pre-wrap"}}><GlossaryText text={q.scenario} t={t}/></div>
-        </div>
+        </section>
       )}
 
       {/* DRAG & DROP */}
@@ -18656,17 +18838,16 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
 
       {/* ORDERING */}
       {q.type==="ORDERING"&&!submitted&&(
-        <div style={{marginBottom:18}}>
-          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:6}}>Drag each answer to rank it from top to bottom</div>
-          <div style={{fontSize:12,color:t.textDim,marginBottom:12}}>Works with mouse, trackpad, and touch.</div>
+        <section className="pbq-workspace-section">
+          <div className="pbq-workspace-head"><div><h3>Put the steps in order</h3><p>Drag each answer into the correct top-to-bottom sequence. Touch is supported.</p></div><ListOrdered size={20} color={simType.color}/></div>
           <SortableOrderList items={orderItems} onChange={setOrderItems} t={t}/>
-        </div>
+        </section>
       )}
 
       {/* FILL BLANK */}
       {q.type==="FILL BLANK"&&!submitted&&(
-        <div style={{marginBottom:18}}>
-          <div style={{fontWeight:500,fontSize:13,color:t.text,marginBottom:12}}>Fill in each blank</div>
+        <section className="pbq-workspace-section">
+          <div className="pbq-workspace-head"><div><h3>Complete each blank</h3><p>Every field must contain an answer before you can submit.</p></div><TextCursorInput size={20} color={simType.color}/></div>
           <div style={{display:"flex",flexDirection:"column",gap:12}}>
             {q.blanks?.map(b=>(
               <div key={b.id} className="card" style={{padding:"14px 18px"}}>
@@ -18676,12 +18857,13 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* MCQ for most types */}
       {(q.choices||q.options)&&(
-        <div style={{marginBottom:18}}>
+        <section className="pbq-workspace-section">
+          <div className="pbq-workspace-head"><div><h3>Make your decision</h3><p>Select the strongest response based on the scenario and evidence above.</p></div><Target size={20} color={simType.color}/></div>
           <div className="question-prompt" style={{fontSize:13,color:t.text,marginBottom:10}}><QuestionStemText text={q.question||"Select the best answer:"} t={t} compact/></div>
           <div style={{display:"flex",flexDirection:"column",gap:9}}>
             {(q.choices||q.options||[]).map((choice,i)=>{
@@ -18689,23 +18871,24 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
               if(submitted){cls+=" done"; if(i===q.correct)cls+=" ok"; else if(i===selected&&i!==q.correct)cls+=" bad";}
               else if(selected===i)cls+=" sel";
               return(
-                <div key={i} className={cls} onClick={()=>!submitted&&setSelected(i)}>
+                <button type="button" key={i} className={cls} disabled={submitted} aria-pressed={!submitted&&selected===i} onClick={()=>!submitted&&setSelected(i)}>
                   <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
                   <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={choice} t={t}/></span>
                   {submitted&&i===q.correct&&<Check size={18} color={t.green} strokeWidth={2.8}/>}
                   {submitted&&i===selected&&i!==q.correct&&<X size={18} color={t.red} strokeWidth={2.8}/>}
-                </div>
+                </button>
               );
             })}
           </div>
-        </div>
+        </section>
       )}
 
       {/* Submit / feedback */}
       {!submitted?(
         <div className="practice-action-bar" style={{justifyContent:"flex-end"}}>
-          <button className="btn btn-primary" disabled={selected===null&&q.type!=="DRAG & DROP"&&q.type!=="ORDERING"&&q.type!=="FILL BLANK"} onClick={submit}>
-            Submit Answer
+          <div className="practice-action-copy"><strong>{canSubmit?"Ready to check":"Complete the activity first"}</strong>{canSubmit?"SecurePlus will mark each part and explain the result.":q.type==="DRAG & DROP"?"Place every option before submitting.":q.type==="FILL BLANK"?"Fill in every blank before submitting.":"Choose an answer before submitting."}</div>
+          <button className="btn btn-primary" style={{minWidth:190}} disabled={!canSubmit} onClick={submit}>
+            Check my PBQ →
           </button>
         </div>
       ):(
