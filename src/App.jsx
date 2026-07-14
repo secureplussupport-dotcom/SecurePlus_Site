@@ -15023,6 +15023,25 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .brilliant-proof-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;}
 .brilliant-proof-row span{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid ${t.border};border-radius:999px;background:${t.surface};color:${t.textSec};font-size:12px;font-weight:850;box-shadow:0 8px 18px rgba(7,12,24,.05);}
 .brilliant-proof-row span::before{content:"";width:8px;height:8px;border-radius:50%;background:${t.green};box-shadow:0 0 0 4px ${t.green}18;}
+.guest-conversion-hero .brilliant-title{font-size:clamp(44px,5.6vw,68px);}
+.guest-title-accent{display:block;color:${t.accent};background:linear-gradient(90deg,${t.accent},${t.green});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.guest-cta-note{display:flex;align-items:center;gap:8px;margin-top:15px;color:${t.textDim};font-size:12px;font-weight:800;line-height:1.5;}
+.guest-cta-note svg{color:${t.green};flex-shrink:0;}
+.guest-value-section{position:relative;overflow:hidden;padding:28px;border:1px solid ${t.accent}3f;border-radius:8px;background:linear-gradient(135deg,${t.accent}13,${t.surface} 48%,${t.green}0d);box-shadow:0 22px 54px rgba(7,12,24,.11);}
+.guest-value-section::after{content:"";position:absolute;right:-70px;top:-80px;width:220px;height:220px;border-radius:50%;border:38px solid ${t.accent}08;pointer-events:none;}
+.guest-value-head{position:relative;z-index:1;display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:20px;}
+.guest-value-head h2{max-width:660px;margin-top:6px;color:${t.text};font-size:clamp(27px,3vw,36px);line-height:1.14;text-wrap:balance;}
+.guest-value-head p{max-width:370px;color:${t.textSec};font-size:13px;line-height:1.7;}
+.guest-value-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.guest-value-card{min-width:0;padding:17px;border:1px solid ${t.border};border-radius:8px;background:color-mix(in srgb,${t.surface} 92%,transparent);box-shadow:0 12px 28px rgba(7,12,24,.07);}
+.guest-value-icon{width:38px;height:38px;display:grid;place-items:center;margin-bottom:13px;border-radius:8px;background:color-mix(in srgb,var(--value-color) 14%,transparent);color:var(--value-color);border:1px solid color-mix(in srgb,var(--value-color) 35%,transparent);}
+.guest-value-card strong{display:block;margin-bottom:6px;color:${t.text};font-size:14px;line-height:1.35;}
+.guest-value-card p{color:${t.textSec};font-size:12px;line-height:1.65;}
+.guest-final-cta{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center;padding:28px;border:1px solid ${t.green}3d;border-radius:8px;background:linear-gradient(125deg,${t.green}13,${t.surface} 55%,${t.accent}10);box-shadow:0 20px 48px rgba(7,12,24,.1);}
+.guest-final-cta h2{margin:5px 0 8px;color:${t.text};font-size:clamp(26px,3.2vw,36px);line-height:1.15;text-wrap:balance;}
+.guest-final-cta p{max-width:650px;color:${t.textSec};font-size:13px;line-height:1.7;}
+.guest-final-actions{display:flex;flex-direction:column;align-items:stretch;gap:9px;min-width:220px;}
+.guest-final-actions .btn{justify-content:center;}
 .brilliant-lesson-shell{position:relative;z-index:1;padding:18px;border-radius:28px;border:1px solid ${t.border};background:linear-gradient(180deg,${t.surface},${t.panel});box-shadow:0 30px 80px rgba(7,12,24,.18);animation:floatCard 6s ease-in-out infinite;}
 .brilliant-lesson-shell::before{content:"";position:absolute;inset:-1px;border-radius:inherit;background:linear-gradient(135deg,${t.accent}45,transparent 28%,${t.green}35 74%,transparent);z-index:-1;opacity:.55;}
 .brilliant-lesson-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px;padding:4px 2px 10px;border-bottom:1px solid ${t.border};}
@@ -15052,6 +15071,29 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .landing-feature-grid{gap:18px;}
 .landing-feature-card{border-radius:22px;box-shadow:0 18px 42px rgba(7,12,24,.08);}
 .landing-split-section .card,.landing-pricing-grid .card,.landing-faq-grid .card,.landing-auth-section{border-radius:24px;}
+.landing-auth-section{scroll-margin-top:18px;}
+.auth-conversion-copy h2{font-size:clamp(27px,3.2vw,36px)!important;line-height:1.16!important;text-wrap:balance;}
+.auth-benefit-list{display:grid;gap:10px;margin-top:20px;}
+.auth-benefit-row{display:grid;grid-template-columns:32px minmax(0,1fr);gap:10px;align-items:start;padding:10px;border:1px solid ${t.border};border-radius:8px;background:${t.surface}b8;}
+.auth-benefit-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:8px;background:${t.green}12;color:${t.green};}
+.auth-benefit-row strong{display:block;color:${t.text};font-size:12px;margin-bottom:2px;}
+.auth-benefit-row span{display:block;color:${t.textSec};font-size:11px;line-height:1.55;}
+.auth-conversion-card{padding:26px!important;border-color:${t.accent}42!important;box-shadow:0 24px 60px rgba(7,12,24,.15)!important;}
+.auth-mode-tabs{display:flex;border-bottom:1px solid ${t.border};margin-bottom:20px;}
+.auth-mode-tab{appearance:none;flex:1;border:0;background:transparent;cursor:pointer;}
+.auth-form-heading{text-align:center;margin:-2px 0 16px;}
+.auth-form-heading strong{display:block;color:${t.text};font-size:18px;line-height:1.3;margin-bottom:4px;}
+.auth-form-heading span{display:block;color:${t.textSec};font-size:11px;line-height:1.5;}
+.auth-divider{display:flex;align-items:center;gap:10px;color:${t.textDim};font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.05em;}
+.auth-divider::before,.auth-divider::after{content:"";height:1px;flex:1;background:${t.border};}
+.auth-referral-details{border:1px solid ${t.border};border-radius:8px;background:${t.panel};overflow:hidden;}
+.auth-referral-details summary{cursor:pointer;padding:11px 12px;color:${t.textSec};font-size:12px;font-weight:850;list-style:none;}
+.auth-referral-details summary::-webkit-details-marker{display:none;}
+.auth-referral-details summary::after{content:"+";float:right;color:${t.accent};font-size:16px;line-height:1;}
+.auth-referral-details[open] summary::after{content:"−";}
+.auth-referral-content{padding:0 12px 12px;}
+.auth-trust-line{display:flex;align-items:center;justify-content:center;gap:7px;color:${t.textDim};font-size:10px;font-weight:800;line-height:1.45;text-align:center;}
+.auth-trust-line svg{color:${t.green};flex-shrink:0;}
 .pillar-icon{width:46px;height:46px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;color:var(--pillar-color);background:color-mix(in srgb,var(--pillar-color) 13%, transparent);border:1px solid color-mix(in srgb,var(--pillar-color) 38%, transparent);transition:transform .2s,box-shadow .2s,background .2s;}
 .pillar-icon span,.pillar-icon::before,.pillar-icon::after{content:"";position:absolute;display:block;transition:all .25s ease;}
 .landing-feature-card:hover .pillar-icon{transform:translateY(-2px) scale(1.04);box-shadow:0 14px 30px color-mix(in srgb,var(--pillar-color) 28%, transparent);background:color-mix(in srgb,var(--pillar-color) 19%, transparent);}
@@ -15385,8 +15427,15 @@ body{background:
   .brilliant-title{font-size:40px!important;line-height:1.02!important;}
   .brilliant-copy{font-size:15px!important;line-height:1.65!important;}
   .brilliant-action-row .btn{width:100%;justify-content:center;}
+  .guest-cta-note{align-items:flex-start;}
   .brilliant-proof-row span{flex:1 1 100%;justify-content:center;}
   .brilliant-lesson-shell{padding:12px!important;border-radius:22px!important;}
+  .guest-value-section{padding:20px!important;}
+  .guest-value-head{display:block!important;}
+  .guest-value-head p{margin-top:10px;}
+  .guest-value-grid{grid-template-columns:minmax(0,1fr)!important;}
+  .guest-final-cta{grid-template-columns:minmax(0,1fr)!important;padding:22px!important;}
+  .guest-final-actions{min-width:0!important;}
   .brilliant-path-section{padding:18px!important;border-radius:22px!important;}
   .brilliant-section-head{align-items:flex-start!important;}
   .brilliant-section-head h2{font-size:25px!important;}
@@ -15402,6 +15451,7 @@ body{background:
   .smart-compare{grid-template-columns:1fr!important;}
   .smart-compare-card{min-height:auto!important;}
   .landing-auth-section{gap:14px!important;}
+  .auth-conversion-card{padding:20px!important;}
   .upgrade-page{padding:24px 16px 132px!important;}
   .upgrade-hero h2{font-size:27px!important;}
   .upgrade-outcome-grid{grid-template-columns:1fr!important;}
@@ -16501,6 +16551,13 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
     setShowLoginModal(initialMode==="login");
     setErr("");
     setOk("");
+    if(initialMode==="signup"){
+      capture("signup_form_viewed", { source:"guest_landing" });
+      const frame=window.requestAnimationFrame(()=>{
+        document.getElementById("landing-auth")?.scrollIntoView({block:"start"});
+      });
+      return()=>window.cancelAnimationFrame(frame);
+    }
   },[initialMode]);
   const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
   const resetMessages=()=>{setErr("");setOk("");};
@@ -16510,6 +16567,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
       setShowLoginModal(true);
       return;
     }
+    capture("landing_signup_cta_clicked", { source:"auth_landing" });
     setTimeout(()=>document.getElementById("landing-auth")?.scrollIntoView({behavior:"smooth",block:"start"}),30);
   };
   useEffect(()=>{
@@ -16518,7 +16576,8 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
     document.addEventListener("keydown",closeOnEscape);
     return()=>document.removeEventListener("keydown",closeOnEscape);
   },[showLoginModal]);
-  const handle=async()=>{
+  const handle=async event=>{
+    event?.preventDefault?.();
     resetMessages();setLoading(true);
     try{
       const email=normalizeEmail(form.email);
@@ -16602,8 +16661,8 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
   const handleGoogle=async()=>{
     resetMessages();setLoading(true);
     try{
-      saveReferralCode(form.referral);
-      capture("login_started", { method: "google" });
+      const referralCode=saveReferralCode(form.referral);
+      capture(mode==="signup"?"signup_started":"login_started", { method:"google", has_referral:Boolean(referralCode) });
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo: window.location.origin },
@@ -16816,70 +16875,101 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
         </section>
 
         <section id="landing-auth" className="landing-auth-section">
-          <div>
-            <div className="label" style={{color:t.accent,marginBottom:8}}>Get Started Now</div>
-            <h2 style={{fontSize:28,color:t.text,marginBottom:8}}>Create a free SecurePlus account</h2>
+          <div className="auth-conversion-copy">
+            <div className="label" style={{color:t.green,marginBottom:8}}>Free account · No credit card</div>
+            <h2 style={{color:t.text,marginBottom:10}}>Turn every practice answer into a smarter study plan.</h2>
             <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,maxWidth:520}}>
-              Save your attempts, see weak areas, and keep practising from any device. Pro is optional and unlocks PBQ simulations for $4.99/year.
+              Your account saves your work and helps SecurePlus bring weak topics back at the right time. Start free and add Pro only if you want PBQ simulations and Exam Mode.
             </p>
+            <div className="auth-benefit-list">
+              <div className="auth-benefit-row">
+                <div className="auth-benefit-icon"><ChartNoAxesColumnIncreasing size={17}/></div>
+                <div><strong>Keep your progress</strong><span>Scores, attempts, streaks, and starred questions stay with your account.</span></div>
+              </div>
+              <div className="auth-benefit-row">
+                <div className="auth-benefit-icon"><Brain size={17}/></div>
+                <div><strong>Get a focused review queue</strong><span>Missed questions come back sooner so every session has a purpose.</span></div>
+              </div>
+              <div className="auth-benefit-row">
+                <div className="auth-benefit-icon"><ShieldCheck size={17}/></div>
+                <div><strong>Stay in control</strong><span>The free plan includes all MCQs. Pro remains completely optional.</span></div>
+              </div>
+            </div>
           </div>
 
-          <div className="card" style={{padding:"28px 28px"}}>
-          <div style={{display:"flex",borderBottom:`1px solid ${t.border}`,marginBottom:24}}>
+          <div className="card auth-conversion-card">
+          <div className="auth-mode-tabs">
             {["login","signup"].map(m=>(
-              <div key={m} className={`tab ${mode===m?"act":""}`} style={{flex:1,textAlign:"center"}} onClick={()=>{setMode(m);resetMessages();}}>
+              <button type="button" key={m} className={`tab auth-mode-tab ${mode===m?"act":""}`} onClick={()=>{setMode(m);resetMessages();}}>
                 {m==="login"?"Sign In":"Create Account"}
-              </div>
+              </button>
             ))}
           </div>
           <Alert msg={err} type="error" t={t}/>
           <Alert msg={ok} type="success" t={t}/>
-          <div style={{display:"flex",flexDirection:"column",gap:14}}>
+          {mode==="signup"&&(
+            <div className="auth-form-heading">
+              <strong>Create your free account</strong>
+              <span>Save progress now. No payment details needed.</span>
+            </div>
+          )}
+          <form style={{display:"flex",flexDirection:"column",gap:14}} onSubmit={handle}>
+            {isSupabaseConfigured&&mode==="signup"&&(
+              <>
+                <button type="button" className="btn btn-outline" style={{width:"100%",justifyContent:"center",padding:"10px"}} onClick={handleGoogle} disabled={loading}>
+                  Continue with Google
+                </button>
+                <div className="auth-divider"><span>or use email</span></div>
+              </>
+            )}
             {mode==="signup"&&(
               <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Full Name</label>
-                <input className="input" placeholder="Jane Smith" value={form.name} onChange={set("name")}/></div>
+                <input className="input" name="name" autoComplete="name" placeholder="Jane Smith" value={form.name} onChange={set("name")}/></div>
             )}
             <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Email</label>
-              <input className="input" type="email" placeholder="you@example.com" value={form.email} onChange={set("email")} onKeyDown={e=>e.key==="Enter"&&handle()}/></div>
+              <input className="input" name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={set("email")}/></div>
             {mode!=="reset"&&(
               <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Password</label>
-                <input className="input" type="password" placeholder="At least 8 characters" value={form.pass} onChange={set("pass")} onKeyDown={e=>e.key==="Enter"&&handle()}/></div>
+                <input className="input" name="password" type="password" autoComplete={mode==="signup"?"new-password":"current-password"} placeholder="At least 8 characters" value={form.pass} onChange={set("pass")}/></div>
             )}
             {mode==="signup"&&(
               <>
               <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Confirm Password</label>
-                <input className="input" type="password" placeholder="••••••••" value={form.confirm} onChange={set("confirm")} onKeyDown={e=>e.key==="Enter"&&handle()}/></div>
-              <div>
-                <label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Referral code</label>
-                <input className="input" placeholder="Optional code from a friend" value={form.referral} onChange={e=>setForm(f=>({...f,referral:e.target.value.toUpperCase()}))}/>
-                <div style={{fontSize:12,color:t.textDim,lineHeight:1.6,marginTop:6}}>
-                  Optional. A valid referral gives you 7 days of Pro after signup. Your friend gets 7 days too, unless they already have Pro.
+                <input className="input" name="confirm-password" type="password" autoComplete="new-password" placeholder="••••••••" value={form.confirm} onChange={set("confirm")}/></div>
+              <details className="auth-referral-details" defaultOpen={Boolean(form.referral)}>
+                <summary>Have a referral code?</summary>
+                <div className="auth-referral-content">
+                  <input className="input" name="referral" autoComplete="off" placeholder="Optional code from a friend" value={form.referral} onChange={e=>setForm(f=>({...f,referral:e.target.value.toUpperCase()}))}/>
+                  <div style={{fontSize:11,color:t.textDim,lineHeight:1.55,marginTop:6}}>
+                    A valid referral gives you and your friend 7 days of Pro, unless your friend already has Pro.
+                  </div>
                 </div>
-              </div>
+              </details>
               <div style={{fontSize:12,color:t.textDim,lineHeight:1.6}}>
                 Use 8+ characters with uppercase, lowercase, a number, and a special character.
               </div>
               </>
             )}
-            <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"11px",marginTop:4}} onClick={handle} disabled={loading}>
-              {loading?"Processing...":mode==="login"?"Sign In":mode==="reset"?"Send Reset Email":"Create Account"}
+            <button type="submit" className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"11px",marginTop:4}} disabled={loading}>
+              {loading?"Processing...":mode==="login"?"Sign In":mode==="reset"?"Send Reset Email":"Create my free account"}
             </button>
-            {isSupabaseConfigured&&mode!=="reset"&&(
-              <button className="btn btn-outline" style={{width:"100%",justifyContent:"center",padding:"10px"}} onClick={handleGoogle} disabled={loading}>
+            {isSupabaseConfigured&&mode==="login"&&(
+              <button type="button" className="btn btn-outline" style={{width:"100%",justifyContent:"center",padding:"10px"}} onClick={handleGoogle} disabled={loading}>
                 Continue with Google
               </button>
             )}
             {mode==="login"&&(
-              <button className="btn btn-ghost" style={{justifyContent:"center",fontSize:12}} onClick={()=>{setMode("reset");resetMessages();}} disabled={loading}>
+              <button type="button" className="btn btn-ghost" style={{justifyContent:"center",fontSize:12}} onClick={()=>{setMode("reset");resetMessages();}} disabled={loading}>
                 Forgot password?
               </button>
             )}
             {mode==="reset"&&(
-              <button className="btn btn-ghost" style={{justifyContent:"center",fontSize:12}} onClick={()=>{setMode("login");resetMessages();}} disabled={loading}>
+              <button type="button" className="btn btn-ghost" style={{justifyContent:"center",fontSize:12}} onClick={()=>{setMode("login");resetMessages();}} disabled={loading}>
                 Back to sign in
               </button>
             )}
-          </div>
+            {mode==="signup"&&<div className="auth-trust-line"><LockKeyhole size={13}/> Your account starts on the free plan. Pro is never added automatically.</div>}
+          </form>
           {!isSupabaseConfigured&&mode==="login"&&(
             <div style={{marginTop:16,padding:"12px 14px",background:t.panel,borderRadius:8,border:`1px solid ${t.border}`}}>
               <div style={{fontSize:12,fontWeight:600,color:t.textDim,marginBottom:4}}>DEMO ACCOUNT</div>
@@ -17228,45 +17318,78 @@ function Dashboard({user,attempts,onNav,t}) {
 
 function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
   const [activePath,setActivePath]=useState("mcq");
+  const startSignup=source=>{
+    capture("landing_signup_cta_clicked", { source });
+    onSignup();
+  };
   const learningPaths=[
     {id:"mcq",label:"MCQ foundations",tag:"Free",color:t.accent,body:`Start with all ${MCQ_BANK.length} MCQs. No account required.`,meta:"Practice now",action:onPractice},
     {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"Finish a short challenge and build a repeatable study rhythm.",meta:"5 questions/day",action:onDaily},
-    {id:"pbq",label:"PBQ simulations",tag:"Pro",color:t.amber,body:`Preview the style, then unlock ${PBQ_BANK.length} performance-based simulations.`,meta:"Applied practice",action:onSignup},
+    {id:"pbq",label:"PBQ simulations",tag:"Pro",color:t.amber,body:`Preview the style, then unlock ${PBQ_BANK.length} performance-based simulations.`,meta:"Applied practice",action:()=>startSignup("learning_path_pbq")},
+  ];
+  const accountBenefits=[
+    {title:"Keep every result",body:"Save scores, streaks, and completed questions instead of starting over.",color:t.accent,Icon:ChartNoAxesColumnIncreasing},
+    {title:"Know what to study next",body:"Smart Review turns missed questions into a focused review queue.",color:t.green,Icon:Brain},
+    {title:"Start free, upgrade only if useful",body:"All MCQs stay free. No credit card is needed to create your account.",color:t.amber,Icon:ShieldCheck},
   ];
   return (
     <div className="dashboard-shell">
-      <section className="home-hero guest-home-hero brilliant-hero">
+      <section className="home-hero guest-home-hero brilliant-hero guest-conversion-hero">
         <div className="home-hero-copy brilliant-hero-copy">
-          <div className="badge brilliant-eyebrow">CompTIA Security+ (SY0-701)</div>
-          <h1 className="home-title brilliant-title">Learn Security+ by doing.</h1>
+          <div className="badge brilliant-eyebrow">Your free CompTIA Security+ study account</div>
+          <h1 className="home-title brilliant-title">
+            Practise Security+.
+            <span className="guest-title-accent">Keep every win.</span>
+          </h1>
           <p className="home-subtitle brilliant-copy">
-            Interactive MCQs, PBQ simulations, and Smart Review for students who want practice that feels clear, modern, and useful.
+            Create a free account to save your scores, spot weak topics, and turn every answer into a clear next step toward SY0-701 exam confidence.
           </p>
           <div className="home-cta-row brilliant-action-row">
-            <button className="btn btn-primary brilliant-primary-cta" onClick={onPractice}>Start practising free →</button>
-            <button className="landing-login-link" onClick={onLogin}>Already have an account? Log in</button>
+            <button className="btn btn-primary brilliant-primary-cta" onClick={()=>startSignup("hero_primary")}>Create my free account →</button>
+            <button className="btn btn-outline brilliant-secondary-cta" onClick={onPractice}>Try a free question</button>
           </div>
+          <div className="guest-cta-note"><ShieldCheck size={16}/> No credit card · Free MCQs included · Pro is optional</div>
           <div className="brilliant-proof-row">
             <span>{MCQ_BANK.length} MCQs</span>
             <span>{PBQ_BANK.length} PBQs</span>
-            <span>No account needed to start</span>
+            <span>Progress saved automatically</span>
           </div>
+          <button className="landing-login-link" onClick={onLogin}>Already studying with us? Log in</button>
         </div>
         <div className="brilliant-lesson-shell">
           <div className="brilliant-lesson-top">
             <div>
-              <div className="label brilliant-lesson-kicker">Try it now</div>
-              <strong>Today's Security+ warm-up</strong>
+              <div className="label brilliant-lesson-kicker">See how it feels</div>
+              <strong>Try today's Security+ warm-up</strong>
             </div>
             <span className="brilliant-lesson-duration">2 min</span>
           </div>
           <div className="brilliant-daily-wrap">
             <LandingDailyChallengeWidget
               t={t}
-              onSignup={onSignup}
+              onSignup={()=>startSignup("daily_challenge")}
               onOpenDaily={onDaily}
             />
           </div>
+        </div>
+      </section>
+
+      <section className="guest-value-section" aria-labelledby="free-account-value-title">
+        <div className="guest-value-head">
+          <div>
+            <div className="label" style={{color:t.green}}>Why create an account?</div>
+            <h2 id="free-account-value-title">Your free account remembers what you should study next.</h2>
+          </div>
+          <p>Guest practice helps you explore. A free account makes each session build on the last one.</p>
+        </div>
+        <div className="guest-value-grid">
+          {accountBenefits.map(({title,body,color,Icon})=>(
+            <div key={title} className="guest-value-card">
+              <div className="guest-value-icon" style={{"--value-color":color}}><Icon size={19} strokeWidth={2.3}/></div>
+              <strong>{title}</strong>
+              <p>{body}</p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -17296,18 +17419,17 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
         </div>
       </section>
 
-      <div className="home-duo-grid">
-        <div className="card home-route-card">
-          <div className="label" style={{color:t.green}}>Start instantly</div>
-          <h3>Instant access. No sign-up required.</h3>
-          <p>Unregistered users can access MCQ Practice, Daily Challenge, and Objectives. Create an account when you want saved progress and personalisation.</p>
+      <section className="guest-final-cta">
+        <div>
+          <div className="label" style={{color:t.green}}>Ready when you are</div>
+          <h2>Make today's practice count tomorrow.</h2>
+          <p>Create your free account and SecurePlus will keep your progress, weak topics, and Smart Review queue ready for your next session.</p>
         </div>
-        <div className="card home-route-card">
-          <div className="label" style={{color:t.amber}}>Keep momentum</div>
-          <h3>Never lose your study momentum.</h3>
-          <p>Create a free account when you are ready to keep streaks, weak topics, and your Smart Review queue across devices.</p>
+        <div className="guest-final-actions">
+          <button className="btn btn-primary" onClick={()=>startSignup("closing_cta")}>Create my free account</button>
+          <button className="btn btn-ghost" onClick={onLogin}>I already have an account</button>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
@@ -22953,6 +23075,9 @@ export default function App() {
             <div style={{padding:"12px 14px",borderTop:`1px solid ${t.border}`,display:"flex",flexDirection:"column",gap:6}}>
               <button className="btn btn-ghost" style={{fontSize:12,justifyContent:"flex-start"}} onClick={()=>setDarkMode(d=>!d)}>
                 {darkMode?<><Sun size={16}/> Light Mode</>:<><Moon size={16}/> Dark Mode</>}
+              </button>
+              <button className="btn btn-primary" style={{fontSize:12,justifyContent:"center"}} onClick={goToSignup}>
+                Create Free Account
               </button>
               <button className="btn btn-outline" style={{fontSize:12,justifyContent:"flex-start"}} onClick={goToLogin}>
                 Log In
