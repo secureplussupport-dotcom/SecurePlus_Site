@@ -8,7 +8,7 @@ a:hover{text-decoration:underline}
 .wrap{width:min(1080px,calc(100% - 36px));margin:0 auto}
 .nav{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:20px 0}
 .brand{display:flex;align-items:center;gap:10px;font-weight:900;color:#fff}
-.brand img{width:36px;height:36px;border-radius:8px}
+.brand img{width:36px;height:36px;border-radius:0;image-rendering:pixelated}
 .navlinks{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}
 .hero{padding:62px 0 34px}
 .eyebrow{color:#60a5fa;font-weight:900;text-transform:uppercase;font-size:13px;letter-spacing:.08em;margin-bottom:14px}

@@ -1,64 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
-  <title id="title">SecurePlus logo</title>
-  <desc id="desc">A modern SecurePlus S plus monogram with circuit nodes and a glowing learning orbit.</desc>
-  <defs>
-    <linearGradient id="bg" x1="18" y1="12" x2="144" y2="148" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#16213f"/>
-      <stop offset=".44" stop-color="#07111f"/>
-      <stop offset="1" stop-color="#062f34"/>
-    </linearGradient>
-    <linearGradient id="tile" x1="34" y1="22" x2="128" y2="139" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#1d4ed8"/>
-      <stop offset=".52" stop-color="#2563eb"/>
-      <stop offset="1" stop-color="#14b8a6"/>
-    </linearGradient>
-    <linearGradient id="mark" x1="47" y1="39" x2="116" y2="118" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#f8fafc"/>
-      <stop offset=".58" stop-color="#dbeafe"/>
-      <stop offset="1" stop-color="#99f6e4"/>
-    </linearGradient>
-    <linearGradient id="orbit" x1="30" y1="39" x2="132" y2="121" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#f59e0b"/>
-      <stop offset=".45" stop-color="#60a5fa"/>
-      <stop offset="1" stop-color="#14b8a6"/>
-    </linearGradient>
-    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="18" stdDeviation="14" flood-color="#020617" flood-opacity=".42"/>
-    </filter>
-    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB">
-      <feGaussianBlur stdDeviation="4" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc" shape-rendering="crispEdges">
+  <title id="title">SecurePlus pixel logo</title>
+  <desc id="desc">A pixel-art blue and teal shield with a white check and amber plus sign.</desc>
 
-  <rect width="160" height="160" rx="36" fill="url(#bg)"/>
-  <path d="M23 46c20-12 42-18 66-18 20 0 36 4 48 13" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" opacity=".16"/>
-  <path d="M25 121c21 9 43 12 66 8 18-3 33-9 45-18" fill="none" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" opacity=".16"/>
+  <path d="M16 0H144V8H152V16H160V144H152V152H144V160H16V152H8V144H0V16H8V8H16Z" fill="#07111f"/>
+  <path d="M16 8H144V16H152V48H144V24H136V16H24V24H16V48H8V16H16Z" fill="#111c34"/>
 
-  <g filter="url(#softShadow)">
-    <rect x="30" y="25" width="100" height="110" rx="30" fill="url(#tile)"/>
-    <rect x="38" y="33" width="84" height="94" rx="24" fill="#07111f" opacity=".72"/>
-    <path d="M47 111c18 14 47 13 63-1 13-12 7-31-11-34l-30-5c-16-3-19-19-7-28 13-10 36-8 51 5" fill="none" stroke="url(#mark)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M102 48v37M84 66h36" fill="none" stroke="#14b8a6" stroke-width="10" stroke-linecap="round"/>
-    <path d="M102 48v37M84 66h36" fill="none" stroke="#f8fafc" stroke-width="4" stroke-linecap="round" opacity=".72"/>
+  <g fill="#1e2a44">
+    <path d="M8 64H16V72H8Z"/>
+    <path d="M16 136H24V144H16Z"/>
+    <path d="M136 128H144V136H136Z"/>
+    <path d="M144 64H152V72H144Z"/>
   </g>
 
-  <g fill="none" stroke="url(#orbit)" stroke-linecap="round" filter="url(#glow)">
-    <path d="M33 94c21 23 59 29 88 8" stroke-width="4" opacity=".9"/>
-    <path d="M127 51c-19-18-50-25-79-12" stroke-width="3" opacity=".62"/>
-  </g>
+  <path d="M40 28H120V36H128V92H120V108H112V116H104V124H96V132H88V140H72V132H64V124H56V116H48V108H40V92H32V36H40Z" fill="#2563eb"/>
+  <path d="M48 44H112V92H104V100H96V108H88V116H72V108H64V100H56V92H48Z" fill="#07111f"/>
+  <path d="M32 76H40V92H48V108H56V116H64V124H72V132H88V124H96V116H104V108H112V92H120V76H128V92H120V108H112V116H104V124H96V132H88V140H72V132H64V124H56V116H48V108H40V92H32Z" fill="#14b8a6"/>
+  <path d="M40 36H120V44H48V76H40Z" fill="#60a5fa"/>
 
-  <g fill="#f8fafc">
-    <circle cx="39" cy="94" r="5"/>
-    <circle cx="121" cy="102" r="5"/>
-    <circle cx="128" cy="51" r="4"/>
-    <circle cx="48" cy="39" r="4"/>
-  </g>
-  <g fill="#f59e0b">
-    <circle cx="117" cy="34" r="3"/>
-    <circle cx="34" cy="122" r="3"/>
-  </g>
+  <path d="M56 76H72V84H80V92H88V84H96V76H104V68H120V84H112V92H104V100H96V108H88V116H72V108H64V100H56Z" fill="#f8fafc"/>
+
+  <path d="M112 12H128V24H140V40H128V52H112V40H100V24H112Z" fill="#f59e0b"/>
+  <path d="M116 16H124V28H136V36H124V48H116V36H104V28H116Z" fill="#fbbf24"/>
 </svg>

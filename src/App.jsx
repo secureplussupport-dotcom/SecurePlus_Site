@@ -15636,11 +15636,11 @@ function ProgBar({v,c,h=8}) {
 function BrandMark({size=30}) {
   return (
     <img
-      src="/secureplus-logo.png"
+      src="/secureplus-logo.svg"
       alt="SecurePlus"
       width={size}
       height={size}
-      style={{borderRadius:Math.max(6,Math.round(size*.22)),display:"block",flexShrink:0,objectFit:"cover"}}
+      style={{borderRadius:0,display:"block",flexShrink:0,objectFit:"contain",imageRendering:"pixelated"}}
     />
   );
 }
