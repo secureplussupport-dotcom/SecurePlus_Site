@@ -16093,6 +16093,23 @@ function GlossaryText({text,t,style}) {
     </span>
   );
 }
+function PBQProseText({text,t,style,paragraphGap=6}) {
+  const value=String(text||"").trim();
+  if(!value)return null;
+  const paragraphs=value.split(/\n{2,}/).map(part=>part.trim()).filter(Boolean);
+  return(
+    <span style={{display:"block",...style}}>
+      {paragraphs.map((paragraph,index)=>(
+        <span
+          key={`${paragraph.slice(0,24)}-${index}`}
+          style={{display:"block",marginTop:index?paragraphGap:0,whiteSpace:"pre-wrap",overflowWrap:"anywhere"}}
+        >
+          <GlossaryText text={paragraph} t={t}/>
+        </span>
+      ))}
+    </span>
+  );
+}
 function splitQuestionStem(text) {
   const value=String(text||"").trim();
   if(!value)return {context:"",question:""};
@@ -19046,7 +19063,9 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       {/* Scenario */}
       <div className="card question-card pbq-scenario-card" style={{"--sim-color":simType.color}}>
         <div className="pbq-scenario-label"><span><FileText size={14}/></span>Read the scenario</div>
-        <p className="scenario-text" style={{fontSize:14,color:t.textSec,lineHeight:1.75}}><GlossaryText text={q.scenario} t={t}/></p>
+        <div className="scenario-text" style={{fontSize:14,color:t.textSec,lineHeight:1.62}}>
+          <PBQProseText text={q.scenario} t={t} paragraphGap={6}/>
+        </div>
         {q.steps&&<div className="pbq-step-list" style={{"--sim-color":simType.color}}>
           {q.steps.map((s,i)=><div key={i} className="pbq-step-row"><span>{i+1}</span><div>{s}</div></div>)}
         </div>}
@@ -19305,7 +19324,9 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
             <div style={{display:"flex",alignItems:"center",gap:8,fontWeight:700,fontSize:16,color:isCorrect()?t.green:t.red,marginBottom:10}}>
               {isCorrect()?<CheckCircle2 size={19}/>:<XCircle size={19}/>} {isCorrect()?"Correct":"Incorrect"}
             </div>
-            <p style={{fontSize:13,color:t.textSec,lineHeight:1.75}}><GlossaryText text={q.explanation} t={t}/></p>
+            <div style={{fontSize:13,color:t.textSec,lineHeight:1.62}}>
+              <PBQProseText text={q.explanation} t={t} paragraphGap={6}/>
+            </div>
             {/* Wrong answer feedback */}
             {!isCorrect()&&q.wrongFeedback&&selected!==null&&q.wrongFeedback[selected]&&(
               <div style={{marginTop:12,padding:"12px 14px",background:`${t.red}08`,borderRadius:7,border:`1px solid ${t.red}25`}}>
@@ -19328,7 +19349,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                         <span style={{fontSize:13,fontWeight:900,color:part.correct?t.green:t.red}}>{part.correct?"Correct":"Incorrect"}</span>
                         <span style={{fontSize:12,fontWeight:800,color:t.text}}>{part.label}</span>
                       </div>
-                      {part.prompt&&<div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginBottom:5}}><GlossaryText text={part.prompt} t={t}/></div>}
+                      {part.prompt&&<div style={{fontSize:12,color:t.textSec,lineHeight:1.5,marginBottom:5}}><PBQProseText text={part.prompt} t={t} paragraphGap={5}/></div>}
                       <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>
                         Your answer: <strong style={{color:t.text}}>{part.userAnswer||"Blank"}</strong>
                       </div>
@@ -20085,8 +20106,8 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false})
                 </div>
               {expanded&&item.kind==="pbq"&&(
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:10}}>
-                  {q.scenario&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Scenario: </strong><GlossaryText text={q.scenario} t={t}/></div>}
-                  {q.question&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Question: </strong><GlossaryText text={q.question} t={t}/></div>}
+                  {q.scenario&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Scenario: </strong><PBQProseText text={q.scenario} t={t} paragraphGap={5}/></div>}
+                  {q.question&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Question: </strong><PBQProseText text={q.question} t={t} paragraphGap={5}/></div>}
                   {q.items&&q.targets&&(
                     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:8}}>
                       <div>
@@ -20160,7 +20181,9 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false})
               <QuestionStemText text={current.kind==="mcq"?q.q:(q.question||q.title)} t={t}/>
             </div>
             {current.kind==="pbq"&&q.scenario&&(
-              <p className="scenario-text" style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginTop:12}}><GlossaryText text={q.scenario} t={t}/></p>
+              <div className="scenario-text" style={{fontSize:13,color:t.textSec,lineHeight:1.58,marginTop:12}}>
+                <PBQProseText text={q.scenario} t={t} paragraphGap={5}/>
+              </div>
             )}
           </div>
 
@@ -22460,7 +22483,9 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
             ) : (
               <>
                 <div style={{fontSize:18,fontWeight:900,color:t.text,marginBottom:8}}><GlossaryText text={form.title||"PBQ title preview"} t={t}/></div>
-                <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:12}}><GlossaryText text={form.scenario||"Scenario preview will appear here."} t={t}/></p>
+                <div style={{fontSize:14,color:t.textSec,lineHeight:1.58,marginBottom:12}}>
+                  <PBQProseText text={form.scenario||"Scenario preview will appear here."} t={t} paragraphGap={6}/>
+                </div>
                 <div style={{fontSize:16,color:t.text,lineHeight:1.5,marginBottom:12}}><QuestionStemText text={form.question||"Task preview will appear here."} t={t} compact/></div>
                 <CodeSnippetBlock code={form.codeBlock} language={form.codeLanguage} t={t} title="Code sample preview"/>
                 {form.type==="FILL BLANK"&&(
