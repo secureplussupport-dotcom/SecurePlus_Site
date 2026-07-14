@@ -484,6 +484,7 @@ function appUserFromProfile(authUser, profile) {
     proTrialUntil: profile?.pro_trial_until || null,
     referralTrialExpired: Boolean(trialUntil && trialUntil.getTime() <= Date.now() && profile?.tier !== "pro"),
     referralCode: profile?.referral_code || "",
+    totalStars: Number(profile?.total_stars || 0),
     pendingReferralCode,
     authProvider: "supabase",
     loginMethod: authUser?.app_metadata?.provider || "email",
@@ -492,19 +493,35 @@ function appUserFromProfile(authUser, profile) {
 
 async function getSupabaseProfile(authUser) {
   if (!supabase || !authUser) return null;
-  const full = await supabase
+  let full = await supabase
     .from("profiles")
-    .select("id,email,tier,subscription_status,pro_trial_until,referral_code")
+    .select("id,email,tier,subscription_status,pro_trial_until,referral_code,total_stars")
     .eq("id", authUser.id)
     .maybeSingle();
+
+  if (full.error?.code === "42703" || /total_stars/i.test(full.error?.message || "")) {
+    full = await supabase
+      .from("profiles")
+      .select("id,email,tier,subscription_status,pro_trial_until,referral_code")
+      .eq("id", authUser.id)
+      .maybeSingle();
+  }
 
   if (!full.error) return full.data ? appUserFromProfile(authUser, full.data) : null;
 
-  const basic = await supabase
+  let basic = await supabase
     .from("profiles")
-    .select("id,email,tier,subscription_status")
+    .select("id,email,tier,subscription_status,total_stars")
     .eq("id", authUser.id)
     .maybeSingle();
+
+  if (basic.error?.code === "42703" || /total_stars/i.test(basic.error?.message || "")) {
+    basic = await supabase
+      .from("profiles")
+      .select("id,email,tier,subscription_status")
+      .eq("id", authUser.id)
+      .maybeSingle();
+  }
 
   if (basic.error) console.warn("Unable to load profile", basic.error);
   return basic.data ? appUserFromProfile(authUser, basic.data) : null;
@@ -630,6 +647,48 @@ async function saveSupabaseAttempt(userId, attempt) {
   if (!supabase || !userId) return;
   const { error } = await supabase.from("attempts").insert(toSupabaseAttempt(userId, attempt));
   if (error) console.warn("Unable to save attempt", error);
+}
+
+async function loadSupabaseAchievements(userId) {
+  if (!supabase || !userId) return {definitions:ACHIEVEMENTS,unlocks:[],totalStars:0,error:null};
+  const [definitionsResult,unlocksResult,profileResult] = await Promise.all([
+    supabase.from("achievements").select("id,title,description,star_value"),
+    supabase.from("user_achievements").select("achievement_id,unlocked_at").eq("user_id", userId),
+    supabase.from("profiles").select("total_stars").eq("id", userId).maybeSingle(),
+  ]);
+
+  const firstError = definitionsResult.error || unlocksResult.error || profileResult.error;
+  if (firstError) {
+    console.warn("Unable to load achievements", firstError);
+    return {definitions:ACHIEVEMENTS,unlocks:[],totalStars:0,error:firstError};
+  }
+
+  return {
+    definitions: definitionsResult.data?.length ? definitionsResult.data : ACHIEVEMENTS,
+    unlocks: unlocksResult.data || [],
+    totalStars: Number(profileResult.data?.total_stars || 0),
+    error: null,
+  };
+}
+
+async function submitAchievementSession(payload) {
+  const token = await getSupabaseAccessToken();
+  if (!token) return {success:false,newlyUnlocked:[]};
+  const response = await fetch("/api/attempts/submit", {
+    method:"POST",
+    headers:{
+      "content-type":"application/json",
+      authorization:`Bearer ${token}`,
+    },
+    body:JSON.stringify(payload),
+  });
+  const data = await response.json().catch(()=>({}));
+  if (!response.ok) throw new Error(data.error || "Unable to submit achievements.");
+  return {
+    success:Boolean(data.success),
+    newlyUnlocked:Array.isArray(data.newlyUnlocked)?data.newlyUnlocked:[],
+    totalStars:data.total_stars,
+  };
 }
 
 async function loadSupabaseStarred(userId) {
@@ -866,6 +925,19 @@ const CHAPTERS = [
   { id:"5", code:"5.0", title:"Security Program Management", emoji:"📋", weight:20,
     topics:["Governance","Risk Management","Compliance & Privacy","Security Policies","Business Continuity","Third-Party Risk"] },
 ];
+
+const ACHIEVEMENT_STAR_TOTAL = 30;
+const ACHIEVEMENTS = [
+  {id:"century_streak",title:"Century Streak",description:"Reach a 100-day study streak.",star_value:5},
+  {id:"fortress_builder",title:"Fortress Builder",description:"Maintain a 30-day study streak.",star_value:3},
+  {id:"flawless_victory",title:"Flawless Victory",description:"Score 100% on a full-length Exam Mode (min. 50 questions).",star_value:5},
+  {id:"domain_master",title:"Domain Master",description:"Get 100% correct in a single study session for any chapter.",star_value:2},
+  {id:"speed_demon",title:"Speed Demon",description:"Complete a full-length Exam Mode in under 10 minutes with a passing score (>= 80%).",star_value:5},
+  {id:"blitz_run",title:"Blitz Run",description:"Complete a 10-question MCQ session in under 90 seconds with 100% accuracy.",star_value:3},
+  {id:"pbq_crusher",title:"PBQ Crusher",description:"Complete all 105 PBQ simulations.",star_value:4},
+  {id:"no_stone_unturned",title:"No Stone Unturned",description:"Practice 100% of the active 412 MCQ question bank.",star_value:3},
+];
+const ACHIEVEMENT_MAP = Object.fromEntries(ACHIEVEMENTS.map(item=>[item.id,item]));
 
 function getChapterById(chId) {
   return CHAPTERS.find(ch=>ch.id===String(chId)) || CHAPTERS[0];
@@ -14497,6 +14569,39 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .readiness-pillar-help{margin-top:8px;padding-right:48px;color:${t.textDim};font-size:10px;line-height:1.45;}
 .readiness-weight{position:absolute;right:10px;bottom:10px;color:${t.textDim};font-size:8px;font-weight:900;text-transform:uppercase;}
 .readiness-trust-note{margin-top:12px;padding:11px 12px;border:1px solid color-mix(in srgb,var(--readiness-color) 24%,${t.border});border-radius:10px;background:color-mix(in srgb,var(--readiness-color) 7%,${t.panel});color:${t.textSec};font-size:11px;line-height:1.55;}
+.achievement-shortcut-card{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;padding:18px 20px!important;border-color:${t.amber}42!important;background:radial-gradient(circle at 92% 8%,${t.amber}18,transparent 30%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
+.achievement-shortcut-card h3{font-size:18px;color:${t.text};line-height:1.3;margin-bottom:4px;}
+.achievement-shortcut-card p{font-size:13px;color:${t.textSec};line-height:1.6;margin:0;}
+.achievement-mini-star{width:48px;height:48px;display:grid;place-items:center;clip-path:polygon(50% 0,61% 34%,98% 34%,68% 55%,79% 91%,50% 70%,21% 91%,32% 55%,2% 34%,39% 34%);background:linear-gradient(135deg,#facc15,#f59e0b);color:#fff7d6;font-weight:950;text-shadow:0 2px 0 rgba(0,0,0,.18);filter:drop-shadow(5px 5px 0 ${t.amber}20);}
+.achievements-page{padding:30px 24px 120px;max-width:1060px;margin:0 auto;}
+.achievements-hero{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(220px,.42fr) minmax(0,1fr);gap:24px;align-items:center;margin-bottom:18px;padding:28px!important;border-color:${t.amber}45!important;background:radial-gradient(circle at 16% 12%,${t.amber}24,transparent 35%),linear-gradient(135deg,${t.surface},${t.panel} 70%,${t.green}0b)!important;}
+.achievement-star-display{width:min(220px,56vw);aspect-ratio:1;display:grid;place-items:center;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 55%,80% 92%,50% 70%,20% 92%,32% 55%,2% 35%,39% 35%);background:linear-gradient(135deg,#fde68a,#f59e0b 55%,#b45309);color:#fff7d6;filter:drop-shadow(10px 10px 0 ${t.amber}18);text-align:center;}
+.achievement-star-display strong{display:block;font-size:42px;line-height:1;font-weight:950;text-shadow:0 3px 0 rgba(0,0,0,.18);}
+.achievement-star-display small{display:block;margin-top:5px;font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;color:#fff7d6;}
+.achievements-hero h2{font-size:32px;color:${t.text};line-height:1.15;margin-bottom:8px;}
+.achievements-hero p{color:${t.textSec};font-size:14px;line-height:1.7;max-width:650px;margin:0;}
+.achievement-progress{height:12px;border-radius:999px;background:${t.border};overflow:hidden;margin:18px 0 9px;}
+.achievement-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#facc15,#f59e0b,${t.green});transition:width .55s cubic-bezier(.16,1,.3,1);}
+.achievement-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.achievement-card{position:relative;overflow:hidden;padding:17px!important;min-height:210px;display:flex;flex-direction:column;gap:11px;transition:transform .18s,border-color .18s,box-shadow .18s,background .18s;}
+.achievement-card.unlocked{border-color:${t.amber}70!important;background:radial-gradient(circle at 88% 8%,${t.amber}24,transparent 28%),linear-gradient(135deg,${t.surface},${t.amber}0d)!important;box-shadow:0 18px 42px ${t.amber}18!important;}
+.achievement-card.locked{background:linear-gradient(135deg,${t.panel},${t.surface})!important;opacity:.82;}
+.achievement-card:hover{transform:translateY(-2px);}
+.achievement-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.achievement-badge{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;border:1px solid ${t.border};background:${t.panel};color:${t.textDim};}
+.achievement-card.unlocked .achievement-badge{clip-path:polygon(50% 0,61% 35%,98% 35%,68% 55%,80% 92%,50% 70%,20% 92%,32% 55%,2% 35%,39% 35%);border:0;border-radius:0;background:linear-gradient(135deg,#facc15,#f59e0b);color:#fff7d6;filter:drop-shadow(4px 4px 0 ${t.amber}24);}
+.achievement-stars{display:inline-flex;align-items:center;gap:4px;padding:5px 8px;border-radius:999px;border:1px solid ${t.amber}35;background:${t.amber}10;color:${t.amber};font-size:11px;font-weight:950;}
+.achievement-card h3{font-size:16px;color:${t.text};line-height:1.25;}
+.achievement-card p{font-size:12px;color:${t.textSec};line-height:1.6;margin:0;flex:1;}
+.achievement-earned{font-size:11px;color:${t.green};font-weight:850;}
+.achievement-locked{font-size:11px;color:${t.textDim};font-weight:850;}
+.achievement-celebration{position:fixed;right:18px;top:18px;z-index:700;width:min(390px,calc(100vw - 36px));padding:15px 16px;border:1px solid ${t.amber}60;border-radius:18px;background:linear-gradient(135deg,${t.surface},${t.amber}12);box-shadow:0 22px 60px rgba(80,52,22,.2);animation:achievementToast .35s cubic-bezier(.16,1,.3,1) both;}
+.achievement-celebration h3{font-size:16px;color:${t.text};margin-bottom:4px;}
+.achievement-celebration p{font-size:12px;color:${t.textSec};line-height:1.55;margin:0;}
+.achievement-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:inherit;}
+.achievement-confetti span{position:absolute;width:7px;height:11px;border-radius:3px;background:var(--confetti-color);top:-12px;left:var(--x);animation:confettiFall 1.5s ease-in forwards;animation-delay:var(--delay);}
+@keyframes achievementToast{from{opacity:0;transform:translateY(-12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes confettiFall{to{transform:translateY(150px) rotate(220deg);opacity:0;}}
 .dashboard-action-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:14px;margin-bottom:18px;}
 .weak-action-card,.daily-habit-card{position:relative;overflow:hidden;padding:18px 20px!important;border-radius:10px!important;}
 .weak-action-card{border-color:${t.red}35!important;background:linear-gradient(135deg,${t.red}09,${t.surface} 54%,${t.accent}08)!important;}
@@ -15842,6 +15947,12 @@ body{background:
   .readiness-lab-head{display:grid!important;grid-template-columns:1fr!important;}
   .readiness-level-badge{justify-self:stretch!important;grid-template-columns:auto auto!important;justify-content:flex-start!important;}
   .readiness-lab-body{grid-template-columns:1fr!important;}
+  .achievement-shortcut-card{align-items:stretch!important;flex-direction:column!important;}
+  .achievement-shortcut-card .btn{width:100%;justify-content:center;}
+  .achievements-page{padding:18px 16px 112px!important;}
+  .achievements-hero{grid-template-columns:1fr!important;padding:20px!important;text-align:left;}
+  .achievement-star-display{width:160px!important;justify-self:center;}
+  .achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .dashboard-action-grid{grid-template-columns:1fr!important;}
   .home-live-card{padding:16px!important;}
   .mission-board{padding:16px!important;border-radius:16px!important;}
@@ -16068,6 +16179,8 @@ body{background:
 }
 @media (max-width: 520px){
   .readiness-pillar-grid{grid-template-columns:1fr!important;}
+  .achievement-grid{grid-template-columns:minmax(0,1fr)!important;}
+  .achievement-card{min-height:auto!important;}
   .readiness-pillar-help{padding-right:0!important;}
   .readiness-weight{position:static!important;display:block;margin-top:6px;}
   .exam-report-header{align-items:flex-start!important;}
@@ -16330,6 +16443,7 @@ function NavGlyph({type,active}) {
     dashboard:House,
     mcq:BookOpenCheck,
     pbq:Lightbulb,
+    achievements:Trophy,
     daily:Target,
     pricing:TrendingUp,
     referrals:Share2,
@@ -17905,6 +18019,18 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
         ))}
       </div>
 
+      <section className="card achievement-shortcut-card">
+        <div style={{display:"flex",gap:14,alignItems:"center",minWidth:0}}>
+          <div className="achievement-mini-star">{Number(user?.totalStars||0)}</div>
+          <div>
+            <div className="label" style={{color:t.amber}}>Stars and achievements</div>
+            <h3>Earn up to {ACHIEVEMENT_STAR_TOTAL} verified stars.</h3>
+            <p>Stars are awarded after SecurePlus checks completed practice or exam sessions on the server.</p>
+          </div>
+        </div>
+        <button className="btn btn-outline" onClick={()=>onNav("achievements")}>View achievements</button>
+      </section>
+
       <section className="dashboard-action-grid" aria-label="Dashboard action recommendations">
         <div className="card weak-action-card">
           <div className="label" style={{color:primaryWeakAction?t.red:t.green}}>Actionable weak area</div>
@@ -18271,10 +18397,155 @@ function GuestLockedPage({t,onSignup,onLogin,onPractice,onDaily,title="Save your
   );
 }
 
+function AchievementCelebration({ids,t,onClose}) {
+  const unlocked=ids.map(id=>ACHIEVEMENT_MAP[id]).filter(Boolean);
+  if(!unlocked.length)return null;
+  const starTotal=unlocked.reduce((sum,item)=>sum+Number(item.star_value||0),0);
+  return (
+    <div className="achievement-celebration" role="status" aria-live="polite">
+      <div className="achievement-confetti" aria-hidden="true">
+        {Array.from({length:18},(_,index)=>(
+          <span
+            key={index}
+            style={{
+              "--x":`${8+(index*5)%88}%`,
+              "--delay":`${(index%7)*.08}s`,
+              "--confetti-color":[t.amber,t.green,t.accent,"#ef4444"][index%4],
+            }}
+          />
+        ))}
+      </div>
+      <div style={{position:"relative",zIndex:1,display:"flex",gap:12,alignItems:"flex-start"}}>
+        <span className="achievement-mini-star" style={{flexShrink:0}}>{starTotal}</span>
+        <div style={{flex:1,minWidth:0}}>
+          <h3>{unlocked.length===1?"Achievement unlocked":"Achievements unlocked"}</h3>
+          <p>
+            {unlocked.map(item=>item.title).join(", ")} · {starTotal} star{starTotal===1?"":"s"} added.
+          </p>
+        </div>
+        <button className="btn btn-ghost" type="button" style={{fontSize:11,minHeight:32,padding:"6px 9px"}} onClick={onClose}>Dismiss</button>
+      </div>
+    </div>
+  );
+}
+
+function AchievementsPage({user,t,onBack}) {
+  const [loading,setLoading]=useState(true);
+  const [data,setData]=useState({definitions:ACHIEVEMENTS,unlocks:[],totalStars:Number(user?.totalStars||0),error:null});
+  const canLoad=user?.authProvider==="supabase"&&user?.id;
+
+  useEffect(()=>{
+    let active=true;
+    if(!canLoad){
+      setLoading(false);
+      return()=>{active=false;};
+    }
+    setLoading(true);
+    loadSupabaseAchievements(user.id).then(result=>{
+      if(active)setData(result);
+    }).finally(()=>{
+      if(active)setLoading(false);
+    });
+    return()=>{active=false;};
+  },[canLoad,user?.id]);
+
+  const unlockMap=useMemo(()=>new Map((data.unlocks||[]).map(item=>[item.achievement_id,item])),[data.unlocks]);
+  const definitions=(data.definitions||ACHIEVEMENTS).map(item=>({
+    ...item,
+    star_value:Number(item.star_value ?? item.stars ?? 0),
+  }));
+  const fallbackStars=definitions.reduce((sum,item)=>unlockMap.has(item.id)?sum+item.star_value:sum,0);
+  const totalStars=Math.min(ACHIEVEMENT_STAR_TOTAL,Number(data.totalStars||user?.totalStars||fallbackStars||0));
+  const progress=Math.min(100,Math.round((totalStars/ACHIEVEMENT_STAR_TOTAL)*100));
+
+  if(!canLoad) return (
+    <div className="achievements-page">
+      <div className="card achievements-hero" style={{display:"block"}}>
+        <div className="page-title-row" style={{marginBottom:10}}>
+          <NavGlyph type="achievements" active/>
+          <h2>Stars need a signed-in cloud account</h2>
+        </div>
+        <p>
+          SecurePlus awards stars from the server after checking completed practice sessions. Sign in with a Supabase-backed account so achievements cannot be faked from the browser.
+        </p>
+        <button className="btn btn-outline" style={{marginTop:16}} onClick={onBack}>Back to dashboard</button>
+      </div>
+    </div>
+  );
+
+  if(loading) return (
+    <div className="achievements-page">
+      <div className="card achievements-hero">
+        <div className="achievement-star-display"><div><strong>…</strong><small>Loading</small></div></div>
+        <div>
+          <div className="label" style={{color:t.amber}}>Stars and achievements</div>
+          <h2>Checking your verified milestones</h2>
+          <p>Loading the achievement definitions, unlock history, and total star balance.</p>
+          <div className="achievement-progress"><span style={{width:"38%"}}/></div>
+        </div>
+      </div>
+      <div className="achievement-grid">
+        {Array.from({length:8},(_,index)=><div key={index} className="card achievement-card locked" style={{minHeight:180,animationDelay:`${index*.05}s`}} />)}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="achievements-page">
+      <section className="card achievements-hero">
+        <div className="achievement-star-display" aria-label={`${totalStars} of ${ACHIEVEMENT_STAR_TOTAL} stars earned`}>
+          <div><strong>{totalStars}</strong><small>/ {ACHIEVEMENT_STAR_TOTAL} stars</small></div>
+        </div>
+        <div>
+          <div className="label" style={{color:t.amber}}>Verified milestone track</div>
+          <h2>Stars you earn from real progress</h2>
+          <p>
+            Stars are awarded by SecurePlus after completed sessions are checked on the server. This keeps the system fair and makes future rewards harder to spoof.
+          </p>
+          <div className="achievement-progress"><span style={{width:`${progress}%`}}/></div>
+          <div style={{display:"flex",gap:10,flexWrap:"wrap",alignItems:"center",fontSize:12,color:t.textSec}}>
+            <span>{unlockMap.size} of {definitions.length} achievements unlocked</span>
+            <span>·</span>
+            <span>{ACHIEVEMENT_STAR_TOTAL-totalStars} stars remaining</span>
+          </div>
+          {data.error&&(
+            <div style={{marginTop:12,fontSize:12,color:t.amber,lineHeight:1.55}}>
+              Using local achievement definitions because the live achievement table could not be read yet.
+            </div>
+          )}
+        </div>
+      </section>
+
+      <div className="achievement-grid">
+        {definitions.map(item=>{
+          const unlocked=unlockMap.get(item.id);
+          return (
+            <article key={item.id} className={`card achievement-card ${unlocked?"unlocked":"locked"}`}>
+              <div className="achievement-card-top">
+                <span className="achievement-badge">{unlocked?<Star size={19} fill="currentColor"/>:<LockKeyhole size={19}/>}</span>
+                <span className="achievement-stars"><Star size={13} fill="currentColor"/> {item.star_value}</span>
+              </div>
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+              {unlocked?(
+                <div className="achievement-earned">Unlocked {new Date(unlocked.unlocked_at).toLocaleDateString()}</div>
+              ):(
+                <div className="achievement-locked">Locked · complete the milestone to earn stars</div>
+              )}
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
-function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null}) {
+function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null,onSessionComplete}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
   const sessionKey=`mcq:${practiceSessionOwner(user)}`;
   const requestSignup=onSignup||onUpgrade;
@@ -18295,6 +18566,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
   const [resumeAvailable,setResumeAvailable]=useState(false);
   const [answerBurst,setAnswerBurst]=useState(null);
   const [starredView,setStarredView]=useState(false);
+  const [sessionStartedAt,setSessionStartedAt]=useState(null);
   const starredSet=useMemo(()=>new Set(starred),[starred]);
   const starredMcqs=MCQ_BANK.filter(q=>starredSet.has(starKey("mcq",q.id)));
 
@@ -18347,12 +18619,12 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
   const startQuiz=()=>{
     const pool=buildMcqPracticePool(filtered, attempts, Math.min(quizCount,filtered.length), reviewMode, new Set(starredMcqs.map(q=>q.id))).map(shuffleMcqOptions);
     capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: diffFilter, topic: topicFilter, question_count: pool.length, tier: user.tier });
-    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);
+    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setSessionStartedAt(Date.now());
   };
   const startMissedQuiz=()=>{
     const pool=rankQuestionsBySm2(missedQuestions,attempts).slice(0,Math.min(50,missedQuestions.length)).map(shuffleMcqOptions);
     capture("mcq_missed_review_started", { question_count: pool.length, tier: user.tier });
-    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);
+    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setSessionStartedAt(Date.now());
   };
   const startChapterSmartReview=useCallback((chapterId)=>{
     if(!chapterId||isGuest)return;
@@ -18380,13 +18652,14 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
     setResults([]);
     setDone(false);
     setStarted(true);
+    setSessionStartedAt(Date.now());
     setStarredView(false);
     capture("mcq_chapter_smart_review_started", { chapter: String(chapterId), question_count: uniquePool.length, missed_topic_count: missedTopics.size, tier: user.tier });
   },[attempts,isGuest,user.tier]);
   const startStarredQuiz=()=>{
     const pool=rankQuestionsBySm2(starredMcqs,attempts,new Set(starredMcqs.map(q=>q.id))).slice(0,Math.min(50,starredMcqs.length)).map(shuffleMcqOptions);
     capture("mcq_starred_review_started", { question_count: pool.length, tier: user.tier });
-    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setStarredView(false);
+    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
   };
 
   useEffect(()=>{
@@ -18421,11 +18694,26 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
     setDone(false);
     setStarted(true);
     setShowWrong(false);
+    setSessionStartedAt(Date.now());
   };
 
   const current=questions[qi];
   const answeredCount=results.filter(Boolean).length;
   const allAnswered=questions.length>0&&answeredCount===questions.length;
+  const reportPracticeSession=useCallback(()=>{
+    if(isGuest||!questions.length)return;
+    const answered=results.filter(Boolean);
+    if(answered.length!==questions.length)return;
+    const correct=answered.filter(r=>r.correct).length;
+    const chapterIds=[...new Set(questions.map(q=>String(q.ch||"")).filter(Boolean))];
+    onSessionComplete?.({
+      session_type:"practice",
+      score:Math.round((correct/questions.length)*100),
+      duration_seconds:Math.max(1,Math.round((Date.now()-(sessionStartedAt||Date.now()))/1000)),
+      questions_count:questions.length,
+      chapter_id:chapterIds.length===1?chapterIds[0]:null,
+    });
+  },[isGuest,onSessionComplete,questions,results,sessionStartedAt]);
   const goToQuestion=index=>{
     if(index<0||index>=questions.length)return;
     setQi(index);
@@ -18450,6 +18738,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
     if(qi<questions.length-1) goToQuestion(qi+1);
     else {
       capture("mcq_quiz_completed", { correct_count: correctCount, question_count: questions.length, tier: user.tier });
+      reportPracticeSession();
       DB.clearPracticeSession(sessionKey);
       setDone(true);
     }
@@ -18461,11 +18750,12 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
       return;
     }
     capture("mcq_quiz_completed", { correct_count: correctCount, question_count: questions.length, tier: user.tier });
+    reportPracticeSession();
     DB.clearPracticeSession(sessionKey);
     setDone(true);
   };
   const retakeCurrentQuiz=()=>{
-    setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setShowWrong(false);
+    setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setShowWrong(false);setSessionStartedAt(Date.now());
   };
 
   const correctCount=results.filter(r=>r?.correct).length;
@@ -19848,7 +20138,7 @@ function ExamModeGuideModal({t,onClose}) {
   );
 }
 
-function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,pbqBank=PBQ_BANK}) {
+function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,pbqBank=PBQ_BANK,onSessionComplete}) {
   const sessionKey=`exam:${practiceSessionOwner(user)}`;
   const [questionCount,setQuestionCount]=useState(20);
   const [pbqCount,setPbqCount]=useState(2);
@@ -20042,8 +20332,16 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
         rows.forEach(row=>onSave(row));
         setSaved(true);
       }
+      const finalScore=rows.length?Math.round((rows.filter(r=>r.correct).length/rows.length)*100):0;
+      onSessionComplete?.({
+        session_type:"exam",
+        score:finalScore,
+        duration_seconds:Math.max(1,examDuration-timeLeft),
+        questions_count:rows.length,
+        chapter_id:null,
+      });
       setCompletedRows(rows);
-      capture("exam_mode_completed", { question_count: questions.length, correct_count: rows.filter(r=>r.correct).length, score, auto_submitted: auto, tier: user.tier });
+      capture("exam_mode_completed", { question_count: questions.length, correct_count: rows.filter(r=>r.correct).length, score: finalScore, auto_submitted: auto, tier: user.tier });
       DB.clearPracticeSession(sessionKey);
       setDone(true);
       setSubmittingExam(false);
@@ -23749,6 +24047,7 @@ export default function App() {
   const [pbqBankLoading,setPbqBankLoading]=useState(Boolean(isSupabaseConfigured));
   const [pbqBankError,setPbqBankError]=useState(null);
   const [smartReviewRequest,setSmartReviewRequest]=useState(null);
+  const [achievementUnlocks,setAchievementUnlocks]=useState([]);
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
@@ -24251,6 +24550,21 @@ export default function App() {
     setSmartReviewRequest({chapterId:String(chapterId),nonce:Date.now()});
     setView("mcq");
   },[]);
+  const handleAchievementSessionComplete=useCallback(async payload=>{
+    if(!user||user.authProvider!=="supabase")return;
+    try{
+      const result=await submitAchievementSession(payload);
+      if(result.totalStars!==null&&result.totalStars!==undefined){
+        setUser(current=>current?{...current,totalStars:Number(result.totalStars)||0}:current);
+      }
+      if(result.newlyUnlocked?.length){
+        setAchievementUnlocks(result.newlyUnlocked);
+        capture("achievements_unlocked", { achievement_ids: result.newlyUnlocked.join(","), count: result.newlyUnlocked.length });
+      }
+    }catch(error){
+      console.warn("Unable to submit achievement session", error);
+    }
+  },[user]);
   const handleEditReportedQuestion=useCallback(target=>{
     if(!target?.id)return;
     setAdminQuestionTarget({...target,nonce:Date.now()});
@@ -24266,6 +24580,13 @@ export default function App() {
       }catch(error){
         console.warn("Unable to save PBQ attempt remotely", error);
       }
+      await handleAchievementSessionComplete({
+        session_type:"pbq",
+        score:Number.isFinite(Number(result.score))?Math.round(Number(result.score)*100):(result.correct?100:0),
+        duration_seconds:Math.max(1,Math.round(Number(result.duration_seconds||result.timeSpentSeconds||1))),
+        questions_count:1,
+        chapter_id:result.ch||null,
+      });
     }
     if(options.nextQuestion){
       setPbqQ(options.nextQuestion);
@@ -24273,7 +24594,7 @@ export default function App() {
       return;
     }
     setPbqQ(null);setView("pbq");
-  },[user]);
+  },[user,handleAchievementSessionComplete]);
 
   const CSS=makeCSS(t);
 
@@ -24469,6 +24790,7 @@ export default function App() {
           <UpgradeModal price="$4.99/year" onUpgrade={()=>setView("pricing")} onClose={()=>{setPbqQ(null);setView("pbq");}} t={t}/>
         )}
       </div>
+      <AchievementCelebration ids={achievementUnlocks} t={t} onClose={()=>setAchievementUnlocks([])}/>
       {questionReport&&<QuestionReportModal report={questionReport} user={user} t={t} onClose={()=>setQuestionReport(null)}/>}
     </>
   );
@@ -24479,6 +24801,7 @@ export default function App() {
     {id:"pbq",icon:"pbq",label:"PBQ Simulator",mobileLabel:"PBQ"},
     {id:"exam",icon:"exam",label:"Exam Mode",mobileLabel:"Exam"},
     {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
+    {id:"achievements",icon:"achievements",label:"Achievements",mobileLabel:"Stars"},
     {id:"pricing",icon:"pricing",label:"Upgrade",mobileLabel:"Upgrade"},
     {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
     {id:"privacy",icon:"privacy",label:"Privacy Policy",mobileLabel:"Privacy"},
@@ -24559,13 +24882,14 @@ export default function App() {
           />
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} t={t}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
-            <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest}/>
+            <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete}/>
           </div>
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading} loadError={pbqBankError}/>
           </div>
-          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank}/>}
+          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} onSessionComplete={handleAchievementSessionComplete}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser}/>}
+          {view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
           {view==="referrals"&&<ReferralPage user={user} t={t}/>}
           {view==="objectives"&&<ObjectivesPage t={t}/>}
@@ -24600,6 +24924,7 @@ export default function App() {
           />
         )}
         {questionReport&&<QuestionReportModal report={questionReport} user={user} t={t} onClose={()=>setQuestionReport(null)}/>}
+        <AchievementCelebration ids={achievementUnlocks} t={t} onClose={()=>setAchievementUnlocks([])}/>
       </div>
     </>
   );
