@@ -14697,6 +14697,16 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .pbq-scenario-card{position:relative;overflow:hidden;padding:22px 24px!important;border-left:4px solid var(--sim-color)!important;background:linear-gradient(135deg,color-mix(in srgb,var(--sim-color) 8%,${t.surface}),${t.surface})!important;}
 .pbq-scenario-label{display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--sim-color);font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.05em;}
 .pbq-scenario-label span{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:color-mix(in srgb,var(--sim-color) 14%,transparent);}
+.pbq-evidence-card{margin-bottom:18px;padding:16px;border:1px solid color-mix(in srgb,var(--evidence-color) 32%,${t.border});border-radius:10px;background:linear-gradient(135deg,color-mix(in srgb,var(--evidence-color) 8%,${t.surface}),${t.surface});box-shadow:0 14px 32px rgba(3,8,20,.08);}
+.pbq-evidence-card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;}
+.pbq-evidence-card-head h3{font-size:15px;color:${t.text};line-height:1.3;}
+.pbq-evidence-kicker{font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;color:var(--evidence-color);margin-bottom:3px;}
+.pbq-evidence-preview{max-height:180px;margin:0;position:relative;}
+.pbq-evidence-overlay{position:fixed;inset:0;z-index:620;display:grid;place-items:center;padding:18px;background:rgba(2,6,23,.78);backdrop-filter:blur(12px);animation:fadeUp .18s ease both;}
+.pbq-evidence-modal{width:min(100%,920px);max-height:92dvh;padding:0!important;display:flex;flex-direction:column;overflow:hidden!important;border-color:color-mix(in srgb,var(--evidence-color) 40%,${t.border})!important;}
+.pbq-evidence-modal-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:18px 20px;border-bottom:1px solid ${t.border};background:${t.surface};}
+.pbq-evidence-modal-head h2{font-size:20px;color:${t.text};line-height:1.25;margin-bottom:7px;}
+.pbq-evidence-full{margin:0;border:0;border-radius:0;max-height:none;min-height:0;flex:1 1 auto;overflow:auto;font-size:13px;line-height:1.75;}
 .pbq-step-list{display:grid;gap:7px;margin-top:14px;padding-top:13px;border-top:1px solid ${t.border};}
 .pbq-step-row{display:grid;grid-template-columns:24px minmax(0,1fr);gap:9px;align-items:start;color:${t.textSec};font-size:12px;line-height:1.55;}
 .pbq-step-row span{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:color-mix(in srgb,var(--sim-color) 13%,transparent);color:var(--sim-color);font-weight:950;}
@@ -15878,8 +15888,21 @@ body{background:
   .pbq-list-actions{grid-column:2;justify-content:flex-end!important;}
   .pbq-session-header{grid-template-columns:minmax(0,1fr) auto!important;}
   .pbq-session-header>.btn:first-child{grid-column:1 / -1;justify-self:start;}
-  .pbq-scenario-card{padding:19px 18px!important;}
+  .pbq-scenario-card{position:sticky!important;top:8px;z-index:35;padding:15px 16px!important;max-height:36dvh;overflow-y:auto!important;box-shadow:0 16px 42px rgba(3,8,20,.18)!important;}
+  .pbq-scenario-card .scenario-text{font-size:14px!important;line-height:1.62!important;}
+  .pbq-evidence-card{padding:14px!important;}
+  .pbq-evidence-card-head{align-items:stretch!important;flex-direction:column!important;}
+  .pbq-evidence-card-head .btn{width:100%;}
+  .pbq-evidence-preview{max-height:118px;font-size:11.5px!important;line-height:1.65!important;}
+  .pbq-evidence-overlay{align-items:stretch;padding:0;}
+  .pbq-evidence-modal{width:100%!important;max-height:100dvh;height:100dvh;border-radius:0!important;}
+  .pbq-evidence-modal-head{padding:16px 16px 12px!important;flex-direction:column!important;}
+  .pbq-evidence-modal-head .btn{width:100%;}
+  .pbq-evidence-full{font-size:12.5px!important;padding:16px!important;padding-bottom:calc(18px + env(safe-area-inset-bottom))!important;}
   .pbq-workspace-section{padding:15px!important;}
+  .pbq-question-screen .drag-item{touch-action:manipulation!important;cursor:pointer!important;min-height:52px;}
+  .pbq-question-screen .drop-zone{min-height:74px;}
+  .pbq-tap-match-grid{grid-template-columns:1fr!important;}
   .app-shell.practice-focus-mode{padding-bottom:0;}
   .app-shell.practice-focus-mode .sidebar{display:none!important;}
   .app-shell.practice-focus-mode .active-practice-screen{padding-bottom:calc(104px + env(safe-area-inset-bottom))!important;}
@@ -16368,6 +16391,43 @@ function CodeSnippetBlock({code,language="",t,title="Code sample"}) {
         {lang&&<span className="chip" style={{background:`${t.accent}12`,borderColor:`${t.accent}35`,color:t.accent,textTransform:"uppercase",letterSpacing:.4}}>{lang}</span>}
       </div>
       <pre className="log-block" style={{fontSize:13,lineHeight:1.65,whiteSpace:"pre-wrap",overflowX:"auto",margin:0}}>{text}</pre>
+    </div>
+  );
+}
+function PBQEvidenceViewer({title="Evidence",content,language="",t,accent}) {
+  const [open,setOpen]=useState(false);
+  const text=String(content||"").trim();
+  const lang=String(language||"").trim();
+  if(!text) return null;
+  return (
+    <div className="pbq-evidence-card" style={{"--evidence-color":accent||t.accent}}>
+      <div className="pbq-evidence-card-head">
+        <div>
+          <div className="pbq-evidence-kicker">Tap-to-expand evidence</div>
+          <h3>{title}</h3>
+        </div>
+        <button type="button" className="btn btn-outline" onClick={()=>setOpen(true)}>
+          View full screen
+        </button>
+      </div>
+      <pre className="log-block pbq-evidence-preview">{text}</pre>
+      {open&&(
+        <div className="pbq-evidence-overlay" role="dialog" aria-modal="true" aria-label={title} onClick={()=>setOpen(false)}>
+          <div className="pbq-evidence-modal card" onClick={event=>event.stopPropagation()}>
+            <div className="pbq-evidence-modal-head">
+              <div>
+                <div className="pbq-evidence-kicker">Evidence viewer</div>
+                <h2>{title}</h2>
+                {lang&&<span className="chip" style={{background:`${t.accent}12`,borderColor:`${t.accent}35`,color:t.accent,textTransform:"uppercase",letterSpacing:.4}}>{lang}</span>}
+              </div>
+              <button type="button" className="btn btn-ghost" onClick={()=>setOpen(false)} aria-label="Close evidence viewer">
+                <X size={17}/> Close
+              </button>
+            </div>
+            <pre className="log-block pbq-evidence-full">{text}</pre>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -19356,7 +19416,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
           {q.steps.map((s,i)=><div key={i} className="pbq-step-row"><span>{i+1}</span><div>{s}</div></div>)}
         </div>}
       </div>
-      <CodeSnippetBlock code={q?.codeBlock || evidence?.codeBlock} language={q?.codeLanguage || evidence?.codeLanguage} t={t}/>
+      <PBQEvidenceViewer title="Code or configuration evidence" content={q?.codeBlock || evidence?.codeBlock} language={q?.codeLanguage || evidence?.codeLanguage} t={t} accent={simType.color}/>
 
       {/* TERMINAL */}
       {q.type==="TERMINAL SIM"&&(
@@ -19386,7 +19446,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       {q.type==="LOG ANALYSIS"&&(
         <section className="pbq-workspace-section">
           <div className="pbq-workspace-head"><div><h3>Log evidence</h3><p>Inspect the events before choosing the strongest conclusion.</p></div><ListOrdered size={20} color={simType.color}/></div>
-          <div className="log-block">{q?.logData || evidence?.logData}</div>
+          <PBQEvidenceViewer title="Log evidence" content={q?.logData || evidence?.logData} t={t} accent={simType.color}/>
         </section>
       )}
 
@@ -19394,7 +19454,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       {q.type==="CONFIG/ACL"&&(
         <section className="pbq-workspace-section">
           <div className="pbq-workspace-head"><div><h3>Configuration review</h3><p>This configuration contains an issue. Find the best correction.</p></div><MonitorCog size={20} color={simType.color}/></div>
-          <div className="terminal" style={{color:t.codeWarn,fontSize:12,minHeight:80}}>{q?.currentConfig || evidence?.currentConfig}</div>
+          <PBQEvidenceViewer title="Current configuration" content={q?.currentConfig || evidence?.currentConfig} t={t} accent={simType.color}/>
         </section>
       )}
 
@@ -19402,7 +19462,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       {q.type==="HOTSPOT"&&(
         <section className="pbq-workspace-section">
           <div className="pbq-workspace-head"><div><h3>Scenario map</h3><p>Review each detail before selecting the best response.</p></div><Crosshair size={20} color={simType.color}/></div>
-          <pre className="log-block" style={{fontSize:13}}>{q?.diagram || evidence?.diagram}</pre>
+          <PBQEvidenceViewer title="Network diagram" content={q?.diagram || evidence?.diagram} t={t} accent={simType.color}/>
         </section>
       )}
 
@@ -19411,7 +19471,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
         <div style={{marginBottom:18}}>
           <div className="card" style={{padding:"16px 18px",marginBottom:14,borderColor:`${simType.color}55`,background:`linear-gradient(135deg, ${simType.color}12, ${t.surface} 68%, ${t.green}08)`}}>
             <div style={{fontWeight:900,fontSize:18,color:t.text,marginBottom:6}}>Match each option to the correct column</div>
-            <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>Drag options from the tray into the column below. Placed options can be dragged again if you change your mind.</div>
+            <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>On mobile, tap an option to highlight it, then tap the answer cell where it belongs. On desktop, drag and drop still works.</div>
           </div>
 
           <div style={{padding:"16px",borderRadius:10,border:`1px solid ${t.accent}35`,background:`linear-gradient(135deg, ${t.accent}12, ${t.panel})`,marginBottom:16,boxShadow:`0 16px 36px ${t.accent}10`}}>
@@ -19428,9 +19488,9 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                   onClick={()=>setTapDragItem(item)}
                   onDragStart={()=>setDragged(item)}
                   onDragEnd={()=>setDragged(null)}
-                  onPointerDown={e=>{if(e.pointerType!=="mouse"){setDragged(item);setTapDragItem(item);e.currentTarget.setPointerCapture?.(e.pointerId);}}}
-                  onPointerMove={e=>{if(dragged?.id===item.id||tapDragItem?.id===item.id) updatePointerDropTarget(e);}}
-                  onPointerUp={e=>{if(e.pointerType!=="mouse") finishPointerDrag(e,item);}}
+                  onPointerDown={e=>{if(e.pointerType==="mouse")setDragged(item);}}
+                  onPointerMove={e=>{if(e.pointerType==="mouse"&&(dragged?.id===item.id||tapDragItem?.id===item.id)) updatePointerDropTarget(e);}}
+                  onPointerUp={e=>{if(e.pointerType==="mouse") finishPointerDrag(e,item);}}
                   style={{touchAction:"none",fontSize:16,fontWeight:800,lineHeight:1.55,color:t.text,background:`linear-gradient(180deg, ${t.surface}, ${t.accent}0d)`,borderColor:tapDragItem?.id===item.id?`${t.accent}`:`${t.accent}30`}}
                 >
                   <GlossaryText text={item.label} t={t}/>
@@ -19438,7 +19498,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
               ))}
               {q.items.filter(item=>!Object.keys(mapping).includes(item.id)).length===0&&(
                 <div style={{padding:"14px 16px",borderRadius:8,border:`1px solid ${t.green}35`,background:`${t.green}10`,color:t.green,fontWeight:900,fontSize:14}}>
-                  All options have been placed. Drag any option below to move it.
+                  All options have been placed. Tap any placed option below to move it.
                 </div>
               )}
             </div>
@@ -19483,20 +19543,20 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                               {placedItems.map(placed=>(
                                 <div
                                   key={placed.id}
-                                  className={`drag-item ${dragged?.id===placed.id?"selected":""}`}
+                                  className={`drag-item ${tapDragItem?.id===placed.id||dragged?.id===placed.id?"selected":""}`}
                                   draggable
                                   style={{width:"100%",background:`linear-gradient(135deg, ${t.green}16, ${t.surface})`,borderColor:`${t.green}55`,color:t.text,cursor:"grab",touchAction:"none",fontSize:15,fontWeight:900,lineHeight:1.55,boxShadow:`0 10px 24px ${t.green}12`}}
                                   onClick={e=>{e.stopPropagation();setTapDragItem(placed);}}
                                   onDragStart={e=>{e.stopPropagation();setDragged(placed);}}
                                   onDragEnd={()=>{setDragged(null);setDragOver(null);}}
-                                  onPointerDown={e=>{setDragged(placed);setTapDragItem(placed);e.currentTarget.setPointerCapture?.(e.pointerId);}}
-                                  onPointerMove={e=>{if(dragged?.id===placed.id||tapDragItem?.id===placed.id) updatePointerDropTarget(e);}}
-                                  onPointerUp={e=>finishPointerDrag(e,placed)}
-                                  onPointerCancel={()=>{setDragged(null);setDragOver(null);}}
-                                ><GlossaryText text={placed.label} t={t}/></div>
+                                onPointerDown={e=>{if(e.pointerType==="mouse")setDragged(placed);setTapDragItem(placed);}}
+                                onPointerMove={e=>{if(e.pointerType==="mouse"&&(dragged?.id===placed.id||tapDragItem?.id===placed.id)) updatePointerDropTarget(e);}}
+                                onPointerUp={e=>{if(e.pointerType==="mouse") finishPointerDrag(e,placed);}}
+                                onPointerCancel={()=>{setDragged(null);setDragOver(null);}}
+                              ><GlossaryText text={placed.label} t={t}/></div>
                               ))}
                             </div>
-                          ):<span style={{fontSize:13,fontWeight:900,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place selected option here":"Empty answer cell"}</span>}
+                      ):<span style={{fontSize:13,fontWeight:900,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place selected option here":"Tap an option first"}</span>}
                         </div>
                       </div>
                     );
@@ -19525,20 +19585,20 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                           {placedItems.map(placed=>(
                             <div
                               key={placed.id}
-                              className={`drag-item ${dragged?.id===placed.id?"selected":""}`}
+                              className={`drag-item ${tapDragItem?.id===placed.id||dragged?.id===placed.id?"selected":""}`}
                               draggable
                               style={{width:"100%",background:`linear-gradient(135deg, ${t.green}16, ${t.surface})`,borderColor:`${t.green}55`,color:t.text,cursor:"grab",touchAction:"none",fontSize:16,fontWeight:900,lineHeight:1.6,boxShadow:`0 10px 24px ${t.green}12`}}
                               onClick={e=>{e.stopPropagation();setTapDragItem(placed);}}
                               onDragStart={e=>{e.stopPropagation();setDragged(placed);}}
                               onDragEnd={()=>{setDragged(null);setDragOver(null);}}
-                              onPointerDown={e=>{setDragged(placed);setTapDragItem(placed);e.currentTarget.setPointerCapture?.(e.pointerId);}}
-                              onPointerMove={e=>{if(dragged?.id===placed.id||tapDragItem?.id===placed.id) updatePointerDropTarget(e);}}
-                              onPointerUp={e=>finishPointerDrag(e,placed)}
+                              onPointerDown={e=>{if(e.pointerType==="mouse")setDragged(placed);setTapDragItem(placed);}}
+                              onPointerMove={e=>{if(e.pointerType==="mouse"&&(dragged?.id===placed.id||tapDragItem?.id===placed.id)) updatePointerDropTarget(e);}}
+                              onPointerUp={e=>{if(e.pointerType==="mouse") finishPointerDrag(e,placed);}}
                               onPointerCancel={()=>{setDragged(null);setDragOver(null);}}
                             ><GlossaryText text={placed.label} t={t}/></div>
                           ))}
                         </div>
-                      ):<span style={{fontSize:14,fontWeight:900,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place selected option here":"Drop option here"}</span>}
+                      ):<span style={{fontSize:14,fontWeight:900,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place selected option here":"Tap an option first"}</span>}
                     </div>
                   </div>
                 );
@@ -20454,7 +20514,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
             <button className="btn btn-ghost" disabled={qi===0} onClick={()=>setQi(i=>Math.max(0,i-1))}>← Previous</button>
             <button className="btn btn-ghost" disabled={qi===questions.length-1} onClick={()=>setQi(i=>Math.min(questions.length-1,i+1))}>Next →</button>
           </div>
-          <div className="card question-card" style={{padding:"20px 22px",marginBottom:16,position:"relative",overflow:"hidden"}}>
+          <div className={`card question-card ${current.kind==="pbq"?"pbq-scenario-card":""}`} style={{"--sim-color":current.kind==="pbq"?((Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent):undefined,padding:"20px 22px",marginBottom:16,position:"relative",overflow:"hidden"}}>
             {flagged[qi]&&<div className="exam-flag-ribbon"><span>Review</span></div>}
             <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
               {current.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
@@ -20473,10 +20533,10 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
             )}
           </div>
 
-          {current.kind==="pbq"&&(q?.codeBlock || q?.payload?.evidence?.codeBlock)&&<CodeSnippetBlock code={q?.codeBlock || q?.payload?.evidence?.codeBlock} language={q?.codeLanguage || q?.payload?.evidence?.codeLanguage} t={t}/>}
-          {current.kind==="pbq"&&(q?.logData || q?.payload?.evidence?.logData)&&<div className="log-block" style={{marginBottom:16}}>{q?.logData || q?.payload?.evidence?.logData}</div>}
-          {current.kind==="pbq"&&(q?.diagram || q?.payload?.evidence?.diagram)&&<pre className="log-block" style={{marginBottom:16}}>{q?.diagram || q?.payload?.evidence?.diagram}</pre>}
-          {current.kind==="pbq"&&(q?.currentConfig || q?.payload?.evidence?.currentConfig)&&<div className="terminal" style={{marginBottom:16,color:t.codeWarn}}>{q?.currentConfig || q?.payload?.evidence?.currentConfig}</div>}
+          {current.kind==="pbq"&&<PBQEvidenceViewer title="Code or configuration evidence" content={q?.codeBlock || q?.payload?.evidence?.codeBlock} language={q?.codeLanguage || q?.payload?.evidence?.codeLanguage} t={t} accent={(Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent}/>}
+          {current.kind==="pbq"&&<PBQEvidenceViewer title="Log evidence" content={q?.logData || q?.payload?.evidence?.logData} t={t} accent={(Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent}/>}
+          {current.kind==="pbq"&&<PBQEvidenceViewer title="Network diagram" content={q?.diagram || q?.payload?.evidence?.diagram} t={t} accent={(Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent}/>}
+          {current.kind==="pbq"&&<PBQEvidenceViewer title="Current configuration" content={q?.currentConfig || q?.payload?.evidence?.currentConfig} t={t} accent={(Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent}/>}
 
           {current.kind==="mcq"&&(
             <div style={{display:"grid",gap:9}}>
@@ -20544,9 +20604,10 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
           )}
 
           {current.kind==="pbq"&&q.type==="DRAG & DROP"&&(
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+            <div className="pbq-tap-match-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
               <div>
                 <div className="label" style={{marginBottom:8}}>Items</div>
+                <div style={{fontSize:12,color:t.textDim,lineHeight:1.55,marginBottom:8}}>Mobile: tap an item, then tap its target column.</div>
                 <div style={{display:"grid",gap:7}}>
                   {q.items.filter(item=>!Object.keys(answer.mapping||{}).includes(item.id)).map(item=>(
                     <div
@@ -20557,9 +20618,9 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
                       onClick={()=>updateAnswer({tapDragItem:item})}
                       onDragStart={()=>updateAnswer({dragged:item})}
                       onDragEnd={()=>updateAnswer({dragged:null,dragOver:null})}
-                      onPointerDown={e=>{updateAnswer({dragged:item,tapDragItem:item});e.currentTarget.setPointerCapture?.(e.pointerId);}}
-                      onPointerMove={e=>{if(answer.dragged?.id===item.id||answer.tapDragItem?.id===item.id) updateExamPointerDropTarget(e);}}
-                      onPointerUp={e=>finishExamPointerDrag(e,item)}
+                      onPointerDown={e=>{if(e.pointerType==="mouse")updateAnswer({dragged:item});}}
+                      onPointerMove={e=>{if(e.pointerType==="mouse"&&(answer.dragged?.id===item.id||answer.tapDragItem?.id===item.id)) updateExamPointerDropTarget(e);}}
+                      onPointerUp={e=>{if(e.pointerType==="mouse")finishExamPointerDrag(e,item);}}
                       onPointerCancel={()=>updateAnswer({dragged:null,dragOver:null})}
                     >{item.label}</div>
                   ))}
@@ -20587,15 +20648,15 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
                             {placedItems.map(placed=>(
                               <div
                                 key={placed.id}
-                                className={`drag-item ${answer.dragged?.id===placed.id?"selected":""}`}
+                                className={`drag-item ${answer.tapDragItem?.id===placed.id||answer.dragged?.id===placed.id?"selected":""}`}
                                 draggable
                                 style={{width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,touchAction:"none"}}
                                 onClick={e=>{e.stopPropagation();updateAnswer({tapDragItem:placed});}}
                                 onDragStart={e=>{e.stopPropagation();updateAnswer({dragged:placed});}}
                                 onDragEnd={()=>updateAnswer({dragged:null,dragOver:null})}
-                                onPointerDown={e=>{updateAnswer({dragged:placed,tapDragItem:placed});e.currentTarget.setPointerCapture?.(e.pointerId);}}
-                                onPointerMove={e=>{if(answer.dragged?.id===placed.id||answer.tapDragItem?.id===placed.id) updateExamPointerDropTarget(e);}}
-                                onPointerUp={e=>finishExamPointerDrag(e,placed)}
+                                onPointerDown={e=>updateAnswer(e.pointerType==="mouse"?{dragged:placed,tapDragItem:placed}:{tapDragItem:placed})}
+                                onPointerMove={e=>{if(e.pointerType==="mouse"&&(answer.dragged?.id===placed.id||answer.tapDragItem?.id===placed.id)) updateExamPointerDropTarget(e);}}
+                                onPointerUp={e=>{if(e.pointerType==="mouse")finishExamPointerDrag(e,placed);}}
                                 onPointerCancel={()=>updateAnswer({dragged:null,dragOver:null})}
                               >{placed.label}</div>
                             ))}
