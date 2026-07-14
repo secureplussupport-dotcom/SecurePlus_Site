@@ -411,6 +411,51 @@ function formatSecondsShort(seconds=0) {
   return `${s}s`;
 }
 
+function getReadinessProfile(attempts=[]) {
+  const usable=attempts.filter(attempt=>typeof attempt?.correct==="boolean");
+  const total=usable.length;
+  const correct=usable.filter(attempt=>attempt.correct).length;
+  const accuracy=total?Math.round((correct/total)*100):0;
+  const uniqueQuestions=new Set(usable.map(attempt=>`${attempt.pbq?"pbq":"mcq"}:${attempt.qid||attempt.title||attempt.createdAt}`));
+  const coveredChapters=new Set(usable.map(attempt=>String(attempt.ch||"")).filter(chapter=>CHAPTERS.some(item=>item.id===chapter)));
+  const uniquePbqs=new Set(usable.filter(attempt=>attempt.pbq).map(attempt=>attempt.qid||attempt.title)).size;
+  const examQuestions=usable.filter(attempt=>attempt.exam).length;
+  const knowledge=Math.round(accuracy*Math.min(1,total/20));
+  const coverage=Math.round((coveredChapters.size/Math.max(1,CHAPTERS.length))*100);
+  const practice=Math.min(100,Math.round((uniqueQuestions.size/60)*100));
+  const application=Math.min(100,Math.round(Math.min(1,uniquePbqs/5)*55+Math.min(1,examQuestions/20)*45));
+  const score=Math.min(100,Math.round(knowledge*.45+coverage*.2+practice*.2+application*.15));
+  const level=score>=80?"Exam ready":score>=65?"Building confidence":score>=45?"Developing":score>=25?"Foundation":"Starting out";
+  const tone=score>=80?"ready":score>=65?"confident":score>=45?"developing":score>=25?"foundation":"starting";
+  const starThresholds=[20,40,60,80,95];
+  const stars=starThresholds.filter(threshold=>score>=threshold).length;
+  const nextStarTarget=starThresholds.find(threshold=>score<threshold)||100;
+  const previousStarTarget=stars?starThresholds[stars-1]:0;
+  const starProgress=stars===starThresholds.length?100:Math.round(((score-previousStarTarget)/(nextStarTarget-previousStarTarget))*100);
+  return {
+    score,
+    accuracy,
+    total,
+    correct,
+    uniqueQuestions:uniqueQuestions.size,
+    uniquePbqs,
+    coveredChapters:coveredChapters.size,
+    examQuestions,
+    level,
+    tone,
+    stars,
+    nextStarTarget,
+    pointsToNextStar:Math.max(0,nextStarTarget-score),
+    starProgress:Math.max(0,Math.min(100,starProgress)),
+    pillars:[
+      {id:"knowledge",label:"Knowledge",value:knowledge,weight:"45%",help:"Accuracy, balanced by enough answer evidence"},
+      {id:"coverage",label:"Coverage",value:coverage,weight:"20%",help:"Security+ chapters you have practised"},
+      {id:"practice",label:"Practice",value:practice,weight:"20%",help:"Unique questions completed"},
+      {id:"application",label:"Applied skills",value:application,weight:"15%",help:"PBQ and Exam Mode experience"},
+    ],
+  };
+}
+
 function getPasswordIssue(password) {
   if (password.length < 8) return "Password must be at least 8 characters.";
   if (!/[A-Z]/.test(password)) return "Password must include at least one uppercase letter.";
@@ -14285,11 +14330,40 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .home-trust-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px;}
 .home-trust-row span{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;border:1px solid ${t.border};background:${t.panel}cc;color:${t.textSec};font-size:12px;font-weight:800;}
 .home-hero-panel{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:stretch;}
-.readiness-orbit{position:relative;min-height:190px;border-radius:22px;display:grid;place-items:center;background:conic-gradient(${t.green} var(--readiness), ${t.border} var(--readiness));box-shadow:inset 0 0 0 1px ${t.border},0 18px 45px ${t.green}12;}
+.readiness-orbit{position:relative;min-height:190px;border-radius:22px;display:grid;place-items:center;background:conic-gradient(var(--readiness-color) var(--readiness), ${t.border} var(--readiness));box-shadow:inset 0 0 0 1px ${t.border},0 18px 45px color-mix(in srgb,var(--readiness-color) 16%,transparent);}
 .readiness-orbit::before{content:"";position:absolute;inset:12px;border-radius:18px;background:linear-gradient(180deg,${t.surface},${t.panel});border:1px solid ${t.border};}
 .readiness-orbit div{position:relative;text-align:center;}
-.readiness-orbit span{display:block;font-size:34px;font-weight:950;color:${t.green};line-height:1;}
+.readiness-orbit span{display:block;font-size:34px;font-weight:950;color:var(--readiness-color);line-height:1;}
 .readiness-orbit small{display:block;margin-top:6px;font-size:11px;font-weight:900;text-transform:uppercase;color:${t.textDim};letter-spacing:.05em;}
+.readiness-lab{position:relative;overflow:hidden;margin-bottom:18px;padding:22px;border-color:color-mix(in srgb,var(--readiness-color) 34%,${t.border})!important;background:radial-gradient(circle at 92% 6%,color-mix(in srgb,var(--readiness-color) 15%,transparent),transparent 30%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
+.readiness-lab::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--readiness-color);}
+.readiness-lab-head{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:22px;margin-bottom:18px;}
+.readiness-lab-head h2{font-size:23px;color:${t.text};margin:3px 0 7px;}
+.readiness-lab-head p{max-width:700px;margin:0;color:${t.textSec};font-size:13px;line-height:1.65;}
+.readiness-level-badge{min-width:175px;display:grid;grid-template-columns:auto auto;align-items:center;justify-content:center;gap:0 9px;padding:13px 15px;border-radius:14px;border:1px solid color-mix(in srgb,var(--readiness-color) 38%,${t.border});background:color-mix(in srgb,var(--readiness-color) 9%,${t.surface});color:var(--readiness-color);box-shadow:0 12px 28px color-mix(in srgb,var(--readiness-color) 12%,transparent);}
+.readiness-level-badge svg{grid-row:1 / 3;}
+.readiness-level-badge span{font-size:13px;font-weight:850;color:${t.textSec};line-height:1;}
+.readiness-level-badge span strong{font-size:24px;color:var(--readiness-color);}
+.readiness-level-badge small{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;color:${t.textDim};margin-top:5px;}
+.readiness-lab-body{position:relative;display:grid;grid-template-columns:minmax(245px,.72fr) minmax(0,1.55fr);gap:14px;align-items:stretch;}
+.readiness-star-card{padding:17px;border:1px solid ${t.border};border-radius:14px;background:${t.panel}d9;}
+.readiness-star-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:13px;}
+.readiness-star-top strong{display:block;color:${t.text};font-size:14px;margin-top:2px;}
+.readiness-eyebrow{display:block;color:${t.textDim};font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.readiness-coming-soon{padding:5px 8px;border-radius:999px;border:1px solid ${t.amber}38;background:${t.amber}0e;color:${t.amber};font-size:9px;font-weight:950;text-transform:uppercase;white-space:nowrap;}
+.readiness-stars{display:flex;align-items:center;gap:7px;color:${t.textDim};}
+.readiness-stars .filled{color:${t.amber};filter:drop-shadow(0 0 7px ${t.amber}55);}
+.readiness-star-meter,.readiness-pillar-meter{height:7px;border-radius:999px;background:${t.border};overflow:hidden;}
+.readiness-star-meter{margin:13px 0 10px;}
+.readiness-star-meter span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,${t.amber},#f97316);transition:width .65s cubic-bezier(.16,1,.3,1);}
+.readiness-star-card p{margin:0;color:${t.textSec};font-size:11px;line-height:1.65;}
+.readiness-pillar-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.readiness-pillar{position:relative;padding:14px 14px 13px;border:1px solid ${t.border};border-radius:12px;background:${t.panel}d9;}
+.readiness-pillar-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;color:${t.textSec};font-size:12px;font-weight:850;}
+.readiness-pillar-top strong{font-size:16px;color:var(--readiness-color);}
+.readiness-pillar-meter span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--readiness-color),${t.accent});transition:width .65s cubic-bezier(.16,1,.3,1);}
+.readiness-pillar-help{margin-top:8px;padding-right:48px;color:${t.textDim};font-size:10px;line-height:1.45;}
+.readiness-weight{position:absolute;right:10px;bottom:10px;color:${t.textDim};font-size:8px;font-weight:900;text-transform:uppercase;}
 .home-live-card{display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:18px;border:1px solid ${t.border};background:linear-gradient(180deg,${t.surface}f2,${t.panel});box-shadow:0 18px 46px rgba(7,12,24,.16);}
 .home-live-top{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:900;text-transform:uppercase;color:${t.textDim};letter-spacing:.04em;}
 .home-live-top strong{margin-left:auto;font-size:11px;}
@@ -14571,6 +14645,64 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .results-summary-tile{padding:13px 14px;border:1px solid ${t.border};border-radius:12px;background:${t.panel};text-align:left;}
 .results-summary-label{font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:${t.textDim};margin-bottom:5px;}
 .results-summary-value{font-size:20px;font-weight:950;color:${t.text};line-height:1.1;}
+.exam-report-card{position:relative;overflow:hidden;margin-bottom:14px;padding:0!important;border-radius:18px!important;border-color:color-mix(in srgb,var(--report-color) 38%,${t.border})!important;background:radial-gradient(circle at 88% 5%,color-mix(in srgb,var(--report-color) 15%,transparent),transparent 31%),linear-gradient(145deg,${t.surface},${t.panel})!important;box-shadow:0 24px 64px rgba(7,12,24,.18)!important;}
+.exam-report-card::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--report-color),var(--report-readiness-color),${t.amber});}
+.exam-report-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px 16px;border-bottom:1px solid ${t.border};}
+.exam-report-brand{display:flex;align-items:center;gap:10px;}
+.exam-report-brand>span{width:43px;height:43px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,var(--report-color),var(--report-readiness-color));color:#fff;box-shadow:0 10px 24px color-mix(in srgb,var(--report-color) 24%,transparent);}
+.exam-report-brand strong,.exam-report-brand small{display:block;}
+.exam-report-brand strong{font-size:17px;color:${t.text};line-height:1.1;}
+.exam-report-brand small{margin-top:4px;font-size:10px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:${t.textDim};}
+.exam-report-date{text-align:right;}
+.exam-report-date span,.exam-report-date strong{display:block;}
+.exam-report-date span{font-size:9px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:${t.textDim};}
+.exam-report-date strong{font-size:12px;color:${t.textSec};margin-top:3px;}
+.exam-report-hero{display:grid;grid-template-columns:220px minmax(0,1fr);gap:22px;align-items:center;padding:24px 24px 20px;}
+.exam-report-score{text-align:center;padding-right:22px;border-right:1px solid ${t.border};}
+.exam-report-status-row{min-height:26px;display:flex;align-items:center;justify-content:center;gap:7px;color:var(--report-color);font-size:11px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;}
+.exam-report-score .radial-score{width:148px;height:148px;margin:5px auto 5px;}
+.exam-report-summary{min-width:0;}
+.exam-report-kicker{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--report-color);margin-bottom:5px;}
+.exam-report-summary h1{font-size:clamp(28px,4vw,42px);line-height:1.04;color:${t.text};margin:0 0 9px;}
+.exam-report-summary>p{max-width:620px;margin:0;color:${t.textSec};font-size:13px;line-height:1.65;}
+.exam-report-readiness{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:11px;align-items:center;margin-top:17px;padding:12px 13px;border:1px solid color-mix(in srgb,var(--report-readiness-color) 34%,${t.border});border-radius:13px;background:color-mix(in srgb,var(--report-readiness-color) 8%,${t.panel});}
+.exam-report-readiness-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--report-readiness-color);color:#fff;box-shadow:0 9px 20px color-mix(in srgb,var(--report-readiness-color) 22%,transparent);}
+.exam-report-readiness small,.exam-report-readiness strong{display:block;}
+.exam-report-readiness small{font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:${t.textDim};}
+.exam-report-readiness strong{margin-top:3px;font-size:13px;color:${t.text};}
+.exam-report-star-preview{text-align:right;}
+.exam-report-star-preview .readiness-stars{justify-content:flex-end;gap:3px;}
+.exam-report-star-preview small{margin-top:4px;}
+.exam-report-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0 24px 20px;border:1px solid ${t.border};border-radius:13px;overflow:hidden;background:${t.panel}b8;}
+.exam-report-metrics>div{padding:13px 14px;}
+.exam-report-metrics>div+div{border-left:1px solid ${t.border};}
+.exam-report-metrics span,.exam-report-metrics strong{display:block;}
+.exam-report-metrics span{font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:${t.textDim};margin-bottom:5px;}
+.exam-report-metrics strong{font-size:19px;color:${t.text};line-height:1.1;}
+.exam-report-metrics strong small{display:inline;font-size:11px;color:${t.textDim};}
+.exam-report-section{margin:0 24px 18px;padding-top:18px;border-top:1px solid ${t.border};}
+.exam-report-section-title{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:11px;}
+.exam-report-section-title span,.exam-report-section-title strong{display:block;}
+.exam-report-section-title span{font-size:9px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:${t.textDim};}
+.exam-report-section-title strong{margin-top:2px;font-size:14px;color:${t.text};}
+.exam-report-section-title>small{font-size:10px;font-weight:850;color:${t.textDim};}
+.exam-report-type-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.exam-report-type{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 13px 17px;border:1px solid ${t.border};border-radius:12px;background:${t.panel};overflow:hidden;}
+.exam-report-type-icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:${t.accent}13;color:${t.accent};}
+.exam-report-type span,.exam-report-type strong{display:block;}
+.exam-report-type div>span{font-size:10px;color:${t.textDim};font-weight:850;}
+.exam-report-type div>strong{font-size:12px;color:${t.text};margin-top:2px;}
+.exam-report-type b{font-size:17px;}
+.exam-report-type-meter{position:absolute;left:0;right:0;bottom:0;height:5px;background:${t.border};}
+.exam-report-type-meter span{height:100%;border-radius:0 99px 99px 0;background:linear-gradient(90deg,var(--report-color),var(--report-readiness-color));}
+.exam-report-insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 24px 20px;}
+.exam-report-insight{padding:14px;border:1px solid ${t.border};border-radius:12px;background:${t.panel};}
+.exam-report-insight>span{display:flex;align-items:center;gap:7px;font-size:9px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px;}
+.exam-report-insight.strength>span{color:${t.green};}
+.exam-report-insight.focus>span{color:${t.amber};}
+.exam-report-insight strong{display:block;color:${t.text};font-size:13px;line-height:1.4;}
+.exam-report-insight p{margin:5px 0 0;color:${t.textSec};font-size:11px;line-height:1.55;}
+.exam-report-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 24px;background:${t.bg}4d;border-top:1px solid ${t.border};color:${t.textDim};font-size:9px;line-height:1.5;}
 .review-toolbar{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin:24px 0 12px;flex-wrap:wrap;}
 .review-count-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid ${t.border};border-radius:999px;background:${t.panel};color:${t.textSec};font-size:12px;font-weight:850;}
 .exam-review-card{position:relative;padding:0!important;border-radius:14px!important;overflow:hidden;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s,background .18s;}
@@ -15545,6 +15677,10 @@ body{background:
   .home-cta-row .btn{flex:1 1 180px;}
   .home-hero-panel{grid-template-columns:1fr!important;}
   .readiness-orbit{min-height:148px!important;}
+  .readiness-lab{padding:18px!important;}
+  .readiness-lab-head{display:grid!important;grid-template-columns:1fr!important;}
+  .readiness-level-badge{justify-self:stretch!important;grid-template-columns:auto auto!important;justify-content:flex-start!important;}
+  .readiness-lab-body{grid-template-columns:1fr!important;}
   .home-live-card{padding:16px!important;}
   .mission-board{padding:16px!important;border-radius:16px!important;}
   .mission-card-grid{grid-template-columns:1fr!important;}
@@ -15634,6 +15770,23 @@ body{background:
   .results-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .results-summary-tile{padding:12px!important;}
   .exam-score-card{padding:18px!important;}
+  .exam-report-card{border-radius:12px!important;}
+  .exam-report-header{padding:17px 16px 14px!important;}
+  .exam-report-hero{grid-template-columns:1fr!important;padding:19px 16px 16px!important;gap:15px!important;}
+  .exam-report-score{padding:0 0 15px!important;border-right:0!important;border-bottom:1px solid ${t.border};}
+  .exam-report-summary{text-align:center;}
+  .exam-report-summary>p{margin-left:auto!important;margin-right:auto!important;}
+  .exam-report-readiness{grid-template-columns:auto minmax(0,1fr)!important;text-align:left!important;}
+  .exam-report-star-preview{grid-column:1 / -1!important;text-align:left!important;padding-top:9px;border-top:1px solid ${t.border};}
+  .exam-report-star-preview .readiness-stars{justify-content:flex-start!important;}
+  .exam-report-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin:0 16px 17px!important;}
+  .exam-report-metrics>div+div{border-left:0!important;}
+  .exam-report-metrics>div:nth-child(even){border-left:1px solid ${t.border}!important;}
+  .exam-report-metrics>div:nth-child(n+3){border-top:1px solid ${t.border}!important;}
+  .exam-report-section{margin:0 16px 16px!important;}
+  .exam-report-type-grid,.exam-report-insights{grid-template-columns:1fr!important;}
+  .exam-report-insights{margin:0 16px 17px!important;}
+  .exam-report-footer{align-items:flex-start!important;flex-direction:column!important;gap:5px!important;padding:11px 16px!important;}
   .exam-review-head{grid-template-columns:auto minmax(0,1fr)!important;}
   .exam-review-toggle{grid-column:1 / -1;justify-self:flex-start;}
   .answer-compare{grid-template-columns:1fr!important;}
@@ -15738,6 +15891,13 @@ body{background:
   .app-main>.site-mascot-placement.anchor-bottom-left,.app-main>.site-mascot-placement.anchor-bottom-center,.app-main>.site-mascot-placement.anchor-bottom-right{bottom:92px!important;}
 }
 @media (max-width: 520px){
+  .readiness-pillar-grid{grid-template-columns:1fr!important;}
+  .readiness-pillar-help{padding-right:0!important;}
+  .readiness-weight{position:static!important;display:block;margin-top:6px;}
+  .exam-report-header{align-items:flex-start!important;}
+  .exam-report-brand>span{width:38px!important;height:38px!important;}
+  .exam-report-summary h1{font-size:29px!important;}
+  .exam-report-section-title{align-items:flex-start!important;flex-direction:column!important;}
   .pbq-type-section{padding:18px!important;}
   .pbq-type-section-head{display:block!important;}
   .pbq-type-section-head span{display:block;margin-top:5px;}
@@ -15745,6 +15905,17 @@ body{background:
   .pbq-type-card{min-height:78px!important;padding:14px!important;}
   .pbq-type-card strong{font-size:16px!important;}
   .pbq-type-card small{font-size:13px!important;}
+}
+@media print{
+  @page{size:auto;margin:12mm;}
+  body{background:#fff!important;}
+  .sidebar,.sidebar-restore,.mobile-topbar,.trial-countdown-banner,.site-mascot-placement,.score-actions{display:none!important;}
+  .app-shell,.app-main{display:block!important;min-height:0!important;overflow:visible!important;}
+  .results-shell{padding:0!important;max-width:none!important;}
+  .results-shell>*:not(.exam-report-card){display:none!important;}
+  .exam-report-card{margin:0!important;box-shadow:none!important;break-inside:avoid;print-color-adjust:exact;-webkit-print-color-adjust:exact;}
+  .exam-report-card *{print-color-adjust:exact;-webkit-print-color-adjust:exact;}
+  .exam-report-card .info-btn{display:none!important;}
 }
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
@@ -16134,6 +16305,15 @@ function RadialScore({score,correct,total,t}) {
         <text x="78" y="95" textAnchor="middle" fill={t.textDim} fontSize="12" fontWeight="800">SCORE</text>
       </svg>
       <div style={{fontSize:14,color:"#94A3B8",fontWeight:800}}>{correct} / {total} correct</div>
+    </div>
+  );
+}
+function ReadinessStars({profile,size=20,label="Future star contribution"}) {
+  return(
+    <div className="readiness-stars" role="img" aria-label={`${label}: ${profile.stars} of 5 preview stars`}>
+      {[0,1,2,3,4].map(index=>(
+        <Star key={index} size={size} strokeWidth={2.2} fill={index<profile.stars?"currentColor":"none"} className={index<profile.stars?"filled":""}/>
+      ))}
     </div>
   );
 }
@@ -17318,14 +17498,11 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
 // ═══════════════════════════════════════════════════════════════
 function Dashboard({user,attempts,onNav,t}) {
   const [activeMission,setActiveMission]=useState("mcq");
-  const mcqAttempts = attempts.filter(a=>a.mcq);
-  const pbqAttempts = attempts.filter(a=>a.pbq);
-  const totalCorrect = attempts.filter(a=>a.correct).length;
-  const uniqueQuestionIds = new Set(attempts.map(a=>`${a.pbq?"pbq":"mcq"}:${a.qid || a.title || a.createdAt}`));
-  const total = attempts.length;
-  const questionsDone = uniqueQuestionIds.size;
-  const accuracy = total ? Math.round((totalCorrect/total)*100) : 0;
-  const readiness = Math.min(100, Math.round(accuracy*0.75 + Math.min(questionsDone,50)/50*25));
+  const readinessProfile=getReadinessProfile(attempts);
+  const questionsDone=readinessProfile.uniqueQuestions;
+  const accuracy=readinessProfile.accuracy;
+  const readiness=readinessProfile.score;
+  const readinessColor=readiness>=80?t.green:readiness>=65?t.accent:readiness>=45?t.amber:t.red;
   const isPro = user.tier==="pro";
   const challenge = getTodayChallenge();
   const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
@@ -17334,13 +17511,13 @@ function Dashboard({user,attempts,onNav,t}) {
     loadDailyStreak(user).then(info=>{if(active)setStreakInfo(info);});
     return()=>{active=false;};
   },[user?.email]);
-  const uniquePbqs=new Set(pbqAttempts.map(a=>a.qid)).size;
+  const uniquePbqs=readinessProfile.uniquePbqs;
   const nextQuest=questionsDone<10
     ? "Complete 10 unique questions to unlock your first study rhythm."
     : accuracy<75
       ? "Run Smart Review and repair weak topics for a stronger score."
       : "Try an Exam Mode set to check real readiness.";
-  const weakSignal = accuracy < 70 ? "Review weak topics first" : readiness >= 75 ? "Ready for timed practice" : "Build one more focused set";
+  const weakSignal = accuracy < 70 ? "Review weak topics first" : readiness >= 80 ? "Ready for timed practice" : "Build one more focused set";
   const missionCards=[
     {id:"mcq",label:"MCQ Practice",title:"Start a focused set",body:"Adaptive ordering prioritises weak and starred questions so each session feels useful.",nav:"mcq",color:t.accent,meta:`${MCQ_BANK.length} questions`,Icon:BookOpenCheck},
     {id:"daily",label:"Daily Challenge",title:streakInfo.completedToday?"Daily complete":"Protect the streak",body:streakInfo.completedToday?"Today is already secured. Return tomorrow for the next streak point.":"Five questions, quick feedback, and a streak moment after completion.",nav:"daily",color:t.amber,meta:`${streakInfo.streak} day streak`,Icon:Target},
@@ -17368,7 +17545,7 @@ function Dashboard({user,attempts,onNav,t}) {
           <p className="home-subtitle">
             {questionsDone===0
               ? "Start with a short guided set. SecurePlus will turn your answers into a personalised review path."
-              : readiness>=75
+              : readiness>=80
                 ? "Your readiness is trending well. Keep pressure-testing with timed practice and PBQ simulations."
                 : "Your next gain is targeted practice. Focus on weak topics, then let Smart Review bring them back."}
           </p>
@@ -17392,10 +17569,10 @@ function Dashboard({user,attempts,onNav,t}) {
           />
         </div>
         <div className="home-hero-panel">
-          <div className="readiness-orbit" style={{"--readiness":`${readiness}%`}}>
+          <div className="readiness-orbit" style={{"--readiness":`${readiness}%`,"--readiness-color":readinessColor}}>
             <div>
               <span>{readiness}%</span>
-              <small>readiness</small>
+              <small>{readinessProfile.level}</small>
             </div>
           </div>
           <div className="home-live-card">
@@ -17418,9 +17595,55 @@ function Dashboard({user,attempts,onNav,t}) {
         </div>
       </section>
 
+      <section className={`card readiness-lab readiness-${readinessProfile.tone}`} style={{"--readiness-color":readinessColor}}>
+        <div className="readiness-lab-head">
+          <div>
+            <div className="label" style={{color:readinessColor}}>Your readiness lab</div>
+            <h2>A score you can understand and improve</h2>
+            <p>Readiness combines what you know with how broadly and practically you have trained. It is a SecurePlus study guide, not an official exam prediction.</p>
+          </div>
+          <div className="readiness-level-badge">
+            <Gauge size={21} strokeWidth={2.4}/>
+            <span><strong>{readiness}</strong>/100</span>
+            <small>{readinessProfile.level}</small>
+          </div>
+        </div>
+        <div className="readiness-lab-body">
+          <div className="readiness-star-card">
+            <div className="readiness-star-top">
+              <div>
+                <span className="readiness-eyebrow">Future star track</span>
+                <strong>{readinessProfile.stars} of 5 preview stars</strong>
+              </div>
+              <span className="readiness-coming-soon">Coming later</span>
+            </div>
+            <ReadinessStars profile={readinessProfile} size={24}/>
+            <div className="readiness-star-meter"><span style={{width:`${readinessProfile.starProgress}%`}}/></div>
+            <p>
+              {readinessProfile.stars===5
+                ? "You have reached every readiness milestone in the preview track."
+                : `${readinessProfile.pointsToNextStar} readiness point${readinessProfile.pointsToNextStar===1?"":"s"} to the next preview star.`}
+              {" "}When study stars launch, readiness will be one contribution—not the only way to earn them.
+            </p>
+          </div>
+          <div className="readiness-pillar-grid">
+            {readinessProfile.pillars.map(pillar=>(
+              <div key={pillar.id} className="readiness-pillar">
+                <div className="readiness-pillar-top">
+                  <span>{pillar.label}</span>
+                  <strong>{pillar.value}%</strong>
+                </div>
+                <div className="readiness-pillar-meter"><span style={{width:`${pillar.value}%`}}/></div>
+                <div className="readiness-pillar-help">{pillar.help}</div>
+                <span className="readiness-weight">{pillar.weight} of score</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <div className="dashboard-stat-grid">
         {[
-          {label:"Readiness",value:`${readiness}%`,color:readiness>=75?t.green:readiness>=50?t.amber:t.red,Icon:Gauge},
           {label:"Accuracy",value:`${accuracy}%`,color:t.accent,Icon:Target},
           {label:"Questions Done",value:questionsDone,color:"#8b5cf6",Icon:BookOpenCheck},
           {label:"Daily Streak",value:streakInfo.streak,color:t.amber,Icon:Flame},
@@ -17471,10 +17694,10 @@ function Dashboard({user,attempts,onNav,t}) {
         <div className="card home-route-card">
           <div className="label" style={{color:t.green}}>Recommended today</div>
           <h3>
-            {readiness>=75?"Run one timed set and protect pacing.":accuracy<65?"Repair missed concepts before adding new topics.":"Keep momentum with a focused practice set."}
+            {readiness>=80?"Run one timed set and protect pacing.":accuracy<65?"Repair missed concepts before adding new topics.":"Keep momentum with a focused practice set."}
           </h3>
           <p>
-            {readiness>=75?"Exam Mode helps you practise pressure, flags, elimination, and review timing.":
+            {readiness>=80?"Exam Mode helps you practise pressure, flags, elimination, and review timing.":
             accuracy<65?"Smart Review puts weak areas first so your next session has a higher chance of moving the score.":
             "A shorter focused set is enough to keep the habit strong without bloating your review queue."}
           </p>
@@ -17491,8 +17714,8 @@ function Dashboard({user,attempts,onNav,t}) {
               </div>
             ))}
           </div>
-          <button className="btn btn-primary" onClick={()=>onNav(readiness>=75&&isPro?"exam":"mcq")}>
-            {readiness>=75&&isPro?"Start Exam Mode":"Start Focus Set"}
+          <button className="btn btn-primary" onClick={()=>onNav(readiness>=80&&isPro?"exam":"mcq")}>
+            {readiness>=80&&isPro?"Start Exam Mode":"Start Focus Set"}
           </button>
         </div>
         <div className="card home-path-card">
@@ -17519,20 +17742,20 @@ function Dashboard({user,attempts,onNav,t}) {
 
       <div className="mission-banner" style={{marginBottom:20}}>
         <div style={{position:"relative",zIndex:1,display:"flex",gap:14,alignItems:"center",flexWrap:"wrap"}}>
-          <span className="mission-badge">{readiness>=75?<CircleGauge size={22} strokeWidth={2.3}/>:accuracy<65?<Brain size={22} strokeWidth={2.3}/>:<BookOpenCheck size={22} strokeWidth={2.3}/>}</span>
+          <span className="mission-badge">{readiness>=80?<CircleGauge size={22} strokeWidth={2.3}/>:accuracy<65?<Brain size={22} strokeWidth={2.3}/>:<BookOpenCheck size={22} strokeWidth={2.3}/>}</span>
           <div style={{flex:1,minWidth:240}}>
             <div className="label" style={{color:t.accent,marginBottom:3}}>Next best action</div>
             <div style={{fontWeight:900,color:t.text,fontSize:16}}>
-              {readiness>=75?"Keep readiness sharp with a timed exam set":accuracy<65?"Rebuild accuracy with Smart Review":"Build momentum with one focused MCQ set"}
+              {readiness>=80?"Keep readiness sharp with a timed exam set":accuracy<65?"Rebuild accuracy with Smart Review":"Build momentum with one focused MCQ set"}
             </div>
             <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
-              {readiness>=75?"You are in the ready zone. Use Exam Mode to practise pacing and review missed concepts.":
+              {readiness>=80?"You are in the ready zone. Use Exam Mode to practise pacing and review missed concepts.":
               accuracy<65?"Your quickest gain is repairing missed topics before adding more new questions.":
               "A short set keeps progress moving without overwhelming your review queue."}
             </div>
           </div>
-          <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={()=>onNav(readiness>=75&&isPro?"exam":"mcq")}>
-            {readiness>=75&&isPro?"Start Exam Mode":"Start Focus Set"}
+          <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={()=>onNav(readiness>=80&&isPro?"exam":"mcq")}>
+            {readiness>=80&&isPro?"Start Exam Mode":"Start Focus Set"}
           </button>
         </div>
       </div>
@@ -19251,7 +19474,7 @@ function ExamModeGuideModal({t,onClose}) {
   );
 }
 
-function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
+function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false}) {
   const sessionKey=`exam:${practiceSessionOwner(user)}`;
   const [questionCount,setQuestionCount]=useState(20);
   const [pbqCount,setPbqCount]=useState(2);
@@ -19269,6 +19492,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
   const [showExamGuide,setShowExamGuide]=useState(false);
   const [submittingExam,setSubmittingExam]=useState(false);
   const [showScoreDisclaimer,setShowScoreDisclaimer]=useState(false);
+  const [completedRows,setCompletedRows]=useState([]);
   const longPressTimers=useRef({});
   const longPressActivated=useRef({});
   const rightClickHandled=useRef({});
@@ -19320,6 +19544,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
     setTimeLeft(examDuration);
     setDone(false);
     setSaved(false);
+    setCompletedRows([]);
     setStarted(true);
     capture("exam_mode_started", { question_count: questionCount, pbq_count: pbqCount, tier: user.tier });
   };
@@ -19350,6 +19575,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
     setTimeSpent(saved.timeSpent||{});
     setDone(false);
     setSaved(false);
+    setCompletedRows([]);
     setStarted(true);
   };
   const updateAnswer=patch=>setAnswers(prev=>({...prev,[qi]:{...(prev[qi]||{}),...patch}}));
@@ -19442,6 +19668,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
         rows.forEach(row=>onSave(row));
         setSaved(true);
       }
+      setCompletedRows(rows);
       capture("exam_mode_completed", { question_count: questions.length, correct_count: rows.filter(r=>r.correct).length, score, auto_submitted: auto, tier: user.tier });
       DB.clearPracticeSession(sessionKey);
       setDone(true);
@@ -19623,6 +19850,42 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
   const flaggedCount=Object.values(flagged).filter(Boolean).length;
   const avgExamSeconds=examReviewRows.length?Math.round(examReviewRows.reduce((sum,row)=>sum+row.seconds,0)/examReviewRows.length):0;
   const slowCount=examReviewRows.filter(row=>row.seconds>row.target*1.35).length;
+  const totalExamSeconds=examReviewRows.reduce((sum,row)=>sum+row.seconds,0);
+  const completionRate=questions.length?Math.round((answeredCount/questions.length)*100):0;
+  const combinedReadinessAttempts=[...completedRows,...attempts.filter(attempt=>!completedRows.includes(attempt))];
+  const reportReadiness=getReadinessProfile(combinedReadinessAttempts);
+  const reportReadinessColor=reportReadiness.score>=80?t.green:reportReadiness.score>=65?t.accent:reportReadiness.score>=45?t.amber:t.red;
+  const gradeLabel=score>=90?"Outstanding":score>=80?"Practice pass":score>=70?"Nearly there":score>=60?"Building skills":"Focus and rebuild";
+  const resultMessage=score>=90
+    ? "Excellent control of this exam set. Keep the result stable with another timed attempt after a short review gap."
+    : score>=80
+      ? "You cleared the SecurePlus practice target. Review the misses so this performance becomes repeatable."
+      : score>=70
+        ? "You are close to the practice target. A focused repair set can turn the weak areas into a pass."
+        : "Use the report below as a study plan. Repair the weakest area first, then retake only the missed questions.";
+  const typePerformance=[
+    {id:"mcq",label:"MCQ knowledge",rows:examReviewRows.filter(row=>row.item.kind==="mcq"),Icon:BookOpenCheck},
+    {id:"pbq",label:"PBQ application",rows:examReviewRows.filter(row=>row.item.kind==="pbq"),Icon:Puzzle},
+  ].filter(group=>group.rows.length).map(group=>({
+    ...group,
+    correct:group.rows.filter(row=>row.ok).length,
+    accuracy:Math.round((group.rows.filter(row=>row.ok).length/group.rows.length)*100),
+  }));
+  const topicPerformance=Object.values(examReviewRows.reduce((acc,row)=>{
+    const q=row.item.q;
+    const key=row.item.kind==="mcq"?(CHAPTERS.find(chapter=>chapter.id===q.ch)?.title||q.topic||"MCQ"):`PBQ · ${q.type}`;
+    if(!acc[key])acc[key]={key,total:0,correct:0};
+    acc[key].total++;
+    if(row.ok)acc[key].correct++;
+    return acc;
+  },{})).map(item=>({...item,accuracy:Math.round((item.correct/item.total)*100)}));
+  const strongestTopic=[...topicPerformance].sort((a,b)=>b.accuracy-a.accuracy||b.total-a.total)[0];
+  const focusTopic=[...topicPerformance].filter(item=>item.correct<item.total).sort((a,b)=>a.accuracy-b.accuracy||b.total-a.total)[0];
+  const reportDate=new Date(completedRows[0]?.createdAt||Date.now()).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"});
+  const printReport=()=>{
+    capture("exam_report_card_printed", { score, question_count:questions.length, tier:user.tier });
+    window.print();
+  };
   const retakeIncorrectExam=()=>{
     const missed=incorrectExamRows.map(row=>row.item);
     if(!missed.length)return;
@@ -19637,6 +19900,7 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
     setTimeLeft(Math.max(1,missed.length)*72);
     setDone(false);
     setSaved(false);
+    setCompletedRows([]);
     setSubmittingExam(false);
     setStarted(true);
     capture("exam_retake_incorrect_started", { question_count: missed.length, tier: user.tier });
@@ -19644,41 +19908,97 @@ function ExamMode({user,onSave,onUpgrade,t,showQuestionCodes=false}) {
 
   if(done) return(
     <div className="results-shell">
-      <div className="card exam-score-card" style={{marginBottom:12,borderColor:score>=80?`${t.green}45`:`${t.red}45`,background:score>=80?`${t.green}07`:`${t.red}07`}}>
-        <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8,position:"relative"}}>
-          <div style={{fontSize:13,fontWeight:900,color:score>=80?"#10B981":"#EF4444",textTransform:"uppercase",letterSpacing:".06em"}}>
-            {score>=80?"Practice Passed":"Practice Failed"}
+      <section className="card exam-report-card" style={{"--report-color":score>=80?t.green:t.red,"--report-readiness-color":reportReadinessColor}}>
+        <header className="exam-report-header">
+          <div className="exam-report-brand">
+            <span><ShieldCheck size={25} strokeWidth={2.4}/></span>
+            <div><strong>SecurePlus</strong><small>Exam report card</small></div>
           </div>
-          <span className="info-popover">
-            <button className="info-btn" type="button" aria-label="Practice score disclaimer" onClick={()=>setShowScoreDisclaimer(v=>!v)}>i</button>
-            {showScoreDisclaimer&&(
-              <span className="info-tooltip">
-                SecurePlus uses 80% as a practice pass mark here. This is not an accurate CompTIA scoring model. The real Security+ exam uses a proprietary scaled score from 100 to 900, PBQs can carry different weight, and the real exam has more questions.
+          <div className="exam-report-date"><span>Completed</span><strong>{reportDate}</strong></div>
+        </header>
+
+        <div className="exam-report-hero">
+          <div className="exam-report-score">
+            <div className="exam-report-status-row">
+              <span>{score>=80?"Practice passed":"Below practice target"}</span>
+              <span className="info-popover">
+                <button className="info-btn" type="button" aria-label="Practice score disclaimer" onClick={()=>setShowScoreDisclaimer(value=>!value)}>i</button>
+                {showScoreDisclaimer&&(
+                  <span className="info-tooltip">
+                    SecurePlus uses 80% as a practice pass mark. This is not the official CompTIA scoring model; real exam scoring is proprietary and PBQs may carry different weight.
+                  </span>
+                )}
               </span>
-            )}
-          </span>
-        </div>
-        <RadialScore score={score} correct={correctCount} total={questions.length} t={t}/>
-        <div className="results-summary-grid">
-          <div className="results-summary-tile">
-            <div className="results-summary-label">Missed</div>
-            <div className="results-summary-value" style={{color:incorrectExamRows.length?t.red:t.green}}>{incorrectExamRows.length}</div>
+            </div>
+            <RadialScore score={score} correct={correctCount} total={questions.length} t={t}/>
           </div>
-          <div className="results-summary-tile">
-            <div className="results-summary-label">Flagged</div>
-            <div className="results-summary-value" style={{color:flaggedCount?t.amber:t.text}}>{flaggedCount}</div>
-          </div>
-          <div className="results-summary-tile">
-            <div className="results-summary-label">Avg time</div>
-            <div className="results-summary-value">{formatSecondsShort(avgExamSeconds)}</div>
-          </div>
-          <div className="results-summary-tile">
-            <div className="results-summary-label">Slow answers</div>
-            <div className="results-summary-value" style={{color:slowCount?t.amber:t.green}}>{slowCount}</div>
+          <div className="exam-report-summary">
+            <div className="exam-report-kicker">Candidate · {user.name}</div>
+            <h1>{gradeLabel}</h1>
+            <p>{resultMessage}</p>
+            <div className="exam-report-readiness">
+              <span className="exam-report-readiness-icon"><Gauge size={22} strokeWidth={2.4}/></span>
+              <div>
+                <small>Updated readiness</small>
+                <strong>{reportReadiness.score}/100 · {reportReadiness.level}</strong>
+              </div>
+              <div className="exam-report-star-preview">
+                <ReadinessStars profile={reportReadiness} size={18}/>
+                <small>Future star contribution</small>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+
+        <div className="exam-report-metrics">
+          <div><span>Correct answers</span><strong style={{color:t.green}}>{correctCount}<small> / {questions.length}</small></strong></div>
+          <div><span>Completion</span><strong>{completionRate}%</strong></div>
+          <div><span>Total time</span><strong>{formatSecondsShort(totalExamSeconds)}</strong></div>
+          <div><span>Average pace</span><strong style={{color:slowCount?t.amber:t.green}}>{formatSecondsShort(avgExamSeconds)}</strong></div>
+        </div>
+
+        <div className="exam-report-section">
+          <div className="exam-report-section-title">
+            <div><span>Performance breakdown</span><strong>Knowledge and applied skills</strong></div>
+            <small>{flaggedCount} flagged · {slowCount} slow</small>
+          </div>
+          <div className="exam-report-type-grid">
+            {typePerformance.map(group=>(
+              <div key={group.id} className="exam-report-type">
+                <span className="exam-report-type-icon"><group.Icon size={20} strokeWidth={2.3}/></span>
+                <div>
+                  <span>{group.label}</span>
+                  <strong>{group.correct}/{group.rows.length} correct</strong>
+                </div>
+                <b style={{color:group.accuracy>=80?t.green:group.accuracy>=65?t.amber:t.red}}>{group.accuracy}%</b>
+                <div className="exam-report-type-meter"><span style={{width:`${group.accuracy}%`}}/></div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="exam-report-insights">
+          <div className="exam-report-insight strength">
+            <span><Trophy size={18} strokeWidth={2.4}/> Strongest signal</span>
+            <strong>{strongestTopic?.key||"Complete more questions"}</strong>
+            <p>{strongestTopic?`${strongestTopic.correct}/${strongestTopic.total} correct in this area.`:"A larger exam will reveal a clearer strength."}</p>
+          </div>
+          <div className="exam-report-insight focus">
+            <span><Target size={18} strokeWidth={2.4}/> Best next focus</span>
+            <strong>{focusTopic?.key||"Protect your result"}</strong>
+            <p>{focusTopic?`${focusTopic.total-focusTopic.correct} missed here. Retake the missed questions after reviewing explanations.`:"No missed topic cluster—repeat a timed set later to confirm consistency."}</p>
+          </div>
+        </div>
+
+        <footer className="exam-report-footer">
+          <span>This report is a SecurePlus practice summary, not an official CompTIA score report.</span>
+          <span>Readiness contributes to the future star system; study stars are not active yet.</span>
+        </footer>
+      </section>
       <div className="score-actions">
+        <button className="btn btn-outline" onClick={printReport}>
+          <FileText size={16}/> Print / Save Report
+        </button>
         <button className="btn btn-primary" disabled={!incorrectExamRows.length} onClick={retakeIncorrectExam}>
           Retake Incorrect Questions
         </button>
@@ -23788,7 +24108,7 @@ export default function App() {
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser}/>
           </div>
-          {view==="exam"&&<ExamMode user={user} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} showQuestionCodes={isRootUser}/>}
+          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} showQuestionCodes={isRootUser}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
           {view==="referrals"&&<ReferralPage user={user} t={t}/>}
