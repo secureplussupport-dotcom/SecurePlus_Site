@@ -14632,22 +14632,47 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 @keyframes achievementToast{from{opacity:0;transform:translateY(-12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes confettiFall{to{transform:translateY(150px) rotate(220deg);opacity:0;}}
 .academy-avatar{display:grid;place-items:center;border-radius:999px;background:radial-gradient(circle at 32% 24%,#fff8,transparent 28%),color-mix(in srgb,var(--avatar-tone) 18%,${t.surface});border:1px solid color-mix(in srgb,var(--avatar-tone) 34%,${t.border});box-shadow:inset 0 0 0 6px color-mix(in srgb,#fff 42%,transparent),0 14px 26px color-mix(in srgb,var(--avatar-tone) 16%,transparent);}
-.academy-id-card{position:relative;isolation:isolate;overflow:hidden;width:100%;max-width:310px;min-height:430px;padding:18px;border:1px solid color-mix(in srgb,var(--academy-tier) 30%,${t.border});border-radius:24px;background:radial-gradient(circle at 22% 8%,var(--academy-tier-bg),transparent 38%),linear-gradient(145deg,#fffaf2,${t.surface} 54%,${t.panel});box-shadow:0 24px 54px rgba(80,52,22,.16),inset 0 0 0 1px rgba(255,255,255,.65);color:${t.text};transform-style:preserve-3d;}
-.academy-id-card.compact{max-width:250px;min-height:320px;padding:14px;border-radius:20px;}
-.academy-id-grain{position:absolute;inset:0;z-index:-1;opacity:.36;background-image:radial-gradient(circle at 1px 1px,rgba(80,52,22,.12) 1px,transparent 0);background-size:13px 13px;mix-blend-mode:multiply;}
-.academy-id-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid color-mix(in srgb,var(--academy-tier) 25%,${t.border});color:var(--academy-tier);}
-.academy-id-header span{display:block;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.12em;color:${t.textDim};}
-.academy-id-header strong{display:block;margin-top:3px;font-size:17px;line-height:1.1;color:${t.text};}
-.academy-id-profile{display:grid;place-items:center;text-align:center;padding:28px 6px 20px;}
-.academy-id-card.compact .academy-id-profile{padding:18px 4px 14px;}
-.academy-id-profile h3{font-size:23px;line-height:1.15;color:${t.text};margin:14px 0 4px;text-wrap:balance;}
-.academy-id-card.compact .academy-id-profile h3{font-size:18px;}
-.academy-id-profile p{font-size:12px;color:${t.textSec};margin:0;}
-.academy-id-stars{display:flex;justify-content:center;gap:8px;padding:12px;border-radius:18px;background:color-mix(in srgb,var(--academy-tier-bg) 56%,${t.surface});border:1px solid color-mix(in srgb,var(--academy-tier) 24%,${t.border});color:var(--academy-tier);}
-.academy-id-stars .empty{color:${t.textDim};opacity:.46;}
-.academy-id-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid ${t.border};font-size:11px;}
-.academy-id-footer span{color:var(--academy-tier);font-weight:950;}
-.academy-id-footer strong{color:${t.text};}
+.academy-id-card{position:relative;isolation:isolate;overflow:hidden;width:100%;max-width:430px;min-height:274px;padding:20px;border:1px solid color-mix(in srgb,var(--academy-tier) 46%,${t.border});border-radius:26px;background:radial-gradient(circle at 4% 0%,color-mix(in srgb,var(--academy-tier) 30%,transparent),transparent 35%),linear-gradient(145deg,color-mix(in srgb,var(--academy-tier-bg) 28%,${t.surface}),${t.surface} 49%,color-mix(in srgb,var(--academy-tier) 10%,${t.panel}));box-shadow:0 26px 68px rgba(61,43,20,.2),inset 0 0 0 1px color-mix(in srgb,#fff 66%,transparent);color:${t.text};transform-style:preserve-3d;transition:transform .28s cubic-bezier(.16,1,.3,1),box-shadow .28s,border-color .28s;}
+.academy-id-card.compact{max-width:390px;min-height:248px;padding:17px;border-radius:23px;}
+.academy-id-card:hover{transform:translateY(-5px) rotateX(1deg) rotateY(-1deg);border-color:color-mix(in srgb,var(--academy-tier) 68%,${t.border});box-shadow:0 34px 78px color-mix(in srgb,var(--academy-tier) 19%,rgba(61,43,20,.25)),inset 0 0 0 1px color-mix(in srgb,#fff 78%,transparent);}
+.academy-id-card:active{transform:translateY(-1px) scale(.992);}
+.academy-id-grain{position:absolute;inset:0;z-index:-1;opacity:.28;background-image:linear-gradient(color-mix(in srgb,var(--academy-tier) 8%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--academy-tier) 8%,transparent) 1px,transparent 1px);background-size:16px 16px;mask-image:linear-gradient(125deg,#000,transparent 68%);}
+.academy-id-holo{position:absolute;z-index:-1;width:250px;height:250px;right:-105px;top:-135px;border-radius:999px;background:conic-gradient(from 30deg,color-mix(in srgb,var(--academy-tier) 56%,transparent),transparent 22%,${t.green}28 42%,transparent 58%,${t.accent}28 76%,transparent);filter:blur(2px);opacity:.52;transition:transform .65s cubic-bezier(.16,1,.3,1),opacity .3s;}
+.academy-id-card:hover .academy-id-holo{transform:rotate(34deg) scale(1.13);opacity:.74;}
+.academy-id-spark{position:absolute;width:8px;height:8px;background:var(--academy-tier);box-shadow:18px 8px 0 color-mix(in srgb,var(--academy-tier) 45%,transparent),8px 22px 0 color-mix(in srgb,var(--academy-tier) 68%,transparent);opacity:.42;transform:rotate(12deg);}
+.academy-id-spark.top{right:84px;top:22px;}
+.academy-id-spark.bottom{left:22px;bottom:32px;transform:rotate(48deg) scale(.7);}
+.academy-id-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:13px;border-bottom:1px solid color-mix(in srgb,var(--academy-tier) 28%,${t.border});}
+.academy-id-brand{display:flex;align-items:center;gap:9px;min-width:0;}
+.academy-id-brand-mark{width:34px;height:34px;display:grid;place-items:center;flex:0 0 auto;border-radius:11px;background:var(--academy-tier);color:${t.surface};box-shadow:0 8px 20px color-mix(in srgb,var(--academy-tier) 28%,transparent),inset 0 0 0 1px color-mix(in srgb,#fff 42%,transparent);}
+.academy-id-brand span{display:block;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.14em;color:${t.textDim};}
+.academy-id-brand strong{display:block;margin-top:2px;font-size:15px;line-height:1.1;color:${t.text};white-space:nowrap;}
+.academy-id-status{display:flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;border:1px solid color-mix(in srgb,${t.green} 35%,${t.border});background:color-mix(in srgb,${t.green} 9%,${t.surface});color:${t.green};font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
+.academy-id-status::before{content:"";width:6px;height:6px;border-radius:999px;background:${t.green};box-shadow:0 0 0 3px ${t.green}18;}
+.academy-id-body{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:18px 0 15px;}
+.academy-avatar-wrap{position:relative;}
+.academy-avatar-rank{position:absolute;right:-3px;bottom:-3px;display:grid;place-items:center;width:25px;height:25px;border-radius:9px;background:var(--academy-tier);border:3px solid ${t.surface};color:${t.surface};font-size:10px;font-weight:950;box-shadow:0 5px 14px color-mix(in srgb,var(--academy-tier) 30%,transparent);}
+.academy-id-profile{min-width:0;}
+.academy-id-profile>span{display:block;margin-bottom:4px;color:var(--academy-tier);font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.11em;}
+.academy-id-profile h3{overflow:hidden;text-overflow:ellipsis;font-size:21px;line-height:1.12;color:${t.text};margin:0 0 4px;text-wrap:balance;}
+.academy-id-card.compact .academy-id-profile h3{font-size:19px;}
+.academy-id-profile p{font-size:11px;color:${t.textSec};margin:0;}
+.academy-id-member-tag{display:inline-flex!important;align-items:center;gap:5px;margin:8px 0 0!important;padding:4px 7px;border-radius:999px;background:color-mix(in srgb,var(--academy-tier) 10%,${t.panel});border:1px solid color-mix(in srgb,var(--academy-tier) 20%,${t.border});color:${t.textSec}!important;font-size:8px!important;letter-spacing:.06em!important;}
+.academy-id-prestige{min-width:76px;padding:10px;border-radius:16px;border:1px solid color-mix(in srgb,var(--academy-tier) 28%,${t.border});background:color-mix(in srgb,var(--academy-tier-bg) 36%,${t.surface});text-align:center;box-shadow:inset 0 0 0 1px color-mix(in srgb,#fff 42%,transparent);}
+.academy-id-prestige svg{color:var(--academy-tier);filter:drop-shadow(0 4px 6px color-mix(in srgb,var(--academy-tier) 28%,transparent));}
+.academy-id-prestige strong{display:block;margin-top:4px;color:${t.text};font-size:11px;line-height:1.15;}
+.academy-id-prestige small{display:block;margin-top:2px;color:${t.textDim};font-size:8px;text-transform:uppercase;font-weight:900;letter-spacing:.07em;}
+.academy-id-stars-panel{display:grid;gap:8px;padding:11px 12px;border-radius:16px;background:color-mix(in srgb,var(--academy-tier-bg) 32%,${t.surface});border:1px solid color-mix(in srgb,var(--academy-tier) 24%,${t.border});}
+.academy-id-stars-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;color:${t.textDim};}
+.academy-id-stars-head strong{font-size:10px;color:var(--academy-tier);letter-spacing:.02em;white-space:nowrap;}
+.academy-id-stars-row{display:flex;align-items:center;gap:7px;color:var(--academy-tier);}
+.academy-id-stars-row .empty{color:${t.textDim};opacity:.36;}
+.academy-id-progress{height:5px;overflow:hidden;flex:1;border-radius:999px;background:color-mix(in srgb,var(--academy-tier) 15%,${t.border});}
+.academy-id-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--academy-tier),color-mix(in srgb,var(--academy-tier) 48%,${t.green}));box-shadow:0 0 12px color-mix(in srgb,var(--academy-tier) 45%,transparent);transition:width .5s cubic-bezier(.16,1,.3,1);}
+.academy-id-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;font-size:9px;text-transform:uppercase;letter-spacing:.07em;}
+.academy-id-footer span{display:flex;align-items:center;gap:5px;color:${t.textSec};font-weight:900;}
+.academy-id-footer span svg{color:${t.green};}
+.academy-id-footer strong{color:var(--academy-tier);font-size:9px;}
 .academy-signup{display:grid;gap:14px;}
 .academy-stepper{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:4px;}
 .academy-stepper span{display:flex;align-items:center;gap:6px;padding:8px 9px;border-radius:999px;background:${t.panel};border:1px solid ${t.border};color:${t.textDim};font-size:10px;font-weight:900;white-space:nowrap;}
@@ -14671,9 +14696,16 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .academy-reveal{animation:academyStepIn .28s cubic-bezier(.16,1,.3,1) both;}
 .academy-reveal-card{display:grid;place-items:center;perspective:1200px;}
 .academy-reveal-card .academy-id-card{animation:academyCardFlip .7s cubic-bezier(.16,1,.3,1) both;}
-.academy-dashboard-pass{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin-bottom:18px;padding:20px!important;border-color:${t.amber}36!important;background:radial-gradient(circle at 92% 16%,${t.amber}16,transparent 36%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
-.academy-dashboard-pass h2{font-size:22px;color:${t.text};margin:4px 0 6px;}
-.academy-dashboard-pass p{font-size:13px;color:${t.textSec};line-height:1.65;max-width:560px;margin:0;}
+.academy-dashboard-pass{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,430px);gap:26px;align-items:center;margin-bottom:18px;padding:28px!important;border-color:${t.amber}42!important;border-radius:24px!important;background:radial-gradient(circle at 7% 10%,${t.amber}1a,transparent 32%),radial-gradient(circle at 96% 88%,${t.accent}10,transparent 28%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
+.academy-dashboard-pass::after{content:"";position:absolute;left:28px;bottom:0;width:140px;height:4px;border-radius:999px 999px 0 0;background:linear-gradient(90deg,${t.amber},${t.green});opacity:.8;}
+.academy-dashboard-copy{position:relative;z-index:1;}
+.academy-dashboard-pass h2{font-size:27px;color:${t.text};margin:5px 0 8px;letter-spacing:-.02em;}
+.academy-dashboard-pass p{font-size:13px;color:${t.textSec};line-height:1.7;max-width:540px;margin:0;}
+.academy-pass-highlights{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0;}
+.academy-pass-highlights span{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid ${t.border};border-radius:999px;background:${t.surface};color:${t.textSec};font-size:10px;font-weight:900;box-shadow:0 7px 16px rgba(70,48,22,.06);}
+.academy-pass-highlights svg{color:${t.amber};}
+.academy-pass-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.academy-pass-actions small{color:${t.textDim};font-size:10px;line-height:1.4;}
 @keyframes academyStepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes academyCardFlip{from{opacity:0;transform:rotateY(-72deg) translateY(12px) scale(.94)}to{opacity:1;transform:rotateY(0) translateY(0) scale(1)}}
 .dashboard-action-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:14px;margin-bottom:18px;}
@@ -16260,8 +16292,16 @@ body{background:
   .achievement-grid{grid-template-columns:minmax(0,1fr)!important;}
   .achievement-card{min-height:auto!important;}
   .academy-avatar-grid{grid-template-columns:minmax(0,1fr)!important;}
-  .academy-id-card{min-height:390px!important;}
-  .academy-id-card.compact{min-height:310px!important;}
+  .academy-dashboard-pass{padding:20px!important;border-radius:20px!important;}
+  .academy-dashboard-pass h2{font-size:24px!important;}
+  .academy-pass-actions{align-items:stretch!important;flex-direction:column!important;}
+  .academy-pass-actions .btn{width:100%;justify-content:center;}
+  .academy-id-card,.academy-id-card.compact{max-width:390px!important;min-height:306px!important;padding:16px!important;border-radius:21px!important;}
+  .academy-id-body{grid-template-columns:auto minmax(0,1fr)!important;gap:12px!important;padding:15px 0 12px!important;}
+  .academy-id-prestige{grid-column:1/-1;width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 10px!important;}
+  .academy-id-prestige strong,.academy-id-prestige small{margin:0!important;}
+  .academy-id-profile h3,.academy-id-card.compact .academy-id-profile h3{font-size:18px!important;}
+  .academy-id-stars-head{letter-spacing:.04em!important;}
   .readiness-pillar-help{padding-right:0!important;}
   .readiness-weight{position:static!important;display:block;margin-top:6px;}
   .exam-report-header{align-items:flex-start!important;}
@@ -16795,7 +16835,7 @@ function LoadingScreen({t}) {
 
 function getAcademyStarState(totalStars=0) {
   const safeStars=Math.max(0,Math.min(ACHIEVEMENT_STAR_TOTAL,Number(totalStars)||0));
-  const tierIndex=safeStars>0 ? Math.min(ACADEMY_STAR_TIERS.length-1,Math.ceil(safeStars/5)-1) : 0;
+  const tierIndex=Math.min(ACADEMY_STAR_TIERS.length-1,Math.floor(safeStars/5));
   const activeStars=safeStars>0 && safeStars%5===0 ? 5 : safeStars%5;
   return {safeStars,tierIndex,activeStars,tier:ACADEMY_STAR_TIERS[tierIndex]};
 }
@@ -16814,37 +16854,59 @@ function AcademyAvatar({avatarId,size=86}) {
 }
 
 function AcademyIDCard({name="SecurePlus Student",avatarId="default-cipher",totalStars=0,compact=false}) {
-  const {safeStars,tier,activeStars}=getAcademyStarState(totalStars);
+  const {safeStars,tier,activeStars,tierIndex}=getAcademyStarState(totalStars);
   const displayName=(name||"SecurePlus Student").trim();
   return (
     <article className={`academy-id-card ${compact?"compact":""}`} style={{"--academy-tier":tier.color,"--academy-tier-bg":tier.bg}}>
       <div className="academy-id-grain" aria-hidden="true"/>
+      <div className="academy-id-holo" aria-hidden="true"/>
+      <span className="academy-id-spark top" aria-hidden="true"/>
+      <span className="academy-id-spark bottom" aria-hidden="true"/>
       <div className="academy-id-header">
-        <div>
-          <span>SecurePlus Academy</span>
-          <strong>Student Pass</strong>
+        <div className="academy-id-brand">
+          <span className="academy-id-brand-mark"><ShieldCheck size={19} strokeWidth={2.5}/></span>
+          <div>
+            <span>SecurePlus Academy</span>
+            <strong>Academy Pass</strong>
+          </div>
         </div>
-        <ShieldCheck size={24} strokeWidth={2.3}/>
+        <span className="academy-id-status">Active</span>
       </div>
-      <div className="academy-id-profile">
-        <AcademyAvatar avatarId={avatarId} size={compact?70:92}/>
-        <h3>{displayName}</h3>
-        <p>Security+ practice member</p>
+      <div className="academy-id-body">
+        <div className="academy-avatar-wrap">
+          <AcademyAvatar avatarId={avatarId} size={compact?68:76}/>
+          <span className="academy-avatar-rank" aria-label={`Prestige level ${tierIndex+1}`}>{tierIndex+1}</span>
+        </div>
+        <div className="academy-id-profile">
+          <span>Academy member</span>
+          <h3>{displayName}</h3>
+          <p>Security+ learning pathway</p>
+          <span className="academy-id-member-tag"><Sparkles size={10}/> Scenario-based learner</span>
+        </div>
+        <div className="academy-id-prestige" aria-label={`${tier.name} prestige tier`}>
+          <Trophy size={compact?22:25} strokeWidth={2.1}/>
+          <strong>{tier.name}</strong>
+          <small>Prestige</small>
+        </div>
       </div>
-      <div className="academy-id-stars" aria-label={`${safeStars} of ${ACHIEVEMENT_STAR_TOTAL} stars earned. Current trim: ${tier.name}.`}>
-        {Array.from({length:5},(_,index)=>(
-          <Star
-            key={index}
-            size={compact?17:20}
-            strokeWidth={2.4}
-            fill={index<activeStars?"currentColor":"none"}
-            className={index<activeStars?"filled":"empty"}
-          />
-        ))}
+      <div className="academy-id-stars-panel" aria-label={`${safeStars} of ${ACHIEVEMENT_STAR_TOTAL} stars earned. Current trim: ${tier.name}.`}>
+        <div className="academy-id-stars-head"><span>Earned achievement stars</span><strong>{safeStars} / {ACHIEVEMENT_STAR_TOTAL}</strong></div>
+        <div className="academy-id-stars-row">
+          {Array.from({length:5},(_,index)=>(
+            <Star
+              key={index}
+              size={compact?15:17}
+              strokeWidth={2.4}
+              fill={index<activeStars?"currentColor":"none"}
+              className={index<activeStars?"filled":"empty"}
+            />
+          ))}
+          <span className="academy-id-progress" aria-hidden="true"><span style={{width:`${Math.round((safeStars/ACHIEVEMENT_STAR_TOTAL)*100)}%`}}/></span>
+        </div>
       </div>
       <div className="academy-id-footer">
-        <span>{tier.name}</span>
-        <strong>{safeStars}/{ACHIEVEMENT_STAR_TOTAL} stars</strong>
+        <span><ShieldCheck size={12} strokeWidth={2.5}/> Active learner</span>
+        <strong>SEC+ · Prestige {tierIndex+1}</strong>
       </div>
     </article>
   );
@@ -18154,6 +18216,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
   const readiness=readinessProfile.score;
   const readinessColor=readiness>=80?t.green:readiness>=65?t.accent:readiness>=45?t.amber:t.red;
   const isPro = user.tier==="pro";
+  const academyState=getAcademyStarState(user.totalStars||0);
   const challenge = getTodayChallenge();
   const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
   useEffect(()=>{
@@ -18259,10 +18322,19 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
       </section>
 
       <section className="academy-dashboard-pass card">
-        <div>
-          <div className="label" style={{color:t.amber}}>Academy ID</div>
-          <h2>Your SecurePlus pass</h2>
-          <p>The pass tracks your identity and future star prestige. Every 5 verified stars changes the trim color, up to 30 stars.</p>
+        <div className="academy-dashboard-copy">
+          <div className="label" style={{color:t.amber}}>Your learner identity</div>
+          <h2>Your Academy Pass grows with you</h2>
+          <p>Earn verified stars through meaningful practice milestones. Your pass evolves through six prestige trims as your Security+ skills grow.</p>
+          <div className="academy-pass-highlights">
+            <span><Trophy size={13}/> {academyState.tier.name}</span>
+            <span><Star size={13}/> {academyState.safeStars} stars earned</span>
+            <span><ShieldCheck size={13}/> Milestone progress</span>
+          </div>
+          <div className="academy-pass-actions">
+            <button className="btn btn-outline" onClick={()=>onNav("achievements")}><Trophy size={15}/> View achievements</button>
+            <small>Each 5-star milestone unlocks a new pass trim.</small>
+          </div>
         </div>
         <AcademyIDCard name={user.name} avatarId={user.avatarId} totalStars={user.totalStars||0} compact/>
       </section>
