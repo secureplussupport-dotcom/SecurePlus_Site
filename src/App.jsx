@@ -14444,30 +14444,30 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .pbq-bank-hero{position:relative;overflow:hidden;padding:24px;border:1px solid ${t.green}38;border-radius:10px;background:linear-gradient(130deg,${t.green}10,${t.surface} 48%,${t.accent}0d);box-shadow:0 20px 46px rgba(7,12,24,.1);margin-bottom:18px;}
 .pbq-bank-hero::after{content:"";position:absolute;right:-56px;top:-68px;width:180px;height:180px;border-radius:50%;border:30px solid ${t.accent}09;pointer-events:none;}
 .pbq-bank-hero-copy{position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:18px;}
-.pbq-bank-hero-copy h3{font-size:22px;color:${t.text};line-height:1.2;margin:4px 0 5px;}
-.pbq-bank-hero-copy p{max-width:580px;font-size:12px;color:${t.textSec};line-height:1.65;}
+.pbq-bank-hero-copy h3{font-size:25px;color:${t.text};line-height:1.22;margin:4px 0 7px;}
+.pbq-bank-hero-copy p{max-width:620px;font-size:15px;color:${t.textSec};line-height:1.68;}
 .pbq-metric-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;}
 .pbq-metric-card{padding:12px;border:1px solid ${t.border};border-radius:8px;background:color-mix(in srgb,${t.surface} 90%,transparent);}
 .pbq-metric-card strong{display:block;font-size:21px;line-height:1.1;color:var(--metric-color);}
-.pbq-metric-card span{display:block;margin-top:4px;color:${t.textDim};font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
-.pbq-type-section{margin-bottom:18px;padding:18px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};}
-.pbq-type-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px;}
-.pbq-type-section-head h3{font-size:15px;color:${t.text};}
-.pbq-type-section-head span{font-size:11px;color:${t.textDim};}
-.pbq-type-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
-.pbq-type-card{appearance:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:center;min-width:0;padding:11px;text-align:left;border:1px solid ${t.border};border-radius:8px;background:${t.panel};cursor:pointer;transition:transform .17s,border-color .17s,background .17s;}
+.pbq-metric-card span{display:block;margin-top:4px;color:${t.textDim};font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+.pbq-type-section{margin-bottom:20px;padding:22px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};}
+.pbq-type-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}
+.pbq-type-section-head h3{font-size:20px;line-height:1.25;color:${t.text};}
+.pbq-type-section-head span{font-size:13px;font-weight:800;color:${t.textDim};}
+.pbq-type-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;}
+.pbq-type-card{appearance:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;min-width:0;min-height:84px;padding:15px;text-align:left;border:1px solid ${t.border};border-radius:8px;background:${t.panel};cursor:pointer;transition:transform .17s,border-color .17s,background .17s;}
 .pbq-type-card:hover{transform:translateY(-2px);border-color:var(--type-color);}
 .pbq-type-card.active{border-color:var(--type-color);background:color-mix(in srgb,var(--type-color) 11%,${t.surface});box-shadow:0 0 0 3px color-mix(in srgb,var(--type-color) 9%,transparent);}
-.pbq-type-card strong{display:block;color:${t.text};font-size:10px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;}
-.pbq-type-card small{display:block;color:${t.textDim};font-size:9px;margin-top:2px;}
+.pbq-type-card strong{display:block;color:${t.text};font-size:15px;line-height:1.25;overflow-wrap:anywhere;}
+.pbq-type-card small{display:block;color:${t.textDim};font-size:12px;font-weight:800;line-height:1.35;margin-top:4px;}
 .pbq-filter-panel{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;padding:13px 14px;border:1px solid ${t.border};border-radius:9px;background:${t.panel};}
 .pbq-chapter-filters{display:flex;gap:7px;flex-wrap:wrap;}
-.pbq-result-summary{font-size:11px;color:${t.textSec};font-weight:800;white-space:nowrap;}
+.pbq-result-summary{font-size:13px;color:${t.textSec};font-weight:850;white-space:nowrap;}
 .pbq-question-list{display:grid;gap:9px;}
 .pbq-list-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:13px;align-items:center;padding:15px 17px!important;cursor:pointer;}
 .pbq-list-card:focus-visible{outline:3px solid ${t.accent}38;outline-offset:2px;}
-.pbq-list-title{font-size:14px;font-weight:850;line-height:1.45;color:${t.text};}
-.pbq-list-subtitle{font-size:11px;color:${t.textDim};margin-top:3px;}
+.pbq-list-title{font-size:16px;font-weight:850;line-height:1.48;color:${t.text};}
+.pbq-list-subtitle{font-size:13px;color:${t.textDim};line-height:1.5;margin-top:4px;}
 .pbq-list-actions{display:flex;align-items:center;gap:7px;}
 .pbq-open-indicator{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:${t.accent}12;color:${t.accent};}
 .pbq-open-indicator.locked{background:${t.panel};color:${t.textDim};border:1px solid ${t.border};}
@@ -15736,6 +15736,15 @@ body{background:
   .app-main>.site-mascot-placement.anchor-top-right,.app-main>.site-mascot-placement.anchor-middle-right,.app-main>.site-mascot-placement.anchor-bottom-right{right:12px!important;}
   .app-main>.site-mascot-placement.anchor-top-left,.app-main>.site-mascot-placement.anchor-top-center,.app-main>.site-mascot-placement.anchor-top-right{top:76px!important;}
   .app-main>.site-mascot-placement.anchor-bottom-left,.app-main>.site-mascot-placement.anchor-bottom-center,.app-main>.site-mascot-placement.anchor-bottom-right{bottom:92px!important;}
+}
+@media (max-width: 520px){
+  .pbq-type-section{padding:18px!important;}
+  .pbq-type-section-head{display:block!important;}
+  .pbq-type-section-head span{display:block;margin-top:5px;}
+  .pbq-type-grid{grid-template-columns:minmax(0,1fr)!important;}
+  .pbq-type-card{min-height:78px!important;padding:14px!important;}
+  .pbq-type-card strong{font-size:16px!important;}
+  .pbq-type-card small{font-size:13px!important;}
 }
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
@@ -18594,11 +18603,11 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
       <div className="pbq-filter-panel">
         <div className="pbq-chapter-filters" aria-label="Filter PBQs by chapter">
           {CHAPTERS.map(ch=>(
-            <button key={ch.id} className="btn" style={{fontSize:11,padding:"5px 12px",background:chFilter===ch.id?`${t.accent}15`:"transparent",color:chFilter===ch.id?t.accent:t.textSec,border:`1px solid ${chFilter===ch.id?t.accent:t.border}`,transition:"all .15s"}} aria-pressed={chFilter===ch.id} onClick={()=>setChFilter(chFilter===ch.id?"all":ch.id)}>
+            <button key={ch.id} className="btn" style={{fontSize:13,padding:"7px 14px",background:chFilter===ch.id?`${t.accent}15`:"transparent",color:chFilter===ch.id?t.accent:t.textSec,border:`1px solid ${chFilter===ch.id?t.accent:t.border}`,transition:"all .15s"}} aria-pressed={chFilter===ch.id} onClick={()=>setChFilter(chFilter===ch.id?"all":ch.id)}>
               <ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}
             </button>
           ))}
-          {(chFilter!=="all"||typeFilter!=="all"||showMissedOnly)&&<button className="btn btn-ghost" style={{fontSize:11,padding:"5px 10px"}} onClick={()=>{setChFilter("all");setTypeFilter("all");setShowMissedOnly(false);}}><X size={14}/> Clear all</button>}
+          {(chFilter!=="all"||typeFilter!=="all"||showMissedOnly)&&<button className="btn btn-ghost" style={{fontSize:13,padding:"7px 12px"}} onClick={()=>{setChFilter("all");setTypeFilter("all");setShowMissedOnly(false);}}><X size={14}/> Clear all</button>}
         </div>
         <div className="pbq-result-summary">{displayQuestions.length} result{displayQuestions.length!==1?"s":""}</div>
       </div>
@@ -18630,7 +18639,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
                   <BeyondTextbookTag question={q} t={t}/>
-                  {ch&&<span style={{fontSize:11,color:t.textDim,display:"inline-flex",alignItems:"center",gap:4}}><ChapterIcon id={ch.id} size={16}/> Ch.{ch.id}</span>}
+                  {ch&&<span style={{fontSize:13,fontWeight:800,color:t.textDim,display:"inline-flex",alignItems:"center",gap:5}}><ChapterIcon id={ch.id} size={16}/> Ch.{ch.id}</span>}
                 </div>
                 <div className="pbq-list-title"><GlossaryText text={q.title} t={t}/></div>
                 <div className="pbq-list-subtitle"><GlossaryText text={q.cat} t={t}/>{done?` · ${ok?"Completed correctly":"Needs another pass"}`:" · Not attempted"}</div>
