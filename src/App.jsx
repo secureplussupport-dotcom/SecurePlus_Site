@@ -478,13 +478,14 @@ function appUserFromProfile(authUser, profile) {
   return {
     id: authUser.id,
     email: profile?.email || authUser.email,
-    name: profileName(authUser),
+    name: profile?.full_name || profileName(authUser),
     tier: (profile?.tier === "pro" && ["active", "trialing"].includes(profile?.subscription_status)) || hasReferralTrial ? "pro" : "free",
     subscriptionStatus: profile?.subscription_status || null,
     proTrialUntil: profile?.pro_trial_until || null,
     referralTrialExpired: Boolean(trialUntil && trialUntil.getTime() <= Date.now() && profile?.tier !== "pro"),
     referralCode: profile?.referral_code || "",
     totalStars: Number(profile?.total_stars || 0),
+    avatarId: profile?.avatar_id || authUser?.user_metadata?.avatar_id || "default-cipher",
     pendingReferralCode,
     authProvider: "supabase",
     loginMethod: authUser?.app_metadata?.provider || "email",
@@ -493,13 +494,14 @@ function appUserFromProfile(authUser, profile) {
 
 async function getSupabaseProfile(authUser) {
   if (!supabase || !authUser) return null;
+  const isMissingProfileColumn=error=>error?.code === "42703" || /total_stars|avatar_id|full_name/i.test(error?.message || "");
   let full = await supabase
     .from("profiles")
-    .select("id,email,tier,subscription_status,pro_trial_until,referral_code,total_stars")
+    .select("id,email,full_name,avatar_id,tier,subscription_status,pro_trial_until,referral_code,total_stars")
     .eq("id", authUser.id)
     .maybeSingle();
 
-  if (full.error?.code === "42703" || /total_stars/i.test(full.error?.message || "")) {
+  if (isMissingProfileColumn(full.error)) {
     full = await supabase
       .from("profiles")
       .select("id,email,tier,subscription_status,pro_trial_until,referral_code")
@@ -511,11 +513,11 @@ async function getSupabaseProfile(authUser) {
 
   let basic = await supabase
     .from("profiles")
-    .select("id,email,tier,subscription_status,total_stars")
+    .select("id,email,full_name,avatar_id,tier,subscription_status,total_stars")
     .eq("id", authUser.id)
     .maybeSingle();
 
-  if (basic.error?.code === "42703" || /total_stars/i.test(basic.error?.message || "")) {
+  if (isMissingProfileColumn(basic.error)) {
     basic = await supabase
       .from("profiles")
       .select("id,email,tier,subscription_status")
@@ -647,6 +649,16 @@ async function saveSupabaseAttempt(userId, attempt) {
   if (!supabase || !userId) return;
   const { error } = await supabase.from("attempts").insert(toSupabaseAttempt(userId, attempt));
   if (error) console.warn("Unable to save attempt", error);
+}
+
+async function updateSupabaseAcademyProfile(userId, {fullName, avatarId}) {
+  if (!supabase || !userId) return;
+  const payload={
+    full_name:String(fullName||"").trim(),
+    avatar_id:String(avatarId||"default-cipher").trim() || "default-cipher",
+  };
+  const { error } = await supabase.from("profiles").update(payload).eq("id", userId);
+  if (error && error.code !== "42703") console.warn("Unable to update Academy profile", error);
 }
 
 async function loadSupabaseAchievements(userId) {
@@ -938,6 +950,23 @@ const ACHIEVEMENTS = [
   {id:"no_stone_unturned",title:"No Stone Unturned",description:"Practice 100% of the active 412 MCQ question bank.",star_value:3},
 ];
 const ACHIEVEMENT_MAP = Object.fromEntries(ACHIEVEMENTS.map(item=>[item.id,item]));
+const ACADEMY_AVATARS = [
+  {id:"default-cipher",label:"Cipher",emoji:"🤖",tone:"#2f7df6",hint:"Helpful learning guide"},
+  {id:"owl",label:"Owl",emoji:"🦉",tone:"#a16207",hint:"Calm night reviewer"},
+  {id:"fox",label:"Fox",emoji:"🦊",tone:"#ea580c",hint:"Fast pattern spotter"},
+  {id:"bear",label:"Bear",emoji:"🐻",tone:"#92400e",hint:"Steady lab builder"},
+  {id:"ninja",label:"Ninja",emoji:"🥷",tone:"#475569",hint:"Quiet focus mode"},
+  {id:"hacker",label:"Hacker",emoji:"🧑‍💻",tone:"#14b8a6",hint:"Friendly packet sleuth"},
+];
+const ACADEMY_AVATAR_MAP = Object.fromEntries(ACADEMY_AVATARS.map(item=>[item.id,item]));
+const ACADEMY_STAR_TIERS = [
+  {name:"Warm Bronze",color:"#b45309",bg:"#fef3c7"},
+  {name:"Matte Silver",color:"#94a3b8",bg:"#f1f5f9"},
+  {name:"Bright Gold",color:"#facc15",bg:"#fef9c3"},
+  {name:"Soft Sapphire",color:"#60a5fa",bg:"#dbeafe"},
+  {name:"Deep Amethyst",color:"#a855f7",bg:"#f3e8ff"},
+  {name:"Vibrant Ruby",color:"#f43f5e",bg:"#ffe4e6"},
+];
 
 function getChapterById(chId) {
   return CHAPTERS.find(ch=>ch.id===String(chId)) || CHAPTERS[0];
@@ -14602,6 +14631,51 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .achievement-confetti span{position:absolute;width:7px;height:11px;border-radius:3px;background:var(--confetti-color);top:-12px;left:var(--x);animation:confettiFall 1.5s ease-in forwards;animation-delay:var(--delay);}
 @keyframes achievementToast{from{opacity:0;transform:translateY(-12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes confettiFall{to{transform:translateY(150px) rotate(220deg);opacity:0;}}
+.academy-avatar{display:grid;place-items:center;border-radius:999px;background:radial-gradient(circle at 32% 24%,#fff8,transparent 28%),color-mix(in srgb,var(--avatar-tone) 18%,${t.surface});border:1px solid color-mix(in srgb,var(--avatar-tone) 34%,${t.border});box-shadow:inset 0 0 0 6px color-mix(in srgb,#fff 42%,transparent),0 14px 26px color-mix(in srgb,var(--avatar-tone) 16%,transparent);}
+.academy-id-card{position:relative;isolation:isolate;overflow:hidden;width:100%;max-width:310px;min-height:430px;padding:18px;border:1px solid color-mix(in srgb,var(--academy-tier) 30%,${t.border});border-radius:24px;background:radial-gradient(circle at 22% 8%,var(--academy-tier-bg),transparent 38%),linear-gradient(145deg,#fffaf2,${t.surface} 54%,${t.panel});box-shadow:0 24px 54px rgba(80,52,22,.16),inset 0 0 0 1px rgba(255,255,255,.65);color:${t.text};transform-style:preserve-3d;}
+.academy-id-card.compact{max-width:250px;min-height:320px;padding:14px;border-radius:20px;}
+.academy-id-grain{position:absolute;inset:0;z-index:-1;opacity:.36;background-image:radial-gradient(circle at 1px 1px,rgba(80,52,22,.12) 1px,transparent 0);background-size:13px 13px;mix-blend-mode:multiply;}
+.academy-id-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid color-mix(in srgb,var(--academy-tier) 25%,${t.border});color:var(--academy-tier);}
+.academy-id-header span{display:block;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.12em;color:${t.textDim};}
+.academy-id-header strong{display:block;margin-top:3px;font-size:17px;line-height:1.1;color:${t.text};}
+.academy-id-profile{display:grid;place-items:center;text-align:center;padding:28px 6px 20px;}
+.academy-id-card.compact .academy-id-profile{padding:18px 4px 14px;}
+.academy-id-profile h3{font-size:23px;line-height:1.15;color:${t.text};margin:14px 0 4px;text-wrap:balance;}
+.academy-id-card.compact .academy-id-profile h3{font-size:18px;}
+.academy-id-profile p{font-size:12px;color:${t.textSec};margin:0;}
+.academy-id-stars{display:flex;justify-content:center;gap:8px;padding:12px;border-radius:18px;background:color-mix(in srgb,var(--academy-tier-bg) 56%,${t.surface});border:1px solid color-mix(in srgb,var(--academy-tier) 24%,${t.border});color:var(--academy-tier);}
+.academy-id-stars .empty{color:${t.textDim};opacity:.46;}
+.academy-id-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid ${t.border};font-size:11px;}
+.academy-id-footer span{color:var(--academy-tier);font-weight:950;}
+.academy-id-footer strong{color:${t.text};}
+.academy-signup{display:grid;gap:14px;}
+.academy-stepper{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:4px;}
+.academy-stepper span{display:flex;align-items:center;gap:6px;padding:8px 9px;border-radius:999px;background:${t.panel};border:1px solid ${t.border};color:${t.textDim};font-size:10px;font-weight:900;white-space:nowrap;}
+.academy-stepper span.active{background:${t.accent}12;border-color:${t.accent}35;color:${t.accent};}
+.academy-stepper em{display:grid;place-items:center;width:18px;height:18px;border-radius:999px;background:currentColor;color:${t.surface};font-style:normal;font-size:10px;}
+.academy-signup-panel{display:flex;flex-direction:column;gap:14px;animation:academyStepIn .28s cubic-bezier(.16,1,.3,1) both;}
+.academy-signup-panel h3{font-size:23px;line-height:1.14;color:${t.text};margin:4px 0 5px;}
+.academy-signup-panel p{font-size:13px;line-height:1.65;color:${t.textSec};margin:0;}
+.academy-signup-panel label{display:block;font-size:13px;font-weight:750;margin-bottom:6px;color:${t.text};}
+.academy-password-hint{font-size:12px;color:${t.textDim};line-height:1.55;}
+.academy-avatar-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;}
+.academy-avatar-choice{border:1px solid ${t.border};border-radius:16px;background:${t.panel};padding:10px 8px;display:grid;gap:4px;justify-items:center;text-align:center;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s,background .16s;color:${t.text};}
+.academy-avatar-choice:hover,.academy-avatar-choice:focus-visible{transform:translateY(-2px);border-color:color-mix(in srgb,var(--avatar-tone) 44%,${t.border});box-shadow:0 12px 28px color-mix(in srgb,var(--avatar-tone) 12%,transparent);}
+.academy-avatar-choice.selected{border-color:color-mix(in srgb,var(--avatar-tone) 62%,${t.border});background:color-mix(in srgb,var(--avatar-tone) 12%,${t.surface});box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--avatar-tone) 24%,transparent);}
+.academy-avatar-choice span{font-size:27px;line-height:1;}
+.academy-avatar-choice strong{font-size:12px;}
+.academy-avatar-choice small{font-size:9px;line-height:1.25;color:${t.textDim};}
+.academy-preview-row{display:flex;align-items:center;gap:12px;padding:11px;border-radius:16px;background:${t.panel};border:1px solid ${t.border};}
+.academy-preview-row strong{display:block;color:${t.text};font-size:13px;}
+.academy-preview-row span{display:block;color:${t.textSec};font-size:12px;margin-top:2px;}
+.academy-reveal{animation:academyStepIn .28s cubic-bezier(.16,1,.3,1) both;}
+.academy-reveal-card{display:grid;place-items:center;perspective:1200px;}
+.academy-reveal-card .academy-id-card{animation:academyCardFlip .7s cubic-bezier(.16,1,.3,1) both;}
+.academy-dashboard-pass{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin-bottom:18px;padding:20px!important;border-color:${t.amber}36!important;background:radial-gradient(circle at 92% 16%,${t.amber}16,transparent 36%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
+.academy-dashboard-pass h2{font-size:22px;color:${t.text};margin:4px 0 6px;}
+.academy-dashboard-pass p{font-size:13px;color:${t.textSec};line-height:1.65;max-width:560px;margin:0;}
+@keyframes academyStepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes academyCardFlip{from{opacity:0;transform:rotateY(-72deg) translateY(12px) scale(.94)}to{opacity:1;transform:rotateY(0) translateY(0) scale(1)}}
 .dashboard-action-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:14px;margin-bottom:18px;}
 .weak-action-card,.daily-habit-card{position:relative;overflow:hidden;padding:18px 20px!important;border-radius:10px!important;}
 .weak-action-card{border-color:${t.red}35!important;background:linear-gradient(135deg,${t.red}09,${t.surface} 54%,${t.accent}08)!important;}
@@ -15953,6 +16027,10 @@ body{background:
   .achievements-hero{grid-template-columns:1fr!important;padding:20px!important;text-align:left;}
   .achievement-star-display{width:160px!important;justify-self:center;}
   .achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .academy-dashboard-pass{grid-template-columns:1fr!important;}
+  .academy-dashboard-pass .academy-id-card{justify-self:center;}
+  .academy-stepper{grid-template-columns:1fr!important;}
+  .academy-avatar-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .dashboard-action-grid{grid-template-columns:1fr!important;}
   .home-live-card{padding:16px!important;}
   .mission-board{padding:16px!important;border-radius:16px!important;}
@@ -16181,6 +16259,9 @@ body{background:
   .readiness-pillar-grid{grid-template-columns:1fr!important;}
   .achievement-grid{grid-template-columns:minmax(0,1fr)!important;}
   .achievement-card{min-height:auto!important;}
+  .academy-avatar-grid{grid-template-columns:minmax(0,1fr)!important;}
+  .academy-id-card{min-height:390px!important;}
+  .academy-id-card.compact{min-height:310px!important;}
   .readiness-pillar-help{padding-right:0!important;}
   .readiness-weight{position:static!important;display:block;margin-top:6px;}
   .exam-report-header{align-items:flex-start!important;}
@@ -16708,6 +16789,179 @@ function LoadingScreen({t}) {
         <div style={{fontWeight:900,color:t.text,fontSize:18}}>Loading SecurePlus</div>
         <div className="fu" key={quote} style={{color:t.textSec,fontSize:14,maxWidth:360,lineHeight:1.7}}>{quote}</div>
       </div>
+    </div>
+  );
+}
+
+function getAcademyStarState(totalStars=0) {
+  const safeStars=Math.max(0,Math.min(ACHIEVEMENT_STAR_TOTAL,Number(totalStars)||0));
+  const tierIndex=safeStars>0 ? Math.min(ACADEMY_STAR_TIERS.length-1,Math.ceil(safeStars/5)-1) : 0;
+  const activeStars=safeStars>0 && safeStars%5===0 ? 5 : safeStars%5;
+  return {safeStars,tierIndex,activeStars,tier:ACADEMY_STAR_TIERS[tierIndex]};
+}
+
+function AcademyAvatar({avatarId,size=86}) {
+  const avatar=ACADEMY_AVATAR_MAP[avatarId] || ACADEMY_AVATAR_MAP["default-cipher"] || ACADEMY_AVATARS[0];
+  return (
+    <span
+      className="academy-avatar"
+      style={{"--avatar-tone":avatar.tone,width:size,height:size,fontSize:Math.round(size*.44)}}
+      aria-hidden="true"
+    >
+      {avatar.emoji}
+    </span>
+  );
+}
+
+function AcademyIDCard({name="SecurePlus Student",avatarId="default-cipher",totalStars=0,compact=false}) {
+  const {safeStars,tier,activeStars}=getAcademyStarState(totalStars);
+  const displayName=(name||"SecurePlus Student").trim();
+  return (
+    <article className={`academy-id-card ${compact?"compact":""}`} style={{"--academy-tier":tier.color,"--academy-tier-bg":tier.bg}}>
+      <div className="academy-id-grain" aria-hidden="true"/>
+      <div className="academy-id-header">
+        <div>
+          <span>SecurePlus Academy</span>
+          <strong>Student Pass</strong>
+        </div>
+        <ShieldCheck size={24} strokeWidth={2.3}/>
+      </div>
+      <div className="academy-id-profile">
+        <AcademyAvatar avatarId={avatarId} size={compact?70:92}/>
+        <h3>{displayName}</h3>
+        <p>Security+ practice member</p>
+      </div>
+      <div className="academy-id-stars" aria-label={`${safeStars} of ${ACHIEVEMENT_STAR_TOTAL} stars earned. Current trim: ${tier.name}.`}>
+        {Array.from({length:5},(_,index)=>(
+          <Star
+            key={index}
+            size={compact?17:20}
+            strokeWidth={2.4}
+            fill={index<activeStars?"currentColor":"none"}
+            className={index<activeStars?"filled":"empty"}
+          />
+        ))}
+      </div>
+      <div className="academy-id-footer">
+        <span>{tier.name}</span>
+        <strong>{safeStars}/{ACHIEVEMENT_STAR_TOTAL} stars</strong>
+      </div>
+    </article>
+  );
+}
+
+function AcademySignupWizard({t,form,setForm,setField,onMint,loading,error,ok}) {
+  const [step,setStep]=useState(1);
+  const [localError,setLocalError]=useState("");
+  const selectedAvatar=ACADEMY_AVATAR_MAP[form.avatarId] || ACADEMY_AVATAR_MAP["default-cipher"];
+
+  const validateCredentials=()=>{
+    const email=normalizeEmail(form.email);
+    if(!email)return "Please enter your email.";
+    if(!form.pass)return "Please enter a password.";
+    if(form.pass!==form.confirm)return "Passwords do not match.";
+    return getPasswordIssue(form.pass);
+  };
+  const goIdentity=()=>{
+    const issue=validateCredentials();
+    if(issue){setLocalError(issue);return;}
+    setLocalError("");
+    setStep(2);
+  };
+  const mint=event=>{
+    event?.preventDefault?.();
+    if(!form.name.trim()){setLocalError("Please enter your full name for the Academy Pass.");return;}
+    if(!form.avatarId){setLocalError("Choose an avatar for your Academy Pass.");return;}
+    setLocalError("");
+    onMint?.();
+  };
+  const message=localError || error;
+
+  return (
+    <div className="academy-signup">
+      <div className="academy-stepper" aria-label={`Signup step ${step} of 3`}>
+        {["Credentials","Identity","Reveal"].map((label,index)=>(
+          <span key={label} className={step>=index+1?"active":""}><em>{index+1}</em>{label}</span>
+        ))}
+      </div>
+      <Alert msg={message} type="error" t={t}/>
+      <Alert msg={ok} type="success" t={t}/>
+      {step===1&&(
+        <form className="academy-signup-panel" onSubmit={event=>{event.preventDefault();goIdentity();}}>
+          <div>
+            <div className="label" style={{color:t.accent}}>Step 1 · Account basics</div>
+            <h3>Start minting your Academy ID</h3>
+            <p>First, add the login details that will protect your progress and future stars.</p>
+          </div>
+          <div>
+            <label htmlFor="academy-email">Email</label>
+            <input id="academy-email" className="input" name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={setField("email")}/>
+          </div>
+          <div>
+            <label htmlFor="academy-password">Password</label>
+            <input id="academy-password" className="input" name="password" type="password" autoComplete="new-password" placeholder="At least 8 characters" value={form.pass} onChange={setField("pass")}/>
+          </div>
+          <div>
+            <label htmlFor="academy-confirm">Confirm password</label>
+            <input id="academy-confirm" className="input" name="confirm-password" type="password" autoComplete="new-password" placeholder="••••••••" value={form.confirm} onChange={setField("confirm")}/>
+          </div>
+          <div className="academy-password-hint">Use 8+ characters with uppercase, lowercase, a number, and a special character.</div>
+          <button type="submit" className="btn btn-primary" style={{width:"100%",justifyContent:"center"}}>Choose avatar →</button>
+        </form>
+      )}
+      {step===2&&(
+        <form className="academy-signup-panel" onSubmit={mint}>
+          <div>
+            <div className="label" style={{color:t.green}}>Step 2 · Identity</div>
+            <h3>Choose your learning companion</h3>
+            <p>Your Academy Pass starts with a warm avatar, not a cold account number.</p>
+          </div>
+          <div>
+            <label htmlFor="academy-name">Full name</label>
+            <input id="academy-name" className="input" name="name" autoComplete="name" placeholder="Jane Smith" value={form.name} onChange={setField("name")}/>
+          </div>
+          <div>
+            <label>Avatar</label>
+            <div className="academy-avatar-grid" role="radiogroup" aria-label="Choose an Academy avatar">
+              {ACADEMY_AVATARS.map(avatar=>(
+                <button
+                  type="button"
+                  key={avatar.id}
+                  className={`academy-avatar-choice ${form.avatarId===avatar.id?"selected":""}`}
+                  style={{"--avatar-tone":avatar.tone}}
+                  role="radio"
+                  aria-checked={form.avatarId===avatar.id}
+                  onClick={()=>setForm(f=>({...f,avatarId:avatar.id}))}
+                >
+                  <span>{avatar.emoji}</span>
+                  <strong>{avatar.label}</strong>
+                  <small>{avatar.hint}</small>
+                </button>
+              ))}
+            </div>
+          </div>
+          <details className="auth-referral-details" defaultOpen={Boolean(form.referral)}>
+            <summary>Have a referral code?</summary>
+            <div className="auth-referral-content">
+              <input className="input" name="referral" autoComplete="off" placeholder="Optional code from a friend" value={form.referral} onChange={event=>setForm(f=>({...f,referral:event.target.value.toUpperCase()}))}/>
+              <div style={{fontSize:11,color:t.textDim,lineHeight:1.55,marginTop:6}}>
+                A valid referral gives you and your friend 7 days of Pro, unless your friend already has Pro.
+              </div>
+            </div>
+          </details>
+          <div className="academy-preview-row">
+            <AcademyAvatar avatarId={form.avatarId} size={54}/>
+            <div><strong>{selectedAvatar?.label}</strong><span>{selectedAvatar?.hint}</span></div>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"auto 1fr",gap:10}}>
+            <button type="button" className="btn btn-ghost" onClick={()=>setStep(1)} disabled={loading}>Back</button>
+            <button type="submit" className="btn btn-primary" style={{justifyContent:"center"}} disabled={loading}>
+              {loading?"Minting...":"Mint Academy ID"}
+            </button>
+          </div>
+          <div className="auth-trust-line"><LockKeyhole size={13}/> Your account starts on the free plan. Pro is never added automatically.</div>
+        </form>
+      )}
     </div>
   );
 }
@@ -17335,10 +17589,11 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
   const [mode,setMode]=useState(initialMode);
   const [showLoginModal,setShowLoginModal]=useState(initialMode==="login");
   const [activePath,setActivePath]=useState("mcq");
-  const [form,setForm]=useState({name:"",email:"",pass:"",confirm:"",referral:getStoredReferralCode()});
+  const [form,setForm]=useState({name:"",email:"",pass:"",confirm:"",referral:getStoredReferralCode(),avatarId:"default-cipher"});
   const [err,setErr]=useState("");
   const [ok,setOk]=useState("");
   const [loading,setLoading]=useState(false);
+  const [mintedUser,setMintedUser]=useState(null);
   useEffect(()=>{
     setMode(initialMode);
     setShowLoginModal(initialMode==="login");
@@ -17356,6 +17611,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
   const resetMessages=()=>{setErr("");setOk("");};
   const jumpToAuth=nextMode=>{
     setMode(nextMode);
+    setMintedUser(null);
     if(nextMode==="login"){
       setShowLoginModal(true);
       return;
@@ -17450,6 +17706,61 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
       }
     } catch(e){setErr(e.message||"Something went wrong. Please try again.");}
     setLoading(false);
+  };
+  const handleAcademyMint=async()=>{
+    resetMessages();setLoading(true);
+    try{
+      const email=normalizeEmail(form.email);
+      const fullName=form.name.trim();
+      const avatarId=form.avatarId || "default-cipher";
+      const referralCode = saveReferralCode(form.referral);
+      if(!email) throw new Error("Please enter your email.");
+      if(!fullName) throw new Error("Please enter your full name.");
+      if(!form.pass) throw new Error("Please enter a password.");
+      if(form.pass!==form.confirm) throw new Error("Passwords do not match.");
+      const passwordIssue=getPasswordIssue(form.pass);
+      if(passwordIssue) throw new Error(passwordIssue);
+
+      if(isSupabaseConfigured){
+        capture("signup_started", { method: "academy_password", has_referral: Boolean(referralCode), avatar_id: avatarId });
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password: form.pass,
+          options: {
+            data: { name: fullName, full_name: fullName, avatar_id: avatarId, pending_referral_code: referralCode },
+            emailRedirectTo: window.location.origin,
+          },
+        });
+        if(error) throw error;
+        if(data.session?.user){
+          await updateSupabaseAcademyProfile(data.session.user.id,{fullName,avatarId});
+          const appUser=await waitForSupabaseProfile(data.session.user);
+          if(!appUser) throw new Error("Your account was created, but the profile is still loading. Please sign in again in a moment.");
+          const revealedUser={...appUser,name:fullName,avatarId};
+          setMintedUser(revealedUser);
+          setOk("Academy ID minted. Review your pass, then enter the dashboard.");
+          capture("signup_completed", { method: "academy_password", confirmed_immediately: true, has_referral: Boolean(referralCode), avatar_id: avatarId });
+        } else {
+          capture("signup_email_confirmation_required", { has_referral: Boolean(referralCode), avatar_id: avatarId });
+          setOk("Academy ID reserved. Check your email, click Confirm signup, then come back here to sign in.");
+        }
+      } else {
+        capture("signup_started", { method: "academy_local_demo", avatar_id: avatarId });
+        const exists=await DB.getUser(email);
+        if(exists) throw new Error("An account with this email already exists.");
+        const trialUntil = referralCode ? new Date(Date.now()+7*24*60*60*1000).toISOString() : null;
+        const user={name:fullName,email,password:form.pass,tier:trialUntil?"pro":"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:trialUntil,referralCode:makeReferralCode(email),avatarId,totalStars:0};
+        await DB.saveUser(user);
+        await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
+        setMintedUser(user);
+        setOk("Academy ID minted. Review your pass, then enter the dashboard.");
+        capture("signup_completed", { method: "academy_local_demo", avatar_id: avatarId });
+      }
+    } catch(e){
+      setErr(e.message||"Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
   const handleGoogle=async()=>{
     resetMessages();setLoading(true);
@@ -17714,76 +18025,71 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           <div className="card auth-conversion-card">
           <div className="auth-mode-tabs">
             {["login","signup"].map(m=>(
-              <button type="button" key={m} className={`tab auth-mode-tab ${mode===m?"act":""}`} onClick={()=>{setMode(m);resetMessages();}}>
-                {m==="login"?"Sign In":"Create Account"}
+              <button type="button" key={m} className={`tab auth-mode-tab ${mode===m?"act":""}`} onClick={()=>{setMode(m);setMintedUser(null);resetMessages();}}>
+                {m==="login"?"Sign In":"Mint Academy ID"}
               </button>
             ))}
           </div>
-          <Alert msg={err} type="error" t={t}/>
-          <Alert msg={ok} type="success" t={t}/>
-          {mode==="signup"&&(
-            <div className="auth-form-heading">
-              <strong>Create your free account</strong>
-              <span>Save progress now. No payment details needed.</span>
-            </div>
-          )}
-          <form style={{display:"flex",flexDirection:"column",gap:14}} onSubmit={handle}>
-            {isSupabaseConfigured&&mode==="signup"&&(
-              <>
-                <button type="button" className="btn btn-outline" style={{width:"100%",justifyContent:"center",padding:"10px"}} onClick={handleGoogle} disabled={loading}>
-                  Continue with Google
-                </button>
-                <div className="auth-divider"><span>or use email</span></div>
-              </>
-            )}
-            {mode==="signup"&&(
-              <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Full Name</label>
-                <input className="input" name="name" autoComplete="name" placeholder="Jane Smith" value={form.name} onChange={set("name")}/></div>
-            )}
-            <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Email</label>
-              <input className="input" name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={set("email")}/></div>
-            {mode!=="reset"&&(
-              <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Password</label>
-                <input className="input" name="password" type="password" autoComplete={mode==="signup"?"new-password":"current-password"} placeholder="At least 8 characters" value={form.pass} onChange={set("pass")}/></div>
-            )}
-            {mode==="signup"&&(
-              <>
-              <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Confirm Password</label>
-                <input className="input" name="confirm-password" type="password" autoComplete="new-password" placeholder="••••••••" value={form.confirm} onChange={set("confirm")}/></div>
-              <details className="auth-referral-details" defaultOpen={Boolean(form.referral)}>
-                <summary>Have a referral code?</summary>
-                <div className="auth-referral-content">
-                  <input className="input" name="referral" autoComplete="off" placeholder="Optional code from a friend" value={form.referral} onChange={e=>setForm(f=>({...f,referral:e.target.value.toUpperCase()}))}/>
-                  <div style={{fontSize:11,color:t.textDim,lineHeight:1.55,marginTop:6}}>
-                    A valid referral gives you and your friend 7 days of Pro, unless your friend already has Pro.
-                  </div>
+          {mode==="signup" ? (
+            mintedUser ? (
+              <div className="academy-reveal">
+                <div className="academy-stepper" aria-label="Signup step 3 of 3">
+                  {["Credentials","Identity","Reveal"].map((label,index)=>(
+                    <span key={label} className="active"><em>{index+1}</em>{label}</span>
+                  ))}
                 </div>
-              </details>
-              <div style={{fontSize:12,color:t.textDim,lineHeight:1.6}}>
-                Use 8+ characters with uppercase, lowercase, a number, and a special character.
+                <Alert msg={ok} type="success" t={t}/>
+                <div className="academy-reveal-card">
+                  <AcademyIDCard name={mintedUser.name} avatarId={mintedUser.avatarId} totalStars={mintedUser.totalStars||0}/>
+                </div>
+                <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",marginTop:14}} onClick={()=>onLogin(mintedUser)}>
+                  Enter the Academy →
+                </button>
               </div>
-              </>
-            )}
-            <button type="submit" className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"11px",marginTop:4}} disabled={loading}>
-              {loading?"Processing...":mode==="login"?"Sign In":mode==="reset"?"Send Reset Email":"Create my free account"}
-            </button>
-            {isSupabaseConfigured&&mode==="login"&&(
-              <button type="button" className="btn btn-outline" style={{width:"100%",justifyContent:"center",padding:"10px"}} onClick={handleGoogle} disabled={loading}>
-                Continue with Google
-              </button>
-            )}
-            {mode==="login"&&(
-              <button type="button" className="btn btn-ghost" style={{justifyContent:"center",fontSize:12}} onClick={()=>{setMode("reset");resetMessages();}} disabled={loading}>
-                Forgot password?
-              </button>
-            )}
-            {mode==="reset"&&(
-              <button type="button" className="btn btn-ghost" style={{justifyContent:"center",fontSize:12}} onClick={()=>{setMode("login");resetMessages();}} disabled={loading}>
-                Back to sign in
-              </button>
-            )}
-            {mode==="signup"&&<div className="auth-trust-line"><LockKeyhole size={13}/> Your account starts on the free plan. Pro is never added automatically.</div>}
-          </form>
+            ) : (
+              <AcademySignupWizard
+                t={t}
+                form={form}
+                setForm={setForm}
+                setField={set}
+                onMint={handleAcademyMint}
+                loading={loading}
+                error={err}
+                ok={ok}
+              />
+            )
+          ) : (
+            <>
+              <Alert msg={err} type="error" t={t}/>
+              <Alert msg={ok} type="success" t={t}/>
+              <form style={{display:"flex",flexDirection:"column",gap:14}} onSubmit={handle}>
+                <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Email</label>
+                  <input className="input" name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={set("email")}/></div>
+                {mode!=="reset"&&(
+                  <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Password</label>
+                    <input className="input" name="password" type="password" autoComplete="current-password" placeholder="Your password" value={form.pass} onChange={set("pass")}/></div>
+                )}
+                <button type="submit" className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"11px",marginTop:4}} disabled={loading}>
+                  {loading?"Processing...":mode==="reset"?"Send Reset Email":"Sign In"}
+                </button>
+                {isSupabaseConfigured&&mode==="login"&&(
+                  <button type="button" className="btn btn-outline" style={{width:"100%",justifyContent:"center",padding:"10px"}} onClick={handleGoogle} disabled={loading}>
+                    Continue with Google
+                  </button>
+                )}
+                {mode==="login"&&(
+                  <button type="button" className="btn btn-ghost" style={{justifyContent:"center",fontSize:12}} onClick={()=>{setMode("reset");resetMessages();}} disabled={loading}>
+                    Forgot password?
+                  </button>
+                )}
+                {mode==="reset"&&(
+                  <button type="button" className="btn btn-ghost" style={{justifyContent:"center",fontSize:12}} onClick={()=>{setMode("login");resetMessages();}} disabled={loading}>
+                    Back to sign in
+                  </button>
+                )}
+              </form>
+            </>
+          )}
           {!isSupabaseConfigured&&mode==="login"&&(
             <div style={{marginTop:16,padding:"12px 14px",background:t.panel,borderRadius:8,border:`1px solid ${t.border}`}}>
               <div style={{fontSize:12,fontWeight:600,color:t.textDim,marginBottom:4}}>DEMO ACCOUNT</div>
@@ -17950,6 +18256,15 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
             <button className="btn btn-primary" onClick={()=>onNav(activeMissionCard.nav)}>Open {activeMissionCard.label}</button>
           </div>
         </div>
+      </section>
+
+      <section className="academy-dashboard-pass card">
+        <div>
+          <div className="label" style={{color:t.amber}}>Academy ID</div>
+          <h2>Your SecurePlus pass</h2>
+          <p>The pass tracks your identity and future star prestige. Every 5 verified stars changes the trim color, up to 30 stars.</p>
+        </div>
+        <AcademyIDCard name={user.name} avatarId={user.avatarId} totalStars={user.totalStars||0} compact/>
       </section>
 
       <section className={`card readiness-lab readiness-${readinessProfile.tone}`} style={{"--readiness-color":readinessColor}}>
@@ -24329,6 +24644,7 @@ export default function App() {
     if(user.authProvider==="supabase"){
       const { data, error } = await supabase.auth.updateUser({ data: { full_name: clean, name: clean } });
       if(error) throw error;
+      await updateSupabaseAcademyProfile(user.id,{fullName:clean,avatarId:user.avatarId||"default-cipher"});
       const updated={...user,name:clean,loginMethod:data?.user?.app_metadata?.provider || user.loginMethod || "email"};
       setUser(updated);identifyUser(updated);
       return;

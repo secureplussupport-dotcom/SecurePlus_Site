@@ -3,7 +3,9 @@
 
 alter table profiles
 add column if not exists referral_code text,
-add column if not exists pro_trial_until timestamptz;
+add column if not exists pro_trial_until timestamptz,
+add column if not exists full_name text,
+add column if not exists avatar_id varchar(50) not null default 'default-cipher';
 
 create table if not exists referrals (
   id uuid primary key default gen_random_uuid(),
@@ -214,14 +216,19 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, email, tier, referral_code)
+  insert into public.profiles (id, email, full_name, avatar_id, tier, referral_code)
   values (
     new.id,
     new.email,
+    nullif(trim(coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name', '')), ''),
+    coalesce(nullif(trim(new.raw_user_meta_data->>'avatar_id'), ''), 'default-cipher'),
     'free',
     upper(substr(replace(gen_random_uuid()::text, '-', ''), 1, 10))
   )
-  on conflict (id) do nothing;
+  on conflict (id) do update
+  set full_name = coalesce(excluded.full_name, profiles.full_name),
+      avatar_id = coalesce(excluded.avatar_id, profiles.avatar_id),
+      updated_at = now();
 
   return new;
 end;
