@@ -15633,6 +15633,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-price-cycle{font-size:14px;line-height:1.4;color:${t.textSec};font-weight:850;padding-bottom:4px;}
 .upgrade-equivalent{font-size:12px;color:${t.textSec};margin-bottom:18px;}
 .upgrade-equivalent strong{color:${t.green};}
+.upgrade-accessible-note{margin:-7px 0 16px;padding:10px 12px;border:1px solid ${t.green}30;border-radius:8px;background:${t.green}0b;color:${t.textSec};font-size:12px;line-height:1.55;}
+.upgrade-accessible-note strong{color:${t.green};}
 .upgrade-feature-list{display:grid;gap:10px;}
 .upgrade-feature{display:flex;align-items:flex-start;gap:9px;color:${t.textSec};font-size:13px;line-height:1.5;}
 .upgrade-feature svg{color:${t.green};flex-shrink:0;margin-top:1px;}
@@ -15640,6 +15642,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-action-panel h3{font-size:18px;line-height:1.3;color:${t.text};margin-bottom:7px;}
 .upgrade-action-panel p{font-size:12px;line-height:1.6;color:${t.textSec};margin-bottom:14px;}
 .upgrade-primary-cta{width:100%;justify-content:center;min-height:50px;font-size:14px;}
+.upgrade-original-badge{display:flex;align-items:flex-start;gap:9px;margin:10px 0 0;padding:10px 11px;border:1px solid ${t.accent}35;border-radius:8px;background:${t.accent}0d;color:${t.textSec};font-size:11px;line-height:1.55;font-weight:750;}
+.upgrade-original-badge svg{color:${t.accent};flex-shrink:0;margin-top:1px;}
+.upgrade-original-badge strong{display:block;color:${t.text};font-size:12px;line-height:1.35;margin-bottom:2px;}
 .upgrade-trust-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:13px;}
 .upgrade-trust-item{display:flex;align-items:center;justify-content:center;gap:5px;color:${t.textDim};font-size:10px;font-weight:800;text-align:center;}
 .upgrade-free-note{margin-top:12px;text-align:center;color:${t.textDim};font-size:11px;line-height:1.5;}
@@ -16030,8 +16035,9 @@ body{background:
   .upgrade-trust-item{justify-content:flex-start!important;}
   .upgrade-compare{padding:16px!important;overflow-x:auto;}
   .upgrade-compare-row{grid-template-columns:minmax(150px,1.2fr) repeat(2,minmax(84px,.55fr));min-width:360px;}
-  .upgrade-mobile-cta{position:fixed;display:flex;left:12px;right:12px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:39;padding:9px;background:color-mix(in srgb,${t.surface} 94%,transparent);border:1px solid ${t.border};border-radius:10px;box-shadow:0 18px 46px rgba(0,0,0,.28);backdrop-filter:blur(16px);}
+  .upgrade-mobile-cta{position:fixed;display:flex;flex-direction:column;gap:7px;left:12px;right:12px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:39;padding:9px;background:color-mix(in srgb,${t.surface} 94%,transparent);border:1px solid ${t.border};border-radius:10px;box-shadow:0 18px 46px rgba(0,0,0,.28);backdrop-filter:blur(16px);}
   .upgrade-mobile-cta .btn{width:100%;justify-content:center;}
+  .upgrade-mobile-trust{font-size:10px;line-height:1.35;text-align:center;color:${t.textDim};font-weight:850;}
   .exam-layout{grid-template-columns:1fr!important;}
   .exam-map{order:-1;position:relative!important;top:auto!important;width:100%;padding:12px!important;}
   .exam-map-grid{grid-template-columns:repeat(10,minmax(30px,1fr))!important;}
@@ -23130,6 +23136,9 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
               <div className="upgrade-price-cycle">USD per year<br/>billed annually</div>
             </div>
             <div className="upgrade-equivalent"><strong>About $0.42/month</strong> for comparison, charged as one $4.99 yearly payment.</div>
+            <div className="upgrade-accessible-note">
+              <strong>Why so accessible?</strong> SecurePlus is built to make high-quality Security+ practice reachable for students and career changers, without the enterprise training markup.
+            </div>
             <div className="upgrade-feature-list">
               {features.map(feature=>(
                 <div key={feature} className="upgrade-feature"><CheckCircle2 size={17}/><span>{feature}</span></div>
@@ -23147,6 +23156,13 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
                 {billingLoading?"Opening secure checkout...":"Unlock Pro for $4.99/year →"}
               </button>
             )}
+            <div className="upgrade-original-badge">
+              <ShieldCheck size={16}/>
+              <span>
+                <strong>Original scenario-based practice</strong>
+                Independent study questions that teach the underlying concepts. Not real exam dumps, not affiliated with or endorsed by CompTIA.
+              </span>
+            </div>
             <div className="upgrade-trust-row">
               <div className="upgrade-trust-item"><ShieldCheck size={13}/> Stripe checkout</div>
               <div className="upgrade-trust-item"><Check size={13}/> Cancel anytime</div>
@@ -23231,6 +23247,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           <button className="btn btn-primary" onClick={startUpgrade} disabled={billingLoading}>
             {billingLoading?"Opening checkout...":"Unlock Pro · $4.99/year"}
           </button>
+          <div className="upgrade-mobile-trust">Original scenario-based practice. Not real exam dumps.</div>
         </div>
       )}
     </div>
