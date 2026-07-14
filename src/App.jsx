@@ -14620,9 +14620,6 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .readiness-pillar-help{margin-top:8px;padding-right:48px;color:${t.textDim};font-size:10px;line-height:1.45;}
 .readiness-weight{position:absolute;right:10px;bottom:10px;color:${t.textDim};font-size:8px;font-weight:900;text-transform:uppercase;}
 .readiness-trust-note{margin-top:12px;padding:11px 12px;border:1px solid color-mix(in srgb,var(--readiness-color) 24%,${t.border});border-radius:10px;background:color-mix(in srgb,var(--readiness-color) 7%,${t.panel});color:${t.textSec};font-size:11px;line-height:1.55;}
-.achievement-shortcut-card{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;padding:18px 20px!important;border-color:${t.amber}42!important;background:radial-gradient(circle at 92% 8%,${t.amber}18,transparent 30%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
-.achievement-shortcut-card h3{font-size:18px;color:${t.text};line-height:1.3;margin-bottom:4px;}
-.achievement-shortcut-card p{font-size:13px;color:${t.textSec};line-height:1.6;margin:0;}
 .achievement-mini-star{width:48px;height:48px;display:grid;place-items:center;clip-path:polygon(50% 0,61% 34%,98% 34%,68% 55%,79% 91%,50% 70%,21% 91%,32% 55%,2% 34%,39% 34%);background:linear-gradient(135deg,#facc15,#f59e0b);color:#fff7d6;font-weight:950;text-shadow:0 2px 0 rgba(0,0,0,.18);filter:drop-shadow(5px 5px 0 ${t.amber}20);}
 .achievements-page{padding:30px 24px 120px;max-width:1060px;margin:0 auto;}
 .achievements-hero{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(220px,.42fr) minmax(0,1fr);gap:24px;align-items:center;margin-bottom:18px;padding:28px!important;border-color:${t.amber}45!important;background:radial-gradient(circle at 16% 12%,${t.amber}24,transparent 35%),linear-gradient(135deg,${t.surface},${t.panel} 70%,${t.green}0b)!important;}
@@ -14759,16 +14756,6 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .academy-reveal{animation:academyStepIn .28s cubic-bezier(.16,1,.3,1) both;}
 .academy-reveal-card{display:grid;place-items:center;perspective:1200px;}
 .academy-reveal-card .academy-id-card{animation:academyCardFlip .7s cubic-bezier(.16,1,.3,1) backwards;}
-.academy-dashboard-pass{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,430px);gap:26px;align-items:center;margin-bottom:18px;padding:28px!important;border-color:${t.amber}42!important;border-radius:24px!important;background:radial-gradient(circle at 7% 10%,${t.amber}1a,transparent 32%),radial-gradient(circle at 96% 88%,${t.accent}10,transparent 28%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
-.academy-dashboard-pass::after{content:"";position:absolute;left:28px;bottom:0;width:140px;height:4px;border-radius:999px 999px 0 0;background:linear-gradient(90deg,${t.amber},${t.green});opacity:.8;}
-.academy-dashboard-copy{position:relative;z-index:1;}
-.academy-dashboard-pass h2{font-size:27px;color:${t.text};margin:5px 0 8px;letter-spacing:-.02em;}
-.academy-dashboard-pass p{font-size:13px;color:${t.textSec};line-height:1.7;max-width:540px;margin:0;}
-.academy-pass-highlights{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0;}
-.academy-pass-highlights span{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid ${t.border};border-radius:999px;background:${t.surface};color:${t.textSec};font-size:10px;font-weight:900;box-shadow:0 7px 16px rgba(70,48,22,.06);}
-.academy-pass-highlights svg{color:${t.amber};}
-.academy-pass-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.academy-pass-actions small{color:${t.textDim};font-size:10px;line-height:1.4;}
 @keyframes academyStepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes academyCardFlip{from{opacity:0;transform:rotateY(-72deg) translateY(12px) scale(.94)}to{opacity:1;transform:rotateY(0) translateY(0) scale(1)}}
 .dashboard-action-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:14px;margin-bottom:18px;}
@@ -16116,14 +16103,10 @@ body{background:
   .readiness-lab-head{display:grid!important;grid-template-columns:1fr!important;}
   .readiness-level-badge{justify-self:stretch!important;grid-template-columns:auto auto!important;justify-content:flex-start!important;}
   .readiness-lab-body{grid-template-columns:1fr!important;}
-  .achievement-shortcut-card{align-items:stretch!important;flex-direction:column!important;}
-  .achievement-shortcut-card .btn{width:100%;justify-content:center;}
   .achievements-page{padding:18px 16px 112px!important;}
   .achievements-hero{grid-template-columns:1fr!important;padding:20px!important;text-align:left;}
   .achievement-star-display{width:160px!important;justify-self:center;}
   .achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
-  .academy-dashboard-pass{grid-template-columns:1fr!important;}
-  .academy-dashboard-pass .academy-id-card{justify-self:center;}
   .academy-stepper{grid-template-columns:1fr!important;}
   .academy-avatar-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .dashboard-action-grid{grid-template-columns:1fr!important;}
@@ -16355,10 +16338,6 @@ body{background:
   .achievement-grid{grid-template-columns:minmax(0,1fr)!important;}
   .achievement-card{min-height:auto!important;}
   .academy-avatar-grid{grid-template-columns:minmax(0,1fr)!important;}
-  .academy-dashboard-pass{padding:20px!important;border-radius:20px!important;}
-  .academy-dashboard-pass h2{font-size:24px!important;}
-  .academy-pass-actions{align-items:stretch!important;flex-direction:column!important;}
-  .academy-pass-actions .btn{width:100%;justify-content:center;}
   .academy-id-card,.academy-id-card.compact{max-width:390px!important;min-height:306px!important;padding:16px!important;border-radius:21px!important;}
   .academy-id-body{grid-template-columns:auto minmax(0,1fr)!important;gap:12px!important;padding:15px 0 12px!important;}
   .academy-id-prestige{grid-column:1/-1;width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 10px!important;}
@@ -18407,7 +18386,6 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
   const readiness=readinessProfile.score;
   const readinessColor=readiness>=80?t.green:readiness>=65?t.accent:readiness>=45?t.amber:t.red;
   const isPro = user.tier==="pro";
-  const academyState=getAcademyStarState(user.totalStars||0);
   const challenge = getTodayChallenge();
   const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
   useEffect(()=>{
@@ -18512,24 +18490,6 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
         </div>
       </section>
 
-      <section className="academy-dashboard-pass card">
-        <div className="academy-dashboard-copy">
-          <div className="label" style={{color:t.amber}}>Your learner identity</div>
-          <h2>Your Academy Pass grows with you</h2>
-          <p>Earn verified stars through meaningful practice milestones. Your pass evolves through six prestige trims as your Security+ skills grow.</p>
-          <div className="academy-pass-highlights">
-            <span><Trophy size={13}/> {academyState.tier.name}</span>
-            <span><Star size={13}/> {academyState.safeStars} stars earned</span>
-            <span><ShieldCheck size={13}/> Milestone progress</span>
-          </div>
-          <div className="academy-pass-actions">
-            <button className="btn btn-outline" onClick={()=>onNav("achievements")}><Trophy size={15}/> View achievements</button>
-            <small>Each 5-star milestone unlocks a new pass trim.</small>
-          </div>
-        </div>
-        <AcademyIDCard name={user.name} avatarId={user.avatarId} totalStars={user.totalStars||0} joinedAt={user.joined} compact/>
-      </section>
-
       <section className={`card readiness-lab readiness-${readinessProfile.tone}`} style={{"--readiness-color":readinessColor}}>
         <div className="readiness-lab-head">
           <div>
@@ -18596,18 +18556,6 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
           </div>
         ))}
       </div>
-
-      <section className="card achievement-shortcut-card">
-        <div style={{display:"flex",gap:14,alignItems:"center",minWidth:0}}>
-          <div className="achievement-mini-star">{Number(user?.totalStars||0)}</div>
-          <div>
-            <div className="label" style={{color:t.amber}}>Stars and achievements</div>
-            <h3>Earn up to {ACHIEVEMENT_STAR_TOTAL} verified stars.</h3>
-            <p>Stars are awarded after SecurePlus checks completed practice or exam sessions on the server.</p>
-          </div>
-        </div>
-        <button className="btn btn-outline" onClick={()=>onNav("achievements")}>View achievements</button>
-      </section>
 
       <section className="dashboard-action-grid" aria-label="Dashboard action recommendations">
         <div className="card weak-action-card">
