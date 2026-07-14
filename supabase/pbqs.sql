@@ -33,7 +33,11 @@ using (
     select 1
     from profiles
     where profiles.id = auth.uid()
-      and profiles.tier = 'pro'
+      and (
+        profiles.tier = 'pro'
+        or profiles.pro_trial_until > now()
+        or coalesce(profiles.subscription_status, '') in ('active', 'trialing')
+      )
   )
 );
 
