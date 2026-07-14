@@ -14214,6 +14214,136 @@ const LOW_QUALITY_PBQ_IDS = new Set([
 const BASE_PBQ_BANK = [...PBQ_BANK_BASE, ...IMPORTED_PBQ_BANK].filter(q=>!LOW_QUALITY_PBQ_IDS.has(q.id));
 let PBQ_BANK = BASE_PBQ_BANK;
 
+const REMOTE_PBQ_TYPE_ALIASES = {
+  config_acl:"CONFIG/ACL",
+  config:"CONFIG/ACL",
+  terminal_sim:"TERMINAL SIM",
+  terminal:"TERMINAL SIM",
+  log_analysis:"LOG ANALYSIS",
+  hotspot:"HOTSPOT",
+  scenario:"SCENARIO",
+  drag_drop:"DRAG & DROP",
+  drag_and_drop:"DRAG & DROP",
+  ordering:"ORDERING",
+  fill_blank:"FILL BLANK",
+};
+
+function normalizeRemotePbqType(type) {
+  const value=String(type||"SCENARIO").trim();
+  const key=value.toLowerCase().replace(/[\s/&-]+/g,"_");
+  return REMOTE_PBQ_TYPE_ALIASES[key] || value.toUpperCase();
+}
+
+function normalizeRemotePBQRow(row) {
+  const payload=row?.payload || {};
+  const appQuestion=payload.appQuestion || {};
+  const evidence=payload.evidence || {};
+  const interactiveData=payload.interactiveData || {};
+  const correctAnswer=payload.correctAnswer || {};
+  const wrongFeedback=payload.wrongFeedback ?? appQuestion.wrongFeedback ?? {};
+  const choices=interactiveData.choices || appQuestion.choices || appQuestion.options || payload.choices;
+  const type=normalizeRemotePbqType(row?.type || appQuestion.type || payload.type);
+  const domain=Number(row?.domain || appQuestion.ch || appQuestion.domain || payload.domain || 1);
+  const normalized={
+    ...appQuestion,
+    id:String(row?.id || appQuestion.id || ""),
+    title:row?.title || appQuestion.title || payload.title || "Untitled PBQ",
+    type,
+    ch:String(Number.isFinite(domain)&&domain>0?domain:1),
+    cat:appQuestion.cat || payload.cat || payload.domainName || `Domain ${Number.isFinite(domain)?domain:1}`,
+    difficulty:appQuestion.difficulty || payload.difficulty || "medium",
+    beyondTextbook:Boolean(appQuestion.beyondTextbook || payload.beyondTextbook),
+    is_pro:row?.is_pro !== false,
+    payload,
+    scenario:payload.scenario ?? appQuestion.scenario ?? "",
+    question:payload.question ?? appQuestion.question ?? payload.prompt ?? "",
+    explanation:payload.explanation ?? correctAnswer.explanation ?? appQuestion.explanation ?? (typeof wrongFeedback==="string" ? wrongFeedback : ""),
+    logData:evidence.logData ?? appQuestion.logData ?? "",
+    currentConfig:evidence.currentConfig ?? appQuestion.currentConfig ?? "",
+    codeBlock:evidence.codeBlock ?? appQuestion.codeBlock ?? "",
+    codeLanguage:evidence.codeLanguage ?? appQuestion.codeLanguage ?? "",
+    diagram:evidence.diagram ?? appQuestion.diagram ?? "",
+    hint:evidence.hint ?? appQuestion.hint ?? "",
+    answer:correctAnswer.answer ?? appQuestion.answer ?? "",
+    choices:Array.isArray(choices) ? choices : undefined,
+    options:Array.isArray(choices) ? choices : undefined,
+    correct:Number.isInteger(correctAnswer.correct) ? correctAnswer.correct : Number.isInteger(appQuestion.correct) ? appQuestion.correct : 0,
+    wrongFeedback:typeof wrongFeedback==="string" ? {} : wrongFeedback,
+    items:interactiveData.items || appQuestion.items,
+    targets:interactiveData.targets || appQuestion.targets,
+    targetLayout:interactiveData.targetLayout || appQuestion.targetLayout,
+    correctMapping:correctAnswer.correctMapping || appQuestion.correctMapping,
+    correctOrder:correctAnswer.correctOrder || appQuestion.correctOrder,
+    blanks:interactiveData.blanks || appQuestion.blanks,
+    acronyms:appQuestion.acronyms || payload.acronyms || [],
+  };
+  return normalized;
+}
+
+function buildSupabasePBQMutation(question, sortOrder) {
+  const domain=Number.parseInt(question.ch || question.domain || "1",10) || 1;
+  const evidence={
+    logData:question.logData || "",
+    currentConfig:question.currentConfig || "",
+    codeBlock:question.codeBlock || "",
+    codeLanguage:question.codeLanguage || "",
+    diagram:question.diagram || "",
+    hint:question.hint || "",
+  };
+  Object.keys(evidence).forEach(key=>{if(!evidence[key]) delete evidence[key];});
+  const interactiveData={
+    choices:question.choices || question.options || [],
+    items:question.items || [],
+    targets:question.targets || [],
+    targetLayout:question.targetLayout || null,
+    blanks:question.blanks || [],
+  };
+  Object.keys(interactiveData).forEach(key=>{
+    if(interactiveData[key]===null || (Array.isArray(interactiveData[key])&&!interactiveData[key].length)) delete interactiveData[key];
+  });
+  const correctAnswer={
+    correct:question.correct,
+    answer:question.answer || "",
+    correctMapping:question.correctMapping || null,
+    correctOrder:question.correctOrder || null,
+  };
+  Object.keys(correctAnswer).forEach(key=>{
+    if(correctAnswer[key]===null || correctAnswer[key]==="" || correctAnswer[key]===undefined) delete correctAnswer[key];
+  });
+  const payload=JSON.parse(JSON.stringify({
+    scenario:question.scenario || "",
+    question:question.question || "",
+    explanation:question.explanation || "",
+    evidence,
+    interactiveData,
+    correctAnswer,
+    wrongFeedback:question.wrongFeedback || {},
+    difficulty:question.difficulty || "medium",
+    cat:question.cat || "",
+    ch:String(question.ch || domain),
+    beyondTextbook:Boolean(question.beyondTextbook),
+    acronyms:question.acronyms || [],
+    sortOrder,
+    appQuestion:question,
+  }));
+  return {
+    id:question.id,
+    title:question.title,
+    type:question.type,
+    domain,
+    is_pro:question.is_pro ?? question.isPro ?? !isFreePBQPreview(question),
+    payload,
+    updated_at:new Date().toISOString(),
+  };
+}
+
+async function loadRemotePBQs() {
+  if(!isSupabaseConfigured || !supabase) return {questions:[], error:null};
+  const { data, error } = await supabase.from("pbqs").select("*");
+  if(error) throw error;
+  return {questions:(data||[]).map(normalizeRemotePBQRow).filter(question=>question.id), error:null};
+}
+
 function applyQuestionOverrides(rows=[]) {
   const mergeBank=(base,kind)=>{
     const byId=new Map(base.map((q,index)=>[q.id,{...q,_baseOrder:index+1}]));
@@ -14280,15 +14410,16 @@ function getTodayChallenge() {
   return DAILY_CHALLENGES.find(c=>c.date===day)||DAILY_CHALLENGES[0];
 }
 
-function getNextRelatedPBQ(current, attempts=[]) {
+function getNextRelatedPBQ(current, attempts=[], bank=PBQ_BANK) {
   if(!current) return null;
   const correctIds=new Set(attempts.filter(a=>a.pbq&&a.correct).map(a=>a.qid));
-  const candidates=PBQ_BANK.filter(q=>q.id!==current.id&&q.ch===current.ch&&q.type===current.type&&!correctIds.has(q.id));
+  const source=bank?.length ? bank : PBQ_BANK;
+  const candidates=source.filter(q=>q.id!==current.id&&q.ch===current.ch&&q.type===current.type&&!correctIds.has(q.id));
   if(candidates.length) return candidates[0];
-  const sameChapter=PBQ_BANK.filter(q=>q.id!==current.id&&q.ch===current.ch&&!correctIds.has(q.id));
+  const sameChapter=source.filter(q=>q.id!==current.id&&q.ch===current.ch&&!correctIds.has(q.id));
   if(sameChapter.length) return sameChapter[0];
-  const index=PBQ_BANK.findIndex(q=>q.id===current.id);
-  return PBQ_BANK[(index+1)%PBQ_BANK.length]||null;
+  const index=source.findIndex(q=>q.id===current.id);
+  return source[(index+1)%source.length]||null;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -14306,6 +14437,8 @@ linear-gradient(90deg, ${t.border}1c 1px, transparent 1px);background-size:auto,
 h1,h2,h3{font-family:'Montserrat',system-ui,sans-serif;font-weight:800;letter-spacing:0;}
 button,input,select{font:inherit;}
 button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-visible,.opt:focus-visible{outline:3px solid ${t.accent}38;outline-offset:2px;}
+.animate-pulse{animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.52;}}
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-track{background:${t.bg};}
 ::-webkit-scrollbar-thumb{background:${t.border};border-radius:3px;}
@@ -18643,20 +18776,61 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK
 // ═══════════════════════════════════════════════════════════════
-function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,showQuestionCodes=false}) {
+function UpgradeModal({price="$4.99/year",onUpgrade,onClose,t}) {
+  return(
+    <div style={{padding:"28px 24px",maxWidth:620,margin:"0 auto"}}>
+      <div className="card" style={{padding:"24px",borderColor:`${t.accent}45`,background:`linear-gradient(135deg, ${t.accent}10, ${t.surface})`}}>
+        <div className="page-title-row" style={{marginBottom:12}}>
+          <span className="section-icon" style={{"--section-color":t.accent}}><LockKeyhole size={21} strokeWidth={2.3}/></span>
+          <div>
+            <h2 style={{fontSize:24,color:t.text}}>PBQs are Pro content</h2>
+            <p style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>Your current session cannot access this PBQ from the remote bank. Upgrade to unlock the full simulator.</p>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:10,flexWrap:"wrap",alignItems:"center",justifyContent:"space-between"}}>
+          <span className="chip" style={{background:`${t.accent}12`,borderColor:`${t.accent}35`,color:t.accent}}>Pro · {price}</span>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+            {onClose&&<button className="btn btn-ghost" onClick={onClose}>Back</button>}
+            <button className="btn btn-primary" onClick={onUpgrade}>Upgrade</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PBQLoadingSkeleton({t}) {
+  return(
+    <div className="pbq-bank-screen fu" style={{padding:"24px",maxWidth:900,margin:"0 auto"}}>
+      <div className="card animate-pulse rounded-xl p-6" style={{padding:24,background:t.surface,border:`1px solid ${t.border}`}}>
+        <div style={{height:22,width:"38%",borderRadius:8,background:t.border,marginBottom:14}}/>
+        <div style={{height:14,width:"70%",borderRadius:8,background:t.panel,marginBottom:24}}/>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,minmax(0,1fr))",gap:10,marginBottom:20}}>
+          {[0,1,2,3].map(item=><div key={item} style={{height:72,borderRadius:10,background:t.panel,border:`1px solid ${t.border}`}}/>)}
+        </div>
+        <div style={{display:"grid",gap:10}}>
+          {[0,1,2].map(item=><div key={item} style={{height:78,borderRadius:10,background:t.panel,border:`1px solid ${t.border}`}}/>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,showQuestionCodes=false,pbqBank=PBQ_BANK,isLoading=false,loadError=null}) {
   const [chFilter,setChFilter]=useState("all");
   const [typeFilter,setTypeFilter]=useState("all");
   const [lockedQuestion,setLockedQuestion]=useState(null);
   const [showMissedOnly,setShowMissedOnly]=useState(false);
   const [starredView,setStarredView]=useState(false);
   const isPro=user.tier==="pro";
+  const bank=pbqBank?.length ? pbqBank : [];
   const starredSet=useMemo(()=>new Set(starred),[starred]);
   const attempted=new Set(attempts.filter(a=>a.pbq).map(a=>a.qid));
   const correct=new Set(attempts.filter(a=>a.pbq&&a.correct).map(a=>a.qid));
   const missedPbqIds=[...new Set(attempts.filter(a=>a.pbq&&!a.correct).map(a=>a.qid))];
-  const starredPbqs=PBQ_BANK.filter(q=>starredSet.has(starKey("pbq",q.id)));
+  const starredPbqs=bank.filter(q=>starredSet.has(starKey("pbq",q.id)));
 
-  const filtered=PBQ_BANK.filter(q=>{
+  const filtered=bank.filter(q=>{
     if(chFilter!=="all"&&q.ch!==chFilter)return false;
     if(typeFilter!=="all"&&q.type!==typeFilter)return false;
     if(showMissedOnly&&!missedPbqIds.includes(q.id))return false;
@@ -18675,16 +18849,20 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
     if(shouldShowPBQUpgradePrompt()) setLockedQuestion(q);
   };
   const practiceRandomPbq=()=>{
-    const notDone=PBQ_BANK.filter(q=>!attempted.has(q.id));
-    const missed=PBQ_BANK.filter(q=>missedPbqIds.includes(q.id));
-    const rawPool=notDone.length?notDone:missed.length?missed:[PBQ_BANK[PBQ_BANK.length-1]];
+    const notDone=bank.filter(q=>!attempted.has(q.id));
+    const missed=bank.filter(q=>missedPbqIds.includes(q.id));
+    const rawPool=notDone.length?notDone:missed.length?missed:[bank[bank.length-1]].filter(Boolean);
     const regular=rawPool.filter(q=>!q.beyondTextbook);
     const beyond=rawPool.filter(q=>q.beyondTextbook);
     const pool=regular.length && beyond.length && Math.random()>.15 ? regular : rawPool;
     const picked=pool[Math.floor(Math.random()*pool.length)];
+    if(!picked)return;
     capture("pbq_random_practice_started", { question_id: picked.id, pool: notDone.length?"new":missed.length?"missed":"newest", tier: user.tier });
     onStart(picked);
   };
+
+  if(isLoading) return <PBQLoadingSkeleton t={t}/>;
+  if(loadError || !bank.length) return <UpgradeModal price="$4.99/year" onUpgrade={onUpgrade} t={t}/>;
 
   if(starredView) return(
     <div style={{padding:"24px",maxWidth:900,margin:"0 auto"}}>
@@ -18736,7 +18914,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
           </div>
         </div>
         <div className="practice-page-meta">
-          <span className="practice-meta-pill"><strong>{PBQ_BANK.length}</strong> PBQs</span>
+          <span className="practice-meta-pill"><strong>{bank.length}</strong> PBQs</span>
           <span className="practice-meta-pill"><strong>{Object.keys(SIM_TYPES).length}</strong> formats</span>
           <span className="practice-meta-pill">{isPro?"Pro access":"1 free preview"}</span>
         </div>
@@ -18762,7 +18940,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
         </div>
         <div className="pbq-metric-grid">
           {[
-            {label:"Total PBQs",value:PBQ_BANK.length,color:t.accent},
+            {label:"Total PBQs",value:bank.length,color:t.accent},
             {label:"Simulation types",value:Object.keys(SIM_TYPES).length,color:t.text},
             {label:"Attempted",value:attempted.size,color:t.amber},
             {label:"Correct",value:correct.size,color:t.green},
@@ -18780,7 +18958,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
             <div style={{flex:1}}>
               <div style={{fontWeight:600,fontSize:15,color:t.text,marginBottom:4}}>Try one PBQ preview for free</div>
               <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                Free users can attempt the PBQ marked <strong style={{color:t.amber}}>Preview</strong>. Pro unlocks all {PBQ_BANK.length} PBQ simulations with terminal commands, drag & drop, log analysis, and more.
+                Free users can attempt the PBQ marked <strong style={{color:t.amber}}>Preview</strong>. Pro unlocks all {bank.length} PBQ simulations with terminal commands, drag & drop, log analysis, and more.
               </div>
             </div>
             <button className="btn btn-primary" style={{flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_access_banner", tier: user.tier });onUpgrade();}}>Upgrade — $4.99/year →</button>
@@ -18827,7 +19005,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
         <div className="pbq-type-section-head"><h3>Choose a simulation format</h3><span>{typeFilter==="all"?"All formats selected":Object.values(SIM_TYPES).find(item=>item.id===typeFilter)?.label}</span></div>
         <div className="pbq-type-grid">
           {Object.values(SIM_TYPES).map(s=>{
-            const count=PBQ_BANK.filter(q=>q.type===s.id).length;
+            const count=bank.filter(q=>q.type===s.id).length;
             const active=typeFilter===s.id;
             return(
               <button type="button" key={s.id} className={`pbq-type-card ${active?"active":""}`} style={{"--type-color":s.color}} aria-pressed={active} onClick={()=>setTypeFilter(active?"all":s.id)}>
@@ -18908,6 +19086,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
 // PBQ SIMULATOR
 // ═══════════════════════════════════════════════════════════════
 function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewMode=false,onUpgrade,onReportQuestion,showQuestionCodes=false}) {
+  const evidence=q?.payload?.evidence || {};
   const [termInput,setTermInput]=useState("");
   const [termHistory,setTermHistory]=useState([]);
   const [selected,setSelected]=useState(null);
@@ -19070,7 +19249,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
           {q.steps.map((s,i)=><div key={i} className="pbq-step-row"><span>{i+1}</span><div>{s}</div></div>)}
         </div>}
       </div>
-      <CodeSnippetBlock code={q.codeBlock} language={q.codeLanguage} t={t}/>
+      <CodeSnippetBlock code={q?.codeBlock || evidence?.codeBlock} language={q?.codeLanguage || evidence?.codeLanguage} t={t}/>
 
       {/* TERMINAL */}
       {q.type==="TERMINAL SIM"&&(
@@ -19100,7 +19279,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       {q.type==="LOG ANALYSIS"&&(
         <section className="pbq-workspace-section">
           <div className="pbq-workspace-head"><div><h3>Log evidence</h3><p>Inspect the events before choosing the strongest conclusion.</p></div><ListOrdered size={20} color={simType.color}/></div>
-          <div className="log-block">{q.logData}</div>
+          <div className="log-block">{q?.logData || evidence?.logData}</div>
         </section>
       )}
 
@@ -19108,7 +19287,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       {q.type==="CONFIG/ACL"&&(
         <section className="pbq-workspace-section">
           <div className="pbq-workspace-head"><div><h3>Configuration review</h3><p>This configuration contains an issue. Find the best correction.</p></div><MonitorCog size={20} color={simType.color}/></div>
-          <div className="terminal" style={{color:t.codeWarn,fontSize:12,minHeight:80}}>{q.currentConfig}</div>
+          <div className="terminal" style={{color:t.codeWarn,fontSize:12,minHeight:80}}>{q?.currentConfig || evidence?.currentConfig}</div>
         </section>
       )}
 
@@ -19116,7 +19295,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       {q.type==="HOTSPOT"&&(
         <section className="pbq-workspace-section">
           <div className="pbq-workspace-head"><div><h3>Scenario map</h3><p>Review each detail before selecting the best response.</p></div><Crosshair size={20} color={simType.color}/></div>
-          <pre className="log-block" style={{fontSize:13}}>{q.diagram}</pre>
+          <pre className="log-block" style={{fontSize:13}}>{q?.diagram || evidence?.diagram}</pre>
         </section>
       )}
 
@@ -19495,7 +19674,7 @@ function ExamModeGuideModal({t,onClose}) {
   );
 }
 
-function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false}) {
+function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,pbqBank=PBQ_BANK}) {
   const sessionKey=`exam:${practiceSessionOwner(user)}`;
   const [questionCount,setQuestionCount]=useState(20);
   const [pbqCount,setPbqCount]=useState(2);
@@ -19553,7 +19732,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false})
     setPbqCount(prev=>Math.min(size,Math.max(0,Math.round(size*(prev/Math.max(1,questionCount))))));
   };
   const startExam=()=>{
-    const examReadyPbqs=PBQ_BANK.filter(q=>!q.beyondTextbook&&(q.type!=="TERMINAL SIM"||q.choices||q.options));
+    const examReadyPbqs=(pbqBank?.length?pbqBank:PBQ_BANK).filter(q=>!q.beyondTextbook&&(q.type!=="TERMINAL SIM"||q.choices||q.options));
     const pickedPbq=shuffle(examReadyPbqs).slice(0,pbqCount).map(q=>({kind:"pbq",q:stripPbqHintsForExam(q)}));
     const pickedMcq=shuffle(MCQ_BANK.filter(q=>!q.beyondTextbook)).slice(0,mcqCount).map(q=>({kind:"mcq",q:shuffleMcqOptions(q)}));
     const examQs=[...pickedPbq,...pickedMcq];
@@ -20187,10 +20366,10 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false})
             )}
           </div>
 
-          {current.kind==="pbq"&&q.codeBlock&&<CodeSnippetBlock code={q.codeBlock} language={q.codeLanguage} t={t}/>}
-          {current.kind==="pbq"&&q.logData&&<div className="log-block" style={{marginBottom:16}}>{q.logData}</div>}
-          {current.kind==="pbq"&&q.diagram&&<pre className="log-block" style={{marginBottom:16}}>{q.diagram}</pre>}
-          {current.kind==="pbq"&&q.currentConfig&&<div className="terminal" style={{marginBottom:16,color:t.codeWarn}}>{q.currentConfig}</div>}
+          {current.kind==="pbq"&&(q?.codeBlock || q?.payload?.evidence?.codeBlock)&&<CodeSnippetBlock code={q?.codeBlock || q?.payload?.evidence?.codeBlock} language={q?.codeLanguage || q?.payload?.evidence?.codeLanguage} t={t}/>}
+          {current.kind==="pbq"&&(q?.logData || q?.payload?.evidence?.logData)&&<div className="log-block" style={{marginBottom:16}}>{q?.logData || q?.payload?.evidence?.logData}</div>}
+          {current.kind==="pbq"&&(q?.diagram || q?.payload?.evidence?.diagram)&&<pre className="log-block" style={{marginBottom:16}}>{q?.diagram || q?.payload?.evidence?.diagram}</pre>}
+          {current.kind==="pbq"&&(q?.currentConfig || q?.payload?.evidence?.currentConfig)&&<div className="terminal" style={{marginBottom:16,color:t.codeWarn}}>{q?.currentConfig || q?.payload?.evidence?.currentConfig}</div>}
 
           {current.kind==="mcq"&&(
             <div style={{display:"grid",gap:9}}>
@@ -21532,6 +21711,29 @@ async function saveQuestionOverrideRequest({kind,question,sortOrder,action="upse
   return data;
 }
 
+async function saveRemotePBQRequest({question,sortOrder}) {
+  if(!isSupabaseConfigured || !supabase) throw new Error("Supabase is not configured.");
+  const token=await getSupabaseAccessToken();
+  if(!token) throw new Error("Please sign in again before saving PBQ changes.");
+  const row=buildSupabasePBQMutation(question,sortOrder);
+  const { error } = await supabase
+    .from("pbqs")
+    .upsert(row,{onConflict:"id"});
+  if(error) throw error;
+  return row;
+}
+
+async function deleteRemotePBQRequest(questionId) {
+  if(!isSupabaseConfigured || !supabase) throw new Error("Supabase is not configured.");
+  const token=await getSupabaseAccessToken();
+  if(!token) throw new Error("Please sign in again before deleting PBQs.");
+  const { error } = await supabase
+    .from("pbqs")
+    .delete()
+    .eq("id",questionId);
+  if(error) throw error;
+}
+
 async function loadQuestionOverrideHistoryRequest() {
   if(!isSupabaseConfigured) throw new Error("Supabase is not configured.");
   const token=await getSupabaseAccessToken();
@@ -21572,7 +21774,7 @@ function questionHistoryLabel(item) {
   return `${label} ${String(item?.question_kind||"").toUpperCase()} ${item?.question_id||""}`;
 }
 
-function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) {
+function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh,pbqBank=PBQ_BANK,initialTarget}) {
   const [kind,setKind]=useState("mcq");
   const [selectedId,setSelectedId]=useState("");
   const [form,setForm]=useState(()=>makeAdminQuestionTemplate("mcq",MCQ_BANK.length+1,MCQ_BANK));
@@ -21589,7 +21791,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const [historyExpanded,setHistoryExpanded]=useState(()=>{
     try{return window.sessionStorage?.getItem("secureplus-question-history-expanded")==="true";}catch{return false;}
   });
-  const bank=kind==="mcq"?MCQ_BANK:PBQ_BANK;
+  const bank=kind==="mcq"?MCQ_BANK:(pbqBank?.length?pbqBank:PBQ_BANK);
   const bankBreakdown=useMemo(()=>buildQuestionBankBreakdown(kind,bank),[kind,bank]);
   const mcqQualityById=useMemo(()=>kind==="mcq"
     ? new Map(bank.map(question=>[question.id,analyzeMcqQuality(question,bank)]))
@@ -21638,7 +21840,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   [form,kind]);
 
   const resetToNew=useCallback((nextKind=kind)=>{
-    const nextBank=nextKind==="mcq"?MCQ_BANK:PBQ_BANK;
+    const nextBank=nextKind==="mcq"?MCQ_BANK:(pbqBank?.length?pbqBank:PBQ_BANK);
     setSelectedId("");
     setForm(makeAdminQuestionTemplate(nextKind,nextBank.length+1,nextBank));
     setError("");
@@ -21790,11 +21992,13 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
           if(!proceed)return;
         }
       }
-      await saveQuestionOverrideRequest({kind,question,sortOrder,action:"upsert"});
+      if(kind==="pbq") await saveRemotePBQRequest({question,sortOrder});
+      else await saveQuestionOverrideRequest({kind,question,sortOrder,action:"upsert"});
       setSelectedId(question.id);
       await onQuestionBankRefresh?.();
+      if(kind==="pbq") await onPbqBankRefresh?.();
       await loadHistory();
-      setStatus("Saved. The live question bank has been refreshed in this browser.");
+      setStatus(kind==="pbq"?"Saved to the remote PBQ bank and refreshed in this browser.":"Saved. The live question bank has been refreshed in this browser.");
       capture("admin_question_saved", { kind, question_id: question.id, sort_order: sortOrder });
     }catch(err){
       setError(err.message||"Unable to save question.");
@@ -21810,8 +22014,10 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
     if(!ok)return;
     setSaving(true);setError("");setStatus("");
     try{
+      if(kind==="pbq") await deleteRemotePBQRequest(targetId);
       await saveQuestionOverrideRequest({kind,question:{id:targetId},sortOrder:null,action:"disable"});
       await onQuestionBankRefresh?.();
+      if(kind==="pbq") await onPbqBankRefresh?.();
       await loadHistory();
       setStatus(`${targetId} has been hidden from the live bank.`);
       resetToNew(kind);
@@ -23353,9 +23559,13 @@ export default function App() {
   const [adminQuestionTarget,setAdminQuestionTarget]=useState(null);
   const [practiceFocusMode,setPracticeFocusMode]=useState(false);
   const [mascotPlacements,setMascotPlacements]=useState([]);
+  const [remotePbqBank,setRemotePbqBank]=useState([]);
+  const [pbqBankLoading,setPbqBankLoading]=useState(Boolean(isSupabaseConfigured));
+  const [pbqBankError,setPbqBankError]=useState(null);
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
+  const livePbqBank=isSupabaseConfigured ? remotePbqBank : PBQ_BANK;
 
   useEffect(()=>{
     try{window.localStorage?.setItem("secureplus-sidebar-hidden",sidebarHidden?"true":"false");}catch{}
@@ -23383,6 +23593,31 @@ export default function App() {
   useEffect(()=>{
     refreshQuestionBankOverrides();
   },[refreshQuestionBankOverrides]);
+
+  const refreshRemotePBQs=useCallback(async()=>{
+    if(!isSupabaseConfigured){
+      setRemotePbqBank(PBQ_BANK);
+      setPbqBankLoading(false);
+      setPbqBankError(null);
+      return;
+    }
+    setPbqBankLoading(true);
+    try{
+      const {questions}=await loadRemotePBQs();
+      setRemotePbqBank(questions);
+      setPbqBankError(null);
+    }catch(error){
+      console.warn("Unable to load remote PBQs", error);
+      setRemotePbqBank([]);
+      setPbqBankError(error);
+    }finally{
+      setPbqBankLoading(false);
+    }
+  },[]);
+
+  useEffect(()=>{
+    refreshRemotePBQs();
+  },[refreshRemotePBQs,user?.tier,questionBankVersion]);
 
   const refreshMascotPlacements=useCallback(async()=>{
     if(!isSupabaseConfigured)return;
@@ -24012,7 +24247,8 @@ export default function App() {
     </>
   );
 
-  const pbqPreviewMode=user?.tier!=="pro"&&isFreePBQPreview(pbqQ);
+  const activePbq=pbqQ ? (livePbqBank.find(question=>question.id===pbqQ.id) || (!isSupabaseConfigured ? pbqQ : null)) : null;
+  const pbqPreviewMode=user?.tier!=="pro"&&isFreePBQPreview(activePbq);
 
   if(pbqQ) return(
     <>
@@ -24023,20 +24259,24 @@ export default function App() {
             <BrandMark size={28}/><span style={{fontWeight:800,fontSize:15,color:t.text}}>SecurePlus</span>
           </button>
         </div>
-        <PBQSim
-          key={pbqQ.id}
-          q={pbqQ}
-          nextQuestion={pbqPreviewMode?null:getNextRelatedPBQ(pbqQ,attempts)}
-          onDone={handlePBQDone}
-          onNext={(result)=>handlePBQDone(result,{nextQuestion:pbqPreviewMode?null:getNextRelatedPBQ(pbqQ,attempts)})}
-          t={t}
-          starred={starred}
-          onToggleStar={handleToggleStar}
-          previewMode={pbqPreviewMode}
-          onUpgrade={()=>setView("pricing")}
-          onReportQuestion={handleReportQuestion}
-          showQuestionCodes={isRootUser}
-        />
+        {pbqBankLoading ? <PBQLoadingSkeleton t={t}/> : activePbq ? (
+          <PBQSim
+            key={activePbq.id}
+            q={activePbq}
+            nextQuestion={pbqPreviewMode?null:getNextRelatedPBQ(activePbq,attempts,livePbqBank)}
+            onDone={handlePBQDone}
+            onNext={(result)=>handlePBQDone(result,{nextQuestion:pbqPreviewMode?null:getNextRelatedPBQ(activePbq,attempts,livePbqBank)})}
+            t={t}
+            starred={starred}
+            onToggleStar={handleToggleStar}
+            previewMode={pbqPreviewMode}
+            onUpgrade={()=>setView("pricing")}
+            onReportQuestion={handleReportQuestion}
+            showQuestionCodes={isRootUser}
+          />
+        ) : (
+          <UpgradeModal price="$4.99/year" onUpgrade={()=>setView("pricing")} onClose={()=>{setPbqQ(null);setView("pbq");}} t={t}/>
+        )}
       </div>
       {questionReport&&<QuestionReportModal report={questionReport} user={user} t={t} onClose={()=>setQuestionReport(null)}/>}
     </>
@@ -24131,9 +24371,9 @@ export default function App() {
             <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser}/>
           </div>
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
-            <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser}/>
+            <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading} loadError={pbqBankError}/>
           </div>
-          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} showQuestionCodes={isRootUser}/>}
+          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
           {view==="referrals"&&<ReferralPage user={user} t={t}/>}
@@ -24141,7 +24381,7 @@ export default function App() {
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
-          {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} initialTarget={adminQuestionTarget}/>}
+          {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
           {view!=="mascot-admin"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
         </main>
