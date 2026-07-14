@@ -14497,6 +14497,18 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .readiness-pillar-meter span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--readiness-color),${t.accent});transition:width .65s cubic-bezier(.16,1,.3,1);}
 .readiness-pillar-help{margin-top:8px;padding-right:48px;color:${t.textDim};font-size:10px;line-height:1.45;}
 .readiness-weight{position:absolute;right:10px;bottom:10px;color:${t.textDim};font-size:8px;font-weight:900;text-transform:uppercase;}
+.readiness-trust-note{margin-top:12px;padding:11px 12px;border:1px solid color-mix(in srgb,var(--readiness-color) 24%,${t.border});border-radius:10px;background:color-mix(in srgb,var(--readiness-color) 7%,${t.panel});color:${t.textSec};font-size:11px;line-height:1.55;}
+.dashboard-action-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:14px;margin-bottom:18px;}
+.weak-action-card,.daily-habit-card{position:relative;overflow:hidden;padding:18px 20px!important;border-radius:10px!important;}
+.weak-action-card{border-color:${t.red}35!important;background:linear-gradient(135deg,${t.red}09,${t.surface} 54%,${t.accent}08)!important;}
+.weak-action-card h3,.daily-habit-card h3{font-size:18px;color:${t.text};line-height:1.3;margin:4px 0 6px;}
+.weak-action-card p,.daily-habit-card p{font-size:13px;color:${t.textSec};line-height:1.65;margin:0 0 12px;}
+.weak-action-meta,.daily-habit-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;}
+.weak-action-meta span,.daily-habit-meta span{padding:5px 8px;border-radius:999px;border:1px solid ${t.border};background:${t.panel};color:${t.textSec};font-size:10px;font-weight:900;text-transform:uppercase;}
+.daily-habit-card{border-color:${t.amber}40!important;background:linear-gradient(135deg,${t.amber}12,${t.surface} 58%,${t.green}08)!important;}
+.daily-habit-streak{display:flex;gap:6px;margin:10px 0 13px;}
+.daily-habit-streak span{width:18px;height:18px;border-radius:6px;background:${t.border};border:1px solid ${t.border};}
+.daily-habit-streak span.active{background:linear-gradient(135deg,${t.amber},${t.green});border-color:${t.amber};box-shadow:0 0 0 3px ${t.amber}12;}
 .home-live-card{display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:18px;border:1px solid ${t.border};background:linear-gradient(180deg,${t.surface}f2,${t.panel});box-shadow:0 18px 46px rgba(7,12,24,.16);}
 .home-live-top{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:900;text-transform:uppercase;color:${t.textDim};letter-spacing:.04em;}
 .home-live-top strong{margin-left:auto;font-size:11px;}
@@ -15814,6 +15826,7 @@ body{background:
   .readiness-lab-head{display:grid!important;grid-template-columns:1fr!important;}
   .readiness-level-badge{justify-self:stretch!important;grid-template-columns:auto auto!important;justify-content:flex-start!important;}
   .readiness-lab-body{grid-template-columns:1fr!important;}
+  .dashboard-action-grid{grid-template-columns:1fr!important;}
   .home-live-card{padding:16px!important;}
   .mission-board{padding:16px!important;border-radius:16px!important;}
   .mission-card-grid{grid-template-columns:1fr!important;}
@@ -17646,7 +17659,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
 // ═══════════════════════════════════════════════════════════════
 // DASHBOARD
 // ═══════════════════════════════════════════════════════════════
-function Dashboard({user,attempts,onNav,t}) {
+function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
   const [activeMission,setActiveMission]=useState("mcq");
   const readinessProfile=getReadinessProfile(attempts);
   const questionsDone=readinessProfile.uniqueQuestions;
@@ -17685,6 +17698,19 @@ function Dashboard({user,attempts,onNav,t}) {
     chStats[a.ch].t++;
     if(a.correct)chStats[a.ch].c++;
   });
+  const resolvedCorrectMcqIds=new Set(attempts.filter(attempt=>attempt.mcq&&attempt.correct).map(attempt=>attempt.qid));
+  const weakChapterActions=CHAPTERS.map(ch=>{
+    const chapterAttempts=attempts.filter(attempt=>attempt.mcq&&String(attempt.ch)===ch.id);
+    const missed=chapterAttempts.filter(attempt=>!attempt.correct&&!resolvedCorrectMcqIds.has(attempt.qid));
+    const missedTopics=[...new Set(missed.map(attempt=>attempt.topic).filter(Boolean))];
+    const conceptMatchCount=MCQ_BANK.filter(question=>question.ch===ch.id&&missedTopics.includes(question.topic)).length;
+    const correctCount=chapterAttempts.filter(attempt=>attempt.correct).length;
+    const accuracy=chapterAttempts.length?Math.round((correctCount/chapterAttempts.length)*100):100;
+    return {chapter:ch,total:chapterAttempts.length,missedCount:missed.length,missedTopics,accuracy,reviewCount:Math.min(10,Math.max(missed.length,conceptMatchCount))};
+  })
+    .filter(item=>item.missedCount>0)
+    .sort((a,b)=>a.accuracy-b.accuracy||b.missedCount-a.missedCount);
+  const primaryWeakAction=weakChapterActions[0];
 
   return(
     <div className="dashboard-shell">
@@ -17749,8 +17775,8 @@ function Dashboard({user,attempts,onNav,t}) {
         <div className="readiness-lab-head">
           <div>
             <div className="label" style={{color:readinessColor}}>Your readiness lab</div>
-            <h2>A score you can understand and improve</h2>
-            <p>Readiness combines what you know with how broadly and practically you have trained. It is a SecurePlus study guide, not an official exam prediction.</p>
+            <h2>A study signal, not a promise</h2>
+            <p>Readiness shows whether your practice is broad, accurate, and applied enough to guide the next study move. Use it to choose what to practise, not as a guarantee of the real exam result.</p>
           </div>
           <div className="readiness-level-badge">
             <Gauge size={21} strokeWidth={2.4}/>
@@ -17775,6 +17801,9 @@ function Dashboard({user,attempts,onNav,t}) {
                 : `${readinessProfile.pointsToNextStar} readiness point${readinessProfile.pointsToNextStar===1?"":"s"} to the next preview star.`}
               {" "}When study stars launch, readiness will be one contribution—not the only way to earn them.
             </p>
+            <div className="readiness-trust-note">
+              Trust this as a direction finder: if a pillar is low, practise that area next. Do not use it as an official pass/fail prediction.
+            </div>
           </div>
           <div className="readiness-pillar-grid">
             {readinessProfile.pillars.map(pillar=>(
@@ -17808,6 +17837,50 @@ function Dashboard({user,attempts,onNav,t}) {
           </div>
         ))}
       </div>
+
+      <section className="dashboard-action-grid" aria-label="Dashboard action recommendations">
+        <div className="card weak-action-card">
+          <div className="label" style={{color:primaryWeakAction?t.red:t.green}}>Actionable weak area</div>
+          {primaryWeakAction ? (
+            <>
+              <h3>Repair Chapter {primaryWeakAction.chapter.id}: {primaryWeakAction.chapter.title}</h3>
+              <p>
+                You have {primaryWeakAction.missedCount} unresolved missed MCQ{primaryWeakAction.missedCount===1?"":"s"} here.
+                SecurePlus will launch a {primaryWeakAction.reviewCount}-question Smart Review set focused on the missed concept{primaryWeakAction.missedTopics.length===1?"":"s"} from this chapter.
+              </p>
+              <div className="weak-action-meta">
+                <span>{primaryWeakAction.accuracy}% chapter accuracy</span>
+                <span>{primaryWeakAction.missedTopics.slice(0,2).join(" + ") || "Missed concepts"}</span>
+              </div>
+              <button className="btn btn-primary" onClick={()=>onStartChapterReview?.(primaryWeakAction.chapter.id)}>
+                Start {primaryWeakAction.reviewCount}-question Chapter {primaryWeakAction.chapter.id} Smart Review
+              </button>
+            </>
+          ) : (
+            <>
+              <h3>No unresolved weak chapter yet</h3>
+              <p>Complete a few more MCQs. Once SecurePlus sees a repeated miss in a chapter, this card becomes a one-click repair session.</p>
+              <button className="btn btn-outline" onClick={()=>onNav("mcq")}>Start MCQ Practice</button>
+            </>
+          )}
+        </div>
+        <div className="card daily-habit-card" onClick={()=>onNav("daily")} role="button" tabIndex={0} onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();onNav("daily");}}}>
+          <div className="label" style={{color:t.amber}}>Daily habit</div>
+          <h3>{streakInfo.completedToday?"Daily Challenge complete":"Protect your Daily Challenge streak"}</h3>
+          <p>{streakInfo.completedToday?"You already secured today. Keep the streak visible and return tomorrow for the next short drill.":"Five questions keeps Security+ active in memory without turning every session into a full exam."}</p>
+          <div className="daily-habit-streak" aria-label={`${streakInfo.streak} day streak`}>
+            {weekDots.map((active,index)=><span key={index} className={active?"active":""}/>)}
+          </div>
+          <div className="daily-habit-meta">
+            <span>{streakInfo.streak} day streak</span>
+            <span>Best {streakInfo.best}</span>
+            <span>{isPro?"Pro":"Free"} users</span>
+          </div>
+          <button className="btn btn-primary" onClick={event=>{event.stopPropagation();onNav("daily");}}>
+            {streakInfo.completedToday?"View Daily Challenge":"Start Daily Challenge"}
+          </button>
+        </div>
+      </section>
 
       <section className="mission-board">
         <div className="mission-board-head">
@@ -18134,7 +18207,7 @@ function GuestLockedPage({t,onSignup,onLogin,onPractice,onDaily,title="Save your
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
-function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false}) {
+function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
   const sessionKey=`mcq:${practiceSessionOwner(user)}`;
   const requestSignup=onSignup||onUpgrade;
@@ -18214,11 +18287,45 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
     capture("mcq_missed_review_started", { question_count: pool.length, tier: user.tier });
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);
   };
+  const startChapterSmartReview=useCallback((chapterId)=>{
+    if(!chapterId||isGuest)return;
+    const resolvedIds=new Set(attempts.filter(attempt=>attempt.mcq&&attempt.correct).map(attempt=>attempt.qid));
+    const unresolvedMisses=attempts.filter(attempt=>attempt.mcq&&!attempt.correct&&String(attempt.ch)===String(chapterId)&&!resolvedIds.has(attempt.qid));
+    const missedIds=new Set(unresolvedMisses.map(attempt=>attempt.qid));
+    const missedTopics=new Set(unresolvedMisses.map(attempt=>attempt.topic).filter(Boolean));
+    const directMisses=MCQ_BANK.filter(question=>missedIds.has(question.id));
+    const conceptMatches=MCQ_BANK.filter(question=>String(question.ch)===String(chapterId)&&missedTopics.has(question.topic));
+    const uniquePool=[...directMisses,...rankQuestionsBySm2(conceptMatches,attempts)]
+      .filter((question,index,self)=>question&&self.findIndex(candidate=>candidate.id===question.id)===index)
+      .slice(0,10)
+      .map(shuffleMcqOptions);
+    if(!uniquePool.length)return;
+    setChFilter(String(chapterId));
+    setDiffFilter("all");
+    setTopicFilter("all");
+    setReviewMode("smart");
+    setQuizCount(Math.min(10,uniquePool.length));
+    setQuestions(uniquePool);
+    setQi(0);
+    setSelected(null);
+    setSubmitted(false);
+    setDraftSelections([]);
+    setResults([]);
+    setDone(false);
+    setStarted(true);
+    setStarredView(false);
+    capture("mcq_chapter_smart_review_started", { chapter: String(chapterId), question_count: uniquePool.length, missed_topic_count: missedTopics.size, tier: user.tier });
+  },[attempts,isGuest,user.tier]);
   const startStarredQuiz=()=>{
     const pool=rankQuestionsBySm2(starredMcqs,attempts,new Set(starredMcqs.map(q=>q.id))).slice(0,Math.min(50,starredMcqs.length)).map(shuffleMcqOptions);
     capture("mcq_starred_review_started", { question_count: pool.length, tier: user.tier });
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setStarredView(false);
   };
+
+  useEffect(()=>{
+    if(!smartReviewRequest?.chapterId||!smartReviewRequest?.nonce)return;
+    startChapterSmartReview(smartReviewRequest.chapterId);
+  },[smartReviewRequest?.chapterId,smartReviewRequest?.nonce,startChapterSmartReview]);
 
   useEffect(()=>{
     if(isGuest){setResumeAvailable(false);return;}
@@ -23562,6 +23669,7 @@ export default function App() {
   const [remotePbqBank,setRemotePbqBank]=useState([]);
   const [pbqBankLoading,setPbqBankLoading]=useState(Boolean(isSupabaseConfigured));
   const [pbqBankError,setPbqBankError]=useState(null);
+  const [smartReviewRequest,setSmartReviewRequest]=useState(null);
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
@@ -24060,6 +24168,10 @@ export default function App() {
     capture("question_report_opened", { question_id:report.questionId, question_type:report.questionKind, tier: user?.tier||"guest" });
     setQuestionReport(report);
   },[user?.tier]);
+  const handleStartChapterReview=useCallback(chapterId=>{
+    setSmartReviewRequest({chapterId:String(chapterId),nonce:Date.now()});
+    setView("mcq");
+  },[]);
   const handleEditReportedQuestion=useCallback(target=>{
     if(!target?.id)return;
     setAdminQuestionTarget({...target,nonce:Date.now()});
@@ -24366,9 +24478,9 @@ export default function App() {
             onExpired={handleTrialExpired}
             onUpgrade={()=>setView("pricing")}
           />
-          {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} t={t}/>}
+          {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} t={t}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
-            <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser}/>
+            <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest}/>
           </div>
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading} loadError={pbqBankError}/>
