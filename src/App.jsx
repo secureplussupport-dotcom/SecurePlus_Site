@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
   BookOpenCheck,
   Brain,
+  CalendarDays,
   Check,
   CheckCircle2,
   ChartNoAxesColumnIncreasing,
@@ -470,6 +471,26 @@ function profileName(authUser) {
   return meta.full_name || meta.name || authUser?.email?.split("@")[0] || "SecurePlus User";
 }
 
+function academyJoinedDate(user) {
+  const raw = user?.joined || user?.createdAt || user?.created_at;
+  const date = raw ? new Date(raw) : new Date();
+  return Number.isNaN(date.getTime()) ? new Date() : date;
+}
+
+function formatAcademyJoinedDate(user) {
+  return academyJoinedDate(user).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+}
+
+function getAcademyActiveDays(user) {
+  const joined = academyJoinedDate(user);
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const joinedStart = new Date(joined);
+  joinedStart.setHours(0, 0, 0, 0);
+  const days = Math.floor((todayStart.getTime() - joinedStart.getTime()) / 86400000) + 1;
+  return Math.max(1, days);
+}
+
 function appUserFromProfile(authUser, profile) {
   const trialUntil = profile?.pro_trial_until ? new Date(profile.pro_trial_until) : null;
   const hasReferralTrial = trialUntil && trialUntil.getTime() > Date.now();
@@ -486,6 +507,7 @@ function appUserFromProfile(authUser, profile) {
     referralCode: profile?.referral_code || "",
     totalStars: Number(profile?.total_stars || 0),
     avatarId: profile?.avatar_id || authUser?.user_metadata?.avatar_id || "default-cipher",
+    joined: profile?.created_at || authUser?.created_at || new Date().toISOString(),
     pendingReferralCode,
     authProvider: "supabase",
     loginMethod: authUser?.app_metadata?.provider || "email",
@@ -494,10 +516,10 @@ function appUserFromProfile(authUser, profile) {
 
 async function getSupabaseProfile(authUser) {
   if (!supabase || !authUser) return null;
-  const isMissingProfileColumn=error=>error?.code === "42703" || /total_stars|avatar_id|full_name/i.test(error?.message || "");
+  const isMissingProfileColumn=error=>error?.code === "42703" || /total_stars|avatar_id|full_name|created_at/i.test(error?.message || "");
   let full = await supabase
     .from("profiles")
-    .select("id,email,full_name,avatar_id,tier,subscription_status,pro_trial_until,referral_code,total_stars")
+    .select("id,email,full_name,avatar_id,tier,subscription_status,pro_trial_until,referral_code,total_stars,created_at")
     .eq("id", authUser.id)
     .maybeSingle();
 
@@ -513,7 +535,7 @@ async function getSupabaseProfile(authUser) {
 
   let basic = await supabase
     .from("profiles")
-    .select("id,email,full_name,avatar_id,tier,subscription_status,total_stars")
+    .select("id,email,full_name,avatar_id,tier,subscription_status,total_stars,created_at")
     .eq("id", authUser.id)
     .maybeSingle();
 
@@ -14667,6 +14689,11 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .academy-id-prestige svg{color:var(--academy-tier);filter:drop-shadow(0 4px 6px color-mix(in srgb,var(--academy-tier) 28%,transparent));}
 .academy-id-prestige strong{display:block;margin-top:4px;color:${t.text};font-size:11px;line-height:1.15;}
 .academy-id-prestige small{display:block;margin-top:2px;color:${t.textDim};font-size:8px;text-transform:uppercase;font-weight:900;letter-spacing:.07em;}
+.academy-id-meta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 10px;}
+.academy-id-meta-item{display:flex;align-items:center;gap:8px;min-width:0;padding:8px 10px;border-radius:13px;border:1px solid color-mix(in srgb,var(--academy-tier) 20%,${t.border});background:color-mix(in srgb,var(--academy-tier-bg) 24%,${t.surface});}
+.academy-id-meta-icon{display:grid;place-items:center;width:26px;height:26px;flex:0 0 auto;border-radius:9px;background:color-mix(in srgb,var(--academy-tier) 14%,${t.surface});color:var(--academy-tier);}
+.academy-id-meta-item small{display:block;color:${t.textDim};font-size:7px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;line-height:1.1;}
+.academy-id-meta-item strong{display:block;overflow:hidden;text-overflow:ellipsis;color:${t.text};font-size:11px;line-height:1.2;white-space:nowrap;}
 .academy-id-stars-panel{display:grid;gap:8px;padding:11px 12px;border-radius:16px;background:color-mix(in srgb,var(--academy-tier-bg) 32%,${t.surface});border:1px solid color-mix(in srgb,var(--academy-tier) 24%,${t.border});}
 .academy-id-stars-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;color:${t.textDim};}
 .academy-id-stars-head strong{font-size:10px;color:var(--academy-tier);letter-spacing:.02em;white-space:nowrap;}
@@ -14717,6 +14744,15 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .academy-avatar-choice span{font-size:27px;line-height:1;}
 .academy-avatar-choice strong{font-size:12px;}
 .academy-avatar-choice small{font-size:9px;line-height:1.25;color:${t.textDim};}
+.profile-avatar-panel{display:grid;gap:9px;border-top:1px solid ${t.border};padding-top:12px;}
+.profile-avatar-head{display:flex;align-items:center;gap:9px;}
+.profile-avatar-head strong{display:block;color:${t.text};font-size:13px;}
+.profile-avatar-head span{display:block;color:${t.textDim};font-size:11px;margin-top:1px;}
+.profile-avatar-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}
+.profile-avatar-grid .academy-avatar-choice{border-radius:12px;padding:8px 6px;}
+.profile-avatar-grid .academy-avatar-choice span{font-size:22px;}
+.profile-avatar-grid .academy-avatar-choice strong{font-size:10px;}
+.profile-avatar-grid .academy-avatar-choice small{display:none;}
 .academy-preview-row{display:flex;align-items:center;gap:12px;padding:11px;border-radius:16px;background:${t.panel};border:1px solid ${t.border};}
 .academy-preview-row strong{display:block;color:${t.text};font-size:13px;}
 .academy-preview-row span{display:block;color:${t.textSec};font-size:12px;margin-top:2px;}
@@ -16880,10 +16916,13 @@ function AcademyAvatar({avatarId,size=86}) {
   );
 }
 
-function AcademyIDCard({name="SecurePlus Student",avatarId="default-cipher",totalStars=0,compact=false}) {
+function AcademyIDCard({name="SecurePlus Student",avatarId="default-cipher",totalStars=0,joinedAt=null,compact=false}) {
   const {safeStars,tier,activeStars,tierIndex}=getAcademyStarState(totalStars);
   const [flipped,setFlipped]=useState(false);
   const displayName=(name||"SecurePlus Student").trim();
+  const passUser={joined:joinedAt};
+  const joinedLabel=formatAcademyJoinedDate(passUser);
+  const activeDays=getAcademyActiveDays(passUser);
   const isComplete=safeStars>=ACHIEVEMENT_STAR_TOTAL;
   const nextTier=tierIndex<ACADEMY_STAR_TIERS.length-1 ? ACADEMY_STAR_TIERS[tierIndex+1] : null;
   const nextTarget=nextTier ? (tierIndex+1)*5 : ACHIEVEMENT_STAR_TOTAL;
@@ -16954,6 +16993,16 @@ function AcademyIDCard({name="SecurePlus Student",avatarId="default-cipher",tota
           </div>
         </div>
         <div className="academy-id-stars-panel" aria-label={`${safeStars} of ${ACHIEVEMENT_STAR_TOTAL} stars earned. Current trim: ${tier.name}.`}>
+          <div className="academy-id-meta-grid" aria-label={`Joined ${joinedLabel}. Active for ${activeDays} days.`}>
+            <div className="academy-id-meta-item">
+              <span className="academy-id-meta-icon"><CalendarDays size={14} strokeWidth={2.4}/></span>
+              <div><small>Date joined</small><strong>{joinedLabel}</strong></div>
+            </div>
+            <div className="academy-id-meta-item">
+              <span className="academy-id-meta-icon"><Flame size={14} strokeWidth={2.4}/></span>
+              <div><small>Active days</small><strong>{activeDays} day{activeDays===1?"":"s"}</strong></div>
+            </div>
+          </div>
           <div className="academy-id-stars-head"><span>Earned achievement stars</span><strong>{safeStars} / {ACHIEVEMENT_STAR_TOTAL}</strong></div>
           <div className="academy-id-stars-row">
             {Array.from({length:5},(_,index)=>(
@@ -17253,10 +17302,11 @@ function loginMethodLabel(user) {
   if(method.includes("supabase")) return "Supabase email login";
   return "Local demo account";
 }
-function ProfileMenu({user,t,onUpdateProfile,onChangePassword,onLogout,compact=false}) {
+function ProfileMenu({user,t,onUpdateProfile,onUpdateAvatar,onChangePassword,onLogout,compact=false}) {
   const menuRef=useRef(null);
   const [open,setOpen]=useState(false);
   const [name,setName]=useState(user?.name||"");
+  const [avatarId,setAvatarId]=useState(user?.avatarId||"default-cipher");
   const [password,setPassword]=useState("");
   const [confirm,setConfirm]=useState("");
   const [msg,setMsg]=useState("");
@@ -17265,6 +17315,7 @@ function ProfileMenu({user,t,onUpdateProfile,onChangePassword,onLogout,compact=f
   const isGoogle=(user?.loginMethod||"").toLowerCase().includes("google");
 
   useEffect(()=>setName(user?.name||""),[user?.name]);
+  useEffect(()=>setAvatarId(user?.avatarId||"default-cipher"),[user?.avatarId]);
   useEffect(()=>{
     if(!open)return;
     const closeOnOutside=e=>{
@@ -17300,13 +17351,25 @@ function ProfileMenu({user,t,onUpdateProfile,onChangePassword,onLogout,compact=f
       setErr(e.message||"Unable to update password.");
     }finally{setSaving(false);}
   };
+  const saveAvatar=async nextAvatarId=>{
+    if(nextAvatarId===avatarId)return;
+    setErr("");setMsg("");
+    setAvatarId(nextAvatarId);
+    setSaving(true);
+    try{
+      await onUpdateAvatar(nextAvatarId);
+      const picked=ACADEMY_AVATAR_MAP[nextAvatarId];
+      setMsg(`${picked?.label || "Avatar"} saved to your Academy Pass.`);
+    }catch(e){
+      setAvatarId(user?.avatarId||"default-cipher");
+      setErr(e.message||"Unable to update avatar.");
+    }finally{setSaving(false);}
+  };
 
   return(
     <div ref={menuRef} className={`profile-menu ${compact?"mobile-profile":""}`}>
       <button className="btn btn-ghost" style={{width:compact?36:"100%",minHeight:compact?36:44,padding:compact?0:"7px 8px",justifyContent:compact?"center":"flex-start"}} onClick={()=>setOpen(o=>!o)} aria-label="Open profile settings">
-        <span style={{width:30,height:30,borderRadius:"50%",background:`${t.accent}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:t.accent,flexShrink:0}}>
-          {user.name[0]?.toUpperCase()}
-        </span>
+        <AcademyAvatar avatarId={user.avatarId} size={30}/>
         {!compact&&(
           <span style={{minWidth:0,textAlign:"left"}}>
             <span style={{display:"block",fontSize:13,fontWeight:700,color:t.text,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{user.name}</span>
@@ -17334,6 +17397,30 @@ function ProfileMenu({user,t,onUpdateProfile,onChangePassword,onLogout,compact=f
               <div style={{display:"flex",gap:8}}>
                 <input className="input" value={name} onChange={e=>setName(e.target.value)} placeholder="Your display name"/>
                 <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={saveName} disabled={saving}>Save</button>
+              </div>
+            </div>
+            <div className="profile-avatar-panel">
+              <div className="profile-avatar-head">
+                <AcademyAvatar avatarId={avatarId} size={38}/>
+                <div><strong>Academy avatar</strong><span>Pick a new pass companion anytime.</span></div>
+              </div>
+              <div className="profile-avatar-grid" role="radiogroup" aria-label="Change Academy avatar">
+                {ACADEMY_AVATARS.map(avatar=>(
+                  <button
+                    type="button"
+                    key={avatar.id}
+                    className={`academy-avatar-choice ${avatarId===avatar.id?"selected":""}`}
+                    style={{"--avatar-tone":avatar.tone}}
+                    role="radio"
+                    aria-checked={avatarId===avatar.id}
+                    onClick={()=>saveAvatar(avatar.id)}
+                    disabled={saving}
+                  >
+                    <span>{avatar.emoji}</span>
+                    <strong>{avatar.label}</strong>
+                    <small>{avatar.hint}</small>
+                  </button>
+                ))}
               </div>
             </div>
             <div style={{borderTop:`1px solid ${t.border}`,paddingTop:12}}>
@@ -17827,7 +17914,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             email,
             password: form.pass,
             options: {
-              data: { name: form.name, full_name: form.name, pending_referral_code: referralCode },
+              data: { name: form.name, full_name: form.name, avatar_id: form.avatarId || "default-cipher", pending_referral_code: referralCode },
               emailRedirectTo: window.location.origin,
             },
           });
@@ -17862,7 +17949,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           const exists=await DB.getUser(email);
           if(exists){setErr("An account with this email already exists.");setLoading(false);return;}
           const trialUntil = referralCode ? new Date(Date.now()+7*24*60*60*1000).toISOString() : null;
-          const user={name:form.name,email,password:form.pass,tier:trialUntil?"pro":"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:trialUntil,referralCode:makeReferralCode(email)};
+          const user={name:form.name,email,password:form.pass,tier:trialUntil?"pro":"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:trialUntil,referralCode:makeReferralCode(email),avatarId:form.avatarId || "default-cipher",totalStars:0};
           await DB.saveUser(user);
           await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
           setOk("Account created! Welcome to SecurePlus.");
@@ -18206,7 +18293,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
                 </div>
                 <Alert msg={ok} type="success" t={t}/>
                 <div className="academy-reveal-card">
-                  <AcademyIDCard name={mintedUser.name} avatarId={mintedUser.avatarId} totalStars={mintedUser.totalStars||0}/>
+                  <AcademyIDCard name={mintedUser.name} avatarId={mintedUser.avatarId} totalStars={mintedUser.totalStars||0} joinedAt={mintedUser.joined}/>
                 </div>
                 <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",marginTop:14}} onClick={()=>onLogin(mintedUser)}>
                   Enter the Academy →
@@ -18440,7 +18527,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
             <small>Each 5-star milestone unlocks a new pass trim.</small>
           </div>
         </div>
-        <AcademyIDCard name={user.name} avatarId={user.avatarId} totalStars={user.totalStars||0} compact/>
+        <AcademyIDCard name={user.name} avatarId={user.avatarId} totalStars={user.totalStars||0} joinedAt={user.joined} compact/>
       </section>
 
       <section className={`card readiness-lab readiness-${readinessProfile.tone}`} style={{"--readiness-color":readinessColor}}>
@@ -24831,6 +24918,22 @@ export default function App() {
     await DB.saveSession({email:updated.email,name:updated.name,tier:updated.tier,loggedIn:true});
     setUser(updated);identifyUser(updated);
   },[user]);
+  const handleUpdateAvatar=useCallback(async avatarId=>{
+    if(!user)return;
+    const clean=ACADEMY_AVATAR_MAP[avatarId] ? avatarId : "default-cipher";
+    if(user.authProvider==="supabase"){
+      const { data, error } = await supabase.auth.updateUser({ data: { avatar_id: clean } });
+      if(error) throw error;
+      await updateSupabaseAcademyProfile(user.id,{fullName:user.name,avatarId:clean});
+      const updated={...user,avatarId:clean,loginMethod:data?.user?.app_metadata?.provider || user.loginMethod || "email"};
+      setUser(updated);identifyUser(updated);
+      return;
+    }
+    const updated={...user,avatarId:clean,authProvider:user.authProvider||"local",loginMethod:user.loginMethod||"local"};
+    await DB.saveUser(updated);
+    await DB.saveSession({email:updated.email,name:updated.name,tier:updated.tier,loggedIn:true});
+    setUser(updated);identifyUser(updated);
+  },[user]);
   const handleChangePassword=useCallback(async password=>{
     if(!user)return;
     if((user.loginMethod||"").toLowerCase().includes("google")){
@@ -25329,7 +25432,7 @@ export default function App() {
 
           {/* User */}
           <div style={{padding:"12px 14px",borderBottom:`1px solid ${t.border}`}}>
-            <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onChangePassword={handleChangePassword} onLogout={handleLogout}/>
+            <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onUpdateAvatar={handleUpdateAvatar} onChangePassword={handleChangePassword} onLogout={handleLogout}/>
           </div>
 
           {/* Nav */}
@@ -25364,7 +25467,7 @@ export default function App() {
               <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
                 {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
               </button>
-              <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onChangePassword={handleChangePassword} onLogout={handleLogout} compact/>
+              <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onUpdateAvatar={handleUpdateAvatar} onChangePassword={handleChangePassword} onLogout={handleLogout} compact/>
             </div>
           </div>
           <TrialCountdownBanner
