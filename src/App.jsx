@@ -14491,7 +14491,7 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .trial-countdown-value{font-family:'Montserrat',system-ui,sans-serif;font-size:22px;font-weight:900;color:${t.green};line-height:1;}
 .trial-countdown-label{font-size:10px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:${t.textDim};margin-top:5px;}
 .question-card{padding:24px 26px!important;margin-bottom:18px!important;background:linear-gradient(180deg,${t.surface},${t.panel})!important;border-color:${t.accent}26!important;box-shadow:0 14px 30px rgba(7,12,24,.09)!important;}
-.question-text{font-family:'Montserrat',system-ui,sans-serif!important;font-size:20px!important;line-height:1.7!important;color:${t.bg==="#0b1020"?"#E2E8F0":t.text}!important;font-weight:800!important;letter-spacing:0!important;overflow-wrap:anywhere;}
+.question-text{font-family:'Montserrat',system-ui,sans-serif!important;font-size:20px!important;line-height:1.7!important;color:${t.bg==="#0b1020"?"#E2E8F0":t.text}!important;font-weight:800!important;letter-spacing:0!important;overflow-wrap:anywhere;white-space:pre-wrap;}
 .scenario-text{font-size:16px!important;line-height:1.8!important;color:${t.textSec}!important;overflow-wrap:anywhere;}
 .question-prompt{font-family:'Montserrat',system-ui,sans-serif!important;font-size:18px!important;line-height:1.65!important;color:${t.text}!important;font-weight:800!important;margin-bottom:14px!important;}
 .option-text{font-size:17px!important;line-height:1.58!important;color:${t.text}!important;font-weight:750!important;overflow-wrap:anywhere;}
@@ -14773,6 +14773,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .answer-burst-title{font-weight:900;color:${t.text};font-size:15px;}
 .answer-burst-body{font-size:12px;color:${t.textSec};line-height:1.45;}
 .cipher-mascot{--cipher-size:96px;--cipher-motion-duration:2.8s;--pet-cycle:2.8s;position:relative;display:inline-block;width:var(--cipher-size);aspect-ratio:4 / 3;transform-origin:50% 88%;will-change:transform;filter:drop-shadow(0 12px 24px ${t.accent}24);animation:cipherIdleMotion var(--cipher-motion-duration) cubic-bezier(.45,0,.25,1) infinite;}
+.cipher-mascot-interactive{appearance:none;padding:0;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;pointer-events:auto;}
+.cipher-mascot-interactive:focus-visible{outline:3px solid ${t.accent};outline-offset:5px;border-radius:18px;}
+.cipher-mascot-interactive:active{filter:drop-shadow(0 9px 18px ${t.accent}32) brightness(1.06);}
 .cipher-rig{position:absolute;inset:0;isolation:isolate;}
 .cipher-aura{position:absolute;z-index:0;inset:6% 16%;border-radius:50%;background:radial-gradient(circle,${t.accent}32,transparent 68%);opacity:.08;animation:cipherAuraBreathe var(--pet-cycle) ease-in-out infinite;}
 .cipher-ground-shadow{position:absolute;z-index:0;left:50%;bottom:5%;width:38%;height:7%;border-radius:50%;background:radial-gradient(ellipse,rgba(3,8,20,.54),transparent 72%);transform:translateX(-50%);animation:cipherGroundShadow var(--cipher-motion-duration) ease-in-out infinite;}
@@ -14805,6 +14808,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-effect-flame{right:8%;top:27%;color:#55d9ff;font-size:calc(var(--cipher-size) * .2);text-shadow:0 0 15px #229cff;}
 .cipher-effect-thought{right:6%;top:22%;padding:4% 6%;border:2px solid #5ce9ff;border-radius:25%;background:#08204c;color:#72f4ff;font-size:calc(var(--cipher-size) * .08);letter-spacing:.05em;box-shadow:0 0 14px rgba(65,215,255,.45);}
 .cipher-effect-tip{right:5%;top:20%;color:#fde047;font-size:calc(var(--cipher-size) * .22);text-shadow:0 0 14px #f59e0b;}
+.cipher-effect-note{right:5%;top:18%;color:#c084fc;font-size:calc(var(--cipher-size) * .2);text-shadow:0 0 13px #8b5cf6;}
+.cipher-effect-scan{left:19%;top:31%;width:62%;height:2px;background:#67f5ff;box-shadow:0 0 6px #25d9ff,0 0 14px #25d9ff;}
 .cipher-motion-blink{--cipher-motion-duration:2.2s;animation-name:cipherBlinkMotion;}
 .cipher-motion-correct{--cipher-motion-duration:1.25s;animation-name:cipherCorrectMotion;animation-timing-function:cubic-bezier(.34,1.35,.64,1);}
 .cipher-motion-wrong{--cipher-motion-duration:1.5s;animation-name:cipherWrongMotion;animation-timing-function:ease-in-out;}
@@ -14812,6 +14817,12 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-motion-streak{--cipher-motion-duration:1.45s;animation-name:cipherStreakMotion;animation-timing-function:cubic-bezier(.34,1.3,.64,1);}
 .cipher-motion-thinking{--cipher-motion-duration:2.35s;animation-name:cipherThinkingMotion;animation-timing-function:ease-in-out;}
 .cipher-motion-tip{--cipher-motion-duration:1.9s;animation-name:cipherTipMotion;animation-timing-function:ease-in-out;}
+.cipher-motion-wave{--cipher-motion-duration:1.65s;animation-name:cipherWaveMotion;animation-timing-function:ease-in-out;}
+.cipher-motion-dance{--cipher-motion-duration:1.35s;animation-name:cipherDanceMotion;animation-timing-function:cubic-bezier(.45,0,.25,1);}
+.cipher-motion-scan{--cipher-motion-duration:2.2s;animation-name:cipherScanMotion;animation-timing-function:ease-in-out;}
+.cipher-motion-focus{--cipher-motion-duration:2.6s;animation-name:cipherFocusMotion;animation-timing-function:ease-in-out;}
+.cipher-motion-cheer{--cipher-motion-duration:1.25s;animation-name:cipherCheerMotion;animation-timing-function:cubic-bezier(.34,1.3,.64,1);}
+.cipher-motion-surprised{--cipher-motion-duration:1.05s;animation-name:cipherSurprisedMotion;animation-timing-function:cubic-bezier(.34,1.45,.64,1);}
 .cipher-motion-blink .cipher-eye{animation-name:cipherEyeBlinkFocus;animation-duration:2.2s;}
 .cipher-motion-correct .cipher-head,.cipher-motion-streak .cipher-head{animation-name:cipherHeadCelebrate;}
 .cipher-motion-correct .cipher-body,.cipher-motion-streak .cipher-body{animation-name:cipherBodyCelebrate;}
@@ -14840,6 +14851,34 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-motion-tip .cipher-head{animation-name:cipherHeadTip;}
 .cipher-motion-tip .cipher-arm-right{animation-name:cipherArmPoint;}
 .cipher-motion-tip .cipher-effect-tip{animation:cipherTipGlow var(--pet-cycle) ease-in-out infinite;}
+.cipher-motion-wave .cipher-head{animation-name:cipherHeadWave;}
+.cipher-motion-wave .cipher-arm-right{animation-name:cipherArmWave;}
+.cipher-motion-wave .cipher-effect-tip{animation:cipherWaveSpark var(--pet-cycle) ease-in-out infinite;}
+.cipher-motion-dance .cipher-head{animation-name:cipherHeadDance;}
+.cipher-motion-dance .cipher-arm-left{animation-name:cipherArmDanceLeft;}
+.cipher-motion-dance .cipher-arm-right{animation-name:cipherArmDanceRight;}
+.cipher-motion-dance .cipher-leg-left{animation-name:cipherLegDanceLeft;}
+.cipher-motion-dance .cipher-leg-right{animation-name:cipherLegDanceRight;}
+.cipher-motion-dance .cipher-effect-note{animation:cipherMusicPop var(--pet-cycle) ease-in-out infinite;}
+.cipher-motion-scan .cipher-head{animation-name:cipherHeadScan;}
+.cipher-motion-scan .cipher-eye{animation:none;height:6%;}
+.cipher-motion-scan .cipher-effect-scan{animation:cipherScanBeam var(--pet-cycle) ease-in-out infinite;}
+.cipher-motion-focus .cipher-head{animation-name:cipherHeadFocus;}
+.cipher-motion-focus .cipher-arm-left{animation-name:cipherArmFocusLeft;}
+.cipher-motion-focus .cipher-arm-right{animation-name:cipherArmFocusRight;}
+.cipher-motion-focus .cipher-effect-thought{animation:cipherFocusPulse var(--pet-cycle) ease-in-out infinite;}
+.cipher-motion-cheer .cipher-head{animation-name:cipherHeadCelebrate;}
+.cipher-motion-cheer .cipher-body{animation-name:cipherBodyCelebrate;}
+.cipher-motion-cheer .cipher-arm-left{animation-name:cipherArmCelebrateLeft;}
+.cipher-motion-cheer .cipher-arm-right{animation-name:cipherArmCelebrateRight;}
+.cipher-motion-cheer .cipher-effect-check{animation:cipherEffectPop var(--pet-cycle) cubic-bezier(.2,1.5,.4,1) infinite;}
+.cipher-motion-cheer .cipher-effect-tip{animation:cipherWaveSpark var(--pet-cycle) ease-in-out infinite;animation-delay:.14s;}
+.cipher-motion-surprised .cipher-head{animation-name:cipherHeadSurprised;}
+.cipher-motion-surprised .cipher-arm-left{animation-name:cipherArmSurprisedLeft;}
+.cipher-motion-surprised .cipher-arm-right{animation-name:cipherArmSurprisedRight;}
+.cipher-motion-surprised .cipher-eye{animation:none;width:14%;height:24%;top:34%;border-radius:50%;}
+.cipher-motion-surprised .cipher-mouth{left:43%;bottom:9%;width:14%;height:15%;border-radius:50%;}
+.cipher-motion-surprised .cipher-effect-alert{animation:cipherEffectPop var(--pet-cycle) ease-in-out infinite;}
 .cipher-mascot.slow{--cipher-motion-duration:3.6s;--pet-cycle:3.6s;}
 .cipher-mascot.fast{--cipher-motion-duration:1.25s;--pet-cycle:1.25s;}
 .cipher-mascot.once,.cipher-mascot.once .cipher-rig *{animation-iteration-count:1;animation-fill-mode:both;}
@@ -14979,6 +15018,61 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   64%{transform:translate3d(1%,-2%,0) rotate(1deg)}
   82%{transform:translate3d(-1%,-4%,0) rotate(-1deg) scale(1.015)}
 }
+@keyframes cipherWaveMotion{
+  0%,100%{transform:translate3d(0,0,0) rotate(0)}
+  28%{transform:translate3d(-2%,-4%,0) rotate(-2deg)}
+  58%{transform:translate3d(2%,-6%,0) rotate(2deg) scale(1.025)}
+  82%{transform:translate3d(0,-2%,0) rotate(-1deg)}
+}
+@keyframes cipherDanceMotion{
+  0%,100%{transform:translate3d(0,0,0) rotate(-3deg) scale(1)}
+  20%{transform:translate3d(-5%,-7%,0) rotate(-7deg) scale(1.03,.98)}
+  44%{transform:translate3d(5%,-2%,0) rotate(7deg) scale(.98,1.03)}
+  68%{transform:translate3d(-3%,-9%,0) rotate(-5deg) scale(1.04,.97)}
+  86%{transform:translate3d(3%,-3%,0) rotate(4deg)}
+}
+@keyframes cipherScanMotion{
+  0%,100%{transform:translate3d(-2%,0,0) rotate(-1deg)}
+  35%{transform:translate3d(2%,-3%,0) rotate(1.5deg)}
+  68%{transform:translate3d(0,-1%,0) rotate(0) scale(1.015)}
+}
+@keyframes cipherFocusMotion{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  40%{transform:translate3d(0,-2%,0) scale(.995,1.015)}
+  72%{transform:translate3d(0,1%,0) scale(1.015,.99)}
+}
+@keyframes cipherCheerMotion{
+  0%,100%{transform:translate3d(0,0,0) rotate(0) scale(1)}
+  18%{transform:translate3d(0,5%,0) rotate(-2deg) scale(1.06,.9)}
+  44%{transform:translate3d(0,-20%,0) rotate(4deg) scale(.94,1.09)}
+  68%{transform:translate3d(0,-8%,0) rotate(-2deg) scale(1.02)}
+  84%{transform:translate3d(0,2%,0) scale(1.06,.94)}
+}
+@keyframes cipherSurprisedMotion{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  18%{transform:translate3d(0,5%,0) scale(1.1,.88)}
+  42%{transform:translate3d(0,-14%,0) rotate(-3deg) scale(.92,1.13)}
+  68%{transform:translate3d(0,-5%,0) rotate(2deg) scale(1.04,.97)}
+  84%{transform:translate3d(0,1%,0) scale(1.02,.96)}
+}
+@keyframes cipherHeadWave{0%,100%{transform:translateY(0) rotate(-2deg)}38%{transform:translateY(-4%) rotate(6deg)}68%{transform:translateY(-2%) rotate(2deg)}}
+@keyframes cipherArmWave{0%,100%{transform:rotate(-18deg)}18%{transform:rotate(-122deg) translateY(-5%)}36%{transform:rotate(-148deg) translateY(-7%)}54%{transform:rotate(-112deg) translateY(-5%)}72%{transform:rotate(-150deg) translateY(-7%)}86%{transform:rotate(-62deg)}}
+@keyframes cipherWaveSpark{0%,18%,100%{opacity:0;transform:translate(-10%,12%) scale(.45) rotate(-16deg)}38%,72%{opacity:1;transform:translate(5%,-8%) scale(1.12) rotate(10deg)}}
+@keyframes cipherHeadDance{0%,100%{transform:rotate(-6deg) translateY(0)}25%{transform:rotate(8deg) translateY(-3%)}50%{transform:rotate(-8deg) translateY(-1%)}75%{transform:rotate(7deg) translateY(-4%)}}
+@keyframes cipherArmDanceLeft{0%,100%{transform:rotate(36deg)}25%{transform:rotate(-54deg)}50%{transform:rotate(74deg)}75%{transform:rotate(-38deg)}}
+@keyframes cipherArmDanceRight{0%,100%{transform:rotate(-58deg)}25%{transform:rotate(38deg)}50%{transform:rotate(-82deg)}75%{transform:rotate(52deg)}}
+@keyframes cipherLegDanceLeft{0%,100%{transform:rotate(3deg) translateY(0)}40%{transform:rotate(25deg) translateY(-9%)}70%{transform:rotate(-12deg)}}
+@keyframes cipherLegDanceRight{0%,100%{transform:rotate(-18deg) translateY(-7%)}40%{transform:rotate(9deg) translateY(0)}70%{transform:rotate(-24deg) translateY(-10%)}}
+@keyframes cipherMusicPop{0%,14%,100%{opacity:0;transform:translate(-15%,12%) rotate(-12deg) scale(.5)}34%,68%{opacity:1;transform:translate(10%,-14%) rotate(10deg) scale(1.08)}}
+@keyframes cipherHeadScan{0%,100%{transform:translateX(-4%) rotate(-5deg)}45%{transform:translateX(4%) rotate(5deg)}70%{transform:translateX(1%) rotate(1deg)}}
+@keyframes cipherScanBeam{0%,12%,100%{opacity:0;transform:translateY(-500%) scaleX(.55)}28%{opacity:1;transform:translateY(-140%) scaleX(1)}66%{opacity:1;transform:translateY(650%) scaleX(.9)}82%{opacity:0;transform:translateY(820%) scaleX(.45)}}
+@keyframes cipherHeadFocus{0%,100%{transform:translateY(2%) rotate(-3deg)}38%{transform:translateY(5%) rotate(3deg)}68%{transform:translateY(1%) rotate(0)}}
+@keyframes cipherArmFocusLeft{0%,100%{transform:rotate(18deg)}38%,72%{transform:rotate(-42deg) translate(3%,4%)}}
+@keyframes cipherArmFocusRight{0%,100%{transform:rotate(-18deg)}38%,72%{transform:rotate(42deg) translate(-3%,4%)}}
+@keyframes cipherFocusPulse{0%,100%{opacity:.18;transform:translateY(10%) scale(.65)}40%,70%{opacity:.92;transform:translateY(-5%) scale(.94)}}
+@keyframes cipherHeadSurprised{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-8%) rotate(-4deg)}58%{transform:translateY(-4%) rotate(4deg)}}
+@keyframes cipherArmSurprisedLeft{0%,100%{transform:rotate(18deg)}28%,68%{transform:rotate(76deg) translateY(-5%)}}
+@keyframes cipherArmSurprisedRight{0%,100%{transform:rotate(-18deg)}28%,68%{transform:rotate(-76deg) translateY(-5%)}}
 @keyframes cipherGroundShadow{
   0%,100%{transform:translateX(-50%) scaleX(1);opacity:.3}
   45%{transform:translateX(-50%) scaleX(.68);opacity:.16}
@@ -15305,6 +15399,19 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .site-mascot-placement[data-horizontal="right"]{flex-direction:row-reverse;}
 .site-mascot-placement .cipher-mascot{filter:drop-shadow(0 12px 22px rgba(0,0,0,.28));flex:0 0 auto;}
 .site-mascot-message{padding:9px 11px;border:1px solid ${t.border};border-radius:9px;background:color-mix(in srgb,${t.surface} 94%,transparent);box-shadow:0 12px 30px rgba(0,0,0,.18);color:${t.text};font-size:11px;font-weight:850;line-height:1.45;backdrop-filter:blur(10px);}
+.mascot-guide{display:flex;align-items:center;gap:10px;width:max-content;max-width:min(100%,330px);position:relative;isolation:isolate;}
+.mascot-guide.side-left{flex-direction:row-reverse;}
+.mascot-guide .cipher-mascot{flex:0 0 auto;filter:drop-shadow(0 13px 25px ${t.accent}2c);}
+.mascot-guide-copy{display:grid;gap:5px;min-width:0;}
+.mascot-guide-message{position:relative;display:block;padding:10px 12px;border:1px solid ${t.accent}38;border-radius:12px;background:linear-gradient(145deg,${t.surface}f7,${t.accent}0d);box-shadow:0 12px 28px rgba(7,12,24,.13);color:${t.text};font-size:12px;font-weight:850;line-height:1.45;backdrop-filter:blur(12px);}
+.mascot-guide-message::before{content:"";position:absolute;left:-6px;top:50%;width:10px;height:10px;transform:translateY(-50%) rotate(45deg);border-left:1px solid ${t.accent}38;border-bottom:1px solid ${t.accent}38;background:${t.surface};}
+.mascot-guide.side-left .mascot-guide-message::before{left:auto;right:-6px;transform:translateY(-50%) rotate(225deg);}
+.mascot-guide-hint{font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:${t.textDim};padding-left:8px;}
+.mascot-guide-lesson{margin:8px 0 10px auto;z-index:3;}
+.mascot-guide-smart,.mascot-guide-auth{margin-top:18px;}
+.mascot-guide-page{margin:0 0 18px auto;}
+.mascot-guide-hero{margin-top:16px;}
+.upgrade-hero .mascot-guide{margin-left:auto;margin-right:auto;}
 .site-mascot-placement.anchor-top-left{top:22px;left:22px;}
 .site-mascot-placement.anchor-top-center{top:22px;left:50%;translate:-50% 0;}
 .site-mascot-placement.anchor-top-right{top:22px;right:22px;}
@@ -15617,6 +15724,12 @@ body{background:
   .mascot-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .site-mascot-placement{max-width:70vw!important;}
   .site-mascot-placement .cipher-mascot{--cipher-size:min(var(--mascot-mobile-size),92px)!important;}
+  .mascot-guide{max-width:100%!important;gap:7px!important;}
+  .mascot-guide .cipher-mascot{--cipher-size:74px!important;}
+  .mascot-guide-message{padding:9px 10px!important;font-size:11px!important;}
+  .mascot-guide-hint{font-size:8px!important;}
+  .mascot-guide-lesson{margin:4px 0 8px auto!important;}
+  .mascot-guide-page{margin:0 0 14px auto!important;}
   .app-main>.site-mascot-placement.anchor-top-left,.app-main>.site-mascot-placement.anchor-middle-left,.app-main>.site-mascot-placement.anchor-bottom-left{left:12px!important;}
   .app-main>.site-mascot-placement.anchor-top-right,.app-main>.site-mascot-placement.anchor-middle-right,.app-main>.site-mascot-placement.anchor-bottom-right{right:12px!important;}
   .app-main>.site-mascot-placement.anchor-top-left,.app-main>.site-mascot-placement.anchor-top-center,.app-main>.site-mascot-placement.anchor-top-right{top:76px!important;}
@@ -15763,7 +15876,7 @@ function GlossaryText({text,t,style}) {
   });
 
   return(
-    <span ref={wrapRef} style={style}>
+    <span ref={wrapRef} style={{whiteSpace:"pre-wrap",overflowWrap:"anywhere",...style}}>
       {parts.map((part,index)=>{
         const term=part.term?normalize(part.text):null;
         if(!term) return <span key={`${part.text}-${index}`} style={formatStyle(part)}>{part.text}</span>;
@@ -15801,10 +15914,10 @@ function GlossaryText({text,t,style}) {
 function splitQuestionStem(text) {
   const value=String(text||"").trim();
   if(!value)return {context:"",question:""};
+  if(value.includes("\n"))return {context:"",question:value};
   const questionEnd=value.indexOf("?");
   if(questionEnd<0)return {context:"",question:value};
   const before=value.slice(0,questionEnd+1);
-  const after=value.slice(questionEnd+1).trim();
   const sentenceStart=Math.max(
     before.lastIndexOf(". "),
     before.lastIndexOf("! "),
@@ -15813,20 +15926,20 @@ function splitQuestionStem(text) {
   );
   const start=sentenceStart>=0 ? sentenceStart+(before[sentenceStart]==="\n"?1:2) : 0;
   const context=value.slice(0,start).trim();
-  const question=(value.slice(start,questionEnd+1)+(after?` ${after}`:"")).trim();
+  const question=value.slice(start).trim();
   return {context,question};
 }
 function QuestionStemText({text,t,style,compact=false}) {
   const {context,question}=splitQuestionStem(text);
   if(!context) {
-    return <span style={{fontWeight:900,color:t.text,...style}}><GlossaryText text={question} t={t}/></span>;
+    return <span style={{fontWeight:900,color:t.text,whiteSpace:"pre-wrap",overflowWrap:"anywhere",...style}}><GlossaryText text={question} t={t}/></span>;
   }
   return(
-    <span style={style}>
-      <span style={{display:"block",fontWeight:compact?600:650,color:t.textSec,lineHeight:1.72,marginBottom:compact?6:10}}>
+    <span style={{whiteSpace:"pre-wrap",overflowWrap:"anywhere",...style}}>
+      <span style={{display:"block",fontWeight:compact?600:650,color:t.textSec,lineHeight:1.72,marginBottom:compact?6:10,whiteSpace:"pre-wrap"}}>
         <GlossaryText text={context} t={t}/>
       </span>
-      <span style={{display:"block",fontWeight:950,color:t.text,lineHeight:1.58}}>
+      <span style={{display:"block",fontWeight:950,color:t.text,lineHeight:1.58,whiteSpace:"pre-wrap"}}>
         <GlossaryText text={question} t={t}/>
       </span>
     </span>
@@ -16371,6 +16484,14 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
           </span>
         )}
       </div>
+      <MascotGuide
+        animation={streakInfo.completedToday?"cheer":"dance"}
+        size={88}
+        context="daily-challenge"
+        message={streakInfo.completedToday?"Today’s streak is safe—great work!":"Five questions. One small win. Let’s go!"}
+        className="mascot-guide-page"
+        side="left"
+      />
       <div className="card" style={{padding:"20px 24px",margin:"24px 0",textAlign:"left"}}>
         <div className="section-icon" style={{"--section-color":t.red,marginBottom:10}}><Target size={21} strokeWidth={2.2}/></div>
         <div style={{fontWeight:600,fontSize:16,marginBottom:6,color:t.text}}>{challenge.title}</div>
@@ -16886,6 +17007,13 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
               </div>
               <span className="brilliant-lesson-duration">2 min</span>
             </div>
+            <MascotGuide
+              animation="wave"
+              size={78}
+              context="landing-warmup"
+              message="Hover or tap me before your warm-up!"
+              className="mascot-guide-lesson"
+            />
             <div id="daily-challenge" className="landing-section brilliant-daily-wrap">
               <LandingDailyChallengeWidget
                 t={t}
@@ -16945,6 +17073,13 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
             <div className="smart-example">
               <strong>Example:</strong> Got 2.4 wrong? It comes back tomorrow. Got it right? It waits a week.
             </div>
+            <MascotGuide
+              animation="scan"
+              size={82}
+              context="landing-smart-review"
+              message="I’m scanning for the topics that need another look."
+              className="mascot-guide-smart"
+            />
           </div>
           <div className="card" style={{padding:"20px"}}>
             <div className="smart-compare">
@@ -17032,6 +17167,13 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
                 <div><strong>Stay in control</strong><span>The free plan includes all MCQs. Pro remains completely optional.</span></div>
               </div>
             </div>
+            <MascotGuide
+              animation="focus"
+              size={86}
+              context="landing-signup"
+              message="Create a free account and I’ll help keep your study momentum visible."
+              className="mascot-guide-auth"
+            />
           </div>
 
           <div className="card auth-conversion-card">
@@ -17230,6 +17372,13 @@ function Dashboard({user,attempts,onNav,t}) {
             <span>Smart Review</span>
             <span>{isPro?"Pro active":"Free plan"}</span>
           </div>
+          <MascotGuide
+            animation={questionsDone?"scan":"wave"}
+            size={88}
+            context="dashboard"
+            message={questionsDone?"I’m watching your progress for the next useful move.":"Let’s complete your first focused set together."}
+            className="mascot-guide-hero"
+          />
         </div>
         <div className="home-hero-panel">
           <div className="readiness-orbit" style={{"--readiness":`${readiness}%`}}>
@@ -17491,6 +17640,13 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
             <span>{PBQ_BANK.length} PBQs</span>
             <span>Progress saved automatically</span>
           </div>
+          <MascotGuide
+            animation="wave"
+            size={86}
+            context="guest-dashboard"
+            message="Tap me for a study-energy boost!"
+            className="mascot-guide-hero"
+          />
           <button className="landing-login-link" onClick={onLogin}>Already studying with us? Log in</button>
         </div>
         <div className="brilliant-lesson-shell">
@@ -17838,6 +17994,15 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
           <span className="practice-meta-pill">SY0-701</span>
         </div>
       </header>
+
+      <MascotGuide
+        animation="focus"
+        size={82}
+        context="mcq-setup"
+        message="Choose a focus and I’ll cheer when the set begins."
+        className="mascot-guide-page"
+        side="left"
+      />
 
       {resumeAvailable&&(
         <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
@@ -18325,6 +18490,15 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
           <span className="practice-meta-pill">{isPro?"Pro access":"1 free preview"}</span>
         </div>
       </header>
+
+      <MascotGuide
+        animation="scan"
+        size={84}
+        context="pbq-bank"
+        message="I’m scanning the PBQ formats for your next challenge."
+        className="mascot-guide-page"
+        side="left"
+      />
 
       <section className="pbq-bank-hero">
         <div className="pbq-bank-hero-copy">
@@ -19979,6 +20153,12 @@ const MASCOT_ANIMATION_OPTIONS = [
   {id:"streak",label:"Streak",description:"Daily celebration"},
   {id:"thinking",label:"Thinking",description:"Loading or review"},
   {id:"tip",label:"Tip",description:"Helpful guidance"},
+  {id:"wave",label:"Wave",description:"Friendly greeting"},
+  {id:"dance",label:"Dance",description:"Playful energy"},
+  {id:"scan",label:"Scan",description:"Finding useful signals"},
+  {id:"focus",label:"Focus",description:"Quiet study mode"},
+  {id:"cheer",label:"Cheer",description:"Big encouragement"},
+  {id:"surprised",label:"Surprised",description:"Touch reaction"},
 ];
 const MASCOT_ANCHORS = [
   "top-left","top-center","top-right",
@@ -19996,6 +20176,58 @@ const DEFAULT_MASCOT_PLACEMENT = Object.freeze({
   y_offset:0,
   message:"Ready for a quick practice session?",
 });
+
+const MASCOT_REACTION_COPY = Object.freeze({
+  wave:"Hi! Ready to learn together?",
+  surprised:"Boop detected!",
+  dance:"Study energy activated!",
+  cheer:"You’ve got this!",
+  scan:"Scanning for your next best step…",
+  focus:"Focus mode ready.",
+});
+
+function broadcastMascotInteraction(context,detail={}) {
+  const payload={context,animation:detail.animation||"idle",source:detail.source||"unknown"};
+  capture("mascot_interacted",payload);
+  if(typeof window!=="undefined")window.dispatchEvent(new CustomEvent("secureplus:mascot-interaction",{detail:payload}));
+}
+
+function MascotGuide({
+  animation="idle",
+  message="Ready when you are.",
+  context="general",
+  size=92,
+  className="",
+  side="right",
+}) {
+  const [liveMessage,setLiveMessage]=useState(message);
+  const messageTimerRef=useRef(null);
+  useEffect(()=>{
+    setLiveMessage(message);
+    return()=>{if(messageTimerRef.current)window.clearTimeout(messageTimerRef.current);};
+  },[message]);
+  const react=detail=>{
+    broadcastMascotInteraction(context,detail);
+    setLiveMessage(MASCOT_REACTION_COPY[detail.animation]||message);
+    if(messageTimerRef.current)window.clearTimeout(messageTimerRef.current);
+    messageTimerRef.current=window.setTimeout(()=>setLiveMessage(message),1800);
+  };
+  return(
+    <aside className={`mascot-guide side-${side} ${className}`.trim()} data-assistant-anchor={context} aria-label="Interactive Cipher study mascot">
+      <MascotAnimation
+        animation={animation}
+        size={size}
+        interactive
+        label="Cipher, the SecurePlus study mascot"
+        onInteract={react}
+      />
+      <div className="mascot-guide-copy">
+        <span className="mascot-guide-message" aria-live="polite">{liveMessage}</span>
+        <span className="mascot-guide-hint">Hover or tap Cipher</span>
+      </div>
+    </aside>
+  );
+}
 
 function normalizeMascotPlacement(value={}) {
   const animation=MASCOT_ANIMATION_OPTIONS.some(item=>item.id===value.animation)?value.animation:"idle";
@@ -20040,6 +20272,8 @@ function MascotPlacement({placement,preview=false}) {
         size={preview?Math.min(config.size,126):config.size}
         className={speedClass}
         label={`Cipher mascot: ${config.animation}`}
+        interactive={!preview}
+        onInteract={detail=>broadcastMascotInteraction(`placement:${config.page_key}`,detail)}
       />
       {config.message&&<span className="site-mascot-message">{config.message}</span>}
     </div>
@@ -20138,7 +20372,7 @@ function AdminMascotManagerPage({user,t,placements,onPublished}) {
           <div className="mascot-control-group">
             <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
               <label className="label">Animation library</label>
-              <span style={{fontSize:11,color:t.textDim}}>8 animations</span>
+              <span style={{fontSize:11,color:t.textDim}}>{MASCOT_ANIMATION_OPTIONS.length} animations</span>
             </div>
             <div className="mascot-choice-grid">
               {MASCOT_ANIMATION_OPTIONS.map(item=>(
@@ -21475,7 +21709,8 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                 </select>
               </AdminField>
               <div style={{height:12}}/>
-              <AdminTextArea label="Question" value={form.q} onChange={v=>updateField("q",v)} placeholder="Write the MCQ question here." rows={5}/>
+              <AdminTextArea label="Question" value={form.q} onChange={v=>updateField("q",v)} placeholder={"Write the MCQ question here.\n\nPress Enter twice to start a new paragraph."} rows={5}/>
+              <div style={{fontSize:11,color:t.textDim,lineHeight:1.55,marginTop:-4,marginBottom:12}}>Paragraphs, blank lines, and intentional spaces will appear in practice exactly as entered here.</div>
               <div style={{height:12}}/>
               <div style={{display:"grid",gap:10}}>
                 {form.opts.map((opt,index)=>(
@@ -21530,7 +21765,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                 </select>
               </AdminField>
               <div style={{height:12}}/>
-              <AdminTextArea label="Scenario" value={form.scenario} onChange={v=>updateField("scenario",v)} placeholder="Explain the environment or situation." rows={5}/>
+              <AdminTextArea label="Scenario" value={form.scenario} onChange={v=>updateField("scenario",v)} placeholder={"Explain the environment or situation.\n\nUse blank lines to separate paragraphs."} rows={5}/>
               <div className="card" style={{padding:14,background:`${t.panel}66`,marginTop:12}}>
                 <div style={{fontWeight:900,color:t.text,marginBottom:8}}>Code sample (optional)</div>
                 <div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginBottom:10}}>
@@ -21543,7 +21778,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
               {form.type!=="DRAG & DROP"&&form.type!=="ORDERING"&&form.type!=="FILL BLANK"&&(
                 <>
                   <div style={{height:12}}/>
-                  <AdminTextArea label="Task for the student" value={form.question} onChange={v=>updateField("question",v)} placeholder="Tell the student what to do." rows={4}/>
+                  <AdminTextArea label="Task for the student" value={form.question} onChange={v=>updateField("question",v)} placeholder={"Tell the student what to do.\n\nParagraphs and spacing are preserved."} rows={4}/>
                 </>
               )}
               {form.type==="TERMINAL SIM"&&(
@@ -22024,6 +22259,13 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           Free gives you every MCQ. Pro adds the applied practice, timed rehearsal, and feedback loop that help you decide what to improve next.
         </p>
         <div className="upgrade-plan-note"><ShieldCheck size={14}/> One annual plan · $4.99/year · Cancel anytime</div>
+        <MascotGuide
+          animation={isPro?"cheer":"unlock"}
+          size={86}
+          context="pricing"
+          message={isPro?"Your Pro practice tools are ready.":"I’ll show you what Pro unlocks—no pressure."}
+          className="mascot-guide-hero"
+        />
         <button
           type="button"
           className="btn btn-ghost"
