@@ -1087,6 +1087,7 @@ function getPbqAcronyms(question) {
     question?.question,
     question?.choices || [],
     question?.explanation,
+    Object.values(question?.wrongFeedback || {}),
     question?.steps || [],
     question?.codeLanguage,
     question?.codeBlock,
@@ -20686,6 +20687,7 @@ function makeAdminQuestionTemplate(kind, nextOrder=1, sourceBank=[]) {
       question:"",
       choices:["","","",""],
       correct:0,
+      wrongFeedback:{0:"",1:"",2:"",3:""},
       explanation:"",
       hint:"",
       answer:"",
@@ -20734,6 +20736,16 @@ function questionToAdminForm(question,kind,index) {
       question:question.question||question.prompt||"",
       choices:Array.isArray(question.choices)?[...question.choices].slice(0,8):["","","",""],
       correct:Number.isInteger(question.correct)?question.correct:0,
+      wrongFeedback:{
+        0:question.wrongFeedback?.[0]||"",
+        1:question.wrongFeedback?.[1]||"",
+        2:question.wrongFeedback?.[2]||"",
+        3:question.wrongFeedback?.[3]||"",
+        4:question.wrongFeedback?.[4]||"",
+        5:question.wrongFeedback?.[5]||"",
+        6:question.wrongFeedback?.[6]||"",
+        7:question.wrongFeedback?.[7]||""
+      },
       explanation:question.explanation||question.exp||"",
       hint:question.hint||"",
       answer:question.answer||"",
@@ -20811,7 +20823,10 @@ function cleanAdminQuestionPayload(form,kind) {
       sortOrder
     };
   }
-  const choices=(form.choices||[]).map(choice=>String(choice||"").trim()).filter(Boolean);
+  const choiceEntries=(form.choices||[])
+    .map((choice,index)=>({index,text:String(choice||"").trim()}))
+    .filter(entry=>entry.text);
+  const choices=choiceEntries.map(entry=>entry.text);
   const pbqType=String(form.type||"SCENARIO").trim().toUpperCase();
   const scenarioText=String(form.scenario||"").trim();
   const taskText=String(form.question||"").trim();
@@ -20888,8 +20903,25 @@ function cleanAdminQuestionPayload(form,kind) {
     question.blanks=blanks;
   } else {
     if(choices.length<2) throw new Error("This PBQ type needs at least 2 answer choices.");
+    const formCorrect=Number(form.correct)||0;
+    const correctIndex=Math.max(0,choiceEntries.findIndex(entry=>entry.index===formCorrect));
+    const wrongFeedback=choiceEntries.reduce((feedback,entry,index)=>{
+      if(index===correctIndex)return feedback;
+      const value=String(form.wrongFeedback?.[entry.index]||form.wrongFeedback?.[String(entry.index)]||"").trim();
+      if(value) feedback[index]=value;
+      return feedback;
+    },{});
+    const missingWrongFeedback=choices.reduce((missing,_,index)=>{
+      if(index===correctIndex)return missing;
+      if(String(wrongFeedback[index]||"").length<25) missing.push(String.fromCharCode(65+index));
+      return missing;
+    },[]);
+    if(missingWrongFeedback.length) {
+      throw new Error(`Add a specific PBQ explanation for wrong option${missingWrongFeedback.length>1?"s":""} ${missingWrongFeedback.join(", ")} (at least 25 characters each).`);
+    }
     question.choices=choices;
-    question.correct=Math.max(0,Math.min(Number(form.correct)||0,Math.max(choices.length-1,0)));
+    question.correct=correctIndex;
+    question.wrongFeedback=wrongFeedback;
   }
   question.acronyms=getPbqAcronyms(question);
   return {
@@ -21250,7 +21282,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const formQuality=useMemo(()=>kind==="mcq"?analyzeMcqQuality(form,bank):null,[bank,form,kind]);
   const detectedAcronyms=useMemo(()=>kind==="mcq"
     ? extractAcronymsFromText(form.q,form.opts||[],form.exp,Object.values(form.wrongFeedback||{}))
-    : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation,form.answer,form.codeLanguage,form.codeBlock,form.logData,form.diagram,form.currentConfig,(form.items||[]).map(item=>item.label),(form.targets||[]).map(target=>target.label),(form.blanks||[]).flatMap(blank=>[blank.sentence,blank.answer,blank.acceptedAnswers,blank.hint])),
+    : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation,Object.values(form.wrongFeedback||{}),form.answer,form.codeLanguage,form.codeBlock,form.logData,form.diagram,form.currentConfig,(form.items||[]).map(item=>item.label),(form.targets||[]).map(target=>target.label),(form.blanks||[]).flatMap(blank=>[blank.sentence,blank.answer,blank.acceptedAnswers,blank.hint])),
   [form,kind]);
 
   const resetToNew=useCallback((nextKind=kind)=>{
@@ -21368,6 +21400,22 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
       patch.correctMapping=Object.fromEntries(Object.entries(prev.correctMapping||{}).filter(([,targetId])=>targetId!==removed?.id));
     }
     return patch;
+  });
+  const addPbqChoice=()=>setForm(prev=>({...prev,choices:[...(prev.choices||[]),""]}));
+  const removePbqChoice=index=>setForm(prev=>{
+    const choices=(prev.choices||[]).filter((_,i)=>i!==index);
+    const wrongFeedback={};
+    Object.entries(prev.wrongFeedback||{}).forEach(([key,value])=>{
+      const oldIndex=Number(key);
+      if(!Number.isInteger(oldIndex)||oldIndex===index)return;
+      const nextIndex=oldIndex>index?oldIndex-1:oldIndex;
+      wrongFeedback[nextIndex]=value;
+    });
+    const previousCorrect=Number(prev.correct)||0;
+    const nextCorrect=choices.length
+      ? Math.min(previousCorrect===index?0:previousCorrect>index?previousCorrect-1:previousCorrect,choices.length-1)
+      : 0;
+    return {...prev,choices,wrongFeedback,correct:nextCorrect};
   });
   const changePbqType=type=>setForm(prev=>({...prev,type}));
   const updateWrongFeedback=(index,value)=>setForm(prev=>({...prev,wrongFeedback:{...(prev.wrongFeedback||{}),[index]:value}}));
@@ -22014,14 +22062,27 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                 <div className="card" style={{padding:14,background:`${t.panel}66`,marginTop:12}}>
                   <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}>
                     <div style={{fontWeight:900,color:t.text}}>Answer choices</div>
-                    <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>updateField("choices",[...(form.choices||[]),""])}>Add choice</button>
+                    <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={addPbqChoice}>Add choice</button>
                   </div>
                   <div style={{display:"grid",gap:10}}>
                     {(form.choices||[]).map((choice,index)=>(
                       <div key={index} style={{display:"grid",gridTemplateColumns:"90px minmax(0,1fr) auto",gap:10,alignItems:"start"}}>
                         <button type="button" className={Number(form.correct)===index?"btn btn-primary":"btn btn-outline"} onClick={()=>updateField("correct",index)}>{String.fromCharCode(65+index)}</button>
-                        <AdminTextInput label={`Choice ${String.fromCharCode(65+index)}`} value={choice} placeholder={`Choice ${String.fromCharCode(65+index)}`} onChange={v=>updateArray("choices",index,v)} format/>
-                        <button className="btn btn-ghost" type="button" onClick={()=>updateField("choices",(form.choices||[]).filter((_,i)=>i!==index))}>Remove</button>
+                        <div style={{display:"grid",gap:8}}>
+                          <AdminTextInput label={`Choice ${String.fromCharCode(65+index)}`} value={choice} placeholder={`Choice ${String.fromCharCode(65+index)}`} onChange={v=>updateArray("choices",index,v)} format/>
+                          {Number(form.correct)===index ? (
+                            <div className="chip" style={{justifySelf:"start",background:`${t.green}12`,borderColor:`${t.green}35`,color:t.green}}>Correct answer</div>
+                          ) : (
+                            <AdminTextArea
+                              label={`Why choice ${String.fromCharCode(65+index)} is wrong`}
+                              value={form.wrongFeedback?.[index]||""}
+                              onChange={v=>updateWrongFeedback(index,v)}
+                              placeholder="Explain why this option is tempting but incorrect."
+                              rows={3}
+                            />
+                          )}
+                        </div>
+                        <button className="btn btn-ghost" type="button" onClick={()=>removePbqChoice(index)}>Remove</button>
                       </div>
                     ))}
                   </div>
@@ -22142,11 +22203,16 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
                 {form.type==="CONFIG/ACL"&&form.currentConfig&&<pre className="log-block" style={{fontSize:12,marginBottom:12}}>{form.currentConfig}</pre>}
                 {form.type==="TERMINAL SIM"&&form.answer&&<pre className="terminal" style={{fontSize:12,marginBottom:12}}>{form.answer}</pre>}
                 <div style={{display:"grid",gap:8}}>
-                  {(form.choices||[]).filter(Boolean).map((choice,index)=>(
+                  {(form.choices||[]).map((choice,index)=>choice?(
                     <div key={index} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${Number(form.correct)===index?t.green:t.border}`,background:Number(form.correct)===index?`${t.green}10`:t.panel,color:t.text}}>
                       <strong>{String.fromCharCode(65+index)}.</strong> <GlossaryText text={choice} t={t}/>
+                      {Number(form.correct)!==index&&form.wrongFeedback?.[index]&&(
+                        <div style={{marginTop:7,padding:"8px 10px",borderRadius:7,background:`${t.red}07`,border:`1px solid ${t.red}22`,fontSize:12,color:t.textSec,lineHeight:1.55}}>
+                          <strong style={{color:t.red}}>Why wrong:</strong> <GlossaryText text={form.wrongFeedback[index]} t={t}/>
+                        </div>
+                      )}
                     </div>
-                  ))}
+                  ):null)}
                 </div>
                 <div style={{marginTop:16,padding:12,borderRadius:10,background:`${t.green}0d`,color:t.textSec,fontSize:13,lineHeight:1.6}}>
                   <strong style={{color:t.green}}>Solution:</strong> <GlossaryText text={form.explanation||"Solution explanation preview."} t={t}/>
