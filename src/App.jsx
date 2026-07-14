@@ -21202,6 +21202,9 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   const [history,setHistory]=useState([]);
   const [historyLoading,setHistoryLoading]=useState(false);
   const [historyError,setHistoryError]=useState("");
+  const [historyExpanded,setHistoryExpanded]=useState(()=>{
+    try{return window.sessionStorage?.getItem("secureplus-question-history-expanded")==="true";}catch{return false;}
+  });
   const bank=kind==="mcq"?MCQ_BANK:PBQ_BANK;
   const bankBreakdown=useMemo(()=>buildQuestionBankBreakdown(kind,bank),[kind,bank]);
   const mcqQualityById=useMemo(()=>kind==="mcq"
@@ -21296,6 +21299,10 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
   },[]);
 
   useEffect(()=>{loadHistory();},[loadHistory]);
+
+  useEffect(()=>{
+    try{window.sessionStorage?.setItem("secureplus-question-history-expanded",historyExpanded?"true":"false");}catch{}
+  },[historyExpanded]);
 
   const updateField=(field,value)=>setForm(prev=>({...prev,[field]:value}));
   const changeChapter=chId=>setForm(prev=>{
@@ -21529,55 +21536,89 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,initialTarget}) 
       )}
 
       <div className="card" style={{padding:"18px 20px",marginBottom:16}}>
-        <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:12,flexWrap:"wrap"}}>
+        <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:historyExpanded?12:0,flexWrap:"wrap"}}>
           <div>
             <h3 style={{fontSize:18,color:t.text,marginBottom:4}}>Question change history</h3>
-            <div style={{fontSize:12,color:t.textDim}}>Review recent adds, edits, deletes, and reverts. Only the latest 3 changes can be reverted.</div>
+            <div style={{fontSize:12,color:t.textDim}}>
+              {historyExpanded
+                ? "Review recent adds, edits, deletes, and reverts. Only the latest 3 changes can be reverted."
+                : historyLoading
+                  ? "Loading recent question changes…"
+                  : historyError
+                    ? "History needs attention. Expand this section to see the details."
+                    : history.length
+                      ? `${history.length} recent change${history.length===1?"":"s"} loaded. Latest: ${questionHistoryLabel(history[0])}.`
+                      : "No recent question changes loaded."}
+            </div>
           </div>
-          <button className="btn btn-outline" style={{fontSize:12}} disabled={historyLoading} onClick={loadHistory}>
-            {historyLoading?"Loading...":"Refresh history"}
-          </button>
+          <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
+            {historyExpanded&&(
+              <button className="btn btn-outline" style={{fontSize:12}} disabled={historyLoading} onClick={loadHistory}>
+                {historyLoading?"Loading...":"Refresh history"}
+              </button>
+            )}
+            <button
+              className="btn btn-outline"
+              type="button"
+              style={{fontSize:12,minWidth:126,justifyContent:"center"}}
+              aria-expanded={historyExpanded}
+              aria-controls="question-change-history-content"
+              onClick={()=>{
+                setHistoryExpanded(value=>{
+                  const expanded=!value;
+                  capture("admin_question_history_toggled",{expanded});
+                  return expanded;
+                });
+              }}
+            >
+              {historyExpanded?"− Shrink history":"+ Expand history"}
+            </button>
+          </div>
         </div>
-        <Alert msg={historyError} t={t}/>
-        {historyError && (
-          <div style={{fontSize:12,color:t.textSec,lineHeight:1.65,marginBottom:12,padding:"10px 12px",border:`1px solid ${t.amber}35`,borderRadius:12,background:`${t.amber}10`}}>
-            Run the latest <code>supabase/question-admin.sql</code> in Supabase SQL Editor, then make one new question save/delete. History starts from new changes after the table is installed, so older edits will not appear retroactively.
-          </div>
-        )}
-        {history.length===0 ? (
-          <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-            {historyLoading?"Loading question history...":"No history yet. After the latest Supabase SQL is installed, save or delete a question once and that new change will appear here."}
-          </div>
-        ) : (
-          <div style={{display:"grid",gap:10}}>
-            {history.map((item,index)=>{
-              const canRevert=index<3 && item.change_type!=="revert";
-              const nextTitle=item.next_override?.payload?.q || item.next_override?.payload?.title || item.next_override?.payload?.question || "";
-              const previousTitle=item.previous_override?.payload?.q || item.previous_override?.payload?.title || item.previous_override?.payload?.question || "";
-              const summary=nextTitle || previousTitle || "Question override record";
-              const accent=item.change_type==="delete"?t.red:item.change_type==="revert"?t.amber:item.change_type==="add"?t.green:t.accent;
-              return(
-                <div key={item.id} className="card" style={{padding:"12px 14px",boxShadow:"none",background:t.panel}}>
-                  <div style={{display:"flex",gap:10,alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap"}}>
-                    <div style={{minWidth:0,flex:"1 1 260px"}}>
-                      <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap",marginBottom:6}}>
-                        <span className="chip" style={{background:`${accent}12`,borderColor:`${accent}42`,color:accent}}>{questionHistoryLabel(item)}</span>
-                        <span style={{fontSize:11,color:t.textDim}}>{new Date(item.created_at).toLocaleString()}</span>
-                      </div>
-                      <div style={{fontSize:13,color:t.textSec,lineHeight:1.6,overflowWrap:"anywhere"}}>
-                        {summary.slice(0,180)}{summary.length>180?"...":""}
-                      </div>
-                      <div style={{fontSize:11,color:t.textDim,marginTop:5}}>
-                        By {item.changed_by_email || "root account"}
+        {historyExpanded&&(
+          <div id="question-change-history-content">
+            <Alert msg={historyError} t={t}/>
+            {historyError && (
+              <div style={{fontSize:12,color:t.textSec,lineHeight:1.65,marginBottom:12,padding:"10px 12px",border:`1px solid ${t.amber}35`,borderRadius:12,background:`${t.amber}10`}}>
+                Run the latest <code>supabase/question-admin.sql</code> in Supabase SQL Editor, then make one new question save/delete. History starts from new changes after the table is installed, so older edits will not appear retroactively.
+              </div>
+            )}
+            {history.length===0 ? (
+              <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
+                {historyLoading?"Loading question history...":"No history yet. After the latest Supabase SQL is installed, save or delete a question once and that new change will appear here."}
+              </div>
+            ) : (
+              <div style={{display:"grid",gap:10}}>
+                {history.map((item,index)=>{
+                  const canRevert=index<3 && item.change_type!=="revert";
+                  const nextTitle=item.next_override?.payload?.q || item.next_override?.payload?.title || item.next_override?.payload?.question || "";
+                  const previousTitle=item.previous_override?.payload?.q || item.previous_override?.payload?.title || item.previous_override?.payload?.question || "";
+                  const summary=nextTitle || previousTitle || "Question override record";
+                  const accent=item.change_type==="delete"?t.red:item.change_type==="revert"?t.amber:item.change_type==="add"?t.green:t.accent;
+                  return(
+                    <div key={item.id} className="card" style={{padding:"12px 14px",boxShadow:"none",background:t.panel}}>
+                      <div style={{display:"flex",gap:10,alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap"}}>
+                        <div style={{minWidth:0,flex:"1 1 260px"}}>
+                          <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap",marginBottom:6}}>
+                            <span className="chip" style={{background:`${accent}12`,borderColor:`${accent}42`,color:accent}}>{questionHistoryLabel(item)}</span>
+                            <span style={{fontSize:11,color:t.textDim}}>{new Date(item.created_at).toLocaleString()}</span>
+                          </div>
+                          <div style={{fontSize:13,color:t.textSec,lineHeight:1.6,overflowWrap:"anywhere"}}>
+                            {summary.slice(0,180)}{summary.length>180?"...":""}
+                          </div>
+                          <div style={{fontSize:11,color:t.textDim,marginTop:5}}>
+                            By {item.changed_by_email || "root account"}
+                          </div>
+                        </div>
+                        <button className="btn btn-outline" style={{fontSize:12}} disabled={!canRevert||saving} onClick={()=>revertHistoryItem(item)} title={canRevert?"Restore previous version":"Only the latest 3 non-revert changes can be reverted"}>
+                          {canRevert?"Revert":"Locked"}
+                        </button>
                       </div>
                     </div>
-                    <button className="btn btn-outline" style={{fontSize:12}} disabled={!canRevert||saving} onClick={()=>revertHistoryItem(item)} title={canRevert?"Restore previous version":"Only the latest 3 non-revert changes can be reverted"}>
-                      {canRevert?"Revert":"Locked"}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
       </div>
