@@ -14634,14 +14634,19 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .academy-avatar{display:grid;place-items:center;border-radius:999px;background:radial-gradient(circle at 32% 24%,#fff8,transparent 28%),color-mix(in srgb,var(--avatar-tone) 18%,${t.surface});border:1px solid color-mix(in srgb,var(--avatar-tone) 34%,${t.border});box-shadow:inset 0 0 0 6px color-mix(in srgb,#fff 42%,transparent),0 14px 26px color-mix(in srgb,var(--avatar-tone) 16%,transparent);}
 .academy-id-card{position:relative;isolation:isolate;overflow:hidden;width:100%;max-width:430px;min-height:274px;padding:20px;border:1px solid color-mix(in srgb,var(--academy-tier) 46%,${t.border});border-radius:26px;background:radial-gradient(circle at 4% 0%,color-mix(in srgb,var(--academy-tier) 30%,transparent),transparent 35%),linear-gradient(145deg,color-mix(in srgb,var(--academy-tier-bg) 28%,${t.surface}),${t.surface} 49%,color-mix(in srgb,var(--academy-tier) 10%,${t.panel}));box-shadow:0 26px 68px rgba(61,43,20,.2),inset 0 0 0 1px color-mix(in srgb,#fff 66%,transparent);color:${t.text};transform-style:preserve-3d;transition:transform .28s cubic-bezier(.16,1,.3,1),box-shadow .28s,border-color .28s;}
 .academy-id-card.compact{max-width:390px;min-height:248px;padding:17px;border-radius:23px;}
-.academy-id-card:hover{transform:translateY(-5px) rotateX(1deg) rotateY(-1deg);border-color:color-mix(in srgb,var(--academy-tier) 68%,${t.border});box-shadow:0 34px 78px color-mix(in srgb,var(--academy-tier) 19%,rgba(61,43,20,.25)),inset 0 0 0 1px color-mix(in srgb,#fff 78%,transparent);}
+.academy-id-card:hover{transform:perspective(950px) translateY(-5px) rotateX(var(--academy-tilt-x,1deg)) rotateY(var(--academy-tilt-y,-1deg));border-color:color-mix(in srgb,var(--academy-tier) 68%,${t.border});box-shadow:0 34px 78px color-mix(in srgb,var(--academy-tier) 19%,rgba(61,43,20,.25)),inset 0 0 0 1px color-mix(in srgb,#fff 78%,transparent);}
 .academy-id-card:active{transform:translateY(-1px) scale(.992);}
 .academy-id-grain{position:absolute;inset:0;z-index:-1;opacity:.28;background-image:linear-gradient(color-mix(in srgb,var(--academy-tier) 8%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--academy-tier) 8%,transparent) 1px,transparent 1px);background-size:16px 16px;mask-image:linear-gradient(125deg,#000,transparent 68%);}
-.academy-id-holo{position:absolute;z-index:-1;width:250px;height:250px;right:-105px;top:-135px;border-radius:999px;background:conic-gradient(from 30deg,color-mix(in srgb,var(--academy-tier) 56%,transparent),transparent 22%,${t.green}28 42%,transparent 58%,${t.accent}28 76%,transparent);filter:blur(2px);opacity:.52;transition:transform .65s cubic-bezier(.16,1,.3,1),opacity .3s;}
-.academy-id-card:hover .academy-id-holo{transform:rotate(34deg) scale(1.13);opacity:.74;}
+.academy-id-holo{position:absolute;z-index:-1;width:250px;height:250px;right:-105px;top:-135px;border-radius:999px;background:conic-gradient(from 30deg,color-mix(in srgb,var(--academy-tier) 56%,transparent),transparent 22%,${t.green}28 42%,transparent 58%,${t.accent}28 76%,transparent);filter:blur(2px);opacity:.52;transform:translate3d(var(--academy-shine-x,0),var(--academy-shine-y,0),0);transition:transform .65s cubic-bezier(.16,1,.3,1),opacity .3s;}
+.academy-id-card:hover .academy-id-holo{transform:translate3d(var(--academy-shine-x,0),var(--academy-shine-y,0),0) rotate(34deg) scale(1.13);opacity:.74;}
 .academy-id-spark{position:absolute;width:8px;height:8px;background:var(--academy-tier);box-shadow:18px 8px 0 color-mix(in srgb,var(--academy-tier) 45%,transparent),8px 22px 0 color-mix(in srgb,var(--academy-tier) 68%,transparent);opacity:.42;transform:rotate(12deg);}
 .academy-id-spark.top{right:84px;top:22px;}
 .academy-id-spark.bottom{left:22px;bottom:32px;transform:rotate(48deg) scale(.7);}
+.academy-id-face{backface-visibility:hidden;transform-style:preserve-3d;transition:transform .58s cubic-bezier(.16,1,.3,1),opacity .24s;}
+.academy-id-front{position:relative;z-index:2;transform:rotateY(0);}
+.academy-id-back{position:absolute;z-index:3;inset:0;padding:inherit;display:flex;flex-direction:column;transform:rotateY(180deg);opacity:0;pointer-events:none;}
+.academy-id-card.is-flipped .academy-id-front{transform:rotateY(-180deg);opacity:0;pointer-events:none;}
+.academy-id-card.is-flipped .academy-id-back{transform:rotateY(0);opacity:1;pointer-events:auto;}
 .academy-id-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:13px;border-bottom:1px solid color-mix(in srgb,var(--academy-tier) 28%,${t.border});}
 .academy-id-brand{display:flex;align-items:center;gap:9px;min-width:0;}
 .academy-id-brand-mark{width:34px;height:34px;display:grid;place-items:center;flex:0 0 auto;border-radius:11px;background:var(--academy-tier);color:${t.surface};box-shadow:0 8px 20px color-mix(in srgb,var(--academy-tier) 28%,transparent),inset 0 0 0 1px color-mix(in srgb,#fff 42%,transparent);}
@@ -14673,6 +14678,28 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .academy-id-footer span{display:flex;align-items:center;gap:5px;color:${t.textSec};font-weight:900;}
 .academy-id-footer span svg{color:${t.green};}
 .academy-id-footer strong{color:var(--academy-tier);font-size:9px;}
+.academy-id-flip{display:inline-flex;align-items:center;gap:5px;margin:-4px -5px -4px auto;padding:6px 7px;border:0;border-radius:9px;background:transparent;color:var(--academy-tier);font:inherit;font-weight:950;text-transform:uppercase;letter-spacing:.07em;cursor:pointer;transition:background .16s,transform .16s;}
+.academy-id-flip:hover{background:color-mix(in srgb,var(--academy-tier) 11%,${t.surface});transform:translateX(2px);}
+.academy-id-flip:focus-visible{outline:2px solid var(--academy-tier);outline-offset:2px;}
+.academy-id-back-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:11px;border-bottom:1px solid color-mix(in srgb,var(--academy-tier) 28%,${t.border});}
+.academy-id-back-title span{display:block;color:var(--academy-tier);font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.12em;}
+.academy-id-back-title strong{display:block;margin-top:3px;color:${t.text};font-size:17px;line-height:1.15;}
+.academy-id-back-count{padding:6px 8px;border-radius:999px;border:1px solid color-mix(in srgb,var(--academy-tier) 26%,${t.border});background:color-mix(in srgb,var(--academy-tier) 9%,${t.surface});color:var(--academy-tier);font-size:9px;font-weight:950;white-space:nowrap;}
+.academy-next-tier{display:flex;align-items:center;gap:10px;margin:11px 0;padding:9px 10px;border-radius:13px;border:1px solid color-mix(in srgb,var(--academy-tier) 24%,${t.border});background:linear-gradient(100deg,color-mix(in srgb,var(--academy-tier) 12%,${t.surface}),${t.surface});}
+.academy-next-tier-icon{width:29px;height:29px;display:grid;place-items:center;flex:0 0 auto;border-radius:10px;background:var(--academy-tier);color:${t.surface};}
+.academy-next-tier strong{display:block;color:${t.text};font-size:11px;line-height:1.2;}
+.academy-next-tier small{display:block;margin-top:2px;color:${t.textSec};font-size:8px;line-height:1.35;}
+.academy-tier-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
+.academy-tier-step{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px;align-items:center;min-width:0;padding:7px;border:1px solid ${t.border};border-radius:11px;background:${t.panel};opacity:.58;}
+.academy-tier-step.unlocked{border-color:color-mix(in srgb,var(--step-color) 35%,${t.border});background:color-mix(in srgb,var(--step-bg) 30%,${t.surface});opacity:1;}
+.academy-tier-step.current{box-shadow:inset 0 0 0 1px var(--step-color),0 5px 14px color-mix(in srgb,var(--step-color) 14%,transparent);}
+.academy-tier-swatch{width:20px;height:20px;display:grid;place-items:center;border-radius:7px;background:var(--step-color);color:#fff;font-size:8px;font-weight:950;box-shadow:0 4px 8px color-mix(in srgb,var(--step-color) 24%,transparent);}
+.academy-tier-step strong{display:block;overflow:hidden;text-overflow:ellipsis;color:${t.text};font-size:8px;line-height:1.15;white-space:nowrap;}
+.academy-tier-step small{display:block;margin-top:2px;color:${t.textDim};font-size:7px;line-height:1.1;}
+.academy-tier-state{position:absolute;right:5px;top:4px;color:var(--step-color);}
+.academy-id-back-footer{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:9px;}
+.academy-id-back-footer>span{flex:1;color:${t.textDim};font-size:8px;line-height:1.35;}
+.academy-id-back-footer .academy-id-flip{margin:0;white-space:nowrap;}
 .academy-signup{display:grid;gap:14px;}
 .academy-stepper{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:4px;}
 .academy-stepper span{display:flex;align-items:center;gap:6px;padding:8px 9px;border-radius:999px;background:${t.panel};border:1px solid ${t.border};color:${t.textDim};font-size:10px;font-weight:900;white-space:nowrap;}
@@ -14695,7 +14722,7 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .academy-preview-row span{display:block;color:${t.textSec};font-size:12px;margin-top:2px;}
 .academy-reveal{animation:academyStepIn .28s cubic-bezier(.16,1,.3,1) both;}
 .academy-reveal-card{display:grid;place-items:center;perspective:1200px;}
-.academy-reveal-card .academy-id-card{animation:academyCardFlip .7s cubic-bezier(.16,1,.3,1) both;}
+.academy-reveal-card .academy-id-card{animation:academyCardFlip .7s cubic-bezier(.16,1,.3,1) backwards;}
 .academy-dashboard-pass{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,430px);gap:26px;align-items:center;margin-bottom:18px;padding:28px!important;border-color:${t.amber}42!important;border-radius:24px!important;background:radial-gradient(circle at 7% 10%,${t.amber}1a,transparent 32%),radial-gradient(circle at 96% 88%,${t.accent}10,transparent 28%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
 .academy-dashboard-pass::after{content:"";position:absolute;left:28px;bottom:0;width:140px;height:4px;border-radius:999px 999px 0 0;background:linear-gradient(90deg,${t.amber},${t.green});opacity:.8;}
 .academy-dashboard-copy{position:relative;z-index:1;}
@@ -16855,58 +16882,135 @@ function AcademyAvatar({avatarId,size=86}) {
 
 function AcademyIDCard({name="SecurePlus Student",avatarId="default-cipher",totalStars=0,compact=false}) {
   const {safeStars,tier,activeStars,tierIndex}=getAcademyStarState(totalStars);
+  const [flipped,setFlipped]=useState(false);
   const displayName=(name||"SecurePlus Student").trim();
+  const isComplete=safeStars>=ACHIEVEMENT_STAR_TOTAL;
+  const nextTier=tierIndex<ACADEMY_STAR_TIERS.length-1 ? ACADEMY_STAR_TIERS[tierIndex+1] : null;
+  const nextTarget=nextTier ? (tierIndex+1)*5 : ACHIEVEMENT_STAR_TOTAL;
+  const starsToTarget=Math.max(0,nextTarget-safeStars);
+  const milestoneTitle=isComplete
+    ? "Maximum prestige complete"
+    : nextTier
+      ? `${starsToTarget} star${starsToTarget===1?"":"s"} to ${nextTier.name}`
+      : `${starsToTarget} star${starsToTarget===1?"":"s"} to complete the path`;
+  const milestoneBody=isComplete
+    ? "Every Academy Pass trim is now unlocked."
+    : nextTier
+      ? `Reach ${nextTarget} earned stars to evolve your pass trim.`
+      : "Finish the remaining achievements to complete Ruby prestige.";
+  const handlePointerMove=event=>{
+    if(event.pointerType==="touch")return;
+    const rect=event.currentTarget.getBoundingClientRect();
+    const x=((event.clientX-rect.left)/rect.width)-.5;
+    const y=((event.clientY-rect.top)/rect.height)-.5;
+    event.currentTarget.style.setProperty("--academy-tilt-x",`${(-y*4).toFixed(2)}deg`);
+    event.currentTarget.style.setProperty("--academy-tilt-y",`${(x*5).toFixed(2)}deg`);
+    event.currentTarget.style.setProperty("--academy-shine-x",`${(x*18).toFixed(1)}px`);
+    event.currentTarget.style.setProperty("--academy-shine-y",`${(y*12).toFixed(1)}px`);
+  };
+  const resetPointerEffect=event=>{
+    event.currentTarget.style.removeProperty("--academy-tilt-x");
+    event.currentTarget.style.removeProperty("--academy-tilt-y");
+    event.currentTarget.style.removeProperty("--academy-shine-x");
+    event.currentTarget.style.removeProperty("--academy-shine-y");
+  };
   return (
-    <article className={`academy-id-card ${compact?"compact":""}`} style={{"--academy-tier":tier.color,"--academy-tier-bg":tier.bg}}>
+    <article
+      className={`academy-id-card ${compact?"compact":""} ${flipped?"is-flipped":""}`}
+      style={{"--academy-tier":tier.color,"--academy-tier-bg":tier.bg}}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={resetPointerEffect}
+    >
       <div className="academy-id-grain" aria-hidden="true"/>
       <div className="academy-id-holo" aria-hidden="true"/>
       <span className="academy-id-spark top" aria-hidden="true"/>
       <span className="academy-id-spark bottom" aria-hidden="true"/>
-      <div className="academy-id-header">
-        <div className="academy-id-brand">
-          <span className="academy-id-brand-mark"><ShieldCheck size={19} strokeWidth={2.5}/></span>
-          <div>
-            <span>SecurePlus Academy</span>
-            <strong>Academy Pass</strong>
+      <div className="academy-id-face academy-id-front" aria-hidden={flipped}>
+        <div className="academy-id-header">
+          <div className="academy-id-brand">
+            <span className="academy-id-brand-mark"><ShieldCheck size={19} strokeWidth={2.5}/></span>
+            <div>
+              <span>SecurePlus Academy</span>
+              <strong>Academy Pass</strong>
+            </div>
+          </div>
+          <span className="academy-id-status">Active</span>
+        </div>
+        <div className="academy-id-body">
+          <div className="academy-avatar-wrap">
+            <AcademyAvatar avatarId={avatarId} size={compact?68:76}/>
+            <span className="academy-avatar-rank" aria-label={`Prestige level ${tierIndex+1}`}>{tierIndex+1}</span>
+          </div>
+          <div className="academy-id-profile">
+            <span>Academy member</span>
+            <h3>{displayName}</h3>
+            <p>Security+ learning pathway</p>
+            <span className="academy-id-member-tag"><Sparkles size={10}/> Scenario-based learner</span>
+          </div>
+          <div className="academy-id-prestige" aria-label={`${tier.name} prestige tier`}>
+            <Trophy size={compact?22:25} strokeWidth={2.1}/>
+            <strong>{tier.name}</strong>
+            <small>Prestige</small>
           </div>
         </div>
-        <span className="academy-id-status">Active</span>
-      </div>
-      <div className="academy-id-body">
-        <div className="academy-avatar-wrap">
-          <AcademyAvatar avatarId={avatarId} size={compact?68:76}/>
-          <span className="academy-avatar-rank" aria-label={`Prestige level ${tierIndex+1}`}>{tierIndex+1}</span>
+        <div className="academy-id-stars-panel" aria-label={`${safeStars} of ${ACHIEVEMENT_STAR_TOTAL} stars earned. Current trim: ${tier.name}.`}>
+          <div className="academy-id-stars-head"><span>Earned achievement stars</span><strong>{safeStars} / {ACHIEVEMENT_STAR_TOTAL}</strong></div>
+          <div className="academy-id-stars-row">
+            {Array.from({length:5},(_,index)=>(
+              <Star
+                key={index}
+                size={compact?15:17}
+                strokeWidth={2.4}
+                fill={index<activeStars?"currentColor":"none"}
+                className={index<activeStars?"filled":"empty"}
+              />
+            ))}
+            <span className="academy-id-progress" aria-hidden="true"><span style={{width:`${Math.round((safeStars/ACHIEVEMENT_STAR_TOTAL)*100)}%`}}/></span>
+          </div>
         </div>
-        <div className="academy-id-profile">
-          <span>Academy member</span>
-          <h3>{displayName}</h3>
-          <p>Security+ learning pathway</p>
-          <span className="academy-id-member-tag"><Sparkles size={10}/> Scenario-based learner</span>
-        </div>
-        <div className="academy-id-prestige" aria-label={`${tier.name} prestige tier`}>
-          <Trophy size={compact?22:25} strokeWidth={2.1}/>
-          <strong>{tier.name}</strong>
-          <small>Prestige</small>
-        </div>
-      </div>
-      <div className="academy-id-stars-panel" aria-label={`${safeStars} of ${ACHIEVEMENT_STAR_TOTAL} stars earned. Current trim: ${tier.name}.`}>
-        <div className="academy-id-stars-head"><span>Earned achievement stars</span><strong>{safeStars} / {ACHIEVEMENT_STAR_TOTAL}</strong></div>
-        <div className="academy-id-stars-row">
-          {Array.from({length:5},(_,index)=>(
-            <Star
-              key={index}
-              size={compact?15:17}
-              strokeWidth={2.4}
-              fill={index<activeStars?"currentColor":"none"}
-              className={index<activeStars?"filled":"empty"}
-            />
-          ))}
-          <span className="academy-id-progress" aria-hidden="true"><span style={{width:`${Math.round((safeStars/ACHIEVEMENT_STAR_TOTAL)*100)}%`}}/></span>
+        <div className="academy-id-footer">
+          <span><ShieldCheck size={12} strokeWidth={2.5}/> Active learner</span>
+          <button type="button" className="academy-id-flip" onClick={()=>setFlipped(true)} aria-expanded={flipped} tabIndex={flipped?-1:0}>
+            Tier path <Route size={12} strokeWidth={2.4}/>
+          </button>
         </div>
       </div>
-      <div className="academy-id-footer">
-        <span><ShieldCheck size={12} strokeWidth={2.5}/> Active learner</span>
-        <strong>SEC+ · Prestige {tierIndex+1}</strong>
+
+      <div className="academy-id-face academy-id-back" aria-hidden={!flipped}>
+        <div className="academy-id-back-head">
+          <div className="academy-id-back-title">
+            <span>Academy Pass evolution</span>
+            <strong>Your prestige path</strong>
+          </div>
+          <span className="academy-id-back-count">{safeStars} / {ACHIEVEMENT_STAR_TOTAL} stars</span>
+        </div>
+        <div className="academy-next-tier">
+          <span className="academy-next-tier-icon">{isComplete?<Trophy size={17}/>:<TrendingUp size={17}/>}</span>
+          <div><strong>{milestoneTitle}</strong><small>{milestoneBody}</small></div>
+        </div>
+        <div className="academy-tier-grid" aria-label="Academy Pass prestige levels">
+          {ACADEMY_STAR_TIERS.map((item,index)=>{
+            const unlocked=index<=tierIndex;
+            const current=index===tierIndex;
+            return (
+              <div
+                key={item.name}
+                className={`academy-tier-step ${unlocked?"unlocked":""} ${current?"current":""}`}
+                style={{"--step-color":item.color,"--step-bg":item.bg}}
+              >
+                <span className="academy-tier-swatch">{index+1}</span>
+                <div><strong>{item.name}</strong><small>{index===0?"Starter":`${index*5} stars`}</small></div>
+                <span className="academy-tier-state" aria-hidden="true">{unlocked?<Check size={9} strokeWidth={3}/>:<LockKeyhole size={8}/>}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="academy-id-back-footer">
+          <span>Stars come from completed achievements—not readiness alone.</span>
+          <button type="button" className="academy-id-flip" onClick={()=>setFlipped(false)} aria-expanded={flipped} tabIndex={flipped?0:-1}>
+            Back to pass <Route size={12} strokeWidth={2.4}/>
+          </button>
+        </div>
       </div>
     </article>
   );
