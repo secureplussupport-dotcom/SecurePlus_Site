@@ -1,6 +1,34 @@
 -- SecurePlus Cipher Coin economy.
--- Run this in Supabase SQL Editor after supabase/schema.sql and supabase/pbqs.sql.
+-- Run this in Supabase SQL Editor after supabase/schema.sql.
+-- The PBQ table is bootstrapped below when pbqs.sql has not been run yet, so
+-- this migration is safe for both existing and newly created projects.
 -- All balance mutations are service-role-only and are recorded in an immutable ledger.
+
+create table if not exists public.pbqs (
+  id text primary key,
+  title text not null,
+  type text not null,
+  domain integer not null,
+  is_pro boolean not null default true,
+  payload jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.pbqs
+add column if not exists is_pro boolean not null default true,
+add column if not exists payload jsonb not null default '{}'::jsonb,
+add column if not exists created_at timestamptz not null default now(),
+add column if not exists updated_at timestamptz not null default now();
+
+alter table public.pbqs enable row level security;
+
+grant select on public.pbqs to anon, authenticated;
+grant insert, update, delete on public.pbqs to authenticated;
+
+create index if not exists pbqs_type_idx on public.pbqs (type);
+create index if not exists pbqs_domain_idx on public.pbqs (domain);
+create index if not exists pbqs_is_pro_idx on public.pbqs (is_pro);
 
 alter table public.profiles
 add column if not exists cipher_coins integer not null default 0,
@@ -660,6 +688,61 @@ using (
     where cipher_coin_unlocks.user_id = (select auth.uid())
       and cipher_coin_unlocks.unlock_type = 'pbq'
       and cipher_coin_unlocks.resource_id = pbqs.id
+  )
+);
+
+drop policy if exists "Question admins can read PBQs" on public.pbqs;
+create policy "Question admins can read PBQs"
+on public.pbqs for select
+to authenticated
+using (
+  exists (
+    select 1
+    from public.app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+);
+
+drop policy if exists "Question admins can insert PBQs" on public.pbqs;
+create policy "Question admins can insert PBQs"
+on public.pbqs for insert
+to authenticated
+with check (
+  exists (
+    select 1
+    from public.app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+);
+
+drop policy if exists "Question admins can update PBQs" on public.pbqs;
+create policy "Question admins can update PBQs"
+on public.pbqs for update
+to authenticated
+using (
+  exists (
+    select 1
+    from public.app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+)
+with check (
+  exists (
+    select 1
+    from public.app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  )
+);
+
+drop policy if exists "Question admins can delete PBQs" on public.pbqs;
+create policy "Question admins can delete PBQs"
+on public.pbqs for delete
+to authenticated
+using (
+  exists (
+    select 1
+    from public.app_admins
+    where lower(app_admins.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
   )
 );
 
