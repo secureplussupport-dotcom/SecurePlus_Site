@@ -14990,7 +14990,7 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .athena-login-skip strong{grid-column:1;color:var(--athena-sage);font-size:12px;}
 .athena-login-skip svg{grid-column:2;grid-row:1/3;color:var(--athena-coral);}
 .athena-workspace-page{padding-bottom:86px;}
-.athena-workspace-header{position:sticky;top:0;z-index:30;display:grid;grid-template-columns:240px minmax(0,760px);justify-content:space-between;align-items:center;gap:26px;padding:15px clamp(20px,4vw,54px);border-bottom:1px solid rgba(73,111,91,.13);background:rgba(251,248,240,.86);backdrop-filter:blur(20px);}
+.athena-workspace-header{position:sticky;top:0;z-index:30;display:grid;grid-template-columns:210px minmax(0,680px);justify-content:space-between;align-items:center;gap:24px;padding:13px clamp(20px,4vw,54px);border-bottom:1px solid rgba(73,111,91,.11);background:rgba(251,248,240,.91);backdrop-filter:blur(20px);}
 .athena-brand{display:flex;align-items:center;gap:10px;border:0;background:transparent;color:var(--athena-ink);font:inherit;text-align:left;cursor:pointer;}
 .athena-brand strong,.athena-brand small{display:block;}
 .athena-brand strong{font-size:15px;}
@@ -14999,20 +14999,20 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .athena-progress>div{min-width:0;}
 .athena-progress>div>span{display:flex;align-items:center;gap:6px;color:#8a938e;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
 .athena-progress>div>span em{display:grid;place-items:center;width:19px;height:19px;flex:0 0 auto;border-radius:50%;background:#e3e4df;color:#838c87;font-style:normal;font-size:9px;}
-.athena-progress>div>span strong{margin-left:auto;font-size:9px;color:#a0a7a3;}
+.athena-progress>div>span strong{display:none;}
 .athena-progress>div>i{display:block;height:5px;margin-top:7px;overflow:hidden;border-radius:99px;background:#e2e5df;}
 .athena-progress>div>i b{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#e9856f,#d5a451);transition:width .48s cubic-bezier(.16,1,.3,1);}
 .athena-progress>div.active>span,.athena-progress>div.complete>span{color:var(--athena-sage);}
 .athena-progress>div.complete>span em{background:var(--athena-sage);color:#fff;}
 .athena-progress>div.complete>i b{background:linear-gradient(90deg,#76a58b,#4e7661);}
 .athena-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(420px,.94fr);min-height:calc(100dvh - 80px);}
-.athena-question-pane{position:relative;display:flex;flex-direction:column;justify-content:center;min-width:0;padding:46px clamp(28px,6vw,92px) 72px;border-right:1px solid rgba(73,111,91,.12);}
-.athena-question-content{width:min(100%,660px);margin:auto 0;animation:athenaQuestionIn .34s cubic-bezier(.16,1,.3,1) both;}
+.athena-question-pane{position:relative;display:flex;flex-direction:column;justify-content:center;min-width:0;padding:46px clamp(28px,6vw,92px) 72px;border-right:1px solid rgba(73,111,91,.1);}
+.athena-question-content{width:min(100%,620px);margin:auto 0;animation:athenaQuestionIn .42s cubic-bezier(.22,.8,.2,1) both;}
 .athena-back-button{position:absolute;left:clamp(28px,6vw,92px);top:28px;display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:0;border-radius:9px;background:transparent;color:var(--athena-muted);font:inherit;font-size:11px;font-weight:850;cursor:pointer;}
 .athena-back-button:hover{background:rgba(93,128,109,.09);color:var(--athena-sage);}
 .athena-question-icon{display:grid;place-items:center;width:45px;height:45px;margin-bottom:17px;border:1px solid rgba(93,128,109,.2);border-radius:15px;background:linear-gradient(145deg,#edf4ee,#e0ebe3);color:var(--athena-sage);box-shadow:0 10px 22px rgba(66,107,87,.1);}
-.athena-question-content h1{max-width:650px;margin:9px 0 10px;color:var(--athena-ink);font-size:clamp(30px,3.7vw,48px);line-height:1.06;letter-spacing:-.025em;text-wrap:balance;}
-.athena-question-content>p{max-width:610px;margin:0 0 22px;color:var(--athena-muted);font-size:14px;font-weight:600;line-height:1.72;}
+.athena-question-content h1{max-width:610px;margin:9px 0 10px;color:var(--athena-ink);font-size:clamp(30px,3.5vw,45px);line-height:1.08;letter-spacing:-.025em;text-wrap:balance;}
+.athena-question-content>p{max-width:560px;margin:0 0 20px;color:var(--athena-muted);font-size:14px;font-weight:600;line-height:1.62;}
 .athena-field-label{display:block;margin:4px 0 7px;color:var(--athena-ink);font-size:12px;font-weight:900;}
 .athena-large-input{height:56px!important;border-color:rgba(73,111,91,.24)!important;border-radius:15px!important;background:rgba(255,253,248,.92)!important;color:var(--athena-ink)!important;font-size:17px!important;font-weight:750!important;box-shadow:0 12px 28px rgba(60,66,55,.065);}
 .athena-large-input:focus{border-color:var(--athena-sage)!important;box-shadow:0 0 0 4px rgba(93,128,109,.12),0 12px 28px rgba(60,66,55,.08)!important;}
@@ -15045,11 +15045,11 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .university-ic-shine::after{content:"";position:absolute;left:-45%;top:-100%;width:45%;height:280%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);transform:rotate(24deg);transition:left .7s ease;}
 .university-ic-card:hover .university-ic-shine::after{left:115%;}
 .university-ic-grid{position:absolute;inset:0;z-index:0;border-radius:23px;background-image:linear-gradient(rgba(73,111,91,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(73,111,91,.045) 1px,transparent 1px);background-size:18px 18px;mask-image:linear-gradient(135deg,#0008,transparent 72%);pointer-events:none;}
-.university-ic-face{position:absolute;inset:0;z-index:1;padding:22px 24px;border-radius:23px;overflow:hidden;backface-visibility:hidden;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.16,1,.3,1),opacity .24s;}
-.university-ic-front{background:radial-gradient(circle at 92% 8%,rgba(233,133,111,.15),transparent 28%),linear-gradient(145deg,rgba(255,253,248,.96),rgba(238,243,234,.94));}
-.university-ic-back{display:flex;flex-direction:column;padding:0;background:radial-gradient(circle at 8% 100%,rgba(93,128,109,.14),transparent 34%),linear-gradient(145deg,#fffdf8,#edf2e9);transform:rotateY(180deg);opacity:0;}
-.university-ic-card.is-flipped .university-ic-front{transform:rotateY(-180deg);opacity:0;pointer-events:none;}
-.university-ic-card.is-flipped .university-ic-back{transform:rotateY(0);opacity:1;}
+.university-ic-rotor{position:absolute;inset:0;z-index:1;border-radius:inherit;transform-style:preserve-3d;transform-origin:center center;transition:transform .78s cubic-bezier(.22,.8,.2,1);will-change:transform;}
+.university-ic-card.is-flipped .university-ic-rotor{transform:rotateY(180deg);}
+.university-ic-face{position:absolute;inset:0;padding:22px 24px;border-radius:23px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform-style:preserve-3d;}
+.university-ic-front{transform:rotateY(0);background:radial-gradient(circle at 92% 8%,rgba(233,133,111,.15),transparent 28%),linear-gradient(145deg,rgba(255,253,248,.96),rgba(238,243,234,.94));}
+.university-ic-back{display:flex;flex-direction:column;padding:0;background:radial-gradient(circle at 8% 100%,rgba(93,128,109,.14),transparent 34%),linear-gradient(145deg,#fffdf8,#edf2e9);transform:rotateY(180deg);}
 .university-ic-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .university-ic-brand{display:flex;align-items:center;gap:8px;color:#365e4a;}
 .university-ic-brand>span{display:grid;place-items:center;width:29px;height:29px;border-radius:10px;background:#527964;color:#fff;box-shadow:0 8px 18px rgba(53,94,74,.2);}
@@ -15087,16 +15087,17 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .athena-secretary-note{display:flex;align-items:center;gap:9px;width:min(100%,520px);margin-top:15px;padding:10px 12px;border:1px solid rgba(73,111,91,.14);border-radius:16px;background:rgba(255,253,248,.55);}
 .athena-secretary-note p{margin:0;color:var(--athena-muted);font-size:9px;line-height:1.45;}
 .athena-secretary-note strong{display:block;margin-bottom:1px;color:var(--athena-sage);font-size:9px;}
-.athena-chapter-list{display:grid;gap:7px;}
-.athena-chapter-list>div{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:10px 11px;border:1px solid rgba(73,111,91,.16);border-radius:14px;background:rgba(255,253,248,.72);transition:border-color .18s,background .18s;}
-.athena-chapter-list>div.answered{border-color:rgba(93,128,109,.35);background:rgba(238,245,238,.82);}
-.athena-chapter-list>div>span:first-child{display:flex;align-items:center;gap:8px;min-width:0;}
-.athena-chapter-list>div>span:first-child em{display:grid;place-items:center;width:25px;height:25px;flex:0 0 auto;border-radius:9px;background:var(--athena-sage-soft);color:var(--athena-sage);font-style:normal;font-size:9px;font-weight:950;}
-.athena-chapter-list>div>span:first-child strong{overflow:hidden;text-overflow:ellipsis;color:var(--athena-ink);font-size:11px;white-space:nowrap;}
-.athena-chapter-actions{display:flex;gap:5px;}
-.athena-chapter-actions button{display:flex;align-items:center;gap:4px;padding:6px 7px;border:1px solid rgba(73,111,91,.16);border-radius:9px;background:#fffdf8;color:#7b8781;font:inherit;font-size:8px;font-weight:900;cursor:pointer;}
-.athena-chapter-actions button.selected{border-color:#5d806d;background:#5d806d;color:#fff;}
-.athena-chapter-actions button.selected.pending{border-color:#d29167;background:#d29167;}
+.athena-chapter-list{display:grid;gap:8px;}
+.athena-chapter-toggle{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;width:100%;padding:11px 12px;border:1px solid rgba(73,111,91,.16);border-radius:14px;background:rgba(255,253,248,.76);color:var(--athena-ink);font:inherit;text-align:left;cursor:pointer;transition:transform .18s,border-color .18s,background .18s,box-shadow .18s;}
+.athena-chapter-toggle:hover,.athena-chapter-toggle:focus-visible{transform:translateY(-1px);border-color:rgba(93,128,109,.44);box-shadow:0 10px 24px rgba(66,107,87,.07);}
+.athena-chapter-toggle.selected{border-color:#5d806d;background:rgba(229,239,232,.9);box-shadow:inset 0 0 0 2px rgba(93,128,109,.1);}
+.athena-chapter-toggle>em{display:grid;place-items:center;width:27px;height:27px;border-radius:9px;background:var(--athena-sage-soft);color:var(--athena-sage);font-style:normal;font-size:9px;font-weight:950;}
+.athena-chapter-toggle>strong{overflow:hidden;text-overflow:ellipsis;font-size:11px;white-space:nowrap;}
+.athena-chapter-check{display:grid;place-items:center;width:25px;height:25px;border:1px solid rgba(73,111,91,.22);border-radius:9px;background:#fffdf8;color:#fff;}
+.athena-chapter-toggle.selected .athena-chapter-check{border-color:#5d806d;background:#5d806d;}
+.athena-chapter-footer{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:9px;margin-top:11px;}
+.athena-chapter-footer .athena-main-action{width:100%;margin:0;}
+.athena-chapter-footer .btn-ghost{min-height:48px;border-radius:14px!important;color:var(--athena-muted)!important;}
 .athena-profile-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:18px 0 4px;}
 .athena-profile-summary>span{position:relative;display:grid;align-content:start;min-height:105px;padding:13px;border:1px solid rgba(73,111,91,.16);border-radius:15px;background:rgba(255,253,248,.75);}
 .athena-profile-summary svg{color:var(--athena-coral);}
@@ -15127,6 +15128,11 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .athena-account-form .input{border-color:rgba(73,111,91,.2);border-radius:12px;background:rgba(255,253,248,.9);color:var(--athena-ink);}
 .athena-account-passwords{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
 .athena-account-form .athena-main-action{width:100%;margin-top:3px;}
+.athena-google-button{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:50px;border:1px solid rgba(73,111,91,.22);border-radius:14px;background:#fff;color:var(--athena-ink);font:inherit;font-size:13px;font-weight:900;cursor:pointer;box-shadow:0 10px 24px rgba(54,61,51,.07);transition:transform .18s,border-color .18s,box-shadow .18s;}
+.athena-google-button:hover:not(:disabled){transform:translateY(-1px);border-color:rgba(93,128,109,.48);box-shadow:0 14px 30px rgba(54,61,51,.1);}
+.athena-google-mark{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:linear-gradient(135deg,#4285f4 0 26%,#34a853 26% 52%,#fbbc05 52% 76%,#ea4335 76%);color:#fff;font-size:13px;font-weight:950;box-shadow:inset 0 0 0 2px rgba(255,255,255,.5);}
+.athena-auth-divider{display:flex;align-items:center;gap:10px;color:var(--athena-muted);font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
+.athena-auth-divider::before,.athena-auth-divider::after{content:"";height:1px;flex:1;background:rgba(73,111,91,.15);}
 .athena-result-pill{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:4px 9px;margin:-7px 0 14px;padding:10px 12px;border:1px solid rgba(93,128,109,.22);border-radius:14px;background:#e9f2ea;color:var(--athena-sage);}
 .athena-result-pill svg{grid-row:1/3;}
 .athena-result-pill span{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;}
@@ -15167,10 +15173,10 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .athena-progress>div.complete>span em{background:var(--stage-primary);}
 .athena-progress>div.active>span,.athena-progress>div.complete>span{color:var(--stage-primary);}
 .athena-workspace{display:block;min-height:100dvh;}
-.athena-question-pane{position:relative;display:flex;align-items:center;justify-content:center;min-height:100dvh;padding:132px clamp(24px,8vw,132px) 142px;border:0;overflow:hidden;background:radial-gradient(circle at 12% 22%,var(--stage-glow),transparent 26%),radial-gradient(circle at 88% 78%,color-mix(in srgb,var(--stage-secondary) 17%,transparent),transparent 29%),linear-gradient(145deg,color-mix(in srgb,var(--stage-soft) 44%,#fffaf1),#fffaf4 52%,color-mix(in srgb,var(--stage-secondary) 7%,#f7f3eb));transition:background .45s ease;}
-.athena-question-content{position:relative;z-index:3;width:min(100%,780px);margin:auto;text-align:left;}
-.athena-question-content h1{max-width:760px;font-size:clamp(40px,5.4vw,66px);line-height:1.01;letter-spacing:-.037em;}
-.athena-question-content>p{max-width:700px;font-size:16px;line-height:1.72;}
+.athena-question-pane{position:relative;display:flex;align-items:center;justify-content:center;min-height:100dvh;padding:126px clamp(24px,8vw,132px) 126px;border:0;overflow-x:hidden;background:radial-gradient(circle at 12% 22%,var(--stage-glow),transparent 26%),radial-gradient(circle at 88% 78%,color-mix(in srgb,var(--stage-secondary) 17%,transparent),transparent 29%),linear-gradient(145deg,color-mix(in srgb,var(--stage-soft) 44%,#fffaf1),#fffaf4 52%,color-mix(in srgb,var(--stage-secondary) 7%,#f7f3eb));transition:background .45s ease;}
+.athena-question-content{position:relative;z-index:3;width:min(100%,680px);margin:auto;text-align:left;}
+.athena-question-content h1{max-width:680px;font-size:clamp(38px,4.6vw,56px);line-height:1.04;letter-spacing:-.034em;}
+.athena-question-content>p{max-width:610px;font-size:15px;line-height:1.62;}
 .athena-question-content .athena-kicker{color:var(--stage-primary);}
 .athena-question-icon{width:54px;height:54px;border-color:color-mix(in srgb,var(--stage-primary) 34%,transparent);border-radius:18px;background:linear-gradient(145deg,var(--stage-soft),color-mix(in srgb,var(--stage-primary) 17%,#fff));color:var(--stage-primary);box-shadow:0 13px 30px var(--stage-glow);}
 .athena-back-button{position:fixed;z-index:82;left:clamp(18px,3vw,44px);top:94px;border:1px solid color-mix(in srgb,var(--stage-primary) 18%,transparent);background:rgba(255,253,247,.74);color:var(--stage-primary);backdrop-filter:blur(12px);}
@@ -15189,10 +15195,9 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .athena-question-footer>span{display:flex;align-items:center;gap:8px;}
 .athena-question-footer strong{font-size:10px;color:var(--stage-primary);}
 .athena-question-footer em{font-size:9px;font-style:normal;font-weight:850;text-transform:uppercase;letter-spacing:.07em;}
-.athena-stage-shape{position:absolute;pointer-events:none;border:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);opacity:.8;animation:athenaShapeFloat 8s ease-in-out infinite;}
+.athena-stage-shape{position:absolute;pointer-events:none;border:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);opacity:.34;animation:athenaShapeFloat 8s ease-in-out infinite;}
 .athena-stage-shape.shape-one{left:-7vw;top:18%;width:26vw;height:26vw;border-radius:42% 58% 50% 50%;background:color-mix(in srgb,var(--stage-primary) 5%,transparent);transform:rotate(17deg);}
-.athena-stage-shape.shape-two{right:-8vw;bottom:4%;width:31vw;height:31vw;border-radius:50%;border-width:34px;border-color:color-mix(in srgb,var(--stage-secondary) 7%,transparent);animation-delay:-3s;}
-.athena-stage-shape.shape-three{right:15%;top:16%;width:46px;height:46px;border-radius:16px;background:color-mix(in srgb,var(--stage-secondary) 12%,transparent);transform:rotate(22deg);animation-delay:-1.5s;}
+.athena-stage-shape.shape-two,.athena-stage-shape.shape-three{display:none;}
 .athena-live-engraving{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;padding:11px 13px;border:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);border-radius:15px;background:color-mix(in srgb,var(--stage-soft) 48%,rgba(255,253,248,.78));}
 .athena-live-engraving>span{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:2px 8px;min-width:0;color:var(--stage-primary);}
 .athena-live-engraving>span svg{grid-row:1/3;}
@@ -15200,15 +15205,15 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .athena-live-engraving small{font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
 .athena-live-engraving strong{color:var(--athena-ink);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;}
 .athena-live-engraving button{display:flex;align-items:center;gap:6px;flex:0 0 auto;padding:7px 9px;border:0;border-radius:10px;background:var(--stage-primary);color:#fff;font:inherit;font-size:9px;font-weight:900;cursor:pointer;}
-.athena-ic-launch{position:fixed;right:24px;top:98px;z-index:70;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:1px 10px;min-width:176px;padding:9px 12px;border:1px solid color-mix(in srgb,var(--stage-primary) 28%,transparent);border-radius:17px;background:rgba(255,253,248,.9);box-shadow:0 16px 38px var(--stage-glow);backdrop-filter:blur(18px);color:var(--athena-ink);font:inherit;text-align:left;cursor:pointer;transition:transform .18s,box-shadow .18s;}
+.athena-ic-launch{position:fixed;right:24px;top:91px;z-index:70;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:1px 9px;min-width:148px;padding:8px 10px;border:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);border-radius:15px;background:rgba(255,253,248,.91);box-shadow:0 13px 32px var(--stage-glow);backdrop-filter:blur(18px);color:var(--athena-ink);font:inherit;text-align:left;cursor:pointer;transition:transform .18s,box-shadow .18s;}
 .athena-ic-launch:hover{transform:translateY(-3px) rotate(-1deg);box-shadow:0 21px 45px var(--stage-glow);}
-.athena-ic-launch>span{position:relative;display:grid;place-items:center;width:38px;height:38px;grid-row:1/3;border-radius:13px;background:linear-gradient(145deg,var(--stage-primary),var(--stage-secondary));color:#fff;box-shadow:0 8px 18px var(--stage-glow);animation:athenaCardUpdated .5s cubic-bezier(.16,1,.3,1);}
+.athena-ic-launch>span{position:relative;display:grid;place-items:center;width:34px;height:34px;grid-row:1/3;border-radius:11px;background:linear-gradient(145deg,var(--stage-primary),var(--stage-secondary));color:#fff;box-shadow:0 8px 18px var(--stage-glow);animation:athenaCardUpdated .5s cubic-bezier(.16,1,.3,1);}
 .athena-ic-launch>span i{position:absolute;right:-7px;bottom:-6px;padding:2px 4px;border:2px solid #fff;border-radius:99px;background:#29352f;color:#fff;font-size:7px;font-style:normal;font-weight:950;}
 .athena-ic-launch strong{font-size:11px;}
-.athena-ic-launch small{color:var(--stage-primary);font-size:8px;font-weight:850;}
+.athena-ic-launch small{display:none;}
 .onboarding-cipher-guide{position:fixed;left:22px;bottom:20px;z-index:72;display:flex;align-items:flex-end;gap:7px;max-width:min(410px,calc(100vw - 32px));}
 .onboarding-cipher-mascot-wrap{position:relative;flex:0 0 auto;filter:drop-shadow(0 14px 20px var(--stage-glow));}
-.onboarding-cipher-mascot-wrap .cipher-mascot{--cipher-size:92px!important;}
+.onboarding-cipher-mascot-wrap .cipher-mascot{--cipher-size:78px!important;}
 .onboarding-cipher-toggle{position:absolute;right:0;top:4px;z-index:2;display:grid;place-items:center;width:23px;height:23px;border:2px solid #fff;border-radius:50%;background:var(--stage-primary);color:#fff;cursor:pointer;}
 .onboarding-cipher-bubble{position:relative;width:min(290px,calc(100vw - 128px));padding:12px 14px;border:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);border-radius:18px 18px 5px 18px;background:rgba(255,253,248,.94);box-shadow:0 18px 44px rgba(63,60,49,.15);backdrop-filter:blur(18px);color:var(--athena-ink);font:inherit;text-align:left;cursor:pointer;animation:cipherBubbleIn .28s cubic-bezier(.16,1,.3,1) both;}
 .onboarding-cipher-bubble::after{content:"";position:absolute;right:-8px;bottom:10px;width:16px;height:16px;border-right:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);border-bottom:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);background:rgba(255,253,248,.94);transform:rotate(-45deg);}
@@ -16997,9 +17002,8 @@ body{background:
   .athena-profile-summary>span{grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;min-height:0;}
   .athena-profile-summary svg{grid-row:1/3;}
   .athena-profile-summary small{margin-top:0;}
-  .athena-chapter-list>div{grid-template-columns:minmax(0,1fr);gap:8px;}
-  .athena-chapter-actions{width:100%;}
-  .athena-chapter-actions button{flex:1;justify-content:center;}
+  .athena-chapter-footer{grid-template-columns:minmax(0,1fr);}
+  .athena-chapter-footer .btn-ghost{width:100%;justify-content:center;}
   .athena-account-passwords{grid-template-columns:minmax(0,1fr);}
   .university-ic-card{height:238px;aspect-ratio:auto;border-radius:20px;}
   .university-ic-shine,.university-ic-grid,.university-ic-face{border-radius:18px;}
@@ -17073,6 +17077,7 @@ body{background:
   .athena-cipher-intro span{font-size:7px;}
   .athena-cipher-welcome{font-size:9px;}
   .athena-workspace-header{padding:8px 9px 10px;overflow:visible;}
+  .athena-workspace-header .athena-brand{display:none;}
   .athena-progress{min-width:0;gap:5px;}
   .athena-progress>div>span{gap:4px;font-size:7px;letter-spacing:0;white-space:nowrap;}
   .athena-progress>div>span em{width:17px;height:17px;font-size:8px;}
@@ -17893,12 +17898,69 @@ function toAthenaStudyProfile(profile) {
     test_date_tbc:Boolean(profile.takingExam==="yes"&&(profile.examDateDeferred||profile.bookedTest==="no")),
     daily_goal_minutes:Number(profile.dailyGoal)||20,
     chapter_status:profile.chapterStatus||{},
+    chapters_reviewed:Boolean(profile.chaptersReviewed),
+    chapters_skipped:Boolean(profile.chaptersSkipped),
     diagnostic_score:profile.diagnosticScore===null||profile.diagnosticScore===undefined?null:Number(profile.diagnosticScore),
     diagnostic_total:Number(profile.diagnosticTotal)||0,
     diagnostic_skipped:Boolean(profile.diagnosticSkipped),
     card_colour:profile.cardColour||"sage",
     completed_at:new Date().toISOString(),
   };
+}
+
+const ATHENA_OAUTH_PENDING_KEY="secureplus-athena-oauth-profile";
+const ATHENA_OAUTH_PENDING_MAX_AGE_MS=60*60*1000;
+
+async function savePendingAthenaOAuth(profile,form) {
+  const payload={
+    fullName:String(profile?.name||form?.name||"").trim(),
+    avatarId:String(form?.avatarId||"default-cipher"),
+    referralCode:String(form?.referral||"").trim().toUpperCase(),
+    studyProfile:toAthenaStudyProfile(profile||{}),
+    savedAt:new Date().toISOString(),
+  };
+  await storageSet(ATHENA_OAUTH_PENDING_KEY,JSON.stringify(payload));
+  return payload;
+}
+
+async function applyPendingAthenaOAuth(authUser) {
+  if(!supabase||!authUser)return authUser;
+  const stored=await storageGet(ATHENA_OAUTH_PENDING_KEY).catch(()=>null);
+  if(!stored?.value)return authUser;
+  let pending;
+  try{pending=JSON.parse(stored.value);}catch{
+    await storageDelete(ATHENA_OAUTH_PENDING_KEY).catch(()=>{});
+    return authUser;
+  }
+  const savedAt=Date.parse(pending?.savedAt||"");
+  if(!Number.isFinite(savedAt)||Date.now()-savedAt>ATHENA_OAUTH_PENDING_MAX_AGE_MS){
+    await storageDelete(ATHENA_OAUTH_PENDING_KEY).catch(()=>{});
+    return authUser;
+  }
+  await storageDelete(ATHENA_OAUTH_PENDING_KEY).catch(()=>{});
+  try{
+    const metadata={
+      ...(authUser.user_metadata||{}),
+      name:pending.fullName||profileName(authUser),
+      full_name:pending.fullName||profileName(authUser),
+      avatar_id:pending.avatarId||"default-cipher",
+      pending_referral_code:pending.referralCode||"",
+      study_profile:pending.studyProfile||null,
+    };
+    const {data,error}=await supabase.auth.updateUser({data:metadata});
+    if(error)throw error;
+    const updatedUser=data?.user||authUser;
+    await waitForSupabaseProfile(updatedUser);
+    await updateSupabaseAcademyProfile(updatedUser.id,{fullName:metadata.full_name,avatarId:metadata.avatar_id});
+    if(updatedUser.email){
+      await Promise.all([DB.saveDiagnosticDone(updatedUser.email),DB.saveOnboardingSeen(updatedUser.email)]);
+    }
+    return updatedUser;
+  }catch(error){
+    await storageSet(ATHENA_OAUTH_PENDING_KEY,JSON.stringify(pending)).catch(()=>{});
+    console.warn("Unable to apply the pending Athena profile",error);
+    return authUser;
+  }
 }
 
 function UniversityICCard({profile,flipped,onFlip}) {
@@ -17948,7 +18010,8 @@ function UniversityICCard({profile,flipped,onFlip}) {
         <span className="university-ic-particle particle-one" aria-hidden="true"/>
         <span className="university-ic-particle particle-two" aria-hidden="true"/>
         <span className="university-ic-particle particle-three" aria-hidden="true"/>
-        <div className="university-ic-face university-ic-front" aria-hidden={flipped}>
+        <div className="university-ic-rotor">
+          <div className="university-ic-face university-ic-front" aria-hidden={flipped}>
           <div className="university-ic-head">
             <span className="university-ic-brand"><span><ShieldCheck size={17}/></span><strong>University of SecurePlus</strong></span>
             <span className="university-ic-kind">Student IC</span>
@@ -17966,8 +18029,8 @@ function UniversityICCard({profile,flipped,onFlip}) {
             <span><BadgeCheck size={13}/> Admission in progress</span>
             <span className="university-ic-bottom-tech"><span className="university-ic-holo-seal"><Sparkles size={12}/></span><span className="university-ic-chip" aria-hidden="true"><i/><i/><i/><i/></span></span>
           </div>
-        </div>
-        <div className="university-ic-face university-ic-back" aria-hidden={!flipped}>
+          </div>
+          <div className="university-ic-face university-ic-back" aria-hidden={!flipped}>
           <div className="university-ic-strip" aria-hidden="true"/>
           <div className="university-ic-back-body">
             <div className="university-ic-signature">
@@ -17983,9 +18046,10 @@ function UniversityICCard({profile,flipped,onFlip}) {
                 </div>
               )}
               <div><small>Daily goal</small><strong><CarvedText value={profile.dailyGoal?`${profile.dailyGoal}+ min`:""} placeholder="Not set"/></strong></div>
-              <div><small>Chapters studied</small><strong><CarvedText value={Object.keys(chapterStatuses).length?`${studiedCount} / ${CHAPTERS.length}`:""} placeholder="Not set"/></strong></div>
+              <div><small>Chapters studied</small><strong><CarvedText value={profile.chaptersReviewed?`${studiedCount} / ${CHAPTERS.length}`:""} placeholder="Not set"/></strong></div>
             </div>
             <p className="university-ic-note">This learning IC is personal to its holder. Athena will use your study choices to shape your starting path.</p>
+          </div>
           </div>
         </div>
       </div>
@@ -18024,7 +18088,7 @@ const CIPHER_ONBOARDING_GUIDANCE={
   booked:{animation:"scan",message:"No booking yet? I’ll mark the date TBC and keep your momentum moving.",tip:"You can update an exam date later from your profile."},
   examDate:{animation:"scan",message:"I’m checking the format: day, month, then year. You can also update it later.",tip:"Example: 18/11/2026."},
   goalsTime:{animation:"tip",message:"A repeatable ten minutes beats an ambitious goal you cannot keep.",tip:"Pick the goal that still feels possible on a busy day."},
-  goalsChapters:{animation:"tip",message:"Mark every chapter. “Not yet” simply tells me where we should begin.",tip:"Your choices create a gentler first study route."},
+  goalsChapters:{animation:"tip",message:"Tick only the chapters you have studied. Anything unticked is treated as not studied.",tip:"Unsure? You can skip this step and update it later."},
   diagnosticIntro:{animation:"cheer",message:"Your IC profile is ready! The starter set is optional and has no effect on account access.",tip:"This is a warm-up, not an exam-readiness verdict."},
   diagnostic:{animation:"thinking",message:"Read the final sentence twice. Security+ questions often hide the real task there.",tip:"Eliminate answers that solve a different problem from the one being asked."},
   account:{animation:"unlock",message:"Last step! Your free account saves the IC and the learning plan we just built.",tip:"No credit card is needed for a free SecurePlus account."},
@@ -18032,9 +18096,9 @@ const CIPHER_ONBOARDING_GUIDANCE={
 
 function OnboardingCipherGuide({stage,answerState=""}) {
   const guide=CIPHER_ONBOARDING_GUIDANCE[stage]||CIPHER_ONBOARDING_GUIDANCE.name;
-  const [expanded,setExpanded]=useState(true);
+  const [expanded,setExpanded]=useState(false);
   const [showTip,setShowTip]=useState(false);
-  useEffect(()=>{setExpanded(true);setShowTip(false);},[stage]);
+  useEffect(()=>{setExpanded(false);setShowTip(false);},[stage]);
   const animation=answerState==="correct"?"correct":answerState==="wrong"?"wrong":guide.animation;
   const message=answerState==="correct"
     ? "That pattern was correct! I’ve logged the signal for Athena."
@@ -18074,7 +18138,7 @@ function AthenaCardLab({open,onClose,profile,setProfile,flipped,setFlipped}) {
     return()=>document.removeEventListener("keydown",closeOnEscape);
   },[open,onClose]);
   if(!open)return null;
-  const chapterComplete=Object.keys(profile.chapterStatus||{}).length>=CHAPTERS.length;
+  const chapterComplete=Boolean(profile.chaptersReviewed||profile.chaptersSkipped);
   const details=[Boolean(profile.name?.trim()),Boolean(profile.experience),Boolean(profile.takingExam),Boolean(profile.dailyGoal),chapterComplete];
   const completed=details.filter(Boolean).length;
   const completion=Math.round((completed/details.length)*100);
@@ -18162,7 +18226,7 @@ function getAthenaDiagnosticQuestions(experience) {
   return picks.slice(0,3);
 }
 
-function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,loading,error,ok,mintedUser,onEnter,onHaveAccount}) {
+function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,onGoogle,loading,error,ok,mintedUser,onEnter,onHaveAccount}) {
   const [stage,setStage]=useState("intro");
   const [flipped,setFlipped]=useState(false);
   const [cardLabOpen,setCardLabOpen]=useState(false);
@@ -18189,18 +18253,15 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
     setLocalError("");
     if(value==="yes"){
       setFlipped(true);
-      setCardLabOpen(true);
       window.setTimeout(()=>setStage("booked"),240);
     }else{
       setFlipped(false);
-      setCardLabOpen(true);
       window.setTimeout(()=>setStage("goalsTime"),240);
     }
   };
   const chooseBooked=value=>{
     setProfile(current=>({...current,bookedTest:value,examDate:value==="no"?"":current.examDate,examDateDeferred:value==="no"}));
     setFlipped(true);
-    setCardLabOpen(true);
     if(value==="no")showNotice("No problem — your IC will show TBC. You can update the date later after booking your examination.");
     window.setTimeout(()=>setStage("examDate"),220);
   };
@@ -18216,16 +18277,22 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
     setLocalError("");
     setStage("goalsTime");
   };
-  const setChapterStatus=(chapterId,status)=>{
-    setProfile(current=>({...current,chapterStatus:{...(current.chapterStatus||{}),[chapterId]:status}}));
+  const toggleStudiedChapter=chapterId=>{
+    setProfile(current=>{
+      const next={...(current.chapterStatus||{})};
+      if(next[chapterId]==="studied")delete next[chapterId];
+      else next[chapterId]="studied";
+      return {...current,chapterStatus:next,chaptersReviewed:false,chaptersSkipped:false};
+    });
   };
   const continueChapters=()=>{
-    if(Object.keys(profile.chapterStatus||{}).length<CHAPTERS.length){
-      setLocalError("Mark each chapter as Studied or Not yet so Athena can shape your starting plan.");
-      return;
-    }
     setLocalError("");
-    setCardLabOpen(true);
+    setProfile(current=>({...current,chaptersReviewed:true,chaptersSkipped:false}));
+    setStage("diagnosticIntro");
+  };
+  const skipChapters=()=>{
+    setLocalError("");
+    setProfile(current=>({...current,chapterStatus:{},chaptersReviewed:false,chaptersSkipped:true}));
     setStage("diagnosticIntro");
   };
   const finishDiagnostic=answers=>{
@@ -18272,14 +18339,8 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
           </div>
           <div className="athena-kicker"><Sparkles size={14}/> Your personal secretary</div>
           <h1>Hello, I’m Athena!</h1>
-          <p>I will be your personal secretary. Let’s make your University IC before you embark on your Security+ learning journey.</p>
-          <div className="athena-cipher-welcome"><Sparkles size={15}/><span>Cipher will join us as your interactive campus guide.</span></div>
-          <div className="athena-intro-promise">
-            <span><UserRound size={17}/><strong>Tell me about you</strong></span>
-            <span><BadgeCheck size={17}/><strong>Build your IC</strong></span>
-            <span><Brain size={17}/><strong>Shape your first set</strong></span>
-          </div>
-          <button className="btn btn-primary athena-main-action" type="button" onClick={()=>setStage("name")}>Continue with Athena <ChevronRight size={18}/></button>
+          <p>Let’s create your University IC and shape a comfortable Security+ starting point.</p>
+          <button className="btn btn-primary athena-main-action" type="button" onClick={()=>setStage("name")}>Create my IC <ChevronRight size={18}/></button>
           <small>About 2 minutes · You can change your study details later</small>
         </div>
         <button className="athena-login-skip" type="button" onClick={onHaveAccount}><span>Have an account?</span><strong>Skip to login</strong><SkipForward size={20}/></button>
@@ -18293,11 +18354,11 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-question-icon"><UserRound size={22}/></div>
         <div className="athena-kicker">Part 1 · Your profile</div>
         <h1>How do you want to be addressed?</h1>
-        <p>This preferred name will be carved onto your University IC as you type.</p>
+        <p>This name appears on your University IC.</p>
         <label className="athena-field-label" htmlFor="athena-preferred-name">Preferred name</label>
-        <input id="athena-preferred-name" className="input athena-large-input" autoComplete="name" autoFocus placeholder="For example, Alex" value={profile.name} onChange={event=>{updateProfile("name",event.target.value);setForm(current=>({...current,name:event.target.value}));}} onKeyDown={event=>{if(event.key==="Enter"&&profile.name.trim()){setStage("experience");setCardLabOpen(true);}}}/>
+        <input id="athena-preferred-name" className="input athena-large-input" autoComplete="name" autoFocus placeholder="For example, Alex" value={profile.name} onChange={event=>{updateProfile("name",event.target.value);setForm(current=>({...current,name:event.target.value}));}} onKeyDown={event=>{if(event.key==="Enter"&&profile.name.trim())setStage("experience");}}/>
         <div className="athena-live-engraving"><span><Sparkles size={15}/><small>Live engraving</small><strong><CarvedText value={profile.name?.toUpperCase()} placeholder="YOUR NAME"/></strong></span><button type="button" onClick={()=>setCardLabOpen(true)}>View on IC <RotateCcw size={13}/></button></div>
-        <button className="btn btn-primary athena-main-action" type="button" disabled={!profile.name.trim()} onClick={()=>{setStage("experience");setCardLabOpen(true);}}>Carve my name <ChevronRight size={17}/></button>
+        <button className="btn btn-primary athena-main-action" type="button" disabled={!profile.name.trim()} onClick={()=>setStage("experience")}>Continue <ChevronRight size={17}/></button>
       </>
     );
     if(stage==="experience")return (
@@ -18305,9 +18366,9 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-question-icon"><Brain size={22}/></div>
         <div className="athena-kicker">Part 1 · Your profile</div>
         <h1>How experienced are you in cybersecurity?</h1>
-        <p>Athena will use this to choose a fair starting question set. It will not affect your IC design.</p>
+        <p>This helps Athena choose a comfortable starting level.</p>
         <div className="athena-option-list">
-          {ATHENA_EXPERIENCE_OPTIONS.map(option=><AthenaOption key={option.id} selected={profile.experience===option.id} onClick={()=>{updateProfile("experience",option.id);window.setTimeout(()=>setStage("examPlan"),180);}} title={option.label} help={option.help}/>) }
+          {ATHENA_EXPERIENCE_OPTIONS.map(option=><AthenaOption key={option.id} selected={profile.experience===option.id} onClick={()=>{updateProfile("experience",option.id);window.setTimeout(()=>setStage("examPlan"),180);}} title={option.label}/>) }
         </div>
       </>
     );
@@ -18316,10 +18377,10 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-question-icon"><CalendarDays size={22}/></div>
         <div className="athena-kicker">Part 2 · Exam plan</div>
         <h1>Are you planning on taking the CompTIA Security+ examination?</h1>
-        <p>Your answer sets the trim of your IC. Gold marks an exam pathway; silver marks a learning pathway.</p>
+        <p>This sets your study path and IC trim.</p>
         <div className="athena-option-list two-column">
-          <AthenaOption selected={profile.takingExam==="yes"} onClick={()=>chooseExamPlan("yes")} icon={Trophy} title="Yes" help="I am working towards the examination."/>
-          <AthenaOption selected={profile.takingExam==="no"} onClick={()=>chooseExamPlan("no")} icon={BookOpenCheck} title="No" help="I am learning without a test date."/>
+          <AthenaOption selected={profile.takingExam==="yes"} onClick={()=>chooseExamPlan("yes")} icon={Trophy} title="Yes"/>
+          <AthenaOption selected={profile.takingExam==="no"} onClick={()=>chooseExamPlan("no")} icon={BookOpenCheck} title="No"/>
         </div>
       </>
     );
@@ -18328,10 +18389,10 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-question-icon"><BadgeCheck size={22}/></div>
         <div className="athena-kicker">Part 2 · Exam plan</div>
         <h1>Have you booked the test?</h1>
-        <p>If not, Athena will carve “TBC” on the back of your IC until your date is confirmed.</p>
+        <p>If not, your IC will simply show “TBC”.</p>
         <div className="athena-option-list two-column">
-          <AthenaOption selected={profile.bookedTest==="yes"} onClick={()=>chooseBooked("yes")} icon={CheckCircle2} title="Yes" help="My examination is booked."/>
-          <AthenaOption selected={profile.bookedTest==="no"} onClick={()=>chooseBooked("no")} icon={Clock3} title="Not yet" help="I will confirm it later."/>
+          <AthenaOption selected={profile.bookedTest==="yes"} onClick={()=>chooseBooked("yes")} icon={CheckCircle2} title="Yes"/>
+          <AthenaOption selected={profile.bookedTest==="no"} onClick={()=>chooseBooked("no")} icon={Clock3} title="Not yet"/>
         </div>
       </>
     );
@@ -18340,7 +18401,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-question-icon"><CalendarDays size={22}/></div>
         <div className="athena-kicker">Part 2 · Exam plan</div>
         <h1>What is your test date?</h1>
-        <p>Use DD/MM/YYYY. Watch the expiry date carve itself into the back of your IC.</p>
+        <p>Use DD/MM/YYYY, or add it later.</p>
         <label className="athena-field-label" htmlFor="athena-exam-date">CompTIA Security+ test date</label>
         <input id="athena-exam-date" className="input athena-large-input mono" inputMode="numeric" autoFocus placeholder="DD/MM/YYYY" maxLength={10} value={profile.examDate} onChange={event=>setProfile(current=>({...current,examDate:formatSignupDateInput(event.target.value),examDateDeferred:false}))}/>
         <div className="athena-live-engraving"><span><CalendarDays size={15}/><small>Expiry engraving</small><strong><CarvedText value={profile.examDate} placeholder="__/__/____"/></strong></span><button type="button" onClick={()=>{setFlipped(true);setCardLabOpen(true);}}>View on IC <RotateCcw size={13}/></button></div>
@@ -18355,9 +18416,9 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-question-icon"><Target size={22}/></div>
         <div className="athena-kicker">Part 3 · Study goals</div>
         <h1>What daily learning goal feels realistic?</h1>
-        <p>A goal should feel repeatable on busy days. You can raise it later as your study rhythm grows.</p>
+        <p>Choose something that still feels possible on a busy day.</p>
         <div className="athena-option-list two-column">
-          {ATHENA_DAILY_GOALS.map(option=><AthenaOption key={option.id} selected={profile.dailyGoal===option.id} onClick={()=>{updateProfile("dailyGoal",option.id);window.setTimeout(()=>setStage("goalsChapters"),180);}} icon={Clock3} title={option.label} help={option.help}/>) }
+          {ATHENA_DAILY_GOALS.map(option=><AthenaOption key={option.id} selected={profile.dailyGoal===option.id} onClick={()=>{updateProfile("dailyGoal",option.id);window.setTimeout(()=>setStage("goalsChapters"),180);}} icon={Clock3} title={option.label}/>) }
         </div>
       </>
     );
@@ -18366,37 +18427,30 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-question-icon"><Layers3 size={22}/></div>
         <div className="athena-kicker">Part 3 · Study goals</div>
         <h1>Which chapters have you studied?</h1>
-        <p>Mark each chapter so Athena can avoid assuming you know material you have not seen yet.</p>
+        <p>Tick what you have studied. Unticked chapters count as not studied.</p>
         <div className="athena-chapter-list">
           {CHAPTERS.map(chapter=>{
-            const status=profile.chapterStatus?.[chapter.id];
+            const studied=profile.chapterStatus?.[chapter.id]==="studied";
             return (
-              <div key={chapter.id} className={status?"answered":""}>
-                <span><em>{chapter.id}</em><strong>{chapter.title}</strong></span>
-                <span className="athena-chapter-actions">
-                  <button type="button" className={status==="studied"?"selected":""} onClick={()=>setChapterStatus(chapter.id,"studied")}><Check size={13}/> Studied</button>
-                  <button type="button" className={status==="not-yet"?"selected pending":""} onClick={()=>setChapterStatus(chapter.id,"not-yet")}><Clock3 size={13}/> Not yet</button>
-                </span>
-              </div>
+              <button key={chapter.id} type="button" className={`athena-chapter-toggle ${studied?"selected":""}`} aria-pressed={studied} onClick={()=>toggleStudiedChapter(chapter.id)}>
+                <em>{chapter.id}</em><strong>{chapter.title}</strong><span className="athena-chapter-check">{studied&&<Check size={14} strokeWidth={3}/>}</span>
+              </button>
             );
           })}
         </div>
-        <button className="btn btn-primary athena-main-action" type="button" onClick={continueChapters}>Build my starting plan <ChevronRight size={17}/></button>
+        <div className="athena-chapter-footer">
+          <button className="btn btn-primary athena-main-action" type="button" onClick={continueChapters}>Continue <ChevronRight size={17}/></button>
+          <button className="btn btn-ghost" type="button" onClick={skipChapters}><SkipForward size={15}/> Skip</button>
+        </div>
       </>
     );
     if(stage==="diagnosticIntro"){
-      const studied=Object.values(profile.chapterStatus||{}).filter(value=>value==="studied").length;
       return (
         <>
           <div className="athena-question-icon"><Sparkles size={22}/></div>
           <div className="athena-kicker">Your IC profile is ready</div>
           <h1>Try a question set chosen for you.</h1>
-          <p>Athena selected three original Security+ questions based on your experience. This is a friendly starting signal, not a readiness score.</p>
-          <div className="athena-profile-summary">
-            <span><Brain size={17}/><small>Starting level</small><strong>{ATHENA_EXPERIENCE_OPTIONS.find(item=>item.id===profile.experience)?.label}</strong></span>
-            <span><Clock3 size={17}/><small>Daily goal</small><strong>{profile.dailyGoal}+ minutes</strong></span>
-            <span><Layers3 size={17}/><small>Chapters studied</small><strong>{studied} of {CHAPTERS.length}</strong></span>
-          </div>
+          <p>Try three original questions chosen for your starting level. This is optional and is not a readiness score.</p>
           <button className="btn btn-primary athena-main-action" type="button" onClick={()=>{setDiagnosticIndex(0);setDiagnosticSelected(null);setDiagnosticSubmitted(false);setStage("diagnostic");}}>Try 3 tailored questions <ChevronRight size={17}/></button>
           <button className="btn btn-ghost athena-skip-diagnostic" type="button" onClick={()=>{setProfile(current=>({...current,diagnosticSkipped:true,diagnosticScore:null,diagnosticTotal:0}));setStage("account");}}><SkipForward size={16}/> Skip questions and save my IC</button>
         </>
@@ -18438,6 +18492,12 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <Alert msg={message} type="error" t={t}/>
         <Alert msg={ok} type="success" t={t}/>
         <form className="athena-account-form" onSubmit={event=>{event.preventDefault();setLocalError("");onMint?.();}}>
+          {isSupabaseConfigured&&(
+            <>
+              <button className="athena-google-button" type="button" disabled={loading} onClick={onGoogle}><span className="athena-google-mark">G</span>{loading?"Opening Google...":"Continue with Google"}</button>
+              <div className="athena-auth-divider">or use email</div>
+            </>
+          )}
           <label>Email<input className="input" name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={setField("email")}/></label>
           <div className="athena-account-passwords">
             <label>Password<input className="input" name="password" type="password" autoComplete="new-password" placeholder="At least 8 characters" value={form.pass} onChange={setField("pass")}/></label>
@@ -18450,10 +18510,6 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
               <div className="auth-referral-coin-note"><CipherCoinIcon size={24}/><span>When this account is created, you and your friend each receive <strong>100 Cipher Coins</strong>.</span></div>
             </div>
           </details>
-          <div className="athena-coin-intro">
-            <CipherCoinIcon size={42}/>
-            <span><strong>Your study can unlock more study.</strong><small>Signed-in learners earn Cipher Coins through daily consistency, perfect practice, and referrals—then exchange them for PBQs and Exam Mode passes.</small></span>
-          </div>
           <button type="submit" className="btn btn-primary athena-main-action" disabled={loading}>{loading?"Minting your IC...":"Create account & save my IC"} <ChevronRight size={17}/></button>
           <div className="auth-trust-line"><LockKeyhole size={13}/> Free account. No credit card. Pro is never added automatically.</div>
         </form>
@@ -18465,9 +18521,9 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
   const diagnosticAnswerState=stage==="diagnostic"&&diagnosticSubmitted
     ? diagnosticSelected===diagnosticQuestion?.correct?"correct":"wrong"
     : "";
-  const creationDetails=[Boolean(profile.name?.trim()),Boolean(profile.experience),Boolean(profile.takingExam),Boolean(profile.dailyGoal),Object.keys(profile.chapterStatus||{}).length>=CHAPTERS.length];
+  const creationDetails=[Boolean(profile.name?.trim()),Boolean(profile.experience),Boolean(profile.takingExam),Boolean(profile.dailyGoal),Boolean(profile.chaptersReviewed||profile.chaptersSkipped)];
   const cardCompletion=Math.round((creationDetails.filter(Boolean).length/creationDetails.length)*100);
-  const cardUpdateKey=[profile.name,profile.takingExam,profile.examDate,profile.dailyGoal,Object.keys(profile.chapterStatus||{}).length,profile.cardColour].join("-");
+  const cardUpdateKey=[profile.name,profile.takingExam,profile.examDate,profile.dailyGoal,Object.keys(profile.chapterStatus||{}).length,profile.chaptersReviewed,profile.chaptersSkipped,profile.cardColour].join("-");
 
   return (
     <div className={`athena-signup-page athena-workspace-page stage-${stage}`}>
@@ -18483,7 +18539,6 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
           <button type="button" className="athena-back-button" onClick={goBack}><ArrowLeft size={16}/> Back</button>
           <div className="athena-question-content" key={stage}>{questionContent()}</div>
           {message&&stage!=="account"&&<div className="athena-inline-error"><TriangleAlert size={16}/>{message}</div>}
-          <div className="athena-question-footer"><span><AthenaMark size={30}/><strong>Athena is shaping your learning profile</strong></span><em>One focused question at a time</em></div>
         </section>
       </main>
       <button className="athena-ic-launch" type="button" onClick={()=>setCardLabOpen(true)} aria-label={`Open live University IC. ${cardCompletion}% complete.`}>
@@ -19293,6 +19348,8 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
     examDateDeferred:false,
     dailyGoal:"",
     chapterStatus:{},
+    chaptersReviewed:false,
+    chaptersSkipped:false,
     diagnosticAnswers:{},
     diagnosticScore:null,
     diagnosticTotal:0,
@@ -19443,6 +19500,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           },
         });
         if(error) throw error;
+        await Promise.all([DB.saveDiagnosticDone(email),DB.saveOnboardingSeen(email)]);
         if(data.session?.user){
           await updateSupabaseAcademyProfile(data.session.user.id,{fullName,avatarId});
           const appUser=await waitForSupabaseProfile(data.session.user);
@@ -19464,6 +19522,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
         if(referralCode)await claimLocalReferralReward(user,referralCode);
         await DB.saveReferralOwner(user.referralCode,user.email);
         await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
+        await Promise.all([DB.saveDiagnosticDone(email),DB.saveOnboardingSeen(email)]);
         setMintedUser(user);
         setOk("Academy ID minted. Review your pass, then enter the dashboard.");
         capture("signup_completed", { method: "academy_local_demo", avatar_id: avatarId });
@@ -19474,21 +19533,25 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
       setLoading(false);
     }
   };
-  const handleGoogle=async()=>{
+  const startGoogleAuth=async({fromAcademy=false}={})=>{
     resetMessages();setLoading(true);
     try{
       const referralCode=saveReferralCode(form.referral);
-      capture(mode==="signup"?"signup_started":"login_started", { method:"google", has_referral:Boolean(referralCode) });
+      if(fromAcademy)await savePendingAthenaOAuth(athenaProfile,{...form,referral:referralCode});
+      capture(mode==="signup"?"signup_started":"login_started", { method:fromAcademy?"academy_google":"google", has_referral:Boolean(referralCode) });
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo: window.location.origin },
       });
       if(error) throw error;
     } catch(e){
+      if(fromAcademy)await storageDelete(ATHENA_OAUTH_PENDING_KEY).catch(()=>{});
       setErr(e.message||"Unable to start Google sign in.");
       setLoading(false);
     }
   };
+  const handleGoogle=()=>startGoogleAuth();
+  const handleAcademyGoogle=()=>startGoogleAuth({fromAcademy:true});
 
   if(mode==="signup"&&showSignupJourney){
     return (
@@ -19500,6 +19563,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
         profile={athenaProfile}
         setProfile={setAthenaProfile}
         onMint={handleAcademyMint}
+        onGoogle={handleAcademyGoogle}
         loading={loading}
         error={err}
         ok={ok}
@@ -26380,7 +26444,7 @@ export default function App() {
           if(active)setLoading(false);
           return;
         }
-        const verifiedUser=verified.user;
+        const verifiedUser=await applyPendingAthenaOAuth(verified.user);
         if(isRecentlyDeletedAccount(verifiedUser)){
           await forceSupabaseSignOut();
           if(active)setLoading(false);
