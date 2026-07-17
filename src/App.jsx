@@ -14958,6 +14958,136 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 @keyframes icCarveLabel{from{opacity:0;clip-path:inset(0 100% 0 0);letter-spacing:.2em}to{opacity:1;clip-path:inset(0 0 0 0);letter-spacing:.08em}}
 @keyframes icGoldSet{0%{border-color:rgba(92,110,99,.34);box-shadow:0 30px 70px rgba(54,61,51,.2)}55%{border-color:#f4cd70;box-shadow:0 30px 70px rgba(120,88,30,.22),0 0 0 10px rgba(210,166,78,.15)}100%{border-color:#d2a64e;box-shadow:0 30px 70px rgba(120,88,30,.22),0 0 0 4px rgba(210,166,78,.11)}}
 @keyframes icSilverSet{0%{border-color:rgba(92,110,99,.34);box-shadow:0 30px 70px rgba(54,61,51,.2)}55%{border-color:#d5dfdb;box-shadow:0 30px 70px rgba(70,82,77,.2),0 0 0 10px rgba(174,185,181,.17)}100%{border-color:#aeb9b5;box-shadow:0 30px 70px rgba(70,82,77,.2),0 0 0 4px rgba(174,185,181,.15)}}
+.athena-workspace-page{--stage-primary:#e56f65;--stage-secondary:#f2b85b;--stage-soft:#fae5df;--stage-glow:rgba(229,111,101,.22);position:relative;min-height:100dvh;padding:0;background:linear-gradient(135deg,#fffaf1,#f8f4ec 55%,#f4f0e8);transition:background .45s ease;}
+.athena-workspace-page.stage-name{--stage-primary:#e56f65;--stage-secondary:#f2b85b;--stage-soft:#fae5df;--stage-glow:rgba(229,111,101,.24);}
+.athena-workspace-page.stage-experience{--stage-primary:#7766c6;--stage-secondary:#e58aa4;--stage-soft:#eae5fb;--stage-glow:rgba(119,102,198,.23);}
+.athena-workspace-page.stage-examPlan,.athena-workspace-page.stage-booked,.athena-workspace-page.stage-examDate{--stage-primary:#c38d2d;--stage-secondary:#e8735c;--stage-soft:#f7e9c8;--stage-glow:rgba(195,141,45,.24);}
+.athena-workspace-page.stage-goalsTime,.athena-workspace-page.stage-goalsChapters{--stage-primary:#288c8a;--stage-secondary:#4e92c4;--stage-soft:#daf0ed;--stage-glow:rgba(40,140,138,.22);}
+.athena-workspace-page.stage-diagnosticIntro,.athena-workspace-page.stage-diagnostic{--stage-primary:#397fba;--stage-secondary:#7766c6;--stage-soft:#dcebf7;--stage-glow:rgba(57,127,186,.22);}
+.athena-workspace-page.stage-account{--stage-primary:#5b8c62;--stage-secondary:#d79b3e;--stage-soft:#dfefe1;--stage-glow:rgba(91,140,98,.22);}
+.athena-workspace-header{position:fixed;left:0;right:0;top:0;z-index:80;grid-template-columns:220px minmax(420px,760px) 220px;justify-content:center;padding:14px clamp(18px,3vw,44px);border-bottom:1px solid color-mix(in srgb,var(--stage-primary) 18%,transparent);background:color-mix(in srgb,#fffaf2 88%,transparent);box-shadow:0 10px 35px rgba(63,60,49,.055);}
+.athena-workspace-header::after{content:"";width:220px;}
+.athena-brand .athena-mark-core{background:linear-gradient(145deg,color-mix(in srgb,var(--stage-primary) 74%,#fff),var(--stage-primary));}
+.athena-progress>div:nth-child(1)>i b{background:linear-gradient(90deg,#e56f65,#f2a65a);}
+.athena-progress>div:nth-child(2)>i b{background:linear-gradient(90deg,#c38d2d,#e8735c);}
+.athena-progress>div:nth-child(3)>i b{background:linear-gradient(90deg,#288c8a,#4e92c4);}
+.athena-progress>div.complete>span em{background:var(--stage-primary);}
+.athena-progress>div.active>span,.athena-progress>div.complete>span{color:var(--stage-primary);}
+.athena-workspace{display:block;min-height:100dvh;}
+.athena-question-pane{position:relative;display:flex;align-items:center;justify-content:center;min-height:100dvh;padding:132px clamp(24px,8vw,132px) 142px;border:0;overflow:hidden;background:radial-gradient(circle at 12% 22%,var(--stage-glow),transparent 26%),radial-gradient(circle at 88% 78%,color-mix(in srgb,var(--stage-secondary) 17%,transparent),transparent 29%),linear-gradient(145deg,color-mix(in srgb,var(--stage-soft) 44%,#fffaf1),#fffaf4 52%,color-mix(in srgb,var(--stage-secondary) 7%,#f7f3eb));transition:background .45s ease;}
+.athena-question-content{position:relative;z-index:3;width:min(100%,780px);margin:auto;text-align:left;}
+.athena-question-content h1{max-width:760px;font-size:clamp(40px,5.4vw,66px);line-height:1.01;letter-spacing:-.037em;}
+.athena-question-content>p{max-width:700px;font-size:16px;line-height:1.72;}
+.athena-question-content .athena-kicker{color:var(--stage-primary);}
+.athena-question-icon{width:54px;height:54px;border-color:color-mix(in srgb,var(--stage-primary) 34%,transparent);border-radius:18px;background:linear-gradient(145deg,var(--stage-soft),color-mix(in srgb,var(--stage-primary) 17%,#fff));color:var(--stage-primary);box-shadow:0 13px 30px var(--stage-glow);}
+.athena-back-button{position:fixed;z-index:82;left:clamp(18px,3vw,44px);top:94px;border:1px solid color-mix(in srgb,var(--stage-primary) 18%,transparent);background:rgba(255,253,247,.74);color:var(--stage-primary);backdrop-filter:blur(12px);}
+.athena-back-button:hover{background:var(--stage-soft);color:var(--stage-primary);}
+.athena-large-input{height:64px!important;border-color:color-mix(in srgb,var(--stage-primary) 28%,transparent)!important;border-radius:19px!important;background:rgba(255,253,248,.94)!important;font-size:20px!important;box-shadow:0 16px 40px color-mix(in srgb,var(--stage-primary) 9%,transparent)!important;}
+.athena-large-input:focus{border-color:var(--stage-primary)!important;box-shadow:0 0 0 5px color-mix(in srgb,var(--stage-primary) 13%,transparent),0 18px 44px color-mix(in srgb,var(--stage-primary) 13%,transparent)!important;}
+.athena-main-action{background:linear-gradient(135deg,var(--stage-primary,#5f876f),color-mix(in srgb,var(--stage-primary,#426b57) 72%,#263b32))!important;border-color:var(--stage-primary,#426b57)!important;box-shadow:0 15px 34px var(--stage-glow,rgba(66,107,87,.22))!important;}
+.athena-option-list{gap:12px;}
+.athena-option{min-height:82px;padding:15px 16px;border-color:color-mix(in srgb,var(--stage-primary) 17%,rgba(73,111,91,.17));border-radius:20px;background:rgba(255,253,248,.83);box-shadow:0 12px 30px color-mix(in srgb,var(--stage-primary) 7%,transparent);}
+.athena-option:nth-child(2n) .athena-option-icon{background:color-mix(in srgb,var(--stage-secondary) 17%,#fff);color:var(--stage-secondary);}
+.athena-option:hover,.athena-option:focus-visible{border-color:var(--stage-primary);box-shadow:0 18px 40px var(--stage-glow);}
+.athena-option.selected{border-color:var(--stage-primary);background:linear-gradient(135deg,var(--stage-soft),rgba(255,253,248,.96));box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--stage-primary) 14%,transparent),0 17px 38px var(--stage-glow);}
+.athena-option-icon{width:44px;height:44px;border-radius:14px;background:color-mix(in srgb,var(--stage-primary) 14%,#fff);color:var(--stage-primary);}
+.athena-option.selected>em{background:var(--stage-primary);}
+.athena-question-footer{position:absolute;z-index:3;left:50%;bottom:31px;display:flex;align-items:center;justify-content:space-between;gap:24px;width:min(760px,calc(100% - 48px));transform:translateX(-50%);color:var(--athena-muted);}
+.athena-question-footer>span{display:flex;align-items:center;gap:8px;}
+.athena-question-footer strong{font-size:10px;color:var(--stage-primary);}
+.athena-question-footer em{font-size:9px;font-style:normal;font-weight:850;text-transform:uppercase;letter-spacing:.07em;}
+.athena-stage-shape{position:absolute;pointer-events:none;border:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);opacity:.8;animation:athenaShapeFloat 8s ease-in-out infinite;}
+.athena-stage-shape.shape-one{left:-7vw;top:18%;width:26vw;height:26vw;border-radius:42% 58% 50% 50%;background:color-mix(in srgb,var(--stage-primary) 5%,transparent);transform:rotate(17deg);}
+.athena-stage-shape.shape-two{right:-8vw;bottom:4%;width:31vw;height:31vw;border-radius:50%;border-width:34px;border-color:color-mix(in srgb,var(--stage-secondary) 7%,transparent);animation-delay:-3s;}
+.athena-stage-shape.shape-three{right:15%;top:16%;width:46px;height:46px;border-radius:16px;background:color-mix(in srgb,var(--stage-secondary) 12%,transparent);transform:rotate(22deg);animation-delay:-1.5s;}
+.athena-live-engraving{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;padding:11px 13px;border:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);border-radius:15px;background:color-mix(in srgb,var(--stage-soft) 48%,rgba(255,253,248,.78));}
+.athena-live-engraving>span{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:2px 8px;min-width:0;color:var(--stage-primary);}
+.athena-live-engraving>span svg{grid-row:1/3;}
+.athena-live-engraving small,.athena-live-engraving strong{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.athena-live-engraving small{font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
+.athena-live-engraving strong{color:var(--athena-ink);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;}
+.athena-live-engraving button{display:flex;align-items:center;gap:6px;flex:0 0 auto;padding:7px 9px;border:0;border-radius:10px;background:var(--stage-primary);color:#fff;font:inherit;font-size:9px;font-weight:900;cursor:pointer;}
+.athena-ic-launch{position:fixed;right:24px;top:98px;z-index:70;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:1px 10px;min-width:176px;padding:9px 12px;border:1px solid color-mix(in srgb,var(--stage-primary) 28%,transparent);border-radius:17px;background:rgba(255,253,248,.9);box-shadow:0 16px 38px var(--stage-glow);backdrop-filter:blur(18px);color:var(--athena-ink);font:inherit;text-align:left;cursor:pointer;transition:transform .18s,box-shadow .18s;}
+.athena-ic-launch:hover{transform:translateY(-3px) rotate(-1deg);box-shadow:0 21px 45px var(--stage-glow);}
+.athena-ic-launch>span{position:relative;display:grid;place-items:center;width:38px;height:38px;grid-row:1/3;border-radius:13px;background:linear-gradient(145deg,var(--stage-primary),var(--stage-secondary));color:#fff;box-shadow:0 8px 18px var(--stage-glow);animation:athenaCardUpdated .5s cubic-bezier(.16,1,.3,1);}
+.athena-ic-launch>span i{position:absolute;right:-7px;bottom:-6px;padding:2px 4px;border:2px solid #fff;border-radius:99px;background:#29352f;color:#fff;font-size:7px;font-style:normal;font-weight:950;}
+.athena-ic-launch strong{font-size:11px;}
+.athena-ic-launch small{color:var(--stage-primary);font-size:8px;font-weight:850;}
+.onboarding-cipher-guide{position:fixed;left:22px;bottom:20px;z-index:72;display:flex;align-items:flex-end;gap:7px;max-width:min(410px,calc(100vw - 32px));}
+.onboarding-cipher-mascot-wrap{position:relative;flex:0 0 auto;filter:drop-shadow(0 14px 20px var(--stage-glow));}
+.onboarding-cipher-mascot-wrap .cipher-mascot{--cipher-size:92px!important;}
+.onboarding-cipher-toggle{position:absolute;right:0;top:4px;z-index:2;display:grid;place-items:center;width:23px;height:23px;border:2px solid #fff;border-radius:50%;background:var(--stage-primary);color:#fff;cursor:pointer;}
+.onboarding-cipher-bubble{position:relative;width:min(290px,calc(100vw - 128px));padding:12px 14px;border:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);border-radius:18px 18px 5px 18px;background:rgba(255,253,248,.94);box-shadow:0 18px 44px rgba(63,60,49,.15);backdrop-filter:blur(18px);color:var(--athena-ink);font:inherit;text-align:left;cursor:pointer;animation:cipherBubbleIn .28s cubic-bezier(.16,1,.3,1) both;}
+.onboarding-cipher-bubble::after{content:"";position:absolute;right:-8px;bottom:10px;width:16px;height:16px;border-right:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);border-bottom:1px solid color-mix(in srgb,var(--stage-primary) 24%,transparent);background:rgba(255,253,248,.94);transform:rotate(-45deg);}
+.onboarding-cipher-bubble>span{display:flex;align-items:center;gap:7px;}
+.onboarding-cipher-bubble strong{color:var(--stage-primary);font-size:11px;}
+.onboarding-cipher-bubble small{padding:3px 5px;border-radius:99px;background:var(--stage-soft);color:var(--stage-primary);font-size:7px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;}
+.onboarding-cipher-bubble p{margin:6px 0 7px;color:var(--athena-muted);font-size:10px;font-weight:680;line-height:1.5;}
+.onboarding-cipher-bubble em{color:var(--stage-primary);font-size:7px;font-style:normal;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
+.athena-card-lab-overlay{position:fixed;inset:0;z-index:760;display:grid;place-items:center;overflow-y:auto;padding:26px;background:rgba(29,32,29,.7);backdrop-filter:blur(20px);animation:fadeUp .2s ease both;}
+.athena-card-lab{position:relative;z-index:2;width:min(1180px,100%);max-height:calc(100dvh - 52px);overflow:auto;border:1px solid rgba(255,255,255,.35);border-radius:30px;background:linear-gradient(145deg,#fffaf1,#edf4ed);box-shadow:0 42px 110px rgba(16,22,18,.42);}
+.athena-card-lab-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:23px 25px 18px;border-bottom:1px solid rgba(73,111,91,.14);background:rgba(255,253,248,.78);}
+.athena-card-lab-head h2{margin:5px 0 4px;color:var(--athena-ink);font-size:26px;line-height:1.1;}
+.athena-card-lab-head p{margin:0;color:var(--athena-muted);font-size:11px;}
+.athena-card-lab-head>button{display:grid;place-items:center;width:38px;height:38px;flex:0 0 auto;border:1px solid rgba(73,111,91,.16);border-radius:13px;background:#fff;color:var(--athena-ink);cursor:pointer;}
+.athena-card-lab-body{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(290px,.7fr);gap:20px;padding:22px;}
+.athena-card-stage{position:relative;display:grid;place-items:center;min-height:540px;overflow:hidden;padding:48px 34px 28px;border:1px solid color-mix(in srgb,var(--lab-accent) 28%,transparent);border-radius:25px;background:radial-gradient(circle at 50% 50%,var(--lab-soft),transparent 54%),linear-gradient(145deg,#fffdf8,#f0f3ed);}
+.athena-card-stage .university-ic-shell{position:relative;z-index:2;width:min(100%,590px);}
+.athena-card-stage-orbit{position:absolute;width:480px;height:480px;border:1px dashed color-mix(in srgb,var(--lab-accent) 36%,transparent);border-radius:50%;animation:athenaOrbit 18s linear infinite;}
+.athena-card-stage-orbit::before,.athena-card-stage-orbit::after{content:"";position:absolute;width:15px;height:15px;border-radius:5px;background:var(--lab-accent);box-shadow:0 0 0 8px color-mix(in srgb,var(--lab-accent) 13%,transparent);}
+.athena-card-stage-orbit::before{left:34px;top:64px;}
+.athena-card-stage-orbit::after{right:45px;bottom:54px;}
+.athena-card-stage-actions{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:14px;}
+.athena-card-stage-actions button,.athena-card-stage-actions span{display:flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid color-mix(in srgb,var(--lab-accent) 25%,transparent);border-radius:99px;background:rgba(255,255,255,.74);color:var(--lab-accent);font:inherit;font-size:9px;font-weight:900;}
+.athena-card-stage-actions button{cursor:pointer;}
+.athena-card-controls{display:flex;flex-direction:column;gap:13px;}
+.athena-card-completion,.athena-card-colour-picker,.athena-card-lab-achievements{padding:15px;border:1px solid rgba(73,111,91,.14);border-radius:18px;background:rgba(255,253,248,.76);}
+.athena-card-completion>span{display:flex;align-items:end;justify-content:space-between;}
+.athena-card-completion strong{color:var(--lab-accent,#4f8a6f);font-size:28px;line-height:1;}
+.athena-card-completion small{color:var(--athena-muted);font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
+.athena-card-completion>i{display:block;height:7px;margin:11px 0 8px;overflow:hidden;border-radius:99px;background:#e4e8e2;}
+.athena-card-completion>i b{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#e56f65,#c38d2d,#288c8a,#7766c6);transition:width .5s cubic-bezier(.16,1,.3,1);}
+.athena-card-completion p{margin:0;color:var(--athena-muted);font-size:9px;line-height:1.45;}
+.athena-card-colour-picker>span{display:block;color:var(--athena-ink);font-size:10px;font-weight:900;}
+.athena-card-colour-picker>div{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:11px 0 10px;}
+.athena-card-colour-picker button{position:relative;display:grid;place-items:center;aspect-ratio:1;border:1px solid color-mix(in srgb,var(--swatch) 28%,transparent);border-radius:12px;background:var(--swatch-soft);color:#fff;cursor:pointer;transition:transform .16s,box-shadow .16s;}
+.athena-card-colour-picker button:hover,.athena-card-colour-picker button.selected{transform:translateY(-2px);box-shadow:0 9px 20px color-mix(in srgb,var(--swatch) 23%,transparent);}
+.athena-card-colour-picker button span{width:19px;height:19px;border-radius:7px;background:var(--swatch);}
+.athena-card-colour-picker button svg{position:absolute;}
+.athena-card-colour-picker>strong{display:flex;align-items:center;gap:6px;color:var(--lab-accent,#4f8a6f);font-size:10px;}
+.athena-card-lab-achievements{display:grid;gap:7px;}
+.athena-card-lab-achievements span{display:flex;align-items:center;gap:7px;padding:7px 8px;border-radius:10px;background:#f0f1ed;color:#9aa19d;font-size:9px;font-weight:850;}
+.athena-card-lab-achievements span.done{background:#e2f0e5;color:#4d7c5b;}
+.athena-card-controls .athena-main-action{width:100%;margin-top:auto;}
+.athena-lab-confetti{position:fixed;width:18px;height:8px;border-radius:4px;background:#e56f65;animation:labConfetti 5s ease-in-out infinite;}
+.athena-lab-confetti.confetti-one{left:8%;top:13%;transform:rotate(24deg);}
+.athena-lab-confetti.confetti-two{right:7%;top:23%;background:#f2b85b;animation-delay:-1.8s;}
+.athena-lab-confetti.confetti-three{left:12%;bottom:12%;background:#7766c6;animation-delay:-3s;}
+.university-ic-card{border-color:color-mix(in srgb,var(--ic-accent,#4f8a6f) 45%,rgba(92,110,99,.34));background:var(--ic-soft,#dff0e6);}
+.university-ic-card:hover{transform:perspective(1000px) translateY(-7px) rotateX(var(--ic-tilt-x,1deg)) rotateY(var(--ic-tilt-y,-1deg));box-shadow:0 42px 84px color-mix(in srgb,var(--ic-accent,#4f8a6f) 24%,rgba(54,61,51,.23)),inset 0 0 0 1px rgba(255,255,255,.82);}
+.university-ic-shine{background:radial-gradient(circle at var(--ic-shine-x,30%) var(--ic-shine-y,20%),rgba(255,255,255,.44),transparent 27%);}
+.university-ic-front{background:radial-gradient(circle at 92% 8%,color-mix(in srgb,var(--ic-accent,#4f8a6f) 20%,transparent),transparent 29%),linear-gradient(145deg,rgba(255,253,248,.98),color-mix(in srgb,var(--ic-soft,#dff0e6) 58%,#fff));}
+.university-ic-back{background:radial-gradient(circle at 8% 100%,color-mix(in srgb,var(--ic-accent,#4f8a6f) 17%,transparent),transparent 34%),linear-gradient(145deg,#fffdf8,color-mix(in srgb,var(--ic-soft,#dff0e6) 48%,#fff));}
+.university-ic-brand,.university-ic-identity p,.university-ic-bottom{color:var(--ic-accent,#4f8a6f);}
+.university-ic-brand>span,.university-ic-portrait span{background:var(--ic-accent,#4f8a6f);}
+.university-ic-portrait{border-color:color-mix(in srgb,var(--ic-accent,#4f8a6f) 25%,transparent);background:linear-gradient(145deg,var(--ic-soft,#dff0e6),color-mix(in srgb,var(--ic-accent,#4f8a6f) 22%,#fff));color:var(--ic-accent,#4f8a6f);}
+.university-ic-holo-seal{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:conic-gradient(from 45deg,#e56f65,#f2b85b,#288c8a,#4e92c4,#7766c6,#e56f65);color:#fff;box-shadow:inset 0 0 0 4px rgba(255,255,255,.45),0 7px 15px color-mix(in srgb,var(--ic-accent,#4f8a6f) 24%,transparent);animation:athenaOrbit 8s linear infinite;}
+.university-ic-bottom-tech{display:flex;align-items:center;gap:8px;}
+.university-ic-particle{position:absolute;z-index:8;width:8px;height:8px;border-radius:3px;background:var(--ic-accent,#4f8a6f);box-shadow:0 0 0 6px color-mix(in srgb,var(--ic-accent,#4f8a6f) 10%,transparent);pointer-events:none;opacity:.66;animation:icParticle 3.6s ease-in-out infinite;}
+.university-ic-particle.particle-one{left:3%;top:24%;}
+.university-ic-particle.particle-two{right:5%;top:42%;animation-delay:-1.1s;}
+.university-ic-particle.particle-three{left:36%;bottom:2%;animation-delay:-2.3s;}
+.athena-intro-mascots,.athena-reveal-mascots{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:13px;}
+.athena-intro-card .athena-intro-mascots .athena-mark{margin-bottom:0;}
+.athena-cipher-intro{position:relative;display:grid;justify-items:center;}
+.athena-cipher-intro span{margin-top:-8px;padding:6px 9px;border:1px solid rgba(57,127,186,.2);border-radius:10px;background:rgba(255,253,248,.84);color:#5e6d75;font-size:8px;font-weight:750;}
+.athena-cipher-intro strong{display:block;color:#397fba;font-size:9px;}
+.athena-cipher-welcome{display:flex;align-items:center;gap:7px;margin-top:13px;padding:8px 10px;border:1px solid rgba(57,127,186,.18);border-radius:99px;background:rgba(220,235,247,.62);color:#397fba;font-size:10px;font-weight:850;}
+@keyframes athenaShapeFloat{0%,100%{translate:0 0;rotate:0deg}50%{translate:0 -14px;rotate:5deg}}
+@keyframes athenaCardUpdated{from{opacity:.35;transform:scale(.72) rotate(-12deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes cipherBubbleIn{from{opacity:0;transform:translateX(-9px) scale(.96)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes labConfetti{0%,100%{translate:0 0;rotate:0deg}50%{translate:14px -20px;rotate:180deg}}
+@keyframes icParticle{0%,100%{opacity:.35;transform:translateY(0) rotate(0)}50%{opacity:.9;transform:translateY(-8px) rotate(45deg)}}
 .dashboard-action-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:14px;margin-bottom:18px;}
 .weak-action-card,.daily-habit-card{position:relative;overflow:hidden;padding:18px 20px!important;border-radius:10px!important;}
 .weak-action-card{border-color:${t.red}35!important;background:linear-gradient(135deg,${t.red}09,${t.surface} 54%,${t.accent}08)!important;}
@@ -16621,6 +16751,78 @@ body{background:
   .pbq-type-card strong{font-size:16px!important;}
   .pbq-type-card small{font-size:13px!important;}
 }
+@media (max-width: 860px){
+  .athena-workspace-page{padding-bottom:0;}
+  .athena-workspace-header{grid-template-columns:minmax(0,1fr);padding:10px 14px 12px;}
+  .athena-workspace-header::after{display:none;}
+  .athena-workspace{min-height:100dvh;}
+  .athena-question-pane{order:initial;min-height:100dvh;padding:118px 24px 168px;border:0;}
+  .athena-question-content{width:min(100%,720px);margin:auto;}
+  .athena-question-content h1{font-size:clamp(37px,8vw,58px);}
+  .athena-back-button{position:fixed;left:14px;top:76px;}
+  .athena-ic-launch{right:14px;top:75px;}
+  .onboarding-cipher-guide{left:12px;bottom:15px;}
+  .onboarding-cipher-mascot-wrap .cipher-mascot{--cipher-size:78px!important;}
+  .athena-login-skip{right:12px;bottom:12px;}
+  .athena-question-footer{bottom:24px;width:min(720px,calc(100% - 48px));padding-left:340px;}
+  .athena-card-lab-overlay{padding:14px;}
+  .athena-card-lab{max-height:calc(100dvh - 28px);border-radius:24px;}
+  .athena-card-lab-body{grid-template-columns:minmax(0,1fr);}
+  .athena-card-stage{min-height:470px;}
+  .athena-card-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+  .athena-card-controls .athena-main-action{grid-column:1/-1;}
+}
+@media (max-width: 520px){
+  .athena-intro-page{padding-top:34px;background:radial-gradient(circle at 8% 16%,rgba(229,111,101,.22),transparent 34%),radial-gradient(circle at 92% 10%,rgba(119,102,198,.18),transparent 30%),radial-gradient(circle at 72% 88%,rgba(40,140,138,.16),transparent 32%),linear-gradient(145deg,#fff8ed,#f7f1fa 54%,#eef7f1);}
+  .athena-intro-mascots{gap:0;transform:scale(.88);margin:-5px 0 4px;}
+  .athena-cipher-intro span{font-size:7px;}
+  .athena-cipher-welcome{font-size:9px;}
+  .athena-workspace-header{padding:8px 9px 10px;overflow:visible;}
+  .athena-progress{min-width:0;gap:5px;}
+  .athena-progress>div>span{gap:4px;font-size:7px;letter-spacing:0;white-space:nowrap;}
+  .athena-progress>div>span em{width:17px;height:17px;font-size:8px;}
+  .athena-progress>div>i{height:4px;margin-top:5px;}
+  .athena-question-pane{min-height:100dvh;padding:112px 16px 196px;align-items:stretch;}
+  .athena-question-content{width:100%;margin:auto 0;}
+  .athena-question-content h1{font-size:clamp(34px,10.8vw,45px);line-height:1.02;}
+  .athena-question-content>p{font-size:14px;line-height:1.62;}
+  .athena-question-icon{width:47px;height:47px;margin-bottom:13px;border-radius:16px;}
+  .athena-back-button{left:9px;top:72px;padding:7px 8px;}
+  .athena-ic-launch{right:9px;top:70px;display:block;min-width:0;padding:7px;border-radius:15px;}
+  .athena-ic-launch>span{width:36px;height:36px;grid-row:auto;}
+  .athena-ic-launch strong,.athena-ic-launch small{display:none;}
+  .athena-option{min-height:72px;padding:13px;border-radius:17px;}
+  .athena-option strong{font-size:14px;}
+  .athena-option small{font-size:11px;}
+  .athena-large-input{height:59px!important;font-size:18px!important;}
+  .athena-live-engraving{align-items:stretch;flex-direction:column;}
+  .athena-live-engraving button{align-self:flex-end;}
+  .athena-question-footer{display:none;}
+  .onboarding-cipher-guide{left:7px;right:auto;bottom:70px;max-width:calc(100vw - 14px);gap:2px;}
+  .onboarding-cipher-mascot-wrap .cipher-mascot{--cipher-size:64px!important;}
+  .onboarding-cipher-toggle{width:21px;height:21px;right:-1px;top:-1px;}
+  .onboarding-cipher-bubble{width:min(245px,calc(100vw - 76px));padding:9px 11px;border-radius:15px 15px 4px 15px;}
+  .onboarding-cipher-bubble p{margin:4px 0 5px;font-size:9px;line-height:1.4;}
+  .onboarding-cipher-bubble strong{font-size:10px;}
+  .athena-login-skip{left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));min-height:52px;border-radius:15px;}
+  .athena-stage-shape.shape-one{width:58vw;height:58vw;}
+  .athena-stage-shape.shape-two{width:68vw;height:68vw;border-width:24px;}
+  .athena-card-lab-overlay{align-items:end;padding:8px 8px calc(8px + env(safe-area-inset-bottom));}
+  .athena-card-lab{width:100%;max-height:calc(100dvh - 16px - env(safe-area-inset-bottom));border-radius:24px 24px 18px 18px;}
+  .athena-card-lab-head{padding:17px 16px 13px;}
+  .athena-card-lab-head h2{font-size:22px;}
+  .athena-card-lab-head p{font-size:10px;line-height:1.45;}
+  .athena-card-lab-body{gap:12px;padding:12px;}
+  .athena-card-stage{min-height:318px;padding:28px 10px 16px;border-radius:19px;}
+  .athena-card-stage-orbit{width:310px;height:310px;}
+  .athena-card-stage-actions{gap:5px;margin-top:8px;}
+  .athena-card-stage-actions button,.athena-card-stage-actions span{padding:6px 8px;font-size:8px;}
+  .athena-card-controls{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;}
+  .athena-card-completion,.athena-card-colour-picker,.athena-card-lab-achievements{padding:12px;border-radius:15px;}
+  .athena-card-lab-achievements{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .athena-card-lab-achievements span{font-size:8px;}
+  .athena-card-controls .athena-main-action{margin-top:0;}
+}
 @media print{
   @page{size:auto;margin:12mm;}
   body{background:#fff!important;}
@@ -17318,6 +17520,17 @@ const ATHENA_DAILY_GOALS=[
   {id:"30",label:"30 minutes",help:"Focused daily progress"},
   {id:"45",label:"45+ minutes",help:"An intensive study plan"},
 ];
+const ATHENA_CARD_COLOURS=[
+  {id:"sage",label:"Campus Sage",accent:"#4f8a6f",soft:"#dff0e6"},
+  {id:"coral",label:"Cipher Coral",accent:"#e56f65",soft:"#fae2dc"},
+  {id:"violet",label:"Athena Violet",accent:"#7766c6",soft:"#e9e3fb"},
+  {id:"sky",label:"Network Sky",accent:"#3988b8",soft:"#dceff8"},
+  {id:"gold",label:"Exam Gold",accent:"#c79635",soft:"#f6e9c8"},
+];
+
+function getAthenaCardColour(colourId) {
+  return ATHENA_CARD_COLOURS.find(colour=>colour.id===colourId)||ATHENA_CARD_COLOURS[0];
+}
 
 function AthenaMark({size=96,label="Athena, your personal secretary"}) {
   return (
@@ -17367,12 +17580,14 @@ function toAthenaStudyProfile(profile) {
     diagnostic_score:profile.diagnosticScore===null||profile.diagnosticScore===undefined?null:Number(profile.diagnosticScore),
     diagnostic_total:Number(profile.diagnosticTotal)||0,
     diagnostic_skipped:Boolean(profile.diagnosticSkipped),
+    card_colour:profile.cardColour||"sage",
     completed_at:new Date().toISOString(),
   };
 }
 
 function UniversityICCard({profile,flipped,onFlip}) {
   const name=(profile.name||"").trim();
+  const cardColour=getAthenaCardColour(profile.cardColour);
   const examPlan=profile.takingExam;
   const border=examPlan==="yes"?"gold":examPlan==="no"?"silver":"neutral";
   const expiry=profile.examDate || ((profile.examDateDeferred||profile.bookedTest==="no")?"TBC":"");
@@ -17381,11 +17596,30 @@ function UniversityICCard({profile,flipped,onFlip}) {
   const serialSeed=[...(name||"SECUREPLUS")].reduce((sum,char)=>sum+char.charCodeAt(0),0);
   const memberNumber=`SPU-${String(serialSeed%10000).padStart(4,"0")}-${new Date().getFullYear()}`;
   const issued=new Date().toLocaleDateString(undefined,{month:"short",year:"numeric"});
+  const handlePointerMove=event=>{
+    if(event.pointerType==="touch")return;
+    const rect=event.currentTarget.getBoundingClientRect();
+    const x=((event.clientX-rect.left)/rect.width)-.5;
+    const y=((event.clientY-rect.top)/rect.height)-.5;
+    event.currentTarget.style.setProperty("--ic-tilt-x",`${(-y*7).toFixed(2)}deg`);
+    event.currentTarget.style.setProperty("--ic-tilt-y",`${(x*9).toFixed(2)}deg`);
+    event.currentTarget.style.setProperty("--ic-shine-x",`${((x+.5)*100).toFixed(1)}%`);
+    event.currentTarget.style.setProperty("--ic-shine-y",`${((y+.5)*100).toFixed(1)}%`);
+  };
+  const resetPointerEffect=event=>{
+    event.currentTarget.style.removeProperty("--ic-tilt-x");
+    event.currentTarget.style.removeProperty("--ic-tilt-y");
+    event.currentTarget.style.removeProperty("--ic-shine-x");
+    event.currentTarget.style.removeProperty("--ic-shine-y");
+  };
   return (
     <div className="university-ic-shell">
       <div
         className={`university-ic-card border-${border} ${flipped?"is-flipped":""}`}
+        style={{"--ic-accent":cardColour.accent,"--ic-soft":cardColour.soft}}
         onClick={onFlip}
+        onPointerMove={handlePointerMove}
+        onPointerLeave={resetPointerEffect}
         onKeyDown={event=>{
           if(event.key==="Enter"||event.key===" "){event.preventDefault();onFlip?.();}
         }}
@@ -17395,6 +17629,9 @@ function UniversityICCard({profile,flipped,onFlip}) {
       >
         <span className="university-ic-shine" aria-hidden="true"/>
         <span className="university-ic-grid" aria-hidden="true"/>
+        <span className="university-ic-particle particle-one" aria-hidden="true"/>
+        <span className="university-ic-particle particle-two" aria-hidden="true"/>
+        <span className="university-ic-particle particle-three" aria-hidden="true"/>
         <div className="university-ic-face university-ic-front" aria-hidden={flipped}>
           <div className="university-ic-head">
             <span className="university-ic-brand"><span><ShieldCheck size={17}/></span><strong>University of SecurePlus</strong></span>
@@ -17411,7 +17648,7 @@ function UniversityICCard({profile,flipped,onFlip}) {
           </div>
           <div className="university-ic-bottom">
             <span><BadgeCheck size={13}/> Admission in progress</span>
-            <span className="university-ic-chip" aria-hidden="true"><i/><i/><i/><i/></span>
+            <span className="university-ic-bottom-tech"><span className="university-ic-holo-seal"><Sparkles size={12}/></span><span className="university-ic-chip" aria-hidden="true"><i/><i/><i/><i/></span></span>
           </div>
         </div>
         <div className="university-ic-face university-ic-back" aria-hidden={!flipped}>
@@ -17464,6 +17701,125 @@ function AthenaProgress({stage,takingExam}) {
   );
 }
 
+const CIPHER_ONBOARDING_GUIDANCE={
+  name:{animation:"wave",message:"Try the name you actually like hearing. I’ll watch it appear on your IC!",tip:"Short names fit beautifully, but your preferred name can be anything."},
+  experience:{animation:"thinking",message:"There is no wrong starting level. Honest answers help Athena choose kinder questions.",tip:"Choose the option that feels true today—not where you think you should be."},
+  examPlan:{animation:"focus",message:"Gold or silver? Your learning path changes the IC trim, but both paths are equally welcome.",tip:"You can study Security+ even if you are not planning to sit the examination."},
+  booked:{animation:"scan",message:"No booking yet? I’ll mark the date TBC and keep your momentum moving.",tip:"You can update an exam date later from your profile."},
+  examDate:{animation:"scan",message:"I’m checking the format: day, month, then year. You can also update it later.",tip:"Example: 18/11/2026."},
+  goalsTime:{animation:"tip",message:"A repeatable ten minutes beats an ambitious goal you cannot keep.",tip:"Pick the goal that still feels possible on a busy day."},
+  goalsChapters:{animation:"tip",message:"Mark every chapter. “Not yet” simply tells me where we should begin.",tip:"Your choices create a gentler first study route."},
+  diagnosticIntro:{animation:"cheer",message:"Your IC profile is ready! The starter set is optional and has no effect on account access.",tip:"This is a warm-up, not an exam-readiness verdict."},
+  diagnostic:{animation:"thinking",message:"Read the final sentence twice. Security+ questions often hide the real task there.",tip:"Eliminate answers that solve a different problem from the one being asked."},
+  account:{animation:"unlock",message:"Last step! Your free account saves the IC and the learning plan we just built.",tip:"No credit card is needed for a free SecurePlus account."},
+};
+
+function OnboardingCipherGuide({stage,answerState=""}) {
+  const guide=CIPHER_ONBOARDING_GUIDANCE[stage]||CIPHER_ONBOARDING_GUIDANCE.name;
+  const [expanded,setExpanded]=useState(true);
+  const [showTip,setShowTip]=useState(false);
+  useEffect(()=>{setExpanded(true);setShowTip(false);},[stage]);
+  const animation=answerState==="correct"?"correct":answerState==="wrong"?"wrong":guide.animation;
+  const message=answerState==="correct"
+    ? "That pattern was correct! I’ve logged the signal for Athena."
+    : answerState==="wrong"
+      ? "That one was designed to teach. Review the explanation, then keep moving."
+      : showTip?guide.tip:guide.message;
+  return (
+    <aside className={`onboarding-cipher-guide ${expanded?"expanded":"collapsed"}`} aria-label="Cipher onboarding guide">
+      {expanded&&(
+        <button type="button" className="onboarding-cipher-bubble" onClick={()=>setShowTip(value=>!value)} aria-label="Show another Cipher tip">
+          <span><strong>Cipher</strong><small>{showTip?"Quick tip":"Onboarding guide"}</small></span>
+          <p>{message}</p>
+          <em>{showTip?"Tap for guidance":"Tap for a quick tip"}</em>
+        </button>
+      )}
+      <div className="onboarding-cipher-mascot-wrap">
+        <MascotAnimation
+          animation={animation}
+          size={92}
+          interactive
+          hoverAnimation="wave"
+          reactionAnimations={["surprised","dance","cheer","scan"]}
+          label="Cipher guides the onboarding process"
+          onInteract={()=>{setExpanded(true);setShowTip(value=>!value);}}
+        />
+        <button type="button" className="onboarding-cipher-toggle" onClick={()=>setExpanded(value=>!value)} aria-label={expanded?"Hide Cipher message":"Show Cipher message"}>{expanded?<X size={12}/>:<MessageSquareWarning size={13}/>}</button>
+      </div>
+    </aside>
+  );
+}
+
+function AthenaCardLab({open,onClose,profile,setProfile,flipped,setFlipped}) {
+  useEffect(()=>{
+    if(!open)return;
+    const closeOnEscape=event=>{if(event.key==="Escape")onClose?.();};
+    document.addEventListener("keydown",closeOnEscape);
+    return()=>document.removeEventListener("keydown",closeOnEscape);
+  },[open,onClose]);
+  if(!open)return null;
+  const chapterComplete=Object.keys(profile.chapterStatus||{}).length>=CHAPTERS.length;
+  const details=[Boolean(profile.name?.trim()),Boolean(profile.experience),Boolean(profile.takingExam),Boolean(profile.dailyGoal),chapterComplete];
+  const completed=details.filter(Boolean).length;
+  const completion=Math.round((completed/details.length)*100);
+  const colour=getAthenaCardColour(profile.cardColour);
+  return (
+    <div className="athena-card-lab-overlay" role="dialog" aria-modal="true" aria-label="Interactive University IC Card Lab" onMouseDown={onClose}>
+      <span className="athena-lab-confetti confetti-one" aria-hidden="true"/>
+      <span className="athena-lab-confetti confetti-two" aria-hidden="true"/>
+      <span className="athena-lab-confetti confetti-three" aria-hidden="true"/>
+      <div className="athena-card-lab" onMouseDown={event=>event.stopPropagation()}>
+        <header className="athena-card-lab-head">
+          <div><div className="athena-kicker"><Sparkles size={14}/> Interactive Card Lab</div><h2>Make your University IC yours.</h2><p>Move your pointer to tilt the card, press it to flip, and choose an identity colour.</p></div>
+          <button type="button" onClick={onClose} aria-label="Close Card Lab"><X size={20}/></button>
+        </header>
+        <div className="athena-card-lab-body">
+          <div className="athena-card-stage" style={{"--lab-accent":colour.accent,"--lab-soft":colour.soft}}>
+            <div className="athena-card-stage-orbit" aria-hidden="true"/>
+            <UniversityICCard profile={profile} flipped={flipped} onFlip={()=>setFlipped(value=>!value)}/>
+            <div className="athena-card-stage-actions">
+              <button type="button" onClick={()=>setFlipped(value=>!value)}><RotateCcw size={15}/> Flip IC</button>
+              <span><Move size={14}/> Move pointer to tilt</span>
+            </div>
+          </div>
+          <aside className="athena-card-controls">
+            <div className="athena-card-completion">
+              <span><strong>{completion}%</strong><small>ID creation</small></span>
+              <i><b style={{width:`${completion}%`}}/></i>
+              <p>{completion===100?"All profile engravings are ready for minting.":`${details.length-completed} profile detail${details.length-completed===1?"":"s"} still to add.`}</p>
+            </div>
+            <div className="athena-card-colour-picker">
+              <span>Choose an identity colour</span>
+              <div>
+                {ATHENA_CARD_COLOURS.map(option=>(
+                  <button
+                    key={option.id}
+                    type="button"
+                    className={(profile.cardColour||"sage")===option.id?"selected":""}
+                    style={{"--swatch":option.accent,"--swatch-soft":option.soft}}
+                    onClick={()=>setProfile(current=>({...current,cardColour:option.id}))}
+                    aria-pressed={(profile.cardColour||"sage")===option.id}
+                    aria-label={option.label}
+                    title={option.label}
+                  ><span/>{(profile.cardColour||"sage")===option.id&&<Check size={13}/>}</button>
+                ))}
+              </div>
+              <strong><Palette size={14}/>{colour.label}</strong>
+            </div>
+            <div className="athena-card-lab-achievements">
+              <span className={profile.name?.trim()?"done":""}><Check size={13}/> Name engraved</span>
+              <span className={profile.takingExam?"done":""}><Check size={13}/> Pathway trim</span>
+              <span className={profile.dailyGoal?"done":""}><Check size={13}/> Study goal encoded</span>
+              <span className={chapterComplete?"done":""}><Check size={13}/> Chapter map added</span>
+            </div>
+            <button className="btn btn-primary athena-main-action" type="button" onClick={onClose}>Return to my questions <ChevronRight size={16}/></button>
+          </aside>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function AthenaOption({selected,onClick,icon:Icon,title,help}) {
   return (
     <button type="button" className={`athena-option ${selected?"selected":""}`} onClick={onClick} aria-pressed={selected}>
@@ -17493,6 +17849,7 @@ function getAthenaDiagnosticQuestions(experience) {
 function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,loading,error,ok,mintedUser,onEnter,onHaveAccount}) {
   const [stage,setStage]=useState("intro");
   const [flipped,setFlipped]=useState(false);
+  const [cardLabOpen,setCardLabOpen]=useState(false);
   const [notice,setNotice]=useState("");
   const [localError,setLocalError]=useState("");
   const [diagnosticIndex,setDiagnosticIndex]=useState(0);
@@ -17516,15 +17873,18 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
     setLocalError("");
     if(value==="yes"){
       setFlipped(true);
+      setCardLabOpen(true);
       window.setTimeout(()=>setStage("booked"),240);
     }else{
       setFlipped(false);
+      setCardLabOpen(true);
       window.setTimeout(()=>setStage("goalsTime"),240);
     }
   };
   const chooseBooked=value=>{
     setProfile(current=>({...current,bookedTest:value,examDate:value==="no"?"":current.examDate,examDateDeferred:value==="no"}));
     setFlipped(true);
+    setCardLabOpen(true);
     if(value==="no")showNotice("No problem — your IC will show TBC. You can update the date later after booking your examination.");
     window.setTimeout(()=>setStage("examDate"),220);
   };
@@ -17549,6 +17909,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
       return;
     }
     setLocalError("");
+    setCardLabOpen(true);
     setStage("diagnosticIntro");
   };
   const finishDiagnostic=answers=>{
@@ -17572,7 +17933,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
     return (
       <div className="athena-signup-page athena-reveal-page">
         <div className="athena-reveal-panel">
-          <AthenaMark size={82}/>
+          <div className="athena-reveal-mascots"><AthenaMark size={82}/><MascotAnimation animation="dance" size={94} interactive hoverAnimation="cheer" reactionAnimations={["cheer","dance","streak"]} label="Cipher celebrates your new University IC"/></div>
           <div className="athena-kicker"><Sparkles size={14}/> IC successfully minted</div>
           <h1>Welcome to the University of SecurePlus, {mintedUser.name?.split(" ")[0]||"student"}.</h1>
           <p>Athena has saved your starting profile. Your learning path can now adapt as you practise.</p>
@@ -17589,10 +17950,14 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-intro-glow glow-one" aria-hidden="true"/>
         <div className="athena-intro-glow glow-two" aria-hidden="true"/>
         <div className="athena-intro-card">
-          <AthenaMark size={126}/>
+          <div className="athena-intro-mascots">
+            <AthenaMark size={126}/>
+            <div className="athena-cipher-intro"><MascotAnimation animation="wave" size={112} interactive hoverAnimation="cheer" reactionAnimations={["surprised","dance","cheer"]} label="Cipher welcomes you to SecurePlus"/><span><strong>Cipher</strong>Tap or hover to say hello!</span></div>
+          </div>
           <div className="athena-kicker"><Sparkles size={14}/> Your personal secretary</div>
           <h1>Hello, I’m Athena!</h1>
           <p>I will be your personal secretary. Let’s make your University IC before you embark on your Security+ learning journey.</p>
+          <div className="athena-cipher-welcome"><Sparkles size={15}/><span>Cipher will join us as your interactive campus guide.</span></div>
           <div className="athena-intro-promise">
             <span><UserRound size={17}/><strong>Tell me about you</strong></span>
             <span><BadgeCheck size={17}/><strong>Build your IC</strong></span>
@@ -17614,8 +17979,9 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <h1>How do you want to be addressed?</h1>
         <p>This preferred name will be carved onto your University IC as you type.</p>
         <label className="athena-field-label" htmlFor="athena-preferred-name">Preferred name</label>
-        <input id="athena-preferred-name" className="input athena-large-input" autoComplete="name" autoFocus placeholder="For example, Alex" value={profile.name} onChange={event=>{updateProfile("name",event.target.value);setForm(current=>({...current,name:event.target.value}));}} onKeyDown={event=>{if(event.key==="Enter"&&profile.name.trim())setStage("experience");}}/>
-        <button className="btn btn-primary athena-main-action" type="button" disabled={!profile.name.trim()} onClick={()=>setStage("experience")}>Carve my name <ChevronRight size={17}/></button>
+        <input id="athena-preferred-name" className="input athena-large-input" autoComplete="name" autoFocus placeholder="For example, Alex" value={profile.name} onChange={event=>{updateProfile("name",event.target.value);setForm(current=>({...current,name:event.target.value}));}} onKeyDown={event=>{if(event.key==="Enter"&&profile.name.trim()){setStage("experience");setCardLabOpen(true);}}}/>
+        <div className="athena-live-engraving"><span><Sparkles size={15}/><small>Live engraving</small><strong><CarvedText value={profile.name?.toUpperCase()} placeholder="YOUR NAME"/></strong></span><button type="button" onClick={()=>setCardLabOpen(true)}>View on IC <RotateCcw size={13}/></button></div>
+        <button className="btn btn-primary athena-main-action" type="button" disabled={!profile.name.trim()} onClick={()=>{setStage("experience");setCardLabOpen(true);}}>Carve my name <ChevronRight size={17}/></button>
       </>
     );
     if(stage==="experience")return (
@@ -17661,6 +18027,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <p>Use DD/MM/YYYY. Watch the expiry date carve itself into the back of your IC.</p>
         <label className="athena-field-label" htmlFor="athena-exam-date">CompTIA Security+ test date</label>
         <input id="athena-exam-date" className="input athena-large-input mono" inputMode="numeric" autoFocus placeholder="DD/MM/YYYY" maxLength={10} value={profile.examDate} onChange={event=>setProfile(current=>({...current,examDate:formatSignupDateInput(event.target.value),examDateDeferred:false}))}/>
+        <div className="athena-live-engraving"><span><CalendarDays size={15}/><small>Expiry engraving</small><strong><CarvedText value={profile.examDate} placeholder="__/__/____"/></strong></span><button type="button" onClick={()=>{setFlipped(true);setCardLabOpen(true);}}>View on IC <RotateCcw size={13}/></button></div>
         <div className="athena-inline-actions">
           <button className="btn btn-primary" type="button" onClick={continueExamDate}>Confirm date <ChevronRight size={16}/></button>
           <button className="btn btn-ghost" type="button" onClick={()=>{setProfile(current=>({...current,examDate:"",examDateDeferred:true}));setLocalError("");showNotice("Your IC will show TBC. You can add the date later from your profile.");setStage("goalsTime");}}>Update later</button>
@@ -17772,25 +18139,37 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
     return null;
   };
 
+  const diagnosticAnswerState=stage==="diagnostic"&&diagnosticSubmitted
+    ? diagnosticSelected===diagnosticQuestion?.correct?"correct":"wrong"
+    : "";
+  const creationDetails=[Boolean(profile.name?.trim()),Boolean(profile.experience),Boolean(profile.takingExam),Boolean(profile.dailyGoal),Object.keys(profile.chapterStatus||{}).length>=CHAPTERS.length];
+  const cardCompletion=Math.round((creationDetails.filter(Boolean).length/creationDetails.length)*100);
+  const cardUpdateKey=[profile.name,profile.takingExam,profile.examDate,profile.dailyGoal,Object.keys(profile.chapterStatus||{}).length,profile.cardColour].join("-");
+
   return (
-    <div className="athena-signup-page athena-workspace-page">
+    <div className={`athena-signup-page athena-workspace-page stage-${stage}`}>
       <header className="athena-workspace-header">
         <button type="button" className="athena-brand" onClick={()=>setStage("intro")}><AthenaMark size={42}/><span><strong>Athena</strong><small>SecurePlus personal secretary</small></span></button>
         <AthenaProgress stage={stage} takingExam={profile.takingExam}/>
       </header>
       <main className="athena-workspace">
         <section className="athena-question-pane">
-          {stage!=="diagnostic"&&stage!=="account"&&<button type="button" className="athena-back-button" onClick={goBack}><ArrowLeft size={16}/> Back</button>}
-          {(stage==="diagnostic"||stage==="account")&&<button type="button" className="athena-back-button" onClick={goBack}><ArrowLeft size={16}/> Back</button>}
-          <div className="athena-question-content">{questionContent()}</div>
+          <span className="athena-stage-shape shape-one" aria-hidden="true"/>
+          <span className="athena-stage-shape shape-two" aria-hidden="true"/>
+          <span className="athena-stage-shape shape-three" aria-hidden="true"/>
+          <button type="button" className="athena-back-button" onClick={goBack}><ArrowLeft size={16}/> Back</button>
+          <div className="athena-question-content" key={stage}>{questionContent()}</div>
           {message&&stage!=="account"&&<div className="athena-inline-error"><TriangleAlert size={16}/>{message}</div>}
-        </section>
-        <section className="athena-ic-pane">
-          <div className="athena-ic-copy"><span>Live University IC</span><small>Every visible change is carved into your card.</small></div>
-          <UniversityICCard profile={profile} flipped={flipped} onFlip={()=>setFlipped(value=>!value)}/>
-          <div className="athena-secretary-note"><AthenaMark size={44}/><p><strong>Athena’s note</strong>{stage==="name"?"I’ll use the name that feels most natural to you.":stage==="examPlan"?"Your IC trim will reflect your chosen pathway.":stage==="goalsChapters"?"Honest answers help me suggest a kinder starting point.":"You can press the IC at any time to see its other side."}</p></div>
+          <div className="athena-question-footer"><span><AthenaMark size={30}/><strong>Athena is shaping your learning profile</strong></span><em>One focused question at a time</em></div>
         </section>
       </main>
+      <button className="athena-ic-launch" type="button" onClick={()=>setCardLabOpen(true)} aria-label={`Open live University IC. ${cardCompletion}% complete.`}>
+        <span key={cardUpdateKey}><BadgeCheck size={20}/><i>{cardCompletion}%</i></span>
+        <strong>Open Card Lab</strong>
+        <small>Flip · tilt · recolour</small>
+      </button>
+      <OnboardingCipherGuide stage={stage} answerState={diagnosticAnswerState}/>
+      <AthenaCardLab open={cardLabOpen} onClose={()=>setCardLabOpen(false)} profile={profile} setProfile={setProfile} flipped={flipped} setFlipped={setFlipped}/>
       {notice&&<div className="athena-toast" role="status"><CheckCircle2 size={18}/><span><strong>Saved for later</strong>{notice}</span><button type="button" onClick={()=>setNotice("")} aria-label="Close message"><X size={15}/></button></div>}
       <button className="athena-login-skip" type="button" onClick={onHaveAccount}><span>Have an account?</span><strong>Skip to login</strong><SkipForward size={20}/></button>
     </div>
@@ -18589,6 +18968,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
     diagnosticScore:null,
     diagnosticTotal:0,
     diagnosticSkipped:false,
+    cardColour:"sage",
   });
   const [err,setErr]=useState("");
   const [ok,setOk]=useState("");
