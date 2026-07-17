@@ -10,6 +10,7 @@ import {
   ChartNoAxesColumnIncreasing,
   ChevronRight,
   Circle,
+  CircleDollarSign,
   CircleGauge,
   ClipboardCheck,
   ClipboardList,
@@ -93,6 +94,8 @@ const DB = {
   async getDiagnosticDone(e) { try { const r=await storageGet(`diagnostic:${normalizeEmail(e)}`); return Boolean(r?.value); } catch { return false; }},
   async saveDiagnosticDone(e) { try { await storageSet(`diagnostic:${normalizeEmail(e)}`,"true"); } catch {}},
   async getReferralCode(e) { try { const key=`refcode:${normalizeEmail(e)}`; let r=await storageGet(key); if(r?.value)return r.value; const code=makeReferralCode(e); await storageSet(key,code); return code; } catch { return makeReferralCode(e); }},
+  async getReferralOwner(code) { try { const r=await storageGet(`refowner:${String(code||"").trim().toUpperCase()}`); return r?.value||""; } catch { return ""; }},
+  async saveReferralOwner(code,email) { try { if(code&&email)await storageSet(`refowner:${String(code).trim().toUpperCase()}`,normalizeEmail(email)); } catch {}},
   async getDailyStreak(key) { try { const r=await storageGet(`daily-streak:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
   async saveDailyStreak(key,data) { try { await storageSet(`daily-streak:${key}`,JSON.stringify(data)); } catch {}},
   async getPracticeSession(key) { try { const r=await storageGet(`practice-session:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
@@ -100,6 +103,8 @@ const DB = {
   async clearPracticeSession(key) { try { await storageDelete(`practice-session:${key}`); } catch {}},
   async getStarred(key) { try { const r=await storageGet(`starred:${key}`); return r?JSON.parse(r.value):[]; } catch { return []; }},
   async saveStarred(key,items) { try { await storageSet(`starred:${key}`,JSON.stringify(items)); } catch {}},
+  async getCipherWallet(key) { try { const r=await storageGet(`cipher-wallet:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
+  async saveCipherWallet(key,wallet) { try { await storageSet(`cipher-wallet:${key}`,JSON.stringify(wallet)); } catch {}},
 };
 
 const normalizeEmail = email => (email || "").trim().toLowerCase();
@@ -174,6 +179,7 @@ function shouldShowPBQUpgradePrompt() {
 }
 
 const FREE_PBQ_PREVIEW_ID = "p001";
+const CIPHER_COIN_COSTS = Object.freeze({ pbq:30, examPass:150 });
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
 const DELETED_ACCOUNT_KEY = "secureplus_deleted_account";
 const FEEDBACK_DESCRIPTION_MIN_LENGTH = 20;
@@ -182,7 +188,189 @@ const isFreePBQPreview = question => question?.id === FREE_PBQ_PREVIEW_ID;
 const dailyStreakOwner = user => normalizeEmail(user?.email || "") || "guest";
 const practiceSessionOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
 const starOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
+const cipherWalletOwner = user => user?.id || normalizeEmail(user?.email || "") || "guest";
 const starKey = (type,id) => `${type}:${id}`;
+const emptyCipherWallet = () => ({
+  balance:0,
+  lifetimeEarned:0,
+  examPasses:0,
+  unlockedPbqIds:[],
+  unlocks:[],
+  transactions:[],
+  checkInStreak:0,
+  challengeStreak:0,
+  lastCheckInDate:"",
+  lastChallengeDate:"",
+  status:"ready",
+  error:"",
+});
+
+function normalizeCipherWallet(wallet={}) {
+  return {
+    ...emptyCipherWallet(),
+    ...wallet,
+    balance:Math.max(0,Number(wallet.balance)||0),
+    lifetimeEarned:Math.max(0,Number(wallet.lifetimeEarned)||0),
+    examPasses:Math.max(0,Number(wallet.examPasses)||0),
+    unlockedPbqIds:Array.isArray(wallet.unlockedPbqIds)?wallet.unlockedPbqIds:[],
+    unlocks:Array.isArray(wallet.unlocks)?wallet.unlocks:[],
+    transactions:Array.isArray(wallet.transactions)?wallet.transactions:[],
+  };
+}
+
+function cipherTransactionLabel(eventType) {
+  return ({
+    daily_check_in:"Daily check-in",
+    daily_challenge:"Perfect Daily Challenge",
+    daily_challenge_streak:"Daily Challenge streak bonus",
+    perfect_mcq:"Perfect MCQ set",
+    referral_referrer:"Friend referral",
+    referral_new_user:"Joined with a friend",
+    pbq_unlock:"PBQ unlocked",
+    exam_pass_purchase:"Exam Mode pass",
+    admin_adjustment:"Balance adjustment",
+  })[eventType] || "Cipher Coin activity";
+}
+
+async function loadCipherCoinWallet(user) {
+  if(!user)return emptyCipherWallet();
+  if(isSupabaseConfigured&&user.authProvider==="supabase"){
+    const token=await getSupabaseAccessToken();
+    if(!token)throw new Error("Sign in again to load Cipher Coins.");
+    const response=await fetch("/api/coins/me",{method:"POST",headers:{authorization:`Bearer ${token}`}});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(data.error||"Unable to load Cipher Coins.");
+    return normalizeCipherWallet(data);
+  }
+  return normalizeCipherWallet(await DB.getCipherWallet(cipherWalletOwner(user))||{});
+}
+
+async function runLocalCipherCoinAction(user,action,payload={}) {
+  const owner=cipherWalletOwner(user);
+  const wallet=normalizeCipherWallet(await DB.getCipherWallet(owner)||{});
+  const today=localDateKey();
+  const addTransaction=(amount,eventType,referenceKey,metadata={})=>{
+    wallet.balance+=amount;
+    if(amount>0)wallet.lifetimeEarned+=amount;
+    wallet.transactions.unshift({
+      id:globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random()}`,
+      amount,
+      balance_after:wallet.balance,
+      event_type:eventType,
+      reference_key:referenceKey,
+      metadata,
+      created_at:new Date().toISOString(),
+    });
+    wallet.transactions=wallet.transactions.slice(0,20);
+  };
+  let result={ok:true,awarded:false,amount:0,balance:wallet.balance};
+
+  if(action==="check_in"){
+    if(wallet.lastCheckInDate!==today){
+      wallet.checkInStreak=wallet.lastCheckInDate===previousDateKey(today)?wallet.checkInStreak+1:1;
+      wallet.lastCheckInDate=today;
+      const amount=wallet.checkInStreak%7===0?10:5;
+      addTransaction(amount,"daily_check_in",`daily_check_in:${today}`,{streak:wallet.checkInStreak});
+      result={ok:true,awarded:true,amount,balance:wallet.balance,streak:wallet.checkInStreak};
+    }else result={...result,streak:wallet.checkInStreak,reason:"already_claimed"};
+  }
+
+  if(action==="daily_challenge"){
+    if(wallet.lastChallengeDate!==today){
+      const score=Number(payload.score)||0;
+      const total=Number(payload.total)||5;
+      wallet.challengeStreak=score*5>=total*3
+        ? wallet.lastChallengeDate===previousDateKey(today)?wallet.challengeStreak+1:1
+        : 0;
+      wallet.lastChallengeDate=today;
+      let amount=0;
+      if(score===total){addTransaction(5,"daily_challenge",`daily_challenge:${today}`,{score,total});amount+=5;}
+      if(wallet.challengeStreak>0&&wallet.challengeStreak%5===0){addTransaction(5,"daily_challenge_streak",`daily_challenge_streak:${wallet.challengeStreak}`,{streak:wallet.challengeStreak});amount+=5;}
+      result={ok:true,awarded:amount>0,amount,balance:wallet.balance,streak:wallet.challengeStreak,milestoneReward:wallet.challengeStreak>0&&wallet.challengeStreak%5===0};
+    }else result={...result,reason:"already_recorded",streak:wallet.challengeStreak};
+  }
+
+  if(action==="perfect_mcq"){
+    const referenceKey=`perfect_mcq:${today}`;
+    if(wallet.transactions.some(item=>item.reference_key===referenceKey))result={...result,reason:"already_claimed"};
+    else{
+      addTransaction(15,"perfect_mcq",referenceKey,{score:100,questionsCount:Number(payload.questionsCount)||5});
+      result={ok:true,awarded:true,amount:15,balance:wallet.balance};
+    }
+  }
+
+  if(action==="referral_reward"){
+    const role=payload.role==="referrer"?"referrer":"new_user";
+    const referralKey=String(payload.referralKey||payload.referralCode||"").trim().toUpperCase();
+    const referenceKey=`referral_${role}:${referralKey}`;
+    if(wallet.transactions.some(item=>item.reference_key===referenceKey))result={...result,reason:"already_claimed"};
+    else{
+      addTransaction(100,role==="referrer"?"referral_referrer":"referral_new_user",referenceKey,{referralCode:String(payload.referralCode||"")});
+      result={ok:true,awarded:true,amount:100,balance:wallet.balance};
+    }
+  }
+
+  if(action==="unlock_pbq"){
+    const resourceId=String(payload.resourceId||"");
+    if(wallet.unlockedPbqIds.includes(resourceId))result={ok:true,purchased:false,alreadyOwned:true,balance:wallet.balance,resourceId};
+    else if(wallet.balance<CIPHER_COIN_COSTS.pbq)throw new Error(`You need ${CIPHER_COIN_COSTS.pbq-wallet.balance} more Cipher Coins.`);
+    else{
+      addTransaction(-CIPHER_COIN_COSTS.pbq,"pbq_unlock",`pbq_unlock:${resourceId}`,{resourceId});
+      wallet.unlockedPbqIds.push(resourceId);
+      wallet.unlocks.unshift({unlock_type:"pbq",resource_id:resourceId,coin_cost:CIPHER_COIN_COSTS.pbq,unlocked_at:new Date().toISOString(),consumed_at:null});
+      result={ok:true,purchased:true,cost:CIPHER_COIN_COSTS.pbq,balance:wallet.balance,resourceId};
+    }
+  }
+
+  if(action==="buy_exam_pass"){
+    if(wallet.balance<CIPHER_COIN_COSTS.examPass)throw new Error(`You need ${CIPHER_COIN_COSTS.examPass-wallet.balance} more Cipher Coins.`);
+    const resourceId=globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random()}`;
+    addTransaction(-CIPHER_COIN_COSTS.examPass,"exam_pass_purchase",`exam_pass_purchase:${resourceId}`,{resourceId});
+    wallet.examPasses+=1;
+    wallet.unlocks.unshift({unlock_type:"exam_pass",resource_id:resourceId,coin_cost:CIPHER_COIN_COSTS.examPass,unlocked_at:new Date().toISOString(),consumed_at:null});
+    result={ok:true,purchased:true,cost:CIPHER_COIN_COSTS.examPass,balance:wallet.balance,resourceId};
+  }
+
+  if(action==="consume_exam_pass"){
+    if(wallet.examPasses<1)throw new Error("No Exam Mode passes are available.");
+    wallet.examPasses-=1;
+    const pass=wallet.unlocks.find(item=>item.unlock_type==="exam_pass"&&!item.consumed_at);
+    if(pass)pass.consumed_at=new Date().toISOString();
+    result={ok:true,consumed:true,remainingPasses:wallet.examPasses,balance:wallet.balance};
+  }
+
+  await DB.saveCipherWallet(owner,wallet);
+  return {...result,wallet:normalizeCipherWallet(wallet)};
+}
+
+async function performCipherCoinAction(user,action,payload={}) {
+  if(!user)throw new Error("Sign in to use Cipher Coins.");
+  if(isSupabaseConfigured&&user.authProvider==="supabase"){
+    const token=await getSupabaseAccessToken();
+    if(!token)throw new Error("Sign in again to use Cipher Coins.");
+    const response=await fetch("/api/coins/action",{
+      method:"POST",
+      headers:{"content-type":"application/json",authorization:`Bearer ${token}`},
+      body:JSON.stringify({action,...payload}),
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(data.error||"Unable to complete the Cipher Coin action.");
+    return data;
+  }
+  return runLocalCipherCoinAction(user,action,payload);
+}
+async function claimLocalReferralReward(user,referralCode) {
+  const code=String(referralCode||"").trim().toUpperCase();
+  if(!user||!code)return null;
+  const referrerEmail=await DB.getReferralOwner(code);
+  if(!referrerEmail||normalizeEmail(referrerEmail)===normalizeEmail(user.email))return null;
+  const referrer=await DB.getUser(referrerEmail);
+  if(!referrer)return null;
+  const referredReward=await runLocalCipherCoinAction(user,"referral_reward",{role:"new_user",referralCode:code,referralKey:code});
+  const referrerReward=await runLocalCipherCoinAction(referrer,"referral_reward",{role:"referrer",referralCode:code,referralKey:normalizeEmail(user.email)});
+  try{window.localStorage?.removeItem("secureplus_referral_code");}catch{}
+  return {coinsAwarded:referredReward.awarded?100:0,cipherCoins:referredReward.balance,referrerRewardGranted:Boolean(referrerReward.awarded),alreadyClaimed:!referredReward.awarded};
+}
 function rememberDeletedAccount(account) {
   try {
     window.localStorage?.setItem(DELETED_ACCOUNT_KEY, JSON.stringify({
@@ -514,6 +702,9 @@ function appUserFromProfile(authUser, profile) {
     referralTrialExpired: Boolean(trialUntil && trialUntil.getTime() <= Date.now() && profile?.tier !== "pro"),
     referralCode: profile?.referral_code || "",
     totalStars: Number(profile?.total_stars || 0),
+    cipherCoins: Number(profile?.cipher_coins || 0),
+    lifetimeCipherCoins: Number(profile?.lifetime_cipher_coins || 0),
+    examPasses: Number(profile?.exam_passes || 0),
     avatarId: profile?.avatar_id || authUser?.user_metadata?.avatar_id || "default-cipher",
     studyProfile: authUser?.user_metadata?.study_profile || null,
     joined: profile?.created_at || authUser?.created_at || new Date().toISOString(),
@@ -525,10 +716,10 @@ function appUserFromProfile(authUser, profile) {
 
 async function getSupabaseProfile(authUser) {
   if (!supabase || !authUser) return null;
-  const isMissingProfileColumn=error=>error?.code === "42703" || /total_stars|avatar_id|full_name|created_at/i.test(error?.message || "");
+  const isMissingProfileColumn=error=>error?.code === "42703" || /total_stars|avatar_id|full_name|created_at|cipher_coins|lifetime_cipher_coins|exam_passes/i.test(error?.message || "");
   let full = await supabase
     .from("profiles")
-    .select("id,email,full_name,avatar_id,tier,subscription_status,pro_trial_until,referral_code,total_stars,created_at")
+    .select("id,email,full_name,avatar_id,tier,subscription_status,pro_trial_until,referral_code,total_stars,cipher_coins,lifetime_cipher_coins,exam_passes,created_at")
     .eq("id", authUser.id)
     .maybeSingle();
 
@@ -586,8 +777,8 @@ async function claimReferralIfPresent(authUser) {
     });
     const data = await response.json().catch(()=>({}));
     if (response.ok) {
-      capture("referral_claimed", { referral_code: referralCode });
-      if (data.proTrialUntil || data.alreadyClaimed) {
+      capture("referral_claimed", { referral_code: referralCode, coins_awarded:Number(data.coinsAwarded||0) });
+      if (data.coinsAwarded !== undefined || data.alreadyClaimed) {
         window.localStorage?.removeItem("secureplus_referral_code");
       }
       return data;
@@ -731,6 +922,8 @@ async function submitAchievementSession(payload) {
     success:Boolean(data.success),
     newlyUnlocked:Array.isArray(data.newlyUnlocked)?data.newlyUnlocked:[],
     totalStars:data.total_stars,
+    coinReward:data.coinReward||null,
+    cipherCoins:data.cipherCoins,
   };
 }
 
@@ -15549,6 +15742,88 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .nav-lnk:hover .nav-glyph-terms span,.nav-glyph-terms.active span{animation:termsPage .58s ease both;}
 .nav-lnk:hover .nav-glyph-terms::after,.nav-glyph-terms.active::after{animation:termsSign .58s ease both;}
 .nav-lnk:hover .nav-glyph,.nav-lnk.act .nav-glyph{transform:translateY(-1px);}
+.nav-lnk:hover .nav-glyph-coins,.nav-glyph-coins.active{color:#d59632;background:#f2b85b22;border-color:#d5963260;box-shadow:0 0 18px #d5963245;}
+.cipher-coin-icon{--coin-size:34px;position:relative;display:inline-block;width:var(--coin-size);height:var(--coin-size);flex:0 0 auto;filter:drop-shadow(0 calc(var(--coin-size)*.16) calc(var(--coin-size)*.13) rgba(113,76,28,.2));isolation:isolate;}
+.cipher-coin-face{position:absolute;inset:4% 7% 10% 5%;display:grid;place-items:center;overflow:hidden;border:2px solid #a96f25;border-radius:47% 53% 49% 51%/44% 48% 52% 56%;background:radial-gradient(circle at 34% 24%,#ffe7a3 0 9%,transparent 10%),linear-gradient(145deg,#f8cf72 0 34%,#dea044 62%,#b9782a 100%);box-shadow:inset calc(var(--coin-size)*.08) calc(var(--coin-size)*.07) 0 rgba(255,247,203,.5),inset calc(var(--coin-size)*-.09) calc(var(--coin-size)*-.08) 0 rgba(121,73,23,.17),2px 0 0 #c48631,-2px 2px 0 #b5792b;transform:rotate(-3deg);}
+.cipher-coin-face::after{content:"";position:absolute;inset:18%;border:2px dashed rgba(126,75,21,.42);border-radius:48% 52% 43% 57%;}
+.cipher-coin-face i{position:relative;z-index:2;color:#88531e;font-family:'JetBrains Mono',monospace;font-size:calc(var(--coin-size)*.37);font-style:normal;font-weight:900;line-height:1;text-shadow:1px 1px 0 #ffe7a3,-1px -1px 0 rgba(101,55,16,.2);}
+.cipher-coin-face b{position:absolute;z-index:3;width:calc(var(--coin-size)*.08);height:calc(var(--coin-size)*.08);min-width:2px;min-height:2px;border-radius:1px;background:#fff1b5;box-shadow:calc(var(--coin-size)*.08) 0 0 rgba(255,255,255,.68);}
+.cipher-coin-face b:nth-of-type(1){left:20%;top:22%;}
+.cipher-coin-face b:nth-of-type(2){right:20%;bottom:24%;background:#b87528;box-shadow:calc(var(--coin-size)*-.07) 0 0 rgba(150,89,25,.48);}
+.cipher-coin-face b:nth-of-type(3){left:21%;bottom:24%;background:#eeb85a;}
+.cipher-coin-shadow{position:absolute;z-index:-1;left:15%;right:9%;bottom:0;height:18%;border-radius:50%;background:rgba(105,67,25,.18);filter:blur(1px);}
+.cipher-coin-icon.celebrate{animation:cipherCoinCelebrate .8s cubic-bezier(.16,1,.3,1) both;}
+.cipher-coin-pill{display:flex;align-items:center;gap:8px;width:100%;padding:8px 10px;border:1px solid #d79b3e55;border-radius:15px;background:linear-gradient(135deg,#f7e8bf80,${t.surface});color:${t.text};font:inherit;text-align:left;cursor:pointer;box-shadow:0 9px 24px #bc7b2420;transition:transform .18s,border-color .18s,box-shadow .18s;}
+.cipher-coin-pill:hover{transform:translateY(-2px);border-color:#d79b3e;box-shadow:0 14px 28px #bc7b2432;}
+.cipher-coin-pill span strong,.cipher-coin-pill span small{display:block;}
+.cipher-coin-pill span strong{font-size:15px;line-height:1;color:${t.text};}
+.cipher-coin-pill span small{margin-top:1px;color:#b47727;font-size:7px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
+.cipher-coin-pill.compact{width:auto;padding:4px 8px 4px 5px;border-radius:999px;}
+.cipher-coin-pill.compact span strong{font-size:12px;}
+.auth-referral-coin-note,.athena-coin-intro{display:flex;gap:10px;align-items:center;margin-top:9px;padding:10px 12px;border:1px solid #d79b3e55;border-radius:14px;background:linear-gradient(135deg,#f8e8bd8c,${t.surface});color:${t.textSec};font-size:11px;line-height:1.55;}
+.auth-referral-coin-note strong,.athena-coin-intro strong{color:#a46820;}
+.athena-coin-intro{align-items:flex-start;margin:2px 0 12px;padding:13px 14px;}
+.athena-coin-intro span strong,.athena-coin-intro span small{display:block;}
+.athena-coin-intro span strong{font-size:13px;color:${t.text};margin-bottom:3px;}
+.athena-coin-intro span small{font-size:11px;color:${t.textSec};line-height:1.55;}
+.cipher-daily-reward-chip,.cipher-unlocked-chip,.cipher-locked-cost{display:inline-flex!important;align-items:center;gap:5px!important;border-color:#d79b3e66!important;background:#f4d68f2e!important;color:#aa6c1f!important;}
+.cipher-locked-cost{font-weight:950;}
+.cipher-vault-page{width:min(1120px,100%);margin:0 auto;padding:28px 24px 110px;}
+.cipher-vault-hero{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:24px;overflow:hidden;padding:30px;border:1px solid #d79b3e40;border-radius:28px;background:radial-gradient(circle at 92% 12%,#f2b85b30,transparent 30%),radial-gradient(circle at 10% 100%,#e56f6521,transparent 34%),linear-gradient(145deg,${t.surface},color-mix(in srgb,#f4e2b5 31%,${t.panel}));box-shadow:0 24px 60px rgba(117,76,27,.12);}
+.cipher-vault-hero::after{content:"";position:absolute;right:-40px;bottom:-52px;width:230px;height:230px;border:34px solid #f2b85b16;border-radius:46% 54% 48% 52%;transform:rotate(18deg);}
+.cipher-vault-kicker{display:flex;align-items:center;gap:8px;color:#b47727;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;}
+.cipher-vault-hero h1{max-width:680px;margin:10px 0 10px;color:${t.text};font-size:clamp(34px,5vw,58px);line-height:1.02;letter-spacing:-.035em;}
+.cipher-vault-hero p{max-width:680px;margin:0;color:${t.textSec};font-size:14px;line-height:1.75;}
+.cipher-wallet-balance{position:relative;z-index:2;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:14px;padding:20px;border:1px solid #d79b3e55;border-radius:22px;background:${t.surface}d9;box-shadow:0 18px 42px rgba(117,76,27,.14);backdrop-filter:blur(16px);}
+.cipher-wallet-balance .cipher-coin-icon{grid-row:1/3;}
+.cipher-wallet-balance span{color:#b47727;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
+.cipher-wallet-balance strong{display:block;color:${t.text};font-size:42px;line-height:1;}
+.cipher-wallet-meta{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:4px;}
+.cipher-wallet-meta div{padding:9px 10px;border-radius:12px;background:#f2b85b12;border:1px solid #d79b3e28;}
+.cipher-wallet-meta small,.cipher-wallet-meta b{display:block;}
+.cipher-wallet-meta small{color:${t.textDim};font-size:7px;font-weight:900;text-transform:uppercase;}
+.cipher-wallet-meta b{margin-top:2px;color:${t.text};font-size:13px;}
+.cipher-economy-note{display:flex;gap:9px;align-items:flex-start;margin-top:14px;padding:11px 12px;border-radius:14px;background:#288c8a10;border:1px solid #288c8a28;color:${t.textSec};font-size:11px;line-height:1.55;}
+.cipher-economy-note strong{color:#288c8a;}
+.cipher-vault-section{margin-top:24px;}
+.cipher-vault-section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:12px;}
+.cipher-vault-section-head h2{color:${t.text};font-size:22px;}
+.cipher-vault-section-head p{max-width:560px;color:${t.textSec};font-size:12px;line-height:1.55;text-align:right;}
+.cipher-earn-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;}
+.cipher-earn-card{position:relative;min-height:154px;overflow:hidden;padding:16px;border:1px solid color-mix(in srgb,var(--earn-color) 30%,${t.border});border-radius:19px;background:linear-gradient(145deg,color-mix(in srgb,var(--earn-color) 9%,${t.surface}),${t.surface});}
+.cipher-earn-card>span{display:grid;place-items:center;width:36px;height:36px;margin-bottom:14px;border-radius:12px;background:color-mix(in srgb,var(--earn-color) 15%,${t.surface});color:var(--earn-color);}
+.cipher-earn-card strong{display:block;color:${t.text};font-size:13px;line-height:1.35;}
+.cipher-earn-card p{margin:5px 0 0;color:${t.textSec};font-size:10px;line-height:1.5;}
+.cipher-earn-card b{position:absolute;right:10px;top:10px;padding:4px 7px;border-radius:99px;background:var(--earn-color);color:#fff;font-size:9px;}
+.cipher-spend-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.cipher-spend-card{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;padding:20px;border:1px solid ${t.border};border-radius:22px;background:${t.surface};box-shadow:0 14px 34px rgba(54,45,30,.07);}
+.cipher-spend-visual{display:grid;place-items:center;width:74px;height:74px;border-radius:22px;background:linear-gradient(145deg,#f6e6b9,#faeee0);border:1px solid #d79b3e38;}
+.cipher-spend-card h3{color:${t.text};font-size:18px;}
+.cipher-spend-card p{margin:5px 0 13px;color:${t.textSec};font-size:11px;line-height:1.55;}
+.cipher-cost-line{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.cipher-cost{display:flex;align-items:center;gap:5px;color:#b47727;font-size:12px;font-weight:950;}
+.cipher-pro-zero{display:flex;align-items:center;gap:7px;margin-top:10px;padding:8px 10px;border-radius:11px;background:${t.green}0f;border:1px solid ${t.green}28;color:${t.green};font-size:9px;font-weight:900;}
+.cipher-ledger{display:grid;gap:7px;padding:8px;border:1px solid ${t.border};border-radius:20px;background:${t.surface};}
+.cipher-ledger-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px;border-radius:14px;}
+.cipher-ledger-row+.cipher-ledger-row{border-top:1px solid ${t.border};}
+.cipher-ledger-row>span:first-child{display:grid;place-items:center;width:32px;height:32px;border-radius:11px;background:#f2b85b16;}
+.cipher-ledger-row strong,.cipher-ledger-row small{display:block;}
+.cipher-ledger-row strong{color:${t.text};font-size:11px;}
+.cipher-ledger-row small{margin-top:2px;color:${t.textDim};font-size:8px;}
+.cipher-ledger-amount{font-size:12px;font-weight:950;}
+.cipher-ledger-amount.positive{color:${t.green};}
+.cipher-ledger-amount.negative{color:#b47727;}
+.cipher-empty-ledger{padding:22px;text-align:center;color:${t.textSec};font-size:12px;line-height:1.6;}
+.cipher-reward-toast{position:fixed;right:22px;top:20px;z-index:900;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;width:min(390px,calc(100vw - 32px));padding:12px 14px;border:1px solid #d79b3e55;border-radius:18px;background:${t.surface}f2;box-shadow:0 22px 60px rgba(104,68,24,.25);backdrop-filter:blur(18px);animation:cipherToastIn .4s cubic-bezier(.16,1,.3,1) both;}
+.cipher-reward-toast strong,.cipher-reward-toast small{display:block;}
+.cipher-reward-toast strong{color:#b47727;font-size:12px;}
+.cipher-reward-toast small{margin-top:2px;color:${t.textSec};font-size:9px;line-height:1.4;}
+.cipher-reward-toast button{display:grid;place-items:center;width:28px;height:28px;border:0;border-radius:10px;background:${t.panel};color:${t.textSec};cursor:pointer;}
+.pbq-coin-unlock{display:inline-flex;align-items:center;gap:5px;padding:5px 7px;border:1px solid #d79b3e42;border-radius:99px;background:#f2b85b17;color:#b47727;font-size:9px;font-weight:950;}
+.athena-coin-intro{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:11px;margin:14px 0 3px;padding:12px 13px;border:1px solid #d79b3e38;border-radius:16px;background:linear-gradient(135deg,#f8e9bd82,rgba(255,253,248,.85));}
+.athena-coin-intro strong,.athena-coin-intro small{display:block;}
+.athena-coin-intro strong{color:#9c661f;font-size:11px;}
+.athena-coin-intro small{margin-top:2px;color:var(--athena-muted);font-size:9px;line-height:1.45;}
 .page-title-row{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
 .page-title-row .nav-glyph{width:34px;height:34px;border-radius:10px;}
 .page-title-row .nav-glyph-mcq span{width:15px;height:19px;}
@@ -15979,6 +16254,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes upgradeTrail{0%{opacity:0;transform:translateY(4px) scaleX(.45);}70%{opacity:1;transform:translateY(0) scaleX(1);}100%{opacity:.65;transform:translateY(1px) scaleX(.7);}}
 @keyframes referralPulse{0%{transform:scale(.9);opacity:.65;}65%{transform:scale(1.12);opacity:1;}100%{transform:scale(1);opacity:1;}}
 @keyframes referralLink{0%{transform:rotate(-28deg) scaleX(.3);opacity:.35;}100%{transform:rotate(-28deg) scaleX(1);opacity:1;}}
+@keyframes cipherCoinCelebrate{0%{opacity:0;transform:translateY(14px) scale(.55) rotate(-28deg)}58%{opacity:1;transform:translateY(-7px) scale(1.13) rotate(8deg)}100%{transform:translateY(0) scale(1) rotate(0)}}
+@keyframes cipherToastIn{from{opacity:0;transform:translateY(-14px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes objectiveCard{0%{transform:rotate(0) scale(1);}55%{transform:rotate(-5deg) scale(1.06);}100%{transform:rotate(0) scale(1);}}
 @keyframes objectiveTick{0%{transform:translateX(-5px);opacity:0;width:0;}100%{transform:translateX(0);opacity:1;width:7px;}}
 @keyframes examScan{0%{right:8px;bottom:7px;transform:scale(.85);}55%{right:0;bottom:0;transform:scale(1.05);}100%{right:2px;bottom:1px;transform:scale(1);}}
@@ -16401,6 +16678,12 @@ body{background:
 @media (max-width: 860px){
   html,body,#root{max-width:100%;overflow-x:hidden;}
   body{font-size:14px;}
+  .cipher-vault-page{padding:18px 16px 110px;}
+  .cipher-vault-hero{grid-template-columns:minmax(0,1fr);padding:22px;}
+  .cipher-earn-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .cipher-spend-grid{grid-template-columns:minmax(0,1fr);}
+  .cipher-vault-section-head{display:block;}
+  .cipher-vault-section-head p{margin-top:5px;text-align:left;}
   .athena-workspace-header{grid-template-columns:1fr;gap:10px;padding:10px 16px 12px;}
   .athena-brand{display:none;}
   .athena-progress>div>span{font-size:8px;}
@@ -16678,6 +16961,18 @@ body{background:
   .app-main>.site-mascot-placement.anchor-bottom-left,.app-main>.site-mascot-placement.anchor-bottom-center,.app-main>.site-mascot-placement.anchor-bottom-right{bottom:92px!important;}
 }
 @media (max-width: 520px){
+  .cipher-vault-page{padding:15px 12px 104px;}
+  .cipher-vault-hero{padding:18px;border-radius:22px;}
+  .cipher-vault-hero h1{font-size:36px;}
+  .cipher-wallet-balance{padding:15px;}
+  .cipher-wallet-balance strong{font-size:36px;}
+  .cipher-earn-grid{grid-template-columns:minmax(0,1fr);}
+  .cipher-earn-card{min-height:124px;}
+  .cipher-spend-card{grid-template-columns:minmax(0,1fr);padding:17px;}
+  .cipher-spend-visual{width:58px;height:58px;border-radius:17px;}
+  .cipher-reward-toast{left:9px;right:9px;top:9px;width:auto;}
+  .cipher-ledger-row{grid-template-columns:auto minmax(0,1fr);}
+  .cipher-ledger-amount{grid-column:2;}
   .athena-intro-page{padding:26px 18px 104px;}
   .athena-intro-card{padding:16px 0;}
   .athena-intro-card .athena-mark{--athena-size:104px!important;}
@@ -16854,6 +17149,26 @@ function BrandMark({size=30}) {
       height={size}
       style={{borderRadius:0,display:"block",flexShrink:0,objectFit:"contain",imageRendering:"pixelated"}}
     />
+  );
+}
+function CipherCoinIcon({size=34,className="",celebrate=false}) {
+  return (
+    <span
+      className={`cipher-coin-icon ${celebrate?"celebrate":""} ${className}`.trim()}
+      style={{"--coin-size":`${size}px`}}
+      aria-hidden="true"
+    >
+      <span className="cipher-coin-face"><i>C</i><b/><b/><b/></span>
+      <span className="cipher-coin-shadow"/>
+    </span>
+  );
+}
+function CipherCoinPill({balance=0,onClick,label="Open Cipher Coin wallet",compact=false}) {
+  return (
+    <button type="button" className={`cipher-coin-pill ${compact?"compact":""}`} onClick={onClick} aria-label={`${label}. Balance: ${balance} Cipher Coins.`}>
+      <CipherCoinIcon size={compact?25:30}/>
+      <span><strong>{Number(balance)||0}</strong>{!compact&&<small>Cipher Coins</small>}</span>
+    </button>
   );
 }
 function SimBadge({type,t}) {
@@ -17074,6 +17389,7 @@ function NavGlyph({type,active}) {
     achievements:Trophy,
     daily:Target,
     pricing:TrendingUp,
+    coins:Sparkles,
     referrals:Share2,
     objectives:ListChecks,
     exam:ClipboardCheck,
@@ -18129,8 +18445,15 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
           </div>
           <details className="auth-referral-details" defaultOpen={Boolean(form.referral)}>
             <summary>Have a referral code?</summary>
-            <div className="auth-referral-content"><input className="input" name="referral" autoComplete="off" placeholder="Optional code" value={form.referral} onChange={event=>setForm(current=>({...current,referral:event.target.value.toUpperCase()}))}/></div>
+            <div className="auth-referral-content">
+              <input className="input" name="referral" autoComplete="off" placeholder="Optional code" value={form.referral} onChange={event=>setForm(current=>({...current,referral:event.target.value.toUpperCase()}))}/>
+              <div className="auth-referral-coin-note"><CipherCoinIcon size={24}/><span>When this account is created, you and your friend each receive <strong>100 Cipher Coins</strong>.</span></div>
+            </div>
           </details>
+          <div className="athena-coin-intro">
+            <CipherCoinIcon size={42}/>
+            <span><strong>Your study can unlock more study.</strong><small>Signed-in learners earn Cipher Coins through daily consistency, perfect practice, and referrals—then exchange them for PBQs and Exam Mode passes.</small></span>
+          </div>
           <button type="submit" className="btn btn-primary athena-main-action" disabled={loading}>{loading?"Minting your IC...":"Create account & save my IC"} <ChevronRight size={17}/></button>
           <div className="auth-trust-line"><LockKeyhole size={13}/> Free account. No credit card. Pro is never added automatically.</div>
         </form>
@@ -18271,7 +18594,7 @@ function AcademySignupWizard({t,form,setForm,setField,onMint,loading,error,ok}) 
             <div className="auth-referral-content">
               <input className="input" name="referral" autoComplete="off" placeholder="Optional code from a friend" value={form.referral} onChange={event=>setForm(f=>({...f,referral:event.target.value.toUpperCase()}))}/>
               <div style={{fontSize:11,color:t.textDim,lineHeight:1.55,marginTop:6}}>
-                A valid referral gives you and your friend 7 days of Pro, unless your friend already has Pro.
+                A valid referral gives you and your friend 100 Cipher Coins after your account is created.
               </div>
             </div>
           </details>
@@ -18553,7 +18876,7 @@ function ProfileMenu({user,t,onUpdateProfile,onUpdateAvatar,onChangePassword,onL
 // ═══════════════════════════════════════════════════════════════
 // DAILY CHALLENGE VIEW (no login required)
 // ═══════════════════════════════════════════════════════════════
-function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
+function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinReward}) {
   const challenge = getTodayChallenge();
   const [step, setStep] = useState("intro"); // intro | quiz | done
   const [qIndex, setQIndex] = useState(0);
@@ -18587,14 +18910,15 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
     if(step!=="done"||streakRecordedRef.current||totalQuestions!==5||results.length<5)return;
     if(!user)return;
     const correctInChallenge=results.filter(r=>r.correct).length;
-    if(correctInChallenge<3)return;
     streakRecordedRef.current=true;
+    onCoinReward?.({score:correctInChallenge,total:5});
+    if(correctInChallenge<3)return;
     completeDailyStreak(user).then(info=>{
       setStreakInfo(info);
       setStreakCelebration(info);
       capture("daily_streak_completed", { streak: info.streak, best: info.best, already_completed: info.alreadyCompleted, signed_in: Boolean(user) });
     });
-  },[step,totalQuestions,results.length,user?.email]);
+  },[step,totalQuestions,results.length,user?.email,onCoinReward]);
 
   const submitQ = () => {
     if(selected===null) return;
@@ -18636,6 +18960,11 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
             Today secured
           </span>
         )}
+        {user&&(
+          <span className="chip cipher-daily-reward-chip">
+            <CipherCoinIcon size={22}/> Perfect score +5 · every fifth streak day +5
+          </span>
+        )}
       </div>
       <MascotGuide
         animation={streakInfo.completedToday?"cheer":"dance"}
@@ -18649,7 +18978,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false}) {
         <div className="section-icon" style={{"--section-color":t.red,marginBottom:10}}><Target size={21} strokeWidth={2.2}/></div>
         <div style={{fontWeight:600,fontSize:16,marginBottom:6,color:t.text}}>{challenge.title}</div>
         <div style={{color:t.textSec,fontSize:14}}>{challenge.description}</div>
-        <div style={{marginTop:12,color:t.textDim,fontSize:13}}>Answer all 5 questions and score at least 3/5 to extend your streak.</div>
+        <div style={{marginTop:12,color:t.textDim,fontSize:13}}>Answer all 5 questions and score at least 3/5 to extend your streak. A signed-in perfect score earns 5 Cipher Coins.</div>
       </div>
       <button className="btn btn-primary" style={{padding:"12px 32px",fontSize:15,width:"100%"}} onClick={()=>{capture("daily_challenge_started", { challenge_type: challenge.type, signed_in: Boolean(user) });setStep("quiz");}}>
         Start Today's Challenge →
@@ -19062,6 +19391,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
         if(mode==="login"){
           const user=await DB.getUser(email);
           if(!user||user.password!==form.pass){setErr("Email or password is incorrect.");setLoading(false);return;}
+          await DB.saveReferralOwner(user.referralCode||makeReferralCode(user.email),user.email);
           await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
           capture("login_completed", { method: "local_demo" });
           onLogin(user);
@@ -19074,9 +19404,10 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           if(passwordIssue){setErr(passwordIssue);setLoading(false);return;}
           const exists=await DB.getUser(email);
           if(exists){setErr("An account with this email already exists.");setLoading(false);return;}
-          const trialUntil = referralCode ? new Date(Date.now()+7*24*60*60*1000).toISOString() : null;
-          const user={name:form.name,email,password:form.pass,tier:trialUntil?"pro":"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:trialUntil,referralCode:makeReferralCode(email),avatarId:form.avatarId || "default-cipher",totalStars:0,studyProfile:toAthenaStudyProfile(athenaProfile)};
+          const user={name:form.name,email,password:form.pass,tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:null,referralCode:makeReferralCode(email),avatarId:form.avatarId || "default-cipher",totalStars:0,studyProfile:toAthenaStudyProfile(athenaProfile)};
           await DB.saveUser(user);
+          if(referralCode)await claimLocalReferralReward(user,referralCode);
+          await DB.saveReferralOwner(user.referralCode,user.email);
           await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
           setOk("Account created! Welcome to SecurePlus.");
           capture("signup_completed", { method: "local_demo" });
@@ -19128,9 +19459,10 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
         capture("signup_started", { method: "academy_local_demo", avatar_id: avatarId });
         const exists=await DB.getUser(email);
         if(exists) throw new Error("An account with this email already exists.");
-        const trialUntil = referralCode ? new Date(Date.now()+7*24*60*60*1000).toISOString() : null;
-        const user={name:fullName,email,password:form.pass,tier:trialUntil?"pro":"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:trialUntil,referralCode:makeReferralCode(email),avatarId,totalStars:0,studyProfile};
+        const user={name:fullName,email,password:form.pass,tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:null,referralCode:makeReferralCode(email),avatarId,totalStars:0,studyProfile};
         await DB.saveUser(user);
+        if(referralCode)await claimLocalReferralReward(user,referralCode);
+        await DB.saveReferralOwner(user.referralCode,user.email);
         await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
         setMintedUser(user);
         setOk("Academy ID minted. Review your pass, then enter the dashboard.");
@@ -19546,7 +19878,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
 // ═══════════════════════════════════════════════════════════════
 // DASHBOARD
 // ═══════════════════════════════════════════════════════════════
-function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
+function Dashboard({user,attempts,onNav,onStartChapterReview,coinWallet,t}) {
   const [activeMission,setActiveMission]=useState("mcq");
   const readinessProfile=getReadinessProfile(attempts);
   const questionsDone=readinessProfile.uniqueQuestions;
@@ -19554,6 +19886,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
   const readiness=readinessProfile.score;
   const readinessColor=readiness>=80?t.green:readiness>=65?t.accent:readiness>=45?t.amber:t.red;
   const isPro = user.tier==="pro";
+  const coinBalance=Number(coinWallet?.balance||0);
+  const examPasses=Number(coinWallet?.examPasses||0);
+  const hasExamAccess=isPro||examPasses>0;
   const challenge = getTodayChallenge();
   const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
   useEffect(()=>{
@@ -19571,8 +19906,8 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
   const missionCards=[
     {id:"mcq",label:"MCQ Practice",title:"Start a focused set",body:"Adaptive ordering prioritises weak and starred questions so each session feels useful.",nav:"mcq",color:t.accent,meta:`${MCQ_BANK.length} questions`,Icon:BookOpenCheck},
     {id:"daily",label:"Daily Challenge",title:streakInfo.completedToday?"Daily complete":"Protect the streak",body:streakInfo.completedToday?"Today is already secured. Return tomorrow for the next streak point.":"Five questions, quick feedback, and a streak moment after completion.",nav:"daily",color:t.amber,meta:`${streakInfo.streak} day streak`,Icon:Target},
-    {id:"pbq",label:"PBQ Simulator",title:isPro?"Practise one PBQ":"Try the PBQ preview",body:isPro?"Terminal, table, drag and drop, ordering, and incident-response style simulations.":"Preview one PBQ for free, then unlock the full simulator with Pro.",nav:"pbq",color:t.green,meta:`${PBQ_BANK.length} PBQs`,Icon:Puzzle},
-    {id:"exam",label:"Exam Mode",title:isPro?"Run a timed exam":"Pro exam mode",body:isPro?"Mixed MCQ/PBQ sets with flags, elimination, timing, and post-exam review.":"Upgrade to access timed mixed exams and deeper result analysis.",nav:isPro?"exam":"pricing",color:"#8b5cf6",meta:isPro?"Timed mode":"Pro feature",Icon:ClipboardCheck},
+    {id:"pbq",label:"PBQ Simulator",title:isPro?"Practise one PBQ":"Earn a PBQ unlock",body:isPro?"Terminal, table, tap-based placement, ordering, and incident-response simulations.":`Preview one PBQ, then permanently unlock more for ${CIPHER_COIN_COSTS.pbq} Cipher Coins each.`,nav:"pbq",color:t.green,meta:`${PBQ_BANK.length} PBQs`,Icon:Puzzle},
+    {id:"exam",label:"Exam Mode",title:hasExamAccess?"Run a timed exam":"Earn an Exam pass",body:hasExamAccess?"Mixed MCQ/PBQ sets with flags, elimination, timing, and post-exam review.":`Exchange ${CIPHER_COIN_COSTS.examPass} coins for one practice exam, or use Pro with zero coin requirements.`,nav:hasExamAccess?"exam":"coins",color:"#8b5cf6",meta:isPro?"Unlimited":examPasses?`${examPasses} pass${examPasses===1?"":"es"}`:"Coin access",Icon:ClipboardCheck},
   ];
   const activeMissionCard=missionCards.find(card=>card.id===activeMission)||missionCards[0];
   const weekDots=Array.from({length:7},(_,index)=>index<Math.min(7,streakInfo.streak));
@@ -19615,7 +19950,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
           <div className="home-cta-row">
             <button className="btn btn-primary" onClick={()=>onNav("mcq")}>Start practice</button>
             <button className="btn btn-outline" onClick={()=>onNav("daily")}>Daily challenge</button>
-            <button className="btn btn-ghost" onClick={()=>onNav(isPro?"exam":"pricing")}>{isPro?"Exam mode":"See Pro"}</button>
+            <button className="btn btn-ghost" onClick={()=>onNav(hasExamAccess?"exam":"coins")}>{hasExamAccess?"Exam mode":"Coin Vault"}</button>
           </div>
           <div className="home-trust-row">
             <span>{MCQ_BANK.length} MCQs</span>
@@ -19623,6 +19958,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
             <span>Smart Review</span>
             <span>{isPro?"Pro active":"Free plan"}</span>
           </div>
+          <div style={{marginTop:14,maxWidth:190}}><CipherCoinPill balance={coinBalance} onClick={()=>onNav("coins")}/></div>
           <MascotGuide
             animation={questionsDone?"scan":"wave"}
             size={88}
@@ -19915,11 +20251,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,t}) {
             <div className="card" style={{padding:"18px 20px",borderColor:`${t.amber}40`,background:`${t.amber}06`}}>
               <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:4}}>Ready for PBQs?</div>
               <div style={{fontSize:13,color:t.textSec,marginBottom:12}}>
-                Keep using all MCQs for free. Pro adds {PBQ_BANK.length} performance-based questions with terminal, drag & drop, log analysis and more.
+                Keep using all MCQs for free. Earn Cipher Coins to unlock individual PBQs, or choose Pro for all {PBQ_BANK.length} PBQs with zero coin requirements.
               </div>
-              <button className="btn btn-primary" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("pricing")}>
-                Upgrade — $4.99/year
-              </button>
+              <div style={{display:"flex",gap:8,flexWrap:"wrap"}}><button className="btn btn-outline" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("coins")}><CipherCoinIcon size={22}/> Open Coin Vault</button><button className="btn btn-primary" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("pricing")}>Pro · zero coins</button></div>
             </div>
           )}
         </div>
@@ -20974,13 +21308,15 @@ function PBQLoadingSkeleton({t}) {
   );
 }
 
-function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,showQuestionCodes=false,pbqBank=PBQ_BANK,isLoading=false,loadError=null}) {
+function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinWallet,coinBusy=false,t,starred=[],onToggleStar,showQuestionCodes=false,pbqBank=PBQ_BANK,isLoading=false,loadError=null}) {
   const [chFilter,setChFilter]=useState("all");
   const [typeFilter,setTypeFilter]=useState("all");
   const [lockedQuestion,setLockedQuestion]=useState(null);
   const [showMissedOnly,setShowMissedOnly]=useState(false);
   const [starredView,setStarredView]=useState(false);
   const isPro=user.tier==="pro";
+  const unlockedSet=useMemo(()=>new Set(coinWallet?.unlockedPbqIds||[]),[coinWallet?.unlockedPbqIds]);
+  const coinBalance=Number(coinWallet?.balance||0);
   const bank=pbqBank?.length ? pbqBank : [];
   const starredSet=useMemo(()=>new Set(starred),[starred]);
   const attempted=new Set(attempts.filter(a=>a.pbq).map(a=>a.qid));
@@ -21004,7 +21340,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
   });
   const openLockedPrompt=q=>{
     capture("pbq_locked_clicked", { question_id: q.id, type: q.type, chapter: q.ch });
-    if(shouldShowPBQUpgradePrompt()) setLockedQuestion(q);
+    setLockedQuestion(q);
   };
   const practiceRandomPbq=()=>{
     const notDone=bank.filter(q=>!attempted.has(q.id));
@@ -21035,12 +21371,13 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
       {starredPbqs.length?(
         <div style={{display:"grid",gap:10}}>
           {starredPbqs.map(q=>(
-            <div key={q.id} className="card card-hover" style={{padding:"14px 18px",display:"flex",gap:12,alignItems:"flex-start",cursor:(isPro||isFreePBQPreview(q))?"pointer":"default"}} onClick={()=>{if(isPro||isFreePBQPreview(q))onStart(q);}}>
+            <div key={q.id} className="card card-hover" style={{padding:"14px 18px",display:"flex",gap:12,alignItems:"flex-start",cursor:"pointer"}} onClick={()=>{if(isPro||isFreePBQPreview(q)||unlockedSet.has(q.id))onStart(q);else openLockedPrompt(q);}}>
               <StarButton active onToggle={()=>onToggleStar?.("pbq",q.id)} label="Unstar PBQ"/>
               <SimIcon type={q.type}/>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
                   {!isPro&&isFreePBQPreview(q)&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}40`}}>Preview</span>}
+                  {!isPro&&unlockedSet.has(q.id)&&<span className="chip cipher-unlocked-chip"><CipherCoinIcon size={19}/> Coin unlocked</span>}
                   {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
@@ -21074,7 +21411,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
         <div className="practice-page-meta">
           <span className="practice-meta-pill"><strong>{bank.length}</strong> PBQs</span>
           <span className="practice-meta-pill"><strong>{Object.keys(SIM_TYPES).length}</strong> formats</span>
-          <span className="practice-meta-pill">{isPro?"Pro access":"1 free preview"}</span>
+          <span className="practice-meta-pill">{isPro?"Pro · zero coins":`${unlockedSet.size} coin unlock${unlockedSet.size===1?"":"s"}`}</span>
         </div>
       </header>
 
@@ -21114,12 +21451,15 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
         <div className="card" style={{padding:"18px 22px",marginBottom:20,borderColor:`${t.amber}40`,background:`${t.amber}06`}}>
           <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
             <div style={{flex:1}}>
-              <div style={{fontWeight:600,fontSize:15,color:t.text,marginBottom:4}}>Try one PBQ preview for free</div>
+              <div style={{fontWeight:700,fontSize:15,color:t.text,marginBottom:4}}>Preview one PBQ, then earn permanent access</div>
               <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                Free users can attempt the PBQ marked <strong style={{color:t.amber}}>Preview</strong>. Pro unlocks all {bank.length} PBQ simulations with terminal commands, drag & drop, log analysis, and more.
+                Free users can try the marked preview and permanently unlock any other PBQ for <strong>{CIPHER_COIN_COSTS.pbq} Cipher Coins</strong>. Pro includes every PBQ with zero coin requirements.
               </div>
             </div>
-            <button className="btn btn-primary" style={{flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_access_banner", tier: user.tier });onUpgrade();}}>Upgrade — $4.99/year →</button>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+              <button className="btn btn-outline" style={{flexShrink:0}} onClick={onOpenWallet}><CipherCoinIcon size={23}/> {coinBalance} coins</button>
+              <button className="btn btn-primary" style={{flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_access_banner", tier: user.tier });onUpgrade();}}>Pro · zero coins →</button>
+            </div>
           </div>
         </div>
       )}
@@ -21129,13 +21469,15 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
           <div style={{display:"flex",gap:12,alignItems:"flex-start",flexWrap:"wrap"}}>
             <span className="section-icon" style={{"--section-color":t.accent}}><LockKeyhole size={21} strokeWidth={2.2}/></span>
             <div style={{flex:1,minWidth:220}}>
-              <div style={{fontWeight:700,fontSize:15,color:t.text,marginBottom:4}}>{lockedQuestion.title} is a Pro PBQ</div>
+              <div style={{fontWeight:700,fontSize:15,color:t.text,marginBottom:4}}>Unlock {lockedQuestion.title}</div>
               <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                This is the kind of performance-based simulation that helps SecurePlus stand out from normal MCQ-only practice. Upgrade when you want full PBQ practice.
+                Keep this PBQ permanently for {CIPHER_COIN_COSTS.pbq} Cipher Coins, or use Pro for the complete bank with zero coin requirements.
               </div>
             </div>
             <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-              <button className="btn btn-primary" style={{fontSize:13}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "locked_pbq_prompt", question_id: lockedQuestion.id, tier: user.tier });onUpgrade();}}>Unlock PBQs</button>
+              <button className="btn btn-primary" style={{fontSize:13}} disabled={coinBusy||coinBalance<CIPHER_COIN_COSTS.pbq} onClick={async()=>{const unlocked=await onUnlockPbq?.(lockedQuestion);if(unlocked)setLockedQuestion(null);}}><CipherCoinIcon size={22}/> {coinBalance<CIPHER_COIN_COSTS.pbq?`${CIPHER_COIN_COSTS.pbq-coinBalance} more needed`:`Unlock for ${CIPHER_COIN_COSTS.pbq}`}</button>
+              {coinBalance<CIPHER_COIN_COSTS.pbq&&<button className="btn btn-outline" style={{fontSize:13}} onClick={onOpenWallet}>How to earn</button>}
+              <button className="btn btn-outline" style={{fontSize:13}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "locked_pbq_prompt", question_id: lockedQuestion.id, tier: user.tier });onUpgrade();}}>Choose Pro</button>
               <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>setLockedQuestion(null)}>Not now</button>
             </div>
           </div>
@@ -21194,7 +21536,8 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
           const done=attempted.has(q.id);
           const ok=correct.has(q.id);
           const preview=isFreePBQPreview(q);
-          const canOpen=isPro||preview;
+          const coinUnlocked=unlockedSet.has(q.id);
+          const canOpen=isPro||preview||coinUnlocked;
           const ch=CHAPTERS.find(c=>c.id===q.ch);
           return(
             <div
@@ -21211,6 +21554,8 @@ function PBQBank({user,attempts,onStart,onUpgrade,t,starred=[],onToggleStar,show
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,marginBottom:5,flexWrap:"wrap"}}>
                   {preview&&!isPro&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}40`}}>Preview</span>}
+                  {!isPro&&coinUnlocked&&<span className="chip cipher-unlocked-chip"><CipherCoinIcon size={19}/> Coin unlocked</span>}
+                  {!canOpen&&<span className="chip cipher-locked-cost"><CipherCoinIcon size={19}/>{CIPHER_COIN_COSTS.pbq}</span>}
                   {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
@@ -21832,7 +22177,7 @@ function ExamModeGuideModal({t,onClose}) {
   );
 }
 
-function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,pbqBank=PBQ_BANK,onSessionComplete}) {
+function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamPass,examPasses=0,t,showQuestionCodes=false,pbqBank=PBQ_BANK,onSessionComplete}) {
   const sessionKey=`exam:${practiceSessionOwner(user)}`;
   const [questionCount,setQuestionCount]=useState(20);
   const [pbqCount,setPbqCount]=useState(2);
@@ -21851,6 +22196,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
   const [submittingExam,setSubmittingExam]=useState(false);
   const [showScoreDisclaimer,setShowScoreDisclaimer]=useState(false);
   const [completedRows,setCompletedRows]=useState([]);
+  const [accessStarting,setAccessStarting]=useState(false);
   const longPressTimers=useRef({});
   const longPressActivated=useRef({});
   const rightClickHandled=useRef({});
@@ -21889,7 +22235,18 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
     setQuestionCount(size);
     setPbqCount(prev=>Math.min(size,Math.max(0,Math.round(size*(prev/Math.max(1,questionCount))))));
   };
-  const startExam=()=>{
+  const startExam=async()=>{
+    if(!isPro){
+      const confirmed=window.confirm("Start this practice exam now? One Exam Mode pass will be used. Your pass is not consumed if you cancel here.");
+      if(!confirmed)return;
+      setAccessStarting(true);
+      try{
+        const consumed=await onConsumeExamPass?.();
+        if(!consumed)return;
+      }finally{
+        setAccessStarting(false);
+      }
+    }
     const examReadyPbqs=(pbqBank?.length?pbqBank:PBQ_BANK).filter(q=>!q.beyondTextbook&&(q.type!=="TERMINAL SIM"||q.choices||q.options));
     const pickedPbq=shuffle(examReadyPbqs).slice(0,pbqCount).map(q=>({kind:"pbq",q:stripPbqHintsForExam(q)}));
     const pickedMcq=shuffle(MCQ_BANK.filter(q=>!q.beyondTextbook)).slice(0,mcqCount).map(q=>({kind:"mcq",q:shuffleMcqOptions(q)}));
@@ -22076,25 +22433,28 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
   };
 
   useEffect(()=>{
-    if(!isPro)return;
+    if(!isPro&&examPasses<1)return;
     let active=true;
     storageGet(examGuideKey).then(value=>{
       if(active&&!value?.value) setShowExamGuide(true);
     }).catch(()=>{if(active)setShowExamGuide(true);});
     return()=>{active=false;};
-  },[examGuideKey,isPro]);
+  },[examGuideKey,isPro,examPasses]);
 
-  if(!isPro) return(
+  if(!isPro&&examPasses<1) return(
     <div className="exam-setup-screen fu" style={{padding:"28px 24px",maxWidth:760,margin:"0 auto"}}>
       <div className="card" style={{padding:"24px",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
         <div className="page-title-row" style={{marginBottom:10}}>
           <NavGlyph type="exam" active/>
-          <h2 style={{fontSize:24,color:t.text}}>Exam Mode is Pro-only</h2>
+          <h2 style={{fontSize:24,color:t.text}}>Unlock a full practice exam</h2>
         </div>
         <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:16}}>
-          Exam Mode mixes MCQs and PBQs, adds a timer, lets you flag questions, and gives a full answer review after submission.
+          Exchange {CIPHER_COIN_COSTS.examPass} Cipher Coins for one Exam Mode pass, or choose Pro for unlimited exams with zero coin requirements. This is a SecurePlus practice pass—not an official CompTIA exam voucher.
         </p>
-        <button className="btn btn-primary" onClick={onUpgrade}>Upgrade to Pro</button>
+        <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+          <button className="btn btn-primary" onClick={onOpenWallet}><CipherCoinIcon size={24}/> Get an Exam Pass</button>
+          <button className="btn btn-outline" onClick={onUpgrade}>Choose Pro · zero coins</button>
+        </div>
       </div>
     </div>
   );
@@ -22106,7 +22466,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
         <NavGlyph type="exam" active/>
         <div>
           <h2 style={{fontSize:26,color:t.text}}>Exam Mode</h2>
-          <p style={{fontSize:14,color:t.textSec}}>Timed mixed practice for Pro users.</p>
+          <p style={{fontSize:14,color:t.textSec}}>{isPro?"Unlimited timed mixed practice with zero coin requirements.":`${examPasses} Exam Mode pass${examPasses===1?"":"es"} available · one is used when a new exam begins.`}</p>
         </div>
       </div>
       <div className="card" style={{padding:"10px",marginBottom:16,display:"flex",gap:8,flexWrap:"wrap"}}>
@@ -22184,8 +22544,8 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
           SecurePlus uses <strong style={{color:t.amber}}>80%</strong> as a practice pass mark here. This is not an accurate CompTIA scoring model. The real Security+ exam uses a proprietary scaled score from 100 to 900, and PBQs can carry different weight.
         </p>
       </div>
-      <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"13px"}} onClick={startExam}>
-        Start Exam →
+      <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"13px"}} onClick={startExam} disabled={accessStarting}>
+        {accessStarting?"Opening exam...":isPro?"Start Exam →":"Use 1 pass & start →"}
       </button>
     </div>
     {showExamGuide&&<ExamModeGuideModal t={t} onClose={closeExamGuide}/>}
@@ -22720,6 +23080,98 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,t,showQuestionCodes=false,p
 // ═══════════════════════════════════════════════════════════════
 // PRICING
 // ═══════════════════════════════════════════════════════════════
+function CipherRewardToast({reward,onClose}) {
+  if(!reward)return null;
+  return (
+    <div className="cipher-reward-toast" role="status" aria-live="polite">
+      <CipherCoinIcon size={42} celebrate/>
+      <span><strong>{reward.amount>0?`+${reward.amount} Cipher Coins`:reward.title||"Cipher Coin wallet updated"}</strong><small>{reward.message||"Your new balance is ready in the Coin Vault."}</small></span>
+      <button type="button" onClick={onClose} aria-label="Close Cipher Coin message"><X size={15}/></button>
+    </div>
+  );
+}
+
+function CipherCoinVault({user,wallet,onBuyExamPass,onNavigate,onRefresh,t,busy=false}) {
+  const isPro=user?.tier==="pro";
+  const balance=Number(wallet?.balance||0);
+  const transactions=wallet?.transactions||[];
+  const earnMethods=[
+    {title:"Daily check-in",body:"Days 1–6 award 5. Every seventh consecutive day awards 10.",reward:"+5 / +10",color:"#e56f65",Icon:CalendarDays},
+    {title:"Perfect MCQ set",body:"Score 100% on at least five questions. The first perfect set each day is rewarded.",reward:"+15",color:"#7766c6",Icon:BookOpenCheck},
+    {title:"Perfect Daily Challenge",body:"Answer all five Daily Challenge questions correctly.",reward:"+5",color:"#397fba",Icon:Target},
+    {title:"Five-day challenge milestone",body:"Every fifth day in your Daily Challenge streak adds a bonus.",reward:"+5",color:"#288c8a",Icon:Flame},
+    {title:"Friend referral",body:"When a new student joins with your code, both accounts receive the reward.",reward:"+100 each",color:"#c38d2d",Icon:Share2},
+  ];
+  return (
+    <div className="cipher-vault-page">
+      <section className="cipher-vault-hero">
+        <div>
+          <div className="cipher-vault-kicker"><CipherCoinIcon size={25}/> SecurePlus accessibility economy</div>
+          <h1>Consistency becomes access.</h1>
+          <p>Cipher Coins let free learners earn permanent PBQ unlocks and Exam Mode passes through regular study. They cannot be purchased for cash, they never expire, and they do not affect your readiness score.</p>
+          <div className="cipher-economy-note"><ShieldCheck size={17}/><span><strong>Fair by design.</strong> Reward limits are recorded once on the server, so refreshing or repeating the same daily event cannot mint extra coins.</span></div>
+          <MascotGuide animation="cheer" size={78} context="cipher-coins" message="Small daily wins can open the whole campus. I’ll keep count!" className="mascot-guide-page" side="left"/>
+        </div>
+        <div className="cipher-wallet-balance">
+          <CipherCoinIcon size={72}/>
+          <span>Available balance</span>
+          <strong>{balance}</strong>
+          <div className="cipher-wallet-meta">
+            <div><small>Lifetime earned</small><b>{Number(wallet?.lifetimeEarned||0)}</b></div>
+            <div><small>Exam Mode passes</small><b>{Number(wallet?.examPasses||0)}</b></div>
+          </div>
+          <button className="btn btn-ghost" type="button" style={{gridColumn:"1/-1",fontSize:10}} onClick={onRefresh} disabled={busy}>{busy?"Refreshing...":"Refresh wallet"}</button>
+        </div>
+      </section>
+
+      {wallet?.error&&<Alert msg={wallet.error} type="warn" t={t}/>}
+
+      <section className="cipher-vault-section">
+        <div className="cipher-vault-section-head"><h2>How to earn</h2><p>Rewards favour daily discipline over endless grinding. The largest reward comes from helping another learner begin.</p></div>
+        <div className="cipher-earn-grid">
+          {earnMethods.map(({title,body,reward,color,Icon})=>(
+            <article className="cipher-earn-card" style={{"--earn-color":color}} key={title}>
+              <span><Icon size={18}/></span><b>{reward}</b><strong>{title}</strong><p>{body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="cipher-vault-section">
+        <div className="cipher-vault-section-head"><h2>Exchange your coins</h2><p>PBQ unlocks are permanent. Exam Mode passes are single-use practice vouchers—not official CompTIA exam vouchers.</p></div>
+        <div className="cipher-spend-grid">
+          <article className="cipher-spend-card">
+            <div className="cipher-spend-visual"><Puzzle size={30} color="#288c8a"/></div>
+            <div><h3>Permanent PBQ unlock</h3><p>Choose one locked PBQ from the simulator and keep access to it on your account.</p><div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={24}/>{CIPHER_COIN_COSTS.pbq} coins</span><button className="btn btn-primary" type="button" onClick={()=>onNavigate("pbq")}>Choose a PBQ</button></div>{isPro&&<div className="cipher-pro-zero"><Sparkles size={13}/> Pro has every PBQ with zero coin requirements.</div>}</div>
+          </article>
+          <article className="cipher-spend-card">
+            <div className="cipher-spend-visual"><ClipboardCheck size={30} color="#7766c6"/></div>
+            <div><h3>One Exam Mode pass</h3><p>Run one complete timed SecurePlus practice exam. A pass is consumed only when the exam begins.</p><div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={24}/>{CIPHER_COIN_COSTS.examPass} coins</span><button className="btn btn-primary" type="button" onClick={onBuyExamPass} disabled={busy||isPro||balance<CIPHER_COIN_COSTS.examPass}>{isPro?"Included with Pro":balance<CIPHER_COIN_COSTS.examPass?`${CIPHER_COIN_COSTS.examPass-balance} more needed`:"Get Exam Pass"}</button></div>{isPro&&<div className="cipher-pro-zero"><Sparkles size={13}/> Pro runs unlimited practice exams without spending coins.</div>}</div>
+          </article>
+        </div>
+      </section>
+
+      <section className="cipher-vault-section">
+        <div className="cipher-vault-section-head"><h2>Bring a friend</h2><p>Referrals give both learners 100 Cipher Coins, with no limit on how many new friends you can invite.</p></div>
+        <ReferralUpgradeBanner user={user} t={t} onFindOutMore={()=>onNavigate("referrals")}/>
+      </section>
+
+      <section className="cipher-vault-section">
+        <div className="cipher-vault-section-head"><h2>Recent activity</h2><p>Your ledger shows exactly why coins entered or left your wallet.</p></div>
+        <div className="cipher-ledger">
+          {transactions.length?transactions.slice(0,12).map(transaction=>(
+            <div className="cipher-ledger-row" key={transaction.id||transaction.reference_key}>
+              <span><CipherCoinIcon size={25}/></span>
+              <span><strong>{cipherTransactionLabel(transaction.event_type)}</strong><small>{transaction.created_at?new Date(transaction.created_at).toLocaleString():"Recorded securely"} · Balance {Number(transaction.balance_after||0)}</small></span>
+              <span className={`cipher-ledger-amount ${Number(transaction.amount)>=0?"positive":"negative"}`}>{Number(transaction.amount)>=0?"+":""}{Number(transaction.amount)||0}</span>
+            </div>
+          )):<div className="cipher-empty-ledger">Your first daily check-in will appear here. Return each day to build a steady balance.</div>}
+        </div>
+      </section>
+    </div>
+  );
+}
+
 function ReferralUpgradeBanner({user,t,onFindOutMore}) {
   const [details,setDetails]=useState(null);
   const [error,setError]=useState("");
@@ -22729,6 +23181,7 @@ function ReferralUpgradeBanner({user,t,onFindOutMore}) {
   useEffect(()=>{
     let active=true;
     if(!user) return;
+    if(!isSupabaseConfigured)DB.saveReferralOwner(user.referralCode||makeReferralCode(user.email),user.email);
     setError("");
     setLoading(true);
     getReferralDetails()
@@ -22741,15 +23194,13 @@ function ReferralUpgradeBanner({user,t,onFindOutMore}) {
   const code=details?.referralCode || user?.referralCode || "";
   const shareUrl=code ? `${window.location.origin}/?ref=${encodeURIComponent(code)}` : "";
   const invitedCount=details?.invitedCount || 0;
-  const referralUsed=invitedCount >= 1;
-  const isPaidPro = user?.tier === "pro" && ["active","trialing"].includes(user?.subscriptionStatus);
 
   const copyLink=async()=>{
     if(!shareUrl)return;
     try{
       await navigator.clipboard?.writeText(shareUrl);
       setCopied(true);
-      capture("referral_link_copied", { source: "upgrade_page", referral_used: referralUsed });
+      capture("referral_link_copied", { source: "cipher_coin_referral", invited_count: invitedCount });
       setTimeout(()=>setCopied(false),1800);
     }catch{
       window.prompt("Copy your referral link", shareUrl);
@@ -22760,17 +23211,16 @@ function ReferralUpgradeBanner({user,t,onFindOutMore}) {
     <div className="card" style={{padding:"22px 24px",marginBottom:18,borderColor:`${t.green}45`,background:`linear-gradient(135deg, ${t.green}12, ${t.accent}10 70%, ${t.surface})`}}>
       <div style={{display:"flex",gap:16,alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap"}}>
         <div style={{flex:"1 1 260px"}}>
-          <div className="label" style={{color:t.green,marginBottom:8}}>Referral Programme</div>
-          <h3 style={{fontSize:22,fontWeight:900,color:t.text,marginBottom:8}}>Share the joy of learning</h3>
+          <div className="label" style={{color:t.green,marginBottom:8}}>Cipher Coin referrals</div>
+          <h3 style={{fontSize:22,fontWeight:900,color:t.text,marginBottom:8}}>Help a friend begin. Both earn 100.</h3>
           <p style={{fontSize:13,color:t.textSec,lineHeight:1.75,marginBottom:12}}>
-            Referral rewards are live. Share your link with one new student. When they create an account using your code, they get 7 days of Pro and you get 7 days too. If you already have an active Pro plan, your friend still receives the trial while your account stays on Pro.
+            When a new student creates an account using your referral link, their wallet receives 100 Cipher Coins and yours receives 100 too.
           </p>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-            <span className="chip" style={{background:`${t.green}18`,borderColor:`${t.green}55`,color:t.green}}>Live now</span>
-            <span className="chip" style={{background:`${t.green}12`,borderColor:`${t.green}35`,color:t.green}}>Friend gets 7 days Pro</span>
-            <span className="chip" style={{background:`${t.green}12`,borderColor:`${t.green}35`,color:t.green}}>You get 7 days Pro</span>
-            <span className="chip" style={{background:`${t.accent}12`,borderColor:`${t.accent}35`,color:t.accent}}>You can refer 1 user</span>
-            {isPaidPro&&<span className="chip" style={{background:`${t.amber}12`,borderColor:`${t.amber}35`,color:t.amber}}>Paid Pro: no extra trial needed</span>}
+            <span className="chip" style={{background:`${t.green}18`,borderColor:`${t.green}55`,color:t.green}}>+100 for your friend</span>
+            <span className="chip" style={{background:`${t.green}12`,borderColor:`${t.green}35`,color:t.green}}>+100 for you</span>
+            <span className="chip" style={{background:`${t.accent}12`,borderColor:`${t.accent}35`,color:t.accent}}>{invitedCount} joined so far</span>
+            <span className="chip" style={{background:`${t.amber}12`,borderColor:`${t.amber}35`,color:t.amber}}>One reward per new account</span>
           </div>
           {onFindOutMore&&(
             <button className="btn btn-outline" style={{fontSize:12,marginTop:14}} onClick={onFindOutMore}>
@@ -22779,30 +23229,19 @@ function ReferralUpgradeBanner({user,t,onFindOutMore}) {
           )}
         </div>
         <div style={{flex:"1 1 260px",minWidth:0}}>
-          {referralUsed ? (
-            <div className="card" style={{padding:"14px 16px",boxShadow:"none",background:`${t.amber}10`,borderColor:`${t.amber}35`}}>
-              <div style={{fontWeight:900,color:t.amber,marginBottom:6}}>Referral already used</div>
-              <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                Your one referral reward has already been used, so the referral link is hidden.
-              </div>
-            </div>
-          ) : (
-            <>
-              <div style={{fontSize:12,fontWeight:800,color:t.textDim,marginBottom:6}}>Your referral link</div>
-              <div style={{display:"flex",gap:8,alignItems:"stretch"}}>
-                <input className="input" readOnly value={loading?"Loading referral link...":error||shareUrl||"Referral setup needed"} style={{fontSize:12,fontFamily:"'JetBrains Mono',monospace"}}/>
-                <button className="btn btn-primary" style={{fontSize:13,whiteSpace:"nowrap"}} onClick={copyLink} disabled={!shareUrl}>
-                  {copied?"Copied":"Copy"}
-                </button>
-              </div>
-              <div style={{fontSize:12,color:t.textDim,lineHeight:1.6,marginTop:8}}>
-                The landing page will open with your referral code already filled in.
-              </div>
-            </>
-          )}
+          <div style={{fontSize:12,fontWeight:800,color:t.textDim,marginBottom:6}}>Your referral link</div>
+          <div style={{display:"flex",gap:8,alignItems:"stretch"}}>
+            <input className="input" readOnly value={loading?"Loading referral link...":error||shareUrl||"Referral setup needed"} style={{fontSize:12,fontFamily:"'JetBrains Mono',monospace"}}/>
+            <button className="btn btn-primary" style={{fontSize:13,whiteSpace:"nowrap"}} onClick={copyLink} disabled={!shareUrl}>
+              {copied?"Copied":"Copy"}
+            </button>
+          </div>
+          <div style={{fontSize:12,color:t.textDim,lineHeight:1.6,marginTop:8}}>
+            The signup page opens with your code already filled in. Rewards are applied once the new account is created.
+          </div>
           {error&&(
             <div style={{fontSize:12,color:t.amber,lineHeight:1.6,marginTop:8}}>
-              Referral launch SQL may not be installed yet. Run <code>supabase/referrals.sql</code> in Supabase SQL Editor if this message stays.
+              Cipher Coin referrals are waiting for database setup. Run <code>supabase/cipher-coins.sql</code> in Supabase SQL Editor.
             </div>
           )}
         </div>
@@ -22841,6 +23280,7 @@ const MASCOT_PAGE_OPTIONS = [
   {id:"pbq",label:"PBQ Simulator",description:"PBQ library and selection"},
   {id:"exam",label:"Exam Mode",description:"Exam setup and test area"},
   {id:"daily",label:"Daily Challenge",description:"Daily practice and streaks"},
+  {id:"coins",label:"Cipher Coins",description:"Coin wallet, earning, and unlocks"},
   {id:"pricing",label:"Upgrade",description:"Plan and referral page"},
   {id:"objectives",label:"Objectives",description:"SY0-701 objective guide"},
 ];
@@ -24953,30 +25393,29 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
   );
 }
 
-function ReferralClaimPrompt({result,t,onUpgrade,onClose}) {
-  const until = result?.proTrialUntil
-    ? new Date(result.proTrialUntil).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
-    : "";
+function ReferralClaimPrompt({result,t,onOpenWallet,onClose}) {
+  const awarded=Number(result?.coinsAwarded||0);
   return(
-    <div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Referral trial activated" onClick={onClose}>
+    <div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Cipher Coin referral reward" onClick={onClose}>
       <div className="streak-modal" style={{maxWidth:480}} onClick={e=>e.stopPropagation()}>
         <div style={{position:"relative",textAlign:"center"}}>
-          <div className="label" style={{color:t.green,marginBottom:8}}>Referral reward activated</div>
-          <h2 style={{fontSize:26,fontWeight:900,color:t.text,marginBottom:10}}>You unlocked 7 days of Pro</h2>
+          <CipherCoinIcon size={72} celebrate/>
+          <div className="label" style={{color:t.green,margin:"10px 0 8px"}}>Referral reward received</div>
+          <h2 style={{fontSize:26,fontWeight:900,color:t.text,marginBottom:10}}>Your wallet gained {awarded || 100} Cipher Coins</h2>
           <p style={{fontSize:14,color:t.textSec,lineHeight:1.75,marginBottom:18}}>
-            Your referral code worked. PBQ simulations, Exam Mode, Smart Review, and detailed solutions are available during your trial{until ? ` until ${until}` : ""}.
+            Your friend’s code worked. Spend the coins on permanent PBQ unlocks or save towards an Exam Mode pass.
           </p>
           <div className="card" style={{padding:"14px 16px",marginBottom:18,background:`${t.green}10`,borderColor:`${t.green}35`}}>
-            <div style={{fontSize:28,fontWeight:900,color:t.green}}>7 days Pro</div>
+            <div style={{fontSize:28,fontWeight:900,color:t.green}}>+{awarded || 100} Cipher Coins</div>
             <div style={{fontSize:13,color:t.textSec,fontWeight:800}}>
               {result?.referrerRewardGranted === false
-                ? "Your friend already has paid Pro, so only your trial was added."
-                : "Your friend gets the same reward too."}
+                ? "Your reward was already safely recorded."
+                : "Your friend receives 100 Cipher Coins too."}
             </div>
           </div>
           <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
             <button className="btn btn-primary" style={{flex:1,justifyContent:"center"}} onClick={onClose}>Start practising</button>
-            <button className="btn btn-outline" style={{flex:1,justifyContent:"center"}} onClick={onUpgrade}>View Pro plan</button>
+            <button className="btn btn-outline" style={{flex:1,justifyContent:"center"}} onClick={onOpenWallet}>Open Coin Vault</button>
           </div>
         </div>
       </div>
@@ -25052,15 +25491,10 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
 }
 
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
-  const referralSectionRef=useRef(null);
   const isPro=user?.tier==="pro";
   useEffect(()=>{
     capture("upgrade_page_viewed", { tier:user?.tier || "guest", plan:"annual_4_99" });
   },[user?.tier]);
-  const scrollToReferral=()=>{
-    referralSectionRef.current?.scrollIntoView({behavior:"smooth",block:"start"});
-    capture("referral_hint_clicked", { source:"upgrade_page", tier:user?.tier || "guest" });
-  };
   const startUpgrade=()=>{
     capture("upgrade_button_clicked", { source:"upgrade_page", tier:user?.tier || "guest" });
     onUpgrade("pro");
@@ -25076,13 +25510,14 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
     "Timed Exam Mode with mixed MCQ and PBQ practice",
     "Smart Review that prioritises missed and starred questions",
     "Detailed solutions, chapter analytics, and next-step guidance",
+    "Zero Cipher Coin requirements—open every Pro tool whenever you need it",
   ];
   const comparison=[
     ["All MCQ practice","Included","Included"],
     ["Daily Challenge","Included","Included"],
     ["Save basic progress","Included","Included"],
-    ["PBQ simulations","Preview",`${PBQ_BANK.length} PBQs`],
-    ["Timed Exam Mode","—","Included"],
+    ["PBQ simulations","Preview + coin unlocks",`${PBQ_BANK.length} PBQs`],
+    ["Timed Exam Mode","Coin pass","Unlimited"],
     ["Smart Review + deep analysis","—","Included"],
   ];
   return(
@@ -25093,7 +25528,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         <p>
           Free gives you every MCQ. Pro adds the applied practice, timed rehearsal, and feedback loop that help you decide what to improve next.
         </p>
-        <div className="upgrade-plan-note"><ShieldCheck size={14}/> One annual plan · $4.99/year · Cancel anytime</div>
+        <div className="upgrade-plan-note"><ShieldCheck size={14}/> One annual plan · $4.99/year · Zero coin requirements · Cancel anytime</div>
         <MascotGuide
           animation={isPro?"cheer":"unlock"}
           size={86}
@@ -25105,9 +25540,9 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           type="button"
           className="btn btn-ghost"
           style={{marginTop:10,fontSize:12,justifyContent:"center"}}
-          onClick={scrollToReferral}
+          onClick={()=>onNavigate("coins")}
         >
-          Have a friend studying too? See the 7-day referral reward ↓
+          Prefer to earn access? Explore Cipher Coins →
         </button>
       </div>
 
@@ -25188,10 +25623,6 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         ))}
       </div>
 
-      <div ref={referralSectionRef} className="upgrade-referral-wrap">
-        <ReferralUpgradeBanner user={user} t={t} onFindOutMore={()=>onNavigate("referrals")}/>
-      </div>
-
       <div className="upgrade-secondary-stack">
         <details className="upgrade-secondary">
           <summary>Payment security</summary>
@@ -25255,10 +25686,10 @@ function ReferralPage({user,t}) {
     <div style={{padding:"28px 24px",maxWidth:820,margin:"0 auto"}}>
       <div className="page-title-row">
         <NavGlyph type="referrals" active/>
-        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>Referral Programme</h2>
+        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>Cipher Coin Referrals</h2>
       </div>
       <p style={{color:t.textSec,fontSize:14,lineHeight:1.7,marginBottom:20}}>
-        The referral programme is live. Share SecurePlus with one new student. They receive 7 days of Pro after signup, and you receive 7 days too unless you already have an active paid Pro plan.
+        Share SecurePlus with a new learner. When they create their account using your link, both of you receive 100 Cipher Coins.
       </p>
 
       <ReferralUpgradeBanner user={user} t={t}/>
@@ -25267,7 +25698,7 @@ function ReferralPage({user,t}) {
         {[
           ["1", "Copy your link", "Use the link above from your account, not a manually typed code."],
           ["2", "Friend signs up", "The referral code is filled in automatically from the link."],
-          ["3", "Trial unlocks", "Both eligible accounts receive a 7-day Pro trial."],
+          ["3", "Both wallets grow", "The new learner and the referrer each receive 100 Cipher Coins."],
         ].map(([num,title,body])=>(
           <div key={title} className="card card-hover" style={{padding:"18px 20px"}}>
             <div style={{width:34,height:34,borderRadius:10,background:`${t.accent}16`,border:`1px solid ${t.accent}36`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:900,color:t.accent,marginBottom:12}}>
@@ -25283,11 +25714,11 @@ function ReferralPage({user,t}) {
         <div style={{fontWeight:900,color:t.text,marginBottom:8}}>Referral rules</div>
         <div style={{display:"grid",gap:8}}>
           {[
-            "Each account can refer only one new user.",
             "Users cannot use their own referral code.",
             "A new user can claim only one referral reward.",
-            "If the referrer already has paid Pro, only the new user receives the free trial.",
-            "When the trial ends, the user is prompted to upgrade to the annual Pro plan.",
+            "Each successful new-account referral awards 100 Cipher Coins to both people.",
+            "Cipher Coins cannot be sold, transferred, or exchanged for cash.",
+            "Pro remains unlimited and never requires Cipher Coins.",
           ].map(rule=>(
             <div key={rule} style={{display:"flex",gap:10,fontSize:13,color:t.textSec,lineHeight:1.65}}>
               <Check size={16} color={t.green} strokeWidth={2.6}/>
@@ -25444,32 +25875,43 @@ function LegalPage({type,t}) {
 // ═══════════════════════════════════════════════════════════════
 // ONBOARDING
 // ═══════════════════════════════════════════════════════════════
-function OnboardingModal({user,t,onClose,onPricing}) {
+function OnboardingModal({user,t,onClose,onPricing,onWallet}) {
   const [step,setStep]=useState(0);
   const slides=[
     {
+      id:"welcome",
       Icon:Sparkles,
       title:`Welcome${user?.name ? `, ${user.name.split(" ")[0]}` : ""}`,
       body:"SecurePlus is built to turn Security+ practice into a repeatable workflow: answer questions, review explanations, and come back to weak areas.",
       bullets:["Your dashboard tracks readiness and accuracy.","Your attempts are saved so practice can get smarter.","Start with MCQs, then add PBQs when you want exam-style simulation."],
     },
     {
+      id:"practice",
       Icon:PenLine,
       title:"Where to practise",
       body:"Use the bottom or side navigation to move around the app.",
-      bullets:["MCQ Practice gives access to all multiple-choice questions.","Daily Challenge gives a short focused drill.","PBQ Simulator contains performance-based simulations for Pro users."],
+      bullets:["MCQ Practice gives access to all multiple-choice questions.","Daily Challenge gives a short focused drill and coin rewards.","PBQ Simulator includes a free preview, coin unlocks, and unlimited Pro access."],
     },
     {
+      id:"coins",
+      Icon:CircleDollarSign,
+      title:"Meet Cipher Coins",
+      body:"Your consistent study can unlock more of SecurePlus—even if upgrading is not practical right now.",
+      bullets:["Daily check-ins award 5 coins, with 10 on every seventh consecutive day.","Perfect MCQ sets, Daily Challenges, streak milestones, and referrals add more.",`Exchange ${CIPHER_COIN_COSTS.pbq} for a permanent PBQ or ${CIPHER_COIN_COSTS.examPass} for one practice Exam Mode pass. Pro has zero coin requirements.`],
+    },
+    {
+      id:"coverage",
       Icon:GraduationCap,
       title:"What Security+ covers",
       body:"CompTIA Security+ tests broad security knowledge across concepts, threats, architecture, operations, and governance.",
       bullets:["Expect both MCQs and performance-based questions.","PBQs may ask you to interpret logs, configure controls, order steps, or solve scenario tasks.","SecurePlus helps solidify skills through practice, feedback, and review."],
     },
     {
+      id:"pro",
       Icon:TrendingUp,
       title:"When Pro helps",
-      body:"The free plan is useful for MCQ practice. Pro is for students who want PBQ simulation practice too.",
-      bullets:["Unlock all PBQ simulations.","Practise terminal, log analysis, ordering, hotspot, and drag/drop-style tasks.","Costs $4.99/year."],
+      body:"Free learners can earn access through Cipher Coins. Pro is the convenience route for learners who want everything ready immediately.",
+      bullets:["Unlock every PBQ and unlimited practice exams.","Use terminal, log analysis, ordering, hotspot, and tap-to-place tasks.","Zero coin requirements for $4.99/year."],
     },
   ];
   const slide=slides[step];
@@ -25502,6 +25944,11 @@ function OnboardingModal({user,t,onClose,onPricing}) {
             Back
           </button>
           <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+            {slide.id==="coins"&&(
+              <button className="btn btn-outline" onClick={()=>{onClose();onWallet?.();}}>
+                <CipherCoinIcon size={23}/> Open Coin Vault
+              </button>
+            )}
             {last&&(
               <button className="btn btn-outline" onClick={()=>{onClose();onPricing();}}>
                 View Pro
@@ -25742,11 +26189,18 @@ export default function App() {
   const [pbqBankError,setPbqBankError]=useState(null);
   const [smartReviewRequest,setSmartReviewRequest]=useState(null);
   const [achievementUnlocks,setAchievementUnlocks]=useState([]);
+  const [coinWallet,setCoinWallet]=useState(()=>({...emptyCipherWallet(),status:"idle"}));
+  const [coinBusy,setCoinBusy]=useState(false);
+  const [coinRewardToast,setCoinRewardToast]=useState(null);
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
   const useLocalPbqFallback=Boolean(isSupabaseConfigured && user?.tier==="pro" && !pbqBankLoading && (pbqBankError || !remotePbqBank.length));
-  const livePbqBank=isSupabaseConfigured && !useLocalPbqFallback ? remotePbqBank : PBQ_BANK;
+  const livePbqBank=isSupabaseConfigured
+    ? user?.tier==="pro"
+      ? useLocalPbqFallback?PBQ_BANK:remotePbqBank
+      : PBQ_BANK.map(localQuestion=>remotePbqBank.find(remoteQuestion=>remoteQuestion.id===localQuestion.id)||localQuestion)
+    : PBQ_BANK;
 
   useEffect(()=>{
     try{window.localStorage?.setItem("secureplus-sidebar-hidden",sidebarHidden?"true":"false");}catch{}
@@ -25830,6 +26284,8 @@ export default function App() {
     setUser(null);
     setAttempts([]);
     setStarred([]);
+    setCoinWallet({...emptyCipherWallet(),status:"idle"});
+    setCoinRewardToast(null);
     setPbqQ(null);
     setView("dashboard");
   },[]);
@@ -25854,17 +26310,6 @@ export default function App() {
       setView("pricing");
     }
   },[user]);
-
-  useEffect(()=>{
-    if(!user?.referralTrialExpired)return;
-    const key=`trial-expired-prompt:${user.id || user.email}`;
-    try {
-      if(window.sessionStorage?.getItem(key)) return;
-      window.sessionStorage?.setItem(key,"true");
-    } catch {}
-    setShowTrialExpiredPrompt(true);
-    setView("pricing");
-  },[user?.id,user?.email,user?.referralTrialExpired]);
 
   useEffect(()=>{
     if(!isSupabaseConfigured)return undefined;
@@ -25961,8 +26406,8 @@ export default function App() {
         if(!active)return;
         const referralClaim = await claimReferralIfPresent(displayUser);
         showReferralClaimErrorOnce(referralClaim);
-        if(referralClaim?.proTrialUntil) {
-          displayUser = { ...displayUser, tier: "pro", proTrialUntil: referralClaim.proTrialUntil };
+        if(Number(referralClaim?.coinsAwarded)>0) {
+          displayUser = { ...displayUser, cipherCoins: Number(referralClaim.cipherCoins ?? displayUser.cipherCoins ?? 0) };
           if(!referralClaim.alreadyClaimed) setReferralClaimPrompt(referralClaim);
         }
         const savedStarred=(await loadSupabaseStarred(verifiedUser.id)) ?? await DB.getStarred(starOwner(displayUser));
@@ -26003,8 +26448,8 @@ export default function App() {
     }
     const referralClaim=await claimReferralIfPresent(u);
     showReferralClaimErrorOnce(referralClaim);
-    if(referralClaim?.proTrialUntil && !referralClaim.alreadyClaimed) setReferralClaimPrompt(referralClaim);
-    const displayUser=referralClaim?.proTrialUntil ? { ...u, tier: "pro", proTrialUntil: referralClaim.proTrialUntil } : u;
+    if(Number(referralClaim?.coinsAwarded)>0 && !referralClaim.alreadyClaimed) setReferralClaimPrompt(referralClaim);
+    const displayUser=Number(referralClaim?.coinsAwarded)>0 ? { ...u, cipherCoins:Number(referralClaim.cipherCoins ?? u.cipherCoins ?? 0) } : u;
     setUser(displayUser);
     identifyUser(displayUser);
     const a=u?.authProvider==="supabase" ? await loadSupabaseAttempts(u.id) : await DB.getAttempts(u.email);
@@ -26018,6 +26463,96 @@ export default function App() {
   const handleLogout=useCallback(async()=>{
     await forceSupabaseSignOut();
   },[forceSupabaseSignOut]);
+  const refreshCipherWallet=useCallback(async()=>{
+    if(!user)return emptyCipherWallet();
+    setCoinBusy(true);
+    try{
+      const wallet=await loadCipherCoinWallet(user);
+      setCoinWallet({...wallet,status:"ready",error:""});
+      setUser(current=>current?{...current,cipherCoins:wallet.balance,lifetimeCipherCoins:wallet.lifetimeEarned,examPasses:wallet.examPasses}:current);
+      return wallet;
+    }catch(error){
+      setCoinWallet(current=>({...normalizeCipherWallet(current),status:"error",error:error.message||"Unable to load Cipher Coins."}));
+      return null;
+    }finally{
+      setCoinBusy(false);
+    }
+  },[user?.id,user?.email,user?.authProvider]);
+
+  const runCipherAction=useCallback(async(action,payload={})=>{
+    if(!user)return null;
+    setCoinBusy(true);
+    try{
+      const result=await performCipherCoinAction(user,action,payload);
+      const wallet=result.wallet ? normalizeCipherWallet(result.wallet) : await loadCipherCoinWallet(user);
+      setCoinWallet({...wallet,status:"ready",error:""});
+      setUser(current=>current?{...current,cipherCoins:wallet.balance,lifetimeCipherCoins:wallet.lifetimeEarned,examPasses:wallet.examPasses}:current);
+      return result;
+    }catch(error){
+      setCoinWallet(current=>({...normalizeCipherWallet(current),status:"error",error:error.message||"Unable to update Cipher Coins."}));
+      alert(error.message||"Unable to update Cipher Coins.");
+      return null;
+    }finally{
+      setCoinBusy(false);
+    }
+  },[user?.id,user?.email,user?.authProvider]);
+
+  useEffect(()=>{
+    if(!user)return undefined;
+    let active=true;
+    (async()=>{
+      try{
+        const loaded=await loadCipherCoinWallet(user);
+        if(!active)return;
+        setCoinWallet({...loaded,status:"ready",error:""});
+        const result=await performCipherCoinAction(user,"check_in");
+        if(!active)return;
+        const wallet=result.wallet ? normalizeCipherWallet(result.wallet) : await loadCipherCoinWallet(user);
+        if(!active)return;
+        setCoinWallet({...wallet,status:"ready",error:""});
+        setUser(current=>current?{...current,cipherCoins:wallet.balance,lifetimeCipherCoins:wallet.lifetimeEarned,examPasses:wallet.examPasses}:current);
+        if(result.awarded&&Number(result.amount)>0){
+          setCoinRewardToast({amount:Number(result.amount),message:`Daily check-in secured · ${Number(result.streak)||1} day streak.`});
+        }
+      }catch(error){
+        if(active)setCoinWallet(current=>({...normalizeCipherWallet(current),status:"error",error:error.message||"Cipher Coin setup is not ready yet."}));
+      }
+    })();
+    return()=>{active=false;};
+  },[user?.id,user?.email,user?.authProvider]);
+
+  const handleUnlockPbq=useCallback(async question=>{
+    if(!question?.id)return false;
+    const confirmed=window.confirm(`Permanently unlock “${question.title}” for ${CIPHER_COIN_COSTS.pbq} Cipher Coins?`);
+    if(!confirmed)return false;
+    const result=await runCipherAction("unlock_pbq",{resourceId:question.id});
+    if(!result)return false;
+    if(result.purchased){
+      setCoinRewardToast({amount:0,title:"PBQ unlocked",message:`${question.title} is now permanently available on this account.`});
+      await refreshRemotePBQs();
+    }
+    return Boolean(result.purchased||result.alreadyOwned);
+  },[runCipherAction,refreshRemotePBQs]);
+
+  const handleBuyExamPass=useCallback(async()=>{
+    const confirmed=window.confirm(`Exchange ${CIPHER_COIN_COSTS.examPass} Cipher Coins for one SecurePlus practice Exam Mode pass?`);
+    if(!confirmed)return false;
+    const result=await runCipherAction("buy_exam_pass");
+    if(result?.purchased)setCoinRewardToast({amount:0,title:"Exam Mode pass ready",message:"One practice exam is now available. The pass is used only when you start a new exam."});
+    return Boolean(result?.purchased);
+  },[runCipherAction]);
+
+  const handleConsumeExamPass=useCallback(async()=>{
+    const result=await runCipherAction("consume_exam_pass");
+    return Boolean(result?.consumed);
+  },[runCipherAction]);
+
+  const handleDailyCoinReward=useCallback(async({score,total})=>{
+    const result=await runCipherAction("daily_challenge",{score,total});
+    if(result?.awarded&&Number(result.amount)>0){
+      setCoinRewardToast({amount:Number(result.amount),message:result.milestoneReward?"Perfect challenge plus a five-day streak milestone!":"Perfect Daily Challenge completed."});
+    }
+  },[runCipherAction]);
   const handleUpdateProfile=useCallback(async name=>{
     if(!user)return;
     const clean=name.trim();
@@ -26263,7 +26798,14 @@ export default function App() {
     setView("mcq");
   },[]);
   const handleAchievementSessionComplete=useCallback(async payload=>{
-    if(!user||user.authProvider!=="supabase")return;
+    if(!user)return;
+    if(user.authProvider!=="supabase"){
+      if(payload?.session_type==="practice"&&Number(payload?.score)===100&&Number(payload?.questions_count)>=5){
+        const reward=await runCipherAction("perfect_mcq",{questionsCount:Number(payload.questions_count)});
+        if(reward?.awarded)setCoinRewardToast({amount:15,message:"Perfect MCQ set · first reward of the day."});
+      }
+      return;
+    }
     try{
       const result=await submitAchievementSession(payload);
       if(result.totalStars!==null&&result.totalStars!==undefined){
@@ -26273,10 +26815,14 @@ export default function App() {
         setAchievementUnlocks(result.newlyUnlocked);
         capture("achievements_unlocked", { achievement_ids: result.newlyUnlocked.join(","), count: result.newlyUnlocked.length });
       }
+      if(result.coinReward?.awarded&&Number(result.coinReward.amount)>0){
+        setCoinRewardToast({amount:Number(result.coinReward.amount),message:"Perfect MCQ set · first reward of the day."});
+        await refreshCipherWallet();
+      }
     }catch(error){
       console.warn("Unable to submit achievement session", error);
     }
-  },[user]);
+  },[user,runCipherAction,refreshCipherWallet]);
   const handleEditReportedQuestion=useCallback(target=>{
     if(!target?.id)return;
     setAdminQuestionTarget({...target,nonce:Date.now()});
@@ -26473,6 +27019,8 @@ export default function App() {
 
   const activePbq=pbqQ ? (livePbqBank.find(question=>question.id===pbqQ.id) || (!isSupabaseConfigured ? pbqQ : null)) : null;
   const pbqPreviewMode=user?.tier!=="pro"&&isFreePBQPreview(activePbq);
+  const pbqCoinUnlocked=Boolean(activePbq&&coinWallet.unlockedPbqIds.includes(activePbq.id));
+  const nextPbq=user?.tier==="pro"&&activePbq?getNextRelatedPBQ(activePbq,attempts,livePbqBank):null;
 
   if(pbqQ) return(
     <>
@@ -26487,9 +27035,9 @@ export default function App() {
           <PBQSim
             key={activePbq.id}
             q={activePbq}
-            nextQuestion={pbqPreviewMode?null:getNextRelatedPBQ(activePbq,attempts,livePbqBank)}
+            nextQuestion={nextPbq}
             onDone={handlePBQDone}
-            onNext={(result)=>handlePBQDone(result,{nextQuestion:pbqPreviewMode?null:getNextRelatedPBQ(activePbq,attempts,livePbqBank)})}
+            onNext={(result)=>handlePBQDone(result,{nextQuestion:nextPbq})}
             t={t}
             starred={starred}
             onToggleStar={handleToggleStar}
@@ -26498,7 +27046,7 @@ export default function App() {
             onReportQuestion={handleReportQuestion}
             showQuestionCodes={isRootUser}
           />
-        ) : (
+        ) : pbqCoinUnlocked ? <PBQLoadingSkeleton t={t}/> : (
           <UpgradeModal price="$4.99/year" onUpgrade={()=>setView("pricing")} onClose={()=>{setPbqQ(null);setView("pbq");}} t={t}/>
         )}
       </div>
@@ -26513,6 +27061,7 @@ export default function App() {
     {id:"pbq",icon:"pbq",label:"PBQ Simulator",mobileLabel:"PBQ"},
     {id:"exam",icon:"exam",label:"Exam Mode",mobileLabel:"Exam"},
     {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
+    {id:"coins",icon:"coins",label:"Cipher Coins",mobileLabel:"Coins"},
     {id:"achievements",icon:"achievements",label:"Achievements",mobileLabel:"Stars"},
     {id:"pricing",icon:"pricing",label:"Upgrade",mobileLabel:"Upgrade"},
     {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
@@ -26549,12 +27098,13 @@ export default function App() {
           {/* User */}
           <div style={{padding:"12px 14px",borderBottom:`1px solid ${t.border}`}}>
             <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onUpdateAvatar={handleUpdateAvatar} onChangePassword={handleChangePassword} onLogout={handleLogout}/>
+            <div style={{marginTop:10}}><CipherCoinPill balance={coinWallet.balance} onClick={()=>setView("coins")}/></div>
           </div>
 
           {/* Nav */}
           <nav style={{flex:1,padding:"10px 10px",display:"flex",flexDirection:"column",gap:2}}>
             {navItems.map(n=>(
-              <div key={n.id} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>setView(n.id==="exam"&&user.tier!=="pro"?"pricing":n.id)}>
+              <div key={n.id} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>setView(n.id==="exam"&&user.tier!=="pro"&&coinWallet.examPasses<1?"coins":n.id)}>
                 <NavGlyph type={n.icon} active={view===n.id}/>
                 <span className="nav-label"><span className="nav-label-desktop">{n.label}</span><span className="nav-label-mobile">{n.mobileLabel}</span></span>
               </div>
@@ -26580,27 +27130,23 @@ export default function App() {
               <div style={{fontSize:11,color:t.textDim}}>CompTIA Security+ Practice</div>
             </div>
             <div style={{display:"flex",gap:6,alignItems:"center",flexShrink:0}}>
+              <CipherCoinPill compact balance={coinWallet.balance} onClick={()=>setView("coins")}/>
               <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
                 {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
               </button>
               <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onUpdateAvatar={handleUpdateAvatar} onChangePassword={handleChangePassword} onLogout={handleLogout} compact/>
             </div>
           </div>
-          <TrialCountdownBanner
-            user={user}
-            t={t}
-            onExpired={handleTrialExpired}
-            onUpgrade={()=>setView("pricing")}
-          />
-          {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} t={t}/>}
+          {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} coinWallet={coinWallet} t={t}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
             <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete}/>
           </div>
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
-            <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading} loadError={useLocalPbqFallback?null:pbqBankError}/>
+            <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)&&!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
           </div>
-          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} onSessionComplete={handleAchievementSessionComplete}/>}
-          {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser}/>}
+          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onConsumeExamPass={handleConsumeExamPass} examPasses={coinWallet.examPasses} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} onSessionComplete={handleAchievementSessionComplete}/>}
+          {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward}/>}
+          {view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}
           {view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
           {view==="referrals"&&<ReferralPage user={user} t={t}/>}
@@ -26618,13 +27164,7 @@ export default function App() {
             t={t}
             onClose={closeOnboarding}
             onPricing={()=>setView("pricing")}
-          />
-        )}
-        {showTrialExpiredPrompt&&(
-          <TrialExpiredPrompt
-            t={t}
-            onClose={()=>setShowTrialExpiredPrompt(false)}
-            onUpgrade={()=>{setShowTrialExpiredPrompt(false);handleUpgrade("pro");}}
+            onWallet={()=>setView("coins")}
           />
         )}
         {referralClaimPrompt&&(
@@ -26632,11 +27172,12 @@ export default function App() {
             result={referralClaimPrompt}
             t={t}
             onClose={()=>setReferralClaimPrompt(null)}
-            onUpgrade={()=>{setReferralClaimPrompt(null);setView("pricing");}}
+            onOpenWallet={()=>{setReferralClaimPrompt(null);setView("coins");}}
           />
         )}
         {questionReport&&<QuestionReportModal report={questionReport} user={user} t={t} onClose={()=>setQuestionReport(null)}/>}
         <AchievementCelebration ids={achievementUnlocks} t={t} onClose={()=>setAchievementUnlocks([])}/>
+        <CipherRewardToast reward={coinRewardToast} onClose={()=>setCoinRewardToast(null)}/>
       </div>
     </>
   );

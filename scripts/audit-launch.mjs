@@ -46,8 +46,11 @@ const requiredFiles = [
   "api/stripe/portal.js",
   "api/referrals/claim.js",
   "api/referrals/me.js",
+  "api/coins/me.js",
+  "api/coins/action.js",
   "api/account/delete.js",
   "supabase/schema.sql",
+  "supabase/cipher-coins.sql",
   ".env.example",
 ];
 
@@ -81,6 +84,8 @@ if (!errors.length) {
     "api/stripe/portal.js",
     "api/referrals/claim.js",
     "api/referrals/me.js",
+    "api/coins/me.js",
+    "api/coins/action.js",
     "api/account/delete.js",
   ]) {
     requireContains(file, "getBearerToken(req)", "authenticated API route must require a bearer token");
@@ -107,13 +112,26 @@ if (!errors.length) {
   requireContains("supabase/schema.sql", 'check (tier in (\'free\', \'pro\'))', "profiles tier must be constrained");
   requireContains("supabase/schema.sql", "profiles_subscription_status_check", "subscription status must be constrained");
   requireContains("supabase/schema.sql", "auth.uid() = user_id", "attempt/starred policies must scope rows to the signed-in user");
-  requireContains("supabase/schema.sql", "referrals_one_new_user_per_referrer_idx", "referrals must enforce one new user per referrer");
+  const coinsSchema=read("supabase/cipher-coins.sql");
+  for (const table of ["cipher_coin_transactions", "cipher_coin_unlocks", "cipher_coin_daily_activity"]) {
+    requireContains("supabase/cipher-coins.sql", `alter table public.${table} enable row level security`, `${table} must have RLS enabled`);
+  }
+  requireContains("supabase/cipher-coins.sql", "unique (user_id, reference_key)", "coin rewards must have idempotent ledger references");
+  requireContains("supabase/cipher-coins.sql", "grant execute on function public.award_cipher_coins", "coin mutations should be service-role-only RPCs");
+  requireContains("supabase/cipher-coins.sql", "drop index if exists public.referrals_one_new_user_per_referrer_idx", "Cipher Coin referrals should allow multiple successful invitations per referrer");
+  requireContains("supabase/cipher-coins.sql", "'referral_referrer'", "referrer reward must be recorded in the coin ledger");
+  requireContains("supabase/cipher-coins.sql", "'referral_new_user'", "new-user referral reward must be recorded in the coin ledger");
+  if (!coinsSchema.includes("revoke insert, update, delete on public.cipher_coin_transactions from anon, authenticated")) {
+    push(errors, "supabase/cipher-coins.sql", "clients must not be able to mutate the Cipher Coin ledger directly");
+  }
 
   const app = read("src/App.jsx");
-  requireContains("src/App.jsx", 'n.id==="exam"&&user.tier!=="pro"?"pricing":n.id', "free users pressing Exam Mode should be redirected to Upgrade");
+  requireContains("src/App.jsx", 'n.id==="exam"&&user.tier!=="pro"&&coinWallet.examPasses<1?"coins":n.id', "free users without an Exam pass should be redirected to the Coin Vault");
   requireContains("src/App.jsx", "isFreePBQPreview", "free users should only get the configured PBQ preview");
-  requireContains("src/App.jsx", 'user.tier==="free"&&!isFreePBQPreview(q)?setView("pricing"):setPbqQ(q)', "PBQ start handler should gate non-preview PBQs");
-  requireContains("src/App.jsx", 'user?.tier === "pro" && ["active","trialing"].includes(user?.subscriptionStatus)', "paid Pro should depend on active/trialing subscription status");
+  requireContains("src/App.jsx", '!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)', "PBQ start handler should allow only previews, Pro access, or permanent coin unlocks");
+  requireContains("src/App.jsx", 'performCipherCoinAction(user,"check_in")', "signed-in users should receive an idempotent daily check-in attempt");
+  requireContains("src/App.jsx", 'onConsumeExamPass={handleConsumeExamPass}', "free Exam Mode access must consume a pass at start");
+  requirePattern("src/App.jsx", /user\?\.tier\s*===\s*"pro"\s*&&\s*\["active",\s*"trialing"\]\.includes\(user\?\.subscriptionStatus/, "paid Pro should depend on active/trialing subscription status");
   requireContains("src/App.jsx", 'fetch("/api/stripe/checkout"', "upgrade flow should call the server-side Stripe checkout endpoint");
 
   const trackedTextFiles = [

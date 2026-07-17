@@ -9,13 +9,13 @@ function makeCode() {
 }
 
 function isMissingReferralSchema(error) {
-  return error?.code === "42703" || error?.code === "42P01";
+  return error?.code === "42703" || error?.code === "42P01" || error?.code === "PGRST204" || error?.code === "PGRST205";
 }
 
 async function ensureProfile(supabase, authUser) {
   const { data: existing, error: selectError } = await supabase
     .from("profiles")
-    .select("id,email,referral_code,pro_trial_until")
+    .select("id,email,referral_code,cipher_coins")
     .eq("id", authUser.id)
     .maybeSingle();
 
@@ -30,7 +30,7 @@ async function ensureProfile(supabase, authUser) {
       tier: "free",
       referral_code: makeCode(),
     })
-    .select("id,email,referral_code,pro_trial_until")
+    .select("id,email,referral_code,cipher_coins")
     .maybeSingle();
 
   if (insertError) throw insertError;
@@ -46,7 +46,7 @@ async function ensureReferralCode(supabase, profile) {
       .from("profiles")
       .update({ referral_code: code, updated_at: new Date().toISOString() })
       .eq("id", profile.id)
-      .select("id,email,referral_code,pro_trial_until")
+      .select("id,email,referral_code,cipher_coins")
       .maybeSingle();
 
     if (!error) return data;
@@ -86,14 +86,14 @@ export default async function handler(req, res) {
     return json(res, 200, {
       ok: true,
       referralCode: profile.referral_code,
-      proTrialUntil: profile.pro_trial_until || null,
+      cipherCoins: Number(profile.cipher_coins || 0),
       invitedCount: invitedCount || 0,
     });
   } catch (error) {
     console.error("Referral profile failed:", error);
     if (isMissingReferralSchema(error)) {
       return json(res, 409, {
-        error: "Referral database setup is missing. Run supabase/referrals.sql in Supabase SQL Editor.",
+        error: "Cipher Coin referral setup is missing. Run supabase/cipher-coins.sql in Supabase SQL Editor.",
       });
     }
     return json(res, 500, { error: "Unable to load referral details." });

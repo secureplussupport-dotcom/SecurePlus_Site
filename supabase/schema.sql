@@ -1,5 +1,7 @@
 -- SecurePlus Supabase schema and security policies.
--- Run in Supabase SQL Editor for a new project.
+-- Run in Supabase SQL Editor for a new project, then run pbqs.sql and
+-- cipher-coins.sql. The latter replaces the legacy referral-trial function
+-- below with the current +100 Cipher Coin referral reward.
 
 create table if not exists profiles (
   id uuid primary key references auth.users(id) on delete cascade,

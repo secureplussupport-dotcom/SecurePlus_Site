@@ -97,18 +97,24 @@ Never expose server-only keys in browser code or commit them to GitHub.
 1. Create a Supabase project.
 2. Go to SQL Editor.
 3. Run `supabase/schema.sql`.
-4. Confirm these tables exist:
+4. Run `supabase/pbqs.sql`.
+5. Run `supabase/cipher-coins.sql` last. This closes the old referral trial, creates the Cipher Coin wallet/ledger, and updates PBQ access rules.
+6. Confirm these tables exist:
    - `profiles`
    - `attempts`
    - `referrals`
-5. Enable only the auth providers you actually use. Current plan: Email + Google.
+   - `cipher_coin_transactions`
+   - `cipher_coin_unlocks`
+   - `cipher_coin_daily_activity`
+7. Enable only the auth providers you actually use. Current plan: Email + Google.
 
 The schema includes:
 
 - `profiles.tier` with allowed values `free` and `pro`
 - Stripe customer/subscription fields
 - `attempts` for quiz/PBQ history
-- `referrals` for the referral free-trial program
+- `referrals` for the +100 Cipher Coin reward given to both learners
+- An immutable, idempotent Cipher Coin ledger and permanent PBQ unlock records
 - Row Level Security policies
 - Signup trigger that creates a Free profile automatically
 
@@ -137,15 +143,15 @@ Users can open the Referrals page and copy a link like:
 https://secureplusprep.com/?ref=ABC123
 ```
 
-When a new user signs up with the link, `/api/referrals/claim` grants both users a 7-day Pro trial in Supabase. Run the latest `supabase/schema.sql` before launching this feature.
+When a new user signs up with the link, `/api/referrals/claim` grants 100 Cipher Coins to both users in Supabase. Each new account can claim one referral, while a referrer can invite multiple new learners.
 
 If the rest of the database is already set up, you can run only:
 
 ```txt
-supabase/referrals.sql
+supabase/cipher-coins.sql
 ```
 
-The Referrals page calls `/api/referrals/me`, which creates or returns the user's real Supabase referral code. Do not use browser-only/local referral codes for live referrals.
+The Referrals page calls `/api/referrals/me`, which creates or returns the user's real Supabase referral code. The old seven-day Pro referral reward is retired; do not run `supabase/referrals.sql` for a new installation.
 
 ## Stripe Setup
 

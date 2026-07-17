@@ -28,6 +28,8 @@ In Supabase SQL Editor, run:
 
 ```txt
 supabase/schema.sql
+supabase/pbqs.sql
+supabase/cipher-coins.sql
 ```
 
 Then check these tables exist:
@@ -36,12 +38,17 @@ Then check these tables exist:
 - `attempts`
 - `referrals`
 - `starred_questions`
+- `cipher_coin_transactions`
+- `cipher_coin_unlocks`
+- `cipher_coin_daily_activity`
 
 Important security expectation:
 
 - Users can read only their own rows.
 - Users cannot directly change `profiles.tier`.
 - Stripe webhook/server code is responsible for changing Free/Pro status.
+- Coin balances can change only through server-side functions, and every change has a unique ledger reference.
+- Free users can read only public PBQs or PBQs permanently unlocked in their own wallet.
 
 Run this project check after editing the SQL:
 

@@ -101,6 +101,30 @@ export default async function handler(req, res) {
     const { error: insertError } = await supabase.from("attempts").insert(sessionAttempt);
     if (insertError) throw insertError;
 
+    let coinReward = null;
+    if (sessionType === "practice" && questionsCount >= 5 && score === 100) {
+      const rewardDate = new Date().toISOString().slice(0, 10);
+      const { data: rewardData, error: rewardError } = await supabase.rpc("award_cipher_coins", {
+        target_user_id: authData.user.id,
+        reward_amount: 15,
+        reward_event_type: "perfect_mcq",
+        reward_reference_key: `perfect_mcq:${rewardDate}`,
+        reward_metadata: {
+          score,
+          questionsCount,
+          rewardDate,
+          dailyCap: 1,
+        },
+      });
+      if (rewardError) {
+        if (!isMissingAchievementsSchema(rewardError)) {
+          console.warn("Perfect MCQ Cipher Coin reward failed:", rewardError);
+        }
+      } else if (rewardData?.ok) {
+        coinReward = rewardData;
+      }
+    }
+
     const qualified = new Set();
     if (sessionType === "exam" && questionsCount >= 50 && score === 100) qualified.add("flawless_victory");
     if (sessionType === "exam" && questionsCount >= 50 && score >= 80 && durationSeconds < 600) qualified.add("speed_demon");
@@ -132,6 +156,8 @@ export default async function handler(req, res) {
       success: true,
       newlyUnlocked,
       total_stars: profile?.total_stars ?? null,
+      coinReward,
+      cipherCoins: coinReward?.balance ?? null,
     });
   } catch (error) {
     console.error("Achievement session submission failed:", error);

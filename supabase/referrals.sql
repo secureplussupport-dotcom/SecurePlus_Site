@@ -1,5 +1,6 @@
--- SecurePlus referral program setup.
--- Run this once in Supabase SQL Editor if the Referrals page says setup is missing.
+-- LEGACY SecurePlus referral-trial setup. Do not run this for new installs.
+-- Run supabase/cipher-coins.sql instead; it replaces this reward with +100
+-- Cipher Coins for each learner and supports multiple referrals per referrer.
 
 alter table profiles
 add column if not exists referral_code text,

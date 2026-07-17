@@ -5,8 +5,6 @@ import {
   json,
 } from "../_utils.js";
 
-const TRIAL_DAYS = 7;
-
 function cleanCode(value) {
   return String(value || "").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0, 32);
 }
@@ -52,18 +50,28 @@ export default async function handler(req, res) {
       return json(res, status, { error });
     }
 
+    if (
+      claimResult.coinsAwarded === undefined &&
+      claimResult.cipherCoins === undefined &&
+      !claimResult.alreadyClaimed
+    ) {
+      return json(res, 409, {
+        error: "The old Pro-trial referral reward is closed. Run supabase/cipher-coins.sql to enable the new Cipher Coin reward.",
+      });
+    }
+
     return json(res, 200, {
       ok: true,
-      trialDays: TRIAL_DAYS,
       alreadyClaimed: Boolean(claimResult.alreadyClaimed),
-      proTrialUntil: claimResult.proTrialUntil || null,
+      coinsAwarded: Number(claimResult.coinsAwarded || 0),
+      cipherCoins: Number(claimResult.cipherCoins || 0),
       referrerRewardGranted: claimResult.referrerRewardGranted,
     });
   } catch (error) {
     console.error("Referral claim failed:", error);
     if (isMissingReferralSchema(error)) {
       return json(res, 409, {
-        error: "Referral database setup is missing. Run supabase/referrals.sql in Supabase SQL Editor.",
+        error: "Cipher Coin referral setup is missing. Run supabase/cipher-coins.sql in Supabase SQL Editor.",
       });
     }
     return json(res, 500, { error: "Unable to apply referral." });
