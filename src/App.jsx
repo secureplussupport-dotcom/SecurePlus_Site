@@ -20173,14 +20173,20 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
   },[initialMode]);
   const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
   const resetMessages=()=>{setErr("");setOk("");};
-  const jumpToAuth=nextMode=>{
-    setMode(nextMode);
+  const openLogin=()=>{
+    setMode("login");
     setMintedUser(null);
+    setShowSignupJourney(false);
+    resetMessages();
+    setShowLoginModal(true);
+  };
+  const jumpToAuth=nextMode=>{
     if(nextMode==="login"){
-      setShowSignupJourney(false);
-      setShowLoginModal(true);
+      openLogin();
       return;
     }
+    setMode(nextMode);
+    setMintedUser(null);
     setShowLoginModal(false);
     setShowSignupJourney(true);
     capture("landing_signup_cta_clicked", { source:"auth_landing" });
@@ -20372,7 +20378,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
         ok={ok}
         mintedUser={mintedUser}
         onEnter={onLogin}
-        onHaveAccount={()=>{setMode("login");setShowSignupJourney(false);setShowLoginModal(true);resetMessages();}}
+        onHaveAccount={openLogin}
       />
     );
   }
@@ -20624,7 +20630,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           <div className="card auth-conversion-card">
           <div className="auth-mode-tabs">
             {["login","signup"].map(m=>(
-              <button type="button" key={m} className={`tab auth-mode-tab ${mode===m?"act":""}`} onClick={()=>{setMintedUser(null);resetMessages();m==="signup"?jumpToAuth("signup"):setMode("login");}}>
+              <button type="button" key={m} className={`tab auth-mode-tab ${mode===m?"act":""}`} onClick={()=>m==="signup"?jumpToAuth("signup"):openLogin()}>
                 {m==="login"?"Sign In":"Mint Academy ID"}
               </button>
             ))}
@@ -28074,6 +28080,7 @@ export default function App() {
   const [showDiagnostic,setShowDiagnostic]=useState(false);
   const [showOnboarding,setShowOnboarding]=useState(false);
   const [authStartMode,setAuthStartMode]=useState("login");
+  const [authRequestId,setAuthRequestId]=useState(0);
   const [showTrialExpiredPrompt,setShowTrialExpiredPrompt]=useState(false);
   const [referralClaimPrompt,setReferralClaimPrompt]=useState(null);
   const [accountDeletion,setAccountDeletion]=useState(readAccountDeletionState);
@@ -28876,7 +28883,7 @@ export default function App() {
   if(!user&&view==="auth") return(
     <>
       <style>{CSS}</style>
-      <AuthView onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={setView} onPracticeMcq={()=>setView("mcq")} initialMode={authStartMode} securityNotice={accountDeletion.stage==="confirm"}/>
+      <AuthView key={`auth-${authStartMode}-${authRequestId}`} onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={setView} onPracticeMcq={()=>setView("mcq")} initialMode={authStartMode} securityNotice={accountDeletion.stage==="confirm"}/>
     </>
   );
 
@@ -28894,8 +28901,8 @@ export default function App() {
         {id:"preview-pbq",amount:-50,balance_after:130,event_type:"pbq_unlock",created_at:new Date(Date.now()-172800000).toISOString()},
       ],
     });
-    const goToSignup=()=>{setAuthStartMode("signup");setView("auth");};
-    const goToLogin=()=>{setAuthStartMode("login");setView("auth");};
+    const goToSignup=()=>{setAuthStartMode("signup");setAuthRequestId(id=>id+1);setView("auth");};
+    const goToLogin=()=>{setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
     const allowedGuestViews=new Set(["dashboard","mcq","daily","objectives",...(devDeepDivePreview?["deep-dives"]:[]),...(devCoinPreview?["coins"]:[])]);
     const guestNavItems=[
       {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},

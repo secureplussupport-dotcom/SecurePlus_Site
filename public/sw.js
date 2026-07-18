@@ -1,4 +1,4 @@
-const CACHE_NAME = "secureplus-pwa-v3";
+const CACHE_NAME = "secureplus-pwa-v4";
 const APP_SHELL = [
   "/",
   "/manifest.webmanifest",
