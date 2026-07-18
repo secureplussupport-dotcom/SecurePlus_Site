@@ -2,7 +2,7 @@ import {
   getBearerToken,
   getSupabaseAdmin,
   json,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 
 function makeCode() {
   return crypto.randomUUID().replace(/-/g, "").slice(0, 10).toUpperCase();

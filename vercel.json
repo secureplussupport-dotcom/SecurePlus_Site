@@ -1,4 +1,22 @@
 {
+  "rewrites": [
+    {
+      "source": "/api/coins/action",
+      "destination": "/api/economy?operation=coins-action"
+    },
+    {
+      "source": "/api/coins/me",
+      "destination": "/api/economy?operation=coins-me"
+    },
+    {
+      "source": "/api/referrals/claim",
+      "destination": "/api/economy?operation=referrals-claim"
+    },
+    {
+      "source": "/api/referrals/me",
+      "destination": "/api/economy?operation=referrals-me"
+    }
+  ],
   "headers": [
     {
       "source": "/",

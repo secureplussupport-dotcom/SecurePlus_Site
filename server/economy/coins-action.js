@@ -3,7 +3,7 @@ import {
   getJsonBody,
   getSupabaseAdmin,
   json,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 
 const ACTIONS = new Set([
   "check_in",

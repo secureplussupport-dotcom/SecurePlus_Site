@@ -3,7 +3,7 @@ import {
   getJsonBody,
   getSupabaseAdmin,
   json,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 
 function cleanCode(value) {
   return String(value || "").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0, 32);
