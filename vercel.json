@@ -15,6 +15,10 @@
     {
       "source": "/api/referrals/me",
       "destination": "/api/economy?operation=referrals-me"
+    },
+    {
+      "source": "/api/assistant",
+      "destination": "/api/economy?operation=cipher-assistant"
     }
   ],
   "headers": [

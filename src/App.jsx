@@ -1014,79 +1014,140 @@ function calculateSm2State(history) {
   return { repetitions, interval, easeFactor, dueAt, lastCorrect, attempts: sorted.length };
 }
 
-function rankQuestionsBySm2(questions, attempts, starredIds=new Set()) {
-  const now = new Date();
+const REVIEW_DAY_MS = 24 * 60 * 60 * 1000;
+
+function getMcqAttemptHistories(attempts=[]) {
   const grouped = new Map();
   attempts.filter(a=>a.mcq).forEach(attempt=>{
     if(!grouped.has(attempt.qid)) grouped.set(attempt.qid, []);
     grouped.get(attempt.qid).push(attempt);
   });
-
-  return [...questions].sort((a,b)=>{
-    const aState = calculateSm2State(grouped.get(a.id) || []);
-    const bState = calculateSm2State(grouped.get(b.id) || []);
-    const aNew = aState.attempts === 0;
-    const bNew = bState.attempts === 0;
-    const aDue = !aNew && aState.dueAt <= now;
-    const bDue = !bNew && bState.dueAt <= now;
-    const aWrong = aState.lastCorrect === false;
-    const bWrong = bState.lastCorrect === false;
-
-    const aStar = starredIds.has(a.id);
-    const bStar = starredIds.has(b.id);
-    const aScore = (aStar?-250:0) + (aWrong?0:1000) + (aDue?0:500) + (aNew?750:0) + aState.easeFactor * 10 + aState.dueAt.getTime() / 86400000;
-    const bScore = (bStar?-250:0) + (bWrong?0:1000) + (bDue?0:500) + (bNew?750:0) + bState.easeFactor * 10 + bState.dueAt.getTime() / 86400000;
-    return aScore - bScore;
-  });
+  grouped.forEach(history=>history.sort((a,b)=>getAttemptDate(a)-getAttemptDate(b)));
+  return grouped;
 }
 
-function buildMcqPracticePool(questions, attempts, count, mode="smart", starredIds=new Set()) {
-  const histories = new Map();
-  attempts.filter(a=>a.mcq).forEach(attempt=>{
-    if(!histories.has(attempt.qid)) histories.set(attempt.qid, []);
-    histories.get(attempt.qid).push(attempt);
+function getLatestMcqAttempts(attempts=[]) {
+  const latest = new Map();
+  getMcqAttemptHistories(attempts).forEach((history,questionId)=>{
+    if(history.length) latest.set(questionId,history[history.length-1]);
   });
-  const shuffle = arr => [...arr].sort(()=>Math.random()-.5);
-  const unseen = shuffle(questions.filter(q=>!histories.has(q.id)));
-  const weak = rankQuestionsBySm2(
-    questions.filter(q=>{
-      const history=histories.get(q.id)||[];
-      return history.length && calculateSm2State(history).lastCorrect===false;
-    }),
-    attempts,
-    starredIds
-  );
-  const starred = rankQuestionsBySm2(
-    questions.filter(q=>starredIds.has(q.id)&&!weak.some(w=>w.id===q.id)),
-    attempts,
-    starredIds
-  );
-  const review = rankQuestionsBySm2(
-    questions.filter(q=>histories.has(q.id)&&!weak.some(w=>w.id===q.id)&&!starred.some(s=>s.id===q.id)),
-    attempts,
-    starredIds
-  );
+  return latest;
+}
 
-  const limitBeyond = pool => {
-    const beyondLimit=Math.max(1,Math.floor(count*.1));
-    const mustKeep=pool.filter(q=>starredIds.has(q.id));
-    const regular=pool.filter(q=>!q.beyondTextbook&&!starredIds.has(q.id));
-    const beyond=pool.filter(q=>q.beyondTextbook&&!starredIds.has(q.id)).slice(0,beyondLimit);
-    return [...mustKeep,...regular,...beyond].slice(0,count);
+function rankSmartReviewQuestions(questions, attempts, starredIds=new Set(), options={}) {
+  const now = options.now instanceof Date ? options.now : new Date();
+  const histories = getMcqAttemptHistories(attempts);
+  const focusTopics = new Set([...(options.focusTopics||[])].map(String));
+  const directMissedIds = new Set([...(options.directMissedIds||[])].map(String));
+  const focusChapterId = options.focusChapterId ? String(options.focusChapterId) : null;
+  const topicStats = new Map();
+  const chapterStats = new Map();
+
+  attempts.filter(attempt=>attempt.mcq).forEach(attempt=>{
+    const topicKey=`${String(attempt.ch||"")}::${String(attempt.topic||"")}`;
+    const topic=topicStats.get(topicKey)||{correct:0,total:0};
+    topic.total+=1;
+    if(attempt.correct)topic.correct+=1;
+    topicStats.set(topicKey,topic);
+
+    const chapterKey=String(attempt.ch||"");
+    const chapter=chapterStats.get(chapterKey)||{correct:0,total:0};
+    chapter.total+=1;
+    if(attempt.correct)chapter.correct+=1;
+    chapterStats.set(chapterKey,chapter);
+  });
+
+  return questions.map(question=>{
+    const history=histories.get(question.id)||[];
+    const state=calculateSm2State(history);
+    const latest=history[history.length-1]||null;
+    const lastSeenAt=latest?getAttemptDate(latest):null;
+    const daysSinceSeen=lastSeenAt?Math.max(0,(now-lastSeenAt)/REVIEW_DAY_MS):null;
+    const due=Boolean(history.length&&state.dueAt<=now);
+    const daysOverdue=due?Math.max(0,(now-state.dueAt)/REVIEW_DAY_MS):0;
+    let wrongStreak=0;
+    for(let index=history.length-1;index>=0;index-=1){
+      if(history[index].correct)break;
+      wrongStreak+=1;
+    }
+
+    const topic=topicStats.get(`${String(question.ch||"")}::${String(question.topic||"")}`)||{correct:0,total:0};
+    const chapter=chapterStats.get(String(question.ch||""))||{correct:0,total:0};
+    const topicAccuracy=topic.total?topic.correct/topic.total:1;
+    const chapterAccuracy=chapter.total?chapter.correct/chapter.total:1;
+    const isDirectMiss=directMissedIds.has(String(question.id));
+    const isFocusTopic=focusTopics.has(String(question.topic||""));
+    const isFocusChapter=focusChapterId&&String(question.ch)===focusChapterId;
+    const isStarred=starredIds.has(question.id);
+    const isUnseen=history.length===0;
+    let score=0;
+    const reasons=[];
+
+    if(isDirectMiss){score+=64;reasons.push("latest miss");}
+    if(latest?.correct===false){score+=42;reasons.push("needs repair");}
+    if(wrongStreak){score+=Math.min(28,wrongStreak*10);reasons.push(`${wrongStreak} recent miss${wrongStreak===1?"":"es"}`);}
+    if(due){score+=20+Math.min(18,daysOverdue*2);reasons.push("due now");}
+    if(isStarred){score+=16;reasons.push("starred");}
+    if(isFocusTopic){score+=24;reasons.push("related concept");}
+    if(isFocusChapter){score+=6;}
+    if(topic.total>=2&&topicAccuracy<.75){score+=(1-topicAccuracy)*24;reasons.push("low topic accuracy");}
+    if(chapter.total>=3&&chapterAccuracy<.72){score+=(1-chapterAccuracy)*12;}
+    if(daysSinceSeen!==null&&daysSinceSeen>7){score+=Math.min(14,(daysSinceSeen-7)*.8);reasons.push("memory refresh");}
+    if(isUnseen){score+=isFocusTopic?13:8;reasons.push("new coverage");}
+    if(latest?.correct&&daysSinceSeen!==null&&daysSinceSeen<2)score-=30;
+    if(latest?.correct&&history.length>3)score-=Math.min(15,(history.length-3)*3);
+    if(question.difficulty==="hard"&&chapter.total>=3&&chapterAccuracy<.6)score-=12;
+    if(question.difficulty==="medium"&&chapter.total>=3&&chapterAccuracy<.7)score+=4;
+    if(question.difficulty==="hard"&&chapterAccuracy>=.8)score+=5;
+    if(question.beyondTextbook&&!isStarred)score-=10;
+
+    return {question,score,reasons,state,latest,topicAccuracy,chapterAccuracy};
+  }).sort((a,b)=>b.score-a.score||String(a.question.id).localeCompare(String(b.question.id)));
+}
+
+function selectDiverseSmartReview(ranked, count) {
+  const requested=Math.max(0,Math.min(count,ranked.length));
+  if(!requested)return [];
+  const picked=[];
+  const used=new Set();
+  const topicCounts=new Map();
+  const topicCap=requested<=3?2:Math.max(2,Math.ceil(requested*.35));
+  const hardCap=Math.max(1,Math.floor(requested*.35));
+  const beyondCap=Math.max(1,Math.floor(requested*.1));
+  let hardCount=0;
+  let beyondCount=0;
+
+  const add=(entry,enforceDiversity=true,enforceBeyondLimit=true)=>{
+    const question=entry.question;
+    if(used.has(question.id)||picked.length>=requested)return;
+    const topic=String(question.topic||"Core concepts");
+    if(enforceDiversity&&(topicCounts.get(topic)||0)>=topicCap)return;
+    if(enforceDiversity&&question.difficulty==="hard"&&hardCount>=hardCap)return;
+    if(enforceBeyondLimit&&question.beyondTextbook&&beyondCount>=beyondCap)return;
+    picked.push(question);
+    used.add(question.id);
+    topicCounts.set(topic,(topicCounts.get(topic)||0)+1);
+    if(question.difficulty==="hard")hardCount+=1;
+    if(question.beyondTextbook)beyondCount+=1;
   };
 
-  if(mode!=="smart") return limitBeyond(shuffle(questions));
+  ranked.forEach(entry=>add(entry,true));
+  ranked.forEach(entry=>add(entry,false));
+  ranked.forEach(entry=>add(entry,false,false));
+  return picked;
+}
 
-  const weakLimit = Math.min(Math.ceil(count*.3), weak.length);
-  const picked = [...weak.slice(0,weakLimit)];
-  const used = new Set(picked.map(q=>q.id));
-  [...starred, ...unseen, ...review, ...weak.slice(weakLimit)].forEach(q=>{
-    if(picked.length<count && !used.has(q.id)) {
-      picked.push(q);
-      used.add(q.id);
-    }
-  });
-  return limitBeyond(picked);
+function rankQuestionsBySm2(questions, attempts, starredIds=new Set(), options={}) {
+  return rankSmartReviewQuestions(questions,attempts,starredIds,options).map(entry=>entry.question);
+}
+
+function buildMcqPracticePool(questions, attempts, count, mode="smart", starredIds=new Set(), options={}) {
+  const shuffle = arr => [...arr].sort(()=>Math.random()-.5);
+  if(mode!=="smart") {
+    const randomRanked=shuffle(questions).map(question=>({question}));
+    return selectDiverseSmartReview(randomRanked,count);
+  }
+  return selectDiverseSmartReview(rankSmartReviewQuestions(questions,attempts,starredIds,options),count);
 }
 
 function buildDiagnosticQuestions() {
@@ -15424,6 +15485,9 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .practice-mode-card small{display:block;color:${t.textSec};font-size:10px;line-height:1.45;}
 .practice-mode-check{width:22px;height:22px;border-radius:999px;border:1px solid ${t.border};display:grid;place-items:center;color:transparent;background:${t.panel};}
 .practice-mode-card.active .practice-mode-check{border-color:var(--mode-color);background:var(--mode-color);color:#fff;}
+.smart-review-signals{position:relative;z-index:1;display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid ${t.border};}
+.smart-review-signals strong{font-size:10px;color:${t.textSec};margin-right:2px;}
+.smart-review-signals span{padding:5px 8px;border:1px solid ${t.green}2e;border-radius:999px;background:${t.green}0c;color:${t.green};font-size:9px;font-weight:900;}
 .practice-builder-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px;}
 .practice-builder-head h3{font-size:19px;color:${t.text};margin-bottom:3px;}
 .practice-builder-head p{font-size:12px;color:${t.textSec};line-height:1.55;}
@@ -15845,6 +15909,48 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-reward-toast strong{color:#b47727;font-size:12px;}
 .cipher-reward-toast small{margin-top:2px;color:${t.textSec};font-size:9px;line-height:1.4;}
 .cipher-reward-toast button{display:grid;place-items:center;width:28px;height:28px;border:0;border-radius:10px;background:${t.panel};color:${t.textSec};cursor:pointer;}
+.cipher-assistant-dock{position:fixed;right:24px;bottom:22px;z-index:760;pointer-events:none;}
+.cipher-assistant-scrim{position:fixed;inset:0;border:0;background:rgba(39,29,18,.16);backdrop-filter:blur(2px);pointer-events:auto;animation:fadeUp .18s ease both;}
+.cipher-assistant-launcher{position:relative;z-index:2;pointer-events:auto;display:grid;grid-template-columns:50px auto;align-items:center;gap:8px;min-width:178px;padding:4px 13px 4px 4px;border:1px solid #d79b3e55;border-radius:18px;background:linear-gradient(135deg,${t.surface},color-mix(in srgb,#f3d898 38%,${t.panel}));color:${t.text};box-shadow:0 18px 46px rgba(104,68,24,.22);cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s;}
+.cipher-assistant-launcher:hover{transform:translateY(-2px);border-color:#d79b3e99;box-shadow:0 22px 54px rgba(104,68,24,.28);}
+.cipher-assistant-launcher>span:first-child{display:grid;place-items:center;width:50px;height:50px;overflow:hidden;border-radius:14px;background:#f4d68f24;}
+.cipher-assistant-launcher .cipher-mascot{--cipher-size:48px!important;}
+.cipher-assistant-launcher strong,.cipher-assistant-launcher small{display:block;text-align:left;}
+.cipher-assistant-launcher strong{font-size:12px;line-height:1.3;}
+.cipher-assistant-launcher small{margin-top:2px;color:${t.textDim};font-size:8px;font-weight:850;}
+.cipher-assistant-panel{position:absolute;right:0;bottom:70px;z-index:3;pointer-events:auto;width:min(410px,calc(100vw - 28px));max-height:min(720px,calc(100dvh - 110px));overflow:hidden;border:1px solid #d79b3e52;border-radius:24px;background:${t.surface};box-shadow:0 28px 90px rgba(52,35,17,.3);animation:cipherAssistantIn .3s cubic-bezier(.16,1,.3,1) both;}
+.cipher-assistant-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;border-bottom:1px solid ${t.border};background:radial-gradient(circle at 16% 20%,#f2b85b26,transparent 38%),linear-gradient(135deg,${t.surface},${t.panel});}
+.cipher-assistant-identity{display:grid;grid-template-columns:58px minmax(0,1fr);align-items:center;gap:9px;min-width:0;}
+.cipher-assistant-avatar{display:grid;place-items:center;width:58px;height:58px;overflow:hidden;border:1px solid #d79b3e38;border-radius:17px;background:#f2b85b17;}
+.cipher-assistant-avatar .cipher-mascot{--cipher-size:54px!important;}
+.cipher-assistant-identity span:not(.cipher-assistant-avatar),.cipher-assistant-identity strong,.cipher-assistant-identity small{display:block;}
+.cipher-assistant-identity div>span{color:#b47727;font-size:8px;font-weight:950;text-transform:uppercase;letter-spacing:.07em;}
+.cipher-assistant-identity strong{color:${t.text};font-size:15px;line-height:1.35;}
+.cipher-assistant-identity small{margin-top:2px;color:${t.textDim};font-size:8px;font-weight:800;}
+.cipher-assistant-close{display:grid;place-items:center;width:34px;height:34px;flex-shrink:0;border:1px solid ${t.border};border-radius:11px;background:${t.surface};color:${t.textSec};cursor:pointer;}
+.cipher-assistant-body{padding:14px;}
+.cipher-assistant-intro{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:start;padding:11px 12px;border:1px solid ${t.green}2d;border-radius:14px;background:${t.green}0b;color:${t.green};}
+.cipher-assistant-intro p{color:${t.textSec};font-size:10px;line-height:1.55;}
+.cipher-assistant-quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px;}
+.cipher-assistant-quick button{display:flex;align-items:flex-start;gap:6px;min-width:0;padding:9px 8px;border:1px solid ${t.border};border-radius:12px;background:${t.panel};color:${t.accent};text-align:left;cursor:pointer;transition:transform .16s,border-color .16s,background .16s;}
+.cipher-assistant-quick button:hover{transform:translateY(-1px);border-color:${t.accent}55;background:${t.accent}0b;}
+.cipher-assistant-quick button span{min-width:0;}
+.cipher-assistant-quick strong,.cipher-assistant-quick small{display:block;overflow-wrap:anywhere;}
+.cipher-assistant-quick strong{color:${t.text};font-size:9px;line-height:1.35;}
+.cipher-assistant-quick small{margin-top:2px;color:${t.textDim};font-size:7px;line-height:1.35;}
+.cipher-assistant-messages{display:flex;flex-direction:column;gap:7px;max-height:250px;overflow-y:auto;margin-top:10px;padding:4px 2px;scrollbar-width:thin;}
+.cipher-assistant-message{max-width:88%;padding:9px 11px;border-radius:13px;font-size:10px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;}
+.cipher-assistant-message.cipher{align-self:flex-start;border:1px solid ${t.border};border-bottom-left-radius:4px;background:${t.panel};color:${t.textSec};}
+.cipher-assistant-message.user{align-self:flex-end;border-bottom-right-radius:4px;background:${t.accent};color:#fff;}
+.cipher-assistant-message.thinking{color:${t.textDim};font-style:italic;}
+.cipher-assistant-input-row{display:grid;grid-template-columns:minmax(0,1fr) 38px;gap:7px;margin-top:10px;}
+.cipher-assistant-input-row input{min-width:0;height:42px;padding:0 12px;border:1px solid ${t.border};border-radius:12px;background:${t.inputBg};color:${t.text};font-size:10px;outline:none;}
+.cipher-assistant-input-row input:focus{border-color:${t.accent};box-shadow:0 0 0 3px ${t.accent}12;}
+.cipher-assistant-input-row button{display:grid;place-items:center;border:0;border-radius:12px;background:${t.accent};color:#fff;cursor:pointer;}
+.cipher-assistant-input-row button:disabled{opacity:.45;cursor:not-allowed;}
+.cipher-assistant-note{margin-top:7px;color:${t.textDim};font-size:7px;line-height:1.4;text-align:center;}
+.cipher-assistant-context-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:${t.green}10;color:${t.green};font-size:9px;font-weight:900;}
+@keyframes cipherAssistantIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .pbq-coin-unlock{display:inline-flex;align-items:center;gap:5px;padding:5px 7px;border:1px solid #d79b3e42;border-radius:99px;background:#f2b85b17;color:#b47727;font-size:9px;font-weight:950;}
 .athena-coin-intro{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:11px;margin:14px 0 3px;padding:12px 13px;border:1px solid #d79b3e38;border-radius:16px;background:linear-gradient(135deg,#f8e9bd82,rgba(255,253,248,.85));}
 .athena-coin-intro strong,.athena-coin-intro small{display:block;}
@@ -17028,6 +17134,10 @@ body{background:
   .mascot-guide-hint{font-size:8px!important;}
   .mascot-guide-lesson{margin:4px 0 8px auto!important;}
   .mascot-guide-page{margin:0 0 14px auto!important;}
+  .cipher-assistant-dock{right:12px;bottom:calc(88px + env(safe-area-inset-bottom));}
+  .cipher-assistant-launcher{min-width:0;width:58px;height:58px;padding:4px;border-radius:18px;grid-template-columns:1fr;}
+  .cipher-assistant-launcher>span:last-child{display:none;}
+  .cipher-assistant-panel{position:fixed;left:12px;right:12px;bottom:calc(158px + env(safe-area-inset-bottom));width:auto;max-height:calc(100dvh - 178px);}
   .app-main>.site-mascot-placement.anchor-top-left,.app-main>.site-mascot-placement.anchor-middle-left,.app-main>.site-mascot-placement.anchor-bottom-left{left:12px!important;}
   .app-main>.site-mascot-placement.anchor-top-right,.app-main>.site-mascot-placement.anchor-middle-right,.app-main>.site-mascot-placement.anchor-bottom-right{right:12px!important;}
   .app-main>.site-mascot-placement.anchor-top-left,.app-main>.site-mascot-placement.anchor-top-center,.app-main>.site-mascot-placement.anchor-top-right{top:76px!important;}
@@ -17063,6 +17173,9 @@ body{background:
   .cipher-ledger-row{grid-template-columns:auto minmax(0,1fr);}
   .cipher-ledger-amount{grid-column:2;}
   .athena-intro-page{padding:26px 18px 104px;}
+  .cipher-assistant-quick{grid-template-columns:minmax(0,1fr);}
+  .cipher-assistant-quick button{align-items:center;padding:9px 10px;}
+  .cipher-assistant-quick small{font-size:8px;}
   .athena-intro-card{padding:16px 0;}
   .athena-intro-card .athena-mark{--athena-size:104px!important;}
   .athena-intro-card h1{font-size:42px;}
@@ -20072,18 +20185,26 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,coinWallet,t}) {
     chStats[a.ch].t++;
     if(a.correct)chStats[a.ch].c++;
   });
-  const resolvedCorrectMcqIds=new Set(attempts.filter(attempt=>attempt.mcq&&attempt.correct).map(attempt=>attempt.qid));
+  const latestMcqAttempts=getLatestMcqAttempts(attempts);
+  const mcqHistories=getMcqAttemptHistories(attempts);
   const weakChapterActions=CHAPTERS.map(ch=>{
     const chapterAttempts=attempts.filter(attempt=>attempt.mcq&&String(attempt.ch)===ch.id);
-    const missed=chapterAttempts.filter(attempt=>!attempt.correct&&!resolvedCorrectMcqIds.has(attempt.qid));
-    const missedTopics=[...new Set(missed.map(attempt=>attempt.topic).filter(Boolean))];
-    const conceptMatchCount=MCQ_BANK.filter(question=>question.ch===ch.id&&missedTopics.includes(question.topic)).length;
+    const missedQuestions=MCQ_BANK.filter(question=>question.ch===ch.id&&latestMcqAttempts.get(question.id)?.correct===false);
+    const missedTopics=[...new Set(missedQuestions.map(question=>question.topic).filter(Boolean))];
+    const repeatedMisses=missedQuestions.reduce((total,question)=>{
+      const history=mcqHistories.get(question.id)||[];
+      let streak=0;
+      for(let index=history.length-1;index>=0&&!history[index].correct;index-=1)streak+=1;
+      return total+Math.max(0,streak-1);
+    },0);
     const correctCount=chapterAttempts.filter(attempt=>attempt.correct).length;
     const accuracy=chapterAttempts.length?Math.round((correctCount/chapterAttempts.length)*100):100;
-    return {chapter:ch,total:chapterAttempts.length,missedCount:missed.length,missedTopics,accuracy,reviewCount:Math.min(10,Math.max(missed.length,conceptMatchCount))};
+    const reviewCount=Math.min(3,MCQ_BANK.filter(question=>question.ch===ch.id).length);
+    const priority=(missedQuestions.length*30)+(repeatedMisses*12)+(100-accuracy);
+    return {chapter:ch,total:chapterAttempts.length,missedCount:missedQuestions.length,missedTopics,accuracy,reviewCount,repeatedMisses,priority};
   })
     .filter(item=>item.missedCount>0)
-    .sort((a,b)=>a.accuracy-b.accuracy||b.missedCount-a.missedCount);
+    .sort((a,b)=>b.priority-a.priority||a.accuracy-b.accuracy);
   const primaryWeakAction=weakChapterActions[0];
 
   return(
@@ -20220,15 +20341,15 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,coinWallet,t}) {
             <>
               <h3>Repair Chapter {primaryWeakAction.chapter.id}: {primaryWeakAction.chapter.title}</h3>
               <p>
-                You have {primaryWeakAction.missedCount} unresolved missed MCQ{primaryWeakAction.missedCount===1?"":"s"} here.
-                SecurePlus will launch a {primaryWeakAction.reviewCount}-question Smart Review set focused on the missed concept{primaryWeakAction.missedTopics.length===1?"":"s"} from this chapter.
+                You have {primaryWeakAction.missedCount} MCQ{primaryWeakAction.missedCount===1?"":"s"} whose latest answer was incorrect here.
+                Launch a short {primaryWeakAction.reviewCount}-question sprint built from the missed concept{primaryWeakAction.missedTopics.length===1?"":"s"} and closely related questions.
               </p>
               <div className="weak-action-meta">
                 <span>{primaryWeakAction.accuracy}% chapter accuracy</span>
                 <span>{primaryWeakAction.missedTopics.slice(0,2).join(" + ") || "Missed concepts"}</span>
               </div>
-              <button className="btn btn-primary" onClick={()=>onStartChapterReview?.(primaryWeakAction.chapter.id)}>
-                Start {primaryWeakAction.reviewCount}-question Chapter {primaryWeakAction.chapter.id} Smart Review
+              <button className="btn btn-primary" onClick={()=>onStartChapterReview?.(primaryWeakAction.chapter.id,{count:primaryWeakAction.reviewCount,source:"dashboard_weak_area"})}>
+                Start {primaryWeakAction.reviewCount}-question repair sprint
               </button>
             </>
           ) : (
@@ -20747,8 +20868,10 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
   const [answerBurst,setAnswerBurst]=useState(null);
   const [starredView,setStarredView]=useState(false);
   const [sessionStartedAt,setSessionStartedAt]=useState(null);
+  const [sessionContext,setSessionContext]=useState(null);
   const starredSet=useMemo(()=>new Set(starred),[starred]);
-  const starredMcqs=MCQ_BANK.filter(q=>starredSet.has(starKey("mcq",q.id)));
+  const starredMcqs=useMemo(()=>MCQ_BANK.filter(q=>starredSet.has(starKey("mcq",q.id))),[starredSet]);
+  const starredQuestionIds=useMemo(()=>new Set(starredMcqs.map(question=>question.id)),[starredMcqs]);
 
   const allTopics=[...new Set(MCQ_BANK.map(q=>q.topic))].sort();
   const chapterOptions=[
@@ -20774,8 +20897,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
   });
   const reviewSummary = getReviewSummary(attempts);
   const quizSizes = [10,20,30,40,50];
-  const resolvedCorrectMcqIds=new Set(attempts.filter(a=>a.mcq&&a.correct).map(a=>a.qid));
-  const missedMcqIds=[...new Set(attempts.filter(a=>a.mcq&&!a.correct&&!resolvedCorrectMcqIds.has(a.qid)).map(a=>a.qid))];
+  const latestMcqAttempts=getLatestMcqAttempts(attempts);
+  const missedMcqIds=[...latestMcqAttempts.entries()].filter(([,attempt])=>attempt.correct===false).map(([questionId])=>questionId);
   const missedQuestions=MCQ_BANK.filter(q=>missedMcqIds.includes(q.id));
 
   useEffect(()=>{
@@ -20792,39 +20915,47 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
   },[isVisible,started,done,onFocusModeChange]);
 
   useEffect(()=>{
+    if(started)return;
     const available = quizSizes.filter(size=>filtered.length>=size);
     if(available.length && !available.includes(quizCount)) setQuizCount(available[available.length-1]);
-  },[filtered.length,quizCount]);
+  },[filtered.length,quizCount,started]);
 
   const startQuiz=()=>{
-    const pool=buildMcqPracticePool(filtered, attempts, Math.min(quizCount,filtered.length), reviewMode, new Set(starredMcqs.map(q=>q.id))).map(shuffleMcqOptions);
+    const pool=buildMcqPracticePool(filtered, attempts, Math.min(quizCount,filtered.length), reviewMode, starredQuestionIds).map(shuffleMcqOptions);
     capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: diffFilter, topic: topicFilter, question_count: pool.length, tier: user.tier });
+    setSessionContext({kind:reviewMode,label:reviewMode==="smart"?"Smart Review":"MCQ Practice"});
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setSessionStartedAt(Date.now());
   };
   const startMissedQuiz=()=>{
-    const pool=rankQuestionsBySm2(missedQuestions,attempts).slice(0,Math.min(50,missedQuestions.length)).map(shuffleMcqOptions);
+    const pool=buildMcqPracticePool(missedQuestions,attempts,Math.min(50,missedQuestions.length),"smart",starredQuestionIds,{directMissedIds:missedMcqIds}).map(shuffleMcqOptions);
     capture("mcq_missed_review_started", { question_count: pool.length, tier: user.tier });
+    setSessionContext({kind:"missed",label:"Missed-question repair"});
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setSessionStartedAt(Date.now());
   };
-  const startChapterSmartReview=useCallback((chapterId)=>{
+  const startChapterSmartReview=useCallback((chapterId,requestedCount=3,source="chapter_review")=>{
     if(!chapterId||isGuest)return;
-    const resolvedIds=new Set(attempts.filter(attempt=>attempt.mcq&&attempt.correct).map(attempt=>attempt.qid));
-    const unresolvedMisses=attempts.filter(attempt=>attempt.mcq&&!attempt.correct&&String(attempt.ch)===String(chapterId)&&!resolvedIds.has(attempt.qid));
-    const missedIds=new Set(unresolvedMisses.map(attempt=>attempt.qid));
-    const missedTopics=new Set(unresolvedMisses.map(attempt=>attempt.topic).filter(Boolean));
-    const directMisses=MCQ_BANK.filter(question=>missedIds.has(question.id));
-    const conceptMatches=MCQ_BANK.filter(question=>String(question.ch)===String(chapterId)&&missedTopics.has(question.topic));
-    const uniquePool=[...directMisses,...rankQuestionsBySm2(conceptMatches,attempts)]
-      .filter((question,index,self)=>question&&self.findIndex(candidate=>candidate.id===question.id)===index)
-      .slice(0,10)
-      .map(shuffleMcqOptions);
-    if(!uniquePool.length)return;
+    const chapterKey=String(chapterId);
+    const latestAttempts=getLatestMcqAttempts(attempts);
+    const chapterQuestions=MCQ_BANK.filter(question=>String(question.ch)===chapterKey);
+    const missedIds=new Set(chapterQuestions.filter(question=>latestAttempts.get(question.id)?.correct===false).map(question=>question.id));
+    const missedTopics=new Set(chapterQuestions.filter(question=>missedIds.has(question.id)).map(question=>question.topic).filter(Boolean));
+    const count=Math.max(1,Math.min(Number(requestedCount)||3,chapterQuestions.length));
+    const pool=buildMcqPracticePool(
+      chapterQuestions,
+      attempts,
+      count,
+      "smart",
+      starredQuestionIds,
+      {focusChapterId:chapterKey,focusTopics:missedTopics,directMissedIds:missedIds}
+    ).map(shuffleMcqOptions);
+    if(!pool.length)return;
+    const chapter=CHAPTERS.find(item=>item.id===chapterKey);
     setChFilter(String(chapterId));
     setDiffFilter("all");
     setTopicFilter("all");
     setReviewMode("smart");
-    setQuizCount(Math.min(10,uniquePool.length));
-    setQuestions(uniquePool);
+    setQuizCount(pool.length);
+    setQuestions(pool);
     setQi(0);
     setSelected(null);
     setSubmitted(false);
@@ -20834,18 +20965,20 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
     setStarted(true);
     setSessionStartedAt(Date.now());
     setStarredView(false);
-    capture("mcq_chapter_smart_review_started", { chapter: String(chapterId), question_count: uniquePool.length, missed_topic_count: missedTopics.size, tier: user.tier });
-  },[attempts,isGuest,user.tier]);
+    setSessionContext({kind:"weak-area",label:`Chapter ${chapterKey} repair sprint`,chapterId:chapterKey,chapterTitle:chapter?.title||"Focused review",source});
+    capture("mcq_chapter_smart_review_started", { chapter: chapterKey, question_count: pool.length, missed_topic_count: missedTopics.size, source, tier: user.tier });
+  },[attempts,isGuest,starredQuestionIds,user.tier]);
   const startStarredQuiz=()=>{
     const pool=rankQuestionsBySm2(starredMcqs,attempts,new Set(starredMcqs.map(q=>q.id))).slice(0,Math.min(50,starredMcqs.length)).map(shuffleMcqOptions);
     capture("mcq_starred_review_started", { question_count: pool.length, tier: user.tier });
+    setSessionContext({kind:"starred",label:"Starred-question review"});
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
   };
 
   useEffect(()=>{
     if(!smartReviewRequest?.chapterId||!smartReviewRequest?.nonce)return;
-    startChapterSmartReview(smartReviewRequest.chapterId);
-  },[smartReviewRequest?.chapterId,smartReviewRequest?.nonce,startChapterSmartReview]);
+    startChapterSmartReview(smartReviewRequest.chapterId,smartReviewRequest.count,smartReviewRequest.source);
+  },[smartReviewRequest?.chapterId,smartReviewRequest?.count,smartReviewRequest?.nonce,smartReviewRequest?.source,startChapterSmartReview]);
 
   useEffect(()=>{
     if(isGuest){setResumeAvailable(false);return;}
@@ -20859,8 +20992,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
   useEffect(()=>{
     if(isGuest)return;
     if(!started||done||!questions.length)return;
-    DB.savePracticeSession(sessionKey,{questions,qi,selected,submitted,draftSelections,results,done:false,updatedAt:new Date().toISOString()});
-  },[isGuest,sessionKey,started,done,questions,qi,selected,submitted,draftSelections,results]);
+    DB.savePracticeSession(sessionKey,{questions,qi,selected,submitted,draftSelections,results,sessionContext,done:false,updatedAt:new Date().toISOString()});
+  },[isGuest,sessionKey,started,done,questions,qi,selected,submitted,draftSelections,results,sessionContext]);
 
   const continueQuiz=async()=>{
     const saved=await DB.getPracticeSession(sessionKey);
@@ -20871,6 +21004,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
     setSubmitted(Boolean(saved.submitted));
     setDraftSelections(saved.draftSelections||[]);
     setResults(saved.results||[]);
+    setSessionContext(saved.sessionContext||{kind:"saved",label:"Saved MCQ practice"});
     setDone(false);
     setStarted(true);
     setShowWrong(false);
@@ -21078,6 +21212,12 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
             <span className="practice-mode-check"><Check size={13} strokeWidth={3}/></span>
           </button>
         </div>
+        {!isGuest&&reviewMode==="smart"&&(
+          <div className="smart-review-signals" aria-label="Smart Review selection signals">
+            <strong>Smart filtering uses</strong>
+            <span>Latest mistakes</span><span>Due dates</span><span>Topic accuracy</span><span>Difficulty fit</span><span>Question variety</span>
+          </div>
+        )}
         {isGuest&&(
           <div style={{position:"relative",zIndex:1,marginTop:12,padding:"10px 12px",borderRadius:7,background:t.panel,border:`1px solid ${t.border}`,fontSize:12,color:t.textSec,lineHeight:1.6}}>
             Smart Review needs saved attempt history. Create a free account when you want personalised question ordering.
@@ -21294,7 +21434,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
     <div style={{padding:"24px",maxWidth:700,margin:"0 auto"}} className="fu active-practice-screen mcq-question-screen" key={qi}>
       <header className="practice-session-header">
         <div className="practice-session-top">
-          <div className="practice-session-name"><span><BookOpenCheck size={16}/></span>MCQ Practice</div>
+          <div className="practice-session-name"><span>{sessionContext?.kind==="weak-area"?<Brain size={16}/>:<BookOpenCheck size={16}/>}</span>{sessionContext?.label||"MCQ Practice"}</div>
           <div className="practice-session-count">Question {qi+1} of {questions.length} · {answeredCount} answered</div>
         </div>
         <div className="practice-session-progress" aria-label={`${Math.round(((qi+1)/questions.length)*100)}% through this practice set`}><span style={{width:`${((qi+1)/questions.length)*100}%`}}/></div>
@@ -23525,6 +23665,170 @@ function MascotGuide({
         <span className="mascot-guide-hint">Hover or tap Cipher</span>
       </div>
     </aside>
+  );
+}
+
+function buildCipherAssistantContext(attempts=[],currentView="dashboard") {
+  const latestAttempts=getLatestMcqAttempts(attempts);
+  const readiness=getReadinessProfile(attempts);
+  const chapterSignals=CHAPTERS.map(chapter=>{
+    const chapterAttempts=attempts.filter(attempt=>attempt.mcq&&String(attempt.ch)===chapter.id);
+    const latestMisses=MCQ_BANK.filter(question=>question.ch===chapter.id&&latestAttempts.get(question.id)?.correct===false);
+    const correct=chapterAttempts.filter(attempt=>attempt.correct).length;
+    const accuracy=chapterAttempts.length?Math.round((correct/chapterAttempts.length)*100):100;
+    const weakTopics=[...new Set(latestMisses.map(question=>question.topic).filter(Boolean))];
+    const priority=(latestMisses.length*30)+(chapterAttempts.length?100-accuracy:0);
+    return {chapter,latestMisses,weakTopics,accuracy,attemptCount:chapterAttempts.length,priority};
+  });
+  const weakArea=chapterSignals
+    .filter(signal=>signal.latestMisses.length)
+    .sort((a,b)=>b.priority-a.priority||a.accuracy-b.accuracy)[0]
+    ||chapterSignals.filter(signal=>signal.attemptCount).sort((a,b)=>a.accuracy-b.accuracy)[0]
+    ||null;
+
+  return {
+    currentView,
+    weakChapterId:weakArea?.chapter.id||null,
+    weakChapterTitle:weakArea?.chapter.title||null,
+    weakTopics:weakArea?.weakTopics||[],
+    accuracy:readiness.accuracy,
+    completedQuestions:readiness.uniqueQuestions,
+    latestMissCount:weakArea?.latestMisses.length||0,
+  };
+}
+
+function CipherAssistantDock({user,attempts,currentView,onStartReview}) {
+  const [open,setOpen]=useState(false);
+  const [draft,setDraft]=useState("");
+  const [messages,setMessages]=useState([]);
+  const [sending,setSending]=useState(false);
+  const messagesEndRef=useRef(null);
+  const context=useMemo(()=>buildCipherAssistantContext(attempts,currentView),[attempts,currentView]);
+  const weakChapter=context.weakChapterId?`Chapter ${context.weakChapterId}: ${context.weakChapterTitle}`:null;
+  const canUseLiveAi=user?.authProvider==="supabase"&&isSupabaseConfigured;
+
+  const addMessage=useCallback((role,text)=>{
+    setMessages(previous=>[...previous,{id:`${Date.now()}-${Math.random()}`,role,text}].slice(-10));
+  },[]);
+
+  useEffect(()=>{
+    if(!open)return;
+    const onKeyDown=event=>{if(event.key==="Escape")setOpen(false);};
+    window.addEventListener("keydown",onKeyDown);
+    return()=>window.removeEventListener("keydown",onKeyDown);
+  },[open]);
+
+  useEffect(()=>{
+    if(open)messagesEndRef.current?.scrollIntoView({behavior:"smooth",block:"nearest"});
+  },[messages,open,sending]);
+
+  const showNextStep=()=>{
+    if(weakChapter){
+      const topics=context.weakTopics.length?` Start with ${context.weakTopics.slice(0,2).join(" and ")}.`:"";
+      addMessage("cipher",`Your best next move is ${weakChapter}. ${context.latestMissCount?`${context.latestMissCount} question${context.latestMissCount===1?" has":"s have"} a latest incorrect answer.`:`It has your lowest recorded accuracy.`}${topics}`);
+    }else{
+      addMessage("cipher","Complete a short MCQ set first. I’ll use those answers to identify a useful weak area instead of guessing.");
+    }
+  };
+
+  const explainSmartReview=()=>addMessage("cipher","Smart Review now weighs your latest answer, repeated misses, due date, time since practice, topic and chapter accuracy, starred questions, difficulty fit, and recent repetition. It then spreads the set across concepts so one topic does not crowd out everything else.");
+
+  const startSprint=()=>{
+    if(!context.weakChapterId){
+      addMessage("cipher","I need a little answer history before I can build a targeted sprint. Complete a short MCQ set and ask me again.");
+      return;
+    }
+    capture("cipher_assistant_review_started",{chapter:context.weakChapterId,source_view:currentView});
+    onStartReview?.(context.weakChapterId,{count:3,source:"cipher_assistant"});
+    setOpen(false);
+  };
+
+  const sendMessage=async()=>{
+    const message=draft.trim().slice(0,900);
+    if(!message||sending)return;
+    setDraft("");
+    addMessage("user",message);
+    if(!canUseLiveAi){
+      addMessage("cipher","Live AI is ready to connect, but this account is currently using guided mode. The quick actions below still use your real SecurePlus progress.");
+      return;
+    }
+    setSending(true);
+    try{
+      const token=await getSupabaseAccessToken();
+      if(!token)throw new Error("Your login session expired. Sign in again.");
+      const response=await fetch("/api/assistant",{
+        method:"POST",
+        headers:{"content-type":"application/json",authorization:`Bearer ${token}`},
+        body:JSON.stringify({message,context}),
+      });
+      const body=await response.json().catch(()=>({}));
+      if(!response.ok){
+        if(body.code==="AI_NOT_CONFIGURED"){
+          addMessage("cipher","My guided study tools are active. Live explanations will switch on after the AI model is connected by the site owner.");
+          return;
+        }
+        throw new Error(body.error||"Cipher could not respond just now.");
+      }
+      addMessage("cipher",body.answer);
+      capture("cipher_assistant_answered",{source_view:currentView,model:body.model||"configured"});
+    }catch(error){
+      addMessage("cipher",error.message||"I could not reach the live model. Try a guided action for now.");
+    }finally{
+      setSending(false);
+    }
+  };
+
+  if(typeof document==="undefined")return null;
+  return createPortal(
+    <div className={`cipher-assistant-dock ${open?"open":""}`}>
+      {open&&<button className="cipher-assistant-scrim" type="button" aria-label="Close Cipher assistant" onClick={()=>setOpen(false)}/>}
+      {open&&(
+        <section className="cipher-assistant-panel" role="dialog" aria-modal="false" aria-label="Cipher study assistant">
+          <header className="cipher-assistant-head">
+            <div className="cipher-assistant-identity">
+              <span className="cipher-assistant-avatar"><MascotAnimation animation={sending?"thinking":"wave"} size={54} interactive label="Cipher assistant"/></span>
+              <div><span>Study companion</span><strong>Cipher Assistant</strong><small>Guided now · live AI connection ready</small></div>
+            </div>
+            <button type="button" className="cipher-assistant-close" aria-label="Close Cipher assistant" onClick={()=>setOpen(false)}><X size={18}/></button>
+          </header>
+          <div className="cipher-assistant-body">
+            <div className="cipher-assistant-intro">
+              <Sparkles size={16}/>
+              <p>{weakChapter?`I’m tracking ${weakChapter} as your current repair area.`:"Answer a few MCQs and I’ll turn your progress into a focused next step."}</p>
+            </div>
+            <div className="cipher-assistant-quick" aria-label="Cipher quick actions">
+              <button type="button" onClick={showNextStep}><Target size={15}/><span><strong>What next?</strong><small>Use my progress</small></span></button>
+              <button type="button" onClick={startSprint}><Play size={15}/><span><strong>3-question sprint</strong><small>Start immediately</small></span></button>
+              <button type="button" onClick={explainSmartReview}><Brain size={15}/><span><strong>Why these questions?</strong><small>See Smart Review logic</small></span></button>
+            </div>
+            {messages.length>0&&(
+              <div className="cipher-assistant-messages" aria-live="polite">
+                {messages.map(message=><div key={message.id} className={`cipher-assistant-message ${message.role}`}>{message.text}</div>)}
+                {sending&&<div className="cipher-assistant-message cipher thinking">Cipher is thinking…</div>}
+                <div ref={messagesEndRef}/>
+              </div>
+            )}
+            <div className="cipher-assistant-input-row">
+              <input
+                value={draft}
+                onChange={event=>setDraft(event.target.value)}
+                onKeyDown={event=>{if(event.key==="Enter")sendMessage();}}
+                placeholder="Ask a Security+ study question"
+                aria-label="Message Cipher"
+                maxLength={900}
+              />
+              <button type="button" onClick={sendMessage} disabled={!draft.trim()||sending} aria-label="Send message to Cipher"><ChevronRight size={19}/></button>
+            </div>
+            <p className="cipher-assistant-note">Cipher teaches concepts—not real exam dumps. Avoid sharing personal details.</p>
+          </div>
+        </section>
+      )}
+      <button className="cipher-assistant-launcher" type="button" aria-expanded={open} onClick={()=>setOpen(value=>!value)}>
+        <span><MascotAnimation animation={open?"surprised":"wave"} size={48} interactive={false} label="Cipher"/></span>
+        <span><strong>Ask Cipher</strong><small>Your study companion</small></span>
+      </button>
+    </div>,
+    document.body
   );
 }
 
@@ -26981,8 +27285,13 @@ export default function App() {
     capture("question_report_opened", { question_id:report.questionId, question_type:report.questionKind, tier: user?.tier||"guest" });
     setQuestionReport(report);
   },[user?.tier]);
-  const handleStartChapterReview=useCallback(chapterId=>{
-    setSmartReviewRequest({chapterId:String(chapterId),nonce:Date.now()});
+  const handleStartChapterReview=useCallback((chapterId,options={})=>{
+    setSmartReviewRequest({
+      chapterId:String(chapterId),
+      count:Math.max(1,Math.min(10,Number(options.count)||3)),
+      source:options.source||"chapter_review",
+      nonce:Date.now(),
+    });
     setView("mcq");
   },[]);
   const handleAchievementSessionComplete=useCallback(async payload=>{
@@ -27346,6 +27655,9 @@ export default function App() {
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
           {!practiceFocusMode&&view!=="exam"&&view!=="mascot-admin"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
         </main>
+        {!practiceFocusMode&&!showOnboarding&&["dashboard","mcq","pbq","daily","coins","objectives","pricing"].includes(view)&&(
+          <CipherAssistantDock user={user} attempts={attempts} currentView={view} onStartReview={handleStartChapterReview}/>
+        )}
         {showOnboarding&&(
           <OnboardingModal
             user={user}
