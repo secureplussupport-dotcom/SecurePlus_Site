@@ -83,22 +83,21 @@ export default async function handler(req, res) {
     }
 
     if (action === "unlock_pbq") {
-      const resourceId = cleanResourceId(body.resourceId);
-      if (!resourceId) return json(res, 400, { error: "Choose a PBQ to unlock." });
-
-      const { data: pbq, error: pbqError } = await supabase
-        .from("pbqs")
-        .select("id")
-        .eq("id", resourceId)
-        .maybeSingle();
-      if (pbqError) throw pbqError;
-      if (!pbq) return json(res, 404, { error: "That PBQ is not available." });
-
       result = await callRpc(supabase, "purchase_cipher_coin_item", {
         target_user_id: userId,
         requested_item_type: "pbq",
-        requested_resource_id: resourceId,
+        requested_resource_id: "",
       });
+
+      if (result?.resourceId) {
+        const { data: unlockedPbq, error: pbqError } = await supabase
+          .from("pbqs")
+          .select("id,title,type,domain")
+          .eq("id", cleanResourceId(result.resourceId))
+          .maybeSingle();
+        if (pbqError) throw pbqError;
+        result = { ...result, unlockedPbq: unlockedPbq || null };
+      }
     }
 
     if (action === "buy_exam_pass") {

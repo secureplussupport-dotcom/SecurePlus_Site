@@ -2,7 +2,8 @@
 -- Run this in Supabase SQL Editor after supabase/schema.sql.
 -- The PBQ table is bootstrapped below when pbqs.sql has not been run yet, so
 -- this migration is safe for both existing and newly created projects.
--- All balance mutations are service-role-only and are recorded in an immutable ledger.
+-- Balance mutations run only through service-role functions or trusted database
+-- triggers, and every change is recorded in an immutable ledger.
 
 create table if not exists public.pbqs (
   id text primary key,
@@ -162,6 +163,7 @@ begin
   end if;
 
   if reward_event_type not in (
+    'onboarding_welcome',
     'daily_check_in',
     'daily_challenge',
     'daily_challenge_streak',
@@ -255,6 +257,37 @@ revoke all on function public.award_cipher_coins(uuid, integer, text, text, json
 revoke all on function public.award_cipher_coins(uuid, integer, text, text, jsonb) from anon;
 revoke all on function public.award_cipher_coins(uuid, integer, text, text, jsonb) from authenticated;
 grant execute on function public.award_cipher_coins(uuid, integer, text, text, jsonb) to service_role;
+
+-- Every profile created after this economy is installed receives one welcome
+-- grant. The ledger reference makes the reward idempotent, even if profile
+-- creation is retried by an authentication callback.
+create schema if not exists private;
+revoke all on schema private from public, anon, authenticated;
+
+create or replace function private.grant_new_user_cipher_welcome()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  perform public.award_cipher_coins(
+    new.id,
+    150,
+    'onboarding_welcome',
+    'onboarding_welcome:' || new.id::text,
+    jsonb_build_object('source', 'academy_onboarding')
+  );
+  return new;
+end;
+$$;
+
+revoke all on function private.grant_new_user_cipher_welcome() from public, anon, authenticated;
+
+drop trigger if exists grant_new_user_cipher_welcome on public.profiles;
+create trigger grant_new_user_cipher_welcome
+after insert on public.profiles
+for each row execute function private.grant_new_user_cipher_welcome();
 
 create or replace function public.claim_cipher_daily_check_in(target_user_id uuid)
 returns jsonb
@@ -488,40 +521,12 @@ begin
     return jsonb_build_object('ok', false, 'error', 'Missing user.');
   end if;
 
-  if requested_item_type = 'pbq' then
-    item_cost := 30;
-    unlock_resource_id := trim(coalesce(requested_resource_id, ''));
-
-    if length(unlock_resource_id) not between 1 and 120 then
-      return jsonb_build_object('ok', false, 'error', 'Invalid PBQ.');
-    end if;
-
-    if exists (
-      select 1
-      from public.cipher_coin_unlocks
-      where user_id = target_user_id
-        and unlock_type = 'pbq'
-        and resource_id = unlock_resource_id
-    ) then
-      select cipher_coins into current_balance from public.profiles where id = target_user_id;
-      return jsonb_build_object(
-        'ok', true,
-        'purchased', false,
-        'alreadyOwned', true,
-        'balance', coalesce(current_balance, 0),
-        'resourceId', unlock_resource_id
-      );
-    end if;
-
-    transaction_reference := 'pbq_unlock:' || unlock_resource_id;
-  elsif requested_item_type = 'exam_pass' then
-    item_cost := 150;
-    unlock_resource_id := gen_random_uuid()::text;
-    transaction_reference := 'exam_pass_purchase:' || unlock_resource_id;
-  else
+  if requested_item_type not in ('pbq', 'exam_pass') then
     return jsonb_build_object('ok', false, 'error', 'Unknown Cipher Coin item.');
   end if;
 
+  -- Lock the wallet before choosing a PBQ so rapid double taps cannot reveal
+  -- two different random questions in parallel.
   select cipher_coins
   into current_balance
   from public.profiles
@@ -532,8 +537,60 @@ begin
     return jsonb_build_object('ok', false, 'error', 'Profile not found.');
   end if;
 
-  -- A second request may have waited on the profile lock while the first
-  -- request completed. Re-check ownership here to avoid a duplicate insert.
+  if requested_item_type = 'pbq' then
+    item_cost := 50;
+
+    -- The first three reveals follow a shared learning path. Once these are
+    -- owned, later purchases reveal a random locked Pro PBQ.
+    select preferred.id
+    into unlock_resource_id
+    from unnest(array['p014', 'p018', 'p033']::text[]) with ordinality as preferred(id, position)
+    where not exists (
+      select 1
+      from public.cipher_coin_unlocks
+      where cipher_coin_unlocks.user_id = target_user_id
+        and cipher_coin_unlocks.unlock_type = 'pbq'
+        and cipher_coin_unlocks.resource_id = preferred.id
+    )
+    order by preferred.position
+    limit 1;
+
+    if unlock_resource_id is null then
+      select candidates.id
+      into unlock_resource_id
+      from (
+        select pbqs.id
+        from public.pbqs
+        where pbqs.is_pro = true
+        union
+        select 'p' || lpad(series.value::text, 3, '0')
+        from generate_series(2, 50) as series(value)
+      ) as candidates
+      where candidates.id <> 'p001'
+        and not exists (
+          select 1
+          from public.cipher_coin_unlocks
+          where cipher_coin_unlocks.user_id = target_user_id
+            and cipher_coin_unlocks.unlock_type = 'pbq'
+            and cipher_coin_unlocks.resource_id = candidates.id
+        )
+      order by random()
+      limit 1;
+    end if;
+
+    if unlock_resource_id is null then
+      return jsonb_build_object('ok', false, 'error', 'Every available PBQ is already unlocked.');
+    end if;
+
+    transaction_reference := 'pbq_unlock:' || unlock_resource_id;
+  elsif requested_item_type = 'exam_pass' then
+    item_cost := 70;
+    unlock_resource_id := gen_random_uuid()::text;
+    transaction_reference := 'exam_pass_purchase:' || unlock_resource_id;
+  end if;
+
+  -- Keep the ownership check as a defensive guard for accounts migrated from
+  -- earlier versions of the economy.
   if requested_item_type = 'pbq' and exists (
     select 1
     from public.cipher_coin_unlocks
@@ -632,7 +689,7 @@ begin
   for update skip locked;
 
   if not found then
-    return jsonb_build_object('ok', false, 'error', 'No Exam Mode passes available.');
+    return jsonb_build_object('ok', false, 'error', 'No practice exam vouchers are available.');
   end if;
 
   update public.cipher_coin_unlocks
