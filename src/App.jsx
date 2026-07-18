@@ -15898,58 +15898,96 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .athena-coin-intro span small{font-size:11px;color:${t.textSec};line-height:1.55;}
 .cipher-daily-reward-chip,.cipher-unlocked-chip,.cipher-locked-cost{display:inline-flex!important;align-items:center;gap:5px!important;border-color:#d79b3e66!important;background:#f4d68f2e!important;color:#aa6c1f!important;}
 .cipher-locked-cost{font-weight:950;}
-.cipher-vault-page{width:min(1120px,100%);margin:0 auto;padding:28px 24px 110px;}
-.cipher-vault-hero{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:24px;overflow:hidden;padding:30px;border:1px solid #d79b3e40;border-radius:28px;background:radial-gradient(circle at 92% 12%,#f2b85b30,transparent 30%),radial-gradient(circle at 10% 100%,#e56f6521,transparent 34%),linear-gradient(145deg,${t.surface},color-mix(in srgb,#f4e2b5 31%,${t.panel}));box-shadow:0 24px 60px rgba(117,76,27,.12);}
-.cipher-vault-hero::after{content:"";position:absolute;right:-40px;bottom:-52px;width:230px;height:230px;border:34px solid #f2b85b16;border-radius:46% 54% 48% 52%;transform:rotate(18deg);}
-.cipher-vault-kicker{display:flex;align-items:center;gap:8px;color:#b47727;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.1em;}
-.cipher-vault-hero h1{max-width:680px;margin:10px 0 10px;color:${t.text};font-size:clamp(34px,5vw,58px);line-height:1.02;letter-spacing:-.035em;}
-.cipher-vault-hero p{max-width:680px;margin:0;color:${t.textSec};font-size:14px;line-height:1.75;}
-.cipher-wallet-balance{position:relative;z-index:2;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:14px;padding:20px;border:1px solid #d79b3e55;border-radius:22px;background:${t.surface}d9;box-shadow:0 18px 42px rgba(117,76,27,.14);backdrop-filter:blur(16px);}
-.cipher-wallet-balance .cipher-coin-icon{grid-row:1/3;}
-.cipher-wallet-balance span{color:#b47727;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
-.cipher-wallet-balance strong{display:block;color:${t.text};font-size:42px;line-height:1;}
-.cipher-wallet-meta{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:4px;}
-.cipher-wallet-meta div{padding:9px 10px;border-radius:12px;background:#f2b85b12;border:1px solid #d79b3e28;}
+.cipher-vault-page{width:min(1180px,100%);margin:0 auto;padding:30px 28px 120px;scroll-behavior:smooth;}
+.cipher-vault-hero{position:relative;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(330px,.88fr);gap:28px;overflow:hidden;padding:36px;border:1px solid #d79b3e52;border-radius:32px;background:radial-gradient(circle at 94% 8%,#f2b85b3d,transparent 31%),radial-gradient(circle at 7% 105%,#e56f652b,transparent 36%),linear-gradient(145deg,${t.surface},color-mix(in srgb,#f4e2b5 34%,${t.panel}));box-shadow:0 26px 68px rgba(117,76,27,.14);isolation:isolate;}
+.cipher-vault-hero::before{content:"";position:absolute;left:47%;top:-90px;width:180px;height:180px;border:1px solid #d79b3e38;border-radius:45% 55% 52% 48%;transform:rotate(28deg);z-index:-1;}
+.cipher-vault-hero::after{content:"";position:absolute;right:-45px;bottom:-62px;width:240px;height:240px;border:36px solid #f2b85b18;border-radius:46% 54% 48% 52%;transform:rotate(18deg);z-index:-1;}
+.cipher-vault-kicker{display:flex;align-items:center;gap:9px;color:#a9661f;font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.095em;}
+.cipher-vault-hero h1{max-width:680px;margin:12px 0 12px;color:${t.text};font-size:clamp(40px,5vw,62px);line-height:1;letter-spacing:-.04em;}
+.cipher-vault-hero p{max-width:680px;margin:0;color:${t.textSec};font-size:15.5px;font-weight:600;line-height:1.7;}
+.cipher-vault-trust{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.cipher-vault-trust span{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid #b4772730;border-radius:999px;background:${t.surface}a8;color:${t.textSec};font-size:11px;font-weight:850;}
+.cipher-vault-trust svg{color:#288c8a;}
+.cipher-coach{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:11px;max-width:620px;margin-top:18px;padding:12px 14px;border:1px solid #288c8a30;border-radius:18px;background:linear-gradient(135deg,#288c8a10,${t.surface}a8);}
+.cipher-coach .cipher-mascot{--cipher-size:70px!important;}
+.cipher-coach-copy small,.cipher-coach-copy strong{display:block;}
+.cipher-coach-copy small{color:#288c8a;font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
+.cipher-coach-copy strong{margin-top:3px;color:${t.text};font-size:14px;line-height:1.5;}
+.cipher-wallet-balance{position:relative;z-index:2;display:flex;flex-direction:column;align-self:stretch;overflow:hidden;padding:23px;border:1px solid #d79b3e66;border-radius:25px;background:linear-gradient(155deg,${t.surface}ed,color-mix(in srgb,#f8e9c6 45%,${t.surface}));box-shadow:0 20px 50px rgba(117,76,27,.17);backdrop-filter:blur(18px);}
+.cipher-wallet-balance::before{content:"";position:absolute;right:-30px;top:-38px;width:140px;height:140px;border-radius:50%;background:#f2b85b20;box-shadow:0 0 0 20px #f2b85b0b;}
+.cipher-wallet-head{position:relative;display:flex;align-items:center;gap:9px;color:#a9661f;font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
+.cipher-wallet-amount{position:relative;display:flex;align-items:center;gap:13px;margin:18px 0 16px;}
+.cipher-wallet-amount>strong{color:${t.text};font-size:clamp(54px,6vw,72px);font-weight:950;letter-spacing:-.05em;line-height:.9;}
+.cipher-wallet-unit{display:flex;flex-direction:column;color:#a9661f!important;font-size:12px!important;font-weight:950;line-height:1.25;letter-spacing:.04em!important;text-transform:uppercase;}
+.cipher-wallet-unit small{color:${t.textDim};font-size:9px;font-weight:850;letter-spacing:0;text-transform:none;}
+.cipher-wallet-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.cipher-wallet-meta div{min-width:0;padding:11px 10px;border-radius:13px;background:#f2b85b13;border:1px solid #d79b3e30;}
 .cipher-wallet-meta small,.cipher-wallet-meta b{display:block;}
-.cipher-wallet-meta small{color:${t.textDim};font-size:7px;font-weight:900;text-transform:uppercase;}
-.cipher-wallet-meta b{margin-top:2px;color:${t.text};font-size:13px;}
-.cipher-economy-note{display:flex;gap:9px;align-items:flex-start;margin-top:14px;padding:11px 12px;border-radius:14px;background:#288c8a10;border:1px solid #288c8a28;color:${t.textSec};font-size:11px;line-height:1.55;}
+.cipher-wallet-meta small{color:${t.textDim};font-size:8px;font-weight:900;line-height:1.25;text-transform:uppercase;}
+.cipher-wallet-meta b{margin-top:4px;color:${t.text};font-size:16px;}
+.cipher-wallet-goal{margin-top:12px;padding:12px;border:1px solid #d79b3e36;border-radius:15px;background:${t.surface}a8;}
+.cipher-wallet-goal-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:${t.textSec};font-size:11px;font-weight:850;}
+.cipher-wallet-goal-head strong{color:#a9661f;font-size:11px;}
+.cipher-wallet-progress{height:8px;margin-top:8px;overflow:hidden;border-radius:99px;background:#d79b3e22;}
+.cipher-wallet-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#d68129,#efb851,#288c8a);transition:width .45s cubic-bezier(.16,1,.3,1);}
+.cipher-wallet-actions{display:flex;gap:8px;margin-top:auto;padding-top:14px;}
+.cipher-wallet-actions .btn{flex:1;justify-content:center;min-height:43px;font-size:12px;}
+.cipher-economy-note{display:flex;gap:9px;align-items:flex-start;margin-top:14px;padding:12px 13px;border-radius:14px;background:#288c8a10;border:1px solid #288c8a28;color:${t.textSec};font-size:12px;font-weight:650;line-height:1.55;}
 .cipher-economy-note strong{color:#288c8a;}
-.cipher-vault-section{margin-top:24px;}
-.cipher-vault-section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:12px;}
-.cipher-vault-section-head h2{color:${t.text};font-size:22px;}
-.cipher-vault-section-head p{max-width:560px;color:${t.textSec};font-size:12px;line-height:1.55;text-align:right;}
-.cipher-earn-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-.cipher-earn-card{position:relative;min-height:154px;overflow:hidden;padding:16px;border:1px solid color-mix(in srgb,var(--earn-color) 30%,${t.border});border-radius:19px;background:linear-gradient(145deg,color-mix(in srgb,var(--earn-color) 9%,${t.surface}),${t.surface});}
-.cipher-earn-card>span{display:grid;place-items:center;width:36px;height:36px;margin-bottom:14px;border-radius:12px;background:color-mix(in srgb,var(--earn-color) 15%,${t.surface});color:var(--earn-color);}
-.cipher-earn-card strong{display:block;color:${t.text};font-size:13px;line-height:1.35;}
-.cipher-earn-card p{margin:5px 0 0;color:${t.textSec};font-size:10px;line-height:1.5;}
-.cipher-earn-card b{position:absolute;right:10px;top:10px;padding:4px 7px;border-radius:99px;background:var(--earn-color);color:#fff;font-size:9px;}
-.cipher-spend-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
-.cipher-spend-card{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;padding:20px;border:1px solid ${t.border};border-radius:22px;background:${t.surface};box-shadow:0 14px 34px rgba(54,45,30,.07);}
-.cipher-spend-visual{display:grid;place-items:center;width:74px;height:74px;border-radius:22px;background:linear-gradient(145deg,#f6e6b9,#faeee0);border:1px solid #d79b3e38;}
-.cipher-spend-card h3{color:${t.text};font-size:18px;}
-.cipher-spend-card p{margin:5px 0 13px;color:${t.textSec};font-size:11px;line-height:1.55;}
+.cipher-vault-jump{position:sticky;top:10px;z-index:45;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:16px auto 0;padding:7px;border:1px solid ${t.border};border-radius:18px;background:${t.surface}e8;box-shadow:0 14px 36px rgba(71,48,23,.12);backdrop-filter:blur(16px);}
+.cipher-vault-jump button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:9px 12px;border:0;border-radius:12px;background:transparent;color:${t.textSec};font:inherit;font-size:12px;font-weight:900;cursor:pointer;transition:background .18s,color .18s,transform .18s;}
+.cipher-vault-jump button:hover{color:${t.text};background:#d79b3e14;transform:translateY(-1px);}
+.cipher-vault-jump button:first-child{color:#a9661f;background:#d79b3e16;}
+.cipher-vault-section{margin-top:32px;scroll-margin-top:84px;}
+.cipher-vault-section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:16px;}
+.cipher-vault-section-head>div{min-width:0;}
+.cipher-section-eyebrow{display:block;margin-bottom:4px;color:#a9661f;font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;}
+.cipher-vault-section-head h2{color:${t.text};font-size:clamp(24px,3vw,30px);line-height:1.15;}
+.cipher-vault-section-head p{max-width:580px;color:${t.textSec};font-size:13px;font-weight:600;line-height:1.6;text-align:right;}
+.cipher-earn-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.cipher-earn-card{position:relative;display:flex;flex-direction:column;min-height:205px;overflow:hidden;padding:19px;border:1px solid color-mix(in srgb,var(--earn-color) 34%,${t.border});border-radius:21px;background:radial-gradient(circle at 105% -5%,color-mix(in srgb,var(--earn-color) 18%,transparent),transparent 38%),linear-gradient(145deg,color-mix(in srgb,var(--earn-color) 8%,${t.surface}),${t.surface});box-shadow:0 11px 26px rgba(66,49,30,.055);transition:transform .18s,box-shadow .18s,border-color .18s;}
+.cipher-earn-card:hover{transform:translateY(-2px);box-shadow:0 18px 34px rgba(66,49,30,.1);border-color:color-mix(in srgb,var(--earn-color) 52%,${t.border});}
+.cipher-earn-card>span{display:grid;place-items:center;width:42px;height:42px;margin-bottom:16px;border-radius:14px;background:color-mix(in srgb,var(--earn-color) 16%,${t.surface});color:var(--earn-color);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--earn-color) 20%,transparent);}
+.cipher-earn-card strong{display:block;color:${t.text};font-size:15px;line-height:1.35;}
+.cipher-earn-card p{margin:6px 0 0;color:${t.textSec};font-size:12px;font-weight:600;line-height:1.55;}
+.cipher-earn-card b{position:absolute;right:12px;top:12px;padding:6px 9px;border-radius:99px;background:var(--earn-color);color:#fff;font-size:11px;box-shadow:0 6px 16px color-mix(in srgb,var(--earn-color) 25%,transparent);}
+.cipher-earn-action{display:flex;align-items:center;gap:5px;width:max-content;margin-top:auto;padding:12px 0 0;border:0;background:transparent;color:var(--earn-color);font:inherit;font-size:11px;font-weight:950;cursor:pointer;}
+.cipher-spend-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.cipher-spend-card{position:relative;overflow:hidden;padding:24px;border:1px solid ${t.border};border-radius:25px;background:${t.surface};box-shadow:0 16px 40px rgba(54,45,30,.08);}
+.cipher-spend-card::after{content:"";position:absolute;right:-52px;top:-62px;width:160px;height:160px;border-radius:50%;background:var(--spend-color);opacity:.08;}
+.cipher-spend-card.pbq{--spend-color:#288c8a;}
+.cipher-spend-card.exam{--spend-color:#7766c6;}
+.cipher-spend-top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}
+.cipher-spend-visual{display:grid;place-items:center;width:64px;height:64px;border-radius:19px;background:color-mix(in srgb,var(--spend-color) 12%,${t.surface});border:1px solid color-mix(in srgb,var(--spend-color) 30%,${t.border});color:var(--spend-color);}
+.cipher-spend-badge{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border-radius:999px;background:color-mix(in srgb,var(--spend-color) 11%,${t.surface});color:var(--spend-color);font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.045em;}
+.cipher-spend-card h3{color:${t.text};font-size:21px;line-height:1.25;}
+.cipher-spend-card p{min-height:58px;margin:7px 0 16px;color:${t.textSec};font-size:13px;font-weight:600;line-height:1.6;}
+.cipher-access-meter{margin:0 0 14px;padding:12px;border:1px solid color-mix(in srgb,var(--spend-color) 22%,${t.border});border-radius:14px;background:color-mix(in srgb,var(--spend-color) 5%,${t.panel});}
+.cipher-access-label{display:flex;align-items:center;justify-content:space-between;gap:9px;color:${t.textSec};font-size:11px;font-weight:850;}
+.cipher-access-label strong{color:var(--spend-color);font-size:11px;}
+.cipher-access-track{height:7px;margin-top:8px;border-radius:99px;background:${t.border};overflow:hidden;}
+.cipher-access-track span{display:block;height:100%;border-radius:inherit;background:var(--spend-color);transition:width .45s cubic-bezier(.16,1,.3,1);}
 .cipher-cost-line{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
-.cipher-cost{display:flex;align-items:center;gap:5px;color:#b47727;font-size:12px;font-weight:950;}
-.cipher-pro-zero{display:flex;align-items:center;gap:7px;margin-top:10px;padding:8px 10px;border-radius:11px;background:${t.green}0f;border:1px solid ${t.green}28;color:${t.green};font-size:9px;font-weight:900;}
-.cipher-reveal-result{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px;margin-top:12px;padding:10px 12px;border:1px solid #d79b3e48;border-radius:16px;background:linear-gradient(135deg,#f7e5b67d,${t.surface});animation:rewardPop .45s cubic-bezier(.16,1,.3,1) both;}
+.cipher-cost{display:flex;align-items:center;gap:6px;color:#a9661f;font-size:13px;font-weight:950;}
+.cipher-cost-line .btn{min-height:43px;font-size:12px;}
+.cipher-pro-zero{display:flex;align-items:center;gap:7px;margin-top:11px;padding:9px 11px;border-radius:11px;background:${t.green}0f;border:1px solid ${t.green}28;color:${t.green};font-size:11px;font-weight:900;}
+.cipher-reveal-result{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:9px;margin-top:13px;padding:11px 13px;border:1px solid #d79b3e48;border-radius:16px;background:linear-gradient(135deg,#f7e5b67d,${t.surface});animation:rewardPop .45s cubic-bezier(.16,1,.3,1) both;}
 .cipher-reveal-result .cipher-mascot{grid-row:1/4;}
 .cipher-reveal-result small,.cipher-reveal-result strong{display:block;}
-.cipher-reveal-result small{color:#b47727;font-size:8px;font-weight:950;text-transform:uppercase;letter-spacing:.07em;}
-.cipher-reveal-result strong{margin-top:2px;color:${t.text};font-size:12px;line-height:1.4;}
-.cipher-reveal-result button{margin-top:5px;padding:0;border:0;background:transparent;color:${t.accent};font:inherit;font-size:10px;font-weight:900;cursor:pointer;}
-.cipher-ledger{display:grid;gap:7px;padding:8px;border:1px solid ${t.border};border-radius:20px;background:${t.surface};}
-.cipher-ledger-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px;border-radius:14px;}
+.cipher-reveal-result small{color:#b47727;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.07em;}
+.cipher-reveal-result strong{margin-top:2px;color:${t.text};font-size:13px;line-height:1.4;}
+.cipher-reveal-result button{margin-top:5px;padding:0;border:0;background:transparent;color:${t.accent};font:inherit;font-size:11px;font-weight:900;cursor:pointer;}
+.cipher-ledger{display:grid;gap:7px;padding:9px;border:1px solid ${t.border};border-radius:22px;background:${t.surface};box-shadow:0 12px 32px rgba(54,45,30,.055);}
+.cipher-ledger-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px;border-radius:15px;}
 .cipher-ledger-row+.cipher-ledger-row{border-top:1px solid ${t.border};}
-.cipher-ledger-row>span:first-child{display:grid;place-items:center;width:32px;height:32px;border-radius:11px;background:#f2b85b16;}
+.cipher-ledger-row>span:first-child{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#f2b85b16;}
 .cipher-ledger-row strong,.cipher-ledger-row small{display:block;}
-.cipher-ledger-row strong{color:${t.text};font-size:11px;}
-.cipher-ledger-row small{margin-top:2px;color:${t.textDim};font-size:8px;}
-.cipher-ledger-amount{font-size:12px;font-weight:950;}
+.cipher-ledger-row strong{color:${t.text};font-size:13px;}
+.cipher-ledger-row small{margin-top:3px;color:${t.textDim};font-size:10px;line-height:1.4;}
+.cipher-ledger-amount{font-size:14px;font-weight:950;}
 .cipher-ledger-amount.positive{color:${t.green};}
 .cipher-ledger-amount.negative{color:#b47727;}
-.cipher-empty-ledger{padding:22px;text-align:center;color:${t.textSec};font-size:12px;line-height:1.6;}
+.cipher-empty-ledger{padding:28px;text-align:center;color:${t.textSec};font-size:13px;font-weight:600;line-height:1.65;}
 .cipher-reward-toast{position:fixed;right:22px;top:20px;z-index:900;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;width:min(390px,calc(100vw - 32px));padding:12px 14px;border:1px solid #d79b3e55;border-radius:18px;background:${t.surface}f2;box-shadow:0 22px 60px rgba(104,68,24,.25);backdrop-filter:blur(18px);animation:cipherToastIn .4s cubic-bezier(.16,1,.3,1) both;}
 .cipher-reward-toast strong,.cipher-reward-toast small{display:block;}
 .cipher-reward-toast strong{color:#b47727;font-size:12px;}
@@ -16930,8 +16968,10 @@ body{background:
 @media (max-width: 860px){
   html,body,#root{max-width:100%;overflow-x:hidden;}
   body{font-size:14px;}
-  .cipher-vault-page{padding:18px 16px 110px;}
-  .cipher-vault-hero{grid-template-columns:minmax(0,1fr);padding:22px;}
+  .cipher-vault-page{padding:20px 16px 112px;}
+  .cipher-vault-hero{grid-template-columns:minmax(0,1fr);padding:26px;}
+  .cipher-wallet-balance{min-height:0;}
+  .cipher-wallet-actions{margin-top:0;}
   .cipher-earn-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .cipher-spend-grid{grid-template-columns:minmax(0,1fr);}
   .cipher-vault-section-head{display:block;}
@@ -17217,15 +17257,38 @@ body{background:
   .app-main>.site-mascot-placement.anchor-bottom-left,.app-main>.site-mascot-placement.anchor-bottom-center,.app-main>.site-mascot-placement.anchor-bottom-right{bottom:92px!important;}
 }
 @media (max-width: 520px){
-  .cipher-vault-page{padding:15px 12px 104px;}
-  .cipher-vault-hero{padding:18px;border-radius:22px;}
-  .cipher-vault-hero h1{font-size:36px;}
-  .cipher-wallet-balance{padding:15px;}
-  .cipher-wallet-balance strong{font-size:36px;}
+  .cipher-vault-page{padding:14px 12px 108px;}
+  .cipher-vault-hero{padding:20px;border-radius:24px;}
+  .cipher-vault-kicker{font-size:10px;}
+  .cipher-vault-hero h1{font-size:39px;}
+  .cipher-vault-hero p{font-size:14px;line-height:1.65;}
+  .cipher-vault-trust{gap:6px;}
+  .cipher-vault-trust span{padding:6px 8px;font-size:9.5px;}
+  .cipher-coach{grid-template-columns:58px minmax(0,1fr);padding:10px 11px;}
+  .cipher-coach .cipher-mascot{--cipher-size:58px!important;}
+  .cipher-coach-copy strong{font-size:12px;}
+  .cipher-wallet-balance{padding:18px;}
+  .cipher-wallet-amount{margin:15px 0 14px;}
+  .cipher-wallet-amount>strong{font-size:58px;}
+  .cipher-wallet-meta{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .cipher-wallet-meta div{padding:9px 7px;}
+  .cipher-wallet-meta small{font-size:7px;}
+  .cipher-wallet-meta b{font-size:14px;}
+  .cipher-wallet-actions{flex-direction:column;}
+  .cipher-vault-jump{top:8px;gap:4px;margin-top:10px;padding:5px;border-radius:15px;}
+  .cipher-vault-jump button{min-height:42px;padding:7px 5px;font-size:10px;gap:5px;}
+  .cipher-vault-section{margin-top:27px;scroll-margin-top:72px;}
+  .cipher-vault-section-head{margin-bottom:13px;}
+  .cipher-vault-section-head h2{font-size:24px;}
+  .cipher-vault-section-head p{font-size:12px;}
   .cipher-earn-grid{grid-template-columns:minmax(0,1fr);}
-  .cipher-earn-card{min-height:124px;}
-  .cipher-spend-card{grid-template-columns:minmax(0,1fr);padding:17px;}
-  .cipher-spend-visual{width:58px;height:58px;border-radius:17px;}
+  .cipher-earn-card{min-height:186px;padding:18px;}
+  .cipher-spend-card{padding:19px;}
+  .cipher-spend-visual{width:56px;height:56px;border-radius:17px;}
+  .cipher-spend-card h3{font-size:19px;}
+  .cipher-spend-card p{min-height:0;font-size:12.5px;}
+  .cipher-cost-line{align-items:stretch;}
+  .cipher-cost-line .btn{width:100%;justify-content:center;}
   .cipher-walkthrough-overlay{align-items:end;padding:8px;}
   .cipher-walkthrough{max-height:94dvh;padding:16px 15px calc(16px + env(safe-area-inset-bottom));border-radius:22px;overflow-y:auto;}
   .cipher-walkthrough-hero{grid-template-columns:78px minmax(0,1fr);gap:8px;margin-bottom:12px;}
@@ -23856,74 +23919,124 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
   const transactions=wallet?.transactions||[];
   const [lastUnlockedPbq,setLastUnlockedPbq]=useState(null);
   const remainingPbqCount=PBQ_BANK.filter(question=>!isFreePBQPreview(question)&&!(wallet?.unlockedPbqIds||[]).includes(question.id)).length;
+  const unlockedPbqCount=(wallet?.unlockedPbqIds||[]).length;
+  const pbqGap=Math.max(0,CIPHER_COIN_COSTS.pbq-balance);
+  const examGap=Math.max(0,CIPHER_COIN_COSTS.examPass-balance);
+  const pbqProgress=isPro?100:Math.min(100,Math.round((balance/CIPHER_COIN_COSTS.pbq)*100));
+  const examProgress=isPro?100:Math.min(100,Math.round((balance/CIPHER_COIN_COSTS.examPass)*100));
+  const walletGoal=isPro
+    ? {label:"Pro access active",status:"Zero coins needed",progress:100}
+    : remainingPbqCount===0
+      ? {label:"Next exam voucher",status:examGap?`${examGap} coins to go`:"Ready now",progress:examProgress}
+      : pbqGap
+        ? {label:"Next mystery PBQ",status:`${pbqGap} coins to go`,progress:pbqProgress}
+        : {label:"Mystery PBQ ready",status:"You can reveal now",progress:100};
+  const coachMessage=isPro
+    ? "Your Pro plan already opens every PBQ and practice exam. Keep coins as a record of your study streak."
+    : balance>=CIPHER_COIN_COSTS.examPass
+      ? "You have enough for either reward. Pick a permanent PBQ or save an exam voucher for a full practice run."
+      : balance>=CIPHER_COIN_COSTS.pbq
+        ? "You can reveal a permanent mystery PBQ now. Your first three reveals follow the shared starter path."
+        : `You are ${pbqGap} coins away from a mystery PBQ. A perfect MCQ set brings in 15.`;
+  const scrollToSection=id=>document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"});
   const revealPbq=async()=>{
     const result=await onUnlockPbq?.();
     if(result?.purchased)setLastUnlockedPbq(result.question||{id:result.resourceId,title:result.resourceId});
   };
   const earnMethods=[
-    {title:"New learner gift",body:"Finish Academy onboarding and your account begins with a one-time welcome balance.",reward:`+${CIPHER_WELCOME_GRANT}`,color:"#d59632",Icon:Sparkles},
-    {title:"Daily check-in",body:"Days 1–6 award 5. Every seventh consecutive day awards 10.",reward:"+5 / +10",color:"#e56f65",Icon:CalendarDays},
-    {title:"Perfect MCQ set",body:"Score 100% on at least five questions. The first perfect set each day is rewarded.",reward:"+15",color:"#7766c6",Icon:BookOpenCheck},
-    {title:"Perfect Daily Challenge",body:"Answer all five Daily Challenge questions correctly.",reward:"+5",color:"#397fba",Icon:Target},
-    {title:"Five-day challenge milestone",body:"Every fifth day in your Daily Challenge streak adds a bonus.",reward:"+5",color:"#288c8a",Icon:Flame},
-    {title:"Friend referral",body:"When a new student joins with your code, both accounts receive the reward.",reward:"+100 each",color:"#c38d2d",Icon:Share2},
+    {title:"New learner gift",body:"Finish Academy onboarding and begin with a one-time welcome balance.",reward:`+${CIPHER_WELCOME_GRANT}`,color:"#d59632",Icon:Sparkles},
+    {title:"Daily check-in",body:"Days 1–6 award 5 coins. Every seventh consecutive day awards 10.",reward:"+5 / +10",color:"#e56f65",Icon:CalendarDays,action:"refresh",actionLabel:"Check today’s status"},
+    {title:"Perfect MCQ set",body:"Score 100% on at least five questions. Your first perfect set each day earns coins.",reward:"+15",color:"#7766c6",Icon:BookOpenCheck,action:"mcq",actionLabel:"Start an MCQ set"},
+    {title:"Perfect Daily Challenge",body:"Answer all five Daily Challenge questions correctly.",reward:"+5",color:"#397fba",Icon:Target,action:"daily",actionLabel:"Open Daily Challenge"},
+    {title:"Five-day challenge milestone",body:"Every fifth day in your Daily Challenge streak adds a bonus.",reward:"+5",color:"#288c8a",Icon:Flame,action:"daily",actionLabel:"Build your streak"},
+    {title:"Friend referral",body:"When a new student joins with your code, both accounts receive the reward.",reward:"+100 each",color:"#c38d2d",Icon:Share2,action:"referrals",actionLabel:"Invite a friend"},
   ];
   return (
     <div className="cipher-vault-page">
       <section className="cipher-vault-hero">
         <div>
-          <div className="cipher-vault-kicker"><CipherCoinIcon size={25}/> SecurePlus accessibility economy</div>
-          <h1>Consistency becomes access.</h1>
-          <p>Cipher Coins let free learners earn permanent mystery PBQs and SecurePlus practice exam vouchers through regular study. They cannot be purchased for cash, they never expire, and they do not affect your readiness score.</p>
-          <div className="cipher-economy-note"><ShieldCheck size={17}/><span><strong>Fair by design.</strong> Reward limits are recorded once on the server, so refreshing or repeating the same daily event cannot mint extra coins.</span></div>
-          <MascotGuide animation="cheer" size={78} context="cipher-coins" message="Small daily wins can open the whole campus. I’ll keep count!" className="mascot-guide-page" side="left"/>
+          <div className="cipher-vault-kicker"><CipherCoinIcon size={27}/> Your Coin Vault</div>
+          <h1>Your effort has value.</h1>
+          <p>Turn steady study habits into PBQ access and SecurePlus practice exam vouchers. Earn coins by learning, then choose how you want to use them.</p>
+          <div className="cipher-vault-trust" aria-label="Cipher Coin rules">
+            <span><ShieldCheck size={14}/> Never expires</span>
+            <span><CheckCircle2 size={14}/> No cash value</span>
+            <span><TrendingUp size={14}/> Readiness unchanged</span>
+          </div>
+          <div className="cipher-coach">
+            <MascotAnimation animation="cheer" size={70} interactive hoverAnimation="dance" reactionAnimations={["cheer","surprised","dance"]} label="Cipher gives a Coin Vault tip"/>
+            <span className="cipher-coach-copy"><small>Cipher’s next move</small><strong>{coachMessage}</strong></span>
+          </div>
         </div>
-        <div className="cipher-wallet-balance">
-          <CipherCoinIcon size={72}/>
-          <span>Available balance</span>
-          <strong>{balance}</strong>
+        <aside className="cipher-wallet-balance" aria-label={`${balance} Cipher Coins available`}>
+          <div className="cipher-wallet-head"><CipherCoinIcon size={28}/> Available balance</div>
+          <div className="cipher-wallet-amount"><CipherCoinIcon size={62}/><strong>{balance}</strong><span className="cipher-wallet-unit">Cipher Coins<small>Ready to use</small></span></div>
           <div className="cipher-wallet-meta">
             <div><small>Lifetime earned</small><b>{Number(wallet?.lifetimeEarned||0)}</b></div>
+            <div><small>PBQs revealed</small><b>{unlockedPbqCount}</b></div>
             <div><small>Exam vouchers</small><b>{Number(wallet?.examPasses||0)}</b></div>
           </div>
-          <button className="btn btn-ghost" type="button" style={{gridColumn:"1/-1",fontSize:10}} onClick={onRefresh} disabled={busy}>{busy?"Refreshing...":"Refresh wallet"}</button>
-        </div>
+          <div className="cipher-wallet-goal">
+            <div className="cipher-wallet-goal-head"><span>{walletGoal.label}</span><strong>{walletGoal.status}</strong></div>
+            <div className="cipher-wallet-progress" role="progressbar" aria-label={walletGoal.label} aria-valuemin="0" aria-valuemax="100" aria-valuenow={walletGoal.progress}><span style={{width:`${walletGoal.progress}%`}}/></div>
+          </div>
+          <div className="cipher-wallet-actions">
+            <button className="btn btn-primary" type="button" onClick={()=>scrollToSection("cipher-spend")}><Sparkles size={16}/> Use my coins</button>
+            <button className="btn btn-ghost" type="button" onClick={onRefresh} disabled={busy}><RotateCcw size={15}/>{busy?"Refreshing...":"Refresh"}</button>
+          </div>
+        </aside>
       </section>
 
       {wallet?.error&&<Alert msg={wallet.error} type="warn" t={t}/>}
 
-      <section className="cipher-vault-section">
-        <div className="cipher-vault-section-head"><h2>How to earn</h2><p>Rewards favour daily discipline over endless grinding. The largest reward comes from helping another learner begin.</p></div>
+      <nav className="cipher-vault-jump" aria-label="Coin Vault sections">
+        <button type="button" onClick={()=>scrollToSection("cipher-spend")}><Sparkles size={16}/> Spend coins</button>
+        <button type="button" onClick={()=>scrollToSection("cipher-earn")}><TrendingUp size={16}/> Earn more</button>
+        <button type="button" onClick={()=>scrollToSection("cipher-activity")}><Clock3 size={16}/> Activity</button>
+      </nav>
+
+      <section className="cipher-vault-section" id="cipher-spend">
+        <div className="cipher-vault-section-head"><div><span className="cipher-section-eyebrow">Choose your reward</span><h2>Use your coins</h2></div><p>PBQ reveals are permanent. Practice exam vouchers are single-use inside SecurePlus—not official CompTIA exam vouchers.</p></div>
+        <div className="cipher-spend-grid">
+          <article className="cipher-spend-card pbq">
+            <div className="cipher-spend-top"><div className="cipher-spend-visual"><Puzzle size={30}/></div><span className="cipher-spend-badge"><BadgeCheck size={13}/> Permanent unlock</span></div>
+            <h3>Mystery PBQ reveal</h3>
+            <p>Your first three reveals follow p014 → p018 → p033. Later reveals are randomly selected from PBQs you do not own.</p>
+            <div className="cipher-access-meter"><div className="cipher-access-label"><span>Your balance</span><strong>{isPro?"Included with Pro":pbqGap?`${pbqGap} more needed`:"Ready to reveal"}</strong></div><div className="cipher-access-track" role="progressbar" aria-label="Progress toward a mystery PBQ" aria-valuemin="0" aria-valuemax={CIPHER_COIN_COSTS.pbq} aria-valuenow={Math.min(balance,CIPHER_COIN_COSTS.pbq)}><span style={{width:`${pbqProgress}%`}}/></div></div>
+            <div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={25}/>{CIPHER_COIN_COSTS.pbq} coins</span><button className="btn btn-primary" type="button" onClick={revealPbq} disabled={busy||isPro||balance<CIPHER_COIN_COSTS.pbq||remainingPbqCount===0}>{isPro?"Included with Pro":remainingPbqCount===0?"All PBQs unlocked":pbqGap?`${pbqGap} more needed`:busy?"Revealing...":"Reveal a PBQ"}</button></div>
+            {lastUnlockedPbq&&<div className="cipher-reveal-result"><MascotAnimation animation="unlock" size={58} label="Cipher celebrates the PBQ reveal"/><span><small>New PBQ revealed</small><strong>{lastUnlockedPbq.title||lastUnlockedPbq.id}</strong><button type="button" onClick={()=>onNavigate("pbq")}>Open PBQ Bank →</button></span></div>}
+            {isPro&&<div className="cipher-pro-zero"><Sparkles size={13}/> Pro has every PBQ with zero coin requirements.</div>}
+          </article>
+          <article className="cipher-spend-card exam">
+            <div className="cipher-spend-top"><div className="cipher-spend-visual"><ClipboardCheck size={30}/></div><span className="cipher-spend-badge"><Clock3 size={13}/> One full exam</span></div>
+            <h3>Practice exam voucher</h3>
+            <p>Run one complete timed SecurePlus practice exam. Your voucher is used only when the exam begins.</p>
+            <div className="cipher-access-meter"><div className="cipher-access-label"><span>Your balance</span><strong>{isPro?"Included with Pro":examGap?`${examGap} more needed`:"Ready to exchange"}</strong></div><div className="cipher-access-track" role="progressbar" aria-label="Progress toward a practice exam voucher" aria-valuemin="0" aria-valuemax={CIPHER_COIN_COSTS.examPass} aria-valuenow={Math.min(balance,CIPHER_COIN_COSTS.examPass)}><span style={{width:`${examProgress}%`}}/></div></div>
+            <div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={25}/>{CIPHER_COIN_COSTS.examPass} coins</span><button className="btn btn-primary" type="button" onClick={onBuyExamPass} disabled={busy||isPro||balance<CIPHER_COIN_COSTS.examPass}>{isPro?"Included with Pro":examGap?`${examGap} more needed`:"Get Exam Voucher"}</button></div>
+            {isPro&&<div className="cipher-pro-zero"><Sparkles size={13}/> Pro runs unlimited practice exams without spending coins.</div>}
+          </article>
+        </div>
+      </section>
+
+      <section className="cipher-vault-section" id="cipher-earn">
+        <div className="cipher-vault-section-head"><div><span className="cipher-section-eyebrow">Build your balance</span><h2>Ways to earn</h2></div><p>Rewards favour steady learning over endless grinding. Every activity has a clear limit, so the system stays fair.</p></div>
         <div className="cipher-earn-grid">
-          {earnMethods.map(({title,body,reward,color,Icon})=>(
+          {earnMethods.map(({title,body,reward,color,Icon,action,actionLabel})=>(
             <article className="cipher-earn-card" style={{"--earn-color":color}} key={title}>
-              <span><Icon size={18}/></span><b>{reward}</b><strong>{title}</strong><p>{body}</p>
+              <span><Icon size={20}/></span><b>{reward}</b><strong>{title}</strong><p>{body}</p>
+              {action&&<button className="cipher-earn-action" type="button" onClick={()=>action==="refresh"?onRefresh():onNavigate(action)} disabled={busy&&action==="refresh"}>{actionLabel}<ChevronRight size={13}/></button>}
             </article>
           ))}
         </div>
       </section>
 
       <section className="cipher-vault-section">
-        <div className="cipher-vault-section-head"><h2>Exchange your coins</h2><p>PBQ reveals are permanent. Practice exam vouchers are single-use inside SecurePlus—not official CompTIA exam vouchers.</p></div>
-        <div className="cipher-spend-grid">
-          <article className="cipher-spend-card">
-            <div className="cipher-spend-visual"><Puzzle size={30} color="#288c8a"/></div>
-            <div><h3>Mystery PBQ reveal</h3><p>Your first three reveals follow the shared p014 → p018 → p033 starter path. Every reveal after that is randomly selected from PBQs you do not own.</p><div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={24}/>{CIPHER_COIN_COSTS.pbq} coins</span><button className="btn btn-primary" type="button" onClick={revealPbq} disabled={busy||isPro||balance<CIPHER_COIN_COSTS.pbq||remainingPbqCount===0}>{isPro?"Included with Pro":remainingPbqCount===0?"All PBQs unlocked":balance<CIPHER_COIN_COSTS.pbq?`${CIPHER_COIN_COSTS.pbq-balance} more needed`:busy?"Revealing...":"Reveal a PBQ"}</button></div>{lastUnlockedPbq&&<div className="cipher-reveal-result"><MascotAnimation animation="unlock" size={58} label="Cipher celebrates the PBQ reveal"/><span><small>New PBQ revealed</small><strong>{lastUnlockedPbq.title||lastUnlockedPbq.id}</strong><button type="button" onClick={()=>onNavigate("pbq")}>Open PBQ Bank →</button></span></div>}{isPro&&<div className="cipher-pro-zero"><Sparkles size={13}/> Pro has every PBQ with zero coin requirements.</div>}</div>
-          </article>
-          <article className="cipher-spend-card">
-            <div className="cipher-spend-visual"><ClipboardCheck size={30} color="#7766c6"/></div>
-            <div><h3>Practice exam voucher</h3><p>Run one complete timed SecurePlus practice exam. The voucher is used only when the exam begins.</p><div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={24}/>{CIPHER_COIN_COSTS.examPass} coins</span><button className="btn btn-primary" type="button" onClick={onBuyExamPass} disabled={busy||isPro||balance<CIPHER_COIN_COSTS.examPass}>{isPro?"Included with Pro":balance<CIPHER_COIN_COSTS.examPass?`${CIPHER_COIN_COSTS.examPass-balance} more needed`:"Get Exam Voucher"}</button></div>{isPro&&<div className="cipher-pro-zero"><Sparkles size={13}/> Pro runs unlimited practice exams without spending coins.</div>}</div>
-          </article>
-        </div>
-      </section>
-
-      <section className="cipher-vault-section">
-        <div className="cipher-vault-section-head"><h2>Bring a friend</h2><p>Referrals give both learners 100 Cipher Coins, with no limit on how many new friends you can invite.</p></div>
+        <div className="cipher-vault-section-head"><div><span className="cipher-section-eyebrow">Earn together</span><h2>Bring a friend</h2></div><p>Referrals give both learners 100 Cipher Coins, with no limit on how many new friends you can invite.</p></div>
         <ReferralUpgradeBanner user={user} t={t} onFindOutMore={()=>onNavigate("referrals")}/>
       </section>
 
-      <section className="cipher-vault-section">
-        <div className="cipher-vault-section-head"><h2>Recent activity</h2><p>Your ledger shows exactly why coins entered or left your wallet.</p></div>
+      <section className="cipher-vault-section" id="cipher-activity">
+        <div className="cipher-vault-section-head"><div><span className="cipher-section-eyebrow">Transparent by design</span><h2>Recent activity</h2></div><p>Your ledger shows exactly why coins entered or left your wallet.</p></div>
         <div className="cipher-ledger">
           {transactions.length?transactions.slice(0,12).map(transaction=>(
             <div className="cipher-ledger-row" key={transaction.id||transaction.reference_key}>
@@ -23931,7 +24044,7 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
               <span><strong>{cipherTransactionLabel(transaction.event_type)}</strong><small>{transaction.created_at?new Date(transaction.created_at).toLocaleString():"Recorded securely"} · Balance {Number(transaction.balance_after||0)}</small></span>
               <span className={`cipher-ledger-amount ${Number(transaction.amount)>=0?"positive":"negative"}`}>{Number(transaction.amount)>=0?"+":""}{Number(transaction.amount)||0}</span>
             </div>
-          )):<div className="cipher-empty-ledger">Your first daily check-in will appear here. Return each day to build a steady balance.</div>}
+          )):<div className="cipher-empty-ledger">Your first daily check-in will appear here. Return each day to build a steady balance.<div><button className="btn btn-outline" type="button" style={{marginTop:12,fontSize:12}} onClick={()=>onNavigate("daily")}>Open Daily Challenge</button></div></div>}
         </div>
       </section>
     </div>
@@ -27625,13 +27738,14 @@ function PasswordUpdateView({t,onDone}) {
 // ═══════════════════════════════════════════════════════════════
 export default function App() {
   const devDeepDivePreview=Boolean(import.meta.env.DEV&&new URLSearchParams(window.location.search).get("preview")==="deep-dives");
+  const devCoinPreview=Boolean(import.meta.env.DEV&&new URLSearchParams(window.location.search).get("preview")==="coins");
   const [darkMode,setDarkMode]=useState(false);
   const [sidebarHidden,setSidebarHidden]=useState(()=>{
     try{return window.localStorage?.getItem("secureplus-sidebar-hidden")==="true";}catch{return false;}
   });
   const [user,setUser]=useState(null);
   const [loading,setLoading]=useState(true);
-  const [view,setView]=useState(()=>devDeepDivePreview?"deep-dives":"dashboard");
+  const [view,setView]=useState(()=>devDeepDivePreview?"deep-dives":devCoinPreview?"coins":"dashboard");
   const [attempts,setAttempts]=useState([]);
   const [starred,setStarred]=useState([]);
   const [pbqQ,setPbqQ]=useState(null);
@@ -28438,15 +28552,28 @@ export default function App() {
 
   if(!user){
     const guestUser={name:"Guest",email:"guest@secureplus.local",tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"guest",loginMethod:"guest"};
+    const devCoinWallet=normalizeCipherWallet({
+      balance:150,
+      lifetimeEarned:250,
+      examPasses:1,
+      unlockedPbqIds:["p014"],
+      checkInStreak:6,
+      transactions:[
+        {id:"preview-check-in",amount:5,balance_after:150,event_type:"daily_check_in",created_at:new Date().toISOString()},
+        {id:"preview-mcq",amount:15,balance_after:145,event_type:"perfect_mcq",created_at:new Date(Date.now()-86400000).toISOString()},
+        {id:"preview-pbq",amount:-50,balance_after:130,event_type:"pbq_unlock",created_at:new Date(Date.now()-172800000).toISOString()},
+      ],
+    });
     const goToSignup=()=>{setAuthStartMode("signup");setView("auth");};
     const goToLogin=()=>{setAuthStartMode("login");setView("auth");};
-    const allowedGuestViews=new Set(["dashboard","mcq","daily","objectives",...(devDeepDivePreview?["deep-dives"]:[])]);
+    const allowedGuestViews=new Set(["dashboard","mcq","daily","objectives",...(devDeepDivePreview?["deep-dives"]:[]),...(devCoinPreview?["coins"]:[])]);
     const guestNavItems=[
       {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},
       {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
       {id:"pbq",icon:"pbq",label:"PBQ Simulator",mobileLabel:"PBQ"},
       {id:"exam",icon:"exam",label:"Exam Mode",mobileLabel:"Exam"},
       {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
+      ...(devCoinPreview?[{id:"coins",icon:"coins",label:"Cipher Coins",mobileLabel:"Coins"}]:[]),
       {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
       ...(devDeepDivePreview?[{id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"}]:[]),
     ];
@@ -28529,6 +28656,7 @@ export default function App() {
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
             {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t}/>}
+            {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
             )}
