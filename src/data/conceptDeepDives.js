@@ -853,3 +853,5 @@ export const CONCEPT_DEEP_DIVE_CATEGORIES = [
 export const CONCEPT_DEEP_DIVE_TOPIC_COUNT = new Set(
   CONCEPT_DEEP_DIVES.flatMap(dive => dive.aliases),
 ).size;
+
+export const CONCEPT_DEEP_DIVE_REVIEWED_AT = "2026-07-18";

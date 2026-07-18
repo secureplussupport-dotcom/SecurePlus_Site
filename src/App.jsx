@@ -64,8 +64,14 @@ import { getSupabaseAccessToken, isSupabaseConfigured, supabase } from "./lib/su
 import {
   CONCEPT_DEEP_DIVES,
   CONCEPT_DEEP_DIVE_CATEGORIES,
+  CONCEPT_DEEP_DIVE_REVIEWED_AT,
   CONCEPT_DEEP_DIVE_TOPIC_COUNT,
 } from "./data/conceptDeepDives.js";
+import {
+  buildDeepDiveDeck,
+  buildDeepDiveFlashcards,
+  formatDeepDiveReviewDate,
+} from "./lib/deepDiveStudy.js";
 
 // ═══════════════════════════════════════════════════════════════
 // PERSISTENT STORAGE
@@ -17493,7 +17499,88 @@ body{background:
 .deep-dive-sources a{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px;border:1px solid var(--deep-border);border-radius:11px;background:var(--deep-surface);color:var(--deep-accent);font-size:10px;font-weight:850;text-decoration:none;}
 .deep-dive-sources a:hover{text-decoration:underline;}
 .deep-dive-sources a svg{flex:0 0 auto;}
-.deep-dive-reader-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;padding-top:4px;}
+.deep-dive-card{cursor:default;}
+.deep-dive-card-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px;}
+.deep-dive-card-actions button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:39px;padding:8px;border:1px solid var(--deep-border);border-radius:11px;background:var(--deep-surface);color:var(--deep-accent);font:inherit;font-size:11px;font-weight:900;cursor:pointer;transition:.18s ease;}
+.deep-dive-card-actions button:first-child{border-color:color-mix(in srgb,var(--chapter-color) 35%,var(--deep-border));background:color-mix(in srgb,var(--chapter-color) 9%,var(--deep-surface));color:color-mix(in srgb,var(--chapter-color) 85%,var(--deep-text));}
+.deep-dive-card-actions button:hover{transform:translateY(-1px);border-color:var(--deep-accent);background:color-mix(in srgb,var(--deep-accent) 9%,var(--deep-surface));}
+.deep-dive-card-actions button:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 26%,transparent);outline-offset:2px;}
+.deep-dives-card-progress{display:flex;align-items:center;gap:8px;margin-top:13px;padding-top:12px;border-top:1px solid var(--deep-border);}
+.deep-dives-card-progress svg{flex:0 0 auto;color:var(--deep-accent);}
+.deep-dives-card-progress span{font-size:10px;line-height:1.45;}
+.deep-dives-card-progress strong{font-size:13px;}
+.deep-dive-objective-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:15px;}
+.deep-dive-objective-strip>span{display:flex;align-items:flex-start;gap:8px;padding:11px 12px;border:1px solid var(--deep-border);border-radius:13px;background:color-mix(in srgb,var(--deep-panel) 78%,transparent);font-size:11px;line-height:1.55;color:var(--deep-muted);}
+.deep-dive-objective-strip strong{display:grid;place-items:center;width:21px;height:21px;flex:0 0 auto;border-radius:7px;background:color-mix(in srgb,var(--deep-accent) 13%,var(--deep-surface));color:var(--deep-accent);font-size:9px;}
+.deep-dive-study-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0;}
+.deep-dive-study-modes>button{display:flex;align-items:center;gap:11px;padding:14px 16px;border:1px solid var(--deep-border);border-radius:15px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;text-align:left;cursor:pointer;transition:.18s ease;}
+.deep-dive-study-modes>button>svg{flex:0 0 auto;}
+.deep-dive-study-modes>button>span{display:grid;gap:2px;}
+.deep-dive-study-modes strong{font-size:13px;color:var(--deep-text);}
+.deep-dive-study-modes small{font-size:10px;color:var(--deep-muted);}
+.deep-dive-study-modes>button:hover,.deep-dive-study-modes>button.active{border-color:color-mix(in srgb,var(--deep-accent) 48%,var(--deep-border));background:color-mix(in srgb,var(--deep-accent) 9%,var(--deep-surface));color:var(--deep-accent);box-shadow:0 8px 22px rgba(40,31,22,.05);}
+.deep-dive-study-modes>button:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 28%,transparent);outline-offset:2px;}
+.deep-dive-lesson-progress-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--deep-muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;}
+.deep-dive-lesson-progress-head strong{color:var(--deep-text);font-size:12px;}
+.deep-dive-lesson-progress{height:8px;margin:10px 0 14px;border-radius:999px;background:var(--deep-border);overflow:hidden;}
+.deep-dive-lesson-progress>span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--deep-green),var(--deep-accent));transition:width .28s ease;}
+.deep-dive-learning-card nav{display:grid;gap:5px;margin-bottom:14px;}
+.deep-dive-learning-card nav button{display:grid;grid-template-columns:24px minmax(0,1fr);gap:8px;align-items:center;width:100%;padding:8px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--deep-muted);font:inherit;font-size:10px;font-weight:800;line-height:1.35;text-align:left;cursor:pointer;}
+.deep-dive-learning-card nav button>span{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--deep-panel);color:var(--deep-muted);font-size:8px;font-weight:950;}
+.deep-dive-learning-card nav button:hover,.deep-dive-learning-card nav button.active{border-color:color-mix(in srgb,var(--deep-accent) 30%,var(--deep-border));background:color-mix(in srgb,var(--deep-accent) 8%,var(--deep-surface));color:var(--deep-text);}
+.deep-dive-learning-card nav button.active>span{background:var(--deep-accent);color:#fff;}
+.deep-dive-guided-panel{padding:24px;border:1px solid var(--deep-border);border-radius:19px;background:var(--deep-surface);box-shadow:0 9px 28px rgba(40,31,22,.05);}
+.deep-dive-guided-heading>span{display:block;margin-bottom:7px;color:var(--deep-accent);font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;}
+.deep-dive-guided-heading h2{margin:0;font-size:clamp(21px,3vw,28px);line-height:1.2;letter-spacing:-.025em;color:var(--deep-text);}
+.deep-dive-concept-bites{display:grid;gap:10px;margin-top:18px;}
+.deep-dive-concept-bites>div{padding:16px;border:1px solid var(--deep-border);border-radius:15px;background:var(--deep-panel);}
+.deep-dive-concept-bites>div>span{display:flex;align-items:center;gap:6px;margin-bottom:8px;color:var(--deep-green);font-size:10px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;}
+.deep-dive-concept-bites p{margin:0;color:var(--deep-text);font-size:15px;line-height:1.72;}
+.deep-dive-guided-panel>.deep-dive-table-wrap{margin-top:18px;}
+.deep-dive-guided-panel .deep-dive-table-wrap th,.deep-dive-guided-panel .deep-dive-table-wrap td{font-size:12px;line-height:1.6;}
+.deep-dive-guided-panel .deep-dive-table-wrap th{font-size:10px;}
+.deep-dive-panel-intro{margin:0 0 14px;color:var(--deep-muted);font-size:13px;line-height:1.65;}
+.deep-dive-guided-panel .deep-dive-trap-list p{font-size:13px;line-height:1.65;color:var(--deep-text);}
+.deep-dive-guided-panel.deep-dive-check{border-color:color-mix(in srgb,var(--deep-accent) 30%,var(--deep-border));}
+.deep-dive-guided-panel .deep-dive-check-content{padding:4px 0 0;}
+.deep-dive-guided-panel .deep-dive-check-content>p{font-size:17px;line-height:1.65;margin-bottom:18px;}
+.deep-dive-model-answer{font-size:14px!important;color:var(--deep-text)!important;}
+.deep-dive-step-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.deep-dive-step-actions .btn:disabled{opacity:.42;cursor:not-allowed;transform:none;}
+.deep-dive-sources-disclosure{border:1px solid var(--deep-border);border-radius:15px;background:var(--deep-surface);overflow:hidden;}
+.deep-dive-sources-disclosure>summary{display:flex;align-items:center;gap:8px;padding:14px 16px;list-style:none;color:var(--deep-muted);font-size:11px;font-weight:900;cursor:pointer;}
+.deep-dive-sources-disclosure>summary::-webkit-details-marker{display:none;}
+.deep-dive-sources-disclosure>summary>svg:first-child{color:var(--deep-green);}
+.deep-dive-sources-disclosure>summary>svg:last-child{margin-left:auto;transition:transform .2s;}
+.deep-dive-sources-disclosure[open]>summary>svg:last-child{transform:rotate(90deg);}
+.deep-dive-sources-disclosure .deep-dive-sources{border-width:1px 0 0;border-radius:0;}
+.deep-dive-flashcard-studio{max-width:850px;margin:0 auto;padding:25px;border:1px solid var(--deep-border);border-radius:22px;background:radial-gradient(circle at 90% 5%,color-mix(in srgb,var(--deep-amber) 15%,transparent),transparent 30%),var(--deep-surface);box-shadow:0 14px 40px rgba(40,31,22,.07);}
+.deep-dive-flashcard-head{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;margin-bottom:18px;}
+.deep-dive-flashcard-head h2{margin:0 0 5px;font-size:24px;color:var(--deep-text);}
+.deep-dive-flashcard-head p{max-width:580px;margin:0;color:var(--deep-muted);font-size:12px;line-height:1.65;}
+.deep-dive-flashcard-score{display:flex;align-items:center;gap:8px;flex:0 0 auto;padding:11px 13px;border:1px solid color-mix(in srgb,var(--deep-green) 30%,var(--deep-border));border-radius:13px;background:color-mix(in srgb,var(--deep-green) 7%,var(--deep-surface));}
+.deep-dive-flashcard-score strong{font-size:25px;line-height:1;color:var(--deep-green);}
+.deep-dive-flashcard-score span{font-size:9px;line-height:1.35;font-weight:850;color:var(--deep-muted);}
+.deep-dive-flashcard-toolbar{display:grid;grid-template-columns:auto minmax(100px,1fr) auto;align-items:center;gap:12px;margin-bottom:14px;}
+.deep-dive-flashcard-toolbar>span{font-size:10px;font-weight:900;color:var(--deep-muted);}
+.deep-dive-flashcard-toolbar .deep-dives-progress-track{margin:0;}
+.deep-dive-flashcard-toolbar .btn{min-height:34px;padding:7px 10px;font-size:10px;}
+.deep-dive-flashcard{display:block;width:100%;height:390px;padding:0;border:0;border-radius:23px;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;perspective:1400px;}
+.deep-dive-flashcard:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 33%,transparent);outline-offset:4px;}
+.deep-dive-flashcard-inner{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.8,.2,1);}
+.deep-dive-flashcard.flipped .deep-dive-flashcard-inner{transform:rotateY(180deg);}
+.deep-dive-flashcard-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:42px;border:1px solid color-mix(in srgb,var(--deep-accent) 27%,var(--deep-border));border-radius:23px;background:linear-gradient(145deg,color-mix(in srgb,var(--deep-accent) 7%,var(--deep-surface)),var(--deep-surface));box-shadow:0 17px 40px rgba(40,31,22,.1);backface-visibility:hidden;-webkit-backface-visibility:hidden;text-align:center;overflow:auto;}
+.deep-dive-flashcard-back{transform:rotateY(180deg);border-color:color-mix(in srgb,var(--deep-green) 36%,var(--deep-border));background:linear-gradient(145deg,color-mix(in srgb,var(--deep-green) 10%,var(--deep-surface)),var(--deep-surface));}
+.deep-dive-flashcard-kind{position:absolute;left:19px;top:18px;display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:9px;background:color-mix(in srgb,var(--deep-accent) 10%,var(--deep-surface));color:var(--deep-accent);font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
+.deep-dive-flashcard-back .deep-dive-flashcard-kind{background:color-mix(in srgb,var(--deep-green) 11%,var(--deep-surface));color:var(--deep-green);}
+.deep-dive-flashcard-face small{max-width:620px;margin-bottom:13px;color:var(--deep-muted);font-size:11px;line-height:1.45;}
+.deep-dive-flashcard-face>strong{display:block;max-width:660px;color:var(--deep-text);font-size:clamp(20px,3vw,29px);font-weight:900;line-height:1.45;white-space:pre-line;}
+.deep-dive-flashcard-back>strong{font-size:clamp(17px,2.5vw,24px);font-weight:750;}
+.deep-dive-flashcard-hint{position:absolute;bottom:18px;color:var(--deep-muted);font-size:9px;font-weight:850;}
+.deep-dive-flashcard-actions{display:grid;grid-template-columns:auto minmax(210px,1fr) auto;align-items:center;gap:9px;margin-top:14px;}
+.deep-dive-flashcard-actions>.btn:nth-child(2){justify-self:center;}
+.deep-dive-flashcard-rating{display:flex;justify-content:center;gap:8px;}
+.deep-dive-reader-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:18px;padding-top:4px;}
 @media (max-width: 1040px){
   .deep-dives-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
 }
@@ -17501,10 +17588,13 @@ body{background:
   .deep-dives-page,.deep-dive-reader{padding:22px 16px 96px;}
   .deep-dives-hero{grid-template-columns:minmax(0,1fr);padding:24px;border-radius:23px;}
   .deep-dives-progress-card{max-width:420px;}
+  .deep-dive-objective-strip{grid-template-columns:minmax(0,1fr);}
   .deep-dive-reader-layout{grid-template-columns:minmax(0,1fr);}
   .deep-dive-learning-card{position:static;}
-  .deep-dive-learning-card ul{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .deep-dive-learning-card nav{display:flex;padding-bottom:4px;overflow-x:auto;scrollbar-width:thin;}
+  .deep-dive-learning-card nav button{flex:0 0 min(250px,75vw);}
   .deep-dive-sources>div:last-child{grid-template-columns:minmax(0,1fr);}
+  .deep-dive-flashcard-studio{padding:19px;}
 }
 @media (max-width: 560px){
   .deep-dives-grid{grid-template-columns:minmax(0,1fr);}
@@ -17513,9 +17603,26 @@ body{background:
   .deep-dive-article-hero{padding:25px 20px;border-radius:22px;}
   .deep-dive-article-hero h1{font-size:33px;}
   .deep-dive-article-subtitle{font-size:14px;}
-  .deep-dive-learning-card ul{grid-template-columns:minmax(0,1fr);}
   .deep-dive-reader-topbar{align-items:flex-start;}
   .deep-dive-reader-topbar .deep-dive-preview-badge{font-size:9px;}
+  .deep-dive-study-modes{grid-template-columns:minmax(0,1fr);}
+  .deep-dive-guided-panel{padding:19px 16px;}
+  .deep-dive-concept-bites p{font-size:14px;line-height:1.7;}
+  .deep-dive-step-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+  .deep-dive-step-actions .btn{justify-content:center;}
+  .deep-dive-flashcard-head{display:block;}
+  .deep-dive-flashcard-score{width:max-content;margin-top:13px;}
+  .deep-dive-flashcard-toolbar{grid-template-columns:auto minmax(70px,1fr);}
+  .deep-dive-flashcard-toolbar .btn{grid-column:1/-1;justify-self:end;}
+  .deep-dive-flashcard{height:420px;}
+  .deep-dive-flashcard-face{padding:55px 24px 48px;}
+  .deep-dive-flashcard-face>strong{font-size:20px;}
+  .deep-dive-flashcard-back>strong{font-size:17px;}
+  .deep-dive-flashcard-actions{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .deep-dive-flashcard-actions>.btn{justify-content:center;}
+  .deep-dive-flashcard-actions>.btn:nth-child(2){justify-self:stretch;}
+  .deep-dive-flashcard-rating{grid-column:1/-1;grid-row:1;}
+  .deep-dive-flashcard-rating .btn{flex:1;justify-content:center;}
   .deep-dive-section>summary,.deep-dive-check>summary{padding:17px 15px;font-size:13px;}
   .deep-dive-section-content{padding:17px 15px;}
   .deep-dive-table-wrap{border:0;overflow:visible;}
@@ -26518,14 +26625,42 @@ function ConceptDeepDivesPage({t}) {
   const [query,setQuery]=useState("");
   const [category,setCategory]=useState("All topics");
   const [selectedId,setSelectedId]=useState(null);
+  const [studyMode,setStudyMode]=useState("learn");
+  const [lessonStep,setLessonStep]=useState(0);
+  const [isAnswerVisible,setIsAnswerVisible]=useState(false);
+  const [cardIndex,setCardIndex]=useState(0);
+  const [cardOrder,setCardOrder]=useState([]);
+  const [isCardFlipped,setIsCardFlipped]=useState(false);
   const [completedIds,setCompletedIds]=useState(()=>{
     try{
       const stored=JSON.parse(window.localStorage?.getItem("secureplus-deep-dives-read")||"[]");
       return Array.isArray(stored)?stored.filter(id=>CONCEPT_DEEP_DIVES.some(dive=>dive.id===id)):[];
     }catch{return [];}
   });
+  const [masteredCardIds,setMasteredCardIds]=useState(()=>{
+    try{
+      const stored=JSON.parse(window.localStorage?.getItem("secureplus-deep-dives-mastered")||"[]");
+      return Array.isArray(stored)?stored:[];
+    }catch{return [];}
+  });
 
   const selectedDive=CONCEPT_DEEP_DIVES.find(dive=>dive.id===selectedId)||null;
+  const allFlashcards=useMemo(()=>buildDeepDiveDeck(CONCEPT_DEEP_DIVES),[]);
+  const selectedFlashcards=useMemo(()=>buildDeepDiveFlashcards(selectedDive),[selectedDive]);
+  const orderedFlashcards=useMemo(()=>{
+    if(!selectedFlashcards.length)return [];
+    const byId=new Map(selectedFlashcards.map(item=>[item.id,item]));
+    const ordered=cardOrder.map(id=>byId.get(id)).filter(Boolean);
+    const included=new Set(ordered.map(item=>item.id));
+    return [...ordered,...selectedFlashcards.filter(item=>!included.has(item.id))];
+  },[selectedFlashcards,cardOrder]);
+  const activeFlashcard=orderedFlashcards[cardIndex]||orderedFlashcards[0]||null;
+  const lessonSteps=useMemo(()=>selectedDive?[
+    ...selectedDive.sections.map((section,index)=>({kind:"section",title:section.title,index})),
+    {kind:"traps",title:"Exam traps"},
+    {kind:"check",title:"Quick check"},
+  ]:[],[selectedDive]);
+  const activeLessonStep=lessonSteps[lessonStep]||lessonSteps[0]||null;
   const filteredDives=useMemo(()=>{
     const needle=query.trim().toLowerCase();
     return CONCEPT_DEEP_DIVES.filter(dive=>{
@@ -26535,11 +26670,17 @@ function ConceptDeepDivesPage({t}) {
     }).sort((a,b)=>a.chapter-b.chapter||a.title.localeCompare(b.title));
   },[query,category]);
 
-  const openDive=id=>{
+  const openDive=(id,mode="learn")=>{
     setSelectedId(id);
+    setStudyMode(mode);
+    setLessonStep(0);
+    setIsAnswerVisible(false);
+    setCardIndex(0);
+    setCardOrder([]);
+    setIsCardFlipped(false);
     const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"}));
-    capture("concept_deep_dive_opened",{deep_dive_id:id,preview:true});
+    capture("concept_deep_dive_opened",{deep_dive_id:id,study_mode:mode,preview:true});
   };
   const closeDive=()=>{
     setSelectedId(null);
@@ -26551,9 +26692,44 @@ function ConceptDeepDivesPage({t}) {
     try{window.localStorage?.setItem("secureplus-deep-dives-read",JSON.stringify(next));}catch{}
     capture("concept_deep_dive_completion_toggled",{deep_dive_id:id,completed:next.includes(id),preview:true});
   };
+  const updateMasteredCards=(cardId,mastered)=>{
+    const next=mastered
+      ?Array.from(new Set([...masteredCardIds,cardId]))
+      :masteredCardIds.filter(id=>id!==cardId);
+    setMasteredCardIds(next);
+    try{window.localStorage?.setItem("secureplus-deep-dives-mastered",JSON.stringify(next));}catch{}
+    capture("concept_deep_dive_flashcard_rated",{deep_dive_id:selectedDive?.id,card_id:cardId,mastered,preview:true});
+  };
+  const moveFlashcard=direction=>{
+    if(!orderedFlashcards.length)return;
+    setCardIndex(current=>(current+direction+orderedFlashcards.length)%orderedFlashcards.length);
+    setIsCardFlipped(false);
+  };
+  const rateFlashcard=mastered=>{
+    if(!activeFlashcard)return;
+    updateMasteredCards(activeFlashcard.id,mastered);
+    moveFlashcard(1);
+  };
+  const shuffleFlashcards=()=>{
+    const shuffled=[...selectedFlashcards.map(item=>item.id)];
+    for(let index=shuffled.length-1;index>0;index-=1){
+      const swapIndex=Math.floor(Math.random()*(index+1));
+      [shuffled[index],shuffled[swapIndex]]=[shuffled[swapIndex],shuffled[index]];
+    }
+    setCardOrder(shuffled);
+    setCardIndex(0);
+    setIsCardFlipped(false);
+  };
+  const changeLessonStep=nextStep=>{
+    setLessonStep(Math.max(0,Math.min(nextStep,lessonSteps.length-1)));
+    setIsAnswerVisible(false);
+  };
 
   if(selectedDive){
     const isComplete=completedIds.includes(selectedDive.id);
+    const masteredInLesson=selectedFlashcards.filter(item=>masteredCardIds.includes(item.id)).length;
+    const lessonProgress=lessonSteps.length?Math.round(((lessonStep+1)/lessonSteps.length)*100):0;
+    const activeSection=activeLessonStep?.kind==="section"?selectedDive.sections[activeLessonStep.index]:null;
     return(
       <article className="deep-dive-reader" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
         <div className="deep-dive-reader-topbar">
@@ -26568,78 +26744,149 @@ function ConceptDeepDivesPage({t}) {
           <div className="deep-dive-article-meta">
             <span><Clock3 size={14}/>{selectedDive.minutes} min</span>
             <span><Layers3 size={14}/>{selectedDive.difficulty}</span>
-            <span><BadgeCheck size={14}/>Reviewed 18 Jul 2026</span>
+            <span><BadgeCheck size={14}/>Reviewed {formatDeepDiveReviewDate(CONCEPT_DEEP_DIVE_REVIEWED_AT)}</span>
           </div>
           <div className="deep-dive-summary"><Lightbulb size={19}/><p>{selectedDive.summary}</p></div>
+          <div className="deep-dive-objective-strip" aria-label="Learning goals">
+            {selectedDive.objectives.map((objective,index)=><span key={objective}><strong>{index+1}</strong>{objective}</span>)}
+          </div>
         </header>
 
-        <div className="deep-dive-reader-layout">
-          <aside className="deep-dive-learning-card">
-            <span className="deep-dive-eyebrow">After this lesson</span>
-            <h2>You should be able to…</h2>
-            <ul>
-              {selectedDive.objectives.map(objective=><li key={objective}><CheckCircle2 size={16}/><span>{objective}</span></li>)}
-            </ul>
-            <button className={`btn ${isComplete?"btn-ghost":"btn-primary"}`} type="button" onClick={()=>toggleComplete(selectedDive.id)}>
-              {isComplete?<><CheckCircle2 size={16}/>Marked as read</>:<><BookOpenCheck size={16}/>Mark lesson as read</>}
-            </button>
-            <small>Preview progress is saved only on this device.</small>
-          </aside>
+        <div className="deep-dive-study-modes" role="tablist" aria-label="Choose a study mode">
+          <button type="button" role="tab" aria-selected={studyMode==="learn"} className={studyMode==="learn"?"active":""} onClick={()=>{setStudyMode("learn");setIsCardFlipped(false);}}>
+            <BookOpenCheck size={17}/><span><strong>Guided lesson</strong><small>One idea at a time</small></span>
+          </button>
+          <button type="button" role="tab" aria-selected={studyMode==="cards"} className={studyMode==="cards"?"active":""} onClick={()=>{setStudyMode("cards");setIsCardFlipped(false);}}>
+            <Brain size={17}/><span><strong>Flashcards</strong><small>{masteredInLesson}/{selectedFlashcards.length} mastered</small></span>
+          </button>
+        </div>
 
-          <div className="deep-dive-article-body">
-            {selectedDive.sections.map((section,index)=>(
-              <details key={section.title} className="deep-dive-section" open={index===0}>
-                <summary><span>{String(index+1).padStart(2,"0")}</span>{section.title}<ChevronRight size={18}/></summary>
-                <div className="deep-dive-section-content">
-                  {section.body?.map(paragraph=><p key={paragraph}>{paragraph}</p>)}
-                  {section.table&&(
+        {studyMode==="learn"?(
+          <div className="deep-dive-reader-layout">
+            <aside className="deep-dive-learning-card">
+              <div className="deep-dive-lesson-progress-head"><span>Lesson path</span><strong>{lessonStep+1}/{lessonSteps.length}</strong></div>
+              <div className="deep-dive-lesson-progress" aria-label={`${lessonProgress}% through this lesson`}><span style={{width:`${lessonProgress}%`}}/></div>
+              <nav aria-label="Lesson sections">
+                {lessonSteps.map((step,index)=><button key={`${step.kind}-${step.title}`} type="button" className={lessonStep===index?"active":""} aria-current={lessonStep===index?"step":undefined} onClick={()=>changeLessonStep(index)}><span>{index+1}</span>{step.title}</button>)}
+              </nav>
+              <button className={`btn ${isComplete?"btn-ghost":"btn-primary"}`} type="button" onClick={()=>toggleComplete(selectedDive.id)}>
+                {isComplete?<><CheckCircle2 size={16}/>Lesson complete</>:<><BookOpenCheck size={16}/>Mark complete</>}
+              </button>
+              <small>Lesson and card progress stays on this device.</small>
+            </aside>
+
+            <div className="deep-dive-article-body">
+              {activeSection&&(
+                <section className="deep-dive-guided-panel">
+                  <div className="deep-dive-guided-heading">
+                    <span>Concept {activeLessonStep.index+1} of {selectedDive.sections.length}</span>
+                    <h2>{activeSection.title}</h2>
+                  </div>
+                  {activeSection.body?.length>0&&<div className="deep-dive-concept-bites">
+                    {activeSection.body.map((paragraph,index)=><div key={paragraph}><span><Lightbulb size={14}/>{index===0?"Key idea":"Build on it"}</span><p>{paragraph}</p></div>)}
+                  </div>}
+                  {activeSection.table&&(
                     <div className="deep-dive-table-wrap">
                       <table>
-                        <thead><tr>{section.table.columns.map(column=><th key={column}>{column}</th>)}</tr></thead>
-                        <tbody>{section.table.rows.map((row,rowIndex)=><tr key={rowIndex}>{row.map((cell,cellIndex)=><td key={`${rowIndex}-${cellIndex}`} data-label={section.table.columns[cellIndex]}>{cell}</td>)}</tr>)}</tbody>
+                        <thead><tr>{activeSection.table.columns.map(column=><th key={column}>{column}</th>)}</tr></thead>
+                        <tbody>{activeSection.table.rows.map((row,rowIndex)=><tr key={rowIndex}>{row.map((cell,cellIndex)=><td key={`${rowIndex}-${cellIndex}`} data-label={activeSection.table.columns[cellIndex]}>{cell}</td>)}</tr>)}</tbody>
                       </table>
                     </div>
                   )}
+                </section>
+              )}
+
+              {activeLessonStep?.kind==="traps"&&<section className="deep-dive-traps deep-dive-guided-panel">
+                <div className="deep-dive-block-title"><TriangleAlert size={19}/><div><span>Exam traps</span><h2>Almost-right answers to avoid</h2></div></div>
+                <p className="deep-dive-panel-intro">Read each distinction slowly. These are the details that often change the best answer.</p>
+                <div className="deep-dive-trap-list">
+                  {selectedDive.traps.map((trap,index)=><div key={trap}><span>{index+1}</span><p>{trap}</p></div>)}
                 </div>
+              </section>}
+
+              {activeLessonStep?.kind==="check"&&<section className="deep-dive-check deep-dive-guided-panel">
+                <div className="deep-dive-block-title"><Brain size={19}/><div><span>Quick check</span><h2>Explain it before you reveal it</h2></div></div>
+                <div className="deep-dive-check-content">
+                  <p>{selectedDive.check.question}</p>
+                  {!isAnswerVisible?(
+                    <button className="btn btn-primary" type="button" onClick={()=>setIsAnswerVisible(true)}><Lightbulb size={16}/>Reveal model answer</button>
+                  ):(
+                    <div className="deep-dive-model-answer"><strong>Model answer</strong>{selectedDive.check.answer}</div>
+                  )}
+                </div>
+              </section>}
+
+              <div className="deep-dive-step-actions">
+                <button className="btn btn-outline" type="button" disabled={lessonStep===0} onClick={()=>changeLessonStep(lessonStep-1)}><ArrowLeft size={16}/>Previous</button>
+                {lessonStep<lessonSteps.length-1?(
+                  <button className="btn btn-primary" type="button" onClick={()=>changeLessonStep(lessonStep+1)}>Next idea<ChevronRight size={16}/></button>
+                ):(
+                  <button className="btn btn-primary" type="button" onClick={()=>setStudyMode("cards")}><Brain size={16}/>Practise with cards</button>
+                )}
+              </div>
+
+              <details className="deep-dive-sources-disclosure">
+                <summary><ShieldCheck size={17}/>View vetted primary references<ChevronRight size={17}/></summary>
+                <section className="deep-dive-sources">
+                  <p>These links support the lesson's technical core. The teaching copy is original SecurePlus material written for concept mastery—not exam dumps.</p>
+                  <div>{selectedDive.sources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.label}<ChevronRight size={14}/></a>)}</div>
+                </section>
               </details>
-            ))}
-
-            <section className="deep-dive-traps">
-              <div className="deep-dive-block-title"><TriangleAlert size={19}/><div><span>Exam traps</span><h2>Almost-right answers to avoid</h2></div></div>
-              <div className="deep-dive-trap-list">
-                {selectedDive.traps.map((trap,index)=><div key={trap}><span>{index+1}</span><p>{trap}</p></div>)}
-              </div>
-            </section>
-
-            <details className="deep-dive-check">
-              <summary><span><Brain size={19}/>Check your understanding</span><ChevronRight size={18}/></summary>
-              <div className="deep-dive-check-content">
-                <p>{selectedDive.check.question}</p>
-                <div><strong>Model answer</strong>{selectedDive.check.answer}</div>
-              </div>
-            </details>
-
-            <section className="deep-dive-sources">
-              <div className="deep-dive-block-title"><ShieldCheck size={19}/><div><span>Quality notes</span><h2>Primary references</h2></div></div>
-              <p>These links support the lesson's technical core. The teaching copy is original SecurePlus material and is written for concept mastery—not memorising exam dumps.</p>
-              <div>
-                {selectedDive.sources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.label}<ChevronRight size={14}/></a>)}
-              </div>
-            </section>
-
-            <div className="deep-dive-reader-actions">
-              <button className={`btn ${isComplete?"btn-ghost":"btn-primary"}`} type="button" onClick={()=>toggleComplete(selectedDive.id)}>
-                {isComplete?<><CheckCircle2 size={16}/>Read</>:<><BookOpenCheck size={16}/>Mark as read</>}
-              </button>
-              <button className="btn btn-outline" type="button" onClick={closeDive}>Choose another topic</button>
             </div>
           </div>
+        ):(
+          <section className="deep-dive-flashcard-studio" aria-label={`${selectedDive.title} flashcards`}>
+            <div className="deep-dive-flashcard-head">
+              <div><span className="deep-dive-eyebrow">Active recall</span><h2>Say the answer, then flip</h2><p>Short sessions beat rereading. Mark a card “Got it” only when you can explain it without hints.</p></div>
+              <div className="deep-dive-flashcard-score"><strong>{masteredInLesson}</strong><span>of {selectedFlashcards.length}<br/>mastered</span></div>
+            </div>
+            <div className="deep-dive-flashcard-toolbar">
+              <span>Card {Math.min(cardIndex+1,orderedFlashcards.length)} of {orderedFlashcards.length}</span>
+              <div className="deep-dives-progress-track"><span style={{width:`${orderedFlashcards.length?((cardIndex+1)/orderedFlashcards.length)*100:0}%`}}/></div>
+              <button className="btn btn-ghost" type="button" onClick={shuffleFlashcards}><RotateCcw size={15}/>Shuffle</button>
+            </div>
+            {activeFlashcard&&<>
+              <button type="button" className={`deep-dive-flashcard ${isCardFlipped?"flipped":""}`} aria-label={isCardFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isCardFlipped} onClick={()=>setIsCardFlipped(value=>!value)}>
+                <span className="deep-dive-flashcard-inner">
+                  <span className="deep-dive-flashcard-face deep-dive-flashcard-front">
+                    <span className="deep-dive-flashcard-kind"><Brain size={15}/>{activeFlashcard.kind}</span>
+                    <small>{activeFlashcard.context}</small>
+                    <strong>{activeFlashcard.front}</strong>
+                    <span className="deep-dive-flashcard-hint">Tap to reveal answer</span>
+                  </span>
+                  <span className="deep-dive-flashcard-face deep-dive-flashcard-back">
+                    <span className="deep-dive-flashcard-kind"><Sparkles size={15}/>Answer</span>
+                    <strong>{activeFlashcard.back}</strong>
+                    <span className="deep-dive-flashcard-hint">Tap to see the question</span>
+                  </span>
+                </span>
+              </button>
+              <div className="deep-dive-flashcard-actions">
+                <button className="btn btn-outline" type="button" onClick={()=>moveFlashcard(-1)}><ArrowLeft size={16}/>Previous</button>
+                {!isCardFlipped?(
+                  <button className="btn btn-primary" type="button" onClick={()=>setIsCardFlipped(true)}><Lightbulb size={16}/>Reveal answer</button>
+                ):(
+                  <div className="deep-dive-flashcard-rating" aria-label="Rate this card">
+                    <button className="btn btn-outline" type="button" onClick={()=>rateFlashcard(false)}><RotateCcw size={16}/>Again</button>
+                    <button className="btn btn-primary" type="button" onClick={()=>rateFlashcard(true)}><CheckCircle2 size={16}/>Got it</button>
+                  </div>
+                )}
+                <button className="btn btn-outline" type="button" onClick={()=>moveFlashcard(1)}>Next<ChevronRight size={16}/></button>
+              </div>
+            </>}
+          </section>
+        )}
+
+        <div className="deep-dive-reader-actions">
+          <button className={`btn ${isComplete?"btn-ghost":"btn-primary"}`} type="button" onClick={()=>toggleComplete(selectedDive.id)}>{isComplete?<><CheckCircle2 size={16}/>Lesson complete</>:<><BookOpenCheck size={16}/>Mark complete</>}</button>
+          <button className="btn btn-outline" type="button" onClick={closeDive}>Choose another topic</button>
         </div>
       </article>
     );
   }
 
   const progressPercent=Math.round((completedIds.length/CONCEPT_DEEP_DIVES.length)*100);
+  const totalMastered=allFlashcards.filter(item=>masteredCardIds.includes(item.id)).length;
   return(
     <div className="deep-dives-page" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <section className="deep-dives-hero">
@@ -26648,15 +26895,16 @@ function ConceptDeepDivesPage({t}) {
           <div className="page-title-row"><NavGlyph type="deep-dives" active/><h1>Concept Deep Dives</h1></div>
           <p>Build the mental model behind difficult Security+ topics, then learn the small distinctions that change an exam answer.</p>
           <div className="deep-dives-proof">
-            <span><BadgeCheck size={15}/>{CONCEPT_DEEP_DIVES.length} editorially reviewed lessons</span>
+            <span><BadgeCheck size={15}/>{CONCEPT_DEEP_DIVES.length} vetted lessons</span>
             <span><Crosshair size={15}/>{CONCEPT_DEEP_DIVE_TOPIC_COUNT} searchable concepts</span>
-            <span><ShieldCheck size={15}/>Primary-source references</span>
+            <span><Brain size={15}/>{allFlashcards.length} built-in flashcards</span>
           </div>
         </div>
         <div className="deep-dives-progress-card">
           <div><span>Preview progress</span><strong>{completedIds.length}/{CONCEPT_DEEP_DIVES.length}</strong></div>
           <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
-          <p>{completedIds.length?"Continue reviewing the curriculum before release.":"Open a lesson and mark it read after your content review."}</p>
+          <p>{completedIds.length?"Continue with one short concept or switch to active recall.":"Choose a lesson, learn one idea at a time, then practise it."}</p>
+          <div className="deep-dives-card-progress"><Brain size={16}/><span><strong>{totalMastered}</strong> of {allFlashcards.length} flashcards mastered</span></div>
         </div>
       </section>
 
@@ -26681,8 +26929,10 @@ function ConceptDeepDivesPage({t}) {
         <div className="deep-dives-grid">
           {filteredDives.map((dive,index)=>{
             const isComplete=completedIds.includes(dive.id);
+            const diveCards=buildDeepDiveFlashcards(dive);
+            const masteredCount=diveCards.filter(item=>masteredCardIds.includes(item.id)).length;
             return(
-              <button className="deep-dive-card" type="button" key={dive.id} onClick={()=>openDive(dive.id)} style={{"--chapter-color":chapterColor(dive.chapter)}}>
+              <article className="deep-dive-card" key={dive.id} style={{"--chapter-color":chapterColor(dive.chapter)}}>
                 <div className="deep-dive-card-top">
                   <span className="deep-dive-card-index">{String(index+1).padStart(2,"0")}</span>
                   {isComplete&&<span className="deep-dive-card-read"><CheckCircle2 size={14}/>Read</span>}
@@ -26691,8 +26941,12 @@ function ConceptDeepDivesPage({t}) {
                 <span className="deep-dive-card-title">{dive.title}</span>
                 <p>{dive.subtitle}</p>
                 <div className="deep-dive-card-tags">{dive.aliases.slice(0,4).map(alias=><span key={alias}>{alias}</span>)}</div>
-                <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span>Open lesson <ChevronRight size={15}/></span></div>
-              </button>
+                <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span><Brain size={14}/>{masteredCount}/{diveCards.length} cards</span></div>
+                <div className="deep-dive-card-actions">
+                  <button type="button" onClick={()=>openDive(dive.id,"learn")}><BookOpenCheck size={15}/>Learn</button>
+                  <button type="button" onClick={()=>openDive(dive.id,"cards")}><Brain size={15}/>Flashcards</button>
+                </div>
+              </article>
             );
           })}
         </div>
@@ -27179,13 +27433,14 @@ function PasswordUpdateView({t,onDone}) {
 // APP ROOT
 // ═══════════════════════════════════════════════════════════════
 export default function App() {
+  const devDeepDivePreview=Boolean(import.meta.env.DEV&&new URLSearchParams(window.location.search).get("preview")==="deep-dives");
   const [darkMode,setDarkMode]=useState(false);
   const [sidebarHidden,setSidebarHidden]=useState(()=>{
     try{return window.localStorage?.getItem("secureplus-sidebar-hidden")==="true";}catch{return false;}
   });
   const [user,setUser]=useState(null);
   const [loading,setLoading]=useState(true);
-  const [view,setView]=useState("dashboard");
+  const [view,setView]=useState(()=>devDeepDivePreview?"deep-dives":"dashboard");
   const [attempts,setAttempts]=useState([]);
   const [starred,setStarred]=useState([]);
   const [pbqQ,setPbqQ]=useState(null);
@@ -27994,7 +28249,7 @@ export default function App() {
     const guestUser={name:"Guest",email:"guest@secureplus.local",tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"guest",loginMethod:"guest"};
     const goToSignup=()=>{setAuthStartMode("signup");setView("auth");};
     const goToLogin=()=>{setAuthStartMode("login");setView("auth");};
-    const allowedGuestViews=new Set(["dashboard","mcq","daily","objectives"]);
+    const allowedGuestViews=new Set(["dashboard","mcq","daily","objectives",...(devDeepDivePreview?["deep-dives"]:[])]);
     const guestNavItems=[
       {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},
       {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
@@ -28002,6 +28257,7 @@ export default function App() {
       {id:"exam",icon:"exam",label:"Exam Mode",mobileLabel:"Exam"},
       {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
       {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
+      ...(devDeepDivePreview?[{id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"}]:[]),
     ];
     const guestGo=id=>{
       if(allowedGuestViews.has(id)) setView(id);
@@ -28081,6 +28337,7 @@ export default function App() {
               <DailyChallenge t={t} onLogin={goToSignup}/>
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
+            {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t}/>}
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
             )}
