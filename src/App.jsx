@@ -17635,6 +17635,82 @@ body{background:
 .deep-dive-flashcard-actions>.btn:nth-child(2){justify-self:center;}
 .deep-dive-flashcard-rating{display:flex;justify-content:center;gap:8px;}
 .deep-dive-reader-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:18px;padding-top:4px;}
+/* Deep Dives use a deliberately larger type scale for comfortable study sessions. */
+.deep-dives-hero-copy>p{font-size:18px;font-weight:600;line-height:1.72;}
+.deep-dives-proof span{font-size:12px;font-weight:900;}
+.deep-dives-blueprint-link{font-size:12px;font-weight:900;}
+.deep-dives-progress-card span{font-size:13px;}
+.deep-dives-progress-card strong{font-size:29px;font-weight:950;}
+.deep-dives-progress-card p{font-size:13px;font-weight:600;line-height:1.6;}
+.deep-dives-search input{height:58px;font-size:16px;font-weight:650;}
+.deep-dives-domain-map button{min-width:150px;padding:13px 14px;}
+.deep-dives-domain-map button strong{font-size:13px;font-weight:950;}
+.deep-dives-domain-map button span{font-size:11px;font-weight:850;}
+.deep-dives-results-head{font-size:14px;font-weight:650;}
+.deep-dives-results-head strong{font-size:19px;font-weight:950;}
+.deep-dives-domain-group>header span{font-size:11px;}
+.deep-dives-domain-group>header h2{font-size:26px;font-weight:950;}
+.deep-dives-domain-group>header>strong{font-size:12px;font-weight:900;}
+.deep-dive-card{min-height:375px;padding:24px;}
+.deep-dive-card-index{font-size:12px;}
+.deep-dive-card-read{font-size:11px;}
+.deep-dive-card-chapter{font-size:12px;font-weight:950;}
+.deep-dive-card-title{font-size:23px;font-weight:950;line-height:1.24;}
+.deep-dive-card>p{font-size:14.5px;font-weight:600;line-height:1.68;}
+.deep-dive-card-tags span{padding:6px 8px;font-size:10.5px;font-weight:900;}
+.deep-dive-card-scope{font-size:10.5px;font-weight:850;}
+.deep-dive-card-footer{font-size:12px;}
+.deep-dive-card-actions button{min-height:44px;font-size:13px;font-weight:950;}
+.deep-dive-article-chapter{font-size:13px;}
+.deep-dive-article-subtitle{font-size:18px;font-weight:600;}
+.deep-dive-article-meta span{font-size:12px;font-weight:950;}
+.deep-dive-summary p{font-size:15.5px;font-weight:650;line-height:1.68;}
+.deep-dive-beyond-notice{font-size:13px;font-weight:600;}
+.deep-dive-objective-strip>span{font-size:13px;font-weight:650;line-height:1.55;}
+.deep-dive-objective-strip strong{min-width:34px;height:26px;font-size:10px;font-weight:950;}
+.deep-dive-study-modes strong{font-size:16px;font-weight:950;}
+.deep-dive-study-modes small{font-size:12px;font-weight:700;}
+.deep-dive-lesson-progress-head{font-size:12px;}
+.deep-dive-lesson-progress-head strong{font-size:14px;}
+.deep-dive-learning-card nav button{padding:10px;font-size:12px;font-weight:850;line-height:1.42;}
+.deep-dive-learning-card nav button>span:first-child{width:28px;height:28px;font-size:10px;}
+.deep-dive-learning-card nav button small{font-size:9.5px;font-weight:900;}
+.deep-dive-learning-card .btn{font-size:12px;}
+.deep-dive-learning-card small{font-size:10.5px;}
+.deep-dive-guided-heading>span{font-size:12px;}
+.deep-dive-guided-heading h2{font-size:clamp(26px,3vw,34px);font-weight:950;}
+.deep-dive-guided-heading>p{font-size:14px;font-weight:600;}
+.deep-dive-scope-note{font-size:13px!important;font-weight:650;line-height:1.55!important;}
+.deep-dive-keyword-picker button{padding:10px 14px;font-size:13.5px;font-weight:950;}
+.deep-dive-keyword-answer>span{font-size:11px;}
+.deep-dive-keyword-answer>strong{font-size:29px;font-weight:950;}
+.deep-dive-keyword-answer p{font-size:17px;font-weight:650;line-height:1.65;}
+.deep-dive-keyword-answer small{font-size:11px;font-weight:850;}
+.deep-dive-concept-bites>div>span{font-size:11.5px;}
+.deep-dive-concept-bites p{font-size:17px;font-weight:620;line-height:1.7;}
+.deep-dive-compare-head span{font-size:11px;}
+.deep-dive-compare-head strong{font-size:12.5px;font-weight:850;}
+.deep-dive-compare-tabs button{padding:10px 13px;font-size:13px;font-weight:950;}
+.deep-dive-compare-answer h3{font-size:24px;font-weight:950;}
+.deep-dive-compare-answer small{font-size:10px;}
+.deep-dive-compare-answer strong{font-size:14.5px;font-weight:800;line-height:1.6;}
+.deep-dive-panel-intro{font-size:15px;font-weight:600;}
+.deep-dive-guided-panel .deep-dive-trap-list p{font-size:15px;font-weight:620;line-height:1.65;}
+.deep-dive-guided-panel .deep-dive-check-content>p{font-size:19px;font-weight:750;}
+.deep-dive-model-answer{font-size:16px!important;font-weight:620;}
+.deep-dive-sources-disclosure>summary{font-size:13px;}
+.deep-dive-sources>p{font-size:13px;font-weight:600;}
+.deep-dive-sources a{font-size:12px;font-weight:900;}
+.deep-dive-flashcard-head h2{font-size:28px;font-weight:950;}
+.deep-dive-flashcard-head p{font-size:14px;font-weight:600;}
+.deep-dive-flashcard-score span{font-size:11px;font-weight:900;}
+.deep-dive-flashcard-toolbar>span{font-size:12px;}
+.deep-dive-flashcard-toolbar .btn{font-size:12px;}
+.deep-dive-flashcard-kind{font-size:11px;}
+.deep-dive-flashcard-face small{font-size:13px;font-weight:750;}
+.deep-dive-flashcard-face>strong{font-size:clamp(24px,3.2vw,34px);font-weight:950;}
+.deep-dive-flashcard-back>strong{font-size:clamp(21px,2.7vw,28px);font-weight:800;}
+.deep-dive-flashcard-hint{font-size:11px;font-weight:900;}
 @media (max-width: 1040px){
   .deep-dives-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
 }
@@ -17643,33 +17719,33 @@ body{background:
   .deep-dives-hero{grid-template-columns:minmax(0,1fr);padding:24px;border-radius:23px;}
   .deep-dives-progress-card{max-width:420px;}
   .deep-dive-objective-strip{grid-template-columns:minmax(0,1fr);}
-  .deep-dives-domain-map{grid-template-columns:repeat(6,145px);}
+  .deep-dives-domain-map{grid-template-columns:repeat(6,165px);}
   .deep-dive-reader-layout{grid-template-columns:minmax(0,1fr);}
   .deep-dive-learning-card{position:static;}
   .deep-dive-learning-card nav{display:flex;padding-bottom:4px;overflow-x:auto;scrollbar-width:none;}
-  .deep-dive-learning-card nav button{flex:0 0 min(250px,75vw);}
+  .deep-dive-learning-card nav button{flex:0 0 min(285px,82vw);}
   .deep-dive-sources>div:last-child{grid-template-columns:minmax(0,1fr);}
   .deep-dive-flashcard-studio{padding:19px;}
 }
 @media (max-width: 560px){
   .deep-dives-grid{grid-template-columns:minmax(0,1fr);}
   .deep-dives-domain-group>header{align-items:flex-start;}
-  .deep-dives-domain-group>header h2{font-size:18px;}
+  .deep-dives-domain-group>header h2{font-size:22px;}
   .deep-dives-results-head span{display:none;}
   .deep-dives-results-head{align-items:flex-start;flex-direction:column;}
-  .deep-dive-card{min-height:300px;}
+  .deep-dive-card{min-height:360px;padding:22px;}
   .deep-dive-article-hero{padding:25px 20px;border-radius:22px;}
   .deep-dive-article-hero h1{font-size:33px;}
-  .deep-dive-article-subtitle{font-size:14px;}
+  .deep-dive-article-subtitle{font-size:16px;}
   .deep-dive-reader-topbar{align-items:flex-start;}
   .deep-dive-reader-topbar .deep-dive-preview-badge{font-size:9px;}
   .deep-dive-study-modes{grid-template-columns:minmax(0,1fr);}
   .deep-dive-guided-panel{padding:19px 16px;}
   .deep-dive-keyword-answer{padding:16px;}
-  .deep-dive-keyword-answer>strong{font-size:21px;}
+  .deep-dive-keyword-answer>strong{font-size:25px;}
   .deep-dive-compare-head{display:grid;}
   .deep-dive-compare-answer>div{grid-template-columns:minmax(0,1fr);}
-  .deep-dive-concept-bites p{font-size:14px;line-height:1.7;}
+  .deep-dive-concept-bites p{font-size:16px;line-height:1.72;}
   .deep-dive-step-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
   .deep-dive-step-actions .btn{justify-content:center;}
   .deep-dive-flashcard-head{display:block;}
@@ -17678,8 +17754,8 @@ body{background:
   .deep-dive-flashcard-toolbar .btn{grid-column:1/-1;justify-self:end;}
   .deep-dive-flashcard{height:420px;}
   .deep-dive-flashcard-face{padding:55px 24px 48px;}
-  .deep-dive-flashcard-face>strong{font-size:20px;}
-  .deep-dive-flashcard-back>strong{font-size:17px;}
+  .deep-dive-flashcard-face>strong{font-size:23px;}
+  .deep-dive-flashcard-back>strong{font-size:20px;}
   .deep-dive-flashcard-actions{grid-template-columns:repeat(2,minmax(0,1fr));}
   .deep-dive-flashcard-actions>.btn{justify-content:center;}
   .deep-dive-flashcard-actions>.btn:nth-child(2){justify-self:stretch;}
