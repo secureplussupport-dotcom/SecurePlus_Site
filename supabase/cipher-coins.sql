@@ -186,11 +186,16 @@ begin
     and reference_key = reward_reference_key;
 
   if found then
+    select cipher_coins
+    into current_balance
+    from public.profiles
+    where id = target_user_id;
+
     return jsonb_build_object(
       'ok', true,
       'awarded', false,
       'amount', 0,
-      'balance', existing_transaction.balance_after,
+      'balance', coalesce(current_balance, existing_transaction.balance_after),
       'reason', 'already_claimed'
     );
   end if;
@@ -243,11 +248,16 @@ exception
     where user_id = target_user_id
       and reference_key = reward_reference_key;
 
+    select cipher_coins
+    into current_balance
+    from public.profiles
+    where id = target_user_id;
+
     return jsonb_build_object(
       'ok', true,
       'awarded', false,
       'amount', 0,
-      'balance', coalesce(existing_transaction.balance_after, current_balance),
+      'balance', coalesce(current_balance, existing_transaction.balance_after),
       'reason', 'already_claimed'
     );
 end;

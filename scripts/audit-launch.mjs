@@ -49,6 +49,7 @@ const requiredFiles = [
   "server/economy/referral-me.js",
   "server/economy/coins-me.js",
   "server/economy/coins-action.js",
+  "server/economy/welcome-grant.js",
   "api/account/delete.js",
   "api/account/delete-request.js",
   "supabase/schema.sql",
@@ -132,6 +133,10 @@ if (!errors.length) {
   }
   requireContains("supabase/cipher-coins.sql", "unique (user_id, reference_key)", "coin rewards must have idempotent ledger references");
   requireContains("supabase/cipher-coins.sql", "grant execute on function public.award_cipher_coins", "coin mutations should be service-role-only RPCs");
+  requireContains("server/economy/coins-me.js", "ensureCipherWelcomeGrant", "wallet loads must persist or repair the welcome grant before returning a balance");
+  requireContains("server/economy/coins-action.js", "ensureCipherWelcomeGrant", "coin spending must verify the welcome grant before subtracting coins");
+  requireContains("server/economy/welcome-grant.js", "authUser?.created_at", "welcome-grant eligibility must use the immutable Auth creation date");
+  requireContains("server/economy/welcome-grant.js", "onboarding_welcome:${authUser.id}", "welcome grants must use an idempotent per-user reference");
   requireContains("supabase/cipher-coins.sql", "drop index if exists public.referrals_one_new_user_per_referrer_idx", "Cipher Coin referrals should allow multiple successful invitations per referrer");
   requireContains("supabase/cipher-coins.sql", "'referral_referrer'", "referrer reward must be recorded in the coin ledger");
   requireContains("supabase/cipher-coins.sql", "'referral_new_user'", "new-user referral reward must be recorded in the coin ledger");
@@ -147,6 +152,9 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'onConsumeExamPass={handleConsumeExamPass}', "free Exam Mode access must consume a pass at start");
   requirePattern("src/App.jsx", /user\?\.tier\s*===\s*"pro"\s*&&\s*\["active",\s*"trialing"\]\.includes\(user\?\.subscriptionStatus/, "paid Pro should depend on active/trialing subscription status");
   requireContains("src/App.jsx", 'fetch("/api/stripe/checkout"', "upgrade flow should call the server-side Stripe checkout endpoint");
+  if (/wallet\?\.status==="ready"\?Number\(wallet\?\.balance\|\|0\):CIPHER_WELCOME_GRANT/.test(app)) {
+    push(errors, "src/App.jsx", "onboarding must not display an unverified 150-coin balance while the persisted wallet is loading");
+  }
 
   const trackedTextFiles = [
     ...walkFiles("api"),

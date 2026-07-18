@@ -4,6 +4,7 @@ import {
   getSupabaseAdmin,
   json,
 } from "../../api/_utils.js";
+import { ensureCipherWelcomeGrant } from "./welcome-grant.js";
 
 const ACTIONS = new Set([
   "check_in",
@@ -61,6 +62,7 @@ export default async function handler(req, res) {
     if (!ACTIONS.has(action)) return json(res, 400, { error: "Unknown Cipher Coin action." });
 
     const userId = authData.user.id;
+    await ensureCipherWelcomeGrant(supabase, authData.user);
     let result;
 
     if (action === "check_in") {

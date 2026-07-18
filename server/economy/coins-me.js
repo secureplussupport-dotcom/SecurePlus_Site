@@ -3,6 +3,7 @@ import {
   getSupabaseAdmin,
   json,
 } from "../../api/_utils.js";
+import { ensureCipherWelcomeGrant } from "./welcome-grant.js";
 
 function isMissingCipherCoinSchema(error) {
   return (
@@ -32,6 +33,7 @@ export default async function handler(req, res) {
     }
 
     const userId = authData.user.id;
+    const welcomeGrant = await ensureCipherWelcomeGrant(supabase, authData.user);
     const [profileResult, transactionsResult, unlocksResult] = await Promise.all([
       supabase
         .from("profiles")
@@ -59,6 +61,12 @@ export default async function handler(req, res) {
 
     return json(res, 200, {
       ok: true,
+      welcomeGrant: {
+        eligible: Boolean(welcomeGrant?.eligible),
+        awarded: Boolean(welcomeGrant?.awarded),
+        amount: Number(welcomeGrant?.amount || 0),
+        reason: welcomeGrant?.reason || "",
+      },
       balance: Number(profile.cipher_coins || 0),
       lifetimeEarned: Number(profile.lifetime_cipher_coins || 0),
       examPasses: Number(profile.exam_passes || 0),

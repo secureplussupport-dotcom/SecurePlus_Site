@@ -26852,7 +26852,7 @@ function LegalPage({type,t}) {
 // ═══════════════════════════════════════════════════════════════
 // ONBOARDING
 // ═══════════════════════════════════════════════════════════════
-function OnboardingModal({user,wallet,t,onClose,onWallet,onPbq}) {
+function OnboardingModal({user,wallet,t,onClose,onWallet,onPbq,onRefreshWallet}) {
   const [step,setStep]=useState(0);
   const [spendPlan,setSpendPlan]=useState([]);
   const plannedCost=spendPlan.reduce((sum,item)=>sum+CIPHER_COIN_COSTS[item],0);
@@ -26895,7 +26895,9 @@ function OnboardingModal({user,wallet,t,onClose,onWallet,onPbq}) {
   ];
   const slide=slides[step];
   const last=step===slides.length-1;
-  const liveBalance=wallet?.status==="ready"?Number(wallet?.balance||0):CIPHER_WELCOME_GRANT;
+  const walletReady=wallet?.status==="ready";
+  const walletError=wallet?.status==="error";
+  const liveBalance=Number(wallet?.balance||0);
 
   return(
     <div className="onboarding-overlay cipher-walkthrough-overlay" role="dialog" aria-modal="true" aria-label="Cipher Coin walkthrough">
@@ -26918,7 +26920,18 @@ function OnboardingModal({user,wallet,t,onClose,onWallet,onPbq}) {
           {slide.id==="gift"&&(
             <div className="cipher-welcome-gift">
               <div className="cipher-welcome-coins" aria-hidden="true"><CipherCoinIcon size={54}/><CipherCoinIcon size={64}/><CipherCoinIcon size={50}/></div>
-              <div><small>Welcome grant</small><strong>+{CIPHER_WELCOME_GRANT}</strong><span>Your live wallet: {liveBalance} coins{liveBalance>CIPHER_WELCOME_GRANT?" including today’s activity":""}</span></div>
+              <div>
+                <small>Welcome grant</small>
+                <strong>+{CIPHER_WELCOME_GRANT}</strong>
+                <span>
+                  {walletReady
+                    ? `Your saved wallet: ${liveBalance} coins${liveBalance>CIPHER_WELCOME_GRANT?" including today’s activity":""}`
+                    : walletError
+                      ? "We could not verify the saved grant yet. Your balance has not been guessed."
+                      : "Securing the grant in your saved wallet..."}
+                </span>
+                {walletError&&<button className="btn btn-outline" type="button" style={{marginTop:9,fontSize:11}} onClick={onRefreshWallet}>Retry wallet check</button>}
+              </div>
             </div>
           )}
 
@@ -28240,6 +28253,7 @@ export default function App() {
             onClose={closeOnboarding}
             onWallet={()=>setView("coins")}
             onPbq={()=>setView("pbq")}
+            onRefreshWallet={refreshCipherWallet}
           />
         )}
         {referralClaimPrompt&&(
