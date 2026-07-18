@@ -1,4 +1,5 @@
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
+const BRAND_LOGO_URL = "https://www.secureplusprep.com/secureplus-logo.png";
 
 function escapeHtml(value) {
   return String(value || "")
@@ -40,8 +41,17 @@ export function renderAccountDeletionEmail({ confirmationUrl, email, expiresInMi
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:560px;background:#fffdf8;border:1px solid #eadfce;border-radius:20px;overflow:hidden;box-shadow:0 18px 50px rgba(82,60,35,.10);">
             <tr>
               <td style="padding:25px 28px;background:#203e3b;color:#ffffff;">
-                <div style="display:inline-block;width:38px;height:38px;line-height:38px;text-align:center;border-radius:11px;background:#e9ad58;color:#203e3b;font-weight:900;vertical-align:middle;">S+</div>
-                <span style="padding-left:10px;font-size:18px;font-weight:800;vertical-align:middle;">SecurePlus</span>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td style="width:44px;vertical-align:middle;">
+                      <img src="${BRAND_LOGO_URL}" width="44" height="44" alt="SecurePlus" style="display:block;width:44px;height:44px;border:0;border-radius:11px;outline:none;text-decoration:none;">
+                    </td>
+                    <td style="padding-left:12px;vertical-align:middle;">
+                      <div style="font-size:18px;font-weight:800;line-height:1.2;color:#ffffff;">SecurePlus</div>
+                      <div style="margin-top:3px;font-size:11px;font-weight:700;line-height:1.3;color:#c8d9d4;">Account security</div>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>

@@ -52,9 +52,15 @@ const requiredFiles = [
   "server/economy/welcome-grant.js",
   "api/account/delete.js",
   "api/account/delete-request.js",
+  "api/account/_deletion-email.js",
+  "api/feedback/submit.js",
   "supabase/schema.sql",
   "supabase/cipher-coins.sql",
   "supabase/account-deletion.sql",
+  "supabase/email-templates/confirm-signup.html",
+  "supabase/email-templates/magic-link.html",
+  "supabase/email-templates/password-changed.html",
+  "supabase/email-templates/reset-password.html",
   ".env.example",
 ];
 
@@ -105,6 +111,17 @@ if (!errors.length) {
   requireContains("api/account/delete-request.js", 'from("account_deletion_requests")', "deletion requests must be stored server-side");
   requireContains("api/account/delete-request.js", 'process.env.RESEND_API_KEY', "deletion emails must use the configured transactional provider");
   requireContains("api/account/delete-request.js", 'supabase.auth.signInWithOtp', "deletion email must retain a safe Supabase fallback until transactional email is configured");
+  for (const file of [
+    "api/account/_deletion-email.js",
+    "api/feedback/submit.js",
+    "supabase/email-templates/confirm-signup.html",
+    "supabase/email-templates/magic-link.html",
+    "supabase/email-templates/password-changed.html",
+    "supabase/email-templates/reset-password.html",
+  ]) {
+    requireContains(file, "https://www.secureplusprep.com/secureplus-logo.png", "email template must use the public SecurePlus logo");
+    requireContains(file, 'alt="SecurePlus"', "email logo must keep accessible fallback text");
+  }
   requireContains("api/account/delete.js", 'body.deletionToken', "account deletion must require a single-use email token");
   requireContains("api/account/delete.js", 'supabase.auth.admin.signOut(token, "global")', "account deletion must revoke Supabase sessions before deleting the user");
   requireContains("supabase/account-deletion.sql", "alter table public.account_deletion_requests enable row level security", "deletion requests must have RLS enabled");
