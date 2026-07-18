@@ -760,13 +760,16 @@ function getAcademyActiveDays(user) {
 function appUserFromProfile(authUser, profile) {
   const trialUntil = profile?.pro_trial_until ? new Date(profile.pro_trial_until) : null;
   const hasReferralTrial = trialUntil && trialUntil.getTime() > Date.now();
+  const hasStoredProTier = profile?.tier === "pro";
+  const hasActiveSubscription = ["active", "trialing"].includes(profile?.subscription_status);
+  const hasProAccess = hasStoredProTier || hasActiveSubscription || hasReferralTrial;
   const pendingReferralCode = String(authUser?.user_metadata?.pending_referral_code || "").trim().toUpperCase();
 
   return {
     id: authUser.id,
     email: profile?.email || authUser.email,
     name: profile?.full_name || profileName(authUser),
-    tier: (profile?.tier === "pro" && ["active", "trialing"].includes(profile?.subscription_status)) || hasReferralTrial ? "pro" : "free",
+    tier: hasProAccess ? "pro" : "free",
     subscriptionStatus: profile?.subscription_status || null,
     proTrialUntil: profile?.pro_trial_until || null,
     referralTrialExpired: Boolean(trialUntil && trialUntil.getTime() <= Date.now() && profile?.tier !== "pro"),
@@ -14736,6 +14739,16 @@ function normalizeRemotePBQRow(row) {
   return normalized;
 }
 
+function mergeRemotePBQBanks(localQuestions=[],remoteQuestions=[]) {
+  const validRemoteQuestions=remoteQuestions.filter(question=>question?.id);
+  const remoteById=new Map(validRemoteQuestions.map(question=>[question.id,question]));
+  const localIds=new Set(localQuestions.map(question=>question.id));
+  return [
+    ...localQuestions.map(question=>remoteById.get(question.id)||question),
+    ...validRemoteQuestions.filter(question=>!localIds.has(question.id)),
+  ];
+}
+
 function buildSupabasePBQMutation(question, sortOrder) {
   const domain=Number.parseInt(question.ch || question.domain || "1",10) || 1;
   const evidence={
@@ -28101,12 +28114,16 @@ export default function App() {
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
-  const useLocalPbqFallback=Boolean(isSupabaseConfigured && user?.tier==="pro" && !pbqBankLoading && (pbqBankError || !remotePbqBank.length));
-  const livePbqBank=isSupabaseConfigured
-    ? user?.tier==="pro"
-      ? useLocalPbqFallback?PBQ_BANK:remotePbqBank
-      : PBQ_BANK.map(localQuestion=>remotePbqBank.find(remoteQuestion=>remoteQuestion.id===localQuestion.id)||localQuestion)
-    : PBQ_BANK;
+  const livePbqBank=useMemo(
+    ()=>isSupabaseConfigured?mergeRemotePBQBanks(PBQ_BANK,remotePbqBank):PBQ_BANK,
+    [remotePbqBank,questionBankVersion]
+  );
+  const useLocalPbqFallback=Boolean(
+    isSupabaseConfigured
+    && user?.tier==="pro"
+    && !pbqBankLoading
+    && (pbqBankError || remotePbqBank.length<PBQ_BANK.length)
+  );
 
   useEffect(()=>{
     try{window.localStorage?.setItem("secureplus-sidebar-hidden",sidebarHidden?"true":"false");}catch{}
