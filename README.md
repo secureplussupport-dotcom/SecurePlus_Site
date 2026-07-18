@@ -65,6 +65,10 @@ VITE_SUPABASE_ANON_KEY=
 SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
 
+RESEND_API_KEY=
+ACCOUNT_DELETE_FROM_EMAIL=SecurePlus <noreply@secureplusprep.com>
+ACCOUNT_DELETE_SITE_URL=https://secureplusprep.com
+
 STRIPE_SECRET_KEY=
 STRIPE_PRICE_PRO=
 STRIPE_WEBHOOK_SECRET=
@@ -87,6 +91,9 @@ Frontend-safe:
 Server-only:
 
 - `SUPABASE_SERVICE_ROLE_KEY`
+- `RESEND_API_KEY`
+- `ACCOUNT_DELETE_FROM_EMAIL`
+- `ACCOUNT_DELETE_SITE_URL`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 
@@ -99,14 +106,16 @@ Never expose server-only keys in browser code or commit them to GitHub.
 3. Run `supabase/schema.sql`.
 4. Run `supabase/pbqs.sql`.
 5. Run `supabase/cipher-coins.sql` last. This closes the old referral trial, creates the Cipher Coin wallet/ledger, and updates PBQ access rules.
-6. Confirm these tables exist:
+6. Run `supabase/account-deletion.sql`. This adds short-lived, server-only account deletion requests.
+7. Confirm these tables exist:
    - `profiles`
    - `attempts`
    - `referrals`
    - `cipher_coin_transactions`
    - `cipher_coin_unlocks`
    - `cipher_coin_daily_activity`
-7. Enable only the auth providers you actually use. Current plan: Email + Google.
+   - `account_deletion_requests`
+8. Enable only the auth providers you actually use. Current plan: Email + Google.
 
 The schema includes:
 
@@ -167,7 +176,10 @@ API routes:
 - `POST /api/stripe/sync`: verifies the logged-in user's Stripe subscription and updates Supabase after Checkout returns
 - `POST /api/stripe/portal`: opens Stripe Billing Portal for cancellation/membership management
 - `POST /api/stripe/webhook`: verifies Stripe webhook signatures and updates `profiles.tier`
-- `POST /api/account/delete`: deletes the logged-in Supabase user; profile/attempts cascade through Supabase
+- `POST /api/account/delete-request`: verifies the session, creates a 15-minute single-use request, and sends through Resend or the temporary Supabase Auth fallback
+- `POST /api/account/delete`: requires the signed-in session and matching single-use token, cancels an active subscription, revokes sessions, and deletes the Supabase user
+
+For the most reliable production account-deletion delivery, add `RESEND_API_KEY`, use a verified sender in `ACCOUNT_DELETE_FROM_EMAIL`, and set `ACCOUNT_DELETE_SITE_URL` to the public site origin. Until that key is configured, SecurePlus falls back to the Supabase Auth mailer. The UI reports provider rejection and provides a one-minute resend cooldown instead of claiming an email was sent when it was not accepted.
 
 Stripe webhook events:
 

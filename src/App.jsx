@@ -190,6 +190,7 @@ const CIPHER_WELCOME_GRANT = 150;
 const CIPHER_FIRST_PBQ_UNLOCKS = Object.freeze(["p014","p018","p033"]);
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
 const DELETED_ACCOUNT_KEY = "secureplus_deleted_account";
+const ACCOUNT_DELETION_TOKEN_KEY = "secureplus-account-deletion-token";
 const FEEDBACK_DESCRIPTION_MIN_LENGTH = 20;
 const FEEDBACK_DESCRIPTION_MIN_WORDS = 5;
 const isFreePBQPreview = question => question?.id === FREE_PBQ_PREVIEW_ID;
@@ -212,6 +213,36 @@ const emptyCipherWallet = () => ({
   status:"ready",
   error:"",
 });
+
+const emptyAccountDeletionState = () => ({
+  stage:"idle",
+  token:"",
+  busy:false,
+  error:"",
+  email:"",
+  retryAt:0,
+  allowRestart:false,
+});
+
+function readAccountDeletionState() {
+  const state=emptyAccountDeletionState();
+  try{
+    const params=new URLSearchParams(window.location.search);
+    const urlToken=String(params.get("delete_account_token")||"").trim();
+    const storedToken=String(window.sessionStorage?.getItem(ACCOUNT_DELETION_TOKEN_KEY)||"").trim();
+    const token=urlToken||storedToken;
+    if(urlToken){
+      params.delete("delete_account_token");
+      const clean=`${window.location.origin}${window.location.pathname}${params.toString()?`?${params.toString()}`:""}${window.location.hash||""}`;
+      window.history.replaceState({},"",clean);
+    }
+    if(token){
+      window.sessionStorage?.setItem(ACCOUNT_DELETION_TOKEN_KEY,token);
+      return {...state,stage:"confirm",token};
+    }
+  }catch{}
+  return state;
+}
 
 function normalizeCipherWallet(wallet={}) {
   return {
@@ -16202,6 +16233,33 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .loading-ring{width:62px;height:62px;border-radius:50%;border:5px solid ${t.border};border-top-color:${t.accent};border-right-color:${t.green};animation:irregularSpin 1.65s cubic-bezier(.4,0,.2,1) infinite;box-shadow:0 0 28px ${t.accent}20;}
 .streak-overlay{position:fixed;inset:0;z-index:500;background:rgba(2,6,23,.78);backdrop-filter:blur(12px);display:grid;place-items:center;padding:18px;animation:fadeUp .24s ease both;}
 .streak-modal{width:min(100%,500px);position:relative;overflow:hidden;padding:28px;border:1px solid ${t.accent}38;border-radius:8px;background:linear-gradient(160deg,#08111f 0%,${t.surface} 48%,${t.accent}12 100%);box-shadow:0 28px 90px rgba(0,0,0,.42);}
+.account-delete-overlay{position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:18px;background:rgba(44,35,29,.62);backdrop-filter:blur(13px);animation:fadeUp .2s ease both;}
+.account-delete-modal{position:relative;width:min(100%,560px);max-height:calc(100dvh - 36px);overflow-y:auto;padding:30px;border:1px solid color-mix(in srgb,${t.red} 28%,${t.border});border-radius:24px;background:radial-gradient(circle at 90% 0,${t.red}0d,transparent 34%),linear-gradient(155deg,${t.surface},${t.panel});box-shadow:0 32px 100px rgba(45,31,23,.34);animation:modalPop .28s cubic-bezier(.16,1,.3,1) both;}
+.account-delete-close{position:absolute;right:16px;top:16px;width:38px;height:38px;display:grid;place-items:center;border:1px solid ${t.border};border-radius:12px;background:${t.surface};color:${t.textSec};cursor:pointer;}
+.account-delete-close:disabled{cursor:wait;opacity:.5;}
+.account-delete-icon{width:54px;height:54px;display:grid;place-items:center;margin-bottom:15px;border:1px solid ${t.red}38;border-radius:17px;background:${t.red}10;color:${t.red};box-shadow:0 14px 34px ${t.red}16;}
+.account-delete-icon.sent{border-color:${t.green}40;background:${t.green}10;color:${t.green};box-shadow:0 14px 34px ${t.green}16;}
+.account-delete-modal h2{max-width:450px;margin:0 46px 8px 0;color:${t.text};font-size:clamp(25px,5vw,34px);line-height:1.13;letter-spacing:-.025em;}
+.account-delete-lead{margin:0 0 18px;color:${t.textSec};font-size:14px;line-height:1.72;}
+.account-delete-summary{display:grid;gap:8px;margin:17px 0;}
+.account-delete-summary>div{display:grid;grid-template-columns:32px minmax(0,1fr);gap:9px;align-items:start;padding:12px;border:1px solid ${t.border};border-radius:14px;background:${t.surface}b8;color:${t.textSec};}
+.account-delete-summary svg{margin-top:2px;color:${t.red};}
+.account-delete-summary strong,.account-delete-summary span{display:block;}
+.account-delete-summary strong{margin-bottom:2px;color:${t.text};font-size:12px;}
+.account-delete-summary span{font-size:11px;line-height:1.55;}
+.account-delete-mail-help,.account-delete-danger-note{display:flex;gap:10px;align-items:flex-start;margin:16px 0;padding:13px 14px;border-radius:14px;font-size:12px;line-height:1.6;}
+.account-delete-mail-help{border:1px solid ${t.green}30;background:${t.green}0b;color:${t.textSec};}
+.account-delete-mail-help strong{color:${t.green};white-space:nowrap;}
+.account-delete-danger-note{border:1px solid ${t.red}35;background:${t.red}0c;color:${t.textSec};}
+.account-delete-danger-note svg{flex-shrink:0;margin-top:1px;color:${t.red};}
+.account-delete-danger-note strong{color:${t.red};}
+.account-delete-actions{display:grid;gap:9px;margin-top:18px;}
+.account-delete-primary{width:100%;justify-content:center;min-height:44px;}
+.account-delete-support{margin-top:16px;color:${t.textDim};font-size:10px;text-align:center;}
+.account-delete-support a{color:${t.accent};font-weight:850;}
+.auth-security-notice{display:flex;gap:9px;align-items:flex-start;margin:0 0 15px;padding:12px 13px;border:1px solid ${t.red}30;border-radius:13px;background:${t.red}0b;color:${t.textSec};font-size:11px;line-height:1.55;text-align:left;}
+.auth-security-notice svg{flex-shrink:0;margin-top:1px;color:${t.red};}
+.auth-security-notice strong{display:block;margin-bottom:2px;color:${t.text};font-size:12px;}
 .streak-code{height:154px;border:1px solid ${t.codeBorder};border-radius:8px;background:${t.codeBg};overflow:hidden;padding:14px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.55;color:${t.codePrompt};text-align:left;position:relative;}
 .streak-code::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,${t.accent}10 48%,transparent);animation:scanLine 1.8s linear infinite;}
 .streak-burst{position:absolute;inset:-20%;background:radial-gradient(circle at 20% 20%,${t.green}24,transparent 22%),radial-gradient(circle at 82% 18%,${t.accent}22,transparent 24%),radial-gradient(circle at 50% 90%,#f59e0b22,transparent 26%);opacity:.9;animation:streakPulse 1.8s ease infinite alternate;pointer-events:none;}
@@ -19684,7 +19742,7 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
 // ═══════════════════════════════════════════════════════════════
 // AUTH VIEW
 // ═══════════════════════════════════════════════════════════════
-function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login"}) {
+function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login",securityNotice=false}) {
   const [mode,setMode]=useState(initialMode);
   const [showLoginModal,setShowLoginModal]=useState(initialMode==="login");
   const [showSignupJourney,setShowSignupJourney]=useState(initialMode==="signup");
@@ -20263,13 +20321,19 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
         </div>
         </section>
         {showLoginModal&&(
-          <div className="landing-login-overlay" role="dialog" aria-modal="true" aria-label="Sign in to SecurePlus" onMouseDown={()=>setShowLoginModal(false)}>
+          <div className="landing-login-overlay" role="dialog" aria-modal="true" aria-label={securityNotice?"Sign in to continue account deletion":"Sign in to SecurePlus"} onMouseDown={()=>setShowLoginModal(false)}>
             <div className="landing-login-modal card" onMouseDown={event=>event.stopPropagation()}>
               <button className="landing-login-close" type="button" aria-label="Close sign in" onClick={()=>setShowLoginModal(false)}>×</button>
               <div className="landing-login-brand"><BrandMark size={42}/></div>
-              <div className="label" style={{color:t.accent,textAlign:"center"}}>Welcome back</div>
-              <h2>Continue your Security+ practice</h2>
-              <p>Your progress, streaks, and Smart Review queue are waiting.</p>
+              <div className="label" style={{color:securityNotice?t.red:t.accent,textAlign:"center"}}>{securityNotice?"Account security":"Welcome back"}</div>
+              <h2>{securityNotice?"Sign in to continue safely":"Continue your Security+ practice"}</h2>
+              <p>{securityNotice?"Use the same account that requested deletion. You will review one final confirmation before anything is removed.":"Your progress, streaks, and Smart Review queue are waiting."}</p>
+              {securityNotice&&(
+                <div className="auth-security-notice">
+                  <ShieldCheck size={18}/>
+                  <span><strong>The email did not delete your account.</strong>The secure link is waiting in this browser and will be checked against the account you sign in to.</span>
+                </div>
+              )}
               <Alert msg={err} type="error" t={t}/>
               <Alert msg={ok} type="success" t={t}/>
               <div className="landing-login-fields">
@@ -26044,6 +26108,101 @@ function ReferralClaimPrompt({result,t,onOpenWallet,onClose}) {
   );
 }
 
+function AccountDeletionModal({state,user,t,onClose,onSend,onConfirm,onSwitchAccount}) {
+  const [now,setNow]=useState(()=>Date.now());
+  const secondsLeft=Math.max(0,Math.ceil((Number(state?.retryAt||0)-now)/1000));
+  useEffect(()=>{
+    if(!state?.retryAt||secondsLeft<=0)return undefined;
+    const timer=window.setInterval(()=>setNow(Date.now()),1000);
+    return()=>window.clearInterval(timer);
+  },[state?.retryAt,secondsLeft]);
+  if(!state||state.stage==="idle")return null;
+
+  const isRequest=state.stage==="request";
+  const isSent=state.stage==="sent";
+  const isConfirm=state.stage==="confirm";
+  const closeAllowed=!state.busy;
+  const requestAgain=()=>onSend?.();
+
+  return(
+    <div className="account-delete-overlay" role="dialog" aria-modal="true" aria-labelledby="account-delete-title" onMouseDown={()=>closeAllowed&&onClose?.()}>
+      <div className="account-delete-modal" onMouseDown={event=>event.stopPropagation()}>
+        <button className="account-delete-close" type="button" aria-label="Close account deletion" disabled={!closeAllowed} onClick={onClose}><X size={18}/></button>
+        <div className={`account-delete-icon ${isSent?"sent":""}`}>
+          {isSent?<CheckCircle2 size={28}/>:<ShieldCheck size={28}/>}
+        </div>
+        <div className="label" style={{color:isSent?t.green:t.red,marginBottom:7}}>{isSent?"Email accepted for delivery":"Account security"}</div>
+        <h2 id="account-delete-title">
+          {isRequest?"Verify before deleting your account":isSent?"Check your inbox":"Finish deleting your account"}
+        </h2>
+        <p className="account-delete-lead">
+          {isRequest
+            ? `We will send a short-lived link to ${user?.email||"your account email"}. Opening it brings you back for one final confirmation.`
+            : isSent
+              ? `We sent a secure link to ${state.email||user?.email||"your email"}. It expires in 15 minutes.`
+              : `You are signed in as ${user?.email||"this account"}. This is the final confirmation—the email link did not delete anything by itself.`}
+        </p>
+
+        {state.error&&<Alert msg={state.error} type="error" t={t}/>}
+
+        {isRequest&&(
+          <div className="account-delete-summary">
+            <div><UserRound size={17}/><span><strong>Your account</strong>Login and profile will be permanently removed.</span></div>
+            <div><ChartNoAxesColumnIncreasing size={17}/><span><strong>Your learning data</strong>Saved attempts, stars, unlocks, and Cipher Coin history will be removed.</span></div>
+            <div><CircleDollarSign size={17}/><span><strong>Your membership</strong>An active Stripe subscription will be cancelled before deletion.</span></div>
+          </div>
+        )}
+
+        {isSent&&(
+          <div className="account-delete-mail-help">
+            <strong>Cannot see it?</strong>
+            <span>Check Spam or Promotions and search for “SecurePlus”. Delivery can take a minute.</span>
+          </div>
+        )}
+
+        {isConfirm&&(
+          <div className="account-delete-danger-note">
+            <TriangleAlert size={19}/>
+            <span><strong>This cannot be undone.</strong> Download or copy anything you want to keep before continuing.</span>
+          </div>
+        )}
+
+        <div className="account-delete-actions">
+          {isRequest&&(
+            <button className="btn btn-danger account-delete-primary" type="button" disabled={state.busy} onClick={onSend}>
+              {state.busy?"Sending secure email...":"Email me a secure deletion link"}
+            </button>
+          )}
+          {isSent&&(
+            <button className="btn btn-outline account-delete-primary" type="button" disabled={state.busy||secondsLeft>0} onClick={requestAgain}>
+              {state.busy?"Sending...":secondsLeft>0?`Resend available in ${secondsLeft}s`:"Resend deletion email"}
+            </button>
+          )}
+          {isConfirm&&(
+            <button className="btn btn-danger account-delete-primary" type="button" disabled={state.busy||state.allowRestart||state.error?.includes("different account")} onClick={onConfirm}>
+              {state.busy?"Deleting account...":"Permanently delete my account"}
+            </button>
+          )}
+          {isConfirm&&state.allowRestart&&(
+            <button className="btn btn-primary account-delete-primary" type="button" disabled={state.busy||secondsLeft>0} onClick={requestAgain}>
+              {state.busy?"Sending...":secondsLeft>0?`New email available in ${secondsLeft}s`:"Send a new deletion link"}
+            </button>
+          )}
+          {isConfirm&&state.error?.includes("different account")&&(
+            <button className="btn btn-outline account-delete-primary" type="button" disabled={state.busy} onClick={onSwitchAccount}>
+              Sign in to a different account
+            </button>
+          )}
+          <button className="btn btn-ghost account-delete-primary" type="button" disabled={!closeAllowed} onClick={onClose}>
+            {isSent?"I’ll check my inbox":"Keep my account"}
+          </button>
+        </div>
+        <div className="account-delete-support">Need help? <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a></div>
+      </div>
+    </div>
+  );
+}
+
 function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
   const [now,setNow]=useState(()=>Date.now());
   const expiredRef=useRef(false);
@@ -27025,7 +27184,7 @@ export default function App() {
   const [authStartMode,setAuthStartMode]=useState("login");
   const [showTrialExpiredPrompt,setShowTrialExpiredPrompt]=useState(false);
   const [referralClaimPrompt,setReferralClaimPrompt]=useState(null);
-  const [deleteAccountVerified,setDeleteAccountVerified]=useState(false);
+  const [accountDeletion,setAccountDeletion]=useState(readAccountDeletionState);
   const [questionReport,setQuestionReport]=useState(null);
   const [questionBankVersion,setQuestionBankVersion]=useState(0);
   const [adminQuestionTarget,setAdminQuestionTarget]=useState(null);
@@ -27127,7 +27286,6 @@ export default function App() {
     setShowOnboarding(false);
     setShowTrialExpiredPrompt(false);
     setReferralClaimPrompt(null);
-    setDeleteAccountVerified(false);
     setUser(null);
     setAttempts([]);
     setStarred([]);
@@ -27146,17 +27304,10 @@ export default function App() {
   },[clearLocalAuthState]);
 
   useEffect(()=>{
-    if(!user)return;
-    const params=new URLSearchParams(window.location.search);
-    if(params.get("delete_account")==="confirm"){
-      setDeleteAccountVerified(true);
-      params.delete("delete_account");
-      const clean=`${window.location.origin}${window.location.pathname}${params.toString()?`?${params.toString()}`:""}`;
-      window.history.replaceState({}, "", clean);
-      alert("Email verified. You can now press Delete account again to complete deletion.");
-      setView("pricing");
-    }
-  },[user]);
+    if(loading||user||accountDeletion.stage!=="confirm")return;
+    setAuthStartMode("login");
+    setView("auth");
+  },[loading,user,accountDeletion.stage]);
 
   useEffect(()=>{
     if(!isSupabaseConfigured)return undefined;
@@ -27502,6 +27653,83 @@ export default function App() {
       setBillingLoading(false);
     }
   },[user]);
+  const clearAccountDeletion=useCallback(()=>{
+    try{window.sessionStorage?.removeItem(ACCOUNT_DELETION_TOKEN_KEY);}catch{}
+    setAccountDeletion(emptyAccountDeletionState());
+  },[]);
+  const sendAccountDeletionEmail=useCallback(async()=>{
+    if(!user)return;
+    setAccountDeletion(current=>({...current,busy:true,error:"",allowRestart:false}));
+    try{
+      const token=await getSupabaseAccessToken();
+      if(!token)throw new Error("Please sign in again before requesting account deletion.");
+      const response=await fetch("/api/account/delete-request",{
+        method:"POST",
+        headers:{authorization:`Bearer ${token}`},
+      });
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok){
+        const error=new Error(data.error||"Unable to send the deletion email.");
+        error.retryAfterSeconds=Number(data.retryAfterSeconds||0);
+        throw error;
+      }
+      setAccountDeletion({
+        ...emptyAccountDeletionState(),
+        stage:"sent",
+        email:data.email||user.email,
+        deliveryChannel:data.deliveryChannel||"",
+        retryAt:Date.now()+Number(data.resendAfterSeconds||60)*1000,
+      });
+      capture("account_deletion_email_requested",{delivery_accepted:true});
+    }catch(error){
+      const retrySeconds=Number(error.retryAfterSeconds||0);
+      setAccountDeletion(current=>({
+        ...current,
+        busy:false,
+        error:error.message||"Unable to send the deletion email.",
+        retryAt:retrySeconds?Date.now()+retrySeconds*1000:current.retryAt,
+      }));
+      capture("account_deletion_email_requested",{delivery_accepted:false});
+    }
+  },[user]);
+  const confirmAccountDeletion=useCallback(async()=>{
+    if(!user||!accountDeletion.token)return;
+    setAccountDeletion(current=>({...current,busy:true,error:"",allowRestart:false}));
+    try{
+      const token=await getSupabaseAccessToken();
+      if(!token)throw new Error("Please sign in again before deleting your account.");
+      const response=await fetch("/api/account/delete",{
+        method:"POST",
+        headers:{"content-type":"application/json",authorization:`Bearer ${token}`},
+        body:JSON.stringify({deletionToken:accountDeletion.token}),
+      });
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok){
+        const error=new Error(data.error||"Unable to delete the account.");
+        error.allowRestart=response.status===410;
+        throw error;
+      }
+      rememberDeletedAccount(user);
+      await DB.saveStarred(starOwner(user),[]);
+      try{window.sessionStorage?.removeItem(ACCOUNT_DELETION_TOKEN_KEY);}catch{}
+      setAccountDeletion(emptyAccountDeletionState());
+      await forceSupabaseSignOut();
+      alert("Your SecurePlus account and saved learning data have been permanently deleted.");
+      window.location.replace("/");
+    }catch(error){
+      setAccountDeletion(current=>({
+        ...current,
+        busy:false,
+        error:error.message||"Unable to delete the account. Your data has not been removed.",
+        allowRestart:Boolean(error.allowRestart),
+      }));
+    }
+  },[user,accountDeletion.token,forceSupabaseSignOut]);
+  const switchDeletionAccount=useCallback(async()=>{
+    await forceSupabaseSignOut();
+    setAuthStartMode("login");
+    setView("auth");
+  },[forceSupabaseSignOut]);
   const handleDeleteAccount=useCallback(async()=>{
     if(!user)return;
 
@@ -27515,43 +27743,12 @@ export default function App() {
       alert("Local demo account deleted from this browser.");
       return;
     }
-
-    try{
-      const token=await getSupabaseAccessToken();
-      if(!token){
-        alert("Please sign in with Supabase before deleting your account.");
-        return;
-      }
-      if(!deleteAccountVerified){
-        const confirmed=window.confirm(`For safety, SecurePlus will email ${user.email} a deletion verification link. Only continue if you personally want to delete this account. If you did not request deletion, cancel now and change your password.`);
-        if(!confirmed)return;
-        const { error } = await supabase.auth.signInWithOtp({
-          email: user.email,
-          options: { emailRedirectTo: `${window.location.origin}/?delete_account=confirm` },
-        });
-        if(error) throw error;
-        alert("Deletion verification email sent. Only press the red verification button if you requested account deletion. After verifying, come back here and press Delete account again.");
-        return;
-      }
-      const confirmed=window.confirm("Email verified. Permanently delete this SecurePlus account and saved progress? This cannot be undone.");
-      if(!confirmed)return;
-      const response=await fetch("/api/account/delete",{
-        method:"POST",
-        headers:{authorization:`Bearer ${token}`},
-      });
-      const data=await response.json().catch(()=>({}));
-      if(!response.ok) throw new Error(data.error||"Unable to delete account.");
-      rememberDeletedAccount(user);
-      await DB.saveStarred(starOwner(user),[]);
-      await forceSupabaseSignOut();
-      const cleanUrl=`${window.location.origin}${window.location.pathname}`;
-      window.history.replaceState({}, "", cleanUrl);
-      alert("Account deleted. You have been signed out on this browser and other sessions.");
-      window.location.replace("/");
-    }catch(error){
-      alert(error.message||"Unable to delete account. Contact secureplus.support@gmail.com.");
+    if(user.authProvider!=="supabase"){
+      alert("This account is not connected to Supabase, so it cannot use production account deletion.");
+      return;
     }
-  },[user,deleteAccountVerified,forceSupabaseSignOut]);
+    setAccountDeletion({...emptyAccountDeletionState(),stage:"request",email:user.email});
+  },[user]);
   const handleUpgrade=useCallback(async tier=>{
     if(!user)return;
     if(tier==="free"){
@@ -27724,6 +27921,26 @@ export default function App() {
     </>
   );
 
+  if(user&&accountDeletion.stage==="confirm") return(
+    <>
+      <style>{CSS}</style>
+      <div style={{minHeight:"100vh",background:t.bg}}>
+        <div style={{padding:"16px 22px",display:"flex",alignItems:"center",gap:9,borderBottom:`1px solid ${t.border}`,background:t.surface}}>
+          <BrandMark size={32}/><strong style={{color:t.text}}>SecurePlus account security</strong>
+        </div>
+      </div>
+      <AccountDeletionModal
+        state={accountDeletion}
+        user={user}
+        t={t}
+        onClose={clearAccountDeletion}
+        onSend={sendAccountDeletionEmail}
+        onConfirm={confirmAccountDeletion}
+        onSwitchAccount={switchDeletionAccount}
+      />
+    </>
+  );
+
   if(showDaily&&!user) return(
     <>
       <style>{CSS}</style>
@@ -27756,7 +27973,7 @@ export default function App() {
   if(!user&&view==="auth") return(
     <>
       <style>{CSS}</style>
-      <AuthView onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={setView} onPracticeMcq={()=>setView("mcq")} initialMode={authStartMode}/>
+      <AuthView onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={setView} onPracticeMcq={()=>setView("mcq")} initialMode={authStartMode} securityNotice={accountDeletion.stage==="confirm"}/>
     </>
   );
 
@@ -28036,6 +28253,17 @@ export default function App() {
         {questionReport&&<QuestionReportModal report={questionReport} user={user} t={t} onClose={()=>setQuestionReport(null)}/>}
         <AchievementCelebration ids={achievementUnlocks} t={t} onClose={()=>setAchievementUnlocks([])}/>
         <CipherRewardToast reward={coinRewardToast} onClose={()=>setCoinRewardToast(null)}/>
+        {(accountDeletion.stage==="request"||accountDeletion.stage==="sent")&&(
+          <AccountDeletionModal
+            state={accountDeletion}
+            user={user}
+            t={t}
+            onClose={clearAccountDeletion}
+            onSend={sendAccountDeletionEmail}
+            onConfirm={confirmAccountDeletion}
+            onSwitchAccount={switchDeletionAccount}
+          />
+        )}
       </div>
     </>
   );

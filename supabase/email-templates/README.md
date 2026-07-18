@@ -9,7 +9,7 @@ These files are the source copies for SecurePlus authentication emails. Hosted S
 | Confirm signup | `Verify your email for SecurePlus` | `confirm-signup.html` |
 | Reset password | `Reset your SecurePlus password` | `reset-password.html` |
 | Password changed notification | `Your SecurePlus password was changed` | `password-changed.html` |
-| Magic Link | `Confirm SecurePlus account deletion` | `magic-link.html` |
+| Magic Link | `Continue your SecurePlus account security request` | `magic-link.html` |
 
 ## Install In Supabase
 
@@ -47,7 +47,7 @@ Good HTML cannot guarantee inbox placement. Complete these delivery controls:
 
 ## Account Deletion Note
 
-SecurePlus currently uses Supabase `signInWithOtp` only to verify account deletion requests. The `Magic Link` template therefore contains account-deletion wording. If passwordless sign-in is added later, move deletion verification to a dedicated transactional email instead of reusing the Magic Link template.
+`/api/account/delete-request` always creates a short-lived, single-use server request. It sends the dedicated security email through Resend when `RESEND_API_KEY` is configured, and temporarily falls back to this Supabase Magic Link template otherwise. Both routes return the user to one final confirmation screen, so automated email-link scanners cannot delete an account by opening the URL.
 
 ## Recommended Sender Settings
 

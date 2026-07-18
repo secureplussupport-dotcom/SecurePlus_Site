@@ -44,13 +44,16 @@ const requiredFiles = [
   "api/stripe/sync.js",
   "api/stripe/webhook.js",
   "api/stripe/portal.js",
-  "api/referrals/claim.js",
-  "api/referrals/me.js",
-  "api/coins/me.js",
-  "api/coins/action.js",
+  "api/economy.js",
+  "server/economy/referral-claim.js",
+  "server/economy/referral-me.js",
+  "server/economy/coins-me.js",
+  "server/economy/coins-action.js",
   "api/account/delete.js",
+  "api/account/delete-request.js",
   "supabase/schema.sql",
   "supabase/cipher-coins.sql",
+  "supabase/account-deletion.sql",
   ".env.example",
 ];
 
@@ -69,6 +72,9 @@ if (!errors.length) {
     "STRIPE_PRICE_PRO",
     "STRIPE_WEBHOOK_SECRET",
     "APP_URL",
+    "RESEND_API_KEY",
+    "ACCOUNT_DELETE_FROM_EMAIL",
+    "ACCOUNT_DELETE_SITE_URL",
     "VITE_PUBLIC_POSTHOG_TOKEN",
   ]) {
     if (!env.includes(`${name}=`)) push(errors, ".env.example", `missing ${name}`);
@@ -82,11 +88,12 @@ if (!errors.length) {
     "api/stripe/checkout.js",
     "api/stripe/sync.js",
     "api/stripe/portal.js",
-    "api/referrals/claim.js",
-    "api/referrals/me.js",
-    "api/coins/me.js",
-    "api/coins/action.js",
+    "server/economy/referral-claim.js",
+    "server/economy/referral-me.js",
+    "server/economy/coins-me.js",
+    "server/economy/coins-action.js",
     "api/account/delete.js",
+    "api/account/delete-request.js",
   ]) {
     requireContains(file, "getBearerToken(req)", "authenticated API route must require a bearer token");
     requireContains(file, "supabase.auth.getUser(token)", "authenticated API route must verify the token with Supabase");
@@ -94,6 +101,13 @@ if (!errors.length) {
   }
 
   requireContains("api/stripe/checkout.js", 'mode: "subscription"', "Stripe checkout must create a subscription session");
+  requireContains("api/account/delete-request.js", 'from("account_deletion_requests")', "deletion requests must be stored server-side");
+  requireContains("api/account/delete-request.js", 'process.env.RESEND_API_KEY', "deletion emails must use the configured transactional provider");
+  requireContains("api/account/delete-request.js", 'supabase.auth.signInWithOtp', "deletion email must retain a safe Supabase fallback until transactional email is configured");
+  requireContains("api/account/delete.js", 'body.deletionToken', "account deletion must require a single-use email token");
+  requireContains("api/account/delete.js", 'supabase.auth.admin.signOut(token, "global")', "account deletion must revoke Supabase sessions before deleting the user");
+  requireContains("supabase/account-deletion.sql", "alter table public.account_deletion_requests enable row level security", "deletion requests must have RLS enabled");
+  requireContains("supabase/account-deletion.sql", "revoke all on table public.account_deletion_requests from anon, authenticated", "browser clients must not access deletion tokens");
   requireContains("api/stripe/checkout.js", 'requireEnv("STRIPE_PRICE_PRO")', "Stripe checkout must use the configured Pro price ID");
   requireContains("api/stripe/checkout.js", "client_reference_id: authUser.id", "Stripe checkout must bind the session to the Supabase user id");
   requireContains("api/stripe/sync.js", "sessionUserId !== authUser.id", "Stripe sync must reject checkout sessions owned by another user");
