@@ -15,7 +15,7 @@ export const CONCEPT_DEEP_DIVES = [
     objectives: [
       "Separate confidentiality, integrity, authentication, and anti-replay properties.",
       "Explain when tunnel mode and transport mode are used.",
-      "Recognise why AH is uncommon on modern NAT-heavy networks.",
+      "Recognize why AH is uncommon on modern NAT-heavy networks.",
     ],
     sections: [
       {
@@ -75,7 +75,7 @@ export const CONCEPT_DEEP_DIVES = [
       {
         title: "Authentication is not encryption",
         body: [
-          "A pre-shared key (PSK) gives authorised users or devices a shared secret. It is simple, but one leaked secret can affect every device using it. Enterprise Wi-Fi commonly uses 802.1X: the supplicant requests access, the access point or switch acts as the authenticator, and an authentication server such as RADIUS evaluates an EAP method.",
+          "A pre-shared key (PSK) gives authorized users or devices a shared secret. It is simple, but one leaked secret can affect every device using it. Enterprise Wi-Fi commonly uses 802.1X: the supplicant requests access, the access point or switch acts as the authenticator, and an authentication server such as RADIUS evaluates an EAP method.",
           "802.1X controls access to a network port; it is not itself a data-encryption algorithm. WPA3-Personal uses Simultaneous Authentication of Equals (SAE). WPA3-Enterprise uses enterprise authentication such as 802.1X/EAP. Therefore, saying all WPA3 uses 802.1X is incorrect.",
         ],
       },
@@ -137,7 +137,7 @@ export const CONCEPT_DEEP_DIVES = [
         table: {
           columns: ["Control", "Protects", "Main limitation"],
           rows: [
-            ["Full-volume encryption / BitLocker", "A volume when the device is powered off or locked", "An authorised, running session can access decrypted data"],
+            ["Full-volume encryption / BitLocker", "A volume when the device is powered off or locked", "An authorized, running session can access decrypted data"],
             ["File or folder encryption", "Selected objects", "Metadata and temporary copies may need separate protection"],
             ["Database encryption", "Database files, fields, or tables depending on design", "Applications and key access still matter"],
             ["Transport encryption", "Data moving between endpoints", "Does not protect plaintext at either endpoint"],
@@ -155,7 +155,7 @@ export const CONCEPT_DEEP_DIVES = [
       {
         title: "A blockchain is not automatically confidential or truthful",
         body: [
-          "A blockchain is a form of distributed ledger that links records cryptographically and uses a consensus design to agree on state. It can make unauthorised historical changes evident or difficult, depending on the network and threat model. Digital signatures can show which key authorised a transaction.",
+          "A blockchain is a form of distributed ledger that links records cryptographically and uses a consensus design to agree on state. It can make unauthorized historical changes evident or difficult, depending on the network and threat model. Digital signatures can show which key authorized a transaction.",
           "The ledger does not automatically encrypt its contents, prove that real-world input was true, prevent stolen-key transactions, or remove the need for governance. Avoid storing sensitive plaintext merely because the storage is called a blockchain; replication can make later deletion especially difficult.",
         ],
       },
@@ -183,7 +183,7 @@ export const CONCEPT_DEEP_DIVES = [
     category: "Cryptography",
     title: "PKI, Certificate Status, and Email Trust",
     subtitle: "Follow trust from certificate issuance to revocation and authenticated email.",
-    summary: "PKI and email questions often combine several independent controls. Certificate revocation, CA authorisation, transport encryption, message encryption, and domain authentication solve different problems and should be evaluated separately.",
+    summary: "PKI and email questions often combine several independent controls. Certificate revocation, CA authorization, transport encryption, message encryption, and domain authentication solve different problems and should be evaluated separately.",
     minutes: 12,
     difficulty: "Applied",
     aliases: ["CRL", "OCSP", "OCSP stapling", "CAA", "SMTP", "POP3S", "S/MIME", "SPF", "DKIM", "DMARC", "DNS TXT"],
@@ -209,7 +209,7 @@ export const CONCEPT_DEEP_DIVES = [
         title: "Email protection is layered",
         body: [
           "SMTP transfers mail. POP3S usually means POP3 protected by TLS. Transport TLS protects a connection between systems, but each receiving hop or endpoint can see plaintext. S/MIME can encrypt message content for recipients and digitally sign it for origin and integrity; it does not hide all metadata and cannot protect a compromised endpoint.",
-          "SPF authorises sending infrastructure for a domain. DKIM attaches a cryptographic signature that a receiver verifies with a DNS-published public key. DMARC adds alignment and domain policy, then enables aggregate or failure reporting. These records are commonly published as DNS TXT records at different names; the obsolete dedicated SPF DNS record type should not be treated as the modern answer.",
+          "SPF authorizes sending infrastructure for a domain. DKIM attaches a cryptographic signature that a receiver verifies with a DNS-published public key. DMARC adds alignment and domain policy, then enables aggregate or failure reporting. These records are commonly published as DNS TXT records at different names; the obsolete dedicated SPF DNS record type should not be treated as the modern answer.",
         ],
       },
     ],
@@ -219,7 +219,7 @@ export const CONCEPT_DEEP_DIVES = [
       "CAA is checked by participating CAs before issuance; it is not a browser-side revocation mechanism.",
     ],
     check: {
-      question: "A receiver must verify that a message body was not changed and that an authorised domain signed it. Which control is most direct?",
+      question: "A receiver must verify that a message body was not changed and that an authorized domain signed it. Which control is most direct?",
       answer: "DKIM. SPF focuses on sending infrastructure, while DMARC evaluates alignment and policy using SPF and/or DKIM results.",
     },
     sources: [
@@ -260,15 +260,15 @@ export const CONCEPT_DEEP_DIVES = [
         ],
       },
       {
-        title: "Modernise Active Directory without calling AD DS obsolete",
+        title: "Modernize Active Directory without calling AD DS obsolete",
         body: [
           "Active Directory Domain Services remains widely used. The legacy risks usually come from old protocols and configurations—such as excessive NTLM reliance, simple LDAP without protection, weak delegation, stale accounts, or manually managed service passwords—not from the mere existence of AD DS.",
-          "A group Managed Service Account (gMSA) lets AD DS manage a service account password and can support a service running across multiple authorised hosts. It is appropriate only for supported Windows workloads and still requires correct host permissions and service configuration.",
+          "A group Managed Service Account (gMSA) lets AD DS manage a service account password and can support a service running across multiple authorized hosts. It is appropriate only for supported Windows workloads and still requires correct host permissions and service configuration.",
         ],
       },
     ],
     traps: [
-      "Zero Trust means verify explicitly and minimise access; it does not mean trust nobody forever or remove usability controls.",
+      "Zero Trust means verify explicitly and minimize access; it does not mean trust nobody forever or remove usability controls.",
       "A PDP decides and a PEP enforces.",
       "A gMSA reduces manual password handling; it does not automatically fix over-privileged services.",
     ],
@@ -287,8 +287,8 @@ export const CONCEPT_DEEP_DIVES = [
     chapter: 4,
     category: "Identity & Access",
     title: "SSO, Federation, OAuth, OIDC, SAML, and Passkeys",
-    subtitle: "Stop using authentication and authorisation as interchangeable words.",
-    summary: "Single sign-on is a user experience outcome, federation is a trust relationship across security domains, OAuth delegates authorisation, and OpenID Connect adds an identity layer. Passkeys use public-key credentials and can be phishing-resistant, but their assurance depends on verification and deployment policy.",
+    subtitle: "Stop using authentication and authorization as interchangeable words.",
+    summary: "Single sign-on is a user experience outcome, federation is a trust relationship across security domains, OAuth delegates authorization, and OpenID Connect adds an identity layer. Passkeys use public-key credentials and can be phishing-resistant, but their assurance depends on verification and deployment policy.",
     minutes: 11,
     difficulty: "Applied",
     aliases: ["SSO", "federation", "SAML", "OAuth", "OIDC", "OpenID Connect", "passkey", "FIDO2", "WebAuthn", "MFA"],
@@ -315,13 +315,13 @@ export const CONCEPT_DEEP_DIVES = [
         title: "Passkeys and phishing resistance",
         body: [
           "A passkey is a FIDO credential: the relying party stores a public key while the authenticator protects the private key. The credential is bound to the relying-party identifier, which makes a well-implemented flow resistant to ordinary phishing and credential replay.",
-          "Do not automatically label every passkey event as multi-factor authentication. Assurance depends on whether user verification—such as a biometric or device PIN—is required, how the credential is synced or backed up, account recovery, and organisational policy. A security key or passkey can satisfy strong MFA goals when the complete ceremony meets the requirement.",
+          "Do not automatically label every passkey event as multi-factor authentication. Assurance depends on whether user verification—such as a biometric or device PIN—is required, how the credential is synced or backed up, account recovery, and organizational policy. A security key or passkey can satisfy strong MFA goals when the complete ceremony meets the requirement.",
         ],
       },
     ],
     traps: [
       "OAuth delegates access; OIDC supplies an authentication layer.",
-      "SSO does not necessarily cross organisational boundaries, while federation does.",
+      "SSO does not necessarily cross organizational boundaries, while federation does.",
       "Phishing-resistant does not mean invulnerable to malware, weak recovery, or a compromised endpoint.",
     ],
     check: {
@@ -340,7 +340,7 @@ export const CONCEPT_DEEP_DIVES = [
     chapter: 3,
     category: "Network Security",
     title: "Network Protocols, Ports, and the TLS Flow",
-    subtitle: "Use the transport behaviour and service purpose—not memorised slogans—to choose an answer.",
+    subtitle: "Use the transport behavior and service purpose—not memorized slogans—to choose an answer.",
     summary: "Ports are useful identifiers, not proof of application identity. TCP and UDP provide different transport properties, common services use registered defaults, and modern TLS establishes authenticated shared keys before protecting application data.",
     minutes: 13,
     difficulty: "Core",
@@ -406,7 +406,7 @@ export const CONCEPT_DEEP_DIVES = [
     category: "Network Security",
     title: "Firewalls, Detection, DDoS, and Secure Access Paths",
     subtitle: "Place each control where it can actually observe or enforce the traffic.",
-    summary: "Network tools overlap, but their position and operating mode matter. A stateful firewall understands flows, an IDS observes, an inline IPS can block, a WAF specialises in web traffic, and proxies or jump hosts create controlled access paths.",
+    summary: "Network tools overlap, but their position and operating mode matter. A stateful firewall understands flows, an IDS observes, an inline IPS can block, a WAF specializes in web traffic, and proxies or jump hosts create controlled access paths.",
     minutes: 13,
     difficulty: "Applied",
     aliases: ["stateful firewall", "IDS", "IPS", "NGFW", "UTM", "WAF", "DoS", "DDoS", "jump server", "proxy", "site-to-site VPN", "TLS inspection"],
@@ -467,21 +467,21 @@ export const CONCEPT_DEEP_DIVES = [
     category: "Governance & Risk",
     title: "Risk Decisions, Resilience, and Assurance",
     subtitle: "Turn likelihood and impact into a defensible action—not a magic formula.",
-    summary: "Risk work connects uncertainty to business decisions. Matrices and scores support comparison, but labels and thresholds belong to the organisation. Controls change likelihood or impact; transfer changes who bears specified consequences but leaves residual risk.",
+    summary: "Risk work connects uncertainty to business decisions. Matrices and scores support comparison, but labels and thresholds belong to the organization. Controls change likelihood or impact; transfer changes who bears specified consequences but leaves residual risk.",
     minutes: 12,
     difficulty: "Applied",
-    aliases: ["risk transfer", "risk matrix", "likelihood", "impact", "residual risk", "asset value", "exposure factor", "EF", "single loss expectancy", "SLE", "annualized rate of occurrence", "ARO", "annualized loss expectancy", "ALE", "qualitative risk", "quantitative risk", "fault tolerance", "high availability", "redundancy", "mandatory vacation", "due diligence", "audit", "rules of engagement", "penetration test", "red team", "vulnerability prioritisation"],
+    aliases: ["risk transfer", "risk matrix", "likelihood", "impact", "residual risk", "asset value", "exposure factor", "EF", "single loss expectancy", "SLE", "annualized rate of occurrence", "ARO", "annualized loss expectancy", "ALE", "qualitative risk", "quantitative risk", "fault tolerance", "high availability", "redundancy", "mandatory vacation", "due diligence", "audit", "rules of engagement", "penetration test", "red team", "vulnerability prioritization"],
     objectives: [
       "Explain risk acceptance, avoidance, mitigation, and transfer.",
       "Differentiate fault tolerance, high availability, and redundancy.",
-      "Prioritise vulnerabilities with technical and business context.",
+      "Prioritize vulnerabilities with technical and business context.",
     ],
     sections: [
       {
         title: "Use the matrix, but respect its limits",
         body: [
           "A qualitative matrix combines likelihood and impact into a relative risk level. Some organisations multiply numbered values; others use a lookup table. A 3×3 score of 9 is ‘critical’ only if the approved method defines it that way. Precision-looking numbers do not remove uncertainty in the inputs.",
-          "Risk transfer—such as insurance or a contract—moves specified financial or operational consequences. It does not eliminate the event, reputational harm, compliance duty, deductibles, exclusions, or residual risk retained by the organisation.",
+          "Risk transfer—such as insurance or a contract—moves specified financial or operational consequences. It does not eliminate the event, reputational harm, compliance duty, deductibles, exclusions, or residual risk retained by the organization.",
         ],
       },
       {
@@ -491,15 +491,15 @@ export const CONCEPT_DEEP_DIVES = [
           rows: [
             ["Redundancy", "Duplicate a component or path", "Two power supplies"],
             ["Fault tolerance", "Continue operating through a component failure, often transparently", "Mirrored storage continues after one disk fails"],
-            ["High availability", "Minimise service downtime through design and recovery", "Cluster failover within an agreed objective"],
+            ["High availability", "Minimize service downtime through design and recovery", "Cluster failover within an agreed objective"],
           ],
         },
       },
       {
         title: "Quantitative estimates support—not replace—judgement",
         body: [
-          "A common exam model estimates single loss expectancy as asset value × exposure factor, then annualised loss expectancy as SLE × annualised rate of occurrence. If a $200,000 process would lose 25% of its value per event, the SLE is $50,000. An ARO of 0.2—roughly once every five years—produces an ALE of $10,000.",
-          "ALE is an expected annualised estimate across uncertainty, not a promise that exactly that amount will be lost each year. Asset value can include revenue, recovery, safety, legal, and reputational effects. Compare controls using expected risk reduction, total lifecycle cost, feasibility, compliance duties, and residual risk; a neat equation cannot make weak inputs precise.",
+          "A common exam model estimates single loss expectancy as asset value × exposure factor, then annualized loss expectancy as SLE × annualized rate of occurrence. If a $200,000 process would lose 25% of its value per event, the SLE is $50,000. An ARO of 0.2—roughly once every five years—produces an ALE of $10,000.",
+          "ALE is an expected annualized estimate across uncertainty, not a promise that exactly that amount will be lost each year. Asset value can include revenue, recovery, safety, legal, and reputational effects. Compare controls using expected risk reduction, total lifecycle cost, feasibility, compliance duties, and residual risk; a neat equation cannot make weak inputs precise.",
         ],
       },
       {
@@ -509,23 +509,23 @@ export const CONCEPT_DEEP_DIVES = [
           rows: [
             ["Audit", "Does evidence meet defined criteria?", "Independence and sampling affect assurance"],
             ["Vulnerability assessment", "Which likely weaknesses are present?", "Findings require validation and do not prove exploitability"],
-            ["Penetration test", "Can an authorised tester demonstrate impact?", "Rules of engagement define targets, timing, techniques, and stop conditions"],
+            ["Penetration test", "Can an authorized tester demonstrate impact?", "Rules of engagement define targets, timing, techniques, and stop conditions"],
             ["Red-team exercise", "Can an objective-focused adversary emulation test detection and response?", "It is not unrestricted hacking and may use multiple attack paths"],
           ],
         },
       },
       {
-        title: "Governance and prioritisation",
+        title: "Governance and prioritization",
         body: [
           "Mandatory vacation is an administrative control that can expose fraud or hidden dependencies when another person performs the absent employee's duties. Due diligence is the ongoing investigation and care used to understand and manage risk; due care is the reasonable action taken in response.",
-          "An audit evaluates evidence against defined criteria and independence requirements. A penetration test actively attempts exploitation within an authorised scope. Vulnerability priority should combine severity, known or likely exploitation, exposure, asset and mission impact, reachability, and compensating controls. No universal multiplication formula replaces judgement.",
+          "An audit evaluates evidence against defined criteria and independence requirements. A penetration test actively attempts exploitation within an authorized scope. Vulnerability priority should combine severity, known or likely exploitation, exposure, asset and mission impact, reachability, and compensating controls. No universal multiplication formula replaces judgement.",
         ],
       },
     ],
     traps: [
       "Transferred risk still leaves residual and non-transferable consequences.",
       "A redundant component is not automatically fault tolerant if failover is manual or untested.",
-      "CVSS severity alone is not the same as organisational risk or remediation priority.",
+      "CVSS severity alone is not the same as organizational risk or remediation priority.",
     ],
     check: {
       question: "Two vulnerabilities have the same CVSS score. One is internet-facing and listed as actively exploited; the other is isolated behind compensating controls. Which normally comes first?",
@@ -558,7 +558,7 @@ export const CONCEPT_DEEP_DIVES = [
         title: "Governance roles",
         body: [
           "A data owner is generally accountable for classification, acceptable use, access requirements, and risk decisions. A custodian or steward implements storage, backup, access, retention, and technical handling under policy. Exact titles vary, so answer from the responsibility described in the scenario.",
-          "Under GDPR, a controller determines the purposes and means of processing personal data. A processor handles data on the controller's behalf. The same organisation can be a controller for one activity and a processor for another.",
+          "Under GDPR, a controller determines the purposes and means of processing personal data. A processor handles data on the controller's behalf. The same organization can be a controller for one activity and a processor for another.",
         ],
       },
       {
@@ -596,7 +596,7 @@ export const CONCEPT_DEEP_DIVES = [
     category: "Security Operations",
     title: "Vulnerability Scanning, SCAP, Orchestration, and Threat Intelligence",
     subtitle: "Automate repeatable work while keeping evidence, context, and human decisions visible.",
-    summary: "Operations tools produce signals, not automatic truth. Scanners combine version, configuration, authenticated, and behavioural checks; SCAP standardises machine-readable security content; orchestration coordinates workflows; threat intelligence adds context at different decision levels.",
+    summary: "Operations tools produce signals, not automatic truth. Scanners combine version, configuration, authenticated, and behavioural checks; SCAP standardizes machine-readable security content; orchestration coordinates workflows; threat intelligence adds context at different decision levels.",
     minutes: 11,
     difficulty: "Applied",
     aliases: ["vulnerability scanner", "CVE", "CWE", "CVSS", "EPSS", "KEV", "SCAP", "orchestration", "automation", "posture assessment", "configuration enforcement", "remediation", "false positive", "false negative", "threat intelligence", "strategic", "operational", "tactical", "technical"],
@@ -609,30 +609,30 @@ export const CONCEPT_DEEP_DIVES = [
       {
         title: "A scanner does more than exact CVE matching",
         body: [
-          "A scanner may identify versions, query package and patch state with credentials, check exposed services, evaluate configuration, or safely test behaviour. Findings can be false positives, false negatives, or affected by backported vendor patches, so validation and asset context remain necessary.",
+          "A scanner may identify versions, query package and patch state with credentials, check exposed services, evaluate configuration, or safely test behavior. Findings can be false positives, false negatives, or affected by backported vendor patches, so validation and asset context remain necessary.",
           "Posture assessment measures whether a device meets requirements. Configuration enforcement changes or blocks non-compliant state. Observation and enforcement are separate capabilities, even when one platform provides both.",
         ],
       },
       {
-        title: "Standardise content, then orchestrate response",
+        title: "Standardize content, then orchestrate response",
         body: [
           "Security Content Automation Protocol (SCAP) is a family of specifications for expressing and exchanging machine-readable security configuration and vulnerability information. It supports consistent assessment; it is not a complete vulnerability-management programme by itself.",
           "Orchestration connects tools and sequences actions. Automation executes defined tasks. A playbook might enrich an alert, check asset criticality, open a case, and request approval before isolation. High-impact actions need safeguards, rollback plans, and evidence capture.",
         ],
       },
       {
-        title: "Prioritisation is a decision, not a severity sort",
+        title: "Prioritization is a decision, not a severity sort",
         body: [
-          "A defensible workflow discovers and scopes a finding, validates the evidence, prioritises it using asset and threat context, applies remediation or a time-limited exception, and then verifies closure. A scanner changing a status to fixed is useful evidence, but a rescan or other independent check should confirm the vulnerable condition is gone.",
+          "A defensible workflow discovers and scopes a finding, validates the evidence, prioritizes it using asset and threat context, applies remediation or a time-limited exception, and then verifies closure. A scanner changing a status to fixed is useful evidence, but a rescan or other independent check should confirm the vulnerable condition is gone.",
         ],
         table: {
           columns: ["Signal", "What it tells you", "What it does not tell you alone"],
           rows: [
             ["CVE", "A public identifier for a disclosed vulnerability", "Whether your exact asset is exposed or exploitable"],
             ["CWE", "A category of software or hardware weakness", "The risk of a particular deployed instance"],
-            ["CVSS", "Standardised technical severity characteristics", "Business impact, current exposure, or observed exploitation"],
+            ["CVSS", "Standardized technical severity characteristics", "Business impact, current exposure, or observed exploitation"],
             ["EPSS", "An estimate of near-term exploitation probability in the wild", "Business impact or proof that exploitation has occurred"],
-            ["CISA KEV", "A vulnerability has evidence of active exploitation", "Whether a specific organisation has been compromised"],
+            ["CISA KEV", "A vulnerability has evidence of active exploitation", "Whether a specific organization has been compromised"],
           ],
         },
       },
@@ -671,7 +671,7 @@ export const CONCEPT_DEEP_DIVES = [
     category: "Threats & Hardening",
     title: "Platform, Endpoint, and Cloud Hardening",
     subtitle: "Build trust from firmware to workloads and avoid category mistakes in cloud scenarios.",
-    summary: "Platform security starts before the operating system and continues through process behaviour, application installation, virtualisation, and cloud responsibility. Most controls reduce an attack path; very few make compromise impossible.",
+    summary: "Platform security starts before the operating system and continues through process behavior, application installation, virtualization, and cloud responsibility. Most controls reduce an attack path; very few make compromise impossible.",
     minutes: 13,
     difficulty: "Applied",
     aliases: ["BIOS", "UEFI", "Secure Boot", "RTOS", "embedded system", "sideloading", "hybrid cloud", "multi-cloud", "virtual machine", "hypervisor", "shared responsibility", "wireless router", "svchost", "misconfiguration", "improper error handling"],
@@ -684,18 +684,18 @@ export const CONCEPT_DEEP_DIVES = [
       {
         title: "Firmware, embedded systems, and application sources",
         body: [
-          "Modern systems usually use UEFI rather than legacy BIOS. Secure Boot checks signatures on approved pre-operating-system components to resist unauthorised boot code. It is one layer: firmware updates, key management, measured boot, disk encryption, operating-system hardening, and physical security still matter.",
-          "A real-time operating system (RTOS) prioritises predictable timing for time-sensitive workloads. Embedded devices often have constrained resources, long support lives, specialised interfaces, and physical exposure. Sideloading installs software outside the normal curated channel; it can be legitimate, but expands trust and provenance decisions.",
+          "Modern systems usually use UEFI rather than legacy BIOS. Secure Boot checks signatures on approved pre-operating-system components to resist unauthorized boot code. It is one layer: firmware updates, key management, measured boot, disk encryption, operating-system hardening, and physical security still matter.",
+          "A real-time operating system (RTOS) prioritizes predictable timing for time-sensitive workloads. Embedded devices often have constrained resources, long support lives, specialized interfaces, and physical exposure. Sideloading installs software outside the normal curated channel; it can be legitimate, but expands trust and provenance decisions.",
         ],
       },
       {
-        title: "Cloud and virtualisation terms",
+        title: "Cloud and virtualization terms",
         table: {
           columns: ["Term", "Accurate meaning", "Common mistake"],
           rows: [
             ["Hybrid cloud", "Distinct cloud infrastructures—such as private and public—bound to enable portability or coordinated use", "Calling any two providers ‘hybrid’"],
             ["Multi-cloud", "Use of services from more than one cloud provider", "Assuming it always includes a private cloud"],
-            ["Guest VM", "Workload operating inside a virtualised environment", "Assuming the guest controls the host hypervisor"],
+            ["Guest VM", "Workload operating inside a virtualized environment", "Assuming the guest controls the host hypervisor"],
             ["Shared responsibility", "Provider and customer duties vary by service model", "Assuming cloud use transfers every security duty"],
           ],
         },
@@ -711,7 +711,7 @@ export const CONCEPT_DEEP_DIVES = [
     ],
     traps: [
       "Hybrid cloud and multi-cloud are not synonyms.",
-      "Secure Boot validates an authorised boot chain; it does not make the running operating system invulnerable.",
+      "Secure Boot validates an authorized boot chain; it does not make the running operating system invulnerable.",
       "A suspicious svchost relationship is evidence to investigate, not standalone proof of process injection.",
     ],
     check: {
@@ -721,7 +721,7 @@ export const CONCEPT_DEEP_DIVES = [
     sources: [
       { label: "Microsoft — Secure Boot and Trusted Boot", url: "https://learn.microsoft.com/en-us/windows/security/operating-system-security/system-security/trusted-boot" },
       { label: "NIST — Hybrid cloud definition", url: "https://csrc.nist.gov/glossary/term/Hybrid_cloud" },
-      { label: "NIST SP 800-125 — Virtualisation Security", url: "https://csrc.nist.gov/pubs/sp/800/125/final" },
+      { label: "NIST SP 800-125 — Virtualization Security", url: "https://csrc.nist.gov/pubs/sp/800/125/final" },
       { label: "Microsoft — Service Host refactoring", url: "https://learn.microsoft.com/en-us/windows/application-management/svchost-service-refactoring" },
     ],
   },
@@ -736,7 +736,7 @@ export const CONCEPT_DEEP_DIVES = [
     difficulty: "Applied",
     aliases: ["forensics", "metadata", "RAM", "volatile evidence", "order of volatility", "chain of custody", "photographs", "journaling", "backup", "snapshot", "recovery"],
     objectives: [
-      "Apply order of volatility under an authorised response plan.",
+      "Apply order of volatility under an authorized response plan.",
       "Use metadata as contextual evidence rather than automatic proof.",
       "Differentiate journals, snapshots, replicas, and backups.",
     ],
@@ -744,15 +744,15 @@ export const CONCEPT_DEEP_DIVES = [
       {
         title: "Preserve what will disappear first",
         body: [
-          "RAM can contain running processes, network connections, encryption keys, injected code, and unsaved data, but it is volatile. An authorised responder follows the incident and legal playbook, records actions, minimises alteration, and captures higher-volatility evidence before lower-volatility evidence when feasible.",
+          "RAM can contain running processes, network connections, encryption keys, injected code, and unsaved data, but it is volatile. An authorized responder follows the incident and legal playbook, records actions, minimizes alteration, and captures higher-volatility evidence before lower-volatility evidence when feasible.",
           "Photographs and notes document the scene, cable state, screens, and device condition. They are important, but a simplistic ‘always photograph everything before any technical action’ rule can lose rapidly changing evidence. Safety, legal authority, encryption risk, and the approved procedure determine the sequence.",
         ],
       },
       {
         title: "Metadata and chain of custody",
         body: [
-          "Metadata can show timestamps, file paths, ownership, application history, EXIF fields, message routing, or document authorship. It can be changed, copied, affected by clock error, or stripped, so correlate it with logs, hashes, filesystem behaviour, and other evidence.",
-          "Chain of custody records who collected, handled, transferred, stored, and analysed evidence, when and why. Hashes support integrity checking, but documentation and controlled handling establish the wider evidentiary story.",
+          "Metadata can show timestamps, file paths, ownership, application history, EXIF fields, message routing, or document authorship. It can be changed, copied, affected by clock error, or stripped, so correlate it with logs, hashes, filesystem behavior, and other evidence.",
+          "Chain of custody records who collected, handled, transferred, stored, and analyzed evidence, when and why. Hashes support integrity checking, but documentation and controlled handling establish the wider evidentiary story.",
         ],
       },
       {
@@ -769,7 +769,7 @@ export const CONCEPT_DEEP_DIVES = [
       },
     ],
     traps: [
-      "Shutting down can destroy volatile evidence; keeping a system running can also change evidence. Follow the authorised playbook.",
+      "Shutting down can destroy volatile evidence; keeping a system running can also change evidence. Follow the authorized playbook.",
       "A snapshot is valuable but is not automatically an independent backup.",
       "Metadata supports a conclusion; it rarely proves attribution by itself.",
     ],
@@ -788,7 +788,7 @@ export const CONCEPT_DEEP_DIVES = [
     chapter: 2,
     category: "Threats & Hardening",
     title: "Web, Social Engineering, and DNS Attacks",
-    subtitle: "Identify the trust boundary the attacker is abusing before choosing a defence.",
+    subtitle: "Identify the trust boundary the attacker is abusing before choosing a defense.",
     summary: "Pretexting abuses human trust, XSS abuses a browser's trust in application content, domain hijacking abuses registrar control, and DNS spoofing abuses name resolution. Similar outcomes can originate at very different layers.",
     minutes: 12,
     difficulty: "Applied",
@@ -803,7 +803,7 @@ export const CONCEPT_DEEP_DIVES = [
         title: "XSS is untrusted data becoming executable browser content",
         body: [
           "Stored XSS persists in server-side storage and is later delivered to victims. Reflected XSS returns attacker-controlled input in an immediate response. DOM-based XSS occurs when client-side code moves attacker-controlled data into a dangerous browser sink.",
-          "For illustration, an unsafe payload may look like <img src=\"missing.jpg\" onerror=\"alert(1)\">. Displaying it here as text is safe because React escapes text content. A real defence uses context-aware output encoding, safe DOM APIs or framework bindings, input validation where appropriate, and a restrictive Content Security Policy as defence in depth. Never paste test payloads into systems without explicit authorisation.",
+          "For illustration, an unsafe payload may look like <img src=\"missing.jpg\" onerror=\"alert(1)\">. Displaying it here as text is safe because React escapes text content. A real defense uses context-aware output encoding, safe DOM APIs or framework bindings, input validation where appropriate, and a restrictive Content Security Policy as defense in depth. Never paste test payloads into systems without explicit authorization.",
         ],
       },
       {
@@ -826,7 +826,7 @@ export const CONCEPT_DEEP_DIVES = [
       },
     ],
     traps: [
-      "A WAF and CSP are defence in depth; safe output handling and safe sinks remain central XSS controls.",
+      "A WAF and CSP are defense in depth; safe output handling and safe sinks remain central XSS controls.",
       "Domain hijacking changes control of registration or delegation; DNS spoofing supplies a false resolution response.",
       "CSRF and XSS are different: XSS executes attacker-controlled script, while CSRF abuses an authenticated request context.",
     ],

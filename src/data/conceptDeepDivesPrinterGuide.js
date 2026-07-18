@@ -9,7 +9,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
     category: "Cryptography",
     title: "Cipher Modes, Hybrid Encryption, and Post-Quantum Transition",
     subtitle: "Choose the construction that provides the required property, then plan for algorithms and data that will outlive today's keys.",
-    summary: "Modern cryptography combines specialised primitives. Symmetric encryption protects bulk data, public-key mechanisms establish keys or signatures, hashes support integrity constructions, and secure protocols define how every piece is used together.",
+    summary: "Modern cryptography combines specialized primitives. Symmetric encryption protects bulk data, public-key mechanisms establish keys or signatures, hashes support integrity constructions, and secure protocols define how every piece is used together.",
     minutes: 15,
     difficulty: "Applied",
     aliases: ["symmetric encryption", "asymmetric encryption", "public key cryptography", "hybrid encryption", "stream cipher", "block cipher", "mode of operation", "ECB", "CBC", "CTR", "GCM", "GMAC", "AEAD", "nonce", "initialization vector", "IV", "digital signature", "key agreement", "forward secrecy", "crypto agility", "post-quantum cryptography", "PQC", "ML-KEM", "ML-DSA", "SLH-DSA", "harvest now decrypt later"],
@@ -48,8 +48,8 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
       {
         title: "Post-quantum migration begins before a cryptographically relevant quantum computer",
         body: [
-          "NIST standardised ML-KEM for key establishment, ML-DSA for digital signatures, and SLH-DSA as a stateless hash-based signature standard. These are different jobs: ML-KEM is not a signature algorithm, and ML-DSA is not bulk encryption.",
-          "Start with a cryptographic inventory: algorithms, libraries, certificates, protocols, keys, owners, data lifetimes, and dependencies. Prioritise information that must remain confidential for many years because attackers can capture ciphertext now and attempt decryption later. Crypto agility means algorithms and parameters can be replaced through tested, governed interfaces—not that systems automatically become quantum-safe.",
+          "NIST standardized ML-KEM for key establishment, ML-DSA for digital signatures, and SLH-DSA as a stateless hash-based signature standard. These are different jobs: ML-KEM is not a signature algorithm, and ML-DSA is not bulk encryption.",
+          "Start with a cryptographic inventory: algorithms, libraries, certificates, protocols, keys, owners, data lifetimes, and dependencies. prioritize information that must remain confidential for many years because attackers can capture ciphertext now and attempt decryption later. Crypto agility means algorithms and parameters can be replaced through tested, governed interfaces—not that systems automatically become quantum-safe.",
         ],
       },
     ],
@@ -82,8 +82,8 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
     aliases: ["Kerberos", "KDC", "authentication service", "AS", "ticket-granting service", "TGS", "ticket-granting ticket", "TGT", "service ticket", "principal", "authenticator", "pass the ticket", "RADIUS", "TACACS+", "AAA", "network access server", "NAS", "LDAP bind", "SASL", "LDAPS"],
     objectives: [
       "Follow the Kerberos ticket flow without sending a reusable password to each service.",
-      "Distinguish Kerberos authentication from the application's authorisation decision.",
-      "Choose RADIUS or TACACS+ from the access scenario rather than a memorised slogan.",
+      "Distinguish Kerberos authentication from the application's authorization decision.",
+      "Choose RADIUS or TACACS+ from the access scenario rather than a memorized slogan.",
     ],
     sections: [
       {
@@ -94,10 +94,10 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
         ],
       },
       {
-        title: "Tickets authenticate; applications still authorise",
+        title: "Tickets authenticate; applications still authorize",
         body: [
-          "Kerberos primarily establishes authenticated identities and session keys. The target operating system or application still decides what the principal may do using groups, roles, ACLs, claims, or application policy. Microsoft environments may carry authorisation-related information with tickets, but the final access decision remains a policy-enforcement responsibility.",
-          "Kerberos depends on protected KDCs, correct service-principal configuration, reasonable clock synchronisation, secure endpoints, and well-managed keys. Stolen tickets can support pass-the-ticket activity until they expire or are otherwise contained. MFA at initial sign-in does not make a stolen bearer ticket harmless.",
+          "Kerberos primarily establishes authenticated identities and session keys. The target operating system or application still decides what the principal may do using groups, roles, ACLs, claims, or application policy. Microsoft environments may carry authorization-related information with tickets, but the final access decision remains a policy-enforcement responsibility.",
+          "Kerberos depends on protected KDCs, correct service-principal configuration, reasonable clock synchronization, secure endpoints, and well-managed keys. Stolen tickets can support pass-the-ticket activity until they expire or are otherwise contained. MFA at initial sign-in does not make a stolen bearer ticket harmless.",
         ],
       },
       {
@@ -106,7 +106,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
           columns: ["Protocol", "Common use", "Design caution"],
           rows: [
             ["RADIUS", "Wi-Fi, VPN, and network-access authentication and policy", "Classic RADIUS does not protect the whole packet; use trusted paths or an approved protected transport"],
-            ["TACACS+", "Administrative access and command authorisation on network devices", "Protect the shared secret, servers, clients, and packet path; the header remains visible"],
+            ["TACACS+", "Administrative access and command authorization on network devices", "Protect the shared secret, servers, clients, and packet path; the header remains visible"],
             ["LDAP with TLS / SASL", "Directory queries and binds", "Simple binds must not expose credentials over unprotected transport"],
           ],
         },
@@ -161,7 +161,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
       {
         title: "Safety and deterministic operation change the playbook",
         body: [
-          "OT may have strict timing, high availability, long equipment lifecycles, vendor dependencies, fragile legacy protocols, and physical consequences. A reboot, aggressive scan, or untested patch that is routine in IT can interrupt a process or create unsafe behaviour. Confidentiality still matters, but integrity, availability, safety, and control-system correctness may dominate a particular decision.",
+          "OT may have strict timing, high availability, long equipment lifecycles, vendor dependencies, fragile legacy protocols, and physical consequences. A reboot, aggressive scan, or untested patch that is routine in IT can interrupt a process or create unsafe behavior. Confidentiality still matters, but integrity, availability, safety, and control-system correctness may dominate a particular decision.",
           "Use approved maintenance windows, representative testing, vendor coordination, engineering ownership, rollback criteria, and process-safety review. When patching cannot occur promptly, reduce exposure with segmentation, allowlisting, access restrictions, monitoring, jump hosts, and documented time-limited risk treatment.",
         ],
       },
@@ -169,14 +169,14 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
         title: "Build zones, conduits, and observable remote access",
         body: [
           "Separate enterprise IT, industrial DMZ services, control operations, safety systems, and field devices according to risk. Permit only required conduits and protocols. Broker remote administration through strongly authenticated, approved, logged access paths; remove vendor access when it is not needed and avoid direct internet exposure.",
-          "Prefer passive discovery and protocol-aware monitoring where active probes could disrupt equipment. Establish normal process and network behaviour, protect engineering workstations and configuration backups, synchronise time where safe, and rehearse manual or fail-safe operations. A network alert should be evaluated with process state because cyber and physical evidence inform each other.",
+          "Prefer passive discovery and protocol-aware monitoring where active probes could disrupt equipment. Establish normal process and network behavior, protect engineering workstations and configuration backups, synchronize time where safe, and rehearse manual or fail-safe operations. A network alert should be evaluated with process state because cyber and physical evidence inform each other.",
         ],
       },
       {
         title: "IoT security begins in procurement",
         body: [
           "Require unique device identities or credentials, secure default configuration, protected updates, vulnerability disclosure and support commitments, data protection, event logging, and a documented end-of-support path. Inventory device model, firmware, owner, network location, dependencies, collected data, and update status.",
-          "Constrained devices may not support full endpoint agents, so compensate with gateway enforcement, network segmentation, behavioural monitoring, restricted egress, and protected management services. At disposal, remove credentials and sensitive data, revoke trust, update inventory, and verify sanitisation or destruction according to the media and risk.",
+          "Constrained devices may not support full endpoint agents, so compensate with gateway enforcement, network segmentation, behavioural monitoring, restricted egress, and protected management services. At disposal, remove credentials and sensitive data, revoke trust, update inventory, and verify sanitization or destruction according to the media and risk.",
         ],
       },
     ],
@@ -201,14 +201,14 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
     category: "Secure Software",
     title: "Memory Safety, Race Conditions, and Resource Exhaustion",
     subtitle: "Distinguish corrupted memory, unsafe arithmetic, timing-dependent state, and uncontrolled consumption before choosing a control.",
-    summary: "Low-level software weaknesses can look similar when a system crashes, but their root causes differ. Accurate classification connects the failure to safer languages, bounds and arithmetic checks, synchronisation, resource budgets, or runtime hardening.",
+    summary: "Low-level software weaknesses can look similar when a system crashes, but their root causes differ. Accurate classification connects the failure to safer languages, bounds and arithmetic checks, synchronization, resource budgets, or runtime hardening.",
     minutes: 14,
     difficulty: "Applied",
     aliases: ["buffer overflow", "out-of-bounds write", "stack overflow", "heap overflow", "integer overflow", "integer wraparound", "null pointer dereference", "race condition", "TOCTOU", "time of check time of use", "memory leak", "resource exhaustion", "uncontrolled resource consumption", "ASLR", "DEP", "NX", "stack canary", "memory-safe language", "fuzzing", "sanitizer"],
     objectives: [
       "Separate memory-boundary, arithmetic, pointer, concurrency, and resource-lifecycle failures.",
       "Explain why a race condition is not a subtype of null-pointer dereference.",
-      "Layer prevention, testing, and exploit mitigations without calling defence in depth a complete fix.",
+      "Layer prevention, testing, and exploit mitigations without calling defense in depth a complete fix.",
     ],
     sections: [
       {
@@ -228,8 +228,8 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
       {
         title: "Race describes timing, not one specific crash",
         body: [
-          "A race condition exists when concurrent execution over shared state lacks correct synchronisation and the result depends on timing or ordering. A time-of-check-to-time-of-use weakness occurs when a condition is checked and the relevant resource changes before use. A race may cause many effects, including privilege or state errors; a null dereference is only one possible failure and is not the definition.",
-          "Design atomic operations and transactions where possible, minimise mutable shared state, use correct locks or concurrency primitives, revalidate security-sensitive state at use, and test under realistic parallel load. Adding a delay may hide the symptom without removing the race.",
+          "A race condition exists when concurrent execution over shared state lacks correct synchronization and the result depends on timing or ordering. A time-of-check-to-time-of-use weakness occurs when a condition is checked and the relevant resource changes before use. A race may cause many effects, including privilege or state errors; a null dereference is only one possible failure and is not the definition.",
+          "Design atomic operations and transactions where possible, minimize mutable shared state, use correct locks or concurrency primitives, revalidate security-sensitive state at use, and test under realistic parallel load. Adding a delay may hide the symptom without removing the race.",
         ],
       },
       {
@@ -241,7 +241,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
       },
     ],
     traps: [
-      "A race condition is a timing and synchronisation weakness, not simply a technique for causing a null pointer.",
+      "A race condition is a timing and synchronization weakness, not simply a technique for causing a null pointer.",
       "An integer overflow can contribute to a buffer overflow, but the two weaknesses are not synonyms.",
       "ASLR and DEP are exploit mitigations; bounds-safe code and correct memory handling address root causes.",
     ],
@@ -261,9 +261,9 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
     id: "api-session-browser-security",
     chapter: 2,
     category: "Secure Software",
-    title: "API Authorisation, Sessions, Replay, and Browser Defences",
+    title: "API Authorization, Sessions, Replay, and Browser Defences",
     subtitle: "Recheck permission on every object and function, then protect the session and browser context that carries the request.",
-    summary: "An authenticated API call can still be unauthorised. Secure APIs enforce object, property, and function permissions server-side, constrain resource use and business flows, protect tokens, and handle browser-specific attacks separately.",
+    summary: "An authenticated API call can still be unauthorized. Secure APIs enforce object, property, and function permissions server-side, constrain resource use and business flows, protect tokens, and handle browser-specific attacks separately.",
     minutes: 15,
     difficulty: "Applied",
     aliases: ["API security", "BOLA", "broken object level authorization", "BOPLA", "broken object property level authorization", "BFLA", "broken function level authorization", "mass assignment", "excessive data exposure", "rate limiting", "business flow abuse", "API inventory", "session token", "session fixation", "replay attack", "cookie", "Secure flag", "HttpOnly", "SameSite", "CSRF", "clickjacking", "frame-ancestors", "X-Frame-Options", "SSL stripping", "TLS stripping", "HSTS"],
@@ -274,7 +274,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
     ],
     sections: [
       {
-        title: "Authentication is not object authorisation",
+        title: "Authentication is not object authorization",
         table: {
           columns: ["Failure", "What the server forgets to check", "Example"],
           rows: [
@@ -288,33 +288,33 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
       {
         title: "Make the server enforce the business rule",
         body: [
-          "Check authorisation on every endpoint and every object selected from client input. Random identifiers make guessing harder but do not replace permission checks. Select explicit response fields, allow changes only to approved properties, validate schemas, deny administrative functions by default, inventory every deployed API version, and test negative access cases.",
+          "Check authorization on every endpoint and every object selected from client input. Random identifiers make guessing harder but do not replace permission checks. Select explicit response fields, allow changes only to approved properties, validate schemas, deny administrative functions by default, inventory every deployed API version, and test negative access cases.",
           "Rate limits help protect capacity but may not stop low-volume abuse of a sensitive business flow such as voucher redemption, reservation, referral, or password reset. Add per-user and per-object state rules, idempotency where appropriate, anti-automation controls, fraud monitoring, and safe rollback or dispute processes.",
         ],
       },
       {
         title: "Treat session tokens like temporary credentials",
         body: [
-          "Generate unpredictable tokens, transmit them only over protected channels, rotate after authentication and privilege changes, limit lifetime and scope, support revocation, and avoid placing secrets in URLs or logs. Cookies carrying sessions should normally use Secure and HttpOnly, with a SameSite value selected for the application's cross-site needs. These flags complement rather than replace server-side authorisation.",
+          "Generate unpredictable tokens, transmit them only over protected channels, rotate after authentication and privilege changes, limit lifetime and scope, support revocation, and avoid placing secrets in URLs or logs. Cookies carrying sessions should normally use Secure and HttpOnly, with a SameSite value selected for the application's cross-site needs. These flags complement rather than replace server-side authorization.",
           "Replay resubmits captured valid material. TLS reduces capture on the network, while nonces, timestamps, sequence numbers, one-time challenges, short-lived tokens, proof-of-possession, and idempotency controls address different replay scenarios. A token can be cryptographically valid and still need rejection because it was revoked, used outside context, or already consumed.",
         ],
       },
       {
         title: "Browser attacks need browser-aware controls",
         body: [
-          "CSRF causes a victim's browser to send an unwanted authenticated request; use anti-CSRF tokens, appropriate SameSite cookies, origin checks, and reauthentication for sensitive actions. Clickjacking overlays or frames a trusted interface to misdirect a click; CSP frame-ancestors is the modern framing policy, with X-Frame-Options retained for compatible defence in depth.",
+          "CSRF causes a victim's browser to send an unwanted authenticated request; use anti-CSRF tokens, appropriate SameSite cookies, origin checks, and reauthentication for sensitive actions. Clickjacking overlays or frames a trusted interface to misdirect a click; CSP frame-ancestors is the modern framing policy, with X-Frame-Options retained for compatible defense in depth.",
           "HTTPS stripping keeps a victim on HTTP when an upgrade path can be intercepted. Redirect to HTTPS, avoid insecure links and mixed content, and use HTTP Strict Transport Security so a browser that has learned the policy refuses HTTP for the host. HSTS preload can protect an eligible first visit, but deployment and subdomain impact require care.",
         ],
       },
     ],
     traps: [
-      "A UUID makes an object difficult to guess but does not prove the caller is authorised to access it.",
+      "A UUID makes an object difficult to guess but does not prove the caller is authorized to access it.",
       "TLS protects transport; it does not enforce API object or function permissions.",
       "CSP frame-ancestors addresses framing, while script-src governs script sources; one directive does not replace the other.",
     ],
     check: {
       question: "A signed-in learner changes a PBQ ID in an API request and receives another learner's private attempt. What control failed?",
-      answer: "Object-level authorisation. The server authenticated the learner but failed to verify permission for the requested attempt object.",
+      answer: "Object-level authorization. The server authenticated the learner but failed to verify permission for the requested attempt object.",
     },
     sources: [
       { label: "OWASP — API Security Top 10:2023", url: "https://owasp.org/API-Security/" },
@@ -329,7 +329,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
     category: "Network Security",
     title: "Secure DNS, Network Time, and Management Protocols",
     subtitle: "Protect the infrastructure services that tell systems where to connect, what time it is, and how devices are configured.",
-    summary: "DNS, time synchronisation, and device management are control-plane dependencies. Their security requires trusted roles, authenticated data or sessions, restricted administration, resilient architecture, and monitoring that can detect misuse.",
+    summary: "DNS, time synchronization, and device management are control-plane dependencies. Their security requires trusted roles, authenticated data or sessions, restricted administration, resilient architecture, and monitoring that can detect misuse.",
     minutes: 14,
     difficulty: "Applied",
     aliases: ["authoritative DNS", "recursive resolver", "DNSSEC", "validating resolver", "trust anchor", "encrypted DNS", "DoT", "DoH", "protective DNS", "split DNS", "zone transfer", "NTP", "Network Time Security", "NTS", "SNMP", "SNMPv3", "USM", "MIB", "community string", "trap", "inform", "management plane"],
@@ -342,8 +342,8 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
       {
         title: "DNS has distinct roles and trust boundaries",
         body: [
-          "An authoritative server publishes data for zones it serves. A recursive resolver follows referrals and caches answers for clients. Restrict recursion to approved clients, control and authenticate administrative changes, limit zone transfers to authorised secondaries, protect registrar and DNS-provider accounts, separate roles where appropriate, log useful activity, and design resilient service paths.",
-          "Protective DNS applies policy or threat intelligence to block or redirect known harmful destinations and records useful signals. It is defence in depth: newly created infrastructure, direct IP connections, alternate resolvers, encrypted channels, compromised trusted domains, and false positives require complementary controls and governance.",
+          "An authoritative server publishes data for zones it serves. A recursive resolver follows referrals and caches answers for clients. Restrict recursion to approved clients, control and authenticate administrative changes, limit zone transfers to authorized secondaries, protect registrar and DNS-provider accounts, separate roles where appropriate, log useful activity, and design resilient service paths.",
+          "Protective DNS applies policy or threat intelligence to block or redirect known harmful destinations and records useful signals. It is defense in depth: newly created infrastructure, direct IP connections, alternate resolvers, encrypted channels, compromised trusted domains, and false positives require complementary controls and governance.",
         ],
       },
       {
@@ -361,20 +361,20 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
         title: "Time is a security dependency",
         body: [
           "Authentication windows, certificate validation, distributed transactions, alert correlation, logs, and forensics depend on credible time. Use approved time sources, multiple monitored peers where appropriate, restricted control access, drift and offset alerts, and an architecture that prevents ordinary clients from changing trusted time.",
-          "Network Time Security adds cryptographic protection for NTP client-server time synchronisation. It helps authenticate the time source and protect exchange integrity, but does not correct a compromised endpoint clock, poor source selection, or every availability attack.",
+          "Network Time Security adds cryptographic protection for NTP client-server time synchronization. It helps authenticate the time source and protect exchange integrity, but does not correct a compromised endpoint clock, poor source selection, or every availability attack.",
         ],
       },
       {
         title: "Treat SNMP as privileged management traffic",
         body: [
           "SNMP managers query or configure agents using objects described by management information bases; agents can send traps or informs about events. Older community-string designs should not be treated as secure authentication. SNMPv3's User-based Security Model supports authentication and privacy, but only when strong credentials, approved algorithms, and suitable security levels are configured.",
-          "Place management interfaces on restricted networks, allow only authorised managers, prefer read-only access unless change is required, disable unused versions and default communities, rotate credentials, protect configuration backups, log administrative actions, and filter management traffic. Encryption does not make excessive write permission safe.",
+          "Place management interfaces on restricted networks, allow only authorized managers, prefer read-only access unless change is required, disable unused versions and default communities, rotate credentials, protect configuration backups, log administrative actions, and filter management traffic. Encryption does not make excessive write permission safe.",
         ],
       },
     ],
     traps: [
       "DNSSEC authenticates signed DNS data; it does not encrypt the query or guarantee the destination is benign.",
-      "DoH can protect a query from local observation while also bypassing an organisation's approved resolver if unmanaged.",
+      "DoH can protect a query from local observation while also bypassing an organization's approved resolver if unmanaged.",
       "SNMPv3 is not automatically secure when deployed without authentication, privacy, access restriction, and credential management.",
     ],
     check: {

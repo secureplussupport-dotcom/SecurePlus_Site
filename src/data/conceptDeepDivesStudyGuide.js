@@ -9,7 +9,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     category: "Security Foundations",
     title: "Security Foundations, Controls, and Gap Analysis",
     subtitle: "Translate broad security goals into controls, evidence, and a defensible target state.",
-    summary: "Security terminology becomes practical when each term answers a different question: what property must be protected, who is acting, what control is being applied, and how the organisation knows the control closes a real gap.",
+    summary: "Security terminology becomes practical when each term answers a different question: what property must be protected, who is acting, what control is being applied, and how the organization knows the control closes a real gap.",
     minutes: 12,
     difficulty: "Core",
     aliases: ["CIA triad", "confidentiality", "integrity", "availability", "non-repudiation", "AAA", "control types", "control categories", "gap analysis", "NIST CSF 2.0", "Govern", "zero trust"],
@@ -24,9 +24,9 @@ export const STUDY_GUIDE_DEEP_DIVES = [
         table: {
           columns: ["Property", "Question to ask", "Example failure"],
           rows: [
-            ["Confidentiality", "Did an unauthorised party learn the information?", "Payroll data is exposed in a public bucket"],
-            ["Integrity", "Was information or a process changed without authorisation?", "A payment destination is altered"],
-            ["Availability", "Can authorised users obtain the service when needed?", "A denial-of-service attack exhausts capacity"],
+            ["Confidentiality", "Did an unauthorized party learn the information?", "Payroll data is exposed in a public bucket"],
+            ["Integrity", "Was information or a process changed without authorization?", "A payment destination is altered"],
+            ["Availability", "Can authorized users obtain the service when needed?", "A denial-of-service attack exhausts capacity"],
             ["Authenticity", "Is the identity or origin genuine?", "A forged update pretends to be vendor-signed"],
             ["Non-repudiation", "Is there strong evidence linking an action to an actor?", "A valid digital signature supports transaction evidence"],
           ],
@@ -36,7 +36,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
         title: "Category and function describe different dimensions",
         body: [
           "CompTIA groups controls into technical, managerial, operational, and physical categories. Functional labels include preventive, deterrent, detective, corrective, compensating, and directive. One control can fit more than one functional label depending on its purpose: a visible guard can deter, prevent, and detect.",
-          "AAA is another separate lens. Authentication establishes confidence in an identity, authorisation decides what that identity may do, and accounting records activity. Identification is the claim that comes before authentication; a username alone does not prove who supplied it.",
+          "AAA is another separate lens. Authentication establishes confidence in an identity, authorization decides what that identity may do, and accounting records activity. Identification is the claim that comes before authentication; a username alone does not prove who supplied it.",
         ],
       },
       {
@@ -67,21 +67,21 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     chapter: 2,
     category: "Threats & Hardening",
     title: "Threat Actors, Attack Surfaces, and Social Engineering",
-    subtitle: "Reason from capability, opportunity, and behaviour instead of memorising villain labels.",
+    subtitle: "Reason from capability, opportunity, and behavior instead of memorizing villain labels.",
     summary: "Threat-actor labels are starting hypotheses. Defenders make better decisions by examining access, resources, capability, persistence, intent, exposed attack surfaces, and the evidence supporting attribution.",
     minutes: 11,
     difficulty: "Core",
     aliases: ["threat actor", "nation-state", "insider threat", "hacktivist", "script kiddie", "shadow IT", "attack surface", "attack vector", "phishing", "smishing", "vishing", "business email compromise", "pretexting", "watering hole", "typosquatting", "misinformation", "disinformation", "supply chain"],
     objectives: [
-      "Describe actors using attributes that matter to defence.",
+      "Describe actors using attributes that matter to defense.",
       "Distinguish an attack surface from the vector used to reach it.",
-      "Recognise social-engineering patterns without assuming malware must be present.",
+      "Recognize social-engineering patterns without assuming malware must be present.",
     ],
     sections: [
       {
         title: "Actor labels do not replace evidence",
         body: [
-          "A nation-state may have deep resources and long time horizons; organised crime often pursues money; hacktivists seek visibility or political effect; inexperienced actors may rely heavily on existing tools. These are tendencies, not proof. Motivation, infrastructure, language, working hours, and techniques can all be imitated.",
+          "A nation-state may have deep resources and long time horizons; organized crime often pursues money; hacktivists seek visibility or political effect; inexperienced actors may rely heavily on existing tools. These are tendencies, not proof. Motivation, infrastructure, language, working hours, and techniques can all be imitated.",
           "An insider is someone with legitimate access or knowledge and may be malicious, negligent, or compromised. A third party can become an indirect actor when its software, credentials, or service relationship is abused. Defences should focus on least privilege, separation of duties, monitoring, and safe reporting rather than stereotypes.",
         ],
       },
@@ -152,7 +152,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
           rows: [
             ["DAC", "The object owner delegates access", "A file owner shares a document"],
             ["MAC", "Centrally enforced labels and clearances", "Classified data and mandatory policy"],
-            ["RBAC", "Job or organisational role", "Nurses receive the permissions needed for their duties"],
+            ["RBAC", "Job or organizational role", "Nurses receive the permissions needed for their duties"],
             ["ABAC", "Attributes of subject, object, action, and environment", "Allow only managed devices during approved hours"],
             ["Rule-based", "A system rule evaluates conditions", "A firewall rule permits a protocol from a network"],
           ],
@@ -207,7 +207,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
       {
         title: "Read an ACL in execution order",
         body: [
-          "For each rule, identify direction, source, destination, protocol, port, state, and action. Many ACLs use first-match processing, so a broad earlier permit can shadow a later deny. An implicit deny drops unmatched traffic only if the platform and policy implement it; exam scenarios often expect this, but production engineers should confirm the device behaviour.",
+          "For each rule, identify direction, source, destination, protocol, port, state, and action. Many ACLs use first-match processing, so a broad earlier permit can shadow a later deny. An implicit deny drops unmatched traffic only if the platform and policy implement it; exam scenarios often expect this, but production engineers should confirm the device behavior.",
           "A stateless filter evaluates individual packets. A stateful firewall tracks connection state and can permit return traffic for an allowed session. State does not make a rule least-privileged: a broad outbound permit can still enable unwanted sessions.",
         ],
       },
@@ -260,7 +260,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
         table: {
           columns: ["Model", "Customer commonly controls", "Provider commonly controls"],
           rows: [
-            ["IaaS", "Guest OS, identities, applications, data, and virtual network policy", "Facilities, physical hardware, and core virtualisation"],
+            ["IaaS", "Guest OS, identities, applications, data, and virtual network policy", "Facilities, physical hardware, and core virtualization"],
             ["PaaS", "Application code, identities, data, and service configuration", "Managed runtime and underlying platform"],
             ["SaaS", "Users, access policy, data handling, integrations, and tenant settings", "Application operation and underlying stack"],
           ],
@@ -284,7 +284,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
         title: "Serverless removes server administration, not customer security work",
         body: [
           "Serverless or Function as a Service means the provider operates and scales the underlying server platform. The customer still secures application code, dependencies, identities, triggers, secrets, data, network paths, logging, runtime selection, and service configuration. Providers patch their platform; customers must still update vulnerable libraries and supported runtimes. ‘No servers to manage’ never means ‘no patching or monitoring.’",
-          "Service-oriented architecture is a broad approach to composing services. Microservices usually emphasise small, independently deployable service boundaries. Neither style is inherently secure: more services can increase identity, API, dependency, observability, and failure-management complexity. Define ownership and trust boundaries before selecting the label.",
+          "Service-oriented architecture is a broad approach to composing services. Microservices usually emphasize small, independently deployable service boundaries. Neither style is inherently secure: more services can increase identity, API, dependency, observability, and failure-management complexity. Define ownership and trust boundaries before selecting the label.",
         ],
       },
     ],
@@ -317,14 +317,14 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     objectives: [
       "Relate asset ownership and lifecycle decisions to resilience.",
       "Distinguish RTO, RPO, MTTR, and MTBF without treating targets as guarantees.",
-      "Layer physical, recovery, deception, and sanitisation controls around business needs.",
+      "Layer physical, recovery, deception, and sanitization controls around business needs.",
     ],
     sections: [
       {
         title: "Assets need owners from acquisition to disposal",
         body: [
           "An inventory should identify the asset, owner, purpose, location, dependencies, classification, support state, and approved configuration. End of life means a product is retired by its maker; end of support means fixes or assistance end under a defined policy. Unsupported assets require replacement, isolation, compensating controls, or documented risk treatment—not silent acceptance.",
-          "Disposal must address the media and its data, not only the device label. Current NIST guidance organises sanitisation around clear, purge, and destroy decisions selected for the media, confidentiality needs, future reuse, verification, and organisational policy. Ordinary file deletion is not sanitisation.",
+          "Disposal must address the media and its data, not only the device label. Current NIST guidance organizes sanitization around clear, purge, and destroy decisions selected for the media, confidentiality needs, future reuse, verification, and organizational policy. Ordinary file deletion is not sanitization.",
         ],
       },
       {
@@ -382,7 +382,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
         title: "A baseline is maintained, not installed once",
         body: [
           "A secure endpoint baseline removes unnecessary services, configures least privilege, patches supported software, enables host firewalling and storage encryption, restricts application execution, protects credentials, collects useful telemetry, and defines recovery. Exceptions need owners, expiry dates, and compensating controls.",
-          "Traditional endpoint protection emphasises prevention and known malicious patterns. EDR records endpoint behaviour and supports investigation and response. XDR correlates telemetry across multiple security domains, but product scope varies. A broad product label does not guarantee high-quality telemetry, tuning, or response authority.",
+          "Traditional endpoint protection emphasizes prevention and known malicious patterns. EDR records endpoint behavior and supports investigation and response. XDR correlates telemetry across multiple security domains, but product scope varies. A broad product label does not guarantee high-quality telemetry, tuning, or response authority.",
         ],
       },
       {
@@ -391,9 +391,9 @@ export const STUDY_GUIDE_DEEP_DIVES = [
           columns: ["Model", "Who owns the device?", "Typical use"],
           rows: [
             ["BYOD", "User", "Personal device approved for work under policy"],
-            ["CYOD", "Organisation or user, depending on programme", "User selects from an approved device list"],
-            ["COPE", "Organisation", "Corporate device permits managed personal use"],
-            ["COBO", "Organisation", "Corporate device restricted to business use"],
+            ["CYOD", "Organization or user, depending on programme", "User selects from an approved device list"],
+            ["COPE", "Organization", "Corporate device permits managed personal use"],
+            ["COBO", "Organization", "Corporate device restricted to business use"],
           ],
         },
       },
@@ -426,7 +426,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     category: "Security Operations",
     title: "Incident Response, SIEM, and Threat Hunting",
     subtitle: "Turn noisy telemetry into evidence, controlled response, and measurable improvement.",
-    summary: "Modern incident response is an organisation-wide capability. Preparation and improvement span governance, protection, detection, response, and recovery; analysts still need a practical, iterative sequence for each event.",
+    summary: "Modern incident response is an organization-wide capability. Preparation and improvement span governance, protection, detection, response, and recovery; analysts still need a practical, iterative sequence for each event.",
     minutes: 14,
     difficulty: "Applied",
     aliases: ["incident response", "NIST SP 800-61 Rev 3", "SIEM", "SOAR", "log management", "time synchronization", "true positive", "true negative", "false positive", "false negative", "confusion matrix", "alert tuning", "threat hunting", "hypothesis", "containment", "eradication", "recovery", "lessons learned"],
@@ -440,7 +440,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
         title: "Response is integrated across CSF 2.0",
         body: [
           "NIST SP 800-61 Rev. 3 supersedes Rev. 2 and integrates incident-response recommendations with all six CSF 2.0 Functions. Govern, Identify, and Protect help prepare and reduce impact; Detect, Respond, and Recover handle possible and confirmed incidents; lessons feed improvement across the programme.",
-          "For an active case, a practical flow remains useful: detect and validate, triage and scope, analyse, contain, eradicate, recover, and improve. These activities overlap and repeat. Immediate isolation may be correct for destructive malware, while covert monitoring may be authorised for a carefully controlled investigation. Business, safety, legal, and evidence needs shape the decision.",
+          "For an active case, a practical flow remains useful: detect and validate, triage and scope, analyze, contain, eradicate, recover, and improve. These activities overlap and repeat. Immediate isolation may be correct for destructive malware, while covert monitoring may be authorized for a carefully controlled investigation. Business, safety, legal, and evidence needs shape the decision.",
         ],
       },
       {
@@ -459,7 +459,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
       {
         title: "Tune for decision quality, not quiet dashboards",
         body: [
-          "A false positive alerts on benign activity; a false negative misses malicious activity. Suppression, deduplication, baselines, asset criticality, identity risk, and confidence can improve prioritisation. Tuning solely to reduce alert volume can hide failure, so changes need testing, ownership, expiry where appropriate, and measures of missed as well as noisy detection.",
+          "A false positive alerts on benign activity; a false negative misses malicious activity. Suppression, deduplication, baselines, asset criticality, identity risk, and confidence can improve prioritization. Tuning solely to reduce alert volume can hide failure, so changes need testing, ownership, expiry where appropriate, and measures of missed as well as noisy detection.",
           "Threat hunting begins with a testable hypothesis, gathers relevant evidence, follows leads, records results, and converts durable findings into improved detection or controls. ATT&CK provides a shared language for behaviours. A hunt result is not automatically an incident, and absence of a hit is not proof the environment is clean.",
         ],
       },
@@ -483,7 +483,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     ],
     check: {
       question: "A team suppresses every alert from a noisy service account and the alert count falls. Why is that not enough evidence of improvement?",
-      answer: "The tuning may have created false negatives. The team must validate the account behaviour, narrow the rule, test known malicious patterns, and measure what is missed as well as what is reduced.",
+      answer: "The tuning may have created false negatives. The team must validate the account behavior, narrow the rule, test known malicious patterns, and measure what is missed as well as what is reduced.",
     },
     sources: [
       { label: "NIST SP 800-61 Rev. 3 — Incident Response", url: "https://csrc.nist.gov/pubs/sp/800/61/r3/final" },
@@ -495,9 +495,9 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     id: "malware-indicators-attacks",
     chapter: 2,
     category: "Threats & Hardening",
-    title: "Malware, Indicators, and Adversary Behaviour",
+    title: "Malware, Indicators, and Adversary Behavior",
     subtitle: "Classify the mechanism, assess the evidence, and respond without treating one signal as proof.",
-    summary: "Malware names describe behaviour or delivery, while indicators describe observations and ATT&CK techniques describe how adversaries operate. Strong analysis connects multiple evidence sources over time.",
+    summary: "Malware names describe behavior or delivery, while indicators describe observations and ATT&CK techniques describe how adversaries operate. Strong analysis connects multiple evidence sources over time.",
     minutes: 13,
     difficulty: "Applied",
     aliases: ["virus", "worm", "trojan", "RAT", "rootkit", "keylogger", "ransomware", "logic bomb", "fileless malware", "IoC", "TTP", "credential stuffing", "password spraying", "replay attack", "on-path attack", "resource consumption", "impossible travel", "missing logs"],
@@ -510,12 +510,12 @@ export const STUDY_GUIDE_DEEP_DIVES = [
       {
         title: "Malware labels describe different dimensions",
         table: {
-          columns: ["Label", "Defining behaviour", "Do not assume"],
+          columns: ["Label", "Defining behavior", "Do not assume"],
           rows: [
             ["Virus", "Replicates by attaching to a host file or content", "It spreads without user or host execution"],
             ["Worm", "Self-propagates across systems or networks", "It cannot also carry ransomware or a backdoor"],
             ["Trojan", "Pretends to be legitimate or useful", "It self-replicates"],
-            ["RAT", "Provides remote administrative control to an unauthorised operator", "Every legitimate remote tool is malicious"],
+            ["RAT", "Provides remote administrative control to an unauthorized operator", "Every legitimate remote tool is malicious"],
             ["Rootkit", "Hides or maintains privileged presence", "One product alert proves kernel compromise"],
             ["Fileless malware", "Relies heavily on memory, interpreters, or trusted tools", "It leaves no files or persistent evidence at all"],
           ],
@@ -525,14 +525,14 @@ export const STUDY_GUIDE_DEEP_DIVES = [
         title: "Indicators are clues with different lifetimes",
         body: [
           "A file hash, domain, IP address, mutex, certificate, command line, or registry path can be an indicator of compromise. Many are easy to change or may also appear in benign activity. Tactics, techniques, and procedures describe behavioural patterns and can remain useful after infrastructure changes, but they still require evidence and context.",
-          "High CPU or network use, impossible travel, repeated lockouts, blocked content, missing logs, unexpected child processes, and new persistence are investigation signals—not verdicts. Correlate time, identity, device, parent process, network destination, asset role, change records, and baseline behaviour.",
+          "High CPU or network use, impossible travel, repeated lockouts, blocked content, missing logs, unexpected child processes, and new persistence are investigation signals—not verdicts. Correlate time, identity, device, parent process, network destination, asset role, change records, and baseline behavior.",
         ],
       },
       {
         title: "Credential and network attacks are not interchangeable",
         body: [
           "Credential stuffing reuses username-password pairs stolen elsewhere. Password spraying tries a small number of common passwords across many accounts. Replay resends captured valid material; robust nonces, timestamps, sequence controls, and short-lived tokens can help. An on-path attacker positions between communicating parties to observe or alter traffic; authenticated encryption and trustworthy endpoint identity reduce the opportunity.",
-          "For ransomware, preserve needed evidence, contain affected identities and systems, determine scope and entry path, eradicate persistence, rotate exposed secrets, and recover from tested clean sources. Payment does not guarantee decryption, deletion, or an end to extortion; follow organisational, legal, insurance, and law-enforcement procedures.",
+          "For ransomware, preserve needed evidence, contain affected identities and systems, determine scope and entry path, eradicate persistence, rotate exposed secrets, and recover from tested clean sources. Payment does not guarantee decryption, deletion, or an end to extortion; follow organizational, legal, insurance, and law-enforcement procedures.",
         ],
       },
     ],
@@ -564,7 +564,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     objectives: [
       "Distinguish injection, traversal, request forgery, and browser attacks by the component being influenced.",
       "Choose primary controls such as safe APIs, contextual encoding, canonical paths, and least privilege.",
-      "Place threat modelling, code review, SAST, DAST, and dependency analysis in a secure development lifecycle.",
+      "Place threat modeling, code review, SAST, DAST, and dependency analysis in a secure development lifecycle.",
     ],
     sections: [
       {
@@ -583,26 +583,26 @@ export const STUDY_GUIDE_DEEP_DIVES = [
       {
         title: "Validation helps, but context decides the encoding",
         body: [
-          "Allowlist validation can reject structurally invalid input, but it does not replace safe query APIs or output handling. Encode for the exact output context: HTML text, attribute, URL, JavaScript, and CSS contexts have different rules. Canonicalise and constrain paths before access, but prefer mapping an opaque server-controlled identifier to an approved file rather than accepting a path from the user.",
-          "A web application firewall, content security policy, sandbox, and runtime monitoring provide defence in depth. They reduce likelihood or impact but should not be used to justify leaving a known injection path in application code.",
+          "Allowlist validation can reject structurally invalid input, but it does not replace safe query APIs or output handling. Encode for the exact output context: HTML text, attribute, URL, JavaScript, and CSS contexts have different rules. canonicalize and constrain paths before access, but prefer mapping an opaque server-controlled identifier to an approved file rather than accepting a path from the user.",
+          "A web application firewall, content security policy, sandbox, and runtime monitoring provide defense in depth. They reduce likelihood or impact but should not be used to justify leaving a known injection path in application code.",
         ],
       },
       {
         title: "Secure development creates evidence before release",
         body: [
-          "Threat modelling identifies assets, trust boundaries, abuse cases, and mitigations while design is still changeable. Peer review examines intent and implementation. SAST analyses code or compiled artefacts without running the application; DAST probes a running system; software composition analysis inventories dependencies and known risks. No single technique sees the whole system.",
+          "Threat modeling identifies assets, trust boundaries, abuse cases, and mitigations while design is still changeable. Peer review examines intent and implementation. SAST analyses code or compiled artefacts without running the application; DAST probes a running system; software composition analysis inventories dependencies and known risks. No single technique sees the whole system.",
           "Protect repositories, branches, build workers, secrets, signing keys, package sources, and release provenance. Pinning a dependency improves repeatability, but the pinned version still needs maintenance. A signed artefact supports origin and integrity only to the extent that the signer and build process are trustworthy.",
         ],
       },
     ],
     traps: [
-      "Input validation alone does not replace parameterised queries or contextual output encoding.",
+      "Input validation alone does not replace parameterized queries or contextual output encoding.",
       "Path traversal targets file location; command injection reaches an executable interpreter.",
       "A sandbox limits capability but is not proof that untrusted code cannot escape or abuse allowed access.",
     ],
     check: {
       question: "A product ID is concatenated into a database query. Which fix most directly removes the SQL/code boundary confusion?",
-      answer: "Use a parameterised query or prepared statement so the product ID remains data rather than becoming query syntax.",
+      answer: "Use a parameterized query or prepared statement so the product ID remains data rather than becoming query syntax.",
     },
     sources: [
       { label: "OWASP Top 10:2025", url: "https://owasp.org/www-project-top-ten/" },
@@ -634,7 +634,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
             ["Policy", "States management intent and mandatory direction", "Sensitive data must be protected according to classification"],
             ["Standard", "Defines mandatory, measurable requirements", "Approved encryption configurations and key lengths"],
             ["Procedure", "Gives repeatable steps for a task", "How to rotate a compromised application secret"],
-            ["Guideline", "Offers recommended judgement where flexibility is allowed", "Suggested secure meeting practices while travelling"],
+            ["Guideline", "Offers recommended judgement where flexibility is allowed", "Suggested secure meeting practices while traveling"],
           ],
         },
       },
@@ -649,7 +649,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
         title: "Third-party risk continues after the contract is signed",
         body: [
           "Due diligence examines capability, architecture, financial and concentration risk, personnel controls, prior incidents, assurance reports, subcontractors, and data handling. Contract terms can define service levels, security requirements, breach notification, audit rights, location, retention, business continuity, liability, and exit assistance. An SLA measures service commitments; an SOW defines work and deliverables; an NDA limits disclosure. The labels do not substitute for precise clauses.",
-          "Awareness programmes should be role-based, accessible, repeated, and measured by safer behaviour—not only course completion. Supportive phishing simulations can test reporting and reinforce skills. Public shaming discourages reporting and can make the programme less accurate.",
+          "Awareness programmes should be role-based, accessible, repeated, and measured by safer behavior—not only course completion. Supportive phishing simulations can test reporting and reinforce skills. Public shaming discourages reporting and can make the programme less accurate.",
         ],
       },
     ],
@@ -672,22 +672,22 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     id: "data-classification-lifecycle",
     chapter: 5,
     category: "Data Protection",
-    title: "Data Classification, DLP, Retention, and Sanitisation",
+    title: "Data Classification, DLP, Retention, and Sanitization",
     subtitle: "Protect information according to its impact, state, location, lifecycle, and legal obligations.",
-    summary: "Data protection works when an organisation knows what information it has, why it needs it, where it may go, who may use it, how long it must remain, and how to verify that disposal meets the risk.",
+    summary: "Data protection works when an organization knows what information it has, why it needs it, where it may go, who may use it, how long it must remain, and how to verify that disposal meets the risk.",
     minutes: 14,
     difficulty: "Applied",
     aliases: ["data classification", "PII", "PHI", "intellectual property", "data sovereignty", "data residency", "data localization", "data at rest", "data in transit", "data in use", "DLP", "retention", "data minimization", "legal hold", "clear", "purge", "destroy", "tokenization", "masking"],
     objectives: [
       "Classify data from business, legal, privacy, and safety impact rather than its file extension.",
-      "Distinguish sovereignty, residency, localisation, and the three data states.",
-      "Connect DLP, minimisation, retention, legal hold, and sanitisation across the lifecycle.",
+      "Distinguish sovereignty, residency, localization, and the three data states.",
+      "Connect DLP, minimization, retention, legal hold, and sanitization across the lifecycle.",
     ],
     sections: [
       {
         title: "Classification drives handling",
         body: [
-          "Classification labels vary by organisation, but the decision should consider harm from disclosure, alteration, loss, or unavailable access; contractual and legal duties; business value; safety; and aggregation. PII can identify or be linked to a person. Health, financial, authentication, legal, and intellectual-property data may need specialised handling. A CSV file can be highly restricted while an encrypted database backup can still be sensitive.",
+          "Classification labels vary by organization, but the decision should consider harm from disclosure, alteration, loss, or unavailable access; contractual and legal duties; business value; safety; and aggregation. PII can identify or be linked to a person. Health, financial, authentication, legal, and intellectual-property data may need specialized handling. A CSV file can be highly restricted while an encrypted database backup can still be sensitive.",
           "Data owners define or approve classification and handling requirements; custodians and systems implement them. Labelling helps discovery and automation, but labels can be missing or wrong. Access policy, encryption, monitoring, training, and periodic review must reinforce them.",
         ],
       },
@@ -698,7 +698,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
           rows: [
             ["Sovereignty", "Data is subject to relevant jurisdictions and legal authority", "Which laws and government powers apply?"],
             ["Residency", "The geographic location where data is stored or processed", "Where are primary copies, backups, logs, and support access?"],
-            ["Localisation", "A rule requires certain data or processing to remain in a location", "Does the exact law or contract require local storage, processing, or copies?"],
+            ["Localization", "A rule requires certain data or processing to remain in a location", "Does the exact law or contract require local storage, processing, or copies?"],
             ["At rest / in transit / in use", "Stored / moving / actively processed", "Which control protects this state and where are keys or plaintext exposed?"],
           ],
         },
@@ -706,8 +706,8 @@ export const STUDY_GUIDE_DEEP_DIVES = [
       {
         title: "Control the whole lifecycle",
         body: [
-          "Data Loss Prevention can inspect endpoint, network, email, storage, and cloud activity using labels, patterns, exact data matches, destinations, user context, and behaviour. Encryption and uncommon formats can reduce inspection visibility; broad patterns can create false positives. Start with monitored policy, validate workflows, add user coaching, and escalate or block according to risk.",
-          "Collect and retain only what has a defined purpose. Retention rules balance operational, legal, regulatory, historical, and privacy needs. A legal hold suspends normal destruction for in-scope material. At disposal, select clear, purge, or destroy according to current sanitisation policy, media technology, confidentiality, reuse, and verification needs. File deletion, factory reset, and cryptographic erase are not interchangeable claims without evidence.",
+          "Data Loss Prevention can inspect endpoint, network, email, storage, and cloud activity using labels, patterns, exact data matches, destinations, user context, and behavior. Encryption and uncommon formats can reduce inspection visibility; broad patterns can create false positives. Start with monitored policy, validate workflows, add user coaching, and escalate or block according to risk.",
+          "Collect and retain only what has a defined purpose. Retention rules balance operational, legal, regulatory, historical, and privacy needs. A legal hold suspends normal destruction for in-scope material. At disposal, select clear, purge, or destroy according to current sanitization policy, media technology, confidentiality, reuse, and verification needs. File deletion, factory reset, and cryptographic erase are not interchangeable claims without evidence.",
         ],
       },
     ],

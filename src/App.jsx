@@ -63,10 +63,14 @@ import { MascotAnimation } from "./lib/MascotAnimation.jsx";
 import { getSupabaseAccessToken, isSupabaseConfigured, supabase } from "./lib/supabaseClient.js";
 import {
   CONCEPT_DEEP_DIVES,
-  CONCEPT_DEEP_DIVE_CATEGORIES,
   CONCEPT_DEEP_DIVE_REVIEWED_AT,
-  CONCEPT_DEEP_DIVE_TOPIC_COUNT,
 } from "./data/conceptDeepDives.js";
+import {
+  getSy0701DeepDiveProfile,
+  sortDeepDivesBySy0701,
+  SY0701_BLUEPRINT,
+  SY0701_DOMAINS,
+} from "./data/sy0701DeepDiveMap.js";
 import {
   buildDeepDiveDeck,
   buildDeepDiveFlashcards,
@@ -17400,6 +17404,9 @@ body{background:
 .deep-dives-proof{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px;}
 .deep-dives-proof span{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid var(--deep-border);border-radius:12px;background:color-mix(in srgb,var(--deep-panel) 72%,transparent);font-size:11px;font-weight:850;color:var(--deep-muted);}
 .deep-dives-proof svg{color:var(--deep-green);}
+.deep-dives-blueprint-link{display:inline-flex;align-items:center;gap:6px;margin-top:11px;color:var(--deep-accent);font-size:10px;font-weight:850;text-decoration:none;}
+.deep-dives-blueprint-link:hover{text-decoration:underline;}
+.deep-dives-blueprint-link svg:first-child{color:var(--deep-green);}
 .deep-dives-progress-card{position:relative;padding:20px;border:1px solid color-mix(in srgb,var(--deep-accent) 25%,var(--deep-border));border-radius:20px;background:color-mix(in srgb,var(--deep-surface) 88%,transparent);box-shadow:0 12px 30px rgba(40,31,22,.08);}
 .deep-dives-progress-card>div:first-child{display:flex;align-items:end;justify-content:space-between;gap:14px;}
 .deep-dives-progress-card span{font-size:11px;font-weight:900;color:var(--deep-muted);}
@@ -17414,12 +17421,21 @@ body{background:
 .deep-dives-search input{min-width:0;flex:1;height:54px;border:0;outline:0;background:transparent;color:var(--deep-text);font:inherit;font-size:14px;}
 .deep-dives-search input::placeholder{color:var(--deep-muted);}
 .deep-dives-search button{display:grid;place-items:center;width:30px;height:30px;border:0;border-radius:9px;background:var(--deep-panel);color:var(--deep-muted);cursor:pointer;}
-.deep-dives-category-list{display:flex;gap:8px;padding-bottom:3px;overflow-x:auto;scrollbar-width:thin;}
-.deep-dives-category-list button{flex:0 0 auto;padding:8px 12px;border:1px solid var(--deep-border);border-radius:999px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;font-size:11px;font-weight:850;cursor:pointer;transition:.18s ease;}
-.deep-dives-category-list button:hover,.deep-dives-category-list button.active{border-color:color-mix(in srgb,var(--deep-accent) 52%,var(--deep-border));background:color-mix(in srgb,var(--deep-accent) 11%,var(--deep-surface));color:var(--deep-accent);}
-.deep-dives-category-list button:focus-visible,.deep-dive-card:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 30%,transparent);outline-offset:3px;}
+.deep-dives-domain-map{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:8px;padding-bottom:4px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;}
+.deep-dives-domain-map::-webkit-scrollbar,.deep-dive-learning-card nav::-webkit-scrollbar,.deep-dive-compare-tabs::-webkit-scrollbar{display:none;}
+.deep-dives-domain-map button{display:grid;gap:3px;min-width:130px;padding:11px 12px;border:1px solid var(--deep-border);border-radius:13px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;text-align:left;scroll-snap-align:start;cursor:pointer;transition:.18s ease;}
+.deep-dives-domain-map button strong{font-size:11px;color:var(--deep-text);}
+.deep-dives-domain-map button span{font-size:9px;font-weight:800;line-height:1.35;}
+.deep-dives-domain-map button:hover,.deep-dives-domain-map button.active{border-color:color-mix(in srgb,var(--deep-accent) 52%,var(--deep-border));background:color-mix(in srgb,var(--deep-accent) 10%,var(--deep-surface));color:var(--deep-accent);box-shadow:0 8px 22px rgba(40,31,22,.05);}
+.deep-dives-domain-map button.active strong{color:var(--deep-accent);}
+.deep-dives-domain-map button:focus-visible,.deep-dive-card:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 30%,transparent);outline-offset:3px;}
 .deep-dives-results-head{display:flex;justify-content:space-between;gap:14px;align-items:center;margin:18px 2px 12px;color:var(--deep-muted);font-size:12px;}
 .deep-dives-results-head strong{color:var(--deep-text);font-size:16px;}
+.deep-dives-domain-groups{display:grid;gap:31px;}
+.deep-dives-domain-group>header{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:0 2px 12px;padding:0 0 12px;border-bottom:1px solid var(--deep-border);}
+.deep-dives-domain-group>header span{display:block;margin-bottom:4px;color:var(--deep-accent);font-size:9px;font-weight:950;letter-spacing:.09em;text-transform:uppercase;}
+.deep-dives-domain-group>header h2{margin:0;color:var(--deep-text);font-size:21px;letter-spacing:-.02em;}
+.deep-dives-domain-group>header>strong{flex:0 0 auto;color:var(--deep-muted);font-size:10px;}
 .deep-dives-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
 .deep-dive-card{position:relative;display:flex;min-width:0;min-height:330px;flex-direction:column;padding:22px;text-align:left;border:1px solid var(--deep-border);border-radius:21px;background:linear-gradient(160deg,color-mix(in srgb,var(--chapter-color) 5%,var(--deep-surface)),var(--deep-surface) 42%);color:var(--deep-text);font:inherit;cursor:pointer;box-shadow:0 9px 26px rgba(40,31,22,.055);overflow:hidden;transition:transform .22s cubic-bezier(.16,1,.3,1),border-color .2s,box-shadow .2s;}
 .deep-dive-card::before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:linear-gradient(90deg,var(--chapter-color),color-mix(in srgb,var(--chapter-color) 20%,transparent));}
@@ -17432,6 +17448,8 @@ body{background:
 .deep-dive-card>p{margin:0 0 16px;font-size:12px;line-height:1.65;color:var(--deep-muted);}
 .deep-dive-card-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto;}
 .deep-dive-card-tags span{padding:5px 7px;border:1px solid var(--deep-border);border-radius:8px;background:var(--deep-panel);font-size:9px;font-weight:850;color:var(--deep-muted);}
+.deep-dive-card-scope{display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 9px;border:1px solid color-mix(in srgb,var(--deep-amber) 30%,var(--deep-border));border-radius:10px;background:color-mix(in srgb,var(--deep-amber) 8%,var(--deep-surface));color:var(--deep-muted);font-size:9px;font-weight:800;line-height:1.4;}
+.deep-dive-card-scope svg{flex:0 0 auto;color:var(--deep-amber);}
 .deep-dive-card-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:15px;padding-top:13px;border-top:1px solid var(--deep-border);font-size:10px;font-weight:900;color:var(--deep-muted);}
 .deep-dive-card-footer span{display:inline-flex;align-items:center;gap:5px;}
 .deep-dive-card-footer span:last-child{color:var(--deep-accent);}
@@ -17451,6 +17469,10 @@ body{background:
 .deep-dive-summary{display:flex;gap:12px;align-items:flex-start;margin-top:24px;padding:17px 18px;border:1px solid color-mix(in srgb,var(--deep-green) 28%,var(--deep-border));border-radius:16px;background:color-mix(in srgb,var(--deep-green) 8%,var(--deep-surface));}
 .deep-dive-summary svg{flex:0 0 auto;margin-top:2px;color:var(--deep-green);}
 .deep-dive-summary p{margin:0;font-size:13px;line-height:1.75;color:var(--deep-text);}
+.deep-dive-summary strong{color:var(--deep-green);}
+.deep-dive-beyond-notice{display:flex;align-items:flex-start;gap:10px;margin-top:10px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--deep-amber) 35%,var(--deep-border));border-radius:14px;background:color-mix(in srgb,var(--deep-amber) 8%,var(--deep-surface));color:var(--deep-muted);font-size:11px;line-height:1.55;}
+.deep-dive-beyond-notice svg{flex:0 0 auto;margin-top:1px;color:var(--deep-amber);}
+.deep-dive-beyond-notice strong{color:var(--deep-text);}
 .deep-dive-reader-layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px;align-items:start;margin-top:20px;}
 .deep-dive-learning-card{position:sticky;top:20px;padding:19px;border:1px solid var(--deep-border);border-radius:19px;background:var(--deep-surface);box-shadow:0 9px 28px rgba(40,31,22,.055);}
 .deep-dive-eyebrow,.deep-dive-block-title span{display:block;margin-bottom:5px;font-size:9px;font-weight:950;letter-spacing:.12em;text-transform:uppercase;color:var(--deep-accent);}
@@ -17511,7 +17533,7 @@ body{background:
 .deep-dives-card-progress strong{font-size:13px;}
 .deep-dive-objective-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:15px;}
 .deep-dive-objective-strip>span{display:flex;align-items:flex-start;gap:8px;padding:11px 12px;border:1px solid var(--deep-border);border-radius:13px;background:color-mix(in srgb,var(--deep-panel) 78%,transparent);font-size:11px;line-height:1.55;color:var(--deep-muted);}
-.deep-dive-objective-strip strong{display:grid;place-items:center;width:21px;height:21px;flex:0 0 auto;border-radius:7px;background:color-mix(in srgb,var(--deep-accent) 13%,var(--deep-surface));color:var(--deep-accent);font-size:9px;}
+.deep-dive-objective-strip strong{display:grid;place-items:center;min-width:29px;height:23px;padding:0 5px;flex:0 0 auto;border-radius:7px;background:color-mix(in srgb,var(--deep-accent) 13%,var(--deep-surface));color:var(--deep-accent);font-size:8px;}
 .deep-dive-study-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0;}
 .deep-dive-study-modes>button{display:flex;align-items:center;gap:11px;padding:14px 16px;border:1px solid var(--deep-border);border-radius:15px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;text-align:left;cursor:pointer;transition:.18s ease;}
 .deep-dive-study-modes>button>svg{flex:0 0 auto;}
@@ -17526,16 +17548,48 @@ body{background:
 .deep-dive-lesson-progress>span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--deep-green),var(--deep-accent));transition:width .28s ease;}
 .deep-dive-learning-card nav{display:grid;gap:5px;margin-bottom:14px;}
 .deep-dive-learning-card nav button{display:grid;grid-template-columns:24px minmax(0,1fr);gap:8px;align-items:center;width:100%;padding:8px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--deep-muted);font:inherit;font-size:10px;font-weight:800;line-height:1.35;text-align:left;cursor:pointer;}
-.deep-dive-learning-card nav button>span{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--deep-panel);color:var(--deep-muted);font-size:8px;font-weight:950;}
+.deep-dive-learning-card nav button>span:first-child{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--deep-panel);color:var(--deep-muted);font-size:8px;font-weight:950;}
+.deep-dive-learning-card nav button>span:last-child{display:grid;gap:2px;min-width:0;}
+.deep-dive-learning-card nav button small{color:var(--deep-amber);font-size:8px;line-height:1.25;}
 .deep-dive-learning-card nav button:hover,.deep-dive-learning-card nav button.active{border-color:color-mix(in srgb,var(--deep-accent) 30%,var(--deep-border));background:color-mix(in srgb,var(--deep-accent) 8%,var(--deep-surface));color:var(--deep-text);}
-.deep-dive-learning-card nav button.active>span{background:var(--deep-accent);color:#fff;}
+.deep-dive-learning-card nav button.active>span:first-child{background:var(--deep-accent);color:#fff;}
+.deep-dive-learning-card nav button.beyond{border-color:color-mix(in srgb,var(--deep-amber) 20%,transparent);}
 .deep-dive-guided-panel{padding:24px;border:1px solid var(--deep-border);border-radius:19px;background:var(--deep-surface);box-shadow:0 9px 28px rgba(40,31,22,.05);}
 .deep-dive-guided-heading>span{display:block;margin-bottom:7px;color:var(--deep-accent);font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;}
 .deep-dive-guided-heading h2{margin:0;font-size:clamp(21px,3vw,28px);line-height:1.2;letter-spacing:-.025em;color:var(--deep-text);}
+.deep-dive-guided-heading>p{margin:9px 0 0;color:var(--deep-muted);font-size:12px;line-height:1.6;}
+.deep-dive-beyond-panel{border-color:color-mix(in srgb,var(--deep-amber) 42%,var(--deep-border));background:radial-gradient(circle at 100% 0,color-mix(in srgb,var(--deep-amber) 10%,transparent),transparent 34%),var(--deep-surface);}
+.deep-dive-beyond-panel .deep-dive-guided-heading>span{color:var(--deep-amber);}
+.deep-dive-scope-note{display:flex!important;align-items:center;gap:7px;padding:9px 10px;border-radius:10px;background:color-mix(in srgb,var(--deep-amber) 9%,var(--deep-surface));}
+.deep-dive-scope-note svg{flex:0 0 auto;color:var(--deep-amber);}
+.deep-dive-keyword-lab{background:radial-gradient(circle at 90% 0,color-mix(in srgb,var(--deep-green) 12%,transparent),transparent 33%),var(--deep-surface);}
+.deep-dive-keyword-picker{display:flex;gap:7px;flex-wrap:wrap;margin-top:18px;}
+.deep-dive-keyword-picker button{padding:9px 12px;border:1px solid var(--deep-border);border-radius:999px;background:var(--deep-panel);color:var(--deep-muted);font:inherit;font-size:11px;font-weight:900;cursor:pointer;transition:.18s ease;}
+.deep-dive-keyword-picker button:hover,.deep-dive-keyword-picker button.active{border-color:color-mix(in srgb,var(--deep-green) 46%,var(--deep-border));background:color-mix(in srgb,var(--deep-green) 10%,var(--deep-surface));color:var(--deep-green);transform:translateY(-1px);}
+.deep-dive-keyword-picker button:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-green) 24%,transparent);outline-offset:2px;}
+.deep-dive-keyword-answer{display:grid;gap:6px;margin-top:14px;padding:20px;border:1px solid color-mix(in srgb,var(--deep-green) 28%,var(--deep-border));border-radius:16px;background:color-mix(in srgb,var(--deep-green) 7%,var(--deep-surface));}
+.deep-dive-keyword-answer>span{color:var(--deep-green);font-size:9px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;}
+.deep-dive-keyword-answer>strong{color:var(--deep-text);font-size:24px;}
+.deep-dive-keyword-answer p{margin:0;color:var(--deep-text);font-size:15px;line-height:1.65;}
+.deep-dive-keyword-answer small{display:flex;align-items:center;gap:6px;margin-top:4px;color:var(--deep-muted);font-size:9px;font-weight:800;}
 .deep-dive-concept-bites{display:grid;gap:10px;margin-top:18px;}
 .deep-dive-concept-bites>div{padding:16px;border:1px solid var(--deep-border);border-radius:15px;background:var(--deep-panel);}
 .deep-dive-concept-bites>div>span{display:flex;align-items:center;gap:6px;margin-bottom:8px;color:var(--deep-green);font-size:10px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;}
 .deep-dive-concept-bites p{margin:0;color:var(--deep-text);font-size:15px;line-height:1.72;}
+.deep-dive-compare-lab{display:grid;gap:12px;margin-top:18px;padding:16px;border:1px solid var(--deep-border);border-radius:16px;background:var(--deep-panel);}
+.deep-dive-compare-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.deep-dive-compare-head span{color:var(--deep-accent);font-size:9px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
+.deep-dive-compare-head strong{color:var(--deep-muted);font-size:10px;}
+.deep-dive-compare-tabs{display:flex;gap:7px;padding-bottom:3px;overflow-x:auto;scrollbar-width:none;}
+.deep-dive-compare-tabs button{flex:0 0 auto;padding:9px 11px;border:1px solid var(--deep-border);border-radius:10px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;font-size:10px;font-weight:900;cursor:pointer;}
+.deep-dive-compare-tabs button:hover,.deep-dive-compare-tabs button.active{border-color:var(--deep-accent);background:color-mix(in srgb,var(--deep-accent) 9%,var(--deep-surface));color:var(--deep-accent);}
+.deep-dive-compare-tabs button:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 24%,transparent);outline-offset:2px;}
+.deep-dive-compare-answer{padding:18px;border-radius:14px;background:var(--deep-surface);box-shadow:0 8px 20px rgba(40,31,22,.05);}
+.deep-dive-compare-answer h3{margin:0 0 12px;color:var(--deep-text);font-size:20px;}
+.deep-dive-compare-answer>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;}
+.deep-dive-compare-answer span{display:grid;gap:4px;padding:11px;border:1px solid var(--deep-border);border-radius:11px;background:var(--deep-panel);}
+.deep-dive-compare-answer small{color:var(--deep-muted);font-size:8px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;}
+.deep-dive-compare-answer strong{color:var(--deep-text);font-size:12px;line-height:1.55;}
 .deep-dive-guided-panel>.deep-dive-table-wrap{margin-top:18px;}
 .deep-dive-guided-panel .deep-dive-table-wrap th,.deep-dive-guided-panel .deep-dive-table-wrap td{font-size:12px;line-height:1.6;}
 .deep-dive-guided-panel .deep-dive-table-wrap th{font-size:10px;}
@@ -17589,15 +17643,19 @@ body{background:
   .deep-dives-hero{grid-template-columns:minmax(0,1fr);padding:24px;border-radius:23px;}
   .deep-dives-progress-card{max-width:420px;}
   .deep-dive-objective-strip{grid-template-columns:minmax(0,1fr);}
+  .deep-dives-domain-map{grid-template-columns:repeat(6,145px);}
   .deep-dive-reader-layout{grid-template-columns:minmax(0,1fr);}
   .deep-dive-learning-card{position:static;}
-  .deep-dive-learning-card nav{display:flex;padding-bottom:4px;overflow-x:auto;scrollbar-width:thin;}
+  .deep-dive-learning-card nav{display:flex;padding-bottom:4px;overflow-x:auto;scrollbar-width:none;}
   .deep-dive-learning-card nav button{flex:0 0 min(250px,75vw);}
   .deep-dive-sources>div:last-child{grid-template-columns:minmax(0,1fr);}
   .deep-dive-flashcard-studio{padding:19px;}
 }
 @media (max-width: 560px){
   .deep-dives-grid{grid-template-columns:minmax(0,1fr);}
+  .deep-dives-domain-group>header{align-items:flex-start;}
+  .deep-dives-domain-group>header h2{font-size:18px;}
+  .deep-dives-results-head span{display:none;}
   .deep-dives-results-head{align-items:flex-start;flex-direction:column;}
   .deep-dive-card{min-height:300px;}
   .deep-dive-article-hero{padding:25px 20px;border-radius:22px;}
@@ -17607,6 +17665,10 @@ body{background:
   .deep-dive-reader-topbar .deep-dive-preview-badge{font-size:9px;}
   .deep-dive-study-modes{grid-template-columns:minmax(0,1fr);}
   .deep-dive-guided-panel{padding:19px 16px;}
+  .deep-dive-keyword-answer{padding:16px;}
+  .deep-dive-keyword-answer>strong{font-size:21px;}
+  .deep-dive-compare-head{display:grid;}
+  .deep-dive-compare-answer>div{grid-template-columns:minmax(0,1fr);}
   .deep-dive-concept-bites p{font-size:14px;line-height:1.7;}
   .deep-dive-step-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
   .deep-dive-step-actions .btn{justify-content:center;}
@@ -26623,11 +26685,13 @@ function ReferralPage({user,t}) {
 // ═══════════════════════════════════════════════════════════════
 function ConceptDeepDivesPage({t}) {
   const [query,setQuery]=useState("");
-  const [category,setCategory]=useState("All topics");
+  const [domainFilter,setDomainFilter]=useState("all");
   const [selectedId,setSelectedId]=useState(null);
   const [studyMode,setStudyMode]=useState("learn");
   const [lessonStep,setLessonStep]=useState(0);
   const [isAnswerVisible,setIsAnswerVisible]=useState(false);
+  const [selectedKeyword,setSelectedKeyword]=useState(0);
+  const [comparisonIndex,setComparisonIndex]=useState(0);
   const [cardIndex,setCardIndex]=useState(0);
   const [cardOrder,setCardOrder]=useState([]);
   const [isCardFlipped,setIsCardFlipped]=useState(false);
@@ -26645,6 +26709,7 @@ function ConceptDeepDivesPage({t}) {
   });
 
   const selectedDive=CONCEPT_DEEP_DIVES.find(dive=>dive.id===selectedId)||null;
+  const selectedProfile=getSy0701DeepDiveProfile(selectedDive);
   const allFlashcards=useMemo(()=>buildDeepDiveDeck(CONCEPT_DEEP_DIVES),[]);
   const selectedFlashcards=useMemo(()=>buildDeepDiveFlashcards(selectedDive),[selectedDive]);
   const orderedFlashcards=useMemo(()=>{
@@ -26656,6 +26721,7 @@ function ConceptDeepDivesPage({t}) {
   },[selectedFlashcards,cardOrder]);
   const activeFlashcard=orderedFlashcards[cardIndex]||orderedFlashcards[0]||null;
   const lessonSteps=useMemo(()=>selectedDive?[
+    {kind:"keywords",title:"Exam keywords"},
     ...selectedDive.sections.map((section,index)=>({kind:"section",title:section.title,index})),
     {kind:"traps",title:"Exam traps"},
     {kind:"check",title:"Quick check"},
@@ -26663,18 +26729,25 @@ function ConceptDeepDivesPage({t}) {
   const activeLessonStep=lessonSteps[lessonStep]||lessonSteps[0]||null;
   const filteredDives=useMemo(()=>{
     const needle=query.trim().toLowerCase();
-    return CONCEPT_DEEP_DIVES.filter(dive=>{
-      const categoryMatch=category==="All topics"||dive.category===category;
-      const searchable=[dive.title,dive.subtitle,dive.summary,dive.category,...dive.aliases].join(" ").toLowerCase();
-      return categoryMatch&&(!needle||searchable.includes(needle));
-    }).sort((a,b)=>a.chapter-b.chapter||a.title.localeCompare(b.title));
-  },[query,category]);
+    return sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES.filter(dive=>{
+      const syllabus=getSy0701DeepDiveProfile(dive);
+      const domainMatch=domainFilter==="all"||String(syllabus?.domainId)===domainFilter;
+      const searchable=[syllabus?.title,syllabus?.plainSummary,syllabus?.domain?.name,...(syllabus?.examKeywords||[]),...dive.aliases].join(" ").toLowerCase();
+      return domainMatch&&(!needle||searchable.includes(needle));
+    }));
+  },[query,domainFilter]);
+  const groupedDives=useMemo(()=>SY0701_DOMAINS.map(domain=>({
+    domain,
+    dives:filteredDives.filter(dive=>getSy0701DeepDiveProfile(dive)?.domainId===domain.id),
+  })).filter(group=>group.dives.length),[filteredDives]);
 
   const openDive=(id,mode="learn")=>{
     setSelectedId(id);
     setStudyMode(mode);
     setLessonStep(0);
     setIsAnswerVisible(false);
+    setSelectedKeyword(0);
+    setComparisonIndex(0);
     setCardIndex(0);
     setCardOrder([]);
     setIsCardFlipped(false);
@@ -26723,6 +26796,7 @@ function ConceptDeepDivesPage({t}) {
   const changeLessonStep=nextStep=>{
     setLessonStep(Math.max(0,Math.min(nextStep,lessonSteps.length-1)));
     setIsAnswerVisible(false);
+    setComparisonIndex(0);
   };
 
   if(selectedDive){
@@ -26730,6 +26804,8 @@ function ConceptDeepDivesPage({t}) {
     const masteredInLesson=selectedFlashcards.filter(item=>masteredCardIds.includes(item.id)).length;
     const lessonProgress=lessonSteps.length?Math.round(((lessonStep+1)/lessonSteps.length)*100):0;
     const activeSection=activeLessonStep?.kind==="section"?selectedDive.sections[activeLessonStep.index]:null;
+    const isBeyondSection=activeLessonStep?.kind==="section"&&selectedProfile?.beyondSections.includes(activeLessonStep.index);
+    const activeComparisonRow=activeSection?.table?.rows?.[comparisonIndex]||activeSection?.table?.rows?.[0]||null;
     return(
       <article className="deep-dive-reader" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
         <div className="deep-dive-reader-topbar">
@@ -26738,17 +26814,18 @@ function ConceptDeepDivesPage({t}) {
         </div>
 
         <header className="deep-dive-article-hero">
-          <div className="deep-dive-article-chapter"><ChapterIcon id={selectedDive.chapter} size={28}/> Chapter {selectedDive.chapter} · {selectedDive.category}</div>
-          <h1>{selectedDive.title}</h1>
-          <p className="deep-dive-article-subtitle">{selectedDive.subtitle}</p>
+          <div className="deep-dive-article-chapter"><ChapterIcon id={selectedProfile.domainId} size={28}/> Domain {selectedProfile.domainId} · {selectedProfile.domain.name} ({selectedProfile.domain.weight}%)</div>
+          <h1>{selectedProfile.title}</h1>
+          <p className="deep-dive-article-subtitle">{selectedProfile.plainSummary}</p>
           <div className="deep-dive-article-meta">
             <span><Clock3 size={14}/>{selectedDive.minutes} min</span>
-            <span><Layers3 size={14}/>{selectedDive.difficulty}</span>
+            {selectedProfile.objectiveLabels.map(objective=><span key={objective.code}><ListChecks size={14}/>Objective {objective.code}</span>)}
             <span><BadgeCheck size={14}/>Reviewed {formatDeepDiveReviewDate(CONCEPT_DEEP_DIVE_REVIEWED_AT)}</span>
           </div>
-          <div className="deep-dive-summary"><Lightbulb size={19}/><p>{selectedDive.summary}</p></div>
+          <div className="deep-dive-summary"><Lightbulb size={19}/><p><strong>Exam focus:</strong> {selectedProfile.objectiveLabels.map(item=>item.title).join(" · ")}</p></div>
+          {selectedProfile.includesBeyondTextbook&&<div className="deep-dive-beyond-notice"><GraduationCap size={18}/><span><strong>Beyond the textbook is optional.</strong> Advanced steps are clearly marked and do not count as required SY0-701 study.</span></div>}
           <div className="deep-dive-objective-strip" aria-label="Learning goals">
-            {selectedDive.objectives.map((objective,index)=><span key={objective}><strong>{index+1}</strong>{objective}</span>)}
+            {selectedProfile.objectiveLabels.map(objective=><span key={objective.code}><strong>{objective.code}</strong>{objective.title}</span>)}
           </div>
         </header>
 
@@ -26767,7 +26844,10 @@ function ConceptDeepDivesPage({t}) {
               <div className="deep-dive-lesson-progress-head"><span>Lesson path</span><strong>{lessonStep+1}/{lessonSteps.length}</strong></div>
               <div className="deep-dive-lesson-progress" aria-label={`${lessonProgress}% through this lesson`}><span style={{width:`${lessonProgress}%`}}/></div>
               <nav aria-label="Lesson sections">
-                {lessonSteps.map((step,index)=><button key={`${step.kind}-${step.title}`} type="button" className={lessonStep===index?"active":""} aria-current={lessonStep===index?"step":undefined} onClick={()=>changeLessonStep(index)}><span>{index+1}</span>{step.title}</button>)}
+                {lessonSteps.map((step,index)=>{
+                  const beyond=step.kind==="section"&&selectedProfile.beyondSections.includes(step.index);
+                  return <button key={`${step.kind}-${step.title}`} type="button" className={`${lessonStep===index?"active":""} ${beyond?"beyond":""}`} aria-current={lessonStep===index?"step":undefined} onClick={()=>changeLessonStep(index)}><span>{index+1}</span><span>{step.title}{beyond&&<small>Beyond the textbook</small>}</span></button>;
+                })}
               </nav>
               <button className={`btn ${isComplete?"btn-ghost":"btn-primary"}`} type="button" onClick={()=>toggleComplete(selectedDive.id)}>
                 {isComplete?<><CheckCircle2 size={16}/>Lesson complete</>:<><BookOpenCheck size={16}/>Mark complete</>}
@@ -26776,21 +26856,45 @@ function ConceptDeepDivesPage({t}) {
             </aside>
 
             <div className="deep-dive-article-body">
-              {activeSection&&(
-                <section className="deep-dive-guided-panel">
+              {activeLessonStep?.kind==="keywords"&&(
+                <section className="deep-dive-guided-panel deep-dive-keyword-lab">
                   <div className="deep-dive-guided-heading">
-                    <span>Concept {activeLessonStep.index+1} of {selectedDive.sections.length}</span>
+                    <span>Start here</span>
+                    <h2>Learn the exam words first</h2>
+                    <p>Tap each keyword. Say its meaning in your own words before reading the simple explanation.</p>
+                  </div>
+                  <div className="deep-dive-keyword-picker" role="tablist" aria-label="Exam keywords">
+                    {selectedProfile.keywordGuide.map((item,index)=><button key={item.term} type="button" role="tab" aria-selected={selectedKeyword===index} className={selectedKeyword===index?"active":""} onClick={()=>setSelectedKeyword(index)}>{item.term}</button>)}
+                  </div>
+                  <div className="deep-dive-keyword-answer" role="tabpanel">
+                    <span>Plain English</span>
+                    <strong>{selectedProfile.keywordGuide[selectedKeyword]?.term}</strong>
+                    <p>{selectedProfile.keywordGuide[selectedKeyword]?.meaning}</p>
+                    <small><ListChecks size={14}/> Used in objective {selectedProfile.objectiveCodes.join(" / ")}</small>
+                  </div>
+                </section>
+              )}
+
+              {activeSection&&(
+                <section className={`deep-dive-guided-panel ${isBeyondSection?"deep-dive-beyond-panel":""}`}>
+                  <div className="deep-dive-guided-heading">
+                    <span>{isBeyondSection?"Beyond the textbook":`Exam concept ${activeLessonStep.index+1} of ${selectedDive.sections.length}`}</span>
                     <h2>{activeSection.title}</h2>
+                    {isBeyondSection&&<p className="deep-dive-scope-note"><GraduationCap size={16}/>Useful context, but not required by the SY0-701 objective wording.</p>}
                   </div>
                   {activeSection.body?.length>0&&<div className="deep-dive-concept-bites">
-                    {activeSection.body.map((paragraph,index)=><div key={paragraph}><span><Lightbulb size={14}/>{index===0?"Key idea":"Build on it"}</span><p>{paragraph}</p></div>)}
+                    {activeSection.body.map((paragraph,index)=><div key={paragraph}><span><Lightbulb size={14}/>{index===0?"What to know":"Why it matters"}</span><p>{paragraph}</p></div>)}
                   </div>}
                   {activeSection.table&&(
-                    <div className="deep-dive-table-wrap">
-                      <table>
-                        <thead><tr>{activeSection.table.columns.map(column=><th key={column}>{column}</th>)}</tr></thead>
-                        <tbody>{activeSection.table.rows.map((row,rowIndex)=><tr key={rowIndex}>{row.map((cell,cellIndex)=><td key={`${rowIndex}-${cellIndex}`} data-label={activeSection.table.columns[cellIndex]}>{cell}</td>)}</tr>)}</tbody>
-                      </table>
+                    <div className="deep-dive-compare-lab">
+                      <div className="deep-dive-compare-head"><span>Tap to compare</span><strong>Which term fits the scenario?</strong></div>
+                      <div className="deep-dive-compare-tabs" role="tablist" aria-label={activeSection.title}>
+                        {activeSection.table.rows.map((row,rowIndex)=><button key={`${row[0]}-${rowIndex}`} type="button" role="tab" aria-selected={comparisonIndex===rowIndex} className={comparisonIndex===rowIndex?"active":""} onClick={()=>setComparisonIndex(rowIndex)}>{row[0]}</button>)}
+                      </div>
+                      {activeComparisonRow&&<div className="deep-dive-compare-answer" role="tabpanel">
+                        <h3>{activeComparisonRow[0]}</h3>
+                        <div>{activeComparisonRow.slice(1).map((cell,cellIndex)=><span key={`${cellIndex}-${cell}`}><small>{activeSection.table.columns[cellIndex+1]}</small><strong>{cell}</strong></span>)}</div>
+                      </div>}
                     </div>
                   )}
                 </section>
@@ -26799,6 +26903,7 @@ function ConceptDeepDivesPage({t}) {
               {activeLessonStep?.kind==="traps"&&<section className="deep-dive-traps deep-dive-guided-panel">
                 <div className="deep-dive-block-title"><TriangleAlert size={19}/><div><span>Exam traps</span><h2>Almost-right answers to avoid</h2></div></div>
                 <p className="deep-dive-panel-intro">Read each distinction slowly. These are the details that often change the best answer.</p>
+                {selectedProfile.includesBeyondTextbook&&<p className="deep-dive-scope-note"><GraduationCap size={16}/>This recap may refer to optional details from steps marked “Beyond the textbook.”</p>}
                 <div className="deep-dive-trap-list">
                   {selectedDive.traps.map((trap,index)=><div key={trap}><span>{index+1}</span><p>{trap}</p></div>)}
                 </div>
@@ -26806,6 +26911,7 @@ function ConceptDeepDivesPage({t}) {
 
               {activeLessonStep?.kind==="check"&&<section className="deep-dive-check deep-dive-guided-panel">
                 <div className="deep-dive-block-title"><Brain size={19}/><div><span>Quick check</span><h2>Explain it before you reveal it</h2></div></div>
+                {selectedProfile.includesBeyondTextbook&&<p className="deep-dive-scope-note"><GraduationCap size={16}/>This check may combine exam focus with the optional context marked earlier.</p>}
                 <div className="deep-dive-check-content">
                   <p>{selectedDive.check.question}</p>
                   {!isAnswerVisible?(
@@ -26893,12 +26999,13 @@ function ConceptDeepDivesPage({t}) {
         <div className="deep-dives-hero-copy">
           <span className="deep-dive-preview-badge"><LockKeyhole size={13}/> Unreleased · owner preview</span>
           <div className="page-title-row"><NavGlyph type="deep-dives" active/><h1>Concept Deep Dives</h1></div>
-          <p>Build the mental model behind difficult Security+ topics, then learn the small distinctions that change an exam answer.</p>
+          <p>Follow the official SY0-701 path. Learn the exam words in plain English, compare similar answers, and practise with short checks instead of long notes.</p>
           <div className="deep-dives-proof">
-            <span><BadgeCheck size={15}/>{CONCEPT_DEEP_DIVES.length} vetted lessons</span>
-            <span><Crosshair size={15}/>{CONCEPT_DEEP_DIVE_TOPIC_COUNT} searchable concepts</span>
+            <span><BadgeCheck size={15}/>{CONCEPT_DEEP_DIVES.length} syllabus-mapped lessons</span>
+            <span><Crosshair size={15}/>5 official exam domains</span>
             <span><Brain size={15}/>{allFlashcards.length} built-in flashcards</span>
           </div>
+          <a className="deep-dives-blueprint-link" href={SY0701_BLUEPRINT.sourceUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Mapped to the official {SY0701_BLUEPRINT.exam} objectives · document v{SY0701_BLUEPRINT.documentVersion}<ChevronRight size={14}/></a>
         </div>
         <div className="deep-dives-progress-card">
           <div><span>Preview progress</span><strong>{completedIds.length}/{CONCEPT_DEEP_DIVES.length}</strong></div>
@@ -26915,8 +27022,9 @@ function ConceptDeepDivesPage({t}) {
           <input value={query} onChange={event=>setQuery(event.target.value)} placeholder="Search IPsec, passkeys, GDPR, ports…"/>
           {query&&<button type="button" aria-label="Clear search" onClick={()=>setQuery("")}><X size={15}/></button>}
         </label>
-        <div className="deep-dives-category-list" aria-label="Filter by category">
-          {CONCEPT_DEEP_DIVE_CATEGORIES.map(item=><button key={item} type="button" className={category===item?"active":""} onClick={()=>setCategory(item)}>{item}</button>)}
+        <div className="deep-dives-domain-map" aria-label="Filter by SY0-701 domain">
+          <button type="button" className={domainFilter==="all"?"active":""} onClick={()=>setDomainFilter("all")}><strong>All</strong><span>Study path</span></button>
+          {SY0701_DOMAINS.map(domain=><button key={domain.id} type="button" className={domainFilter===String(domain.id)?"active":""} onClick={()=>setDomainFilter(String(domain.id))}><strong>{domain.id}.0 · {domain.weight}%</strong><span>{domain.shortName}</span></button>)}
         </div>
       </section>
 
@@ -26926,36 +27034,43 @@ function ConceptDeepDivesPage({t}) {
       </div>
 
       {filteredDives.length?(
-        <div className="deep-dives-grid">
-          {filteredDives.map((dive,index)=>{
-            const isComplete=completedIds.includes(dive.id);
-            const diveCards=buildDeepDiveFlashcards(dive);
-            const masteredCount=diveCards.filter(item=>masteredCardIds.includes(item.id)).length;
-            return(
-              <article className="deep-dive-card" key={dive.id} style={{"--chapter-color":chapterColor(dive.chapter)}}>
-                <div className="deep-dive-card-top">
-                  <span className="deep-dive-card-index">{String(index+1).padStart(2,"0")}</span>
-                  {isComplete&&<span className="deep-dive-card-read"><CheckCircle2 size={14}/>Read</span>}
-                </div>
-                <div className="deep-dive-card-chapter"><ChapterIcon id={dive.chapter} size={26}/>Chapter {dive.chapter} · {dive.category}</div>
-                <span className="deep-dive-card-title">{dive.title}</span>
-                <p>{dive.subtitle}</p>
-                <div className="deep-dive-card-tags">{dive.aliases.slice(0,4).map(alias=><span key={alias}>{alias}</span>)}</div>
-                <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span><Brain size={14}/>{masteredCount}/{diveCards.length} cards</span></div>
-                <div className="deep-dive-card-actions">
-                  <button type="button" onClick={()=>openDive(dive.id,"learn")}><BookOpenCheck size={15}/>Learn</button>
-                  <button type="button" onClick={()=>openDive(dive.id,"cards")}><Brain size={15}/>Flashcards</button>
-                </div>
-              </article>
-            );
-          })}
+        <div className="deep-dives-domain-groups">
+          {groupedDives.map(group=><section className="deep-dives-domain-group" key={group.domain.id}>
+            <header><div><span>Domain {group.domain.id} · {group.domain.weight}% of exam</span><h2>{group.domain.name}</h2></div><strong>{group.dives.length} lesson{group.dives.length===1?"":"s"}</strong></header>
+            <div className="deep-dives-grid">
+              {group.dives.map(dive=>{
+                const syllabus=getSy0701DeepDiveProfile(dive);
+                const isComplete=completedIds.includes(dive.id);
+                const diveCards=buildDeepDiveFlashcards(dive);
+                const masteredCount=diveCards.filter(item=>masteredCardIds.includes(item.id)).length;
+                return(
+                  <article className="deep-dive-card" key={dive.id} style={{"--chapter-color":chapterColor(syllabus.domainId)}}>
+                    <div className="deep-dive-card-top">
+                      <span className="deep-dive-card-index">Objective {syllabus.objectiveCodes.join(" · ")}</span>
+                      {isComplete&&<span className="deep-dive-card-read"><CheckCircle2 size={14}/>Read</span>}
+                    </div>
+                    <div className="deep-dive-card-chapter"><ChapterIcon id={syllabus.domainId} size={26}/>Domain {syllabus.domainId} · Exam focus</div>
+                    <span className="deep-dive-card-title">{syllabus.title}</span>
+                    <p>{syllabus.plainSummary}</p>
+                    <div className="deep-dive-card-tags">{syllabus.examKeywords.slice(0,4).map(keyword=><span key={keyword}>{keyword}</span>)}</div>
+                    {syllabus.includesBeyondTextbook&&<div className="deep-dive-card-scope"><GraduationCap size={14}/>Includes clearly marked “Beyond the textbook” detail</div>}
+                    <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span><Brain size={14}/>{masteredCount}/{diveCards.length} cards</span></div>
+                    <div className="deep-dive-card-actions">
+                      <button type="button" onClick={()=>openDive(dive.id,"learn")}><BookOpenCheck size={15}/>Learn</button>
+                      <button type="button" onClick={()=>openDive(dive.id,"cards")}><Brain size={15}/>Flashcards</button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>)}
         </div>
       ):(
         <div className="deep-dives-empty">
           <Lightbulb size={24}/>
           <h2>No lesson matches that search yet.</h2>
-          <p>Try a protocol, attack, governance term, or a broader category.</p>
-          <button className="btn btn-outline" type="button" onClick={()=>{setQuery("");setCategory("All topics");}}>Clear filters</button>
+          <p>Try a protocol, attack, governance term, or a broader exam domain.</p>
+          <button className="btn btn-outline" type="button" onClick={()=>{setQuery("");setDomainFilter("all");}}>Clear filters</button>
         </div>
       )}
     </div>

@@ -1,3 +1,5 @@
+import { getSy0701DeepDiveProfile } from "../data/sy0701DeepDiveMap.js";
+
 const cleanText = value => typeof value === "string" ? value.trim() : "";
 
 const card = (id, kind, front, back, context) => ({
@@ -10,14 +12,16 @@ const card = (id, kind, front, back, context) => ({
 
 export function buildDeepDiveFlashcards(dive) {
   if (!dive?.id) return [];
+  const syllabus = getSy0701DeepDiveProfile(dive);
+  const lessonTitle = syllabus?.title || dive.title;
 
   const cards = [
     card(
       `${dive.id}:core`,
       "Core idea",
-      `What is the main idea behind “${dive.title}”?`,
-      dive.summary,
-      "Start with the mental model",
+      `What is the exam focus of “${lessonTitle}”?`,
+      syllabus?.plainSummary || dive.summary,
+      `SY0-701 objective ${syllabus?.objectiveCodes?.join(" / ") || "review"}`,
     ),
   ];
 
@@ -33,7 +37,7 @@ export function buildDeepDiveFlashcards(dive) {
 
       cards.push(card(
         `${dive.id}:table-${sectionIndex}-${rowIndex}`,
-        "Compare",
+        syllabus?.beyondSections?.includes(sectionIndex) ? "Beyond textbook" : "Compare",
         `${subjectLabel || "Concept"}: How should you recognise “${subject}”?`,
         answer,
         section.title,
@@ -44,17 +48,17 @@ export function buildDeepDiveFlashcards(dive) {
   dive.traps?.forEach((trap, trapIndex) => {
     cards.push(card(
       `${dive.id}:trap-${trapIndex}`,
-      "Exam trap",
+      syllabus?.includesBeyondTextbook ? "Exam + beyond" : "Exam trap",
       `Which almost-right assumption should you avoid?`,
       trap,
-      `Trap ${trapIndex + 1} · ${dive.title}`,
+      `${syllabus?.includesBeyondTextbook ? "Check the lesson scope" : `Trap ${trapIndex + 1}`} · ${lessonTitle}`,
     ));
   });
 
   if (dive.check?.question && dive.check?.answer) {
     cards.push(card(
       `${dive.id}:check`,
-      "Apply it",
+      syllabus?.includesBeyondTextbook ? "Apply + beyond" : "Apply it",
       dive.check.question,
       dive.check.answer,
       "Lesson check",

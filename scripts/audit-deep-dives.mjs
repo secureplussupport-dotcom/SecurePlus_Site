@@ -4,6 +4,15 @@ import {
   CONCEPT_DEEP_DIVE_REVIEWED_AT,
 } from "../src/data/conceptDeepDives.js";
 import { buildDeepDiveDeck, buildDeepDiveFlashcards } from "../src/lib/deepDiveStudy.js";
+import {
+  getSy0701DeepDiveProfile,
+  sortDeepDivesBySy0701,
+  SY0701_BLUEPRINT,
+  SY0701_DEEP_DIVE_PROFILES,
+  SY0701_DOMAINS,
+  SY0701_KEYWORD_DEFINITIONS,
+  SY0701_OBJECTIVES,
+} from "../src/data/sy0701DeepDiveMap.js";
 
 const failures = [];
 const requireValue = (condition, message) => {
@@ -31,15 +40,36 @@ const primaryDomains = [
   "rfc-editor.org",
 ];
 const isPrimaryDomain = hostname => primaryDomains.some(domain => hostname === domain || hostname.endsWith(`.${domain}`));
+const mappedObjectiveCodes = new Set(Object.values(SY0701_DEEP_DIVE_PROFILES).flatMap(profile => profile.objectiveCodes));
 
 requireValue(CONCEPT_DEEP_DIVES.length >= 32, `Expected at least 32 lessons; found ${CONCEPT_DEEP_DIVES.length}.`);
 requireValue(unique(CONCEPT_DEEP_DIVES.map(dive => dive.id)), "Lesson IDs must be unique.");
 requireValue(unique(CONCEPT_DEEP_DIVES.map(dive => dive.title)), "Lesson titles must be unique.");
+requireValue(Object.keys(SY0701_DEEP_DIVE_PROFILES).length === CONCEPT_DEEP_DIVES.length, "Every lesson needs exactly one SY0-701 syllabus profile.");
+requireValue(SY0701_DOMAINS.length === 5, "The SY0-701 map must contain five exam domains.");
+requireValue(SY0701_DOMAINS.reduce((total, domain) => total + domain.weight, 0) === 100, "SY0-701 domain weights must total 100%.");
+requireValue(Object.keys(SY0701_OBJECTIVES).length === 28, "The SY0-701 map must contain all 28 numbered objectives.");
+requireValue(mappedObjectiveCodes.size === Object.keys(SY0701_OBJECTIVES).length, "The Deep Dive path must cover all 28 SY0-701 objectives.");
+requireValue(SY0701_BLUEPRINT.exam === "SY0-701 V7" && SY0701_BLUEPRINT.documentVersion === "7.0", "The syllabus map must identify the reviewed official blueprint version.");
+requireValue(/^https:\/\//.test(SY0701_BLUEPRINT.sourceUrl), "The official blueprint source must use HTTPS.");
 requireValue(/^\d{4}-\d{2}-\d{2}$/.test(CONCEPT_DEEP_DIVE_REVIEWED_AT), "Review date must use YYYY-MM-DD.");
 requireValue(CONCEPT_DEEP_DIVE_CATEGORIES[0] === "All topics", "The category list must begin with All topics.");
 
 for (const dive of CONCEPT_DEEP_DIVES) {
   const prefix = `[${dive.id || "missing-id"}]`;
+  const syllabus = getSy0701DeepDiveProfile(dive);
+  requireValue(Boolean(syllabus), `${prefix} is missing its SY0-701 syllabus profile.`);
+  if (syllabus) {
+    requireValue(syllabus.studyOrder >= 1 && syllabus.studyOrder <= CONCEPT_DEEP_DIVES.length, `${prefix} has an invalid syllabus study order.`);
+    requireValue(syllabus.objectiveCodes.length >= 1 && syllabus.objectiveCodes.every(code => SY0701_OBJECTIVES[code]), `${prefix} references an unknown SY0-701 objective.`);
+    requireValue(syllabus.domainId === Number(syllabus.objectiveCodes[0].split(".")[0]), `${prefix} domain does not match its primary objective.`);
+    requireValue(words(syllabus.title) >= 3 && words(syllabus.title) <= 12, `${prefix} beginner title must be 3-12 words.`);
+    requireValue(words(syllabus.plainSummary) >= 10 && words(syllabus.plainSummary) <= 32, `${prefix} plain summary must be 10-32 words.`);
+    requireValue(syllabus.examKeywords.length >= 3 && syllabus.examKeywords.length <= 5, `${prefix} needs 3-5 exam keywords.`);
+    requireValue(syllabus.examKeywords.every(keyword => SY0701_KEYWORD_DEFINITIONS[keyword]), `${prefix} has an exam keyword without a plain-English definition.`);
+    requireValue(unique(syllabus.examKeywords), `${prefix} repeats an exam keyword.`);
+    requireValue(syllabus.beyondSections.every(index => Number.isInteger(index) && index >= 0 && index < dive.sections.length), `${prefix} has an invalid Beyond the textbook section index.`);
+  }
   requireValue(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(dive.id || ""), `${prefix} ID must be a URL-safe slug.`);
   requireValue(Number.isInteger(dive.chapter) && dive.chapter >= 1 && dive.chapter <= 5, `${prefix} chapter must be 1-5.`);
   requireValue(typeof dive.category === "string" && dive.category.trim(), `${prefix} category is required.`);
@@ -99,6 +129,9 @@ for (const dive of CONCEPT_DEEP_DIVES) {
 const deck = buildDeepDiveDeck(CONCEPT_DEEP_DIVES);
 requireValue(unique(deck.map(item => item.id)), "Generated flashcard IDs must be unique across the full library.");
 requireValue(!/\b(?:TODO|FIXME|lorem ipsum)\b|\?\?\?/i.test(JSON.stringify(CONCEPT_DEEP_DIVES)), "Lesson data contains placeholder copy.");
+requireValue(!/\b(?:authorisation|authorised|unauthorised|organisation|organisational|behaviour|defence|prioritise|sanitisation|synchronisation|virtualisation|recognise|standardise)\b/i.test(JSON.stringify(CONCEPT_DEEP_DIVES)), "Lesson copy must use the American-English keywords used in the CompTIA objectives.");
+requireValue(unique(Object.values(SY0701_DEEP_DIVE_PROFILES).map(item => item.studyOrder)), "SY0-701 study order values must be unique.");
+requireValue(sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES).every((dive, index, ordered) => index === 0 || getSy0701DeepDiveProfile(ordered[index - 1]).studyOrder < getSy0701DeepDiveProfile(dive).studyOrder), "Lessons are not sorted into a unique SY0-701 study path.");
 
 if (failures.length) {
   console.error(`Deep Dive audit failed with ${failures.length} issue${failures.length === 1 ? "" : "s"}:`);
@@ -112,6 +145,8 @@ const sectionCount = CONCEPT_DEEP_DIVES.reduce((total, dive) => total + dive.sec
 console.log("Deep Dive content audit passed.");
 console.log(`- ${CONCEPT_DEEP_DIVES.length} complete lessons across ${sectionCount} guided sections`);
 console.log(`- ${deck.length} concise flashcards with unique IDs`);
+console.log(`- All ${CONCEPT_DEEP_DIVES.length} lessons mapped across all 28 SY0-701 objectives and five domains`);
+console.log(`- ${Object.values(SY0701_DEEP_DIVE_PROFILES).filter(item => item.beyondSections.length).length} lessons clearly label optional Beyond the textbook sections`);
 console.log(`- ${sourceReferences.length} source references (${uniqueSourceUrls.size} distinct HTTPS URLs)`);
 console.log(`- All sources use the approved primary-source domain set`);
 console.log(`- Reviewed dataset date: ${CONCEPT_DEEP_DIVE_REVIEWED_AT}`);
