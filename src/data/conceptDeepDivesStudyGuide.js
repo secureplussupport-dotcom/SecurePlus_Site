@@ -246,9 +246,9 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     title: "Cloud Models, Containers, and Infrastructure as Code",
     subtitle: "Know which layer you control, which boundary you share, and how automation multiplies both consistency and mistakes.",
     summary: "Cloud security is not a single responsibility chart. The service model, provider contract, workload architecture, identity design, data location, and automation pipeline determine who can control each risk.",
-    minutes: 14,
+    minutes: 16,
     difficulty: "Applied",
-    aliases: ["IaaS", "PaaS", "SaaS", "public cloud", "private cloud", "community cloud", "hybrid cloud", "shared responsibility", "container", "virtual machine", "orchestrator", "registry", "SDN", "control plane", "data plane", "infrastructure as code", "IaC", "immutable infrastructure", "configuration drift", "guardrails"],
+    aliases: ["IaaS", "PaaS", "SaaS", "public cloud", "private cloud", "community cloud", "hybrid cloud", "shared responsibility", "container", "virtual machine", "orchestrator", "registry", "serverless", "function as a service", "FaaS", "microservices", "service-oriented architecture", "SOA", "SDN", "control plane", "data plane", "infrastructure as code", "IaC", "immutable infrastructure", "configuration drift", "guardrails"],
     objectives: [
       "Reason about responsibility from the actual service layer and contract.",
       "Compare VM and container isolation without treating either as absolute.",
@@ -280,10 +280,18 @@ export const STUDY_GUIDE_DEEP_DIVES = [
           "Infrastructure as code makes intended state reviewable and repeatable. It can also deploy one mistake everywhere. Use protected repositories, peer review, automated policy checks, separate environments, short-lived deployment credentials, secret managers, staged rollouts, rollback plans, and drift detection. Immutability means replacing rather than manually repairing instances; stateful data and incident evidence still need deliberate handling.",
         ],
       },
+      {
+        title: "Serverless removes server administration, not customer security work",
+        body: [
+          "Serverless or Function as a Service means the provider operates and scales the underlying server platform. The customer still secures application code, dependencies, identities, triggers, secrets, data, network paths, logging, runtime selection, and service configuration. Providers patch their platform; customers must still update vulnerable libraries and supported runtimes. ‘No servers to manage’ never means ‘no patching or monitoring.’",
+          "Service-oriented architecture is a broad approach to composing services. Microservices usually emphasise small, independently deployable service boundaries. Neither style is inherently secure: more services can increase identity, API, dependency, observability, and failure-management complexity. Define ownership and trust boundaries before selecting the label.",
+        ],
+      },
     ],
     traps: [
       "The provider secures the cloud, but the exact customer duties vary by service and contract.",
       "A container is not simply a smaller VM and does not normally include its own kernel.",
+      "Serverless shifts infrastructure operations to the provider; customers still secure code, dependencies, identities, data, and configuration.",
       "Infrastructure as code reduces manual inconsistency but can reproduce insecure configuration at high speed.",
     ],
     check: {
@@ -303,7 +311,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     title: "Resilience, Asset Lifecycles, and Physical Security",
     subtitle: "Connect business recovery targets to maintained assets, tested recovery paths, and layered physical controls.",
     summary: "Resilience is an engineered and tested capability. It depends on knowing what exists, how failure affects the business, which recovery targets matter, and whether digital and physical dependencies can meet them.",
-    minutes: 14,
+    minutes: 15,
     difficulty: "Applied",
     aliases: ["asset inventory", "asset owner", "EOL", "EOSL", "BIA", "RTO", "RPO", "MTTR", "MTBF", "high availability", "fault tolerance", "redundancy", "cluster", "load balancing", "hot site", "warm site", "cold site", "honeypot", "honeynet", "honeyfile", "bollard", "mantrap", "media sanitization"],
     objectives: [
@@ -421,7 +429,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     summary: "Modern incident response is an organisation-wide capability. Preparation and improvement span governance, protection, detection, response, and recovery; analysts still need a practical, iterative sequence for each event.",
     minutes: 14,
     difficulty: "Applied",
-    aliases: ["incident response", "NIST SP 800-61 Rev 3", "SIEM", "SOAR", "log management", "time synchronization", "false positive", "false negative", "alert tuning", "threat hunting", "hypothesis", "containment", "eradication", "recovery", "lessons learned"],
+    aliases: ["incident response", "NIST SP 800-61 Rev 3", "SIEM", "SOAR", "log management", "time synchronization", "true positive", "true negative", "false positive", "false negative", "confusion matrix", "alert tuning", "threat hunting", "hypothesis", "containment", "eradication", "recovery", "lessons learned"],
     objectives: [
       "Use the current NIST incident-response model without forcing every incident into a rigid sequence.",
       "Choose logs that can reconstruct identity, endpoint, network, cloud, and application activity.",
@@ -454,6 +462,18 @@ export const STUDY_GUIDE_DEEP_DIVES = [
           "A false positive alerts on benign activity; a false negative misses malicious activity. Suppression, deduplication, baselines, asset criticality, identity risk, and confidence can improve prioritisation. Tuning solely to reduce alert volume can hide failure, so changes need testing, ownership, expiry where appropriate, and measures of missed as well as noisy detection.",
           "Threat hunting begins with a testable hypothesis, gathers relevant evidence, follows leads, records results, and converts durable findings into improved detection or controls. ATT&CK provides a shared language for behaviours. A hunt result is not automatically an incident, and absence of a hit is not proof the environment is clean.",
         ],
+      },
+      {
+        title: "Classify alerts against reality",
+        table: {
+          columns: ["Reality", "Detection result", "Classification"],
+          rows: [
+            ["Malicious activity occurred", "Alert fired", "True positive"],
+            ["Benign activity occurred", "Alert fired", "False positive"],
+            ["Benign activity occurred", "No alert", "True negative"],
+            ["Malicious activity occurred", "No alert", "False negative"],
+          ],
+        },
       },
     ],
     traps: [

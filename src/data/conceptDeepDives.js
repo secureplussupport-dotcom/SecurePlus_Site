@@ -1,4 +1,5 @@
 import { STUDY_GUIDE_DEEP_DIVES } from "./conceptDeepDivesStudyGuide.js";
+import { PRINTER_GUIDE_DEEP_DIVES } from "./conceptDeepDivesPrinterGuide.js";
 
 export const CONCEPT_DEEP_DIVES = [
   {
@@ -115,7 +116,7 @@ export const CONCEPT_DEEP_DIVES = [
     title: "Keys, Password Hashing, and Encryption Scope",
     subtitle: "Know what should be hashed, encrypted, wrapped, or protected by hardware.",
     summary: "Cryptography questions are rarely solved by choosing the strongest-sounding term. Start with the asset and operation: passwords are verified with slow salted hashes, data is encrypted with keys, and high-value keys may be wrapped or isolated in trusted hardware.",
-    minutes: 12,
+    minutes: 15,
     difficulty: "Applied",
     aliases: ["bcrypt", "Argon2", "Argon2id", "scrypt", "salt", "pepper", "KEK", "HSM", "Secure Enclave", "BitLocker", "full disk encryption", "file encryption", "database encryption", "blockchain", "distributed ledger"],
     objectives: [
@@ -469,7 +470,7 @@ export const CONCEPT_DEEP_DIVES = [
     summary: "Risk work connects uncertainty to business decisions. Matrices and scores support comparison, but labels and thresholds belong to the organisation. Controls change likelihood or impact; transfer changes who bears specified consequences but leaves residual risk.",
     minutes: 12,
     difficulty: "Applied",
-    aliases: ["risk transfer", "risk matrix", "likelihood", "impact", "residual risk", "fault tolerance", "high availability", "redundancy", "mandatory vacation", "due diligence", "audit", "penetration test", "vulnerability prioritisation"],
+    aliases: ["risk transfer", "risk matrix", "likelihood", "impact", "residual risk", "asset value", "exposure factor", "EF", "single loss expectancy", "SLE", "annualized rate of occurrence", "ARO", "annualized loss expectancy", "ALE", "qualitative risk", "quantitative risk", "fault tolerance", "high availability", "redundancy", "mandatory vacation", "due diligence", "audit", "rules of engagement", "penetration test", "red team", "vulnerability prioritisation"],
     objectives: [
       "Explain risk acceptance, avoidance, mitigation, and transfer.",
       "Differentiate fault tolerance, high availability, and redundancy.",
@@ -495,6 +496,25 @@ export const CONCEPT_DEEP_DIVES = [
         },
       },
       {
+        title: "Quantitative estimates support—not replace—judgement",
+        body: [
+          "A common exam model estimates single loss expectancy as asset value × exposure factor, then annualised loss expectancy as SLE × annualised rate of occurrence. If a $200,000 process would lose 25% of its value per event, the SLE is $50,000. An ARO of 0.2—roughly once every five years—produces an ALE of $10,000.",
+          "ALE is an expected annualised estimate across uncertainty, not a promise that exactly that amount will be lost each year. Asset value can include revenue, recovery, safety, legal, and reputational effects. Compare controls using expected risk reduction, total lifecycle cost, feasibility, compliance duties, and residual risk; a neat equation cannot make weak inputs precise.",
+        ],
+      },
+      {
+        title: "Assurance methods need scope and permission",
+        table: {
+          columns: ["Method", "Primary question", "Boundary to remember"],
+          rows: [
+            ["Audit", "Does evidence meet defined criteria?", "Independence and sampling affect assurance"],
+            ["Vulnerability assessment", "Which likely weaknesses are present?", "Findings require validation and do not prove exploitability"],
+            ["Penetration test", "Can an authorised tester demonstrate impact?", "Rules of engagement define targets, timing, techniques, and stop conditions"],
+            ["Red-team exercise", "Can an objective-focused adversary emulation test detection and response?", "It is not unrestricted hacking and may use multiple attack paths"],
+          ],
+        },
+      },
+      {
         title: "Governance and prioritisation",
         body: [
           "Mandatory vacation is an administrative control that can expose fraud or hidden dependencies when another person performs the absent employee's duties. Due diligence is the ongoing investigation and care used to understand and manage risk; due care is the reasonable action taken in response.",
@@ -514,6 +534,7 @@ export const CONCEPT_DEEP_DIVES = [
     sources: [
       { label: "NIST SP 800-30 Rev. 1 — Risk Assessments", url: "https://csrc.nist.gov/pubs/sp/800/30/r1/final" },
       { label: "NIST SP 800-53 Rev. 5 — Security Controls", url: "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final" },
+      { label: "NIST SP 800-115 — Security Testing and Assessment", url: "https://csrc.nist.gov/pubs/sp/800/115/final" },
       { label: "CISA — Known Exploited Vulnerabilities", url: "https://www.cisa.gov/known-exploited-vulnerabilities-catalog" },
     ],
   },
@@ -821,6 +842,7 @@ export const CONCEPT_DEEP_DIVES = [
     ],
   },
   ...STUDY_GUIDE_DEEP_DIVES,
+  ...PRINTER_GUIDE_DEEP_DIVES,
 ];
 
 export const CONCEPT_DEEP_DIVE_CATEGORIES = [
