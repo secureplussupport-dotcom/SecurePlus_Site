@@ -1,3 +1,5 @@
+import { STUDY_GUIDE_DEEP_DIVES } from "./conceptDeepDivesStudyGuide.js";
+
 export const CONCEPT_DEEP_DIVES = [
   {
     id: "ipsec-secure-media",
@@ -576,7 +578,7 @@ export const CONCEPT_DEEP_DIVES = [
     summary: "Operations tools produce signals, not automatic truth. Scanners combine version, configuration, authenticated, and behavioural checks; SCAP standardises machine-readable security content; orchestration coordinates workflows; threat intelligence adds context at different decision levels.",
     minutes: 11,
     difficulty: "Applied",
-    aliases: ["vulnerability scanner", "CVE", "SCAP", "orchestration", "automation", "posture assessment", "configuration enforcement", "threat intelligence", "strategic", "operational", "tactical", "technical"],
+    aliases: ["vulnerability scanner", "CVE", "CWE", "CVSS", "EPSS", "KEV", "SCAP", "orchestration", "automation", "posture assessment", "configuration enforcement", "remediation", "false positive", "false negative", "threat intelligence", "strategic", "operational", "tactical", "technical"],
     objectives: [
       "Explain authenticated and unauthenticated scanning evidence.",
       "Use SCAP and orchestration without overstating automation.",
@@ -596,6 +598,22 @@ export const CONCEPT_DEEP_DIVES = [
           "Security Content Automation Protocol (SCAP) is a family of specifications for expressing and exchanging machine-readable security configuration and vulnerability information. It supports consistent assessment; it is not a complete vulnerability-management programme by itself.",
           "Orchestration connects tools and sequences actions. Automation executes defined tasks. A playbook might enrich an alert, check asset criticality, open a case, and request approval before isolation. High-impact actions need safeguards, rollback plans, and evidence capture.",
         ],
+      },
+      {
+        title: "Prioritisation is a decision, not a severity sort",
+        body: [
+          "A defensible workflow discovers and scopes a finding, validates the evidence, prioritises it using asset and threat context, applies remediation or a time-limited exception, and then verifies closure. A scanner changing a status to fixed is useful evidence, but a rescan or other independent check should confirm the vulnerable condition is gone.",
+        ],
+        table: {
+          columns: ["Signal", "What it tells you", "What it does not tell you alone"],
+          rows: [
+            ["CVE", "A public identifier for a disclosed vulnerability", "Whether your exact asset is exposed or exploitable"],
+            ["CWE", "A category of software or hardware weakness", "The risk of a particular deployed instance"],
+            ["CVSS", "Standardised technical severity characteristics", "Business impact, current exposure, or observed exploitation"],
+            ["EPSS", "An estimate of near-term exploitation probability in the wild", "Business impact or proof that exploitation has occurred"],
+            ["CISA KEV", "A vulnerability has evidence of active exploitation", "Whether a specific organisation has been compromised"],
+          ],
+        },
       },
       {
         title: "Threat intelligence levels are a useful model, not a universal law",
@@ -623,6 +641,7 @@ export const CONCEPT_DEEP_DIVES = [
       { label: "NIST — SCAP Releases", url: "https://csrc.nist.gov/Projects/Security-Content-Automation-Protocol/SCAP-Releases" },
       { label: "NIST SP 800-40 Rev. 4 — Enterprise Patch Management", url: "https://csrc.nist.gov/pubs/sp/800/40/r4/final" },
       { label: "CISA — Known Exploited Vulnerabilities", url: "https://www.cisa.gov/known-exploited-vulnerabilities-catalog" },
+      { label: "FIRST — Exploit Prediction Scoring System", url: "https://www.first.org/epss/" },
     ],
   },
   {
@@ -801,6 +820,7 @@ export const CONCEPT_DEEP_DIVES = [
       { label: "ICANN — Information for Domain Registrants", url: "https://www.icann.org/registrants" },
     ],
   },
+  ...STUDY_GUIDE_DEEP_DIVES,
 ];
 
 export const CONCEPT_DEEP_DIVE_CATEGORIES = [

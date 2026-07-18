@@ -26373,7 +26373,7 @@ function ConceptDeepDivesPage({t}) {
       const categoryMatch=category==="All topics"||dive.category===category;
       const searchable=[dive.title,dive.subtitle,dive.summary,dive.category,...dive.aliases].join(" ").toLowerCase();
       return categoryMatch&&(!needle||searchable.includes(needle));
-    });
+    }).sort((a,b)=>a.chapter-b.chapter||a.title.localeCompare(b.title));
   },[query,category]);
 
   const openDive=id=>{
