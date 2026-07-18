@@ -4,6 +4,7 @@ import {
   CONCEPT_DEEP_DIVE_REVIEWED_AT,
 } from "../src/data/conceptDeepDives.js";
 import { buildDeepDiveDeck, buildDeepDiveFlashcards } from "../src/lib/deepDiveStudy.js";
+import { getDeepDiveRecommendations } from "../src/lib/deepDiveRecommendations.js";
 import {
   SY0701_ACRONYM_CARDS,
   SY0701_ACRONYM_SETS,
@@ -159,6 +160,31 @@ requireValue(!/\b(?:authorisation|authorised|unauthorised|organisation|organisat
 requireValue(unique(Object.values(SY0701_DEEP_DIVE_PROFILES).map(item => item.studyOrder)), "SY0-701 study order values must be unique.");
 requireValue(sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES).every((dive, index, ordered) => index === 0 || getSy0701DeepDiveProfile(ordered[index - 1]).studyOrder < getSy0701DeepDiveProfile(dive).studyOrder), "Lessons are not sorted into a unique SY0-701 study path.");
 
+const recommendationChecks = [
+  {
+    question:{ id:"audit-wifi", ch:"3", topic:"Wireless Security", q:"A university needs WPA3-Enterprise with individual credentials using 802.1X and RADIUS." },
+    expected:"wifi-access-defense",
+  },
+  {
+    question:{ id:"audit-pki", ch:"1", topic:"PKI & Certificates", q:"Which method checks whether a certificate was revoked using OCSP?" },
+    expected:"pki-email-trust",
+  },
+  {
+    question:{ id:"audit-siem", ch:"4", topic:"Monitoring & SIEM", q:"An analyst correlates logs in a SIEM during incident response." },
+    expected:"incident-response-monitoring",
+  },
+  {
+    question:{ id:"audit-risk", ch:"5", topic:"Risk Management", q:"Calculate SLE and ALE, then record the selected risk treatment." },
+    expected:"risk-resilience-governance",
+  },
+];
+recommendationChecks.forEach(({question,expected})=>{
+  const recommendations=getDeepDiveRecommendations([question],{limit:2});
+  requireValue(recommendations[0]?.id===expected, `Smart Review mapped ${question.id} to ${recommendations[0]?.id||"nothing"}; expected ${expected}.`);
+  requireValue(recommendations.every(item=>CONCEPT_DEEP_DIVES.some(dive=>dive.id===item.id)), `Smart Review returned an unknown lesson for ${question.id}.`);
+  requireValue(recommendations.every(item=>item.objectiveCodes.length&&item.domainId), `Smart Review returned incomplete syllabus metadata for ${question.id}.`);
+});
+
 if (failures.length) {
   console.error(`Deep Dive audit failed with ${failures.length} issue${failures.length === 1 ? "" : "s"}:`);
   failures.forEach(failure => console.error(`- ${failure}`));
@@ -173,6 +199,7 @@ console.log(`- ${CONCEPT_DEEP_DIVES.length} complete lessons across ${sectionCou
 console.log(`- ${deck.length} concise flashcards with unique IDs`);
 console.log(`- ${SY0701_ACRONYM_CARDS.length} vetted acronym cards across ${SY0701_ACRONYM_SETS.length} active-recall sets`);
 console.log(`- All ${CONCEPT_DEEP_DIVES.length} lessons mapped across all 28 SY0-701 objectives and five domains`);
+console.log(`- Smart Review lesson matching passed ${recommendationChecks.length} representative weak-area checks`);
 console.log(`- ${Object.values(SY0701_DEEP_DIVE_PROFILES).filter(item => item.beyondSections.length).length} lessons clearly label optional Beyond the textbook sections`);
 console.log(`- ${sourceReferences.length} source references (${uniqueSourceUrls.size} distinct HTTPS URLs)`);
 console.log(`- All sources use the approved primary-source domain set`);

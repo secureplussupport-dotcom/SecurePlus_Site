@@ -81,6 +81,10 @@ import {
   buildDeepDiveFlashcards,
   formatDeepDiveReviewDate,
 } from "./lib/deepDiveStudy.js";
+import {
+  describeDeepDiveMatch,
+  getDeepDiveRecommendations,
+} from "./lib/deepDiveRecommendations.js";
 
 // ═══════════════════════════════════════════════════════════════
 // PERSISTENT STORAGE
@@ -15418,6 +15422,25 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .weak-action-card{border-color:${t.red}35!important;background:linear-gradient(135deg,${t.red}09,${t.surface} 54%,${t.accent}08)!important;}
 .weak-action-card h3,.daily-habit-card h3{font-size:18px;color:${t.text};line-height:1.3;margin:4px 0 6px;}
 .weak-action-card p,.daily-habit-card p{font-size:13px;color:${t.textSec};line-height:1.65;margin:0 0 12px;}
+.smart-lesson-path{margin:14px 0;padding:14px;border:1px solid ${t.accent}30;border-radius:12px;background:${t.surface};}
+.smart-lesson-path-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+.smart-lesson-path-head>span{display:inline-flex;align-items:center;gap:7px;color:${t.text};font-size:13px;font-weight:900;}
+.smart-lesson-path-head>span svg{color:${t.accent};}
+.smart-lesson-path-head small{color:${t.textDim};font-size:11px;font-weight:700;}
+.smart-lesson-grid{display:grid;gap:9px;}
+.smart-lesson-card{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;gap:11px;padding:12px;border:1px solid ${t.border};border-radius:10px;background:${t.panel};transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;}
+.smart-lesson-card:hover{transform:translateY(-1px);border-color:${t.accent}55;box-shadow:0 8px 22px ${t.accent}0e;}
+.smart-lesson-order{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:${t.accent}16;color:${t.accent};font-size:12px;font-weight:950;}
+.smart-lesson-copy{min-width:0;}
+.smart-lesson-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:4px;}
+.smart-lesson-meta span{color:${t.textDim};font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.045em;}
+.smart-lesson-copy h4{margin:0 0 3px;color:${t.text};font-size:14px;line-height:1.35;}
+.smart-lesson-copy p{margin:0!important;color:${t.textSec};font-size:11px!important;line-height:1.5!important;}
+.smart-lesson-card .btn{min-height:34px;padding:7px 10px;font-size:11px;white-space:nowrap;}
+.smart-lesson-path.compact{padding:11px;margin:12px 0;}
+.smart-lesson-path.compact .smart-lesson-card{grid-template-columns:26px minmax(0,1fr);padding:10px;}
+.smart-lesson-path.compact .smart-lesson-order{width:26px;height:26px;}
+.smart-lesson-path.compact .smart-lesson-card .btn{grid-column:2;justify-self:start;}
 .weak-action-meta,.daily-habit-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;}
 .weak-action-meta span,.daily-habit-meta span{padding:5px 8px;border-radius:999px;border:1px solid ${t.border};background:${t.panel};color:${t.textSec};font-size:10px;font-weight:900;text-transform:uppercase;}
 .daily-habit-card{border-color:${t.amber}40!important;background:linear-gradient(135deg,${t.amber}12,${t.surface} 58%,${t.green}08)!important;}
@@ -17034,6 +17057,9 @@ body{background:
   .academy-stepper{grid-template-columns:1fr!important;}
   .academy-avatar-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .dashboard-action-grid{grid-template-columns:1fr!important;}
+  .smart-lesson-card{grid-template-columns:30px minmax(0,1fr)!important;align-items:start!important;}
+  .smart-lesson-card .btn{grid-column:2;justify-self:start;width:100%;justify-content:center;}
+  .smart-lesson-path-head{align-items:flex-start;flex-direction:column;gap:3px;}
   .home-live-card{padding:16px!important;}
   .mission-board{padding:16px!important;border-radius:16px!important;}
   .mission-card-grid{grid-template-columns:1fr!important;}
@@ -20723,9 +20749,40 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
 }
 
 // ═══════════════════════════════════════════════════════════════
-// DASHBOARD
+// SMART REVIEW LEARNING PATH + DASHBOARD
 // ═══════════════════════════════════════════════════════════════
-function Dashboard({user,attempts,onNav,onStartChapterReview,coinWallet,t}) {
+function SmartReviewLessonPath({recommendations=[],onOpenDeepDive,source="smart_review",title="Study before you retry",compact=false}) {
+  if(!recommendations.length)return null;
+  return(
+    <section className={`smart-lesson-path ${compact?"compact":""}`} aria-label="Recommended Concept Deep Dive lessons">
+      <div className="smart-lesson-path-head">
+        <span><Brain size={15}/>{title}</span>
+        <small>Chosen from your missed concepts</small>
+      </div>
+      <div className="smart-lesson-grid">
+        {recommendations.map((lesson,index)=>(
+          <article className="smart-lesson-card" key={lesson.id}>
+            <div className="smart-lesson-order">{index+1}</div>
+            <div className="smart-lesson-copy">
+              <div className="smart-lesson-meta">
+                <span>Domain {lesson.domainId}</span>
+                <span>Objective {lesson.objectiveCodes.join(" · ")}</span>
+                <span>{lesson.minutes} min</span>
+              </div>
+              <h4>{lesson.title}</h4>
+              <p>{describeDeepDiveMatch(lesson)}</p>
+            </div>
+            <button className="btn btn-outline" type="button" onClick={()=>onOpenDeepDive?.(lesson.id,{source})}>
+              Study lesson <ChevronRight size={15}/>
+            </button>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coinWallet,t}) {
   const [activeMission,setActiveMission]=useState("mcq");
   const readinessProfile=getReadinessProfile(attempts);
   const questionsDone=readinessProfile.uniqueQuestions;
@@ -20783,11 +20840,12 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,coinWallet,t}) {
     const accuracy=chapterAttempts.length?Math.round((correctCount/chapterAttempts.length)*100):100;
     const reviewCount=Math.min(3,MCQ_BANK.filter(question=>question.ch===ch.id).length);
     const priority=(missedQuestions.length*30)+(repeatedMisses*12)+(100-accuracy);
-    return {chapter:ch,total:chapterAttempts.length,missedCount:missedQuestions.length,missedTopics,accuracy,reviewCount,repeatedMisses,priority};
+    return {chapter:ch,total:chapterAttempts.length,missedCount:missedQuestions.length,missedQuestions,missedTopics,accuracy,reviewCount,repeatedMisses,priority};
   })
     .filter(item=>item.missedCount>0)
     .sort((a,b)=>b.priority-a.priority||a.accuracy-b.accuracy);
   const primaryWeakAction=weakChapterActions[0];
+  const primaryLessonPath=getDeepDiveRecommendations(primaryWeakAction?.missedQuestions||[],{limit:2});
 
   return(
     <div className="dashboard-shell">
@@ -20930,6 +20988,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,coinWallet,t}) {
                 <span>{primaryWeakAction.accuracy}% chapter accuracy</span>
                 <span>{primaryWeakAction.missedTopics.slice(0,2).join(" + ") || "Missed concepts"}</span>
               </div>
+              <SmartReviewLessonPath recommendations={primaryLessonPath} onOpenDeepDive={onOpenDeepDive} source="dashboard_weak_area" compact title="Recommended concept lessons"/>
               <button className="btn btn-primary" onClick={()=>onStartChapterReview?.(primaryWeakAction.chapter.id,{count:primaryWeakAction.reviewCount,source:"dashboard_weak_area"})}>
                 Start {primaryWeakAction.reviewCount}-question repair sprint
               </button>
@@ -21428,7 +21487,7 @@ function AchievementsPage({user,t,onBack}) {
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
-function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null,onSessionComplete}) {
+function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null,onSessionComplete}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
   const sessionKey=`mcq:${practiceSessionOwner(user)}`;
   const requestSignup=onSignup||onUpgrade;
@@ -21482,6 +21541,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
   const latestMcqAttempts=getLatestMcqAttempts(attempts);
   const missedMcqIds=[...latestMcqAttempts.entries()].filter(([,attempt])=>attempt.correct===false).map(([questionId])=>questionId);
   const missedQuestions=MCQ_BANK.filter(q=>missedMcqIds.includes(q.id));
+  const smartReviewLessonPath=getDeepDiveRecommendations(missedQuestions,{limit:2});
 
   useEffect(()=>{
     if(!isGuest)return;
@@ -21665,6 +21725,10 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
     return {chapter:ch,total:chapterResults.length,correct:chapterResults.filter(r=>r.correct).length,missed:missed.length,focusTopics};
   }).filter(item=>item.total>0).sort((a,b)=>(a.correct/a.total)-(b.correct/b.total));
   const weakChapters=chapterEvaluation.filter(item=>item.missed>0).slice(0,3);
+  const sessionMissedQuestions=results
+    .map((result,index)=>result&&!result.correct?questions[index]:null)
+    .filter(Boolean);
+  const sessionLessonPath=getDeepDiveRecommendations(sessionMissedQuestions,{limit:2});
   const guestSignupPrompt=(
     <div className="card" style={{padding:"18px 20px",marginBottom:16,borderColor:`${t.accent}55`,background:`linear-gradient(135deg, ${t.accent}18, ${t.surface} 58%, ${t.green}10)`,boxShadow:`0 18px 42px ${t.accent}18`,textAlign:"left"}}>
       <div style={{display:"flex",gap:14,alignItems:"center",flexWrap:"wrap"}}>
@@ -21829,6 +21893,14 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
           </div>
         </div>
       )}
+      {!isGuest&&smartReviewLessonPath.length>0&&(
+        <SmartReviewLessonPath
+          recommendations={smartReviewLessonPath}
+          onOpenDeepDive={onOpenDeepDive}
+          source="smart_review_builder"
+          title="Learn the concepts Smart Review found"
+        />
+      )}
       {!isGuest&&(
       <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}28`,background:`${t.amber}06`}}>
         <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
@@ -21958,6 +22030,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
           </div>
         ))}
       </div>
+      {!isGuest&&sessionLessonPath.length>0&&(
+        <SmartReviewLessonPath recommendations={sessionLessonPath} onOpenDeepDive={onOpenDeepDive} source="mcq_result" title="Concept lessons matched to this set"/>
+      )}
       {user.tier==="pro"?(
         <div className="card" style={{padding:"18px 20px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}28`,background:`${t.accent}05`}}>
           <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:12,flexWrap:"wrap"}}>
@@ -21976,6 +22051,10 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
               {weakChapters.map(item=>{
                 const accuracy=Math.round((item.correct/item.total)*100);
                 const topics=item.focusTopics.length?item.focusTopics.join(" and "):item.chapter.title;
+                const lessonPath=getDeepDiveRecommendations(
+                  sessionMissedQuestions.filter(question=>question.ch===item.chapter.id),
+                  {limit:1}
+                );
                 return(
                   <div key={item.chapter.id} style={{padding:"12px 14px",border:`1px solid ${t.border}`,borderRadius:8,background:t.surface}}>
                     <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:6}}>
@@ -21983,8 +22062,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,t,onSignup,onFocusModeChang
                       <div style={{fontSize:12,fontWeight:700,color:accuracy>=75?t.green:accuracy>=50?t.amber:t.red}}>{accuracy}%</div>
                     </div>
                     <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                      Next action: read up more on {topics}, then run Smart Review again with Chapter {item.chapter.id} selected.
+                      Focus concepts: {topics}. Study the matched lesson, then run Smart Review again with Chapter {item.chapter.id} selected.
                     </div>
+                    <SmartReviewLessonPath recommendations={lessonPath} onOpenDeepDive={onOpenDeepDive} source="mcq_result_weak_chapter" compact title={`Lesson for Chapter ${item.chapter.id}`}/>
                   </div>
                 );
               })}
@@ -26928,7 +27008,7 @@ function ReferralPage({user,t}) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// CONCEPT DEEP DIVES — OWNER-ONLY EDITORIAL PREVIEW
+// CONCEPT DEEP DIVES — SY0-701 GUIDED STUDY LIBRARY
 // ═══════════════════════════════════════════════════════════════
 function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
   const [direction,setDirection]=useState("mixed");
@@ -26982,7 +27062,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
     <article className="deep-dive-acronym-reader" style={{"--set-color":acronymSet.color,"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <div className="deep-dive-reader-topbar">
         <button className="btn btn-ghost deep-dive-back" type="button" onClick={onClose}><ArrowLeft size={17}/> All acronym sets</button>
-        <span className="deep-dive-preview-badge"><LockKeyhole size={13}/> Owner preview</span>
+        <span className="deep-dive-preview-badge"><Brain size={13}/> Active recall lab</span>
       </div>
 
       <header className="deep-dive-acronym-reader-hero">
@@ -27048,7 +27128,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
   );
 }
 
-function ConceptDeepDivesPage({t}) {
+function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandled}) {
   const [query,setQuery]=useState("");
   const [domainFilter,setDomainFilter]=useState("all");
   const [selectedId,setSelectedId]=useState(null);
@@ -27061,6 +27141,7 @@ function ConceptDeepDivesPage({t}) {
   const [cardIndex,setCardIndex]=useState(0);
   const [cardOrder,setCardOrder]=useState([]);
   const [isCardFlipped,setIsCardFlipped]=useState(false);
+  const handledLessonRequest=useRef(null);
   const [completedIds,setCompletedIds]=useState(()=>{
     try{
       const stored=JSON.parse(window.localStorage?.getItem("secureplus-deep-dives-read")||"[]");
@@ -27127,14 +27208,22 @@ function ConceptDeepDivesPage({t}) {
     setIsCardFlipped(false);
     const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"}));
-    capture("concept_deep_dive_opened",{deep_dive_id:id,study_mode:mode,preview:true});
+    capture("concept_deep_dive_opened",{deep_dive_id:id,study_mode:mode,source:"library"});
   };
+  useEffect(()=>{
+    if(!openLessonRequest?.lessonId||!openLessonRequest?.nonce||handledLessonRequest.current===openLessonRequest.nonce)return;
+    if(!CONCEPT_DEEP_DIVES.some(dive=>dive.id===openLessonRequest.lessonId))return;
+    handledLessonRequest.current=openLessonRequest.nonce;
+    openDive(openLessonRequest.lessonId,openLessonRequest.mode||"learn");
+    capture("smart_review_lesson_opened",{deep_dive_id:openLessonRequest.lessonId,source:openLessonRequest.source||"smart_review"});
+    onOpenLessonRequestHandled?.();
+  },[openLessonRequest?.lessonId,openLessonRequest?.mode,openLessonRequest?.nonce,openLessonRequest?.source]);
   const openAcronymSet=id=>{
     setSelectedId(null);
     setSelectedAcronymSetId(id);
     const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"}));
-    capture("concept_deep_dive_acronym_set_opened",{set_id:id,preview:true});
+    capture("concept_deep_dive_acronym_set_opened",{set_id:id});
   };
   const closeAcronymSet=()=>{
     setSelectedAcronymSetId(null);
@@ -27148,7 +27237,7 @@ function ConceptDeepDivesPage({t}) {
     const next=completedIds.includes(id)?completedIds.filter(item=>item!==id):[...completedIds,id];
     setCompletedIds(next);
     try{window.localStorage?.setItem("secureplus-deep-dives-read",JSON.stringify(next));}catch{}
-    capture("concept_deep_dive_completion_toggled",{deep_dive_id:id,completed:next.includes(id),preview:true});
+    capture("concept_deep_dive_completion_toggled",{deep_dive_id:id,completed:next.includes(id)});
   };
   const updateMasteredCards=(cardId,mastered)=>{
     const next=mastered
@@ -27156,7 +27245,7 @@ function ConceptDeepDivesPage({t}) {
       :masteredCardIds.filter(id=>id!==cardId);
     setMasteredCardIds(next);
     try{window.localStorage?.setItem("secureplus-deep-dives-mastered",JSON.stringify(next));}catch{}
-    capture("concept_deep_dive_flashcard_rated",{deep_dive_id:selectedDive?.id,card_id:cardId,mastered,preview:true});
+    capture("concept_deep_dive_flashcard_rated",{deep_dive_id:selectedDive?.id,card_id:cardId,mastered});
   };
   const updateMasteredAcronyms=(cardId,mastered)=>{
     const next=mastered
@@ -27164,7 +27253,7 @@ function ConceptDeepDivesPage({t}) {
       :masteredAcronymIds.filter(id=>id!==cardId);
     setMasteredAcronymIds(next);
     try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
-    capture("concept_deep_dive_acronym_rated",{set_id:selectedAcronymSet?.id,card_id:cardId,mastered,preview:true});
+    capture("concept_deep_dive_acronym_rated",{set_id:selectedAcronymSet?.id,card_id:cardId,mastered});
   };
   const moveFlashcard=direction=>{
     if(!orderedFlashcards.length)return;
@@ -27207,7 +27296,7 @@ function ConceptDeepDivesPage({t}) {
       <article className="deep-dive-reader" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
         <div className="deep-dive-reader-topbar">
           <button className="btn btn-ghost deep-dive-back" type="button" onClick={closeDive}><ArrowLeft size={17}/> All Deep Dives</button>
-          <span className="deep-dive-preview-badge"><LockKeyhole size={13}/> Owner preview</span>
+          <span className="deep-dive-preview-badge"><BookOpenCheck size={13}/> Guided lesson</span>
         </div>
 
         <header className="deep-dive-article-hero">
@@ -27395,7 +27484,7 @@ function ConceptDeepDivesPage({t}) {
     <div className="deep-dives-page" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <section className="deep-dives-hero">
         <div className="deep-dives-hero-copy">
-          <span className="deep-dive-preview-badge"><LockKeyhole size={13}/> Unreleased · owner preview</span>
+          <span className="deep-dive-preview-badge"><Sparkles size={13}/> Personalized study library</span>
           <div className="page-title-row"><NavGlyph type="deep-dives" active/><h1>Concept Deep Dives</h1></div>
           <p>Follow the official SY0-701 path. Learn the exam words in plain English, compare similar answers, and practise with short checks instead of long notes.</p>
           <div className="deep-dives-proof">
@@ -27406,7 +27495,7 @@ function ConceptDeepDivesPage({t}) {
           <a className="deep-dives-blueprint-link" href={SY0701_BLUEPRINT.sourceUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Mapped to the official {SY0701_BLUEPRINT.exam} objectives · document v{SY0701_BLUEPRINT.documentVersion}<ChevronRight size={14}/></a>
         </div>
         <div className="deep-dives-progress-card">
-          <div><span>Preview progress</span><strong>{completedIds.length}/{CONCEPT_DEEP_DIVES.length}</strong></div>
+          <div><span>Study progress</span><strong>{completedIds.length}/{CONCEPT_DEEP_DIVES.length}</strong></div>
           <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
           <p>{completedIds.length?"Continue with one short concept or switch to active recall.":"Choose a lesson, learn one idea at a time, then practise it."}</p>
           <div className="deep-dives-card-progress"><Brain size={16}/><span><strong>{totalMastered}</strong> of {allFlashcards.length} flashcards mastered</span></div>
@@ -27997,6 +28086,7 @@ export default function App() {
   const [pbqBankLoading,setPbqBankLoading]=useState(Boolean(isSupabaseConfigured));
   const [pbqBankError,setPbqBankError]=useState(null);
   const [smartReviewRequest,setSmartReviewRequest]=useState(null);
+  const [deepDiveRequest,setDeepDiveRequest]=useState(null);
   const [achievementUnlocks,setAchievementUnlocks]=useState([]);
   const [coinWallet,setCoinWallet]=useState(()=>({...emptyCipherWallet(),status:"idle"}));
   const [coinBusy,setCoinBusy]=useState(false);
@@ -28649,6 +28739,16 @@ export default function App() {
     });
     setView("mcq");
   },[]);
+  const handleOpenDeepDive=useCallback((lessonId,options={})=>{
+    if(!CONCEPT_DEEP_DIVES.some(dive=>dive.id===lessonId))return;
+    setDeepDiveRequest({
+      lessonId,
+      mode:options.mode||"learn",
+      source:options.source||"smart_review",
+      nonce:Date.now(),
+    });
+    setView("deep-dives");
+  },[]);
   const handleAchievementSessionComplete=useCallback(async payload=>{
     if(!user)return;
     if(user.authProvider!=="supabase"){
@@ -28950,6 +29050,7 @@ export default function App() {
     {id:"exam",icon:"exam",label:"Exam Mode",mobileLabel:"Exam"},
     {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
     {id:"coins",icon:"coins",label:"Cipher Coins",mobileLabel:"Coins"},
+    {id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"},
     {id:"achievements",icon:"achievements",label:"Achievements",mobileLabel:"Stars"},
     {id:"pricing",icon:"pricing",label:"Upgrade",mobileLabel:"Upgrade"},
     {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
@@ -28957,7 +29058,6 @@ export default function App() {
     {id:"terms",icon:"terms",label:"Terms & Conditions",mobileLabel:"Terms"},
   ];
   if(isRootUser) {
-    navItems.push({id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"});
     navItems.push({id:"feedback",icon:"feedback",label:"Internal Feedback",mobileLabel:"Feedback"});
     navItems.push({id:"question-admin",icon:"question-admin",label:"Question Manager",mobileLabel:"Manager"});
     navItems.push({id:"mascot-admin",icon:"mascot-admin",label:"Mascot Manager",mobileLabel:"Mascot"});
@@ -29026,14 +29126,14 @@ export default function App() {
               <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onUpdateAvatar={handleUpdateAvatar} onChangePassword={handleChangePassword} onLogout={handleLogout} compact/>
             </div>
           </div>
-          {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} coinWallet={coinWallet} t={t}/>}
+          {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} coinWallet={coinWallet} t={t}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
-            <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete}/>
+            <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete}/>
           </div>
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)&&!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
           </div>
-          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onConsumeExamPass={handleConsumeExamPass} examPasses={coinWallet.examPasses} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} onSessionComplete={handleAchievementSessionComplete} canPreviewDeepDives={isRootUser} onOpenDeepDives={()=>setView("deep-dives")}/>}
+          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onConsumeExamPass={handleConsumeExamPass} examPasses={coinWallet.examPasses} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} onSessionComplete={handleAchievementSessionComplete} canPreviewDeepDives onOpenDeepDives={()=>setView("deep-dives")}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward}/>}
           {view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onUnlockPbq={handleUnlockPbq} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}
           {view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
@@ -29042,7 +29142,7 @@ export default function App() {
           {view==="objectives"&&<ObjectivesPage t={t}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
-          {isRootUser&&view==="deep-dives"&&<ConceptDeepDivesPage t={t}/>}
+          {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
