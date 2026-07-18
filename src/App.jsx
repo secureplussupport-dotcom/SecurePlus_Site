@@ -61,6 +61,11 @@ import {
 import { capture, identifyUser, resetAnalytics } from "./lib/analytics.js";
 import { MascotAnimation } from "./lib/MascotAnimation.jsx";
 import { getSupabaseAccessToken, isSupabaseConfigured, supabase } from "./lib/supabaseClient.js";
+import {
+  CONCEPT_DEEP_DIVES,
+  CONCEPT_DEEP_DIVE_CATEGORIES,
+  CONCEPT_DEEP_DIVE_TOPIC_COUNT,
+} from "./data/conceptDeepDives.js";
 
 // ═══════════════════════════════════════════════════════════════
 // PERSISTENT STORAGE
@@ -17320,6 +17325,152 @@ body{background:
   .athena-card-lab-achievements span{font-size:8px;}
   .athena-card-controls .athena-main-action{margin-top:0;}
 }
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;}
+.deep-dives-page,.deep-dive-reader{width:min(100%,1180px);margin:0 auto;padding:34px 28px 80px;color:var(--deep-text);}
+.deep-dives-hero{position:relative;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.65fr);gap:28px;align-items:end;padding:34px;border:1px solid var(--deep-border);border-radius:28px;background:radial-gradient(circle at 92% 14%,color-mix(in srgb,var(--deep-amber) 20%,transparent),transparent 33%),radial-gradient(circle at 12% 112%,color-mix(in srgb,var(--deep-green) 16%,transparent),transparent 39%),var(--deep-surface);box-shadow:0 18px 50px rgba(40,31,22,.08);overflow:hidden;}
+.deep-dives-hero::before{content:"";position:absolute;right:26px;top:22px;width:74px;height:74px;border:12px solid color-mix(in srgb,var(--deep-accent) 10%,transparent);border-radius:24px;transform:rotate(16deg);pointer-events:none;}
+.deep-dive-preview-badge{display:inline-flex;align-items:center;gap:6px;width:max-content;padding:7px 10px;border:1px solid color-mix(in srgb,var(--deep-amber) 42%,var(--deep-border));border-radius:999px;background:color-mix(in srgb,var(--deep-amber) 11%,var(--deep-surface));color:var(--deep-text);font-size:11px;font-weight:900;letter-spacing:.02em;}
+.deep-dives-hero .page-title-row{margin:17px 0 10px;}
+.deep-dives-hero h1{font-size:clamp(31px,4vw,48px);line-height:1.02;letter-spacing:-.04em;color:var(--deep-text);}
+.deep-dives-hero-copy>p{max-width:690px;margin:0;font-size:16px;line-height:1.75;color:var(--deep-muted);}
+.deep-dives-proof{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px;}
+.deep-dives-proof span{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid var(--deep-border);border-radius:12px;background:color-mix(in srgb,var(--deep-panel) 72%,transparent);font-size:11px;font-weight:850;color:var(--deep-muted);}
+.deep-dives-proof svg{color:var(--deep-green);}
+.deep-dives-progress-card{position:relative;padding:20px;border:1px solid color-mix(in srgb,var(--deep-accent) 25%,var(--deep-border));border-radius:20px;background:color-mix(in srgb,var(--deep-surface) 88%,transparent);box-shadow:0 12px 30px rgba(40,31,22,.08);}
+.deep-dives-progress-card>div:first-child{display:flex;align-items:end;justify-content:space-between;gap:14px;}
+.deep-dives-progress-card span{font-size:11px;font-weight:900;color:var(--deep-muted);}
+.deep-dives-progress-card strong{font-size:25px;line-height:1;color:var(--deep-text);}
+.deep-dives-progress-track{height:9px;margin:13px 0 11px;border-radius:999px;background:var(--deep-border);overflow:hidden;}
+.deep-dives-progress-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--deep-green),var(--deep-accent));transition:width .35s cubic-bezier(.16,1,.3,1);}
+.deep-dives-progress-card p{margin:0;font-size:11px;line-height:1.55;color:var(--deep-muted);}
+.deep-dives-controls{display:grid;gap:14px;margin:26px 0 20px;}
+.deep-dives-search{display:flex;align-items:center;gap:10px;width:100%;padding:0 14px;border:1px solid var(--deep-border);border-radius:16px;background:var(--deep-surface);box-shadow:0 8px 24px rgba(40,31,22,.05);transition:border-color .18s,box-shadow .18s;}
+.deep-dives-search:focus-within{border-color:var(--deep-accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--deep-accent) 13%,transparent);}
+.deep-dives-search>svg{flex:0 0 auto;color:var(--deep-accent);}
+.deep-dives-search input{min-width:0;flex:1;height:54px;border:0;outline:0;background:transparent;color:var(--deep-text);font:inherit;font-size:14px;}
+.deep-dives-search input::placeholder{color:var(--deep-muted);}
+.deep-dives-search button{display:grid;place-items:center;width:30px;height:30px;border:0;border-radius:9px;background:var(--deep-panel);color:var(--deep-muted);cursor:pointer;}
+.deep-dives-category-list{display:flex;gap:8px;padding-bottom:3px;overflow-x:auto;scrollbar-width:thin;}
+.deep-dives-category-list button{flex:0 0 auto;padding:8px 12px;border:1px solid var(--deep-border);border-radius:999px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;font-size:11px;font-weight:850;cursor:pointer;transition:.18s ease;}
+.deep-dives-category-list button:hover,.deep-dives-category-list button.active{border-color:color-mix(in srgb,var(--deep-accent) 52%,var(--deep-border));background:color-mix(in srgb,var(--deep-accent) 11%,var(--deep-surface));color:var(--deep-accent);}
+.deep-dives-category-list button:focus-visible,.deep-dive-card:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 30%,transparent);outline-offset:3px;}
+.deep-dives-results-head{display:flex;justify-content:space-between;gap:14px;align-items:center;margin:18px 2px 12px;color:var(--deep-muted);font-size:12px;}
+.deep-dives-results-head strong{color:var(--deep-text);font-size:16px;}
+.deep-dives-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+.deep-dive-card{position:relative;display:flex;min-width:0;min-height:330px;flex-direction:column;padding:22px;text-align:left;border:1px solid var(--deep-border);border-radius:21px;background:linear-gradient(160deg,color-mix(in srgb,var(--chapter-color) 5%,var(--deep-surface)),var(--deep-surface) 42%);color:var(--deep-text);font:inherit;cursor:pointer;box-shadow:0 9px 26px rgba(40,31,22,.055);overflow:hidden;transition:transform .22s cubic-bezier(.16,1,.3,1),border-color .2s,box-shadow .2s;}
+.deep-dive-card::before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:linear-gradient(90deg,var(--chapter-color),color-mix(in srgb,var(--chapter-color) 20%,transparent));}
+.deep-dive-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--chapter-color) 42%,var(--deep-border));box-shadow:0 18px 38px rgba(40,31,22,.1);}
+.deep-dive-card-top{display:flex;justify-content:space-between;align-items:center;min-height:25px;margin-bottom:16px;}
+.deep-dive-card-index{font-size:11px;font-weight:950;letter-spacing:.12em;color:color-mix(in srgb,var(--chapter-color) 85%,var(--deep-text));}
+.deep-dive-card-read{display:inline-flex;align-items:center;gap:4px;padding:5px 8px;border-radius:999px;background:color-mix(in srgb,var(--deep-green) 12%,var(--deep-surface));color:var(--deep-green);font-size:10px;font-weight:950;}
+.deep-dive-card-chapter{display:flex;align-items:center;gap:8px;margin-bottom:13px;font-size:10px;font-weight:900;letter-spacing:.02em;color:var(--deep-muted);}
+.deep-dive-card-title{display:block;margin:0 0 9px;font-size:19px;font-weight:900;line-height:1.25;letter-spacing:-.018em;color:var(--deep-text);}
+.deep-dive-card>p{margin:0 0 16px;font-size:12px;line-height:1.65;color:var(--deep-muted);}
+.deep-dive-card-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto;}
+.deep-dive-card-tags span{padding:5px 7px;border:1px solid var(--deep-border);border-radius:8px;background:var(--deep-panel);font-size:9px;font-weight:850;color:var(--deep-muted);}
+.deep-dive-card-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:15px;padding-top:13px;border-top:1px solid var(--deep-border);font-size:10px;font-weight:900;color:var(--deep-muted);}
+.deep-dive-card-footer span{display:inline-flex;align-items:center;gap:5px;}
+.deep-dive-card-footer span:last-child{color:var(--deep-accent);}
+.deep-dives-empty{padding:50px 24px;border:1px dashed var(--deep-border);border-radius:22px;text-align:center;background:var(--deep-surface);}
+.deep-dives-empty>svg{color:var(--deep-amber);}
+.deep-dives-empty h2{margin:12px 0 6px;font-size:20px;color:var(--deep-text);}
+.deep-dives-empty p{margin:0 0 16px;color:var(--deep-muted);font-size:13px;}
+.deep-dive-reader{max-width:1080px;}
+.deep-dive-reader-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;}
+.deep-dive-back{margin-left:-8px;}
+.deep-dive-article-hero{position:relative;padding:38px;border:1px solid var(--deep-border);border-radius:28px;background:radial-gradient(circle at 100% 0,color-mix(in srgb,var(--deep-amber) 16%,transparent),transparent 35%),radial-gradient(circle at 0 100%,color-mix(in srgb,var(--deep-green) 12%,transparent),transparent 35%),var(--deep-surface);box-shadow:0 18px 48px rgba(40,31,22,.08);overflow:hidden;}
+.deep-dive-article-chapter{display:flex;align-items:center;gap:8px;margin-bottom:15px;font-size:11px;font-weight:950;color:var(--deep-muted);}
+.deep-dive-article-hero h1{max-width:830px;margin:0 0 10px;font-size:clamp(32px,5vw,52px);line-height:1.04;letter-spacing:-.045em;color:var(--deep-text);}
+.deep-dive-article-subtitle{max-width:780px;margin:0;font-size:16px;line-height:1.7;color:var(--deep-muted);}
+.deep-dive-article-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px;}
+.deep-dive-article-meta span{display:inline-flex;align-items:center;gap:5px;padding:7px 9px;border:1px solid var(--deep-border);border-radius:10px;background:color-mix(in srgb,var(--deep-panel) 72%,transparent);font-size:10px;font-weight:900;color:var(--deep-muted);}
+.deep-dive-summary{display:flex;gap:12px;align-items:flex-start;margin-top:24px;padding:17px 18px;border:1px solid color-mix(in srgb,var(--deep-green) 28%,var(--deep-border));border-radius:16px;background:color-mix(in srgb,var(--deep-green) 8%,var(--deep-surface));}
+.deep-dive-summary svg{flex:0 0 auto;margin-top:2px;color:var(--deep-green);}
+.deep-dive-summary p{margin:0;font-size:13px;line-height:1.75;color:var(--deep-text);}
+.deep-dive-reader-layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px;align-items:start;margin-top:20px;}
+.deep-dive-learning-card{position:sticky;top:20px;padding:19px;border:1px solid var(--deep-border);border-radius:19px;background:var(--deep-surface);box-shadow:0 9px 28px rgba(40,31,22,.055);}
+.deep-dive-eyebrow,.deep-dive-block-title span{display:block;margin-bottom:5px;font-size:9px;font-weight:950;letter-spacing:.12em;text-transform:uppercase;color:var(--deep-accent);}
+.deep-dive-learning-card h2{margin:0;font-size:17px;color:var(--deep-text);}
+.deep-dive-learning-card ul{display:grid;gap:10px;margin:15px 0;padding:0;list-style:none;}
+.deep-dive-learning-card li{display:flex;gap:8px;font-size:11px;line-height:1.55;color:var(--deep-muted);}
+.deep-dive-learning-card li svg{flex:0 0 auto;margin-top:1px;color:var(--deep-green);}
+.deep-dive-learning-card .btn{width:100%;justify-content:center;font-size:11px;}
+.deep-dive-learning-card small{display:block;margin-top:9px;text-align:center;font-size:9px;line-height:1.45;color:var(--deep-muted);}
+.deep-dive-article-body{display:grid;gap:12px;min-width:0;}
+.deep-dive-section,.deep-dive-check{border:1px solid var(--deep-border);border-radius:18px;background:var(--deep-surface);overflow:hidden;box-shadow:0 8px 24px rgba(40,31,22,.045);}
+.deep-dive-section>summary,.deep-dive-check>summary{display:flex;align-items:center;gap:12px;padding:19px 20px;list-style:none;cursor:pointer;font-size:15px;font-weight:950;color:var(--deep-text);}
+.deep-dive-section>summary::-webkit-details-marker,.deep-dive-check>summary::-webkit-details-marker{display:none;}
+.deep-dive-section>summary>span{display:grid;place-items:center;width:29px;height:29px;flex:0 0 auto;border-radius:9px;background:color-mix(in srgb,var(--deep-accent) 11%,var(--deep-surface));color:var(--deep-accent);font-size:9px;letter-spacing:.08em;}
+.deep-dive-section>summary>svg,.deep-dive-check>summary>svg{margin-left:auto;color:var(--deep-muted);transition:transform .2s;}
+.deep-dive-section[open]>summary>svg,.deep-dive-check[open]>summary>svg{transform:rotate(90deg);}
+.deep-dive-section[open]>summary,.deep-dive-check[open]>summary{border-bottom:1px solid var(--deep-border);}
+.deep-dive-section-content{padding:21px;}
+.deep-dive-section-content>p{margin:0 0 14px;font-size:13px;line-height:1.82;color:var(--deep-muted);}
+.deep-dive-section-content>p:last-child{margin-bottom:0;}
+.deep-dive-table-wrap{margin-top:14px;border:1px solid var(--deep-border);border-radius:14px;overflow:auto;}
+.deep-dive-table-wrap table{width:100%;border-collapse:collapse;min-width:560px;}
+.deep-dive-table-wrap th,.deep-dive-table-wrap td{padding:12px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--deep-border);font-size:10px;line-height:1.55;color:var(--deep-muted);}
+.deep-dive-table-wrap th{background:var(--deep-panel);font-size:9px;font-weight:950;letter-spacing:.04em;text-transform:uppercase;color:var(--deep-text);}
+.deep-dive-table-wrap td:first-child{font-weight:900;color:var(--deep-text);}
+.deep-dive-table-wrap tr:last-child td{border-bottom:0;}
+.deep-dive-traps,.deep-dive-sources{padding:21px;border:1px solid color-mix(in srgb,var(--deep-amber) 32%,var(--deep-border));border-radius:18px;background:color-mix(in srgb,var(--deep-amber) 7%,var(--deep-surface));}
+.deep-dive-block-title{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;}
+.deep-dive-block-title>svg{flex:0 0 auto;margin-top:1px;color:var(--deep-amber);}
+.deep-dive-block-title h2{margin:0;font-size:17px;color:var(--deep-text);}
+.deep-dive-trap-list{display:grid;gap:8px;}
+.deep-dive-trap-list>div{display:flex;gap:10px;padding:11px;border:1px solid color-mix(in srgb,var(--deep-amber) 20%,var(--deep-border));border-radius:12px;background:color-mix(in srgb,var(--deep-surface) 82%,transparent);}
+.deep-dive-trap-list>div>span{display:grid;place-items:center;width:22px;height:22px;flex:0 0 auto;border-radius:7px;background:color-mix(in srgb,var(--deep-amber) 16%,var(--deep-surface));color:var(--deep-amber);font-size:9px;font-weight:950;}
+.deep-dive-trap-list p{margin:0;font-size:11px;line-height:1.6;color:var(--deep-muted);}
+.deep-dive-check{border-color:color-mix(in srgb,var(--deep-accent) 28%,var(--deep-border));}
+.deep-dive-check>summary>span{display:flex;align-items:center;gap:9px;}
+.deep-dive-check>summary>span svg{color:var(--deep-accent);}
+.deep-dive-check-content{padding:20px;}
+.deep-dive-check-content>p{margin:0 0 13px;font-size:13px;line-height:1.72;color:var(--deep-text);}
+.deep-dive-check-content>div{padding:14px;border-left:3px solid var(--deep-green);border-radius:4px 12px 12px 4px;background:color-mix(in srgb,var(--deep-green) 8%,var(--deep-surface));font-size:12px;line-height:1.7;color:var(--deep-muted);}
+.deep-dive-check-content strong{display:block;margin-bottom:4px;color:var(--deep-green);font-size:10px;text-transform:uppercase;letter-spacing:.05em;}
+.deep-dive-sources{border-color:color-mix(in srgb,var(--deep-green) 28%,var(--deep-border));background:color-mix(in srgb,var(--deep-green) 6%,var(--deep-surface));}
+.deep-dive-sources .deep-dive-block-title>svg{color:var(--deep-green);}
+.deep-dive-sources>p{margin:0 0 13px;font-size:11px;line-height:1.7;color:var(--deep-muted);}
+.deep-dive-sources>div:last-child{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;}
+.deep-dive-sources a{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px;border:1px solid var(--deep-border);border-radius:11px;background:var(--deep-surface);color:var(--deep-accent);font-size:10px;font-weight:850;text-decoration:none;}
+.deep-dive-sources a:hover{text-decoration:underline;}
+.deep-dive-sources a svg{flex:0 0 auto;}
+.deep-dive-reader-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;padding-top:4px;}
+@media (max-width: 1040px){
+  .deep-dives-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (max-width: 760px){
+  .deep-dives-page,.deep-dive-reader{padding:22px 16px 96px;}
+  .deep-dives-hero{grid-template-columns:minmax(0,1fr);padding:24px;border-radius:23px;}
+  .deep-dives-progress-card{max-width:420px;}
+  .deep-dive-reader-layout{grid-template-columns:minmax(0,1fr);}
+  .deep-dive-learning-card{position:static;}
+  .deep-dive-learning-card ul{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .deep-dive-sources>div:last-child{grid-template-columns:minmax(0,1fr);}
+}
+@media (max-width: 560px){
+  .deep-dives-grid{grid-template-columns:minmax(0,1fr);}
+  .deep-dives-results-head{align-items:flex-start;flex-direction:column;}
+  .deep-dive-card{min-height:300px;}
+  .deep-dive-article-hero{padding:25px 20px;border-radius:22px;}
+  .deep-dive-article-hero h1{font-size:33px;}
+  .deep-dive-article-subtitle{font-size:14px;}
+  .deep-dive-learning-card ul{grid-template-columns:minmax(0,1fr);}
+  .deep-dive-reader-topbar{align-items:flex-start;}
+  .deep-dive-reader-topbar .deep-dive-preview-badge{font-size:9px;}
+  .deep-dive-section>summary,.deep-dive-check>summary{padding:17px 15px;font-size:13px;}
+  .deep-dive-section-content{padding:17px 15px;}
+  .deep-dive-table-wrap{border:0;overflow:visible;}
+  .deep-dive-table-wrap table{display:block;min-width:0;}
+  .deep-dive-table-wrap thead{display:none;}
+  .deep-dive-table-wrap tbody,.deep-dive-table-wrap tr,.deep-dive-table-wrap td{display:block;}
+  .deep-dive-table-wrap tr{margin-bottom:10px;border:1px solid var(--deep-border);border-radius:12px;background:var(--deep-panel);overflow:hidden;}
+  .deep-dive-table-wrap td{display:grid;grid-template-columns:minmax(92px,.7fr) minmax(0,1.3fr);gap:9px;border-bottom:1px solid var(--deep-border);background:var(--deep-surface);}
+  .deep-dive-table-wrap td::before{content:attr(data-label);font-size:8px;font-weight:950;letter-spacing:.04em;text-transform:uppercase;color:var(--deep-muted);}
+  .deep-dive-table-wrap td:first-child{background:var(--deep-panel);}
+  .deep-dive-table-wrap tr:last-child,.deep-dive-table-wrap td:last-child{margin-bottom:0;border-bottom:0;}
+  .deep-dive-reader-actions .btn{flex:1;justify-content:center;}
+}
 @media print{
   @page{size:auto;margin:12mm;}
   body{background:#fff!important;}
@@ -17597,6 +17748,7 @@ function NavGlyph({type,active}) {
     exam:ClipboardCheck,
     privacy:LockKeyhole,
     terms:FileText,
+    "deep-dives":Layers3,
     feedback:MessageSquareWarning,
     "question-admin":ListPlus,
     "mascot-admin":Palette,
@@ -22469,7 +22621,7 @@ function ExamModeGuideModal({t,onClose}) {
   );
 }
 
-function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamPass,examPasses=0,t,showQuestionCodes=false,pbqBank=PBQ_BANK,onSessionComplete}) {
+function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamPass,examPasses=0,t,showQuestionCodes=false,pbqBank=PBQ_BANK,onSessionComplete,canPreviewDeepDives=false,onOpenDeepDives}) {
   const sessionKey=`exam:${practiceSessionOwner(user)}`;
   const [questionCount,setQuestionCount]=useState(20);
   const [pbqCount,setPbqCount]=useState(2);
@@ -22763,9 +22915,15 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
       </div>
       <div className="card" style={{padding:"10px",marginBottom:16,display:"flex",gap:8,flexWrap:"wrap"}}>
         <button className="btn btn-primary" style={{fontSize:12}}>Practice Exam</button>
-        <button className="btn btn-ghost" style={{fontSize:12,opacity:.72,cursor:"not-allowed"}} disabled title="Coming soon">
-          Concept Deep Dives · Coming soon
-        </button>
+        {canPreviewDeepDives?(
+          <button className="btn btn-outline" style={{fontSize:12}} onClick={onOpenDeepDives}>
+            <Layers3 size={15}/> Concept Deep Dives · Preview
+          </button>
+        ):(
+          <button className="btn btn-ghost" style={{fontSize:12,opacity:.72,cursor:"not-allowed"}} disabled title="Coming soon">
+            Concept Deep Dives · Coming soon
+          </button>
+        )}
       </div>
       <div className="card" style={{padding:"20px 22px",marginBottom:16}}>
         <div style={{fontWeight:800,color:t.text,marginBottom:8}}>Exam setup</div>
@@ -26123,7 +26281,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           <summary>Coming soon: Concept Deep Dives</summary>
           <div className="upgrade-secondary-content">
             <p>
-              A future section is planned for in-depth explanations of key topics like salting vs peppering, symmetric vs asymmetric encryption, and common exam traps.
+              A source-reviewed lesson library is now in private editorial preview. It will explain difficult topics, compare near-miss answers, and highlight common exam traps before public release.
             </p>
           </div>
         </details>
@@ -26190,6 +26348,203 @@ function ReferralPage({user,t}) {
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONCEPT DEEP DIVES — OWNER-ONLY EDITORIAL PREVIEW
+// ═══════════════════════════════════════════════════════════════
+function ConceptDeepDivesPage({t}) {
+  const [query,setQuery]=useState("");
+  const [category,setCategory]=useState("All topics");
+  const [selectedId,setSelectedId]=useState(null);
+  const [completedIds,setCompletedIds]=useState(()=>{
+    try{
+      const stored=JSON.parse(window.localStorage?.getItem("secureplus-deep-dives-read")||"[]");
+      return Array.isArray(stored)?stored.filter(id=>CONCEPT_DEEP_DIVES.some(dive=>dive.id===id)):[];
+    }catch{return [];}
+  });
+
+  const selectedDive=CONCEPT_DEEP_DIVES.find(dive=>dive.id===selectedId)||null;
+  const filteredDives=useMemo(()=>{
+    const needle=query.trim().toLowerCase();
+    return CONCEPT_DEEP_DIVES.filter(dive=>{
+      const categoryMatch=category==="All topics"||dive.category===category;
+      const searchable=[dive.title,dive.subtitle,dive.summary,dive.category,...dive.aliases].join(" ").toLowerCase();
+      return categoryMatch&&(!needle||searchable.includes(needle));
+    });
+  },[query,category]);
+
+  const openDive=id=>{
+    setSelectedId(id);
+    const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"}));
+    capture("concept_deep_dive_opened",{deep_dive_id:id,preview:true});
+  };
+  const closeDive=()=>{
+    setSelectedId(null);
+    window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:"auto"}));
+  };
+  const toggleComplete=id=>{
+    const next=completedIds.includes(id)?completedIds.filter(item=>item!==id):[...completedIds,id];
+    setCompletedIds(next);
+    try{window.localStorage?.setItem("secureplus-deep-dives-read",JSON.stringify(next));}catch{}
+    capture("concept_deep_dive_completion_toggled",{deep_dive_id:id,completed:next.includes(id),preview:true});
+  };
+
+  if(selectedDive){
+    const isComplete=completedIds.includes(selectedDive.id);
+    return(
+      <article className="deep-dive-reader" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
+        <div className="deep-dive-reader-topbar">
+          <button className="btn btn-ghost deep-dive-back" type="button" onClick={closeDive}><ArrowLeft size={17}/> All Deep Dives</button>
+          <span className="deep-dive-preview-badge"><LockKeyhole size={13}/> Owner preview</span>
+        </div>
+
+        <header className="deep-dive-article-hero">
+          <div className="deep-dive-article-chapter"><ChapterIcon id={selectedDive.chapter} size={28}/> Chapter {selectedDive.chapter} · {selectedDive.category}</div>
+          <h1>{selectedDive.title}</h1>
+          <p className="deep-dive-article-subtitle">{selectedDive.subtitle}</p>
+          <div className="deep-dive-article-meta">
+            <span><Clock3 size={14}/>{selectedDive.minutes} min</span>
+            <span><Layers3 size={14}/>{selectedDive.difficulty}</span>
+            <span><BadgeCheck size={14}/>Reviewed 18 Jul 2026</span>
+          </div>
+          <div className="deep-dive-summary"><Lightbulb size={19}/><p>{selectedDive.summary}</p></div>
+        </header>
+
+        <div className="deep-dive-reader-layout">
+          <aside className="deep-dive-learning-card">
+            <span className="deep-dive-eyebrow">After this lesson</span>
+            <h2>You should be able to…</h2>
+            <ul>
+              {selectedDive.objectives.map(objective=><li key={objective}><CheckCircle2 size={16}/><span>{objective}</span></li>)}
+            </ul>
+            <button className={`btn ${isComplete?"btn-ghost":"btn-primary"}`} type="button" onClick={()=>toggleComplete(selectedDive.id)}>
+              {isComplete?<><CheckCircle2 size={16}/>Marked as read</>:<><BookOpenCheck size={16}/>Mark lesson as read</>}
+            </button>
+            <small>Preview progress is saved only on this device.</small>
+          </aside>
+
+          <div className="deep-dive-article-body">
+            {selectedDive.sections.map((section,index)=>(
+              <details key={section.title} className="deep-dive-section" open={index===0}>
+                <summary><span>{String(index+1).padStart(2,"0")}</span>{section.title}<ChevronRight size={18}/></summary>
+                <div className="deep-dive-section-content">
+                  {section.body?.map(paragraph=><p key={paragraph}>{paragraph}</p>)}
+                  {section.table&&(
+                    <div className="deep-dive-table-wrap">
+                      <table>
+                        <thead><tr>{section.table.columns.map(column=><th key={column}>{column}</th>)}</tr></thead>
+                        <tbody>{section.table.rows.map((row,rowIndex)=><tr key={rowIndex}>{row.map((cell,cellIndex)=><td key={`${rowIndex}-${cellIndex}`} data-label={section.table.columns[cellIndex]}>{cell}</td>)}</tr>)}</tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </details>
+            ))}
+
+            <section className="deep-dive-traps">
+              <div className="deep-dive-block-title"><TriangleAlert size={19}/><div><span>Exam traps</span><h2>Almost-right answers to avoid</h2></div></div>
+              <div className="deep-dive-trap-list">
+                {selectedDive.traps.map((trap,index)=><div key={trap}><span>{index+1}</span><p>{trap}</p></div>)}
+              </div>
+            </section>
+
+            <details className="deep-dive-check">
+              <summary><span><Brain size={19}/>Check your understanding</span><ChevronRight size={18}/></summary>
+              <div className="deep-dive-check-content">
+                <p>{selectedDive.check.question}</p>
+                <div><strong>Model answer</strong>{selectedDive.check.answer}</div>
+              </div>
+            </details>
+
+            <section className="deep-dive-sources">
+              <div className="deep-dive-block-title"><ShieldCheck size={19}/><div><span>Quality notes</span><h2>Primary references</h2></div></div>
+              <p>These links support the lesson's technical core. The teaching copy is original SecurePlus material and is written for concept mastery—not memorising exam dumps.</p>
+              <div>
+                {selectedDive.sources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.label}<ChevronRight size={14}/></a>)}
+              </div>
+            </section>
+
+            <div className="deep-dive-reader-actions">
+              <button className={`btn ${isComplete?"btn-ghost":"btn-primary"}`} type="button" onClick={()=>toggleComplete(selectedDive.id)}>
+                {isComplete?<><CheckCircle2 size={16}/>Read</>:<><BookOpenCheck size={16}/>Mark as read</>}
+              </button>
+              <button className="btn btn-outline" type="button" onClick={closeDive}>Choose another topic</button>
+            </div>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
+  const progressPercent=Math.round((completedIds.length/CONCEPT_DEEP_DIVES.length)*100);
+  return(
+    <div className="deep-dives-page" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
+      <section className="deep-dives-hero">
+        <div className="deep-dives-hero-copy">
+          <span className="deep-dive-preview-badge"><LockKeyhole size={13}/> Unreleased · owner preview</span>
+          <div className="page-title-row"><NavGlyph type="deep-dives" active/><h1>Concept Deep Dives</h1></div>
+          <p>Build the mental model behind difficult Security+ topics, then learn the small distinctions that change an exam answer.</p>
+          <div className="deep-dives-proof">
+            <span><BadgeCheck size={15}/>{CONCEPT_DEEP_DIVES.length} editorially reviewed lessons</span>
+            <span><Crosshair size={15}/>{CONCEPT_DEEP_DIVE_TOPIC_COUNT} searchable concepts</span>
+            <span><ShieldCheck size={15}/>Primary-source references</span>
+          </div>
+        </div>
+        <div className="deep-dives-progress-card">
+          <div><span>Preview progress</span><strong>{completedIds.length}/{CONCEPT_DEEP_DIVES.length}</strong></div>
+          <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
+          <p>{completedIds.length?"Continue reviewing the curriculum before release.":"Open a lesson and mark it read after your content review."}</p>
+        </div>
+      </section>
+
+      <section className="deep-dives-controls" aria-label="Find a Concept Deep Dive">
+        <label className="deep-dives-search">
+          <TextCursorInput size={18}/>
+          <span className="sr-only">Search concepts</span>
+          <input value={query} onChange={event=>setQuery(event.target.value)} placeholder="Search IPsec, passkeys, GDPR, ports…"/>
+          {query&&<button type="button" aria-label="Clear search" onClick={()=>setQuery("")}><X size={15}/></button>}
+        </label>
+        <div className="deep-dives-category-list" aria-label="Filter by category">
+          {CONCEPT_DEEP_DIVE_CATEGORIES.map(item=><button key={item} type="button" className={category===item?"active":""} onClick={()=>setCategory(item)}>{item}</button>)}
+        </div>
+      </section>
+
+      <div className="deep-dives-results-head">
+        <div><strong>{filteredDives.length}</strong> lesson{filteredDives.length===1?"":"s"}</div>
+        <span>Sorted into a teachable path—not the order of the raw notes.</span>
+      </div>
+
+      {filteredDives.length?(
+        <div className="deep-dives-grid">
+          {filteredDives.map((dive,index)=>{
+            const isComplete=completedIds.includes(dive.id);
+            return(
+              <button className="deep-dive-card" type="button" key={dive.id} onClick={()=>openDive(dive.id)} style={{"--chapter-color":chapterColor(dive.chapter)}}>
+                <div className="deep-dive-card-top">
+                  <span className="deep-dive-card-index">{String(index+1).padStart(2,"0")}</span>
+                  {isComplete&&<span className="deep-dive-card-read"><CheckCircle2 size={14}/>Read</span>}
+                </div>
+                <div className="deep-dive-card-chapter"><ChapterIcon id={dive.chapter} size={26}/>Chapter {dive.chapter} · {dive.category}</div>
+                <span className="deep-dive-card-title">{dive.title}</span>
+                <p>{dive.subtitle}</p>
+                <div className="deep-dive-card-tags">{dive.aliases.slice(0,4).map(alias=><span key={alias}>{alias}</span>)}</div>
+                <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span>Open lesson <ChevronRight size={15}/></span></div>
+              </button>
+            );
+          })}
+        </div>
+      ):(
+        <div className="deep-dives-empty">
+          <Lightbulb size={24}/>
+          <h2>No lesson matches that search yet.</h2>
+          <p>Try a protocol, attack, governance term, or a broader category.</p>
+          <button className="btn btn-outline" type="button" onClick={()=>{setQuery("");setCategory("All topics");}}>Clear filters</button>
+        </div>
+      )}
     </div>
   );
 }
@@ -27566,6 +27921,7 @@ export default function App() {
     {id:"terms",icon:"terms",label:"Terms & Conditions",mobileLabel:"Terms"},
   ];
   if(isRootUser) {
+    navItems.push({id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"});
     navItems.push({id:"feedback",icon:"feedback",label:"Internal Feedback",mobileLabel:"Feedback"});
     navItems.push({id:"question-admin",icon:"question-admin",label:"Question Manager",mobileLabel:"Manager"});
     navItems.push({id:"mascot-admin",icon:"mascot-admin",label:"Mascot Manager",mobileLabel:"Mascot"});
@@ -27641,7 +27997,7 @@ export default function App() {
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)&&!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
           </div>
-          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onConsumeExamPass={handleConsumeExamPass} examPasses={coinWallet.examPasses} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} onSessionComplete={handleAchievementSessionComplete}/>}
+          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onConsumeExamPass={handleConsumeExamPass} examPasses={coinWallet.examPasses} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} onSessionComplete={handleAchievementSessionComplete} canPreviewDeepDives={isRootUser} onOpenDeepDives={()=>setView("deep-dives")}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward}/>}
           {view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onUnlockPbq={handleUnlockPbq} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}
           {view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
@@ -27650,6 +28006,7 @@ export default function App() {
           {view==="objectives"&&<ObjectivesPage t={t}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
+          {isRootUser&&view==="deep-dives"&&<ConceptDeepDivesPage t={t}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
