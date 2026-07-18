@@ -5,6 +5,11 @@ import {
 } from "../src/data/conceptDeepDives.js";
 import { buildDeepDiveDeck, buildDeepDiveFlashcards } from "../src/lib/deepDiveStudy.js";
 import {
+  SY0701_ACRONYM_CARDS,
+  SY0701_ACRONYM_SETS,
+  SY0701_ACRONYM_SOURCE,
+} from "../src/data/sy0701AcronymFlashcards.js";
+import {
   getSy0701DeepDiveProfile,
   sortDeepDivesBySy0701,
   SY0701_BLUEPRINT,
@@ -54,6 +59,27 @@ requireValue(SY0701_BLUEPRINT.exam === "SY0-701 V7" && SY0701_BLUEPRINT.document
 requireValue(/^https:\/\//.test(SY0701_BLUEPRINT.sourceUrl), "The official blueprint source must use HTTPS.");
 requireValue(/^\d{4}-\d{2}-\d{2}$/.test(CONCEPT_DEEP_DIVE_REVIEWED_AT), "Review date must use YYYY-MM-DD.");
 requireValue(CONCEPT_DEEP_DIVE_CATEGORIES[0] === "All topics", "The category list must begin with All topics.");
+requireValue(SY0701_ACRONYM_SETS.length === 6, `Expected six acronym study sets; found ${SY0701_ACRONYM_SETS.length}.`);
+requireValue(SY0701_ACRONYM_CARDS.length === 90, `Expected 90 acronym cards; found ${SY0701_ACRONYM_CARDS.length}.`);
+requireValue(unique(SY0701_ACRONYM_SETS.map(set => set.id)), "Acronym set IDs must be unique.");
+requireValue(unique(SY0701_ACRONYM_CARDS.map(card => card.id)), "Acronym card IDs must be unique.");
+requireValue(unique(SY0701_ACRONYM_CARDS.map(card => card.acronym.toLowerCase())), "Acronyms must not repeat across study sets.");
+requireValue(SY0701_ACRONYM_SOURCE.officialUrl === SY0701_BLUEPRINT.sourceUrl, "Acronym cards must point to the reviewed official SY0-701 blueprint.");
+requireValue(/^\d{4}-\d{2}-\d{2}$/.test(SY0701_ACRONYM_SOURCE.reviewedAt), "Acronym review date must use YYYY-MM-DD.");
+
+for (const set of SY0701_ACRONYM_SETS) {
+  const prefix = `[acronym set ${set.id || "missing-id"}]`;
+  requireValue(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(set.id || ""), `${prefix} ID must be a URL-safe slug.`);
+  requireValue(words(set.title) >= 2 && words(set.title) <= 6, `${prefix} title must be 2-6 words.`);
+  requireValue(words(set.description) >= 6 && words(set.description) <= 20, `${prefix} description must be 6-20 words.`);
+  requireValue(set.objectiveCodes.length >= 1 && set.objectiveCodes.every(code => SY0701_OBJECTIVES[code]), `${prefix} references an unknown SY0-701 objective.`);
+  requireValue(set.cards.length === 15, `${prefix} must contain exactly 15 cards.`);
+  set.cards.forEach(card => {
+    requireValue(Boolean(card.acronym && card.expansion && card.meaning), `${card.id || prefix} is incomplete.`);
+    requireValue(words(card.expansion) <= 10, `${card.id} expansion is too long for active recall.`);
+    requireValue(words(card.meaning) >= 7 && words(card.meaning) <= 28, `${card.id} plain-English meaning must be 7-28 words.`);
+  });
+}
 
 for (const dive of CONCEPT_DEEP_DIVES) {
   const prefix = `[${dive.id || "missing-id"}]`;
@@ -145,6 +171,7 @@ const sectionCount = CONCEPT_DEEP_DIVES.reduce((total, dive) => total + dive.sec
 console.log("Deep Dive content audit passed.");
 console.log(`- ${CONCEPT_DEEP_DIVES.length} complete lessons across ${sectionCount} guided sections`);
 console.log(`- ${deck.length} concise flashcards with unique IDs`);
+console.log(`- ${SY0701_ACRONYM_CARDS.length} vetted acronym cards across ${SY0701_ACRONYM_SETS.length} active-recall sets`);
 console.log(`- All ${CONCEPT_DEEP_DIVES.length} lessons mapped across all 28 SY0-701 objectives and five domains`);
 console.log(`- ${Object.values(SY0701_DEEP_DIVE_PROFILES).filter(item => item.beyondSections.length).length} lessons clearly label optional Beyond the textbook sections`);
 console.log(`- ${sourceReferences.length} source references (${uniqueSourceUrls.size} distinct HTTPS URLs)`);

@@ -72,6 +72,11 @@ import {
   SY0701_DOMAINS,
 } from "./data/sy0701DeepDiveMap.js";
 import {
+  SY0701_ACRONYM_CARDS,
+  SY0701_ACRONYM_SETS,
+  SY0701_ACRONYM_SOURCE,
+} from "./data/sy0701AcronymFlashcards.js";
+import {
   buildDeepDiveDeck,
   buildDeepDiveFlashcards,
   formatDeepDiveReviewDate,
@@ -17671,6 +17676,43 @@ body{background:
 .deep-dive-sources-disclosure>summary>svg:last-child{margin-left:auto;transition:transform .2s;}
 .deep-dive-sources-disclosure[open]>summary>svg:last-child{transform:rotate(90deg);}
 .deep-dive-sources-disclosure .deep-dive-sources{border-width:1px 0 0;border-radius:0;}
+.deep-dive-acronym-library{margin:18px 0 24px;padding:24px;border:1px solid color-mix(in srgb,var(--deep-accent) 27%,var(--deep-border));border-radius:24px;background:radial-gradient(circle at 92% 4%,color-mix(in srgb,var(--deep-accent) 13%,transparent),transparent 28%),linear-gradient(145deg,var(--deep-surface),color-mix(in srgb,var(--deep-amber) 6%,var(--deep-panel)));box-shadow:0 15px 42px rgba(40,31,22,.07);}
+.deep-dive-acronym-library-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:17px;}
+.deep-dive-acronym-library-head>div>span{display:block;margin-bottom:5px;color:var(--deep-accent);font-size:11px;font-weight:950;letter-spacing:.09em;text-transform:uppercase;}
+.deep-dive-acronym-library-head h2{margin:0;color:var(--deep-text);font-size:28px;line-height:1.15;}
+.deep-dive-acronym-library-head p{max-width:600px;margin:7px 0 0;color:var(--deep-muted);font-size:13px;font-weight:600;line-height:1.65;}
+.deep-dive-acronym-total{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid color-mix(in srgb,var(--deep-green) 28%,var(--deep-border));border-radius:14px;background:color-mix(in srgb,var(--deep-green) 7%,var(--deep-surface));}
+.deep-dive-acronym-total strong{color:var(--deep-green);font-size:26px;line-height:1;}
+.deep-dive-acronym-total span{color:var(--deep-muted);font-size:10px;font-weight:900;line-height:1.35;}
+.deep-dive-acronym-set-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.deep-dive-acronym-set-card{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:11px;align-items:center;min-height:112px;padding:15px;border:1px solid color-mix(in srgb,var(--set-color) 30%,var(--deep-border));border-radius:17px;background:color-mix(in srgb,var(--set-color) 6%,var(--deep-surface));color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;}
+.deep-dive-acronym-set-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--set-color) 54%,var(--deep-border));box-shadow:0 13px 26px rgba(40,31,22,.09);}
+.deep-dive-acronym-set-card:focus-visible{outline:3px solid color-mix(in srgb,var(--set-color) 25%,transparent);outline-offset:2px;}
+.deep-dive-acronym-set-icon{display:grid;place-items:center;width:43px;height:43px;border-radius:13px;background:color-mix(in srgb,var(--set-color) 16%,var(--deep-surface));color:var(--set-color);}
+.deep-dive-acronym-set-card strong,.deep-dive-acronym-set-card small{display:block;}
+.deep-dive-acronym-set-card strong{font-size:13px;line-height:1.35;}
+.deep-dive-acronym-set-card small{margin-top:4px;color:var(--deep-muted);font-size:10px;line-height:1.45;}
+.deep-dive-acronym-set-card>svg{color:var(--set-color);}
+.deep-dive-acronym-set-progress{grid-column:2/4;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;align-items:center;}
+.deep-dive-acronym-set-progress>span:first-child{height:5px;border-radius:99px;background:var(--deep-border);overflow:hidden;}
+.deep-dive-acronym-set-progress i{display:block;height:100%;border-radius:inherit;background:var(--set-color);}
+.deep-dive-acronym-set-progress>span:last-child{color:var(--deep-muted);font-size:9px;font-weight:900;}
+.deep-dive-acronym-source-note{display:flex;align-items:flex-start;gap:8px;margin-top:13px;color:var(--deep-muted);font-size:11px;font-weight:650;line-height:1.55;}
+.deep-dive-acronym-source-note svg{flex:0 0 auto;color:var(--deep-green);margin-top:1px;}
+.deep-dive-acronym-reader{max-width:980px;margin:0 auto;padding:24px 24px 110px;}
+.deep-dive-acronym-reader-hero{position:relative;overflow:hidden;margin-bottom:16px;padding:25px;border:1px solid color-mix(in srgb,var(--set-color) 32%,var(--deep-border));border-radius:23px;background:radial-gradient(circle at 94% 7%,color-mix(in srgb,var(--set-color) 15%,transparent),transparent 34%),var(--deep-surface);}
+.deep-dive-acronym-reader-hero>span{color:var(--set-color);font-size:11px;font-weight:950;letter-spacing:.09em;text-transform:uppercase;}
+.deep-dive-acronym-reader-hero h1{margin:7px 0 7px;color:var(--deep-text);font-size:clamp(30px,5vw,46px);line-height:1.06;letter-spacing:-.03em;}
+.deep-dive-acronym-reader-hero p{max-width:680px;margin:0;color:var(--deep-muted);font-size:14px;font-weight:600;line-height:1.65;}
+.deep-dive-acronym-reader-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px;}
+.deep-dive-acronym-reader-meta span,.deep-dive-acronym-reader-meta a{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid var(--deep-border);border-radius:999px;background:var(--deep-panel);color:var(--deep-muted);font-size:10px;font-weight:900;text-decoration:none;}
+.deep-dive-acronym-reader-meta a:hover{color:var(--set-color);border-color:color-mix(in srgb,var(--set-color) 42%,var(--deep-border));}
+.deep-dive-acronym-mode{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-width:850px;margin:0 auto 12px;padding:6px;border:1px solid var(--deep-border);border-radius:14px;background:var(--deep-surface);}
+.deep-dive-acronym-mode button{min-height:43px;padding:8px 10px;border:0;border-radius:10px;background:transparent;color:var(--deep-muted);font:inherit;font-size:11px;font-weight:900;cursor:pointer;}
+.deep-dive-acronym-mode button.active{background:color-mix(in srgb,var(--set-color) 12%,var(--deep-panel));color:var(--set-color);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--set-color) 26%,transparent);}
+.deep-dive-acronym-prompt{color:var(--set-color)!important;font-size:12px!important;font-weight:900;}
+.deep-dive-acronym-answer-copy{max-width:650px;margin:12px 0 0;color:var(--deep-muted);font-size:15px;font-weight:650;line-height:1.65;}
+.deep-dive-acronym-reader .deep-dive-flashcard-studio{max-width:850px;}
 .deep-dive-flashcard-studio{max-width:850px;margin:0 auto;padding:25px;border:1px solid var(--deep-border);border-radius:22px;background:radial-gradient(circle at 90% 5%,color-mix(in srgb,var(--deep-amber) 15%,transparent),transparent 30%),var(--deep-surface);box-shadow:0 14px 40px rgba(40,31,22,.07);}
 .deep-dive-flashcard-head{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;margin-bottom:18px;}
 .deep-dive-flashcard-head h2{margin:0 0 5px;font-size:24px;color:var(--deep-text);}
@@ -17779,7 +17821,10 @@ body{background:
 }
 @media (max-width: 760px){
   .deep-dives-page,.deep-dive-reader{padding:22px 16px 96px;}
+  .deep-dive-acronym-reader{padding:22px 16px 96px;}
   .deep-dives-hero{grid-template-columns:minmax(0,1fr);padding:24px;border-radius:23px;}
+  .deep-dive-acronym-library-head{align-items:flex-start;}
+  .deep-dive-acronym-set-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .deep-dives-progress-card{max-width:420px;}
   .deep-dive-objective-strip{grid-template-columns:minmax(0,1fr);}
   .deep-dives-domain-map{grid-template-columns:repeat(6,165px);}
@@ -17792,6 +17837,19 @@ body{background:
 }
 @media (max-width: 560px){
   .deep-dives-grid{grid-template-columns:minmax(0,1fr);}
+  .deep-dive-acronym-library{padding:19px 16px;border-radius:21px;}
+  .deep-dive-acronym-library-head{display:block;}
+  .deep-dive-acronym-library-head h2{font-size:25px;}
+  .deep-dive-acronym-library-head p{font-size:12.5px;}
+  .deep-dive-acronym-total{width:max-content;margin-top:12px;}
+  .deep-dive-acronym-set-grid{grid-template-columns:minmax(0,1fr);}
+  .deep-dive-acronym-set-card{min-height:108px;}
+  .deep-dive-acronym-source-note{font-size:10.5px;}
+  .deep-dive-acronym-reader-hero{padding:21px 18px;}
+  .deep-dive-acronym-reader-hero h1{font-size:34px;}
+  .deep-dive-acronym-mode{gap:4px;padding:5px;}
+  .deep-dive-acronym-mode button{padding:7px 5px;font-size:9.5px;}
+  .deep-dive-acronym-answer-copy{font-size:14px;}
   .deep-dives-domain-group>header{align-items:flex-start;}
   .deep-dives-domain-group>header h2{font-size:22px;}
   .deep-dives-results-head span{display:none;}
@@ -26872,10 +26930,129 @@ function ReferralPage({user,t}) {
 // ═══════════════════════════════════════════════════════════════
 // CONCEPT DEEP DIVES — OWNER-ONLY EDITORIAL PREVIEW
 // ═══════════════════════════════════════════════════════════════
+function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
+  const [direction,setDirection]=useState("mixed");
+  const [cardIndex,setCardIndex]=useState(0);
+  const [cardOrder,setCardOrder]=useState(()=>acronymSet.cards.map(card=>card.id));
+  const [isFlipped,setIsFlipped]=useState(false);
+  const orderedCards=useMemo(()=>{
+    const byId=new Map(acronymSet.cards.map(card=>[card.id,card]));
+    const ordered=cardOrder.map(id=>byId.get(id)).filter(Boolean);
+    const included=new Set(ordered.map(card=>card.id));
+    return [...ordered,...acronymSet.cards.filter(card=>!included.has(card.id))];
+  },[acronymSet,cardOrder]);
+  const activeCard=orderedCards[cardIndex]||orderedCards[0];
+  const showDefinitionFirst=direction==="definition"||(direction==="mixed"&&cardIndex%2===1);
+  const masteredCount=acronymSet.cards.filter(card=>masteredIds.includes(card.id)).length;
+  const progress=orderedCards.length?Math.round(((cardIndex+1)/orderedCards.length)*100):0;
+
+  useEffect(()=>{
+    setDirection("mixed");
+    setCardIndex(0);
+    setCardOrder(acronymSet.cards.map(card=>card.id));
+    setIsFlipped(false);
+  },[acronymSet.id]);
+
+  const moveCard=directionStep=>{
+    setCardIndex(current=>(current+directionStep+orderedCards.length)%orderedCards.length);
+    setIsFlipped(false);
+  };
+  const rateCard=mastered=>{
+    if(!activeCard)return;
+    onRate(activeCard.id,mastered);
+    moveCard(1);
+  };
+  const shuffleCards=()=>{
+    const shuffled=[...acronymSet.cards.map(card=>card.id)];
+    for(let index=shuffled.length-1;index>0;index-=1){
+      const swapIndex=Math.floor(Math.random()*(index+1));
+      [shuffled[index],shuffled[swapIndex]]=[shuffled[swapIndex],shuffled[index]];
+    }
+    setCardOrder(shuffled);
+    setCardIndex(0);
+    setIsFlipped(false);
+  };
+  const chooseDirection=nextDirection=>{
+    setDirection(nextDirection);
+    setCardIndex(0);
+    setIsFlipped(false);
+  };
+
+  return(
+    <article className="deep-dive-acronym-reader" style={{"--set-color":acronymSet.color,"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
+      <div className="deep-dive-reader-topbar">
+        <button className="btn btn-ghost deep-dive-back" type="button" onClick={onClose}><ArrowLeft size={17}/> All acronym sets</button>
+        <span className="deep-dive-preview-badge"><LockKeyhole size={13}/> Owner preview</span>
+      </div>
+
+      <header className="deep-dive-acronym-reader-hero">
+        <span>SY0-701 active recall</span>
+        <h1>{acronymSet.title}</h1>
+        <p>{acronymSet.description} Say the answer before you flip the card.</p>
+        <div className="deep-dive-acronym-reader-meta">
+          <span><Brain size={14}/>{acronymSet.cards.length} cards</span>
+          <span><ListChecks size={14}/>Objectives {acronymSet.objectiveCodes.join(" · ")}</span>
+          <a href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Checked against official SY0-701 list<ChevronRight size={13}/></a>
+        </div>
+      </header>
+
+      <div className="deep-dive-acronym-mode" role="tablist" aria-label="Choose flashcard direction">
+        <button type="button" role="tab" aria-selected={direction==="acronym"} className={direction==="acronym"?"active":""} onClick={()=>chooseDirection("acronym")}>Acronym → definition</button>
+        <button type="button" role="tab" aria-selected={direction==="definition"} className={direction==="definition"?"active":""} onClick={()=>chooseDirection("definition")}>Definition → acronym</button>
+        <button type="button" role="tab" aria-selected={direction==="mixed"} className={direction==="mixed"?"active":""} onClick={()=>chooseDirection("mixed")}>Mixed challenge</button>
+      </div>
+
+      <section className="deep-dive-flashcard-studio" aria-label={`${acronymSet.title} acronym flashcards`}>
+        <div className="deep-dive-flashcard-head">
+          <div><span className="deep-dive-eyebrow">Acronym drill</span><h2>Recall it, then flip</h2><p>Definitions include a short plain-English reminder so you learn what the term does, not only what the letters spell.</p></div>
+          <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {acronymSet.cards.length}<br/>mastered</span></div>
+        </div>
+        <div className="deep-dive-flashcard-toolbar">
+          <span>Card {Math.min(cardIndex+1,orderedCards.length)} of {orderedCards.length}</span>
+          <div className="deep-dives-progress-track"><span style={{width:`${progress}%`}}/></div>
+          <button className="btn btn-ghost" type="button" onClick={shuffleCards}><RotateCcw size={15}/>Shuffle</button>
+        </div>
+        {activeCard&&<>
+          <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
+            <span className="deep-dive-flashcard-inner">
+              <span className="deep-dive-flashcard-face deep-dive-flashcard-front">
+                <span className="deep-dive-flashcard-kind"><Brain size={15}/>{showDefinitionFirst?"Name the acronym":"Expand the acronym"}</span>
+                <small className="deep-dive-acronym-prompt">Objective {acronymSet.objectiveCodes.join(" / ")}</small>
+                <strong>{showDefinitionFirst?activeCard.expansion:activeCard.acronym}</strong>
+                <span className="deep-dive-flashcard-hint">Say it aloud, then tap to reveal</span>
+              </span>
+              <span className="deep-dive-flashcard-face deep-dive-flashcard-back">
+                <span className="deep-dive-flashcard-kind"><Sparkles size={15}/>Answer</span>
+                <small>{showDefinitionFirst?"Acronym":"Full definition"}</small>
+                <strong>{showDefinitionFirst?activeCard.acronym:activeCard.expansion}</strong>
+                <p className="deep-dive-acronym-answer-copy">{activeCard.meaning}</p>
+                <span className="deep-dive-flashcard-hint">Tap to see the question again</span>
+              </span>
+            </span>
+          </button>
+          <div className="deep-dive-flashcard-actions">
+            <button className="btn btn-outline" type="button" onClick={()=>moveCard(-1)}><ArrowLeft size={16}/>Previous</button>
+            {!isFlipped?(
+              <button className="btn btn-primary" type="button" onClick={()=>setIsFlipped(true)}><Lightbulb size={16}/>Reveal answer</button>
+            ):(
+              <div className="deep-dive-flashcard-rating" aria-label="Rate this card">
+                <button className="btn btn-outline" type="button" onClick={()=>rateCard(false)}><RotateCcw size={16}/>Again</button>
+                <button className="btn btn-primary" type="button" onClick={()=>rateCard(true)}><CheckCircle2 size={16}/>Got it</button>
+              </div>
+            )}
+            <button className="btn btn-outline" type="button" onClick={()=>moveCard(1)}>Next<ChevronRight size={16}/></button>
+          </div>
+        </>}
+      </section>
+    </article>
+  );
+}
+
 function ConceptDeepDivesPage({t}) {
   const [query,setQuery]=useState("");
   const [domainFilter,setDomainFilter]=useState("all");
   const [selectedId,setSelectedId]=useState(null);
+  const [selectedAcronymSetId,setSelectedAcronymSetId]=useState(null);
   const [studyMode,setStudyMode]=useState("learn");
   const [lessonStep,setLessonStep]=useState(0);
   const [isAnswerVisible,setIsAnswerVisible]=useState(false);
@@ -26896,8 +27073,15 @@ function ConceptDeepDivesPage({t}) {
       return Array.isArray(stored)?stored:[];
     }catch{return [];}
   });
+  const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
+    try{
+      const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
+      return Array.isArray(stored)?stored.filter(id=>SY0701_ACRONYM_CARDS.some(card=>card.id===id)):[];
+    }catch{return [];}
+  });
 
   const selectedDive=CONCEPT_DEEP_DIVES.find(dive=>dive.id===selectedId)||null;
+  const selectedAcronymSet=SY0701_ACRONYM_SETS.find(set=>set.id===selectedAcronymSetId)||null;
   const selectedProfile=getSy0701DeepDiveProfile(selectedDive);
   const allFlashcards=useMemo(()=>buildDeepDiveDeck(CONCEPT_DEEP_DIVES),[]);
   const selectedFlashcards=useMemo(()=>buildDeepDiveFlashcards(selectedDive),[selectedDive]);
@@ -26931,6 +27115,7 @@ function ConceptDeepDivesPage({t}) {
   })).filter(group=>group.dives.length),[filteredDives]);
 
   const openDive=(id,mode="learn")=>{
+    setSelectedAcronymSetId(null);
     setSelectedId(id);
     setStudyMode(mode);
     setLessonStep(0);
@@ -26943,6 +27128,17 @@ function ConceptDeepDivesPage({t}) {
     const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"}));
     capture("concept_deep_dive_opened",{deep_dive_id:id,study_mode:mode,preview:true});
+  };
+  const openAcronymSet=id=>{
+    setSelectedId(null);
+    setSelectedAcronymSetId(id);
+    const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"}));
+    capture("concept_deep_dive_acronym_set_opened",{set_id:id,preview:true});
+  };
+  const closeAcronymSet=()=>{
+    setSelectedAcronymSetId(null);
+    window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:"auto"}));
   };
   const closeDive=()=>{
     setSelectedId(null);
@@ -26961,6 +27157,14 @@ function ConceptDeepDivesPage({t}) {
     setMasteredCardIds(next);
     try{window.localStorage?.setItem("secureplus-deep-dives-mastered",JSON.stringify(next));}catch{}
     capture("concept_deep_dive_flashcard_rated",{deep_dive_id:selectedDive?.id,card_id:cardId,mastered,preview:true});
+  };
+  const updateMasteredAcronyms=(cardId,mastered)=>{
+    const next=mastered
+      ?Array.from(new Set([...masteredAcronymIds,cardId]))
+      :masteredAcronymIds.filter(id=>id!==cardId);
+    setMasteredAcronymIds(next);
+    try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
+    capture("concept_deep_dive_acronym_rated",{set_id:selectedAcronymSet?.id,card_id:cardId,mastered,preview:true});
   };
   const moveFlashcard=direction=>{
     if(!orderedFlashcards.length)return;
@@ -26987,6 +27191,10 @@ function ConceptDeepDivesPage({t}) {
     setIsAnswerVisible(false);
     setComparisonIndex(0);
   };
+
+  if(selectedAcronymSet){
+    return <AcronymFlashcardLab acronymSet={selectedAcronymSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={closeAcronymSet} t={t}/>;
+  }
 
   if(selectedDive){
     const isComplete=completedIds.includes(selectedDive.id);
@@ -27182,6 +27390,7 @@ function ConceptDeepDivesPage({t}) {
 
   const progressPercent=Math.round((completedIds.length/CONCEPT_DEEP_DIVES.length)*100);
   const totalMastered=allFlashcards.filter(item=>masteredCardIds.includes(item.id)).length;
+  const totalAcronymsMastered=SY0701_ACRONYM_CARDS.filter(item=>masteredAcronymIds.includes(item.id)).length;
   return(
     <div className="deep-dives-page" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <section className="deep-dives-hero">
@@ -27192,7 +27401,7 @@ function ConceptDeepDivesPage({t}) {
           <div className="deep-dives-proof">
             <span><BadgeCheck size={15}/>{CONCEPT_DEEP_DIVES.length} syllabus-mapped lessons</span>
             <span><Crosshair size={15}/>5 official exam domains</span>
-            <span><Brain size={15}/>{allFlashcards.length} built-in flashcards</span>
+            <span><Brain size={15}/>{allFlashcards.length+SY0701_ACRONYM_CARDS.length} built-in flashcards</span>
           </div>
           <a className="deep-dives-blueprint-link" href={SY0701_BLUEPRINT.sourceUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Mapped to the official {SY0701_BLUEPRINT.exam} objectives · document v{SY0701_BLUEPRINT.documentVersion}<ChevronRight size={14}/></a>
         </div>
@@ -27201,7 +27410,28 @@ function ConceptDeepDivesPage({t}) {
           <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
           <p>{completedIds.length?"Continue with one short concept or switch to active recall.":"Choose a lesson, learn one idea at a time, then practise it."}</p>
           <div className="deep-dives-card-progress"><Brain size={16}/><span><strong>{totalMastered}</strong> of {allFlashcards.length} flashcards mastered</span></div>
+          <div className="deep-dives-card-progress"><TextCursorInput size={16}/><span><strong>{totalAcronymsMastered}</strong> of {SY0701_ACRONYM_CARDS.length} acronyms mastered</span></div>
         </div>
+      </section>
+
+      <section className="deep-dive-acronym-library" aria-labelledby="acronym-library-title">
+        <div className="deep-dive-acronym-library-head">
+          <div><span>New active-recall lab</span><h2 id="acronym-library-title">Acronyms without the alphabet soup</h2><p>Choose one focused set. Practise in both directions so you can recognize the letters and recall the full definition.</p></div>
+          <div className="deep-dive-acronym-total"><strong>{totalAcronymsMastered}</strong><span>of {SY0701_ACRONYM_CARDS.length}<br/>mastered</span></div>
+        </div>
+        <div className="deep-dive-acronym-set-grid">
+          {SY0701_ACRONYM_SETS.map(set=>{
+            const mastered=set.cards.filter(card=>masteredAcronymIds.includes(card.id)).length;
+            const setProgress=Math.round((mastered/set.cards.length)*100);
+            return <button type="button" className="deep-dive-acronym-set-card" style={{"--set-color":set.color}} key={set.id} onClick={()=>openAcronymSet(set.id)} aria-label={`Open ${set.title}: ${mastered} of ${set.cards.length} mastered`}>
+              <span className="deep-dive-acronym-set-icon"><TextCursorInput size={20}/></span>
+              <span><strong>{set.title}</strong><small>{set.cards.length} cards · Objectives {set.objectiveCodes.join(" / ")}</small></span>
+              <ChevronRight size={17}/>
+              <span className="deep-dive-acronym-set-progress"><span><i style={{width:`${setProgress}%`}}/></span><span>{mastered}/{set.cards.length}</span></span>
+            </button>;
+          })}
+        </div>
+        <div className="deep-dive-acronym-source-note"><ShieldCheck size={16}/><span>{SY0701_ACRONYM_SOURCE.reviewNote}</span></div>
       </section>
 
       <section className="deep-dives-controls" aria-label="Find a Concept Deep Dive">
