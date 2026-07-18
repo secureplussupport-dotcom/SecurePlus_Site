@@ -694,11 +694,6 @@ function getReadinessProfile(attempts=[]) {
   const score=Math.min(100,Math.round(knowledge*.45+coverage*.2+practice*.2+application*.15));
   const level=score>=80?"Exam ready":score>=65?"Building confidence":score>=45?"Developing":score>=25?"Foundation":"Starting out";
   const tone=score>=80?"ready":score>=65?"confident":score>=45?"developing":score>=25?"foundation":"starting";
-  const starThresholds=[20,40,60,80,95];
-  const stars=starThresholds.filter(threshold=>score>=threshold).length;
-  const nextStarTarget=starThresholds.find(threshold=>score<threshold)||100;
-  const previousStarTarget=stars?starThresholds[stars-1]:0;
-  const starProgress=stars===starThresholds.length?100:Math.round(((score-previousStarTarget)/(nextStarTarget-previousStarTarget))*100);
   return {
     score,
     accuracy,
@@ -710,10 +705,6 @@ function getReadinessProfile(attempts=[]) {
     examQuestions,
     level,
     tone,
-    stars,
-    nextStarTarget,
-    pointsToNextStar:Math.max(0,nextStarTarget-score),
-    starProgress:Math.max(0,Math.min(100,starProgress)),
     pillars:[
       {id:"knowledge",label:"Knowledge",value:knowledge,weight:"45%",help:"Accuracy, balanced by enough answer evidence"},
       {id:"coverage",label:"Coverage",value:coverage,weight:"20%",help:"Security+ chapters you have practised"},
@@ -14946,19 +14937,9 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .readiness-level-badge span{font-size:13px;font-weight:850;color:${t.textSec};line-height:1;}
 .readiness-level-badge span strong{font-size:24px;color:var(--readiness-color);}
 .readiness-level-badge small{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;color:${t.textDim};margin-top:5px;}
-.readiness-lab-body{position:relative;display:grid;grid-template-columns:minmax(245px,.72fr) minmax(0,1.55fr);gap:14px;align-items:stretch;}
-.readiness-star-card{padding:17px;border:1px solid ${t.border};border-radius:14px;background:${t.panel}d9;}
-.readiness-star-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:13px;}
-.readiness-star-top strong{display:block;color:${t.text};font-size:14px;margin-top:2px;}
-.readiness-eyebrow{display:block;color:${t.textDim};font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
-.readiness-coming-soon{padding:5px 8px;border-radius:999px;border:1px solid ${t.amber}38;background:${t.amber}0e;color:${t.amber};font-size:9px;font-weight:950;text-transform:uppercase;white-space:nowrap;}
-.readiness-stars{display:flex;align-items:center;gap:7px;color:${t.textDim};}
-.readiness-stars .filled{color:${t.amber};filter:drop-shadow(0 0 7px ${t.amber}55);}
-.readiness-star-meter,.readiness-pillar-meter{height:7px;border-radius:999px;background:${t.border};overflow:hidden;}
-.readiness-star-meter{margin:13px 0 10px;}
-.readiness-star-meter span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,${t.amber},#f97316);transition:width .65s cubic-bezier(.16,1,.3,1);}
-.readiness-star-card p{margin:0;color:${t.textSec};font-size:11px;line-height:1.65;}
-.readiness-pillar-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.readiness-lab-body{position:relative;}
+.readiness-pillar-meter{height:7px;border-radius:999px;background:${t.border};overflow:hidden;}
+.readiness-pillar-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
 .readiness-pillar{position:relative;padding:14px 14px 13px;border:1px solid ${t.border};border-radius:12px;background:${t.panel}d9;}
 .readiness-pillar-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;color:${t.textSec};font-size:12px;font-weight:850;}
 .readiness-pillar-top strong{font-size:16px;color:var(--readiness-color);}
@@ -15774,14 +15755,11 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .exam-report-kicker{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--report-color);margin-bottom:5px;}
 .exam-report-summary h1{font-size:clamp(28px,4vw,42px);line-height:1.04;color:${t.text};margin:0 0 9px;}
 .exam-report-summary>p{max-width:620px;margin:0;color:${t.textSec};font-size:13px;line-height:1.65;}
-.exam-report-readiness{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:11px;align-items:center;margin-top:17px;padding:12px 13px;border:1px solid color-mix(in srgb,var(--report-readiness-color) 34%,${t.border});border-radius:13px;background:color-mix(in srgb,var(--report-readiness-color) 8%,${t.panel});}
+.exam-report-readiness{display:grid;grid-template-columns:auto minmax(0,1fr);gap:11px;align-items:center;margin-top:17px;padding:12px 13px;border:1px solid color-mix(in srgb,var(--report-readiness-color) 34%,${t.border});border-radius:13px;background:color-mix(in srgb,var(--report-readiness-color) 8%,${t.panel});}
 .exam-report-readiness-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--report-readiness-color);color:#fff;box-shadow:0 9px 20px color-mix(in srgb,var(--report-readiness-color) 22%,transparent);}
 .exam-report-readiness small,.exam-report-readiness strong{display:block;}
 .exam-report-readiness small{font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:${t.textDim};}
 .exam-report-readiness strong{margin-top:3px;font-size:13px;color:${t.text};}
-.exam-report-star-preview{text-align:right;}
-.exam-report-star-preview .readiness-stars{justify-content:flex-end;gap:3px;}
-.exam-report-star-preview small{margin-top:4px;}
 .exam-report-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0 24px 20px;border:1px solid ${t.border};border-radius:13px;overflow:hidden;background:${t.panel}b8;}
 .exam-report-metrics>div{padding:13px 14px;}
 .exam-report-metrics>div+div{border-left:1px solid ${t.border};}
@@ -17062,7 +17040,7 @@ body{background:
   .readiness-lab{padding:18px!important;}
   .readiness-lab-head{display:grid!important;grid-template-columns:1fr!important;}
   .readiness-level-badge{justify-self:stretch!important;grid-template-columns:auto auto!important;justify-content:flex-start!important;}
-  .readiness-lab-body{grid-template-columns:1fr!important;}
+  .readiness-pillar-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .achievements-page{padding:18px 16px 112px!important;}
   .achievements-hero{grid-template-columns:1fr!important;padding:20px!important;text-align:left;}
   .achievement-star-display{width:160px!important;justify-self:center;}
@@ -17182,8 +17160,6 @@ body{background:
   .exam-report-summary{text-align:center;}
   .exam-report-summary>p{margin-left:auto!important;margin-right:auto!important;}
   .exam-report-readiness{grid-template-columns:auto minmax(0,1fr)!important;text-align:left!important;}
-  .exam-report-star-preview{grid-column:1 / -1!important;text-align:left!important;padding-top:9px;border-top:1px solid ${t.border};}
-  .exam-report-star-preview .readiness-stars{justify-content:flex-start!important;}
   .exam-report-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin:0 16px 17px!important;}
   .exam-report-metrics>div+div{border-left:0!important;}
   .exam-report-metrics>div:nth-child(even){border-left:1px solid ${t.border}!important;}
@@ -18410,15 +18386,6 @@ function RadialScore({score,correct,total,t}) {
         <text x="78" y="95" textAnchor="middle" fill={t.textDim} fontSize="12" fontWeight="800">SCORE</text>
       </svg>
       <div style={{fontSize:14,color:"#94A3B8",fontWeight:800}}>{correct} / {total} correct</div>
-    </div>
-  );
-}
-function ReadinessStars({profile,size=20,label="Future star contribution"}) {
-  return(
-    <div className="readiness-stars" role="img" aria-label={`${label}: ${profile.stars} of 5 preview stars`}>
-      {[0,1,2,3,4].map(index=>(
-        <Star key={index} size={size} strokeWidth={2.2} fill={index<profile.stars?"currentColor":"none"} className={index<profile.stars?"filled":""}/>
-      ))}
     </div>
   );
 }
@@ -20940,26 +20907,6 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
           </div>
         </div>
         <div className="readiness-lab-body">
-          <div className="readiness-star-card">
-            <div className="readiness-star-top">
-              <div>
-                <span className="readiness-eyebrow">Future star track</span>
-                <strong>{readinessProfile.stars} of 5 preview stars</strong>
-              </div>
-              <span className="readiness-coming-soon">Coming later</span>
-            </div>
-            <ReadinessStars profile={readinessProfile} size={24}/>
-            <div className="readiness-star-meter"><span style={{width:`${readinessProfile.starProgress}%`}}/></div>
-            <p>
-              {readinessProfile.stars===5
-                ? "You have reached every readiness milestone in the preview track."
-                : `${readinessProfile.pointsToNextStar} readiness point${readinessProfile.pointsToNextStar===1?"":"s"} to the next preview star.`}
-              {" "}When study stars launch, readiness will be one contribution—not the only way to earn them.
-            </p>
-            <div className="readiness-trust-note">
-              Trust this as a direction finder: if a pillar is low, practise that area next. Do not use it as an official pass/fail prediction.
-            </div>
-          </div>
           <div className="readiness-pillar-grid">
             {readinessProfile.pillars.map(pillar=>(
               <div key={pillar.id} className="readiness-pillar">
@@ -20972,6 +20919,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
                 <span className="readiness-weight">{pillar.weight} of score</span>
               </div>
             ))}
+          </div>
+          <div className="readiness-trust-note">
+            Trust this as a direction finder: if a factor is low, practise that area next. Do not use it as an official pass/fail prediction.
           </div>
         </div>
       </section>
@@ -23647,10 +23597,6 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
                 <small>Updated readiness</small>
                 <strong>{reportReadiness.score}/100 · {reportReadiness.level}</strong>
               </div>
-              <div className="exam-report-star-preview">
-                <ReadinessStars profile={reportReadiness} size={18}/>
-                <small>Future star contribution</small>
-              </div>
             </div>
           </div>
         </div>
@@ -23697,7 +23643,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
 
         <footer className="exam-report-footer">
           <span>This report is a SecurePlus practice summary, not an official CompTIA score report.</span>
-          <span>Readiness contributes to the future star system; study stars are not active yet.</span>
+          <span>Use readiness to choose what to practise next, not to predict the official exam result.</span>
         </footer>
       </section>
       <div className="score-actions">
