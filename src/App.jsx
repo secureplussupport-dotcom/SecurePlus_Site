@@ -25236,6 +25236,23 @@ function adminFormatMatches(node,tag) {
   return nodeTag===tag;
 }
 
+function adminNodeBelongsToEditor(editor,node) {
+  if(!editor || !node)return false;
+  return node===editor || editor.contains(node);
+}
+
+function adminRangeBelongsToEditor(editor,range) {
+  if(!editor || !range)return false;
+  return adminNodeBelongsToEditor(editor,range.commonAncestorContainer) ||
+    (adminNodeBelongsToEditor(editor,range.startContainer) && adminNodeBelongsToEditor(editor,range.endContainer));
+}
+
+function getAdminEditorSelectionRange(editor) {
+  const selection=window.getSelection?.();
+  const range=selection?.rangeCount ? selection.getRangeAt(0) : null;
+  return adminRangeBelongsToEditor(editor,range) ? range : null;
+}
+
 function findAdminFormatAncestor(node,tag,editor) {
   let current=node?.nodeType===Node.ELEMENT_NODE?node:node?.parentElement;
   while(current&&current!==editor) {
@@ -25263,18 +25280,29 @@ function unwrapAdminFormatElement(element) {
 
 function AdminFormatToolbar({editorRef,selectionRef,onChange}) {
   const buttonStyle={fontSize:12,minHeight:30,padding:"5px 10px"};
+  const rememberLiveSelection=()=> {
+    const editor=editorRef.current;
+    const range=getAdminEditorSelectionRange(editor);
+    if(range)selectionRef.current=range.cloneRange();
+  };
   const format=(tag)=>{
     const editor=editorRef.current;
     if(!editor)return;
-    editor.focus();
+    const liveRange=getAdminEditorSelectionRange(editor);
+    if(liveRange)selectionRef.current=liveRange.cloneRange();
+    editor.focus({preventScroll:true});
     const selection=window.getSelection?.();
     if(selectionRef.current&&selection) {
       selection.removeAllRanges();
-      selection.addRange(selectionRef.current);
+      try {
+        selection.addRange(selectionRef.current);
+      } catch {
+        selectionRef.current=null;
+      }
     }
     const activeSelection=window.getSelection?.();
     const range=activeSelection?.rangeCount ? activeSelection.getRangeAt(0) : null;
-    if(range&&editor.contains(range.commonAncestorContainer)) {
+    if(adminRangeBelongsToEditor(editor,range)) {
       const existing=
         findAdminFormatAncestor(range.commonAncestorContainer,tag,editor) ||
         findAdminFormatAncestor(range.startContainer,tag,editor) ||
@@ -25292,7 +25320,7 @@ function AdminFormatToolbar({editorRef,selectionRef,onChange}) {
     }
     const wrapper=document.createElement(tag);
     if(tag==="mark") wrapper.style.background="rgba(245, 158, 11, .35)";
-    if(!range || !editor.contains(range.commonAncestorContainer)) {
+    if(!adminRangeBelongsToEditor(editor,range)) {
       wrapper.textContent="text";
       editor.appendChild(wrapper);
     } else if(range.collapsed) {
@@ -25311,13 +25339,13 @@ function AdminFormatToolbar({editorRef,selectionRef,onChange}) {
   };
   return(
     <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:7}}>
-      <button className="btn btn-outline" type="button" style={buttonStyle} onMouseDown={e=>e.preventDefault()} onClick={()=>format("strong")} title="Bold selected text">
+      <button className="btn btn-outline" type="button" style={buttonStyle} onMouseDown={e=>{rememberLiveSelection();e.preventDefault();}} onClick={()=>format("strong")} title="Bold selected text">
         <strong>B</strong>
       </button>
-      <button className="btn btn-outline" type="button" style={buttonStyle} onMouseDown={e=>e.preventDefault()} onClick={()=>format("mark")} title="Highlight selected text">
+      <button className="btn btn-outline" type="button" style={buttonStyle} onMouseDown={e=>{rememberLiveSelection();e.preventDefault();}} onClick={()=>format("mark")} title="Highlight selected text">
         Highlight
       </button>
-      <button className="btn btn-outline" type="button" style={buttonStyle} onMouseDown={e=>e.preventDefault()} onClick={()=>format("u")} title="Underline selected text">
+      <button className="btn btn-outline" type="button" style={buttonStyle} onMouseDown={e=>{rememberLiveSelection();e.preventDefault();}} onClick={()=>format("u")} title="Underline selected text">
         <span style={{textDecoration:"underline",textUnderlineOffset:3}}>U</span>
       </button>
     </div>
@@ -25328,11 +25356,14 @@ function AdminTextInput({label,value,onChange,placeholder,type="text",format=fal
   const editorRef=useRef(null);
   const selectionRef=useRef(null);
   const saveSelection=()=> {
-    const selection=window.getSelection?.();
-    if(selection?.rangeCount&&editorRef.current?.contains(selection.anchorNode)) {
-      selectionRef.current=selection.getRangeAt(0).cloneRange();
-    }
+    const range=getAdminEditorSelectionRange(editorRef.current);
+    if(range)selectionRef.current=range.cloneRange();
   };
+  useEffect(()=>{
+    if(!format)return;
+    document.addEventListener("selectionchange",saveSelection);
+    return ()=>document.removeEventListener("selectionchange",saveSelection);
+  },[format]);
   useEffect(()=>{
     if(!format)return;
     const editor=editorRef.current;
@@ -25374,11 +25405,14 @@ function AdminTextArea({label,value,onChange,placeholder,rows=4,format=true}) {
   const editorRef=useRef(null);
   const selectionRef=useRef(null);
   const saveSelection=()=> {
-    const selection=window.getSelection?.();
-    if(selection?.rangeCount&&editorRef.current?.contains(selection.anchorNode)) {
-      selectionRef.current=selection.getRangeAt(0).cloneRange();
-    }
+    const range=getAdminEditorSelectionRange(editorRef.current);
+    if(range)selectionRef.current=range.cloneRange();
   };
+  useEffect(()=>{
+    if(!format)return;
+    document.addEventListener("selectionchange",saveSelection);
+    return ()=>document.removeEventListener("selectionchange",saveSelection);
+  },[format]);
   useEffect(()=>{
     if(!format)return;
     const editor=editorRef.current;
