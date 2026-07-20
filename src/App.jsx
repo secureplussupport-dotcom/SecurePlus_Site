@@ -1371,12 +1371,13 @@ function buildQuestionBankBreakdown(kind, bank=[]) {
 // ═══════════════════════════════════════════════════════════════
 // PBQ SIM TYPES with emojis
 // ═══════════════════════════════════════════════════════════════
+const SELECT_FILL_PBQ_TYPE = "SELECT & FILL";
+
 const SIM_TYPES = {
   TERMINAL: { id:"TERMINAL SIM", label:"Terminal Sim",  emoji:"💻", color:"#6366f1" },
-  DRAG:     { id:"DRAG & DROP",  label:"Drag & Drop",   emoji:"🔀", color:"#f59e0b" },
+  SELECT:   { id:SELECT_FILL_PBQ_TYPE, label:"Select & Fill", emoji:"🧩", color:"#db6b5f" },
   HOTSPOT:  { id:"HOTSPOT",      label:"Hotspot",       emoji:"📍", color:"#10b981" },
   ORDERING: { id:"ORDERING",     label:"Ordering",      emoji:"📋", color:"#a78bfa" },
-  FILL:     { id:"FILL BLANK",   label:"Fill in Blank", emoji:"✏️",  color:"#ec4899" },
   CONFIG:   { id:"CONFIG/ACL",   label:"Config / ACL",  emoji:"⚙️",  color:"#f59e0b" },
   LOG:      { id:"LOG ANALYSIS", label:"Log Analysis",  emoji:"📊", color:"#10b981" },
   SCENARIO: { id:"SCENARIO",     label:"Scenario",      emoji:"📖", color:"#06b6d4" },
@@ -14661,7 +14662,100 @@ const LOW_QUALITY_PBQ_IDS = new Set([
   "p092","p093","p097","p098","p100"
 ]);
 
-const BASE_PBQ_BANK = [...PBQ_BANK_BASE, ...IMPORTED_PBQ_BANK].filter(q=>!LOW_QUALITY_PBQ_IDS.has(q.id));
+const SY0701_SELECTION_DISTRACTORS = Object.freeze({
+  "1":["Hashing","Tokenization","Data masking","Digital signature","Key escrow","Key stretching","Certificate revocation"],
+  "2":["Phishing","Vishing","Smishing","Whaling","Pretexting","Tailgating","Watering-hole attack"],
+  "3":["Network segmentation","NAC","Firewall","IDS","IPS","VPN","Zero Trust"],
+  "4":["Preparation","Detection and analysis","Containment","Eradication","Recovery","Lessons learned","Root cause analysis"],
+  "5":["Risk acceptance","Risk avoidance","Risk transfer","Risk mitigation","SLE","ALE","ARO","Exposure factor"],
+});
+
+function uniqueSelectionOptions(values=[]) {
+  const seen=new Set();
+  return values
+    .map(value=>String(value||"").trim())
+    .filter(value=>{
+      if(!value)return false;
+      const key=normalizeFillBlankAnswer(value);
+      if(!key||seen.has(key))return false;
+      seen.add(key);
+      return true;
+    });
+}
+
+function stableSelectionOptionOrder(options,seed="secureplus") {
+  const score=value=>{
+    const input=`${seed}:${value}`;
+    let hash=2166136261;
+    for(let index=0;index<input.length;index+=1) hash=Math.imul(hash^input.charCodeAt(index),16777619);
+    return hash>>>0;
+  };
+  return [...options].sort((left,right)=>score(left)-score(right)||left.localeCompare(right));
+}
+
+function hintSelectionOptions(hint) {
+  const value=String(hint||"").trim();
+  if(!value || !/[,;|]/.test(value))return [];
+  return value
+    .split(/[,;|]/)
+    .map(option=>option.trim())
+    .filter(option=>option.length>=2&&option.length<=120);
+}
+
+function buildSelectionOptionBank(question,blanks,seedOptions=[],minimumDistractors=0) {
+  const answers=uniqueSelectionOptions(blanks.map(blank=>blank.answer));
+  const hinted=blanks.flatMap(blank=>hintSelectionOptions(blank.hint));
+  const options=uniqueSelectionOptions([...answers,...seedOptions,...hinted]);
+  const answerKeys=new Set(answers.map(normalizeFillBlankAnswer));
+  const distractorCount=()=>options.filter(option=>!answerKeys.has(normalizeFillBlankAnswer(option))).length;
+  const fallback=SY0701_SELECTION_DISTRACTORS[String(question.ch||question.domain||"1")]||[];
+  for(const option of fallback) {
+    if(options.length>=Math.max(4,answers.length+minimumDistractors)&&distractorCount()>=minimumDistractors)break;
+    if(!options.some(existing=>normalizeFillBlankAnswer(existing)===normalizeFillBlankAnswer(option))) options.push(option);
+  }
+  return options;
+}
+
+function normalizeSelectionPBQ(question) {
+  const sourceType=String(question?.type||"").trim().toUpperCase();
+  if(!["DRAG & DROP","FILL BLANK",SELECT_FILL_PBQ_TYPE].includes(sourceType))return question;
+  const legacyType=String(question?.legacySelectionType||sourceType).trim().toUpperCase().replace(/[_-]+/g," ");
+  const legacyIsDrag=legacyType.includes("DRAG") || (sourceType===SELECT_FILL_PBQ_TYPE&&question?.items?.length&&question?.correctMapping&&!question?.blanks?.length);
+  const legacyIsFill=legacyType==="FILL BLANK" || (sourceType===SELECT_FILL_PBQ_TYPE&&question?.blanks?.length&&!question?.selectionOptions?.length);
+
+  if(legacyIsDrag) {
+    const targets=(question.targets||[]).filter(target=>target?.droppable!==false);
+    const targetById=new Map(targets.map((target,index)=>[target.id,target.label||`Answer area ${index+1}`]));
+    const blanks=(question.items||[]).map((item,index)=>({
+      id:item.id||`b${index}`,
+      sentence:String(item.label||`Prompt ${index+1}`).includes("___")?String(item.label):`${item.label||`Prompt ${index+1}`} → ___`,
+      answer:targetById.get(question.correctMapping?.[item.id])||"",
+      acceptedAnswers:[],
+      hint:"",
+      explanation:item.explanation||item.solution||"",
+    })).filter(blank=>blank.sentence&&blank.answer);
+    const selectionOptions=stableSelectionOptionOrder(buildSelectionOptionBank(question,blanks,targets.map((target,index)=>target.label||`Answer area ${index+1}`),0),question.id);
+    return {...question,type:SELECT_FILL_PBQ_TYPE,emoji:"🧩",legacySelectionType:"DRAG & DROP",blanks,selectionOptions};
+  }
+
+  const blanks=(question.blanks||[]).map((blank,index)=>({
+    ...blank,
+    id:blank.id||`b${index}`,
+    sentence:String(blank.sentence||""),
+    answer:String(blank.answer||"").trim(),
+    acceptedAnswers:Array.isArray(blank.acceptedAnswers)?blank.acceptedAnswers:Array.isArray(blank.aliases)?blank.aliases:[],
+  })).filter(blank=>blank.sentence&&blank.answer);
+  const seedOptions=question.selectionOptions||question.optionBank||question.distractors||[];
+  const minimumDistractors=legacyIsFill?2:0;
+  const selectionOptions=legacyIsFill
+    ? stableSelectionOptionOrder(buildSelectionOptionBank(question,blanks,seedOptions,minimumDistractors),question.id)
+    : buildSelectionOptionBank(question,blanks,seedOptions,minimumDistractors);
+  return {...question,type:SELECT_FILL_PBQ_TYPE,emoji:"🧩",legacySelectionType:legacyIsFill?"FILL BLANK":question.legacySelectionType||sourceType,blanks,selectionOptions};
+}
+
+const BASE_PBQ_BANK = [...PBQ_BANK_BASE, ...IMPORTED_PBQ_BANK]
+  .filter(q=>!LOW_QUALITY_PBQ_IDS.has(q.id))
+  .map(normalizeSelectionPBQ);
 let PBQ_BANK = BASE_PBQ_BANK;
 
 const REMOTE_PBQ_TYPE_ALIASES = {
@@ -14672,10 +14766,12 @@ const REMOTE_PBQ_TYPE_ALIASES = {
   log_analysis:"LOG ANALYSIS",
   hotspot:"HOTSPOT",
   scenario:"SCENARIO",
-  drag_drop:"DRAG & DROP",
-  drag_and_drop:"DRAG & DROP",
+  drag_drop:SELECT_FILL_PBQ_TYPE,
+  drag_and_drop:SELECT_FILL_PBQ_TYPE,
   ordering:"ORDERING",
-  fill_blank:"FILL BLANK",
+  fill_blank:SELECT_FILL_PBQ_TYPE,
+  select_fill:SELECT_FILL_PBQ_TYPE,
+  select_and_fill:SELECT_FILL_PBQ_TYPE,
 };
 
 function normalizeRemotePbqType(type) {
@@ -14699,6 +14795,7 @@ function normalizeRemotePBQRow(row) {
     id:String(row?.id || appQuestion.id || ""),
     title:row?.title || appQuestion.title || payload.title || "Untitled PBQ",
     type,
+    legacySelectionType:appQuestion.legacySelectionType || row?.type || appQuestion.type || payload.type,
     ch:String(Number.isFinite(domain)&&domain>0?domain:1),
     cat:appQuestion.cat || payload.cat || payload.domainName || `Domain ${Number.isFinite(domain)?domain:1}`,
     difficulty:appQuestion.difficulty || payload.difficulty || "medium",
@@ -14725,9 +14822,10 @@ function normalizeRemotePBQRow(row) {
     correctMapping:correctAnswer.correctMapping || appQuestion.correctMapping,
     correctOrder:correctAnswer.correctOrder || appQuestion.correctOrder,
     blanks:interactiveData.blanks || appQuestion.blanks,
+    selectionOptions:interactiveData.selectionOptions || appQuestion.selectionOptions || payload.selectionOptions,
     acronyms:appQuestion.acronyms || payload.acronyms || [],
   };
-  return normalized;
+  return normalizeSelectionPBQ(normalized);
 }
 
 function mergeRemotePBQBanks(localQuestions=[],remoteQuestions=[]) {
@@ -14757,6 +14855,7 @@ function buildSupabasePBQMutation(question, sortOrder) {
     targets:question.targets || [],
     targetLayout:question.targetLayout || null,
     blanks:question.blanks || [],
+    selectionOptions:question.selectionOptions || [],
   };
   Object.keys(interactiveData).forEach(key=>{
     if(interactiveData[key]===null || (Array.isArray(interactiveData[key])&&!interactiveData[key].length)) delete interactiveData[key];
@@ -15649,6 +15748,39 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .pbq-workspace-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
 .pbq-workspace-head h3{font-size:15px;color:${t.text};line-height:1.3;}
 .pbq-workspace-head p{font-size:11px;color:${t.textDim};line-height:1.5;margin-top:2px;}
+.pbq-selection-workspace{display:grid;gap:12px;}
+.pbq-selection-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 13px;border:1px solid color-mix(in srgb,var(--selection-color) 30%,${t.border});border-radius:10px;background:color-mix(in srgb,var(--selection-color) 8%,${t.panel});color:${t.text};font-size:12px;font-weight:900;}
+.pbq-selection-summary span{display:inline-flex;align-items:center;gap:7px;color:var(--selection-color);}
+.pbq-selection-summary strong{white-space:nowrap;}
+.pbq-selection-note{margin:0;color:${t.textSec};font-size:12px;line-height:1.65;}
+.pbq-selection-list{display:grid;gap:10px;}
+.pbq-selection-row{display:grid;grid-template-columns:32px minmax(0,1fr);gap:11px;align-items:start;padding:15px;border:1px solid ${t.border};border-radius:12px;background:linear-gradient(145deg,${t.surface},${t.panel});transition:border-color .18s,box-shadow .18s,transform .18s;}
+.pbq-selection-row.answered{border-color:color-mix(in srgb,var(--selection-color) 42%,${t.border});box-shadow:0 10px 24px color-mix(in srgb,var(--selection-color) 8%,transparent);}
+.pbq-selection-number{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--selection-color) 13%,${t.surface});color:var(--selection-color);font-size:12px;font-weight:950;}
+.pbq-selection-prompt{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:${t.text};font-size:15px;font-weight:750;line-height:1.72;}
+.pbq-selection-prompt.stacked{display:grid;gap:10px;}
+.pbq-selection-blank{appearance:none;display:inline-flex;align-items:center;justify-content:space-between;gap:9px;min-width:148px;min-height:44px;padding:9px 11px;border:1.5px dashed color-mix(in srgb,var(--selection-color) 65%,${t.border});border-radius:10px;background:color-mix(in srgb,var(--selection-color) 7%,${t.surface});color:var(--selection-color);font:inherit;font-size:13px;font-weight:900;text-align:left;cursor:pointer;transition:transform .17s,border-color .17s,background .17s,box-shadow .17s;}
+.pbq-selection-blank:hover,.pbq-selection-blank:focus-visible{transform:translateY(-1px);border-style:solid;background:color-mix(in srgb,var(--selection-color) 13%,${t.surface});box-shadow:0 0 0 3px color-mix(in srgb,var(--selection-color) 12%,transparent);outline:none;}
+.pbq-selection-blank.filled{border-style:solid;background:color-mix(in srgb,var(--selection-color) 12%,${t.surface});color:${t.text};}
+.pbq-selection-blank svg{flex-shrink:0;color:var(--selection-color);}
+.pbq-selection-hint{margin-top:8px;color:${t.textDim};font-size:11px;line-height:1.55;}
+.pbq-selector-overlay{position:fixed;inset:0;z-index:760;display:grid;place-items:center;padding:18px;background:rgba(22,28,38,.68);backdrop-filter:blur(12px);animation:fadeUp .18s ease both;}
+.pbq-selector-sheet{width:min(100%,680px);max-height:calc(100dvh - 36px);display:flex;flex-direction:column;overflow:hidden;border:1px solid color-mix(in srgb,var(--selection-color,${t.accent}) 35%,${t.border});border-radius:22px;background:linear-gradient(155deg,${t.surface},${t.panel});box-shadow:0 34px 100px rgba(0,0,0,.34);}
+.pbq-selector-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:20px 22px 15px;border-bottom:1px solid ${t.border};}
+.pbq-selector-kicker{margin-bottom:4px;color:${t.accent};font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
+.pbq-selector-head h2{margin:0;color:${t.text};font-size:22px;line-height:1.25;}
+.pbq-selector-head p{margin:5px 0 0;color:${t.textSec};font-size:12px;line-height:1.5;}
+.pbq-selector-context{margin:14px 22px 0;padding:12px 14px;border:1px solid ${t.border};border-radius:10px;background:${t.panel};color:${t.textSec};font-size:13px;line-height:1.6;}
+.pbq-selector-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;min-height:0;overflow-y:auto;padding:14px 22px 20px;}
+.pbq-selector-option{appearance:none;display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:58px;padding:11px 12px;border:1.5px solid ${t.border};border-radius:12px;background:${t.surface};color:${t.text};font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;line-height:1.48;text-align:left;cursor:pointer;transition:border-color .16s,background .16s,transform .16s,box-shadow .16s;}
+.pbq-selector-option:hover,.pbq-selector-option:focus-visible{border-color:${t.accent};background:${t.accent}09;transform:translateY(-1px);outline:none;box-shadow:0 0 0 3px ${t.accent}10;}
+.pbq-selector-option.selected{border-color:${t.green};background:${t.green}0e;color:${t.text};}
+.pbq-selector-letter{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:${t.panel};color:${t.accent};font-size:11px;font-weight:950;}
+.pbq-selector-option.selected .pbq-selector-letter{background:${t.green}16;color:${t.green};}
+.pbq-selector-option>svg{color:${t.green};}
+.pbq-selector-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 22px calc(12px + env(safe-area-inset-bottom));border-top:1px solid ${t.border};background:${t.surface};color:${t.textDim};font-size:11px;line-height:1.5;}
+.pbq-selection-workspace.compact .pbq-selection-row{padding:12px;}
+.pbq-selection-workspace.compact .pbq-selection-prompt{font-size:13px;line-height:1.6;}
 .trial-countdown-banner{margin:18px auto 0;width:min(920px,calc(100% - 48px));padding:18px 20px;border:1px solid ${t.green}38;border-radius:10px;background:linear-gradient(135deg,${t.green}12,${t.surface} 48%,${t.accent}0f);box-shadow:0 16px 38px rgba(7,12,24,.12);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
 .trial-countdown-copy{flex:1 1 270px;min-width:0;}
 .trial-countdown-grid{display:grid;grid-template-columns:repeat(4,minmax(54px,1fr));gap:8px;flex:0 1 330px;}
@@ -16281,11 +16413,6 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .terminal::selection,.log-block::selection,.streak-code::selection{background:${t.accent}28;}
 .log-block{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:${t.codePanel};border:1px solid ${t.codeBorder};border-radius:8px;padding:16px;color:${t.codeText};line-height:1.9;white-space:pre-wrap;overflow-x:auto;}
 .inline-code,code{font-family:'JetBrains Mono',monospace;background:${t.codePanel};border:1px solid ${t.codeBorder};color:${t.codeCommand};padding:1px 6px;border-radius:5px;font-size:.92em;}
-.drag-item{padding:13px 15px;background:linear-gradient(180deg,${t.surface},${t.panel});border:1.5px solid ${t.border};border-radius:7px;cursor:grab;user-select:none;transition:all .2s;font-size:15px;line-height:1.55;color:${t.text};box-shadow:0 8px 18px rgba(7,12,24,.055);}
-.drag-item:hover{border-color:${t.accent};}
-.drag-item.selected{border-color:${t.accent};background:${t.accent}12;box-shadow:0 0 0 3px ${t.accent}16;}
-.drop-zone{min-height:44px;border:2px dashed ${t.border};border-radius:7px;padding:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;}
-.drop-zone.over{border-color:${t.accent};background:${t.accent}08;}
 .order-item{padding:13px 15px;background:linear-gradient(180deg,${t.surface},${t.panel});border:1.5px solid ${t.border};border-radius:7px;display:flex;align-items:center;gap:10px;font-size:15px;line-height:1.55;cursor:default;transition:border-color .2s,background .2s,transform .18s,box-shadow .18s;color:${t.text};box-shadow:0 8px 18px rgba(7,12,24,.055);}
 .order-item:hover{border-color:${t.accent}44;}
 .order-draggable{cursor:grab;user-select:none;touch-action:none;}
@@ -17114,9 +17241,20 @@ body{background:
   .pbq-evidence-modal-head .btn{width:100%;}
   .pbq-evidence-full{font-size:12.5px!important;padding:16px!important;padding-bottom:calc(18px + env(safe-area-inset-bottom))!important;}
   .pbq-workspace-section{padding:15px!important;}
-  .pbq-question-screen .drag-item{touch-action:manipulation!important;cursor:pointer!important;min-height:52px;}
-  .pbq-question-screen .drop-zone{min-height:74px;}
-  .pbq-tap-match-grid{grid-template-columns:1fr!important;}
+  .pbq-selection-row{grid-template-columns:28px minmax(0,1fr)!important;padding:13px!important;gap:9px!important;}
+  .pbq-selection-number{width:28px!important;height:28px!important;border-radius:8px!important;}
+  .pbq-selection-prompt{font-size:14px!important;line-height:1.65!important;}
+  .pbq-selection-blank{width:100%!important;min-width:0!important;min-height:50px!important;}
+  .pbq-selector-overlay{align-items:end!important;padding:0!important;}
+  .pbq-selector-sheet{width:100%!important;max-height:92dvh!important;border-radius:22px 22px 0 0!important;}
+  .pbq-selector-head{padding:18px 16px 13px!important;}
+  .pbq-selector-head .btn{min-width:44px;padding:9px!important;}
+  .pbq-selector-head .btn svg{margin:0;}
+  .pbq-selector-context{margin:12px 16px 0!important;}
+  .pbq-selector-options{grid-template-columns:1fr!important;padding:12px 16px 18px!important;}
+  .pbq-selector-option{min-height:60px!important;font-size:14px!important;}
+  .pbq-selector-footer{align-items:stretch!important;flex-direction:column!important;padding:12px 16px calc(12px + env(safe-area-inset-bottom))!important;}
+  .pbq-selector-footer .btn{width:100%!important;}
   .app-shell.practice-focus-mode{padding-bottom:0;}
   .app-shell.practice-focus-mode .sidebar{display:none!important;}
   .app-shell.practice-focus-mode .active-practice-screen{padding-bottom:calc(104px + env(safe-area-inset-bottom))!important;}
@@ -18205,10 +18343,9 @@ function ChapterIcon({id,size=34}) {
 function simIconClass(type) {
   return ({
     "TERMINAL SIM":"terminal",
-    "DRAG & DROP":"drag",
+    [SELECT_FILL_PBQ_TYPE]:"select",
     HOTSPOT:"hotspot",
     ORDERING:"ordering",
-    "FILL BLANK":"fill",
     "CONFIG/ACL":"config",
     "LOG ANALYSIS":"log",
     SCENARIO:"scenario",
@@ -18218,10 +18355,9 @@ function SimIcon({type,size=34}) {
   const s=Object.values(SIM_TYPES).find(x=>x.id===type)||SIM_TYPES.TERMINAL;
   const Icon={
     "TERMINAL SIM":SquareTerminal,
-    "DRAG & DROP":Move,
+    [SELECT_FILL_PBQ_TYPE]:ListChecks,
     HOTSPOT:Crosshair,
     ORDERING:ListOrdered,
-    "FILL BLANK":TextCursorInput,
     "CONFIG/ACL":SlidersHorizontal,
     "LOG ANALYSIS":ChartNoAxesColumnIncreasing,
     SCENARIO:Route,
@@ -18285,6 +18421,123 @@ function PBQEvidenceViewer({title="Evidence",content,language="",t,accent}) {
             <pre className="log-block pbq-evidence-full">{text}</pre>
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+function PBQSelectionWorkspace({q,values={},onChange,t,accent,showHints=true,compact=false}) {
+  const [activeBlankId,setActiveBlankId]=useState(null);
+  const blanks=q?.blanks||[];
+  const options=q?.selectionOptions||[];
+  const activeBlank=blanks.find(blank=>blank.id===activeBlankId)||null;
+  const answeredCount=blanks.filter(blank=>String(values?.[blank.id]||"").trim()).length;
+
+  useEffect(()=>setActiveBlankId(null),[q?.id]);
+  useEffect(()=>{
+    if(!activeBlankId)return;
+    const close=event=>{if(event.key==="Escape")setActiveBlankId(null);};
+    const previousOverflow=document.body.style.overflow;
+    document.body.style.overflow="hidden";
+    document.addEventListener("keydown",close);
+    return()=>{
+      document.body.style.overflow=previousOverflow;
+      document.removeEventListener("keydown",close);
+    };
+  },[activeBlankId]);
+
+  const choose=(blankId,option)=>{
+    onChange?.(blankId,option);
+    setActiveBlankId(null);
+  };
+  const blankButton=blank=>(
+    <button
+      type="button"
+      className={`pbq-selection-blank ${values?.[blank.id]?"filled":""}`}
+      onClick={()=>setActiveBlankId(blank.id)}
+      aria-label={`${values?.[blank.id]?"Change":"Choose"} answer for ${blank.id}`}
+      aria-haspopup="dialog"
+    >
+      <span>{values?.[blank.id]||"Tap to choose"}</span>
+      <ChevronRight size={16} strokeWidth={2.5}/>
+    </button>
+  );
+  const sentenceWithBlank=blank=>{
+    const sentence=String(blank.sentence||"");
+    const match=sentence.match(/_{2,}|\[\s*blank\s*\]/i);
+    if(!match)return(
+      <div className="pbq-selection-prompt stacked">
+        <div><GlossaryText text={sentence} t={t}/></div>
+        {blankButton(blank)}
+      </div>
+    );
+    const start=match.index||0;
+    return(
+      <div className="pbq-selection-prompt">
+        <span><GlossaryText text={sentence.slice(0,start)} t={t}/></span>
+        {blankButton(blank)}
+        <span><GlossaryText text={sentence.slice(start+match[0].length)} t={t}/></span>
+      </div>
+    );
+  };
+
+  return(
+    <div className={`pbq-selection-workspace ${compact?"compact":""}`} style={{"--selection-color":accent||t.accent}}>
+      <div className="pbq-selection-summary" aria-live="polite">
+        <span><ListChecks size={17}/> Shared answer selector</span>
+        <strong>{answeredCount}/{blanks.length} complete</strong>
+      </div>
+      <p className="pbq-selection-note">Tap any blank to choose from the same {options.length}-option answer bank. Options may be used more than once or not at all.</p>
+      <div className="pbq-selection-list">
+        {blanks.map((blank,index)=>(
+          <article key={blank.id||index} className={`pbq-selection-row ${values?.[blank.id]?"answered":""}`}>
+            <span className="pbq-selection-number">{index+1}</span>
+            <div>
+              {sentenceWithBlank(blank)}
+              {showHints&&blank.hint&&<div className="pbq-selection-hint">Study clue: <GlossaryText text={blank.hint} t={t}/></div>}
+            </div>
+          </article>
+        ))}
+      </div>
+      {activeBlank&&typeof document!=="undefined"&&createPortal(
+        <div className="pbq-selector-overlay" role="presentation" style={{"--selection-color":accent||t.accent}} onClick={()=>setActiveBlankId(null)}>
+          <section className="pbq-selector-sheet" role="dialog" aria-modal="true" aria-labelledby="pbq-selector-title" onClick={event=>event.stopPropagation()}>
+            <header className="pbq-selector-head">
+              <div>
+                <div className="pbq-selector-kicker">Blank {blanks.findIndex(blank=>blank.id===activeBlank.id)+1} of {blanks.length}</div>
+                <h2 id="pbq-selector-title">Choose the best answer</h2>
+                <p>Every option remains available for every blank.</p>
+              </div>
+              <button type="button" className="btn btn-ghost" onClick={()=>setActiveBlankId(null)} aria-label="Close answer selector"><X size={17}/> Close</button>
+            </header>
+            <div className="pbq-selector-context"><GlossaryText text={activeBlank.sentence} t={t}/></div>
+            <div className="pbq-selector-options" role="listbox" aria-label="Available answers">
+              {options.map((option,index)=>{
+                const selected=values?.[activeBlank.id]===option;
+                return(
+                  <button
+                    type="button"
+                    key={`${option}-${index}`}
+                    className={`pbq-selector-option ${selected?"selected":""}`}
+                    role="option"
+                    aria-selected={selected}
+                    onClick={()=>choose(activeBlank.id,option)}
+                    autoFocus={index===0}
+                  >
+                    <span className="pbq-selector-letter">{String.fromCharCode(65+index)}</span>
+                    <span>{option}</span>
+                    {selected&&<Check size={18} strokeWidth={3}/>}
+                  </button>
+                );
+              })}
+            </div>
+            <footer className="pbq-selector-footer">
+              <span>Answers are reusable—choosing one here does not remove it elsewhere.</span>
+              {values?.[activeBlank.id]&&<button type="button" className="btn btn-ghost" onClick={()=>choose(activeBlank.id,"")}>Clear this blank</button>}
+            </footer>
+          </section>
+        </div>,
+        document.body
       )}
     </div>
   );
@@ -20365,7 +20618,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
 
   const featureCards=[
     {type:"mcq",plan:"free",color:"#2f7df6",title:"Full MCQ practice",body:"Guests and free accounts can access every MCQ question. Create an account when you want answers, scores, and progress to follow you."},
-    {type:"pbq",plan:"pro",color:"#f59e0b",title:"PBQ simulations",body:"Practice firewall decisions, terminal logs, drag/drop, ordering, hotspot, and scenario tasks before exam day pressure."},
+    {type:"pbq",plan:"pro",color:"#f59e0b",title:"PBQ simulations",body:"Practice firewall decisions, terminal logs, Select & Fill, ordering, hotspot, and scenario tasks before exam day pressure."},
     {type:"review",plan:"free",color:"#14b8a6",title:"Smart Review",body:"SecurePlus brings missed questions back first and spaces out correct questions, so your weak areas get the most attention."},
     {type:"exam",plan:"pro",color:"#8b5cf6",title:"Exam-style mode",body:"Pro users can run timed mixed MCQ/PBQ sets, flag questions, review detailed solutions, and estimate readiness."},
   ];
@@ -20382,7 +20635,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
   const learningPaths=[
     {id:"mcq",label:"MCQ foundations",tag:"Free",color:t.accent,body:"Build confidence across all five SY0-701 chapters with short interactive sets.",meta:`${MCQ_BANK.length} questions`,action:onPracticeMcq},
     {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"A quick 5-question loop that creates a reason to come back tomorrow.",meta:"5 questions/day",action:onDaily},
-    {id:"pbq",label:"PBQ simulations",tag:"Pro",color:t.amber,body:"Practise applied scenarios, logs, drag/drop tasks, and terminal-style questions.",meta:`${PBQ_BANK.length} PBQs`,action:()=>jumpToAuth("signup")},
+    {id:"pbq",label:"PBQ simulations",tag:"Pro",color:t.amber,body:"Practise applied scenarios, logs, tap-to-select tasks, and terminal-style questions.",meta:`${PBQ_BANK.length} PBQs`,action:()=>jumpToAuth("signup")},
   ];
   return(
     <div className="landing-page fu">
@@ -21845,7 +22098,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
             <div style={{flex:1}}>
               <div style={{fontWeight:600,fontSize:14,color:t.text}}>MCQs stay free. Pro adds exam-style PBQs.</div>
-              <div style={{fontSize:13,color:t.textSec}}>When you are ready to practise terminal, log, ordering, and drag/drop simulations, Pro is $4.99/year.</div>
+              <div style={{fontSize:13,color:t.textSec}}>When you are ready to practise terminal, log, ordering, and Select &amp; Fill simulations, Pro is $4.99/year.</div>
             </div>
             <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={onUpgrade}>See Pro PBQs</button>
           </div>
@@ -22517,25 +22770,20 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
   const [termHistory,setTermHistory]=useState([]);
   const [selected,setSelected]=useState(null);
   const [submitted,setSubmitted]=useState(false);
-  const [mapping,setMapping]=useState({});
   const [orderItems,setOrderItems]=useState(()=>q.items?[...q.items].sort(()=>Math.random()-.5):[]);
   const [blanks,setBlanks]=useState(()=>q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{});
-  const [dragOver,setDragOver]=useState(null);
-  const [dragged,setDragged]=useState(null);
-  const [tapDragItem,setTapDragItem]=useState(null);
   const [showHint,setShowHint]=useState(false);
   const [answerBurst,setAnswerBurst]=useState(null);
   const starredSet=useMemo(()=>new Set(starred),[starred]);
 
   const isCorrect=()=>{
     if(["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type))return selected===q.correct;
-    if(q.type==="DRAG & DROP")return q.items?.every(item=>mapping[item.id]===q.correctMapping?.[item.id]);
     if(q.type==="ORDERING")return q.correctOrder?.every((id,i)=>orderItems[i]?.id===id);
-    if(q.type==="FILL BLANK")return q.blanks?.every(b=>isFillBlankAnswerCorrect(blanks[b.id],b));
+    if(q.type===SELECT_FILL_PBQ_TYPE)return q.blanks?.every(b=>isFillBlankAnswerCorrect(blanks[b.id],b));
     return false;
   };
   const partResults=useMemo(()=>{
-    if(q.type==="FILL BLANK") {
+    if(q.type===SELECT_FILL_PBQ_TYPE) {
       return (q.blanks||[]).map((blank,index)=>({
         id:blank.id||index,
         label:`Blank ${index+1}`,
@@ -22545,22 +22793,6 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
         solution:blank.explanation||blank.solution||"",
         correct:isFillBlankAnswerCorrect(blanks[blank.id],blank),
       }));
-    }
-    if(q.type==="DRAG & DROP") {
-      return (q.items||[]).map(item=>{
-        const userTargetId=mapping[item.id];
-        const expectedTargetId=q.correctMapping?.[item.id];
-        const userTarget=q.targets?.find(target=>target.id===userTargetId);
-        const expectedTarget=q.targets?.find(target=>target.id===expectedTargetId);
-        return {
-          id:item.id,
-          label:item.label,
-          userAnswer:userTarget?.label||"Not placed",
-          correctAnswer:expectedTarget?.label||"Unmapped",
-          solution:item.explanation||item.solution||"",
-          correct:userTargetId===expectedTargetId,
-        };
-      });
     }
     if(q.type==="ORDERING") {
       return (q.correctOrder||[]).map((expectedId,index)=>{
@@ -22585,7 +22817,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       }];
     }
     return [];
-  },[q,blanks,mapping,orderItems,selected]);
+  },[q,blanks,orderItems,selected]);
   const partCorrectCount=partResults.filter(part=>part.correct).length;
 
   const submit=()=>{
@@ -22611,38 +22843,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
   };
 
   const simType=Object.values(SIM_TYPES).find(s=>s.id===q.type)||SIM_TYPES.TERMINAL;
-  const placeDragItem=(item,targetId)=>{
-    if(!item)return;
-    setMapping(m=>{
-      const n={...m};
-      n[item.id]=targetId;
-      return n;
-    });
-    setTapDragItem(null);
-    setDragged(null);
-  };
-  const updatePointerDropTarget=e=>{
-    const el=document.elementFromPoint(e.clientX,e.clientY)?.closest?.("[data-drop-target]");
-    setDragOver(el?.dataset?.dropTarget||null);
-    return el?.dataset?.dropTarget||null;
-  };
-  const finishPointerDrag=(e,item)=>{
-    const targetId=updatePointerDropTarget(e);
-    if(targetId) placeDragItem(item,targetId);
-    setDragOver(null);
-    setDragged(null);
-  };
-  const dragDropTargets=q.targets||[];
-  const isDragDropTable=q.type==="DRAG & DROP" && (
-    q.targetLayout?.type==="table" ||
-    dragDropTargets.some(target=>Number.isInteger(target.row)&&Number.isInteger(target.col))
-  );
-  const dragDropRows=Math.max(1,q.targetLayout?.rows||Math.max(1,...dragDropTargets.map(target=>Number.isInteger(target.row)?target.row+1:0)));
-  const dragDropCols=Math.max(1,q.targetLayout?.cols||Math.max(1,...dragDropTargets.map(target=>Number.isInteger(target.col)?target.col+1:0)));
-  const getDragDropCell=(row,col)=>dragDropTargets.find(target=>target.row===row&&target.col===col);
-  const canSubmit=q.type==="DRAG & DROP"
-    ? Boolean(q.items?.length)&&q.items.every(item=>mapping[item.id])
-    : q.type==="FILL BLANK"
+  const canSubmit=q.type===SELECT_FILL_PBQ_TYPE
       ? Boolean(q.blanks?.length)&&q.blanks.every(blank=>String(blanks[blank.id]||"").trim())
       : q.type==="ORDERING"
         ? Boolean(orderItems.length)
@@ -22725,147 +22926,24 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
         </section>
       )}
 
-      {/* DRAG & DROP */}
-      {q.type==="DRAG & DROP"&&!submitted&&(
-        <div style={{marginBottom:18}}>
-          <div className="card" style={{padding:"16px 18px",marginBottom:14,borderColor:`${simType.color}55`,background:`linear-gradient(135deg, ${simType.color}12, ${t.surface} 68%, ${t.green}08)`}}>
-            <div style={{fontWeight:900,fontSize:18,color:t.text,marginBottom:6}}>Match each option to the correct column</div>
-            <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>On mobile, tap an option to highlight it, then tap the answer cell where it belongs. On desktop, drag and drop still works.</div>
-          </div>
-
-          <div style={{padding:"16px",borderRadius:10,border:`1px solid ${t.accent}35`,background:`linear-gradient(135deg, ${t.accent}12, ${t.panel})`,marginBottom:16,boxShadow:`0 16px 36px ${t.accent}10`}}>
-            <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10,flexWrap:"wrap"}}>
-              <div style={{fontWeight:900,fontSize:15,color:t.text}}>Options to place</div>
-              <div style={{fontSize:12,color:t.textDim}}>{q.items.filter(item=>!Object.keys(mapping).includes(item.id)).length} remaining</div>
+      {/* SELECT & FILL */}
+      {q.type===SELECT_FILL_PBQ_TYPE&&!submitted&&(
+        <section className="pbq-workspace-section">
+          <div className="pbq-workspace-head">
+            <div>
+              <h3>Select an answer for each blank</h3>
+              <p>Tap a blank, choose an option, and reuse options whenever the scenario requires it.</p>
             </div>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:10}}>
-              {q.items.filter(item=>!Object.keys(mapping).includes(item.id)).map(item=>(
-                <div
-                  key={item.id}
-                  className={`drag-item ${tapDragItem?.id===item.id||dragged?.id===item.id?"selected":""}`}
-                  draggable
-                  onClick={()=>setTapDragItem(item)}
-                  onDragStart={()=>setDragged(item)}
-                  onDragEnd={()=>setDragged(null)}
-                  onPointerDown={e=>{if(e.pointerType==="mouse")setDragged(item);}}
-                  onPointerMove={e=>{if(e.pointerType==="mouse"&&(dragged?.id===item.id||tapDragItem?.id===item.id)) updatePointerDropTarget(e);}}
-                  onPointerUp={e=>{if(e.pointerType==="mouse") finishPointerDrag(e,item);}}
-                  style={{touchAction:"none",fontSize:16,fontWeight:800,lineHeight:1.55,color:t.text,background:`linear-gradient(180deg, ${t.surface}, ${t.accent}0d)`,borderColor:tapDragItem?.id===item.id?`${t.accent}`:`${t.accent}30`}}
-                >
-                  <GlossaryText text={item.label} t={t}/>
-                </div>
-              ))}
-              {q.items.filter(item=>!Object.keys(mapping).includes(item.id)).length===0&&(
-                <div style={{padding:"14px 16px",borderRadius:8,border:`1px solid ${t.green}35`,background:`${t.green}10`,color:t.green,fontWeight:900,fontSize:14}}>
-                  All options have been placed. Tap any placed option below to move it.
-                </div>
-              )}
-            </div>
+            <ListChecks size={20} color={simType.color}/>
           </div>
-
-          <div>
-            <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:10}}>{isDragDropTable?"Answer table":"Drop columns"}</div>
-            {isDragDropTable ? (
-              <div style={{overflowX:"auto",border:`1px solid ${t.border}`,borderRadius:10,background:t.panel}}>
-                <div style={{display:"grid",gridTemplateColumns:`repeat(${dragDropCols}, minmax(180px, 1fr))`,minWidth:Math.max(520,dragDropCols*180)}}>
-                  {Array.from({length:dragDropRows*dragDropCols}).map((_,cellIndex)=>{
-                    const row=Math.floor(cellIndex/dragDropCols);
-                    const col=cellIndex%dragDropCols;
-                    const target=getDragDropCell(row,col);
-                    if(!target) {
-                      return <div key={`empty-${row}-${col}`} style={{minHeight:128,borderRight:col<dragDropCols-1?`1px solid ${t.border}`:0,borderBottom:row<dragDropRows-1?`1px solid ${t.border}`:0,background:`${t.surface}66`}}/>;
-                    }
-                    const isDropCell=target.droppable!==false;
-                    const placedItems=q.items.filter(i=>mapping[i.id]===target.id);
-                    if(!isDropCell) {
-                      return(
-                        <div key={target.id} style={{minHeight:128,padding:"18px 16px",display:"flex",alignItems:"center",justifyContent:"center",textAlign:"center",borderRight:col<dragDropCols-1?`1px solid ${t.border}`:0,borderBottom:row<dragDropRows-1?`1px solid ${t.border}`:0,background:`linear-gradient(135deg, ${t.accent}10, ${t.surface})`}}>
-                          <div style={{fontSize:16,fontWeight:900,color:t.text,lineHeight:1.55}}><GlossaryText text={target.label||" "} t={t}/></div>
-                        </div>
-                      );
-                    }
-                    return(
-                      <div key={target.id} style={{minHeight:180,padding:12,borderRight:col<dragDropCols-1?`1px solid ${t.border}`:0,borderBottom:row<dragDropRows-1?`1px solid ${t.border}`:0,background:placedItems.length?`${t.green}08`:t.panel}}>
-                        {target.label&&<div style={{fontSize:13,fontWeight:900,color:t.text,marginBottom:8,lineHeight:1.45}}><GlossaryText text={target.label} t={t}/></div>}
-                        <div className={`drop-zone ${dragOver===target.id?"over":""} ${placedItems.length?"filled":""}`}
-                          data-drop-target={target.id}
-                          onClick={()=>tapDragItem&&placeDragItem(tapDragItem,target.id)}
-                          onDragOver={e=>{e.preventDefault();setDragOver(target.id);}}
-                          onDragLeave={()=>setDragOver(null)}
-                          onDrop={()=>{
-                            if(dragged) placeDragItem(dragged,target.id);
-                            setDragOver(null);setDragged(null);
-                          }}
-                          style={{minHeight:target.label?118:150,alignItems:"stretch",justifyContent:placedItems.length?"flex-start":"center",background:dragOver===target.id?`${t.accent}12`:`${t.inputBg}`,borderColor:dragOver===target.id?t.accent:placedItems.length?`${t.green}55`:t.border}}>
-                          {placedItems.length?(
-                            <div style={{display:"grid",gap:8,width:"100%"}}>
-                              {placedItems.map(placed=>(
-                                <div
-                                  key={placed.id}
-                                  className={`drag-item ${tapDragItem?.id===placed.id||dragged?.id===placed.id?"selected":""}`}
-                                  draggable
-                                  style={{width:"100%",background:`linear-gradient(135deg, ${t.green}16, ${t.surface})`,borderColor:`${t.green}55`,color:t.text,cursor:"grab",touchAction:"none",fontSize:15,fontWeight:900,lineHeight:1.55,boxShadow:`0 10px 24px ${t.green}12`}}
-                                  onClick={e=>{e.stopPropagation();setTapDragItem(placed);}}
-                                  onDragStart={e=>{e.stopPropagation();setDragged(placed);}}
-                                  onDragEnd={()=>{setDragged(null);setDragOver(null);}}
-                                onPointerDown={e=>{if(e.pointerType==="mouse")setDragged(placed);setTapDragItem(placed);}}
-                                onPointerMove={e=>{if(e.pointerType==="mouse"&&(dragged?.id===placed.id||tapDragItem?.id===placed.id)) updatePointerDropTarget(e);}}
-                                onPointerUp={e=>{if(e.pointerType==="mouse") finishPointerDrag(e,placed);}}
-                                onPointerCancel={()=>{setDragged(null);setDragOver(null);}}
-                              ><GlossaryText text={placed.label} t={t}/></div>
-                              ))}
-                            </div>
-                      ):<span style={{fontSize:13,fontWeight:900,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place selected option here":"Tap an option first"}</span>}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : (
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,320px),1fr))",gap:16}}>
-              {dragDropTargets.filter(target=>target.droppable!==false).map(target=>{
-                const placedItems=q.items.filter(i=>mapping[i.id]===target.id);
-                return(
-                  <div key={target.id} style={{border:`1px solid ${placedItems.length?t.green:t.border}`,borderRadius:10,background:`linear-gradient(180deg, ${t.surface}, ${placedItems.length?t.green+"08":t.panel})`,padding:16,boxShadow:placedItems.length?`0 0 0 3px ${t.green}10, 0 16px 34px ${t.green}10`:"none",minHeight:260}}>
-                    <div style={{fontSize:17,fontWeight:900,color:t.text,marginBottom:12,lineHeight:1.5}}><GlossaryText text={target.label} t={t}/></div>
-                    <div className={`drop-zone ${dragOver===target.id?"over":""} ${placedItems.length?"filled":""}`}
-                      data-drop-target={target.id}
-                      onClick={()=>tapDragItem&&placeDragItem(tapDragItem,target.id)}
-                      onDragOver={e=>{e.preventDefault();setDragOver(target.id);}}
-                      onDragLeave={()=>setDragOver(null)}
-                      onDrop={()=>{
-                        if(dragged) placeDragItem(dragged,target.id);
-                        setDragOver(null);setDragged(null);
-                      }}
-                      style={{minHeight:190,alignItems:"stretch",justifyContent:placedItems.length?"flex-start":"center",background:dragOver===target.id?`${t.accent}12`:`${t.inputBg}`,borderColor:dragOver===target.id?t.accent:placedItems.length?`${t.green}55`:t.border}}>
-                      {placedItems.length?(
-                        <div style={{display:"grid",gap:8,width:"100%"}}>
-                          {placedItems.map(placed=>(
-                            <div
-                              key={placed.id}
-                              className={`drag-item ${tapDragItem?.id===placed.id||dragged?.id===placed.id?"selected":""}`}
-                              draggable
-                              style={{width:"100%",background:`linear-gradient(135deg, ${t.green}16, ${t.surface})`,borderColor:`${t.green}55`,color:t.text,cursor:"grab",touchAction:"none",fontSize:16,fontWeight:900,lineHeight:1.6,boxShadow:`0 10px 24px ${t.green}12`}}
-                              onClick={e=>{e.stopPropagation();setTapDragItem(placed);}}
-                              onDragStart={e=>{e.stopPropagation();setDragged(placed);}}
-                              onDragEnd={()=>{setDragged(null);setDragOver(null);}}
-                              onPointerDown={e=>{if(e.pointerType==="mouse")setDragged(placed);setTapDragItem(placed);}}
-                              onPointerMove={e=>{if(e.pointerType==="mouse"&&(dragged?.id===placed.id||tapDragItem?.id===placed.id)) updatePointerDropTarget(e);}}
-                              onPointerUp={e=>{if(e.pointerType==="mouse") finishPointerDrag(e,placed);}}
-                              onPointerCancel={()=>{setDragged(null);setDragOver(null);}}
-                            ><GlossaryText text={placed.label} t={t}/></div>
-                          ))}
-                        </div>
-                      ):<span style={{fontSize:14,fontWeight:900,color:tapDragItem?t.accent:t.textDim}}>{tapDragItem?"Tap to place selected option here":"Tap an option first"}</span>}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            )}
-          </div>
-        </div>
+          <PBQSelectionWorkspace
+            q={q}
+            values={blanks}
+            onChange={(blankId,value)=>setBlanks(current=>({...current,[blankId]:value}))}
+            t={t}
+            accent={simType.color}
+          />
+        </section>
       )}
 
       {/* ORDERING */}
@@ -22873,22 +22951,6 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
         <section className="pbq-workspace-section">
           <div className="pbq-workspace-head"><div><h3>Put the steps in order</h3><p>Drag each answer into the correct top-to-bottom sequence. Touch is supported.</p></div><ListOrdered size={20} color={simType.color}/></div>
           <SortableOrderList items={orderItems} onChange={setOrderItems} t={t}/>
-        </section>
-      )}
-
-      {/* FILL BLANK */}
-      {q.type==="FILL BLANK"&&!submitted&&(
-        <section className="pbq-workspace-section">
-          <div className="pbq-workspace-head"><div><h3>Complete each blank</h3><p>Every field must contain an answer before you can submit.</p></div><TextCursorInput size={20} color={simType.color}/></div>
-          <div style={{display:"flex",flexDirection:"column",gap:12}}>
-            {q.blanks?.map(b=>(
-              <div key={b.id} className="card" style={{padding:"14px 18px"}}>
-                <div className="compact-question-text" style={{fontSize:14,color:t.text,marginBottom:8,lineHeight:1.65}}>{b.sentence}</div>
-                <div style={{fontSize:11,color:t.textDim,marginBottom:6}}>Hint: {b.hint}</div>
-                <input className="input" placeholder="Your answer..." value={blanks[b.id]||""} onChange={e=>setBlanks(bl=>({...bl,[b.id]:e.target.value}))} style={{fontSize:13}}/>
-              </div>
-            ))}
-          </div>
         </section>
       )}
 
@@ -22918,7 +22980,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
       {/* Submit / feedback */}
       {!submitted?(
         <div className="practice-action-bar" style={{justifyContent:"flex-end"}}>
-          <div className="practice-action-copy"><strong>{canSubmit?"Ready to check":"Complete the activity first"}</strong>{canSubmit?"SecurePlus will mark each part and explain the result.":q.type==="DRAG & DROP"?"Place every option before submitting.":q.type==="FILL BLANK"?"Fill in every blank before submitting.":"Choose an answer before submitting."}</div>
+          <div className="practice-action-copy"><strong>{canSubmit?"Ready to check":"Complete the activity first"}</strong>{canSubmit?"SecurePlus will mark each part and explain the result.":q.type===SELECT_FILL_PBQ_TYPE?"Choose an answer for every blank before submitting.":"Choose an answer before submitting."}</div>
           <button className="btn btn-primary" style={{minWidth:190}} disabled={!canSubmit} onClick={submit}>
             Check my PBQ →
           </button>
@@ -22939,7 +23001,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>{q.wrongFeedback[selected]}</div>
               </div>
             )}
-            {(q.type==="FILL BLANK"||partResults.length>1)&&(
+            {(q.type===SELECT_FILL_PBQ_TYPE||partResults.length>1)&&(
               <div style={{marginTop:12,padding:"12px 14px",background:t.panel,borderRadius:8,border:`1px solid ${t.border}`}}>
                 <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:8,flexWrap:"wrap"}}>
                   <div style={{fontSize:12,fontWeight:900,color:t.text}}>Part-by-part marking</div>
@@ -23011,7 +23073,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
           )}
           <div className="practice-action-bar" style={{justifyContent:"flex-end",flexWrap:"wrap"}}>
             <AnswerBurst result={answerBurst} t={t}/>
-            <button className="btn btn-ghost" onClick={()=>{setSubmitted(false);setSelected(null);setTermHistory([]);setMapping({});setTapDragItem(null);setOrderItems(q.items?[...q.items].sort(()=>Math.random()-.5):[]);setBlanks(q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{})}}>
+            <button className="btn btn-ghost" onClick={()=>{setSubmitted(false);setSelected(null);setTermHistory([]);setOrderItems(q.items?[...q.items].sort(()=>Math.random()-.5):[]);setBlanks(q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{})}}>
               Try Again
             </button>
             <button className="btn btn-primary" onClick={()=>onDone({qid:q.id,correct:isCorrect(),score:partResults.length?partCorrectCount/partResults.length:undefined,partCorrectCount,partCount:partResults.length,type:q.type,title:q.title,ch:q.ch,domain:q.cat,pbq:true})}>
@@ -23147,10 +23209,8 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
     const q=item.q;
     return {
       selected:null,
-      mapping:{},
       orderItems:q.type==="ORDERING"&&q.items?shuffle(q.items):[],
       blanks:q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{},
-      tapDragItem:null,
       termInput:"",
     };
   };
@@ -23251,9 +23311,8 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
   };
   const pbqCorrect=(q,a={})=>{
     if(["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type)) return a.selected===q.correct;
-    if(q.type==="DRAG & DROP") return q.items?.every(item=>a.mapping?.[item.id]===q.correctMapping?.[item.id]);
     if(q.type==="ORDERING") return q.correctOrder?.every((id,i)=>a.orderItems?.[i]?.id===id);
-    if(q.type==="FILL BLANK") return q.blanks?.every(b=>isFillBlankAnswerCorrect(a.blanks?.[b.id],b));
+    if(q.type===SELECT_FILL_PBQ_TYPE) return q.blanks?.every(b=>isFillBlankAnswerCorrect(a.blanks?.[b.id],b));
     return false;
   };
   const isCorrect=(item,a={})=>item.kind==="mcq" ? a.selected===item.q.correct : pbqCorrect(item.q,a);
@@ -23261,8 +23320,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
     if(item.kind==="mcq") return a.selected!==null&&a.selected!==undefined;
     const q=item.q;
     if((q.choices||q.options)&&["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type)) return a.selected!==null&&a.selected!==undefined;
-    if(q.type==="DRAG & DROP") return Object.keys(a.mapping||{}).length>0;
-    if(q.type==="FILL BLANK") return q.blanks?.some(b=>(a.blanks?.[b.id]||"").trim());
+    if(q.type===SELECT_FILL_PBQ_TYPE) return q.blanks?.some(b=>(a.blanks?.[b.id]||"").trim());
     if(q.type==="ORDERING") return Boolean(a.orderItems?.length);
     return Boolean(a.termInput);
   };
@@ -23332,23 +23390,6 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
     return()=>clearInterval(id);
   },[started,done,submittingExam,timeLeft,qi]);
 
-  const placeDragItem=(item,targetId)=>{
-    if(!item)return;
-    const mapping={...(answer.mapping||{})};
-    mapping[item.id]=targetId;
-    updateAnswer({mapping,tapDragItem:null,dragged:null,dragOver:null});
-  };
-  const updateExamPointerDropTarget=e=>{
-    const el=document.elementFromPoint(e.clientX,e.clientY)?.closest?.("[data-exam-drop-target]");
-    const dragOver=el?.dataset?.examDropTarget||null;
-    updateAnswer({dragOver});
-    return dragOver;
-  };
-  const finishExamPointerDrag=(e,item)=>{
-    const targetId=updateExamPointerDropTarget(e);
-    if(targetId) placeDragItem(item,targetId);
-    else updateAnswer({dragged:null,dragOver:null});
-  };
   const closeExamGuide=async()=>{
     setShowExamGuide(false);
     try{await storageSet(examGuideKey,"true");}catch{}
@@ -23738,7 +23779,23 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:10}}>
                   {q.scenario&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Scenario: </strong><PBQProseText text={q.scenario} t={t} paragraphGap={5}/></div>}
                   {q.question&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Question: </strong><PBQProseText text={q.question} t={t} paragraphGap={5}/></div>}
-                  {q.items&&q.targets&&(
+                  {q.type===SELECT_FILL_PBQ_TYPE&&q.blanks?.length>0&&(
+                    <div style={{display:"grid",gap:7,marginTop:8}}>
+                      <strong style={{color:t.text}}>Blank review</strong>
+                      {q.blanks.map((blank,blankIndex)=>{
+                        const userValue=a.blanks?.[blank.id]||"Not answered";
+                        const correct=isFillBlankAnswerCorrect(userValue,blank);
+                        return(
+                          <div key={blank.id||blankIndex} style={{padding:"9px 10px",borderRadius:9,border:`1px solid ${correct?t.green:t.red}35`,background:`${correct?t.green:t.red}08`}}>
+                            <div style={{color:t.text,lineHeight:1.55}}><GlossaryText text={blank.sentence} t={t}/></div>
+                            <div style={{marginTop:4,fontSize:12}}>Your answer: <strong style={{color:correct?t.green:t.red}}>{userValue}</strong></div>
+                            {!correct&&<div style={{fontSize:12}}>Correct answer: <strong style={{color:t.green}}>{blank.answer}</strong></div>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                  {q.type!==SELECT_FILL_PBQ_TYPE&&q.items&&q.targets&&(
                     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:8}}>
                       <div>
                         <strong style={{color:t.text}}>Items</strong>
@@ -23887,90 +23944,22 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
             </div>
           )}
 
-          {current.kind==="pbq"&&q.type==="DRAG & DROP"&&(
-            <div className="pbq-tap-match-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
-              <div>
-                <div className="label" style={{marginBottom:8}}>Items</div>
-                <div style={{fontSize:12,color:t.textDim,lineHeight:1.55,marginBottom:8}}>Mobile: tap an item, then tap its target column.</div>
-                <div style={{display:"grid",gap:7}}>
-                  {q.items.filter(item=>!Object.keys(answer.mapping||{}).includes(item.id)).map(item=>(
-                    <div
-                      key={item.id}
-                      className={`drag-item ${answer.tapDragItem?.id===item.id||answer.dragged?.id===item.id?"selected":""}`}
-                      draggable
-                      style={{touchAction:"none"}}
-                      onClick={()=>updateAnswer({tapDragItem:item})}
-                      onDragStart={()=>updateAnswer({dragged:item})}
-                      onDragEnd={()=>updateAnswer({dragged:null,dragOver:null})}
-                      onPointerDown={e=>{if(e.pointerType==="mouse")updateAnswer({dragged:item});}}
-                      onPointerMove={e=>{if(e.pointerType==="mouse"&&(answer.dragged?.id===item.id||answer.tapDragItem?.id===item.id)) updateExamPointerDropTarget(e);}}
-                      onPointerUp={e=>{if(e.pointerType==="mouse")finishExamPointerDrag(e,item);}}
-                      onPointerCancel={()=>updateAnswer({dragged:null,dragOver:null})}
-                    >{item.label}</div>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <div className="label" style={{marginBottom:8}}>Columns</div>
-                <div style={{display:"grid",gap:7}}>
-                  {q.targets?.map(target=>{
-                    const placedItems=q.items.filter(item=>answer.mapping?.[item.id]===target.id);
-                    return(
-                      <div
-                        key={target.id}
-                        className={`drop-zone ${answer.dragOver===target.id?"over":""}`}
-                        data-exam-drop-target={target.id}
-                        onClick={()=>answer.tapDragItem&&placeDragItem(answer.tapDragItem,target.id)}
-                        onDragOver={e=>{e.preventDefault();updateAnswer({dragOver:target.id});}}
-                        onDragLeave={()=>updateAnswer({dragOver:null})}
-                        onDrop={e=>{e.preventDefault();if(answer.dragged)placeDragItem(answer.dragged,target.id);}}
-                        style={{justifyContent:"flex-start",cursor:"pointer",display:"block",minHeight:82}}
-                      >
-                        <span style={{fontSize:12,color:t.textSec}}>{target.label}: </span>
-                        {placedItems.length?(
-                          <div style={{display:"grid",gap:6,marginTop:6}}>
-                            {placedItems.map(placed=>(
-                              <div
-                                key={placed.id}
-                                className={`drag-item ${answer.tapDragItem?.id===placed.id||answer.dragged?.id===placed.id?"selected":""}`}
-                                draggable
-                                style={{width:"100%",background:`${t.green}10`,borderColor:`${t.green}40`,touchAction:"none"}}
-                                onClick={e=>{e.stopPropagation();updateAnswer({tapDragItem:placed});}}
-                                onDragStart={e=>{e.stopPropagation();updateAnswer({dragged:placed});}}
-                                onDragEnd={()=>updateAnswer({dragged:null,dragOver:null})}
-                                onPointerDown={e=>updateAnswer(e.pointerType==="mouse"?{dragged:placed,tapDragItem:placed}:{tapDragItem:placed})}
-                                onPointerMove={e=>{if(e.pointerType==="mouse"&&(answer.dragged?.id===placed.id||answer.tapDragItem?.id===placed.id)) updateExamPointerDropTarget(e);}}
-                                onPointerUp={e=>{if(e.pointerType==="mouse")finishExamPointerDrag(e,placed);}}
-                                onPointerCancel={()=>updateAnswer({dragged:null,dragOver:null})}
-                              >{placed.label}</div>
-                            ))}
-                          </div>
-                        ):(
-                          <strong style={{fontSize:12,color:t.text,marginLeft:6}}>{answer.tapDragItem?"Drop here":"Choose item"}</strong>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
+          {current.kind==="pbq"&&q.type===SELECT_FILL_PBQ_TYPE&&(
+            <PBQSelectionWorkspace
+              q={q}
+              values={answer.blanks||{}}
+              onChange={(blankId,value)=>updateAnswer({blanks:{...(answer.blanks||{}),[blankId]:value}})}
+              t={t}
+              accent={(Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent}
+              showHints={false}
+              compact
+            />
           )}
 
           {current.kind==="pbq"&&q.type==="ORDERING"&&(
             <div>
               <div style={{fontSize:12,color:t.textDim,marginBottom:10}}>Drag each answer to rank it from top to bottom.</div>
               <SortableOrderList items={answer.orderItems||[]} onChange={next=>updateAnswer({orderItems:next})} t={t}/>
-            </div>
-          )}
-
-          {current.kind==="pbq"&&q.type==="FILL BLANK"&&(
-            <div style={{display:"grid",gap:10}}>
-              {q.blanks?.map(blank=>(
-                <div key={blank.id} className="card" style={{padding:"14px 16px"}}>
-                  <div style={{fontSize:13,color:t.textSec,lineHeight:1.6,marginBottom:8}}>{blank.sentence}</div>
-                  <input className="input" value={answer.blanks?.[blank.id]||""} onChange={e=>updateAnswer({blanks:{...(answer.blanks||{}),[blank.id]:e.target.value}})} placeholder="Your answer"/>
-                </div>
-              ))}
             </div>
           )}
         </div>
@@ -24986,7 +24975,8 @@ function makeAdminQuestionTemplate(kind, nextOrder=1, sourceBank=[]) {
       tableCols:"2",
       correctMapping:{},
       correctOrder:["i0"],
-      blanks:[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:"",explanation:""}]
+      blanks:[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:"",explanation:""}],
+      selectionOptions:["","","","",""]
     };
   }
   return {
@@ -25044,7 +25034,8 @@ function questionToAdminForm(question,kind,index) {
       tableCols:String(question.targetLayout?.cols || Math.max(2, ...((question.targets||[]).map(target=>Number.isInteger(target.col)?target.col+1:0)), 2)),
       correctMapping:question.correctMapping||{},
       correctOrder:Array.isArray(question.correctOrder)?question.correctOrder:[],
-      blanks:Array.isArray(question.blanks)?question.blanks.map((blank,index)=>({id:blank.id||`b${index}`,sentence:blank.sentence||"",answer:blank.answer||"",acceptedAnswers:[...(blank.acceptedAnswers||[]),...(blank.aliases||[])].join("\n"),hint:blank.hint||"",explanation:blank.explanation||blank.solution||""})):[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:"",explanation:""}]
+      blanks:Array.isArray(question.blanks)?question.blanks.map((blank,index)=>({id:blank.id||`b${index}`,sentence:blank.sentence||"",answer:blank.answer||"",acceptedAnswers:[...(blank.acceptedAnswers||[]),...(blank.aliases||[])].join("\n"),hint:blank.hint||"",explanation:blank.explanation||blank.solution||""})):[{id:"b0",sentence:"",answer:"",acceptedAnswers:"",hint:"",explanation:""}],
+      selectionOptions:Array.isArray(question.selectionOptions)?[...question.selectionOptions]:["","","","",""]
     };
   }
   return {
@@ -25111,12 +25102,13 @@ function cleanAdminQuestionPayload(form,kind) {
     .map((choice,index)=>({index,text:String(choice||"").trim()}))
     .filter(entry=>entry.text);
   const choices=choiceEntries.map(entry=>entry.text);
-  const pbqType=String(form.type||"SCENARIO").trim().toUpperCase();
+  const rawPbqType=String(form.type||"SCENARIO").trim().toUpperCase();
+  const pbqType=["DRAG & DROP","FILL BLANK"].includes(rawPbqType)?SELECT_FILL_PBQ_TYPE:rawPbqType;
   const scenarioText=String(form.scenario||"").trim();
   const taskText=String(form.question||"").trim();
   if(String(form.title||"").trim().length<8) throw new Error("PBQ title must be at least 8 characters.");
   if(scenarioText.length<10&&taskText.length<10) throw new Error("PBQ needs either a scenario or a task prompt.");
-  if(!["DRAG & DROP","ORDERING","FILL BLANK"].includes(pbqType)&&taskText.length<10) throw new Error("PBQ task/question must be at least 10 characters.");
+  if(![SELECT_FILL_PBQ_TYPE,"ORDERING"].includes(pbqType)&&taskText.length<10) throw new Error("PBQ task/question must be at least 10 characters.");
   const question={
     id,
     type:pbqType,
@@ -25141,39 +25133,7 @@ function cleanAdminQuestionPayload(form,kind) {
   if(pbqType==="LOG ANALYSIS") question.logData=String(form.logData||"").trim();
   if(pbqType==="HOTSPOT") question.diagram=String(form.diagram||"").trim();
   if(pbqType==="CONFIG/ACL") question.currentConfig=String(form.currentConfig||"").trim();
-  if(pbqType==="DRAG & DROP") {
-    const items=(form.items||[]).map((item,index)=>({
-      id:String(item.id||`i${index}`).trim()||`i${index}`,
-      label:String(item.label||"").trim(),
-      explanation:String(item.explanation||"").trim()
-    })).filter(item=>item.label);
-    const targets=(form.targets||[]).map((target,index)=>({
-      id:String(target.id||`t${index}`).trim()||`t${index}`,
-      label:String(target.label||"").trim(),
-      row:Number.isInteger(target.row)?target.row:null,
-      col:Number.isInteger(target.col)?target.col:null,
-      droppable:target.droppable!==false
-    })).filter(target=>target.label||target.droppable);
-    const dropTargets=targets.filter(target=>target.droppable!==false);
-    if(items.length<2||dropTargets.length<1) throw new Error("Drag & Drop PBQs need at least 2 draggable items and at least 1 drop cell.");
-    const targetIds=new Set(dropTargets.map(target=>target.id));
-    const correctMapping={};
-    items.forEach(item=>{if(targetIds.has(form.correctMapping?.[item.id])) correctMapping[item.id]=form.correctMapping[item.id];});
-    if(Object.keys(correctMapping).length!==items.length) throw new Error("Map every Drag & Drop item to a correct drop cell.");
-    question.items=items;
-    question.targets=targets;
-    question.correctMapping=correctMapping;
-    const tableRows=Math.max(1,Math.min(8,Number.parseInt(form.tableRows,10)||0));
-    const tableCols=Math.max(1,Math.min(8,Number.parseInt(form.tableCols,10)||0));
-    if(targets.some(target=>Number.isInteger(target.row)&&Number.isInteger(target.col))) {
-      question.targetLayout={type:"table",rows:tableRows,cols:tableCols};
-    }
-  } else if(pbqType==="ORDERING") {
-    const items=(form.items||[]).map((item,index)=>({id:String(item.id||`i${index}`).trim()||`i${index}`,label:String(item.label||"").trim()})).filter(item=>item.label);
-    if(items.length<2) throw new Error("Ordering PBQs need at least 2 ordered items.");
-    question.items=items;
-    question.correctOrder=items.map(item=>item.id);
-  } else if(pbqType==="FILL BLANK") {
+  if(pbqType===SELECT_FILL_PBQ_TYPE) {
     const blanks=(form.blanks||[]).map((blank,index)=>({
       id:String(blank.id||`b${index}`).trim()||`b${index}`,
       sentence:String(blank.sentence||"").trim(),
@@ -25182,9 +25142,23 @@ function cleanAdminQuestionPayload(form,kind) {
       hint:String(blank.hint||"").trim(),
       explanation:String(blank.explanation||"").trim()
     })).filter(blank=>blank.sentence||blank.answer||blank.acceptedAnswers.length);
-    if(!blanks.length) throw new Error("Fill Blank PBQs need at least one blank.");
-    if(blanks.some(blank=>!blank.sentence||!blank.answer)) throw new Error("Every Fill Blank row needs a sentence and answer.");
+    if(!blanks.length) throw new Error("Select & Fill PBQs need at least one blank.");
+    if(blanks.some(blank=>!blank.sentence||!blank.answer)) throw new Error("Every Select & Fill row needs a prompt and correct answer.");
+    const selectionOptions=uniqueSelectionOptions([
+      ...(form.selectionOptions||[]),
+      ...blanks.map(blank=>blank.answer),
+    ]);
+    const answerKeys=new Set(blanks.map(blank=>normalizeFillBlankAnswer(blank.answer)));
+    const distractors=selectionOptions.filter(option=>!answerKeys.has(normalizeFillBlankAnswer(option)));
+    if(selectionOptions.length<4) throw new Error("Add at least 4 shared selector options.");
+    if(distractors.length<2) throw new Error("Add at least 2 plausible distractor options that are not correct for any blank.");
     question.blanks=blanks;
+    question.selectionOptions=selectionOptions;
+  } else if(pbqType==="ORDERING") {
+    const items=(form.items||[]).map((item,index)=>({id:String(item.id||`i${index}`).trim()||`i${index}`,label:String(item.label||"").trim()})).filter(item=>item.label);
+    if(items.length<2) throw new Error("Ordering PBQs need at least 2 ordered items.");
+    question.items=items;
+    question.correctOrder=items.map(item=>item.id);
   } else {
     if(choices.length<2) throw new Error("This PBQ type needs at least 2 answer choices.");
     const formCorrect=Number(form.correct)||0;
@@ -25589,7 +25563,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
   const formQuality=useMemo(()=>kind==="mcq"?analyzeMcqQuality(form,bank):null,[bank,form,kind]);
   const detectedAcronyms=useMemo(()=>kind==="mcq"
     ? extractAcronymsFromText(form.q,form.opts||[],form.exp,Object.values(form.wrongFeedback||{}))
-    : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.explanation,Object.values(form.wrongFeedback||{}),form.answer,form.codeLanguage,form.codeBlock,form.logData,form.diagram,form.currentConfig,(form.items||[]).map(item=>item.label),(form.targets||[]).map(target=>target.label),(form.blanks||[]).flatMap(blank=>[blank.sentence,blank.answer,blank.acceptedAnswers,blank.hint])),
+    : extractAcronymsFromText(form.title,form.cat,form.scenario,form.question,form.choices||[],form.selectionOptions||[],form.explanation,Object.values(form.wrongFeedback||{}),form.answer,form.codeLanguage,form.codeBlock,form.logData,form.diagram,form.currentConfig,(form.items||[]).map(item=>item.label),(form.targets||[]).map(target=>target.label),(form.blanks||[]).flatMap(blank=>[blank.sentence,blank.answer,blank.acceptedAnswers,blank.hint])),
   [form,kind]);
 
   const resetToNew=useCallback((nextKind=kind)=>{
@@ -25709,6 +25683,25 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
     return patch;
   });
   const addPbqChoice=()=>setForm(prev=>({...prev,choices:[...(prev.choices||[]),""]}));
+  const updateSelectionOption=(index,value)=>setForm(prev=>{
+    const previousValue=prev.selectionOptions?.[index]||"";
+    const selectionOptions=[...(prev.selectionOptions||[])];
+    selectionOptions[index]=value;
+    return {
+      ...prev,
+      selectionOptions,
+      blanks:(prev.blanks||[]).map(blank=>blank.answer===previousValue?{...blank,answer:value}:blank),
+    };
+  });
+  const addSelectionOption=()=>setForm(prev=>({...prev,selectionOptions:[...(prev.selectionOptions||[]),""]}));
+  const removeSelectionOption=index=>setForm(prev=>{
+    const removed=prev.selectionOptions?.[index];
+    return {
+      ...prev,
+      selectionOptions:(prev.selectionOptions||[]).filter((_,optionIndex)=>optionIndex!==index),
+      blanks:(prev.blanks||[]).map(blank=>blank.answer===removed?{...blank,answer:""}:blank),
+    };
+  });
   const removePbqChoice=index=>setForm(prev=>{
     const choices=(prev.choices||[]).filter((_,i)=>i!==index);
     const wrongFeedback={};
@@ -25724,7 +25717,11 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
       : 0;
     return {...prev,choices,wrongFeedback,correct:nextCorrect};
   });
-  const changePbqType=type=>setForm(prev=>({...prev,type}));
+  const changePbqType=type=>setForm(prev=>({
+    ...prev,
+    type,
+    selectionOptions:type===SELECT_FILL_PBQ_TYPE&&!(prev.selectionOptions||[]).length?["","","","",""]:prev.selectionOptions,
+  }));
   const updateWrongFeedback=(index,value)=>setForm(prev=>({...prev,wrongFeedback:{...(prev.wrongFeedback||{}),[index]:value}}));
 
   const changeKind=(nextKind)=>{
@@ -26176,7 +26173,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
                 <div style={{height:12}}/>
                 <AdminTextArea label="Code block" value={form.codeBlock} onChange={v=>updateField("codeBlock",v)} placeholder={"Example:\nSELECT * FROM users WHERE username = '$input';"} rows={7} format={false}/>
               </div>
-              {form.type!=="DRAG & DROP"&&form.type!=="ORDERING"&&form.type!=="FILL BLANK"&&(
+              {form.type!==SELECT_FILL_PBQ_TYPE&&form.type!=="ORDERING"&&(
                 <>
                   <div style={{height:12}}/>
                   <AdminTextArea label="Task for the student" value={form.question} onChange={v=>updateField("question",v)} placeholder={"Tell the student what to do.\n\nParagraphs and spacing are preserved."} rows={4}/>
@@ -26208,142 +26205,82 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
                   <AdminTextArea label="Current configuration" value={form.currentConfig} onChange={v=>updateField("currentConfig",v)} placeholder="Paste firewall rules, config, ACL, or policy table." rows={7} format={false}/>
                 </>
               )}
-              {form.type==="FILL BLANK"&&(
-                <div className="card" style={{padding:14,background:`${t.panel}66`,marginTop:12}}>
-                  <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10}}>
+              {form.type===SELECT_FILL_PBQ_TYPE&&(
+                <div className="card" style={{padding:16,background:`linear-gradient(145deg, ${t.accent}08, ${t.panel})`,marginTop:12,borderColor:`${t.accent}30`}}>
+                  <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"flex-start",marginBottom:15,flexWrap:"wrap"}}>
                     <div>
-                      <div style={{fontWeight:900,color:t.text}}>Fill-in-the-blank rows</div>
-                      <div style={{fontSize:12,color:t.textSec}}>Each row becomes one blank with its own accepted answer.</div>
-                    </div>
-                    <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("blanks")}>Add blank</button>
-                  </div>
-                  <div style={{display:"grid",gap:12}}>
-                    {(form.blanks||[]).map((blank,index)=>(
-                      <div key={blank.id||index} className="card" style={{padding:12,background:t.surface}}>
-                        <div style={{display:"grid",gridTemplateColumns:"80px minmax(0,1fr) auto",gap:10,alignItems:"start"}}>
-                          <AdminTextInput label="ID" value={blank.id||""} onChange={v=>updateObjectArray("blanks",index,"id",v)} placeholder={`b${index}`}/>
-                          <AdminTextArea label={`Blank ${index+1} sentence`} value={blank.sentence||""} onChange={v=>updateObjectArray("blanks",index,"sentence",v)} placeholder="A ___ is used to..." rows={2}/>
-                          <button className="btn btn-ghost" type="button" onClick={()=>removePbqItem("blanks",index)}>Remove</button>
-                        </div>
-                        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:10}}>
-                          <AdminTextInput label="Correct answer" value={blank.answer||""} onChange={v=>updateObjectArray("blanks",index,"answer",v)} placeholder="Honeynet"/>
-                          <AdminTextInput label="Hint" value={blank.hint||""} onChange={v=>updateObjectArray("blanks",index,"hint",v)} placeholder="Optional learning hint"/>
-                        </div>
-                        <div style={{marginTop:10}}>
-                          <AdminTextArea
-                            label={`Blank ${index+1} solution`}
-                            value={blank.explanation||""}
-                            onChange={v=>updateObjectArray("blanks",index,"explanation",v)}
-                            placeholder="Explain why this blank uses this answer."
-                            rows={2}
-                          />
-                        </div>
-                        <div style={{marginTop:10}}>
-                          <AdminTextArea
-                            label="Accepted alternate answers"
-                            value={blank.acceptedAnswers||""}
-                            onChange={v=>updateObjectArray("blanks",index,"acceptedAnswers",v)}
-                            placeholder={"One per line, or separate with commas\nExample: User and Entity Behavioral Analytics\nUEBA"}
-                            rows={2}
-                            format={false}
-                          />
-                          <div style={{fontSize:11,color:t.textDim,marginTop:5,lineHeight:1.5}}>
-                            These are accepted in addition to the main answer. Capitalisation and British/American spelling are still handled automatically.
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {form.type==="DRAG & DROP"&&(
-                <div className="card" style={{padding:14,background:`${t.panel}66`,marginTop:12}}>
-                  <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"flex-start",marginBottom:12,flexWrap:"wrap"}}>
-                    <div>
-                      <div style={{fontWeight:900,color:t.text}}>Drag & Drop builder</div>
-                      <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>Create columns such as Attack Type and Mitigation, then map each draggable answer into the correct column.</div>
-                    </div>
-                  </div>
-                  <div style={{display:"grid",gridTemplateColumns:"1fr",gap:14,alignItems:"start"}}>
-                    <div>
-                      <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:10}}>
-                        <div>
-                          <div style={{fontWeight:900,color:t.text}}>Drop table / cells</div>
-                          <div style={{fontSize:11,color:t.textDim,marginTop:2}}>Choose a table size, then edit each cell label. Each cell becomes a drop target.</div>
-                        </div>
-                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("targets")}>Add loose cell</button>
-                      </div>
-                      <div className="card" style={{padding:12,background:`${t.green}08`,borderColor:`${t.green}25`,boxShadow:"none",marginBottom:10}}>
-                        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(120px,1fr)) auto",gap:10,alignItems:"end"}}>
-                          <AdminField label="Rows">
-                            <input className="input" type="number" min="1" max="8" value={form.tableRows||"2"} onChange={e=>updateField("tableRows",e.target.value)} style={{padding:"10px 12px"}}/>
-                          </AdminField>
-                          <AdminField label="Columns">
-                            <input className="input" type="number" min="1" max="8" value={form.tableCols||"2"} onChange={e=>updateField("tableCols",e.target.value)} style={{padding:"10px 12px"}}/>
-                          </AdminField>
-                          <button className="btn btn-primary" type="button" style={{fontSize:12,whiteSpace:"nowrap"}} onClick={generateDragDropTable}>Generate table cells</button>
-                        </div>
-                        <div style={{fontSize:11,color:t.textDim,lineHeight:1.5,marginTop:8}}>
-                          Tip: use cells for prompts such as “Attack type”, “Mitigation”, or “Firewall rule result”. Existing mappings are kept only when the same cell IDs still exist.
-                        </div>
-                      </div>
-                      <div style={{display:"grid",gap:10}}>
-                        {(form.targets||[]).map((target,index)=>(
-                          <div key={target.id||index} className="card" style={{padding:12,background:t.surface,borderColor:`${t.green}24`,boxShadow:"none"}}>
-                            <div style={{display:"grid",gridTemplateColumns:"92px minmax(160px,1fr) auto",gap:10,alignItems:"end",marginBottom:10}}>
-                              <AdminTextInput label="ID" value={target.id||""} onChange={v=>updateObjectArray("targets",index,"id",v)} placeholder={`t${index}`}/>
-                              <AdminField label="Cell type">
-                                <select className="input" value={target.droppable===false?"static":"drop"} onChange={e=>updateObjectArray("targets",index,"droppable",e.target.value==="drop")}>
-                                  <option value="drop">Empty drop cell</option>
-                                  <option value="static">Static label / question cell</option>
-                                </select>
-                              </AdminField>
-                              <button className="btn btn-ghost" type="button" style={{justifySelf:"end"}} onClick={()=>removePbqItem("targets",index)}>Remove</button>
-                            </div>
-                            <AdminTextArea label={`Cell ${index+1} label`} value={target.label||""} onChange={v=>updateObjectArray("targets",index,"label",v)} placeholder="Example: Attack type" rows={2} format/>
-                            <div style={{fontSize:11,color:t.textDim,lineHeight:1.5,marginTop:6}}>
-                              Static cells display this label only. Drop cells can be left blank and will accept dragged answers.
-                            </div>
-                          </div>
-                        ))}
+                      <div style={{fontWeight:950,fontSize:17,color:t.text}}>Select & Fill builder</div>
+                      <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginTop:4,maxWidth:650}}>
+                        Students tap each blank and choose from one shared answer bank. Every option can be reused, so do not remove an option after it is selected.
                       </div>
                     </div>
-                    <div>
-                      <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:10}}>
-                        <div>
-                          <div style={{fontWeight:900,color:t.text}}>Draggable items</div>
-                          <div style={{fontSize:11,color:t.textDim,marginTop:2}}>Add each item, then choose its correct target.</div>
-                        </div>
-                        <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("items")}>Add item</button>
+                    <span className="chip" style={{background:`${t.green}12`,borderColor:`${t.green}35`,color:t.green}}>No typing or dragging</span>
+                  </div>
+
+                  <div className="card" style={{padding:14,background:t.surface,boxShadow:"none",borderColor:`${t.accent}25`,marginBottom:14}}>
+                    <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10,flexWrap:"wrap"}}>
+                      <div>
+                        <div style={{fontWeight:900,color:t.text}}>1. Shared answer bank</div>
+                        <div style={{fontSize:11,color:t.textDim,lineHeight:1.5,marginTop:2}}>Include every correct answer plus at least two believable SY0-701 distractors.</div>
                       </div>
-                      <div style={{display:"grid",gap:10}}>
-                        {(form.items||[]).map((item,index)=>(
-                          <div key={item.id||index} className="card" style={{padding:12,background:t.surface,borderColor:`${t.accent}24`,boxShadow:"none"}}>
-                            <div style={{display:"grid",gridTemplateColumns:"92px auto",gap:10,alignItems:"end",marginBottom:10}}>
-                              <AdminTextInput label="ID" value={item.id||""} onChange={v=>updateObjectArray("items",index,"id",v)} placeholder={`i${index}`}/>
-                              <button className="btn btn-ghost" type="button" style={{justifySelf:"end"}} onClick={()=>removePbqItem("items",index)}>Remove</button>
-                            </div>
-                            <AdminTextArea label={`Item ${index+1} text`} value={item.label||""} onChange={v=>updateObjectArray("items",index,"label",v)} placeholder="Item shown to user" rows={2} format/>
-                            <div style={{marginTop:10}}>
-                              <AdminTextArea
-                                label={`Item ${index+1} solution`}
-                                value={item.explanation||""}
-                                onChange={v=>updateObjectArray("items",index,"explanation",v)}
-                                placeholder="Explain why this item belongs in its correct column."
-                                rows={2}
-                              />
-                            </div>
-                            <div style={{marginTop:10,paddingTop:10,borderTop:`1px solid ${t.border}`}}>
-                              <AdminField label="Correct table cell">
-                                <select className="input" value={form.correctMapping?.[item.id]||""} onChange={e=>updateField("correctMapping",{...(form.correctMapping||{}),[item.id]:e.target.value})}>
-                                  <option value="">Choose cell</option>
-                                  {(form.targets||[]).filter(target=>target.droppable!==false).map(target=><option key={target.id} value={target.id}>{target.label||`${target.id} (empty cell)`}</option>)}
-                                </select>
-                              </AdminField>
-                            </div>
+                      <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={addSelectionOption}>Add option</button>
+                    </div>
+                    <div style={{display:"grid",gap:9}}>
+                      {(form.selectionOptions||[]).map((option,index)=>{
+                        const usedBy=(form.blanks||[]).filter(blank=>blank.answer===option).length;
+                        return(
+                          <div key={index} style={{display:"grid",gridTemplateColumns:"42px minmax(0,1fr) auto",gap:9,alignItems:"end"}}>
+                            <span className="chip" style={{justifyContent:"center",marginBottom:5}}>{String.fromCharCode(65+index)}</span>
+                            <AdminTextInput
+                              label={usedBy?`Option ${String.fromCharCode(65+index)} · correct for ${usedBy} blank${usedBy===1?"":"s"}`:`Option ${String.fromCharCode(65+index)} · distractor or unused`}
+                              value={option}
+                              onChange={value=>updateSelectionOption(index,value)}
+                              placeholder={index<4?"Security+ term or definition":"Plausible distractor"}
+                              format
+                            />
+                            <button className="btn btn-ghost" type="button" onClick={()=>removeSelectionOption(index)}>Remove</button>
                           </div>
-                        ))}
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="card" style={{padding:14,background:t.surface,boxShadow:"none",borderColor:`${t.green}25`}}>
+                    <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10,flexWrap:"wrap"}}>
+                      <div>
+                        <div style={{fontWeight:900,color:t.text}}>2. Prompts and blanks</div>
+                        <div style={{fontSize:11,color:t.textDim,lineHeight:1.5,marginTop:2}}>Use <strong>___</strong> where the tappable blank should appear. Anything not chosen remains unused.</div>
                       </div>
+                      <button className="btn btn-outline" type="button" style={{fontSize:12}} onClick={()=>addPbqItem("blanks")}>Add blank</button>
+                    </div>
+                    <div style={{display:"grid",gap:12}}>
+                      {(form.blanks||[]).map((blank,index)=>(
+                        <div key={blank.id||index} className="card" style={{padding:12,background:t.panel,boxShadow:"none"}}>
+                          <div style={{display:"grid",gridTemplateColumns:"80px minmax(0,1fr) auto",gap:10,alignItems:"start"}}>
+                            <AdminTextInput label="ID" value={blank.id||""} onChange={value=>updateObjectArray("blanks",index,"id",value)} placeholder={`b${index}`}/>
+                            <AdminTextArea label={`Prompt ${index+1}`} value={blank.sentence||""} onChange={value=>updateObjectArray("blanks",index,"sentence",value)} placeholder="A ___ verifies certificate revocation status in real time." rows={2}/>
+                            <button className="btn btn-ghost" type="button" onClick={()=>removePbqItem("blanks",index)}>Remove</button>
+                          </div>
+                          <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) minmax(0,1fr)",gap:10,marginTop:10}}>
+                            <AdminField label="Correct selector option">
+                              <select className="input" value={blank.answer||""} onChange={event=>updateObjectArray("blanks",index,"answer",event.target.value)}>
+                                <option value="">Choose the correct option</option>
+                                {uniqueSelectionOptions([...(form.selectionOptions||[]),blank.answer]).map(option=><option key={option} value={option}>{option}</option>)}
+                              </select>
+                            </AdminField>
+                            <AdminTextInput label="Study clue (optional)" value={blank.hint||""} onChange={value=>updateObjectArray("blanks",index,"hint",value)} placeholder="Short clue without giving away the answer"/>
+                          </div>
+                          <div style={{marginTop:10}}>
+                            <AdminTextArea
+                              label={`Why blank ${index+1} uses this answer`}
+                              value={blank.explanation||""}
+                              onChange={value=>updateObjectArray("blanks",index,"explanation",value)}
+                              placeholder="Explain the concept in clear Security+ exam language."
+                              rows={2}
+                            />
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -26447,63 +26384,27 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
                 </div>
                 <div style={{fontSize:16,color:t.text,lineHeight:1.5,marginBottom:12}}><QuestionStemText text={form.question||"Task preview will appear here."} t={t} compact/></div>
                 <CodeSnippetBlock code={form.codeBlock} language={form.codeLanguage} t={t} title="Code sample preview"/>
-                {form.type==="FILL BLANK"&&(
-                  <div style={{display:"grid",gap:8,marginBottom:12}}>
+                {form.type===SELECT_FILL_PBQ_TYPE&&(
+                  <div style={{display:"grid",gap:9,marginBottom:12}}>
+                    <div style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${t.accent}30`,background:`${t.accent}08`}}>
+                      <div style={{fontSize:11,fontWeight:900,color:t.accent,marginBottom:6}}>Shared answer bank · options can be reused</div>
+                      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                        {uniqueSelectionOptions(form.selectionOptions||[]).map(option=>(
+                          <span key={option} className="chip" style={{background:t.surface,borderColor:t.border,color:t.textSec}}><GlossaryText text={option} t={t}/></span>
+                        ))}
+                      </div>
+                    </div>
                     {(form.blanks||[]).map((blank,index)=>(
                       <div key={blank.id||index} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${t.border}`,background:t.panel}}>
-                        <div style={{fontSize:13,color:t.text,lineHeight:1.55}}><GlossaryText text={blank.sentence||`Blank ${index+1} sentence`} t={t}/></div>
-                        <div style={{fontSize:12,color:t.textSec,marginTop:5}}>Answer: <strong style={{color:t.green}}>{blank.answer||"Not set"}</strong></div>
+                        <div style={{fontSize:13,color:t.text,lineHeight:1.55}}><GlossaryText text={blank.sentence||`Blank ${index+1} prompt`} t={t}/></div>
+                        <div style={{fontSize:12,color:t.textSec,marginTop:5}}>Correct selector option: <strong style={{color:t.green}}>{blank.answer||"Not set"}</strong></div>
                         {blank.explanation&&(
                           <div style={{fontSize:12,color:t.textSec,marginTop:4}}>
                             Solution: <GlossaryText text={blank.explanation} t={t}/>
                           </div>
                         )}
-                        {parseAcceptedAnswers(blank.acceptedAnswers).length>0&&(
-                          <div style={{fontSize:12,color:t.textSec,marginTop:4}}>
-                            Also accepted: {parseAcceptedAnswers(blank.acceptedAnswers).join(", ")}
-                          </div>
-                        )}
                       </div>
                     ))}
-                  </div>
-                )}
-                {form.type==="DRAG & DROP"&&(
-                  <div style={{display:"grid",gap:8,marginBottom:12}}>
-                    {(form.targets||[]).map(target=>{
-                      const itemsForColumn=(form.items||[]).filter(item=>form.correctMapping?.[item.id]===target.id);
-                      const isDropCell=target.droppable!==false;
-                      return(
-                        <div key={target.id} style={{padding:"10px 12px",borderRadius:10,border:`1px solid ${t.border}`,background:t.panel,fontSize:13,color:t.textSec}}>
-                          <strong style={{color:t.text}}>{target.label||target.id}</strong>
-                          <span className="chip" style={{marginLeft:8,background:isDropCell?`${t.green}12`:`${t.accent}12`,borderColor:isDropCell?`${t.green}35`:`${t.accent}35`,color:isDropCell?t.green:t.accent}}>
-                            {isDropCell?"Drop cell":"Static cell"}
-                          </span>
-                          {!isDropCell ? (
-                            <div style={{marginTop:7,color:t.textDim}}>This cell is display-only. Users cannot drop options here.</div>
-                          ) : itemsForColumn.length?(
-                            <div style={{display:"grid",gap:5,marginTop:7}}>
-                              {itemsForColumn.map(item=>(
-                                <div key={item.id}>
-                                  <div>- {item.label||item.id}</div>
-                                  {item.explanation&&(
-                                    <div style={{fontSize:12,color:t.textDim,marginLeft:12,marginTop:2}}>
-                                      Solution: <GlossaryText text={item.explanation} t={t}/>
-                                    </div>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          ):(
-                            <div style={{marginTop:7,color:t.textDim}}>No items mapped to this cell yet.</div>
-                          )}
-                        </div>
-                      );
-                    })}
-                    {(form.items||[]).some(item=>!form.correctMapping?.[item.id])&&(
-                      <div style={{padding:"10px 12px",borderRadius:10,border:`1px dashed ${t.amber}55`,background:`${t.amber}08`,fontSize:13,color:t.amber}}>
-                        Some draggable items are not mapped to a table cell yet.
-                      </div>
-                    )}
                   </div>
                 )}
                 {form.type==="ORDERING"&&(
@@ -27596,7 +27497,7 @@ function ObjectivesPage({t}) {
             {label:"MCQ Bank",value:`${MCQ_BANK.length} questions`},
             {label:"PBQ Bank",value:`${PBQ_BANK.length} simulations`},
             {label:"Domains",value:"5 objective areas"},
-            {label:"Question Types",value:"MCQ, terminal, ordering, hotspot, drag/drop, logs"},
+            {label:"Question Types",value:"MCQ, terminal, ordering, hotspot, Select & Fill, logs"},
           ].map(item=>(
             <div key={item.label} style={{padding:"12px 14px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel}}>
               <div className="label">{item.label}</div>

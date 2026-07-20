@@ -169,6 +169,10 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'onConsumeExamPass={handleConsumeExamPass}', "free Exam Mode access must consume a pass at start");
   requireContains("src/App.jsx", "tier: hasProAccess ? \"pro\" : \"free\"", "the app should use the same trusted Pro profile signals as PBQ RLS");
   requireContains("src/App.jsx", "mergeRemotePBQBanks(PBQ_BANK,remotePbqBank)", "partial remote PBQ results must not replace the complete local PBQ baseline");
+  requireContains("src/App.jsx", 'const SELECT_FILL_PBQ_TYPE = "SELECT & FILL"', "fill-blank and legacy matching PBQs should share one visible format");
+  requireContains("src/App.jsx", "function PBQSelectionWorkspace", "Select & Fill PBQs should use the reusable tap-to-select workspace");
+  requireContains("src/App.jsx", "selectionOptions:question.selectionOptions || []", "the shared PBQ selector options should persist in the Supabase payload");
+  requireContains("src/App.jsx", 'distractors.length<2', "Question Manager should require at least two distractors for Select & Fill questions");
   requirePattern("src/App.jsx", /user\?\.tier\s*===\s*"pro"\s*&&\s*\["active",\s*"trialing"\]\.includes\(user\?\.subscriptionStatus/, "paid Pro should depend on active/trialing subscription status");
   requireContains("src/App.jsx", 'fetch("/api/stripe/checkout"', "upgrade flow should call the server-side Stripe checkout endpoint");
   if (/wallet\?\.status==="ready"\?Number\(wallet\?\.balance\|\|0\):CIPHER_WELCOME_GRANT/.test(app)) {

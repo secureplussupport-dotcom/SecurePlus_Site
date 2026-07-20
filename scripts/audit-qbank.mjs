@@ -137,7 +137,49 @@ const mcqs = [...rawMcqs, ...importedMcqs]
 const basePbqs = evaluateLiteral("PBQ_BANK_BASE");
 const importedPbqs = evaluateLiteral("IMPORTED_PBQ_BANK");
 const lowQualityPbqIds = new Set(evaluateLiteral("LOW_QUALITY_PBQ_IDS"));
-const pbqs = [...basePbqs, ...importedPbqs].filter(q => !lowQualityPbqIds.has(q.id));
+const selectionDistractors = {
+  "1":["Hashing","Tokenization","Data masking","Digital signature","Key escrow","Key stretching","Certificate revocation"],
+  "2":["Phishing","Vishing","Smishing","Whaling","Pretexting","Tailgating","Watering-hole attack"],
+  "3":["Network segmentation","NAC","Firewall","IDS","IPS","VPN","Zero Trust"],
+  "4":["Preparation","Detection and analysis","Containment","Eradication","Recovery","Lessons learned","Root cause analysis"],
+  "5":["Risk acceptance","Risk avoidance","Risk transfer","Risk mitigation","SLE","ALE","ARO","Exposure factor"],
+};
+const uniqueOptions = values => {
+  const seen = new Set();
+  return values.map(value => String(value || "").trim()).filter(value => {
+    const key = normalize(value);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+const normalizeSelectionQuestion = question => {
+  if (question.type === "DRAG & DROP") {
+    const targets = (question.targets || []).filter(target => target.droppable !== false);
+    const targetById = new Map(targets.map((target, index) => [target.id, target.label || `Answer area ${index + 1}`]));
+    const blanks = (question.items || []).map((item, index) => ({
+      id:item.id || `b${index}`,
+      sentence:item.label || `Prompt ${index + 1}`,
+      answer:targetById.get(question.correctMapping?.[item.id]) || "",
+    }));
+    return {...question,type:"SELECT & FILL",legacySelectionType:"DRAG & DROP",blanks,selectionOptions:uniqueOptions(targets.map(target => target.label))};
+  }
+  if (question.type !== "FILL BLANK" && question.type !== "SELECT & FILL") return question;
+  const blanks = question.blanks || [];
+  const answers = uniqueOptions(blanks.map(blank => blank.answer));
+  const hinted = blanks.flatMap(blank => /[,;|]/.test(String(blank.hint || "")) ? String(blank.hint).split(/[,;|]/) : []);
+  const selectionOptions = uniqueOptions([...answers, ...(question.selectionOptions || []), ...hinted]);
+  const answerKeys = new Set(answers.map(normalize));
+  for (const option of selectionDistractors[String(question.ch || "1")] || []) {
+    const distractorCount = selectionOptions.filter(value => !answerKeys.has(normalize(value))).length;
+    if (selectionOptions.length >= Math.max(4, answers.length + 2) && distractorCount >= 2) break;
+    if (!selectionOptions.some(value => normalize(value) === normalize(option))) selectionOptions.push(option);
+  }
+  return {...question,type:"SELECT & FILL",legacySelectionType:"FILL BLANK",blanks,selectionOptions};
+};
+const pbqs = [...basePbqs, ...importedPbqs]
+  .filter(q => !lowQualityPbqIds.has(q.id))
+  .map(normalizeSelectionQuestion);
 const errors = [];
 const warnings = [];
 const MAX_MCQ_STEM_LENGTH = 360;
@@ -208,12 +250,15 @@ for (const q of pbqs) {
     push(warnings, q.id, `PBQ explanation is too long (${q.explanation.length}/${MAX_PBQ_EXPLANATION_LENGTH} chars)`);
   }
 
-  if (q.type === "DRAG & DROP") {
-    if (!Array.isArray(q.items) || !Array.isArray(q.targets) || !q.correctMapping) push(errors, q.id, "drag/drop PBQ needs items, targets, and correctMapping");
+  if (q.type === "SELECT & FILL") {
+    const answerKeys = new Set((q.blanks || []).map(blank => normalize(blank.answer)));
+    const distractors = (q.selectionOptions || []).filter(option => !answerKeys.has(normalize(option)));
+    if (!Array.isArray(q.blanks) || !q.blanks.length || q.blanks.some(blank => !blank.answer || !blank.sentence)) push(errors, q.id, "Select & Fill PBQ needs complete prompt/answer rows");
+    if (!Array.isArray(q.selectionOptions) || q.selectionOptions.length < 4) push(errors, q.id, "Select & Fill PBQ needs at least four shared selector options");
+    if (q.blanks?.some(blank => !(q.selectionOptions || []).some(option => normalize(option) === normalize(blank.answer)))) push(errors, q.id, "Select & Fill correct answer is missing from the shared option bank");
+    if (q.legacySelectionType === "FILL BLANK" && distractors.length < 2) push(errors, q.id, "converted fill-blank PBQ needs at least two plausible distractors");
   } else if (q.type === "ORDERING") {
     if (!Array.isArray(q.items) || !Array.isArray(q.correctOrder)) push(errors, q.id, "ordering PBQ needs items and correctOrder");
-  } else if (q.type === "FILL BLANK") {
-    if (!Array.isArray(q.blanks) || q.blanks.some(blank => !blank.answer)) push(errors, q.id, "fill-blank PBQ needs blanks with answers");
   } else if (!("correct" in q) && !q.answer && !q.correctMapping && !q.correctOrder) {
     push(errors, q.id, "PBQ needs a correct answer, answer text, mapping, or ordering key");
   }
