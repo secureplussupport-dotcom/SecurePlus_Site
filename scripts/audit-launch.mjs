@@ -126,6 +126,8 @@ if (!errors.length) {
   requireContains("api/account/delete.js", 'supabase.auth.admin.signOut(token, "global")', "account deletion must revoke Supabase sessions before deleting the user");
   requireContains("supabase/account-deletion.sql", "alter table public.account_deletion_requests enable row level security", "deletion requests must have RLS enabled");
   requireContains("supabase/account-deletion.sql", "revoke all on table public.account_deletion_requests from anon, authenticated", "browser clients must not access deletion tokens");
+  requireContains("supabase/account-deletion.sql", "grant usage on schema public to service_role", "the server role must be able to reach the deletion request table through the Data API");
+  requireContains("supabase/account-deletion.sql", "notify pgrst, 'reload schema'", "account deletion setup should refresh the PostgREST schema cache");
   requireContains("api/stripe/checkout.js", 'requireEnv("STRIPE_PRICE_PRO")', "Stripe checkout must use the configured Pro price ID");
   requireContains("api/stripe/checkout.js", "PRO_ACADEMY_PASS_AMOUNT = 999", "Stripe checkout must require the advertised $9.99 amount");
   requireContains("api/stripe/checkout.js", 'PRO_ACADEMY_PASS_INTERVAL = "month"', "Stripe checkout must use a monthly interval base");

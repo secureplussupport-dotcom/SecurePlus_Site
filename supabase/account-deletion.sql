@@ -34,4 +34,10 @@ alter table public.account_deletion_requests enable row level security;
 -- Browser clients must never read or mutate deletion tokens. The Vercel API
 -- uses the service role, which bypasses RLS, after verifying the signed-in user.
 revoke all on table public.account_deletion_requests from anon, authenticated;
+revoke all on table public.account_deletion_requests from public;
+grant usage on schema public to service_role;
 grant all on table public.account_deletion_requests to service_role;
+
+-- Make the table and its explicit service-role grant visible to PostgREST
+-- immediately, including projects using Supabase's newer opt-in Data API grants.
+notify pgrst, 'reload schema';

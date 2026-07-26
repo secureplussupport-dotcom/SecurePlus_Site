@@ -810,4 +810,7 @@ create index if not exists account_deletion_requests_expiry_idx
 
 alter table public.account_deletion_requests enable row level security;
 revoke all on table public.account_deletion_requests from anon, authenticated;
+revoke all on table public.account_deletion_requests from public;
+grant usage on schema public to service_role;
 grant all on table public.account_deletion_requests to service_role;
+notify pgrst, 'reload schema';
