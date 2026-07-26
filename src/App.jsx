@@ -212,6 +212,8 @@ const CIPHER_FIRST_PBQ_UNLOCKS = Object.freeze(["p014","p018","p033"]);
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
 const PRO_ACADEMY_PASS_NAME = "Pro Academy Pass";
 const PRO_ACADEMY_PASS_PRICE = "$9.99 / 3 months";
+const PRO_MONTHLY_PASS_PRICE = "$4.99 / month";
+const PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus";
 const PRO_ACADEMY_PASS_DESCRIPTION = "Built around the typical Security+ study window. Unlock all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.";
 const PRO_ACADEMY_PASS_TRUST = "Original scenario-based practice. Not exam dumps.";
 const GUEST_SMART_REVIEW_BRIDGE_KEY = "secureplus-pending-guest-smart-review";
@@ -16959,6 +16961,41 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-outcome-head{display:flex;align-items:center;gap:9px;margin-bottom:8px;color:${t.text};font-size:13px;font-weight:950;}
 .upgrade-outcome-icon{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:color-mix(in srgb,var(--outcome-color) 14%,transparent);color:var(--outcome-color);flex-shrink:0;}
 .upgrade-outcome p{margin:0;color:${t.textSec};font-size:12px;line-height:1.6;}
+.upgrade-plan-selector{margin-bottom:18px;padding:22px;border:1px solid ${t.border};border-radius:12px;background:${t.surface};box-shadow:0 18px 42px rgba(7,12,24,.08);}
+.upgrade-plan-selector-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px;}
+.upgrade-plan-selector-head h3{margin:0 0 5px;color:${t.text};font-size:20px;line-height:1.25;}
+.upgrade-plan-selector-head p{margin:0;max-width:590px;color:${t.textSec};font-size:12px;line-height:1.6;}
+.upgrade-plan-choice-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:14px;align-items:stretch;}
+.upgrade-plan-option{position:relative;display:flex;flex-direction:column;min-width:0;padding:21px;border:1px solid ${t.border};border-radius:10px;background:${t.panel};transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
+.upgrade-plan-option:hover{transform:translateY(-2px);border-color:${t.accent}55;box-shadow:0 16px 30px ${t.accent}0d;}
+.upgrade-plan-option.recommended{overflow:hidden;border:2px solid ${t.accent};background:linear-gradient(145deg,${t.accent}0e,${t.surface} 45%,${t.green}09);box-shadow:0 18px 38px ${t.accent}16;}
+.upgrade-plan-option.recommended::after{content:"";position:absolute;right:-52px;top:-58px;width:150px;height:150px;border:28px solid ${t.accent}0a;border-radius:50%;pointer-events:none;}
+.upgrade-plan-option-top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:28px;margin-bottom:10px;}
+.upgrade-plan-kicker{color:${t.textDim};font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
+.upgrade-recommended-badge{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:${t.accent};color:#fff;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.03em;}
+.upgrade-plan-option h3{position:relative;z-index:1;margin:0;color:${t.text};font-size:22px;line-height:1.2;}
+.upgrade-plan-option .upgrade-price-row{position:relative;z-index:1;margin:14px 0 7px;}
+.upgrade-plan-option .upgrade-price{font-size:38px;}
+.upgrade-plan-math{position:relative;z-index:1;min-height:38px;margin:0 0 12px;color:${t.textSec};font-size:12px;line-height:1.55;}
+.upgrade-plan-math strong{color:${t.text};}
+.upgrade-savings-pill{position:relative;z-index:1;display:inline-flex;align-items:center;gap:5px;width:fit-content;margin:0 0 12px;padding:7px 10px;border-radius:999px;background:${t.green}14;color:${t.green};font-size:11px;font-weight:950;}
+.upgrade-plan-summary{position:relative;z-index:1;margin:0 0 14px;color:${t.textSec};font-size:12px;line-height:1.6;}
+.upgrade-plan-mini-list{position:relative;z-index:1;display:grid;gap:8px;margin:0 0 18px;}
+.upgrade-plan-mini-item{display:flex;align-items:flex-start;gap:7px;color:${t.textSec};font-size:11px;line-height:1.45;}
+.upgrade-plan-mini-item svg{flex-shrink:0;margin-top:1px;color:${t.green};}
+.upgrade-plan-option .upgrade-primary-cta{position:relative;z-index:1;margin-top:auto;}
+.upgrade-monthly-cta{border-color:${t.accent}60;color:${t.accent};background:transparent;}
+.upgrade-monthly-cta:hover{background:${t.accent}0c;}
+.upgrade-shared-access{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(245px,.72fr);gap:20px;margin-top:16px;padding:18px;border:1px solid ${t.border};border-radius:10px;background:color-mix(in srgb,${t.panel} 82%,transparent);}
+.upgrade-shared-access h4{margin:0 0 10px;color:${t.text};font-size:14px;}
+.upgrade-shared-access .upgrade-feature-list{grid-template-columns:repeat(2,minmax(0,1fr));}
+.upgrade-shared-access .upgrade-feature{font-size:11px;}
+.upgrade-checkout-note{display:flex;flex-direction:column;justify-content:center;padding:15px;border:1px solid ${t.accent}30;border-radius:8px;background:${t.accent}0b;}
+.upgrade-checkout-note .upgrade-original-line{margin-bottom:10px;border:0;padding:0;background:transparent;}
+.upgrade-checkout-note p{margin:0;color:${t.textSec};font-size:11px;line-height:1.6;}
+.upgrade-checkout-note strong{color:${t.text};}
+.upgrade-checkout-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.upgrade-checkout-actions .btn{flex:1;min-width:130px;justify-content:center;font-size:11px;}
 .upgrade-decision-card{position:relative;overflow:hidden;padding:28px;border:1.5px solid ${t.accent};border-radius:8px;background:linear-gradient(145deg,${t.accent}10,${t.surface} 48%,${t.green}08);box-shadow:0 22px 50px ${t.accent}16;margin-bottom:18px;}
 .upgrade-decision-card::before{content:"";position:absolute;right:-70px;top:-86px;width:210px;height:210px;border-radius:50%;border:38px solid ${t.accent}09;pointer-events:none;}
 .upgrade-decision-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.72fr);gap:30px;align-items:center;}
@@ -17453,6 +17490,13 @@ body{background:
   .upgrade-page{padding:24px 16px 132px!important;}
   .upgrade-hero h2{font-size:27px!important;}
   .upgrade-outcome-grid{grid-template-columns:1fr!important;}
+  .upgrade-plan-selector{padding:16px!important;}
+  .upgrade-plan-selector-head{display:block!important;}
+  .upgrade-plan-choice-grid{grid-template-columns:1fr!important;}
+  .upgrade-plan-option.recommended{order:-1;}
+  .upgrade-plan-option{padding:19px!important;}
+  .upgrade-shared-access{grid-template-columns:1fr!important;padding:15px!important;}
+  .upgrade-shared-access .upgrade-feature-list{grid-template-columns:1fr!important;}
   .upgrade-decision-card{padding:20px!important;}
   .upgrade-decision-grid{grid-template-columns:1fr!important;gap:20px!important;}
   .upgrade-price{font-size:39px!important;}
@@ -26998,11 +27042,11 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
   const isPro=user?.tier==="pro";
   useEffect(()=>{
-    capture("upgrade_page_viewed", { tier:user?.tier || "guest", plan:"academy_pass_3_month_9_99" });
+    capture("upgrade_page_viewed", { tier:user?.tier || "guest", plans:"monthly_4_99,three_month_9_99" });
   },[user?.tier]);
-  const startUpgrade=()=>{
-    capture("upgrade_button_clicked", { source:"upgrade_page", tier:user?.tier || "guest" });
-    onUpgrade("pro");
+  const startUpgrade=(plan="three_month")=>{
+    capture("upgrade_button_clicked", { source:"upgrade_page", tier:user?.tier || "guest", plan });
+    onUpgrade(plan);
   };
   const outcomes=[
     {title:"Find the weak spot",body:"Use chapter analytics and Smart Review to decide what to study next.",color:t.accent,Icon:Target},
@@ -27033,7 +27077,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         <p>
           Free gives you every MCQ. Pro adds the applied practice, timed rehearsal, and feedback loop that help you decide what to improve next.
         </p>
-        <div className="upgrade-plan-note"><ShieldCheck size={14}/> 3-month Academy Pass · {PRO_ACADEMY_PASS_PRICE} · Zero coin requirements · Cancel anytime</div>
+        <div className="upgrade-plan-note"><ShieldCheck size={14}/> Recommended: {PRO_THREE_MONTH_PLAN_NAME} · {PRO_ACADEMY_PASS_PRICE} · Save 33% vs monthly</div>
         <MascotGuide
           animation={isPro?"cheer":"unlock"}
           size={86}
@@ -27060,58 +27104,92 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         ))}
       </div>
 
-      <div className="upgrade-decision-card">
-        <div className="upgrade-decision-grid">
+      <section className="upgrade-plan-selector" aria-labelledby="pro-plan-heading">
+        <div className="upgrade-plan-selector-head">
           <div>
-            <span className="upgrade-plan-badge"><Sparkles size={13}/> {PRO_ACADEMY_PASS_NAME}</span>
+            <h3 id="pro-plan-heading">Choose your Pro Academy Pass</h3>
+            <p>Both plans unlock the same Pro tools with zero Cipher Coin requirements. Choose based on how long you expect to study.</p>
+          </div>
+        </div>
+
+        <div className="upgrade-plan-choice-grid">
+          <article className="upgrade-plan-option">
+            <div className="upgrade-plan-option-top">
+              <span className="upgrade-plan-kicker">Most flexible</span>
+            </div>
+            <h3>Monthly Flex</h3>
+            <div className="upgrade-price-row">
+              <div className="upgrade-price">$4.99</div>
+              <div className="upgrade-price-cycle">USD / month<br/>renews monthly</div>
+            </div>
+            <p className="upgrade-plan-math"><strong>$14.97 across 3 months.</strong> A lower upfront commitment if you are unsure how long you need.</p>
+            <p className="upgrade-plan-summary">Full Pro access with the freedom to reassess each month.</p>
+            <div className="upgrade-plan-mini-list">
+              {["All Pro practice tools","Zero Cipher Coin requirements","Cancel before the next monthly renewal"].map(item=>(
+                <div key={item} className="upgrade-plan-mini-item"><Check size={14}/><span>{item}</span></div>
+              ))}
+            </div>
+            {isPro?(
+              <button className="btn btn-ghost upgrade-primary-cta" disabled><CheckCircle2 size={17}/> Pro is active</button>
+            ):(
+              <button className="btn btn-outline upgrade-primary-cta upgrade-monthly-cta" onClick={()=>startUpgrade("monthly")} disabled={billingLoading}>
+                {billingLoading?"Opening checkout...":`Choose ${PRO_MONTHLY_PASS_PRICE}`}
+              </button>
+            )}
+          </article>
+
+          <article className="upgrade-plan-option recommended">
+            <div className="upgrade-plan-option-top">
+              <span className="upgrade-plan-kicker">Best for exam preparation</span>
+              <span className="upgrade-recommended-badge"><Sparkles size={12}/> Recommended</span>
+            </div>
+            <h3>{PRO_THREE_MONTH_PLAN_NAME}</h3>
             <div className="upgrade-price-row">
               <div className="upgrade-price">$9.99</div>
               <div className="upgrade-price-cycle">USD / 3 months<br/>renews every 3 months</div>
             </div>
-            <div className="upgrade-pass-description">{PRO_ACADEMY_PASS_DESCRIPTION}</div>
-            <div className="upgrade-original-line"><ShieldCheck size={14}/>{PRO_ACADEMY_PASS_TRUST}</div>
-            <div className="upgrade-equivalent"><strong>One focused study term</strong> with a single $9.99 charge every 3 months until you cancel.</div>
-            <div className="upgrade-accessible-note">
-              <strong>Why so accessible?</strong> SecurePlus is built to make high-quality Security+ practice reachable for students and career changers, without the enterprise training markup.
+            <div className="upgrade-savings-pill"><CheckCircle2 size={14}/> Save $4.98 (33%) across 3 months</div>
+            <p className="upgrade-plan-math"><strong>$3.33/month equivalent.</strong> One focused study term at the lowest effective monthly price.</p>
+            <p className="upgrade-plan-summary">{PRO_ACADEMY_PASS_DESCRIPTION}</p>
+            <div className="upgrade-plan-mini-list">
+              {["All Pro practice tools","Zero Cipher Coin requirements","Built around a typical Security+ study window"].map(item=>(
+                <div key={item} className="upgrade-plan-mini-item"><Check size={14}/><span>{item}</span></div>
+              ))}
             </div>
+            {isPro?(
+              <button className="btn btn-ghost upgrade-primary-cta" disabled><CheckCircle2 size={17}/> Pro is active</button>
+            ):(
+              <button className="btn btn-primary upgrade-primary-cta" onClick={()=>startUpgrade("three_month")} disabled={billingLoading}>
+                {billingLoading?"Opening secure checkout...":`Choose ${PRO_THREE_MONTH_PLAN_NAME} · ${PRO_ACADEMY_PASS_PRICE} →`}
+              </button>
+            )}
+          </article>
+        </div>
+
+        <div className="upgrade-shared-access">
+          <div>
+            <h4>Included with either Pro plan</h4>
             <div className="upgrade-feature-list">
               {features.map(feature=>(
-                <div key={feature} className="upgrade-feature"><CheckCircle2 size={17}/><span>{feature}</span></div>
+                <div key={feature} className="upgrade-feature"><CheckCircle2 size={16}/><span>{feature}</span></div>
               ))}
             </div>
           </div>
-
-          <div className="upgrade-action-panel">
-            <h3>{isPro?"Your Pro tools are active":"Ready for more than answer checking?"}</h3>
-            <p>{isPro?"Keep building your readiness with PBQs, timed exams, and targeted review.":"Unlock the practice loop designed to show you what to work on next."}</p>
-            {isPro?(
-              <button className="btn btn-ghost upgrade-primary-cta" disabled><CheckCircle2 size={17}/> Current plan</button>
-            ):(
-              <button className="btn btn-primary upgrade-primary-cta" onClick={startUpgrade} disabled={billingLoading}>
-                {billingLoading?"Opening secure checkout...":`Unlock Pro · ${PRO_ACADEMY_PASS_PRICE} →`}
-              </button>
-            )}
-            <div className="upgrade-original-badge">
-              <ShieldCheck size={16}/>
-              <span>
-                <strong>{PRO_ACADEMY_PASS_TRUST}</strong>
-                Independent study questions that teach the underlying concepts. SecurePlus is not affiliated with or endorsed by CompTIA.
-              </span>
+          <div className="upgrade-checkout-note">
+            <div className="upgrade-original-line"><ShieldCheck size={14}/>{PRO_ACADEMY_PASS_TRUST}</div>
+            <p><strong>Simple, secure billing.</strong> Stripe processes your payment. SecurePlus never stores your card details, and your free MCQ access remains available if you do not upgrade.</p>
+            <div className="upgrade-checkout-actions">
+              <span className="upgrade-trust-item"><LockKeyhole size={13}/> Stripe checkout</span>
+              <span className="upgrade-trust-item"><Check size={13}/> Cancel anytime</span>
             </div>
-            <div className="upgrade-trust-row">
-              <div className="upgrade-trust-item"><ShieldCheck size={13}/> Stripe checkout</div>
-              <div className="upgrade-trust-item"><Check size={13}/> Cancel anytime</div>
-              <div className="upgrade-trust-item"><LockKeyhole size={13}/> No card stored here</div>
-            </div>
-            {!isPro&&<div className="upgrade-free-note">Your free MCQ access stays available whether you upgrade or not.</div>}
             {!isPro&&(
-              <button className="btn btn-ghost" style={{width:"100%",justifyContent:"center",fontSize:11,marginTop:8}} onClick={onSyncBilling} disabled={billingLoading}>
+              <button className="btn btn-ghost" style={{width:"100%",justifyContent:"center",fontSize:11,marginTop:12}} onClick={onSyncBilling} disabled={billingLoading}>
                 Already paid? Refresh Pro status
               </button>
             )}
           </div>
         </div>
-      </div>
+      </section>
 
       <div className="upgrade-compare">
         <h3>Choose by how you want to practise</h3>
@@ -27175,10 +27253,10 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
 
       {!isPro&&(
         <div className="upgrade-mobile-cta">
-          <button className="btn btn-primary" onClick={startUpgrade} disabled={billingLoading}>
-            {billingLoading?"Opening checkout...":`Unlock Pro · ${PRO_ACADEMY_PASS_PRICE}`}
+          <button className="btn btn-primary" onClick={()=>startUpgrade("three_month")} disabled={billingLoading}>
+            {billingLoading?"Opening checkout...":`${PRO_THREE_MONTH_PLAN_NAME} · ${PRO_ACADEMY_PASS_PRICE}`}
           </button>
-          <div className="upgrade-mobile-trust">{PRO_ACADEMY_PASS_TRUST}</div>
+          <div className="upgrade-mobile-trust">Recommended · Save 33% vs monthly · {PRO_ACADEMY_PASS_TRUST}</div>
         </div>
       )}
     </div>
@@ -29106,13 +29184,9 @@ export default function App() {
     }
     setAccountDeletion({...emptyAccountDeletionState(),stage:"request",email:user.email});
   },[user]);
-  const handleUpgrade=useCallback(async tier=>{
+  const handleUpgrade=useCallback(async (plan="three_month")=>{
     if(!user)return;
-    if(tier==="free"){
-      const updated={...user,tier};await DB.saveUser(updated);setUser(updated);
-      alert("Switched this local demo profile back to Free. In production, downgrades should go through Stripe billing portal or subscription cancellation.");
-      return;
-    }
+    const selectedPlan=plan==="monthly"?"monthly":"three_month";
 
     if(!isSupabaseConfigured){
       alert("Stripe Checkout is ready in the project code, but Supabase env vars are not configured yet. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY, sign in with Supabase, then try again.");
@@ -29133,7 +29207,10 @@ export default function App() {
           "content-type":"application/json",
           authorization:`Bearer ${token}`,
         },
-        body: JSON.stringify({ referralCode: getStoredReferralCode() }),
+        body: JSON.stringify({
+          plan:selectedPlan,
+          referralCode:getStoredReferralCode(),
+        }),
       });
       const data=await response.json().catch(()=>({}));
       if(!response.ok||!data.url) throw new Error(data.error||"Unable to start Checkout.");

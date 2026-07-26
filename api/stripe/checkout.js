@@ -11,32 +11,51 @@ const PRO_ACADEMY_PASS_AMOUNT = 999;
 const PRO_ACADEMY_PASS_CURRENCY = "usd";
 const PRO_ACADEMY_PASS_INTERVAL = "month";
 const PRO_ACADEMY_PASS_INTERVAL_COUNT = 3;
-let validatedProAcademyPassPriceId = "";
+const PRO_MONTHLY_AMOUNT = 499;
+const PRO_MONTHLY_INTERVAL_COUNT = 1;
+const PRO_PLAN_CONFIGS = Object.freeze({
+  monthly: {
+    envName: "STRIPE_PRICE_PRO_MONTHLY",
+    amount: PRO_MONTHLY_AMOUNT,
+    intervalCount: PRO_MONTHLY_INTERVAL_COUNT,
+    metadataPlan: "pro_monthly",
+    description: "$4.99 USD recurring price billed every month",
+  },
+  three_month: {
+    envName: "STRIPE_PRICE_PRO",
+    amount: PRO_ACADEMY_PASS_AMOUNT,
+    intervalCount: PRO_ACADEMY_PASS_INTERVAL_COUNT,
+    metadataPlan: "pro_3_month_plus",
+    description: "$9.99 USD recurring price billed every 3 months",
+  },
+});
+const validatedPriceIds = new Map();
 
-function isProAcademyPassPrice(price) {
+function isConfiguredProPrice(price, planConfig) {
   return Boolean(
     price?.active &&
     price?.type === "recurring" &&
-    price?.unit_amount === PRO_ACADEMY_PASS_AMOUNT &&
+    price?.unit_amount === planConfig.amount &&
     price?.currency === PRO_ACADEMY_PASS_CURRENCY &&
     price?.recurring?.interval === PRO_ACADEMY_PASS_INTERVAL &&
-    price?.recurring?.interval_count === PRO_ACADEMY_PASS_INTERVAL_COUNT
+    price?.recurring?.interval_count === planConfig.intervalCount
   );
 }
 
-async function getProAcademyPassPriceId(stripe) {
-  if (validatedProAcademyPassPriceId) return validatedProAcademyPassPriceId;
-  const priceId = requireEnv("STRIPE_PRICE_PRO");
+async function getConfiguredProPriceId(stripe, planKey) {
+  if (validatedPriceIds.has(planKey)) return validatedPriceIds.get(planKey);
+  const planConfig = PRO_PLAN_CONFIGS[planKey];
+  const priceId = requireEnv(planConfig.envName);
   const price = await stripe.prices.retrieve(priceId);
-  if (!isProAcademyPassPrice(price)) {
+  if (!isConfiguredProPrice(price, planConfig)) {
     const error = new Error(
-      "STRIPE_PRICE_PRO must be an active $9.99 USD recurring price billed every 3 months."
+      `${planConfig.envName} must be an active ${planConfig.description}.`
     );
-    error.code = "invalid_pro_academy_pass_price";
+    error.code = "invalid_pro_price";
     throw error;
   }
-  validatedProAcademyPassPriceId = price.id;
-  return validatedProAcademyPassPriceId;
+  validatedPriceIds.set(planKey, price.id);
+  return price.id;
 }
 
 function successUrl(appUrl) {
@@ -59,6 +78,8 @@ export default async function handler(req, res) {
     const token = getBearerToken(req);
     if (!token) return json(res, 401, { error: "Sign in before upgrading." });
     const body = await getJsonBody(req);
+    const planKey = body?.plan === "monthly" ? "monthly" : "three_month";
+    const planConfig = PRO_PLAN_CONFIGS[planKey];
     const referralCode = String(body.referralCode || "")
       .trim()
       .toUpperCase()
@@ -117,14 +138,14 @@ export default async function handler(req, res) {
     }
 
     const appUrl = process.env.APP_URL || req.headers.origin || "http://localhost:5173";
-    const proAcademyPassPriceId = await getProAcademyPassPriceId(stripe);
+    const selectedPriceId = await getConfiguredProPriceId(stripe, planKey);
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       customer: customerId,
       client_reference_id: authUser.id,
       line_items: [
         {
-          price: proAcademyPassPriceId,
+          price: selectedPriceId,
           quantity: 1,
         },
       ],
@@ -132,13 +153,15 @@ export default async function handler(req, res) {
       cancel_url: process.env.STRIPE_CANCEL_URL || `${appUrl}/?checkout=cancelled`,
       metadata: {
         supabase_user_id: authUser.id,
-        plan: "pro_academy_pass_3_month",
+        plan: planConfig.metadataPlan,
+        selected_plan: planKey,
         referral_code: referralCode,
       },
       subscription_data: {
         metadata: {
           supabase_user_id: authUser.id,
-          plan: "pro_academy_pass_3_month",
+          plan: planConfig.metadataPlan,
+          selected_plan: planKey,
           referral_code: referralCode,
         },
       },
@@ -147,9 +170,9 @@ export default async function handler(req, res) {
     return json(res, 200, { url: session.url });
   } catch (error) {
     console.error("Stripe checkout failed:", error);
-    if (error?.code === "invalid_pro_academy_pass_price") {
+    if (error?.code === "invalid_pro_price") {
       return json(res, 503, {
-        error: "The Pro Academy Pass is being updated in Stripe. Please try again shortly.",
+        error: "The selected Pro plan is being updated in Stripe. Please try again shortly.",
       });
     }
     return json(res, 500, { error: "Unable to start Stripe Checkout." });

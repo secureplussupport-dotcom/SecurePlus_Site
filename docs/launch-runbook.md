@@ -100,19 +100,21 @@ supabase/email-templates/README.md
 
 ## 5. Stripe Setup
 
-Create one recurring **Pro Academy Pass** price:
+Create two recurring prices under the **Pro Academy Pass** product:
 
 ```txt
-$9.99 USD every 3 months
+Monthly Flex: $4.99 USD every month
+3-Month Plus: $9.99 USD every 3 months
 ```
 
-Save the Stripe price ID as:
+Save both Stripe Price IDs:
 
 ```bash
-STRIPE_PRICE_PRO=price_xxx
+STRIPE_PRICE_PRO=price_three_month_xxx
+STRIPE_PRICE_PRO_MONTHLY=price_monthly_xxx
 ```
 
-Create a new Stripe Price instead of editing the old price. After replacing the Vercel environment value, redeploy and run a test-mode checkout. The server rejects a Price ID unless it is active, `$9.99 USD`, and billed every 3 months.
+Create new Stripe Prices instead of editing old ones. After adding both Vercel environment values, redeploy and run a test-mode checkout for each option. The server rejects IDs unless Monthly Flex is an active `$4.99 USD` monthly Price and 3-Month Plus is an active `$9.99 USD` Price billed every 3 months.
 
 Add a webhook endpoint:
 
@@ -154,6 +156,7 @@ SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_PRICE_PRO=
+STRIPE_PRICE_PRO_MONTHLY=
 STRIPE_WEBHOOK_SECRET=
 APP_URL=https://www.secureplusprep.com
 STRIPE_SUCCESS_URL=https://www.secureplusprep.com/?checkout=success

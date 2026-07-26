@@ -71,6 +71,7 @@ ACCOUNT_DELETE_SITE_URL=https://secureplusprep.com
 
 STRIPE_SECRET_KEY=
 STRIPE_PRICE_PRO=
+STRIPE_PRICE_PRO_MONTHLY=
 STRIPE_WEBHOOK_SECRET=
 
 APP_URL=
@@ -164,19 +165,21 @@ The Referrals page calls `/api/referrals/me`, which creates or returns the user'
 
 ## Stripe Setup
 
-Create a new recurring Stripe price for the **Pro Academy Pass**:
+Under the **Pro Academy Pass** product, create these two recurring Stripe prices:
 
 ```txt
-$9.99 USD every 3 months
+Monthly Flex: $4.99 USD every month
+3-Month Plus: $9.99 USD every 3 months
 ```
 
-Stripe recurring amounts and billing intervals cannot be edited in place. Create a new Price under the existing SecurePlus Pro product, then replace the environment value:
+Stripe recurring amounts and billing intervals cannot be edited in place. Create new Prices under the existing SecurePlus Pro product, then save both Price IDs:
 
 ```bash
-STRIPE_PRICE_PRO=price_xxx
+STRIPE_PRICE_PRO=price_three_month_xxx
+STRIPE_PRICE_PRO_MONTHLY=price_monthly_xxx
 ```
 
-Checkout validates that this Price is active, is `$9.99 USD`, and renews every 3 months. A leftover yearly or old `$4.99` Price ID is rejected so customers cannot be billed differently from the pricing page. Existing subscriptions are not silently changed; manage those separately in Stripe.
+Checkout validates the selected Price on the server before charging: Monthly Flex must be an active `$4.99 USD` monthly Price, and 3-Month Plus must be an active `$9.99 USD` Price renewing every 3 months. Yearly or incorrectly priced IDs are rejected so customers cannot be billed differently from the pricing page. Existing subscriptions are not silently changed; manage those separately in Stripe.
 
 API routes:
 

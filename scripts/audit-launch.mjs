@@ -77,6 +77,7 @@ if (!errors.length) {
     "SUPABASE_SERVICE_ROLE_KEY",
     "STRIPE_SECRET_KEY",
     "STRIPE_PRICE_PRO",
+    "STRIPE_PRICE_PRO_MONTHLY",
     "STRIPE_WEBHOOK_SECRET",
     "APP_URL",
     "RESEND_API_KEY",
@@ -128,11 +129,15 @@ if (!errors.length) {
   requireContains("supabase/account-deletion.sql", "revoke all on table public.account_deletion_requests from anon, authenticated", "browser clients must not access deletion tokens");
   requireContains("supabase/account-deletion.sql", "grant usage on schema public to service_role", "the server role must be able to reach the deletion request table through the Data API");
   requireContains("supabase/account-deletion.sql", "notify pgrst, 'reload schema'", "account deletion setup should refresh the PostgREST schema cache");
-  requireContains("api/stripe/checkout.js", 'requireEnv("STRIPE_PRICE_PRO")', "Stripe checkout must use the configured Pro price ID");
+  requireContains("api/stripe/checkout.js", 'envName: "STRIPE_PRICE_PRO"', "Stripe checkout must use the configured three-month Pro price ID");
+  requireContains("api/stripe/checkout.js", 'envName: "STRIPE_PRICE_PRO_MONTHLY"', "Stripe checkout must use the configured monthly Pro price ID");
   requireContains("api/stripe/checkout.js", "PRO_ACADEMY_PASS_AMOUNT = 999", "Stripe checkout must require the advertised $9.99 amount");
+  requireContains("api/stripe/checkout.js", "PRO_MONTHLY_AMOUNT = 499", "Stripe checkout must require the advertised $4.99 monthly amount");
   requireContains("api/stripe/checkout.js", 'PRO_ACADEMY_PASS_INTERVAL = "month"', "Stripe checkout must use a monthly interval base");
   requireContains("api/stripe/checkout.js", "PRO_ACADEMY_PASS_INTERVAL_COUNT = 3", "Stripe checkout must bill every three months");
-  requireContains("api/stripe/checkout.js", "isProAcademyPassPrice", "Stripe checkout must validate the configured price before charging");
+  requireContains("api/stripe/checkout.js", "PRO_MONTHLY_INTERVAL_COUNT = 1", "Stripe checkout must bill the monthly option every month");
+  requireContains("api/stripe/checkout.js", "isConfiguredProPrice", "Stripe checkout must validate each configured price before charging");
+  requireContains("api/stripe/checkout.js", 'body?.plan === "monthly" ? "monthly" : "three_month"', "Stripe checkout must allow only known server-side plan configurations");
   requireContains("api/stripe/checkout.js", "client_reference_id: authUser.id", "Stripe checkout must bind the session to the Supabase user id");
   requireContains("api/stripe/sync.js", "sessionUserId !== authUser.id", "Stripe sync must reject checkout sessions owned by another user");
   requireContains("api/stripe/webhook.js", "stripe.webhooks.constructEvent", "Stripe webhook must verify the webhook signature");
@@ -192,6 +197,11 @@ if (!errors.length) {
   requireContains("src/App.jsx", "Preparing your ID…", "the onboarding buffer should explain that the tailored ID is being prepared");
   requirePattern("src/App.jsx", /user\?\.tier\s*===\s*"pro"\s*&&\s*\["active",\s*"trialing"\]\.includes\(user\?\.subscriptionStatus/, "paid Pro should depend on active/trialing subscription status");
   requireContains("src/App.jsx", 'fetch("/api/stripe/checkout"', "upgrade flow should call the server-side Stripe checkout endpoint");
+  requireContains("src/App.jsx", 'PRO_MONTHLY_PASS_PRICE = "$4.99 / month"', "pricing should offer the $4.99 monthly option");
+  requireContains("src/App.jsx", 'PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus"', "pricing should name the recommended three-month option clearly");
+  requireContains("src/App.jsx", "Save $4.98 (33%) across 3 months", "pricing should explain the three-month savings honestly");
+  requireContains("src/App.jsx", "Recommended</span>", "pricing should visually recommend the three-month plan");
+  requireContains("src/App.jsx", "plan:selectedPlan", "upgrade requests should send the selected plan without accepting a client price ID");
   if (/wallet\?\.status==="ready"\?Number\(wallet\?\.balance\|\|0\):CIPHER_WELCOME_GRANT/.test(app)) {
     push(errors, "src/App.jsx", "onboarding must not display an unverified 150-coin balance while the persisted wallet is loading");
   }
