@@ -561,6 +561,24 @@ function getWrongOptionFeedback(question,index) {
   const correctText=question?.opts?.[question.correct] || "the correct option";
   return `This option is not the best answer for the scenario. The better answer is ${String.fromCharCode(65+(question?.correct||0))}: ${correctText}. ${question?.exp||""}`.trim();
 }
+function MCQFeedbackVerdict({correct,t,compact=false}) {
+  return (
+    <div
+      className="mcq-feedback-verdict"
+      style={{
+        display:"flex",
+        alignItems:"center",
+        gap:compact?6:8,
+        color:correct?t.green:t.red,
+        fontSize:compact?12:15,
+        fontWeight:900,
+      }}
+    >
+      {correct?<CheckCircle2 size={compact?15:18}/>:<XCircle size={compact?15:18}/>}
+      <strong>{correct?"Correct.":"Incorrect."}</strong>
+    </div>
+  );
+}
 function ensureMcqWrongFeedback(question) {
   if(!Array.isArray(question?.opts)) return question;
   const wrongFeedback={...(question.wrongFeedback||{})};
@@ -1249,28 +1267,23 @@ function buildMcqPracticePool(questions, attempts, count, mode="smart", starredI
 
 function buildDiagnosticQuestions() {
   const picked=[];
+  const conciseFallbacks=Object.values(ATHENA_STARTER_QUESTION_SETS).flat();
   CHAPTERS.forEach(ch=>{
     const chapterPool=MCQ_BANK
-      .filter(q=>q.ch===ch.id&&q.difficulty!=="hard")
-      .sort((a,b)=>{
-        const difficultyRank={easy:1,medium:2};
-        return (difficultyRank[b.difficulty]||0)-(difficultyRank[a.difficulty]||0)||String(a.topic).localeCompare(String(b.topic));
-      });
-    const usedTopics=new Set();
-    const chapterPicked=[];
-    chapterPool.forEach(q=>{
-      if(chapterPicked.length>=2)return;
-      if(usedTopics.has(q.topic))return;
-      chapterPicked.push(q);
-      usedTopics.add(q.topic);
-    });
-    chapterPool.forEach(q=>{
-      if(chapterPicked.length>=2)return;
-      if(!chapterPicked.some(item=>item.id===q.id)) chapterPicked.push(q);
-    });
-    picked.push(...chapterPicked);
+      .filter(q=>
+        q.ch===ch.id
+        && q.difficulty==="easy"
+        && !q.beyondTextbook
+        && String(q.q||"").length<=180
+        && Array.isArray(q.opts)
+        && q.opts.length===4
+        && q.opts.every(option=>String(option).length<=100)
+      )
+      .sort((a,b)=>String(a.q).length-String(b.q).length||String(a.topic).localeCompare(String(b.topic)));
+    const fallback=conciseFallbacks.find(question=>question.ch===ch.id&&!picked.some(item=>item.id===question.id));
+    if(chapterPool[0]||fallback)picked.push(chapterPool[0]||fallback);
   });
-  return picked.slice(0,10).map(shuffleMcqOptions);
+  return picked.slice(0,5).map(shuffleMcqOptions);
 }
 
 function getReviewSummary(attempts, questionBank=MCQ_BANK) {
@@ -15395,6 +15408,14 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .athena-diagnostic-feedback.review{background:#faece6;color:#81493c;}
 .athena-diagnostic-feedback strong{font-size:11px;}
 .athena-diagnostic-feedback p{margin:4px 0 0;font-size:10px;line-height:1.55;}
+.athena-preparing{display:grid;justify-items:center;text-align:center;}
+.athena-preparing-seal{position:relative;display:grid;place-items:center;width:82px;height:82px;margin-bottom:20px;border:1px solid color-mix(in srgb,var(--stage-primary) 32%,transparent);border-radius:27px;background:linear-gradient(145deg,var(--stage-soft),rgba(255,253,248,.96));color:var(--stage-primary);box-shadow:0 20px 48px var(--stage-glow);animation:athenaPreparingSeal 1.25s ease-in-out infinite alternate;}
+.athena-preparing-seal svg:last-child{position:absolute;right:-6px;top:-6px;padding:4px;border-radius:9px;background:var(--stage-secondary);color:#fff;box-shadow:0 8px 18px var(--stage-glow);animation:athenaTwinkle 1s ease-in-out infinite;}
+.athena-preparing h1{margin:9px 0 10px!important;}
+.athena-preparing>p{margin:0!important;text-align:center;}
+.athena-preparing-progress{width:min(100%,420px);height:9px;margin:24px 0 11px;overflow:hidden;border-radius:99px;background:color-mix(in srgb,var(--stage-primary) 12%,#fff);}
+.athena-preparing-progress span{display:block;width:100%;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--stage-primary),var(--stage-secondary));transform-origin:left;animation:athenaPreparingProgress 2.05s cubic-bezier(.25,.8,.25,1) both;}
+.athena-preparing>small{color:var(--athena-muted);font-size:9px;font-weight:850;letter-spacing:.02em;}
 .athena-account-form{display:grid;gap:11px;}
 .athena-account-form label{display:grid;gap:5px;color:var(--athena-ink);font-size:10px;font-weight:900;}
 .athena-account-form .input{border-color:rgba(73,111,91,.2);border-radius:12px;background:rgba(255,253,248,.9);color:var(--athena-ink);}
@@ -15424,6 +15445,8 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 @keyframes athenaTwinkle{0%,100%{opacity:.45;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.16) rotate(14deg)}}
 @keyframes athenaQuestionIn{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
 @keyframes athenaToastIn{from{opacity:0;transform:translateY(-10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes athenaPreparingSeal{from{transform:translateY(2px) rotate(-2deg);box-shadow:0 16px 34px var(--stage-glow)}to{transform:translateY(-5px) rotate(2deg);box-shadow:0 25px 54px var(--stage-glow)}}
+@keyframes athenaPreparingProgress{from{transform:scaleX(.05)}to{transform:scaleX(1)}}
 @keyframes icCarve{from{opacity:.28;filter:blur(2px);clip-path:inset(0 100% 0 0);letter-spacing:.08em;text-shadow:0 0 8px rgba(51,72,62,.36)}to{opacity:1;filter:blur(0);clip-path:inset(0 0 0 0);letter-spacing:inherit;text-shadow:0 1px 0 rgba(255,255,255,.7)}}
 @keyframes icDecarve{from{opacity:.4;filter:blur(1px);letter-spacing:.08em;transform:translateX(3px)}to{opacity:1;filter:blur(0);letter-spacing:inherit;transform:translateX(0)}}
 @keyframes icCarveLabel{from{opacity:0;clip-path:inset(0 100% 0 0);letter-spacing:.2em}to{opacity:1;clip-path:inset(0 0 0 0);letter-spacing:.08em}}
@@ -15435,6 +15458,7 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .athena-workspace-page.stage-examPlan,.athena-workspace-page.stage-booked,.athena-workspace-page.stage-examDate{--stage-primary:#c38d2d;--stage-secondary:#e8735c;--stage-soft:#f7e9c8;--stage-glow:rgba(195,141,45,.24);}
 .athena-workspace-page.stage-goalsTime,.athena-workspace-page.stage-goalsChapters{--stage-primary:#288c8a;--stage-secondary:#4e92c4;--stage-soft:#daf0ed;--stage-glow:rgba(40,140,138,.22);}
 .athena-workspace-page.stage-diagnosticIntro,.athena-workspace-page.stage-diagnostic{--stage-primary:#397fba;--stage-secondary:#7766c6;--stage-soft:#dcebf7;--stage-glow:rgba(57,127,186,.22);}
+.athena-workspace-page.stage-preparing{--stage-primary:#6b63c7;--stage-secondary:#e59270;--stage-soft:#e9e6fb;--stage-glow:rgba(107,99,199,.22);}
 .athena-workspace-page.stage-account{--stage-primary:#5b8c62;--stage-secondary:#d79b3e;--stage-soft:#dfefe1;--stage-glow:rgba(91,140,98,.22);}
 .athena-workspace-header{position:fixed;left:0;right:0;top:0;z-index:80;grid-template-columns:220px minmax(420px,760px) 220px;justify-content:center;padding:14px clamp(18px,3vw,44px);border-bottom:1px solid color-mix(in srgb,var(--stage-primary) 18%,transparent);background:color-mix(in srgb,#fffaf2 88%,transparent);box-shadow:0 10px 35px rgba(63,60,49,.055);}
 .athena-workspace-header::after{content:"";width:220px;}
@@ -19239,7 +19263,7 @@ function UniversityICCard({profile,flipped,onFlip}) {
 
 function AthenaProgress({stage,takingExam}) {
   const stageProgress={
-    intro:[0,0,0],name:[45,0,0],experience:[85,0,0],examPlan:[100,30,0],booked:[100,62,0],examDate:[100,86,0],goalsTime:[100,100,42],goalsChapters:[100,100,78],diagnosticIntro:[100,100,100],diagnostic:[100,100,100],account:[100,100,100],reveal:[100,100,100],
+    intro:[0,0,0],name:[45,0,0],experience:[85,0,0],examPlan:[100,30,0],booked:[100,62,0],examDate:[100,86,0],goalsTime:[100,100,42],goalsChapters:[100,100,78],diagnosticIntro:[100,100,100],diagnostic:[100,100,100],preparing:[100,100,100],account:[100,100,100],reveal:[100,100,100],
   };
   const values=stageProgress[stage]||[0,0,0];
   if(stage==="goalsTime"&&takingExam==="no")values[1]=100;
@@ -19269,7 +19293,8 @@ const CIPHER_ONBOARDING_GUIDANCE={
   goalsTime:{animation:"tip",message:"A repeatable ten minutes beats an ambitious goal you cannot keep.",tip:"Pick the goal that still feels possible on a busy day."},
   goalsChapters:{animation:"tip",message:"Tick only the chapters you have studied. Anything unticked is treated as not studied.",tip:"Unsure? You can skip this step and update it later."},
   diagnosticIntro:{animation:"cheer",message:"Your IC profile is ready! The starter set is optional and has no effect on account access.",tip:"This is a warm-up, not an exam-readiness verdict."},
-  diagnostic:{animation:"thinking",message:"Read the final sentence twice. Security+ questions often hide the real task there.",tip:"Eliminate answers that solve a different problem from the one being asked."},
+  diagnostic:{animation:"thinking",message:"These are short warm-up questions. Choose the answer that feels strongest.",tip:"A missed answer simply helps Athena choose your first review topic."},
+  preparing:{animation:"scan",message:"Athena and I are turning your answers into a calm first study path.",tip:"This only takes a moment."},
   account:{animation:"unlock",message:"Last step! Your free account saves the IC and the learning plan we just built.",tip:"No credit card is needed for a free SecurePlus account."},
 };
 
@@ -19389,20 +19414,108 @@ function AthenaOption({selected,onClick,icon:Icon,title,help}) {
   );
 }
 
+const ATHENA_STARTER_QUESTION_SETS=Object.freeze({
+  new:[
+    {
+      id:"athena-new-phishing",
+      ch:"2",
+      topic:"Social Engineering",
+      difficulty:"easy",
+      q:"Which attack usually arrives as a fake email?",
+      opts:["Phishing","Tailgating","Shoulder surfing","Dumpster diving"],
+      correct:0,
+      exp:"Phishing uses deceptive emails or messages to make someone click, share information, or open a harmful file.",
+    },
+    {
+      id:"athena-new-mfa",
+      ch:"4",
+      topic:"Identity and Access",
+      difficulty:"easy",
+      q:"What protects an account if its password is stolen?",
+      opts:["A password hint","A shared login","Multi-factor authentication (MFA)","A shorter username"],
+      correct:2,
+      exp:"MFA asks for another form of proof, so a stolen password alone is not enough to sign in.",
+    },
+    {
+      id:"athena-new-confidentiality",
+      ch:"1",
+      topic:"Security Concepts",
+      difficulty:"easy",
+      q:"Which security goal keeps information private?",
+      opts:["Availability","Confidentiality","Redundancy","Scalability"],
+      correct:1,
+      exp:"Confidentiality means information is only available to authorised people and systems.",
+    },
+  ],
+  studying:[
+    {
+      id:"athena-study-siem",
+      ch:"4",
+      topic:"Security Monitoring",
+      difficulty:"easy",
+      q:"Which tool collects and compares security logs?",
+      opts:["SIEM","Firewall","Load balancer","Password vault"],
+      correct:0,
+      exp:"A SIEM collects logs from many systems and compares events to help analysts spot suspicious activity.",
+    },
+    {
+      id:"athena-study-firewall",
+      ch:"3",
+      topic:"Network Security",
+      difficulty:"easy",
+      q:"Which control blocks network traffic using rules?",
+      opts:["Firewall","Hash","Digital certificate","Backup"],
+      correct:0,
+      exp:"A firewall checks network traffic against rules and allows or blocks each connection.",
+    },
+    {
+      id:"athena-study-rpo",
+      ch:"5",
+      topic:"Resilience and Recovery",
+      difficulty:"easy",
+      q:"Which metric measures acceptable data loss in time?",
+      opts:["RTO","RPO","MTTR","SLE"],
+      correct:1,
+      exp:"Recovery Point Objective (RPO) states how much recent data an organisation can afford to lose.",
+    },
+  ],
+  professional:[
+    {
+      id:"athena-pro-least-privilege",
+      ch:"1",
+      topic:"Security Concepts",
+      difficulty:"easy",
+      q:"Which principle grants only the access a user needs?",
+      opts:["Least privilege","Open access","Job rotation","High availability"],
+      correct:0,
+      exp:"Least privilege limits each account to the minimum permissions needed for its work.",
+    },
+    {
+      id:"athena-pro-hash",
+      ch:"3",
+      topic:"Cryptography",
+      difficulty:"easy",
+      q:"A downloaded file has a different hash. What failed?",
+      opts:["Availability","Integrity","Confidentiality","Authentication"],
+      correct:1,
+      exp:"A changed hash shows that the file content changed, so its integrity cannot be trusted.",
+    },
+    {
+      id:"athena-pro-ransomware",
+      ch:"4",
+      topic:"Incident Response",
+      difficulty:"easy",
+      q:"Ransomware is spreading. What should happen first?",
+      opts:["Isolate affected systems","Delete every log","Pay immediately","Restart all servers"],
+      correct:0,
+      exp:"Isolation contains the incident and helps stop ransomware from reaching more systems.",
+    },
+  ],
+});
+
 function getAthenaDiagnosticQuestions(experience) {
-  const preferred=experience==="professional"?"hard":experience==="studying"?"medium":"easy";
-  const pool=MCQ_BANK.filter(question=>question.difficulty===preferred&&Array.isArray(question.opts)&&question.opts.length>=4);
-  const picks=[];
-  ["1","3","5"].forEach(chapter=>{
-    const question=pool.find(item=>item.ch===chapter&&!picks.some(pick=>pick.id===item.id));
-    if(question)picks.push(question);
-  });
-  const fallback=MCQ_BANK.filter(question=>Array.isArray(question.opts)&&question.opts.length>=4);
-  for(const question of [...pool,...fallback]){
-    if(picks.length>=3)break;
-    if(!picks.some(pick=>pick.id===question.id))picks.push(question);
-  }
-  return picks.slice(0,3);
+  const level=experience==="professional"?"professional":experience==="studying"?"studying":"new";
+  return ATHENA_STARTER_QUESTION_SETS[level].map(question=>({...question,opts:[...question.opts]}));
 }
 
 function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,onGoogle,loading,error,ok,mintedUser,onEnter,onHaveAccount}) {
@@ -19418,6 +19531,11 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
   const diagnosticQuestion=diagnosticQuestions[diagnosticIndex];
   const message=localError||error;
   const updateProfile=(key,value)=>setProfile(current=>({...current,[key]:value}));
+  useEffect(()=>{
+    if(stage!=="preparing")return undefined;
+    const timer=window.setTimeout(()=>setStage("account"),2100);
+    return()=>window.clearTimeout(timer);
+  },[stage]);
   const showNotice=text=>{
     setNotice(text);
     window.setTimeout(()=>setNotice(""),5200);
@@ -19479,7 +19597,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
     setProfile(current=>({...current,diagnosticAnswers:answers,diagnosticScore:score,diagnosticTotal:diagnosticQuestions.length}));
     setDiagnosticSelected(null);
     setDiagnosticSubmitted(false);
-    setStage("account");
+    setStage("preparing");
   };
   const continueDiagnostic=()=>{
     if(diagnosticSelected===null)return;
@@ -19648,7 +19766,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         </div>
         {diagnosticSubmitted&&(
           <div className={`athena-diagnostic-feedback ${diagnosticSelected===diagnosticQuestion.correct?"correct":"review"}`}>
-            <strong>{diagnosticSelected===diagnosticQuestion.correct?"Well spotted.":"Good question to learn from."}</strong>
+            <MCQFeedbackVerdict correct={diagnosticSelected===diagnosticQuestion.correct} t={t} compact/>
             <p>{diagnosticQuestion.exp}</p>
           </div>
         )}
@@ -19658,6 +19776,16 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
           <button className="btn btn-primary athena-main-action" type="button" onClick={continueDiagnostic}>{diagnosticIndex<diagnosticQuestions.length-1?"Next question":"Save my result"} <ChevronRight size={17}/></button>
         )}
       </>
+    );
+    if(stage==="preparing")return (
+      <div className="athena-preparing" role="status" aria-live="polite">
+        <div className="athena-preparing-seal" aria-hidden="true"><BadgeCheck size={34}/><Sparkles size={18}/></div>
+        <div className="athena-kicker">Tailoring your starting path</div>
+        <h1>Preparing your ID…</h1>
+        <p>Athena is combining your profile and starter answers into a simple first study plan.</p>
+        <div className="athena-preparing-progress" aria-hidden="true"><span/></div>
+        <small>Adding your study goal · Choosing a gentle first focus · Finishing your IC</small>
+      </div>
     );
     if(stage==="account")return (
       <>
@@ -19682,7 +19810,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
             <label>Password<input className="input" name="password" type="password" autoComplete="new-password" placeholder="At least 8 characters" value={form.pass} onChange={setField("pass")}/></label>
             <label>Confirm password<input className="input" name="confirm-password" type="password" autoComplete="new-password" placeholder="Repeat password" value={form.confirm} onChange={setField("confirm")}/></label>
           </div>
-          <details className="auth-referral-details" defaultOpen={Boolean(form.referral)}>
+          <details className="auth-referral-details" open={Boolean(form.referral)||undefined}>
             <summary>Have a referral code?</summary>
             <div className="auth-referral-content">
               <input className="input" name="referral" autoComplete="off" placeholder="Optional code" value={form.referral} onChange={event=>setForm(current=>({...current,referral:event.target.value.toUpperCase()}))}/>
@@ -19715,16 +19843,18 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
           <span className="athena-stage-shape shape-one" aria-hidden="true"/>
           <span className="athena-stage-shape shape-two" aria-hidden="true"/>
           <span className="athena-stage-shape shape-three" aria-hidden="true"/>
-          <button type="button" className="athena-back-button" onClick={goBack}><ArrowLeft size={16}/> Back</button>
+          {stage!=="preparing"&&<button type="button" className="athena-back-button" onClick={goBack}><ArrowLeft size={16}/> Back</button>}
           <div className="athena-question-content" key={stage}>{questionContent()}</div>
           {message&&stage!=="account"&&<div className="athena-inline-error"><TriangleAlert size={16}/>{message}</div>}
         </section>
       </main>
-      <button className="athena-ic-launch" type="button" onClick={()=>setCardLabOpen(true)} aria-label={`Open live University IC. ${cardCompletion}% complete.`}>
-        <span key={cardUpdateKey}><BadgeCheck size={20}/><i>{cardCompletion}%</i></span>
-        <strong>Open Card Lab</strong>
-        <small>Flip · tilt · recolour</small>
-      </button>
+      {stage!=="preparing"&&(
+        <button className="athena-ic-launch" type="button" onClick={()=>setCardLabOpen(true)} aria-label={`Open live University IC. ${cardCompletion}% complete.`}>
+          <span key={cardUpdateKey}><BadgeCheck size={20}/><i>{cardCompletion}%</i></span>
+          <strong>Open Card Lab</strong>
+          <small>Flip · tilt · recolour</small>
+        </button>
+      )}
       <OnboardingCipherGuide stage={stage} answerState={diagnosticAnswerState}/>
       <AthenaCardLab open={cardLabOpen} onClose={()=>setCardLabOpen(false)} profile={profile} setProfile={setProfile} flipped={flipped} setFlipped={setFlipped}/>
       {notice&&<div className="athena-toast" role="status"><CheckCircle2 size={18}/><span><strong>Saved for later</strong>{notice}</span><button type="button" onClick={()=>setNotice("")} aria-label="Close message"><X size={15}/></button></div>}
@@ -19823,7 +19953,7 @@ function AcademySignupWizard({t,form,setForm,setField,onMint,loading,error,ok}) 
               ))}
             </div>
           </div>
-          <details className="auth-referral-details" defaultOpen={Boolean(form.referral)}>
+          <details className="auth-referral-details" open={Boolean(form.referral)||undefined}>
             <summary>Have a referral code?</summary>
             <div className="auth-referral-content">
               <input className="input" name="referral" autoComplete="off" placeholder="Optional code from a friend" value={form.referral} onChange={event=>setForm(f=>({...f,referral:event.target.value.toUpperCase()}))}/>
@@ -20313,9 +20443,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
       ):(
         <>
           <div className="card" style={{padding:"16px 20px",marginBottom:14,borderColor:selected===current.correct?t.green:t.red}}>
-            <div style={{display:"flex",alignItems:"center",gap:8,fontWeight:700,color:selected===current.correct?t.green:t.red,marginBottom:8,fontSize:15}}>
-              {selected===current.correct?<CheckCircle2 size={18}/>:<XCircle size={18}/>} {selected===current.correct?"Correct":"Incorrect"}
-            </div>
+            <div style={{marginBottom:8}}><MCQFeedbackVerdict correct={selected===current.correct} t={t}/></div>
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}><GlossaryText text={current.exp} t={t}/></p>
             {selected!==current.correct&&(
               <div style={{marginTop:10,padding:"10px 12px",background:`${t.red}08`,borderRadius:6,fontSize:12,color:t.red}}>
@@ -20472,9 +20600,7 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
           </div>
           {submitted&&(
             <div className="card" style={{padding:"12px 14px",marginTop:12,borderColor:selected===current.correct?`${t.green}55`:`${t.red}55`,background:selected===current.correct?`${t.green}0f`:`${t.red}0d`,animation:"feedbackIn .24s ease both"}}>
-              <div style={{fontWeight:900,color:selected===current.correct?t.green:t.red,fontSize:13}}>
-                {selected===current.correct?"Correct":"Not quite"}
-              </div>
+              <MCQFeedbackVerdict correct={selected===current.correct} t={t} compact/>
               <div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:3}}>
                 <GlossaryText text={current.exp} t={t}/>
               </div>
@@ -22563,12 +22689,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       ):(
         <>
           <div className="card answer-feedback" style={{padding:"16px 18px",marginBottom:14,borderColor:selected===current.correct?`${t.green}42`:`${t.red}42`,background:selected===current.correct?`${t.green}08`:`${t.red}08`,boxShadow:"none"}}>
-            <div style={{display:"flex",alignItems:"center",gap:10,fontWeight:800,color:t.text,marginBottom:10,fontSize:15}}>
-              <span style={{width:26,height:26,borderRadius:"50%",display:"inline-flex",alignItems:"center",justifyContent:"center",background:selected===current.correct?`${t.green}18`:`${t.red}18`,color:selected===current.correct?t.green:t.red}}>
-                {selected===current.correct?<Check size={16} strokeWidth={3}/>:<X size={16} strokeWidth={3}/>}
-              </span>
-              {selected===current.correct?"Nice work":"Not quite"}
-            </div>
+            <div style={{marginBottom:10}}><MCQFeedbackVerdict correct={selected===current.correct} t={t}/></div>
             {canSeeFeedback?(
               <p style={{fontSize:13,color:t.textSec,lineHeight:1.75}}><GlossaryText text={current.exp} t={t}/></p>
             ):(
@@ -24003,7 +24124,14 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
                 </div>
               )}
               <div className="solution-panel">
-                <strong style={{color:t.text}}>Solution: </strong>{item.kind==="mcq"?q.exp:q.explanation}
+                {item.kind==="mcq"?(
+                  <>
+                    <MCQFeedbackVerdict correct={ok} t={t} compact/>
+                    <div style={{marginTop:6}}>{q.exp}</div>
+                  </>
+                ):(
+                  <><strong style={{color:t.text}}>Solution: </strong>{q.explanation}</>
+                )}
               </div>
               <div className="guidance-panel">
                 {examTimeGuidance(item,seconds,ok)}
@@ -28160,9 +28288,10 @@ function DiagnosticQuiz({user,t,onComplete}) {
   const [submitted,setSubmitted]=useState(false);
   const [results,setResults]=useState([]);
   const [saving,setSaving]=useState(false);
+  const [showSummary,setShowSummary]=useState(false);
   const current=questions[index];
   const correctCount=results.filter(r=>r.correct).length;
-  const done=questions.length>0&&results.length===questions.length;
+  const done=showSummary&&questions.length>0&&results.length===questions.length;
   const chapterResults=CHAPTERS.map(ch=>{
     const rows=results.filter(r=>r.ch===ch.id);
     return {chapter:ch,total:rows.length,correct:rows.filter(r=>r.correct).length,missed:rows.filter(r=>!r.correct)};
@@ -28254,7 +28383,7 @@ function DiagnosticQuiz({user,t,onComplete}) {
           <div>
             <div className="label" style={{color:t.accent,marginBottom:6}}>New account baseline</div>
             <h2 style={{fontSize:24,color:t.text}}>Mini mock test</h2>
-            <div style={{fontSize:13,color:t.textSec}}>10 medium-or-easier questions across all 5 chapters.</div>
+            <div style={{fontSize:13,color:t.textSec}}>5 short, beginner-friendly questions · one per chapter.</div>
           </div>
           <span className="chip" style={{background:`${t.accent}10`,borderColor:`${t.accent}35`,color:t.accent}}>Question {index+1}/{questions.length}</span>
         </div>
@@ -28285,9 +28414,20 @@ function DiagnosticQuiz({user,t,onComplete}) {
         {!submitted?(
           <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} disabled={selected===null} onClick={submit}>Submit Answer</button>
         ):(
-          <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={index<questions.length-1?next:()=>{}}>
-            {index<questions.length-1?"Next Question →":"See Baseline →"}
-          </button>
+          <>
+            <div className="card answer-feedback" style={{padding:"14px 16px",marginBottom:12,borderColor:selected===current.correct?`${t.green}42`:`${t.red}42`,background:selected===current.correct?`${t.green}08`:`${t.red}08`,boxShadow:"none"}}>
+              <MCQFeedbackVerdict correct={selected===current.correct} t={t}/>
+              <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginTop:7}}><GlossaryText text={current.exp} t={t}/></p>
+              {selected!==current.correct&&(
+                <div style={{fontSize:12,color:t.red,lineHeight:1.55,marginTop:8}}>
+                  <strong>Why your choice was wrong:</strong> {getWrongOptionFeedback(current,selected)}
+                </div>
+              )}
+            </div>
+            <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={index<questions.length-1?next:()=>setShowSummary(true)}>
+              {index<questions.length-1?"Next Question →":"See Baseline →"}
+            </button>
+          </>
         )}
       </div>
     </div>
