@@ -214,6 +214,8 @@ const PRO_ACADEMY_PASS_NAME = "Pro Academy Pass";
 const PRO_ACADEMY_PASS_PRICE = "$9.99 / 3 months";
 const PRO_ACADEMY_PASS_DESCRIPTION = "Built around the typical Security+ study window. Unlock all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.";
 const PRO_ACADEMY_PASS_TRUST = "Original scenario-based practice. Not exam dumps.";
+const GUEST_SMART_REVIEW_BRIDGE_KEY = "secureplus-pending-guest-smart-review";
+const GUEST_SMART_REVIEW_BRIDGE_TTL_MS = 24 * 60 * 60 * 1000;
 const DELETED_ACCOUNT_KEY = "secureplus_deleted_account";
 const ACCOUNT_DELETION_TOKEN_KEY = "secureplus-account-deletion-token";
 const FEEDBACK_DESCRIPTION_MIN_LENGTH = 20;
@@ -224,6 +226,36 @@ const practiceSessionOwner = user => normalizeEmail(user?.email || "") || user?.
 const starOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
 const cipherWalletOwner = user => user?.id || normalizeEmail(user?.email || "") || "guest";
 const starKey = (type,id) => `${type}:${id}`;
+
+async function savePendingGuestSmartReview(attempts=[]) {
+  const cleanAttempts=attempts
+    .filter(attempt=>attempt?.qid)
+    .map(attempt=>({
+      ...attempt,
+      guestBridge:true,
+      createdAt:attempt.createdAt||new Date().toISOString(),
+    }));
+  if(!cleanAttempts.length)return;
+  await storageSet(GUEST_SMART_REVIEW_BRIDGE_KEY,JSON.stringify({
+    createdAt:Date.now(),
+    attempts:cleanAttempts,
+  }));
+}
+
+async function takePendingGuestSmartReview() {
+  try{
+    const stored=await storageGet(GUEST_SMART_REVIEW_BRIDGE_KEY);
+    if(!stored?.value)return [];
+    await storageDelete(GUEST_SMART_REVIEW_BRIDGE_KEY);
+    const parsed=JSON.parse(stored.value);
+    if(Date.now()-Number(parsed?.createdAt||0)>GUEST_SMART_REVIEW_BRIDGE_TTL_MS)return [];
+    return Array.isArray(parsed?.attempts)?parsed.attempts.filter(attempt=>attempt?.qid):[];
+  }catch{
+    await storageDelete(GUEST_SMART_REVIEW_BRIDGE_KEY).catch(()=>{});
+    return [];
+  }
+}
+
 const emptyCipherWallet = () => ({
   balance:0,
   lifetimeEarned:0,
@@ -944,10 +976,13 @@ async function loadSupabaseAttempts(userId) {
   return (data || []).map(fromSupabaseAttempt);
 }
 
-async function saveSupabaseAttempt(userId, attempt) {
+async function saveSupabaseAttempt(userId, attempt, {throwOnError=false}={}) {
   if (!supabase || !userId) return;
   const { error } = await supabase.from("attempts").insert(toSupabaseAttempt(userId, attempt));
-  if (error) console.warn("Unable to save attempt", error);
+  if (error) {
+    console.warn("Unable to save attempt", error);
+    if(throwOnError)throw error;
+  }
 }
 
 async function updateSupabaseAcademyProfile(userId, {fullName, avatarId}) {
@@ -20477,7 +20512,7 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
 // ═══════════════════════════════════════════════════════════════
 // AUTH VIEW
 // ═══════════════════════════════════════════════════════════════
-function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login",securityNotice=false}) {
+function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initialMode="login",securityNotice=false}) {
   const [mode,setMode]=useState(initialMode);
   const [showLoginModal,setShowLoginModal]=useState(initialMode==="login");
   const [showSignupJourney,setShowSignupJourney]=useState(initialMode==="signup");
@@ -20783,9 +20818,10 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
               Interactive MCQs, PBQ simulations, and Smart Review that turns mistakes into your next study plan.
             </p>
             <div className="brilliant-action-row">
-              <button className="btn btn-primary brilliant-primary-cta" onClick={onPracticeMcq}>Start Practising Free →</button>
-              <button className="landing-login-link" onClick={()=>jumpToAuth("login")}>Already have an account? Log in</button>
+              <button className="btn btn-primary brilliant-primary-cta" onClick={onPracticeMcq}>Start Free MCQ Practice</button>
+              <button className="btn btn-outline brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
             </div>
+            <button className="landing-login-link" onClick={()=>jumpToAuth("login")}>Already have an account? Log in</button>
             <div className="brilliant-proof-row">
               <span>{MCQ_BANK.length} MCQs</span>
               <span>{PBQ_BANK.length} PBQs</span>
@@ -21528,7 +21564,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
   );
 }
 
-function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
+function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily}) {
   const [activePath,setActivePath]=useState("mcq");
   const startSignup=source=>{
     capture("landing_signup_cta_clicked", { source });
@@ -21537,7 +21573,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
   const learningPaths=[
     {id:"mcq",label:"MCQ foundations",tag:"Free",color:t.accent,body:`Start with all ${MCQ_BANK.length} MCQs. No account required.`,meta:"Practice now",action:onPractice},
     {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"Finish a short challenge and build a repeatable study rhythm.",meta:"5 questions/day",action:onDaily},
-    {id:"pbq",label:"PBQ simulations",tag:"Pro",color:t.amber,body:`Preview the style, then unlock ${PBQ_BANK.length} performance-based simulations.`,meta:"Applied practice",action:()=>startSignup("learning_path_pbq")},
+    {id:"pbq",label:"PBQ simulations",tag:"Preview",color:t.amber,body:`Try one complete PBQ, then choose coins or Pro for the remaining ${PBQ_BANK.length-1}.`,meta:"Try the preview",action:onPreviewPbq},
   ];
   const accountBenefits=[
     {title:"Keep every result",body:"Save scores, streaks, and completed questions instead of starting over.",color:t.accent,Icon:ChartNoAxesColumnIncreasing},
@@ -21557,8 +21593,8 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onDaily}) {
             Create a free account to save your scores, spot weak topics, and turn every answer into a clear next step toward SY0-701 exam confidence.
           </p>
           <div className="home-cta-row brilliant-action-row">
-            <button className="btn btn-primary brilliant-primary-cta" onClick={()=>startSignup("hero_primary")}>Create my free account →</button>
-            <button className="btn btn-outline brilliant-secondary-cta" onClick={onPractice}>Try a free question</button>
+            <button className="btn btn-primary brilliant-primary-cta" onClick={onPractice}>Start Free MCQ Practice</button>
+            <button className="btn btn-outline brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
           </div>
           <div className="guest-cta-note"><ShieldCheck size={16}/> No credit card · Free MCQs included · Pro is optional</div>
           <div className="brilliant-proof-row">
@@ -22064,19 +22100,39 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     .map((result,index)=>result&&!result.correct?questions[index]:null)
     .filter(Boolean);
   const sessionLessonPath=getDeepDiveRecommendations(sessionMissedQuestions,{limit:2});
+  const guestWeakChapter=weakChapters[0]||null;
+  const guestWeakTopics=guestWeakChapter?.focusTopics||[];
+  const saveGuestSmartReview=async()=>{
+    await savePendingGuestSmartReview(results.filter(Boolean));
+    capture("guest_smart_review_save_clicked", {
+      chapter:guestWeakChapter?.chapter?.id||"none",
+      missed_count:sessionMissedQuestions.length,
+      question_count:questions.length,
+    });
+    requestSignup?.();
+  };
   const guestSignupPrompt=(
     <div className="card" style={{padding:"18px 20px",marginBottom:16,borderColor:`${t.accent}55`,background:`linear-gradient(135deg, ${t.accent}18, ${t.surface} 58%, ${t.green}10)`,boxShadow:`0 18px 42px ${t.accent}18`,textAlign:"left"}}>
       <div style={{display:"flex",gap:14,alignItems:"center",flexWrap:"wrap"}}>
-        <div style={{width:48,height:48,borderRadius:14,background:`${t.accent}18`,border:`1px solid ${t.accent}38`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-          <NavGlyph type="mcq" active/>
+        <div style={{width:52,height:52,borderRadius:14,background:`${guestWeakChapter?t.amber:t.green}18`,border:`1px solid ${guestWeakChapter?t.amber:t.green}38`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:guestWeakChapter?t.amber:t.green}}>
+          {guestWeakChapter?<Target size={24}/>:<CheckCircle2 size={24}/>}
         </div>
         <div style={{flex:1,minWidth:240}}>
-          <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:4}}>Save this MCQ progress with a free account</div>
+          <div className="label" style={{color:guestWeakChapter?t.amber:t.green,marginBottom:4}}>
+            {guestWeakChapter?"Weak area found":"Strong first set"}
+          </div>
+          <div style={{fontWeight:900,fontSize:17,color:t.text,marginBottom:4}}>
+            {guestWeakChapter
+              ? `Chapter ${guestWeakChapter.chapter.id}: ${guestWeakChapter.chapter.title}`
+              : "Keep this result in your Smart Review history"}
+          </div>
           <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-            Guests can practise the full MCQ bank, but this session is not saved. Create an account or sign in to keep your score, weak topics, and Smart Review history.
+            {guestWeakChapter
+              ? `${guestWeakChapter.missed} missed question${guestWeakChapter.missed===1?"":"s"}${guestWeakTopics.length?` around ${guestWeakTopics.join(" and ")}`:""}. Create a free account and these results will seed your personalised Smart Review queue.`
+              : "Create a free account and SecurePlus will save this score, space out mastered questions, and build your personalised Smart Review queue."}
           </div>
         </div>
-        <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={requestSignup}>Save Progress</button>
+        <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={saveGuestSmartReview}>Create free account to save Smart Review</button>
       </div>
     </div>
   );
@@ -22744,14 +22800,14 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
         <div className="card" style={{padding:"18px 22px",marginBottom:20,borderColor:`${t.amber}40`,background:`${t.amber}06`}}>
           <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
             <div style={{flex:1}}>
-              <div style={{fontWeight:700,fontSize:15,color:t.text,marginBottom:4}}>Preview one PBQ, then earn permanent access</div>
+              <div style={{fontWeight:800,fontSize:16,color:t.text,marginBottom:4}}>Use 50 coins or unlock all PBQs with Pro</div>
               <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
                 Free users can try the marked preview and reveal a permanent mystery PBQ for <strong>{CIPHER_COIN_COSTS.pbq} Cipher Coins</strong>. Your first three reveals are p014, p018, and p033; later reveals are random. Pro includes every PBQ with zero coin requirements.
               </div>
             </div>
             <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
               <button className="btn btn-outline" style={{flexShrink:0}} onClick={onOpenWallet}><CipherCoinIcon size={23}/> {coinBalance} coins</button>
-              <button className="btn btn-primary" style={{flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_access_banner", tier: user.tier });onUpgrade();}}>Pro · zero coins →</button>
+              <button className="btn btn-primary" style={{flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_access_banner", tier: user.tier });onUpgrade();}}>Unlock all PBQs with Pro →</button>
             </div>
           </div>
         </div>
@@ -22762,15 +22818,15 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
           <div style={{display:"flex",gap:12,alignItems:"flex-start",flexWrap:"wrap"}}>
             <span className="section-icon" style={{"--section-color":t.accent}}><LockKeyhole size={21} strokeWidth={2.2}/></span>
             <div style={{flex:1,minWidth:220}}>
-              <div style={{fontWeight:700,fontSize:15,color:t.text,marginBottom:4}}>This PBQ is still locked</div>
+              <div style={{fontWeight:800,fontSize:16,color:t.text,marginBottom:4}}>Use 50 coins or unlock all PBQs with Pro</div>
               <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
                 Spend {CIPHER_COIN_COSTS.pbq} Cipher Coins to reveal one mystery PBQ permanently. The reveal may be a different question from {lockedQuestion.title}. Pro opens the complete bank with zero coin requirements.
               </div>
             </div>
             <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-              <button className="btn btn-primary" style={{fontSize:13}} disabled={coinBusy||coinBalance<CIPHER_COIN_COSTS.pbq} onClick={async()=>{const unlocked=await onUnlockPbq?.();if(unlocked?.purchased||unlocked?.alreadyOwned)setLockedQuestion(null);}}><CipherCoinIcon size={22}/> {coinBalance<CIPHER_COIN_COSTS.pbq?`${CIPHER_COIN_COSTS.pbq-coinBalance} more needed`:`Reveal for ${CIPHER_COIN_COSTS.pbq}`}</button>
+              <button className="btn btn-primary" style={{fontSize:13}} disabled={coinBusy||coinBalance<CIPHER_COIN_COSTS.pbq} onClick={async()=>{const unlocked=await onUnlockPbq?.();if(unlocked?.purchased||unlocked?.alreadyOwned)setLockedQuestion(null);}}><CipherCoinIcon size={22}/> {coinBalance<CIPHER_COIN_COSTS.pbq?`${CIPHER_COIN_COSTS.pbq-coinBalance} more needed`:`Use ${CIPHER_COIN_COSTS.pbq} coins`}</button>
               {coinBalance<CIPHER_COIN_COSTS.pbq&&<button className="btn btn-outline" style={{fontSize:13}} onClick={onOpenWallet}>How to earn</button>}
-              <button className="btn btn-outline" style={{fontSize:13}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "locked_pbq_prompt", question_id: lockedQuestion.id, tier: user.tier });onUpgrade();}}>Choose Pro</button>
+              <button className="btn btn-outline" style={{fontSize:13}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "locked_pbq_prompt", question_id: lockedQuestion.id, tier: user.tier });onUpgrade();}}>Unlock all PBQs with Pro</button>
               <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>setLockedQuestion(null)}>Not now</button>
             </div>
           </div>
@@ -22881,7 +22937,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
 // ═══════════════════════════════════════════════════════════════
 // PBQ SIMULATOR
 // ═══════════════════════════════════════════════════════════════
-function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewMode=false,onUpgrade,onReportQuestion,showQuestionCodes=false}) {
+function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewMode=false,onUpgrade,onOpenWallet,isGuest=false,onReportQuestion,showQuestionCodes=false}) {
   const evidence=q?.payload?.evidence || {};
   const [termInput,setTermInput]=useState("");
   const [termHistory,setTermHistory]=useState([]);
@@ -23179,12 +23235,19 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                 <div style={{flex:1,minWidth:220}}>
                   <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:4}}>That was your free PBQ preview</div>
                   <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                    The {PRO_ACADEMY_PASS_NAME} unlocks the full PBQ simulator bank, Exam Mode, and deeper review tools for {PRO_ACADEMY_PASS_PRICE}.
+                    {isGuest
+                      ? "Create a free account, then use 50 Cipher Coins for a permanent PBQ reveal or unlock the complete bank with Pro."
+                      : `Use ${CIPHER_COIN_COSTS.pbq} Cipher Coins for a permanent PBQ reveal, or unlock every PBQ with the ${PRO_ACADEMY_PASS_NAME}.`}
                   </div>
                 </div>
-                <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_preview_complete", question_id: q.id });onUpgrade?.();}}>
-                  Unlock all PBQs
-                </button>
+                <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+                  <button className="btn btn-outline" style={{fontSize:13,flexShrink:0}} onClick={()=>{capture("coin_prompt_clicked", { source:"pbq_preview_complete", question_id:q.id, tier:isGuest?"guest":"free" });onOpenWallet?.();}}>
+                    {isGuest?"Create account to use 50 coins":`Use ${CIPHER_COIN_COSTS.pbq} coins`}
+                  </button>
+                  <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_preview_complete", question_id: q.id });onUpgrade?.();}}>
+                    {isGuest?"Create account for Pro":"Unlock all PBQs with Pro"}
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -28337,6 +28400,27 @@ export default function App() {
     && (pbqBankError || remotePbqBank.length<PBQ_BANK.length)
   );
 
+  const importPendingGuestSmartReview=useCallback(async(account,existingAttempts=[])=>{
+    const pending=await takePendingGuestSmartReview();
+    if(!pending.length||!account)return existingAttempts;
+    try{
+      if(account.authProvider==="supabase"){
+        await Promise.all(pending.map(attempt=>saveSupabaseAttempt(account.id,attempt,{throwOnError:true})));
+      }else{
+        for(const attempt of [...pending].reverse())await DB.saveAttempt(account.email,attempt);
+      }
+      capture("guest_smart_review_imported", {
+        attempt_count:pending.length,
+        chapter_count:new Set(pending.map(attempt=>attempt.ch).filter(Boolean)).size,
+      });
+      return [...pending].sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)).concat(existingAttempts);
+    }catch(error){
+      await savePendingGuestSmartReview(pending);
+      console.warn("Unable to attach guest Smart Review results",error);
+      return existingAttempts;
+    }
+  },[]);
+
   useEffect(()=>{
     try{window.localStorage?.setItem("secureplus-sidebar-hidden",sidebarHidden?"true":"false");}catch{}
   },[sidebarHidden]);
@@ -28530,6 +28614,7 @@ export default function App() {
           }
         }
         const savedAttempts=await loadSupabaseAttempts(verifiedUser.id);
+        const accountAttempts=await importPendingGuestSmartReview(displayUser,savedAttempts);
         if(!active)return;
         const referralClaim = await claimReferralIfPresent(displayUser);
         showReferralClaimErrorOnce(referralClaim);
@@ -28540,12 +28625,12 @@ export default function App() {
         const savedStarred=(await loadSupabaseStarred(verifiedUser.id)) ?? await DB.getStarred(starOwner(displayUser));
         setUser(displayUser);
         identifyUser(displayUser);
-        setAttempts(savedAttempts);
+        setAttempts(accountAttempts);
         setStarred(savedStarred);
         const diagnosticDone=await DB.getDiagnosticDone(appUser.email);
         const seen=await DB.getOnboardingSeen(appUser.email);
-        if(active&&!diagnosticDone&&savedAttempts.length===0) setShowDiagnostic(true);
-        else if(active&&!seen) setShowOnboarding(true);
+        if(active&&!seen) setShowOnboarding(true);
+        else if(active&&!diagnosticDone&&accountAttempts.length===0) setShowDiagnostic(true);
         setLoading(false);
       };
 
@@ -28562,11 +28647,11 @@ export default function App() {
 
     (async()=>{
       const sess=await DB.getSession();
-      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){setUser(u);const a=await DB.getAttempts(u.email);const s=await DB.getStarred(starOwner(u));setAttempts(a);setStarred(s);const diagnosticDone=await DB.getDiagnosticDone(u.email);const seen=await DB.getOnboardingSeen(u.email);if(!diagnosticDone&&a.length===0)setShowDiagnostic(true);else if(!seen)setShowOnboarding(true);}}
+      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){setUser(u);const a=await DB.getAttempts(u.email);const s=await DB.getStarred(starOwner(u));setAttempts(a);setStarred(s);const diagnosticDone=await DB.getDiagnosticDone(u.email);const seen=await DB.getOnboardingSeen(u.email);if(!seen)setShowOnboarding(true);else if(!diagnosticDone&&a.length===0)setShowDiagnostic(true);}}
       setLoading(false);
     })();
     return()=>{active=false;};
-  },[clearLocalAuthState,forceSupabaseSignOut]);
+  },[clearLocalAuthState,forceSupabaseSignOut,importPendingGuestSmartReview]);
 
   const handleLogin=useCallback(async u=>{
     if(isRecentlyDeletedAccount(u)){
@@ -28579,14 +28664,15 @@ export default function App() {
     const displayUser=Number(referralClaim?.coinsAwarded)>0 ? { ...u, cipherCoins:Number(referralClaim.cipherCoins ?? u.cipherCoins ?? 0) } : u;
     setUser(displayUser);
     identifyUser(displayUser);
-    const a=u?.authProvider==="supabase" ? await loadSupabaseAttempts(u.id) : await DB.getAttempts(u.email);
+    const savedAttempts=u?.authProvider==="supabase" ? await loadSupabaseAttempts(u.id) : await DB.getAttempts(u.email);
+    const a=await importPendingGuestSmartReview(displayUser,savedAttempts);
     const s=u?.authProvider==="supabase" ? ((await loadSupabaseStarred(u.id)) ?? await DB.getStarred(starOwner(displayUser))) : await DB.getStarred(starOwner(displayUser));
     const diagnosticDone=await DB.getDiagnosticDone(displayUser.email);
     const seen=await DB.getOnboardingSeen(displayUser.email);
-    if(!diagnosticDone&&a.length===0) setShowDiagnostic(true);
-    else if(!seen) setShowOnboarding(true);
+    if(!seen) setShowOnboarding(true);
+    else if(!diagnosticDone&&a.length===0) setShowDiagnostic(true);
     setAttempts(a);setStarred(s);setView("dashboard");setShowDaily(false);
-  },[forceSupabaseSignOut]);
+  },[forceSupabaseSignOut,importPendingGuestSmartReview]);
   const handleLogout=useCallback(async()=>{
     await forceSupabaseSignOut();
   },[forceSupabaseSignOut]);
@@ -28729,7 +28815,9 @@ export default function App() {
   const closeOnboarding=useCallback(async()=>{
     if(user?.email) await DB.saveOnboardingSeen(user.email);
     setShowOnboarding(false);
-  },[user]);
+    const diagnosticDone=user?.email ? await DB.getDiagnosticDone(user.email) : true;
+    if(!diagnosticDone&&attempts.length===0)setShowDiagnostic(true);
+  },[user,attempts.length]);
   const handleCancelMembership=useCallback(async()=>{
     if(!isSupabaseConfigured){
       alert("Membership cancellation will use Stripe's billing portal once Supabase and Stripe env vars are configured. For now, contact secureplus.support@gmail.com.");
@@ -28985,6 +29073,15 @@ export default function App() {
     });
     setView("deep-dives");
   },[]);
+  const handleGuestPbqPreview=useCallback(()=>{
+    const preview=livePbqBank.find(isFreePBQPreview)||PBQ_BANK.find(isFreePBQPreview)||null;
+    capture("pbq_preview_cta_clicked", {
+      source:view==="auth"?"marketing_home":"guest_home",
+      question_id:preview?.id||FREE_PBQ_PREVIEW_ID,
+    });
+    setPbqQ(preview);
+    setView("pbq");
+  },[livePbqBank,view]);
   const handleAchievementSessionComplete=useCallback(async payload=>{
     if(!user)return;
     if(user.authProvider!=="supabase"){
@@ -29112,12 +29209,14 @@ export default function App() {
   if(!user&&view==="auth") return(
     <>
       <style>{CSS}</style>
-      <AuthView key={`auth-${authStartMode}-${authRequestId}`} onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={setView} onPracticeMcq={()=>setView("mcq")} initialMode={authStartMode} securityNotice={accountDeletion.stage==="confirm"}/>
+      <AuthView key={`auth-${authStartMode}-${authRequestId}`} onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={setView} onPracticeMcq={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} initialMode={authStartMode} securityNotice={accountDeletion.stage==="confirm"}/>
     </>
   );
 
   if(!user){
     const guestUser={name:"Guest",email:"guest@secureplus.local",tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"guest",loginMethod:"guest"};
+    const guestCoinWallet=normalizeCipherWallet(emptyCipherWallet());
+    const activeGuestPbq=pbqQ ? (livePbqBank.find(question=>question.id===pbqQ.id)||pbqQ) : null;
     const devCoinWallet=normalizeCipherWallet({
       balance:150,
       lifetimeEarned:250,
@@ -29130,9 +29229,9 @@ export default function App() {
         {id:"preview-pbq",amount:-50,balance_after:130,event_type:"pbq_unlock",created_at:new Date(Date.now()-172800000).toISOString()},
       ],
     });
-    const goToSignup=()=>{setAuthStartMode("signup");setAuthRequestId(id=>id+1);setView("auth");};
-    const goToLogin=()=>{setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
-    const allowedGuestViews=new Set(["dashboard","mcq","daily","objectives",...(devDeepDivePreview?["deep-dives"]:[]),...(devCoinPreview?["coins"]:[])]);
+    const goToSignup=()=>{setPbqQ(null);setAuthStartMode("signup");setAuthRequestId(id=>id+1);setView("auth");};
+    const goToLogin=()=>{setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
+    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","objectives",...(devDeepDivePreview?["deep-dives"]:[]),...(devCoinPreview?["coins"]:[])]);
     const guestNavItems=[
       {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},
       {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
@@ -29212,10 +29311,39 @@ export default function App() {
               </div>
             </div>
             {view==="dashboard"&&(
-              <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
+              <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onDaily={()=>setView("daily")}/>
             )}
             {view==="mcq"&&(
               <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion} mcqBank={liveMcqBank}/>
+            )}
+            {view==="pbq"&&(
+              activeGuestPbq ? (
+                <PBQSim
+                  key={activeGuestPbq.id}
+                  q={activeGuestPbq}
+                  t={t}
+                  previewMode
+                  isGuest
+                  onDone={()=>{setPbqQ(null);setView("pbq");}}
+                  onUpgrade={goToSignup}
+                  onOpenWallet={goToSignup}
+                  onReportQuestion={handleReportQuestion}
+                />
+              ) : (
+                <PBQBank
+                  user={guestUser}
+                  attempts={[]}
+                  onStart={question=>{if(isFreePBQPreview(question))setPbqQ(question);else goToSignup();}}
+                  onUpgrade={goToSignup}
+                  onOpenWallet={goToSignup}
+                  onUnlockPbq={async()=>{goToSignup();return null;}}
+                  coinWallet={guestCoinWallet}
+                  t={t}
+                  starred={[]}
+                  onReportQuestion={handleReportQuestion}
+                  pbqBank={livePbqBank}
+                />
+              )
             )}
             {view==="daily"&&(
               <DailyChallenge t={t} onLogin={goToSignup}/>
@@ -29267,6 +29395,7 @@ export default function App() {
             onToggleStar={handleToggleStar}
             previewMode={pbqPreviewMode}
             onUpgrade={()=>setView("pricing")}
+            onOpenWallet={()=>setView("coins")}
             onReportQuestion={handleReportQuestion}
             showQuestionCodes={isRootUser}
           />
