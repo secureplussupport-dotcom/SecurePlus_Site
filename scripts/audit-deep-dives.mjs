@@ -3,7 +3,11 @@ import {
   CONCEPT_DEEP_DIVE_CATEGORIES,
   CONCEPT_DEEP_DIVE_REVIEWED_AT,
 } from "../src/data/conceptDeepDives.js";
-import { buildDeepDiveDeck, buildDeepDiveFlashcards } from "../src/lib/deepDiveStudy.js";
+import {
+  buildDeepDiveDeck,
+  buildDeepDiveFlashcards,
+  buildDeepDivePracticeQuestions,
+} from "../src/lib/deepDiveStudy.js";
 import { getDeepDiveRecommendations } from "../src/lib/deepDiveRecommendations.js";
 import {
   SY0701_ACRONYM_CARDS,
@@ -47,6 +51,7 @@ const primaryDomains = [
 ];
 const isPrimaryDomain = hostname => primaryDomains.some(domain => hostname === domain || hostname.endsWith(`.${domain}`));
 const mappedObjectiveCodes = new Set(Object.values(SY0701_DEEP_DIVE_PROFILES).flatMap(profile => profile.objectiveCodes));
+let practiceQuestionCount = 0;
 
 requireValue(CONCEPT_DEEP_DIVES.length >= 32, `Expected at least 32 lessons; found ${CONCEPT_DEEP_DIVES.length}.`);
 requireValue(unique(CONCEPT_DEEP_DIVES.map(dive => dive.id)), "Lesson IDs must be unique.");
@@ -151,6 +156,17 @@ for (const dive of CONCEPT_DEEP_DIVES) {
     requireValue(words(item.front) <= 35, `${item.id} question is too long for a flashcard.`);
     requireValue(words(item.back) <= 55, `${item.id} answer is too long for a flashcard.`);
   });
+
+  const practiceQuestions = buildDeepDivePracticeQuestions(dive);
+  practiceQuestionCount += practiceQuestions.length;
+  requireValue(practiceQuestions.length >= 3 && practiceQuestions.length <= 6, `${prefix} must generate 3-6 practice-lab questions.`);
+  requireValue(unique(practiceQuestions.map(item => item.id)), `${prefix} generates duplicate practice-lab question IDs.`);
+  practiceQuestions.forEach(item => {
+    requireValue(Boolean(item.prompt && item.clue && item.answer && item.explanation && item.source), `${item.id} is incomplete.`);
+    requireValue(item.options.length >= 2 && item.options.length <= 4, `${item.id} must have 2-4 answer choices.`);
+    requireValue(unique(item.options), `${item.id} repeats an answer choice.`);
+    requireValue(item.options.includes(item.answer), `${item.id} does not include its correct answer.`);
+  });
 }
 
 const deck = buildDeepDiveDeck(CONCEPT_DEEP_DIVES);
@@ -197,6 +213,7 @@ const sectionCount = CONCEPT_DEEP_DIVES.reduce((total, dive) => total + dive.sec
 console.log("Deep Dive content audit passed.");
 console.log(`- ${CONCEPT_DEEP_DIVES.length} complete lessons across ${sectionCount} guided sections`);
 console.log(`- ${deck.length} concise flashcards with unique IDs`);
+console.log(`- ${practiceQuestionCount} vetted tap-based questions across ${CONCEPT_DEEP_DIVES.length} practice labs`);
 console.log(`- ${SY0701_ACRONYM_CARDS.length} vetted acronym cards across ${SY0701_ACRONYM_SETS.length} active-recall sets`);
 console.log(`- All ${CONCEPT_DEEP_DIVES.length} lessons mapped across all 28 SY0-701 objectives and five domains`);
 console.log(`- Smart Review lesson matching passed ${recommendationChecks.length} representative weak-area checks`);

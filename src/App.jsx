@@ -79,12 +79,14 @@ import {
 import {
   buildDeepDiveDeck,
   buildDeepDiveFlashcards,
+  buildDeepDivePracticeQuestions,
   formatDeepDiveReviewDate,
 } from "./lib/deepDiveStudy.js";
 import {
   describeDeepDiveMatch,
   getDeepDiveRecommendations,
 } from "./lib/deepDiveRecommendations.js";
+import { getActiveDailyStreak } from "./lib/dailyStreak.js";
 
 // ═══════════════════════════════════════════════════════════════
 // PERSISTENT STORAGE
@@ -481,22 +483,29 @@ function previousDateKey(dateKey) {
 }
 async function loadDailyStreak(user) {
   const fallback={streak:0,best:0,lastCompletedDate:"",completedToday:false};
-  let data=await DB.getDailyStreak(dailyStreakOwner(user));
+  const owner=dailyStreakOwner(user);
+  let data=await DB.getDailyStreak(owner);
   if(!data&&user) {
     const guestData=await DB.getDailyStreak("guest");
     if(guestData) {
       data=guestData;
-      await DB.saveDailyStreak(dailyStreakOwner(user), guestData);
+      await DB.saveDailyStreak(owner,guestData);
     }
   }
   if(!data) return fallback;
   const today=localDateKey();
-  return {
-    streak:Number(data.streak)||0,
-    best:Number(data.best)||0,
-    lastCompletedDate:data.lastCompletedDate||"",
-    completedToday:data.lastCompletedDate===today,
-  };
+  const yesterday=previousDateKey(today);
+  const snapshot=getActiveDailyStreak(data,today,yesterday);
+  if(snapshot.expired){
+    await DB.saveDailyStreak(owner,{
+      ...data,
+      streak:0,
+      best:snapshot.best,
+      lastCompletedDate:snapshot.lastCompletedDate,
+      updatedAt:new Date().toISOString(),
+    });
+  }
+  return snapshot;
 }
 function dailyEncouragementForDate(dateKey=localDateKey()) {
   const messages=[
@@ -16139,7 +16148,10 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-ledger-amount.positive{color:${t.green};}
 .cipher-ledger-amount.negative{color:#b47727;}
 .cipher-empty-ledger{padding:28px;text-align:center;color:${t.textSec};font-size:13px;font-weight:600;line-height:1.65;}
-.cipher-reward-toast{position:fixed;right:22px;top:20px;z-index:900;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;width:min(390px,calc(100vw - 32px));padding:12px 14px;border:1px solid #d79b3e55;border-radius:18px;background:${t.surface}f2;box-shadow:0 22px 60px rgba(104,68,24,.25);backdrop-filter:blur(18px);animation:cipherToastIn .4s cubic-bezier(.16,1,.3,1) both;}
+.cipher-reward-toast{position:fixed;right:22px;top:20px;z-index:900;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;width:min(390px,calc(100vw - 32px));overflow:hidden;padding:12px 14px;border:1px solid #d79b3e55;border-radius:18px;background:${t.surface}f2;box-shadow:0 22px 60px rgba(104,68,24,.25);backdrop-filter:blur(18px);animation:cipherToastIn .4s cubic-bezier(.16,1,.3,1) both;}
+.cipher-reward-toast::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:3px;background:linear-gradient(90deg,#f2b85b,#288c8a);transform-origin:left;animation:cipherToastTimer 4.2s linear both;}
+.cipher-reward-toast.is-leaving{pointer-events:none;animation:cipherToastOut .38s cubic-bezier(.4,0,1,1) both;}
+.cipher-reward-toast.is-leaving::after{opacity:0;}
 .cipher-reward-toast strong,.cipher-reward-toast small{display:block;}
 .cipher-reward-toast strong{color:#b47727;font-size:12px;}
 .cipher-reward-toast small{margin-top:2px;color:${t.textSec};font-size:9px;line-height:1.4;}
@@ -16645,6 +16657,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes referralLink{0%{transform:rotate(-28deg) scaleX(.3);opacity:.35;}100%{transform:rotate(-28deg) scaleX(1);opacity:1;}}
 @keyframes cipherCoinCelebrate{0%{opacity:0;transform:translateY(14px) scale(.55) rotate(-28deg)}58%{opacity:1;transform:translateY(-7px) scale(1.13) rotate(8deg)}100%{transform:translateY(0) scale(1) rotate(0)}}
 @keyframes cipherToastIn{from{opacity:0;transform:translateY(-14px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes cipherToastOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-12px) scale(.96)}}
+@keyframes cipherToastTimer{from{transform:scaleX(1)}to{transform:scaleX(0)}}
 @keyframes objectiveCard{0%{transform:rotate(0) scale(1);}55%{transform:rotate(-5deg) scale(1.06);}100%{transform:rotate(0) scale(1);}}
 @keyframes objectiveTick{0%{transform:translateX(-5px);opacity:0;width:0;}100%{transform:translateX(0);opacity:1;width:7px;}}
 @keyframes examScan{0%{right:8px;bottom:7px;transform:scale(.85);}55%{right:0;bottom:0;transform:scale(1.05);}100%{right:2px;bottom:1px;transform:scale(1);}}
@@ -17635,6 +17649,21 @@ body{background:
 .deep-dives-progress-track{height:9px;margin:13px 0 11px;border-radius:999px;background:var(--deep-border);overflow:hidden;}
 .deep-dives-progress-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--deep-green),var(--deep-accent));transition:width .35s cubic-bezier(.16,1,.3,1);}
 .deep-dives-progress-card p{margin:0;font-size:11px;line-height:1.55;color:var(--deep-muted);}
+.deep-dive-launchpad{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(360px,.75fr);gap:16px;margin:18px 0 24px;padding:19px;border:1px solid color-mix(in srgb,var(--deep-green) 30%,var(--deep-border));border-radius:24px;background:radial-gradient(circle at 3% 100%,color-mix(in srgb,var(--deep-green) 13%,transparent),transparent 28%),linear-gradient(135deg,var(--deep-surface),color-mix(in srgb,var(--deep-accent) 5%,var(--deep-panel)));box-shadow:0 13px 36px rgba(40,31,22,.065);}
+.deep-dive-launchpad-coach{display:grid;grid-template-columns:112px minmax(0,1fr);align-items:center;gap:13px;min-width:0;}
+.deep-dive-launchpad-coach>.cipher-mascot{filter:drop-shadow(0 10px 16px rgba(40,31,22,.12));}
+.deep-dive-launchpad-coach>div>span{display:block;margin-bottom:4px;color:var(--deep-green);font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;}
+.deep-dive-launchpad-coach h2{margin:0;color:var(--deep-text);font-size:clamp(21px,2.3vw,29px);line-height:1.17;letter-spacing:-.025em;}
+.deep-dive-launchpad-coach p{max-width:590px;margin:7px 0 10px;color:var(--deep-muted);font-size:13px;font-weight:600;line-height:1.58;}
+.deep-dive-launchpad-coach>div>div{display:flex;gap:7px;flex-wrap:wrap;}
+.deep-dive-launchpad-coach>div>div span,.deep-dive-launchpad-coach>div>div strong{padding:6px 8px;border:1px solid var(--deep-border);border-radius:9px;background:var(--deep-panel);color:var(--deep-muted);font-size:9.5px;font-weight:900;}
+.deep-dive-launchpad-coach>div>div strong{color:var(--deep-accent);}
+.deep-dive-launchpad-actions{display:grid;gap:7px;}
+.deep-dive-launchpad-actions button{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;min-height:58px;padding:10px 12px;border:1px solid var(--deep-border);border-radius:14px;background:var(--deep-surface);color:var(--deep-accent);font:inherit;text-align:left;cursor:pointer;transition:transform .18s,border-color .18s,background .18s;}
+.deep-dive-launchpad-actions button:hover{transform:translateX(3px);border-color:color-mix(in srgb,var(--deep-accent) 45%,var(--deep-border));background:color-mix(in srgb,var(--deep-accent) 7%,var(--deep-surface));}
+.deep-dive-launchpad-actions button>span{display:grid;gap:2px;}
+.deep-dive-launchpad-actions strong{color:var(--deep-text);font-size:12px;}
+.deep-dive-launchpad-actions small{color:var(--deep-muted);font-size:10px;font-weight:700;}
 .deep-dives-controls{display:grid;gap:14px;margin:26px 0 20px;}
 .deep-dives-search{display:flex;align-items:center;gap:10px;width:100%;padding:0 14px;border:1px solid var(--deep-border);border-radius:16px;background:var(--deep-surface);box-shadow:0 8px 24px rgba(40,31,22,.05);transition:border-color .18s,box-shadow .18s;}
 .deep-dives-search:focus-within{border-color:var(--deep-accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--deep-accent) 13%,transparent);}
@@ -17743,7 +17772,7 @@ body{background:
 .deep-dive-sources a:hover{text-decoration:underline;}
 .deep-dive-sources a svg{flex:0 0 auto;}
 .deep-dive-card{cursor:default;}
-.deep-dive-card-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px;}
+.deep-dive-card-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:12px;}
 .deep-dive-card-actions button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:39px;padding:8px;border:1px solid var(--deep-border);border-radius:11px;background:var(--deep-surface);color:var(--deep-accent);font:inherit;font-size:11px;font-weight:900;cursor:pointer;transition:.18s ease;}
 .deep-dive-card-actions button:first-child{border-color:color-mix(in srgb,var(--chapter-color) 35%,var(--deep-border));background:color-mix(in srgb,var(--chapter-color) 9%,var(--deep-surface));color:color-mix(in srgb,var(--chapter-color) 85%,var(--deep-text));}
 .deep-dive-card-actions button:hover{transform:translateY(-1px);border-color:var(--deep-accent);background:color-mix(in srgb,var(--deep-accent) 9%,var(--deep-surface));}
@@ -17755,7 +17784,7 @@ body{background:
 .deep-dive-objective-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:15px;}
 .deep-dive-objective-strip>span{display:flex;align-items:flex-start;gap:8px;padding:11px 12px;border:1px solid var(--deep-border);border-radius:13px;background:color-mix(in srgb,var(--deep-panel) 78%,transparent);font-size:11px;line-height:1.55;color:var(--deep-muted);}
 .deep-dive-objective-strip strong{display:grid;place-items:center;min-width:29px;height:23px;padding:0 5px;flex:0 0 auto;border-radius:7px;background:color-mix(in srgb,var(--deep-accent) 13%,var(--deep-surface));color:var(--deep-accent);font-size:8px;}
-.deep-dive-study-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0;}
+.deep-dive-study-modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0 10px;}
 .deep-dive-study-modes>button{display:flex;align-items:center;gap:11px;padding:14px 16px;border:1px solid var(--deep-border);border-radius:15px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;text-align:left;cursor:pointer;transition:.18s ease;}
 .deep-dive-study-modes>button>svg{flex:0 0 auto;}
 .deep-dive-study-modes>button>span{display:grid;gap:2px;}
@@ -17763,6 +17792,13 @@ body{background:
 .deep-dive-study-modes small{font-size:10px;color:var(--deep-muted);}
 .deep-dive-study-modes>button:hover,.deep-dive-study-modes>button.active{border-color:color-mix(in srgb,var(--deep-accent) 48%,var(--deep-border));background:color-mix(in srgb,var(--deep-accent) 9%,var(--deep-surface));color:var(--deep-accent);box-shadow:0 8px 22px rgba(40,31,22,.05);}
 .deep-dive-study-modes>button:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 28%,transparent);outline-offset:2px;}
+.deep-dive-cipher-coach{display:grid;grid-template-columns:80px minmax(0,1fr) auto;align-items:center;gap:11px;margin-bottom:18px;padding:10px 13px;border:1px solid color-mix(in srgb,var(--deep-amber) 32%,var(--deep-border));border-radius:17px;background:radial-gradient(circle at 3% 50%,color-mix(in srgb,var(--deep-amber) 14%,transparent),transparent 23%),var(--deep-surface);}
+.deep-dive-cipher-coach>.cipher-mascot{filter:drop-shadow(0 7px 12px rgba(40,31,22,.11));}
+.deep-dive-cipher-coach>div>span{display:block;margin-bottom:2px;color:var(--deep-amber);font-size:9px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;}
+.deep-dive-cipher-coach strong,.deep-dive-cipher-coach small{display:block;}
+.deep-dive-cipher-coach strong{color:var(--deep-text);font-size:13px;line-height:1.45;}
+.deep-dive-cipher-coach small{margin-top:3px;color:var(--deep-muted);font-size:10px;font-weight:650;line-height:1.45;}
+.deep-dive-cipher-coach>.deep-dive-coach-action{display:flex;align-items:center;gap:5px;padding:9px 10px;border:1px solid color-mix(in srgb,var(--deep-accent) 30%,var(--deep-border));border-radius:10px;background:color-mix(in srgb,var(--deep-accent) 8%,var(--deep-surface));color:var(--deep-accent);font:inherit;font-size:10px;font-weight:950;cursor:pointer;}
 .deep-dive-lesson-progress-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--deep-muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;}
 .deep-dive-lesson-progress-head strong{color:var(--deep-text);font-size:12px;}
 .deep-dive-lesson-progress{height:8px;margin:10px 0 14px;border-radius:999px;background:var(--deep-border);overflow:hidden;}
@@ -17892,6 +17928,51 @@ body{background:
 .deep-dive-flashcard-actions{display:grid;grid-template-columns:auto minmax(210px,1fr) auto;align-items:center;gap:9px;margin-top:14px;}
 .deep-dive-flashcard-actions>.btn:nth-child(2){justify-self:center;}
 .deep-dive-flashcard-rating{display:flex;justify-content:center;gap:8px;}
+.deep-dive-practice-lab{max-width:880px;margin:0 auto;padding:27px;border:1px solid color-mix(in srgb,var(--deep-accent) 29%,var(--deep-border));border-radius:24px;background:radial-gradient(circle at 92% 4%,color-mix(in srgb,var(--deep-green) 13%,transparent),transparent 29%),radial-gradient(circle at 4% 100%,color-mix(in srgb,var(--deep-amber) 12%,transparent),transparent 26%),var(--deep-surface);box-shadow:0 16px 44px rgba(40,31,22,.08);}
+.deep-dive-practice-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;}
+.deep-dive-practice-head>div:first-child>span{display:flex;align-items:center;gap:6px;color:var(--deep-accent);font-size:10px;font-weight:950;letter-spacing:.09em;text-transform:uppercase;}
+.deep-dive-practice-head h2{margin:7px 0 4px;color:var(--deep-text);font-size:clamp(25px,3vw,33px);line-height:1.15;}
+.deep-dive-practice-head p{margin:0;color:var(--deep-muted);font-size:12px;font-weight:800;}
+.deep-dive-practice-score{display:flex;align-items:center;gap:8px;flex:0 0 auto;padding:11px 13px;border:1px solid color-mix(in srgb,var(--deep-green) 30%,var(--deep-border));border-radius:14px;background:color-mix(in srgb,var(--deep-green) 8%,var(--deep-surface));}
+.deep-dive-practice-score strong{color:var(--deep-green);font-size:28px;line-height:1;}
+.deep-dive-practice-score span{color:var(--deep-muted);font-size:9px;font-weight:900;line-height:1.35;}
+.deep-dive-practice-question{margin:19px 0 13px;padding:23px;border:1px solid var(--deep-border);border-radius:18px;background:var(--deep-panel);}
+.deep-dive-practice-question>span{display:block;color:var(--deep-accent);font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
+.deep-dive-practice-question h3{margin:10px 0 14px;color:var(--deep-text);font-size:clamp(19px,2.6vw,25px);font-weight:820;line-height:1.5;}
+.deep-dive-practice-question small{display:flex;align-items:center;gap:6px;color:var(--deep-muted);font-size:10px;font-weight:850;}
+.deep-dive-practice-question small svg{color:var(--deep-green);}
+.deep-dive-practice-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+.deep-dive-practice-options button{display:grid;grid-template-columns:35px minmax(0,1fr) auto;align-items:center;gap:10px;min-height:68px;padding:12px;border:1px solid var(--deep-border);border-radius:15px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;text-align:left;cursor:pointer;transition:transform .17s,border-color .17s,background .17s;}
+.deep-dive-practice-options button:hover:not(:disabled),.deep-dive-practice-options button.selected{transform:translateY(-1px);border-color:color-mix(in srgb,var(--deep-accent) 55%,var(--deep-border));background:color-mix(in srgb,var(--deep-accent) 8%,var(--deep-surface));}
+.deep-dive-practice-options button:disabled{cursor:default;}
+.deep-dive-practice-options button>span{display:grid;place-items:center;width:35px;height:35px;border-radius:11px;background:var(--deep-panel);color:var(--deep-muted);font-size:11px;font-weight:950;}
+.deep-dive-practice-options button>strong{color:var(--deep-text);font-size:13px;line-height:1.42;}
+.deep-dive-practice-options button>svg{color:var(--deep-muted);}
+.deep-dive-practice-options button.correct{border-color:color-mix(in srgb,var(--deep-green) 55%,var(--deep-border));background:color-mix(in srgb,var(--deep-green) 10%,var(--deep-surface));}
+.deep-dive-practice-options button.correct>span{background:var(--deep-green);color:#fff;}
+.deep-dive-practice-options button.correct>svg{color:var(--deep-green);}
+.deep-dive-practice-options button.wrong{border-color:#dc6a605f;background:#dc6a600d;}
+.deep-dive-practice-options button.wrong>span{background:#dc6a60;color:#fff;}
+.deep-dive-practice-options button.wrong>svg{color:#c75249;}
+.deep-dive-practice-feedback{display:grid;grid-template-columns:auto minmax(0,1fr);gap:11px;align-items:flex-start;margin-top:12px;padding:14px 15px;border:1px solid var(--deep-border);border-radius:15px;}
+.deep-dive-practice-feedback.correct{border-color:color-mix(in srgb,var(--deep-green) 38%,var(--deep-border));background:color-mix(in srgb,var(--deep-green) 8%,var(--deep-surface));}
+.deep-dive-practice-feedback.wrong{border-color:#dc6a604a;background:#dc6a6009;}
+.deep-dive-practice-feedback>svg{margin-top:1px;color:var(--deep-green);}
+.deep-dive-practice-feedback.wrong>svg{color:var(--deep-amber);}
+.deep-dive-practice-feedback strong{display:block;color:var(--deep-text);font-size:13px;}
+.deep-dive-practice-feedback p{margin:4px 0 0;color:var(--deep-muted);font-size:12px;font-weight:600;line-height:1.58;}
+.deep-dive-practice-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:15px;}
+.deep-dive-practice-actions .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.deep-dive-practice-complete{text-align:center;}
+.deep-dive-practice-celebration{position:relative;display:grid;place-items:center;width:142px;height:130px;margin:0 auto 8px;}
+.deep-dive-practice-celebration>span{position:absolute;left:50%;bottom:0;display:flex;align-items:center;gap:6px;width:max-content;padding:7px 10px;border-radius:999px;background:var(--deep-green);color:#fff;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.07em;transform:translateX(-50%);}
+.deep-dive-practice-complete h2{margin:8px 0 5px;color:var(--deep-text);font-size:42px;line-height:1;}
+.deep-dive-practice-complete>p{max-width:620px;margin:0 auto;color:var(--deep-muted);font-size:14px;font-weight:620;line-height:1.65;}
+.deep-dive-practice-summary{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin:18px 0;}
+.deep-dive-practice-summary>span{display:flex;align-items:center;gap:5px;padding:7px 9px;border:1px solid var(--deep-border);border-radius:10px;background:var(--deep-panel);color:var(--deep-muted);font-size:10px;}
+.deep-dive-practice-summary>span.correct{color:var(--deep-green);border-color:color-mix(in srgb,var(--deep-green) 28%,var(--deep-border));}
+.deep-dive-practice-summary>span.wrong{color:#c75249;border-color:#dc6a6038;}
+.deep-dive-practice-complete .deep-dive-practice-actions{justify-content:center;}
 .deep-dive-reader-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:18px;padding-top:4px;}
 /* Deep Dives use a deliberately larger type scale for comfortable study sessions. */
 .deep-dives-hero-copy>p{font-size:18px;font-weight:600;line-height:1.72;}
@@ -17976,6 +18057,7 @@ body{background:
   .deep-dives-page,.deep-dive-reader{padding:22px 16px 96px;}
   .deep-dive-acronym-reader{padding:22px 16px 96px;}
   .deep-dives-hero{grid-template-columns:minmax(0,1fr);padding:24px;border-radius:23px;}
+  .deep-dive-launchpad{grid-template-columns:minmax(0,1fr);}
   .deep-dive-acronym-library-head{align-items:flex-start;}
   .deep-dive-acronym-set-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .deep-dives-progress-card{max-width:420px;}
@@ -17987,6 +18069,7 @@ body{background:
   .deep-dive-learning-card nav button{flex:0 0 min(285px,82vw);}
   .deep-dive-sources>div:last-child{grid-template-columns:minmax(0,1fr);}
   .deep-dive-flashcard-studio{padding:19px;}
+  .deep-dive-practice-lab{padding:21px;}
 }
 @media (max-width: 560px){
   .deep-dives-grid{grid-template-columns:minmax(0,1fr);}
@@ -18008,12 +18091,23 @@ body{background:
   .deep-dives-results-head span{display:none;}
   .deep-dives-results-head{align-items:flex-start;flex-direction:column;}
   .deep-dive-card{min-height:360px;padding:22px;}
+  .deep-dive-card-actions{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .deep-dive-card-actions button{font-size:11px;padding:7px 5px;}
+  .deep-dive-launchpad{padding:15px;border-radius:20px;}
+  .deep-dive-launchpad-coach{grid-template-columns:76px minmax(0,1fr);align-items:start;}
+  .deep-dive-launchpad-coach>.cipher-mascot{--cipher-size:76px!important;}
+  .deep-dive-launchpad-coach h2{font-size:21px;}
+  .deep-dive-launchpad-coach p{font-size:12px;}
+  .deep-dive-launchpad-actions button{min-height:61px;}
   .deep-dive-article-hero{padding:25px 20px;border-radius:22px;}
   .deep-dive-article-hero h1{font-size:33px;}
   .deep-dive-article-subtitle{font-size:16px;}
   .deep-dive-reader-topbar{align-items:flex-start;}
   .deep-dive-reader-topbar .deep-dive-preview-badge{font-size:9px;}
   .deep-dive-study-modes{grid-template-columns:minmax(0,1fr);}
+  .deep-dive-cipher-coach{grid-template-columns:62px minmax(0,1fr);padding:10px;}
+  .deep-dive-cipher-coach>.cipher-mascot{--cipher-size:62px!important;}
+  .deep-dive-cipher-coach>.deep-dive-coach-action{grid-column:1/-1;justify-content:center;}
   .deep-dive-guided-panel{padding:19px 16px;}
   .deep-dive-keyword-answer{padding:16px;}
   .deep-dive-keyword-answer>strong{font-size:25px;}
@@ -18035,6 +18129,15 @@ body{background:
   .deep-dive-flashcard-actions>.btn:nth-child(2){justify-self:stretch;}
   .deep-dive-flashcard-rating{grid-column:1/-1;grid-row:1;}
   .deep-dive-flashcard-rating .btn{flex:1;justify-content:center;}
+  .deep-dive-practice-lab{padding:18px 15px;border-radius:20px;}
+  .deep-dive-practice-head h2{font-size:25px;}
+  .deep-dive-practice-score{padding:9px 10px;}
+  .deep-dive-practice-question{padding:18px 16px;}
+  .deep-dive-practice-question h3{font-size:19px;}
+  .deep-dive-practice-options{grid-template-columns:minmax(0,1fr);}
+  .deep-dive-practice-options button{min-height:64px;}
+  .deep-dive-practice-actions{align-items:stretch;flex-direction:column-reverse;}
+  .deep-dive-practice-actions .btn{width:100%;justify-content:center;}
   .deep-dive-section>summary,.deep-dive-check>summary{padding:17px 15px;font-size:13px;}
   .deep-dive-section-content{padding:17px 15px;}
   .deep-dive-table-wrap{border:0;overflow:visible;}
@@ -23995,12 +24098,31 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
 // PRICING
 // ═══════════════════════════════════════════════════════════════
 function CipherRewardToast({reward,onClose}) {
+  const [isLeaving,setIsLeaving]=useState(false);
+  const closeRef=useRef(onClose);
+  const closeTimerRef=useRef(null);
+  useEffect(()=>{closeRef.current=onClose;},[onClose]);
+  useEffect(()=>{
+    if(!reward)return undefined;
+    setIsLeaving(false);
+    const fadeTimer=window.setTimeout(()=>setIsLeaving(true),4200);
+    closeTimerRef.current=window.setTimeout(()=>closeRef.current?.(),4580);
+    return()=>{
+      window.clearTimeout(fadeTimer);
+      window.clearTimeout(closeTimerRef.current);
+    };
+  },[reward]);
+  const dismiss=()=>{
+    window.clearTimeout(closeTimerRef.current);
+    setIsLeaving(true);
+    closeTimerRef.current=window.setTimeout(()=>closeRef.current?.(),380);
+  };
   if(!reward)return null;
   return (
-    <div className="cipher-reward-toast" role="status" aria-live="polite">
+    <div className={`cipher-reward-toast ${isLeaving?"is-leaving":""}`} role="status" aria-live="polite">
       <CipherCoinIcon size={42} celebrate/>
       <span><strong>{reward.amount>0?`+${reward.amount} Cipher Coins`:reward.title||"Cipher Coin wallet updated"}</strong><small>{reward.message||"Your new balance is ready in the Coin Vault."}</small></span>
-      <button type="button" onClick={onClose} aria-label="Close Cipher Coin message"><X size={15}/></button>
+      <button type="button" onClick={dismiss} aria-label="Close Cipher Coin message"><X size={15}/></button>
     </div>
   );
 }
@@ -27041,6 +27163,10 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
   const [cardIndex,setCardIndex]=useState(0);
   const [cardOrder,setCardOrder]=useState([]);
   const [isCardFlipped,setIsCardFlipped]=useState(false);
+  const [practiceIndex,setPracticeIndex]=useState(0);
+  const [practiceChoice,setPracticeChoice]=useState("");
+  const [practiceSubmitted,setPracticeSubmitted]=useState(false);
+  const [practiceResults,setPracticeResults]=useState([]);
   const handledLessonRequest=useRef(null);
   const [completedIds,setCompletedIds]=useState(()=>{
     try{
@@ -27060,12 +27186,20 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
       return Array.isArray(stored)?stored.filter(id=>SY0701_ACRONYM_CARDS.some(card=>card.id===id)):[];
     }catch{return [];}
   });
+  const [practiceBestScores,setPracticeBestScores]=useState(()=>{
+    try{
+      const stored=JSON.parse(window.localStorage?.getItem("secureplus-deep-dives-practice")||"{}");
+      return stored&&typeof stored==="object"&&!Array.isArray(stored)?stored:{};
+    }catch{return {};}
+  });
 
   const selectedDive=CONCEPT_DEEP_DIVES.find(dive=>dive.id===selectedId)||null;
   const selectedAcronymSet=SY0701_ACRONYM_SETS.find(set=>set.id===selectedAcronymSetId)||null;
   const selectedProfile=getSy0701DeepDiveProfile(selectedDive);
   const allFlashcards=useMemo(()=>buildDeepDiveDeck(CONCEPT_DEEP_DIVES),[]);
   const selectedFlashcards=useMemo(()=>buildDeepDiveFlashcards(selectedDive),[selectedDive]);
+  const practiceQuestions=useMemo(()=>buildDeepDivePracticeQuestions(selectedDive),[selectedDive]);
+  const activePracticeQuestion=practiceQuestions[practiceIndex]||null;
   const orderedFlashcards=useMemo(()=>{
     if(!selectedFlashcards.length)return [];
     const byId=new Map(selectedFlashcards.map(item=>[item.id,item]));
@@ -27106,6 +27240,10 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
     setCardIndex(0);
     setCardOrder([]);
     setIsCardFlipped(false);
+    setPracticeIndex(0);
+    setPracticeChoice("");
+    setPracticeSubmitted(false);
+    setPracticeResults([]);
     const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"}));
     capture("concept_deep_dive_opened",{deep_dive_id:id,study_mode:mode,source:"library"});
@@ -27180,6 +27318,49 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
     setIsAnswerVisible(false);
     setComparisonIndex(0);
   };
+  const submitPracticeAnswer=()=>{
+    if(!activePracticeQuestion||!practiceChoice||practiceSubmitted)return;
+    const correct=practiceChoice===activePracticeQuestion.answer;
+    setPracticeResults(current=>[
+      ...current.filter(result=>result.id!==activePracticeQuestion.id),
+      {id:activePracticeQuestion.id,choice:practiceChoice,correct},
+    ]);
+    setPracticeSubmitted(true);
+    playAnswerSound(correct);
+    capture("concept_deep_dive_practice_answered",{
+      deep_dive_id:selectedDive?.id,
+      question_id:activePracticeQuestion.id,
+      correct,
+    });
+  };
+  const savePracticeBest=score=>{
+    if(!selectedDive||!practiceQuestions.length)return;
+    const percent=Math.round((score/practiceQuestions.length)*100);
+    const next={...practiceBestScores,[selectedDive.id]:Math.max(Number(practiceBestScores[selectedDive.id])||0,percent)};
+    setPracticeBestScores(next);
+    try{window.localStorage?.setItem("secureplus-deep-dives-practice",JSON.stringify(next));}catch{}
+    capture("concept_deep_dive_practice_completed",{deep_dive_id:selectedDive.id,score,total:practiceQuestions.length,percent});
+  };
+  const nextPracticeQuestion=()=>{
+    if(!practiceSubmitted)return;
+    if(practiceIndex<practiceQuestions.length-1){
+      setPracticeIndex(index=>index+1);
+      setPracticeChoice("");
+      setPracticeSubmitted(false);
+      return;
+    }
+    const score=practiceResults.filter(result=>result.correct).length;
+    savePracticeBest(score);
+    setPracticeIndex(practiceQuestions.length);
+    setPracticeChoice("");
+    setPracticeSubmitted(false);
+  };
+  const resetPracticeLab=()=>{
+    setPracticeIndex(0);
+    setPracticeChoice("");
+    setPracticeSubmitted(false);
+    setPracticeResults([]);
+  };
 
   if(selectedAcronymSet){
     return <AcronymFlashcardLab acronymSet={selectedAcronymSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={closeAcronymSet} t={t}/>;
@@ -27222,7 +27403,27 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
           <button type="button" role="tab" aria-selected={studyMode==="cards"} className={studyMode==="cards"?"active":""} onClick={()=>{setStudyMode("cards");setIsCardFlipped(false);}}>
             <Brain size={17}/><span><strong>Flashcards</strong><small>{masteredInLesson}/{selectedFlashcards.length} mastered</small></span>
           </button>
+          <button type="button" role="tab" aria-selected={studyMode==="practice"} className={studyMode==="practice"?"active":""} onClick={()=>{setStudyMode("practice");resetPracticeLab();}}>
+            <Puzzle size={17}/><span><strong>Practice lab</strong><small>Tap, check, and improve</small></span>
+          </button>
         </div>
+
+        <section className="deep-dive-cipher-coach" aria-label="Cipher study guide">
+          <MascotAnimation
+            animation={studyMode==="practice"&&practiceSubmitted?(practiceChoice===activePracticeQuestion?.answer?"correct":"thinking"):"idle"}
+            size={76}
+            interactive
+            hoverAnimation="wave"
+            reactionAnimations={["wave","thinking","cheer"]}
+            label="Cipher guides this Concept Deep Dive"
+          />
+          <div>
+            <span>Cipher’s study cue</span>
+            <strong>{studyMode==="learn"?"Understand one idea before moving on.":studyMode==="cards"?"Answer aloud before you flip the card.":"Use the clue, eliminate close distractors, then check your choice."}</strong>
+            <small>{studyMode==="practice"?"Every answer comes directly from this vetted lesson.":"Switch modes whenever rereading stops feeling useful."}</small>
+          </div>
+          {studyMode!=="practice"&&<button className="deep-dive-coach-action" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}>Try the lab<ChevronRight size={15}/></button>}
+        </section>
 
         {studyMode==="learn"?(
           <div className="deep-dive-reader-layout">
@@ -27326,7 +27527,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
               </details>
             </div>
           </div>
-        ):(
+        ):studyMode==="cards"?(
           <section className="deep-dive-flashcard-studio" aria-label={`${selectedDive.title} flashcards`}>
             <div className="deep-dive-flashcard-head">
               <div><span className="deep-dive-eyebrow">Active recall</span><h2>Say the answer, then flip</h2><p>Short sessions beat rereading. Mark a card “Got it” only when you can explain it without hints.</p></div>
@@ -27367,6 +27568,95 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
               </div>
             </>}
           </section>
+        ):(
+          <section className="deep-dive-practice-lab" aria-label={`${selectedDive.title} practice lab`}>
+            {activePracticeQuestion?(
+              <>
+                <div className="deep-dive-practice-head">
+                  <div>
+                    <span><Puzzle size={15}/> Interactive checkpoint</span>
+                    <h2>Choose the strongest match</h2>
+                    <p>Question {practiceIndex+1} of {practiceQuestions.length} · {activePracticeQuestion.kind}</p>
+                  </div>
+                  <div className="deep-dive-practice-score">
+                    <strong>{practiceResults.filter(result=>result.correct).length}</strong>
+                    <span>correct<br/>so far</span>
+                  </div>
+                </div>
+                <div className="deep-dives-progress-track" aria-label={`${Math.round((practiceIndex/practiceQuestions.length)*100)}% through the practice lab`}>
+                  <span style={{width:`${(practiceIndex/practiceQuestions.length)*100}%`}}/>
+                </div>
+                <div className="deep-dive-practice-question">
+                  <span>{activePracticeQuestion.prompt}</span>
+                  <h3>{activePracticeQuestion.clue}</h3>
+                  <small><ShieldCheck size={14}/>{activePracticeQuestion.source}</small>
+                </div>
+                <div className="deep-dive-practice-options" role="radiogroup" aria-label="Answer choices">
+                  {activePracticeQuestion.options.map((option,index)=>{
+                    const isSelected=practiceChoice===option;
+                    const isCorrect=practiceSubmitted&&option===activePracticeQuestion.answer;
+                    const isWrong=practiceSubmitted&&isSelected&&!isCorrect;
+                    return <button
+                      key={option}
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
+                      disabled={practiceSubmitted}
+                      className={`${isSelected?"selected":""} ${isCorrect?"correct":""} ${isWrong?"wrong":""}`}
+                      onClick={()=>setPracticeChoice(option)}
+                    >
+                      <span>{String.fromCharCode(65+index)}</span>
+                      <strong>{option}</strong>
+                      {isCorrect?<CheckCircle2 size={19}/>:isWrong?<XCircle size={19}/>:<Circle size={18}/>}
+                    </button>;
+                  })}
+                </div>
+                {practiceSubmitted&&(
+                  <div className={`deep-dive-practice-feedback ${practiceChoice===activePracticeQuestion.answer?"correct":"wrong"}`} role="status">
+                    {practiceChoice===activePracticeQuestion.answer?<CheckCircle2 size={22}/>:<Lightbulb size={22}/>}
+                    <div>
+                      <strong>{practiceChoice===activePracticeQuestion.answer?"Correct — you matched the exam clue.":`The best answer is ${activePracticeQuestion.answer}.`}</strong>
+                      <p>{activePracticeQuestion.explanation}</p>
+                    </div>
+                  </div>
+                )}
+                <div className="deep-dive-practice-actions">
+                  <button className="btn btn-outline" type="button" onClick={()=>setStudyMode("learn")}><BookOpenCheck size={16}/>Review lesson</button>
+                  {!practiceSubmitted?(
+                    <button className="btn btn-primary" type="button" disabled={!practiceChoice} onClick={submitPracticeAnswer}><Check size={16}/>Check answer</button>
+                  ):(
+                    <button className="btn btn-primary" type="button" onClick={nextPracticeQuestion}>{practiceIndex===practiceQuestions.length-1?"See results":"Next challenge"}<ChevronRight size={16}/></button>
+                  )}
+                </div>
+              </>
+            ):practiceQuestions.length?(
+              <div className="deep-dive-practice-complete">
+                <div className="deep-dive-practice-celebration">
+                  <MascotAnimation animation={practiceResults.filter(result=>result.correct).length===practiceQuestions.length?"cheer":"wave"} size={118} interactive hoverAnimation="dance" label="Cipher celebrates the completed practice lab"/>
+                  <span><Trophy size={18}/> Lab complete</span>
+                </div>
+                <h2>{practiceResults.filter(result=>result.correct).length}/{practiceQuestions.length} correct</h2>
+                <p>{practiceResults.every(result=>result.correct)?"Excellent recall. You can recognise these ideas without relying on a wall of notes.":"Good attempt. Review the missed terms, then retry—the choices are drawn only from this lesson."}</p>
+                <div className="deep-dive-practice-summary">
+                  {practiceQuestions.map(question=>{
+                    const result=practiceResults.find(item=>item.id===question.id);
+                    return <span className={result?.correct?"correct":"wrong"} key={question.id}>{result?.correct?<Check size={14}/>:<RotateCcw size={14}/>}<strong>{question.answer}</strong></span>;
+                  })}
+                </div>
+                <div className="deep-dive-practice-actions">
+                  <button className="btn btn-outline" type="button" onClick={()=>setStudyMode("cards")}><Brain size={16}/>Review flashcards</button>
+                  <button className="btn btn-primary" type="button" onClick={resetPracticeLab}><RotateCcw size={16}/>Retry lab</button>
+                </div>
+              </div>
+            ):(
+              <div className="deep-dives-empty">
+                <Lightbulb size={24}/>
+                <h2>This lesson’s practice lab is being prepared.</h2>
+                <p>Use the guided lesson and flashcards while the interactive questions are reviewed.</p>
+                <button className="btn btn-primary" type="button" onClick={()=>setStudyMode("cards")}>Open flashcards</button>
+              </div>
+            )}
+          </section>
         )}
 
         <div className="deep-dive-reader-actions">
@@ -27380,6 +27670,10 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
   const progressPercent=Math.round((completedIds.length/CONCEPT_DEEP_DIVES.length)*100);
   const totalMastered=allFlashcards.filter(item=>masteredCardIds.includes(item.id)).length;
   const totalAcronymsMastered=SY0701_ACRONYM_CARDS.filter(item=>masteredAcronymIds.includes(item.id)).length;
+  const continueDive=sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES).find(dive=>!completedIds.includes(dive.id))||sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES)[0];
+  const continueProfile=getSy0701DeepDiveProfile(continueDive);
+  const continueCards=buildDeepDiveFlashcards(continueDive);
+  const continueMastered=continueCards.filter(card=>masteredCardIds.includes(card.id)).length;
   return(
     <div className="deep-dives-page" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <section className="deep-dives-hero">
@@ -27400,6 +27694,23 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
           <p>{completedIds.length?"Continue with one short concept or switch to active recall.":"Choose a lesson, learn one idea at a time, then practise it."}</p>
           <div className="deep-dives-card-progress"><Brain size={16}/><span><strong>{totalMastered}</strong> of {allFlashcards.length} flashcards mastered</span></div>
           <div className="deep-dives-card-progress"><TextCursorInput size={16}/><span><strong>{totalAcronymsMastered}</strong> of {SY0701_ACRONYM_CARDS.length} acronyms mastered</span></div>
+        </div>
+      </section>
+
+      <section className="deep-dive-launchpad" aria-label="Continue learning">
+        <div className="deep-dive-launchpad-coach">
+          <MascotAnimation animation="thinking" size={104} interactive hoverAnimation="wave" reactionAnimations={["wave","cheer","thinking"]} label="Cipher recommends the next Concept Deep Dive"/>
+          <div>
+            <span>Cipher’s next stop</span>
+            <h2>{continueProfile.title}</h2>
+            <p>{completedIds.length?`Continue your SY0-701 path with a ${continueDive.minutes}-minute lesson.`:"Start with a short guided lesson, then switch to recall or the practice lab."}</p>
+            <div><strong>Objective {continueProfile.objectiveCodes.join(" / ")}</strong><span>{continueMastered}/{continueCards.length} cards mastered</span>{Number(practiceBestScores[continueDive.id])>0&&<span>Best lab {practiceBestScores[continueDive.id]}%</span>}</div>
+          </div>
+        </div>
+        <div className="deep-dive-launchpad-actions">
+          <button type="button" onClick={()=>openDive(continueDive.id,"learn")}><BookOpenCheck size={21}/><span><strong>Learn</strong><small>One idea at a time</small></span><ChevronRight size={17}/></button>
+          <button type="button" onClick={()=>openDive(continueDive.id,"cards")}><Brain size={21}/><span><strong>Recall</strong><small>Flip focused cards</small></span><ChevronRight size={17}/></button>
+          <button type="button" onClick={()=>openDive(continueDive.id,"practice")}><Puzzle size={21}/><span><strong>Practise</strong><small>Tap through a scored lab</small></span><ChevronRight size={17}/></button>
         </div>
       </section>
 
@@ -27462,10 +27773,11 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
                     <p>{syllabus.plainSummary}</p>
                     <div className="deep-dive-card-tags">{syllabus.examKeywords.slice(0,4).map(keyword=><span key={keyword}>{keyword}</span>)}</div>
                     {syllabus.includesBeyondTextbook&&<div className="deep-dive-card-scope"><GraduationCap size={14}/>Includes clearly marked “Beyond the textbook” detail</div>}
-                    <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span><Brain size={14}/>{masteredCount}/{diveCards.length} cards</span></div>
+                    <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span><Brain size={14}/>{masteredCount}/{diveCards.length} cards</span>{Number(practiceBestScores[dive.id])>0&&<span><Trophy size={14}/>{practiceBestScores[dive.id]}%</span>}</div>
                     <div className="deep-dive-card-actions">
                       <button type="button" onClick={()=>openDive(dive.id,"learn")}><BookOpenCheck size={15}/>Learn</button>
                       <button type="button" onClick={()=>openDive(dive.id,"cards")}><Brain size={15}/>Flashcards</button>
+                      <button type="button" onClick={()=>openDive(dive.id,"practice")}><Puzzle size={15}/>Lab</button>
                     </div>
                   </article>
                 );

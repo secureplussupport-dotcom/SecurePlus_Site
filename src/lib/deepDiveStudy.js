@@ -72,6 +72,63 @@ export function buildDeepDiveDeck(dives = []) {
   return dives.flatMap(buildDeepDiveFlashcards);
 }
 
+export function buildDeepDivePracticeQuestions(dive) {
+  if (!dive?.id) return [];
+  const profile = getSy0701DeepDiveProfile(dive);
+  const keywordGuide = (profile?.keywordGuide || []).filter(item => item?.term && item?.meaning);
+  const makeOptions = (answer, pool, seed = 0) => {
+    const unique = Array.from(new Set(pool.filter(Boolean)));
+    const alternatives = unique.filter(item => item !== answer);
+    const rotated = alternatives.length
+      ? alternatives.map((_, index) => alternatives[(index + seed) % alternatives.length])
+      : [];
+    const selected = [answer, ...rotated.slice(0, 3)];
+    const shift = selected.length ? seed % selected.length : 0;
+    return selected.map((_, index) => selected[(index + shift) % selected.length]);
+  };
+
+  const keywordQuestions = keywordGuide.slice(0, 3).map((item, index) => ({
+    id: `${dive.id}:practice-keyword-${index}`,
+    kind: "Keyword match",
+    prompt: "Which exam term matches this explanation?",
+    clue: item.meaning,
+    answer: item.term,
+    options: makeOptions(item.term, keywordGuide.map(entry => entry.term), index + 1),
+    explanation: `${item.term}: ${item.meaning}`,
+    source: `SY0-701 objective ${profile.objectiveCodes.join(" / ")}`,
+  }));
+
+  const comparisonQuestions = [];
+  dive.sections?.forEach((section, sectionIndex) => {
+    const columns = section?.table?.columns || [];
+    const rows = section?.table?.rows || [];
+    const answerPool = rows.map(row => String(row?.[0] || "").trim()).filter(Boolean);
+    if (answerPool.length < 2) return;
+    rows.forEach((row, rowIndex) => {
+      const answer = String(row?.[0] || "").trim();
+      const clue = String(row?.[1] || "").trim();
+      if (!answer || !clue) return;
+      const detail = row
+        .slice(1)
+        .map((cell, index) => `${columns[index + 1] || "Remember"}: ${cell}`)
+        .join(" · ");
+      comparisonQuestions.push({
+        id: `${dive.id}:practice-compare-${sectionIndex}-${rowIndex}`,
+        kind: "Scenario sort",
+        prompt: `Which ${String(columns[0] || "concept").toLowerCase()} fits this clue?`,
+        clue,
+        answer,
+        options: makeOptions(answer, answerPool, rowIndex + sectionIndex + 1),
+        explanation: detail,
+        source: section.title,
+      });
+    });
+  });
+
+  return [...keywordQuestions, ...comparisonQuestions.slice(0, 3)]
+    .filter(question => question.options.length >= 2);
+}
+
 export function formatDeepDiveReviewDate(value = "2026-07-18") {
   const [year, month, day] = value.split("-").map(Number);
   if (!year || !month || !day) return value;
