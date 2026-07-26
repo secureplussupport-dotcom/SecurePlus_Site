@@ -7,6 +7,38 @@ import {
   requireEnv,
 } from "../_utils.js";
 
+const PRO_ACADEMY_PASS_AMOUNT = 499;
+const PRO_ACADEMY_PASS_CURRENCY = "usd";
+const PRO_ACADEMY_PASS_INTERVAL = "month";
+const PRO_ACADEMY_PASS_INTERVAL_COUNT = 3;
+let validatedProAcademyPassPriceId = "";
+
+function isProAcademyPassPrice(price) {
+  return Boolean(
+    price?.active &&
+    price?.type === "recurring" &&
+    price?.unit_amount === PRO_ACADEMY_PASS_AMOUNT &&
+    price?.currency === PRO_ACADEMY_PASS_CURRENCY &&
+    price?.recurring?.interval === PRO_ACADEMY_PASS_INTERVAL &&
+    price?.recurring?.interval_count === PRO_ACADEMY_PASS_INTERVAL_COUNT
+  );
+}
+
+async function getProAcademyPassPriceId(stripe) {
+  if (validatedProAcademyPassPriceId) return validatedProAcademyPassPriceId;
+  const priceId = requireEnv("STRIPE_PRICE_PRO");
+  const price = await stripe.prices.retrieve(priceId);
+  if (!isProAcademyPassPrice(price)) {
+    const error = new Error(
+      "STRIPE_PRICE_PRO must be an active $4.99 USD recurring price billed every 3 months."
+    );
+    error.code = "invalid_pro_academy_pass_price";
+    throw error;
+  }
+  validatedProAcademyPassPriceId = price.id;
+  return validatedProAcademyPassPriceId;
+}
+
 function successUrl(appUrl) {
   const base = process.env.STRIPE_SUCCESS_URL || `${appUrl}/?checkout=success`;
   const withCheckout = base.includes("checkout=")
@@ -85,13 +117,14 @@ export default async function handler(req, res) {
     }
 
     const appUrl = process.env.APP_URL || req.headers.origin || "http://localhost:5173";
+    const proAcademyPassPriceId = await getProAcademyPassPriceId(stripe);
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       customer: customerId,
       client_reference_id: authUser.id,
       line_items: [
         {
-          price: requireEnv("STRIPE_PRICE_PRO"),
+          price: proAcademyPassPriceId,
           quantity: 1,
         },
       ],
@@ -99,13 +132,13 @@ export default async function handler(req, res) {
       cancel_url: process.env.STRIPE_CANCEL_URL || `${appUrl}/?checkout=cancelled`,
       metadata: {
         supabase_user_id: authUser.id,
-        plan: "pro",
+        plan: "pro_academy_pass_3_month",
         referral_code: referralCode,
       },
       subscription_data: {
         metadata: {
           supabase_user_id: authUser.id,
-          plan: "pro",
+          plan: "pro_academy_pass_3_month",
           referral_code: referralCode,
         },
       },
@@ -114,6 +147,11 @@ export default async function handler(req, res) {
     return json(res, 200, { url: session.url });
   } catch (error) {
     console.error("Stripe checkout failed:", error);
+    if (error?.code === "invalid_pro_academy_pass_price") {
+      return json(res, 503, {
+        error: "The Pro Academy Pass is being updated in Stripe. Please try again shortly.",
+      });
+    }
     return json(res, 500, { error: "Unable to start Stripe Checkout." });
   }
 }

@@ -210,6 +210,10 @@ const CIPHER_COIN_COSTS = Object.freeze({ pbq:50, examPass:70 });
 const CIPHER_WELCOME_GRANT = 150;
 const CIPHER_FIRST_PBQ_UNLOCKS = Object.freeze(["p014","p018","p033"]);
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
+const PRO_ACADEMY_PASS_NAME = "Pro Academy Pass";
+const PRO_ACADEMY_PASS_PRICE = "$4.99 / 3 months";
+const PRO_ACADEMY_PASS_DESCRIPTION = "Built around the typical Security+ study window. Unlock all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.";
+const PRO_ACADEMY_PASS_TRUST = "Original scenario-based practice. Not exam dumps.";
 const DELETED_ACCOUNT_KEY = "secureplus_deleted_account";
 const ACCOUNT_DELETION_TOKEN_KEY = "secureplus-account-deletion-token";
 const FEEDBACK_DESCRIPTION_MIN_LENGTH = 20;
@@ -16903,7 +16907,10 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-price-row{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin:16px 0 5px;}
 .upgrade-price{font-size:44px;line-height:1;font-weight:950;color:${t.text};}
 .upgrade-price-cycle{font-size:14px;line-height:1.4;color:${t.textSec};font-weight:850;padding-bottom:4px;}
-.upgrade-equivalent{font-size:12px;color:${t.textSec};margin-bottom:18px;}
+.upgrade-pass-description{max-width:520px;margin:10px 0 10px;color:${t.textSec};font-size:13px;font-weight:750;line-height:1.65;}
+.upgrade-original-line{display:flex;align-items:center;gap:7px;width:fit-content;padding:7px 10px;border:1px solid ${t.accent}38;border-radius:999px;background:${t.accent}0d;color:${t.text};font-size:11px;line-height:1.4;font-weight:900;}
+.upgrade-original-line svg{color:${t.accent};flex-shrink:0;}
+.upgrade-equivalent{font-size:12px;color:${t.textSec};margin:13px 0 18px;}
 .upgrade-equivalent strong{color:${t.green};}
 .upgrade-accessible-note{margin:-7px 0 16px;padding:10px 12px;border:1px solid ${t.green}30;border-radius:8px;background:${t.green}0b;color:${t.textSec};font-size:12px;line-height:1.55;}
 .upgrade-accessible-note strong{color:${t.green};}
@@ -20732,7 +20739,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
     {q:"Is there a mobile-friendly layout?",a:"Yes. The app is designed for phones, tablets, and desktop browsers, including mobile practice sessions."},
     {q:"Can I practise without creating an account?",a:"Yes. Visitors can access all MCQ questions, but progress and review history are not saved until they sign up."},
     {q:"What does Smart Review do?",a:"It uses an SM-2 inspired review model to prioritise wrong answers and bring topics back at better intervals. Example: got 2.4 wrong? It comes back tomorrow. Got it right? It waits a week."},
-    {q:"What does Pro unlock?",a:"Pro adds PBQ simulations, Exam Mode, deeper review guidance, and stronger readiness tools for $4.99 per year."},
+    {q:"What does Pro unlock?",a:`${PRO_ACADEMY_PASS_DESCRIPTION} ${PRO_ACADEMY_PASS_PRICE}, renewing every 3 months until cancelled.`},
     {q:"Is SecurePlus affiliated with CompTIA?",a:"No. CompTIA and Security+ are trademarks of CompTIA. SecurePlus is an independent practice platform."},
   ];
   const learningPaths=[
@@ -20908,13 +20915,15 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,initialMode="login
           </div>
           <div className="card pricing-pro-card" style={{padding:"22px",borderColor:`${t.accent}55`,background:`linear-gradient(180deg, ${t.accent}10, ${t.surface})`}}>
             <div className="chip" style={{borderColor:`${t.accent}44`,color:t.accent,background:`${t.accent}10`,marginBottom:10}}>Most popular</div>
-            <h2 style={{fontSize:24,color:t.text,marginBottom:4}}>$4.99/year</h2>
-            <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>About $0.42/month, billed once yearly as $4.99.</p>
+            <div style={{fontSize:12,fontWeight:950,color:t.accent,marginBottom:5}}>{PRO_ACADEMY_PASS_NAME}</div>
+            <h2 style={{fontSize:24,color:t.text,marginBottom:7}}>{PRO_ACADEMY_PASS_PRICE}</h2>
+            <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:12}}>{PRO_ACADEMY_PASS_DESCRIPTION}</p>
+            <div className="upgrade-original-line" style={{marginBottom:16}}><ShieldCheck size={14}/>{PRO_ACADEMY_PASS_TRUST}</div>
             {["Practise applied skills with PBQ simulations","Rehearse under pressure in Exam Mode","Turn results into weak-chapter guidance","Bring missed and starred questions back sooner"].map(item=>(
               <div key={item} className="pricing-feature-row"><Check size={16} strokeWidth={2.6}/><div>{item}</div></div>
             ))}
             <button className="btn btn-primary" style={{width:"100%",marginTop:18,justifyContent:"center"}} onClick={()=>jumpToAuth("signup")}>Create account to unlock Pro</button>
-            <div style={{fontSize:11,color:t.textDim,textAlign:"center",marginTop:10}}>No monthly charge. Cancel before the next yearly renewal.</div>
+            <div style={{fontSize:11,color:t.textDim,textAlign:"center",marginTop:10}}>Renews every 3 months. Cancel anytime before the next renewal.</div>
           </div>
         </section>
 
@@ -22202,7 +22211,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
             <div style={{flex:1}}>
               <div style={{fontWeight:600,fontSize:14,color:t.text}}>MCQs stay free. Pro adds exam-style PBQs.</div>
-              <div style={{fontSize:13,color:t.textSec}}>When you are ready to practise terminal, log, ordering, and Select &amp; Fill simulations, Pro is $4.99/year.</div>
+              <div style={{fontSize:13,color:t.textSec}}>When you are ready to practise terminal, log, ordering, and Select &amp; Fill simulations, the {PRO_ACADEMY_PASS_NAME} is {PRO_ACADEMY_PASS_PRICE}.</div>
             </div>
             <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={onUpgrade}>See Pro PBQs</button>
           </div>
@@ -22410,7 +22419,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         <div className="card" style={{padding:"16px 20px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
           <div style={{fontWeight:700,color:t.text,fontSize:14,marginBottom:4}}>Want the PBQ side of the exam too?</div>
           <div style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:10}}>
-            Your MCQ practice stays free. Pro adds hands-on PBQ simulations for $4.99/year.
+            Your MCQ practice stays free. The {PRO_ACADEMY_PASS_NAME} adds hands-on PBQ simulations for {PRO_ACADEMY_PASS_PRICE}.
           </div>
           <button className="btn btn-outline" style={{fontSize:12}} onClick={onUpgrade}>Preview Pro PBQs</button>
         </div>
@@ -22548,7 +22557,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK
 // ═══════════════════════════════════════════════════════════════
-function UpgradeModal({price="$4.99/year",onUpgrade,onClose,t}) {
+function UpgradeModal({price=PRO_ACADEMY_PASS_PRICE,onUpgrade,onClose,t}) {
   return(
     <div style={{padding:"28px 24px",maxWidth:620,margin:"0 auto"}}>
       <div className="card" style={{padding:"24px",borderColor:`${t.accent}45`,background:`linear-gradient(135deg, ${t.accent}10, ${t.surface})`}}>
@@ -22559,11 +22568,15 @@ function UpgradeModal({price="$4.99/year",onUpgrade,onClose,t}) {
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>Your current session cannot access this PBQ from the remote bank. Upgrade to unlock the full simulator.</p>
           </div>
         </div>
-        <div style={{display:"flex",gap:10,flexWrap:"wrap",alignItems:"center",justifyContent:"space-between"}}>
-          <span className="chip" style={{background:`${t.accent}12`,borderColor:`${t.accent}35`,color:t.accent}}>Pro · {price}</span>
+        <div style={{padding:"13px 14px",marginBottom:14,borderRadius:10,background:`${t.accent}0c`,border:`1px solid ${t.accent}28`}}>
+          <div style={{fontSize:12,fontWeight:950,color:t.accent,marginBottom:4}}>{PRO_ACADEMY_PASS_NAME} · {price}</div>
+          <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginBottom:8}}>{PRO_ACADEMY_PASS_DESCRIPTION}</div>
+          <div className="upgrade-original-line"><ShieldCheck size={14}/>{PRO_ACADEMY_PASS_TRUST}</div>
+        </div>
+        <div style={{display:"flex",gap:10,flexWrap:"wrap",alignItems:"center",justifyContent:"flex-end"}}>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
             {onClose&&<button className="btn btn-ghost" onClick={onClose}>Back</button>}
-            <button className="btn btn-primary" onClick={onUpgrade}>Upgrade</button>
+            <button className="btn btn-primary" onClick={onUpgrade}>View Academy Pass</button>
           </div>
         </div>
       </div>
@@ -22636,7 +22649,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
   };
 
   if(isLoading) return <PBQLoadingSkeleton t={t}/>;
-  if(loadError || !bank.length) return <UpgradeModal price="$4.99/year" onUpgrade={onUpgrade} t={t}/>;
+  if(loadError || !bank.length) return <UpgradeModal onUpgrade={onUpgrade} t={t}/>;
 
   if(starredView) return(
     <div style={{padding:"24px",maxWidth:900,margin:"0 auto"}}>
@@ -23166,7 +23179,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                 <div style={{flex:1,minWidth:220}}>
                   <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:4}}>That was your free PBQ preview</div>
                   <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                    Pro unlocks the full PBQ simulator bank, Exam Mode, and deeper review tools for $4.99/year.
+                    The {PRO_ACADEMY_PASS_NAME} unlocks the full PBQ simulator bank, Exam Mode, and deeper review tools for {PRO_ACADEMY_PASS_PRICE}.
                   </div>
                 </div>
                 <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_preview_complete", question_id: q.id });onUpgrade?.();}}>
@@ -24353,14 +24366,15 @@ function TrialExpiredPrompt({t,onUpgrade,onClose}) {
           <div className="label" style={{color:t.amber,marginBottom:8}}>Pro trial ended</div>
           <h2 style={{fontSize:26,fontWeight:900,color:t.text,marginBottom:10}}>Ready to keep Pro?</h2>
           <p style={{fontSize:14,color:t.textSec,lineHeight:1.75,marginBottom:18}}>
-            Your 7-day referral trial has expired. Upgrade to the annual Pro plan to keep PBQ simulations, Exam Mode, Smart Review, and detailed solutions.
+            Your 7-day referral trial has expired. Choose the {PRO_ACADEMY_PASS_NAME} to keep PBQ simulations, Exam Mode, Smart Review, and detailed solutions.
           </p>
           <div className="card" style={{padding:"14px 16px",marginBottom:18,background:`${t.accent}10`,borderColor:`${t.accent}35`}}>
-            <div style={{fontSize:28,fontWeight:900,color:t.accent}}>$4.99/year</div>
-            <div style={{fontSize:13,color:t.green,fontWeight:800}}>$4.99/year</div>
+            <div style={{fontSize:14,fontWeight:950,color:t.accent,marginBottom:4}}>{PRO_ACADEMY_PASS_NAME}</div>
+            <div style={{fontSize:28,fontWeight:900,color:t.text}}>{PRO_ACADEMY_PASS_PRICE}</div>
+            <div style={{fontSize:12,color:t.green,fontWeight:850,marginTop:6}}>{PRO_ACADEMY_PASS_TRUST}</div>
           </div>
           <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-            <button className="btn btn-primary" style={{flex:1,justifyContent:"center"}} onClick={onUpgrade}>Upgrade yearly</button>
+            <button className="btn btn-primary" style={{flex:1,justifyContent:"center"}} onClick={onUpgrade}>Choose Academy Pass</button>
             <button className="btn btn-outline" style={{flex:1,justifyContent:"center"}} onClick={onClose}>Maybe later</button>
           </div>
         </div>
@@ -26767,7 +26781,7 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
         <div className="label" style={{color:t.green,marginBottom:6}}>Referral Pro trial active</div>
         <div style={{fontWeight:900,color:t.text,fontSize:18,marginBottom:5}}>Your 7-day Pro trial ends in</div>
         <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
-          Trial ends {trialEnd}. Upgrade yearly to keep PBQ simulations, Exam Mode, Smart Review, and detailed solutions.
+          Trial ends {trialEnd}. Choose the 3-month Academy Pass to keep PBQ simulations, Exam Mode, Smart Review, and detailed solutions.
         </div>
       </div>
       <div className="trial-countdown-grid" aria-label={`Trial time left: ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`}>
@@ -26784,7 +26798,7 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
         ))}
       </div>
       <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={onUpgrade}>
-        Keep Pro yearly
+        Keep Pro for 3 months
       </button>
     </div>
   );
@@ -26793,7 +26807,7 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
   const isPro=user?.tier==="pro";
   useEffect(()=>{
-    capture("upgrade_page_viewed", { tier:user?.tier || "guest", plan:"annual_4_99" });
+    capture("upgrade_page_viewed", { tier:user?.tier || "guest", plan:"academy_pass_3_month_4_99" });
   },[user?.tier]);
   const startUpgrade=()=>{
     capture("upgrade_button_clicked", { source:"upgrade_page", tier:user?.tier || "guest" });
@@ -26828,7 +26842,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         <p>
           Free gives you every MCQ. Pro adds the applied practice, timed rehearsal, and feedback loop that help you decide what to improve next.
         </p>
-        <div className="upgrade-plan-note"><ShieldCheck size={14}/> One annual plan · $4.99/year · Zero coin requirements · Cancel anytime</div>
+        <div className="upgrade-plan-note"><ShieldCheck size={14}/> 3-month Academy Pass · {PRO_ACADEMY_PASS_PRICE} · Zero coin requirements · Cancel anytime</div>
         <MascotGuide
           animation={isPro?"cheer":"unlock"}
           size={86}
@@ -26858,12 +26872,14 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
       <div className="upgrade-decision-card">
         <div className="upgrade-decision-grid">
           <div>
-            <span className="upgrade-plan-badge"><Sparkles size={13}/> SecurePlus Pro</span>
+            <span className="upgrade-plan-badge"><Sparkles size={13}/> {PRO_ACADEMY_PASS_NAME}</span>
             <div className="upgrade-price-row">
               <div className="upgrade-price">$4.99</div>
-              <div className="upgrade-price-cycle">USD per year<br/>billed annually</div>
+              <div className="upgrade-price-cycle">USD / 3 months<br/>renews every 3 months</div>
             </div>
-            <div className="upgrade-equivalent"><strong>About $0.42/month</strong> for comparison, charged as one $4.99 yearly payment.</div>
+            <div className="upgrade-pass-description">{PRO_ACADEMY_PASS_DESCRIPTION}</div>
+            <div className="upgrade-original-line"><ShieldCheck size={14}/>{PRO_ACADEMY_PASS_TRUST}</div>
+            <div className="upgrade-equivalent"><strong>One focused study term</strong> with a single $4.99 charge every 3 months until you cancel.</div>
             <div className="upgrade-accessible-note">
               <strong>Why so accessible?</strong> SecurePlus is built to make high-quality Security+ practice reachable for students and career changers, without the enterprise training markup.
             </div>
@@ -26881,14 +26897,14 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
               <button className="btn btn-ghost upgrade-primary-cta" disabled><CheckCircle2 size={17}/> Current plan</button>
             ):(
               <button className="btn btn-primary upgrade-primary-cta" onClick={startUpgrade} disabled={billingLoading}>
-                {billingLoading?"Opening secure checkout...":"Unlock Pro for $4.99/year →"}
+                {billingLoading?"Opening secure checkout...":`Unlock Pro · ${PRO_ACADEMY_PASS_PRICE} →`}
               </button>
             )}
             <div className="upgrade-original-badge">
               <ShieldCheck size={16}/>
               <span>
-                <strong>Original scenario-based practice</strong>
-                Independent study questions that teach the underlying concepts. Not real exam dumps, not affiliated with or endorsed by CompTIA.
+                <strong>{PRO_ACADEMY_PASS_TRUST}</strong>
+                Independent study questions that teach the underlying concepts. SecurePlus is not affiliated with or endorsed by CompTIA.
               </span>
             </div>
             <div className="upgrade-trust-row">
@@ -26969,9 +26985,9 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
       {!isPro&&(
         <div className="upgrade-mobile-cta">
           <button className="btn btn-primary" onClick={startUpgrade} disabled={billingLoading}>
-            {billingLoading?"Opening checkout...":"Unlock Pro · $4.99/year"}
+            {billingLoading?"Opening checkout...":`Unlock Pro · ${PRO_ACADEMY_PASS_PRICE}`}
           </button>
-          <div className="upgrade-mobile-trust">Original scenario-based practice. Not real exam dumps.</div>
+          <div className="upgrade-mobile-trust">{PRO_ACADEMY_PASS_TRUST}</div>
         </div>
       )}
     </div>
@@ -29255,7 +29271,7 @@ export default function App() {
             showQuestionCodes={isRootUser}
           />
         ) : pbqCoinUnlocked ? <PBQLoadingSkeleton t={t}/> : (
-          <UpgradeModal price="$4.99/year" onUpgrade={()=>setView("pricing")} onClose={()=>{setPbqQ(null);setView("pbq");}} t={t}/>
+          <UpgradeModal onUpgrade={()=>setView("pricing")} onClose={()=>{setPbqQ(null);setView("pbq");}} t={t}/>
         )}
       </div>
       <AchievementCelebration ids={achievementUnlocks} t={t} onClose={()=>setAchievementUnlocks([])}/>

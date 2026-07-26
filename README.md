@@ -164,11 +164,19 @@ The Referrals page calls `/api/referrals/me`, which creates or returns the user'
 
 ## Stripe Setup
 
-Create a yearly recurring Stripe price for Pro (`$4.99 USD / year`), then set:
+Create a new recurring Stripe price for the **Pro Academy Pass**:
+
+```txt
+$4.99 USD every 3 months
+```
+
+Stripe recurring amounts and billing intervals cannot be edited in place. Create a new Price under the existing SecurePlus Pro product, then replace the environment value:
 
 ```bash
 STRIPE_PRICE_PRO=price_xxx
 ```
+
+Checkout validates that this Price is active, is `$4.99 USD`, and renews every 3 months. A leftover yearly Price ID is rejected so customers cannot be billed differently from the pricing page. Existing yearly subscriptions are not silently changed; manage those separately in Stripe.
 
 API routes:
 

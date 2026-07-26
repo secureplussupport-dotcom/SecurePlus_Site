@@ -47,9 +47,10 @@ If a confirmation email opens a page of raw HTML, the most common causes are a b
 
 1. Stay in test mode while building.
 2. Create SecurePlus Pro product.
-3. Create yearly recurring price: `$4.99 USD / year`.
+3. Create a new recurring price under the SecurePlus Pro product: `$4.99 USD every 3 months`.
 4. Copy the price ID into `STRIPE_PRICE_PRO`.
-5. Add webhook endpoint after Vercel deploy:
+5. Confirm the Price shows a monthly interval with an interval count of `3`. Checkout rejects yearly or incorrectly priced IDs.
+6. Add webhook endpoint after Vercel deploy:
 
 ```txt
 https://your-domain.com/api/stripe/webhook
