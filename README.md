@@ -167,7 +167,7 @@ The Referrals page calls `/api/referrals/me`, which creates or returns the user'
 Create a new recurring Stripe price for the **Pro Academy Pass**:
 
 ```txt
-$4.99 USD every 3 months
+$9.99 USD every 3 months
 ```
 
 Stripe recurring amounts and billing intervals cannot be edited in place. Create a new Price under the existing SecurePlus Pro product, then replace the environment value:
@@ -176,7 +176,7 @@ Stripe recurring amounts and billing intervals cannot be edited in place. Create
 STRIPE_PRICE_PRO=price_xxx
 ```
 
-Checkout validates that this Price is active, is `$4.99 USD`, and renews every 3 months. A leftover yearly Price ID is rejected so customers cannot be billed differently from the pricing page. Existing yearly subscriptions are not silently changed; manage those separately in Stripe.
+Checkout validates that this Price is active, is `$9.99 USD`, and renews every 3 months. A leftover yearly or old `$4.99` Price ID is rejected so customers cannot be billed differently from the pricing page. Existing subscriptions are not silently changed; manage those separately in Stripe.
 
 API routes:
 

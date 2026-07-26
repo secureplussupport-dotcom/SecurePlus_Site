@@ -127,7 +127,7 @@ if (!errors.length) {
   requireContains("supabase/account-deletion.sql", "alter table public.account_deletion_requests enable row level security", "deletion requests must have RLS enabled");
   requireContains("supabase/account-deletion.sql", "revoke all on table public.account_deletion_requests from anon, authenticated", "browser clients must not access deletion tokens");
   requireContains("api/stripe/checkout.js", 'requireEnv("STRIPE_PRICE_PRO")', "Stripe checkout must use the configured Pro price ID");
-  requireContains("api/stripe/checkout.js", "PRO_ACADEMY_PASS_AMOUNT = 499", "Stripe checkout must require the advertised $4.99 amount");
+  requireContains("api/stripe/checkout.js", "PRO_ACADEMY_PASS_AMOUNT = 999", "Stripe checkout must require the advertised $9.99 amount");
   requireContains("api/stripe/checkout.js", 'PRO_ACADEMY_PASS_INTERVAL = "month"', "Stripe checkout must use a monthly interval base");
   requireContains("api/stripe/checkout.js", "PRO_ACADEMY_PASS_INTERVAL_COUNT = 3", "Stripe checkout must bill every three months");
   requireContains("api/stripe/checkout.js", "isProAcademyPassPrice", "Stripe checkout must validate the configured price before charging");

@@ -211,7 +211,7 @@ const CIPHER_WELCOME_GRANT = 150;
 const CIPHER_FIRST_PBQ_UNLOCKS = Object.freeze(["p014","p018","p033"]);
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
 const PRO_ACADEMY_PASS_NAME = "Pro Academy Pass";
-const PRO_ACADEMY_PASS_PRICE = "$4.99 / 3 months";
+const PRO_ACADEMY_PASS_PRICE = "$9.99 / 3 months";
 const PRO_ACADEMY_PASS_DESCRIPTION = "Built around the typical Security+ study window. Unlock all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.";
 const PRO_ACADEMY_PASS_TRUST = "Original scenario-based practice. Not exam dumps.";
 const DELETED_ACCOUNT_KEY = "secureplus_deleted_account";
@@ -26807,7 +26807,7 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
   const isPro=user?.tier==="pro";
   useEffect(()=>{
-    capture("upgrade_page_viewed", { tier:user?.tier || "guest", plan:"academy_pass_3_month_4_99" });
+    capture("upgrade_page_viewed", { tier:user?.tier || "guest", plan:"academy_pass_3_month_9_99" });
   },[user?.tier]);
   const startUpgrade=()=>{
     capture("upgrade_button_clicked", { source:"upgrade_page", tier:user?.tier || "guest" });
@@ -26874,12 +26874,12 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           <div>
             <span className="upgrade-plan-badge"><Sparkles size={13}/> {PRO_ACADEMY_PASS_NAME}</span>
             <div className="upgrade-price-row">
-              <div className="upgrade-price">$4.99</div>
+              <div className="upgrade-price">$9.99</div>
               <div className="upgrade-price-cycle">USD / 3 months<br/>renews every 3 months</div>
             </div>
             <div className="upgrade-pass-description">{PRO_ACADEMY_PASS_DESCRIPTION}</div>
             <div className="upgrade-original-line"><ShieldCheck size={14}/>{PRO_ACADEMY_PASS_TRUST}</div>
-            <div className="upgrade-equivalent"><strong>One focused study term</strong> with a single $4.99 charge every 3 months until you cancel.</div>
+            <div className="upgrade-equivalent"><strong>One focused study term</strong> with a single $9.99 charge every 3 months until you cancel.</div>
             <div className="upgrade-accessible-note">
               <strong>Why so accessible?</strong> SecurePlus is built to make high-quality Security+ practice reachable for students and career changers, without the enterprise training markup.
             </div>

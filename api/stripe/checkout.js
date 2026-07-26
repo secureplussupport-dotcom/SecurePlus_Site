@@ -7,7 +7,7 @@ import {
   requireEnv,
 } from "../_utils.js";
 
-const PRO_ACADEMY_PASS_AMOUNT = 499;
+const PRO_ACADEMY_PASS_AMOUNT = 999;
 const PRO_ACADEMY_PASS_CURRENCY = "usd";
 const PRO_ACADEMY_PASS_INTERVAL = "month";
 const PRO_ACADEMY_PASS_INTERVAL_COUNT = 3;
@@ -30,7 +30,7 @@ async function getProAcademyPassPriceId(stripe) {
   const price = await stripe.prices.retrieve(priceId);
   if (!isProAcademyPassPrice(price)) {
     const error = new Error(
-      "STRIPE_PRICE_PRO must be an active $4.99 USD recurring price billed every 3 months."
+      "STRIPE_PRICE_PRO must be an active $9.99 USD recurring price billed every 3 months."
     );
     error.code = "invalid_pro_academy_pass_price";
     throw error;

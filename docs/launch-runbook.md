@@ -103,7 +103,7 @@ supabase/email-templates/README.md
 Create one recurring **Pro Academy Pass** price:
 
 ```txt
-$4.99 USD every 3 months
+$9.99 USD every 3 months
 ```
 
 Save the Stripe price ID as:
@@ -112,7 +112,7 @@ Save the Stripe price ID as:
 STRIPE_PRICE_PRO=price_xxx
 ```
 
-Create a new Stripe Price instead of editing the old yearly price. After replacing the Vercel environment value, redeploy and run a test-mode checkout. The server rejects a Price ID unless it is active, `$4.99 USD`, and billed every 3 months.
+Create a new Stripe Price instead of editing the old price. After replacing the Vercel environment value, redeploy and run a test-mode checkout. The server rejects a Price ID unless it is active, `$9.99 USD`, and billed every 3 months.
 
 Add a webhook endpoint:
 
