@@ -20742,8 +20742,13 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
   useEffect(()=>{
     if(!showLoginModal)return;
     const closeOnEscape=event=>{if(event.key==="Escape")setShowLoginModal(false);};
+    const previousOverflow=document.body.style.overflow;
+    document.body.style.overflow="hidden";
     document.addEventListener("keydown",closeOnEscape);
-    return()=>document.removeEventListener("keydown",closeOnEscape);
+    return()=>{
+      document.body.style.overflow=previousOverflow;
+      document.removeEventListener("keydown",closeOnEscape);
+    };
   },[showLoginModal]);
   const handle=async event=>{
     event?.preventDefault?.();
@@ -21269,13 +21274,13 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           </button>
         </div>
         </section>
-        {showLoginModal&&(
-          <div className="landing-login-overlay" role="dialog" aria-modal="true" aria-label={securityNotice?"Sign in to continue account deletion":"Sign in to SecurePlus"} onMouseDown={()=>setShowLoginModal(false)}>
+        {showLoginModal&&createPortal((
+          <div className="landing-login-overlay" role="dialog" aria-modal="true" aria-labelledby="landing-login-title" onMouseDown={()=>setShowLoginModal(false)}>
             <div className="landing-login-modal card" onMouseDown={event=>event.stopPropagation()}>
               <button className="landing-login-close" type="button" aria-label="Close sign in" onClick={()=>setShowLoginModal(false)}>×</button>
               <div className="landing-login-brand"><BrandMark size={42}/></div>
               <div className="label" style={{color:securityNotice?t.red:t.accent,textAlign:"center"}}>{securityNotice?"Account security":"Welcome back"}</div>
-              <h2>{securityNotice?"Sign in to continue safely":"Continue your Security+ practice"}</h2>
+              <h2 id="landing-login-title">{securityNotice?"Sign in to continue safely":"Continue your Security+ practice"}</h2>
               <p>{securityNotice?"Use the same account that requested deletion. You will review one final confirmation before anything is removed.":"Your progress, streaks, and Smart Review queue are waiting."}</p>
               {securityNotice&&(
                 <div className="auth-security-notice">
@@ -21299,7 +21304,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
               </div>
             </div>
           </div>
-        )}
+        ),document.body)}
       </main>
     </div>
   );

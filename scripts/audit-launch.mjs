@@ -195,6 +195,8 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'correct?"Correct.":"Incorrect."', "MCQ explanations should start with a standard colour-coded verdict");
   requireContains("src/App.jsx", 'setStage("preparing")', "completed onboarding questions should transition through the ID preparation buffer");
   requireContains("src/App.jsx", "Preparing your ID…", "the onboarding buffer should explain that the tailored ID is being prepared");
+  requireContains("src/App.jsx", "showLoginModal&&createPortal((", "the login dialog must render at document level so it stays centred in the viewport");
+  requireContains("src/App.jsx", "document.body.style.overflow=\"hidden\"", "the centred login dialog should prevent the landing page from scrolling behind it");
   requirePattern("src/App.jsx", /user\?\.tier\s*===\s*"pro"\s*&&\s*\["active",\s*"trialing"\]\.includes\(user\?\.subscriptionStatus/, "paid Pro should depend on active/trialing subscription status");
   requireContains("src/App.jsx", 'fetch("/api/stripe/checkout"', "upgrade flow should call the server-side Stripe checkout endpoint");
   requireContains("src/App.jsx", 'PRO_MONTHLY_PASS_PRICE = "$4.99 / month"', "pricing should offer the $4.99 monthly option");
