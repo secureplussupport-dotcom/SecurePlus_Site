@@ -1234,7 +1234,7 @@ function buildDiagnosticQuestions() {
   return picked.slice(0,10).map(shuffleMcqOptions);
 }
 
-function getReviewSummary(attempts) {
+function getReviewSummary(attempts, questionBank=MCQ_BANK) {
   const now = new Date();
   const grouped = new Map();
   attempts.filter(a=>a.mcq).forEach(attempt=>{
@@ -1254,7 +1254,7 @@ function getReviewSummary(attempts) {
     due,
     weak,
     learned: grouped.size,
-    untouched: Math.max(0, MCQ_BANK.length - grouped.size),
+    untouched: Math.max(0, questionBank.length - grouped.size),
   };
 }
 
@@ -21812,10 +21812,11 @@ function AchievementsPage({user,t,onBack}) {
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
-function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null,onSessionComplete}) {
+function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null,onSessionComplete,mcqBank=MCQ_BANK}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
   const sessionKey=`mcq:${practiceSessionOwner(user)}`;
   const requestSignup=onSignup||onUpgrade;
+  const bank=mcqBank?.length ? mcqBank : MCQ_BANK;
   const [chFilter,setChFilter]=useState("all");
   const [diffFilter,setDiffFilter]=useState("all");
   const [topicFilter,setTopicFilter]=useState("all");
@@ -21836,13 +21837,13 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [sessionStartedAt,setSessionStartedAt]=useState(null);
   const [sessionContext,setSessionContext]=useState(null);
   const starredSet=useMemo(()=>new Set(starred),[starred]);
-  const starredMcqs=useMemo(()=>MCQ_BANK.filter(q=>starredSet.has(starKey("mcq",q.id))),[starredSet]);
+  const starredMcqs=useMemo(()=>bank.filter(q=>starredSet.has(starKey("mcq",q.id))),[bank,starredSet]);
   const starredQuestionIds=useMemo(()=>new Set(starredMcqs.map(question=>question.id)),[starredMcqs]);
 
-  const allTopics=[...new Set(MCQ_BANK.map(q=>q.topic))].sort();
+  const allTopics=[...new Set(bank.map(q=>q.topic))].sort();
   const chapterOptions=[
-    {value:"all",label:`All Chapters (${MCQ_BANK.length})`},
-    ...CHAPTERS.map(ch=>({value:ch.id,label:`Ch.${ch.id}: ${ch.title} (${MCQ_BANK.filter(q=>q.ch===ch.id).length})`})),
+    {value:"all",label:`All Chapters (${bank.length})`},
+    ...CHAPTERS.map(ch=>({value:ch.id,label:`Ch.${ch.id}: ${ch.title} (${bank.filter(q=>q.ch===ch.id).length})`})),
   ];
   const difficultyOptions=[
     {value:"all",label:"All Difficulties"},
@@ -21855,17 +21856,17 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     ...allTopics.map(tp=>({value:tp,label:tp})),
   ];
 
-  const filtered=MCQ_BANK.filter(q=>{
+  const filtered=bank.filter(q=>{
     if(chFilter!=="all"&&q.ch!==chFilter)return false;
     if(diffFilter!=="all"&&q.difficulty!==diffFilter)return false;
     if(topicFilter!=="all"&&q.topic!==topicFilter)return false;
     return true;
   });
-  const reviewSummary = getReviewSummary(attempts);
+  const reviewSummary = getReviewSummary(attempts,bank);
   const quizSizes = [10,20,30,40,50];
   const latestMcqAttempts=getLatestMcqAttempts(attempts);
   const missedMcqIds=[...latestMcqAttempts.entries()].filter(([,attempt])=>attempt.correct===false).map(([questionId])=>questionId);
-  const missedQuestions=MCQ_BANK.filter(q=>missedMcqIds.includes(q.id));
+  const missedQuestions=bank.filter(q=>missedMcqIds.includes(q.id));
   const smartReviewLessonPath=getDeepDiveRecommendations(missedQuestions,{limit:2});
 
   useEffect(()=>{
@@ -21903,7 +21904,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     if(!chapterId||isGuest)return;
     const chapterKey=String(chapterId);
     const latestAttempts=getLatestMcqAttempts(attempts);
-    const chapterQuestions=MCQ_BANK.filter(question=>String(question.ch)===chapterKey);
+    const chapterQuestions=bank.filter(question=>String(question.ch)===chapterKey);
     const missedIds=new Set(chapterQuestions.filter(question=>latestAttempts.get(question.id)?.correct===false).map(question=>question.id));
     const missedTopics=new Set(chapterQuestions.filter(question=>missedIds.has(question.id)).map(question=>question.topic).filter(Boolean));
     const count=Math.max(1,Math.min(Number(requestedCount)||3,chapterQuestions.length));
@@ -21934,7 +21935,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     setStarredView(false);
     setSessionContext({kind:"weak-area",label:`Chapter ${chapterKey} repair sprint`,chapterId:chapterKey,chapterTitle:chapter?.title||"Focused review",source});
     capture("mcq_chapter_smart_review_started", { chapter: chapterKey, question_count: pool.length, missed_topic_count: missedTopics.size, source, tier: user.tier });
-  },[attempts,isGuest,starredQuestionIds,user.tier]);
+  },[attempts,bank,isGuest,starredQuestionIds,user.tier]);
   const startStarredQuiz=()=>{
     const pool=rankQuestionsBySm2(starredMcqs,attempts,new Set(starredMcqs.map(q=>q.id))).slice(0,Math.min(50,starredMcqs.length)).map(shuffleMcqOptions);
     capture("mcq_starred_review_started", { question_count: pool.length, tier: user.tier });
@@ -22122,7 +22123,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           </div>
         </div>
         <div className="practice-page-meta">
-          <span className="practice-meta-pill"><strong>{MCQ_BANK.length}</strong> questions</span>
+          <span className="practice-meta-pill"><strong>{bank.length}</strong> questions</span>
           <span className="practice-meta-pill"><strong>5</strong> chapters</span>
           <span className="practice-meta-pill">SY0-701</span>
         </div>
@@ -22307,7 +22308,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
               <ChapterIcon id={ch.id}/>
               <div style={{flex:1}}>
                 <div style={{fontSize:13,fontWeight:600,color:t.text}}>Ch.{ch.id}: {ch.title}</div>
-                <div style={{fontSize:11,color:t.textDim}}>{ch.weight}% of exam · {MCQ_BANK.filter(q=>q.ch===ch.id).length} questions available</div>
+                <div style={{fontSize:11,color:t.textDim}}>{ch.weight}% of exam · {bank.filter(q=>q.ch===ch.id).length} questions available</div>
               </div>
               <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}25`,fontSize:11}}>{ch.weight}%</span>
             </div>
@@ -23265,7 +23266,7 @@ function ExamModeGuideModal({t,onClose}) {
   );
 }
 
-function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamPass,examPasses=0,t,showQuestionCodes=false,pbqBank=PBQ_BANK,onSessionComplete,canPreviewDeepDives=false,onOpenDeepDives}) {
+function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamPass,examPasses=0,t,showQuestionCodes=false,pbqBank=PBQ_BANK,mcqBank=MCQ_BANK,onSessionComplete,canPreviewDeepDives=false,onOpenDeepDives}) {
   const sessionKey=`exam:${practiceSessionOwner(user)}`;
   const [questionCount,setQuestionCount]=useState(20);
   const [pbqCount,setPbqCount]=useState(2);
@@ -23295,6 +23296,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
   const answer=answers[qi]||{};
   const examDuration=questionCount*72;
   const mcqCount=Math.max(0,questionCount-pbqCount);
+  const liveMcqs=mcqBank?.length ? mcqBank : MCQ_BANK;
   const pbqPercent=questionCount?Math.round((pbqCount/questionCount)*100):0;
   const mcqPercent=100-pbqPercent;
   const examGuideKey=`exam-guide-seen:${practiceSessionOwner(user)}`;
@@ -23335,7 +23337,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
     }
     const examReadyPbqs=(pbqBank?.length?pbqBank:PBQ_BANK).filter(q=>!q.beyondTextbook&&(q.type!=="TERMINAL SIM"||q.choices||q.options));
     const pickedPbq=shuffle(examReadyPbqs).slice(0,pbqCount).map(q=>({kind:"pbq",q:stripPbqHintsForExam(q)}));
-    const pickedMcq=shuffle(MCQ_BANK.filter(q=>!q.beyondTextbook)).slice(0,mcqCount).map(q=>({kind:"mcq",q:shuffleMcqOptions(q)}));
+    const pickedMcq=shuffle(liveMcqs.filter(q=>!q.beyondTextbook)).slice(0,mcqCount).map(q=>({kind:"mcq",q:shuffleMcqOptions(q)}));
     const examQs=[...pickedPbq,...pickedMcq];
     setQuestions(examQs);
     setAnswers(Object.fromEntries(examQs.map((item,index)=>[index,initAnswer(item)])));
@@ -28307,6 +28309,7 @@ export default function App() {
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
+  const liveMcqBank=useMemo(()=>MCQ_BANK,[questionBankVersion]);
   const livePbqBank=useMemo(
     ()=>isSupabaseConfigured?mergeRemotePBQBanks(PBQ_BANK,remotePbqBank):PBQ_BANK,
     [remotePbqBank,questionBankVersion]
@@ -29196,7 +29199,7 @@ export default function App() {
               <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
             )}
             {view==="mcq"&&(
-              <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion}/>
+              <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion} mcqBank={liveMcqBank}/>
             )}
             {view==="daily"&&(
               <DailyChallenge t={t} onLogin={goToSignup}/>
@@ -29345,12 +29348,12 @@ export default function App() {
           </div>
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} coinWallet={coinWallet} t={t}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
-            <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete}/>
+            <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
           </div>
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)&&!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
           </div>
-          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onConsumeExamPass={handleConsumeExamPass} examPasses={coinWallet.examPasses} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} onSessionComplete={handleAchievementSessionComplete} canPreviewDeepDives onOpenDeepDives={()=>setView("deep-dives")}/>}
+          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onConsumeExamPass={handleConsumeExamPass} examPasses={coinWallet.examPasses} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} mcqBank={liveMcqBank} onSessionComplete={handleAchievementSessionComplete} canPreviewDeepDives onOpenDeepDives={()=>setView("deep-dives")}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward}/>}
           {view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onUnlockPbq={handleUnlockPbq} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}
           {view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
