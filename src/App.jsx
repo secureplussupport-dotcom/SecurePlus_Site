@@ -214,6 +214,34 @@ const PRO_MONTHLY_PASS_PRICE = "$4.99 / month";
 const PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus";
 const PRO_ACADEMY_PASS_DESCRIPTION = "Built around the typical Security+ study window. Unlock all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.";
 const PRO_ACADEMY_PASS_TRUST = "Original scenario-based practice. Not exam dumps.";
+
+function TrustBadge({t,compact=false,center=false,style={}}) {
+  return (
+    <div
+      className={`trust-badge ${compact ? "compact" : ""}`}
+      style={{
+        display:"inline-flex",
+        alignItems:"center",
+        justifyContent:center?"center":"flex-start",
+        gap:compact?5:7,
+        maxWidth:"100%",
+        padding:compact?"5px 8px":"7px 10px",
+        border:`1px solid ${t.green}35`,
+        borderRadius:999,
+        background:`${t.green}10`,
+        color:t.textSec,
+        fontSize:compact?10:11,
+        fontWeight:900,
+        lineHeight:1.35,
+        ...style,
+      }}
+    >
+      <ShieldCheck size={compact?13:15} color={t.green} style={{flexShrink:0}}/>
+      <span>{PRO_ACADEMY_PASS_TRUST}</span>
+    </div>
+  );
+}
+
 const SEO_RESOURCE_LINKS = Object.freeze([
   { href:"/security-plus-acronyms/", title:"Security+ acronyms", body:"Flashcard-style definitions for common SY0-701 abbreviations." },
   { href:"/security-plus-port-numbers/", title:"Port numbers", body:"Quick review for common services, protocols, and exam clues." },
@@ -19891,6 +19919,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
           </details>
           <button type="submit" className="btn btn-primary athena-main-action" disabled={loading}>{loading?"Minting your IC...":"Create account & save my IC"} <ChevronRight size={17}/></button>
           <div className="auth-trust-line"><LockKeyhole size={13}/> Free account. No credit card. Pro is never added automatically.</div>
+          <TrustBadge t={t} compact center style={{width:"100%"}}/>
         </form>
       </>
     );
@@ -19992,6 +20021,7 @@ function AcademySignupWizard({t,form,setForm,setField,onMint,loading,error,ok}) 
           </div>
           <div className="academy-password-hint">Use 8+ characters with uppercase, lowercase, a number, and a special character.</div>
           <button type="submit" className="btn btn-primary" style={{width:"100%",justifyContent:"center"}}>Choose avatar →</button>
+          <TrustBadge t={t} compact center style={{width:"100%"}}/>
         </form>
       )}
       {step===2&&(
@@ -20045,6 +20075,7 @@ function AcademySignupWizard({t,form,setForm,setField,onMint,loading,error,ok}) 
             </button>
           </div>
           <div className="auth-trust-line"><LockKeyhole size={13}/> Your account starts on the free plan. Pro is never added automatically.</div>
+          <TrustBadge t={t} compact center style={{width:"100%"}}/>
         </form>
       )}
     </div>
@@ -20384,6 +20415,9 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
       <p style={{color:t.textSec,marginBottom:6}}>
         {user ? "Practice today's 5-question challenge from your account." : "No account needed. One free 5-question challenge every day."}
       </p>
+      <div style={{display:"flex",justifyContent:"center",marginTop:10}}>
+        <TrustBadge t={t} compact/>
+      </div>
       <div style={{display:"flex",justifyContent:"center",gap:8,flexWrap:"wrap",marginTop:14}}>
         <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}30`}}>
           Current streak: {streakInfo.streak}
@@ -21030,6 +21064,9 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
               <span>{PBQ_BANK.length} PBQs</span>
               <span>No account needed to start</span>
             </div>
+            <div style={{marginTop:12}}>
+              <TrustBadge t={t}/>
+            </div>
           </div>
 
           <div className="brilliant-lesson-shell">
@@ -21221,6 +21258,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
                 <div><strong>Stay in control</strong><span>The free plan includes all MCQs. Pro remains completely optional.</span></div>
               </div>
             </div>
+            <TrustBadge t={t} style={{marginTop:12}}/>
             <MascotGuide
               animation="focus"
               size={86}
@@ -21479,6 +21517,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
             <span>{PBQ_BANK.length} PBQs</span>
             <span>Smart Review</span>
             <span>{isPro?"Pro active":"Free plan"}</span>
+          </div>
+          <div style={{marginTop:12}}>
+            <TrustBadge t={t}/>
           </div>
           <div style={{marginTop:14,maxWidth:190}}><CipherCoinPill balance={coinBalance} onClick={()=>onNav("coins")}/></div>
           <MascotGuide
@@ -21819,6 +21860,9 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily}
             <button className="btn btn-outline brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
           </div>
           <div className="guest-cta-note"><ShieldCheck size={16}/> No credit card · Free MCQs included · Pro is optional</div>
+          <div style={{marginTop:10}}>
+            <TrustBadge t={t}/>
+          </div>
           <div className="brilliant-proof-row">
             <span>{MCQ_BANK.length} MCQs</span>
             <span>{PBQ_BANK.length} PBQs</span>
@@ -21939,6 +21983,9 @@ function GuestLockedPage({t,onSignup,onLogin,onPractice,onDaily,title="Save your
         <p style={{fontSize:14,color:t.textSec,lineHeight:1.75,marginBottom:18}}>
           Guests can freely try MCQ Practice and Daily Challenge. Create a free account or sign in to save progress, unlock personalised review, and access the rest of SecurePlus.
         </p>
+        <div style={{marginBottom:18}}>
+          <TrustBadge t={t}/>
+        </div>
         <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
           <button className="btn btn-primary" onClick={onSignup}>Create Free Account</button>
           <button className="btn btn-outline" onClick={onLogin}>Log In</button>
@@ -22434,6 +22481,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <span className="practice-meta-pill">SY0-701</span>
         </div>
       </header>
+      <div style={{marginBottom:16}}>
+        <TrustBadge t={t}/>
+      </div>
 
       <MascotGuide
         animation="focus"
@@ -22999,6 +23049,9 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
           <span className="practice-meta-pill">{isPro?"Pro · zero coins":`${unlockedSet.size} coin unlock${unlockedSet.size===1?"":"s"}`}</span>
         </div>
       </header>
+      <div style={{marginBottom:16}}>
+        <TrustBadge t={t}/>
+      </div>
 
       <MascotGuide
         animation="scan"
@@ -23270,6 +23323,9 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
             <SimBadge type={q.type} t={t}/>
             <DiffBadge d={q.difficulty} t={t}/>
             <BeyondTextbookTag question={q} t={t}/>
+          </div>
+          <div style={{marginTop:8}}>
+            <TrustBadge t={t} compact/>
           </div>
         </div>
         <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
@@ -23832,6 +23888,9 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
         <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:16}}>
           Exchange {CIPHER_COIN_COSTS.examPass} Cipher Coins for one SecurePlus practice exam voucher, or choose Pro for unlimited exams with zero coin requirements. This is not an official CompTIA exam voucher.
         </p>
+        <div style={{marginBottom:16}}>
+          <TrustBadge t={t}/>
+        </div>
         <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
           <button className="btn btn-primary" onClick={onOpenWallet}><CipherCoinIcon size={24}/> Get an Exam Voucher</button>
           <button className="btn btn-outline" onClick={onUpgrade}>Choose Pro · zero coins</button>
@@ -23848,6 +23907,9 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
         <div>
           <h2 style={{fontSize:26,color:t.text}}>Exam Mode</h2>
           <p style={{fontSize:14,color:t.textSec}}>{isPro?"Unlimited timed mixed practice with zero coin requirements.":`${examPasses} practice exam voucher${examPasses===1?"":"s"} available · one is used when a new exam begins.`}</p>
+          <div style={{marginTop:9}}>
+            <TrustBadge t={t} compact/>
+          </div>
         </div>
       </div>
       <div className="card" style={{padding:"10px",marginBottom:16,display:"flex",gap:8,flexWrap:"wrap"}}>
@@ -27710,6 +27772,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
             {selectedProfile.objectiveLabels.map(objective=><span key={objective.code}><ListChecks size={14}/>Objective {objective.code}</span>)}
             <span><BadgeCheck size={14}/>Reviewed {formatDeepDiveReviewDate(CONCEPT_DEEP_DIVE_REVIEWED_AT)}</span>
           </div>
+          <TrustBadge t={t} compact style={{marginBottom:14}}/>
           <div className="deep-dive-summary"><Lightbulb size={19}/><p><strong>Exam focus:</strong> {selectedProfile.objectiveLabels.map(item=>item.title).join(" · ")}</p></div>
           {selectedProfile.includesBeyondTextbook&&<div className="deep-dive-beyond-notice"><GraduationCap size={18}/><span><strong>Beyond the textbook is optional.</strong> Advanced steps are clearly marked and do not count as required SY0-701 study.</span></div>}
           <div className="deep-dive-objective-strip" aria-label="Learning goals">
@@ -27960,6 +28023,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
             <span><Crosshair size={15}/>5 official exam domains</span>
             <span><Brain size={15}/>{SY0701_ACRONYM_CARDS.length} high-yield acronym flashcards</span>
           </div>
+          <TrustBadge t={t} style={{marginTop:12}}/>
           <a className="deep-dives-blueprint-link" href={SY0701_BLUEPRINT.sourceUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Mapped to the official {SY0701_BLUEPRINT.exam} objectives · document v{SY0701_BLUEPRINT.documentVersion}<ChevronRight size={14}/></a>
         </div>
         <div className="deep-dives-progress-card">
@@ -28080,6 +28144,9 @@ function ObjectivesPage({t}) {
       <p style={{color:t.textSec,fontSize:14,marginBottom:20}}>
         SecurePlus is organised around the current Security+ domain structure. This page avoids locking the product name to a single exam code, since exam versions can change over time.
       </p>
+      <div style={{marginBottom:20}}>
+        <TrustBadge t={t}/>
+      </div>
       <a
         className="btn btn-primary"
         href="https://www.comptia.org/en/certifications/security/"
