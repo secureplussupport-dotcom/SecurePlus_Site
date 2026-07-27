@@ -216,6 +216,17 @@ const PRO_MONTHLY_PASS_PRICE = "$4.99 / month";
 const PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus";
 const PRO_ACADEMY_PASS_DESCRIPTION = "Built around the typical Security+ study window. Unlock all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.";
 const PRO_ACADEMY_PASS_TRUST = "Original scenario-based practice. Not exam dumps.";
+const SEO_RESOURCE_LINKS = Object.freeze([
+  { href:"/security-plus-acronyms/", title:"Security+ acronyms", body:"Flashcard-style definitions for common SY0-701 abbreviations." },
+  { href:"/security-plus-port-numbers/", title:"Port numbers", body:"Quick review for common services, protocols, and exam clues." },
+  { href:"/security-plus-firewall-pbq-practice/", title:"Firewall PBQ practice", body:"ACL logic, ports, protocols, and rule-order scenarios." },
+  { href:"/security-plus-cryptography-practice/", title:"Cryptography practice", body:"Encryption, hashing, certificates, PKI, and signatures in plain language." },
+  { href:"/security-plus-domain-1-practice/", title:"Domain 1", body:"Threats, attacks, vulnerabilities, malware, and social engineering." },
+  { href:"/security-plus-domain-2-practice/", title:"Domain 2", body:"Secure architecture, cloud security, segmentation, and resilience." },
+  { href:"/security-plus-domain-3-practice/", title:"Domain 3", body:"Implementation topics including IAM, crypto, PKI, and secure protocols." },
+  { href:"/security-plus-domain-4-practice/", title:"Domain 4", body:"Security operations, monitoring, incident response, and vulnerability management." },
+  { href:"/security-plus-domain-5-practice/", title:"Domain 5", body:"Governance, risk, compliance, privacy, audits, and policies." },
+]);
 const GUEST_SMART_REVIEW_BRIDGE_KEY = "secureplus-pending-guest-smart-review";
 const GUEST_SMART_REVIEW_BRIDGE_TTL_MS = 24 * 60 * 60 * 1000;
 const DELETED_ACCOUNT_KEY = "secureplus_deleted_account";
@@ -16823,6 +16834,16 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .plan-badge.pro{color:#111827;background:${t.amber};border:1px solid ${t.amber};box-shadow:0 8px 20px ${t.amber}24;}
 .landing-feature-card[data-plan="pro"] .plan-badge{position:absolute;right:14px;top:14px;margin:0;}
 .landing-feature-card[data-plan="pro"] > div:last-child{padding-top:18px;}
+.seo-resource-section{padding:24px;border:1px solid ${t.border};border-radius:8px;background:linear-gradient(135deg,${t.green}0c,${t.surface} 58%,${t.accent}0b);}
+.seo-resource-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:15px;}
+.seo-resource-head h2{font-size:26px;color:${t.text};margin:0;}
+.seo-resource-head p{max-width:520px;margin:0;color:${t.textSec};font-size:13px;line-height:1.65;}
+.seo-resource-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.seo-resource-link{display:block;min-height:126px;padding:15px;border:1px solid ${t.border};border-radius:8px;background:${t.panel};text-decoration:none;transition:transform .16s,border-color .16s,background .16s,box-shadow .16s;}
+.seo-resource-link:hover{transform:translateY(-2px);border-color:${t.accent}55;background:${t.accent}08;text-decoration:none;box-shadow:0 12px 28px ${t.accent}10;}
+.seo-resource-link strong{display:block;color:${t.text};font-size:14px;font-weight:950;margin-bottom:7px;}
+.seo-resource-link span{display:block;color:${t.textSec};font-size:12px;line-height:1.55;}
+.seo-resource-link em{display:block;margin-top:10px;color:${t.accent};font-size:11px;font-style:normal;font-weight:900;}
 .smart-example{margin-top:16px;padding:14px;border:1px solid ${t.accent}35;border-radius:8px;background:linear-gradient(135deg,${t.accent}10,${t.panel});font-size:13px;color:${t.textSec};line-height:1.65;}
 .smart-example strong{color:${t.text};}
 .smart-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
@@ -17480,7 +17501,10 @@ body{background:
   .landing-primary-actions .btn{width:100%;}
   .landing-proof-strip{grid-template-columns:1fr!important;}
   .landing-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
-  .landing-feature-grid,.landing-split-section,.landing-pricing-grid,.landing-faq-grid,.landing-auth-section,.referral-grid{grid-template-columns:1fr!important;}
+  .landing-feature-grid,.landing-split-section,.landing-pricing-grid,.landing-faq-grid,.landing-auth-section,.referral-grid,.seo-resource-grid{grid-template-columns:1fr!important;}
+  .seo-resource-section{padding:18px!important;}
+  .seo-resource-head{display:block!important;}
+  .seo-resource-head p{margin-top:8px!important;}
   .landing-feature-card{grid-template-columns:1fr!important;}
   .landing-feature-card[data-plan="pro"] > div:last-child{padding-top:26px!important;}
   .smart-compare{grid-template-columns:1fr!important;}
@@ -21055,6 +21079,25 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           </div>
         </section>
 
+        <section className="seo-resource-section landing-section" aria-labelledby="security-study-resources-title">
+          <div className="seo-resource-head">
+            <div>
+              <div className="label" style={{color:t.green}}>Security+ study resources</div>
+              <h2 id="security-study-resources-title">Review the exact topics students search for.</h2>
+            </div>
+            <p>Short SecurePlus pages for acronyms, port numbers, PBQs, cryptography, and each SY0-701 domain.</p>
+          </div>
+          <div className="seo-resource-grid">
+            {SEO_RESOURCE_LINKS.map(resource=>(
+              <a key={resource.href} className="seo-resource-link" href={resource.href}>
+                <strong>{resource.title}</strong>
+                <span>{resource.body}</span>
+                <em>Open resource →</em>
+              </a>
+            ))}
+          </div>
+        </section>
+
         <section id="features" className="landing-feature-grid landing-section">
           {featureCards.map(card=>(
             <div key={card.title} className="card card-hover landing-feature-card" data-plan={card.plan} style={{"--feature-color":card.color}}>
@@ -21845,6 +21888,25 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily}
               <small>{path.body}</small>
               <em>{path.meta} →</em>
             </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="seo-resource-section landing-section" aria-labelledby="guest-security-study-resources-title">
+        <div className="seo-resource-head">
+          <div>
+            <div className="label" style={{color:t.green}}>Security+ study resources</div>
+            <h2 id="guest-security-study-resources-title">Quick topic pages when you need a refresher.</h2>
+          </div>
+          <p>Use these SecurePlus pages to review acronyms, ports, PBQs, cryptography, and SY0-701 domains before practice.</p>
+        </div>
+        <div className="seo-resource-grid">
+          {SEO_RESOURCE_LINKS.map(resource=>(
+            <a key={resource.href} className="seo-resource-link" href={resource.href}>
+              <strong>{resource.title}</strong>
+              <span>{resource.body}</span>
+              <em>Open resource →</em>
+            </a>
           ))}
         </div>
       </section>
