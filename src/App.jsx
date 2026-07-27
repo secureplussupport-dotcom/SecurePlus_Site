@@ -226,6 +226,12 @@ const SEO_RESOURCE_LINKS = Object.freeze([
   { href:"/security-plus-domain-3-practice/", title:"Domain 3", body:"Implementation topics including IAM, crypto, PKI, and secure protocols." },
   { href:"/security-plus-domain-4-practice/", title:"Domain 4", body:"Security operations, monitoring, incident response, and vulnerability management." },
   { href:"/security-plus-domain-5-practice/", title:"Domain 5", body:"Governance, risk, compliance, privacy, audits, and policies." },
+  { href:"/security-plus-comptia-practice-test/", title:"CompTIA practice test", body:"Security+ practice test preparation with MCQs, PBQs, and review guidance." },
+  { href:"/security-plus-comptia-study-guide/", title:"CompTIA study guide", body:"Beginner-friendly Security+ study order for SY0-701 preparation." },
+  { href:"/security-plus-pbq-practices/", title:"PBQ practices", body:"Security+ PBQ practices for firewall, logs, ordering, and select-and-fill tasks." },
+  { href:"/security-plus-study-plan/", title:"Study plan", body:"A practical Security+ study schedule built around daily practice and review." },
+  { href:"/security-plus-study-notes/", title:"Study notes", body:"Exam-keyword notes for common SY0-701 concepts and control choices." },
+  { href:"/security-plus-free-comptia-practice/", title:"Free CompTIA practice", body:"Free Security+ practice questions, daily challenges, and PBQ previews." },
 ]);
 const GUEST_SMART_REVIEW_BRIDGE_KEY = "secureplus-pending-guest-smart-review";
 const GUEST_SMART_REVIEW_BRIDGE_TTL_MS = 24 * 60 * 60 * 1000;
