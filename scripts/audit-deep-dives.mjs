@@ -4,8 +4,6 @@ import {
   CONCEPT_DEEP_DIVE_REVIEWED_AT,
 } from "../src/data/conceptDeepDives.js";
 import {
-  buildDeepDiveDeck,
-  buildDeepDiveFlashcards,
   buildDeepDivePracticeQuestions,
 } from "../src/lib/deepDiveStudy.js";
 import { getDeepDiveRecommendations } from "../src/lib/deepDiveRecommendations.js";
@@ -66,7 +64,7 @@ requireValue(/^https:\/\//.test(SY0701_BLUEPRINT.sourceUrl), "The official bluep
 requireValue(/^\d{4}-\d{2}-\d{2}$/.test(CONCEPT_DEEP_DIVE_REVIEWED_AT), "Review date must use YYYY-MM-DD.");
 requireValue(CONCEPT_DEEP_DIVE_CATEGORIES[0] === "All topics", "The category list must begin with All topics.");
 requireValue(SY0701_ACRONYM_SETS.length === 6, `Expected six acronym study sets; found ${SY0701_ACRONYM_SETS.length}.`);
-requireValue(SY0701_ACRONYM_CARDS.length === 90, `Expected 90 acronym cards; found ${SY0701_ACRONYM_CARDS.length}.`);
+requireValue(SY0701_ACRONYM_CARDS.length === 59, `Expected 59 high-yield acronym cards from the supplied PDF; found ${SY0701_ACRONYM_CARDS.length}.`);
 requireValue(unique(SY0701_ACRONYM_SETS.map(set => set.id)), "Acronym set IDs must be unique.");
 requireValue(unique(SY0701_ACRONYM_CARDS.map(card => card.id)), "Acronym card IDs must be unique.");
 requireValue(unique(SY0701_ACRONYM_CARDS.map(card => card.acronym.toLowerCase())), "Acronyms must not repeat across study sets.");
@@ -79,10 +77,10 @@ for (const set of SY0701_ACRONYM_SETS) {
   requireValue(words(set.title) >= 2 && words(set.title) <= 6, `${prefix} title must be 2-6 words.`);
   requireValue(words(set.description) >= 6 && words(set.description) <= 20, `${prefix} description must be 6-20 words.`);
   requireValue(set.objectiveCodes.length >= 1 && set.objectiveCodes.every(code => SY0701_OBJECTIVES[code]), `${prefix} references an unknown SY0-701 objective.`);
-  requireValue(set.cards.length === 15, `${prefix} must contain exactly 15 cards.`);
+  requireValue(set.cards.length >= 8 && set.cards.length <= 12, `${prefix} must contain 8-12 high-yield cards.`);
   set.cards.forEach(card => {
     requireValue(Boolean(card.acronym && card.expansion && card.meaning), `${card.id || prefix} is incomplete.`);
-    requireValue(words(card.expansion) <= 10, `${card.id} expansion is too long for active recall.`);
+    requireValue(words(card.expansion) <= 15, `${card.id} expansion is too long for active recall.`);
     requireValue(words(card.meaning) >= 7 && words(card.meaning) <= 28, `${card.id} plain-English meaning must be 7-28 words.`);
   });
 }
@@ -148,15 +146,6 @@ for (const dive of CONCEPT_DEEP_DIVES) {
     }
   });
 
-  const cards = buildDeepDiveFlashcards(dive);
-  requireValue(cards.length >= 5, `${prefix} generates fewer than five flashcards.`);
-  requireValue(unique(cards.map(item => item.id)), `${prefix} generates duplicate flashcard IDs.`);
-  cards.forEach(item => {
-    requireValue(item.front && item.back, `${prefix} generated an incomplete flashcard.`);
-    requireValue(words(item.front) <= 35, `${item.id} question is too long for a flashcard.`);
-    requireValue(words(item.back) <= 55, `${item.id} answer is too long for a flashcard.`);
-  });
-
   const practiceQuestions = buildDeepDivePracticeQuestions(dive);
   practiceQuestionCount += practiceQuestions.length;
   requireValue(practiceQuestions.length >= 3 && practiceQuestions.length <= 6, `${prefix} must generate 3-6 practice-lab questions.`);
@@ -169,8 +158,6 @@ for (const dive of CONCEPT_DEEP_DIVES) {
   });
 }
 
-const deck = buildDeepDiveDeck(CONCEPT_DEEP_DIVES);
-requireValue(unique(deck.map(item => item.id)), "Generated flashcard IDs must be unique across the full library.");
 requireValue(!/\b(?:TODO|FIXME|lorem ipsum)\b|\?\?\?/i.test(JSON.stringify(CONCEPT_DEEP_DIVES)), "Lesson data contains placeholder copy.");
 requireValue(!/\b(?:authorisation|authorised|unauthorised|organisation|organisational|behaviour|defence|prioritise|sanitisation|synchronisation|virtualisation|recognise|standardise)\b/i.test(JSON.stringify(CONCEPT_DEEP_DIVES)), "Lesson copy must use the American-English keywords used in the CompTIA objectives.");
 requireValue(unique(Object.values(SY0701_DEEP_DIVE_PROFILES).map(item => item.studyOrder)), "SY0-701 study order values must be unique.");
@@ -212,9 +199,8 @@ const uniqueSourceUrls = new Set(sourceReferences.map(source => source.url));
 const sectionCount = CONCEPT_DEEP_DIVES.reduce((total, dive) => total + dive.sections.length, 0);
 console.log("Deep Dive content audit passed.");
 console.log(`- ${CONCEPT_DEEP_DIVES.length} complete lessons across ${sectionCount} guided sections`);
-console.log(`- ${deck.length} concise flashcards with unique IDs`);
 console.log(`- ${practiceQuestionCount} vetted tap-based questions across ${CONCEPT_DEEP_DIVES.length} practice labs`);
-console.log(`- ${SY0701_ACRONYM_CARDS.length} vetted acronym cards across ${SY0701_ACRONYM_SETS.length} active-recall sets`);
+console.log(`- ${SY0701_ACRONYM_CARDS.length} high-yield acronym cards across ${SY0701_ACRONYM_SETS.length} standalone active-recall sets`);
 console.log(`- All ${CONCEPT_DEEP_DIVES.length} lessons mapped across all 28 SY0-701 objectives and five domains`);
 console.log(`- Smart Review lesson matching passed ${recommendationChecks.length} representative weak-area checks`);
 console.log(`- ${Object.values(SY0701_DEEP_DIVE_PROFILES).filter(item => item.beyondSections.length).length} lessons clearly label optional Beyond the textbook sections`);

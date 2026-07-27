@@ -77,8 +77,6 @@ import {
   SY0701_ACRONYM_SOURCE,
 } from "./data/sy0701AcronymFlashcards.js";
 import {
-  buildDeepDiveDeck,
-  buildDeepDiveFlashcards,
   buildDeepDivePracticeQuestions,
   formatDeepDiveReviewDate,
 } from "./lib/deepDiveStudy.js";
@@ -27393,7 +27391,7 @@ function ReferralPage({user,t}) {
 // CONCEPT DEEP DIVES — SY0-701 GUIDED STUDY LIBRARY
 // ═══════════════════════════════════════════════════════════════
 function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
-  const [direction,setDirection]=useState("mixed");
+  const [direction,setDirection]=useState("definition");
   const [cardIndex,setCardIndex]=useState(0);
   const [cardOrder,setCardOrder]=useState(()=>acronymSet.cards.map(card=>card.id));
   const [isFlipped,setIsFlipped]=useState(false);
@@ -27404,12 +27402,12 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
     return [...ordered,...acronymSet.cards.filter(card=>!included.has(card.id))];
   },[acronymSet,cardOrder]);
   const activeCard=orderedCards[cardIndex]||orderedCards[0];
-  const showDefinitionFirst=direction==="definition"||(direction==="mixed"&&cardIndex%2===1);
+  const asksForAcronym=direction==="acronym"||(direction==="mixed"&&cardIndex%2===1);
   const masteredCount=acronymSet.cards.filter(card=>masteredIds.includes(card.id)).length;
   const progress=orderedCards.length?Math.round(((cardIndex+1)/orderedCards.length)*100):0;
 
   useEffect(()=>{
-    setDirection("mixed");
+    setDirection("definition");
     setCardIndex(0);
     setCardOrder(acronymSet.cards.map(card=>card.id));
     setIsFlipped(false);
@@ -27459,8 +27457,8 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
       </header>
 
       <div className="deep-dive-acronym-mode" role="tablist" aria-label="Choose flashcard direction">
-        <button type="button" role="tab" aria-selected={direction==="acronym"} className={direction==="acronym"?"active":""} onClick={()=>chooseDirection("acronym")}>Acronym → definition</button>
-        <button type="button" role="tab" aria-selected={direction==="definition"} className={direction==="definition"?"active":""} onClick={()=>chooseDirection("definition")}>Definition → acronym</button>
+        <button type="button" role="tab" aria-selected={direction==="definition"} className={direction==="definition"?"active":""} onClick={()=>chooseDirection("definition")}>Test definitions</button>
+        <button type="button" role="tab" aria-selected={direction==="acronym"} className={direction==="acronym"?"active":""} onClick={()=>chooseDirection("acronym")}>Identify acronym</button>
         <button type="button" role="tab" aria-selected={direction==="mixed"} className={direction==="mixed"?"active":""} onClick={()=>chooseDirection("mixed")}>Mixed challenge</button>
       </div>
 
@@ -27478,16 +27476,16 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
           <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
             <span className="deep-dive-flashcard-inner">
               <span className="deep-dive-flashcard-face deep-dive-flashcard-front">
-                <span className="deep-dive-flashcard-kind"><Brain size={15}/>{showDefinitionFirst?"Name the acronym":"Expand the acronym"}</span>
+                <span className="deep-dive-flashcard-kind"><Brain size={15}/>{asksForAcronym?"Identify the acronym":"Define the acronym"}</span>
                 <small className="deep-dive-acronym-prompt">Objective {acronymSet.objectiveCodes.join(" / ")}</small>
-                <strong>{showDefinitionFirst?activeCard.expansion:activeCard.acronym}</strong>
+                <strong>{asksForAcronym?activeCard.meaning:activeCard.acronym}</strong>
                 <span className="deep-dive-flashcard-hint">Say it aloud, then tap to reveal</span>
               </span>
               <span className="deep-dive-flashcard-face deep-dive-flashcard-back">
                 <span className="deep-dive-flashcard-kind"><Sparkles size={15}/>Answer</span>
-                <small>{showDefinitionFirst?"Acronym":"Full definition"}</small>
-                <strong>{showDefinitionFirst?activeCard.acronym:activeCard.expansion}</strong>
-                <p className="deep-dive-acronym-answer-copy">{activeCard.meaning}</p>
+                <small>{asksForAcronym?"Acronym and full term":"Full definition"}</small>
+                <strong>{asksForAcronym?`${activeCard.acronym} - ${activeCard.expansion}`:activeCard.expansion}</strong>
+                <p className="deep-dive-acronym-answer-copy">{asksForAcronym?`Exam meaning: ${activeCard.meaning}`:activeCard.meaning}</p>
                 <span className="deep-dive-flashcard-hint">Tap to see the question again</span>
               </span>
             </span>
@@ -27510,7 +27508,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
   );
 }
 
-function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandled}) {
+function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandled,focusAcronyms=false}) {
   const [query,setQuery]=useState("");
   const [domainFilter,setDomainFilter]=useState("all");
   const [selectedId,setSelectedId]=useState(null);
@@ -27520,9 +27518,6 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
   const [isAnswerVisible,setIsAnswerVisible]=useState(false);
   const [selectedKeyword,setSelectedKeyword]=useState(0);
   const [comparisonIndex,setComparisonIndex]=useState(0);
-  const [cardIndex,setCardIndex]=useState(0);
-  const [cardOrder,setCardOrder]=useState([]);
-  const [isCardFlipped,setIsCardFlipped]=useState(false);
   const [practiceIndex,setPracticeIndex]=useState(0);
   const [practiceChoice,setPracticeChoice]=useState("");
   const [practiceSubmitted,setPracticeSubmitted]=useState(false);
@@ -27532,12 +27527,6 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
     try{
       const stored=JSON.parse(window.localStorage?.getItem("secureplus-deep-dives-read")||"[]");
       return Array.isArray(stored)?stored.filter(id=>CONCEPT_DEEP_DIVES.some(dive=>dive.id===id)):[];
-    }catch{return [];}
-  });
-  const [masteredCardIds,setMasteredCardIds]=useState(()=>{
-    try{
-      const stored=JSON.parse(window.localStorage?.getItem("secureplus-deep-dives-mastered")||"[]");
-      return Array.isArray(stored)?stored:[];
     }catch{return [];}
   });
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
@@ -27553,21 +27542,20 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
     }catch{return {};}
   });
 
+  useEffect(()=>{
+    if(!focusAcronyms||selectedId||selectedAcronymSetId)return;
+    const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    const timer=window.setTimeout(()=>{
+      document.getElementById("acronym-library-title")?.scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"});
+    },80);
+    return()=>window.clearTimeout(timer);
+  },[focusAcronyms,selectedId,selectedAcronymSetId]);
+
   const selectedDive=CONCEPT_DEEP_DIVES.find(dive=>dive.id===selectedId)||null;
   const selectedAcronymSet=SY0701_ACRONYM_SETS.find(set=>set.id===selectedAcronymSetId)||null;
   const selectedProfile=getSy0701DeepDiveProfile(selectedDive);
-  const allFlashcards=useMemo(()=>buildDeepDiveDeck(CONCEPT_DEEP_DIVES),[]);
-  const selectedFlashcards=useMemo(()=>buildDeepDiveFlashcards(selectedDive),[selectedDive]);
   const practiceQuestions=useMemo(()=>buildDeepDivePracticeQuestions(selectedDive),[selectedDive]);
   const activePracticeQuestion=practiceQuestions[practiceIndex]||null;
-  const orderedFlashcards=useMemo(()=>{
-    if(!selectedFlashcards.length)return [];
-    const byId=new Map(selectedFlashcards.map(item=>[item.id,item]));
-    const ordered=cardOrder.map(id=>byId.get(id)).filter(Boolean);
-    const included=new Set(ordered.map(item=>item.id));
-    return [...ordered,...selectedFlashcards.filter(item=>!included.has(item.id))];
-  },[selectedFlashcards,cardOrder]);
-  const activeFlashcard=orderedFlashcards[cardIndex]||orderedFlashcards[0]||null;
   const lessonSteps=useMemo(()=>selectedDive?[
     {kind:"keywords",title:"Exam keywords"},
     ...selectedDive.sections.map((section,index)=>({kind:"section",title:section.title,index})),
@@ -27592,14 +27580,11 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
   const openDive=(id,mode="learn")=>{
     setSelectedAcronymSetId(null);
     setSelectedId(id);
-    setStudyMode(mode);
+    setStudyMode(mode==="cards"?"practice":mode);
     setLessonStep(0);
     setIsAnswerVisible(false);
     setSelectedKeyword(0);
     setComparisonIndex(0);
-    setCardIndex(0);
-    setCardOrder([]);
-    setIsCardFlipped(false);
     setPracticeIndex(0);
     setPracticeChoice("");
     setPracticeSubmitted(false);
@@ -27627,6 +27612,11 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
     setSelectedAcronymSetId(null);
     window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:"auto"}));
   };
+  const scrollToAcronymLibrary=()=>{
+    const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    window.requestAnimationFrame(()=>document.getElementById("acronym-library-title")?.scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"}));
+    capture("concept_deep_dive_acronym_library_opened",{source:"launchpad"});
+  };
   const closeDive=()=>{
     setSelectedId(null);
     window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:"auto"}));
@@ -27637,14 +27627,6 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
     try{window.localStorage?.setItem("secureplus-deep-dives-read",JSON.stringify(next));}catch{}
     capture("concept_deep_dive_completion_toggled",{deep_dive_id:id,completed:next.includes(id)});
   };
-  const updateMasteredCards=(cardId,mastered)=>{
-    const next=mastered
-      ?Array.from(new Set([...masteredCardIds,cardId]))
-      :masteredCardIds.filter(id=>id!==cardId);
-    setMasteredCardIds(next);
-    try{window.localStorage?.setItem("secureplus-deep-dives-mastered",JSON.stringify(next));}catch{}
-    capture("concept_deep_dive_flashcard_rated",{deep_dive_id:selectedDive?.id,card_id:cardId,mastered});
-  };
   const updateMasteredAcronyms=(cardId,mastered)=>{
     const next=mastered
       ?Array.from(new Set([...masteredAcronymIds,cardId]))
@@ -27652,26 +27634,6 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
     setMasteredAcronymIds(next);
     try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
     capture("concept_deep_dive_acronym_rated",{set_id:selectedAcronymSet?.id,card_id:cardId,mastered});
-  };
-  const moveFlashcard=direction=>{
-    if(!orderedFlashcards.length)return;
-    setCardIndex(current=>(current+direction+orderedFlashcards.length)%orderedFlashcards.length);
-    setIsCardFlipped(false);
-  };
-  const rateFlashcard=mastered=>{
-    if(!activeFlashcard)return;
-    updateMasteredCards(activeFlashcard.id,mastered);
-    moveFlashcard(1);
-  };
-  const shuffleFlashcards=()=>{
-    const shuffled=[...selectedFlashcards.map(item=>item.id)];
-    for(let index=shuffled.length-1;index>0;index-=1){
-      const swapIndex=Math.floor(Math.random()*(index+1));
-      [shuffled[index],shuffled[swapIndex]]=[shuffled[swapIndex],shuffled[index]];
-    }
-    setCardOrder(shuffled);
-    setCardIndex(0);
-    setIsCardFlipped(false);
   };
   const changeLessonStep=nextStep=>{
     setLessonStep(Math.max(0,Math.min(nextStep,lessonSteps.length-1)));
@@ -27728,7 +27690,6 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
 
   if(selectedDive){
     const isComplete=completedIds.includes(selectedDive.id);
-    const masteredInLesson=selectedFlashcards.filter(item=>masteredCardIds.includes(item.id)).length;
     const lessonProgress=lessonSteps.length?Math.round(((lessonStep+1)/lessonSteps.length)*100):0;
     const activeSection=activeLessonStep?.kind==="section"?selectedDive.sections[activeLessonStep.index]:null;
     const isBeyondSection=activeLessonStep?.kind==="section"&&selectedProfile?.beyondSections.includes(activeLessonStep.index);
@@ -27757,11 +27718,8 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
         </header>
 
         <div className="deep-dive-study-modes" role="tablist" aria-label="Choose a study mode">
-          <button type="button" role="tab" aria-selected={studyMode==="learn"} className={studyMode==="learn"?"active":""} onClick={()=>{setStudyMode("learn");setIsCardFlipped(false);}}>
+          <button type="button" role="tab" aria-selected={studyMode==="learn"} className={studyMode==="learn"?"active":""} onClick={()=>setStudyMode("learn")}>
             <BookOpenCheck size={17}/><span><strong>Guided lesson</strong><small>One idea at a time</small></span>
-          </button>
-          <button type="button" role="tab" aria-selected={studyMode==="cards"} className={studyMode==="cards"?"active":""} onClick={()=>{setStudyMode("cards");setIsCardFlipped(false);}}>
-            <Brain size={17}/><span><strong>Flashcards</strong><small>{masteredInLesson}/{selectedFlashcards.length} mastered</small></span>
           </button>
           <button type="button" role="tab" aria-selected={studyMode==="practice"} className={studyMode==="practice"?"active":""} onClick={()=>{setStudyMode("practice");resetPracticeLab();}}>
             <Puzzle size={17}/><span><strong>Practice lab</strong><small>Tap, check, and improve</small></span>
@@ -27779,7 +27737,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
           />
           <div>
             <span>Cipher’s study cue</span>
-            <strong>{studyMode==="learn"?"Understand one idea before moving on.":studyMode==="cards"?"Answer aloud before you flip the card.":"Use the clue, eliminate close distractors, then check your choice."}</strong>
+            <strong>{studyMode==="learn"?"Understand one idea before moving on.":"Use the clue, eliminate close distractors, then check your choice."}</strong>
             <small>{studyMode==="practice"?"Every answer comes directly from this vetted lesson.":"Switch modes whenever rereading stops feeling useful."}</small>
           </div>
           {studyMode!=="practice"&&<button className="deep-dive-coach-action" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}>Try the lab<ChevronRight size={15}/></button>}
@@ -27799,7 +27757,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
               <button className={`btn ${isComplete?"btn-ghost":"btn-primary"}`} type="button" onClick={()=>toggleComplete(selectedDive.id)}>
                 {isComplete?<><CheckCircle2 size={16}/>Lesson complete</>:<><BookOpenCheck size={16}/>Mark complete</>}
               </button>
-              <small>Lesson and card progress stays on this device.</small>
+              <small>Lesson progress stays on this device.</small>
             </aside>
 
             <div className="deep-dive-article-body">
@@ -27874,7 +27832,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
                 {lessonStep<lessonSteps.length-1?(
                   <button className="btn btn-primary" type="button" onClick={()=>changeLessonStep(lessonStep+1)}>Next idea<ChevronRight size={16}/></button>
                 ):(
-                  <button className="btn btn-primary" type="button" onClick={()=>setStudyMode("cards")}><Brain size={16}/>Practise with cards</button>
+                  <button className="btn btn-primary" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>Try the lab</button>
                 )}
               </div>
 
@@ -27887,47 +27845,6 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
               </details>
             </div>
           </div>
-        ):studyMode==="cards"?(
-          <section className="deep-dive-flashcard-studio" aria-label={`${selectedDive.title} flashcards`}>
-            <div className="deep-dive-flashcard-head">
-              <div><span className="deep-dive-eyebrow">Active recall</span><h2>Say the answer, then flip</h2><p>Short sessions beat rereading. Mark a card “Got it” only when you can explain it without hints.</p></div>
-              <div className="deep-dive-flashcard-score"><strong>{masteredInLesson}</strong><span>of {selectedFlashcards.length}<br/>mastered</span></div>
-            </div>
-            <div className="deep-dive-flashcard-toolbar">
-              <span>Card {Math.min(cardIndex+1,orderedFlashcards.length)} of {orderedFlashcards.length}</span>
-              <div className="deep-dives-progress-track"><span style={{width:`${orderedFlashcards.length?((cardIndex+1)/orderedFlashcards.length)*100:0}%`}}/></div>
-              <button className="btn btn-ghost" type="button" onClick={shuffleFlashcards}><RotateCcw size={15}/>Shuffle</button>
-            </div>
-            {activeFlashcard&&<>
-              <button type="button" className={`deep-dive-flashcard ${isCardFlipped?"flipped":""}`} aria-label={isCardFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isCardFlipped} onClick={()=>setIsCardFlipped(value=>!value)}>
-                <span className="deep-dive-flashcard-inner">
-                  <span className="deep-dive-flashcard-face deep-dive-flashcard-front">
-                    <span className="deep-dive-flashcard-kind"><Brain size={15}/>{activeFlashcard.kind}</span>
-                    <small>{activeFlashcard.context}</small>
-                    <strong>{activeFlashcard.front}</strong>
-                    <span className="deep-dive-flashcard-hint">Tap to reveal answer</span>
-                  </span>
-                  <span className="deep-dive-flashcard-face deep-dive-flashcard-back">
-                    <span className="deep-dive-flashcard-kind"><Sparkles size={15}/>Answer</span>
-                    <strong>{activeFlashcard.back}</strong>
-                    <span className="deep-dive-flashcard-hint">Tap to see the question</span>
-                  </span>
-                </span>
-              </button>
-              <div className="deep-dive-flashcard-actions">
-                <button className="btn btn-outline" type="button" onClick={()=>moveFlashcard(-1)}><ArrowLeft size={16}/>Previous</button>
-                {!isCardFlipped?(
-                  <button className="btn btn-primary" type="button" onClick={()=>setIsCardFlipped(true)}><Lightbulb size={16}/>Reveal answer</button>
-                ):(
-                  <div className="deep-dive-flashcard-rating" aria-label="Rate this card">
-                    <button className="btn btn-outline" type="button" onClick={()=>rateFlashcard(false)}><RotateCcw size={16}/>Again</button>
-                    <button className="btn btn-primary" type="button" onClick={()=>rateFlashcard(true)}><CheckCircle2 size={16}/>Got it</button>
-                  </div>
-                )}
-                <button className="btn btn-outline" type="button" onClick={()=>moveFlashcard(1)}>Next<ChevronRight size={16}/></button>
-              </div>
-            </>}
-          </section>
         ):(
           <section className="deep-dive-practice-lab" aria-label={`${selectedDive.title} practice lab`}>
             {activePracticeQuestion?(
@@ -28004,7 +27921,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
                   })}
                 </div>
                 <div className="deep-dive-practice-actions">
-                  <button className="btn btn-outline" type="button" onClick={()=>setStudyMode("cards")}><Brain size={16}/>Review flashcards</button>
+                  <button className="btn btn-outline" type="button" onClick={()=>setStudyMode("learn")}><BookOpenCheck size={16}/>Review lesson</button>
                   <button className="btn btn-primary" type="button" onClick={resetPracticeLab}><RotateCcw size={16}/>Retry lab</button>
                 </div>
               </div>
@@ -28012,8 +27929,8 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
               <div className="deep-dives-empty">
                 <Lightbulb size={24}/>
                 <h2>This lesson’s practice lab is being prepared.</h2>
-                <p>Use the guided lesson and flashcards while the interactive questions are reviewed.</p>
-                <button className="btn btn-primary" type="button" onClick={()=>setStudyMode("cards")}>Open flashcards</button>
+                <p>Use the guided lesson while the interactive questions are reviewed.</p>
+                <button className="btn btn-primary" type="button" onClick={()=>setStudyMode("learn")}>Review lesson</button>
               </div>
             )}
           </section>
@@ -28028,12 +27945,9 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
   }
 
   const progressPercent=Math.round((completedIds.length/CONCEPT_DEEP_DIVES.length)*100);
-  const totalMastered=allFlashcards.filter(item=>masteredCardIds.includes(item.id)).length;
   const totalAcronymsMastered=SY0701_ACRONYM_CARDS.filter(item=>masteredAcronymIds.includes(item.id)).length;
   const continueDive=sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES).find(dive=>!completedIds.includes(dive.id))||sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES)[0];
   const continueProfile=getSy0701DeepDiveProfile(continueDive);
-  const continueCards=buildDeepDiveFlashcards(continueDive);
-  const continueMastered=continueCards.filter(card=>masteredCardIds.includes(card.id)).length;
   return(
     <div className="deep-dives-page" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <section className="deep-dives-hero">
@@ -28044,15 +27958,14 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
           <div className="deep-dives-proof">
             <span><BadgeCheck size={15}/>{CONCEPT_DEEP_DIVES.length} syllabus-mapped lessons</span>
             <span><Crosshair size={15}/>5 official exam domains</span>
-            <span><Brain size={15}/>{allFlashcards.length+SY0701_ACRONYM_CARDS.length} built-in flashcards</span>
+            <span><Brain size={15}/>{SY0701_ACRONYM_CARDS.length} high-yield acronym flashcards</span>
           </div>
           <a className="deep-dives-blueprint-link" href={SY0701_BLUEPRINT.sourceUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Mapped to the official {SY0701_BLUEPRINT.exam} objectives · document v{SY0701_BLUEPRINT.documentVersion}<ChevronRight size={14}/></a>
         </div>
         <div className="deep-dives-progress-card">
           <div><span>Study progress</span><strong>{completedIds.length}/{CONCEPT_DEEP_DIVES.length}</strong></div>
           <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
-          <p>{completedIds.length?"Continue with one short concept or switch to active recall.":"Choose a lesson, learn one idea at a time, then practise it."}</p>
-          <div className="deep-dives-card-progress"><Brain size={16}/><span><strong>{totalMastered}</strong> of {allFlashcards.length} flashcards mastered</span></div>
+          <p>{completedIds.length?"Continue with one short concept or open the standalone acronym flashcards.":"Choose a lesson, learn one idea at a time, then practise it."}</p>
           <div className="deep-dives-card-progress"><TextCursorInput size={16}/><span><strong>{totalAcronymsMastered}</strong> of {SY0701_ACRONYM_CARDS.length} acronyms mastered</span></div>
         </div>
       </section>
@@ -28063,13 +27976,13 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
           <div>
             <span>Cipher’s next stop</span>
             <h2>{continueProfile.title}</h2>
-            <p>{completedIds.length?`Continue your SY0-701 path with a ${continueDive.minutes}-minute lesson.`:"Start with a short guided lesson, then switch to recall or the practice lab."}</p>
-            <div><strong>Objective {continueProfile.objectiveCodes.join(" / ")}</strong><span>{continueMastered}/{continueCards.length} cards mastered</span>{Number(practiceBestScores[continueDive.id])>0&&<span>Best lab {practiceBestScores[continueDive.id]}%</span>}</div>
+            <p>{completedIds.length?`Continue your SY0-701 path with a ${continueDive.minutes}-minute lesson.`:"Start with a short guided lesson, then switch to the practice lab or acronym flashcards."}</p>
+            <div><strong>Objective {continueProfile.objectiveCodes.join(" / ")}</strong><span>{SY0701_ACRONYM_CARDS.length} acronym cards available</span>{Number(practiceBestScores[continueDive.id])>0&&<span>Best lab {practiceBestScores[continueDive.id]}%</span>}</div>
           </div>
         </div>
         <div className="deep-dive-launchpad-actions">
           <button type="button" onClick={()=>openDive(continueDive.id,"learn")}><BookOpenCheck size={21}/><span><strong>Learn</strong><small>One idea at a time</small></span><ChevronRight size={17}/></button>
-          <button type="button" onClick={()=>openDive(continueDive.id,"cards")}><Brain size={21}/><span><strong>Recall</strong><small>Flip focused cards</small></span><ChevronRight size={17}/></button>
+          <button type="button" onClick={scrollToAcronymLibrary}><Brain size={21}/><span><strong>Acronym flashcards</strong><small>Definitions or acronym recall</small></span><ChevronRight size={17}/></button>
           <button type="button" onClick={()=>openDive(continueDive.id,"practice")}><Puzzle size={21}/><span><strong>Practise</strong><small>Tap through a scored lab</small></span><ChevronRight size={17}/></button>
         </div>
       </section>
@@ -28120,8 +28033,6 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
               {group.dives.map(dive=>{
                 const syllabus=getSy0701DeepDiveProfile(dive);
                 const isComplete=completedIds.includes(dive.id);
-                const diveCards=buildDeepDiveFlashcards(dive);
-                const masteredCount=diveCards.filter(item=>masteredCardIds.includes(item.id)).length;
                 return(
                   <article className="deep-dive-card" key={dive.id} style={{"--chapter-color":chapterColor(syllabus.domainId)}}>
                     <div className="deep-dive-card-top">
@@ -28133,10 +28044,9 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
                     <p>{syllabus.plainSummary}</p>
                     <div className="deep-dive-card-tags">{syllabus.examKeywords.slice(0,4).map(keyword=><span key={keyword}>{keyword}</span>)}</div>
                     {syllabus.includesBeyondTextbook&&<div className="deep-dive-card-scope"><GraduationCap size={14}/>Includes clearly marked “Beyond the textbook” detail</div>}
-                    <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span><Brain size={14}/>{masteredCount}/{diveCards.length} cards</span>{Number(practiceBestScores[dive.id])>0&&<span><Trophy size={14}/>{practiceBestScores[dive.id]}%</span>}</div>
+                    <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span><Puzzle size={14}/>Practice lab</span>{Number(practiceBestScores[dive.id])>0&&<span><Trophy size={14}/>{practiceBestScores[dive.id]}%</span>}</div>
                     <div className="deep-dive-card-actions">
                       <button type="button" onClick={()=>openDive(dive.id,"learn")}><BookOpenCheck size={15}/>Learn</button>
-                      <button type="button" onClick={()=>openDive(dive.id,"cards")}><Brain size={15}/>Flashcards</button>
                       <button type="button" onClick={()=>openDive(dive.id,"practice")}><Puzzle size={15}/>Lab</button>
                     </div>
                   </article>
@@ -28640,15 +28550,18 @@ function PasswordUpdateView({t,onDone}) {
 // APP ROOT
 // ═══════════════════════════════════════════════════════════════
 export default function App() {
-  const devDeepDivePreview=Boolean(import.meta.env.DEV&&new URLSearchParams(window.location.search).get("preview")==="deep-dives");
-  const devCoinPreview=Boolean(import.meta.env.DEV&&new URLSearchParams(window.location.search).get("preview")==="coins");
+  const initialParams=new URLSearchParams(window.location.search);
+  const urlDeepDiveRequest=initialParams.get("view")==="deep-dives";
+  const focusAcronymLibrary=Boolean(urlDeepDiveRequest&&initialParams.get("focus")==="acronyms");
+  const devDeepDivePreview=Boolean(import.meta.env.DEV&&initialParams.get("preview")==="deep-dives");
+  const devCoinPreview=Boolean(import.meta.env.DEV&&initialParams.get("preview")==="coins");
   const [darkMode,setDarkMode]=useState(false);
   const [sidebarHidden,setSidebarHidden]=useState(()=>{
     try{return window.localStorage?.getItem("secureplus-sidebar-hidden")==="true";}catch{return false;}
   });
   const [user,setUser]=useState(null);
   const [loading,setLoading]=useState(true);
-  const [view,setView]=useState(()=>devDeepDivePreview?"deep-dives":devCoinPreview?"coins":"dashboard");
+  const [view,setView]=useState(()=>urlDeepDiveRequest||devDeepDivePreview?"deep-dives":devCoinPreview?"coins":"dashboard");
   const [attempts,setAttempts]=useState([]);
   const [starred,setStarred]=useState([]);
   const [pbqQ,setPbqQ]=useState(null);
@@ -29639,7 +29552,7 @@ export default function App() {
               <DailyChallenge t={t} onLogin={goToSignup}/>
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
-            {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t}/>}
+            {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t} focusAcronyms={focusAcronymLibrary}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
@@ -29797,7 +29710,7 @@ export default function App() {
           {view==="objectives"&&<ObjectivesPage t={t}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
-          {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)}/>}
+          {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
