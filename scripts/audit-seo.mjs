@@ -5,6 +5,25 @@ const root = process.cwd();
 const publicDir = path.join(root, "public");
 const siteUrl = "https://www.secureplusprep.com";
 const requiredTerms = ["Security+", "SecurePlus"];
+const softwareApplicationPages = new Set([
+  "security-plus-acronyms",
+  "security-plus-comptia-practice-test",
+  "security-plus-cryptography-practice",
+  "security-plus-daily-challenge",
+  "security-plus-domain-1-practice",
+  "security-plus-domain-2-practice",
+  "security-plus-domain-3-practice",
+  "security-plus-domain-4-practice",
+  "security-plus-domain-5-practice",
+  "security-plus-firewall-pbq-practice",
+  "security-plus-free-comptia-practice",
+  "security-plus-mcq-practice",
+  "security-plus-pbq-practice",
+  "security-plus-pbq-practices",
+  "security-plus-port-numbers",
+  "security-plus-practice-questions",
+  "security-plus-sy0-701-practice",
+]);
 const errors = [];
 const warnings = [];
 
@@ -22,6 +41,30 @@ function getTag(html, pattern) {
 
 function stripTags(html) {
   return html.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<[^>]+>/g, " ");
+}
+
+function jsonLdObjects(html, file) {
+  const scripts = [...html.matchAll(/<script\s+type="application\/ld\+json"\s*>([\s\S]*?)<\/script>/gi)].map(match => match[1]);
+  const objects = [];
+  for (const script of scripts) {
+    try {
+      objects.push(JSON.parse(script));
+    } catch (error) {
+      push(errors, file, `invalid JSON-LD: ${error.message}`);
+    }
+  }
+  return objects;
+}
+
+function flattenStructuredData(items) {
+  return items.flatMap(item => Array.isArray(item?.["@graph"]) ? item["@graph"] : item ? [item] : []);
+}
+
+function hasSchemaType(items, type) {
+  return items.some(item => {
+    const itemType = item?.["@type"];
+    return Array.isArray(itemType) ? itemType.includes(type) : itemType === type;
+  });
 }
 
 function publicPageFiles() {
@@ -54,6 +97,8 @@ for (const file of pageFiles) {
   const title = getTag(html, /<title>(.*?)<\/title>/is);
   const description = getTag(html, /<meta\s+name="description"\s+content="([^"]+)"/i);
   const h1 = getTag(html, /<h1\b[^>]*>(.*?)<\/h1>/is);
+  const structuredItems = flattenStructuredData(jsonLdObjects(html, file));
+  const slug = file === "index.html" ? "" : file.split("/")[1];
 
   if (canonical !== `${siteUrl}${route}`) push(errors, file, `canonical should be ${siteUrl}${route}`);
   if (!title || title.length < 35 || title.length > 70) push(warnings, file, `title length should be 35-70 characters, found ${title.length}`);
@@ -68,6 +113,19 @@ for (const file of pageFiles) {
 
   if (!html.includes('property="og:title"')) push(warnings, file, "missing Open Graph title");
   if (!html.includes('property="og:image"')) push(warnings, file, "missing Open Graph image");
+
+  if (!structuredItems.length) push(warnings, file, "missing JSON-LD structured data");
+  if (file === "index.html" && !hasSchemaType(structuredItems, "SoftwareApplication")) {
+    push(warnings, file, "root app JSON-LD should include SoftwareApplication");
+  }
+  if (file !== "index.html") {
+    if (!hasSchemaType(structuredItems, "Course")) push(errors, file, "missing Course JSON-LD");
+    if (!hasSchemaType(structuredItems, "FAQPage")) push(errors, file, "missing FAQPage JSON-LD");
+    if (!html.includes('class="wrap card seo-faq"')) push(errors, file, "FAQPage JSON-LD must match a visible FAQ block");
+    if (softwareApplicationPages.has(slug) && !hasSchemaType(structuredItems, "SoftwareApplication")) {
+      push(errors, file, "practice-oriented page is missing SoftwareApplication JSON-LD");
+    }
+  }
 }
 
 const sy0701Path = "/security-plus-sy0-701-practice/";
