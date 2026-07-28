@@ -763,6 +763,35 @@ async function completeDailyStreak(user) {
   await DB.saveDailyStreak(key,next);
   return {...next,completedToday:true,alreadyCompleted,previousStreak:Number(current.streak)||0};
 }
+function getStreakRecoveryMessage(info={}) {
+  if(info.expired) return "Streak recovery: you missed a day, so today starts a fresh chain. One 3/5 Daily Challenge gets momentum back.";
+  if(!info.completedToday&&info.lastCompletedDate) return "Streak recovery: today is still open. Complete 3/5 before the day ends to protect your chain.";
+  if(info.completedToday) return "Today is secured. Return tomorrow for the next quick win.";
+  return "Start today with five questions. Small daily wins make Security+ feel less heavy.";
+}
+function getWeeklyStreakBadge(info={}) {
+  const streak=Math.max(0,Number(info.streak)||0);
+  const weekCount=Math.floor(streak/7);
+  if(weekCount>0) return `${weekCount}-week streak badge`;
+  const remaining=Math.max(1,7-streak);
+  return `${remaining} day${remaining===1?"":"s"} to weekly badge`;
+}
+function getTomorrowRewardPreview(info={},signedIn=false) {
+  const nextStreak=(Math.max(0,Number(info.streak)||0)+1);
+  const checkInReward=nextStreak%7===0?10:5;
+  const streakBonus=nextStreak%5===0?5:0;
+  if(!signedIn) return "Tomorrow preview: another fresh 5-question challenge. Create a free account to save streaks and coin rewards.";
+  return `Tomorrow preview: +${checkInReward} check-in coins${streakBonus?` + ${streakBonus} streak bonus`:""} if you keep the habit going.`;
+}
+function summarizeMissedConcepts(questions=[],limit=2) {
+  const topics=[...new Set(questions.map(question=>String(question?.topic||"").trim()).filter(Boolean))].slice(0,limit);
+  if(!topics.length) return "the concepts that caused your latest misses";
+  if(topics.length===1) return topics[0];
+  return `${topics.slice(0,-1).join(", ")} and ${topics.at(-1)}`;
+}
+function getRecommendedDeepDiveTitle(recommendations=[]) {
+  return recommendations?.[0]?.title || "matched Concept Deep Dive";
+}
 
 function expectedExamSeconds(item) {
   if(item?.kind==="pbq") return 180;
@@ -20354,6 +20383,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
   const [streakCelebration,setStreakCelebration]=useState(null);
   const [answerBurst,setAnswerBurst]=useState(null);
+  const [shareStatus,setShareStatus]=useState("");
   const streakRecordedRef=useRef(false);
 
   const questions = useMemo(()=>challenge.type==="mcq5"
@@ -20367,7 +20397,6 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   const totalQuestions = challenge.type==="pbq" ? 1 : questions.length;
 
   useEffect(()=>{
-    if(!user){setStreakInfo({streak:0,best:0,completedToday:false});return;}
     let active=true;
     loadDailyStreak(user).then(info=>{if(active)setStreakInfo(info);});
     return()=>{active=false;};
@@ -20375,10 +20404,9 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
 
   useEffect(()=>{
     if(step!=="done"||streakRecordedRef.current||totalQuestions!==5||results.length<5)return;
-    if(!user)return;
     const correctInChallenge=results.filter(r=>r.correct).length;
     streakRecordedRef.current=true;
-    onCoinReward?.({score:correctInChallenge,total:5});
+    if(user) onCoinReward?.({score:correctInChallenge,total:5});
     if(correctInChallenge<3)return;
     completeDailyStreak(user).then(info=>{
       setStreakInfo(info);
@@ -20403,6 +20431,25 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   };
 
   const correctCount = results.filter(r=>r.correct).length;
+  const recoveryMessage=getStreakRecoveryMessage(streakInfo);
+  const weeklyBadge=getWeeklyStreakBadge(streakInfo);
+  const tomorrowRewardPreview=getTomorrowRewardPreview(streakInfo,Boolean(user));
+  const sharePerfectScore=async()=>{
+    const text="I got 5/5 on today’s Security+ Daily Challenge.\nTry it: secureplusprep.com";
+    try{
+      if(navigator.share){
+        await navigator.share({text,url:"https://secureplusprep.com"});
+        setShareStatus("Share sheet opened.");
+      } else {
+        await navigator.clipboard?.writeText(text);
+        setShareStatus("Share text copied.");
+      }
+    }catch{
+      try{await navigator.clipboard?.writeText(text);setShareStatus("Share text copied.");}
+      catch{setShareStatus(text);}
+    }
+    window.setTimeout(()=>setShareStatus(""),3200);
+  };
 
   if(step==="intro") return (
     <div style={{padding:"32px 24px",maxWidth:600,margin:"0 auto",textAlign:"center"}} className="fu">
@@ -20425,6 +20472,9 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
         <span className="chip" style={{background:`${t.green}12`,color:t.green,borderColor:`${t.green}30`}}>
           Best: {streakInfo.best}
         </span>
+        <span className="chip" style={{background:`${t.amber}12`,color:t.amber,borderColor:`${t.amber}30`}}>
+          {weeklyBadge}
+        </span>
         {streakInfo.completedToday&&(
           <span className="chip" style={{background:`${t.amber}12`,color:t.amber,borderColor:`${t.amber}30`}}>
             Today secured
@@ -20435,6 +20485,11 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
             <CipherCoinIcon size={22}/> Perfect score +5 · every fifth streak day +5
           </span>
         )}
+      </div>
+      <div className="card" style={{padding:"13px 15px",margin:"16px 0 0",textAlign:"left",borderColor:`${t.amber}30`,background:`${t.amber}08`}}>
+        <div style={{fontSize:13,fontWeight:900,color:t.text,marginBottom:4}}>Habit loop</div>
+        <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{recoveryMessage}</div>
+        <div style={{fontSize:12,color:t.amber,fontWeight:800,marginTop:6}}>{tomorrowRewardPreview}</div>
       </div>
       <MascotGuide
         animation={streakInfo.completedToday?"cheer":"dance"}
@@ -20478,7 +20533,21 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
         <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
           {correctCount>=3 ? "Score at least 3/5 again tomorrow to keep the chain alive." : "Score 3/5 or higher tomorrow to extend your streak."}
         </div>
+        <div style={{fontSize:12,color:t.amber,fontWeight:800,lineHeight:1.6,marginTop:8}}>{weeklyBadge} · {tomorrowRewardPreview}</div>
       </div>
+      {correctCount===5&&totalQuestions===5&&(
+        <div className="card" style={{padding:"14px 16px",marginBottom:18,textAlign:"left",borderColor:`${t.green}35`,background:`${t.green}08`}}>
+          <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+            <div style={{flex:1,minWidth:220}}>
+              <div className="label" style={{color:t.green,marginBottom:4}}>Perfect score</div>
+              <div style={{fontSize:14,fontWeight:900,color:t.text}}>Share today&apos;s 5/5 Daily Challenge result.</div>
+              <div style={{fontSize:12,color:t.textSec,lineHeight:1.6}}>I got 5/5 on today&apos;s Security+ Daily Challenge. Try it: secureplusprep.com</div>
+              {shareStatus&&<div style={{fontSize:12,color:t.green,fontWeight:800,marginTop:6}}>{shareStatus}</div>}
+            </div>
+            <button className="btn btn-outline" type="button" style={{fontSize:12,flexShrink:0}} onClick={sharePerfectScore}><Share2 size={15}/>Share score</button>
+          </div>
+        </div>
+      )}
       {!user&&<div className="card" style={{padding:"16px 20px",marginBottom:20,textAlign:"left",borderColor:`${t.accent}45`,background:`${t.accent}08`}}>
         <div className="label" style={{marginBottom:10,color:t.accent}}>Save this challenge progress</div>
         <div style={{fontSize:14,fontWeight:900,color:t.text,marginBottom:8}}>Create a free account or sign in so today&apos;s effort is not lost.</div>
@@ -21457,11 +21526,14 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
   const missionCards=[
     {id:"mcq",label:"MCQ Practice",title:"Start a focused set",body:"Adaptive ordering prioritises weak and starred questions so each session feels useful.",nav:"mcq",color:t.accent,meta:`${MCQ_BANK.length} questions`,Icon:BookOpenCheck},
     {id:"daily",label:"Daily Challenge",title:streakInfo.completedToday?"Daily complete":"Protect the streak",body:streakInfo.completedToday?"Today is already secured. Return tomorrow for the next streak point.":"Five questions, quick feedback, and a streak moment after completion.",nav:"daily",color:t.amber,meta:`${streakInfo.streak} day streak`,Icon:Target},
-    {id:"pbq",label:"PBQ Simulator",title:isPro?"Practise one PBQ":"Reveal a mystery PBQ",body:isPro?"Terminal, table, tap-based placement, ordering, and incident-response simulations.":`Preview one PBQ, then reveal permanent mystery PBQs for ${CIPHER_COIN_COSTS.pbq} Cipher Coins each.`,nav:"pbq",color:t.green,meta:`${PBQ_BANK.length} PBQs`,Icon:Puzzle},
-    {id:"exam",label:"Exam Mode",title:hasExamAccess?"Run a timed exam":"Earn an exam voucher",body:hasExamAccess?"Mixed MCQ/PBQ sets with flags, elimination, timing, and post-exam review.":`Exchange ${CIPHER_COIN_COSTS.examPass} coins for one SecurePlus practice exam voucher, or use Pro with zero coin requirements.`,nav:hasExamAccess?"exam":"coins",color:"#8b5cf6",meta:isPro?"Unlimited":examPasses?`${examPasses} voucher${examPasses===1?"":"s"}`:"Coin access",Icon:ClipboardCheck},
+    {id:"pbq",label:"PBQ Simulator",title:isPro?"Practise one PBQ":"Reveal a mystery PBQ",body:isPro?"Terminal, table, tap-based placement, ordering, and incident-response simulations.":`Use coins if you have time. Use Pro if your exam is soon. PBQ reveals cost ${CIPHER_COIN_COSTS.pbq} Cipher Coins each.`,nav:"pbq",color:t.green,meta:`${PBQ_BANK.length} PBQs`,Icon:Puzzle},
+    {id:"exam",label:"Exam Mode",title:hasExamAccess?"Run a timed exam":"Earn an exam voucher",body:hasExamAccess?"Mixed MCQ/PBQ sets with flags, elimination, timing, and post-exam review.":`Daily Challenge → earn coins → unlock PBQ or exam voucher → get a report card → return tomorrow. Pro skips the coin requirement.`,nav:hasExamAccess?"exam":"coins",color:"#8b5cf6",meta:isPro?"Unlimited":examPasses?`${examPasses} voucher${examPasses===1?"":"s"}`:"Coin access",Icon:ClipboardCheck},
   ];
   const activeMissionCard=missionCards.find(card=>card.id===activeMission)||missionCards[0];
   const weekDots=Array.from({length:7},(_,index)=>index<Math.min(7,streakInfo.streak));
+  const recoveryMessage=getStreakRecoveryMessage(streakInfo);
+  const weeklyBadge=getWeeklyStreakBadge(streakInfo);
+  const tomorrowRewardPreview=getTomorrowRewardPreview(streakInfo,true);
 
   // Chapter performance
   const chStats = {};
@@ -21485,7 +21557,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
     },0);
     const correctCount=chapterAttempts.filter(attempt=>attempt.correct).length;
     const accuracy=chapterAttempts.length?Math.round((correctCount/chapterAttempts.length)*100):100;
-    const reviewCount=Math.min(3,MCQ_BANK.filter(question=>question.ch===ch.id).length);
+    const reviewCount=Math.min(10,MCQ_BANK.filter(question=>question.ch===ch.id).length);
     const priority=(missedQuestions.length*30)+(repeatedMisses*12)+(100-accuracy);
     return {chapter:ch,total:chapterAttempts.length,missedCount:missedQuestions.length,missedQuestions,missedTopics,accuracy,reviewCount,repeatedMisses,priority};
   })
@@ -21493,6 +21565,8 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
     .sort((a,b)=>b.priority-a.priority||a.accuracy-b.accuracy);
   const primaryWeakAction=weakChapterActions[0];
   const primaryLessonPath=getDeepDiveRecommendations(primaryWeakAction?.missedQuestions||[],{limit:2});
+  const primaryWeakConcepts=summarizeMissedConcepts(primaryWeakAction?.missedQuestions||[]);
+  const primaryDeepDiveTitle=getRecommendedDeepDiveTitle(primaryLessonPath);
 
   return(
     <div className="dashboard-shell">
@@ -21614,8 +21688,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
             <>
               <h3>Repair Chapter {primaryWeakAction.chapter.id}: {primaryWeakAction.chapter.title}</h3>
               <p>
-                You have {primaryWeakAction.missedCount} MCQ{primaryWeakAction.missedCount===1?"":"s"} whose latest answer was incorrect here.
-                Launch a short {primaryWeakAction.reviewCount}-question sprint built from the missed concept{primaryWeakAction.missedTopics.length===1?"":"s"} and closely related questions.
+                You missed {primaryWeakConcepts}. Next: {primaryWeakAction.reviewCount}-question Smart Review + {primaryDeepDiveTitle}.
               </p>
               <div className="weak-action-meta">
                 <span>{primaryWeakAction.accuracy}% chapter accuracy</span>
@@ -21623,7 +21696,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
               </div>
               <SmartReviewLessonPath recommendations={primaryLessonPath} onOpenDeepDive={onOpenDeepDive} source="dashboard_weak_area" compact title="Recommended concept lessons"/>
               <button className="btn btn-primary" onClick={()=>onStartChapterReview?.(primaryWeakAction.chapter.id,{count:primaryWeakAction.reviewCount,source:"dashboard_weak_area"})}>
-                Start {primaryWeakAction.reviewCount}-question repair sprint
+                Start {primaryWeakAction.reviewCount}-question Smart Review
               </button>
             </>
           ) : (
@@ -21638,14 +21711,16 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
           <div className="label" style={{color:t.amber}}>Daily habit</div>
           <h3>{streakInfo.completedToday?"Daily Challenge complete":"Protect your Daily Challenge streak"}</h3>
           <p>{streakInfo.completedToday?"You already secured today. Keep the streak visible and return tomorrow for the next short drill.":"Five questions keeps Security+ active in memory without turning every session into a full exam."}</p>
+          <div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginBottom:10}}>{recoveryMessage}</div>
           <div className="daily-habit-streak" aria-label={`${streakInfo.streak} day streak`}>
             {weekDots.map((active,index)=><span key={index} className={active?"active":""}/>)}
           </div>
           <div className="daily-habit-meta">
             <span>{streakInfo.streak} day streak</span>
             <span>Best {streakInfo.best}</span>
-            <span>{isPro?"Pro":"Free"} users</span>
+            <span>{weeklyBadge}</span>
           </div>
+          <div style={{fontSize:12,color:t.amber,fontWeight:800,lineHeight:1.5,margin:"8px 0 12px"}}>{tomorrowRewardPreview}</div>
           <button className="btn btn-primary" onClick={event=>{event.stopPropagation();onNav("daily");}}>
             {streakInfo.completedToday?"View Daily Challenge":"Start Daily Challenge"}
           </button>
@@ -21834,7 +21909,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily}
     onSignup();
   };
   const learningPaths=[
-    {id:"mcq",label:"MCQ foundations",tag:"Free",color:t.accent,body:`Start with all ${MCQ_BANK.length} MCQs. No account required.`,meta:"Practice now",action:onPractice},
+    {id:"mcq",label:"5 simple MCQs",tag:"Free",color:t.accent,body:"Start with a short no-account session, then see your instant weak-area result.",meta:"Practice now",action:onPractice},
     {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"Finish a short challenge and build a repeatable study rhythm.",meta:"5 questions/day",action:onDaily},
     {id:"pbq",label:"PBQ simulations",tag:"Preview",color:t.amber,body:`Try one complete PBQ, then choose coins or Pro for the remaining ${PBQ_BANK.length-1}.`,meta:"Try the preview",action:onPreviewPbq},
   ];
@@ -21853,7 +21928,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily}
             <span className="guest-title-accent">Keep every win.</span>
           </h1>
           <p className="home-subtitle brilliant-copy">
-            Create a free account to save your scores, spot weak topics, and turn every answer into a clear next step toward SY0-701 exam confidence.
+            Start with 5 simple MCQs, see your weak area instantly, then create a free account only when you want to save Smart Review.
           </p>
           <div className="home-cta-row brilliant-action-row">
             <button className="btn btn-primary brilliant-primary-cta" onClick={onPractice}>Start Free MCQ Practice</button>
@@ -22154,7 +22229,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [diffFilter,setDiffFilter]=useState("all");
   const [topicFilter,setTopicFilter]=useState("all");
   const [reviewMode,setReviewMode]=useState(isGuest?"random":"smart");
-  const [quizCount,setQuizCount]=useState(10);
+  const [quizCount,setQuizCount]=useState(isGuest?5:10);
   const [started,setStarted]=useState(false);
   const [questions,setQuestions]=useState([]);
   const [qi,setQi]=useState(0);
@@ -22196,7 +22271,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     return true;
   });
   const reviewSummary = getReviewSummary(attempts,bank);
-  const quizSizes = [10,20,30,40,50];
+  const quizSizes = isGuest ? [5] : [10,20,30,40,50];
+  const sessionMinimum = isGuest ? 5 : 10;
   const latestMcqAttempts=getLatestMcqAttempts(attempts);
   const missedMcqIds=[...latestMcqAttempts.entries()].filter(([,attempt])=>attempt.correct===false).map(([questionId])=>questionId);
   const missedQuestions=bank.filter(q=>missedMcqIds.includes(q.id));
@@ -22205,9 +22281,10 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   useEffect(()=>{
     if(!isGuest)return;
     setChFilter("all");
-    setDiffFilter("all");
+    setDiffFilter("easy");
     setTopicFilter("all");
     setReviewMode("random");
+    setQuizCount(5);
   },[isGuest]);
 
   useEffect(()=>{
@@ -22233,14 +22310,14 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     setSessionContext({kind:"missed",label:"Missed-question repair"});
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setSessionStartedAt(Date.now());
   };
-  const startChapterSmartReview=useCallback((chapterId,requestedCount=3,source="chapter_review")=>{
+  const startChapterSmartReview=useCallback((chapterId,requestedCount=10,source="chapter_review")=>{
     if(!chapterId||isGuest)return;
     const chapterKey=String(chapterId);
     const latestAttempts=getLatestMcqAttempts(attempts);
     const chapterQuestions=bank.filter(question=>String(question.ch)===chapterKey);
     const missedIds=new Set(chapterQuestions.filter(question=>latestAttempts.get(question.id)?.correct===false).map(question=>question.id));
     const missedTopics=new Set(chapterQuestions.filter(question=>missedIds.has(question.id)).map(question=>question.topic).filter(Boolean));
-    const count=Math.max(1,Math.min(Number(requestedCount)||3,chapterQuestions.length));
+    const count=Math.max(1,Math.min(Number(requestedCount)||10,chapterQuestions.length));
     const pool=buildMcqPracticePool(
       chapterQuestions,
       attempts,
@@ -22407,7 +22484,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         </div>
         <div style={{flex:1,minWidth:240}}>
           <div className="label" style={{color:guestWeakChapter?t.amber:t.green,marginBottom:4}}>
-            {guestWeakChapter?"Weak area found":"Strong first set"}
+            {guestWeakChapter?"Instant weak-area result":"Strong first set"}
           </div>
           <div style={{fontWeight:900,fontSize:17,color:t.text,marginBottom:4}}>
             {guestWeakChapter
@@ -22416,11 +22493,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           </div>
           <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
             {guestWeakChapter
-              ? `${guestWeakChapter.missed} missed question${guestWeakChapter.missed===1?"":"s"}${guestWeakTopics.length?` around ${guestWeakTopics.join(" and ")}`:""}. Create a free account and these results will seed your personalised Smart Review queue.`
+              ? `You missed ${guestWeakTopics.length?guestWeakTopics.join(" and "):"one core concept"}. Create free account to save Smart Review, then run a 10-question repair set after signup.`
               : "Create a free account and SecurePlus will save this score, space out mastered questions, and build your personalised Smart Review queue."}
           </div>
         </div>
-        <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={saveGuestSmartReview}>Create free account to save Smart Review</button>
+        <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={saveGuestSmartReview}>Save my Smart Review</button>
       </div>
     </div>
   );
@@ -22471,8 +22548,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <div className="practice-page-icon"><BookOpenCheck size={23} strokeWidth={2.3}/></div>
           <div>
             <div className="label" style={{color:t.accent}}>Knowledge practice</div>
-            <h2>MCQ Practice</h2>
-            <p>Build a focused question set and get clear feedback as you work.</p>
+            <h2>{isGuest?"Start with 5 simple MCQs":"MCQ Practice"}</h2>
+            <p>{isGuest?"A short first session gives an instant weak-area result without loading you into a heavy dashboard.":"Build a focused question set and get clear feedback as you work."}</p>
           </div>
         </div>
         <div className="practice-page-meta">
@@ -22510,8 +22587,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         <div className="practice-setup-copy">
           <div>
             <div className="label" style={{color:t.green}}>Step 1 · Choose your practice style</div>
-            <h3>How should SecurePlus choose your questions?</h3>
-            <p>Use Smart Review to revisit weak or due topics, or choose Random Practice for a fresh mixed set.</p>
+            <h3>{isGuest?"Your first session is short on purpose":"How should SecurePlus choose your questions?"}</h3>
+            <p>{isGuest?"Answer five easy Security+ questions, see the weak area instantly, then save the Smart Review queue if it is useful.":"Use Smart Review to revisit weak or due topics, or choose Random Practice for a fresh mixed set."}</p>
           </div>
           {!isGuest&&(
             <div className="setup-stats">
@@ -22624,7 +22701,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           </div>
           {isGuest&&(
             <div style={{marginTop:14,padding:"12px 14px",borderRadius:7,background:`${t.accent}08`,border:`1px solid ${t.accent}25`,fontSize:12,color:t.textSec,lineHeight:1.6}}>
-              Targeted filters are a free-account feature. Guest sessions use the full mixed question bank.
+              Targeted filters are a free-account feature. Guest sessions use five short, easy questions so the first session feels fast.
             </div>
           )}
         </div>
@@ -22647,10 +22724,10 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         <div className="practice-builder-footer">
           <div className="practice-builder-result">
             <div className="practice-builder-count">{quizCount}</div>
-            <div><strong>{reviewMode==="smart"?"Smart Review set":"Random practice set"}</strong><small>{filtered.length>=10?`${filtered.length} questions match your focus`:`Only ${filtered.length} match — broaden your filters`}</small></div>
+            <div><strong>{isGuest?"First-session set":reviewMode==="smart"?"Smart Review set":"Random practice set"}</strong><small>{filtered.length>=sessionMinimum?`${filtered.length} questions match your focus`:`Only ${filtered.length} match — broaden your filters`}</small></div>
           </div>
-          <button className="btn btn-primary" style={{minWidth:170}} onClick={startQuiz} disabled={filtered.length<10}>
-            Start {quizCount}-question set →
+          <button className="btn btn-primary" style={{minWidth:170}} onClick={startQuiz} disabled={filtered.length<sessionMinimum}>
+            {isGuest?"Start 5-question first session →":`Start ${quizCount}-question set →`}
           </button>
         </div>
       </div>
@@ -27570,7 +27647,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
   );
 }
 
-function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandled,focusAcronyms=false}) {
+function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandled,focusAcronyms=false,onAddWeakTopicToReview,onTryRelatedPbq}) {
   const [query,setQuery]=useState("");
   const [domainFilter,setDomainFilter]=useState("all");
   const [selectedId,setSelectedId]=useState(null);
@@ -27616,7 +27693,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
   const selectedDive=CONCEPT_DEEP_DIVES.find(dive=>dive.id===selectedId)||null;
   const selectedAcronymSet=SY0701_ACRONYM_SETS.find(set=>set.id===selectedAcronymSetId)||null;
   const selectedProfile=getSy0701DeepDiveProfile(selectedDive);
-  const practiceQuestions=useMemo(()=>buildDeepDivePracticeQuestions(selectedDive),[selectedDive]);
+  const practiceQuestions=useMemo(()=>buildDeepDivePracticeQuestions(selectedDive).slice(0,3),[selectedDive]);
   const activePracticeQuestion=practiceQuestions[practiceIndex]||null;
   const lessonSteps=useMemo(()=>selectedDive?[
     {kind:"keywords",title:"Exam keywords"},
@@ -27756,6 +27833,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
     const activeSection=activeLessonStep?.kind==="section"?selectedDive.sections[activeLessonStep.index]:null;
     const isBeyondSection=activeLessonStep?.kind==="section"&&selectedProfile?.beyondSections.includes(activeLessonStep.index);
     const activeComparisonRow=activeSection?.table?.rows?.[comparisonIndex]||activeSection?.table?.rows?.[0]||null;
+    const relevantAcronymSet=SY0701_ACRONYM_SETS.find(set=>set.objectiveCodes.some(code=>selectedProfile.objectiveCodes.includes(code)))||SY0701_ACRONYM_SETS[0];
     return(
       <article className="deep-dive-reader" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
         <div className="deep-dive-reader-topbar">
@@ -27998,6 +28076,25 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
             )}
           </section>
         )}
+
+        <section className="card" style={{padding:"18px 20px",marginTop:18,borderColor:`${t.accent}35`,background:`linear-gradient(135deg, ${t.accent}10, ${t.surface} 62%, ${t.green}08)`}}>
+          <div style={{display:"flex",justifyContent:"space-between",gap:14,alignItems:"flex-start",flexWrap:"wrap",marginBottom:12}}>
+            <div style={{flex:"1 1 260px"}}>
+              <div className="label" style={{color:t.accent,marginBottom:6}}>End of lesson actions</div>
+              <h3 style={{fontSize:20,fontWeight:950,color:t.text,marginBottom:6}}>Turn this concept into practice</h3>
+              <p style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
+                Finish with a 3-question checkpoint, then add the topic to Smart Review, try a related PBQ, or drill matching acronyms.
+              </p>
+            </div>
+            <MascotAnimation animation="wave" size={72} interactive hoverAnimation="cheer" reactionAnimations={["wave","thinking","cheer"]} label="Cipher points to lesson actions"/>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(190px,1fr))",gap:10}}>
+            <button className="btn btn-primary" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>3-question checkpoint</button>
+            <button className="btn btn-outline" type="button" onClick={()=>onAddWeakTopicToReview?.({chapterId:selectedProfile.domainId,lessonId:selectedDive.id,title:selectedProfile.title})}><Brain size={16}/>Add weak topic to Smart Review</button>
+            <button className="btn btn-outline" type="button" onClick={()=>onTryRelatedPbq?.({chapterId:selectedProfile.domainId,lessonId:selectedDive.id,title:selectedProfile.title})}><Target size={16}/>Try related PBQ</button>
+            <button className="btn btn-outline" type="button" onClick={()=>openAcronymSet(relevantAcronymSet.id)}><TextCursorInput size={16}/>Flashcard this acronym</button>
+          </div>
+        </section>
 
         <div className="deep-dive-reader-actions">
           <button className={`btn ${isComplete?"btn-ghost":"btn-primary"}`} type="button" onClick={()=>toggleComplete(selectedDive.id)}>{isComplete?<><CheckCircle2 size={16}/>Lesson complete</>:<><BookOpenCheck size={16}/>Mark complete</>}</button>
@@ -28295,14 +28392,14 @@ function OnboardingModal({user,wallet,t,onClose,onWallet,onPbq,onRefreshWallet})
       Icon:Sparkles,
       animation:"dance",
       title:`A welcome gift for ${user?.name ? user.name.split(" ")[0] : "you"}`,
-      body:`Your Academy account begins with ${CIPHER_WELCOME_GRANT} Cipher Coins. They are learning currency—not money—and they never reduce your readiness score.`,
+      body:`Your Academy account begins with ${CIPHER_WELCOME_GRANT} Cipher Coins. They help you try locked practice through steady effort, and they never reduce your readiness score.`,
     },
     {
       id:"earn",
       Icon:CalendarDays,
       animation:"cheer",
       title:"Study habits mint more",
-      body:"Cipher keeps the system simple: show up, practise well, and invite friends who will genuinely use SecurePlus.",
+      body:"The loop is simple: Daily Challenge, earn coins, unlock a PBQ or exam voucher, read the report card, then return tomorrow.",
     },
     {
       id:"spend",
@@ -28316,7 +28413,7 @@ function OnboardingModal({user,wallet,t,onClose,onWallet,onPbq,onRefreshWallet})
       Icon:ShieldCheck,
       animation:"unlock",
       title:"Your Coin Vault is ready",
-      body:"Redeem whenever you are ready. Pro remains the convenience option with every PBQ and unlimited practice exams using zero coins.",
+      body:"Use coins if you have time. Use Pro if your exam is soon. Pro unlocks every PBQ and practice exam with zero coin requirements.",
     },
   ];
   const slide=slides[step];
@@ -29327,7 +29424,7 @@ export default function App() {
   const handleStartChapterReview=useCallback((chapterId,options={})=>{
     setSmartReviewRequest({
       chapterId:String(chapterId),
-      count:Math.max(1,Math.min(10,Number(options.count)||3)),
+      count:Math.max(1,Math.min(10,Number(options.count)||10)),
       source:options.source||"chapter_review",
       nonce:Date.now(),
     });
@@ -29343,6 +29440,27 @@ export default function App() {
     });
     setView("deep-dives");
   },[]);
+  const handleAddDeepDiveWeakTopicToReview=useCallback(({chapterId,lessonId,title}={})=>{
+    if(!chapterId)return;
+    capture("deep_dive_add_weak_topic_clicked",{chapter:chapterId,lesson_id:lessonId,title});
+    handleStartChapterReview(chapterId,{count:10,source:"concept_deep_dive_end_action"});
+  },[handleStartChapterReview]);
+  const handleTryRelatedDeepDivePbq=useCallback(({chapterId,lessonId,title}={})=>{
+    const chapterKey=String(chapterId||"");
+    const unlockedIds=coinWallet?.unlockedPbqIds||[];
+    const accessible=question=>user?.tier==="pro"||isFreePBQPreview(question)||unlockedIds.includes(question.id);
+    const related=livePbqBank.find(question=>String(question.ch)===chapterKey&&accessible(question))
+      || livePbqBank.find(question=>String(question.ch)===chapterKey)
+      || livePbqBank.find(isFreePBQPreview)
+      || null;
+    capture("deep_dive_related_pbq_clicked",{chapter:chapterKey,lesson_id:lessonId,title,question_id:related?.id||null,accessible:Boolean(related&&accessible(related))});
+    if(related&&accessible(related)){
+      setPbqQ(related);
+      setView("pbq");
+      return;
+    }
+    setView(user?.tier==="free"?"coins":"pbq");
+  },[coinWallet?.unlockedPbqIds,livePbqBank,user?.tier]);
   const handleGuestPbqPreview=useCallback(()=>{
     const preview=livePbqBank.find(isFreePBQPreview)||PBQ_BANK.find(isFreePBQPreview)||null;
     capture("pbq_preview_cta_clicked", {
@@ -29619,7 +29737,7 @@ export default function App() {
               <DailyChallenge t={t} onLogin={goToSignup}/>
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
-            {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t} focusAcronyms={focusAcronymLibrary}/>}
+            {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={({chapterId})=>{setView("mcq");}} onTryRelatedPbq={handleGuestPbqPreview}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
@@ -29777,7 +29895,7 @@ export default function App() {
           {view==="objectives"&&<ObjectivesPage t={t}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
-          {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary}/>}
+          {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
