@@ -16349,23 +16349,17 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-assistant-body{padding:14px;}
 .cipher-assistant-intro{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:start;padding:11px 12px;border:1px solid ${t.green}2d;border-radius:14px;background:${t.green}0b;color:${t.green};}
 .cipher-assistant-intro p{color:${t.textSec};font-size:10px;line-height:1.55;}
-.cipher-assistant-quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px;}
-.cipher-assistant-quick button{display:flex;align-items:flex-start;gap:6px;min-width:0;padding:9px 8px;border:1px solid ${t.border};border-radius:12px;background:${t.panel};color:${t.accent};text-align:left;cursor:pointer;transition:transform .16s,border-color .16s,background .16s;}
+.cipher-assistant-quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px;}
+.cipher-assistant-quick button{display:flex;align-items:flex-start;gap:7px;min-width:0;padding:10px 9px;border:1px solid ${t.border};border-radius:13px;background:${t.panel};color:${t.accent};text-align:left;cursor:pointer;transition:transform .16s,border-color .16s,background .16s;}
 .cipher-assistant-quick button:hover{transform:translateY(-1px);border-color:${t.accent}55;background:${t.accent}0b;}
 .cipher-assistant-quick button span{min-width:0;}
 .cipher-assistant-quick strong,.cipher-assistant-quick small{display:block;overflow-wrap:anywhere;}
-.cipher-assistant-quick strong{color:${t.text};font-size:9px;line-height:1.35;}
-.cipher-assistant-quick small{margin-top:2px;color:${t.textDim};font-size:7px;line-height:1.35;}
+.cipher-assistant-quick strong{color:${t.text};font-size:10px;line-height:1.35;}
+.cipher-assistant-quick small{margin-top:2px;color:${t.textDim};font-size:8px;line-height:1.35;}
 .cipher-assistant-messages{display:flex;flex-direction:column;gap:7px;max-height:250px;overflow-y:auto;margin-top:10px;padding:4px 2px;scrollbar-width:thin;}
 .cipher-assistant-message{max-width:88%;padding:9px 11px;border-radius:13px;font-size:10px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;}
 .cipher-assistant-message.cipher{align-self:flex-start;border:1px solid ${t.border};border-bottom-left-radius:4px;background:${t.panel};color:${t.textSec};}
 .cipher-assistant-message.user{align-self:flex-end;border-bottom-right-radius:4px;background:${t.accent};color:#fff;}
-.cipher-assistant-message.thinking{color:${t.textDim};font-style:italic;}
-.cipher-assistant-input-row{display:grid;grid-template-columns:minmax(0,1fr) 38px;gap:7px;margin-top:10px;}
-.cipher-assistant-input-row input{min-width:0;height:42px;padding:0 12px;border:1px solid ${t.border};border-radius:12px;background:${t.inputBg};color:${t.text};font-size:10px;outline:none;}
-.cipher-assistant-input-row input:focus{border-color:${t.accent};box-shadow:0 0 0 3px ${t.accent}12;}
-.cipher-assistant-input-row button{display:grid;place-items:center;border:0;border-radius:12px;background:${t.accent};color:#fff;cursor:pointer;}
-.cipher-assistant-input-row button:disabled{opacity:.45;cursor:not-allowed;}
 .cipher-assistant-note{margin-top:7px;color:${t.textDim};font-size:7px;line-height:1.4;text-align:center;}
 .cipher-assistant-context-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:${t.green}10;color:${t.green};font-size:9px;font-weight:900;}
 @keyframes cipherAssistantIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -25031,15 +25025,12 @@ function buildCipherAssistantContext(attempts=[],currentView="dashboard") {
   };
 }
 
-function CipherAssistantDock({user,attempts,currentView,onStartReview}) {
+function CipherAssistantDock({attempts,currentView,onStartReview}) {
   const [open,setOpen]=useState(false);
-  const [draft,setDraft]=useState("");
   const [messages,setMessages]=useState([]);
-  const [sending,setSending]=useState(false);
   const messagesEndRef=useRef(null);
   const context=useMemo(()=>buildCipherAssistantContext(attempts,currentView),[attempts,currentView]);
   const weakChapter=context.weakChapterId?`Chapter ${context.weakChapterId}: ${context.weakChapterTitle}`:null;
-  const canUseLiveAi=user?.authProvider==="supabase"&&isSupabaseConfigured;
 
   const addMessage=useCallback((role,text)=>{
     setMessages(previous=>[...previous,{id:`${Date.now()}-${Math.random()}`,role,text}].slice(-10));
@@ -25054,7 +25045,7 @@ function CipherAssistantDock({user,attempts,currentView,onStartReview}) {
 
   useEffect(()=>{
     if(open)messagesEndRef.current?.scrollIntoView({behavior:"smooth",block:"nearest"});
-  },[messages,open,sending]);
+  },[messages,open]);
 
   const showNextStep=()=>{
     if(weakChapter){
@@ -25067,6 +25058,10 @@ function CipherAssistantDock({user,attempts,currentView,onStartReview}) {
 
   const explainSmartReview=()=>addMessage("cipher","Smart Review now weighs your latest answer, repeated misses, due date, time since practice, topic and chapter accuracy, starred questions, difficulty fit, and recent repetition. It then spreads the set across concepts so one topic does not crowd out everything else.");
 
+  const explainCoins=()=>addMessage("cipher",`Cipher Coins let free users unlock premium practice through consistent study. Daily Challenge and perfect sets earn coins. PBQ unlocks cost ${CIPHER_COIN_COSTS.pbq} coins, and Exam Vouchers cost ${CIPHER_COIN_COSTS.examPass} coins. Pro is still the faster route when your exam is soon because it removes coin requirements.`);
+
+  const explainPbq=()=>addMessage("cipher","PBQs are scenario questions. Read the objective first, open the evidence only when needed, then solve the task step by step. If you are on mobile, use tap-based selections instead of drag-and-drop.");
+
   const startSprint=()=>{
     if(!context.weakChapterId){
       addMessage("cipher","I need a little answer history before I can build a targeted sprint. Complete a short MCQ set and ask me again.");
@@ -25077,40 +25072,19 @@ function CipherAssistantDock({user,attempts,currentView,onStartReview}) {
     setOpen(false);
   };
 
-  const sendMessage=async()=>{
-    const message=draft.trim().slice(0,900);
-    if(!message||sending)return;
-    setDraft("");
-    addMessage("user",message);
-    if(!canUseLiveAi){
-      addMessage("cipher","Live AI is ready to connect, but this account is currently using guided mode. The quick actions below still use your real SecurePlus progress.");
-      return;
-    }
-    setSending(true);
-    try{
-      const token=await getSupabaseAccessToken();
-      if(!token)throw new Error("Your login session expired. Sign in again.");
-      const response=await fetch("/api/assistant",{
-        method:"POST",
-        headers:{"content-type":"application/json",authorization:`Bearer ${token}`},
-        body:JSON.stringify({message,context}),
-      });
-      const body=await response.json().catch(()=>({}));
-      if(!response.ok){
-        if(body.code==="AI_NOT_CONFIGURED"){
-          addMessage("cipher","My guided study tools are active. Live explanations will switch on after the AI model is connected by the site owner.");
-          return;
-        }
-        throw new Error(body.error||"Cipher could not respond just now.");
-      }
-      addMessage("cipher",body.answer);
-      capture("cipher_assistant_answered",{source_view:currentView,model:body.model||"configured"});
-    }catch(error){
-      addMessage("cipher",error.message||"I could not reach the live model. Try a guided action for now.");
-    }finally{
-      setSending(false);
-    }
+  const choosePrompt=(label,action)=>{
+    addMessage("user",label);
+    capture("cipher_assistant_choice_selected",{choice:label,source_view:currentView});
+    action();
   };
+
+  const guidedPrompts=[
+    {label:"What should I do next?",detail:"Use my progress",icon:<Target size={15}/>,action:showNextStep},
+    {label:"Start weak-area sprint",detail:"Launch now",icon:<Play size={15}/>,action:startSprint},
+    {label:"Why these questions?",detail:"Smart Review logic",icon:<Brain size={15}/>,action:explainSmartReview},
+    {label:"How do coins work?",detail:"Unlock PBQs",icon:<Sparkles size={15}/>,action:explainCoins},
+    {label:"How should I approach PBQs?",detail:"Scenario strategy",icon:<ClipboardCheck size={15}/>,action:explainPbq},
+  ];
 
   if(typeof document==="undefined")return null;
   return createPortal(
@@ -25120,8 +25094,8 @@ function CipherAssistantDock({user,attempts,currentView,onStartReview}) {
         <section className="cipher-assistant-panel" role="dialog" aria-modal="false" aria-label="Cipher study assistant">
           <header className="cipher-assistant-head">
             <div className="cipher-assistant-identity">
-              <span className="cipher-assistant-avatar"><MascotAnimation animation={sending?"thinking":"wave"} size={54} interactive label="Cipher assistant"/></span>
-              <div><span>Study companion</span><strong>Cipher Assistant</strong><small>Guided now · live AI connection ready</small></div>
+              <span className="cipher-assistant-avatar"><MascotAnimation animation="wave" size={54} interactive label="Cipher assistant"/></span>
+              <div><span>Study companion</span><strong>Cipher Assistant</strong><small>Guided choices only</small></div>
             </div>
             <button type="button" className="cipher-assistant-close" aria-label="Close Cipher assistant" onClick={()=>setOpen(false)}><X size={18}/></button>
           </header>
@@ -25131,35 +25105,26 @@ function CipherAssistantDock({user,attempts,currentView,onStartReview}) {
               <p>{weakChapter?`I’m tracking ${weakChapter} as your current repair area.`:"Answer a few MCQs and I’ll turn your progress into a focused next step."}</p>
             </div>
             <div className="cipher-assistant-quick" aria-label="Cipher quick actions">
-              <button type="button" onClick={showNextStep}><Target size={15}/><span><strong>What next?</strong><small>Use my progress</small></span></button>
-              <button type="button" onClick={startSprint}><Play size={15}/><span><strong>3-question sprint</strong><small>Start immediately</small></span></button>
-              <button type="button" onClick={explainSmartReview}><Brain size={15}/><span><strong>Why these questions?</strong><small>See Smart Review logic</small></span></button>
+              {guidedPrompts.map(prompt=>(
+                <button key={prompt.label} type="button" onClick={()=>choosePrompt(prompt.label,prompt.action)}>
+                  {prompt.icon}
+                  <span><strong>{prompt.label}</strong><small>{prompt.detail}</small></span>
+                </button>
+              ))}
             </div>
             {messages.length>0&&(
               <div className="cipher-assistant-messages" aria-live="polite">
                 {messages.map(message=><div key={message.id} className={`cipher-assistant-message ${message.role}`}>{message.text}</div>)}
-                {sending&&<div className="cipher-assistant-message cipher thinking">Cipher is thinking…</div>}
                 <div ref={messagesEndRef}/>
               </div>
             )}
-            <div className="cipher-assistant-input-row">
-              <input
-                value={draft}
-                onChange={event=>setDraft(event.target.value)}
-                onKeyDown={event=>{if(event.key==="Enter")sendMessage();}}
-                placeholder="Ask a Security+ study question"
-                aria-label="Message Cipher"
-                maxLength={900}
-              />
-              <button type="button" onClick={sendMessage} disabled={!draft.trim()||sending} aria-label="Send message to Cipher"><ChevronRight size={19}/></button>
-            </div>
-            <p className="cipher-assistant-note">Cipher teaches concepts—not real exam dumps. Avoid sharing personal details.</p>
+            <p className="cipher-assistant-note">Cipher uses preset study guidance only. Original scenario-based practice. Not exam dumps.</p>
           </div>
         </section>
       )}
       <button className="cipher-assistant-launcher" type="button" aria-expanded={open} onClick={()=>setOpen(value=>!value)}>
         <span><MascotAnimation animation={open?"surprised":"wave"} size={48} interactive={false} label="Cipher"/></span>
-        <span><strong>Ask Cipher</strong><small>Your study companion</small></span>
+        <span><strong>Open Cipher</strong><small>Guided study choices</small></span>
       </button>
     </div>,
     document.body
