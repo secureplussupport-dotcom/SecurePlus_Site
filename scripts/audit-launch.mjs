@@ -193,6 +193,10 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'const activeDiffFilter=isGuest?"all":diffFilter', "guest MCQ practice must not filter by difficulty");
   requireContains("src/App.jsx", 'const activeTopicFilter=isGuest?"all":topicFilter', "guest MCQ practice must not filter by topic");
   requireContains("src/App.jsx", '<FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>', "guest MCQ practice should still allow chapter filtering");
+  requireContains("src/App.jsx", "guest-mcq-showcase", "guest MCQ practice should use a more engaging conversion-focused showcase");
+  requireContains("src/App.jsx", "guest-mcq-benefit-grid", "guest MCQ practice should explain the value of saving progress");
+  requireContains("src/App.jsx", "guest-chapter-choice-grid", "guest MCQ practice should provide visual chapter choices");
+  requireContains("src/App.jsx", "guest-length-grid", "guest MCQ practice should make fixed set sizes visually prominent");
   requireContains("src/App.jsx", "Use 50 coins or unlock all PBQs with Pro", "PBQ interest should present both the coin and Pro paths");
   requireContains("src/App.jsx", "ATHENA_STARTER_QUESTION_SETS", "new-user starter questions should use the concise curated onboarding set");
   requireContains("src/App.jsx", "picked.slice(0,5)", "the fallback new-account baseline should stay limited to five questions");
