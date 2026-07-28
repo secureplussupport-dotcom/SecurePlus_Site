@@ -15681,8 +15681,9 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .university-ic-particle.particle-three{left:36%;bottom:2%;animation-delay:-2.3s;}
 .athena-intro-mascots,.athena-reveal-mascots{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:13px;}
 .athena-intro-card .athena-intro-mascots .athena-mark{margin-bottom:0;}
-.athena-cipher-intro{position:relative;display:grid;justify-items:center;}
-.athena-cipher-intro span{margin-top:-8px;padding:6px 9px;border:1px solid rgba(57,127,186,.2);border-radius:10px;background:rgba(255,253,248,.84);color:#5e6d75;font-size:8px;font-weight:750;}
+.athena-cipher-intro{position:relative;display:grid;justify-items:center;align-content:end;width:132px;min-height:126px;padding:2px 8px 7px;overflow:visible;}
+.athena-cipher-intro .cipher-mascot{flex:0 0 auto;width:var(--cipher-size)!important;min-width:var(--cipher-size);height:auto;aspect-ratio:4 / 3;transform-origin:50% 88%;}
+.athena-cipher-intro span{position:relative;z-index:2;margin-top:-7px;padding:6px 9px;border:1px solid rgba(57,127,186,.2);border-radius:10px;background:rgba(255,253,248,.9);color:#5e6d75;font-size:8px;font-weight:750;line-height:1.25;box-shadow:0 8px 18px rgba(57,127,186,.09);}
 .athena-cipher-intro strong{display:block;color:#397fba;font-size:9px;}
 .athena-cipher-welcome{display:flex;align-items:center;gap:7px;margin-top:13px;padding:8px 10px;border:1px solid rgba(57,127,186,.18);border-radius:99px;background:rgba(220,235,247,.62);color:#397fba;font-size:10px;font-weight:850;}
 @keyframes athenaShapeFloat{0%,100%{translate:0 0;rotate:0deg}50%{translate:0 -14px;rotate:5deg}}
@@ -19289,7 +19290,7 @@ const ATHENA_DAILY_GOALS=[
 const ATHENA_CARD_COLOURS=[
   {id:"sage",label:"Campus Sage",accent:"#4f8a6f",soft:"#dff0e6"},
   {id:"coral",label:"Cipher Coral",accent:"#e56f65",soft:"#fae2dc"},
-  {id:"violet",label:"Athena Violet",accent:"#7766c6",soft:"#e9e3fb"},
+  {id:"violet",label:"Cipher Violet",accent:"#7766c6",soft:"#e9e3fb"},
   {id:"sky",label:"Network Sky",accent:"#3988b8",soft:"#dceff8"},
   {id:"gold",label:"Exam Gold",accent:"#c79635",soft:"#f6e9c8"},
 ];
@@ -19298,7 +19299,7 @@ function getAthenaCardColour(colourId) {
   return ATHENA_CARD_COLOURS.find(colour=>colour.id===colourId)||ATHENA_CARD_COLOURS[0];
 }
 
-function AthenaMark({size=96,label="Athena, your personal secretary"}) {
+function AthenaMark({size=96,label="SecurePlus university guide"}) {
   return (
     <span className="athena-mark" style={{"--athena-size":`${size}px`}} role="img" aria-label={label}>
       <span className="athena-mark-orbit" aria-hidden="true"/>
@@ -19403,7 +19404,7 @@ async function applyPendingAthenaOAuth(authUser) {
     return updatedUser;
   }catch(error){
     await storageSet(ATHENA_OAUTH_PENDING_KEY,JSON.stringify(pending)).catch(()=>{});
-    console.warn("Unable to apply the pending Athena profile",error);
+    console.warn("Unable to apply the pending Cipher profile",error);
     return authUser;
   }
 }
@@ -19493,7 +19494,7 @@ function UniversityICCard({profile,flipped,onFlip}) {
               <div><small>Daily goal</small><strong><CarvedText value={profile.dailyGoal?`${profile.dailyGoal}+ min`:""} placeholder="Not set"/></strong></div>
               <div><small>Chapters studied</small><strong><CarvedText value={profile.chaptersReviewed?`${studiedCount} / ${CHAPTERS.length}`:""} placeholder="Not set"/></strong></div>
             </div>
-            <p className="university-ic-note">This learning IC is personal to its holder. Athena will use your study choices to shape your starting path.</p>
+            <p className="university-ic-note">This learning IC is personal to its holder. Cipher will use your study choices to shape your starting path.</p>
           </div>
           </div>
         </div>
@@ -19528,15 +19529,15 @@ function AthenaProgress({stage,takingExam}) {
 
 const CIPHER_ONBOARDING_GUIDANCE={
   name:{animation:"wave",message:"Try the name you actually like hearing. I’ll watch it appear on your IC!",tip:"Short names fit beautifully, but your preferred name can be anything."},
-  experience:{animation:"thinking",message:"There is no wrong starting level. Honest answers help Athena choose kinder questions.",tip:"Choose the option that feels true today—not where you think you should be."},
+  experience:{animation:"thinking",message:"There is no wrong starting level. Honest answers help Cipher choose kinder questions.",tip:"Choose the option that feels true today—not where you think you should be."},
   examPlan:{animation:"focus",message:"Gold or silver? Your learning path changes the IC trim, but both paths are equally welcome.",tip:"You can study Security+ even if you are not planning to sit the examination."},
   booked:{animation:"scan",message:"No booking yet? I’ll mark the date TBC and keep your momentum moving.",tip:"You can update an exam date later from your profile."},
   examDate:{animation:"scan",message:"I’m checking the format: day, month, then year. You can also update it later.",tip:"Example: 18/11/2026."},
   goalsTime:{animation:"tip",message:"A repeatable ten minutes beats an ambitious goal you cannot keep.",tip:"Pick the goal that still feels possible on a busy day."},
   goalsChapters:{animation:"tip",message:"Tick only the chapters you have studied. Anything unticked is treated as not studied.",tip:"Unsure? You can skip this step and update it later."},
   diagnosticIntro:{animation:"cheer",message:"Your IC profile is ready! The starter set is optional and has no effect on account access.",tip:"This is a warm-up, not an exam-readiness verdict."},
-  diagnostic:{animation:"thinking",message:"These are short warm-up questions. Choose the answer that feels strongest.",tip:"A missed answer simply helps Athena choose your first review topic."},
-  preparing:{animation:"scan",message:"Athena and I are turning your answers into a calm first study path.",tip:"This only takes a moment."},
+  diagnostic:{animation:"thinking",message:"These are short warm-up questions. Choose the answer that feels strongest.",tip:"A missed answer simply helps Cipher choose your first review topic."},
+  preparing:{animation:"scan",message:"I’m turning your answers into a calm first study path.",tip:"This only takes a moment."},
   account:{animation:"unlock",message:"Last step! Your free account saves the IC and the learning plan we just built.",tip:"No credit card is needed for a free SecurePlus account."},
 };
 
@@ -19547,7 +19548,7 @@ function OnboardingCipherGuide({stage,answerState=""}) {
   useEffect(()=>{setExpanded(false);setShowTip(false);},[stage]);
   const animation=answerState==="correct"?"correct":answerState==="wrong"?"wrong":guide.animation;
   const message=answerState==="correct"
-    ? "That pattern was correct! I’ve logged the signal for Athena."
+    ? "That pattern was correct! I’ve logged the signal for Cipher."
     : answerState==="wrong"
       ? "That one was designed to teach. Review the explanation, then keep moving."
       : showTip?guide.tip:guide.message;
@@ -19858,7 +19859,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
           <div className="athena-reveal-mascots"><AthenaMark size={82}/><MascotAnimation animation="dance" size={94} interactive hoverAnimation="cheer" reactionAnimations={["cheer","dance","streak"]} label="Cipher celebrates your new University IC"/></div>
           <div className="athena-kicker"><Sparkles size={14}/> IC successfully minted</div>
           <h1>Welcome to the University of SecurePlus, {mintedUser.name?.split(" ")[0]||"student"}.</h1>
-          <p>Athena has saved your starting profile. Your learning path can now adapt as you practise.</p>
+          <p>Cipher has saved your starting profile. Your learning path can now adapt as you practise.</p>
           <div className="athena-final-card"><UniversityICCard profile={{...profile,name:mintedUser.name}} flipped={flipped} onFlip={()=>setFlipped(value=>!value)}/></div>
           <button className="btn btn-primary athena-main-action" type="button" onClick={()=>onEnter(mintedUser)}>Enter SecurePlus <ChevronRight size={17}/></button>
         </div>
@@ -19876,8 +19877,8 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
             <AthenaMark size={126}/>
             <div className="athena-cipher-intro"><MascotAnimation animation="wave" size={112} interactive hoverAnimation="cheer" reactionAnimations={["surprised","dance","cheer"]} label="Cipher welcomes you to SecurePlus"/><span><strong>Cipher</strong>Tap or hover to say hello!</span></div>
           </div>
-          <div className="athena-kicker"><Sparkles size={14}/> Your personal secretary</div>
-          <h1>Hello, I’m Athena!</h1>
+          <div className="athena-kicker"><Sparkles size={14}/> Your SecurePlus guide</div>
+          <h1>Hello, I’m Cipher!</h1>
           <p>Let’s create your University IC and shape a comfortable Security+ starting point.</p>
           <button className="btn btn-primary athena-main-action" type="button" onClick={()=>setStage("name")}>Create my IC <ChevronRight size={18}/></button>
           <small>About 2 minutes · You can change your study details later</small>
@@ -19905,7 +19906,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-question-icon"><Brain size={22}/></div>
         <div className="athena-kicker">Part 1 · Your profile</div>
         <h1>How experienced are you in cybersecurity?</h1>
-        <p>This helps Athena choose a comfortable starting level.</p>
+        <p>This helps Cipher choose a comfortable starting level.</p>
         <div className="athena-option-list">
           {ATHENA_EXPERIENCE_OPTIONS.map(option=><AthenaOption key={option.id} selected={profile.experience===option.id} onClick={()=>{updateProfile("experience",option.id);window.setTimeout(()=>setStage("examPlan"),180);}} title={option.label}/>) }
         </div>
@@ -19997,7 +19998,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
     }
     if(stage==="diagnostic"&&diagnosticQuestion)return (
       <>
-        <div className="athena-diagnostic-head"><div><div className="athena-kicker">Athena’s starter set</div><span>Question {diagnosticIndex+1} of {diagnosticQuestions.length}</span></div><button type="button" onClick={()=>{setProfile(current=>({...current,diagnosticSkipped:true,diagnosticScore:null,diagnosticTotal:0}));setStage("account");}}><SkipForward size={14}/> Skip set</button></div>
+        <div className="athena-diagnostic-head"><div><div className="athena-kicker">Cipher’s starter set</div><span>Question {diagnosticIndex+1} of {diagnosticQuestions.length}</span></div><button type="button" onClick={()=>{setProfile(current=>({...current,diagnosticSkipped:true,diagnosticScore:null,diagnosticTotal:0}));setStage("account");}}><SkipForward size={14}/> Skip set</button></div>
         <h2 className="athena-diagnostic-question">{diagnosticQuestion.q}</h2>
         <div className="athena-diagnostic-options">
           {diagnosticQuestion.opts.map((option,index)=>{
@@ -20024,7 +20025,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-preparing-seal" aria-hidden="true"><BadgeCheck size={34}/><Sparkles size={18}/></div>
         <div className="athena-kicker">Tailoring your starting path</div>
         <h1>Preparing your ID…</h1>
-        <p>Athena is combining your profile and starter answers into a simple first study plan.</p>
+        <p>Cipher is combining your profile and starter answers into a simple first study plan.</p>
         <div className="athena-preparing-progress" aria-hidden="true"><span/></div>
         <small>Adding your study goal · Choosing a gentle first focus · Finishing your IC</small>
       </div>
@@ -20034,7 +20035,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-question-icon"><ShieldCheck size={22}/></div>
         <div className="athena-kicker">Final step · Save your progress</div>
         <h1>Your IC is ready to mint.</h1>
-        <p>Create your free account so Athena can save this profile and your future practice progress.</p>
+        <p>Create your free account so Cipher can save this profile and your future practice progress.</p>
         {profile.diagnosticScore!==null&&profile.diagnosticScore!==undefined&&profile.diagnosticTotal>0&&(
           <div className="athena-result-pill"><Sparkles size={16}/><span>Starter set</span><strong>{profile.diagnosticScore} / {profile.diagnosticTotal}</strong><small>A starting signal—not an exam-readiness score.</small></div>
         )}
@@ -20078,7 +20079,7 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
   return (
     <div className={`athena-signup-page athena-workspace-page stage-${stage}`}>
       <header className="athena-workspace-header">
-        <button type="button" className="athena-brand" onClick={()=>setStage("intro")}><AthenaMark size={42}/><span><strong>Athena</strong><small>SecurePlus personal secretary</small></span></button>
+        <button type="button" className="athena-brand" onClick={()=>setStage("intro")}><AthenaMark size={42}/><span><strong>Cipher</strong><small>SecurePlus study guide</small></span></button>
         <AthenaProgress stage={stage} takingExam={profile.takingExam}/>
       </header>
       <main className="athena-workspace">
