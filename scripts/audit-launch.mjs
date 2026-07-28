@@ -189,6 +189,10 @@ if (!errors.length) {
   requireContains("src/App.jsx", "Create free account to save Smart Review", "guest results should invite learners to preserve their weak-area Smart Review");
   requireContains("src/App.jsx", "GUEST_SMART_REVIEW_BRIDGE_KEY", "guest quiz attempts should survive account creation for Smart Review");
   requireContains("src/App.jsx", 'allowedGuestViews=new Set(["dashboard","mcq","pbq","daily"', "guests should be able to enter the PBQ preview without signing in");
+  requireContains("src/App.jsx", "const quizSizes = isGuest ? [10,20,30] : [10,20,30,40,50]", "guest MCQ practice should offer fixed 10, 20, or 30 question sets");
+  requireContains("src/App.jsx", 'const activeDiffFilter=isGuest?"all":diffFilter', "guest MCQ practice must not filter by difficulty");
+  requireContains("src/App.jsx", 'const activeTopicFilter=isGuest?"all":topicFilter', "guest MCQ practice must not filter by topic");
+  requireContains("src/App.jsx", '<FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>', "guest MCQ practice should still allow chapter filtering");
   requireContains("src/App.jsx", "Use 50 coins or unlock all PBQs with Pro", "PBQ interest should present both the coin and Pro paths");
   requireContains("src/App.jsx", "ATHENA_STARTER_QUESTION_SETS", "new-user starter questions should use the concise curated onboarding set");
   requireContains("src/App.jsx", "picked.slice(0,5)", "the fallback new-account baseline should stay limited to five questions");

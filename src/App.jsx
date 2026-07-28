@@ -21959,7 +21959,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily}
             <span className="guest-title-accent">Keep every win.</span>
           </h1>
           <p className="home-subtitle brilliant-copy">
-            Start with 5 simple MCQs, see your weak area instantly, then create a free account only when you want to save Smart Review.
+            Start with 10, 20, or 30 free MCQs, choose a chapter, then create a free account only when you want to save Smart Review.
           </p>
           <div className="home-cta-row brilliant-action-row">
             <button className="btn btn-primary brilliant-primary-cta" onClick={onPractice}>Start Free MCQ Practice</button>
@@ -22336,16 +22336,18 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     {value:"all",label:"All Topics"},
     ...allTopics.map(tp=>({value:tp,label:tp})),
   ];
+  const activeDiffFilter=isGuest?"all":diffFilter;
+  const activeTopicFilter=isGuest?"all":topicFilter;
 
   const filtered=bank.filter(q=>{
     if(chFilter!=="all"&&q.ch!==chFilter)return false;
-    if(diffFilter!=="all"&&q.difficulty!==diffFilter)return false;
-    if(topicFilter!=="all"&&q.topic!==topicFilter)return false;
+    if(activeDiffFilter!=="all"&&q.difficulty!==activeDiffFilter)return false;
+    if(activeTopicFilter!=="all"&&q.topic!==activeTopicFilter)return false;
     return true;
   });
   const reviewSummary = getReviewSummary(attempts,bank);
-  const quizSizes = isGuest ? [5] : [10,20,30,40,50];
-  const sessionMinimum = isGuest ? 5 : 10;
+  const quizSizes = isGuest ? [10,20,30] : [10,20,30,40,50];
+  const sessionMinimum = 10;
   const latestMcqAttempts=getLatestMcqAttempts(attempts);
   const missedMcqIds=[...latestMcqAttempts.entries()].filter(([,attempt])=>attempt.correct===false).map(([questionId])=>questionId);
   const missedQuestions=bank.filter(q=>missedMcqIds.includes(q.id));
@@ -22353,11 +22355,10 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
   useEffect(()=>{
     if(!isGuest)return;
-    setChFilter("all");
-    setDiffFilter("easy");
+    setDiffFilter("all");
     setTopicFilter("all");
     setReviewMode("random");
-    setQuizCount(5);
+    setQuizCount(count=>[10,20,30].includes(count)?count:10);
   },[isGuest]);
 
   useEffect(()=>{
@@ -22373,7 +22374,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
   const startQuiz=()=>{
     const pool=buildMcqPracticePool(filtered, attempts, Math.min(quizCount,filtered.length), reviewMode, starredQuestionIds).map(shuffleMcqOptions);
-    capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: diffFilter, topic: topicFilter, question_count: pool.length, tier: user.tier });
+    capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: activeDiffFilter, topic: activeTopicFilter, question_count: pool.length, tier: user.tier });
     setSessionContext({kind:reviewMode,label:reviewMode==="smart"?"Smart Review":"MCQ Practice"});
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setSessionStartedAt(Date.now());
   };
@@ -22621,8 +22622,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <div className="practice-page-icon"><BookOpenCheck size={23} strokeWidth={2.3}/></div>
           <div>
             <div className="label" style={{color:t.accent}}>Knowledge practice</div>
-            <h2>{isGuest?"Start with 5 simple MCQs":"MCQ Practice"}</h2>
-            <p>{isGuest?"A short first session gives an instant weak-area result without loading you into a heavy dashboard.":"Build a focused question set and get clear feedback as you work."}</p>
+            <h2>{isGuest?"Start a free MCQ set":"MCQ Practice"}</h2>
+            <p>{isGuest?"Choose 10, 20, or 30 questions and filter by chapter without creating an account.":"Build a focused question set and get clear feedback as you work."}</p>
           </div>
         </div>
         <div className="practice-page-meta">
@@ -22660,8 +22661,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         <div className="practice-setup-copy">
           <div>
             <div className="label" style={{color:t.green}}>Step 1 · Choose your practice style</div>
-            <h3>{isGuest?"Your first session is short on purpose":"How should SecurePlus choose your questions?"}</h3>
-            <p>{isGuest?"Answer five easy Security+ questions, see the weak area instantly, then save the Smart Review queue if it is useful.":"Use Smart Review to revisit weak or due topics, or choose Random Practice for a fresh mixed set."}</p>
+            <h3>{isGuest?"Choose a simple guest set":"How should SecurePlus choose your questions?"}</h3>
+            <p>{isGuest?"Guest practice uses random Security+ questions from your selected chapter. Create an account later to save results and unlock Smart Review.":"Use Smart Review to revisit weak or due topics, or choose Random Practice for a fresh mixed set."}</p>
           </div>
           {!isGuest&&(
             <div className="setup-stats">
@@ -22761,20 +22762,22 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <div className="practice-filter-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Chapter</label>
-              <FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} disabled={isGuest} label="Chapter filter"/>
+              <FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>
             </div>
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Difficulty</label>
               <FilterSelect value={diffFilter} onChange={setDiffFilter} options={difficultyOptions} disabled={isGuest} label="Difficulty filter"/>
+              {isGuest&&<div style={{fontSize:11,color:t.textDim,marginTop:6}}>Create an account to filter by difficulty.</div>}
             </div>
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Topic</label>
               <FilterSelect value={topicFilter} onChange={setTopicFilter} options={topicOptions} disabled={isGuest} label="Topic filter"/>
+              {isGuest&&<div style={{fontSize:11,color:t.textDim,marginTop:6}}>Create an account to filter by topic.</div>}
             </div>
           </div>
           {isGuest&&(
             <div style={{marginTop:14,padding:"12px 14px",borderRadius:7,background:`${t.accent}08`,border:`1px solid ${t.accent}25`,fontSize:12,color:t.textSec,lineHeight:1.6}}>
-              Targeted filters are a free-account feature. Guest sessions use five short, easy questions so the first session feels fast.
+              Guest users can choose chapter and fixed set size only. Topic, difficulty, Smart Review, and saved weak-area history unlock after account creation.
             </div>
           )}
         </div>
@@ -22797,10 +22800,10 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         <div className="practice-builder-footer">
           <div className="practice-builder-result">
             <div className="practice-builder-count">{quizCount}</div>
-            <div><strong>{isGuest?"First-session set":reviewMode==="smart"?"Smart Review set":"Random practice set"}</strong><small>{filtered.length>=sessionMinimum?`${filtered.length} questions match your focus`:`Only ${filtered.length} match — broaden your filters`}</small></div>
+            <div><strong>{isGuest?"Guest practice set":reviewMode==="smart"?"Smart Review set":"Random practice set"}</strong><small>{filtered.length>=sessionMinimum?`${filtered.length} questions match your focus`:`Only ${filtered.length} match — broaden your filters`}</small></div>
           </div>
           <button className="btn btn-primary" style={{minWidth:170}} onClick={startQuiz} disabled={filtered.length<sessionMinimum}>
-            {isGuest?"Start 5-question first session →":`Start ${quizCount}-question set →`}
+            {`Start ${quizCount}-question set →`}
           </button>
         </div>
       </div>
@@ -22810,7 +22813,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         <summary><span>Browse all five exam chapters</span><span style={{fontSize:11,color:t.textDim,fontWeight:700}}>Optional</span></summary>
         <div className="practice-secondary-content practice-chapter-grid">
           {CHAPTERS.map(ch=>(
-            <div key={ch.id} className="chapter-card" style={{display:"flex",gap:12,alignItems:"center",padding:"10px 14px",borderRadius:8,background:chFilter===ch.id?`${chapterColor(ch.id)}12`:t.panel,cursor:isGuest?"not-allowed":"pointer",opacity:isGuest?0.82:1,border:`1px solid ${chFilter===ch.id?chapterColor(ch.id):t.border}`,transition:"all .15s"}} onClick={()=>{if(!isGuest)setChFilter(ch.id===chFilter?"all":ch.id);}}>
+            <div key={ch.id} className="chapter-card" style={{display:"flex",gap:12,alignItems:"center",padding:"10px 14px",borderRadius:8,background:chFilter===ch.id?`${chapterColor(ch.id)}12`:t.panel,cursor:"pointer",border:`1px solid ${chFilter===ch.id?chapterColor(ch.id):t.border}`,transition:"all .15s"}} onClick={()=>setChFilter(ch.id===chFilter?"all":ch.id)}>
               <ChapterIcon id={ch.id}/>
               <div style={{flex:1}}>
                 <div style={{fontSize:13,fontWeight:600,color:t.text}}>Ch.{ch.id}: {ch.title}</div>
