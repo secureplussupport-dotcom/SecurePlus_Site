@@ -187,9 +187,61 @@ const MAX_MCQ_OPTION_LENGTH = 180;
 const MAX_MCQ_TOTAL_LENGTH = 900;
 const MAX_PBQ_PROMPT_LENGTH = 1000;
 const MAX_PBQ_EXPLANATION_LENGTH = 620;
+const PBQ_DOMAIN_MINIMUMS = Object.freeze({
+  "1": 18,
+  "2": 18,
+  "3": 18,
+  "4": 22,
+  "5": 10,
+});
+const PBQ_DIFFICULTY_BANDS = Object.freeze({
+  easy: [15, 35],
+  medium: [45, 70],
+  hard: [18, 35],
+});
+const DISCOURAGED_ACTIVE_PBQ_PATTERNS = [
+  [/OpenSSL payload|openssl enc/i, "avoid OpenSSL command memorisation in active PBQs"],
+  [/NIST SP 800-63B current guidance/i, "avoid narrow NIST password-guidance trivia in active PBQs"],
+  [/bug bounty|exploit and remediate|payload would confirm/i, "avoid exploit-construction or bug-bounty framing in active PBQs"],
+  [/\bAWS CLI\b|aws s3api|get-public-access-block/i, "avoid vendor CLI memorisation in active cloud PBQs"],
+  [/Splunk SPL|index=windows_security|EventCode=4625/i, "avoid vendor SIEM query memorisation in active PBQs"],
+  [/\bRAID\s*(?:0|1|5|6|10|levels?)\b/i, "avoid storage-admin RAID trivia in active SY0-701 PBQs"],
+];
 
 if (mcqs.length < 400) push(errors, "MCQ_BANK", `expected at least 400 active MCQs, found ${mcqs.length}`);
 if (pbqs.length < 100) push(errors, "PBQ_BANK", `expected at least 100 PBQs, found ${pbqs.length}`);
+
+const pbqDomainCounts = pbqs.reduce((counts, question) => {
+  counts[question.ch] = (counts[question.ch] || 0) + 1;
+  return counts;
+}, {});
+for (const [domain, minimum] of Object.entries(PBQ_DOMAIN_MINIMUMS)) {
+  if ((pbqDomainCounts[domain] || 0) < minimum) {
+    push(errors, "PBQ_BANK", `SY0-701 domain ${domain} needs at least ${minimum} active PBQs, found ${pbqDomainCounts[domain] || 0}`);
+  }
+}
+
+const pbqDifficultyCounts = pbqs.reduce((counts, question) => {
+  counts[question.difficulty] = (counts[question.difficulty] || 0) + 1;
+  return counts;
+}, {});
+for (const [difficulty, [minimum, maximum]] of Object.entries(PBQ_DIFFICULTY_BANDS)) {
+  const count = pbqDifficultyCounts[difficulty] || 0;
+  if (count < minimum || count > maximum) {
+    push(errors, "PBQ_BANK", `PBQ ${difficulty} difficulty count should stay between ${minimum}-${maximum}, found ${count}`);
+  }
+}
+
+const pbqTypeCounts = pbqs.reduce((counts, question) => {
+  counts[question.type] = (counts[question.type] || 0) + 1;
+  return counts;
+}, {});
+if (Object.keys(pbqTypeCounts).length < 6) {
+  push(errors, "PBQ_BANK", `expected at least 6 active PBQ interaction types, found ${Object.keys(pbqTypeCounts).length}`);
+}
+if ((pbqTypeCounts.SCENARIO || 0) > Math.ceil(pbqs.length * 0.38)) {
+  push(errors, "PBQ_BANK", "scenario-only PBQs should not dominate the active bank");
+}
 
 for (const [id] of findDuplicates(mcqs, q => q.id)) push(errors, id, "duplicate active MCQ id");
 for (const [id] of findDuplicates(pbqs, q => q.id)) push(errors, id, "duplicate PBQ id");
@@ -248,6 +300,10 @@ for (const q of pbqs) {
   }
   if (q.explanation && q.explanation.length > MAX_PBQ_EXPLANATION_LENGTH) {
     push(warnings, q.id, `PBQ explanation is too long (${q.explanation.length}/${MAX_PBQ_EXPLANATION_LENGTH} chars)`);
+  }
+  const searchablePbqText = [q.title, q.cat, q.scenario, q.question, q.hint, q.answer, q.diagram, q.logData, q.currentConfig, q.explanation, ...(q.choices || [])].filter(Boolean).join(" ");
+  for (const [pattern, message] of DISCOURAGED_ACTIVE_PBQ_PATTERNS) {
+    if (pattern.test(searchablePbqText)) push(errors, q.id, message);
   }
 
   if (q.type === "SELECT & FILL") {
