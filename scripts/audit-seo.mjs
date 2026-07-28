@@ -119,6 +119,14 @@ for (const file of pageFiles) {
     push(warnings, file, "root app JSON-LD should include SoftwareApplication");
   }
   if (file !== "index.html") {
+    if (!html.includes('class="lead"')) push(errors, file, "missing short explanation lead copy");
+    if (!html.includes('class="cta"')) push(errors, file, "missing CTA block to start practice");
+    if (!html.includes("Original scenario-based practice. Not exam dumps.")) {
+      push(errors, file, "missing original-practice disclaimer");
+    }
+    if (!html.includes("seo-sample-question")) {
+      push(errors, file, "missing visible sample question section");
+    }
     if (!hasSchemaType(structuredItems, "Course")) push(errors, file, "missing Course JSON-LD");
     if (!hasSchemaType(structuredItems, "FAQPage")) push(errors, file, "missing FAQPage JSON-LD");
     if (!html.includes('class="wrap card seo-faq"')) push(errors, file, "FAQPage JSON-LD must match a visible FAQ block");
