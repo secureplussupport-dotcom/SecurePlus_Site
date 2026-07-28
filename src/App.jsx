@@ -27506,38 +27506,6 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
             </p>
           </div>
         </details>
-
-        <details className="upgrade-secondary">
-          <summary>Account, support, and legal</summary>
-          <div className="upgrade-secondary-content">
-            <p>
-              Need help? Contact <a href="mailto:secureplus.support@gmail.com" style={{color:t.accent}}>secureplus.support@gmail.com</a>.
-            </p>
-            <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:12}}>
-              <button className="btn btn-outline" style={{fontSize:13}} onClick={onCancelMembership} disabled={billingLoading}>
-                Cancel membership
-              </button>
-              <button className="btn btn-danger" style={{fontSize:13}} onClick={onDeleteAccount}>
-                Delete account
-              </button>
-              <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>onNavigate("privacy")}>
-                Privacy policy
-              </button>
-              <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>onNavigate("terms")}>
-                Terms & Conditions
-              </button>
-            </div>
-          </div>
-        </details>
-
-        <details className="upgrade-secondary">
-          <summary>Coming soon: Concept Deep Dives</summary>
-          <div className="upgrade-secondary-content">
-            <p>
-              A source-reviewed lesson library is now in private editorial preview. It will explain difficult topics, compare near-miss answers, and highlight common exam traps before public release.
-            </p>
-          </div>
-        </details>
       </div>
 
       {!isPro&&(
