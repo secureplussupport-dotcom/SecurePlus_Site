@@ -792,6 +792,12 @@ function summarizeMissedConcepts(questions=[],limit=2) {
 function getRecommendedDeepDiveTitle(recommendations=[]) {
   return recommendations?.[0]?.title || "matched Concept Deep Dive";
 }
+function splitReadableSentences(text="") {
+  return String(text||"")
+    .split(/(?<=[.!?])\s+/)
+    .map(sentence=>sentence.trim())
+    .filter(Boolean);
+}
 
 function expectedExamSeconds(item) {
   if(item?.kind==="pbq") return 180;
@@ -15191,11 +15197,20 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .achievements-hero p{color:${t.textSec};font-size:14px;line-height:1.7;max-width:650px;margin:0;}
 .achievement-progress{height:12px;border-radius:999px;background:${t.border};overflow:hidden;margin:18px 0 9px;}
 .achievement-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#facc15,#f59e0b,${t.green});transition:width .55s cubic-bezier(.16,1,.3,1);}
+.achievement-interactive-board{display:grid;grid-template-columns:1fr 1fr minmax(170px,.55fr);gap:12px;margin-bottom:14px;}
+.achievement-spotlight-card{padding:17px 18px!important;border-radius:18px!important;background:linear-gradient(135deg,${t.surface},${t.green}08)!important;}
+.achievement-spotlight-card.selected{border-color:${t.accent}38!important;background:linear-gradient(135deg,${t.accent}10,${t.surface})!important;}
+.achievement-spotlight-card h3{font-size:18px;color:${t.text};margin:5px 0 6px;line-height:1.25;}
+.achievement-spotlight-card p{font-size:12px;color:${t.textSec};line-height:1.6;margin:0 0 10px;}
+.achievement-spotlight-reward{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border-radius:999px;background:${t.amber}12;color:${t.amber};font-size:11px;font-weight:950;}
+.achievement-filter-card{display:grid;gap:8px;padding:15px!important;}
+.achievement-filter-card .btn{justify-content:space-between;min-height:38px;font-size:12px;}
 .achievement-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
 .achievement-card{position:relative;overflow:hidden;padding:17px!important;min-height:210px;display:flex;flex-direction:column;gap:11px;transition:transform .18s,border-color .18s,box-shadow .18s,background .18s;}
 .achievement-card.unlocked{border-color:${t.amber}70!important;background:radial-gradient(circle at 88% 8%,${t.amber}24,transparent 28%),linear-gradient(135deg,${t.surface},${t.amber}0d)!important;box-shadow:0 18px 42px ${t.amber}18!important;}
 .achievement-card.locked{background:linear-gradient(135deg,${t.panel},${t.surface})!important;opacity:.82;}
 .achievement-card:hover{transform:translateY(-2px);}
+.achievement-card.selected{border-color:${t.accent}70!important;box-shadow:0 0 0 3px ${t.accent}16,0 18px 42px ${t.accent}12!important;}
 .achievement-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
 .achievement-badge{width:44px;height:44px;display:grid;place-items:center;border-radius:14px;border:1px solid ${t.border};background:${t.panel};color:${t.textDim};}
 .achievement-card.unlocked .achievement-badge{clip-path:polygon(50% 0,61% 35%,98% 35%,68% 55%,80% 92%,50% 70%,20% 92%,32% 55%,2% 35%,39% 35%);border:0;border-radius:0;background:linear-gradient(135deg,#facc15,#f59e0b);color:#fff7d6;filter:drop-shadow(4px 4px 0 ${t.amber}24);}
@@ -15210,6 +15225,25 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .achievement-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:inherit;}
 .achievement-confetti span{position:absolute;width:7px;height:11px;border-radius:3px;background:var(--confetti-color);top:-12px;left:var(--x);animation:confettiFall 1.5s ease-in forwards;animation-delay:var(--delay);}
 @keyframes achievementToast{from{opacity:0;transform:translateY(-12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.account-support-page{padding:30px 24px 120px;max-width:1040px;margin:0 auto;}
+.account-support-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.38fr);gap:22px;align-items:center;padding:26px!important;margin-bottom:14px;border-color:${t.accent}35!important;background:radial-gradient(circle at 90% 8%,${t.accent}16,transparent 32%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
+.account-support-hero h2{font-size:32px;color:${t.text};line-height:1.12;margin:7px 0 8px;}
+.account-support-hero p{font-size:14px;color:${t.textSec};line-height:1.7;max-width:660px;}
+.account-support-profile{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.account-support-profile span{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid ${t.border};border-radius:999px;background:${t.panel};color:${t.textSec};font-size:11px;font-weight:900;}
+.account-support-safe-card{display:grid;gap:8px;padding:18px;border:1px solid ${t.green}35;border-radius:18px;background:${t.green}09;color:${t.green};}
+.account-support-safe-card strong{font-size:16px;color:${t.text};}
+.account-support-safe-card span{font-size:12px;color:${t.textSec};line-height:1.55;}
+.account-support-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px;}
+.account-support-card{display:flex;flex-direction:column;gap:10px;min-height:230px;padding:18px!important;border-color:color-mix(in srgb,var(--support-color) 30%,${t.border})!important;background:linear-gradient(135deg,color-mix(in srgb,var(--support-color) 9%,${t.surface}),${t.panel})!important;}
+.account-support-card>span{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:color-mix(in srgb,var(--support-color) 13%,${t.surface});color:var(--support-color);}
+.account-support-card h3{font-size:18px;color:${t.text};line-height:1.25;}
+.account-support-card p{font-size:13px;color:${t.textSec};line-height:1.65;flex:1;}
+.account-support-card a{text-decoration:none;justify-content:center;}
+.account-danger-zone{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:21px!important;border-color:${t.red}35!important;background:linear-gradient(135deg,${t.red}08,${t.surface})!important;}
+.account-danger-zone h3{font-size:21px;color:${t.text};margin:5px 0 5px;}
+.account-danger-zone p{font-size:13px;color:${t.textSec};line-height:1.65;max-width:620px;}
+.account-danger-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
 @keyframes confettiFall{to{transform:translateY(150px) rotate(220deg);opacity:0;}}
 .academy-avatar{display:grid;place-items:center;border-radius:999px;background:radial-gradient(circle at 32% 24%,#fff8,transparent 28%),color-mix(in srgb,var(--avatar-tone) 18%,${t.surface});border:1px solid color-mix(in srgb,var(--avatar-tone) 34%,${t.border});box-shadow:inset 0 0 0 6px color-mix(in srgb,#fff 42%,transparent),0 14px 26px color-mix(in srgb,var(--avatar-tone) 16%,transparent);}
 .academy-id-card{position:relative;isolation:isolate;overflow:hidden;width:100%;max-width:430px;min-height:274px;padding:20px;border:1px solid color-mix(in srgb,var(--academy-tier) 46%,${t.border});border-radius:26px;background:radial-gradient(circle at 4% 0%,color-mix(in srgb,var(--academy-tier) 30%,transparent),transparent 35%),linear-gradient(145deg,color-mix(in srgb,var(--academy-tier-bg) 28%,${t.surface}),${t.surface} 49%,color-mix(in srgb,var(--academy-tier) 10%,${t.panel}));box-shadow:0 26px 68px rgba(61,43,20,.2),inset 0 0 0 1px color-mix(in srgb,#fff 66%,transparent);color:${t.text};transform-style:preserve-3d;transition:transform .28s cubic-bezier(.16,1,.3,1),box-shadow .28s,border-color .28s;}
@@ -17370,7 +17404,14 @@ body{background:
   .achievements-page{padding:18px 16px 112px!important;}
   .achievements-hero{grid-template-columns:1fr!important;padding:20px!important;text-align:left;}
   .achievement-star-display{width:160px!important;justify-self:center;}
+  .achievement-interactive-board{grid-template-columns:1fr!important;}
   .achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .account-support-page{padding:18px 16px 112px!important;}
+  .account-support-hero{grid-template-columns:1fr!important;padding:20px!important;}
+  .account-support-grid{grid-template-columns:1fr!important;}
+  .account-danger-zone{display:grid!important;}
+  .account-danger-actions{justify-content:stretch!important;}
+  .account-danger-actions .btn{flex:1;justify-content:center;}
   .academy-stepper{grid-template-columns:1fr!important;}
   .academy-avatar-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .dashboard-action-grid{grid-template-columns:1fr!important;}
@@ -18028,6 +18069,15 @@ body{background:
 .deep-dive-concept-bites>div{padding:16px;border:1px solid var(--deep-border);border-radius:15px;background:var(--deep-panel);}
 .deep-dive-concept-bites>div>span{display:flex;align-items:center;gap:6px;margin-bottom:8px;color:var(--deep-green);font-size:10px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;}
 .deep-dive-concept-bites p{margin:0;color:var(--deep-text);font-size:15px;line-height:1.72;}
+.deep-dive-readable-bites{display:grid;gap:11px;margin-top:18px;}
+.deep-dive-readable-bite{position:relative;overflow:hidden;padding:18px;border:1px solid color-mix(in srgb,var(--bite-color) 28%,var(--deep-border));border-radius:17px;background:linear-gradient(135deg,color-mix(in srgb,var(--bite-color) 9%,var(--deep-surface)),var(--deep-panel));}
+.deep-dive-readable-bite::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--bite-color);opacity:.9;}
+.deep-dive-readable-label{display:flex;align-items:center;gap:7px;margin-bottom:9px;color:var(--bite-color);font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
+.deep-dive-readable-bite p{margin:0;color:var(--deep-text);font-size:16px;font-weight:760;line-height:1.62;}
+.deep-dive-readable-bite details{margin-top:11px;border-top:1px solid color-mix(in srgb,var(--bite-color) 18%,var(--deep-border));padding-top:9px;}
+.deep-dive-readable-bite summary{cursor:pointer;color:var(--bite-color);font-size:11px;font-weight:950;}
+.deep-dive-readable-bite details div{margin-top:8px;color:var(--deep-muted);font-size:13px;font-weight:600;line-height:1.65;}
+.deep-dive-syllabus-chip{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;padding:7px 10px;border:1px solid color-mix(in srgb,var(--deep-green) 28%,var(--deep-border));border-radius:999px;background:color-mix(in srgb,var(--deep-green) 8%,var(--deep-surface));color:var(--deep-green);font-size:11px;font-weight:950;}
 .deep-dive-compare-lab{display:grid;gap:12px;margin-top:18px;padding:16px;border:1px solid var(--deep-border);border-radius:16px;background:var(--deep-panel);}
 .deep-dive-compare-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .deep-dive-compare-head span{color:var(--deep-accent);font-size:9px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
@@ -18222,6 +18272,11 @@ body{background:
 .deep-dive-keyword-answer small{font-size:11px;font-weight:850;}
 .deep-dive-concept-bites>div>span{font-size:11.5px;}
 .deep-dive-concept-bites p{font-size:17px;font-weight:620;line-height:1.7;}
+.deep-dive-readable-label{font-size:12px;}
+.deep-dive-readable-bite p{font-size:18px;}
+.deep-dive-readable-bite summary{font-size:12px;}
+.deep-dive-readable-bite details div{font-size:15px;}
+.deep-dive-syllabus-chip{font-size:12px;}
 .deep-dive-compare-head span{font-size:11px;}
 .deep-dive-compare-head strong{font-size:12.5px;font-weight:850;}
 .deep-dive-compare-tabs button{padding:10px 13px;font-size:13px;font-weight:950;}
@@ -18621,6 +18676,7 @@ function NavGlyph({type,active}) {
     referrals:Share2,
     objectives:ListChecks,
     exam:ClipboardCheck,
+    account:UserRound,
     privacy:LockKeyhole,
     terms:FileText,
     "deep-dives":Layers3,
@@ -20452,65 +20508,46 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   };
 
   if(step==="intro") return (
-    <div style={{padding:"32px 24px",maxWidth:600,margin:"0 auto",textAlign:"center"}} className="fu">
-      <div style={{display:"flex",justifyContent:"center",marginBottom:16}}>
-        <span style={{width:56,height:56,borderRadius:16,display:"inline-flex",alignItems:"center",justifyContent:"center",background:`${t.red}12`,border:`1px solid ${t.red}35`,color:t.red}}>
-          <NavGlyph type="daily" active/>
-        </span>
+    <div style={{padding:"34px 20px",maxWidth:660,margin:"0 auto",textAlign:"center"}} className="fu">
+      <div className="card" style={{position:"relative",overflow:"hidden",padding:"34px 28px",borderColor:`${t.red}35`,background:`radial-gradient(circle at 88% 8%, ${t.amber}20, transparent 30%), linear-gradient(145deg, ${t.surface}, ${t.panel})`}}>
+        <div style={{display:"grid",placeItems:"center",gap:12}}>
+          <span style={{width:72,height:72,borderRadius:22,display:"inline-flex",alignItems:"center",justifyContent:"center",background:`${t.red}12`,border:`1px solid ${t.red}35`,color:t.red}}>
+            <NavGlyph type="daily" active/>
+          </span>
+          <div>
+            <div className="label" style={{color:t.red,marginBottom:7}}>Daily Challenge</div>
+            <h2 style={{fontSize:34,fontWeight:950,letterSpacing:"-.03em",marginBottom:8,color:t.text}}>{challenge.title}</h2>
+            <p style={{maxWidth:470,margin:"0 auto",color:t.textSec,fontSize:16,lineHeight:1.65}}>
+              Five questions. One quick habit. Come back tomorrow for a fresh challenge.
+            </p>
+          </div>
+          <button className="btn btn-primary" style={{padding:"15px 34px",fontSize:16,minWidth:260,justifyContent:"center",marginTop:8}} onClick={()=>{capture("daily_challenge_started", { challenge_type: challenge.type, signed_in: Boolean(user) });setStep("quiz");}}>
+            Practise Daily Challenge →
+          </button>
+          <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap",marginTop:4}}>
+            <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}30`}}>{streakInfo.streak} day streak</span>
+            {streakInfo.completedToday&&<span className="chip" style={{background:`${t.green}12`,color:t.green,borderColor:`${t.green}30`}}>Today secured</span>}
+          </div>
+        </div>
       </div>
-      <h2 style={{fontSize:26,fontWeight:700,marginBottom:8,color:t.text}}>Daily Challenge</h2>
-      <p style={{color:t.textSec,marginBottom:6}}>
-        {user ? "Practice today's 5-question challenge from your account." : "No account needed. One free 5-question challenge every day."}
-      </p>
-      <div style={{display:"flex",justifyContent:"center",marginTop:10}}>
+
+      <details className="card" style={{marginTop:14,padding:"0",textAlign:"left",overflow:"hidden"}}>
+        <summary style={{display:"flex",alignItems:"center",gap:9,padding:"14px 16px",cursor:"pointer",fontSize:13,fontWeight:900,color:t.text}}>
+          <Flame size={16} color={t.amber}/> Streak and reward details
+        </summary>
+        <div style={{borderTop:`1px solid ${t.border}`,padding:"14px 16px"}}>
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{recoveryMessage}</div>
+          <div style={{fontSize:12,color:t.amber,fontWeight:800,marginTop:6}}>{weeklyBadge} · {tomorrowRewardPreview}</div>
+          {user&&<div style={{display:"inline-flex",alignItems:"center",gap:6,marginTop:10,fontSize:12,fontWeight:900,color:t.amber}}><CipherCoinIcon size={22}/> Perfect score +5 coins · every fifth streak day +5</div>}
+        </div>
+      </details>
+
+      <div style={{display:"flex",justifyContent:"center",marginTop:12}}>
         <TrustBadge t={t} compact/>
       </div>
-      <div style={{display:"flex",justifyContent:"center",gap:8,flexWrap:"wrap",marginTop:14}}>
-        <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}30`}}>
-          Current streak: {streakInfo.streak}
-        </span>
-        <span className="chip" style={{background:`${t.green}12`,color:t.green,borderColor:`${t.green}30`}}>
-          Best: {streakInfo.best}
-        </span>
-        <span className="chip" style={{background:`${t.amber}12`,color:t.amber,borderColor:`${t.amber}30`}}>
-          {weeklyBadge}
-        </span>
-        {streakInfo.completedToday&&(
-          <span className="chip" style={{background:`${t.amber}12`,color:t.amber,borderColor:`${t.amber}30`}}>
-            Today secured
-          </span>
-        )}
-        {user&&(
-          <span className="chip cipher-daily-reward-chip">
-            <CipherCoinIcon size={22}/> Perfect score +5 · every fifth streak day +5
-          </span>
-        )}
-      </div>
-      <div className="card" style={{padding:"13px 15px",margin:"16px 0 0",textAlign:"left",borderColor:`${t.amber}30`,background:`${t.amber}08`}}>
-        <div style={{fontSize:13,fontWeight:900,color:t.text,marginBottom:4}}>Habit loop</div>
-        <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{recoveryMessage}</div>
-        <div style={{fontSize:12,color:t.amber,fontWeight:800,marginTop:6}}>{tomorrowRewardPreview}</div>
-      </div>
-      <MascotGuide
-        animation={streakInfo.completedToday?"cheer":"dance"}
-        size={88}
-        context="daily-challenge"
-        message={streakInfo.completedToday?"Today’s streak is safe—great work!":"Five questions. One small win. Let’s go!"}
-        className="mascot-guide-page"
-        side="left"
-      />
-      <div className="card" style={{padding:"20px 24px",margin:"24px 0",textAlign:"left"}}>
-        <div className="section-icon" style={{"--section-color":t.red,marginBottom:10}}><Target size={21} strokeWidth={2.2}/></div>
-        <div style={{fontWeight:600,fontSize:16,marginBottom:6,color:t.text}}>{challenge.title}</div>
-        <div style={{color:t.textSec,fontSize:14}}>{challenge.description}</div>
-        <div style={{marginTop:12,color:t.textDim,fontSize:13}}>Answer all 5 questions and score at least 3/5 to extend your streak. A signed-in perfect score earns 5 Cipher Coins.</div>
-      </div>
-      <button className="btn btn-primary" style={{padding:"12px 32px",fontSize:15,width:"100%"}} onClick={()=>{capture("daily_challenge_started", { challenge_type: challenge.type, signed_in: Boolean(user) });setStep("quiz");}}>
-        Start Today's Challenge →
-      </button>
       {!user&&<div style={{marginTop:16,color:t.textDim,fontSize:13}}>
         Want unlimited practice?{" "}
-        <span style={{color:t.accent,cursor:"pointer",fontWeight:500}} onClick={onLogin}>Create a free account →</span>
+        <span style={{color:t.accent,cursor:"pointer",fontWeight:800}} onClick={onLogin}>Create a free account →</span>
       </div>}
     </div>
   );
@@ -22107,6 +22144,8 @@ function AchievementCelebration({ids,t,onClose}) {
 function AchievementsPage({user,t,onBack}) {
   const [loading,setLoading]=useState(true);
   const [data,setData]=useState({definitions:ACHIEVEMENTS,unlocks:[],totalStars:Number(user?.totalStars||0),error:null});
+  const [achievementFilter,setAchievementFilter]=useState("all");
+  const [selectedAchievementId,setSelectedAchievementId]=useState(null);
   const canLoad=user?.authProvider==="supabase"&&user?.id;
 
   useEffect(()=>{
@@ -22132,6 +22171,16 @@ function AchievementsPage({user,t,onBack}) {
   const fallbackStars=definitions.reduce((sum,item)=>unlockMap.has(item.id)?sum+item.star_value:sum,0);
   const totalStars=Math.min(ACHIEVEMENT_STAR_TOTAL,Number(data.totalStars||user?.totalStars||fallbackStars||0));
   const progress=Math.min(100,Math.round((totalStars/ACHIEVEMENT_STAR_TOTAL)*100));
+  const unlockedDefinitions=definitions.filter(item=>unlockMap.has(item.id));
+  const lockedDefinitions=definitions.filter(item=>!unlockMap.has(item.id));
+  const selectedAchievement=definitions.find(item=>item.id===(selectedAchievementId||lockedDefinitions[0]?.id||unlockedDefinitions[0]?.id))||definitions[0];
+  const selectedUnlocked=selectedAchievement?unlockMap.get(selectedAchievement.id):null;
+  const visibleAchievements=achievementFilter==="unlocked"
+    ? unlockedDefinitions
+    : achievementFilter==="locked"
+      ? lockedDefinitions
+      : definitions;
+  const nextAchievement=lockedDefinitions[0]||unlockedDefinitions.at(-1)||definitions[0];
 
   if(!canLoad) return (
     <div className="achievements-page">
@@ -22191,11 +22240,41 @@ function AchievementsPage({user,t,onBack}) {
         </div>
       </section>
 
+      <section className="achievement-interactive-board" aria-label="Achievement progress board">
+        <div className="achievement-spotlight-card card">
+          <div className="label" style={{color:t.green}}>Next milestone</div>
+          <h3>{nextAchievement?.title||"Keep practising"}</h3>
+          <p>{nextAchievement?.description||"Complete practice sessions to unlock more verified achievements."}</p>
+          <div className="achievement-spotlight-reward"><Star size={16} fill="currentColor"/> {nextAchievement?.star_value||0} stars waiting</div>
+        </div>
+        <div className="achievement-spotlight-card card selected">
+          <div className="label" style={{color:selectedUnlocked?t.amber:t.accent}}>{selectedUnlocked?"Unlocked spotlight":"Locked spotlight"}</div>
+          <h3>{selectedAchievement?.title||"Select an achievement"}</h3>
+          <p>{selectedAchievement?.description||"Tap an achievement card below to inspect it here."}</p>
+          <div className="achievement-spotlight-reward">
+            {selectedUnlocked?<CheckCircle2 size={16}/>:<LockKeyhole size={16}/>}
+            {selectedUnlocked?`Unlocked ${new Date(selectedUnlocked.unlocked_at).toLocaleDateString()}`:"Tap cards below to preview goals"}
+          </div>
+        </div>
+        <div className="achievement-filter-card card">
+          <div className="label" style={{color:t.accent}}>Filter board</div>
+          {[
+            ["all","All",definitions.length],
+            ["unlocked","Unlocked",unlockedDefinitions.length],
+            ["locked","Locked",lockedDefinitions.length],
+          ].map(([id,label,count])=>(
+            <button key={id} className={`btn ${achievementFilter===id?"btn-primary":"btn-outline"}`} type="button" onClick={()=>setAchievementFilter(id)}>
+              {label} <span>{count}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+
       <div className="achievement-grid">
-        {definitions.map(item=>{
+        {visibleAchievements.map(item=>{
           const unlocked=unlockMap.get(item.id);
           return (
-            <article key={item.id} className={`card achievement-card ${unlocked?"unlocked":"locked"}`}>
+            <article key={item.id} className={`card achievement-card ${unlocked?"unlocked":"locked"} ${selectedAchievement?.id===item.id?"selected":""}`} role="button" tabIndex={0} onClick={()=>setSelectedAchievementId(item.id)} onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();setSelectedAchievementId(item.id);}}}>
               <div className="achievement-card-top">
                 <span className="achievement-badge">{unlocked?<Star size={19} fill="currentColor"/>:<LockKeyhole size={19}/>}</span>
                 <span className="achievement-stars"><Star size={13} fill="currentColor"/> {item.star_value}</span>
@@ -27647,6 +27726,42 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
   );
 }
 
+function DeepDiveReadableBites({section,selectedProfile,t}) {
+  const tone=[
+    {label:"Exam rule",Icon:ShieldCheck,color:t.accent},
+    {label:"Why it matters",Icon:Lightbulb,color:t.green},
+    {label:"Memory cue",Icon:Brain,color:t.amber},
+  ];
+  const paragraphs=(section?.body||[]).map((paragraph,index)=>{
+    const sentences=splitReadableSentences(paragraph);
+    const first=sentences[0]||paragraph;
+    const rest=sentences.slice(1).join(" ");
+    return {text:paragraph,first,rest,index};
+  });
+  if(!paragraphs.length)return null;
+  return(
+    <div className="deep-dive-readable-bites">
+      {paragraphs.map(item=>{
+        const style=tone[item.index%tone.length];
+        const BiteIcon=style.Icon;
+        return(
+          <article className="deep-dive-readable-bite" style={{"--bite-color":style.color}} key={`${section.title}-${item.index}`}>
+            <div className="deep-dive-readable-label"><BiteIcon size={15}/>{style.label}</div>
+            <p><GlossaryText text={item.first} t={t}/></p>
+            {item.rest&&(
+              <details>
+                <summary>Show supporting detail</summary>
+                <div><GlossaryText text={item.rest} t={t}/></div>
+              </details>
+            )}
+          </article>
+        );
+      })}
+      <div className="deep-dive-syllabus-chip"><ListChecks size={14}/> SY0-701 objective {selectedProfile.objectiveCodes.join(" / ")}</div>
+    </div>
+  );
+}
+
 function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandled,focusAcronyms=false,onAddWeakTopicToReview,onTryRelatedPbq}) {
   const [query,setQuery]=useState("");
   const [domainFilter,setDomainFilter]=useState("all");
@@ -27928,9 +28043,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
                     <h2>{activeSection.title}</h2>
                     {isBeyondSection&&<p className="deep-dive-scope-note"><GraduationCap size={16}/>Useful context, but not required by the SY0-701 objective wording.</p>}
                   </div>
-                  {activeSection.body?.length>0&&<div className="deep-dive-concept-bites">
-                    {activeSection.body.map((paragraph,index)=><div key={paragraph}><span><Lightbulb size={14}/>{index===0?"What to know":"Why it matters"}</span><p>{paragraph}</p></div>)}
-                  </div>}
+                  <DeepDiveReadableBites section={activeSection} selectedProfile={selectedProfile} t={t}/>
                   {activeSection.table&&(
                     <div className="deep-dive-compare-lab">
                       <div className="deep-dive-compare-head"><span>Tap to compare</span><strong>Which term fits the scenario?</strong></div>
@@ -28368,6 +28481,66 @@ function LegalPage({type,t}) {
           </section>
         ))}
       </div>
+    </div>
+  );
+}
+
+function AccountSupportPage({user,t,onDeleteAccount,onCancelMembership,onNavigate,billingLoading=false}) {
+  const isPro=user?.tier==="pro";
+  const cards=[
+    {title:"Contact support",body:"Email us for account, billing, content, or technical issues.",color:t.accent,Icon:MessageSquareWarning,action:"Email support",href:`mailto:${SUPPORT_EMAIL}`},
+    {title:"Privacy policy",body:"See what account, payment, and practice data SecurePlus uses.",color:t.green,Icon:LockKeyhole,action:"Open privacy",view:"privacy"},
+    {title:"Terms & Conditions",body:"Review subscription, content, and acceptable-use terms.",color:t.amber,Icon:FileText,action:"Open terms",view:"terms"},
+  ];
+  return(
+    <div className="account-support-page">
+      <section className="card account-support-hero">
+        <div>
+          <div className="label" style={{color:t.accent}}>Account, legal, and support</div>
+          <h2>Manage the serious account stuff in one place.</h2>
+          <p>Use this page for support, legal documents, cancellation, and account deletion. Deletion still requires secure email verification before anything is removed.</p>
+          <div className="account-support-profile">
+            <span><UserRound size={16}/>{user?.email||"Signed-in account"}</span>
+            <span><ShieldCheck size={16}/>{isPro?"Pro active":"Free plan"}</span>
+          </div>
+        </div>
+        <div className="account-support-safe-card">
+          <ShieldCheck size={30}/>
+          <strong>Deletion is protected</strong>
+          <span>The red button sends a secure email link first. The email alone does not delete the account.</span>
+        </div>
+      </section>
+
+      <section className="account-support-grid">
+        {cards.map(card=>(
+          <article className="card account-support-card" style={{"--support-color":card.color}} key={card.title}>
+            <span><card.Icon size={22}/></span>
+            <h3>{card.title}</h3>
+            <p>{card.body}</p>
+            {card.href?(
+              <a className="btn btn-outline" href={card.href}>{card.action}</a>
+            ):(
+              <button className="btn btn-outline" type="button" onClick={()=>onNavigate(card.view)}>{card.action}</button>
+            )}
+          </article>
+        ))}
+      </section>
+
+      <section className="card account-danger-zone">
+        <div>
+          <div className="label" style={{color:t.red}}>Account controls</div>
+          <h3>Billing and deletion</h3>
+          <p>Cancel membership if you only want to stop renewal. Delete account only if you want saved learning data removed too.</p>
+        </div>
+        <div className="account-danger-actions">
+          <button className="btn btn-outline" type="button" onClick={onCancelMembership} disabled={billingLoading}>
+            {billingLoading?"Opening billing...":"Cancel membership"}
+          </button>
+          <button className="btn btn-danger" type="button" onClick={onDeleteAccount}>
+            Delete account
+          </button>
+        </div>
+      </section>
     </div>
   );
 }
@@ -29807,8 +29980,7 @@ export default function App() {
     {id:"achievements",icon:"achievements",label:"Achievements",mobileLabel:"Stars"},
     {id:"pricing",icon:"pricing",label:"Upgrade",mobileLabel:"Upgrade"},
     {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
-    {id:"privacy",icon:"privacy",label:"Privacy Policy",mobileLabel:"Privacy"},
-    {id:"terms",icon:"terms",label:"Terms & Conditions",mobileLabel:"Terms"},
+    {id:"account",icon:"account",label:"Account & Support",mobileLabel:"Account"},
   ];
   if(isRootUser) {
     navItems.push({id:"feedback",icon:"feedback",label:"Internal Feedback",mobileLabel:"Feedback"});
@@ -29893,6 +30065,7 @@ export default function App() {
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
           {view==="referrals"&&<ReferralPage user={user} t={t}/>}
           {view==="objectives"&&<ObjectivesPage t={t}/>}
+          {view==="account"&&<AccountSupportPage user={user} t={t} onDeleteAccount={handleDeleteAccount} onCancelMembership={handleCancelMembership} onNavigate={setView} billingLoading={billingLoading}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
           {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq}/>}
