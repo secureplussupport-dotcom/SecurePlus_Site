@@ -197,6 +197,8 @@ if (!errors.length) {
   requireContains("src/App.jsx", "guest-mcq-benefit-grid", "guest MCQ practice should explain the value of saving progress");
   requireContains("src/App.jsx", "guest-chapter-choice-grid", "guest MCQ practice should provide visual chapter choices");
   requireContains("src/App.jsx", "guest-length-grid", "guest MCQ practice should make fixed set sizes visually prominent");
+  requireContains("src/App.jsx", "mcq-launch-pad", "MCQ practice should expose a prominent launch panel above detailed controls");
+  requireContains("src/App.jsx", "Start questions now", "MCQ practice should use obvious start-button copy");
   requireContains("src/App.jsx", "Use 50 coins or unlock all PBQs with Pro", "PBQ interest should present both the coin and Pro paths");
   requireContains("src/App.jsx", "ATHENA_STARTER_QUESTION_SETS", "new-user starter questions should use the concise curated onboarding set");
   requireContains("src/App.jsx", "picked.slice(0,5)", "the fallback new-account baseline should stay limited to five questions");

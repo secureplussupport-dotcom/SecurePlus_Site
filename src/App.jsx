@@ -15846,6 +15846,18 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .guest-length-grid .btn{display:grid!important;gap:2px;align-content:center;border-radius:16px!important;}
 .guest-length-grid .btn>span{font-size:15px;font-weight:950;line-height:1.1;}
 .guest-length-grid .btn small{font-size:10px;line-height:1.2;font-weight:850;opacity:.78;}
+.mcq-launch-pad{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin:0 0 18px;padding:18px;border:1px solid ${t.accent}42;border-radius:22px;background:linear-gradient(135deg,${t.accent}13,${t.surface} 52%,${t.green}0f);box-shadow:0 20px 52px rgba(80,52,22,.12);overflow:hidden;}
+.mcq-launch-pad::after{content:"";position:absolute;right:-54px;top:-70px;width:170px;height:170px;border-radius:48px;background:linear-gradient(135deg,${t.amber}1e,${t.green}12);transform:rotate(16deg);pointer-events:none;}
+.mcq-launch-main{position:relative;z-index:1;display:flex;gap:14px;align-items:center;min-width:0;}
+.mcq-launch-icon{display:grid;place-items:center;width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,${t.accent},${t.green});color:#fff;box-shadow:0 16px 32px ${t.accent}28;flex-shrink:0;}
+.mcq-launch-main h3{margin:0;color:${t.text};font-size:24px;line-height:1.15;letter-spacing:-.01em;}
+.mcq-launch-main p{margin:5px 0 0;color:${t.textSec};font-size:13px;line-height:1.55;font-weight:700;}
+.mcq-launch-steps{position:relative;z-index:1;display:flex;gap:8px;flex-wrap:wrap;margin-top:11px;}
+.mcq-launch-steps span{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid ${t.border};border-radius:999px;background:${t.panel};color:${t.textSec};font-size:11px;font-weight:900;}
+.mcq-launch-steps span strong{color:${t.text};}
+.mcq-launch-action{position:relative;z-index:1;display:grid;gap:8px;justify-items:stretch;min-width:240px;}
+.mcq-launch-action .btn{min-height:58px!important;border-radius:18px!important;font-size:16px!important;font-weight:950!important;box-shadow:0 18px 38px ${t.accent}2c!important;}
+.mcq-launch-action small{display:block;text-align:center;color:${t.textDim};font-size:11px;font-weight:850;line-height:1.35;}
 .practice-summary{margin-top:16px;padding:12px 14px;background:${t.panel};border:1px solid ${t.border};border-radius:8px;font-size:13px;color:${t.textSec};display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .practice-summary strong{color:${t.text};font-weight:900;}
 .practice-action-bar{position:relative;z-index:10;margin-top:10px;padding:10px;border:1px solid ${t.border};border-radius:10px;background:${t.surface}eb;backdrop-filter:blur(16px);box-shadow:0 14px 30px rgba(0,0,0,.12);display:flex;gap:10px;justify-content:center;align-items:center;}
@@ -17482,6 +17494,11 @@ body{background:
   .guest-mcq-benefit-grid,.guest-mcq-path-grid{grid-template-columns:minmax(0,1fr)!important;}
   .guest-mcq-cipher-card{min-height:0!important;padding:14px!important;}
   .guest-chapter-choice-grid{grid-template-columns:minmax(0,1fr)!important;}
+  .mcq-launch-pad{grid-template-columns:minmax(0,1fr)!important;padding:16px!important;border-radius:20px!important;}
+  .mcq-launch-main{align-items:flex-start!important;}
+  .mcq-launch-icon{width:50px!important;height:50px!important;border-radius:16px!important;}
+  .mcq-launch-main h3{font-size:21px!important;}
+  .mcq-launch-action{min-width:0!important;width:100%;}
   .practice-setup-hero,.pbq-bank-hero{padding:18px!important;}
   .practice-setup-copy,.pbq-bank-hero-copy{display:block!important;}
   .practice-setup-copy .setup-stats{margin-top:14px;}
@@ -22405,6 +22422,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     {title:"Save Smart Review later",body:"Create a free account after the set to keep your repair queue.",Icon:Brain,color:t.accent},
   ];
   const guestLengthLabels={10:"Quick warm-up",20:"Focused session",30:"Deep practice"};
+  const launchChapterLabel=selectedChapter?`Chapter ${selectedChapter.id}: ${selectedChapter.title}`:"All chapters";
+  const launchModeLabel=isGuest?"Random practice":reviewMode==="smart"?"Smart Review":"Random practice";
 
   useEffect(()=>{
     if(!isGuest)return;
@@ -22689,6 +22708,27 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         <TrustBadge t={t}/>
       </div>
 
+      <section className="mcq-launch-pad" aria-label="Start MCQ question set">
+        <div className="mcq-launch-main">
+          <span className="mcq-launch-icon"><Play size={25} fill="currentColor"/></span>
+          <div>
+            <h3>Ready to answer questions?</h3>
+            <p>Press the button to begin now. Changing chapter or set size below is optional.</p>
+            <div className="mcq-launch-steps" aria-label="Selected MCQ setup">
+              <span><strong>{quizCount}</strong> questions</span>
+              <span>{launchChapterLabel}</span>
+              <span>{launchModeLabel}</span>
+            </div>
+          </div>
+        </div>
+        <div className="mcq-launch-action">
+          <button className="btn btn-primary" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum}>
+            Start questions now →
+          </button>
+          <small>{filtered.length>=sessionMinimum?`${filtered.length} questions available for this choice.`:`Only ${filtered.length} questions match. Choose all chapters to start.`}</small>
+        </div>
+      </section>
+
       {isGuest&&(
         <section className="guest-mcq-showcase">
           <div className="guest-mcq-showcase-copy">
@@ -22852,16 +22892,16 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       <div className="card practice-filter-card" style={{padding:"20px 24px",marginBottom:16}}>
         <div className="practice-builder-head">
           <div>
-            <div className="label" style={{color:t.accent}}>Steps 2–3</div>
-            <h3>Build your practice set</h3>
-            <p>Choose what to practise, then pick a session length that fits your time.</p>
+            <div className="label" style={{color:t.accent}}>Optional setup</div>
+            <h3>Want a different set?</h3>
+            <p>Use these controls only if you want to change the chapter or number of questions before starting.</p>
           </div>
           {(chFilter!=="all"||diffFilter!=="all"||topicFilter!=="all")&&(
             <button className="btn btn-ghost" style={{fontSize:11,minHeight:34,padding:"7px 10px"}} onClick={()=>{setChFilter("all");setDiffFilter("all");setTopicFilter("all");}}><X size={14}/> Reset filters</button>
           )}
         </div>
         <div className="practice-builder-step">
-          <div className="practice-step-head"><span className="practice-step-index">2</span><strong>Choose your focus</strong><span>{filtered.length} matching questions</span></div>
+          <div className="practice-step-head"><span className="practice-step-index">1</span><strong>Choose chapter</strong><span>{filtered.length} matching questions</span></div>
           <div className="practice-filter-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Chapter</label>
@@ -22901,7 +22941,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           )}
         </div>
         <div className="practice-builder-step">
-          <div className="practice-step-head"><span className="practice-step-index">3</span><strong>Choose session length</strong><span>{quizCount} selected</span></div>
+          <div className="practice-step-head"><span className="practice-step-index">2</span><strong>Choose number of questions</strong><span>{quizCount} selected</span></div>
           <div className={`quiz-length-grid ${isGuest?"guest-length-grid":""}`} style={{display:"grid",gridTemplateColumns:`repeat(${quizSizes.length},minmax(0,1fr))`,gap:8}}>
             {quizSizes.map(size=>(
               <button
@@ -22923,7 +22963,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
             <div><strong>{isGuest?"Guest practice set":reviewMode==="smart"?"Smart Review set":"Random practice set"}</strong><small>{filtered.length>=sessionMinimum?`${filtered.length} questions match your focus`:`Only ${filtered.length} match — broaden your filters`}</small></div>
           </div>
           <button className="btn btn-primary" style={{minWidth:170}} onClick={startQuiz} disabled={filtered.length<sessionMinimum}>
-            {`Start ${quizCount}-question set →`}
+            {`Start questions now →`}
           </button>
         </div>
       </div>
