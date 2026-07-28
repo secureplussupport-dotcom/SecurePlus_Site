@@ -20147,7 +20147,7 @@ function AcademySignupWizard({t,form,setForm,setField,onMint,loading,error,ok}) 
         <form className="academy-signup-panel" onSubmit={event=>{event.preventDefault();goIdentity();}}>
           <div>
             <div className="label" style={{color:t.accent}}>Step 1 · Account basics</div>
-            <h3>Start minting your Academy ID</h3>
+            <h3>Create your free account</h3>
             <p>First, add the login details that will protect your progress and future stars.</p>
           </div>
           <div>
@@ -20214,7 +20214,7 @@ function AcademySignupWizard({t,form,setForm,setField,onMint,loading,error,ok}) 
           <div style={{display:"grid",gridTemplateColumns:"auto 1fr",gap:10}}>
             <button type="button" className="btn btn-ghost" onClick={()=>setStep(1)} disabled={loading}>Back</button>
             <button type="submit" className="btn btn-primary" style={{justifyContent:"center"}} disabled={loading}>
-              {loading?"Minting...":"Mint Academy ID"}
+              {loading?"Creating account...":"Create account"}
             </button>
           </div>
           <div className="auth-trust-line"><LockKeyhole size={13}/> Your account starts on the free plan. Pro is never added automatically.</div>
@@ -21433,12 +21433,8 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           </div>
 
           <div className="card auth-conversion-card">
-          <div className="auth-mode-tabs">
-            {["login","signup"].map(m=>(
-              <button type="button" key={m} className={`tab auth-mode-tab ${mode===m?"act":""}`} onClick={()=>m==="signup"?jumpToAuth("signup"):openLogin()}>
-                {m==="login"?"Sign In":"Mint Academy ID"}
-              </button>
-            ))}
+          <div className="auth-mode-tabs auth-mode-tabs-single" aria-label="Authentication mode">
+            <button type="button" className="tab auth-mode-tab act" onClick={openLogin}>Sign In</button>
           </div>
           {mode==="signup" ? (
             mintedUser ? (

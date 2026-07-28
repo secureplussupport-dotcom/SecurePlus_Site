@@ -208,6 +208,9 @@ if (!errors.length) {
   requireContains("src/App.jsx", "Hello, I’m Cipher!", "onboarding intro should introduce Cipher instead of Athena");
   requireContains("src/App.jsx", "Cipher’s starter set", "onboarding starter set should be branded as Cipher");
   requireContains("src/App.jsx", ".athena-cipher-intro .cipher-mascot", "onboarding Cipher mascot should have protected sizing to avoid intro-card distortion");
+  if (app.includes("Mint Academy ID")) {
+    push(errors, "src/App.jsx", "auth UI should not show the old Mint Academy ID wording");
+  }
   requireContains("src/App.jsx", "showLoginModal&&createPortal((", "the login dialog must render at document level so it stays centred in the viewport");
   requireContains("src/App.jsx", "document.body.style.overflow=\"hidden\"", "the centred login dialog should prevent the landing page from scrolling behind it");
   requirePattern("src/App.jsx", /user\?\.tier\s*===\s*"pro"\s*&&\s*\["active",\s*"trialing"\]\.includes\(user\?\.subscriptionStatus/, "paid Pro should depend on active/trialing subscription status");
