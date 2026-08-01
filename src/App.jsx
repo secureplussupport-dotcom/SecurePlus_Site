@@ -11509,11 +11509,11 @@ NETWORK CONNECTIONS:
 PID   Local              Remote             State
 4892  192.168.1.100:54321  198.51.100.5:443  ESTABLISHED`,
     question:"What makes PID 4892 suspicious? Select the BEST answer.",
-    choices:["It is using port 443, which should be HTTPS only","Its parent process is cmd.exe — legitimate svchost.exe always starts from services.exe, not cmd.exe","The name svchost32.exe ends in 32, which indicates it is 32-bit software","It is consuming 18% CPU, which is too high for a background service"],
+    choices:["It is using port 443, which should be HTTPS only","It uses a lookalike service-host name, was started by cmd.exe, and has an external connection","The name svchost32.exe ends in 32, which indicates it is 32-bit software","It is consuming 18% CPU, which is too high for a background service"],
     correct:1,
-    explanation:"Process parent-child relationships are a key forensic indicator. All legitimate svchost.exe processes on Windows are created by services.exe. A svchost.exe (or similar name) spawned by cmd.exe is a strong indicator of process injection or a masquerading malware that uses a legitimate-sounding name. The external connection on port 443 used for C2 traffic that blends with HTTPS further confirms malicious activity.",
+    explanation:"The process name is a lookalike of svchost.exe, its parent process is cmd.exe, and it has an outbound connection. Legitimate Windows service-host processes normally run as svchost.exe from trusted Windows paths and are commonly started by services.exe. This combination points to masquerading or malicious process launch rather than normal service activity.",
     wrongFeedback:{ 0:"Port 443 is commonly used by malware for C2 communications specifically to blend with legitimate HTTPS traffic — the port alone is not suspicious.", 2:"While the name is also suspicious (a slight difference from svchost.exe), the parent process relationship is the clearest forensic indicator.", 3:"High CPU usage can indicate cryptomining or other malicious activity, but it is not the definitive indicator — the parent process is." },
-    objective:"4.8"},
+    objective:"4.9"},
 
   // ── DRAG & DROP ─────────────────────────────────────────────
   { id:"p004", type:"DRAG & DROP", ch:"4", cat:"Incident Response", difficulty:"easy",
@@ -11725,7 +11725,7 @@ RULE 1: DENY ALL INBOUND
     correct:1,
     explanation:"Option B is correct: it allows HTTP and HTTPS from any source (required for a public web server), restricts SSH to only the management subnet (10.0.0.0/24), and has an explicit DENY ALL at the end. Option A removes all firewall protection. Option C allows SSH from any IP — an attacker anywhere can attempt SSH brute force. Option D makes the server unreachable.",
     wrongFeedback:{ 0:"Relying on the application for security violates defence in depth. A firewall must always be the first layer.", 2:"Allowing SSH from ANY IP globally exposes the server to brute-force attacks from anywhere on the internet.", 3:"A DENY ALL rule makes the server completely inaccessible — legitimate web traffic cannot reach it." },
-    objective:"3.2"},
+    objective:"4.5"},
 
   // ── LOG ANALYSIS ─────────────────────────────────────────────
   { id:"p014", type:"LOG ANALYSIS", ch:"4", cat:"Security Operations", difficulty:"medium",
@@ -11751,7 +11751,7 @@ RULE 1: DENY ALL INBOUND
     correct:1,
     explanation:"Two attacks are visible: (1) SQL injection — the sequence from 'id=1'' causing a 500 error (confirming vulnerability) to 'OR 1=1' and UNION SELECT extracting usernames and passwords. The large 200 responses confirm data was returned. (2) Directory traversal — '/admin' is blocked (403) but '../../../etc/passwd' returns a 200 with a large response, indicating the attacker escaped the web root and read a system file. Both require immediate remediation: parameterised queries and server-side path validation.",
     wrongFeedback:{ 0:"No DoS (no flood of requests) or XSS (no script injection into pages) is visible in these logs.", 2:"No repeated login failures (brute force) or email links (phishing) appear in these logs.", 3:"No port scanning pattern or ARP traffic is visible in web server HTTP logs." },
-    objective:"2.3"},
+    objective:"4.9"},
 
   { id:"p015", type:"LOG ANALYSIS", ch:"4", cat:"Authentication", difficulty:"medium",
     title:"Identify the brute-force pattern in authentication logs",
@@ -11777,7 +11777,7 @@ RULE 1: DENY ALL INBOUND
     correct:1,
     explanation:"The attack is distributed — multiple source IPs (185.220.101.10, .11, .12, .13, .47) each make only a small number of attempts against the same target. This evades per-IP account lockout policies (which trigger after N failures from the SAME IP). The eventual success from .47 shows the attacker found valid credentials. Mitigations: geo-blocking suspicious IP ranges, subnet-based lockout policies, MFA (which would make this attack useless regardless of the password).",
     wrongFeedback:{ 0:"Credential stuffing tries username/password pairs from previous breach dumps against a service. It doesn't typically cycle through common usernames like 'root' and 'ubuntu'.", 2:"Password spraying tries ONE password (e.g. 'Summer2024!') against MANY different accounts to avoid lockout. Here, the attacker targets the same account (admin) with many passwords.", 3:"Replay attacks reuse captured session tokens — they do not involve failed login attempts." },
-    objective:"2.4"},
+    objective:"4.9"},
 
   // ── SCENARIO ────────────────────────────────────────────────
   { id:"p016", type:"SCENARIO", ch:"3", cat:"Cloud Security", difficulty:"medium",
@@ -11863,7 +11863,7 @@ D) Document the risk formally and continue using the system while replacement is
     explanation:"Social engineering delivery channels: Email=Phishing. Voice/telephone=Vishing. SMS/text=Smishing. Targeted individual=Spear Phishing. Targeted executive=Whaling. Memory aid: Vishing=Voice+phishing. Smishing=SMS+phishing. These are fundamental CompTIA Security+ concepts.",
     objective:"2.2"},
 
-  { id:"p020", type:"ORDERING", ch:"2", cat:"Vulnerability Management", difficulty:"medium",
+  { id:"p020", type:"ORDERING", ch:"4", cat:"Vulnerability Management", difficulty:"medium",
     title:"Order the vulnerability management lifecycle steps",
     emoji:"📋",
     scenario:"A security team has just run a vulnerability scan on the company's web servers. Place the vulnerability management lifecycle steps in the correct order.",
@@ -11964,7 +11964,7 @@ Command to fix: chmod 640 /etc/shadow && chown root:shadow /etc/shadow`,
     correct:1,
     explanation:"In octal 644: Owner=6(rw-), Group=4(r--), Others=4(r--). The '4' in the Others position means any local user can READ /etc/shadow. This exposes all hashed passwords to offline cracking attacks. The correct permission is 640 (Owner:rw-, Group:r--, Others:---) with group 'shadow'. This way only root and members of the shadow group can read it.",
     wrongFeedback:{0:"Write permission would be '2' in octal. '4' is read permission — dangerous because users can exfiltrate and crack the hashes.",2:"Execute permission would be '1' in octal. '4' is read — /etc/shadow is a data file, not executable.",3:"The setuid bit (4000) is a separate special permission. '644' means read/write for owner, read for group and others."},
-    objective:"2.5"},
+    objective:"4.1"},
 
   { id:"p024", type:"DRAG & DROP", ch:"4", cat:"Security Operations", difficulty:"medium",
     title:"Match monitoring tools to their primary function",
@@ -14865,6 +14865,126 @@ function buildSelectionOptionBank(question,blanks,seedOptions=[],minimumDistract
   return options;
 }
 
+const SY0701_DOMAIN_LABELS=Object.freeze({
+  "1":"General Security Concepts",
+  "2":"Threats, Vulnerabilities, and Mitigations",
+  "3":"Security Architecture",
+  "4":"Security Operations",
+  "5":"Security Program Management and Oversight",
+});
+
+const PBQ_OBJECTIVE_FALLBACKS=Object.freeze({
+  "1":"1.2",
+  "2":"2.4",
+  "3":"3.2",
+  "4":"4.9",
+  "5":"5.2",
+});
+
+function compactFeedbackText(value,maxLength=520) {
+  const clean=String(value||"").replace(/\s+/g," ").trim();
+  if(clean.length<=maxLength)return clean;
+  return `${clean.slice(0,maxLength-1).replace(/\s+\S*$/,"")}…`;
+}
+
+function ensureFeedbackLead(text,isCorrectAnswer) {
+  const clean=String(text||"").trim();
+  if(/^correct\./i.test(clean) || /^incorrect\./i.test(clean)) return clean;
+  return `${isCorrectAnswer?"Correct.":"Incorrect."} ${clean}`.trim();
+}
+
+function inferPbqObjective(question) {
+  const ch=String(question?.ch||question?.domain||"1");
+  if(question?.objective && /^\d+\.\d+$/.test(String(question.objective)) && String(question.objective).startsWith(`${ch}.`)) return String(question.objective);
+  const text=[
+    question?.title,
+    question?.cat,
+    question?.type,
+    question?.scenario,
+    question?.question,
+    question?.explanation,
+  ].join(" ").toLowerCase();
+  if(ch==="1") {
+    if(/pki|certificate|crypt|hash|signature|tls|key|kerberos|symmetric|asymmetric/.test(text)) return "1.4";
+    if(/control|zero trust|authentication|authorization|password|mfa|privilege|identity/.test(text)) return "1.2";
+    return "1.1";
+  }
+  if(ch==="2") {
+    if(/actor|motivation|phish|social engineering|pretext|whaling|smishing|vishing/.test(text)) return "2.1";
+    if(/attack vector|attack surface|wireless|default credential|open service|email|removable/.test(text)) return "2.2";
+    if(/vulnerab|injection|xss|sql|patch|cve|misconfig|dependency|supply chain/.test(text)) return "2.3";
+    return "2.4";
+  }
+  if(ch==="3") {
+    if(/cloud|shared responsibility|iaas|paas|saas|serverless|container|iot|ics|scada|architecture/.test(text)) return "3.1";
+    if(/data|classification|dlp|mask|token|encrypt|retention|privacy|state/.test(text)) return "3.3";
+    if(/resilience|recovery|backup|rto|rpo|dr|continuity|failover|replication/.test(text)) return "3.4";
+    return "3.2";
+  }
+  if(ch==="4") {
+    if(/automation|orchestration|script|playbook|ticket|baseline/.test(text)) return "4.7";
+    if(/incident response phase|containment|eradication|recovery|lessons learned|root cause/.test(text)) return "4.8";
+    if(/log|process|packet|capture|netflow|firewall|endpoint|investigat|forensic|chain of custody|siem|ids|ips|ioc|alert/.test(text)) return "4.9";
+    return "4.9";
+  }
+  if(ch==="5") {
+    if(/policy|standard|procedure|governance|change management|legal|regulatory|privacy/.test(text)) return "5.1";
+    if(/third party|vendor|agreement|sla|mou|moa|risk|bia|sle|ale|aro|impact|likelihood/.test(text)) return "5.2";
+    return "5.2";
+  }
+  return PBQ_OBJECTIVE_FALLBACKS[ch]||"1.2";
+}
+
+function pbqEvidenceNudge(question) {
+  const type=String(question?.type||"").toUpperCase();
+  if(type==="LOG ANALYSIS") return "Use the event pattern, source, destination, and timing instead of judging by one word in the log.";
+  if(type==="TERMINAL SIM") return "Use the command output and the scenario goal together before choosing the answer.";
+  if(type==="CONFIG/ACL") return "Check the required source, destination, service, and rule order before changing a control.";
+  if(type==="HOTSPOT") return "Match the answer to the affected system or location shown in the scenario evidence.";
+  if(type==="ORDERING") return "The safest order is the one that protects evidence, limits damage, and then restores service.";
+  return "Focus on the stated business requirement and the strongest Security+ control for that situation.";
+}
+
+function buildPbqOptionFeedback(question,index,choice,correctIndex) {
+  const choices=question.choices||question.options||[];
+  const correctChoice=choices[correctIndex]||"the correct option";
+  const correctLetter=String.fromCharCode(65+correctIndex);
+  const explanation=compactFeedbackText(question.explanation,360);
+  if(index===correctIndex) {
+    return compactFeedbackText(`Correct. This is the strongest answer because it matches the scenario evidence and the task requirement. ${explanation || pbqEvidenceNudge(question)}`,520);
+  }
+  return compactFeedbackText(`Incorrect. This option may sound related, but it does not best satisfy the scenario. The stronger answer is ${correctLetter}: ${correctChoice}. ${pbqEvidenceNudge(question)}`,520);
+}
+
+function ensurePbqBlankExplanations(question) {
+  if(question.type!==SELECT_FILL_PBQ_TYPE || !Array.isArray(question.blanks)) return question;
+  const blanks=question.blanks.map((blank,index)=>{
+    const answer=String(blank.answer||"").trim();
+    const existing=String(blank.explanation||blank.solution||"").trim();
+    const explanation=existing.length>=25
+      ? existing
+      : `The best selection for blank ${index+1} is "${answer}" because it matches the scenario clue and the SY0-701 concept being tested.`;
+    return {...blank,explanation};
+  });
+  return {...question,blanks};
+}
+
+function ensurePbqChoiceFeedback(question) {
+  const choices=Array.isArray(question.choices)?question.choices:Array.isArray(question.options)?question.options:null;
+  if(!choices?.length || !Number.isInteger(question.correct)) return question;
+  const correctIndex=question.correct;
+  const optionFeedback={...(question.optionFeedback||question.choiceFeedback||{})};
+  const wrongFeedback={...(question.wrongFeedback||{})};
+  choices.forEach((choice,index)=>{
+    const existing=optionFeedback[index] ?? optionFeedback[String(index)] ?? (index!==correctIndex ? wrongFeedback[index] ?? wrongFeedback[String(index)] : "");
+    const fallback=buildPbqOptionFeedback(question,index,choice,correctIndex);
+    const feedback=compactFeedbackText(String(existing||"").trim().length>=25 ? existing : fallback);
+    optionFeedback[index]=ensureFeedbackLead(feedback,index===correctIndex);
+    if(index!==correctIndex) wrongFeedback[index]=optionFeedback[index].replace(/^Incorrect\.\s*/i,"");
+  });
+  return {...question,choices,options:choices,optionFeedback,wrongFeedback};
+}
+
 function normalizeSelectionPBQ(question) {
   const sourceType=String(question?.type||"").trim().toUpperCase();
   if(!["DRAG & DROP","FILL BLANK",SELECT_FILL_PBQ_TYPE].includes(sourceType))return question;
@@ -14881,7 +15001,7 @@ function normalizeSelectionPBQ(question) {
       answer:targetById.get(question.correctMapping?.[item.id])||"",
       acceptedAnswers:[],
       hint:"",
-      explanation:item.explanation||item.solution||"",
+      explanation:item.explanation||item.solution||`Match this item to "${targetById.get(question.correctMapping?.[item.id])||"the correct target"}" because that pairing best satisfies the scenario.`,
     })).filter(blank=>blank.sentence&&blank.answer);
     const selectionOptions=stableSelectionOptionOrder(buildSelectionOptionBank(question,blanks,targets.map((target,index)=>target.label||`Answer area ${index+1}`),0),question.id);
     return {...question,type:SELECT_FILL_PBQ_TYPE,emoji:"🧩",legacySelectionType:"DRAG & DROP",blanks,selectionOptions};
@@ -14902,9 +15022,20 @@ function normalizeSelectionPBQ(question) {
   return {...question,type:SELECT_FILL_PBQ_TYPE,emoji:"🧩",legacySelectionType:legacyIsFill?"FILL BLANK":question.legacySelectionType||sourceType,blanks,selectionOptions};
 }
 
+function enhancePBQQuestion(question) {
+  const normalized=ensurePbqBlankExplanations(normalizeSelectionPBQ(question));
+  const ch=String(normalized.ch||normalized.domain||"1");
+  return ensurePbqChoiceFeedback({
+    ...normalized,
+    ch,
+    objective:inferPbqObjective(normalized),
+    syllabusDomain:normalized.syllabusDomain || `Domain ${ch}: ${SY0701_DOMAIN_LABELS[ch]||"Security+"}`,
+  });
+}
+
 const BASE_PBQ_BANK = [...PBQ_BANK_BASE, ...IMPORTED_PBQ_BANK]
   .filter(q=>!LOW_QUALITY_PBQ_IDS.has(q.id))
-  .map(normalizeSelectionPBQ);
+  .map(enhancePBQQuestion);
 let PBQ_BANK = BASE_PBQ_BANK;
 
 const REMOTE_PBQ_TYPE_ALIASES = {
@@ -14936,6 +15067,7 @@ function normalizeRemotePBQRow(row) {
   const interactiveData=payload.interactiveData || {};
   const correctAnswer=payload.correctAnswer || {};
   const wrongFeedback=payload.wrongFeedback ?? appQuestion.wrongFeedback ?? {};
+  const optionFeedback=payload.optionFeedback ?? appQuestion.optionFeedback ?? payload.choiceFeedback ?? appQuestion.choiceFeedback ?? {};
   const choices=interactiveData.choices || appQuestion.choices || appQuestion.options || payload.choices;
   const type=normalizeRemotePbqType(row?.type || appQuestion.type || payload.type);
   const domain=Number(row?.domain || appQuestion.ch || appQuestion.domain || payload.domain || 1);
@@ -14965,6 +15097,7 @@ function normalizeRemotePBQRow(row) {
     options:Array.isArray(choices) ? choices : undefined,
     correct:Number.isInteger(correctAnswer.correct) ? correctAnswer.correct : Number.isInteger(appQuestion.correct) ? appQuestion.correct : 0,
     wrongFeedback:typeof wrongFeedback==="string" ? {} : wrongFeedback,
+    optionFeedback:typeof optionFeedback==="string" ? {} : optionFeedback,
     items:interactiveData.items || appQuestion.items,
     targets:interactiveData.targets || appQuestion.targets,
     targetLayout:interactiveData.targetLayout || appQuestion.targetLayout,
@@ -14974,7 +15107,7 @@ function normalizeRemotePBQRow(row) {
     selectionOptions:interactiveData.selectionOptions || appQuestion.selectionOptions || payload.selectionOptions,
     acronyms:appQuestion.acronyms || payload.acronyms || [],
   };
-  return normalizeSelectionPBQ(normalized);
+  return enhancePBQQuestion(normalized);
 }
 
 function mergeRemotePBQBanks(localQuestions=[],remoteQuestions=[]) {
@@ -14984,7 +15117,7 @@ function mergeRemotePBQBanks(localQuestions=[],remoteQuestions=[]) {
   return [
     ...localQuestions.map(question=>remoteById.get(question.id)||question),
     ...validRemoteQuestions.filter(question=>!localIds.has(question.id)),
-  ];
+  ].map(enhancePBQQuestion);
 }
 
 function buildSupabasePBQMutation(question, sortOrder) {
@@ -15026,6 +15159,9 @@ function buildSupabasePBQMutation(question, sortOrder) {
     interactiveData,
     correctAnswer,
     wrongFeedback:question.wrongFeedback || {},
+    optionFeedback:question.optionFeedback || {},
+    objective:question.objective || inferPbqObjective(question),
+    syllabusDomain:question.syllabusDomain || `Domain ${String(question.ch || domain)}: ${SY0701_DOMAIN_LABELS[String(question.ch || domain)]||"Security+"}`,
     difficulty:question.difficulty || "medium",
     cat:question.cat || "",
     ch:String(question.ch || domain),
@@ -23599,6 +23735,10 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
     return [];
   },[q,blanks,orderItems,selected]);
   const partCorrectCount=partResults.filter(part=>part.correct).length;
+  const pbqChoices=q.choices||q.options||[];
+  const selectedOptionFeedback=selected!==null&&selected!==undefined
+    ? q.optionFeedback?.[selected] || (selected===q.correct ? ensureFeedbackLead(q.explanation||"",true) : q.wrongFeedback?.[selected] ? ensureFeedbackLead(q.wrongFeedback[selected],false) : "")
+    : "";
 
   const submit=()=>{
     const correct = isCorrect();
@@ -23777,11 +23917,32 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
             <div style={{fontSize:13,color:t.textSec,lineHeight:1.62}}>
               <PBQProseText text={q.explanation} t={t} paragraphGap={6}/>
             </div>
-            {/* Wrong answer feedback */}
-            {!isCorrect()&&q.wrongFeedback&&selected!==null&&q.wrongFeedback[selected]&&(
-              <div style={{marginTop:12,padding:"12px 14px",background:`${t.red}08`,borderRadius:7,border:`1px solid ${t.red}25`}}>
-                <div style={{fontSize:12,fontWeight:600,color:t.red,marginBottom:4}}>Why option {String.fromCharCode(65+selected)} is wrong:</div>
-                <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>{q.wrongFeedback[selected]}</div>
+            {selectedOptionFeedback&&(
+              <div style={{marginTop:12,padding:"12px 14px",background:`${isCorrect()?t.green:t.red}08`,borderRadius:9,border:`1px solid ${isCorrect()?t.green:t.red}30`}}>
+                <div style={{fontSize:12,fontWeight:900,color:isCorrect()?t.green:t.red,marginBottom:5}}>
+                  Why option {String.fromCharCode(65+selected)} is {isCorrect()?"correct":"wrong"}
+                </div>
+                <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}><PBQProseText text={selectedOptionFeedback} t={t} paragraphGap={5}/></div>
+              </div>
+            )}
+            {pbqChoices.length>0&&(
+              <div style={{marginTop:12,padding:"12px 14px",background:t.panel,borderRadius:10,border:`1px solid ${t.border}`}}>
+                <div style={{fontSize:12,fontWeight:950,color:t.text,marginBottom:8}}>Review every option</div>
+                <div style={{display:"grid",gap:8}}>
+                  {pbqChoices.map((choice,index)=>{
+                    const optionCorrect=index===q.correct;
+                    const feedback=q.optionFeedback?.[index] || (optionCorrect ? ensureFeedbackLead(q.explanation||"",true) : q.wrongFeedback?.[index] ? ensureFeedbackLead(q.wrongFeedback[index],false) : buildPbqOptionFeedback(q,index,choice,q.correct));
+                    return(
+                      <div key={index} style={{padding:"10px 12px",borderRadius:9,border:`1px solid ${optionCorrect?t.green:t.border}35`,background:optionCorrect?`${t.green}08`:t.surface}}>
+                        <div style={{display:"flex",gap:8,alignItems:"flex-start",fontSize:13,lineHeight:1.5}}>
+                          <strong style={{color:optionCorrect?t.green:t.text}}>{String.fromCharCode(65+index)}. {optionCorrect?"Correct.":"Incorrect."}</strong>
+                          <span style={{color:t.text}}><GlossaryText text={choice} t={t}/></span>
+                        </div>
+                        <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginTop:5}}><PBQProseText text={feedback} t={t} paragraphGap={5}/></div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
             {(q.type===SELECT_FILL_PBQ_TYPE||partResults.length>1)&&(
@@ -24576,6 +24737,25 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
                 <div style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:10}}>
                   {q.scenario&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Scenario: </strong><PBQProseText text={q.scenario} t={t} paragraphGap={5}/></div>}
                   {q.question&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Question: </strong><PBQProseText text={q.question} t={t} paragraphGap={5}/></div>}
+                  {(q.choices||q.options)?.length>0&&(
+                    <div style={{display:"grid",gap:7,marginTop:8}}>
+                      <strong style={{color:t.text}}>Option review</strong>
+                      {(q.choices||q.options||[]).map((choice,choiceIndex)=>{
+                        const optionCorrect=choiceIndex===q.correct;
+                        const wasSelected=a.selected===choiceIndex;
+                        const feedback=q.optionFeedback?.[choiceIndex] || (optionCorrect ? ensureFeedbackLead(q.explanation||"",true) : q.wrongFeedback?.[choiceIndex] ? ensureFeedbackLead(q.wrongFeedback[choiceIndex],false) : buildPbqOptionFeedback(q,choiceIndex,choice,q.correct));
+                        return(
+                          <div key={choiceIndex} style={{padding:"9px 10px",borderRadius:9,border:`1px solid ${optionCorrect?t.green:wasSelected?t.red:t.border}35`,background:optionCorrect?`${t.green}08`:wasSelected?`${t.red}08`:t.panel}}>
+                            <div style={{display:"flex",gap:7,alignItems:"flex-start",color:t.text,lineHeight:1.55}}>
+                              <strong style={{color:optionCorrect?t.green:wasSelected?t.red:t.textSec}}>{String.fromCharCode(65+choiceIndex)}. {optionCorrect?"Correct.":"Incorrect."}</strong>
+                              <GlossaryText text={choice} t={t}/>
+                            </div>
+                            <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginTop:5}}><PBQProseText text={feedback} t={t} paragraphGap={5}/></div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                   {q.type===SELECT_FILL_PBQ_TYPE&&q.blanks?.length>0&&(
                     <div style={{display:"grid",gap:7,marginTop:8}}>
                       <strong style={{color:t.text}}>Blank review</strong>

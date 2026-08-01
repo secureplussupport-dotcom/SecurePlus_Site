@@ -128,6 +128,88 @@ function ensureMcqWrongFeedback(question) {
   return { ...question, wrongFeedback };
 }
 
+const compactFeedbackText = (value, maxLength = 520) => {
+  const clean = String(value || "").replace(/\s+/g, " ").trim();
+  if (clean.length <= maxLength) return clean;
+  return `${clean.slice(0, maxLength - 1).replace(/\s+\S*$/, "")}…`;
+};
+
+const ensureFeedbackLead = (text, isCorrectAnswer) => {
+  const clean = String(text || "").trim();
+  if (/^correct\./i.test(clean) || /^incorrect\./i.test(clean)) return clean;
+  return `${isCorrectAnswer ? "Correct." : "Incorrect."} ${clean}`.trim();
+};
+
+const pbqEvidenceNudge = question => {
+  const type = String(question?.type || "").toUpperCase();
+  if (type === "LOG ANALYSIS") return "Use the event pattern, source, destination, and timing instead of judging by one word in the log.";
+  if (type === "TERMINAL SIM") return "Use the command output and the scenario goal together before choosing the answer.";
+  if (type === "CONFIG/ACL") return "Check the required source, destination, service, and rule order before changing a control.";
+  if (type === "HOTSPOT") return "Match the answer to the affected system or location shown in the scenario evidence.";
+  if (type === "ORDERING") return "The safest order is the one that protects evidence, limits damage, and then restores service.";
+  return "Focus on the stated business requirement and the strongest Security+ control for that situation.";
+};
+
+const inferPbqObjective = question => {
+  const ch = String(question?.ch || question?.domain || "1");
+  if (question?.objective && /^\d+\.\d+$/.test(String(question.objective)) && String(question.objective).startsWith(`${ch}.`)) return String(question.objective);
+  const text = [question?.title, question?.cat, question?.type, question?.scenario, question?.question, question?.explanation].join(" ").toLowerCase();
+  if (ch === "1") {
+    if (/pki|certificate|crypt|hash|signature|tls|key|kerberos|symmetric|asymmetric/.test(text)) return "1.4";
+    if (/control|zero trust|authentication|authorization|password|mfa|privilege|identity/.test(text)) return "1.2";
+    return "1.1";
+  }
+  if (ch === "2") {
+    if (/actor|motivation|phish|social engineering|pretext|whaling|smishing|vishing/.test(text)) return "2.1";
+    if (/attack vector|attack surface|wireless|default credential|open service|email|removable/.test(text)) return "2.2";
+    if (/vulnerab|injection|xss|sql|patch|cve|misconfig|dependency|supply chain/.test(text)) return "2.3";
+    return "2.4";
+  }
+  if (ch === "3") {
+    if (/cloud|shared responsibility|iaas|paas|saas|serverless|container|iot|ics|scada|architecture/.test(text)) return "3.1";
+    if (/data|classification|dlp|mask|token|encrypt|retention|privacy|state/.test(text)) return "3.3";
+    if (/resilience|recovery|backup|rto|rpo|dr|continuity|failover|replication/.test(text)) return "3.4";
+    return "3.2";
+  }
+  if (ch === "4") {
+    if (/automation|orchestration|script|playbook|ticket|baseline/.test(text)) return "4.7";
+    if (/incident response phase|containment|eradication|recovery|lessons learned|root cause/.test(text)) return "4.8";
+    if (/log|process|packet|capture|netflow|firewall|endpoint|investigat|forensic|chain of custody|siem|ids|ips|ioc|alert/.test(text)) return "4.9";
+    return "4.9";
+  }
+  if (ch === "5") {
+    if (/policy|standard|procedure|governance|change management|legal|regulatory|privacy/.test(text)) return "5.1";
+    return "5.2";
+  }
+  return ({ "1":"1.2", "2":"2.4", "3":"3.2", "4":"4.9", "5":"5.2" })[ch] || "1.2";
+};
+
+const buildPbqOptionFeedback = (question, index, choice, correctIndex) => {
+  const choices = question.choices || question.options || [];
+  const correctChoice = choices[correctIndex] || "the correct option";
+  const correctLetter = String.fromCharCode(65 + correctIndex);
+  const explanation = compactFeedbackText(question.explanation, 360);
+  if (index === correctIndex) {
+    return compactFeedbackText(`Correct. This is the strongest answer because it matches the scenario evidence and the task requirement. ${explanation || pbqEvidenceNudge(question)}`, 520);
+  }
+  return compactFeedbackText(`Incorrect. This option may sound related, but it does not best satisfy the scenario. The stronger answer is ${correctLetter}: ${correctChoice}. ${pbqEvidenceNudge(question)}`, 520);
+};
+
+const ensurePbqChoiceFeedback = question => {
+  const choices = Array.isArray(question.choices) ? question.choices : Array.isArray(question.options) ? question.options : null;
+  if (!choices?.length || !Number.isInteger(question.correct)) return question;
+  const optionFeedback = { ...(question.optionFeedback || question.choiceFeedback || {}) };
+  const wrongFeedback = { ...(question.wrongFeedback || {}) };
+  choices.forEach((choice, index) => {
+    const existing = optionFeedback[index] ?? optionFeedback[String(index)] ?? (index !== question.correct ? wrongFeedback[index] ?? wrongFeedback[String(index)] : "");
+    const fallback = buildPbqOptionFeedback(question, index, choice, question.correct);
+    const feedback = compactFeedbackText(String(existing || "").trim().length >= 25 ? existing : fallback);
+    optionFeedback[index] = ensureFeedbackLead(feedback, index === question.correct);
+    if (index !== question.correct) wrongFeedback[index] = optionFeedback[index].replace(/^Incorrect\.\s*/i, "");
+  });
+  return { ...question, choices, options: choices, optionFeedback, wrongFeedback };
+};
+
 const rawMcqs = evaluateLiteral("MCQ_BANK_RAW");
 const importedMcqs = evaluateLiteral("IMPORTED_MCQ_BANK");
 const lowQualityIds = new Set(evaluateLiteral("LOW_QUALITY_MCQ_IDS"));
@@ -161,11 +243,17 @@ const normalizeSelectionQuestion = question => {
       id:item.id || `b${index}`,
       sentence:item.label || `Prompt ${index + 1}`,
       answer:targetById.get(question.correctMapping?.[item.id]) || "",
+      explanation:item.explanation || item.solution || `Match this item to "${targetById.get(question.correctMapping?.[item.id]) || "the correct target"}" because that pairing best satisfies the scenario.`,
     }));
     return {...question,type:"SELECT & FILL",legacySelectionType:"DRAG & DROP",blanks,selectionOptions:uniqueOptions(targets.map(target => target.label))};
   }
   if (question.type !== "FILL BLANK" && question.type !== "SELECT & FILL") return question;
-  const blanks = question.blanks || [];
+  const blanks = (question.blanks || []).map((blank, index) => ({
+    ...blank,
+    explanation:String(blank.explanation || blank.solution || "").trim().length >= 25
+      ? String(blank.explanation || blank.solution).trim()
+      : `The best selection for blank ${index + 1} is "${String(blank.answer || "").trim()}" because it matches the scenario clue and the SY0-701 concept being tested.`,
+  }));
   const answers = uniqueOptions(blanks.map(blank => blank.answer));
   const hinted = blanks.flatMap(blank => /[,;|]/.test(String(blank.hint || "")) ? String(blank.hint).split(/[,;|]/) : []);
   const selectionOptions = uniqueOptions([...answers, ...(question.selectionOptions || []), ...hinted]);
@@ -177,9 +265,18 @@ const normalizeSelectionQuestion = question => {
   }
   return {...question,type:"SELECT & FILL",legacySelectionType:"FILL BLANK",blanks,selectionOptions};
 };
+
+const enhancePbqQuestion = question => {
+  const normalized = normalizeSelectionQuestion(question);
+  return ensurePbqChoiceFeedback({
+    ...normalized,
+    objective: inferPbqObjective(normalized),
+  });
+};
+
 const pbqs = [...basePbqs, ...importedPbqs]
   .filter(q => !lowQualityPbqIds.has(q.id))
-  .map(normalizeSelectionQuestion);
+  .map(enhancePbqQuestion);
 const errors = [];
 const warnings = [];
 const MAX_MCQ_STEM_LENGTH = 360;
@@ -291,6 +388,8 @@ for (const q of pbqs) {
   if (!q.type) push(errors, q.id, "missing type");
   if (!q.ch) push(errors, q.id, "missing chapter");
   if (!["easy", "medium", "hard"].includes(q.difficulty)) push(errors, q.id, "difficulty must be easy, medium, or hard");
+  if (!/^[1-5]\.\d+$/.test(String(q.objective || ""))) push(errors, q.id, "missing SY0-701 objective tag");
+  else if (!String(q.objective).startsWith(`${q.ch}.`)) push(errors, q.id, `objective ${q.objective} does not match domain ${q.ch}`);
   if (!q.title || q.title.length < 10) push(errors, q.id, "missing or very short title");
   if (!q.question && !q.scenario) push(errors, q.id, "missing question/scenario prompt");
   if (!q.explanation || q.explanation.length < 60) push(errors, q.id, "missing or very short explanation");
@@ -306,12 +405,31 @@ for (const q of pbqs) {
     if (pattern.test(searchablePbqText)) push(errors, q.id, message);
   }
 
+  const pbqChoices = Array.isArray(q.choices) ? q.choices : Array.isArray(q.options) ? q.options : null;
+  if (pbqChoices?.length) {
+    if (!Number.isInteger(q.correct) || q.correct < 0 || q.correct >= pbqChoices.length) push(errors, q.id, "PBQ correct index is invalid");
+    const optionFeedback = q.optionFeedback || {};
+    pbqChoices.forEach((_, index) => {
+      const feedback = optionFeedback[index] || optionFeedback[String(index)];
+      if (!feedback || String(feedback).length < 40) push(errors, q.id, `missing explanation for option ${String.fromCharCode(65 + index)}`);
+      if (index === q.correct && feedback && !/^correct\./i.test(String(feedback).trim())) push(errors, q.id, `correct option ${String.fromCharCode(65 + index)} explanation must start with "Correct."`);
+      if (index !== q.correct && feedback && !/^incorrect\./i.test(String(feedback).trim())) push(errors, q.id, `wrong option ${String.fromCharCode(65 + index)} explanation must start with "Incorrect."`);
+    });
+    const wrongFeedback = q.wrongFeedback || {};
+    pbqChoices.forEach((_, index) => {
+      if (index === q.correct) return;
+      const feedback = wrongFeedback[index] || wrongFeedback[String(index)];
+      if (!feedback || String(feedback).length < 25) push(errors, q.id, `missing wrong-answer explanation for option ${String.fromCharCode(65 + index)}`);
+    });
+  }
+
   if (q.type === "SELECT & FILL") {
     const answerKeys = new Set((q.blanks || []).map(blank => normalize(blank.answer)));
     const distractors = (q.selectionOptions || []).filter(option => !answerKeys.has(normalize(option)));
     if (!Array.isArray(q.blanks) || !q.blanks.length || q.blanks.some(blank => !blank.answer || !blank.sentence)) push(errors, q.id, "Select & Fill PBQ needs complete prompt/answer rows");
     if (!Array.isArray(q.selectionOptions) || q.selectionOptions.length < 4) push(errors, q.id, "Select & Fill PBQ needs at least four shared selector options");
     if (q.blanks?.some(blank => !(q.selectionOptions || []).some(option => normalize(option) === normalize(blank.answer)))) push(errors, q.id, "Select & Fill correct answer is missing from the shared option bank");
+    if (q.blanks?.some(blank => !blank.explanation || String(blank.explanation).length < 25)) push(errors, q.id, "Select & Fill PBQ needs an explanation for every blank");
     if (q.legacySelectionType === "FILL BLANK" && distractors.length < 2) push(errors, q.id, "converted fill-blank PBQ needs at least two plausible distractors");
   } else if (q.type === "ORDERING") {
     if (!Array.isArray(q.items) || !Array.isArray(q.correctOrder)) push(errors, q.id, "ordering PBQ needs items and correctOrder");
@@ -325,6 +443,7 @@ console.log(`- Active MCQs: ${mcqs.length} (${rawMcqs.length} base, ${importedMc
 console.log(`- PBQs: ${pbqs.length} (${basePbqs.length} base, ${importedPbqs.length} imported, ${lowQualityPbqIds.size} hidden low-quality)`);
 console.log(`- MCQ duplicate IDs/text: 0 expected`);
 console.log(`- PBQ duplicate IDs/prompts: 0 expected`);
+console.log(`- PBQ quality gates: SY0-701 objective fit, selector explanations, and every choice option explanation`);
 
 if (errors.length) {
   console.error(`\nFound ${errors.length} issue${errors.length === 1 ? "" : "s"}:`);
