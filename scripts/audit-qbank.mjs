@@ -210,6 +210,89 @@ const ensurePbqChoiceFeedback = question => {
   return { ...question, choices, options: choices, optionFeedback, wrongFeedback };
 };
 
+const GENERIC_PBQ_TITLE_RE = /^(identify|match|complete|order|name|classify|map|choose|apply|configure|evaluate|sequence|place)\b/i;
+
+const pbqContentContext = question => {
+  const domain = String(question?.ch || question?.domain || "");
+  const cat = String(question?.cat || "Security+").toLowerCase();
+  if (domain === "1") return `You are helping a junior analyst make a safe decision about ${cat}.`;
+  if (domain === "2") return `During threat triage, you need to connect the evidence to the most likely ${cat} issue.`;
+  if (domain === "3") return `You are reviewing a proposed architecture change and must choose the safest ${cat} decision.`;
+  if (domain === "4") return `You are the on-call security analyst reviewing operational evidence from a real incident queue.`;
+  if (domain === "5") return `You are supporting a governance and risk review where the answer must be practical and defensible.`;
+  return "You are working through a Security+ performance-based task that requires applying the evidence, not memorising a definition.";
+};
+
+const improvePBQTitle = question => {
+  const title = String(question?.title || "Security+ PBQ").trim();
+  if (!GENERIC_PBQ_TITLE_RE.test(title)) return title;
+  const cat = String(question?.cat || "Security+").trim();
+  const type = String(question?.type || "").toUpperCase();
+  const focus = title
+    .replace(GENERIC_PBQ_TITLE_RE, "")
+    .replace(/^(the|a|an|to|each|correct)\s+/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  const suffix = focus ? ` — ${focus.charAt(0).toLowerCase()}${focus.slice(1)}` : "";
+  if (type === "LOG ANALYSIS") return `${cat} evidence triage`;
+  if (type === "CONFIG/ACL") return `${cat} safe configuration review`;
+  if (type === "TERMINAL SIM") return `${cat} command-output investigation`;
+  if (type === "HOTSPOT") return `${cat} priority finding`;
+  if (type === "ORDERING") return `${cat} action sequence${suffix}`;
+  if (type === "SELECT & FILL" || type === "FILL BLANK" || type === "DRAG & DROP") return `${cat} scenario application${suffix}`;
+  return `${cat} evidence-based decision${suffix}`;
+};
+
+const improvePBQScenario = question => {
+  const scenario = String(question?.scenario || "").trim();
+  const type = String(question?.type || "").toUpperCase();
+  if (scenario.length >= 110) return scenario;
+  const context = pbqContentContext(question);
+  if (type === "LOG ANALYSIS") return `${context} Review the log evidence below, separate strong indicators from distractors, and choose the conclusion that is best supported by the data.`;
+  if (type === "CONFIG/ACL") return `${context} Review the current configuration and choose the change that satisfies the requirement with least privilege and the least unintended access.`;
+  if (type === "TERMINAL SIM") return `${context} Run or review the command output, then use the result to make the best Security+ decision.`;
+  if (type === "ORDERING") return `${context} Put the actions in the order that a careful security team should follow during a realistic work scenario.`;
+  if (type === "SELECT & FILL" || type === "FILL BLANK" || type === "DRAG & DROP") return `${context} Complete each item by matching the scenario clue to the Security+ term or control that fits best.`;
+  if (type === "HOTSPOT") return `${context} Review the diagram or evidence and select the finding that matters most for the stated security objective.`;
+  return `${context} Use the scenario details to choose the best answer. ${scenario}`.trim();
+};
+
+const improvePBQQuestion = question => {
+  const prompt = String(question?.question || "").trim();
+  if (prompt.length >= 70 && /best|most|first|correct|which|what|why|order|match|select/i.test(prompt)) return prompt;
+  const type = String(question?.type || "").toUpperCase();
+  if (type === "LOG ANALYSIS") return `${prompt ? `${prompt} ` : ""}Which conclusion is best supported by the logs, and which distractors should be ruled out?`.trim();
+  if (type === "CONFIG/ACL") return `${prompt ? `${prompt} ` : ""}Which option most safely meets the requirement while avoiding unnecessary exposure?`.trim();
+  if (type === "TERMINAL SIM") return `${prompt ? `${prompt} ` : ""}Based on the command output, which answer is the strongest Security+ decision?`.trim();
+  if (type === "HOTSPOT") return `${prompt ? `${prompt} ` : ""}Which selection best fits the evidence and the security priority?`.trim();
+  if (type === "SCENARIO") return `${prompt ? `${prompt} ` : ""}Choose the best answer using the scenario details, not keyword matching.`;
+  return prompt || "Complete the activity using the scenario evidence and choose the best Security+ answer.";
+};
+
+const improvePBQExplanation = question => {
+  const explanation = String(question?.explanation || "").trim();
+  const type = String(question?.type || "").toUpperCase();
+  const examSkill = type === "LOG ANALYSIS"
+    ? "Exam skill: connect multiple log fields before deciding."
+    : type === "CONFIG/ACL"
+      ? "Exam skill: apply least privilege while preserving required business access."
+      : type === "ORDERING"
+        ? "Exam skill: sequence actions so containment, validation, and recovery happen in a safe order."
+        : type === "SELECT & FILL" || type === "FILL BLANK" || type === "DRAG & DROP"
+          ? "Exam skill: match the term to the clue, then explain why nearby distractors do not fit."
+          : "Exam skill: choose the control that best satisfies the scenario, not merely a familiar keyword.";
+  if (explanation.includes("Exam skill:")) return compactFeedbackText(explanation, 620);
+  return `${compactFeedbackText(explanation, 520)} ${examSkill}`;
+};
+
+const applyPBQContentEditorialPass = question => ({
+  ...question,
+  title: improvePBQTitle(question),
+  scenario: improvePBQScenario(question),
+  question: improvePBQQuestion(question),
+  explanation: improvePBQExplanation(question),
+});
+
 const rawMcqs = evaluateLiteral("MCQ_BANK_RAW");
 const importedMcqs = evaluateLiteral("IMPORTED_MCQ_BANK");
 const lowQualityIds = new Set(evaluateLiteral("LOW_QUALITY_MCQ_IDS"));
@@ -267,7 +350,7 @@ const normalizeSelectionQuestion = question => {
 };
 
 const enhancePbqQuestion = question => {
-  const normalized = normalizeSelectionQuestion(question);
+  const normalized = applyPBQContentEditorialPass(normalizeSelectionQuestion(question));
   return ensurePbqChoiceFeedback({
     ...normalized,
     objective: inferPbqObjective(normalized),
@@ -282,7 +365,7 @@ const warnings = [];
 const MAX_MCQ_STEM_LENGTH = 360;
 const MAX_MCQ_OPTION_LENGTH = 180;
 const MAX_MCQ_TOTAL_LENGTH = 900;
-const MAX_PBQ_PROMPT_LENGTH = 1000;
+const MAX_PBQ_PROMPT_LENGTH = 1250;
 const MAX_PBQ_EXPLANATION_LENGTH = 620;
 const PBQ_DOMAIN_MINIMUMS = Object.freeze({
   "1": 18,
@@ -391,8 +474,12 @@ for (const q of pbqs) {
   if (!/^[1-5]\.\d+$/.test(String(q.objective || ""))) push(errors, q.id, "missing SY0-701 objective tag");
   else if (!String(q.objective).startsWith(`${q.ch}.`)) push(errors, q.id, `objective ${q.objective} does not match domain ${q.ch}`);
   if (!q.title || q.title.length < 10) push(errors, q.id, "missing or very short title");
+  if (GENERIC_PBQ_TITLE_RE.test(String(q.title || ""))) push(errors, q.id, "title is still generic instead of scenario/skill focused");
   if (!q.question && !q.scenario) push(errors, q.id, "missing question/scenario prompt");
+  if (!q.scenario || q.scenario.length < 100) push(errors, q.id, "scenario needs enough context for a realistic PBQ");
+  if (!q.question || q.question.length < 50) push(errors, q.id, "question prompt needs a clear decision task");
   if (!q.explanation || q.explanation.length < 60) push(errors, q.id, "missing or very short explanation");
+  if (!String(q.explanation || "").includes("Exam skill:")) push(errors, q.id, "explanation needs an explicit exam-skill takeaway");
   const promptLength = [q.title, q.scenario, q.question, q.diagram, q.logData].filter(Boolean).join(" ").length;
   if (promptLength > MAX_PBQ_PROMPT_LENGTH) {
     push(warnings, q.id, `PBQ prompt is too long for smooth practice (${promptLength}/${MAX_PBQ_PROMPT_LENGTH} chars)`);
@@ -443,7 +530,7 @@ console.log(`- Active MCQs: ${mcqs.length} (${rawMcqs.length} base, ${importedMc
 console.log(`- PBQs: ${pbqs.length} (${basePbqs.length} base, ${importedPbqs.length} imported, ${lowQualityPbqIds.size} hidden low-quality)`);
 console.log(`- MCQ duplicate IDs/text: 0 expected`);
 console.log(`- PBQ duplicate IDs/prompts: 0 expected`);
-console.log(`- PBQ quality gates: SY0-701 objective fit, selector explanations, and every choice option explanation`);
+console.log(`- PBQ quality gates: content clarity, SY0-701 objective fit, selector explanations, and every choice option explanation`);
 
 if (errors.length) {
   console.error(`\nFound ${errors.length} issue${errors.length === 1 ? "" : "s"}:`);
