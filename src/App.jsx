@@ -17678,8 +17678,9 @@ body{background:
 .practice-result-kicker{font-size:11px;font-weight:900;text-transform:uppercase;color:var(--result-color);}
 .practice-result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
 .practice-review-list{padding:8px!important;}
-.practice-review-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:11px;align-items:center;padding:12px;border-radius:8px;}
+.practice-review-row{appearance:none;width:100%;border:0;background:transparent;text-align:left;font:inherit;display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:11px;align-items:center;padding:12px;border-radius:8px;cursor:pointer;transition:background .16s,transform .16s,box-shadow .16s;}
 .practice-review-row+.practice-review-row{border-top:1px solid ${t.border};}
+.practice-review-row:hover,.practice-review-row:focus-visible{background:color-mix(in srgb,var(--review-color) 8%,${t.surface});transform:translateY(-1px);box-shadow:0 10px 22px color-mix(in srgb,var(--review-color) 12%,transparent);outline:none;}
 .practice-review-status{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:var(--review-color);color:#fff;}
 .practice-review-row span:nth-child(2){font-size:13px;color:${t.text};line-height:1.45;}
 .practice-review-row small{font-size:11px;font-weight:800;color:var(--review-color);}
@@ -22722,6 +22723,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [draftSelections,setDraftSelections]=useState([]);
   const [results,setResults]=useState([]);
   const [done,setDone]=useState(false);
+  const [finishedReviewMode,setFinishedReviewMode]=useState(false);
   const [showWrong,setShowWrong]=useState(false);
   const [resumeAvailable,setResumeAvailable]=useState(false);
   const [answerBurst,setAnswerBurst]=useState(null);
@@ -22782,9 +22784,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   },[isGuest]);
 
   useEffect(()=>{
-    onFocusModeChange?.(isVisible && started && !done);
+    onFocusModeChange?.(isVisible && started && !done && !finishedReviewMode);
     return()=>onFocusModeChange?.(false);
-  },[isVisible,started,done,onFocusModeChange]);
+  },[isVisible,started,done,finishedReviewMode,onFocusModeChange]);
 
   useEffect(()=>{
     if(started)return;
@@ -22796,13 +22798,13 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     const pool=buildMcqPracticePool(filtered, attempts, Math.min(quizCount,filtered.length), reviewMode, starredQuestionIds).map(shuffleMcqOptions);
     capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: activeDiffFilter, topic: activeTopicFilter, question_count: pool.length, tier: user.tier });
     setSessionContext({kind:reviewMode,label:reviewMode==="smart"?"Smart Review":"MCQ Practice"});
-    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setSessionStartedAt(Date.now());
+    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());
   };
   const startMissedQuiz=()=>{
     const pool=buildMcqPracticePool(missedQuestions,attempts,Math.min(50,missedQuestions.length),"smart",starredQuestionIds,{directMissedIds:missedMcqIds}).map(shuffleMcqOptions);
     capture("mcq_missed_review_started", { question_count: pool.length, tier: user.tier });
     setSessionContext({kind:"missed",label:"Missed-question repair"});
-    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setSessionStartedAt(Date.now());
+    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());
   };
   const startChapterSmartReview=useCallback((chapterId,requestedCount=10,source="chapter_review")=>{
     if(!chapterId||isGuest)return;
@@ -22834,6 +22836,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     setDraftSelections([]);
     setResults([]);
     setDone(false);
+    setFinishedReviewMode(false);
     setStarted(true);
     setSessionStartedAt(Date.now());
     setStarredView(false);
@@ -22844,7 +22847,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     const pool=rankQuestionsBySm2(starredMcqs,attempts,new Set(starredMcqs.map(q=>q.id))).slice(0,Math.min(50,starredMcqs.length)).map(shuffleMcqOptions);
     capture("mcq_starred_review_started", { question_count: pool.length, tier: user.tier });
     setSessionContext({kind:"starred",label:"Starred-question review"});
-    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
+    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
   };
 
   useEffect(()=>{
@@ -22863,9 +22866,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
   useEffect(()=>{
     if(isGuest)return;
-    if(!started||done||!questions.length)return;
+    if(!started||done||finishedReviewMode||!questions.length)return;
     DB.savePracticeSession(sessionKey,{questions,qi,selected,submitted,draftSelections,results,sessionContext,done:false,updatedAt:new Date().toISOString()});
-  },[isGuest,sessionKey,started,done,questions,qi,selected,submitted,draftSelections,results,sessionContext]);
+  },[isGuest,sessionKey,started,done,finishedReviewMode,questions,qi,selected,submitted,draftSelections,results,sessionContext]);
 
   const continueQuiz=async()=>{
     const saved=await DB.getPracticeSession(sessionKey);
@@ -22878,6 +22881,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     setResults(saved.results||[]);
     setSessionContext(saved.sessionContext||{kind:"saved",label:"Saved MCQ practice"});
     setDone(false);
+    setFinishedReviewMode(false);
     setStarted(true);
     setShowWrong(false);
     setSessionStartedAt(Date.now());
@@ -22907,6 +22911,19 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     setSubmitted(Boolean(results[index]));
     setShowWrong(false);
   };
+  const reviewCompletedQuestion=index=>{
+    const result=results[index];
+    if(!result||!questions[index])return;
+    setQi(index);
+    setSelected(result.selected);
+    setSubmitted(true);
+    setDone(false);
+    setFinishedReviewMode(true);
+    setStarted(true);
+    setShowWrong(false);
+    setAnswerBurst(null);
+    capture("mcq_completed_question_reviewed", { question_id: questions[index].id, correct: result.correct, tier: user.tier });
+  };
 
   const submitQ=()=>{
     if(selected===null)return;
@@ -22926,6 +22943,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       capture("mcq_quiz_completed", { correct_count: correctCount, question_count: questions.length, tier: user.tier });
       reportPracticeSession();
       DB.clearPracticeSession(sessionKey);
+      setFinishedReviewMode(false);
       setDone(true);
     }
   };
@@ -22938,10 +22956,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     capture("mcq_quiz_completed", { correct_count: correctCount, question_count: questions.length, tier: user.tier });
     reportPracticeSession();
     DB.clearPracticeSession(sessionKey);
+    setFinishedReviewMode(false);
     setDone(true);
   };
   const retakeCurrentQuiz=()=>{
-    setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setStarted(true);setShowWrong(false);setSessionStartedAt(Date.now());
+    setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setShowWrong(false);setSessionStartedAt(Date.now());
   };
 
   const correctCount=results.filter(r=>r?.correct).length;
@@ -23352,7 +23371,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
               :"Mistakes are useful data. Review the missed concepts now and they will become easier to recognise next time."}</p>
           <div className="practice-result-actions">
             <button className="btn btn-primary" onClick={retakeCurrentQuiz}>Retry this set</button>
-            <button className="btn btn-ghost" onClick={()=>{setStarted(false);setDone(false);}}>Build a new quiz</button>
+            <button className="btn btn-ghost" onClick={()=>{setStarted(false);setDone(false);setFinishedReviewMode(false);}}>Build a new quiz</button>
           </div>
         </div>
       </section>
@@ -23360,17 +23379,18 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,margin:"22px 0 10px",textAlign:"left"}}>
         <div>
           <div style={{fontSize:11,fontWeight:900,textTransform:"uppercase",color:t.accent}}>Answer review</div>
-          <h3 style={{fontSize:19,color:t.text}}>See what to keep and what to revisit</h3>
+          <h3 style={{fontSize:19,color:t.text}}>Tap any question to review it</h3>
+          <p style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:3}}>Review correct and incorrect answers in their answered state.</p>
         </div>
         <span className="chip" style={{color:t.textSec,borderColor:t.border,background:t.panel}}>{results.length} answered</span>
       </div>
       <div className="card practice-review-list" style={{padding:"16px 20px",marginBottom:16,textAlign:"left"}}>
         {results.map((r,i)=>(
-          <div key={i} className="practice-review-row" style={{"--review-color":r.correct?t.green:t.red}}>
+          <button key={i} type="button" className="practice-review-row" style={{"--review-color":r.correct?t.green:t.red}} onClick={()=>reviewCompletedQuestion(i)}>
             <span className="practice-review-status">{r.correct?<Check size={16} strokeWidth={3}/>:<X size={16} strokeWidth={3}/>}</span>
             <span>{questions[i]?.q?.slice(0,88)}{questions[i]?.q?.length>88?"...":""}</span>
-            <small>{r.correct?"Mastered":"Review"}</small>
-          </div>
+            <small>{r.correct?"Review correct":"Review miss"}</small>
+          </button>
         ))}
       </div>
       {!isGuest&&user.tier!=="pro"&&sessionLessonPath.length>0&&(
@@ -23451,7 +23471,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     <div style={{padding:"24px",maxWidth:700,margin:"0 auto"}} className="fu active-practice-screen mcq-question-screen" key={qi}>
       <header className="practice-session-header">
         <div className="practice-session-top">
-          <div className="practice-session-name"><span>{sessionContext?.kind==="weak-area"?<Brain size={16}/>:<BookOpenCheck size={16}/>}</span>{sessionContext?.label||"MCQ Practice"}</div>
+          <div className="practice-session-name"><span>{finishedReviewMode?<CheckCircle2 size={16}/>:sessionContext?.kind==="weak-area"?<Brain size={16}/>:<BookOpenCheck size={16}/>}</span>{finishedReviewMode?"Answered Set Review":sessionContext?.label||"MCQ Practice"}</div>
           <div className="practice-session-count">Question {qi+1} of {questions.length} · {answeredCount} answered</div>
         </div>
         <div className="practice-session-progress" aria-label={`${Math.round(((qi+1)/questions.length)*100)}% through this practice set`}><span style={{width:`${((qi+1)/questions.length)*100}%`}}/></div>
@@ -23468,7 +23488,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         </nav>
         <div className="practice-session-controls">
           <button className="btn btn-ghost" style={{fontSize:11,minHeight:34,padding:"7px 10px"}} disabled={qi===0} onClick={()=>goToQuestion(qi-1)}>← Previous</button>
-          <span>{allAnswered?"All questions answered":"You can return to drafted answers anytime"}</span>
+          <span>{finishedReviewMode?"Reviewing completed answers":allAnswered?"All questions answered":"You can return to drafted answers anytime"}</span>
           <button className="btn btn-ghost" style={{fontSize:11,minHeight:34,padding:"7px 10px"}} disabled={qi===questions.length-1} onClick={()=>goToQuestion(qi+1)}>Next →</button>
         </div>
       </header>
@@ -23560,12 +23580,21 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
             </div>}
           </div>
           <AnswerBurst result={answerBurst} t={t}/>
-          <div className="practice-action-bar">
-            <div className="practice-action-copy"><strong>{selected===current.correct?"Keep the momentum":"Use the feedback, then continue"}</strong>{qi<questions.length-1?"Your next question is ready.":allAnswered?"Your result summary is ready.":"Some questions still need answers."}</div>
-            <button className="btn btn-primary" style={{minWidth:190}} onClick={qi<questions.length-1?nextQ:finishQuiz}>
-              {qi<questions.length-1?"Next Question →":allAnswered?"See Results →":"Review Unanswered →"}
-            </button>
-          </div>
+          {finishedReviewMode?(
+            <div className="practice-action-bar">
+              <div className="practice-action-copy"><strong>Review mode</strong>Choose another question number above, or return to the result summary.</div>
+              <button className="btn btn-primary" style={{minWidth:190}} onClick={()=>{setDone(true);setFinishedReviewMode(false);setAnswerBurst(null);}}>
+                Back to results →
+              </button>
+            </div>
+          ):(
+            <div className="practice-action-bar">
+              <div className="practice-action-copy"><strong>{selected===current.correct?"Keep the momentum":"Use the feedback, then continue"}</strong>{qi<questions.length-1?"Your next question is ready.":allAnswered?"Your result summary is ready.":"Some questions still need answers."}</div>
+              <button className="btn btn-primary" style={{minWidth:190}} onClick={qi<questions.length-1?nextQ:finishQuiz}>
+                {qi<questions.length-1?"Next Question →":allAnswered?"See Results →":"Review Unanswered →"}
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>
