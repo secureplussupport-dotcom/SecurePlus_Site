@@ -4,11 +4,16 @@ import {
   getSupabaseAdmin,
   isQuestionAdminSchemaError,
   json,
+  normalizeSafeId,
+  normalizeSafeText,
+  requireJsonContentType,
   requireQuestionAdmin,
+  SafeInputError,
+  sanitizeJsonPayload,
 } from "../_utils.js";
 
 function cleanText(value, max = 1000) {
-  return String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
+  return normalizeSafeText(value, { max, multiline: false });
 }
 
 function cleanQuestionKind(value) {
@@ -23,7 +28,84 @@ function cleanAction(value) {
 
 function cleanPayload(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return {};
-  return value;
+  return sanitizeJsonPayload(value, {
+    field: "Question payload",
+    maxDepth: 8,
+    maxStringLength: 12000,
+    maxTotalStringLength: 50000,
+  });
+}
+
+function buildPbqRow(question, sortOrder) {
+  const domain = Number.parseInt(question.ch || question.domain || "1", 10) || 1;
+  const evidence = {
+    logData: question.logData || "",
+    currentConfig: question.currentConfig || "",
+    codeBlock: question.codeBlock || "",
+    codeLanguage: question.codeLanguage || "",
+    diagram: question.diagram || "",
+    hint: question.hint || "",
+  };
+  Object.keys(evidence).forEach(key => {
+    if (!evidence[key]) delete evidence[key];
+  });
+
+  const interactiveData = {
+    choices: question.choices || question.options || [],
+    items: question.items || [],
+    targets: question.targets || [],
+    targetLayout: question.targetLayout || null,
+    blanks: question.blanks || [],
+    selectionOptions: question.selectionOptions || [],
+  };
+  Object.keys(interactiveData).forEach(key => {
+    if (interactiveData[key] === null || (Array.isArray(interactiveData[key]) && !interactiveData[key].length)) delete interactiveData[key];
+  });
+
+  const correctAnswer = {
+    correct: question.correct,
+    answer: question.answer || "",
+    correctMapping: question.correctMapping || null,
+    correctOrder: question.correctOrder || null,
+  };
+  Object.keys(correctAnswer).forEach(key => {
+    if (correctAnswer[key] === null || correctAnswer[key] === "" || correctAnswer[key] === undefined) delete correctAnswer[key];
+  });
+
+  const payload = sanitizeJsonPayload({
+    scenario: question.scenario || "",
+    question: question.question || "",
+    explanation: question.explanation || "",
+    evidence,
+    interactiveData,
+    correctAnswer,
+    wrongFeedback: question.wrongFeedback || {},
+    optionFeedback: question.optionFeedback || {},
+    objective: question.objective || "",
+    syllabusDomain: question.syllabusDomain || `Domain ${String(question.ch || domain)}`,
+    difficulty: question.difficulty || "medium",
+    cat: question.cat || "",
+    ch: String(question.ch || domain),
+    beyondTextbook: Boolean(question.beyondTextbook),
+    acronyms: question.acronyms || [],
+    sortOrder,
+    appQuestion: question,
+  }, {
+    field: "PBQ payload",
+    maxDepth: 8,
+    maxStringLength: 12000,
+    maxTotalStringLength: 50000,
+  });
+
+  return {
+    id: question.id,
+    title: normalizeSafeText(question.title || "Untitled PBQ", { field: "PBQ title", max: 160 }),
+    type: normalizeSafeText(question.type || "SCENARIO", { field: "PBQ type", max: 40 }),
+    domain,
+    is_pro: question.is_pro ?? question.isPro ?? true,
+    payload,
+    updated_at: new Date().toISOString(),
+  };
 }
 
 function overrideSnapshot(row) {
@@ -45,20 +127,37 @@ export default async function handler(req, res) {
   }
 
   try {
+    requireJsonContentType(req);
     const supabase = getSupabaseAdmin();
     const admin = await requireQuestionAdmin(supabase, getBearerToken(req), "edit questions");
     if (!admin.ok) return json(res, admin.status, { error: admin.error });
 
-    const body = await getJsonBody(req);
+    const body = await getJsonBody(req, { throwSafeErrors: true });
     const questionKind = cleanQuestionKind(body.questionKind);
     const action = cleanAction(body.action);
     const payload = cleanPayload(body.payload);
-    const questionId = cleanText(body.questionId || payload.id, 80);
+    const questionId = normalizeSafeId(body.questionId || payload.id, { field: "Question ID", max: 80 });
     const sortOrderValue = Number.parseInt(body.sortOrder, 10);
     const sortOrder = Number.isFinite(sortOrderValue) && sortOrderValue > 0 ? sortOrderValue : null;
 
     if (!questionId) return json(res, 400, { error: "Question ID is required." });
     if (action === "upsert" && !payload.id) return json(res, 400, { error: "Question payload is missing its ID." });
+
+    if (questionKind === "pbq") {
+      if (action === "disable") {
+        const { error: deletePbqError } = await supabase
+          .from("pbqs")
+          .delete()
+          .eq("id", questionId);
+        if (deletePbqError) throw deletePbqError;
+      } else {
+        const pbqRow = buildPbqRow(payload, sortOrder);
+        const { error: pbqUpsertError } = await supabase
+          .from("pbqs")
+          .upsert(pbqRow, { onConflict: "id" });
+        if (pbqUpsertError) throw pbqUpsertError;
+      }
+    }
 
     const { data: previousRow, error: previousError } = await supabase
       .from("question_overrides")
@@ -106,6 +205,9 @@ export default async function handler(req, res) {
     return json(res, 200, { ok: true, override: data });
   } catch (error) {
     console.error("Question override save failed:", error);
+    if (error instanceof SafeInputError) {
+      return json(res, error.status, { error: error.message });
+    }
     if (isQuestionAdminSchemaError(error)) {
       return json(res, 409, {
         error: "Question Manager database setup is missing. Run supabase/question-admin.sql in Supabase SQL Editor.",

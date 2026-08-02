@@ -26469,21 +26469,77 @@ function questionToAdminForm(question,kind,index) {
   };
 }
 
+const ADMIN_CONTROL_CHARS_RE=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/;
+const ADMIN_CONTROL_CHARS_GLOBAL_RE=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
+const ADMIN_UNSAFE_TEXT_PATTERNS=[
+  {pattern:/<\s*\/?\s*(script|iframe|object|embed|svg|math|link|meta|base|form|input|button|textarea|select|option|img|video|audio|source|style)\b/i,label:"HTML/script tag"},
+  {pattern:/\bon[a-z]+\s*=/i,label:"script event handler"},
+  {pattern:/\b(?:javascript|vbscript)\s*:/i,label:"script URL"},
+  {pattern:/\bdata\s*:\s*(?:text\/html|image\/svg\+xml|application\/javascript)/i,label:"executable data URL"},
+  {pattern:/\bsrcdoc\s*=/i,label:"embedded HTML document"},
+  {pattern:/style\s*=\s*["'][^"']*expression\s*\(/i,label:"executable style expression"},
+  {pattern:/file\s*:\s*\/\//i,label:"local file URL"},
+];
+
+function getAdminUnsafeTextReason(value) {
+  const text=String(value||"");
+  if(ADMIN_CONTROL_CHARS_RE.test(text))return "hidden control character";
+  return ADMIN_UNSAFE_TEXT_PATTERNS.find(item=>item.pattern.test(text))?.label || "";
+}
+
+function cleanAdminSafeText(value,{field="Text",max=4000,multiline=true,allowEmpty=true}={}) {
+  const normalized=String(value||"")
+    .replace(ADMIN_CONTROL_CHARS_GLOBAL_RE,"")
+    .replace(/\r\n?/g,"\n");
+  const text=multiline ? normalized.trim() : normalized.replace(/\s+/g," ").trim();
+  if(!allowEmpty&&!text) throw new Error(`${field} is required.`);
+  if(text.length>max) throw new Error(`${field} is too long. Keep it under ${max} characters.`);
+  const unsafeReason=getAdminUnsafeTextReason(text);
+  if(unsafeReason) {
+    throw new Error(`${field} contains an unsafe ${unsafeReason}. Use plain text only; do not paste HTML, SVG, data URLs, scripts, or local file links.`);
+  }
+  return text;
+}
+
+function cleanAdminQuestionId(value) {
+  const id=cleanAdminSafeText(value,{field:"Question ID",max:80,multiline:false,allowEmpty:false});
+  if(!/^[a-z0-9][a-z0-9_-]{1,79}$/i.test(id)) {
+    throw new Error("Question ID can use only letters, numbers, hyphens, and underscores.");
+  }
+  return id;
+}
+
+function cleanAdminShortCode(value,{field="Code",max=40}={}) {
+  const text=cleanAdminSafeText(value,{field,max,multiline:false});
+  if(text&&!/^[a-z0-9+#._ -]+$/i.test(text)) {
+    throw new Error(`${field} can use only letters, numbers, spaces, +, #, period, underscore, or hyphen.`);
+  }
+  return text;
+}
+
 function cleanAdminQuestionPayload(form,kind) {
-  const id=String(form.id||"").trim();
+  const id=cleanAdminQuestionId(form.id);
   const difficulty=String(form.difficulty||"medium").toLowerCase();
   const sortOrder=Math.max(1,Number.parseInt(form.order,10)||1);
-  if(!id) throw new Error("Question ID is required.");
   if(!["easy","medium","hard"].includes(difficulty)) throw new Error("Difficulty must be Easy, Medium, or Hard.");
   if(kind==="mcq") {
-    const opts=(form.opts||[]).map(opt=>String(opt||"").trim());
-    if(String(form.q||"").trim().length<20) throw new Error("MCQ question must be at least 20 characters.");
+    const q=cleanAdminSafeText(form.q,{field:"MCQ question",max:3000});
+    const opts=(form.opts||[]).map((opt,index)=>cleanAdminSafeText(opt,{field:`MCQ option ${String.fromCharCode(65+index)}`,max:800,multiline:false}));
+    if(q.length<20) throw new Error("MCQ question must be at least 20 characters.");
     if(opts.length!==4||opts.some(opt=>opt.length<1)) throw new Error("All 4 MCQ answer choices must be filled in.");
     if(!Number.isInteger(Number(form.correct))||Number(form.correct)<0||Number(form.correct)>3) throw new Error("Pick the correct MCQ answer.");
-    if(String(form.exp||"").trim().length<20) throw new Error("The correct-answer explanation must be at least 20 characters.");
+    const exp=cleanAdminSafeText(form.exp,{field:"Correct-answer explanation",max:3000});
+    if(exp.length<20) throw new Error("The correct-answer explanation must be at least 20 characters.");
+    const wrongFeedback=Object.fromEntries([0,1,2,3].map(index=>[
+      index,
+      cleanAdminSafeText(form.wrongFeedback?.[index]||form.wrongFeedback?.[String(index)]||"",{
+        field:`Wrong-option explanation ${String.fromCharCode(65+index)}`,
+        max:2000,
+      })
+    ]));
     const missingWrongFeedback=opts.reduce((missing,_,index)=>{
       if(index===Number(form.correct))return missing;
-      if(String(form.wrongFeedback?.[index]||form.wrongFeedback?.[String(index)]||"").trim().length<25) {
+      if(String(wrongFeedback[index]||"").length<25) {
         missing.push(String.fromCharCode(65+index));
       }
       return missing;
@@ -26496,12 +26552,12 @@ function cleanAdminQuestionPayload(form,kind) {
       ch:String(form.ch||"1"),
       difficulty,
       beyondTextbook:Boolean(form.beyondTextbook),
-      topic:String(form.topic||"General Security Concepts").trim(),
-      q:String(form.q||"").trim(),
+      topic:cleanAdminSafeText(form.topic||"General Security Concepts",{field:"Topic",max:140,multiline:false}),
+      q,
       opts,
       correct:Number(form.correct),
-      exp:String(form.exp||"").trim(),
-      wrongFeedback:form.wrongFeedback||{}
+      exp,
+      wrongFeedback
     });
     question.acronyms=getMcqAcronyms(question);
     return {
@@ -26510,53 +26566,56 @@ function cleanAdminQuestionPayload(form,kind) {
     };
   }
   const choiceEntries=(form.choices||[])
-    .map((choice,index)=>({index,text:String(choice||"").trim()}))
+    .map((choice,index)=>({index,text:cleanAdminSafeText(choice,{field:`PBQ option ${String.fromCharCode(65+index)}`,max:1000,multiline:false})}))
     .filter(entry=>entry.text);
   const choices=choiceEntries.map(entry=>entry.text);
   const rawPbqType=String(form.type||"SCENARIO").trim().toUpperCase();
   const pbqType=["DRAG & DROP","FILL BLANK"].includes(rawPbqType)?SELECT_FILL_PBQ_TYPE:rawPbqType;
-  const scenarioText=String(form.scenario||"").trim();
-  const taskText=String(form.question||"").trim();
-  if(String(form.title||"").trim().length<8) throw new Error("PBQ title must be at least 8 characters.");
+  const title=cleanAdminSafeText(form.title,{field:"PBQ title",max:160,multiline:false});
+  const scenarioText=cleanAdminSafeText(form.scenario,{field:"PBQ scenario",max:6000});
+  const taskText=cleanAdminSafeText(form.question,{field:"PBQ task",max:3000});
+  if(title.length<8) throw new Error("PBQ title must be at least 8 characters.");
   if(scenarioText.length<10&&taskText.length<10) throw new Error("PBQ needs either a scenario or a task prompt.");
   if(![SELECT_FILL_PBQ_TYPE,"ORDERING"].includes(pbqType)&&taskText.length<10) throw new Error("PBQ task/question must be at least 10 characters.");
   const question={
     id,
     type:pbqType,
     ch:String(form.ch||"1"),
-    cat:String(form.cat||"General Security Concepts").trim(),
+    cat:cleanAdminSafeText(form.cat||"General Security Concepts",{field:"PBQ topic",max:140,multiline:false}),
     difficulty,
     beyondTextbook:Boolean(form.beyondTextbook),
-    title:String(form.title||"").trim(),
+    title,
     scenario:scenarioText,
     question:taskText,
-    explanation:String(form.explanation||"").trim()
+    explanation:cleanAdminSafeText(form.explanation,{field:"PBQ explanation",max:4000})
   };
-  const codeBlock=String(form.codeBlock||"").trim();
+  const codeBlock=cleanAdminSafeText(form.codeBlock,{field:"PBQ code/config evidence",max:12000});
   if(codeBlock) {
-    question.codeLanguage=String(form.codeLanguage||"").trim().slice(0,40);
+    question.codeLanguage=cleanAdminShortCode(form.codeLanguage,{field:"Code language",max:40});
     question.codeBlock=codeBlock;
   }
   if(pbqType==="TERMINAL SIM") {
-    question.hint=String(form.hint||"").trim();
-    question.answer=String(form.answer||"").trim();
+    question.hint=cleanAdminSafeText(form.hint,{field:"Terminal hint",max:1000});
+    question.answer=cleanAdminSafeText(form.answer,{field:"Terminal answer",max:1000,multiline:false});
   }
-  if(pbqType==="LOG ANALYSIS") question.logData=String(form.logData||"").trim();
-  if(pbqType==="HOTSPOT") question.diagram=String(form.diagram||"").trim();
-  if(pbqType==="CONFIG/ACL") question.currentConfig=String(form.currentConfig||"").trim();
+  if(pbqType==="LOG ANALYSIS") question.logData=cleanAdminSafeText(form.logData,{field:"Log evidence",max:12000});
+  if(pbqType==="HOTSPOT") question.diagram=cleanAdminSafeText(form.diagram,{field:"Diagram text",max:8000});
+  if(pbqType==="CONFIG/ACL") question.currentConfig=cleanAdminSafeText(form.currentConfig,{field:"Current configuration",max:12000});
   if(pbqType===SELECT_FILL_PBQ_TYPE) {
     const blanks=(form.blanks||[]).map((blank,index)=>({
-      id:String(blank.id||`b${index}`).trim()||`b${index}`,
-      sentence:String(blank.sentence||"").trim(),
-      answer:String(blank.answer||"").trim(),
-      acceptedAnswers:parseAcceptedAnswers(blank.acceptedAnswers),
-      hint:String(blank.hint||"").trim(),
-      explanation:String(blank.explanation||"").trim()
+      id:cleanAdminSafeText(blank.id||`b${index}`,{field:`Blank ${index+1} ID`,max:40,multiline:false})||`b${index}`,
+      sentence:cleanAdminSafeText(blank.sentence,{field:`Blank ${index+1} prompt`,max:1200}),
+      answer:cleanAdminSafeText(blank.answer,{field:`Blank ${index+1} answer`,max:300,multiline:false}),
+      acceptedAnswers:parseAcceptedAnswers(
+        cleanAdminSafeText(blank.acceptedAnswers,{field:`Blank ${index+1} accepted answers`,max:1200})
+      ).map((answer,answerIndex)=>cleanAdminSafeText(answer,{field:`Blank ${index+1} accepted answer ${answerIndex+1}`,max:300,multiline:false})),
+      hint:cleanAdminSafeText(blank.hint,{field:`Blank ${index+1} hint`,max:800}),
+      explanation:cleanAdminSafeText(blank.explanation,{field:`Blank ${index+1} explanation`,max:1200})
     })).filter(blank=>blank.sentence||blank.answer||blank.acceptedAnswers.length);
     if(!blanks.length) throw new Error("Select & Fill PBQs need at least one blank.");
     if(blanks.some(blank=>!blank.sentence||!blank.answer)) throw new Error("Every Select & Fill row needs a prompt and correct answer.");
     const selectionOptions=uniqueSelectionOptions([
-      ...(form.selectionOptions||[]),
+      ...(form.selectionOptions||[]).map((option,index)=>cleanAdminSafeText(option,{field:`Selector option ${index+1}`,max:300,multiline:false})),
       ...blanks.map(blank=>blank.answer),
     ]);
     const answerKeys=new Set(blanks.map(blank=>normalizeFillBlankAnswer(blank.answer)));
@@ -26566,7 +26625,10 @@ function cleanAdminQuestionPayload(form,kind) {
     question.blanks=blanks;
     question.selectionOptions=selectionOptions;
   } else if(pbqType==="ORDERING") {
-    const items=(form.items||[]).map((item,index)=>({id:String(item.id||`i${index}`).trim()||`i${index}`,label:String(item.label||"").trim()})).filter(item=>item.label);
+    const items=(form.items||[]).map((item,index)=>({
+      id:cleanAdminSafeText(item.id||`i${index}`,{field:`Item ${index+1} ID`,max:40,multiline:false})||`i${index}`,
+      label:cleanAdminSafeText(item.label,{field:`Item ${index+1} label`,max:800,multiline:false})
+    })).filter(item=>item.label);
     if(items.length<2) throw new Error("Ordering PBQs need at least 2 ordered items.");
     question.items=items;
     question.correctOrder=items.map(item=>item.id);
@@ -26576,7 +26638,10 @@ function cleanAdminQuestionPayload(form,kind) {
     const correctIndex=Math.max(0,choiceEntries.findIndex(entry=>entry.index===formCorrect));
     const wrongFeedback=choiceEntries.reduce((feedback,entry,index)=>{
       if(index===correctIndex)return feedback;
-      const value=String(form.wrongFeedback?.[entry.index]||form.wrongFeedback?.[String(entry.index)]||"").trim();
+      const value=cleanAdminSafeText(form.wrongFeedback?.[entry.index]||form.wrongFeedback?.[String(entry.index)]||"",{
+        field:`PBQ wrong-option explanation ${String.fromCharCode(65+index)}`,
+        max:2000,
+      });
       if(value) feedback[index]=value;
       return feedback;
     },{});
@@ -26884,26 +26949,11 @@ async function saveQuestionOverrideRequest({kind,question,sortOrder,action="upse
 }
 
 async function saveRemotePBQRequest({question,sortOrder}) {
-  if(!isSupabaseConfigured || !supabase) throw new Error("Supabase is not configured.");
-  const token=await getSupabaseAccessToken();
-  if(!token) throw new Error("Please sign in again before saving PBQ changes.");
-  const row=buildSupabasePBQMutation(question,sortOrder);
-  const { error } = await supabase
-    .from("pbqs")
-    .upsert(row,{onConflict:"id"});
-  if(error) throw error;
-  return row;
+  return saveQuestionOverrideRequest({kind:"pbq",question,sortOrder,action:"upsert"});
 }
 
 async function deleteRemotePBQRequest(questionId) {
-  if(!isSupabaseConfigured || !supabase) throw new Error("Supabase is not configured.");
-  const token=await getSupabaseAccessToken();
-  if(!token) throw new Error("Please sign in again before deleting PBQs.");
-  const { error } = await supabase
-    .from("pbqs")
-    .delete()
-    .eq("id",questionId);
-  if(error) throw error;
+  return saveQuestionOverrideRequest({kind:"pbq",question:{id:questionId},sortOrder:null,action:"disable"});
 }
 
 async function loadQuestionOverrideHistoryRequest() {
@@ -27210,7 +27260,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
     setSaving(true);setError("");setStatus("");
     try{
       if(kind==="pbq") await deleteRemotePBQRequest(targetId);
-      await saveQuestionOverrideRequest({kind,question:{id:targetId},sortOrder:null,action:"disable"});
+      else await saveQuestionOverrideRequest({kind,question:{id:targetId},sortOrder:null,action:"disable"});
       await onQuestionBankRefresh?.();
       if(kind==="pbq") await onPbqBankRefresh?.();
       await loadHistory();

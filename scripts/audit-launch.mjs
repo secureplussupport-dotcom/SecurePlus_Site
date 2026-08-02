@@ -94,6 +94,10 @@ if (!errors.length) {
   requireContains("api/_utils.js", "SUPABASE_SERVICE_ROLE_KEY", "server API must use Supabase service role only on the server");
   requireContains("api/_utils.js", "STRIPE_SECRET_KEY", "server API must load Stripe secret from process.env");
   requireContains("api/_utils.js", "persistSession: false", "server Supabase admin client should not persist sessions");
+  requireContains("api/_utils.js", "function unsafeTextReason", "shared API utilities must detect unsafe text payloads");
+  requireContains("api/_utils.js", "function sanitizeJsonPayload", "shared API utilities must recursively sanitize saved JSON payloads");
+  requireContains("api/_utils.js", "function requireJsonContentType", "mutating JSON APIs must reject form-data/file-upload payloads");
+  requireContains("api/_utils.js", "MAX_JSON_BODY_BYTES", "API raw-body parsing should enforce a configurable request size limit");
 
   for (const file of [
     "server/stripe/checkout.js",
@@ -134,6 +138,12 @@ if (!errors.length) {
   }
   requireContains("api/account/delete.js", 'body.deletionToken', "account deletion must require a single-use email token");
   requireContains("api/account/delete.js", 'supabase.auth.admin.signOut(token, "global")', "account deletion must revoke Supabase sessions before deleting the user");
+  requireContains("api/question-overrides/save.js", "requireJsonContentType(req)", "Question Manager saves must reject non-JSON/file-upload payloads");
+  requireContains("api/question-overrides/save.js", "sanitizeJsonPayload", "Question Manager saves must sanitize nested question JSON before storage");
+  requireContains("api/question-overrides/save.js", "normalizeSafeId", "Question Manager saves must validate question IDs before using them in database writes");
+  requireContains("api/question-overrides/save.js", 'from("pbqs")', "PBQ saves must go through the validated server route instead of direct browser mutation");
+  requireContains("api/feedback/submit.js", "requireJsonContentType(req)", "feedback submissions must reject non-JSON/file-upload payloads");
+  requireContains("api/feedback/submit.js", "normalizeSafeText", "feedback submissions must validate unsafe markup before storage/email");
   requireContains("supabase/account-deletion.sql", "alter table public.account_deletion_requests enable row level security", "deletion requests must have RLS enabled");
   requireContains("supabase/account-deletion.sql", "revoke all on table public.account_deletion_requests from anon, authenticated", "browser clients must not access deletion tokens");
   requireContains("supabase/account-deletion.sql", "grant usage on schema public to service_role", "the server role must be able to reach the deletion request table through the Data API");
@@ -182,6 +192,13 @@ if (!errors.length) {
   }
 
   const app = read("src/App.jsx");
+  if (app.includes("dangerouslySetInnerHTML")) {
+    push(errors, "src/App.jsx", "public question text must not be rendered with dangerouslySetInnerHTML");
+  }
+  requireContains("src/App.jsx", "cleanAdminSafeText", "Question Manager must validate unsafe text before saving questions");
+  requireContains("src/App.jsx", "cleanAdminQuestionId", "Question Manager must validate question IDs before saving questions");
+  requireContains("src/App.jsx", "HTML/script tag", "Question Manager should give a clear unsafe-content error for pasted markup");
+  requireContains("src/App.jsx", 'return saveQuestionOverrideRequest({kind:"pbq"', "PBQ saves should use the validated server route");
   requireContains("src/App.jsx", 'n.id==="exam"&&user.tier!=="pro"&&coinWallet.examPasses<1?"coins":n.id', "free users without an Exam pass should be redirected to the Coin Vault");
   requireContains("src/App.jsx", "isFreePBQPreview", "free users should only get the configured PBQ preview");
   requireContains("src/App.jsx", '!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)', "PBQ start handler should allow only previews, Pro access, or permanent coin unlocks");

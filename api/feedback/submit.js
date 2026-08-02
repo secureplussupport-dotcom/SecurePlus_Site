@@ -3,6 +3,9 @@ import {
   getJsonBody,
   getSupabaseAdmin,
   json,
+  normalizeSafeText,
+  requireJsonContentType,
+  SafeInputError,
 } from "../_utils.js";
 
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
@@ -11,11 +14,11 @@ const FEEDBACK_DESCRIPTION_MIN_LENGTH = 20;
 const FEEDBACK_DESCRIPTION_MIN_WORDS = 5;
 
 function cleanText(value, max = 1000) {
-  return String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
+  return normalizeSafeText(value, { max, multiline: false });
 }
 
 function cleanMultiline(value, max = 4000) {
-  return String(value || "").trim().slice(0, max);
+  return normalizeSafeText(value, { max, multiline: true });
 }
 
 function cleanIssueType(value) {
@@ -129,7 +132,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = await getJsonBody(req);
+    requireJsonContentType(req);
+    const body = await getJsonBody(req, { throwSafeErrors: true });
     const message = cleanMultiline(body.message, 4000);
     if (message.length < FEEDBACK_DESCRIPTION_MIN_LENGTH) {
       return json(res, 400, { error: `Description must be at least ${FEEDBACK_DESCRIPTION_MIN_LENGTH} characters.` });
@@ -176,6 +180,9 @@ export default async function handler(req, res) {
     return json(res, 200, { ok: true, id: inserted?.id, notificationSent });
   } catch (error) {
     console.error("Feedback submission failed:", error);
+    if (error instanceof SafeInputError) {
+      return json(res, error.status, { error: error.message });
+    }
     if (isMissingFeedbackSchema(error)) {
       return json(res, 409, {
         error: "Feedback database setup is missing. Run supabase/feedback.sql in Supabase SQL Editor.",
