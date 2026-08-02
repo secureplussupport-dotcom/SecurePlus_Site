@@ -207,6 +207,7 @@ const FREE_PBQ_PREVIEW_ID = "p001";
 const CIPHER_COIN_COSTS = Object.freeze({ pbq:50, examPass:70 });
 const CIPHER_WELCOME_GRANT = 150;
 const CIPHER_FIRST_PBQ_UNLOCKS = Object.freeze(["p014","p018","p033"]);
+const PRO_WELCOME_SEEN_KEY = "secureplus-pro-welcome-seen-v1";
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
 const PRO_ACADEMY_PASS_NAME = "Pro Academy Pass";
 const PRO_ACADEMY_PASS_PRICE = "$9.99 / 3 months";
@@ -214,6 +215,27 @@ const PRO_MONTHLY_PASS_PRICE = "$4.99 / month";
 const PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus";
 const PRO_ACADEMY_PASS_DESCRIPTION = "Built around the typical Security+ study window. Unlock all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.";
 const PRO_ACADEMY_PASS_TRUST = "Original scenario-based practice. Not exam dumps.";
+
+function proWelcomeStorageKey(user) {
+  return `${PRO_WELCOME_SEEN_KEY}:${user?.id || normalizeEmail(user?.email) || "unknown"}`;
+}
+
+function shouldShowProWelcome(user) {
+  if (!user || user.tier !== "pro") return false;
+  try {
+    const key = proWelcomeStorageKey(user);
+    return window.localStorage?.getItem(key) !== "true";
+  } catch {
+    return true;
+  }
+}
+
+function markProWelcomeSeen(user) {
+  if (!user) return;
+  try {
+    window.localStorage?.setItem(proWelcomeStorageKey(user), "true");
+  } catch {}
+}
 
 function TrustBadge({t,compact=false,center=false,style={}}) {
   return (
@@ -17456,6 +17478,23 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .onboarding-modal{width:min(100%,520px);padding:28px 30px;position:relative;box-shadow:0 30px 90px rgba(0,0,0,.36);}
 .cipher-walkthrough-overlay{z-index:980;background:rgba(38,31,23,.68);backdrop-filter:blur(18px);}
 .cipher-walkthrough{width:min(100%,660px);padding:22px 24px 20px;overflow:hidden;border-color:#d79b3e42;background:radial-gradient(circle at 10% 4%,#f3c96c24,transparent 28%),radial-gradient(circle at 94% 96%,${t.accent}15,transparent 28%),${t.surface};}
+.pro-welcome{width:min(100%,720px);padding:24px;overflow:hidden;border-color:${t.accent}42;background:radial-gradient(circle at 7% 0%,${t.accent}1c,transparent 30%),radial-gradient(circle at 92% 92%,${t.green}14,transparent 30%),${t.surface};}
+.pro-welcome-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px;}
+.pro-welcome-top span{display:inline-flex;align-items:center;gap:6px;color:${t.accent};font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
+.pro-welcome-top .btn{min-height:32px;padding:5px 10px;font-size:11px;}
+.pro-welcome-hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;margin-bottom:16px;}
+.pro-welcome-hero h2{margin:0 0 6px;color:${t.text};font-size:clamp(25px,5vw,36px);line-height:1.06;letter-spacing:-.025em;}
+.pro-welcome-hero p{margin:0;color:${t.textSec};font-size:13px;line-height:1.65;}
+.pro-welcome-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0;}
+.pro-welcome-choice{position:relative;display:flex;flex-direction:column;gap:9px;min-height:172px;padding:16px;border:1px solid ${t.border};border-radius:16px;background:${t.panel};color:${t.text};text-align:left;cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;}
+.pro-welcome-choice:hover,.pro-welcome-choice.selected{transform:translateY(-2px);border-color:var(--pro-choice-color);box-shadow:0 16px 32px color-mix(in srgb,var(--pro-choice-color) 16%,transparent);}
+.pro-welcome-choice-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:color-mix(in srgb,var(--pro-choice-color) 13%,${t.surface});color:var(--pro-choice-color);}
+.pro-welcome-choice strong{font-size:15px;line-height:1.25;}
+.pro-welcome-choice span{color:${t.textSec};font-size:12px;line-height:1.55;}
+.pro-welcome-mini{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid ${t.green}30;border-radius:14px;background:${t.green}0c;color:${t.textSec};font-size:12px;line-height:1.55;}
+.pro-welcome-mini strong{color:${t.green};}
+.pro-welcome-actions{display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px;}
+.pro-welcome-actions .btn{justify-content:center;}
 .cipher-walkthrough-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
 .cipher-walkthrough-top>span{color:#b47727;font-size:9px;font-weight:950;letter-spacing:.09em;text-transform:uppercase;}
 .cipher-walkthrough-top .btn{min-height:32px;padding:5px 9px;font-size:11px;}
@@ -17952,6 +17991,13 @@ body{background:
   .exam-map-grid{grid-template-columns:repeat(10,minmax(30px,1fr))!important;}
   .onboarding-overlay{align-items:end;padding:12px;}
   .onboarding-modal{padding:24px 22px;max-height:92vh;overflow-y:auto;}
+  .pro-welcome{padding:20px!important;}
+  .pro-welcome-hero{grid-template-columns:1fr!important;text-align:center;}
+  .pro-welcome-hero .cipher-mascot{margin:0 auto;}
+  .pro-welcome-grid{grid-template-columns:1fr!important;}
+  .pro-welcome-choice{min-height:auto!important;}
+  .pro-welcome-actions{display:grid!important;grid-template-columns:1fr!important;}
+  .pro-welcome-actions .btn{width:100%;}
   .feedback-modal{width:100%!important;max-height:88dvh!important;overflow:hidden!important;display:flex!important;}
   .feedback-modal-header{padding:20px 18px 10px!important;}
   .feedback-modal-body{padding:14px 18px 16px!important;}
@@ -29097,6 +29143,96 @@ function OnboardingModal({user,wallet,t,onClose,onWallet,onPbq,onRefreshWallet})
   );
 }
 
+function ProWelcomeModal({user,t,onClose,onNavigate}) {
+  const [selected,setSelected]=useState("pbq");
+  const firstName=user?.name ? user.name.split(" ")[0] : "there";
+  const choices=[
+    {
+      id:"pbq",
+      title:"Start PBQ practice",
+      body:"Open the full PBQ simulator with no coin spending or preview limits.",
+      Icon:Puzzle,
+      color:t.accent,
+      view:"pbq",
+      cta:"Open PBQs",
+    },
+    {
+      id:"exam",
+      title:"Run Exam Mode",
+      body:"Use timed mixed practice and get a report card when you finish.",
+      Icon:ClipboardCheck,
+      color:t.green,
+      view:"exam",
+      cta:"Start Exam Mode",
+    },
+    {
+      id:"deep-dives",
+      title:"Review weak concepts",
+      body:"Use Concept Deep Dives when Smart Review points to a weak topic.",
+      Icon:BookOpenCheck,
+      color:t.amber,
+      view:"deep-dives",
+      cta:"Open Deep Dives",
+    },
+  ];
+  const active=choices.find(choice=>choice.id===selected)||choices[0];
+  const finish=(view=active.view)=>{
+    capture("pro_welcome_completed", { selected: view });
+    onClose?.();
+    onNavigate?.(view);
+  };
+
+  return(
+    <div className="onboarding-overlay cipher-walkthrough-overlay" role="dialog" aria-modal="true" aria-labelledby="pro-welcome-title">
+      <div className="onboarding-modal card pro-welcome">
+        <div className="pro-welcome-top">
+          <span><Sparkles size={14}/> Pro unlocked</span>
+          <button className="btn btn-ghost" type="button" onClick={()=>{capture("pro_welcome_skipped", { tier:user?.tier || "unknown" });onClose?.();}}>Skip</button>
+        </div>
+
+        <div className="pro-welcome-hero">
+          <MascotAnimation animation="cheer" size={112} interactive hoverAnimation="dance" reactionAnimations={["cheer","dance","unlock"]} label="Cipher welcomes you to Pro"/>
+          <div>
+            <h2 id="pro-welcome-title">Welcome to Pro, {firstName}.</h2>
+            <p>
+              Your Pro Academy Pass is active. PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives now open with zero Cipher Coin requirements.
+            </p>
+          </div>
+        </div>
+
+        <div className="pro-welcome-mini">
+          <ShieldCheck size={18}/>
+          <span><strong>{PRO_ACADEMY_PASS_TRUST}</strong> Pro gives convenience, not shortcuts. The best first step is one focused practice action.</span>
+        </div>
+
+        <div className="pro-welcome-grid" aria-label="Choose your first Pro action">
+          {choices.map(({id,title,body,Icon,color})=>(
+            <button
+              key={id}
+              type="button"
+              className={`pro-welcome-choice ${selected===id?"selected":""}`}
+              style={{"--pro-choice-color":color}}
+              onClick={()=>setSelected(id)}
+              aria-pressed={selected===id}
+            >
+              <span className="pro-welcome-choice-icon"><Icon size={22}/></span>
+              <strong>{title}</strong>
+              <span>{body}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="pro-welcome-actions">
+          <button className="btn btn-ghost" type="button" onClick={onClose}>Maybe later</button>
+          <button className="btn btn-primary" type="button" onClick={()=>finish()}>
+            {active.cta} <ChevronRight size={17}/>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DiagnosticQuiz({user,t,onComplete}) {
   const questions=useMemo(()=>buildDiagnosticQuestions(),[]);
   const [index,setIndex]=useState(0);
@@ -29325,6 +29461,7 @@ export default function App() {
   const [passwordRecovery,setPasswordRecovery]=useState(false);
   const [showDiagnostic,setShowDiagnostic]=useState(false);
   const [showOnboarding,setShowOnboarding]=useState(false);
+  const [showProWelcome,setShowProWelcome]=useState(false);
   const [authStartMode,setAuthStartMode]=useState("login");
   const [authRequestId,setAuthRequestId]=useState(0);
   const [showTrialExpiredPrompt,setShowTrialExpiredPrompt]=useState(false);
@@ -29456,6 +29593,7 @@ export default function App() {
     setPasswordRecovery(false);
     setShowDiagnostic(false);
     setShowOnboarding(false);
+    setShowProWelcome(false);
     setShowTrialExpiredPrompt(false);
     setReferralClaimPrompt(null);
     setUser(null);
@@ -29564,10 +29702,13 @@ export default function App() {
         }
         let displayUser=appUser;
         const params = new URLSearchParams(window.location.search);
+        let shouldOpenProWelcome=false;
         if(params.get("checkout")==="success" || params.get("billing")==="return"){
+          const checkoutSucceeded=params.get("checkout")==="success";
           const syncedUser = await syncStripeProfile(verifiedUser, params.get("session_id") || "");
           if(syncedUser) {
             displayUser = syncedUser;
+            shouldOpenProWelcome=Boolean(checkoutSucceeded&&syncedUser.tier==="pro"&&shouldShowProWelcome(syncedUser));
             const cleanUrl = `${window.location.origin}${window.location.pathname}`;
             window.history.replaceState({}, "", cleanUrl);
           }
@@ -29588,7 +29729,12 @@ export default function App() {
         setStarred(savedStarred);
         const diagnosticDone=await DB.getDiagnosticDone(appUser.email);
         const seen=await DB.getOnboardingSeen(appUser.email);
-        if(active&&!seen) setShowOnboarding(true);
+        if(active&&shouldOpenProWelcome){
+          setShowOnboarding(false);
+          setShowDiagnostic(false);
+          setShowProWelcome(true);
+          capture("pro_welcome_viewed", { source:"checkout_success" });
+        }else if(active&&!seen) setShowOnboarding(true);
         else if(active&&!diagnosticDone&&accountAttempts.length===0) setShowDiagnostic(true);
         setLoading(false);
       };
@@ -29777,6 +29923,10 @@ export default function App() {
     const diagnosticDone=user?.email ? await DB.getDiagnosticDone(user.email) : true;
     if(!diagnosticDone&&attempts.length===0)setShowDiagnostic(true);
   },[user,attempts.length]);
+  const closeProWelcome=useCallback(()=>{
+    markProWelcomeSeen(user);
+    setShowProWelcome(false);
+  },[user]);
   const handleCancelMembership=useCallback(async()=>{
     if(!user)return;
     if(!isSupabaseConfigured){
@@ -30520,7 +30670,7 @@ export default function App() {
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
           {!practiceFocusMode&&view!=="exam"&&view!=="mascot-admin"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
         </main>
-        {!practiceFocusMode&&!showOnboarding&&["dashboard","mcq","pbq","daily","coins","objectives","pricing"].includes(view)&&(
+        {!practiceFocusMode&&!showOnboarding&&!showProWelcome&&["dashboard","mcq","pbq","daily","coins","objectives","pricing"].includes(view)&&(
           <CipherAssistantDock user={user} attempts={attempts} currentView={view} onStartReview={handleStartChapterReview}/>
         )}
         {showOnboarding&&(
@@ -30532,6 +30682,14 @@ export default function App() {
             onWallet={()=>setView("coins")}
             onPbq={()=>setView("pbq")}
             onRefreshWallet={refreshCipherWallet}
+          />
+        )}
+        {showProWelcome&&(
+          <ProWelcomeModal
+            user={user}
+            t={t}
+            onClose={closeProWelcome}
+            onNavigate={setView}
           />
         )}
         {referralClaimPrompt&&(
