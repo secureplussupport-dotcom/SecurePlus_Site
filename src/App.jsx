@@ -16792,6 +16792,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .opt.ok .opt-ltr::before{content:"✓";font-size:15px;}
 .opt.ok .opt-ltr{font-size:0;}
 .opt.bad .opt-ltr{border-color:${t.red};color:#fff;background:${t.red};box-shadow:0 0 0 5px ${t.red}16;}
+.option-body{min-width:0;display:grid;gap:7px;}
+.option-inline-feedback{padding:10px 12px;border:1px solid ${t.red}28;border-radius:12px;background:${t.red}08;color:${t.textSec};font-size:13px;line-height:1.62;font-weight:650;animation:feedbackIn .32s cubic-bezier(.16,1,.3,1) both;}
+.option-inline-feedback strong{display:block;color:${t.red};font-size:12px;font-weight:950;margin-bottom:3px;}
 .answer-burst{position:fixed;left:50%;top:18px;z-index:480;width:min(440px,calc(100vw - 28px));transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;border:1px solid;background:${t.surface};box-shadow:0 22px 56px rgba(0,0,0,.24);animation:answerBurstIn .42s cubic-bezier(.16,1,.3,1) both;}
 .answer-burst.correct{border-color:${t.green}55;background:linear-gradient(135deg, ${t.green}18, ${t.surface});}
 .answer-burst.wrong{border-color:${t.red}50;background:linear-gradient(135deg, ${t.red}14, ${t.surface});}
@@ -23484,6 +23487,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           let cls="opt";
           if(submitted){cls+=" done"; if(i===current.correct)cls+=" ok"; else if(i===selected&&i!==current.correct)cls+=" bad";}
           else if(selected===i)cls+=" sel";
+          const showSelectedWrongFeedback=submitted&&canSeeFeedback&&i===selected&&i!==current.correct;
           return(
             <button
               type="button"
@@ -23494,7 +23498,15 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
               onClick={()=>{if(submitted)return;setSelected(i);setDraftSelections(prev=>{const next=[...prev];next[qi]=i;return next;});}}
             >
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
-              <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
+              <div className="option-body">
+                <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
+                {showSelectedWrongFeedback&&(
+                  <div className="option-inline-feedback">
+                    <strong>Why this choice is wrong:</strong>
+                    <GlossaryText text={getWrongOptionFeedback(current, i)} t={t}/>
+                  </div>
+                )}
+              </div>
               {submitted&&i===current.correct&&<Check size={18} color={t.green} strokeWidth={2.8}/>}
               {submitted&&i===selected&&i!==current.correct&&<X size={18} color={t.red} strokeWidth={2.8}/>}
             </button>
@@ -23523,12 +23535,6 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
                 <button className="btn btn-outline" style={{fontSize:12}} onClick={isGuest?requestSignup:onUpgrade}>
                   {isGuest?"Create free account":"Unlock feedback"}
                 </button>
-              </div>
-            )}
-            {canSeeFeedback&&selected!==current.correct&&(
-              <div style={{marginTop:12,padding:"12px 14px",background:`${t.red}08`,borderRadius:7,border:`1px solid ${t.red}25`}}>
-                <div style={{fontSize:12,fontWeight:600,color:t.red,marginBottom:4}}>Why option {String.fromCharCode(65+selected)} is wrong:</div>
-                <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>{getWrongOptionFeedback(current, selected)}</div>
               </div>
             )}
             {onReportQuestion&&<div style={{display:"flex",justifyContent:"flex-end",marginTop:12}}>
@@ -29401,10 +29407,19 @@ function DiagnosticQuiz({user,t,onComplete}) {
             let cls="opt";
             if(submitted){cls+=" done"; if(i===current.correct)cls+=" ok"; else if(i===selected&&i!==current.correct)cls+=" bad";}
             else if(selected===i)cls+=" sel";
+            const showSelectedWrongFeedback=submitted&&i===selected&&i!==current.correct;
             return(
               <button key={i} type="button" className={cls} style={{textAlign:"left"}} onClick={()=>!submitted&&setSelected(i)}>
                 <span className="opt-ltr">{String.fromCharCode(65+i)}</span>
-                <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
+                <div className="option-body">
+                  <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
+                  {showSelectedWrongFeedback&&(
+                    <div className="option-inline-feedback">
+                      <strong>Why this choice is wrong:</strong>
+                      <GlossaryText text={getWrongOptionFeedback(current, i)} t={t}/>
+                    </div>
+                  )}
+                </div>
               </button>
             );
           })}
@@ -29416,11 +29431,6 @@ function DiagnosticQuiz({user,t,onComplete}) {
             <div className="card answer-feedback" style={{padding:"14px 16px",marginBottom:12,borderColor:selected===current.correct?`${t.green}42`:`${t.red}42`,background:selected===current.correct?`${t.green}08`:`${t.red}08`,boxShadow:"none"}}>
               <MCQFeedbackVerdict correct={selected===current.correct} t={t}/>
               <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginTop:7}}><GlossaryText text={current.exp} t={t}/></p>
-              {selected!==current.correct&&(
-                <div style={{fontSize:12,color:t.red,lineHeight:1.55,marginTop:8}}>
-                  <strong>Why your choice was wrong:</strong> {getWrongOptionFeedback(current,selected)}
-                </div>
-              )}
             </div>
             <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={index<questions.length-1?next:()=>setShowSummary(true)}>
               {index<questions.length-1?"Next Question →":"See Baseline →"}
