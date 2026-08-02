@@ -68,6 +68,16 @@ function successUrl(appUrl) {
     : `${withCheckout}${withCheckout.includes("?") ? "&" : "?"}session_id={CHECKOUT_SESSION_ID}`;
 }
 
+function checkoutCancelUrl(appUrl) {
+  const base = process.env.STRIPE_CANCEL_URL || `${appUrl}/?view=pricing`;
+  const withCheckout = base.includes("checkout=")
+    ? base
+    : `${base}${base.includes("?") ? "&" : "?"}checkout=cancelled`;
+  return withCheckout.includes("view=")
+    ? withCheckout
+    : `${withCheckout}${withCheckout.includes("?") ? "&" : "?"}view=pricing`;
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("allow", "POST");
@@ -150,7 +160,7 @@ export default async function handler(req, res) {
         },
       ],
       success_url: successUrl(appUrl),
-      cancel_url: process.env.STRIPE_CANCEL_URL || `${appUrl}/?checkout=cancelled`,
+      cancel_url: checkoutCancelUrl(appUrl),
       metadata: {
         supabase_user_id: authUser.id,
         plan: planConfig.metadataPlan,

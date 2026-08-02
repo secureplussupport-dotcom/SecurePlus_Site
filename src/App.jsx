@@ -15951,12 +15951,14 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .university-ic-particle.particle-one{left:3%;top:24%;}
 .university-ic-particle.particle-two{right:5%;top:42%;animation-delay:-1.1s;}
 .university-ic-particle.particle-three{left:36%;bottom:2%;animation-delay:-2.3s;}
-.athena-intro-mascots,.athena-reveal-mascots{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:13px;}
-.athena-intro-card .athena-intro-mascots .athena-mark{margin-bottom:0;}
-.athena-cipher-intro{position:relative;display:grid;justify-items:center;align-content:end;width:132px;min-height:126px;padding:2px 8px 7px;overflow:visible;}
-.athena-cipher-intro .cipher-mascot{flex:0 0 auto;width:var(--cipher-size)!important;min-width:var(--cipher-size);height:auto;aspect-ratio:4 / 3;transform-origin:50% 88%;}
-.athena-cipher-intro span{position:relative;z-index:2;margin-top:-7px;padding:6px 9px;border:1px solid rgba(57,127,186,.2);border-radius:10px;background:rgba(255,253,248,.9);color:#5e6d75;font-size:8px;font-weight:750;line-height:1.25;box-shadow:0 8px 18px rgba(57,127,186,.09);}
-.athena-cipher-intro strong{display:block;color:#397fba;font-size:9px;}
+.athena-intro-mascots{display:grid;place-items:center;margin-bottom:13px;}
+.athena-reveal-mascots{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-bottom:13px;}
+.athena-cipher-hero{position:relative;display:grid;justify-items:center;width:190px;min-height:184px;overflow:visible;isolation:isolate;}
+.athena-cipher-hero::before{content:"";position:absolute;z-index:-1;inset:18px 22px 20px;border-radius:999px;background:radial-gradient(circle at 50% 42%,rgba(82,151,211,.22),rgba(82,151,211,.08) 44%,transparent 69%);border:1px solid rgba(82,151,211,.12);animation:athenaShapeFloat 6s ease-in-out infinite;}
+.athena-cipher-intro .cipher-mascot,.athena-cipher-hero .cipher-mascot{flex:0 0 auto;width:var(--cipher-size)!important;min-width:var(--cipher-size);height:auto;aspect-ratio:4 / 3;transform-origin:50% 88%;filter:drop-shadow(7px 9px 0 rgba(57,127,186,.18));}
+.athena-cipher-hero-label{position:relative;z-index:2;margin-top:-12px;padding:7px 12px;border:1px solid rgba(57,127,186,.22);border-radius:12px;background:rgba(255,253,248,.94);color:#5e6d75;font-size:9px;font-weight:800;line-height:1.25;text-align:center;box-shadow:0 10px 22px rgba(57,127,186,.11);}
+.athena-cipher-hero-label strong{display:block;color:#397fba;font-size:11px;}
+.athena-cipher-hero-label span{display:block;}
 .athena-cipher-welcome{display:flex;align-items:center;gap:7px;margin-top:13px;padding:8px 10px;border:1px solid rgba(57,127,186,.18);border-radius:99px;background:rgba(220,235,247,.62);color:#397fba;font-size:10px;font-weight:850;}
 @keyframes athenaShapeFloat{0%,100%{translate:0 0;rotate:0deg}50%{translate:0 -14px;rotate:5deg}}
 @keyframes athenaCardUpdated{from{opacity:.35;transform:scale(.72) rotate(-12deg)}to{opacity:1;transform:scale(1) rotate(0)}}
@@ -16529,6 +16531,10 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .nav-lnk:hover .nav-glyph-terms::after,.nav-glyph-terms.active::after{animation:termsSign .58s ease both;}
 .nav-lnk:hover .nav-glyph,.nav-lnk.act .nav-glyph{transform:translateY(-1px);}
 .nav-lnk:hover .nav-glyph-coins,.nav-glyph-coins.active{color:#d59632;background:#f2b85b22;border-color:#d5963260;box-shadow:0 0 18px #d5963245;}
+.nav-glyph-achievements{color:#d97706;background:linear-gradient(135deg,#facc1530,#fb718530);border-color:#f59e0b60;box-shadow:0 8px 18px rgba(217,119,6,.14);}
+.nav-lnk:hover .nav-glyph-achievements,.nav-glyph-achievements.active{color:#b45309;background:linear-gradient(135deg,#facc1540,#fb718540);border-color:#f59e0b85;box-shadow:0 0 20px rgba(245,158,11,.42);}
+.nav-glyph-deep-dives{color:#2563eb;background:linear-gradient(135deg,#38bdf830,#8b5cf630);border-color:#3b82f660;box-shadow:0 8px 18px rgba(37,99,235,.14);}
+.nav-lnk:hover .nav-glyph-deep-dives,.nav-glyph-deep-dives.active{color:#1d4ed8;background:linear-gradient(135deg,#38bdf840,#8b5cf640);border-color:#3b82f685;box-shadow:0 0 20px rgba(59,130,246,.42);}
 .cipher-coin-icon{--coin-size:34px;position:relative;display:inline-block;width:var(--coin-size);height:var(--coin-size);flex:0 0 auto;filter:drop-shadow(0 calc(var(--coin-size)*.16) calc(var(--coin-size)*.13) rgba(113,76,28,.2));isolation:isolate;}
 .cipher-coin-face{position:absolute;inset:4% 7% 10% 5%;display:grid;place-items:center;overflow:hidden;border:2px solid #a96f25;border-radius:47% 53% 49% 51%/44% 48% 52% 56%;background:radial-gradient(circle at 34% 24%,#ffe7a3 0 9%,transparent 10%),linear-gradient(145deg,#f8cf72 0 34%,#dea044 62%,#b9782a 100%);box-shadow:inset calc(var(--coin-size)*.08) calc(var(--coin-size)*.07) 0 rgba(255,247,203,.5),inset calc(var(--coin-size)*-.09) calc(var(--coin-size)*-.08) 0 rgba(121,73,23,.17),2px 0 0 #c48631,-2px 2px 0 #b5792b;transform:rotate(-3deg);}
 .cipher-coin-face::after{content:"";position:absolute;inset:18%;border:2px dashed rgba(126,75,21,.42);border-radius:48% 52% 43% 57%;}
@@ -18175,7 +18181,8 @@ body{background:
 @media (max-width: 520px){
   .athena-intro-page{padding-top:34px;background:radial-gradient(circle at 8% 16%,rgba(229,111,101,.22),transparent 34%),radial-gradient(circle at 92% 10%,rgba(119,102,198,.18),transparent 30%),radial-gradient(circle at 72% 88%,rgba(40,140,138,.16),transparent 32%),linear-gradient(145deg,#fff8ed,#f7f1fa 54%,#eef7f1);}
   .athena-intro-mascots{gap:0;transform:scale(.88);margin:-5px 0 4px;}
-  .athena-cipher-intro span{font-size:7px;}
+  .athena-cipher-hero-label{font-size:8px;}
+  .athena-cipher-hero-label strong{font-size:10px;}
   .athena-cipher-welcome{font-size:9px;}
   .athena-workspace-header{padding:8px 9px 10px;overflow:visible;}
   .athena-workspace-header .athena-brand{display:none;}
@@ -19658,6 +19665,8 @@ function toAthenaStudyProfile(profile) {
 
 const ATHENA_OAUTH_PENDING_KEY="secureplus-athena-oauth-profile";
 const ATHENA_OAUTH_PENDING_MAX_AGE_MS=60*60*1000;
+const LOGIN_OAUTH_INTENT_KEY="secureplus-login-oauth-intent";
+const LOGIN_OAUTH_INTENT_MAX_AGE_MS=10*60*1000;
 
 async function savePendingAthenaOAuth(profile,form) {
   const payload={
@@ -19671,20 +19680,26 @@ async function savePendingAthenaOAuth(profile,form) {
   return payload;
 }
 
-async function applyPendingAthenaOAuth(authUser) {
-  if(!supabase||!authUser)return authUser;
+async function getFreshPendingAthenaOAuth() {
   const stored=await storageGet(ATHENA_OAUTH_PENDING_KEY).catch(()=>null);
-  if(!stored?.value)return authUser;
+  if(!stored?.value)return null;
   let pending;
   try{pending=JSON.parse(stored.value);}catch{
     await storageDelete(ATHENA_OAUTH_PENDING_KEY).catch(()=>{});
-    return authUser;
+    return null;
   }
   const savedAt=Date.parse(pending?.savedAt||"");
   if(!Number.isFinite(savedAt)||Date.now()-savedAt>ATHENA_OAUTH_PENDING_MAX_AGE_MS){
     await storageDelete(ATHENA_OAUTH_PENDING_KEY).catch(()=>{});
-    return authUser;
+    return null;
   }
+  return pending;
+}
+
+async function applyPendingAthenaOAuth(authUser) {
+  if(!supabase||!authUser)return authUser;
+  const pending=await getFreshPendingAthenaOAuth();
+  if(!pending)return authUser;
   await storageDelete(ATHENA_OAUTH_PENDING_KEY).catch(()=>{});
   try{
     const metadata={
@@ -19709,6 +19724,33 @@ async function applyPendingAthenaOAuth(authUser) {
     console.warn("Unable to apply the pending Cipher profile",error);
     return authUser;
   }
+}
+
+async function saveLoginOAuthIntent() {
+  await storageSet(LOGIN_OAUTH_INTENT_KEY,JSON.stringify({savedAt:new Date().toISOString()}));
+}
+
+async function consumeFreshLoginOAuthIntent() {
+  const stored=await storageGet(LOGIN_OAUTH_INTENT_KEY).catch(()=>null);
+  await storageDelete(LOGIN_OAUTH_INTENT_KEY).catch(()=>{});
+  if(!stored?.value)return false;
+  try{
+    const parsed=JSON.parse(stored.value);
+    const savedAt=Date.parse(parsed?.savedAt||"");
+    return Number.isFinite(savedAt)&&Date.now()-savedAt<=LOGIN_OAUTH_INTENT_MAX_AGE_MS;
+  }catch{
+    return false;
+  }
+}
+
+function shouldForceCipherOnboardingAfterLoginOAuth(authUser,{loginIntent=false,hadPendingAthena=false}={}) {
+  if(!loginIntent||hadPendingAthena||!authUser)return false;
+  const provider=String(authUser?.app_metadata?.provider||"").toLowerCase();
+  if(!provider.includes("google"))return false;
+  if(authUser?.user_metadata?.study_profile)return false;
+  const createdAt=Date.parse(authUser.created_at||"");
+  if(!Number.isFinite(createdAt))return false;
+  return Date.now()-createdAt<=LOGIN_OAUTH_INTENT_MAX_AGE_MS;
 }
 
 function UniversityICCard({profile,flipped,onFlip}) {
@@ -20176,8 +20218,10 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
         <div className="athena-intro-glow glow-two" aria-hidden="true"/>
         <div className="athena-intro-card">
           <div className="athena-intro-mascots">
-            <AthenaMark size={126}/>
-            <div className="athena-cipher-intro"><MascotAnimation animation="wave" size={112} interactive hoverAnimation="cheer" reactionAnimations={["surprised","dance","cheer"]} label="Cipher welcomes you to SecurePlus"/><span><strong>Cipher</strong>Tap or hover to say hello!</span></div>
+            <div className="athena-cipher-hero">
+              <MascotAnimation animation="wave" size={150} interactive hoverAnimation="cheer" reactionAnimations={["surprised","dance","cheer"]} label="Cipher welcomes you to SecurePlus"/>
+              <div className="athena-cipher-hero-label"><strong>Cipher</strong><span>Tap or hover to say hello!</span></div>
+            </div>
           </div>
           <div className="athena-kicker"><Sparkles size={14}/> Your SecurePlus guide</div>
           <h1>Hello, I’m Cipher!</h1>
@@ -21428,6 +21472,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     try{
       const referralCode=saveReferralCode(form.referral);
       if(fromAcademy)await savePendingAthenaOAuth(athenaProfile,{...form,referral:referralCode});
+      else await saveLoginOAuthIntent();
       capture(mode==="signup"?"signup_started":"login_started", { method:fromAcademy?"academy_google":"google", has_referral:Boolean(referralCode) });
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
@@ -21436,6 +21481,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
       if(error) throw error;
     } catch(e){
       if(fromAcademy)await storageDelete(ATHENA_OAUTH_PENDING_KEY).catch(()=>{});
+      else await storageDelete(LOGIN_OAUTH_INTENT_KEY).catch(()=>{});
       setErr(e.message||"Unable to start Google sign in.");
       setLoading(false);
     }
@@ -21782,7 +21828,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
                 </button>
                 {isSupabaseConfigured&&mode==="login"&&(
                   <button type="button" className="btn btn-outline" style={{width:"100%",justifyContent:"center",padding:"10px"}} onClick={handleGoogle} disabled={loading}>
-                    Continue with Google
+                    Log in with Google
                   </button>
                 )}
                 {mode==="login"&&(
@@ -21843,7 +21889,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
               </div>
               <button className="btn btn-primary" type="button" style={{width:"100%",justifyContent:"center"}} onClick={handle} disabled={loading}>{loading?"Signing in...":"Log In"}</button>
               {isSupabaseConfigured&&(
-                <button className="btn btn-outline" type="button" style={{width:"100%",justifyContent:"center",marginTop:10}} onClick={handleGoogle} disabled={loading}>Continue with Google</button>
+                <button className="btn btn-outline" type="button" style={{width:"100%",justifyContent:"center",marginTop:10}} onClick={handleGoogle} disabled={loading}>Log in with Google</button>
               )}
               <div className="landing-login-footer">
                 <button type="button" onClick={()=>{setShowLoginModal(false);setMode("reset");setTimeout(()=>document.getElementById("landing-auth")?.scrollIntoView({behavior:"smooth"}),30);}}>Forgot password?</button>
@@ -29443,6 +29489,7 @@ function PasswordUpdateView({t,onDone}) {
 export default function App() {
   const initialParams=new URLSearchParams(window.location.search);
   const urlDeepDiveRequest=initialParams.get("view")==="deep-dives";
+  const urlPricingRequest=initialParams.get("view")==="pricing"||initialParams.get("checkout")==="cancelled";
   const focusAcronymLibrary=Boolean(urlDeepDiveRequest&&initialParams.get("focus")==="acronyms");
   const devDeepDivePreview=Boolean(import.meta.env.DEV&&initialParams.get("preview")==="deep-dives");
   const devCoinPreview=Boolean(import.meta.env.DEV&&initialParams.get("preview")==="coins");
@@ -29452,7 +29499,7 @@ export default function App() {
   });
   const [user,setUser]=useState(null);
   const [loading,setLoading]=useState(true);
-  const [view,setView]=useState(()=>urlDeepDiveRequest||devDeepDivePreview?"deep-dives":devCoinPreview?"coins":"dashboard");
+  const [view,setView]=useState(()=>urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":devCoinPreview?"coins":"dashboard");
   const [attempts,setAttempts]=useState([]);
   const [starred,setStarred]=useState([]);
   const [pbqQ,setPbqQ]=useState(null);
@@ -29688,7 +29735,19 @@ export default function App() {
           if(active)setLoading(false);
           return;
         }
+        const hadPendingAthena=Boolean(await getFreshPendingAthenaOAuth());
         const verifiedUser=await applyPendingAthenaOAuth(verified.user);
+        const loginOAuthIntent=await consumeFreshLoginOAuthIntent();
+        if(shouldForceCipherOnboardingAfterLoginOAuth(verifiedUser,{loginIntent:loginOAuthIntent,hadPendingAthena})){
+          await forceSupabaseSignOut();
+          if(active){
+            setAuthStartMode("signup");
+            setAuthRequestId(id=>id+1);
+            setView("auth");
+            setLoading(false);
+          }
+          return;
+        }
         if(isRecentlyDeletedAccount(verifiedUser)){
           await forceSupabaseSignOut();
           if(active)setLoading(false);
@@ -29703,7 +29762,12 @@ export default function App() {
         let displayUser=appUser;
         const params = new URLSearchParams(window.location.search);
         let shouldOpenProWelcome=false;
-        if(params.get("checkout")==="success" || params.get("billing")==="return"){
+        if(params.get("checkout")==="cancelled"){
+          setView("pricing");
+          capture("stripe_checkout_cancelled", { source:"stripe_return" });
+          const cleanUrl = `${window.location.origin}${window.location.pathname}`;
+          window.history.replaceState({}, "", cleanUrl);
+        }else if(params.get("checkout")==="success" || params.get("billing")==="return"){
           const checkoutSucceeded=params.get("checkout")==="success";
           const syncedUser = await syncStripeProfile(verifiedUser, params.get("session_id") || "");
           if(syncedUser) {
