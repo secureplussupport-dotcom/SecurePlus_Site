@@ -16654,7 +16654,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .nav-lnk:hover{color:${t.text};background:${t.panel};box-shadow:inset 0 0 0 1px ${t.border};}
 .nav-lnk.act{color:${t.text};background:linear-gradient(135deg, ${t.accent}24, ${t.green}0f);border-color:${t.accent}38;box-shadow:0 12px 26px ${t.accent}16, inset 0 0 0 1px ${t.accent}18;animation:softGlow 2.8s ease-in-out infinite;}
 .nav-lnk.act span:last-child{color:${t.text};text-shadow:0 0 16px ${t.accent}55;}
-.nav-glyph{width:22px;height:22px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;background:transparent;border:1px solid transparent;transition:transform .2s,background .2s,border-color .2s,box-shadow .2s;}
+.nav-glyph{width:22px;height:22px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;color:var(--nav-glyph-color,currentColor);background:var(--nav-glyph-bg,transparent);border:1px solid var(--nav-glyph-border,transparent);box-shadow:var(--nav-glyph-shadow,none);transition:transform .2s,background .2s,border-color .2s,box-shadow .2s,color .2s;}
 .nav-glyph span,.nav-glyph::before,.nav-glyph::after{content:"";position:absolute;display:block;transition:all .25s ease;}
 .nav-glyph-dashboard span{width:10px;height:8px;border:2px solid currentColor;border-top:0;bottom:5px;border-radius:1px;}
 .nav-glyph-dashboard::before{width:12px;height:12px;border-left:2px solid currentColor;border-top:2px solid currentColor;transform:rotate(45deg);top:3px;}
@@ -16929,7 +16929,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .chapter-icon::before,.chapter-icon::after,
 .sim-icon::before,.sim-icon::after,
 .pillar-icon::before,.pillar-icon::after{display:none!important;content:none!important;}
-.glyph-svg{display:block;position:relative;z-index:1;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;transform-origin:center;transition:transform .2s ease,filter .2s ease;}
+.glyph-svg{display:block;position:relative;z-index:1;color:inherit!important;fill:none;stroke:currentColor!important;stroke-linecap:round;stroke-linejoin:round;transform-origin:center;transition:transform .2s ease,filter .2s ease;}
 .nav-lnk:hover .nav-glyph .glyph-svg,.nav-glyph.active .glyph-svg{animation:glyphLift .42s cubic-bezier(.16,1,.3,1) both;filter:drop-shadow(0 0 5px currentColor);}
 .chapter-icon:hover .glyph-svg,.chapter-card:hover .chapter-icon .glyph-svg,
 .sim-icon:hover .glyph-svg,.sim-card:hover .sim-icon .glyph-svg,.card-hover:hover .sim-icon .glyph-svg,
@@ -19221,6 +19221,20 @@ function ChBadge({chId,t}) {
   return <span className="chip meta-chip" style={{fontSize:11}}><ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}</span>;
 }
 function NavGlyph({type,active}) {
+  const themedGlyphStyles={
+    achievements:{
+      "--nav-glyph-color":active?"#b45309":"#d97706",
+      "--nav-glyph-bg":active?"linear-gradient(135deg,#facc1540,#fb718540)":"linear-gradient(135deg,#facc1530,#fb718530)",
+      "--nav-glyph-border":active?"#f59e0b85":"#f59e0b60",
+      "--nav-glyph-shadow":active?"0 0 20px rgba(245,158,11,.42)":"0 8px 18px rgba(217,119,6,.14)",
+    },
+    "deep-dives":{
+      "--nav-glyph-color":active?"#1d4ed8":"#2563eb",
+      "--nav-glyph-bg":active?"linear-gradient(135deg,#38bdf840,#8b5cf640)":"linear-gradient(135deg,#38bdf830,#8b5cf630)",
+      "--nav-glyph-border":active?"#3b82f685":"#3b82f660",
+      "--nav-glyph-shadow":active?"0 0 20px rgba(59,130,246,.42)":"0 8px 18px rgba(37,99,235,.14)",
+    },
+  };
   const Icon={
     dashboard:House,
     mcq:BookOpenCheck,
@@ -19240,7 +19254,7 @@ function NavGlyph({type,active}) {
     "question-admin":ListPlus,
     "mascot-admin":Palette,
   }[type]||ShieldCheck;
-  return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true"><Icon className="glyph-svg" size={19} strokeWidth={2.15}/></span>;
+  return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} style={themedGlyphStyles[type]||undefined} aria-hidden="true"><Icon className="glyph-svg" size={19} strokeWidth={2.15}/></span>;
 }
 function chapterColor(id) {
   return ({1:"#2f7df6",2:"#ef4444",3:"#14b8a6",4:"#a78bfa",5:"#f59e0b"})[id] || "#2f7df6";
