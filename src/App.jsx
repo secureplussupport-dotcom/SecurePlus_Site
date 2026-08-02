@@ -16716,9 +16716,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .nav-lnk:hover .nav-glyph-terms::after,.nav-glyph-terms.active::after{animation:termsSign .58s ease both;}
 .nav-lnk:hover .nav-glyph,.nav-lnk.act .nav-glyph{transform:translateY(-1px);}
 .nav-lnk:hover .nav-glyph-coins,.nav-glyph-coins.active{color:#d59632;background:#f2b85b22;border-color:#d5963260;box-shadow:0 0 18px #d5963245;}
-.nav-glyph-achievements{color:#d97706;background:linear-gradient(135deg,#facc1530,#fb718530);border-color:#f59e0b60;box-shadow:0 8px 18px rgba(217,119,6,.14);}
 .nav-lnk:hover .nav-glyph-achievements,.nav-glyph-achievements.active{color:#b45309;background:linear-gradient(135deg,#facc1540,#fb718540);border-color:#f59e0b85;box-shadow:0 0 20px rgba(245,158,11,.42);}
-.nav-glyph-deep-dives{color:#2563eb;background:linear-gradient(135deg,#38bdf830,#8b5cf630);border-color:#3b82f660;box-shadow:0 8px 18px rgba(37,99,235,.14);}
 .nav-lnk:hover .nav-glyph-deep-dives,.nav-glyph-deep-dives.active{color:#1d4ed8;background:linear-gradient(135deg,#38bdf840,#8b5cf640);border-color:#3b82f685;box-shadow:0 0 20px rgba(59,130,246,.42);}
 .cipher-coin-icon{--coin-size:34px;position:relative;display:inline-block;width:var(--coin-size);height:var(--coin-size);flex:0 0 auto;filter:drop-shadow(0 calc(var(--coin-size)*.16) calc(var(--coin-size)*.13) rgba(113,76,28,.2));isolation:isolate;}
 .cipher-coin-face{position:absolute;inset:4% 7% 10% 5%;display:grid;place-items:center;overflow:hidden;border:2px solid #a96f25;border-radius:47% 53% 49% 51%/44% 48% 52% 56%;background:radial-gradient(circle at 34% 24%,#ffe7a3 0 9%,transparent 10%),linear-gradient(145deg,#f8cf72 0 34%,#dea044 62%,#b9782a 100%);box-shadow:inset calc(var(--coin-size)*.08) calc(var(--coin-size)*.07) 0 rgba(255,247,203,.5),inset calc(var(--coin-size)*-.09) calc(var(--coin-size)*-.08) 0 rgba(121,73,23,.17),2px 0 0 #c48631,-2px 2px 0 #b5792b;transform:rotate(-3deg);}
@@ -19221,20 +19219,6 @@ function ChBadge({chId,t}) {
   return <span className="chip meta-chip" style={{fontSize:11}}><ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}</span>;
 }
 function NavGlyph({type,active}) {
-  const themedGlyphStyles={
-    achievements:{
-      "--nav-glyph-color":active?"#b45309":"#d97706",
-      "--nav-glyph-bg":active?"linear-gradient(135deg,#facc1540,#fb718540)":"linear-gradient(135deg,#facc1530,#fb718530)",
-      "--nav-glyph-border":active?"#f59e0b85":"#f59e0b60",
-      "--nav-glyph-shadow":active?"0 0 20px rgba(245,158,11,.42)":"0 8px 18px rgba(217,119,6,.14)",
-    },
-    "deep-dives":{
-      "--nav-glyph-color":active?"#1d4ed8":"#2563eb",
-      "--nav-glyph-bg":active?"linear-gradient(135deg,#38bdf840,#8b5cf640)":"linear-gradient(135deg,#38bdf830,#8b5cf630)",
-      "--nav-glyph-border":active?"#3b82f685":"#3b82f660",
-      "--nav-glyph-shadow":active?"0 0 20px rgba(59,130,246,.42)":"0 8px 18px rgba(37,99,235,.14)",
-    },
-  };
   const Icon={
     dashboard:House,
     mcq:BookOpenCheck,
@@ -19254,7 +19238,7 @@ function NavGlyph({type,active}) {
     "question-admin":ListPlus,
     "mascot-admin":Palette,
   }[type]||ShieldCheck;
-  return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} style={themedGlyphStyles[type]||undefined} aria-hidden="true"><Icon className="glyph-svg" size={19} strokeWidth={2.15}/></span>;
+  return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true"><Icon className="glyph-svg" size={19} strokeWidth={2.15}/></span>;
 }
 function chapterColor(id) {
   return ({1:"#2f7df6",2:"#ef4444",3:"#14b8a6",4:"#a78bfa",5:"#f59e0b"})[id] || "#2f7df6";

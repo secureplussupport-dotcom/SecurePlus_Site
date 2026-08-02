@@ -234,9 +234,12 @@ if (!errors.length) {
   requireContains("src/App.jsx", "Hello, I’m Cipher!", "onboarding intro should introduce Cipher instead of Athena");
   requireContains("src/App.jsx", "Cipher’s starter set", "onboarding starter set should be branded as Cipher");
   requireContains("src/App.jsx", ".athena-cipher-intro .cipher-mascot", "onboarding Cipher mascot should have protected sizing to avoid intro-card distortion");
-  requireContains("src/App.jsx", '"--nav-glyph-color":active?"#b45309":"#d97706"', "Achievements navigation icon should have explicit amber/orange colour tokens");
-  requireContains("src/App.jsx", '"--nav-glyph-color":active?"#1d4ed8":"#2563eb"', "Concept Deep Dives navigation icon should have explicit blue colour tokens");
+  requireContains("src/App.jsx", ".nav-lnk:hover .nav-glyph-achievements,.nav-glyph-achievements.active{color:#b45309", "Achievements navigation icon should light up amber/orange only on hover or active state");
+  requireContains("src/App.jsx", ".nav-lnk:hover .nav-glyph-deep-dives,.nav-glyph-deep-dives.active{color:#1d4ed8", "Concept Deep Dives navigation icon should light up blue only on hover or active state");
   requireContains("src/App.jsx", "stroke:currentColor!important", "SVG navigation icons should inherit the coloured glyph stroke");
+  if (app.includes(".nav-glyph-achievements{color:") || app.includes(".nav-glyph-deep-dives{color:")) {
+    push(errors, "src/App.jsx", "Achievements and Concept Deep Dives icons should not have permanent default colours");
+  }
   if (app.includes("Mint Academy ID")) {
     push(errors, "src/App.jsx", "auth UI should not show the old Mint Academy ID wording");
   }
