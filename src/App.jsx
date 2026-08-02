@@ -23373,24 +23373,27 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           </div>
         ))}
       </div>
-      {!isGuest&&sessionLessonPath.length>0&&(
+      {!isGuest&&user.tier!=="pro"&&sessionLessonPath.length>0&&(
         <SmartReviewLessonPath recommendations={sessionLessonPath} onOpenDeepDive={onOpenDeepDive} source="mcq_result" title="Concept lessons matched to this set"/>
       )}
       {user.tier==="pro"?(
-        <div className="card" style={{padding:"18px 20px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}28`,background:`${t.accent}05`}}>
-          <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:12,flexWrap:"wrap"}}>
+        <div className="card" style={{padding:"16px 18px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}28`,background:`${t.accent}05`}}>
+          <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10,flexWrap:"wrap"}}>
             <div>
-              <div style={{fontWeight:800,color:t.text,fontSize:15}}>Chapter Improvement Plan</div>
-              <div style={{fontSize:12,color:t.textDim}}>Based on this quiz only</div>
+              <div style={{fontWeight:900,color:t.text,fontSize:15}}>Pro evaluation</div>
+              <div style={{fontSize:12,color:t.textDim}}>Based on this set</div>
             </div>
             <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}25`}}>Pro evaluation</span>
           </div>
           {weakChapters.length===0?(
-            <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-              Strong set. You did not miss any chapters in this quiz. Keep using Smart Review so older correct answers are spaced out and weak areas return later.
+            <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
+              No weak chapter detected in this set. Next: run a timed Exam Mode set or continue Smart Review.
             </div>
           ):(
-            <div style={{display:"grid",gap:10}}>
+            <div style={{display:"grid",gap:9}}>
+              <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
+                Work on {weakChapters.map(item=>`Ch.${item.chapter.id}`).join(", ")} first. Open the matched lesson, then retry Smart Review.
+              </div>
               {weakChapters.map(item=>{
                 const accuracy=Math.round((item.correct/item.total)*100);
                 const topics=item.focusTopics.length?item.focusTopics.join(" and "):item.chapter.title;
@@ -23398,16 +23401,25 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
                   sessionMissedQuestions.filter(question=>question.ch===item.chapter.id),
                   {limit:1}
                 );
+                const lesson=lessonPath[0];
                 return(
-                  <div key={item.chapter.id} style={{padding:"12px 14px",border:`1px solid ${t.border}`,borderRadius:8,background:t.surface}}>
-                    <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:6}}>
-                      <div style={{fontSize:13,fontWeight:700,color:t.text}}>Ch.{item.chapter.id}: {item.chapter.title}</div>
+                  <div key={item.chapter.id} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:10,alignItems:"center",padding:"11px 12px",border:`1px solid ${t.border}`,borderRadius:10,background:t.surface}}>
+                    <div style={{minWidth:0}}>
+                      <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap",marginBottom:4}}>
+                        <div style={{fontSize:13,fontWeight:900,color:t.text}}>Ch.{item.chapter.id}: {item.chapter.title}</div>
+                        <span style={{fontSize:12,fontWeight:900,color:accuracy>=75?t.green:accuracy>=50?t.amber:t.red}}>{accuracy}%</span>
+                      </div>
+                      <div style={{fontSize:12,color:t.textSec,lineHeight:1.5}}>
+                        Focus: {topics}{lesson?` · Lesson: ${lesson.title}`:""}
+                      </div>
+                    </div>
+                    {lesson?(
+                      <button className="btn btn-outline" type="button" style={{fontSize:12,minHeight:36,padding:"8px 12px",whiteSpace:"nowrap"}} onClick={()=>onOpenDeepDive?.(lesson.id,{source:"mcq_result_pro_evaluation"})}>
+                        Learn <ChevronRight size={14}/>
+                      </button>
+                    ):(
                       <div style={{fontSize:12,fontWeight:700,color:accuracy>=75?t.green:accuracy>=50?t.amber:t.red}}>{accuracy}%</div>
-                    </div>
-                    <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                      Focus concepts: {topics}. Study the matched lesson, then run Smart Review again with Chapter {item.chapter.id} selected.
-                    </div>
-                    <SmartReviewLessonPath recommendations={lessonPath} onOpenDeepDive={onOpenDeepDive} source="mcq_result_weak_chapter" compact title={`Lesson for Chapter ${item.chapter.id}`}/>
+                    )}
                   </div>
                 );
               })}
