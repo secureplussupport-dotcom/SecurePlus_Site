@@ -10,7 +10,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     title: "Security Foundations, Controls, and Gap Analysis",
     subtitle: "Translate broad security goals into controls, evidence, and a defensible target state.",
     summary: "Security terminology becomes practical when each term answers a different question: what property must be protected, who is acting, what control is being applied, and how the organization knows the control closes a real gap.",
-    minutes: 12,
+    minutes: 13,
     difficulty: "Core",
     aliases: ["CIA triad", "confidentiality", "integrity", "availability", "non-repudiation", "AAA", "control types", "control categories", "gap analysis", "NIST CSF 2.0", "Govern", "zero trust"],
     objectives: [
@@ -38,6 +38,19 @@ export const STUDY_GUIDE_DEEP_DIVES = [
           "CompTIA groups controls into technical, managerial, operational, and physical categories. Functional labels include preventive, deterrent, detective, corrective, compensating, and directive. One control can fit more than one functional label depending on its purpose: a visible guard can deter, prevent, and detect.",
           "AAA is another separate lens. Authentication establishes confidence in an identity, authorization decides what that identity may do, and accounting records activity. Identification is the claim that comes before authentication; a username alone does not prove who supplied it.",
         ],
+      },
+      {
+        title: "Beginner memory map",
+        table: {
+          columns: ["Exam phrase", "Plain meaning", "Quick example"],
+          rows: [
+            ["Confidentiality", "Stop unauthorized disclosure", "Encrypt customer records and limit access"],
+            ["Integrity", "Stop or detect unauthorized change", "Hash a downloaded file and compare the digest"],
+            ["Availability", "Keep systems usable when needed", "Redundant links and tested backups"],
+            ["Non-repudiation", "Create strong evidence that an actor performed an action", "Digital signatures, audit logs, and timestamps"],
+            ["Accounting", "Record what authenticated users did", "SIEM logs, audit trails, and monitoring"],
+          ],
+        },
       },
       {
         title: "CSF 2.0 is a six-function improvement model",
@@ -69,7 +82,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     title: "Threat Actors, Attack Surfaces, and Social Engineering",
     subtitle: "Reason from capability, opportunity, and behavior instead of memorizing villain labels.",
     summary: "Threat-actor labels are starting hypotheses. Defenders make better decisions by examining access, resources, capability, persistence, intent, exposed attack surfaces, and the evidence supporting attribution.",
-    minutes: 11,
+    minutes: 12,
     difficulty: "Core",
     aliases: ["threat actor", "nation-state", "insider threat", "hacktivist", "script kiddie", "shadow IT", "attack surface", "attack vector", "phishing", "smishing", "vishing", "business email compromise", "pretexting", "watering hole", "typosquatting", "misinformation", "disinformation", "supply chain"],
     objectives: [
@@ -82,7 +95,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
         title: "Actor labels do not replace evidence",
         body: [
           "A nation-state may have deep resources and long time horizons; organized crime often pursues money; hacktivists seek visibility or political effect; inexperienced actors may rely heavily on existing tools. These are tendencies, not proof. Motivation, infrastructure, language, working hours, and techniques can all be imitated.",
-          "An insider is someone with legitimate access or knowledge and may be malicious, negligent, or compromised. A third party can become an indirect actor when its software, credentials, or service relationship is abused. Defences should focus on least privilege, separation of duties, monitoring, and safe reporting rather than stereotypes.",
+          "An insider is someone with legitimate access or knowledge and may be malicious, negligent, or compromised. A third party can become an indirect actor when its software, credentials, or service relationship is abused. Defenses should focus on least privilege, separation of duties, monitoring, and safe reporting rather than stereotypes.",
         ],
       },
       {
@@ -103,6 +116,19 @@ export const STUDY_GUIDE_DEEP_DIVES = [
             ["Watering hole", "A site frequented by the target group", "A trusted destination becomes the delivery point"],
             ["Typosquatting", "A look-alike registered name", "Small spelling or Unicode difference; not the same as DNS poisoning"],
             ["Misinformation / disinformation", "False content", "Disinformation is deliberately deceptive; misinformation may be shared without that intent"],
+          ],
+        },
+      },
+      {
+        title: "Common delivery paths",
+        table: {
+          columns: ["Vector", "Likely clue", "First defensive thought"],
+          rows: [
+            ["Email", "Phishing, malicious attachment, or business email compromise", "Verify sender, filter content, and require strong payment-change procedures"],
+            ["Web", "Drive-by download, watering hole, malicious ad, or browser exploit", "Patch browsers, filter risky destinations, and isolate high-risk browsing"],
+            ["Network", "On-path attack, DNS poisoning, ARP spoofing, or DDoS", "Authenticate endpoints, segment networks, monitor traffic, and protect availability"],
+            ["Physical", "USB drop, tailgating, dumpster diving, or shoulder surfing", "Use badges, clean desk habits, visitor control, and awareness training"],
+            ["Supply chain", "Trusted update, vendor, or dependency becomes the path", "Assess suppliers, verify releases, monitor dependencies, and define contract controls"],
           ],
         },
       },
@@ -246,7 +272,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     title: "Cloud Models, Containers, and Infrastructure as Code",
     subtitle: "Know which layer you control, which boundary you share, and how automation multiplies both consistency and mistakes.",
     summary: "Cloud security is not a single responsibility chart. The service model, provider contract, workload architecture, identity design, data location, and automation pipeline determine who can control each risk.",
-    minutes: 16,
+    minutes: 17,
     difficulty: "Applied",
     aliases: ["IaaS", "PaaS", "SaaS", "public cloud", "private cloud", "community cloud", "hybrid cloud", "shared responsibility", "container", "virtual machine", "orchestrator", "registry", "serverless", "function as a service", "FaaS", "microservices", "service-oriented architecture", "SOA", "SDN", "control plane", "data plane", "infrastructure as code", "IaC", "immutable infrastructure", "configuration drift", "guardrails"],
     objectives: [
@@ -263,6 +289,19 @@ export const STUDY_GUIDE_DEEP_DIVES = [
             ["IaaS", "Guest OS, identities, applications, data, and virtual network policy", "Facilities, physical hardware, and core virtualization"],
             ["PaaS", "Application code, identities, data, and service configuration", "Managed runtime and underlying platform"],
             ["SaaS", "Users, access policy, data handling, integrations, and tenant settings", "Application operation and underlying stack"],
+          ],
+        },
+      },
+      {
+        title: "Deployment models answer where the cloud lives",
+        table: {
+          columns: ["Model", "Exam meaning", "Do not confuse it with"],
+          rows: [
+            ["Public cloud", "Services offered over shared provider infrastructure", "A private cloud just because access uses the internet"],
+            ["Private cloud", "Cloud infrastructure used by one organization", "A single ordinary server"],
+            ["Community cloud", "Shared by organizations with a common mission or compliance need", "A general public-cloud account"],
+            ["Hybrid cloud", "Distinct environments, such as private and public, connected for coordinated use", "Using two public providers only"],
+            ["Multi-cloud", "Using services from more than one cloud provider", "Always having a private-cloud component"],
           ],
         },
       },
@@ -460,7 +499,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
         title: "Tune for decision quality, not quiet dashboards",
         body: [
           "A false positive alerts on benign activity; a false negative misses malicious activity. Suppression, deduplication, baselines, asset criticality, identity risk, and confidence can improve prioritization. Tuning solely to reduce alert volume can hide failure, so changes need testing, ownership, expiry where appropriate, and measures of missed as well as noisy detection.",
-          "Threat hunting begins with a testable hypothesis, gathers relevant evidence, follows leads, records results, and converts durable findings into improved detection or controls. ATT&CK provides a shared language for behaviours. A hunt result is not automatically an incident, and absence of a hit is not proof the environment is clean.",
+          "Threat hunting begins with a testable hypothesis, gathers relevant evidence, follows leads, records results, and converts durable findings into improved detection or controls. ATT&CK provides a shared language for behaviors. A hunt result is not automatically an incident, and absence of a hit is not proof the environment is clean.",
         ],
       },
       {
@@ -472,6 +511,20 @@ export const STUDY_GUIDE_DEEP_DIVES = [
             ["Benign activity occurred", "Alert fired", "False positive"],
             ["Benign activity occurred", "No alert", "True negative"],
             ["Malicious activity occurred", "No alert", "False negative"],
+          ],
+        },
+      },
+      {
+        title: "Classic exam flow for active incidents",
+        table: {
+          columns: ["Phase", "What the learner should do first", "Common trap"],
+          rows: [
+            ["Preparation", "Have roles, tools, communications, and evidence handling ready", "Trying to invent the process during the incident"],
+            ["Detection and analysis", "Confirm what happened, scope impact, and document evidence", "Treating the first alert as complete truth"],
+            ["Containment", "Limit spread or damage before cleanup", "Erasing malware before stopping active movement"],
+            ["Eradication", "Remove the cause, persistence, and exploited weakness", "Restoring systems while the attacker still has access"],
+            ["Recovery", "Return clean systems to service and monitor closely", "Skipping validation because a backup restored"],
+            ["Lessons learned", "Improve controls, playbooks, and training", "Closing the case without fixing the process"],
           ],
         },
       },
@@ -502,7 +555,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
     difficulty: "Applied",
     aliases: ["virus", "worm", "trojan", "RAT", "rootkit", "keylogger", "ransomware", "logic bomb", "fileless malware", "IoC", "TTP", "credential stuffing", "password spraying", "replay attack", "on-path attack", "resource consumption", "impossible travel", "missing logs"],
     objectives: [
-      "Distinguish malware behaviours without assuming one sample fits only one label.",
+      "Distinguish malware behaviors without assuming one sample fits only one label.",
       "Separate short-lived indicators from durable tactics, techniques, and procedures.",
       "Correlate identity, process, network, and log signals before declaring compromise.",
     ],
@@ -515,8 +568,12 @@ export const STUDY_GUIDE_DEEP_DIVES = [
             ["Virus", "Replicates by attaching to a host file or content", "It spreads without user or host execution"],
             ["Worm", "Self-propagates across systems or networks", "It cannot also carry ransomware or a backdoor"],
             ["Trojan", "Pretends to be legitimate or useful", "It self-replicates"],
-            ["RAT", "Provides remote administrative control to an unauthorized operator", "Every legitimate remote tool is malicious"],
+            ["Ransomware", "Encrypts, locks, or steals data to pressure payment", "Payment guarantees recovery or deletion"],
+            ["Spyware", "Monitors activity or collects information quietly", "It must always display pop-ups"],
             ["Rootkit", "Hides or maintains privileged presence", "One product alert proves kernel compromise"],
+            ["Keylogger", "Records keystrokes or input to capture secrets", "It is always a separate physical device"],
+            ["Logic bomb", "Triggers malicious action when a condition is met", "It runs immediately after installation"],
+            ["RAT", "Provides remote administrative control to an unauthorized operator", "Every legitimate remote tool is malicious"],
             ["Fileless malware", "Relies heavily on memory, interpreters, or trusted tools", "It leaves no files or persistent evidence at all"],
           ],
         },
@@ -524,7 +581,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
       {
         title: "Indicators are clues with different lifetimes",
         body: [
-          "A file hash, domain, IP address, mutex, certificate, command line, or registry path can be an indicator of compromise. Many are easy to change or may also appear in benign activity. Tactics, techniques, and procedures describe behavioural patterns and can remain useful after infrastructure changes, but they still require evidence and context.",
+          "A file hash, domain, IP address, mutex, certificate, command line, or registry path can be an indicator of compromise. Many are easy to change or may also appear in benign activity. Tactics, techniques, and procedures describe behavioral patterns and can remain useful after infrastructure changes, but they still require evidence and context.",
           "High CPU or network use, impossible travel, repeated lockouts, blocked content, missing logs, unexpected child processes, and new persistence are investigation signals—not verdicts. Correlate time, identity, device, parent process, network destination, asset role, change records, and baseline behavior.",
         ],
       },
@@ -575,6 +632,8 @@ export const STUDY_GUIDE_DEEP_DIVES = [
             ["SQL / command / LDAP injection", "A database, shell, or directory query interpreter", "Parameterized or safe APIs, strict construction, least privilege"],
             ["XSS", "A victim browser interprets untrusted content as active code", "Context-aware output handling and safe DOM APIs"],
             ["Path traversal", "A file path escapes the intended directory", "Server-selected identifiers, canonical paths, allowlists, filesystem isolation"],
+            ["Buffer overflow", "A program writes outside the memory it was given", "Bounds checking, safer libraries, memory-safe languages, ASLR and DEP"],
+            ["XML injection", "Untrusted XML changes parser or data behavior", "Disable unsafe features, validate structure, and parse with safe libraries"],
             ["SSRF", "The server makes an attacker-influenced request", "Destination allowlists, network egress controls, parser-safe validation"],
             ["CSRF", "A browser sends an unwanted authenticated request", "Anti-CSRF tokens, SameSite cookies, origin checks, reauthentication"],
           ],
@@ -583,15 +642,15 @@ export const STUDY_GUIDE_DEEP_DIVES = [
       {
         title: "Validation helps, but context decides the encoding",
         body: [
-          "Allowlist validation can reject structurally invalid input, but it does not replace safe query APIs or output handling. Encode for the exact output context: HTML text, attribute, URL, JavaScript, and CSS contexts have different rules. canonicalize and constrain paths before access, but prefer mapping an opaque server-controlled identifier to an approved file rather than accepting a path from the user.",
+          "Allowlist validation can reject structurally invalid input, but it does not replace safe query APIs or output handling. Encode for the exact output context: HTML text, attribute, URL, JavaScript, and CSS contexts have different rules. Canonicalize and constrain paths before access, but prefer mapping an opaque server-controlled identifier to an approved file rather than accepting a path from the user.",
           "A web application firewall, content security policy, sandbox, and runtime monitoring provide defense in depth. They reduce likelihood or impact but should not be used to justify leaving a known injection path in application code.",
         ],
       },
       {
         title: "Secure development creates evidence before release",
         body: [
-          "Threat modeling identifies assets, trust boundaries, abuse cases, and mitigations while design is still changeable. Peer review examines intent and implementation. SAST analyses code or compiled artefacts without running the application; DAST probes a running system; software composition analysis inventories dependencies and known risks. No single technique sees the whole system.",
-          "Protect repositories, branches, build workers, secrets, signing keys, package sources, and release provenance. Pinning a dependency improves repeatability, but the pinned version still needs maintenance. A signed artefact supports origin and integrity only to the extent that the signer and build process are trustworthy.",
+          "Threat modeling identifies assets, trust boundaries, abuse cases, and mitigations while design is still changeable. Peer review examines intent and implementation. SAST analyzes code or compiled artifacts without running the application; DAST probes a running system; software composition analysis inventories dependencies and known risks. No single technique sees the whole system.",
+          "Protect repositories, branches, build workers, secrets, signing keys, package sources, and release provenance. Pinning a dependency improves repeatability, but the pinned version still needs maintenance. A signed artifact supports origin and integrity only to the extent that the signer and build process are trustworthy.",
         ],
       },
     ],

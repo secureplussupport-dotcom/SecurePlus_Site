@@ -176,7 +176,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
         title: "IoT security begins in procurement",
         body: [
           "Require unique device identities or credentials, secure default configuration, protected updates, vulnerability disclosure and support commitments, data protection, event logging, and a documented end-of-support path. Inventory device model, firmware, owner, network location, dependencies, collected data, and update status.",
-          "Constrained devices may not support full endpoint agents, so compensate with gateway enforcement, network segmentation, behavioural monitoring, restricted egress, and protected management services. At disposal, remove credentials and sensitive data, revoke trust, update inventory, and verify sanitization or destruction according to the media and risk.",
+          "Constrained devices may not support full endpoint agents, so compensate with gateway enforcement, network segmentation, behavioral monitoring, restricted egress, and protected management services. At disposal, remove credentials and sensitive data, revoke trust, update inventory, and verify sanitization or destruction according to the media and risk.",
         ],
       },
     ],
@@ -261,7 +261,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
     id: "api-session-browser-security",
     chapter: 2,
     category: "Secure Software",
-    title: "API Authorization, Sessions, Replay, and Browser Defences",
+    title: "API Authorization, Sessions, Replay, and Browser Defenses",
     subtitle: "Recheck permission on every object and function, then protect the session and browser context that carries the request.",
     summary: "An authenticated API call can still be unauthorized. Secure APIs enforce object, property, and function permissions server-side, constrain resource use and business flows, protect tokens, and handle browser-specific attacks separately.",
     minutes: 15,
@@ -270,7 +270,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
     objectives: [
       "Enforce API access at object, property, and function levels.",
       "Protect sessions against theft, fixation, replay, and uncontrolled lifetime.",
-      "Distinguish CSRF, clickjacking, and HTTPS downgrade defences.",
+      "Distinguish CSRF, clickjacking, and HTTPS downgrade defenses.",
     ],
     sections: [
       {

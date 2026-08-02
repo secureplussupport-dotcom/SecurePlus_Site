@@ -11480,7 +11480,192 @@ const IMPORTED_MCQ_BANK = [
   }
 ];
 
-const BASE_MCQ_BANK = [...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id)).map(ensureMcqWrongFeedback);
+const SY0701_STUDY_NOTE_MCQ_ENHANCEMENTS = {
+  m001: {
+    exp: "A deterrent control discourages an unwanted action before it happens. A motion-sensor light may make a person leave, but it does not physically block entry or restore anything after an incident.",
+    wrongFeedback: {
+      0: "Preventive controls stop or block an action, such as a locked gate. A light mainly discourages behavior.",
+      1: "Detective controls identify or record that something happened, such as camera footage or an IDS alert. This light is primarily meant to discourage.",
+      3: "Corrective controls fix or restore after an incident, such as restoring from backup. Nothing is being restored here.",
+    },
+  },
+  m002: {
+    exp: "Availability means authorized users can reach systems and data when needed. A flood of traffic is a denial-of-service pattern that exhausts capacity and makes the service unavailable.",
+    wrongFeedback: {
+      0: "Confidentiality is about unauthorized disclosure. The scenario does not say data was exposed.",
+      1: "Integrity is about unauthorized change. The scenario does not say records were modified.",
+      3: "Non-repudiation is evidence that an actor cannot deny an action, usually through signatures, logs, and timestamps. The issue here is service access.",
+    },
+  },
+  m004: {
+    exp: "A salt is a unique random value added before hashing a password. It makes identical passwords produce different hashes and defeats precomputed rainbow tables. Slow password-hashing functions, such as bcrypt, scrypt, or Argon2id, are still needed to slow guessing.",
+    wrongFeedback: {
+      0: "Salting alone does not stop brute force. A slow, tuned password-hashing function raises the cost of each guess.",
+      2: "A man-in-the-middle attack targets network communication. Salting is a password-storage control.",
+      3: "Replay attacks reuse captured valid authentication material. Salting does not protect session tokens or protocol freshness.",
+    },
+  },
+  m005: {
+    exp: "A browser must be able to build a certificate chain from the website certificate through any intermediate CA to a trusted root CA in its trust store. If the intermediate is missing, chain validation can fail even when the root is trusted.",
+    wrongFeedback: {
+      0: "Root CAs are not always trusted by every client, and the browser still needs a complete chain to reach a trusted root.",
+      2: "The intermediate CA may be valid. The server's mistake is failing to provide the intermediate certificate needed to build the chain.",
+      3: "Modern browsers do not silently fall back to HTTP after a certificate-chain error. They warn or block the connection.",
+    },
+  },
+  m007: {
+    exp: "Zero Trust removes automatic trust based on network location. The exam phrase is 'never trust, always verify': check identity, device posture, access need, and context even for internal traffic.",
+    wrongFeedback: {
+      0: "Implicit perimeter trust is the older assumption that internal network traffic is safe. Zero Trust rejects that assumption.",
+      2: "Default allow is the opposite of Zero Trust. Access should be explicitly evaluated and limited.",
+      3: "Separation of duties divides sensitive tasks between people. It does not explain continuous access verification.",
+    },
+  },
+  m009: {
+    exp: "Vishing is phishing by voice call. Pretexting is the fabricated story or role, such as pretending to be the CFO. This scenario contains both clues.",
+    wrongFeedback: {
+      0: "Phishing is usually the broad email category. This attack is over a voice call.",
+      2: "Smishing uses SMS or text messages. The scenario says the attacker calls the help desk.",
+      3: "A watering hole compromises a site visited by the target group. No website is involved here.",
+    },
+  },
+  m010: {
+    exp: "A keylogger records keystrokes or typed input so an attacker can capture passwords, card numbers, or other secrets. It may be software or hardware, but the defining behavior is input capture.",
+    wrongFeedback: {
+      0: "Ransomware encrypts or locks data and demands payment. This scenario is about recording input.",
+      1: "A rootkit hides activity or maintains privileged access. Hiding can support malware, but it is not the main clue here.",
+      3: "A worm self-propagates across systems or networks. The scenario does not describe self-replication.",
+    },
+  },
+  m011: {
+    exp: "A SYN flood leaves many half-open TCP connections. SYN cookies help the server avoid allocating full connection state until the final ACK arrives, reducing resource exhaustion.",
+    wrongFeedback: {
+      0: "Increasing the timeout keeps half-open connections around longer, which worsens resource exhaustion.",
+      2: "Blocking all inbound TCP would also block legitimate TCP services, so it is not a usable mitigation for a production server.",
+      3: "An IDS can alert, but it does not stop half-open connection exhaustion by itself. The question asks for the best mitigation.",
+    },
+  },
+  m012: {
+    exp: "SQL injection happens when attacker-controlled input becomes part of a database query. The input changes the WHERE clause logic, so the login check succeeds. The root fix is parameterized queries or prepared statements.",
+    wrongFeedback: {
+      0: "XSS makes a browser run untrusted script. This attack changes a database query.",
+      2: "A buffer overflow writes outside allocated memory. This scenario is about query logic, not memory bounds.",
+      3: "Directory traversal uses path sequences to reach files outside an intended folder. No file path is being abused here.",
+    },
+  },
+  m013: {
+    exp: "An advanced persistent threat is suggested by high resources, advanced tooling or zero-days, stealth, and long dwell time. The category is an evidence-based assessment, not absolute attribution.",
+    wrongFeedback: {
+      0: "Script kiddies usually rely on existing tools and do not match the zero-day, high-resource, long-term profile.",
+      1: "Hacktivists are usually motivated by visibility or a cause. The scenario emphasizes stealthy long-term access and advanced capability.",
+      3: "An insider has legitimate access. The scenario points to an externally resourced, persistent actor group.",
+    },
+  },
+  m016: {
+    exp: "A logic bomb is malicious code that waits for a condition, such as a date or account event, before executing. It is a common insider-threat pattern when code is planted before access is removed.",
+    wrongFeedback: {
+      0: "A Trojan disguises itself as legitimate software. The defining clue here is delayed execution on a trigger.",
+      2: "Ransomware encrypts or locks data to demand payment. The scenario describes timed deletion.",
+      3: "A rootkit hides privileged activity. The scenario does not focus on concealment.",
+    },
+  },
+  m017: {
+    exp: "In IaaS, the provider handles the physical data center, networking hardware, and hypervisor. The customer manages the guest OS, applications, identities, data, and configuration.",
+    wrongFeedback: {
+      0: "Physical data-center security is handled by the cloud provider in IaaS.",
+      1: "The hypervisor belongs to the provider's managed layer in IaaS.",
+      3: "The provider maintains the underlying network hardware. The customer configures virtual network policy.",
+    },
+  },
+  m022: {
+    exp: "In the classic incident-response flow, containment follows detection and analysis. Stop active spread before eradication and recovery so the incident does not keep expanding.",
+    wrongFeedback: {
+      0: "Eradication removes the cause after the spread is contained. Cleaning too early can miss active movement.",
+      1: "Recovery returns clean systems to service after containment and eradication. Restoring too early risks reinfection.",
+      3: "Lessons learned happens after the incident is handled, not while malware is still spreading.",
+    },
+  },
+  m023: {
+    exp: "CVSS base score describes technical severity. Effective risk also considers environmental context, such as exposure, asset value, compensating controls, and business impact.",
+    wrongFeedback: {
+      0: "CVSS base score is important, but it is not the only priority signal. Environmental context changes effective risk.",
+      2: "Internal systems can still matter for lateral movement or operations. A high CVSS issue should not be dismissed as informational.",
+      3: "A low-value server can still be a stepping stone. The answer should reduce risk using environmental context, not ignore it.",
+    },
+  },
+  m025: {
+    exp: "For forensic integrity, create a forensic image and verify it with cryptographic hashes before and after acquisition. Chain of custody also records who handled the evidence, when, and why.",
+    wrongFeedback: {
+      0: "Photos help document the scene, but they do not prove the disk image matches the original data.",
+      2: "Running antivirus changes the device and can damage evidence. Analyze a verified copy instead.",
+      3: "Interviews add context, but they do not preserve or verify digital evidence integrity.",
+    },
+  },
+  m029: {
+    exp: "SLE = asset value × exposure factor, so $500,000 × 0.60 = $300,000. ALE = SLE × ARO, so $300,000 × 0.10 = $30,000.",
+    wrongFeedback: {
+      0: "$300,000 is the SLE for one event, not the expected annual loss.",
+      1: "$50,000 applies the annual rate to the full asset value and skips exposure factor.",
+      3: "$500,000 assumes a full loss every year, which ignores both exposure factor and annual rate of occurrence.",
+    },
+  },
+};
+
+const EXAM_ENGLISH_REPLACEMENTS = [
+  [/\borganisations\b/g, "organizations"],
+  [/\borganisation\b/g, "organization"],
+  [/\borganisational\b/g, "organizational"],
+  [/\bauthorised\b/g, "authorized"],
+  [/\bauthorisation\b/g, "authorization"],
+  [/\bunauthorised\b/g, "unauthorized"],
+  [/\bbehaviours\b/g, "behaviors"],
+  [/\bbehaviour\b/g, "behavior"],
+  [/\bbehavioural\b/g, "behavioral"],
+  [/\bdefences\b/g, "defenses"],
+  [/\bdefence\b/g, "defense"],
+  [/\bprioritise\b/g, "prioritize"],
+  [/\bprioritises\b/g, "prioritizes"],
+  [/\bminimisation\b/g, "minimization"],
+  [/\bsanitisation\b/g, "sanitization"],
+  [/\bsynchronise\b/g, "synchronize"],
+  [/\bsynchronisation\b/g, "synchronization"],
+  [/\bTokenisation\b/g, "Tokenization"],
+  [/\btokenisation\b/g, "tokenization"],
+  [/\bData centre\b/g, "Data center"],
+  [/\bdata centre\b/g, "data center"],
+  [/\bprogramme\b/g, "program"],
+  [/\bprogrammes\b/g, "programs"],
+  [/\bmodelling\b/g, "modeling"],
+  [/\banalyses\b/g, "analyzes"],
+  [/\bartefacts\b/g, "artifacts"],
+];
+
+function toExamEnglish(value) {
+  if(typeof value==="string") {
+    return EXAM_ENGLISH_REPLACEMENTS.reduce((text,[pattern,replacement])=>text.replace(pattern,replacement),value);
+  }
+  if(Array.isArray(value)) return value.map(toExamEnglish);
+  if(value&&typeof value==="object") {
+    return Object.fromEntries(Object.entries(value).map(([key,nextValue])=>[key,toExamEnglish(nextValue)]));
+  }
+  return value;
+}
+
+function applySy0701StudyNoteEnhancement(question) {
+  const base=toExamEnglish(question);
+  const enhancement=SY0701_STUDY_NOTE_MCQ_ENHANCEMENTS[base.id];
+  if(!enhancement) return base;
+  return {
+    ...base,
+    ...enhancement,
+    wrongFeedback:{
+      ...(base.wrongFeedback||{}),
+      ...(enhancement.wrongFeedback||{}),
+    },
+  };
+}
+
+const BASE_MCQ_BANK = [...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id)).map(ensureMcqWrongFeedback).map(applySy0701StudyNoteEnhancement);
 let MCQ_BANK = BASE_MCQ_BANK;
 
 // ═══════════════════════════════════════════════════════════════

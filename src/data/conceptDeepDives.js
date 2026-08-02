@@ -480,7 +480,7 @@ export const CONCEPT_DEEP_DIVES = [
       {
         title: "Use the matrix, but respect its limits",
         body: [
-          "A qualitative matrix combines likelihood and impact into a relative risk level. Some organisations multiply numbered values; others use a lookup table. A 3×3 score of 9 is ‘critical’ only if the approved method defines it that way. Precision-looking numbers do not remove uncertainty in the inputs.",
+          "A qualitative matrix combines likelihood and impact into a relative risk level. Some organizations multiply numbered values; others use a lookup table. A 3×3 score of 9 is ‘critical’ only if the approved method defines it that way. Precision-looking numbers do not remove uncertainty in the inputs.",
           "Risk transfer—such as insurance or a contract—moves specified financial or operational consequences. It does not eliminate the event, reputational harm, compliance duty, deductibles, exclusions, or residual risk retained by the organization.",
         ],
       },
@@ -596,7 +596,7 @@ export const CONCEPT_DEEP_DIVES = [
     category: "Security Operations",
     title: "Vulnerability Scanning, SCAP, Orchestration, and Threat Intelligence",
     subtitle: "Automate repeatable work while keeping evidence, context, and human decisions visible.",
-    summary: "Operations tools produce signals, not automatic truth. Scanners combine version, configuration, authenticated, and behavioural checks; SCAP standardizes machine-readable security content; orchestration coordinates workflows; threat intelligence adds context at different decision levels.",
+    summary: "Operations tools produce signals, not automatic truth. Scanners combine version, configuration, authenticated, and behavioral checks; SCAP standardizes machine-readable security content; orchestration coordinates workflows; threat intelligence adds context at different decision levels.",
     minutes: 11,
     difficulty: "Applied",
     aliases: ["vulnerability scanner", "CVE", "CWE", "CVSS", "EPSS", "KEV", "SCAP", "orchestration", "automation", "posture assessment", "configuration enforcement", "remediation", "false positive", "false negative", "threat intelligence", "strategic", "operational", "tactical", "technical"],
@@ -854,4 +854,4 @@ export const CONCEPT_DEEP_DIVE_TOPIC_COUNT = new Set(
   CONCEPT_DEEP_DIVES.flatMap(dive => dive.aliases),
 ).size;
 
-export const CONCEPT_DEEP_DIVE_REVIEWED_AT = "2026-07-18";
+export const CONCEPT_DEEP_DIVE_REVIEWED_AT = "2026-08-02";
