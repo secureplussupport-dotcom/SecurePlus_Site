@@ -90,7 +90,8 @@ VITE_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 ```
 
 4. Deploy.
-5. Test signup, login, Google login, checkout, billing portal, account deletion.
+5. Run `supabase/stripe-cancellation.sql` once if your Supabase project existed before the cancellation-status columns were added.
+6. Test signup, login, Google login, checkout, cancel renewal, billing portal, account deletion.
 
 ## 5. PostHog Analytics
 
@@ -115,6 +116,7 @@ Useful custom events already sent by the app:
 - `mcq_quiz_completed`
 - `pbq_locked_clicked`
 - `checkout_started`
+- `membership_cancel_requested`
 - `referral_link_copied`
 - `referral_claimed`
 

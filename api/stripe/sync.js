@@ -5,10 +5,11 @@ import {
   getSupabaseAdmin,
   json,
 } from "../_utils.js";
-
-function subscriptionTier(status) {
-  return status === "active" || status === "trialing" ? "pro" : "free";
-}
+import {
+  isCancellationSchemaError,
+  subscriptionProfilePatch,
+  withoutCancellationColumns,
+} from "./_subscription.js";
 
 function pickBestSubscription(subscriptions = []) {
   return (
@@ -19,12 +20,22 @@ function pickBestSubscription(subscriptions = []) {
 }
 
 async function updateProfile(supabase, userId, patch) {
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("profiles")
     .update({ ...patch, updated_at: new Date().toISOString() })
     .eq("id", userId)
-    .select("id,email,tier,subscription_status,stripe_customer_id,stripe_subscription_id,pro_trial_until,referral_code")
+    .select("id,email,tier,subscription_status,subscription_cancel_at_period_end,subscription_current_period_end,stripe_customer_id,stripe_subscription_id,pro_trial_until,referral_code")
     .maybeSingle();
+
+  if (isCancellationSchemaError(error)) {
+    ({ data, error } = await supabase
+      .from("profiles")
+      .update({ ...withoutCancellationColumns(patch), updated_at: new Date().toISOString() })
+      .eq("id", userId)
+      .select("id,email,tier,subscription_status,stripe_customer_id,stripe_subscription_id,pro_trial_until,referral_code")
+      .maybeSingle());
+    if (!error && data) data = { ...data, ...patch };
+  }
 
   if (error) throw error;
   return data;
@@ -93,10 +104,8 @@ export default async function handler(req, res) {
     }
 
     const updatedProfile = await updateProfile(supabase, authUser.id, {
-      tier: subscriptionTier(subscription.status),
+      ...subscriptionProfilePatch(subscription),
       stripe_customer_id: customerId || subscription.customer,
-      stripe_subscription_id: subscription.id,
-      subscription_status: subscription.status,
     });
 
     return json(res, 200, {

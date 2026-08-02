@@ -891,6 +891,13 @@ function getAcademyActiveDays(user) {
   return Math.max(1, days);
 }
 
+function formatSubscriptionDate(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+}
+
 function appUserFromProfile(authUser, profile) {
   const trialUntil = profile?.pro_trial_until ? new Date(profile.pro_trial_until) : null;
   const hasReferralTrial = trialUntil && trialUntil.getTime() > Date.now();
@@ -905,6 +912,8 @@ function appUserFromProfile(authUser, profile) {
     name: profile?.full_name || profileName(authUser),
     tier: hasProAccess ? "pro" : "free",
     subscriptionStatus: profile?.subscription_status || null,
+    subscriptionCancelAtPeriodEnd: Boolean(profile?.subscription_cancel_at_period_end),
+    subscriptionCurrentPeriodEnd: profile?.subscription_current_period_end || null,
     proTrialUntil: profile?.pro_trial_until || null,
     referralTrialExpired: Boolean(trialUntil && trialUntil.getTime() <= Date.now() && profile?.tier !== "pro"),
     referralCode: profile?.referral_code || "",
@@ -923,10 +932,10 @@ function appUserFromProfile(authUser, profile) {
 
 async function getSupabaseProfile(authUser) {
   if (!supabase || !authUser) return null;
-  const isMissingProfileColumn=error=>error?.code === "42703" || /total_stars|avatar_id|full_name|created_at|cipher_coins|lifetime_cipher_coins|exam_passes/i.test(error?.message || "");
+  const isMissingProfileColumn=error=>error?.code === "42703" || /total_stars|avatar_id|full_name|created_at|cipher_coins|lifetime_cipher_coins|exam_passes|subscription_cancel_at_period_end|subscription_current_period_end/i.test(error?.message || "");
   let full = await supabase
     .from("profiles")
-    .select("id,email,full_name,avatar_id,tier,subscription_status,pro_trial_until,referral_code,total_stars,cipher_coins,lifetime_cipher_coins,exam_passes,created_at")
+    .select("id,email,full_name,avatar_id,tier,subscription_status,subscription_cancel_at_period_end,subscription_current_period_end,pro_trial_until,referral_code,total_stars,cipher_coins,lifetime_cipher_coins,exam_passes,created_at")
     .eq("id", authUser.id)
     .maybeSingle();
 
@@ -942,7 +951,7 @@ async function getSupabaseProfile(authUser) {
 
   let basic = await supabase
     .from("profiles")
-    .select("id,email,full_name,avatar_id,tier,subscription_status,total_stars,created_at")
+    .select("id,email,full_name,avatar_id,tier,subscription_status,subscription_cancel_at_period_end,subscription_current_period_end,total_stars,created_at")
     .eq("id", authUser.id)
     .maybeSingle();
 
@@ -17400,6 +17409,12 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-checkout-note strong{color:${t.text};}
 .upgrade-checkout-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
 .upgrade-checkout-actions .btn{flex:1;min-width:130px;justify-content:center;font-size:11px;}
+.subscription-status-card{display:grid;gap:8px;margin-top:12px;padding:12px;border:1px solid ${t.amber}35;border-radius:8px;background:${t.amber}0c;color:${t.textSec};}
+.subscription-status-card strong{color:${t.text};font-size:12px;}
+.subscription-status-card span{font-size:11px;line-height:1.55;}
+.subscription-status-card.cancelled{border-color:${t.green}35;background:${t.green}0d;}
+.subscription-status-card.cancelled strong{color:${t.green};}
+.subscription-status-card .btn{width:100%;justify-content:center;font-size:11px;}
 .upgrade-decision-card{position:relative;overflow:hidden;padding:28px;border:1.5px solid ${t.accent};border-radius:8px;background:linear-gradient(145deg,${t.accent}10,${t.surface} 48%,${t.green}08);box-shadow:0 22px 50px ${t.accent}16;margin-bottom:18px;}
 .upgrade-decision-card::before{content:"";position:absolute;right:-70px;top:-86px;width:210px;height:210px;border-radius:50%;border:38px solid ${t.accent}09;pointer-events:none;}
 .upgrade-decision-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.72fr);gap:30px;align-items:center;}
@@ -27740,6 +27755,9 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
 
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
   const isPro=user?.tier==="pro";
+  const hasPaidSubscription=["active","trialing"].includes(user?.subscriptionStatus || "");
+  const isRenewalCancelled=Boolean(user?.subscriptionCancelAtPeriodEnd);
+  const subscriptionEndLabel=formatSubscriptionDate(user?.subscriptionCurrentPeriodEnd);
   useEffect(()=>{
     capture("upgrade_page_viewed", { tier:user?.tier || "guest", plans:"monthly_4_99,three_month_9_99" });
   },[user?.tier]);
@@ -27879,8 +27897,21 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
             <p><strong>Simple, secure billing.</strong> Stripe processes your payment. SecurePlus never stores your card details, and your free MCQ access remains available if you do not upgrade.</p>
             <div className="upgrade-checkout-actions">
               <span className="upgrade-trust-item"><LockKeyhole size={13}/> Stripe checkout</span>
-              <span className="upgrade-trust-item"><Check size={13}/> Cancel anytime</span>
+              <span className="upgrade-trust-item"><Check size={13}/> Cancel renewal anytime</span>
             </div>
+            {isPro&&hasPaidSubscription&&(
+              <div className={`subscription-status-card ${isRenewalCancelled?"cancelled":""}`}>
+                <strong>{isRenewalCancelled?"Renewal cancelled":"Membership active"}</strong>
+                <span>
+                  {isRenewalCancelled
+                    ? `You will not be billed again. Pro access remains until ${subscriptionEndLabel || "the current paid period ends"}.`
+                    : `You can stop the next bill anytime. Pro access remains through the current paid period after cancellation${subscriptionEndLabel ? ` (${subscriptionEndLabel})` : ""}.`}
+                </span>
+                <button className="btn btn-outline" type="button" onClick={onCancelMembership} disabled={billingLoading||isRenewalCancelled}>
+                  {isRenewalCancelled?"Renewal already cancelled":billingLoading?"Cancelling renewal...":"Cancel renewal"}
+                </button>
+              </div>
+            )}
             {!isPro&&(
               <button className="btn btn-ghost" style={{width:"100%",justifyContent:"center",fontSize:11,marginTop:12}} onClick={onSyncBilling} disabled={billingLoading}>
                 Already paid? Refresh Pro status
@@ -28865,6 +28896,9 @@ function LegalPage({type,t}) {
 
 function AccountSupportPage({user,t,onDeleteAccount,onCancelMembership,onNavigate,billingLoading=false}) {
   const isPro=user?.tier==="pro";
+  const hasPaidSubscription=["active","trialing"].includes(user?.subscriptionStatus || "");
+  const isRenewalCancelled=Boolean(user?.subscriptionCancelAtPeriodEnd);
+  const subscriptionEndLabel=formatSubscriptionDate(user?.subscriptionCurrentPeriodEnd);
   const cards=[
     {title:"Contact support",body:"Email us for account, billing, content, or technical issues.",color:t.accent,Icon:MessageSquareWarning,action:"Email support",href:`mailto:${SUPPORT_EMAIL}`},
     {title:"Privacy policy",body:"See what account, payment, and practice data SecurePlus uses.",color:t.green,Icon:LockKeyhole,action:"Open privacy",view:"privacy"},
@@ -28879,7 +28913,7 @@ function AccountSupportPage({user,t,onDeleteAccount,onCancelMembership,onNavigat
           <p>Use this page for support, legal documents, cancellation, and account deletion. Deletion still requires secure email verification before anything is removed.</p>
           <div className="account-support-profile">
             <span><UserRound size={16}/>{user?.email||"Signed-in account"}</span>
-            <span><ShieldCheck size={16}/>{isPro?"Pro active":"Free plan"}</span>
+            <span><ShieldCheck size={16}/>{isRenewalCancelled?"Pro until period end":isPro?"Pro active":"Free plan"}</span>
           </div>
         </div>
         <div className="account-support-safe-card">
@@ -28908,11 +28942,17 @@ function AccountSupportPage({user,t,onDeleteAccount,onCancelMembership,onNavigat
         <div>
           <div className="label" style={{color:t.red}}>Account controls</div>
           <h3>Billing and deletion</h3>
-          <p>Cancel membership if you only want to stop renewal. Delete account only if you want saved learning data removed too.</p>
+          <p>
+            {hasPaidSubscription
+              ? isRenewalCancelled
+                ? `Your renewal is already cancelled. You will not be billed again${subscriptionEndLabel ? `, and Pro access remains until ${subscriptionEndLabel}` : ""}.`
+                : `Cancel renewal if you only want to stop the next bill. Your Pro access remains until the current paid period ends${subscriptionEndLabel ? ` (${subscriptionEndLabel})` : ""}.`
+              : "No active Stripe membership is linked to this account. Delete account only if you want saved learning data removed too."}
+          </p>
         </div>
         <div className="account-danger-actions">
-          <button className="btn btn-outline" type="button" onClick={onCancelMembership} disabled={billingLoading}>
-            {billingLoading?"Opening billing...":"Cancel membership"}
+          <button className="btn btn-outline" type="button" onClick={onCancelMembership} disabled={billingLoading||!hasPaidSubscription||isRenewalCancelled}>
+            {isRenewalCancelled?"Renewal already cancelled":billingLoading?"Cancelling renewal...":"Cancel renewal"}
           </button>
           <button className="btn btn-danger" type="button" onClick={onDeleteAccount}>
             Delete account
@@ -29738,31 +29778,59 @@ export default function App() {
     if(!diagnosticDone&&attempts.length===0)setShowDiagnostic(true);
   },[user,attempts.length]);
   const handleCancelMembership=useCallback(async()=>{
+    if(!user)return;
     if(!isSupabaseConfigured){
-      alert("Membership cancellation will use Stripe's billing portal once Supabase and Stripe env vars are configured. For now, contact secureplus.support@gmail.com.");
+      alert("Membership cancellation requires Supabase and Stripe env vars. For now, contact secureplus.support@gmail.com.");
+      return;
+    }
+    if(user.authProvider!=="supabase"){
+      alert("Please sign in with your live Supabase account before cancelling renewal. Local demo accounts do not have Stripe billing.");
+      return;
+    }
+    if(user.subscriptionCancelAtPeriodEnd){
+      alert("Your renewal is already cancelled. You will not be billed again for this membership.");
+      return;
+    }
+    const confirmed=window.confirm("Cancel Pro renewal now? You will not be billed again, and Pro access will remain until the current paid period ends.");
+    if(!confirmed){
       return;
     }
     setBillingLoading(true);
     try{
-      capture("checkout_started", { tier: user.tier, has_referral: Boolean(getStoredReferralCode()) });
+      capture("membership_cancel_requested", { tier: user.tier, subscription_status: user.subscriptionStatus || "unknown" });
       const token=await getSupabaseAccessToken();
       if(!token){
-        alert("Please sign in with Supabase before managing billing.");
+        alert("Please sign in again before cancelling renewal.");
         return;
       }
-      const response=await fetch("/api/stripe/portal",{
+      const response=await fetch("/api/stripe/cancel",{
         method:"POST",
         headers:{authorization:`Bearer ${token}`},
       });
       const data=await response.json().catch(()=>({}));
-      if(!response.ok||!data.url) throw new Error(data.error||"Unable to open billing portal.");
-      window.location.href=data.url;
+      if(!response.ok||!data.profile) throw new Error(data.error||"Unable to cancel renewal.");
+      const { data:authData }=await supabase.auth.getUser();
+      const authUser=authData?.user;
+      if(authUser){
+        const updatedUser=appUserFromProfile(authUser,data.profile);
+        setUser(updatedUser);
+        identifyUser(updatedUser);
+      }else{
+        setUser(current=>current ? {
+          ...current,
+          subscriptionCancelAtPeriodEnd:true,
+          subscriptionCurrentPeriodEnd:data.profile.subscription_current_period_end || current.subscriptionCurrentPeriodEnd,
+          subscriptionStatus:data.profile.subscription_status || current.subscriptionStatus,
+        } : current);
+      }
+      const endLabel=formatSubscriptionDate(data.profile.subscription_current_period_end);
+      alert(`Renewal cancelled. You will not be billed again${endLabel ? `, and Pro access remains until ${endLabel}` : ""}.`);
     }catch(error){
-      alert(error.message||"Unable to open billing portal. Contact secureplus.support@gmail.com.");
+      alert(error.message||"Unable to cancel renewal. Contact secureplus.support@gmail.com.");
     }finally{
       setBillingLoading(false);
     }
-  },[]);
+  },[user]);
   const handleSyncBilling=useCallback(async()=>{
     if(!user)return;
     if(!isSupabaseConfigured || user.authProvider!=="supabase"){

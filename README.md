@@ -184,6 +184,7 @@ Checkout validates the selected Price on the server before charging: Monthly Fle
 API routes:
 
 - `POST /api/stripe/checkout`: creates a subscription Checkout Session for the logged-in Supabase user
+- `POST /api/stripe/cancel`: schedules the logged-in user's Stripe subscription to stop renewing at the end of the current paid period
 - `POST /api/stripe/sync`: verifies the logged-in user's Stripe subscription and updates Supabase after Checkout returns
 - `POST /api/stripe/portal`: opens Stripe Billing Portal for cancellation/membership management
 - `POST /api/stripe/webhook`: verifies Stripe webhook signatures and updates `profiles.tier`
@@ -199,6 +200,8 @@ Stripe webhook events:
 - `customer.subscription.updated`
 - `customer.subscription.deleted`
 - `invoice.payment_failed`
+
+Run `supabase/stripe-cancellation.sql` once if your Supabase project existed before the cancellation-status columns were added. SecurePlus uses Stripe's period-end cancellation, so users are not billed again but keep Pro until their current paid period ends.
 
 Test card:
 

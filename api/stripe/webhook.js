@@ -5,26 +5,40 @@ import {
   json,
   requireEnv,
 } from "../_utils.js";
-
-function subscriptionTier(status) {
-  return status === "active" || status === "trialing" ? "pro" : "free";
-}
+import {
+  isCancellationSchemaError,
+  subscriptionProfilePatch,
+  subscriptionTier,
+  withoutCancellationColumns,
+} from "./_subscription.js";
 
 async function updateProfileByUserId(supabase, userId, patch) {
   if (!userId) return;
-  const { error } = await supabase
+  let { error } = await supabase
     .from("profiles")
     .update({ ...patch, updated_at: new Date().toISOString() })
     .eq("id", userId);
+  if (isCancellationSchemaError(error)) {
+    ({ error } = await supabase
+      .from("profiles")
+      .update({ ...withoutCancellationColumns(patch), updated_at: new Date().toISOString() })
+      .eq("id", userId));
+  }
   if (error) throw error;
 }
 
 async function updateProfileByCustomerId(supabase, customerId, patch) {
   if (!customerId) return;
-  const { error } = await supabase
+  let { error } = await supabase
     .from("profiles")
     .update({ ...patch, updated_at: new Date().toISOString() })
     .eq("stripe_customer_id", customerId);
+  if (isCancellationSchemaError(error)) {
+    ({ error } = await supabase
+      .from("profiles")
+      .update({ ...withoutCancellationColumns(patch), updated_at: new Date().toISOString() })
+      .eq("stripe_customer_id", customerId));
+  }
   if (error) throw error;
 }
 
@@ -61,9 +75,11 @@ export default async function handler(req, res) {
           : session.subscription?.id;
 
       let subscriptionStatus = "active";
+      let subscriptionPatch = {};
       if (subscriptionId) {
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
         subscriptionStatus = subscription.status;
+        subscriptionPatch = subscriptionProfilePatch(subscription);
       }
 
       await updateProfileByUserId(supabase, userId, {
@@ -72,6 +88,7 @@ export default async function handler(req, res) {
           typeof session.customer === "string" ? session.customer : session.customer?.id,
         stripe_subscription_id: subscriptionId || null,
         subscription_status: subscriptionStatus,
+        ...subscriptionPatch,
       });
     }
 
@@ -81,11 +98,7 @@ export default async function handler(req, res) {
       event.type === "customer.subscription.deleted"
     ) {
       const subscription = event.data.object;
-      await updateProfileByCustomerId(supabase, subscription.customer, {
-        tier: subscriptionTier(subscription.status),
-        stripe_subscription_id: subscription.id,
-        subscription_status: subscription.status,
-      });
+      await updateProfileByCustomerId(supabase, subscription.customer, subscriptionProfilePatch(subscription));
     }
 
     if (event.type === "invoice.payment_failed") {
@@ -93,6 +106,7 @@ export default async function handler(req, res) {
       await updateProfileByCustomerId(supabase, invoice.customer, {
         tier: "free",
         subscription_status: "past_due",
+        subscription_cancel_at_period_end: false,
       });
     }
 
