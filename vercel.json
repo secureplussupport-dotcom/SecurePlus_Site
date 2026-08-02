@@ -15,6 +15,26 @@
     {
       "source": "/api/referrals/me",
       "destination": "/api/economy?operation=referrals-me"
+    },
+    {
+      "source": "/api/stripe/cancel",
+      "destination": "/api/stripe?operation=cancel"
+    },
+    {
+      "source": "/api/stripe/checkout",
+      "destination": "/api/stripe?operation=checkout"
+    },
+    {
+      "source": "/api/stripe/portal",
+      "destination": "/api/stripe?operation=portal"
+    },
+    {
+      "source": "/api/stripe/sync",
+      "destination": "/api/stripe?operation=sync"
+    },
+    {
+      "source": "/api/stripe/webhook",
+      "destination": "/api/stripe?operation=webhook"
     }
   ],
   "headers": [

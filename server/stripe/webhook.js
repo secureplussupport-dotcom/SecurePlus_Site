@@ -4,7 +4,7 @@ import {
   getSupabaseAdmin,
   json,
   requireEnv,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 import {
   isCancellationSchemaError,
   subscriptionProfilePatch,

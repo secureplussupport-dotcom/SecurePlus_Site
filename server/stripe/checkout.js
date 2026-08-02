@@ -5,7 +5,7 @@ import {
   getSupabaseAdmin,
   json,
   requireEnv,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 
 const PRO_ACADEMY_PASS_AMOUNT = 999;
 const PRO_ACADEMY_PASS_CURRENCY = "usd";

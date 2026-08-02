@@ -4,7 +4,7 @@ import {
   getStripe,
   getSupabaseAdmin,
   json,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 import {
   isCancellationSchemaError,
   subscriptionProfilePatch,

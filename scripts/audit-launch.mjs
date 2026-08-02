@@ -40,10 +40,13 @@ function walkFiles(dir) {
 
 const requiredFiles = [
   "api/_utils.js",
-  "api/stripe/checkout.js",
-  "api/stripe/sync.js",
-  "api/stripe/webhook.js",
-  "api/stripe/portal.js",
+  "api/stripe.js",
+  "server/stripe/checkout.js",
+  "server/stripe/sync.js",
+  "server/stripe/webhook.js",
+  "server/stripe/portal.js",
+  "server/stripe/cancel.js",
+  "server/stripe/_subscription.js",
   "api/economy.js",
   "server/economy/referral-claim.js",
   "server/economy/referral-me.js",
@@ -93,9 +96,9 @@ if (!errors.length) {
   requireContains("api/_utils.js", "persistSession: false", "server Supabase admin client should not persist sessions");
 
   for (const file of [
-    "api/stripe/checkout.js",
-    "api/stripe/sync.js",
-    "api/stripe/portal.js",
+    "server/stripe/checkout.js",
+    "server/stripe/sync.js",
+    "server/stripe/portal.js",
     "server/economy/referral-claim.js",
     "server/economy/referral-me.js",
     "server/economy/coins-me.js",
@@ -108,7 +111,13 @@ if (!errors.length) {
     requirePattern(file, /if\s*\(\s*req\.method\s*!==|req\.method !== "GET" && req\.method !== "POST"/, "API route should reject unexpected HTTP methods");
   }
 
-  requireContains("api/stripe/checkout.js", 'mode: "subscription"', "Stripe checkout must create a subscription session");
+  const apiFunctionFiles = walkFiles("api").filter(file => file.endsWith(".js"));
+  if (apiFunctionFiles.length > 12) {
+    push(errors, "api", `Vercel Hobby allows at most 12 Serverless Functions; found ${apiFunctionFiles.length} JS files under api/`);
+  }
+  requireContains("api/stripe.js", "checkout", "Stripe dispatcher must expose checkout operation");
+  requireContains("api/stripe.js", "webhook", "Stripe dispatcher must expose webhook operation");
+  requireContains("server/stripe/checkout.js", 'mode: "subscription"', "Stripe checkout must create a subscription session");
   requireContains("api/account/delete-request.js", 'from("account_deletion_requests")', "deletion requests must be stored server-side");
   requireContains("api/account/delete-request.js", 'process.env.RESEND_API_KEY', "deletion emails must use the configured transactional provider");
   requireContains("api/account/delete-request.js", 'supabase.auth.signInWithOtp', "deletion email must retain a safe Supabase fallback until transactional email is configured");
@@ -129,21 +138,21 @@ if (!errors.length) {
   requireContains("supabase/account-deletion.sql", "revoke all on table public.account_deletion_requests from anon, authenticated", "browser clients must not access deletion tokens");
   requireContains("supabase/account-deletion.sql", "grant usage on schema public to service_role", "the server role must be able to reach the deletion request table through the Data API");
   requireContains("supabase/account-deletion.sql", "notify pgrst, 'reload schema'", "account deletion setup should refresh the PostgREST schema cache");
-  requireContains("api/stripe/checkout.js", 'envName: "STRIPE_PRICE_PRO"', "Stripe checkout must use the configured three-month Pro price ID");
-  requireContains("api/stripe/checkout.js", 'envName: "STRIPE_PRICE_PRO_MONTHLY"', "Stripe checkout must use the configured monthly Pro price ID");
-  requireContains("api/stripe/checkout.js", "PRO_ACADEMY_PASS_AMOUNT = 999", "Stripe checkout must require the advertised $9.99 amount");
-  requireContains("api/stripe/checkout.js", "PRO_MONTHLY_AMOUNT = 499", "Stripe checkout must require the advertised $4.99 monthly amount");
-  requireContains("api/stripe/checkout.js", 'PRO_ACADEMY_PASS_INTERVAL = "month"', "Stripe checkout must use a monthly interval base");
-  requireContains("api/stripe/checkout.js", "PRO_ACADEMY_PASS_INTERVAL_COUNT = 3", "Stripe checkout must bill every three months");
-  requireContains("api/stripe/checkout.js", "PRO_MONTHLY_INTERVAL_COUNT = 1", "Stripe checkout must bill the monthly option every month");
-  requireContains("api/stripe/checkout.js", "isConfiguredProPrice", "Stripe checkout must validate each configured price before charging");
-  requireContains("api/stripe/checkout.js", 'body?.plan === "monthly" ? "monthly" : "three_month"', "Stripe checkout must allow only known server-side plan configurations");
-  requireContains("api/stripe/checkout.js", "client_reference_id: authUser.id", "Stripe checkout must bind the session to the Supabase user id");
-  requireContains("api/stripe/sync.js", "sessionUserId !== authUser.id", "Stripe sync must reject checkout sessions owned by another user");
-  requireContains("api/stripe/webhook.js", "stripe.webhooks.constructEvent", "Stripe webhook must verify the webhook signature");
-  requireContains("api/stripe/webhook.js", 'requireEnv("STRIPE_WEBHOOK_SECRET")', "Stripe webhook must use STRIPE_WEBHOOK_SECRET");
-  requireContains("api/stripe/webhook.js", 'event.type === "customer.subscription.updated"', "Stripe webhook should handle subscription updates");
-  requireContains("api/stripe/webhook.js", 'event.type === "customer.subscription.deleted"', "Stripe webhook should handle subscription deletion");
+  requireContains("server/stripe/checkout.js", 'envName: "STRIPE_PRICE_PRO"', "Stripe checkout must use the configured three-month Pro price ID");
+  requireContains("server/stripe/checkout.js", 'envName: "STRIPE_PRICE_PRO_MONTHLY"', "Stripe checkout must use the configured monthly Pro price ID");
+  requireContains("server/stripe/checkout.js", "PRO_ACADEMY_PASS_AMOUNT = 999", "Stripe checkout must require the advertised $9.99 amount");
+  requireContains("server/stripe/checkout.js", "PRO_MONTHLY_AMOUNT = 499", "Stripe checkout must require the advertised $4.99 monthly amount");
+  requireContains("server/stripe/checkout.js", 'PRO_ACADEMY_PASS_INTERVAL = "month"', "Stripe checkout must use a monthly interval base");
+  requireContains("server/stripe/checkout.js", "PRO_ACADEMY_PASS_INTERVAL_COUNT = 3", "Stripe checkout must bill every three months");
+  requireContains("server/stripe/checkout.js", "PRO_MONTHLY_INTERVAL_COUNT = 1", "Stripe checkout must bill the monthly option every month");
+  requireContains("server/stripe/checkout.js", "isConfiguredProPrice", "Stripe checkout must validate each configured price before charging");
+  requireContains("server/stripe/checkout.js", 'body?.plan === "monthly" ? "monthly" : "three_month"', "Stripe checkout must allow only known server-side plan configurations");
+  requireContains("server/stripe/checkout.js", "client_reference_id: authUser.id", "Stripe checkout must bind the session to the Supabase user id");
+  requireContains("server/stripe/sync.js", "sessionUserId !== authUser.id", "Stripe sync must reject checkout sessions owned by another user");
+  requireContains("server/stripe/webhook.js", "stripe.webhooks.constructEvent", "Stripe webhook must verify the webhook signature");
+  requireContains("server/stripe/webhook.js", 'requireEnv("STRIPE_WEBHOOK_SECRET")', "Stripe webhook must use STRIPE_WEBHOOK_SECRET");
+  requireContains("server/stripe/webhook.js", 'event.type === "customer.subscription.updated"', "Stripe webhook should handle subscription updates");
+  requireContains("server/stripe/webhook.js", 'event.type === "customer.subscription.deleted"', "Stripe webhook should handle subscription deletion");
 
   const schema = read("supabase/schema.sql");
   for (const table of ["profiles", "attempts", "referrals", "starred_questions"]) {
