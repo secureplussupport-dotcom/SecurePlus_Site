@@ -4,7 +4,7 @@ import {
   isQuestionAdminSchemaError,
   json,
   requireQuestionAdmin,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {

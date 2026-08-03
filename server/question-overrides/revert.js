@@ -5,7 +5,7 @@ import {
   isQuestionAdminSchemaError,
   json,
   requireQuestionAdmin,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 
 function overrideSnapshot(row) {
   if (!row) return null;

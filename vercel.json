@@ -36,6 +36,34 @@
     {
       "source": "/api/stripe/webhook",
       "destination": "/api/stripe?operation=webhook"
+    },
+    {
+      "source": "/api/account/delete-request",
+      "destination": "/api/account?operation=delete-request"
+    },
+    {
+      "source": "/api/account/delete",
+      "destination": "/api/account?operation=delete"
+    },
+    {
+      "source": "/api/attempts/submit",
+      "destination": "/api/attempts?operation=submit"
+    },
+    {
+      "source": "/api/feedback/submit",
+      "destination": "/api/feedback?operation=submit"
+    },
+    {
+      "source": "/api/question-overrides/save",
+      "destination": "/api/question-overrides?operation=save"
+    },
+    {
+      "source": "/api/question-overrides/history",
+      "destination": "/api/question-overrides?operation=history"
+    },
+    {
+      "source": "/api/question-overrides/revert",
+      "destination": "/api/question-overrides?operation=revert"
     }
   ],
   "headers": [

@@ -3,7 +3,7 @@ import {
   getBearerToken,
   getSupabaseAdmin,
   json,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 import { renderAccountDeletionEmail } from "./_deletion-email.js";
 
 const EXPIRY_MINUTES = 15;

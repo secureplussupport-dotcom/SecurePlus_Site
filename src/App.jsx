@@ -16874,6 +16874,10 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-assistant-message{max-width:88%;padding:9px 11px;border-radius:13px;font-size:10px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;}
 .cipher-assistant-message.cipher{align-self:flex-start;border:1px solid ${t.border};border-bottom-left-radius:4px;background:${t.panel};color:${t.textSec};}
 .cipher-assistant-message.user{align-self:flex-end;border-bottom-right-radius:4px;background:${t.accent};color:#fff;}
+.cipher-assistant-confirm{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;padding-top:8px;border-top:1px solid ${t.border};}
+.cipher-assistant-confirm button{display:inline-flex;align-items:center;gap:5px;min-height:29px;padding:6px 9px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};color:${t.text};font-size:9px;font-weight:900;cursor:pointer;transition:transform .16s,border-color .16s,background .16s;}
+.cipher-assistant-confirm button:first-child{border-color:${t.accent}55;background:${t.accent};color:#fff;}
+.cipher-assistant-confirm button:hover{transform:translateY(-1px);border-color:${t.accent}77;}
 .cipher-assistant-note{margin-top:7px;color:${t.textDim};font-size:7px;line-height:1.4;text-align:center;}
 .cipher-assistant-context-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:${t.green}10;color:${t.green};font-size:9px;font-weight:900;}
 @keyframes cipherAssistantIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -25810,13 +25814,39 @@ function buildCipherAssistantContext(attempts=[],currentView="dashboard") {
 function CipherAssistantDock({attempts,currentView,onStartReview}) {
   const [open,setOpen]=useState(false);
   const [messages,setMessages]=useState([]);
+  const [quickMode,setQuickMode]=useState("main");
   const messagesEndRef=useRef(null);
+  const typingTimersRef=useRef([]);
   const context=useMemo(()=>buildCipherAssistantContext(attempts,currentView),[attempts,currentView]);
   const weakChapter=context.weakChapterId?`Chapter ${context.weakChapterId}: ${context.weakChapterTitle}`:null;
 
-  const addMessage=useCallback((role,text)=>{
-    setMessages(previous=>[...previous,{id:`${Date.now()}-${Math.random()}`,role,text}].slice(-10));
+  const clearTypingTimers=useCallback(()=>{
+    typingTimersRef.current.forEach(timer=>window.clearInterval(timer));
+    typingTimersRef.current=[];
   },[]);
+
+  const addMessage=useCallback((role,text,options={})=>{
+    const id=`${Date.now()}-${Math.random()}`;
+    const shouldType=role==="cipher"&&options.animated!==false;
+    const nextMessage={id,role,text:shouldType?"":text,kind:options.kind||"text",meta:options.meta||null};
+    setMessages(previous=>[...previous,nextMessage].slice(-12));
+    if(!shouldType)return id;
+
+    const fullText=String(text||"");
+    let index=0;
+    const timer=window.setInterval(()=>{
+      index+=2;
+      setMessages(previous=>previous.map(message=>message.id===id?{...message,text:fullText.slice(0,index)}:message));
+      if(index>=fullText.length){
+        window.clearInterval(timer);
+        typingTimersRef.current=typingTimersRef.current.filter(item=>item!==timer);
+      }
+    },18);
+    typingTimersRef.current.push(timer);
+    return id;
+  },[]);
+
+  useEffect(()=>()=>clearTypingTimers(),[clearTypingTimers]);
 
   useEffect(()=>{
     if(!open)return;
@@ -25844,14 +25874,54 @@ function CipherAssistantDock({attempts,currentView,onStartReview}) {
 
   const explainPbq=()=>addMessage("cipher","PBQs are scenario questions. Read the objective first, open the evidence only when needed, then solve the task step by step. If you are on mobile, use tap-based selections instead of drag-and-drop.");
 
-  const startSprint=()=>{
+  const explainDailyChallenge=()=>addMessage("cipher","Daily Challenge is the daily habit loop: five focused Security+ questions, instant feedback, streak tracking, and coin rewards for perfect runs. It is designed to be short enough to complete every day.");
+
+  const explainExamMode=()=>addMessage("cipher","Exam Mode is for rehearsal when you want pressure: timed practice, mixed objectives, review after submission, and a report card that points you toward chapters to repair next.");
+
+  const explainProPlan=()=>addMessage("cipher",`The ${PRO_ACADEMY_PASS_NAME} is convenience access. It unlocks all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements. Use coins if you have time; use Pro if your exam is soon.`);
+
+  const explainPaymentPolicy=()=>addMessage("cipher","Payments are handled through Stripe. SecurePlus does not store your card details. You can cancel renewal from the account support area before the next billing cycle, or contact support if the portal is unavailable.");
+
+  const explainTerms=()=>addMessage("cipher","SecurePlus uses original scenario-based practice and is not affiliated with CompTIA. The questions are built to teach Security+ concepts, not to reproduce real exam items.");
+
+  const showFeatureHelp=()=>{
+    setQuickMode("features");
+    addMessage("cipher","Choose the area you want to understand. I’ll keep each explanation short.");
+  };
+
+  const showMainChoices=()=>{
+    setQuickMode("main");
+    addMessage("cipher","Back to the main choices. Pick what you want to do next.");
+  };
+
+  const contactSupport=()=>{
+    addMessage("cipher",`Opening your email app with ${SUPPORT_EMAIL} filled in.`);
+    window.location.href=`mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent("SecurePlus support request")}`;
+  };
+
+  const confirmSprint=()=>{
     if(!context.weakChapterId){
       addMessage("cipher","I need a little answer history before I can build a targeted sprint. Complete a short MCQ set and ask me again.");
       return;
     }
     capture("cipher_assistant_review_started",{chapter:context.weakChapterId,source_view:currentView});
-    onStartReview?.(context.weakChapterId,{count:3,source:"cipher_assistant"});
+    onStartReview?.(context.weakChapterId,{count:10,source:"cipher_assistant"});
     setOpen(false);
+  };
+
+  const previewSprint=()=>{
+    if(!context.weakChapterId){
+      addMessage("cipher","I need a little answer history before I can build a targeted sprint. Complete a short MCQ set and ask me again.");
+      return;
+    }
+    const topicLine=context.weakTopics.length
+      ? `I’ll prioritise ${context.weakTopics.slice(0,3).join(", ")}.`
+      : "I’ll prioritise recent misses and lower-accuracy questions from this chapter.";
+    addMessage(
+      "cipher",
+      `Prepared: 10 Smart Review questions for ${weakChapter}.\n${topicLine}\nThe set will mix missed concepts, recent weak signals, and spaced review so it does not feel repetitive.`,
+      {kind:"sprintConfirm",meta:{chapterId:context.weakChapterId}}
+    );
   };
 
   const choosePrompt=(label,action)=>{
@@ -25860,13 +25930,26 @@ function CipherAssistantDock({attempts,currentView,onStartReview}) {
     action();
   };
 
-  const guidedPrompts=[
+  const mainPrompts=[
     {label:"What should I do next?",detail:"Use my progress",icon:<Target size={15}/>,action:showNextStep},
-    {label:"Start weak-area sprint",detail:"Launch now",icon:<Play size={15}/>,action:startSprint},
+    {label:"Start weak point area",detail:"Preview first",icon:<Play size={15}/>,action:previewSprint},
     {label:"Why these questions?",detail:"Smart Review logic",icon:<Brain size={15}/>,action:explainSmartReview},
-    {label:"How do coins work?",detail:"Unlock PBQs",icon:<Sparkles size={15}/>,action:explainCoins},
+    {label:"Feature help",detail:"Coins, Pro, policies",icon:<Lightbulb size={15}/>,action:showFeatureHelp},
     {label:"How should I approach PBQs?",detail:"Scenario strategy",icon:<ClipboardCheck size={15}/>,action:explainPbq},
   ];
+
+  const featurePrompts=[
+    {label:"Exam Mode",detail:"Timed exam practice",icon:<ClipboardList size={15}/>,action:explainExamMode},
+    {label:"Cipher Coins",detail:"Earning and spending",icon:<CircleDollarSign size={15}/>,action:explainCoins},
+    {label:"Daily Challenge",detail:"Streaks and rewards",icon:<Flame size={15}/>,action:explainDailyChallenge},
+    {label:"Pro Plan",detail:"What it unlocks",icon:<BadgeCheck size={15}/>,action:explainProPlan},
+    {label:"Payment policy",detail:"Stripe and renewal",icon:<ShieldCheck size={15}/>,action:explainPaymentPolicy},
+    {label:"Terms and conditions",detail:"Original practice",icon:<FileText size={15}/>,action:explainTerms},
+    {label:"Contact support",detail:"Open email app",icon:<MessageSquareWarning size={15}/>,action:contactSupport},
+    {label:"Back",detail:"Main choices",icon:<ArrowLeft size={15}/>,action:showMainChoices},
+  ];
+
+  const activePrompts=quickMode==="features"?featurePrompts:mainPrompts;
 
   if(typeof document==="undefined")return null;
   return createPortal(
@@ -25877,7 +25960,7 @@ function CipherAssistantDock({attempts,currentView,onStartReview}) {
           <header className="cipher-assistant-head">
             <div className="cipher-assistant-identity">
               <span className="cipher-assistant-avatar"><MascotAnimation animation="wave" size={54} interactive label="Cipher assistant"/></span>
-              <div><span>Study companion</span><strong>Cipher Assistant</strong><small>Guided choices only</small></div>
+              <div><span>Study companion</span><strong>Cipher Assistant</strong></div>
             </div>
             <button type="button" className="cipher-assistant-close" aria-label="Close Cipher assistant" onClick={()=>setOpen(false)}><X size={18}/></button>
           </header>
@@ -25887,7 +25970,7 @@ function CipherAssistantDock({attempts,currentView,onStartReview}) {
               <p>{weakChapter?`I’m tracking ${weakChapter} as your current repair area.`:"Answer a few MCQs and I’ll turn your progress into a focused next step."}</p>
             </div>
             <div className="cipher-assistant-quick" aria-label="Cipher quick actions">
-              {guidedPrompts.map(prompt=>(
+              {activePrompts.map(prompt=>(
                 <button key={prompt.label} type="button" onClick={()=>choosePrompt(prompt.label,prompt.action)}>
                   {prompt.icon}
                   <span><strong>{prompt.label}</strong><small>{prompt.detail}</small></span>
@@ -25896,7 +25979,17 @@ function CipherAssistantDock({attempts,currentView,onStartReview}) {
             </div>
             {messages.length>0&&(
               <div className="cipher-assistant-messages" aria-live="polite">
-                {messages.map(message=><div key={message.id} className={`cipher-assistant-message ${message.role}`}>{message.text}</div>)}
+                {messages.map(message=>(
+                  <div key={message.id} className={`cipher-assistant-message ${message.role}`}>
+                    {message.text}
+                    {message.kind==="sprintConfirm"&&message.text&&(
+                      <div className="cipher-assistant-confirm">
+                        <button type="button" onClick={confirmSprint}><Play size={13}/>Start this set</button>
+                        <button type="button" onClick={()=>addMessage("cipher","No problem. Choose another option when you’re ready.")}>Not now</button>
+                      </div>
+                    )}
+                  </div>
+                ))}
                 <div ref={messagesEndRef}/>
               </div>
             )}

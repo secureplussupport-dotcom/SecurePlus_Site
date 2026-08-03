@@ -6,7 +6,7 @@ import {
   normalizeSafeText,
   requireJsonContentType,
   SafeInputError,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
 const BRAND_LOGO_URL = "https://www.secureplusprep.com/secureplus-logo.png";

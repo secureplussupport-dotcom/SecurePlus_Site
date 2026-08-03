@@ -53,10 +53,18 @@ const requiredFiles = [
   "server/economy/coins-me.js",
   "server/economy/coins-action.js",
   "server/economy/welcome-grant.js",
-  "api/account/delete.js",
-  "api/account/delete-request.js",
-  "api/account/_deletion-email.js",
-  "api/feedback/submit.js",
+  "api/account.js",
+  "api/attempts.js",
+  "api/feedback.js",
+  "api/question-overrides.js",
+  "server/account/delete.js",
+  "server/account/delete-request.js",
+  "server/account/_deletion-email.js",
+  "server/attempts/submit.js",
+  "server/feedback/submit.js",
+  "server/question-overrides/save.js",
+  "server/question-overrides/history.js",
+  "server/question-overrides/revert.js",
   "supabase/schema.sql",
   "supabase/cipher-coins.sql",
   "supabase/account-deletion.sql",
@@ -107,8 +115,8 @@ if (!errors.length) {
     "server/economy/referral-me.js",
     "server/economy/coins-me.js",
     "server/economy/coins-action.js",
-    "api/account/delete.js",
-    "api/account/delete-request.js",
+    "server/account/delete.js",
+    "server/account/delete-request.js",
   ]) {
     requireContains(file, "getBearerToken(req)", "authenticated API route must require a bearer token");
     requireContains(file, "supabase.auth.getUser(token)", "authenticated API route must verify the token with Supabase");
@@ -121,13 +129,24 @@ if (!errors.length) {
   }
   requireContains("api/stripe.js", "checkout", "Stripe dispatcher must expose checkout operation");
   requireContains("api/stripe.js", "webhook", "Stripe dispatcher must expose webhook operation");
+  requireContains("api/account.js", '"delete-request"', "account dispatcher must expose delete-request operation");
+  requireContains("api/account.js", "delete: deleteAccount", "account dispatcher must expose delete operation");
+  requireContains("api/attempts.js", "submit: submitAttempt", "attempts dispatcher must expose submit operation");
+  requireContains("api/feedback.js", "submit: submitFeedback", "feedback dispatcher must expose submit operation");
+  requireContains("api/question-overrides.js", "history", "Question Manager dispatcher must expose history operation");
+  requireContains("api/question-overrides.js", "revert", "Question Manager dispatcher must expose revert operation");
+  requireContains("api/question-overrides.js", "save", "Question Manager dispatcher must expose save operation");
+  requireContains("vercel.json", '"/api/account/delete-request"', "legacy account deletion request URL must rewrite to the account dispatcher");
+  requireContains("vercel.json", '"/api/attempts/submit"', "legacy attempts submit URL must rewrite to the attempts dispatcher");
+  requireContains("vercel.json", '"/api/feedback/submit"', "legacy feedback submit URL must rewrite to the feedback dispatcher");
+  requireContains("vercel.json", '"/api/question-overrides/save"', "legacy Question Manager save URL must rewrite to the Question Manager dispatcher");
   requireContains("server/stripe/checkout.js", 'mode: "subscription"', "Stripe checkout must create a subscription session");
-  requireContains("api/account/delete-request.js", 'from("account_deletion_requests")', "deletion requests must be stored server-side");
-  requireContains("api/account/delete-request.js", 'process.env.RESEND_API_KEY', "deletion emails must use the configured transactional provider");
-  requireContains("api/account/delete-request.js", 'supabase.auth.signInWithOtp', "deletion email must retain a safe Supabase fallback until transactional email is configured");
+  requireContains("server/account/delete-request.js", 'from("account_deletion_requests")', "deletion requests must be stored server-side");
+  requireContains("server/account/delete-request.js", 'process.env.RESEND_API_KEY', "deletion emails must use the configured transactional provider");
+  requireContains("server/account/delete-request.js", 'supabase.auth.signInWithOtp', "deletion email must retain a safe Supabase fallback until transactional email is configured");
   for (const file of [
-    "api/account/_deletion-email.js",
-    "api/feedback/submit.js",
+    "server/account/_deletion-email.js",
+    "server/feedback/submit.js",
     "supabase/email-templates/confirm-signup.html",
     "supabase/email-templates/magic-link.html",
     "supabase/email-templates/password-changed.html",
@@ -136,14 +155,14 @@ if (!errors.length) {
     requireContains(file, "https://www.secureplusprep.com/secureplus-logo.png", "email template must use the public SecurePlus logo");
     requireContains(file, 'alt="SecurePlus"', "email logo must keep accessible fallback text");
   }
-  requireContains("api/account/delete.js", 'body.deletionToken', "account deletion must require a single-use email token");
-  requireContains("api/account/delete.js", 'supabase.auth.admin.signOut(token, "global")', "account deletion must revoke Supabase sessions before deleting the user");
-  requireContains("api/question-overrides/save.js", "requireJsonContentType(req)", "Question Manager saves must reject non-JSON/file-upload payloads");
-  requireContains("api/question-overrides/save.js", "sanitizeJsonPayload", "Question Manager saves must sanitize nested question JSON before storage");
-  requireContains("api/question-overrides/save.js", "normalizeSafeId", "Question Manager saves must validate question IDs before using them in database writes");
-  requireContains("api/question-overrides/save.js", 'from("pbqs")', "PBQ saves must go through the validated server route instead of direct browser mutation");
-  requireContains("api/feedback/submit.js", "requireJsonContentType(req)", "feedback submissions must reject non-JSON/file-upload payloads");
-  requireContains("api/feedback/submit.js", "normalizeSafeText", "feedback submissions must validate unsafe markup before storage/email");
+  requireContains("server/account/delete.js", 'body.deletionToken', "account deletion must require a single-use email token");
+  requireContains("server/account/delete.js", 'supabase.auth.admin.signOut(token, "global")', "account deletion must revoke Supabase sessions before deleting the user");
+  requireContains("server/question-overrides/save.js", "requireJsonContentType(req)", "Question Manager saves must reject non-JSON/file-upload payloads");
+  requireContains("server/question-overrides/save.js", "sanitizeJsonPayload", "Question Manager saves must sanitize nested question JSON before storage");
+  requireContains("server/question-overrides/save.js", "normalizeSafeId", "Question Manager saves must validate question IDs before using them in database writes");
+  requireContains("server/question-overrides/save.js", 'from("pbqs")', "PBQ saves must go through the validated server route instead of direct browser mutation");
+  requireContains("server/feedback/submit.js", "requireJsonContentType(req)", "feedback submissions must reject non-JSON/file-upload payloads");
+  requireContains("server/feedback/submit.js", "normalizeSafeText", "feedback submissions must validate unsafe markup before storage/email");
   requireContains("supabase/account-deletion.sql", "alter table public.account_deletion_requests enable row level security", "deletion requests must have RLS enabled");
   requireContains("supabase/account-deletion.sql", "revoke all on table public.account_deletion_requests from anon, authenticated", "browser clients must not access deletion tokens");
   requireContains("supabase/account-deletion.sql", "grant usage on schema public to service_role", "the server role must be able to reach the deletion request table through the Data API");

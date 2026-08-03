@@ -5,7 +5,7 @@ import {
   getStripe,
   getSupabaseAdmin,
   json,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 
 function hashToken(token) {
   return crypto.createHash("sha256").update(token).digest("hex");

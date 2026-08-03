@@ -3,7 +3,7 @@ import {
   getJsonBody,
   getSupabaseAdmin,
   json,
-} from "../_utils.js";
+} from "../../api/_utils.js";
 
 const ACTIVE_MCQ_COUNT = 412;
 const ACTIVE_PBQ_COUNT = 105;
