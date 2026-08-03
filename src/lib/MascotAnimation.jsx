@@ -16,6 +16,9 @@ const CIPHER_ANIMATION_ROWS = {
   cheer: 12,
   surprised: 13,
   flashcards: 14,
+  flashcardTeach: 15,
+  flashcardInspect: 16,
+  flashcardThink: 17,
 };
 
 const DEFAULT_REACTION_ANIMATIONS = Object.freeze(["surprised", "dance", "cheer"]);
@@ -141,6 +144,10 @@ export function MascotAnimation({
         <span className="cipher-effect cipher-effect-tip">✦</span>
         <span className="cipher-effect cipher-effect-note">♪</span>
         <span className="cipher-effect cipher-effect-scan" />
+        <span className="cipher-prop cipher-prop-board"><span>AAA</span><i /></span>
+        <span className="cipher-prop cipher-prop-pointer" />
+        <span className="cipher-prop cipher-prop-magnifier"><i /></span>
+        <span className="cipher-prop cipher-prop-question">?</span>
       </span>
     </Root>
   );

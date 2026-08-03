@@ -53,6 +53,7 @@ const isPrimaryDomain = hostname => primaryDomains.some(domain => hostname === d
 const mappedObjectiveCodes = new Set(Object.values(SY0701_DEEP_DIVE_PROFILES).flatMap(profile => profile.objectiveCodes));
 let practiceQuestionCount = 0;
 const appSource = readFileSync(new URL("../src/App.jsx", import.meta.url), "utf8");
+const mascotSource = readFileSync(new URL("../src/lib/MascotAnimation.jsx", import.meta.url), "utf8");
 
 requireValue(CONCEPT_DEEP_DIVES.length >= 32, `Expected at least 32 lessons; found ${CONCEPT_DEEP_DIVES.length}.`);
 requireValue(unique(CONCEPT_DEEP_DIVES.map(dive => dive.id)), "Lesson IDs must be unique.");
@@ -103,8 +104,10 @@ requireValue(appSource.includes("FlashcardSavePrompt"), "Guest flashcard starrin
 requireValue(appSource.includes("FlashcardModeChooser") && appSource.includes("flashcard-mode-sheet") && appSource.includes("flashcard-mode-card"), "Flashcard sets must open through a dedicated mode chooser instead of an inline selector.");
 requireValue(!appSource.includes('role="tablist" aria-label="Choose flashcard direction"'), "Flashcard mode selection must not remain as a tab selector above the card.");
 requireValue(appSource.includes("FLASHCARD_DEFAULT_MODE_PREFIX") && appSource.includes("flashcard-default-checkbox") && appSource.includes("flashcard-default-mode-card"), "Signed-in users must be able to save and change a default flashcard mode.");
-requireValue(appSource.includes("flashcard-mode-recommended") && appSource.includes("Guess from Example") && appSource.includes("mode-cipher-question"), "Example-enabled flashcard sets must show a recommended Guess from Example mode with Cipher thinking.");
-requireValue(appSource.includes("mode-cipher-board") && appSource.includes("mode-cipher-stick") && appSource.includes("mode-cipher-magnifier"), "Definition and acronym flashcard modes must include distinct Cipher teaching and magnifying animations.");
+requireValue(appSource.includes("flashcard-mode-recommended") && appSource.includes("Guess from Example") && appSource.includes("flashcardThink"), "Example-enabled flashcard sets must show a recommended Guess from Example mode with Cipher thinking.");
+requireValue(appSource.includes("flashcardTeach") && appSource.includes("flashcardInspect") && appSource.includes("flashcardThink"), "Flashcard mode chooser must use dedicated Cipher animation variants for every mode.");
+requireValue(mascotSource.includes("flashcardTeach") && mascotSource.includes("flashcardInspect") && mascotSource.includes("flashcardThink"), "Cipher animation registry must include dedicated flashcard mode animations.");
+requireValue(mascotSource.includes("cipher-prop-board") && mascotSource.includes("cipher-prop-pointer") && mascotSource.includes("cipher-prop-magnifier") && mascotSource.includes("cipher-prop-question"), "Flashcard mode props must live inside the Cipher mascot rig, not as external add-ons.");
 requireValue(appSource.includes("flashcard-change-mode-btn"), "Flashcard set view must include a visible Change Mode button.");
 requireValue(appSource.includes(".flashcards-fan-glyph rect{fill:color-mix(in srgb,currentColor 7%,transparent);stroke:currentColor;stroke-width:1.05;}"), "Flashcards nav icon must use lighter card strokes so the fan does not become a purple mesh.");
 requireValue(appSource.includes("--chapter-filter-color") && appSource.includes("chapterColor(group.chapterId)") && appSource.includes('"--deep-accent":"#0ea5e9"'), "Flashcards page must use clearer blue/teal contrast and per-chapter selector colours.");

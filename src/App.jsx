@@ -17161,6 +17161,15 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-effect-tip{right:5%;top:20%;color:#fde047;font-family:'JetBrains Mono',monospace;font-size:calc(var(--cipher-size) * .22);text-shadow:3px 3px 0 #92400e;}
 .cipher-effect-note{right:5%;top:18%;color:#c084fc;font-family:'JetBrains Mono',monospace;font-size:calc(var(--cipher-size) * .2);text-shadow:3px 3px 0 #5b21b6;}
 .cipher-effect-scan{left:19%;top:31%;width:62%;height:3px;background:#67f5ff;box-shadow:0 3px 0 #075985;}
+.cipher-prop{position:absolute;z-index:9;display:none;pointer-events:none;}
+.cipher-prop-board{left:2%;top:12%;width:42%;height:33%;border:3px solid #6b4f39;clip-path:polygon(8% 0,92% 0,92% 8%,100% 8%,100% 86%,92% 86%,92% 100%,8% 100%,8% 92%,0 92%,0 8%,8% 8%);background:linear-gradient(145deg,#284735,#14241b);box-shadow:4px 5px 0 rgba(91,58,25,.36);}
+.cipher-prop-board span{position:absolute;left:15%;top:23%;color:#d9f99d;font-family:'JetBrains Mono',monospace;font-size:calc(var(--cipher-size) * .1);font-weight:950;letter-spacing:.06em;}
+.cipher-prop-board i{position:absolute;left:14%;right:14%;bottom:22%;height:3px;background:#d9f99d99;box-shadow:0 7px 0 #d9f99d66;}
+.cipher-prop-pointer{left:35%;top:50%;width:35%;height:5%;border-radius:0;background:#a16207;box-shadow:2px 2px 0 #713f12;transform-origin:10% 50%;clip-path:polygon(0 20%,82% 20%,82% 0,100% 50%,82% 100%,82% 80%,0 80%);}
+.cipher-prop-magnifier{right:5%;top:21%;width:33%;aspect-ratio:1;border:5px solid #38bdf8;border-radius:50%;background:rgba(240,249,255,.58);box-shadow:inset 0 0 16px rgba(14,165,233,.22),3px 4px 0 #075985;}
+.cipher-prop-magnifier::after{content:"";position:absolute;right:-28%;bottom:-18%;width:43%;height:12%;background:#0ea5e9;box-shadow:2px 2px 0 #075985;transform:rotate(43deg);transform-origin:left center;}
+.cipher-prop-magnifier i{position:absolute;left:28%;top:39%;width:44%;height:13%;background:#075985;box-shadow:0 7px 0 #075985;border-radius:999px;}
+.cipher-prop-question{right:6%;top:4%;place-items:center;width:32%;height:29%;clip-path:polygon(12% 0,88% 0,88% 8%,100% 8%,100% 76%,84% 76%,84% 92%,66% 92%,66% 100%,50% 92%,12% 92%,12% 84%,0 84%,0 8%,12% 8%);background:#fff;color:#16a34a;font-family:'JetBrains Mono',monospace;font-size:calc(var(--cipher-size) * .2);font-weight:950;box-shadow:4px 5px 0 rgba(22,163,74,.22);}
 .cipher-motion-blink{--cipher-motion-duration:2.2s;animation-name:cipherBlinkMotion;}
 .cipher-motion-correct{--cipher-motion-duration:1.25s;animation-name:cipherCorrectMotion;animation-timing-function:cubic-bezier(.34,1.35,.64,1);}
 .cipher-motion-wrong{--cipher-motion-duration:1.5s;animation-name:cipherWrongMotion;animation-timing-function:ease-in-out;}
@@ -17236,6 +17245,32 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-motion-flashcards .cipher-arm-right{animation-name:cipherArmFlashcardRight;}
 .cipher-motion-flashcards .cipher-effect-note{animation:cipherFlashcardFlipEffect var(--pet-cycle) ease-in-out infinite;}
 .cipher-motion-flashcards .cipher-effect-tip{animation:cipherFlashcardSpark var(--pet-cycle) ease-in-out infinite;animation-delay:.18s;}
+.cipher-motion-flashcardTeach{--cipher-motion-duration:2.05s;--pet-cycle:2.05s;animation-name:cipherTeachMotion;animation-timing-function:ease-in-out;}
+.cipher-motion-flashcardTeach .cipher-prop-board,.cipher-motion-flashcardTeach .cipher-prop-pointer{display:block;}
+.cipher-motion-flashcardTeach .cipher-head{animation-name:cipherHeadTeach;}
+.cipher-motion-flashcardTeach .cipher-arm-left{animation-name:cipherArmTeachLeft;}
+.cipher-motion-flashcardTeach .cipher-arm-right{animation-name:cipherArmTeachRight;}
+.cipher-motion-flashcardTeach .cipher-eye{animation:none;height:10%;top:39%;}
+.cipher-motion-flashcardTeach .cipher-mouth{width:18%;left:41%;bottom:13%;}
+.cipher-motion-flashcardTeach .cipher-prop-board{animation:cipherBoardTeach var(--pet-cycle) steps(8,end) infinite;}
+.cipher-motion-flashcardTeach .cipher-prop-pointer{animation:cipherPointerTeach var(--pet-cycle) steps(8,end) infinite;}
+.cipher-motion-flashcardInspect{--cipher-motion-duration:1.85s;--pet-cycle:1.85s;animation-name:cipherInspectMotion;animation-timing-function:ease-in-out;}
+.cipher-motion-flashcardInspect .cipher-prop-magnifier{display:block;animation:cipherMagnifierInspect var(--pet-cycle) steps(8,end) infinite;}
+.cipher-motion-flashcardInspect .cipher-head{animation-name:cipherHeadInspect;}
+.cipher-motion-flashcardInspect .cipher-arm-left{animation-name:cipherArmInspectLeft;}
+.cipher-motion-flashcardInspect .cipher-arm-right{animation-name:cipherArmInspectRight;}
+.cipher-motion-flashcardInspect .cipher-eye{animation:none;width:24%;height:16%;top:36%;box-shadow:3px 3px 0 #0f7ca3;}
+.cipher-motion-flashcardInspect .cipher-eye-left{left:18%;}
+.cipher-motion-flashcardInspect .cipher-eye-right{right:18%;}
+.cipher-motion-flashcardInspect .cipher-mouth{width:10%;left:45%;bottom:14%;}
+.cipher-motion-flashcardThink{--cipher-motion-duration:2.25s;--pet-cycle:2.25s;animation-name:cipherExampleThinkMotion;animation-timing-function:ease-in-out;}
+.cipher-motion-flashcardThink .cipher-prop-question{display:grid;animation:cipherQuestionThink var(--pet-cycle) steps(8,end) infinite;}
+.cipher-motion-flashcardThink .cipher-head{animation-name:cipherHeadExampleThink;}
+.cipher-motion-flashcardThink .cipher-arm-left{animation-name:cipherArmExampleThinkLeft;}
+.cipher-motion-flashcardThink .cipher-arm-right{animation-name:cipherArmExampleThinkRight;}
+.cipher-motion-flashcardThink .cipher-eye{animation:none;width:10%;height:10%;top:39%;}
+.cipher-motion-flashcardThink .cipher-mouth{left:45%;width:10%;height:7%;bottom:14%;}
+.cipher-motion-flashcardThink .cipher-aura{animation-name:cipherAuraPulse;}
 .cipher-mascot,.cipher-rig *{animation-timing-function:steps(8,end)!important;}
 .cipher-mascot.slow{--cipher-motion-duration:3.6s;--pet-cycle:3.6s;}
 .cipher-mascot.fast{--cipher-motion-duration:1.25s;--pet-cycle:1.25s;}
@@ -17467,6 +17502,22 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes cipherArmFlashcardRight{0%,100%{transform:rotate(-18deg)}28%{transform:rotate(-120deg) translateY(-6%)}58%{transform:rotate(-64deg) translateY(-3%)}82%{transform:rotate(-96deg) translateY(-5%)}}
 @keyframes cipherFlashcardFlipEffect{0%,14%,100%{opacity:0;transform:translate(-20%,18%) rotateY(0) rotate(-10deg) scale(.42)}32%,70%{opacity:1;transform:translate(8%,-12%) rotateY(180deg) rotate(8deg) scale(1.08)}84%{opacity:.45;transform:translate(-5%,-2%) rotateY(360deg) rotate(-4deg) scale(.8)}}
 @keyframes cipherFlashcardSpark{0%,26%,100%{opacity:0;transform:translate(4%,12%) scale(.5) rotate(-12deg)}46%,76%{opacity:1;transform:translate(-8%,-10%) scale(1.08) rotate(12deg)}}
+@keyframes cipherTeachMotion{0%,100%{transform:translate3d(0,0,0) rotate(-1deg)}32%{transform:translate3d(-2%,-3%,0) rotate(-3deg)}62%{transform:translate3d(1%,-1%,0) rotate(2deg)}}
+@keyframes cipherHeadTeach{0%,100%{transform:translateY(0) rotate(-4deg)}34%{transform:translateY(-3%) rotate(4deg)}64%{transform:translateY(-1%) rotate(1deg)}}
+@keyframes cipherArmTeachLeft{0%,100%{transform:rotate(54deg) translate(-4%,-3%)}46%{transform:rotate(38deg) translate(-2%,-2%)}}
+@keyframes cipherArmTeachRight{0%,100%{transform:rotate(-62deg) translateY(-4%)}30%{transform:rotate(-104deg) translateY(-7%)}58%{transform:rotate(-80deg) translateY(-5%)}82%{transform:rotate(-116deg) translateY(-8%)}}
+@keyframes cipherBoardTeach{0%,100%{transform:translateY(0) rotate(-5deg)}44%{transform:translateY(-4%) rotate(-2deg)}72%{transform:translateY(-1%) rotate(-4deg)}}
+@keyframes cipherPointerTeach{0%,100%{transform:rotate(-24deg)}28%{transform:rotate(-11deg) translateX(5%)}56%{transform:rotate(-32deg) translateX(1%)}82%{transform:rotate(-15deg) translateX(4%)}}
+@keyframes cipherInspectMotion{0%,100%{transform:translate3d(0,0,0) rotate(1deg)}28%{transform:translate3d(3%,-2%,0) rotate(4deg)}58%{transform:translate3d(-2%,-4%,0) rotate(-2deg)}}
+@keyframes cipherHeadInspect{0%,100%{transform:translate(2%,0) rotate(5deg)}34%{transform:translate(7%,-3%) rotate(9deg)}66%{transform:translate(-2%,-2%) rotate(-3deg)}}
+@keyframes cipherArmInspectLeft{0%,100%{transform:rotate(28deg)}38%{transform:rotate(60deg) translateY(-3%)}}
+@keyframes cipherArmInspectRight{0%,100%{transform:rotate(-70deg) translate(4%,-6%)}34%{transform:rotate(-92deg) translate(8%,-9%)}68%{transform:rotate(-52deg) translate(1%,-3%)}}
+@keyframes cipherMagnifierInspect{0%,100%{transform:translate(0,0) scale(1)}32%{transform:translate(-8%,4%) scale(1.08)}62%{transform:translate(5%,-3%) scale(.98)}}
+@keyframes cipherExampleThinkMotion{0%,100%{transform:translate3d(0,0,0) rotate(0)}36%{transform:translate3d(0,-3%,0) rotate(-2deg)}72%{transform:translate3d(1%,1%,0) rotate(2deg)}}
+@keyframes cipherHeadExampleThink{0%,100%{transform:translateY(0) rotate(-6deg)}30%{transform:translateY(3%) rotate(5deg)}62%{transform:translateY(-4%) rotate(-2deg)}}
+@keyframes cipherArmExampleThinkLeft{0%,100%{transform:rotate(72deg) translate(-3%,-3%)}42%{transform:rotate(54deg) translate(-2%,-2%)}}
+@keyframes cipherArmExampleThinkRight{0%,100%{transform:rotate(-48deg) translate(0,-1%)}44%{transform:rotate(-18deg) translate(-2%,1%)}}
+@keyframes cipherQuestionThink{0%,100%{transform:translateY(0) rotate(-5deg) scale(.95);opacity:.9}38%{transform:translateY(-12%) rotate(4deg) scale(1.08);opacity:1}72%{transform:translateY(-5%) rotate(-1deg) scale(1)}}
 @keyframes flashcardsCipherCardIn{from{opacity:0;transform:translate(12px,-8px) scale(.96)}to{opacity:1;transform:translate(0,0) scale(1)}}
 @keyframes flashcardsOrbPulse{0%,100%{transform:scale(.82);opacity:.35}50%{transform:scale(1.1);opacity:.72}}
 @keyframes cipherGroundShadow{
@@ -18924,15 +18975,7 @@ body{background:
 .flashcard-mode-action{align-self:end;display:inline-flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--mode-color) 12%,var(--deep-panel));color:var(--mode-color);font-size:11px;font-weight:950;letter-spacing:.05em;text-transform:uppercase;}
 .flashcard-mode-recommended{position:absolute;right:13px;top:13px;z-index:3;display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:#22c55e;color:#fff;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 8px 18px rgba(34,197,94,.22);}
 .flashcard-mode-cipher{position:relative;display:grid;place-items:center;min-height:126px;}
-.flashcard-mode-cipher .cipher-mascot{--cipher-size:86px!important;position:relative;z-index:2;filter:drop-shadow(6px 8px 0 color-mix(in srgb,var(--mode-color) 22%,transparent));}
-.mode-cipher-board{position:absolute;left:8px;top:8px;width:80px;height:55px;border:3px solid #6b4f39;border-radius:9px;background:linear-gradient(145deg,#253f2f,#17291f);box-shadow:0 8px 0 rgba(107,79,57,.18);transform:rotate(-4deg);animation:flashcardBoardFloat 2.2s ease-in-out infinite alternate;}
-.mode-cipher-board span{position:absolute;left:12px;top:13px;color:#d9f99d;font-size:16px;font-weight:950;letter-spacing:.08em;}
-.mode-cipher-board i{position:absolute;left:10px;right:10px;bottom:12px;height:3px;border-radius:999px;background:#d9f99d88;}
-.mode-cipher-stick{position:absolute;left:91px;top:60px;width:48px;height:5px;border-radius:999px;background:#8b5e34;transform:rotate(-26deg);transform-origin:left center;animation:flashcardPointerWiggle 1.1s ease-in-out infinite alternate;}
-.mode-cipher-magnifier{position:absolute;right:25px;top:22px;z-index:3;width:48px;height:48px;border:5px solid #38bdf8;border-radius:999px;background:rgba(240,249,255,.55);box-shadow:inset 0 0 16px rgba(14,165,233,.2),0 8px 0 rgba(14,165,233,.12);animation:flashcardMagnify 1.6s ease-in-out infinite alternate;}
-.mode-cipher-magnifier::after{content:"";position:absolute;right:-17px;bottom:-12px;width:27px;height:6px;border-radius:999px;background:#0ea5e9;transform:rotate(43deg);}
-.mode-cipher-magnifier i{position:absolute;left:12px;top:17px;width:22px;height:7px;border-radius:999px;background:#075985;}
-.mode-cipher-question{position:absolute;right:22px;top:7px;z-index:3;display:grid;place-items:center;width:48px;height:42px;border-radius:22px 22px 22px 6px;background:#fff;color:#16a34a;font-size:27px;font-weight:950;box-shadow:0 9px 22px rgba(34,197,94,.2);animation:flashcardQuestionBob 1.5s ease-in-out infinite alternate;}
+.flashcard-mode-cipher .cipher-mascot{--cipher-size:108px!important;position:relative;z-index:2;filter:drop-shadow(6px 8px 0 color-mix(in srgb,var(--mode-color) 22%,transparent));}
 .flashcard-mode-footer{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;padding-top:15px;border-top:1px solid var(--deep-border);}
 .flashcard-default-checkbox{display:inline-flex;align-items:center;gap:9px;color:var(--deep-muted);font-size:12px;font-weight:900;cursor:pointer;user-select:none;}
 .flashcard-default-checkbox input{position:absolute;opacity:0;pointer-events:none;}
@@ -18941,10 +18984,6 @@ body{background:
 .flashcard-mode-footer>small{color:var(--deep-muted);font-size:11px;font-weight:800;line-height:1.45;}
 .flashcard-change-mode-btn{border-color:color-mix(in srgb,var(--set-color) 34%,var(--deep-border))!important;color:var(--set-color)!important;background:color-mix(in srgb,var(--set-color) 7%,var(--deep-surface))!important;}
 @keyframes flashcardModePop{from{opacity:0;transform:translateY(16px) scale(.96);}to{opacity:1;transform:translateY(0) scale(1);}}
-@keyframes flashcardBoardFloat{from{transform:rotate(-5deg) translateY(0);}to{transform:rotate(-2deg) translateY(-5px);}}
-@keyframes flashcardPointerWiggle{from{transform:rotate(-31deg);}to{transform:rotate(-19deg);}}
-@keyframes flashcardMagnify{from{transform:translate(0,0) scale(1);}to{transform:translate(-7px,4px) scale(1.08);}}
-@keyframes flashcardQuestionBob{from{transform:translateY(0) rotate(-3deg);}to{transform:translateY(-7px) rotate(4deg);}}
 .flashcards-topic-card>span:nth-child(2)>i{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;color:var(--set-color);font-size:10px;font-style:normal;font-weight:900;line-height:1.45;}
 .flashcards-chapter-group header h2{max-width:760px;}
 .deep-dive-acronym-reader{max-width:980px;margin:0 auto;padding:24px 24px 110px;}
@@ -28947,13 +28986,10 @@ const getSafeFlashcardMode=(mode,hasExample=false)=>{
 const flashcardSetHasExampleMode=set=>Boolean(set?.cards?.some(card=>card.example));
 
 function FlashcardModeCipher({mode}) {
+  const animation=mode==="definition"?"flashcardTeach":mode==="acronym"?"flashcardInspect":"flashcardThink";
   return(
-    <div className={`flashcard-mode-cipher mode-${mode}`} aria-hidden="true">
-      {mode==="definition"&&<span className="mode-cipher-board"><span>AAA</span><i/></span>}
-      {mode==="definition"&&<span className="mode-cipher-stick"/>}
-      {mode==="acronym"&&<span className="mode-cipher-magnifier"><i/></span>}
-      {mode==="example"&&<span className="mode-cipher-question">?</span>}
-      <MascotAnimation animation={mode==="example"?"thinking":"flashcards"} size={86} interactive={false} label="Cipher flashcard mode"/>
+    <div className={`flashcard-mode-cipher mode-${mode}`}>
+      <MascotAnimation animation={animation} size={108} interactive={false} label={`${FLASHCARD_MODE_OPTIONS[mode]?.title||"Flashcard"} Cipher animation`}/>
     </div>
   );
 }
