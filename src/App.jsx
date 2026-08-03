@@ -19196,8 +19196,9 @@ body{background:
 @keyframes flashcardModePop{from{opacity:0;transform:translateY(16px) scale(.96);}to{opacity:1;transform:translateY(0) scale(1);}}
 .flashcards-topic-card>span:nth-child(2)>i{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;color:var(--set-color);font-size:11.5px;font-style:normal;font-weight:900;line-height:1.5;}
 .flashcards-inventory-grid{grid-template-columns:repeat(auto-fit,minmax(315px,1fr));align-items:stretch;}
-.flashcard-random-builder{display:block!important;padding:0!important;overflow:hidden;}
-.flashcard-random-plus{display:grid;width:100%;min-height:100%;padding:22px;border:0;background:transparent;color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;}
+.flashcard-random-builder{display:block!important;padding:0!important;overflow:hidden;cursor:pointer;}
+.flashcard-random-builder.open{cursor:default;}
+.flashcard-random-plus{display:grid;width:100%;min-height:148px;padding:22px;border:0;background:transparent;color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;}
 .flashcard-random-plus>span{display:grid;place-items:center;width:62px;height:62px;margin-bottom:14px;border-radius:21px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);color:#fff;font-size:42px;font-weight:700;line-height:1;box-shadow:0 14px 28px rgba(14,165,233,.24);}
 .flashcard-random-plus strong{font-size:17px!important;}
 .flashcard-random-plus small{font-size:11px!important;}
@@ -30569,14 +30570,28 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
               <span className="deep-dive-acronym-set-progress"><span><i style={{width:"100%"}}/></span><span>{assistantSet.cards.filter(card=>card.cardType!=="divider").length}</span></span>
             </button>
           )}
-          <div className={`deep-dive-acronym-set-card flashcards-topic-card flashcard-random-builder ${randomBuilderOpen?"open":""}`} style={{"--set-color":"#0ea5e9"}}>
-            <button type="button" className="flashcard-random-plus" onClick={()=>setRandomBuilderOpen(value=>!value)} aria-expanded={randomBuilderOpen}>
+          <div
+            className={`deep-dive-acronym-set-card flashcards-topic-card flashcard-random-builder ${randomBuilderOpen?"open":""}`}
+            style={{"--set-color":"#0ea5e9"}}
+            role="button"
+            tabIndex={0}
+            aria-expanded={randomBuilderOpen}
+            aria-label="Open randomised flashcard set builder"
+            onClick={()=>{if(!randomBuilderOpen)setRandomBuilderOpen(true);}}
+            onKeyDown={event=>{
+              if(event.key==="Enter"||event.key===" "){
+                event.preventDefault();
+                setRandomBuilderOpen(true);
+              }
+            }}
+          >
+            <button type="button" className="flashcard-random-plus" onClick={event=>{event.stopPropagation();setRandomBuilderOpen(value=>!value);}} aria-expanded={randomBuilderOpen}>
               <span aria-hidden="true">+</span>
               <strong>Randomised set</strong>
               <small>Build a quick 10-30 card deck from terms, acronyms, or both.</small>
             </button>
             {randomBuilderOpen&&(
-              <div className="flashcard-random-panel">
+              <div className="flashcard-random-panel" onClick={event=>event.stopPropagation()}>
                 <label>
                   <span>Cards: <strong>{randomConfig.count}</strong></span>
                   <input type="range" min="10" max="30" step="1" value={randomConfig.count} onChange={event=>setRandomConfig(config=>({...config,count:clampRandomFlashcardCount(event.target.value)}))}/>
