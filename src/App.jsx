@@ -64,6 +64,7 @@ import {
   TextCursorInput,
   TrendingUp,
   TriangleAlert,
+  Trash2,
   Trophy,
   RadioTower,
   UserRound,
@@ -19237,9 +19238,12 @@ body{background:
 .flashcard-inventory-notice span{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:900;line-height:1.35;}
 .flashcard-inventory-notice button{flex:0 0 auto;}
 .saved-random-set-card{border-color:color-mix(in srgb,var(--set-color) 36%,var(--deep-border))!important;}
-.generated-set-title-row{display:flex;align-items:center;gap:7px;margin-top:1px;}
+.generated-set-title-row{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-top:1px;}
 .generated-set-title-row strong{min-width:0;overflow:hidden;text-overflow:ellipsis;}
+.generated-set-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto;}
 .generated-set-title-row .icon-btn{width:27px;height:27px;flex:0 0 auto;border-radius:9px;color:var(--set-color);}
+.generated-set-title-row .icon-btn.danger{color:#dc2626;background:color-mix(in srgb,#dc2626 9%,transparent);border-color:color-mix(in srgb,#dc2626 24%,var(--deep-border));}
+.generated-set-title-row .icon-btn.danger:hover{background:color-mix(in srgb,#dc2626 16%,transparent);transform:translateY(-1px);}
 .generated-set-rename{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;margin-top:3px;}
 .generated-set-rename input{min-width:0;height:36px;padding:8px 10px;border:1px solid color-mix(in srgb,var(--set-color) 30%,var(--deep-border));border-radius:11px;background:var(--deep-surface);color:var(--deep-text);font:inherit;font-size:12px;font-weight:850;}
 .generated-set-rename .btn{min-height:36px;padding:7px 10px;font-size:10px!important;}
@@ -30523,6 +30527,22 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
     setInventoryNotice(`Renamed to ${cleanName}.`);
     capture("flashcards_generated_set_renamed",{set_id:setId});
   };
+  const deleteGeneratedSet=(set,event)=>{
+    event?.preventDefault?.();
+    event?.stopPropagation?.();
+    if(!user||!set?.id)return;
+    const confirmed=window.confirm(`Delete "${set.title}" from your generated flashcard decks?`);
+    if(!confirmed)return;
+    const next=savedRandomSets.filter(item=>item.id!==set.id);
+    setSavedRandomSets(next);
+    writeSavedRandomFlashcardSets(user,next);
+    if(renamingSetId===set.id){
+      setRenamingSetId(null);
+      setRenameDraft("");
+    }
+    setInventoryNotice(`Deleted ${set.title}.`);
+    capture("flashcards_generated_set_deleted",{set_id:set.id});
+  };
 
   if(selectedSet){
     return(
@@ -30550,7 +30570,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
               ))}
             </div>
           </div>
-          <p>Your last-minute Security+ recall pack before exam day. Review high-yield acronyms, attack clues, and Security Operations terms quickly, build confidence, and share the same set with friends so nobody studies alone.</p>
+          <p>Your last-minute Security+ recall pack before exam day. Pick a set, test yourself, and share the same set with friends.</p>
           <div className="deep-dives-proof">
             <span><ListChecks size={15}/>Grouped by SY0-701 chapters</span>
             <span><Brain size={15}/>{SY0701_ACRONYM_CARDS.length} high-yield cards</span>
@@ -30758,7 +30778,10 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
                 ):(
                   <span className="generated-set-title-row">
                     <strong>{set.title}</strong>
-                    <button className="icon-btn" type="button" onClick={event=>startRenameGeneratedSet(set,event)} aria-label={`Rename ${set.title}`}><PenLine size={14}/></button>
+                    <span className="generated-set-actions">
+                      <button className="icon-btn" type="button" onClick={event=>startRenameGeneratedSet(set,event)} aria-label={`Rename ${set.title}`}><PenLine size={14}/></button>
+                      <button className="icon-btn danger" type="button" onClick={event=>deleteGeneratedSet(set,event)} aria-label={`Delete ${set.title}`}><Trash2 size={14}/></button>
+                    </span>
                   </span>
                 )}
                 <small>{set.description}</small>
