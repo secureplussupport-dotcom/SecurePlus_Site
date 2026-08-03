@@ -86,6 +86,9 @@ requireValue(appSource.includes("view:\"flashcards\""), "Flashcard share links m
 requireValue(appSource.includes("https://wa.me/?text="), "Flashcards must support direct WhatsApp sharing.");
 requireValue(appSource.includes("https://discord.com/channels/@me"), "Flashcards must open Discord after copying the share message.");
 requireValue(appSource.includes("https://www.instagram.com/"), "Flashcards must open Instagram after copying the share message.");
+requireValue(appSource.includes("https://www.reddit.com/submit?url="), "Flashcards must support Reddit sharing.");
+requireValue(appSource.includes("copyText(shareUrl"), "Copy Link must copy only the flashcard URL.");
+requireValue(appSource.includes("flashcard-share-menu") && appSource.includes("aria-expanded={open}"), "Flashcard share locations must be hidden behind an expandable widget.");
 requireValue(appSource.includes("FlashcardSavePrompt"), "Guest flashcard starring must show a soft login/signup prompt.");
 
 for (const set of SY0701_ACRONYM_SETS) {

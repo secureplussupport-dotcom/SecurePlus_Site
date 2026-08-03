@@ -342,6 +342,39 @@ const buildFlashcardShareMessage = set => {
   const setLine=isShareableSet?`Set: ${set.title}`:"Collection: SecurePlus Security+ Flashcards";
   return `${FLASHCARD_SHARE_COPY.statement}\n\n${setLine}\nTry it here: ${url}`;
 };
+const FlashcardSocialIcon = ({type}) => {
+  if(type==="instagram")return(
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <rect x="5" y="5" width="14" height="14" rx="4.5"/>
+      <circle cx="12" cy="12" r="3.2"/>
+      <circle cx="16.2" cy="7.8" r="1"/>
+    </svg>
+  );
+  if(type==="discord")return(
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M7.7 8.1c2.8-1.2 5.8-1.2 8.6 0l1.2 6.5c-1.5 1.1-3 1.7-4.6 1.9l-.6-1.1c-.2 0-.4.1-.6.1s-.4 0-.6-.1l-.6 1.1c-1.7-.2-3.2-.9-4.6-1.9l1.2-6.5Z"/>
+      <circle cx="9.7" cy="12" r="1"/>
+      <circle cx="14.3" cy="12" r="1"/>
+    </svg>
+  );
+  if(type==="whatsapp")return(
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M6.3 18.1 7 15.4a7.1 7.1 0 1 1 2.1 2l-2.8.7Z"/>
+      <path d="M9.6 8.9c.3-.2.8 0 1 .4l.5 1c.1.2.1.4-.1.6l-.4.5c.5 1 1.2 1.7 2.4 2.2l.5-.5c.2-.2.5-.2.7-.1l1 .5c.4.2.5.7.3 1-.3.5-.9.8-1.5.7-2.8-.3-5.1-2.5-5.4-5.3-.1-.4.3-.8 1-1Z"/>
+    </svg>
+  );
+  if(type==="reddit")return(
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="13" r="5.2"/>
+      <circle cx="9.8" cy="12.6" r=".8"/>
+      <circle cx="14.2" cy="12.6" r=".8"/>
+      <path d="M9.8 15c1.3.8 3.1.8 4.4 0"/>
+      <path d="M13.1 7.9 14 5.3l2.4.6"/>
+      <circle cx="17.1" cy="6.1" r="1.2"/>
+    </svg>
+  );
+  return <Share2 size={16}/>;
+};
 
 async function savePendingGuestSmartReview(attempts=[]) {
   const cleanAttempts=attempts
@@ -18758,14 +18791,20 @@ body{background:
 .deep-dive-acronym-source-note svg{flex:0 0 auto;color:var(--deep-green);margin-top:1px;}
 .flashcards-page .deep-dives-hero{background:radial-gradient(circle at 92% 14%,color-mix(in srgb,#8b5cf6 22%,transparent),transparent 33%),radial-gradient(circle at 12% 112%,color-mix(in srgb,var(--deep-green) 15%,transparent),transparent 39%),var(--deep-surface);}
 .flashcards-controls{margin-top:18px;}
-.flashcard-share-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:15px;padding:11px;border:1px solid color-mix(in srgb,var(--set-color,#7c3aed) 24%,var(--deep-border));border-radius:16px;background:color-mix(in srgb,var(--set-color,#7c3aed) 6%,var(--deep-panel));}
-.flashcard-share-actions.compact{max-width:720px;border-color:color-mix(in srgb,#7c3aed 22%,var(--deep-border));background:color-mix(in srgb,#7c3aed 6%,var(--deep-panel));}
-.flashcard-share-copy{display:inline-flex;align-items:center;gap:7px;color:var(--set-color,#7c3aed);font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
-.flashcard-share-buttons{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
-.flashcard-share-btn{min-height:34px;padding:7px 10px;border:1px solid color-mix(in srgb,var(--set-color,#7c3aed) 25%,var(--deep-border));border-radius:999px;background:var(--deep-surface);color:var(--deep-text);font:inherit;font-size:11px;font-weight:900;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,color .16s;}
-.flashcard-share-btn:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--set-color,#7c3aed) 55%,var(--deep-border));background:color-mix(in srgb,var(--set-color,#7c3aed) 10%,var(--deep-surface));color:var(--set-color,#7c3aed);}
+.flashcard-share-actions{position:relative;display:inline-flex;align-items:flex-start;gap:8px;flex-wrap:wrap;z-index:10;}
+.flashcard-share-actions.compact{display:flex;margin-top:15px;}
+.flashcard-share-trigger{display:inline-flex;align-items:center;gap:8px;min-height:39px;padding:9px 12px;border:1px solid color-mix(in srgb,var(--set-color,#7c3aed) 30%,var(--deep-border));border-radius:999px;background:var(--deep-surface);color:var(--deep-text);font:inherit;font-size:11px;font-weight:950;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;box-shadow:0 10px 24px rgba(40,31,22,.08);transition:transform .17s,border-color .17s,background .17s,color .17s,box-shadow .17s;}
+.flashcard-share-trigger:hover,.flashcard-share-actions.open .flashcard-share-trigger{transform:translateY(-1px);border-color:color-mix(in srgb,var(--set-color,#7c3aed) 58%,var(--deep-border));background:color-mix(in srgb,var(--set-color,#7c3aed) 10%,var(--deep-surface));color:var(--set-color,#7c3aed);box-shadow:0 14px 28px rgba(40,31,22,.12);}
+.flashcard-share-trigger svg:last-child{transition:transform .18s ease;}
+.flashcard-share-actions.open .flashcard-share-trigger svg:last-child{transform:rotate(90deg);}
+.flashcard-share-menu{position:absolute;right:0;top:calc(100% + 8px);display:flex;align-items:center;gap:7px;padding:9px;border:1px solid color-mix(in srgb,var(--set-color,#7c3aed) 28%,var(--deep-border));border-radius:18px;background:color-mix(in srgb,var(--deep-surface) 96%,transparent);box-shadow:0 20px 48px rgba(40,31,22,.2);opacity:0;transform:translateY(-6px) scale(.98);pointer-events:none;transition:opacity .18s ease,transform .18s ease;backdrop-filter:blur(12px);}
+.flashcard-share-actions.compact .flashcard-share-menu{left:0;right:auto;}
+.flashcard-share-actions.open .flashcard-share-menu{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+.flashcard-share-btn{display:grid;place-items:center;width:38px;height:38px;padding:0;border:1px solid color-mix(in srgb,var(--set-color,#7c3aed) 25%,var(--deep-border));border-radius:13px;background:var(--deep-panel);color:var(--deep-text);font:inherit;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,color .16s;}
+.flashcard-share-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.flashcard-share-btn:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--set-color,#7c3aed) 58%,var(--deep-border));background:color-mix(in srgb,var(--set-color,#7c3aed) 10%,var(--deep-surface));color:var(--set-color,#7c3aed);}
 .flashcard-share-btn.primary{background:var(--set-color,#7c3aed);border-color:var(--set-color,#7c3aed);color:#fff;}
-.flashcard-share-status{margin-left:auto;color:var(--deep-green);font-size:11px;font-weight:900;animation:fadeUp .18s ease both;}
+.flashcard-share-status{align-self:center;color:var(--deep-green);font-size:11px;font-weight:900;animation:fadeUp .18s ease both;}
 .flashcard-auth-nudge{position:fixed;inset:0;z-index:560;display:grid;place-items:center;padding:18px;background:rgba(18,24,20,.34);backdrop-filter:blur(10px);animation:fadeUp .18s ease both;}
 .flashcard-auth-card{position:relative;width:min(100%,450px);padding:28px;border:1px solid color-mix(in srgb,#f59e0b 34%,${t.border});border-radius:25px;background:radial-gradient(circle at 90% 0,#f59e0b18,transparent 35%),linear-gradient(150deg,${t.surface},${t.panel});box-shadow:0 30px 95px rgba(40,31,22,.28);animation:modalPop .28s cubic-bezier(.16,1,.3,1) both;}
 .flashcard-auth-card .icon-btn{position:absolute;right:15px;top:15px;}
@@ -18795,6 +18834,7 @@ body{background:
 .deep-dive-flashcard-head{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;margin-bottom:18px;}
 .deep-dive-flashcard-head h2{margin:0 0 5px;font-size:24px;color:var(--deep-text);}
 .deep-dive-flashcard-head p{max-width:580px;margin:0;color:var(--deep-muted);font-size:12px;line-height:1.65;}
+.deep-dive-flashcard-side{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex:0 0 auto;}
 .deep-dive-flashcard-score{display:flex;align-items:center;gap:8px;flex:0 0 auto;padding:11px 13px;border:1px solid color-mix(in srgb,var(--deep-green) 30%,var(--deep-border));border-radius:13px;background:color-mix(in srgb,var(--deep-green) 7%,var(--deep-surface));}
 .deep-dive-flashcard-score strong{font-size:25px;line-height:1;color:var(--deep-green);}
 .deep-dive-flashcard-score span{font-size:9px;line-height:1.35;font-weight:850;color:var(--deep-muted);}
@@ -19014,7 +19054,9 @@ body{background:
   .deep-dive-step-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
   .deep-dive-step-actions .btn{justify-content:center;}
   .deep-dive-flashcard-head{display:block;}
-  .deep-dive-flashcard-score{width:max-content;margin-top:13px;}
+  .deep-dive-flashcard-side{align-items:flex-start;margin-top:13px;}
+  .flashcard-share-menu{left:0;right:auto;}
+  .deep-dive-flashcard-score{width:max-content;}
   .deep-dive-flashcard-toolbar{grid-template-columns:auto minmax(70px,1fr);}
   .deep-dive-flashcard-toolbar .btn{grid-column:1/-1;justify-self:end;}
   .deep-dive-flashcard{height:420px;}
@@ -28617,33 +28659,38 @@ function ReferralPage({user,t}) {
 // ═══════════════════════════════════════════════════════════════
 function FlashcardShareActions({set,t,compact=false}) {
   const [status,setStatus]=useState("");
+  const [open,setOpen]=useState(false);
   const message=useMemo(()=>buildFlashcardShareMessage(set),[set]);
   const shareUrl=useMemo(()=>getFlashcardShareUrl(set?.id!==STARRED_FLASHCARD_SET_ID?set?.id:null),[set?.id]);
   const canNativeShare=typeof navigator!=="undefined"&&typeof navigator.share==="function";
-  const copyMessage=async(nextStatus="Copied share message")=>{
+  const copyText=async(text,nextStatus)=>{
     try{
-      await navigator?.clipboard?.writeText(message);
+      await navigator?.clipboard?.writeText(text);
       setStatus(nextStatus);
       window.setTimeout(()=>setStatus(""),2600);
       return true;
     }catch{
       try{
-        window.prompt?.("Copy this SecurePlus flashcard message:",message);
+        window.prompt?.("Copy this:",text);
         setStatus("Copy message ready");
         window.setTimeout(()=>setStatus(""),2600);
       }catch{}
       return false;
     }
   };
+  const copyLink=()=>copyText(shareUrl,"Link copied");
+  const copyMessage=(nextStatus="Copied share message")=>copyText(message,nextStatus);
   const openShare=async(platform,url)=>{
     await copyMessage(`Copied for ${platform}`);
     window.open(url,"_blank","noopener,noreferrer");
   };
+  const redditTitle=set?.title?`${set.title} - SecurePlus Security+ flashcards`:"SecurePlus premium Security+ flashcards";
   const buttons=[
-    {label:"Copy link",action:()=>copyMessage("Copied link and intro")},
-    {label:"WhatsApp",action:()=>window.open(`https://wa.me/?text=${encodeURIComponent(message)}`,"_blank","noopener,noreferrer")},
-    {label:"Discord",action:()=>openShare("Discord","https://discord.com/channels/@me")},
-    {label:"Instagram",action:()=>openShare("Instagram","https://www.instagram.com/")},
+    {label:"Copy link",type:"copy",action:copyLink},
+    {label:"WhatsApp",type:"whatsapp",action:()=>window.open(`https://wa.me/?text=${encodeURIComponent(message)}`,"_blank","noopener,noreferrer")},
+    {label:"Discord",type:"discord",action:()=>openShare("Discord","https://discord.com/channels/@me")},
+    {label:"Instagram",type:"instagram",action:()=>openShare("Instagram","https://www.instagram.com/")},
+    {label:"Reddit",type:"reddit",action:()=>window.open(`https://www.reddit.com/submit?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(redditTitle)}`,"_blank","noopener,noreferrer")},
   ];
   const nativeShare=async()=>{
     if(!canNativeShare){await copyMessage("Copied share message");return;}
@@ -28658,15 +28705,27 @@ function FlashcardShareActions({set,t,compact=false}) {
     }catch{}
   };
   return(
-    <div className={`flashcard-share-actions ${compact?"compact":""}`} aria-label="Share flashcard set">
-      <div className="flashcard-share-copy">
+    <div className={`flashcard-share-actions ${compact?"compact":""} ${open?"open":""}`} aria-label="Share flashcard set">
+      <button
+        type="button"
+        className="flashcard-share-trigger"
+        aria-expanded={open}
+        onClick={()=>setOpen(value=>!value)}
+      >
         <Share2 size={16}/>
         <span>{compact?"Share collection":"Share this flashcard set"}</span>
-      </div>
-      <div className="flashcard-share-buttons">
-        {canNativeShare&&<button type="button" className="flashcard-share-btn primary" onClick={nativeShare}>Share</button>}
+        <ChevronRight size={15}/>
+      </button>
+      <div className="flashcard-share-menu">
+        {canNativeShare&&(
+          <button type="button" className="flashcard-share-btn primary" onClick={()=>{nativeShare();setOpen(false);}} aria-label="Open device share sheet">
+            <Share2 size={16}/>
+          </button>
+        )}
         {buttons.map(button=>(
-          <button key={button.label} type="button" className="flashcard-share-btn" onClick={button.action}>{button.label}</button>
+          <button key={button.label} type="button" className="flashcard-share-btn" onClick={()=>{button.action();setOpen(false);}} aria-label={button.label} title={button.label}>
+            <FlashcardSocialIcon type={button.type}/>
+          </button>
         ))}
       </div>
       {status&&<span className="flashcard-share-status" role="status">{status}</span>}
@@ -28773,7 +28832,6 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
           <span><ListChecks size={14}/>{acronymSet.chapterTitle}</span>
           <a href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Checked against official SY0-701 list<ChevronRight size={13}/></a>
         </div>
-        {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&<FlashcardShareActions set={acronymSet} t={t}/>}
       </header>
 
       <div className="deep-dive-acronym-mode" role="tablist" aria-label="Choose flashcard direction">
@@ -28786,7 +28844,10 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
       <section className="deep-dive-flashcard-studio" aria-label={`${acronymSet.title} acronym flashcards`}>
         <div className="deep-dive-flashcard-head">
           <div><span className="deep-dive-eyebrow">{hasExampleMode?"Scenario attack drill":"Acronym drill"}</span><h2>{asksFromExample?"Read the example. Name the attack.":"Recall it, then flip"}</h2><p>{hasExampleMode?"Use the example mode to practise recognizing attacks from real-world clues, then flip to check the full name.":"Definitions include a short plain-English reminder so you learn what the term does, not only what the letters spell."}</p></div>
-          <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {acronymSet.cards.length}<br/>mastered</span></div>
+          <div className="deep-dive-flashcard-side">
+            {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&<FlashcardShareActions set={acronymSet} t={t}/>}
+            <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {acronymSet.cards.length}<br/>mastered</span></div>
+          </div>
         </div>
         <div className="deep-dive-flashcard-toolbar">
           <span>Card {Math.min(cardIndex+1,studyCards.length)} of {studyCards.length}</span>
