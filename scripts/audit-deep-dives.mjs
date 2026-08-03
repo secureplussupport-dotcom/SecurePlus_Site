@@ -91,6 +91,7 @@ requireValue(appSource.includes("copyText(shareUrl"), "Copy Link must copy only 
 requireValue(appSource.includes("flashcard-share-menu") && appSource.includes("aria-expanded={open}"), "Flashcard share locations must be hidden behind an expandable widget.");
 requireValue(appSource.includes("social-whatsapp") && appSource.includes("social-discord") && appSource.includes("social-instagram") && appSource.includes("social-reddit"), "Flashcard share icons must use platform-specific color classes.");
 requireValue(appSource.includes('type==="copy"'), "Copy Link must use a distinct link icon rather than the generic share icon.");
+requireValue(appSource.includes(".flashcard-share-btn svg{width:29px;height:29px"), "Flashcard share platform glyphs must be large enough to fill the icon boxes.");
 requireValue(appSource.includes("FlashcardSavePrompt"), "Guest flashcard starring must show a soft login/signup prompt.");
 
 for (const set of SY0701_ACRONYM_SETS) {

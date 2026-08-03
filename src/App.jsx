@@ -18807,8 +18807,8 @@ body{background:
 .flashcard-share-menu{position:absolute;right:0;top:calc(100% + 8px);display:flex;align-items:center;gap:7px;padding:9px;border:1px solid color-mix(in srgb,var(--set-color,#7c3aed) 28%,var(--deep-border));border-radius:18px;background:color-mix(in srgb,var(--deep-surface) 96%,transparent);box-shadow:0 20px 48px rgba(40,31,22,.2);opacity:0;transform:translateY(-6px) scale(.98);pointer-events:none;transition:opacity .18s ease,transform .18s ease;backdrop-filter:blur(12px);}
 .flashcard-share-actions.compact .flashcard-share-menu{left:0;right:auto;}
 .flashcard-share-actions.open .flashcard-share-menu{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
-.flashcard-share-btn{display:grid;place-items:center;width:42px;height:42px;padding:0;border:1px solid color-mix(in srgb,var(--social-color,var(--set-color,#7c3aed)) 26%,var(--deep-border));border-radius:14px;background:color-mix(in srgb,var(--social-color,var(--set-color,#7c3aed)) 10%,var(--deep-panel));color:var(--social-color,var(--deep-text));font:inherit;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,color .16s,box-shadow .16s;}
-.flashcard-share-btn svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2.05;stroke-linecap:round;stroke-linejoin:round;}
+.flashcard-share-btn{display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid color-mix(in srgb,var(--social-color,var(--set-color,#7c3aed)) 26%,var(--deep-border));border-radius:14px;background:color-mix(in srgb,var(--social-color,var(--set-color,#7c3aed)) 10%,var(--deep-panel));color:var(--social-color,var(--deep-text));font:inherit;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,color .16s,box-shadow .16s;}
+.flashcard-share-btn svg{width:29px;height:29px;fill:none;stroke:currentColor;stroke-width:2.15;stroke-linecap:round;stroke-linejoin:round;}
 .flashcard-share-btn.primary{background:var(--set-color,#7c3aed);border-color:var(--set-color,#7c3aed);color:#fff;}
 .flashcard-share-btn.social-copy{--social-color:#64748b;}
 .flashcard-share-btn.social-whatsapp{--social-color:#22c55e;}
