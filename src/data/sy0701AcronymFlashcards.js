@@ -3,19 +3,31 @@ const slug = value => String(value || "")
   .replace(/[^a-z0-9]+/g, "-")
   .replace(/^-|-$/g, "");
 
-const makeCard = (setId, acronym, expansion, meaning) => ({
+const CHAPTER_TITLES = Object.freeze({
+  1: "General Security Concepts",
+  2: "Threats, Vulnerabilities, and Mitigations",
+  3: "Security Architecture",
+  4: "Security Operations",
+  5: "Security Program Management and Oversight",
+});
+
+const makeCard = (setId, acronym, expansion, meaning, topic = "") => ({
   id: `sy0701-acronym-${setId}-${slug(acronym)}`,
   acronym,
   expansion,
   meaning,
+  topic,
 });
 
-const makeSet = (id, title, description, objectiveCodes, color, entries) => ({
+const makeSet = (id, title, description, objectiveCodes, color, entries, meta = {}) => ({
   id,
   title,
   description,
   objectiveCodes,
   color,
+  chapterId: meta.chapterId || Number(String(objectiveCodes[0] || "1").split(".")[0]) || 1,
+  chapterTitle: meta.chapterTitle || CHAPTER_TITLES[meta.chapterId || Number(String(objectiveCodes[0] || "1").split(".")[0]) || 1],
+  topic: meta.topic || title,
   cards: entries.map(entry => makeCard(id, ...entry)),
 });
 
@@ -47,6 +59,7 @@ export const SY0701_ACRONYM_SETS = [
       ["TLS", "Transport Layer Security", "Protocol that protects data in transit with encryption, integrity, and authentication."],
       ["TPM", "Trusted Platform Module", "Security chip that stores keys and supports hardware-based integrity checks."],
     ],
+    { chapterId: 1, topic: "Cryptography and identity services" },
   ),
   makeSet(
     "risk-governance",
@@ -67,6 +80,7 @@ export const SY0701_ACRONYM_SETS = [
       ["RTO", "Recovery Time Objective", "Target time for restoring a service after disruption."],
       ["SLA", "Service Level Agreement", "Contract that defines measurable service expectations such as uptime or response time."],
     ],
+    { chapterId: 5, topic: "Governance, risk, and continuity" },
   ),
   makeSet(
     "threat-appsec",
@@ -85,6 +99,7 @@ export const SY0701_ACRONYM_SETS = [
       ["WAF", "Web Application Firewall", "Control that filters web traffic to help block application attacks."],
       ["XSS", "Cross-Site Scripting", "Web flaw where malicious scripts run in another user's browser."],
     ],
+    { chapterId: 2, topic: "Threats, vulnerabilities, and app security" },
   ),
   makeSet(
     "network-access",
@@ -104,6 +119,7 @@ export const SY0701_ACRONYM_SETS = [
       ["VPN", "Virtual Private Network", "Encrypted tunnel that protects traffic across an untrusted network."],
       ["WPA3", "Wi-Fi Protected Access 3", "Current Wi-Fi security standard with stronger authentication and encryption protections."],
     ],
+    { chapterId: 3, topic: "Network architecture and access control" },
   ),
   makeSet(
     "operations-response",
@@ -123,6 +139,7 @@ export const SY0701_ACRONYM_SETS = [
       ["SOAR", "Security Orchestration, Automation, and Response", "Automates repeatable security workflows through playbooks and connected tools."],
       ["XDR", "Extended Detection and Response", "Correlates detection and response data across multiple security layers."],
     ],
+    { chapterId: 4, topic: "Monitoring, detection, and incident response" },
   ),
   makeSet(
     "cloud-endpoint",
@@ -140,11 +157,26 @@ export const SY0701_ACRONYM_SETS = [
       ["UPS", "Uninterruptible Power Supply", "Backup power source that prevents sudden shutdowns during power loss."],
       ["UTM", "Unified Threat Management", "Gateway or platform combining multiple security functions in one place."],
     ],
+    { chapterId: 3, topic: "Cloud, endpoint, and infrastructure controls" },
   ),
 ];
 
 export const SY0701_ACRONYM_CARDS = SY0701_ACRONYM_SETS.flatMap(set =>
-  set.cards.map(card => ({ ...card, setId: set.id, setTitle: set.title, objectiveCodes: set.objectiveCodes })),
+  set.cards.map(card => ({
+    ...card,
+    setId: set.id,
+    setTitle: set.title,
+    objectiveCodes: set.objectiveCodes,
+    chapterId: set.chapterId,
+    chapterTitle: set.chapterTitle,
+    topic: card.topic || set.topic,
+  })),
 );
 
 export const getSy0701AcronymSet = id => SY0701_ACRONYM_SETS.find(set => set.id === id) || null;
+export const groupSy0701AcronymSetsByChapter = () =>
+  [1, 2, 3, 4, 5].map(chapterId => ({
+    chapterId,
+    chapterTitle: CHAPTER_TITLES[chapterId],
+    sets: SY0701_ACRONYM_SETS.filter(set => set.chapterId === chapterId),
+  })).filter(group => group.sets.length);

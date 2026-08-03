@@ -75,6 +75,7 @@ import {
   SY0701_ACRONYM_CARDS,
   SY0701_ACRONYM_SETS,
   SY0701_ACRONYM_SOURCE,
+  groupSy0701AcronymSetsByChapter,
 } from "./data/sy0701AcronymFlashcards.js";
 import {
   buildDeepDivePracticeQuestions,
@@ -16718,6 +16719,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .nav-lnk:hover .nav-glyph-coins,.nav-glyph-coins.active{color:#d59632;background:#f2b85b22;border-color:#d5963260;box-shadow:0 0 18px #d5963245;}
 .nav-lnk:hover .nav-glyph-achievements,.nav-glyph-achievements.active{color:#b45309;background:linear-gradient(135deg,#facc1540,#fb718540);border-color:#f59e0b85;box-shadow:0 0 20px rgba(245,158,11,.42);}
 .nav-lnk:hover .nav-glyph-deep-dives,.nav-glyph-deep-dives.active{color:#1d4ed8;background:linear-gradient(135deg,#38bdf840,#8b5cf640);border-color:#3b82f685;box-shadow:0 0 20px rgba(59,130,246,.42);}
+.nav-lnk:hover .nav-glyph-flashcards,.nav-glyph-flashcards.active{color:#7c3aed;background:linear-gradient(135deg,#c4b5fd40,#f0abfc40);border-color:#8b5cf685;box-shadow:0 0 20px rgba(124,58,237,.4);}
 .cipher-coin-icon{--coin-size:34px;position:relative;display:inline-block;width:var(--coin-size);height:var(--coin-size);flex:0 0 auto;filter:drop-shadow(0 calc(var(--coin-size)*.16) calc(var(--coin-size)*.13) rgba(113,76,28,.2));isolation:isolate;}
 .cipher-coin-face{position:absolute;inset:4% 7% 10% 5%;display:grid;place-items:center;overflow:hidden;border:2px solid #a96f25;border-radius:47% 53% 49% 51%/44% 48% 52% 56%;background:radial-gradient(circle at 34% 24%,#ffe7a3 0 9%,transparent 10%),linear-gradient(145deg,#f8cf72 0 34%,#dea044 62%,#b9782a 100%);box-shadow:inset calc(var(--coin-size)*.08) calc(var(--coin-size)*.07) 0 rgba(255,247,203,.5),inset calc(var(--coin-size)*-.09) calc(var(--coin-size)*-.08) 0 rgba(121,73,23,.17),2px 0 0 #c48631,-2px 2px 0 #b5792b;transform:rotate(-3deg);}
 .cipher-coin-face::after{content:"";position:absolute;inset:18%;border:2px dashed rgba(126,75,21,.42);border-radius:48% 52% 43% 57%;}
@@ -18691,6 +18693,10 @@ body{background:
 .deep-dive-acronym-set-progress>span:last-child{color:var(--deep-muted);font-size:9px;font-weight:900;}
 .deep-dive-acronym-source-note{display:flex;align-items:flex-start;gap:8px;margin-top:13px;color:var(--deep-muted);font-size:11px;font-weight:650;line-height:1.55;}
 .deep-dive-acronym-source-note svg{flex:0 0 auto;color:var(--deep-green);margin-top:1px;}
+.flashcards-page .deep-dives-hero{background:radial-gradient(circle at 92% 14%,color-mix(in srgb,#8b5cf6 22%,transparent),transparent 33%),radial-gradient(circle at 12% 112%,color-mix(in srgb,var(--deep-green) 15%,transparent),transparent 39%),var(--deep-surface);}
+.flashcards-controls{margin-top:18px;}
+.flashcards-topic-card>span:nth-child(2)>i{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;color:var(--set-color);font-size:10px;font-style:normal;font-weight:900;line-height:1.45;}
+.flashcards-chapter-group header h2{max-width:760px;}
 .deep-dive-acronym-reader{max-width:980px;margin:0 auto;padding:24px 24px 110px;}
 .deep-dive-acronym-reader-hero{position:relative;overflow:hidden;margin-bottom:16px;padding:25px;border:1px solid color-mix(in srgb,var(--set-color) 32%,var(--deep-border));border-radius:23px;background:radial-gradient(circle at 94% 7%,color-mix(in srgb,var(--set-color) 15%,transparent),transparent 34%),var(--deep-surface);}
 .deep-dive-acronym-reader-hero>span{color:var(--set-color);font-size:11px;font-weight:950;letter-spacing:.09em;text-transform:uppercase;}
@@ -19238,6 +19244,7 @@ function NavGlyph({type,active}) {
     privacy:LockKeyhole,
     terms:FileText,
     "deep-dives":Layers3,
+    flashcards:TextCursorInput,
     feedback:MessageSquareWarning,
     "question-admin":ListPlus,
     "mascot-admin":Palette,
@@ -28636,7 +28643,7 @@ function DeepDiveReadableBites({section,selectedProfile,t}) {
   );
 }
 
-function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandled,focusAcronyms=false,onAddWeakTopicToReview,onTryRelatedPbq}) {
+function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandled,focusAcronyms=false,onAddWeakTopicToReview,onTryRelatedPbq,onOpenFlashcards}) {
   const [query,setQuery]=useState("");
   const [domainFilter,setDomainFilter]=useState("all");
   const [selectedId,setSelectedId]=useState(null);
@@ -29079,7 +29086,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
             <button className="btn btn-primary" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>3-question checkpoint</button>
             <button className="btn btn-outline" type="button" onClick={()=>onAddWeakTopicToReview?.({chapterId:selectedProfile.domainId,lessonId:selectedDive.id,title:selectedProfile.title})}><Brain size={16}/>Add weak topic to Smart Review</button>
             <button className="btn btn-outline" type="button" onClick={()=>onTryRelatedPbq?.({chapterId:selectedProfile.domainId,lessonId:selectedDive.id,title:selectedProfile.title})}><Target size={16}/>Try related PBQ</button>
-            <button className="btn btn-outline" type="button" onClick={()=>openAcronymSet(relevantAcronymSet.id)}><TextCursorInput size={16}/>Flashcard this acronym</button>
+            <button className="btn btn-outline" type="button" onClick={()=>onOpenFlashcards?.(relevantAcronymSet.id)}><TextCursorInput size={16}/>Open related flashcards</button>
           </div>
         </section>
 
@@ -29092,7 +29099,6 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
   }
 
   const progressPercent=Math.round((completedIds.length/CONCEPT_DEEP_DIVES.length)*100);
-  const totalAcronymsMastered=SY0701_ACRONYM_CARDS.filter(item=>masteredAcronymIds.includes(item.id)).length;
   const continueDive=sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES).find(dive=>!completedIds.includes(dive.id))||sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES)[0];
   const continueProfile=getSy0701DeepDiveProfile(continueDive);
   return(
@@ -29105,7 +29111,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
           <div className="deep-dives-proof">
             <span><BadgeCheck size={15}/>{CONCEPT_DEEP_DIVES.length} syllabus-mapped lessons</span>
             <span><Crosshair size={15}/>5 official exam domains</span>
-            <span><Brain size={15}/>{SY0701_ACRONYM_CARDS.length} high-yield acronym flashcards</span>
+            <span><Brain size={15}/>Flashcards moved to their own page</span>
           </div>
           <TrustBadge t={t} style={{marginTop:12}}/>
           <a className="deep-dives-blueprint-link" href={SY0701_BLUEPRINT.sourceUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Mapped to the official {SY0701_BLUEPRINT.exam} objectives · document v{SY0701_BLUEPRINT.documentVersion}<ChevronRight size={14}/></a>
@@ -29113,8 +29119,8 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
         <div className="deep-dives-progress-card">
           <div><span>Study progress</span><strong>{completedIds.length}/{CONCEPT_DEEP_DIVES.length}</strong></div>
           <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
-          <p>{completedIds.length?"Continue with one short concept or open the standalone acronym flashcards.":"Choose a lesson, learn one idea at a time, then practise it."}</p>
-          <div className="deep-dives-card-progress"><TextCursorInput size={16}/><span><strong>{totalAcronymsMastered}</strong> of {SY0701_ACRONYM_CARDS.length} acronyms mastered</span></div>
+          <p>{completedIds.length?"Continue with one short concept or open Flashcards from the main menu.":"Choose a lesson, learn one idea at a time, then practise it."}</p>
+          <div className="deep-dives-card-progress"><BookOpenCheck size={16}/><span><strong>{Math.max(0,CONCEPT_DEEP_DIVES.length-completedIds.length)}</strong> lessons left in this path</span></div>
         </div>
       </section>
 
@@ -29124,35 +29130,15 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
           <div>
             <span>Cipher’s next stop</span>
             <h2>{continueProfile.title}</h2>
-            <p>{completedIds.length?`Continue your SY0-701 path with a ${continueDive.minutes}-minute lesson.`:"Start with a short guided lesson, then switch to the practice lab or acronym flashcards."}</p>
-            <div><strong>Objective {continueProfile.objectiveCodes.join(" / ")}</strong><span>{SY0701_ACRONYM_CARDS.length} acronym cards available</span>{Number(practiceBestScores[continueDive.id])>0&&<span>Best lab {practiceBestScores[continueDive.id]}%</span>}</div>
+            <p>{completedIds.length?`Continue your SY0-701 path with a ${continueDive.minutes}-minute lesson.`:"Start with a short guided lesson, then switch to the practice lab when ready."}</p>
+            <div><strong>Objective {continueProfile.objectiveCodes.join(" / ")}</strong><span>Flashcards now live in the main menu</span>{Number(practiceBestScores[continueDive.id])>0&&<span>Best lab {practiceBestScores[continueDive.id]}%</span>}</div>
           </div>
         </div>
         <div className="deep-dive-launchpad-actions">
           <button type="button" onClick={()=>openDive(continueDive.id,"learn")}><BookOpenCheck size={21}/><span><strong>Learn</strong><small>One idea at a time</small></span><ChevronRight size={17}/></button>
-          <button type="button" onClick={scrollToAcronymLibrary}><Brain size={21}/><span><strong>Acronym flashcards</strong><small>Definitions or acronym recall</small></span><ChevronRight size={17}/></button>
+          <button type="button" onClick={()=>onOpenFlashcards?.()}><Brain size={21}/><span><strong>Open Flashcards</strong><small>Separate acronym page</small></span><ChevronRight size={17}/></button>
           <button type="button" onClick={()=>openDive(continueDive.id,"practice")}><Puzzle size={21}/><span><strong>Practise</strong><small>Tap through a scored lab</small></span><ChevronRight size={17}/></button>
         </div>
-      </section>
-
-      <section className="deep-dive-acronym-library" aria-labelledby="acronym-library-title">
-        <div className="deep-dive-acronym-library-head">
-          <div><span>New active-recall lab</span><h2 id="acronym-library-title">Acronyms without the alphabet soup</h2><p>Choose one focused set. Practise in both directions so you can recognize the letters and recall the full definition.</p></div>
-          <div className="deep-dive-acronym-total"><strong>{totalAcronymsMastered}</strong><span>of {SY0701_ACRONYM_CARDS.length}<br/>mastered</span></div>
-        </div>
-        <div className="deep-dive-acronym-set-grid">
-          {SY0701_ACRONYM_SETS.map(set=>{
-            const mastered=set.cards.filter(card=>masteredAcronymIds.includes(card.id)).length;
-            const setProgress=Math.round((mastered/set.cards.length)*100);
-            return <button type="button" className="deep-dive-acronym-set-card" style={{"--set-color":set.color}} key={set.id} onClick={()=>openAcronymSet(set.id)} aria-label={`Open ${set.title}: ${mastered} of ${set.cards.length} mastered`}>
-              <span className="deep-dive-acronym-set-icon"><TextCursorInput size={20}/></span>
-              <span><strong>{set.title}</strong><small>{set.cards.length} cards · Objectives {set.objectiveCodes.join(" / ")}</small></span>
-              <ChevronRight size={17}/>
-              <span className="deep-dive-acronym-set-progress"><span><i style={{width:`${setProgress}%`}}/></span><span>{mastered}/{set.cards.length}</span></span>
-            </button>;
-          })}
-        </div>
-        <div className="deep-dive-acronym-source-note"><ShieldCheck size={16}/><span>{SY0701_ACRONYM_SOURCE.reviewNote}</span></div>
       </section>
 
       <section className="deep-dives-controls" aria-label="Find a Concept Deep Dive">
@@ -29211,6 +29197,114 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
           <button className="btn btn-outline" type="button" onClick={()=>{setQuery("");setDomainFilter("all");}}>Clear filters</button>
         </div>
       )}
+    </div>
+  );
+}
+
+function FlashcardsPage({t,initialSetId=null,onInitialSetHandled}) {
+  const [selectedSetId,setSelectedSetId]=useState(null);
+  const [chapterFilter,setChapterFilter]=useState("all");
+  const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
+    try{
+      const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
+      return Array.isArray(stored)?stored.filter(id=>SY0701_ACRONYM_CARDS.some(card=>card.id===id)):[];
+    }catch{return [];}
+  });
+  const chapterGroups=useMemo(()=>groupSy0701AcronymSetsByChapter(),[]);
+  const visibleGroups=chapterFilter==="all"?chapterGroups:chapterGroups.filter(group=>String(group.chapterId)===chapterFilter);
+  const selectedSet=SY0701_ACRONYM_SETS.find(set=>set.id===selectedSetId)||null;
+  const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>masteredAcronymIds.includes(card.id)).length;
+  const progressPercent=SY0701_ACRONYM_CARDS.length?Math.round((totalMastered/SY0701_ACRONYM_CARDS.length)*100):0;
+
+  useEffect(()=>{
+    if(!initialSetId)return;
+    if(SY0701_ACRONYM_SETS.some(set=>set.id===initialSetId)){
+      setSelectedSetId(initialSetId);
+      window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:"auto"}));
+    }
+    onInitialSetHandled?.();
+  },[initialSetId,onInitialSetHandled]);
+
+  const updateMasteredAcronyms=(cardId,mastered)=>{
+    const next=mastered
+      ?Array.from(new Set([...masteredAcronymIds,cardId]))
+      :masteredAcronymIds.filter(id=>id!==cardId);
+    setMasteredAcronymIds(next);
+    try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
+    capture("flashcards_acronym_rated",{set_id:selectedSet?.id,card_id:cardId,mastered});
+  };
+
+  const openSet=id=>{
+    setSelectedSetId(id);
+    capture("flashcards_set_opened",{set_id:id});
+    const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"}));
+  };
+
+  if(selectedSet){
+    return <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t}/>;
+  }
+
+  return(
+    <div className="deep-dives-page flashcards-page" style={{"--deep-accent":"#7c3aed","--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
+      <section className="deep-dives-hero flashcards-hero">
+        <div className="deep-dives-hero-copy">
+          <span className="deep-dive-preview-badge"><TextCursorInput size={13}/> Standalone active recall</span>
+          <div className="page-title-row"><NavGlyph type="flashcards" active/><h1>Flashcards</h1></div>
+          <p>Practise Security+ acronyms by chapter and topic. Choose whether to test the definition, identify the acronym, or mix both directions.</p>
+          <div className="deep-dives-proof">
+            <span><ListChecks size={15}/>Grouped by SY0-701 chapters</span>
+            <span><Brain size={15}/>{SY0701_ACRONYM_CARDS.length} high-yield cards</span>
+            <span><ShieldCheck size={15}/>Original study prompts. Not exam dumps.</span>
+          </div>
+          <a className="deep-dives-blueprint-link" href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Checked against the official SY0-701 objectives<ChevronRight size={14}/></a>
+        </div>
+        <div className="deep-dives-progress-card">
+          <div><span>Acronym mastery</span><strong>{totalMastered}/{SY0701_ACRONYM_CARDS.length}</strong></div>
+          <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
+          <p>Marked cards stay saved on this device, so repeated practice becomes lighter over time.</p>
+        </div>
+      </section>
+
+      <section className="deep-dives-controls flashcards-controls" aria-label="Filter flashcards by chapter">
+        <div className="deep-dives-domain-map">
+          <button type="button" className={chapterFilter==="all"?"active":""} onClick={()=>setChapterFilter("all")}><strong>All</strong><span>Chapters</span></button>
+          {chapterGroups.map(group=>(
+            <button key={group.chapterId} type="button" className={chapterFilter===String(group.chapterId)?"active":""} onClick={()=>setChapterFilter(String(group.chapterId))}>
+              <strong>Ch. {group.chapterId}</strong><span>{group.chapterTitle}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <div className="deep-dives-domain-groups">
+        {visibleGroups.map(group=>(
+          <section className="deep-dives-domain-group flashcards-chapter-group" key={group.chapterId}>
+            <header><div><span>Chapter {group.chapterId}</span><h2>{group.chapterTitle}</h2></div><strong>{group.sets.reduce((sum,set)=>sum+set.cards.length,0)} cards</strong></header>
+            <div className="deep-dive-acronym-set-grid">
+              {group.sets.map(set=>{
+                const mastered=set.cards.filter(card=>masteredAcronymIds.includes(card.id)).length;
+                const setProgress=Math.round((mastered/set.cards.length)*100);
+                const topics=[...new Set(set.cards.map(card=>card.topic||set.topic).filter(Boolean))];
+                return(
+                  <button type="button" className="deep-dive-acronym-set-card flashcards-topic-card" style={{"--set-color":set.color}} key={set.id} onClick={()=>openSet(set.id)} aria-label={`Open ${set.title}: ${mastered} of ${set.cards.length} mastered`}>
+                    <span className="deep-dive-acronym-set-icon"><TextCursorInput size={20}/></span>
+                    <span>
+                      <strong>{set.title}</strong>
+                      <small>{set.cards.length} cards · Objectives {set.objectiveCodes.join(" / ")}</small>
+                      <i>{topics.join(" · ")}</i>
+                    </span>
+                    <ChevronRight size={17}/>
+                    <span className="deep-dive-acronym-set-progress"><span><i style={{width:`${setProgress}%`}}/></span><span>{mastered}/{set.cards.length}</span></span>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <div className="deep-dive-acronym-source-note"><ShieldCheck size={16}/><span>{SY0701_ACRONYM_SOURCE.reviewNote}</span></div>
     </div>
   );
 }
@@ -29876,7 +29970,7 @@ export default function App() {
   });
   const [user,setUser]=useState(null);
   const [loading,setLoading]=useState(true);
-  const [view,setView]=useState(()=>urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":devCoinPreview?"coins":"dashboard");
+  const [view,setView]=useState(()=>focusAcronymLibrary?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":devCoinPreview?"coins":"dashboard");
   const [attempts,setAttempts]=useState([]);
   const [starred,setStarred]=useState([]);
   const [pbqQ,setPbqQ]=useState(null);
@@ -29901,6 +29995,7 @@ export default function App() {
   const [pbqBankError,setPbqBankError]=useState(null);
   const [smartReviewRequest,setSmartReviewRequest]=useState(null);
   const [deepDiveRequest,setDeepDiveRequest]=useState(null);
+  const [flashcardSetRequest,setFlashcardSetRequest]=useState(null);
   const [achievementUnlocks,setAchievementUnlocks]=useState([]);
   const [coinWallet,setCoinWallet]=useState(()=>({...emptyCipherWallet(),status:"idle"}));
   const [coinBusy,setCoinBusy]=useState(false);
@@ -30650,6 +30745,14 @@ export default function App() {
     });
     setView("deep-dives");
   },[]);
+  const handleOpenFlashcards=useCallback((setId=null)=>{
+    if(setId&&SY0701_ACRONYM_SETS.some(set=>set.id===setId)){
+      setFlashcardSetRequest(setId);
+    }else{
+      setFlashcardSetRequest(null);
+    }
+    setView("flashcards");
+  },[]);
   const handleAddDeepDiveWeakTopicToReview=useCallback(({chapterId,lessonId,title}={})=>{
     if(!chapterId)return;
     capture("deep_dive_add_weak_topic_clicked",{chapter:chapterId,lesson_id:lessonId,title});
@@ -31014,6 +31117,7 @@ export default function App() {
     {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
     {id:"coins",icon:"coins",label:"Cipher Coins",mobileLabel:"Coins"},
     {id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"},
+    {id:"flashcards",icon:"flashcards",label:"Flashcards",mobileLabel:"Cards"},
     {id:"achievements",icon:"achievements",label:"Achievements",mobileLabel:"Stars"},
     {id:"pricing",icon:"pricing",label:"Upgrade",mobileLabel:"Upgrade"},
     {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
@@ -31105,7 +31209,8 @@ export default function App() {
           {view==="account"&&<AccountSupportPage user={user} t={t} onDeleteAccount={handleDeleteAccount} onCancelMembership={handleCancelMembership} onNavigate={setView} billingLoading={billingLoading}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
-          {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq}/>}
+          {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq} onOpenFlashcards={handleOpenFlashcards}/>}
+          {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
