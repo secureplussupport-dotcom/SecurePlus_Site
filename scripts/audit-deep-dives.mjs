@@ -77,10 +77,22 @@ requireValue(SY0701_ACRONYM_SETS.filter(set => set.chapterId === 4 && set.setTyp
   const set = SY0701_ACRONYM_SETS.find(item => item.id === setId);
   requireValue(set?.setType === "term" && set.cards.every(card => card.cardType === "term"), `[${setId}] must be a definition-only term deck.`);
 });
+requireValue(SY0701_ACRONYM_SETS.filter(set => set.chapterId === 5 && set.setType === "term").length >= 4, "Chapter 5 Security Program Management must include categorized term-only flashcard sets.");
+["chapter5-governance-data-roles", "chapter5-risk-analysis-response", "chapter5-vendor-supply-chain", "chapter5-awareness-training"].forEach(setId => {
+  const set = SY0701_ACRONYM_SETS.find(item => item.id === setId);
+  requireValue(set?.setType === "term" && set.cards.every(card => card.cardType === "term"), `[${setId}] must be a definition-only term deck.`);
+});
 ["GPO", "IPFIX", "UEBA", "PICERL", "CVE", "CVSS", "PAM", "JIT"].forEach(acronym => {
   requireValue(SY0701_ACRONYM_CARDS.some(card => card.chapterId === 4 && card.acronym === acronym), `Chapter 4 acronym ${acronym} must be present.`);
 });
+["CIS", "CSF", "CTF", "EF", "HIPAA", "ISMS"].forEach(acronym => {
+  requireValue(SY0701_ACRONYM_CARDS.some(card => card.chapterId === 5 && card.acronym === acronym), `Chapter 5 acronym ${acronym} must be present.`);
+});
 ["SIEM", "SOAR", "FIM"].forEach(acronym => {
+  const matches = SY0701_ACRONYM_CARDS.filter(card => card.acronym === acronym);
+  requireValue(matches.length === 1, `Overlapping acronym ${acronym} must not be duplicated.`);
+});
+["AV", "ALE", "ARO", "BPA", "GDPR", "NIST", "PCI DSS", "PHI", "PII", "SLA", "SLE", "SOC"].forEach(acronym => {
   const matches = SY0701_ACRONYM_CARDS.filter(card => card.acronym === acronym);
   requireValue(matches.length === 1, `Overlapping acronym ${acronym} must not be duplicated.`);
 });

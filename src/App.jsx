@@ -19643,6 +19643,10 @@ const FLASHCARD_SET_ICON_MAP = {
   "chapter4-forensics-response": ClipboardCheck,
   "chapter4-vulnerability-access-ops": Gauge,
   "risk-governance-business": ScrollText,
+  "chapter5-governance-data-roles": ClipboardList,
+  "chapter5-risk-analysis-response": Scale,
+  "chapter5-vendor-supply-chain": Network,
+  "chapter5-awareness-training": Brain,
 };
 const FLASHCARD_SET_ICON_IDS = Object.freeze(Object.keys(FLASHCARD_SET_ICON_MAP));
 function FlashcardSetIcon({set,size=21}) {
