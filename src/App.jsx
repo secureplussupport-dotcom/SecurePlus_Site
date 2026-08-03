@@ -30063,7 +30063,6 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     <div className="deep-dives-page flashcards-page" style={{"--deep-accent":"#0ea5e9","--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <section className="deep-dives-hero flashcards-hero">
         <div className="deep-dives-hero-copy">
-          <span className="deep-dive-preview-badge"><TextCursorInput size={13}/> Free standalone active recall</span>
           <div className="page-title-row"><NavGlyph type="flashcards" active/><h1>Flashcards</h1></div>
           <div className="flashcards-mobile-quick" aria-label="Quick start flashcard sets">
             <span>Start now</span>
@@ -30077,11 +30076,12 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
               ))}
             </div>
           </div>
-          <p>Practise Security+ acronyms by chapter and topic for free, even without an account. Sign in only if you want to save your own starred flashcard set.</p>
+          <p>Your last-minute Security+ recall pack before exam day. Review high-yield acronyms, attack clues, and Security Operations terms quickly, build confidence, and share the same set with friends so nobody studies alone.</p>
           <div className="deep-dives-proof">
             <span><ListChecks size={15}/>Grouped by SY0-701 chapters</span>
             <span><Brain size={15}/>{SY0701_ACRONYM_CARDS.length} high-yield cards</span>
-            <span><Star size={15}/>Personal starred set with account</span>
+            <span><Star size={15}/>Star weak cards before the exam</span>
+            <span><Share2 size={15}/>Share sets with friends</span>
             <span><ShieldCheck size={15}/>Original study prompts. Not exam dumps.</span>
           </div>
           <a className="deep-dives-blueprint-link" href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Chapter and topic grouping checked against the official SY0-701 outline<ChevronRight size={14}/></a>
