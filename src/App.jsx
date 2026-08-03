@@ -310,6 +310,8 @@ const starKey = (type,id) => `${type}:${id}`;
 const FLASHCARD_STAR_TYPE = "flashcard";
 const STARRED_FLASHCARD_SET_ID = "starred-flashcards";
 const ASSISTANT_FLASHCARD_SET_ID = "cipher-weak-area-flashcards";
+const RANDOM_FLASHCARD_SET_ID = "random-flashcards";
+const SAVED_RANDOM_FLASHCARD_PREFIX = "saved-random-flashcards";
 const FLASHCARD_SHARE_COPY = {
   title:"SecurePlus Security+ flashcards",
   description:"Premium Security+ flashcards grouped by chapter and topic.",
@@ -331,6 +333,101 @@ const buildStarredFlashcardSet = cards => ({
   topic:"Saved flashcards",
   cards,
 });
+const clampRandomFlashcardCount = value => Math.max(10,Math.min(30,Number(value)||10));
+const shuffledFlashcardCards = cards => {
+  const next=[...(cards||[])];
+  for(let index=next.length-1;index>0;index-=1){
+    const swapIndex=Math.floor(Math.random()*(index+1));
+    [next[index],next[swapIndex]]=[next[swapIndex],next[index]];
+  }
+  return next;
+};
+const makeFlashcardSectionDivider = (id,label,color="#0ea5e9") => ({
+  id,
+  acronym:label,
+  expansion:label,
+  meaning:"Section change. The next cards use a different flashcard type.",
+  topic:"Mode change",
+  cardType:"divider",
+  setType:"term",
+  color,
+});
+const randomFlashcardStorageKey = user => `${SAVED_RANDOM_FLASHCARD_PREFIX}:${starOwner(user)}`;
+const buildRandomFlashcardSet = ({count=10,mode="definition",includeTerms=true,includeAcronyms=true,sourceCards=SY0701_ACRONYM_CARDS,title="Randomised flashcard set",savedId="",preserveOrder=false}={}) => {
+  const safeCount=clampRandomFlashcardCount(count);
+  const termCards=(sourceCards||[]).filter(card=>card.cardType==="term");
+  const acronymCards=(sourceCards||[]).filter(card=>card.cardType!=="term"&&card.cardType!=="divider");
+  const useTerms=Boolean(includeTerms);
+  const useAcronyms=Boolean(includeAcronyms);
+  const selected=[];
+  if(useTerms&&useAcronyms){
+    const termTarget=Math.max(1,Math.floor(safeCount/2));
+    const acronymTarget=safeCount-termTarget;
+    const pickedTerms=(preserveOrder?termCards:shuffledFlashcardCards(termCards)).slice(0,termTarget);
+    const pickedAcronyms=(preserveOrder?acronymCards:shuffledFlashcardCards(acronymCards)).slice(0,acronymTarget);
+    selected.push(
+      makeFlashcardSectionDivider(`${savedId||RANDOM_FLASHCARD_SET_ID}-terms-divider`,"Definition cards first","#7c3aed"),
+      ...pickedTerms,
+      makeFlashcardSectionDivider(`${savedId||RANDOM_FLASHCARD_SET_ID}-acronyms-divider`,"Acronym cards next","#0ea5e9"),
+      ...pickedAcronyms,
+    );
+  }else if(useTerms){
+    selected.push(...(preserveOrder?termCards:shuffledFlashcardCards(termCards)).slice(0,safeCount));
+  }else if(useAcronyms){
+    selected.push(...(preserveOrder?acronymCards:shuffledFlashcardCards(acronymCards)).slice(0,safeCount));
+  }
+  const nonDivider=selected.filter(card=>card.cardType!=="divider");
+  const setType=nonDivider.length&&nonDivider.every(card=>card.cardType==="term")?"term":"acronym";
+  return {
+    id:savedId||RANDOM_FLASHCARD_SET_ID,
+    title,
+    description:`${nonDivider.length} randomized cards · ${useTerms&&useAcronyms?"Terms and acronyms":useTerms?"Terms only":"Acronyms only"}.`,
+    setType,
+    objectiveCodes:[...new Set(nonDivider.flatMap(card=>card.objectiveCodes||[]))],
+    color:useTerms&&useAcronyms?"#0ea5e9":useTerms?"#7c3aed":"#f59e0b",
+    chapterId:0,
+    chapterTitle:"Randomised deck",
+    topic:"Randomised Security+ recall",
+    cards:selected,
+    generatedBy:"random_builder",
+    randomConfig:{count:safeCount,mode:getSafeFlashcardMode(mode,false,setType),includeTerms:useTerms,includeAcronyms:useAcronyms},
+  };
+};
+const readSavedRandomFlashcardSets = user => {
+  if(!user)return [];
+  try{
+    const parsed=JSON.parse(window.localStorage?.getItem(randomFlashcardStorageKey(user))||"[]");
+    if(!Array.isArray(parsed))return [];
+    return parsed.map((item,index)=>{
+      const cardIds=Array.isArray(item.cardIds)?item.cardIds:[];
+      const cardMap=new Map(SY0701_ACRONYM_CARDS.map(card=>[card.id,card]));
+      const cards=cardIds.map(id=>cardMap.get(id)).filter(Boolean);
+      if(!cards.length)return null;
+      const config=item.config||{};
+      return buildRandomFlashcardSet({
+        count:cards.length,
+        mode:config.mode||"definition",
+        includeTerms:config.includeTerms!==false,
+        includeAcronyms:config.includeAcronyms!==false,
+        sourceCards:cards,
+        title:item.title||`Saved random deck ${index+1}`,
+        savedId:item.id||`${SAVED_RANDOM_FLASHCARD_PREFIX}-${index+1}`,
+        preserveOrder:true,
+      });
+    }).filter(Boolean);
+  }catch{return [];}
+};
+const writeSavedRandomFlashcardSets = (user,sets) => {
+  if(!user)return;
+  const payload=(sets||[]).map(set=>({
+    id:set.id,
+    title:set.title,
+    savedAt:set.savedAt||new Date().toISOString(),
+    config:set.randomConfig||{},
+    cardIds:(set.cards||[]).filter(card=>card.cardType!=="divider").map(card=>card.id),
+  }));
+  try{window.localStorage?.setItem(randomFlashcardStorageKey(user),JSON.stringify(payload));}catch{}
+};
 const getFlashcardShareUrl = setId => {
   const origin=typeof window!=="undefined"?window.location.origin:"https://secureplusprep.com";
   const path=typeof window!=="undefined"?window.location.pathname:"/";
@@ -19031,6 +19128,26 @@ body{background:
 .flashcard-change-mode-btn{border-color:color-mix(in srgb,var(--set-color) 34%,var(--deep-border))!important;color:var(--set-color)!important;background:color-mix(in srgb,var(--set-color) 7%,var(--deep-surface))!important;}
 @keyframes flashcardModePop{from{opacity:0;transform:translateY(16px) scale(.96);}to{opacity:1;transform:translateY(0) scale(1);}}
 .flashcards-topic-card>span:nth-child(2)>i{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;color:var(--set-color);font-size:10px;font-style:normal;font-weight:900;line-height:1.45;}
+.flashcards-inventory-grid{grid-template-columns:repeat(auto-fit,minmax(255px,1fr));align-items:stretch;}
+.flashcard-random-builder{display:block!important;padding:0!important;overflow:hidden;}
+.flashcard-random-plus{display:grid;width:100%;min-height:100%;padding:18px;border:0;background:transparent;color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;}
+.flashcard-random-plus>span{display:grid;place-items:center;width:64px;height:64px;margin-bottom:11px;border-radius:22px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);color:#fff;font-size:54px;font-weight:650;line-height:1;box-shadow:0 14px 28px rgba(14,165,233,.24);}
+.flashcard-random-plus strong{font-size:17px!important;}
+.flashcard-random-plus small{font-size:11px!important;}
+.flashcard-random-panel{display:grid;gap:12px;padding:0 18px 18px;animation:fadeUp .18s ease both;}
+.flashcard-random-panel label{display:grid;gap:8px;color:var(--deep-muted);font-size:11px;font-weight:900;}
+.flashcard-random-panel label span{display:flex;align-items:center;justify-content:space-between;color:var(--deep-muted);}
+.flashcard-random-panel label strong{color:var(--set-color);font-size:15px;}
+.flashcard-random-panel input[type="range"]{width:100%;accent-color:var(--set-color);}
+.flashcard-random-choice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;}
+.flashcard-random-choice button{min-height:36px;padding:8px 9px;border:1px solid var(--deep-border);border-radius:12px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;font-size:10px;font-weight:950;cursor:pointer;}
+.flashcard-random-choice button.active{border-color:color-mix(in srgb,var(--set-color) 56%,var(--deep-border));background:color-mix(in srgb,var(--set-color) 13%,var(--deep-surface));color:var(--set-color);}
+.saved-random-set-card{border-color:color-mix(in srgb,var(--set-color) 36%,var(--deep-border))!important;}
+.flashcard-section-divider-face{border-color:color-mix(in srgb,var(--set-color) 52%,var(--deep-border))!important;background:radial-gradient(circle at 18% 18%,color-mix(in srgb,var(--set-color) 20%,transparent),transparent 36%),linear-gradient(145deg,color-mix(in srgb,var(--set-color) 12%,var(--deep-surface)),var(--deep-panel))!important;}
+.flashcard-section-divider-face>strong{color:var(--set-color)!important;font-size:clamp(28px,4vw,46px)!important;font-weight:950!important;line-height:1.12!important;}
+.flashcard-save-random{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:14px;padding:15px 16px!important;border-color:color-mix(in srgb,#0ea5e9 34%,var(--deep-border))!important;background:linear-gradient(145deg,color-mix(in srgb,#0ea5e9 8%,var(--deep-surface)),var(--deep-panel))!important;}
+.flashcard-save-random strong{display:block;color:var(--deep-text);font-size:14px;font-weight:950;}
+.flashcard-save-random p{margin:4px 0 0;color:var(--deep-muted);font-size:11px;font-weight:750;line-height:1.55;}
 .flashcards-chapter-group header h2{max-width:760px;}
 .deep-dive-acronym-reader{max-width:980px;margin:0 auto;padding:24px 24px 110px;}
 .deep-dive-acronym-reader-hero{position:relative;overflow:hidden;margin-bottom:16px;padding:25px;border:1px solid color-mix(in srgb,var(--set-color) 32%,var(--deep-border));border-radius:23px;background:radial-gradient(circle at 94% 7%,color-mix(in srgb,var(--set-color) 15%,transparent),transparent 34%),var(--deep-surface);}
@@ -29213,7 +29330,7 @@ function FlashcardModeChooser({t,set=null,hasExample=false,currentMode="definiti
   return typeof document!=="undefined"&&document.body?createPortal(chooser,document.body):chooser;
 }
 
-function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,initialMode="definition",onChangeModeRequest}) {
+function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,onSaveGeneratedSet,initialMode="definition",onChangeModeRequest}) {
   const setType=flashcardSetType(acronymSet);
   const setKindLabel=setType==="term"?"Term":"Acronym";
   const [direction,setDirection]=useState(()=>getSafeFlashcardMode(initialMode,flashcardSetHasExampleMode(acronymSet),setType));
@@ -29231,33 +29348,44 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   },[acronymSet,cardOrder]);
   const studyCards=direction==="example"?orderedCards.filter(card=>card.example):orderedCards;
   const activeCard=studyCards[cardIndex]||studyCards[0]||orderedCards[0];
+  const isDividerCard=activeCard?.cardType==="divider";
   const testsAcronym=direction==="acronym";
   const asksFromExample=direction==="example";
-  const frontPrompt=asksFromExample
+  const frontPrompt=isDividerCard
+    ?"Section change"
+    :asksFromExample
     ?"Guess the full attack name"
     :testsAcronym
       ?"Test the acronym"
       :"Test the definition";
-  const frontText=asksFromExample
+  const frontText=isDividerCard
+    ?activeCard?.acronym
+    :asksFromExample
     ?activeCard?.example
     :testsAcronym
       ?activeCard?.acronym
       :activeCard?.meaning;
-  const answerLabel=asksFromExample
+  const answerLabel=isDividerCard
+    ?"Next section"
+    :asksFromExample
     ?"Full attack name"
     :testsAcronym
       ?"Full term and definition"
       :setType==="term"
         ?"Term"
         :"Term and acronym";
-  const answerMain=asksFromExample
+  const answerMain=isDividerCard
+    ?activeCard?.expansion
+    :asksFromExample
     ?activeCard?.expansion
     :testsAcronym
       ?activeCard?.expansion
       :setType==="term"
         ?activeCard?.expansion
         :`${activeCard?.expansion} (${activeCard?.acronym})`;
-  const answerCopy=asksFromExample
+  const answerCopy=isDividerCard
+    ?activeCard?.meaning
+    :asksFromExample
     ?`Exam meaning: ${activeCard?.meaning}`
     :testsAcronym
       ?`Definition: ${activeCard?.meaning}`
@@ -29302,6 +29430,10 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   };
   const rateCard=mastered=>{
     if(!activeCard)return;
+    if(isDividerCard){
+      moveCard(1);
+      return;
+    }
     onRate(activeCard.id,mastered);
     moveCard(1);
   };
@@ -29350,7 +29482,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
         <div className="deep-dive-flashcard-head">
           <div><span className="deep-dive-eyebrow">{hasExampleMode?"Scenario attack drill":setType==="term"?"Definition drill":"Acronym drill"}</span><h2>{asksFromExample?"Read the example. Name the attack.":"Recall it, then flip"}</h2><p>{setType==="term"?"Term decks test definitions only: read the definition, recall the exam term, then flip.":hasExampleMode?"Use the example mode to practise recognizing attacks from real-world clues, then flip to check the full name.":"Test Acronym shows the acronym first. Test Definition shows the definition first. Flip to check the full term, acronym, and exam meaning."}</p></div>
           <div className="deep-dive-flashcard-side">
-            {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&acronymSet.id!==ASSISTANT_FLASHCARD_SET_ID&&<FlashcardShareActions set={acronymSet} t={t}/>}
+            {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&acronymSet.id!==ASSISTANT_FLASHCARD_SET_ID&&acronymSet.id!==RANDOM_FLASHCARD_SET_ID&&!String(acronymSet.id||"").startsWith(SAVED_RANDOM_FLASHCARD_PREFIX)&&<FlashcardShareActions set={acronymSet} t={t}/>}
             <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {acronymSet.cards.length}<br/>mastered</span></div>
           </div>
         </div>
@@ -29362,17 +29494,17 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
         </div>
         {activeCard&&<>
           <div className="deep-dive-flashcard-stage">
-            {(onToggleStar||onRequireSignup)&&<StarButton active={activeCardStarred} onToggle={toggleActiveFlashcardStar} label={user?"Save flashcard to my set":"Sign up to save this flashcard"} activeLabel="Remove flashcard from my set"/>}
+            {!isDividerCard&&(onToggleStar||onRequireSignup)&&<StarButton active={activeCardStarred} onToggle={toggleActiveFlashcardStar} label={user?"Save flashcard to my set":"Sign up to save this flashcard"} activeLabel="Remove flashcard from my set"/>}
             <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
               <span className="deep-dive-flashcard-inner">
-                <span className="deep-dive-flashcard-face deep-dive-flashcard-front">
+                <span className={`deep-dive-flashcard-face deep-dive-flashcard-front ${isDividerCard?"flashcard-section-divider-face":""}`}>
                   <span className="deep-dive-flashcard-kind"><Brain size={15}/>{frontPrompt}</span>
                   <span className="deep-dive-flashcard-watermark"><BrandMark size={16}/>SecurePlus</span>
                   <small className="deep-dive-acronym-prompt">{activeCard.topic || acronymSet.topic}</small>
                   <strong>{frontText}</strong>
                   <span className="deep-dive-flashcard-hint">{asksFromExample?"Name the attack, then tap to reveal":"Say it aloud, then tap to reveal"}</span>
                 </span>
-                <span className="deep-dive-flashcard-face deep-dive-flashcard-back">
+                <span className={`deep-dive-flashcard-face deep-dive-flashcard-back ${isDividerCard?"flashcard-section-divider-face":""}`}>
                   <span className="deep-dive-flashcard-kind"><Sparkles size={15}/>Answer</span>
                   <span className="deep-dive-flashcard-watermark"><BrandMark size={16}/>SecurePlus</span>
                   <small>{answerLabel}</small>
@@ -29385,7 +29517,9 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
           </div>
           <div className="deep-dive-flashcard-actions">
             <button className="btn btn-outline" type="button" onClick={()=>moveCard(-1)}><ArrowLeft size={16}/>Previous</button>
-            {!isFlipped?(
+            {isDividerCard?(
+              <button className="btn btn-primary" type="button" onClick={()=>moveCard(1)}><ChevronRight size={16}/>Continue</button>
+            ):!isFlipped?(
               <button className="btn btn-primary" type="button" onClick={()=>setIsFlipped(true)}><Lightbulb size={16}/>Reveal answer</button>
             ):(
               <div className="deep-dive-flashcard-rating" aria-label="Rate this card">
@@ -29432,6 +29566,15 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
                 </div>
               </div>
             )}
+          </div>
+        )}
+        {acronymSet.id===RANDOM_FLASHCARD_SET_ID&&(
+          <div className="flashcard-save-random card">
+            <div>
+              <strong>Save this random set</strong>
+              <p>Keep this exact card mix in your flashcard inventory so you can repeat it later instead of generating a new shuffle.</p>
+            </div>
+            <button className="btn btn-primary" type="button" onClick={()=>onSaveGeneratedSet?.(acronymSet)}><Star size={15}/>Save this set</button>
           </div>
         )}
       </section>
@@ -30036,6 +30179,10 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
 function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=null,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade}) {
   const [selectedSetId,setSelectedSetId]=useState(null);
   const [chapterFilter,setChapterFilter]=useState("all");
+  const [randomBuilderOpen,setRandomBuilderOpen]=useState(false);
+  const [randomConfig,setRandomConfig]=useState({count:10,mode:"definition",includeTerms:true,includeAcronyms:true});
+  const [randomFlashcardSet,setRandomFlashcardSet]=useState(null);
+  const [savedRandomSets,setSavedRandomSets]=useState(()=>readSavedRandomFlashcardSets(user));
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
     try{
       const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
@@ -30047,10 +30194,12 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
   const starredFlashcardSet=useMemo(()=>buildStarredFlashcardSet(starredFlashcards),[starredFlashcards]);
   const selectedSet=selectedSetId===STARRED_FLASHCARD_SET_ID
-    ?starredFlashcardSet
-    :selectedSetId===ASSISTANT_FLASHCARD_SET_ID
-      ?assistantSet
-      :SY0701_ACRONYM_SETS.find(set=>set.id===selectedSetId)||null;
+    ? starredFlashcardSet
+    : selectedSetId===ASSISTANT_FLASHCARD_SET_ID
+      ? assistantSet
+      : selectedSetId===RANDOM_FLASHCARD_SET_ID
+        ? randomFlashcardSet
+        : savedRandomSets.find(set=>set.id===selectedSetId) || SY0701_ACRONYM_SETS.find(set=>set.id===selectedSetId) || null;
   const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>masteredAcronymIds.includes(card.id)).length;
   const progressPercent=SY0701_ACRONYM_CARDS.length?Math.round((totalMastered/SY0701_ACRONYM_CARDS.length)*100):0;
   const mobileQuickSets=useMemo(()=>visibleGroups.flatMap(group=>group.sets).slice(0,3),[visibleGroups]);
@@ -30059,6 +30208,10 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const [activeMode,setActiveMode]=useState("definition");
   const [defaultMode,setDefaultMode]=useState("");
   const [modeChooser,setModeChooser]=useState(null);
+
+  useEffect(()=>{
+    setSavedRandomSets(readSavedRandomFlashcardSets(user));
+  },[user?.id,user?.email]);
 
   useEffect(()=>{
     if(!signedIn){
@@ -30087,19 +30240,23 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   },[]);
 
   const startFlashcardSet=useCallback((id,mode)=>{
-    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:id===ASSISTANT_FLASHCARD_SET_ID?assistantSet:SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
+    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:id===ASSISTANT_FLASHCARD_SET_ID?assistantSet:id===RANDOM_FLASHCARD_SET_ID?randomFlashcardSet:savedRandomSets.find(item=>item.id===id)||SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
     const safeMode=getSafeFlashcardMode(mode,flashcardSetHasExampleMode(set),flashcardSetType(set));
     setActiveMode(safeMode);
     setSelectedSetId(id);
     setModeChooser(null);
     capture("flashcards_set_opened",{set_id:id,mode:safeMode});
     scrollToFlashcardTop(true);
-  },[assistantSet,scrollToFlashcardTop,starredFlashcardSet]);
+  },[assistantSet,randomFlashcardSet,savedRandomSets,scrollToFlashcardTop,starredFlashcardSet]);
 
   const openSet=useCallback(id=>{
-    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:id===ASSISTANT_FLASHCARD_SET_ID?assistantSet:SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
+    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:id===ASSISTANT_FLASHCARD_SET_ID?assistantSet:id===RANDOM_FLASHCARD_SET_ID?randomFlashcardSet:savedRandomSets.find(item=>item.id===id)||SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
     if(!set)return;
     const hasExample=flashcardSetHasExampleMode(set);
+    if(id===RANDOM_FLASHCARD_SET_ID||String(id||"").startsWith(SAVED_RANDOM_FLASHCARD_PREFIX)){
+      startFlashcardSet(id,set.randomConfig?.mode||"definition");
+      return;
+    }
     if(flashcardSetType(set)==="term"){
       startFlashcardSet(id,"definition");
       return;
@@ -30111,11 +30268,11 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
       return;
     }
     startFlashcardSet(id,safeDefault);
-  },[assistantSet,defaultMode,signedIn,starredFlashcardSet,startFlashcardSet]);
+  },[assistantSet,defaultMode,randomFlashcardSet,savedRandomSets,signedIn,starredFlashcardSet,startFlashcardSet]);
 
   const handleModeChosen=(mode,{makeDefault=false}={})=>{
     const chooser=modeChooser;
-    const chooserSet=chooser?.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:chooser?.setId===ASSISTANT_FLASHCARD_SET_ID?assistantSet:SY0701_ACRONYM_SETS.find(item=>item.id===chooser?.setId)||null;
+    const chooserSet=chooser?.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:chooser?.setId===ASSISTANT_FLASHCARD_SET_ID?assistantSet:chooser?.setId===RANDOM_FLASHCARD_SET_ID?randomFlashcardSet:savedRandomSets.find(item=>item.id===chooser?.setId)||SY0701_ACRONYM_SETS.find(item=>item.id===chooser?.setId)||null;
     const safeMode=getSafeFlashcardMode(mode,chooser?.hasExample,flashcardSetType(chooserSet));
     if(makeDefault)saveDefaultMode(safeMode);
     if(chooser?.context==="default"){
@@ -30158,11 +30315,45 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
     try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
     capture("flashcards_acronym_rated",{set_id:selectedSet?.id,card_id:cardId,mastered});
   };
+  const buildAndOpenRandomSet=()=>{
+    const safeConfig={
+      ...randomConfig,
+      count:clampRandomFlashcardCount(randomConfig.count),
+      includeTerms:randomConfig.includeTerms||!randomConfig.includeAcronyms,
+      includeAcronyms:randomConfig.includeAcronyms||!randomConfig.includeTerms,
+    };
+    const built=buildRandomFlashcardSet(safeConfig);
+    setRandomConfig(safeConfig);
+    setRandomFlashcardSet(built);
+    capture("flashcards_random_set_generated",{count:safeConfig.count,mode:safeConfig.mode,include_terms:safeConfig.includeTerms,include_acronyms:safeConfig.includeAcronyms});
+    setActiveMode(getSafeFlashcardMode(safeConfig.mode,false,flashcardSetType(built)));
+    setSelectedSetId(RANDOM_FLASHCARD_SET_ID);
+    setModeChooser(null);
+    scrollToFlashcardTop(true);
+  };
+  const saveRandomSet=set=>{
+    if(!user){
+      onRequireSignup?.("flashcard_random_set");
+      return;
+    }
+    const cardCount=(set?.cards||[]).filter(card=>card.cardType!=="divider").length;
+    if(!cardCount)return;
+    const saved={
+      ...set,
+      id:`${SAVED_RANDOM_FLASHCARD_PREFIX}-${Date.now()}`,
+      title:`Saved random deck ${savedRandomSets.length+1}`,
+      savedAt:new Date().toISOString(),
+    };
+    const next=[saved,...savedRandomSets].slice(0,8);
+    setSavedRandomSets(next);
+    writeSavedRandomFlashcardSets(user,next);
+    capture("flashcards_random_set_saved",{card_count:cardCount});
+  };
 
   if(selectedSet){
     return(
       <>
-        <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade} initialMode={activeMode} onChangeModeRequest={flashcardSetType(selectedSet)==="term"?undefined:()=>setModeChooser({context:"change",setId:selectedSet.id,hasExample:flashcardSetHasExampleMode(selectedSet)})}/>
+        <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade} onSaveGeneratedSet={saveRandomSet} initialMode={activeMode} onChangeModeRequest={flashcardSetType(selectedSet)==="term"?undefined:()=>setModeChooser({context:"change",setId:selectedSet.id,hasExample:flashcardSetHasExampleMode(selectedSet)})}/>
         {modeChooser&&<FlashcardModeChooser t={t} set={selectedSet} hasExample={modeChooser.hasExample} currentMode={activeMode} defaultMode={defaultMode} user={user} context={modeChooser.context} onChoose={handleModeChosen} onClose={()=>setModeChooser(null)}/>}
       </>
     );
@@ -30232,10 +30423,10 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
 
       <section className="deep-dives-domain-group flashcards-curated-set" style={{"--set-color":"#f59e0b"}}>
         <header>
-          <div><span>Your saved deck</span><h2>My Starred Flashcards</h2></div>
-          <strong>{starredFlashcards.length} saved</strong>
+          <div><span>Your flashcard inventory</span><h2>Starred and random decks</h2></div>
+          <strong>{starredFlashcards.length+savedRandomSets.length} saved</strong>
         </header>
-        <div className="deep-dive-acronym-set-grid">
+        <div className="deep-dive-acronym-set-grid flashcards-inventory-grid">
           <button
             type="button"
             className="deep-dive-acronym-set-card flashcards-topic-card"
@@ -30254,6 +30445,62 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
             <ChevronRight size={17}/>
             <span className="deep-dive-acronym-set-progress"><span><i style={{width:`${starredFlashcards.length?100:8}%`}}/></span><span>{starredFlashcards.length}</span></span>
           </button>
+          <div className={`deep-dive-acronym-set-card flashcards-topic-card flashcard-random-builder ${randomBuilderOpen?"open":""}`} style={{"--set-color":"#0ea5e9"}}>
+            <button type="button" className="flashcard-random-plus" onClick={()=>setRandomBuilderOpen(value=>!value)} aria-expanded={randomBuilderOpen}>
+              <span aria-hidden="true">+</span>
+              <strong>Randomised set</strong>
+              <small>Build a quick 10-30 card deck from terms, acronyms, or both.</small>
+            </button>
+            {randomBuilderOpen&&(
+              <div className="flashcard-random-panel">
+                <label>
+                  <span>Cards: <strong>{randomConfig.count}</strong></span>
+                  <input type="range" min="10" max="30" step="1" value={randomConfig.count} onChange={event=>setRandomConfig(config=>({...config,count:clampRandomFlashcardCount(event.target.value)}))}/>
+                </label>
+                <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard mode">
+                  {[
+                    ["definition","Test Definition"],
+                    ["acronym","Test Acronym"],
+                  ].map(([mode,label])=>(
+                    <button key={mode} type="button" className={randomConfig.mode===mode?"active":""} onClick={()=>setRandomConfig(config=>({...config,mode}))}>{label}</button>
+                  ))}
+                </div>
+                <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard content type">
+                  {[
+                    ["includeTerms","Terms"],
+                    ["includeAcronyms","Acronyms"],
+                  ].map(([key,label])=>(
+                    <button key={key} type="button" className={randomConfig[key]?"active":""} onClick={()=>setRandomConfig(config=>{
+                      const next={...config,[key]:!config[key]};
+                      if(!next.includeTerms&&!next.includeAcronyms)next[key]=true;
+                      return next;
+                    })}>{label}</button>
+                  ))}
+                </div>
+                <button className="btn btn-primary" type="button" onClick={buildAndOpenRandomSet}><Sparkles size={15}/>Generate set</button>
+              </div>
+            )}
+          </div>
+          {savedRandomSets.map(set=>(
+            <button
+              type="button"
+              className="deep-dive-acronym-set-card flashcards-topic-card saved-random-set-card"
+              style={{"--set-color":set.color}}
+              key={set.id}
+              onClick={()=>openSet(set.id)}
+              aria-label={`Open ${set.title}`}
+            >
+              <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Sparkles size={21} strokeWidth={2.35}/></span>
+              <span>
+                <em className="flashcard-type-badge">Saved random</em>
+                <strong>{set.title}</strong>
+                <small>{set.description}</small>
+                <i>{set.cards.filter(card=>card.cardType!=="divider").slice(0,4).map(card=>card.acronym).join(" · ")}</i>
+              </span>
+              <ChevronRight size={17}/>
+              <span className="deep-dive-acronym-set-progress"><span><i style={{width:"100%"}}/></span><span>{set.cards.filter(card=>card.cardType!=="divider").length}</span></span>
+            </button>
+          ))}
         </div>
       </section>
 
@@ -30286,7 +30533,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
       </div>
 
       <div className="deep-dive-acronym-source-note"><ShieldCheck size={16}/><span>{SY0701_ACRONYM_SOURCE.reviewNote}</span></div>
-        {modeChooser&&<FlashcardModeChooser t={t} set={modeChooser.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:modeChooser.setId===ASSISTANT_FLASHCARD_SET_ID?assistantSet:SY0701_ACRONYM_SETS.find(set=>set.id===modeChooser.setId)||null} hasExample={modeChooser.hasExample} currentMode={activeMode} defaultMode={defaultMode} user={user} context={modeChooser.context} onChoose={handleModeChosen} onClose={()=>setModeChooser(null)}/>}
+        {modeChooser&&<FlashcardModeChooser t={t} set={modeChooser.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:modeChooser.setId===ASSISTANT_FLASHCARD_SET_ID?assistantSet:modeChooser.setId===RANDOM_FLASHCARD_SET_ID?randomFlashcardSet:savedRandomSets.find(set=>set.id===modeChooser.setId)||SY0701_ACRONYM_SETS.find(set=>set.id===modeChooser.setId)||null} hasExample={modeChooser.hasExample} currentMode={activeMode} defaultMode={defaultMode} user={user} context={modeChooser.context} onChoose={handleModeChosen} onClose={()=>setModeChooser(null)}/>}
     </div>
   );
 }
