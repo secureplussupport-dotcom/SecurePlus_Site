@@ -19198,7 +19198,7 @@ body{background:
 .flashcards-inventory-grid{grid-template-columns:repeat(auto-fit,minmax(315px,1fr));align-items:stretch;}
 .flashcard-random-builder{display:block!important;padding:0!important;overflow:hidden;}
 .flashcard-random-plus{display:grid;width:100%;min-height:100%;padding:22px;border:0;background:transparent;color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;}
-.flashcard-random-plus>span{display:grid;place-items:center;width:82px;height:82px;margin-bottom:14px;border-radius:27px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);color:#fff;font-size:70px;font-weight:650;line-height:1;box-shadow:0 16px 32px rgba(14,165,233,.28);}
+.flashcard-random-plus>span{display:grid;place-items:center;width:62px;height:62px;margin-bottom:14px;border-radius:21px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);color:#fff;font-size:42px;font-weight:700;line-height:1;box-shadow:0 14px 28px rgba(14,165,233,.24);}
 .flashcard-random-plus strong{font-size:17px!important;}
 .flashcard-random-plus small{font-size:11px!important;}
 .flashcard-random-panel{display:grid;gap:12px;padding:0 18px 18px;animation:fadeUp .18s ease both;}
@@ -19209,6 +19209,11 @@ body{background:
 .flashcard-random-choice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;}
 .flashcard-random-choice button{min-height:36px;padding:8px 9px;border:1px solid var(--deep-border);border-radius:12px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;font-size:10px;font-weight:950;cursor:pointer;}
 .flashcard-random-choice button.active{border-color:color-mix(in srgb,var(--set-color) 56%,var(--deep-border));background:color-mix(in srgb,var(--set-color) 13%,var(--deep-surface));color:var(--set-color);}
+.flashcard-random-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.flashcard-random-actions .btn{min-height:38px;justify-content:center;font-size:11px!important;}
+.flashcard-inventory-notice{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;padding:11px 12px;border:1px solid color-mix(in srgb,#0ea5e9 36%,var(--deep-border));border-radius:15px;background:linear-gradient(135deg,color-mix(in srgb,#0ea5e9 10%,var(--deep-surface)),var(--deep-panel));color:var(--deep-text);box-shadow:0 12px 28px rgba(14,165,233,.1);}
+.flashcard-inventory-notice span{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:900;line-height:1.35;}
+.flashcard-inventory-notice button{flex:0 0 auto;}
 .saved-random-set-card{border-color:color-mix(in srgb,var(--set-color) 36%,var(--deep-border))!important;}
 .cipher-made-set-card{border-color:color-mix(in srgb,#0ea5e9 46%,var(--deep-border))!important;background:radial-gradient(circle at 92% 12%,color-mix(in srgb,#0ea5e9 18%,transparent),transparent 33%),linear-gradient(145deg,color-mix(in srgb,#0ea5e9 8%,var(--deep-surface)),var(--deep-surface))!important;}
 .flashcard-section-divider-face{border-color:color-mix(in srgb,var(--set-color) 52%,var(--deep-border))!important;background:radial-gradient(circle at 18% 18%,color-mix(in srgb,var(--set-color) 20%,transparent),transparent 36%),linear-gradient(145deg,color-mix(in srgb,var(--set-color) 12%,var(--deep-surface)),var(--deep-panel))!important;}
@@ -30255,6 +30260,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const [randomConfig,setRandomConfig]=useState({count:10,mode:"definition",includeTerms:true,includeAcronyms:true});
   const [randomFlashcardSet,setRandomFlashcardSet]=useState(null);
   const [savedRandomSets,setSavedRandomSets]=useState(()=>readSavedRandomFlashcardSets(user));
+  const [inventoryNotice,setInventoryNotice]=useState("");
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
     try{
       const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
@@ -30394,29 +30400,53 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
     setRandomConfig(safeConfig);
     setRandomFlashcardSet(built);
     setRandomBuilderOpen(false);
+    setInventoryNotice("");
     capture("flashcards_random_set_generated",{count:safeConfig.count,mode:safeConfig.mode,include_terms:safeConfig.includeTerms,include_acronyms:safeConfig.includeAcronyms});
     setActiveMode(getSafeFlashcardMode(safeConfig.mode,false,flashcardSetType(built)));
     setSelectedSetId(RANDOM_FLASHCARD_SET_ID);
     setModeChooser(null);
     scrollToFlashcardTop(true);
   };
+  const persistSavedRandomSet=(set,{openAfterSave=false}={})=>{
+    const cardCount=(set?.cards||[]).filter(card=>card.cardType!=="divider").length;
+    if(!cardCount)return null;
+    const saved={
+      ...set,
+      id:String(set.id||"").startsWith(SAVED_RANDOM_FLASHCARD_PREFIX)?set.id:`${SAVED_RANDOM_FLASHCARD_PREFIX}-${Date.now()}`,
+      title:set.title?.startsWith("Saved random deck")?set.title:`Saved random deck ${savedRandomSets.length+1}`,
+      savedAt:new Date().toISOString(),
+    };
+    const next=[saved,...savedRandomSets.filter(item=>item.id!==saved.id)].slice(0,8);
+    setSavedRandomSets(next);
+    writeSavedRandomFlashcardSets(user,next);
+    setInventoryNotice(`${saved.title} created with ${cardCount} cards.`);
+    setRandomBuilderOpen(false);
+    setRandomFlashcardSet(null);
+    setSelectedSetId(openAfterSave?saved.id:null);
+    capture("flashcards_random_set_saved",{card_count:cardCount,opened:Boolean(openAfterSave)});
+    scrollToFlashcardTop(true);
+    return saved;
+  };
+  const createSavedRandomSet=()=>{
+    if(!user){
+      onRequireSignup?.("flashcard_random_set");
+      return;
+    }
+    const safeConfig=normalizeRandomFlashcardConfig(randomConfig);
+    const built=buildRandomFlashcardSet({
+      ...safeConfig,
+      title:`Saved random deck ${savedRandomSets.length+1}`,
+      savedId:`${SAVED_RANDOM_FLASHCARD_PREFIX}-${Date.now()}`,
+    });
+    setRandomConfig(safeConfig);
+    persistSavedRandomSet(built,{openAfterSave:false});
+  };
   const saveRandomSet=set=>{
     if(!user){
       onRequireSignup?.("flashcard_random_set");
       return;
     }
-    const cardCount=(set?.cards||[]).filter(card=>card.cardType!=="divider").length;
-    if(!cardCount)return;
-    const saved={
-      ...set,
-      id:`${SAVED_RANDOM_FLASHCARD_PREFIX}-${Date.now()}`,
-      title:`Saved random deck ${savedRandomSets.length+1}`,
-      savedAt:new Date().toISOString(),
-    };
-    const next=[saved,...savedRandomSets].slice(0,8);
-    setSavedRandomSets(next);
-    writeSavedRandomFlashcardSets(user,next);
-    capture("flashcards_random_set_saved",{card_count:cardCount});
+    persistSavedRandomSet(set,{openAfterSave:false});
   };
 
   if(selectedSet){
@@ -30495,6 +30525,12 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
           <div><span>Your flashcard inventory</span><h2>Starred and random decks</h2></div>
           <strong>{starredFlashcards.length+savedRandomSets.length+(showAssistantDeck?1:0)} saved</strong>
         </header>
+        {inventoryNotice&&(
+          <div className="flashcard-inventory-notice" role="status">
+            <span><CheckCircle2 size={16}/>{inventoryNotice}</span>
+            <button className="btn btn-ghost" type="button" onClick={()=>setInventoryNotice("")}>Dismiss</button>
+          </div>
+        )}
         <div className="deep-dive-acronym-set-grid flashcards-inventory-grid">
           <button
             type="button"
@@ -30566,7 +30602,10 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
                     })}>{label}</button>
                   ))}
                 </div>
-                <button className="btn btn-primary" type="button" onClick={buildAndOpenRandomSet}><Sparkles size={15}/>Generate set</button>
+                <div className="flashcard-random-actions">
+                  <button className="btn btn-primary" type="button" onClick={createSavedRandomSet}><ListPlus size={15}/>Create saved set</button>
+                  <button className="btn btn-outline" type="button" onClick={buildAndOpenRandomSet}><Sparkles size={15}/>Study now</button>
+                </div>
               </div>
             )}
           </div>
