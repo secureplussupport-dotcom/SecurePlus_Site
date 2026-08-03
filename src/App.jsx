@@ -335,7 +335,17 @@ const buildStarredFlashcardSet = cards => ({
   topic:"Saved flashcards",
   cards,
 });
-const clampRandomFlashcardCount = value => Math.max(10,Math.min(30,Number(value)||10));
+const RANDOM_FLASHCARD_COUNTS = [10,20,30];
+const RANDOM_FLASHCARD_COLORS = ["#0ea5e9","#14b8a6","#8b5cf6","#f59e0b","#ec4899","#22c55e","#6366f1","#f97316"];
+const clampRandomFlashcardCount = value => {
+  const requested=Number(value)||10;
+  return RANDOM_FLASHCARD_COUNTS.reduce((closest,count)=>Math.abs(count-requested)<Math.abs(closest-requested)?count:closest,10);
+};
+const generatedFlashcardSetColor = seed => {
+  const text=String(seed||Date.now());
+  const hash=[...text].reduce((sum,char)=>(sum+char.charCodeAt(0))%RANDOM_FLASHCARD_COLORS.length,0);
+  return RANDOM_FLASHCARD_COLORS[hash]||"#0ea5e9";
+};
 const normalizeRandomFlashcardConfig = (config={}) => {
   const includeTerms=Boolean(config.includeTerms);
   const includeAcronyms=Boolean(config.includeAcronyms);
@@ -376,7 +386,7 @@ const flashcardHasRealAcronym = card => {
 };
 const randomFlashcardStorageKey = user => `${SAVED_RANDOM_FLASHCARD_PREFIX}:${starOwner(user)}`;
 const buildRandomFlashcardSet = (input={}) => {
-  const {count=10,mode="definition",includeTerms=true,includeAcronyms=true,sourceCards=SY0701_ACRONYM_CARDS,title="Randomised flashcard set",savedId="",preserveOrder=false}=input;
+  const {count=10,mode="definition",includeTerms=true,includeAcronyms=true,sourceCards=SY0701_ACRONYM_CARDS,title="Randomised flashcard set",savedId="",preserveOrder=false,color=""}=input;
   const safeConfig=normalizeRandomFlashcardConfig({count,mode,includeTerms,includeAcronyms});
   const safeCount=safeConfig.count;
   const termCards=(sourceCards||[]).filter(card=>card.cardType==="term");
@@ -415,7 +425,7 @@ const buildRandomFlashcardSet = (input={}) => {
     description:`${nonDivider.length} randomized cards · ${useTerms&&useAcronyms?"Terms and acronyms":useTerms?"Terms only":"Acronyms only"}.`,
     setType,
     objectiveCodes:[...new Set(nonDivider.flatMap(card=>card.objectiveCodes||[]))],
-    color:useTerms&&useAcronyms?"#0ea5e9":useTerms?"#7c3aed":"#f59e0b",
+    color:color||generatedFlashcardSetColor(savedId||`${safeCount}-${safeConfig.mode}-${Date.now()}`),
     chapterId:0,
     chapterTitle:"Randomised deck",
     topic:"Randomised Security+ recall",
@@ -443,6 +453,7 @@ const readSavedRandomFlashcardSets = user => {
         sourceCards:cards,
         title:item.title||`Generated deck ${index+1}`,
         savedId:item.id||`${SAVED_RANDOM_FLASHCARD_PREFIX}-${index+1}`,
+        color:item.color||generatedFlashcardSetColor(item.id||index),
         preserveOrder:true,
       });
     }).filter(Boolean);
@@ -454,6 +465,7 @@ const writeSavedRandomFlashcardSets = (user,sets) => {
     id:set.id,
     title:set.title,
     savedAt:set.savedAt||new Date().toISOString(),
+    color:set.color,
     config:set.randomConfig||{},
     cardIds:(set.cards||[]).filter(card=>card.cardType!=="divider").map(card=>card.id),
   }));
@@ -19202,16 +19214,24 @@ body{background:
 .flashcard-random-plus>span{display:grid;place-items:center;width:62px;height:62px;margin-bottom:14px;border-radius:21px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);color:#fff;font-size:42px;font-weight:700;line-height:1;box-shadow:0 14px 28px rgba(14,165,233,.24);}
 .flashcard-random-plus strong{font-size:17px!important;}
 .flashcard-random-plus small{font-size:11px!important;}
-.flashcard-random-panel{display:grid;gap:12px;padding:0 18px 18px;animation:fadeUp .18s ease both;}
-.flashcard-random-panel label{display:grid;gap:8px;color:var(--deep-muted);font-size:11px;font-weight:900;}
-.flashcard-random-panel label span{display:flex;align-items:center;justify-content:space-between;color:var(--deep-muted);}
-.flashcard-random-panel label strong{color:var(--set-color);font-size:15px;}
-.flashcard-random-panel input[type="range"]{width:100%;accent-color:var(--set-color);}
+.flashcard-random-panel{position:relative;display:grid;gap:12px;padding:0 18px 18px;animation:fadeUp .18s ease both;}
+.flashcard-random-intro{display:grid;gap:3px;padding:11px 12px;border:1px solid color-mix(in srgb,#0ea5e9 28%,var(--deep-border));border-radius:15px;background:radial-gradient(circle at 96% 12%,rgba(139,92,246,.13),transparent 40%),linear-gradient(135deg,color-mix(in srgb,#0ea5e9 10%,var(--deep-surface)),color-mix(in srgb,#f59e0b 7%,var(--deep-panel)));color:var(--deep-text);}
+.flashcard-random-intro strong{font-size:12px!important;color:var(--deep-text)!important;}
+.flashcard-random-intro small{font-size:10px!important;color:var(--deep-muted)!important;line-height:1.45;}
+.flashcard-random-group{display:grid;gap:7px;padding:9px;border:1px solid color-mix(in srgb,var(--group-color,#0ea5e9) 28%,var(--deep-border));border-radius:15px;background:linear-gradient(135deg,color-mix(in srgb,var(--group-color,#0ea5e9) 8%,var(--deep-surface)),var(--deep-panel));}
+.flashcard-random-group>span{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--deep-muted);font-size:10px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;}
+.flashcard-random-group>span strong{color:var(--group-color,#0ea5e9);font-size:12px;}
 .flashcard-random-choice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;}
-.flashcard-random-choice button{min-height:36px;padding:8px 9px;border:1px solid var(--deep-border);border-radius:12px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;font-size:10px;font-weight:950;cursor:pointer;}
-.flashcard-random-choice button.active{border-color:color-mix(in srgb,var(--set-color) 56%,var(--deep-border));background:color-mix(in srgb,var(--set-color) 13%,var(--deep-surface));color:var(--set-color);}
+.flashcard-random-choice.three{grid-template-columns:repeat(3,minmax(0,1fr));}
+.flashcard-random-choice button{min-height:39px;padding:8px 9px;border:1px solid color-mix(in srgb,var(--group-color,#0ea5e9) 22%,var(--deep-border));border-radius:12px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;font-size:10px;font-weight:950;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,color .16s;}
+.flashcard-random-choice button:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--group-color,#0ea5e9) 44%,var(--deep-border));}
+.flashcard-random-choice button.active{border-color:color-mix(in srgb,var(--group-color,#0ea5e9) 62%,var(--deep-border));background:linear-gradient(135deg,color-mix(in srgb,var(--group-color,#0ea5e9) 19%,var(--deep-surface)),var(--deep-surface));color:var(--group-color,#0ea5e9);box-shadow:0 8px 18px color-mix(in srgb,var(--group-color,#0ea5e9) 14%,transparent);}
 .flashcard-random-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
 .flashcard-random-actions .btn{min-height:38px;justify-content:center;font-size:11px!important;}
+.flashcard-randomising-buffer{position:absolute;inset:0;z-index:4;display:grid;place-items:center;padding:18px;border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,#fff 72%,transparent),color-mix(in srgb,#0ea5e9 10%,var(--deep-surface)));backdrop-filter:blur(8px);animation:fadeUp .16s ease both;}
+.flashcard-randomising-card{display:grid;place-items:center;gap:5px;min-width:190px;padding:16px 18px;border:1px solid color-mix(in srgb,#0ea5e9 38%,var(--deep-border));border-radius:18px;background:var(--deep-surface);box-shadow:0 18px 42px rgba(14,165,233,.18);}
+.flashcard-randomising-card strong{color:#0ea5e9;font-size:15px;font-weight:950;letter-spacing:.08em;}
+.flashcard-randomising-card small{color:var(--deep-muted);font-size:10px;font-weight:850;}
 .flashcard-inventory-notice{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;padding:11px 12px;border:1px solid color-mix(in srgb,#0ea5e9 36%,var(--deep-border));border-radius:15px;background:linear-gradient(135deg,color-mix(in srgb,#0ea5e9 10%,var(--deep-surface)),var(--deep-panel));color:var(--deep-text);box-shadow:0 12px 28px rgba(14,165,233,.1);}
 .flashcard-inventory-notice span{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:900;line-height:1.35;}
 .flashcard-inventory-notice button{flex:0 0 auto;}
@@ -30272,6 +30292,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const [inventoryNotice,setInventoryNotice]=useState("");
   const [renamingSetId,setRenamingSetId]=useState(null);
   const [renameDraft,setRenameDraft]=useState("");
+  const [randomisingAction,setRandomisingAction]=useState(null);
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
     try{
       const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
@@ -30407,7 +30428,8 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   };
   const buildAndOpenRandomSet=()=>{
     const safeConfig=normalizeRandomFlashcardConfig(randomConfig);
-    const built=buildRandomFlashcardSet(safeConfig);
+    const generatedId=`${RANDOM_FLASHCARD_SET_ID}-${Date.now()}`;
+    const built=buildRandomFlashcardSet({...safeConfig,color:generatedFlashcardSetColor(generatedId)});
     setRandomConfig(safeConfig);
     setRandomFlashcardSet(built);
     setRandomBuilderOpen(false);
@@ -30444,13 +30466,31 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
       return;
     }
     const safeConfig=normalizeRandomFlashcardConfig(randomConfig);
+    const generatedId=`${SAVED_RANDOM_FLASHCARD_PREFIX}-${Date.now()}`;
     const built=buildRandomFlashcardSet({
       ...safeConfig,
       title:`Generated deck ${savedRandomSets.length+1}`,
-      savedId:`${SAVED_RANDOM_FLASHCARD_PREFIX}-${Date.now()}`,
+      savedId:generatedId,
+      color:generatedFlashcardSetColor(generatedId),
     });
     setRandomConfig(safeConfig);
     persistSavedRandomSet(built,{openAfterSave:false});
+  };
+  const runRandomisingBuffer=(action,work)=>{
+    if(randomisingAction)return;
+    setRandomisingAction(action);
+    window.setTimeout(()=>{
+      work();
+      setRandomisingAction(null);
+    },850);
+  };
+  const randomiseAndStudy=()=>runRandomisingBuffer("study",buildAndOpenRandomSet);
+  const randomiseAndSave=()=>{
+    if(!user){
+      onRequireSignup?.("flashcard_random_set");
+      return;
+    }
+    runRandomisingBuffer("save",createSavedRandomSet);
   };
   const saveRandomSet=set=>{
     if(!user){
@@ -30625,35 +30665,58 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
             </button>
             {randomBuilderOpen&&(
               <div className="flashcard-random-panel" onClick={event=>event.stopPropagation()}>
-                <label>
-                  <span>Cards: <strong>{randomConfig.count}</strong></span>
-                  <input type="range" min="10" max="30" step="1" value={randomConfig.count} onChange={event=>setRandomConfig(config=>({...config,count:clampRandomFlashcardCount(event.target.value)}))}/>
-                </label>
-                <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard mode">
-                  {[
-                    ["definition","Test Definition"],
-                    ["acronym","Test Acronym"],
-                  ].map(([mode,label])=>(
-                    <button key={mode} type="button" className={randomConfig.mode===mode?"active":""} onClick={()=>setRandomConfig(config=>({...config,mode}))}>{label}</button>
-                  ))}
+                <div className="flashcard-random-intro">
+                  <strong>How it works</strong>
+                  <small>Pick the deck size, choose how the card tests you, then choose whether the pool uses terms, acronyms, or both.</small>
                 </div>
-                <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard content type">
-                  {[
-                    ["includeTerms","Terms"],
-                    ["includeAcronyms","Acronyms"],
-                  ].map(([key,label])=>(
-                    <button key={key} type="button" className={randomConfig[key]?"active":""} onClick={()=>setRandomConfig(config=>{
-                      const next={...config,[key]:!config[key]};
-                      if(!next.includeTerms&&!next.includeAcronyms)next[key]=true;
-                      if(next.includeTerms&&!next.includeAcronyms)next.mode="definition";
-                      return next;
-                    })}>{label}</button>
-                  ))}
+                <div className="flashcard-random-group" style={{"--group-color":"#f59e0b"}}>
+                  <span>Deck size <strong>{randomConfig.count} cards</strong></span>
+                  <div className="flashcard-random-choice three" role="group" aria-label="Choose number of random flashcards">
+                    {RANDOM_FLASHCARD_COUNTS.map(count=>(
+                      <button key={count} type="button" className={randomConfig.count===count?"active":""} onClick={()=>setRandomConfig(config=>({...config,count}))}>{count}</button>
+                    ))}
+                  </div>
+                </div>
+                <div className="flashcard-random-group" style={{"--group-color":"#8b5cf6"}}>
+                  <span>Test selector <strong>{randomConfig.mode==="acronym"?"Acronym":"Definition"}</strong></span>
+                  <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard test mode">
+                    {[
+                      ["definition","Test Definition"],
+                      ["acronym","Test Acronym"],
+                    ].map(([mode,label])=>(
+                      <button key={mode} type="button" className={randomConfig.mode===mode?"active":""} onClick={()=>setRandomConfig(config=>({...config,mode}))}>{label}</button>
+                    ))}
+                  </div>
+                </div>
+                <div className="flashcard-random-group" style={{"--group-color":"#14b8a6"}}>
+                  <span>Content selector <strong>{randomConfig.includeTerms&&randomConfig.includeAcronyms?"Both":randomConfig.includeTerms?"Terms":"Acronyms"}</strong></span>
+                  <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard content type">
+                    {[
+                      ["terms","Terms"],
+                      ["acronyms","Acronyms"],
+                      ["both","Both"],
+                    ].map(([value,label])=>(
+                      <button key={value} type="button" className={(value==="both"&&randomConfig.includeTerms&&randomConfig.includeAcronyms)||(value==="terms"&&randomConfig.includeTerms&&!randomConfig.includeAcronyms)||(value==="acronyms"&&!randomConfig.includeTerms&&randomConfig.includeAcronyms)?"active":""} onClick={()=>setRandomConfig(config=>{
+                        if(value==="terms")return {...config,includeTerms:true,includeAcronyms:false,mode:"definition"};
+                        if(value==="acronyms")return {...config,includeTerms:false,includeAcronyms:true};
+                        return {...config,includeTerms:true,includeAcronyms:true};
+                      })}>{label}</button>
+                    ))}
+                  </div>
                 </div>
                 <div className="flashcard-random-actions">
-                  <button className="btn btn-primary" type="button" onClick={createSavedRandomSet}><ListPlus size={15}/>Create saved set</button>
-                  <button className="btn btn-outline" type="button" onClick={buildAndOpenRandomSet}><Sparkles size={15}/>Study now</button>
+                  <button className="btn btn-primary" type="button" onClick={randomiseAndSave} disabled={Boolean(randomisingAction)}><ListPlus size={15}/>Create saved set</button>
+                  <button className="btn btn-outline" type="button" onClick={randomiseAndStudy} disabled={Boolean(randomisingAction)}><Sparkles size={15}/>Study now</button>
                 </div>
+                {randomisingAction&&(
+                  <div className="flashcard-randomising-buffer" role="status" aria-live="polite">
+                    <div className="flashcard-randomising-card">
+                      <MascotAnimation animation="thinking" size={72} interactive={false} label="Cipher randomising flashcards"/>
+                      <strong>RANDOMISING...</strong>
+                      <small>{randomisingAction==="save"?"Creating your generated deck":"Building your study set"}</small>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
