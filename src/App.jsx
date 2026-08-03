@@ -19255,6 +19255,13 @@ body{background:
 @keyframes flashcardModePop{from{opacity:0;transform:translateY(16px) scale(.96);}to{opacity:1;transform:translateY(0) scale(1);}}
 .flashcards-topic-card>span:nth-child(2)>i{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;color:var(--set-color);font-size:11.5px;font-style:normal;font-weight:900;line-height:1.5;}
 .flashcards-inventory-grid{grid-template-columns:repeat(auto-fit,minmax(315px,1fr));align-items:stretch;}
+.flashcard-inventory-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;}
+.flashcard-inventory-header-actions>strong{flex:0 0 auto;color:var(--deep-muted);font-size:10px;}
+.flashcard-inventory-toggles{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap;}
+.flashcard-inventory-toggles button{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:7px 10px;border:1px solid color-mix(in srgb,var(--set-color,#f59e0b) 22%,var(--deep-border));border-radius:999px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;font-size:10px;font-weight:950;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,color .16s;}
+.flashcard-inventory-toggles button span{display:grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--deep-panel);color:var(--deep-text);font-size:9px;}
+.flashcard-inventory-toggles button.active{border-color:color-mix(in srgb,var(--set-color,#f59e0b) 54%,var(--deep-border));background:color-mix(in srgb,var(--set-color,#f59e0b) 11%,var(--deep-surface));color:var(--set-color,#f59e0b);}
+.flashcard-inventory-toggles button:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--set-color,#f59e0b) 48%,var(--deep-border));}
 .flashcard-random-builder{display:block!important;padding:0!important;overflow:hidden;cursor:pointer;}
 .flashcard-random-builder.open{cursor:default;}
 .flashcard-random-plus{display:grid;width:100%;min-height:148px;padding:22px;border:0;background:transparent;color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;}
@@ -29407,6 +29414,19 @@ const FLASHCARD_MODE_OPTIONS={
 };
 const FLASHCARD_DEFAULT_MODE_PREFIX="secureplus-flashcard-default-mode";
 const getFlashcardDefaultModeKey=owner=>`${FLASHCARD_DEFAULT_MODE_PREFIX}:${owner||"guest"}`;
+const FLASHCARD_INVENTORY_VISIBILITY_PREFIX="secureplus-flashcard-inventory-visibility";
+const getFlashcardInventoryVisibilityKey=owner=>`${FLASHCARD_INVENTORY_VISIBILITY_PREFIX}:${owner||"guest"}`;
+const readFlashcardInventoryVisibility=owner=>{
+  try{
+    const parsed=JSON.parse(window.localStorage?.getItem(getFlashcardInventoryVisibilityKey(owner))||"{}");
+    return {
+      starred:parsed.starred!==false,
+      generated:parsed.generated!==false,
+    };
+  }catch{
+    return {starred:true,generated:true};
+  }
+};
 const flashcardSetType=set=>set?.setType==="term"||set?.cards?.every(card=>card.cardType==="term")?"term":"acronym";
 const getSafeFlashcardMode=(mode,hasExample=false,setType="acronym")=>{
   if(setType==="term")return "definition";
@@ -30376,6 +30396,9 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const [activeMode,setActiveMode]=useState("definition");
   const [defaultMode,setDefaultMode]=useState("");
   const [modeChooser,setModeChooser]=useState(null);
+  const [inventoryVisibility,setInventoryVisibility]=useState(()=>readFlashcardInventoryVisibility(defaultOwner));
+  const showStarredDecks=inventoryVisibility.starred;
+  const showGeneratedDecks=inventoryVisibility.generated;
 
   useEffect(()=>{
     setSavedRandomSets(readSavedRandomFlashcardSets(user));
@@ -30393,6 +30416,19 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
       setDefaultMode("");
     }
   },[signedIn,defaultOwner]);
+
+  useEffect(()=>{
+    setInventoryVisibility(readFlashcardInventoryVisibility(defaultOwner));
+  },[defaultOwner]);
+
+  const toggleInventoryVisibility=section=>{
+    setInventoryVisibility(current=>{
+      const next={...current,[section]:!current[section]};
+      try{window.localStorage?.setItem(getFlashcardInventoryVisibilityKey(defaultOwner),JSON.stringify(next));}catch{}
+      capture("flashcards_inventory_visibility_toggled",{section,visible:next[section]});
+      return next;
+    });
+  };
 
   const saveDefaultMode=mode=>{
     if(!signedIn)return;
@@ -30670,7 +30706,13 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
       <section className="deep-dives-domain-group flashcards-curated-set" style={{"--set-color":"#f59e0b"}}>
         <header>
           <div><span>Your flashcard inventory</span><h2>Starred and generated decks</h2></div>
-          <strong>{starredFlashcards.length+savedRandomSets.length+(showAssistantDeck?1:0)} saved</strong>
+          <div className="flashcard-inventory-header-actions">
+            <div className="flashcard-inventory-toggles" role="group" aria-label="Show or hide saved flashcard deck groups">
+              <button type="button" className={showStarredDecks?"active":""} aria-pressed={showStarredDecks} onClick={()=>toggleInventoryVisibility("starred")}><Star size={13}/>{showStarredDecks?"Hide":"Show"} Starred <span>{starredFlashcards.length}</span></button>
+              <button type="button" className={showGeneratedDecks?"active":""} aria-pressed={showGeneratedDecks} onClick={()=>toggleInventoryVisibility("generated")}><Sparkles size={13}/>{showGeneratedDecks?"Hide":"Show"} Generated <span>{savedRandomSets.length}</span></button>
+            </div>
+            <strong>{starredFlashcards.length+savedRandomSets.length+(showAssistantDeck?1:0)} saved</strong>
+          </div>
         </header>
         {inventoryNotice&&(
           <div className="flashcard-inventory-notice" role="status">
@@ -30679,7 +30721,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
           </div>
         )}
         <div className="deep-dive-acronym-set-grid flashcards-inventory-grid">
-          <button
+          {showStarredDecks&&<button
             type="button"
             className="deep-dive-acronym-set-card flashcards-topic-card"
             style={{"--set-color":"#f59e0b"}}
@@ -30696,7 +30738,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
             </span>
             <ChevronRight size={17}/>
             <span className="deep-dive-acronym-set-progress"><span><i style={{width:`${starredFlashcards.length?100:8}%`}}/></span><span>{starredFlashcards.length}</span></span>
-          </button>
+          </button>}
           {showAssistantDeck&&(
             <button
               type="button"
@@ -30793,7 +30835,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
               </div>
             )}
           </div>
-          {savedRandomSets.map(set=>(
+          {showGeneratedDecks&&savedRandomSets.map(set=>(
             <div
               className="deep-dive-acronym-set-card flashcards-topic-card saved-random-set-card"
               style={{"--set-color":set.color}}
