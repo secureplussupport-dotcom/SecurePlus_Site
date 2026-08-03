@@ -89,6 +89,8 @@ requireValue(appSource.includes("https://www.instagram.com/"), "Flashcards must 
 requireValue(appSource.includes("https://www.reddit.com/submit?url="), "Flashcards must support Reddit sharing.");
 requireValue(appSource.includes("copyText(shareUrl"), "Copy Link must copy only the flashcard URL.");
 requireValue(appSource.includes("flashcard-share-menu") && appSource.includes("aria-expanded={open}"), "Flashcard share locations must be hidden behind an expandable widget.");
+requireValue(appSource.includes("social-whatsapp") && appSource.includes("social-discord") && appSource.includes("social-instagram") && appSource.includes("social-reddit"), "Flashcard share icons must use platform-specific color classes.");
+requireValue(appSource.includes('type==="copy"'), "Copy Link must use a distinct link icon rather than the generic share icon.");
 requireValue(appSource.includes("FlashcardSavePrompt"), "Guest flashcard starring must show a soft login/signup prompt.");
 
 for (const set of SY0701_ACRONYM_SETS) {
