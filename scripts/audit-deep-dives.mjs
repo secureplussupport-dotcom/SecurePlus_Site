@@ -11,6 +11,7 @@ import {
   SY0701_ACRONYM_CARDS,
   SY0701_ACRONYM_SETS,
   SY0701_ACRONYM_SOURCE,
+  groupSy0701AcronymSetsByChapter,
 } from "../src/data/sy0701AcronymFlashcards.js";
 import {
   getSy0701DeepDiveProfile,
@@ -63,25 +64,30 @@ requireValue(SY0701_BLUEPRINT.exam === "SY0-701 V7" && SY0701_BLUEPRINT.document
 requireValue(/^https:\/\//.test(SY0701_BLUEPRINT.sourceUrl), "The official blueprint source must use HTTPS.");
 requireValue(/^\d{4}-\d{2}-\d{2}$/.test(CONCEPT_DEEP_DIVE_REVIEWED_AT), "Review date must use YYYY-MM-DD.");
 requireValue(CONCEPT_DEEP_DIVE_CATEGORIES[0] === "All topics", "The category list must begin with All topics.");
-requireValue(SY0701_ACRONYM_SETS.length === 6, `Expected six acronym study sets; found ${SY0701_ACRONYM_SETS.length}.`);
-requireValue(SY0701_ACRONYM_CARDS.length === 59, `Expected 59 high-yield acronym cards from the supplied PDF; found ${SY0701_ACRONYM_CARDS.length}.`);
+const acronymChapterGroups = groupSy0701AcronymSetsByChapter();
+requireValue(SY0701_ACRONYM_SETS.length >= 8, `Expected at least eight chapter/topic acronym sets; found ${SY0701_ACRONYM_SETS.length}.`);
+requireValue(SY0701_ACRONYM_CARDS.length >= 150, `Expected at least 150 acronym cards from the expanded supplied input; found ${SY0701_ACRONYM_CARDS.length}.`);
+requireValue(acronymChapterGroups.length === 5, `Acronym cards must be grouped across all five SY0-701 chapters; found ${acronymChapterGroups.length}.`);
 requireValue(unique(SY0701_ACRONYM_SETS.map(set => set.id)), "Acronym set IDs must be unique.");
 requireValue(unique(SY0701_ACRONYM_CARDS.map(card => card.id)), "Acronym card IDs must be unique.");
-requireValue(unique(SY0701_ACRONYM_CARDS.map(card => card.acronym.toLowerCase())), "Acronyms must not repeat across study sets.");
 requireValue(SY0701_ACRONYM_SOURCE.officialUrl === SY0701_BLUEPRINT.sourceUrl, "Acronym cards must point to the reviewed official SY0-701 blueprint.");
 requireValue(/^\d{4}-\d{2}-\d{2}$/.test(SY0701_ACRONYM_SOURCE.reviewedAt), "Acronym review date must use YYYY-MM-DD.");
 
 for (const set of SY0701_ACRONYM_SETS) {
   const prefix = `[acronym set ${set.id || "missing-id"}]`;
   requireValue(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(set.id || ""), `${prefix} ID must be a URL-safe slug.`);
-  requireValue(words(set.title) >= 2 && words(set.title) <= 6, `${prefix} title must be 2-6 words.`);
-  requireValue(words(set.description) >= 6 && words(set.description) <= 20, `${prefix} description must be 6-20 words.`);
+  requireValue(words(set.title) >= 2 && words(set.title) <= 7, `${prefix} title must be 2-7 words.`);
+  requireValue(words(set.description) >= 6 && words(set.description) <= 22, `${prefix} description must be 6-22 words.`);
+  requireValue(Number.isInteger(set.chapterId) && set.chapterId >= 1 && set.chapterId <= 5, `${prefix} chapterId must be 1-5.`);
+  requireValue(typeof set.chapterTitle === "string" && set.chapterTitle.trim(), `${prefix} needs a chapter title.`);
+  requireValue(typeof set.topic === "string" && words(set.topic) >= 2 && words(set.topic) <= 8, `${prefix} needs a casual topic label.`);
   requireValue(set.objectiveCodes.length >= 1 && set.objectiveCodes.every(code => SY0701_OBJECTIVES[code]), `${prefix} references an unknown SY0-701 objective.`);
-  requireValue(set.cards.length >= 8 && set.cards.length <= 12, `${prefix} must contain 8-12 high-yield cards.`);
+  requireValue(set.cards.length >= 8 && set.cards.length <= 32, `${prefix} must contain 8-32 topic cards.`);
   set.cards.forEach(card => {
     requireValue(Boolean(card.acronym && card.expansion && card.meaning), `${card.id || prefix} is incomplete.`);
-    requireValue(words(card.expansion) <= 15, `${card.id} expansion is too long for active recall.`);
-    requireValue(words(card.meaning) >= 7 && words(card.meaning) <= 28, `${card.id} plain-English meaning must be 7-28 words.`);
+    requireValue(words(card.expansion) <= 18, `${card.id} expansion is too long for active recall.`);
+    requireValue(words(card.meaning) >= 5 && words(card.meaning) <= 32, `${card.id} plain-English meaning must be 5-32 words.`);
+    requireValue(typeof card.topic === "string" && card.topic.trim(), `${card.id} needs a topic label.`);
   });
 }
 

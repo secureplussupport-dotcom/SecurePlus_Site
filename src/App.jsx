@@ -28550,7 +28550,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
         <p>{acronymSet.description} Say the answer before you flip the card.</p>
         <div className="deep-dive-acronym-reader-meta">
           <span><Brain size={14}/>{acronymSet.cards.length} cards</span>
-          <span><ListChecks size={14}/>Objectives {acronymSet.objectiveCodes.join(" · ")}</span>
+          <span><ListChecks size={14}/>{acronymSet.chapterTitle}</span>
           <a href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Checked against official SY0-701 list<ChevronRight size={13}/></a>
         </div>
       </header>
@@ -28576,7 +28576,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
             <span className="deep-dive-flashcard-inner">
               <span className="deep-dive-flashcard-face deep-dive-flashcard-front">
                 <span className="deep-dive-flashcard-kind"><Brain size={15}/>{asksForAcronym?"Identify the acronym":"Define the acronym"}</span>
-                <small className="deep-dive-acronym-prompt">Objective {acronymSet.objectiveCodes.join(" / ")}</small>
+                <small className="deep-dive-acronym-prompt">{activeCard.topic || acronymSet.topic}</small>
                 <strong>{asksForAcronym?activeCard.meaning:activeCard.acronym}</strong>
                 <span className="deep-dive-flashcard-hint">Say it aloud, then tap to reveal</span>
               </span>
@@ -29257,7 +29257,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled}) {
             <span><Brain size={15}/>{SY0701_ACRONYM_CARDS.length} high-yield cards</span>
             <span><ShieldCheck size={15}/>Original study prompts. Not exam dumps.</span>
           </div>
-          <a className="deep-dives-blueprint-link" href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Checked against the official SY0-701 objectives<ChevronRight size={14}/></a>
+          <a className="deep-dives-blueprint-link" href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Chapter and topic grouping checked against the official SY0-701 outline<ChevronRight size={14}/></a>
         </div>
         <div className="deep-dives-progress-card">
           <div><span>Acronym mastery</span><strong>{totalMastered}/{SY0701_ACRONYM_CARDS.length}</strong></div>
@@ -29291,7 +29291,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled}) {
                     <span className="deep-dive-acronym-set-icon"><TextCursorInput size={20}/></span>
                     <span>
                       <strong>{set.title}</strong>
-                      <small>{set.cards.length} cards · Objectives {set.objectiveCodes.join(" / ")}</small>
+                      <small>{set.cards.length} cards · {group.chapterTitle}</small>
                       <i>{topics.join(" · ")}</i>
                     </span>
                     <ChevronRight size={17}/>
@@ -30932,7 +30932,7 @@ export default function App() {
     });
     const goToSignup=()=>{setPbqQ(null);setAuthStartMode("signup");setAuthRequestId(id=>id+1);setView("auth");};
     const goToLogin=()=>{setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
-    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","objectives",...(devDeepDivePreview?["deep-dives"]:[]),...(devCoinPreview?["coins"]:[])]);
+    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","objectives","flashcards",...(devDeepDivePreview?["deep-dives"]:[]),...(devCoinPreview?["coins"]:[])]);
     const guestNavItems=[
       {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},
       {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
@@ -30941,6 +30941,7 @@ export default function App() {
       {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
       ...(devCoinPreview?[{id:"coins",icon:"coins",label:"Cipher Coins",mobileLabel:"Coins"}]:[]),
       {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
+      {id:"flashcards",icon:"flashcards",label:"Flashcards",mobileLabel:"Cards"},
       ...(devDeepDivePreview?[{id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"}]:[]),
     ];
     const guestGo=id=>{
@@ -31050,6 +31051,7 @@ export default function App() {
               <DailyChallenge t={t} onLogin={goToSignup}/>
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
+            {view==="flashcards"&&<FlashcardsPage t={t}/>}
             {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={({chapterId})=>{setView("mcq");}} onTryRelatedPbq={handleGuestPbqPreview}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
