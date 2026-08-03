@@ -309,6 +309,11 @@ const cipherWalletOwner = user => user?.id || normalizeEmail(user?.email || "") 
 const starKey = (type,id) => `${type}:${id}`;
 const FLASHCARD_STAR_TYPE = "flashcard";
 const STARRED_FLASHCARD_SET_ID = "starred-flashcards";
+const FLASHCARD_SHARE_COPY = {
+  title:"SecurePlus Security+ flashcards",
+  description:"Premium Security+ flashcards grouped by chapter and topic.",
+  statement:"SecurePlus has a premium Security+ flashcards collection for acronyms, attack clues, definitions, and exam keywords. Original scenario-based practice. Not exam dumps.",
+};
 const getStarredFlashcards = starredKeys => {
   const keySet=new Set(starredKeys||[]);
   return SY0701_ACRONYM_CARDS.filter(card=>keySet.has(starKey(FLASHCARD_STAR_TYPE,card.id)));
@@ -324,6 +329,19 @@ const buildStarredFlashcardSet = cards => ({
   topic:"Saved flashcards",
   cards,
 });
+const getFlashcardShareUrl = setId => {
+  const origin=typeof window!=="undefined"?window.location.origin:"https://secureplusprep.com";
+  const path=typeof window!=="undefined"?window.location.pathname:"/";
+  const params=new URLSearchParams({view:"flashcards"});
+  if(setId&&setId!==STARRED_FLASHCARD_SET_ID)params.set("set",setId);
+  return `${origin}${path}?${params.toString()}`;
+};
+const buildFlashcardShareMessage = set => {
+  const isShareableSet=Boolean(set?.id&&set.id!==STARRED_FLASHCARD_SET_ID);
+  const url=getFlashcardShareUrl(isShareableSet?set.id:null);
+  const setLine=isShareableSet?`Set: ${set.title}`:"Collection: SecurePlus Security+ Flashcards";
+  return `${FLASHCARD_SHARE_COPY.statement}\n\n${setLine}\nTry it here: ${url}`;
+};
 
 async function savePendingGuestSmartReview(attempts=[]) {
   const cleanAttempts=attempts
@@ -18740,6 +18758,23 @@ body{background:
 .deep-dive-acronym-source-note svg{flex:0 0 auto;color:var(--deep-green);margin-top:1px;}
 .flashcards-page .deep-dives-hero{background:radial-gradient(circle at 92% 14%,color-mix(in srgb,#8b5cf6 22%,transparent),transparent 33%),radial-gradient(circle at 12% 112%,color-mix(in srgb,var(--deep-green) 15%,transparent),transparent 39%),var(--deep-surface);}
 .flashcards-controls{margin-top:18px;}
+.flashcard-share-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:15px;padding:11px;border:1px solid color-mix(in srgb,var(--set-color,#7c3aed) 24%,var(--deep-border));border-radius:16px;background:color-mix(in srgb,var(--set-color,#7c3aed) 6%,var(--deep-panel));}
+.flashcard-share-actions.compact{max-width:720px;border-color:color-mix(in srgb,#7c3aed 22%,var(--deep-border));background:color-mix(in srgb,#7c3aed 6%,var(--deep-panel));}
+.flashcard-share-copy{display:inline-flex;align-items:center;gap:7px;color:var(--set-color,#7c3aed);font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
+.flashcard-share-buttons{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.flashcard-share-btn{min-height:34px;padding:7px 10px;border:1px solid color-mix(in srgb,var(--set-color,#7c3aed) 25%,var(--deep-border));border-radius:999px;background:var(--deep-surface);color:var(--deep-text);font:inherit;font-size:11px;font-weight:900;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,color .16s;}
+.flashcard-share-btn:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--set-color,#7c3aed) 55%,var(--deep-border));background:color-mix(in srgb,var(--set-color,#7c3aed) 10%,var(--deep-surface));color:var(--set-color,#7c3aed);}
+.flashcard-share-btn.primary{background:var(--set-color,#7c3aed);border-color:var(--set-color,#7c3aed);color:#fff;}
+.flashcard-share-status{margin-left:auto;color:var(--deep-green);font-size:11px;font-weight:900;animation:fadeUp .18s ease both;}
+.flashcard-auth-nudge{position:fixed;inset:0;z-index:560;display:grid;place-items:center;padding:18px;background:rgba(18,24,20,.34);backdrop-filter:blur(10px);animation:fadeUp .18s ease both;}
+.flashcard-auth-card{position:relative;width:min(100%,450px);padding:28px;border:1px solid color-mix(in srgb,#f59e0b 34%,${t.border});border-radius:25px;background:radial-gradient(circle at 90% 0,#f59e0b18,transparent 35%),linear-gradient(150deg,${t.surface},${t.panel});box-shadow:0 30px 95px rgba(40,31,22,.28);animation:modalPop .28s cubic-bezier(.16,1,.3,1) both;}
+.flashcard-auth-card .icon-btn{position:absolute;right:15px;top:15px;}
+.flashcard-auth-icon{display:grid;place-items:center;width:54px;height:54px;margin-bottom:12px;border-radius:17px;background:#f59e0b18;color:#d97706;box-shadow:inset 0 0 0 1px #f59e0b30;}
+.flashcard-auth-card h2{margin:12px 0 8px;color:${t.text};font-size:clamp(25px,5vw,34px);line-height:1.1;letter-spacing:-.025em;}
+.flashcard-auth-card p{margin:0 0 18px;color:${t.textSec};font-size:14px;font-weight:650;line-height:1.7;}
+.flashcard-auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;}
+.flashcard-auth-actions .btn:first-child{grid-column:1/-1;}
+.flashcard-auth-card small{display:block;color:${t.textDim};font-size:11px;font-weight:800;line-height:1.5;}
 .flashcards-topic-card>span:nth-child(2)>i{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;color:var(--set-color);font-size:10px;font-style:normal;font-weight:900;line-height:1.45;}
 .flashcards-chapter-group header h2{max-width:760px;}
 .deep-dive-acronym-reader{max-width:980px;margin:0 auto;padding:24px 24px 110px;}
@@ -28580,6 +28615,85 @@ function ReferralPage({user,t}) {
 // ═══════════════════════════════════════════════════════════════
 // CONCEPT DEEP DIVES — SY0-701 GUIDED STUDY LIBRARY
 // ═══════════════════════════════════════════════════════════════
+function FlashcardShareActions({set,t,compact=false}) {
+  const [status,setStatus]=useState("");
+  const message=useMemo(()=>buildFlashcardShareMessage(set),[set]);
+  const shareUrl=useMemo(()=>getFlashcardShareUrl(set?.id!==STARRED_FLASHCARD_SET_ID?set?.id:null),[set?.id]);
+  const canNativeShare=typeof navigator!=="undefined"&&typeof navigator.share==="function";
+  const copyMessage=async(nextStatus="Copied share message")=>{
+    try{
+      await navigator?.clipboard?.writeText(message);
+      setStatus(nextStatus);
+      window.setTimeout(()=>setStatus(""),2600);
+      return true;
+    }catch{
+      try{
+        window.prompt?.("Copy this SecurePlus flashcard message:",message);
+        setStatus("Copy message ready");
+        window.setTimeout(()=>setStatus(""),2600);
+      }catch{}
+      return false;
+    }
+  };
+  const openShare=async(platform,url)=>{
+    await copyMessage(`Copied for ${platform}`);
+    window.open(url,"_blank","noopener,noreferrer");
+  };
+  const buttons=[
+    {label:"Copy link",action:()=>copyMessage("Copied link and intro")},
+    {label:"WhatsApp",action:()=>window.open(`https://wa.me/?text=${encodeURIComponent(message)}`,"_blank","noopener,noreferrer")},
+    {label:"Discord",action:()=>openShare("Discord","https://discord.com/channels/@me")},
+    {label:"Instagram",action:()=>openShare("Instagram","https://www.instagram.com/")},
+  ];
+  const nativeShare=async()=>{
+    if(!canNativeShare){await copyMessage("Copied share message");return;}
+    try{
+      await navigator.share({
+        title:set?.title||FLASHCARD_SHARE_COPY.title,
+        text:FLASHCARD_SHARE_COPY.statement,
+        url:shareUrl,
+      });
+      setStatus("Share sheet opened");
+      window.setTimeout(()=>setStatus(""),2200);
+    }catch{}
+  };
+  return(
+    <div className={`flashcard-share-actions ${compact?"compact":""}`} aria-label="Share flashcard set">
+      <div className="flashcard-share-copy">
+        <Share2 size={16}/>
+        <span>{compact?"Share collection":"Share this flashcard set"}</span>
+      </div>
+      <div className="flashcard-share-buttons">
+        {canNativeShare&&<button type="button" className="flashcard-share-btn primary" onClick={nativeShare}>Share</button>}
+        {buttons.map(button=>(
+          <button key={button.label} type="button" className="flashcard-share-btn" onClick={button.action}>{button.label}</button>
+        ))}
+      </div>
+      {status&&<span className="flashcard-share-status" role="status">{status}</span>}
+    </div>
+  );
+}
+
+function FlashcardSavePrompt({t,onLogin,onSignup,onClose}) {
+  return(
+    <div className="flashcard-auth-nudge" role="dialog" aria-modal="true" aria-labelledby="flashcard-save-title" onMouseDown={onClose}>
+      <div className="flashcard-auth-card card" onMouseDown={event=>event.stopPropagation()}>
+        <button className="icon-btn" type="button" aria-label="Close flashcard save prompt" onClick={onClose}><X size={18}/></button>
+        <div className="flashcard-auth-icon"><Star size={23} fill="currentColor"/></div>
+        <span className="deep-dive-preview-badge"><ShieldCheck size={13}/>Free to study</span>
+        <h2 id="flashcard-save-title">Save this flashcard?</h2>
+        <p>You can keep studying all flashcards for free. Log in or create a free account only if you want to build your own starred deck.</p>
+        <div className="flashcard-auth-actions">
+          <button className="btn btn-primary" type="button" onClick={onSignup}>Create free account</button>
+          <button className="btn btn-outline" type="button" onClick={onLogin}>Log in</button>
+          <button className="btn btn-ghost" type="button" onClick={onClose}>Keep studying</button>
+        </div>
+        <small>Subtle note: starring is saved to your account. No payment needed.</small>
+      </div>
+    </div>
+  );
+}
+
 function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup}) {
   const [direction,setDirection]=useState("definition");
   const [cardIndex,setCardIndex]=useState(0);
@@ -28659,6 +28773,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
           <span><ListChecks size={14}/>{acronymSet.chapterTitle}</span>
           <a href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Checked against official SY0-701 list<ChevronRight size={13}/></a>
         </div>
+        {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&<FlashcardShareActions set={acronymSet} t={t}/>}
       </header>
 
       <div className="deep-dive-acronym-mode" role="tablist" aria-label="Choose flashcard direction">
@@ -28680,7 +28795,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
         </div>
         {activeCard&&<>
           <div className="deep-dive-flashcard-stage">
-            <StarButton active={activeCardStarred} onToggle={toggleActiveFlashcardStar} label={user?"Save flashcard to my set":"Sign up to save this flashcard"} activeLabel="Remove flashcard from my set"/>
+            {(onToggleStar||onRequireSignup)&&<StarButton active={activeCardStarred} onToggle={toggleActiveFlashcardStar} label={user?"Save flashcard to my set":"Sign up to save this flashcard"} activeLabel="Remove flashcard from my set"/>}
             <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
               <span className="deep-dive-flashcard-inner">
                 <span className="deep-dive-flashcard-face deep-dive-flashcard-front">
@@ -29376,6 +29491,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
             <span><ShieldCheck size={15}/>Original study prompts. Not exam dumps.</span>
           </div>
           <a className="deep-dives-blueprint-link" href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Chapter and topic grouping checked against the official SY0-701 outline<ChevronRight size={14}/></a>
+          <FlashcardShareActions t={t} compact/>
         </div>
         <div className="deep-dives-progress-card">
           <div><span>Acronym mastery</span><strong>{totalMastered}/{SY0701_ACRONYM_CARDS.length}</strong></div>
@@ -30104,6 +30220,8 @@ function PasswordUpdateView({t,onDone}) {
 export default function App() {
   const initialParams=new URLSearchParams(window.location.search);
   const urlDeepDiveRequest=initialParams.get("view")==="deep-dives";
+  const urlFlashcardsRequest=initialParams.get("view")==="flashcards";
+  const urlFlashcardSetRequest=urlFlashcardsRequest?initialParams.get("set"):"";
   const urlPricingRequest=initialParams.get("view")==="pricing"||initialParams.get("checkout")==="cancelled";
   const focusAcronymLibrary=Boolean(urlDeepDiveRequest&&initialParams.get("focus")==="acronyms");
   const devDeepDivePreview=Boolean(import.meta.env.DEV&&initialParams.get("preview")==="deep-dives");
@@ -30114,7 +30232,7 @@ export default function App() {
   });
   const [user,setUser]=useState(null);
   const [loading,setLoading]=useState(true);
-  const [view,setView]=useState(()=>focusAcronymLibrary?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":devCoinPreview?"coins":"dashboard");
+  const [view,setView]=useState(()=>focusAcronymLibrary||urlFlashcardsRequest?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":devCoinPreview?"coins":"dashboard");
   const [attempts,setAttempts]=useState([]);
   const [starred,setStarred]=useState([]);
   const [pbqQ,setPbqQ]=useState(null);
@@ -30139,7 +30257,8 @@ export default function App() {
   const [pbqBankError,setPbqBankError]=useState(null);
   const [smartReviewRequest,setSmartReviewRequest]=useState(null);
   const [deepDiveRequest,setDeepDiveRequest]=useState(null);
-  const [flashcardSetRequest,setFlashcardSetRequest]=useState(null);
+  const [flashcardSetRequest,setFlashcardSetRequest]=useState(()=>urlFlashcardSetRequest||null);
+  const [flashcardAuthPrompt,setFlashcardAuthPrompt]=useState(false);
   const [achievementUnlocks,setAchievementUnlocks]=useState([]);
   const [coinWallet,setCoinWallet]=useState(()=>({...emptyCipherWallet(),status:"idle"}));
   const [coinBusy,setCoinBusy]=useState(false);
@@ -31195,7 +31314,7 @@ export default function App() {
               <DailyChallenge t={t} onLogin={goToSignup}/>
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
-            {view==="flashcards"&&<FlashcardsPage t={t} onRequireSignup={goToSignup}/>}
+            {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} onRequireSignup={()=>setFlashcardAuthPrompt(true)}/>}
             {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={({chapterId})=>{setView("mcq");}} onTryRelatedPbq={handleGuestPbqPreview}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
@@ -31203,6 +31322,14 @@ export default function App() {
             )}
             {!practiceFocusMode&&view!=="exam"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
           </main>
+          {flashcardAuthPrompt&&(
+            <FlashcardSavePrompt
+              t={t}
+              onClose={()=>setFlashcardAuthPrompt(false)}
+              onLogin={()=>{setFlashcardAuthPrompt(false);goToLogin();}}
+              onSignup={()=>{setFlashcardAuthPrompt(false);goToSignup();}}
+            />
+          )}
           {questionReport&&<QuestionReportModal report={questionReport} user={null} t={t} onClose={()=>setQuestionReport(null)}/>}
         </div>
       </>

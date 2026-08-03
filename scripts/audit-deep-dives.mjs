@@ -81,6 +81,12 @@ requireValue(appSource.includes("Free standalone active recall"), "Flashcards pa
 requireValue(appSource.includes("STARRED_FLASHCARD_SET_ID"), "Flashcards must support a curated starred flashcard set.");
 requireValue(appSource.includes("Sign up to save this flashcard"), "Guest flashcard starring must prompt account creation instead of silently saving.");
 requireValue(appSource.includes("flashcard_curated_set"), "Guest curated-set access should route to account creation.");
+requireValue(appSource.includes("FlashcardShareActions"), "Flashcards must expose share controls for sets and the collection.");
+requireValue(appSource.includes("view:\"flashcards\""), "Flashcard share links must route directly to the Flashcards page.");
+requireValue(appSource.includes("https://wa.me/?text="), "Flashcards must support direct WhatsApp sharing.");
+requireValue(appSource.includes("https://discord.com/channels/@me"), "Flashcards must open Discord after copying the share message.");
+requireValue(appSource.includes("https://www.instagram.com/"), "Flashcards must open Instagram after copying the share message.");
+requireValue(appSource.includes("FlashcardSavePrompt"), "Guest flashcard starring must show a soft login/signup prompt.");
 
 for (const set of SY0701_ACRONYM_SETS) {
   const prefix = `[acronym set ${set.id || "missing-id"}]`;
