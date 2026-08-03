@@ -124,7 +124,7 @@ requireValue(appSource.includes("FlashcardShareActions"), "Flashcards must expos
 requireValue(appSource.includes("view:\"flashcards\""), "Flashcard share links must route directly to the Flashcards page.");
 requireValue(appSource.includes("https://wa.me/?text="), "Flashcards must support direct WhatsApp sharing.");
 requireValue(appSource.includes("https://discord.com/channels/@me"), "Flashcards must open Discord after copying the share message.");
-requireValue(appSource.includes("https://www.instagram.com/"), "Flashcards must open Instagram after copying the share message.");
+requireValue(appSource.includes("buildFlashcardPlatformShare") && appSource.includes("platformMessages") && appSource.includes("https://www.instagram.com/create/select/"), "Flashcards must prepare platform-specific social captions and open Instagram's posting entry after copying the caption.");
 requireValue(appSource.includes("https://www.reddit.com/submit?url="), "Flashcards must support Reddit sharing.");
 requireValue(appSource.includes("copyText(shareUrl"), "Copy Link must copy only the flashcard URL.");
 requireValue(appSource.includes("flashcard-share-menu") && appSource.includes("aria-expanded={open}"), "Flashcard share locations must be hidden behind an expandable widget.");

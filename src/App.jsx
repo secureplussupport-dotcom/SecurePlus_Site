@@ -486,6 +486,51 @@ const buildFlashcardShareMessage = set => {
   const setLine=isShareableSet?`Set: ${set.title}`:"Collection: SecurePlus Security+ Flashcards";
   return `${FLASHCARD_SHARE_COPY.statement}\n\n${setLine}\nTry it here: ${url}`;
 };
+const buildFlashcardPlatformShare = (platform,set) => {
+  const isShareableSet=Boolean(set?.id&&set.id!==STARRED_FLASHCARD_SET_ID);
+  const url=getFlashcardShareUrl(isShareableSet?set.id:null);
+  const setName=isShareableSet?set.title:"SecurePlus Security+ Flashcards";
+  const platformName=String(platform||"").toLowerCase();
+  if(platformName==="instagram"){
+    return [
+      "Before exam day, I’m using SecurePlus flashcards for Security+ recall.",
+      `${setName} covers acronyms, definitions, and scenario clues without exam dumps.`,
+      "Original scenario-based practice. Not exam dumps.",
+      `Try it: ${url}`,
+      "#SecurityPlus #CompTIA #CompTIASecurityPlus #CybersecurityStudy",
+    ].join("\n");
+  }
+  if(platformName==="reddit"){
+    return [
+      "I found a Security+ flashcard collection that is built around understanding acronyms, definitions, attack clues, and exam keywords instead of memorising dumps.",
+      "",
+      "Original scenario-based practice. Not exam dumps.",
+      "",
+      `Set: ${setName}`,
+      `Link: ${url}`,
+    ].join("\n");
+  }
+  if(platformName==="discord"){
+    return [
+      "Sharing this Security+ flashcard set from SecurePlus:",
+      `${setName}`,
+      "",
+      "It focuses on acronyms, definitions, attack clues, and exam keywords.",
+      "Original scenario-based practice. Not exam dumps.",
+      url,
+    ].join("\n");
+  }
+  if(platformName==="whatsapp"){
+    return [
+      "Security+ flashcards from SecurePlus:",
+      `${setName}`,
+      "Acronyms, definitions, attack clues, and exam keywords.",
+      "Original scenario-based practice. Not exam dumps.",
+      url,
+    ].join("\n");
+  }
+  return buildFlashcardShareMessage(set);
+};
 const tokenizeLearningText = text => String(text||"").toLowerCase().match(/[a-z0-9+#.]+/g)||[];
 const buildCipherWeakFlashcardSet = context => {
   const chapterId=String(context?.weakChapterId||"");
@@ -29241,6 +29286,12 @@ function FlashcardShareActions({set,t,compact=false}) {
   const [open,setOpen]=useState(false);
   const message=useMemo(()=>buildFlashcardShareMessage(set),[set]);
   const shareUrl=useMemo(()=>getFlashcardShareUrl(set?.id!==STARRED_FLASHCARD_SET_ID?set?.id:null),[set?.id]);
+  const platformMessages=useMemo(()=>({
+    whatsapp:buildFlashcardPlatformShare("whatsapp",set),
+    discord:buildFlashcardPlatformShare("discord",set),
+    instagram:buildFlashcardPlatformShare("instagram",set),
+    reddit:buildFlashcardPlatformShare("reddit",set),
+  }),[set]);
   const canNativeShare=typeof navigator!=="undefined"&&typeof navigator.share==="function";
   const copyText=async(text,nextStatus)=>{
     try{
@@ -29259,17 +29310,18 @@ function FlashcardShareActions({set,t,compact=false}) {
   };
   const copyLink=()=>copyText(shareUrl,"Link copied");
   const copyMessage=(nextStatus="Copied share message")=>copyText(message,nextStatus);
-  const openShare=async(platform,url)=>{
-    await copyMessage(`Copied for ${platform}`);
+  const openShare=async(platform,url,text=message)=>{
+    await copyText(text,`Copied for ${platform}`);
     window.open(url,"_blank","noopener,noreferrer");
   };
   const redditTitle=set?.title?`${set.title} - SecurePlus Security+ flashcards`:"SecurePlus premium Security+ flashcards";
+  const redditUrl=`https://www.reddit.com/submit?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(redditTitle)}&text=${encodeURIComponent(platformMessages.reddit)}`;
   const buttons=[
     {label:"Copy link",type:"copy",action:copyLink},
-    {label:"WhatsApp",type:"whatsapp",action:()=>window.open(`https://wa.me/?text=${encodeURIComponent(message)}`,"_blank","noopener,noreferrer")},
-    {label:"Discord",type:"discord",action:()=>openShare("Discord","https://discord.com/channels/@me")},
-    {label:"Instagram",type:"instagram",action:()=>openShare("Instagram","https://www.instagram.com/")},
-    {label:"Reddit",type:"reddit",action:()=>window.open(`https://www.reddit.com/submit?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(redditTitle)}`,"_blank","noopener,noreferrer")},
+    {label:"WhatsApp",type:"whatsapp",action:()=>window.open(`https://wa.me/?text=${encodeURIComponent(platformMessages.whatsapp)}`,"_blank","noopener,noreferrer")},
+    {label:"Discord",type:"discord",action:()=>openShare("Discord","https://discord.com/channels/@me",platformMessages.discord)},
+    {label:"Instagram",type:"instagram",action:()=>openShare("Instagram","https://www.instagram.com/create/select/",platformMessages.instagram)},
+    {label:"Reddit",type:"reddit",action:()=>window.open(redditUrl,"_blank","noopener,noreferrer")},
   ];
   const nativeShare=async()=>{
     if(!canNativeShare){await copyMessage("Copied share message");return;}
