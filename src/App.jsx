@@ -17191,6 +17191,12 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-motion-surprised .cipher-eye{animation:none;width:14%;height:24%;top:34%;border-radius:0;}
 .cipher-motion-surprised .cipher-mouth{left:43%;bottom:9%;width:14%;height:15%;border-radius:0;}
 .cipher-motion-surprised .cipher-effect-alert{animation:cipherEffectPop var(--pet-cycle) ease-in-out infinite;}
+.cipher-motion-flashcards{--cipher-motion-duration:1.95s;animation-name:cipherFlashcardsMotion;animation-timing-function:cubic-bezier(.45,0,.25,1);}
+.cipher-motion-flashcards .cipher-head{animation-name:cipherHeadFlashcards;}
+.cipher-motion-flashcards .cipher-arm-left{animation-name:cipherArmFlashcardLeft;}
+.cipher-motion-flashcards .cipher-arm-right{animation-name:cipherArmFlashcardRight;}
+.cipher-motion-flashcards .cipher-effect-note{animation:cipherFlashcardFlipEffect var(--pet-cycle) ease-in-out infinite;}
+.cipher-motion-flashcards .cipher-effect-tip{animation:cipherFlashcardSpark var(--pet-cycle) ease-in-out infinite;animation-delay:.18s;}
 .cipher-mascot,.cipher-rig *{animation-timing-function:steps(8,end)!important;}
 .cipher-mascot.slow{--cipher-motion-duration:3.6s;--pet-cycle:3.6s;}
 .cipher-mascot.fast{--cipher-motion-duration:1.25s;--pet-cycle:1.25s;}
@@ -17392,6 +17398,13 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
   68%{transform:translate3d(0,-5%,0) rotate(2deg) scale(1.04,.97)}
   84%{transform:translate3d(0,1%,0) scale(1.02,.96)}
 }
+@keyframes cipherFlashcardsMotion{
+  0%,100%{transform:translate3d(0,0,0) rotate(-1deg) scale(1)}
+  22%{transform:translate3d(-3%,-4%,0) rotate(-4deg) scale(1.025)}
+  48%{transform:translate3d(3%,-7%,0) rotate(4deg) scale(1.035)}
+  70%{transform:translate3d(0,-3%,0) rotate(-1deg) scale(1.01)}
+  86%{transform:translate3d(2%,1%,0) rotate(2deg) scale(1.02,.98)}
+}
 @keyframes cipherHeadWave{0%,100%{transform:translateY(0) rotate(-2deg)}38%{transform:translateY(-4%) rotate(6deg)}68%{transform:translateY(-2%) rotate(2deg)}}
 @keyframes cipherArmWave{0%,100%{transform:rotate(-18deg)}18%{transform:rotate(-122deg) translateY(-5%)}36%{transform:rotate(-148deg) translateY(-7%)}54%{transform:rotate(-112deg) translateY(-5%)}72%{transform:rotate(-150deg) translateY(-7%)}86%{transform:rotate(-62deg)}}
 @keyframes cipherWaveSpark{0%,18%,100%{opacity:0;transform:translate(-10%,12%) scale(.45) rotate(-16deg)}38%,72%{opacity:1;transform:translate(5%,-8%) scale(1.12) rotate(10deg)}}
@@ -17410,6 +17423,13 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes cipherHeadSurprised{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-8%) rotate(-4deg)}58%{transform:translateY(-4%) rotate(4deg)}}
 @keyframes cipherArmSurprisedLeft{0%,100%{transform:rotate(18deg)}28%,68%{transform:rotate(76deg) translateY(-5%)}}
 @keyframes cipherArmSurprisedRight{0%,100%{transform:rotate(-18deg)}28%,68%{transform:rotate(-76deg) translateY(-5%)}}
+@keyframes cipherHeadFlashcards{0%,100%{transform:translateY(0) rotate(-3deg)}35%{transform:translateY(-6%) rotate(6deg)}68%{transform:translateY(-2%) rotate(-1deg)}}
+@keyframes cipherArmFlashcardLeft{0%,100%{transform:rotate(16deg)}32%{transform:rotate(70deg) translate(-4%,-5%)}62%{transform:rotate(42deg) translateY(-2%)}}
+@keyframes cipherArmFlashcardRight{0%,100%{transform:rotate(-18deg)}28%{transform:rotate(-120deg) translateY(-6%)}58%{transform:rotate(-64deg) translateY(-3%)}82%{transform:rotate(-96deg) translateY(-5%)}}
+@keyframes cipherFlashcardFlipEffect{0%,14%,100%{opacity:0;transform:translate(-20%,18%) rotateY(0) rotate(-10deg) scale(.42)}32%,70%{opacity:1;transform:translate(8%,-12%) rotateY(180deg) rotate(8deg) scale(1.08)}84%{opacity:.45;transform:translate(-5%,-2%) rotateY(360deg) rotate(-4deg) scale(.8)}}
+@keyframes cipherFlashcardSpark{0%,26%,100%{opacity:0;transform:translate(4%,12%) scale(.5) rotate(-12deg)}46%,76%{opacity:1;transform:translate(-8%,-10%) scale(1.08) rotate(12deg)}}
+@keyframes flashcardsCipherCardIn{from{opacity:0;transform:translate(12px,-8px) scale(.96)}to{opacity:1;transform:translate(0,0) scale(1)}}
+@keyframes flashcardsOrbPulse{0%,100%{transform:scale(.82);opacity:.35}50%{transform:scale(1.1);opacity:.72}}
 @keyframes cipherGroundShadow{
   0%,100%{transform:translateX(-50%) scaleX(1);opacity:.3}
   45%{transform:translateX(-50%) scaleX(.68);opacity:.16}
@@ -18797,6 +18817,14 @@ body{background:
 .deep-dive-acronym-source-note{display:flex;align-items:flex-start;gap:8px;margin-top:13px;color:var(--deep-muted);font-size:11px;font-weight:650;line-height:1.55;}
 .deep-dive-acronym-source-note svg{flex:0 0 auto;color:var(--deep-green);margin-top:1px;}
 .flashcards-page .deep-dives-hero{background:radial-gradient(circle at 92% 14%,color-mix(in srgb,#8b5cf6 22%,transparent),transparent 33%),radial-gradient(circle at 12% 112%,color-mix(in srgb,var(--deep-green) 15%,transparent),transparent 39%),var(--deep-surface);}
+.flashcards-hero{align-items:stretch;}
+.flashcards-hero-side{position:relative;display:flex;flex-direction:column;gap:12px;align-items:stretch;justify-content:flex-end;min-width:0;}
+.flashcards-cipher-card{position:relative;align-self:flex-end;width:min(100%,255px);padding:14px 14px 13px;border:1px solid color-mix(in srgb,#7c3aed 34%,var(--deep-border));border-radius:20px;background:linear-gradient(145deg,color-mix(in srgb,#7c3aed 11%,var(--deep-surface)),color-mix(in srgb,var(--deep-green) 7%,var(--deep-surface)));box-shadow:0 18px 38px rgba(40,31,22,.12);overflow:hidden;animation:flashcardsCipherCardIn .42s cubic-bezier(.16,1,.3,1) both;}
+.flashcards-cipher-card::before{content:"";position:absolute;right:-22px;top:-28px;width:112px;height:112px;border-radius:999px;background:radial-gradient(circle,color-mix(in srgb,#7c3aed 28%,transparent),transparent 68%);opacity:.85;animation:flashcardsOrbPulse 3.2s ease-in-out infinite;}
+.flashcards-cipher-card .cipher-mascot{--cipher-size:98px!important;display:block;margin:-8px auto -2px;filter:drop-shadow(6px 7px 0 #7c3aed2e);}
+.flashcards-cipher-card strong,.flashcards-cipher-card span{position:relative;z-index:1;display:block;text-align:center;}
+.flashcards-cipher-card strong{color:var(--deep-text);font-size:14px;font-weight:950;line-height:1.25;}
+.flashcards-cipher-card span{margin-top:3px;color:var(--deep-muted);font-size:11px;font-weight:750;line-height:1.45;}
 .flashcards-controls{margin-top:18px;}
 .flashcard-share-actions{position:relative;display:inline-flex;align-items:flex-start;gap:8px;flex-wrap:wrap;z-index:10;}
 .flashcard-share-actions.compact{display:flex;margin-top:15px;}
@@ -19010,6 +19038,8 @@ body{background:
   .deep-dive-acronym-library-head{align-items:flex-start;}
   .deep-dive-acronym-set-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .deep-dives-progress-card{max-width:420px;}
+  .flashcards-hero-side{align-items:flex-start;}
+  .flashcards-cipher-card{align-self:flex-start;width:min(100%,320px);}
   .deep-dive-objective-strip{grid-template-columns:minmax(0,1fr);}
   .deep-dives-domain-map{grid-template-columns:repeat(6,165px);}
   .deep-dive-reader-layout{grid-template-columns:minmax(0,1fr);}
@@ -29566,10 +29596,17 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
           <a className="deep-dives-blueprint-link" href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Chapter and topic grouping checked against the official SY0-701 outline<ChevronRight size={14}/></a>
           <FlashcardShareActions t={t} compact/>
         </div>
-        <div className="deep-dives-progress-card">
-          <div><span>Acronym mastery</span><strong>{totalMastered}/{SY0701_ACRONYM_CARDS.length}</strong></div>
-          <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
-          <p>Marked cards stay saved on this device, so repeated practice becomes lighter over time.</p>
+        <div className="flashcards-hero-side">
+          <aside className="flashcards-cipher-card" aria-label="Cipher flashcard coach">
+            <MascotAnimation animation="flashcards" size={98} interactive hoverAnimation="cheer" reactionAnimations={["flashcards","thinking","cheer"]} label="Cipher flips through flashcards"/>
+            <strong>Cipher’s recall lab</strong>
+            <span>Tap a set, say the answer, then flip.</span>
+          </aside>
+          <div className="deep-dives-progress-card">
+            <div><span>Acronym mastery</span><strong>{totalMastered}/{SY0701_ACRONYM_CARDS.length}</strong></div>
+            <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
+            <p>Marked cards stay saved on this device, so repeated practice becomes lighter over time.</p>
+          </div>
         </div>
       </section>
 

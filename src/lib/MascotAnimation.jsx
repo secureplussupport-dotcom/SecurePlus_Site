@@ -15,6 +15,7 @@ const CIPHER_ANIMATION_ROWS = {
   focus: 11,
   cheer: 12,
   surprised: 13,
+  flashcards: 14,
 };
 
 const DEFAULT_REACTION_ANIMATIONS = Object.freeze(["surprised", "dance", "cheer"]);
