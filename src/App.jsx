@@ -299,6 +299,7 @@ const GUEST_SMART_REVIEW_BRIDGE_KEY = "secureplus-pending-guest-smart-review";
 const GUEST_SMART_REVIEW_BRIDGE_TTL_MS = 24 * 60 * 60 * 1000;
 const DELETED_ACCOUNT_KEY = "secureplus_deleted_account";
 const ACCOUNT_DELETION_TOKEN_KEY = "secureplus-account-deletion-token";
+const THEME_STORAGE_KEY = "secureplus-theme-mode";
 const FEEDBACK_DESCRIPTION_MIN_LENGTH = 20;
 const FEEDBACK_DESCRIPTION_MIN_WORDS = 5;
 const isFreePBQPreview = question => question?.id === FREE_PBQ_PREVIEW_ID;
@@ -31461,7 +31462,14 @@ export default function App() {
   const focusAcronymLibrary=Boolean(urlDeepDiveRequest&&initialParams.get("focus")==="acronyms");
   const devDeepDivePreview=Boolean(import.meta.env.DEV&&initialParams.get("preview")==="deep-dives");
   const devCoinPreview=Boolean(import.meta.env.DEV&&initialParams.get("preview")==="coins");
-  const [darkMode,setDarkMode]=useState(false);
+  const [darkMode,setDarkMode]=useState(()=>{
+    try{
+      const stored=window.localStorage?.getItem(THEME_STORAGE_KEY);
+      if(stored==="dark")return true;
+      if(stored==="light")return false;
+      return window.matchMedia?.("(prefers-color-scheme: dark)")?.matches||false;
+    }catch{return false;}
+  });
   const [sidebarHidden,setSidebarHidden]=useState(()=>{
     try{return window.localStorage?.getItem("secureplus-sidebar-hidden")==="true";}catch{return false;}
   });
@@ -31513,6 +31521,13 @@ export default function App() {
     && !pbqBankLoading
     && (pbqBankError || remotePbqBank.length<PBQ_BANK.length)
   );
+
+  useEffect(()=>{
+    try{
+      window.localStorage?.setItem(THEME_STORAGE_KEY,darkMode?"dark":"light");
+      document.documentElement.dataset.theme=darkMode?"dark":"light";
+    }catch{}
+  },[darkMode]);
   const effectiveAssistantFlashcardSet=useMemo(()=>{
     if(user?.tier!=="pro")return assistantFlashcardSet;
     if(assistantFlashcardSet?.cards?.length)return assistantFlashcardSet;
