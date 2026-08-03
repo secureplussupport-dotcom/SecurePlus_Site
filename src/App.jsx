@@ -16864,21 +16864,21 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-assistant-intro{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:start;padding:11px 12px;border:1px solid ${t.green}2d;border-radius:14px;background:${t.green}0b;color:${t.green};}
 .cipher-assistant-intro p{color:${t.textSec};font-size:10px;line-height:1.55;}
 .cipher-assistant-quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px;}
-.cipher-assistant-quick button{display:flex;align-items:flex-start;gap:7px;min-width:0;padding:10px 9px;border:1px solid ${t.border};border-radius:13px;background:${t.panel};color:${t.accent};text-align:left;cursor:pointer;transition:transform .16s,border-color .16s,background .16s;}
+.cipher-assistant-quick button{display:flex;align-items:flex-start;gap:8px;min-width:0;padding:11px 10px;border:1px solid ${t.border};border-radius:13px;background:${t.panel};color:${t.accent};text-align:left;cursor:pointer;transition:transform .16s,border-color .16s,background .16s;}
 .cipher-assistant-quick button:hover{transform:translateY(-1px);border-color:${t.accent}55;background:${t.accent}0b;}
 .cipher-assistant-quick button span{min-width:0;}
 .cipher-assistant-quick strong,.cipher-assistant-quick small{display:block;overflow-wrap:anywhere;}
-.cipher-assistant-quick strong{color:${t.text};font-size:10px;line-height:1.35;}
-.cipher-assistant-quick small{margin-top:2px;color:${t.textDim};font-size:8px;line-height:1.35;}
+.cipher-assistant-quick strong{color:${t.text};font-size:12px;line-height:1.35;}
+.cipher-assistant-quick small{margin-top:3px;color:${t.textSec};font-size:10px;line-height:1.4;font-weight:750;}
 .cipher-assistant-messages{display:flex;flex-direction:column;gap:7px;max-height:250px;overflow-y:auto;margin-top:10px;padding:4px 2px;scrollbar-width:thin;}
-.cipher-assistant-message{max-width:88%;padding:9px 11px;border-radius:13px;font-size:10px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;}
-.cipher-assistant-message.cipher{align-self:flex-start;border:1px solid ${t.border};border-bottom-left-radius:4px;background:${t.panel};color:${t.textSec};}
-.cipher-assistant-message.user{align-self:flex-end;border-bottom-right-radius:4px;background:${t.accent};color:#fff;}
+.cipher-assistant-message{max-width:90%;padding:11px 13px;border-radius:13px;font-size:13px;font-weight:650;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;}
+.cipher-assistant-message.cipher{align-self:flex-start;border:1px solid #d8c8af;border-bottom-left-radius:4px;background:#fffaf0;color:#29241d;}
+.cipher-assistant-message.user{align-self:flex-end;border-bottom-right-radius:4px;background:#20645f;color:#fff;font-weight:750;}
 .cipher-assistant-confirm{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;padding-top:8px;border-top:1px solid ${t.border};}
-.cipher-assistant-confirm button{display:inline-flex;align-items:center;gap:5px;min-height:29px;padding:6px 9px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};color:${t.text};font-size:9px;font-weight:900;cursor:pointer;transition:transform .16s,border-color .16s,background .16s;}
+.cipher-assistant-confirm button{display:inline-flex;align-items:center;gap:5px;min-height:31px;padding:7px 10px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};color:${t.text};font-size:11px;font-weight:900;cursor:pointer;transition:transform .16s,border-color .16s,background .16s;}
 .cipher-assistant-confirm button:first-child{border-color:${t.accent}55;background:${t.accent};color:#fff;}
 .cipher-assistant-confirm button:hover{transform:translateY(-1px);border-color:${t.accent}77;}
-.cipher-assistant-note{margin-top:7px;color:${t.textDim};font-size:7px;line-height:1.4;text-align:center;}
+.cipher-assistant-note{margin-top:8px;color:${t.textSec};font-size:9px;font-weight:750;line-height:1.45;text-align:center;}
 .cipher-assistant-context-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:${t.green}10;color:${t.green};font-size:9px;font-weight:900;}
 @keyframes cipherAssistantIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .pbq-coin-unlock{display:inline-flex;align-items:center;gap:5px;padding:5px 7px;border:1px solid #d79b3e42;border-radius:99px;background:#f2b85b17;color:#b47727;font-size:9px;font-weight:950;}
@@ -18276,7 +18276,7 @@ body{background:
   .athena-intro-page{padding:26px 18px 104px;}
   .cipher-assistant-quick{grid-template-columns:minmax(0,1fr);}
   .cipher-assistant-quick button{align-items:center;padding:9px 10px;}
-  .cipher-assistant-quick small{font-size:8px;}
+  .cipher-assistant-quick small{font-size:10px;}
   .athena-intro-card{padding:16px 0;}
   .athena-intro-card .athena-mark{--athena-size:104px!important;}
   .athena-intro-card h1{font-size:42px;}
