@@ -317,6 +317,8 @@ const FLASHCARD_SHARE_COPY = {
   description:"Premium Security+ flashcards grouped by chapter and topic.",
   statement:"SecurePlus has a premium Security+ flashcards collection for acronyms, attack clues, definitions, and exam keywords. Original scenario-based practice. Not exam dumps.",
 };
+const FLASHCARD_DEFINITION_NEXT_LABEL = "Definition cards next";
+const FLASHCARD_ACRONYM_SECTION_LABEL = "Acronym cards next";
 const getStarredFlashcards = starredKeys => {
   const keySet=new Set(starredKeys||[]);
   return SY0701_ACRONYM_CARDS.filter(card=>keySet.has(starKey(FLASHCARD_STAR_TYPE,card.id)));
@@ -334,6 +336,21 @@ const buildStarredFlashcardSet = cards => ({
   cards,
 });
 const clampRandomFlashcardCount = value => Math.max(10,Math.min(30,Number(value)||10));
+const normalizeRandomFlashcardConfig = (config={}) => {
+  const includeTerms=Boolean(config.includeTerms);
+  const includeAcronyms=Boolean(config.includeAcronyms);
+  const safeIncludes={
+    includeTerms:includeTerms || !includeAcronyms,
+    includeAcronyms:includeAcronyms || !includeTerms,
+  };
+  const termsOnly=safeIncludes.includeTerms&&!safeIncludes.includeAcronyms;
+  return {
+    ...config,
+    count:clampRandomFlashcardCount(config.count),
+    mode:termsOnly?"definition":config.mode==="acronym"?"acronym":"definition",
+    ...safeIncludes,
+  };
+};
 const shuffledFlashcardCards = cards => {
   const next=[...(cards||[])];
   for(let index=next.length-1;index>0;index-=1){
@@ -352,25 +369,39 @@ const makeFlashcardSectionDivider = (id,label,color="#0ea5e9") => ({
   setType:"term",
   color,
 });
+const flashcardHasRealAcronym = card => {
+  const acronym=String(card?.acronym||"").trim().toLowerCase();
+  const expansion=String(card?.expansion||"").trim().toLowerCase();
+  return Boolean(acronym&&expansion&&acronym!==expansion);
+};
 const randomFlashcardStorageKey = user => `${SAVED_RANDOM_FLASHCARD_PREFIX}:${starOwner(user)}`;
-const buildRandomFlashcardSet = ({count=10,mode="definition",includeTerms=true,includeAcronyms=true,sourceCards=SY0701_ACRONYM_CARDS,title="Randomised flashcard set",savedId="",preserveOrder=false}={}) => {
-  const safeCount=clampRandomFlashcardCount(count);
+const buildRandomFlashcardSet = (input={}) => {
+  const {count=10,mode="definition",includeTerms=true,includeAcronyms=true,sourceCards=SY0701_ACRONYM_CARDS,title="Randomised flashcard set",savedId="",preserveOrder=false}=input;
+  const safeConfig=normalizeRandomFlashcardConfig({count,mode,includeTerms,includeAcronyms});
+  const safeCount=safeConfig.count;
   const termCards=(sourceCards||[]).filter(card=>card.cardType==="term");
-  const acronymCards=(sourceCards||[]).filter(card=>card.cardType!=="term"&&card.cardType!=="divider");
-  const useTerms=Boolean(includeTerms);
-  const useAcronyms=Boolean(includeAcronyms);
+  const acronymCards=(sourceCards||[]).filter(card=>card.cardType!=="term"&&card.cardType!=="divider"&&(safeConfig.mode==="acronym"?flashcardHasRealAcronym(card):true));
+  const useTerms=Boolean(safeConfig.includeTerms);
+  const useAcronyms=Boolean(safeConfig.includeAcronyms);
   const selected=[];
   if(useTerms&&useAcronyms){
     const termTarget=Math.max(1,Math.floor(safeCount/2));
     const acronymTarget=safeCount-termTarget;
     const pickedTerms=(preserveOrder?termCards:shuffledFlashcardCards(termCards)).slice(0,termTarget);
     const pickedAcronyms=(preserveOrder?acronymCards:shuffledFlashcardCards(acronymCards)).slice(0,acronymTarget);
-    selected.push(
-      makeFlashcardSectionDivider(`${savedId||RANDOM_FLASHCARD_SET_ID}-terms-divider`,"Definition cards first","#7c3aed"),
-      ...pickedTerms,
-      makeFlashcardSectionDivider(`${savedId||RANDOM_FLASHCARD_SET_ID}-acronyms-divider`,"Acronym cards next","#0ea5e9"),
-      ...pickedAcronyms,
-    );
+    if(safeConfig.mode==="acronym"){
+      selected.push(
+        ...pickedAcronyms,
+        makeFlashcardSectionDivider(`${savedId||RANDOM_FLASHCARD_SET_ID}-terms-divider`,FLASHCARD_DEFINITION_NEXT_LABEL,"#7c3aed"),
+        ...pickedTerms,
+      );
+    }else{
+      selected.push(
+        ...pickedTerms,
+        makeFlashcardSectionDivider(`${savedId||RANDOM_FLASHCARD_SET_ID}-acronyms-divider`,FLASHCARD_ACRONYM_SECTION_LABEL,"#0ea5e9"),
+        ...pickedAcronyms,
+      );
+    }
   }else if(useTerms){
     selected.push(...(preserveOrder?termCards:shuffledFlashcardCards(termCards)).slice(0,safeCount));
   }else if(useAcronyms){
@@ -390,7 +421,7 @@ const buildRandomFlashcardSet = ({count=10,mode="definition",includeTerms=true,i
     topic:"Randomised Security+ recall",
     cards:selected,
     generatedBy:"random_builder",
-    randomConfig:{count:safeCount,mode:getSafeFlashcardMode(mode,false,setType),includeTerms:useTerms,includeAcronyms:useAcronyms},
+    randomConfig:{count:safeCount,mode:getSafeFlashcardMode(safeConfig.mode,false,setType),includeTerms:useTerms,includeAcronyms:useAcronyms},
   };
 };
 const readSavedRandomFlashcardSets = user => {
@@ -29351,8 +29382,11 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   const studyCards=direction==="example"?orderedCards.filter(card=>card.example):orderedCards;
   const activeCard=studyCards[cardIndex]||studyCards[0]||orderedCards[0];
   const isDividerCard=activeCard?.cardType==="divider";
-  const testsAcronym=direction==="acronym";
+  const activeCardIsTerm=activeCard?.cardType==="term";
+  const testsAcronym=direction==="acronym"&&!activeCardIsTerm&&flashcardHasRealAcronym(activeCard);
   const asksFromExample=direction==="example";
+  const studyCardCount=studyCards.filter(card=>card.cardType!=="divider").length;
+  const totalCardCount=acronymSet.cards.filter(card=>card.cardType!=="divider").length;
   const frontPrompt=isDividerCard
     ?"Section change"
     :asksFromExample
@@ -29394,7 +29428,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
       :setType==="term"
         ?`Definition: ${activeCard?.meaning}`
         :`Acronym: ${activeCard?.acronym}. Definition: ${activeCard?.meaning}`;
-  const masteredCount=acronymSet.cards.filter(card=>masteredIds.includes(card.id)).length;
+  const masteredCount=acronymSet.cards.filter(card=>card.cardType!=="divider"&&masteredIds.includes(card.id)).length;
   const progress=studyCards.length?Math.round(((cardIndex+1)/studyCards.length)*100):0;
   const flashcardStarredSet=useMemo(()=>new Set(starred||[]),[starred]);
   const activeStarKey=activeCard?starKey(FLASHCARD_STAR_TYPE,activeCard.id):"";
@@ -29473,7 +29507,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
         <div className="page-title-row"><FlashcardSetIcon set={acronymSet} size={24}/><h1>{acronymSet.title}</h1></div>
         <p>{acronymSet.description} Say the answer before you flip the card.</p>
         <div className="deep-dive-acronym-reader-meta">
-          <span><Brain size={14}/>{acronymSet.cards.length} cards</span>
+          <span><Brain size={14}/>{totalCardCount} cards</span>
           <span><TextCursorInput size={14}/>{setKindLabel}</span>
           <span><ListChecks size={14}/>{acronymSet.chapterTitle}</span>
           <a href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Checked against official SY0-701 list<ChevronRight size={13}/></a>
@@ -29485,11 +29519,11 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
           <div><span className="deep-dive-eyebrow">{hasExampleMode?"Scenario attack drill":setType==="term"?"Definition drill":"Acronym drill"}</span><h2>{asksFromExample?"Read the example. Name the attack.":"Recall it, then flip"}</h2><p>{setType==="term"?"Term decks test definitions only: read the definition, recall the exam term, then flip.":hasExampleMode?"Use the example mode to practise recognizing attacks from real-world clues, then flip to check the full name.":"Test Acronym shows the acronym first. Test Definition shows the definition first. Flip to check the full term, acronym, and exam meaning."}</p></div>
           <div className="deep-dive-flashcard-side">
             {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&acronymSet.id!==ASSISTANT_FLASHCARD_SET_ID&&acronymSet.id!==RANDOM_FLASHCARD_SET_ID&&!String(acronymSet.id||"").startsWith(SAVED_RANDOM_FLASHCARD_PREFIX)&&<FlashcardShareActions set={acronymSet} t={t}/>}
-            <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {acronymSet.cards.length}<br/>mastered</span></div>
+            <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {totalCardCount}<br/>mastered</span></div>
           </div>
         </div>
         <div className="deep-dive-flashcard-toolbar">
-          <span>Card {Math.min(cardIndex+1,studyCards.length)} of {studyCards.length}</span>
+          <span>{isDividerCard?"Section marker":`Card ${Math.min(studyCards.slice(0,cardIndex+1).filter(card=>card.cardType!=="divider").length||1,studyCardCount)} of ${studyCardCount}`}</span>
           <div className="deep-dives-progress-track"><span style={{width:`${progress}%`}}/></div>
           {onChangeModeRequest&&<button className="btn btn-outline flashcard-change-mode-btn" type="button" onClick={onChangeModeRequest}><Brain size={15}/>{FLASHCARD_MODE_OPTIONS[direction]?.title||"Change mode"}</button>}
           <button className="btn btn-ghost" type="button" onClick={shuffleCards}><RotateCcw size={15}/>Shuffle</button>
@@ -30319,15 +30353,11 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
     capture("flashcards_acronym_rated",{set_id:selectedSet?.id,card_id:cardId,mastered});
   };
   const buildAndOpenRandomSet=()=>{
-    const safeConfig={
-      ...randomConfig,
-      count:clampRandomFlashcardCount(randomConfig.count),
-      includeTerms:randomConfig.includeTerms||!randomConfig.includeAcronyms,
-      includeAcronyms:randomConfig.includeAcronyms||!randomConfig.includeTerms,
-    };
+    const safeConfig=normalizeRandomFlashcardConfig(randomConfig);
     const built=buildRandomFlashcardSet(safeConfig);
     setRandomConfig(safeConfig);
     setRandomFlashcardSet(built);
+    setRandomBuilderOpen(false);
     capture("flashcards_random_set_generated",{count:safeConfig.count,mode:safeConfig.mode,include_terms:safeConfig.includeTerms,include_acronyms:safeConfig.includeAcronyms});
     setActiveMode(getSafeFlashcardMode(safeConfig.mode,false,flashcardSetType(built)));
     setSelectedSetId(RANDOM_FLASHCARD_SET_ID);
@@ -30495,6 +30525,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
                     <button key={key} type="button" className={randomConfig[key]?"active":""} onClick={()=>setRandomConfig(config=>{
                       const next={...config,[key]:!config[key]};
                       if(!next.includeTerms&&!next.includeAcronyms)next[key]=true;
+                      if(next.includeTerms&&!next.includeAcronyms)next.mode="definition";
                       return next;
                     })}>{label}</button>
                   ))}
