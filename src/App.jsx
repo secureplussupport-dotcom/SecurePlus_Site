@@ -309,6 +309,7 @@ const cipherWalletOwner = user => user?.id || normalizeEmail(user?.email || "") 
 const starKey = (type,id) => `${type}:${id}`;
 const FLASHCARD_STAR_TYPE = "flashcard";
 const STARRED_FLASHCARD_SET_ID = "starred-flashcards";
+const ASSISTANT_FLASHCARD_SET_ID = "cipher-weak-area-flashcards";
 const FLASHCARD_SHARE_COPY = {
   title:"SecurePlus Security+ flashcards",
   description:"Premium Security+ flashcards grouped by chapter and topic.",
@@ -344,6 +345,47 @@ const buildFlashcardShareMessage = set => {
   return `${FLASHCARD_SHARE_COPY.statement}\n\n${setLine}\nTry it here: ${url}`;
 };
 const tokenizeLearningText = text => String(text||"").toLowerCase().match(/[a-z0-9+#.]+/g)||[];
+const buildCipherWeakFlashcardSet = context => {
+  const chapterId=String(context?.weakChapterId||"");
+  if(!chapterId)return null;
+  const weakTopics=(context?.weakTopics||[]).map(topic=>String(topic||"").trim()).filter(Boolean);
+  const topicTokens=new Set(weakTopics.flatMap(topic=>tokenizeLearningText(topic)).filter(token=>token.length>2));
+  const chapterCards=SY0701_ACRONYM_CARDS.filter(card=>String(card.chapterId)===chapterId);
+  if(!chapterCards.length)return null;
+  const scoreCard=card=>{
+    const cardText=[card.topic,card.acronym,card.expansion,card.meaning,card.example].join(" ");
+    const cardTokens=tokenizeLearningText(cardText);
+    const topicHit=weakTopics.some(topic=>String(card.topic||"").toLowerCase().includes(topic.toLowerCase()));
+    const tokenHits=cardTokens.filter(token=>topicTokens.has(token)).length;
+    const termHit=weakTopics.some(topic=>String(cardText||"").toLowerCase().includes(topic.toLowerCase()));
+    return (topicHit?80:0)+(termHit?32:0)+(tokenHits*9)+(card.setType==="term"?4:0);
+  };
+  const scored=chapterCards
+    .map(card=>({card,score:scoreCard(card)}))
+    .sort((a,b)=>b.score-a.score||String(a.card.topic||"").localeCompare(String(b.card.topic||"")));
+  const targeted=scored.filter(item=>item.score>0).map(item=>item.card);
+  const fallback=scored.map(item=>item.card);
+  const selected=[];
+  [...targeted,...fallback].forEach(card=>{
+    if(selected.length>=18)return;
+    if(!selected.some(item=>item.id===card.id))selected.push(card);
+  });
+  const chapter=CHAPTERS.find(item=>item.id===chapterId);
+  const topicText=weakTopics.length?weakTopics.slice(0,3).join(", "):"recent weak signals";
+  return {
+    id:ASSISTANT_FLASHCARD_SET_ID,
+    title:`Cipher deck: Chapter ${chapterId}`,
+    description:`Pro weak-area flashcards built from ${topicText}.`,
+    setType:selected.length&&selected.every(card=>card.cardType==="term")?"term":"acronym",
+    objectiveCodes:[...new Set(selected.flatMap(card=>card.objectiveCodes||[]))],
+    color:"#0ea5e9",
+    chapterId:Number(chapterId),
+    chapterTitle:chapter?.title||`Chapter ${chapterId}`,
+    topic:`Cipher weak-area deck · ${topicText}`,
+    cards:selected,
+    generatedBy:"cipher_assistant",
+  };
+};
 const getFlashcardRelatedDeepDives = acronymSet => {
   if(!acronymSet||acronymSet.id===STARRED_FLASHCARD_SET_ID)return [];
   const setText=[
@@ -26247,7 +26289,7 @@ function buildCipherAssistantContext(attempts=[],currentView="dashboard") {
   };
 }
 
-function CipherAssistantDock({attempts,currentView,onStartReview}) {
+function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpenFlashcards,onUpgrade}) {
   const [open,setOpen]=useState(false);
   const [messages,setMessages]=useState([]);
   const [quickMode,setQuickMode]=useState("main");
@@ -26255,6 +26297,7 @@ function CipherAssistantDock({attempts,currentView,onStartReview}) {
   const typingTimersRef=useRef([]);
   const context=useMemo(()=>buildCipherAssistantContext(attempts,currentView),[attempts,currentView]);
   const weakChapter=context.weakChapterId?`Chapter ${context.weakChapterId}: ${context.weakChapterTitle}`:null;
+  const isPro=user?.tier==="pro";
 
   const clearTypingTimers=useCallback(()=>{
     typingTimersRef.current.forEach(timer=>window.clearInterval(timer));
@@ -26345,6 +26388,49 @@ function CipherAssistantDock({attempts,currentView,onStartReview}) {
     setOpen(false);
   };
 
+  const openWeakFlashcards=()=>{
+    if(!isPro){
+      addMessage("cipher","Weak-area flashcard building is a Pro tool. It uses your missed concepts to make a targeted deck instead of sending you into the full library.");
+      return;
+    }
+    if(!context.weakChapterId){
+      addMessage("cipher","I need a little answer history before I can build a weak-area flashcard deck. Complete a short MCQ set and ask me again.");
+      return;
+    }
+    const generatedSet=buildCipherWeakFlashcardSet(context);
+    if(!generatedSet?.cards?.length){
+      addMessage("cipher","I could not find enough matching flashcards yet. Try a few more MCQs so I can link your misses to the right terms.");
+      return;
+    }
+    capture("cipher_assistant_flashcards_started",{chapter:context.weakChapterId,card_count:generatedSet.cards.length,source_view:currentView});
+    onOpenFlashcards?.(generatedSet);
+    setOpen(false);
+  };
+
+  const previewWeakFlashcards=()=>{
+    if(!isPro){
+      addMessage("cipher","This is available in Pro mode. Pro lets me build a flashcard deck from your weak areas, then open it directly with zero coin requirements.");
+      return;
+    }
+    if(!context.weakChapterId){
+      addMessage("cipher","I need a little answer history before I can build a weak-area flashcard deck. Complete a short MCQ set and ask me again.");
+      return;
+    }
+    const generatedSet=buildCipherWeakFlashcardSet(context);
+    if(!generatedSet?.cards?.length){
+      addMessage("cipher","I could not find enough matching flashcards yet. Try a few more MCQs so I can link your misses to the right terms.");
+      return;
+    }
+    const topicLine=context.weakTopics.length
+      ? `Focus: ${context.weakTopics.slice(0,3).join(", ")}.`
+      : "Focus: recent weak signals from this chapter.";
+    addMessage(
+      "cipher",
+      `Prepared: ${generatedSet.cards.length} flashcards for ${weakChapter}.\n${topicLine}\nI’ll start with the terms closest to your misses, then fill gaps with related exam keywords.`,
+      {kind:"flashcardConfirm",meta:{chapterId:context.weakChapterId,cardCount:generatedSet.cards.length}}
+    );
+  };
+
   const previewSprint=()=>{
     if(!context.weakChapterId){
       addMessage("cipher","I need a little answer history before I can build a targeted sprint. Complete a short MCQ set and ask me again.");
@@ -26369,6 +26455,7 @@ function CipherAssistantDock({attempts,currentView,onStartReview}) {
   const mainPrompts=[
     {label:"What should I do next?",detail:"Use my progress",icon:<Target size={15}/>,action:showNextStep},
     {label:"Start weak point area",detail:"Preview first",icon:<Play size={15}/>,action:previewSprint},
+    {label:"Build weak flashcards",detail:isPro?"Pro targeted deck":"Pro mode",icon:<TextCursorInput size={15}/>,action:previewWeakFlashcards},
     {label:"Why these questions?",detail:"Smart Review logic",icon:<Brain size={15}/>,action:explainSmartReview},
     {label:"Feature help",detail:"Coins, Pro, policies",icon:<Lightbulb size={15}/>,action:showFeatureHelp},
     {label:"How should I approach PBQs?",detail:"Scenario strategy",icon:<ClipboardCheck size={15}/>,action:explainPbq},
@@ -26422,6 +26509,12 @@ function CipherAssistantDock({attempts,currentView,onStartReview}) {
                       <div className="cipher-assistant-confirm">
                         <button type="button" onClick={confirmSprint}><Play size={13}/>Start this set</button>
                         <button type="button" onClick={()=>addMessage("cipher","No problem. Choose another option when you’re ready.")}>Not now</button>
+                      </div>
+                    )}
+                    {message.kind==="flashcardConfirm"&&message.text&&(
+                      <div className="cipher-assistant-confirm">
+                        <button type="button" onClick={openWeakFlashcards}><TextCursorInput size={13}/>Open deck</button>
+                        <button type="button" onClick={()=>addMessage("cipher","No problem. I’ll keep the flashcard option ready when you want it.")}>Not now</button>
                       </div>
                     )}
                   </div>
@@ -29257,7 +29350,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
         <div className="deep-dive-flashcard-head">
           <div><span className="deep-dive-eyebrow">{hasExampleMode?"Scenario attack drill":setType==="term"?"Definition drill":"Acronym drill"}</span><h2>{asksFromExample?"Read the example. Name the attack.":"Recall it, then flip"}</h2><p>{setType==="term"?"Term decks test definitions only: read the definition, recall the exam term, then flip.":hasExampleMode?"Use the example mode to practise recognizing attacks from real-world clues, then flip to check the full name.":"Test Acronym shows the acronym first. Test Definition shows the definition first. Flip to check the full term, acronym, and exam meaning."}</p></div>
           <div className="deep-dive-flashcard-side">
-            {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&<FlashcardShareActions set={acronymSet} t={t}/>}
+            {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&acronymSet.id!==ASSISTANT_FLASHCARD_SET_ID&&<FlashcardShareActions set={acronymSet} t={t}/>}
             <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {acronymSet.cards.length}<br/>mastered</span></div>
           </div>
         </div>
@@ -29940,7 +30033,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
   );
 }
 
-function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade}) {
+function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=null,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade}) {
   const [selectedSetId,setSelectedSetId]=useState(null);
   const [chapterFilter,setChapterFilter]=useState("all");
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
@@ -29953,7 +30046,11 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   const visibleGroups=chapterFilter==="all"?chapterGroups:chapterGroups.filter(group=>String(group.chapterId)===chapterFilter);
   const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
   const starredFlashcardSet=useMemo(()=>buildStarredFlashcardSet(starredFlashcards),[starredFlashcards]);
-  const selectedSet=selectedSetId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(set=>set.id===selectedSetId)||null;
+  const selectedSet=selectedSetId===STARRED_FLASHCARD_SET_ID
+    ?starredFlashcardSet
+    :selectedSetId===ASSISTANT_FLASHCARD_SET_ID
+      ?assistantSet
+      :SY0701_ACRONYM_SETS.find(set=>set.id===selectedSetId)||null;
   const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>masteredAcronymIds.includes(card.id)).length;
   const progressPercent=SY0701_ACRONYM_CARDS.length?Math.round((totalMastered/SY0701_ACRONYM_CARDS.length)*100):0;
   const mobileQuickSets=useMemo(()=>visibleGroups.flatMap(group=>group.sets).slice(0,3),[visibleGroups]);
@@ -29990,17 +30087,17 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   },[]);
 
   const startFlashcardSet=useCallback((id,mode)=>{
-    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
+    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:id===ASSISTANT_FLASHCARD_SET_ID?assistantSet:SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
     const safeMode=getSafeFlashcardMode(mode,flashcardSetHasExampleMode(set),flashcardSetType(set));
     setActiveMode(safeMode);
     setSelectedSetId(id);
     setModeChooser(null);
     capture("flashcards_set_opened",{set_id:id,mode:safeMode});
     scrollToFlashcardTop(true);
-  },[scrollToFlashcardTop,starredFlashcardSet]);
+  },[assistantSet,scrollToFlashcardTop,starredFlashcardSet]);
 
   const openSet=useCallback(id=>{
-    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
+    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:id===ASSISTANT_FLASHCARD_SET_ID?assistantSet:SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
     if(!set)return;
     const hasExample=flashcardSetHasExampleMode(set);
     if(flashcardSetType(set)==="term"){
@@ -30014,11 +30111,11 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
       return;
     }
     startFlashcardSet(id,safeDefault);
-  },[defaultMode,signedIn,starredFlashcardSet,startFlashcardSet]);
+  },[assistantSet,defaultMode,signedIn,starredFlashcardSet,startFlashcardSet]);
 
   const handleModeChosen=(mode,{makeDefault=false}={})=>{
     const chooser=modeChooser;
-    const chooserSet=chooser?.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(item=>item.id===chooser?.setId)||null;
+    const chooserSet=chooser?.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:chooser?.setId===ASSISTANT_FLASHCARD_SET_ID?assistantSet:SY0701_ACRONYM_SETS.find(item=>item.id===chooser?.setId)||null;
     const safeMode=getSafeFlashcardMode(mode,chooser?.hasExample,flashcardSetType(chooserSet));
     if(makeDefault)saveDefaultMode(safeMode);
     if(chooser?.context==="default"){
@@ -30040,11 +30137,13 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
 
   useEffect(()=>{
     if(!initialSetId)return;
-    if(initialSetId===STARRED_FLASHCARD_SET_ID || SY0701_ACRONYM_SETS.some(set=>set.id===initialSetId)){
+    if(initialSetId===ASSISTANT_FLASHCARD_SET_ID&&assistantSet?.cards?.length){
+      startFlashcardSet(ASSISTANT_FLASHCARD_SET_ID,"definition");
+    }else if(initialSetId===STARRED_FLASHCARD_SET_ID || SY0701_ACRONYM_SETS.some(set=>set.id===initialSetId)){
       openSet(initialSetId);
     }
     onInitialSetHandled?.();
-  },[initialSetId,onInitialSetHandled,openSet]);
+  },[assistantSet,initialSetId,onInitialSetHandled,openSet,startFlashcardSet]);
   useEffect(()=>{
     if(selectedSetId===STARRED_FLASHCARD_SET_ID&&!starredFlashcards.length){
       setSelectedSetId(null);
@@ -30187,7 +30286,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
       </div>
 
       <div className="deep-dive-acronym-source-note"><ShieldCheck size={16}/><span>{SY0701_ACRONYM_SOURCE.reviewNote}</span></div>
-      {modeChooser&&<FlashcardModeChooser t={t} set={modeChooser.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(set=>set.id===modeChooser.setId)||null} hasExample={modeChooser.hasExample} currentMode={activeMode} defaultMode={defaultMode} user={user} context={modeChooser.context} onChoose={handleModeChosen} onClose={()=>setModeChooser(null)}/>}
+        {modeChooser&&<FlashcardModeChooser t={t} set={modeChooser.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:modeChooser.setId===ASSISTANT_FLASHCARD_SET_ID?assistantSet:SY0701_ACRONYM_SETS.find(set=>set.id===modeChooser.setId)||null} hasExample={modeChooser.hasExample} currentMode={activeMode} defaultMode={defaultMode} user={user} context={modeChooser.context} onChoose={handleModeChosen} onClose={()=>setModeChooser(null)}/>}
     </div>
   );
 }
@@ -30881,6 +30980,7 @@ export default function App() {
   const [smartReviewRequest,setSmartReviewRequest]=useState(null);
   const [deepDiveRequest,setDeepDiveRequest]=useState(null);
   const [flashcardSetRequest,setFlashcardSetRequest]=useState(()=>urlFlashcardSetRequest||null);
+  const [assistantFlashcardSet,setAssistantFlashcardSet]=useState(null);
   const [flashcardAuthPrompt,setFlashcardAuthPrompt]=useState(null);
   const [achievementUnlocks,setAchievementUnlocks]=useState([]);
   const [coinWallet,setCoinWallet]=useState(()=>({...emptyCipherWallet(),status:"idle"}));
@@ -31632,6 +31732,12 @@ export default function App() {
     setView("deep-dives");
   },[]);
   const handleOpenFlashcards=useCallback((setId=null)=>{
+    if(setId&&typeof setId==="object"&&setId.id===ASSISTANT_FLASHCARD_SET_ID){
+      setAssistantFlashcardSet({...setId,nonce:Date.now()});
+      setFlashcardSetRequest(ASSISTANT_FLASHCARD_SET_ID);
+      setView("flashcards");
+      return;
+    }
     if(setId&&(setId===STARRED_FLASHCARD_SET_ID||SY0701_ACRONYM_SETS.some(set=>set.id===setId))){
       setFlashcardSetRequest(setId);
     }else{
@@ -31937,7 +32043,7 @@ export default function App() {
               <DailyChallenge t={t} onLogin={goToSignup}/>
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
-            {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
+            {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} assistantSet={assistantFlashcardSet} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
             {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={({chapterId})=>{setView("mcq");}} onTryRelatedPbq={handleGuestPbqPreview}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
@@ -32107,14 +32213,14 @@ export default function App() {
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
           {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq} onOpenFlashcards={handleOpenFlashcards}/>}
-          {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")} onOpenDeepDive={handleOpenDeepDive} onUpgrade={()=>setView("pricing")}/>}
+          {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} assistantSet={assistantFlashcardSet} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")} onOpenDeepDive={handleOpenDeepDive} onUpgrade={()=>setView("pricing")}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
           {!practiceFocusMode&&view!=="exam"&&view!=="mascot-admin"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
         </main>
         {!practiceFocusMode&&!showOnboarding&&!showProWelcome&&["dashboard","mcq","pbq","daily","coins","objectives","pricing"].includes(view)&&(
-          <CipherAssistantDock user={user} attempts={attempts} currentView={view} onStartReview={handleStartChapterReview}/>
+          <CipherAssistantDock user={user} attempts={attempts} currentView={view} onStartReview={handleStartChapterReview} onOpenFlashcards={handleOpenFlashcards} onUpgrade={()=>setView("pricing")}/>
         )}
         {showOnboarding&&(
           <OnboardingModal

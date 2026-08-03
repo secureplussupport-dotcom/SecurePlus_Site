@@ -139,6 +139,9 @@ requireValue(appSource.includes("deep-dive-flashcard-watermark") && appSource.in
 requireValue(appSource.includes("flashcards-fan-glyph"), "Flashcards navigation icon must use a fan of cards.");
 requireValue(appSource.includes("getFlashcardRelatedDeepDives") && appSource.includes("flashcard-learn-more") && appSource.includes("flashcard_learn_more"), "Flashcards must link to Concept Deep Dives through a closable Learn More flow.");
 requireValue(appSource.includes("FlashcardSavePrompt"), "Guest flashcard starring must show a soft login/signup prompt.");
+requireValue(appSource.includes("ASSISTANT_FLASHCARD_SET_ID") && appSource.includes("buildCipherWeakFlashcardSet") && appSource.includes("Build weak flashcards"), "Cipher Assistant must expose a Pro weak-area flashcard deck builder.");
+requireValue(appSource.includes('message.kind==="flashcardConfirm"') && appSource.includes("Open deck") && appSource.includes("cipher_assistant_flashcards_started"), "Cipher Assistant weak-area flashcards must preview before opening the generated deck.");
+requireValue(appSource.includes("assistantFlashcardSet") && appSource.includes("assistantSet={assistantFlashcardSet}"), "Flashcards page must accept the temporary Cipher-generated weak-area deck.");
 requireValue(appSource.includes("FlashcardModeChooser") && appSource.includes("flashcard-mode-sheet") && appSource.includes("flashcard-mode-card"), "Flashcard sets must open through a dedicated mode chooser instead of an inline selector.");
 requireValue(!appSource.includes('role="tablist" aria-label="Choose flashcard direction"'), "Flashcard mode selection must not remain as a tab selector above the card.");
 requireValue(appSource.includes("FLASHCARD_DEFAULT_MODE_PREFIX") && appSource.includes("flashcard-default-checkbox") && appSource.includes("flashcard-default-mode-card"), "Signed-in users must be able to save and change a default flashcard mode.");
