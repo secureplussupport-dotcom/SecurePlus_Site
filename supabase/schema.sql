@@ -185,8 +185,8 @@ to authenticated
 with check (
   auth.uid() is not null
   and auth.uid() = user_id
-  and question_type in ('mcq', 'pbq')
-  and length(question_id) between 1 and 80
+  and question_type in ('mcq', 'pbq', 'flashcard')
+  and length(question_id) between 1 and 160
   and question_key = question_type || ':' || question_id
 );
 
@@ -397,8 +397,8 @@ begin
     alter table starred_questions
     add constraint starred_questions_type_check
     check (
-      question_type in ('mcq', 'pbq')
-      and length(question_id) between 1 and 80
+      question_type in ('mcq', 'pbq', 'flashcard')
+      and length(question_id) between 1 and 160
       and question_key = question_type || ':' || question_id
     );
   end if;

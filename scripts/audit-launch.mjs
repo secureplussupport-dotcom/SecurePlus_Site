@@ -193,6 +193,9 @@ if (!errors.length) {
   requireContains("supabase/schema.sql", 'check (tier in (\'free\', \'pro\'))', "profiles tier must be constrained");
   requireContains("supabase/schema.sql", "profiles_subscription_status_check", "subscription status must be constrained");
   requireContains("supabase/schema.sql", "auth.uid() = user_id", "attempt/starred policies must scope rows to the signed-in user");
+  requireContains("supabase/schema.sql", "question_type in ('mcq', 'pbq', 'flashcard')", "starred question storage must allow curated flashcards");
+  requireContains("supabase/starred-flashcards.sql", "question_type in ('mcq', 'pbq', 'flashcard')", "existing Supabase installs need a flashcard-star migration");
+  requireContains("supabase/starred-flashcards.sql", "length(question_id) between 1 and 160", "flashcard-star migration must allow long flashcard IDs");
   const coinsSchema=read("supabase/cipher-coins.sql");
   for (const table of ["cipher_coin_transactions", "cipher_coin_unlocks", "cipher_coin_daily_activity"]) {
     requireContains("supabase/cipher-coins.sql", `alter table public.${table} enable row level security`, `${table} must have RLS enabled`);

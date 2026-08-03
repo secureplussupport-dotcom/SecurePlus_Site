@@ -77,6 +77,10 @@ requireValue(/^\d{4}-\d{2}-\d{2}$/.test(SY0701_ACRONYM_SOURCE.reviewedAt), "Acro
 SY0701_ACRONYM_SETS.forEach(set => {
   requireValue(appSource.includes(`"${set.id}"`), `[acronym set ${set.id}] needs a dedicated focused icon mapping in App.jsx.`);
 });
+requireValue(appSource.includes("Free standalone active recall"), "Flashcards page must clearly present flashcards as a free standalone feature.");
+requireValue(appSource.includes("STARRED_FLASHCARD_SET_ID"), "Flashcards must support a curated starred flashcard set.");
+requireValue(appSource.includes("Sign up to save this flashcard"), "Guest flashcard starring must prompt account creation instead of silently saving.");
+requireValue(appSource.includes("flashcard_curated_set"), "Guest curated-set access should route to account creation.");
 
 for (const set of SY0701_ACRONYM_SETS) {
   const prefix = `[acronym set ${set.id || "missing-id"}]`;

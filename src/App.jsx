@@ -307,6 +307,23 @@ const practiceSessionOwner = user => normalizeEmail(user?.email || "") || user?.
 const starOwner = user => normalizeEmail(user?.email || "") || user?.id || "guest";
 const cipherWalletOwner = user => user?.id || normalizeEmail(user?.email || "") || "guest";
 const starKey = (type,id) => `${type}:${id}`;
+const FLASHCARD_STAR_TYPE = "flashcard";
+const STARRED_FLASHCARD_SET_ID = "starred-flashcards";
+const getStarredFlashcards = starredKeys => {
+  const keySet=new Set(starredKeys||[]);
+  return SY0701_ACRONYM_CARDS.filter(card=>keySet.has(starKey(FLASHCARD_STAR_TYPE,card.id)));
+};
+const buildStarredFlashcardSet = cards => ({
+  id:STARRED_FLASHCARD_SET_ID,
+  title:"My starred flashcards",
+  description:"Your personally curated Security+ flashcards from every chapter and topic.",
+  objectiveCodes:[...new Set(cards.flatMap(card=>card.objectiveCodes||[]))],
+  color:"#f59e0b",
+  chapterId:0,
+  chapterTitle:"Your curated set",
+  topic:"Saved flashcards",
+  cards,
+});
 
 async function savePendingGuestSmartReview(attempts=[]) {
   const cleanAttempts=attempts
@@ -16221,6 +16238,10 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .home-mission-copy small{display:block;color:${t.textSec};font-size:12px;line-height:1.55;}
 .home-mission-meta{position:absolute;top:14px;right:14px;padding:5px 8px;border-radius:999px;background:${t.panel};border:1px solid ${t.border};color:var(--mission-color);font-size:10px;font-weight:950;text-transform:uppercase;}
 .home-duo-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:18px;margin-bottom:20px;}
+.dashboard-flashcard-set-card{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px;padding:18px 20px!important;border-color:color-mix(in srgb,var(--set-color) 30%,${t.border})!important;background:radial-gradient(circle at 94% 16%,color-mix(in srgb,var(--set-color) 14%,transparent),transparent 32%),${t.surface}!important;}
+.dashboard-flashcard-set-main{display:flex;align-items:center;gap:13px;min-width:0;}
+.dashboard-flashcard-set-main h3{margin:2px 0 4px;color:${t.text};font-size:17px;line-height:1.25;}
+.dashboard-flashcard-set-main p{margin:0;color:${t.textSec};font-size:13px;line-height:1.55;}
 .home-route-card,.home-path-card{padding:22px;}
 .home-route-card h3,.home-path-card h3{font-size:21px;color:${t.text};line-height:1.25;margin:7px 0 8px;}
 .home-route-card p{font-size:13px;line-height:1.75;color:${t.textSec};margin:0 0 16px;}
@@ -17977,6 +17998,8 @@ body{background:
   .mission-card-grid{grid-template-columns:1fr!important;}
   .home-mission-card{min-height:132px!important;}
   .home-duo-grid{grid-template-columns:1fr!important;}
+  .dashboard-flashcard-set-card{display:grid!important;grid-template-columns:1fr!important;}
+  .dashboard-flashcard-set-card .btn{justify-content:center;width:100%;}
   .home-step-row{grid-template-columns:1fr!important;}
   .home-value-grid{grid-template-columns:1fr!important;}
   .home-preview-tabs{overflow-x:auto;flex-wrap:nowrap!important;padding-bottom:2px;}
@@ -18695,6 +18718,7 @@ body{background:
 .deep-dive-acronym-set-card{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:11px;align-items:center;min-height:112px;padding:15px;border:1px solid color-mix(in srgb,var(--set-color) 30%,var(--deep-border));border-radius:17px;background:color-mix(in srgb,var(--set-color) 6%,var(--deep-surface));color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;}
 .deep-dive-acronym-set-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--set-color) 54%,var(--deep-border));box-shadow:0 13px 26px rgba(40,31,22,.09);}
 .deep-dive-acronym-set-card:focus-visible{outline:3px solid color-mix(in srgb,var(--set-color) 25%,transparent);outline-offset:2px;}
+.deep-dive-acronym-set-card:disabled{cursor:not-allowed;opacity:.72;transform:none;box-shadow:none;}
 .deep-dive-acronym-set-icon{display:grid;place-items:center;width:43px;height:43px;border-radius:13px;background:color-mix(in srgb,var(--set-color) 16%,var(--deep-surface));color:var(--set-color);}
 .flashcard-set-focus-icon{position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--set-color) 32%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 7px 16px color-mix(in srgb,var(--set-color) 15%,transparent);transition:transform .2s ease,box-shadow .2s ease,background .2s ease;}
 .flashcard-set-focus-icon::after{content:"";position:absolute;inset:auto -18% -36% -18%;height:58%;border-radius:999px;background:color-mix(in srgb,var(--set-color) 18%,transparent);transform:translateY(16px);transition:transform .22s ease;}
@@ -18743,6 +18767,9 @@ body{background:
 .deep-dive-flashcard-toolbar>span{font-size:10px;font-weight:900;color:var(--deep-muted);}
 .deep-dive-flashcard-toolbar .deep-dives-progress-track{margin:0;}
 .deep-dive-flashcard-toolbar .btn{min-height:34px;padding:7px 10px;font-size:10px;}
+.deep-dive-flashcard-stage{position:relative;}
+.deep-dive-flashcard-stage>.star-btn{position:absolute;right:18px;top:18px;z-index:5;background:color-mix(in srgb,var(--deep-surface) 88%,transparent);border:1px solid color-mix(in srgb,#f59e0b 25%,var(--deep-border));box-shadow:0 10px 24px rgba(40,31,22,.1);}
+.deep-dive-flashcard-stage>.star-btn.active{background:#f59e0b18;border-color:#f59e0b66;}
 .deep-dive-flashcard{display:block;width:100%;height:390px;padding:0;border:0;border-radius:23px;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;perspective:1400px;}
 .deep-dive-flashcard:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 33%,transparent);outline-offset:4px;}
 .deep-dive-flashcard-inner{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.8,.2,1);}
@@ -19565,14 +19592,14 @@ function FilterSelect({value,onChange,options,disabled=false,label="Select"}) {
     </div>
   );
 }
-function StarButton({active,onToggle,label="Star question"}) {
+function StarButton({active,onToggle,label="Star question",activeLabel="Unstar question"}) {
   return(
     <button
       type="button"
       className={`star-btn ${active?"active":""}`}
       aria-pressed={active}
-      aria-label={active?"Unstar question":label}
-      title={active?"Unstar question":label}
+      aria-label={active?activeLabel:label}
+      title={active?activeLabel:label}
       onClick={e=>{e.stopPropagation();onToggle?.();}}
     >
       <Star size={18} strokeWidth={2.2} fill={active?"currentColor":"none"}/>
@@ -22183,7 +22210,7 @@ function SmartReviewLessonPath({recommendations=[],onOpenDeepDive,source="smart_
   );
 }
 
-function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coinWallet,t}) {
+function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coinWallet,t,starred=[]}) {
   const [activeMission,setActiveMission]=useState("mcq");
   const readinessProfile=getReadinessProfile(attempts);
   const questionsDone=readinessProfile.uniqueQuestions;
@@ -22219,6 +22246,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
   const recoveryMessage=getStreakRecoveryMessage(streakInfo);
   const weeklyBadge=getWeeklyStreakBadge(streakInfo);
   const tomorrowRewardPreview=getTomorrowRewardPreview(streakInfo,true);
+  const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
 
   // Chapter performance
   const chStats = {};
@@ -22412,6 +22440,20 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
         </div>
       </section>
 
+      <section className="card dashboard-flashcard-set-card" style={{"--set-color":"#f59e0b"}}>
+        <div className="dashboard-flashcard-set-main">
+          <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Star size={21} strokeWidth={2.35} fill={starredFlashcards.length?"currentColor":"none"}/></span>
+          <div>
+            <div className="label" style={{color:"#f59e0b"}}>My starred flashcards</div>
+            <h3>{starredFlashcards.length?`${starredFlashcards.length} saved card${starredFlashcards.length===1?"":"s"} ready for review`:"Build your own flashcard set"}</h3>
+            <p>{starredFlashcards.length?`Saved: ${starredFlashcards.slice(0,5).map(card=>card.acronym).join(" · ")}${starredFlashcards.length>5?" · …":""}`:"Open Flashcards and press the star on any card to save the acronym, full name, definition, and example into your own set."}</p>
+          </div>
+        </div>
+        <button className="btn btn-primary" type="button" onClick={()=>onNav("flashcards")}>
+          {starredFlashcards.length?"Review starred flashcards":"Open Flashcards"}
+        </button>
+      </section>
+
       <section className="mission-board">
         <div className="mission-board-head">
           <div>
@@ -22587,7 +22629,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
   );
 }
 
-function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily}) {
+function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,onFlashcards}) {
   const [activePath,setActivePath]=useState("mcq");
   const startSignup=source=>{
     capture("landing_signup_cta_clicked", { source });
@@ -22595,6 +22637,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily}
   };
   const learningPaths=[
     {id:"mcq",label:"5 simple MCQs",tag:"Free",color:t.accent,body:"Start with a short no-account session, then see your instant weak-area result.",meta:"Practice now",action:onPractice},
+    {id:"flashcards",label:"Flashcards",tag:"Free",color:"#7c3aed",body:"Review acronyms and attacks by chapter without creating an account.",meta:"No login needed",action:onFlashcards},
     {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"Finish a short challenge and build a repeatable study rhythm.",meta:"5 questions/day",action:onDaily},
     {id:"pbq",label:"PBQ simulations",tag:"Preview",color:t.amber,body:`Try one complete PBQ, then choose coins or Pro for the remaining ${PBQ_BANK.length-1}.`,meta:"Try the preview",action:onPreviewPbq},
   ];
@@ -28537,7 +28580,7 @@ function ReferralPage({user,t}) {
 // ═══════════════════════════════════════════════════════════════
 // CONCEPT DEEP DIVES — SY0-701 GUIDED STUDY LIBRARY
 // ═══════════════════════════════════════════════════════════════
-function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
+function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup}) {
   const [direction,setDirection]=useState("definition");
   const [cardIndex,setCardIndex]=useState(0);
   const [cardOrder,setCardOrder]=useState(()=>acronymSet.cards.map(card=>card.id));
@@ -28555,6 +28598,17 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
   const asksFromExample=direction==="example";
   const masteredCount=acronymSet.cards.filter(card=>masteredIds.includes(card.id)).length;
   const progress=studyCards.length?Math.round(((cardIndex+1)/studyCards.length)*100):0;
+  const flashcardStarredSet=useMemo(()=>new Set(starred||[]),[starred]);
+  const activeStarKey=activeCard?starKey(FLASHCARD_STAR_TYPE,activeCard.id):"";
+  const activeCardStarred=Boolean(activeStarKey&&flashcardStarredSet.has(activeStarKey));
+  const toggleActiveFlashcardStar=()=>{
+    if(!activeCard)return;
+    if(!user){
+      onRequireSignup?.("flashcard_star");
+      return;
+    }
+    onToggleStar?.(FLASHCARD_STAR_TYPE,activeCard.id);
+  };
 
   useEffect(()=>{
     setDirection("definition");
@@ -28625,23 +28679,26 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
           <button className="btn btn-ghost" type="button" onClick={shuffleCards}><RotateCcw size={15}/>Shuffle</button>
         </div>
         {activeCard&&<>
-          <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
-            <span className="deep-dive-flashcard-inner">
-              <span className="deep-dive-flashcard-face deep-dive-flashcard-front">
-                <span className="deep-dive-flashcard-kind"><Brain size={15}/>{asksFromExample?"Guess the full attack name":asksForAcronym?"Identify the acronym":"Define the acronym"}</span>
-                <small className="deep-dive-acronym-prompt">{activeCard.topic || acronymSet.topic}</small>
-                <strong>{asksFromExample?activeCard.example:asksForAcronym?activeCard.meaning:activeCard.acronym}</strong>
-                <span className="deep-dive-flashcard-hint">{asksFromExample?"Name the attack, then tap to reveal":"Say it aloud, then tap to reveal"}</span>
+          <div className="deep-dive-flashcard-stage">
+            <StarButton active={activeCardStarred} onToggle={toggleActiveFlashcardStar} label={user?"Save flashcard to my set":"Sign up to save this flashcard"} activeLabel="Remove flashcard from my set"/>
+            <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
+              <span className="deep-dive-flashcard-inner">
+                <span className="deep-dive-flashcard-face deep-dive-flashcard-front">
+                  <span className="deep-dive-flashcard-kind"><Brain size={15}/>{asksFromExample?"Guess the full attack name":asksForAcronym?"Identify the acronym":"Define the acronym"}</span>
+                  <small className="deep-dive-acronym-prompt">{activeCard.topic || acronymSet.topic}</small>
+                  <strong>{asksFromExample?activeCard.example:asksForAcronym?activeCard.meaning:activeCard.acronym}</strong>
+                  <span className="deep-dive-flashcard-hint">{asksFromExample?"Name the attack, then tap to reveal":"Say it aloud, then tap to reveal"}</span>
+                </span>
+                <span className="deep-dive-flashcard-face deep-dive-flashcard-back">
+                  <span className="deep-dive-flashcard-kind"><Sparkles size={15}/>Answer</span>
+                  <small>{asksFromExample?"Full attack name":asksForAcronym?"Acronym and full term":"Full definition"}</small>
+                  <strong>{asksFromExample?activeCard.expansion:asksForAcronym?`${activeCard.acronym} - ${activeCard.expansion}`:activeCard.expansion}</strong>
+                  <p className="deep-dive-acronym-answer-copy">{asksFromExample?`Exam meaning: ${activeCard.meaning}`:asksForAcronym?`Exam meaning: ${activeCard.meaning}`:activeCard.meaning}</p>
+                  <span className="deep-dive-flashcard-hint">Tap to see the question again</span>
+                </span>
               </span>
-              <span className="deep-dive-flashcard-face deep-dive-flashcard-back">
-                <span className="deep-dive-flashcard-kind"><Sparkles size={15}/>Answer</span>
-                <small>{asksFromExample?"Full attack name":asksForAcronym?"Acronym and full term":"Full definition"}</small>
-                <strong>{asksFromExample?activeCard.expansion:asksForAcronym?`${activeCard.acronym} - ${activeCard.expansion}`:activeCard.expansion}</strong>
-                <p className="deep-dive-acronym-answer-copy">{asksFromExample?`Exam meaning: ${activeCard.meaning}`:asksForAcronym?`Exam meaning: ${activeCard.meaning}`:activeCard.meaning}</p>
-                <span className="deep-dive-flashcard-hint">Tap to see the question again</span>
-              </span>
-            </span>
-          </button>
+            </button>
+          </div>
           <div className="deep-dive-flashcard-actions">
             <button className="btn btn-outline" type="button" onClick={()=>moveCard(-1)}><ArrowLeft size={16}/>Previous</button>
             {!isFlipped?(
@@ -29254,7 +29311,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
   );
 }
 
-function FlashcardsPage({t,initialSetId=null,onInitialSetHandled}) {
+function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starred=[],onToggleStar,onRequireSignup}) {
   const [selectedSetId,setSelectedSetId]=useState(null);
   const [chapterFilter,setChapterFilter]=useState("all");
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
@@ -29265,18 +29322,25 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled}) {
   });
   const chapterGroups=useMemo(()=>groupSy0701AcronymSetsByChapter(),[]);
   const visibleGroups=chapterFilter==="all"?chapterGroups:chapterGroups.filter(group=>String(group.chapterId)===chapterFilter);
-  const selectedSet=SY0701_ACRONYM_SETS.find(set=>set.id===selectedSetId)||null;
+  const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
+  const starredFlashcardSet=useMemo(()=>buildStarredFlashcardSet(starredFlashcards),[starredFlashcards]);
+  const selectedSet=selectedSetId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(set=>set.id===selectedSetId)||null;
   const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>masteredAcronymIds.includes(card.id)).length;
   const progressPercent=SY0701_ACRONYM_CARDS.length?Math.round((totalMastered/SY0701_ACRONYM_CARDS.length)*100):0;
 
   useEffect(()=>{
     if(!initialSetId)return;
-    if(SY0701_ACRONYM_SETS.some(set=>set.id===initialSetId)){
+    if(initialSetId===STARRED_FLASHCARD_SET_ID || SY0701_ACRONYM_SETS.some(set=>set.id===initialSetId)){
       setSelectedSetId(initialSetId);
       window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:"auto"}));
     }
     onInitialSetHandled?.();
   },[initialSetId,onInitialSetHandled]);
+  useEffect(()=>{
+    if(selectedSetId===STARRED_FLASHCARD_SET_ID&&!starredFlashcards.length){
+      setSelectedSetId(null);
+    }
+  },[selectedSetId,starredFlashcards.length]);
 
   const updateMasteredAcronyms=(cardId,mastered)=>{
     const next=mastered
@@ -29295,19 +29359,20 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled}) {
   };
 
   if(selectedSet){
-    return <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t}/>;
+    return <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup}/>;
   }
 
   return(
     <div className="deep-dives-page flashcards-page" style={{"--deep-accent":"#7c3aed","--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <section className="deep-dives-hero flashcards-hero">
         <div className="deep-dives-hero-copy">
-          <span className="deep-dive-preview-badge"><TextCursorInput size={13}/> Standalone active recall</span>
+          <span className="deep-dive-preview-badge"><TextCursorInput size={13}/> Free standalone active recall</span>
           <div className="page-title-row"><NavGlyph type="flashcards" active/><h1>Flashcards</h1></div>
-          <p>Practise Security+ acronyms by chapter and topic. Choose whether to test the definition, identify the acronym, or mix both directions.</p>
+          <p>Practise Security+ acronyms by chapter and topic for free, even without an account. Sign in only if you want to save your own starred flashcard set.</p>
           <div className="deep-dives-proof">
             <span><ListChecks size={15}/>Grouped by SY0-701 chapters</span>
             <span><Brain size={15}/>{SY0701_ACRONYM_CARDS.length} high-yield cards</span>
+            <span><Star size={15}/>Personal starred set with account</span>
             <span><ShieldCheck size={15}/>Original study prompts. Not exam dumps.</span>
           </div>
           <a className="deep-dives-blueprint-link" href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Chapter and topic grouping checked against the official SY0-701 outline<ChevronRight size={14}/></a>
@@ -29327,6 +29392,32 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled}) {
               <strong>Ch. {group.chapterId}</strong><span>{group.chapterTitle}</span>
             </button>
           ))}
+        </div>
+      </section>
+
+      <section className="deep-dives-domain-group flashcards-curated-set" style={{"--set-color":"#f59e0b"}}>
+        <header>
+          <div><span>Your saved deck</span><h2>My Starred Flashcards</h2></div>
+          <strong>{starredFlashcards.length} saved</strong>
+        </header>
+        <div className="deep-dive-acronym-set-grid">
+          <button
+            type="button"
+            className="deep-dive-acronym-set-card flashcards-topic-card"
+            style={{"--set-color":"#f59e0b"}}
+            onClick={()=>user&&starredFlashcards.length?openSet(STARRED_FLASHCARD_SET_ID):onRequireSignup?.("flashcard_curated_set")}
+            disabled={Boolean(user)&&!starredFlashcards.length}
+            aria-label={user?`Open your starred flashcards: ${starredFlashcards.length} saved`:"Sign up to create a starred flashcard set"}
+          >
+            <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Star size={21} strokeWidth={2.35} fill={starredFlashcards.length?"currentColor":"none"}/></span>
+            <span>
+              <strong>{user?starredFlashcards.length?"Review your saved cards":"No starred flashcards yet":"Create your own set"}</strong>
+              <small>{user?"Press the star on any flashcard to save it here.":"Free guests can study all cards. Sign up to save a personal set."}</small>
+              <i>{starredFlashcards.slice(0,4).map(card=>card.acronym).join(" · ") || "Acronym · full name · definition · examples"}</i>
+            </span>
+            <ChevronRight size={17}/>
+            <span className="deep-dive-acronym-set-progress"><span><i style={{width:`${starredFlashcards.length?100:8}%`}}/></span><span>{starredFlashcards.length}</span></span>
+          </button>
         </div>
       </section>
 
@@ -30799,7 +30890,7 @@ export default function App() {
     setView("deep-dives");
   },[]);
   const handleOpenFlashcards=useCallback((setId=null)=>{
-    if(setId&&SY0701_ACRONYM_SETS.some(set=>set.id===setId)){
+    if(setId&&(setId===STARRED_FLASHCARD_SET_ID||SY0701_ACRONYM_SETS.some(set=>set.id===setId))){
       setFlashcardSetRequest(setId);
     }else{
       setFlashcardSetRequest(null);
@@ -31066,7 +31157,7 @@ export default function App() {
               </div>
             </div>
             {view==="dashboard"&&(
-              <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onDaily={()=>setView("daily")}/>
+              <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onDaily={()=>setView("daily")} onFlashcards={()=>setView("flashcards")}/>
             )}
             {view==="mcq"&&(
               <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion} mcqBank={liveMcqBank}/>
@@ -31104,7 +31195,7 @@ export default function App() {
               <DailyChallenge t={t} onLogin={goToSignup}/>
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
-            {view==="flashcards"&&<FlashcardsPage t={t}/>}
+            {view==="flashcards"&&<FlashcardsPage t={t} onRequireSignup={goToSignup}/>}
             {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={({chapterId})=>{setView("mcq");}} onTryRelatedPbq={handleGuestPbqPreview}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
@@ -31247,7 +31338,7 @@ export default function App() {
               <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onUpdateAvatar={handleUpdateAvatar} onChangePassword={handleChangePassword} onLogout={handleLogout} compact/>
             </div>
           </div>
-          {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} coinWallet={coinWallet} t={t}/>}
+          {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} coinWallet={coinWallet} t={t} starred={starred}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
             <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
           </div>
@@ -31265,7 +31356,7 @@ export default function App() {
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
           {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq} onOpenFlashcards={handleOpenFlashcards}/>}
-          {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)}/>}
+          {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
