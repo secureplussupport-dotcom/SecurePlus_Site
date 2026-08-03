@@ -342,6 +342,43 @@ const buildFlashcardShareMessage = set => {
   const setLine=isShareableSet?`Set: ${set.title}`:"Collection: SecurePlus Security+ Flashcards";
   return `${FLASHCARD_SHARE_COPY.statement}\n\n${setLine}\nTry it here: ${url}`;
 };
+const tokenizeLearningText = text => String(text||"").toLowerCase().match(/[a-z0-9+#.]+/g)||[];
+const getFlashcardRelatedDeepDives = acronymSet => {
+  if(!acronymSet||acronymSet.id===STARRED_FLASHCARD_SET_ID)return [];
+  const setText=[
+    acronymSet.title,
+    acronymSet.description,
+    acronymSet.chapterTitle,
+    acronymSet.topic,
+    ...(acronymSet.objectiveCodes||[]),
+    ...(acronymSet.cards||[]).flatMap(card=>[card.acronym,card.expansion,card.meaning,card.example,card.topic]),
+  ].join(" ");
+  const setTokens=new Set(tokenizeLearningText(setText).filter(token=>token.length>2));
+  return CONCEPT_DEEP_DIVES.map(dive=>{
+    const syllabus=getSy0701DeepDiveProfile(dive);
+    const diveKeywords=[
+      dive.title,
+      dive.category,
+      ...(dive.aliases||[]),
+      syllabus?.title,
+      syllabus?.plainSummary,
+      syllabus?.domain?.name,
+      ...(syllabus?.examKeywords||[]),
+    ];
+    let score=0;
+    diveKeywords.forEach(keyword=>{
+      const normalized=String(keyword||"").toLowerCase();
+      const directMatch=normalized&&setText.toLowerCase().includes(normalized);
+      if(directMatch)score+=5;
+      tokenizeLearningText(normalized).forEach(token=>{
+        if(setTokens.has(token))score+=1;
+      });
+    });
+    if(Number(syllabus?.domainId)===Number(acronymSet.chapterId))score+=3;
+    if((acronymSet.objectiveCodes||[]).some(code=>syllabus?.objectiveCodes?.includes(code)))score+=6;
+    return {dive,score};
+  }).filter(item=>item.score>3).sort((a,b)=>b.score-a.score).map(item=>item.dive).slice(0,3);
+};
 const FlashcardSocialIcon = ({type}) => {
   if(type==="copy")return(
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -16812,6 +16849,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .nav-lnk:hover .nav-glyph-achievements,.nav-glyph-achievements.active{color:#b45309;background:linear-gradient(135deg,#facc1540,#fb718540);border-color:#f59e0b85;box-shadow:0 0 20px rgba(245,158,11,.42);}
 .nav-lnk:hover .nav-glyph-deep-dives,.nav-glyph-deep-dives.active{color:#1d4ed8;background:linear-gradient(135deg,#38bdf840,#8b5cf640);border-color:#3b82f685;box-shadow:0 0 20px rgba(59,130,246,.42);}
 .nav-lnk:hover .nav-glyph-flashcards,.nav-glyph-flashcards.active{color:#7c3aed;background:linear-gradient(135deg,#c4b5fd40,#f0abfc40);border-color:#8b5cf685;box-shadow:0 0 20px rgba(124,58,237,.4);}
+.flashcards-fan-glyph rect{fill:color-mix(in srgb,currentColor 16%,transparent);stroke:currentColor;stroke-width:1.7;}
+.flashcards-fan-glyph path{stroke:currentColor;stroke-width:1.7;stroke-linecap:round;}
 .cipher-coin-icon{--coin-size:34px;position:relative;display:inline-block;width:var(--coin-size);height:var(--coin-size);flex:0 0 auto;filter:drop-shadow(0 calc(var(--coin-size)*.16) calc(var(--coin-size)*.13) rgba(113,76,28,.2));isolation:isolate;}
 .cipher-coin-face{position:absolute;inset:4% 7% 10% 5%;display:grid;place-items:center;overflow:hidden;border:2px solid #a96f25;border-radius:47% 53% 49% 51%/44% 48% 52% 56%;background:radial-gradient(circle at 34% 24%,#ffe7a3 0 9%,transparent 10%),linear-gradient(145deg,#f8cf72 0 34%,#dea044 62%,#b9782a 100%);box-shadow:inset calc(var(--coin-size)*.08) calc(var(--coin-size)*.07) 0 rgba(255,247,203,.5),inset calc(var(--coin-size)*-.09) calc(var(--coin-size)*-.08) 0 rgba(121,73,23,.17),2px 0 0 #c48631,-2px 2px 0 #b5792b;transform:rotate(-3deg);}
 .cipher-coin-face::after{content:"";position:absolute;inset:18%;border:2px dashed rgba(126,75,21,.42);border-radius:48% 52% 43% 57%;}
@@ -18893,6 +18932,8 @@ body{background:
 .deep-dive-flashcard-back{transform:rotateY(180deg);border-color:color-mix(in srgb,var(--deep-green) 36%,var(--deep-border));background:linear-gradient(145deg,color-mix(in srgb,var(--deep-green) 10%,var(--deep-surface)),var(--deep-surface));}
 .deep-dive-flashcard-kind{position:absolute;left:19px;top:18px;display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:9px;background:color-mix(in srgb,var(--deep-accent) 10%,var(--deep-surface));color:var(--deep-accent);font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
 .deep-dive-flashcard-back .deep-dive-flashcard-kind{background:color-mix(in srgb,var(--deep-green) 11%,var(--deep-surface));color:var(--deep-green);}
+.deep-dive-flashcard-watermark{position:absolute;right:17px;bottom:16px;display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid color-mix(in srgb,var(--deep-border) 72%,transparent);border-radius:999px;background:color-mix(in srgb,var(--deep-surface) 80%,transparent);color:var(--deep-muted);font-size:9px;font-weight:950;letter-spacing:.04em;text-transform:uppercase;opacity:.72;pointer-events:none;}
+.deep-dive-flashcard-watermark img{width:16px!important;height:16px!important;opacity:.85;}
 .deep-dive-flashcard-face small{max-width:620px;margin-bottom:13px;color:var(--deep-muted);font-size:11px;line-height:1.45;}
 .deep-dive-flashcard-face>strong{display:block;max-width:660px;color:var(--deep-text);font-size:clamp(20px,3vw,29px);font-weight:900;line-height:1.45;white-space:pre-line;}
 .deep-dive-flashcard-back>strong{font-size:clamp(17px,2.5vw,24px);font-weight:750;}
@@ -18900,6 +18941,21 @@ body{background:
 .deep-dive-flashcard-actions{display:grid;grid-template-columns:auto minmax(210px,1fr) auto;align-items:center;gap:9px;margin-top:14px;}
 .deep-dive-flashcard-actions>.btn:nth-child(2){justify-self:center;}
 .deep-dive-flashcard-rating{display:flex;justify-content:center;gap:8px;}
+.flashcard-learn-more{margin-top:16px;padding:16px;border:1px solid color-mix(in srgb,var(--set-color) 24%,var(--deep-border));border-radius:19px;background:linear-gradient(145deg,color-mix(in srgb,var(--set-color) 7%,var(--deep-surface)),var(--deep-surface));}
+.flashcard-learn-more>button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0;border:0;background:transparent;color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;}
+.flashcard-learn-more>button span{display:block;color:var(--set-color);font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
+.flashcard-learn-more>button strong{display:block;margin-top:4px;color:var(--deep-text);font-size:16px;font-weight:950;}
+.flashcard-learn-more>button small{display:block;margin-top:3px;color:var(--deep-muted);font-size:12px;font-weight:650;line-height:1.5;}
+.flashcard-learn-more>button svg{color:var(--set-color);transition:transform .18s ease;}
+.flashcard-learn-more.open>button svg{transform:rotate(90deg);}
+.flashcard-learn-more-panel{margin-top:13px;padding-top:13px;border-top:1px solid var(--deep-border);animation:fadeUp .18s ease both;}
+.flashcard-learn-more-note{margin:0 0 10px;color:var(--deep-muted);font-size:12px;font-weight:650;line-height:1.6;}
+.flashcard-lesson-links{display:grid;gap:8px;}
+.flashcard-lesson-link{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--deep-border);border-radius:14px;background:var(--deep-panel);color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;}
+.flashcard-lesson-link:hover{border-color:color-mix(in srgb,var(--set-color) 45%,var(--deep-border));background:color-mix(in srgb,var(--set-color) 7%,var(--deep-surface));}
+.flashcard-lesson-link strong{display:block;font-size:13px;font-weight:950;line-height:1.35;}
+.flashcard-lesson-link small{display:block;margin-top:4px;color:var(--deep-muted);font-size:10px;font-weight:800;line-height:1.45;}
+.flashcard-learn-more-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px;}
 .deep-dive-practice-lab{max-width:880px;margin:0 auto;padding:27px;border:1px solid color-mix(in srgb,var(--deep-accent) 29%,var(--deep-border));border-radius:24px;background:radial-gradient(circle at 92% 4%,color-mix(in srgb,var(--deep-green) 13%,transparent),transparent 29%),radial-gradient(circle at 4% 100%,color-mix(in srgb,var(--deep-amber) 12%,transparent),transparent 26%),var(--deep-surface);box-shadow:0 16px 44px rgba(40,31,22,.08);}
 .deep-dive-practice-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;}
 .deep-dive-practice-head>div:first-child>span{display:flex;align-items:center;gap:6px;color:var(--deep-accent);font-size:10px;font-weight:950;letter-spacing:.09em;text-transform:uppercase;}
@@ -19396,6 +19452,16 @@ function ChBadge({chId,t}) {
   return <span className="chip meta-chip" style={{fontSize:11}}><ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}</span>;
 }
 function NavGlyph({type,active}) {
+  if(type==="flashcards")return(
+    <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true">
+      <svg className="glyph-svg flashcards-fan-glyph" viewBox="0 0 24 24" width="21" height="21" fill="none">
+        <rect x="3.5" y="7.5" width="10" height="13" rx="2" transform="rotate(-14 3.5 7.5)"/>
+        <rect x="7" y="4.2" width="10" height="14" rx="2" transform="rotate(-2 7 4.2)"/>
+        <rect x="10.5" y="5.6" width="10" height="13" rx="2" transform="rotate(13 10.5 5.6)"/>
+        <path d="M10.3 8.5h3.8M10.4 11.1h4.9"/>
+      </svg>
+    </span>
+  );
   const Icon={
     dashboard:House,
     mcq:BookOpenCheck,
@@ -19411,7 +19477,6 @@ function NavGlyph({type,active}) {
     privacy:LockKeyhole,
     terms:FileText,
     "deep-dives":Layers3,
-    flashcards:TextCursorInput,
     feedback:MessageSquareWarning,
     "question-admin":ListPlus,
     "mascot-admin":Palette,
@@ -28775,31 +28840,34 @@ function FlashcardShareActions({set,t,compact=false}) {
   );
 }
 
-function FlashcardSavePrompt({t,onLogin,onSignup,onClose}) {
+function FlashcardSavePrompt({t,onLogin,onSignup,onClose,mode="save"}) {
+  const isLearnMore=mode==="learn_more";
   return(
     <div className="flashcard-auth-nudge" role="dialog" aria-modal="true" aria-labelledby="flashcard-save-title" onMouseDown={onClose}>
       <div className="flashcard-auth-card card" onMouseDown={event=>event.stopPropagation()}>
         <button className="icon-btn" type="button" aria-label="Close flashcard save prompt" onClick={onClose}><X size={18}/></button>
-        <div className="flashcard-auth-icon"><Star size={23} fill="currentColor"/></div>
-        <span className="deep-dive-preview-badge"><ShieldCheck size={13}/>Free to study</span>
-        <h2 id="flashcard-save-title">Save this flashcard?</h2>
-        <p>You can keep studying all flashcards for free. Log in or create a free account only if you want to build your own starred deck.</p>
+        <div className="flashcard-auth-icon">{isLearnMore?<BookOpenCheck size={23}/>:<Star size={23} fill="currentColor"/>}</div>
+        <span className="deep-dive-preview-badge"><ShieldCheck size={13}/>{isLearnMore?"Account feature":"Free to study"}</span>
+        <h2 id="flashcard-save-title">{isLearnMore?"Explore the full lesson path?":"Save this flashcard?"}</h2>
+        <p>{isLearnMore?"Create a free account to connect flashcards with more SecurePlus study features. You can close this and keep practicing flashcards anytime.":"You can keep studying all flashcards for free. Log in or create a free account only if you want to build your own starred deck."}</p>
         <div className="flashcard-auth-actions">
           <button className="btn btn-primary" type="button" onClick={onSignup}>Create free account</button>
           <button className="btn btn-outline" type="button" onClick={onLogin}>Log in</button>
           <button className="btn btn-ghost" type="button" onClick={onClose}>Keep studying</button>
         </div>
-        <small>Subtle note: starring is saved to your account. No payment needed.</small>
+        <small>{isLearnMore?"Subtle note: Flashcards stay free. Account features help connect the rest of your study path.":"Subtle note: starring is saved to your account. No payment needed."}</small>
       </div>
     </div>
   );
 }
 
-function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup}) {
+function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade}) {
   const [direction,setDirection]=useState("definition");
   const [cardIndex,setCardIndex]=useState(0);
   const [cardOrder,setCardOrder]=useState(()=>acronymSet.cards.map(card=>card.id));
   const [isFlipped,setIsFlipped]=useState(false);
+  const [learnMoreOpen,setLearnMoreOpen]=useState(false);
+  const [learnMoreNotice,setLearnMoreNotice]=useState("");
   const hasExampleMode=acronymSet.cards.some(card=>card.example);
   const orderedCards=useMemo(()=>{
     const byId=new Map(acronymSet.cards.map(card=>[card.id,card]));
@@ -28816,6 +28884,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   const flashcardStarredSet=useMemo(()=>new Set(starred||[]),[starred]);
   const activeStarKey=activeCard?starKey(FLASHCARD_STAR_TYPE,activeCard.id):"";
   const activeCardStarred=Boolean(activeStarKey&&flashcardStarredSet.has(activeStarKey));
+  const relatedDeepDives=useMemo(()=>getFlashcardRelatedDeepDives(acronymSet),[acronymSet]);
   const toggleActiveFlashcardStar=()=>{
     if(!activeCard)return;
     if(!user){
@@ -28830,6 +28899,8 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
     setCardIndex(0);
     setCardOrder(acronymSet.cards.map(card=>card.id));
     setIsFlipped(false);
+    setLearnMoreOpen(false);
+    setLearnMoreNotice("");
   },[acronymSet.id]);
 
   const moveCard=directionStep=>{
@@ -28856,6 +28927,17 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
     setDirection(nextDirection);
     setCardIndex(0);
     setIsFlipped(false);
+  };
+  const handleLearnMoreLesson=dive=>{
+    if(!user){
+      onRequireSignup?.("flashcard_learn_more");
+      return;
+    }
+    if(user.tier!=="pro"){
+      setLearnMoreNotice("Concept Deep Dives are part of Pro. Flashcards remain free; Pro connects this set to guided lessons.");
+      return;
+    }
+    onOpenDeepDive?.(dive.id,{mode:"learn",source:"flashcard_learn_more"});
   };
 
   return(
@@ -28903,12 +28985,14 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
               <span className="deep-dive-flashcard-inner">
                 <span className="deep-dive-flashcard-face deep-dive-flashcard-front">
                   <span className="deep-dive-flashcard-kind"><Brain size={15}/>{asksFromExample?"Guess the full attack name":asksForAcronym?"Identify the acronym":"Define the acronym"}</span>
+                  <span className="deep-dive-flashcard-watermark"><BrandMark size={16}/>SecurePlus</span>
                   <small className="deep-dive-acronym-prompt">{activeCard.topic || acronymSet.topic}</small>
                   <strong>{asksFromExample?activeCard.example:asksForAcronym?activeCard.meaning:activeCard.acronym}</strong>
                   <span className="deep-dive-flashcard-hint">{asksFromExample?"Name the attack, then tap to reveal":"Say it aloud, then tap to reveal"}</span>
                 </span>
                 <span className="deep-dive-flashcard-face deep-dive-flashcard-back">
                   <span className="deep-dive-flashcard-kind"><Sparkles size={15}/>Answer</span>
+                  <span className="deep-dive-flashcard-watermark"><BrandMark size={16}/>SecurePlus</span>
                   <small>{asksFromExample?"Full attack name":asksForAcronym?"Acronym and full term":"Full definition"}</small>
                   <strong>{asksFromExample?activeCard.expansion:asksForAcronym?`${activeCard.acronym} - ${activeCard.expansion}`:activeCard.expansion}</strong>
                   <p className="deep-dive-acronym-answer-copy">{asksFromExample?`Exam meaning: ${activeCard.meaning}`:asksForAcronym?`Exam meaning: ${activeCard.meaning}`:activeCard.meaning}</p>
@@ -28930,6 +29014,45 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
             <button className="btn btn-outline" type="button" onClick={()=>moveCard(1)}>Next<ChevronRight size={16}/></button>
           </div>
         </>}
+        {relatedDeepDives.length>0&&(
+          <div className={`flashcard-learn-more ${learnMoreOpen?"open":""}`}>
+            <button type="button" onClick={()=>{setLearnMoreOpen(value=>!value);setLearnMoreNotice("");}} aria-expanded={learnMoreOpen}>
+              <span>
+                <span>Learn More</span>
+                <strong>Connect this deck to Concept Deep Dives</strong>
+                <small>Matched by shared Security+ keywords, acronyms, and objectives.</small>
+              </span>
+              <ChevronRight size={18}/>
+            </button>
+            {learnMoreOpen&&(
+              <div className="flashcard-learn-more-panel">
+                <p className="flashcard-learn-more-note">
+                  {user?.tier==="pro"
+                    ?"Open the related guided lesson when you want more context."
+                    : user
+                      ?"Flashcards stay free. Pro unlocks the linked Concept Deep Dive lesson path."
+                      :"Create a free account to connect flashcards with more SecurePlus study features."}
+                </p>
+                <div className="flashcard-lesson-links">
+                  {relatedDeepDives.map(dive=>{
+                    const profile=getSy0701DeepDiveProfile(dive);
+                    return(
+                      <button key={dive.id} type="button" className="flashcard-lesson-link" onClick={()=>handleLearnMoreLesson(dive)}>
+                        <span><strong>{dive.title}</strong><small>{profile?.plainSummary||profile?.domain?.name||"Related Security+ guided lesson"}</small></span>
+                        {user?.tier==="pro"?<ChevronRight size={16}/>:user?<LockKeyhole size={16}/>:<UserRound size={16}/>}
+                      </button>
+                    );
+                  })}
+                </div>
+                {learnMoreNotice&&<p className="flashcard-learn-more-note" role="status">{learnMoreNotice}</p>}
+                <div className="flashcard-learn-more-actions">
+                  {user&&user.tier!=="pro"&&<button className="btn btn-primary" type="button" onClick={onUpgrade}>View Pro</button>}
+                  <button className="btn btn-ghost" type="button" onClick={()=>{setLearnMoreOpen(false);setLearnMoreNotice("");}}>Close</button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </section>
     </article>
   );
@@ -29529,7 +29652,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
   );
 }
 
-function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starred=[],onToggleStar,onRequireSignup}) {
+function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade}) {
   const [selectedSetId,setSelectedSetId]=useState(null);
   const [chapterFilter,setChapterFilter]=useState("all");
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
@@ -29577,7 +29700,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   };
 
   if(selectedSet){
-    return <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup}/>;
+    return <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade}/>;
   }
 
   return(
@@ -30368,7 +30491,7 @@ export default function App() {
   const [smartReviewRequest,setSmartReviewRequest]=useState(null);
   const [deepDiveRequest,setDeepDiveRequest]=useState(null);
   const [flashcardSetRequest,setFlashcardSetRequest]=useState(()=>urlFlashcardSetRequest||null);
-  const [flashcardAuthPrompt,setFlashcardAuthPrompt]=useState(false);
+  const [flashcardAuthPrompt,setFlashcardAuthPrompt]=useState(null);
   const [achievementUnlocks,setAchievementUnlocks]=useState([]);
   const [coinWallet,setCoinWallet]=useState(()=>({...emptyCipherWallet(),status:"idle"}));
   const [coinBusy,setCoinBusy]=useState(false);
@@ -31424,7 +31547,7 @@ export default function App() {
               <DailyChallenge t={t} onLogin={goToSignup}/>
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
-            {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} onRequireSignup={()=>setFlashcardAuthPrompt(true)}/>}
+            {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
             {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={({chapterId})=>{setView("mcq");}} onTryRelatedPbq={handleGuestPbqPreview}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
@@ -31438,6 +31561,7 @@ export default function App() {
               onClose={()=>setFlashcardAuthPrompt(false)}
               onLogin={()=>{setFlashcardAuthPrompt(false);goToLogin();}}
               onSignup={()=>{setFlashcardAuthPrompt(false);goToSignup();}}
+              mode={flashcardAuthPrompt==="flashcard_learn_more"?"learn_more":"save"}
             />
           )}
           {questionReport&&<QuestionReportModal report={questionReport} user={null} t={t} onClose={()=>setQuestionReport(null)}/>}
@@ -31593,7 +31717,7 @@ export default function App() {
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
           {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq} onOpenFlashcards={handleOpenFlashcards}/>}
-          {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")}/>}
+          {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")} onOpenDeepDive={handleOpenDeepDive} onUpgrade={()=>setView("pricing")}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}

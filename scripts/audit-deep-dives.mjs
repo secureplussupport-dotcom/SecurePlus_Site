@@ -93,6 +93,9 @@ requireValue(appSource.includes("social-whatsapp") && appSource.includes("social
 requireValue(appSource.includes('type==="copy"'), "Copy Link must use a distinct link icon rather than the generic share icon.");
 requireValue(appSource.includes(".flashcard-share-btn svg{width:29px;height:29px"), "Flashcard share platform glyphs must be large enough to fill the icon boxes.");
 requireValue(appSource.includes("flashcards-cipher-card") && appSource.includes('animation="flashcards"'), "Flashcards page must place Cipher in the hero with a flashcard-specific animation.");
+requireValue(appSource.includes("deep-dive-flashcard-watermark") && appSource.includes("<BrandMark size={16}/>SecurePlus"), "Every flashcard face must include a small SecurePlus watermark.");
+requireValue(appSource.includes("flashcards-fan-glyph"), "Flashcards navigation icon must use a fan of cards.");
+requireValue(appSource.includes("getFlashcardRelatedDeepDives") && appSource.includes("flashcard-learn-more") && appSource.includes("flashcard_learn_more"), "Flashcards must link to Concept Deep Dives through a closable Learn More flow.");
 requireValue(appSource.includes("FlashcardSavePrompt"), "Guest flashcard starring must show a soft login/signup prompt.");
 
 for (const set of SY0701_ACRONYM_SETS) {
