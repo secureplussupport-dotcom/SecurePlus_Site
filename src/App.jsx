@@ -18958,8 +18958,8 @@ body{background:
 .flashcard-default-mode-card span{display:flex;align-items:center;gap:6px;color:var(--deep-green);font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
 .flashcard-default-mode-card strong{font-size:14px;font-weight:950;line-height:1.25;}
 .flashcard-default-mode-card small{color:var(--deep-muted);font-size:11px;font-weight:750;line-height:1.45;}
-.flashcard-mode-overlay{position:fixed;inset:0;z-index:570;display:grid;place-items:center;padding:22px;background:rgba(17,24,22,.58);backdrop-filter:blur(9px) saturate(1.08);animation:fadeUp .18s ease both;overflow:hidden;}
-.flashcard-mode-sheet{position:relative;display:grid;grid-template-rows:auto minmax(0,1fr) auto;width:min(100%,980px);max-height:min(760px,calc(100dvh - 44px));padding:28px 30px 24px;border:1px solid #dbcbb4;border-radius:32px;background:radial-gradient(circle at 10% 8%,rgba(34,197,94,.13),transparent 28%),radial-gradient(circle at 91% 18%,rgba(124,58,237,.13),transparent 34%),linear-gradient(145deg,#fffaf0,#f5fbf1 58%,#f7f1e5);color:#2d251c;box-shadow:0 36px 110px rgba(18,24,20,.45);animation:flashcardModePop .32s cubic-bezier(.16,1,.3,1) both;overflow:hidden;}
+.flashcard-mode-overlay{position:fixed;inset:0;z-index:570;display:grid;place-items:center;padding:32px 24px;background:rgba(17,24,22,.58);backdrop-filter:blur(9px) saturate(1.08);animation:fadeUp .18s ease both;overflow:auto;}
+.flashcard-mode-sheet{position:relative;display:grid;grid-template-rows:auto minmax(0,1fr) auto;width:min(96vw,1120px);max-height:min(700px,calc(100dvh - 72px));padding:24px 34px 22px;border:1px solid #dbcbb4;border-radius:32px;background:radial-gradient(circle at 10% 8%,rgba(34,197,94,.13),transparent 28%),radial-gradient(circle at 91% 18%,rgba(124,58,237,.13),transparent 34%),linear-gradient(145deg,#fffaf0,#f5fbf1 58%,#f7f1e5);color:#2d251c;box-shadow:0 36px 110px rgba(18,24,20,.45);animation:flashcardModePop .32s cubic-bezier(.16,1,.3,1) both;overflow:auto;}
 .flashcard-mode-sheet::before,.flashcard-mode-sheet::after{content:"";position:absolute;top:19%;width:86px;height:62%;border-radius:999px;background:rgba(255,255,255,.42);filter:blur(1px);pointer-events:none;}
 .flashcard-mode-sheet::before{left:-58px;box-shadow:18px 0 38px rgba(124,58,237,.08);}
 .flashcard-mode-sheet::after{right:-58px;box-shadow:-18px 0 38px rgba(34,197,94,.08);}
@@ -18967,9 +18967,9 @@ body{background:
 .flashcard-mode-intro{position:relative;z-index:1;max-width:610px;margin:0 auto 18px;text-align:center;}
 .flashcard-mode-intro h2{margin:10px 0 6px;color:#2d251c;font-size:clamp(26px,4vw,42px);line-height:1.06;letter-spacing:-.035em;}
 .flashcard-mode-intro p{margin:0;color:#5f5348;font-size:13px;font-weight:800;line-height:1.6;}
-.flashcard-mode-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;min-height:0;overflow-y:auto;padding:2px 2px 4px;scrollbar-width:thin;}
+.flashcard-mode-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;min-height:0;overflow-y:auto;padding:2px 4px 6px;scrollbar-width:thin;}
 .flashcard-mode-sheet.has-example .flashcard-mode-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
-.flashcard-mode-card{position:relative;display:grid;grid-template-rows:132px auto auto;gap:12px;min-height:300px;padding:18px;border:1px solid color-mix(in srgb,var(--mode-color) 34%,#d8cab7);border-radius:24px;background:radial-gradient(circle at 88% 7%,color-mix(in srgb,var(--mode-color) 15%,transparent),transparent 34%),linear-gradient(155deg,color-mix(in srgb,var(--mode-color) 7%,#fffdf8),#fffaf1);color:#2d251c;font:inherit;text-align:left;cursor:pointer;overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease;}
+.flashcard-mode-card{position:relative;display:grid;grid-template-rows:136px auto auto;gap:13px;min-height:316px;padding:20px 22px;border:1px solid color-mix(in srgb,var(--mode-color) 34%,#d8cab7);border-radius:24px;background:radial-gradient(circle at 88% 7%,color-mix(in srgb,var(--mode-color) 15%,transparent),transparent 34%),linear-gradient(155deg,color-mix(in srgb,var(--mode-color) 7%,#fffdf8),#fffaf1);color:#2d251c;font:inherit;text-align:left;cursor:pointer;overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease;}
 .flashcard-mode-card.definition{--mode-color:#7c3aed;}
 .flashcard-mode-card.acronym{--mode-color:#0ea5e9;}
 .flashcard-mode-card.example{--mode-color:#22c55e;}
