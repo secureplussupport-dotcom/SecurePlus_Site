@@ -18954,8 +18954,8 @@ body{background:
 .flashcard-default-mode-card span{display:flex;align-items:center;gap:6px;color:var(--deep-green);font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
 .flashcard-default-mode-card strong{font-size:14px;font-weight:950;line-height:1.25;}
 .flashcard-default-mode-card small{color:var(--deep-muted);font-size:11px;font-weight:750;line-height:1.45;}
-.flashcard-mode-overlay{position:fixed;inset:0;z-index:570;display:grid;place-items:center;padding:22px;background:rgba(18,24,20,.38);backdrop-filter:blur(14px);animation:fadeUp .18s ease both;}
-.flashcard-mode-sheet{position:relative;width:min(100%,980px);padding:28px 30px 24px;border:1px solid color-mix(in srgb,#7c3aed 28%,var(--deep-border));border-radius:32px;background:radial-gradient(circle at 10% 8%,color-mix(in srgb,#22c55e 15%,transparent),transparent 28%),radial-gradient(circle at 91% 18%,color-mix(in srgb,#7c3aed 20%,transparent),transparent 34%),linear-gradient(145deg,var(--deep-surface),var(--deep-panel));box-shadow:0 36px 110px rgba(40,31,22,.3);animation:flashcardModePop .32s cubic-bezier(.16,1,.3,1) both;overflow:hidden;}
+.flashcard-mode-overlay{position:fixed;inset:0;z-index:570;display:grid;place-items:center;padding:22px;background:rgba(18,24,20,.38);backdrop-filter:blur(14px);animation:fadeUp .18s ease both;overflow:hidden;}
+.flashcard-mode-sheet{position:relative;display:grid;grid-template-rows:auto minmax(0,1fr) auto;width:min(100%,980px);max-height:min(760px,calc(100dvh - 44px));padding:28px 30px 24px;border:1px solid color-mix(in srgb,#7c3aed 28%,var(--deep-border));border-radius:32px;background:radial-gradient(circle at 10% 8%,color-mix(in srgb,#22c55e 15%,transparent),transparent 28%),radial-gradient(circle at 91% 18%,color-mix(in srgb,#7c3aed 20%,transparent),transparent 34%),linear-gradient(145deg,var(--deep-surface),var(--deep-panel));box-shadow:0 36px 110px rgba(40,31,22,.3);animation:flashcardModePop .32s cubic-bezier(.16,1,.3,1) both;overflow:hidden;}
 .flashcard-mode-sheet::before,.flashcard-mode-sheet::after{content:"";position:absolute;top:19%;width:86px;height:62%;border-radius:999px;background:rgba(255,255,255,.42);filter:blur(1px);pointer-events:none;}
 .flashcard-mode-sheet::before{left:-58px;box-shadow:18px 0 38px rgba(124,58,237,.08);}
 .flashcard-mode-sheet::after{right:-58px;box-shadow:-18px 0 38px rgba(34,197,94,.08);}
@@ -18963,7 +18963,7 @@ body{background:
 .flashcard-mode-intro{position:relative;z-index:1;max-width:610px;margin:0 auto 18px;text-align:center;}
 .flashcard-mode-intro h2{margin:10px 0 6px;color:var(--deep-text);font-size:clamp(26px,4vw,42px);line-height:1.06;letter-spacing:-.035em;}
 .flashcard-mode-intro p{margin:0;color:var(--deep-muted);font-size:13px;font-weight:700;line-height:1.6;}
-.flashcard-mode-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.flashcard-mode-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;min-height:0;overflow-y:auto;padding:2px 2px 4px;scrollbar-width:thin;}
 .flashcard-mode-sheet.has-example .flashcard-mode-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
 .flashcard-mode-card{position:relative;display:grid;grid-template-rows:132px auto auto;gap:12px;min-height:300px;padding:18px;border:1px solid color-mix(in srgb,var(--mode-color) 28%,var(--deep-border));border-radius:24px;background:radial-gradient(circle at 88% 7%,color-mix(in srgb,var(--mode-color) 22%,transparent),transparent 34%),linear-gradient(155deg,color-mix(in srgb,var(--mode-color) 10%,var(--deep-surface)),var(--deep-surface));color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease;}
 .flashcard-mode-card.definition{--mode-color:#7c3aed;}
@@ -29008,7 +29008,7 @@ function FlashcardModeChooser({t,set=null,hasExample=false,currentMode="definiti
     :set?.title
       ?`Set: ${set.title}`
       :"Pick how you want to study this deck.";
-  return(
+  const chooser=(
     <div className="flashcard-mode-overlay" role="dialog" aria-modal="true" aria-labelledby="flashcard-mode-title" onMouseDown={onClose}>
       <div className={`flashcard-mode-sheet ${hasExample?"has-example":"two-mode"}`} onMouseDown={event=>event.stopPropagation()}>
         <button className="icon-btn flashcard-mode-close" type="button" aria-label="Close flashcard mode chooser" onClick={onClose}><X size={18}/></button>
@@ -29054,6 +29054,7 @@ function FlashcardModeChooser({t,set=null,hasExample=false,currentMode="definiti
       </div>
     </div>
   );
+  return typeof document!=="undefined"&&document.body?createPortal(chooser,document.body):chooser;
 }
 
 function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,initialMode="definition",onChangeModeRequest}) {
