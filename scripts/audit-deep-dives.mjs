@@ -100,6 +100,12 @@ requireValue(appSource.includes("deep-dive-flashcard-watermark") && appSource.in
 requireValue(appSource.includes("flashcards-fan-glyph"), "Flashcards navigation icon must use a fan of cards.");
 requireValue(appSource.includes("getFlashcardRelatedDeepDives") && appSource.includes("flashcard-learn-more") && appSource.includes("flashcard_learn_more"), "Flashcards must link to Concept Deep Dives through a closable Learn More flow.");
 requireValue(appSource.includes("FlashcardSavePrompt"), "Guest flashcard starring must show a soft login/signup prompt.");
+requireValue(appSource.includes("FlashcardModeChooser") && appSource.includes("flashcard-mode-sheet") && appSource.includes("flashcard-mode-card"), "Flashcard sets must open through a dedicated mode chooser instead of an inline selector.");
+requireValue(!appSource.includes('role="tablist" aria-label="Choose flashcard direction"'), "Flashcard mode selection must not remain as a tab selector above the card.");
+requireValue(appSource.includes("FLASHCARD_DEFAULT_MODE_PREFIX") && appSource.includes("flashcard-default-checkbox") && appSource.includes("flashcard-default-mode-card"), "Signed-in users must be able to save and change a default flashcard mode.");
+requireValue(appSource.includes("flashcard-mode-recommended") && appSource.includes("Guess from Example") && appSource.includes("mode-cipher-question"), "Example-enabled flashcard sets must show a recommended Guess from Example mode with Cipher thinking.");
+requireValue(appSource.includes("mode-cipher-board") && appSource.includes("mode-cipher-stick") && appSource.includes("mode-cipher-magnifier"), "Definition and acronym flashcard modes must include distinct Cipher teaching and magnifying animations.");
+requireValue(appSource.includes("flashcard-change-mode-btn"), "Flashcard set view must include a visible Change Mode button.");
 
 for (const set of SY0701_ACRONYM_SETS) {
   const prefix = `[acronym set ${set.id || "missing-id"}]`;

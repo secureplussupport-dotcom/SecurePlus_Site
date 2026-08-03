@@ -18894,6 +18894,53 @@ body{background:
 .flashcard-auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;}
 .flashcard-auth-actions .btn:first-child{grid-column:1/-1;}
 .flashcard-auth-card small{display:block;color:${t.textDim};font-size:11px;font-weight:800;line-height:1.5;}
+.flashcard-default-mode-card{display:grid;gap:4px;width:min(100%,255px);align-self:flex-end;padding:13px 14px;border:1px solid color-mix(in srgb,#22c55e 28%,var(--deep-border));border-radius:18px;background:linear-gradient(145deg,color-mix(in srgb,#22c55e 9%,var(--deep-surface)),color-mix(in srgb,#7c3aed 7%,var(--deep-panel)));color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;box-shadow:0 13px 30px rgba(40,31,22,.08);transition:transform .18s,border-color .18s,box-shadow .18s;}
+.flashcard-default-mode-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,#22c55e 55%,var(--deep-border));box-shadow:0 18px 38px rgba(40,31,22,.13);}
+.flashcard-default-mode-card span{display:flex;align-items:center;gap:6px;color:var(--deep-green);font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
+.flashcard-default-mode-card strong{font-size:14px;font-weight:950;line-height:1.25;}
+.flashcard-default-mode-card small{color:var(--deep-muted);font-size:11px;font-weight:750;line-height:1.45;}
+.flashcard-mode-overlay{position:fixed;inset:0;z-index:570;display:grid;place-items:center;padding:22px;background:rgba(18,24,20,.38);backdrop-filter:blur(14px);animation:fadeUp .18s ease both;}
+.flashcard-mode-sheet{position:relative;width:min(100%,980px);padding:28px 30px 24px;border:1px solid color-mix(in srgb,#7c3aed 28%,var(--deep-border));border-radius:32px;background:radial-gradient(circle at 10% 8%,color-mix(in srgb,#22c55e 15%,transparent),transparent 28%),radial-gradient(circle at 91% 18%,color-mix(in srgb,#7c3aed 20%,transparent),transparent 34%),linear-gradient(145deg,var(--deep-surface),var(--deep-panel));box-shadow:0 36px 110px rgba(40,31,22,.3);animation:flashcardModePop .32s cubic-bezier(.16,1,.3,1) both;overflow:hidden;}
+.flashcard-mode-sheet::before,.flashcard-mode-sheet::after{content:"";position:absolute;top:19%;width:86px;height:62%;border-radius:999px;background:rgba(255,255,255,.42);filter:blur(1px);pointer-events:none;}
+.flashcard-mode-sheet::before{left:-58px;box-shadow:18px 0 38px rgba(124,58,237,.08);}
+.flashcard-mode-sheet::after{right:-58px;box-shadow:-18px 0 38px rgba(34,197,94,.08);}
+.flashcard-mode-close{position:absolute;right:18px;top:17px;z-index:2;}
+.flashcard-mode-intro{position:relative;z-index:1;max-width:610px;margin:0 auto 18px;text-align:center;}
+.flashcard-mode-intro h2{margin:10px 0 6px;color:var(--deep-text);font-size:clamp(26px,4vw,42px);line-height:1.06;letter-spacing:-.035em;}
+.flashcard-mode-intro p{margin:0;color:var(--deep-muted);font-size:13px;font-weight:700;line-height:1.6;}
+.flashcard-mode-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.flashcard-mode-sheet.has-example .flashcard-mode-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+.flashcard-mode-card{position:relative;display:grid;grid-template-rows:132px auto auto;gap:12px;min-height:300px;padding:18px;border:1px solid color-mix(in srgb,var(--mode-color) 28%,var(--deep-border));border-radius:24px;background:radial-gradient(circle at 88% 7%,color-mix(in srgb,var(--mode-color) 22%,transparent),transparent 34%),linear-gradient(155deg,color-mix(in srgb,var(--mode-color) 10%,var(--deep-surface)),var(--deep-surface));color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease;}
+.flashcard-mode-card.definition{--mode-color:#7c3aed;}
+.flashcard-mode-card.acronym{--mode-color:#0ea5e9;}
+.flashcard-mode-card.example{--mode-color:#22c55e;}
+.flashcard-mode-card:hover,.flashcard-mode-card.active{transform:translateY(-3px);border-color:color-mix(in srgb,var(--mode-color) 62%,var(--deep-border));box-shadow:0 20px 46px color-mix(in srgb,var(--mode-color) 18%,transparent);}
+.flashcard-mode-copy strong{display:block;color:var(--deep-text);font-size:22px;font-weight:950;line-height:1.12;letter-spacing:-.02em;}
+.flashcard-mode-copy small{display:block;margin-top:7px;color:var(--deep-muted);font-size:13px;font-weight:750;line-height:1.55;}
+.flashcard-mode-action{align-self:end;display:inline-flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--mode-color) 12%,var(--deep-panel));color:var(--mode-color);font-size:11px;font-weight:950;letter-spacing:.05em;text-transform:uppercase;}
+.flashcard-mode-recommended{position:absolute;right:13px;top:13px;z-index:3;display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:#22c55e;color:#fff;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;box-shadow:0 8px 18px rgba(34,197,94,.22);}
+.flashcard-mode-cipher{position:relative;display:grid;place-items:center;min-height:126px;}
+.flashcard-mode-cipher .cipher-mascot{--cipher-size:86px!important;position:relative;z-index:2;filter:drop-shadow(6px 8px 0 color-mix(in srgb,var(--mode-color) 22%,transparent));}
+.mode-cipher-board{position:absolute;left:8px;top:8px;width:80px;height:55px;border:3px solid #6b4f39;border-radius:9px;background:linear-gradient(145deg,#253f2f,#17291f);box-shadow:0 8px 0 rgba(107,79,57,.18);transform:rotate(-4deg);animation:flashcardBoardFloat 2.2s ease-in-out infinite alternate;}
+.mode-cipher-board span{position:absolute;left:12px;top:13px;color:#d9f99d;font-size:16px;font-weight:950;letter-spacing:.08em;}
+.mode-cipher-board i{position:absolute;left:10px;right:10px;bottom:12px;height:3px;border-radius:999px;background:#d9f99d88;}
+.mode-cipher-stick{position:absolute;left:91px;top:60px;width:48px;height:5px;border-radius:999px;background:#8b5e34;transform:rotate(-26deg);transform-origin:left center;animation:flashcardPointerWiggle 1.1s ease-in-out infinite alternate;}
+.mode-cipher-magnifier{position:absolute;right:25px;top:22px;z-index:3;width:48px;height:48px;border:5px solid #38bdf8;border-radius:999px;background:rgba(240,249,255,.55);box-shadow:inset 0 0 16px rgba(14,165,233,.2),0 8px 0 rgba(14,165,233,.12);animation:flashcardMagnify 1.6s ease-in-out infinite alternate;}
+.mode-cipher-magnifier::after{content:"";position:absolute;right:-17px;bottom:-12px;width:27px;height:6px;border-radius:999px;background:#0ea5e9;transform:rotate(43deg);}
+.mode-cipher-magnifier i{position:absolute;left:12px;top:17px;width:22px;height:7px;border-radius:999px;background:#075985;}
+.mode-cipher-question{position:absolute;right:22px;top:7px;z-index:3;display:grid;place-items:center;width:48px;height:42px;border-radius:22px 22px 22px 6px;background:#fff;color:#16a34a;font-size:27px;font-weight:950;box-shadow:0 9px 22px rgba(34,197,94,.2);animation:flashcardQuestionBob 1.5s ease-in-out infinite alternate;}
+.flashcard-mode-footer{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;padding-top:15px;border-top:1px solid var(--deep-border);}
+.flashcard-default-checkbox{display:inline-flex;align-items:center;gap:9px;color:var(--deep-muted);font-size:12px;font-weight:900;cursor:pointer;user-select:none;}
+.flashcard-default-checkbox input{position:absolute;opacity:0;pointer-events:none;}
+.flashcard-default-checkbox>span{display:grid;place-items:center;width:22px;height:22px;border:2px solid color-mix(in srgb,#22c55e 36%,var(--deep-border));border-radius:8px;background:var(--deep-surface);color:transparent;transition:background .16s,border-color .16s,color .16s,transform .16s;}
+.flashcard-default-checkbox.checked>span{background:#22c55e;border-color:#22c55e;color:#fff;transform:scale(1.05);}
+.flashcard-mode-footer>small{color:var(--deep-muted);font-size:11px;font-weight:800;line-height:1.45;}
+.flashcard-change-mode-btn{border-color:color-mix(in srgb,var(--set-color) 34%,var(--deep-border))!important;color:var(--set-color)!important;background:color-mix(in srgb,var(--set-color) 7%,var(--deep-surface))!important;}
+@keyframes flashcardModePop{from{opacity:0;transform:translateY(16px) scale(.96);}to{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes flashcardBoardFloat{from{transform:rotate(-5deg) translateY(0);}to{transform:rotate(-2deg) translateY(-5px);}}
+@keyframes flashcardPointerWiggle{from{transform:rotate(-31deg);}to{transform:rotate(-19deg);}}
+@keyframes flashcardMagnify{from{transform:translate(0,0) scale(1);}to{transform:translate(-7px,4px) scale(1.08);}}
+@keyframes flashcardQuestionBob{from{transform:translateY(0) rotate(-3deg);}to{transform:translateY(-7px) rotate(4deg);}}
 .flashcards-topic-card>span:nth-child(2)>i{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;color:var(--set-color);font-size:10px;font-style:normal;font-weight:900;line-height:1.45;}
 .flashcards-chapter-group header h2{max-width:760px;}
 .deep-dive-acronym-reader{max-width:980px;margin:0 auto;padding:24px 24px 110px;}
@@ -18904,9 +18951,6 @@ body{background:
 .deep-dive-acronym-reader-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px;}
 .deep-dive-acronym-reader-meta span,.deep-dive-acronym-reader-meta a{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid var(--deep-border);border-radius:999px;background:var(--deep-panel);color:var(--deep-muted);font-size:10px;font-weight:900;text-decoration:none;}
 .deep-dive-acronym-reader-meta a:hover{color:var(--set-color);border-color:color-mix(in srgb,var(--set-color) 42%,var(--deep-border));}
-.deep-dive-acronym-mode{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-width:850px;margin:0 auto 12px;padding:6px;border:1px solid var(--deep-border);border-radius:14px;background:var(--deep-surface);}
-.deep-dive-acronym-mode button{min-height:43px;padding:8px 10px;border:0;border-radius:10px;background:transparent;color:var(--deep-muted);font:inherit;font-size:11px;font-weight:900;cursor:pointer;}
-.deep-dive-acronym-mode button.active{background:color-mix(in srgb,var(--set-color) 12%,var(--deep-panel));color:var(--set-color);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--set-color) 26%,transparent);}
 .deep-dive-acronym-prompt{color:var(--set-color)!important;font-size:12px!important;font-weight:900;}
 .deep-dive-acronym-answer-copy{max-width:650px;margin:12px 0 0;color:var(--deep-muted);font-size:15px;font-weight:650;line-height:1.65;}
 .deep-dive-acronym-reader .deep-dive-flashcard-studio{max-width:850px;}
@@ -18918,7 +18962,7 @@ body{background:
 .deep-dive-flashcard-score{display:flex;align-items:center;gap:8px;flex:0 0 auto;padding:11px 13px;border:1px solid color-mix(in srgb,var(--deep-green) 30%,var(--deep-border));border-radius:13px;background:color-mix(in srgb,var(--deep-green) 7%,var(--deep-surface));}
 .deep-dive-flashcard-score strong{font-size:25px;line-height:1;color:var(--deep-green);}
 .deep-dive-flashcard-score span{font-size:9px;line-height:1.35;font-weight:850;color:var(--deep-muted);}
-.deep-dive-flashcard-toolbar{display:grid;grid-template-columns:auto minmax(100px,1fr) auto;align-items:center;gap:12px;margin-bottom:14px;}
+.deep-dive-flashcard-toolbar{display:grid;grid-template-columns:auto minmax(100px,1fr) auto auto;align-items:center;gap:12px;margin-bottom:14px;}
 .deep-dive-flashcard-toolbar>span{font-size:10px;font-weight:900;color:var(--deep-muted);}
 .deep-dive-flashcard-toolbar .deep-dives-progress-track{margin:0;}
 .deep-dive-flashcard-toolbar .btn{min-height:34px;padding:7px 10px;font-size:10px;}
@@ -19097,6 +19141,10 @@ body{background:
   .deep-dives-progress-card{max-width:420px;}
   .flashcards-hero-side{align-items:flex-start;}
   .flashcards-cipher-card{align-self:flex-start;width:min(100%,320px);}
+  .flashcard-default-mode-card{align-self:flex-start;width:min(100%,320px);}
+  .flashcard-mode-sheet.has-example .flashcard-mode-grid,.flashcard-mode-grid{grid-template-columns:minmax(0,1fr);}
+  .flashcard-mode-card{grid-template-rows:auto auto auto;min-height:0;}
+  .flashcard-mode-cipher{min-height:108px;}
   .deep-dive-objective-strip{grid-template-columns:minmax(0,1fr);}
   .deep-dives-domain-map{grid-template-columns:repeat(6,165px);}
   .deep-dive-reader-layout{grid-template-columns:minmax(0,1fr);}
@@ -19105,6 +19153,8 @@ body{background:
   .deep-dive-learning-card nav button{flex:0 0 min(285px,82vw);}
   .deep-dive-sources>div:last-child{grid-template-columns:minmax(0,1fr);}
   .deep-dive-flashcard-studio{padding:19px;}
+  .deep-dive-flashcard-toolbar{grid-template-columns:minmax(0,1fr);align-items:stretch;}
+  .deep-dive-flashcard-toolbar .btn{justify-content:center;}
   .deep-dive-practice-lab{padding:21px;}
 }
 @media (max-width: 560px){
@@ -19119,8 +19169,11 @@ body{background:
   .deep-dive-acronym-source-note{font-size:10.5px;}
   .deep-dive-acronym-reader-hero{padding:21px 18px;}
   .deep-dive-acronym-reader-hero h1{font-size:34px;}
-  .deep-dive-acronym-mode{gap:4px;padding:5px;}
-  .deep-dive-acronym-mode button{padding:7px 5px;font-size:9.5px;}
+  .flashcard-mode-overlay{padding:12px;}
+  .flashcard-mode-sheet{max-height:92vh;overflow:auto;padding:23px 18px 18px;border-radius:25px;}
+  .flashcard-mode-card{padding:15px;border-radius:20px;}
+  .flashcard-mode-copy strong{font-size:19px;}
+  .flashcard-mode-footer{align-items:stretch;flex-direction:column;}
   .deep-dive-acronym-answer-copy{font-size:14px;}
   .deep-dives-domain-group>header{align-items:flex-start;}
   .deep-dives-domain-group>header h2{font-size:22px;}
@@ -28862,8 +28915,110 @@ function FlashcardSavePrompt({t,onLogin,onSignup,onClose,mode="save"}) {
   );
 }
 
-function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade}) {
-  const [direction,setDirection]=useState("definition");
+const FLASHCARD_MODE_OPTIONS={
+  definition:{
+    id:"definition",
+    title:"Test Definition",
+    short:"See the acronym first, then recall what it means.",
+    label:"Definition mode",
+  },
+  acronym:{
+    id:"acronym",
+    title:"Identify Acronym",
+    short:"See the meaning first, then name the acronym.",
+    label:"Acronym mode",
+  },
+  example:{
+    id:"example",
+    title:"Guess from Example",
+    short:"Read a scenario clue and identify the full attack or term.",
+    label:"Scenario mode",
+  },
+};
+const FLASHCARD_DEFAULT_MODE_PREFIX="secureplus-flashcard-default-mode";
+const getFlashcardDefaultModeKey=owner=>`${FLASHCARD_DEFAULT_MODE_PREFIX}:${owner||"guest"}`;
+const getSafeFlashcardMode=(mode,hasExample=false)=>{
+  if(mode==="example")return hasExample?"example":"definition";
+  return mode==="acronym"?"acronym":"definition";
+};
+const flashcardSetHasExampleMode=set=>Boolean(set?.cards?.some(card=>card.example));
+
+function FlashcardModeCipher({mode}) {
+  return(
+    <div className={`flashcard-mode-cipher mode-${mode}`} aria-hidden="true">
+      {mode==="definition"&&<span className="mode-cipher-board"><span>AAA</span><i/></span>}
+      {mode==="definition"&&<span className="mode-cipher-stick"/>}
+      {mode==="acronym"&&<span className="mode-cipher-magnifier"><i/></span>}
+      {mode==="example"&&<span className="mode-cipher-question">?</span>}
+      <MascotAnimation animation={mode==="example"?"thinking":"flashcards"} size={86} interactive={false} label="Cipher flashcard mode"/>
+    </div>
+  );
+}
+
+function FlashcardModeChooser({t,set=null,hasExample=false,currentMode="definition",defaultMode="",user=null,onChoose,onClose,context="open"}) {
+  const [makeDefault,setMakeDefault]=useState(false);
+  const signedIn=Boolean(user?.id||user?.email);
+  const choices=[
+    FLASHCARD_MODE_OPTIONS.definition,
+    FLASHCARD_MODE_OPTIONS.acronym,
+    ...(hasExample?[FLASHCARD_MODE_OPTIONS.example]:[]),
+  ];
+  const title=context==="default"?"Choose your default flashcard mode":"Choose your flashcard mode";
+  const subtitle=context==="default"
+    ?"Signed-in users can skip this prompt for standard decks by saving a default."
+    :set?.title
+      ?`Set: ${set.title}`
+      :"Pick how you want to study this deck.";
+  return(
+    <div className="flashcard-mode-overlay" role="dialog" aria-modal="true" aria-labelledby="flashcard-mode-title" onMouseDown={onClose}>
+      <div className={`flashcard-mode-sheet ${hasExample?"has-example":"two-mode"}`} onMouseDown={event=>event.stopPropagation()}>
+        <button className="icon-btn flashcard-mode-close" type="button" aria-label="Close flashcard mode chooser" onClick={onClose}><X size={18}/></button>
+        <div className="flashcard-mode-intro">
+          <span className="deep-dive-preview-badge"><Brain size={13}/>Active recall setup</span>
+          <h2 id="flashcard-mode-title">{title}</h2>
+          <p>{subtitle}</p>
+        </div>
+        <div className="flashcard-mode-grid">
+          {choices.map(choice=>{
+            const active=currentMode===choice.id||defaultMode===choice.id;
+            const recommended=choice.id==="example";
+            return(
+              <button
+                key={choice.id}
+                type="button"
+                className={`flashcard-mode-card ${choice.id} ${active?"active":""}`}
+                onClick={()=>onChoose?.(choice.id,{makeDefault:makeDefault&&signedIn})}
+              >
+                {recommended&&<span className="flashcard-mode-recommended"><CheckCircle2 size={15}/>Recommended</span>}
+                <FlashcardModeCipher mode={choice.id}/>
+                <span className="flashcard-mode-copy">
+                  <strong>{choice.title}</strong>
+                  <small>{choice.short}</small>
+                </span>
+                <span className="flashcard-mode-action">{active?"Current choice":"Start this mode"}<ChevronRight size={15}/></span>
+              </button>
+            );
+          })}
+        </div>
+        <div className="flashcard-mode-footer">
+          {signedIn?(
+            <label className={`flashcard-default-checkbox ${makeDefault?"checked":""}`}>
+              <input type="checkbox" checked={makeDefault} onChange={event=>setMakeDefault(event.target.checked)}/>
+              <span><Check size={13}/></span>
+              <strong>Set as my default mode</strong>
+            </label>
+          ):(
+            <small>Guests can use every mode. Sign in if you want SecurePlus to remember your default.</small>
+          )}
+          <button className="btn btn-ghost" type="button" onClick={onClose}>Back</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,initialMode="definition",onChangeModeRequest}) {
+  const [direction,setDirection]=useState(()=>getSafeFlashcardMode(initialMode,flashcardSetHasExampleMode(acronymSet)));
   const [cardIndex,setCardIndex]=useState(0);
   const [cardOrder,setCardOrder]=useState(()=>acronymSet.cards.map(card=>card.id));
   const [isFlipped,setIsFlipped]=useState(false);
@@ -28896,13 +29051,20 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   };
 
   useEffect(()=>{
-    setDirection("definition");
+    setDirection(getSafeFlashcardMode(initialMode,flashcardSetHasExampleMode(acronymSet)));
     setCardIndex(0);
     setCardOrder(acronymSet.cards.map(card=>card.id));
     setIsFlipped(false);
     setLearnMoreOpen(false);
     setLearnMoreNotice("");
-  },[acronymSet.id]);
+  },[acronymSet.id,initialMode]);
+
+  useEffect(()=>{
+    const safeMode=getSafeFlashcardMode(initialMode,hasExampleMode);
+    setDirection(current=>current===safeMode?current:safeMode);
+    setCardIndex(0);
+    setIsFlipped(false);
+  },[initialMode,hasExampleMode]);
 
   const moveCard=directionStep=>{
     const total=Math.max(studyCards.length,1);
@@ -28921,11 +29083,6 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
       [shuffled[index],shuffled[swapIndex]]=[shuffled[swapIndex],shuffled[index]];
     }
     setCardOrder(shuffled);
-    setCardIndex(0);
-    setIsFlipped(false);
-  };
-  const chooseDirection=nextDirection=>{
-    setDirection(nextDirection);
     setCardIndex(0);
     setIsFlipped(false);
   };
@@ -28959,12 +29116,6 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
         </div>
       </header>
 
-      <div className="deep-dive-acronym-mode" role="tablist" aria-label="Choose flashcard direction">
-        <button type="button" role="tab" aria-selected={direction==="definition"} className={direction==="definition"?"active":""} onClick={()=>chooseDirection("definition")}>Test definitions</button>
-        <button type="button" role="tab" aria-selected={direction==="acronym"} className={direction==="acronym"?"active":""} onClick={()=>chooseDirection("acronym")}>Identify acronym</button>
-        {hasExampleMode&&<button type="button" role="tab" aria-selected={direction==="example"} className={direction==="example"?"active":""} onClick={()=>chooseDirection("example")}>Guess from example</button>}
-      </div>
-
       <section className="deep-dive-flashcard-studio" aria-label={`${acronymSet.title} acronym flashcards`}>
         <div className="deep-dive-flashcard-head">
           <div><span className="deep-dive-eyebrow">{hasExampleMode?"Scenario attack drill":"Acronym drill"}</span><h2>{asksFromExample?"Read the example. Name the attack.":"Recall it, then flip"}</h2><p>{hasExampleMode?"Use the example mode to practise recognizing attacks from real-world clues, then flip to check the full name.":"Definitions include a short plain-English reminder so you learn what the term does, not only what the letters spell."}</p></div>
@@ -28976,6 +29127,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
         <div className="deep-dive-flashcard-toolbar">
           <span>Card {Math.min(cardIndex+1,studyCards.length)} of {studyCards.length}</span>
           <div className="deep-dives-progress-track"><span style={{width:`${progress}%`}}/></div>
+          {onChangeModeRequest&&<button className="btn btn-outline flashcard-change-mode-btn" type="button" onClick={onChangeModeRequest}><Brain size={15}/>{FLASHCARD_MODE_OPTIONS[direction]?.title||"Change mode"}</button>}
           <button className="btn btn-ghost" type="button" onClick={shuffleCards}><RotateCcw size={15}/>Shuffle</button>
         </div>
         {activeCard&&<>
@@ -29668,15 +29820,89 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   const selectedSet=selectedSetId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(set=>set.id===selectedSetId)||null;
   const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>masteredAcronymIds.includes(card.id)).length;
   const progressPercent=SY0701_ACRONYM_CARDS.length?Math.round((totalMastered/SY0701_ACRONYM_CARDS.length)*100):0;
+  const signedIn=Boolean(user?.id||user?.email);
+  const defaultOwner=starOwner(user);
+  const [activeMode,setActiveMode]=useState("definition");
+  const [defaultMode,setDefaultMode]=useState("");
+  const [modeChooser,setModeChooser]=useState(null);
+
+  useEffect(()=>{
+    if(!signedIn){
+      setDefaultMode("");
+      return;
+    }
+    try{
+      const stored=window.localStorage?.getItem(getFlashcardDefaultModeKey(defaultOwner))||"";
+      setDefaultMode(["definition","acronym","example"].includes(stored)?stored:"");
+    }catch{
+      setDefaultMode("");
+    }
+  },[signedIn,defaultOwner]);
+
+  const saveDefaultMode=mode=>{
+    if(!signedIn)return;
+    const safeMode=getSafeFlashcardMode(mode,true);
+    setDefaultMode(safeMode);
+    try{window.localStorage?.setItem(getFlashcardDefaultModeKey(defaultOwner),safeMode);}catch{}
+    capture("flashcards_default_mode_saved",{mode:safeMode});
+  };
+
+  const scrollToFlashcardTop=useCallback((smooth=true)=>{
+    const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:!smooth||reduceMotion?"auto":"smooth"}));
+  },[]);
+
+  const startFlashcardSet=useCallback((id,mode)=>{
+    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
+    const safeMode=getSafeFlashcardMode(mode,flashcardSetHasExampleMode(set));
+    setActiveMode(safeMode);
+    setSelectedSetId(id);
+    setModeChooser(null);
+    capture("flashcards_set_opened",{set_id:id,mode:safeMode});
+    scrollToFlashcardTop(true);
+  },[scrollToFlashcardTop,starredFlashcardSet]);
+
+  const openSet=useCallback(id=>{
+    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
+    if(!set)return;
+    const hasExample=flashcardSetHasExampleMode(set);
+    const safeDefault=defaultMode?getSafeFlashcardMode(defaultMode,hasExample):"";
+    const shouldChooseMode=!signedIn || hasExample || !safeDefault;
+    if(shouldChooseMode){
+      setModeChooser({context:"open",setId:id,hasExample});
+      return;
+    }
+    startFlashcardSet(id,safeDefault);
+  },[defaultMode,signedIn,starredFlashcardSet,startFlashcardSet]);
+
+  const handleModeChosen=(mode,{makeDefault=false}={})=>{
+    const chooser=modeChooser;
+    const safeMode=getSafeFlashcardMode(mode,chooser?.hasExample);
+    if(makeDefault)saveDefaultMode(safeMode);
+    if(chooser?.context==="default"){
+      setModeChooser(null);
+      return;
+    }
+    if(chooser?.context==="change"){
+      setActiveMode(safeMode);
+      setModeChooser(null);
+      capture("flashcards_mode_changed",{set_id:selectedSet?.id,mode:safeMode});
+      return;
+    }
+    if(chooser?.context==="open"&&chooser.setId){
+      startFlashcardSet(chooser.setId,safeMode);
+      return;
+    }
+    setModeChooser(null);
+  };
 
   useEffect(()=>{
     if(!initialSetId)return;
     if(initialSetId===STARRED_FLASHCARD_SET_ID || SY0701_ACRONYM_SETS.some(set=>set.id===initialSetId)){
-      setSelectedSetId(initialSetId);
-      window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:"auto"}));
+      openSet(initialSetId);
     }
     onInitialSetHandled?.();
-  },[initialSetId,onInitialSetHandled]);
+  },[initialSetId,onInitialSetHandled,openSet]);
   useEffect(()=>{
     if(selectedSetId===STARRED_FLASHCARD_SET_ID&&!starredFlashcards.length){
       setSelectedSetId(null);
@@ -29692,15 +29918,13 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     capture("flashcards_acronym_rated",{set_id:selectedSet?.id,card_id:cardId,mastered});
   };
 
-  const openSet=id=>{
-    setSelectedSetId(id);
-    capture("flashcards_set_opened",{set_id:id});
-    const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-    window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"}));
-  };
-
   if(selectedSet){
-    return <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade}/>;
+    return(
+      <>
+        <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade} initialMode={activeMode} onChangeModeRequest={()=>setModeChooser({context:"change",setId:selectedSet.id,hasExample:flashcardSetHasExampleMode(selectedSet)})}/>
+        {modeChooser&&<FlashcardModeChooser t={t} set={selectedSet} hasExample={modeChooser.hasExample} currentMode={activeMode} defaultMode={defaultMode} user={user} context={modeChooser.context} onChoose={handleModeChosen} onClose={()=>setModeChooser(null)}/>}
+      </>
+    );
   }
 
   return(
@@ -29730,6 +29954,15 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
             <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
             <p>Marked cards stay saved on this device, so repeated practice becomes lighter over time.</p>
           </div>
+          <button
+            className="flashcard-default-mode-card"
+            type="button"
+            onClick={()=>setModeChooser({context:"default",setId:null,hasExample:false})}
+          >
+            <span><CheckCircle2 size={16}/>{signedIn?defaultMode?"Default mode saved":"Choose default mode":"Mode chooser"}</span>
+            <strong>{signedIn&&defaultMode?FLASHCARD_MODE_OPTIONS[defaultMode]?.title:"Pick before studying"}</strong>
+            <small>{signedIn?"Change how standard decks open.":"Guests choose a mode each time."}</small>
+          </button>
         </div>
       </section>
 
@@ -29798,6 +30031,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
       </div>
 
       <div className="deep-dive-acronym-source-note"><ShieldCheck size={16}/><span>{SY0701_ACRONYM_SOURCE.reviewNote}</span></div>
+      {modeChooser&&<FlashcardModeChooser t={t} set={modeChooser.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(set=>set.id===modeChooser.setId)||null} hasExample={modeChooser.hasExample} currentMode={activeMode} defaultMode={defaultMode} user={user} context={modeChooser.context} onChoose={handleModeChosen} onClose={()=>setModeChooser(null)}/>}
     </div>
   );
 }
