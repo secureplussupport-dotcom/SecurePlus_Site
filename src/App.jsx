@@ -441,7 +441,7 @@ const readSavedRandomFlashcardSets = user => {
         includeTerms:config.includeTerms!==false,
         includeAcronyms:config.includeAcronyms!==false,
         sourceCards:cards,
-        title:item.title||`Saved random deck ${index+1}`,
+        title:item.title||`Generated deck ${index+1}`,
         savedId:item.id||`${SAVED_RANDOM_FLASHCARD_PREFIX}-${index+1}`,
         preserveOrder:true,
       });
@@ -19216,7 +19216,15 @@ body{background:
 .flashcard-inventory-notice span{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:900;line-height:1.35;}
 .flashcard-inventory-notice button{flex:0 0 auto;}
 .saved-random-set-card{border-color:color-mix(in srgb,var(--set-color) 36%,var(--deep-border))!important;}
-.cipher-made-set-card{border-color:color-mix(in srgb,#0ea5e9 46%,var(--deep-border))!important;background:radial-gradient(circle at 92% 12%,color-mix(in srgb,#0ea5e9 18%,transparent),transparent 33%),linear-gradient(145deg,color-mix(in srgb,#0ea5e9 8%,var(--deep-surface)),var(--deep-surface))!important;}
+.generated-set-title-row{display:flex;align-items:center;gap:7px;margin-top:1px;}
+.generated-set-title-row strong{min-width:0;overflow:hidden;text-overflow:ellipsis;}
+.generated-set-title-row .icon-btn{width:27px;height:27px;flex:0 0 auto;border-radius:9px;color:var(--set-color);}
+.generated-set-rename{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;margin-top:3px;}
+.generated-set-rename input{min-width:0;height:36px;padding:8px 10px;border:1px solid color-mix(in srgb,var(--set-color) 30%,var(--deep-border));border-radius:11px;background:var(--deep-surface);color:var(--deep-text);font:inherit;font-size:12px;font-weight:850;}
+.generated-set-rename .btn{min-height:36px;padding:7px 10px;font-size:10px!important;}
+.cipher-made-set-card{--set-color:#14b8a6!important;border-color:color-mix(in srgb,#14b8a6 62%,var(--deep-border))!important;background:radial-gradient(circle at 92% 12%,color-mix(in srgb,#34d399 25%,transparent),transparent 33%),radial-gradient(circle at 12% 88%,color-mix(in srgb,#0ea5e9 18%,transparent),transparent 38%),linear-gradient(145deg,color-mix(in srgb,#14b8a6 13%,var(--deep-surface)),color-mix(in srgb,#0ea5e9 8%,var(--deep-surface)))!important;box-shadow:0 18px 42px rgba(20,184,166,.18),0 10px 22px rgba(40,31,22,.06)!important;}
+.cipher-made-set-card .flashcard-type-badge{border-color:color-mix(in srgb,#14b8a6 48%,var(--deep-border));background:color-mix(in srgb,#14b8a6 14%,var(--deep-panel));color:#0f766e;}
+.cipher-made-set-card .flashcard-set-focus-icon{background:linear-gradient(135deg,#14b8a6,#0ea5e9);color:#fff;border-color:rgba(255,255,255,.42);}
 .flashcard-section-divider-face{border-color:color-mix(in srgb,var(--set-color) 52%,var(--deep-border))!important;background:radial-gradient(circle at 18% 18%,color-mix(in srgb,var(--set-color) 20%,transparent),transparent 36%),linear-gradient(145deg,color-mix(in srgb,var(--set-color) 12%,var(--deep-surface)),var(--deep-panel))!important;}
 .flashcard-section-divider-face>strong{color:var(--set-color)!important;font-size:clamp(28px,4vw,46px)!important;font-weight:950!important;line-height:1.12!important;}
 .flashcard-save-random{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:14px;padding:15px 16px!important;border-color:color-mix(in srgb,#0ea5e9 34%,var(--deep-border))!important;background:linear-gradient(145deg,color-mix(in srgb,#0ea5e9 8%,var(--deep-surface)),var(--deep-panel))!important;}
@@ -30262,6 +30270,8 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const [randomFlashcardSet,setRandomFlashcardSet]=useState(null);
   const [savedRandomSets,setSavedRandomSets]=useState(()=>readSavedRandomFlashcardSets(user));
   const [inventoryNotice,setInventoryNotice]=useState("");
+  const [renamingSetId,setRenamingSetId]=useState(null);
+  const [renameDraft,setRenameDraft]=useState("");
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
     try{
       const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
@@ -30414,7 +30424,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
     const saved={
       ...set,
       id:String(set.id||"").startsWith(SAVED_RANDOM_FLASHCARD_PREFIX)?set.id:`${SAVED_RANDOM_FLASHCARD_PREFIX}-${Date.now()}`,
-      title:set.title?.startsWith("Saved random deck")?set.title:`Saved random deck ${savedRandomSets.length+1}`,
+      title:set.title?.startsWith("Generated deck")?set.title:`Generated deck ${savedRandomSets.length+1}`,
       savedAt:new Date().toISOString(),
     };
     const next=[saved,...savedRandomSets.filter(item=>item.id!==saved.id)].slice(0,8);
@@ -30436,7 +30446,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
     const safeConfig=normalizeRandomFlashcardConfig(randomConfig);
     const built=buildRandomFlashcardSet({
       ...safeConfig,
-      title:`Saved random deck ${savedRandomSets.length+1}`,
+      title:`Generated deck ${savedRandomSets.length+1}`,
       savedId:`${SAVED_RANDOM_FLASHCARD_PREFIX}-${Date.now()}`,
     });
     setRandomConfig(safeConfig);
@@ -30448,6 +30458,29 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
       return;
     }
     persistSavedRandomSet(set,{openAfterSave:false});
+  };
+  const startRenameGeneratedSet=(set,event)=>{
+    event?.stopPropagation?.();
+    setInventoryNotice("");
+    setRenamingSetId(set.id);
+    setRenameDraft(set.title||"");
+  };
+  const saveGeneratedSetName=(setId,event)=>{
+    event?.preventDefault?.();
+    event?.stopPropagation?.();
+    if(!user)return;
+    const cleanName=String(renameDraft||"").trim().slice(0,48);
+    if(!cleanName){
+      setInventoryNotice("Generated set name cannot be empty.");
+      return;
+    }
+    const next=savedRandomSets.map(set=>set.id===setId?{...set,title:cleanName}:set);
+    setSavedRandomSets(next);
+    writeSavedRandomFlashcardSets(user,next);
+    setRenamingSetId(null);
+    setRenameDraft("");
+    setInventoryNotice(`Renamed to ${cleanName}.`);
+    capture("flashcards_generated_set_renamed",{set_id:setId});
   };
 
   if(selectedSet){
@@ -30523,7 +30556,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
 
       <section className="deep-dives-domain-group flashcards-curated-set" style={{"--set-color":"#f59e0b"}}>
         <header>
-          <div><span>Your flashcard inventory</span><h2>Starred and random decks</h2></div>
+          <div><span>Your flashcard inventory</span><h2>Starred and generated decks</h2></div>
           <strong>{starredFlashcards.length+savedRandomSets.length+(showAssistantDeck?1:0)} saved</strong>
         </header>
         {inventoryNotice&&(
@@ -30625,24 +30658,51 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
             )}
           </div>
           {savedRandomSets.map(set=>(
-            <button
-              type="button"
+            <div
               className="deep-dive-acronym-set-card flashcards-topic-card saved-random-set-card"
               style={{"--set-color":set.color}}
               key={set.id}
+              role="button"
+              tabIndex={0}
               onClick={()=>openSet(set.id)}
+              onKeyDown={event=>{
+                if(event.key==="Enter"||event.key===" "){
+                  event.preventDefault();
+                  openSet(set.id);
+                }
+              }}
               aria-label={`Open ${set.title}`}
             >
               <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Sparkles size={21} strokeWidth={2.35}/></span>
               <span>
-                <em className="flashcard-type-badge">Saved random</em>
-                <strong>{set.title}</strong>
+                <em className="flashcard-type-badge">Generated</em>
+                {renamingSetId===set.id?(
+                  <span className="generated-set-rename" onClick={event=>event.stopPropagation()}>
+                    <input
+                      value={renameDraft}
+                      onChange={event=>setRenameDraft(event.target.value)}
+                      onKeyDown={event=>{
+                        if(event.key==="Enter")saveGeneratedSetName(set.id,event);
+                        if(event.key==="Escape"){event.stopPropagation();setRenamingSetId(null);setRenameDraft("");}
+                      }}
+                      autoFocus
+                      maxLength={48}
+                      aria-label={`Rename ${set.title}`}
+                    />
+                    <button className="btn btn-primary" type="button" onClick={event=>saveGeneratedSetName(set.id,event)}>Save</button>
+                  </span>
+                ):(
+                  <span className="generated-set-title-row">
+                    <strong>{set.title}</strong>
+                    <button className="icon-btn" type="button" onClick={event=>startRenameGeneratedSet(set,event)} aria-label={`Rename ${set.title}`}><PenLine size={14}/></button>
+                  </span>
+                )}
                 <small>{set.description}</small>
                 <i>{set.cards.filter(card=>card.cardType!=="divider").slice(0,4).map(card=>card.acronym).join(" · ")}</i>
               </span>
               <ChevronRight size={17}/>
               <span className="deep-dive-acronym-set-progress"><span><i style={{width:"100%"}}/></span><span>{set.cards.filter(card=>card.cardType!=="divider").length}</span></span>
-            </button>
+            </div>
           ))}
         </div>
       </section>
