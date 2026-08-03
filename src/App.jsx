@@ -19143,6 +19143,7 @@ body{background:
 .flashcard-random-choice button{min-height:36px;padding:8px 9px;border:1px solid var(--deep-border);border-radius:12px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;font-size:10px;font-weight:950;cursor:pointer;}
 .flashcard-random-choice button.active{border-color:color-mix(in srgb,var(--set-color) 56%,var(--deep-border));background:color-mix(in srgb,var(--set-color) 13%,var(--deep-surface));color:var(--set-color);}
 .saved-random-set-card{border-color:color-mix(in srgb,var(--set-color) 36%,var(--deep-border))!important;}
+.cipher-made-set-card{border-color:color-mix(in srgb,#0ea5e9 46%,var(--deep-border))!important;background:radial-gradient(circle at 92% 12%,color-mix(in srgb,#0ea5e9 18%,transparent),transparent 33%),linear-gradient(145deg,color-mix(in srgb,#0ea5e9 8%,var(--deep-surface)),var(--deep-surface))!important;}
 .flashcard-section-divider-face{border-color:color-mix(in srgb,var(--set-color) 52%,var(--deep-border))!important;background:radial-gradient(circle at 18% 18%,color-mix(in srgb,var(--set-color) 20%,transparent),transparent 36%),linear-gradient(145deg,color-mix(in srgb,var(--set-color) 12%,var(--deep-surface)),var(--deep-panel))!important;}
 .flashcard-section-divider-face>strong{color:var(--set-color)!important;font-size:clamp(28px,4vw,46px)!important;font-weight:950!important;line-height:1.12!important;}
 .flashcard-save-random{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:14px;padding:15px 16px!important;border-color:color-mix(in srgb,#0ea5e9 34%,var(--deep-border))!important;background:linear-gradient(145deg,color-mix(in srgb,#0ea5e9 8%,var(--deep-surface)),var(--deep-panel))!important;}
@@ -30204,6 +30205,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const progressPercent=SY0701_ACRONYM_CARDS.length?Math.round((totalMastered/SY0701_ACRONYM_CARDS.length)*100):0;
   const mobileQuickSets=useMemo(()=>visibleGroups.flatMap(group=>group.sets).slice(0,3),[visibleGroups]);
   const signedIn=Boolean(user?.id||user?.email);
+  const showAssistantDeck=user?.tier==="pro"&&Boolean(assistantSet?.cards?.length);
   const defaultOwner=starOwner(user);
   const [activeMode,setActiveMode]=useState("definition");
   const [defaultMode,setDefaultMode]=useState("");
@@ -30424,7 +30426,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
       <section className="deep-dives-domain-group flashcards-curated-set" style={{"--set-color":"#f59e0b"}}>
         <header>
           <div><span>Your flashcard inventory</span><h2>Starred and random decks</h2></div>
-          <strong>{starredFlashcards.length+savedRandomSets.length} saved</strong>
+          <strong>{starredFlashcards.length+savedRandomSets.length+(showAssistantDeck?1:0)} saved</strong>
         </header>
         <div className="deep-dive-acronym-set-grid flashcards-inventory-grid">
           <button
@@ -30445,6 +30447,25 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
             <ChevronRight size={17}/>
             <span className="deep-dive-acronym-set-progress"><span><i style={{width:`${starredFlashcards.length?100:8}%`}}/></span><span>{starredFlashcards.length}</span></span>
           </button>
+          {showAssistantDeck&&(
+            <button
+              type="button"
+              className="deep-dive-acronym-set-card flashcards-topic-card cipher-made-set-card"
+              style={{"--set-color":assistantSet.color||"#0ea5e9"}}
+              onClick={()=>openSet(ASSISTANT_FLASHCARD_SET_ID)}
+              aria-label={`Open ${assistantSet.title}`}
+            >
+              <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Brain size={21} strokeWidth={2.35}/></span>
+              <span>
+                <em className="flashcard-type-badge">Cipher made</em>
+                <strong>{assistantSet.title}</strong>
+                <small>{assistantSet.description}</small>
+                <i>{assistantSet.cards.filter(card=>card.cardType!=="divider").slice(0,4).map(card=>card.acronym).join(" · ")}</i>
+              </span>
+              <ChevronRight size={17}/>
+              <span className="deep-dive-acronym-set-progress"><span><i style={{width:"100%"}}/></span><span>{assistantSet.cards.filter(card=>card.cardType!=="divider").length}</span></span>
+            </button>
+          )}
           <div className={`deep-dive-acronym-set-card flashcards-topic-card flashcard-random-builder ${randomBuilderOpen?"open":""}`} style={{"--set-color":"#0ea5e9"}}>
             <button type="button" className="flashcard-random-plus" onClick={()=>setRandomBuilderOpen(value=>!value)} aria-expanded={randomBuilderOpen}>
               <span aria-hidden="true">+</span>
