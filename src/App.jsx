@@ -18994,7 +18994,7 @@ body{background:
 .deep-dive-acronym-reader-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px;}
 .deep-dive-acronym-reader-meta span,.deep-dive-acronym-reader-meta a{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid var(--deep-border);border-radius:999px;background:var(--deep-panel);color:var(--deep-muted);font-size:10px;font-weight:900;text-decoration:none;}
 .deep-dive-acronym-reader-meta a:hover{color:var(--set-color);border-color:color-mix(in srgb,var(--set-color) 42%,var(--deep-border));}
-.deep-dive-acronym-prompt{color:var(--set-color)!important;font-size:12px!important;font-weight:900;}
+.deep-dive-acronym-prompt{color:color-mix(in srgb,var(--set-color) 72%,var(--deep-muted))!important;font-size:12px!important;font-weight:800;}
 .deep-dive-acronym-answer-copy{max-width:650px;margin:12px 0 0;color:var(--deep-muted);font-size:15px;font-weight:650;line-height:1.65;}
 .deep-dive-acronym-reader .deep-dive-flashcard-studio{max-width:850px;}
 .deep-dive-flashcard-studio{max-width:850px;margin:0 auto;padding:25px;border:1px solid color-mix(in srgb,var(--set-color) 25%,var(--deep-border));border-radius:22px;background:radial-gradient(circle at 90% 5%,color-mix(in srgb,var(--deep-amber) 18%,transparent),transparent 30%),radial-gradient(circle at 8% 100%,color-mix(in srgb,var(--set-color) 13%,transparent),transparent 34%),var(--deep-surface);box-shadow:0 14px 40px rgba(40,31,22,.09);}
@@ -19016,14 +19016,16 @@ body{background:
 .deep-dive-flashcard:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 33%,transparent);outline-offset:4px;}
 .deep-dive-flashcard-inner{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.8,.2,1);}
 .deep-dive-flashcard.flipped .deep-dive-flashcard-inner{transform:rotateY(180deg);}
-.deep-dive-flashcard-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:42px;border:1px solid color-mix(in srgb,var(--set-color) 34%,var(--deep-border));border-radius:23px;background:radial-gradient(circle at 14% 18%,color-mix(in srgb,var(--set-color) 16%,transparent),transparent 30%),linear-gradient(145deg,color-mix(in srgb,var(--set-color) 9%,var(--deep-surface)),var(--deep-surface));box-shadow:0 17px 40px rgba(40,31,22,.12),inset 0 1px 0 rgba(255,255,255,.28);backface-visibility:hidden;-webkit-backface-visibility:hidden;text-align:center;overflow:auto;}
+.deep-dive-flashcard-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:42px;border:1px solid color-mix(in srgb,var(--set-color) 22%,var(--deep-border));border-radius:23px;background:linear-gradient(145deg,color-mix(in srgb,var(--set-color) 4%,var(--deep-surface)),var(--deep-surface));box-shadow:0 14px 32px rgba(40,31,22,.09),inset 0 1px 0 rgba(255,255,255,.18);backface-visibility:hidden;-webkit-backface-visibility:hidden;text-align:center;overflow:auto;}
+.deep-dive-flashcard-front{background:radial-gradient(circle at 16% 14%,color-mix(in srgb,var(--set-color) 7%,transparent),transparent 32%),linear-gradient(145deg,color-mix(in srgb,var(--deep-panel) 72%,var(--deep-surface)),var(--deep-surface));}
 .deep-dive-flashcard-back{transform:rotateY(180deg);border-color:color-mix(in srgb,var(--deep-green) 42%,var(--deep-border));background:radial-gradient(circle at 86% 16%,color-mix(in srgb,var(--deep-green) 18%,transparent),transparent 31%),linear-gradient(145deg,color-mix(in srgb,var(--deep-green) 12%,var(--deep-surface)),var(--deep-surface));}
 .deep-dive-flashcard-kind{position:absolute;left:19px;top:18px;display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:9px;background:color-mix(in srgb,var(--deep-accent) 10%,var(--deep-surface));color:var(--deep-accent);font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
 .deep-dive-flashcard-back .deep-dive-flashcard-kind{background:color-mix(in srgb,var(--deep-green) 11%,var(--deep-surface));color:var(--deep-green);}
 .deep-dive-flashcard-watermark{position:absolute;right:17px;bottom:16px;display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid color-mix(in srgb,var(--deep-border) 72%,transparent);border-radius:999px;background:color-mix(in srgb,var(--deep-surface) 80%,transparent);color:var(--deep-muted);font-size:9px;font-weight:950;letter-spacing:.04em;text-transform:uppercase;opacity:.72;pointer-events:none;}
 .deep-dive-flashcard-watermark img{width:16px!important;height:16px!important;opacity:.85;}
 .deep-dive-flashcard-face small{max-width:620px;margin-bottom:13px;color:var(--deep-muted);font-size:11px;line-height:1.45;}
-.deep-dive-flashcard-face>strong{display:block;max-width:660px;color:var(--deep-text);font-size:clamp(20px,3vw,29px);font-weight:900;line-height:1.45;white-space:pre-line;}
+.deep-dive-flashcard-face>strong{display:block;max-width:660px;color:var(--deep-text);font-size:clamp(20px,3vw,29px);font-weight:760;line-height:1.5;white-space:pre-line;letter-spacing:-.01em;}
+.deep-dive-flashcard-front>strong{font-size:clamp(20px,2.7vw,28px);font-weight:720;line-height:1.58;color:color-mix(in srgb,var(--deep-text) 88%,var(--deep-muted));}
 .deep-dive-flashcard-back>strong{font-size:clamp(17px,2.5vw,24px);font-weight:750;}
 .deep-dive-flashcard-hint{position:absolute;bottom:18px;color:var(--deep-muted);font-size:9px;font-weight:850;}
 .deep-dive-flashcard-actions{display:grid;grid-template-columns:auto minmax(210px,1fr) auto;align-items:center;gap:9px;margin-top:14px;}
@@ -19166,8 +19168,9 @@ body{background:
 .deep-dive-flashcard-toolbar>span{font-size:12px;}
 .deep-dive-flashcard-toolbar .btn{font-size:12px;}
 .deep-dive-flashcard-kind{font-size:11px;}
-.deep-dive-flashcard-face small{font-size:13px;font-weight:750;}
-.deep-dive-flashcard-face>strong{font-size:clamp(24px,3.2vw,34px);font-weight:950;}
+.deep-dive-flashcard-face small{font-size:13px;font-weight:700;}
+.deep-dive-flashcard-face>strong{font-size:clamp(22px,3vw,31px);font-weight:780;}
+.deep-dive-flashcard-front>strong{font-size:clamp(21px,2.75vw,29px);font-weight:720;}
 .deep-dive-flashcard-back>strong{font-size:clamp(21px,2.7vw,28px);font-weight:800;}
 .deep-dive-flashcard-hint{font-size:11px;font-weight:900;}
 @media (max-width: 1040px){

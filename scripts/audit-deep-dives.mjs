@@ -113,6 +113,7 @@ requireValue(appSource.includes("flashcard-change-mode-btn"), "Flashcard set vie
 requireValue(appSource.includes(".flashcards-fan-glyph rect{fill:color-mix(in srgb,currentColor 7%,transparent);stroke:currentColor;stroke-width:1.05;}"), "Flashcards nav icon must use lighter card strokes so the fan does not become a purple mesh.");
 requireValue(appSource.includes("--chapter-filter-color") && appSource.includes("chapterColor(group.chapterId)") && appSource.includes('"--deep-accent":"#0ea5e9"'), "Flashcards page must use clearer blue/teal contrast and per-chapter selector colours.");
 requireValue(!appSource.includes("Matched by shared Security+ keywords, acronyms, and objectives."), "Flashcard Learn More trigger should stay subtle without the bottom descriptor.");
+requireValue(appSource.includes(".deep-dive-flashcard-front>strong{font-size:clamp(21px,2.75vw,29px);font-weight:720;") && appSource.includes(".deep-dive-flashcard-front{background:radial-gradient(circle at 16% 14%,color-mix(in srgb,var(--set-color) 7%,transparent)"), "Flashcard front face must use softer typography and a less glaring surface for reading comfort.");
 
 for (const set of SY0701_ACRONYM_SETS) {
   const prefix = `[acronym set ${set.id || "missing-id"}]`;
