@@ -114,6 +114,8 @@ requireValue(appSource.includes(".flashcards-fan-glyph rect{fill:color-mix(in sr
 requireValue(appSource.includes("--chapter-filter-color") && appSource.includes("chapterColor(group.chapterId)") && appSource.includes('"--deep-accent":"#0ea5e9"'), "Flashcards page must use clearer blue/teal contrast and per-chapter selector colours.");
 requireValue(!appSource.includes("Matched by shared Security+ keywords, acronyms, and objectives."), "Flashcard Learn More trigger should stay subtle without the bottom descriptor.");
 requireValue(appSource.includes(".deep-dive-flashcard-front>strong{font-size:clamp(21px,2.75vw,29px);font-weight:720;") && appSource.includes(".deep-dive-flashcard-front{background:radial-gradient(circle at 16% 14%,color-mix(in srgb,var(--set-color) 7%,transparent)"), "Flashcard front face must use softer typography and a less glaring surface for reading comfort.");
+requireValue(appSource.includes("flashcards-mobile-quick") && appSource.includes("mobileQuickSets.map") && appSource.includes(".flashcards-page .deep-dives-proof,.flashcards-page .deep-dives-blueprint-link,.flashcards-page .flashcard-share-actions.compact{display:none;}"), "Flashcards mobile page must expose quick-start sets above secondary information.");
+requireValue(appSource.includes(".flashcards-controls{position:sticky;top:0;z-index:35") && appSource.includes(".flashcards-hero-side{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);"), "Flashcards mobile controls must stay compact and accessible near the top of the screen.");
 
 for (const set of SY0701_ACRONYM_SETS) {
   const prefix = `[acronym set ${set.id || "missing-id"}]`;

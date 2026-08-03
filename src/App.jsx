@@ -18910,6 +18910,7 @@ body{background:
 .flashcards-page .deep-dives-hero{background:radial-gradient(circle at 92% 14%,color-mix(in srgb,#38bdf8 24%,transparent),transparent 33%),radial-gradient(circle at 12% 112%,color-mix(in srgb,#f59e0b 15%,transparent),transparent 39%),linear-gradient(145deg,color-mix(in srgb,#f8fafc 44%,var(--deep-surface)),color-mix(in srgb,#14b8a6 5%,var(--deep-surface)));}
 .flashcards-hero{align-items:stretch;}
 .flashcards-hero-side{position:relative;display:flex;flex-direction:column;gap:12px;align-items:stretch;justify-content:flex-end;min-width:0;}
+.flashcards-mobile-quick{display:none;}
 .flashcards-cipher-card{position:relative;align-self:flex-end;width:min(100%,255px);padding:14px 14px 13px;border:1px solid color-mix(in srgb,#0ea5e9 34%,var(--deep-border));border-radius:20px;background:linear-gradient(145deg,color-mix(in srgb,#0ea5e9 13%,var(--deep-surface)),color-mix(in srgb,var(--deep-green) 9%,var(--deep-surface)));box-shadow:0 18px 38px rgba(40,31,22,.12),inset 0 1px 0 rgba(255,255,255,.32);overflow:hidden;animation:flashcardsCipherCardIn .42s cubic-bezier(.16,1,.3,1) both;}
 .flashcards-cipher-card::before{content:"";position:absolute;right:-22px;top:-28px;width:112px;height:112px;border-radius:999px;background:radial-gradient(circle,color-mix(in srgb,#0ea5e9 28%,transparent),transparent 68%);opacity:.85;animation:flashcardsOrbPulse 3.2s ease-in-out infinite;}
 .flashcards-cipher-card .cipher-mascot{--cipher-size:98px!important;position:relative;z-index:1;display:block;margin:-8px auto -2px;filter:drop-shadow(6px 7px 0 #0ea5e92e);}
@@ -19180,13 +19181,43 @@ body{background:
   .deep-dives-page,.deep-dive-reader{padding:22px 16px 96px;}
   .deep-dive-acronym-reader{padding:22px 16px 96px;}
   .deep-dives-hero{grid-template-columns:minmax(0,1fr);padding:24px;border-radius:23px;}
+  .flashcards-page{padding:12px 10px 84px;}
+  .flashcards-page .deep-dives-hero{padding:14px;border-radius:18px;gap:10px;}
+  .flashcards-page .deep-dives-hero-copy>p{margin-top:8px;font-size:12.5px;line-height:1.48;}
+  .flashcards-page .page-title-row h1{font-size:clamp(29px,10vw,42px);}
+  .flashcards-page .deep-dive-preview-badge{font-size:9px;padding:5px 7px;}
+  .flashcards-page .deep-dives-proof,.flashcards-page .deep-dives-blueprint-link,.flashcards-page .flashcard-share-actions.compact{display:none;}
+  .flashcards-mobile-quick{display:grid;gap:7px;margin-top:10px;}
+  .flashcards-mobile-quick>span{color:var(--deep-accent);font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
+  .flashcards-mobile-quick>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}
+  .flashcards-mobile-quick button{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:5px;min-height:46px;padding:7px 7px;border:1px solid color-mix(in srgb,var(--set-color) 38%,var(--deep-border));border-radius:13px;background:linear-gradient(145deg,color-mix(in srgb,var(--set-color) 11%,var(--deep-surface)),var(--deep-surface));color:var(--deep-text);font:inherit;text-align:left;box-shadow:0 8px 18px color-mix(in srgb,var(--set-color) 10%,transparent);}
+  .flashcards-mobile-quick button .deep-dive-acronym-set-icon{width:28px;height:28px;border-radius:9px;}
+  .flashcards-mobile-quick button strong{overflow:hidden;color:var(--deep-text);font-size:10.5px;font-weight:900;line-height:1.18;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+  .flashcards-mobile-quick button>svg{color:var(--set-color);flex:0 0 auto;}
+  .flashcards-hero-side{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:stretch;}
+  .flashcards-cipher-card{align-self:stretch;width:100%;min-height:86px;padding:8px 9px;border-radius:15px;}
+  .flashcards-cipher-card .cipher-mascot{--cipher-size:58px!important;margin:-7px auto -5px;}
+  .flashcards-cipher-card>strong{font-size:11px;}
+  .flashcards-cipher-card>.flashcards-cipher-copy{display:none;}
+  .flashcards-hero-side .deep-dives-progress-card{max-width:none;padding:10px 11px;border-radius:15px;}
+  .flashcards-hero-side .deep-dives-progress-card div:first-child{gap:6px;}
+  .flashcards-hero-side .deep-dives-progress-card span{font-size:10px;}
+  .flashcards-hero-side .deep-dives-progress-card strong{font-size:20px;}
+  .flashcards-hero-side .deep-dives-progress-card p{display:none;}
+  .flashcard-default-mode-card{grid-column:1/-1;align-self:stretch;width:100%;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;padding:9px 11px;border-radius:14px;}
+  .flashcard-default-mode-card span{font-size:9px;}
+  .flashcard-default-mode-card strong{font-size:12px;}
+  .flashcard-default-mode-card small{grid-column:1/-1;font-size:10px;}
+  .flashcards-controls{position:sticky;top:0;z-index:35;margin-top:9px;padding:8px;border-radius:15px;backdrop-filter:blur(14px);}
+  .flashcards-controls .deep-dives-domain-map{grid-template-columns:repeat(6,112px);gap:6px;}
+  .flashcards-controls .deep-dives-domain-map button{min-width:112px;min-height:48px;padding:8px 9px;border-radius:11px;}
+  .flashcards-controls .deep-dives-domain-map button strong{font-size:11px;}
+  .flashcards-controls .deep-dives-domain-map button span{font-size:8.5px;}
+  .flashcards-curated-set{margin-top:9px;}
   .deep-dive-launchpad{grid-template-columns:minmax(0,1fr);}
   .deep-dive-acronym-library-head{align-items:flex-start;}
   .deep-dive-acronym-set-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .deep-dives-progress-card{max-width:420px;}
-  .flashcards-hero-side{align-items:flex-start;}
-  .flashcards-cipher-card{align-self:flex-start;width:min(100%,320px);}
-  .flashcard-default-mode-card{align-self:flex-start;width:min(100%,320px);}
   .flashcard-mode-sheet.has-example .flashcard-mode-grid,.flashcard-mode-grid{grid-template-columns:minmax(0,1fr);}
   .flashcard-mode-card{grid-template-rows:auto auto auto;min-height:0;}
   .flashcard-mode-cipher{min-height:108px;}
@@ -19204,6 +19235,13 @@ body{background:
 }
 @media (max-width: 560px){
   .deep-dives-grid{grid-template-columns:minmax(0,1fr);}
+  .flashcards-page .deep-dives-hero-copy>p{display:none;}
+  .flashcards-mobile-quick>div{grid-template-columns:1fr;}
+  .flashcards-mobile-quick button{min-height:44px;}
+  .flashcards-controls{margin-inline:-2px;}
+  .flashcards-curated-set header{display:none;}
+  .flashcards-curated-set .deep-dive-acronym-set-card{min-height:76px;padding:10px 12px;}
+  .flashcards-curated-set .deep-dive-acronym-set-card small,.flashcards-curated-set .deep-dive-acronym-set-card i{display:none!important;}
   .deep-dive-acronym-library{padding:19px 16px;border-radius:21px;}
   .deep-dive-acronym-library-head{display:block;}
   .deep-dive-acronym-library-head h2{font-size:25px;}
@@ -29862,6 +29900,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   const selectedSet=selectedSetId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(set=>set.id===selectedSetId)||null;
   const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>masteredAcronymIds.includes(card.id)).length;
   const progressPercent=SY0701_ACRONYM_CARDS.length?Math.round((totalMastered/SY0701_ACRONYM_CARDS.length)*100):0;
+  const mobileQuickSets=useMemo(()=>visibleGroups.flatMap(group=>group.sets).slice(0,3),[visibleGroups]);
   const signedIn=Boolean(user?.id||user?.email);
   const defaultOwner=starOwner(user);
   const [activeMode,setActiveMode]=useState("definition");
@@ -29975,6 +30014,18 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
         <div className="deep-dives-hero-copy">
           <span className="deep-dive-preview-badge"><TextCursorInput size={13}/> Free standalone active recall</span>
           <div className="page-title-row"><NavGlyph type="flashcards" active/><h1>Flashcards</h1></div>
+          <div className="flashcards-mobile-quick" aria-label="Quick start flashcard sets">
+            <span>Start now</span>
+            <div>
+              {mobileQuickSets.map(set=>(
+                <button key={set.id} type="button" style={{"--set-color":set.color}} onClick={()=>openSet(set.id)}>
+                  <FlashcardSetIcon set={set} size={17}/>
+                  <strong>{set.title}</strong>
+                  <ChevronRight size={14}/>
+                </button>
+              ))}
+            </div>
+          </div>
           <p>Practise Security+ acronyms by chapter and topic for free, even without an account. Sign in only if you want to save your own starred flashcard set.</p>
           <div className="deep-dives-proof">
             <span><ListChecks size={15}/>Grouped by SY0-701 chapters</span>
