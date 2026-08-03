@@ -82,14 +82,21 @@ for (const set of SY0701_ACRONYM_SETS) {
   requireValue(typeof set.chapterTitle === "string" && set.chapterTitle.trim(), `${prefix} needs a chapter title.`);
   requireValue(typeof set.topic === "string" && words(set.topic) >= 2 && words(set.topic) <= 8, `${prefix} needs a casual topic label.`);
   requireValue(set.objectiveCodes.length >= 1 && set.objectiveCodes.every(code => SY0701_OBJECTIVES[code]), `${prefix} references an unknown SY0-701 objective.`);
-  requireValue(set.cards.length >= 8 && set.cards.length <= 32, `${prefix} must contain 8-32 topic cards.`);
+  requireValue(set.cards.length >= 3 && set.cards.length <= 32, `${prefix} must contain 3-32 focused topic cards.`);
   set.cards.forEach(card => {
     requireValue(Boolean(card.acronym && card.expansion && card.meaning), `${card.id || prefix} is incomplete.`);
     requireValue(words(card.expansion) <= 18, `${card.id} expansion is too long for active recall.`);
     requireValue(words(card.meaning) >= 5 && words(card.meaning) <= 32, `${card.id} plain-English meaning must be 5-32 words.`);
     requireValue(typeof card.topic === "string" && card.topic.trim(), `${card.id} needs a topic label.`);
+    if (card.cardType === "attack") {
+      requireValue(typeof card.example === "string" && words(card.example) >= 8 && words(card.example) <= 34, `${card.id} attack card needs an 8-34 word example.`);
+    }
   });
 }
+
+const attackSets = SY0701_ACRONYM_SETS.filter(set => set.cards.some(card => card.cardType === "attack"));
+requireValue(attackSets.length >= 7, `Expected at least seven dedicated attack flashcard stacks; found ${attackSets.length}.`);
+requireValue(attackSets.every(set => set.cards.every(card => card.example)), "Every attack stack card must support example-based guessing.");
 
 for (const dive of CONCEPT_DEEP_DIVES) {
   const prefix = `[${dive.id || "missing-id"}]`;

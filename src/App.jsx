@@ -28494,16 +28494,19 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
   const [cardIndex,setCardIndex]=useState(0);
   const [cardOrder,setCardOrder]=useState(()=>acronymSet.cards.map(card=>card.id));
   const [isFlipped,setIsFlipped]=useState(false);
+  const hasExampleMode=acronymSet.cards.some(card=>card.example);
   const orderedCards=useMemo(()=>{
     const byId=new Map(acronymSet.cards.map(card=>[card.id,card]));
     const ordered=cardOrder.map(id=>byId.get(id)).filter(Boolean);
     const included=new Set(ordered.map(card=>card.id));
     return [...ordered,...acronymSet.cards.filter(card=>!included.has(card.id))];
   },[acronymSet,cardOrder]);
-  const activeCard=orderedCards[cardIndex]||orderedCards[0];
+  const studyCards=direction==="example"?orderedCards.filter(card=>card.example):orderedCards;
+  const activeCard=studyCards[cardIndex]||studyCards[0]||orderedCards[0];
   const asksForAcronym=direction==="acronym"||(direction==="mixed"&&cardIndex%2===1);
+  const asksFromExample=direction==="example";
   const masteredCount=acronymSet.cards.filter(card=>masteredIds.includes(card.id)).length;
-  const progress=orderedCards.length?Math.round(((cardIndex+1)/orderedCards.length)*100):0;
+  const progress=studyCards.length?Math.round(((cardIndex+1)/studyCards.length)*100):0;
 
   useEffect(()=>{
     setDirection("definition");
@@ -28513,7 +28516,8 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
   },[acronymSet.id]);
 
   const moveCard=directionStep=>{
-    setCardIndex(current=>(current+directionStep+orderedCards.length)%orderedCards.length);
+    const total=Math.max(studyCards.length,1);
+    setCardIndex(current=>(current+directionStep+total)%total);
     setIsFlipped(false);
   };
   const rateCard=mastered=>{
@@ -28559,15 +28563,16 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
         <button type="button" role="tab" aria-selected={direction==="definition"} className={direction==="definition"?"active":""} onClick={()=>chooseDirection("definition")}>Test definitions</button>
         <button type="button" role="tab" aria-selected={direction==="acronym"} className={direction==="acronym"?"active":""} onClick={()=>chooseDirection("acronym")}>Identify acronym</button>
         <button type="button" role="tab" aria-selected={direction==="mixed"} className={direction==="mixed"?"active":""} onClick={()=>chooseDirection("mixed")}>Mixed challenge</button>
+        {hasExampleMode&&<button type="button" role="tab" aria-selected={direction==="example"} className={direction==="example"?"active":""} onClick={()=>chooseDirection("example")}>Guess from example</button>}
       </div>
 
       <section className="deep-dive-flashcard-studio" aria-label={`${acronymSet.title} acronym flashcards`}>
         <div className="deep-dive-flashcard-head">
-          <div><span className="deep-dive-eyebrow">Acronym drill</span><h2>Recall it, then flip</h2><p>Definitions include a short plain-English reminder so you learn what the term does, not only what the letters spell.</p></div>
+          <div><span className="deep-dive-eyebrow">{hasExampleMode?"Scenario attack drill":"Acronym drill"}</span><h2>{asksFromExample?"Read the example. Name the attack.":"Recall it, then flip"}</h2><p>{hasExampleMode?"Use the example mode to practise recognizing attacks from real-world clues, then flip to check the full name.":"Definitions include a short plain-English reminder so you learn what the term does, not only what the letters spell."}</p></div>
           <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {acronymSet.cards.length}<br/>mastered</span></div>
         </div>
         <div className="deep-dive-flashcard-toolbar">
-          <span>Card {Math.min(cardIndex+1,orderedCards.length)} of {orderedCards.length}</span>
+          <span>Card {Math.min(cardIndex+1,studyCards.length)} of {studyCards.length}</span>
           <div className="deep-dives-progress-track"><span style={{width:`${progress}%`}}/></div>
           <button className="btn btn-ghost" type="button" onClick={shuffleCards}><RotateCcw size={15}/>Shuffle</button>
         </div>
@@ -28575,16 +28580,16 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
           <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
             <span className="deep-dive-flashcard-inner">
               <span className="deep-dive-flashcard-face deep-dive-flashcard-front">
-                <span className="deep-dive-flashcard-kind"><Brain size={15}/>{asksForAcronym?"Identify the acronym":"Define the acronym"}</span>
+                <span className="deep-dive-flashcard-kind"><Brain size={15}/>{asksFromExample?"Guess the full attack name":asksForAcronym?"Identify the acronym":"Define the acronym"}</span>
                 <small className="deep-dive-acronym-prompt">{activeCard.topic || acronymSet.topic}</small>
-                <strong>{asksForAcronym?activeCard.meaning:activeCard.acronym}</strong>
-                <span className="deep-dive-flashcard-hint">Say it aloud, then tap to reveal</span>
+                <strong>{asksFromExample?activeCard.example:asksForAcronym?activeCard.meaning:activeCard.acronym}</strong>
+                <span className="deep-dive-flashcard-hint">{asksFromExample?"Name the attack, then tap to reveal":"Say it aloud, then tap to reveal"}</span>
               </span>
               <span className="deep-dive-flashcard-face deep-dive-flashcard-back">
                 <span className="deep-dive-flashcard-kind"><Sparkles size={15}/>Answer</span>
-                <small>{asksForAcronym?"Acronym and full term":"Full definition"}</small>
-                <strong>{asksForAcronym?`${activeCard.acronym} - ${activeCard.expansion}`:activeCard.expansion}</strong>
-                <p className="deep-dive-acronym-answer-copy">{asksForAcronym?`Exam meaning: ${activeCard.meaning}`:activeCard.meaning}</p>
+                <small>{asksFromExample?"Full attack name":asksForAcronym?"Acronym and full term":"Full definition"}</small>
+                <strong>{asksFromExample?activeCard.expansion:asksForAcronym?`${activeCard.acronym} - ${activeCard.expansion}`:activeCard.expansion}</strong>
+                <p className="deep-dive-acronym-answer-copy">{asksFromExample?`Exam meaning: ${activeCard.meaning}`:asksForAcronym?`Exam meaning: ${activeCard.meaning}`:activeCard.meaning}</p>
                 <span className="deep-dive-flashcard-hint">Tap to see the question again</span>
               </span>
             </span>
