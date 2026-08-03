@@ -71,6 +71,19 @@ const acronymChapterGroups = groupSy0701AcronymSetsByChapter();
 requireValue(SY0701_ACRONYM_SETS.length >= 8, `Expected at least eight chapter/topic acronym sets; found ${SY0701_ACRONYM_SETS.length}.`);
 requireValue(SY0701_ACRONYM_CARDS.length >= 150, `Expected at least 150 acronym cards from the expanded supplied input; found ${SY0701_ACRONYM_CARDS.length}.`);
 requireValue(acronymChapterGroups.length === 5, `Acronym cards must be grouped across all five SY0-701 chapters; found ${acronymChapterGroups.length}.`);
+requireValue(SY0701_ACRONYM_SETS.every(set => set.setType === "acronym" || set.setType === "term"), "Every flashcard set must declare whether it is an Acronym or Term set.");
+requireValue(SY0701_ACRONYM_SETS.filter(set => set.chapterId === 4 && set.setType === "term").length >= 4, "Chapter 4 Security Operations must include categorized term-only flashcard sets.");
+["chapter4-hardening-baselines", "chapter4-monitoring-logging", "chapter4-forensics-response", "chapter4-vulnerability-access-ops"].forEach(setId => {
+  const set = SY0701_ACRONYM_SETS.find(item => item.id === setId);
+  requireValue(set?.setType === "term" && set.cards.every(card => card.cardType === "term"), `[${setId}] must be a definition-only term deck.`);
+});
+["GPO", "IPFIX", "UEBA", "PICERL", "CVE", "CVSS", "PAM", "JIT"].forEach(acronym => {
+  requireValue(SY0701_ACRONYM_CARDS.some(card => card.chapterId === 4 && card.acronym === acronym), `Chapter 4 acronym ${acronym} must be present.`);
+});
+["SIEM", "SOAR", "FIM"].forEach(acronym => {
+  const matches = SY0701_ACRONYM_CARDS.filter(card => card.acronym === acronym);
+  requireValue(matches.length === 1, `Overlapping acronym ${acronym} must not be duplicated.`);
+});
 requireValue(unique(SY0701_ACRONYM_SETS.map(set => set.id)), "Acronym set IDs must be unique.");
 requireValue(unique(SY0701_ACRONYM_CARDS.map(card => card.id)), "Acronym card IDs must be unique.");
 requireValue(SY0701_ACRONYM_SOURCE.officialUrl === SY0701_BLUEPRINT.sourceUrl, "Acronym cards must point to the reviewed official SY0-701 blueprint.");
@@ -111,6 +124,8 @@ requireValue(mascotSource.includes("cipher-prop-board") && mascotSource.includes
 requireValue(appSource.includes(".cipher-prop-board{right:0;top:10%;width:40%;") && appSource.includes(".cipher-prop-pointer{left:50%;top:51%;width:35%;") && appSource.includes(".cipher-motion-flashcardTeach .cipher-arm-right{z-index:10;}"), "Test Definition Cipher animation must align the board, pointer, and hand so the stick appears held and points toward the board.");
 requireValue(appSource.includes("createPortal(chooser,document.body)") && appSource.includes("max-height:min(760px,calc(100dvh - 44px))"), "Flashcard mode chooser must render centered in the viewport with internal scrolling instead of requiring page scroll.");
 requireValue(appSource.includes("flashcard-change-mode-btn"), "Flashcard set view must include a visible Change Mode button.");
+requireValue(appSource.includes("flashcard-type-badge") && appSource.includes('set.setType==="term"?"Term":"Acronym"'), "Flashcard set cards must visibly label Acronym and Term decks.");
+requireValue(appSource.includes('flashcardSetType(set)==="term"') && appSource.includes('startFlashcardSet(id,"definition")'), "Term-only flashcard decks must open directly in Test Definition mode.");
 requireValue(appSource.includes(".flashcards-fan-glyph rect{fill:color-mix(in srgb,currentColor 7%,transparent);stroke:currentColor;stroke-width:1.05;}"), "Flashcards nav icon must use lighter card strokes so the fan does not become a purple mesh.");
 requireValue(appSource.includes("--chapter-filter-color") && appSource.includes("chapterColor(group.chapterId)") && appSource.includes('"--deep-accent":"#0ea5e9"'), "Flashcards page must use clearer blue/teal contrast and per-chapter selector colours.");
 requireValue(!appSource.includes("Matched by shared Security+ keywords, acronyms, and objectives."), "Flashcard Learn More trigger should stay subtle without the bottom descriptor.");

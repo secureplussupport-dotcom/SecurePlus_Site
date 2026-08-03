@@ -34,16 +34,44 @@ const makeCard = (setId, entry, defaultTopic = "") => {
   };
 };
 
+const makeTermCard = (setId, entry, defaultTopic = "") => {
+  const [term, meaning, extra = {}, explicitTopic = ""] = entry;
+  const metadata = typeof extra === "object" && extra !== null ? extra : {};
+  const topic = explicitTopic || metadata.topic || (typeof extra === "string" ? extra : "") || defaultTopic;
+  return {
+    id: `sy0701-term-${setId}-${slug(term)}`,
+    acronym: term,
+    expansion: term,
+    meaning,
+    topic,
+    cardType: "term",
+  };
+};
+
 const makeSet = (id, title, description, chapterId, topic, color, entries, objectiveCodes = CHAPTER_OBJECTIVES[chapterId]) => ({
   id,
   title,
   description,
+  setType: "acronym",
   objectiveCodes,
   color,
   chapterId,
   chapterTitle: CHAPTER_TITLES[chapterId],
   topic,
   cards: entries.map(entry => makeCard(id, entry, topic)),
+});
+
+const makeTermSet = (id, title, description, chapterId, topic, color, entries, objectiveCodes = CHAPTER_OBJECTIVES[chapterId]) => ({
+  id,
+  title,
+  description,
+  setType: "term",
+  objectiveCodes,
+  color,
+  chapterId,
+  chapterTitle: CHAPTER_TITLES[chapterId],
+  topic,
+  cards: entries.map(entry => makeTermCard(id, entry, topic)),
 });
 
 export const SY0701_ACRONYM_SOURCE = Object.freeze({
@@ -391,6 +419,14 @@ export const SY0701_ACRONYM_SETS = [
       ["CIRT / CERT", "Computer Incident Response Team / Computer Emergency Response Team", "Team responsible for handling cybersecurity incidents."],
       ["DRP", "Disaster Recovery Plan", "Plan for restoring IT systems after a major outage or disaster."],
       ["IRP", "Incident Response Plan", "Written process for responding to a cyber incident."],
+      ["GPO", "Group Policy Object", "Microsoft Active Directory feature used to centrally enforce configuration, password, and security settings."],
+      ["IPFIX", "Internet Protocol Flow Information Export", "Standard for exporting IP flow metadata such as source, destination, ports, and packet counts."],
+      ["UEBA", "User and Entity Behavior Analytics", "Behavior-based analytics that flags unusual user or device activity compared with a normal baseline."],
+      ["PICERL", "Preparation, Identification, Containment, Eradication, Recovery, and Lessons Learned", "Common incident response lifecycle used to structure breach handling from readiness through review."],
+      ["CVE", "Common Vulnerabilities and Exposures", "Public naming system that gives known vulnerabilities standardized identifiers."],
+      ["CVSS", "Common Vulnerability Scoring System", "Standard scoring method used to rate vulnerability severity, commonly from 0.0 to 10.0."],
+      ["PAM", "Privileged Access Management", "Controls and tools used to secure, monitor, and audit administrator or root-level access."],
+      ["JIT", "Just-In-Time Access", "Temporary privileged access granted only when needed and removed after the task or time window ends."],
       ["MSSP", "Managed Security Service Provider", "External provider that supplies security monitoring or operations services."],
       ["SIEM", "Security Information and Event Management", "Platform that collects and correlates logs for alerting and investigation."],
       ["SOAR", "Security Orchestration, Automation, and Response", "Automates repeatable response workflows using playbooks."],
@@ -398,6 +434,72 @@ export const SY0701_ACRONYM_SETS = [
       ["XDR", "Extended Detection and Response", "Correlates detection and response data across endpoints, network, cloud, and other sources."],
     ],
     ["4.4", "4.5", "4.8", "4.9"],
+  ),
+  makeTermSet(
+    "chapter4-hardening-baselines",
+    "Hardening and baselines",
+    "Security operations terms for reducing attack surface and enforcing safe defaults.",
+    4,
+    "System hardening and baselines",
+    "#2563eb",
+    [
+      ["Secure Baseline", "Approved minimum security configuration applied consistently to systems, applications, and network devices."],
+      ["Hardening", "Reducing attack surface by disabling unneeded services, closing unused ports, removing unnecessary software, and changing defaults."],
+      ["Application Whitelisting / Blacklisting", "Execution control where allow lists permit approved software and block lists deny prohibited software."],
+      ["Sandboxing", "Running suspicious or untrusted software in a restricted environment so it cannot easily affect the host."],
+    ],
+    ["4.1", "4.2"],
+  ),
+  makeTermSet(
+    "chapter4-monitoring-logging",
+    "Monitoring and logging",
+    "Operational terms for logs, flow data, alerting, and evidence integrity.",
+    4,
+    "Monitoring, logging, and alerting",
+    "#0ea5e9",
+    [
+      ["Syslog", "Standard used by systems and network devices to send event messages to a central logging server."],
+      ["NetFlow", "Network telemetry that summarizes IP traffic flows using metadata rather than full packet contents."],
+      ["Log Aggregation", "Collecting logs from many sources into one central place for searching, alerting, and investigation."],
+      ["Log Integrity", "Using controls such as hashing to prove logs were not altered, deleted, or tampered with."],
+    ],
+    ["4.4", "4.5", "4.9"],
+  ),
+  makeTermSet(
+    "chapter4-forensics-response",
+    "Forensics and response",
+    "Incident response and forensic handling terms used in security operations.",
+    4,
+    "Incident response and digital forensics",
+    "#7c3aed",
+    [
+      ["Playbook / Runbook", "Documented step-by-step procedure analysts follow during repeatable incident response tasks."],
+      ["Containment", "Incident response phase focused on isolating affected systems to stop spread or further damage."],
+      ["Eradication", "Incident response phase where malware, attacker access, and related artifacts are removed."],
+      ["Order of Volatility", "Forensic collection priority that gathers the most temporary evidence, such as RAM, before less volatile storage."],
+      ["Chain of Custody", "Chronological record of who collected, handled, transferred, and protected evidence."],
+      ["Legal Hold", "Directive to preserve relevant records when litigation or investigation is expected."],
+      ["Memory Dump", "Capture of system RAM for analysis of running processes, connections, credentials, and injected code."],
+    ],
+    ["4.4", "4.8", "4.9"],
+  ),
+  makeTermSet(
+    "chapter4-vulnerability-access-ops",
+    "Vulnerability and access ops",
+    "Operational terms for scanning, patching, and identity lifecycle work.",
+    4,
+    "Vulnerability, patch, and access operations",
+    "#14b8a6",
+    [
+      ["Vulnerability Scanning", "Automated process for finding and reporting known weaknesses in systems, devices, or applications."],
+      ["False Positive", "Alert or scan result that reports a problem even though the problem is not actually present."],
+      ["False Negative", "Failure to detect a real vulnerability or malicious activity that is actually present."],
+      ["Patch Management", "Process of testing and applying software updates that fix bugs or security weaknesses."],
+      ["Compensating Control", "Alternative control used when the primary control, such as immediate patching, cannot be applied."],
+      ["Provisioning & Deprovisioning", "Creating, changing, and removing accounts and permissions across a user lifecycle."],
+      ["Least Privilege Principle", "Granting only the minimum access needed for a user, process, or system to do its job."],
+    ],
+    ["4.1", "4.2", "4.3", "4.6"],
   ),
   makeSet(
     "risk-governance-business",
@@ -443,6 +545,7 @@ export const SY0701_ACRONYM_CARDS = SY0701_ACRONYM_SETS.flatMap(set =>
     ...card,
     setId: set.id,
     setTitle: set.title,
+    setType: set.setType,
     objectiveCodes: set.objectiveCodes,
     chapterId: set.chapterId,
     chapterTitle: set.chapterTitle,

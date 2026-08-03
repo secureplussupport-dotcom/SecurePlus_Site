@@ -322,6 +322,7 @@ const buildStarredFlashcardSet = cards => ({
   id:STARRED_FLASHCARD_SET_ID,
   title:"My starred flashcards",
   description:"Your personally curated Security+ flashcards from every chapter and topic.",
+  setType:cards.length&&cards.every(card=>card.cardType==="term")?"term":"acronym",
   objectiveCodes:[...new Set(cards.flatMap(card=>card.objectiveCodes||[]))],
   color:"#f59e0b",
   chapterId:0,
@@ -18901,6 +18902,7 @@ body{background:
 .deep-dive-acronym-set-card strong,.deep-dive-acronym-set-card small{display:block;}
 .deep-dive-acronym-set-card strong{font-size:13px;line-height:1.35;}
 .deep-dive-acronym-set-card small{margin-top:4px;color:var(--deep-muted);font-size:10px;line-height:1.45;}
+.flashcard-type-badge{display:inline-flex!important;align-items:center;gap:4px;width:max-content;margin:0 0 6px;padding:4px 7px;border:1px solid color-mix(in srgb,var(--set-color) 34%,var(--deep-border));border-radius:999px;background:color-mix(in srgb,var(--set-color) 9%,var(--deep-panel));color:var(--set-color);font-size:8.5px!important;font-weight:950!important;letter-spacing:.07em;text-transform:uppercase;line-height:1!important;}
 .deep-dive-acronym-set-card>svg{color:var(--set-color);}
 .deep-dive-acronym-set-progress{grid-column:2/4;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;align-items:center;}
 .deep-dive-acronym-set-progress>span:first-child{height:5px;border-radius:99px;background:var(--deep-border);overflow:hidden;}
@@ -19636,6 +19638,10 @@ const FLASHCARD_SET_ICON_MAP = {
   "network-architecture-protocols": Network,
   "cloud-endpoint-infrastructure": Cloud,
   "security-operations-response": ShieldAlert,
+  "chapter4-hardening-baselines": SlidersHorizontal,
+  "chapter4-monitoring-logging": Radar,
+  "chapter4-forensics-response": ClipboardCheck,
+  "chapter4-vulnerability-access-ops": Gauge,
   "risk-governance-business": ScrollText,
 };
 const FLASHCARD_SET_ICON_IDS = Object.freeze(Object.keys(FLASHCARD_SET_ICON_MAP));
@@ -29021,7 +29027,9 @@ const FLASHCARD_MODE_OPTIONS={
 };
 const FLASHCARD_DEFAULT_MODE_PREFIX="secureplus-flashcard-default-mode";
 const getFlashcardDefaultModeKey=owner=>`${FLASHCARD_DEFAULT_MODE_PREFIX}:${owner||"guest"}`;
-const getSafeFlashcardMode=(mode,hasExample=false)=>{
+const flashcardSetType=set=>set?.setType==="term"||set?.cards?.every(card=>card.cardType==="term")?"term":"acronym";
+const getSafeFlashcardMode=(mode,hasExample=false,setType="acronym")=>{
+  if(setType==="term")return "definition";
   if(mode==="example")return hasExample?"example":"definition";
   return mode==="acronym"?"acronym":"definition";
 };
@@ -29039,11 +29047,14 @@ function FlashcardModeCipher({mode}) {
 function FlashcardModeChooser({t,set=null,hasExample=false,currentMode="definition",defaultMode="",user=null,onChoose,onClose,context="open"}) {
   const [makeDefault,setMakeDefault]=useState(false);
   const signedIn=Boolean(user?.id||user?.email);
-  const choices=[
-    FLASHCARD_MODE_OPTIONS.definition,
-    FLASHCARD_MODE_OPTIONS.acronym,
-    ...(hasExample?[FLASHCARD_MODE_OPTIONS.example]:[]),
-  ];
+  const termOnly=flashcardSetType(set)==="term";
+  const choices=termOnly
+    ? [FLASHCARD_MODE_OPTIONS.definition]
+    : [
+        FLASHCARD_MODE_OPTIONS.definition,
+        FLASHCARD_MODE_OPTIONS.acronym,
+        ...(hasExample?[FLASHCARD_MODE_OPTIONS.example]:[]),
+      ];
   const title=context==="default"?"Choose your default flashcard mode":"Choose your flashcard mode";
   const subtitle=context==="default"
     ?"Signed-in users can skip this prompt for standard decks by saving a default."
@@ -29100,7 +29111,9 @@ function FlashcardModeChooser({t,set=null,hasExample=false,currentMode="definiti
 }
 
 function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,initialMode="definition",onChangeModeRequest}) {
-  const [direction,setDirection]=useState(()=>getSafeFlashcardMode(initialMode,flashcardSetHasExampleMode(acronymSet)));
+  const setType=flashcardSetType(acronymSet);
+  const setKindLabel=setType==="term"?"Term":"Acronym";
+  const [direction,setDirection]=useState(()=>getSafeFlashcardMode(initialMode,flashcardSetHasExampleMode(acronymSet),setType));
   const [cardIndex,setCardIndex]=useState(0);
   const [cardOrder,setCardOrder]=useState(()=>acronymSet.cards.map(card=>card.id));
   const [isFlipped,setIsFlipped]=useState(false);
@@ -29133,7 +29146,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   };
 
   useEffect(()=>{
-    setDirection(getSafeFlashcardMode(initialMode,flashcardSetHasExampleMode(acronymSet)));
+    setDirection(getSafeFlashcardMode(initialMode,flashcardSetHasExampleMode(acronymSet),flashcardSetType(acronymSet)));
     setCardIndex(0);
     setCardOrder(acronymSet.cards.map(card=>card.id));
     setIsFlipped(false);
@@ -29142,11 +29155,11 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   },[acronymSet.id,initialMode]);
 
   useEffect(()=>{
-    const safeMode=getSafeFlashcardMode(initialMode,hasExampleMode);
+    const safeMode=getSafeFlashcardMode(initialMode,hasExampleMode,setType);
     setDirection(current=>current===safeMode?current:safeMode);
     setCardIndex(0);
     setIsFlipped(false);
-  },[initialMode,hasExampleMode]);
+  },[initialMode,hasExampleMode,setType]);
 
   const moveCard=directionStep=>{
     const total=Math.max(studyCards.length,1);
@@ -29183,7 +29196,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   return(
     <article className="deep-dive-acronym-reader" style={{"--set-color":acronymSet.color,"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <div className="deep-dive-reader-topbar">
-        <button className="btn btn-ghost deep-dive-back" type="button" onClick={onClose}><ArrowLeft size={17}/> All acronym sets</button>
+        <button className="btn btn-ghost deep-dive-back" type="button" onClick={onClose}><ArrowLeft size={17}/> All flashcard sets</button>
         <span className="deep-dive-preview-badge"><Brain size={13}/> Active recall lab</span>
       </div>
 
@@ -29193,6 +29206,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
         <p>{acronymSet.description} Say the answer before you flip the card.</p>
         <div className="deep-dive-acronym-reader-meta">
           <span><Brain size={14}/>{acronymSet.cards.length} cards</span>
+          <span><TextCursorInput size={14}/>{setKindLabel}</span>
           <span><ListChecks size={14}/>{acronymSet.chapterTitle}</span>
           <a href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Checked against official SY0-701 list<ChevronRight size={13}/></a>
         </div>
@@ -29200,7 +29214,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
 
       <section className="deep-dive-flashcard-studio" aria-label={`${acronymSet.title} acronym flashcards`}>
         <div className="deep-dive-flashcard-head">
-          <div><span className="deep-dive-eyebrow">{hasExampleMode?"Scenario attack drill":"Acronym drill"}</span><h2>{asksFromExample?"Read the example. Name the attack.":"Recall it, then flip"}</h2><p>{hasExampleMode?"Use the example mode to practise recognizing attacks from real-world clues, then flip to check the full name.":"Definitions include a short plain-English reminder so you learn what the term does, not only what the letters spell."}</p></div>
+          <div><span className="deep-dive-eyebrow">{hasExampleMode?"Scenario attack drill":setType==="term"?"Definition drill":"Acronym drill"}</span><h2>{asksFromExample?"Read the example. Name the attack.":"Recall it, then flip"}</h2><p>{setType==="term"?"Term decks test definitions only: read the concept name, recall the exam meaning, then flip.":hasExampleMode?"Use the example mode to practise recognizing attacks from real-world clues, then flip to check the full name.":"Definitions include a short plain-English reminder so you learn what the term does, not only what the letters spell."}</p></div>
           <div className="deep-dive-flashcard-side">
             {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&<FlashcardShareActions set={acronymSet} t={t}/>}
             <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {acronymSet.cards.length}<br/>mastered</span></div>
@@ -29936,7 +29950,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
 
   const startFlashcardSet=useCallback((id,mode)=>{
     const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
-    const safeMode=getSafeFlashcardMode(mode,flashcardSetHasExampleMode(set));
+    const safeMode=getSafeFlashcardMode(mode,flashcardSetHasExampleMode(set),flashcardSetType(set));
     setActiveMode(safeMode);
     setSelectedSetId(id);
     setModeChooser(null);
@@ -29948,7 +29962,11 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
     if(!set)return;
     const hasExample=flashcardSetHasExampleMode(set);
-    const safeDefault=defaultMode?getSafeFlashcardMode(defaultMode,hasExample):"";
+    if(flashcardSetType(set)==="term"){
+      startFlashcardSet(id,"definition");
+      return;
+    }
+    const safeDefault=defaultMode?getSafeFlashcardMode(defaultMode,hasExample,flashcardSetType(set)):"";
     const shouldChooseMode=!signedIn || hasExample || !safeDefault;
     if(shouldChooseMode){
       setModeChooser({context:"open",setId:id,hasExample});
@@ -29959,7 +29977,8 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
 
   const handleModeChosen=(mode,{makeDefault=false}={})=>{
     const chooser=modeChooser;
-    const safeMode=getSafeFlashcardMode(mode,chooser?.hasExample);
+    const chooserSet=chooser?.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:SY0701_ACRONYM_SETS.find(item=>item.id===chooser?.setId)||null;
+    const safeMode=getSafeFlashcardMode(mode,chooser?.hasExample,flashcardSetType(chooserSet));
     if(makeDefault)saveDefaultMode(safeMode);
     if(chooser?.context==="default"){
       setModeChooser(null);
@@ -30003,7 +30022,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   if(selectedSet){
     return(
       <>
-        <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade} initialMode={activeMode} onChangeModeRequest={()=>setModeChooser({context:"change",setId:selectedSet.id,hasExample:flashcardSetHasExampleMode(selectedSet)})}/>
+        <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade} initialMode={activeMode} onChangeModeRequest={flashcardSetType(selectedSet)==="term"?undefined:()=>setModeChooser({context:"change",setId:selectedSet.id,hasExample:flashcardSetHasExampleMode(selectedSet)})}/>
         {modeChooser&&<FlashcardModeChooser t={t} set={selectedSet} hasExample={modeChooser.hasExample} currentMode={activeMode} defaultMode={defaultMode} user={user} context={modeChooser.context} onChoose={handleModeChosen} onClose={()=>setModeChooser(null)}/>}
       </>
     );
@@ -30044,7 +30063,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
             <span className="flashcards-cipher-copy">Tap a set, say the answer, then flip.</span>
           </aside>
           <div className="deep-dives-progress-card">
-            <div><span>Acronym mastery</span><strong>{totalMastered}/{SY0701_ACRONYM_CARDS.length}</strong></div>
+            <div><span>Flashcard mastery</span><strong>{totalMastered}/{SY0701_ACRONYM_CARDS.length}</strong></div>
             <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
             <p>Marked cards stay saved on this device, so repeated practice becomes lighter over time.</p>
           </div>
@@ -30087,6 +30106,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
           >
             <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Star size={21} strokeWidth={2.35} fill={starredFlashcards.length?"currentColor":"none"}/></span>
             <span>
+              <em className="flashcard-type-badge">{starredFlashcardSet.setType==="term"?"Term":"Acronym"}</em>
               <strong>{user?starredFlashcards.length?"Review your saved cards":"No starred flashcards yet":"Create your own set"}</strong>
               <small>{user?"Press the star on any flashcard to save it here.":"Free guests can study all cards. Sign up to save a personal set."}</small>
               <i>{starredFlashcards.slice(0,4).map(card=>card.acronym).join(" · ") || "Acronym · full name · definition · examples"}</i>
@@ -30110,6 +30130,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
                   <button type="button" className="deep-dive-acronym-set-card flashcards-topic-card" style={{"--set-color":set.color}} key={set.id} onClick={()=>openSet(set.id)} aria-label={`Open ${set.title}: ${mastered} of ${set.cards.length} mastered`}>
                     <FlashcardSetIcon set={set}/>
                     <span>
+                      <em className="flashcard-type-badge">{set.setType==="term"?"Term":"Acronym"}</em>
                       <strong>{set.title}</strong>
                       <small>{set.cards.length} cards · {group.chapterTitle}</small>
                       <i>{topics.join(" · ")}</i>
