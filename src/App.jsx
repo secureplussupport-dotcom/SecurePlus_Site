@@ -16849,8 +16849,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .nav-lnk:hover .nav-glyph-achievements,.nav-glyph-achievements.active{color:#b45309;background:linear-gradient(135deg,#facc1540,#fb718540);border-color:#f59e0b85;box-shadow:0 0 20px rgba(245,158,11,.42);}
 .nav-lnk:hover .nav-glyph-deep-dives,.nav-glyph-deep-dives.active{color:#1d4ed8;background:linear-gradient(135deg,#38bdf840,#8b5cf640);border-color:#3b82f685;box-shadow:0 0 20px rgba(59,130,246,.42);}
 .nav-lnk:hover .nav-glyph-flashcards,.nav-glyph-flashcards.active{color:#7c3aed;background:linear-gradient(135deg,#c4b5fd40,#f0abfc40);border-color:#8b5cf685;box-shadow:0 0 20px rgba(124,58,237,.4);}
-.flashcards-fan-glyph rect{fill:color-mix(in srgb,currentColor 16%,transparent);stroke:currentColor;stroke-width:1.7;}
-.flashcards-fan-glyph path{stroke:currentColor;stroke-width:1.7;stroke-linecap:round;}
+.flashcards-fan-glyph rect{fill:color-mix(in srgb,currentColor 7%,transparent);stroke:currentColor;stroke-width:1.05;}
+.flashcards-fan-glyph path{stroke:currentColor;stroke-width:.95;stroke-linecap:round;}
 .cipher-coin-icon{--coin-size:34px;position:relative;display:inline-block;width:var(--coin-size);height:var(--coin-size);flex:0 0 auto;filter:drop-shadow(0 calc(var(--coin-size)*.16) calc(var(--coin-size)*.13) rgba(113,76,28,.2));isolation:isolate;}
 .cipher-coin-face{position:absolute;inset:4% 7% 10% 5%;display:grid;place-items:center;overflow:hidden;border:2px solid #a96f25;border-radius:47% 53% 49% 51%/44% 48% 52% 56%;background:radial-gradient(circle at 34% 24%,#ffe7a3 0 9%,transparent 10%),linear-gradient(145deg,#f8cf72 0 34%,#dea044 62%,#b9782a 100%);box-shadow:inset calc(var(--coin-size)*.08) calc(var(--coin-size)*.07) 0 rgba(255,247,203,.5),inset calc(var(--coin-size)*-.09) calc(var(--coin-size)*-.08) 0 rgba(121,73,23,.17),2px 0 0 #c48631,-2px 2px 0 #b5792b;transform:rotate(-3deg);}
 .cipher-coin-face::after{content:"";position:absolute;inset:18%;border:2px dashed rgba(126,75,21,.42);border-radius:48% 52% 43% 57%;}
@@ -18856,16 +18856,20 @@ body{background:
 .deep-dive-acronym-set-progress>span:last-child{color:var(--deep-muted);font-size:9px;font-weight:900;}
 .deep-dive-acronym-source-note{display:flex;align-items:flex-start;gap:8px;margin-top:13px;color:var(--deep-muted);font-size:11px;font-weight:650;line-height:1.55;}
 .deep-dive-acronym-source-note svg{flex:0 0 auto;color:var(--deep-green);margin-top:1px;}
-.flashcards-page .deep-dives-hero{background:radial-gradient(circle at 92% 14%,color-mix(in srgb,#8b5cf6 26%,transparent),transparent 33%),radial-gradient(circle at 12% 112%,color-mix(in srgb,var(--deep-green) 18%,transparent),transparent 39%),linear-gradient(145deg,color-mix(in srgb,#f8fafc 58%,var(--deep-surface)),var(--deep-surface));}
+.flashcards-page .deep-dives-hero{background:radial-gradient(circle at 92% 14%,color-mix(in srgb,#38bdf8 24%,transparent),transparent 33%),radial-gradient(circle at 12% 112%,color-mix(in srgb,#f59e0b 15%,transparent),transparent 39%),linear-gradient(145deg,color-mix(in srgb,#f8fafc 44%,var(--deep-surface)),color-mix(in srgb,#14b8a6 5%,var(--deep-surface)));}
 .flashcards-hero{align-items:stretch;}
 .flashcards-hero-side{position:relative;display:flex;flex-direction:column;gap:12px;align-items:stretch;justify-content:flex-end;min-width:0;}
-.flashcards-cipher-card{position:relative;align-self:flex-end;width:min(100%,255px);padding:14px 14px 13px;border:1px solid color-mix(in srgb,#7c3aed 34%,var(--deep-border));border-radius:20px;background:linear-gradient(145deg,color-mix(in srgb,#7c3aed 13%,var(--deep-surface)),color-mix(in srgb,var(--deep-green) 9%,var(--deep-surface)));box-shadow:0 18px 38px rgba(40,31,22,.12),inset 0 1px 0 rgba(255,255,255,.32);overflow:hidden;animation:flashcardsCipherCardIn .42s cubic-bezier(.16,1,.3,1) both;}
-.flashcards-cipher-card::before{content:"";position:absolute;right:-22px;top:-28px;width:112px;height:112px;border-radius:999px;background:radial-gradient(circle,color-mix(in srgb,#7c3aed 28%,transparent),transparent 68%);opacity:.85;animation:flashcardsOrbPulse 3.2s ease-in-out infinite;}
-.flashcards-cipher-card .cipher-mascot{--cipher-size:98px!important;position:relative;z-index:1;display:block;margin:-8px auto -2px;filter:drop-shadow(6px 7px 0 #7c3aed2e);}
+.flashcards-cipher-card{position:relative;align-self:flex-end;width:min(100%,255px);padding:14px 14px 13px;border:1px solid color-mix(in srgb,#0ea5e9 34%,var(--deep-border));border-radius:20px;background:linear-gradient(145deg,color-mix(in srgb,#0ea5e9 13%,var(--deep-surface)),color-mix(in srgb,var(--deep-green) 9%,var(--deep-surface)));box-shadow:0 18px 38px rgba(40,31,22,.12),inset 0 1px 0 rgba(255,255,255,.32);overflow:hidden;animation:flashcardsCipherCardIn .42s cubic-bezier(.16,1,.3,1) both;}
+.flashcards-cipher-card::before{content:"";position:absolute;right:-22px;top:-28px;width:112px;height:112px;border-radius:999px;background:radial-gradient(circle,color-mix(in srgb,#0ea5e9 28%,transparent),transparent 68%);opacity:.85;animation:flashcardsOrbPulse 3.2s ease-in-out infinite;}
+.flashcards-cipher-card .cipher-mascot{--cipher-size:98px!important;position:relative;z-index:1;display:block;margin:-8px auto -2px;filter:drop-shadow(6px 7px 0 #0ea5e92e);}
 .flashcards-cipher-card>strong,.flashcards-cipher-card>.flashcards-cipher-copy{position:relative;z-index:1;display:block;text-align:center;}
 .flashcards-cipher-card>strong{color:var(--deep-text);font-size:14px;font-weight:950;line-height:1.25;}
 .flashcards-cipher-card>.flashcards-cipher-copy{margin-top:3px;color:var(--deep-muted);font-size:11px;font-weight:750;line-height:1.45;}
-.flashcards-controls{margin-top:18px;background:linear-gradient(145deg,color-mix(in srgb,#7c3aed 7%,var(--deep-surface)),color-mix(in srgb,var(--deep-green) 5%,var(--deep-surface)));}
+.flashcards-controls{margin-top:18px;background:linear-gradient(145deg,color-mix(in srgb,#0ea5e9 7%,var(--deep-surface)),color-mix(in srgb,#f59e0b 5%,var(--deep-surface)));}
+.flashcards-controls .deep-dives-domain-map button{position:relative;overflow:hidden;border-color:color-mix(in srgb,var(--chapter-filter-color,var(--deep-accent)) 24%,var(--deep-border));background:linear-gradient(145deg,color-mix(in srgb,var(--chapter-filter-color,var(--deep-accent)) 7%,var(--deep-surface)),var(--deep-surface));}
+.flashcards-controls .deep-dives-domain-map button::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--chapter-filter-color,var(--deep-accent));opacity:.82;}
+.flashcards-controls .deep-dives-domain-map button:hover,.flashcards-controls .deep-dives-domain-map button.active{border-color:color-mix(in srgb,var(--chapter-filter-color,var(--deep-accent)) 58%,var(--deep-border));background:linear-gradient(145deg,color-mix(in srgb,var(--chapter-filter-color,var(--deep-accent)) 16%,var(--deep-surface)),color-mix(in srgb,var(--chapter-filter-color,var(--deep-accent)) 6%,var(--deep-panel)));color:var(--chapter-filter-color,var(--deep-accent));box-shadow:0 11px 26px color-mix(in srgb,var(--chapter-filter-color,var(--deep-accent)) 14%,transparent);}
+.flashcards-controls .deep-dives-domain-map button.active strong{color:var(--chapter-filter-color,var(--deep-accent));}
 .flashcard-share-actions{position:relative;display:inline-flex;align-items:flex-start;gap:8px;flex-wrap:wrap;z-index:10;}
 .flashcard-share-actions.compact{display:flex;margin-top:15px;}
 .flashcard-share-trigger{display:inline-flex;align-items:center;gap:8px;min-height:39px;padding:9px 12px;border:1px solid color-mix(in srgb,var(--set-color,#7c3aed) 30%,var(--deep-border));border-radius:999px;background:var(--deep-surface);color:var(--deep-text);font:inherit;font-size:11px;font-weight:950;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;box-shadow:0 10px 24px rgba(40,31,22,.08);transition:transform .17s,border-color .17s,background .17s,color .17s,box-shadow .17s;}
@@ -18986,12 +18990,11 @@ body{background:
 .deep-dive-flashcard-actions{display:grid;grid-template-columns:auto minmax(210px,1fr) auto;align-items:center;gap:9px;margin-top:14px;}
 .deep-dive-flashcard-actions>.btn:nth-child(2){justify-self:center;}
 .deep-dive-flashcard-rating{display:flex;justify-content:center;gap:8px;}
-.flashcard-learn-more{margin-top:16px;padding:16px;border:1px solid color-mix(in srgb,var(--set-color) 24%,var(--deep-border));border-radius:19px;background:linear-gradient(145deg,color-mix(in srgb,var(--set-color) 7%,var(--deep-surface)),var(--deep-surface));}
+.flashcard-learn-more{margin-top:14px;padding:11px 12px;border:1px solid color-mix(in srgb,var(--deep-border) 82%,transparent);border-radius:16px;background:color-mix(in srgb,var(--deep-panel) 76%,transparent);}
 .flashcard-learn-more>button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0;border:0;background:transparent;color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;}
-.flashcard-learn-more>button span{display:block;color:var(--set-color);font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
-.flashcard-learn-more>button strong{display:block;margin-top:4px;color:var(--deep-text);font-size:16px;font-weight:950;}
-.flashcard-learn-more>button small{display:block;margin-top:3px;color:var(--deep-muted);font-size:12px;font-weight:650;line-height:1.5;}
-.flashcard-learn-more>button svg{color:var(--set-color);transition:transform .18s ease;}
+.flashcard-learn-more>button span{display:block;color:var(--deep-muted);font-size:9px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
+.flashcard-learn-more>button strong{display:block;margin-top:2px;color:var(--deep-text);font-size:13px;font-weight:900;}
+.flashcard-learn-more>button svg{color:var(--deep-muted);transition:transform .18s ease;}
 .flashcard-learn-more.open>button svg{transform:rotate(90deg);}
 .flashcard-learn-more-panel{margin-top:13px;padding-top:13px;border-top:1px solid var(--deep-border);animation:fadeUp .18s ease both;}
 .flashcard-learn-more-note{margin:0 0 10px;color:var(--deep-muted);font-size:12px;font-weight:650;line-height:1.6;}
@@ -29169,13 +29172,12 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
         {relatedDeepDives.length>0&&(
           <div className={`flashcard-learn-more ${learnMoreOpen?"open":""}`}>
             <button type="button" onClick={()=>{setLearnMoreOpen(value=>!value);setLearnMoreNotice("");}} aria-expanded={learnMoreOpen}>
-              <span>
-                <span>Learn More</span>
-                <strong>Connect this deck to Concept Deep Dives</strong>
-                <small>Matched by shared Security+ keywords, acronyms, and objectives.</small>
-              </span>
-              <ChevronRight size={18}/>
-            </button>
+                <span>
+                  <span>Learn More</span>
+                  <strong>Connect this deck to Concept Deep Dives</strong>
+                </span>
+                <ChevronRight size={18}/>
+              </button>
             {learnMoreOpen&&(
               <div className="flashcard-learn-more-panel">
                 <p className="flashcard-learn-more-note">
@@ -29928,7 +29930,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   }
 
   return(
-    <div className="deep-dives-page flashcards-page" style={{"--deep-accent":"#7c3aed","--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
+    <div className="deep-dives-page flashcards-page" style={{"--deep-accent":"#0ea5e9","--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <section className="deep-dives-hero flashcards-hero">
         <div className="deep-dives-hero-copy">
           <span className="deep-dive-preview-badge"><TextCursorInput size={13}/> Free standalone active recall</span>
@@ -29968,9 +29970,9 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
 
       <section className="deep-dives-controls flashcards-controls" aria-label="Filter flashcards by chapter">
         <div className="deep-dives-domain-map">
-          <button type="button" className={chapterFilter==="all"?"active":""} onClick={()=>setChapterFilter("all")}><strong>All</strong><span>Chapters</span></button>
+          <button type="button" className={chapterFilter==="all"?"active":""} style={{"--chapter-filter-color":"#0ea5e9"}} onClick={()=>setChapterFilter("all")}><strong>All</strong><span>Chapters</span></button>
           {chapterGroups.map(group=>(
-            <button key={group.chapterId} type="button" className={chapterFilter===String(group.chapterId)?"active":""} onClick={()=>setChapterFilter(String(group.chapterId))}>
+            <button key={group.chapterId} type="button" className={chapterFilter===String(group.chapterId)?"active":""} style={{"--chapter-filter-color":chapterColor(group.chapterId)}} onClick={()=>setChapterFilter(String(group.chapterId))}>
               <strong>Ch. {group.chapterId}</strong><span>{group.chapterTitle}</span>
             </button>
           ))}

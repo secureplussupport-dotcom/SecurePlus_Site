@@ -106,6 +106,9 @@ requireValue(appSource.includes("FLASHCARD_DEFAULT_MODE_PREFIX") && appSource.in
 requireValue(appSource.includes("flashcard-mode-recommended") && appSource.includes("Guess from Example") && appSource.includes("mode-cipher-question"), "Example-enabled flashcard sets must show a recommended Guess from Example mode with Cipher thinking.");
 requireValue(appSource.includes("mode-cipher-board") && appSource.includes("mode-cipher-stick") && appSource.includes("mode-cipher-magnifier"), "Definition and acronym flashcard modes must include distinct Cipher teaching and magnifying animations.");
 requireValue(appSource.includes("flashcard-change-mode-btn"), "Flashcard set view must include a visible Change Mode button.");
+requireValue(appSource.includes(".flashcards-fan-glyph rect{fill:color-mix(in srgb,currentColor 7%,transparent);stroke:currentColor;stroke-width:1.05;}"), "Flashcards nav icon must use lighter card strokes so the fan does not become a purple mesh.");
+requireValue(appSource.includes("--chapter-filter-color") && appSource.includes("chapterColor(group.chapterId)") && appSource.includes('"--deep-accent":"#0ea5e9"'), "Flashcards page must use clearer blue/teal contrast and per-chapter selector colours.");
+requireValue(!appSource.includes("Matched by shared Security+ keywords, acronyms, and objectives."), "Flashcard Learn More trigger should stay subtle without the bottom descriptor.");
 
 for (const set of SY0701_ACRONYM_SETS) {
   const prefix = `[acronym set ${set.id || "missing-id"}]`;
