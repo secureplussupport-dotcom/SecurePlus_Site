@@ -5,6 +5,7 @@ import {
   BadgeCheck,
   BookOpenCheck,
   Brain,
+  Bug,
   CalendarDays,
   Check,
   CheckCircle2,
@@ -16,12 +17,18 @@ import {
   ClipboardCheck,
   ClipboardList,
   Clock3,
+  Cloud,
+  CloudCog,
+  CodeXml,
   Crosshair,
+  Fingerprint,
   FileText,
+  FileKey2,
   Flame,
   Gauge,
   GraduationCap,
   House,
+  KeyRound,
   Lightbulb,
   ListChecks,
   ListOrdered,
@@ -29,6 +36,7 @@ import {
   Layers3,
   LockKeyhole,
   LogOut,
+  MailWarning,
   MessageSquareWarning,
   MonitorCog,
   Moon,
@@ -38,10 +46,14 @@ import {
   PenLine,
   Play,
   Puzzle,
+  Radar,
   Route,
   RotateCcw,
+  Scale,
+  ScrollText,
   Share2,
   ShieldCheck,
+  ShieldAlert,
   SkipForward,
   SlidersHorizontal,
   SquareTerminal,
@@ -53,6 +65,7 @@ import {
   TrendingUp,
   TriangleAlert,
   Trophy,
+  RadioTower,
   UserRound,
   WandSparkles,
   X,
@@ -18683,6 +18696,14 @@ body{background:
 .deep-dive-acronym-set-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--set-color) 54%,var(--deep-border));box-shadow:0 13px 26px rgba(40,31,22,.09);}
 .deep-dive-acronym-set-card:focus-visible{outline:3px solid color-mix(in srgb,var(--set-color) 25%,transparent);outline-offset:2px;}
 .deep-dive-acronym-set-icon{display:grid;place-items:center;width:43px;height:43px;border-radius:13px;background:color-mix(in srgb,var(--set-color) 16%,var(--deep-surface));color:var(--set-color);}
+.flashcard-set-focus-icon{position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--set-color) 32%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 7px 16px color-mix(in srgb,var(--set-color) 15%,transparent);transition:transform .2s ease,box-shadow .2s ease,background .2s ease;}
+.flashcard-set-focus-icon::after{content:"";position:absolute;inset:auto -18% -36% -18%;height:58%;border-radius:999px;background:color-mix(in srgb,var(--set-color) 18%,transparent);transform:translateY(16px);transition:transform .22s ease;}
+.flashcard-set-focus-icon .glyph-svg{position:relative;z-index:1;transition:transform .22s ease,filter .22s ease;}
+.deep-dive-acronym-set-card:hover .flashcard-set-focus-icon,.deep-dive-acronym-set-card:focus-visible .flashcard-set-focus-icon{transform:translateY(-2px) scale(1.08);background:color-mix(in srgb,var(--set-color) 21%,var(--deep-surface));box-shadow:0 0 0 4px color-mix(in srgb,var(--set-color) 10%,transparent),0 13px 24px color-mix(in srgb,var(--set-color) 24%,transparent);}
+.deep-dive-acronym-set-card:hover .flashcard-set-focus-icon::after,.deep-dive-acronym-set-card:focus-visible .flashcard-set-focus-icon::after{transform:translateY(4px);}
+.deep-dive-acronym-set-card:hover .flashcard-set-focus-icon .glyph-svg,.deep-dive-acronym-set-card:focus-visible .flashcard-set-focus-icon .glyph-svg{transform:rotate(-5deg) scale(1.08);filter:drop-shadow(0 0 7px color-mix(in srgb,var(--set-color) 42%,transparent));}
+.deep-dive-acronym-set-card:hover .flashcard-set-focus-icon.cloud .glyph-svg,.deep-dive-acronym-set-card:focus-visible .flashcard-set-focus-icon.cloud .glyph-svg{animation:flashcardCloudFloat 1.2s ease-in-out infinite alternate;}
+@keyframes flashcardCloudFloat{from{transform:translateX(-1px) translateY(0) scale(1.05);}to{transform:translateX(2px) translateY(-3px) scale(1.12);}}
 .deep-dive-acronym-set-card strong,.deep-dive-acronym-set-card small{display:block;}
 .deep-dive-acronym-set-card strong{font-size:13px;line-height:1.35;}
 .deep-dive-acronym-set-card small{margin-top:4px;color:var(--deep-muted);font-size:10px;line-height:1.45;}
@@ -19250,6 +19271,33 @@ function NavGlyph({type,active}) {
     "mascot-admin":Palette,
   }[type]||ShieldCheck;
   return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true"><Icon className="glyph-svg" size={19} strokeWidth={2.15}/></span>;
+}
+const FLASHCARD_SET_ICON_MAP = {
+  "security-principles-access-models": Scale,
+  "crypto-keys-pki": FileKey2,
+  "identity-authentication": Fingerprint,
+  "network-wireless-attacks": RadioTower,
+  "application-software-attacks": CodeXml,
+  "malware-attacks": Bug,
+  "password-credential-attacks": KeyRound,
+  "social-engineering-attacks": MailWarning,
+  "cryptographic-attacks": LockKeyhole,
+  "cloud-mobile-hardware-attacks": CloudCog,
+  "threat-intel-protection": Radar,
+  "network-architecture-protocols": Network,
+  "cloud-endpoint-infrastructure": Cloud,
+  "security-operations-response": ShieldAlert,
+  "risk-governance-business": ScrollText,
+};
+const FLASHCARD_SET_ICON_IDS = Object.freeze(Object.keys(FLASHCARD_SET_ICON_MAP));
+function FlashcardSetIcon({set,size=21}) {
+  const Icon=FLASHCARD_SET_ICON_MAP[set?.id]||TextCursorInput;
+  const isCloud=/cloud/i.test(`${set?.id||""} ${set?.title||""}`);
+  return(
+    <span className={`deep-dive-acronym-set-icon flashcard-set-focus-icon ${isCloud?"cloud":""}`} aria-hidden="true">
+      <Icon className="glyph-svg" size={size} strokeWidth={2.35}/>
+    </span>
+  );
 }
 function chapterColor(id) {
   return ({1:"#2f7df6",2:"#ef4444",3:"#14b8a6",4:"#a78bfa",5:"#f59e0b"})[id] || "#2f7df6";
@@ -28550,7 +28598,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t}) {
 
       <header className="deep-dive-acronym-reader-hero">
         <span>SY0-701 active recall</span>
-        <h1>{acronymSet.title}</h1>
+        <div className="page-title-row"><FlashcardSetIcon set={acronymSet} size={24}/><h1>{acronymSet.title}</h1></div>
         <p>{acronymSet.description} Say the answer before you flip the card.</p>
         <div className="deep-dive-acronym-reader-meta">
           <span><Brain size={14}/>{acronymSet.cards.length} cards</span>
@@ -29293,7 +29341,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled}) {
                 const topics=[...new Set(set.cards.map(card=>card.topic||set.topic).filter(Boolean))];
                 return(
                   <button type="button" className="deep-dive-acronym-set-card flashcards-topic-card" style={{"--set-color":set.color}} key={set.id} onClick={()=>openSet(set.id)} aria-label={`Open ${set.title}: ${mastered} of ${set.cards.length} mastered`}>
-                    <span className="deep-dive-acronym-set-icon"><TextCursorInput size={20}/></span>
+                    <FlashcardSetIcon set={set}/>
                     <span>
                       <strong>{set.title}</strong>
                       <small>{set.cards.length} cards · {group.chapterTitle}</small>

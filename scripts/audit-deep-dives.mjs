@@ -3,6 +3,7 @@ import {
   CONCEPT_DEEP_DIVE_CATEGORIES,
   CONCEPT_DEEP_DIVE_REVIEWED_AT,
 } from "../src/data/conceptDeepDives.js";
+import { readFileSync } from "node:fs";
 import {
   buildDeepDivePracticeQuestions,
 } from "../src/lib/deepDiveStudy.js";
@@ -51,6 +52,7 @@ const primaryDomains = [
 const isPrimaryDomain = hostname => primaryDomains.some(domain => hostname === domain || hostname.endsWith(`.${domain}`));
 const mappedObjectiveCodes = new Set(Object.values(SY0701_DEEP_DIVE_PROFILES).flatMap(profile => profile.objectiveCodes));
 let practiceQuestionCount = 0;
+const appSource = readFileSync(new URL("../src/App.jsx", import.meta.url), "utf8");
 
 requireValue(CONCEPT_DEEP_DIVES.length >= 32, `Expected at least 32 lessons; found ${CONCEPT_DEEP_DIVES.length}.`);
 requireValue(unique(CONCEPT_DEEP_DIVES.map(dive => dive.id)), "Lesson IDs must be unique.");
@@ -72,6 +74,9 @@ requireValue(unique(SY0701_ACRONYM_SETS.map(set => set.id)), "Acronym set IDs mu
 requireValue(unique(SY0701_ACRONYM_CARDS.map(card => card.id)), "Acronym card IDs must be unique.");
 requireValue(SY0701_ACRONYM_SOURCE.officialUrl === SY0701_BLUEPRINT.sourceUrl, "Acronym cards must point to the reviewed official SY0-701 blueprint.");
 requireValue(/^\d{4}-\d{2}-\d{2}$/.test(SY0701_ACRONYM_SOURCE.reviewedAt), "Acronym review date must use YYYY-MM-DD.");
+SY0701_ACRONYM_SETS.forEach(set => {
+  requireValue(appSource.includes(`"${set.id}"`), `[acronym set ${set.id}] needs a dedicated focused icon mapping in App.jsx.`);
+});
 
 for (const set of SY0701_ACRONYM_SETS) {
   const prefix = `[acronym set ${set.id || "missing-id"}]`;
