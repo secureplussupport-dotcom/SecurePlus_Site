@@ -93,6 +93,9 @@ requireValue(appSource.includes("social-whatsapp") && appSource.includes("social
 requireValue(appSource.includes('type==="copy"'), "Copy Link must use a distinct link icon rather than the generic share icon.");
 requireValue(appSource.includes(".flashcard-share-btn svg{width:29px;height:29px"), "Flashcard share platform glyphs must be large enough to fill the icon boxes.");
 requireValue(appSource.includes("flashcards-cipher-card") && appSource.includes('animation="flashcards"'), "Flashcards page must place Cipher in the hero with a flashcard-specific animation.");
+requireValue(!appSource.includes("Mixed challenge") && !appSource.includes('direction==="mixed"'), "Flashcards must not show the removed Mixed Challenge mode.");
+requireValue(appSource.includes(".flashcards-cipher-card>strong") && appSource.includes(".flashcards-cipher-card>.flashcards-cipher-copy"), "Flashcards Cipher card must not style every nested mascot span.");
+requireValue(appSource.includes(".deep-dive-acronym-set-card::before") && appSource.includes("radial-gradient(circle at 95% 8%"), "Flashcards set cards must have stronger color contrast and creative accents.");
 requireValue(appSource.includes("deep-dive-flashcard-watermark") && appSource.includes("<BrandMark size={16}/>SecurePlus"), "Every flashcard face must include a small SecurePlus watermark.");
 requireValue(appSource.includes("flashcards-fan-glyph"), "Flashcards navigation icon must use a fan of cards.");
 requireValue(appSource.includes("getFlashcardRelatedDeepDives") && appSource.includes("flashcard-learn-more") && appSource.includes("flashcard_learn_more"), "Flashcards must link to Concept Deep Dives through a closable Learn More flow.");

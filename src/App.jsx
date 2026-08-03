@@ -18832,8 +18832,9 @@ body{background:
 .deep-dive-acronym-total strong{color:var(--deep-green);font-size:26px;line-height:1;}
 .deep-dive-acronym-total span{color:var(--deep-muted);font-size:10px;font-weight:900;line-height:1.35;}
 .deep-dive-acronym-set-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-.deep-dive-acronym-set-card{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:11px;align-items:center;min-height:112px;padding:15px;border:1px solid color-mix(in srgb,var(--set-color) 30%,var(--deep-border));border-radius:17px;background:color-mix(in srgb,var(--set-color) 6%,var(--deep-surface));color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;}
-.deep-dive-acronym-set-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--set-color) 54%,var(--deep-border));box-shadow:0 13px 26px rgba(40,31,22,.09);}
+.deep-dive-acronym-set-card{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:11px;align-items:center;min-height:112px;padding:15px;border:1px solid color-mix(in srgb,var(--set-color) 32%,var(--deep-border));border-radius:17px;background:radial-gradient(circle at 95% 8%,color-mix(in srgb,var(--set-color) 14%,transparent),transparent 35%),linear-gradient(145deg,color-mix(in srgb,var(--set-color) 8%,var(--deep-surface)),var(--deep-surface));color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s,background .18s;}
+.deep-dive-acronym-set-card::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:999px;background:linear-gradient(180deg,var(--set-color),color-mix(in srgb,var(--set-color) 38%,transparent));opacity:.86;}
+.deep-dive-acronym-set-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--set-color) 58%,var(--deep-border));box-shadow:0 13px 28px color-mix(in srgb,var(--set-color) 15%,transparent),0 16px 30px rgba(40,31,22,.08);}
 .deep-dive-acronym-set-card:focus-visible{outline:3px solid color-mix(in srgb,var(--set-color) 25%,transparent);outline-offset:2px;}
 .deep-dive-acronym-set-card:disabled{cursor:not-allowed;opacity:.72;transform:none;box-shadow:none;}
 .deep-dive-acronym-set-icon{display:grid;place-items:center;width:43px;height:43px;border-radius:13px;background:color-mix(in srgb,var(--set-color) 16%,var(--deep-surface));color:var(--set-color);}
@@ -18855,16 +18856,16 @@ body{background:
 .deep-dive-acronym-set-progress>span:last-child{color:var(--deep-muted);font-size:9px;font-weight:900;}
 .deep-dive-acronym-source-note{display:flex;align-items:flex-start;gap:8px;margin-top:13px;color:var(--deep-muted);font-size:11px;font-weight:650;line-height:1.55;}
 .deep-dive-acronym-source-note svg{flex:0 0 auto;color:var(--deep-green);margin-top:1px;}
-.flashcards-page .deep-dives-hero{background:radial-gradient(circle at 92% 14%,color-mix(in srgb,#8b5cf6 22%,transparent),transparent 33%),radial-gradient(circle at 12% 112%,color-mix(in srgb,var(--deep-green) 15%,transparent),transparent 39%),var(--deep-surface);}
+.flashcards-page .deep-dives-hero{background:radial-gradient(circle at 92% 14%,color-mix(in srgb,#8b5cf6 26%,transparent),transparent 33%),radial-gradient(circle at 12% 112%,color-mix(in srgb,var(--deep-green) 18%,transparent),transparent 39%),linear-gradient(145deg,color-mix(in srgb,#f8fafc 58%,var(--deep-surface)),var(--deep-surface));}
 .flashcards-hero{align-items:stretch;}
 .flashcards-hero-side{position:relative;display:flex;flex-direction:column;gap:12px;align-items:stretch;justify-content:flex-end;min-width:0;}
-.flashcards-cipher-card{position:relative;align-self:flex-end;width:min(100%,255px);padding:14px 14px 13px;border:1px solid color-mix(in srgb,#7c3aed 34%,var(--deep-border));border-radius:20px;background:linear-gradient(145deg,color-mix(in srgb,#7c3aed 11%,var(--deep-surface)),color-mix(in srgb,var(--deep-green) 7%,var(--deep-surface)));box-shadow:0 18px 38px rgba(40,31,22,.12);overflow:hidden;animation:flashcardsCipherCardIn .42s cubic-bezier(.16,1,.3,1) both;}
+.flashcards-cipher-card{position:relative;align-self:flex-end;width:min(100%,255px);padding:14px 14px 13px;border:1px solid color-mix(in srgb,#7c3aed 34%,var(--deep-border));border-radius:20px;background:linear-gradient(145deg,color-mix(in srgb,#7c3aed 13%,var(--deep-surface)),color-mix(in srgb,var(--deep-green) 9%,var(--deep-surface)));box-shadow:0 18px 38px rgba(40,31,22,.12),inset 0 1px 0 rgba(255,255,255,.32);overflow:hidden;animation:flashcardsCipherCardIn .42s cubic-bezier(.16,1,.3,1) both;}
 .flashcards-cipher-card::before{content:"";position:absolute;right:-22px;top:-28px;width:112px;height:112px;border-radius:999px;background:radial-gradient(circle,color-mix(in srgb,#7c3aed 28%,transparent),transparent 68%);opacity:.85;animation:flashcardsOrbPulse 3.2s ease-in-out infinite;}
-.flashcards-cipher-card .cipher-mascot{--cipher-size:98px!important;display:block;margin:-8px auto -2px;filter:drop-shadow(6px 7px 0 #7c3aed2e);}
-.flashcards-cipher-card strong,.flashcards-cipher-card span{position:relative;z-index:1;display:block;text-align:center;}
-.flashcards-cipher-card strong{color:var(--deep-text);font-size:14px;font-weight:950;line-height:1.25;}
-.flashcards-cipher-card span{margin-top:3px;color:var(--deep-muted);font-size:11px;font-weight:750;line-height:1.45;}
-.flashcards-controls{margin-top:18px;}
+.flashcards-cipher-card .cipher-mascot{--cipher-size:98px!important;position:relative;z-index:1;display:block;margin:-8px auto -2px;filter:drop-shadow(6px 7px 0 #7c3aed2e);}
+.flashcards-cipher-card>strong,.flashcards-cipher-card>.flashcards-cipher-copy{position:relative;z-index:1;display:block;text-align:center;}
+.flashcards-cipher-card>strong{color:var(--deep-text);font-size:14px;font-weight:950;line-height:1.25;}
+.flashcards-cipher-card>.flashcards-cipher-copy{margin-top:3px;color:var(--deep-muted);font-size:11px;font-weight:750;line-height:1.45;}
+.flashcards-controls{margin-top:18px;background:linear-gradient(145deg,color-mix(in srgb,#7c3aed 7%,var(--deep-surface)),color-mix(in srgb,var(--deep-green) 5%,var(--deep-surface)));}
 .flashcard-share-actions{position:relative;display:inline-flex;align-items:flex-start;gap:8px;flex-wrap:wrap;z-index:10;}
 .flashcard-share-actions.compact{display:flex;margin-top:15px;}
 .flashcard-share-trigger{display:inline-flex;align-items:center;gap:8px;min-height:39px;padding:9px 12px;border:1px solid color-mix(in srgb,var(--set-color,#7c3aed) 30%,var(--deep-border));border-radius:999px;background:var(--deep-surface);color:var(--deep-text);font:inherit;font-size:11px;font-weight:950;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;box-shadow:0 10px 24px rgba(40,31,22,.08);transition:transform .17s,border-color .17s,background .17s,color .17s,box-shadow .17s;}
@@ -18909,7 +18910,7 @@ body{background:
 .deep-dive-acronym-prompt{color:var(--set-color)!important;font-size:12px!important;font-weight:900;}
 .deep-dive-acronym-answer-copy{max-width:650px;margin:12px 0 0;color:var(--deep-muted);font-size:15px;font-weight:650;line-height:1.65;}
 .deep-dive-acronym-reader .deep-dive-flashcard-studio{max-width:850px;}
-.deep-dive-flashcard-studio{max-width:850px;margin:0 auto;padding:25px;border:1px solid var(--deep-border);border-radius:22px;background:radial-gradient(circle at 90% 5%,color-mix(in srgb,var(--deep-amber) 15%,transparent),transparent 30%),var(--deep-surface);box-shadow:0 14px 40px rgba(40,31,22,.07);}
+.deep-dive-flashcard-studio{max-width:850px;margin:0 auto;padding:25px;border:1px solid color-mix(in srgb,var(--set-color) 25%,var(--deep-border));border-radius:22px;background:radial-gradient(circle at 90% 5%,color-mix(in srgb,var(--deep-amber) 18%,transparent),transparent 30%),radial-gradient(circle at 8% 100%,color-mix(in srgb,var(--set-color) 13%,transparent),transparent 34%),var(--deep-surface);box-shadow:0 14px 40px rgba(40,31,22,.09);}
 .deep-dive-flashcard-head{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;margin-bottom:18px;}
 .deep-dive-flashcard-head h2{margin:0 0 5px;font-size:24px;color:var(--deep-text);}
 .deep-dive-flashcard-head p{max-width:580px;margin:0;color:var(--deep-muted);font-size:12px;line-height:1.65;}
@@ -18928,8 +18929,8 @@ body{background:
 .deep-dive-flashcard:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 33%,transparent);outline-offset:4px;}
 .deep-dive-flashcard-inner{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.8,.2,1);}
 .deep-dive-flashcard.flipped .deep-dive-flashcard-inner{transform:rotateY(180deg);}
-.deep-dive-flashcard-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:42px;border:1px solid color-mix(in srgb,var(--deep-accent) 27%,var(--deep-border));border-radius:23px;background:linear-gradient(145deg,color-mix(in srgb,var(--deep-accent) 7%,var(--deep-surface)),var(--deep-surface));box-shadow:0 17px 40px rgba(40,31,22,.1);backface-visibility:hidden;-webkit-backface-visibility:hidden;text-align:center;overflow:auto;}
-.deep-dive-flashcard-back{transform:rotateY(180deg);border-color:color-mix(in srgb,var(--deep-green) 36%,var(--deep-border));background:linear-gradient(145deg,color-mix(in srgb,var(--deep-green) 10%,var(--deep-surface)),var(--deep-surface));}
+.deep-dive-flashcard-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:42px;border:1px solid color-mix(in srgb,var(--set-color) 34%,var(--deep-border));border-radius:23px;background:radial-gradient(circle at 14% 18%,color-mix(in srgb,var(--set-color) 16%,transparent),transparent 30%),linear-gradient(145deg,color-mix(in srgb,var(--set-color) 9%,var(--deep-surface)),var(--deep-surface));box-shadow:0 17px 40px rgba(40,31,22,.12),inset 0 1px 0 rgba(255,255,255,.28);backface-visibility:hidden;-webkit-backface-visibility:hidden;text-align:center;overflow:auto;}
+.deep-dive-flashcard-back{transform:rotateY(180deg);border-color:color-mix(in srgb,var(--deep-green) 42%,var(--deep-border));background:radial-gradient(circle at 86% 16%,color-mix(in srgb,var(--deep-green) 18%,transparent),transparent 31%),linear-gradient(145deg,color-mix(in srgb,var(--deep-green) 12%,var(--deep-surface)),var(--deep-surface));}
 .deep-dive-flashcard-kind{position:absolute;left:19px;top:18px;display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:9px;background:color-mix(in srgb,var(--deep-accent) 10%,var(--deep-surface));color:var(--deep-accent);font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
 .deep-dive-flashcard-back .deep-dive-flashcard-kind{background:color-mix(in srgb,var(--deep-green) 11%,var(--deep-surface));color:var(--deep-green);}
 .deep-dive-flashcard-watermark{position:absolute;right:17px;bottom:16px;display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid color-mix(in srgb,var(--deep-border) 72%,transparent);border-radius:999px;background:color-mix(in srgb,var(--deep-surface) 80%,transparent);color:var(--deep-muted);font-size:9px;font-weight:950;letter-spacing:.04em;text-transform:uppercase;opacity:.72;pointer-events:none;}
@@ -28877,7 +28878,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   },[acronymSet,cardOrder]);
   const studyCards=direction==="example"?orderedCards.filter(card=>card.example):orderedCards;
   const activeCard=studyCards[cardIndex]||studyCards[0]||orderedCards[0];
-  const asksForAcronym=direction==="acronym"||(direction==="mixed"&&cardIndex%2===1);
+  const asksForAcronym=direction==="acronym";
   const asksFromExample=direction==="example";
   const masteredCount=acronymSet.cards.filter(card=>masteredIds.includes(card.id)).length;
   const progress=studyCards.length?Math.round(((cardIndex+1)/studyCards.length)*100):0;
@@ -28961,7 +28962,6 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
       <div className="deep-dive-acronym-mode" role="tablist" aria-label="Choose flashcard direction">
         <button type="button" role="tab" aria-selected={direction==="definition"} className={direction==="definition"?"active":""} onClick={()=>chooseDirection("definition")}>Test definitions</button>
         <button type="button" role="tab" aria-selected={direction==="acronym"} className={direction==="acronym"?"active":""} onClick={()=>chooseDirection("acronym")}>Identify acronym</button>
-        <button type="button" role="tab" aria-selected={direction==="mixed"} className={direction==="mixed"?"active":""} onClick={()=>chooseDirection("mixed")}>Mixed challenge</button>
         {hasExampleMode&&<button type="button" role="tab" aria-selected={direction==="example"} className={direction==="example"?"active":""} onClick={()=>chooseDirection("example")}>Guess from example</button>}
       </div>
 
@@ -29723,7 +29723,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
           <aside className="flashcards-cipher-card" aria-label="Cipher flashcard coach">
             <MascotAnimation animation="flashcards" size={98} interactive hoverAnimation="cheer" reactionAnimations={["flashcards","thinking","cheer"]} label="Cipher flips through flashcards"/>
             <strong>Cipher’s recall lab</strong>
-            <span>Tap a set, say the answer, then flip.</span>
+            <span className="flashcards-cipher-copy">Tap a set, say the answer, then flip.</span>
           </aside>
           <div className="deep-dives-progress-card">
             <div><span>Acronym mastery</span><strong>{totalMastered}/{SY0701_ACRONYM_CARDS.length}</strong></div>
