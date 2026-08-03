@@ -514,6 +514,42 @@ const buildCipherWeakFlashcardSet = context => {
     generatedBy:"cipher_assistant",
   };
 };
+const buildCipherStarterFlashcardSet = () => {
+  const priorityTopics=[
+    "Identity and access",
+    "Security Operations",
+    "Incident response",
+    "Architecture",
+    "Risk",
+  ];
+  const selected=[];
+  priorityTopics.forEach(topic=>{
+    const matches=SY0701_ACRONYM_CARDS
+      .filter(card=>String([card.topic,card.setTitle,card.chapterTitle].join(" ")).toLowerCase().includes(topic.toLowerCase()))
+      .filter(card=>!selected.some(item=>item.id===card.id));
+    selected.push(...matches.slice(0,4));
+  });
+  if(selected.length<18){
+    SY0701_ACRONYM_CARDS
+      .filter(card=>flashcardHasRealAcronym(card)||card.cardType==="term")
+      .forEach(card=>{
+        if(selected.length<18&&!selected.some(item=>item.id===card.id))selected.push(card);
+      });
+  }
+  return {
+    id:ASSISTANT_FLASHCARD_SET_ID,
+    title:"Cipher deck: Starter priorities",
+    description:"Pro assistant flashcards for high-yield Security+ terms while Cipher waits for more weak-area data.",
+    setType:selected.length&&selected.every(card=>card.cardType==="term")?"term":"acronym",
+    objectiveCodes:[...new Set(selected.flatMap(card=>card.objectiveCodes||[]))],
+    color:"#0ea5e9",
+    chapterId:0,
+    chapterTitle:"Cipher assisted deck",
+    topic:"Cipher starter deck",
+    cards:selected.slice(0,18),
+    generatedBy:"cipher_assistant",
+  };
+};
 const getFlashcardRelatedDeepDives = acronymSet => {
   if(!acronymSet||acronymSet.id===STARRED_FLASHCARD_SET_ID)return [];
   const setText=[
@@ -31300,6 +31336,12 @@ export default function App() {
     && !pbqBankLoading
     && (pbqBankError || remotePbqBank.length<PBQ_BANK.length)
   );
+  const effectiveAssistantFlashcardSet=useMemo(()=>{
+    if(user?.tier!=="pro")return assistantFlashcardSet;
+    if(assistantFlashcardSet?.cards?.length)return assistantFlashcardSet;
+    const weakContext=buildCipherAssistantContext(attempts,"flashcards");
+    return buildCipherWeakFlashcardSet(weakContext)||buildCipherStarterFlashcardSet();
+  },[assistantFlashcardSet,attempts,user?.tier]);
 
   const importPendingGuestSmartReview=useCallback(async(account,existingAttempts=[])=>{
     const pending=await takePendingGuestSmartReview();
@@ -32513,13 +32555,13 @@ export default function App() {
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
           {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq} onOpenFlashcards={handleOpenFlashcards}/>}
-          {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} assistantSet={assistantFlashcardSet} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")} onOpenDeepDive={handleOpenDeepDive} onUpgrade={()=>setView("pricing")}/>}
+          {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} assistantSet={effectiveAssistantFlashcardSet} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")} onOpenDeepDive={handleOpenDeepDive} onUpgrade={()=>setView("pricing")}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
           {!practiceFocusMode&&view!=="exam"&&view!=="mascot-admin"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
         </main>
-        {!practiceFocusMode&&!showOnboarding&&!showProWelcome&&["dashboard","mcq","pbq","daily","coins","objectives","pricing"].includes(view)&&(
+        {!practiceFocusMode&&!showOnboarding&&!showProWelcome&&["dashboard","mcq","pbq","daily","coins","objectives","pricing","flashcards"].includes(view)&&(
           <CipherAssistantDock user={user} attempts={attempts} currentView={view} onStartReview={handleStartChapterReview} onOpenFlashcards={handleOpenFlashcards} onUpgrade={()=>setView("pricing")}/>
         )}
         {showOnboarding&&(
