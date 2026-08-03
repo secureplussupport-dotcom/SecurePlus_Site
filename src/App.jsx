@@ -17162,10 +17162,10 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-effect-note{right:5%;top:18%;color:#c084fc;font-family:'JetBrains Mono',monospace;font-size:calc(var(--cipher-size) * .2);text-shadow:3px 3px 0 #5b21b6;}
 .cipher-effect-scan{left:19%;top:31%;width:62%;height:3px;background:#67f5ff;box-shadow:0 3px 0 #075985;}
 .cipher-prop{position:absolute;z-index:9;display:none;pointer-events:none;}
-.cipher-prop-board{left:2%;top:12%;width:42%;height:33%;border:3px solid #6b4f39;clip-path:polygon(8% 0,92% 0,92% 8%,100% 8%,100% 86%,92% 86%,92% 100%,8% 100%,8% 92%,0 92%,0 8%,8% 8%);background:linear-gradient(145deg,#284735,#14241b);box-shadow:4px 5px 0 rgba(91,58,25,.36);}
+.cipher-prop-board{right:0;top:10%;width:40%;height:32%;border:3px solid #6b4f39;clip-path:polygon(8% 0,92% 0,92% 8%,100% 8%,100% 86%,92% 86%,92% 100%,8% 100%,8% 92%,0 92%,0 8%,8% 8%);background:linear-gradient(145deg,#284735,#14241b);box-shadow:4px 5px 0 rgba(91,58,25,.36);}
 .cipher-prop-board span{position:absolute;left:15%;top:23%;color:#d9f99d;font-family:'JetBrains Mono',monospace;font-size:calc(var(--cipher-size) * .1);font-weight:950;letter-spacing:.06em;}
 .cipher-prop-board i{position:absolute;left:14%;right:14%;bottom:22%;height:3px;background:#d9f99d99;box-shadow:0 7px 0 #d9f99d66;}
-.cipher-prop-pointer{left:35%;top:50%;width:35%;height:5%;border-radius:0;background:#a16207;box-shadow:2px 2px 0 #713f12;transform-origin:10% 50%;clip-path:polygon(0 20%,82% 20%,82% 0,100% 50%,82% 100%,82% 80%,0 80%);}
+.cipher-prop-pointer{left:50%;top:51%;width:35%;height:5%;border-radius:0;background:#a16207;box-shadow:2px 2px 0 #713f12;transform-origin:10% 50%;clip-path:polygon(0 20%,82% 20%,82% 0,100% 50%,82% 100%,82% 80%,0 80%);}
 .cipher-prop-magnifier{right:5%;top:21%;width:33%;aspect-ratio:1;border:5px solid #38bdf8;border-radius:50%;background:rgba(240,249,255,.58);box-shadow:inset 0 0 16px rgba(14,165,233,.22),3px 4px 0 #075985;}
 .cipher-prop-magnifier::after{content:"";position:absolute;right:-28%;bottom:-18%;width:43%;height:12%;background:#0ea5e9;box-shadow:2px 2px 0 #075985;transform:rotate(43deg);transform-origin:left center;}
 .cipher-prop-magnifier i{position:absolute;left:28%;top:39%;width:44%;height:13%;background:#075985;box-shadow:0 7px 0 #075985;border-radius:999px;}
@@ -17250,6 +17250,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-motion-flashcardTeach .cipher-head{animation-name:cipherHeadTeach;}
 .cipher-motion-flashcardTeach .cipher-arm-left{animation-name:cipherArmTeachLeft;}
 .cipher-motion-flashcardTeach .cipher-arm-right{animation-name:cipherArmTeachRight;}
+.cipher-motion-flashcardTeach .cipher-arm-right{z-index:10;}
 .cipher-motion-flashcardTeach .cipher-eye{animation:none;height:10%;top:39%;}
 .cipher-motion-flashcardTeach .cipher-mouth{width:18%;left:41%;bottom:13%;}
 .cipher-motion-flashcardTeach .cipher-prop-board{animation:cipherBoardTeach var(--pet-cycle) steps(8,end) infinite;}
@@ -17505,9 +17506,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes cipherTeachMotion{0%,100%{transform:translate3d(0,0,0) rotate(-1deg)}32%{transform:translate3d(-2%,-3%,0) rotate(-3deg)}62%{transform:translate3d(1%,-1%,0) rotate(2deg)}}
 @keyframes cipherHeadTeach{0%,100%{transform:translateY(0) rotate(-4deg)}34%{transform:translateY(-3%) rotate(4deg)}64%{transform:translateY(-1%) rotate(1deg)}}
 @keyframes cipherArmTeachLeft{0%,100%{transform:rotate(54deg) translate(-4%,-3%)}46%{transform:rotate(38deg) translate(-2%,-2%)}}
-@keyframes cipherArmTeachRight{0%,100%{transform:rotate(-62deg) translateY(-4%)}30%{transform:rotate(-104deg) translateY(-7%)}58%{transform:rotate(-80deg) translateY(-5%)}82%{transform:rotate(-116deg) translateY(-8%)}}
+@keyframes cipherArmTeachRight{0%,100%{transform:rotate(-78deg) translate(5%,-7%)}30%{transform:rotate(-104deg) translate(7%,-9%)}58%{transform:rotate(-88deg) translate(6%,-8%)}82%{transform:rotate(-112deg) translate(8%,-10%)}}
 @keyframes cipherBoardTeach{0%,100%{transform:translateY(0) rotate(-5deg)}44%{transform:translateY(-4%) rotate(-2deg)}72%{transform:translateY(-1%) rotate(-4deg)}}
-@keyframes cipherPointerTeach{0%,100%{transform:rotate(-24deg)}28%{transform:rotate(-11deg) translateX(5%)}56%{transform:rotate(-32deg) translateX(1%)}82%{transform:rotate(-15deg) translateX(4%)}}
+@keyframes cipherPointerTeach{0%,100%{transform:rotate(-29deg) translateX(0)}28%{transform:rotate(-22deg) translateX(3%)}56%{transform:rotate(-34deg) translateX(1%)}82%{transform:rotate(-24deg) translateX(3%)}}
 @keyframes cipherInspectMotion{0%,100%{transform:translate3d(0,0,0) rotate(1deg)}28%{transform:translate3d(3%,-2%,0) rotate(4deg)}58%{transform:translate3d(-2%,-4%,0) rotate(-2deg)}}
 @keyframes cipherHeadInspect{0%,100%{transform:translate(2%,0) rotate(5deg)}34%{transform:translate(7%,-3%) rotate(9deg)}66%{transform:translate(-2%,-2%) rotate(-3deg)}}
 @keyframes cipherArmInspectLeft{0%,100%{transform:rotate(28deg)}38%{transform:rotate(60deg) translateY(-3%)}}
