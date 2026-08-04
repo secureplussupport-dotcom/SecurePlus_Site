@@ -25,6 +25,10 @@ function requirePattern(file, pattern, message) {
   if (!pattern.test(read(file))) push(errors, file, message);
 }
 
+function allowedSecretPlaceholder(value) {
+  return /(xxx|example|placeholder|your_|test_key|price_three_month_xxx|price_monthly_xxx|whsec_xxx|phc_xxx)/i.test(String(value || ""));
+}
+
 function walkFiles(dir) {
   const full = path.join(root, dir);
   if (!fs.existsSync(full)) return [];
@@ -301,10 +305,21 @@ if (!errors.length) {
 
   for (const file of trackedTextFiles) {
     const text = read(file);
-    const leakedStripeSecret = text.match(/\bsk_(?:live|test)_[A-Za-z0-9]{20,}\b/);
-    const leakedWebhookSecret = text.match(/\bwhsec_[A-Za-z0-9]{20,}\b/);
-    if (leakedStripeSecret) push(errors, file, "looks like a real Stripe secret key is committed");
-    if (leakedWebhookSecret) push(errors, file, "looks like a real Stripe webhook secret is committed");
+    const secretPatterns = [
+      ["Stripe secret key", /\bsk_(?:live|test)_[A-Za-z0-9]{20,}\b/g],
+      ["Stripe restricted key", /\brk_(?:live|test)_[A-Za-z0-9]{20,}\b/g],
+      ["Stripe webhook secret", /\bwhsec_[A-Za-z0-9]{20,}\b/g],
+      ["Supabase JWT-like key", /\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/g],
+      ["Resend API key", /\bre_[A-Za-z0-9_]{16,}\b/g],
+      ["PostHog project token", /\bphc_[A-Za-z0-9]{16,}\b/g],
+      ["Google API key", /\bAIza[0-9A-Za-z_-]{20,}\b/g],
+      ["private key block", /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/g],
+    ];
+    for (const [label, pattern] of secretPatterns) {
+      for (const match of text.matchAll(pattern)) {
+        if (!allowedSecretPlaceholder(match[0])) push(errors, file, `looks like a real ${label} is committed`);
+      }
+    }
   }
 }
 
