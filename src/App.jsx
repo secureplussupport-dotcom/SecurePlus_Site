@@ -17839,8 +17839,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .landing-page{min-height:100vh;padding:0 24px 54px;background:transparent;}
 .landing-header{position:sticky;top:10px;z-index:150;max-width:1120px;margin:0 auto 28px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;padding:12px 14px;background:${t.bg}e8;backdrop-filter:blur(16px);border:1px solid ${t.border};border-radius:8px;box-shadow:0 14px 34px rgba(7,12,24,.1);}
 .landing-nav-center{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;}
-.landing-nav-center a{color:${t.textSec};font-size:13px;font-weight:800;text-decoration:none;padding:8px 10px;border-radius:8px;transition:background .18s,color .18s;}
-.landing-nav-center a:hover{color:${t.text};background:${t.panel};}
+.landing-nav-center a,.landing-nav-center button{color:${t.textSec};font-size:13px;font-weight:800;text-decoration:none;padding:8px 10px;border-radius:8px;transition:background .18s,color .18s;background:transparent;border:0;font-family:inherit;cursor:pointer;}
+.landing-nav-center a:hover,.landing-nav-center button:hover{color:${t.text};background:${t.panel};}
 .landing-nav-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;}
 .landing-main{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:24px;}
 .landing-section{scroll-margin-top:92px;}
@@ -22189,7 +22189,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
   const [mode,setMode]=useState(initialMode);
   const [showLoginModal,setShowLoginModal]=useState(initialMode==="login");
   const [showSignupJourney,setShowSignupJourney]=useState(initialMode==="signup");
-  const [activePath,setActivePath]=useState("mcq");
+  const [activePath,setActivePath]=useState("flashcards");
   const [form,setForm]=useState({name:"",email:"",pass:"",confirm:"",referral:getStoredReferralCode(),avatarId:"default-cipher"});
   const [athenaProfile,setAthenaProfile]=useState({
     name:"",
@@ -22442,6 +22442,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
   }
 
   const featureCards=[
+    {type:"flashcards",plan:"free",color:"#0ea5e9",title:"Free Security+ flashcards",body:"The easiest gateway into SecurePlus: open chapter-grouped acronyms, terms, and attack clues without an account, then save starred cards when you sign up."},
     {type:"mcq",plan:"free",color:"#2f7df6",title:"Full MCQ practice",body:"Guests and free accounts can access every MCQ question. Create an account when you want answers, scores, and progress to follow you."},
     {type:"pbq",plan:"pro",color:"#f59e0b",title:"PBQ simulations",body:"Practice firewall decisions, terminal logs, Select & Fill, ordering, hotspot, and scenario tasks before exam day pressure."},
     {type:"review",plan:"free",color:"#14b8a6",title:"Smart Review",body:"SecurePlus brings missed questions back first and spaces out correct questions, so your weak areas get the most attention."},
@@ -22452,12 +22453,14 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     {q:"Which exam version is supported?",a:"The current question bank is built for CompTIA Security+ (SY0-701)."},
     {q:"How often is the question bank updated?",a:"The bank is reviewed and expanded as Security+ objectives and student weak areas change."},
     {q:"Is there a mobile-friendly layout?",a:"Yes. The app is designed for phones, tablets, and desktop browsers, including mobile practice sessions."},
-    {q:"Can I practise without creating an account?",a:"Yes. Visitors can access all MCQ questions, but progress and review history are not saved until they sign up."},
+    {q:"Can I practise without creating an account?",a:"Yes. Visitors can open Flashcards, access all MCQ questions, and try the Daily Challenge. Progress, starred cards, and review history are saved after sign-up."},
+    {q:"Why start with Flashcards?",a:"Flashcards are quick, low-pressure, and easy to share. They help new learners build Security+ vocabulary before attempting harder MCQs and PBQs."},
     {q:"What does Smart Review do?",a:"It uses an SM-2 inspired review model to prioritise wrong answers and bring topics back at better intervals. Example: got 2.4 wrong? It comes back tomorrow. Got it right? It waits a week."},
     {q:"What does Pro unlock?",a:`${PRO_ACADEMY_PASS_DESCRIPTION} ${PRO_ACADEMY_PASS_PRICE}, renewing every 3 months until cancelled.`},
     {q:"Is SecurePlus affiliated with CompTIA?",a:"No. CompTIA and Security+ are trademarks of CompTIA. SecurePlus is an independent practice platform."},
   ];
   const learningPaths=[
+    {id:"flashcards",label:"Flashcard recall pack",tag:"Free",color:"#0ea5e9",body:"Review Security+ acronyms, definitions, and attack clues in quick active-recall decks.",meta:"No account needed",action:()=>onNavigate("flashcards")},
     {id:"mcq",label:"MCQ foundations",tag:"Free",color:t.accent,body:"Build confidence across all five SY0-701 chapters with short interactive sets.",meta:`${MCQ_BANK.length} questions`,action:onPracticeMcq},
     {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"A quick 5-question loop that creates a reason to come back tomorrow.",meta:"5 questions/day",action:onDaily},
     {id:"pbq",label:"PBQ simulations",tag:"Pro",color:t.amber,body:"Practise applied scenarios, logs, tap-to-select tasks, and terminal-style questions.",meta:`${PBQ_BANK.length} PBQs`,action:()=>jumpToAuth("signup")},
@@ -22474,6 +22477,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
         </button>
         <nav className="landing-nav-center" aria-label="Landing page sections">
           <a href="#features">Features</a>
+          <button type="button" onClick={()=>onNavigate("flashcards")}>Flashcards</button>
           <a href="#learning-paths">Paths</a>
           <a href="#pricing">Pricing</a>
           <a href="#daily-challenge">Daily Challenge</a>
@@ -22492,17 +22496,19 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
               CompTIA Security+ (SY0-701)
             </div>
             <h1 className="landing-title brilliant-title">
-              Learn Security+ by doing, not by staring at notes.
+              Start with free Security+ flashcards. Stay for smarter exam prep.
             </h1>
             <p className="landing-copy brilliant-copy">
-              Interactive MCQs, PBQ simulations, and Smart Review that turns mistakes into your next study plan.
+              A fast, shareable recall pack for SY0-701 acronyms, definitions, and attack clues. Upgrade only when you want premium weak-area decks, PBQs, and Smart Review.
             </p>
             <div className="brilliant-action-row">
-              <button className="btn btn-primary brilliant-primary-cta" onClick={onPracticeMcq}>Start Free MCQ Practice</button>
-              <button className="btn btn-outline brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
+              <button className="btn btn-primary brilliant-primary-cta" onClick={()=>onNavigate("flashcards")}>Open Free Flashcards</button>
+              <button className="btn btn-outline brilliant-secondary-cta" onClick={onPracticeMcq}>Start Free MCQ Practice</button>
+              <button className="btn btn-ghost brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
             </div>
             <button className="landing-login-link" onClick={()=>jumpToAuth("login")}>Already have an account? Log in</button>
             <div className="brilliant-proof-row">
+              <span>Free flashcards</span>
               <span>{MCQ_BANK.length} MCQs</span>
               <span>{PBQ_BANK.length} PBQs</span>
               <span>No account needed to start</span>
@@ -22515,8 +22521,8 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           <div className="brilliant-lesson-shell">
             <div className="brilliant-lesson-top">
               <div>
-                <div className="label brilliant-lesson-kicker">Try it now</div>
-                <strong>Today's Security+ warm-up</strong>
+                <div className="label brilliant-lesson-kicker">Start in 30 seconds</div>
+                <strong>Open a free flashcard deck</strong>
               </div>
               <span className="brilliant-lesson-duration">2 min</span>
             </div>
@@ -22600,10 +22606,10 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
             <div className="label" style={{color:t.accent,marginBottom:8}}>Smart Review benefit</div>
             <h2 style={{fontSize:26,color:t.text,marginBottom:10}}>Turn missed questions into a focused study plan.</h2>
             <p style={{fontSize:14,color:t.textSec,lineHeight:1.75}}>
-              Smart Review watches what you miss, groups weak chapters, and brings those questions back earlier. Correct answers are spaced out so you practise for retention, not just short-term memory.
+              Start with Flashcards to build vocabulary, then use MCQs and PBQs to reveal weak concepts. Pro can turn those misses into premium Cipher-built flashcard decks and targeted Smart Review.
             </p>
             <div className="smart-example">
-              <strong>Example:</strong> Got 2.4 wrong? It comes back tomorrow. Got it right? It waits a week.
+              <strong>Example:</strong> Missed TLS trust chain? Pro can prepare a focused PKI flashcard deck before your next review set.
             </div>
             <MascotGuide
               animation="scan"
@@ -22645,11 +22651,11 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           <div className="card pricing-free-card" style={{padding:"22px"}}>
             <div className="label" style={{marginBottom:8}}>Free</div>
             <h2 style={{fontSize:24,color:t.text,marginBottom:4}}>$0</h2>
-            <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Best for starting Security+ practice.</p>
-            {["All MCQ questions","Daily Challenge","Create an account to save progress","Basic practice history"].map(item=>(
+            <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Best for starting with quick recall and MCQ practice.</p>
+            {["Free Security+ flashcards","All MCQ questions","Daily Challenge","Create an account to save starred cards","Basic practice history"].map(item=>(
               <div key={item} className="pricing-feature-row"><Check size={16} strokeWidth={2.6}/><div>{item}</div></div>
             ))}
-            <button className="btn btn-outline" style={{width:"100%",marginTop:18}} onClick={onPracticeMcq}>Practise MCQs Free</button>
+            <button className="btn btn-outline" style={{width:"100%",marginTop:18}} onClick={()=>onNavigate("flashcards")}>Open Flashcards Free</button>
           </div>
           <div className="card pricing-pro-card" style={{padding:"22px",borderColor:`${t.accent}55`,background:`linear-gradient(180deg, ${t.accent}10, ${t.surface})`}}>
             <div className="chip" style={{borderColor:`${t.accent}44`,color:t.accent,background:`${t.accent}10`,marginBottom:10}}>Most popular</div>
@@ -22657,7 +22663,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
             <h2 style={{fontSize:24,color:t.text,marginBottom:7}}>{PRO_ACADEMY_PASS_PRICE}</h2>
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:12}}>{PRO_ACADEMY_PASS_DESCRIPTION}</p>
             <div className="upgrade-original-line" style={{marginBottom:16}}><ShieldCheck size={14}/>{PRO_ACADEMY_PASS_TRUST}</div>
-            {["Practise applied skills with PBQ simulations","Rehearse under pressure in Exam Mode","Turn results into weak-chapter guidance","Bring missed and starred questions back sooner"].map(item=>(
+            {["Build premium weak-area flashcard decks with Cipher","Practise applied skills with PBQ simulations","Rehearse under pressure in Exam Mode","Turn results into weak-chapter guidance","Bring missed and starred questions back sooner"].map(item=>(
               <div key={item} className="pricing-feature-row"><Check size={16} strokeWidth={2.6}/><div>{item}</div></div>
             ))}
             <button className="btn btn-primary" style={{width:"100%",marginTop:18,justifyContent:"center"}} onClick={()=>jumpToAuth("signup")}>Create account to unlock Pro</button>
@@ -23288,14 +23294,14 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
 }
 
 function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,onFlashcards}) {
-  const [activePath,setActivePath]=useState("mcq");
+  const [activePath,setActivePath]=useState("flashcards");
   const startSignup=source=>{
     capture("landing_signup_cta_clicked", { source });
     onSignup();
   };
   const learningPaths=[
-    {id:"mcq",label:"5 simple MCQs",tag:"Free",color:t.accent,body:"Start with a short no-account session, then see your instant weak-area result.",meta:"Practice now",action:onPractice},
-    {id:"flashcards",label:"Flashcards",tag:"Free",color:"#7c3aed",body:"Review acronyms and attacks by chapter without creating an account.",meta:"No login needed",action:onFlashcards},
+    {id:"flashcards",label:"Free flashcards",tag:"Gateway",color:"#0ea5e9",body:"Start with Security+ acronyms, definitions, and attack clues. No account needed.",meta:"Open now",action:onFlashcards},
+    {id:"mcq",label:"5 simple MCQs",tag:"Free",color:t.accent,body:"After recall practice, try a short no-account MCQ session and see your weak-area result.",meta:"Practice now",action:onPractice},
     {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"Finish a short challenge and build a repeatable study rhythm.",meta:"5 questions/day",action:onDaily},
     {id:"pbq",label:"PBQ simulations",tag:"Preview",color:t.amber,body:`Try one complete PBQ, then choose coins or Pro for the remaining ${PBQ_BANK.length-1}.`,meta:"Try the preview",action:onPreviewPbq},
   ];
@@ -23308,23 +23314,25 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
     <div className="dashboard-shell">
       <section className="home-hero guest-home-hero brilliant-hero guest-conversion-hero">
         <div className="home-hero-copy brilliant-hero-copy">
-          <div className="badge brilliant-eyebrow">Your free CompTIA Security+ study account</div>
+          <div className="badge brilliant-eyebrow">Free Security+ flashcards first</div>
           <h1 className="home-title brilliant-title">
-            Practise Security+.
-            <span className="guest-title-accent">Keep every win.</span>
+            Build recall fast.
+            <span className="guest-title-accent">Then practise smarter.</span>
           </h1>
           <p className="home-subtitle brilliant-copy">
-            Start with 10, 20, or 30 free MCQs, choose a chapter, then create a free account only when you want to save Smart Review.
+            Open free flashcards without an account. Star useful cards after sign-up, then use MCQs, Smart Review, and Pro decks when you are ready.
           </p>
           <div className="home-cta-row brilliant-action-row">
-            <button className="btn btn-primary brilliant-primary-cta" onClick={onPractice}>Start Free MCQ Practice</button>
-            <button className="btn btn-outline brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
+            <button className="btn btn-primary brilliant-primary-cta" onClick={onFlashcards}>Open Free Flashcards</button>
+            <button className="btn btn-outline brilliant-secondary-cta" onClick={onPractice}>Start Free MCQ Practice</button>
+            <button className="btn btn-ghost brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
           </div>
-          <div className="guest-cta-note"><ShieldCheck size={16}/> No credit card · Free MCQs included · Pro is optional</div>
+          <div className="guest-cta-note"><ShieldCheck size={16}/> Free flashcards · No credit card · Pro is optional</div>
           <div style={{marginTop:10}}>
             <TrustBadge t={t}/>
           </div>
           <div className="brilliant-proof-row">
+            <span>Flashcards free</span>
             <span>{MCQ_BANK.length} MCQs</span>
             <span>{PBQ_BANK.length} PBQs</span>
             <span>Progress saved automatically</span>
