@@ -18156,7 +18156,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-benefit-plan-title em{font-style:normal;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:${t.textSec};}
 .upgrade-benefit-plan.pro .upgrade-benefit-plan-title{color:#111827;}
 .upgrade-benefit-plan.pro .upgrade-benefit-plan-title em{color:#3f2a18;}
-.upgrade-benefit-phone{display:grid;grid-template-rows:repeat(4,74px);margin:0 9px 9px;border-radius:17px;background:#191917;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
+.upgrade-benefit-phone{display:grid;grid-template-rows:repeat(4,74px);grid-row:2 / span 4;margin:0 9px 9px;border-radius:17px;background:#191917;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
 .upgrade-benefit-cell{display:flex;align-items:center;justify-content:center;gap:7px;border-top:1px solid color-mix(in srgb,${t.border} 78%,transparent);font-size:13px;font-weight:950;color:${t.green};}
 .upgrade-benefit-cell:first-child{border-top:0;}
 .upgrade-benefit-cell svg{width:28px;height:28px;padding:5px;border-radius:999px;background:#fed7aa;color:#1f2937;box-shadow:0 8px 14px rgba(0,0,0,.22);}
@@ -29088,9 +29088,9 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
     "Zero Cipher Coin requirements—open every Pro tool whenever you need it",
   ];
   const premiumBenefits=[
+    {label:"Personalised practice",free:"Basic review",freeIncluded:true,Icon:Brain},
     {label:"Unlimited PBQs",free:"Preview only",freeIncluded:false,Icon:Puzzle},
     {label:"Exam Mode",free:"Not included",freeIncluded:false,Icon:ClipboardCheck},
-    {label:"Personalised practice",free:"Basic review",freeIncluded:true,Icon:Brain},
     {label:"Concept Deep Dives",free:"Not included",freeIncluded:false,Icon:BookOpenCheck},
   ];
   const rawOwnerName=String(user?.name||user?.fullName||user?.email?.split("@")?.[0]||"").trim().split(/\s+/)[0] || "Your";
