@@ -10,6 +10,7 @@ import {
   Check,
   CheckCircle2,
   ChartNoAxesColumnIncreasing,
+  ChevronDown,
   ChevronRight,
   Circle,
   CircleDollarSign,
@@ -40,6 +41,7 @@ import {
   MessageSquareWarning,
   MonitorCog,
   Moon,
+  MoreHorizontal,
   Move,
   Network,
   Palette,
@@ -16024,6 +16026,8 @@ linear-gradient(180deg, ${t.bg} 0%, ${t.bg} 58%, ${t.panel} 100%);background-siz
 h1,h2,h3{font-family:'Montserrat',system-ui,sans-serif;font-weight:800;letter-spacing:0;}
 button,input,select{font:inherit;}
 button:focus-visible,input:focus-visible,select:focus-visible,.nav-lnk:focus-visible,.opt:focus-visible{outline:3px solid ${t.accent}38;outline-offset:2px;}
+.skip-link{position:fixed;left:14px;top:12px;z-index:1200;padding:10px 14px;border-radius:10px;background:${t.accent};color:#fff;font-size:13px;font-weight:900;text-decoration:none;transform:translateY(-160%);transition:transform .16s ease;box-shadow:0 12px 28px ${t.accent}35;}
+.skip-link:focus{transform:translateY(0);}
 .animate-pulse{animation:pulse 1.5s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.52;}}
 ::-webkit-scrollbar{width:5px;}
@@ -16897,6 +16901,8 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .pbq-list-title{font-size:16px;font-weight:850;line-height:1.48;color:${t.text};}
 .pbq-list-subtitle{font-size:13px;color:${t.textDim};line-height:1.5;margin-top:4px;}
 .pbq-list-actions{display:flex;align-items:center;gap:7px;}
+.pbq-load-more{display:flex;align-items:center;justify-content:center;gap:12px;padding:14px 0 4px;}
+.pbq-load-more span{color:${t.textDim};font-size:12px;font-weight:800;}
 .pbq-open-indicator{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:${t.accent}12;color:${t.accent};}
 .pbq-open-indicator.locked{background:${t.panel};color:${t.textDim};border:1px solid ${t.border};}
 .pbq-session-header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;margin-bottom:16px;padding:13px 14px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};box-shadow:0 14px 34px rgba(3,8,20,.1);}
@@ -17130,7 +17136,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .tab{padding:9px 18px;cursor:pointer;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:${t.textSec};transition:all .15s;white-space:nowrap;}
 .tab:hover{color:${t.text};}
 .tab.act{color:${t.accent};border-bottom-color:${t.accent};}
-.nav-lnk{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:800;color:${t.textSec};cursor:pointer;transition:all .18s;border:1px solid transparent;min-height:42px;}
+.nav-lnk{appearance:none;position:relative;display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:10px;background:transparent;font:inherit;font-size:13px;font-weight:800;color:${t.textSec};text-align:left;cursor:pointer;transition:all .18s;border:1px solid transparent;min-height:42px;}
 .nav-lnk.locked{opacity:.68;}
 .nav-lock-indicator{margin-left:auto;color:${t.amber};flex-shrink:0;filter:drop-shadow(0 0 7px ${t.amber}45);}
 .nav-label-mobile{display:none;}
@@ -17340,27 +17346,27 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-assistant-launcher .cipher-mascot{--cipher-size:48px!important;}
 .cipher-assistant-launcher strong,.cipher-assistant-launcher small{display:block;text-align:left;}
 .cipher-assistant-launcher strong{font-size:12px;line-height:1.3;}
-.cipher-assistant-launcher small{margin-top:2px;color:${t.textDim};font-size:8px;font-weight:850;}
+.cipher-assistant-launcher small{margin-top:2px;color:${t.textDim};font-size:10px;font-weight:850;}
 .cipher-assistant-panel{position:absolute;right:0;bottom:70px;z-index:3;pointer-events:auto;width:min(410px,calc(100vw - 28px));max-height:min(720px,calc(100dvh - 110px));overflow:hidden;border:1px solid #d79b3e52;border-radius:24px;background:${t.surface};box-shadow:0 28px 90px rgba(52,35,17,.3);animation:cipherAssistantIn .3s cubic-bezier(.16,1,.3,1) both;}
 .cipher-assistant-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;border-bottom:1px solid ${t.border};background:radial-gradient(circle at 16% 20%,#f2b85b26,transparent 38%),linear-gradient(135deg,${t.surface},${t.panel});}
 .cipher-assistant-identity{display:grid;grid-template-columns:58px minmax(0,1fr);align-items:center;gap:9px;min-width:0;}
 .cipher-assistant-avatar{display:grid;place-items:center;width:58px;height:58px;overflow:hidden;border:1px solid #d79b3e38;border-radius:17px;background:#f2b85b17;}
 .cipher-assistant-avatar .cipher-mascot{--cipher-size:54px!important;}
 .cipher-assistant-identity span:not(.cipher-assistant-avatar),.cipher-assistant-identity strong,.cipher-assistant-identity small{display:block;}
-.cipher-assistant-identity div>span{color:#b47727;font-size:8px;font-weight:950;text-transform:uppercase;letter-spacing:.07em;}
+.cipher-assistant-identity div>span{color:#b47727;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.07em;}
 .cipher-assistant-identity strong{color:${t.text};font-size:15px;line-height:1.35;}
-.cipher-assistant-identity small{margin-top:2px;color:${t.textDim};font-size:8px;font-weight:800;}
+.cipher-assistant-identity small{margin-top:2px;color:${t.textDim};font-size:11px;font-weight:800;}
 .cipher-assistant-close{display:grid;place-items:center;width:34px;height:34px;flex-shrink:0;border:1px solid ${t.border};border-radius:11px;background:${t.surface};color:${t.textSec};cursor:pointer;}
 .cipher-assistant-body{padding:14px;}
 .cipher-assistant-intro{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:start;padding:11px 12px;border:1px solid ${t.green}2d;border-radius:14px;background:${t.green}0b;color:${t.green};}
-.cipher-assistant-intro p{color:${t.textSec};font-size:10px;line-height:1.55;}
+.cipher-assistant-intro p{color:${t.textSec};font-size:12px;line-height:1.55;}
 .cipher-assistant-quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px;}
 .cipher-assistant-quick button{display:flex;align-items:flex-start;gap:8px;min-width:0;padding:11px 10px;border:1px solid ${t.border};border-radius:13px;background:${t.panel};color:${t.accent};text-align:left;cursor:pointer;transition:transform .16s,border-color .16s,background .16s;}
 .cipher-assistant-quick button:hover{transform:translateY(-1px);border-color:${t.accent}55;background:${t.accent}0b;}
 .cipher-assistant-quick button span{min-width:0;}
 .cipher-assistant-quick strong,.cipher-assistant-quick small{display:block;overflow-wrap:anywhere;}
 .cipher-assistant-quick strong{color:${t.text};font-size:12px;line-height:1.35;}
-.cipher-assistant-quick small{margin-top:3px;color:${t.textSec};font-size:10px;line-height:1.4;font-weight:750;}
+.cipher-assistant-quick small{margin-top:3px;color:${t.textSec};font-size:11px;line-height:1.45;font-weight:750;}
 .cipher-assistant-messages{display:flex;flex-direction:column;gap:7px;max-height:250px;overflow-y:auto;margin-top:10px;padding:4px 2px;scrollbar-width:thin;}
 .cipher-assistant-message{max-width:90%;padding:11px 13px;border-radius:13px;font-size:13px;font-weight:650;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;}
 .cipher-assistant-message.cipher{align-self:flex-start;border:1px solid #d8c8af;border-bottom-left-radius:4px;background:#fffaf0;color:#29241d;}
@@ -17369,8 +17375,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .cipher-assistant-confirm button{display:inline-flex;align-items:center;gap:5px;min-height:31px;padding:7px 10px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};color:${t.text};font-size:11px;font-weight:900;cursor:pointer;transition:transform .16s,border-color .16s,background .16s;}
 .cipher-assistant-confirm button:first-child{border-color:${t.accent}55;background:${t.accent};color:#fff;}
 .cipher-assistant-confirm button:hover{transform:translateY(-1px);border-color:${t.accent}77;}
-.cipher-assistant-note{margin-top:8px;color:${t.textSec};font-size:9px;font-weight:750;line-height:1.45;text-align:center;}
-.cipher-assistant-context-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:${t.green}10;color:${t.green};font-size:9px;font-weight:900;}
+.cipher-assistant-note{margin-top:8px;color:${t.textSec};font-size:11px;font-weight:750;line-height:1.45;text-align:center;}
+.cipher-assistant-context-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:${t.green}10;color:${t.green};font-size:10px;font-weight:900;}
 @keyframes cipherAssistantIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .pbq-coin-unlock{display:inline-flex;align-items:center;gap:5px;padding:5px 7px;border:1px solid #d79b3e42;border-radius:99px;background:#f2b85b17;color:#b47727;font-size:9px;font-weight:950;}
 .athena-coin-intro{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:11px;margin:14px 0 3px;padding:12px 13px;border:1px solid #d79b3e38;border-radius:16px;background:linear-gradient(135deg,#f8e9bd82,rgba(255,253,248,.85));}
@@ -17424,6 +17430,22 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .pillar-icon::before,.pillar-icon::after{display:none!important;content:none!important;}
 .glyph-svg{display:block;position:relative;z-index:1;color:inherit!important;fill:none;stroke:currentColor!important;stroke-linecap:round;stroke-linejoin:round;transform-origin:center;transition:transform .2s ease,filter .2s ease;}
 .nav-lnk:hover .nav-glyph .glyph-svg,.nav-glyph.active .glyph-svg{animation:glyphLift .42s cubic-bezier(.16,1,.3,1) both;filter:drop-shadow(0 0 5px currentColor);}
+.mobile-more-trigger{display:none;}
+.mobile-nav-overlay{position:fixed;inset:0;z-index:980;display:flex;align-items:flex-end;padding:16px;background:rgba(2,6,23,.58);backdrop-filter:blur(9px);animation:fadeUp .18s ease both;}
+.mobile-nav-sheet{width:min(100%,560px);max-height:min(78dvh,700px);margin:0 auto;padding:18px;border:1px solid ${t.border};border-radius:24px;background:linear-gradient(155deg,${t.surface},${t.panel});box-shadow:0 30px 90px rgba(0,0,0,.34);overflow-y:auto;animation:mobileSheetIn .26s cubic-bezier(.16,1,.3,1) both;}
+.mobile-nav-sheet>header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px;padding-bottom:13px;border-bottom:1px solid ${t.border};}
+.mobile-nav-sheet>header span{display:block;color:${t.accent};font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
+.mobile-nav-sheet>header h2{margin:3px 0 0;color:${t.text};font-size:22px;line-height:1.18;}
+.mobile-nav-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+.mobile-nav-grid>button{appearance:none;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;min-height:68px;padding:11px;border:1px solid ${t.border};border-radius:16px;background:${t.surface};color:${t.textSec};font:inherit;text-align:left;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,box-shadow .16s;}
+.mobile-nav-grid>button:hover,.mobile-nav-grid>button.active{transform:translateY(-1px);border-color:${t.accent}65;background:${t.accent}0d;box-shadow:0 12px 26px ${t.accent}12;}
+.mobile-nav-grid>button.locked{opacity:.78;}
+.mobile-nav-grid>button>span:nth-child(2){min-width:0;}
+.mobile-nav-grid strong,.mobile-nav-grid small{display:block;}
+.mobile-nav-grid strong{color:${t.text};font-size:13px;line-height:1.25;}
+.mobile-nav-grid small{margin-top:3px;color:${t.textDim};font-size:11px;line-height:1.3;}
+.mobile-nav-grid>button>svg{color:${t.textDim};}
+@keyframes mobileSheetIn{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 .chapter-icon:hover .glyph-svg,.chapter-card:hover .chapter-icon .glyph-svg,
 .sim-icon:hover .glyph-svg,.sim-card:hover .sim-icon .glyph-svg,.card-hover:hover .sim-icon .glyph-svg,
 .landing-feature-card:hover .pillar-icon .glyph-svg{animation:glyphLift .42s cubic-bezier(.16,1,.3,1) both;filter:drop-shadow(0 0 5px currentColor);}
@@ -18009,6 +18031,12 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .landing-feature-card[data-plan="pro"] .plan-badge{position:absolute;right:14px;top:14px;margin:0;}
 .landing-feature-card[data-plan="pro"] > div:last-child{padding-top:18px;}
 .seo-resource-section{padding:24px;border:1px solid ${t.border};border-radius:8px;background:linear-gradient(135deg,${t.green}0c,${t.surface} 58%,${t.accent}0b);}
+.seo-resource-disclosure>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;}
+.seo-resource-disclosure>summary::-webkit-details-marker{display:none;}
+.seo-resource-disclosure>summary .seo-resource-head{flex:1;margin-bottom:0;}
+.seo-resource-summary-icon{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px;border:1px solid ${t.border};border-radius:12px;background:${t.panel};color:${t.accent};transition:transform .18s,border-color .18s;}
+.seo-resource-disclosure[open] .seo-resource-summary-icon{transform:rotate(90deg);border-color:${t.accent}55;}
+.seo-resource-disclosure .seo-resource-grid{margin-top:18px;padding-top:18px;border-top:1px solid ${t.border};animation:fadeUp .2s ease both;}
 .seo-resource-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:15px;}
 .seo-resource-head h2{font-size:26px;color:${t.text};margin:0;}
 .seo-resource-head p{max-width:520px;margin:0;color:${t.textSec};font-size:13px;line-height:1.65;}
@@ -18473,6 +18501,9 @@ body{background:
 .landing-feature-card[data-plan="pro"]{border-color:${t.accent}55;box-shadow:0 15px 38px ${t.accent}10;}
 .landing-feature-card[data-plan="free"]{border-color:${t.green}3f;}
 .landing-faq-grid details{border-radius:8px;}
+.practice-page-head p,.practice-setup-copy p,.pbq-bank-hero-copy p{font-size:14px!important;line-height:1.65!important;}
+.practice-meta-pill,.mcq-launch-steps span,.mcq-launch-action small,.mcq-review-queue-card small,.practice-mode-card small{font-size:12px!important;line-height:1.45!important;}
+.flashcards-page small,.deep-dives-page small,.deep-dive-reader small,.cipher-vault-page small{font-size:12px;line-height:1.45;}
 @keyframes resultRingIn{from{opacity:0;transform:scale(.82) rotate(-18deg)}to{opacity:1;transform:scale(1) rotate(0)}}
 @media (max-width: 860px){
   html,body,#root{max-width:100%;overflow-x:hidden;}
@@ -18504,9 +18535,11 @@ body{background:
   .sidebar.hidden{display:flex!important;}
   .sidebar-restore{display:none!important;}
   .sidebar > div{display:none!important;}
-  .sidebar nav{flex-direction:row!important;overflow-x:auto;overflow-y:hidden;padding:0!important;gap:4px!important;scrollbar-width:none;}
+  .sidebar nav{width:100%;flex-direction:row!important;overflow:visible!important;padding:0!important;gap:4px!important;scrollbar-width:none;}
   .sidebar nav::-webkit-scrollbar{display:none;}
-  .nav-lnk{min-width:52px;flex:1 0 52px;flex-direction:column;gap:2px;padding:6px 4px;font-size:9px;text-align:center;min-height:56px;border-radius:8px;}
+  .sidebar nav>.nav-lnk:not([data-mobile-primary="true"]):not(.mobile-more-trigger){display:none!important;}
+  .mobile-more-trigger{display:flex!important;}
+  .nav-lnk{min-width:0;flex:1 1 20%;flex-direction:column;gap:2px;padding:6px 3px;font-size:10px;text-align:center;min-height:56px;border-radius:8px;}
   .nav-lnk.locked{opacity:.82;}
   .nav-label{display:block;width:100%;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .nav-label-desktop{display:none;}
@@ -19093,6 +19126,12 @@ body{background:
 .deep-dives-domain-group>header span{display:block;margin-bottom:4px;color:var(--deep-accent);font-size:9px;font-weight:950;letter-spacing:.09em;text-transform:uppercase;}
 .deep-dives-domain-group>header h2{margin:0;color:var(--deep-text);font-size:21px;letter-spacing:-.02em;}
 .deep-dives-domain-group>header>strong{flex:0 0 auto;color:var(--deep-muted);font-size:10px;}
+.deep-dives-domain-toggle{appearance:none;display:flex;align-items:end;justify-content:space-between;gap:18px;width:100%;padding:4px 2px;background:transparent;border:0;color:inherit;font:inherit;text-align:left;cursor:pointer;border-radius:10px;}
+.deep-dives-domain-toggle:focus-visible{outline:3px solid var(--deep-accent);outline-offset:5px;}
+.deep-dives-domain-toggle-meta{display:flex!important;align-items:center;gap:10px;margin:0!important;color:var(--deep-muted)!important;font-size:12px!important;letter-spacing:0!important;text-transform:none!important;}
+.deep-dives-domain-toggle-meta strong{white-space:nowrap;}
+.deep-dives-domain-toggle-meta svg{transition:transform .18s ease;}
+.deep-dives-domain-toggle[aria-expanded="true"] .deep-dives-domain-toggle-meta svg{transform:rotate(90deg);}
 .deep-dives-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
 .deep-dive-card{position:relative;display:flex;min-width:0;min-height:330px;flex-direction:column;padding:22px;text-align:left;border:1px solid var(--deep-border);border-radius:21px;background:linear-gradient(160deg,color-mix(in srgb,var(--chapter-color) 5%,var(--deep-surface)),var(--deep-surface) 42%);color:var(--deep-text);font:inherit;cursor:pointer;box-shadow:0 9px 26px rgba(40,31,22,.055);overflow:hidden;transition:transform .22s cubic-bezier(.16,1,.3,1),border-color .2s,box-shadow .2s;}
 .deep-dive-card::before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:linear-gradient(90deg,var(--chapter-color),color-mix(in srgb,var(--chapter-color) 20%,transparent));}
@@ -20146,6 +20185,48 @@ function NavGlyph({type,active}) {
     "mascot-admin":Palette,
   }[type]||ShieldCheck;
   return <span className={`nav-glyph nav-glyph-${type} ${active?"active":""}`} aria-hidden="true"><Icon className="glyph-svg" size={19} strokeWidth={2.15}/></span>;
+}
+const MOBILE_PRIMARY_NAV_IDS = new Set(["dashboard","mcq","daily","flashcards"]);
+function MobileNavigationMenu({open,items=[],currentView,onNavigate,onClose}) {
+  useEffect(()=>{
+    if(!open)return;
+    const previousOverflow=document.body.style.overflow;
+    const handleKeyDown=event=>{if(event.key==="Escape")onClose?.();};
+    document.body.style.overflow="hidden";
+    document.addEventListener("keydown",handleKeyDown);
+    return()=>{
+      document.body.style.overflow=previousOverflow;
+      document.removeEventListener("keydown",handleKeyDown);
+    };
+  },[onClose,open]);
+  if(!open||typeof document==="undefined")return null;
+  return createPortal(
+    <div className="mobile-nav-overlay" role="presentation" onMouseDown={onClose}>
+      <section className="mobile-nav-sheet" role="dialog" aria-modal="true" aria-labelledby="mobile-nav-title" onMouseDown={event=>event.stopPropagation()}>
+        <header>
+          <div>
+            <span>Study menu</span>
+            <h2 id="mobile-nav-title">Where do you want to go?</h2>
+          </div>
+          <button className="icon-btn" type="button" onClick={onClose} aria-label="Close study menu"><X size={19}/></button>
+        </header>
+        <div className="mobile-nav-grid">
+          {items.map(item=><button
+            type="button"
+            key={item.id}
+            className={`${currentView===item.id?"active":""} ${item.locked?"locked":""}`}
+            aria-current={currentView===item.id?"page":undefined}
+            onClick={()=>onNavigate?.(item.id)}
+          >
+            <NavGlyph type={item.icon} active={currentView===item.id}/>
+            <span><strong>{item.label}</strong><small>{item.locked?"Sign in to open":"Open page"}</small></span>
+            {item.locked?<LockKeyhole size={15}/>:<ChevronRight size={16}/>}
+          </button>)}
+        </div>
+      </section>
+    </div>,
+    document.body
+  );
 }
 const FLASHCARD_SET_ICON_MAP = {
   "security-principles-access-models": Scale,
@@ -22672,6 +22753,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
   ];
   return(
     <div className="landing-page fu">
+      <a className="skip-link" href="#secureplus-main">Skip to main content</a>
       <header className="landing-header">
         <button type="button" onClick={()=>{onNavigate("dashboard");window.scrollTo({top:0,behavior:"smooth"});}} style={{display:"flex",alignItems:"center",gap:10,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}>
           <BrandMark size={32}/>
@@ -22694,7 +22776,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
         </div>
       </header>
 
-      <main className="landing-main">
+      <main id="secureplus-main" className="landing-main">
         <section className="landing-hero brilliant-hero">
           <div className="brilliant-hero-copy">
             <div className="badge brilliant-eyebrow">
@@ -22774,14 +22856,17 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           </div>
         </section>
 
-        <section className="seo-resource-section landing-section" aria-labelledby="security-study-resources-title">
-          <div className="seo-resource-head">
-            <div>
-              <div className="label" style={{color:t.green}}>Security+ study resources</div>
-              <h2 id="security-study-resources-title">Review the exact topics students search for.</h2>
+        <details className="seo-resource-section seo-resource-disclosure landing-section" aria-labelledby="security-study-resources-title">
+          <summary>
+            <div className="seo-resource-head">
+              <div>
+                <div className="label" style={{color:t.green}}>Optional study library</div>
+                <h2 id="security-study-resources-title">Browse focused Security+ refreshers.</h2>
+              </div>
+              <p>Open this only when you need a quick topic page for acronyms, ports, PBQs, cryptography, or an SY0-701 domain.</p>
             </div>
-            <p>Short SecurePlus pages for acronyms, port numbers, PBQs, cryptography, and each SY0-701 domain.</p>
-          </div>
+            <span className="seo-resource-summary-icon" aria-hidden="true"><ChevronRight size={18}/></span>
+          </summary>
           <div className="seo-resource-grid">
             {SEO_RESOURCE_LINKS.map(resource=>(
               <a key={resource.href} className="seo-resource-link" href={resource.href}>
@@ -22791,7 +22876,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
               </a>
             ))}
           </div>
-        </section>
+        </details>
 
         <section id="features" className="landing-feature-grid landing-section">
           {featureCards.map(card=>(
@@ -23486,14 +23571,17 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
         </div>
       </section>
 
-      <section className="seo-resource-section landing-section" aria-labelledby="guest-security-study-resources-title">
-        <div className="seo-resource-head">
-          <div>
-            <div className="label" style={{color:t.green}}>Security+ study resources</div>
-            <h2 id="guest-security-study-resources-title">Quick topic pages when you need a refresher.</h2>
+      <details className="seo-resource-section seo-resource-disclosure landing-section" aria-labelledby="guest-security-study-resources-title">
+        <summary>
+          <div className="seo-resource-head">
+            <div>
+              <div className="label" style={{color:t.green}}>Optional study library</div>
+              <h2 id="guest-security-study-resources-title">Browse focused Security+ refreshers.</h2>
+            </div>
+            <p>Open this only when you need a quick topic page for acronyms, ports, PBQs, cryptography, or an SY0-701 domain.</p>
           </div>
-          <p>Use these SecurePlus pages to review acronyms, ports, PBQs, cryptography, and SY0-701 domains before practice.</p>
-        </div>
+          <span className="seo-resource-summary-icon" aria-hidden="true"><ChevronRight size={18}/></span>
+        </summary>
         <div className="seo-resource-grid">
           {SEO_RESOURCE_LINKS.map(resource=>(
             <a key={resource.href} className="seo-resource-link" href={resource.href}>
@@ -23503,7 +23591,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
             </a>
           ))}
         </div>
-      </section>
+      </details>
 
       <section className="guest-final-cta">
         <div>
@@ -24644,6 +24732,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
   const [lockedQuestion,setLockedQuestion]=useState(null);
   const [showMissedOnly,setShowMissedOnly]=useState(false);
   const [starredView,setStarredView]=useState(false);
+  const [visibleCount,setVisibleCount]=useState(12);
   const isPro=user.tier==="pro";
   const unlockedSet=useMemo(()=>new Set(coinWallet?.unlockedPbqIds||[]),[coinWallet?.unlockedPbqIds]);
   const coinBalance=Number(coinWallet?.balance||0);
@@ -24668,6 +24757,8 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
     const rank=q=>correct.has(q.id)?2:attempted.has(q.id)?0:1;
     return rank(a)-rank(b);
   });
+  const visibleQuestions=displayQuestions.slice(0,visibleCount);
+  useEffect(()=>setVisibleCount(12),[chFilter,showMissedOnly,typeFilter]);
   const openLockedPrompt=q=>{
     capture("pbq_locked_clicked", { question_id: q.id, type: q.type, chapter: q.ch });
     setLockedQuestion(q);
@@ -24860,12 +24951,12 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
           ))}
           {(chFilter!=="all"||typeFilter!=="all"||showMissedOnly)&&<button className="btn btn-ghost" style={{fontSize:13,padding:"7px 12px"}} onClick={()=>{setChFilter("all");setTypeFilter("all");setShowMissedOnly(false);}}><X size={14}/> Clear all</button>}
         </div>
-        <div className="pbq-result-summary">{displayQuestions.length} result{displayQuestions.length!==1?"s":""}</div>
+        <div className="pbq-result-summary">Showing {Math.min(visibleQuestions.length,displayQuestions.length)} of {displayQuestions.length}</div>
       </div>
 
       {/* Question list */}
       <div className="pbq-question-list">
-        {displayQuestions.map(q=>{
+        {visibleQuestions.map(q=>{
           const done=attempted.has(q.id);
           const ok=correct.has(q.id);
           const preview=isFreePBQPreview(q);
@@ -24911,6 +25002,14 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
             <div style={{fontWeight:900,color:t.text,marginBottom:5}}>No PBQs match these filters</div>
             <div style={{fontSize:12,marginBottom:14}}>Clear the filters to return to the full simulator bank.</div>
             <button className="btn btn-outline" onClick={()=>{setChFilter("all");setTypeFilter("all");setShowMissedOnly(false);}}>Clear filters</button>
+          </div>
+        )}
+        {visibleQuestions.length<displayQuestions.length&&(
+          <div className="pbq-load-more">
+            <button className="btn btn-outline" type="button" onClick={()=>setVisibleCount(count=>Math.min(count+12,displayQuestions.length))}>
+              Show 12 more <ChevronDown size={16}/>
+            </button>
+            <span>{displayQuestions.length-visibleQuestions.length} remaining</span>
           </div>
         )}
       </div>
@@ -29848,6 +29947,7 @@ function DeepDiveReadableBites({section,selectedProfile,t}) {
 function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRequestHandled,focusAcronyms=false,onAddWeakTopicToReview,onTryRelatedPbq,onOpenFlashcards,onUpgrade}) {
   const [query,setQuery]=useState("");
   const [domainFilter,setDomainFilter]=useState("all");
+  const [openDomains,setOpenDomains]=useState(()=>new Set(["1"]));
   const [selectedId,setSelectedId]=useState(null);
   const [selectedAcronymSetId,setSelectedAcronymSetId]=useState(null);
   const [lockedDivePrompt,setLockedDivePrompt]=useState(null);
@@ -29925,6 +30025,25 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
     domain,
     dives:filteredDives.filter(dive=>getSy0701DeepDiveProfile(dive)?.domainId===domain.id),
   })).filter(group=>group.dives.length),[filteredDives]);
+  useEffect(()=>{
+    if(query.trim()){
+      setOpenDomains(new Set(groupedDives.map(group=>String(group.domain.id))));
+      return;
+    }
+    if(domainFilter!=="all"){
+      setOpenDomains(new Set([domainFilter]));
+      return;
+    }
+    const previewDomain=String(getSy0701DeepDiveProfile(freePreviewDive)?.domainId||1);
+    setOpenDomains(new Set([isPro?"1":previewDomain]));
+  },[domainFilter,freePreviewDive,groupedDives,isPro,query]);
+  const toggleDomain=domainId=>setOpenDomains(current=>{
+    const key=String(domainId);
+    const next=new Set(current);
+    if(next.has(key))next.delete(key);
+    else next.add(key);
+    return next;
+  });
 
   const openDive=(id,mode="learn")=>{
     if(isLockedDeepDive(id)){
@@ -30389,9 +30508,16 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
 
       {filteredDives.length?(
         <div className="deep-dives-domain-groups">
-          {groupedDives.map(group=><section className="deep-dives-domain-group" key={group.domain.id}>
-            <header><div><span>Domain {group.domain.id} · {group.domain.weight}% of exam</span><h2>{group.domain.name}</h2></div><strong>{group.dives.length} lesson{group.dives.length===1?"":"s"}</strong></header>
-            <div className="deep-dives-grid">
+          {groupedDives.map(group=>{
+            const isOpen=openDomains.has(String(group.domain.id));
+            return <section className="deep-dives-domain-group" key={group.domain.id}>
+            <header>
+              <button className="deep-dives-domain-toggle" type="button" aria-expanded={isOpen} onClick={()=>toggleDomain(group.domain.id)}>
+                <div><span>Domain {group.domain.id} · {group.domain.weight}% of exam</span><h2>{group.domain.name}</h2></div>
+                <span className="deep-dives-domain-toggle-meta"><strong>{group.dives.length} lesson{group.dives.length===1?"":"s"}</strong><ChevronRight size={19}/></span>
+              </button>
+            </header>
+            {isOpen&&<div className="deep-dives-grid">
               {group.dives.map(dive=>{
                 const syllabus=getSy0701DeepDiveProfile(dive);
                 const isComplete=completedIds.includes(dive.id);
@@ -30429,8 +30555,8 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
                   </article>
                 );
               })}
-            </div>
-          </section>)}
+            </div>}
+          </section>})}
         </div>
       ):(
         <div className="deep-dives-empty">
@@ -30463,6 +30589,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const signedIn=Boolean(user?.id||user?.email);
   const [selectedSetId,setSelectedSetId]=useState(null);
   const [chapterFilter,setChapterFilter]=useState("all");
+  const [openFlashcardChapters,setOpenFlashcardChapters]=useState(()=>new Set(["1"]));
   const [randomBuilderOpen,setRandomBuilderOpen]=useState(false);
   const [randomConfig,setRandomConfig]=useState({count:10,mode:"definition",includeTerms:true,includeAcronyms:true});
   const [randomFlashcardSet,setRandomFlashcardSet]=useState(null);
@@ -30504,6 +30631,17 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const previousInventoryOwnerRef=useRef(defaultOwner);
   const previousStarredCountRef=useRef(starredFlashcards.length);
   const previousAssistantDeckRef=useRef(showAssistantDeck);
+
+  useEffect(()=>{
+    setOpenFlashcardChapters(new Set([chapterFilter==="all"?"1":chapterFilter]));
+  },[chapterFilter]);
+  const toggleFlashcardChapter=chapterId=>setOpenFlashcardChapters(current=>{
+    const key=String(chapterId);
+    const next=new Set(current);
+    if(next.has(key))next.delete(key);
+    else next.add(key);
+    return next;
+  });
 
   useEffect(()=>{
     setSavedRandomSets(readSavedRandomFlashcardSets(user));
@@ -31068,10 +31206,16 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
       </section>}
 
       <div className="deep-dives-domain-groups">
-        {visibleGroups.map(group=>(
-          <section className="deep-dives-domain-group flashcards-chapter-group" key={group.chapterId}>
-            <header><div><span>Chapter {group.chapterId}</span><h2>{group.chapterTitle}</h2></div><strong>{group.sets.reduce((sum,set)=>sum+set.cards.length,0)} cards</strong></header>
-            <div className="deep-dive-acronym-set-grid">
+        {visibleGroups.map(group=>{
+          const isOpen=openFlashcardChapters.has(String(group.chapterId));
+          return <section className="deep-dives-domain-group flashcards-chapter-group" key={group.chapterId}>
+            <header>
+              <button className="deep-dives-domain-toggle" type="button" aria-expanded={isOpen} onClick={()=>toggleFlashcardChapter(group.chapterId)}>
+                <div><span>Chapter {group.chapterId}</span><h2>{group.chapterTitle}</h2></div>
+                <span className="deep-dives-domain-toggle-meta"><strong>{group.sets.reduce((sum,set)=>sum+set.cards.length,0)} cards</strong><ChevronRight size={19}/></span>
+              </button>
+            </header>
+            {isOpen&&<div className="deep-dive-acronym-set-grid">
               {group.sets.map(set=>{
                 const mastered=set.cards.filter(card=>masteredAcronymIds.includes(card.id)).length;
                 const setProgress=Math.round((mastered/set.cards.length)*100);
@@ -31090,9 +31234,9 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
                   </button>
                 );
               })}
-            </div>
-          </section>
-        ))}
+            </div>}
+          </section>;
+        })}
       </div>
 
       <div className="deep-dive-acronym-source-note"><ShieldCheck size={16}/><span>{SY0701_ACRONYM_SOURCE.reviewNote}</span></div>
@@ -31109,10 +31253,10 @@ function ObjectivesPage({t}) {
     <div style={{padding:"28px 24px",maxWidth:860,margin:"0 auto"}}>
       <div className="page-title-row">
         <NavGlyph type="objectives" active/>
-        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>CompTIA Security+ (V7) Exam Objectives</h2>
+        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>Security+ exam map</h2>
       </div>
       <p style={{color:t.textSec,fontSize:14,marginBottom:20}}>
-        SecurePlus is organised around the current Security+ domain structure. This page avoids locking the product name to a single exam code, since exam versions can change over time.
+        See how SecurePlus practice is grouped across the five current exam domains. Use the official CompTIA page below when you need the latest certification blueprint.
       </p>
       <div style={{marginBottom:20}}>
         <TrustBadge t={t}/>
@@ -31124,7 +31268,7 @@ function ObjectivesPage({t}) {
         rel="noreferrer"
         style={{display:"inline-flex",marginBottom:20,textDecoration:"none"}}
       >
-        Find out more
+        View official CompTIA exam page
       </a>
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:12,marginBottom:20}}>
@@ -31136,7 +31280,7 @@ function ObjectivesPage({t}) {
             </div>
             <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
               {ch.topics.map(topic=>(
-                <span key={topic} className="chip" style={{fontSize:11,color:t.textSec,borderColor:t.border,background:t.panel}}>{topic}</span>
+                <span key={topic} className="chip" style={{fontSize:12,color:t.textSec,borderColor:t.border,background:t.panel}}>{topic}</span>
               ))}
             </div>
           </div>
@@ -31836,6 +31980,7 @@ export default function App() {
   const [sidebarHidden,setSidebarHidden]=useState(()=>{
     try{return window.localStorage?.getItem("secureplus-sidebar-hidden")==="true";}catch{return false;}
   });
+  const [mobileNavOpen,setMobileNavOpen]=useState(false);
   const [user,setUser]=useState(null);
   const [loading,setLoading]=useState(true);
   const [view,setView]=useState(()=>focusAcronymLibrary||urlFlashcardsRequest?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":devCoinPreview?"coins":"dashboard");
@@ -31896,6 +32041,9 @@ export default function App() {
   },[darkMode]);
   useEffect(()=>{
     if(view==="achievements")setView("dashboard");
+  },[view]);
+  useEffect(()=>{
+    setMobileNavOpen(false);
   },[view]);
   useEffect(()=>{
     const pageKey=showDiagnostic
@@ -32873,7 +33021,7 @@ export default function App() {
     });
     const goToSignup=()=>{setPbqQ(null);setAuthStartMode("signup");setAuthRequestId(id=>id+1);setView("auth");};
     const goToLogin=()=>{setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
-    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","objectives","flashcards",...(devCoinPreview?["coins"]:[])]);
+    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","objectives","flashcards","deep-dives",...(devCoinPreview?["coins"]:[])]);
     const guestNavItems=[
       {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},
       {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
@@ -32903,6 +33051,7 @@ export default function App() {
       <>
         <style>{CSS}</style>
         <div className={`app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
+          <a className="skip-link" href="#secureplus-main">Skip to study content</a>
           {sidebarHidden&&(
             <button className="sidebar-restore" type="button" onClick={()=>setSidebarHidden(false)}>
               <NavGlyph type="dashboard" active/>
@@ -32921,13 +33070,17 @@ export default function App() {
               {guestNavItems.map(n=>{
                 const locked=!allowedGuestViews.has(n.id);
                 return(
-                  <div key={n.id} className={`nav-lnk ${view===n.id?"act":""} ${locked?"locked":""}`} onClick={()=>guestGo(n.id)}>
+                  <button type="button" key={n.id} data-mobile-primary={MOBILE_PRIMARY_NAV_IDS.has(n.id)?"true":"false"} aria-current={view===n.id?"page":undefined} className={`nav-lnk ${view===n.id?"act":""} ${locked?"locked":""}`} onClick={()=>guestGo(n.id)}>
                     <NavGlyph type={n.icon} active={view===n.id}/>
                     <span className="nav-label"><span className="nav-label-desktop">{n.label}</span><span className="nav-label-mobile">{n.mobileLabel}</span></span>
                     {locked&&<LockKeyhole className="nav-lock-indicator" size={13} strokeWidth={2.4} aria-hidden="true"/>}
-                  </div>
+                  </button>
                 );
               })}
+              <button type="button" className={`nav-lnk mobile-more-trigger ${!MOBILE_PRIMARY_NAV_IDS.has(view)?"act":""}`} aria-expanded={mobileNavOpen} onClick={()=>setMobileNavOpen(true)}>
+                <span className="nav-glyph" aria-hidden="true"><MoreHorizontal size={19}/></span>
+                <span className="nav-label"><span className="nav-label-desktop">More</span><span className="nav-label-mobile">More</span></span>
+              </button>
             </nav>
             <div style={{padding:"12px 14px",borderTop:`1px solid ${t.border}`,display:"flex",flexDirection:"column",gap:6}}>
               <button className="btn btn-ghost" style={{fontSize:12,justifyContent:"flex-start"}} onClick={()=>setDarkMode(d=>!d)}>
@@ -32941,7 +33094,7 @@ export default function App() {
               </button>
             </div>
           </aside>
-          <main className="app-main fu">
+          <main id="secureplus-main" className="app-main fu">
             <div className="mobile-topbar">
               <div>
                 <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> SecurePlus</button>
@@ -32994,12 +33147,20 @@ export default function App() {
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
             {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} assistantSet={assistantFlashcardSet} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
+            {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={guestUser} onOpenFlashcards={()=>setView("flashcards")} onUpgrade={goToSignup}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
             )}
             {!practiceFocusMode&&view!=="exam"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
           </main>
+          <MobileNavigationMenu
+            open={mobileNavOpen}
+            items={guestNavItems.filter(item=>!MOBILE_PRIMARY_NAV_IDS.has(item.id)).map(item=>({...item,locked:!allowedGuestViews.has(item.id)}))}
+            currentView={view}
+            onNavigate={id=>{setMobileNavOpen(false);guestGo(id);}}
+            onClose={()=>setMobileNavOpen(false)}
+          />
           {flashcardAuthPrompt&&(
             <FlashcardSavePrompt
               t={t}
@@ -33084,6 +33245,7 @@ export default function App() {
     <>
       <style>{CSS}</style>
       <div className={`app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
+        <a className="skip-link" href="#secureplus-main">Skip to study content</a>
         {sidebarHidden&&(
           <button className="sidebar-restore" type="button" onClick={()=>setSidebarHidden(false)}>
             <NavGlyph type="dashboard" active/>
@@ -33110,11 +33272,15 @@ export default function App() {
           {/* Nav */}
           <nav style={{flex:1,padding:"10px 10px",display:"flex",flexDirection:"column",gap:2}}>
             {navItems.map(n=>(
-              <div key={n.id} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>setView(n.id==="exam"&&user.tier!=="pro"&&coinWallet.examPasses<1?"coins":n.id)}>
+              <button type="button" key={n.id} data-mobile-primary={MOBILE_PRIMARY_NAV_IDS.has(n.id)?"true":"false"} aria-current={view===n.id?"page":undefined} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>setView(n.id==="exam"&&user.tier!=="pro"&&coinWallet.examPasses<1?"coins":n.id)}>
                 <NavGlyph type={n.icon} active={view===n.id}/>
                 <span className="nav-label"><span className="nav-label-desktop">{n.label}</span><span className="nav-label-mobile">{n.mobileLabel}</span></span>
-              </div>
+              </button>
             ))}
+            <button type="button" className={`nav-lnk mobile-more-trigger ${!MOBILE_PRIMARY_NAV_IDS.has(view)?"act":""}`} aria-expanded={mobileNavOpen} onClick={()=>setMobileNavOpen(true)}>
+              <span className="nav-glyph" aria-hidden="true"><MoreHorizontal size={19}/></span>
+              <span className="nav-label"><span className="nav-label-desktop">More</span><span className="nav-label-mobile">More</span></span>
+            </button>
           </nav>
 
           {/* Dark mode + logout */}
@@ -33129,7 +33295,7 @@ export default function App() {
         </aside>
 
         {/* Main content */}
-        <main className="app-main fu">
+        <main id="secureplus-main" className="app-main fu">
           <div className="mobile-topbar">
             <div>
               <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> SecurePlus</button>
@@ -33167,6 +33333,16 @@ export default function App() {
           {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
           {!practiceFocusMode&&view!=="exam"&&view!=="mascot-admin"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
         </main>
+        <MobileNavigationMenu
+          open={mobileNavOpen}
+          items={navItems.filter(item=>!MOBILE_PRIMARY_NAV_IDS.has(item.id))}
+          currentView={view}
+          onNavigate={id=>{
+            setMobileNavOpen(false);
+            setView(id==="exam"&&user.tier!=="pro"&&coinWallet.examPasses<1?"coins":id);
+          }}
+          onClose={()=>setMobileNavOpen(false)}
+        />
         {!practiceFocusMode&&!showOnboarding&&!showProWelcome&&["dashboard","mcq","pbq","daily","coins","objectives","pricing","flashcards"].includes(view)&&(
           <CipherAssistantDock user={user} attempts={attempts} currentView={view} onStartReview={handleStartChapterReview} onOpenFlashcards={handleOpenFlashcards} onUpgrade={()=>setView("pricing")}/>
         )}
