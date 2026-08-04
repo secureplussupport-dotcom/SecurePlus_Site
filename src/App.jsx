@@ -280,7 +280,7 @@ function TrustBadge({t,compact=false,center=false,style={}}) {
 }
 
 const SEO_RESOURCE_LINKS = Object.freeze([
-  { href:"/security-plus-flashcards/", title:"Free Security+ flashcards", body:"Last-minute SY0-701 recall decks with premium weak-area review for Pro users." },
+  { href:"/security-plus-flashcards/", title:"Security+ flashcards", body:"Last-minute SY0-701 recall decks with weak-area review for Pro users." },
   { href:"/security-plus-acronyms/", title:"Security+ acronyms", body:"Flashcard-style definitions for common SY0-701 abbreviations." },
   { href:"/security-plus-port-numbers/", title:"Port numbers", body:"Quick review for common services, protocols, and exam clues." },
   { href:"/security-plus-firewall-pbq-practice/", title:"Firewall PBQ practice", body:"ACL logic, ports, protocols, and rule-order scenarios." },
@@ -295,7 +295,7 @@ const SEO_RESOURCE_LINKS = Object.freeze([
   { href:"/security-plus-pbq-practices/", title:"PBQ practices", body:"Security+ PBQ practices for firewall, logs, ordering, and select-and-fill tasks." },
   { href:"/security-plus-study-plan/", title:"Study plan", body:"A practical Security+ study schedule built around daily practice and review." },
   { href:"/security-plus-study-notes/", title:"Study notes", body:"Exam-keyword notes for common SY0-701 concepts and control choices." },
-  { href:"/security-plus-free-comptia-practice/", title:"Free CompTIA practice", body:"Free Security+ practice questions, daily challenges, and PBQ previews." },
+  { href:"/security-plus-free-comptia-practice/", title:"Original Security+ practice", body:"Scenario-based Security+ practice questions, daily challenges, and PBQ previews." },
 ]);
 const GUEST_SMART_REVIEW_BRIDGE_KEY = "secureplus-pending-guest-smart-review";
 const GUEST_SMART_REVIEW_BRIDGE_TTL_MS = 24 * 60 * 60 * 1000;
@@ -317,8 +317,8 @@ const RANDOM_FLASHCARD_SET_ID = "random-flashcards";
 const SAVED_RANDOM_FLASHCARD_PREFIX = "saved-random-flashcards";
 const FLASHCARD_SHARE_COPY = {
   title:"SecurePlus Security+ flashcards",
-  description:"Premium Security+ flashcards grouped by chapter and topic.",
-  statement:"SecurePlus has a premium Security+ flashcards collection for acronyms, attack clues, definitions, and exam keywords. Original scenario-based practice. Not exam dumps.",
+  description:"Security+ flashcards grouped by chapter and topic.",
+  statement:"SecurePlus has Security+ flashcards for acronyms, attack clues, definitions, and exam keywords. Original scenario-based practice. Not exam dumps.",
 };
 const FLASHCARD_DEFINITION_NEXT_LABEL = "Definition cards next";
 const FLASHCARD_ACRONYM_SECTION_LABEL = "Acronym cards next";
@@ -22560,7 +22560,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
   }
 
   const featureCards=[
-    {type:"flashcards",plan:"free",color:"#0ea5e9",title:"Free Security+ flashcards",body:"The easiest gateway into SecurePlus: open chapter-grouped acronyms, terms, and attack clues without an account, then save starred cards when you sign up."},
+    {type:"flashcards",plan:"free",color:"#0ea5e9",title:"Security+ flashcards",body:"The easiest gateway into SecurePlus: open chapter-grouped acronyms, terms, and attack clues without an account, then save starred cards when you sign up."},
     {type:"mcq",plan:"free",color:"#2f7df6",title:"Full MCQ practice",body:"Guests and free accounts can access every MCQ question. Create an account when you want answers, scores, and progress to follow you."},
     {type:"pbq",plan:"pro",color:"#f59e0b",title:"PBQ simulations",body:"Practice firewall decisions, terminal logs, Select & Fill, ordering, hotspot, and scenario tasks before exam day pressure."},
     {type:"review",plan:"free",color:"#14b8a6",title:"Smart Review",body:"SecurePlus brings missed questions back first and spaces out correct questions, so your weak areas get the most attention."},
@@ -22614,13 +22614,13 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
               CompTIA Security+ (SY0-701)
             </div>
             <h1 className="landing-title brilliant-title">
-              Start with free Security+ flashcards. Stay for smarter exam prep.
+              Start with Security+ flashcards. Stay for smarter exam prep.
             </h1>
             <p className="landing-copy brilliant-copy">
-              A fast, shareable recall pack for SY0-701 acronyms, definitions, and attack clues. Upgrade only when you want premium weak-area decks, PBQs, and Smart Review.
+              A fast, shareable recall pack for SY0-701 acronyms, definitions, and attack clues. Upgrade only when you want Pro weak-area decks, PBQs, and Smart Review.
             </p>
             <div className="brilliant-action-row">
-              <button className="btn btn-primary brilliant-primary-cta" onClick={()=>onNavigate("flashcards")}>Open Free Flashcards</button>
+              <button className="btn btn-primary brilliant-primary-cta" onClick={()=>onNavigate("flashcards")}>Open Flashcards</button>
               <button className="btn btn-outline brilliant-secondary-cta" onClick={onPracticeMcq}>Start Free MCQ Practice</button>
               <button className="btn btn-ghost brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
             </div>
@@ -22724,7 +22724,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
             <div className="label" style={{color:t.accent,marginBottom:8}}>Smart Review benefit</div>
             <h2 style={{fontSize:26,color:t.text,marginBottom:10}}>Turn missed questions into a focused study plan.</h2>
             <p style={{fontSize:14,color:t.textSec,lineHeight:1.75}}>
-              Start with Flashcards to build vocabulary, then use MCQs and PBQs to reveal weak concepts. Pro can turn those misses into premium Cipher-built flashcard decks and targeted Smart Review.
+              Start with Flashcards to build vocabulary, then use MCQs and PBQs to reveal weak concepts. Pro can turn those misses into Cipher-built flashcard decks and targeted Smart Review.
             </p>
             <div className="smart-example">
               <strong>Example:</strong> Missed TLS trust chain? Pro can prepare a focused PKI flashcard deck before your next review set.
@@ -22770,10 +22770,10 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
             <div className="label" style={{marginBottom:8}}>Free</div>
             <h2 style={{fontSize:24,color:t.text,marginBottom:4}}>$0</h2>
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:16}}>Best for starting with quick recall and MCQ practice.</p>
-            {["Free Security+ flashcards","All MCQ questions","Daily Challenge","Create an account to save starred cards","Basic practice history"].map(item=>(
+            {["Security+ flashcards","All MCQ questions","Daily Challenge","Create an account to save starred cards","Basic practice history"].map(item=>(
               <div key={item} className="pricing-feature-row"><Check size={16} strokeWidth={2.6}/><div>{item}</div></div>
             ))}
-            <button className="btn btn-outline" style={{width:"100%",marginTop:18}} onClick={()=>onNavigate("flashcards")}>Open Flashcards Free</button>
+            <button className="btn btn-outline" style={{width:"100%",marginTop:18}} onClick={()=>onNavigate("flashcards")}>Open Flashcards</button>
           </div>
           <div className="card pricing-pro-card" style={{padding:"22px",borderColor:`${t.accent}55`,background:`linear-gradient(180deg, ${t.accent}10, ${t.surface})`}}>
             <div className="chip" style={{borderColor:`${t.accent}44`,color:t.accent,background:`${t.accent}10`,marginBottom:10}}>Most popular</div>
@@ -22781,7 +22781,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
             <h2 style={{fontSize:24,color:t.text,marginBottom:7}}>{PRO_ACADEMY_PASS_PRICE}</h2>
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:12}}>{PRO_ACADEMY_PASS_DESCRIPTION}</p>
             <div className="upgrade-original-line" style={{marginBottom:16}}><ShieldCheck size={14}/>{PRO_ACADEMY_PASS_TRUST}</div>
-            {["Build premium weak-area flashcard decks with Cipher","Practise applied skills with PBQ simulations","Rehearse under pressure in Exam Mode","Turn results into weak-chapter guidance","Bring missed and starred questions back sooner"].map(item=>(
+            {["Build Pro weak-area flashcard decks with Cipher","Practise applied skills with PBQ simulations","Rehearse under pressure in Exam Mode","Turn results into weak-chapter guidance","Bring missed and starred questions back sooner"].map(item=>(
               <div key={item} className="pricing-feature-row"><Check size={16} strokeWidth={2.6}/><div>{item}</div></div>
             ))}
             <button className="btn btn-primary" style={{width:"100%",marginTop:18,justifyContent:"center"}} onClick={()=>jumpToAuth("signup")}>Create account to unlock Pro</button>
@@ -23432,16 +23432,16 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
     <div className="dashboard-shell">
       <section className="home-hero guest-home-hero brilliant-hero guest-conversion-hero">
         <div className="home-hero-copy brilliant-hero-copy">
-          <div className="badge brilliant-eyebrow">Free Security+ flashcards first</div>
+          <div className="badge brilliant-eyebrow">Security+ flashcards first</div>
           <h1 className="home-title brilliant-title">
             Build recall fast.
             <span className="guest-title-accent">Then practise smarter.</span>
           </h1>
           <p className="home-subtitle brilliant-copy">
-            Open free flashcards without an account. Star useful cards after sign-up, then use MCQs, Smart Review, and Pro decks when you are ready.
+            Open flashcards without an account. Star useful cards after sign-up, then use MCQs, Smart Review, and Pro decks when you are ready.
           </p>
           <div className="home-cta-row brilliant-action-row">
-            <button className="btn btn-primary brilliant-primary-cta" onClick={onFlashcards}>Open Free Flashcards</button>
+            <button className="btn btn-primary brilliant-primary-cta" onClick={onFlashcards}>Open Flashcards</button>
             <button className="btn btn-outline brilliant-secondary-cta" onClick={onPractice}>Start Free MCQ Practice</button>
             <button className="btn btn-ghost brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
           </div>
@@ -29443,7 +29443,7 @@ function FlashcardShareActions({set,t,compact=false}) {
     await copyText(text,`Copied for ${platform}`);
     window.open(url,"_blank","noopener,noreferrer");
   };
-  const redditTitle=set?.title?`${set.title} - SecurePlus Security+ flashcards`:"SecurePlus premium Security+ flashcards";
+  const redditTitle=set?.title?`${set.title} - SecurePlus Security+ flashcards`:"SecurePlus Security+ flashcards";
   const redditUrl=`https://www.reddit.com/submit?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(redditTitle)}&text=${encodeURIComponent(platformMessages.reddit)}`;
   const buttons=[
     {label:"Copy link",type:"copy",action:copyLink},
@@ -30986,7 +30986,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
           <aside className="flashcards-cipher-card" aria-label="Cipher flashcard coach">
             <MascotAnimation animation="flashcards" size={98} interactive hoverAnimation="cheer" reactionAnimations={["flashcards","thinking","cheer"]} label="Cipher flips through flashcards"/>
             <strong>Cipher’s recall lab</strong>
-            <span className="flashcards-cipher-copy">Free decks now. Premium weak-area decks with Pro.</span>
+            <span className="flashcards-cipher-copy">Free decks now. Pro weak-area decks with Pro.</span>
           </aside>
           {signedIn?(
             <>
@@ -31828,6 +31828,57 @@ function PasswordUpdateView({t,onDone}) {
 // ═══════════════════════════════════════════════════════════════
 // APP ROOT
 // ═══════════════════════════════════════════════════════════════
+const APP_HISTORY_VIEWS = Object.freeze(new Set([
+  "dashboard",
+  "mcq",
+  "pbq",
+  "exam",
+  "daily",
+  "coins",
+  "pricing",
+  "auth",
+  "objectives",
+  "flashcards",
+  "deep-dives",
+  "account",
+  "privacy",
+  "terms",
+  "feedback",
+  "question-admin",
+  "mascot-admin",
+  "referrals",
+]));
+
+function normalizeAppHistoryView(view) {
+  return APP_HISTORY_VIEWS.has(view) ? view : "dashboard";
+}
+
+function hasCheckoutReturnParams(search=window.location.search) {
+  const params=new URLSearchParams(search);
+  return Boolean(params.get("checkout") || params.get("billing") || params.get("session_id"));
+}
+
+function buildAppHistoryUrl(view,setId=null) {
+  if(typeof window==="undefined")return "/";
+  const safeView=normalizeAppHistoryView(view);
+  const params=new URLSearchParams();
+  if(safeView!=="dashboard")params.set("view",safeView);
+  if(safeView==="flashcards"&&setId)params.set("set",setId);
+  const query=params.toString();
+  return `/${query?`?${query}`:""}`;
+}
+
+function readAppHistoryState() {
+  if(typeof window==="undefined")return {view:"dashboard",flashcardSetId:null};
+  const params=new URLSearchParams(window.location.search);
+  const checkout=params.get("checkout");
+  const view=checkout==="cancelled" ? "pricing" : normalizeAppHistoryView(params.get("view")||"dashboard");
+  return {
+    view,
+    flashcardSetId:view==="flashcards" ? params.get("set") : null,
+  };
+}
+
 export default function App() {
   const initialParams=new URLSearchParams(window.location.search);
   const urlDeepDiveRequest=initialParams.get("view")==="deep-dives";
@@ -31882,6 +31933,8 @@ export default function App() {
   const [coinWallet,setCoinWallet]=useState(()=>({...emptyCipherWallet(),status:"idle"}));
   const [coinBusy,setCoinBusy]=useState(false);
   const [coinRewardToast,setCoinRewardToast]=useState(null);
+  const historyReadyRef=useRef(false);
+  const suppressNextHistoryPushRef=useRef(false);
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
@@ -31937,6 +31990,33 @@ export default function App() {
   useEffect(()=>{
     try{window.localStorage?.setItem("secureplus-sidebar-hidden",sidebarHidden?"true":"false");}catch{}
   },[sidebarHidden]);
+
+  useEffect(()=>{
+    const handlePopState=()=>{
+      const next=readAppHistoryState();
+      suppressNextHistoryPushRef.current=true;
+      setFlashcardSetRequest(next.flashcardSetId);
+      setView(next.view);
+    };
+    window.addEventListener("popstate",handlePopState);
+    return()=>window.removeEventListener("popstate",handlePopState);
+  },[]);
+
+  useEffect(()=>{
+    if(typeof window==="undefined"||hasCheckoutReturnParams())return;
+    const nextUrl=buildAppHistoryUrl(view,flashcardSetRequest);
+    const currentUrl=`${window.location.pathname}${window.location.search}`;
+    if(!historyReadyRef.current){
+      historyReadyRef.current=true;
+      if(currentUrl!==nextUrl)window.history.replaceState({secureplusView:view},"",nextUrl);
+      return;
+    }
+    if(suppressNextHistoryPushRef.current){
+      suppressNextHistoryPushRef.current=false;
+      return;
+    }
+    if(currentUrl!==nextUrl)window.history.pushState({secureplusView:view},"",nextUrl);
+  },[view,flashcardSetRequest]);
 
   useEffect(()=>{
     if(user) identifyUser(user);
