@@ -280,6 +280,7 @@ function TrustBadge({t,compact=false,center=false,style={}}) {
 }
 
 const SEO_RESOURCE_LINKS = Object.freeze([
+  { href:"/security-plus-flashcards/", title:"Free Security+ flashcards", body:"Last-minute SY0-701 recall decks with premium weak-area review for Pro users." },
   { href:"/security-plus-acronyms/", title:"Security+ acronyms", body:"Flashcard-style definitions for common SY0-701 abbreviations." },
   { href:"/security-plus-port-numbers/", title:"Port numbers", body:"Quick review for common services, protocols, and exam clues." },
   { href:"/security-plus-firewall-pbq-practice/", title:"Firewall PBQ practice", body:"ACL logic, ports, protocols, and rule-order scenarios." },
@@ -30658,7 +30659,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
               ))}
             </div>
           </div>
-          <p>Your last-minute Security+ recall pack before exam day. Pick a set, test yourself, and share the same set with friends.</p>
+          <p>Your free last-minute Security+ recall pack before exam day: share the same set with friends, then upgrade to Pro for premium Cipher-built weak-area decks.</p>
           <div className="deep-dives-proof">
             <span><ListChecks size={15}/>Grouped by SY0-701 chapters</span>
             <span><Brain size={15}/>{SY0701_ACRONYM_CARDS.length} high-yield cards</span>
@@ -30673,7 +30674,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
           <aside className="flashcards-cipher-card" aria-label="Cipher flashcard coach">
             <MascotAnimation animation="flashcards" size={98} interactive hoverAnimation="cheer" reactionAnimations={["flashcards","thinking","cheer"]} label="Cipher flips through flashcards"/>
             <strong>Cipher’s recall lab</strong>
-            <span className="flashcards-cipher-copy">Tap a set, say the answer, then flip.</span>
+            <span className="flashcards-cipher-copy">Free decks now. Premium weak-area decks with Pro.</span>
           </aside>
           <div className="deep-dives-progress-card">
             <div><span>Flashcard mastery</span><strong>{totalMastered}/{SY0701_ACRONYM_CARDS.length}</strong></div>

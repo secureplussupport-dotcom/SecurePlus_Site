@@ -16,6 +16,7 @@ const softwareApplicationPages = new Set([
   "security-plus-domain-4-practice",
   "security-plus-domain-5-practice",
   "security-plus-firewall-pbq-practice",
+  "security-plus-flashcards",
   "security-plus-free-comptia-practice",
   "security-plus-mcq-practice",
   "security-plus-pbq-practice",
