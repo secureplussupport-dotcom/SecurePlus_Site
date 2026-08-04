@@ -23334,24 +23334,6 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
           )}
         </div>
       </div>
-
-      {/* Recent attempts */}
-      {attempts.length>0&&(
-        <div className="card" style={{padding:"20px 22px"}}>
-          <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:14}}>Recent Activity</div>
-          <div style={{display:"flex",flexDirection:"column",gap:8}}>
-            {attempts.slice(0,6).map((a,i)=>(
-              <div key={i} className="recent-row" style={{background:a.correct?`${t.green}08`:`${t.red}08`}}>
-                {a.correct?<CheckCircle2 size={18} color={t.green}/>:<XCircle size={18} color={t.red}/>}
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:13,color:t.text,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{a.title||"Question"}</div>
-                  <div style={{fontSize:11,color:t.textDim}}>{a.pbq?"PBQ":"MCQ"} · {a.domain||a.ch||""}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
