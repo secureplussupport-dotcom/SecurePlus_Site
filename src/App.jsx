@@ -22014,15 +22014,15 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
         </div>
       </div>
 
-      <details className="card daily-habit-card daily-habit-page-card" style={{marginTop:14,padding:"0",textAlign:"left",overflow:"hidden"}}>
-        <summary style={{display:"flex",alignItems:"center",gap:9,padding:"16px 18px",cursor:"pointer",fontSize:14,fontWeight:950,color:t.text}}>
-          <Flame size={17} color={t.amber}/> Daily Habit
+      <details className="card daily-habit-card daily-habit-page-card" style={{margin:"12px auto 0",maxWidth:500,padding:"0",textAlign:"left",overflow:"hidden"}}>
+        <summary style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",cursor:"pointer",fontSize:13,fontWeight:950,color:t.text}}>
+          <Flame size={15} color={t.amber}/> Daily Habit
         </summary>
-        <div style={{borderTop:`1px solid ${t.border}`,padding:"14px 16px"}}>
-          <h3 style={{fontSize:18,color:t.text,margin:"0 0 8px"}}>{streakInfo.completedToday?"Today is secured":"Protect your streak"}</h3>
-          <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{recoveryMessage}</div>
-          <div style={{fontSize:12,color:t.amber,fontWeight:800,marginTop:6}}>{weeklyBadge} · {tomorrowRewardPreview}</div>
-          {user&&<div style={{display:"inline-flex",alignItems:"center",gap:6,marginTop:10,fontSize:12,fontWeight:900,color:t.amber}}><CipherCoinIcon size={22}/> Perfect score +5 coins · every fifth streak day +5</div>}
+        <div style={{borderTop:`1px solid ${t.border}`,padding:"11px 14px"}}>
+          <h3 style={{fontSize:15,color:t.text,margin:"0 0 5px"}}>{streakInfo.completedToday?"Today is secured":"Protect your streak"}</h3>
+          <div style={{fontSize:12,color:t.textSec,lineHeight:1.5}}>{recoveryMessage}</div>
+          <div style={{fontSize:11,color:t.amber,fontWeight:800,marginTop:5,lineHeight:1.45}}>{weeklyBadge} · {tomorrowRewardPreview}</div>
+          {user&&<div style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:8,fontSize:11,fontWeight:900,color:t.amber}}><CipherCoinIcon size={18}/> Perfect score +5 coins · every fifth streak day +5</div>}
         </div>
       </details>
 
