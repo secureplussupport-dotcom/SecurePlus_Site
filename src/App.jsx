@@ -1279,6 +1279,30 @@ function getReadinessProfile(attempts=[]) {
   };
 }
 
+function getReadinessEncouragement(profile={}) {
+  const score=Number(profile.score)||0;
+  if(score>=80)return {
+    title:"You’re in exam-ready territory",
+    body:"Strong work. Keep this level warm with timed sets, PBQ simulations, and a final pass through any stubborn weak topics.",
+  };
+  if(score>=65)return {
+    title:"You’re building real exam confidence",
+    body:"Good momentum. A few focused repairs can turn this into a stronger finish—prioritise missed concepts, then retest under light pressure.",
+  };
+  if(score>=45)return {
+    title:"You’re making the right progress",
+    body:"The base is forming. Keep converting missed questions into Smart Review, flashcards, and short chapter repairs.",
+  };
+  if(score>=25)return {
+    title:"Your foundation is coming together",
+    body:"This is the useful early stage. Small daily sets will quickly show which concepts are sticking and which need another pass.",
+  };
+  return {
+    title:"Your first momentum is starting",
+    body:"Start simple. A short MCQ set today gives SecurePlus enough signal to build a clearer next step for you.",
+  };
+}
+
 function getPasswordIssue(password) {
   if (password.length < 8) return "Password must be at least 8 characters.";
   if (!/[A-Z]/.test(password)) return "Password must include at least one uppercase letter.";
@@ -23092,6 +23116,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
     weakTopics:primaryWeakAction.missedTopics,
   }):null;
   const weakFlashcardPreview=(primaryWeakFlashcardSet?.cards||[]).slice(0,4).map(card=>card.acronym||card.expansion||card.term).filter(Boolean);
+  const readinessEncouragement=getReadinessEncouragement(readinessProfile);
 
   return(
     <div className="dashboard-shell">
@@ -23163,8 +23188,8 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
         <div className="readiness-lab-head">
           <div>
             <div className="label" style={{color:readinessColor}}>Your readiness lab</div>
-            <h2>A study signal, not a promise</h2>
-            <p>Readiness shows whether your practice is broad, accurate, and applied enough to guide the next study move. Use it to choose what to practise, not as a guarantee of the real exam result.</p>
+            <h2>{readinessEncouragement.title}</h2>
+            <p>{readinessEncouragement.body}</p>
           </div>
           <div className="readiness-level-badge">
             <Gauge size={21} strokeWidth={2.4}/>
