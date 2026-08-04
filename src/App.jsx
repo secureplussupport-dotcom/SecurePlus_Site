@@ -16018,13 +16018,16 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .home-cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
 .home-trust-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px;}
 .home-trust-row span{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;border:1px solid ${t.border};background:${t.panel}cc;color:${t.textSec};font-size:12px;font-weight:800;}
-.home-hero-panel{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:stretch;}
+.home-hero-panel{display:grid;gap:14px;align-items:center;justify-items:center;}
 .readiness-orbit{position:relative;min-height:190px;border-radius:22px;display:grid;place-items:center;background:conic-gradient(var(--readiness-color) var(--readiness), ${t.border} var(--readiness));box-shadow:inset 0 0 0 1px ${t.border},0 18px 45px color-mix(in srgb,var(--readiness-color) 16%,transparent);}
+.dashboard-readiness-focus{width:min(100%,240px);}
+.dashboard-breakdown-toggle{justify-content:center;}
 .readiness-orbit::before{content:"";position:absolute;inset:12px;border-radius:18px;background:linear-gradient(180deg,${t.surface},${t.panel});border:1px solid ${t.border};}
 .readiness-orbit div{position:relative;text-align:center;}
 .readiness-orbit span{display:block;font-size:34px;font-weight:950;color:var(--readiness-color);line-height:1;}
 .readiness-orbit small{display:block;margin-top:6px;font-size:11px;font-weight:900;text-transform:uppercase;color:${t.textDim};letter-spacing:.05em;}
 .readiness-lab{position:relative;overflow:hidden;margin-bottom:18px;padding:22px;border-color:color-mix(in srgb,var(--readiness-color) 34%,${t.border})!important;background:radial-gradient(circle at 92% 6%,color-mix(in srgb,var(--readiness-color) 15%,transparent),transparent 30%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
+.dashboard-readiness-reveal{animation:softReveal .28s cubic-bezier(.16,1,.3,1) both;}
 .readiness-lab::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--readiness-color);}
 .readiness-lab-head{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:22px;margin-bottom:18px;}
 .readiness-lab-head h2{font-size:23px;color:${t.text};margin:3px 0 7px;}
@@ -16551,10 +16554,14 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 @keyframes labConfetti{0%,100%{translate:0 0;rotate:0deg}50%{translate:14px -20px;rotate:180deg}}
 @keyframes icParticle{0%,100%{opacity:.35;transform:translateY(0) rotate(0)}50%{opacity:.9;transform:translateY(-8px) rotate(45deg)}}
 .dashboard-action-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:14px;margin-bottom:18px;}
+.dashboard-action-grid-clean{grid-template-columns:minmax(0,1fr);}
 .weak-action-card,.daily-habit-card{position:relative;overflow:hidden;padding:18px 20px!important;border-radius:10px!important;}
+.dashboard-action-grid-clean .weak-action-card{padding:24px 26px!important;border-radius:18px!important;}
 .weak-action-card{border-color:${t.red}35!important;background:linear-gradient(135deg,${t.red}09,${t.surface} 54%,${t.accent}08)!important;}
 .weak-action-card h3,.daily-habit-card h3{font-size:18px;color:${t.text};line-height:1.3;margin:4px 0 6px;}
+.dashboard-action-grid-clean .weak-action-card h3{font-size:23px;line-height:1.2;margin:6px 0 10px;}
 .weak-action-card p,.daily-habit-card p{font-size:13px;color:${t.textSec};line-height:1.65;margin:0 0 12px;}
+.dashboard-action-grid-clean .weak-action-card p{font-size:15px;max-width:860px;}
 .smart-lesson-path{margin:14px 0;padding:14px;border:1px solid ${t.accent}30;border-radius:12px;background:${t.surface};}
 .smart-lesson-path-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
 .smart-lesson-path-head>span{display:inline-flex;align-items:center;gap:7px;color:${t.text};font-size:13px;font-weight:900;}
@@ -16607,11 +16614,15 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .home-mission-copy small{display:block;color:${t.textSec};font-size:12px;line-height:1.55;}
 .home-mission-meta{position:absolute;top:14px;right:14px;padding:5px 8px;border-radius:999px;background:${t.panel};border:1px solid ${t.border};color:var(--mission-color);font-size:10px;font-weight:950;text-transform:uppercase;}
 .home-duo-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:18px;margin-bottom:20px;}
-.dashboard-flashcard-set-card{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px;padding:18px 20px!important;border-color:color-mix(in srgb,var(--set-color) 30%,${t.border})!important;background:radial-gradient(circle at 94% 16%,color-mix(in srgb,var(--set-color) 14%,transparent),transparent 32%),${t.surface}!important;}
+.dashboard-flashcard-widget-stack{display:grid;gap:12px;margin-bottom:20px;}
+.dashboard-flashcard-set-card{width:100%;display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:0;padding:18px 20px!important;border-color:color-mix(in srgb,var(--set-color) 30%,${t.border})!important;background:radial-gradient(circle at 94% 16%,color-mix(in srgb,var(--set-color) 14%,transparent),transparent 32%),${t.surface}!important;text-align:left;cursor:pointer;color:inherit;}
+.dashboard-flashcard-set-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--set-color) 55%,${t.border})!important;box-shadow:0 18px 40px color-mix(in srgb,var(--set-color) 16%,transparent);}
+.dashboard-flashcard-set-card.cipher-made{background:radial-gradient(circle at 94% 16%,color-mix(in srgb,var(--set-color) 20%,transparent),transparent 32%),linear-gradient(135deg,color-mix(in srgb,var(--set-color) 10%,${t.surface}),${t.panel})!important;}
 .dashboard-flashcard-set-main{display:flex;align-items:center;gap:13px;min-width:0;}
 .dashboard-flashcard-set-main h3{margin:2px 0 4px;color:${t.text};font-size:17px;line-height:1.25;}
 .dashboard-flashcard-set-main p{margin:0;color:${t.textSec};font-size:13px;line-height:1.55;}
 .home-route-card,.home-path-card{padding:22px;}
+.dashboard-chapter-map{margin-bottom:18px;}
 .home-route-card h3,.home-path-card h3{font-size:21px;color:${t.text};line-height:1.25;margin:7px 0 8px;}
 .home-route-card p{font-size:13px;line-height:1.75;color:${t.textSec};margin:0 0 16px;}
 .home-step-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0;}
@@ -17611,6 +17622,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .streak-burst{position:absolute;inset:-20%;background:radial-gradient(circle at 20% 20%,${t.green}24,transparent 22%),radial-gradient(circle at 82% 18%,${t.accent}22,transparent 24%),radial-gradient(circle at 50% 90%,#f59e0b22,transparent 26%);opacity:.9;animation:streakPulse 1.8s ease infinite alternate;pointer-events:none;}
 .streak-number{font-size:68px;line-height:1;font-weight:900;color:${t.text};text-shadow:0 0 30px ${t.accent}55;font-family:'Montserrat',sans-serif;}
 @keyframes softRise{from{opacity:0;transform:translateY(10px) scale(.992)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes softReveal{from{opacity:0;transform:translateY(-8px) scale(.985);max-height:0}to{opacity:1;transform:translateY(0) scale(1);max-height:900px}}
 @keyframes softGlow{0%,100%{box-shadow:0 10px 22px ${t.accent}10;}50%{box-shadow:0 12px 28px ${t.accent}22;}}
 @keyframes heroSweep{0%,62%{transform:translateX(-110%)}82%,100%{transform:translateX(110%)}}
 @keyframes barShine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
@@ -21984,11 +21996,12 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
         </div>
       </div>
 
-      <details className="card" style={{marginTop:14,padding:"0",textAlign:"left",overflow:"hidden"}}>
-        <summary style={{display:"flex",alignItems:"center",gap:9,padding:"14px 16px",cursor:"pointer",fontSize:13,fontWeight:900,color:t.text}}>
-          <Flame size={16} color={t.amber}/> Streak and reward details
+      <details className="card daily-habit-card daily-habit-page-card" style={{marginTop:14,padding:"0",textAlign:"left",overflow:"hidden"}}>
+        <summary style={{display:"flex",alignItems:"center",gap:9,padding:"16px 18px",cursor:"pointer",fontSize:14,fontWeight:950,color:t.text}}>
+          <Flame size={17} color={t.amber}/> Daily Habit
         </summary>
         <div style={{borderTop:`1px solid ${t.border}`,padding:"14px 16px"}}>
+          <h3 style={{fontSize:18,color:t.text,margin:"0 0 8px"}}>{streakInfo.completedToday?"Today is secured":"Protect your streak"}</h3>
           <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>{recoveryMessage}</div>
           <div style={{fontSize:12,color:t.amber,fontWeight:800,marginTop:6}}>{weeklyBadge} · {tomorrowRewardPreview}</div>
           {user&&<div style={{display:"inline-flex",alignItems:"center",gap:6,marginTop:10,fontSize:12,fontWeight:900,color:t.amber}}><CipherCoinIcon size={22}/> Perfect score +5 coins · every fifth streak day +5</div>}
@@ -22992,15 +23005,14 @@ function SmartReviewLessonPath({recommendations=[],onOpenDeepDive,source="smart_
   );
 }
 
-function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coinWallet,t,starred=[]}) {
-  const [activeMission,setActiveMission]=useState("mcq");
+function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOpenFlashcards,coinWallet,t,starred=[],assistantFlashcardSet=null}) {
+  const [showReadinessLab,setShowReadinessLab]=useState(false);
   const readinessProfile=getReadinessProfile(attempts);
   const questionsDone=readinessProfile.uniqueQuestions;
   const accuracy=readinessProfile.accuracy;
   const readiness=readinessProfile.score;
   const readinessColor=readiness>=80?t.green:readiness>=65?t.accent:readiness>=45?t.amber:t.red;
   const isPro = user.tier==="pro";
-  const coinBalance=Number(coinWallet?.balance||0);
   const examPasses=Number(coinWallet?.examPasses||0);
   const hasExamAccess=isPro||examPasses>0;
   const challenge = getTodayChallenge();
@@ -23011,24 +23023,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
     return()=>{active=false;};
   },[user?.email]);
   const uniquePbqs=readinessProfile.uniquePbqs;
-  const nextQuest=questionsDone<10
-    ? "Complete 10 unique questions to unlock your first study rhythm."
-    : accuracy<75
-      ? "Run Smart Review and repair weak topics for a stronger score."
-      : "Try an Exam Mode set to check real readiness.";
-  const weakSignal = accuracy < 70 ? "Review weak topics first" : readiness >= 80 ? "Ready for timed practice" : "Build one more focused set";
-  const missionCards=[
-    {id:"mcq",label:"MCQ Practice",title:"Start a focused set",body:"Adaptive ordering prioritises weak and starred questions so each session feels useful.",nav:"mcq",color:t.accent,meta:`${MCQ_BANK.length} questions`,Icon:BookOpenCheck},
-    {id:"daily",label:"Daily Challenge",title:streakInfo.completedToday?"Daily complete":"Protect the streak",body:streakInfo.completedToday?"Today is already secured. Return tomorrow for the next streak point.":"Five questions, quick feedback, and a streak moment after completion.",nav:"daily",color:t.amber,meta:`${streakInfo.streak} day streak`,Icon:Target},
-    {id:"pbq",label:"PBQ Simulator",title:isPro?"Practise one PBQ":"Reveal a mystery PBQ",body:isPro?"Terminal, table, tap-based placement, ordering, and incident-response simulations.":`Use coins if you have time. Use Pro if your exam is soon. PBQ reveals cost ${CIPHER_COIN_COSTS.pbq} Cipher Coins each.`,nav:"pbq",color:t.green,meta:`${PBQ_BANK.length} PBQs`,Icon:Puzzle},
-    {id:"exam",label:"Exam Mode",title:hasExamAccess?"Run a timed exam":"Earn an exam voucher",body:hasExamAccess?"Mixed MCQ/PBQ sets with flags, elimination, timing, and post-exam review.":`Daily Challenge → earn coins → unlock PBQ or exam voucher → get a report card → return tomorrow. Pro skips the coin requirement.`,nav:hasExamAccess?"exam":"coins",color:"#8b5cf6",meta:isPro?"Unlimited":examPasses?`${examPasses} voucher${examPasses===1?"":"s"}`:"Coin access",Icon:ClipboardCheck},
-  ];
-  const activeMissionCard=missionCards.find(card=>card.id===activeMission)||missionCards[0];
-  const weekDots=Array.from({length:7},(_,index)=>index<Math.min(7,streakInfo.streak));
-  const recoveryMessage=getStreakRecoveryMessage(streakInfo);
-  const weeklyBadge=getWeeklyStreakBadge(streakInfo);
-  const tomorrowRewardPreview=getTomorrowRewardPreview(streakInfo,true);
   const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
+  const showStarredDashboardSet=starredFlashcards.length>=5;
+  const showAssistantDashboardSet=Boolean(assistantFlashcardSet?.cards?.length);
 
   // Chapter performance
   const chStats = {};
@@ -23079,18 +23076,11 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
           <div className="home-cta-row">
             <button className="btn btn-primary" onClick={()=>onNav("mcq")}>Start practice</button>
             <button className="btn btn-outline" onClick={()=>onNav("daily")}>Daily challenge</button>
-            <button className="btn btn-ghost" onClick={()=>onNav(hasExamAccess?"exam":"coins")}>{hasExamAccess?"Exam mode":"Coin Vault"}</button>
-          </div>
-          <div className="home-trust-row">
-            <span>{MCQ_BANK.length} MCQs</span>
-            <span>{PBQ_BANK.length} PBQs</span>
-            <span>Smart Review</span>
-            <span>{isPro?"Pro active":"Free plan"}</span>
+            <button className="btn btn-ghost" onClick={()=>onNav(hasExamAccess?"exam":"pricing")}>{hasExamAccess?"Exam mode":"View Pro"}</button>
           </div>
           <div style={{marginTop:12}}>
             <TrustBadge t={t}/>
           </div>
-          <div style={{marginTop:14,maxWidth:190}}><CipherCoinPill balance={coinBalance} onClick={()=>onNav("coins")}/></div>
           <MascotGuide
             animation={questionsDone?"scan":"wave"}
             size={88}
@@ -23100,33 +23090,41 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
           />
         </div>
         <div className="home-hero-panel">
-          <div className="readiness-orbit" style={{"--readiness":`${readiness}%`,"--readiness-color":readinessColor}}>
+          <div className="readiness-orbit dashboard-readiness-focus" style={{"--readiness":`${readiness}%`,"--readiness-color":readinessColor}}>
             <div>
               <span>{readiness}%</span>
               <small>{readinessProfile.level}</small>
             </div>
           </div>
-          <div className="home-live-card">
-            <div className="home-live-top">
-              <span className="home-live-dot"/>
-              <span>{activeMissionCard.label}</span>
-              <strong style={{color:activeMissionCard.color}}>{activeMissionCard.meta}</strong>
-            </div>
-            <h3>{activeMissionCard.title}</h3>
-            <p>{activeMissionCard.body}</p>
-            <div className="home-live-answer selected">
-              <span>A</span>
-              <div>
-                <strong>{weakSignal}</strong>
-                <small>{nextQuest}</small>
-              </div>
-            </div>
-            <button className="btn btn-primary" onClick={()=>onNav(activeMissionCard.nav)}>Open {activeMissionCard.label}</button>
-          </div>
+          <button
+            className="btn btn-outline dashboard-breakdown-toggle"
+            type="button"
+            aria-expanded={showReadinessLab}
+            onClick={()=>setShowReadinessLab(value=>!value)}
+          >
+            <Gauge size={17}/> {showReadinessLab?"Hide breakdown":"Break it down"}
+          </button>
         </div>
       </section>
 
-      <section className={`card readiness-lab readiness-${readinessProfile.tone}`} style={{"--readiness-color":readinessColor}}>
+      <div className="dashboard-stat-grid">
+        {[
+          {label:"Accuracy",value:`${accuracy}%`,color:t.accent,Icon:Target},
+          {label:"Questions Done",value:questionsDone,color:"#8b5cf6",Icon:BookOpenCheck},
+          {label:"Daily Streak",value:streakInfo.streak,color:t.amber,Icon:Flame},
+          {label:"PBQs Complete",value:uniquePbqs,color:t.green,Icon:Puzzle},
+        ].map(s=>(
+          <div key={s.label} className="game-stat">
+            <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:10}}>
+              <div className="label">{s.label}</div>
+              <span className="game-stat-icon" style={{"--game-color":s.color}}><s.Icon size={19} strokeWidth={2.2}/></span>
+            </div>
+            <div style={{fontSize:30,fontWeight:900,color:s.color,lineHeight:1}}>{s.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {showReadinessLab&&<section className={`card readiness-lab readiness-${readinessProfile.tone} dashboard-readiness-reveal`} style={{"--readiness-color":readinessColor}}>
         <div className="readiness-lab-head">
           <div>
             <div className="label" style={{color:readinessColor}}>Your readiness lab</div>
@@ -23157,26 +23155,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
             Trust this as a direction finder: if a factor is low, practise that area next. Do not use it as an official pass/fail prediction.
           </div>
         </div>
-      </section>
+      </section>}
 
-      <div className="dashboard-stat-grid">
-        {[
-          {label:"Accuracy",value:`${accuracy}%`,color:t.accent,Icon:Target},
-          {label:"Questions Done",value:questionsDone,color:"#8b5cf6",Icon:BookOpenCheck},
-          {label:"Daily Streak",value:streakInfo.streak,color:t.amber,Icon:Flame},
-          {label:"PBQs Complete",value:uniquePbqs,color:t.green,Icon:Puzzle},
-        ].map(s=>(
-          <div key={s.label} className="game-stat">
-            <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:10}}>
-              <div className="label">{s.label}</div>
-              <span className="game-stat-icon" style={{"--game-color":s.color}}><s.Icon size={19} strokeWidth={2.2}/></span>
-            </div>
-            <div style={{fontSize:30,fontWeight:900,color:s.color,lineHeight:1}}>{s.value}</div>
-          </div>
-        ))}
-      </div>
-
-      <section className="dashboard-action-grid" aria-label="Dashboard action recommendations">
+      <section className="dashboard-action-grid dashboard-action-grid-clean" aria-label="Dashboard action recommendations">
         <div className="card weak-action-card">
           <div className="label" style={{color:primaryWeakAction?t.red:t.green}}>Actionable weak area</div>
           {primaryWeakAction ? (
@@ -23202,138 +23183,57 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,coin
             </>
           )}
         </div>
-        <div className="card daily-habit-card" onClick={()=>onNav("daily")} role="button" tabIndex={0} onKeyDown={event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();onNav("daily");}}}>
-          <div className="label" style={{color:t.amber}}>Daily habit</div>
-          <h3>{streakInfo.completedToday?"Daily Challenge complete":"Protect your Daily Challenge streak"}</h3>
-          <p>{streakInfo.completedToday?"You already secured today. Keep the streak visible and return tomorrow for the next short drill.":"Five questions keeps Security+ active in memory without turning every session into a full exam."}</p>
-          <div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginBottom:10}}>{recoveryMessage}</div>
-          <div className="daily-habit-streak" aria-label={`${streakInfo.streak} day streak`}>
-            {weekDots.map((active,index)=><span key={index} className={active?"active":""}/>)}
-          </div>
-          <div className="daily-habit-meta">
-            <span>{streakInfo.streak} day streak</span>
-            <span>Best {streakInfo.best}</span>
-            <span>{weeklyBadge}</span>
-          </div>
-          <div style={{fontSize:12,color:t.amber,fontWeight:800,lineHeight:1.5,margin:"8px 0 12px"}}>{tomorrowRewardPreview}</div>
-          <button className="btn btn-primary" onClick={event=>{event.stopPropagation();onNav("daily");}}>
-            {streakInfo.completedToday?"View Daily Challenge":"Start Daily Challenge"}
-          </button>
-        </div>
       </section>
 
-      <section className="card dashboard-flashcard-set-card" style={{"--set-color":"#f59e0b"}}>
-        <div className="dashboard-flashcard-set-main">
-          <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Star size={21} strokeWidth={2.35} fill={starredFlashcards.length?"currentColor":"none"}/></span>
-          <div>
-            <div className="label" style={{color:"#f59e0b"}}>My starred flashcards</div>
-            <h3>{starredFlashcards.length?`${starredFlashcards.length} saved card${starredFlashcards.length===1?"":"s"} ready for review`:"Build your own flashcard set"}</h3>
-            <p>{starredFlashcards.length?`Saved: ${starredFlashcards.slice(0,5).map(card=>card.acronym).join(" · ")}${starredFlashcards.length>5?" · …":""}`:"Open Flashcards and press the star on any card to save the acronym, full name, definition, and example into your own set."}</p>
-          </div>
-        </div>
-        <button className="btn btn-primary" type="button" onClick={()=>onNav("flashcards")}>
-          {starredFlashcards.length?"Review starred flashcards":"Open Flashcards"}
-        </button>
-      </section>
-
-      <section className="mission-board">
-        <div className="mission-board-head">
-          <div>
-            <div className="label" style={{color:t.accent}}>Choose your next move</div>
-            <h2>Interactive study missions</h2>
-          </div>
-          <div className="streak-strip" aria-label="Weekly streak progress">
-            {weekDots.map((active,index)=><span key={index} className={active?"active":""}/>)}
-          </div>
-        </div>
-        <div className="mission-card-grid">
-          {missionCards.map(card=>(
-            <button
-              key={card.id}
-              className={`home-mission-card ${activeMission===card.id?"active":""}`}
-              style={{"--mission-color":card.color}}
-              onMouseEnter={()=>setActiveMission(card.id)}
-              onFocus={()=>setActiveMission(card.id)}
-              onClick={()=>onNav(card.nav)}
-            >
-              <span className="home-mission-icon"><card.Icon size={21} strokeWidth={2.3}/></span>
-              <span className="home-mission-copy">
-                <strong>{card.title}</strong>
-                <small>{card.body}</small>
-              </span>
-              <span className="home-mission-meta">{card.meta}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      <div className="home-duo-grid">
-        <div className="card home-route-card">
-          <div className="label" style={{color:t.green}}>Recommended today</div>
-          <h3>
-            {readiness>=80?"Run one timed set and protect pacing.":accuracy<65?"Repair missed concepts before adding new topics.":"Keep momentum with a focused practice set."}
-          </h3>
-          <p>
-            {readiness>=80?"Exam Mode helps you practise pressure, flags, elimination, and review timing.":
-            accuracy<65?"Smart Review puts weak areas first so your next session has a higher chance of moving the score.":
-            "A shorter focused set is enough to keep the habit strong without bloating your review queue."}
-          </p>
-          <div className="home-step-row">
-            {[
-              ["Answer","Complete one focused set"],
-              ["Review","Read missed explanations"],
-              ["Return","Let SM-2 bring it back"],
-            ].map(([title,body],index)=>(
-              <div key={title} className="home-step">
-                <span>{index+1}</span>
-                <strong>{title}</strong>
-                <small>{body}</small>
+      {(showAssistantDashboardSet||showStarredDashboardSet)&&(
+        <section className="dashboard-flashcard-widget-stack" aria-label="Saved flashcard sets">
+          {showAssistantDashboardSet&&(
+            <button className="card dashboard-flashcard-set-card cipher-made" type="button" style={{"--set-color":assistantFlashcardSet.color||"#14b8a6"}} onClick={()=>onOpenFlashcards?.(assistantFlashcardSet)}>
+              <div className="dashboard-flashcard-set-main">
+                <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Brain size={22} strokeWidth={2.35}/></span>
+                <div>
+                  <div className="label" style={{color:assistantFlashcardSet.color||"#14b8a6"}}>Cipher-made flashcards</div>
+                  <h3>{assistantFlashcardSet.title}</h3>
+                  <p>{assistantFlashcardSet.description || "A focused weak-area deck prepared from your recent practice signals."}</p>
+                </div>
               </div>
-            ))}
-          </div>
-          <button className="btn btn-primary" onClick={()=>onNav(readiness>=80&&isPro?"exam":"mcq")}>
-            {readiness>=80&&isPro?"Start Exam Mode":"Start Focus Set"}
-          </button>
-        </div>
-        <div className="card home-path-card">
-          <div className="label" style={{color:t.accent}}>Security+ map</div>
-          <h3>Chapter path</h3>
-          <div className="skill-path">
-            {CHAPTERS.map(ch=>{
-              const s=chStats[ch.id];
-              const count=s?.t||0;
-              const p=s?Math.round((s.c/s.t)*100):0;
-              const done=count>=10&&p>=70;
-              const active=count>0&&!done;
-              return(
-                <button key={ch.id} className={`skill-node ${done?"done":active?"active":""}`} onClick={()=>onNav("mcq")} title={ch.title}>
-                  <span className="skill-node-dot" style={{"--node-color":chapterColor(ch.id)}}/>
-                  <span style={{fontSize:11,fontWeight:900,color:t.text}}>Ch.{ch.id}</span>
-                  <span style={{fontSize:10,color:t.textDim}}>{count?`${p}%`:"Start"}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+              <ChevronRight size={22}/>
+            </button>
+          )}
+          {showStarredDashboardSet&&(
+            <button className="card dashboard-flashcard-set-card" type="button" style={{"--set-color":"#f59e0b"}} onClick={()=>onOpenFlashcards?.(STARRED_FLASHCARD_SET_ID)}>
+              <div className="dashboard-flashcard-set-main">
+                <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Star size={22} strokeWidth={2.35} fill="currentColor"/></span>
+                <div>
+                  <div className="label" style={{color:"#f59e0b"}}>Starred flashcards</div>
+                  <h3>{starredFlashcards.length} saved cards ready for review</h3>
+                  <p>{starredFlashcards.slice(0,5).map(card=>card.acronym).join(" · ")}{starredFlashcards.length>5?" · …":""}</p>
+                </div>
+              </div>
+              <ChevronRight size={22}/>
+            </button>
+          )}
+        </section>
+      )}
 
-      <div className="mission-banner" style={{marginBottom:20}}>
-        <div style={{position:"relative",zIndex:1,display:"flex",gap:14,alignItems:"center",flexWrap:"wrap"}}>
-          <span className="mission-badge">{readiness>=80?<CircleGauge size={22} strokeWidth={2.3}/>:accuracy<65?<Brain size={22} strokeWidth={2.3}/>:<BookOpenCheck size={22} strokeWidth={2.3}/>}</span>
-          <div style={{flex:1,minWidth:240}}>
-            <div className="label" style={{color:t.accent,marginBottom:3}}>Next best action</div>
-            <div style={{fontWeight:900,color:t.text,fontSize:16}}>
-              {readiness>=80?"Keep readiness sharp with a timed exam set":accuracy<65?"Rebuild accuracy with Smart Review":"Build momentum with one focused MCQ set"}
-            </div>
-            <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
-              {readiness>=80?"You are in the ready zone. Use Exam Mode to practise pacing and review missed concepts.":
-              accuracy<65?"Your quickest gain is repairing missed topics before adding more new questions.":
-              "A short set keeps progress moving without overwhelming your review queue."}
-            </div>
-          </div>
-          <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={()=>onNav(readiness>=80&&isPro?"exam":"mcq")}>
-            {readiness>=80&&isPro?"Start Exam Mode":"Start Focus Set"}
-          </button>
+      <div className="card home-path-card dashboard-chapter-map">
+        <div className="label" style={{color:t.accent}}>Security+ map</div>
+        <h3>Chapter path</h3>
+        <div className="skill-path">
+          {CHAPTERS.map(ch=>{
+            const s=chStats[ch.id];
+            const count=s?.t||0;
+            const p=s?Math.round((s.c/s.t)*100):0;
+            const done=count>=10&&p>=70;
+            const active=count>0&&!done;
+            return(
+              <button key={ch.id} className={`skill-node ${done?"done":active?"active":""}`} onClick={()=>onNav("mcq")} title={ch.title}>
+                <span className="skill-node-dot" style={{"--node-color":chapterColor(ch.id)}}/>
+                <span style={{fontSize:11,fontWeight:900,color:t.text}}>Ch.{ch.id}</span>
+                <span style={{fontSize:10,color:t.textDim}}>{count?`${p}%`:"Start"}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -33186,7 +33086,7 @@ export default function App() {
               <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onUpdateAvatar={handleUpdateAvatar} onChangePassword={handleChangePassword} onLogout={handleLogout} compact/>
             </div>
           </div>
-          {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} coinWallet={coinWallet} t={t} starred={starred}/>}
+          {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
             <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
           </div>
