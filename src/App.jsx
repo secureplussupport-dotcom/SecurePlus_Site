@@ -16077,6 +16077,21 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .readiness-pillar-help{margin-top:8px;padding-right:48px;color:${t.textDim};font-size:10px;line-height:1.45;}
 .readiness-weight{position:absolute;right:10px;bottom:10px;color:${t.textDim};font-size:8px;font-weight:900;text-transform:uppercase;}
 .readiness-trust-note{margin-top:12px;padding:11px 12px;border:1px solid color-mix(in srgb,var(--readiness-color) 24%,${t.border});border-radius:10px;background:color-mix(in srgb,var(--readiness-color) 7%,${t.panel});color:${t.textSec};font-size:11px;line-height:1.55;}
+.readiness-chapter-chart{margin-top:14px;padding:16px;border:1px solid color-mix(in srgb,var(--readiness-color) 24%,${t.border});border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--readiness-color) 8%,${t.surface}),${t.panel});overflow:hidden;}
+.readiness-chart-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:13px;}
+.readiness-chart-head h3{margin:4px 0 0;color:${t.text};font-size:18px;line-height:1.15;}
+.readiness-chart-head small{color:${t.textDim};font-size:11px;font-weight:850;text-align:right;}
+.readiness-chart-empty{padding:14px;border:1px dashed ${t.border};border-radius:12px;color:${t.textSec};font-size:12px;line-height:1.6;background:${t.panel}90;}
+.readiness-chart-bars{display:grid;gap:11px;}
+.readiness-chart-row{display:grid;gap:7px;}
+.readiness-chart-label{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;color:${t.textSec};font-weight:850;}
+.readiness-chart-label span{display:flex;align-items:center;gap:8px;min-width:0;}
+.readiness-chart-label svg{color:var(--bar-color);}
+.readiness-chart-label strong{color:var(--bar-color);font-size:13px;}
+.readiness-chart-track{height:10px;border-radius:999px;background:${t.border};overflow:hidden;}
+.readiness-chart-track span{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--bar-color),color-mix(in srgb,var(--bar-color) 72%,${t.accent}));box-shadow:0 0 16px color-mix(in srgb,var(--bar-color) 35%,transparent);transition:width .9s cubic-bezier(.16,1,.3,1);}
+.readiness-chapter-chart.visible .readiness-chart-track span{width:var(--bar-width);}
+.dashboard-upgrade-card{margin-bottom:18px;}
 .achievement-mini-star{width:48px;height:48px;display:grid;place-items:center;clip-path:polygon(50% 0,61% 34%,98% 34%,68% 55%,79% 91%,50% 70%,21% 91%,32% 55%,2% 34%,39% 34%);background:linear-gradient(135deg,#facc15,#f59e0b);color:#fff7d6;font-weight:950;text-shadow:0 2px 0 rgba(0,0,0,.18);filter:drop-shadow(5px 5px 0 ${t.amber}20);}
 .achievements-page{padding:30px 24px 120px;max-width:1060px;margin:0 auto;}
 .achievements-hero{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(220px,.42fr) minmax(0,1fr);gap:24px;align-items:center;margin-bottom:18px;padding:28px!important;border-color:${t.amber}45!important;background:radial-gradient(circle at 16% 12%,${t.amber}24,transparent 35%),linear-gradient(135deg,${t.surface},${t.panel} 70%,${t.green}0b)!important;}
@@ -23067,8 +23082,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   const isPro = user.tier==="pro";
   const examPasses=Number(coinWallet?.examPasses||0);
   const hasExamAccess=isPro||examPasses>0;
-  const challenge = getTodayChallenge();
   const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
+  const [chapterChartVisible,setChapterChartVisible]=useState(false);
+  const chapterChartRef=useRef(null);
   useEffect(()=>{
     let active=true;
     loadDailyStreak(user).then(info=>{if(active)setStreakInfo(info);});
@@ -23117,6 +23133,24 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   }):null;
   const weakFlashcardPreview=(primaryWeakFlashcardSet?.cards||[]).slice(0,4).map(card=>card.acronym||card.expansion||card.term).filter(Boolean);
   const readinessEncouragement=getReadinessEncouragement(readinessProfile);
+
+  useEffect(()=>{
+    if(!showReadinessLab){
+      setChapterChartVisible(false);
+      return;
+    }
+    const node=chapterChartRef.current;
+    if(!node)return;
+    if(typeof IntersectionObserver==="undefined"){
+      setChapterChartVisible(true);
+      return;
+    }
+    const observer=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting))setChapterChartVisible(true);
+    },{threshold:.28,rootMargin:"0px 0px -8% 0px"});
+    observer.observe(node);
+    return()=>observer.disconnect();
+  },[showReadinessLab]);
 
   return(
     <div className="dashboard-shell">
@@ -23214,6 +23248,36 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
           <div className="readiness-trust-note">
             Trust this as a direction finder: if a factor is low, practise that area next. Do not use it as an official pass/fail prediction.
           </div>
+          <div ref={chapterChartRef} className={`readiness-chapter-chart ${chapterChartVisible?"visible":""}`} aria-label="Performance by chapter">
+            <div className="readiness-chart-head">
+              <div>
+                <div className="label" style={{color:readinessColor}}>Performance by chapter</div>
+                <h3>Where your score is strongest</h3>
+              </div>
+              <small>{Object.keys(chStats).length?`${Object.keys(chStats).length} chapter${Object.keys(chStats).length===1?"":"s"} with practice data`:"No chapter data yet"}</small>
+            </div>
+            {Object.keys(chStats).length===0?(
+              <div className="readiness-chart-empty">No attempts yet. Start MCQ Practice and this chart will fill as you answer questions.</div>
+            ):(
+              <div className="readiness-chart-bars">
+                {CHAPTERS.map(ch=>{
+                  const s=chStats[ch.id];
+                  if(!s)return null;
+                  const p=Math.round((s.c/s.t)*100);
+                  const barColor=p>=75?t.green:p>=50?t.amber:t.red;
+                  return(
+                    <div key={ch.id} className="readiness-chart-row" style={{"--bar-width":`${p}%`,"--bar-color":barColor}}>
+                      <div className="readiness-chart-label">
+                        <span><ChapterIcon id={ch.id} size={20}/> Ch.{ch.id} · {ch.title.split(",")[0]}</span>
+                        <strong>{p}%</strong>
+                      </div>
+                      <div className="readiness-chart-track"><span/></div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </section>}
 
@@ -23286,79 +23350,15 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
         </section>
       )}
 
-      <div className="card home-path-card dashboard-chapter-map">
-        <div className="label" style={{color:t.accent}}>Security+ map</div>
-        <h3>Chapter path</h3>
-        <div className="skill-path">
-          {CHAPTERS.map(ch=>{
-            const s=chStats[ch.id];
-            const count=s?.t||0;
-            const p=s?Math.round((s.c/s.t)*100):0;
-            const done=count>=10&&p>=70;
-            const active=count>0&&!done;
-            return(
-              <button key={ch.id} className={`skill-node ${done?"done":active?"active":""}`} onClick={()=>onNav("mcq")} title={ch.title}>
-                <span className="skill-node-dot" style={{"--node-color":chapterColor(ch.id)}}/>
-                <span style={{fontSize:11,fontWeight:900,color:t.text}}>Ch.{ch.id}</span>
-                <span style={{fontSize:10,color:t.textDim}}>{count?`${p}%`:"Start"}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="dashboard-grid">
-        {/* Chapter performance */}
-        <div className="card" style={{padding:"20px 22px"}}>
-          <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:14}}>Performance by Chapter</div>
-          {Object.keys(chStats).length===0?(
-            <div style={{color:t.textDim,fontSize:13,padding:"12px 0"}}>No attempts yet — start practising!</div>
-          ):(
-            <div style={{display:"flex",flexDirection:"column",gap:12}}>
-              {CHAPTERS.map(ch=>{
-                const s=chStats[ch.id];
-                if(!s)return null;
-                const p=Math.round((s.c/s.t)*100);
-                return(
-                  <div key={ch.id}>
-                    <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
-                      <span style={{fontSize:12,color:t.textSec,display:"inline-flex",alignItems:"center",gap:6}}><ChapterIcon id={ch.id} size={20}/> {ch.title.split(",")[0]}</span>
-                      <span style={{fontSize:12,fontWeight:600,color:p>=75?t.green:p>=50?t.amber:t.red}}>{p}%</span>
-                    </div>
-                    <ProgBar v={p} c={p>=75?t.green:p>=50?t.amber:t.red} h={6}/>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        {/* Daily challenge + recent */}
-        <div style={{display:"flex",flexDirection:"column",gap:12}}>
-          {/* Daily challenge card */}
-          <div className="card card-hover" style={{padding:"18px 20px",borderColor:`${t.accent}30`,cursor:"pointer"}} onClick={()=>onNav("daily")}>
-            <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
-              <span className="mission-badge" style={{background:"#ef4444",width:42,height:42}}><Target size={21} strokeWidth={2.3}/></span>
-              <div style={{flex:1}}>
-                <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:3}}>{challenge.title}</div>
-                <div style={{fontSize:12,color:t.textSec,marginBottom:10}}>{challenge.description}</div>
-                <button className="btn btn-outline" style={{fontSize:12,padding:"6px 14px"}}>Start Challenge →</button>
-              </div>
-            </div>
+      {!isPro&&(
+        <div className="card dashboard-upgrade-card" style={{padding:"18px 20px",borderColor:`${t.amber}40`,background:`${t.amber}06`}}>
+          <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:4}}>Ready for PBQs?</div>
+          <div style={{fontSize:13,color:t.textSec,marginBottom:12}}>
+            Keep using all MCQs for free. Earn Cipher Coins to unlock individual PBQs, or choose Pro for all {PBQ_BANK.length} PBQs with zero coin requirements.
           </div>
-
-          {/* Upgrade if free */}
-          {!isPro&&(
-            <div className="card" style={{padding:"18px 20px",borderColor:`${t.amber}40`,background:`${t.amber}06`}}>
-              <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:4}}>Ready for PBQs?</div>
-              <div style={{fontSize:13,color:t.textSec,marginBottom:12}}>
-                Keep using all MCQs for free. Earn Cipher Coins to unlock individual PBQs, or choose Pro for all {PBQ_BANK.length} PBQs with zero coin requirements.
-              </div>
-              <div style={{display:"flex",gap:8,flexWrap:"wrap"}}><button className="btn btn-outline" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("coins")}><CipherCoinIcon size={22}/> Open Coin Vault</button><button className="btn btn-primary" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("pricing")}>Pro · zero coins</button></div>
-            </div>
-          )}
+          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}><button className="btn btn-outline" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("coins")}><CipherCoinIcon size={22}/> Open Coin Vault</button><button className="btn btn-primary" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("pricing")}>Pro · zero coins</button></div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
