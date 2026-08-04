@@ -19430,15 +19430,19 @@ body{background:
 .flashcard-learn-more>button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0;border:0;background:transparent;color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;}
 .flashcard-learn-more>button span{display:block;color:var(--deep-muted);font-size:9px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
 .flashcard-learn-more>button strong{display:block;margin-top:2px;color:var(--deep-text);font-size:13px;font-weight:900;}
+.flashcard-learn-more-title-accent{color:var(--deep-accent);}
 .flashcard-learn-more>button svg{color:var(--deep-muted);transition:transform .18s ease;}
 .flashcard-learn-more.open>button svg{transform:rotate(90deg);}
 .flashcard-learn-more-panel{margin-top:13px;padding-top:13px;border-top:1px solid var(--deep-border);animation:fadeUp .18s ease both;}
 .flashcard-learn-more-note{margin:0 0 10px;color:var(--deep-muted);font-size:12px;font-weight:650;line-height:1.6;}
 .flashcard-lesson-links{display:grid;gap:8px;}
-.flashcard-lesson-link{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--deep-border);border-radius:14px;background:var(--deep-panel);color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;}
-.flashcard-lesson-link:hover{border-color:color-mix(in srgb,var(--set-color) 45%,var(--deep-border));background:color-mix(in srgb,var(--set-color) 7%,var(--deep-surface));}
+.flashcard-lesson-link{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:13px 14px 13px 18px;border:1px solid color-mix(in srgb,var(--lesson-color,var(--set-color)) 34%,var(--deep-border));border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--lesson-color,var(--set-color)) 12%,var(--deep-panel)),var(--deep-panel));color:var(--deep-text);font:inherit;text-align:left;cursor:pointer;overflow:hidden;transition:transform .16s,border-color .16s,background .16s,box-shadow .16s;}
+.flashcard-lesson-link::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--lesson-color,var(--set-color));opacity:.92;}
+.flashcard-lesson-link:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--lesson-color,var(--set-color)) 58%,var(--deep-border));background:linear-gradient(135deg,color-mix(in srgb,var(--lesson-color,var(--set-color)) 17%,var(--deep-panel)),color-mix(in srgb,var(--lesson-color,var(--set-color)) 5%,var(--deep-surface)));box-shadow:0 12px 28px color-mix(in srgb,var(--lesson-color,var(--set-color)) 14%,transparent);}
 .flashcard-lesson-link strong{display:block;font-size:13px;font-weight:950;line-height:1.35;}
 .flashcard-lesson-link small{display:block;margin-top:4px;color:var(--deep-muted);font-size:10px;font-weight:800;line-height:1.45;}
+.flashcard-lesson-link>svg{color:var(--lesson-color,var(--set-color));transition:transform .16s ease;}
+.flashcard-lesson-link:hover>svg{transform:translateX(3px);}
 .flashcard-learn-more-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px;}
 .deep-dive-practice-lab{max-width:880px;margin:0 auto;padding:27px;border:1px solid color-mix(in srgb,var(--deep-accent) 29%,var(--deep-border));border-radius:24px;background:radial-gradient(circle at 92% 4%,color-mix(in srgb,var(--deep-green) 13%,transparent),transparent 29%),radial-gradient(circle at 4% 100%,color-mix(in srgb,var(--deep-amber) 12%,transparent),transparent 26%),var(--deep-surface);box-shadow:0 16px 44px rgba(40,31,22,.08);}
 .deep-dive-practice-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;}
@@ -29795,7 +29799,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
             <button type="button" onClick={()=>{setLearnMoreOpen(value=>!value);setLearnMoreNotice("");}} aria-expanded={learnMoreOpen}>
                 <span>
                   <span>Learn More</span>
-                  <strong>Connect this deck to Concept Deep Dives</strong>
+                  <strong>Connect this deck to <span className="flashcard-learn-more-title-accent">Concept Deep Dives</span></strong>
                 </span>
                 <ChevronRight size={18}/>
               </button>
@@ -29812,9 +29816,9 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
                   {relatedDeepDives.map(dive=>{
                     const profile=getSy0701DeepDiveProfile(dive);
                     return(
-                      <button key={dive.id} type="button" className="flashcard-lesson-link" onClick={()=>handleLearnMoreLesson(dive)}>
+                      <button key={dive.id} type="button" className="flashcard-lesson-link" style={{"--lesson-color":chapterColor(profile?.domainId)}} onClick={()=>handleLearnMoreLesson(dive)}>
                         <span><strong>{dive.title}</strong><small>{profile?.plainSummary||profile?.domain?.name||"Related Security+ guided lesson"}</small></span>
-                        {user?.tier==="pro"?<ChevronRight size={16}/>:user?<LockKeyhole size={16}/>:<UserRound size={16}/>}
+                        <ChevronRight size={17}/>
                       </button>
                     );
                   })}
@@ -32744,7 +32748,7 @@ export default function App() {
     });
     const goToSignup=()=>{setPbqQ(null);setAuthStartMode("signup");setAuthRequestId(id=>id+1);setView("auth");};
     const goToLogin=()=>{setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
-    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","objectives","flashcards",...(devDeepDivePreview?["deep-dives"]:[]),...(devCoinPreview?["coins"]:[])]);
+    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","objectives","flashcards",...(devCoinPreview?["coins"]:[])]);
     const guestNavItems=[
       {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},
       {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
@@ -32754,7 +32758,7 @@ export default function App() {
       ...(devCoinPreview?[{id:"coins",icon:"coins",label:"Cipher Coins",mobileLabel:"Coins"}]:[]),
       {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
       {id:"flashcards",icon:"flashcards",label:"Flashcards",mobileLabel:"Cards"},
-      ...(devDeepDivePreview?[{id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"}]:[]),
+      {id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"},
     ];
     const guestGo=id=>{
       if(allowedGuestViews.has(id)) setView(id);
@@ -32766,6 +32770,7 @@ export default function App() {
     const lockedTitle={
       pbq:"Create an account to unlock PBQ previews",
       exam:"Create an account before Exam Mode",
+      "deep-dives":"Create an account to preview Concept Deep Dives",
       pricing:"Sign up before upgrading",
       objectives:"Create an account to save your study path",
     }[view] || "Create an account to save progress";
@@ -32864,7 +32869,6 @@ export default function App() {
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
             {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} assistantSet={assistantFlashcardSet} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
-            {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={guestUser} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={({chapterId})=>{setView("mcq");}} onTryRelatedPbq={handleGuestPbqPreview} onUpgrade={goToSignup}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
