@@ -19362,6 +19362,8 @@ body{background:
 .flashcard-save-random{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:14px;padding:15px 16px!important;border-color:color-mix(in srgb,#0ea5e9 34%,var(--deep-border))!important;background:linear-gradient(145deg,color-mix(in srgb,#0ea5e9 8%,var(--deep-surface)),var(--deep-panel))!important;}
 .flashcard-save-random strong{display:block;color:var(--deep-text);font-size:14px;font-weight:950;}
 .flashcard-save-random p{margin:4px 0 0;color:var(--deep-muted);font-size:11px;font-weight:750;line-height:1.55;}
+.flashcards-curated-set{margin-bottom:42px;}
+.flashcards-curated-set.collapsed{margin-bottom:26px;}
 .flashcards-chapter-group header h2{max-width:760px;}
 .deep-dive-acronym-reader{max-width:980px;margin:0 auto;padding:24px 24px 110px;}
 .deep-dive-acronym-reader-hero{position:relative;overflow:hidden;margin-bottom:16px;padding:25px;border:1px solid color-mix(in srgb,var(--set-color) 32%,var(--deep-border));border-radius:23px;background:radial-gradient(circle at 94% 7%,color-mix(in srgb,var(--set-color) 15%,transparent),transparent 34%),var(--deep-surface);}
