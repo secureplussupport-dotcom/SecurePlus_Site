@@ -18089,9 +18089,6 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-plan-option.recommended .upgrade-monthly-equivalent strong{font-size:clamp(46px,7vw,78px);background:linear-gradient(135deg,${t.accent},${t.green});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .upgrade-savings-pill{position:relative;z-index:1;display:inline-flex;align-items:center;gap:5px;width:fit-content;margin:0 0 12px;padding:7px 10px;border-radius:999px;background:${t.green}14;color:${t.green};font-size:11px;font-weight:950;}
 .upgrade-plan-summary{display:none;}
-.upgrade-plan-mini-list{position:relative;z-index:1;display:grid;gap:8px;margin:0 0 18px;}
-.upgrade-plan-mini-item{display:flex;align-items:flex-start;gap:7px;color:${t.textSec};font-size:11px;line-height:1.45;}
-.upgrade-plan-mini-item svg{flex-shrink:0;margin-top:1px;color:${t.green};}
 .upgrade-plan-option .upgrade-primary-cta{position:relative;z-index:1;margin-top:auto;}
 .upgrade-monthly-cta{border-color:${t.accent}60;color:${t.accent};background:transparent;}
 .upgrade-monthly-cta:hover{background:${t.accent}0c;}
@@ -29135,11 +29132,6 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
             <div className="upgrade-monthly-equivalent"><strong>$4.99</strong><span>per month</span></div>
             <p className="upgrade-plan-math"><strong>Flexible.</strong> Best if you only need a short boost.</p>
             <p className="upgrade-plan-summary">Full Pro access with the freedom to reassess each month.</p>
-            <div className="upgrade-plan-mini-list">
-              {["All Pro practice tools","Zero Cipher Coin requirements","Cancel before the next monthly renewal"].map(item=>(
-                <div key={item} className="upgrade-plan-mini-item"><Check size={14}/><span>{item}</span></div>
-              ))}
-            </div>
             {isPro?(
               <button className="btn btn-ghost upgrade-primary-cta" disabled><CheckCircle2 size={17}/> Pro is active</button>
             ):(
@@ -29164,11 +29156,6 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
             <div className="upgrade-savings-pill"><CheckCircle2 size={14}/> Save $4.98 (33%) across 3 months · Optimal Security+ study window</div>
             <p className="upgrade-plan-math"><strong>Recommended.</strong> One focused study term at the lowest monthly equivalent.</p>
             <p className="upgrade-plan-summary">{PRO_ACADEMY_PASS_DESCRIPTION}</p>
-            <div className="upgrade-plan-mini-list">
-              {["All Pro practice tools","Zero Cipher Coin requirements","Built around a typical Security+ study window"].map(item=>(
-                <div key={item} className="upgrade-plan-mini-item"><Check size={14}/><span>{item}</span></div>
-              ))}
-            </div>
             {isPro?(
               <button className="btn btn-ghost upgrade-primary-cta" disabled><CheckCircle2 size={17}/> Pro is active</button>
             ):(
