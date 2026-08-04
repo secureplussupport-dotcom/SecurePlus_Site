@@ -31814,6 +31814,22 @@ function readAppHistoryState() {
   };
 }
 
+function scrollSecurePlusPageToTop({behavior="auto"}={}) {
+  if(typeof window==="undefined")return;
+  const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  const scrollBehavior=reduceMotion?"auto":behavior;
+  const reset=()=>{
+    document.querySelectorAll(".app-main").forEach(node=>{
+      if(typeof node.scrollTo==="function")node.scrollTo({top:0,left:0,behavior:scrollBehavior});
+      else node.scrollTop=0;
+    });
+    window.scrollTo({top:0,left:0,behavior:scrollBehavior});
+    document.documentElement.scrollTop=0;
+    document.body.scrollTop=0;
+  };
+  window.requestAnimationFrame(()=>window.requestAnimationFrame(reset));
+}
+
 export default function App() {
   const initialParams=new URLSearchParams(window.location.search);
   const urlDeepDiveRequest=initialParams.get("view")==="deep-dives";
@@ -31870,6 +31886,7 @@ export default function App() {
   const [coinRewardToast,setCoinRewardToast]=useState(null);
   const historyReadyRef=useRef(false);
   const suppressNextHistoryPushRef=useRef(false);
+  const lastPageKeyRef=useRef(null);
 
   const t=darkMode?THEMES.dark:THEMES.light;
   const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
@@ -31894,6 +31911,25 @@ export default function App() {
   useEffect(()=>{
     if(view==="achievements")setView("dashboard");
   },[view]);
+  useEffect(()=>{
+    const pageKey=showDiagnostic
+      ?"diagnostic"
+      :showOnboarding
+        ?"onboarding"
+        :passwordRecovery
+          ?"password-recovery"
+          :pbqQ?.id
+            ?`pbq:${pbqQ.id}`
+            :`view:${view}`;
+    if(lastPageKeyRef.current===null){
+      lastPageKeyRef.current=pageKey;
+      return;
+    }
+    if(lastPageKeyRef.current!==pageKey){
+      lastPageKeyRef.current=pageKey;
+      scrollSecurePlusPageToTop({behavior:"auto"});
+    }
+  },[passwordRecovery,pbqQ?.id,showDiagnostic,showOnboarding,view]);
   const effectiveAssistantFlashcardSet=useMemo(()=>{
     if(user?.tier!=="pro")return assistantFlashcardSet;
     if(assistantFlashcardSet?.cards?.length)return assistantFlashcardSet;
