@@ -18060,11 +18060,6 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-hero p{max-width:700px;margin:0 auto;color:${t.textSec};font-size:15px;line-height:1.55;}
 .upgrade-hero-cta-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:13px;}
 .upgrade-plan-note{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid ${t.green}35;border-radius:999px;background:${t.green}0d;color:${t.green};font-size:12px;font-weight:900;}
-.upgrade-outcome-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 18px;}
-.upgrade-outcome{padding:16px;border:1px solid ${t.border};border-radius:8px;background:${t.surface};min-width:0;}
-.upgrade-outcome-head{display:flex;align-items:center;gap:9px;margin-bottom:8px;color:${t.text};font-size:13px;font-weight:950;}
-.upgrade-outcome-icon{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:color-mix(in srgb,var(--outcome-color) 14%,transparent);color:var(--outcome-color);flex-shrink:0;}
-.upgrade-outcome p{margin:0;color:${t.textSec};font-size:12px;line-height:1.6;}
 .upgrade-plan-selector{margin-bottom:18px;padding:18px;border:1px solid ${t.border};border-radius:14px;background:${t.surface};box-shadow:0 18px 42px rgba(7,12,24,.08);}
 .upgrade-plan-selector-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:12px;}
 .upgrade-plan-selector-head h3{margin:0;color:${t.text};font-size:18px;line-height:1.25;}
@@ -18670,7 +18665,6 @@ body{background:
   .auth-conversion-card{padding:20px!important;}
   .upgrade-page{padding:24px 16px 132px!important;}
   .upgrade-hero h2{font-size:27px!important;}
-  .upgrade-outcome-grid{grid-template-columns:1fr!important;}
   .upgrade-plan-selector{padding:16px!important;}
   .upgrade-plan-selector-head{display:block!important;}
   .upgrade-plan-choice-grid{grid-template-columns:1fr!important;}
@@ -29088,11 +29082,6 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
     capture("upgrade_button_clicked", { source:"upgrade_page", tier:user?.tier || "guest", plan });
     onUpgrade(plan);
   };
-  const outcomes=[
-    {title:"Find the weak spot",body:"Use chapter analytics and Smart Review to decide what to study next.",color:t.accent,Icon:Target},
-    {title:"Practise the real skill",body:`Work through ${PBQ_BANK.length} applied simulations instead of relying on recognition alone.`,color:t.green,Icon:Puzzle},
-    {title:"Rehearse exam pressure",body:"Run timed MCQ and PBQ exams with flags, review tools, and detailed results.",color:t.amber,Icon:ClipboardCheck},
-  ];
   const features=[
     "Everything in Free, including the full MCQ bank",
     `${PBQ_BANK.length} performance-based simulations across 8 task types`,
@@ -29227,15 +29216,6 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           </div>
         </div>
       </section>
-
-      <div className="upgrade-outcome-grid" aria-label="What Pro helps you do">
-        {outcomes.map(({title,body,color,Icon})=>(
-          <div key={title} className="upgrade-outcome" style={{"--outcome-color":color}}>
-            <div className="upgrade-outcome-head"><span className="upgrade-outcome-icon"><Icon size={18}/></span>{title}</div>
-            <p>{body}</p>
-          </div>
-        ))}
-      </div>
 
       <section className="upgrade-benefit-stage" aria-labelledby="upgrade-benefit-stage-title">
         <div className="upgrade-benefit-stage-copy">
