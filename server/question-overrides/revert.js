@@ -26,8 +26,11 @@ export default async function handler(req, res) {
   }
 
   try {
+    const token = getBearerToken(req);
+    if (!token) return json(res, 401, { error: "Sign in before you revert question changes." });
+
     const supabase = getSupabaseAdmin();
-    const admin = await requireQuestionAdmin(supabase, getBearerToken(req), "revert question changes");
+    const admin = await requireQuestionAdmin(supabase, token, "revert question changes");
     if (!admin.ok) return json(res, admin.status, { error: admin.error });
 
     const body = await getJsonBody(req);

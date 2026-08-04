@@ -13,8 +13,11 @@ export default async function handler(req, res) {
   }
 
   try {
+    const token = getBearerToken(req);
+    if (!token) return json(res, 401, { error: "Sign in before you view question history." });
+
     const supabase = getSupabaseAdmin();
-    const admin = await requireQuestionAdmin(supabase, getBearerToken(req), "view question history");
+    const admin = await requireQuestionAdmin(supabase, token, "view question history");
     if (!admin.ok) return json(res, admin.status, { error: admin.error });
 
     const limit = Math.min(Math.max(Number.parseInt(req.query?.limit || "20", 10) || 20, 1), 50);

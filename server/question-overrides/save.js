@@ -128,8 +128,11 @@ export default async function handler(req, res) {
 
   try {
     requireJsonContentType(req);
+    const token = getBearerToken(req);
+    if (!token) return json(res, 401, { error: "Sign in before you edit questions." });
+
     const supabase = getSupabaseAdmin();
-    const admin = await requireQuestionAdmin(supabase, getBearerToken(req), "edit questions");
+    const admin = await requireQuestionAdmin(supabase, token, "edit questions");
     if (!admin.ok) return json(res, admin.status, { error: admin.error });
 
     const body = await getJsonBody(req, { throwSafeErrors: true });

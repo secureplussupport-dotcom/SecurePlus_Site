@@ -117,10 +117,21 @@ if (!errors.length) {
     "server/economy/coins-action.js",
     "server/account/delete.js",
     "server/account/delete-request.js",
+    "server/question-overrides/history.js",
+    "server/question-overrides/save.js",
+    "server/question-overrides/revert.js",
   ]) {
+    const routeSource = read(file);
     requireContains(file, "getBearerToken(req)", "authenticated API route must require a bearer token");
-    requireContains(file, "supabase.auth.getUser(token)", "authenticated API route must verify the token with Supabase");
+    if (!routeSource.includes("supabase.auth.getUser(token)") && !routeSource.includes("requireQuestionAdmin(")) {
+      push(errors, file, "authenticated API route must verify the token with Supabase or a shared admin-auth helper");
+    }
     requirePattern(file, /if\s*\(\s*req\.method\s*!==|req\.method !== "GET" && req\.method !== "POST"/, "API route should reject unexpected HTTP methods");
+    const tokenIndex = routeSource.indexOf("getBearerToken(req)");
+    const adminClientIndex = routeSource.indexOf("getSupabaseAdmin()");
+    if (tokenIndex >= 0 && adminClientIndex >= 0 && adminClientIndex < tokenIndex) {
+      push(errors, file, "authenticated API route should check bearer token before creating privileged service clients");
+    }
   }
 
   const apiFunctionFiles = walkFiles("api").filter(file => file.endsWith(".js"));
