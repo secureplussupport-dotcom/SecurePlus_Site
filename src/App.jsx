@@ -18054,35 +18054,41 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-secondary[open] summary::after{content:"-";}
 .upgrade-secondary-content{padding:0 18px 18px;font-size:13px;line-height:1.7;color:${t.textSec};}
 .upgrade-secondary-content p{margin:0;}
-.upgrade-page{padding:32px 24px 120px;max-width:860px;margin:0 auto;}
-.upgrade-hero{text-align:center;margin-bottom:26px;}
-.upgrade-hero h2{font-size:32px;font-weight:950;color:${t.text};margin:10px 0 8px;text-wrap:balance;}
-.upgrade-hero p{max-width:620px;margin:0 auto;color:${t.textSec};font-size:14px;line-height:1.7;}
-.upgrade-plan-note{display:inline-flex;align-items:center;gap:7px;margin-top:14px;padding:8px 12px;border:1px solid ${t.green}35;border-radius:999px;background:${t.green}0d;color:${t.green};font-size:12px;font-weight:900;}
+.upgrade-page{padding:22px 24px 120px;max-width:1040px;margin:0 auto;}
+.upgrade-hero{text-align:center;margin-bottom:14px;}
+.upgrade-hero h2{font-size:clamp(34px,5vw,54px);font-weight:950;color:${t.text};margin:8px 0 8px;text-wrap:balance;letter-spacing:-.045em;line-height:1.04;}
+.upgrade-hero p{max-width:700px;margin:0 auto;color:${t.textSec};font-size:15px;line-height:1.55;}
+.upgrade-hero-cta-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:13px;}
+.upgrade-plan-note{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid ${t.green}35;border-radius:999px;background:${t.green}0d;color:${t.green};font-size:12px;font-weight:900;}
 .upgrade-outcome-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 18px;}
 .upgrade-outcome{padding:16px;border:1px solid ${t.border};border-radius:8px;background:${t.surface};min-width:0;}
 .upgrade-outcome-head{display:flex;align-items:center;gap:9px;margin-bottom:8px;color:${t.text};font-size:13px;font-weight:950;}
 .upgrade-outcome-icon{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:color-mix(in srgb,var(--outcome-color) 14%,transparent);color:var(--outcome-color);flex-shrink:0;}
 .upgrade-outcome p{margin:0;color:${t.textSec};font-size:12px;line-height:1.6;}
-.upgrade-plan-selector{margin-bottom:18px;padding:22px;border:1px solid ${t.border};border-radius:12px;background:${t.surface};box-shadow:0 18px 42px rgba(7,12,24,.08);}
-.upgrade-plan-selector-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px;}
-.upgrade-plan-selector-head h3{margin:0 0 5px;color:${t.text};font-size:20px;line-height:1.25;}
-.upgrade-plan-selector-head p{margin:0;max-width:590px;color:${t.textSec};font-size:12px;line-height:1.6;}
-.upgrade-plan-choice-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:14px;align-items:stretch;}
-.upgrade-plan-option{position:relative;display:flex;flex-direction:column;min-width:0;padding:21px;border:1px solid ${t.border};border-radius:10px;background:${t.panel};transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
+.upgrade-plan-selector{margin-bottom:18px;padding:18px;border:1px solid ${t.border};border-radius:14px;background:${t.surface};box-shadow:0 18px 42px rgba(7,12,24,.08);}
+.upgrade-plan-selector-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:12px;}
+.upgrade-plan-selector-head h3{margin:0;color:${t.text};font-size:18px;line-height:1.25;}
+.upgrade-plan-selector-head p{display:none;}
+.upgrade-plan-choice-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,7fr);gap:14px;align-items:stretch;}
+.upgrade-plan-option{position:relative;display:flex;flex-direction:column;min-width:0;padding:20px;border:1px solid ${t.border};border-radius:12px;background:${t.panel};transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
 .upgrade-plan-option:hover{transform:translateY(-2px);border-color:${t.accent}55;box-shadow:0 16px 30px ${t.accent}0d;}
-.upgrade-plan-option.recommended{overflow:hidden;border:2px solid ${t.accent};background:linear-gradient(145deg,${t.accent}0e,${t.surface} 45%,${t.green}09);box-shadow:0 18px 38px ${t.accent}16;}
+.upgrade-plan-option.recommended{overflow:hidden;border:3px solid ${t.accent};background:linear-gradient(145deg,${t.accent}14,${t.surface} 42%,${t.green}10);box-shadow:0 24px 54px ${t.accent}22;}
 .upgrade-plan-option.recommended::after{content:"";position:absolute;right:-52px;top:-58px;width:150px;height:150px;border:28px solid ${t.accent}0a;border-radius:50%;pointer-events:none;}
 .upgrade-plan-option-top{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:28px;margin-bottom:10px;}
 .upgrade-plan-kicker{color:${t.textDim};font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
-.upgrade-recommended-badge{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:${t.accent};color:#fff;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.03em;}
+.upgrade-recommended-badge{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:999px;background:linear-gradient(135deg,${t.accent},${t.green});color:#fff;font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.04em;box-shadow:0 12px 24px ${t.accent}28;}
 .upgrade-plan-option h3{position:relative;z-index:1;margin:0;color:${t.text};font-size:22px;line-height:1.2;}
 .upgrade-plan-option .upgrade-price-row{position:relative;z-index:1;margin:14px 0 7px;}
-.upgrade-plan-option .upgrade-price{font-size:38px;}
-.upgrade-plan-math{position:relative;z-index:1;min-height:38px;margin:0 0 12px;color:${t.textSec};font-size:12px;line-height:1.55;}
+.upgrade-plan-option .upgrade-price{font-size:48px;}
+.upgrade-plan-option.recommended .upgrade-price{font-size:64px;}
+.upgrade-plan-math{position:relative;z-index:1;margin:0 0 12px;color:${t.textSec};font-size:12px;line-height:1.45;}
 .upgrade-plan-math strong{color:${t.text};}
+.upgrade-monthly-equivalent{position:relative;z-index:1;display:flex;align-items:flex-end;gap:8px;margin:11px 0 8px;color:${t.text};}
+.upgrade-monthly-equivalent strong{font-size:clamp(34px,5vw,56px);line-height:.95;font-weight:950;letter-spacing:-.05em;}
+.upgrade-monthly-equivalent span{padding-bottom:5px;color:${t.textSec};font-size:13px;font-weight:900;line-height:1.25;}
+.upgrade-plan-option.recommended .upgrade-monthly-equivalent strong{font-size:clamp(46px,7vw,78px);background:linear-gradient(135deg,${t.accent},${t.green});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .upgrade-savings-pill{position:relative;z-index:1;display:inline-flex;align-items:center;gap:5px;width:fit-content;margin:0 0 12px;padding:7px 10px;border-radius:999px;background:${t.green}14;color:${t.green};font-size:11px;font-weight:950;}
-.upgrade-plan-summary{position:relative;z-index:1;margin:0 0 14px;color:${t.textSec};font-size:12px;line-height:1.6;}
+.upgrade-plan-summary{display:none;}
 .upgrade-plan-mini-list{position:relative;z-index:1;display:grid;gap:8px;margin:0 0 18px;}
 .upgrade-plan-mini-item{display:flex;align-items:flex-start;gap:7px;color:${t.textSec};font-size:11px;line-height:1.45;}
 .upgrade-plan-mini-item svg{flex-shrink:0;margin-top:1px;color:${t.green};}
@@ -29100,42 +29106,23 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
     <div className="upgrade-page">
       <div className="upgrade-hero">
         <div className="page-title-row" style={{justifyContent:"center"}}><NavGlyph type="pricing" active/></div>
-        <h2>Turn practice into a focused exam plan.</h2>
+        <h2>Unlock Pro before your next practice set.</h2>
         <p>
-          Free gives you every MCQ. Pro adds the applied practice, timed rehearsal, and feedback loop that help you decide what to improve next.
+          Get PBQs, Exam Mode, personalised practice, and Concept Deep Dives with zero coin requirements.
         </p>
-        <div className="upgrade-plan-note"><ShieldCheck size={14}/> Recommended: {PRO_THREE_MONTH_PLAN_NAME} · {PRO_ACADEMY_PASS_PRICE} · Save 33% vs monthly</div>
-        <MascotGuide
-          animation={isPro?"cheer":"unlock"}
-          size={86}
-          context="pricing"
-          message={isPro?"Your Pro practice tools are ready.":"I’ll show you what Pro unlocks—no pressure."}
-          className="mascot-guide-hero"
-        />
-        <button
-          type="button"
-          className="btn btn-ghost"
-          style={{marginTop:10,fontSize:12,justifyContent:"center"}}
-          onClick={()=>onNavigate("coins")}
-        >
-          Prefer to earn access? Explore Cipher Coins →
-        </button>
-      </div>
-
-      <div className="upgrade-outcome-grid" aria-label="What Pro helps you do">
-        {outcomes.map(({title,body,color,Icon})=>(
-          <div key={title} className="upgrade-outcome" style={{"--outcome-color":color}}>
-            <div className="upgrade-outcome-head"><span className="upgrade-outcome-icon"><Icon size={18}/></span>{title}</div>
-            <p>{body}</p>
-          </div>
-        ))}
+        <div className="upgrade-hero-cta-row">
+          <button className="btn btn-primary" type="button" onClick={()=>startUpgrade("three_month")} disabled={billingLoading||isPro}>
+            {isPro?"Pro is active":billingLoading?"Opening checkout...":`Start ${PRO_THREE_MONTH_PLAN_NAME}`}
+          </button>
+          <div className="upgrade-plan-note"><ShieldCheck size={14}/> Best fit for the typical 3-month Security+ study window</div>
+        </div>
       </div>
 
       <section className="upgrade-plan-selector" aria-labelledby="pro-plan-heading">
         <div className="upgrade-plan-selector-head">
           <div>
             <h3 id="pro-plan-heading">Choose your Pro Academy Pass</h3>
-            <p>Both plans unlock the same Pro tools with zero Cipher Coin requirements. Choose based on how long you expect to study.</p>
+            <p>Both plans unlock the same Pro tools with zero Cipher Coin requirements.</p>
           </div>
         </div>
 
@@ -29149,7 +29136,8 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
               <div className="upgrade-price">$4.99</div>
               <div className="upgrade-price-cycle">USD / month<br/>renews monthly</div>
             </div>
-            <p className="upgrade-plan-math"><strong>$14.97 across 3 months.</strong> A lower upfront commitment if you are unsure how long you need.</p>
+            <div className="upgrade-monthly-equivalent"><strong>$4.99</strong><span>per month</span></div>
+            <p className="upgrade-plan-math"><strong>Flexible.</strong> Best if you only need a short boost.</p>
             <p className="upgrade-plan-summary">Full Pro access with the freedom to reassess each month.</p>
             <div className="upgrade-plan-mini-list">
               {["All Pro practice tools","Zero Cipher Coin requirements","Cancel before the next monthly renewal"].map(item=>(
@@ -29175,8 +29163,9 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
               <div className="upgrade-price">$9.99</div>
               <div className="upgrade-price-cycle">USD / 3 months<br/>renews every 3 months</div>
             </div>
-            <div className="upgrade-savings-pill"><CheckCircle2 size={14}/> Save $4.98 (33%) across 3 months</div>
-            <p className="upgrade-plan-math"><strong>$3.33/month equivalent.</strong> One focused study term at the lowest effective monthly price.</p>
+            <div className="upgrade-monthly-equivalent"><strong>$3.33</strong><span>per month equivalent</span></div>
+            <div className="upgrade-savings-pill"><CheckCircle2 size={14}/> Save $4.98 (33%) across 3 months · Optimal Security+ study window</div>
+            <p className="upgrade-plan-math"><strong>Recommended.</strong> One focused study term at the lowest monthly equivalent.</p>
             <p className="upgrade-plan-summary">{PRO_ACADEMY_PASS_DESCRIPTION}</p>
             <div className="upgrade-plan-mini-list">
               {["All Pro practice tools","Zero Cipher Coin requirements","Built around a typical Security+ study window"].map(item=>(
@@ -29230,6 +29219,15 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           </div>
         </div>
       </section>
+
+      <div className="upgrade-outcome-grid" aria-label="What Pro helps you do">
+        {outcomes.map(({title,body,color,Icon})=>(
+          <div key={title} className="upgrade-outcome" style={{"--outcome-color":color}}>
+            <div className="upgrade-outcome-head"><span className="upgrade-outcome-icon"><Icon size={18}/></span>{title}</div>
+            <p>{body}</p>
+          </div>
+        ))}
+      </div>
 
       <section className="upgrade-benefit-stage" aria-labelledby="upgrade-benefit-stage-title">
         <div className="upgrade-benefit-stage-copy">
