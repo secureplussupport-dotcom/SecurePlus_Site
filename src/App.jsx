@@ -474,22 +474,29 @@ const writeSavedRandomFlashcardSets = (user,sets) => {
   }));
   try{window.localStorage?.setItem(randomFlashcardStorageKey(user),JSON.stringify(payload));}catch{}
 };
-const getFlashcardShareUrl = setId => {
+const getFlashcardShareUrl = setOrId => {
   const origin=typeof window!=="undefined"?window.location.origin:"https://secureplusprep.com";
   const path=typeof window!=="undefined"?window.location.pathname:"/";
   const params=new URLSearchParams({view:"flashcards"});
+  const set=typeof setOrId==="object"&&setOrId?setOrId:null;
+  const setId=set?set.id:setOrId;
   if(setId&&setId!==STARRED_FLASHCARD_SET_ID)params.set("set",setId);
+  if(set?.id===RANDOM_FLASHCARD_SET_ID){
+    const cardIds=(set.cards||[]).filter(card=>card.cardType!=="divider").map(card=>card.id).filter(Boolean).slice(0,30);
+    if(cardIds.length)params.set("cards",cardIds.join(","));
+    if(set.randomConfig?.mode)params.set("mode",set.randomConfig.mode);
+  }
   return `${origin}${path}?${params.toString()}`;
 };
 const buildFlashcardShareMessage = set => {
   const isShareableSet=Boolean(set?.id&&set.id!==STARRED_FLASHCARD_SET_ID);
-  const url=getFlashcardShareUrl(isShareableSet?set.id:null);
+  const url=getFlashcardShareUrl(isShareableSet?set:null);
   const setLine=isShareableSet?`Set: ${set.title}`:"Collection: SecurePlus Security+ Flashcards";
   return `${FLASHCARD_SHARE_COPY.statement}\n\n${setLine}\nTry it here: ${url}`;
 };
 const buildFlashcardPlatformShare = (platform,set) => {
   const isShareableSet=Boolean(set?.id&&set.id!==STARRED_FLASHCARD_SET_ID);
-  const url=getFlashcardShareUrl(isShareableSet?set.id:null);
+  const url=getFlashcardShareUrl(isShareableSet?set:null);
   const setName=isShareableSet?set.title:"SecurePlus Security+ Flashcards";
   const platformName=String(platform||"").toLowerCase();
   if(platformName==="instagram"){
@@ -29405,7 +29412,7 @@ function FlashcardShareActions({set,t,compact=false}) {
   const [status,setStatus]=useState("");
   const [open,setOpen]=useState(false);
   const message=useMemo(()=>buildFlashcardShareMessage(set),[set]);
-  const shareUrl=useMemo(()=>getFlashcardShareUrl(set?.id!==STARRED_FLASHCARD_SET_ID?set?.id:null),[set?.id]);
+  const shareUrl=useMemo(()=>getFlashcardShareUrl(set?.id!==STARRED_FLASHCARD_SET_ID?set:null),[set]);
   const platformMessages=useMemo(()=>({
     whatsapp:buildFlashcardPlatformShare("whatsapp",set),
     discord:buildFlashcardPlatformShare("discord",set),
@@ -29779,7 +29786,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
         <div className="deep-dive-flashcard-head">
           <div><span className="deep-dive-eyebrow">{hasExampleMode?"Scenario attack drill":setType==="term"?"Definition drill":"Acronym drill"}</span><h2>{asksFromExample?"Read the example. Name the attack.":"Recall it, then flip"}</h2><p>{setType==="term"?"Term decks test definitions only: read the definition, recall the exam term, then flip.":hasExampleMode?"Use the example mode to practise recognizing attacks from real-world clues, then flip to check the full name.":"Test Acronym shows the acronym first. Test Definition shows the definition first. Flip to check the full term, acronym, and exam meaning."}</p></div>
           <div className="deep-dive-flashcard-side">
-            {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&acronymSet.id!==ASSISTANT_FLASHCARD_SET_ID&&acronymSet.id!==RANDOM_FLASHCARD_SET_ID&&!String(acronymSet.id||"").startsWith(SAVED_RANDOM_FLASHCARD_PREFIX)&&<FlashcardShareActions set={acronymSet} t={t}/>}
+            {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&acronymSet.id!==ASSISTANT_FLASHCARD_SET_ID&&!String(acronymSet.id||"").startsWith(SAVED_RANDOM_FLASHCARD_PREFIX)&&<FlashcardShareActions set={acronymSet} t={t}/>}
             <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {totalCardCount}<br/>mastered</span></div>
           </div>
         </div>
@@ -30707,6 +30714,30 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
     if(!initialSetId)return;
     if(initialSetId===ASSISTANT_FLASHCARD_SET_ID&&assistantSet?.cards?.length){
       startFlashcardSet(ASSISTANT_FLASHCARD_SET_ID,"definition");
+    }else if(initialSetId===RANDOM_FLASHCARD_SET_ID){
+      const params=new URLSearchParams(typeof window!=="undefined"?window.location.search:"");
+      const cardIds=String(params.get("cards")||"").split(",").map(id=>id.trim()).filter(Boolean).slice(0,30);
+      const cardMap=new Map(SY0701_ACRONYM_CARDS.map(card=>[card.id,card]));
+      const cards=cardIds.map(id=>cardMap.get(id)).filter(Boolean);
+      if(cards.length){
+        const sharedSet={
+          id:RANDOM_FLASHCARD_SET_ID,
+          title:"Shared random deck",
+          topic:"Shared Security+ flashcards",
+          chapterTitle:"Randomised Security+ recall",
+          description:`${cards.length} shared flashcards · ${cards.some(card=>card.cardType==="term")&&cards.some(card=>card.cardType!=="term")?"Terms and acronyms":cards.every(card=>card.cardType==="term")?"Terms only":"Acronyms only"}.`,
+          color:generatedFlashcardSetColor(cardIds.join("-")),
+          setType:cards.every(card=>card.cardType==="term")?"term":"acronym",
+          generatedBy:"random_builder",
+          randomConfig:{mode:getSafeFlashcardMode(params.get("mode")||"definition",false,cards.every(card=>card.cardType==="term")?"term":"acronym")},
+          cards,
+        };
+        setRandomFlashcardSet(sharedSet);
+        setActiveMode(sharedSet.randomConfig.mode);
+        setSelectedSetId(RANDOM_FLASHCARD_SET_ID);
+        setModeChooser(null);
+        scrollToFlashcardTop(true);
+      }
     }else if(initialSetId===STARRED_FLASHCARD_SET_ID || SY0701_ACRONYM_SETS.some(set=>set.id===initialSetId)){
       openSet(initialSetId);
     }
@@ -30858,7 +30889,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
     >
       <button type="button" className="flashcard-random-plus" onClick={event=>{event.stopPropagation();setRandomBuilderOpen(value=>!value);}} aria-expanded={randomBuilderOpen}>
         <span aria-hidden="true">+</span>
-        <strong>Randomised set</strong>
+        {!compact&&<strong>Randomised set</strong>}
         <small>{compact?"Quickly build a 10, 20, or 30-card study set.":"Build a quick 10-30 card deck from terms, acronyms, or both."}</small>
       </button>
       {randomBuilderOpen&&(
@@ -30997,7 +31028,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
         <section className="flashcards-guest-random-row" aria-label="Randomised flashcard set">
           <div>
             <span>Quick builder</span>
-            <strong>Randomised set</strong>
+            <strong>Build a deck</strong>
           </div>
           {renderRandomBuilder(true)}
         </section>
