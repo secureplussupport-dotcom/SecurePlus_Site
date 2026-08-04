@@ -19086,11 +19086,13 @@ body{background:
 .deep-dive-sources a:hover{text-decoration:underline;}
 .deep-dive-sources a svg{flex:0 0 auto;}
 .deep-dive-card{cursor:default;}
-.deep-dive-card-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:12px;}
+.deep-dive-card-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px;}
 .deep-dive-card-actions button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:39px;padding:8px;border:1px solid var(--deep-border);border-radius:11px;background:var(--deep-surface);color:var(--deep-accent);font:inherit;font-size:11px;font-weight:900;cursor:pointer;transition:.18s ease;}
-.deep-dive-card-actions button:first-child{border-color:color-mix(in srgb,var(--chapter-color) 35%,var(--deep-border));background:color-mix(in srgb,var(--chapter-color) 9%,var(--deep-surface));color:color-mix(in srgb,var(--chapter-color) 85%,var(--deep-text));}
-.deep-dive-card-actions button:hover{transform:translateY(-1px);border-color:var(--deep-accent);background:color-mix(in srgb,var(--deep-accent) 9%,var(--deep-surface));}
-.deep-dive-card-actions button:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 26%,transparent);outline-offset:2px;}
+.deep-dive-card-actions button.learn-action{border-color:color-mix(in srgb,#3b82f6 48%,var(--deep-border));background:linear-gradient(135deg,color-mix(in srgb,#3b82f6 14%,var(--deep-surface)),var(--deep-surface));color:#60a5fa;box-shadow:0 8px 18px rgba(59,130,246,.1);}
+.deep-dive-card-actions button.lab-action{border-color:color-mix(in srgb,#14b8a6 50%,var(--deep-border));background:linear-gradient(135deg,color-mix(in srgb,#14b8a6 14%,var(--deep-surface)),var(--deep-surface));color:#2dd4bf;box-shadow:0 8px 18px rgba(20,184,166,.1);}
+.deep-dive-card-actions button.learn-action:hover{transform:translateY(-1px);border-color:#60a5fa;background:linear-gradient(135deg,color-mix(in srgb,#3b82f6 22%,var(--deep-surface)),var(--deep-surface));box-shadow:0 12px 24px rgba(59,130,246,.18);}
+.deep-dive-card-actions button.lab-action:hover{transform:translateY(-1px);border-color:#2dd4bf;background:linear-gradient(135deg,color-mix(in srgb,#14b8a6 22%,var(--deep-surface)),var(--deep-surface));box-shadow:0 12px 24px rgba(20,184,166,.18);}
+.deep-dive-card-actions button:focus-visible{outline:3px solid color-mix(in srgb,currentColor 26%,transparent);outline-offset:2px;}
 .deep-dives-card-progress{display:flex;align-items:center;gap:8px;margin-top:13px;padding-top:12px;border-top:1px solid var(--deep-border);}
 .deep-dives-card-progress svg{flex:0 0 auto;color:var(--deep-accent);}
 .deep-dives-card-progress span{font-size:10px;line-height:1.45;}
@@ -19644,7 +19646,7 @@ body{background:
   .deep-dives-results-head span{display:none;}
   .deep-dives-results-head{align-items:flex-start;flex-direction:column;}
   .deep-dive-card{min-height:360px;padding:22px;}
-  .deep-dive-card-actions{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .deep-dive-card-actions{grid-template-columns:repeat(2,minmax(0,1fr));}
   .deep-dive-card-actions button{font-size:11px;padding:7px 5px;}
   .deep-dive-launchpad{padding:15px;border-radius:20px;}
   .deep-dive-launchpad-coach{grid-template-columns:76px minmax(0,1fr);align-items:start;}
@@ -30400,8 +30402,8 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
                     {syllabus.includesBeyondTextbook&&<div className="deep-dive-card-scope"><GraduationCap size={14}/>Includes clearly marked “Beyond the textbook” detail</div>}
                     <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span><Puzzle size={14}/>Practice lab</span>{Number(practiceBestScores[dive.id])>0&&<span><Trophy size={14}/>{practiceBestScores[dive.id]}%</span>}</div>
                     <div className="deep-dive-card-actions">
-                      <button type="button" onClick={()=>openDive(dive.id,"learn")}><BookOpenCheck size={15}/>Learn</button>
-                      <button type="button" onClick={()=>openDive(dive.id,"practice")}><Puzzle size={15}/>Lab</button>
+                      <button type="button" className="learn-action" onClick={()=>openDive(dive.id,"learn")}><BookOpenCheck size={15}/>Learn</button>
+                      <button type="button" className="lab-action" onClick={()=>openDive(dive.id,"practice")}><Puzzle size={15}/>Lab</button>
                     </div>
                   </article>
                 );
