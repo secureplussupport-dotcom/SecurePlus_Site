@@ -29170,42 +29170,6 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
           </article>
         </div>
 
-        <div className="upgrade-shared-access">
-          <div>
-            <h4>Included with either Pro plan</h4>
-            <div className="upgrade-feature-list">
-              {features.map(feature=>(
-                <div key={feature} className="upgrade-feature"><CheckCircle2 size={16}/><span>{feature}</span></div>
-              ))}
-            </div>
-          </div>
-          <div className="upgrade-checkout-note">
-            <div className="upgrade-original-line"><ShieldCheck size={14}/>{PRO_ACADEMY_PASS_TRUST}</div>
-            <p><strong>Simple, secure billing.</strong> Stripe processes your payment. SecurePlus never stores your card details, and your free MCQ access remains available if you do not upgrade.</p>
-            <div className="upgrade-checkout-actions">
-              <span className="upgrade-trust-item"><LockKeyhole size={13}/> Stripe checkout</span>
-              <span className="upgrade-trust-item"><Check size={13}/> Cancel renewal anytime</span>
-            </div>
-            {isPro&&hasPaidSubscription&&(
-              <div className={`subscription-status-card ${isRenewalCancelled?"cancelled":""}`}>
-                <strong>{isRenewalCancelled?"Renewal cancelled":"Membership active"}</strong>
-                <span>
-                  {isRenewalCancelled
-                    ? `You will not be billed again. Pro access remains until ${subscriptionEndLabel || "the current paid period ends"}.`
-                    : `You can stop the next bill anytime. Pro access remains through the current paid period after cancellation${subscriptionEndLabel ? ` (${subscriptionEndLabel})` : ""}.`}
-                </span>
-                <button className="btn btn-outline" type="button" onClick={onCancelMembership} disabled={billingLoading||isRenewalCancelled}>
-                  {isRenewalCancelled?"Renewal already cancelled":billingLoading?"Cancelling renewal...":"Cancel renewal"}
-                </button>
-              </div>
-            )}
-            {!isPro&&(
-              <button className="btn btn-ghost" style={{width:"100%",justifyContent:"center",fontSize:11,marginTop:12}} onClick={onSyncBilling} disabled={billingLoading}>
-                Already paid? Refresh Pro status
-              </button>
-            )}
-          </div>
-        </div>
       </section>
 
       <section className="upgrade-benefit-stage" aria-labelledby="upgrade-benefit-stage-title">
@@ -29259,6 +29223,43 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
             </p>
           </div>
         </details>
+      </div>
+
+      <div className="upgrade-shared-access">
+        <div>
+          <h4>Included with either Pro plan</h4>
+          <div className="upgrade-feature-list">
+            {features.map(feature=>(
+              <div key={feature} className="upgrade-feature"><CheckCircle2 size={16}/><span>{feature}</span></div>
+            ))}
+          </div>
+        </div>
+        <div className="upgrade-checkout-note">
+          <div className="upgrade-original-line"><ShieldCheck size={14}/>{PRO_ACADEMY_PASS_TRUST}</div>
+          <p><strong>Simple, secure billing.</strong> Stripe processes your payment. SecurePlus never stores your card details, and your free MCQ access remains available if you do not upgrade.</p>
+          <div className="upgrade-checkout-actions">
+            <span className="upgrade-trust-item"><LockKeyhole size={13}/> Stripe checkout</span>
+            <span className="upgrade-trust-item"><Check size={13}/> Cancel renewal anytime</span>
+          </div>
+          {isPro&&hasPaidSubscription&&(
+            <div className={`subscription-status-card ${isRenewalCancelled?"cancelled":""}`}>
+              <strong>{isRenewalCancelled?"Renewal cancelled":"Membership active"}</strong>
+              <span>
+                {isRenewalCancelled
+                  ? `You will not be billed again. Pro access remains until ${subscriptionEndLabel || "the current paid period ends"}.`
+                  : `You can stop the next bill anytime. Pro access remains through the current paid period after cancellation${subscriptionEndLabel ? ` (${subscriptionEndLabel})` : ""}.`}
+              </span>
+              <button className="btn btn-outline" type="button" onClick={onCancelMembership} disabled={billingLoading||isRenewalCancelled}>
+                {isRenewalCancelled?"Renewal already cancelled":billingLoading?"Cancelling renewal...":"Cancel renewal"}
+              </button>
+            </div>
+          )}
+          {!isPro&&(
+            <button className="btn btn-ghost" style={{width:"100%",justifyContent:"center",fontSize:11,marginTop:12}} onClick={onSyncBilling} disabled={billingLoading}>
+              Already paid? Refresh Pro status
+            </button>
+          )}
+        </div>
       </div>
 
       {!isPro&&(
