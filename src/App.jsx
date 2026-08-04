@@ -19004,6 +19004,11 @@ body{background:
 .deep-dive-card{position:relative;display:flex;min-width:0;min-height:330px;flex-direction:column;padding:22px;text-align:left;border:1px solid var(--deep-border);border-radius:21px;background:linear-gradient(160deg,color-mix(in srgb,var(--chapter-color) 5%,var(--deep-surface)),var(--deep-surface) 42%);color:var(--deep-text);font:inherit;cursor:pointer;box-shadow:0 9px 26px rgba(40,31,22,.055);overflow:hidden;transition:transform .22s cubic-bezier(.16,1,.3,1),border-color .2s,box-shadow .2s;}
 .deep-dive-card::before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:linear-gradient(90deg,var(--chapter-color),color-mix(in srgb,var(--chapter-color) 20%,transparent));}
 .deep-dive-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--chapter-color) 42%,var(--deep-border));box-shadow:0 18px 38px rgba(40,31,22,.1);}
+.deep-dive-card.locked{opacity:.46;filter:grayscale(.42) saturate(.65);cursor:pointer;}
+.deep-dive-card.locked:hover{opacity:.68;filter:grayscale(.22) saturate(.85);border-color:color-mix(in srgb,var(--deep-amber) 42%,var(--deep-border));box-shadow:0 18px 38px rgba(40,31,22,.12);}
+.deep-dive-card.shake{animation:shakeLite .34s ease both;}
+.deep-dive-lock-badge{position:absolute;right:14px;top:14px;z-index:2;display:inline-flex;align-items:center;gap:5px;padding:6px 8px;border:1px solid color-mix(in srgb,var(--deep-amber) 42%,var(--deep-border));border-radius:999px;background:color-mix(in srgb,var(--deep-amber) 12%,var(--deep-surface));color:var(--deep-amber);font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
+.deep-dive-preview-access-badge{position:absolute;right:14px;top:14px;z-index:2;display:inline-flex;align-items:center;gap:5px;padding:6px 8px;border:1px solid color-mix(in srgb,var(--deep-green) 42%,var(--deep-border));border-radius:999px;background:color-mix(in srgb,var(--deep-green) 12%,var(--deep-surface));color:var(--deep-green);font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
 .deep-dive-card-top{display:flex;justify-content:space-between;align-items:center;min-height:25px;margin-bottom:16px;}
 .deep-dive-card-index{font-size:11px;font-weight:950;letter-spacing:.12em;color:color-mix(in srgb,var(--chapter-color) 85%,var(--deep-text));}
 .deep-dive-card-read{display:inline-flex;align-items:center;gap:4px;padding:5px 8px;border-radius:999px;background:color-mix(in srgb,var(--deep-green) 12%,var(--deep-surface));color:var(--deep-green);font-size:10px;font-weight:950;}
@@ -19092,7 +19097,14 @@ body{background:
 .deep-dive-card-actions button.lab-action{border-color:color-mix(in srgb,#14b8a6 50%,var(--deep-border));background:linear-gradient(135deg,color-mix(in srgb,#14b8a6 14%,var(--deep-surface)),var(--deep-surface));color:#2dd4bf;box-shadow:0 8px 18px rgba(20,184,166,.1);}
 .deep-dive-card-actions button.learn-action:hover{transform:translateY(-1px);border-color:#60a5fa;background:linear-gradient(135deg,color-mix(in srgb,#3b82f6 22%,var(--deep-surface)),var(--deep-surface));box-shadow:0 12px 24px rgba(59,130,246,.18);}
 .deep-dive-card-actions button.lab-action:hover{transform:translateY(-1px);border-color:#2dd4bf;background:linear-gradient(135deg,color-mix(in srgb,#14b8a6 22%,var(--deep-surface)),var(--deep-surface));box-shadow:0 12px 24px rgba(20,184,166,.18);}
+.deep-dive-card.locked .deep-dive-card-actions button{border-color:color-mix(in srgb,var(--deep-amber) 25%,var(--deep-border));background:color-mix(in srgb,var(--deep-amber) 7%,var(--deep-surface));color:var(--deep-amber);}
 .deep-dive-card-actions button:focus-visible{outline:3px solid color-mix(in srgb,currentColor 26%,transparent);outline-offset:2px;}
+.deep-dive-upgrade-prompt{position:fixed;inset:0;z-index:620;display:grid;place-items:center;padding:20px;background:rgba(7,12,24,.54);backdrop-filter:blur(8px);animation:fadeUp .16s ease both;}
+.deep-dive-upgrade-prompt-card{width:min(100%,440px);padding:22px;border:1px solid color-mix(in srgb,var(--deep-amber) 44%,var(--deep-border));border-radius:22px;background:radial-gradient(circle at 90% 5%,color-mix(in srgb,var(--deep-amber) 18%,transparent),transparent 34%),var(--deep-surface);box-shadow:0 28px 80px rgba(7,12,24,.34);}
+.deep-dive-upgrade-prompt-card h3{margin:12px 0 6px;color:var(--deep-text);font-size:24px;line-height:1.12;letter-spacing:-.025em;}
+.deep-dive-upgrade-prompt-card p{margin:0 0 16px;color:var(--deep-muted);font-size:13px;font-weight:700;line-height:1.65;}
+.deep-dive-upgrade-prompt-icon{display:grid;place-items:center;width:48px;height:48px;border-radius:16px;background:color-mix(in srgb,var(--deep-amber) 15%,var(--deep-surface));color:var(--deep-amber);border:1px solid color-mix(in srgb,var(--deep-amber) 40%,var(--deep-border));}
+.deep-dive-upgrade-prompt-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;}
 .deep-dives-card-progress{display:flex;align-items:center;gap:8px;margin-top:13px;padding-top:12px;border-top:1px solid var(--deep-border);}
 .deep-dives-card-progress svg{flex:0 0 auto;color:var(--deep-accent);}
 .deep-dives-card-progress span{font-size:10px;line-height:1.45;}
@@ -29480,6 +29492,7 @@ const FLASHCARD_DEFAULT_MODE_PREFIX="secureplus-flashcard-default-mode";
 const getFlashcardDefaultModeKey=owner=>`${FLASHCARD_DEFAULT_MODE_PREFIX}:${owner||"guest"}`;
 const FLASHCARD_INVENTORY_VISIBILITY_PREFIX="secureplus-flashcard-inventory-visibility";
 const getFlashcardInventoryVisibilityKey=owner=>`${FLASHCARD_INVENTORY_VISIBILITY_PREFIX}:${owner||"guest"}`;
+const FREE_DEEP_DIVE_PREVIEW_ID="web-social-dns-attacks";
 const readFlashcardInventoryVisibility=owner=>{
   try{
     const parsed=JSON.parse(window.localStorage?.getItem(getFlashcardInventoryVisibilityKey(owner))||"{}");
@@ -29865,11 +29878,13 @@ function DeepDiveReadableBites({section,selectedProfile,t}) {
   );
 }
 
-function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandled,focusAcronyms=false,onAddWeakTopicToReview,onTryRelatedPbq,onOpenFlashcards}) {
+function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRequestHandled,focusAcronyms=false,onAddWeakTopicToReview,onTryRelatedPbq,onOpenFlashcards,onUpgrade}) {
   const [query,setQuery]=useState("");
   const [domainFilter,setDomainFilter]=useState("all");
   const [selectedId,setSelectedId]=useState(null);
   const [selectedAcronymSetId,setSelectedAcronymSetId]=useState(null);
+  const [lockedDivePrompt,setLockedDivePrompt]=useState(null);
+  const [shakingDiveId,setShakingDiveId]=useState(null);
   const [studyMode,setStudyMode]=useState("learn");
   const [lessonStep,setLessonStep]=useState(0);
   const [isAnswerVisible,setIsAnswerVisible]=useState(false);
@@ -29898,6 +29913,16 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
       return stored&&typeof stored==="object"&&!Array.isArray(stored)?stored:{};
     }catch{return {};}
   });
+  const isPro=user?.tier==="pro";
+  const freePreviewDive=CONCEPT_DEEP_DIVES.find(dive=>dive.id===FREE_DEEP_DIVE_PREVIEW_ID)||CONCEPT_DEEP_DIVES[0];
+  const isLockedDeepDive=useCallback(id=>!isPro&&id!==freePreviewDive?.id,[freePreviewDive?.id,isPro]);
+  const promptLockedDeepDive=useCallback((id,source="card")=>{
+    const dive=CONCEPT_DEEP_DIVES.find(item=>item.id===id)||null;
+    setShakingDiveId(id);
+    window.setTimeout(()=>setShakingDiveId(current=>current===id?null:current),380);
+    setLockedDivePrompt(dive||{id,title:"This lesson"});
+    capture("concept_deep_dive_locked_clicked",{deep_dive_id:id,source,tier:user?.tier||"guest"});
+  },[user?.tier]);
 
   useEffect(()=>{
     if(!focusAcronyms||selectedId||selectedAcronymSetId)return;
@@ -29935,6 +29960,10 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
   })).filter(group=>group.dives.length),[filteredDives]);
 
   const openDive=(id,mode="learn")=>{
+    if(isLockedDeepDive(id)){
+      promptLockedDeepDive(id,"open");
+      return;
+    }
     setSelectedAcronymSetId(null);
     setSelectedId(id);
     setStudyMode(mode==="cards"?"practice":mode);
@@ -29954,10 +29983,15 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
     if(!openLessonRequest?.lessonId||!openLessonRequest?.nonce||handledLessonRequest.current===openLessonRequest.nonce)return;
     if(!CONCEPT_DEEP_DIVES.some(dive=>dive.id===openLessonRequest.lessonId))return;
     handledLessonRequest.current=openLessonRequest.nonce;
+    if(isLockedDeepDive(openLessonRequest.lessonId)){
+      promptLockedDeepDive(openLessonRequest.lessonId,openLessonRequest.source||"deep_link");
+      onOpenLessonRequestHandled?.();
+      return;
+    }
     openDive(openLessonRequest.lessonId,openLessonRequest.mode||"learn");
     capture("smart_review_lesson_opened",{deep_dive_id:openLessonRequest.lessonId,source:openLessonRequest.source||"smart_review"});
     onOpenLessonRequestHandled?.();
-  },[openLessonRequest?.lessonId,openLessonRequest?.mode,openLessonRequest?.nonce,openLessonRequest?.source]);
+  },[isLockedDeepDive,onOpenLessonRequestHandled,openDive,openLessonRequest?.lessonId,openLessonRequest?.mode,openLessonRequest?.nonce,openLessonRequest?.source,promptLockedDeepDive]);
   const openAcronymSet=id=>{
     setSelectedId(null);
     setSelectedAcronymSetId(id);
@@ -30320,18 +30354,22 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
     );
   }
 
-  const progressPercent=Math.round((completedIds.length/CONCEPT_DEEP_DIVES.length)*100);
-  const continueDive=sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES).find(dive=>!completedIds.includes(dive.id))||sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES)[0];
+  const visibleCompletedIds=isPro?completedIds:completedIds.filter(id=>id===freePreviewDive?.id);
+  const visibleLessonTotal=isPro?CONCEPT_DEEP_DIVES.length:1;
+  const progressPercent=Math.round((visibleCompletedIds.length/visibleLessonTotal)*100);
+  const continueDive=isPro
+    ? sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES).find(dive=>!completedIds.includes(dive.id))||sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES)[0]
+    : freePreviewDive;
   const continueProfile=getSy0701DeepDiveProfile(continueDive);
   return(
     <div className="deep-dives-page" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <section className="deep-dives-hero">
         <div className="deep-dives-hero-copy">
-          <span className="deep-dive-preview-badge"><Sparkles size={13}/> Personalized study library</span>
+          <span className="deep-dive-preview-badge"><Sparkles size={13}/>{isPro?"Personalized study library":"Free preview lesson"}</span>
           <div className="page-title-row"><NavGlyph type="deep-dives" active/><h1>Concept Deep Dives</h1></div>
-          <p>Follow the official SY0-701 path. Learn the exam words in plain English, compare similar answers, and practise with short checks instead of long notes.</p>
+          <p>{isPro?"Follow the official SY0-701 path. Learn the exam words in plain English, compare similar answers, and practise with short checks instead of long notes.":"Preview Web Attacks, Phishing, and DNS Attacks for free. The rest of the guided lesson path unlocks with Pro."}</p>
           <div className="deep-dives-proof">
-            <span><BadgeCheck size={15}/>{CONCEPT_DEEP_DIVES.length} syllabus-mapped lessons</span>
+            <span><BadgeCheck size={15}/>{isPro?CONCEPT_DEEP_DIVES.length:"1"} syllabus-mapped lesson{isPro?"s":" preview"}</span>
             <span><Crosshair size={15}/>5 official exam domains</span>
             <span><Brain size={15}/>Flashcards moved to their own page</span>
           </div>
@@ -30339,10 +30377,10 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
           <a className="deep-dives-blueprint-link" href={SY0701_BLUEPRINT.sourceUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Mapped to the official {SY0701_BLUEPRINT.exam} objectives · document v{SY0701_BLUEPRINT.documentVersion}<ChevronRight size={14}/></a>
         </div>
         <div className="deep-dives-progress-card">
-          <div><span>Study progress</span><strong>{completedIds.length}/{CONCEPT_DEEP_DIVES.length}</strong></div>
+          <div><span>{isPro?"Study progress":"Preview progress"}</span><strong>{visibleCompletedIds.length}/{visibleLessonTotal}</strong></div>
           <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
-          <p>{completedIds.length?"Continue with one short concept or open Flashcards from the main menu.":"Choose a lesson, learn one idea at a time, then practise it."}</p>
-          <div className="deep-dives-card-progress"><BookOpenCheck size={16}/><span><strong>{Math.max(0,CONCEPT_DEEP_DIVES.length-completedIds.length)}</strong> lessons left in this path</span></div>
+          <p>{isPro?(completedIds.length?"Continue with one short concept or open Flashcards from the main menu.":"Choose a lesson, learn one idea at a time, then practise it."):"Start with the free attacks lesson, then upgrade when you want the full guided path."}</p>
+          <div className="deep-dives-card-progress"><BookOpenCheck size={16}/><span><strong>{Math.max(0,visibleLessonTotal-visibleCompletedIds.length)}</strong> lesson{visibleLessonTotal-visibleCompletedIds.length===1?"":"s"} left in this {isPro?"path":"preview"}</span></div>
         </div>
       </section>
 
@@ -30352,7 +30390,7 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
           <div>
             <span>Cipher’s next stop</span>
             <h2>{continueProfile.title}</h2>
-            <p>{completedIds.length?`Continue your SY0-701 path with a ${continueDive.minutes}-minute lesson.`:"Start with a short guided lesson, then switch to the practice lab when ready."}</p>
+            <p>{isPro?(completedIds.length?`Continue your SY0-701 path with a ${continueDive.minutes}-minute lesson.`:"Start with a short guided lesson, then switch to the practice lab when ready."):`Free preview: open this ${continueDive.minutes}-minute lesson before deciding whether Pro is useful.`}</p>
             <div><strong>Objective {continueProfile.objectiveCodes.join(" / ")}</strong><span>Flashcards now live in the main menu</span>{Number(practiceBestScores[continueDive.id])>0&&<span>Best lab {practiceBestScores[continueDive.id]}%</span>}</div>
           </div>
         </div>
@@ -30389,8 +30427,21 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
               {group.dives.map(dive=>{
                 const syllabus=getSy0701DeepDiveProfile(dive);
                 const isComplete=completedIds.includes(dive.id);
+                const locked=isLockedDeepDive(dive.id);
+                const isFreePreview=!isPro&&dive.id===freePreviewDive?.id;
                 return(
-                  <article className="deep-dive-card" key={dive.id} style={{"--chapter-color":chapterColor(syllabus.domainId)}}>
+                  <article
+                    className={`deep-dive-card ${locked?"locked":""} ${shakingDiveId===dive.id?"shake":""}`}
+                    key={dive.id}
+                    style={{"--chapter-color":chapterColor(syllabus.domainId)}}
+                    role={locked?"button":undefined}
+                    tabIndex={locked?0:undefined}
+                    aria-label={locked?`${syllabus.title} is a Pro lesson. Upgrade to unlock.`:undefined}
+                    onClick={locked?()=>promptLockedDeepDive(dive.id,"card"):undefined}
+                    onKeyDown={locked?event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();promptLockedDeepDive(dive.id,"card_keyboard");}}:undefined}
+                  >
+                    {locked&&<span className="deep-dive-lock-badge"><LockKeyhole size={12}/>Pro</span>}
+                    {isFreePreview&&<span className="deep-dive-preview-access-badge"><BadgeCheck size={12}/>Free preview</span>}
                     <div className="deep-dive-card-top">
                       <span className="deep-dive-card-index">Objective {syllabus.objectiveCodes.join(" · ")}</span>
                       {isComplete&&<span className="deep-dive-card-read"><CheckCircle2 size={14}/>Read</span>}
@@ -30402,8 +30453,8 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
                     {syllabus.includesBeyondTextbook&&<div className="deep-dive-card-scope"><GraduationCap size={14}/>Includes clearly marked “Beyond the textbook” detail</div>}
                     <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span><Puzzle size={14}/>Practice lab</span>{Number(practiceBestScores[dive.id])>0&&<span><Trophy size={14}/>{practiceBestScores[dive.id]}%</span>}</div>
                     <div className="deep-dive-card-actions">
-                      <button type="button" className="learn-action" onClick={()=>openDive(dive.id,"learn")}><BookOpenCheck size={15}/>Learn</button>
-                      <button type="button" className="lab-action" onClick={()=>openDive(dive.id,"practice")}><Puzzle size={15}/>Lab</button>
+                      <button type="button" className="learn-action" onClick={event=>{event.stopPropagation();openDive(dive.id,"learn");}}><BookOpenCheck size={15}/>Learn</button>
+                      <button type="button" className="lab-action" onClick={event=>{event.stopPropagation();openDive(dive.id,"practice");}}><Puzzle size={15}/>Lab</button>
                     </div>
                   </article>
                 );
@@ -30417,6 +30468,21 @@ function ConceptDeepDivesPage({t,openLessonRequest=null,onOpenLessonRequestHandl
           <h2>No lesson matches that search yet.</h2>
           <p>Try a protocol, attack, governance term, or a broader exam domain.</p>
           <button className="btn btn-outline" type="button" onClick={()=>{setQuery("");setDomainFilter("all");}}>Clear filters</button>
+        </div>
+      )}
+      {lockedDivePrompt&&(
+        <div className="deep-dive-upgrade-prompt" role="dialog" aria-modal="true" aria-labelledby="deep-dive-upgrade-title" onMouseDown={()=>setLockedDivePrompt(null)}>
+          <div className="deep-dive-upgrade-prompt-card" onMouseDown={event=>event.stopPropagation()}>
+            <div className="deep-dive-upgrade-prompt-icon"><LockKeyhole size={24}/></div>
+            <h3 id="deep-dive-upgrade-title">Unlock the full Concept Deep Dives path</h3>
+            <p>
+              “{getSy0701DeepDiveProfile(lockedDivePrompt)?.title||lockedDivePrompt.title}” is part of Pro. You can still preview Web Attacks, Phishing, and DNS Attacks for free.
+            </p>
+            <div className="deep-dive-upgrade-prompt-actions">
+              <button className="btn btn-ghost" type="button" onClick={()=>setLockedDivePrompt(null)}>Keep previewing</button>
+              <button className="btn btn-primary" type="button" onClick={()=>{setLockedDivePrompt(null);onUpgrade?.();}}>View Pro</button>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -32798,7 +32864,7 @@ export default function App() {
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
             {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} assistantSet={assistantFlashcardSet} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
-            {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={({chapterId})=>{setView("mcq");}} onTryRelatedPbq={handleGuestPbqPreview}/>}
+            {devDeepDivePreview&&view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={guestUser} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={({chapterId})=>{setView("mcq");}} onTryRelatedPbq={handleGuestPbqPreview} onUpgrade={goToSignup}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
@@ -32965,7 +33031,7 @@ export default function App() {
           {view==="account"&&<AccountSupportPage user={user} t={t} onDeleteAccount={handleDeleteAccount} onCancelMembership={handleCancelMembership} onNavigate={setView} billingLoading={billingLoading}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
-          {view==="deep-dives"&&<ConceptDeepDivesPage t={t} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq} onOpenFlashcards={handleOpenFlashcards}/>}
+          {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={user} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq} onOpenFlashcards={handleOpenFlashcards} onUpgrade={()=>setView("pricing")}/>}
           {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} assistantSet={effectiveAssistantFlashcardSet} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")} onOpenDeepDive={handleOpenDeepDive} onUpgrade={()=>setView("pricing")}/>}
           {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
