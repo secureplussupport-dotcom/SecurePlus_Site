@@ -24153,12 +24153,6 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
             </button>
           </div>
         )}
-        {!isGuest&&reviewMode==="smart"&&(
-          <div className="smart-review-signals" aria-label="Smart Review selection signals">
-            <strong>Smart filtering uses</strong>
-            <span>Latest mistakes</span><span>Due dates</span><span>Topic accuracy</span><span>Difficulty fit</span><span>Question variety</span>
-          </div>
-        )}
         {isGuest&&(
           <div className="guest-mcq-lock-note">
             <LockKeyhole size={15}/>
