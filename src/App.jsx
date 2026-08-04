@@ -17116,6 +17116,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .nav-lnk:hover .nav-glyph-achievements,.nav-glyph-achievements.active{color:#b45309;background:linear-gradient(135deg,#facc1540,#fb718540);border-color:#f59e0b85;box-shadow:0 0 20px rgba(245,158,11,.42);}
 .nav-glyph-deep-dives .glyph-svg,.nav-glyph-flashcards .glyph-svg{filter:drop-shadow(0 0 2px color-mix(in srgb,currentColor 45%,transparent));}
 .nav-lnk:hover .nav-glyph-deep-dives,.nav-glyph-deep-dives.active{color:#1d4ed8;background:linear-gradient(135deg,#93c5fd70,#38bdf85c);border-color:#93c5fd;box-shadow:0 0 0 1px rgba(147,197,253,.32),0 0 24px rgba(96,165,250,.6);}
+.nav-lnk:hover .nav-glyph-deep-dives,.nav-glyph-deep-dives.active{color:#7dd3fc;background:linear-gradient(135deg,#38bdf875,#2563eb62 55%,#0ea5e958);border-color:#bae6fd;box-shadow:0 0 0 1px rgba(186,230,253,.55),0 0 18px rgba(56,189,248,.68),0 0 34px rgba(37,99,235,.44),inset 0 0 18px rgba(125,211,252,.14);}
+.nav-lnk:hover .nav-glyph-deep-dives .glyph-svg,.nav-glyph-deep-dives.active .glyph-svg{stroke-width:2.95;filter:drop-shadow(0 0 4px rgba(186,230,253,.95)) drop-shadow(0 0 9px rgba(56,189,248,.72));}
 .nav-lnk:hover .nav-glyph-flashcards,.nav-glyph-flashcards.active{color:#d8b4fe;background:linear-gradient(135deg,#a855f755,#ec489938);border-color:#c084fc;box-shadow:0 0 0 1px rgba(216,180,254,.26),0 0 24px rgba(192,132,252,.56);}
 .flashcards-fan-glyph rect{fill:color-mix(in srgb,currentColor 7%,transparent);stroke:currentColor;stroke-width:1.05;}
 .flashcards-fan-glyph path{stroke:currentColor;stroke-width:.95;stroke-linecap:round;}
