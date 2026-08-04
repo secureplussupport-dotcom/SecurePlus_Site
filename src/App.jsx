@@ -19298,7 +19298,8 @@ body{background:
 .flashcard-mode-footer{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;padding-top:15px;border-top:1px solid var(--deep-border);}
 .flashcard-default-checkbox{display:inline-flex;align-items:center;gap:9px;color:#3f352b;font-size:12px;font-weight:950;cursor:pointer;user-select:none;}
 .flashcard-default-checkbox input{position:absolute;opacity:0;pointer-events:none;}
-.flashcard-default-checkbox>span{display:grid;place-items:center;width:22px;height:22px;border:2px solid color-mix(in srgb,#22c55e 36%,var(--deep-border));border-radius:8px;background:var(--deep-surface);color:transparent;transition:background .16s,border-color .16s,color .16s,transform .16s;}
+.flashcard-default-checkbox>span{display:grid;place-items:center;width:22px;height:22px;border:2px solid #6b5b4b;border-radius:8px;background:linear-gradient(145deg,#fffdf7,#f0e7d7);color:transparent;box-shadow:inset 0 0 0 2px rgba(255,255,255,.75),0 4px 10px rgba(45,37,28,.14);transition:background .16s,border-color .16s,color .16s,transform .16s,box-shadow .16s;}
+.flashcard-default-checkbox:hover>span,.flashcard-default-checkbox:focus-within>span{border-color:#22c55e;box-shadow:inset 0 0 0 2px rgba(255,255,255,.82),0 0 0 4px rgba(34,197,94,.16),0 5px 12px rgba(45,37,28,.16);}
 .flashcard-default-checkbox.checked>span{background:#22c55e;border-color:#22c55e;color:#fff;transform:scale(1.05);}
 .flashcard-mode-footer>small{color:var(--deep-muted);font-size:11px;font-weight:800;line-height:1.45;}
 .flashcard-change-mode-btn{border-color:color-mix(in srgb,var(--set-color) 34%,var(--deep-border))!important;color:var(--set-color)!important;background:color-mix(in srgb,var(--set-color) 7%,var(--deep-surface))!important;}
