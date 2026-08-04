@@ -19009,6 +19009,8 @@ body{background:
 .deep-dive-card.shake{animation:shakeLite .34s ease both;}
 .deep-dive-lock-badge{position:absolute;right:14px;top:14px;z-index:2;display:inline-flex;align-items:center;gap:5px;padding:6px 8px;border:1px solid color-mix(in srgb,var(--deep-amber) 42%,var(--deep-border));border-radius:999px;background:color-mix(in srgb,var(--deep-amber) 12%,var(--deep-surface));color:var(--deep-amber);font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
 .deep-dive-preview-access-badge{position:absolute;right:14px;top:14px;z-index:2;display:inline-flex;align-items:center;gap:5px;padding:6px 8px;border:1px solid color-mix(in srgb,var(--deep-green) 42%,var(--deep-border));border-radius:999px;background:color-mix(in srgb,var(--deep-green) 12%,var(--deep-surface));color:var(--deep-green);font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
+.deep-dive-next-read-banner{position:absolute;left:14px;right:14px;top:14px;z-index:2;display:flex;align-items:center;justify-content:center;gap:6px;min-height:30px;padding:7px 10px;border:1px solid color-mix(in srgb,#0ea5e9 50%,var(--deep-border));border-radius:999px;background:linear-gradient(135deg,color-mix(in srgb,#0ea5e9 18%,var(--deep-surface)),color-mix(in srgb,var(--deep-green) 10%,var(--deep-surface)));color:#0ea5e9;font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 10px 22px rgba(14,165,233,.13);}
+.deep-dive-card.has-next-read{padding-top:58px;border-color:color-mix(in srgb,#0ea5e9 42%,var(--deep-border));box-shadow:0 16px 36px rgba(14,165,233,.12);}
 .deep-dive-card-top{display:flex;justify-content:space-between;align-items:center;min-height:25px;margin-bottom:16px;}
 .deep-dive-card-index{font-size:11px;font-weight:950;letter-spacing:.12em;color:color-mix(in srgb,var(--chapter-color) 85%,var(--deep-text));}
 .deep-dive-card-read{display:inline-flex;align-items:center;gap:4px;padding:5px 8px;border-radius:999px;background:color-mix(in srgb,var(--deep-green) 12%,var(--deep-surface));color:var(--deep-green);font-size:10px;font-weight:950;}
@@ -19339,6 +19341,15 @@ body{background:
 .flashcard-random-plus>span{display:grid;place-items:center;width:62px;height:62px;margin-bottom:14px;border-radius:21px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);color:#fff;font-size:42px;font-weight:700;line-height:1;box-shadow:0 14px 28px rgba(14,165,233,.24);}
 .flashcard-random-plus strong{font-size:17px!important;}
 .flashcard-random-plus small{font-size:11px!important;}
+.flashcards-guest-random-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,360px);align-items:start;gap:12px;margin:10px 0 16px;padding:14px;border:1px solid color-mix(in srgb,#0ea5e9 28%,var(--deep-border));border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,#0ea5e9 8%,var(--deep-surface)),color-mix(in srgb,#14b8a6 5%,var(--deep-panel)));box-shadow:0 12px 30px rgba(14,165,233,.08);}
+.flashcards-guest-random-row>div:first-child{display:grid;gap:3px;padding:8px 4px;}
+.flashcards-guest-random-row>div:first-child span{color:#0ea5e9;font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
+.flashcards-guest-random-row>div:first-child strong{color:var(--deep-text);font-size:clamp(20px,3vw,28px);font-weight:950;line-height:1.08;}
+.flashcard-random-builder.compact{min-height:0;border-color:color-mix(in srgb,#0ea5e9 42%,var(--deep-border));background:linear-gradient(145deg,color-mix(in srgb,#0ea5e9 12%,var(--deep-surface)),var(--deep-surface));}
+.flashcard-random-builder.compact .flashcard-random-plus{grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;min-height:76px;padding:13px 14px;}
+.flashcard-random-builder.compact .flashcard-random-plus>span{width:42px;height:42px;margin:0;border-radius:15px;font-size:29px;}
+.flashcard-random-builder.compact .flashcard-random-plus small{margin-top:2px;}
+.flashcard-random-builder.compact.open{grid-column:1/-1;}
 .flashcard-random-panel{position:relative;display:grid;gap:12px;padding:0 18px 18px;animation:fadeUp .18s ease both;}
 .flashcard-random-intro{display:grid;gap:3px;padding:11px 12px;border:1px solid color-mix(in srgb,#0ea5e9 28%,var(--deep-border));border-radius:15px;background:radial-gradient(circle at 96% 12%,rgba(139,92,246,.13),transparent 40%),linear-gradient(135deg,color-mix(in srgb,#0ea5e9 10%,var(--deep-surface)),color-mix(in srgb,#f59e0b 7%,var(--deep-panel)));color:var(--deep-text);}
 .flashcard-random-intro strong{font-size:12px!important;color:var(--deep-text)!important;}
@@ -19611,6 +19622,13 @@ body{background:
   .flashcards-controls .deep-dives-domain-map button{min-width:112px;min-height:48px;padding:8px 9px;border-radius:11px;}
   .flashcards-controls .deep-dives-domain-map button strong{font-size:11px;}
   .flashcards-controls .deep-dives-domain-map button span{font-size:8.5px;}
+  .flashcards-guest-random-row{grid-template-columns:minmax(0,1fr);gap:8px;margin:8px 0 12px;padding:10px;border-radius:15px;}
+  .flashcards-guest-random-row>div:first-child{grid-template-columns:auto minmax(0,1fr);align-items:center;padding:0;}
+  .flashcards-guest-random-row>div:first-child strong{font-size:18px;}
+  .flashcard-random-builder.compact .flashcard-random-plus{min-height:64px;padding:10px;}
+  .flashcard-random-builder.compact .flashcard-random-plus>span{width:36px;height:36px;border-radius:13px;font-size:24px;}
+  .flashcard-random-panel{padding:0 10px 12px;}
+  .flashcard-random-actions{grid-template-columns:minmax(0,1fr);}
   .flashcards-curated-set{margin-top:9px;}
   .deep-dive-launchpad{grid-template-columns:minmax(0,1fr);}
   .deep-dive-acronym-library-head{align-items:flex-start;}
@@ -30364,6 +30382,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
   const continueDive=isPro
     ? sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES).find(dive=>!completedIds.includes(dive.id))||sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES)[0]
     : freePreviewDive;
+  const nextUnreadDiveId=isPro&&!completedIds.includes(continueDive?.id)?continueDive?.id:null;
   const continueProfile=getSy0701DeepDiveProfile(continueDive);
   return(
     <div className="deep-dives-page" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
@@ -30433,9 +30452,10 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
                 const isComplete=completedIds.includes(dive.id);
                 const locked=isLockedDeepDive(dive.id);
                 const isFreePreview=!isPro&&dive.id===freePreviewDive?.id;
+                const isNextUnread=isPro&&dive.id===nextUnreadDiveId;
                 return(
                   <article
-                    className={`deep-dive-card ${locked?"locked":""} ${shakingDiveId===dive.id?"shake":""}`}
+                    className={`deep-dive-card ${locked?"locked":""} ${isNextUnread?"has-next-read":""} ${shakingDiveId===dive.id?"shake":""}`}
                     key={dive.id}
                     style={{"--chapter-color":chapterColor(syllabus.domainId)}}
                     role={locked?"button":undefined}
@@ -30446,6 +30466,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
                   >
                     {locked&&<span className="deep-dive-lock-badge"><LockKeyhole size={12}/>Pro</span>}
                     {isFreePreview&&<span className="deep-dive-preview-access-badge"><BadgeCheck size={12}/>Free preview</span>}
+                    {isNextUnread&&<span className="deep-dive-next-read-banner"><BookOpenCheck size={13}/>Your next read</span>}
                     <div className="deep-dive-card-top">
                       <span className="deep-dive-card-index">Objective {syllabus.objectiveCodes.join(" · ")}</span>
                       {isComplete&&<span className="deep-dive-card-read"><CheckCircle2 size={14}/>Read</span>}
@@ -30494,6 +30515,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
 }
 
 function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=null,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade}) {
+  const signedIn=Boolean(user?.id||user?.email);
   const [selectedSetId,setSelectedSetId]=useState(null);
   const [chapterFilter,setChapterFilter]=useState("all");
   const [randomBuilderOpen,setRandomBuilderOpen]=useState(false);
@@ -30506,6 +30528,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const [randomisingAction,setRandomisingAction]=useState(null);
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
     try{
+      if(!signedIn)return [];
       const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
       return Array.isArray(stored)?stored.filter(id=>SY0701_ACRONYM_CARDS.some(card=>card.id===id)):[];
     }catch{return [];}
@@ -30524,7 +30547,6 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>masteredAcronymIds.includes(card.id)).length;
   const progressPercent=SY0701_ACRONYM_CARDS.length?Math.round((totalMastered/SY0701_ACRONYM_CARDS.length)*100):0;
   const mobileQuickSets=useMemo(()=>visibleGroups.flatMap(group=>group.sets).slice(0,3),[visibleGroups]);
-  const signedIn=Boolean(user?.id||user?.email);
   const showAssistantDeck=user?.tier==="pro"&&Boolean(assistantSet?.cards?.length);
   const defaultOwner=starOwner(user);
   const [activeMode,setActiveMode]=useState("definition");
@@ -30545,6 +30567,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   useEffect(()=>{
     if(!signedIn){
       setDefaultMode("");
+      setMasteredAcronymIds([]);
       return;
     }
     try{
@@ -30685,7 +30708,9 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
       ?Array.from(new Set([...masteredAcronymIds,cardId]))
       :masteredAcronymIds.filter(id=>id!==cardId);
     setMasteredAcronymIds(next);
-    try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
+    if(signedIn){
+      try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
+    }
     capture("flashcards_acronym_rated",{set_id:selectedSet?.id,card_id:cardId,mastered});
   };
   const buildAndOpenRandomSet=()=>{
@@ -30800,6 +30825,85 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
     setInventoryNotice(`Deleted ${set.title}.`);
     capture("flashcards_generated_set_deleted",{set_id:set.id});
   };
+  const renderRandomBuilder=(compact=false)=>(
+    <div
+      className={`deep-dive-acronym-set-card flashcards-topic-card flashcard-random-builder ${compact?"compact":""} ${randomBuilderOpen?"open":""}`}
+      style={{"--set-color":"#0ea5e9"}}
+      role="button"
+      tabIndex={0}
+      aria-expanded={randomBuilderOpen}
+      aria-label="Open randomised flashcard set builder"
+      onClick={()=>{if(!randomBuilderOpen)setRandomBuilderOpen(true);}}
+      onKeyDown={event=>{
+        if(event.key==="Enter"||event.key===" "){
+          event.preventDefault();
+          setRandomBuilderOpen(true);
+        }
+      }}
+    >
+      <button type="button" className="flashcard-random-plus" onClick={event=>{event.stopPropagation();setRandomBuilderOpen(value=>!value);}} aria-expanded={randomBuilderOpen}>
+        <span aria-hidden="true">+</span>
+        <strong>Randomised set</strong>
+        <small>{compact?"Quickly build a 10, 20, or 30-card study set.":"Build a quick 10-30 card deck from terms, acronyms, or both."}</small>
+      </button>
+      {randomBuilderOpen&&(
+        <div className="flashcard-random-panel" onClick={event=>event.stopPropagation()}>
+          <div className="flashcard-random-intro">
+            <strong>How it works</strong>
+            <small>Pick the deck size, choose how the card tests you, then choose whether the pool uses terms, acronyms, or both.</small>
+          </div>
+          <div className="flashcard-random-group" style={{"--group-color":"#f59e0b"}}>
+            <span>Deck size <strong>{randomConfig.count} cards</strong></span>
+            <div className="flashcard-random-choice three" role="group" aria-label="Choose number of random flashcards">
+              {RANDOM_FLASHCARD_COUNTS.map(count=>(
+                <button key={count} type="button" className={randomConfig.count===count?"active":""} onClick={()=>setRandomConfig(config=>({...config,count}))}>{count}</button>
+              ))}
+            </div>
+          </div>
+          <div className="flashcard-random-group" style={{"--group-color":"#8b5cf6"}}>
+            <span>Test selector <strong>{randomConfig.mode==="acronym"?"Acronym":"Definition"}</strong></span>
+            <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard test mode">
+              {[
+                ["definition","Test Definition"],
+                ["acronym","Test Acronym"],
+              ].map(([mode,label])=>(
+                <button key={mode} type="button" className={randomConfig.mode===mode?"active":""} onClick={()=>setRandomConfig(config=>({...config,mode}))}>{label}</button>
+              ))}
+            </div>
+          </div>
+          <div className="flashcard-random-group" style={{"--group-color":"#14b8a6"}}>
+            <span>Content selector <strong>{randomConfig.includeTerms&&randomConfig.includeAcronyms?"Both":randomConfig.includeTerms?"Terms":"Acronyms"}</strong></span>
+            <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard content type">
+              {[
+                ["terms","Terms"],
+                ["acronyms","Acronyms"],
+                ["both","Both"],
+              ].map(([value,label])=>(
+                <button key={value} type="button" className={(value==="both"&&randomConfig.includeTerms&&randomConfig.includeAcronyms)||(value==="terms"&&randomConfig.includeTerms&&!randomConfig.includeAcronyms)||(value==="acronyms"&&!randomConfig.includeTerms&&randomConfig.includeAcronyms)?"active":""} onClick={()=>setRandomConfig(config=>{
+                  if(value==="terms")return {...config,includeTerms:true,includeAcronyms:false,mode:"definition"};
+                  if(value==="acronyms")return {...config,includeTerms:false,includeAcronyms:true};
+                  return {...config,includeTerms:true,includeAcronyms:true};
+                })}>{label}</button>
+              ))}
+            </div>
+          </div>
+          <div className="flashcard-random-actions">
+            <button className="btn btn-primary" type="button" onClick={randomiseAndSave} disabled={Boolean(randomisingAction)}><ListPlus size={15}/>{signedIn?"Create saved set":"Save after sign up"}</button>
+            <button className="btn btn-outline" type="button" onClick={randomiseAndStudy} disabled={Boolean(randomisingAction)}><Sparkles size={15}/>Study now</button>
+          </div>
+          {randomisingAction&&(
+            <div className="flashcard-randomising-buffer" role="status" aria-live="polite">
+              <div className="flashcard-randomising-card">
+                <MascotAnimation animation="thinking" size={72} interactive={false} label="Cipher randomising flashcards"/>
+                <strong>RANDOMISING...</strong>
+                <small>{randomisingAction==="save"?"Creating your generated deck":"Building your study set"}</small>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 
   if(selectedSet){
     return(
@@ -30828,13 +30932,6 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
             </div>
           </div>
           <p>Your free last-minute Security+ recall pack before exam day: share the same set with friends, then upgrade to Pro for premium Cipher-built weak-area decks.</p>
-          <div className="deep-dives-proof">
-            <span><ListChecks size={15}/>Grouped by SY0-701 chapters</span>
-            <span><Brain size={15}/>{SY0701_ACRONYM_CARDS.length} high-yield cards</span>
-            <span><Star size={15}/>Star weak cards before the exam</span>
-            <span><Share2 size={15}/>Share sets with friends</span>
-            <span><ShieldCheck size={15}/>Original study prompts. Not exam dumps.</span>
-          </div>
           <a className="deep-dives-blueprint-link" href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Chapter and topic grouping checked against the official SY0-701 outline<ChevronRight size={14}/></a>
           <FlashcardShareActions t={t} compact/>
         </div>
@@ -30845,18 +30942,18 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
             <span className="flashcards-cipher-copy">Free decks now. Premium weak-area decks with Pro.</span>
           </aside>
           <div className="deep-dives-progress-card">
-            <div><span>Flashcard mastery</span><strong>{totalMastered}/{SY0701_ACRONYM_CARDS.length}</strong></div>
+            <div><span>Flashcard mastery</span><strong>{signedIn?`${totalMastered}/${SY0701_ACRONYM_CARDS.length}`:"Save your progress"}</strong></div>
             <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
-            <p>Marked cards stay saved on this device, so repeated practice becomes lighter over time.</p>
+            <p>{signedIn?"Marked cards stay saved on this device, so repeated practice becomes lighter over time.":"Guest practice works now, but mastery and starred cards are saved after sign-up."}</p>
           </div>
           <button
             className="flashcard-default-mode-card"
             type="button"
-            onClick={()=>setModeChooser({context:"default",setId:null,hasExample:false})}
+            onClick={()=>signedIn?setModeChooser({context:"default",setId:null,hasExample:false}):onRequireSignup?.("flashcard_default_mode")}
           >
-            <span><CheckCircle2 size={16}/>{signedIn?defaultMode?"Default mode saved":"Choose default mode":"Mode chooser"}</span>
-            <strong>{signedIn&&defaultMode?FLASHCARD_MODE_OPTIONS[defaultMode]?.title:"Pick before studying"}</strong>
-            <small>{signedIn?"Change how standard decks open.":"Guests choose a mode each time."}</small>
+            <span><CheckCircle2 size={16}/>{signedIn?defaultMode?"Default mode saved":"Choose default mode":"Sign in to save defaults"}</span>
+            <strong>{signedIn&&defaultMode?FLASHCARD_MODE_OPTIONS[defaultMode]?.title:"Choose each time"}</strong>
+            <small>{signedIn?"Change how standard decks open.":"Guests can choose modes, but default mode is saved after sign-up."}</small>
           </button>
         </div>
       </section>
@@ -30872,7 +30969,17 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
         </div>
       </section>
 
-      <section className={`deep-dives-domain-group flashcards-curated-set ${inventoryCollapsed?"collapsed":""}`} style={{"--set-color":"#f59e0b"}}>
+      {!signedIn&&(
+        <section className="flashcards-guest-random-row" aria-label="Randomised flashcard set">
+          <div>
+            <span>Quick builder</span>
+            <strong>Randomised set</strong>
+          </div>
+          {renderRandomBuilder(true)}
+        </section>
+      )}
+
+      {signedIn&&<section className={`deep-dives-domain-group flashcards-curated-set ${inventoryCollapsed?"collapsed":""}`} style={{"--set-color":"#f59e0b"}}>
         <header>
           <div><span>Your flashcard inventory</span><h2>Starred and generated decks</h2></div>
           <div className="flashcard-inventory-header-actions">
@@ -30928,83 +31035,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
               <span className="deep-dive-acronym-set-progress"><span><i style={{width:"100%"}}/></span><span>{assistantSet.cards.filter(card=>card.cardType!=="divider").length}</span></span>
             </button>
           )}
-          <div
-            className={`deep-dive-acronym-set-card flashcards-topic-card flashcard-random-builder ${randomBuilderOpen?"open":""}`}
-            style={{"--set-color":"#0ea5e9"}}
-            role="button"
-            tabIndex={0}
-            aria-expanded={randomBuilderOpen}
-            aria-label="Open randomised flashcard set builder"
-            onClick={()=>{if(!randomBuilderOpen)setRandomBuilderOpen(true);}}
-            onKeyDown={event=>{
-              if(event.key==="Enter"||event.key===" "){
-                event.preventDefault();
-                setRandomBuilderOpen(true);
-              }
-            }}
-          >
-            <button type="button" className="flashcard-random-plus" onClick={event=>{event.stopPropagation();setRandomBuilderOpen(value=>!value);}} aria-expanded={randomBuilderOpen}>
-              <span aria-hidden="true">+</span>
-              <strong>Randomised set</strong>
-              <small>Build a quick 10-30 card deck from terms, acronyms, or both.</small>
-            </button>
-            {randomBuilderOpen&&(
-              <div className="flashcard-random-panel" onClick={event=>event.stopPropagation()}>
-                <div className="flashcard-random-intro">
-                  <strong>How it works</strong>
-                  <small>Pick the deck size, choose how the card tests you, then choose whether the pool uses terms, acronyms, or both.</small>
-                </div>
-                <div className="flashcard-random-group" style={{"--group-color":"#f59e0b"}}>
-                  <span>Deck size <strong>{randomConfig.count} cards</strong></span>
-                  <div className="flashcard-random-choice three" role="group" aria-label="Choose number of random flashcards">
-                    {RANDOM_FLASHCARD_COUNTS.map(count=>(
-                      <button key={count} type="button" className={randomConfig.count===count?"active":""} onClick={()=>setRandomConfig(config=>({...config,count}))}>{count}</button>
-                    ))}
-                  </div>
-                </div>
-                <div className="flashcard-random-group" style={{"--group-color":"#8b5cf6"}}>
-                  <span>Test selector <strong>{randomConfig.mode==="acronym"?"Acronym":"Definition"}</strong></span>
-                  <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard test mode">
-                    {[
-                      ["definition","Test Definition"],
-                      ["acronym","Test Acronym"],
-                    ].map(([mode,label])=>(
-                      <button key={mode} type="button" className={randomConfig.mode===mode?"active":""} onClick={()=>setRandomConfig(config=>({...config,mode}))}>{label}</button>
-                    ))}
-                  </div>
-                </div>
-                <div className="flashcard-random-group" style={{"--group-color":"#14b8a6"}}>
-                  <span>Content selector <strong>{randomConfig.includeTerms&&randomConfig.includeAcronyms?"Both":randomConfig.includeTerms?"Terms":"Acronyms"}</strong></span>
-                  <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard content type">
-                    {[
-                      ["terms","Terms"],
-                      ["acronyms","Acronyms"],
-                      ["both","Both"],
-                    ].map(([value,label])=>(
-                      <button key={value} type="button" className={(value==="both"&&randomConfig.includeTerms&&randomConfig.includeAcronyms)||(value==="terms"&&randomConfig.includeTerms&&!randomConfig.includeAcronyms)||(value==="acronyms"&&!randomConfig.includeTerms&&randomConfig.includeAcronyms)?"active":""} onClick={()=>setRandomConfig(config=>{
-                        if(value==="terms")return {...config,includeTerms:true,includeAcronyms:false,mode:"definition"};
-                        if(value==="acronyms")return {...config,includeTerms:false,includeAcronyms:true};
-                        return {...config,includeTerms:true,includeAcronyms:true};
-                      })}>{label}</button>
-                    ))}
-                  </div>
-                </div>
-                <div className="flashcard-random-actions">
-                  <button className="btn btn-primary" type="button" onClick={randomiseAndSave} disabled={Boolean(randomisingAction)}><ListPlus size={15}/>Create saved set</button>
-                  <button className="btn btn-outline" type="button" onClick={randomiseAndStudy} disabled={Boolean(randomisingAction)}><Sparkles size={15}/>Study now</button>
-                </div>
-                {randomisingAction&&(
-                  <div className="flashcard-randomising-buffer" role="status" aria-live="polite">
-                    <div className="flashcard-randomising-card">
-                      <MascotAnimation animation="thinking" size={72} interactive={false} label="Cipher randomising flashcards"/>
-                      <strong>RANDOMISING...</strong>
-                      <small>{randomisingAction==="save"?"Creating your generated deck":"Building your study set"}</small>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
+          {renderRandomBuilder()}
           {showGeneratedDecks&&savedRandomSets.map(set=>(
             <div
               className="deep-dive-acronym-set-card flashcards-topic-card saved-random-set-card"
@@ -31056,7 +31087,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
             </div>
           ))}
         </div>}
-      </section>
+      </section>}
 
       <div className="deep-dives-domain-groups">
         {visibleGroups.map(group=>(
