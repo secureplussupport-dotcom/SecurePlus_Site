@@ -16589,6 +16589,13 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .smart-lesson-path.compact .smart-lesson-card .btn{grid-column:2;justify-self:start;}
 .weak-action-meta,.daily-habit-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;}
 .weak-action-meta span,.daily-habit-meta span{padding:5px 8px;border-radius:999px;border:1px solid ${t.border};background:${t.panel};color:${t.textSec};font-size:10px;font-weight:900;text-transform:uppercase;}
+.weak-flashcard-reco{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;margin:13px 0 12px;padding:14px 15px;border:1px solid color-mix(in srgb,var(--set-color) 42%,${t.border});border-radius:15px;background:linear-gradient(135deg,color-mix(in srgb,var(--set-color) 13%,${t.surface}),${t.panel});color:${t.text};text-align:left;cursor:pointer;box-shadow:0 14px 32px color-mix(in srgb,var(--set-color) 10%,transparent);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;}
+.weak-flashcard-reco:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--set-color) 68%,${t.border});box-shadow:0 18px 42px color-mix(in srgb,var(--set-color) 16%,transparent);}
+.weak-flashcard-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--set-color),color-mix(in srgb,var(--set-color) 62%,${t.accent}));color:#fff;box-shadow:0 12px 22px color-mix(in srgb,var(--set-color) 24%,transparent);}
+.weak-flashcard-reco strong,.weak-flashcard-reco small{display:block;}
+.weak-flashcard-reco strong{font-size:14px;color:${t.text};line-height:1.25;}
+.weak-flashcard-reco small{margin-top:4px;color:${t.textSec};font-size:11px;font-weight:850;line-height:1.45;}
+.weak-flashcard-reco>svg{color:var(--set-color);}
 .daily-habit-card{border-color:${t.amber}40!important;background:linear-gradient(135deg,${t.amber}12,${t.surface} 58%,${t.green}08)!important;}
 .daily-habit-streak{display:flex;gap:6px;margin:10px 0 13px;}
 .daily-habit-streak span{width:18px;height:18px;border-radius:6px;background:${t.border};border:1px solid ${t.border};}
@@ -23070,6 +23077,11 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   const primaryLessonPath=getDeepDiveRecommendations(primaryWeakAction?.missedQuestions||[],{limit:2});
   const primaryWeakConcepts=summarizeMissedConcepts(primaryWeakAction?.missedQuestions||[]);
   const primaryDeepDiveTitle=getRecommendedDeepDiveTitle(primaryLessonPath);
+  const primaryWeakFlashcardSet=primaryWeakAction?buildCipherWeakFlashcardSet({
+    weakChapterId:primaryWeakAction.chapter.id,
+    weakTopics:primaryWeakAction.missedTopics,
+  }):null;
+  const weakFlashcardPreview=(primaryWeakFlashcardSet?.cards||[]).slice(0,4).map(card=>card.acronym||card.expansion||card.term).filter(Boolean);
 
   return(
     <div className="dashboard-shell">
@@ -23177,12 +23189,22 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
             <>
               <h3>Repair Chapter {primaryWeakAction.chapter.id}: {primaryWeakAction.chapter.title}</h3>
               <p>
-                You missed {primaryWeakConcepts}. Next: {primaryWeakAction.reviewCount}-question Smart Review + {primaryDeepDiveTitle}.
+                You missed {primaryWeakConcepts}. Next: quick flashcards + {primaryWeakAction.reviewCount}-question Smart Review + {primaryDeepDiveTitle}.
               </p>
               <div className="weak-action-meta">
                 <span>{primaryWeakAction.accuracy}% chapter accuracy</span>
                 <span>{primaryWeakAction.missedTopics.slice(0,2).join(" + ") || "Missed concepts"}</span>
               </div>
+              {primaryWeakFlashcardSet?.cards?.length>0&&(
+                <button className="weak-flashcard-reco" type="button" style={{"--set-color":primaryWeakFlashcardSet.color||"#0ea5e9"}} onClick={()=>onOpenFlashcards?.({...primaryWeakFlashcardSet,title:`Flashcards for Chapter ${primaryWeakAction.chapter.id}`,description:`Review ${primaryWeakAction.missedTopics.slice(0,3).join(", ")||"the terms linked to your missed questions"} before starting Smart Review.`})}>
+                  <span className="weak-flashcard-icon"><Brain size={20}/></span>
+                  <span>
+                    <strong>Review related flashcards first</strong>
+                    <small>{weakFlashcardPreview.length?weakFlashcardPreview.join(" · "):`${primaryWeakFlashcardSet.cards.length} targeted cards`} · {primaryWeakFlashcardSet.cards.length} cards</small>
+                  </span>
+                  <ChevronRight size={20}/>
+                </button>
+              )}
               <SmartReviewLessonPath recommendations={primaryLessonPath} onOpenDeepDive={onOpenDeepDive} source="dashboard_weak_area" compact title="Recommended concept lessons"/>
               <button className="btn btn-primary" onClick={()=>onStartChapterReview?.(primaryWeakAction.chapter.id,{count:primaryWeakAction.reviewCount,source:"dashboard_weak_area"})}>
                 Start {primaryWeakAction.reviewCount}-question Smart Review
