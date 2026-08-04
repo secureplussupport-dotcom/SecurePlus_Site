@@ -18069,7 +18069,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-plan-selector-head p{display:none;}
 .upgrade-plan-choice-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,7fr);gap:14px;align-items:stretch;}
 .upgrade-plan-option{position:relative;display:flex;flex-direction:column;min-width:0;padding:20px;border:1px solid ${t.border};border-radius:12px;background:${t.panel};transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
-.upgrade-plan-option.monthly{align-self:start;min-height:0;margin-top:58px;padding:16px 18px 18px;background:linear-gradient(180deg,${t.panel},color-mix(in srgb,${t.panel} 88%,${t.accent}));}
+.upgrade-plan-option.monthly{align-self:stretch;min-height:0;margin-top:58px;padding:16px 18px 18px;background:linear-gradient(180deg,${t.panel},color-mix(in srgb,${t.panel} 88%,${t.accent}));}
 .upgrade-plan-option:hover{transform:translateY(-2px);border-color:${t.accent}55;box-shadow:0 16px 30px ${t.accent}0d;}
 .upgrade-plan-option.recommended{overflow:hidden;border:3px solid ${t.accent};background:linear-gradient(145deg,${t.accent}14,${t.surface} 42%,${t.green}10);box-shadow:0 24px 54px ${t.accent}22;}
 .upgrade-plan-option.recommended::after{content:"";position:absolute;right:-52px;top:-58px;width:150px;height:150px;border:28px solid ${t.accent}0a;border-radius:50%;pointer-events:none;}
