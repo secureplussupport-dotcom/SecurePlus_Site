@@ -18071,6 +18071,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-plan-selector-head p{display:none;}
 .upgrade-plan-choice-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,7fr);gap:14px;align-items:stretch;}
 .upgrade-plan-option{position:relative;display:flex;flex-direction:column;min-width:0;padding:20px;border:1px solid ${t.border};border-radius:12px;background:${t.panel};transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
+.upgrade-plan-option.monthly{align-self:start;min-height:0;padding:18px;background:linear-gradient(180deg,${t.panel},color-mix(in srgb,${t.panel} 88%,${t.accent}));}
 .upgrade-plan-option:hover{transform:translateY(-2px);border-color:${t.accent}55;box-shadow:0 16px 30px ${t.accent}0d;}
 .upgrade-plan-option.recommended{overflow:hidden;border:3px solid ${t.accent};background:linear-gradient(145deg,${t.accent}14,${t.surface} 42%,${t.green}10);box-shadow:0 24px 54px ${t.accent}22;}
 .upgrade-plan-option.recommended::after{content:"";position:absolute;right:-52px;top:-58px;width:150px;height:150px;border:28px solid ${t.accent}0a;border-radius:50%;pointer-events:none;}
@@ -18079,6 +18080,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-recommended-badge{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:999px;background:linear-gradient(135deg,${t.accent},${t.green});color:#fff;font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.04em;box-shadow:0 12px 24px ${t.accent}28;}
 .upgrade-plan-option h3{position:relative;z-index:1;margin:0;color:${t.text};font-size:22px;line-height:1.2;}
 .upgrade-pro-short-descriptor{position:relative;z-index:1;margin:5px 0 0;color:${t.accent};font-size:12px;font-weight:950;line-height:1.4;}
+.upgrade-monthly-mascot-slot{position:relative;z-index:1;display:grid;place-items:center;min-height:122px;margin:8px 0 4px;border-radius:18px;background:radial-gradient(circle at 50% 40%,${t.accent}18,transparent 58%);overflow:hidden;}
+.upgrade-monthly-mascot-slot::after{content:"Monthly";position:absolute;right:10px;bottom:9px;padding:5px 8px;border-radius:999px;background:${t.surface};border:1px solid ${t.border};color:${t.textDim};font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
+.upgrade-plan-option.monthly .upgrade-monthly-equivalent{margin-top:4px;}
 .upgrade-plan-option .upgrade-price-row{position:relative;z-index:1;margin:14px 0 7px;}
 .upgrade-plan-option .upgrade-price{font-size:48px;}
 .upgrade-plan-option.recommended .upgrade-price{font-size:64px;}
@@ -29131,14 +29135,13 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         </div>
 
         <div className="upgrade-plan-choice-grid">
-          <article className="upgrade-plan-option">
+          <article className="upgrade-plan-option monthly">
             <div className="upgrade-plan-option-top">
               <span className="upgrade-plan-kicker">Most flexible</span>
             </div>
             <h3>Monthly Pro</h3>
-            <div className="upgrade-price-row">
-              <div className="upgrade-price">$4.99</div>
-              <div className="upgrade-price-cycle">USD / month<br/>renews monthly</div>
+            <div className="upgrade-monthly-mascot-slot" aria-hidden="true">
+              <MascotAnimation animation="wave" size={86} interactive={false} label="Cipher beside the monthly plan"/>
             </div>
             <div className="upgrade-monthly-equivalent"><strong>$4.99</strong><span>per month</span></div>
             <p className="upgrade-plan-math"><strong>Flexible.</strong> Best if you only need a short boost.</p>
