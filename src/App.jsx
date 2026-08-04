@@ -16020,12 +16020,18 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .home-trust-row span{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;border:1px solid ${t.border};background:${t.panel}cc;color:${t.textSec};font-size:12px;font-weight:800;}
 .home-hero-panel{display:grid;gap:14px;align-items:center;justify-items:center;}
 .readiness-orbit{position:relative;min-height:190px;border-radius:22px;display:grid;place-items:center;background:conic-gradient(var(--readiness-color) var(--readiness), ${t.border} var(--readiness));box-shadow:inset 0 0 0 1px ${t.border},0 18px 45px color-mix(in srgb,var(--readiness-color) 16%,transparent);}
-.dashboard-readiness-focus{width:min(100%,240px);}
+.dashboard-readiness-focus{width:min(100%,360px);min-height:270px;border-radius:30px;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--readiness-color) 38%,${t.border}),0 24px 70px color-mix(in srgb,var(--readiness-color) 24%,transparent);}
 .dashboard-breakdown-toggle{justify-content:center;}
 .readiness-orbit::before{content:"";position:absolute;inset:12px;border-radius:18px;background:linear-gradient(180deg,${t.surface},${t.panel});border:1px solid ${t.border};}
+.dashboard-readiness-focus::before{inset:18px;border-radius:24px;border-color:color-mix(in srgb,var(--readiness-color) 30%,${t.border});}
 .readiness-orbit div{position:relative;text-align:center;}
 .readiness-orbit span{display:block;font-size:34px;font-weight:950;color:var(--readiness-color);line-height:1;}
 .readiness-orbit small{display:block;margin-top:6px;font-size:11px;font-weight:900;text-transform:uppercase;color:${t.textDim};letter-spacing:.05em;}
+.dashboard-readiness-focus span{font-size:clamp(58px,7vw,82px);letter-spacing:-.07em;text-shadow:0 12px 28px color-mix(in srgb,var(--readiness-color) 24%,transparent);}
+.dashboard-readiness-focus small{margin-top:12px;font-size:14px;letter-spacing:.08em;color:${t.text};}
+.dashboard-readiness-caption{position:relative;display:inline-flex;align-items:center;gap:7px;margin-bottom:13px;padding:7px 11px;border-radius:999px;border:1px solid color-mix(in srgb,var(--readiness-color) 34%,${t.border});background:color-mix(in srgb,var(--readiness-color) 10%,${t.surface});color:var(--readiness-color);font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
+.dashboard-readiness-bar{position:relative;width:min(220px,78%);height:10px;margin:16px auto 0;border-radius:999px;background:${t.border};overflow:hidden;}
+.dashboard-readiness-bar span{display:block;width:var(--readiness);height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--readiness-color),${t.accent},${t.green});box-shadow:0 0 18px color-mix(in srgb,var(--readiness-color) 42%,transparent);}
 .readiness-lab{position:relative;overflow:hidden;margin-bottom:18px;padding:22px;border-color:color-mix(in srgb,var(--readiness-color) 34%,${t.border})!important;background:radial-gradient(circle at 92% 6%,color-mix(in srgb,var(--readiness-color) 15%,transparent),transparent 30%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
 .dashboard-readiness-reveal{animation:softReveal .28s cubic-bezier(.16,1,.3,1) both;}
 .readiness-lab::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--readiness-color);}
@@ -18459,6 +18465,11 @@ body{background:
   .home-cta-row .btn{flex:1 1 180px;}
   .home-hero-panel{grid-template-columns:1fr!important;}
   .readiness-orbit{min-height:148px!important;}
+  .dashboard-readiness-focus{width:100%!important;min-height:230px!important;border-radius:26px!important;}
+  .dashboard-readiness-focus::before{inset:15px!important;border-radius:21px!important;}
+  .dashboard-readiness-focus span{font-size:60px!important;}
+  .dashboard-readiness-focus small{font-size:12px!important;}
+  .dashboard-readiness-caption{font-size:10px!important;margin-bottom:10px!important;}
   .readiness-lab{padding:18px!important;}
   .readiness-lab-head{display:grid!important;grid-template-columns:1fr!important;}
   .readiness-level-badge{justify-self:stretch!important;grid-template-columns:auto auto!important;justify-content:flex-start!important;}
@@ -23092,8 +23103,10 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
         <div className="home-hero-panel">
           <div className="readiness-orbit dashboard-readiness-focus" style={{"--readiness":`${readiness}%`,"--readiness-color":readinessColor}}>
             <div>
+              <div className="dashboard-readiness-caption"><Gauge size={14}/> Exam readiness</div>
               <span>{readiness}%</span>
               <small>{readinessProfile.level}</small>
+              <div className="dashboard-readiness-bar" aria-hidden="true"><span/></div>
             </div>
           </div>
           <button
