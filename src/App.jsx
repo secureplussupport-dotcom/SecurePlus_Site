@@ -18078,6 +18078,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-plan-kicker{color:${t.textDim};font-size:10px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}
 .upgrade-recommended-badge{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:999px;background:linear-gradient(135deg,${t.accent},${t.green});color:#fff;font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.04em;box-shadow:0 12px 24px ${t.accent}28;}
 .upgrade-plan-option h3{position:relative;z-index:1;margin:0;color:${t.text};font-size:22px;line-height:1.2;}
+.upgrade-pro-short-descriptor{position:relative;z-index:1;margin:5px 0 0;color:${t.accent};font-size:12px;font-weight:950;line-height:1.4;}
 .upgrade-plan-option .upgrade-price-row{position:relative;z-index:1;margin:14px 0 7px;}
 .upgrade-plan-option .upgrade-price{font-size:48px;}
 .upgrade-plan-option.recommended .upgrade-price{font-size:64px;}
@@ -29102,6 +29103,9 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
     {label:"Personalised practice",free:"Basic review",freeIncluded:true,Icon:Brain},
     {label:"Concept Deep Dives",free:"Not included",freeIncluded:false,Icon:BookOpenCheck},
   ];
+  const rawOwnerName=String(user?.name||user?.fullName||user?.email?.split("@")?.[0]||"").trim().split(/\s+/)[0] || "Your";
+  const safeOwnerName=rawOwnerName.replace(/[^A-Za-z0-9'-]/g,"").slice(0,18) || "Your";
+  const essentialPlanName=safeOwnerName==="Your" ? "Your Essential" : `${safeOwnerName}${safeOwnerName.endsWith("s")?"'":"'s"} Essential`;
   return(
     <div className="upgrade-page">
       <div className="upgrade-hero">
@@ -29112,7 +29116,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         </p>
         <div className="upgrade-hero-cta-row">
           <button className="btn btn-primary" type="button" onClick={()=>startUpgrade("three_month")} disabled={billingLoading||isPro}>
-            {isPro?"Pro is active":billingLoading?"Opening checkout...":`Start ${PRO_THREE_MONTH_PLAN_NAME}`}
+            {isPro?"Pro is active":billingLoading?"Opening checkout...":`Start ${essentialPlanName}`}
           </button>
           <div className="upgrade-plan-note"><ShieldCheck size={14}/> Best fit for the typical 3-month Security+ study window</div>
         </div>
@@ -29131,7 +29135,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
             <div className="upgrade-plan-option-top">
               <span className="upgrade-plan-kicker">Most flexible</span>
             </div>
-            <h3>Monthly Flex</h3>
+            <h3>Monthly Pro</h3>
             <div className="upgrade-price-row">
               <div className="upgrade-price">$4.99</div>
               <div className="upgrade-price-cycle">USD / month<br/>renews monthly</div>
@@ -29158,7 +29162,8 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
               <span className="upgrade-plan-kicker">Best for exam preparation</span>
               <span className="upgrade-recommended-badge"><Sparkles size={12}/> Recommended</span>
             </div>
-            <h3>{PRO_THREE_MONTH_PLAN_NAME}</h3>
+            <h3>{essentialPlanName}</h3>
+            <p className="upgrade-pro-short-descriptor">Pro access for your 3-month Security+ study window.</p>
             <div className="upgrade-price-row">
               <div className="upgrade-price">$9.99</div>
               <div className="upgrade-price-cycle">USD / 3 months<br/>renews every 3 months</div>
@@ -29176,7 +29181,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
               <button className="btn btn-ghost upgrade-primary-cta" disabled><CheckCircle2 size={17}/> Pro is active</button>
             ):(
               <button className="btn btn-primary upgrade-primary-cta" onClick={()=>startUpgrade("three_month")} disabled={billingLoading}>
-                {billingLoading?"Opening secure checkout...":`Choose ${PRO_THREE_MONTH_PLAN_NAME} · ${PRO_ACADEMY_PASS_PRICE} →`}
+                {billingLoading?"Opening secure checkout...":`Choose ${essentialPlanName} · ${PRO_ACADEMY_PASS_PRICE} →`}
               </button>
             )}
           </article>
@@ -29285,7 +29290,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
       {!isPro&&(
         <div className="upgrade-mobile-cta">
           <button className="btn btn-primary" onClick={()=>startUpgrade("three_month")} disabled={billingLoading}>
-            {billingLoading?"Opening checkout...":`${PRO_THREE_MONTH_PLAN_NAME} · ${PRO_ACADEMY_PASS_PRICE}`}
+            {billingLoading?"Opening checkout...":`${essentialPlanName} · ${PRO_ACADEMY_PASS_PRICE}`}
           </button>
           <div className="upgrade-mobile-trust">Recommended · Save 33% vs monthly · {PRO_ACADEMY_PASS_TRUST}</div>
         </div>
