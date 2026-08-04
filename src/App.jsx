@@ -18148,15 +18148,18 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-benefit-board{position:relative;z-index:1;display:grid;grid-template-columns:minmax(240px,1fr) minmax(138px,.42fr) minmax(138px,.42fr);align-items:stretch;gap:0;max-width:760px;margin:0 auto;}
 .upgrade-benefit-labels{display:grid;grid-template-rows:66px repeat(4,74px);}
 .upgrade-benefit-heading{display:flex;align-items:center;color:${t.text};font-size:18px;font-weight:950;}
-.upgrade-benefit-name{display:flex;align-items:center;gap:12px;border-top:1px solid ${t.border};color:${t.text};font-size:18px;font-weight:850;line-height:1.2;}
+.upgrade-benefit-name{display:flex;align-items:center;gap:12px;width:100%;border:0;border-top:1px solid ${t.border};background:transparent;color:${t.text};font:inherit;font-size:18px;font-weight:850;line-height:1.2;text-align:left;cursor:pointer;transition:color .18s ease,transform .18s ease;}
 .upgrade-benefit-name span{width:38px;height:38px;border-radius:13px;display:inline-flex;align-items:center;justify-content:center;background:${t.panel};color:${t.accent};border:1px solid ${t.border};box-shadow:0 10px 22px rgba(7,12,24,.08);}
+.upgrade-benefit-name:hover{color:${t.green};transform:translateX(3px);}
+.upgrade-benefit-name:hover span{border-color:${t.green}66;background:${t.green}17;color:${t.green};}
+.upgrade-benefit-name:focus-visible{outline:3px solid ${t.green}55;outline-offset:-4px;border-radius:14px;}
 .upgrade-benefit-plan{display:grid;grid-template-rows:66px repeat(4,74px);text-align:center;}
 .upgrade-benefit-plan.free{background:color-mix(in srgb,${t.text} 5%,transparent);border-radius:22px 0 0 22px;color:${t.textDim};}
-.upgrade-benefit-plan.pro{position:relative;border-radius:0 22px 22px 0;padding:0;background:linear-gradient(145deg,#8b5cf6,#f472b6 48%,#fbbf24);box-shadow:0 24px 58px ${t.accent}28;}
+.upgrade-benefit-plan.pro{position:relative;border-radius:0 22px 22px 0;padding:0;background:linear-gradient(145deg,#2dd4bf 0%,#34d399 46%,#facc15 100%);box-shadow:0 24px 58px ${t.green}22;}
 .upgrade-benefit-plan-title{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;font-size:18px;font-weight:950;color:${t.text};}
 .upgrade-benefit-plan-title em{font-style:normal;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:${t.textSec};}
-.upgrade-benefit-plan.pro .upgrade-benefit-plan-title{color:#111827;}
-.upgrade-benefit-plan.pro .upgrade-benefit-plan-title em{color:#3f2a18;}
+.upgrade-benefit-plan.pro .upgrade-benefit-plan-title{color:#102016;}
+.upgrade-benefit-plan.pro .upgrade-benefit-plan-title em{color:#31511d;}
 .upgrade-benefit-phone{display:grid;grid-template-rows:repeat(4,74px);grid-row:2 / span 4;margin:0 9px 9px;border-radius:17px;background:#191917;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
 .upgrade-benefit-cell{display:flex;align-items:center;justify-content:center;gap:7px;border-top:1px solid color-mix(in srgb,${t.border} 78%,transparent);font-size:13px;font-weight:950;color:${t.green};}
 .upgrade-benefit-cell:first-child{border-top:0;}
@@ -29092,10 +29095,10 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
     "Zero Cipher Coin requirements—open every Pro tool whenever you need it",
   ];
   const premiumBenefits=[
-    {label:"Personalised practice",free:"Basic review",freeIncluded:true,Icon:Brain},
-    {label:"Unlimited PBQs",free:"Preview only",freeIncluded:false,Icon:Puzzle},
-    {label:"Exam Mode",free:"Not included",freeIncluded:false,Icon:ClipboardCheck},
-    {label:"Concept Deep Dives",free:"Not included",freeIncluded:false,Icon:BookOpenCheck},
+    {label:"Personalised practice",free:"Basic review",freeIncluded:true,Icon:Brain,view:"dashboard"},
+    {label:"Unlimited PBQs",free:"Preview only",freeIncluded:false,Icon:Puzzle,view:"pbq"},
+    {label:"Exam Mode",free:"Not included",freeIncluded:false,Icon:ClipboardCheck,view:"exam"},
+    {label:"Concept Deep Dives",free:"Not included",freeIncluded:false,Icon:BookOpenCheck,view:"deep-dives"},
   ];
   const rawOwnerName=String(user?.name||user?.fullName||user?.email?.split("@")?.[0]||"").trim().split(/\s+/)[0] || "Your";
   const safeOwnerName=rawOwnerName.replace(/[^A-Za-z0-9'-]/g,"").slice(0,18) || "Your";
@@ -29181,11 +29184,11 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         <div className="upgrade-benefit-board" aria-label="Free and Pro benefit comparison">
           <div className="upgrade-benefit-labels">
             <div className="upgrade-benefit-heading">Benefits</div>
-            {premiumBenefits.map(({label,Icon})=>(
-              <div key={label} className="upgrade-benefit-name">
+            {premiumBenefits.map(({label,Icon,view})=>(
+              <button key={label} type="button" className="upgrade-benefit-name" onClick={()=>onNavigate?.(view)} aria-label={`Open ${label}`}>
                 <span><Icon size={19}/></span>
                 {label}
-              </div>
+              </button>
             ))}
           </div>
           <div className="upgrade-benefit-plan free">
