@@ -19308,6 +19308,10 @@ body{background:
 .flashcards-inventory-grid{grid-template-columns:repeat(auto-fit,minmax(315px,1fr));align-items:stretch;}
 .flashcard-inventory-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;}
 .flashcard-inventory-header-actions>strong{flex:0 0 auto;color:var(--deep-muted);font-size:10px;}
+.flashcard-inventory-collapse-btn{display:inline-flex;align-items:center;gap:7px;min-height:32px;padding:7px 11px;border:1px solid color-mix(in srgb,#0ea5e9 30%,var(--deep-border));border-radius:999px;background:linear-gradient(135deg,color-mix(in srgb,#0ea5e9 9%,var(--deep-surface)),var(--deep-surface));color:#0ea5e9;font:inherit;font-size:10px;font-weight:950;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,box-shadow .16s;}
+.flashcard-inventory-collapse-btn svg{transition:transform .16s ease;}
+.flashcard-inventory-collapse-btn.active svg{transform:rotate(90deg);}
+.flashcard-inventory-collapse-btn:hover{transform:translateY(-1px);border-color:color-mix(in srgb,#0ea5e9 58%,var(--deep-border));box-shadow:0 10px 22px rgba(14,165,233,.12);}
 .flashcard-inventory-toggles{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap;}
 .flashcard-inventory-toggles button{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:7px 10px;border:1px solid color-mix(in srgb,var(--set-color,#f59e0b) 22%,var(--deep-border));border-radius:999px;background:var(--deep-surface);color:var(--deep-muted);font:inherit;font-size:10px;font-weight:950;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:transform .16s,border-color .16s,background .16s,color .16s;}
 .flashcard-inventory-toggles button span{display:grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--deep-panel);color:var(--deep-text);font-size:9px;}
@@ -30451,8 +30455,12 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
   const [defaultMode,setDefaultMode]=useState("");
   const [modeChooser,setModeChooser]=useState(null);
   const [inventoryVisibility,setInventoryVisibility]=useState(()=>readFlashcardInventoryVisibility(defaultOwner));
+  const [inventoryCollapsed,setInventoryCollapsed]=useState(true);
   const showStarredDecks=inventoryVisibility.starred;
   const showGeneratedDecks=inventoryVisibility.generated;
+  const previousInventoryOwnerRef=useRef(defaultOwner);
+  const previousStarredCountRef=useRef(starredFlashcards.length);
+  const previousAssistantDeckRef=useRef(showAssistantDeck);
 
   useEffect(()=>{
     setSavedRandomSets(readSavedRandomFlashcardSets(user));
@@ -30483,6 +30491,37 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
       return next;
     });
   };
+  const revealInventorySection=useCallback((section,notice="")=>{
+    setInventoryCollapsed(false);
+    if(section){
+      setInventoryVisibility(current=>({...current,[section]:true}));
+    }
+    if(notice)setInventoryNotice(notice);
+  },[]);
+
+  useEffect(()=>{
+    if(previousInventoryOwnerRef.current!==defaultOwner){
+      previousInventoryOwnerRef.current=defaultOwner;
+      previousStarredCountRef.current=starredFlashcards.length;
+      previousAssistantDeckRef.current=showAssistantDeck;
+      setInventoryCollapsed(true);
+    }
+  },[defaultOwner,showAssistantDeck,starredFlashcards.length]);
+
+  useEffect(()=>{
+    const previous=previousStarredCountRef.current;
+    if(starredFlashcards.length>previous){
+      revealInventorySection("starred","Starred flashcard added. Your saved-card deck is open for this session.");
+    }
+    previousStarredCountRef.current=starredFlashcards.length;
+  },[revealInventorySection,starredFlashcards.length]);
+
+  useEffect(()=>{
+    if(showAssistantDeck&&!previousAssistantDeckRef.current){
+      revealInventorySection(null,"Cipher generated a weak-area flashcard deck for this session.");
+    }
+    previousAssistantDeckRef.current=showAssistantDeck;
+  },[revealInventorySection,showAssistantDeck]);
 
   const saveDefaultMode=mode=>{
     if(!signedIn)return;
@@ -30599,7 +30638,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
     const next=[saved,...savedRandomSets.filter(item=>item.id!==saved.id)].slice(0,8);
     setSavedRandomSets(next);
     writeSavedRandomFlashcardSets(user,next);
-    setInventoryNotice(`${saved.title} created with ${cardCount} cards.`);
+    revealInventorySection("generated",`${saved.title} created with ${cardCount} cards.`);
     setRandomBuilderOpen(false);
     setRandomFlashcardSet(null);
     setSelectedSetId(openAfterSave?saved.id:null);
@@ -30757,10 +30796,11 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
         </div>
       </section>
 
-      <section className="deep-dives-domain-group flashcards-curated-set" style={{"--set-color":"#f59e0b"}}>
+      <section className={`deep-dives-domain-group flashcards-curated-set ${inventoryCollapsed?"collapsed":""}`} style={{"--set-color":"#f59e0b"}}>
         <header>
           <div><span>Your flashcard inventory</span><h2>Starred and generated decks</h2></div>
           <div className="flashcard-inventory-header-actions">
+            <button type="button" className={`flashcard-inventory-collapse-btn ${inventoryCollapsed?"":"active"}`} aria-expanded={!inventoryCollapsed} onClick={()=>setInventoryCollapsed(value=>!value)}><ChevronRight size={14}/>{inventoryCollapsed?"Show inventory":"Shrink inventory"}</button>
             <div className="flashcard-inventory-toggles" role="group" aria-label="Show or hide saved flashcard deck groups">
               <button type="button" className={showStarredDecks?"active":""} aria-pressed={showStarredDecks} onClick={()=>toggleInventoryVisibility("starred")}><Star size={13}/>{showStarredDecks?"Hide":"Show"} Starred <span>{starredFlashcards.length}</span></button>
               <button type="button" className={showGeneratedDecks?"active":""} aria-pressed={showGeneratedDecks} onClick={()=>toggleInventoryVisibility("generated")}><Sparkles size={13}/>{showGeneratedDecks?"Hide":"Show"} Generated <span>{savedRandomSets.length}</span></button>
@@ -30768,13 +30808,13 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
             <strong>{starredFlashcards.length+savedRandomSets.length+(showAssistantDeck?1:0)} saved</strong>
           </div>
         </header>
-        {inventoryNotice&&(
+        {!inventoryCollapsed&&inventoryNotice&&(
           <div className="flashcard-inventory-notice" role="status">
             <span><CheckCircle2 size={16}/>{inventoryNotice}</span>
             <button className="btn btn-ghost" type="button" onClick={()=>setInventoryNotice("")}>Dismiss</button>
           </div>
         )}
-        <div className="deep-dive-acronym-set-grid flashcards-inventory-grid">
+        {!inventoryCollapsed&&<div className="deep-dive-acronym-set-grid flashcards-inventory-grid">
           {showStarredDecks&&<button
             type="button"
             className="deep-dive-acronym-set-card flashcards-topic-card"
@@ -30939,7 +30979,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,assistantSet=nu
               <span className="deep-dive-acronym-set-progress"><span><i style={{width:"100%"}}/></span><span>{set.cards.filter(card=>card.cardType!=="divider").length}</span></span>
             </div>
           ))}
-        </div>
+        </div>}
       </section>
 
       <div className="deep-dives-domain-groups">
