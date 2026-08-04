@@ -1245,13 +1245,20 @@ function formatSecondsShort(seconds=0) {
 
 function getReadinessProfile(attempts=[]) {
   const usable=attempts.filter(attempt=>typeof attempt?.correct==="boolean");
-  const total=usable.length;
-  const correct=usable.filter(attempt=>attempt.correct).length;
+  const latestByQuestion=new Map();
+  usable.forEach(attempt=>{
+    const key=`${attempt.pbq?"pbq":"mcq"}:${attempt.qid||attempt.title||attempt.createdAt}`;
+    const current=latestByQuestion.get(key);
+    if(!current||getAttemptDate(attempt)>getAttemptDate(current))latestByQuestion.set(key,attempt);
+  });
+  const latestAttempts=[...latestByQuestion.values()];
+  const total=latestAttempts.length;
+  const correct=latestAttempts.filter(attempt=>attempt.correct).length;
   const accuracy=total?Math.round((correct/total)*100):0;
-  const uniqueQuestions=new Set(usable.map(attempt=>`${attempt.pbq?"pbq":"mcq"}:${attempt.qid||attempt.title||attempt.createdAt}`));
-  const coveredChapters=new Set(usable.map(attempt=>String(attempt.ch||"")).filter(chapter=>CHAPTERS.some(item=>item.id===chapter)));
+  const uniqueQuestions=new Set(latestByQuestion.keys());
+  const coveredChapters=new Set(latestAttempts.map(attempt=>String(attempt.ch||"")).filter(chapter=>CHAPTERS.some(item=>item.id===chapter)));
   const uniquePbqs=new Set(usable.filter(attempt=>attempt.pbq).map(attempt=>attempt.qid||attempt.title)).size;
-  const examQuestions=usable.filter(attempt=>attempt.exam).length;
+  const examQuestions=new Set(usable.filter(attempt=>attempt.exam).map(attempt=>`${attempt.pbq?"pbq":"mcq"}:${attempt.qid||attempt.title||attempt.createdAt}`)).size;
   const knowledge=Math.round(accuracy*Math.min(1,total/20));
   const coverage=Math.round((coveredChapters.size/Math.max(1,CHAPTERS.length))*100);
   const practice=Math.min(100,Math.round((uniqueQuestions.size/60)*100));
