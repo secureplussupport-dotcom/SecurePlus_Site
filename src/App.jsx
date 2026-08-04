@@ -18132,14 +18132,32 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .upgrade-trust-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:13px;}
 .upgrade-trust-item{display:flex;align-items:center;justify-content:center;gap:5px;color:${t.textDim};font-size:10px;font-weight:800;text-align:center;}
 .upgrade-free-note{margin-top:12px;text-align:center;color:${t.textDim};font-size:11px;line-height:1.5;}
-.upgrade-compare{padding:20px;border:1px solid ${t.border};border-radius:8px;background:${t.surface};margin-bottom:24px;}
-.upgrade-compare h3{font-size:18px;color:${t.text};margin-bottom:5px;}
-.upgrade-compare > p{font-size:12px;color:${t.textSec};margin-bottom:14px;}
-.upgrade-compare-row{display:grid;grid-template-columns:minmax(180px,1.25fr) repeat(2,minmax(100px,.55fr));gap:8px;align-items:center;padding:10px 0;border-top:1px solid ${t.border};font-size:12px;}
-.upgrade-compare-row:first-of-type{border-top:0;}
-.upgrade-compare-label{color:${t.textSec};font-weight:800;}
-.upgrade-compare-value{display:flex;align-items:center;justify-content:center;gap:5px;color:${t.textDim};text-align:center;}
-.upgrade-compare-value.pro{color:${t.green};font-weight:900;}
+.upgrade-benefit-stage{position:relative;overflow:hidden;margin:22px 0 24px;padding:34px 28px 38px;border:1px solid ${t.border};border-radius:18px;background:
+  radial-gradient(circle at 80% 12%,${t.accent}28,transparent 30%),
+  radial-gradient(circle at 13% 94%,${t.green}22,transparent 34%),
+  linear-gradient(135deg,${t.surface},${t.panel} 48%,${t.amber}12);
+  box-shadow:0 26px 70px rgba(7,12,24,.13);}
+.upgrade-benefit-stage::before{content:"";position:absolute;inset:auto -12% -36% -12%;height:58%;background:linear-gradient(90deg,${t.accent}22,${t.green}15,${t.amber}24);filter:blur(8px);opacity:.9;pointer-events:none;}
+.upgrade-benefit-stage-copy{position:relative;z-index:1;text-align:center;max-width:660px;margin:0 auto 28px;}
+.upgrade-benefit-stage-copy h3{margin:6px auto 8px;color:${t.text};font-size:clamp(30px,5vw,48px);line-height:1.08;letter-spacing:-.045em;}
+.upgrade-benefit-stage-copy p{margin:0 auto;color:${t.textSec};font-size:14px;line-height:1.65;max-width:560px;}
+.upgrade-benefit-board{position:relative;z-index:1;display:grid;grid-template-columns:minmax(240px,1fr) minmax(118px,.36fr) minmax(154px,.48fr);align-items:stretch;gap:0;max-width:760px;margin:0 auto;}
+.upgrade-benefit-labels{display:grid;grid-template-rows:66px repeat(4,74px);}
+.upgrade-benefit-heading{display:flex;align-items:center;color:${t.text};font-size:18px;font-weight:950;}
+.upgrade-benefit-name{display:flex;align-items:center;gap:12px;border-top:1px solid ${t.border};color:${t.text};font-size:18px;font-weight:850;line-height:1.2;}
+.upgrade-benefit-name span{width:38px;height:38px;border-radius:13px;display:inline-flex;align-items:center;justify-content:center;background:${t.panel};color:${t.accent};border:1px solid ${t.border};box-shadow:0 10px 22px rgba(7,12,24,.08);}
+.upgrade-benefit-plan{display:grid;grid-template-rows:66px repeat(4,74px);text-align:center;}
+.upgrade-benefit-plan.free{background:color-mix(in srgb,${t.text} 5%,transparent);border-radius:22px 0 0 22px;color:${t.textDim};}
+.upgrade-benefit-plan.pro{position:relative;margin:-20px 0 -12px;border-radius:28px;padding:10px;background:linear-gradient(145deg,#8b5cf6,#f472b6 48%,#fbbf24);box-shadow:0 24px 58px ${t.accent}30;transform:translateX(-2px);}
+.upgrade-benefit-plan-title{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;font-size:18px;font-weight:950;color:${t.text};}
+.upgrade-benefit-plan-title em{font-style:normal;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:${t.textSec};}
+.upgrade-benefit-plan.pro .upgrade-benefit-plan-title{color:#111827;}
+.upgrade-benefit-plan.pro .upgrade-benefit-plan-title em{color:#3f2a18;}
+.upgrade-benefit-phone{display:grid;grid-template-rows:repeat(4,74px);border-radius:20px;background:#191917;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
+.upgrade-benefit-cell{display:flex;align-items:center;justify-content:center;gap:7px;border-top:1px solid color-mix(in srgb,${t.border} 78%,transparent);font-size:13px;font-weight:950;color:${t.green};}
+.upgrade-benefit-cell:first-child{border-top:0;}
+.upgrade-benefit-cell svg{width:28px;height:28px;padding:5px;border-radius:999px;background:#fed7aa;color:#1f2937;box-shadow:0 8px 14px rgba(0,0,0,.22);}
+.upgrade-benefit-cell.muted{color:${t.textDim};font-size:12px;font-weight:850;padding:0 8px;}
 .upgrade-referral-wrap{scroll-margin-top:90px;}
 .upgrade-mobile-cta{display:none;}
 .onboarding-overlay{position:fixed;inset:0;z-index:80;background:rgba(4,8,18,.72);backdrop-filter:blur(10px);display:grid;place-items:center;padding:20px;animation:fadeUp .22s ease both;}
@@ -18652,8 +18670,20 @@ body{background:
   .upgrade-price{font-size:39px!important;}
   .upgrade-trust-row{grid-template-columns:1fr!important;gap:9px!important;}
   .upgrade-trust-item{justify-content:flex-start!important;}
-  .upgrade-compare{padding:16px!important;overflow-x:auto;}
-  .upgrade-compare-row{grid-template-columns:minmax(150px,1.2fr) repeat(2,minmax(84px,.55fr));min-width:360px;}
+  .upgrade-benefit-stage{padding:24px 14px 28px!important;border-radius:16px!important;}
+  .upgrade-benefit-stage-copy h3{font-size:30px!important;}
+  .upgrade-benefit-board{grid-template-columns:minmax(132px,1fr) minmax(82px,.52fr) minmax(104px,.66fr)!important;max-width:100%!important;}
+  .upgrade-benefit-labels,.upgrade-benefit-plan{grid-template-rows:54px repeat(4,64px)!important;}
+  .upgrade-benefit-phone{grid-template-rows:repeat(4,64px)!important;}
+  .upgrade-benefit-heading{font-size:14px!important;}
+  .upgrade-benefit-name{gap:7px!important;font-size:12px!important;}
+  .upgrade-benefit-name span{width:29px!important;height:29px!important;border-radius:10px!important;}
+  .upgrade-benefit-plan-title{font-size:14px!important;}
+  .upgrade-benefit-plan.pro{margin:-14px 0 -8px!important;padding:7px!important;border-radius:22px!important;}
+  .upgrade-benefit-phone{border-radius:16px!important;}
+  .upgrade-benefit-cell{font-size:10px!important;gap:4px!important;}
+  .upgrade-benefit-cell svg{width:22px!important;height:22px!important;padding:4px!important;}
+  .upgrade-benefit-cell.muted{font-size:9px!important;padding:0 4px!important;}
   .upgrade-mobile-cta{position:fixed;display:flex;flex-direction:column;gap:7px;left:12px;right:12px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:39;padding:9px;background:color-mix(in srgb,${t.surface} 94%,transparent);border:1px solid ${t.border};border-radius:10px;box-shadow:0 18px 46px rgba(0,0,0,.28);backdrop-filter:blur(16px);}
   .upgrade-mobile-cta .btn{width:100%;justify-content:center;}
   .upgrade-mobile-trust{font-size:10px;line-height:1.35;text-align:center;color:${t.textDim};font-weight:850;}
@@ -29058,13 +29088,11 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
     "Detailed solutions, chapter analytics, and next-step guidance",
     "Zero Cipher Coin requirements—open every Pro tool whenever you need it",
   ];
-  const comparison=[
-    ["All MCQ practice","Included","Included"],
-    ["Daily Challenge","Included","Included"],
-    ["Save basic progress","Included","Included"],
-    ["PBQ simulations","Preview + coin unlocks",`${PBQ_BANK.length} PBQs`],
-    ["Timed Exam Mode","Coin pass","Unlimited"],
-    ["Smart Review + deep analysis","—","Included"],
+  const premiumBenefits=[
+    {label:"Unlimited PBQs",free:"Preview + coins",pro:"Unlimited",Icon:Puzzle},
+    {label:"Exam Mode",free:"Coin voucher",pro:"Unlimited",Icon:ClipboardCheck},
+    {label:"Personalised practice",free:"Basic review",pro:"Smart Review",Icon:Brain},
+    {label:"Concept Deep Dives",free:"Flashcards only",pro:"Included",Icon:BookOpenCheck},
   ];
   return(
     <div className="upgrade-page">
@@ -29201,22 +29229,46 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         </div>
       </section>
 
-      <div className="upgrade-compare">
-        <h3>Choose by how you want to practise</h3>
-        <p>Free remains useful. Upgrade when applied simulations and deeper feedback become part of your study plan.</p>
-        <div className="upgrade-compare-row" aria-hidden="true">
-          <div/>
-          <div className="upgrade-compare-value" style={{fontWeight:950,color:t.text}}>Free</div>
-          <div className="upgrade-compare-value pro" style={{color:t.accent}}>Pro</div>
+      <section className="upgrade-benefit-stage" aria-labelledby="upgrade-benefit-stage-title">
+        <div className="upgrade-benefit-stage-copy">
+          <div className="label" style={{color:t.accent}}>Free vs Pro</div>
+          <h3 id="upgrade-benefit-stage-title">Unlock the full SecurePlus exam-prep loop.</h3>
+          <p>Free gets you started. Pro removes limits when your exam preparation needs applied practice and guided next steps.</p>
         </div>
-        {comparison.map(([label,free,pro])=>(
-          <div key={label} className="upgrade-compare-row">
-            <div className="upgrade-compare-label">{label}</div>
-            <div className="upgrade-compare-value">{free}</div>
-            <div className="upgrade-compare-value pro"><Check size={13}/>{pro}</div>
+        <div className="upgrade-benefit-board" aria-label="Free and Pro benefit comparison">
+          <div className="upgrade-benefit-labels">
+            <div className="upgrade-benefit-heading">Benefits</div>
+            {premiumBenefits.map(({label,Icon})=>(
+              <div key={label} className="upgrade-benefit-name">
+                <span><Icon size={19}/></span>
+                {label}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+          <div className="upgrade-benefit-plan free">
+            <div className="upgrade-benefit-plan-title">Free</div>
+            {premiumBenefits.map(({label,free})=>(
+              <div key={label} className="upgrade-benefit-cell muted">
+                <span>{free}</span>
+              </div>
+            ))}
+          </div>
+          <div className="upgrade-benefit-plan pro" aria-label="Pro plan includes all listed premium benefits">
+            <div className="upgrade-benefit-plan-title">
+              <span>Pro</span>
+              <em>Full access</em>
+            </div>
+            <div className="upgrade-benefit-phone">
+              {premiumBenefits.map(({label,pro})=>(
+                <div key={label} className="upgrade-benefit-cell">
+                  <Check size={18}/>
+                  <span>{pro}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className="upgrade-secondary-stack">
         <details className="upgrade-secondary">
