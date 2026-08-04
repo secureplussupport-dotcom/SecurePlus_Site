@@ -17114,10 +17114,13 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .nav-lnk:hover .nav-glyph,.nav-lnk.act .nav-glyph{transform:translateY(-1px);}
 .nav-lnk:hover .nav-glyph-coins,.nav-glyph-coins.active{color:#d59632;background:#f2b85b22;border-color:#d5963260;box-shadow:0 0 18px #d5963245;}
 .nav-lnk:hover .nav-glyph-achievements,.nav-glyph-achievements.active{color:#b45309;background:linear-gradient(135deg,#facc1540,#fb718540);border-color:#f59e0b85;box-shadow:0 0 20px rgba(245,158,11,.42);}
-.nav-lnk:hover .nav-glyph-deep-dives,.nav-glyph-deep-dives.active{color:#1d4ed8;background:linear-gradient(135deg,#38bdf840,#8b5cf640);border-color:#3b82f685;box-shadow:0 0 20px rgba(59,130,246,.42);}
-.nav-lnk:hover .nav-glyph-flashcards,.nav-glyph-flashcards.active{color:#7c3aed;background:linear-gradient(135deg,#c4b5fd40,#f0abfc40);border-color:#8b5cf685;box-shadow:0 0 20px rgba(124,58,237,.4);}
+.nav-glyph-deep-dives .glyph-svg,.nav-glyph-flashcards .glyph-svg{filter:drop-shadow(0 0 2px color-mix(in srgb,currentColor 45%,transparent));}
+.nav-lnk:hover .nav-glyph-deep-dives,.nav-glyph-deep-dives.active{color:#1d4ed8;background:linear-gradient(135deg,#93c5fd70,#38bdf85c);border-color:#93c5fd;box-shadow:0 0 0 1px rgba(147,197,253,.32),0 0 24px rgba(96,165,250,.6);}
+.nav-lnk:hover .nav-glyph-flashcards,.nav-glyph-flashcards.active{color:#d8b4fe;background:linear-gradient(135deg,#a855f755,#ec489938);border-color:#c084fc;box-shadow:0 0 0 1px rgba(216,180,254,.26),0 0 24px rgba(192,132,252,.56);}
 .flashcards-fan-glyph rect{fill:color-mix(in srgb,currentColor 7%,transparent);stroke:currentColor;stroke-width:1.05;}
 .flashcards-fan-glyph path{stroke:currentColor;stroke-width:.95;stroke-linecap:round;}
+.nav-lnk:hover .nav-glyph-flashcards .flashcards-fan-glyph rect,.nav-glyph-flashcards.active .flashcards-fan-glyph rect{fill:color-mix(in srgb,currentColor 16%,transparent);stroke-width:1.28;}
+.nav-lnk:hover .nav-glyph-flashcards .flashcards-fan-glyph path,.nav-glyph-flashcards.active .flashcards-fan-glyph path{stroke-width:1.18;}
 .cipher-coin-icon{--coin-size:34px;position:relative;display:inline-block;width:var(--coin-size);height:var(--coin-size);flex:0 0 auto;filter:drop-shadow(0 calc(var(--coin-size)*.16) calc(var(--coin-size)*.13) rgba(113,76,28,.2));isolation:isolate;}
 .cipher-coin-face{position:absolute;inset:4% 7% 10% 5%;display:grid;place-items:center;overflow:hidden;border:2px solid #a96f25;border-radius:47% 53% 49% 51%/44% 48% 52% 56%;background:radial-gradient(circle at 34% 24%,#ffe7a3 0 9%,transparent 10%),linear-gradient(145deg,#f8cf72 0 34%,#dea044 62%,#b9782a 100%);box-shadow:inset calc(var(--coin-size)*.08) calc(var(--coin-size)*.07) 0 rgba(255,247,203,.5),inset calc(var(--coin-size)*-.09) calc(var(--coin-size)*-.08) 0 rgba(121,73,23,.17),2px 0 0 #c48631,-2px 2px 0 #b5792b;transform:rotate(-3deg);}
 .cipher-coin-face::after{content:"";position:absolute;inset:18%;border:2px dashed rgba(126,75,21,.42);border-radius:48% 52% 43% 57%;}
