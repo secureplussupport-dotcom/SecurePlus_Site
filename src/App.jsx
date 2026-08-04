@@ -31693,6 +31693,9 @@ export default function App() {
       document.documentElement.dataset.theme=darkMode?"dark":"light";
     }catch{}
   },[darkMode]);
+  useEffect(()=>{
+    if(view==="achievements")setView("dashboard");
+  },[view]);
   const effectiveAssistantFlashcardSet=useMemo(()=>{
     if(user?.tier!=="pro")return assistantFlashcardSet;
     if(assistantFlashcardSet?.cards?.length)return assistantFlashcardSet;
@@ -32820,7 +32823,6 @@ export default function App() {
     {id:"coins",icon:"coins",label:"Cipher Coins",mobileLabel:"Coins"},
     {id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"},
     {id:"flashcards",icon:"flashcards",label:"Flashcards",mobileLabel:"Cards"},
-    {id:"achievements",icon:"achievements",label:"Achievements",mobileLabel:"Stars"},
     {id:"pricing",icon:"pricing",label:"Upgrade",mobileLabel:"Upgrade"},
     {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
     {id:"account",icon:"account",label:"Account & Support",mobileLabel:"Account"},
@@ -32904,7 +32906,7 @@ export default function App() {
           {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onConsumeExamPass={handleConsumeExamPass} examPasses={coinWallet.examPasses} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} mcqBank={liveMcqBank} onSessionComplete={handleAchievementSessionComplete} canPreviewDeepDives onOpenDeepDives={()=>setView("deep-dives")}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward}/>}
           {view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onUnlockPbq={handleUnlockPbq} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}
-          {view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
+          {false&&view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
           {view==="referrals"&&<ReferralPage user={user} t={t}/>}
           {view==="objectives"&&<ObjectivesPage t={t}/>}
