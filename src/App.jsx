@@ -25479,7 +25479,7 @@ function ExamModeGuideModal({t,onClose}) {
   );
 }
 
-function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamPass,examPasses=0,t,showQuestionCodes=false,pbqBank=PBQ_BANK,mcqBank=MCQ_BANK,onSessionComplete,canPreviewDeepDives=false,onOpenDeepDives}) {
+function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamPass,examPasses=0,t,showQuestionCodes=false,pbqBank=PBQ_BANK,mcqBank=MCQ_BANK,onSessionComplete}) {
   const sessionKey=`exam:${practiceSessionOwner(user)}`;
   const [questionCount,setQuestionCount]=useState(20);
   const [pbqCount,setPbqCount]=useState(2);
@@ -25759,15 +25759,6 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
       </div>
       <div className="card" style={{padding:"10px",marginBottom:16,display:"flex",gap:8,flexWrap:"wrap"}}>
         <button className="btn btn-primary" style={{fontSize:12}}>Practice Exam</button>
-        {canPreviewDeepDives?(
-          <button className="btn btn-outline" style={{fontSize:12}} onClick={onOpenDeepDives}>
-            <Layers3 size={15}/> Concept Deep Dives · Preview
-          </button>
-        ):(
-          <button className="btn btn-ghost" style={{fontSize:12,opacity:.72,cursor:"not-allowed"}} disabled title="Coming soon">
-            Concept Deep Dives · Coming soon
-          </button>
-        )}
       </div>
       <div className="card" style={{padding:"20px 22px",marginBottom:16}}>
         <div style={{fontWeight:800,color:t.text,marginBottom:8}}>Exam setup</div>
@@ -33389,7 +33380,7 @@ export default function App() {
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)&&!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
           </div>
-          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onConsumeExamPass={handleConsumeExamPass} examPasses={coinWallet.examPasses} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} mcqBank={liveMcqBank} onSessionComplete={handleAchievementSessionComplete} canPreviewDeepDives onOpenDeepDives={()=>setView("deep-dives")}/>}
+          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onConsumeExamPass={handleConsumeExamPass} examPasses={coinWallet.examPasses} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} mcqBank={liveMcqBank} onSessionComplete={handleAchievementSessionComplete}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward}/>}
           {view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onUnlockPbq={handleUnlockPbq} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}
           {false&&view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
