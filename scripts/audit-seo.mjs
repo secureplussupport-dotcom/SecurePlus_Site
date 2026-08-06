@@ -142,8 +142,18 @@ for (const file of pageFiles) {
   if (!read(file).includes(sy0701Path)) push(errors, file, `missing internal link to ${sy0701Path}`);
 }
 
-if (!appFallback.includes("CompTIA Security+ PBQ / MCQ practice site")) {
-  push(warnings, "index.html", "fallback HTML should describe the PBQ / MCQ practice site");
+const flashcardsPath = "/security-plus-flashcards/";
+for (const file of pageFiles) {
+  if (!read(file).includes(flashcardsPath)) push(errors, file, `missing internal link to ${flashcardsPath}`);
+}
+
+const flashcardsPage = read("public/security-plus-flashcards/index.html");
+for (const proof of ["313", "29", "General Security Concepts", "Security Operations", "Not exam dumps."]) {
+  if (!flashcardsPage.includes(proof)) push(errors, "public/security-plus-flashcards/index.html", `missing flashcard proof: ${proof}`);
+}
+
+if (!appFallback.includes("CompTIA Security+ PBQ, MCQ, and flashcard practice site")) {
+  push(warnings, "index.html", "fallback HTML should describe the PBQ, MCQ, and flashcard practice site");
 }
 
 console.log("SEO audit");

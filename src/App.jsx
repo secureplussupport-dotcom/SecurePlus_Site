@@ -282,7 +282,7 @@ function TrustBadge({t,compact=false,center=false,style={}}) {
 }
 
 const SEO_RESOURCE_LINKS = Object.freeze([
-  { href:"/security-plus-flashcards/", title:"Security+ flashcards", body:"Last-minute SY0-701 recall decks with weak-area review for Pro users." },
+  { href:"/security-plus-flashcards/", title:"CompTIA Security+ flashcards for SY0-701", body:"Study 313 original cards in 29 decks across all five exam domains, then use weak-area review with Pro." },
   { href:"/security-plus-acronyms/", title:"Security+ acronyms", body:"Flashcard-style definitions for common SY0-701 abbreviations." },
   { href:"/security-plus-port-numbers/", title:"Port numbers", body:"Quick review for common services, protocols, and exam clues." },
   { href:"/security-plus-firewall-pbq-practice/", title:"Firewall PBQ practice", body:"ACL logic, ports, protocols, and rule-order scenarios." },
