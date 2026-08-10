@@ -19662,6 +19662,23 @@ body{background:
 .deep-dive-practice-summary>span.correct{color:var(--deep-green);border-color:color-mix(in srgb,var(--deep-green) 28%,var(--deep-border));}
 .deep-dive-practice-summary>span.wrong{color:#c75249;border-color:#dc6a6038;}
 .deep-dive-practice-complete .deep-dive-practice-actions{justify-content:center;}
+.deep-dive-lesson-actions{padding:18px 20px;margin-top:18px;border-color:color-mix(in srgb,var(--deep-accent) 25%,var(--deep-border));background:linear-gradient(135deg,color-mix(in srgb,var(--deep-accent) 9%,var(--deep-surface)),var(--deep-surface) 62%,color-mix(in srgb,var(--deep-green) 7%,var(--deep-surface)));}
+.deep-dive-lesson-actions-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:13px;}
+.deep-dive-lesson-actions-copy{flex:1 1 260px;}
+.deep-dive-lesson-actions-copy .label{margin-bottom:6px;color:var(--deep-accent);}
+.deep-dive-lesson-actions-copy h3{margin:0 0 6px;color:var(--deep-text);font-size:20px;font-weight:950;letter-spacing:-.02em;}
+.deep-dive-lesson-actions-copy p{margin:0;color:var(--deep-muted);font-size:13px;line-height:1.65;}
+.deep-dive-lesson-action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px;}
+.deep-dive-lesson-action-grid .btn{min-width:0;min-height:48px;padding:10px 13px;gap:7px;white-space:normal;line-height:1.2;text-align:center;font-size:12px;font-weight:950;}
+.deep-dive-lesson-action-grid .btn svg{flex:0 0 auto;}
+.deep-dive-lesson-btn-checkpoint{background:linear-gradient(180deg,#60a5fa,#3b82f6);color:#fff;box-shadow:0 12px 24px rgba(59,130,246,.2);}
+.deep-dive-lesson-btn-review{background:color-mix(in srgb,#14b8a6 10%,var(--deep-surface));border:1.5px solid color-mix(in srgb,#14b8a6 68%,var(--deep-border));color:#2dd4bf;}
+.deep-dive-lesson-btn-pbq{background:color-mix(in srgb,#f59e0b 10%,var(--deep-surface));border:1.5px solid color-mix(in srgb,#f59e0b 64%,var(--deep-border));color:#fbbf24;}
+.deep-dive-lesson-btn-flashcards{background:color-mix(in srgb,#8b5cf6 10%,var(--deep-surface));border:1.5px solid color-mix(in srgb,#8b5cf6 64%,var(--deep-border));color:#a78bfa;}
+.deep-dive-lesson-btn-checkpoint:hover{transform:translateY(-1px);background:linear-gradient(180deg,#74b3ff,#4f8df7);}
+.deep-dive-lesson-btn-review:hover{transform:translateY(-1px);background:color-mix(in srgb,#14b8a6 16%,var(--deep-surface));}
+.deep-dive-lesson-btn-pbq:hover{transform:translateY(-1px);background:color-mix(in srgb,#f59e0b 16%,var(--deep-surface));}
+.deep-dive-lesson-btn-flashcards:hover{transform:translateY(-1px);background:color-mix(in srgb,#8b5cf6 16%,var(--deep-surface));}
 .deep-dive-reader-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:18px;padding-top:4px;}
 /* Deep Dives use a deliberately larger type scale for comfortable study sessions. */
 .deep-dives-hero-copy>p{font-size:18px;font-weight:600;line-height:1.72;}
@@ -19907,6 +19924,11 @@ body{background:
   .deep-dive-practice-options button{min-height:64px;}
   .deep-dive-practice-actions{align-items:stretch;flex-direction:column-reverse;}
   .deep-dive-practice-actions .btn{width:100%;justify-content:center;}
+  .deep-dive-lesson-actions{padding:16px 14px;border-radius:18px;}
+  .deep-dive-lesson-actions-head{align-items:center;}
+  .deep-dive-lesson-actions-head .mascot-animation-wrap{display:none;}
+  .deep-dive-lesson-action-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+  .deep-dive-lesson-action-grid .btn{min-height:44px;padding:9px 8px;font-size:11px;}
   .deep-dive-section>summary,.deep-dive-check>summary{padding:17px 15px;font-size:13px;}
   .deep-dive-section-content{padding:17px 15px;}
   .deep-dive-table-wrap{border:0;overflow:visible;}
@@ -30192,6 +30214,16 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
     const isBeyondSection=activeLessonStep?.kind==="section"&&selectedProfile?.beyondSections.includes(activeLessonStep.index);
     const activeComparisonRow=activeSection?.table?.rows?.[comparisonIndex]||activeSection?.table?.rows?.[0]||null;
     const relevantAcronymSet=SY0701_ACRONYM_SETS.find(set=>set.objectiveCodes.some(code=>selectedProfile.objectiveCodes.includes(code)))||SY0701_ACRONYM_SETS[0];
+    const lessonActionContext={chapterId:selectedProfile.domainId,lessonId:selectedDive.id,title:selectedProfile.title};
+    const handleLessonReviewAction=()=>onAddWeakTopicToReview
+      ? onAddWeakTopicToReview(lessonActionContext)
+      : onUpgrade?.();
+    const handleRelatedPbqAction=()=>onTryRelatedPbq
+      ? onTryRelatedPbq(lessonActionContext)
+      : onUpgrade?.();
+    const handleRelatedFlashcardsAction=()=>relevantAcronymSet?.id
+      ? onOpenFlashcards?.(relevantAcronymSet.id)
+      : onUpgrade?.();
     return(
       <article className="deep-dive-reader" style={{"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
         <div className="deep-dive-reader-topbar">
@@ -30433,22 +30465,22 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
           </section>
         )}
 
-        <section className="card" style={{padding:"18px 20px",marginTop:18,borderColor:`${t.accent}35`,background:`linear-gradient(135deg, ${t.accent}10, ${t.surface} 62%, ${t.green}08)`}}>
-          <div style={{display:"flex",justifyContent:"space-between",gap:14,alignItems:"flex-start",flexWrap:"wrap",marginBottom:12}}>
-            <div style={{flex:"1 1 260px"}}>
-              <div className="label" style={{color:t.accent,marginBottom:6}}>End of lesson actions</div>
-              <h3 style={{fontSize:20,fontWeight:950,color:t.text,marginBottom:6}}>Turn this concept into practice</h3>
-              <p style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
+        <section className="card deep-dive-lesson-actions">
+          <div className="deep-dive-lesson-actions-head">
+            <div className="deep-dive-lesson-actions-copy">
+              <div className="label">End of lesson actions</div>
+              <h3>Turn this concept into practice</h3>
+              <p>
                 Finish with a 3-question checkpoint, then add the topic to Smart Review, try a related PBQ, or drill matching acronyms.
               </p>
             </div>
             <MascotAnimation animation="wave" size={72} interactive hoverAnimation="cheer" reactionAnimations={["wave","thinking","cheer"]} label="Cipher points to lesson actions"/>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(190px,1fr))",gap:10}}>
-            <button className="btn btn-primary" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>3-question checkpoint</button>
-            <button className="btn btn-outline" type="button" onClick={()=>onAddWeakTopicToReview?.({chapterId:selectedProfile.domainId,lessonId:selectedDive.id,title:selectedProfile.title})}><Brain size={16}/>Add weak topic to Smart Review</button>
-            <button className="btn btn-outline" type="button" onClick={()=>onTryRelatedPbq?.({chapterId:selectedProfile.domainId,lessonId:selectedDive.id,title:selectedProfile.title})}><Target size={16}/>Try related PBQ</button>
-            <button className="btn btn-outline" type="button" onClick={()=>onOpenFlashcards?.(relevantAcronymSet.id)}><TextCursorInput size={16}/>Open related flashcards</button>
+          <div className="deep-dive-lesson-action-grid">
+            <button className="btn deep-dive-lesson-btn-checkpoint" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>Checkpoint</button>
+            <button className="btn deep-dive-lesson-btn-review" type="button" onClick={handleLessonReviewAction}><Brain size={16}/>Smart Review</button>
+            <button className="btn deep-dive-lesson-btn-pbq" type="button" onClick={handleRelatedPbqAction}><Target size={16}/>Related PBQ</button>
+            <button className="btn deep-dive-lesson-btn-flashcards" type="button" onClick={handleRelatedFlashcardsAction}><TextCursorInput size={16}/>Flashcards</button>
           </div>
         </section>
 
@@ -33214,7 +33246,7 @@ export default function App() {
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
             {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={assistantFlashcardSet} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
-            {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={guestUser} onOpenFlashcards={()=>setView("flashcards")} onUpgrade={goToSignup}/>}
+            {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={guestUser} onAddWeakTopicToReview={goToSignup} onTryRelatedPbq={handleGuestPbqPreview} onOpenFlashcards={handleOpenFlashcards} onUpgrade={goToSignup}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
