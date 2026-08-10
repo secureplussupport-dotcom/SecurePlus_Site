@@ -52,3 +52,133 @@ footer{border-top:1px solid #1f2937;margin-top:34px;padding:28px 0;color:#94a3b8
   .final-cta{align-items:flex-start;flex-direction:column}.final-cta .btn{width:100%}
   .card{padding:18px}
 }
+
+/* Focused legacy-search pages: a quieter SecurePlus transition experience. */
+body.legacy-seo-page{
+  background:
+    radial-gradient(circle at 8% 2%,rgba(59,130,246,.2),transparent 25rem),
+    radial-gradient(circle at 92% 18%,rgba(45,212,191,.13),transparent 24rem),
+    radial-gradient(circle at 75% 85%,rgba(245,158,11,.08),transparent 28rem),
+    #09111f;
+}
+.legacy-seo-page .wrap{width:min(1020px,calc(100% - 36px))}
+.legacy-seo-page .nav{
+  margin-top:18px;
+  padding:13px 16px;
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:18px;
+  background:rgba(15,23,42,.72);
+  box-shadow:0 18px 50px rgba(2,6,23,.22);
+  backdrop-filter:blur(16px);
+}
+.legacy-seo-page .brand img{width:34px;height:34px}
+.legacy-nav-cta{
+  display:inline-flex;
+  align-items:center;
+  min-height:38px;
+  padding:8px 14px;
+  border:1px solid rgba(96,165,250,.34);
+  border-radius:12px;
+  background:rgba(37,99,235,.12);
+  color:#dbeafe;
+  font-size:13px;
+  font-weight:850;
+}
+.legacy-nav-cta:hover{background:rgba(37,99,235,.22);text-decoration:none}
+.legacy-seo-page .breadcrumbs{padding:20px 4px 0;font-size:12px}
+.legacy-hero{
+  position:relative;
+  overflow:hidden;
+  margin-top:18px;
+  padding:clamp(34px,6vw,64px);
+  border:1px solid rgba(96,165,250,.22);
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 94% 12%,rgba(45,212,191,.13),transparent 26rem),
+    linear-gradient(145deg,rgba(30,41,59,.92),rgba(15,23,42,.82));
+  box-shadow:0 30px 80px rgba(2,6,23,.32);
+}
+.legacy-hero::after{
+  content:"";
+  position:absolute;
+  right:-70px;
+  bottom:-120px;
+  width:260px;
+  height:260px;
+  border:1px solid rgba(96,165,250,.12);
+  border-radius:50%;
+  box-shadow:0 0 0 34px rgba(45,212,191,.035),0 0 0 68px rgba(96,165,250,.025);
+  pointer-events:none;
+}
+.legacy-hero>*{position:relative;z-index:1}
+.legacy-seo-page .eyebrow{margin-bottom:18px;color:#7dd3fc;font-size:12px}
+.legacy-seo-page h1{max-width:850px;font-size:clamp(38px,5.2vw,62px);letter-spacing:-.035em}
+.legacy-seo-page .lead{max-width:760px;margin:20px 0 0;color:#cbd5e1;font-size:clamp(16px,2vw,18px)}
+.version-path{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  width:max-content;
+  max-width:100%;
+  margin-top:24px;
+  padding:8px 11px;
+  border:1px solid rgba(45,212,191,.25);
+  border-radius:999px;
+  background:rgba(13,148,136,.08);
+  color:#ccfbf1;
+  font-size:12px;
+  font-weight:850;
+}
+.version-path .retired{color:#94a3b8;text-decoration:line-through;text-decoration-color:#f87171}
+.version-path .arrow{color:#5eead4;font-size:16px}
+.legacy-meta-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:22px}
+.legacy-meta-row .version-path,.legacy-meta-row .trust-line{margin-top:0}
+.legacy-seo-page .trust-line{margin-top:18px;border-color:rgba(52,211,153,.24);background:rgba(6,78,59,.22)}
+.legacy-seo-page .cta{margin-top:26px}
+.legacy-seo-page .btn{min-height:46px;padding:11px 18px;border-radius:13px;box-shadow:0 10px 26px rgba(37,99,235,.18)}
+.legacy-seo-page .btn.alt{border-color:rgba(148,163,184,.24);background:rgba(15,23,42,.44);box-shadow:none}
+.legacy-seo-page section:not(.legacy-hero){padding-top:20px;padding-bottom:20px}
+.legacy-seo-page .section-heading{padding-top:48px;padding-bottom:8px}
+.legacy-seo-page .section-heading p{max-width:680px}
+.legacy-seo-page .card{
+  border-color:rgba(148,163,184,.17);
+  border-radius:20px;
+  background:linear-gradient(160deg,rgba(30,41,59,.86),rgba(15,23,42,.78));
+  box-shadow:0 18px 48px rgba(2,6,23,.18);
+}
+.legacy-seo-page .card h2{letter-spacing:-.02em}
+.legacy-seo-page .card p:last-child{margin-bottom:0}
+.legacy-seo-page .no-dumps-card{border-color:rgba(45,212,191,.22);background:radial-gradient(circle at 95% 5%,rgba(45,212,191,.13),transparent 42%),linear-gradient(160deg,rgba(19,43,52,.9),rgba(15,23,42,.82))}
+.legacy-seo-page .question{border-left:1px solid rgba(96,165,250,.3);border-top:3px solid #60a5fa}
+.legacy-seo-page code{padding:2px 6px;border-radius:7px;background:#020617;color:#bae6fd;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em}
+.legacy-seo-page .steps{gap:18px}
+.legacy-seo-page .steps li::before{background:linear-gradient(145deg,#3b82f6,#14b8a6);box-shadow:0 7px 16px rgba(37,99,235,.2)}
+.legacy-seo-page .final-cta{padding:26px 28px;border-color:rgba(96,165,250,.26)}
+.legacy-seo-page .seo-faq{border-color:rgba(148,163,184,.17);background:rgba(15,23,42,.72)}
+.legacy-seo-page .seo-faq details{border-top:1px solid rgba(148,163,184,.14)}
+.legacy-seo-page .seo-faq details:first-of-type{border-top:0}
+.legacy-seo-page .seo-faq summary{position:relative;padding:17px 34px 17px 0;color:#f8fafc;font-weight:800;cursor:pointer;list-style:none}
+.legacy-seo-page .seo-faq summary::-webkit-details-marker{display:none}
+.legacy-seo-page .seo-faq summary::after{content:"+";position:absolute;right:4px;top:14px;color:#60a5fa;font-size:22px;line-height:1;transition:transform .18s ease}
+.legacy-seo-page .seo-faq details[open] summary::after{transform:rotate(45deg)}
+.legacy-seo-page .seo-faq details p{margin:0;padding:0 34px 18px 0;color:#cbd5e1}
+.legacy-seo-page .seo-faq article{display:none}
+.legacy-seo-page footer{margin-top:40px;text-align:center}
+@media(max-width:760px){
+  .legacy-seo-page .wrap{width:min(100% - 24px,1020px)}
+  .legacy-seo-page .nav{flex-direction:row;align-items:center;margin-top:12px;padding:11px 12px}
+  .legacy-seo-page .brand{font-size:14px}
+  .legacy-seo-page .brand img{width:30px;height:30px}
+  .legacy-nav-cta{min-height:34px;padding:6px 10px;font-size:11px}
+  .legacy-seo-page .breadcrumbs{padding-top:14px}
+  .legacy-hero{margin-top:12px;padding:28px 22px;border-radius:24px}
+  .legacy-seo-page h1{font-size:clamp(34px,10.5vw,48px)}
+  .legacy-seo-page .lead{font-size:15px;line-height:1.65}
+  .version-path{white-space:normal}
+  .legacy-meta-row{align-items:flex-start;flex-direction:column}
+  .legacy-seo-page .cta{display:grid;grid-template-columns:1fr}
+  .legacy-seo-page .btn{width:100%}
+  .legacy-seo-page .section-heading{padding-top:34px}
+  .legacy-seo-page .card{border-radius:17px}
+  .legacy-seo-page .final-cta{padding:22px}
+}
