@@ -393,6 +393,18 @@ const flashcardHasRealAcronym = card => {
   return Boolean(acronym&&expansion&&acronym!==expansion);
 };
 const randomFlashcardStorageKey = user => `${SAVED_RANDOM_FLASHCARD_PREFIX}:${starOwner(user)}`;
+const readLocalMasteredFlashcardIds = () => {
+  try{
+    const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
+    return Array.isArray(stored)?stored.filter(id=>SY0701_ACRONYM_CARDS.some(card=>card.id===id)):[];
+  }catch{return [];}
+};
+const readLocalFlashcardDefaultMode = owner => {
+  try{
+    const stored=window.localStorage?.getItem(getFlashcardDefaultModeKey(owner))||"";
+    return ["definition","acronym","example"].includes(stored)?stored:"";
+  }catch{return "";}
+};
 const buildRandomFlashcardSet = (input={}) => {
   const {count=10,mode="definition",includeTerms=true,includeAcronyms=true,sourceCards=SY0701_ACRONYM_CARDS,title="Randomised flashcard set",savedId="",preserveOrder=false,color=""}=input;
   const safeConfig=normalizeRandomFlashcardConfig({count,mode,includeTerms,includeAcronyms});
@@ -442,29 +454,36 @@ const buildRandomFlashcardSet = (input={}) => {
     randomConfig:{count:safeCount,mode:getSafeFlashcardMode(safeConfig.mode,false,setType),includeTerms:useTerms,includeAcronyms:useAcronyms},
   };
 };
+const hydrateSavedRandomFlashcardSets = (items=[]) => {
+  const cardMap=new Map(SY0701_ACRONYM_CARDS.map(card=>[card.id,card]));
+  return (items||[]).map((item,index)=>{
+    const cardIds=Array.isArray(item.cardIds)?item.cardIds:Array.isArray(item.card_ids)?item.card_ids:[];
+    const cards=cardIds.map(id=>cardMap.get(id)).filter(Boolean);
+    if(!cards.length)return null;
+    const config=item.config||{
+      mode:item.default_mode||item.mode,
+      includeTerms:item.include_terms,
+      includeAcronyms:item.include_acronyms,
+    };
+    return buildRandomFlashcardSet({
+      count:cards.length,
+      mode:config.mode||"definition",
+      includeTerms:config.includeTerms ?? config.include_terms ?? true,
+      includeAcronyms:config.includeAcronyms ?? config.include_acronyms ?? true,
+      sourceCards:cards,
+      title:item.title||`Generated deck ${index+1}`,
+      savedId:item.id||item.deck_id||`${SAVED_RANDOM_FLASHCARD_PREFIX}-${index+1}`,
+      color:item.color||generatedFlashcardSetColor(item.id||item.deck_id||index),
+      preserveOrder:true,
+    });
+  }).filter(Boolean);
+};
 const readSavedRandomFlashcardSets = user => {
   if(!user)return [];
   try{
     const parsed=JSON.parse(window.localStorage?.getItem(randomFlashcardStorageKey(user))||"[]");
     if(!Array.isArray(parsed))return [];
-    return parsed.map((item,index)=>{
-      const cardIds=Array.isArray(item.cardIds)?item.cardIds:[];
-      const cardMap=new Map(SY0701_ACRONYM_CARDS.map(card=>[card.id,card]));
-      const cards=cardIds.map(id=>cardMap.get(id)).filter(Boolean);
-      if(!cards.length)return null;
-      const config=item.config||{};
-      return buildRandomFlashcardSet({
-        count:cards.length,
-        mode:config.mode||"definition",
-        includeTerms:config.includeTerms!==false,
-        includeAcronyms:config.includeAcronyms!==false,
-        sourceCards:cards,
-        title:item.title||`Generated deck ${index+1}`,
-        savedId:item.id||`${SAVED_RANDOM_FLASHCARD_PREFIX}-${index+1}`,
-        color:item.color||generatedFlashcardSetColor(item.id||index),
-        preserveOrder:true,
-      });
-    }).filter(Boolean);
+    return hydrateSavedRandomFlashcardSets(parsed);
   }catch{return [];}
 };
 const writeSavedRandomFlashcardSets = (user,sets) => {
@@ -1637,6 +1656,135 @@ async function saveSupabaseStar(userId, type, id, shouldStar) {
     .eq("user_id", userId)
     .eq("question_key", question_key);
   if (error) console.warn("Unable to remove starred question", error);
+}
+
+const isValidFlashcardId = id => SY0701_ACRONYM_CARDS.some(card=>card.id===id);
+
+async function loadSupabaseFlashcardMasteredIds(userId) {
+  if (!supabase || !userId) return null;
+  const { data, error } = await supabase
+    .from("flashcard_progress")
+    .select("card_id, mastered")
+    .eq("user_id", userId);
+  if (error) {
+    console.warn("Unable to load flashcard progress", error);
+    return null;
+  }
+  return (data || [])
+    .filter(row=>row.mastered && isValidFlashcardId(row.card_id))
+    .map(row=>row.card_id);
+}
+
+async function saveSupabaseFlashcardProgress(userId, cardId, mastered) {
+  if (!supabase || !userId || !isValidFlashcardId(cardId)) return;
+  const { data: existing } = await supabase
+    .from("flashcard_progress")
+    .select("review_count")
+    .eq("user_id", userId)
+    .eq("card_id", cardId)
+    .maybeSingle();
+  const { error } = await supabase.from("flashcard_progress").upsert({
+    user_id: userId,
+    card_id: cardId,
+    mastered: Boolean(mastered),
+    review_count: Math.min(10000, (Number(existing?.review_count) || 0) + 1),
+    last_reviewed_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }, { onConflict: "user_id,card_id" });
+  if (error) console.warn("Unable to save flashcard progress", error);
+}
+
+async function loadSupabaseGeneratedFlashcardSets(userId) {
+  if (!supabase || !userId) return null;
+  const { data, error } = await supabase
+    .from("flashcard_generated_decks")
+    .select("deck_id,title,color,default_mode,include_terms,include_acronyms,card_ids,saved_at")
+    .eq("user_id", userId)
+    .order("saved_at", { ascending: false });
+  if (error) {
+    console.warn("Unable to load generated flashcard decks", error);
+    return null;
+  }
+  return hydrateSavedRandomFlashcardSets((data || []).map(row=>({
+    id: row.deck_id,
+    title: row.title,
+    color: row.color,
+    cardIds: row.card_ids,
+    savedAt: row.saved_at,
+    config: {
+      mode: row.default_mode,
+      includeTerms: row.include_terms,
+      includeAcronyms: row.include_acronyms,
+    },
+  })));
+}
+
+async function saveSupabaseGeneratedFlashcardSet(userId, set) {
+  if (!supabase || !userId || !set?.id) return;
+  const cards=(set.cards || []).filter(card=>card.cardType !== "divider" && isValidFlashcardId(card.id)).slice(0,30);
+  if (!cards.length) return;
+  const config=normalizeRandomFlashcardConfig(set.randomConfig || {});
+  const { error } = await supabase.from("flashcard_generated_decks").upsert({
+    user_id: userId,
+    deck_id: String(set.id).slice(0,160),
+    title: String(set.title || "Generated deck").trim().slice(0,80),
+    color: String(set.color || generatedFlashcardSetColor(set.id)).slice(0,32),
+    default_mode: getSafeFlashcardMode(config.mode, false, flashcardSetType(set)),
+    include_terms: Boolean(config.includeTerms),
+    include_acronyms: Boolean(config.includeAcronyms),
+    card_ids: cards.map(card=>card.id),
+    saved_at: set.savedAt || new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }, { onConflict: "user_id,deck_id" });
+  if (error) console.warn("Unable to save generated flashcard deck", error);
+}
+
+async function deleteSupabaseGeneratedFlashcardSet(userId, deckId) {
+  if (!supabase || !userId || !deckId) return;
+  const { error } = await supabase
+    .from("flashcard_generated_decks")
+    .delete()
+    .eq("user_id", userId)
+    .eq("deck_id", deckId);
+  if (error) console.warn("Unable to delete generated flashcard deck", error);
+}
+
+const normalizeFlashcardInventoryVisibility = value => ({
+  starred: value?.starred !== false,
+  generated: value?.generated !== false,
+});
+
+async function loadSupabaseFlashcardPreferences(userId) {
+  if (!supabase || !userId) return null;
+  const { data, error } = await supabase
+    .from("flashcard_preferences")
+    .select("default_mode, inventory_visibility")
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (error) {
+    console.warn("Unable to load flashcard preferences", error);
+    return null;
+  }
+  return data ? {
+    defaultMode: ["definition","acronym","example"].includes(data.default_mode) ? data.default_mode : "",
+    inventoryVisibility: normalizeFlashcardInventoryVisibility(data.inventory_visibility),
+  } : null;
+}
+
+async function saveSupabaseFlashcardPreferences(userId, patch={}) {
+  if (!supabase || !userId) return;
+  const payload={
+    user_id: userId,
+    updated_at: new Date().toISOString(),
+  };
+  if (patch.defaultMode !== undefined) {
+    payload.default_mode = ["definition","acronym","example"].includes(patch.defaultMode) ? patch.defaultMode : null;
+  }
+  if (patch.inventoryVisibility !== undefined) {
+    payload.inventory_visibility = normalizeFlashcardInventoryVisibility(patch.inventoryVisibility);
+  }
+  const { error } = await supabase.from("flashcard_preferences").upsert(payload, { onConflict: "user_id" });
+  if (error) console.warn("Unable to save flashcard preferences", error);
 }
 
 function getAttemptDate(attempt) {
@@ -30651,13 +30799,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
   const [renamingSetId,setRenamingSetId]=useState(null);
   const [renameDraft,setRenameDraft]=useState("");
   const [randomisingAction,setRandomisingAction]=useState(null);
-  const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
-    try{
-      if(!signedIn)return [];
-      const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
-      return Array.isArray(stored)?stored.filter(id=>SY0701_ACRONYM_CARDS.some(card=>card.id===id)):[];
-    }catch{return [];}
-  });
+  const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>signedIn?readLocalMasteredFlashcardIds():[]);
   const chapterGroups=useMemo(()=>groupSy0701AcronymSetsByChapter(),[]);
   const visibleGroups=chapterFilter==="all"?chapterGroups:chapterGroups.filter(group=>String(group.chapterId)===chapterFilter);
   const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
@@ -30684,6 +30826,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
   const previousInventoryOwnerRef=useRef(defaultOwner);
   const previousStarredCountRef=useRef(starredFlashcards.length);
   const previousAssistantDeckRef=useRef(showAssistantDeck);
+  const canSyncFlashcards=Boolean(user?.authProvider==="supabase"&&user?.id&&supabase);
 
   useEffect(()=>{
     if(!showIntroInitially)return;
@@ -30727,17 +30870,46 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
   },[user?.id,user?.email]);
 
   useEffect(()=>{
+    let cancelled=false;
+    if(!canSyncFlashcards)return undefined;
+    Promise.all([
+      loadSupabaseFlashcardMasteredIds(user.id),
+      loadSupabaseGeneratedFlashcardSets(user.id),
+      loadSupabaseFlashcardPreferences(user.id),
+    ]).then(([masteredIds,generatedSets,preferences])=>{
+      if(cancelled)return;
+      const shouldSeedCloud=!preferences;
+      const localMastered=readLocalMasteredFlashcardIds();
+      const nextMastered=Array.isArray(masteredIds)&&masteredIds.length?masteredIds:localMastered;
+      if(Array.isArray(nextMastered))setMasteredAcronymIds(nextMastered);
+      if(shouldSeedCloud&&Array.isArray(masteredIds)&&!masteredIds.length&&localMastered.length){
+        localMastered.forEach(cardId=>saveSupabaseFlashcardProgress(user.id,cardId,true));
+      }
+      if(Array.isArray(generatedSets)){
+        const localGenerated=readSavedRandomFlashcardSets(user);
+        const nextGenerated=generatedSets.length?generatedSets:localGenerated;
+        setSavedRandomSets(nextGenerated);
+        writeSavedRandomFlashcardSets(user,nextGenerated);
+        if(shouldSeedCloud&&!generatedSets.length&&localGenerated.length){
+          localGenerated.forEach(set=>saveSupabaseGeneratedFlashcardSet(user.id,set));
+        }
+      }
+      const localDefaultMode=readLocalFlashcardDefaultMode(defaultOwner);
+      if(preferences?.defaultMode)setDefaultMode(preferences.defaultMode);
+      else if(localDefaultMode&&shouldSeedCloud)saveSupabaseFlashcardPreferences(user.id,{defaultMode:localDefaultMode});
+      if(preferences?.inventoryVisibility)setInventoryVisibility(preferences.inventoryVisibility);
+      else if(shouldSeedCloud)saveSupabaseFlashcardPreferences(user.id,{inventoryVisibility:readFlashcardInventoryVisibility(defaultOwner)});
+    }).catch(error=>console.warn("Unable to sync flashcard state",error));
+    return ()=>{cancelled=true;};
+  },[canSyncFlashcards,defaultOwner,user?.id]);
+
+  useEffect(()=>{
     if(!signedIn){
       setDefaultMode("");
       setMasteredAcronymIds([]);
       return;
     }
-    try{
-      const stored=window.localStorage?.getItem(getFlashcardDefaultModeKey(defaultOwner))||"";
-      setDefaultMode(["definition","acronym","example"].includes(stored)?stored:"");
-    }catch{
-      setDefaultMode("");
-    }
+    setDefaultMode(readLocalFlashcardDefaultMode(defaultOwner));
   },[signedIn,defaultOwner]);
 
   useEffect(()=>{
@@ -30748,6 +30920,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
     setInventoryVisibility(current=>{
       const next={...current,[section]:!current[section]};
       try{window.localStorage?.setItem(getFlashcardInventoryVisibilityKey(defaultOwner),JSON.stringify(next));}catch{}
+      if(canSyncFlashcards)saveSupabaseFlashcardPreferences(user.id,{inventoryVisibility:next});
       capture("flashcards_inventory_visibility_toggled",{section,visible:next[section]});
       return next;
     });
@@ -30789,6 +30962,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
     const safeMode=getSafeFlashcardMode(mode,true);
     setDefaultMode(safeMode);
     try{window.localStorage?.setItem(getFlashcardDefaultModeKey(defaultOwner),safeMode);}catch{}
+    if(canSyncFlashcards)saveSupabaseFlashcardPreferences(user.id,{defaultMode:safeMode});
     capture("flashcards_default_mode_saved",{mode:safeMode});
   };
 
@@ -30897,6 +31071,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
     if(signedIn){
       try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
     }
+    if(canSyncFlashcards)saveSupabaseFlashcardProgress(user.id,cardId,mastered);
     capture("flashcards_acronym_rated",{set_id:selectedSet?.id,card_id:cardId,mastered});
   };
   const buildAndOpenRandomSet=()=>{
@@ -30925,6 +31100,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
     const next=[saved,...savedRandomSets.filter(item=>item.id!==saved.id)].slice(0,8);
     setSavedRandomSets(next);
     writeSavedRandomFlashcardSets(user,next);
+    if(canSyncFlashcards)saveSupabaseGeneratedFlashcardSet(user.id,saved);
     revealInventorySection("generated",`${saved.title} created with ${cardCount} cards.`);
     setRandomBuilderOpen(false);
     setRandomFlashcardSet(null);
@@ -30990,6 +31166,10 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
     const next=savedRandomSets.map(set=>set.id===setId?{...set,title:cleanName}:set);
     setSavedRandomSets(next);
     writeSavedRandomFlashcardSets(user,next);
+    if(canSyncFlashcards){
+      const renamed=next.find(set=>set.id===setId);
+      if(renamed)saveSupabaseGeneratedFlashcardSet(user.id,renamed);
+    }
     setRenamingSetId(null);
     setRenameDraft("");
     setInventoryNotice(`Renamed to ${cleanName}.`);
@@ -31004,6 +31184,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
     const next=savedRandomSets.filter(item=>item.id!==set.id);
     setSavedRandomSets(next);
     writeSavedRandomFlashcardSets(user,next);
+    if(canSyncFlashcards)deleteSupabaseGeneratedFlashcardSet(user.id,set.id);
     if(renamingSetId===set.id){
       setRenamingSetId(null);
       setRenameDraft("");
