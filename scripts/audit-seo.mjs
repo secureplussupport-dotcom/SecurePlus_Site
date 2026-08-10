@@ -24,6 +24,7 @@ const softwareApplicationPages = new Set([
   "security-plus-port-numbers",
   "security-plus-practice-questions",
   "security-plus-sy0-701-practice",
+  "sy0-601-pbq-practice",
 ]);
 const errors = [];
 const warnings = [];
@@ -71,7 +72,7 @@ function hasSchemaType(items, type) {
 function publicPageFiles() {
   return fs
     .readdirSync(publicDir, { withFileTypes: true })
-    .filter(entry => entry.isDirectory() && entry.name.startsWith("security-plus-"))
+    .filter(entry => entry.isDirectory() && (entry.name.startsWith("security-plus-") || entry.name.startsWith("sy0-")))
     .map(entry => `public/${entry.name}/index.html`)
     .sort();
 }

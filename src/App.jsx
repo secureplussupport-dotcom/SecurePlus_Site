@@ -295,6 +295,8 @@ const SEO_RESOURCE_LINKS = Object.freeze([
   { href:"/security-plus-comptia-practice-test/", title:"CompTIA practice test", body:"Security+ practice test preparation with MCQs, PBQs, and review guidance." },
   { href:"/security-plus-comptia-study-guide/", title:"CompTIA study guide", body:"Beginner-friendly Security+ study order for SY0-701 preparation." },
   { href:"/security-plus-pbq-practices/", title:"PBQ practices", body:"Security+ PBQ practices for firewall, logs, ordering, and select-and-fill tasks." },
+  { href:"/sy0-601-pbq-practice/", title:"SY0-601 PBQ search guide", body:"Use transferable 601 concepts safely, then move into current SY0-701 PBQ practice." },
+  { href:"/sy0-601-vs-sy0-701/", title:"SY0-601 vs SY0-701", body:"Compare the retired and current Security+ blueprints and rebuild an older study plan." },
   { href:"/security-plus-study-plan/", title:"Study plan", body:"A practical Security+ study schedule built around daily practice and review." },
   { href:"/security-plus-study-notes/", title:"Study notes", body:"Exam-keyword notes for common SY0-701 concepts and control choices." },
   { href:"/security-plus-free-comptia-practice/", title:"Original Security+ practice", body:"Scenario-based Security+ practice questions, daily challenges, and PBQ previews." },
