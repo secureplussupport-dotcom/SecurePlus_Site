@@ -4,6 +4,7 @@ import {
   getSupabaseAdmin,
   json,
 } from "../../api/_utils.js";
+import { CIPHER_UNLOCKABLE_PBQ_SET, chooseNextCipherPbq } from "./pbq-catalog.js";
 import { ensureCipherWelcomeGrant } from "./welcome-grant.js";
 
 const ACTIONS = new Set([
@@ -27,6 +28,51 @@ function isMissingCipherCoinSchema(error) {
 
 function cleanResourceId(value) {
   return String(value || "").trim().replace(/[^A-Za-z0-9_-]/g, "").slice(0, 120);
+}
+
+async function loadWalletSnapshot(supabase, userId, welcomeGrant = null) {
+  const [profileResult, transactionsResult, unlocksResult] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("cipher_coins,lifetime_cipher_coins,exam_passes")
+      .eq("id", userId)
+      .maybeSingle(),
+    supabase
+      .from("cipher_coin_transactions")
+      .select("id,amount,balance_after,event_type,reference_key,metadata,created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(20),
+    supabase
+      .from("cipher_coin_unlocks")
+      .select("id,unlock_type,resource_id,coin_cost,unlocked_at,consumed_at")
+      .eq("user_id", userId)
+      .order("unlocked_at", { ascending: false }),
+  ]);
+
+  const firstError = profileResult.error || transactionsResult.error || unlocksResult.error;
+  if (firstError) throw firstError;
+
+  const profile = profileResult.data || {};
+  const unlocks = unlocksResult.data || [];
+  return {
+    welcomeGrant: welcomeGrant
+      ? {
+          eligible: Boolean(welcomeGrant.eligible),
+          awarded: Boolean(welcomeGrant.awarded),
+          amount: Number(welcomeGrant.amount || 0),
+          reason: welcomeGrant.reason || "",
+        }
+      : undefined,
+    balance: Number(profile.cipher_coins || 0),
+    lifetimeEarned: Number(profile.lifetime_cipher_coins || 0),
+    examPasses: Number(profile.exam_passes || 0),
+    unlockedPbqIds: unlocks
+      .filter(item => item.unlock_type === "pbq")
+      .map(item => item.resource_id),
+    unlocks,
+    transactions: transactionsResult.data || [],
+  };
 }
 
 async function callRpc(supabase, name, parameters) {
@@ -62,7 +108,7 @@ export default async function handler(req, res) {
     if (!ACTIONS.has(action)) return json(res, 400, { error: "Unknown Cipher Coin action." });
 
     const userId = authData.user.id;
-    await ensureCipherWelcomeGrant(supabase, authData.user);
+    const welcomeGrant = await ensureCipherWelcomeGrant(supabase, authData.user);
     let result;
 
     if (action === "check_in") {
@@ -85,13 +131,19 @@ export default async function handler(req, res) {
     }
 
     if (action === "unlock_pbq") {
+      const walletBeforePurchase = await loadWalletSnapshot(supabase, userId, welcomeGrant);
+      const requestedPbqId = chooseNextCipherPbq(walletBeforePurchase.unlockedPbqIds);
+      if (!requestedPbqId) {
+        return json(res, 409, { error: "Every available PBQ is already unlocked." });
+      }
+
       result = await callRpc(supabase, "purchase_cipher_coin_item", {
         target_user_id: userId,
         requested_item_type: "pbq",
-        requested_resource_id: "",
+        requested_resource_id: requestedPbqId,
       });
 
-      if (result?.resourceId) {
+      if (result?.resourceId && CIPHER_UNLOCKABLE_PBQ_SET.has(cleanResourceId(result.resourceId))) {
         const { data: unlockedPbq, error: pbqError } = await supabase
           .from("pbqs")
           .select("id,title,type,domain")
@@ -116,7 +168,8 @@ export default async function handler(req, res) {
       });
     }
 
-    return json(res, 200, { ok: true, action, ...result });
+    const wallet = await loadWalletSnapshot(supabase, userId, welcomeGrant);
+    return json(res, 200, { ok: true, action, ...result, wallet });
   } catch (error) {
     console.error("Cipher Coin action failed:", error);
     if (isMissingCipherCoinSchema(error)) {

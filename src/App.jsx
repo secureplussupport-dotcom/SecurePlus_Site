@@ -26632,6 +26632,7 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
   const balance=Number(wallet?.balance||0);
   const transactions=wallet?.transactions||[];
   const [lastUnlockedPbq,setLastUnlockedPbq]=useState(null);
+  const [pendingExchange,setPendingExchange]=useState(null);
   const remainingPbqCount=PBQ_BANK.filter(question=>!isFreePBQPreview(question)&&!(wallet?.unlockedPbqIds||[]).includes(question.id)).length;
   const unlockedPbqCount=(wallet?.unlockedPbqIds||[]).length;
   const pbqGap=Math.max(0,CIPHER_COIN_COSTS.pbq-balance);
@@ -26653,9 +26654,20 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
         ? "You can reveal a permanent mystery PBQ now. Your first three reveals follow the shared starter path."
         : `You are ${pbqGap} coins away from a mystery PBQ. A perfect MCQ set brings in 15.`;
   const scrollToSection=id=>document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"});
+  const openExchange=type=>{
+    if(busy||isPro)return;
+    if(type==="pbq"&&(balance<CIPHER_COIN_COSTS.pbq||remainingPbqCount===0))return;
+    if(type==="exam"&&balance<CIPHER_COIN_COSTS.examPass)return;
+    setPendingExchange(type);
+  };
   const revealPbq=async()=>{
-    const result=await onUnlockPbq?.();
+    const result=await onUnlockPbq?.({openAfter:true});
     if(result?.purchased)setLastUnlockedPbq(result.question||{id:result.resourceId,title:result.resourceId});
+    if(result?.purchased||result?.alreadyOwned)setPendingExchange(null);
+  };
+  const buyExamPass=async()=>{
+    const purchased=await onBuyExamPass?.({openAfter:true});
+    if(purchased)setPendingExchange(null);
   };
   const earnMethods=[
     {title:"New learner gift",body:"Finish Academy onboarding and begin with a one-time welcome balance.",reward:`+${CIPHER_WELCOME_GRANT}`,color:"#d59632",Icon:Sparkles},
@@ -26717,7 +26729,7 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
             <h3>Mystery PBQ reveal</h3>
             <p>Your first three reveals follow p014 → p018 → p033. Later reveals are randomly selected from PBQs you do not own.</p>
             <div className="cipher-access-meter"><div className="cipher-access-label"><span>Your balance</span><strong>{isPro?"Included with Pro":pbqGap?`${pbqGap} more needed`:"Ready to reveal"}</strong></div><div className="cipher-access-track" role="progressbar" aria-label="Progress toward a mystery PBQ" aria-valuemin="0" aria-valuemax={CIPHER_COIN_COSTS.pbq} aria-valuenow={Math.min(balance,CIPHER_COIN_COSTS.pbq)}><span style={{width:`${pbqProgress}%`}}/></div></div>
-            <div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={25}/>{CIPHER_COIN_COSTS.pbq} coins</span><button className="btn btn-primary" type="button" onClick={revealPbq} disabled={busy||isPro||balance<CIPHER_COIN_COSTS.pbq||remainingPbqCount===0}>{isPro?"Included with Pro":remainingPbqCount===0?"All PBQs unlocked":pbqGap?`${pbqGap} more needed`:busy?"Revealing...":"Reveal a PBQ"}</button></div>
+            <div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={25}/>{CIPHER_COIN_COSTS.pbq} coins</span><button className="btn btn-primary" type="button" onClick={()=>openExchange("pbq")} disabled={busy||isPro||balance<CIPHER_COIN_COSTS.pbq||remainingPbqCount===0}>{isPro?"Included with Pro":remainingPbqCount===0?"All PBQs unlocked":pbqGap?`${pbqGap} more needed`:busy?"Revealing...":"Reveal a PBQ"}</button></div>
             {lastUnlockedPbq&&<div className="cipher-reveal-result"><MascotAnimation animation="unlock" size={58} label="Cipher celebrates the PBQ reveal"/><span><small>New PBQ revealed</small><strong>{lastUnlockedPbq.title||lastUnlockedPbq.id}</strong><button type="button" onClick={()=>onNavigate("pbq")}>Open PBQ Bank →</button></span></div>}
             {isPro&&<div className="cipher-pro-zero"><Sparkles size={13}/> Pro has every PBQ with zero coin requirements.</div>}
           </article>
@@ -26726,11 +26738,72 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
             <h3>Practice exam voucher</h3>
             <p>Run one complete timed SecurePlus practice exam. Your voucher is used only when the exam begins.</p>
             <div className="cipher-access-meter"><div className="cipher-access-label"><span>Your balance</span><strong>{isPro?"Included with Pro":examGap?`${examGap} more needed`:"Ready to exchange"}</strong></div><div className="cipher-access-track" role="progressbar" aria-label="Progress toward a practice exam voucher" aria-valuemin="0" aria-valuemax={CIPHER_COIN_COSTS.examPass} aria-valuenow={Math.min(balance,CIPHER_COIN_COSTS.examPass)}><span style={{width:`${examProgress}%`}}/></div></div>
-            <div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={25}/>{CIPHER_COIN_COSTS.examPass} coins</span><button className="btn btn-primary" type="button" onClick={onBuyExamPass} disabled={busy||isPro||balance<CIPHER_COIN_COSTS.examPass}>{isPro?"Included with Pro":examGap?`${examGap} more needed`:"Get Exam Voucher"}</button></div>
+            <div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={25}/>{CIPHER_COIN_COSTS.examPass} coins</span><button className="btn btn-primary" type="button" onClick={()=>openExchange("exam")} disabled={busy||isPro||balance<CIPHER_COIN_COSTS.examPass}>{isPro?"Included with Pro":examGap?`${examGap} more needed`:"Get Exam Voucher"}</button></div>
             {isPro&&<div className="cipher-pro-zero"><Sparkles size={13}/> Pro runs unlimited practice exams without spending coins.</div>}
           </article>
         </div>
       </section>
+
+      {pendingExchange&&(
+        <div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Confirm Cipher Coin exchange" onClick={()=>!busy&&setPendingExchange(null)}>
+          <div
+            className="streak-modal"
+            style={{
+              maxWidth:520,
+              padding:0,
+              overflow:"hidden",
+              borderColor:pendingExchange==="pbq"?`${t.accent}55`:`${t.green}55`,
+              background:`linear-gradient(145deg,${t.surface},${t.panel} 58%,${pendingExchange==="pbq"?t.accent:t.green}14)`,
+            }}
+            onClick={e=>e.stopPropagation()}
+          >
+            <div style={{padding:"24px 24px 20px",position:"relative"}}>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                style={{position:"absolute",right:14,top:14,minHeight:34,padding:"6px 9px"}}
+                onClick={()=>setPendingExchange(null)}
+                disabled={busy}
+                aria-label="Cancel exchange"
+              >
+                <X size={16}/>
+              </button>
+              <div style={{display:"flex",gap:14,alignItems:"center",marginBottom:16}}>
+                <div className="cipher-spend-visual" style={{width:64,height:64,color:pendingExchange==="pbq"?t.accent:t.green}}>
+                  {pendingExchange==="pbq"?<Puzzle size={32}/>:<ClipboardCheck size={32}/>}
+                </div>
+                <div>
+                  <div className="label" style={{color:pendingExchange==="pbq"?t.accent:t.green}}>Cipher Coin exchange</div>
+                  <h2 style={{fontSize:26,lineHeight:1.08,fontWeight:950,color:t.text,marginTop:4}}>
+                    {pendingExchange==="pbq"?"Reveal one PBQ?":"Get one exam voucher?"}
+                  </h2>
+                </div>
+              </div>
+              <p style={{fontSize:14,color:t.textSec,lineHeight:1.75,marginBottom:16}}>
+                {pendingExchange==="pbq"
+                  ? "Cipher will permanently unlock one PBQ on this account, then open it so you can start practising."
+                  : "Cipher will add one SecurePlus practice exam voucher, then take you to Exam Mode. The voucher is only used when an exam begins."}
+              </p>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:10,marginBottom:18}}>
+                <div className="card" style={{padding:"12px",background:`${t.bg}66`}}><small style={{color:t.textDim,fontWeight:800}}>Current</small><strong style={{display:"block",fontSize:22,color:t.text}}>{balance}</strong></div>
+                <div className="card" style={{padding:"12px",background:`${t.amber}10`,borderColor:`${t.amber}35`}}><small style={{color:t.textDim,fontWeight:800}}>Cost</small><strong style={{display:"block",fontSize:22,color:t.amber}}>-{pendingExchange==="pbq"?CIPHER_COIN_COSTS.pbq:CIPHER_COIN_COSTS.examPass}</strong></div>
+                <div className="card" style={{padding:"12px",background:`${t.green}10`,borderColor:`${t.green}35`}}><small style={{color:t.textDim,fontWeight:800}}>After</small><strong style={{display:"block",fontSize:22,color:t.green}}>{Math.max(0,balance-(pendingExchange==="pbq"?CIPHER_COIN_COSTS.pbq:CIPHER_COIN_COSTS.examPass))}</strong></div>
+              </div>
+              <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+                <button className="btn btn-primary" style={{flex:"1 1 220px",justifyContent:"center"}} type="button" onClick={pendingExchange==="pbq"?revealPbq:buyExamPass} disabled={busy}>
+                  {busy?"Securing exchange...":pendingExchange==="pbq"?"Reveal PBQ now":"Get voucher now"}
+                </button>
+                <button className="btn btn-outline" style={{flex:"1 1 140px",justifyContent:"center"}} type="button" onClick={()=>setPendingExchange(null)} disabled={busy}>
+                  Not now
+                </button>
+              </div>
+              <div style={{fontSize:11,color:t.textDim,lineHeight:1.55,marginTop:12}}>
+                This exchange is recorded in your Cipher Coin ledger so the item remains attached to your account.
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <section className="cipher-vault-section" id="cipher-earn">
         <div className="cipher-vault-section-head"><div><span className="cipher-section-eyebrow">Build your balance</span><h2>Ways to earn</h2></div><p>Rewards favour steady learning over endless grinding. Every activity has a clear limit, so the system stays fair.</p></div>
@@ -32873,24 +32946,27 @@ export default function App() {
     return()=>{active=false;};
   },[user?.id,user?.email,user?.authProvider]);
 
-  const handleUnlockPbq=useCallback(async()=>{
-    const confirmed=window.confirm(`Spend ${CIPHER_COIN_COSTS.pbq} Cipher Coins to reveal one permanent mystery PBQ? Your first three reveals follow the shared starter path.`);
-    if(!confirmed)return null;
+  const handleUnlockPbq=useCallback(async(options={})=>{
     const result=await runCipherAction("unlock_pbq");
     if(!result)return null;
     const unlockedQuestion=livePbqBank.find(question=>question.id===result.resourceId)||PBQ_BANK.find(question=>question.id===result.resourceId)||result.unlockedPbq||null;
     if(result.purchased){
       setCoinRewardToast({amount:0,title:"Mystery PBQ revealed",message:`${unlockedQuestion?.title||result.resourceId} is now permanently available on this account.`});
       await refreshRemotePBQs();
+      if(options.openAfter){
+        if(unlockedQuestion)setPbqQ(unlockedQuestion);
+        setView("pbq");
+      }
     }
     return {...result,question:unlockedQuestion};
   },[runCipherAction,refreshRemotePBQs,livePbqBank]);
 
-  const handleBuyExamPass=useCallback(async()=>{
-    const confirmed=window.confirm(`Exchange ${CIPHER_COIN_COSTS.examPass} Cipher Coins for one SecurePlus practice exam voucher?`);
-    if(!confirmed)return false;
+  const handleBuyExamPass=useCallback(async(options={})=>{
     const result=await runCipherAction("buy_exam_pass");
-    if(result?.purchased)setCoinRewardToast({amount:0,title:"Practice exam voucher ready",message:"One SecurePlus practice exam is now available. The voucher is used only when you start a new exam."});
+    if(result?.purchased){
+      setCoinRewardToast({amount:0,title:"Practice exam voucher ready",message:"One SecurePlus practice exam is now available. The voucher is used only when you start a new exam."});
+      if(options.openAfter)setView("exam");
+    }
     return Boolean(result?.purchased);
   },[runCipherAction]);
 
@@ -33598,7 +33674,11 @@ export default function App() {
     </>
   );
 
-  const activePbq=pbqQ ? (livePbqBank.find(question=>question.id===pbqQ.id) || (!isSupabaseConfigured ? pbqQ : null)) : null;
+  const pbqLocalFallback=pbqQ ? (PBQ_BANK.find(question=>question.id===pbqQ.id) || pbqQ) : null;
+  const pbqUnlockedByCoins=Boolean(pbqQ&&coinWallet.unlockedPbqIds.includes(pbqQ.id));
+  const activePbq=pbqQ
+    ? (livePbqBank.find(question=>question.id===pbqQ.id) || (pbqLocalFallback&&(pbqUnlockedByCoins||isFreePBQPreview(pbqLocalFallback)||!isSupabaseConfigured) ? pbqLocalFallback : null))
+    : null;
   const pbqPreviewMode=user?.tier!=="pro"&&isFreePBQPreview(activePbq);
   const pbqCoinUnlocked=Boolean(activePbq&&coinWallet.unlockedPbqIds.includes(activePbq.id));
   const nextPbq=user?.tier==="pro"&&activePbq?getNextRelatedPBQ(activePbq,attempts,livePbqBank):null;

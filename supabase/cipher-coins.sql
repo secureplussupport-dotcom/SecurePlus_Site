@@ -522,9 +522,11 @@ set search_path = public
 as $$
 declare
   current_balance integer;
+  ledger_balance integer;
   next_balance integer;
   item_cost integer;
   unlock_resource_id text;
+  requested_pbq_id text;
   transaction_reference text;
 begin
   if target_user_id is null then
@@ -547,23 +549,77 @@ begin
     return jsonb_build_object('ok', false, 'error', 'Profile not found.');
   end if;
 
+  select coalesce(sum(amount), 0)::integer
+  into ledger_balance
+  from public.cipher_coin_transactions
+  where user_id = target_user_id;
+
+  if ledger_balance > current_balance then
+    current_balance := ledger_balance;
+    update public.profiles
+    set cipher_coins = current_balance,
+        updated_at = now()
+    where id = target_user_id;
+  end if;
+
   if requested_item_type = 'pbq' then
     item_cost := 50;
+    requested_pbq_id := nullif(trim(coalesce(requested_resource_id, '')), '');
+
+    if requested_pbq_id is not null then
+      select candidates.id
+      into unlock_resource_id
+      from (
+        select pbqs.id
+        from public.pbqs
+        where pbqs.is_pro = true
+        union
+        select catalog.id
+        from unnest(array[
+          'p002','p003','p004','p005','p006','p007','p008','p009','p010','p011','p012','p013',
+          'p014','p015','p016','p017','p018','p019','p020','p021','p022','p023','p024','p025',
+          'p026','p027','p028','p029','p030','p031','p032','p033','p034','p035','p036','p037',
+          'p038','p039','p040','p041','p042','p043','p044','p045','p046','p047','p048','p049',
+          'p050','p051','p052','p054','p055','p056','p057','p058','p060','p061','p062','p064',
+          'p066','p067','p068','p069','p070','p073','p074','p075','p077','p078','p079','p080',
+          'p082','p083','p084','p085','p086','p089','p094','p095','p096','p099','p201','p202',
+          'p203','p204','p205','p206','p207','p208','p209','p210','p211','p212','p213','p214',
+          'p215','p216','p217','p218','p219','p220','p221',
+          'p222'
+        ]::text[]) as catalog(id)
+      ) as candidates
+      where candidates.id = requested_pbq_id
+        and candidates.id <> 'p001'
+        and not exists (
+          select 1
+          from public.cipher_coin_unlocks
+          where cipher_coin_unlocks.user_id = target_user_id
+            and cipher_coin_unlocks.unlock_type = 'pbq'
+            and cipher_coin_unlocks.resource_id = candidates.id
+        )
+      limit 1;
+
+      if unlock_resource_id is null then
+        return jsonb_build_object('ok', false, 'error', 'Invalid PBQ reveal. Refresh the Coin Vault and try again.');
+      end if;
+    end if;
 
     -- The first three reveals follow a shared learning path. Once these are
     -- owned, later purchases reveal a random locked Pro PBQ.
-    select preferred.id
-    into unlock_resource_id
-    from unnest(array['p014', 'p018', 'p033']::text[]) with ordinality as preferred(id, position)
-    where not exists (
-      select 1
-      from public.cipher_coin_unlocks
-      where cipher_coin_unlocks.user_id = target_user_id
-        and cipher_coin_unlocks.unlock_type = 'pbq'
-        and cipher_coin_unlocks.resource_id = preferred.id
-    )
-    order by preferred.position
-    limit 1;
+    if unlock_resource_id is null then
+      select preferred.id
+      into unlock_resource_id
+      from unnest(array['p014', 'p018', 'p033']::text[]) with ordinality as preferred(id, position)
+      where not exists (
+        select 1
+        from public.cipher_coin_unlocks
+        where cipher_coin_unlocks.user_id = target_user_id
+          and cipher_coin_unlocks.unlock_type = 'pbq'
+          and cipher_coin_unlocks.resource_id = preferred.id
+      )
+      order by preferred.position
+      limit 1;
+    end if;
 
     if unlock_resource_id is null then
       select candidates.id
@@ -573,8 +629,19 @@ begin
         from public.pbqs
         where pbqs.is_pro = true
         union
-        select 'p' || lpad(series.value::text, 3, '0')
-        from generate_series(2, 50) as series(value)
+        select catalog.id
+        from unnest(array[
+          'p002','p003','p004','p005','p006','p007','p008','p009','p010','p011','p012','p013',
+          'p014','p015','p016','p017','p018','p019','p020','p021','p022','p023','p024','p025',
+          'p026','p027','p028','p029','p030','p031','p032','p033','p034','p035','p036','p037',
+          'p038','p039','p040','p041','p042','p043','p044','p045','p046','p047','p048','p049',
+          'p050','p051','p052','p054','p055','p056','p057','p058','p060','p061','p062','p064',
+          'p066','p067','p068','p069','p070','p073','p074','p075','p077','p078','p079','p080',
+          'p082','p083','p084','p085','p086','p089','p094','p095','p096','p099','p201','p202',
+          'p203','p204','p205','p206','p207','p208','p209','p210','p211','p212','p213','p214',
+          'p215','p216','p217','p218','p219','p220','p221',
+          'p222'
+        ]::text[]) as catalog(id)
       ) as candidates
       where candidates.id <> 'p001'
         and not exists (
