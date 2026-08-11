@@ -131,6 +131,14 @@ insert into app_admins (email)
 values ('secureplus.support@gmail.com')
 on conflict (email) do nothing;
 
+-- Keep the owner/admin account permanently marked as Pro at the database layer.
+-- The app can still temporarily simulate Free mode in the admin's own browser for testing.
+update profiles
+set tier = 'pro',
+    subscription_status = coalesce(nullif(subscription_status, ''), 'admin_permanent'),
+    updated_at = now()
+where lower(email) = lower('secureplus.support@gmail.com');
+
 create table if not exists feedback_reports (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete set null,

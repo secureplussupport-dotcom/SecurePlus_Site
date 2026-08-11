@@ -232,6 +232,53 @@ const PRO_MONTHLY_PASS_PRICE = "$4.99 / month";
 const PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus";
 const PRO_ACADEMY_PASS_DESCRIPTION = "Built around the typical Security+ study window. Unlock all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.";
 const PRO_ACADEMY_PASS_TRUST = "Original scenario-based practice. Not exam dumps.";
+const ADMIN_PRO_MODE_STORAGE_PREFIX = "secureplus-admin-pro-mode";
+const ADMIN_ONLY_APP_VIEWS = new Set(["feedback","question-admin","mascot-admin"]);
+
+function configuredAdminEmails() {
+  const envEmails = String(import.meta.env.VITE_ADMIN_EMAILS || import.meta.env.VITE_ADMIN_EMAIL || "")
+    .split(",")
+    .map(normalizeEmail)
+    .filter(Boolean);
+  return new Set([normalizeEmail(SUPPORT_EMAIL), ...envEmails]);
+}
+
+function isAdminEmail(email) {
+  return configuredAdminEmails().has(normalizeEmail(email));
+}
+
+function isAdminUser(user) {
+  return Boolean(user?.isAdmin || isAdminEmail(user?.email));
+}
+
+function adminProModeStorageKey(user) {
+  return `${ADMIN_PRO_MODE_STORAGE_PREFIX}:${normalizeEmail(user?.email) || user?.id || "unknown"}`;
+}
+
+function readAdminProModeOverride(user) {
+  if(!isAdminUser(user))return "";
+  try{
+    const stored=window.localStorage?.getItem(adminProModeStorageKey(user));
+    return stored==="free"||stored==="pro"?stored:"";
+  }catch{return "";}
+}
+
+function applyAdminEntitlements(user) {
+  if(!user)return user;
+  if(!isAdminEmail(user.email))return user;
+  const override=readAdminProModeOverride(user);
+  const effectiveTier=override==="free"?"free":"pro";
+  return {
+    ...user,
+    isAdmin:true,
+    permanentProTier:true,
+    adminProMode:effectiveTier,
+    realTier:"pro",
+    tier:effectiveTier,
+    subscriptionStatus:user.subscriptionStatus || "admin_permanent",
+    referralTrialExpired:false,
+  };
+}
 
 function proWelcomeStorageKey(user) {
   return `${PRO_WELCOME_SEEN_KEY}:${user?.id || normalizeEmail(user?.email) || "unknown"}`;
@@ -1380,14 +1427,17 @@ function appUserFromProfile(authUser, profile) {
   const hasReferralTrial = trialUntil && trialUntil.getTime() > Date.now();
   const hasStoredProTier = profile?.tier === "pro";
   const hasActiveSubscription = ["active", "trialing"].includes(profile?.subscription_status);
-  const hasProAccess = hasStoredProTier || hasActiveSubscription || hasReferralTrial;
+  const adminAccount = isAdminEmail(profile?.email || authUser?.email);
+  const hasProAccess = adminAccount || hasStoredProTier || hasActiveSubscription || hasReferralTrial;
   const pendingReferralCode = String(authUser?.user_metadata?.pending_referral_code || "").trim().toUpperCase();
 
-  return {
+  return applyAdminEntitlements({
     id: authUser.id,
     email: profile?.email || authUser.email,
     name: profile?.full_name || profileName(authUser),
     tier: hasProAccess ? "pro" : "free",
+    isAdmin: adminAccount,
+    permanentProTier: adminAccount,
     subscriptionStatus: profile?.subscription_status || null,
     subscriptionCancelAtPeriodEnd: Boolean(profile?.subscription_cancel_at_period_end),
     subscriptionCurrentPeriodEnd: profile?.subscription_current_period_end || null,
@@ -1404,7 +1454,7 @@ function appUserFromProfile(authUser, profile) {
     pendingReferralCode,
     authProvider: "supabase",
     loginMethod: authUser?.app_metadata?.provider || "email",
-  };
+  });
 }
 
 async function getSupabaseProfile(authUser) {
@@ -22244,6 +22294,45 @@ function ProfileMenu({user,t,onUpdateProfile,onUpdateAvatar,onChangePassword,onL
   );
 }
 
+function AdminProTestSwitch({user,t,onModeChange}) {
+  if(!isAdminUser(user))return null;
+  const viewingAsPro=user?.tier==="pro";
+  return (
+    <div
+      className="admin-pro-test-switch"
+      style={{
+        marginTop:10,
+        padding:"10px 11px",
+        borderRadius:16,
+        border:`1px solid ${viewingAsPro?t.green:t.amber}55`,
+        background:viewingAsPro
+          ? `linear-gradient(135deg,${t.green}1f,${t.panel})`
+          : `linear-gradient(135deg,${t.amber}20,${t.panel})`,
+        boxShadow:`0 14px 30px ${viewingAsPro?t.green:t.amber}12`,
+      }}
+    >
+      <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:8}}>
+        <div>
+          <div className="label" style={{fontSize:9,color:t.textDim,letterSpacing:".12em"}}>ADMIN TEST MODE</div>
+          <div style={{fontSize:13,fontWeight:900,color:t.text}}>{viewingAsPro?"Viewing as Pro":"Viewing as Free"}</div>
+        </div>
+        <span style={{width:10,height:10,borderRadius:999,background:viewingAsPro?t.green:t.amber,boxShadow:`0 0 14px ${viewingAsPro?t.green:t.amber}`}}/>
+      </div>
+      <button
+        type="button"
+        className="btn btn-outline"
+        style={{width:"100%",minHeight:34,fontSize:11,padding:"6px 8px",justifyContent:"center"}}
+        onClick={()=>onModeChange?.(viewingAsPro?"free":"pro")}
+      >
+        {viewingAsPro?"Test Free gates":"Restore Pro view"}
+      </button>
+      <div style={{fontSize:10,color:t.textDim,lineHeight:1.45,marginTop:7}}>
+        Permanent admin Pro remains on the account. This only changes your browser view for testing.
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════
 // DAILY CHALLENGE VIEW (no login required)
 // ═══════════════════════════════════════════════════════════════
@@ -32318,7 +32407,7 @@ export default function App() {
   const lastPageKeyRef=useRef(null);
 
   const t=darkMode?THEMES.dark:THEMES.light;
-  const isRootUser=normalizeEmail(user?.email)===normalizeEmail(SUPPORT_EMAIL);
+  const isRootUser=isAdminUser(user);
   const liveMcqBank=useMemo(()=>MCQ_BANK,[questionBankVersion]);
   const livePbqBank=useMemo(
     ()=>isSupabaseConfigured?mergeRemotePBQBanks(PBQ_BANK,remotePbqBank):PBQ_BANK,
@@ -32351,6 +32440,14 @@ export default function App() {
     if(view==="achievements")setView("dashboard");
   },[view]);
   useEffect(()=>{
+    if(loading)return;
+    if(ADMIN_ONLY_APP_VIEWS.has(view)&&!isRootUser){
+      setAdminQuestionTarget(null);
+      setView("dashboard");
+      capture("admin_view_blocked", { view });
+    }
+  },[isRootUser,loading,view]);
+  useEffect(()=>{
     setMobileNavOpen(false);
   },[view]);
   useEffect(()=>{
@@ -32378,6 +32475,15 @@ export default function App() {
     const weakContext=buildCipherAssistantContext(attempts,"flashcards");
     return buildCipherWeakFlashcardSet(weakContext)||buildCipherStarterFlashcardSet();
   },[assistantFlashcardSet,attempts,user?.tier]);
+  const handleAdminProModeChange=useCallback(mode=>{
+    if(!isAdminUser(user))return;
+    const nextMode=mode==="free"?"free":"pro";
+    try{
+      window.localStorage?.setItem(adminProModeStorageKey(user),nextMode);
+    }catch{}
+    setUser(current=>current?applyAdminEntitlements(current):current);
+    capture("admin_pro_test_mode_changed", { mode: nextMode });
+  },[user]);
 
   const importPendingGuestSmartReview=useCallback(async(account,existingAttempts=[])=>{
     const pending=await takePendingGuestSmartReview();
@@ -32563,7 +32669,7 @@ export default function App() {
   },[forceSupabaseSignOut]);
 
   const handleTrialExpired=useCallback(()=>{
-    setUser(u=>u ? { ...u, tier: "free", referralTrialExpired: true } : u);
+    setUser(u=>u ? applyAdminEntitlements({ ...u, tier: "free", referralTrialExpired: true }) : u);
     setShowTrialExpiredPrompt(true);
     setView("pricing");
   },[]);
@@ -32650,8 +32756,9 @@ export default function App() {
           if(!referralClaim.alreadyClaimed) setReferralClaimPrompt(referralClaim);
         }
         const savedStarred=(await loadSupabaseStarred(verifiedUser.id)) ?? await DB.getStarred(starOwner(displayUser));
-        setUser(displayUser);
-        identifyUser(displayUser);
+        const entitledUser=applyAdminEntitlements(displayUser);
+        setUser(entitledUser);
+        identifyUser(entitledUser);
         setAttempts(accountAttempts);
         setStarred(savedStarred);
         const diagnosticDone=await DB.getDiagnosticDone(appUser.email);
@@ -32679,7 +32786,7 @@ export default function App() {
 
     (async()=>{
       const sess=await DB.getSession();
-      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){setUser(u);const a=await DB.getAttempts(u.email);const s=await DB.getStarred(starOwner(u));setAttempts(a);setStarred(s);const diagnosticDone=await DB.getDiagnosticDone(u.email);const seen=await DB.getOnboardingSeen(u.email);if(!seen)setShowOnboarding(true);else if(!diagnosticDone&&a.length===0)setShowDiagnostic(true);}}
+      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){const entitledUser=applyAdminEntitlements(u);setUser(entitledUser);const a=await DB.getAttempts(entitledUser.email);const s=await DB.getStarred(starOwner(entitledUser));setAttempts(a);setStarred(s);const diagnosticDone=await DB.getDiagnosticDone(entitledUser.email);const seen=await DB.getOnboardingSeen(entitledUser.email);if(!seen)setShowOnboarding(true);else if(!diagnosticDone&&a.length===0)setShowDiagnostic(true);}}
       setLoading(false);
     })();
     return()=>{active=false;};
@@ -32693,7 +32800,7 @@ export default function App() {
     const referralClaim=await claimReferralIfPresent(u);
     showReferralClaimErrorOnce(referralClaim);
     if(Number(referralClaim?.coinsAwarded)>0 && !referralClaim.alreadyClaimed) setReferralClaimPrompt(referralClaim);
-    const displayUser=Number(referralClaim?.coinsAwarded)>0 ? { ...u, cipherCoins:Number(referralClaim.cipherCoins ?? u.cipherCoins ?? 0) } : u;
+    const displayUser=applyAdminEntitlements(Number(referralClaim?.coinsAwarded)>0 ? { ...u, cipherCoins:Number(referralClaim.cipherCoins ?? u.cipherCoins ?? 0) } : u);
     setUser(displayUser);
     identifyUser(displayUser);
     const savedAttempts=u?.authProvider==="supabase" ? await loadSupabaseAttempts(u.id) : await DB.getAttempts(u.email);
@@ -33207,11 +33314,11 @@ export default function App() {
     }
   },[user,runCipherAction,refreshCipherWallet]);
   const handleEditReportedQuestion=useCallback(target=>{
-    if(!target?.id)return;
+    if(!isRootUser||!target?.id)return;
     setAdminQuestionTarget({...target,nonce:Date.now()});
     setView("question-admin");
     capture("admin_feedback_edit_question_clicked", { question_id: target.id, question_type: target.kind, report_id: target.reportId });
-  },[]);
+  },[isRootUser]);
   const handlePBQDone=useCallback(async (result,options={})=>{
     if(result&&user){
       setAttempts(a=>[result,...a]);
@@ -33575,6 +33682,7 @@ export default function App() {
           <div style={{padding:"12px 14px",borderBottom:`1px solid ${t.border}`}}>
             <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onUpdateAvatar={handleUpdateAvatar} onChangePassword={handleChangePassword} onLogout={handleLogout}/>
             <div style={{marginTop:10}}><CipherCoinPill balance={coinWallet.balance} onClick={()=>setView("coins")}/></div>
+            <AdminProTestSwitch user={user} t={t} onModeChange={handleAdminProModeChange}/>
           </div>
 
           {/* Nav */}
@@ -33636,9 +33744,9 @@ export default function App() {
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
           {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={user} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq} onOpenFlashcards={handleOpenFlashcards} onUpgrade={()=>setView("pricing")}/>}
           {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={effectiveAssistantFlashcardSet} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")} onOpenDeepDive={handleOpenDeepDive} onUpgrade={()=>setView("pricing")}/>}
-          {view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
-          {view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
-          {view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
+          {isRootUser&&view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
+          {isRootUser&&view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
+          {isRootUser&&view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
           {!practiceFocusMode&&view!=="exam"&&view!=="mascot-admin"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
         </main>
         <MobileNavigationMenu
