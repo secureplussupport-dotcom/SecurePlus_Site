@@ -118,7 +118,9 @@ SY0701_ACRONYM_SETS.forEach(set => {
 requireValue(!appSource.includes("Free standalone active recall"), "Flashcards page must not show the removed Free standalone active recall badge.");
 requireValue(appSource.includes("last-minute Security+ recall pack before exam day") && appSource.includes("share the same set with friends"), "Flashcards page must position the feature as last-minute exam prep with a share-with-friends theme.");
 requireValue(appSource.includes("STARRED_FLASHCARD_SET_ID"), "Flashcards must support a curated starred flashcard set.");
-requireValue(appSource.includes("Sign up to save this flashcard"), "Guest flashcard starring must prompt account creation instead of silently saving.");
+requireValue(appSource.includes('text="Save for review"') && appSource.includes('activeText="Saved"'), "Guest flashcard star control must clearly say Save for review and Saved.");
+requireValue(appSource.includes("guestStarred") && appSource.includes('DB.saveStarred("guest",next)'), "Guest flashcard stars must persist locally before authentication.");
+requireValue(appSource.includes("GUEST_FLASHCARD_REVIEW_AUTH_KEY") && appSource.includes("importPendingGuestFlashcards"), "Guest flashcard review sets must migrate into the account after authentication.");
 requireValue(appSource.includes("flashcard_curated_set"), "Guest curated-set access should route to account creation.");
 requireValue(appSource.includes("FlashcardShareActions"), "Flashcards must expose share controls for sets and the collection.");
 requireValue(appSource.includes("view:\"flashcards\""), "Flashcard share links must route directly to the Flashcards page.");
@@ -138,7 +140,7 @@ requireValue(appSource.includes(".deep-dive-acronym-set-card::before") && appSou
 requireValue(appSource.includes("deep-dive-flashcard-watermark") && appSource.includes("<BrandMark size={16}/>SecurePlus"), "Every flashcard face must include a small SecurePlus watermark.");
 requireValue(appSource.includes("flashcards-fan-glyph"), "Flashcards navigation icon must use a fan of cards.");
 requireValue(appSource.includes("getFlashcardRelatedDeepDives") && appSource.includes("flashcard-learn-more") && appSource.includes("flashcard_learn_more"), "Flashcards must link to Concept Deep Dives through a closable Learn More flow.");
-requireValue(appSource.includes("FlashcardSavePrompt"), "Guest flashcard starring must show a soft login/signup prompt.");
+requireValue(appSource.includes("FlashcardSavePrompt"), "Flashcard save-review and Learn More flows must show a soft login/signup prompt when account features are required.");
 requireValue(appSource.includes("ASSISTANT_FLASHCARD_SET_ID") && appSource.includes("buildCipherWeakFlashcardSet") && appSource.includes("Build weak flashcards"), "Cipher Assistant must expose a Pro weak-area flashcard deck builder.");
 requireValue(appSource.includes('message.kind==="flashcardConfirm"') && appSource.includes("Open deck") && appSource.includes("cipher_assistant_flashcards_started"), "Cipher Assistant weak-area flashcards must preview before opening the generated deck.");
 requireValue(appSource.includes("assistantFlashcardSet") && appSource.includes("assistantSet={assistantFlashcardSet}"), "Flashcards page must accept the temporary Cipher-generated weak-area deck.");

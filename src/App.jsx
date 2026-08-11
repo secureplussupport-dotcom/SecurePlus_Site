@@ -367,6 +367,9 @@ const STARRED_FLASHCARD_SET_ID = "starred-flashcards";
 const ASSISTANT_FLASHCARD_SET_ID = "cipher-weak-area-flashcards";
 const RANDOM_FLASHCARD_SET_ID = "random-flashcards";
 const SAVED_RANDOM_FLASHCARD_PREFIX = "saved-random-flashcards";
+const GUEST_FLASHCARD_REVIEW_AUTH_KEY = "secureplus-guest-flashcard-review-auth";
+const GUEST_FLASHCARD_REVIEW_AUTH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const FLASHCARD_REVIEW_LAST_OPENED_PREFIX = "secureplus-flashcard-review-last-opened";
 const FLASHCARD_SHARE_COPY = {
   title:"SecurePlus Security+ flashcards",
   description:"Security+ flashcards grouped by chapter and topic.",
@@ -377,6 +380,21 @@ const FLASHCARD_ACRONYM_SECTION_LABEL = "Acronym cards next";
 const getStarredFlashcards = starredKeys => {
   const keySet=new Set(starredKeys||[]);
   return SY0701_ACRONYM_CARDS.filter(card=>keySet.has(starKey(FLASHCARD_STAR_TYPE,card.id)));
+};
+const getFlashcardStarKeys = starredKeys => (starredKeys||[]).filter(key=>String(key||"").startsWith(`${FLASHCARD_STAR_TYPE}:`));
+const getReviewSetStorageKey = user => `${FLASHCARD_REVIEW_LAST_OPENED_PREFIX}:${starOwner(user)}`;
+const summarizeFlashcardReviewSet = cards => {
+  const realCards=(cards||[]).filter(card=>card?.cardType!=="divider");
+  const chapterLabels=[...new Set(realCards.map(card=>card.chapterTitle||`Chapter ${card.chapterId||""}`).filter(Boolean))];
+  const topicLabels=[...new Set(realCards.map(card=>card.topic).filter(Boolean))];
+  return {
+    count:realCards.length,
+    chapters:chapterLabels.slice(0,3),
+    topics:topicLabels.slice(0,4),
+    label:realCards.length
+      ? `${realCards.length} saved · ${chapterLabels.slice(0,2).join(" + ") || "mixed chapters"}`
+      : "Acronym · full name · definition · examples",
+  };
 };
 const buildStarredFlashcardSet = cards => ({
   id:STARRED_FLASHCARD_SET_ID,
@@ -440,6 +458,27 @@ const flashcardHasRealAcronym = card => {
   return Boolean(acronym&&expansion&&acronym!==expansion);
 };
 const randomFlashcardStorageKey = user => `${SAVED_RANDOM_FLASHCARD_PREFIX}:${starOwner(user)}`;
+const getNextFlashcardSet = currentSet => {
+  const index=SY0701_ACRONYM_SETS.findIndex(set=>set.id===currentSet?.id);
+  if(index<0)return SY0701_ACRONYM_SETS[0]||null;
+  return SY0701_ACRONYM_SETS[(index+1)%SY0701_ACRONYM_SETS.length]||null;
+};
+async function saveFlashcardReviewAuthIntent({source="save_review_set",count=0}={}) {
+  await storageSet(GUEST_FLASHCARD_REVIEW_AUTH_KEY,JSON.stringify({source,count:Number(count)||0,savedAt:new Date().toISOString()}));
+}
+async function consumeFreshFlashcardReviewAuthIntent() {
+  const stored=await storageGet(GUEST_FLASHCARD_REVIEW_AUTH_KEY).catch(()=>null);
+  await storageDelete(GUEST_FLASHCARD_REVIEW_AUTH_KEY).catch(()=>{});
+  if(!stored?.value)return null;
+  try{
+    const parsed=JSON.parse(stored.value);
+    const savedAt=Date.parse(parsed?.savedAt||"");
+    if(!Number.isFinite(savedAt)||Date.now()-savedAt>GUEST_FLASHCARD_REVIEW_AUTH_TTL_MS)return null;
+    return parsed;
+  }catch{
+    return null;
+  }
+}
 const readLocalMasteredFlashcardIds = () => {
   try{
     const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
@@ -17234,6 +17273,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .difficulty-chip{font-weight:900;}
 .meta-chip{background:${t.panel}!important;color:${t.textSec}!important;border-color:${t.border}!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035);}
 .star-btn{min-width:38px;min-height:38px;padding:0 10px;border-radius:999px;border:0;background:transparent;color:${t.textDim};font-size:21px;font-weight:900;cursor:pointer;transition:transform .18s,background .18s,color .18s,box-shadow .18s;}
+.star-btn.with-label{display:inline-flex;align-items:center;gap:7px;min-width:0;padding:8px 12px;font-size:13px;font-weight:950;}
+.star-btn-label{font-size:10px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;}
 .star-btn:hover{transform:translateY(-1px) scale(1.04);color:#f59e0b;background:#f59e0b12;box-shadow:0 0 18px #f59e0b18;}
 .star-btn.active{color:#f59e0b;background:#f59e0b16;box-shadow:0 0 22px #f59e0b26;text-shadow:0 0 14px #f59e0b88;}
 .exam-timer{transition:color .18s,text-shadow .18s,transform .18s;}
@@ -19581,6 +19622,8 @@ body{background:
 .flashcards-page .page-title-row .nav-glyph-flashcards .flashcards-fan-glyph path{stroke-width:1.18;}
 .flashcards-hero{align-items:center;}
 .flashcards-hero .deep-dives-hero-copy>p{max-width:720px;margin-top:12px;font-size:clamp(18px,2.4vw,28px);line-height:1.35;}
+.flashcard-guest-start-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px;}
+.flashcard-guest-start-row .btn{min-height:38px;font-size:12px;}
 .flashcards-hero-side{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:stretch;justify-content:end;min-width:0;}
 .flashcards-mobile-quick{display:none;}
 .flashcards-cipher-card{position:relative;align-self:end;width:min(100%,255px);padding:11px 12px 12px;border:1px solid color-mix(in srgb,#0ea5e9 34%,var(--deep-border));border-radius:18px;background:linear-gradient(145deg,color-mix(in srgb,#0ea5e9 13%,var(--deep-surface)),color-mix(in srgb,var(--deep-green) 9%,var(--deep-surface)));box-shadow:0 14px 30px rgba(40,31,22,.1),inset 0 1px 0 rgba(255,255,255,.32);overflow:hidden;animation:flashcardsCipherCardIn .42s cubic-bezier(.16,1,.3,1) both;}
@@ -19625,11 +19668,20 @@ body{background:
 .flashcard-auth-card{position:relative;width:min(100%,450px);padding:28px;border:1px solid color-mix(in srgb,#f59e0b 34%,${t.border});border-radius:25px;background:radial-gradient(circle at 90% 0,#f59e0b18,transparent 35%),linear-gradient(150deg,${t.surface},${t.panel});box-shadow:0 30px 95px rgba(40,31,22,.28);animation:modalPop .28s cubic-bezier(.16,1,.3,1) both;}
 .flashcard-auth-card .icon-btn{position:absolute;right:15px;top:15px;}
 .flashcard-auth-icon{display:grid;place-items:center;width:54px;height:54px;margin-bottom:12px;border-radius:17px;background:#f59e0b18;color:#d97706;box-shadow:inset 0 0 0 1px #f59e0b30;}
+.flashcard-review-auth-copy{display:grid;gap:5px;margin-bottom:14px;padding:13px 14px;border:1px solid color-mix(in srgb,#22c55e 36%,${t.border});border-radius:16px;background:linear-gradient(135deg,#22c55e10,${t.panel});}
+.flashcard-review-auth-copy span{display:flex;align-items:center;gap:7px;color:#16a34a;font-size:11px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;}
+.flashcard-review-auth-copy strong{color:${t.text};font-size:16px;font-weight:950;}
+.flashcard-review-auth-copy small{color:${t.textSec};font-size:11px;font-weight:750;line-height:1.5;}
 .flashcard-auth-card h2{margin:12px 0 8px;color:${t.text};font-size:clamp(25px,5vw,34px);line-height:1.1;letter-spacing:-.025em;}
 .flashcard-auth-card p{margin:0 0 18px;color:${t.textSec};font-size:14px;font-weight:650;line-height:1.7;}
 .flashcard-auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;}
 .flashcard-auth-actions .btn:first-child{grid-column:1/-1;}
 .flashcard-auth-card small{display:block;color:${t.textDim};font-size:11px;font-weight:800;line-height:1.5;}
+.flashcard-review-confirmation{position:fixed;inset:0;z-index:570;display:grid;place-items:center;padding:18px;background:rgba(8,15,28,.44);backdrop-filter:blur(10px);animation:fadeUp .18s ease both;}
+.flashcard-review-confirmation-card{width:min(100%,470px);padding:27px!important;border-color:color-mix(in srgb,#22c55e 42%,${t.border})!important;background:radial-gradient(circle at 92% 8%,#22c55e21,transparent 34%),linear-gradient(145deg,${t.surface},${t.panel})!important;box-shadow:0 32px 90px rgba(15,23,42,.32)!important;text-align:left;}
+.flashcard-review-confirmation-card>span{display:inline-flex;align-items:center;gap:7px;margin-bottom:12px;color:#16a34a;font-size:11px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;}
+.flashcard-review-confirmation-card h2{margin:0 0 8px;color:${t.text};font-size:clamp(25px,5vw,36px);line-height:1.08;}
+.flashcard-review-confirmation-card p{margin:0 0 18px;color:${t.textSec};font-size:13px;font-weight:700;line-height:1.6;}
 .flashcard-intro-overlay{position:fixed;inset:0;z-index:580;display:grid;place-items:center;padding:18px;background:rgba(8,15,28,.64);backdrop-filter:blur(12px) saturate(1.05);animation:fadeUp .18s ease both;}
 .flashcard-intro-card{position:relative;width:min(100%,610px);padding:24px;border:1px solid color-mix(in srgb,#0ea5e9 42%,${t.border});border-radius:26px;background:radial-gradient(circle at 8% 0,#0ea5e91f,transparent 34%),radial-gradient(circle at 96% 96%,#8b5cf61b,transparent 38%),${t.surface};box-shadow:0 32px 100px rgba(2,6,23,.42);animation:modalPop .28s cubic-bezier(.16,1,.3,1) both;}
 .flashcard-intro-close{position:absolute;right:14px;top:14px;z-index:2;}
@@ -19778,6 +19830,10 @@ body{background:
 .deep-dive-flashcard-stage{position:relative;}
 .deep-dive-flashcard-stage>.star-btn{position:absolute;right:18px;top:18px;z-index:5;background:color-mix(in srgb,var(--deep-surface) 88%,transparent);border:1px solid color-mix(in srgb,#f59e0b 25%,var(--deep-border));box-shadow:0 10px 24px rgba(40,31,22,.1);}
 .deep-dive-flashcard-stage>.star-btn.active{background:#f59e0b18;border-color:#f59e0b66;}
+.flashcard-completion-card{display:grid;gap:12px;margin:12px 0 2px;padding:26px!important;border-color:color-mix(in srgb,var(--set-color) 38%,var(--deep-border))!important;background:radial-gradient(circle at 92% 8%,color-mix(in srgb,var(--set-color) 17%,transparent),transparent 34%),linear-gradient(145deg,color-mix(in srgb,var(--set-color) 9%,var(--deep-surface)),var(--deep-surface))!important;text-align:left;animation:fadeUp .22s ease both;}
+.flashcard-completion-card h2{margin:0;color:var(--deep-text);font-size:clamp(24px,4vw,36px);line-height:1.1;}
+.flashcard-completion-card p{max-width:660px;margin:0;color:var(--deep-muted);font-size:13px;font-weight:750;line-height:1.6;}
+.flashcard-completion-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:3px;}
 .deep-dive-flashcard{display:block;width:100%;height:390px;padding:0;border:0;border-radius:23px;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;perspective:1400px;}
 .deep-dive-flashcard:focus-visible{outline:3px solid color-mix(in srgb,var(--deep-accent) 33%,transparent);outline-offset:4px;}
 .deep-dive-flashcard-inner{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.8,.2,1);}
@@ -20032,6 +20088,8 @@ body{background:
 @media (max-width: 560px){
   .deep-dives-grid{grid-template-columns:minmax(0,1fr);}
   .flashcards-page .deep-dives-hero-copy>p{display:none;}
+  .flashcard-guest-start-row{margin-top:10px;}
+  .flashcard-guest-start-row .btn{flex:1 1 145px;}
   .flashcards-page .page-title-row .nav-glyph-flashcards{width:42px;height:42px;border-radius:14px;}
   .flashcards-page .page-title-row .nav-glyph-flashcards .flashcards-fan-glyph{width:27px;height:27px;}
   .flashcards-hero-side{grid-template-columns:minmax(0,1fr);}
@@ -20053,6 +20111,10 @@ body{background:
   .deep-dive-acronym-source-note{font-size:10.5px;}
   .deep-dive-acronym-reader-hero{padding:21px 18px;}
   .deep-dive-acronym-reader-hero h1{font-size:34px;}
+  .deep-dive-flashcard-stage>.star-btn.with-label{left:14px;right:14px;top:14px;justify-content:center;}
+  .deep-dive-flashcard-face{padding:64px 22px 42px;}
+  .flashcard-completion-actions{display:grid;grid-template-columns:minmax(0,1fr);}
+  .flashcard-completion-actions .btn{justify-content:center;}
   .flashcard-mode-overlay{padding:12px;}
   .flashcard-intro-overlay{padding:12px;}
   .flashcard-intro-card{padding:20px 16px 16px;border-radius:22px;}
@@ -20784,17 +20846,19 @@ function FilterSelect({value,onChange,options,disabled=false,label="Select"}) {
     </div>
   );
 }
-function StarButton({active,onToggle,label="Star question",activeLabel="Unstar question"}) {
+function StarButton({active,onToggle,label="Star question",activeLabel="Unstar question",showText=false,text="",activeText=""}) {
+  const visibleText=active ? (activeText||text||activeLabel) : (text||label);
   return(
     <button
       type="button"
-      className={`star-btn ${active?"active":""}`}
+      className={`star-btn ${active?"active":""} ${showText?"with-label":""}`}
       aria-pressed={active}
       aria-label={active?activeLabel:label}
       title={active?activeLabel:label}
       onClick={e=>{e.stopPropagation();onToggle?.();}}
     >
       <Star size={18} strokeWidth={2.2} fill={active?"currentColor":"none"}/>
+      {showText&&<span className="star-btn-label">{visibleText}</span>}
     </button>
   );
 }
@@ -22760,7 +22824,8 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
 // AUTH VIEW
 // ═══════════════════════════════════════════════════════════════
 function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initialMode="login",securityNotice=false}) {
-  const [mode,setMode]=useState(initialMode);
+  const isReviewSignupStart=initialMode==="review-signup";
+  const [mode,setMode]=useState(isReviewSignupStart?"signup":initialMode);
   const [showLoginModal,setShowLoginModal]=useState(initialMode==="login");
   const [showSignupJourney,setShowSignupJourney]=useState(initialMode==="signup");
   const [activePath,setActivePath]=useState("flashcards");
@@ -22787,13 +22852,14 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
   const [loading,setLoading]=useState(false);
   const [mintedUser,setMintedUser]=useState(null);
   useEffect(()=>{
-    setMode(initialMode);
+    const isReviewSignup=initialMode==="review-signup";
+    setMode(isReviewSignup?"signup":initialMode);
     setShowLoginModal(initialMode==="login");
     setShowSignupJourney(initialMode==="signup");
     setErr("");
     setOk("");
-    if(initialMode==="signup"){
-      capture("signup_form_viewed", { source:"guest_landing" });
+    if(initialMode==="signup"||isReviewSignup){
+      capture("signup_form_viewed", { source:isReviewSignup?"flashcard_review_set":"guest_landing" });
     }
   },[initialMode]);
   const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
@@ -22853,8 +22919,9 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           onLogin(appUser);
         } else {
           const referralCode = saveReferralCode(form.referral);
-          capture("signup_started", { method: "password", has_referral: Boolean(referralCode) });
-          if(!form.name||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
+          const directSignupName=(form.name||email.split("@")[0]||"SecurePlus Learner").trim();
+          capture("signup_started", { method: "password", has_referral: Boolean(referralCode), source:initialMode==="review-signup"?"flashcard_review_set":"standard" });
+          if(!directSignupName||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
           if(form.pass!==form.confirm){setErr("Passwords do not match.");setLoading(false);return;}
           const passwordIssue=getPasswordIssue(form.pass);
           if(passwordIssue){setErr(passwordIssue);setLoading(false);return;}
@@ -22863,7 +22930,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
             email,
             password: form.pass,
             options: {
-              data: { name: form.name, full_name: form.name, avatar_id: form.avatarId || "default-cipher", pending_referral_code: referralCode, study_profile:toAthenaStudyProfile(athenaProfile) },
+              data: { name: directSignupName, full_name: directSignupName, avatar_id: form.avatarId || "default-cipher", pending_referral_code: referralCode, study_profile:initialMode==="review-signup"?null:toAthenaStudyProfile(athenaProfile) },
               emailRedirectTo: window.location.origin,
             },
           });
@@ -22890,15 +22957,16 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           capture("login_completed", { method: "local_demo" });
           onLogin(user);
         } else {
-          capture("signup_started", { method: "local_demo" });
+          const directSignupName=(form.name||email.split("@")[0]||"SecurePlus Learner").trim();
+          capture("signup_started", { method: "local_demo", source:initialMode==="review-signup"?"flashcard_review_set":"standard" });
           const referralCode = saveReferralCode(form.referral);
-          if(!form.name||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
+          if(!directSignupName||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
           if(form.pass!==form.confirm){setErr("Passwords do not match.");setLoading(false);return;}
           const passwordIssue=getPasswordIssue(form.pass);
           if(passwordIssue){setErr(passwordIssue);setLoading(false);return;}
           const exists=await DB.getUser(email);
           if(exists){setErr("An account with this email already exists.");setLoading(false);return;}
-          const user={name:form.name,email,password:form.pass,tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:null,referralCode:makeReferralCode(email),avatarId:form.avatarId || "default-cipher",totalStars:0,studyProfile:toAthenaStudyProfile(athenaProfile)};
+          const user={name:directSignupName,email,password:form.pass,tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:null,referralCode:makeReferralCode(email),avatarId:form.avatarId || "default-cipher",totalStars:0,studyProfile:initialMode==="review-signup"?null:toAthenaStudyProfile(athenaProfile)};
           await DB.saveUser(user);
           await runLocalCipherCoinAction(user,"onboarding_welcome");
           if(referralCode)await claimLocalReferralReward(user,referralCode);
@@ -22976,9 +23044,11 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     resetMessages();setLoading(true);
     try{
       const referralCode=saveReferralCode(form.referral);
+      const fromReviewSignup=initialMode==="review-signup"&&mode==="signup"&&!fromAcademy;
       if(fromAcademy)await savePendingAthenaOAuth(athenaProfile,{...form,referral:referralCode});
+      else if(fromReviewSignup)await saveFlashcardReviewAuthIntent({source:"google_auth"});
       else await saveLoginOAuthIntent();
-      capture(mode==="signup"?"signup_started":"login_started", { method:fromAcademy?"academy_google":"google", has_referral:Boolean(referralCode) });
+      capture(mode==="signup"?"signup_started":"login_started", { method:fromAcademy?"academy_google":fromReviewSignup?"flashcard_review_google":"google", has_referral:Boolean(referralCode) });
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo: window.location.origin },
@@ -22986,6 +23056,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
       if(error) throw error;
     } catch(e){
       if(fromAcademy)await storageDelete(ATHENA_OAUTH_PENDING_KEY).catch(()=>{});
+      else if(initialMode==="review-signup"&&mode==="signup")await storageDelete(GUEST_FLASHCARD_REVIEW_AUTH_KEY).catch(()=>{});
       else await storageDelete(LOGIN_OAUTH_INTENT_KEY).catch(()=>{});
       setErr(e.message||"Unable to start Google sign in.");
       setLoading(false);
@@ -23296,8 +23367,15 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           </div>
 
           <div className="card auth-conversion-card">
+          {initialMode==="review-signup"&&(
+            <div className="flashcard-review-auth-copy">
+              <span><Star size={15} fill="currentColor"/> Save your review set</span>
+              <strong>No credit card required.</strong>
+              <small>Create an account and your selected flashcards will move into your saved review deck.</small>
+            </div>
+          )}
           <div className="auth-mode-tabs auth-mode-tabs-single" aria-label="Authentication mode">
-            <button type="button" className="tab auth-mode-tab act" onClick={openLogin}>Sign In</button>
+            <button type="button" className="tab auth-mode-tab act" onClick={openLogin}>{initialMode==="review-signup"?"Log in instead":"Sign In"}</button>
           </div>
           {mode==="signup" ? (
             mintedUser ? (
@@ -23315,7 +23393,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
                   Enter the Academy →
                 </button>
               </div>
-            ) : (
+            ) : showSignupJourney ? (
               <AcademySignupWizard
                 t={t}
                 form={form}
@@ -23326,6 +23404,32 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
                 error={err}
                 ok={ok}
               />
+            ) : (
+              <>
+                <Alert msg={err} type="error" t={t}/>
+                <Alert msg={ok} type="success" t={t}/>
+                <form style={{display:"flex",flexDirection:"column",gap:14}} onSubmit={handle}>
+                  <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Name</label>
+                    <input className="input" name="name" type="text" autoComplete="name" placeholder="What should we call you?" value={form.name} onChange={set("name")}/></div>
+                  <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Email</label>
+                    <input className="input" name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={set("email")}/></div>
+                  <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Password</label>
+                    <input className="input" name="password" type="password" autoComplete="new-password" placeholder="Create a password" value={form.pass} onChange={set("pass")}/></div>
+                  <div><label style={{display:"block",fontSize:13,fontWeight:500,marginBottom:5,color:t.text}}>Confirm password</label>
+                    <input className="input" name="confirm-password" type="password" autoComplete="new-password" placeholder="Repeat password" value={form.confirm} onChange={set("confirm")}/></div>
+                  <button type="submit" className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"11px",marginTop:4}} disabled={loading}>
+                    {loading?"Saving...":initialMode==="review-signup"?"Create account and save set":"Create account"}
+                  </button>
+                  {isSupabaseConfigured&&(
+                    <button type="button" className="btn btn-outline" style={{width:"100%",justifyContent:"center",padding:"10px"}} onClick={handleGoogle} disabled={loading}>
+                      Continue with Google
+                    </button>
+                  )}
+                  <button type="button" className="btn btn-ghost" style={{justifyContent:"center",fontSize:12}} onClick={openLogin} disabled={loading}>
+                    Already have an account? Log in
+                  </button>
+                </form>
+              </>
             )
           ) : (
             <>
@@ -29867,20 +29971,21 @@ function FlashcardShareActions({set,t,compact=false}) {
 
 function FlashcardSavePrompt({t,onLogin,onSignup,onClose,mode="save"}) {
   const isLearnMore=mode==="learn_more";
+  const isReviewSet=mode==="review_set";
   return(
     <div className="flashcard-auth-nudge" role="dialog" aria-modal="true" aria-labelledby="flashcard-save-title" onMouseDown={onClose}>
       <div className="flashcard-auth-card card" onMouseDown={event=>event.stopPropagation()}>
         <button className="icon-btn" type="button" aria-label="Close flashcard save prompt" onClick={onClose}><X size={18}/></button>
         <div className="flashcard-auth-icon">{isLearnMore?<BookOpenCheck size={23}/>:<Star size={23} fill="currentColor"/>}</div>
-        <span className="deep-dive-preview-badge"><ShieldCheck size={13}/>{isLearnMore?"Account feature":"Free to study"}</span>
-        <h2 id="flashcard-save-title">{isLearnMore?"Explore the full lesson path?":"Save this flashcard?"}</h2>
-        <p>{isLearnMore?"Create a free account to connect flashcards with more SecurePlus study features. You can close this and keep practicing flashcards anytime.":"You can keep studying all flashcards for free. Log in or create a free account only if you want to build your own starred deck."}</p>
+        <span className="deep-dive-preview-badge"><ShieldCheck size={13}/>{isLearnMore?"Account feature":isReviewSet?"No credit card required":"Free to study"}</span>
+        <h2 id="flashcard-save-title">{isLearnMore?"Explore the full lesson path?":isReviewSet?"Save your review set?":"Save this flashcard?"}</h2>
+        <p>{isLearnMore?"Create a free account to connect flashcards with more SecurePlus study features. You can close this and keep practicing flashcards anytime.":isReviewSet?"Create a free account and SecurePlus will move your selected guest flashcards into your saved review deck. No payment needed.":"You can keep studying all flashcards for free. Log in or create a free account only if you want to build your own starred deck."}</p>
         <div className="flashcard-auth-actions">
           <button className="btn btn-primary" type="button" onClick={onSignup}>Create free account</button>
           <button className="btn btn-outline" type="button" onClick={onLogin}>Log in</button>
           <button className="btn btn-ghost" type="button" onClick={onClose}>Keep studying</button>
         </div>
-        <small>{isLearnMore?"Subtle note: Flashcards stay free. Account features help connect the rest of your study path.":"Subtle note: starring is saved to your account. No payment needed."}</small>
+        <small>{isLearnMore?"Subtle note: Flashcards stay free. Account features help connect the rest of your study path.":isReviewSet?"After signup, you will go straight back to the saved review set.":"Subtle note: starring is saved to your account. No payment needed."}</small>
       </div>
     </div>
   );
@@ -30005,13 +30110,15 @@ function FlashcardModeChooser({t,set=null,hasExample=false,currentMode="definiti
   return typeof document!=="undefined"&&document.body?createPortal(chooser,document.body):chooser;
 }
 
-function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,onSaveGeneratedSet,initialMode="definition",onChangeModeRequest}) {
+function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,onSaveGeneratedSet,onSaveReviewSet,onOpenRecommendedSet,recommendedSet=null,initialMode="definition",onChangeModeRequest}) {
   const setType=flashcardSetType(acronymSet);
   const setKindLabel=setType==="term"?"Term":"Acronym";
   const [direction,setDirection]=useState(()=>getSafeFlashcardMode(initialMode,flashcardSetHasExampleMode(acronymSet),setType));
   const [cardIndex,setCardIndex]=useState(0);
   const [cardOrder,setCardOrder]=useState(()=>acronymSet.cards.map(card=>card.id));
   const [isFlipped,setIsFlipped]=useState(false);
+  const [ratedCardsThisPass,setRatedCardsThisPass]=useState(()=>new Set());
+  const [showCompletion,setShowCompletion]=useState(false);
   const [learnMoreOpen,setLearnMoreOpen]=useState(false);
   const [learnMoreNotice,setLearnMoreNotice]=useState("");
   const hasExampleMode=acronymSet.cards.some(card=>card.example);
@@ -30075,10 +30182,11 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   const flashcardStarredSet=useMemo(()=>new Set(starred||[]),[starred]);
   const activeStarKey=activeCard?starKey(FLASHCARD_STAR_TYPE,activeCard.id):"";
   const activeCardStarred=Boolean(activeStarKey&&flashcardStarredSet.has(activeStarKey));
+  const savedCardsInSetCount=useMemo(()=>acronymSet.cards.filter(card=>card.cardType!=="divider"&&flashcardStarredSet.has(starKey(FLASHCARD_STAR_TYPE,card.id))).length,[acronymSet.cards,flashcardStarredSet]);
   const relatedDeepDives=useMemo(()=>getFlashcardRelatedDeepDives(acronymSet),[acronymSet]);
   const toggleActiveFlashcardStar=()=>{
     if(!activeCard)return;
-    if(!user){
+    if(!user&&!onToggleStar){
       onRequireSignup?.("flashcard_star");
       return;
     }
@@ -30090,6 +30198,8 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
     setCardIndex(0);
     setCardOrder(acronymSet.cards.map(card=>card.id));
     setIsFlipped(false);
+    setRatedCardsThisPass(new Set());
+    setShowCompletion(false);
     setLearnMoreOpen(false);
     setLearnMoreNotice("");
   },[acronymSet.id,initialMode]);
@@ -30099,6 +30209,8 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
     setDirection(current=>current===safeMode?current:safeMode);
     setCardIndex(0);
     setIsFlipped(false);
+    setRatedCardsThisPass(new Set());
+    setShowCompletion(false);
   },[initialMode,hasExampleMode,setType]);
 
   const moveCard=directionStep=>{
@@ -30113,6 +30225,15 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
       return;
     }
     onRate(activeCard.id,mastered);
+    const nextRated=new Set(ratedCardsThisPass);
+    nextRated.add(activeCard.id);
+    const completed=studyCardCount>0&&nextRated.size>=studyCardCount;
+    setRatedCardsThisPass(nextRated);
+    if(completed){
+      setShowCompletion(true);
+      setIsFlipped(false);
+      return;
+    }
     moveCard(1);
   };
   const shuffleCards=()=>{
@@ -30124,6 +30245,8 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
     setCardOrder(shuffled);
     setCardIndex(0);
     setIsFlipped(false);
+    setRatedCardsThisPass(new Set());
+    setShowCompletion(false);
   };
   const handleLearnMoreLesson=dive=>{
     if(!user){
@@ -30170,9 +30293,35 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
           {onChangeModeRequest&&<button className="btn btn-outline flashcard-change-mode-btn" type="button" onClick={onChangeModeRequest}><Brain size={15}/>{FLASHCARD_MODE_OPTIONS[direction]?.title||"Change mode"}</button>}
           <button className="btn btn-ghost" type="button" onClick={shuffleCards}><RotateCcw size={15}/>Shuffle</button>
         </div>
-        {activeCard&&<>
+        {showCompletion&&(
+          <div className="flashcard-completion-card card" role="status" aria-live="polite">
+            <span className="deep-dive-preview-badge"><CheckCircle2 size={13}/>Set complete</span>
+            {savedCardsInSetCount>0?(
+              <>
+                <h2>{savedCardsInSetCount} card{savedCardsInSetCount===1?"":"s"} saved for review.</h2>
+                <p>Your review set is ready. Save it to your account so the starred cards stay available after you leave.</p>
+                <div className="flashcard-completion-actions">
+                  <button className="btn btn-primary" type="button" onClick={()=>onSaveReviewSet?.("flashcard_review_set")}>{user?"Study my review set":"Create my review set"}</button>
+                  <button className="btn btn-outline" type="button" onClick={()=>{setShowCompletion(false);setRatedCardsThisPass(new Set());}}>Continue without saving</button>
+                  {recommendedSet&&<button className="btn btn-ghost" type="button" onClick={()=>onOpenRecommendedSet?.()}>{recommendedSet.title}<ChevronRight size={15}/></button>}
+                </div>
+              </>
+            ):(
+              <>
+                <h2>Ready for another?</h2>
+                <p>No cards were saved from this set. Keep momentum by moving to the next short deck.</p>
+                <div className="flashcard-completion-actions">
+                  {recommendedSet&&<button className="btn btn-primary" type="button" onClick={()=>onOpenRecommendedSet?.()}>Continue studying <ChevronRight size={15}/></button>}
+                  {!user&&<button className="btn btn-outline" type="button" onClick={()=>onRequireSignup?.("flashcard_standard_signup")}>Create account later</button>}
+                  <button className="btn btn-ghost" type="button" onClick={()=>{setShowCompletion(false);setRatedCardsThisPass(new Set());}}>Review this set again</button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+        {!showCompletion&&activeCard&&<>
           <div className="deep-dive-flashcard-stage">
-            {!isDividerCard&&(onToggleStar||onRequireSignup)&&<StarButton active={activeCardStarred} onToggle={toggleActiveFlashcardStar} label={user?"Save flashcard to my set":"Sign up to save this flashcard"} activeLabel="Remove flashcard from my set"/>}
+            {!isDividerCard&&(onToggleStar||onRequireSignup)&&<StarButton active={activeCardStarred} onToggle={toggleActiveFlashcardStar} label="Save flashcard for review" activeLabel="Remove flashcard from review set" showText text="Save for review" activeText="Saved"/>}
             <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
               <span className="deep-dive-flashcard-inner">
                 <span className={`deep-dive-flashcard-face deep-dive-flashcard-front ${isDividerCard?"flashcard-section-divider-face":""}`}>
@@ -30200,10 +30349,11 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
             ):!isFlipped?(
               <button className="btn btn-primary" type="button" onClick={()=>setIsFlipped(true)}><Lightbulb size={16}/>Reveal answer</button>
             ):(
-              <div className="deep-dive-flashcard-rating" aria-label="Rate this card">
-                <button className="btn btn-outline" type="button" onClick={()=>rateCard(false)}><RotateCcw size={16}/>Again</button>
-                <button className="btn btn-primary" type="button" onClick={()=>rateCard(true)}><CheckCircle2 size={16}/>Got it</button>
-              </div>
+	              <div className="deep-dive-flashcard-rating" aria-label="Rate this card">
+	                <button className="btn btn-outline" type="button" onClick={()=>rateCard(false)}><RotateCcw size={16}/>Again</button>
+	                <button className="btn btn-primary" type="button" onClick={()=>rateCard(true)}><CheckCircle2 size={16}/>Got it</button>
+                    {acronymSet.id===STARRED_FLASHCARD_SET_ID&&activeCardStarred&&<button className="btn btn-ghost" type="button" onClick={()=>{toggleActiveFlashcardStar();rateCard(true);}}>Remove from review set</button>}
+	              </div>
             )}
             <button className="btn btn-outline" type="button" onClick={()=>moveCard(1)}>Next<ChevronRight size={16}/></button>
           </div>
@@ -30947,7 +31097,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
   );
 }
 
-function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitially=false,assistantSet=null,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade}) {
+function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitially=false,assistantSet=null,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,reviewConfirmation=null,onDismissReviewConfirmation}) {
   const signedIn=Boolean(user?.id||user?.email);
   const [showQuickIntro,setShowQuickIntro]=useState(false);
   const [selectedSetId,setSelectedSetId]=useState(null);
@@ -30961,11 +31111,12 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
   const [renamingSetId,setRenamingSetId]=useState(null);
   const [renameDraft,setRenameDraft]=useState("");
   const [randomisingAction,setRandomisingAction]=useState(null);
-  const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>signedIn?readLocalMasteredFlashcardIds():[]);
+  const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>readLocalMasteredFlashcardIds());
   const chapterGroups=useMemo(()=>groupSy0701AcronymSetsByChapter(),[]);
   const visibleGroups=chapterFilter==="all"?chapterGroups:chapterGroups.filter(group=>String(group.chapterId)===chapterFilter);
   const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
   const starredFlashcardSet=useMemo(()=>buildStarredFlashcardSet(starredFlashcards),[starredFlashcards]);
+  const flashcardReviewSummary=useMemo(()=>summarizeFlashcardReviewSet(starredFlashcards),[starredFlashcards]);
   const selectedSet=selectedSetId===STARRED_FLASHCARD_SET_ID
     ? starredFlashcardSet
     : selectedSetId===ASSISTANT_FLASHCARD_SET_ID
@@ -30976,6 +31127,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
   const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>masteredAcronymIds.includes(card.id)).length;
   const progressPercent=SY0701_ACRONYM_CARDS.length?Math.round((totalMastered/SY0701_ACRONYM_CARDS.length)*100):0;
   const mobileQuickSets=useMemo(()=>visibleGroups.flatMap(group=>group.sets).slice(0,3),[visibleGroups]);
+  const recommendedSet=useMemo(()=>getNextFlashcardSet(selectedSet),[selectedSet]);
   const showAssistantDeck=user?.tier==="pro"&&Boolean(assistantSet?.cards?.length);
   const defaultOwner=starOwner(user);
   const [activeMode,setActiveMode]=useState("definition");
@@ -31070,7 +31222,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
   useEffect(()=>{
     if(!signedIn){
       setDefaultMode("");
-      setMasteredAcronymIds([]);
+      setMasteredAcronymIds(readLocalMasteredFlashcardIds());
       return;
     }
     setDefaultMode(readLocalFlashcardDefaultMode(defaultOwner));
@@ -31143,9 +31295,12 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
     setActiveMode(safeMode);
     setSelectedSetId(id);
     setModeChooser(null);
+    if(id===STARRED_FLASHCARD_SET_ID){
+      try{window.localStorage?.setItem(getReviewSetStorageKey(user),new Date().toISOString());}catch{}
+    }
     capture("flashcards_set_opened",{set_id:id,mode:safeMode});
     scrollToFlashcardTop(true);
-  },[assistantSet,randomFlashcardSet,savedRandomSets,scrollToFlashcardTop,starredFlashcardSet]);
+  },[assistantSet,randomFlashcardSet,savedRandomSets,scrollToFlashcardTop,starredFlashcardSet,user]);
 
   const openSet=useCallback(id=>{
     const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:id===ASSISTANT_FLASHCARD_SET_ID?assistantSet:id===RANDOM_FLASHCARD_SET_ID?randomFlashcardSet:savedRandomSets.find(item=>item.id===id)||SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
@@ -31167,6 +31322,15 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
     }
     startFlashcardSet(id,safeDefault);
   },[assistantSet,defaultMode,randomFlashcardSet,savedRandomSets,signedIn,starredFlashcardSet,startFlashcardSet]);
+
+  const startSomewhere=useCallback(()=>{
+    const starter=mobileQuickSets[0]||SY0701_ACRONYM_SETS[0];
+    if(starter)openSet(starter.id);
+  },[mobileQuickSets,openSet]);
+
+  const browseDecks=useCallback(()=>{
+    document.querySelector(".deep-dives-domain-groups")?.scrollIntoView({behavior:"smooth",block:"start"});
+  },[]);
 
   const handleModeChosen=(mode,{makeDefault=false}={})=>{
     const chooser=modeChooser;
@@ -31234,9 +31398,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
       ?Array.from(new Set([...masteredAcronymIds,cardId]))
       :masteredAcronymIds.filter(id=>id!==cardId);
     setMasteredAcronymIds(next);
-    if(signedIn){
-      try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
-    }
+    try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
     if(canSyncFlashcards)saveSupabaseFlashcardProgress(user.id,cardId,mastered);
     capture("flashcards_acronym_rated",{set_id:selectedSet?.id,card_id:cardId,mastered});
     if(selectedSet?.id&&cardId){
@@ -31455,7 +31617,17 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
   if(selectedSet){
     return(
       <>
-        <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade} onSaveGeneratedSet={saveRandomSet} initialMode={activeMode} onChangeModeRequest={flashcardSetType(selectedSet)==="term"?undefined:()=>setModeChooser({context:"change",setId:selectedSet.id,hasExample:flashcardSetHasExampleMode(selectedSet)})}/>
+        {reviewConfirmation&&(
+          <div className="flashcard-review-confirmation" role="dialog" aria-modal="true" aria-labelledby="flashcard-review-confirmation-title">
+            <div className="flashcard-review-confirmation-card card">
+              <span><CheckCircle2 size={17}/> Review set saved</span>
+              <h2 id="flashcard-review-confirmation-title">Your {reviewConfirmation.count} selected card{reviewConfirmation.count===1?" is":"s are"} now in your account.</h2>
+              <p>Open your saved deck when you want to review only the cards you picked as a guest.</p>
+              <button className="btn btn-primary" type="button" onClick={onDismissReviewConfirmation}>Study my review set</button>
+            </div>
+          </div>
+        )}
+        <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade} onSaveGeneratedSet={saveRandomSet} onSaveReviewSet={reason=>user?openSet(STARRED_FLASHCARD_SET_ID):onRequireSignup?.(reason)} recommendedSet={recommendedSet} onOpenRecommendedSet={()=>recommendedSet&&openSet(recommendedSet.id)} initialMode={activeMode} onChangeModeRequest={flashcardSetType(selectedSet)==="term"?undefined:()=>setModeChooser({context:"change",setId:selectedSet.id,hasExample:flashcardSetHasExampleMode(selectedSet)})}/>
         {modeChooser&&<FlashcardModeChooser t={t} set={selectedSet} hasExample={modeChooser.hasExample} currentMode={activeMode} defaultMode={defaultMode} user={user} context={modeChooser.context} onChoose={handleModeChosen} onClose={()=>setModeChooser(null)}/>}
       </>
     );
@@ -31463,6 +31635,20 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
 
   return(
     <div className="deep-dives-page flashcards-page" style={{"--deep-accent":"#0ea5e9","--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
+      {reviewConfirmation&&(
+        <div className="flashcard-review-confirmation" role="dialog" aria-modal="true" aria-labelledby="flashcard-review-confirmation-title">
+          <div className="flashcard-review-confirmation-card card">
+            <span><CheckCircle2 size={17}/> Progress saved</span>
+            <h2 id="flashcard-review-confirmation-title">
+              {reviewConfirmation.count>0
+                ?`Your ${reviewConfirmation.count} selected card${reviewConfirmation.count===1?" is":"s are"} now in your account.`
+                :"Your flashcard progress is now attached to your account."}
+            </h2>
+            <p>{reviewConfirmation.count>0?"Open your saved deck when you want to review only the cards you picked as a guest.":"Continue studying Flashcards. Future starred cards, generated sets, and default mode can now stay with this account."}</p>
+            <button className="btn btn-primary" type="button" onClick={onDismissReviewConfirmation}>{reviewConfirmation.count>0?"Study my review set":"Continue to Flashcards"}</button>
+          </div>
+        </div>
+      )}
       <section className="deep-dives-hero flashcards-hero">
         <div className="deep-dives-hero-copy">
           <div className="page-title-row"><NavGlyph type="flashcards" active/><h1>Flashcards</h1></div>
@@ -31479,6 +31665,10 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
             </div>
           </div>
           <p>Your last-minute Security+ recall pack before exam day: share the same set with friends, practise fast, and save progress when you create an account.</p>
+          <div className="flashcard-guest-start-row">
+            <button className="btn btn-primary" type="button" onClick={startSomewhere}>Start me somewhere <ChevronRight size={16}/></button>
+            <button className="btn btn-outline" type="button" onClick={browseDecks}>Browse all decks</button>
+          </div>
           <FlashcardShareActions t={t} compact/>
         </div>
         <div className="flashcards-hero-side">
@@ -31566,8 +31756,8 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
             <span>
               <em className="flashcard-type-badge">{starredFlashcardSet.setType==="term"?"Term":"Acronym"}</em>
               <strong>{user?starredFlashcards.length?"Review your saved cards":"No starred flashcards yet":"Create your own set"}</strong>
-              <small>{user?"Press the star on any flashcard to save it here.":"Free guests can study all cards. Sign up to save a personal set."}</small>
-              <i>{starredFlashcards.slice(0,4).map(card=>card.acronym).join(" · ") || "Acronym · full name · definition · examples"}</i>
+              <small>{user?flashcardReviewSummary.count?`Review saved cards across ${flashcardReviewSummary.chapters.join(", ") || "mixed chapters"}.`:"Press the star on any flashcard to save it here.":"Free guests can study all cards. Sign up to save a personal set."}</small>
+              <i>{flashcardReviewSummary.topics.join(" · ") || flashcardReviewSummary.label}</i>
             </span>
             <ChevronRight size={17}/>
             <span className="deep-dive-acronym-set-progress"><span><i style={{width:`${starredFlashcards.length?100:8}%`}}/></span><span>{starredFlashcards.length}</span></span>
@@ -32446,6 +32636,7 @@ export default function App() {
   const [flashcardsIntroRequested]=useState(()=>urlFlashcardsIntroRequest);
   const [attempts,setAttempts]=useState([]);
   const [starred,setStarred]=useState([]);
+  const [guestStarred,setGuestStarred]=useState([]);
   const [pbqQ,setPbqQ]=useState(null);
   const [showDaily,setShowDaily]=useState(false);
   const [billingLoading,setBillingLoading]=useState(false);
@@ -32471,6 +32662,7 @@ export default function App() {
   const [flashcardSetRequest,setFlashcardSetRequest]=useState(()=>urlFlashcardSetRequest||null);
   const [assistantFlashcardSet,setAssistantFlashcardSet]=useState(null);
   const [flashcardAuthPrompt,setFlashcardAuthPrompt]=useState(null);
+  const [flashcardReviewConfirmation,setFlashcardReviewConfirmation]=useState(null);
   const [achievementUnlocks,setAchievementUnlocks]=useState([]);
   const [coinWallet,setCoinWallet]=useState(()=>({...emptyCipherWallet(),status:"idle"}));
   const [coinBusy,setCoinBusy]=useState(false);
@@ -32502,6 +32694,18 @@ export default function App() {
       tier:user?.tier || "guest",
     });
   },[flashcardAuthPrompt,view,user]);
+
+  useEffect(()=>{
+    let active=true;
+    if(user){
+      setGuestStarred([]);
+      return undefined;
+    }
+    DB.getStarred("guest").then(items=>{
+      if(active)setGuestStarred(Array.isArray(items)?items:[]);
+    });
+    return()=>{active=false;};
+  },[user]);
 
   useEffect(()=>{
     try{
@@ -32576,6 +32780,41 @@ export default function App() {
       await savePendingGuestSmartReview(pending);
       console.warn("Unable to attach guest Smart Review results",error);
       return existingAttempts;
+    }
+  },[]);
+
+  const importPendingGuestFlashcards=useCallback(async(account,existingStarred=null)=>{
+    if(!account)return {starred:Array.isArray(existingStarred)?existingStarred:[],importedCount:0,reviewIntent:null};
+    const reviewIntent=await consumeFreshFlashcardReviewAuthIntent();
+    const guestItems=await DB.getStarred("guest");
+    const guestFlashcardKeys=getFlashcardStarKeys(guestItems);
+    const baseStarred=Array.isArray(existingStarred)
+      ?existingStarred
+      :account.authProvider==="supabase"
+        ?((await loadSupabaseStarred(account.id)) ?? await DB.getStarred(starOwner(account)))
+        :await DB.getStarred(starOwner(account));
+    if(!guestFlashcardKeys.length)return {starred:baseStarred,importedCount:0,reviewIntent};
+    const merged=Array.from(new Set([...(baseStarred||[]),...guestFlashcardKeys]));
+    try{
+      await DB.saveStarred(starOwner(account),merged);
+      if(account.authProvider==="supabase"&&account.id){
+        await Promise.all(guestFlashcardKeys.map(key=>{
+          const id=String(key).slice(`${FLASHCARD_STAR_TYPE}:`.length);
+          return saveSupabaseStar(account.id,FLASHCARD_STAR_TYPE,id,true);
+        }));
+      }
+      const remainingGuest=(guestItems||[]).filter(key=>!guestFlashcardKeys.includes(key));
+      await DB.saveStarred("guest",remainingGuest);
+      setGuestStarred(remainingGuest);
+      capture("flashcards_guest_review_set_imported",{
+        card_count:guestFlashcardKeys.length,
+        source:reviewIntent?.source || "auth_handoff",
+        signed_in:true,
+      });
+      return {starred:merged,importedCount:guestFlashcardKeys.length,reviewIntent};
+    }catch(error){
+      console.warn("Unable to import guest flashcard review set",error);
+      return {starred:baseStarred,importedCount:0,reviewIntent};
     }
   },[]);
 
@@ -32828,7 +33067,10 @@ export default function App() {
           displayUser = { ...displayUser, cipherCoins: Number(referralClaim.cipherCoins ?? displayUser.cipherCoins ?? 0) };
           if(!referralClaim.alreadyClaimed) setReferralClaimPrompt(referralClaim);
         }
-        const savedStarred=(await loadSupabaseStarred(verifiedUser.id)) ?? await DB.getStarred(starOwner(displayUser));
+        const loadedStarred=(await loadSupabaseStarred(verifiedUser.id)) ?? await DB.getStarred(starOwner(displayUser));
+        const flashcardImport=await importPendingGuestFlashcards(displayUser,loadedStarred);
+        const savedStarred=flashcardImport.starred;
+        const shouldShowFlashcardReviewConfirmation=Boolean(flashcardImport.reviewIntent);
         const entitledUser=applyAdminEntitlements(displayUser);
         setUser(entitledUser);
         identifyUser(entitledUser);
@@ -32836,7 +33078,15 @@ export default function App() {
         setStarred(savedStarred);
         const diagnosticDone=await DB.getDiagnosticDone(appUser.email);
         const seen=await DB.getOnboardingSeen(appUser.email);
-        if(active&&shouldOpenProWelcome){
+        if(active&&shouldShowFlashcardReviewConfirmation){
+          await DB.saveOnboardingSeen(appUser.email);
+          setShowOnboarding(false);
+          setShowDiagnostic(false);
+          setShowProWelcome(false);
+          setFlashcardReviewConfirmation({count:flashcardImport.importedCount});
+          setFlashcardSetRequest(flashcardImport.importedCount>0?STARRED_FLASHCARD_SET_ID:null);
+          setView("flashcards");
+        }else if(active&&shouldOpenProWelcome){
           setShowOnboarding(false);
           setShowDiagnostic(false);
           setShowProWelcome(true);
@@ -32863,7 +33113,7 @@ export default function App() {
       setLoading(false);
     })();
     return()=>{active=false;};
-  },[clearLocalAuthState,forceSupabaseSignOut,importPendingGuestSmartReview]);
+  },[clearLocalAuthState,forceSupabaseSignOut,importPendingGuestFlashcards,importPendingGuestSmartReview]);
 
   const handleLogin=useCallback(async u=>{
     if(isRecentlyDeletedAccount(u)){
@@ -32878,13 +33128,21 @@ export default function App() {
     identifyUser(displayUser);
     const savedAttempts=u?.authProvider==="supabase" ? await loadSupabaseAttempts(u.id) : await DB.getAttempts(u.email);
     const a=await importPendingGuestSmartReview(displayUser,savedAttempts);
-    const s=u?.authProvider==="supabase" ? ((await loadSupabaseStarred(u.id)) ?? await DB.getStarred(starOwner(displayUser))) : await DB.getStarred(starOwner(displayUser));
+    const loadedStarred=u?.authProvider==="supabase" ? ((await loadSupabaseStarred(u.id)) ?? await DB.getStarred(starOwner(displayUser))) : await DB.getStarred(starOwner(displayUser));
+    const flashcardImport=await importPendingGuestFlashcards(displayUser,loadedStarred);
+    const s=flashcardImport.starred;
     const diagnosticDone=await DB.getDiagnosticDone(displayUser.email);
     const seen=await DB.getOnboardingSeen(displayUser.email);
-    if(!seen) setShowOnboarding(true);
+    const shouldShowFlashcardReviewConfirmation=Boolean(flashcardImport.reviewIntent);
+    if(shouldShowFlashcardReviewConfirmation){
+      await DB.saveOnboardingSeen(displayUser.email);
+      setShowOnboarding(false);
+      setShowDiagnostic(false);
+      setFlashcardReviewConfirmation({count:flashcardImport.importedCount});
+    }else if(!seen) setShowOnboarding(true);
     else if(!diagnosticDone&&a.length===0) setShowDiagnostic(true);
-    setAttempts(a);setStarred(s);setView("dashboard");setShowDaily(false);
-  },[forceSupabaseSignOut,importPendingGuestSmartReview]);
+    setAttempts(a);setStarred(s);setView(shouldShowFlashcardReviewConfirmation?"flashcards":"dashboard");setFlashcardSetRequest(shouldShowFlashcardReviewConfirmation&&flashcardImport.importedCount>0?STARRED_FLASHCARD_SET_ID:null);setShowDaily(false);
+  },[forceSupabaseSignOut,importPendingGuestFlashcards,importPendingGuestSmartReview]);
   const handleLogout=useCallback(async()=>{
     await forceSupabaseSignOut();
   },[forceSupabaseSignOut]);
@@ -33295,6 +33553,25 @@ export default function App() {
       return next;
     });
   },[user]);
+  const handleGuestToggleStar=useCallback((type,id)=>{
+    if(type!==FLASHCARD_STAR_TYPE||!id)return;
+    const key=starKey(type,id);
+    setGuestStarred(prev=>{
+      const exists=prev.includes(key);
+      const next=exists?prev.filter(item=>item!==key):[key,...prev];
+      DB.saveStarred("guest",next);
+      capture("flashcards_guest_star_toggled", { id, starred: !exists });
+      return next;
+    });
+  },[]);
+  const startFlashcardReviewSignup=useCallback(async(reason="flashcard_review_set")=>{
+    const count=getFlashcardStarKeys(guestStarred).length;
+    await saveFlashcardReviewAuthIntent({source:reason,count});
+    setPbqQ(null);
+    setAuthStartMode("review-signup");
+    setAuthRequestId(id=>id+1);
+    setView("auth");
+  },[guestStarred]);
   const handleReportQuestion=useCallback(details=>{
     const report=buildQuestionReport(details);
     capture("question_report_opened", { question_id:report.questionId, question_type:report.questionKind, tier: user?.tier||"guest" });
@@ -33637,7 +33914,7 @@ export default function App() {
               <DailyChallenge t={t} onLogin={goToSignup}/>
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
-            {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={assistantFlashcardSet} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
+            {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={assistantFlashcardSet} starred={guestStarred} onToggleStar={handleGuestToggleStar} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
             {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={guestUser} onAddWeakTopicToReview={goToSignup} onTryRelatedPbq={handleGuestPbqPreview} onOpenFlashcards={handleOpenFlashcards} onUpgrade={goToSignup}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
@@ -33656,9 +33933,9 @@ export default function App() {
             <FlashcardSavePrompt
               t={t}
               onClose={()=>setFlashcardAuthPrompt(false)}
-              onLogin={()=>{setFlashcardAuthPrompt(false);goToLogin();}}
-              onSignup={()=>{setFlashcardAuthPrompt(false);goToSignup();}}
-              mode={flashcardAuthPrompt==="flashcard_learn_more"?"learn_more":"save"}
+              onLogin={async()=>{const reason=flashcardAuthPrompt;setFlashcardAuthPrompt(false);if(String(reason||"").startsWith("flashcard"))await saveFlashcardReviewAuthIntent({source:`${reason}_login`,count:getFlashcardStarKeys(guestStarred).length});goToLogin();}}
+              onSignup={async()=>{const reason=flashcardAuthPrompt;setFlashcardAuthPrompt(false);if(String(reason||"").startsWith("flashcard"))await startFlashcardReviewSignup(reason);else goToSignup();}}
+              mode={flashcardAuthPrompt==="flashcard_learn_more"?"learn_more":flashcardAuthPrompt==="flashcard_review_set"||flashcardAuthPrompt==="flashcard_save_progress"?"review_set":"save"}
             />
           )}
           {questionReport&&<QuestionReportModal report={questionReport} user={null} t={t} onClose={()=>setQuestionReport(null)}/>}
@@ -33823,7 +34100,7 @@ export default function App() {
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
           {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={user} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq} onOpenFlashcards={handleOpenFlashcards} onUpgrade={()=>setView("pricing")}/>}
-          {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={effectiveAssistantFlashcardSet} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")} onOpenDeepDive={handleOpenDeepDive} onUpgrade={()=>setView("pricing")}/>}
+          {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={effectiveAssistantFlashcardSet} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")} onOpenDeepDive={handleOpenDeepDive} onUpgrade={()=>setView("pricing")} reviewConfirmation={flashcardReviewConfirmation} onDismissReviewConfirmation={()=>setFlashcardReviewConfirmation(null)}/>}
           {isRootUser&&view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {isRootUser&&view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
           {isRootUser&&view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
