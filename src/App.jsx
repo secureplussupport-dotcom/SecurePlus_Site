@@ -30826,6 +30826,8 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
   const previousInventoryOwnerRef=useRef(defaultOwner);
   const previousStarredCountRef=useRef(starredFlashcards.length);
   const previousAssistantDeckRef=useRef(showAssistantDeck);
+  const completedCardsThisSessionRef=useRef(new Set());
+  const tenCardsCompletedCapturedRef=useRef(false);
   const canSyncFlashcards=Boolean(user?.authProvider==="supabase"&&user?.id&&supabase);
 
   useEffect(()=>{
@@ -30974,6 +30976,8 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
   const startFlashcardSet=useCallback((id,mode)=>{
     const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:id===ASSISTANT_FLASHCARD_SET_ID?assistantSet:id===RANDOM_FLASHCARD_SET_ID?randomFlashcardSet:savedRandomSets.find(item=>item.id===id)||SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
     const safeMode=getSafeFlashcardMode(mode,flashcardSetHasExampleMode(set),flashcardSetType(set));
+    completedCardsThisSessionRef.current=new Set();
+    tenCardsCompletedCapturedRef.current=false;
     setActiveMode(safeMode);
     setSelectedSetId(id);
     setModeChooser(null);
@@ -31073,6 +31077,20 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
     }
     if(canSyncFlashcards)saveSupabaseFlashcardProgress(user.id,cardId,mastered);
     capture("flashcards_acronym_rated",{set_id:selectedSet?.id,card_id:cardId,mastered});
+    if(selectedSet?.id&&cardId){
+      completedCardsThisSessionRef.current.add(cardId);
+      const completedCount=completedCardsThisSessionRef.current.size;
+      if(completedCount>=10&&!tenCardsCompletedCapturedRef.current){
+        tenCardsCompletedCapturedRef.current=true;
+        capture("flashcards_ten_cards_completed",{
+          set_id:selectedSet.id,
+          mode:activeMode,
+          signed_in:signedIn,
+          tier:user?.tier || "guest",
+          completed_count:completedCount,
+        });
+      }
+    }
   };
   const buildAndOpenRandomSet=()=>{
     const safeConfig=normalizeRandomFlashcardConfig(randomConfig);
@@ -32312,6 +32330,16 @@ export default function App() {
     && !pbqBankLoading
     && (pbqBankError || remotePbqBank.length<PBQ_BANK.length)
   );
+
+  useEffect(()=>{
+    if(!flashcardAuthPrompt)return;
+    capture("flashcards_save_progress_prompt_viewed",{
+      reason:flashcardAuthPrompt,
+      source_view:view,
+      signed_in:Boolean(user),
+      tier:user?.tier || "guest",
+    });
+  },[flashcardAuthPrompt,view,user]);
 
   useEffect(()=>{
     try{
