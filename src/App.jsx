@@ -586,8 +586,8 @@ const writeSavedRandomFlashcardSets = (user,sets) => {
 };
 const getFlashcardShareUrl = setOrId => {
   const origin=typeof window!=="undefined"?window.location.origin:"https://secureplusprep.com";
-  const path=typeof window!=="undefined"?window.location.pathname:"/";
-  const params=new URLSearchParams({view:"flashcards"});
+  const path="/security-plus-flashcards/";
+  const params=new URLSearchParams();
   const set=typeof setOrId==="object"&&setOrId?setOrId:null;
   const setId=set?set.id:setOrId;
   if(setId&&setId!==STARRED_FLASHCARD_SET_ID)params.set("set",setId);
@@ -596,7 +596,8 @@ const getFlashcardShareUrl = setOrId => {
     if(cardIds.length)params.set("cards",cardIds.join(","));
     if(set.randomConfig?.mode)params.set("mode",set.randomConfig.mode);
   }
-  return `${origin}${path}?${params.toString()}`;
+  const query=params.toString();
+  return `${origin}${path}${query?`?${query}`:""}`;
 };
 const buildFlashcardShareMessage = set => {
   const isShareableSet=Boolean(set?.id&&set.id!==STARRED_FLASHCARD_SET_ID);
@@ -32566,6 +32567,10 @@ function normalizeAppHistoryView(view) {
   return APP_HISTORY_VIEWS.has(view) ? view : "dashboard";
 }
 
+function isFlashcardsAppPath(pathname=window.location.pathname) {
+  return String(pathname||"").replace(/\/+$/,"")==="/security-plus-flashcards";
+}
+
 function hasCheckoutReturnParams(search=window.location.search) {
   const params=new URLSearchParams(search);
   return Boolean(params.get("checkout") || params.get("billing") || params.get("session_id"));
@@ -32575,17 +32580,19 @@ function buildAppHistoryUrl(view,setId=null) {
   if(typeof window==="undefined")return "/";
   const safeView=normalizeAppHistoryView(view);
   const params=new URLSearchParams();
-  if(safeView!=="dashboard")params.set("view",safeView);
+  const pathname=safeView==="flashcards"?"/security-plus-flashcards/":"/";
+  if(safeView!=="dashboard"&&safeView!=="flashcards")params.set("view",safeView);
   if(safeView==="flashcards"&&setId)params.set("set",setId);
   const query=params.toString();
-  return `/${query?`?${query}`:""}`;
+  return `${pathname}${query?`?${query}`:""}`;
 }
 
 function readAppHistoryState() {
   if(typeof window==="undefined")return {view:"dashboard",flashcardSetId:null};
   const params=new URLSearchParams(window.location.search);
   const checkout=params.get("checkout");
-  const view=checkout==="cancelled" ? "pricing" : normalizeAppHistoryView(params.get("view")||"dashboard");
+  const pathView=isFlashcardsAppPath()?"flashcards":"dashboard";
+  const view=checkout==="cancelled" ? "pricing" : normalizeAppHistoryView(params.get("view")||pathView);
   return {
     view,
     flashcardSetId:view==="flashcards" ? params.get("set") : null,
@@ -32611,7 +32618,7 @@ function scrollSecurePlusPageToTop({behavior="auto"}={}) {
 export default function App() {
   const initialParams=new URLSearchParams(window.location.search);
   const urlDeepDiveRequest=initialParams.get("view")==="deep-dives";
-  const urlFlashcardsRequest=initialParams.get("view")==="flashcards";
+  const urlFlashcardsRequest=isFlashcardsAppPath()||initialParams.get("view")==="flashcards";
   const urlFlashcardsIntroRequest=Boolean(urlFlashcardsRequest&&initialParams.get("intro")==="1");
   const urlFlashcardSetRequest=urlFlashcardsRequest?initialParams.get("set"):"";
   const urlPricingRequest=initialParams.get("view")==="pricing"||initialParams.get("checkout")==="cancelled";

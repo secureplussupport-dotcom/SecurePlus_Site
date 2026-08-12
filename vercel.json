@@ -1,12 +1,5 @@
 {
   "ignoreCommand": "node scripts/vercel-ignore-build.mjs",
-  "redirects": [
-    {
-      "source": "/security-plus-flashcards/",
-      "destination": "/?view=flashcards&intro=1",
-      "permanent": false
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/coins/action",

@@ -74,13 +74,20 @@ function publicPageFiles() {
     .readdirSync(publicDir, { withFileTypes: true })
     .filter(entry => entry.isDirectory() && (entry.name.startsWith("security-plus-") || entry.name.startsWith("sy0-")))
     .map(entry => `public/${entry.name}/index.html`)
+    .filter(file => fs.existsSync(path.join(root,file)))
     .sort();
 }
 
-const pageFiles = ["index.html", ...publicPageFiles()];
+const interactiveSeoPages = ["security-plus-flashcards/index.html"];
+const pageFiles = ["index.html", ...publicPageFiles(), ...interactiveSeoPages].sort();
 const sitemap = read("public/sitemap.xml");
 const sitemapUrls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1]);
-const staticPageUrls = publicPageFiles().map(file => `${siteUrl}/${file.split("/")[1]}/`);
+function pageSlug(file) {
+  if(file==="index.html")return "";
+  return file.startsWith("public/")?file.split("/")[1]:file.split("/")[0];
+}
+
+const staticPageUrls = [...publicPageFiles(), ...interactiveSeoPages].map(file => `${siteUrl}/${pageSlug(file)}/`);
 const appFallback = read("index.html");
 
 if (!read("public/robots.txt").includes(`${siteUrl}/sitemap.xml`)) {
@@ -94,13 +101,13 @@ for (const url of [`${siteUrl}/`, ...staticPageUrls]) {
 for (const file of pageFiles) {
   const html = read(file);
   const visibleText = stripTags(html);
-  const route = file === "index.html" ? "/" : `/${file.split("/")[1]}/`;
+  const slug=pageSlug(file);
+  const route = file === "index.html" ? "/" : `/${slug}/`;
   const canonical = getTag(html, /<link\s+rel="canonical"\s+href="([^"]+)"/i);
   const title = getTag(html, /<title>(.*?)<\/title>/is);
   const description = getTag(html, /<meta\s+name="description"\s+content="([^"]+)"/i);
   const h1 = getTag(html, /<h1\b[^>]*>(.*?)<\/h1>/is);
   const structuredItems = flattenStructuredData(jsonLdObjects(html, file));
-  const slug = file === "index.html" ? "" : file.split("/")[1];
 
   if (canonical !== `${siteUrl}${route}`) push(errors, file, `canonical should be ${siteUrl}${route}`);
   if (!title || title.length < 35 || title.length > 70) push(warnings, file, `title length should be 35-70 characters, found ${title.length}`);
@@ -121,17 +128,19 @@ for (const file of pageFiles) {
     push(warnings, file, "root app JSON-LD should include SoftwareApplication");
   }
   if (file !== "index.html") {
-    if (!html.includes('class="lead"')) push(errors, file, "missing short explanation lead copy");
-    if (!html.includes('class="cta"')) push(errors, file, "missing CTA block to start practice");
+    const isInteractiveEntry=interactiveSeoPages.includes(file);
+    if (!isInteractiveEntry&&!html.includes('class="lead"')) push(errors, file, "missing short explanation lead copy");
+    if (!isInteractiveEntry&&!html.includes('class="cta"')) push(errors, file, "missing CTA block to start practice");
     if (!html.includes("Original scenario-based practice. Not exam dumps.")) {
       push(errors, file, "missing original-practice disclaimer");
     }
-    if (!html.includes("seo-sample-question")) {
+    if (!isInteractiveEntry&&!html.includes("seo-sample-question")) {
       push(errors, file, "missing visible sample question section");
     }
     if (!hasSchemaType(structuredItems, "Course")) push(errors, file, "missing Course JSON-LD");
     if (!hasSchemaType(structuredItems, "FAQPage")) push(errors, file, "missing FAQPage JSON-LD");
-    if (!html.includes('class="wrap card seo-faq"')) push(errors, file, "FAQPage JSON-LD must match a visible FAQ block");
+    if (!isInteractiveEntry&&!html.includes('class="wrap card seo-faq"')) push(errors, file, "FAQPage JSON-LD must match a visible FAQ block");
+    if (isInteractiveEntry&&!html.includes('src="/src/main.jsx"')) push(errors, file, "interactive SEO entry must hydrate the React application");
     if (softwareApplicationPages.has(slug) && !hasSchemaType(structuredItems, "SoftwareApplication")) {
       push(errors, file, "practice-oriented page is missing SoftwareApplication JSON-LD");
     }
@@ -148,10 +157,14 @@ for (const file of pageFiles) {
   if (!read(file).includes(flashcardsPath)) push(errors, file, `missing internal link to ${flashcardsPath}`);
 }
 
-const flashcardsPage = read("public/security-plus-flashcards/index.html");
+const flashcardsPage = read("security-plus-flashcards/index.html");
 for (const proof of ["313", "29", "General Security Concepts", "Security Operations", "Not exam dumps."]) {
-  if (!flashcardsPage.includes(proof)) push(errors, "public/security-plus-flashcards/index.html", `missing flashcard proof: ${proof}`);
+  if (!flashcardsPage.includes(proof)) push(errors, "security-plus-flashcards/index.html", `missing flashcard proof: ${proof}`);
 }
+
+const vercelConfig=JSON.parse(read("vercel.json"));
+const flashcardRedirect=(vercelConfig.redirects||[]).find(route=>route.source===flashcardsPath);
+if(flashcardRedirect)push(errors,"vercel.json",`${flashcardsPath} must return the interactive HTTP-200 entry instead of redirecting`);
 
 if (!appFallback.includes("CompTIA Security+ PBQ, MCQ, and flashcard practice site")) {
   push(warnings, "index.html", "fallback HTML should describe the PBQ, MCQ, and flashcard practice site");

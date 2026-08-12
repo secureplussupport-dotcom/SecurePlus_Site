@@ -123,7 +123,7 @@ requireValue(appSource.includes("guestStarred") && appSource.includes('DB.saveSt
 requireValue(appSource.includes("GUEST_FLASHCARD_REVIEW_AUTH_KEY") && appSource.includes("importPendingGuestFlashcards"), "Guest flashcard review sets must migrate into the account after authentication.");
 requireValue(appSource.includes("flashcard_curated_set"), "Guest curated-set access should route to account creation.");
 requireValue(appSource.includes("FlashcardShareActions"), "Flashcards must expose share controls for sets and the collection.");
-requireValue(appSource.includes("view:\"flashcards\""), "Flashcard share links must route directly to the Flashcards page.");
+requireValue(appSource.includes('const path="/security-plus-flashcards/"'), "Flashcard share links must route directly to the canonical Flashcards page.");
 requireValue(appSource.includes("https://wa.me/?text="), "Flashcards must support direct WhatsApp sharing.");
 requireValue(appSource.includes("https://discord.com/channels/@me"), "Flashcards must open Discord after copying the share message.");
 requireValue(appSource.includes("buildFlashcardPlatformShare") && appSource.includes("platformMessages") && appSource.includes("https://www.instagram.com/create/select/"), "Flashcards must prepare platform-specific social captions and open Instagram's posting entry after copying the caption.");
