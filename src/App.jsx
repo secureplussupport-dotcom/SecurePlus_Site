@@ -340,11 +340,10 @@ const SEO_RESOURCE_LINKS = Object.freeze([
   { href:"/security-plus-domain-3-practice/", title:"Domain 3", body:"Implementation topics including IAM, crypto, PKI, and secure protocols." },
   { href:"/security-plus-domain-4-practice/", title:"Domain 4", body:"Security operations, monitoring, incident response, and vulnerability management." },
   { href:"/security-plus-domain-5-practice/", title:"Domain 5", body:"Governance, risk, compliance, privacy, audits, and policies." },
-  { href:"/security-plus-comptia-study-guide/", title:"CompTIA study guide", body:"Beginner-friendly Security+ study order for SY0-701 preparation." },
-  { href:"/sy0-601-pbq-practice/", title:"SY0-601 PBQ search guide", body:"Use transferable 601 concepts safely, then move into current SY0-701 PBQ practice." },
+  { href:"/security-plus-study-guide/", title:"Security+ study guide", body:"Beginner-friendly SY0-701 study order, exam keywords, and note-to-practice guidance." },
+  { href:"/sy0-601-vs-sy0-701/", title:"SY0-601 migration guide", body:"Use transferable 601 concepts safely, then move into current SY0-701 PBQ practice." },
   { href:"/sy0-601-vs-sy0-701/", title:"SY0-601 vs SY0-701", body:"Compare the retired and current Security+ blueprints and rebuild an older study plan." },
   { href:"/security-plus-study-plan/", title:"Study plan", body:"A practical Security+ study schedule built around daily practice and review." },
-  { href:"/security-plus-study-notes/", title:"Study notes", body:"Exam-keyword notes for common SY0-701 concepts and control choices." },
 ]);
 const GUEST_SMART_REVIEW_BRIDGE_KEY = "secureplus-pending-guest-smart-review";
 const GUEST_SMART_REVIEW_BRIDGE_TTL_MS = 24 * 60 * 60 * 1000;

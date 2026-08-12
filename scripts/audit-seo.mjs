@@ -19,14 +19,16 @@ const softwareApplicationPages = new Set([
   "security-plus-pbq-practice",
   "security-plus-port-numbers",
   "security-plus-practice-questions",
-  "sy0-601-pbq-practice",
 ]);
 const consolidatedPageSlugs = new Set([
   "security-plus-comptia-practice-test",
+  "security-plus-comptia-study-guide",
   "security-plus-free-comptia-practice",
   "security-plus-firewall-pbq-practice",
   "security-plus-pbq-practices",
+  "security-plus-study-notes",
   "security-plus-sy0-701-practice",
+  "sy0-601-pbq-practice",
 ]);
 const errors = [];
 const warnings = [];
@@ -171,10 +173,13 @@ if(flashcardRedirect)push(errors,"vercel.json",`${flashcardsPath} must return th
 
 const expectedConsolidationRedirects = [
   ["/security-plus-comptia-practice-test/", "/security-plus-practice-questions/"],
+  ["/security-plus-comptia-study-guide/", "/security-plus-study-guide/"],
   ["/security-plus-free-comptia-practice/", "/security-plus-practice-questions/"],
   ["/security-plus-sy0-701-practice/", "/security-plus-practice-questions/"],
   ["/security-plus-firewall-pbq-practice/", "/security-plus-pbq-practice/"],
   ["/security-plus-pbq-practices/", "/security-plus-pbq-practice/"],
+  ["/security-plus-study-notes/", "/security-plus-study-guide/"],
+  ["/sy0-601-pbq-practice/", "/sy0-601-vs-sy0-701/"],
 ];
 for (const [source,destination] of expectedConsolidationRedirects) {
   const redirect=(vercelConfig.redirects||[]).find(route=>route.source===source);
@@ -189,7 +194,7 @@ for (const [source,destination] of expectedConsolidationRedirects) {
 if (sitemap.includes("free-comptia")) {
   push(errors, "public/sitemap.xml", "sitemap should not advertise free-branded practice URLs");
 }
-if (sitemapUrls.length > 21) {
+if (sitemapUrls.length > 18) {
   push(errors, "public/sitemap.xml", `sitemap should stay focused after consolidation, found ${sitemapUrls.length} URLs`);
 }
 
