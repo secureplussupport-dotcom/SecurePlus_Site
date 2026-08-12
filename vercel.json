@@ -1,5 +1,22 @@
 {
   "ignoreCommand": "node scripts/vercel-ignore-build.mjs",
+  "redirects": [
+    {
+      "source": "/security-plus-sy0-701-practice/",
+      "destination": "/security-plus-practice-questions/",
+      "permanent": true
+    },
+    {
+      "source": "/security-plus-comptia-practice-test/",
+      "destination": "/security-plus-practice-questions/",
+      "permanent": true
+    },
+    {
+      "source": "/security-plus-free-comptia-practice/",
+      "destination": "/security-plus-practice-questions/",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/coins/action",

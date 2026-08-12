@@ -329,6 +329,7 @@ function TrustBadge({t,compact=false,center=false,style={}}) {
 }
 
 const SEO_RESOURCE_LINKS = Object.freeze([
+  { href:"/security-plus-practice-questions/", title:"Security+ practice questions", body:"Scenario-based Security+ practice with MCQs, PBQ previews, daily challenges, and review guidance." },
   { href:"/security-plus-flashcards/", title:"CompTIA Security+ flashcards for SY0-701", body:"Study 313 original cards in 29 decks across all five exam domains, then use weak-area review with Pro." },
   { href:"/security-plus-acronyms/", title:"Security+ acronyms", body:"Flashcard-style definitions for common SY0-701 abbreviations." },
   { href:"/security-plus-port-numbers/", title:"Port numbers", body:"Quick review for common services, protocols, and exam clues." },
@@ -339,14 +340,12 @@ const SEO_RESOURCE_LINKS = Object.freeze([
   { href:"/security-plus-domain-3-practice/", title:"Domain 3", body:"Implementation topics including IAM, crypto, PKI, and secure protocols." },
   { href:"/security-plus-domain-4-practice/", title:"Domain 4", body:"Security operations, monitoring, incident response, and vulnerability management." },
   { href:"/security-plus-domain-5-practice/", title:"Domain 5", body:"Governance, risk, compliance, privacy, audits, and policies." },
-  { href:"/security-plus-comptia-practice-test/", title:"CompTIA practice test", body:"Security+ practice test preparation with MCQs, PBQs, and review guidance." },
   { href:"/security-plus-comptia-study-guide/", title:"CompTIA study guide", body:"Beginner-friendly Security+ study order for SY0-701 preparation." },
   { href:"/security-plus-pbq-practices/", title:"PBQ practices", body:"Security+ PBQ practices for firewall, logs, ordering, and select-and-fill tasks." },
   { href:"/sy0-601-pbq-practice/", title:"SY0-601 PBQ search guide", body:"Use transferable 601 concepts safely, then move into current SY0-701 PBQ practice." },
   { href:"/sy0-601-vs-sy0-701/", title:"SY0-601 vs SY0-701", body:"Compare the retired and current Security+ blueprints and rebuild an older study plan." },
   { href:"/security-plus-study-plan/", title:"Study plan", body:"A practical Security+ study schedule built around daily practice and review." },
   { href:"/security-plus-study-notes/", title:"Study notes", body:"Exam-keyword notes for common SY0-701 concepts and control choices." },
-  { href:"/security-plus-free-comptia-practice/", title:"Original Security+ practice", body:"Scenario-based Security+ practice questions, daily challenges, and PBQ previews." },
 ]);
 const GUEST_SMART_REVIEW_BRIDGE_KEY = "secureplus-pending-guest-smart-review";
 const GUEST_SMART_REVIEW_BRIDGE_TTL_MS = 24 * 60 * 60 * 1000;

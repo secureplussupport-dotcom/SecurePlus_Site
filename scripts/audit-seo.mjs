@@ -7,7 +7,6 @@ const siteUrl = "https://www.secureplusprep.com";
 const requiredTerms = ["Security+", "SecurePlus"];
 const softwareApplicationPages = new Set([
   "security-plus-acronyms",
-  "security-plus-comptia-practice-test",
   "security-plus-cryptography-practice",
   "security-plus-daily-challenge",
   "security-plus-domain-1-practice",
@@ -17,14 +16,17 @@ const softwareApplicationPages = new Set([
   "security-plus-domain-5-practice",
   "security-plus-firewall-pbq-practice",
   "security-plus-flashcards",
-  "security-plus-free-comptia-practice",
   "security-plus-mcq-practice",
   "security-plus-pbq-practice",
   "security-plus-pbq-practices",
   "security-plus-port-numbers",
   "security-plus-practice-questions",
-  "security-plus-sy0-701-practice",
   "sy0-601-pbq-practice",
+]);
+const consolidatedPageSlugs = new Set([
+  "security-plus-comptia-practice-test",
+  "security-plus-free-comptia-practice",
+  "security-plus-sy0-701-practice",
 ]);
 const errors = [];
 const warnings = [];
@@ -73,6 +75,7 @@ function publicPageFiles() {
   return fs
     .readdirSync(publicDir, { withFileTypes: true })
     .filter(entry => entry.isDirectory() && (entry.name.startsWith("security-plus-") || entry.name.startsWith("sy0-")))
+    .filter(entry => !consolidatedPageSlugs.has(entry.name))
     .map(entry => `public/${entry.name}/index.html`)
     .filter(file => fs.existsSync(path.join(root,file)))
     .sort();
@@ -147,7 +150,7 @@ for (const file of pageFiles) {
   }
 }
 
-const sy0701Path = "/security-plus-sy0-701-practice/";
+const sy0701Path = "/security-plus-practice-questions/";
 for (const file of pageFiles) {
   if (!read(file).includes(sy0701Path)) push(errors, file, `missing internal link to ${sy0701Path}`);
 }
@@ -165,6 +168,28 @@ for (const proof of ["313", "29", "General Security Concepts", "Security Operati
 const vercelConfig=JSON.parse(read("vercel.json"));
 const flashcardRedirect=(vercelConfig.redirects||[]).find(route=>route.source===flashcardsPath);
 if(flashcardRedirect)push(errors,"vercel.json",`${flashcardsPath} must return the interactive HTTP-200 entry instead of redirecting`);
+
+const expectedConsolidationRedirects = [
+  "/security-plus-comptia-practice-test/",
+  "/security-plus-free-comptia-practice/",
+  "/security-plus-sy0-701-practice/",
+];
+for (const source of expectedConsolidationRedirects) {
+  const redirect=(vercelConfig.redirects||[]).find(route=>route.source===source);
+  if(!redirect)push(errors,"vercel.json",`missing consolidation redirect from ${source}`);
+  else if(redirect.destination!=="/security-plus-practice-questions/"||redirect.permanent!==true) {
+    push(errors,"vercel.json",`${source} should permanently redirect to /security-plus-practice-questions/`);
+  }
+  if(sitemapUrls.includes(`${siteUrl}${source}`)) {
+    push(errors,"public/sitemap.xml",`consolidated URL should not remain in sitemap: ${source}`);
+  }
+}
+if (sitemap.includes("free-comptia")) {
+  push(errors, "public/sitemap.xml", "sitemap should not advertise free-branded practice URLs");
+}
+if (sitemapUrls.length > 23) {
+  push(errors, "public/sitemap.xml", `sitemap should stay focused after consolidation, found ${sitemapUrls.length} URLs`);
+}
 
 if (!appFallback.includes("CompTIA Security+ PBQ, MCQ, and flashcard practice site")) {
   push(warnings, "index.html", "fallback HTML should describe the PBQ, MCQ, and flashcard practice site");
