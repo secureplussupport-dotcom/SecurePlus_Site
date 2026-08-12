@@ -14,11 +14,9 @@ const softwareApplicationPages = new Set([
   "security-plus-domain-3-practice",
   "security-plus-domain-4-practice",
   "security-plus-domain-5-practice",
-  "security-plus-firewall-pbq-practice",
   "security-plus-flashcards",
   "security-plus-mcq-practice",
   "security-plus-pbq-practice",
-  "security-plus-pbq-practices",
   "security-plus-port-numbers",
   "security-plus-practice-questions",
   "sy0-601-pbq-practice",
@@ -26,6 +24,8 @@ const softwareApplicationPages = new Set([
 const consolidatedPageSlugs = new Set([
   "security-plus-comptia-practice-test",
   "security-plus-free-comptia-practice",
+  "security-plus-firewall-pbq-practice",
+  "security-plus-pbq-practices",
   "security-plus-sy0-701-practice",
 ]);
 const errors = [];
@@ -170,15 +170,17 @@ const flashcardRedirect=(vercelConfig.redirects||[]).find(route=>route.source===
 if(flashcardRedirect)push(errors,"vercel.json",`${flashcardsPath} must return the interactive HTTP-200 entry instead of redirecting`);
 
 const expectedConsolidationRedirects = [
-  "/security-plus-comptia-practice-test/",
-  "/security-plus-free-comptia-practice/",
-  "/security-plus-sy0-701-practice/",
+  ["/security-plus-comptia-practice-test/", "/security-plus-practice-questions/"],
+  ["/security-plus-free-comptia-practice/", "/security-plus-practice-questions/"],
+  ["/security-plus-sy0-701-practice/", "/security-plus-practice-questions/"],
+  ["/security-plus-firewall-pbq-practice/", "/security-plus-pbq-practice/"],
+  ["/security-plus-pbq-practices/", "/security-plus-pbq-practice/"],
 ];
-for (const source of expectedConsolidationRedirects) {
+for (const [source,destination] of expectedConsolidationRedirects) {
   const redirect=(vercelConfig.redirects||[]).find(route=>route.source===source);
   if(!redirect)push(errors,"vercel.json",`missing consolidation redirect from ${source}`);
-  else if(redirect.destination!=="/security-plus-practice-questions/"||redirect.permanent!==true) {
-    push(errors,"vercel.json",`${source} should permanently redirect to /security-plus-practice-questions/`);
+  else if(redirect.destination!==destination||redirect.permanent!==true) {
+    push(errors,"vercel.json",`${source} should permanently redirect to ${destination}`);
   }
   if(sitemapUrls.includes(`${siteUrl}${source}`)) {
     push(errors,"public/sitemap.xml",`consolidated URL should not remain in sitemap: ${source}`);
@@ -187,7 +189,7 @@ for (const source of expectedConsolidationRedirects) {
 if (sitemap.includes("free-comptia")) {
   push(errors, "public/sitemap.xml", "sitemap should not advertise free-branded practice URLs");
 }
-if (sitemapUrls.length > 23) {
+if (sitemapUrls.length > 21) {
   push(errors, "public/sitemap.xml", `sitemap should stay focused after consolidation, found ${sitemapUrls.length} URLs`);
 }
 

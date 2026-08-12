@@ -15,6 +15,16 @@
       "source": "/security-plus-free-comptia-practice/",
       "destination": "/security-plus-practice-questions/",
       "permanent": true
+    },
+    {
+      "source": "/security-plus-firewall-pbq-practice/",
+      "destination": "/security-plus-pbq-practice/",
+      "permanent": true
+    },
+    {
+      "source": "/security-plus-pbq-practices/",
+      "destination": "/security-plus-pbq-practice/",
+      "permanent": true
     }
   ],
   "rewrites": [
