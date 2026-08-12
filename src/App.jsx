@@ -23140,10 +23140,10 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
               CompTIA Security+ (SY0-701)
             </div>
             <h1 className="landing-title brilliant-title">
-              Start with Security+ flashcards. Stay for smarter exam prep.
+              Security+ Practice & Flashcards — Not Exam Dumps.
             </h1>
             <p className="landing-copy brilliant-copy">
-              A fast, shareable recall pack for SY0-701 acronyms, definitions, and attack clues. Upgrade only when you want Pro weak-area decks, PBQs, and Smart Review.
+              Start without an account using interactive SY0-701 flashcards, original MCQs, PBQ previews, and Smart Review. Original scenario-based practice. Not exam dumps.
             </p>
             <div className="brilliant-action-row">
               <button className="btn btn-primary brilliant-primary-cta" onClick={()=>onNavigate("flashcards")}>Open Flashcards</button>
@@ -31649,7 +31649,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
       )}
       <section className="deep-dives-hero flashcards-hero">
         <div className="deep-dives-hero-copy">
-          <div className="page-title-row"><NavGlyph type="flashcards" active/><h1>Flashcards</h1></div>
+          <div className="page-title-row"><NavGlyph type="flashcards" active/><h1>CompTIA Security+ Flashcards (SY0-701)</h1></div>
           <div className="flashcards-mobile-quick" aria-label="Quick start flashcard sets">
             <span>Start now</span>
             <div>
@@ -31662,7 +31662,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
               ))}
             </div>
           </div>
-          <p>Your last-minute Security+ recall pack before exam day: share the same set with friends, practise fast, and save progress when you create an account.</p>
+          <p>Study 313 interactive cards in 29 focused decks across all five SY0-701 domains. Use this last-minute Security+ recall pack before exam day, share the same set with friends, and practise original prompts. Not exam dumps.</p>
           <div className="flashcard-guest-start-row">
             <button className="btn btn-primary" type="button" onClick={startSomewhere}>Start me somewhere <ChevronRight size={16}/></button>
             <button className="btn btn-outline" type="button" onClick={browseDecks}>Browse all decks</button>
@@ -31673,7 +31673,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
           <aside className="flashcards-cipher-card" aria-label="Cipher flashcard coach">
             <MascotAnimation animation="flashcards" size={98} interactive hoverAnimation="cheer" reactionAnimations={["flashcards","thinking","cheer"]} label="Cipher flips through flashcards"/>
             <strong>Cipher’s recall lab</strong>
-            <span className="flashcards-cipher-copy">Free decks now. Pro weak-area decks with Pro.</span>
+            <span className="flashcards-cipher-copy">Start without an account. Save mastery when you sign up.</span>
           </aside>
           {signedIn?(
             <>
