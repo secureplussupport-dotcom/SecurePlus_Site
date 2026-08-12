@@ -20939,7 +20939,7 @@ function LoadingScreen({t}) {
     <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:t.bg,padding:24}}>
       <div style={{display:"grid",justifyItems:"center",gap:18,textAlign:"center"}}>
         <MascotAnimation animation="thinking" size={118} className="loading-mascot slow" label="Cipher is loading SecurePlus"/>
-        <div style={{fontWeight:900,color:t.text,fontSize:18}}>Loading SecurePlus</div>
+        <div style={{fontWeight:900,color:t.text,fontSize:18}}>Security+ practice that teaches. Not exam dumps.</div>
         <div className="fu" key={quote} style={{color:t.textSec,fontSize:14,maxWidth:360,lineHeight:1.7}}>{quote}</div>
       </div>
     </div>
