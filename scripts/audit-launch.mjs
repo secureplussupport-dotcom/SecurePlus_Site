@@ -252,6 +252,7 @@ if (!errors.length) {
   requireContains("src/App.jsx", "Create free account to save Smart Review", "guest results should invite learners to preserve their weak-area Smart Review");
   requireContains("src/App.jsx", "GUEST_SMART_REVIEW_BRIDGE_KEY", "guest quiz attempts should survive account creation for Smart Review");
   requireContains("src/App.jsx", 'allowedGuestViews=new Set(["dashboard","mcq","pbq","daily"', "guests should be able to enter the PBQ preview without signing in");
+  requireContains("src/App.jsx", "clearLocalAuthState({preserveRoute:true})", "guest session restoration must preserve direct routes such as the canonical Flashcards page");
   requireContains("src/App.jsx", "const quizSizes = isGuest ? [10,20,30] : [10,20,30,40,50]", "guest MCQ practice should offer fixed 10, 20, or 30 question sets");
   requireContains("src/App.jsx", 'const activeDiffFilter=isGuest?"all":diffFilter', "guest MCQ practice must not filter by difficulty");
   requireContains("src/App.jsx", 'const activeTopicFilter=isGuest?"all":topicFilter', "guest MCQ practice must not filter by topic");

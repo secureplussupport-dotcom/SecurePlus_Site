@@ -32919,7 +32919,7 @@ export default function App() {
     refreshMascotPlacements();
   },[refreshMascotPlacements]);
 
-  const clearLocalAuthState=useCallback(async()=>{
+  const clearLocalAuthState=useCallback(async({preserveRoute=false}={})=>{
     resetAnalytics();
     await DB.clearSession();
     setPasswordRecovery(false);
@@ -32934,7 +32934,7 @@ export default function App() {
     setCoinWallet({...emptyCipherWallet(),status:"idle"});
     setCoinRewardToast(null);
     setPbqQ(null);
-    setView("dashboard");
+    if(!preserveRoute)setView("dashboard");
   },[]);
 
   const forceSupabaseSignOut=useCallback(async()=>{
@@ -33010,7 +33010,7 @@ export default function App() {
       const applySupabaseSession=async session=>{
         if(!active)return;
         if(!session?.user){
-          await clearLocalAuthState();
+          await clearLocalAuthState({preserveRoute:true});
           setLoading(false);
           return;
         }
