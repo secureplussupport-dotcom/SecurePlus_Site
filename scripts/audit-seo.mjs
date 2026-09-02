@@ -162,6 +162,39 @@ for (const file of pageFiles) {
   if (!read(file).includes(flashcardsPath)) push(errors, file, `missing internal link to ${flashcardsPath}`);
 }
 
+const flashcardCornerstoneLinks = new Map([
+  ["public/security-plus-acronyms/index.html", "SY0-701 acronym flashcards"],
+  ["public/security-plus-cryptography-practice/index.html", "Security+ cryptography definitions"],
+  ["public/security-plus-port-numbers/index.html", "port and protocol flashcards"],
+  ["public/security-plus-domain-1-practice/index.html", "Security+ definitions"],
+  ["public/security-plus-domain-2-practice/index.html", "Security+ attack flashcards"],
+  ["public/security-plus-domain-3-practice/index.html", "Security+ architecture flashcards"],
+  ["public/security-plus-domain-4-practice/index.html", "Security+ operations flashcards"],
+  ["public/security-plus-domain-5-practice/index.html", "Security+ governance definitions"],
+  ["public/security-plus-exam-objectives/index.html", "flashcards by SY0-701 domain"],
+  ["public/security-plus-study-guide/index.html", "Security+ last-minute review"],
+  ["public/security-plus-study-plan/index.html", "Use Security+ flashcards"],
+  ["public/sy0-601-vs-sy0-701/index.html", "SY0-701 flashcard review"],
+]);
+for (const [file, anchorText] of flashcardCornerstoneLinks) {
+  const html = read(file);
+  const linkCount = (html.match(/href="\/security-plus-flashcards\/"/g) || []).length;
+  if (linkCount < 2) push(errors, file, "flashcard cornerstone should have a contextual body link in addition to navigation");
+  if (!html.includes(anchorText)) push(errors, file, `missing contextual flashcard anchor: ${anchorText}`);
+}
+
+const appSource = read("src/App.jsx");
+for (const anchorText of ["Open Security+ flashcards", "Review related flashcards", "All Security+ flashcards"]) {
+  if (!appSource.includes(anchorText)) push(errors, "src/App.jsx", `missing app-level flashcard anchor: ${anchorText}`);
+}
+const thinFlashcardSlugs = fs
+  .readdirSync(publicDir, { withFileTypes: true })
+  .filter(entry => entry.isDirectory() && entry.name.includes("flashcard") && entry.name !== "security-plus-flashcards")
+  .map(entry => entry.name);
+if (thinFlashcardSlugs.length) {
+  push(errors, "public/", `flashcard authority is split across extra page slugs: ${thinFlashcardSlugs.join(", ")}`);
+}
+
 const flashcardsPage = read("security-plus-flashcards/index.html");
 for (const proof of ["313", "29", "General Security Concepts", "Security Operations", "Not exam dumps."]) {
   if (!flashcardsPage.includes(proof)) push(errors, "security-plus-flashcards/index.html", `missing flashcard proof: ${proof}`);

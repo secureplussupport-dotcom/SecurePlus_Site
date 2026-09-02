@@ -19339,9 +19339,9 @@ body{background:
 .deep-dive-launchpad-coach>div>div span,.deep-dive-launchpad-coach>div>div strong{padding:6px 8px;border:1px solid var(--deep-border);border-radius:9px;background:var(--deep-panel);color:var(--deep-muted);font-size:9.5px;font-weight:900;}
 .deep-dive-launchpad-coach>div>div strong{color:var(--deep-accent);}
 .deep-dive-launchpad-actions{display:grid;gap:7px;}
-.deep-dive-launchpad-actions button{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;min-height:58px;padding:10px 12px;border:1px solid var(--deep-border);border-radius:14px;background:var(--deep-surface);color:var(--deep-accent);font:inherit;text-align:left;cursor:pointer;transition:transform .18s,border-color .18s,background .18s;}
-.deep-dive-launchpad-actions button:hover{transform:translateX(3px);border-color:color-mix(in srgb,var(--deep-accent) 45%,var(--deep-border));background:color-mix(in srgb,var(--deep-accent) 7%,var(--deep-surface));}
-.deep-dive-launchpad-actions button>span{display:grid;gap:2px;}
+.deep-dive-launchpad-actions button,.deep-dive-launchpad-actions a{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;min-height:58px;padding:10px 12px;border:1px solid var(--deep-border);border-radius:14px;background:var(--deep-surface);color:var(--deep-accent);font:inherit;text-align:left;text-decoration:none;cursor:pointer;transition:transform .18s,border-color .18s,background .18s;}
+.deep-dive-launchpad-actions button:hover,.deep-dive-launchpad-actions a:hover{transform:translateX(3px);border-color:color-mix(in srgb,var(--deep-accent) 45%,var(--deep-border));background:color-mix(in srgb,var(--deep-accent) 7%,var(--deep-surface));}
+.deep-dive-launchpad-actions button>span,.deep-dive-launchpad-actions a>span{display:grid;gap:2px;}
 .deep-dive-launchpad-actions strong{color:var(--deep-text);font-size:12px;}
 .deep-dive-launchpad-actions small{color:var(--deep-muted);font-size:10px;font-weight:700;}
 .deep-dives-controls{display:grid;gap:14px;margin:26px 0 20px;}
@@ -20140,7 +20140,7 @@ body{background:
   .deep-dive-launchpad-coach>.cipher-mascot{--cipher-size:76px!important;}
   .deep-dive-launchpad-coach h2{font-size:21px;}
   .deep-dive-launchpad-coach p{font-size:12px;}
-  .deep-dive-launchpad-actions button{min-height:61px;}
+  .deep-dive-launchpad-actions button,.deep-dive-launchpad-actions a{min-height:61px;}
   .deep-dive-article-hero{padding:25px 20px;border-radius:22px;}
   .deep-dive-article-hero h1{font-size:33px;}
   .deep-dive-article-subtitle{font-size:16px;}
@@ -23121,7 +23121,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
         </button>
         <nav className="landing-nav-center" aria-label="Landing page sections">
           <a href="#features">Features</a>
-          <button type="button" onClick={()=>onNavigate("flashcards")}>Flashcards</button>
+          <a href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onNavigate("flashcards");}}>Security+ flashcards</a>
           <a href="#learning-paths">Paths</a>
           <a href="#pricing">Pricing</a>
           <a href="#daily-challenge">Daily Challenge</a>
@@ -23146,7 +23146,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
               Start without an account using interactive SY0-701 flashcards, original MCQs, PBQ previews, and Smart Review. Original scenario-based practice. Not exam dumps.
             </p>
             <div className="brilliant-action-row">
-              <button className="btn btn-primary brilliant-primary-cta" onClick={()=>onNavigate("flashcards")}>Open Flashcards</button>
+              <a className="btn btn-primary brilliant-primary-cta" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onNavigate("flashcards");}}>Open Security+ flashcards</a>
               <button className="btn btn-outline brilliant-secondary-cta" onClick={onPracticeMcq}>Start Free MCQ Practice</button>
               <button className="btn btn-ghost brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
             </div>
@@ -23875,7 +23875,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
             Open flashcards without an account. Star useful cards after sign-up, then use MCQs, Smart Review, and Pro decks when you are ready.
           </p>
           <div className="home-cta-row brilliant-action-row">
-            <button className="btn btn-primary brilliant-primary-cta" onClick={onFlashcards}>Open Flashcards</button>
+            <a className="btn btn-primary brilliant-primary-cta" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onFlashcards();}}>Open Security+ flashcards</a>
             <button className="btn btn-outline brilliant-secondary-cta" onClick={onPractice}>Start Free MCQ Practice</button>
             <button className="btn btn-ghost brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
           </div>
@@ -30261,7 +30261,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   return(
     <article className="deep-dive-acronym-reader" style={{"--set-color":acronymSet.color,"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <div className="deep-dive-reader-topbar">
-        <button className="btn btn-ghost deep-dive-back" type="button" onClick={onClose}><ArrowLeft size={17}/> All flashcard sets</button>
+        <a className="btn btn-ghost deep-dive-back" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onClose();}}><ArrowLeft size={17}/> All Security+ flashcards</a>
         <span className="deep-dive-preview-badge"><Brain size={13}/> Active recall lab</span>
       </div>
 
@@ -30938,7 +30938,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
             <button className="btn deep-dive-lesson-btn-checkpoint" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>Checkpoint</button>
             <button className="btn deep-dive-lesson-btn-review" type="button" onClick={handleLessonReviewAction}><Brain size={16}/>Smart Review</button>
             <button className="btn deep-dive-lesson-btn-pbq" type="button" onClick={handleRelatedPbqAction}><Target size={16}/>Related PBQ</button>
-            <button className="btn deep-dive-lesson-btn-flashcards" type="button" onClick={handleRelatedFlashcardsAction}><TextCursorInput size={16}/>Flashcards</button>
+            <a className="btn deep-dive-lesson-btn-flashcards" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();handleRelatedFlashcardsAction();}}><TextCursorInput size={16}/>Review related flashcards</a>
           </div>
         </section>
 
@@ -30993,7 +30993,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
         </div>
         <div className="deep-dive-launchpad-actions">
           <button type="button" onClick={()=>openDive(continueDive.id,"learn")}><BookOpenCheck size={21}/><span><strong>Learn</strong><small>One idea at a time</small></span><ChevronRight size={17}/></button>
-          <button type="button" onClick={()=>onOpenFlashcards?.()}><Brain size={21}/><span><strong>Open Flashcards</strong><small>Separate acronym page</small></span><ChevronRight size={17}/></button>
+          <a href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onOpenFlashcards?.();}}><Brain size={21}/><span><strong>Open Security+ flashcards</strong><small>Review related definitions</small></span><ChevronRight size={17}/></a>
           <button type="button" onClick={()=>openDive(continueDive.id,"practice")}><Puzzle size={21}/><span><strong>Practise</strong><small>Tap through a scored lab</small></span><ChevronRight size={17}/></button>
         </div>
       </section>
