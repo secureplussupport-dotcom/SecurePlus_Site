@@ -18404,7 +18404,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-tagline-support{display:block;font-size:clamp(30px,3.7vw,48px);line-height:1.02;color:${t.text};font-weight:850;letter-spacing:-.02em;}
 .guest-tagline-main{display:block;font-size:clamp(42px,5.2vw,68px);line-height:1.02;color:${t.text};font-weight:850;letter-spacing:-.025em;}
 .guest-home-hero .brilliant-title strong{font-weight:950;color:${t.text};}
-.guest-home-hero .guest-title-accent,.guest-home-hero .brilliant-title strong:last-child{background:linear-gradient(90deg,${t.accent},${t.green});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.guest-home-hero .guest-title-accent,.guest-home-hero .guest-tagline-main strong{background:linear-gradient(90deg,${t.accent},${t.green});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .guest-home-hero .guest-hero-primary-actions{margin-top:22px;}
 .brilliant-daily-wrap .landing-challenge-card{min-height:0;border-radius:22px;border-color:${t.border};box-shadow:none;background:linear-gradient(180deg,${t.surface},${t.panel});}
 .brilliant-daily-wrap .landing-challenge-card::before{display:none;}
