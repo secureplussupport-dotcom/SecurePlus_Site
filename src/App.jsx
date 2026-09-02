@@ -18190,6 +18190,25 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .sidebar-restore:hover{transform:translateY(-1px);border-color:${t.accent}55;box-shadow:0 16px 34px ${t.accent}16;}
 .mobile-topbar{display:none;}
 .auth-layout{width:100%;max-width:980px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:stretch;}
+.auth-only-page{min-height:100vh;padding:24px;display:grid;place-items:center;background:
+  radial-gradient(circle at 50% 0%, ${t.accent}12, transparent 34%),
+  radial-gradient(circle at 85% 20%, ${t.green}10, transparent 28%),
+  transparent;}
+.auth-only-main{width:100%;display:grid;place-items:center;}
+.auth-only-card{width:min(100%,460px);padding:24px;border-radius:18px;}
+.auth-only-brand{display:inline-flex;align-items:center;gap:12px;margin:0 0 22px;padding:0;background:transparent;border:0;color:${t.text};cursor:pointer;text-align:left;}
+.auth-only-brand strong{display:block;font-size:19px;font-weight:950;line-height:1.1;}
+.auth-only-brand small{display:block;margin-top:3px;color:${t.textDim};font-size:12px;font-weight:750;}
+.auth-only-card h1{margin:8px 0 8px;color:${t.text};font-size:clamp(27px,5vw,34px);line-height:1.05;font-weight:950;letter-spacing:-.03em;}
+.auth-only-copy{margin:0 0 18px;color:${t.textSec};font-size:14px;line-height:1.65;}
+.auth-only-form{display:flex;flex-direction:column;gap:13px;}
+.auth-only-form label{display:block;margin-bottom:5px;color:${t.text};font-size:13px;font-weight:850;}
+.auth-only-form .btn{width:100%;justify-content:center;}
+.auth-demo-panel{margin-top:16px;padding:12px 14px;background:${t.panel};border:1px solid ${t.border};border-radius:12px;}
+.auth-demo-panel div{font-size:11px;font-weight:900;color:${t.textDim};letter-spacing:.08em;}
+.auth-demo-panel p{margin:5px 0 8px;font-size:12px;color:${t.textSec};}
+.auth-only-links{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.auth-only-links .btn{font-size:12px;padding:7px 10px;}
 .landing-page{min-height:100vh;padding:0 24px 54px;background:transparent;}
 .landing-header{position:sticky;top:10px;z-index:150;max-width:1120px;margin:0 auto 28px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;padding:12px 14px;background:${t.bg}e8;backdrop-filter:blur(16px);border:1px solid ${t.border};border-radius:8px;box-shadow:0 14px 34px rgba(7,12,24,.1);}
 .landing-nav-center{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;}
@@ -19052,6 +19071,9 @@ body{background:
   .auth-layout > section:first-child h1{font-size:28px!important;line-height:1.14!important;overflow-wrap:break-word!important;}
   .auth-layout > section:first-child{padding:24px!important;}
   .auth-layout > section:first-child p{font-size:14px!important;}
+  .auth-only-page{padding:16px!important;align-items:flex-start!important;padding-top:28px!important;}
+  .auth-only-card{padding:20px!important;border-radius:16px!important;}
+  .auth-only-card h1{font-size:28px!important;}
   .auth-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;margin-top:24px!important;}
   .auth-stat-card{padding:12px 10px!important;}
   .auth-stat-card div:first-child{font-size:22px!important;}
@@ -23154,6 +23176,154 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     );
   }
 
+  return(
+    <div className="auth-only-page fu">
+      <a className="skip-link" href="#secureplus-main">Skip to sign in form</a>
+      <main id="secureplus-main" className="auth-only-main">
+        <section className="card auth-only-card" aria-labelledby="auth-only-title">
+          <button type="button" className="auth-only-brand" onClick={()=>onNavigate("dashboard")}>
+            <BrandMark size={36}/>
+            <span>
+              <strong>SecurePlus</strong>
+              <small>CompTIA Security+ practice</small>
+            </span>
+          </button>
+
+          {initialMode==="review-signup"&&(
+            <div className="flashcard-review-auth-copy">
+              <span><Star size={15} fill="currentColor"/> Save your review set</span>
+              <strong>No credit card required.</strong>
+              <small>Create an account and your selected flashcards will move into your saved review deck.</small>
+            </div>
+          )}
+
+          <div className="label" style={{color:securityNotice?t.red:t.accent,marginTop:initialMode==="review-signup"?14:0}}>
+            {securityNotice?"Account security":mode==="reset"?"Password reset":mode==="signup"?"Create your account":"Welcome back"}
+          </div>
+          <h1 id="auth-only-title">
+            {securityNotice
+              ?"Sign in to continue safely"
+              :mode==="reset"
+                ?"Reset your password"
+                :mode==="signup"
+                  ?"Save your Security+ progress"
+                  :"Continue your Security+ practice"}
+          </h1>
+          <p className="auth-only-copy">
+            {securityNotice
+              ?"Use the same account that requested deletion. You will review one final confirmation before anything is removed."
+              :mode==="reset"
+                ?"Enter your email and we’ll send a secure reset link."
+                :mode==="signup"
+                  ?"Create a free account so your starred cards, scores, and review progress stay available."
+                  :"Your saved progress, starred cards, and review queue are waiting."}
+          </p>
+
+          {securityNotice&&(
+            <div className="auth-security-notice">
+              <ShieldCheck size={18}/>
+              <span><strong>The email did not delete your account.</strong>The secure link is waiting in this browser and will be checked against the account you sign in to.</span>
+            </div>
+          )}
+
+          <Alert msg={err} type="error" t={t}/>
+          <Alert msg={ok} type="success" t={t}/>
+
+          <form className="auth-only-form" onSubmit={handle}>
+            {mode==="signup"&&(
+              <div>
+                <label>Name</label>
+                <input className="input" name="name" type="text" autoComplete="name" placeholder="What should we call you?" value={form.name} onChange={set("name")}/>
+              </div>
+            )}
+            <div>
+              <label>Email</label>
+              <input className="input" name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={set("email")}/>
+            </div>
+            {mode!=="reset"&&(
+              <div>
+                <label>Password</label>
+                <input className="input" name="password" type="password" autoComplete={mode==="signup"?"new-password":"current-password"} placeholder={mode==="signup"?"Create a password":"Your password"} value={form.pass} onChange={set("pass")}/>
+              </div>
+            )}
+            {mode==="signup"&&(
+              <div>
+                <label>Confirm password</label>
+                <input className="input" name="confirm-password" type="password" autoComplete="new-password" placeholder="Repeat password" value={form.confirm} onChange={set("confirm")}/>
+              </div>
+            )}
+            <button type="submit" className="btn btn-primary" disabled={loading}>
+              {loading
+                ?"Processing..."
+                :mode==="reset"
+                  ?"Send Reset Email"
+                  :mode==="signup"
+                    ?initialMode==="review-signup"?"Create account and save set":"Create account"
+                    :"Log In"}
+            </button>
+            {isSupabaseConfigured&&mode==="login"&&(
+              <button type="button" className="btn btn-outline" onClick={handleGoogle} disabled={loading}>
+                Log in with Google
+              </button>
+            )}
+            {isSupabaseConfigured&&mode==="signup"&&(
+              <button type="button" className="btn btn-outline" onClick={handleGoogle} disabled={loading}>
+                Continue with Google
+              </button>
+            )}
+            {mode==="login"&&(
+              <button type="button" className="btn btn-ghost" onClick={()=>{setMode("reset");resetMessages();}} disabled={loading}>
+                Forgot password?
+              </button>
+            )}
+            {mode==="reset"&&(
+              <button type="button" className="btn btn-ghost" onClick={()=>{setMode("login");resetMessages();}} disabled={loading}>
+                Back to sign in
+              </button>
+            )}
+            {mode!=="login"&&(
+              <button type="button" className="btn btn-ghost" onClick={openLogin} disabled={loading}>
+                Already have an account? Log in
+              </button>
+            )}
+            {mode==="login"&&(
+              <button type="button" className="btn btn-outline" onClick={()=>jumpToAuth("signup")} disabled={loading}>
+                Create free account
+              </button>
+            )}
+          </form>
+
+          {!isSupabaseConfigured&&mode==="login"&&(
+            <div className="auth-demo-panel">
+              <div>DEMO ACCOUNT</div>
+              <p className="mono">Email: demo@secureplus.io · Password: demo123</p>
+              <button className="btn btn-ghost" type="button" onClick={async()=>{
+                let u=await DB.getUser("demo@secureplus.io");
+                if(!u){u={name:"Demo User",email:"demo@secureplus.io",password:"demo123",tier:"pro",joined:new Date().toISOString(),streak:14,authProvider:"local",loginMethod:"local"};await DB.saveUser(u);}
+                setForm(f=>({...f,email:"demo@secureplus.io",pass:"demo123"}));
+                await DB.saveSession({email:u.email,name:u.name,tier:u.tier,loggedIn:true});
+                onLogin(u);
+              }}>
+                Open demo workspace →
+              </button>
+            </div>
+          )}
+
+          <div className="auth-only-links">
+            <button type="button" className="btn btn-ghost" onClick={()=>onNavigate("dashboard")}>Back to guest practice</button>
+            <button type="button" className="btn btn-ghost" onClick={()=>onNavigate("privacy")}>Privacy Policy</button>
+            <button type="button" className="btn btn-ghost" onClick={()=>onNavigate("terms")}>Terms</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+
+  /*
+   * Archived 2026-09-02: legacy standalone marketing landing page.
+   * The root route now opens GuestDashboardGate, and auth routes render the
+   * compact auth-only surface above. Keep this block commented for short-term
+   * reference while the new guest funnel stabilises.
   const featureCards=[
     {type:"flashcards",plan:"free",color:"#0ea5e9",title:"Security+ flashcards",body:"The easiest gateway into SecurePlus: open chapter-grouped acronyms, terms, and attack clues without an account, then save starred cards when you sign up."},
     {type:"mcq",plan:"free",color:"#2f7df6",title:"Full MCQ practice",body:"Guests and free accounts can access every MCQ question. Create an account when you want answers, scores, and progress to follow you."},
@@ -23588,6 +23758,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
       </main>
     </div>
   );
+  */
 }
 
 // ═══════════════════════════════════════════════════════════════
