@@ -231,7 +231,7 @@ const PRO_ACADEMY_PASS_PRICE = "$9.99 / 3 months";
 const PRO_MONTHLY_PASS_PRICE = "$4.99 / month";
 const PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus";
 const PRO_ACADEMY_PASS_DESCRIPTION = "Built around the typical Security+ study window. Unlock all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.";
-const PRO_ACADEMY_PASS_TRUST = "Original scenario-based practice. Not exam dumps.";
+const PRO_ACADEMY_PASS_TRUST = "Clear study paths. Real scenarios. Pass Security+ with confidence.";
 const ADMIN_PRO_MODE_STORAGE_PREFIX = "secureplus-admin-pro-mode";
 const ADMIN_ONLY_APP_VIEWS = new Set(["feedback","question-admin","mascot-admin"]);
 
@@ -370,7 +370,7 @@ const FLASHCARD_REVIEW_LAST_OPENED_PREFIX = "secureplus-flashcard-review-last-op
 const FLASHCARD_SHARE_COPY = {
   title:"SecurePlus Security+ flashcards",
   description:"Security+ flashcards grouped by chapter and topic.",
-  statement:"SecurePlus has Security+ flashcards for acronyms, attack clues, definitions, and exam keywords. Original scenario-based practice. Not exam dumps.",
+  statement:"SecurePlus has Security+ flashcards for acronyms, attack clues, definitions, and exam keywords. Clear study paths. Real scenarios. Pass Security+ with confidence.",
 };
 const FLASHCARD_DEFINITION_NEXT_LABEL = "Definition cards next";
 const FLASHCARD_ACRONYM_SECTION_LABEL = "Acronym cards next";
@@ -610,17 +610,17 @@ const buildFlashcardPlatformShare = (platform,set) => {
   if(platformName==="instagram"){
     return [
       "Before exam day, I’m using SecurePlus flashcards for Security+ recall.",
-      `${setName} covers acronyms, definitions, and scenario clues without exam dumps.`,
-      "Original scenario-based practice. Not exam dumps.",
+      `${setName} covers acronyms, definitions, and scenario clues for fast last-minute review.`,
+      "Clear study paths. Real scenarios. Pass Security+ with confidence.",
       `Try it: ${url}`,
       "#SecurityPlus #CompTIA #CompTIASecurityPlus #CybersecurityStudy",
     ].join("\n");
   }
   if(platformName==="reddit"){
     return [
-      "I found a Security+ flashcard collection that is built around understanding acronyms, definitions, attack clues, and exam keywords instead of memorising dumps.",
+      "I found a Security+ flashcard collection built around acronyms, definitions, attack clues, and exam keywords for fast last-minute recall.",
       "",
-      "Original scenario-based practice. Not exam dumps.",
+      "Clear study paths. Real scenarios. Pass Security+ with confidence.",
       "",
       `Set: ${setName}`,
       `Link: ${url}`,
@@ -632,7 +632,7 @@ const buildFlashcardPlatformShare = (platform,set) => {
       `${setName}`,
       "",
       "It focuses on acronyms, definitions, attack clues, and exam keywords.",
-      "Original scenario-based practice. Not exam dumps.",
+      "Clear study paths. Real scenarios. Pass Security+ with confidence.",
       url,
     ].join("\n");
   }
@@ -641,7 +641,7 @@ const buildFlashcardPlatformShare = (platform,set) => {
       "Security+ flashcards from SecurePlus:",
       `${setName}`,
       "Acronyms, definitions, attack clues, and exam keywords.",
-      "Original scenario-based practice. Not exam dumps.",
+      "Clear study paths. Real scenarios. Pass Security+ with confidence.",
       url,
     ].join("\n");
   }
@@ -18322,7 +18322,6 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-desktop-auth-actions .btn{pointer-events:auto;}
 .guest-hero-primary-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:620px;margin-top:26px;}
 .guest-hero-choice{justify-content:center;min-height:64px;border-radius:18px!important;padding:16px 18px!important;font-size:15px!important;font-weight:950;text-decoration:none!important;border:1.5px solid transparent;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease;}
-.guest-hero-choice svg{flex-shrink:0;}
 .guest-hero-choice-flashcards{color:#f8fbff!important;background:linear-gradient(135deg,#2563eb,#06b6d4);box-shadow:0 18px 34px rgba(37,99,235,.22);}
 .guest-hero-choice-mcq{color:#082f49!important;background:linear-gradient(135deg,#67e8f9,#34d399);box-shadow:0 18px 34px rgba(20,184,166,.2);}
 .guest-hero-choice:hover{transform:translateY(-2px);box-shadow:0 22px 42px rgba(3,8,20,.18);}
@@ -18337,6 +18336,43 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-value-icon{width:38px;height:38px;display:grid;place-items:center;margin-bottom:13px;border-radius:8px;background:color-mix(in srgb,var(--value-color) 14%,transparent);color:var(--value-color);border:1px solid color-mix(in srgb,var(--value-color) 35%,transparent);}
 .guest-value-card strong{display:block;margin-bottom:6px;color:${t.text};font-size:14px;line-height:1.35;}
 .guest-value-card p{color:${t.textSec};font-size:12px;line-height:1.65;}
+.guest-feature-showcase{display:grid;gap:18px;margin-top:18px;}
+.guest-feature-showcase-card{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,.82fr) minmax(300px,1fr);gap:24px;align-items:center;min-height:260px;padding:30px;border:1px solid color-mix(in srgb,var(--feature-color) 35%,${t.border});border-radius:24px;background:linear-gradient(135deg,color-mix(in srgb,var(--feature-color) 12%,${t.surface}),${t.panel} 58%,color-mix(in srgb,var(--feature-color) 9%,${t.surface}));box-shadow:0 22px 54px rgba(7,12,24,.11);opacity:0;transform:translateY(24px);animation:featureReveal .75s cubic-bezier(.16,1,.3,1) both;animation-timeline:view();animation-range:entry 8% cover 34%;}
+.guest-feature-showcase-card::after{content:"";position:absolute;right:-120px;top:-110px;width:270px;height:270px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--feature-color) 20%,transparent),transparent 68%);pointer-events:none;}
+.guest-feature-copy{position:relative;z-index:1;display:grid;justify-items:start;gap:12px;}
+.guest-feature-kicker{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border-radius:999px;border:1px solid color-mix(in srgb,var(--feature-color) 42%,transparent);background:color-mix(in srgb,var(--feature-color) 12%,transparent);color:var(--feature-color);font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
+.guest-feature-copy h2{margin:0;color:${t.text};font-size:clamp(28px,3vw,42px);line-height:1.05;text-wrap:balance;}
+.guest-feature-copy p{max-width:410px;margin:0;color:${t.textSec};font-size:14px;line-height:1.65;font-weight:650;}
+.guest-feature-copy .btn{margin-top:5px;border-color:color-mix(in srgb,var(--feature-color) 48%,${t.border});box-shadow:0 12px 26px color-mix(in srgb,var(--feature-color) 15%,transparent);}
+.guest-feature-visual{position:relative;z-index:1;min-height:190px;border:1px solid color-mix(in srgb,var(--feature-color) 34%,${t.border});border-radius:22px;background:linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 9%,${t.panel}));box-shadow:inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden;}
+.guest-feature-visual::before{content:"";position:absolute;inset:auto 18px 18px 18px;height:4px;border-radius:999px;background:linear-gradient(90deg,var(--feature-color),transparent);}
+.guest-feature-visual.flashcards{display:grid;place-items:center;}
+.guest-preview-card-stack{position:relative;width:min(280px,80%);height:132px;}
+.guest-preview-card-stack span{position:absolute;inset:0;display:grid;align-content:center;gap:8px;padding:22px;border-radius:20px;border:1px solid color-mix(in srgb,var(--feature-color) 45%,#fff);background:linear-gradient(135deg,color-mix(in srgb,var(--feature-color) 24%,${t.surface}),${t.panel});box-shadow:0 18px 34px rgba(7,12,24,.24);animation:flashcardFloat 3.4s ease-in-out infinite;}
+.guest-preview-card-stack span:nth-child(1){transform:rotate(-7deg) translate(-24px,8px);opacity:.45;animation-delay:-.8s;}
+.guest-preview-card-stack span:nth-child(2){transform:rotate(6deg) translate(22px,2px);opacity:.7;animation-delay:-.35s;}
+.guest-preview-card-stack span:nth-child(3){transform:rotate(0deg);}
+.guest-preview-card-stack strong{color:${t.text};font-size:22px;}
+.guest-preview-card-stack small{color:${t.textSec};font-size:12px;font-weight:800;}
+.guest-feature-visual.mcq{display:grid;align-content:center;gap:10px;padding:24px;}
+.guest-mcq-option{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid ${t.border};background:${t.surface};color:${t.textSec};font-weight:850;font-size:13px;}
+.guest-mcq-option.correct{border-color:color-mix(in srgb,var(--feature-color) 55%,transparent);background:color-mix(in srgb,var(--feature-color) 14%,${t.surface});color:${t.text};}
+.guest-mcq-option span{width:23px;height:23px;border-radius:999px;display:grid;place-items:center;background:color-mix(in srgb,var(--feature-color) 16%,transparent);color:var(--feature-color);font-size:11px;}
+.guest-feature-visual.pbq{padding:24px;display:grid;align-content:center;gap:12px;}
+.guest-terminal-preview{border-radius:16px;background:#07111f;border:1px solid color-mix(in srgb,var(--feature-color) 28%,#26364a);padding:16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#b7f7d8;font-size:12px;line-height:1.7;}
+.guest-terminal-preview b{color:#fbbf24;font-weight:800;}
+.guest-feature-visual.review{display:grid;align-content:center;gap:12px;padding:24px;}
+.guest-review-row{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;border-radius:15px;background:${t.surface};border:1px solid ${t.border};}
+.guest-review-row strong{color:${t.text};font-size:12px;}
+.guest-review-row span{height:8px;border-radius:999px;background:linear-gradient(90deg,var(--feature-color),color-mix(in srgb,var(--feature-color) 22%,transparent));}
+.guest-review-row em{font-style:normal;color:var(--feature-color);font-size:11px;font-weight:950;}
+.guest-feature-visual.deep{display:grid;align-content:center;gap:10px;padding:24px;}
+.guest-lesson-preview{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;border:1px solid ${t.border};border-radius:16px;background:${t.surface};}
+.guest-lesson-preview strong{color:${t.text};font-size:13px;line-height:1.3;}
+.guest-lesson-preview small{color:${t.textDim};font-size:11px;font-weight:800;}
+.guest-lesson-preview svg{color:var(--feature-color);}
+@keyframes featureReveal{to{opacity:1;transform:none;}}
+@keyframes flashcardFloat{0%,100%{translate:0 0;}50%{translate:0 -8px;}}
 .guest-final-cta{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center;padding:28px;border:1px solid ${t.green}3d;border-radius:8px;background:linear-gradient(125deg,${t.green}13,${t.surface} 55%,${t.accent}10);box-shadow:0 20px 48px rgba(7,12,24,.1);}
 .guest-final-cta h2{margin:5px 0 8px;color:${t.text};font-size:clamp(26px,3.2vw,36px);line-height:1.15;text-wrap:balance;}
 .guest-final-cta p{max-width:650px;color:${t.textSec};font-size:13px;line-height:1.7;}
@@ -18349,7 +18385,11 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .brilliant-lesson-top span{padding:6px 10px;border-radius:999px;background:${t.green}12;color:${t.green};font-size:12px;font-weight:950;white-space:nowrap;}
 .brilliant-lesson-top .brilliant-lesson-kicker{padding:0;border-radius:0;background:transparent;color:${t.accent};font-size:11px;font-weight:950;}
 .brilliant-lesson-top .brilliant-lesson-duration{background:${t.green};color:#062e25;border:1px solid ${t.green};box-shadow:0 7px 18px ${t.green}22;}
-.guest-home-hero{margin-left:-30px;margin-right:-30px;padding-left:38px!important;padding-right:38px!important;border-left:0!important;border-right:0!important;border-radius:0!important;background:linear-gradient(90deg,transparent 0%,${t.accent}12 9%,${t.surface} 32%,${t.surface} 68%,${t.green}0c 91%,transparent 100%)!important;}
+.guest-home-hero{align-items:start!important;margin-left:-30px;margin-right:-30px;padding:18px 38px 18px!important;min-height:0;border-left:0!important;border-right:0!important;border-radius:0!important;background:linear-gradient(90deg,transparent 0%,${t.accent}12 9%,${t.surface} 32%,${t.surface} 68%,${t.green}0c 91%,transparent 100%)!important;}
+.guest-home-hero .brilliant-title{max-width:820px;font-size:clamp(38px,4.55vw,56px);line-height:1.02;font-weight:800;}
+.guest-home-hero .brilliant-title strong{font-weight:950;color:${t.text};}
+.guest-home-hero .guest-title-accent,.guest-home-hero .brilliant-title strong:last-child{background:linear-gradient(90deg,${t.accent},${t.green});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.guest-home-hero .guest-hero-primary-actions{margin-top:22px;}
 .brilliant-daily-wrap .landing-challenge-card{min-height:0;border-radius:22px;border-color:${t.border};box-shadow:none;background:linear-gradient(180deg,${t.surface},${t.panel});}
 .brilliant-daily-wrap .landing-challenge-card::before{display:none;}
 .brilliant-daily-wrap .landing-challenge-small .landing-challenge-question{-webkit-line-clamp:4;}
@@ -19026,6 +19066,11 @@ body{background:
   .guest-value-head{display:block!important;}
   .guest-value-head p{margin-top:10px;}
   .guest-value-grid{grid-template-columns:minmax(0,1fr)!important;}
+  .guest-feature-showcase-card{grid-template-columns:1fr!important;gap:16px!important;min-height:0!important;padding:22px!important;border-radius:20px!important;}
+  .guest-feature-visual{min-height:170px!important;}
+  .guest-feature-copy h2{font-size:clamp(25px,8vw,34px)!important;}
+  .guest-review-row{grid-template-columns:74px minmax(0,1fr)!important;}
+  .guest-review-row em{grid-column:1 / -1;}
   .guest-final-cta{grid-template-columns:minmax(0,1fr)!important;padding:22px!important;}
   .guest-final-actions{min-width:0!important;}
   .brilliant-path-section{padding:18px!important;border-radius:22px!important;}
@@ -20948,7 +20993,7 @@ function LoadingScreen({t}) {
     <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:t.bg,padding:24}}>
       <div style={{display:"grid",justifyItems:"center",gap:18,textAlign:"center"}}>
         <MascotAnimation animation="thinking" size={118} className="loading-mascot slow" label="Cipher is loading SecurePlus"/>
-        <div style={{fontWeight:900,color:t.text,fontSize:18}}>Security+ practice that teaches. Not exam dumps.</div>
+        <div style={{fontWeight:900,color:t.text,fontSize:18}}>Security+ practice that teaches. Pass Security+ with confidence.</div>
         <div className="fu" key={quote} style={{color:t.textSec,fontSize:14,maxWidth:360,lineHeight:1.7}}>{quote}</div>
       </div>
     </div>
@@ -23104,7 +23149,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     {type:"exam",plan:"pro",color:"#8b5cf6",title:"Exam-style mode",body:"Pro users can run timed mixed MCQ/PBQ sets, flag questions, review detailed solutions, and estimate readiness."},
   ];
   const faqItems=[
-    {q:"Are the questions identical to the real exam?",a:"No. SecurePlus uses original practice questions. It is for learning and exam preparation, not real exam dumps."},
+    {q:"Are the questions identical to the real exam?",a:"No. SecurePlus uses original practice questions for learning and exam preparation."},
     {q:"Which exam version is supported?",a:"The current question bank is built for CompTIA Security+ (SY0-701)."},
     {q:"How often is the question bank updated?",a:"The bank is reviewed and expanded as Security+ objectives and student weak areas change."},
     {q:"Is there a mobile-friendly layout?",a:"Yes. The app is designed for phones, tablets, and desktop browsers, including mobile practice sessions."},
@@ -23152,10 +23197,10 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
               CompTIA Security+ (SY0-701)
             </div>
             <h1 className="landing-title brilliant-title">
-              Security+ Practice & Flashcards — Not Exam Dumps.
+              Clear study paths. Real scenarios. Pass Security+ with confidence.
             </h1>
             <p className="landing-copy brilliant-copy">
-              Start without an account using interactive SY0-701 flashcards, original MCQs, PBQ previews, and Smart Review. Original scenario-based practice. Not exam dumps.
+              Start without an account using interactive SY0-701 flashcards, original MCQs, PBQ previews, and Smart Review. Clear study paths. Real scenarios. Pass Security+ with confidence.
             </p>
             <div className="brilliant-action-row">
               <a className="btn btn-primary brilliant-primary-cta" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onNavigate("flashcards");}}>Open Security+ flashcards</a>
@@ -23857,39 +23902,81 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   );
 }
 
-function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,onFlashcards}) {
-  const [activePath,setActivePath]=useState("flashcards");
+function GuestFeaturePreview({type,t}) {
+  if(type==="flashcards"){
+    return (
+      <div className="guest-feature-visual flashcards" aria-hidden="true">
+        <div className="guest-preview-card-stack">
+          <span><strong>ACL</strong><small>Access control list</small></span>
+          <span><strong>Phishing</strong><small>Social engineering clue</small></span>
+          <span><strong>Zero Trust</strong><small>Never trust by default</small></span>
+        </div>
+      </div>
+    );
+  }
+  if(type==="mcq"){
+    return (
+      <div className="guest-feature-visual mcq" aria-hidden="true">
+        <div className="guest-mcq-option correct"><span>A</span> Least privilege</div>
+        <div className="guest-mcq-option"><span>B</span> Tailgating</div>
+        <div className="guest-mcq-option"><span>C</span> Piggybacking</div>
+      </div>
+    );
+  }
+  if(type==="pbq"){
+    return (
+      <div className="guest-feature-visual pbq" aria-hidden="true">
+        <div className="guest-terminal-preview">
+          <div><b>fw01</b>$ review acl --scenario</div>
+          <div>ALLOW 443/tcp → web tier</div>
+          <div>DENY any → admin subnet</div>
+          <div>Apply the safest rule order.</div>
+        </div>
+      </div>
+    );
+  }
+  if(type==="review"){
+    return (
+      <div className="guest-feature-visual review" aria-hidden="true">
+        <div className="guest-review-row"><strong>PKI</strong><span style={{width:"78%"}}/><em>review first</em></div>
+        <div className="guest-review-row"><strong>IAM</strong><span style={{width:"56%"}}/><em>next</em></div>
+        <div className="guest-review-row"><strong>Logs</strong><span style={{width:"34%"}}/><em>later</em></div>
+      </div>
+    );
+  }
+  return (
+    <div className="guest-feature-visual deep" aria-hidden="true">
+      <div className="guest-lesson-preview"><div><strong>Web Attacks</strong><br/><small>Learn the clues</small></div><ChevronRight size={20}/></div>
+      <div className="guest-lesson-preview"><div><strong>DNS Attacks</strong><br/><small>Compare the patterns</small></div><ChevronRight size={20}/></div>
+      <div className="guest-lesson-preview"><div><strong>Phishing</strong><br/><small>Spot the scenario</small></div><ChevronRight size={20}/></div>
+    </div>
+  );
+}
+
+function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,onFlashcards,onConcepts}) {
   const startSignup=source=>{
     capture("landing_signup_cta_clicked", { source });
     onSignup();
   };
-  const learningPaths=[
-    {id:"flashcards",label:"Free flashcards",tag:"Gateway",color:"#0ea5e9",body:"Start with Security+ acronyms, definitions, and attack clues. No account needed.",meta:"Open now",action:onFlashcards},
-    {id:"mcq",label:"5 simple MCQs",tag:"Free",color:t.accent,body:"After recall practice, try a short no-account MCQ session and see your weak-area result.",meta:"Practice now",action:onPractice},
-    {id:"daily",label:"Daily challenge",tag:"Free",color:t.green,body:"Finish a short challenge and build a repeatable study rhythm.",meta:"5 questions/day",action:onDaily},
-    {id:"pbq",label:"PBQ simulations",tag:"Preview",color:t.amber,body:`Try one complete PBQ, then choose coins or Pro for the remaining ${PBQ_BANK.length-1}.`,meta:"Try the preview",action:onPreviewPbq},
-  ];
-  const accountBenefits=[
-    {title:"Keep every result",body:"Save scores, streaks, and completed questions instead of starting over.",color:t.accent,Icon:ChartNoAxesColumnIncreasing},
-    {title:"Know what to study next",body:"Smart Review turns missed questions into a focused review queue.",color:t.green,Icon:Brain},
-    {title:"Start free, upgrade only if useful",body:"All MCQs stay free. No credit card is needed to create your account.",color:t.amber,Icon:ShieldCheck},
+  const showcaseFeatures=[
+    {id:"flashcards",label:"Gateway",color:"#0ea5e9",title:"Flashcards",body:"Fast recall for acronyms, definitions, and attack clues.",button:"Open flashcards",action:onFlashcards},
+    {id:"mcq",label:"Free practice",color:t.accent,title:"MCQ practice",body:"Short SY0-701 sets that show what you understand.",button:"Start MCQs",action:onPractice},
+    {id:"pbq",label:"Scenario work",color:t.amber,title:"PBQ simulator",body:"Apply concepts through logs, rules, ordering, and scenarios.",button:"Try a PBQ",action:onPreviewPbq},
+    {id:"review",label:"Personalised",color:t.green,title:"Smart Review",body:"Missed topics come back first so study stays focused.",button:"Try MCQs first",action:onPractice},
+    {id:"deep",label:"Guided learning",color:"#8b5cf6",title:"Concept Deep Dives",body:"Read the concept, then practise it while the idea is fresh.",button:"Open lessons",action:onConcepts||(()=>startSignup("concept_deep_dives"))},
   ];
   return (
     <div className="dashboard-shell" data-page-label="Guest main landing page">
       <section className="home-hero guest-home-hero brilliant-hero guest-conversion-hero">
         <div className="home-hero-copy brilliant-hero-copy">
           <h1 className="home-title brilliant-title">
-            Clear study paths.
-            <span className="guest-title-accent">Real scenarios.</span>
-            Pass Security+ with confidence.
+            <strong>Pass</strong> Security+ with <strong>confidence</strong>.
           </h1>
           <div className="home-cta-row brilliant-action-row guest-hero-primary-actions">
             <a className="btn guest-hero-choice guest-hero-choice-flashcards" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onFlashcards();}}>
-              <Layers3 size={22}/>
               <span>Security+ flashcards</span>
             </a>
             <button className="btn guest-hero-choice guest-hero-choice-mcq" type="button" onClick={onPractice}>
-              <BookOpenCheck size={22}/>
               <span>Start MCQ practice</span>
             </button>
             <button className="btn btn-primary guest-hero-account-cta" type="button" onClick={()=>startSignup("hero_create_account")}>Create Free Account</button>
@@ -23920,49 +24007,18 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
         </div>
       </section>
 
-      <section className="guest-value-section" aria-labelledby="free-account-value-title">
-        <div className="guest-value-head">
-          <div>
-            <div className="label" style={{color:t.green}}>Why create an account?</div>
-            <h2 id="free-account-value-title">Your free account remembers what you should study next.</h2>
-          </div>
-          <p>Guest practice helps you explore. A free account makes each session build on the last one.</p>
-        </div>
-        <div className="guest-value-grid">
-          {accountBenefits.map(({title,body,color,Icon})=>(
-            <div key={title} className="guest-value-card">
-              <div className="guest-value-icon" style={{"--value-color":color}}><Icon size={19} strokeWidth={2.3}/></div>
-              <strong>{title}</strong>
-              <p>{body}</p>
+      <section className="guest-feature-showcase" aria-label="SecurePlus study features">
+        {showcaseFeatures.map(feature=>(
+          <article key={feature.id} className="guest-feature-showcase-card" style={{"--feature-color":feature.color}}>
+            <div className="guest-feature-copy">
+              <span className="guest-feature-kicker">{feature.label}</span>
+              <h2>{feature.title}</h2>
+              <p>{feature.body}</p>
+              <button className="btn btn-outline" type="button" onClick={feature.action}>{feature.button}</button>
             </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="brilliant-path-section landing-section">
-        <div className="brilliant-section-head">
-          <div>
-            <div className="label" style={{color:t.accent}}>Choose your path</div>
-            <h2>Start small. Build real exam confidence.</h2>
-          </div>
-        </div>
-        <div className="brilliant-path-grid">
-          {learningPaths.map(path=>(
-            <button
-              key={path.id}
-              className={`brilliant-path-card ${activePath===path.id?"active":""}`}
-              style={{"--path-color":path.color}}
-              onMouseEnter={()=>setActivePath(path.id)}
-              onFocus={()=>setActivePath(path.id)}
-              onClick={path.action}
-            >
-              <span className="brilliant-path-tag">{path.tag}</span>
-              <strong>{path.label}</strong>
-              <small>{path.body}</small>
-              <em>{path.meta} →</em>
-            </button>
-          ))}
-        </div>
+            <GuestFeaturePreview type={feature.id} t={t}/>
+          </article>
+        ))}
       </section>
 
       <details className="seo-resource-section seo-resource-disclosure landing-section" aria-labelledby="guest-security-study-resources-title">
@@ -27404,7 +27460,7 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
                 <div ref={messagesEndRef}/>
               </div>
             )}
-            <p className="cipher-assistant-note">Cipher uses preset study guidance only. Original scenario-based practice. Not exam dumps.</p>
+            <p className="cipher-assistant-note">Cipher uses preset study guidance only. Clear study paths. Real scenarios. Pass Security+ with confidence.</p>
           </div>
         </section>
       )}
@@ -30830,7 +30886,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
               <details className="deep-dive-sources-disclosure">
                 <summary><ShieldCheck size={17}/>View vetted primary references<ChevronRight size={17}/></summary>
                 <section className="deep-dive-sources">
-                  <p>These links support the lesson's technical core. The teaching copy is original SecurePlus material written for concept mastery—not exam dumps.</p>
+                  <p>These links support the lesson's technical core. The teaching copy is original SecurePlus material written for concept mastery—pass Security+ with confidence.</p>
                   <div>{selectedDive.sources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.label}<ChevronRight size={14}/></a>)}</div>
                 </section>
               </details>
@@ -31666,7 +31722,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
               ))}
             </div>
           </div>
-          <p>Study 313 interactive cards in 29 focused decks across all five SY0-701 domains. Use this last-minute Security+ recall pack before exam day, share the same set with friends, and practise original prompts. Not exam dumps.</p>
+          <p>Study 313 interactive cards in 29 focused decks across all five SY0-701 domains. Use this last-minute Security+ recall pack before exam day, share the same set with friends, and practise original prompts. Pass Security+ with confidence.</p>
           <div className="flashcard-guest-start-row">
             <button className="btn btn-primary" type="button" onClick={startSomewhere}>Start me somewhere <ChevronRight size={16}/></button>
             <button className="btn btn-outline" type="button" onClick={browseDecks}>Browse all decks</button>
@@ -33883,7 +33939,7 @@ export default function App() {
               </div>
             </div>
             {view==="dashboard"&&(
-              <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onDaily={()=>setView("daily")} onFlashcards={()=>setView("flashcards")}/>
+              <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onDaily={()=>setView("daily")} onFlashcards={()=>setView("flashcards")} onConcepts={()=>setView("deep-dives")}/>
             )}
             {view==="mcq"&&(
               <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion} mcqBank={liveMcqBank}/>

@@ -136,8 +136,8 @@ for (const file of pageFiles) {
     const isInteractiveEntry=interactiveSeoPages.includes(file);
     if (!isInteractiveEntry&&!html.includes('class="lead"')) push(errors, file, "missing short explanation lead copy");
     if (!isInteractiveEntry&&!html.includes('class="cta"')) push(errors, file, "missing CTA block to start practice");
-    if (!html.includes("Original scenario-based practice. Not exam dumps.")) {
-      push(errors, file, "missing original-practice disclaimer");
+    if (!html.includes("Clear study paths. Real scenarios. Pass Security+ with confidence.")) {
+      push(errors, file, "missing site tagline");
     }
     if (!isInteractiveEntry&&!html.includes("seo-sample-question")) {
       push(errors, file, "missing visible sample question section");
@@ -196,8 +196,15 @@ if (thinFlashcardSlugs.length) {
 }
 
 const flashcardsPage = read("security-plus-flashcards/index.html");
-for (const proof of ["313", "29", "General Security Concepts", "Security Operations", "Not exam dumps."]) {
+for (const proof of ["313", "29", "General Security Concepts", "Security Operations", "Pass Security+ with confidence."]) {
   if (!flashcardsPage.includes(proof)) push(errors, "security-plus-flashcards/index.html", `missing flashcard proof: ${proof}`);
+}
+
+const forbiddenTaglinePattern = /\b(?:no\s+)?exam dumps?\b/i;
+for (const file of [...pageFiles, "index.html", "src/App.jsx"]) {
+  if (forbiddenTaglinePattern.test(read(file))) {
+    push(errors, file, "old exam-dump positioning must not appear in SEO or app copy");
+  }
 }
 
 const vercelConfig=JSON.parse(read("vercel.json"));
