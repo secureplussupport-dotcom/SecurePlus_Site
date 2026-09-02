@@ -18318,6 +18318,15 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-title-accent{display:block;color:${t.accent};background:linear-gradient(90deg,${t.accent},${t.green});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .guest-cta-note{display:flex;align-items:center;gap:8px;margin-top:15px;color:${t.textDim};font-size:12px;font-weight:800;line-height:1.5;}
 .guest-cta-note svg{color:${t.green};flex-shrink:0;}
+.guest-desktop-auth-actions{position:sticky;top:12px;z-index:135;display:flex;justify-content:flex-end;gap:8px;padding:12px 24px 0;pointer-events:none;}
+.guest-desktop-auth-actions .btn{pointer-events:auto;}
+.guest-hero-primary-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:620px;margin-top:26px;}
+.guest-hero-choice{justify-content:center;min-height:64px;border-radius:18px!important;padding:16px 18px!important;font-size:15px!important;font-weight:950;text-decoration:none!important;border:1.5px solid transparent;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease;}
+.guest-hero-choice svg{flex-shrink:0;}
+.guest-hero-choice-flashcards{color:#f8fbff!important;background:linear-gradient(135deg,#2563eb,#06b6d4);box-shadow:0 18px 34px rgba(37,99,235,.22);}
+.guest-hero-choice-mcq{color:#082f49!important;background:linear-gradient(135deg,#67e8f9,#34d399);box-shadow:0 18px 34px rgba(20,184,166,.2);}
+.guest-hero-choice:hover{transform:translateY(-2px);box-shadow:0 22px 42px rgba(3,8,20,.18);}
+.guest-hero-account-cta{grid-column:1/-1;justify-content:center;min-height:54px;border-radius:18px!important;font-size:14px!important;}
 .guest-value-section{position:relative;overflow:hidden;padding:28px;border:1px solid ${t.accent}3f;border-radius:8px;background:linear-gradient(135deg,${t.accent}13,${t.surface} 48%,${t.green}0d);box-shadow:0 22px 54px rgba(7,12,24,.11);}
 .guest-value-section::after{content:"";position:absolute;right:-70px;top:-80px;width:220px;height:220px;border-radius:50%;border:38px solid ${t.accent}08;pointer-events:none;}
 .guest-value-head{position:relative;z-index:1;display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:20px;}
@@ -18771,6 +18780,7 @@ body{background:
   .athena-login-skip{right:12px;bottom:12px;}
   .athena-toast{right:16px;top:84px;}
   .app-shell{display:block;padding-bottom:72px;}
+  .guest-desktop-auth-actions{display:none;}
   .sidebar{position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));top:auto;width:auto;height:70px;min-height:70px;padding:6px;border:1px solid ${t.border};border-radius:22px;z-index:120;box-shadow:0 -4px 30px rgba(80,52,22,.16);background:${t.surface}f2;backdrop-filter:blur(20px);}
   .sidebar.hidden{display:flex!important;}
   .sidebar-restore{display:none!important;}
@@ -18795,6 +18805,8 @@ body{background:
   .guest-home-hero{margin-left:-16px!important;margin-right:-16px!important;padding-left:22px!important;padding-right:22px!important;border-radius:0!important;}
   .home-hero>*{min-width:0!important;max-width:100%!important;}
   .guest-home-hero .brilliant-lesson-shell{width:100%!important;min-width:0!important;}
+  .guest-hero-primary-actions{grid-template-columns:minmax(0,1fr)!important;max-width:none!important;}
+  .guest-hero-account-cta{grid-column:auto!important;}
   .home-title{font-size:34px!important;line-height:1.06!important;}
   .home-subtitle{font-size:14px!important;line-height:1.65!important;}
   .home-cta-row .btn{flex:1 1 180px;}
@@ -23863,31 +23875,24 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
     {title:"Start free, upgrade only if useful",body:"All MCQs stay free. No credit card is needed to create your account.",color:t.amber,Icon:ShieldCheck},
   ];
   return (
-    <div className="dashboard-shell">
+    <div className="dashboard-shell" data-page-label="Guest main landing page">
       <section className="home-hero guest-home-hero brilliant-hero guest-conversion-hero">
         <div className="home-hero-copy brilliant-hero-copy">
-          <div className="badge brilliant-eyebrow">Security+ flashcards first</div>
           <h1 className="home-title brilliant-title">
-            Build recall fast.
-            <span className="guest-title-accent">Then practise smarter.</span>
+            Clear study paths.
+            <span className="guest-title-accent">Real scenarios.</span>
+            Pass Security+ with confidence.
           </h1>
-          <p className="home-subtitle brilliant-copy">
-            Open flashcards without an account. Star useful cards after sign-up, then use MCQs, Smart Review, and Pro decks when you are ready.
-          </p>
-          <div className="home-cta-row brilliant-action-row">
-            <a className="btn btn-primary brilliant-primary-cta" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onFlashcards();}}>Open Security+ flashcards</a>
-            <button className="btn btn-outline brilliant-secondary-cta" onClick={onPractice}>Start Free MCQ Practice</button>
-            <button className="btn btn-ghost brilliant-secondary-cta" onClick={onPreviewPbq}>Try a PBQ Preview</button>
-          </div>
-          <div className="guest-cta-note"><ShieldCheck size={16}/> Free flashcards · No credit card · Pro is optional</div>
-          <div style={{marginTop:10}}>
-            <TrustBadge t={t}/>
-          </div>
-          <div className="brilliant-proof-row">
-            <span>Flashcards free</span>
-            <span>{MCQ_BANK.length} MCQs</span>
-            <span>{PBQ_BANK.length} PBQs</span>
-            <span>Progress saved automatically</span>
+          <div className="home-cta-row brilliant-action-row guest-hero-primary-actions">
+            <a className="btn guest-hero-choice guest-hero-choice-flashcards" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onFlashcards();}}>
+              <Layers3 size={22}/>
+              <span>Security+ flashcards</span>
+            </a>
+            <button className="btn guest-hero-choice guest-hero-choice-mcq" type="button" onClick={onPractice}>
+              <BookOpenCheck size={22}/>
+              <span>Start MCQ practice</span>
+            </button>
+            <button className="btn btn-primary guest-hero-account-cta" type="button" onClick={()=>startSignup("hero_create_account")}>Create Free Account</button>
           </div>
           <MascotGuide
             animation="wave"
@@ -23896,7 +23901,6 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
             message="Tap me for a study-energy boost!"
             className="mascot-guide-hero"
           />
-          <button className="landing-login-link" onClick={onLogin}>Already studying with us? Log in</button>
         </div>
         <div className="brilliant-lesson-shell">
           <div className="brilliant-lesson-top">
@@ -33858,15 +33862,13 @@ export default function App() {
               <button className="btn btn-ghost" style={{fontSize:12,justifyContent:"flex-start"}} onClick={()=>setDarkMode(d=>!d)}>
                 {darkMode?<><Sun size={16}/> Light Mode</>:<><Moon size={16}/> Dark Mode</>}
               </button>
-              <button className="btn btn-primary" style={{fontSize:12,justifyContent:"center"}} onClick={goToSignup}>
-                Create Free Account
-              </button>
-              <button className="btn btn-outline" style={{fontSize:12,justifyContent:"flex-start"}} onClick={goToLogin}>
-                Log In
-              </button>
             </div>
           </aside>
           <main id="secureplus-main" className="app-main fu">
+            <div className="guest-desktop-auth-actions" aria-label="Guest account actions">
+              <button className="btn btn-ghost" style={{fontSize:12,minHeight:36,padding:"7px 13px"}} onClick={goToLogin}>Log In</button>
+              <button className="btn btn-primary" style={{fontSize:12,minHeight:36,padding:"7px 14px"}} onClick={goToSignup}>Create Free Account</button>
+            </div>
             <div className="mobile-topbar">
               <div>
                 <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> SecurePlus</button>
@@ -33876,6 +33878,7 @@ export default function App() {
                 <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
                   {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
                 </button>
+                <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToLogin}>Log In</button>
                 <button className="btn btn-primary" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToSignup}>Sign up</button>
               </div>
             </div>
