@@ -18347,13 +18347,25 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-feature-visual{position:relative;z-index:1;min-height:190px;border:1px solid color-mix(in srgb,var(--feature-color) 34%,${t.border});border-radius:22px;background:linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 9%,${t.panel}));box-shadow:inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden;}
 .guest-feature-visual::before{content:"";position:absolute;inset:auto 18px 18px 18px;height:4px;border-radius:999px;background:linear-gradient(90deg,var(--feature-color),transparent);}
 .guest-feature-visual.flashcards{display:grid;place-items:center;}
-.guest-preview-card-stack{position:relative;width:min(280px,80%);height:132px;}
-.guest-preview-card-stack span{position:absolute;inset:0;display:grid;align-content:center;gap:8px;padding:22px;border-radius:20px;border:1px solid color-mix(in srgb,var(--feature-color) 45%,#fff);background:linear-gradient(135deg,color-mix(in srgb,var(--feature-color) 24%,${t.surface}),${t.panel});box-shadow:0 18px 34px rgba(7,12,24,.24);animation:flashcardFloat 3.4s ease-in-out infinite;}
-.guest-preview-card-stack span:nth-child(1){transform:rotate(-7deg) translate(-24px,8px);opacity:.45;animation-delay:-.8s;}
-.guest-preview-card-stack span:nth-child(2){transform:rotate(6deg) translate(22px,2px);opacity:.7;animation-delay:-.35s;}
-.guest-preview-card-stack span:nth-child(3){transform:rotate(0deg);}
-.guest-preview-card-stack strong{color:${t.text};font-size:22px;}
-.guest-preview-card-stack small{color:${t.textSec};font-size:12px;font-weight:800;}
+.guest-flip-card-stage{width:min(420px,92%);height:170px;perspective:1300px;}
+.guest-flip-card{position:relative;width:100%;height:100%;transform-style:preserve-3d;animation:guestFlashcardFlip 9.2s cubic-bezier(.68,-.2,.25,1.2) infinite;}
+.guest-flip-face{position:absolute;inset:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:18px 20px;border-radius:20px;border:1px solid color-mix(in srgb,var(--feature-color) 36%,${t.border});background:radial-gradient(circle at 84% 14%,color-mix(in srgb,var(--feature-color) 22%,transparent),transparent 40%),linear-gradient(145deg,${t.surface},${t.panel});box-shadow:0 22px 44px rgba(7,12,24,.28);backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;}
+.guest-flip-face::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(105deg,transparent 0 42%,rgba(255,255,255,.08) 49%,transparent 56%);transform:translateX(-120%);animation:guestFlashcardSheen 9.2s ease-in-out infinite;pointer-events:none;}
+.guest-flip-back{transform:rotateY(180deg);border-color:color-mix(in srgb,${t.green} 52%,${t.border});background:radial-gradient(circle at 86% 13%,${t.green}2a,transparent 42%),linear-gradient(145deg,color-mix(in srgb,${t.green} 12%,${t.surface}),${t.panel});}
+.guest-flip-top{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:1;}
+.guest-flip-pill,.guest-flip-save{display:inline-flex;align-items:center;gap:7px;border-radius:999px;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;}
+.guest-flip-pill{padding:7px 10px;background:${t.accent}1f;color:${t.accent};}
+.guest-flip-back .guest-flip-pill{background:${t.green}1c;color:${t.green};}
+.guest-flip-save{padding:7px 10px;border:1px solid ${t.amber}50;color:${t.textDim};background:${t.panel}d8;}
+.guest-flip-main{position:relative;z-index:1;display:grid;place-items:center;text-align:center;gap:8px;align-self:center;}
+.guest-flip-topic{color:${t.amber};font-size:12px;font-weight:900;}
+.guest-flip-acronym{color:${t.text};font-size:clamp(34px,5vw,52px);line-height:1;font-weight:950;letter-spacing:-.02em;}
+.guest-flip-kicker{color:${t.textSec};font-size:13px;font-weight:900;}
+.guest-flip-term{color:${t.text};font-size:clamp(22px,3.4vw,34px);line-height:1.05;font-weight:950;letter-spacing:-.02em;}
+.guest-flip-definition{max-width:330px;color:${t.textSec};font-size:13px;line-height:1.45;font-weight:850;}
+.guest-flip-bottom{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;color:${t.textDim};font-size:10px;font-weight:900;}
+.guest-flip-brand{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border-radius:999px;border:1px solid ${t.border};background:${t.surface};}
+.guest-flip-brand img{width:18px;height:18px;border-radius:5px;}
 .guest-feature-visual.mcq{display:grid;align-content:center;gap:10px;padding:24px;}
 .guest-mcq-option{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid ${t.border};background:${t.surface};color:${t.textSec};font-weight:850;font-size:13px;}
 .guest-mcq-option.correct{border-color:color-mix(in srgb,var(--feature-color) 55%,transparent);background:color-mix(in srgb,var(--feature-color) 14%,${t.surface});color:${t.text};}
@@ -18372,7 +18384,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-lesson-preview small{color:${t.textDim};font-size:11px;font-weight:800;}
 .guest-lesson-preview svg{color:var(--feature-color);}
 @keyframes featureReveal{to{opacity:1;transform:none;}}
-@keyframes flashcardFloat{0%,100%{translate:0 0;}50%{translate:0 -8px;}}
+@keyframes guestFlashcardFlip{0%,31%{transform:rotateY(0deg);}42%,62%{transform:rotateY(180deg);}73%,100%{transform:rotateY(360deg);}}
+@keyframes guestFlashcardSheen{0%,24%{transform:translateX(-120%);}34%,44%{transform:translateX(120%);}66%,100%{transform:translateX(120%);}}
 .guest-final-cta{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center;padding:28px;border:1px solid ${t.green}3d;border-radius:8px;background:linear-gradient(125deg,${t.green}13,${t.surface} 55%,${t.accent}10);box-shadow:0 20px 48px rgba(7,12,24,.1);}
 .guest-final-cta h2{margin:5px 0 8px;color:${t.text};font-size:clamp(26px,3.2vw,36px);line-height:1.15;text-wrap:balance;}
 .guest-final-cta p{max-width:650px;color:${t.textSec};font-size:13px;line-height:1.7;}
@@ -23909,10 +23922,38 @@ function GuestFeaturePreview({type,t}) {
   if(type==="flashcards"){
     return (
       <div className="guest-feature-visual flashcards" aria-hidden="true">
-        <div className="guest-preview-card-stack">
-          <span><strong>ACL</strong><small>Access control list</small></span>
-          <span><strong>Phishing</strong><small>Social engineering clue</small></span>
-          <span><strong>Zero Trust</strong><small>Never trust by default</small></span>
+        <div className="guest-flip-card-stage">
+          <div className="guest-flip-card">
+            <div className="guest-flip-face guest-flip-front">
+              <div className="guest-flip-top">
+                <span className="guest-flip-pill"><Brain size={14}/> Test the acronym</span>
+                <span className="guest-flip-save"><Star size={15}/> Save for review</span>
+              </div>
+              <div className="guest-flip-main">
+                <div className="guest-flip-topic">Core principles and access control</div>
+                <div className="guest-flip-acronym">MAC</div>
+              </div>
+              <div className="guest-flip-bottom">
+                <span>Say it aloud, then reveal</span>
+                <span className="guest-flip-brand"><img src="/favicon-v2-48.png" alt="" /> SecurePlus</span>
+              </div>
+            </div>
+            <div className="guest-flip-face guest-flip-back">
+              <div className="guest-flip-top">
+                <span className="guest-flip-pill"><Sparkles size={14}/> Answer</span>
+                <span className="guest-flip-save"><Star size={15}/> Save for review</span>
+              </div>
+              <div className="guest-flip-main">
+                <div className="guest-flip-kicker">Full term and definition</div>
+                <div className="guest-flip-term">Mandatory Access Control</div>
+                <div className="guest-flip-definition">Definition: Access model where labels and central policy decide access, not the object owner.</div>
+              </div>
+              <div className="guest-flip-bottom">
+                <span>Tap to see the question again</span>
+                <span className="guest-flip-brand"><img src="/favicon-v2-48.png" alt="" /> SecurePlus</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
