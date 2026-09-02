@@ -18387,6 +18387,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .brilliant-lesson-top .brilliant-lesson-duration{background:${t.green};color:#062e25;border:1px solid ${t.green};box-shadow:0 7px 18px ${t.green}22;}
 .guest-home-hero{align-items:start!important;margin-left:-30px;margin-right:-30px;padding:18px 38px 18px!important;min-height:0;border-left:0!important;border-right:0!important;border-radius:0!important;background:linear-gradient(90deg,transparent 0%,${t.accent}12 9%,${t.surface} 32%,${t.surface} 68%,${t.green}0c 91%,transparent 100%)!important;}
 .guest-home-hero .brilliant-title{max-width:820px;font-size:clamp(38px,4.55vw,56px);line-height:1.02;font-weight:800;}
+.guest-tagline-title{display:grid;gap:4px;}
+.guest-tagline-support{display:block;font-size:clamp(30px,3.7vw,48px);line-height:1.02;color:${t.text};font-weight:850;letter-spacing:-.02em;}
+.guest-tagline-main{display:block;font-size:clamp(42px,5.2vw,68px);line-height:1.02;color:${t.text};font-weight:850;letter-spacing:-.025em;}
 .guest-home-hero .brilliant-title strong{font-weight:950;color:${t.text};}
 .guest-home-hero .guest-title-accent,.guest-home-hero .brilliant-title strong:last-child{background:linear-gradient(90deg,${t.accent},${t.green});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
 .guest-home-hero .guest-hero-primary-actions{margin-top:22px;}
@@ -23969,8 +23972,10 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
     <div className="dashboard-shell" data-page-label="Guest main landing page">
       <section className="home-hero guest-home-hero brilliant-hero guest-conversion-hero">
         <div className="home-hero-copy brilliant-hero-copy">
-          <h1 className="home-title brilliant-title">
-            <strong>Pass</strong> Security+ with <strong>confidence</strong>.
+          <h1 className="home-title brilliant-title guest-tagline-title">
+            <span className="guest-tagline-support">Clear study paths.</span>
+            <span className="guest-tagline-support">Real scenarios.</span>
+            <span className="guest-tagline-main"><strong>Pass</strong> Security+ with <strong>confidence</strong>.</span>
           </h1>
           <div className="home-cta-row brilliant-action-row guest-hero-primary-actions">
             <a className="btn guest-hero-choice guest-hero-choice-flashcards" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onFlashcards();}}>
