@@ -18189,6 +18189,17 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .sidebar-restore{position:fixed;left:14px;top:14px;z-index:180;display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;border:1px solid ${t.border};background:${t.surface}e8;color:${t.text};box-shadow:0 12px 28px rgba(7,12,24,.14);backdrop-filter:blur(14px);font-size:12px;font-weight:900;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s;}
 .sidebar-restore:hover{transform:translateY(-1px);border-color:${t.accent}55;box-shadow:0 16px 34px ${t.accent}16;}
 .mobile-topbar{display:none;}
+.guest-app-shell{display:block;min-height:100vh;}
+.guest-app-shell .app-main{overflow:visible;}
+.guest-top-nav{position:sticky;top:0;z-index:160;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;padding:13px 24px;border-bottom:1px solid ${t.border};background:${t.bg}e8;backdrop-filter:blur(18px);box-shadow:0 10px 26px rgba(7,12,24,.09);}
+.guest-top-nav-brand{display:flex;align-items:center;gap:9px;background:transparent;border:0;color:${t.text};font:inherit;font-weight:950;font-size:16px;cursor:pointer;text-align:left;white-space:nowrap;}
+.guest-top-nav-brand small{display:block;margin-top:1px;color:${t.textDim};font-size:10px;font-weight:750;line-height:1.1;}
+.guest-top-nav-links{display:flex;align-items:center;gap:8px;min-width:0;overflow-x:auto;padding:2px;scrollbar-width:none;}
+.guest-top-nav-links::-webkit-scrollbar{display:none;}
+.guest-top-nav-link{flex:0 0 auto;min-height:38px;padding:9px 12px;border:1px solid transparent;border-radius:999px;background:transparent;color:${t.textSec};font:inherit;font-size:12px;font-weight:900;cursor:pointer;transition:background .16s,border-color .16s,color .16s,transform .16s;}
+.guest-top-nav-link:hover{transform:translateY(-1px);border-color:${t.accent}35;background:${t.panel};color:${t.text};}
+.guest-top-nav-link.active{border-color:${t.accent}5f;background:linear-gradient(135deg,${t.accent}18,${t.green}10);color:${t.accent};box-shadow:0 10px 24px ${t.accent}12;}
+.guest-top-nav-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;}
 .auth-layout{width:100%;max-width:980px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:stretch;}
 .auth-only-page{min-height:100vh;padding:24px;display:grid;place-items:center;background:
   radial-gradient(circle at 50% 0%, ${t.accent}12, transparent 34%),
@@ -18345,6 +18356,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-hero-choice-mcq{color:#082f49!important;background:linear-gradient(135deg,#67e8f9,#34d399);box-shadow:0 18px 34px rgba(20,184,166,.2);}
 .guest-hero-choice:hover{transform:translateY(-2px);box-shadow:0 22px 42px rgba(3,8,20,.18);}
 .guest-hero-account-cta{grid-column:1/-1;justify-content:center;min-height:54px;border-radius:18px!important;font-size:14px!important;}
+.guest-hero-primary-actions.single{display:flex;max-width:360px;margin-top:26px;}
+.guest-hero-primary-actions.single .btn{width:100%;justify-content:center;min-height:62px;border-radius:18px!important;font-size:15px!important;font-weight:950;}
+.guest-hero-practice-cta{box-shadow:0 18px 36px ${t.accent}24;}
 .guest-value-section{position:relative;overflow:hidden;padding:28px;border:1px solid ${t.accent}3f;border-radius:8px;background:linear-gradient(135deg,${t.accent}13,${t.surface} 48%,${t.green}0d);box-shadow:0 22px 54px rgba(7,12,24,.11);}
 .guest-value-section::after{content:"";position:absolute;right:-70px;top:-80px;width:220px;height:220px;border-radius:50%;border:38px solid ${t.accent}08;pointer-events:none;}
 .guest-value-head{position:relative;z-index:1;display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:20px;}
@@ -18874,6 +18888,15 @@ body{background:
   .nav-lnk .nav-glyph{width:24px;height:24px;}
   .nav-lnk span:first-child{font-size:15px!important;}
   .mobile-topbar{display:flex;position:sticky;top:0;z-index:130;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px;background:${t.bg}e8;backdrop-filter:blur(18px);border-bottom:1px solid ${t.border};box-shadow:0 8px 24px rgba(80,52,22,.1);}
+  .guest-app-shell{padding-bottom:0!important;}
+  .guest-app-shell .mobile-topbar{display:none!important;}
+  .guest-top-nav{grid-template-columns:1fr!important;gap:10px!important;padding:10px 14px!important;}
+  .guest-top-nav-brand{justify-content:flex-start;font-size:15px!important;}
+  .guest-top-nav-links{order:3;width:100%;gap:7px!important;padding-bottom:3px!important;}
+  .guest-top-nav-link{min-height:36px!important;padding:8px 10px!important;font-size:11px!important;}
+  .guest-top-nav-actions{position:absolute;right:12px;top:10px;gap:6px!important;}
+  .guest-top-nav-actions .btn{min-height:31px!important;padding:6px 9px!important;font-size:11px!important;}
+  .guest-top-nav-actions .btn-ghost:first-child{display:none!important;}
   main > div{padding-left:16px!important;padding-right:16px!important;max-width:100%!important;}
   .dashboard-shell{padding:18px 16px 108px!important;}
   .home-hero{grid-template-columns:minmax(0,1fr)!important;padding:22px!important;border-radius:22px!important;gap:18px!important;}
@@ -24189,22 +24212,11 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
             <span className="guest-tagline-support">Real scenarios.</span>
             <span className="guest-tagline-main"><strong>Pass</strong> Security+ with <strong>confidence</strong>.</span>
           </h1>
-          <div className="home-cta-row brilliant-action-row guest-hero-primary-actions">
-            <a className="btn guest-hero-choice guest-hero-choice-flashcards" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onFlashcards();}}>
-              <span>Security+ flashcards</span>
-            </a>
-            <button className="btn guest-hero-choice guest-hero-choice-mcq" type="button" onClick={onPractice}>
-              <span>Start MCQ practice</span>
+          <div className="home-cta-row brilliant-action-row guest-hero-primary-actions single">
+            <button className="btn btn-primary guest-hero-practice-cta" type="button" onClick={onPractice}>
+              Start practicing free
             </button>
-            <button className="btn btn-primary guest-hero-account-cta" type="button" onClick={()=>startSignup("hero_create_account")}>Create Free Account</button>
           </div>
-          <MascotGuide
-            animation="wave"
-            size={86}
-            context="guest-dashboard"
-            message="Tap me for a study-energy boost!"
-            className="mascot-guide-hero"
-          />
         </div>
         <div className="brilliant-lesson-shell">
           <div className="brilliant-lesson-top">
@@ -34071,16 +34083,11 @@ export default function App() {
     const goToSignup=()=>{setPbqQ(null);setAuthStartMode("signup");setAuthRequestId(id=>id+1);setView("auth");};
     const goToLogin=()=>{setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
     const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","objectives","flashcards","deep-dives",...(devCoinPreview?["coins"]:[])]);
-    const guestNavItems=[
-      {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},
-      {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
-      {id:"pbq",icon:"pbq",label:"PBQ Simulator",mobileLabel:"PBQ"},
-      {id:"exam",icon:"exam",label:"Exam Mode",mobileLabel:"Exam"},
-      {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
-      ...(devCoinPreview?[{id:"coins",icon:"coins",label:"Cipher Coins",mobileLabel:"Coins"}]:[]),
-      {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
-      {id:"flashcards",icon:"flashcards",label:"Flashcards",mobileLabel:"Cards"},
-      {id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"},
+    const guestTopNavItems=[
+      {id:"mcq",label:"MCQ practice"},
+      {id:"pbq",label:"PBQ Simulations"},
+      {id:"flashcards",label:"Flashcards"},
+      {id:"objectives",label:"SY0-701 Exam Guide"},
     ];
     const guestGo=id=>{
       if(allowedGuestViews.has(id)) setView(id);
@@ -34099,49 +34106,38 @@ export default function App() {
     return(
       <>
         <style>{CSS}</style>
-        <div className={`app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
+        <div className={`app-shell guest-app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
           <a className="skip-link" href="#secureplus-main">Skip to study content</a>
-          {sidebarHidden&&(
-            <button className="sidebar-restore" type="button" onClick={()=>setSidebarHidden(false)}>
-              <NavGlyph type="dashboard" active/>
-              Show menu
+          <header className="guest-top-nav">
+            <button type="button" className="guest-top-nav-brand" onClick={()=>setView("dashboard")} aria-label="SecurePlus guest landing page">
+              <BrandMark size={30}/>
+              <span>
+                SecurePlus
+                <small>Guest mode · progress is not saved</small>
+              </span>
             </button>
-          )}
-          <aside className={`sidebar ${sidebarHidden?"hidden":""}`}>
-            <div style={{padding:"18px 16px",borderBottom:`1px solid ${t.border}`}}>
-              <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:9,fontWeight:700,fontSize:16,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={30}/> SecurePlus</button>
-              <div style={{fontSize:11,color:t.textDim,marginTop:4}}>Guest mode · progress is not saved</div>
-              <button className="btn btn-ghost" type="button" style={{fontSize:12,justifyContent:"flex-start",width:"100%",marginTop:12}} onClick={()=>setSidebarHidden(true)}>
-                Hide sidebar
-              </button>
-            </div>
-            <nav style={{flex:1,padding:"10px 10px",display:"flex",flexDirection:"column",gap:2}}>
-              {guestNavItems.map(n=>{
-                const locked=!allowedGuestViews.has(n.id);
-                return(
-                  <button type="button" key={n.id} data-mobile-primary={MOBILE_PRIMARY_NAV_IDS.has(n.id)?"true":"false"} aria-current={view===n.id?"page":undefined} className={`nav-lnk ${view===n.id?"act":""} ${locked?"locked":""}`} onClick={()=>guestGo(n.id)}>
-                    <NavGlyph type={n.icon} active={view===n.id}/>
-                    <span className="nav-label"><span className="nav-label-desktop">{n.label}</span><span className="nav-label-mobile">{n.mobileLabel}</span></span>
-                    {locked&&<LockKeyhole className="nav-lock-indicator" size={13} strokeWidth={2.4} aria-hidden="true"/>}
-                  </button>
-                );
-              })}
-              <button type="button" className={`nav-lnk mobile-more-trigger ${!MOBILE_PRIMARY_NAV_IDS.has(view)?"act":""}`} aria-expanded={mobileNavOpen} onClick={()=>setMobileNavOpen(true)}>
-                <span className="nav-glyph" aria-hidden="true"><MoreHorizontal size={19}/></span>
-                <span className="nav-label"><span className="nav-label-desktop">More</span><span className="nav-label-mobile">More</span></span>
-              </button>
+            <nav className="guest-top-nav-links" aria-label="Guest study navigation">
+              {guestTopNavItems.map(item=>(
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`guest-top-nav-link ${view===item.id?"active":""}`}
+                  aria-current={view===item.id?"page":undefined}
+                  onClick={()=>guestGo(item.id)}
+                >
+                  {item.label}
+                </button>
+              ))}
             </nav>
-            <div style={{padding:"12px 14px",borderTop:`1px solid ${t.border}`,display:"flex",flexDirection:"column",gap:6}}>
-              <button className="btn btn-ghost" style={{fontSize:12,justifyContent:"flex-start"}} onClick={()=>setDarkMode(d=>!d)}>
-                {darkMode?<><Sun size={16}/> Light Mode</>:<><Moon size={16}/> Dark Mode</>}
+            <div className="guest-top-nav-actions" aria-label="Guest account actions">
+              <button className="btn btn-ghost" type="button" onClick={()=>setDarkMode(d=>!d)}>
+                {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
               </button>
+              <button className="btn btn-ghost" type="button" onClick={goToLogin}>Log In</button>
+              <button className="btn btn-primary" type="button" onClick={goToSignup}>Create Free Account</button>
             </div>
-          </aside>
-          <main id="secureplus-main" className="app-main fu">
-            <div className="guest-desktop-auth-actions" aria-label="Guest account actions">
-              <button className="btn btn-ghost" style={{fontSize:12,minHeight:36,padding:"7px 13px"}} onClick={goToLogin}>Log In</button>
-              <button className="btn btn-primary" style={{fontSize:12,minHeight:36,padding:"7px 14px"}} onClick={goToSignup}>Create Free Account</button>
-            </div>
+          </header>
+          <main id="secureplus-main" className="app-main guest-main fu">
             <div className="mobile-topbar">
               <div>
                 <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> SecurePlus</button>
@@ -34200,15 +34196,7 @@ export default function App() {
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
             )}
-            {!practiceFocusMode&&view!=="exam"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
           </main>
-          <MobileNavigationMenu
-            open={mobileNavOpen}
-            items={guestNavItems.filter(item=>!MOBILE_PRIMARY_NAV_IDS.has(item.id)).map(item=>({...item,locked:!allowedGuestViews.has(item.id)}))}
-            currentView={view}
-            onNavigate={id=>{setMobileNavOpen(false);guestGo(id);}}
-            onClose={()=>setMobileNavOpen(false)}
-          />
           {flashcardAuthPrompt&&(
             <FlashcardSavePrompt
               t={t}
