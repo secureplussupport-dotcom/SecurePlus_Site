@@ -18448,8 +18448,6 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-hero-proof-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px;}
 .guest-hero-proof-row span{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid ${t.border};border-radius:999px;background:${t.surface};color:${t.textSec};font-size:12px;font-weight:900;line-height:1.35;}
 .guest-hero-proof-row span::before{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:999px;background:${t.green}16;color:${t.green};font-size:12px;font-weight:950;flex:0 0 auto;}
-.guest-domain-line{max-width:700px;margin:16px 0 0;color:${t.textDim};font-size:13px;font-weight:750;line-height:1.65;}
-.guest-domain-line strong{color:${t.textSec};font-weight:950;}
 .brilliant-daily-wrap .landing-challenge-card{min-height:0;border-radius:22px;border-color:${t.border};box-shadow:none;background:linear-gradient(180deg,${t.surface},${t.panel});}
 .brilliant-daily-wrap .landing-challenge-card::before{display:none;}
 .brilliant-daily-wrap .landing-challenge-small .landing-challenge-question{-webkit-line-clamp:4;}
@@ -24235,9 +24233,6 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
             <span>Hands-on PBQ Stimulator</span>
             <span>100% Free Flashcards</span>
           </div>
-          <p className="guest-domain-line">
-            <strong>Covering all 5 domains:</strong> General Security Concepts, Threats &amp; Mitigations, Architecture, Operations, and Security Management.
-          </p>
         </div>
         <div className="brilliant-lesson-shell">
           <div className="brilliant-lesson-top">
