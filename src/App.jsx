@@ -24223,7 +24223,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
             <span className="guest-tagline-main"><strong>Pass</strong> Security+ with <strong>confidence</strong>.</span>
           </h1>
           <p className="guest-hero-description">
-            The active-recall question bank and PBQ simulator are built to eliminate exam-day surprises. Practice realistic drills, track weak domains, and sit for the exam ready to score 750+.
+            Master active-recall MCQs and real PBQ simulations. Track weak domains with smart reviews and sit for your exam ready to score 750+.
           </p>
           <div className="home-cta-row brilliant-action-row guest-hero-primary-actions single">
             <button className="btn btn-primary guest-hero-practice-cta" type="button" onClick={onPractice}>
