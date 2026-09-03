@@ -18441,6 +18441,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-tagline-main{display:block;font-size:clamp(42px,5.2vw,68px);line-height:1.02;color:${t.text};font-weight:850;letter-spacing:-.025em;}
 .guest-home-hero .brilliant-title strong{font-weight:950;color:${t.text};}
 .guest-home-hero .guest-title-accent,.guest-home-hero .guest-tagline-main strong{background:linear-gradient(90deg,${t.accent},${t.green});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.guest-objective-chip{display:inline-flex;align-items:center;width:max-content;max-width:100%;margin-top:18px;padding:8px 12px;border-radius:999px;border:1px solid ${t.green}38;background:linear-gradient(135deg,${t.green}14,${t.accent}0f);color:${t.textSec};font-size:12px;font-weight:900;line-height:1.35;box-shadow:0 10px 24px ${t.green}0f;}
+.guest-objective-chip::before{content:"";width:8px;height:8px;margin-right:8px;border-radius:999px;background:${t.green};box-shadow:0 0 0 4px ${t.green}18;flex:0 0 auto;}
 .guest-home-hero .guest-hero-primary-actions{margin-top:22px;}
 .brilliant-daily-wrap .landing-challenge-card{min-height:0;border-radius:22px;border-color:${t.border};box-shadow:none;background:linear-gradient(180deg,${t.surface},${t.panel});}
 .brilliant-daily-wrap .landing-challenge-card::before{display:none;}
@@ -24213,6 +24215,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
             <span className="guest-tagline-support">Real scenarios.</span>
             <span className="guest-tagline-main"><strong>Pass</strong> Security+ with <strong>confidence</strong>.</span>
           </h1>
+          <div className="guest-objective-chip">100% Aligned to CompTIA SY0-701 Objectives</div>
           <div className="home-cta-row brilliant-action-row guest-hero-primary-actions single">
             <button className="btn btn-primary guest-hero-practice-cta" type="button" onClick={onPractice}>
               Start practicing free
