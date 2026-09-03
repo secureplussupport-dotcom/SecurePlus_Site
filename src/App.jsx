@@ -24231,8 +24231,8 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
             </button>
           </div>
           <div className="guest-hero-proof-row" aria-label="SecurePlus practice benefits">
-            <span>400+ Practice MCQs</span>
-            <span>Personalised Learning</span>
+            <span>500+ Practice MCQs</span>
+            <span>Hands-on PBQ Stimulator</span>
             <span>100% Free Flashcards</span>
           </div>
           <p className="guest-domain-line">
