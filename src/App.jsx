@@ -16210,28 +16210,28 @@ const DAILY_CHALLENGES = [
   { date:"default", type:"mcq5",
     title:"5-Question Daily Challenge",
     description:"Test your Security+ knowledge with today's five questions.",
-    qids:["m001","m009","m014","m022","m028"] },
+    qids:["m001","m009","m022","m028","m004"] },
   { date:"mon", type:"mcq5", title:"Monday Security Warmup",
     description:"Start the week with five mixed Security+ questions.",
-    qids:["m001","m006","m011","m018","m029"] },
+    qids:["m001","m006","m017","m028","m011"] },
   { date:"tue", type:"mcq5", title:"Tuesday Threat Hunt",
     description:"Five questions focused on attacks, actors, and mitigation thinking.",
-    qids:["m009","m013","m015","m020","m026"] },
+    qids:["m009","m010","m014","m094","m011"] },
   { date:"wed", type:"mcq5", title:"Wednesday Challenge",
     description:"Five questions focused on Cryptography and PKI.",
-    qids:["m004","m005","m007","m008","m019"] },
+    qids:["m002","m006","m033","m039","m004"] },
   { date:"thu", type:"mcq5", title:"Thursday Operations Drill",
     description:"Five questions on monitoring, response, identity, and hardening.",
-    qids:["m022","m023","m024","m026","m027"] },
+    qids:["m022","m026","m066","m068","m023"] },
   { date:"fri", type:"mcq5", title:"Friday Review",
     description:"Mixed questions across all five domains.",
-    qids:["m002","m011","m017","m024","m029"] },
+    qids:["m002","m009","m017","m028","m024"] },
   { date:"sat", type:"mcq5", title:"Saturday Scenario Set",
     description:"Five scenario-style questions to keep your exam instincts warm.",
-    qids:["m003","m012","m021","m025","m031"] },
+    qids:["m001","m010","m021","m032","m003"] },
   { date:"sun", type:"mcq5", title:"Sunday Practice",
     description:"Governance, risk, and compliance focus.",
-    qids:["m028","m029","m030","m031","m032"] },
+    qids:["m028","m032","m079","m083","m080"] },
 ];
 
 function getTodayChallenge() {
@@ -18361,7 +18361,14 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-hero-account-cta{grid-column:1/-1;justify-content:center;min-height:54px;border-radius:18px!important;font-size:14px!important;}
 .guest-hero-primary-actions.single{display:flex;max-width:360px;margin-top:26px;}
 .guest-hero-primary-actions.single .btn{width:100%;justify-content:center;min-height:62px;border-radius:18px!important;font-size:15px!important;font-weight:950;}
-.guest-hero-practice-cta{box-shadow:0 18px 36px ${t.accent}24;}
+.guest-bank-cta-block{max-width:470px;margin-top:24px;}
+.guest-home-hero .guest-bank-cta-block .guest-hero-primary-actions{max-width:390px;margin-top:0;}
+.guest-hero-practice-cta{min-height:68px!important;padding:18px 24px!important;border:1px solid ${t.green}!important;background:linear-gradient(135deg,${t.green},#22d3ee)!important;color:#052e2b!important;box-shadow:0 20px 42px ${t.green}32!important;transition:transform .18s ease,box-shadow .18s ease,filter .18s ease!important;}
+.guest-hero-practice-cta:hover{transform:translateY(-2px);box-shadow:0 24px 50px ${t.green}42!important;filter:saturate(1.08) brightness(1.04);}
+.guest-hero-practice-cta span{font-size:19px;line-height:1;transition:transform .18s ease;}
+.guest-hero-practice-cta:hover span{transform:translateX(3px);}
+.guest-bank-cta-note{display:flex;align-items:center;gap:7px;margin:9px 0 0;color:${t.textDim};font-size:11px;font-weight:800;line-height:1.45;white-space:nowrap;}
+.guest-bank-cta-note span{color:${t.green};font-weight:950;}
 .guest-value-section{position:relative;overflow:hidden;padding:28px;border:1px solid ${t.accent}3f;border-radius:8px;background:linear-gradient(135deg,${t.accent}13,${t.surface} 48%,${t.green}0d);box-shadow:0 22px 54px rgba(7,12,24,.11);}
 .guest-value-section::after{content:"";position:absolute;right:-70px;top:-80px;width:220px;height:220px;border-radius:50%;border:38px solid ${t.accent}08;pointer-events:none;}
 .guest-value-head{position:relative;z-index:1;display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:20px;}
@@ -18453,6 +18460,11 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .brilliant-daily-wrap .landing-challenge-card::before{display:none;}
 .brilliant-daily-wrap .landing-challenge-small .landing-challenge-question{-webkit-line-clamp:4;}
 .brilliant-daily-wrap .landing-challenge-option{border-radius:16px;padding:12px 13px;}
+.landing-drill-complete{display:grid;gap:10px;align-content:center;min-height:300px;}
+.landing-drill-complete-title{color:${t.text};font-size:18px;font-weight:950;line-height:1.25;}
+.landing-drill-score{color:${t.textSec};font-size:15px;font-weight:850;}
+.landing-drill-complete p{margin:0;color:${t.textSec};font-size:13px;font-weight:700;line-height:1.65;}
+.landing-drill-full-bank-cta{width:100%;justify-content:center;margin-top:4px;padding:14px 16px!important;border:1px solid ${t.green}!important;background:linear-gradient(135deg,${t.green},#22d3ee)!important;color:#052e2b!important;font-weight:950!important;box-shadow:0 15px 32px ${t.green}28!important;}
 .brilliant-path-section{padding:28px;border-radius:28px;border:1px solid ${t.border};background:linear-gradient(180deg,${t.surface}f2,${t.panel});box-shadow:0 22px 54px rgba(7,12,24,.1);}
 .brilliant-section-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:18px;flex-wrap:wrap;}
 .brilliant-section-head h2{font-size:30px;line-height:1.15;color:${t.text};margin-top:4px;letter-spacing:-.01em;}
@@ -19132,6 +19144,9 @@ body{background:
   .guest-tagline-main{font-size:clamp(42px,11vw,52px)!important;line-height:1!important;}
   .guest-objective-chip{font-size:11px!important;padding:8px 10px!important;margin-bottom:12px!important;}
   .guest-hero-description{font-size:15px!important;line-height:1.62!important;font-weight:650!important;margin-top:16px!important;}
+  .guest-bank-cta-block{width:100%!important;max-width:none!important;margin-top:18px!important;}
+  .guest-home-hero .guest-bank-cta-block .guest-hero-primary-actions{width:100%!important;max-width:none!important;}
+  .guest-bank-cta-note{justify-content:center;white-space:normal!important;text-align:center;font-size:11px!important;}
   .guest-hero-proof-row{flex-wrap:wrap!important;margin-top:16px!important;padding-top:0!important;}
   .guest-hero-proof-row span{flex:1 1 100%;justify-content:center;font-size:12px!important;}
   .brilliant-copy{font-size:15px!important;line-height:1.65!important;}
@@ -22551,7 +22566,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   const streakRecordedRef=useRef(false);
 
   const questions = useMemo(()=>challenge.type==="mcq5"
-    ? MCQ_BANK.filter(q=>challenge.qids.includes(q.id)).map(shuffleMcqOptions)
+    ? challenge.qids.map(id=>MCQ_BANK.find(q=>q.id===id)).filter(Boolean).map(shuffleMcqOptions)
     : [], [challenge.date,challenge.type]);
   const pbq = challenge.type==="pbq"
     ? PBQ_BANK.find(p=>p.id===challenge.qid)
@@ -22808,10 +22823,12 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   );
 }
 
-function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
+function LandingDailyChallengeWidget({t,onPractice}) {
   const challenge=getTodayChallenge();
+  const drillDay=challenge.date==="default"?"Today's":`${challenge.date.charAt(0).toUpperCase()}${challenge.date.slice(1)}`;
+  const drillTitle=`${drillDay} Quick Micro-Drill`;
   const questions=useMemo(()=>challenge.type==="mcq5"
-    ? MCQ_BANK.filter(q=>challenge.qids.includes(q.id)).map(shuffleMcqOptions)
+    ? challenge.qids.map(id=>MCQ_BANK.find(q=>q.id===id)).filter(Boolean).map(shuffleMcqOptions)
     : [], [challenge.date,challenge.type]);
   const [qIndex,setQIndex]=useState(0);
   const [selected,setSelected]=useState(null);
@@ -22820,6 +22837,16 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
   const current=questions[qIndex];
   const correctCount=results.filter(result=>result.correct).length;
   const isDone=questions.length>0&&results.length>=questions.length;
+  const strongestChapter=useMemo(()=>{
+    const correctByChapter=results.reduce((totals,result)=>{
+      if(!result.correct)return totals;
+      const question=questions.find(item=>item.id===result.qid);
+      if(question)totals[question.ch]=(totals[question.ch]||0)+1;
+      return totals;
+    },{});
+    const strongestId=Object.entries(correctByChapter).sort((a,b)=>b[1]-a[1])[0]?.[0];
+    return strongestId?CHAPTERS.find(chapter=>chapter.id===strongestId):null;
+  },[questions,results]);
 
   const submit=()=>{
     if(selected===null||!current)return;
@@ -22836,25 +22863,19 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
       setSubmitted(false);
     }
   };
-  const restart=()=>{
-    setQIndex(0);
-    setSelected(null);
-    setSubmitted(false);
-    setResults([]);
-  };
-  const openDailyExplanation=()=>{
-    capture("landing_daily_explanation_cta_clicked",{source:"guest_home_preview"});
-    onOpenDaily();
+  const continueToFullBank=()=>{
+    capture("landing_daily_drill_mcq_cta_clicked",{score:correctCount,total:questions.length});
+    onPractice();
   };
 
   const renderPanel=({large=false}={})=>(
-    <div className={large?"landing-challenge-expanded card":"landing-challenge-card landing-challenge-small"} aria-label="Today's Daily Challenge preview">
+    <div className={large?"landing-challenge-expanded card":"landing-challenge-card landing-challenge-small"} aria-label="Quick five-question Security+ drill">
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:14}}>
         <div style={{display:"flex",alignItems:"center",gap:10,minWidth:0}}>
           <NavGlyph type="daily" active/>
           <div style={{minWidth:0}}>
-            <div style={{fontSize:12,color:t.accent,fontWeight:900,textTransform:"uppercase",letterSpacing:".04em"}}>Today's Challenge</div>
-            <div style={{fontSize:large?18:15,color:t.text,fontWeight:900,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{challenge.title}</div>
+            <div style={{fontSize:12,color:t.accent,fontWeight:900,textTransform:"uppercase",letterSpacing:".04em"}}>Quick Micro-Drill</div>
+            <div style={{fontSize:large?18:15,color:t.text,fontWeight:900,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{drillTitle}</div>
           </div>
         </div>
       </div>
@@ -22869,16 +22890,18 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
       </div>
 
       {isDone ? (
-        <div className="card" style={{padding:large?"22px":"16px",background:`${t.panel}c8`,borderColor:correctCount>=3?`${t.green}44`:`${t.amber}44`}}>
-          <div style={{fontSize:12,color:t.textDim,fontWeight:900,textTransform:"uppercase",letterSpacing:".04em",marginBottom:6}}>Score</div>
-          <div style={{fontSize:large?44:34,fontWeight:900,color:correctCount>=3?t.green:t.amber,lineHeight:1}}>{correctCount}/{questions.length}</div>
-          <p style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginTop:10}}>
-            Create a free account to save progress, personalise chapters, and unlock Smart Review.
+        <div className="card landing-drill-complete" role="status" aria-live="polite" style={{padding:large?"22px":"18px",background:`${t.panel}c8`,borderColor:correctCount>=3?`${t.green}55`:`${t.amber}55`}}>
+          <div className="landing-drill-complete-title">🎉 Daily Drill Complete!</div>
+          <div className="landing-drill-score">Score: <strong style={{color:correctCount>=3?t.green:t.amber}}>{correctCount}/{questions.length}</strong></div>
+          <p>
+            {strongestChapter&&correctCount>0
+              ? `Your strongest result was Domain ${strongestChapter.code} (${strongestChapter.title}). `
+              : "You completed today's five-question warm-up. "}
+            Want to test your skills across all five CompTIA domains?
           </p>
-          <div style={{display:"flex",gap:10,flexWrap:"wrap",marginTop:14}}>
-            <button className="btn btn-primary" type="button" onClick={onSignup}>Create Free Account</button>
-            <button className="btn btn-outline" type="button" onClick={restart}>Try Again</button>
-          </div>
+          <button className="btn landing-drill-full-bank-cta" type="button" onClick={continueToFullBank}>
+            Continue to Full MCQ Practice Bank →
+          </button>
         </div>
       ) : current ? (
         <>
@@ -22917,25 +22940,6 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
           {submitted&&(
             <div className="card" style={{padding:"12px 14px",marginTop:12,borderColor:selected===current.correct?`${t.green}55`:`${t.red}55`,background:selected===current.correct?`${t.green}0f`:`${t.red}0d`,animation:"feedbackIn .24s ease both"}}>
               <MCQFeedbackVerdict correct={selected===current.correct} t={t} compact/>
-              {large ? (
-                <>
-                  <div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:3}}>
-                    <GlossaryText text={current.exp} t={t}/>
-                  </div>
-                  {selected!==current.correct&&(
-                    <div style={{fontSize:12,color:t.red,lineHeight:1.55,marginTop:7}}>
-                      <strong>Why your choice was wrong:</strong> {getWrongOptionFeedback(current,selected)}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginTop:10,flexWrap:"wrap"}}>
-                  <span style={{fontSize:12,color:t.textSec,lineHeight:1.45}}>Read the explanation in Daily Challenge.</span>
-                  <button className="btn btn-outline" type="button" style={{fontSize:12,padding:"8px 12px",whiteSpace:"nowrap"}} onClick={openDailyExplanation}>
-                    Daily Challenge
-                  </button>
-                </div>
-              )}
             </div>
           )}
           <div style={{display:"flex",gap:10,marginTop:14,flexWrap:"wrap"}}>
@@ -22946,14 +22950,13 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
                 {qIndex<questions.length-1?"Next Question":"Finish"}
               </button>
             )}
-            {large&&<button className="btn btn-outline" type="button" onClick={onOpenDaily}>Open Daily Page</button>}
           </div>
         </>
       ) : (
         <div className="card" style={{padding:16,background:t.panel}}>
           <div style={{fontWeight:900,color:t.text,marginBottom:6}}>Challenge loading issue</div>
-          <p style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>Open the full Daily Challenge page while we refresh this preview.</p>
-          <button className="btn btn-primary" type="button" style={{marginTop:12}} onClick={onOpenDaily}>Open Daily Challenge</button>
+          <p style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>The warm-up could not load, but the full practice bank is ready.</p>
+          <button className="btn btn-primary" type="button" style={{marginTop:12}} onClick={onPractice}>Open Full MCQ Bank</button>
         </div>
       )}
     </div>
@@ -23470,8 +23473,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
             <div id="daily-challenge" className="landing-section brilliant-daily-wrap">
               <LandingDailyChallengeWidget
                 t={t}
-                onSignup={()=>jumpToAuth("signup")}
-                onOpenDaily={onDaily}
+                onPractice={onPracticeMcq}
               />
             </div>
           </div>
@@ -24205,10 +24207,14 @@ function GuestFeaturePreview({type,t}) {
   );
 }
 
-function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,onFlashcards,onConcepts}) {
+function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashcards,onConcepts}) {
   const startSignup=source=>{
     capture("landing_signup_cta_clicked", { source });
     onSignup();
+  };
+  const launchFullMcq=source=>{
+    capture("landing_full_mcq_bank_clicked",{source});
+    onPractice();
   };
   const showcaseFeatures=[
     {id:"flashcards",label:"Rapid Recall",color:"#8b5cf6",title:"Flashcards",body:"Fast recall for acronyms, definitions, and attack clues.",button:"Open flashcards",action:onFlashcards},
@@ -24230,10 +24236,13 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
           <p className="guest-hero-description">
             Master active-recall MCQs and real PBQ simulations. Track weak domains with smart reviews and sit for your exam ready to score 750+.
           </p>
-          <div className="home-cta-row brilliant-action-row guest-hero-primary-actions single">
-            <button className="btn btn-primary guest-hero-practice-cta" type="button" onClick={onPractice}>
-              Start Practicing Free
-            </button>
+          <div className="guest-bank-cta-block">
+            <div className="home-cta-row brilliant-action-row guest-hero-primary-actions single">
+              <button className="btn guest-hero-practice-cta" type="button" onClick={()=>launchFullMcq("guest_hero")}>
+                Launch Full MCQ Bank <span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <p className="guest-bank-cta-note">Explore 500+ free questions by domain <span aria-hidden="true">•</span> No sign-up required</p>
           </div>
           <div className="guest-hero-proof-row" aria-label="SecurePlus practice benefits">
             <span>500+ Practice MCQs</span>
@@ -24244,16 +24253,15 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
         <div className="brilliant-lesson-shell">
           <div className="brilliant-lesson-top">
             <div>
-              <div className="label brilliant-lesson-kicker">See how it feels</div>
-              <strong>Try today's Security+ warm-up</strong>
+              <div className="label brilliant-lesson-kicker">Quick Warm-Up: 5-Question Daily Drill</div>
+              <strong>Test yourself in two minutes</strong>
             </div>
             <span className="brilliant-lesson-duration">2 min</span>
           </div>
           <div className="brilliant-daily-wrap">
             <LandingDailyChallengeWidget
               t={t}
-              onSignup={()=>startSignup("daily_challenge")}
-              onOpenDaily={onDaily}
+              onPractice={()=>launchFullMcq("daily_drill_completion")}
             />
           </div>
         </div>
@@ -34171,7 +34179,7 @@ export default function App() {
               </div>
             </div>
             {view==="dashboard"&&(
-              <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onDaily={()=>setView("daily")} onFlashcards={()=>setView("flashcards")} onConcepts={()=>setView("deep-dives")}/>
+              <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onFlashcards={()=>setView("flashcards")} onConcepts={()=>setView("deep-dives")}/>
             )}
             {view==="mcq"&&(
               <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion} mcqBank={liveMcqBank}/>
