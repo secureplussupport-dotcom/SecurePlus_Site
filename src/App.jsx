@@ -22796,8 +22796,8 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
     setSubmitted(false);
     setResults([]);
   };
-  const openExpanded=()=>{
-    capture("landing_daily_challenge_expanded");
+  const openDailyExplanation=()=>{
+    capture("landing_daily_explanation_cta_clicked",{source:"guest_home_preview"});
     onOpenDaily();
   };
 
@@ -22811,11 +22811,6 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
             <div style={{fontSize:large?18:15,color:t.text,fontWeight:900,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{challenge.title}</div>
           </div>
         </div>
-        {!large&&(
-          <button className="btn btn-outline" type="button" style={{fontSize:12,whiteSpace:"nowrap"}} onClick={openExpanded}>
-            Expand
-          </button>
-        )}
       </div>
 
       <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}>
@@ -22876,12 +22871,23 @@ function LandingDailyChallengeWidget({t,onSignup,onOpenDaily}) {
           {submitted&&(
             <div className="card" style={{padding:"12px 14px",marginTop:12,borderColor:selected===current.correct?`${t.green}55`:`${t.red}55`,background:selected===current.correct?`${t.green}0f`:`${t.red}0d`,animation:"feedbackIn .24s ease both"}}>
               <MCQFeedbackVerdict correct={selected===current.correct} t={t} compact/>
-              <div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:3}}>
-                <GlossaryText text={current.exp} t={t}/>
-              </div>
-              {selected!==current.correct&&(
-                <div style={{fontSize:12,color:t.red,lineHeight:1.55,marginTop:7}}>
-                  <strong>Why your choice was wrong:</strong> {getWrongOptionFeedback(current,selected)}
+              {large ? (
+                <>
+                  <div style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:3}}>
+                    <GlossaryText text={current.exp} t={t}/>
+                  </div>
+                  {selected!==current.correct&&(
+                    <div style={{fontSize:12,color:t.red,lineHeight:1.55,marginTop:7}}>
+                      <strong>Why your choice was wrong:</strong> {getWrongOptionFeedback(current,selected)}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginTop:10,flexWrap:"wrap"}}>
+                  <span style={{fontSize:12,color:t.textSec,lineHeight:1.45}}>Read the explanation in Daily Challenge.</span>
+                  <button className="btn btn-outline" type="button" style={{fontSize:12,padding:"8px 12px",whiteSpace:"nowrap"}} onClick={openDailyExplanation}>
+                    Daily Challenge
+                  </button>
                 </div>
               )}
             </div>
