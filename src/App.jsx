@@ -18365,19 +18365,25 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-feature-copy .btn{margin-top:5px;border-color:color-mix(in srgb,var(--feature-color) 48%,${t.border});box-shadow:0 12px 26px color-mix(in srgb,var(--feature-color) 15%,transparent);}
 .guest-feature-visual{position:relative;z-index:1;min-height:190px;border:1px solid color-mix(in srgb,var(--feature-color) 34%,${t.border});border-radius:22px;background:linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 9%,${t.panel}));box-shadow:inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden;}
 .guest-feature-visual::before{content:"";position:absolute;inset:auto 18px 18px 18px;height:4px;border-radius:999px;background:linear-gradient(90deg,var(--feature-color),transparent);}
-.guest-feature-visual.flashcards{display:grid;place-items:center;padding:20px;}
-.guest-flip-card-stage{width:min(520px,96%);height:250px;perspective:1300px;display:grid;place-items:center;}
+.guest-feature-visual.flashcards{display:grid;place-items:center;min-height:230px;padding:18px;background:radial-gradient(circle at 86% 13%,color-mix(in srgb,#7c3aed 16%,transparent),transparent 38%),linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 11%,${t.panel}));}
+.guest-flip-card-stage{width:min(430px,88%);height:205px;perspective:1300px;display:grid;place-items:center;}
 .guest-flip-card{position:relative;width:100%;height:100%;transform-style:preserve-3d;}
-.guest-flip-face{position:absolute;inset:0;display:grid;place-items:center;padding:26px 30px;border-radius:20px;border:1px solid color-mix(in srgb,var(--feature-color) 36%,${t.border});background:radial-gradient(circle at 84% 14%,color-mix(in srgb,var(--feature-color) 22%,transparent),transparent 40%),linear-gradient(145deg,${t.surface},${t.panel});box-shadow:0 22px 44px rgba(7,12,24,.28);backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;}
+.guest-flip-face{position:absolute;inset:0;display:grid;place-items:center;padding:20px 24px;border-radius:18px;border:1px solid color-mix(in srgb,var(--feature-color) 36%,${t.border});background:radial-gradient(circle at 84% 14%,color-mix(in srgb,var(--feature-color) 22%,transparent),transparent 40%),linear-gradient(145deg,${t.surface},${t.panel});box-shadow:0 18px 34px rgba(7,12,24,.24);backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;}
 .guest-flip-face::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(105deg,transparent 0 42%,rgba(255,255,255,.08) 49%,transparent 56%);transform:translateX(-120%);animation:guestFlashcardSheen 9.2s ease-in-out infinite;pointer-events:none;}
 .guest-flip-front{animation:guestFlashcardFront 9.2s cubic-bezier(.68,-.2,.25,1.2) infinite;z-index:2;}
 .guest-flip-back{border-color:color-mix(in srgb,${t.green} 52%,${t.border});background:radial-gradient(circle at 86% 13%,${t.green}2a,transparent 42%),linear-gradient(145deg,color-mix(in srgb,${t.green} 12%,${t.surface}),${t.panel});animation:guestFlashcardBack 9.2s cubic-bezier(.68,-.2,.25,1.2) infinite;opacity:0;z-index:1;}
 .guest-flip-main{position:relative;z-index:1;display:grid;place-items:center;text-align:center;gap:12px;}
 .guest-flip-topic{color:${t.amber};font-size:12px;font-weight:900;}
-.guest-flip-acronym{color:${t.text};font-size:clamp(42px,7vw,74px);line-height:1;font-weight:950;letter-spacing:-.02em;}
+.guest-flip-acronym{color:${t.text};font-size:clamp(38px,6vw,62px);line-height:1;font-weight:950;letter-spacing:-.02em;}
 .guest-flip-kicker{color:${t.textSec};font-size:13px;font-weight:900;}
-.guest-flip-term{color:${t.text};font-size:clamp(24px,3.3vw,38px);line-height:1.05;font-weight:950;letter-spacing:-.02em;}
-.guest-flip-definition{max-width:430px;color:${t.textSec};font-size:14px;line-height:1.5;font-weight:850;}
+.guest-flip-term{color:${t.text};font-size:clamp(21px,2.8vw,32px);line-height:1.08;font-weight:950;letter-spacing:-.02em;}
+.guest-flip-term span{display:inline-block;}
+.guest-flip-term .term-mandatory{color:color-mix(in srgb,#c084fc 82%,${t.text});}
+.guest-flip-term .term-access{color:color-mix(in srgb,#38bdf8 76%,${t.text});}
+.guest-flip-term .term-control{color:color-mix(in srgb,#34d399 72%,${t.text});}
+.guest-flip-definition{max-width:360px;color:${t.textSec};font-size:13px;line-height:1.5;font-weight:850;}
+.guest-flip-definition .def-key{color:color-mix(in srgb,var(--feature-color) 78%,${t.text});font-weight:950;}
+.guest-flip-definition .def-policy{color:color-mix(in srgb,${t.green} 82%,${t.text});font-weight:950;}
 .guest-feature-visual.mcq{display:grid;align-content:center;gap:10px;padding:24px;}
 .guest-mcq-option{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid ${t.border};background:${t.surface};color:${t.textSec};font-weight:850;font-size:13px;}
 .guest-mcq-option.correct{border-color:color-mix(in srgb,var(--feature-color) 55%,transparent);background:color-mix(in srgb,var(--feature-color) 14%,${t.surface});color:${t.text};}
@@ -19100,9 +19106,10 @@ body{background:
   .guest-value-grid{grid-template-columns:minmax(0,1fr)!important;}
   .guest-feature-showcase-card{grid-template-columns:1fr!important;gap:16px!important;min-height:0!important;padding:22px!important;border-radius:20px!important;}
   .guest-feature-visual{min-height:170px!important;}
-  .guest-flip-card-stage{height:196px!important;width:100%!important;}
-  .guest-flip-face{padding:20px 18px!important;}
-  .guest-flip-definition{font-size:12px!important;line-height:1.45!important;}
+  .guest-feature-visual.flashcards{min-height:205px!important;padding:14px!important;}
+  .guest-flip-card-stage{height:168px!important;width:min(100%,340px)!important;}
+  .guest-flip-face{padding:16px 16px!important;border-radius:16px!important;}
+  .guest-flip-definition{font-size:11.5px!important;line-height:1.45!important;}
   .guest-feature-copy h2{font-size:clamp(25px,8vw,34px)!important;}
   .guest-review-row{grid-template-columns:74px minmax(0,1fr)!important;}
   .guest-review-row em{grid-column:1 / -1;}
@@ -24107,8 +24114,14 @@ function GuestFeaturePreview({type,t}) {
             <div className="guest-flip-face guest-flip-back">
               <div className="guest-flip-main">
                 <div className="guest-flip-kicker">Full term and definition</div>
-                <div className="guest-flip-term">Mandatory Access Control</div>
-                <div className="guest-flip-definition">Definition: Access model where labels and central policy decide access, not the object owner.</div>
+                <div className="guest-flip-term">
+                  <span className="term-mandatory">Mandatory</span>{" "}
+                  <span className="term-access">Access</span>{" "}
+                  <span className="term-control">Control</span>
+                </div>
+                <div className="guest-flip-definition">
+                  Definition: Access model where <span className="def-key">labels</span> and <span className="def-policy">central policy</span> decide access, not the object owner.
+                </div>
               </div>
             </div>
           </div>
@@ -24161,7 +24174,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onDaily,
     onSignup();
   };
   const showcaseFeatures=[
-    {id:"flashcards",label:"Gateway",color:"#0ea5e9",title:"Flashcards",body:"Fast recall for acronyms, definitions, and attack clues.",button:"Open flashcards",action:onFlashcards},
+    {id:"flashcards",label:"Memory retention",color:"#8b5cf6",title:"Flashcards",body:"Fast recall for acronyms, definitions, and attack clues.",button:"Open flashcards",action:onFlashcards},
     {id:"mcq",label:"Free practice",color:t.accent,title:"MCQ practice",body:"Short SY0-701 sets that show what you understand.",button:"Start MCQs",action:onPractice},
     {id:"pbq",label:"Scenario work",color:t.amber,title:"PBQ simulator",body:"Apply concepts through logs, rules, ordering, and scenarios.",button:"Try a PBQ",action:onPreviewPbq},
     {id:"review",label:"Personalised",color:t.green,title:"Smart Review",body:"Missed topics come back first so study stays focused.",button:"Try MCQs first",action:onPractice},
