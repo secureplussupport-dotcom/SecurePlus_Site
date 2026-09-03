@@ -103,6 +103,8 @@ import {
 } from "./lib/deepDiveRecommendations.js";
 import { getActiveDailyStreak } from "./lib/dailyStreak.js";
 
+const SITE_BRAND_LOCKUP = "SecurePlus | CompTIA Security+™ Prep";
+
 // ═══════════════════════════════════════════════════════════════
 // PERSISTENT STORAGE
 // ═══════════════════════════════════════════════════════════════
@@ -18192,7 +18194,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-app-shell{display:block;min-height:100vh;}
 .guest-app-shell .app-main{overflow:visible;}
 .guest-top-nav{position:sticky;top:0;z-index:160;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;padding:13px 24px;border-bottom:1px solid ${t.border};background:${t.bg}e8;backdrop-filter:blur(18px);box-shadow:0 10px 26px rgba(7,12,24,.09);}
-.guest-top-nav-brand{display:flex;align-items:center;gap:9px;background:transparent;border:0;color:${t.text};font:inherit;font-weight:950;font-size:16px;cursor:pointer;text-align:left;white-space:nowrap;}
+.guest-top-nav-brand{display:flex;align-items:center;gap:9px;background:transparent;border:0;color:${t.text};font:inherit;font-weight:950;font-size:15px;line-height:1.15;cursor:pointer;text-align:left;white-space:normal;min-width:0;}
+.guest-top-nav-brand span{display:block;min-width:0;}
 .guest-top-nav-brand small{display:block;margin-top:1px;color:${t.textDim};font-size:10px;font-weight:750;line-height:1.1;}
 .guest-top-nav-links{display:flex;align-items:center;gap:8px;min-width:0;overflow-x:auto;padding:2px;scrollbar-width:none;}
 .guest-top-nav-links::-webkit-scrollbar{display:none;}
@@ -18891,7 +18894,7 @@ body{background:
   .guest-app-shell{padding-bottom:0!important;}
   .guest-app-shell .mobile-topbar{display:none!important;}
   .guest-top-nav{grid-template-columns:1fr!important;gap:10px!important;padding:10px 14px!important;}
-  .guest-top-nav-brand{justify-content:flex-start;font-size:15px!important;}
+  .guest-top-nav-brand{justify-content:flex-start;font-size:12px!important;max-width:calc(100% - 210px);}
   .guest-top-nav-links{order:3;width:100%;gap:7px!important;padding-bottom:3px!important;}
   .guest-top-nav-link{min-height:36px!important;padding:8px 10px!important;font-size:11px!important;}
   .guest-top-nav-actions{position:absolute;right:12px;top:10px;gap:6px!important;}
@@ -23220,8 +23223,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           <button type="button" className="auth-only-brand" onClick={()=>onNavigate("dashboard")}>
             <BrandMark size={36}/>
             <span>
-              <strong>SecurePlus</strong>
-              <small>CompTIA Security+ practice</small>
+              <strong>{SITE_BRAND_LOCKUP}</strong>
             </span>
           </button>
 
@@ -23391,8 +23393,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
         <button type="button" onClick={()=>{onNavigate("dashboard");window.scrollTo({top:0,behavior:"smooth"});}} style={{display:"flex",alignItems:"center",gap:10,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}>
           <BrandMark size={32}/>
           <div>
-            <div style={{fontWeight:900,color:t.text,fontSize:18}}>SecurePlus</div>
-            <div style={{fontSize:12,color:t.textDim}}>CompTIA Security+ PBQ / MCQ practice</div>
+            <div style={{fontWeight:900,color:t.text,fontSize:16,lineHeight:1.18}}>{SITE_BRAND_LOCKUP}</div>
           </div>
         </button>
         <nav className="landing-nav-center" aria-label="Landing page sections">
@@ -32803,7 +32804,7 @@ function PasswordUpdateView({t,onDone}) {
       <div className="card" style={{width:"100%",maxWidth:430,padding:"28px 28px"}}>
         <div style={{display:"inline-flex",alignItems:"center",gap:10,padding:"7px 11px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel,marginBottom:20}}>
           <BrandMark size={28}/>
-          <span style={{fontWeight:800,color:t.text}}>SecurePlus</span>
+          <span style={{fontWeight:800,color:t.text,lineHeight:1.2}}>{SITE_BRAND_LOCKUP}</span>
         </div>
         <h1 style={{fontSize:26,color:t.text,marginBottom:8}}>Set a new password</h1>
         <p style={{fontSize:13,color:t.textSec,lineHeight:1.6,marginBottom:18}}>
@@ -34013,7 +34014,7 @@ export default function App() {
       <style>{CSS}</style>
       <div style={{minHeight:"100vh",background:t.bg}}>
         <div style={{padding:"16px 22px",display:"flex",alignItems:"center",gap:9,borderBottom:`1px solid ${t.border}`,background:t.surface}}>
-          <BrandMark size={32}/><strong style={{color:t.text}}>SecurePlus account security</strong>
+          <BrandMark size={32}/><strong style={{color:t.text}}>{SITE_BRAND_LOCKUP}</strong>
         </div>
       </div>
       <AccountDeletionModal
@@ -34033,7 +34034,7 @@ export default function App() {
       <style>{CSS}</style>
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:15,color:t.text}}>SecurePlus</span></button>
+          <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:14,lineHeight:1.2,color:t.text}}>{SITE_BRAND_LOCKUP}</span></button>
           <div style={{display:"flex",gap:8}}>
             <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>setShowDaily(false)}>← Back</button>
             <button className="btn btn-outline" style={{fontSize:12}} onClick={()=>setShowDaily(false)}>Sign In / Register</button>
@@ -34049,7 +34050,7 @@ export default function App() {
       <style>{CSS}</style>
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:15,color:t.text}}>SecurePlus</span></button>
+          <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:14,lineHeight:1.2,color:t.text}}>{SITE_BRAND_LOCKUP}</span></button>
           <button className="btn btn-outline" style={{fontSize:12}} onClick={()=>setView("dashboard")}>Sign In / Register</button>
         </div>
         <LegalPage type={view} t={t}/>
@@ -34109,12 +34110,9 @@ export default function App() {
         <div className={`app-shell guest-app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
           <a className="skip-link" href="#secureplus-main">Skip to study content</a>
           <header className="guest-top-nav">
-            <button type="button" className="guest-top-nav-brand" onClick={()=>setView("dashboard")} aria-label="SecurePlus guest landing page">
+            <button type="button" className="guest-top-nav-brand" onClick={()=>setView("dashboard")} aria-label={`${SITE_BRAND_LOCKUP} guest landing page`}>
               <BrandMark size={30}/>
-              <span>
-                SecurePlus
-                <small>Guest mode · progress is not saved</small>
-              </span>
+              <span>{SITE_BRAND_LOCKUP}</span>
             </button>
             <nav className="guest-top-nav-links" aria-label="Guest study navigation">
               {guestTopNavItems.map(item=>(
@@ -34140,8 +34138,7 @@ export default function App() {
           <main id="secureplus-main" className="app-main guest-main fu">
             <div className="mobile-topbar">
               <div>
-                <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> SecurePlus</button>
-                <div style={{fontSize:11,color:t.textDim}}>Progress is not saved</div>
+                <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:13,lineHeight:1.2,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> {SITE_BRAND_LOCKUP}</button>
               </div>
               <div style={{display:"flex",gap:6,alignItems:"center",flexShrink:0}}>
                 <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
@@ -34234,7 +34231,7 @@ export default function App() {
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <button type="button" onClick={()=>{setPbqQ(null);setView("dashboard");}} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}>
-            <BrandMark size={28}/><span style={{fontWeight:800,fontSize:15,color:t.text}}>SecurePlus</span>
+            <BrandMark size={28}/><span style={{fontWeight:800,fontSize:14,lineHeight:1.2,color:t.text}}>{SITE_BRAND_LOCKUP}</span>
           </button>
         </div>
         {pbqBankLoading ? <PBQLoadingSkeleton t={t}/> : activePbq ? (
@@ -34296,8 +34293,7 @@ export default function App() {
         <aside className={`sidebar ${sidebarHidden?"hidden":""}`}>
           {/* Logo */}
           <div style={{padding:"18px 16px",borderBottom:`1px solid ${t.border}`}}>
-            <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:9,fontWeight:700,fontSize:16,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={30}/> SecurePlus</button>
-            <div style={{fontSize:11,color:t.textDim,marginTop:2}}>CompTIA Security+ Practice Platform</div>
+            <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:9,fontWeight:800,fontSize:13,lineHeight:1.18,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={30}/><span>{SITE_BRAND_LOCKUP}</span></button>
             <button className="btn btn-ghost" type="button" style={{fontSize:12,justifyContent:"flex-start",width:"100%",marginTop:12}} onClick={()=>setSidebarHidden(true)}>
               Hide sidebar
             </button>
@@ -34339,8 +34335,7 @@ export default function App() {
         <main id="secureplus-main" className="app-main fu">
           <div className="mobile-topbar">
             <div>
-              <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:15,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> SecurePlus</button>
-              <div style={{fontSize:11,color:t.textDim}}>CompTIA Security+ Practice</div>
+              <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:13,lineHeight:1.2,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> {SITE_BRAND_LOCKUP}</button>
             </div>
             <div style={{display:"flex",gap:6,alignItems:"center",flexShrink:0}}>
               <CipherCoinPill compact balance={coinWallet.balance} onClick={()=>setView("coins")}/>
