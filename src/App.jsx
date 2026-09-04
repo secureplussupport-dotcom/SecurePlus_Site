@@ -18382,6 +18382,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-feature-showcase{display:grid;gap:18px;margin-top:18px;}
 .guest-feature-showcase-card{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,.82fr) minmax(300px,1fr);gap:24px;align-items:center;min-height:260px;padding:30px;border:1px solid color-mix(in srgb,var(--feature-color) 35%,${t.border});border-radius:24px;background:linear-gradient(135deg,color-mix(in srgb,var(--feature-color) 12%,${t.surface}),${t.panel} 58%,color-mix(in srgb,var(--feature-color) 9%,${t.surface}));box-shadow:0 22px 54px rgba(7,12,24,.11);opacity:0;transform:translateY(24px);animation:featureReveal .75s cubic-bezier(.16,1,.3,1) both;animation-timeline:view();animation-range:entry 8% cover 34%;}
 .guest-feature-showcase-card::after{content:"";position:absolute;right:-120px;top:-110px;width:270px;height:270px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--feature-color) 20%,transparent),transparent 68%);pointer-events:none;}
+.guest-feature-showcase-card:focus-within{border-color:color-mix(in srgb,var(--feature-color) 70%,${t.border});box-shadow:0 24px 58px color-mix(in srgb,var(--feature-color) 14%,transparent);}
 .guest-feature-copy{position:relative;z-index:1;display:grid;justify-items:start;gap:12px;}
 .guest-feature-kicker{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border-radius:999px;border:1px solid color-mix(in srgb,var(--feature-color) 42%,transparent);background:color-mix(in srgb,var(--feature-color) 12%,transparent);color:var(--feature-color);font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
 .guest-feature-copy h2{margin:0;color:${t.text};font-size:clamp(28px,3vw,42px);line-height:1.05;text-wrap:balance;}
@@ -18389,13 +18390,21 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-feature-copy .btn{margin-top:5px;border-color:color-mix(in srgb,var(--feature-color) 48%,${t.border});box-shadow:0 12px 26px color-mix(in srgb,var(--feature-color) 15%,transparent);}
 .guest-feature-visual{position:relative;z-index:1;min-height:190px;border:1px solid color-mix(in srgb,var(--feature-color) 34%,${t.border});border-radius:22px;background:linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 9%,${t.panel}));box-shadow:inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden;}
 .guest-feature-visual::before{content:"";position:absolute;inset:auto 18px 18px 18px;height:4px;border-radius:999px;background:linear-gradient(90deg,var(--feature-color),transparent);}
-.guest-feature-visual.flashcards{display:grid;place-items:center;min-height:230px;padding:18px;background:radial-gradient(circle at 86% 13%,color-mix(in srgb,#7c3aed 16%,transparent),transparent 38%),linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 11%,${t.panel}));}
-.guest-flip-card-stage{width:min(390px,82%);height:182px;perspective:1300px;display:grid;place-items:center;}
-.guest-flip-card{position:relative;width:100%;height:100%;transform-style:preserve-3d;}
+.guest-demo-hint{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--feature-color);font-size:11px;font-weight:900;}
+.guest-demo-question{position:relative;z-index:1;color:${t.text};font-size:13px;font-weight:900;line-height:1.45;}
+.guest-demo-feedback{position:relative;z-index:1;min-height:22px;color:${t.textSec};font-size:11px;font-weight:850;line-height:1.45;}
+.guest-demo-feedback.idle{color:${t.textDim};}
+.guest-demo-feedback.success{color:${t.green};}
+.guest-demo-feedback.retry{color:${t.amber};}
+.guest-feature-visual.flashcards{display:grid;align-content:center;justify-items:center;gap:10px;min-height:245px;padding:18px;background:radial-gradient(circle at 86% 13%,color-mix(in srgb,#7c3aed 16%,transparent),transparent 38%),linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 11%,${t.panel}));}
+.guest-flip-card-stage{appearance:none;width:min(390px,82%);height:182px;padding:0;border:0;background:transparent;color:inherit;perspective:1300px;display:grid;place-items:center;cursor:pointer;}
+.guest-flip-card-stage:focus-visible{outline:3px solid color-mix(in srgb,var(--feature-color) 48%,transparent);outline-offset:5px;border-radius:18px;}
+.guest-flip-card{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .72s cubic-bezier(.2,.75,.25,1);}
+.guest-flip-card.is-flipped{transform:rotateY(180deg);}
 .guest-flip-face{position:absolute;inset:0;display:grid;place-items:center;padding:20px 24px;border-radius:18px;border:1px solid color-mix(in srgb,var(--feature-color) 36%,${t.border});background:radial-gradient(circle at 84% 14%,color-mix(in srgb,var(--feature-color) 22%,transparent),transparent 40%),linear-gradient(145deg,${t.surface},${t.panel});box-shadow:0 18px 34px rgba(7,12,24,.24);backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;}
 .guest-flip-face::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(105deg,transparent 0 42%,rgba(255,255,255,.08) 49%,transparent 56%);transform:translateX(-120%);animation:guestFlashcardSheen 9.2s ease-in-out infinite;pointer-events:none;}
-.guest-flip-front{animation:guestFlashcardFront 9.2s cubic-bezier(.68,-.2,.25,1.2) infinite;z-index:2;}
-.guest-flip-back{border-color:color-mix(in srgb,${t.green} 52%,${t.border});background:radial-gradient(circle at 86% 13%,${t.green}2a,transparent 42%),linear-gradient(145deg,color-mix(in srgb,${t.green} 12%,${t.surface}),${t.panel});animation:guestFlashcardBack 9.2s cubic-bezier(.68,-.2,.25,1.2) infinite;opacity:0;z-index:1;}
+.guest-flip-front{transform:rotateY(0deg);}
+.guest-flip-back{transform:rotateY(180deg);border-color:color-mix(in srgb,${t.green} 52%,${t.border});background:radial-gradient(circle at 86% 13%,${t.green}2a,transparent 42%),linear-gradient(145deg,color-mix(in srgb,${t.green} 12%,${t.surface}),${t.panel});}
 .guest-flip-main{position:relative;z-index:1;display:grid;place-items:center;text-align:center;gap:12px;}
 .guest-flip-topic{color:${t.amber};font-size:12px;font-weight:900;}
 .guest-flip-acronym{color:${t.text};font-size:clamp(38px,6vw,62px);line-height:1;font-weight:950;letter-spacing:-.02em;}
@@ -18409,25 +18418,43 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-flip-definition .def-key{color:color-mix(in srgb,var(--feature-color) 78%,${t.text});font-weight:950;}
 .guest-flip-definition .def-policy{color:color-mix(in srgb,${t.green} 82%,${t.text});font-weight:950;}
 .guest-feature-visual.mcq{display:grid;align-content:center;gap:10px;padding:24px;}
-.guest-mcq-option{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid ${t.border};background:${t.surface};color:${t.textSec};font-weight:850;font-size:13px;}
+.guest-mcq-option{appearance:none;width:100%;display:flex;align-items:center;gap:10px;text-align:left;padding:12px 14px;border-radius:14px;border:1px solid ${t.border};background:${t.surface};color:${t.textSec};font:inherit;font-weight:850;font-size:13px;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease;}
+.guest-mcq-option:hover{transform:translateX(3px);border-color:color-mix(in srgb,var(--feature-color) 50%,${t.border});}
 .guest-mcq-option.correct{border-color:color-mix(in srgb,var(--feature-color) 55%,transparent);background:color-mix(in srgb,var(--feature-color) 14%,${t.surface});color:${t.text};}
+.guest-mcq-option.wrong{border-color:${t.red};background:${t.red}0d;color:${t.text};}
 .guest-mcq-option span{width:23px;height:23px;border-radius:999px;display:grid;place-items:center;background:color-mix(in srgb,var(--feature-color) 16%,transparent);color:var(--feature-color);font-size:11px;}
-.guest-feature-visual.pbq{padding:24px;display:grid;align-content:center;gap:12px;}
+.guest-feature-visual.pbq{padding:24px;display:grid;align-content:center;gap:11px;}
 .guest-terminal-preview{border-radius:16px;background:#07111f;border:1px solid color-mix(in srgb,var(--feature-color) 28%,#26364a);padding:16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#b7f7d8;font-size:12px;line-height:1.7;}
 .guest-terminal-preview b{color:#fbbf24;font-weight:800;}
+.guest-pbq-slots{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}
+.guest-pbq-slots span{min-height:42px;display:grid;place-items:center;padding:8px;border:1px dashed ${t.border};border-radius:12px;color:${t.textDim};font-size:10px;font-weight:900;text-align:center;}
+.guest-pbq-slots span.filled{border-style:solid;border-color:color-mix(in srgb,var(--feature-color) 55%,${t.border});background:color-mix(in srgb,var(--feature-color) 12%,${t.surface});color:${t.text};}
+.guest-pbq-actions{position:relative;z-index:1;display:flex;gap:7px;flex-wrap:wrap;}
+.guest-pbq-actions button,.guest-demo-reset{appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:36px;padding:7px 10px;border:1px solid color-mix(in srgb,var(--feature-color) 42%,${t.border});border-radius:11px;background:${t.surface};color:${t.textSec};font:inherit;font-size:11px;font-weight:900;cursor:pointer;}
+.guest-pbq-actions button:hover:not(:disabled){border-color:var(--feature-color);color:${t.text};transform:translateY(-1px);}
+.guest-pbq-actions button:disabled{opacity:.42;cursor:default;}
+.guest-demo-reset{position:relative;z-index:1;width:max-content;min-height:30px;padding:5px 8px;border-color:${t.border};background:transparent;color:${t.textDim};}
 .guest-feature-visual.review{display:grid;align-content:center;gap:12px;padding:24px;}
-.guest-review-row{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;border-radius:15px;background:${t.surface};border:1px solid ${t.border};}
+.guest-review-row{appearance:none;width:100%;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;text-align:left;padding:11px 13px;border-radius:15px;background:${t.surface};border:1px solid ${t.border};font:inherit;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease;}
+.guest-review-row:hover{transform:translateX(3px);border-color:color-mix(in srgb,var(--feature-color) 48%,${t.border});}
+.guest-review-row.active{border-color:color-mix(in srgb,var(--feature-color) 62%,${t.border});background:color-mix(in srgb,var(--feature-color) 11%,${t.surface});}
 .guest-review-row strong{color:${t.text};font-size:12px;}
 .guest-review-row span{height:8px;border-radius:999px;background:linear-gradient(90deg,var(--feature-color),color-mix(in srgb,var(--feature-color) 22%,transparent));}
-.guest-review-row em{font-style:normal;color:var(--feature-color);font-size:11px;font-weight:950;}
+.guest-review-row em{font-style:normal;color:${t.textDim};font-size:10px;font-weight:850;}
+.guest-review-row.active em{color:var(--feature-color);}
+.guest-review-result,.guest-lesson-takeaway{position:relative;z-index:1;display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--feature-color) 13%,${t.surface});color:var(--feature-color);}
+.guest-review-result span,.guest-lesson-takeaway span{display:grid;gap:1px;}
+.guest-review-result small,.guest-lesson-takeaway small{color:${t.textDim};font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+.guest-review-result strong,.guest-lesson-takeaway strong{color:${t.text};font-size:11px;line-height:1.4;}
 .guest-feature-visual.deep{display:grid;align-content:center;gap:10px;padding:24px;}
-.guest-lesson-preview{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;border:1px solid ${t.border};border-radius:16px;background:${t.surface};}
+.guest-lesson-preview{appearance:none;width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:12px 14px;border:1px solid ${t.border};border-radius:14px;background:${t.surface};font:inherit;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease;}
+.guest-lesson-preview:hover{transform:translateX(3px);border-color:color-mix(in srgb,var(--feature-color) 48%,${t.border});}
+.guest-lesson-preview.active{border-color:color-mix(in srgb,var(--feature-color) 65%,${t.border});background:color-mix(in srgb,var(--feature-color) 12%,${t.surface});}
+.guest-lesson-preview>span{display:grid;gap:2px;}
 .guest-lesson-preview strong{color:${t.text};font-size:13px;line-height:1.3;}
-.guest-lesson-preview small{color:${t.textDim};font-size:11px;font-weight:800;}
+.guest-lesson-preview small{display:block;color:${t.textDim};font-size:10px;font-weight:800;}
 .guest-lesson-preview svg{color:var(--feature-color);}
 @keyframes featureReveal{to{opacity:1;transform:none;}}
-@keyframes guestFlashcardFront{0%,34%{opacity:1;transform:rotateY(0deg) scale(1);}40%,86%{opacity:0;transform:rotateY(-92deg) scale(.99);}94%,100%{opacity:1;transform:rotateY(0deg) scale(1);}}
-@keyframes guestFlashcardBack{0%,40%{opacity:0;transform:rotateY(92deg) scale(.99);}46%,80%{opacity:1;transform:rotateY(0deg) scale(1);}86%,100%{opacity:0;transform:rotateY(-92deg) scale(.99);}}
 @keyframes guestFlashcardSheen{0%,26%{transform:translateX(-120%);}36%,48%{transform:translateX(120%);}70%,100%{transform:translateX(120%);}}
 .guest-final-cta{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center;padding:28px;border:1px solid ${t.green}3d;border-radius:8px;background:linear-gradient(125deg,${t.green}13,${t.surface} 55%,${t.accent}10);box-shadow:0 20px 48px rgba(7,12,24,.1);}
 .guest-final-cta h2{margin:5px 0 8px;color:${t.text};font-size:clamp(26px,3.2vw,36px);line-height:1.15;text-wrap:balance;}
@@ -24139,18 +24166,39 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
 }
 
 function GuestFeaturePreview({type,t}) {
+  const [flashcardFlipped,setFlashcardFlipped]=useState(false);
+  const [mcqChoice,setMcqChoice]=useState(null);
+  const [pbqSequence,setPbqSequence]=useState([]);
+  const [reviewTopic,setReviewTopic]=useState("PKI");
+  const [deepTopic,setDeepTopic]=useState("Web Attacks");
+
+  useEffect(()=>{
+    if(type!=="flashcards"||window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches)return undefined;
+    const timer=window.setInterval(()=>setFlashcardFlipped(value=>!value),6200);
+    return()=>window.clearInterval(timer);
+  },[type]);
+
+  const trackDemo=(interaction,details={})=>capture("landing_feature_demo_interacted",{feature:type,interaction,...details});
+
   if(type==="flashcards"){
     return (
-      <div className="guest-feature-visual flashcards" aria-hidden="true">
-        <div className="guest-flip-card-stage">
-          <div className="guest-flip-card">
-            <div className="guest-flip-face guest-flip-front">
+      <div className="guest-feature-visual flashcards">
+        <div className="guest-demo-hint"><RotateCcw size={14}/> Tap the card to flip</div>
+        <button
+          className="guest-flip-card-stage"
+          type="button"
+          aria-label={flashcardFlipped?"Show the MAC acronym":"Reveal the meaning of MAC"}
+          aria-pressed={flashcardFlipped}
+          onClick={()=>{setFlashcardFlipped(value=>!value);trackDemo("flip");}}
+        >
+          <div className={`guest-flip-card${flashcardFlipped?" is-flipped":""}`}>
+            <div className="guest-flip-face guest-flip-front" aria-hidden={flashcardFlipped}>
               <div className="guest-flip-main">
                 <div className="guest-flip-topic">Core principles and access control</div>
                 <div className="guest-flip-acronym">MAC</div>
               </div>
             </div>
-            <div className="guest-flip-face guest-flip-back">
+            <div className="guest-flip-face guest-flip-back" aria-hidden={!flashcardFlipped}>
               <div className="guest-flip-main">
                 <div className="guest-flip-kicker">Full term and definition</div>
                 <div className="guest-flip-term">
@@ -24164,45 +24212,108 @@ function GuestFeaturePreview({type,t}) {
               </div>
             </div>
           </div>
-        </div>
+        </button>
       </div>
     );
   }
   if(type==="mcq"){
+    const options=["Least privilege","Tailgating","Piggybacking"];
+    const isCorrect=mcqChoice===0;
     return (
-      <div className="guest-feature-visual mcq" aria-hidden="true">
-        <div className="guest-mcq-option correct"><span>A</span> Least privilege</div>
-        <div className="guest-mcq-option"><span>B</span> Tailgating</div>
-        <div className="guest-mcq-option"><span>C</span> Piggybacking</div>
-      </div>
-    );
-  }
-  if(type==="pbq"){
-    return (
-      <div className="guest-feature-visual pbq" aria-hidden="true">
-        <div className="guest-terminal-preview">
-          <div><b>fw01</b>$ review acl --scenario</div>
-          <div>ALLOW 443/tcp → web tier</div>
-          <div>DENY any → admin subnet</div>
-          <div>Apply the safest rule order.</div>
+      <div className="guest-feature-visual mcq">
+        <div className="guest-demo-question">Which principle gives users only the access their job requires?</div>
+        {options.map((option,index)=>{
+          const state=mcqChoice===index?(index===0?" correct":" wrong"):"";
+          return (
+            <button
+              key={option}
+              className={`guest-mcq-option${state}`}
+              type="button"
+              aria-pressed={mcqChoice===index}
+              onClick={()=>{setMcqChoice(index);trackDemo("answer",{correct:index===0});}}
+            >
+              <span>{String.fromCharCode(65+index)}</span> {option}
+            </button>
+          );
+        })}
+        <div className={`guest-demo-feedback${mcqChoice===null?" idle":isCorrect?" success":" retry"}`} role="status" aria-live="polite">
+          {mcqChoice===null?"Choose an answer":isCorrect?"Correct — minimum necessary access.":"Not quite — try another answer."}
         </div>
       </div>
     );
   }
-  if(type==="review"){
+  if(type==="pbq"){
+    const expected=["Contain","Eradicate","Recover"];
+    const choices=["Recover","Contain","Eradicate"];
+    const pbqComplete=pbqSequence.length===expected.length;
+    const pbqCorrect=pbqComplete&&pbqSequence.every((step,index)=>step===expected[index]);
+    const chooseStep=step=>{
+      if(pbqComplete||pbqSequence.includes(step))return;
+      const next=[...pbqSequence,step];
+      setPbqSequence(next);
+      if(next.length===expected.length)trackDemo("sequence_complete",{correct:next.every((item,index)=>item===expected[index])});
+    };
     return (
-      <div className="guest-feature-visual review" aria-hidden="true">
-        <div className="guest-review-row"><strong>PKI</strong><span style={{width:"78%"}}/><em>review first</em></div>
-        <div className="guest-review-row"><strong>IAM</strong><span style={{width:"56%"}}/><em>next</em></div>
-        <div className="guest-review-row"><strong>Logs</strong><span style={{width:"34%"}}/><em>later</em></div>
+      <div className="guest-feature-visual pbq">
+        <div className="guest-demo-question">Build the incident-response order</div>
+        <div className="guest-pbq-slots" aria-label="Your incident-response sequence">
+          {expected.map((_,index)=><span key={index} className={pbqSequence[index]?"filled":""}>{pbqSequence[index]||`Step ${index+1}`}</span>)}
+        </div>
+        <div className="guest-pbq-actions" aria-label="Available response steps">
+          {choices.map(step=><button key={step} type="button" disabled={pbqSequence.includes(step)||pbqComplete} onClick={()=>chooseStep(step)}>{step}</button>)}
+        </div>
+        <div className={`guest-demo-feedback${!pbqComplete?" idle":pbqCorrect?" success":" retry"}`} role="status" aria-live="polite">
+          {!pbqComplete?"Tap the safest first action":pbqCorrect?"Sequence secured — contain before cleanup.":"Close — containment must stop the spread first."}
+        </div>
+        {pbqSequence.length>0&&<button className="guest-demo-reset" type="button" onClick={()=>{setPbqSequence([]);trackDemo("reset");}}><RotateCcw size={13}/> Reset sequence</button>}
       </div>
     );
   }
+  if(type==="review"){
+    const reviewRows=[
+      {topic:"PKI",width:"78%",detail:"3 recent misses"},
+      {topic:"IAM",width:"56%",detail:"2 recent misses"},
+      {topic:"Logs",width:"34%",detail:"1 recent miss"},
+    ];
+    return (
+      <div className="guest-feature-visual review">
+        <div className="guest-demo-question">Tap a weak area to reshape your queue</div>
+        {reviewRows.map(row=>(
+          <button
+            key={row.topic}
+            className={`guest-review-row${reviewTopic===row.topic?" active":""}`}
+            type="button"
+            aria-pressed={reviewTopic===row.topic}
+            onClick={()=>{setReviewTopic(row.topic);trackDemo("choose_weak_area",{topic:row.topic});}}
+          >
+            <strong>{row.topic}</strong><span style={{width:row.width}}/><em>{row.detail}</em>
+          </button>
+        ))}
+        <div className="guest-review-result" role="status" aria-live="polite"><Sparkles size={15}/><span><small>Recommended next</small><strong>{reviewTopic} focused review</strong></span></div>
+      </div>
+    );
+  }
+  const lessons=[
+    {title:"Web Attacks",prompt:"Trace where untrusted input executes."},
+    {title:"DNS Attacks",prompt:"Separate poisoning clues from tunnelling."},
+    {title:"Phishing",prompt:"Use urgency, identity, and channel as clues."},
+  ];
+  const activeLesson=lessons.find(lesson=>lesson.title===deepTopic)||lessons[0];
   return (
-    <div className="guest-feature-visual deep" aria-hidden="true">
-      <div className="guest-lesson-preview"><div><strong>Web Attacks</strong><br/><small>Learn the clues</small></div><ChevronRight size={20}/></div>
-      <div className="guest-lesson-preview"><div><strong>DNS Attacks</strong><br/><small>Compare the patterns</small></div><ChevronRight size={20}/></div>
-      <div className="guest-lesson-preview"><div><strong>Phishing</strong><br/><small>Spot the scenario</small></div><ChevronRight size={20}/></div>
+    <div className="guest-feature-visual deep">
+      <div className="guest-demo-question">Open a concept preview</div>
+      {lessons.map(lesson=>(
+        <button
+          key={lesson.title}
+          className={`guest-lesson-preview${deepTopic===lesson.title?" active":""}`}
+          type="button"
+          aria-pressed={deepTopic===lesson.title}
+          onClick={()=>{setDeepTopic(lesson.title);trackDemo("open_preview",{lesson:lesson.title});}}
+        >
+          <span><strong>{lesson.title}</strong><small>{deepTopic===lesson.title?"Preview open":"Tap to preview"}</small></span><ChevronRight size={20}/>
+        </button>
+      ))}
+      <div className="guest-lesson-takeaway" role="status" aria-live="polite"><BookOpenCheck size={16}/><span><small>{activeLesson.title}</small><strong>{activeLesson.prompt}</strong></span></div>
     </div>
   );
 }
@@ -24217,11 +24328,11 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
     onPractice();
   };
   const showcaseFeatures=[
-    {id:"flashcards",label:"Rapid Recall",color:"#8b5cf6",title:"Flashcards",body:"Fast recall for acronyms, definitions, and attack clues.",button:"Open flashcards",action:onFlashcards},
-    {id:"mcq",label:"Exam Readiness",color:t.accent,title:"MCQ practice",body:"Short SY0-701 sets that show what you understand.",button:"Start MCQs",action:onPractice},
-    {id:"pbq",label:"Hands On Mastery",color:t.amber,title:"PBQ simulator",body:"Apply concepts through logs, rules, ordering, and scenarios.",button:"Try a PBQ",action:onPreviewPbq},
-    {id:"review",label:"Personalisation",color:t.green,title:"Smart Review",body:"Missed topics come back first so study stays focused.",button:"Try MCQs first",action:onPractice},
-    {id:"deep",label:"Foundational Clarity",color:"#8b5cf6",title:"Concept Deep Dives",body:"Read the concept, then practise it while the idea is fresh.",button:"Open lessons",action:onConcepts||(()=>startSignup("concept_deep_dives"))},
+    {id:"flashcards",label:"Rapid Recall",color:"#8b5cf6",title:"Flashcards",body:"Flip high-yield terms until recall becomes automatic.",button:"Open flashcards",action:onFlashcards},
+    {id:"mcq",label:"Exam Readiness",color:t.accent,title:"MCQ practice",body:"Answer realistic questions and expose gaps immediately.",button:"Start MCQs",action:onPractice},
+    {id:"pbq",label:"Hands On Mastery",color:t.amber,title:"PBQ simulator",body:"Make the decisions Security+ expects you to apply.",button:"Try a PBQ",action:onPreviewPbq},
+    {id:"review",label:"Personalisation",color:t.green,title:"Smart Review",body:"Your mistakes decide what returns to the top of the queue.",button:"Build my review queue",action:onPractice},
+    {id:"deep",label:"Foundational Clarity",color:"#8b5cf6",title:"Concept Deep Dives",body:"Learn a difficult concept, then test it in the same flow.",button:"Open lessons",action:onConcepts||(()=>startSignup("concept_deep_dives"))},
   ];
   return (
     <div className="dashboard-shell" data-page-label="Guest main landing page">
