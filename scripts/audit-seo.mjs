@@ -4,6 +4,7 @@ import path from "node:path";
 const root = process.cwd();
 const publicDir = path.join(root, "public");
 const siteUrl = "https://www.secureplusprep.com";
+const siteTagline = "Clear study paths. Real scenarios. Pass Security+ with confidence.";
 const requiredTerms = ["Security+", "SecurePlus"];
 const softwareApplicationPages = new Set([
   "security-plus-acronyms",
@@ -111,12 +112,18 @@ for (const file of pageFiles) {
   const canonical = getTag(html, /<link\s+rel="canonical"\s+href="([^"]+)"/i);
   const title = getTag(html, /<title>(.*?)<\/title>/is);
   const description = getTag(html, /<meta\s+name="description"\s+content="([^"]+)"/i);
+  const openGraphDescription = getTag(html, /<meta\s+property="og:description"\s+content="([^"]+)"/i);
   const h1 = getTag(html, /<h1\b[^>]*>(.*?)<\/h1>/is);
   const structuredItems = flattenStructuredData(jsonLdObjects(html, file));
 
   if (canonical !== `${siteUrl}${route}`) push(errors, file, `canonical should be ${siteUrl}${route}`);
   if (!title || title.length < 35 || title.length > 70) push(warnings, file, `title length should be 35-70 characters, found ${title.length}`);
   if (!description || description.length < 90 || description.length > 170) push(warnings, file, `description length should be 90-170 characters, found ${description.length}`);
+  if (!description.includes(siteTagline)) push(errors, file, "search description is missing the current site tagline");
+  if (!openGraphDescription.includes(siteTagline)) push(errors, file, "Open Graph description is missing the current site tagline");
+  if (!structuredItems.some(item => String(item?.description || "").includes(siteTagline))) {
+    push(errors, file, "structured data is missing the current site tagline");
+  }
   if (!h1) push(errors, file, "missing h1");
 
   for (const term of requiredTerms) {
@@ -136,7 +143,7 @@ for (const file of pageFiles) {
     const isInteractiveEntry=interactiveSeoPages.includes(file);
     if (!isInteractiveEntry&&!html.includes('class="lead"')) push(errors, file, "missing short explanation lead copy");
     if (!isInteractiveEntry&&!html.includes('class="cta"')) push(errors, file, "missing CTA block to start practice");
-    if (!html.includes("Clear study paths. Real scenarios. Pass Security+ with confidence.")) {
+    if (!visibleText.includes(siteTagline)) {
       push(errors, file, "missing site tagline");
     }
     if (!isInteractiveEntry&&!html.includes("seo-sample-question")) {

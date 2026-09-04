@@ -104,6 +104,7 @@ import {
 import { getActiveDailyStreak } from "./lib/dailyStreak.js";
 
 const SITE_BRAND_LOCKUP = "SecurePlus | CompTIA Security+™ Prep";
+const SITE_TAGLINE = "Clear study paths. Real scenarios. Pass Security+ with confidence.";
 
 // ═══════════════════════════════════════════════════════════════
 // PERSISTENT STORAGE
@@ -233,7 +234,7 @@ const PRO_ACADEMY_PASS_PRICE = "$9.99 / 3 months";
 const PRO_MONTHLY_PASS_PRICE = "$4.99 / month";
 const PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus";
 const PRO_ACADEMY_PASS_DESCRIPTION = "Built around the typical Security+ study window. Unlock all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.";
-const PRO_ACADEMY_PASS_TRUST = "Clear study paths. Real scenarios. Pass Security+ with confidence.";
+const PRO_ACADEMY_PASS_TRUST = SITE_TAGLINE;
 const ADMIN_PRO_MODE_STORAGE_PREFIX = "secureplus-admin-pro-mode";
 const ADMIN_ONLY_APP_VIEWS = new Set(["feedback","question-admin","mascot-admin"]);
 
@@ -372,7 +373,7 @@ const FLASHCARD_REVIEW_LAST_OPENED_PREFIX = "secureplus-flashcard-review-last-op
 const FLASHCARD_SHARE_COPY = {
   title:"SecurePlus Security+ flashcards",
   description:"Security+ flashcards grouped by chapter and topic.",
-  statement:"SecurePlus has Security+ flashcards for acronyms, attack clues, definitions, and exam keywords. Clear study paths. Real scenarios. Pass Security+ with confidence.",
+  statement:`SecurePlus has Security+ flashcards for acronyms, attack clues, definitions, and exam keywords. ${SITE_TAGLINE}`,
 };
 const FLASHCARD_DEFINITION_NEXT_LABEL = "Definition cards next";
 const FLASHCARD_ACRONYM_SECTION_LABEL = "Acronym cards next";
@@ -613,7 +614,7 @@ const buildFlashcardPlatformShare = (platform,set) => {
     return [
       "Before exam day, I’m using SecurePlus flashcards for Security+ recall.",
       `${setName} covers acronyms, definitions, and scenario clues for fast last-minute review.`,
-      "Clear study paths. Real scenarios. Pass Security+ with confidence.",
+      SITE_TAGLINE,
       `Try it: ${url}`,
       "#SecurityPlus #CompTIA #CompTIASecurityPlus #CybersecurityStudy",
     ].join("\n");
@@ -622,7 +623,7 @@ const buildFlashcardPlatformShare = (platform,set) => {
     return [
       "I found a Security+ flashcard collection built around acronyms, definitions, attack clues, and exam keywords for fast last-minute recall.",
       "",
-      "Clear study paths. Real scenarios. Pass Security+ with confidence.",
+      SITE_TAGLINE,
       "",
       `Set: ${setName}`,
       `Link: ${url}`,
@@ -634,7 +635,7 @@ const buildFlashcardPlatformShare = (platform,set) => {
       `${setName}`,
       "",
       "It focuses on acronyms, definitions, attack clues, and exam keywords.",
-      "Clear study paths. Real scenarios. Pass Security+ with confidence.",
+      SITE_TAGLINE,
       url,
     ].join("\n");
   }
@@ -643,7 +644,7 @@ const buildFlashcardPlatformShare = (platform,set) => {
       "Security+ flashcards from SecurePlus:",
       `${setName}`,
       "Acronyms, definitions, attack clues, and exam keywords.",
-      "Clear study paths. Real scenarios. Pass Security+ with confidence.",
+      SITE_TAGLINE,
       url,
     ].join("\n");
   }
@@ -21143,7 +21144,7 @@ function LoadingScreen({t}) {
     <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:t.bg,padding:24}}>
       <div style={{display:"grid",justifyItems:"center",gap:18,textAlign:"center"}}>
         <MascotAnimation animation="thinking" size={118} className="loading-mascot slow" label="Cipher is loading SecurePlus"/>
-        <div style={{fontWeight:900,color:t.text,fontSize:18}}>Security+ practice that teaches. Pass Security+ with confidence.</div>
+        <div style={{fontWeight:900,color:t.text,fontSize:18}}>{SITE_TAGLINE}</div>
         <div className="fu" key={quote} style={{color:t.textSec,fontSize:14,maxWidth:360,lineHeight:1.7}}>{quote}</div>
       </div>
     </div>
@@ -27779,7 +27780,7 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
 
   const explainPaymentPolicy=()=>addMessage("cipher","Payments are handled through Stripe. SecurePlus does not store your card details. You can cancel renewal from the account support area before the next billing cycle, or contact support if the portal is unavailable.");
 
-  const explainTerms=()=>addMessage("cipher","SecurePlus uses original scenario-based practice and is not affiliated with CompTIA. The questions are built to teach Security+ concepts, not to reproduce real exam items.");
+  const explainTerms=()=>addMessage("cipher",`SecurePlus is an independent study platform aligned to SY0-701. ${SITE_TAGLINE}`);
 
   const showFeatureHelp=()=>{
     setQuickMode("features");
@@ -27885,7 +27886,7 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
     {label:"Daily Challenge",detail:"Streaks and rewards",icon:<Flame size={15}/>,action:explainDailyChallenge},
     {label:"Pro Plan",detail:"What it unlocks",icon:<BadgeCheck size={15}/>,action:explainProPlan},
     {label:"Payment policy",detail:"Stripe and renewal",icon:<ShieldCheck size={15}/>,action:explainPaymentPolicy},
-    {label:"Terms and conditions",detail:"Original practice",icon:<FileText size={15}/>,action:explainTerms},
+    {label:"Terms and conditions",detail:"Independent platform",icon:<FileText size={15}/>,action:explainTerms},
     {label:"Contact support",detail:"Open email app",icon:<MessageSquareWarning size={15}/>,action:contactSupport},
     {label:"Back",detail:"Main choices",icon:<ArrowLeft size={15}/>,action:showMainChoices},
   ];
@@ -27940,7 +27941,7 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
                 <div ref={messagesEndRef}/>
               </div>
             )}
-            <p className="cipher-assistant-note">Cipher uses preset study guidance only. Clear study paths. Real scenarios. Pass Security+ with confidence.</p>
+            <p className="cipher-assistant-note">Cipher uses preset study guidance only. {SITE_TAGLINE}</p>
           </div>
         </section>
       )}
@@ -31366,7 +31367,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
               <details className="deep-dive-sources-disclosure">
                 <summary><ShieldCheck size={17}/>View vetted primary references<ChevronRight size={17}/></summary>
                 <section className="deep-dive-sources">
-                  <p>These links support the lesson's technical core. The teaching copy is original SecurePlus material written for concept mastery—pass Security+ with confidence.</p>
+                  <p>These links support the lesson's technical core. {SITE_TAGLINE}</p>
                   <div>{selectedDive.sources.map(source=><a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.label}<ChevronRight size={14}/></a>)}</div>
                 </section>
               </details>
@@ -32202,7 +32203,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitia
               ))}
             </div>
           </div>
-          <p>Study 313 interactive cards in 29 focused decks across all five SY0-701 domains. Use this last-minute Security+ recall pack before exam day, share the same set with friends, and practise original prompts. Pass Security+ with confidence.</p>
+          <p>Study 313 interactive cards in 29 focused decks across all five SY0-701 domains. Use this last-minute Security+ recall pack before exam day and share the same set with friends. {SITE_TAGLINE}</p>
           <div className="flashcard-guest-start-row">
             <button className="btn btn-primary" type="button" onClick={startSomewhere}>Start me somewhere <ChevronRight size={16}/></button>
             <button className="btn btn-outline" type="button" onClick={browseDecks}>Browse all decks</button>
