@@ -18505,6 +18505,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes guestSmartCorePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
 @keyframes guestSmartQueueRebuild{from{opacity:.35;transform:translateX(10px) scale(.98);}to{opacity:1;transform:none;}}
 @keyframes guestSmartQueueItem{to{opacity:1;transform:none;}}
+@keyframes landingDrillReveal{from{opacity:0;transform:translateY(12px) scale(.985);}to{opacity:1;transform:none;}}
 .guest-final-cta{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center;padding:28px;border:1px solid ${t.green}3d;border-radius:8px;background:linear-gradient(125deg,${t.green}13,${t.surface} 55%,${t.accent}10);box-shadow:0 20px 48px rgba(7,12,24,.1);}
 .guest-final-cta h2{margin:5px 0 8px;color:${t.text};font-size:clamp(26px,3.2vw,36px);line-height:1.15;text-wrap:balance;}
 .guest-final-cta p{max-width:650px;color:${t.textSec};font-size:13px;line-height:1.7;}
@@ -18519,6 +18520,10 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .brilliant-lesson-top .brilliant-lesson-duration{background:${t.green};color:#062e25;border:1px solid ${t.green};box-shadow:0 7px 18px ${t.green}22;}
 .guest-home-hero{align-items:stretch!important;margin-left:-30px;margin-right:-30px;padding:18px 38px 18px!important;min-height:0;border-left:0!important;border-right:0!important;border-radius:0!important;background:linear-gradient(90deg,transparent 0%,${t.accent}12 9%,${t.surface} 32%,${t.surface} 68%,${t.green}0c 91%,transparent 100%)!important;}
 .guest-home-hero .brilliant-hero-copy{display:flex;flex-direction:column;align-self:stretch;max-width:860px;}
+.guest-home-hero .brilliant-lesson-shell{display:flex;flex-direction:column;}
+.guest-home-hero .brilliant-daily-wrap{display:flex;flex:1;min-height:0;}
+.guest-home-hero .landing-challenge-card{flex:1;}
+.guest-home-hero .landing-drill-teaser{min-height:100%;}
 .guest-home-hero .brilliant-title{max-width:860px;font-size:clamp(42px,4.95vw,66px);line-height:1;font-weight:850;}
 .guest-tagline-title{display:grid;gap:4px;}
 .guest-tagline-support{display:block;font-size:clamp(32px,3.85vw,50px);line-height:1;color:${t.text};font-weight:850;letter-spacing:-.02em;}
@@ -18536,6 +18541,24 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .brilliant-daily-wrap .landing-challenge-card::before{display:none;}
 .brilliant-daily-wrap .landing-challenge-small .landing-challenge-question{-webkit-line-clamp:4;}
 .brilliant-daily-wrap .landing-challenge-option{border-radius:16px;padding:12px 13px;}
+.landing-drill-teaser{min-height:330px;display:grid;align-content:center;justify-items:center;gap:16px;padding:26px 22px;text-align:center;border:1px solid transparent;border-radius:18px;background:radial-gradient(circle at 50% 18%,${t.green}14,transparent 38%);transition:transform .22s ease,border-color .22s ease,background .22s ease;}
+.landing-drill-teaser:hover{transform:translateY(-2px);border-color:${t.green}32;background:radial-gradient(circle at 50% 18%,${t.green}1c,transparent 42%);}
+.landing-drill-teaser-icon{width:58px;height:58px;display:grid;place-items:center;border:1px solid ${t.green}4f;border-radius:18px;background:${t.green}12;color:${t.green};box-shadow:0 14px 34px ${t.green}16;}
+.landing-drill-teaser-copy{display:grid;gap:7px;max-width:340px;}
+.landing-drill-teaser-copy span{color:${t.green};font-size:10px;font-weight:950;letter-spacing:.07em;text-transform:uppercase;}
+.landing-drill-teaser-copy h2{margin:0;color:${t.text};font-size:clamp(22px,2.25vw,29px);line-height:1.12;text-wrap:balance;}
+.landing-drill-teaser-copy p{margin:0;color:${t.textSec};font-size:13px;font-weight:700;line-height:1.6;text-wrap:balance;}
+.landing-drill-teaser-track{width:min(100%,300px);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;}
+.landing-drill-teaser-track span{height:7px;border-radius:999px;background:${t.border};transition:background .22s ease,transform .22s ease;}
+.landing-drill-teaser:hover .landing-drill-teaser-track span{background:${t.green}55;transform:scaleX(.94);}
+.landing-drill-teaser:hover .landing-drill-teaser-track span:nth-child(2){transition-delay:.04s;}
+.landing-drill-teaser:hover .landing-drill-teaser-track span:nth-child(3){transition-delay:.08s;}
+.landing-drill-teaser:hover .landing-drill-teaser-track span:nth-child(4){transition-delay:.12s;}
+.landing-drill-teaser:hover .landing-drill-teaser-track span:nth-child(5){transition-delay:.16s;}
+.landing-drill-launch{appearance:none;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border:1px solid ${t.green}70;border-radius:14px;background:${t.surface};color:${t.text};font:inherit;font-size:13px;font-weight:900;cursor:pointer;box-shadow:0 9px 22px rgba(7,12,24,.1);transition:transform .18s ease,border-color .18s ease,background .18s ease,color .18s ease;}
+.landing-drill-launch:hover,.landing-drill-launch:focus-visible{transform:translateY(-1px);border-color:${t.green};background:${t.green}10;color:${t.green};outline:none;}
+.landing-drill-launch-note{color:${t.textDim};font-size:10px;font-weight:800;}
+.landing-drill-active{animation:landingDrillReveal .42s cubic-bezier(.16,1,.3,1) both;outline:none;}
 .landing-drill-complete{display:grid;gap:10px;align-content:center;min-height:300px;}
 .landing-drill-complete-title{color:${t.text};font-size:18px;font-weight:950;line-height:1.25;}
 .landing-drill-score{color:${t.textSec};font-size:15px;font-weight:850;}
@@ -22909,15 +22932,15 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
 
 function LandingDailyChallengeWidget({t,onPractice}) {
   const challenge=getTodayChallenge();
-  const drillDay=challenge.date==="default"?"Today's":`${challenge.date.charAt(0).toUpperCase()}${challenge.date.slice(1)}`;
-  const drillTitle=`${drillDay} Quick Micro-Drill`;
   const questions=useMemo(()=>challenge.type==="mcq5"
     ? challenge.qids.map(id=>MCQ_BANK.find(q=>q.id===id)).filter(Boolean).map(shuffleMcqOptions)
     : [], [challenge.date,challenge.type]);
+  const [started,setStarted]=useState(false);
   const [qIndex,setQIndex]=useState(0);
   const [selected,setSelected]=useState(null);
   const [submitted,setSubmitted]=useState(false);
   const [results,setResults]=useState([]);
+  const activePanelRef=useRef(null);
   const current=questions[qIndex];
   const correctCount=results.filter(result=>result.correct).length;
   const isDone=questions.length>0&&results.length>=questions.length;
@@ -22951,96 +22974,109 @@ function LandingDailyChallengeWidget({t,onPractice}) {
     capture("landing_daily_drill_mcq_cta_clicked",{score:correctCount,total:questions.length});
     onPractice();
   };
+  const startDrill=()=>{
+    capture("landing_daily_drill_started",{total:questions.length||5});
+    setStarted(true);
+    window.requestAnimationFrame(()=>activePanelRef.current?.focus());
+  };
 
   const renderPanel=({large=false}={})=>(
     <div className={large?"landing-challenge-expanded card":"landing-challenge-card landing-challenge-small"} aria-label="Quick five-question Security+ drill">
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:14}}>
-        <div style={{display:"flex",alignItems:"center",gap:10,minWidth:0}}>
-          <NavGlyph type="daily" active/>
-          <div style={{minWidth:0}}>
-            <div style={{fontSize:12,color:t.accent,fontWeight:900,textTransform:"uppercase",letterSpacing:".04em"}}>Quick Micro-Drill</div>
-            <div style={{fontSize:large?18:15,color:t.text,fontWeight:900,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{drillTitle}</div>
+      {!started?(
+        <div className="landing-drill-teaser">
+          <div className="landing-drill-teaser-icon" aria-hidden="true"><Target size={27}/></div>
+          <div className="landing-drill-teaser-copy">
+            <span>2 minutes · 5 questions</span>
+            <h2>See what already sticks.</h2>
+            <p>Try one short mix of Security+ questions and get your score instantly.</p>
           </div>
-        </div>
-      </div>
-
-      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}>
-        {questions.map((_,index)=>(
-          <span key={index} style={{height:8,flex:1,borderRadius:99,background:index<results.length?(results[index]?.correct?t.green:t.red):index===qIndex?t.accent:t.border}}/>
-        ))}
-        <span style={{fontSize:12,color:t.textDim,fontWeight:900,minWidth:42,textAlign:"right"}}>
-          {Math.min(qIndex+1,questions.length)} / {questions.length||5}
-        </span>
-      </div>
-
-      {isDone ? (
-        <div className="card landing-drill-complete" role="status" aria-live="polite" style={{padding:large?"22px":"18px",background:`${t.panel}c8`,borderColor:correctCount>=3?`${t.green}55`:`${t.amber}55`}}>
-          <div className="landing-drill-complete-title">🎉 Daily Drill Complete!</div>
-          <div className="landing-drill-score">Score: <strong style={{color:correctCount>=3?t.green:t.amber}}>{correctCount}/{questions.length}</strong></div>
-          <p>
-            {strongestChapter&&correctCount>0
-              ? `Your strongest result was Domain ${strongestChapter.code} (${strongestChapter.title}). `
-              : "You completed today's five-question warm-up. "}
-            Want to test your skills across all five CompTIA domains?
-          </p>
-          <button className="btn landing-drill-full-bank-cta" type="button" onClick={continueToFullBank}>
-            Continue to Full MCQ Practice Bank →
+          <div className="landing-drill-teaser-track" aria-hidden="true"><span/><span/><span/><span/><span/></div>
+          <button className="landing-drill-launch" type="button" onClick={startDrill}>
+            <Play size={15} fill="currentColor"/> Start 2-minute drill
           </button>
+          <small className="landing-drill-launch-note">No sign-up required</small>
         </div>
-      ) : current ? (
-        <>
-          <div className="demo-question" style={{marginBottom:12}}>
-            <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
-              <ChBadge chId={current.ch} t={t}/>
-              <DiffBadge d={current.difficulty} t={t}/>
-              <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
+      ):(
+        <div className="landing-drill-active" ref={activePanelRef} tabIndex={-1}>
+          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}>
+            {questions.map((_,index)=>(
+              <span key={index} style={{height:8,flex:1,borderRadius:99,background:index<results.length?(results[index]?.correct?t.green:t.red):index===qIndex?t.accent:t.border}}/>
+            ))}
+            <span style={{fontSize:12,color:t.textDim,fontWeight:900,minWidth:42,textAlign:"right"}}>
+              {Math.min(qIndex+1,questions.length)} / {questions.length||5}
+            </span>
+          </div>
+
+          {isDone ? (
+            <div className="card landing-drill-complete" role="status" aria-live="polite" style={{padding:large?"22px":"18px",background:`${t.panel}c8`,borderColor:correctCount>=3?`${t.green}55`:`${t.amber}55`}}>
+              <div className="landing-drill-complete-title">🎉 Daily Drill Complete!</div>
+              <div className="landing-drill-score">Score: <strong style={{color:correctCount>=3?t.green:t.amber}}>{correctCount}/{questions.length}</strong></div>
+              <p>
+                {strongestChapter&&correctCount>0
+                  ? `Your strongest result was Domain ${strongestChapter.code} (${strongestChapter.title}). `
+                  : "You completed today's five-question warm-up. "}
+                Want to test your skills across all five CompTIA domains?
+              </p>
+              <button className="btn landing-drill-full-bank-cta" type="button" onClick={continueToFullBank}>
+                Continue to Full MCQ Practice Bank →
+              </button>
             </div>
-            <div className="landing-challenge-question"><QuestionStemText text={current.q} t={t}/></div>
-          </div>
-          <div className="landing-challenge-options" style={{display:"grid",gap:9}}>
-            {current.opts.map((opt,index)=>{
-              const state=submitted
-                ? index===current.correct
-                  ? " correct"
-                  : index===selected
-                    ? " wrong"
-                    : ""
-                : selected===index
-                  ? " selected"
-                  : "";
-              return (
-                <button
-                  key={index}
-                  type="button"
-                  className={`landing-challenge-option${state}`}
-                  onClick={()=>!submitted&&setSelected(index)}
-                >
-                  <span className="landing-challenge-letter">{String.fromCharCode(65+index)}</span>
-                  <span style={{flex:1}}><GlossaryText text={opt} t={t}/></span>
-                </button>
-              );
-            })}
-          </div>
-          {submitted&&(
-            <div className="card" style={{padding:"12px 14px",marginTop:12,borderColor:selected===current.correct?`${t.green}55`:`${t.red}55`,background:selected===current.correct?`${t.green}0f`:`${t.red}0d`,animation:"feedbackIn .24s ease both"}}>
-              <MCQFeedbackVerdict correct={selected===current.correct} t={t} compact/>
+          ) : current ? (
+            <>
+              <div className="demo-question" style={{marginBottom:12}}>
+                <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
+                  <ChBadge chId={current.ch} t={t}/>
+                  <DiffBadge d={current.difficulty} t={t}/>
+                  <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
+                </div>
+                <div className="landing-challenge-question"><QuestionStemText text={current.q} t={t}/></div>
+              </div>
+              <div className="landing-challenge-options" style={{display:"grid",gap:9}}>
+                {current.opts.map((opt,index)=>{
+                  const state=submitted
+                    ? index===current.correct
+                      ? " correct"
+                      : index===selected
+                        ? " wrong"
+                        : ""
+                    : selected===index
+                      ? " selected"
+                      : "";
+                  return (
+                    <button
+                      key={index}
+                      type="button"
+                      className={`landing-challenge-option${state}`}
+                      onClick={()=>!submitted&&setSelected(index)}
+                    >
+                      <span className="landing-challenge-letter">{String.fromCharCode(65+index)}</span>
+                      <span style={{flex:1}}><GlossaryText text={opt} t={t}/></span>
+                    </button>
+                  );
+                })}
+              </div>
+              {submitted&&(
+                <div className="card" style={{padding:"12px 14px",marginTop:12,borderColor:selected===current.correct?`${t.green}55`:`${t.red}55`,background:selected===current.correct?`${t.green}0f`:`${t.red}0d`,animation:"feedbackIn .24s ease both"}}>
+                  <MCQFeedbackVerdict correct={selected===current.correct} t={t} compact/>
+                </div>
+              )}
+              <div style={{display:"flex",gap:10,marginTop:14,flexWrap:"wrap"}}>
+                {!submitted?(
+                  <button className="btn btn-primary" type="button" style={{flex:1,justifyContent:"center"}} disabled={selected===null} onClick={submit}>Submit</button>
+                ):(
+                  <button className="btn btn-primary" type="button" style={{flex:1,justifyContent:"center"}} onClick={next}>
+                    {qIndex<questions.length-1?"Next Question":"Finish"}
+                  </button>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="card" style={{padding:16,background:t.panel}}>
+              <div style={{fontWeight:900,color:t.text,marginBottom:6}}>Challenge loading issue</div>
+              <p style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>The warm-up could not load, but the full practice bank is ready.</p>
+              <button className="btn btn-primary" type="button" style={{marginTop:12}} onClick={onPractice}>Open Full MCQ Bank</button>
             </div>
           )}
-          <div style={{display:"flex",gap:10,marginTop:14,flexWrap:"wrap"}}>
-            {!submitted?(
-              <button className="btn btn-primary" type="button" style={{flex:1,justifyContent:"center"}} disabled={selected===null} onClick={submit}>Submit</button>
-            ):(
-              <button className="btn btn-primary" type="button" style={{flex:1,justifyContent:"center"}} onClick={next}>
-                {qIndex<questions.length-1?"Next Question":"Finish"}
-              </button>
-            )}
-          </div>
-        </>
-      ) : (
-        <div className="card" style={{padding:16,background:t.panel}}>
-          <div style={{fontWeight:900,color:t.text,marginBottom:6}}>Challenge loading issue</div>
-          <p style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>The warm-up could not load, but the full practice bank is ready.</p>
-          <button className="btn btn-primary" type="button" style={{marginTop:12}} onClick={onPractice}>Open Full MCQ Bank</button>
         </div>
       )}
     </div>
@@ -24515,7 +24551,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
         <div className="brilliant-lesson-shell">
           <div className="brilliant-lesson-top">
             <div>
-              <div className="label brilliant-lesson-kicker">Quick Warm-Up: 5-Question Daily Drill</div>
+              <div className="label brilliant-lesson-kicker">5-Question Daily Drill</div>
               <strong>Test yourself in two minutes</strong>
             </div>
             <span className="brilliant-lesson-duration">2 min</span>
