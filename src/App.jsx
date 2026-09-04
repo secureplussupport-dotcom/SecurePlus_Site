@@ -34273,7 +34273,7 @@ export default function App() {
                 {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
               </button>
               <button className="btn btn-ghost" type="button" onClick={goToLogin}>Log In</button>
-              <button className="btn btn-primary" type="button" onClick={goToSignup}>Create Free Account</button>
+              <button className="btn btn-primary" type="button" onClick={goToSignup}>Get Started</button>
             </div>
           </header>
           <main id="secureplus-main" className="app-main guest-main fu">
@@ -34286,7 +34286,7 @@ export default function App() {
                   {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
                 </button>
                 <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToLogin}>Log In</button>
-                <button className="btn btn-primary" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToSignup}>Sign up</button>
+                <button className="btn btn-primary" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToSignup}>Get Started</button>
               </div>
             </div>
             {view==="dashboard"&&(
