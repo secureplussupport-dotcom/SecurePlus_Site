@@ -24581,11 +24581,11 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
   };
   const showcaseFeatures=[
     {id:"flashcards",label:"Rapid Recall",color:"#8b5cf6",title:"Flashcards",body:"Flip high-yield terms until recall becomes automatic.",button:"Open flashcards",action:onFlashcards},
+    {id:"review",label:"Personalisation",color:t.green,title:"Smart Review",body:"Turn missed concepts into a focused, adaptive repair route."},
     {id:"mcq",label:"Exam Readiness",color:t.accent,title:"MCQ practice",body:"Answer realistic questions and expose gaps immediately.",button:"Start MCQs",action:onPractice},
     {id:"explanations",label:"Answer Clarity",color:t.green,title:"Quality explanations",body:"See why the right answer works and why each distractor fails."},
     {id:"pbq",label:"Hands On Mastery",color:t.amber,title:"PBQ simulator",body:"Make the decisions Security+ expects you to apply.",button:"Try a PBQ",action:onPreviewPbq},
     {id:"exam",label:"Timed Performance",color:t.red,title:"Exam mode",body:"Practise under a live clock so pace becomes part of your preparation."},
-    {id:"review",label:"Personalisation",color:t.green,title:"Smart Review",body:"Turn missed concepts into a focused, adaptive repair route."},
     {id:"deep",label:"Foundational Clarity",color:"#8b5cf6",title:"Concept Deep Dives",body:"Learn a difficult concept, then test it in the same flow.",button:"Open lessons",action:onConcepts||(()=>startSignup("concept_deep_dives"))},
   ];
   return (
