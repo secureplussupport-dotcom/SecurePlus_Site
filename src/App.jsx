@@ -18381,7 +18381,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-value-card strong{display:block;margin-bottom:6px;color:${t.text};font-size:14px;line-height:1.35;}
 .guest-value-card p{color:${t.textSec};font-size:12px;line-height:1.65;}
 .guest-feature-showcase{display:grid;gap:18px;margin-top:18px;}
-.guest-feature-showcase-card{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,.82fr) minmax(300px,1fr);gap:24px;align-items:center;min-height:260px;padding:30px;border:1px solid color-mix(in srgb,var(--feature-color) 35%,${t.border});border-radius:24px;background:linear-gradient(135deg,color-mix(in srgb,var(--feature-color) 12%,${t.surface}),${t.panel} 58%,color-mix(in srgb,var(--feature-color) 9%,${t.surface}));box-shadow:0 22px 54px rgba(7,12,24,.11);opacity:0;transform:translateY(24px);animation:featureReveal .75s cubic-bezier(.16,1,.3,1) both;animation-timeline:view();animation-range:entry 8% cover 34%;}
+.guest-feature-showcase-card{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,.82fr) minmax(300px,1fr);gap:24px;align-items:center;min-height:260px;padding:30px;border:1px solid color-mix(in srgb,var(--feature-color) 35%,${t.border});border-radius:24px;background:linear-gradient(135deg,color-mix(in srgb,var(--feature-color) 12%,${t.surface}),${t.panel} 58%,color-mix(in srgb,var(--feature-color) 9%,${t.surface}));box-shadow:0 22px 54px rgba(7,12,24,.11);opacity:0;transform:translateY(-34px) scale(.985);transition:opacity .58s ease var(--feature-delay,0ms),transform .78s cubic-bezier(.16,1,.3,1) var(--feature-delay,0ms),border-color .2s ease,box-shadow .2s ease;will-change:opacity,transform;}
+.guest-feature-showcase-card.is-visible{opacity:1;transform:none;will-change:auto;}
 .guest-feature-showcase-card::after{content:"";position:absolute;right:-120px;top:-110px;width:270px;height:270px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--feature-color) 20%,transparent),transparent 68%);pointer-events:none;}
 .guest-feature-showcase-card:focus-within{border-color:color-mix(in srgb,var(--feature-color) 70%,${t.border});box-shadow:0 24px 58px color-mix(in srgb,var(--feature-color) 14%,transparent);}
 .guest-feature-copy{position:relative;z-index:1;display:grid;justify-items:start;gap:12px;}
@@ -18421,12 +18422,18 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-mcq-option.answer-key-wrong:hover span,.guest-mcq-option.answer-key-wrong:active span,.guest-mcq-option.wrong span{background:${t.red}1c;color:${t.red};}
 .guest-mcq-option span{width:23px;height:23px;border-radius:999px;display:grid;place-items:center;background:color-mix(in srgb,var(--feature-color) 16%,transparent);color:var(--feature-color);font-size:11px;}
 .guest-feature-visual.explanations{display:grid;align-content:center;gap:11px;padding:24px;}
-.guest-explanation-card{position:relative;z-index:1;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:13px 14px;border-radius:15px;border:1px solid ${t.border};background:${t.surface};}
+.guest-explanation-card{appearance:none;position:relative;z-index:1;width:100%;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:13px 14px;border-radius:15px;border:1px solid ${t.border};background:${t.surface};font:inherit;text-align:left;cursor:pointer;transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;}
 .guest-explanation-card>span{display:grid;gap:3px;}
-.guest-explanation-card small{font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.05em;}
+.guest-explanation-card small{width:max-content;padding:3px 7px;border-radius:999px;font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.05em;transition:background .18s ease,color .18s ease,box-shadow .18s ease;}
 .guest-explanation-card strong{color:${t.textSec};font-size:11px;line-height:1.55;}
 .guest-explanation-card.correct{border-color:${t.green}52;background:color-mix(in srgb,${t.green} 10%,${t.surface});color:${t.green};}
 .guest-explanation-card.wrong{border-color:${t.red}48;background:color-mix(in srgb,${t.red} 8%,${t.surface});color:${t.red};}
+.guest-explanation-card.correct small{background:${t.green}12;color:${t.green};}
+.guest-explanation-card.wrong small{background:${t.red}10;color:${t.red};}
+.guest-explanation-card.correct:hover,.guest-explanation-card.correct:focus-visible,.guest-explanation-card.correct.active{transform:translateX(4px) scale(1.01);border-color:${t.green};background:color-mix(in srgb,${t.green} 19%,${t.surface});box-shadow:0 12px 28px ${t.green}24;outline:none;}
+.guest-explanation-card.wrong:hover,.guest-explanation-card.wrong:focus-visible,.guest-explanation-card.wrong.active{transform:translateX(4px) scale(1.01);border-color:${t.red};background:color-mix(in srgb,${t.red} 16%,${t.surface});box-shadow:0 12px 28px ${t.red}20;outline:none;}
+.guest-explanation-card.correct:hover small,.guest-explanation-card.correct:focus-visible small,.guest-explanation-card.correct.active small{background:${t.green};color:#052e2b;box-shadow:0 0 18px ${t.green}65;}
+.guest-explanation-card.wrong:hover small,.guest-explanation-card.wrong:focus-visible small,.guest-explanation-card.wrong.active small{background:${t.red};color:#fff;box-shadow:0 0 18px ${t.red}5c;}
 .guest-feature-visual.pbq{padding:24px;display:grid;align-content:center;gap:11px;}
 .guest-terminal-preview{border-radius:16px;background:#07111f;border:1px solid color-mix(in srgb,var(--feature-color) 28%,#26364a);padding:16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#b7f7d8;font-size:12px;line-height:1.7;}
 .guest-terminal-preview b{color:#fbbf24;font-weight:800;}
@@ -18450,15 +18457,21 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-exam-clock small{color:${t.textDim};font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
 .guest-exam-clock strong{color:${t.text};font-size:clamp(25px,3.2vw,36px);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:.04em;}
 .guest-exam-progress{position:relative;z-index:1;width:100%;height:7px;border-radius:999px;background:${t.border};overflow:hidden;}
-.guest-exam-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--feature-color),color-mix(in srgb,var(--feature-color) 55%,${t.amber}));box-shadow:0 0 16px var(--feature-color);}
+.guest-exam-progress span{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--feature-color),color-mix(in srgb,var(--feature-color) 55%,${t.amber}));box-shadow:0 0 16px var(--feature-color);transition:width 1.15s cubic-bezier(.16,1,.3,1) .2s;}
+.guest-feature-visual.exam.is-visible .guest-exam-progress span{width:68%;}
 .guest-feature-visual.review{display:grid;align-content:center;gap:12px;min-height:275px;padding:22px 24px 34px;background:radial-gradient(circle at 52% 48%,color-mix(in srgb,var(--feature-color) 15%,transparent),transparent 36%),linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 8%,${t.panel}));}
 .guest-smart-studio{position:relative;z-index:1;display:grid;grid-template-columns:132px 62px minmax(150px,1fr);gap:10px;align-items:center;}
 .guest-smart-signal-row{display:grid;gap:7px;}
 .guest-smart-signal{appearance:none;display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;align-items:center;padding:8px;border:1px solid ${t.border};border-radius:13px;background:${t.surface};color:${t.textDim};font:inherit;text-align:left;cursor:pointer;transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;}
 .guest-smart-signal:hover{transform:translateX(3px);border-color:color-mix(in srgb,var(--feature-color) 50%,${t.border});}
 .guest-smart-signal.active{transform:translateX(4px);border-color:color-mix(in srgb,var(--feature-color) 70%,${t.border});background:color-mix(in srgb,var(--feature-color) 14%,${t.surface});box-shadow:0 10px 24px color-mix(in srgb,var(--feature-color) 16%,transparent);}
-.guest-smart-score-ring{width:34px;height:34px;padding:3px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--feature-color) var(--score),${t.border} 0);}
-.guest-smart-score-ring b{width:100%;height:100%;display:grid;place-items:center;border-radius:50%;background:${t.surface};color:${t.text};font-size:8px;font-weight:950;font-variant-numeric:tabular-nums;}
+.guest-smart-score-ring{position:relative;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;}
+.guest-smart-score-ring svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;transform:rotate(-90deg);}
+.guest-smart-score-ring circle{fill:none;stroke-width:3;}
+.guest-smart-score-ring .ring-track{stroke:${t.border};}
+.guest-smart-score-ring .ring-progress{stroke:var(--feature-color);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset 1.05s cubic-bezier(.16,1,.3,1) var(--ring-delay,0ms);}
+.guest-feature-visual.review.is-visible .guest-smart-score-ring .ring-progress{stroke-dashoffset:calc(100 - var(--score));}
+.guest-smart-score-ring b{position:relative;width:27px;height:27px;display:grid;place-items:center;border-radius:50%;background:${t.surface};color:${t.text};font-size:8px;font-weight:950;font-variant-numeric:tabular-nums;}
 .guest-smart-signal>span:last-child{display:grid;gap:1px;min-width:0;}
 .guest-smart-signal strong{color:${t.text};font-size:11px;}
 .guest-smart-signal small{color:${t.textDim};font-size:8px;font-weight:850;white-space:nowrap;}
@@ -18497,7 +18510,6 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-lesson-preview strong{color:${t.text};font-size:13px;line-height:1.3;}
 .guest-lesson-preview small{display:block;color:${t.textDim};font-size:10px;font-weight:800;}
 .guest-lesson-preview svg{color:var(--feature-color);}
-@keyframes featureReveal{to{opacity:1;transform:none;}}
 @keyframes guestFlashcardSheen{0%,26%{transform:translateX(-120%);}36%,48%{transform:translateX(120%);}70%,100%{transform:translateX(120%);}}
 @keyframes guestNextStepHint{0%,68%,100%{transform:translateX(0);}72%{transform:translateX(-3px) rotate(-1deg);}76%{transform:translateX(3px) rotate(1deg);}80%{transform:translateX(-2px);}84%{transform:translateX(2px);}88%{transform:translateX(0);}}
 @keyframes guestSmartSignalFlow{0%{transform:translateX(0) scale(.75);opacity:0;}18%{opacity:1;}82%{opacity:1;}100%{transform:translateX(54px) scale(1.15);opacity:0;}}
@@ -24258,9 +24270,10 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   );
 }
 
-function GuestFeaturePreview({type,t}) {
+function GuestFeaturePreview({type,t,inView=true}) {
   const [flashcardFlipped,setFlashcardFlipped]=useState(false);
   const [mcqChoice,setMcqChoice]=useState(null);
+  const [explanationFocus,setExplanationFocus]=useState(null);
   const [pbqSlots,setPbqSlots]=useState([null,null,null]);
   const [draggedPbqStep,setDraggedPbqStep]=useState(null);
   const [reviewTopic,setReviewTopic]=useState("PKI");
@@ -24344,14 +24357,24 @@ function GuestFeaturePreview({type,t}) {
     return (
       <div className="guest-feature-visual explanations">
         <div className="guest-demo-question">Why is least privilege the best answer?</div>
-        <div className="guest-explanation-card correct">
+        <button
+          className={`guest-explanation-card correct${explanationFocus==="correct"?" active":""}`}
+          type="button"
+          aria-pressed={explanationFocus==="correct"}
+          onClick={()=>{setExplanationFocus(value=>value==="correct"?null:"correct");trackDemo("inspect_explanation",{verdict:"correct"});}}
+        >
           <CheckCircle2 size={18}/>
           <span><small>Correct</small><strong>It limits each user to the access their role actually needs.</strong></span>
-        </div>
-        <div className="guest-explanation-card wrong">
+        </button>
+        <button
+          className={`guest-explanation-card wrong${explanationFocus==="wrong"?" active":""}`}
+          type="button"
+          aria-pressed={explanationFocus==="wrong"}
+          onClick={()=>{setExplanationFocus(value=>value==="wrong"?null:"wrong");trackDemo("inspect_explanation",{verdict:"wrong"});}}
+        >
           <XCircle size={18}/>
           <span><small>Why another choice is wrong</small><strong>Tailgating is a physical access attack, not an access-control principle.</strong></span>
-        </div>
+        </button>
       </div>
     );
   }
@@ -24419,7 +24442,7 @@ function GuestFeaturePreview({type,t}) {
     const minutes=String(Math.floor((examSeconds%3600)/60)).padStart(2,"0");
     const seconds=String(examSeconds%60).padStart(2,"0");
     return (
-      <div className="guest-feature-visual exam">
+      <div className={`guest-feature-visual exam${inView?" is-visible":""}`}>
         <div className="guest-exam-status"><span>Timed session</span><strong>Question 18</strong></div>
         <button
           className={`guest-exam-clock${examPaused?" paused":""}`}
@@ -24431,7 +24454,7 @@ function GuestFeaturePreview({type,t}) {
           <Clock3 size={28}/>
           <span><small>Time remaining</small><strong>{hours}:{minutes}:{seconds}</strong></span>
         </button>
-        <div className="guest-exam-progress" aria-label="Exam progress"><span style={{width:"38%"}}/></div>
+        <div className="guest-exam-progress" aria-label="Exam progress"><span/></div>
         <div className="guest-demo-feedback idle">{examPaused?"Timer paused — tap to resume":"Stay focused. Your timer keeps every question moving."}</div>
       </div>
     );
@@ -24445,11 +24468,11 @@ function GuestFeaturePreview({type,t}) {
     const activePath=reviewPaths[reviewTopic];
     const queueTiming=["Now","Next","Later"];
     return (
-      <div className="guest-feature-visual review">
+      <div className={`guest-feature-visual review${inView?" is-visible":""}`}>
         <div className="guest-demo-question">Tap a weak signal and watch your review queue rebuild</div>
         <div className="guest-smart-studio">
           <div className="guest-smart-signal-row" aria-label="Weak-area signals">
-            {Object.entries(reviewPaths).map(([topic,path])=>(
+            {Object.entries(reviewPaths).map(([topic,path],index)=>(
               <button
                 key={topic}
                 className={`guest-smart-signal${reviewTopic===topic?" active":""}`}
@@ -24457,7 +24480,13 @@ function GuestFeaturePreview({type,t}) {
                 aria-pressed={reviewTopic===topic}
                 onClick={()=>{setReviewTopic(topic);trackDemo("choose_weak_area",{topic});}}
               >
-                <span className="guest-smart-score-ring" style={{"--score":`${path.score*3.6}deg`}}><b>{path.score}%</b></span>
+                <span className="guest-smart-score-ring" style={{"--score":path.score,"--ring-delay":`${180+(index*110)}ms`}}>
+                  <svg viewBox="0 0 36 36" aria-hidden="true">
+                    <circle className="ring-track" cx="18" cy="18" r="15.9155" pathLength="100"/>
+                    <circle className="ring-progress" cx="18" cy="18" r="15.9155" pathLength="100"/>
+                  </svg>
+                  <b>{path.score}%</b>
+                </span>
                 <span><strong>{topic}</strong><small>{path.signal}</small></span>
               </button>
             ))}
@@ -24503,6 +24532,44 @@ function GuestFeaturePreview({type,t}) {
   );
 }
 
+function GuestFeatureShowcaseCard({feature,t,index}) {
+  const cardRef=useRef(null);
+  const [inView,setInView]=useState(false);
+
+  useEffect(()=>{
+    const node=cardRef.current;
+    if(!node)return undefined;
+    if(window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches||typeof IntersectionObserver==="undefined"){
+      setInView(true);
+      return undefined;
+    }
+    const observer=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting)){
+        setInView(true);
+        observer.disconnect();
+      }
+    },{threshold:.16,rootMargin:"0px 0px -10% 0px"});
+    observer.observe(node);
+    return()=>observer.disconnect();
+  },[]);
+
+  return (
+    <article
+      ref={cardRef}
+      className={`guest-feature-showcase-card${inView?" is-visible":""}`}
+      style={{"--feature-color":feature.color,"--feature-delay":`${(index%2)*55}ms`}}
+    >
+      <div className="guest-feature-copy">
+        <span className="guest-feature-kicker">{feature.label}</span>
+        <h2>{feature.title}</h2>
+        <p>{feature.body}</p>
+        {feature.button&&feature.action&&<button className="btn btn-outline" type="button" onClick={feature.action}>{feature.button}</button>}
+      </div>
+      <GuestFeaturePreview type={feature.id} t={t} inView={inView}/>
+    </article>
+  );
+}
+
 function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashcards,onConcepts}) {
   const startSignup=source=>{
     capture("landing_signup_cta_clicked", { source });
@@ -24518,7 +24585,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
     {id:"explanations",label:"Answer Clarity",color:t.green,title:"Quality explanations",body:"See why the right answer works and why each distractor fails."},
     {id:"pbq",label:"Hands On Mastery",color:t.amber,title:"PBQ simulator",body:"Make the decisions Security+ expects you to apply.",button:"Try a PBQ",action:onPreviewPbq},
     {id:"exam",label:"Timed Performance",color:t.red,title:"Exam mode",body:"Practise under a live clock so pace becomes part of your preparation."},
-    {id:"review",label:"Personalisation",color:t.green,title:"Smart Review",body:"Turn missed concepts into a focused, adaptive repair route.",button:"Build my review queue",action:onPractice},
+    {id:"review",label:"Personalisation",color:t.green,title:"Smart Review",body:"Turn missed concepts into a focused, adaptive repair route."},
     {id:"deep",label:"Foundational Clarity",color:"#8b5cf6",title:"Concept Deep Dives",body:"Learn a difficult concept, then test it in the same flow.",button:"Open lessons",action:onConcepts||(()=>startSignup("concept_deep_dives"))},
   ];
   return (
@@ -24566,17 +24633,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
       </section>
 
       <section className="guest-feature-showcase" aria-label="SecurePlus study features">
-        {showcaseFeatures.map(feature=>(
-          <article key={feature.id} className="guest-feature-showcase-card" style={{"--feature-color":feature.color}}>
-            <div className="guest-feature-copy">
-              <span className="guest-feature-kicker">{feature.label}</span>
-              <h2>{feature.title}</h2>
-              <p>{feature.body}</p>
-              {feature.button&&feature.action&&<button className="btn btn-outline" type="button" onClick={feature.action}>{feature.button}</button>}
-            </div>
-            <GuestFeaturePreview type={feature.id} t={t}/>
-          </article>
-        ))}
+        {showcaseFeatures.map((feature,index)=><GuestFeatureShowcaseCard key={feature.id} feature={feature} t={t} index={index}/>)}
       </section>
 
       <details className="seo-resource-section seo-resource-disclosure landing-section" aria-labelledby="guest-security-study-resources-title">
