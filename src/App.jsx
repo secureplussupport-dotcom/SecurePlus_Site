@@ -18451,22 +18451,40 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-exam-clock strong{color:${t.text};font-size:clamp(25px,3.2vw,36px);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:.04em;}
 .guest-exam-progress{position:relative;z-index:1;width:100%;height:7px;border-radius:999px;background:${t.border};overflow:hidden;}
 .guest-exam-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--feature-color),color-mix(in srgb,var(--feature-color) 55%,${t.amber}));box-shadow:0 0 16px var(--feature-color);}
-.guest-feature-visual.review{display:grid;align-content:center;gap:12px;padding:24px;}
-.guest-smart-signal-row{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
-.guest-smart-signal{appearance:none;display:grid;gap:2px;padding:10px 8px;border:1px solid ${t.border};border-radius:13px;background:${t.surface};color:${t.textDim};font:inherit;text-align:center;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease;}
-.guest-smart-signal:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--feature-color) 50%,${t.border});}
-.guest-smart-signal.active{border-color:color-mix(in srgb,var(--feature-color) 68%,${t.border});background:color-mix(in srgb,var(--feature-color) 13%,${t.surface});box-shadow:0 10px 24px color-mix(in srgb,var(--feature-color) 12%,transparent);}
-.guest-smart-signal strong{color:${t.text};font-size:12px;}
-.guest-smart-signal small{font-size:9px;font-weight:850;}
+.guest-feature-visual.review{display:grid;align-content:center;gap:12px;min-height:275px;padding:22px 24px 34px;background:radial-gradient(circle at 52% 48%,color-mix(in srgb,var(--feature-color) 15%,transparent),transparent 36%),linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 8%,${t.panel}));}
+.guest-smart-studio{position:relative;z-index:1;display:grid;grid-template-columns:132px 62px minmax(150px,1fr);gap:10px;align-items:center;}
+.guest-smart-signal-row{display:grid;gap:7px;}
+.guest-smart-signal{appearance:none;display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;align-items:center;padding:8px;border:1px solid ${t.border};border-radius:13px;background:${t.surface};color:${t.textDim};font:inherit;text-align:left;cursor:pointer;transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;}
+.guest-smart-signal:hover{transform:translateX(3px);border-color:color-mix(in srgb,var(--feature-color) 50%,${t.border});}
+.guest-smart-signal.active{transform:translateX(4px);border-color:color-mix(in srgb,var(--feature-color) 70%,${t.border});background:color-mix(in srgb,var(--feature-color) 14%,${t.surface});box-shadow:0 10px 24px color-mix(in srgb,var(--feature-color) 16%,transparent);}
+.guest-smart-score-ring{width:34px;height:34px;padding:3px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--feature-color) var(--score),${t.border} 0);}
+.guest-smart-score-ring b{width:100%;height:100%;display:grid;place-items:center;border-radius:50%;background:${t.surface};color:${t.text};font-size:8px;font-weight:950;font-variant-numeric:tabular-nums;}
+.guest-smart-signal>span:last-child{display:grid;gap:1px;min-width:0;}
+.guest-smart-signal strong{color:${t.text};font-size:11px;}
+.guest-smart-signal small{color:${t.textDim};font-size:8px;font-weight:850;white-space:nowrap;}
 .guest-smart-signal.active small{color:var(--feature-color);}
-.guest-smart-core{position:relative;z-index:1;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 14px;border-radius:16px;border:1px solid color-mix(in srgb,var(--feature-color) 48%,${t.border});background:linear-gradient(110deg,color-mix(in srgb,var(--feature-color) 16%,${t.surface}),${t.surface});color:var(--feature-color);box-shadow:0 0 0 4px color-mix(in srgb,var(--feature-color) 6%,transparent);}
-.guest-smart-core>span{display:grid;gap:2px;}
-.guest-smart-core small{color:${t.textDim};font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;}
-.guest-smart-core strong{color:${t.text};font-size:12px;}
-.guest-smart-core>svg:last-child{animation:guestSmartPulse 2.4s ease-in-out infinite;}
-.guest-smart-path{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
-.guest-smart-path>span{display:flex;align-items:center;justify-content:center;gap:4px;min-width:0;padding:8px 5px;border:1px solid ${t.border};border-radius:11px;background:${t.surface};color:${t.textSec};font-size:9px;font-weight:900;text-align:center;}
-.guest-smart-path>span.active{border-color:var(--feature-color);color:var(--feature-color);background:color-mix(in srgb,var(--feature-color) 11%,${t.surface});}
+.guest-smart-router{position:relative;min-height:150px;display:grid;place-items:center;color:var(--feature-color);}
+.guest-smart-router::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--feature-color),transparent);opacity:.5;}
+.guest-smart-router::after{content:"";position:absolute;top:calc(50% - 4px);left:0;width:8px;height:8px;border-radius:50%;background:var(--feature-color);box-shadow:0 0 16px 4px color-mix(in srgb,var(--feature-color) 55%,transparent);animation:guestSmartSignalFlow 2.2s ease-in-out infinite;}
+.guest-smart-router-core{position:relative;z-index:1;width:52px;height:52px;display:grid;place-items:center;border-radius:17px;border:1px solid color-mix(in srgb,var(--feature-color) 62%,${t.border});background:linear-gradient(145deg,color-mix(in srgb,var(--feature-color) 22%,${t.surface}),${t.panel});box-shadow:0 0 0 6px color-mix(in srgb,var(--feature-color) 7%,transparent),0 0 28px color-mix(in srgb,var(--feature-color) 22%,transparent);animation:guestSmartCorePulse 2.2s ease-in-out infinite;}
+.guest-smart-router-core::after{content:"";position:absolute;width:7px;height:7px;right:-4px;top:7px;border-radius:50%;background:${t.green};box-shadow:0 0 12px ${t.green};}
+.guest-smart-queue{display:grid;gap:6px;padding:10px;border:1px solid color-mix(in srgb,var(--feature-color) 38%,${t.border});border-radius:16px;background:color-mix(in srgb,${t.panel} 88%,transparent);box-shadow:0 16px 30px rgba(7,12,24,.18);animation:guestSmartQueueRebuild .38s cubic-bezier(.16,1,.3,1) both;}
+.guest-smart-queue-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 2px 3px;}
+.guest-smart-queue-head strong{color:${t.text};font-size:10px;}
+.guest-smart-queue-head span{display:inline-flex;align-items:center;gap:4px;color:var(--feature-color);font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
+.guest-smart-queue-item{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:7px;align-items:center;padding:7px;border:1px solid ${t.border};border-radius:11px;background:${t.surface};opacity:0;transform:translateY(7px);animation:guestSmartQueueItem .34s ease forwards;animation-delay:var(--queue-delay);}
+.guest-smart-queue-item>span{width:24px;height:24px;display:grid;place-items:center;border-radius:8px;background:${t.border};color:${t.textDim};font-size:9px;font-weight:950;}
+.guest-smart-queue-item>div{display:grid;gap:1px;min-width:0;}
+.guest-smart-queue-item small{color:${t.textDim};font-size:7px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;}
+.guest-smart-queue-item strong{overflow:hidden;color:${t.textSec};font-size:9px;text-overflow:ellipsis;white-space:nowrap;}
+.guest-smart-queue-item em{color:${t.textDim};font-size:7px;font-style:normal;font-weight:900;white-space:nowrap;}
+.guest-smart-queue-item.now{border-color:color-mix(in srgb,var(--feature-color) 66%,${t.border});background:color-mix(in srgb,var(--feature-color) 13%,${t.surface});box-shadow:0 8px 20px color-mix(in srgb,var(--feature-color) 12%,transparent);}
+.guest-smart-queue-item.now>span{background:var(--feature-color);color:#062a26;}
+.guest-smart-queue-item.now small,.guest-smart-queue-item.now em{color:var(--feature-color);}
+.guest-smart-queue-item.now strong{color:${t.text};}
+.guest-smart-result{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:8px;color:${t.textSec};font-size:9px;font-weight:850;}
+.guest-smart-result svg{color:var(--feature-color);}
+.guest-smart-result strong{color:${t.text};}
 .guest-review-result,.guest-lesson-takeaway{position:relative;z-index:1;display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--feature-color) 13%,${t.surface});color:var(--feature-color);}
 .guest-review-result span,.guest-lesson-takeaway span{display:grid;gap:1px;}
 .guest-review-result small,.guest-lesson-takeaway small{color:${t.textDim};font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
@@ -18482,7 +18500,11 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes featureReveal{to{opacity:1;transform:none;}}
 @keyframes guestFlashcardSheen{0%,26%{transform:translateX(-120%);}36%,48%{transform:translateX(120%);}70%,100%{transform:translateX(120%);}}
 @keyframes guestNextStepHint{0%,68%,100%{transform:translateX(0);}72%{transform:translateX(-3px) rotate(-1deg);}76%{transform:translateX(3px) rotate(1deg);}80%{transform:translateX(-2px);}84%{transform:translateX(2px);}88%{transform:translateX(0);}}
-@keyframes guestSmartPulse{0%,100%{transform:scale(1);opacity:.7;}50%{transform:scale(1.18) rotate(8deg);opacity:1;}}
+@keyframes guestSmartSignalFlow{0%{transform:translateX(0) scale(.75);opacity:0;}18%{opacity:1;}82%{opacity:1;}100%{transform:translateX(54px) scale(1.15);opacity:0;}}
+@keyframes guestSmartSignalFlowMobile{0%{transform:translateY(0) scale(.75);opacity:0;}18%{opacity:1;}82%{opacity:1;}100%{transform:translateY(32px) scale(1.15);opacity:0;}}
+@keyframes guestSmartCorePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+@keyframes guestSmartQueueRebuild{from{opacity:.35;transform:translateX(10px) scale(.98);}to{opacity:1;transform:none;}}
+@keyframes guestSmartQueueItem{to{opacity:1;transform:none;}}
 .guest-final-cta{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center;padding:28px;border:1px solid ${t.green}3d;border-radius:8px;background:linear-gradient(125deg,${t.green}13,${t.surface} 55%,${t.accent}10);box-shadow:0 20px 48px rgba(7,12,24,.1);}
 .guest-final-cta h2{margin:5px 0 8px;color:${t.text};font-size:clamp(26px,3.2vw,36px);line-height:1.15;text-wrap:balance;}
 .guest-final-cta p{max-width:650px;color:${t.textSec};font-size:13px;line-height:1.7;}
@@ -19219,9 +19241,16 @@ body{background:
   .guest-flip-face{padding:16px 16px!important;border-radius:16px!important;}
   .guest-flip-definition{font-size:11.5px!important;line-height:1.45!important;}
   .guest-feature-copy h2{font-size:clamp(25px,8vw,34px)!important;}
+  .guest-feature-visual.review{padding:18px 14px 32px!important;}
+  .guest-smart-studio{grid-template-columns:1fr!important;gap:8px!important;}
   .guest-smart-signal-row{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
-  .guest-smart-path{grid-template-columns:1fr!important;}
-  .guest-smart-path>span{justify-content:space-between!important;}
+  .guest-smart-signal{grid-template-columns:1fr!important;justify-items:center;text-align:center!important;}
+  .guest-smart-signal small{white-space:normal!important;}
+  .guest-smart-router{min-height:40px!important;}
+  .guest-smart-router::before{left:50%!important;right:auto!important;top:0!important;bottom:0!important;width:2px!important;height:auto!important;background:linear-gradient(180deg,transparent,var(--feature-color),transparent)!important;}
+  .guest-smart-router::after{top:0!important;left:calc(50% - 4px)!important;animation-name:guestSmartSignalFlowMobile!important;}
+  .guest-smart-router-core{width:42px!important;height:42px!important;border-radius:14px!important;}
+  .guest-smart-result{align-items:flex-start!important;text-align:left!important;}
   .guest-final-cta{grid-template-columns:minmax(0,1fr)!important;padding:22px!important;}
   .guest-final-actions{min-width:0!important;}
   .brilliant-path-section{padding:18px!important;border-radius:22px!important;}
@@ -24373,31 +24402,43 @@ function GuestFeaturePreview({type,t}) {
   }
   if(type==="review"){
     const reviewPaths={
-      PKI:{signal:"3 recent misses",steps:["Trust roots","Certificate chain","Validation"]},
-      IAM:{signal:"2 recent misses",steps:["Least privilege","Federation","MFA"]},
-      Logs:{signal:"1 recent miss",steps:["Log source","Correlation","Response"]},
+      PKI:{score:42,signal:"3 recent misses",steps:["Trust roots","Certificate chain","Validation"]},
+      IAM:{score:58,signal:"2 recent misses",steps:["Least privilege","Federation","MFA"]},
+      Logs:{score:71,signal:"1 recent miss",steps:["Log source","Correlation","Response"]},
     };
     const activePath=reviewPaths[reviewTopic];
+    const queueTiming=["Now","Next","Later"];
     return (
       <div className="guest-feature-visual review">
-        <div className="guest-demo-question">Watch your misses become a focused study route</div>
-        <div className="guest-smart-signal-row" aria-label="Weak-area signals">
-        {Object.entries(reviewPaths).map(([topic,path])=>(
-          <button
-            key={topic}
-            className={`guest-smart-signal${reviewTopic===topic?" active":""}`}
-            type="button"
-            aria-pressed={reviewTopic===topic}
-            onClick={()=>{setReviewTopic(topic);trackDemo("choose_weak_area",{topic});}}
-          >
-            <strong>{topic}</strong><small>{path.signal}</small>
-          </button>
-        ))}
+        <div className="guest-demo-question">Tap a weak signal and watch your review queue rebuild</div>
+        <div className="guest-smart-studio">
+          <div className="guest-smart-signal-row" aria-label="Weak-area signals">
+            {Object.entries(reviewPaths).map(([topic,path])=>(
+              <button
+                key={topic}
+                className={`guest-smart-signal${reviewTopic===topic?" active":""}`}
+                type="button"
+                aria-pressed={reviewTopic===topic}
+                onClick={()=>{setReviewTopic(topic);trackDemo("choose_weak_area",{topic});}}
+              >
+                <span className="guest-smart-score-ring" style={{"--score":`${path.score*3.6}deg`}}><b>{path.score}%</b></span>
+                <span><strong>{topic}</strong><small>{path.signal}</small></span>
+              </button>
+            ))}
+          </div>
+          <div className="guest-smart-router" aria-hidden="true"><span className="guest-smart-router-core"><Brain size={23}/></span></div>
+          <div key={reviewTopic} className="guest-smart-queue" role="status" aria-live="polite">
+            <div className="guest-smart-queue-head"><strong>Adaptive queue</strong><span><Sparkles size={10}/>Rebuilt now</span></div>
+            {activePath.steps.map((step,index)=>(
+              <div key={step} className={`guest-smart-queue-item${index===0?" now":""}`} style={{"--queue-delay":`${index*70}ms`}}>
+                <span>{index+1}</span>
+                <div><small>{queueTiming[index]}</small><strong>{step}</strong></div>
+                <em>{index===0?"Priority +2":"Spaced"}</em>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="guest-smart-core"><Brain size={20}/><span><small>Smart Review rebuilt</small><strong>{reviewTopic} repair route</strong></span><Sparkles size={16}/></div>
-        <div className="guest-smart-path" role="status" aria-live="polite">
-          {activePath.steps.map((step,index)=><span key={step} className={index===0?"active":""}>{step}{index<activePath.steps.length-1&&<ChevronRight size={13}/>}</span>)}
-        </div>
+        <div className="guest-smart-result"><TrendingUp size={14}/><span><strong>{activePath.score}% accuracy detected.</strong> The highest-impact concept moves first.</span></div>
       </div>
     );
   }
