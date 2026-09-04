@@ -18396,8 +18396,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-demo-feedback.idle{color:${t.textDim};}
 .guest-demo-feedback.success{color:${t.green};}
 .guest-demo-feedback.retry{color:${t.amber};}
-.guest-feature-visual.flashcards{display:grid;align-content:center;justify-items:center;gap:10px;min-height:245px;padding:18px;background:radial-gradient(circle at 86% 13%,color-mix(in srgb,#7c3aed 16%,transparent),transparent 38%),linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 11%,${t.panel}));}
-.guest-flip-card-stage{appearance:none;width:min(390px,82%);height:182px;padding:0;border:0;background:transparent;color:inherit;perspective:1300px;display:grid;place-items:center;cursor:pointer;}
+.guest-feature-visual.flashcards{display:grid;align-content:center;justify-items:center;gap:10px;min-height:292px;padding:20px 18px 40px;background:radial-gradient(circle at 86% 13%,color-mix(in srgb,#7c3aed 16%,transparent),transparent 38%),linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 11%,${t.panel}));}
+.guest-flip-card-stage{appearance:none;width:min(640px,90%);height:210px;padding:0;border:0;background:transparent;color:inherit;perspective:1300px;display:grid;place-items:center;cursor:pointer;}
 .guest-flip-card-stage:focus-visible{outline:3px solid color-mix(in srgb,var(--feature-color) 48%,transparent);outline-offset:5px;border-radius:18px;}
 .guest-flip-card{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .72s cubic-bezier(.2,.75,.25,1);}
 .guest-flip-card.is-flipped{transform:rotateY(180deg);}
@@ -18414,34 +18414,64 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-flip-term .term-mandatory{color:color-mix(in srgb,#c084fc 82%,${t.text});}
 .guest-flip-term .term-access{color:color-mix(in srgb,#38bdf8 76%,${t.text});}
 .guest-flip-term .term-control{color:color-mix(in srgb,#34d399 72%,${t.text});}
-.guest-flip-definition{max-width:360px;color:${t.textSec};font-size:13px;line-height:1.5;font-weight:850;}
+.guest-flip-definition{max-width:430px;color:${t.textSec};font-size:13px;line-height:1.5;font-weight:850;}
 .guest-flip-definition .def-key{color:color-mix(in srgb,var(--feature-color) 78%,${t.text});font-weight:950;}
 .guest-flip-definition .def-policy{color:color-mix(in srgb,${t.green} 82%,${t.text});font-weight:950;}
 .guest-feature-visual.mcq{display:grid;align-content:center;gap:10px;padding:24px;}
 .guest-mcq-option{appearance:none;width:100%;display:flex;align-items:center;gap:10px;text-align:left;padding:12px 14px;border-radius:14px;border:1px solid ${t.border};background:${t.surface};color:${t.textSec};font:inherit;font-weight:850;font-size:13px;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease;}
-.guest-mcq-option:hover{transform:translateX(3px);border-color:color-mix(in srgb,var(--feature-color) 50%,${t.border});}
-.guest-mcq-option.correct{border-color:color-mix(in srgb,var(--feature-color) 55%,transparent);background:color-mix(in srgb,var(--feature-color) 14%,${t.surface});color:${t.text};}
-.guest-mcq-option.wrong{border-color:${t.red};background:${t.red}0d;color:${t.text};}
+.guest-mcq-option:hover{transform:translateX(3px);}
+.guest-mcq-option.answer-key-correct:hover,.guest-mcq-option.answer-key-correct:active,.guest-mcq-option.correct{border-color:color-mix(in srgb,${t.green} 70%,${t.border});background:color-mix(in srgb,${t.green} 18%,${t.surface});color:${t.text};box-shadow:0 8px 22px ${t.green}17;}
+.guest-mcq-option.answer-key-wrong:hover,.guest-mcq-option.answer-key-wrong:active,.guest-mcq-option.wrong{border-color:color-mix(in srgb,${t.red} 72%,${t.border});background:color-mix(in srgb,${t.red} 14%,${t.surface});color:${t.text};box-shadow:0 8px 22px ${t.red}12;}
+.guest-mcq-option.answer-key-correct:hover span,.guest-mcq-option.answer-key-correct:active span,.guest-mcq-option.correct span{background:${t.green}22;color:${t.green};}
+.guest-mcq-option.answer-key-wrong:hover span,.guest-mcq-option.answer-key-wrong:active span,.guest-mcq-option.wrong span{background:${t.red}1c;color:${t.red};}
 .guest-mcq-option span{width:23px;height:23px;border-radius:999px;display:grid;place-items:center;background:color-mix(in srgb,var(--feature-color) 16%,transparent);color:var(--feature-color);font-size:11px;}
+.guest-feature-visual.explanations{display:grid;align-content:center;gap:11px;padding:24px;}
+.guest-explanation-card{position:relative;z-index:1;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:13px 14px;border-radius:15px;border:1px solid ${t.border};background:${t.surface};}
+.guest-explanation-card>span{display:grid;gap:3px;}
+.guest-explanation-card small{font-size:9px;font-weight:950;text-transform:uppercase;letter-spacing:.05em;}
+.guest-explanation-card strong{color:${t.textSec};font-size:11px;line-height:1.55;}
+.guest-explanation-card.correct{border-color:${t.green}52;background:color-mix(in srgb,${t.green} 10%,${t.surface});color:${t.green};}
+.guest-explanation-card.wrong{border-color:${t.red}48;background:color-mix(in srgb,${t.red} 8%,${t.surface});color:${t.red};}
 .guest-feature-visual.pbq{padding:24px;display:grid;align-content:center;gap:11px;}
 .guest-terminal-preview{border-radius:16px;background:#07111f;border:1px solid color-mix(in srgb,var(--feature-color) 28%,#26364a);padding:16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#b7f7d8;font-size:12px;line-height:1.7;}
 .guest-terminal-preview b{color:#fbbf24;font-weight:800;}
 .guest-pbq-slots{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}
-.guest-pbq-slots span{min-height:42px;display:grid;place-items:center;padding:8px;border:1px dashed ${t.border};border-radius:12px;color:${t.textDim};font-size:10px;font-weight:900;text-align:center;}
-.guest-pbq-slots span.filled{border-style:solid;border-color:color-mix(in srgb,var(--feature-color) 55%,${t.border});background:color-mix(in srgb,var(--feature-color) 12%,${t.surface});color:${t.text};}
+.guest-pbq-slots button{appearance:none;min-height:48px;display:grid;place-items:center;padding:8px;border:1px dashed ${t.border};border-radius:12px;background:color-mix(in srgb,${t.surface} 86%,transparent);color:${t.textDim};font:inherit;font-size:10px;font-weight:900;text-align:center;transition:border-color .16s ease,background .16s ease,transform .16s ease;}
+.guest-pbq-slots button:hover{border-color:color-mix(in srgb,var(--feature-color) 62%,${t.border});background:color-mix(in srgb,var(--feature-color) 8%,${t.surface});}
+.guest-pbq-slots button.filled{border-style:solid;border-color:color-mix(in srgb,var(--feature-color) 55%,${t.border});background:color-mix(in srgb,var(--feature-color) 12%,${t.surface});color:${t.text};cursor:pointer;}
 .guest-pbq-actions{position:relative;z-index:1;display:flex;gap:7px;flex-wrap:wrap;}
 .guest-pbq-actions button,.guest-demo-reset{appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:36px;padding:7px 10px;border:1px solid color-mix(in srgb,var(--feature-color) 42%,${t.border});border-radius:11px;background:${t.surface};color:${t.textSec};font:inherit;font-size:11px;font-weight:900;cursor:pointer;}
 .guest-pbq-actions button:hover:not(:disabled){border-color:var(--feature-color);color:${t.text};transform:translateY(-1px);}
 .guest-pbq-actions button:disabled{opacity:.42;cursor:default;}
+.guest-pbq-actions button.next-step-hint{border-color:color-mix(in srgb,var(--feature-color) 72%,${t.border});color:var(--feature-color);box-shadow:0 0 0 3px color-mix(in srgb,var(--feature-color) 10%,transparent);animation:guestNextStepHint 2.8s ease-in-out infinite;}
 .guest-demo-reset{position:relative;z-index:1;width:max-content;min-height:30px;padding:5px 8px;border-color:${t.border};background:transparent;color:${t.textDim};}
+.guest-feature-visual.exam{display:grid;align-content:center;justify-items:center;gap:14px;padding:24px;}
+.guest-exam-status{position:relative;z-index:1;width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;color:${t.textDim};font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;}
+.guest-exam-status strong{color:var(--feature-color);font-size:10px;}
+.guest-exam-clock{appearance:none;position:relative;z-index:1;display:flex;align-items:center;gap:13px;padding:16px 21px;border-radius:20px;border:1px solid color-mix(in srgb,var(--feature-color) 52%,${t.border});background:radial-gradient(circle at 18% 25%,color-mix(in srgb,var(--feature-color) 22%,transparent),transparent 42%),${t.surface};color:var(--feature-color);font:inherit;cursor:pointer;box-shadow:0 16px 34px color-mix(in srgb,var(--feature-color) 13%,transparent);transition:transform .16s ease,box-shadow .16s ease;}
+.guest-exam-clock:hover{transform:translateY(-2px);box-shadow:0 20px 40px color-mix(in srgb,var(--feature-color) 20%,transparent);}
+.guest-exam-clock.paused{opacity:.72;}
+.guest-exam-clock span{display:grid;gap:2px;text-align:left;}
+.guest-exam-clock small{color:${t.textDim};font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
+.guest-exam-clock strong{color:${t.text};font-size:clamp(25px,3.2vw,36px);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:.04em;}
+.guest-exam-progress{position:relative;z-index:1;width:100%;height:7px;border-radius:999px;background:${t.border};overflow:hidden;}
+.guest-exam-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--feature-color),color-mix(in srgb,var(--feature-color) 55%,${t.amber}));box-shadow:0 0 16px var(--feature-color);}
 .guest-feature-visual.review{display:grid;align-content:center;gap:12px;padding:24px;}
-.guest-review-row{appearance:none;width:100%;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;text-align:left;padding:11px 13px;border-radius:15px;background:${t.surface};border:1px solid ${t.border};font:inherit;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease;}
-.guest-review-row:hover{transform:translateX(3px);border-color:color-mix(in srgb,var(--feature-color) 48%,${t.border});}
-.guest-review-row.active{border-color:color-mix(in srgb,var(--feature-color) 62%,${t.border});background:color-mix(in srgb,var(--feature-color) 11%,${t.surface});}
-.guest-review-row strong{color:${t.text};font-size:12px;}
-.guest-review-row span{height:8px;border-radius:999px;background:linear-gradient(90deg,var(--feature-color),color-mix(in srgb,var(--feature-color) 22%,transparent));}
-.guest-review-row em{font-style:normal;color:${t.textDim};font-size:10px;font-weight:850;}
-.guest-review-row.active em{color:var(--feature-color);}
+.guest-smart-signal-row{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.guest-smart-signal{appearance:none;display:grid;gap:2px;padding:10px 8px;border:1px solid ${t.border};border-radius:13px;background:${t.surface};color:${t.textDim};font:inherit;text-align:center;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease;}
+.guest-smart-signal:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--feature-color) 50%,${t.border});}
+.guest-smart-signal.active{border-color:color-mix(in srgb,var(--feature-color) 68%,${t.border});background:color-mix(in srgb,var(--feature-color) 13%,${t.surface});box-shadow:0 10px 24px color-mix(in srgb,var(--feature-color) 12%,transparent);}
+.guest-smart-signal strong{color:${t.text};font-size:12px;}
+.guest-smart-signal small{font-size:9px;font-weight:850;}
+.guest-smart-signal.active small{color:var(--feature-color);}
+.guest-smart-core{position:relative;z-index:1;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 14px;border-radius:16px;border:1px solid color-mix(in srgb,var(--feature-color) 48%,${t.border});background:linear-gradient(110deg,color-mix(in srgb,var(--feature-color) 16%,${t.surface}),${t.surface});color:var(--feature-color);box-shadow:0 0 0 4px color-mix(in srgb,var(--feature-color) 6%,transparent);}
+.guest-smart-core>span{display:grid;gap:2px;}
+.guest-smart-core small{color:${t.textDim};font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;}
+.guest-smart-core strong{color:${t.text};font-size:12px;}
+.guest-smart-core>svg:last-child{animation:guestSmartPulse 2.4s ease-in-out infinite;}
+.guest-smart-path{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+.guest-smart-path>span{display:flex;align-items:center;justify-content:center;gap:4px;min-width:0;padding:8px 5px;border:1px solid ${t.border};border-radius:11px;background:${t.surface};color:${t.textSec};font-size:9px;font-weight:900;text-align:center;}
+.guest-smart-path>span.active{border-color:var(--feature-color);color:var(--feature-color);background:color-mix(in srgb,var(--feature-color) 11%,${t.surface});}
 .guest-review-result,.guest-lesson-takeaway{position:relative;z-index:1;display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--feature-color) 13%,${t.surface});color:var(--feature-color);}
 .guest-review-result span,.guest-lesson-takeaway span{display:grid;gap:1px;}
 .guest-review-result small,.guest-lesson-takeaway small{color:${t.textDim};font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
@@ -18456,6 +18486,8 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-lesson-preview svg{color:var(--feature-color);}
 @keyframes featureReveal{to{opacity:1;transform:none;}}
 @keyframes guestFlashcardSheen{0%,26%{transform:translateX(-120%);}36%,48%{transform:translateX(120%);}70%,100%{transform:translateX(120%);}}
+@keyframes guestNextStepHint{0%,68%,100%{transform:translateX(0);}72%{transform:translateX(-3px) rotate(-1deg);}76%{transform:translateX(3px) rotate(1deg);}80%{transform:translateX(-2px);}84%{transform:translateX(2px);}88%{transform:translateX(0);}}
+@keyframes guestSmartPulse{0%,100%{transform:scale(1);opacity:.7;}50%{transform:scale(1.18) rotate(8deg);opacity:1;}}
 .guest-final-cta{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px;align-items:center;padding:28px;border:1px solid ${t.green}3d;border-radius:8px;background:linear-gradient(125deg,${t.green}13,${t.surface} 55%,${t.accent}10);box-shadow:0 20px 48px rgba(7,12,24,.1);}
 .guest-final-cta h2{margin:5px 0 8px;color:${t.text};font-size:clamp(26px,3.2vw,36px);line-height:1.15;text-wrap:balance;}
 .guest-final-cta p{max-width:650px;color:${t.textSec};font-size:13px;line-height:1.7;}
@@ -19187,13 +19219,14 @@ body{background:
   .guest-value-grid{grid-template-columns:minmax(0,1fr)!important;}
   .guest-feature-showcase-card{grid-template-columns:1fr!important;gap:16px!important;min-height:0!important;padding:22px!important;border-radius:20px!important;}
   .guest-feature-visual{min-height:170px!important;}
-  .guest-feature-visual.flashcards{min-height:205px!important;padding:14px!important;}
-  .guest-flip-card-stage{height:150px!important;width:min(100%,310px)!important;}
+  .guest-feature-visual.flashcards{min-height:220px!important;padding:14px 12px 34px!important;}
+  .guest-flip-card-stage{height:158px!important;width:min(92%,360px)!important;}
   .guest-flip-face{padding:16px 16px!important;border-radius:16px!important;}
   .guest-flip-definition{font-size:11.5px!important;line-height:1.45!important;}
   .guest-feature-copy h2{font-size:clamp(25px,8vw,34px)!important;}
-  .guest-review-row{grid-template-columns:74px minmax(0,1fr)!important;}
-  .guest-review-row em{grid-column:1 / -1;}
+  .guest-smart-signal-row{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
+  .guest-smart-path{grid-template-columns:1fr!important;}
+  .guest-smart-path>span{justify-content:space-between!important;}
   .guest-final-cta{grid-template-columns:minmax(0,1fr)!important;padding:22px!important;}
   .guest-final-actions{min-width:0!important;}
   .brilliant-path-section{padding:18px!important;border-radius:22px!important;}
@@ -24168,15 +24201,24 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
 function GuestFeaturePreview({type,t}) {
   const [flashcardFlipped,setFlashcardFlipped]=useState(false);
   const [mcqChoice,setMcqChoice]=useState(null);
-  const [pbqSequence,setPbqSequence]=useState([]);
+  const [pbqSlots,setPbqSlots]=useState([null,null,null]);
+  const [draggedPbqStep,setDraggedPbqStep]=useState(null);
   const [reviewTopic,setReviewTopic]=useState("PKI");
   const [deepTopic,setDeepTopic]=useState("Web Attacks");
+  const [examSeconds,setExamSeconds]=useState((89*60)+42);
+  const [examPaused,setExamPaused]=useState(false);
 
   useEffect(()=>{
     if(type!=="flashcards"||window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches)return undefined;
     const timer=window.setInterval(()=>setFlashcardFlipped(value=>!value),6200);
     return()=>window.clearInterval(timer);
   },[type]);
+
+  useEffect(()=>{
+    if(type!=="exam"||examPaused)return undefined;
+    const timer=window.setInterval(()=>setExamSeconds(value=>Math.max(0,value-1)),1000);
+    return()=>window.clearInterval(timer);
+  },[type,examPaused]);
 
   const trackDemo=(interaction,details={})=>capture("landing_feature_demo_interacted",{feature:type,interaction,...details});
 
@@ -24187,27 +24229,26 @@ function GuestFeaturePreview({type,t}) {
         <button
           className="guest-flip-card-stage"
           type="button"
-          aria-label={flashcardFlipped?"Show the MAC acronym":"Reveal the meaning of MAC"}
+          aria-label={flashcardFlipped?"Show the MFA acronym":"Reveal the meaning of MFA"}
           aria-pressed={flashcardFlipped}
           onClick={()=>{setFlashcardFlipped(value=>!value);trackDemo("flip");}}
         >
           <div className={`guest-flip-card${flashcardFlipped?" is-flipped":""}`}>
             <div className="guest-flip-face guest-flip-front" aria-hidden={flashcardFlipped}>
               <div className="guest-flip-main">
-                <div className="guest-flip-topic">Core principles and access control</div>
-                <div className="guest-flip-acronym">MAC</div>
+                <div className="guest-flip-topic">Identity and authentication</div>
+                <div className="guest-flip-acronym">MFA</div>
               </div>
             </div>
             <div className="guest-flip-face guest-flip-back" aria-hidden={!flashcardFlipped}>
               <div className="guest-flip-main">
                 <div className="guest-flip-kicker">Full term and definition</div>
                 <div className="guest-flip-term">
-                  <span className="term-mandatory">Mandatory</span>{" "}
-                  <span className="term-access">Access</span>{" "}
-                  <span className="term-control">Control</span>
+                  <span className="term-mandatory">Multi</span>-<span className="term-access">Factor</span>{" "}
+                  <span className="term-control">Authentication</span>
                 </div>
                 <div className="guest-flip-definition">
-                  Definition: Access model where <span className="def-key">labels</span> and <span className="def-policy">central policy</span> decide access, not the object owner.
+                  Uses <span className="def-key">two or more factor types</span>, such as a password plus an <span className="def-policy">authenticator app</span>.
                 </div>
               </div>
             </div>
@@ -24227,7 +24268,7 @@ function GuestFeaturePreview({type,t}) {
           return (
             <button
               key={option}
-              className={`guest-mcq-option${state}`}
+              className={`guest-mcq-option ${index===0?"answer-key-correct":"answer-key-wrong"}${state}`}
               type="button"
               aria-pressed={mcqChoice===index}
               onClick={()=>{setMcqChoice(index);trackDemo("answer",{correct:index===0});}}
@@ -24242,54 +24283,129 @@ function GuestFeaturePreview({type,t}) {
       </div>
     );
   }
+  if(type==="explanations"){
+    return (
+      <div className="guest-feature-visual explanations">
+        <div className="guest-demo-question">Why is least privilege the best answer?</div>
+        <div className="guest-explanation-card correct">
+          <CheckCircle2 size={18}/>
+          <span><small>Correct</small><strong>It limits each user to the access their role actually needs.</strong></span>
+        </div>
+        <div className="guest-explanation-card wrong">
+          <XCircle size={18}/>
+          <span><small>Why another choice is wrong</small><strong>Tailgating is a physical access attack, not an access-control principle.</strong></span>
+        </div>
+      </div>
+    );
+  }
   if(type==="pbq"){
     const expected=["Contain","Eradicate","Recover"];
     const choices=["Recover","Contain","Eradicate"];
-    const pbqComplete=pbqSequence.length===expected.length;
-    const pbqCorrect=pbqComplete&&pbqSequence.every((step,index)=>step===expected[index]);
-    const chooseStep=step=>{
-      if(pbqComplete||pbqSequence.includes(step))return;
-      const next=[...pbqSequence,step];
-      setPbqSequence(next);
-      if(next.length===expected.length)trackDemo("sequence_complete",{correct:next.every((item,index)=>item===expected[index])});
+    const nextOpenSlot=pbqSlots.findIndex(step=>!step);
+    const pbqComplete=nextOpenSlot===-1;
+    const pbqCorrect=pbqComplete&&pbqSlots.every((step,index)=>step===expected[index]);
+    const placeStep=(step,targetIndex=nextOpenSlot)=>{
+      if(!step||targetIndex<0||pbqSlots[targetIndex])return;
+      const next=pbqSlots.map(value=>value===step?null:value);
+      next[targetIndex]=step;
+      setPbqSlots(next);
+      if(next.every(Boolean))trackDemo("sequence_complete",{correct:next.every((item,index)=>item===expected[index])});
     };
+    const resetPbq=()=>{setPbqSlots([null,null,null]);setDraggedPbqStep(null);trackDemo("reset");};
     return (
       <div className="guest-feature-visual pbq">
-        <div className="guest-demo-question">Build the incident-response order</div>
+        <div className="guest-demo-question">Drag each response step into the right order</div>
         <div className="guest-pbq-slots" aria-label="Your incident-response sequence">
-          {expected.map((_,index)=><span key={index} className={pbqSequence[index]?"filled":""}>{pbqSequence[index]||`Step ${index+1}`}</span>)}
+          {expected.map((_,index)=>(
+            <button
+              key={index}
+              type="button"
+              className={pbqSlots[index]?"filled":""}
+              onDragOver={event=>event.preventDefault()}
+              onDrop={event=>{event.preventDefault();placeStep(draggedPbqStep||event.dataTransfer.getData("text/plain"),index);setDraggedPbqStep(null);}}
+              onClick={()=>{if(pbqSlots[index])setPbqSlots(values=>values.map((value,slot)=>slot===index?null:value));}}
+              aria-label={pbqSlots[index]?`${pbqSlots[index]} in step ${index+1}. Tap to remove.`:`Drop response step ${index+1} here`}
+            >
+              {pbqSlots[index]||`Step ${index+1}`}
+            </button>
+          ))}
         </div>
         <div className="guest-pbq-actions" aria-label="Available response steps">
-          {choices.map(step=><button key={step} type="button" disabled={pbqSequence.includes(step)||pbqComplete} onClick={()=>chooseStep(step)}>{step}</button>)}
+          {choices.map(step=>{
+            const used=pbqSlots.includes(step);
+            const isHint=!pbqComplete&&!used&&step===expected[nextOpenSlot];
+            return (
+              <button
+                key={step}
+                className={isHint?"next-step-hint":""}
+                type="button"
+                draggable={!used&&!pbqComplete}
+                disabled={used||pbqComplete}
+                onDragStart={event=>{setDraggedPbqStep(step);event.dataTransfer.effectAllowed="move";event.dataTransfer.setData("text/plain",step);trackDemo("drag_start",{step});}}
+                onDragEnd={()=>setDraggedPbqStep(null)}
+                onClick={()=>placeStep(step)}
+              >
+                <Move size={13}/>{step}
+              </button>
+            );
+          })}
         </div>
         <div className={`guest-demo-feedback${!pbqComplete?" idle":pbqCorrect?" success":" retry"}`} role="status" aria-live="polite">
-          {!pbqComplete?"Tap the safest first action":pbqCorrect?"Sequence secured — contain before cleanup.":"Close — containment must stop the spread first."}
+          {!pbqComplete?"Drag on desktop or tap on mobile":pbqCorrect?"Sequence secured — contain before cleanup.":"Close — containment must stop the spread first."}
         </div>
-        {pbqSequence.length>0&&<button className="guest-demo-reset" type="button" onClick={()=>{setPbqSequence([]);trackDemo("reset");}}><RotateCcw size={13}/> Reset sequence</button>}
+        {pbqSlots.some(Boolean)&&<button className="guest-demo-reset" type="button" onClick={resetPbq}><RotateCcw size={13}/> Reset sequence</button>}
+      </div>
+    );
+  }
+  if(type==="exam"){
+    const hours=String(Math.floor(examSeconds/3600)).padStart(2,"0");
+    const minutes=String(Math.floor((examSeconds%3600)/60)).padStart(2,"0");
+    const seconds=String(examSeconds%60).padStart(2,"0");
+    return (
+      <div className="guest-feature-visual exam">
+        <div className="guest-exam-status"><span>Timed session</span><strong>Question 18</strong></div>
+        <button
+          className={`guest-exam-clock${examPaused?" paused":""}`}
+          type="button"
+          aria-pressed={examPaused}
+          aria-label={examPaused?"Resume exam timer":"Pause exam timer"}
+          onClick={()=>{setExamPaused(value=>!value);trackDemo(examPaused?"resume_timer":"pause_timer");}}
+        >
+          <Clock3 size={28}/>
+          <span><small>Time remaining</small><strong>{hours}:{minutes}:{seconds}</strong></span>
+        </button>
+        <div className="guest-exam-progress" aria-label="Exam progress"><span style={{width:"38%"}}/></div>
+        <div className="guest-demo-feedback idle">{examPaused?"Timer paused — tap to resume":"Stay focused. Your timer keeps every question moving."}</div>
       </div>
     );
   }
   if(type==="review"){
-    const reviewRows=[
-      {topic:"PKI",width:"78%",detail:"3 recent misses"},
-      {topic:"IAM",width:"56%",detail:"2 recent misses"},
-      {topic:"Logs",width:"34%",detail:"1 recent miss"},
-    ];
+    const reviewPaths={
+      PKI:{signal:"3 recent misses",steps:["Trust roots","Certificate chain","Validation"]},
+      IAM:{signal:"2 recent misses",steps:["Least privilege","Federation","MFA"]},
+      Logs:{signal:"1 recent miss",steps:["Log source","Correlation","Response"]},
+    };
+    const activePath=reviewPaths[reviewTopic];
     return (
       <div className="guest-feature-visual review">
-        <div className="guest-demo-question">Tap a weak area to reshape your queue</div>
-        {reviewRows.map(row=>(
+        <div className="guest-demo-question">Watch your misses become a focused study route</div>
+        <div className="guest-smart-signal-row" aria-label="Weak-area signals">
+        {Object.entries(reviewPaths).map(([topic,path])=>(
           <button
-            key={row.topic}
-            className={`guest-review-row${reviewTopic===row.topic?" active":""}`}
+            key={topic}
+            className={`guest-smart-signal${reviewTopic===topic?" active":""}`}
             type="button"
-            aria-pressed={reviewTopic===row.topic}
-            onClick={()=>{setReviewTopic(row.topic);trackDemo("choose_weak_area",{topic:row.topic});}}
+            aria-pressed={reviewTopic===topic}
+            onClick={()=>{setReviewTopic(topic);trackDemo("choose_weak_area",{topic});}}
           >
-            <strong>{row.topic}</strong><span style={{width:row.width}}/><em>{row.detail}</em>
+            <strong>{topic}</strong><small>{path.signal}</small>
           </button>
         ))}
-        <div className="guest-review-result" role="status" aria-live="polite"><Sparkles size={15}/><span><small>Recommended next</small><strong>{reviewTopic} focused review</strong></span></div>
+        </div>
+        <div className="guest-smart-core"><Brain size={20}/><span><small>Smart Review rebuilt</small><strong>{reviewTopic} repair route</strong></span><Sparkles size={16}/></div>
+        <div className="guest-smart-path" role="status" aria-live="polite">
+          {activePath.steps.map((step,index)=><span key={step} className={index===0?"active":""}>{step}{index<activePath.steps.length-1&&<ChevronRight size={13}/>}</span>)}
+        </div>
       </div>
     );
   }
@@ -24330,8 +24446,10 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
   const showcaseFeatures=[
     {id:"flashcards",label:"Rapid Recall",color:"#8b5cf6",title:"Flashcards",body:"Flip high-yield terms until recall becomes automatic.",button:"Open flashcards",action:onFlashcards},
     {id:"mcq",label:"Exam Readiness",color:t.accent,title:"MCQ practice",body:"Answer realistic questions and expose gaps immediately.",button:"Start MCQs",action:onPractice},
+    {id:"explanations",label:"Answer Clarity",color:t.green,title:"Quality explanations",body:"See why the right answer works and why each distractor fails."},
     {id:"pbq",label:"Hands On Mastery",color:t.amber,title:"PBQ simulator",body:"Make the decisions Security+ expects you to apply.",button:"Try a PBQ",action:onPreviewPbq},
-    {id:"review",label:"Personalisation",color:t.green,title:"Smart Review",body:"Your mistakes decide what returns to the top of the queue.",button:"Build my review queue",action:onPractice},
+    {id:"exam",label:"Timed Performance",color:t.red,title:"Exam mode",body:"Practise under a live clock so pace becomes part of your preparation."},
+    {id:"review",label:"Personalisation",color:t.green,title:"Smart Review",body:"Turn missed concepts into a focused, adaptive repair route.",button:"Build my review queue",action:onPractice},
     {id:"deep",label:"Foundational Clarity",color:"#8b5cf6",title:"Concept Deep Dives",body:"Learn a difficult concept, then test it in the same flow.",button:"Open lessons",action:onConcepts||(()=>startSignup("concept_deep_dives"))},
   ];
   return (
@@ -24385,7 +24503,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
               <span className="guest-feature-kicker">{feature.label}</span>
               <h2>{feature.title}</h2>
               <p>{feature.body}</p>
-              <button className="btn btn-outline" type="button" onClick={feature.action}>{feature.button}</button>
+              {feature.button&&feature.action&&<button className="btn btn-outline" type="button" onClick={feature.action}>{feature.button}</button>}
             </div>
             <GuestFeaturePreview type={feature.id} t={t}/>
           </article>
