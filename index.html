@@ -8,6 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="SecurePlus" />
+    <meta name="application-name" content="SecurePlus | CompTIA Security+™ Prep" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://www.secureplusprep.com/" />
@@ -24,8 +25,8 @@
     <meta name="description" content="Clear study paths. Real scenarios. Pass Security+ with confidence. Study SY0-701 with flashcards, MCQs, PBQ simulations, Smart Review, and guided weak-area practice." />
     <meta name="keywords" content="Security+ flashcards, CompTIA Security+ flashcards, SY0-701 flashcards, Security+ practice questions, Security+ PBQ, Security+ realistic scenarios" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="SecurePlus" />
-    <meta property="og:title" content="Security+ Practice & Flashcards | Pass With Confidence | SecurePlus" />
+    <meta property="og:site_name" content="SecurePlus | CompTIA Security+™ Prep" />
+    <meta property="og:title" content="SecurePlus | CompTIA Security+™ Prep" />
     <meta property="og:description" content="Study SY0-701 with flashcards, MCQs, PBQ simulations, and Smart Review. Clear study paths. Real scenarios. Pass Security+ with confidence." />
     <meta property="og:url" content="https://www.secureplusprep.com/" />
     <meta property="og:image" content="https://www.secureplusprep.com/og-signup.png" />
@@ -33,34 +34,56 @@
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Security+ Practice & Flashcards | Pass With Confidence | SecurePlus" />
+    <meta name="twitter:title" content="SecurePlus | CompTIA Security+™ Prep" />
     <meta name="twitter:description" content="Study SY0-701 with flashcards, MCQs, PBQ simulations, and Smart Review. Clear study paths. Real scenarios. Pass Security+ with confidence." />
     <meta name="twitter:image" content="https://www.secureplusprep.com/og-signup.png" />
-    <title>Security+ Practice & Flashcards | Pass With Confidence | SecurePlus</title>
+    <title>SecurePlus | CompTIA Security+™ Prep</title>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": ["WebApplication", "SoftwareApplication"],
-        "name": "SecurePlus",
-        "url": "https://www.secureplusprep.com/",
-        "logo": "https://www.secureplusprep.com/secureplus-logo.png",
-        "image": "https://www.secureplusprep.com/og-signup.png",
-        "applicationCategory": "EducationalApplication",
-        "description": "Clear study paths. Real scenarios. Pass Security+ with confidence. CompTIA Security+ flashcards and practice that starts with quick recall, then connects MCQs, PBQs, Smart Review, and weak-area decks.",
-        "offers": [
+        "@graph": [
           {
-            "@type": "Offer",
-            "name": "SecurePlus Starter",
-            "price": "0",
-            "priceCurrency": "USD"
+            "@type": "Organization",
+            "@id": "https://www.secureplusprep.com/#organization",
+            "name": "SecurePlus",
+            "url": "https://www.secureplusprep.com/",
+            "logo": "https://www.secureplusprep.com/secureplus-logo.png"
           },
           {
-            "@type": "Offer",
-            "name": "SecurePlus Pro Academy Pass — 3 months",
-            "price": "9.99",
-            "priceCurrency": "USD",
-            "description": "Three months of Pro access with all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.",
-            "availability": "https://schema.org/InStock"
+            "@type": "WebSite",
+            "@id": "https://www.secureplusprep.com/#website",
+            "name": "SecurePlus | CompTIA Security+™ Prep",
+            "alternateName": "SecurePlus",
+            "url": "https://www.secureplusprep.com/",
+            "publisher": { "@id": "https://www.secureplusprep.com/#organization" }
+          },
+          {
+            "@type": ["WebApplication", "SoftwareApplication"],
+            "@id": "https://www.secureplusprep.com/#software-application",
+            "name": "SecurePlus | CompTIA Security+™ Prep",
+            "alternateName": "SecurePlus",
+            "url": "https://www.secureplusprep.com/",
+            "logo": "https://www.secureplusprep.com/secureplus-logo.png",
+            "image": "https://www.secureplusprep.com/og-signup.png",
+            "applicationCategory": "EducationalApplication",
+            "description": "Clear study paths. Real scenarios. Pass Security+ with confidence. CompTIA Security+ flashcards and practice that starts with quick recall, then connects MCQs, PBQs, Smart Review, and weak-area decks.",
+            "creator": { "@id": "https://www.secureplusprep.com/#organization" },
+            "offers": [
+              {
+                "@type": "Offer",
+                "name": "SecurePlus Starter",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              {
+                "@type": "Offer",
+                "name": "SecurePlus Pro Academy Pass — 3 months",
+                "price": "9.99",
+                "priceCurrency": "USD",
+                "description": "Three months of Pro access with all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.",
+                "availability": "https://schema.org/InStock"
+              }
+            ]
           }
         ]
       }

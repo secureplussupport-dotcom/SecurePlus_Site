@@ -4,6 +4,7 @@ import path from "node:path";
 const root = process.cwd();
 const publicDir = path.join(root, "public");
 const siteUrl = "https://www.secureplusprep.com";
+const siteBrandName = "SecurePlus | CompTIA Security+™ Prep";
 const siteTagline = "Clear study paths. Real scenarios. Pass Security+ with confidence.";
 const requiredTerms = ["Security+", "SecurePlus"];
 const softwareApplicationPages = new Set([
@@ -112,6 +113,8 @@ for (const file of pageFiles) {
   const canonical = getTag(html, /<link\s+rel="canonical"\s+href="([^"]+)"/i);
   const title = getTag(html, /<title>(.*?)<\/title>/is);
   const description = getTag(html, /<meta\s+name="description"\s+content="([^"]+)"/i);
+  const applicationName = getTag(html, /<meta\s+name="application-name"\s+content="([^"]+)"/i);
+  const openGraphSiteName = getTag(html, /<meta\s+property="og:site_name"\s+content="([^"]+)"/i);
   const openGraphDescription = getTag(html, /<meta\s+property="og:description"\s+content="([^"]+)"/i);
   const h1 = getTag(html, /<h1\b[^>]*>(.*?)<\/h1>/is);
   const structuredItems = flattenStructuredData(jsonLdObjects(html, file));
@@ -119,6 +122,8 @@ for (const file of pageFiles) {
   if (canonical !== `${siteUrl}${route}`) push(errors, file, `canonical should be ${siteUrl}${route}`);
   if (!title || title.length < 35 || title.length > 70) push(warnings, file, `title length should be 35-70 characters, found ${title.length}`);
   if (!description || description.length < 90 || description.length > 170) push(warnings, file, `description length should be 90-170 characters, found ${description.length}`);
+  if (applicationName !== siteBrandName) push(errors, file, `application name should be ${siteBrandName}`);
+  if (openGraphSiteName !== siteBrandName) push(errors, file, `Open Graph site name should be ${siteBrandName}`);
   if (!description.includes(siteTagline)) push(errors, file, "search description is missing the current site tagline");
   if (!openGraphDescription.includes(siteTagline)) push(errors, file, "Open Graph description is missing the current site tagline");
   if (!structuredItems.some(item => String(item?.description || "").includes(siteTagline))) {
@@ -136,8 +141,26 @@ for (const file of pageFiles) {
   if (!html.includes('property="og:image"')) push(warnings, file, "missing Open Graph image");
 
   if (!structuredItems.length) push(warnings, file, "missing JSON-LD structured data");
+  const webSite = structuredItems.find(item => {
+    const itemType = item?.["@type"];
+    return Array.isArray(itemType) ? itemType.includes("WebSite") : itemType === "WebSite";
+  });
+  if (!webSite) push(errors, file, "missing WebSite JSON-LD");
+  else {
+    if (webSite.name !== siteBrandName) push(errors, file, `WebSite name should be ${siteBrandName}`);
+    if (webSite.alternateName !== "SecurePlus") push(errors, file, "WebSite alternateName should be SecurePlus");
+  }
+  for (const app of structuredItems.filter(item => {
+    const itemType = item?.["@type"];
+    return Array.isArray(itemType) ? itemType.includes("SoftwareApplication") : itemType === "SoftwareApplication";
+  })) {
+    if (app.name !== siteBrandName) push(errors, file, `SoftwareApplication name should be ${siteBrandName}`);
+  }
   if (file === "index.html" && !hasSchemaType(structuredItems, "SoftwareApplication")) {
     push(warnings, file, "root app JSON-LD should include SoftwareApplication");
+  }
+  if (file === "index.html" && title !== siteBrandName) {
+    push(errors, file, `homepage title should be ${siteBrandName}`);
   }
   if (file !== "index.html") {
     const isInteractiveEntry=interactiveSeoPages.includes(file);
