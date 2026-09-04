@@ -18410,13 +18410,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-flip-acronym{color:${t.text};font-size:clamp(38px,6vw,62px);line-height:1;font-weight:950;letter-spacing:-.02em;}
 .guest-flip-kicker{color:${t.textSec};font-size:13px;font-weight:900;}
 .guest-flip-term{color:${t.text};font-size:clamp(21px,2.8vw,32px);line-height:1.08;font-weight:950;letter-spacing:-.02em;}
-.guest-flip-term span{display:inline-block;}
-.guest-flip-term .term-mandatory{color:color-mix(in srgb,#c084fc 82%,${t.text});}
-.guest-flip-term .term-access{color:color-mix(in srgb,#38bdf8 76%,${t.text});}
-.guest-flip-term .term-control{color:color-mix(in srgb,#34d399 72%,${t.text});}
 .guest-flip-definition{max-width:430px;color:${t.textSec};font-size:13px;line-height:1.5;font-weight:850;}
-.guest-flip-definition .def-key{color:color-mix(in srgb,var(--feature-color) 78%,${t.text});font-weight:950;}
-.guest-flip-definition .def-policy{color:color-mix(in srgb,${t.green} 82%,${t.text});font-weight:950;}
 .guest-feature-visual.mcq{display:grid;align-content:center;gap:10px;padding:24px;}
 .guest-mcq-option{appearance:none;width:100%;display:flex;align-items:center;gap:10px;text-align:left;padding:12px 14px;border-radius:14px;border:1px solid ${t.border};background:${t.surface};color:${t.textSec};font:inherit;font-weight:850;font-size:13px;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease;}
 .guest-mcq-option:hover{transform:translateX(3px);}
@@ -24243,12 +24237,9 @@ function GuestFeaturePreview({type,t}) {
             <div className="guest-flip-face guest-flip-back" aria-hidden={!flashcardFlipped}>
               <div className="guest-flip-main">
                 <div className="guest-flip-kicker">Full term and definition</div>
-                <div className="guest-flip-term">
-                  <span className="term-mandatory">Multi</span>-<span className="term-access">Factor</span>{" "}
-                  <span className="term-control">Authentication</span>
-                </div>
+                <div className="guest-flip-term">Multi-Factor Authentication</div>
                 <div className="guest-flip-definition">
-                  Uses <span className="def-key">two or more factor types</span>, such as a password plus an <span className="def-policy">authenticator app</span>.
+                  Uses two or more factor types, such as a password plus an authenticator app.
                 </div>
               </div>
             </div>
