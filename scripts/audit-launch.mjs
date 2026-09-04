@@ -252,6 +252,9 @@ if (!errors.length) {
   requireContains("src/App.jsx", "Create free account to save Smart Review", "guest results should invite learners to preserve their weak-area Smart Review");
   requireContains("src/App.jsx", "GUEST_SMART_REVIEW_BRIDGE_KEY", "guest quiz attempts should survive account creation for Smart Review");
   requireContains("src/App.jsx", 'allowedGuestViews=new Set(["dashboard","mcq","pbq","daily"', "guests should be able to enter the PBQ preview without signing in");
+  requirePattern("src/App.jsx", /const guestTopNavItems=\[\s*\{id:"mcq",label:"MCQ practice"\},\s*\{id:"pbq",label:"PBQ Simulations"\},\s*\{id:"flashcards",label:"Flashcards"\},\s*\];/, "guest top navigation should keep only the three primary practice destinations visible");
+  requirePattern("src/App.jsx", /const guestMoreItems=\[\s*\{id:"objectives",label:"SY0-701 Exam Guide"\},\s*\{id:"deep-dives",label:"Concept Deep Dives"\},\s*\{id:"privacy",label:"Privacy Policy"\},\s*\{id:"terms",label:"Terms & Conditions"\},\s*\];/, "guest More menu should contain the exam guide, deep dives, privacy, and terms links");
+  requireContains("src/App.jsx", "guest-top-nav-more-menu", "guest secondary navigation should open in an expandable More menu");
   requireContains("src/App.jsx", "clearLocalAuthState({preserveRoute:true})", "guest session restoration must preserve direct routes such as the canonical Flashcards page");
   requireContains("src/App.jsx", "const quizSizes = isGuest ? [10,20,30] : [10,20,30,40,50]", "guest MCQ practice should offer fixed 10, 20, or 30 question sets");
   requireContains("src/App.jsx", 'const activeDiffFilter=isGuest?"all":diffFilter', "guest MCQ practice must not filter by difficulty");

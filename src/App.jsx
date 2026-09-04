@@ -18198,11 +18198,19 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-top-nav-brand{display:flex;align-items:center;gap:9px;background:transparent;border:0;color:${t.text};font:inherit;font-weight:950;font-size:15px;line-height:1.15;cursor:pointer;text-align:left;white-space:normal;min-width:0;}
 .guest-top-nav-brand span{display:block;min-width:0;}
 .guest-top-nav-brand small{display:block;margin-top:1px;color:${t.textDim};font-size:10px;font-weight:750;line-height:1.1;}
-.guest-top-nav-links{display:flex;align-items:center;gap:8px;min-width:0;overflow-x:auto;padding:2px;scrollbar-width:none;}
+.guest-top-nav-links{display:flex;align-items:center;gap:8px;min-width:0;overflow:visible;padding:2px;}
 .guest-top-nav-links::-webkit-scrollbar{display:none;}
 .guest-top-nav-link{flex:0 0 auto;min-height:38px;padding:9px 12px;border:1px solid transparent;border-radius:999px;background:transparent;color:${t.textSec};font:inherit;font-size:12px;font-weight:900;cursor:pointer;transition:background .16s,border-color .16s,color .16s,transform .16s;}
 .guest-top-nav-link:hover{transform:translateY(-1px);border-color:${t.accent}35;background:${t.panel};color:${t.text};}
 .guest-top-nav-link.active{border-color:${t.accent}5f;background:linear-gradient(135deg,${t.accent}18,${t.green}10);color:${t.accent};box-shadow:0 10px 24px ${t.accent}12;}
+.guest-top-nav-more{position:relative;flex:0 0 auto;}
+.guest-top-nav-more-trigger{display:inline-flex;align-items:center;justify-content:center;gap:5px;}
+.guest-top-nav-more-trigger svg{transition:transform .18s ease;}
+.guest-top-nav-more.open .guest-top-nav-more-trigger svg{transform:rotate(180deg);}
+.guest-top-nav-more-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:220;width:228px;padding:7px;border:1px solid ${t.border};border-radius:14px;background:${t.surface};box-shadow:0 20px 48px rgba(7,12,24,.24);animation:fadeUp .18s cubic-bezier(.16,1,.3,1) both;}
+.guest-top-nav-more-item{display:block;width:100%;padding:10px 11px;border:0;border-radius:9px;background:transparent;color:${t.textSec};font:inherit;font-size:12px;font-weight:850;line-height:1.25;text-align:left;cursor:pointer;transition:background .16s,color .16s,transform .16s;}
+.guest-top-nav-more-item:hover,.guest-top-nav-more-item:focus-visible{background:${t.accent}12;color:${t.text};transform:translateX(2px);outline:none;}
+.guest-top-nav-more-item.active{background:linear-gradient(135deg,${t.accent}16,${t.green}0c);color:${t.accent};}
 .guest-top-nav-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;}
 .auth-layout{width:100%;max-width:980px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:stretch;}
 .auth-only-page{min-height:100vh;padding:24px;display:grid;place-items:center;background:
@@ -19025,8 +19033,9 @@ body{background:
   .guest-app-shell .mobile-topbar{display:none!important;}
   .guest-top-nav{grid-template-columns:1fr!important;gap:10px!important;padding:10px 14px!important;}
   .guest-top-nav-brand{justify-content:flex-start;font-size:12px!important;max-width:calc(100% - 210px);}
-  .guest-top-nav-links{order:3;width:100%;gap:7px!important;padding-bottom:3px!important;}
-  .guest-top-nav-link{min-height:36px!important;padding:8px 10px!important;font-size:11px!important;}
+  .guest-top-nav-links{order:3;width:100%;justify-content:center;gap:5px!important;padding-bottom:3px!important;overflow:visible!important;}
+  .guest-top-nav-link{min-height:36px!important;padding:8px 9px!important;font-size:11px!important;}
+  .guest-top-nav-more-menu{right:0;width:min(228px,calc(100vw - 28px));}
   .guest-top-nav-actions{position:absolute;right:12px;top:10px;gap:6px!important;}
   .guest-top-nav-actions .btn{min-height:31px!important;padding:6px 9px!important;font-size:11px!important;}
   .guest-top-nav-actions .btn-ghost:first-child{display:none!important;}
@@ -33346,6 +33355,8 @@ export default function App() {
   const [coinWallet,setCoinWallet]=useState(()=>({...emptyCipherWallet(),status:"idle"}));
   const [coinBusy,setCoinBusy]=useState(false);
   const [coinRewardToast,setCoinRewardToast]=useState(null);
+  const [guestMoreOpen,setGuestMoreOpen]=useState(false);
+  const guestMoreRef=useRef(null);
   const historyReadyRef=useRef(false);
   const suppressNextHistoryPushRef=useRef(false);
   const lastPageKeyRef=useRef(null);
@@ -33405,7 +33416,22 @@ export default function App() {
   },[isRootUser,loading,view]);
   useEffect(()=>{
     setMobileNavOpen(false);
+    setGuestMoreOpen(false);
   },[view]);
+  useEffect(()=>{
+    if(!guestMoreOpen)return undefined;
+    const closeMoreMenu=event=>{
+      if(event.type==="keydown"&&event.key!=="Escape")return;
+      if(event.type==="pointerdown"&&guestMoreRef.current?.contains(event.target))return;
+      setGuestMoreOpen(false);
+    };
+    document.addEventListener("pointerdown",closeMoreMenu);
+    document.addEventListener("keydown",closeMoreMenu);
+    return()=>{
+      document.removeEventListener("pointerdown",closeMoreMenu);
+      document.removeEventListener("keydown",closeMoreMenu);
+    };
+  },[guestMoreOpen]);
   useEffect(()=>{
     const pageKey=showDiagnostic
       ?"diagnostic"
@@ -34430,19 +34456,6 @@ export default function App() {
     </>
   );
 
-  if(!user&&(view==="privacy"||view==="terms")) return(
-    <>
-      <style>{CSS}</style>
-      <div style={{background:t.bg,minHeight:"100vh"}}>
-        <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:14,lineHeight:1.2,color:t.text}}>{SITE_BRAND_LOCKUP}</span></button>
-          <button className="btn btn-outline" style={{fontSize:12}} onClick={()=>setView("dashboard")}>Sign In / Register</button>
-        </div>
-        <LegalPage type={view} t={t}/>
-      </div>
-    </>
-  );
-
   if(!user&&view==="auth") return(
     <>
       <style>{CSS}</style>
@@ -34466,16 +34479,22 @@ export default function App() {
         {id:"preview-pbq",amount:-50,balance_after:130,event_type:"pbq_unlock",created_at:new Date(Date.now()-172800000).toISOString()},
       ],
     });
-    const goToSignup=()=>{setPbqQ(null);setAuthStartMode("signup");setAuthRequestId(id=>id+1);setView("auth");};
-    const goToLogin=()=>{setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
-    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","objectives","flashcards","deep-dives",...(devCoinPreview?["coins"]:[])]);
+    const goToSignup=()=>{setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("signup");setAuthRequestId(id=>id+1);setView("auth");};
+    const goToLogin=()=>{setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
+    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","objectives","flashcards","deep-dives","privacy","terms",...(devCoinPreview?["coins"]:[])]);
     const guestTopNavItems=[
       {id:"mcq",label:"MCQ practice"},
       {id:"pbq",label:"PBQ Simulations"},
       {id:"flashcards",label:"Flashcards"},
+    ];
+    const guestMoreItems=[
       {id:"objectives",label:"SY0-701 Exam Guide"},
+      {id:"deep-dives",label:"Concept Deep Dives"},
+      {id:"privacy",label:"Privacy Policy"},
+      {id:"terms",label:"Terms & Conditions"},
     ];
     const guestGo=id=>{
+      setGuestMoreOpen(false);
       if(allowedGuestViews.has(id)) setView(id);
       else {
         capture("guest_locked_nav_clicked", { target:id });
@@ -34495,7 +34514,7 @@ export default function App() {
         <div className={`app-shell guest-app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
           <a className="skip-link" href="#secureplus-main">Skip to study content</a>
           <header className="guest-top-nav">
-            <button type="button" className="guest-top-nav-brand" onClick={()=>setView("dashboard")} aria-label={`${SITE_BRAND_LOCKUP} guest landing page`}>
+            <button type="button" className="guest-top-nav-brand" onClick={()=>guestGo("dashboard")} aria-label={`${SITE_BRAND_LOCKUP} guest landing page`}>
               <BrandMark size={30}/>
               <span>{SITE_BRAND_LOCKUP}</span>
             </button>
@@ -34511,9 +34530,35 @@ export default function App() {
                   {item.label}
                 </button>
               ))}
+              <div ref={guestMoreRef} className={`guest-top-nav-more ${guestMoreOpen?"open":""}`}>
+                <button
+                  type="button"
+                  className={`guest-top-nav-link guest-top-nav-more-trigger ${guestMoreItems.some(item=>item.id===view)?"active":""}`}
+                  aria-expanded={guestMoreOpen}
+                  aria-controls="guest-more-menu"
+                  onClick={()=>setGuestMoreOpen(open=>!open)}
+                >
+                  More <ChevronDown size={14} aria-hidden="true"/>
+                </button>
+                {guestMoreOpen&&(
+                  <div id="guest-more-menu" className="guest-top-nav-more-menu" aria-label="More guest pages">
+                    {guestMoreItems.map(item=>(
+                      <button
+                        key={item.id}
+                        type="button"
+                        className={`guest-top-nav-more-item ${view===item.id?"active":""}`}
+                        aria-current={view===item.id?"page":undefined}
+                        onClick={()=>guestGo(item.id)}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </nav>
             <div className="guest-top-nav-actions" aria-label="Guest account actions">
-              <button className="btn btn-ghost" type="button" onClick={()=>setDarkMode(d=>!d)}>
+              <button className="btn btn-ghost" type="button" onClick={()=>{setGuestMoreOpen(false);setDarkMode(d=>!d);}}>
                 {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
               </button>
               <button className="btn btn-ghost" type="button" onClick={goToLogin}>Log In</button>
@@ -34574,6 +34619,8 @@ export default function App() {
             {view==="objectives"&&<ObjectivesPage t={t}/>}
             {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={assistantFlashcardSet} starred={guestStarred} onToggleStar={handleGuestToggleStar} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
             {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={guestUser} onAddWeakTopicToReview={goToSignup} onTryRelatedPbq={handleGuestPbqPreview} onOpenFlashcards={handleOpenFlashcards} onUpgrade={goToSignup}/>}
+            {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
+            {view==="terms"&&<LegalPage type="terms" t={t}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
             {!allowedGuestViews.has(view)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
