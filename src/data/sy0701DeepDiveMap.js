@@ -45,7 +45,7 @@ export const SY0701_OBJECTIVES = {
 
 export const SY0701_KEYWORD_DEFINITIONS = {
   "AAA": "Authentication checks identity, authorization decides access, and accounting records activity.",
-  "ACL": "An access control list is an ordered set of permit and deny rules.",
+  "ACL": "An access control list specifies permitted or denied access; network-rule order and evaluation depend on the platform.",
   "AES": "A widely used symmetric encryption algorithm named in the exam acronym list.",
   "AH": "An IPsec protocol that checks integrity and origin but does not encrypt the data.",
   "ALE": "Annualized loss expectancy estimates the expected yearly cost of a risk.",
@@ -64,8 +64,8 @@ export const SY0701_KEYWORD_DEFINITIONS = {
   "data classification": "A label that tells people how sensitive data is and how it must be handled.",
   "data subject": "The person whose personal data is being processed.",
   "digital signature": "A cryptographic check that supports integrity, origin authentication, and non-repudiation.",
-  "DLP": "Data loss prevention finds or blocks sensitive data leaving an approved location.",
-  "DMARC": "An email policy that uses SPF and DKIM results to help stop domain impersonation.",
+  "DLP": "Data loss prevention detects or controls sensitive-data handling across endpoints, storage and communications according to policy.",
+  "DMARC": "An email policy that requires a passing, aligned SPF or DKIM result for the visible From domain and requests handling and reports.",
   "DNS filtering": "A control that blocks requests to known harmful or unwanted domains.",
   "DNSSEC": "A method that signs DNS data so a resolver can check its integrity and origin.",
   "EDR": "Endpoint detection and response monitors devices and supports investigation and containment.",
@@ -131,7 +131,7 @@ const profile = (studyOrder, objectiveCodes, title, plainSummary, examKeywords, 
 });
 
 export const SY0701_DEEP_DIVE_PROFILES = {
-  "security-foundations-controls": profile(1, ["1.1", "1.2"], "Security Controls, CIA, AAA, and Zero Trust", "Learn the core security goals, how controls are classified, and why access should never be trusted automatically.", ["CIA triad", "AAA", "Zero Trust"], [2]),
+  "security-foundations-controls": profile(1, ["1.1", "1.2"], "Security Controls, CIA, AAA, and Zero Trust", "Learn the core security goals, how controls are classified, and why access should never be trusted automatically.", ["CIA triad", "AAA", "Zero Trust"], [3]),
   "keys-passwords-encryption": profile(2, ["1.4"], "Encryption, Hashing, Salting, and Key Protection", "Choose hashing for password checking, encryption for secrecy, and protected hardware for high-value keys.", ["hashing", "salting", "HSM"], [0]),
   "pki-email-trust": profile(3, ["1.4", "4.5"], "PKI, Certificates, and Email Security", "Follow how certificates create trust, how their status is checked, and how email controls reduce domain impersonation.", ["PKI", "certificate", "DMARC"]),
   "crypto-modes-pqc-transition": profile(4, ["1.4"], "Symmetric Encryption, Key Exchange, and Digital Signatures", "Separate the exam jobs of encryption, key exchange, hashing, and digital signatures before exploring advanced cryptography.", ["AES", "digital signature", "hashing"], [1, 3]),

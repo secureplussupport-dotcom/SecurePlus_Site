@@ -49,7 +49,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
         title: "Post-quantum migration begins before a cryptographically relevant quantum computer",
         body: [
           "NIST standardized ML-KEM for key establishment, ML-DSA for digital signatures, and SLH-DSA as a stateless hash-based signature standard. These are different jobs: ML-KEM is not a signature algorithm, and ML-DSA is not bulk encryption.",
-          "Start with a cryptographic inventory: algorithms, libraries, certificates, protocols, keys, owners, data lifetimes, and dependencies. prioritize information that must remain confidential for many years because attackers can capture ciphertext now and attempt decryption later. Crypto agility means algorithms and parameters can be replaced through tested, governed interfaces—not that systems automatically become quantum-safe.",
+          "Start with a cryptographic inventory: algorithms, libraries, certificates, protocols, keys, owners, data lifetimes, and dependencies. Prioritize information that must remain confidential for many years because attackers can capture ciphertext now and attempt decryption later. Crypto agility means algorithms and parameters can be replaced through tested, governed interfaces—not that systems automatically become quantum-safe.",
         ],
       },
     ],
@@ -97,7 +97,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
         title: "Tickets authenticate; applications still authorize",
         body: [
           "Kerberos primarily establishes authenticated identities and session keys. The target operating system or application still decides what the principal may do using groups, roles, ACLs, claims, or application policy. Microsoft environments may carry authorization-related information with tickets, but the final access decision remains a policy-enforcement responsibility.",
-          "Kerberos depends on protected KDCs, correct service-principal configuration, reasonable clock synchronization, secure endpoints, and well-managed keys. Stolen tickets can support pass-the-ticket activity until they expire or are otherwise contained. MFA at initial sign-in does not make a stolen bearer ticket harmless.",
+          "Kerberos depends on protected KDCs, correct service-principal configuration, clock synchronization, secure endpoints, and managed keys. Pass-the-ticket attacks use stolen ticket material together with the associated session key; a ticket is not simply an HTTP bearer token. MFA at initial sign-in does not make stolen session material harmless. Timestamp validation and replay detection work together, and permitted clock skew is configurable.",
         ],
       },
       {
@@ -229,7 +229,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
         title: "Race describes timing, not one specific crash",
         body: [
           "A race condition exists when concurrent execution over shared state lacks correct synchronization and the result depends on timing or ordering. A time-of-check-to-time-of-use weakness occurs when a condition is checked and the relevant resource changes before use. A race may cause many effects, including privilege or state errors; a null dereference is only one possible failure and is not the definition.",
-          "Design atomic operations and transactions where possible, minimize mutable shared state, use correct locks or concurrency primitives, revalidate security-sensitive state at use, and test under realistic parallel load. Adding a delay may hide the symptom without removing the race.",
+          "Bind the security check and use to the same resource through atomic operations, safe handles, transactions or correct synchronization. Merely checking the pathname again can leave another race window. Minimize mutable shared state and test under realistic parallel load. Adding a delay may hide the symptom without removing the race.",
         ],
       },
       {
@@ -325,7 +325,7 @@ export const PRINTER_GUIDE_DEEP_DIVES = [
   },
   {
     id: "dns-time-management-security",
-    chapter: 3,
+    chapter: 4,
     category: "Network Security",
     title: "Secure DNS, Network Time, and Management Protocols",
     subtitle: "Protect the infrastructure services that tell systems where to connect, what time it is, and how devices are configured.",

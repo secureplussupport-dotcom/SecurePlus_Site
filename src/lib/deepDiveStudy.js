@@ -94,16 +94,24 @@ export function buildDeepDivePracticeQuestions(dive) {
     clue: item.meaning,
     answer: item.term,
     options: makeOptions(item.term, keywordGuide.map(entry => entry.term), index + 1),
+    optionFeedback: Object.fromEntries(keywordGuide.map(entry => [entry.term, `${entry.term}: ${entry.meaning}`])),
     explanation: `${item.term}: ${item.meaning}`,
     source: `SY0-701 objective ${profile.objectiveCodes.join(" / ")}`,
   }));
 
   const comparisonQuestions = [];
   dive.sections?.forEach((section, sectionIndex) => {
+    // Optional enrichment remains readable, but must not become an exam-scoped quiz.
+    if (profile?.beyondSections?.includes(sectionIndex)) return;
     const columns = section?.table?.columns || [];
     const rows = section?.table?.rows || [];
     const answerPool = rows.map(row => String(row?.[0] || "").trim()).filter(Boolean);
     if (answerPool.length < 2) return;
+    // A comparison table is not necessarily a valid single-answer quiz. For
+    // example, a confusion matrix repeats both subjects and observations.
+    const clues = rows.map(row => String(row?.[1] || "").trim().toLowerCase());
+    if (new Set(answerPool.map(answer => answer.toLowerCase())).size !== answerPool.length
+      || new Set(clues).size !== clues.length) return;
     rows.forEach((row, rowIndex) => {
       const answer = String(row?.[0] || "").trim();
       const clue = String(row?.[1] || "").trim();
@@ -119,6 +127,11 @@ export function buildDeepDivePracticeQuestions(dive) {
         clue,
         answer,
         options: makeOptions(answer, answerPool, rowIndex + sectionIndex + 1),
+        sectionIndex,
+        optionFeedback: Object.fromEntries(rows.map(candidate => [
+          String(candidate[0]).trim(),
+          candidate.slice(1).map((cell, index) => `${columns[index + 1] || "Remember"}: ${cell}`).join(" · "),
+        ])),
         explanation: detail,
         source: section.title,
       });

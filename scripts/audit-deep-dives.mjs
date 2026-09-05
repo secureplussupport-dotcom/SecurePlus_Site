@@ -266,6 +266,8 @@ for (const dive of CONCEPT_DEEP_DIVES) {
     requireValue(item.options.length >= 2 && item.options.length <= 4, `${item.id} must have 2-4 answer choices.`);
     requireValue(unique(item.options), `${item.id} repeats an answer choice.`);
     requireValue(item.options.includes(item.answer), `${item.id} does not include its correct answer.`);
+    requireValue(item.options.every(option => String(item.optionFeedback?.[option] || "").length >= 20), `${item.id} must explain every answer option.`);
+    requireValue(item.sectionIndex === undefined || !syllabus.beyondSections.includes(item.sectionIndex), `${item.id} must not test optional enrichment as exam-core content.`);
   });
 }
 
@@ -310,7 +312,7 @@ const uniqueSourceUrls = new Set(sourceReferences.map(source => source.url));
 const sectionCount = CONCEPT_DEEP_DIVES.reduce((total, dive) => total + dive.sections.length, 0);
 console.log("Deep Dive content audit passed.");
 console.log(`- ${CONCEPT_DEEP_DIVES.length} complete lessons across ${sectionCount} guided sections`);
-console.log(`- ${practiceQuestionCount} vetted tap-based questions across ${CONCEPT_DEEP_DIVES.length} practice labs`);
+console.log(`- ${practiceQuestionCount} structurally checked tap-based questions across ${CONCEPT_DEEP_DIVES.length} practice labs (not a factual certification)`);
 console.log(`- ${SY0701_ACRONYM_CARDS.length} high-yield acronym cards across ${SY0701_ACRONYM_SETS.length} standalone active-recall sets`);
 console.log(`- All ${CONCEPT_DEEP_DIVES.length} lessons mapped across all 28 SY0-701 objectives and five domains`);
 console.log(`- Smart Review lesson matching passed ${recommendationChecks.length} representative weak-area checks`);

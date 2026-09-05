@@ -29,7 +29,7 @@ export const CONCEPT_DEEP_DIVES = [
           rows: [
             ["ESP", "Protect IP payloads", "Yes, when encryption is enabled", "A VPN needs privacy and integrity"],
             ["AH", "Authenticate IP traffic and detect changes", "No", "Integrity without hiding the payload"],
-            ["SRTP", "Protect RTP voice/video media", "Yes", "Secure a live call or media stream"],
+            ["SRTP", "Protect RTP voice/video media", "When an encryption transform is enabled", "Secure a live call or media stream"],
           ],
         },
       },
@@ -58,7 +58,7 @@ export const CONCEPT_DEEP_DIVES = [
   },
   {
     id: "wifi-access-defense",
-    chapter: 3,
+    chapter: 4,
     category: "Network Security",
     title: "Wi-Fi Security: CCMP, WPA3, 802.1X, and Wireless Attacks",
     subtitle: "Connect encryption, authentication, and radio-layer attacks without mixing their jobs.",
@@ -137,7 +137,7 @@ export const CONCEPT_DEEP_DIVES = [
         table: {
           columns: ["Control", "Protects", "Main limitation"],
           rows: [
-            ["Full-volume encryption / BitLocker", "A volume when the device is powered off or locked", "An authorized, running session can access decrypted data"],
+            ["Full-volume encryption / BitLocker", "Stored volume data when decryption keys are unavailable to the attacker", "Locking the screen alone does not unload all keys or protect an already compromised running session"],
             ["File or folder encryption", "Selected objects", "Metadata and temporary copies may need separate protection"],
             ["Database encryption", "Database files, fields, or tables depending on design", "Applications and key access still matter"],
             ["Transport encryption", "Data moving between endpoints", "Does not protect plaintext at either endpoint"],
@@ -199,7 +199,7 @@ export const CONCEPT_DEEP_DIVES = [
           columns: ["Mechanism", "Question it answers", "Important limit"],
           rows: [
             ["CRL", "Has this certificate been revoked according to a published list?", "Lists can become stale between publications"],
-            ["OCSP", "What is the current status of this specific certificate?", "Adds responder availability and privacy considerations"],
+            ["OCSP", "What revocation status does the signed response report for this certificate?", "Responses may be cached; verify signature, scope and freshness"],
             ["OCSP stapling", "Can the server provide a signed status response during the handshake?", "The response still has a validity period"],
             ["DNS CAA", "Which certificate authorities may issue for this domain?", "It constrains compliant CAs; it does not make mis-issuance impossible"],
           ],
@@ -209,7 +209,7 @@ export const CONCEPT_DEEP_DIVES = [
         title: "Email protection is layered",
         body: [
           "SMTP transfers mail. POP3S usually means POP3 protected by TLS. Transport TLS protects a connection between systems, but each receiving hop or endpoint can see plaintext. S/MIME can encrypt message content for recipients and digitally sign it for origin and integrity; it does not hide all metadata and cannot protect a compromised endpoint.",
-          "SPF authorizes sending infrastructure for a domain. DKIM attaches a cryptographic signature that a receiver verifies with a DNS-published public key. DMARC adds alignment and domain policy, then enables aggregate or failure reporting. These records are commonly published as DNS TXT records at different names; the obsolete dedicated SPF DNS record type should not be treated as the modern answer.",
+          "SPF checks sending authorization for the envelope identity, not the visible From address alone. DKIM signs selected headers and a body hash under a signing domain. DMARC requires at least one passing SPF or DKIM result aligned with the visible From domain; both need not pass. It also publishes requested handling and reporting policy. These mechanisms commonly use DNS TXT records at different names and do not prove that the human sender or message is trustworthy.",
         ],
       },
     ],
@@ -321,7 +321,7 @@ export const CONCEPT_DEEP_DIVES = [
     ],
     traps: [
       "OAuth delegates access; OIDC supplies an authentication layer.",
-      "SSO does not necessarily cross organizational boundaries, while federation does.",
+      "Federation crosses identity/security trust domains, which may belong to the same organization; SSO describes the sign-in experience.",
       "Phishing-resistant does not mean invulnerable to malware, weak recovery, or a compromised endpoint.",
     ],
     check: {
@@ -557,7 +557,7 @@ export const CONCEPT_DEEP_DIVES = [
       {
         title: "Governance roles",
         body: [
-          "A data owner is generally accountable for classification, acceptable use, access requirements, and risk decisions. A custodian or steward implements storage, backup, access, retention, and technical handling under policy. Exact titles vary, so answer from the responsibility described in the scenario.",
+          "A data owner is generally accountable for classification, acceptable use, access requirements, and risk decisions. A custodian implements technical storage, backup, access and retention controls. A steward commonly coordinates data quality and day-to-day governance. Exact titles vary, so distinguish the responsibilities described rather than treating custodian and steward as interchangeable.",
           "Under GDPR, a controller determines the purposes and means of processing personal data. A processor handles data on the controller's behalf. The same organization can be a controller for one activity and a processor for another.",
         ],
       },
@@ -802,7 +802,7 @@ export const CONCEPT_DEEP_DIVES = [
       {
         title: "XSS is untrusted data becoming executable browser content",
         body: [
-          "Stored XSS persists in server-side storage and is later delivered to victims. Reflected XSS returns attacker-controlled input in an immediate response. DOM-based XSS occurs when client-side code moves attacker-controlled data into a dangerous browser sink.",
+          "Stored XSS retains attacker-controlled content for later use; storage can be server-side or client-side. Reflected XSS returns input in an immediate response. DOM-based XSS describes unsafe client-side processing that moves data into an executable browser sink. These describe persistence and execution mechanisms, so DOM-based XSS can overlap with stored or reflected delivery.",
           "For illustration, an unsafe payload may look like <img src=\"missing.jpg\" onerror=\"alert(1)\">. Displaying it here as text is safe because React escapes text content. A real defense uses context-aware output encoding, safe DOM APIs or framework bindings, input validation where appropriate, and a restrictive Content Security Policy as defense in depth. Never paste test payloads into systems without explicit authorization.",
         ],
       },
@@ -854,4 +854,4 @@ export const CONCEPT_DEEP_DIVE_TOPIC_COUNT = new Set(
   CONCEPT_DEEP_DIVES.flatMap(dive => dive.aliases),
 ).size;
 
-export const CONCEPT_DEEP_DIVE_REVIEWED_AT = "2026-08-02";
+export const CONCEPT_DEEP_DIVE_REVIEWED_AT = "2026-09-05";

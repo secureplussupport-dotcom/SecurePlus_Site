@@ -45,7 +45,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
           columns: ["Exam phrase", "Plain meaning", "Quick example"],
           rows: [
             ["Confidentiality", "Stop unauthorized disclosure", "Encrypt customer records and limit access"],
-            ["Integrity", "Stop or detect unauthorized change", "Hash a downloaded file and compare the digest"],
+            ["Integrity", "Stop or detect unauthorized change", "Compare a downloaded file's hash against a trusted reference digest"],
             ["Availability", "Keep systems usable when needed", "Redundant links and tested backups"],
             ["Non-repudiation", "Create strong evidence that an actor performed an action", "Digital signatures, audit logs, and timestamps"],
             ["Accounting", "Record what authenticated users did", "SIEM logs, audit trails, and monitoring"],
@@ -167,7 +167,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
       {
         title: "Two checks are not always two factors",
         body: [
-          "Common factor types are something you know, have, are, do, or somewhere you are. A password plus two security questions remains knowledge-based. A password plus a hardware authenticator combines independent factor types and is MFA. Risk signals such as device health or location can influence a decision without automatically becoming a separate authentication factor.",
+          "The core authentication-factor categories are something you know, have, and are. A password plus two security questions remains knowledge-based. A password plus proof of possession of a hardware authenticator combines factor categories. Location and behavior can inform risk decisions, but an IP address or location check alone should not be counted as an independent MFA factor. A device PIN may activate a possession authenticator locally rather than being a second password sent to the service.",
           "Biometrics are measured, not secret. False acceptance rate describes impostors accepted; false rejection rate describes genuine users rejected. The crossover or equal error rate is a comparison point where the rates meet under a test configuration. Liveness detection and a protected fallback path matter because a biometric usually cannot be replaced like a password.",
         ],
       },
@@ -729,7 +729,7 @@ export const STUDY_GUIDE_DEEP_DIVES = [
   },
   {
     id: "data-classification-lifecycle",
-    chapter: 5,
+    chapter: 3,
     category: "Data Protection",
     title: "Data Classification, DLP, Retention, and Sanitization",
     subtitle: "Protect information according to its impact, state, location, lifecycle, and legal obligations.",

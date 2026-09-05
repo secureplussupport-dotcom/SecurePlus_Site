@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
+import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701EditorialReview.js";
+import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
+import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from "./data/sy0701PublishedSnapshot.js";
 import {
   ArrowLeft,
   BadgeCheck,
@@ -2142,7 +2145,7 @@ const ACHIEVEMENTS = [
   {id:"speed_demon",title:"Speed Demon",description:"Complete a full-length Exam Mode in under 10 minutes with a passing score (>= 80%).",star_value:5},
   {id:"blitz_run",title:"Blitz Run",description:"Complete a 10-question MCQ session in under 90 seconds with 100% accuracy.",star_value:3},
   {id:"pbq_crusher",title:"PBQ Crusher",description:"Complete all 105 PBQ simulations.",star_value:4},
-  {id:"no_stone_unturned",title:"No Stone Unturned",description:"Practice 100% of the active 412 MCQ question bank.",star_value:3},
+  {id:"no_stone_unturned",title:"No Stone Unturned",description:"Practice every question in the active MCQ bank.",star_value:3},
 ];
 const ACHIEVEMENT_MAP = Object.fromEntries(ACHIEVEMENTS.map(item=>[item.id,item]));
 const ACADEMY_AVATARS = [
@@ -12339,7 +12342,7 @@ function applySy0701StudyNoteEnhancement(question) {
   };
 }
 
-const BASE_MCQ_BANK = [...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id)).map(ensureMcqWrongFeedback).map(applySy0701StudyNoteEnhancement);
+const BASE_MCQ_BANK = mergePublishedSnapshot([...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id)),"mcq").filter(isMcqEditoriallyActive).map(applySy0701StudyNoteEnhancement).map(applyMcqEditorialReview).map(ensureMcqWrongFeedback);
 let MCQ_BANK = BASE_MCQ_BANK;
 
 // ═══════════════════════════════════════════════════════════════
@@ -15868,7 +15871,7 @@ function ensurePbqChoiceFeedback(question) {
   choices.forEach((choice,index)=>{
     const existing=optionFeedback[index] ?? optionFeedback[String(index)] ?? (index!==correctIndex ? wrongFeedback[index] ?? wrongFeedback[String(index)] : "");
     const fallback=buildPbqOptionFeedback(question,index,choice,correctIndex);
-    const feedback=compactFeedbackText(String(existing||"").trim().length>=25 ? existing : fallback);
+    const feedback=question.editorialReviewed ? String(existing||"").trim() : compactFeedbackText(String(existing||"").trim().length>=25 ? existing : fallback);
     optionFeedback[index]=ensureFeedbackLead(feedback,index===correctIndex);
     if(index!==correctIndex) wrongFeedback[index]=optionFeedback[index].replace(/^Incorrect\.\s*/i,"");
   });
@@ -15963,6 +15966,8 @@ function improvePBQExplanation(question) {
 }
 
 function applyPBQContentEditorialPass(question) {
+  // Do not replace reviewed case requirements or truncate their qualifications.
+  if(question.editorialReviewed) return question;
   return {
     ...question,
     title:improvePBQTitle(question),
@@ -15973,6 +15978,7 @@ function applyPBQContentEditorialPass(question) {
 }
 
 function normalizeSelectionPBQ(question) {
+  if(question.editorialReviewed && question.type===SELECT_FILL_PBQ_TYPE) return question;
   const sourceType=String(question?.type||"").trim().toUpperCase();
   if(!["DRAG & DROP","FILL BLANK",SELECT_FILL_PBQ_TYPE].includes(sourceType))return question;
   const legacyType=String(question?.legacySelectionType||sourceType).trim().toUpperCase().replace(/[_-]+/g," ");
@@ -16020,8 +16026,10 @@ function enhancePBQQuestion(question) {
   });
 }
 
-const BASE_PBQ_BANK = [...PBQ_BANK_BASE, ...IMPORTED_PBQ_BANK]
-  .filter(q=>!LOW_QUALITY_PBQ_IDS.has(q.id))
+const BASE_PBQ_BANK = mergePublishedSnapshot([...PBQ_BANK_BASE, ...IMPORTED_PBQ_BANK]
+  .filter(q=>!LOW_QUALITY_PBQ_IDS.has(q.id)),"pbq")
+  .filter(isPbqEditoriallyActive)
+  .map(applyPbqEditorialReview)
   .map(enhancePBQQuestion);
 let PBQ_BANK = BASE_PBQ_BANK;
 
@@ -16070,6 +16078,7 @@ function normalizeRemotePBQRow(row) {
     beyondTextbook:Boolean(appQuestion.beyondTextbook || payload.beyondTextbook),
     is_pro:row?.is_pro !== false,
     payload,
+    remoteUpdatedAt:row?.updated_at,
     scenario:payload.scenario ?? appQuestion.scenario ?? "",
     question:payload.question ?? appQuestion.question ?? payload.prompt ?? "",
     explanation:payload.explanation ?? correctAnswer.explanation ?? appQuestion.explanation ?? (typeof wrongFeedback==="string" ? wrongFeedback : ""),
@@ -16098,11 +16107,11 @@ function normalizeRemotePBQRow(row) {
 }
 
 function mergeRemotePBQBanks(localQuestions=[],remoteQuestions=[]) {
-  const validRemoteQuestions=remoteQuestions.filter(question=>question?.id);
+  const validRemoteQuestions=remoteQuestions.filter(question=>question?.id && isPbqEditoriallyActive(question));
   const remoteById=new Map(validRemoteQuestions.map(question=>[question.id,question]));
   const localIds=new Set(localQuestions.map(question=>question.id));
   return [
-    ...localQuestions.map(question=>remoteById.get(question.id)||question),
+    ...localQuestions.map(question=>preferReviewedPbq(question,remoteById.get(question.id))),
     ...validRemoteQuestions.filter(question=>!localIds.has(question.id)),
   ].map(enhancePBQQuestion);
 }
@@ -16185,6 +16194,15 @@ function applyQuestionOverrides(rows=[]) {
         if(!id)return;
         if(row.action==="disable"){
           byId.delete(id);
+          return;
+        }
+        if (!(kind==="mcq" ? isMcqEditoriallyActive({id}) : isPbqEditoriallyActive({id}))) return;
+        // Captured publications are already merged before the editorial review.
+        // Reapplying the old payload here would restore the errors just fixed.
+        if (isCapturedOverride(row)) {
+          const existing=byId.get(id);
+          const capturedOrder=Number(row.sort_order);
+          if(existing && Number.isFinite(capturedOrder) && capturedOrder>0) byId.set(id,{...existing,_adminOrder:capturedOrder});
           return;
         }
         const payload={...(row.payload||{})};
@@ -24616,10 +24634,10 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
                 Launch Full MCQ Bank <span aria-hidden="true">→</span>
               </button>
             </div>
-            <p className="guest-bank-cta-note">Explore 500+ free questions by domain <span aria-hidden="true">•</span> No sign-up required</p>
+            <p className="guest-bank-cta-note">Explore free questions across all five domains <span aria-hidden="true">•</span> No sign-up required</p>
           </div>
           <div className="guest-hero-proof-row" aria-label="SecurePlus practice benefits">
-            <span>500+ Practice MCQs</span>
+            <span>Practice by domain</span>
             <span>Hands-on PBQ Stimulator</span>
             <span>100% Free Flashcards</span>
           </div>
@@ -26133,6 +26151,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
           label:`Position ${index+1}`,
           userAnswer:userItem?.label||"No item",
           correctAnswer:expectedItem?.label||"Unknown",
+          solution:expectedItem?.explanation||"",
           correct:userItem?.id===expectedId,
         };
       });
@@ -26393,6 +26412,10 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                 </div>
               </div>
             )}
+            {q.selectionFeedback&&<details style={{marginTop:12}}>
+              <summary style={{cursor:"pointer",fontWeight:700}}>What each answer option means</summary>
+              <ul style={{paddingLeft:20,lineHeight:1.65}}>{Object.entries(q.selectionFeedback).map(([option,feedback])=><li key={option}><strong>{option}: </strong><GlossaryText text={feedback} t={t}/></li>)}</ul>
+            </details>}
             {/* Show correct drag order / blanks */}
             {q.type==="ORDERING"&&!isCorrect()&&(
               <div style={{marginTop:12}}>
@@ -31565,6 +31588,14 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
                     <div>
                       <strong>{practiceChoice===activePracticeQuestion.answer?"Correct — you matched the exam clue.":`The best answer is ${activePracticeQuestion.answer}.`}</strong>
                       <p>{activePracticeQuestion.explanation}</p>
+                      <details>
+                        <summary>Why the other options do not fit</summary>
+                        <ul>
+                          {activePracticeQuestion.options.filter(option=>option!==activePracticeQuestion.answer).map(option=>(
+                            <li key={option}><strong>{option}: </strong>{activePracticeQuestion.optionFeedback?.[option]}</li>
+                          ))}
+                        </ul>
+                      </details>
                     </div>
                   </div>
                 )}
