@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readAuthoredBank, readMcqEnhancer, readPbqEnhancer } from "./lib/read-authored-bank.mjs";
+import { readAuthoredBank, readMcqEnhancer, readPbqEnhancer, readPbqDatabaseAdapters } from "./lib/read-authored-bank.mjs";
 import { MCQ_REVIEW, RETIRED_MCQ_REVIEW, applyMcqEditorialReview } from "../src/data/sy0701EditorialReview.js";
 import { PBQ_REVIEW, RETIRED_PBQ_REVIEW, applyPbqEditorialReview } from "../src/data/sy0701PbqReview.js";
 import { LESSON_REVIEW } from "../src/data/sy0701LessonReview.js";
@@ -85,6 +85,19 @@ for (const dive of CONCEPT_DEEP_DIVES) {
 }
 // Factual/structural regressions that formerly gave learners contradictory keys.
 const p011 = pbqs.find(q => q.id === "p011");
+// These two Pro rows also live in Supabase. Check the actual write/read path,
+// including duplicate payload representations and entitlement preservation.
+const adapters = readPbqDatabaseAdapters();
+for (const id of ["p003", "p017"]) {
+  const authored = {...pbqs.find(q => q.id === id), is_pro:true};
+  const serialized = adapters.serialize(authored, id === "p003" ? 8 : 1);
+  const restored = adapters.normalize(serialized);
+  assert.equal(restored.is_pro, true, `${id}: database round trip changed entitlement`);
+  for (const field of ["scenario", "question", "answer", "correct", "explanation", "difficulty", "objective", "choices"]) {
+    assert.deepEqual(restored[field] || "", authored[field] || "", `${id}: database round trip changed ${field}`);
+  }
+  authored.choices.forEach((_, i) => assert(restored.optionFeedback[i].includes(authored.optionFeedback[i]), `${id}: database round trip lost feedback ${i}`));
+}
 assert.deepEqual(p011.blanks.find(b => b.id === "d").acceptedAnswers, ["Fraction", "Proportion"]);
 assert(!p011.blanks.find(b => b.id === "b").acceptedAnswers?.includes("Fraction"));
 assert.match(mcqs.find(q => q.id === "m005").exp, /root|anchor/i);
@@ -106,4 +119,4 @@ assert(app.includes("if (isCapturedOverride(row)) {"), "Stale overrides must not
 assert(app.includes("preferReviewedPbq(question,remoteById.get(question.id))"));
 console.log(`Editorial integrity passed: ${activeMcqs.length} active MCQs (${mcqs.length} reviewed, ${mcqs.length-activeMcqs.length} existing admin disables preserved), ${pbqs.length} PBQs, ${CONCEPT_DEEP_DIVES.length} lessons, ${generated} generated practice questions.`);
 console.log(`Retired: ${Object.keys(RETIRED_MCQ_REVIEW).length} MCQs and ${Object.keys(RETIRED_PBQ_REVIEW).length} PBQs. Feedback checked before UI fallbacks.`);
-console.log(`Includes ${PUBLISHED_CONTENT_SNAPSHOT.length} captured public override records. Private/database-only PBQs still require a connected check. Tests do not certify factual accuracy.`);
+console.log(`Includes ${PUBLISHED_CONTENT_SNAPSHOT.length} captured public override records and database round-trip checks for p003/p017. See docs/content-review.md for the dated live database comparison. Tests do not certify factual accuracy.`);

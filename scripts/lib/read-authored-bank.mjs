@@ -20,6 +20,22 @@ export function readPbqEnhancer(file = "src/App.jsx") {
   return Function(`"use strict"; const SELECT_FILL_PBQ_TYPE="SELECT & FILL"; ${source.slice(start, end)}; return enhancePBQQuestion;`)();
 }
 
+// Exercise the production database serializer and reader in editorial checks.
+export function readPbqDatabaseAdapters(file = "src/App.jsx") {
+  const source = fs.readFileSync(file, "utf8");
+  const start = source.indexOf("const REMOTE_PBQ_TYPE_ALIASES =");
+  const end = source.indexOf("async function loadRemotePBQs()", start);
+  if (start < 0 || end < 0) throw new Error("Missing PBQ database adapters");
+  const labelsStart = source.indexOf("const SY0701_DOMAIN_LABELS=");
+  const labelsEnd = source.indexOf("const PBQ_OBJECTIVE_FALLBACKS=", labelsStart);
+  return Function("enhancePBQQuestion", `"use strict";
+    const SELECT_FILL_PBQ_TYPE="SELECT & FILL";
+    ${source.slice(labelsStart, labelsEnd)}
+    ${source.slice(start, end)};
+    return {normalize:normalizeRemotePBQRow, serialize:buildSupabasePBQMutation};
+  `)(readPbqEnhancer(file));
+}
+
 // Read authored literals, before runtime fallbacks can hide missing feedback.
 export function readAuthoredBank(file = "src/App.jsx") {
   const source = fs.readFileSync(file, "utf8");

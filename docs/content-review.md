@@ -1,4 +1,4 @@
-# SY0-701 editorial review — 5 September 2026
+# SY0-701 editorial review — completed 29 September 2026
 
 ## Result and scope
 
@@ -12,9 +12,9 @@ The review covered the active repository bank and **56 publicly served database 
 | PBQs | 109 | 21 | 0 | 88 |
 | Deep Dives | 32 | 0 | 0 | 32 |
 
-Previously hidden low-quality source records were not reactivated, except where an already published override supplied the active version reviewed here. Original source and history remain recoverable in Git; this release does not delete learners' historical attempts or mutate the database.
+Previously hidden low-quality source records were not reactivated, except where an already published override supplied the active version reviewed here. Original source and history remain recoverable in Git; this release does not delete learners' historical attempts. The two existing database PBQs were synchronized with the final reviewed definitions on 29 September.
 
-**Outstanding boundary:** authenticated Supabase access was unavailable. The public `pbqs` request returned no visible rows, which is not proof that the private table is empty. Private/database-only PBQs, additional role-restricted publications and subsequent admin edits cannot be called reviewed by this work. Connect the intended Supabase project to complete that last comparison. No service-role credential or private user data was used.
+**Database comparison completed, 29 September 2026:** authenticated access to the SecurePlus project confirmed all 56 override records match the captured baseline (IDs, kind, action, status, payload and publication timestamp; zero mismatches). The entire `pbqs` table contained two rows, `p003` and `p017`, both existing reviewed IDs; there were no additional database-only PBQs. Their stale definitions were corrected in place, keeping Pro entitlement and ordering. A read-back comparison confirmed exact payload and metadata matches and four option explanations per row. No learner/account records were read or changed. Historical override revisions are archival records, not additional active questions.
 
 ## Editorial decisions
 
@@ -53,7 +53,7 @@ Previously hidden low-quality source records were not reactivated, except where 
 
 Captured database override payloads are merged **before** editorial corrections and are not reapplied afterward. Their admin ordering is retained when loaded. A later override with a different publication timestamp remains eligible for the normal admin workflow. Retired IDs cannot be silently reintroduced through overrides.
 
-For reviewed built-in PBQ IDs, older database copies (dated at or before `2026-09-05T13:32:13Z`, or lacking a publication date) cannot replace this complete reviewed definition. Remote `is_pro` entitlement metadata is preserved. Newer admin publications and remote-only IDs remain supported; those changes require their own review. This is a client content-precedence change, **not** a claim that the private database itself was updated or inspected.
+For reviewed built-in PBQ IDs, older database copies (dated at or before `2026-09-05T13:32:13Z`, or lacking a publication date) cannot replace this complete reviewed definition. Remote `is_pro` entitlement metadata is preserved. Newer admin publications and remote-only IDs remain supported; those changes require their own review. This client precedence rule remains in place. The two database rows inspected on 29 September were separately synchronized as described above; the 56 captured override records retain their historical payloads, with the reviewed client corrections applied afterward.
 
 Admin edits published after this review can supersede its findings. Do not represent the review date as ongoing certification. For the next content update, review the actual effective question, including published overrides, not just the original source literal.
 
@@ -65,7 +65,16 @@ Admin edits published after this review can supersede its findings. Do not repre
 - The audit executes the application's actual legacy MCQ enhancement and PBQ display-normalization functions, preventing a test-only content path from concealing overwritten corrections.
 - Local guest browser check: MCQ catalog showed 395; PBQ catalog showed 88. Ran the simulated port scan, submitted the correct response, and verified the PBQ preview showed the overall solution plus specific explanations for all four choices. Guest MCQs retain the existing explanation-access rules; this work does not change subscription entitlements.
 
-These automated checks establish structure and integration, not factual truth. Factual judgments came from the editorial review and primary-source checks. The remaining private-database comparison is explicitly pending.
+These automated checks establish structure and integration, not factual truth. Factual judgments came from the editorial review and primary-source checks. The authenticated database comparison is now complete for the current project and content tables. Later publications require another review.
+
+## Final continuation — 29 September 2026
+
+- Recovered the previous review and verified its pushed release before continuing.
+- `p003`: replaced weak distractors with competing interpretations of process/network evidence; no port, filename, CPU threshold or parent process is treated as proof of malware. Domain 4, objective 4.9, medium difficulty.
+- `p017`: uses four plausible responses to one defined payment-channel risk: mitigation, transfer, avoidance and acceptance. The avoidance answer ends the activity while acknowledging retained records and obligations. Domain 5, objective 5.2, medium difficulty.
+- Synchronized both database rows through the application's production serialization format. Preserved `is_pro=true`, sort positions 8 and 1, original IDs and creation timestamps. Updates checked the previously read modification timestamps to avoid overwriting concurrent edits.
+- Added regression checks through the application's actual database serialization and normalization functions: answer keys, evidence, choices, difficulty, objective, explanations and Pro entitlement survive the round trip.
+- Authenticated comparison: 56/56 overrides matched the reviewed snapshot; 2/2 database PBQs matched their final corrections. Counts remain 395 MCQs, 88 PBQs, 32 lessons and 171 generated lesson questions.
 
 ## Primary references used
 
@@ -83,3 +92,6 @@ These automated checks establish structure and integration, not factual truth. F
 - [NIST SCAP](https://csrc.nist.gov/projects/security-content-automation-protocol): standardized assessment content, not an automatic interoperability guarantee.
 
 The lessons also retain their topic-specific primary references. Checking link structure or approved source domains does not imply every linked external document was re-audited in full.
+
+- [Microsoft Sysmon documentation](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon): process and connection evidence, correlation and limits of event collection.
+- [NIST SP 800-39](https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-39.pdf): risk response and avoidance of the activity giving rise to risk.
