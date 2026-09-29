@@ -1,3 +1,4 @@
+import { SECOND_PASS_MCQ_REVIEW, SECOND_PASS_PBQ_REVIEW } from "../src/data/sy0701SecondPassReview.js";
 import assert from "node:assert/strict";
 import { readAuthoredBank, readMcqEnhancer, readPbqEnhancer, readPbqDatabaseAdapters } from "./lib/read-authored-bank.mjs";
 import { MCQ_REVIEW, RETIRED_MCQ_REVIEW, applyMcqEditorialReview } from "../src/data/sy0701EditorialReview.js";
@@ -81,6 +82,18 @@ for (const dive of CONCEPT_DEEP_DIVES) {
     assert(unique(q.options) && q.options.includes(q.answer), `${q.id}: ambiguous/invalid options`);
     assert(!profile.beyondSections.includes(q.sectionIndex), `${q.id}: enrichment leaked into exam practice`);
     q.options.forEach(option => assert(meaningful(q.optionFeedback[option]), `${q.id}: missing feedback`));
+  }
+}
+// Follow-up patches must survive the published snapshot and legacy-enhancement
+// pipeline. In particular, historical public overrides must not restore stale
+// choices while retaining a revised key or explanation.
+for (const [patches, bank] of [[SECOND_PASS_MCQ_REVIEW, mcqs], [SECOND_PASS_PBQ_REVIEW, pbqs]]) {
+  for (const [id, patch] of Object.entries(patches)) {
+    const effective = bank.find(q => q.id === id);
+    assert(effective, `${id}: second-pass correction has no active reviewed item`);
+    for (const [field, value] of Object.entries(patch)) {
+      assert.deepEqual(effective[field], value, `${id}: second-pass ${field} lost to earlier content`);
+    }
   }
 }
 // Factual/structural regressions that formerly gave learners contradictory keys.

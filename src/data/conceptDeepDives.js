@@ -8,7 +8,7 @@ export const CONCEPT_DEEP_DIVES = [
     category: "Network Security",
     title: "IPsec, VPNs, and Secure Real-Time Media",
     subtitle: "Choose ESP, AH, tunnel mode, and SRTP for the protection the scenario actually needs.",
-    summary: "IPsec protects IP traffic at the network layer, while SRTP protects real-time audio and video at the application layer. The exam usually tests what each protocol protects, whether confidentiality is present, and why an otherwise valid protocol may be a poor operational choice.",
+    summary: "IPsec protects IP traffic at the network layer, while SRTP protects real-time audio and video at the application layer. Compare what each protocol protects, whether confidentiality is enabled, and how the deployment affects the choice.",
     minutes: 9,
     difficulty: "Core",
     aliases: ["IPsec", "ESP", "AH", "SRTP", "site-to-site VPN", "tunnel mode", "transport mode"],
@@ -630,7 +630,7 @@ export const CONCEPT_DEEP_DIVES = [
           rows: [
             ["CVE", "A public identifier for a disclosed vulnerability", "Whether your exact asset is exposed or exploitable"],
             ["CWE", "A category of software or hardware weakness", "The risk of a particular deployed instance"],
-            ["CVSS", "Standardized technical severity characteristics", "Business impact, current exposure, or observed exploitation"],
+            ["CVSS base score", "Intrinsic technical severity characteristics", "The full local business risk, current exposure, or observed exploitation"],
             ["EPSS", "An estimate of near-term exploitation probability in the wild", "Business impact or proof that exploitation has occurred"],
             ["CISA KEV", "A vulnerability has evidence of active exploitation", "Whether a specific organization has been compromised"],
           ],
@@ -715,8 +715,8 @@ export const CONCEPT_DEEP_DIVES = [
       "A suspicious svchost relationship is evidence to investigate, not standalone proof of process injection.",
     ],
     check: {
-      question: "A company uses AWS and Azure but no connected private-cloud environment. Which term is most precise?",
-      answer: "Multi-cloud. It becomes hybrid when distinct cloud infrastructures such as private and public environments are connected for coordinated use or portability.",
+      question: "A company uses AWS and Azure independently, without technology binding their infrastructures for workload or data portability. Which term describes its use of several providers?",
+      answer: "Multi-cloud describes using several cloud providers. Hybrid describes distinct cloud infrastructures bound by technology for data and application portability; a private/public combination is one example. The terms can overlap when both conditions are met.",
     },
     sources: [
       { label: "Microsoft — Secure Boot and Trusted Boot", url: "https://learn.microsoft.com/en-us/windows/security/operating-system-security/system-security/trusted-boot" },
@@ -854,4 +854,4 @@ export const CONCEPT_DEEP_DIVE_TOPIC_COUNT = new Set(
   CONCEPT_DEEP_DIVES.flatMap(dive => dive.aliases),
 ).size;
 
-export const CONCEPT_DEEP_DIVE_REVIEWED_AT = "2026-09-05";
+export const CONCEPT_DEEP_DIVE_REVIEWED_AT = "2026-09-29";

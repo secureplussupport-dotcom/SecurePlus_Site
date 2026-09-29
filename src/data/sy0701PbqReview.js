@@ -1,3 +1,4 @@
+import { SECOND_PASS_PBQ_REVIEW } from "./sy0701SecondPassReview.js";
 // Authored, evidence-based corrections. Coverage is checked separately from UI
 // normalisation; generated fallback text does not count as an editorial review.
 import { PUBLISHED_PBQ_REVIEW } from "./sy0701PublishedReview.js";
@@ -97,6 +98,7 @@ export const RETIRED_PBQ_REVIEW = Object.fromEntries([
 ].map(id => [id, "Unusable imported assessment: unrelated placeholder distractors reveal the only substantive answer. Retired rather than counted as meaningful practice."]));
 
 Object.assign(PBQ_REVIEW, PUBLISHED_PBQ_REVIEW);
+for (const [id, patch] of Object.entries(SECOND_PASS_PBQ_REVIEW)) PBQ_REVIEW[id] = {...PBQ_REVIEW[id], ...patch};
 export const isPbqEditoriallyActive = question => !RETIRED_PBQ_REVIEW[question.id];
 
 export function applyPbqEditorialReview(question) {

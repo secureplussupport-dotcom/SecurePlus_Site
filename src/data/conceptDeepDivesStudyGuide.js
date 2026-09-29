@@ -297,10 +297,10 @@ export const STUDY_GUIDE_DEEP_DIVES = [
         table: {
           columns: ["Model", "Exam meaning", "Do not confuse it with"],
           rows: [
-            ["Public cloud", "Services offered over shared provider infrastructure", "A private cloud just because access uses the internet"],
+            ["Public cloud", "Cloud infrastructure provisioned for open use by the general public", "A private cloud just because access uses the internet"],
             ["Private cloud", "Cloud infrastructure used by one organization", "A single ordinary server"],
             ["Community cloud", "Shared by organizations with a common mission or compliance need", "A general public-cloud account"],
-            ["Hybrid cloud", "Distinct environments, such as private and public, connected for coordinated use", "Using two public providers only"],
+            ["Hybrid cloud", "Distinct environments, such as private and public, connected for coordinated use", "Using multiple providers without the required integration"],
             ["Multi-cloud", "Using services from more than one cloud provider", "Always having a private-cloud component"],
           ],
         },

@@ -76,6 +76,24 @@ These automated checks establish structure and integration, not factual truth. F
 - Added regression checks through the application's actual database serialization and normalization functions: answer keys, evidence, choices, difficulty, objective, explanations and Pro entitlement survive the round trip.
 - Authenticated comparison: 56/56 overrides matched the reviewed snapshot; 2/2 database PBQs matched their final corrections. Counts remain 395 MCQs, 88 PBQs, 32 lessons and 171 generated lesson questions.
 
+## Second editorial pass — 29 September 2026
+
+At the user's request, reread the effective learner-facing MCQ and PBQ banks and all 32 Deep Dives, including their tables, checks and explanations. Reviewed the existing objective mappings against the SY0-701 blueprint, rather than treating automated coverage as proof of factual correctness.
+
+- Corrected or strengthened **73 MCQs and 31 PBQs**. IDs and correct-choice positions remain stable; no additional items were retired in this pass.
+- Corrected the remaining claim that any unpatched vulnerability is a zero-day; distinguished contextual geolocation from MFA factors; clarified RTO as a recovery target; and made ARO an expected event rate rather than an unexplained annual probability.
+- Qualified cloud responsibility, private/public/hybrid definitions, risk avoidance, legal scope, certificate trust, DNS cache poisoning, object authorisation, credentialed scanning, packet-capture limitations and segmentation claims.
+- Replaced weak choices in cryptography, identity, monitoring, cloud, forensic and response scenarios. Each revised option has a rationale matching that exact option. Removed several ordering prompts that simply recited their answer sequence while retaining dependencies needed for a unique ordering.
+- Recalibrated 16 PBQs and 3 MCQs: straightforward matching/recognition moved to easy, simple ACL interpretation from hard to medium, and certificate-trust remediation from easy to medium. Difficulty remains editorial rather than statistically calibrated.
+- Updated four Deep Dives: cloud model distinctions in two lessons, CVSS **base** versus contextual risk in operations, and an unsupported exam-frequency claim in IPsec. Optional enrichment remains labelled and excluded from exam-scoped table practice.
+- Added regression coverage that checks every second-pass patch survives the effective publication/enhancement pipeline. Existing checks verify all option feedback, answer bounds, objective/chapter alignment, PBQ part explanations, generated-practice uniqueness and enrichment exclusion.
+
+Validation: the full `npm run audit` suite and `npm run build` passed after shortening one overlong revised stem. The build retains the existing large-bundle advisory. A fresh authenticated full-join comparison found **zero mismatches across all 56 override records and both database PBQs**; no database write was needed in this second pass.
+
+Counts remain **395 active MCQs, 88 PBQs, 32 Deep Dives and 171 generated practice questions**, covering all 28 numbered objective groups. This is a dated editorial review, not a CompTIA endorsement or a guarantee about real examination questions.
+
+Second-pass primary checks: [NIST authentication factors and contextual signals](https://pages.nist.gov/800-63-4/sp800-63b.html), [NIST cloud definition](https://csrc.nist.gov/pubs/sp/800/145/final), [NIST hybrid cloud definition](https://csrc.nist.gov/glossary/term/hybrid_cloud), [OWASP object-level authorisation](https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html), [EDPB data-subject rights](https://www.edpb.europa.eu/sme/be-compliant/respect-individuals-rights_en), [PCI SSC scope guidance](https://blog.pcisecuritystandards.org/guidance-how-pci-dss-requirements-apply-to-wfh-environments), and [ISO certification](https://www.iso.org/certification.html), alongside the references below.
+
 ## Primary references used
 
 - [CompTIA SY0-701 objectives, version 7](https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be): scope and numbered objective mapping.
