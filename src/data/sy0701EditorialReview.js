@@ -1,3 +1,4 @@
+import { CONCISE_MCQ_REVIEW } from "./sy0701ConciseExplanations.js";
 import { SECOND_PASS_MCQ_REVIEW } from "./sy0701SecondPassReview.js";
 // Explicit, item-level editorial decisions. Unlisted items are NOT certified as reviewed.
 import { PUBLISHED_MCQ_REVIEW, PUBLISHED_RETIRED_MCQS } from "./sy0701PublishedReview.js";
@@ -367,6 +368,7 @@ export const MCQ_REVIEW = {
 // them as additional practice. In particular, m679 also had an incorrect key.
 for (const [id, patch] of Object.entries(PUBLISHED_MCQ_REVIEW)) MCQ_REVIEW[id] = {...MCQ_REVIEW[id], ...patch};
 for (const [id, patch] of Object.entries(SECOND_PASS_MCQ_REVIEW)) MCQ_REVIEW[id] = {...MCQ_REVIEW[id], ...patch};
+for (const [id, patch] of Object.entries(CONCISE_MCQ_REVIEW)) MCQ_REVIEW[id] = {...MCQ_REVIEW[id], ...patch};
 
 export const RETIRED_MCQ_REVIEW = Object.freeze({
   ...PUBLISHED_RETIRED_MCQS,

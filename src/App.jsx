@@ -15786,6 +15786,16 @@ function ensureFeedbackLead(text,isCorrectAnswer) {
   return `${isCorrectAnswer?"Correct.":"Incorrect."} ${clean}`.trim();
 }
 
+function pbqFeedbackBody(text) {
+  return String(text||"").replace(/^(?:in)?correct[.:]\s*/i,"").trim();
+}
+
+function hasSeparatePbqSolution(question) {
+  if(!(question.choices||question.options)?.length) return true;
+  const optionSolution=question.optionFeedback?.[question.correct] || question.explanation;
+  return pbqFeedbackBody(optionSolution)!==pbqFeedbackBody(question.explanation);
+}
+
 function inferPbqObjective(question) {
   const ch=String(question?.ch||question?.domain||"1");
   if(question?.objective && /^\d+\.\d+$/.test(String(question.objective)) && String(question.objective).startsWith(`${ch}.`)) return String(question.objective);
@@ -26255,9 +26265,6 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
   },[q,blanks,orderItems,selected]);
   const partCorrectCount=partResults.filter(part=>part.correct).length;
   const pbqChoices=q.choices||q.options||[];
-  const selectedOptionFeedback=selected!==null&&selected!==undefined
-    ? q.optionFeedback?.[selected] || (selected===q.correct ? ensureFeedbackLead(q.explanation||"",true) : q.wrongFeedback?.[selected] ? ensureFeedbackLead(q.wrongFeedback[selected],false) : "")
-    : "";
 
   const submit=()=>{
     const correct = isCorrect();
@@ -26433,17 +26440,9 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
             <div style={{display:"flex",alignItems:"center",gap:8,fontWeight:700,fontSize:16,color:isCorrect()?t.green:t.red,marginBottom:10}}>
               {isCorrect()?<CheckCircle2 size={19}/>:<XCircle size={19}/>} {isCorrect()?"Correct":"Incorrect"}
             </div>
-            <div style={{fontSize:13,color:t.textSec,lineHeight:1.62}}>
+            {hasSeparatePbqSolution(q)&&<div style={{fontSize:13,color:t.textSec,lineHeight:1.62}}>
               <PBQProseText text={q.explanation} t={t} paragraphGap={6}/>
-            </div>
-            {selectedOptionFeedback&&(
-              <div style={{marginTop:12,padding:"12px 14px",background:`${isCorrect()?t.green:t.red}08`,borderRadius:9,border:`1px solid ${isCorrect()?t.green:t.red}30`}}>
-                <div style={{fontSize:12,fontWeight:900,color:isCorrect()?t.green:t.red,marginBottom:5}}>
-                  Why option {String.fromCharCode(65+selected)} is {isCorrect()?"correct":"wrong"}
-                </div>
-                <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}><PBQProseText text={selectedOptionFeedback} t={t} paragraphGap={5}/></div>
-              </div>
-            )}
+            </div>}
             {pbqChoices.length>0&&(
               <div style={{marginTop:12,padding:"12px 14px",background:t.panel,borderRadius:10,border:`1px solid ${t.border}`}}>
                 <div style={{fontSize:12,fontWeight:950,color:t.text,marginBottom:8}}>Review every option</div>
@@ -26457,7 +26456,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                           <strong style={{color:optionCorrect?t.green:t.text}}>{String.fromCharCode(65+index)}. {optionCorrect?"Correct.":"Incorrect."}</strong>
                           <span style={{color:t.text}}><GlossaryText text={choice} t={t}/></span>
                         </div>
-                        <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginTop:5}}><PBQProseText text={feedback} t={t} paragraphGap={5}/></div>
+                        <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginTop:5}}><PBQProseText text={pbqFeedbackBody(feedback)} t={t} paragraphGap={5}/></div>
                       </div>
                     );
                   })}
@@ -27264,7 +27263,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
                               <strong style={{color:optionCorrect?t.green:wasSelected?t.red:t.textSec}}>{String.fromCharCode(65+choiceIndex)}. {optionCorrect?"Correct.":"Incorrect."}</strong>
                               <GlossaryText text={choice} t={t}/>
                             </div>
-                            <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginTop:5}}><PBQProseText text={feedback} t={t} paragraphGap={5}/></div>
+                            <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginTop:5}}><PBQProseText text={pbqFeedbackBody(feedback)} t={t} paragraphGap={5}/></div>
                           </div>
                         );
                       })}
@@ -27312,7 +27311,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
                   </div>
                 </div>
               )}
-              <div className="solution-panel">
+              {(item.kind==="mcq"||hasSeparatePbqSolution(q))&&<div className="solution-panel">
                 {item.kind==="mcq"?(
                   <>
                     <MCQFeedbackVerdict correct={ok} t={t} compact/>
@@ -27321,7 +27320,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
                 ):(
                   <><strong style={{color:t.text}}>Solution: </strong>{q.explanation}</>
                 )}
-              </div>
+              </div>}
               <div className="guidance-panel">
                 {examTimeGuidance(item,seconds,ok)}
               </div>

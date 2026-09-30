@@ -113,3 +113,23 @@ The lessons also retain their topic-specific primary references. Checking link s
 
 - [Microsoft Sysmon documentation](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon): process and connection evidence, correlation and limits of event collection.
 - [NIST SP 800-39](https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-39.pdf): risk response and avoidance of the activity giving rise to risk.
+
+## Concise explanation pass — 30 September 2026
+
+Rewrote the overall explanations for **all 395 active MCQs and 88 PBQs** and shortened **104 longer or repetitive distractor explanations** (90 MCQ, 14 PBQ). Already concise option rationales, PBQ matching/ordering notes and the 171 generated lesson-quiz explanations were retained. The lesson-quiz overall explanations are at most 31 words.
+
+- MCQ overall explanations: 14,520 → 8,138 words (**44% shorter**).
+- PBQ overall explanations: 4,040 → 2,071 words (**49% shorter**).
+- Kept the reason the answer fits, the reason each distractor fails, calculations, and qualifications that affect correctness. Removed repeated scenario details, generic exam advice and unrelated examples.
+- Preserved essential distinctions including salt versus guessing cost, object-level authorisation versus token validation, either-aligned-SPF-or-DKIM DMARC semantics, PSK-only versus ephemeral TLS key agreement, evidence indicators versus proof, and scenario-specific ordering versus universal procedures.
+- A full before/after comparison confirmed no changes to question text, options, answer keys, mappings, order, IDs, difficulty, objective tags or part-level solution notes. Hidden and retired items remain hidden.
+- `src/data/sy0701ConciseExplanations.js` supplies authored copy after earlier reviews. No runtime sentence clipping or automatic summarisation is used. Later admin publications retain their normal precedence.
+- Regression checks enforce active-bank coverage, explanation-only changes and preservation through the existing publication, UI normalization and database serialization paths.
+
+Primary reference checks for retained distinctions: [CompTIA SY0-701 objectives](https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be), [NIST authentication guidance](https://pages.nist.gov/800-63-4/sp800-63b.html), [TLS 1.3 forward secrecy](https://www.rfc-editor.org/rfc/rfc8446.html#appendix-E.1), and [DMARC](https://www.rfc-editor.org/rfc/rfc9989.html).
+
+Choice-based PBQ practice and exam review now display each rationale once when the correct-option text already contains the overall solution. Distinct overall solutions and all matching/ordering feedback remain visible.
+
+Validation completed: `npm run build` and the full `npm run audit` suite passed. Browser testing confirmed the free terminal PBQ renders the complete shorter solution and all four option explanations once. The complete MCQ/PBQ publication and feedback paths also passed the automated editorial audit.
+
+Authenticated database check: all 56 published overrides still exactly match the captured baseline, so their historical payloads remain unchanged and receive the reviewed client explanations. Updated explanation fields only in `p003` and `p017`, including their nested app representations, using an atomic transaction guarded by the previous timestamps and payloads. Read-back confirmed exact expected payloads, four option explanations each, Pro entitlements and sort positions 8/1 preserved. No learner records changed.

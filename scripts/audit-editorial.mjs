@@ -1,4 +1,5 @@
 import { SECOND_PASS_MCQ_REVIEW, SECOND_PASS_PBQ_REVIEW } from "../src/data/sy0701SecondPassReview.js";
+import { CONCISE_MCQ_REVIEW, CONCISE_PBQ_REVIEW } from "../src/data/sy0701ConciseExplanations.js";
 import assert from "node:assert/strict";
 import { readAuthoredBank, readMcqEnhancer, readPbqEnhancer, readPbqDatabaseAdapters } from "./lib/read-authored-bank.mjs";
 import { MCQ_REVIEW, RETIRED_MCQ_REVIEW, applyMcqEditorialReview } from "../src/data/sy0701EditorialReview.js";
@@ -87,12 +88,13 @@ for (const dive of CONCEPT_DEEP_DIVES) {
 // Follow-up patches must survive the published snapshot and legacy-enhancement
 // pipeline. In particular, historical public overrides must not restore stale
 // choices while retaining a revised key or explanation.
-for (const [patches, bank] of [[SECOND_PASS_MCQ_REVIEW, mcqs], [SECOND_PASS_PBQ_REVIEW, pbqs]]) {
+for (const [patches, concise, bank] of [[SECOND_PASS_MCQ_REVIEW, CONCISE_MCQ_REVIEW, mcqs], [SECOND_PASS_PBQ_REVIEW, CONCISE_PBQ_REVIEW, pbqs]]) {
   for (const [id, patch] of Object.entries(patches)) {
     const effective = bank.find(q => q.id === id);
     assert(effective, `${id}: second-pass correction has no active reviewed item`);
     for (const [field, value] of Object.entries(patch)) {
-      assert.deepEqual(effective[field], value, `${id}: second-pass ${field} lost to earlier content`);
+      // Approved concise copy supersedes only explanation fields, never keys or prompts.
+      assert.deepEqual(effective[field], concise[id]?.[field] ?? value, `${id}: second-pass ${field} lost to earlier content`);
     }
   }
 }
@@ -125,6 +127,18 @@ assert.equal(preferReviewedPbq(local,{id:"p001",explanation:"Stale",is_pro:true,
 assert.equal(preferReviewedPbq(local,{id:"p001",is_pro:true}).is_pro,true, "Content revision must preserve remote entitlement policy");
 assert.equal(preferReviewedPbq(local,{id:"p001",explanation:"New admin publication",remoteUpdatedAt:"2026-09-06T00:00:00Z"}).explanation,"New admin publication");
 const activeMcqs = mcqs.filter(q=>!isSnapshotDisabled(q.id,"mcq"));
+for (const [patches, bank, explanationField] of [[CONCISE_MCQ_REVIEW, activeMcqs, "exp"], [CONCISE_PBQ_REVIEW, pbqs, "explanation"]]) {
+  assert.deepEqual(new Set(Object.keys(patches)), new Set(bank.map(q=>q.id)), "Concise review must cover every active question");
+  for (const q of bank) {
+    const patch=patches[q.id];
+    assert(Object.keys(patch).every(field=>[explanationField,"wrongFeedback"].includes(field)), `${q.id}: copy review must not alter question/scoring fields`);
+    for (const [field,value] of Object.entries(patch)) assert.deepEqual(q[field],value, `${q.id}: concise ${field} lost in publication pipeline`);
+    assert(!/…|\.\.\.$/.test(q[explanationField]), `${q.id}: explanation must be authored, not clipped`);
+  }
+}
+assert.match(activeMcqs.find(q=>q.id==="m004").exp,/slow.*hash/i,"Salt summary must retain the separate guessing-cost control");
+assert.match(activeMcqs.find(q=>q.id==="m106").exp,/PSK-only.*lacks/i,"TLS summary must retain the forward-secrecy exception");
+assert.match(pbqs.find(q=>q.id==="p067").explanation,/either SPF or DKIM, not both/i,"DMARC summary must preserve OR alignment semantics");
 assert.equal(activeMcqs.find(q=>q.id==="m402").correct,0, "Published key must not override revised options");
 assert.equal(activeMcqs.find(q=>q.id==="m404").correct,1, "Salt answer must match the published/reviewed options");
 const app=readFileSync("src/App.jsx","utf8");
