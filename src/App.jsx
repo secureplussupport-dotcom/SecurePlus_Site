@@ -18225,7 +18225,9 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-top-nav-more-trigger{display:inline-flex;align-items:center;justify-content:center;gap:5px;}
 .guest-top-nav-more-trigger svg{transition:transform .18s ease;}
 .guest-top-nav-more.open .guest-top-nav-more-trigger svg{transform:rotate(180deg);}
-.guest-top-nav-more-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:220;width:228px;padding:7px;border:1px solid ${t.border};border-radius:14px;background:${t.surface};box-shadow:0 20px 48px rgba(7,12,24,.24);animation:fadeUp .18s cubic-bezier(.16,1,.3,1) both;}
+.guest-top-nav-more-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:220;width:228px;padding:7px;border:1px solid ${t.border};border-radius:14px;background:${t.surface};box-shadow:0 20px 48px rgba(7,12,24,.24);overflow:hidden;transform-origin:top right;transform:translateY(-10px) scaleY(.92);clip-path:inset(0 0 100% 0 round 14px);opacity:0;visibility:hidden;pointer-events:none;transition:clip-path .28s cubic-bezier(.22,1,.36,1),transform .28s cubic-bezier(.22,1,.36,1),opacity .2s,visibility .28s;}
+.guest-top-nav-more.open .guest-top-nav-more-menu{transform:translateY(0) scaleY(1);clip-path:inset(0 round 14px);opacity:1;visibility:visible;pointer-events:auto;}
+.guest-top-nav-more-trigger{border:1px solid ${t.border};border-radius:10px;background:${t.panel};}
 .guest-top-nav-more-item{display:block;width:100%;padding:10px 11px;border:0;border-radius:9px;background:transparent;color:${t.textSec};font:inherit;font-size:12px;font-weight:850;line-height:1.25;text-align:left;cursor:pointer;transition:background .16s,color .16s,transform .16s;}
 .guest-top-nav-more-item:hover,.guest-top-nav-more-item:focus-visible{background:${t.accent}12;color:${t.text};transform:translateX(2px);outline:none;}
 .guest-top-nav-more-item.active{background:linear-gradient(135deg,${t.accent}16,${t.green}0c);color:${t.accent};}
@@ -18579,23 +18581,67 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .brilliant-daily-wrap .landing-challenge-card::before{display:none;}
 .brilliant-daily-wrap .landing-challenge-small .landing-challenge-question{-webkit-line-clamp:4;}
 .brilliant-daily-wrap .landing-challenge-option{border-radius:16px;padding:12px 13px;}
-.landing-drill-teaser{min-height:330px;display:grid;align-content:center;justify-items:center;gap:16px;padding:26px 22px;text-align:center;border:1px solid transparent;border-radius:18px;background:radial-gradient(circle at 50% 18%,${t.green}14,transparent 38%);transition:transform .22s ease,border-color .22s ease,background .22s ease;}
-.landing-drill-teaser:hover{transform:translateY(-2px);border-color:${t.green}32;background:radial-gradient(circle at 50% 18%,${t.green}1c,transparent 42%);}
-.landing-drill-teaser-icon{width:58px;height:58px;display:grid;place-items:center;border:1px solid ${t.green}4f;border-radius:18px;background:${t.green}12;color:${t.green};box-shadow:0 14px 34px ${t.green}16;}
+
+.landing-drill-preview{--drill-accent:#9b8bc9;position:relative;isolation:isolate;min-height:390px;display:grid;align-items:center;}
+.landing-drill-preview-content{position:absolute;inset:6px 0;overflow:hidden;filter:blur(5px);opacity:.48;user-select:none;pointer-events:none;transform:scale(1.015);color:${t.text};font-size:13px;line-height:1.65;}
+.landing-drill-preview-content>p{font-size:16px;font-weight:800;margin:20px 4px;}
+.landing-drill-preview-content>div{display:flex;align-items:center;gap:12px;padding:13px;margin:9px 0;border:1px solid ${t.textDim}55;border-radius:13px;background:${t.panel};}
+.landing-drill-preview-content b{padding:3px 8px;border:1px solid ${t.border};border-radius:6px;}
+.landing-drill-teaser{position:relative;z-index:1;display:grid;align-content:center;justify-items:center;gap:13px;margin:24px 12px;padding:24px 16px;text-align:center;border:1px solid color-mix(in srgb,var(--drill-accent) 30%,${t.border});border-radius:22px;background:color-mix(in srgb,${t.surface} 74%,transparent);box-shadow:0 14px 36px rgba(7,12,24,.1);}
+.guest-home-hero .landing-drill-teaser{min-height:0;}
+.landing-drill-teaser-icon{width:46px;height:46px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--drill-accent) 40%,transparent);border-radius:15px;background:color-mix(in srgb,var(--drill-accent) 12%,transparent);color:var(--drill-accent);}
 .landing-drill-teaser-copy{display:grid;gap:7px;max-width:340px;}
-.landing-drill-teaser-copy span{color:${t.green};font-size:10px;font-weight:950;letter-spacing:.07em;text-transform:uppercase;}
-.landing-drill-teaser-copy h2{margin:0;color:${t.text};font-size:clamp(22px,2.25vw,29px);line-height:1.12;text-wrap:balance;}
-.landing-drill-teaser-copy p{margin:0;color:${t.textSec};font-size:13px;font-weight:700;line-height:1.6;text-wrap:balance;}
-.landing-drill-teaser-track{width:min(100%,300px);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;}
-.landing-drill-teaser-track span{height:7px;border-radius:999px;background:${t.border};transition:background .22s ease,transform .22s ease;}
-.landing-drill-teaser:hover .landing-drill-teaser-track span{background:${t.green}55;transform:scaleX(.94);}
-.landing-drill-teaser:hover .landing-drill-teaser-track span:nth-child(2){transition-delay:.04s;}
-.landing-drill-teaser:hover .landing-drill-teaser-track span:nth-child(3){transition-delay:.08s;}
-.landing-drill-teaser:hover .landing-drill-teaser-track span:nth-child(4){transition-delay:.12s;}
-.landing-drill-teaser:hover .landing-drill-teaser-track span:nth-child(5){transition-delay:.16s;}
-.landing-drill-launch{appearance:none;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border:1px solid ${t.green}70;border-radius:14px;background:${t.surface};color:${t.text};font:inherit;font-size:13px;font-weight:900;cursor:pointer;box-shadow:0 9px 22px rgba(7,12,24,.1);transition:transform .18s ease,border-color .18s ease,background .18s ease,color .18s ease;}
-.landing-drill-launch:hover,.landing-drill-launch:focus-visible{transform:translateY(-1px);border-color:${t.green};background:${t.green}10;color:${t.green};outline:none;}
-.landing-drill-launch-note{color:${t.textDim};font-size:10px;font-weight:800;}
+.landing-drill-teaser-copy span{color:${t.textSec};font-size:10px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;}
+.landing-drill-teaser-copy h2{margin:0;color:${t.text};font-size:clamp(21px,2vw,27px);line-height:1.15;text-wrap:balance;}
+.landing-drill-teaser-copy p{margin:0;color:${t.textSec};font-size:12px;line-height:1.6;text-wrap:balance;}
+.landing-drill-teaser-track{width:120px;display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+.landing-drill-teaser-track span{height:4px;border-radius:99px;background:color-mix(in srgb,var(--drill-accent) 35%,${t.border});}
+.landing-drill-launch{appearance:none;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border:1px solid color-mix(in srgb,var(--drill-accent) 55%,${t.border});border-radius:12px;background:color-mix(in srgb,var(--drill-accent) 10%,${t.surface});color:${t.text};font:inherit;font-size:12px;font-weight:850;cursor:pointer;transition:background .2s,transform .2s;}
+.landing-drill-launch:hover{background:color-mix(in srgb,var(--drill-accent) 20%,${t.surface});transform:translateY(-1px);}
+.landing-drill-launch:focus-visible{outline:2px solid var(--drill-accent);outline-offset:4px;}
+.landing-drill-launch-note{color:${t.textDim};font-size:10px;font-weight:700;}
+.guest-completion{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;padding:36px 28px;border:1px solid ${t.accent}35;border-radius:26px;background:radial-gradient(ellipse at 50% 0,${t.accent}16,transparent 65%),${t.surface};box-shadow:0 20px 55px rgba(7,12,24,.08);}
+.guest-completion-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:850;color:${t.textSec};}
+.guest-completion-ring{position:relative;width:164px;height:164px;flex-shrink:0;display:grid;place-items:center;border-radius:50%;background:conic-gradient(from -90deg,${t.accent} var(--result-progress),${t.border} 0);padding:8px;animation:guestScoreArrive .65s cubic-bezier(.2,.9,.25,1.15) both;box-shadow:0 0 0 8px ${t.accent}07;}
+.guest-completion-ring>div{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:50%;background:${t.surface};}
+.guest-completion-ring strong{font-size:46px;letter-spacing:-2px;line-height:1.1;color:${t.text};font-variant-numeric:tabular-nums;}
+.guest-completion-ring strong span{font-size:23px;letter-spacing:-1px;color:${t.textDim};}
+.guest-completion-ring small{font-size:11px;color:${t.textSec};margin-top:6px;}
+.guest-completion-star{position:absolute;top:2px;right:2px;color:${t.amber};filter:drop-shadow(0 2px 4px ${t.surface});animation:guestScoreArrive .6s .2s both;}
+.guest-completion h2{margin:0;max-width:520px;font-size:clamp(25px,3vw,34px);line-height:1.12;color:${t.text};letter-spacing:-.025em;outline:none;}
+.guest-completion>p{margin:0;max-width:480px;color:${t.textSec};font-size:14px;line-height:1.7;}
+.guest-completion-stats{display:flex;justify-content:center;gap:0;flex-wrap:wrap;width:100%;max-width:440px;border-block:1px solid ${t.border};padding:16px 0;}
+.guest-completion-stats>span{flex:1;min-width:80px;display:grid;gap:4px;font-size:11px;color:${t.textSec};}
+.guest-completion-stats>span+span{border-left:1px solid ${t.border};}
+.guest-completion-stats strong{font-size:21px;color:${t.text};font-variant-numeric:tabular-nums;}
+.guest-completion-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+.guest-completion-note{color:${t.textDim};font-size:11px;line-height:1.5;}
+.guest-completion-sparks{position:absolute;inset:0;pointer-events:none;z-index:-1;}
+.guest-completion-sparks i{position:absolute;left:calc(12% + var(--i)*15%);top:15%;width:5px;height:10px;border-radius:2px;background:${t.accent};opacity:0;animation:guestFinishSpark 1s calc(var(--i)*.06s) ease-out both;}
+.guest-completion-sparks i:nth-child(even){background:${t.amber};}
+.guest-completion.compact{gap:12px;padding:22px 16px;border-radius:18px;}
+.guest-completion.compact .guest-completion-ring{width:110px;height:110px;padding:6px;}
+.guest-completion.compact .guest-completion-ring strong{font-size:32px;}
+.guest-completion.compact .guest-completion-ring strong span{font-size:20px;}
+.guest-completion.compact .guest-completion-ring small{font-size:9px;}
+.guest-completion.compact h2{font-size:23px;}
+.guest-completion.compact>p{font-size:12px;line-height:1.6;}
+.guest-completion.compact .guest-completion-stats{padding:10px 0;}
+.guest-completion.compact .guest-completion-stats strong{font-size:17px;}
+.guest-drill-receipt{display:flex;gap:9px;}
+.guest-drill-receipt>span{display:flex;align-items:center;gap:4px;padding:5px 7px;border-radius:8px;background:${t.panel};font-size:11px;}
+.guest-drill-receipt .correct{color:${t.green};}.guest-drill-receipt .revisit{color:${t.textSec};}
+.guest-completion-next{width:100%;justify-content:center;}
+.guest-results-screen{max-width:780px;margin:0 auto;padding:28px 20px;}
+.guest-result-next-step{margin-top:24px;}.guest-result-next-step>.label{margin:0 0 10px;color:${t.textDim};}
+.guest-result-next-step>p{font-size:12px;color:${t.textDim};margin:-4px 0 20px;}
+.guest-result-review{padding:0 18px;margin-bottom:14px;}
+.guest-result-review>summary{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:18px 0;color:${t.text};font-size:14px;font-weight:850;list-style:none;}
+.guest-result-review>summary::-webkit-details-marker{display:none;}
+.guest-result-review[open]>summary svg{transform:rotate(180deg);}
+@keyframes guestScoreArrive{from{transform:scale(.82);opacity:0;}to{transform:scale(1);opacity:1;}}
+@keyframes guestFinishSpark{0%{transform:translateY(-16px) rotate(0);opacity:0;}25%{opacity:.65;}100%{transform:translateY(150px) rotate(150deg);opacity:0;}}
+@media(max-width:540px){.guest-completion{padding:26px 18px;}.guest-completion-actions{width:100%;flex-direction:column;}.guest-completion-actions .btn{justify-content:center;}.landing-drill-teaser{margin:24px 8px;}.guest-results-screen{padding:18px 12px;}}
 .landing-drill-active{animation:landingDrillReveal .42s cubic-bezier(.16,1,.3,1) both;outline:none;}
 .landing-drill-complete{display:grid;gap:10px;align-content:center;min-height:300px;}
 .landing-drill-complete-title{color:${t.text};font-size:18px;font-weight:950;line-height:1.25;}
@@ -22969,12 +23015,39 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   );
 }
 
+function GuestCompletionMoment({correct,total,compact=false,children}) {
+  const headingRef=useRef(null);
+  const pct=total?Math.round(correct/total*100):0;
+  useEffect(()=>{
+    const heading=headingRef.current;
+    heading?.focus({preventScroll:true});
+    const section=heading?.closest("section");
+    if(section){
+      section.style.scrollMarginTop=`${(document.querySelector(".guest-top-nav")?.getBoundingClientRect().height||0)+16}px`;
+      section.scrollIntoView({block:"start",behavior:"instant"});
+    }
+  },[]);
+  return <section className={`guest-completion ${compact?"compact":""}`} aria-label={compact?"Daily drill results":"Guest MCQ results"}>
+    <div className="guest-completion-sparks" aria-hidden="true">{Array.from({length:6},(_,i)=><i key={i} style={{"--i":i}}/>)}</div>
+    <div className="guest-completion-badge"><CheckCircle2 size={15}/>{compact?"Five questions. One step forward.":"Practice set complete"}</div>
+    <div className="guest-completion-ring" style={{"--result-progress":`${pct}%`}} aria-label={`${correct} of ${total} correct, ${pct} percent`}>
+      <div><strong>{correct}<span>/{total}</span></strong><small>correct answers</small></div>
+      <svg className="guest-completion-star" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M14 1l3.5 9.5L27 14l-9.5 3.5L14 27l-3.5-9.5L1 14l9.5-3.5z" fill="currentColor"/></svg>
+    </div>
+    <h2 ref={headingRef} tabIndex={-1}>{correct===total?"Every answer, earned.":pct>=60?"Keep that momentum.":"Your next step is clearer."}</h2>
+    <p>{correct===total?"A clean sweep of this set. Give these ideas a little space, then test your recall again.":pct>=60?"You have solid answers to build on. A few focused reviews will make the next round count.":"You showed up and found what needs practice. Start with one missed concept and build from there."}</p>
+    <div className="guest-completion-stats"><span><strong>{total}</strong> completed</span><span><strong>{pct}%</strong> accuracy</span><span><strong>{total-correct}</strong> to revisit</span></div>
+    {children}
+  </section>;
+}
+
 function LandingDailyChallengeWidget({t,onPractice}) {
   const challenge=getTodayChallenge();
   const questions=useMemo(()=>challenge.type==="mcq5"
     ? challenge.qids.map(id=>MCQ_BANK.find(q=>q.id===id)).filter(Boolean).map(shuffleMcqOptions)
     : [], [challenge.date,challenge.type]);
   const [started,setStarted]=useState(false);
+  const [finished,setFinished]=useState(false);
   const [qIndex,setQIndex]=useState(0);
   const [selected,setSelected]=useState(null);
   const [submitted,setSubmitted]=useState(false);
@@ -22982,20 +23055,11 @@ function LandingDailyChallengeWidget({t,onPractice}) {
   const activePanelRef=useRef(null);
   const current=questions[qIndex];
   const correctCount=results.filter(result=>result.correct).length;
-  const isDone=questions.length>0&&results.length>=questions.length;
-  const strongestChapter=useMemo(()=>{
-    const correctByChapter=results.reduce((totals,result)=>{
-      if(!result.correct)return totals;
-      const question=questions.find(item=>item.id===result.qid);
-      if(question)totals[question.ch]=(totals[question.ch]||0)+1;
-      return totals;
-    },{});
-    const strongestId=Object.entries(correctByChapter).sort((a,b)=>b[1]-a[1])[0]?.[0];
-    return strongestId?CHAPTERS.find(chapter=>chapter.id===strongestId):null;
-  },[questions,results]);
+  const isDone=finished;
+
 
   const submit=()=>{
-    if(selected===null||!current)return;
+    if(selected===null||!current||submitted)return;
     const correct=selected===current.correct;
     capture("landing_daily_question_answered",{question_id:current.id,correct});
     playAnswerSound(correct);
@@ -23007,6 +23071,9 @@ function LandingDailyChallengeWidget({t,onPractice}) {
       setQIndex(index=>index+1);
       setSelected(null);
       setSubmitted(false);
+    } else {
+      setFinished(true);
+      capture("landing_daily_drill_completed",{score:correctCount,total:questions.length});
     }
   };
   const continueToFullBank=()=>{
@@ -23022,7 +23089,13 @@ function LandingDailyChallengeWidget({t,onPractice}) {
   const renderPanel=({large=false}={})=>(
     <div className={large?"landing-challenge-expanded card":"landing-challenge-card landing-challenge-small"} aria-label="Quick five-question Security+ drill">
       {!started?(
-        <div className="landing-drill-teaser">
+        <div className="landing-drill-preview">
+          <div className="landing-drill-preview-content" aria-hidden="true">
+            <span className="chip">QUESTION 1 OF 5</span>
+            <p>{questions[0]?.q||"Which security control best addresses the risk described in this scenario?"}</p>
+            {(questions[0]?.opts||["Apply the appropriate access policy","Review the available evidence","Validate the security configuration","Confirm the recovery requirements"]).map((option,index)=><div key={index}><b>{String.fromCharCode(65+index)}</b><span>{option}</span></div>)}
+          </div>
+          <div className="landing-drill-teaser">
           <div className="landing-drill-teaser-icon" aria-hidden="true"><Target size={27}/></div>
           <div className="landing-drill-teaser-copy">
             <span>2 minutes · 5 questions</span>
@@ -23034,6 +23107,7 @@ function LandingDailyChallengeWidget({t,onPractice}) {
             <Play size={15} fill="currentColor"/> Start 2-minute drill
           </button>
           <small className="landing-drill-launch-note">No sign-up required</small>
+          </div>
         </div>
       ):(
         <div className="landing-drill-active" ref={activePanelRef} tabIndex={-1}>
@@ -23047,19 +23121,11 @@ function LandingDailyChallengeWidget({t,onPractice}) {
           </div>
 
           {isDone ? (
-            <div className="card landing-drill-complete" role="status" aria-live="polite" style={{padding:large?"22px":"18px",background:`${t.panel}c8`,borderColor:correctCount>=3?`${t.green}55`:`${t.amber}55`}}>
-              <div className="landing-drill-complete-title">🎉 Daily Drill Complete!</div>
-              <div className="landing-drill-score">Score: <strong style={{color:correctCount>=3?t.green:t.amber}}>{correctCount}/{questions.length}</strong></div>
-              <p>
-                {strongestChapter&&correctCount>0
-                  ? `Your strongest result was Domain ${strongestChapter.code} (${strongestChapter.title}). `
-                  : "You completed today's five-question warm-up. "}
-                Want to test your skills across all five CompTIA domains?
-              </p>
-              <button className="btn landing-drill-full-bank-cta" type="button" onClick={continueToFullBank}>
-                Continue to Full MCQ Practice Bank →
-              </button>
-            </div>
+            <GuestCompletionMoment correct={correctCount} total={questions.length} compact>
+              <div className="guest-drill-receipt" aria-label="Your five answers">{results.map((result,index)=><span key={result.qid} className={result.correct?"correct":"revisit"} aria-label={`Question ${index+1}: ${result.correct?"correct":"revisit"}`}>{result.correct?<Check size={15}/>:<RotateCcw size={13}/>}<small>{index+1}</small></span>)}</div>
+              <button className="btn btn-primary guest-completion-next" type="button" onClick={continueToFullBank}>Keep practising <ChevronRight size={16}/></button>
+              <small className="guest-completion-note">Choose your next set · No account needed</small>
+            </GuestCompletionMoment>
           ) : current ? (
             <>
               <div className="demo-question" style={{marginBottom:12}}>
@@ -23677,7 +23743,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           </summary>
           <div className="seo-resource-grid">
             {SEO_RESOURCE_LINKS.map(resource=>(
-              <a key={resource.href} className="seo-resource-link" href={resource.href}>
+              <a key={`${resource.href}-${resource.title}`} className="seo-resource-link" href={resource.href}>
                 <strong>{resource.title}</strong>
                 <span>{resource.body}</span>
                 <em>Open resource →</em>
@@ -24676,7 +24742,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
         </summary>
         <div className="seo-resource-grid">
           {SEO_RESOURCE_LINKS.map(resource=>(
-            <a key={resource.href} className="seo-resource-link" href={resource.href}>
+            <a key={`${resource.href}-${resource.title}`} className="seo-resource-link" href={resource.href}>
               <strong>{resource.title}</strong>
               <span>{resource.body}</span>
               <em>Open resource →</em>
@@ -25521,6 +25587,26 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           ))}
         </div>
       </details>
+    </div>
+  );
+
+  if(done&&isGuest) return(
+    <div className="mcq-results-screen guest-results-screen fu">
+      <GuestCompletionMoment correct={correctCount} total={questions.length}>
+        <div className="guest-completion-actions">
+          <button className="btn btn-primary" onClick={()=>reviewCompletedQuestion(Math.max(0,results.findIndex(result=>result&&!result.correct)))}>{sessionMissedQuestions.length?"Review missed questions":"Review your answers"}<ChevronRight size={16}/></button>
+          <button className="btn btn-outline" onClick={()=>{setStarted(false);setDone(false);setFinishedReviewMode(false);}}>Start a new set</button>
+        </div>
+        <small className="guest-completion-note">This is your practice snapshot, not an exam-readiness score.</small>
+      </GuestCompletionMoment>
+      <div className="guest-result-next-step"><div className="label">Make your next session count</div>{guestSignupPrompt}<p>Your result is not saved to an account yet. Creating one is free.</p></div>
+      <details className="card guest-result-review">
+        <summary>Explore your {questions.length} answers <ChevronDown size={16}/></summary>
+        <div className="practice-review-list">{results.map((result,index)=><button key={result.qid} type="button" className="practice-review-row" style={{"--review-color":result.correct?t.green:t.amber}} onClick={()=>reviewCompletedQuestion(index)}>
+          <span className="practice-review-status">{result.correct?<Check size={16}/>:<RotateCcw size={16}/>}</span><span>{questions[index]?.q}</span><small>{result.correct?"Correct":"Revisit"}</small>
+        </button>)}</div>
+      </details>
+      <button className="btn btn-ghost" onClick={retakeCurrentQuiz}><RotateCcw size={14}/>Retry the same set</button>
     </div>
   );
 
@@ -33455,6 +33541,7 @@ export default function App() {
       if(event.type==="keydown"&&event.key!=="Escape")return;
       if(event.type==="pointerdown"&&guestMoreRef.current?.contains(event.target))return;
       setGuestMoreOpen(false);
+      if(event.key==="Escape")guestMoreRef.current?.querySelector("button")?.focus();
     };
     document.addEventListener("pointerdown",closeMoreMenu);
     document.addEventListener("keydown",closeMoreMenu);
@@ -34571,8 +34658,7 @@ export default function App() {
                 >
                   More <ChevronDown size={14} aria-hidden="true"/>
                 </button>
-                {guestMoreOpen&&(
-                  <div id="guest-more-menu" className="guest-top-nav-more-menu" aria-label="More guest pages">
+                <div id="guest-more-menu" className="guest-top-nav-more-menu" aria-label="More guest pages" aria-hidden={!guestMoreOpen} inert={!guestMoreOpen}>
                     {guestMoreItems.map(item=>(
                       <button
                         key={item.id}
@@ -34585,7 +34671,6 @@ export default function App() {
                       </button>
                     ))}
                   </div>
-                )}
               </div>
             </nav>
             <div className="guest-top-nav-actions" aria-label="Guest account actions">
