@@ -314,6 +314,50 @@ These requirements are part of the brand promise:
 - Keep guest practice useful; explain when signup becomes valuable for persistence and longitudinal personalisation.
 - Keep free-account value distinct from optional paid capabilities.
 
+### MCQ practice-page direction
+
+For signed-in learners, the MCQ page should lead with one obvious job: start the next personalised question set. Remove or collapse competing cards, promotional panels, tours, and secondary actions that distract from that decision. This requirement refers to surrounding interface distractions; it does **not** mean removing the plausible incorrect answer options within an MCQ.
+
+The primary setup should contain:
+
+- A concise **Personalised MCQ set** heading.
+- One or two sentences explaining why the set is being recommended.
+- Brief, decision-useful metrics such as due concepts, concepts needing attention, current chapter coverage, or the previous targeted-set result.
+- A question-count control allowing a minimum of 10 and a maximum of 30 questions. Default to 10 unless product evidence supports another default.
+- One dominant CTA, such as **Start my personalised set**.
+
+Keep individual controls such as chapter, topic, difficulty, review mode, or other manual filters inside a collapsed **Customise practice** section below the primary action. Opening that section must not change the 30-question maximum. Do not allow the custom controls to visually compete with the personalised default.
+
+The question-count control may use clear presets or an accessible bounded stepper, but it must never accept fewer than 10 or more than 30 questions. Preserve keyboard use, visible labels, and validation. When too few eligible questions exist, explain the reduced set rather than silently filling it with unrelated content.
+
+### Free PBQ access decision
+
+The baseline free-account PBQ allowlist must contain exactly these question IDs:
+
+- `p035`
+- `p033`
+- `p223`
+- `p094`
+- `p017`
+
+Remove all previously designated free PBQs from the baseline free allowlist, including any legacy single-preview constant or UI exception. A PBQ unlocked separately through an earned-access mechanism may remain accessible under that separate entitlement, but it must not be presented as part of the baseline free set.
+
+Use one shared entitlement source for the PBQ bank, direct links, recommendations, guest previews where applicable, and PBQ launch checks. Do not maintain different hard-coded free lists in separate components. Verify that every listed ID exists in the published PBQ bank and that no retired free ID remains reachable through a stale client-side check.
+
+### Free Concept Deep Dive access decision
+
+Free signed-in learners receive access to **all Domain 1 Concept Deep Dive lessons**. Remove Domain 2 lessons from free access. Unless another explicit entitlement applies, Domain 2 through Domain 5 Deep Dives require Pro.
+
+Smart Review may still recommend a locked Domain 2–5 lesson. In that case, show the lesson title, matched concept, reason for the recommendation, tier status, and upgrade path before navigation. The learner must still receive the underlying MCQ answer explanation and weak-concept diagnosis.
+
+Implement Deep Dive access from canonical lesson-domain metadata and a central entitlement rule. Do not create a manually maintained list that can drift when lessons are added or renamed. New Domain 1 lessons should inherit free access automatically; new Domain 2 lessons must not.
+
+### Exam Mode PBQ cap
+
+Exam Mode must cap PBQs at **30% of the total questions by question count**. Learners may select a lower PBQ share, including zero where the experience permits, but never a higher share.
+
+Calculate the maximum as `floor(totalQuestionCount × 0.30)` so the generated exam cannot exceed the cap. Recalculate and constrain the PBQ count whenever the total question count changes. The UI label, preview, generated exam, analytics, and final report must all use the same validated composition. Server or trusted generation logic should revalidate the cap rather than relying only on a slider or client control.
+
 ## 12. Smart Review and personalisation engine
 
 ### Product decision
@@ -545,6 +589,8 @@ Do not rely only on a mutable mastery percentage. Preserve the underlying eviden
 ### Activation and retention metrics
 
 - Percentage of new accounts that receive a weak-topic recommendation.
+- Personalised MCQ-set start and completion rate, segmented by selected set size.
+- Usage of the collapsed custom-practice controls versus the recommended default.
 - Percentage that open a recommended Deep Dive or targeted practice item.
 - First Smart Review completion rate.
 - Seven-day return rate for learners who use Smart Review versus those who only take broad sets.
@@ -603,8 +649,12 @@ Do not rely only on a mutable mastery percentage. Preserve the underlying eviden
 ### Phase 3 — Build the personalised learner experience
 
 - Add the post-set concept summary, Deep Dive links, curated flashcard update, and retest expectation.
+- Simplify the MCQ page around the personalised-set CTA, brief recommendation metrics, and a 10–30 question-count control; move manual configuration into the collapsed customisation section.
 - Rebuild the signed-in learner homepage around targeted MCQs, curated flashcards, flagged Deep Dives, due concepts, and competency analysis.
 - Add “Why am I seeing this?” explanations and learner controls.
+- Replace the baseline free PBQ allowlist with `p035`, `p033`, `p223`, `p094`, and `p017`, then verify all PBQ entry paths use the same entitlement rule.
+- Give free signed-in learners all Domain 1 Deep Dives, remove Domain 2 from free access, and verify new lessons inherit access from canonical domain metadata.
+- Cap Exam Mode PBQs at 30% of the generated question count and validate the cap beyond the client control.
 - Verify free and Pro access states without hiding core diagnosis or answer explanations.
 
 ### Phase 4 — Lock rebrand messaging and storyboard
@@ -658,6 +708,11 @@ The rebrand is ready for review when:
 - Post-set results link to the relevant Deep Dive and refreshed flashcards and state how the concept will return.
 - The signed-in homepage provides direct access to personalised MCQs, curated flashcards, flagged Deep Dives, and competency analysis.
 - Chapter competency distinguishes mastery from confidence and displays insufficient evidence honestly.
+- The signed-in MCQ page leads with one personalised-set CTA, concise recommendation metrics, and a validated 10–30 question selector; manual filters remain collapsed below it.
+- MCQ answer distractors and per-option explanations remain intact even though surrounding interface distractions are removed.
+- The baseline free PBQ set contains exactly `p035`, `p033`, `p223`, `p094`, and `p017`; previous free-only exceptions no longer grant baseline access.
+- Free signed-in learners can open every Domain 1 Deep Dive and cannot freely open Domain 2–5 lessons unless another explicit entitlement applies.
+- Exam Mode never generates PBQs above 30% of total questions, including after total-question changes or direct state manipulation.
 - Existing SEO routes, canonicals, structured data, and internal links are preserved unless a documented migration is approved.
 - Guest practice remains useful and the reason to create a free account is concrete.
 - The implementation is responsive, keyboard accessible, and respects reduced motion.
