@@ -460,6 +460,7 @@ The first implementation should be deterministic, versioned, and configurable. D
 - Correctly answering an exact question soon after seeing its explanation is weak evidence because the learner may remember the answer.
 - Correctly answering a different scenario testing the same concept is stronger transfer evidence.
 - A correct answer after a time delay is stronger retention evidence than an immediate retry.
+- A concept cannot move to `Proven` while recent contradictory evidence remains unresolved. A later miss must delay or reverse promotion until the learner succeeds again on sufficiently varied and spaced evidence.
 - Repeated misses after an intervention increase stickiness and the amount of future evidence required for `Proven` or `Mastered` status.
 - A later lapse lowers mastery and schedules repair. Prior sticky history should make the concept recover more cautiously than a first-time miss.
 - Response time may help with diagnostics only after accuracy is stable. Slow answers must not automatically count as poor understanding because reading speed and accessibility needs vary.
@@ -570,7 +571,7 @@ Do not rely only on a mutable mastery percentage. Preserve the underlying eviden
 2. Audit every MCQ for canonical primary and secondary concept tags; add PBQ step-level tags where scoring permits.
 3. Map flashcards and Deep Dives to the same concepts.
 4. Extend attempt persistence so concept evidence survives across devices and sessions.
-5. Build a versioned mastery calculator and scheduler with automated scenario tests.
+5. Build a versioned mastery calculator and scheduler with automated scenario tests, including immediate exact-question recall, fresh-scenario transfer, delayed retention, repeated misses, sticky recovery, and post-mastery relapse.
 6. Run the new system in shadow mode against historical attempts without changing learner sets.
 7. Review false flags, repetition, concept coverage, and recommendation explanations.
 8. Add the post-set learning plan and signed-in homepage surfaces.
@@ -703,6 +704,7 @@ The rebrand is ready for review when:
 - Every MCQ has reviewed canonical concept metadata before it can influence concept mastery.
 - An incorrect answer creates immediate help and a future review event without declaring broad weakness from that event alone.
 - Proof requires performance on distinct scenarios and delayed evidence; immediate exact-question recall cannot independently establish mastery.
+- Promotion to `Proven` requires no unresolved recent contradictory evidence; a subsequent miss must delay or reverse the state appropriately.
 - Related concepts can enter the review deck without being falsely marked weak.
 - Sticky concepts require more varied and spaced evidence to recover than a first-time miss.
 - Post-set results link to the relevant Deep Dive and refreshed flashcards and state how the concept will return.
@@ -724,7 +726,7 @@ The rebrand is ready for review when:
 
 Run a **product-loop and concept-data truth audit** before designing the new page or changing the algorithm. For each of the four stages, capture the current screen, input data, recommendation logic, next action, persisted fields, and any gap that would make the homepage claim feel exaggerated.
 
-Use RTO, RPO, MTD, and MTTR as the first vertical slice. Tag the relevant questions, flashcards, and Deep Dive; model their relationships; replay representative correct and incorrect histories; and verify that the proposed states and recommendations remain understandable. This pilot should expose data-model and scheduling flaws before the entire question bank is retagged.
+Use RTO, RPO, MTD, and MTTR as the first vertical slice. Tag the relevant questions, flashcards, and Deep Dive; model their relationships; replay representative correct and incorrect histories; and verify that the proposed states and recommendations remain understandable. The replay set must include a learner who memorises an immediate exact-question retry, a learner who transfers understanding to fresh scenarios and a delayed check, a learner whose concept becomes sticky, and a previously proven learner who later relapses. This pilot should expose data-model and scheduling flaws before the entire question bank is retagged.
 
 Unless the founder objects, use this messaging hierarchy as the working default during that audit:
 
