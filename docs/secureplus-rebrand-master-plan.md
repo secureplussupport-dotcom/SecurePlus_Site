@@ -246,6 +246,24 @@ Potential pillar routes include `/personalized-security-plus-study-plan/` and `/
 
 Core SEO landing pages should remain direct and keyword-led. Introduce the adaptive learning proposition as the reason to choose SecurePlus after the page has satisfied the searcher's immediate intent. Do not rewrite every page around the brand slogan or force “personalised” into copy where the page does not demonstrate personalisation.
 
+### Minimise SEO duplication during page construction
+
+Every new or rewritten page must have one documented primary search intent before copy is produced. Maintain a simple page-to-keyword map containing the URL, audience intent, primary query family, supporting queries, title, H1, canonical URL, and the next action for the learner. Review that map whenever another page is added.
+
+Apply these construction rules:
+
+- Give the homepage, “Why We're Different” page, SY0-601-versus-SY0-701 page, and each practice resource a distinct purpose and primary query family.
+- Do not copy large sections of body text, FAQs, titles, meta descriptions, or H1 headings between pages. Shared product facts may be restated briefly, but the surrounding explanation must serve the page's specific intent.
+- Keep the homepage focused on the SecurePlus brand and adaptive learning proposition. Do not turn it into a full SY0-601-versus-SY0-701 comparison or a substitute for the detailed practice pages.
+- Keep the “Why We're Different” page focused on product philosophy and workflow. It should link to detailed SEO resources rather than reproduce their instructional content.
+- Keep `/sy0-601-vs-sy0-701/` focused on exam-version comparison and migration intent. Do not reuse its comparison sections across the homepage or About page.
+- Use self-referencing canonicals for distinct, indexable pages. Use a canonical to another URL only when pages are genuinely duplicate or near-duplicate and consolidation is intentional.
+- Avoid creating multiple routes for spelling variants, campaign parameters, or minor copy variations. Redirect retired duplicates and ensure tracking parameters do not create indexable versions.
+- Before publication, compare the proposed page against existing page titles, H1s, metadata, headings, FAQs, and substantial body passages. Rewrite overlapping sections or consolidate pages when they satisfy the same intent.
+- After publication, monitor Google Search Console for the same query repeatedly switching between multiple SecurePlus URLs. Treat this as a possible cannibalisation signal and investigate content intent, internal links, and canonicals.
+
+Some overlap in brand language and product facts is natural. The objective is minimal **substantive** duplication and a clear best SecurePlus page for each search intent, not artificial wording changes that make the content less useful.
+
 ### Internal-link model
 
 Existing high-traffic practice and guide pages should link naturally into the diagnostic and Smart Review journey. New personalised-study articles should link back to relevant domain practice, Concept Deep Dives, flashcards, PBQs, and the diagnostic CTA. This turns informational traffic into product use without sacrificing search relevance.
@@ -381,6 +399,8 @@ The rebrand is ready for review when:
 - A visitor can explain how SecurePlus differs from a random question bank after viewing the hero and product loop.
 - The homepage links to a separate “Why We're Different” About page that expands the product thesis without duplicating the full homepage.
 - `/sy0-601-vs-sy0-701/` remains a distinct, search-focused landing page and is not repurposed as a generic brand page.
+- A page-to-keyword map confirms a distinct primary intent, title, H1, canonical, and learner action for every new or rewritten indexable page.
+- A pre-publication duplication review finds no avoidable reuse of substantial copy, metadata, headings, or FAQs across indexable pages.
 - Personalisation claims match current behavior and show why recommendations were made.
 - Existing SEO routes, canonicals, structured data, and internal links are preserved unless a documented migration is approved.
 - Guest practice remains useful and the reason to create a free account is concrete.
