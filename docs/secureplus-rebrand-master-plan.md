@@ -29,6 +29,19 @@ The following decisions are approved:
 - Add a personalised-study SEO cluster without replacing or weakening the existing SY0-701 keyword footprint.
 - Build advertising around the pain of random practice, stuck scores, and wasted review time.
 
+### Page hierarchy decision
+
+SecurePlus will have **one main homepage**, not separate homepages for each audience. The immediate product and design focus is the rebranded homepage at `/`.
+
+Different pages may serve different entry intents without competing with the homepage:
+
+- **Main homepage:** the concise brand promise, Daily Drill, and a visual summary of the adaptive learning loop.
+- **Search landing pages:** focused pages that satisfy a specific Google query and then introduce the relevant SecurePlus journey.
+- **Campaign landing pages:** created later only when a paid campaign needs close message match.
+- **“Why We're Different” page:** an explanatory About page linked from the homepage. It expands the product thesis and is not treated as a search or advertising landing page.
+
+The existing `/sy0-601-vs-sy0-701/` page is an essential search landing page. It must remain a distinct, maintained entry point for learners comparing the retired SY0-601 exam with the current SY0-701 exam. It is not an alternative homepage.
+
 ## 3. Target learner and job to be done
 
 ### Primary audience
@@ -155,9 +168,13 @@ Replace the current generic feature showcase with a clear narrative:
 
 After the loop, explain the value of a free account: saving progress, preserving weak-topic history, and building a continuing Smart Review queue. Keep paid features clearly optional. The page should retain a genuine guest practice path so new learners can experience value before signup.
 
-## 7. About-page role
+## 7. “Why We're Different” About page
 
-Move the longer brand story to the About page. It should cover:
+Create a dedicated page that is accessible from the homepage and primary navigation or another consistently visible navigation location. Its user-facing label should clearly communicate **“Why We're Different”** even if the final URL is `/about/` or `/why-secureplus/`.
+
+This is a supporting brand and product-explanation page, not a landing page. Its job is to expand the ideas introduced briefly on the homepage without making the homepage long or repetitive.
+
+Move the longer brand story to this page. It should cover:
 
 1. The learner problem: more random questions do not automatically produce better study decisions.
 2. The SecurePlus belief: every mistake can become a useful signal when practice, teaching, and review are connected.
@@ -166,7 +183,16 @@ Move the longer brand story to the About page. It should cover:
 5. How personalisation works in plain language, including its current limits.
 6. The product's commitment to CompTIA SY0-701 scope, accurate explanations, and deliberate review.
 
-Avoid a founder-centric company biography unless it adds trust. The page's primary job is to deepen the product thesis introduced on the homepage.
+It should also compare the SecurePlus learning model with common alternatives in a fair, factual way:
+
+- Random question banks provide volume; SecurePlus connects performance signals to a next study action.
+- Standalone notes or videos teach concepts; SecurePlus connects concept learning to the mistake that triggered it and to later retesting.
+- Static flashcards support recall; SecurePlus can prioritise review around observed weak areas.
+- A score reports an outcome; SecurePlus should help the learner decide what to do next.
+
+Do not claim that competitors lack capabilities without evidence or name competitors merely to create contrast. Demonstrate the difference through the SecurePlus workflow and real interface states.
+
+Avoid a founder-centric company biography unless it adds trust. The page's primary job is to deepen the product thesis introduced on the homepage. The homepage should link to it near the summarised product loop with copy such as **“See why SecurePlus is different.”** It should also remain discoverable through the site's navigation or footer.
 
 ## 8. SEO strategy: preserve the base and add a new cluster
 
@@ -188,6 +214,19 @@ Preserve these current resource routes, their strongest keyword intent, canonica
 - `/security-plus-port-numbers/`
 
 Before changing titles, URLs, headings, or internal links, record current Google Search Console impressions, clicks, click-through rate, and average position by page and query. Keep URLs stable unless there is a measured reason to migrate them; if a URL must change, use a permanent redirect and update canonicals, the sitemap, and internal links.
+
+### Essential SY0-601 vs SY0-701 landing page
+
+The `/sy0-601-vs-sy0-701/` page is a priority SEO asset, not an optional resource link. Preserve and improve it as a focused landing page that:
+
+- Clearly states that SY0-601 is retired and SY0-701 is the current study target, with dates and exam facts verified against authoritative sources before publication.
+- Explains what changed at a level useful to a learner deciding whether older materials are still safe to use.
+- Separates transferable concepts from objectives that require updated SY0-701 study.
+- Gives the learner a concrete migration path into current SY0-701 practice, PBQs, study guidance, and weak-area diagnosis.
+- Uses search-focused metadata and headings while applying the new SecurePlus brand and visual system.
+- Links into the adaptive learning journey without obscuring the comparison information that brought the visitor to the page.
+
+Do not merge this content into the homepage or the “Why We're Different” page. They serve different user intent.
 
 ### New positioning-led content cluster
 
@@ -309,17 +348,19 @@ These requirements are part of the brand promise:
 - Produce a responsive storyboard using real SecurePlus screens and realistic demo data.
 - Check that the entire landing page tells one story rather than returning to a feature catalogue.
 
-### Phase 3 — Implement the landing page
+### Phase 3 — Implement the rebranded homepage
 
 - Update the hero while retaining the right-side Daily Drill.
 - Replace `guest-feature-showcase` with the four-step loop.
+- Add a clear path from the summarised loop to the “Why We're Different” page.
 - Add responsive, accessible motion and reduced-motion handling.
 - Preserve the guest journey and the clear free-account value proposition.
 - Instrument the hero, loop, diagnostic, signup, and Smart Review events.
 
-### Phase 4 — Expand brand and organic acquisition
+### Phase 4 — Build the supporting page architecture
 
-- Write the longer About page.
+- Build the longer “Why We're Different” About page and link it from the homepage and site navigation.
+- Audit and strengthen the essential `/sy0-601-vs-sy0-701/` landing page while preserving its URL and search intent.
 - Audit metadata and copy while preserving existing SEO intent and routes.
 - Research and publish the personalised-study content cluster.
 - Strengthen internal links from existing search pages into the adaptive loop.
@@ -338,6 +379,8 @@ The rebrand is ready for review when:
 - The Daily Drill remains usable in the hero.
 - The page demonstrates Diagnose → Understand → Repair → Retest with real, legible product visuals.
 - A visitor can explain how SecurePlus differs from a random question bank after viewing the hero and product loop.
+- The homepage links to a separate “Why We're Different” About page that expands the product thesis without duplicating the full homepage.
+- `/sy0-601-vs-sy0-701/` remains a distinct, search-focused landing page and is not repurposed as a generic brand page.
 - Personalisation claims match current behavior and show why recommendations were made.
 - Existing SEO routes, canonicals, structured data, and internal links are preserved unless a documented migration is approved.
 - Guest practice remains useful and the reason to create a free account is concrete.
@@ -358,4 +401,3 @@ Unless the founder objects, use this messaging hierarchy as the working default 
 - **CTA:** Find my weak spots.
 
 After the truth audit, the next deliverable should be the exact homepage copy and a section-by-section responsive visual storyboard. Implementation should begin only after the storyboard is coherent and every product visual maps to a real capability.
-
