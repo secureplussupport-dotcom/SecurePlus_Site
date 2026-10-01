@@ -20,7 +20,8 @@
     "audit:seo": "node scripts/audit-seo.mjs",
     "audit:deep-dives": "node scripts/audit-deep-dives.mjs",
     "audit:qbank": "node scripts/audit-qbank.mjs",
-    "audit:qbank:strict": "node scripts/audit-qbank.mjs --strict"
+    "audit:qbank:strict": "node scripts/audit-qbank.mjs --strict",
+    "audit:learning-pilot": "node scripts/audit-learning-pilot.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.105.3",
