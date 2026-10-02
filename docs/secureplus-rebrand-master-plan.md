@@ -706,6 +706,22 @@ Do not rely only on a mutable mastery percentage. Preserve the underlying eviden
 - Treat engagement as meaningful learning-loop adoption and return behavior, not extra clicks, animation, time-on-page or addictive friction. Avoid adding features merely to make the interface busier.
 - Commit and push only task-related changes after applicable build, content, security and browser checks pass. Verify the deployed experience rather than treating a source commit as completion.
 
+### Phase 9 — AI-assisted real-user growth analysis
+
+- Establish an ongoing founder-and-AI analysis cycle using real, dated product and acquisition data. The AI acts as an analytical partner: it retrieves or helps organise the evidence, explains patterns and uncertainty in plain language, challenges weak conclusions, proposes prioritised experiments, and helps the founder decide what to test next.
+- Use the correct source for each question. Google Search Console is the primary source for organic impressions, search queries, clicks, click-through rate and average position. PostHog is the primary source for landing sessions, navigation, activation, practice completion, learning-loop behavior, return behavior, retention, conversion, experiments and other on-site events. Add billing or subscription data only when revenue questions require it; do not treat an analytics event as authoritative payment or account data.
+- Begin with a dated measurement audit: confirm event definitions, identity handling, consent boundaries, bot/internal-traffic exclusions, URL and UTM conventions, Search Console coverage, conversion definitions, known gaps and which metrics are authoritative. Do not optimise from an unverified dashboard.
+- **Stage 9A — Grow qualified discovery and clicks.** Analyse query and landing-page performance, impressions, click-through rate, position, device, country where appropriate, branded versus non-branded demand, new versus decaying pages, search-intent fit and the path from organic landing to a meaningful first action. Protect existing ranking URLs and distinguish increased visibility from traffic that is likely to become an activated Security+ learner.
+- Use Stage 9A to prioritise title/meta tests, content refreshes, internal linking, search-intent alignment, structured data, new content opportunities and landing-page message matching. Avoid keyword cannibalisation, duplicated pages, misleading titles and publishing low-value content solely to increase impression counts.
+- Treat acquisition as sufficiently understood only when tracking is reliable, priority query/page opportunities are mapped, experiments can be attributed, and qualified organic clicks show a sustained improvement over an agreed comparison window. A temporary increase in total impressions or clicks alone does not complete the stage.
+- **Stage 9B — Improve engagement after acquisition is understood.** Analyse whether acquired visitors start useful practice, complete a first set, understand their diagnosis, create a free account when persistence becomes valuable, follow recommended learning actions, return, and eventually convert. Segment by landing intent, device, guest/free/Pro state, new/returning status and other dimensions only when sample size and privacy permit.
+- Prioritise meaningful engagement measures: diagnostic or practice starts, set completion, answer-review use, Diagnose → Understand → Strengthen → Prove loop completion, recommendation follow-through, retest completion, D1/D7/D30 return behavior, free-account activation, Pro conversion and churn. Do not optimise raw time-on-page, click volume or screen count when those actions do not improve learning or retention.
+- Run a repeatable cycle: establish the baseline and question; inspect funnels, cohorts and recordings where consent permits; identify the largest credible constraint; present a short prioritised experiment list with expected impact, effort, risk and success criteria; obtain founder approval; implement; measure for a suitable period; and record whether to keep, iterate or revert.
+- Keep a dated growth decision log containing the question, source, segments, baseline, hypothesis, approved change, exposure period, outcome, uncertainty and next decision. Clearly distinguish correlation from causation and exploratory findings from experiment results.
+- Use aggregate reporting by default. Avoid exposing unnecessary personal data, raw answers, email addresses or identifiable recordings. Apply minimum sample thresholds and suppress misleading percentages from tiny cohorts.
+- Review unit economics as paid acquisition grows: CAC, activation-adjusted CAC, free-to-paid conversion, retention, churn, gross contribution where available, LTV assumptions and payback period. Do not scale campaigns because clicks are cheap if the resulting learners do not activate or retain.
+- The AI may recommend product, SEO, content, analytics or campaign changes, but it must present the proposed changes and reasoning for founder approval before implementation, following the Phase 8 proposal discipline.
+
 ## 16. Acceptance criteria for the implementation agent
 
 The rebrand is ready for review when:
@@ -745,6 +761,10 @@ The rebrand is ready for review when:
 - Phase 8 explicitly evaluates and proposes UI/UX improvements, and material redesign bullets include a concrete visual or flow representation before founder approval.
 - Phase 8 improvements make the learning loop and SecurePlus differentiation clearer without weakening factual accuracy, accessibility, privacy, entitlement integrity, SEO intent or learner trust.
 - Phase 8 reports unresolved defects, rejected ideas, verification results and any pricing, legal, destructive-data or entitlement decisions that remain reserved for founder approval.
+- Phase 9 begins with a dated measurement and instrumentation audit and uses Search Console for search visibility while using PostHog for on-site behavior.
+- Phase 9A reports qualified discovery and click performance by query and landing intent, protects established SEO equity, and does not claim success from unqualified impression or click growth alone.
+- Phase 9B begins only after acquisition measurement and priority opportunities are understood, then measures activation, learning-loop completion, retention and conversion rather than superficial interaction volume.
+- Phase 9 maintains a dated decision log, states data limitations, distinguishes correlation from causation, protects learner privacy, and submits proposed changes for founder approval before execution.
 
 ## 17. Immediate next step
 
