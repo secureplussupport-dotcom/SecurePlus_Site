@@ -37,7 +37,7 @@ export function readPbqDatabaseAdapters(file = "src/App.jsx") {
 }
 
 // Read authored literals, before runtime fallbacks can hide missing feedback.
-export function readAuthoredBank(file = "src/App.jsx") {
+export function readAuthoredInputs(file = "src/App.jsx") {
   const source = fs.readFileSync(file, "utf8");
   const read = name => {
     const declaration = source.indexOf(`const ${name} =`);
@@ -64,10 +64,19 @@ export function readAuthoredBank(file = "src/App.jsx") {
     }
     throw new Error(`Unclosed bank: ${name}`);
   };
-  const hiddenMcqs = new Set(read("LOW_QUALITY_MCQ_IDS"));
-  const hiddenPbqs = new Set(read("LOW_QUALITY_PBQ_IDS"));
   return {
-    mcqs: mergePublishedSnapshot([...read("MCQ_BANK_RAW"), ...read("IMPORTED_MCQ_BANK")].filter(q => !hiddenMcqs.has(q.id)), "mcq", {includeDisabled:true}),
-    pbqs: mergePublishedSnapshot([...read("PBQ_BANK_BASE"), ...read("IMPORTED_PBQ_BANK")].filter(q => !hiddenPbqs.has(q.id)), "pbq", {includeDisabled:true}),
+    authored: {mcq:read("MCQ_BANK_RAW"), pbq:read("PBQ_BANK_BASE")},
+    imported: {mcq:read("IMPORTED_MCQ_BANK"), pbq:read("IMPORTED_PBQ_BANK")},
+    excluded: {mcq:read("LOW_QUALITY_MCQ_IDS"), pbq:read("LOW_QUALITY_PBQ_IDS")},
+  };
+}
+
+export function readAuthoredBank(file = "src/App.jsx") {
+  const {authored, imported, excluded} = readAuthoredInputs(file);
+  const hiddenMcqs = new Set(excluded.mcq);
+  const hiddenPbqs = new Set(excluded.pbq);
+  return {
+    mcqs: mergePublishedSnapshot([...authored.mcq, ...imported.mcq].filter(q => !hiddenMcqs.has(q.id)), "mcq", {includeDisabled:true}),
+    pbqs: mergePublishedSnapshot([...authored.pbq, ...imported.pbq].filter(q => !hiddenPbqs.has(q.id)), "pbq", {includeDisabled:true}),
   };
 }
