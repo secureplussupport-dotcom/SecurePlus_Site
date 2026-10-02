@@ -688,6 +688,21 @@ Do not rely only on a mutable mastery percentage. Preserve the underlying eviden
 - Send each ad to a message-matched diagnostic entry point.
 - Scale only the combinations that create activated and retained learners with credible unit economics.
 
+### Phase 8 — AI-directed whole-site user audit and improvement
+
+- Give a capable AI implementation agent broad authority to explore the live-equivalent site as an unfamiliar online learner, diagnose weaknesses, and improve the product end to end.
+- Test from multiple realistic perspectives rather than one ideal path: a search visitor comparing SY0-601 and SY0-701, a first-time guest trying practice, a free signed-in learner, a returning learner with history, a Pro learner, a mobile visitor, and a learner who is sceptical or already stuck.
+- Exercise complete journeys in a real browser at desktop and mobile widths, including discovery, first impression, Daily Drill, signup, authentication, MCQ and PBQ practice, answer review, Deep Dives, flashcards, Smart Review, personalised recommendations, Exam Mode, upgrade prompts, account controls, failure states, navigation and return visits.
+- Inspect usability, clarity, differentiation, engagement, accessibility, responsive behavior, performance, console/network failures, broken links, dead ends, inconsistent entitlements, confusing copy, unnecessary friction, repetitive screens, weak feedback, and places where the experience feels like a generic question bank.
+- Before editing, create a dated change register that lists every proposed addition, removal or modification; the observed evidence; why it matters; the expected learner or business outcome; risk; scope; and how success will be verified. This is a mandatory reasoning checkpoint, not a request for item-by-item founder approval. After recording it, the agent may execute the reviewed list autonomously within the guardrails below.
+- Allow the agent to add, remove, combine, reorder, rewrite or redesign product elements when the evidence supports a more engaging, coherent and distinctive experience. Prefer changes that strengthen the Diagnose → Understand → Strengthen → Prove loop and make the next useful action obvious.
+- Require the agent to update the change register if testing changes its plan. Record rejected ideas and material reversals so the final result can be audited without preserving irrelevant implementation history in the product UI.
+- Re-run the same user journeys after implementation and provide before/after evidence, test results, remaining weaknesses and a final judgement on whether the site is clearer, more useful and more differentiated.
+- Preserve factual Security+ accuracy, reviewed question truth, privacy, accessibility, account ownership, payment integrity, search intent, canonical routes and the useful guest path. Do not use fabricated testimonials, false urgency, dark patterns or unsupported personalisation and exam-pass claims.
+- Do not autonomously change pricing, legal terms, destructive data operations, production secrets, human editorial approvals or the core free/Pro entitlement strategy. Surface those as separate founder decisions with evidence and a recommendation.
+- Treat engagement as meaningful learning-loop adoption and return behavior, not extra clicks, animation, time-on-page or addictive friction. Avoid adding features merely to make the interface busier.
+- Commit and push only task-related changes after applicable build, content, security and browser checks pass. Verify the deployed experience rather than treating a source commit as completion.
+
 ## 16. Acceptance criteria for the implementation agent
 
 The rebrand is ready for review when:
@@ -721,6 +736,10 @@ The rebrand is ready for review when:
 - Relevant analytics events are verified.
 - Repository build and content audits pass.
 - The deployed site is checked in a browser at desktop and mobile widths; a source commit alone is not treated as proof of production delivery.
+- Phase 8 begins with a dated, evidence-backed change register covering every intended addition, removal and modification before implementation starts.
+- Phase 8 tests complete guest, free, Pro, returning, mobile and search-entry journeys, then repeats them after the changes and records before/after evidence.
+- Phase 8 improvements make the learning loop and SecurePlus differentiation clearer without weakening factual accuracy, accessibility, privacy, entitlement integrity, SEO intent or learner trust.
+- Phase 8 reports unresolved defects, rejected ideas, verification results and any pricing, legal, destructive-data or entitlement decisions that remain reserved for founder approval.
 
 ## 17. Immediate next step
 
