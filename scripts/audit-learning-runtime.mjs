@@ -10,6 +10,7 @@ import { resolvePublication } from '../server/adaptive/publication.mjs';
 import { compileRevision, learnerRevision, gradeRevision } from '../server/adaptive/revision.mjs';
 import { assessReplayChronology } from '../server/adaptive/chronology.mjs';
 import { shadowWritesAllowed, createShadowRunner } from '../server/adaptive/shadow.mjs';
+import { adaptiveDatabaseAllowed } from '../server/adaptive/database.mjs';
 
 const { assets, pipeline, oracle, serializePbq } = readPublicationFixtures();
 const copy = structuredClone;
@@ -195,6 +196,10 @@ test('chronology: cross-owner rows, forged set indices and duplicate sessions fa
 const enabled = { ADAPTIVE_SHADOW_WRITES_ENABLED: 'true', ADAPTIVE_SHADOW_WRITES_KILL_SWITCH: 'false', ADAPTIVE_RUNTIME_ENVIRONMENT: 'disposable_local', NODE_ENV: 'test' };
 test('shadow: missing, malformed, partial and production configuration all deny writes', () => {
   for (const env of [{}, { ADAPTIVE_SHADOW_WRITES_ENABLED: 'true' }, { ...enabled, NODE_ENV: 'production' }, { ...enabled, VERCEL_ENV: 'preview' }, { ...enabled, ADAPTIVE_SHADOW_WRITES_ENABLED: true }, { ...enabled, ADAPTIVE_SHADOW_WRITES_KILL_SWITCH: undefined }, { ...enabled, ADAPTIVE_RUNTIME_ENVIRONMENT: 'production' }]) assert.equal(shadowWritesAllowed(env), false);
+});
+test('database: direct transaction pool is hard-denied outside disposable local validation', () => {
+  assert.equal(adaptiveDatabaseAllowed(enabled), true);
+  for (const env of [{}, { ...enabled, NODE_ENV: 'production' }, { ...enabled, VERCEL_ENV: 'preview' }, { ...enabled, ADAPTIVE_RUNTIME_ENVIRONMENT: 'production' }]) assert.equal(adaptiveDatabaseAllowed(env), false);
 });
 test('shadow: disabled runner performs no writes and ignores browser input', async () => {
   let writes = 0;

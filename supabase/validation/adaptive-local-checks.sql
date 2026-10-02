@@ -1,5 +1,6 @@
--- LOCAL ONLY: run after the new migration in a disposable Supabase database.
--- Synthetic fixtures, no production IDs/data. Everything rolls back.
+-- LOCAL ONLY: run after the new migration in a disposable, unlinked Supabase database.
+-- Synthetic fixtures, no production IDs/data. Synthetic lifecycle events exist
+-- only inside this transaction and every change rolls back.
 \set ON_ERROR_STOP on
 begin;
 create schema adaptive_test;
@@ -23,24 +24,28 @@ grant execute on all functions in schema adaptive_test to anon, authenticated, s
 insert into auth.users(id,email) values
  ('00000000-0000-4000-8000-000000000001','adaptive-local-a@example.invalid'),
  ('00000000-0000-4000-8000-000000000002','adaptive-local-b@example.invalid');
+insert into adaptive_private.editorial_actors(actor_id,actor_kind,login_user_id,provenance_code) values
+ ('00000000-0000-4000-8000-000000000100','human_editor','00000000-0000-4000-8000-000000000001','local-human-editor'),
+ ('00000000-0000-4000-8000-000000000101','system',null,'local-system-actor');
 insert into public.adaptive_versions(version_id,version_kind,payload_sha256,review_status,approved_by,approved_at) values
- ('local-map-v1','mapping',repeat('a',64),'human_approved','00000000-0000-4000-8000-000000000001',now()),
- ('local-algo-v1','algorithm',repeat('b',64),'human_approved','00000000-0000-4000-8000-000000000001',now()),
- ('local-config-v1','configuration',repeat('c',64),'human_approved','00000000-0000-4000-8000-000000000001',now()),
+ ('local-map-v1','mapping',repeat('a',64),'human_approved','00000000-0000-4000-8000-000000000100',now()),
+ ('local-algo-v1','algorithm',repeat('b',64),'human_approved','00000000-0000-4000-8000-000000000100',now()),
+ ('local-config-v1','configuration',repeat('c',64),'human_approved','00000000-0000-4000-8000-000000000100',now()),
  ('local-pending-v1','mapping',repeat('d',64),'agent_reviewed_pending_human',null,null);
+select adaptive_test.expect_error($q$insert into public.adaptive_versions(version_id,version_kind,payload_sha256,review_status,approved_by,approved_at) values ('local-system-approved-v1','mapping',repeat('9',64),'human_approved','00000000-0000-4000-8000-000000000101',now())$q$,'23514');
 insert into adaptive_private.version_payloads(version_id,payload) select version_id,'{"fixture":true}' from public.adaptive_versions;
 insert into public.adaptive_concepts(mapping_version,concept_id,exam_scope,name,description,objective_codes,domain_id,chapter_id,topic_id,node_kind,review_status,reviewed_by,reviewed_at) values
- ('local-map-v1','recovery.rto','SY0-701','RTO','Local fixture',array['3.4'],'3','3.4','recovery','mastery_concept','human_approved','00000000-0000-4000-8000-000000000001',now());
+ ('local-map-v1','recovery.rto','SY0-701','RTO','Local fixture',array['3.4'],'3','3.4','recovery','mastery_concept','human_approved','00000000-0000-4000-8000-000000000100',now());
 insert into public.adaptive_question_revisions(revision_id,question_id,question_type,content_signature,publication_source,publication_steps,published_at,objective_codes,domain_id,topic_id,difficulty,scenario_family,review_status) values
  ('00000000-0000-4000-8000-000000000010','m001','mcq','sha256:'||repeat('e',64),'local fixture',array['authored'],now(),array['3.4'],'3','recovery','medium','local-family','pending');
 insert into public.adaptive_answer_components values ('00000000-0000-4000-8000-000000000010','option-a','option');
 insert into adaptive_private.grading_keys(revision_id,grading_contract,grading_payload,payload_sha256) values
  ('00000000-0000-4000-8000-000000000010','synthetic-v1','{"correct":"option-a"}',repeat('f',64));
-insert into public.adaptive_question_mappings(mapping_version,revision_id,concept_id,concept_role,precision,cognitive_skill,review_status,reviewed_by,reviewed_at) values
- ('local-map-v1','00000000-0000-4000-8000-000000000010','recovery.rto','primary','direct','apply','human_approved','00000000-0000-4000-8000-000000000001',now());
+insert into public.adaptive_question_mappings(mapping_version,revision_id,concept_id,concept_role,precision,cognitive_skill,model_revision_key,review_status,reviewed_by,reviewed_at) values
+ ('local-map-v1','00000000-0000-4000-8000-000000000010','recovery.rto','primary','direct','apply','sha256:'||repeat('e',64),'human_approved','00000000-0000-4000-8000-000000000100',now());
 insert into public.adaptive_version_sets(mapping_version,algorithm_version,configuration_version) values ('local-map-v1','local-algo-v1','local-config-v1');
-insert into public.adaptive_version_events(version_id,action,actor_id,reason) select version_id,'activate','00000000-0000-4000-8000-000000000001','Local approval fixture' from public.adaptive_versions where review_status='human_approved';
-insert into public.adaptive_question_publications(revision_id,status,actor_id) values ('00000000-0000-4000-8000-000000000010','active','00000000-0000-4000-8000-000000000001');
+insert into public.adaptive_version_events(version_id,action,actor_id,reason) select version_id,'activate','00000000-0000-4000-8000-000000000100','Local rollback-only fixture' from public.adaptive_versions where review_status='human_approved';
+insert into public.adaptive_question_publications(revision_id,status,actor_id) values ('00000000-0000-4000-8000-000000000010','active','00000000-0000-4000-8000-000000000100');
 
 set local role service_role;
 insert into public.adaptive_sessions(session_id,owner_id,set_index,source,mode,requested_count,actual_count,requested_pbq_count,actual_pbq_count,mapping_version,algorithm_version,configuration_version) values
@@ -88,6 +93,7 @@ select adaptive_test.expect_error('select * from adaptive_private.grading_keys',
 select adaptive_test.expect_error('update public.adaptive_concept_projections set state=''mastered''','42501');
 select adaptive_test.expect_error('update public.adaptive_answer_evidence set correct=true','42501');
 select adaptive_test.expect_error('insert into public.adaptive_answer_evidence default values','42501');
+select adaptive_test.expect_error($q$select adaptive_private.delete_learner_data('00000000-0000-4000-8000-000000000001')$q$,'42501');
 select set_config('request.jwt.claim.sub','00000000-0000-4000-8000-000000000002',true);
 select adaptive_test.assert_ok((select count(*)=0 from public.adaptive_answer_evidence),'cross-user evidence hidden');
 select adaptive_test.assert_ok((select count(*)=0 from public.adaptive_sessions),'cross-user sessions hidden');
@@ -98,5 +104,20 @@ set local role anon;
 select adaptive_test.expect_error('select * from public.adaptive_question_revisions','42501');
 select adaptive_test.expect_error('select * from adaptive_private.grading_keys','42501');
 reset role;
+
+-- Account deletion removes only the learner-owned graph. The durable editorial
+-- actor survives and drops its login association when Auth deletes the user.
+insert into adaptive_private.owner_state(owner_id,last_set_index,evidence_generation) values
+ ('00000000-0000-4000-8000-000000000002',0,0)
+on conflict(owner_id) do nothing;
+set local role service_role;
+select adaptive_test.expect_error($q$delete from public.adaptive_answer_evidence where owner_id='00000000-0000-4000-8000-000000000001'$q$,'42501');
+select adaptive_private.delete_learner_data('00000000-0000-4000-8000-000000000001');
+reset role;
+select adaptive_test.assert_ok(not exists(select 1 from public.adaptive_sessions where owner_id='00000000-0000-4000-8000-000000000001'),'learner sessions deleted');
+select adaptive_test.assert_ok(not exists(select 1 from public.adaptive_answer_evidence where owner_id='00000000-0000-4000-8000-000000000001'),'learner evidence deleted');
+select adaptive_test.assert_ok(exists(select 1 from adaptive_private.owner_state where owner_id='00000000-0000-4000-8000-000000000002'),'other learner survives scoped deletion');
+delete from auth.users where id='00000000-0000-4000-8000-000000000001';
+select adaptive_test.assert_ok(exists(select 1 from adaptive_private.editorial_actors where actor_id='00000000-0000-4000-8000-000000000100' and login_user_id is null),'editorial provenance survives login deletion without identity link');
 rollback;
 \echo 'PASS local adaptive SQL assertions (all synthetic changes rolled back)'

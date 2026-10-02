@@ -1,245 +1,195 @@
-# Phase 2B-2: independent runtime kernels; database execution blocked
+# Phase 2B-2: adaptive shadow-runtime foundation
 
-Date: 2026-10-02. Starting commit: `a208ebfa4ec971e6d1e2b1cd8b6e06ae14be354f` on `main`.
+Date: 2026-10-02. Starting commit: `a2efefd` on `main`.
 
-## 1. Executive summary
+## Executive status
 
-**INCOMPLETE — NOT DEPLOYABLE.** Local Supabase initialization succeeded, but startup and status failed because neither Docker nor Podman is installed. The brief requires explicit authorization before installing system software. Authorization was requested; none was received during this implementation. No runtime or system package was installed. Database-dependent implementation stopped as instructed.
+**LOCAL FOUNDATION COMPLETE; NOT DEPLOYED OR PRODUCTION-READY.**
 
-This partial delivery adds independently tested, unwired server modules for effective publication precedence, stable pilot answer identities, pure grading, conservative chronology preflight, and a default-off local shadow runner. It does **not** deliver authenticated database grading, transactional session/evidence ingestion, deletion repair, durable editorial actors, intervention/task persistence, or the projection worker.
+The additive migration and runtime foundation now execute against a disposable local Supabase stack. The work proves the core database boundary, transaction behavior, real Data API isolation, protected grading, idempotency, recommendation/intervention/task persistence, projection publication, quarantine, and learner deletion. It remains deliberately disconnected from the application and production Supabase.
 
-| Required statement | Verified outcome |
+| Required boundary | Result |
 | --- | --- |
-| Migration executed locally | **No** — local database unavailable |
-| Local SQL validation passed | **No** — not executed |
-| Actual database role / REST / RLS testing | **No** — unavailable; static checks are not a substitute |
-| Live Supabase mutations | **None** — metadata SELECTs only |
-| Shadow writing enabled | **No application path is connected or enabled**; tests invoke an in-memory callback only |
-| Production shadow flag | No production environment setting was changed or inspected; the new runner defaults off and hard-denies production |
-| Learner-visible behavior changed | **No** — no application, API, selection, reward, access or UI code changed |
-| Versions activated / human approval granted | **None** |
+| Migration executed locally | PASS on PostgreSQL 17.11 |
+| SQL validation fixture | PASS; all synthetic changes rolled back |
+| Real REST/JWT/RLS tests | PASS with two synthetic users |
+| Database concurrency | PASS for set allocation and identical answer retries |
+| Live Supabase mutations | None |
+| Production shadow writes | Disabled and hard-denied |
+| Application/API/UI wiring | None |
+| Learner-visible behavior | Unchanged |
+| Production versions activated | None |
 
-Authority remains the approved master plan, Phase 1 current-state audit, Phase 2A provisional learning model, and Phase 2B-1 proposed persistence design, with this phase's explicit working decisions controlling deletion and chronology. No approved product behavior was changed.
+This phase completes a testable local persistence package. It does not authorize a live migration, a learner cohort, production shadow writes, mastery promotion, or any change to legacy scoring and rewards.
 
-## 2. Local Supabase environment and versions
+## Local environment
 
-Host: Darwin arm64. Node `v24.15.0`; npm `11.12.1`. Existing CLI: `/tmp/secureplus-cli-2.119.0/supabase`, version `2.119.0`. CLI help was inspected before `init`, `start`, and `status`.
+- Host: Darwin arm64
+- Node: `v24.15.0`; npm: `11.12.1`
+- Supabase CLI: `2.119.0`
+- Container runtime: Colima with Docker CLI
+- Local PostgreSQL: `17.11`
+- Disposable unlinked workspace: `/tmp/secureplus-phase2b2-resume.5kVVpr`
 
-Disposable, unlinked workspace: `/tmp/secureplus-phase2b2-local.4enZ7G`. No production data, credentials, database connection, or migration was copied there.
+The first Docker Desktop attempt could not complete its privileged helper installation without an administrator password. Colima supplied the compatible local container runtime instead. No production credentials or learner data were used.
 
-```sh
-/tmp/secureplus-cli-2.119.0/supabase init --workdir /tmp/secureplus-phase2b2-local.4enZ7G
-env DOCKER_HOST=unix:///var/run/docker.sock /tmp/secureplus-cli-2.119.0/supabase start --workdir /tmp/secureplus-phase2b2-local.4enZ7G
-env DOCKER_HOST=unix:///var/run/docker.sock /tmp/secureplus-cli-2.119.0/supabase status --workdir /tmp/secureplus-phase2b2-local.4enZ7G
-```
+Current Supabase local-development, RLS, changelog, and PostgreSQL breaking-change guidance was reviewed. The migration does not use the affected PostgreSQL 17 features identified in that guidance.
 
-Initialization passed. Both runtime commands exited 1. Startup returned `DockerLifecycleInspectError`; status returned `StatusDbInspectError` with `linked_project: null`. Shared cause:
+## Migration and data model
 
-```text
-docker: command not found (podman also not found) — install Docker Desktop or Podman and ensure it is on PATH
-```
+The revised migration creates 24 additive tables across `public` and `adaptive_private`. It modifies no existing application table.
 
-Docker Desktop, OrbStack, Docker/Podman/Colima executables, and usual Docker sockets were absent. PostgreSQL was also unavailable. Live Supabase was not used as a substitute.
+Material changes from the earlier proposal:
 
-Both Supabase skills were applied. The current official [local development guide](https://supabase.com/docs/guides/local-development/cli-workflows) and [Supabase changelog](https://supabase.com/changelog) were consulted. The guide requires a running container runtime. No `link`, remote `db pull`, `db push`, migration application, or backfill was performed.
+- Durable private editorial actors are independent of ordinary Auth accounts. Removing an editor login clears the optional login association while preserving minimal approval provenance.
+- Human-approved records and version lifecycle events require an active durable human editorial actor.
+- `model_revision_key` bridges the canonical runtime UUID revision to the Phase 2A content-hash mapping.
+- New sessions require an active human-approved version set, and every manifest revision must be actively published.
+- Recommendation, intervention, review-task, task-event, and projection integrity are enforced by database triggers.
+- Owner replay status, quarantine reasons, replay digest, replay time, generation, and complete-evidence boundary are durable.
+- Foreign-key indexes were added for the database advisor findings.
+- A narrow private account-deletion function removes one learner's adaptive graph atomically while preserving shared catalogue and editorial history.
 
-## 3. Migration changes and reasons
+The migration contains no production catalogue seed and activates no real version. Synthetic activation occurs only in disposable tests and is removed by reset or transaction rollback.
 
-**No migration changes.** The existing unapplied `20261001170334_adaptive_learning_persistence_foundation.sql` remains a proposed 23-table foundation. Its 172 static checks pass, but PostgreSQL syntax, dependencies, trigger behavior, grants, RLS, and concurrency have not been executed.
+## Runtime modules
 
-The new decisions require database changes, especially Auth-user deletion and durable editorial actors. Making those changes without executing them would violate the brief's database-blocker fallback. Resume by modifying this unapplied migration, not by stacking corrective migrations.
+### Database boundary
 
-The existing local SQL validation fixture creates synthetic human-approved versions and activates them. **Do not run that fixture unchanged under this phase's no-activation restriction.** Its fixtures must be revised and locally verified when database work resumes. No such fixture or activation was executed here.
+`server/adaptive/database.mjs` uses the pinned `postgres@3.4.9` driver. A direct pool is allowed only when `ADAPTIVE_RUNTIME_ENVIRONMENT=disposable_local`, the URL is loopback, and neither production nor Vercel is active. This intentionally prevents the local validation adapter from becoming an accidental production database path.
 
-## 4. Account-deletion resolution
+### Transactional persistence
 
-The **policy decision is resolved; implementation is not**. Confirmed learner deletion must delete or irreversibly anonymize all owned adaptive sessions, answers, recommendations, interventions, tasks, projections, and private owner state. Shared catalogs must survive. Identifiable history must not remain associated with the deleted learner.
+`server/adaptive/persistence.mjs` implements:
 
-The existing restrictive Auth foreign keys and immutable delete guards can block that outcome. They were not changed or tested. A privileged atomic deletion mechanism must reconcile append-only ordinary operations with the account deletion promise, enforce a narrow owned scope, and prevent callers from forging deletion authority. Verify deletion of a synthetic learner with complete history plus survival of another learner and shared catalog before claiming this requirement complete.
+- Server-allocated per-owner set indices and immutable manifests.
+- Grading from the protected compiled revision stored in the private schema.
+- Stable answer validation and server-derived exposure classification.
+- Concurrent idempotent answer handling: identical retries return the original result; conflicting reuse is rejected.
+- Append-only corrections that preserve the original occurrence classification.
+- Deterministic recommendation and review-task identity.
+- Content-compatible interventions with injected trusted completion verification.
+- Review-task events whose completion evidence must satisfy the time gate, set-index gate, version identity, concept, target revision, direct precision, and correctness requirements.
 
-## 5. Editorial-actor model
+The new executable audit exposed and fixed a first-insert recommendation bug: the insert did not return the fields immediately used for identity verification. Both initial insertion and deterministic retry now execute successfully against PostgreSQL.
 
-**Blocked, not implemented.** The next migration revision must add a durable private editorial actor independent of ordinary learner profiles. Approval rows should reference that durable actor. Login associations may be removed when the login account is deleted, while minimal approval provenance remains auditable.
+### Projection worker
 
-Actor creation and approval authority must be server-controlled; learner `user_metadata` cannot grant it. No personal actor data should become accessible through the Data API. The private model, retention fields, grants, and deletion tests remain outstanding. No pending mapping was labelled human-approved.
+`server/adaptive/projection-worker.mjs`:
 
-## 6. Effective-publication resolver
+- Locks one owner's replay state.
+- Loads a versioned immutable snapshot.
+- Runs chronology assessment before projection.
+- Persists machine-readable quarantine instead of projecting ambiguous overlapping histories.
+- Calls an injected version-pinned projector.
+- Publishes cache rows only for the unchanged evidence generation.
+- Always returns `promotionAllowed: false`.
 
-Implemented pure server kernel: `server/adaptive/publication.mjs`. It takes trusted source assets and enhancement/normalization functions, then follows the current application order:
+The local database audit verifies both branches: overlapping sessions persist quarantine, while a clean single-session history publishes a `ready` `learning_signal` projection. This worker is a cache rebuilder; it does not grant access, coins, rewards, or mastery promotion.
 
-1. Authored/imported records and low-quality exclusions.
-2. Captured snapshot upserts/disables.
-3. Editorial retirement.
-4. Existing MCQ enhancement → review → feedback, and PBQ review → enhancement.
-5. Active overrides in supplied application order, including disables, captured-row protection, sort order, payload ID correction, and last-row precedence.
-6. Remote PBQ normalization, retirement filter, reviewed cutoff, merge, and final enhancement when the remote capability is present.
+## Account deletion and editorial provenance
 
-Each source stage and final result records a SHA-256 fingerprint in provenance. These outputs contain private answer content and must not be returned directly to learners.
+`adaptive_private.delete_learner_data(uuid)` is a private `SECURITY DEFINER` function with a blank search path, advisory owner lock, transaction-scoped deletion authority, explicit table list, and service-role-only execution. Ordinary history remains immutable.
 
-Tests execute the existing application override/merge functions as a separate oracle. Baseline equality covers all **395 active MCQs and 88 PBQs**. Fixtures cover captured and new overrides, disables, retirement, old/cutoff-equal/missing-date/new remote PBQs, conflicting override/remote content, and remote-disabled operation.
+Executable checks prove that:
 
-Verified current-state edge case: a non-retired remote PBQ can reappear after a local disable because the remote merge follows the local bank. This kernel preserves that behavior. Changing its precedence would be a separate product change.
+- The selected learner's sessions, evidence, recommendations, interventions, tasks, projections, and owner state are removed.
+- A second learner survives.
+- Shared concepts, revisions, mappings, and versions survive.
+- Deleting the editor's Auth login sets the private actor login association to null.
+- Approval provenance continues to reference the durable actor.
 
-**Remaining:** deployable trusted asset packaging, remote-source acquisition, atomic revision/catalog publication, historical revision retention, and publication authorization. Audit helpers evaluate trusted repository source solely as a local oracle; production modules do not import those helpers or evaluate request input. A final production publication service is not complete.
+This is a hard-delete design for adaptive learner records. The live product's broader account-deletion flow still needs a separately reviewed integration transaction before deployment.
 
-## 7. Stable answer-identity design
+## RLS and API isolation
 
-Implemented `server/adaptive/revision.mjs`, grammar `pilot-revision-v1`:
+The local audit signs real JWTs and calls the local PostgREST endpoint. It verifies:
 
-- MCQ and whole-choice PBQ IDs hash the question ID, component kind, and exact option text before display shuffling. Duplicate option text is rejected as ambiguous.
-- Ordering PBQs retain authored item identity through a deterministic hashed ID; positions have separate stable IDs. Every position must reference one unique valid item.
-- Option-indexed feedback and grading truth are normalized onto stable components. Reordering options with correspondingly reordered feedback and grading indices preserves the canonical signature and revision.
-- Semantic content, feedback, and grading changes produce a new SHA-256 signature and deterministic version-8 UUID. Full content hashes must be checked alongside revision IDs when durable storage is implemented.
-- Administrative sort order, remote update timestamps, and access metadata do not create answer revisions. Entitlement decisions remain external and unchanged.
-- Learner views use an explicit allowlist and omit keys, expected answers, explanations, feedback, source payloads, and publication provenance.
+- An owner can read their own adaptive session rows.
+- A different authenticated user receives no owner rows.
+- A pending version is hidden.
+- An authenticated browser cannot insert adaptive evidence.
+- The private grading schema is unavailable through the Data API.
+- Anonymous catalogue reads are denied.
 
-All seven Phase 2A questions compile. `p211` and `p048` remain **coarse**, regardless of correctness. General SELECT & FILL, blanks, targets and other component grammars deliberately fail closed; they are not implemented or advertised as supported. No full-bank concept tagging occurred.
+Database security advisors report four informational `rls_enabled_no_policy` notices for private service-only tables: editorial actors, grading keys, owner state, and version payloads. These tables have RLS enabled, no client grants, and no client policy by design. No warning or error-level security finding was reported.
 
-## 8. Trusted grading flow
+## Database integrity and concurrency evidence
 
-Implemented **pure grading kernel only**. It checks revision integrity, validates stable selection membership and shape, computes whole-question correctness and a 0/1 score, and returns only correctness, score and precision. Displayed indices, foreign components, forged fields, invalid ordering, and altered revision/key payloads are rejected.
+The executable database audit covers 28 assertions:
 
-It does **not authenticate a caller**, load protected rows, authorize an owned manifest, resolve sealed mappings, or derive durable exposure history. Those are required responsibilities of the future transactional service. No endpoint was added, no protected-storage claim is made, and no service credential or connection string was introduced. The kernels are not imported by frontend or production API code.
+- Two concurrent session starts allocate distinct set indices.
+- Two concurrent identical answers resolve to one insert plus one retry.
+- Reusing the client event ID with different content is rejected.
+- Protected grading returns the expected wrong/correct results.
+- Corrections append and preserve historical classification.
+- Exposure history classifies a related scenario as `same_scenario`.
+- Recommendation insertion and deterministic retry succeed.
+- Trusted lesson completion persists as verified.
+- Original-recall task completion accepts only qualifying evidence.
+- Overlapping session chronology persists quarantine.
+- Clean chronology publishes a generation-matched ready projection.
+- RLS/API, index use, deletion, and durable actor behavior pass.
 
-## 9. Session transaction
+`EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` confirms that the owner replay query uses `adaptive_evidence_owner_time`. Performance advisors show only expected unused-index information on the freshly reset database; prior unindexed-foreign-key findings are resolved.
 
-**Not implemented or tested.** Required: authenticated owner resolution, transactionally allocated set index, pinned versions, immutable manifest, exact requested/actual composition, start event, complete rollback on any invalid item, and simultaneous session-start tests. Existing Phase 2B-1 contracts and static SQL checks remain supporting work only.
+This is correctness and query-plan evidence on a tiny synthetic data set. It is not a production latency, throughput, pool-capacity, or large-history benchmark.
 
-## 10. Evidence-ingestion transaction
-
-**Not implemented or tested.** Required: one atomic transaction for owned manifest resolution, exact revision grading, sealed concept snapshot, full-history freshness, immutable evidence, owner generation increment, and projection invalidation. Independent PostgREST writes were not substituted for atomicity. Legacy attempts remain authoritative and untouched.
-
-## 11. Idempotency and correction behavior
-
-The existing pure persistence contract audit still passes normalized retry/conflict and correction filtering tests. This does not establish race safety. No real concurrent insert, replay response, unique-key conflict handler, correction transaction, or durable supersession chain was exercised.
-
-The chronology preflight accepts a late correction using its original occurrence time and a later receipt time, and includes correction metadata in the input digest. It does not resolve corrections or replace the projection worker. Corrections must eventually append and supersede; overwriting evidence remains prohibited.
-
-## 12. Intervention and review-task persistence
-
-**Not implemented.** Existing pure contracts distinguish shown/opened/started/completed/skipped/dismissed/postponed/mapping-reported events and activity types, but no runtime persists or verifies them.
-
-The future runtime must verify completion of lesson steps/checks, card review, and targeted practice through trusted criteria. Opening content and client completion claims are not verified completion. Interventions must never create positive mastery evidence. Persist deterministic transfer, original recall, delayed proof, maintenance and coverage-shortage tasks with both time and set-index gates, consistent with the Phase 2A scheduler.
-
-## 13. Projection worker
-
-**Not implemented.** The Phase 2A engine and Phase 2B-1 replay contracts still pass their deterministic synthetic tests. This delivery adds only chronology preflight; no database snapshot loader, receipt watermark transaction, projection/task commit, generation compare-and-swap, or durable retry worker exists.
-
-Remaining replay work must resolve supersession, preserve complete exposure history when classifying novelty, honor complete-history boundaries, exclude legacy/coarse evidence from mastery, retain contradictions/sticky history/relapse, use pinned version payloads, and atomically publish only against an unchanged owner generation. No worker grants rewards or access.
-
-## 14. Quarantine treatment for overlapping/offline sessions
-
-Implemented pure `assessReplayChronology` with policy `chronology-quarantine-v1`. Input must eventually come from an authenticated owned database snapshot. It rejects foreign owners, mismatched set/session references, duplicate identities, and malformed timestamps.
-
-It conservatively quarantines the supplied owner history when any of these machine-readable reasons apply:
-
-- `session_clock_conflict`
-- `trusted_set_order_conflict`
-- `overlapping_sessions`
-- `evidence_clock_conflict`
-- `occurrence_set_order_conflict`
-- `ambiguous_simultaneous_evidence`
-
-An earlier open session overlapping a later one is ambiguous. Interrupted/resumed activity in a single session is permitted; resuming an earlier set after a later set produces quarantine. Out-of-order receipts and offline delayed delivery alone do not establish a conflict. No records are deleted, rewritten or retimed. Sorted original metadata yields an input-order-independent digest.
-
-Preflight returns either `quarantined` or `ready_for_replay`, **never a ready projection**, and always `promotionAllowed: false`: only a future validated worker can make a promotion decision. Quarantine is tested locally but not persisted. Future changes to this treatment require a new algorithm/configuration version and an explicit policy binding in that version's payload. Existing Phase 2A versions were not silently rewritten.
-
-## 15. Shadow feature flag and kill switch
-
-Implemented unwired `server/adaptive/shadow.mjs`. Missing configuration denies writes. The runner requires all of:
-
-```text
-ADAPTIVE_SHADOW_WRITES_ENABLED=true
-ADAPTIVE_SHADOW_WRITES_KILL_SWITCH=false
-ADAPTIVE_RUNTIME_ENVIRONMENT=disposable_local
-NODE_ENV must not be production
-VERCEL_ENV must be absent
-```
-
-These values are used only as an injected in-memory test fixture. No environment file or deployment setting was changed. The browser supplies no configuration to the runner; it takes no request arguments. Production and Vercel environments are hard-denied even if the enable flag is set.
-
-Environment configuration is reread before every operation. Set the enable flag to `false` or the kill switch to `true` to stop future starts; already running operations are not cancelled. There is no adaptive data to delete in this implementation. Failures return a safe failure status and log only a fixed code plus a random incident UUID. Raw exceptions, learner IDs and answer contents are not logged, and logger failures cannot escape.
-
-This callback runner is **not a wired shadow integration**. Future legacy integration must commit its authoritative result before independently invoking authenticated adaptive work. No production route calls this module.
-
-## 16. RLS and cross-user test results
-
-**Actual RLS/REST tests unavailable.** The new tests reject cross-owner chronology inputs and foreign answer components in memory. The existing persistence tests reject forged owner/correctness/concept fields and unowned session references. These are JavaScript contract checks, not authenticated database tests.
-
-The required two-user/two-device database tests, private grading-key reads, projection write denial, pending-catalog invisibility, user deletion, editorial privacy, and transaction rollback checks remain outstanding. No database isolation guarantee is inferred from static inspection.
-
-## 17. Performance and concurrency results
-
-**No database measurements available.** Session/ingestion latency, projection rebuild at small/medium/large histories, EXPLAIN plans, index use, lock ordering, duplicate races, concurrent set allocation and generation conflicts were not tested. Fast execution of the pure test suite is not a proxy for these measurements. No optimization or production-scale claim is made.
-
-## 18. Files changed
-
-| File | Purpose |
-| --- | --- |
-| `server/adaptive/publication.mjs` | Pure final-precedence resolver and provenance fingerprints |
-| `server/adaptive/revision.mjs` | Pilot stable components, canonical revisions, safe views and grading |
-| `server/adaptive/chronology.mjs` | Conservative deterministic chronology preflight |
-| `server/adaptive/shadow.mjs` | Default-off local-only failure-isolated runner |
-| `scripts/lib/read-authored-bank.mjs` | Expose raw authored/imported/exclusion assets to audit helpers; preserve existing reader behavior |
-| `scripts/lib/read-publication-fixtures.mjs` | Existing application-function oracle for local tests |
-| `scripts/audit-learning-runtime.mjs` | Publication, identity, grading, chronology, shadow and import-boundary tests |
-| `package.json` | Add `audit:learning-runtime` |
-| `docs/phase-2b2-shadow-runtime.md` | This status and verification report |
-
-Unrelated `.gitignore`, Android, Capacitor, temporary Supabase files, audit artifacts, output and review exports remain outside the commit. No database migration, runtime API, UI, content mapping, algorithm/configuration payload or production flag changed.
-
-## 19. Verification results
+## Verification matrix
 
 | Check | Result |
 | --- | --- |
-| CLI help/version and disposable `init` | PASS, CLI 2.119.0 |
-| Local Supabase `start` / `status` | FAIL, missing Docker/Podman runtime |
-| Local migration application, validation SQL, migration list | UNAVAILABLE, no local database |
-| Local lint, database advisors, REST/RLS tests | UNAVAILABLE, no local database |
-| `npm run audit:learning-runtime` | PASS, 39 pure scenarios; includes publication, stable-answer, grading, chronology and shadow tests |
-| New authenticated grading, session/ingestion transactions, races, projection worker, deletion | NOT IMPLEMENTED / UNAVAILABLE under blocker fallback |
-| `npm run audit:learning-persistence` | PASS, 20 contract scenarios |
-| `npm run audit:learning-migration` | PASS, 172 **static** checks across 23 tables |
-| `npm run audit:learning-pilot` | PASS, replay/validation/non-attribution/caps/determinism and pilot inventory |
-| `npm run build` | PASS; existing large-bundle warning remains |
-| `npm run audit` | PASS, all eight included audits |
-| `audit:launch`, `audit:coins`, `audit:engagement` | PASS as part of `npm run audit` |
-| `audit:seo`, `audit:pwa`, `audit:deep-dives` | PASS as part of `npm run audit` |
-| `audit:editorial` | PASS as part of `npm run audit`; 395 MCQs / 88 PBQs / 32 lessons / 171 generated practice questions |
-| `audit:qbank:strict` | PASS as part of `npm run audit` |
+| `supabase db reset --local` | PASS; migration applies on PostgreSQL 17.11 |
+| `adaptive-local-checks.sql` | PASS; synthetic changes rolled back |
+| `supabase db lint --local --schema public,adaptive_private --level warning --fail-on error` | PASS; no schema errors |
+| Supabase security advisors | PASS; four intentional private-table info notices only |
+| Supabase performance advisors | PASS; fresh-database unused-index info only |
+| `npm run audit:learning-database` | PASS; 28 executable assertions |
+| `npm run audit:learning-runtime` | PASS; 40 pure scenarios |
+| `npm run audit:learning-persistence` | PASS; 20 contract scenarios |
+| `npm run audit:learning-migration` | PASS; 189 static checks across 24 tables |
+| `npm run audit:learning-pilot` | PASS |
+| `npm run build` | PASS; existing large-bundle warning |
+| `npm run audit` | PASS |
 | `git diff --check` | PASS |
-| Final read-only live metadata comparison | PASS, exact equality with this run's starting metadata snapshot and event-trigger inventory |
 
-Build and audit logs are temporary local files `/tmp/secureplus-phase2b2-{build,audit,runtime}.log`, not committed artifacts. Tests do not certify factual content accuracy or live database coverage.
+`npm audit --omit=dev` still reports one low and one moderate transitive advisory through the existing pinned `posthog-js@1.395.0` dependency (`dompurify` and `fflate`). The new pinned `postgres` dependency is not the source. Updating analytics dependencies is separate work because it can change production tracking behavior.
 
-Read-only live comparison used `supabase/validation/adaptive-live-baseline.sql`, executing its catalog SELECT and supplemental event-trigger SELECT separately. Final metadata is unchanged: **16 public tables, 35 policies, 47 indexes, 74 constraints, and seven event triggers**. The full compared object also includes columns/defaults, function definitions, grants/default ACLs, regular triggers, and exposed API settings where visible. There is no adaptive schema and the read-only migration inventory is empty. No learner records or private answer payloads were fetched. This confirms the compared schema metadata remained unchanged; it is not a production data audit.
+## Files in this continuation
 
-## 20. Remaining risks
+| File | Purpose |
+| --- | --- |
+| `supabase/migrations/20261001170334_adaptive_learning_persistence_foundation.sql` | Revised 24-table persistence, actors, integrity, deletion, indexes, grants and RLS |
+| `supabase/validation/adaptive-local-checks.sql` | Transactional local SQL assertions and rollback |
+| `server/adaptive/database.mjs` | Disposable-local direct database gate and pool |
+| `server/adaptive/persistence.mjs` | Trusted transaction and persistence services |
+| `server/adaptive/projection-worker.mjs` | Owner-locked quarantine and projection publication |
+| `scripts/audit-learning-database.mjs` | Executable PostgreSQL, REST/RLS and concurrency audit |
+| `scripts/audit-learning-runtime.mjs` | Adds production-deny database-boundary coverage |
+| `scripts/audit-learning-migration.mjs` | Updated 24-table static guard audit |
+| `package.json`, `package-lock.json` | Database audit command and pinned driver |
+| `docs/phase-2b2-shadow-runtime.md` | This evidence and deployment boundary |
 
-The blocking risk is an unexecuted persistence design, including known deletion incompatibility. Neither this report nor passing JavaScript/static audits makes it deployable. Server asset packaging and authenticated transactional boundaries remain absent. New canonical UUID revisions also need an explicit bridge to the Phase 2A content-hash mappings; existing mappings were not silently repointed. Unsupported PBQ grammars fail closed. Chronology policy must be pinned and stored consistently with the future worker. Original SQL fixtures must be aligned with the no-activation restriction before execution. RTO variant coverage is still insufficient; no extra transfer variants were fabricated.
+Unrelated Android, Capacitor, generated artifacts, output, review exports, `.gitignore`, and Supabase temporary files remain outside the task commit.
 
-## 21. Exact live-deployment plan
+## Remaining risks and next gate
 
-**There is no executable live deployment package yet. Do not apply the current migration.** Required sequence before proposing live deployment:
+The main risk has shifted from an unexecuted database design to an unintegrated local foundation. Before any live deployment:
 
-1. Obtain the requested container-runtime installation authorization or use an already authorized working local runtime. Start a disposable unlinked Supabase stack with synthetic data only.
-2. Resume database-dependent work: repair the unapplied migration, implement deletion and private actors, align non-activating SQL fixtures, and execute migration/validation/lint plus actual API-role tests.
-3. Implement trusted asset packaging, protected grading, atomic sessions/ingestion/corrections, intervention verification, task persistence and generation-safe projection rebuilding. Persist only a pending, inactive local pilot.
-4. Run the full two-user/two-device ownership, retry/race, correction, offline chronology, deletion and performance matrix. Document results and query plans. Rerun all applicable audits and a read-only live metadata diff.
-5. Deliver a reviewed, complete package with tested migration/rollback instructions and obtain **separate explicit live migration approval**. Reconcile current live schema drift and existing integration mismatches first.
-6. Only after that approval, arrange an appropriate backup/recovery point and apply the reviewed additive migration through the approved migration mechanism. Verify grants/RLS/private API exposure and leave all production versions inactive and shadow writes disabled.
-7. Any production shadow cohort or activation requires a subsequent explicit instruction, human-reviewed mapping approval, version activation authorization, monitoring/retention decisions, and a separately reviewed change to the hard production-deny guard. None is part of this delivery.
+1. Human-review the migration, runtime boundaries, deletion semantics, and this evidence report.
+2. Reconcile the migration against current live schema metadata and create a reviewed backup/rollback runbook.
+3. Decide the production server execution architecture. The current direct database adapter intentionally hard-denies production and must not be weakened casually.
+4. Prepare human-approved mapping, algorithm, configuration, question, and content publication payloads. No agent may self-approve them.
+5. Obtain separate explicit approval for the live additive migration. Apply it with all versions inactive and shadow writes disabled.
+6. Re-run grants, RLS, private-schema exposure, deletion, and query-plan checks in the approved environment using synthetic accounts.
+7. Obtain a later, separate approval for a bounded shadow cohort, monitoring, retention, incident response, and kill-switch operation.
 
-## 22. Rollback and disable procedure
+Do not move directly to Phase 2C learner-facing personalization. The commercially important moat is the quality of the learning loop, but shipping an opaque algorithm without production observability and reviewed concept mappings creates trust and retention risk. The next investable milestone is a safe, measurable shadow cohort with zero influence on learner outcomes.
 
-No live rollback is needed: no live mutation occurred. The new kernels have no production caller. To remove this partial package, revert only its task commit while preserving unrelated changes. Do not delete or modify production data.
+## Disable and rollback
 
-For future local callback use, set `ADAPTIVE_SHADOW_WRITES_ENABLED=false` or `ADAPTIVE_SHADOW_WRITES_KILL_SWITCH=true`; future operations stop without deleting evidence. A future live implementation must document and test connection/pool behavior, in-flight transactions, generation recovery, actor retention and account deletion before rollout. Do not use destructive schema rollback as a substitute for disabling writes.
+There is no live rollback because no live mutation occurred. The modules have no production caller.
 
-## 23. Founder approvals required before live deployment
+For future local shadow execution, set `ADAPTIVE_SHADOW_WRITES_ENABLED=false` or `ADAPTIVE_SHADOW_WRITES_KILL_SWITCH=true`. The current runtime also refuses production and Vercel environments. A future live rollout must use disable-first operations; destructive schema rollback must not be the incident response.
 
-The immediate prerequisite is explicit approval to install a container runtime; this comes from the user's brief, not an inferred skill approval requirement. Until supplied, the database-dependent portion remains blocked.
-
-Later approvals must cover the completed tested live migration, human editorial review and version approval, any shadow cohort, and any activation/learner-facing rollout. Phase 2A thresholds remain provisional. The learner-deletion and editorial-separation product decisions are already authorized and do not need to be reopened; their implementation still requires local proof.
-
-**Delivery status remains Phase 2B-2 incomplete. No live shadow rollout is authorized or underway.**
+**Final Phase 2B-2 status: locally complete and evidence-backed; not deployed, not learner-visible, and not authorized for production shadow use.**

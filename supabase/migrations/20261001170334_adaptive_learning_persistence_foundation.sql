@@ -5,12 +5,25 @@ create schema adaptive_private;
 revoke all on schema adaptive_private from public, anon, authenticated;
 grant usage on schema adaptive_private to service_role;
 
+-- Editorial provenance survives deletion of an editor's login. This private
+-- identity deliberately stores no email, display name, or client-controlled
+-- authorization metadata.
+create table adaptive_private.editorial_actors (
+  actor_id uuid primary key default gen_random_uuid(),
+  actor_kind text not null check (actor_kind in ('human_editor','system')),
+  login_user_id uuid unique references auth.users(id) on delete set null,
+  provenance_code text not null check (provenance_code ~ '^[a-z0-9][a-z0-9._-]{2,99}$'),
+  created_at timestamptz not null default now(),
+  retired_at timestamptz,
+  check (retired_at is null or retired_at >= created_at)
+);
+
 create table public.adaptive_versions (
   version_id text primary key check (version_id ~ '^[a-z0-9][a-z0-9._-]{2,99}$'),
   version_kind text not null check (version_kind in ('mapping','algorithm','configuration')),
   payload_sha256 text not null check (payload_sha256 ~ '^[0-9a-f]{64}$'),
   review_status text not null default 'pending' check (review_status in ('pending','agent_reviewed_pending_human','human_approved')),
-  approved_by uuid references auth.users(id) on delete restrict,
+  approved_by uuid references adaptive_private.editorial_actors(actor_id) on delete restrict,
   approved_at timestamptz,
   created_at timestamptz not null default now(),
   unique (version_id, version_kind),
@@ -26,7 +39,7 @@ create table public.adaptive_version_events (
   event_index bigint generated always as identity primary key,
   version_id text not null references public.adaptive_versions(version_id) on delete restrict,
   action text not null check (action in ('activate','deactivate')),
-  actor_id uuid not null references auth.users(id) on delete restrict,
+  actor_id uuid not null references adaptive_private.editorial_actors(actor_id) on delete restrict,
   reason text not null check (length(reason) between 1 and 1000),
   created_at timestamptz not null default now()
 );
@@ -57,7 +70,7 @@ create table public.adaptive_concepts (
   node_kind text not null check (node_kind in ('mastery_concept','supporting_concept','topic')),
   aliases text[] not null default '{}',
   review_status text not null check (review_status in ('pending','agent_reviewed_pending_human','human_approved')),
-  reviewed_by uuid references auth.users(id) on delete restrict,
+  reviewed_by uuid references adaptive_private.editorial_actors(actor_id) on delete restrict,
   reviewed_at timestamptz,
   created_at timestamptz not null default now(),
   primary key (mapping_version,concept_id),
@@ -74,7 +87,7 @@ create table public.adaptive_relationships (
   editorial_weight numeric not null check (editorial_weight > 0 and editorial_weight <= 1),
   review_status text not null check (review_status in ('pending','agent_reviewed_pending_human','human_approved')),
   review_provenance text not null check (length(review_provenance) between 1 and 1000),
-  reviewed_by uuid references auth.users(id) on delete restrict,
+  reviewed_by uuid references adaptive_private.editorial_actors(actor_id) on delete restrict,
   reviewed_at timestamptz,
   created_at timestamptz not null default now(),
   primary key (mapping_version,source_concept_id,target_concept_id,relationship_type),
@@ -100,7 +113,7 @@ create table public.adaptive_question_revisions (
   difficulty text not null check (difficulty in ('easy','medium','hard')),
   scenario_family text not null check (length(scenario_family) between 1 and 160),
   review_status text not null check (review_status in ('pending','agent_reviewed_pending_human','human_approved')),
-  reviewed_by uuid references auth.users(id) on delete restrict,
+  reviewed_by uuid references adaptive_private.editorial_actors(actor_id) on delete restrict,
   reviewed_at timestamptz,
   created_at timestamptz not null default now(),
   unique (question_id,content_signature),
@@ -112,7 +125,7 @@ create table public.adaptive_question_publications (
   event_index bigint generated always as identity primary key,
   revision_id uuid not null references public.adaptive_question_revisions on delete restrict,
   status text not null check (status in ('active','retired')),
-  actor_id uuid not null references auth.users(id) on delete restrict,
+  actor_id uuid not null references adaptive_private.editorial_actors(actor_id) on delete restrict,
   occurred_at timestamptz not null default now()
 );
 create index adaptive_question_publications_latest on public.adaptive_question_publications(revision_id,event_index desc);
@@ -136,8 +149,9 @@ create table public.adaptive_question_mappings (
   concept_role text not null check (concept_role in ('primary','secondary')),
   precision text not null check (precision in ('direct','coarse')),
   cognitive_skill text not null check (length(cognitive_skill) between 1 and 100),
+  model_revision_key text not null check (model_revision_key ~ '^sha256:[0-9a-f]{64}$'),
   review_status text not null check (review_status in ('pending','agent_reviewed_pending_human','human_approved')),
-  reviewed_by uuid references auth.users(id) on delete restrict,
+  reviewed_by uuid references adaptive_private.editorial_actors(actor_id) on delete restrict,
   reviewed_at timestamptz,
   primary key (mapping_version,revision_id,concept_id),
   foreign key (mapping_version,concept_id) references public.adaptive_concepts on delete restrict,
@@ -158,7 +172,7 @@ create table public.adaptive_content_mappings (
   content_revision_id uuid not null references public.adaptive_content_revisions on delete restrict,
   concept_id text not null,
   review_status text not null check (review_status in ('pending','agent_reviewed_pending_human','human_approved')),
-  reviewed_by uuid references auth.users(id) on delete restrict,
+  reviewed_by uuid references adaptive_private.editorial_actors(actor_id) on delete restrict,
   reviewed_at timestamptz,
   primary key (mapping_version,content_revision_id,concept_id),
   foreign key (mapping_version,concept_id) references public.adaptive_concepts on delete restrict,
@@ -171,7 +185,12 @@ create table adaptive_private.owner_state (
   owner_id uuid primary key references auth.users(id) on delete restrict,
   last_set_index bigint not null default 0 check (last_set_index >= 0),
   evidence_generation bigint not null default 0 check (evidence_generation >= 0),
-  complete_evidence_from timestamptz
+  complete_evidence_from timestamptz,
+  replay_status text not null default 'idle' check (replay_status in ('idle','ready','quarantined','failed')),
+  quarantine_reasons text[] not null default '{}',
+  last_replay_at timestamptz,
+  last_replay_sha256 text check (last_replay_sha256 is null or last_replay_sha256 ~ '^[0-9a-f]{64}$'),
+  check ((replay_status='quarantined') = (cardinality(quarantine_reasons)>0))
 );
 create table public.adaptive_sessions (
   session_id uuid primary key default gen_random_uuid(),
@@ -270,7 +289,7 @@ create table public.adaptive_recommendations (
   unique (owner_id,recommendation_id), unique (owner_id,scheduling_key),
   foreign key (mapping_version,concept_id) references public.adaptive_concepts on delete restrict,
   foreign key (mapping_version,algorithm_version,configuration_version) references public.adaptive_version_sets on delete restrict,
-  foreign key (owner_id,source_evidence_id) references public.adaptive_answer_evidence(owner_id,evidence_id) on delete restrict
+  foreign key (owner_id,source_evidence_id) references public.adaptive_answer_evidence(owner_id,evidence_id) on delete restrict deferrable initially deferred
 );
 create table public.adaptive_interventions (
   intervention_id uuid primary key default gen_random_uuid(),
@@ -289,15 +308,15 @@ create table public.adaptive_interventions (
   received_at timestamptz not null default now(),
   mapping_version text not null, algorithm_version text not null, configuration_version text not null,
   unique (owner_id,intervention_id), unique (owner_id,client_event_id),
-  foreign key (owner_id,recommendation_id) references public.adaptive_recommendations(owner_id,recommendation_id) on delete restrict,
-  foreign key (owner_id,source_evidence_id) references public.adaptive_answer_evidence(owner_id,evidence_id) on delete restrict,
+  foreign key (owner_id,recommendation_id) references public.adaptive_recommendations(owner_id,recommendation_id) on delete restrict deferrable initially deferred,
+  foreign key (owner_id,source_evidence_id) references public.adaptive_answer_evidence(owner_id,evidence_id) on delete restrict deferrable initially deferred,
   foreign key (mapping_version,concept_id) references public.adaptive_concepts on delete restrict,
   foreign key (mapping_version,algorithm_version,configuration_version) references public.adaptive_version_sets on delete restrict,
   check (occurred_at <= received_at + interval '5 minutes'),
   check (not completion_verified or (event_type='completed' and activity_type <> 'lesson_open' and completion_criteria is not null and length(completion_criteria) between 1 and 2000))
 );
-alter table public.adaptive_answer_evidence add constraint adaptive_evidence_recommendation_fk foreign key (owner_id,recommendation_id) references public.adaptive_recommendations(owner_id,recommendation_id) on delete restrict;
-alter table public.adaptive_answer_evidence add constraint adaptive_evidence_intervention_fk foreign key (owner_id,intervention_id) references public.adaptive_interventions(owner_id,intervention_id) on delete restrict;
+alter table public.adaptive_answer_evidence add constraint adaptive_evidence_recommendation_fk foreign key (owner_id,recommendation_id) references public.adaptive_recommendations(owner_id,recommendation_id) on delete restrict deferrable initially deferred;
+alter table public.adaptive_answer_evidence add constraint adaptive_evidence_intervention_fk foreign key (owner_id,intervention_id) references public.adaptive_interventions(owner_id,intervention_id) on delete restrict deferrable initially deferred;
 create index adaptive_interventions_time on public.adaptive_interventions(owner_id,occurred_at);
 create index adaptive_interventions_concept on public.adaptive_interventions(owner_id,concept_id,occurred_at);
 
@@ -315,7 +334,7 @@ create table public.adaptive_review_tasks (
   mapping_version text not null, algorithm_version text not null, configuration_version text not null,
   created_at timestamptz not null default now(),
   unique (owner_id,task_id), unique (owner_id,scheduling_key),
-  foreign key (owner_id,source_evidence_id) references public.adaptive_answer_evidence(owner_id,evidence_id) on delete restrict,
+  foreign key (owner_id,source_evidence_id) references public.adaptive_answer_evidence(owner_id,evidence_id) on delete restrict deferrable initially deferred,
   foreign key (mapping_version,concept_id) references public.adaptive_concepts on delete restrict,
   foreign key (mapping_version,algorithm_version,configuration_version) references public.adaptive_version_sets on delete restrict,
   check ((task_type='insufficient_variant_coverage' and target_revision_id is null and initial_status='unavailable') or (task_type <> 'insufficient_variant_coverage' and target_revision_id is not null and initial_status='pending'))
@@ -332,7 +351,7 @@ create table public.adaptive_review_task_events (
   occurred_at timestamptz not null default now(),
   unique (owner_id,event_key),
   foreign key (owner_id,task_id) references public.adaptive_review_tasks(owner_id,task_id) on delete restrict,
-  foreign key (owner_id,completion_evidence_id) references public.adaptive_answer_evidence(owner_id,evidence_id) on delete restrict,
+  foreign key (owner_id,completion_evidence_id) references public.adaptive_answer_evidence(owner_id,evidence_id) on delete restrict deferrable initially deferred,
   check ((status='completed') = (completion_evidence_id is not null))
 );
 create index adaptive_task_events_task on public.adaptive_review_task_events(owner_id,task_id,occurred_at);
@@ -373,6 +392,44 @@ begin
   raise exception 'Adaptive history is immutable; append a correction or lifecycle event' using errcode='55000';
 end;
 $$;
+create function adaptive_private.reject_owned_change() returns trigger
+language plpgsql security invoker set search_path = '' as $$
+declare deletion_owner text := current_setting('adaptive_private.deletion_owner', true);
+begin
+  if tg_op='DELETE' and current_user='postgres' and deletion_owner is not null
+    and deletion_owner=(to_jsonb(old)->>'owner_id') then
+    return old;
+  end if;
+  raise exception 'Adaptive history is immutable; append a correction or use the privileged account-deletion transaction' using errcode='55000';
+end;
+$$;
+create function adaptive_private.validate_editorial_review() returns trigger
+language plpgsql security invoker set search_path = '' as $$
+declare row_data jsonb := to_jsonb(new); review_status text; editorial_actor_id uuid;
+begin
+  review_status := row_data->>tg_argv[0];
+  if row_data->>tg_argv[1] is not null then editorial_actor_id := (row_data->>tg_argv[1])::uuid; end if;
+  if review_status='human_approved' and not exists(
+    select 1 from adaptive_private.editorial_actors a
+    where a.actor_id=editorial_actor_id and a.actor_kind='human_editor' and a.retired_at is null
+  ) then
+    raise exception 'Human approval requires an active durable human editorial actor' using errcode='23514';
+  end if;
+  return new;
+end;
+$$;
+create trigger adaptive_versions_editorial_actor before insert on public.adaptive_versions
+for each row execute function adaptive_private.validate_editorial_review('review_status','approved_by');
+create trigger adaptive_concepts_editorial_actor before insert on public.adaptive_concepts
+for each row execute function adaptive_private.validate_editorial_review('review_status','reviewed_by');
+create trigger adaptive_relationships_editorial_actor before insert on public.adaptive_relationships
+for each row execute function adaptive_private.validate_editorial_review('review_status','reviewed_by');
+create trigger adaptive_question_revisions_editorial_actor before insert on public.adaptive_question_revisions
+for each row execute function adaptive_private.validate_editorial_review('review_status','reviewed_by');
+create trigger adaptive_question_mappings_editorial_actor before insert on public.adaptive_question_mappings
+for each row execute function adaptive_private.validate_editorial_review('review_status','reviewed_by');
+create trigger adaptive_content_mappings_editorial_actor before insert on public.adaptive_content_mappings
+for each row execute function adaptive_private.validate_editorial_review('review_status','reviewed_by');
 create function adaptive_private.version_active(id text) returns boolean
 language sql stable security invoker set search_path = '' as $$
   select exists(select 1 from public.adaptive_versions v where v.version_id=id
@@ -384,6 +441,10 @@ language plpgsql security invoker set search_path = '' as $$
 begin
   -- Lock the registry row to serialize competing lifecycle changes.
   perform 1 from public.adaptive_versions where version_id=new.version_id for update;
+  if not exists(select 1 from adaptive_private.editorial_actors a
+      where a.actor_id=new.actor_id and a.actor_kind='human_editor' and a.retired_at is null) then
+    raise exception 'Version lifecycle changes require an active durable human editorial actor' using errcode='23514';
+  end if;
   if new.action='activate' and not exists(select 1 from public.adaptive_versions
       where version_id=new.version_id and review_status='human_approved') then
     raise exception 'Human approval required for activation' using errcode='23514';
@@ -419,6 +480,20 @@ $$;
 create trigger adaptive_set_allocation before insert on public.adaptive_sessions
 for each row execute function adaptive_private.allocate_set();
 
+create function adaptive_private.validate_session_versions() returns trigger
+language plpgsql security invoker set search_path = '' as $$
+begin
+  if not adaptive_private.version_active(new.mapping_version)
+    or not adaptive_private.version_active(new.algorithm_version)
+    or not adaptive_private.version_active(new.configuration_version) then
+    raise exception 'New adaptive sessions require an active human-approved version set' using errcode='23514';
+  end if;
+  return new;
+end;
+$$;
+create trigger adaptive_session_active_versions before insert on public.adaptive_sessions
+for each row execute function adaptive_private.validate_session_versions();
+
 create function adaptive_private.check_manifest() returns trigger
 language plpgsql security invoker set search_path = '' as $$
 declare s public.adaptive_sessions; n integer; pbqs integer; last_position integer;
@@ -434,6 +509,10 @@ begin
     and not exists(select 1 from public.adaptive_question_mappings m where m.mapping_version=s.mapping_version
       and m.revision_id=i.revision_id and m.concept_role='primary')) then
     raise exception 'Manifest requires one primary mapping per revision' using errcode='23514';
+  end if;
+  if exists(select 1 from public.adaptive_session_items i where i.owner_id=s.owner_id and i.session_id=s.session_id
+    and (select p.status from public.adaptive_question_publications p where p.revision_id=i.revision_id order by p.event_index desc limit 1) is distinct from 'active') then
+    raise exception 'Manifest revisions must be actively published' using errcode='23514';
   end if;
   return null;
 end;
@@ -509,6 +588,28 @@ $$;
 create trigger adaptive_answer_validation before insert on public.adaptive_answer_evidence
 for each row execute function adaptive_private.validate_answer();
 
+create function adaptive_private.validate_recommendation() returns trigger
+language plpgsql security invoker set search_path = '' as $$
+declare e public.adaptive_answer_evidence;
+begin
+  select * into strict e from public.adaptive_answer_evidence where owner_id=new.owner_id and evidence_id=new.source_evidence_id;
+  if not e.eligible_for_mastery or row(new.mapping_version,new.algorithm_version,new.configuration_version)
+      is distinct from row(e.mapping_version,e.algorithm_version,e.configuration_version)
+    or not e.concept_snapshot @> jsonb_build_array(jsonb_build_object('conceptId',new.concept_id)) then
+    raise exception 'Recommendation requires matching complete direct evidence' using errcode='23514';
+  end if;
+  if new.content_revision_id is not null and not exists(
+    select 1 from public.adaptive_content_mappings m where m.mapping_version=new.mapping_version
+      and m.content_revision_id=new.content_revision_id and m.concept_id=new.concept_id and m.review_status='human_approved'
+  ) then
+    raise exception 'Recommendation content must have an approved concept mapping' using errcode='23514';
+  end if;
+  return new;
+end;
+$$;
+create trigger adaptive_recommendation_validation before insert on public.adaptive_recommendations
+for each row execute function adaptive_private.validate_recommendation();
+
 create function adaptive_private.validate_intervention() returns trigger
 language plpgsql security invoker set search_path = '' as $$
 declare r public.adaptive_recommendations;
@@ -524,6 +625,68 @@ end;
 $$;
 create trigger adaptive_intervention_validation before insert on public.adaptive_interventions
 for each row execute function adaptive_private.validate_intervention();
+
+create function adaptive_private.validate_review_task() returns trigger
+language plpgsql security invoker set search_path = '' as $$
+declare source public.adaptive_answer_evidence; source_revision public.adaptive_question_revisions; target public.adaptive_question_revisions;
+begin
+  select * into strict source from public.adaptive_answer_evidence where owner_id=new.owner_id and evidence_id=new.source_evidence_id;
+  if not source.eligible_for_mastery or row(new.mapping_version,new.algorithm_version,new.configuration_version)
+      is distinct from row(source.mapping_version,source.algorithm_version,source.configuration_version)
+    or not source.concept_snapshot @> jsonb_build_array(jsonb_build_object('conceptId',new.concept_id)) then
+    raise exception 'Review task requires matching complete direct evidence' using errcode='23514';
+  end if;
+  if new.task_type<>'insufficient_variant_coverage' then
+    select * into strict target from public.adaptive_question_revisions where revision_id=new.target_revision_id;
+    if target.question_type<>'mcq' or not exists(
+      select 1 from public.adaptive_question_mappings m where m.mapping_version=new.mapping_version
+        and m.revision_id=target.revision_id and m.concept_id=new.concept_id and m.precision='direct'
+    ) or (select p.status from public.adaptive_question_publications p where p.revision_id=target.revision_id order by p.event_index desc limit 1) is distinct from 'active' then
+      raise exception 'Review task target must be an active directly mapped MCQ' using errcode='23514';
+    end if;
+    if new.task_type='original_recall' and target.revision_id is distinct from source.revision_id then
+      raise exception 'Original recall must preserve the source revision' using errcode='23514';
+    end if;
+    if new.task_type='transfer' then
+      select * into strict source_revision from public.adaptive_question_revisions where revision_id=source.revision_id;
+      if target.question_id=source_revision.question_id or target.scenario_family=source_revision.scenario_family
+        or exists(select 1 from public.adaptive_answer_evidence e join public.adaptive_question_revisions q on q.revision_id=e.revision_id
+          where e.owner_id=new.owner_id and (q.question_id=target.question_id or q.scenario_family=target.scenario_family)) then
+        raise exception 'Transfer task requires an unexposed independent scenario' using errcode='23514';
+      end if;
+    end if;
+  end if;
+  return new;
+end;
+$$;
+create trigger adaptive_review_task_validation before insert on public.adaptive_review_tasks
+for each row execute function adaptive_private.validate_review_task();
+
+create function adaptive_private.validate_review_task_event() returns trigger
+language plpgsql security invoker set search_path = '' as $$
+declare task public.adaptive_review_tasks; evidence public.adaptive_answer_evidence; answer_set bigint;
+begin
+  select * into strict task from public.adaptive_review_tasks where owner_id=new.owner_id and task_id=new.task_id;
+  if exists(select 1 from public.adaptive_review_task_events e where e.owner_id=new.owner_id and e.task_id=new.task_id
+      and e.status in ('completed','cancelled','superseded')) then
+    raise exception 'Review task is already terminal' using errcode='23514';
+  end if;
+  if new.status='completed' then
+    select * into strict evidence from public.adaptive_answer_evidence where owner_id=new.owner_id and evidence_id=new.completion_evidence_id;
+    select set_index into strict answer_set from public.adaptive_sessions where owner_id=new.owner_id and session_id=evidence.session_id;
+    if not evidence.eligible_for_mastery or evidence.correct is distinct from true or evidence.occurred_at<task.eligible_at
+      or answer_set<task.eligible_set_index or row(evidence.mapping_version,evidence.algorithm_version,evidence.configuration_version)
+        is distinct from row(task.mapping_version,task.algorithm_version,task.configuration_version)
+      or not evidence.concept_snapshot @> jsonb_build_array(jsonb_build_object('conceptId',task.concept_id))
+      or (task.target_revision_id is not null and evidence.revision_id<>task.target_revision_id) then
+      raise exception 'Task completion evidence does not satisfy both eligibility gates and target proof' using errcode='23514';
+    end if;
+  end if;
+  return new;
+end;
+$$;
+create trigger adaptive_review_task_event_validation before insert on public.adaptive_review_task_events
+for each row execute function adaptive_private.validate_review_task_event();
 
 create function adaptive_private.invalidate_projections() returns trigger
 language plpgsql security invoker set search_path = '' as $$
@@ -609,6 +772,10 @@ create function adaptive_private.publish_question() returns trigger
 language plpgsql security invoker set search_path = '' as $$
 begin
   perform 1 from public.adaptive_question_revisions where revision_id=new.revision_id for update;
+  if not exists(select 1 from adaptive_private.editorial_actors a
+      where a.actor_id=new.actor_id and a.actor_kind='human_editor' and a.retired_at is null) then
+    raise exception 'Question publication requires an active durable human editorial actor' using errcode='23514';
+  end if;
   if new.status='active' and (not exists(select 1 from adaptive_private.grading_keys where revision_id=new.revision_id)
     or not exists(select 1 from public.adaptive_answer_components where revision_id=new.revision_id)) then
     raise exception 'Publishing requires a secured grading key and stable components' using errcode='23514';
@@ -643,6 +810,56 @@ for each row execute function adaptive_private.guard_mapping_append();
 create trigger adaptive_content_mappings_sealed before insert on public.adaptive_content_mappings
 for each row execute function adaptive_private.guard_mapping_append();
 
+-- Account deletion uses one privileged transaction to remove only the selected
+-- learner's adaptive state. Shared catalogues and durable editorial provenance
+-- are outside the owned graph and therefore survive.
+create function adaptive_private.delete_learner_data(target_owner uuid) returns jsonb
+language plpgsql security definer set search_path = '' as $$
+declare deleted_rows bigint; deleted_total bigint := 0;
+begin
+  if target_owner is null then
+    raise exception 'Learner owner is required' using errcode='22004';
+  end if;
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(target_owner::text, 7919));
+  perform pg_catalog.set_config('adaptive_private.deletion_owner', target_owner::text, true);
+  set constraints all deferred;
+
+  delete from public.adaptive_concept_projections where owner_id=target_owner;
+  get diagnostics deleted_rows = row_count; deleted_total := deleted_total + deleted_rows;
+  delete from public.adaptive_review_task_events where owner_id=target_owner;
+  get diagnostics deleted_rows = row_count; deleted_total := deleted_total + deleted_rows;
+  delete from public.adaptive_review_tasks where owner_id=target_owner;
+  get diagnostics deleted_rows = row_count; deleted_total := deleted_total + deleted_rows;
+  delete from public.adaptive_interventions where owner_id=target_owner;
+  get diagnostics deleted_rows = row_count; deleted_total := deleted_total + deleted_rows;
+  delete from public.adaptive_recommendations where owner_id=target_owner;
+  get diagnostics deleted_rows = row_count; deleted_total := deleted_total + deleted_rows;
+  delete from public.adaptive_answer_evidence where owner_id=target_owner;
+  get diagnostics deleted_rows = row_count; deleted_total := deleted_total + deleted_rows;
+  delete from public.adaptive_session_events where owner_id=target_owner;
+  get diagnostics deleted_rows = row_count; deleted_total := deleted_total + deleted_rows;
+  delete from public.adaptive_session_items where owner_id=target_owner;
+  get diagnostics deleted_rows = row_count; deleted_total := deleted_total + deleted_rows;
+  delete from public.adaptive_sessions where owner_id=target_owner;
+  get diagnostics deleted_rows = row_count; deleted_total := deleted_total + deleted_rows;
+  delete from adaptive_private.owner_state where owner_id=target_owner;
+  get diagnostics deleted_rows = row_count; deleted_total := deleted_total + deleted_rows;
+
+  if exists(
+    select 1 from public.adaptive_sessions where owner_id=target_owner
+    union all select 1 from public.adaptive_answer_evidence where owner_id=target_owner
+    union all select 1 from public.adaptive_recommendations where owner_id=target_owner
+    union all select 1 from public.adaptive_interventions where owner_id=target_owner
+    union all select 1 from public.adaptive_review_tasks where owner_id=target_owner
+    union all select 1 from public.adaptive_concept_projections where owner_id=target_owner
+    union all select 1 from adaptive_private.owner_state where owner_id=target_owner
+  ) then
+    raise exception 'Learner adaptive deletion was incomplete' using errcode='P0001';
+  end if;
+  return jsonb_build_object('ownerId',target_owner,'deletedRows',deleted_total);
+end;
+$$;
+
 -- Query/FK indexes not already covered by a leftmost primary/unique index.
 create index adaptive_version_sets_algorithm on public.adaptive_version_sets(algorithm_version);
 create index adaptive_version_sets_configuration on public.adaptive_version_sets(configuration_version);
@@ -663,6 +880,29 @@ create index adaptive_projections_mapping on public.adaptive_concept_projections
 create index adaptive_projections_task on public.adaptive_concept_projections(owner_id,next_due_task_id);
 create index adaptive_evidence_recommendation on public.adaptive_answer_evidence(owner_id,recommendation_id);
 create index adaptive_evidence_intervention on public.adaptive_answer_evidence(owner_id,intervention_id);
+-- Cover every remaining incoming FK so account deletion, editorial retirement,
+-- and version-integrity checks do not degrade into table scans.
+create index adaptive_versions_approver on public.adaptive_versions(approved_by);
+create index adaptive_version_events_actor on public.adaptive_version_events(actor_id);
+create index adaptive_version_sets_mapping_kind on public.adaptive_version_sets(mapping_version,mapping_kind);
+create index adaptive_version_sets_algorithm_kind on public.adaptive_version_sets(algorithm_version,algorithm_kind);
+create index adaptive_version_sets_configuration_kind on public.adaptive_version_sets(configuration_version,configuration_kind);
+create index adaptive_concepts_mapping_kind on public.adaptive_concepts(mapping_version,mapping_kind);
+create index adaptive_concepts_reviewer on public.adaptive_concepts(reviewed_by);
+create index adaptive_relationships_reviewer on public.adaptive_relationships(reviewed_by);
+create index adaptive_question_revisions_reviewer on public.adaptive_question_revisions(reviewed_by);
+create index adaptive_question_publications_actor on public.adaptive_question_publications(actor_id);
+create index adaptive_question_mappings_reviewer on public.adaptive_question_mappings(reviewed_by);
+create index adaptive_content_mappings_reviewer on public.adaptive_content_mappings(reviewed_by);
+create index adaptive_recommendations_versions on public.adaptive_recommendations(mapping_version,algorithm_version,configuration_version);
+create index adaptive_interventions_versions on public.adaptive_interventions(mapping_version,algorithm_version,configuration_version);
+create index adaptive_review_tasks_versions on public.adaptive_review_tasks(mapping_version,algorithm_version,configuration_version);
+create index adaptive_projections_versions on public.adaptive_concept_projections(mapping_version,algorithm_version,configuration_version);
+
+alter table adaptive_private.editorial_actors enable row level security;
+revoke all on table adaptive_private.editorial_actors from public, anon, authenticated, service_role;
+grant select, insert on table adaptive_private.editorial_actors to service_role;
+grant update (login_user_id, retired_at) on table adaptive_private.editorial_actors to service_role;
 
 alter table public.adaptive_versions enable row level security;
 revoke all on table public.adaptive_versions from public, anon, authenticated, service_role;
@@ -798,7 +1038,7 @@ alter table public.adaptive_sessions enable row level security;
 revoke all on table public.adaptive_sessions from public, anon, authenticated, service_role;
 grant select, insert on table public.adaptive_sessions to service_role;
 create trigger adaptive_sessions_immutable before update or delete on public.adaptive_sessions
-for each row execute function adaptive_private.reject_change();
+for each row execute function adaptive_private.reject_owned_change();
 create trigger adaptive_sessions_no_truncate before truncate on public.adaptive_sessions
 for each statement execute function adaptive_private.reject_change();
 grant select on table public.adaptive_sessions to authenticated;
@@ -808,7 +1048,7 @@ alter table public.adaptive_session_items enable row level security;
 revoke all on table public.adaptive_session_items from public, anon, authenticated, service_role;
 grant select, insert on table public.adaptive_session_items to service_role;
 create trigger adaptive_session_items_immutable before update or delete on public.adaptive_session_items
-for each row execute function adaptive_private.reject_change();
+for each row execute function adaptive_private.reject_owned_change();
 create trigger adaptive_session_items_no_truncate before truncate on public.adaptive_session_items
 for each statement execute function adaptive_private.reject_change();
 grant select on table public.adaptive_session_items to authenticated;
@@ -818,7 +1058,7 @@ alter table public.adaptive_session_events enable row level security;
 revoke all on table public.adaptive_session_events from public, anon, authenticated, service_role;
 grant select, insert on table public.adaptive_session_events to service_role;
 create trigger adaptive_session_events_immutable before update or delete on public.adaptive_session_events
-for each row execute function adaptive_private.reject_change();
+for each row execute function adaptive_private.reject_owned_change();
 create trigger adaptive_session_events_no_truncate before truncate on public.adaptive_session_events
 for each statement execute function adaptive_private.reject_change();
 grant select on table public.adaptive_session_events to authenticated;
@@ -828,7 +1068,7 @@ alter table public.adaptive_answer_evidence enable row level security;
 revoke all on table public.adaptive_answer_evidence from public, anon, authenticated, service_role;
 grant select, insert on table public.adaptive_answer_evidence to service_role;
 create trigger adaptive_answer_evidence_immutable before update or delete on public.adaptive_answer_evidence
-for each row execute function adaptive_private.reject_change();
+for each row execute function adaptive_private.reject_owned_change();
 create trigger adaptive_answer_evidence_no_truncate before truncate on public.adaptive_answer_evidence
 for each statement execute function adaptive_private.reject_change();
 grant select on table public.adaptive_answer_evidence to authenticated;
@@ -838,7 +1078,7 @@ alter table public.adaptive_recommendations enable row level security;
 revoke all on table public.adaptive_recommendations from public, anon, authenticated, service_role;
 grant select, insert on table public.adaptive_recommendations to service_role;
 create trigger adaptive_recommendations_immutable before update or delete on public.adaptive_recommendations
-for each row execute function adaptive_private.reject_change();
+for each row execute function adaptive_private.reject_owned_change();
 create trigger adaptive_recommendations_no_truncate before truncate on public.adaptive_recommendations
 for each statement execute function adaptive_private.reject_change();
 grant select on table public.adaptive_recommendations to authenticated;
@@ -848,7 +1088,7 @@ alter table public.adaptive_interventions enable row level security;
 revoke all on table public.adaptive_interventions from public, anon, authenticated, service_role;
 grant select, insert on table public.adaptive_interventions to service_role;
 create trigger adaptive_interventions_immutable before update or delete on public.adaptive_interventions
-for each row execute function adaptive_private.reject_change();
+for each row execute function adaptive_private.reject_owned_change();
 create trigger adaptive_interventions_no_truncate before truncate on public.adaptive_interventions
 for each statement execute function adaptive_private.reject_change();
 grant select on table public.adaptive_interventions to authenticated;
@@ -858,7 +1098,7 @@ alter table public.adaptive_review_tasks enable row level security;
 revoke all on table public.adaptive_review_tasks from public, anon, authenticated, service_role;
 grant select, insert on table public.adaptive_review_tasks to service_role;
 create trigger adaptive_review_tasks_immutable before update or delete on public.adaptive_review_tasks
-for each row execute function adaptive_private.reject_change();
+for each row execute function adaptive_private.reject_owned_change();
 create trigger adaptive_review_tasks_no_truncate before truncate on public.adaptive_review_tasks
 for each statement execute function adaptive_private.reject_change();
 grant select on table public.adaptive_review_tasks to authenticated;
@@ -868,7 +1108,7 @@ alter table public.adaptive_review_task_events enable row level security;
 revoke all on table public.adaptive_review_task_events from public, anon, authenticated, service_role;
 grant select, insert on table public.adaptive_review_task_events to service_role;
 create trigger adaptive_review_task_events_immutable before update or delete on public.adaptive_review_task_events
-for each row execute function adaptive_private.reject_change();
+for each row execute function adaptive_private.reject_owned_change();
 create trigger adaptive_review_task_events_no_truncate before truncate on public.adaptive_review_task_events
 for each statement execute function adaptive_private.reject_change();
 grant select on table public.adaptive_review_task_events to authenticated;

@@ -24,11 +24,13 @@
     "audit:learning-pilot": "node scripts/audit-learning-pilot.mjs",
     "audit:learning-persistence": "node scripts/audit-learning-persistence.mjs",
     "audit:learning-migration": "node scripts/audit-learning-migration.mjs",
+    "audit:learning-database": "node scripts/audit-learning-database.mjs",
     "audit:learning-runtime": "node --test scripts/audit-learning-runtime.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.105.3",
     "lucide-react": "^0.468.0",
+    "postgres": "3.4.9",
     "posthog-js": "1.395.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
