@@ -12,6 +12,7 @@ export async function rebuildAdaptiveOwner(sql, ownerId, { now = new Date().toIS
   requireThat(typeof ownerId === 'string' && UUID.test(ownerId), 'Invalid adaptive owner');
   requireThat(typeof project === 'function', 'Missing version-pinned projection adapter');
   return sql.begin(async tx => {
+    await tx`select pg_advisory_xact_lock(hashtextextended(${ownerId}, 7919))`;
     await tx`
       insert into adaptive_private.owner_state(owner_id) values (${ownerId})
       on conflict(owner_id) do nothing

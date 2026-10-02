@@ -46,6 +46,18 @@ export async function startAdaptiveSession(sql, authenticatedOwnerId, input) {
   const ownerId = uuid(authenticatedOwnerId, 'authenticated owner');
   const plan = normalizeSessionPlan(input);
   return sql.begin(async tx => {
+    // Match the deletion lock and serialize retry/allocation for this owner.
+    await tx`select pg_advisory_xact_lock(hashtextextended(${ownerId}, 7919))`;
+    const [existing] = await tx`select * from public.adaptive_sessions where owner_id=${ownerId} and session_id=${plan.sessionId}`;
+    if (existing) {
+      const items = await tx`select revision_id from public.adaptive_session_items where owner_id=${ownerId} and session_id=${plan.sessionId} order by position`;
+      const previous = { sessionId: existing.session_id, source: existing.source, mode: existing.mode, seed: existing.seed,
+        requestedCount: existing.requested_count, requestedPbqCount: existing.requested_pbq_count,
+        revisionIds: items.map(i => i.revision_id), mappingVersion: existing.mapping_version,
+        algorithmVersion: existing.algorithm_version, configurationVersion: existing.configuration_version };
+      if (canonicalPayload(previous) !== canonicalPayload(plan)) throw new AdaptiveConflictError('Conflicting session retry');
+      return { status: 'retry', sessionId: existing.session_id, ownerId, setIndex: Number(existing.set_index), startedAt: existing.started_at.toISOString(), revisionIds: plan.revisionIds };
+    }
     const revisions = await tx`
       select revision_id, question_type
       from public.adaptive_question_revisions
@@ -72,8 +84,11 @@ export async function startAdaptiveSession(sql, authenticatedOwnerId, input) {
         values (${ownerId}, ${plan.sessionId}, ${index + 1}, ${plan.revisionIds[index]})
       `;
     }
+    await tx`insert into public.adaptive_session_events(owner_id,session_id,client_event_id,status,occurred_at)
+      values (${ownerId},${plan.sessionId},${plan.sessionId},'started',${session.started_at})`;
     await tx`set constraints all immediate`;
     return {
+      status: 'inserted',
       sessionId: session.session_id,
       ownerId: session.owner_id,
       setIndex: Number(session.set_index),
@@ -128,6 +143,7 @@ export async function ingestAdaptiveAnswer(sql, authenticatedOwnerId, input) {
   };
   try {
     return await sql.begin(async tx => {
+    await tx`select pg_advisory_xact_lock(hashtextextended(${ownerId}, 7919))`;
     const [existing] = await tx`
       select evidence_id, submission_sha256, correct, score_fraction, evidence_precision, classification_at_ingest, received_at
       from public.adaptive_answer_evidence
@@ -148,7 +164,6 @@ export async function ingestAdaptiveAnswer(sql, authenticatedOwnerId, input) {
       join adaptive_private.grading_keys g on g.revision_id=q.revision_id
       where s.owner_id=${ownerId} and s.session_id=${answer.sessionId}
         and i.position=${answer.itemPosition} and i.revision_id=${answer.revisionId}
-      for key share of s, i, q, g
     `;
     requireThat(record, 'Unknown or unowned session item');
     const startedAt = new Date(record.started_at);
@@ -212,6 +227,35 @@ export async function ingestAdaptiveAnswer(sql, authenticatedOwnerId, input) {
   }
 }
 
+// Session lifecycle is separate from question evidence and never creates proof.
+export async function recordAdaptiveSessionEvent(sql, authenticatedOwnerId, input) {
+  const ownerId = uuid(authenticatedOwnerId, 'authenticated owner');
+  exactFields(input, ['clientEventId', 'sessionId', 'status', 'occurredAt']);
+  const value = { clientEventId: uuid(input.clientEventId, 'client event'), sessionId: uuid(input.sessionId, 'session'),
+    status: input.status, occurredAt: new Date(qualifiedTimestamp(input.occurredAt)).toISOString() };
+  requireThat(['completed', 'abandoned'].includes(value.status), 'Invalid session lifecycle event');
+  return sql.begin(async tx => {
+    await tx`select pg_advisory_xact_lock(hashtextextended(${ownerId}, 7919))`;
+    const [existing] = await tx`select * from public.adaptive_session_events where owner_id=${ownerId} and client_event_id=${value.clientEventId}`;
+    if (existing) {
+      if (existing.session_id !== value.sessionId || existing.status !== value.status || existing.occurred_at.toISOString() !== value.occurredAt) throw new AdaptiveConflictError('Conflicting session event retry');
+      return { status: 'retry', eventId: existing.event_id };
+    }
+    const [event] = await tx`
+      insert into public.adaptive_session_events(owner_id,session_id,client_event_id,status,occurred_at)
+      select ${ownerId},session_id,${value.clientEventId},${value.status},${value.occurredAt}::timestamptz
+      from public.adaptive_sessions where owner_id=${ownerId} and session_id=${value.sessionId}
+        and started_at<=${value.occurredAt}::timestamptz and ${value.occurredAt}::timestamptz<=clock_timestamp()+interval '5 minutes'
+      returning event_id
+    `;
+    requireThat(event, 'Invalid or unowned session lifecycle event');
+    // A late close can resolve chronology quarantine; schedule a fresh replay.
+    await tx`update adaptive_private.owner_state set evidence_generation=evidence_generation+1,replay_status='idle',quarantine_reasons='{}' where owner_id=${ownerId}`;
+    await tx`update public.adaptive_concept_projections set projection_status='stale' where owner_id=${ownerId}`;
+    return { status: 'inserted', eventId: event.event_id };
+  });
+}
+
 function normalizedVersions(input) {
   return {
     mappingVersion: version(input.mappingVersion, 'mapping version'),
@@ -257,6 +301,7 @@ export async function recordAdaptiveIntervention(sql, authenticatedOwnerId, inpu
   requireThat(['lesson_open', 'lesson_steps', 'lesson_check', 'flashcard_review', 'targeted_practice'].includes(normalized.activityType), 'Invalid intervention activity');
   const submissionSha256 = sha256(canonicalPayload(normalized));
   const write = async () => sql.begin(async tx => {
+    await tx`select pg_advisory_xact_lock(hashtextextended(${ownerId}, 7919))`;
     const [existing] = await tx`select intervention_id,submission_sha256,completion_verified,received_at from public.adaptive_interventions where owner_id=${ownerId} and client_event_id=${normalized.clientEventId}`;
     if (existing) {
       if (existing.submission_sha256 !== submissionSha256) throw new AdaptiveConflictError('Client event ID was already used for a different intervention');
@@ -266,7 +311,6 @@ export async function recordAdaptiveIntervention(sql, authenticatedOwnerId, inpu
       select r.*,c.content_kind from public.adaptive_recommendations r
       left join public.adaptive_content_revisions c on c.content_revision_id=r.content_revision_id
       where r.owner_id=${ownerId} and r.recommendation_id=${normalized.recommendationId}
-      for key share of r
     `;
     requireThat(recommendation?.content_revision_id, 'Unknown recommendation or missing mapped content');
     const allowedByContent = {
