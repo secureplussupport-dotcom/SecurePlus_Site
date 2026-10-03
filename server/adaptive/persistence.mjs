@@ -252,8 +252,7 @@ export async function recordAdaptiveSessionEvent(sql, authenticatedOwnerId, inpu
     `;
     requireThat(event, 'Invalid or unowned session lifecycle event');
     // A late close can resolve chronology quarantine; schedule a fresh replay.
-    await tx`update adaptive_private.owner_state set evidence_generation=evidence_generation+1,replay_status='idle',quarantine_reasons='{}' where owner_id=${ownerId}`;
-    await tx`update public.adaptive_concept_projections set projection_status='stale' where owner_id=${ownerId}`;
+    // Database trigger advances generation, invalidates caches and enqueues atomically.
     return { status: 'inserted', eventId: event.event_id };
   });
 }

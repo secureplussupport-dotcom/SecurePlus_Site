@@ -1,3 +1,4 @@
+import { bindJobLease, assertJobLease } from './durable-queue.mjs';
 import { assertOwnerWritable } from './owner-guard.mjs';
 import { canonicalPayload } from '../../src/lib/learningPersistenceContracts.js';
 import { assessReplayChronology } from './chronology.mjs';
@@ -9,11 +10,12 @@ const requireThat = (ok, message) => { if (!ok) throw new Error(message); };
 
 // The projector is injected and version-pinned by the caller. It receives a
 // complete immutable snapshot and returns cache rows only; it cannot write.
-export async function rebuildAdaptiveOwner(sql, ownerId, { now = new Date().toISOString(), project, enrollmentId = null } = {}) {
+export async function rebuildAdaptiveOwner(sql, ownerId, { now = null, project, enrollmentId = null, job = null } = {}) {
   requireThat(typeof ownerId === 'string' && UUID.test(ownerId), 'Invalid adaptive owner');
   requireThat(typeof project === 'function', 'Missing version-pinned projection adapter');
   return sql.begin(async tx => {
     await assertOwnerWritable(tx, ownerId, enrollmentId);
+    if (job) { requireThat(job.ownerId===ownerId && job.enrollmentId===enrollmentId, 'Foreign job'); await bindJobLease(tx,job); }
     await tx`
       insert into adaptive_private.owner_state(owner_id) values (${ownerId})
       on conflict(owner_id) do nothing
@@ -40,13 +42,17 @@ export async function rebuildAdaptiveOwner(sql, ownerId, { now = new Date().toIS
       where e.owner_id=${ownerId}
       order by e.occurred_at,e.receipt_index
     `;
+    // Receipt timestamps and default replay time share the database clock.
+    // Host/VM clock skew must not quarantine freshly committed server receipts.
+    const replayNow=now ?? (await tx`select clock_timestamp() as replay_now`)[0].replay_now.toISOString();
     const chronology = assessReplayChronology({
       ownerId,
-      now,
+      now:replayNow,
       sessions: sessions.map(row => ({ ownerId, sessionId: row.session_id, setIndex: Number(row.set_index), startedAt: row.started_at.toISOString(), closedAt: row.closed_at?.toISOString() ?? null })),
       evidence: evidence.filter(row => row.session_id).map(row => ({ ownerId, evidenceId: row.evidence_id, sessionId: row.session_id, setIndex: Number(row.set_index), occurredAt: row.occurred_at.toISOString(), receivedAt: row.received_at.toISOString(), supersedesEvidenceId: row.supersedes_evidence_id })),
     });
     if (chronology.status === 'quarantined') {
+      if (job) await assertJobLease(tx,job);
       await tx`
         update adaptive_private.owner_state set replay_status='quarantined',quarantine_reasons=${chronology.reasonCodes},last_replay_at=clock_timestamp(),last_replay_sha256=${chronology.inputSha256}
         where owner_id=${ownerId}
@@ -57,9 +63,13 @@ export async function rebuildAdaptiveOwner(sql, ownerId, { now = new Date().toIS
     const complete = evidence.filter(row => row.provenance === 'complete');
     const boundary = state.complete_evidence_from ?? complete.reduce((minimum, row) => !minimum || row.occurred_at < minimum ? row.occurred_at : minimum, null);
     if (boundary && state.complete_evidence_from == null) await tx`update adaptive_private.owner_state set complete_evidence_from=${boundary} where owner_id=${ownerId}`;
-    const snapshot = Object.freeze({ ownerId, now, generation: Number(state.evidence_generation), completeEvidenceFrom: boundary?.toISOString() ?? null, sessions, evidence });
+    const snapshot = Object.freeze({ ownerId, now:replayNow, generation: Number(state.evidence_generation), completeEvidenceFrom: boundary?.toISOString() ?? null, sessions, evidence });
     const projected = await project(snapshot);
     requireThat(Array.isArray(projected), 'Projection adapter must return rows');
+    if (job) {
+      await assertJobLease(tx,job);
+      requireThat(projected.every(r=>r.mappingVersion===job.versions.mappingVersion && r.algorithmVersion===job.versions.algorithmVersion && r.configurationVersion===job.versions.configurationVersion),'Job version mismatch');
+    }
     const inputSha256 = hash({ chronology: chronology.inputSha256, generation: snapshot.generation, projectionRows: projected });
     const watermark = evidence.reduce((maximum, row) => Math.max(maximum, Number(row.receipt_index ?? 0)), 0);
     for (const row of projected) {
@@ -91,6 +101,7 @@ export async function rebuildAdaptiveOwner(sql, ownerId, { now = new Date().toIS
       update adaptive_private.owner_state set replay_status='ready',quarantine_reasons='{}',last_replay_at=clock_timestamp(),last_replay_sha256=${inputSha256}
       where owner_id=${ownerId} and evidence_generation=${snapshot.generation}
     `;
+    if (job) await assertJobLease(tx,job);
     return { status: 'ready', projectionCount: projected.length, inputGeneration: snapshot.generation, inputSha256, promotionAllowed: false };
   });
 }

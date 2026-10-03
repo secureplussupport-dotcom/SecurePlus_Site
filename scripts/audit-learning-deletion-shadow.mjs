@@ -10,7 +10,7 @@ import * as persistence from '../server/adaptive/persistence.mjs';
 import { rebuildAdaptiveOwner } from '../server/adaptive/projection-worker.mjs';
 import { beginConfirmedAccountErasure,resumeAdaptiveErasure,resumePendingErasures,eraseExpiredEnrollments,withdrawShadow,createAdaptiveDeletionHandler,adaptiveDeletionInstalled } from '../server/adaptive/deletion.mjs';
 import { createAccountCleanup } from '../server/adaptive/account-cleanup.mjs';
-import { createTestQueue } from './lib/adaptive-test-queue.mjs';
+import { createDurableQueue } from '../server/adaptive/durable-queue.mjs';
 
 const url=process.env.SUPABASE_LOCAL_API_URL;
 assert.ok(['localhost','127.0.0.1'].includes(new URL(url).hostname));
@@ -22,7 +22,7 @@ runtime.begin=fn=>pool.begin(async tx=>{await tx`set local role service_role`;re
 runtime.end=options=>pool.end(options);
 const admin=createClient(url,process.env.SUPABASE_LOCAL_SERVICE_ROLE_KEY,{auth:{persistSession:false,autoRefreshToken:false}});
 const authenticate=createAdaptiveDeletionAuthenticator({url,publishableKey:process.env.SUPABASE_LOCAL_ANON_KEY});
-const queue=createTestQueue(runtime), logs=[];
+const queue=createDurableQueue(runtime), logs=[];
 let count=0; const check=(ok,label)=>{assert.ok(ok,label);count++;};
 const rejects=async(fn,label)=>{await assert.rejects(fn,undefined,label);count++;};
 const versions={mappingVersion:'local-map-v1',algorithmVersion:'local-algo-v1',configurationVersion:'local-config-v1'};
@@ -123,8 +123,8 @@ try{
   const controlBody=await control.json();check(controlBody.data?.__typename==='Query','GraphQL endpoint works');
   const introspection=await fetch(`${url}/graphql/v1`,{method:'POST',headers,body:JSON.stringify({query:'{ __schema { queryType { fields { name } } } }'})});
   const schema=await introspection.json();
-  check(Array.isArray(schema.data?.__schema?.queryType?.fields) && !schema.data.__schema.queryType.fields.some(f=>/adaptive|grading|shadow|erasure|editorial|owner_state|version_payload/i.test(f.name)),'GraphQL actual schema contains no adaptive collections');
-  for(const field of ['adaptiveSessionsCollection','adaptive_sessionsCollection','gradingKeysCollection','shadowEnrollmentsCollection','erasureOperationsCollection']){
+  check(Array.isArray(schema.data?.__schema?.queryType?.fields) && !schema.data.__schema.queryType.fields.some(f=>/adaptive|grading|shadow|erasure|editorial|owner_state|version_payload|projectionJobs|schedulerNonces|runtimeReceipts/i.test(f.name)),'GraphQL actual schema contains no adaptive collections');
+  for(const field of ['adaptiveSessionsCollection','adaptive_sessionsCollection','gradingKeysCollection','shadowEnrollmentsCollection','erasureOperationsCollection','projectionJobsCollection','schedulerNoncesCollection','runtimeReceiptsCollection']){
    const r=await fetch(`${url}/graphql/v1`,{method:'POST',headers,body:JSON.stringify({query:`{ ${field} { edges { node { id } } } }`})});
    const body=await r.json();check(body.errors?.length>0 && !body.data?.[field],`GraphQL hides ${field}`);
   }
@@ -213,6 +213,6 @@ try{
  await withdrawShadow(runtime,b.id,cleanup);
  for(const user of clients){const {error}=await admin.auth.admin.deleteUser(user.id);if(error && error.code!=='user_not_found')throw error;}
  check((await sql`select count(*)::int as n from adaptive_private.erasure_operations where stage='completed' and (owner_id is not null or confirmation_request_id is not null)`)[0].n===0,'Completed receipts retain no subject link');
- console.log(`PASS deletion/shadow isolation: ${count} assertions; real Auth/REST/GraphQL, role transactions, races, erasure retries, retention and local queue fencing.`);
+ console.log(`PASS deletion/shadow isolation: ${count} assertions; real Auth/REST/GraphQL, role transactions, races, erasure retries, retention and durable queue fencing.`);
 }catch(error){console.error(`FAIL deletion/shadow isolation: ${error.code??error.name}: ${error.message}`);process.exitCode=1;}
 finally{await closeAdaptiveDatabase(sql);await closeAdaptiveDatabase(runtime);}

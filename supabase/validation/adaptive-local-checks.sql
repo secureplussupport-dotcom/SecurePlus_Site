@@ -75,7 +75,8 @@ select adaptive_test.assert_ok((select count(*)=1 from public.adaptive_answer_ev
 insert into public.adaptive_answer_evidence(owner_id,client_event_id,submission_sha256,mapping_version,algorithm_version,configuration_version,evidence_precision,provenance,source,mode,classification_at_ingest,classification_provenance,legacy_attempt_id) values ('00000000-0000-4000-8000-000000000001','00000000-0000-4000-8000-000000000042',repeat('b',64),'local-map-v1','local-algo-v1','local-config-v1','direct','legacy_inferred','legacy','legacy','unknown','legacy_unknown','00000000-0000-4000-8000-000000000050');
 select adaptive_test.assert_ok((select not eligible_for_mastery from public.adaptive_answer_evidence where provenance='legacy_inferred'),'legacy cannot become mastery evidence');
 select adaptive_test.assert_ok((select projection_status='stale' from public.adaptive_concept_projections),'new arrivals invalidate projections');
-update public.adaptive_concept_projections set input_generation=2,projection_status='ready';
+select adaptive_test.assert_ok((select evidence_generation=3 from adaptive_private.owner_state where owner_id='00000000-0000-4000-8000-000000000001'),'session lifecycle and both answers each advance replay generation');
+update public.adaptive_concept_projections set input_generation=3,projection_status='ready';
 select adaptive_test.assert_ok((select projection_status='ready' from public.adaptive_concept_projections),'projection cache can be rebuilt');
 
 reset role;
@@ -116,6 +117,7 @@ set local role service_role;
 select adaptive_test.expect_error($q$delete from public.adaptive_answer_evidence where owner_id='00000000-0000-4000-8000-000000000001'$q$,'42501');
 do $$ declare op uuid; begin
  op:=adaptive_private.begin_erasure('00000000-0000-4000-8000-000000000001','withdrawal');
+ perform adaptive_private.cancel_owner_jobs('00000000-0000-4000-8000-000000000001');
  perform adaptive_private.advance_erasure(op,'jobs_cancelled');
  perform adaptive_private.erase_operation(op);
  perform adaptive_private.advance_erasure(op,'completed');

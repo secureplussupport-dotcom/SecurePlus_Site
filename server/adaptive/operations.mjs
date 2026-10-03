@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-const events = new Set(['runtime_accepted', 'runtime_rejected', 'idempotent_retry', 'transaction_failure', 'projection_success', 'projection_failure', 'quarantine', 'generation_conflict', 'kill_switch', 'deletion_complete', 'deletion_failure']);
+const events = new Set(['runtime_accepted', 'runtime_rejected', 'idempotent_retry', 'transaction_failure', 'projection_success', 'projection_failure', 'quarantine', 'generation_conflict', 'kill_switch', 'deletion_complete', 'deletion_failure', 'job_enqueued', 'job_deduplicated', 'job_claimed', 'lease_recovered', 'job_acknowledged', 'job_retry', 'job_released', 'job_parked', 'job_cancelled', 'scheduler_denied', 'connection_denied', 'connection_failure']);
 const reasons = new Set(['ok', 'disabled', 'unauthenticated', 'ineligible', 'invalid_request', 'conflict', 'unavailable', 'retryable', 'poison_job', 'generation_changed', 'chronology_conflict']);
 
 // No payload spreading, external correlation IDs, exception messages or user IDs.

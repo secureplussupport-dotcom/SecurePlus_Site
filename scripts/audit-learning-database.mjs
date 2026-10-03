@@ -203,6 +203,7 @@ try {
   await sql.begin(async tx => {
     await tx`set local role service_role`;
     const [op] = await tx`select adaptive_private.begin_erasure(${ids.ownerA},'withdrawal') as id`;
+    await tx`select adaptive_private.cancel_owner_jobs(${ids.ownerA})`;
     await tx`select adaptive_private.advance_erasure(${op.id},'jobs_cancelled')`;
     await tx`select adaptive_private.erase_operation(${op.id})`;
     await tx`select adaptive_private.advance_erasure(${op.id},'completed')`;

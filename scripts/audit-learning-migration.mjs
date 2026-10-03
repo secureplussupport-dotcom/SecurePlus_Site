@@ -42,4 +42,9 @@ for(const fragment of ['revoke all on schema adaptive_private from public,anon,a
 // Lexical sanity only; not a PostgreSQL parser or an execution/security proof.
 check((sql.match(/\$\$/g) ?? []).length % 2 === 0, 'Balanced dollar quotes');
 check(!/\b(?:drop|truncate)\s+table\b/i.test(sql), 'No destructive migration DDL');
-console.log(`PASS ${checks} static migration checks across ${tables.length} foundation tables plus the shadow/deletion follow-up. Run audit:learning-database plus local lint/advisors for executable proof.`);
+const infrastructure=readFileSync('supabase/migrations/'+readdirSync('supabase/migrations').find(n=>n.endsWith('_adaptive_durable_runtime.sql')),'utf8');
+for(const role of ['adaptive_ingest','adaptive_worker','adaptive_erasure'])check(infrastructure.includes(`create role ${role} nologin nosuperuser nocreatedb nocreaterole noinherit nobypassrls`),`${role} restricted group`);
+for(const name of ['projection_jobs','scheduler_nonces','runtime_receipts'])check(infrastructure.includes(`alter table adaptive_private.${name} enable row level security`),`${name} private RLS`);
+for(const name of ['enqueue_generation','pg_try_advisory_xact_lock','job_fence_seq','guard_worker_publication','guard_worker_output','require_erased_jobs','consume_scheduler_nonce','revoke all on all functions in schema adaptive_private from public,anon,authenticated'])check(infrastructure.includes(name),`Durable runtime guard: ${name}`);
+check(!/\bpassword\s+'[^']+'/i.test(infrastructure),'No migration credentials');
+console.log(`PASS ${checks} static migration checks across ${tables.length} foundation tables plus the shadow/deletion and durable-runtime follow-ups. Run audit:learning-database plus local lint/advisors for executable proof.`);

@@ -67,6 +67,7 @@ try {
   check(!serialized.includes(ownerId) && !serialized.includes(token) && !serialized.includes(password) && !serialized.includes(answer.selectedComponents[0].valueId), 'Operational logs contain no identifiers, credentials or answer selections');
   check(logs.some(record => record.event === 'idempotent_retry'), 'Retry telemetry');
   const [op] = await sql`select adaptive_private.begin_erasure(${ownerId},'withdrawal') as id`;
+  await sql`select adaptive_private.cancel_owner_jobs(${ownerId})`;
   await sql`select adaptive_private.advance_erasure(${op.id},'jobs_cancelled')`;
   await sql`select adaptive_private.erase_operation(${op.id})`;
   await sql`select adaptive_private.advance_erasure(${op.id},'completed')`;
