@@ -36,8 +36,10 @@ check(sql.includes('revoke all on all functions in schema adaptive_private from 
 check(sql.includes('grant execute on function adaptive_private.version_active(text) to authenticated;'), 'Only safe read helper callable');
 check(!readFileSync('src/App.jsx', 'utf8').includes('learningPersistenceContracts'), 'Production App does not import contracts');
 const validations = readFileSync('supabase/validation/adaptive-local-checks.sql', 'utf8');
-for (const name of ['cross-user', 'immutable', 'pending versions hidden', 'no grading columns', 'summaries never enter', 'rolled back', 'projection cache can be rebuilt', 'other learner survives scoped deletion', 'editorial provenance survives login deletion']) check(validations.includes(name), `Executable local assertion: ${name}`);
+for (const name of ['select * from public.adaptive_sessions', 'immutable', 'select * from public.adaptive_versions', 'no grading columns', 'summaries never enter', 'rolled back', 'projection cache can be rebuilt', 'other learner survives scoped deletion', 'editorial provenance survives login deletion']) check(validations.includes(name), `Executable local assertion: ${name}`);
+const isolation=readFileSync('supabase/migrations/'+readdirSync('supabase/migrations').find(n=>n.endsWith('_adaptive_deletion_shadow_isolation.sql')),'utf8');
+for(const fragment of ['revoke all on schema adaptive_private from public,anon,authenticated','drop policy %I','shadow_authorizations','shadow_enrollments','erasure_operations','assert_owner_writable','confirm_account_erasure','revoke execute on function adaptive_private.delete_learner_data(uuid) from service_role',"owner_id=case when next_stage='completed'"]) check(isolation.includes(fragment),`Shadow/deletion guard: ${fragment}`);
 // Lexical sanity only; not a PostgreSQL parser or an execution/security proof.
 check((sql.match(/\$\$/g) ?? []).length % 2 === 0, 'Balanced dollar quotes');
 check(!/\b(?:drop|truncate)\s+table\b/i.test(sql), 'No destructive migration DDL');
-console.log(`PASS ${checks} static migration checks across ${tables.length} new tables. Run audit:learning-database plus local lint/advisors for executable proof.`);
+console.log(`PASS ${checks} static migration checks across ${tables.length} foundation tables plus the shadow/deletion follow-up. Run audit:learning-database plus local lint/advisors for executable proof.`);

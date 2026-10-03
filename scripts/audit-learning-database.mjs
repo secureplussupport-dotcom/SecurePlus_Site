@@ -101,6 +101,8 @@ try {
       insert into public.adaptive_version_events(version_id,action,actor_id,reason) values (${versionId},'activate',${ids.actor},'Disposable rollback/reset-only database audit')
     `;
     for (const revision of revisions) await tx`insert into public.adaptive_question_publications(revision_id,status,actor_id) values (${revision.revisionId},'active',${ids.actor})`;
+    await tx`insert into adaptive_private.shadow_authorizations(mapping_version,algorithm_version,configuration_version,action,actor_id) values (${versions.mappingVersion},${versions.algorithmVersion},${versions.configurationVersion},'authorize',${ids.actor})`;
+    for (const owner of [ids.ownerA,ids.ownerB]) await tx`select adaptive_private.enroll_shadow(${owner},clock_timestamp()+interval '7 days',gen_random_uuid())`;
     await tx`insert into adaptive_private.owner_state(owner_id,last_set_index,evidence_generation) values (${ids.ownerB},0,0)`;
   });
 
@@ -154,11 +156,11 @@ try {
   assert.equal(taskEvent.status, 'inserted'); assertions += 1;
 
   const ownerRead = await api('adaptive_sessions?select=session_id,set_index&order=set_index', { ownerId: ids.ownerA });
-  assert.equal(ownerRead.status, 200); const ownerRows = await ownerRead.json(); assert.equal(ownerRows.length, 2); assertions += 2;
+  check(ownerRead.status === 403, 'Owner cannot read private shadow sessions');
   const foreignRead = await api('adaptive_sessions?select=session_id', { ownerId: ids.ownerB });
-  assert.equal(foreignRead.status, 200); assert.deepEqual(await foreignRead.json(), []); assertions += 2;
+  check(foreignRead.status === 403, 'Other authenticated user cannot read shadow sessions');
   const versionsRead = await api('adaptive_versions?select=version_id', { ownerId: ids.ownerA });
-  assert.equal(versionsRead.status, 200); const visibleVersions = await versionsRead.json(); check(!visibleVersions.some(row => row.version_id === 'local-pending-v1'), 'Pending version must be hidden by RLS');
+  check(versionsRead.status === 403, 'All adaptive version metadata stays internal');
   const forgedWrite = await api('adaptive_answer_evidence', { ownerId: ids.ownerA, method: 'POST', body: {} });
   check(forgedWrite.status >= 400, 'Authenticated browser must not insert answer evidence');
   const privateRead = await api('grading_keys?select=*', { ownerId: ids.ownerA, profile: 'adaptive_private' });
@@ -200,8 +202,11 @@ try {
 
   await sql.begin(async tx => {
     await tx`set local role service_role`;
-    const [result] = await tx`select adaptive_private.delete_learner_data(${ids.ownerA}) as result`;
-    check(Number(result.result.deletedRows) >= 8, 'Scoped deletion should remove the complete learner graph');
+    const [op] = await tx`select adaptive_private.begin_erasure(${ids.ownerA},'withdrawal') as id`;
+    await tx`select adaptive_private.advance_erasure(${op.id},'jobs_cancelled')`;
+    await tx`select adaptive_private.erase_operation(${op.id})`;
+    await tx`select adaptive_private.advance_erasure(${op.id},'completed')`;
+    check((await tx`select count(*)::int as n from public.adaptive_answer_evidence where owner_id=${ids.ownerA}`)[0].n===0,'Scoped lifecycle removes evidence');
   });
   const [{ ownerACount }] = await sql`select count(*)::int as "ownerACount" from public.adaptive_sessions where owner_id=${ids.ownerA}`;
   const [{ ownerBCount }] = await sql`select count(*)::int as "ownerBCount" from adaptive_private.owner_state where owner_id=${ids.ownerB}`;

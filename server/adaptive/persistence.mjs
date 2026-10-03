@@ -1,3 +1,4 @@
+import { assertOwnerWritable } from './owner-guard.mjs';
 import { createHash } from 'node:crypto';
 import { canonicalPayload, qualifiedTimestamp, validateStableSelections } from '../../src/lib/learningPersistenceContracts.js';
 import { gradeRevision } from './revision.mjs';
@@ -47,7 +48,7 @@ export async function startAdaptiveSession(sql, authenticatedOwnerId, input) {
   const plan = normalizeSessionPlan(input);
   return sql.begin(async tx => {
     // Match the deletion lock and serialize retry/allocation for this owner.
-    await tx`select pg_advisory_xact_lock(hashtextextended(${ownerId}, 7919))`;
+    await assertOwnerWritable(tx, ownerId);
     const [existing] = await tx`select * from public.adaptive_sessions where owner_id=${ownerId} and session_id=${plan.sessionId}`;
     if (existing) {
       const items = await tx`select revision_id from public.adaptive_session_items where owner_id=${ownerId} and session_id=${plan.sessionId} order by position`;
@@ -131,8 +132,9 @@ export async function ingestAdaptiveAnswer(sql, authenticatedOwnerId, input) {
   const ownerId = uuid(authenticatedOwnerId, 'authenticated owner');
   const answer = normalizeAnswer(input);
   const submissionSha256 = sha256(canonicalPayload(answer));
-  const readRetry = async () => {
-    const [existing] = await sql`
+  const readRetry = async () => sql.begin(async tx => {
+    await assertOwnerWritable(tx, ownerId);
+    const [existing] = await tx`
       select evidence_id, submission_sha256, correct, score_fraction, evidence_precision, classification_at_ingest, received_at
       from public.adaptive_answer_evidence
       where owner_id=${ownerId} and client_event_id=${answer.clientEventId}
@@ -140,10 +142,10 @@ export async function ingestAdaptiveAnswer(sql, authenticatedOwnerId, input) {
     if (!existing) return null;
     if (existing.submission_sha256 !== submissionSha256) throw new AdaptiveConflictError('Client event ID was already used for a different answer');
     return safeEvidence(existing, 'retry');
-  };
+  });
   try {
     return await sql.begin(async tx => {
-    await tx`select pg_advisory_xact_lock(hashtextextended(${ownerId}, 7919))`;
+    await assertOwnerWritable(tx, ownerId);
     const [existing] = await tx`
       select evidence_id, submission_sha256, correct, score_fraction, evidence_precision, classification_at_ingest, received_at
       from public.adaptive_answer_evidence
@@ -235,7 +237,7 @@ export async function recordAdaptiveSessionEvent(sql, authenticatedOwnerId, inpu
     status: input.status, occurredAt: new Date(qualifiedTimestamp(input.occurredAt)).toISOString() };
   requireThat(['completed', 'abandoned'].includes(value.status), 'Invalid session lifecycle event');
   return sql.begin(async tx => {
-    await tx`select pg_advisory_xact_lock(hashtextextended(${ownerId}, 7919))`;
+    await assertOwnerWritable(tx, ownerId);
     const [existing] = await tx`select * from public.adaptive_session_events where owner_id=${ownerId} and client_event_id=${value.clientEventId}`;
     if (existing) {
       if (existing.session_id !== value.sessionId || existing.status !== value.status || existing.occurred_at.toISOString() !== value.occurredAt) throw new AdaptiveConflictError('Conflicting session event retry');
@@ -276,18 +278,21 @@ export async function persistAdaptiveRecommendation(sql, authenticatedOwnerId, i
   requireThat(Array.isArray(input.reasonCodes) && input.reasonCodes.length >= 1 && input.reasonCodes.length <= 30 && input.reasonCodes.every(code => typeof code === 'string' && code.length >= 1), 'Invalid recommendation reasons');
   const identity = { ownerId, conceptId: input.conceptId, contentRevisionId: input.contentRevisionId ?? null, sourceEvidenceId: input.sourceEvidenceId, role: input.role, reasonCodes: [...input.reasonCodes].sort(), ...versionIds };
   const schedulingKey = `recommendation:${sha256(canonicalPayload(identity))}`;
-  const [inserted] = await sql`
-    insert into public.adaptive_recommendations(owner_id,scheduling_key,concept_id,content_revision_id,source_evidence_id,role,reason_codes,mapping_version,algorithm_version,configuration_version)
-    values (${ownerId},${schedulingKey},${input.conceptId},${input.contentRevisionId ?? null},${input.sourceEvidenceId},${input.role},${identity.reasonCodes},${versionIds.mappingVersion},${versionIds.algorithmVersion},${versionIds.configurationVersion})
-    on conflict(owner_id,scheduling_key) do nothing
-    returning recommendation_id,created_at,concept_id,content_revision_id,source_evidence_id,role,reason_codes,mapping_version,algorithm_version,configuration_version
-  `;
-  const row = inserted ?? (await sql`
-    select recommendation_id,created_at,concept_id,content_revision_id,source_evidence_id,role,reason_codes,mapping_version,algorithm_version,configuration_version
-    from public.adaptive_recommendations where owner_id=${ownerId} and scheduling_key=${schedulingKey}
-  `)[0];
-  requireThat(row && row.concept_id === input.conceptId && row.source_evidence_id === input.sourceEvidenceId, 'Recommendation identity conflict');
-  return { status: inserted ? 'inserted' : 'retry', recommendationId: row.recommendation_id, createdAt: row.created_at.toISOString() };
+  return sql.begin(async tx => {
+    await assertOwnerWritable(tx, ownerId);
+    const [inserted] = await tx`
+      insert into public.adaptive_recommendations(owner_id,scheduling_key,concept_id,content_revision_id,source_evidence_id,role,reason_codes,mapping_version,algorithm_version,configuration_version)
+      values (${ownerId},${schedulingKey},${input.conceptId},${input.contentRevisionId ?? null},${input.sourceEvidenceId},${input.role},${identity.reasonCodes},${versionIds.mappingVersion},${versionIds.algorithmVersion},${versionIds.configurationVersion})
+      on conflict(owner_id,scheduling_key) do nothing
+      returning recommendation_id,created_at,concept_id,content_revision_id,source_evidence_id,role,reason_codes,mapping_version,algorithm_version,configuration_version
+    `;
+    const row = inserted ?? (await tx`
+      select recommendation_id,created_at,concept_id,content_revision_id,source_evidence_id,role,reason_codes,mapping_version,algorithm_version,configuration_version
+      from public.adaptive_recommendations where owner_id=${ownerId} and scheduling_key=${schedulingKey}
+    `)[0];
+    requireThat(row && row.concept_id === input.conceptId && row.source_evidence_id === input.sourceEvidenceId, 'Recommendation identity conflict');
+    return { status: inserted ? 'inserted' : 'retry', recommendationId: row.recommendation_id, createdAt: row.created_at.toISOString() };
+  });
 }
 
 export async function recordAdaptiveIntervention(sql, authenticatedOwnerId, input, { verifyCompletion } = {}) {
@@ -301,7 +306,7 @@ export async function recordAdaptiveIntervention(sql, authenticatedOwnerId, inpu
   requireThat(['lesson_open', 'lesson_steps', 'lesson_check', 'flashcard_review', 'targeted_practice'].includes(normalized.activityType), 'Invalid intervention activity');
   const submissionSha256 = sha256(canonicalPayload(normalized));
   const write = async () => sql.begin(async tx => {
-    await tx`select pg_advisory_xact_lock(hashtextextended(${ownerId}, 7919))`;
+    await assertOwnerWritable(tx, ownerId);
     const [existing] = await tx`select intervention_id,submission_sha256,completion_verified,received_at from public.adaptive_interventions where owner_id=${ownerId} and client_event_id=${normalized.clientEventId}`;
     if (existing) {
       if (existing.submission_sha256 !== submissionSha256) throw new AdaptiveConflictError('Client event ID was already used for a different intervention');
@@ -335,9 +340,12 @@ export async function recordAdaptiveIntervention(sql, authenticatedOwnerId, inpu
   });
   try { return await write(); } catch (error) {
     if (error?.code !== '23505') throw error;
-    const [row] = await sql`select intervention_id,submission_sha256,completion_verified,received_at from public.adaptive_interventions where owner_id=${ownerId} and client_event_id=${normalized.clientEventId}`;
+    return sql.begin(async tx => {
+      await assertOwnerWritable(tx, ownerId);
+    const [row] = await tx`select intervention_id,submission_sha256,completion_verified,received_at from public.adaptive_interventions where owner_id=${ownerId} and client_event_id=${normalized.clientEventId}`;
     if (!row || row.submission_sha256 !== submissionSha256) throw new AdaptiveConflictError('Conflicting intervention retry');
     return { status: 'retry', interventionId: row.intervention_id, completionVerified: row.completion_verified, receivedAt: row.received_at.toISOString() };
+    });
   }
 }
 
@@ -356,14 +364,17 @@ export async function persistAdaptiveReviewTask(sql, authenticatedOwnerId, input
   };
   requireThat(['transfer', 'original_recall', 'delayed_proof', 'maintenance', 'insufficient_variant_coverage'].includes(normalized.taskType), 'Invalid review task');
   const schedulingKey = `review:${sha256(canonicalPayload(normalized))}`;
-  const [inserted] = await sql`
-    insert into public.adaptive_review_tasks(owner_id,scheduling_key,concept_id,source_evidence_id,target_revision_id,task_type,reason_codes,eligible_at,eligible_set_index,initial_status,mapping_version,algorithm_version,configuration_version)
-    values (${ownerId},${schedulingKey},${normalized.conceptId},${normalized.sourceEvidenceId},${normalized.targetRevisionId},${normalized.taskType},${normalized.reasonCodes},${normalized.eligibleAt},${normalized.eligibleSetIndex},${normalized.initialStatus},${versionIds.mappingVersion},${versionIds.algorithmVersion},${versionIds.configurationVersion})
-    on conflict(owner_id,scheduling_key) do nothing returning task_id
-  `;
-  const taskId = inserted?.task_id ?? (await sql`select task_id from public.adaptive_review_tasks where owner_id=${ownerId} and scheduling_key=${schedulingKey}`)[0]?.task_id;
-  requireThat(taskId, 'Review task idempotency conflict');
-  return { status: inserted ? 'inserted' : 'retry', taskId, schedulingKey };
+  return sql.begin(async tx => {
+    await assertOwnerWritable(tx, ownerId);
+    const [inserted] = await tx`
+      insert into public.adaptive_review_tasks(owner_id,scheduling_key,concept_id,source_evidence_id,target_revision_id,task_type,reason_codes,eligible_at,eligible_set_index,initial_status,mapping_version,algorithm_version,configuration_version)
+      values (${ownerId},${schedulingKey},${normalized.conceptId},${normalized.sourceEvidenceId},${normalized.targetRevisionId},${normalized.taskType},${normalized.reasonCodes},${normalized.eligibleAt},${normalized.eligibleSetIndex},${normalized.initialStatus},${versionIds.mappingVersion},${versionIds.algorithmVersion},${versionIds.configurationVersion})
+      on conflict(owner_id,scheduling_key) do nothing returning task_id
+    `;
+    const taskId = inserted?.task_id ?? (await tx`select task_id from public.adaptive_review_tasks where owner_id=${ownerId} and scheduling_key=${schedulingKey}`)[0]?.task_id;
+    requireThat(taskId, 'Review task idempotency conflict');
+    return { status: inserted ? 'inserted' : 'retry', taskId, schedulingKey };
+  });
 }
 
 export async function recordAdaptiveTaskEvent(sql, authenticatedOwnerId, input) {
@@ -372,12 +383,15 @@ export async function recordAdaptiveTaskEvent(sql, authenticatedOwnerId, input) 
   const normalized = { taskId: uuid(input.taskId, 'task'), status: input.status, completionEvidenceId: input.completionEvidenceId == null ? null : uuid(input.completionEvidenceId, 'completion evidence'), occurredAt: new Date(qualifiedTimestamp(input.occurredAt)).toISOString() };
   requireThat(['scheduled', 'completed', 'skipped', 'postponed', 'cancelled', 'superseded'].includes(normalized.status), 'Invalid task event');
   const eventKey = `task-event:${sha256(canonicalPayload({ ownerId, ...normalized }))}`;
-  const [row] = await sql`
-    insert into public.adaptive_review_task_events(owner_id,task_id,event_key,status,completion_evidence_id,occurred_at)
-    values (${ownerId},${normalized.taskId},${eventKey},${normalized.status},${normalized.completionEvidenceId},${normalized.occurredAt})
-    on conflict(owner_id,event_key) do nothing returning event_id
-  `;
-  const eventId = row?.event_id ?? (await sql`select event_id from public.adaptive_review_task_events where owner_id=${ownerId} and event_key=${eventKey}`)[0]?.event_id;
-  requireThat(eventId, 'Task event idempotency conflict');
-  return { status: row ? 'inserted' : 'retry', eventId };
+  return sql.begin(async tx => {
+    await assertOwnerWritable(tx, ownerId);
+    const [row] = await tx`
+      insert into public.adaptive_review_task_events(owner_id,task_id,event_key,status,completion_evidence_id,occurred_at)
+      values (${ownerId},${normalized.taskId},${eventKey},${normalized.status},${normalized.completionEvidenceId},${normalized.occurredAt})
+      on conflict(owner_id,event_key) do nothing returning event_id
+    `;
+    const eventId = row?.event_id ?? (await tx`select event_id from public.adaptive_review_task_events where owner_id=${ownerId} and event_key=${eventKey}`)[0]?.event_id;
+    requireThat(eventId, 'Task event idempotency conflict');
+    return { status: row ? 'inserted' : 'retry', eventId };
+  });
 }

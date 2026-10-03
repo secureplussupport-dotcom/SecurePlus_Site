@@ -16,3 +16,17 @@ export function createAdaptiveAuthenticator({ url, publishableKey, fetchImpl = f
     return { id: data.user.id };
   };
 }
+
+// Decode session_id only AFTER remote verification of this exact token.
+export function createAdaptiveDeletionAuthenticator(options) {
+  const verify=createAdaptiveAuthenticator(options);
+  return async token => {
+    const user=await verify(token);
+    if (!user) return null;
+    try {
+      const {session_id:sessionId,sub}=JSON.parse(Buffer.from(token.split('.')[1],'base64url').toString('utf8'));
+      if(sub!==user.id || !/^[0-9a-f-]{36}$/i.test(sessionId)) return null;
+      return {id:user.id,sessionId};
+    } catch { return null; }
+  };
+}

@@ -47,6 +47,8 @@ insert into public.adaptive_version_sets(mapping_version,algorithm_version,confi
 insert into public.adaptive_version_events(version_id,action,actor_id,reason) select version_id,'activate','00000000-0000-4000-8000-000000000100','Local rollback-only fixture' from public.adaptive_versions where review_status='human_approved';
 insert into public.adaptive_question_publications(revision_id,status,actor_id) values ('00000000-0000-4000-8000-000000000010','active','00000000-0000-4000-8000-000000000100');
 
+insert into adaptive_private.shadow_authorizations(mapping_version,algorithm_version,configuration_version,action,actor_id) values('local-map-v1','local-algo-v1','local-config-v1','authorize','00000000-0000-4000-8000-000000000100');
+select adaptive_private.enroll_shadow(id,clock_timestamp()+interval '7 days',gen_random_uuid()) from auth.users;
 set local role service_role;
 insert into public.adaptive_sessions(session_id,owner_id,set_index,source,mode,requested_count,actual_count,requested_pbq_count,actual_pbq_count,mapping_version,algorithm_version,configuration_version) values
  ('00000000-0000-4000-8000-000000000020','00000000-0000-4000-8000-000000000001',9999,'practice','normal',1,1,0,0,'local-map-v1','local-algo-v1','local-config-v1');
@@ -86,19 +88,19 @@ select adaptive_test.assert_ok(not exists(select 1 from information_schema.colum
 
 set local role authenticated;
 select set_config('request.jwt.claim.sub','00000000-0000-4000-8000-000000000001',true);
-select adaptive_test.assert_ok((select count(*)=2 from public.adaptive_answer_evidence),'owner can read own evidence');
-select adaptive_test.assert_ok((select count(*)=0 from public.adaptive_versions where version_id='local-pending-v1'),'pending versions hidden');
-select adaptive_test.assert_ok((select count(*)=1 from public.adaptive_concepts),'approved active catalogue readable');
+select adaptive_test.expect_error('select * from public.adaptive_answer_evidence','42501');
+select adaptive_test.expect_error('select * from public.adaptive_versions','42501');
+select adaptive_test.expect_error('select * from public.adaptive_concepts','42501');
 select adaptive_test.expect_error('select * from adaptive_private.grading_keys','42501');
 select adaptive_test.expect_error('update public.adaptive_concept_projections set state=''mastered''','42501');
 select adaptive_test.expect_error('update public.adaptive_answer_evidence set correct=true','42501');
 select adaptive_test.expect_error('insert into public.adaptive_answer_evidence default values','42501');
 select adaptive_test.expect_error($q$select adaptive_private.delete_learner_data('00000000-0000-4000-8000-000000000001')$q$,'42501');
 select set_config('request.jwt.claim.sub','00000000-0000-4000-8000-000000000002',true);
-select adaptive_test.assert_ok((select count(*)=0 from public.adaptive_answer_evidence),'cross-user evidence hidden');
-select adaptive_test.assert_ok((select count(*)=0 from public.adaptive_sessions),'cross-user sessions hidden');
-select adaptive_test.assert_ok((select count(*)=0 from public.adaptive_session_items),'cross-user manifests hidden');
-select adaptive_test.assert_ok((select count(*)=0 from public.adaptive_concept_projections),'cross-user projections hidden');
+select adaptive_test.expect_error('select * from public.adaptive_answer_evidence','42501');
+select adaptive_test.expect_error('select * from public.adaptive_sessions','42501');
+select adaptive_test.expect_error('select * from public.adaptive_session_items','42501');
+select adaptive_test.expect_error('select * from public.adaptive_concept_projections','42501');
 reset role;
 set local role anon;
 select adaptive_test.expect_error('select * from public.adaptive_question_revisions','42501');
@@ -112,7 +114,12 @@ insert into adaptive_private.owner_state(owner_id,last_set_index,evidence_genera
 on conflict(owner_id) do nothing;
 set local role service_role;
 select adaptive_test.expect_error($q$delete from public.adaptive_answer_evidence where owner_id='00000000-0000-4000-8000-000000000001'$q$,'42501');
-select adaptive_private.delete_learner_data('00000000-0000-4000-8000-000000000001');
+do $$ declare op uuid; begin
+ op:=adaptive_private.begin_erasure('00000000-0000-4000-8000-000000000001','withdrawal');
+ perform adaptive_private.advance_erasure(op,'jobs_cancelled');
+ perform adaptive_private.erase_operation(op);
+ perform adaptive_private.advance_erasure(op,'completed');
+end $$;
 reset role;
 select adaptive_test.assert_ok(not exists(select 1 from public.adaptive_sessions where owner_id='00000000-0000-4000-8000-000000000001'),'learner sessions deleted');
 select adaptive_test.assert_ok(not exists(select 1 from public.adaptive_answer_evidence where owner_id='00000000-0000-4000-8000-000000000001'),'learner evidence deleted');

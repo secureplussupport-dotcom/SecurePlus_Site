@@ -10,6 +10,8 @@ select jsonb_build_object(
     from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='adaptive_private'),
   'private_client_grants', (select jsonb_agg(to_jsonb(g) order by table_name,grantee,privilege_type)
     from information_schema.role_table_grants g where table_schema='adaptive_private' and grantee in ('PUBLIC','anon','authenticated')),
+  'adaptive_client_grants', (select jsonb_agg(to_jsonb(g) order by table_schema,table_name,grantee,privilege_type)
+    from information_schema.role_table_grants g where (table_schema='adaptive_private' or (table_schema='public' and table_name like 'adaptive_%')) and grantee in ('PUBLIC','anon','authenticated')),
   'adaptive_policies', (select jsonb_agg(to_jsonb(p) order by schemaname,tablename,policyname) from pg_policies p
     where schemaname='adaptive_private' or (schemaname='public' and tablename like 'adaptive_%')),
   'auth_foreign_keys', (select jsonb_agg(jsonb_build_object('table',conrelid::regclass::text,'definition',pg_get_constraintdef(oid)) order by conrelid::regclass::text,conname)

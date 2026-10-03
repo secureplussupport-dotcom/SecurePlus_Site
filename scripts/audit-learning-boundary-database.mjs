@@ -23,6 +23,7 @@ try {
   const { data: created, error: createError } = await admin.auth.admin.createUser({ email, password, email_confirm: true });
   check(!createError && created?.user, 'Local fixture Auth setup');
   const ownerId = created.user.id;
+  await sql`select adaptive_private.enroll_shadow(${ownerId},clock_timestamp()+interval '7 days',gen_random_uuid())`;
   const client = createClient(apiUrl, process.env.SUPABASE_LOCAL_ANON_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data, error } = await client.auth.signInWithPassword({ email, password });
   check(!error && data?.session, 'Real local Auth session');
@@ -65,7 +66,10 @@ try {
   const serialized = JSON.stringify(logs);
   check(!serialized.includes(ownerId) && !serialized.includes(token) && !serialized.includes(password) && !serialized.includes(answer.selectedComponents[0].valueId), 'Operational logs contain no identifiers, credentials or answer selections');
   check(logs.some(record => record.event === 'idempotent_retry'), 'Retry telemetry');
-  await sql`select adaptive_private.delete_learner_data(${ownerId})`;
+  const [op] = await sql`select adaptive_private.begin_erasure(${ownerId},'withdrawal') as id`;
+  await sql`select adaptive_private.advance_erasure(${op.id},'jobs_cancelled')`;
+  await sql`select adaptive_private.erase_operation(${op.id})`;
+  await sql`select adaptive_private.advance_erasure(${op.id},'completed')`;
   await admin.auth.admin.deleteUser(ownerId);
   const [{ remaining }] = await sql`select count(*)::int as remaining from public.adaptive_sessions where owner_id=${ownerId}`;
   check(remaining === 0, 'Explicit local adaptive cleanup before Auth deletion');

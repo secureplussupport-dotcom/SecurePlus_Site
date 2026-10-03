@@ -1,3 +1,4 @@
+import { assertOwnerWritable } from './owner-guard.mjs';
 import { canonicalPayload } from '../../src/lib/learningPersistenceContracts.js';
 import { assessReplayChronology } from './chronology.mjs';
 import { createHash } from 'node:crypto';
@@ -8,11 +9,11 @@ const requireThat = (ok, message) => { if (!ok) throw new Error(message); };
 
 // The projector is injected and version-pinned by the caller. It receives a
 // complete immutable snapshot and returns cache rows only; it cannot write.
-export async function rebuildAdaptiveOwner(sql, ownerId, { now = new Date().toISOString(), project } = {}) {
+export async function rebuildAdaptiveOwner(sql, ownerId, { now = new Date().toISOString(), project, enrollmentId = null } = {}) {
   requireThat(typeof ownerId === 'string' && UUID.test(ownerId), 'Invalid adaptive owner');
   requireThat(typeof project === 'function', 'Missing version-pinned projection adapter');
   return sql.begin(async tx => {
-    await tx`select pg_advisory_xact_lock(hashtextextended(${ownerId}, 7919))`;
+    await assertOwnerWritable(tx, ownerId, enrollmentId);
     await tx`
       insert into adaptive_private.owner_state(owner_id) values (${ownerId})
       on conflict(owner_id) do nothing

@@ -78,7 +78,7 @@ test('operational logger allowlists fields/codes and ignores sink failures', asy
 
 function jobs(outcomes, overrides = {}) {
   let index = 0; const calls = [];
-  const store = { claim: async () => index < outcomes.length ? { ownerId, attempt: 1, versions: {}, index: index++ } : null,
+  const store = { claim: async () => index < outcomes.length ? { ownerId, enrollmentId: ownerId, attempt: 1, versions: {}, index: index++ } : null,
     complete: async (...args) => calls.push(['complete', ...args]), park: async (...args) => calls.push(['park', ...args]),
     retry: async (...args) => calls.push(['retry', ...args]), release: async (...args) => calls.push(['release', ...args]) };
   const drain = createProjectionDrain({ store, getDatabase: async () => ({}), project: () => [], readEnvironment: () => env, readControl: control, clock: () => 1000,

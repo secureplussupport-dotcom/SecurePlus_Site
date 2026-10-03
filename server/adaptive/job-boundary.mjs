@@ -23,7 +23,8 @@ export function createProjectionDrain({ store, getDatabase, project, readEnviron
         if (!await enabled()) { await store.release(job); summary.disabled = true; break; }
         const sql = await getDatabase();
         if (!await enabled()) { await store.release(job); summary.disabled = true; break; }
-        const result = await rebuild(sql, job.ownerId, { project: snapshot => project(snapshot, job.versions) });
+        if (!job.enrollmentId) throw Object.assign(new Error('Missing job enrollment fence'), { code: '55000' });
+        const result = await rebuild(sql, job.ownerId, { enrollmentId: job.enrollmentId, project: snapshot => project(snapshot, job.versions) });
         if (result.status === 'quarantined') {
           await store.park(job, { reason: 'chronology_conflict' }); summary.parked++; emit('quarantine', 'chronology_conflict');
         } else {

@@ -27,7 +27,8 @@
     "audit:learning-database": "node scripts/audit-learning-database.mjs",
     "audit:learning-runtime": "node --test scripts/audit-learning-runtime.mjs",
     "audit:learning-boundary": "node --test scripts/audit-learning-boundary.mjs",
-    "audit:learning-boundary:database": "node scripts/audit-learning-boundary-database.mjs"
+    "audit:learning-boundary:database": "node scripts/audit-learning-boundary-database.mjs",
+    "audit:learning-deletion-shadow": "node scripts/audit-learning-deletion-shadow.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.105.3",
