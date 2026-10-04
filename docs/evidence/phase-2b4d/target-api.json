@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "assertions": 75,
+  "postgres": "17.6",
+  "postgrest": "v16.4",
+  "roles": [
+    "anonymous",
+    "signed synthetic owner",
+    "signed synthetic foreign owner"
+  ],
+  "scope": "Working HTTP control; all public adaptive tables and selected private controls denied. Real Auth issuer coverage is supplied by the separate CLI stack suite."
+}

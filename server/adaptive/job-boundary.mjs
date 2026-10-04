@@ -24,6 +24,7 @@ export function createProjectionDrain({ store, getDatabase, project, readEnviron
         const sql = await getDatabase();
         if (clock()>=deadline || !await enabled()) { await store.release(job); summary.disabled = true; break; }
         if (!job.enrollmentId) throw Object.assign(new Error('Missing job enrollment fence'), { code: '55000' });
+        const replayStarted = clock();
         const result = await rebuild(sql, job.ownerId, { enrollmentId: job.enrollmentId, job:store.durable?job:null, project: async snapshot => {
           let timer;
           try {
@@ -37,7 +38,7 @@ export function createProjectionDrain({ store, getDatabase, project, readEnviron
         } else if (result.status === 'quarantined') {
           await store.park(job, { reason: 'chronology_conflict' }); summary.parked++; emit('quarantine', 'chronology_conflict');
         } else {
-          await store.complete(job, { observedGeneration: result.inputGeneration }); summary.completed++; emit('projection_success');
+          await store.complete(job, { observedGeneration: result.inputGeneration }); summary.completed++; emit('projection_success','ok',clock()-replayStarted);
         }
       } catch (error) {
         // Cancellation/expiry has already fenced this lease. Do not attempt to

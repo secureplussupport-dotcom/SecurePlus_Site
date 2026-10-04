@@ -1,0 +1,181 @@
+{
+  "cold": {
+    "claims": 2,
+    "elapsedMs": 176
+  },
+  "load": [
+    {
+      "answers": 10,
+      "concurrency": 1,
+      "peakConnections": 2,
+      "peakLeases": 1,
+      "samples": 1,
+      "elapsedMs": 208,
+      "ownersPerSecond": 4.81,
+      "minMs": 202,
+      "maxMs": 202,
+      "ingestMs": [
+        112
+      ],
+      "claims": [
+        2
+      ]
+    },
+    {
+      "answers": 10,
+      "concurrency": 2,
+      "peakConnections": 2,
+      "peakLeases": 2,
+      "samples": 2,
+      "elapsedMs": 317,
+      "ownersPerSecond": 6.31,
+      "minMs": 315,
+      "maxMs": 317,
+      "ingestMs": [
+        156,
+        153
+      ],
+      "claims": [
+        2,
+        2
+      ]
+    },
+    {
+      "answers": 10,
+      "concurrency": 4,
+      "peakConnections": 2,
+      "peakLeases": 2,
+      "samples": 4,
+      "elapsedMs": 626,
+      "ownersPerSecond": 6.39,
+      "minMs": 312,
+      "maxMs": 626,
+      "ingestMs": [
+        327,
+        324,
+        321,
+        318
+      ],
+      "claims": [
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    {
+      "answers": 500,
+      "concurrency": 1,
+      "peakConnections": 2,
+      "peakLeases": 1,
+      "samples": 1,
+      "elapsedMs": 241,
+      "ownersPerSecond": 4.15,
+      "minMs": 241,
+      "maxMs": 241,
+      "ingestMs": [
+        3759
+      ],
+      "claims": [
+        2
+      ]
+    },
+    {
+      "answers": 500,
+      "concurrency": 2,
+      "peakConnections": 2,
+      "peakLeases": 2,
+      "samples": 2,
+      "elapsedMs": 445,
+      "ownersPerSecond": 4.49,
+      "minMs": 443,
+      "maxMs": 445,
+      "ingestMs": [
+        7804,
+        7802
+      ],
+      "claims": [
+        2,
+        2
+      ]
+    },
+    {
+      "answers": 500,
+      "concurrency": 4,
+      "peakConnections": 2,
+      "peakLeases": 2,
+      "samples": 4,
+      "elapsedMs": 870,
+      "ownersPerSecond": 4.6,
+      "minMs": 466,
+      "maxMs": 870,
+      "ingestMs": [
+        15052,
+        15049,
+        15046,
+        15043
+      ],
+      "claims": [
+        2,
+        2,
+        2,
+        2
+      ]
+    }
+  ],
+  "metrics": {
+    "metrics": {
+      "queueDepth": 0,
+      "oldestEligibleMs": 0,
+      "leases": 0,
+      "expiredLeases": 0,
+      "retryDepth": 0,
+      "deadLetters": 1,
+      "quarantined": 1,
+      "incompleteErasures": 0,
+      "oldestErasureMs": 0,
+      "expiryBacklog": 0,
+      "retentionBacklog": 0,
+      "dbConnections": 2,
+      "leaseRecoveries": 5,
+      "generationConflicts": 54,
+      "purposeConnections": 3,
+      "schedulerDenials": 1,
+      "connectionFailures": 3,
+      "projectionFailures": 0,
+      "acceptedAfterKill": 0
+    },
+    "alerts": [
+      {
+        "code": "dead_letter",
+        "severity": "critical",
+        "threshold": 1
+      },
+      {
+        "code": "quarantine",
+        "severity": "warning",
+        "threshold": 1
+      },
+      {
+        "code": "lease_recovery",
+        "severity": "warning",
+        "threshold": 5
+      },
+      {
+        "code": "connection_failure",
+        "severity": "critical",
+        "threshold": 1
+      }
+    ],
+    "windowSeconds": 300,
+    "saturated": false
+  },
+  "connectionModel": "max=1 per purpose; local direct TCP; not managed pooler/TLS",
+  "limits": {
+    "globalLeases": 2,
+    "drainClaims": 5,
+    "modelMs": 2000,
+    "snapshotBytes": 8388608
+  },
+  "percentiles": "Not reported: each scenario has fewer than 20 samples"
+}

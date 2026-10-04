@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-04",
+  "baseline": "cf196f8786d0392e051ae9c30084d606f46947e6",
+  "status": "PASS",
+  "counts": {
+    "operational": 80,
+    "targetApi": 75,
+    "operationsUnitTests": 5,
+    "database": 26,
+    "infrastructure": 116,
+    "trustedRuntime": 103,
+    "deletionIsolation": 262,
+    "databaseBoundary": 18,
+    "pureBoundary": 15,
+    "runtime": 40,
+    "persistence": 20,
+    "priorStaticMigration": 213
+  },
+  "lint": {
+    "target176": [],
+    "cli1711": []
+  },
+  "advisors": {
+    "target176": {
+      "INFO:unindexed_foreign_keys": 2,
+      "INFO:unused_index": 54,
+      "INFO:rls_enabled_no_policy": 8
+    },
+    "cli1711": {
+      "INFO:unused_index": 38,
+      "INFO:rls_enabled_no_policy": 7
+    }
+  },
+  "build": "PASS; existing large-chunk warning",
+  "site": "PASS all eight audits",
+  "productionAfterReadOnlyInspection": {
+    "serverVersion": "17.6",
+    "adaptiveSchema": false,
+    "adaptivePublicRelations": 0,
+    "adaptiveRoles": 0
+  },
+  "localTranscriptHashes": {
+    "secureplus-4d-rehearsal.log": "6b9dd8728413cff58718c1093de9fad383db3595efab683208bae1b3631f06b8",
+    "secureplus-4d-target-api.log": "7bc55753c7e5bbef16386d43dffe7ad0e463c2a3e0bf27116901492b90106d6f",
+    "secureplus-4d-final.log": "e246c03bc5d6745c4b58c0acff672933eefe372b9a7f3395a27f8a2f373732fb",
+    "secureplus-4d-sql.log": "2cf10d8f8a534678ca2697785179032427a18f7a0a1323455502be5188a1e3b0",
+    "secureplus-4d-infra-sql.log": "831c92a9c77b170aa2be0f47f050c42064087be525c8f0decad2597211d8f9f9",
+    "secureplus-4d-build.log": "ecf5a73c51d4aac5de11245cd6095af049abdb705408eb58a7096ba66bc9b494",
+    "secureplus-4d-site.log": "dd2f9f87e0ce0be45924f5af4d5b3bd6cf6daa67c62a4ac622840146955343ca"
+  }
+}

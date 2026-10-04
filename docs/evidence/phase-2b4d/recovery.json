@@ -1,0 +1,101 @@
+{
+  "checks": [
+    "Repeat deployment skips identical committed checksums",
+    "Changed committed migration fails closed",
+    "Terminated actual migration backend before commit",
+    "Interrupted migration leaves no partial schema",
+    "Statement timeout aborts migration",
+    "Timed-out DDL rolls back atomically",
+    "DDL lock timeout fails without partial deploy",
+    "Fresh reset produces identical schema, grants and roles",
+    "Exact target PostgreSQL minor version",
+    "Every adaptive table has RLS",
+    "No PUBLIC function execution",
+    "Definers have explicit owner and empty search path",
+    "Fresh migration is default-off",
+    "Worker cannot enable control",
+    "Cold full model reaches stable generation",
+    "Fresh central reader enabled",
+    "Disable visible without cache",
+    "Disabled database refuses claims",
+    "Disabled database rejects new ingestion plan",
+    "Disabled database refuses old publication",
+    "Re-enable does not revive stale fence",
+    "Re-enable resumes pending work without duplicates",
+    "Kill acknowledgment waits for in-flight transaction barrier",
+    "Expired control refuses work without operator refresh",
+    "Dead process cannot reuse old lease",
+    "Crash replay retains two unique review tasks",
+    "Crash replay publishes current generation",
+    "Dead process cannot reuse old lease",
+    "Crash replay retains two unique review tasks",
+    "Crash replay publishes current generation",
+    "Prepare resulting generation for crash",
+    "Dead process cannot reuse old lease",
+    "Crash replay retains two unique review tasks",
+    "Crash replay publishes current generation",
+    "Prepare resulting generation for crash",
+    "Dead process cannot reuse old lease",
+    "Crash replay retains two unique review tasks",
+    "Crash replay publishes current generation",
+    "Dead process cannot reuse old lease",
+    "Crash replay retains two unique review tasks",
+    "Crash replay publishes current generation",
+    "Kill waits for actual full-model compute transaction",
+    "Process death releases barrier and confirms kill",
+    "Computed but unpublished stale process is fenced",
+    "Two independent owner leases can coexist",
+    "Third global lease is denied",
+    "Overlapping same-owner claim is denied",
+    "Dead-letter and quarantine are observable durable states",
+    "Scheduler rejects learner authority and emits denial",
+    "Overlapping scheduler requests remain bounded",
+    "Scheduler cannot claim queued work after central kill",
+    "Database restart preserves durable lease",
+    "Restarted server recovers expired lease and deterministic output",
+    "Deletion completes while control is disabled",
+    "Fresh restore preserves adaptive browser grant denial",
+    "Fresh restore preserves PUBLIC function denial",
+    "Backup actually restored stale enabled control",
+    "Restore quarantine revokes runtime login before replay",
+    "Older backup actually restores erased graph in quarantine",
+    "Restored graph cannot enter service before reconciliation",
+    "Older or truncated journal checkpoint rejected",
+    "External journal erases resurrected graph completely",
+    "Partial erasure resumes from durable stage",
+    "Post-restore re-enrollment has new fence"
+  ],
+  "recovery": [
+    {
+      "phase": "claim",
+      "claims": 2,
+      "recoveryMs": 158
+    },
+    {
+      "phase": "compute",
+      "claims": 2,
+      "recoveryMs": 147
+    },
+    {
+      "phase": "publication",
+      "claims": 1,
+      "recoveryMs": 76
+    },
+    {
+      "phase": "ack",
+      "claims": 0,
+      "recoveryMs": 4
+    },
+    {
+      "phase": "scheduler",
+      "claims": 2,
+      "recoveryMs": 143
+    },
+    {
+      "phase": "database_restart",
+      "recoveryMs": 1749
+    }
+  ],
+  "killAcknowledgmentMs": 261,
+  "backupKind": "isolated custom-format pg_dump with stale enabled control; runtime logins revoked before restore; forced disable and external authenticated erasure checkpoint before readmission"
+}

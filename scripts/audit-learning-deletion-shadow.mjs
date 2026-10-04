@@ -124,8 +124,8 @@ try{
   const controlBody=await control.json();check(controlBody.data?.__typename==='Query','GraphQL endpoint works');
   const introspection=await fetch(`${url}/graphql/v1`,{method:'POST',headers,body:JSON.stringify({query:'{ __schema { queryType { fields { name } } } }'})});
   const schema=await introspection.json();
-  check(Array.isArray(schema.data?.__schema?.queryType?.fields) && !schema.data.__schema.queryType.fields.some(f=>/adaptive|grading|shadow|erasure|editorial|owner_state|version_payload|projectionJobs|schedulerNonces|runtimeReceipts|sessionPlans|interventionProofs/i.test(f.name)),'GraphQL actual schema contains no adaptive collections');
-  for(const field of ['adaptiveSessionsCollection','adaptive_sessionsCollection','gradingKeysCollection','shadowEnrollmentsCollection','erasureOperationsCollection','projectionJobsCollection','schedulerNoncesCollection','runtimeReceiptsCollection','sessionPlansCollection','interventionProofsCollection']){
+  check(Array.isArray(schema.data?.__schema?.queryType?.fields) && !schema.data.__schema.queryType.fields.some(f=>/adaptive|grading|shadow|erasure|editorial|owner_state|version_payload|projectionJobs|schedulerNonces|runtimeReceipts|runtimeControl|sessionPlans|interventionProofs/i.test(f.name)),'GraphQL actual schema contains no adaptive collections');
+  for(const field of ['adaptiveSessionsCollection','adaptive_sessionsCollection','gradingKeysCollection','shadowEnrollmentsCollection','erasureOperationsCollection','projectionJobsCollection','schedulerNoncesCollection','runtimeReceiptsCollection','runtimeControlCollection','sessionPlansCollection','interventionProofsCollection']){
    const r=await fetch(`${url}/graphql/v1`,{method:'POST',headers,body:JSON.stringify({query:`{ ${field} { edges { node { id } } } }`})});
    const body=await r.json();check(body.errors?.length>0 && !body.data?.[field],`GraphQL hides ${field}`);
   }

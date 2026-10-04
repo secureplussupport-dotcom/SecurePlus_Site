@@ -1,0 +1,34 @@
+{
+  "observedDate": "2026-10-04",
+  "inspection": "Read-only Supabase project metadata and SQL catalogs; no learner data exported",
+  "target": {
+    "supabaseDatabaseRelease": "17.6.1.113",
+    "serverVersion": "17.6",
+    "serverVersionNum": "170006",
+    "build": "PostgreSQL 17.6 on aarch64-unknown-linux-gnu, compiled by gcc (GCC) 15.2.0, 64-bit",
+    "postgresSuperuser": false,
+    "postgresCanCreateInAuth": false,
+    "postgresCanReferenceAuthUsers": true,
+    "adaptiveSchemaPresent": false,
+    "extensions": {"pg_stat_statements":"1.11","pgcrypto":"1.3","plpgsql":"1.0","supabase_vault":"0.3.1","uuid-ossp":"1.1"}
+  },
+  "local": {
+    "officialImage": "supabase/postgres:17.6.1.113",
+    "pinnedImage": "supabase/postgres@sha256:4c39816ce8d9303a3aba1161c842929c73a40c7109a9ef1b644582478e31832e",
+    "architecture": "arm64",
+    "cliVersion": "2.119.0",
+    "nodeVersion": "24.15.0",
+    "dockerVmCpus": 4,
+    "dockerVmMemoryBytes": 8307175424,
+    "apiRehearsal": "PostgREST v16.4, local signed synthetic owner/foreign-owner tokens and anonymous role"
+  },
+  "parity": {
+    "engineBuildAndInstalledExtensions": "MATCH before diagnostic tools add any extension",
+    "migrationPrincipal": "MATCH: postgres is not a superuser; Auth bootstrap and complete restore use separate disposable supabase_admin authority",
+    "defaultPublicGrants": "Representative target defaults reproduced before migration; revoked grants and restore grants tested",
+    "managedPlatform": "NOT ESTABLISHED: actual pooler/TLS, Auth service release, platform lifecycle, network/API configuration and managed PITR are outside local proof",
+    "applicationSchema": "Synthetic relevant predecessor tables and existing MCQ/PBQ/profile records, not a full production schema clone",
+    "eventTriggerDrift": "Target has ensure_rls in addition to standard Supabase event triggers; synthetic rehearsal relies on explicit adaptive RLS statements and records the difference",
+    "apiSettings": "Live catalog pgrst settings were null; this does not establish external gateway configuration"
+  }
+}
