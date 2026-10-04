@@ -30,7 +30,7 @@ export function validateMappings(mappings, concepts, config) {
 // Duplicate IDs must describe the same semantic event; conflicts fail closed.
 export function normalizeLearningEvidence(raw, {
   now, mappings = QUESTION_MAPPINGS, concepts = LEARNING_CONCEPTS,
-  contentMappings = CONTENT_MAPPINGS, config = LEARNING_CONFIG,
+  contentMappings = CONTENT_MAPPINGS, config = LEARNING_CONFIG, priorExposure = [],
 } = {}) {
   const clock = timestamp(now, 'now');
   validateMappings(mappings, concepts, config);
@@ -63,7 +63,10 @@ export function normalizeLearningEvidence(raw, {
   }
   const sorted = [...byId.values()].sort((a, b) => a.occurredAt - b.occurredAt || a.setIndex - b.setIndex || compareIds(a.eventId, b.eventId));
   let lastSet = -1;
-  const seenQuestions = new Set(), seenScenarios = new Set();
+  // Trusted full-history adapters may conservatively retain exposure from
+  // incomplete or differently versioned history without awarding evidence.
+  const seenQuestions = new Set(priorExposure.map(e => e.questionId).filter(Boolean));
+  const seenScenarios = new Set(priorExposure.map(e => e.scenarioFamily).filter(Boolean));
   for (const event of sorted) {
     if (event.setIndex < lastSet) throw new Error('Set index must be monotonic with occurrence time');
     lastSet = event.setIndex;

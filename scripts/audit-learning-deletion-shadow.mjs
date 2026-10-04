@@ -71,6 +71,7 @@ async function absent(owner){
  check(await queue.remainingOwner(owner)===0,'No identifiable graph or job remains');
 }
 try{
+ const catalogueBefore=(await sql`select revision_id from public.adaptive_question_revisions order by revision_id`).map(r=>r.revision_id);
  await sql`create extension if not exists pg_graphql`;
  // Local test only: prove collection visibility, not just disabled introspection.
  await sql.unsafe("comment on schema public is '@graphql({\"introspection\": true})'");
@@ -123,8 +124,8 @@ try{
   const controlBody=await control.json();check(controlBody.data?.__typename==='Query','GraphQL endpoint works');
   const introspection=await fetch(`${url}/graphql/v1`,{method:'POST',headers,body:JSON.stringify({query:'{ __schema { queryType { fields { name } } } }'})});
   const schema=await introspection.json();
-  check(Array.isArray(schema.data?.__schema?.queryType?.fields) && !schema.data.__schema.queryType.fields.some(f=>/adaptive|grading|shadow|erasure|editorial|owner_state|version_payload|projectionJobs|schedulerNonces|runtimeReceipts/i.test(f.name)),'GraphQL actual schema contains no adaptive collections');
-  for(const field of ['adaptiveSessionsCollection','adaptive_sessionsCollection','gradingKeysCollection','shadowEnrollmentsCollection','erasureOperationsCollection','projectionJobsCollection','schedulerNoncesCollection','runtimeReceiptsCollection']){
+  check(Array.isArray(schema.data?.__schema?.queryType?.fields) && !schema.data.__schema.queryType.fields.some(f=>/adaptive|grading|shadow|erasure|editorial|owner_state|version_payload|projectionJobs|schedulerNonces|runtimeReceipts|sessionPlans|interventionProofs/i.test(f.name)),'GraphQL actual schema contains no adaptive collections');
+  for(const field of ['adaptiveSessionsCollection','adaptive_sessionsCollection','gradingKeysCollection','shadowEnrollmentsCollection','erasureOperationsCollection','projectionJobsCollection','schedulerNoncesCollection','runtimeReceiptsCollection','sessionPlansCollection','interventionProofsCollection']){
    const r=await fetch(`${url}/graphql/v1`,{method:'POST',headers,body:JSON.stringify({query:`{ ${field} { edges { node { id } } } }`})});
    const body=await r.json();check(body.errors?.length>0 && !body.data?.[field],`GraphQL hides ${field}`);
   }
@@ -192,7 +193,7 @@ try{
  await rejects(()=>persistence.startAdaptiveSession(runtime,expiring.id,plan()),'Expiry stops writes before scanner runs');
  check((await eraseExpiredEnrollments(runtime,cleanup)).completed===1,'Expired enrollment erased through lifecycle');await absent(expiring.id);
  check((await sql`select count(*)::int as n from public.adaptive_sessions where owner_id=${b.id}`)[0].n>0,'Other learner graph survives');
- check((await sql`select count(*)::int as n from public.adaptive_question_revisions`)[0].n===2,'Shared catalogue survives');
+ check(JSON.stringify((await sql`select revision_id from public.adaptive_question_revisions order by revision_id`).map(r=>r.revision_id))===JSON.stringify(catalogueBefore),'Entire shared catalogue survives unchanged');
  check((await sql`select actor_id from adaptive_private.editorial_actors where actor_id=${actor}`)[0]?.actor_id===actor,'Durable editorial provenance survives');
  // Probe a genuinely absent adaptive schema inside a rolled-back rename.
  await rejects(()=>sql.begin(async tx=>{await tx`alter schema adaptive_private rename to adaptive_probe`;check(!await adaptiveDeletionInstalled(tx),'Missing schema capability is false');throw new Error('rollback probe');}),'Probe transaction rolled back');

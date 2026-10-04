@@ -32,7 +32,9 @@ export function createProjectionDrain({ store, getDatabase, project, readEnviron
             return rows;
           }finally{clearTimeout(timer);}
         } });
-        if (result.status === 'quarantined') {
+        if (result.status === 'rescheduled') {
+          summary.retried++; emit('generation_conflict','generation_changed');
+        } else if (result.status === 'quarantined') {
           await store.park(job, { reason: 'chronology_conflict' }); summary.parked++; emit('quarantine', 'chronology_conflict');
         } else {
           await store.complete(job, { observedGeneration: result.inputGeneration }); summary.completed++; emit('projection_success');

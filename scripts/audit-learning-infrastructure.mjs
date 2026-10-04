@@ -11,6 +11,7 @@ import { createProductionShapedDatabase,closeProductionShapedPools } from '../se
 import { createAdaptiveScheduler,createSchedulerReplayGuard } from '../server/adaptive/scheduler-boundary.mjs';
 import { createProjectionDrain } from '../server/adaptive/job-boundary.mjs';
 import postgres from 'postgres';
+import { storeTrustedSessionPlan } from '../server/adaptive/session-plans.mjs';
 
 const sql=createAdaptiveDatabase({max:12}), pool=createAdaptiveDatabase({max:12});
 const asRole=role=>{const db=(...args)=>db.begin(tx=>tx(...args));db.begin=fn=>pool.begin(async tx=>{await tx.unsafe(`set local role ${role}`);await tx`set local statement_timeout='5s'`;return fn(tx);});return db;};
@@ -24,7 +25,9 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const owners=[];let revision,compiled;
 async function owner(){const id=randomUUID();owners.push(id);await sql`insert into auth.users(id) values(${id})`;await sql`select adaptive_private.enroll_shadow(${id},clock_timestamp()+interval '1 day',gen_random_uuid())`;return id;}
 async function graph(id,answers=1,db=ingest){
- const session=await startAdaptiveSession(db,id,{sessionId:randomUUID(),source:'practice',mode:'normal',seed:null,requestedCount:1,requestedPbqCount:0,revisionIds:[revision],...v});
+ const plan={sessionId:randomUUID(),source:'practice',mode:'normal',seed:null,requestedCount:1,requestedPbqCount:0,revisionIds:[revision],...v};
+ await storeTrustedSessionPlan(db,id,plan);
+ const session=await startAdaptiveSession(db,id,plan);
  const selected=compiled.components.find(c=>c.kind==='option'&&c.id!==compiled.gradingKey.expected[0].valueId).id;
  let evidence;
  for(let i=0;i<answers;i++)evidence=await ingestAdaptiveAnswer(db,id,{clientEventId:randomUUID(),sessionId:session.sessionId,itemPosition:1,revisionId:revision,selectedComponents:[{componentId:selected,valueId:selected}],occurredAt:new Date(Date.parse(session.startedAt)+100+i).toISOString()});

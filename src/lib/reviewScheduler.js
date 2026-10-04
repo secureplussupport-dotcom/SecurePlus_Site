@@ -35,8 +35,8 @@ export function scheduleConceptReview(raw, options = {}) {
   const model = calculateConceptMastery(raw, { ...options, config, mappings, concepts });
   if (model.evidence.some(e => e.setIndex > setIndex)) throw new Error('Scheduler set index precedes evidence');
   const answers = model.evidence.filter(e => e.kind === 'answer');
-  const seenIds = new Set(answers.map(e => e.questionId));
-  const seenFamilies = new Set(answers.map(e => e.scenarioFamily));
+  const seenIds = new Set([...answers, ...(options.priorExposure ?? [])].map(e => e.questionId));
+  const seenFamilies = new Set([...answers, ...(options.priorExposure ?? [])].map(e => e.scenarioFamily));
   const tasks = [], recommendations = [];
   for (const state of Object.values(model.concepts)) {
     if (!state.lastMiss) continue;
@@ -52,7 +52,7 @@ export function scheduleConceptReview(raw, options = {}) {
       questionId: candidates[0]?.questionId ?? null, questionRevision: candidates[0]?.questionRevision ?? null,
       eligibleAfterAt, eligibleAfterSetIndex, priority, status: 'pending', reasons: [],
     });
-    const direct = mappings.filter(m => m.primaryConceptId === state.conceptId && m.evidencePrecision === 'direct');
+    const direct = mappings.filter(m => m.primaryConceptId === state.conceptId && m.evidencePrecision === 'direct' && m.active !== false);
     const variants = direct.filter(m => !seenIds.has(m.questionId) && !seenFamilies.has(m.scenarioFamily))
       .sort((a, b) => seededOrder(seed, a.questionId) - seededOrder(seed, b.questionId) || compareIds(a.questionId, b.questionId));
     const anchor = state.lastIntervention && state.lastIntervention.occurredAt > miss.occurredAt ? state.lastIntervention : miss;
@@ -62,7 +62,7 @@ export function scheduleConceptReview(raw, options = {}) {
       availableFreshFamilies: new Set(variants.map(m => m.scenarioFamily)).size };
     transfer.coverage.missingFamilies = Math.max(0, requiredFresh - transfer.coverage.achievedFresh - transfer.coverage.availableFreshFamilies);
     if (transfer.coverage.missingFamilies) transfer.reasons.push('insufficient_variant_coverage');
-    const recall = makeTask('original_recall', mappings.filter(m => m.questionId === miss.questionId && m.questionRevision === miss.questionRevision),
+    const recall = makeTask('original_recall', mappings.filter(m => m.questionId === miss.questionId && m.questionRevision === miss.questionRevision && m.active !== false),
       miss.occurredAt + (state.everSticky ? config.scheduler.stickyRecallDelayMs : config.scheduler.recallDelayMs),
       miss.setIndex + (state.everSticky ? config.scheduler.stickyRecallSetGap : config.scheduler.recallSetGap),
       (config.scheduler.priority.recall + extraPriority) * config.weights.exact_repeat);
