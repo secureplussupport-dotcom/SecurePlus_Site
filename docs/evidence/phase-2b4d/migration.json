@@ -3,17 +3,17 @@
     {
       "name": "20261001170334_adaptive_learning_persistence_foundation.sql",
       "sha256": "35a3161ee7023b808ad0b88eb9b2534025adf4365e45883191c72fc2884a7790",
-      "elapsedMs": 59
+      "elapsedMs": 61
     },
     {
       "name": "20261002232053_adaptive_deletion_shadow_isolation.sql",
       "sha256": "d02f367614388d0145a1b68772c9f0873b05f2919ff5710a5fa45ef68f28be9b",
-      "elapsedMs": 12
+      "elapsedMs": 13
     },
     {
       "name": "20261003043634_adaptive_durable_runtime.sql",
       "sha256": "2e81d681c1b648850372f5a34c6f64d0481338d1b303ca844f47584de1c4634a",
-      "elapsedMs": 16
+      "elapsedMs": 14
     },
     {
       "name": "20261003200440_adaptive_trusted_learning_runtime.sql",
@@ -23,39 +23,39 @@
     {
       "name": "20261004072830_adaptive_operational_controls.sql",
       "sha256": "e46f7fef2e8b07924a05646f6499055986afbef453581aeca0adb8bd7ffaad28",
-      "elapsedMs": 4
+      "elapsedMs": 3
     }
   ],
   "second": [
     {
       "name": "20261001170334_adaptive_learning_persistence_foundation.sql",
       "sha256": "35a3161ee7023b808ad0b88eb9b2534025adf4365e45883191c72fc2884a7790",
-      "elapsedMs": 68
+      "elapsedMs": 132
     },
     {
       "name": "20261002232053_adaptive_deletion_shadow_isolation.sql",
       "sha256": "d02f367614388d0145a1b68772c9f0873b05f2919ff5710a5fa45ef68f28be9b",
-      "elapsedMs": 14
+      "elapsedMs": 18
     },
     {
       "name": "20261003043634_adaptive_durable_runtime.sql",
       "sha256": "2e81d681c1b648850372f5a34c6f64d0481338d1b303ca844f47584de1c4634a",
-      "elapsedMs": 16
+      "elapsedMs": 21
     },
     {
       "name": "20261003200440_adaptive_trusted_learning_runtime.sql",
       "sha256": "528821f54cd881b23e6ef2fffe1f3cb704a206def618407714abdc9fae562866",
-      "elapsedMs": 9
+      "elapsedMs": 8
     },
     {
       "name": "20261004072830_adaptive_operational_controls.sql",
       "sha256": "e46f7fef2e8b07924a05646f6499055986afbef453581aeca0adb8bd7ffaad28",
-      "elapsedMs": 3
+      "elapsedMs": 6
     }
   ],
   "failures": {
-    "statementFailureMs": 234,
-    "lockFailureMs": 106,
+    "statementFailureMs": 242,
+    "lockFailureMs": 113,
     "interruption": "Actual backend termination before commit; schema absent afterward"
   },
   "inventory": {

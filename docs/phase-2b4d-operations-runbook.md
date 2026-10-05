@@ -53,3 +53,14 @@ Inspect depth/oldest eligible age, active/expired leases, retries, dead-letter/q
 Before a migration commits: abort and verify transactional rollback and an absent journal entry. After an additive migration commits: keep the runtime disabled and roll forward with a reviewed corrective migration. Do not run destructive down migrations or rewrite committed migration files. Restore is a disaster-recovery action into quarantine, followed by erasure reconciliation; it is not an ordinary feature rollback.
 
 The user-facing fallback is the unchanged existing learner implementation. No adaptive cache, reward, entitlement or selection output is wired to it in this phase.
+
+
+## Rehearsal exit and cleanup verification
+
+Run `npm run audit:learning-operations:cleanup` against the fixed disposable image/database to reproduce the full success, failure-after-enable and denied-verification checks. The intentional failure must exit 1, retain `FORCED_AFTER_ENABLE`, and record successful cleanup separately. The denied-verification scenario must remain FAIL even if disable committed. The harness independently reads the database after each case and writes only sanitized booleans/error codes.
+
+The ordinary runner (`npm run audit:learning-operations:database`) first invalidates the previous result with RUNNING/UNVERIFIED markers. After either completion or a caught error, it closes workload pools, uses a fresh administrative connection to commit disabled control, then uses another fresh connection to require stored enabled=false, effective enabled=false and killSwitch=true. PASS is written only after all cleanup succeeds. A pool-close, disable or verification error is a separate cleanup failure; retain the original rehearsal error as well. Inspect both `result.json` and `final-control.json`; do not interpret the cleanup's nested PASS as a successful rehearsal.
+
+If cleanup is FAIL, the process is externally terminated, the host stops, or the receipt remains RUNNING/UNVERIFIED, treat containment as unconfirmed. Stop any local invocation and use the fixed disposable database administration path to run `select adaptive_private.set_runtime_control(false,60);`. After that transaction commits, independently read the raw control row and `adaptive_private.read_runtime_control()` and require the three values above. Record the failure and subsequent verified recovery; do not overwrite the failed run as PASS. An expired TTL alone does not satisfy cleanup. Database unavailability or OS termination cannot be repaired by pretending that a JavaScript finalizer ran.
+
+Both disposable databases must be independently verified disabled after any validation session. Never reuse these commands with arbitrary database URLs. Phase 2B-5 remains on hold pending independent review; this cleanup runbook grants no production action.

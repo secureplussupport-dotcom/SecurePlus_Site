@@ -38,3 +38,60 @@ test('external erasure journal rejects tampering, old heads, concurrent writers 
   symlinkSync(path,directory+'/link');assert.throws(()=>readErasureJournal(directory+'/link',key,head));
  }finally{rmSync(directory,{recursive:true,force:true});}
 });
+
+// These lifecycle tests cover reporting and commit ordering. Real PostgreSQL
+// exit-path proof is in audit-learning-operations-cleanup.mjs.
+const {runWithControlCleanup}=await import('./lib/operational-cleanup.mjs');
+function cleanupFixture({disableError,verifyError,storedEnabled=false,effectiveEnabled=false,closeError}={}){
+ const order=[];let connections=0;
+ const connect=()=>{
+  const stage=++connections===1?'disable':'verify';order.push(stage+'_connect');
+  return {
+   begin:async work=>{
+    const tx=async strings=>{
+     const query=strings.join('');
+     if(query.includes('set local'))return [];
+     order.push(stage+'_query');
+     if(stage==='disable'&&disableError)throw disableError;
+     if(stage==='verify'&&verifyError)throw verifyError;
+     return [{stored_enabled:storedEnabled,control:{enabled:effectiveEnabled,killSwitch:!effectiveEnabled}}];
+    };
+    await work(tx);order.push(stage+'_commit');
+   },
+   end:async()=>{order.push(stage+'_close');if(closeError)throw closeError;}
+  };
+ };
+ return {connect,order};
+}
+test('successful rehearsal commits disable and verifies on a new connection before PASS',async()=>{
+ const {connect,order}=cleanupFixture();
+ const result=await runWithControlCleanup({connect,run:async()=>order.push('run'),close:async()=>order.push('close_workload')});
+ assert.equal(result.status,'PASS');assert.equal(result.cleanup.storedEnabled,false);
+ assert.deepEqual(order,['run','close_workload','disable_connect','disable_query','disable_commit','disable_close','verify_connect','verify_query','verify_commit','verify_close']);
+});
+test('failure after enable preserves primary failure and still confirms disable',async()=>{
+ const {connect}=cleanupFixture();
+ const result=await runWithControlCleanup({connect,run:async()=>{throw {code:'FORCED_AFTER_ENABLE'};},close:async()=>{}});
+ assert.equal(result.status,'FAIL');assert.equal(result.primaryFailure.code,'FORCED_AFTER_ENABLE');assert.equal(result.cleanup.status,'PASS');
+});
+test('primary and cleanup failures are both reported without exception text',async()=>{
+ const {connect,order}=cleanupFixture({disableError:{code:'55P03',message:'secret SQL'},verifyError:{code:'42501',detail:'secret URL'}});
+ const result=await runWithControlCleanup({connect,run:async()=>{throw {code:'FORCED_AFTER_ENABLE',message:'secret token'};},close:async()=>{}});
+ assert.equal(result.status,'FAIL');assert.equal(result.primaryFailure.code,'FORCED_AFTER_ENABLE');
+ assert.deepEqual(result.cleanup.errors,[{stage:'disable',code:'55P03'},{stage:'verify',code:'42501'}]);
+ assert.equal(result.cleanup.verified,false);assert.ok(order.includes('verify_connect'));assert.ok(!JSON.stringify(result).includes('secret'));
+});
+test('verification failure alone prevents PASS, including enabled-but-expired control',async()=>{
+ for(const config of [{verifyError:{code:'42501'}},{storedEnabled:true,effectiveEnabled:false},{storedEnabled:false,effectiveEnabled:true},{storedEnabled:null},{effectiveEnabled:null}]){
+  const {connect}=cleanupFixture(config);const result=await runWithControlCleanup({connect,run:async()=>{},close:async()=>{}});
+  assert.equal(result.status,'FAIL');assert.equal(result.primaryFailure,null);assert.equal(result.cleanup.disableCommitted,true);assert.equal(result.cleanup.verified,false);
+ }
+});
+test('pool close and cleanup connection failures never skip disable or replace the primary error',async()=>{
+ const {connect,order}=cleanupFixture({closeError:{code:'ECONNRESET'}});
+ const result=await runWithControlCleanup({connect,run:async()=>{throw {code:'ERR_ASSERTION'};},close:async()=>{throw {message:'secret'};}});
+ assert.equal(result.status,'FAIL');assert.equal(result.primaryFailure.code,'ERR_ASSERTION');assert.ok(order.includes('disable_query'));
+ assert.deepEqual(result.cleanup.errors.map(x=>x.stage),['workload_connection_close','disable_connection_close','verify_connection_close']);
+ const unavailable=await runWithControlCleanup({connect:()=>{throw {code:'ECONNREFUSED'};},run:async()=>{},close:async()=>{}});
+ assert.equal(unavailable.status,'FAIL');assert.equal(unavailable.cleanup.errors.length,2);assert.equal(unavailable.cleanup.storedEnabled,null);
+});

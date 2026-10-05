@@ -1,7 +1,7 @@
 {
   "cold": {
     "claims": 2,
-    "elapsedMs": 176
+    "elapsedMs": 241
   },
   "load": [
     {
@@ -10,12 +10,12 @@
       "peakConnections": 2,
       "peakLeases": 1,
       "samples": 1,
-      "elapsedMs": 208,
-      "ownersPerSecond": 4.81,
-      "minMs": 202,
-      "maxMs": 202,
+      "elapsedMs": 242,
+      "ownersPerSecond": 4.13,
+      "minMs": 242,
+      "maxMs": 242,
       "ingestMs": [
-        112
+        104
       ],
       "claims": [
         2
@@ -27,13 +27,13 @@
       "peakConnections": 2,
       "peakLeases": 2,
       "samples": 2,
-      "elapsedMs": 317,
-      "ownersPerSecond": 6.31,
-      "minMs": 315,
-      "maxMs": 317,
+      "elapsedMs": 412,
+      "ownersPerSecond": 4.85,
+      "minMs": 409,
+      "maxMs": 412,
       "ingestMs": [
-        156,
-        153
+        200,
+        194
       ],
       "claims": [
         2,
@@ -46,15 +46,15 @@
       "peakConnections": 2,
       "peakLeases": 2,
       "samples": 4,
-      "elapsedMs": 626,
-      "ownersPerSecond": 6.39,
-      "minMs": 312,
-      "maxMs": 626,
+      "elapsedMs": 863,
+      "ownersPerSecond": 4.63,
+      "minMs": 460,
+      "maxMs": 863,
       "ingestMs": [
-        327,
-        324,
-        321,
-        318
+        658,
+        653,
+        649,
+        643
       ],
       "claims": [
         2,
@@ -69,12 +69,12 @@
       "peakConnections": 2,
       "peakLeases": 1,
       "samples": 1,
-      "elapsedMs": 241,
-      "ownersPerSecond": 4.15,
-      "minMs": 241,
-      "maxMs": 241,
+      "elapsedMs": 302,
+      "ownersPerSecond": 3.31,
+      "minMs": 302,
+      "maxMs": 302,
       "ingestMs": [
-        3759
+        4990
       ],
       "claims": [
         2
@@ -86,13 +86,13 @@
       "peakConnections": 2,
       "peakLeases": 2,
       "samples": 2,
-      "elapsedMs": 445,
-      "ownersPerSecond": 4.49,
-      "minMs": 443,
-      "maxMs": 445,
+      "elapsedMs": 466,
+      "ownersPerSecond": 4.29,
+      "minMs": 463,
+      "maxMs": 466,
       "ingestMs": [
-        7804,
-        7802
+        9447,
+        9443
       ],
       "claims": [
         2,
@@ -105,15 +105,15 @@
       "peakConnections": 2,
       "peakLeases": 2,
       "samples": 4,
-      "elapsedMs": 870,
-      "ownersPerSecond": 4.6,
-      "minMs": 466,
-      "maxMs": 870,
+      "elapsedMs": 1083,
+      "ownersPerSecond": 3.69,
+      "minMs": 588,
+      "maxMs": 1083,
       "ingestMs": [
-        15052,
-        15049,
-        15046,
-        15043
+        18069,
+        18062,
+        18060,
+        18058
       ],
       "claims": [
         2,

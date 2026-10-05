@@ -47,5 +47,50 @@
     "secureplus-4d-infra-sql.log": "831c92a9c77b170aa2be0f47f050c42064087be525c8f0decad2597211d8f9f9",
     "secureplus-4d-build.log": "ecf5a73c51d4aac5de11245cd6095af049abdb705408eb58a7096ba66bc9b494",
     "secureplus-4d-site.log": "dd2f9f87e0ce0be45924f5af4d5b3bd6cf6daa67c62a4ac622840146955343ca"
+  },
+  "remediation": {
+    "date": "2026-10-05",
+    "baseline": "3b6c337cbb7cbfa527e305a52a0c6124efc9d2d3",
+    "status": "PASS",
+    "scope": "Rehearsal cleanup only; migration, runtime and learner code unchanged",
+    "readiness": {
+      "localCleanup": "PASS",
+      "phase2b5": "ON HOLD pending independent review",
+      "production": "NOT READY"
+    },
+    "counts": {
+      "operational": 80,
+      "cleanupRegression": 18,
+      "operationsUnitTests": 10,
+      "pureBoundary": 15,
+      "runtime": 40,
+      "targetApi": 75,
+      "infrastructure": 116,
+      "trustedRuntime": 103,
+      "deletionIsolation": 262,
+      "databaseBoundary": 18
+    },
+    "retainedEvidence": "Top-level counts, lint, advisors, build, site and production observation are the original 4 October evidence, not new runs.",
+    "finalControlObservedAtUtc": "2026-10-05T12:21:46.961414+00:00",
+    "finalDisposableControls": {
+      "target176": {
+        "serverVersion": "17.6",
+        "storedEnabled": false,
+        "effectiveEnabled": false,
+        "killSwitch": true
+      },
+      "fullstack1711": {
+        "serverVersion": "17.11",
+        "storedEnabled": false,
+        "effectiveEnabled": false,
+        "killSwitch": true
+      }
+    },
+    "localTranscriptHashes": {
+      "secureplus-4d-cleanup-database.log": "b60f69604c3c780f34b2e9de2c5fd4cd3940609b2c4a6d3d04f54c47423230df",
+      "secureplus-4d-cleanup-unit.log": "9f654b99bf46b635b789eaeabf4b50a59aafa5d4c3481b9ef68f6c54bec8b934",
+      "secureplus-4d-cleanup-fullstack.log": "3ab3fa20f9184ef244daf5ff5752afeb7adb62a379427efccc597864318b81de",
+      "secureplus-4d-cleanup-target-api.log": "7bc55753c7e5bbef16386d43dffe7ad0e463c2a3e0bf27116901492b90106d6f"
+    }
   }
 }

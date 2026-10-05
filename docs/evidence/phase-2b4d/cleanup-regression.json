@@ -1,0 +1,94 @@
+{
+  "status": "PASS",
+  "assertions": 18,
+  "checks": [
+    "Expected process exit for forced failure",
+    "Result matches actual exit",
+    "Primary failure is preserved independently",
+    "Cleanup commits disable and verifies it",
+    "Independent psql observes disabled stored and effective control",
+    "Console receipt includes verified cleanup",
+    "Forced failure never prints a PASS receipt",
+    "Expected process exit for success",
+    "Result matches actual exit",
+    "Primary failure is preserved independently",
+    "Cleanup commits disable and verifies it",
+    "Independent psql observes disabled stored and effective control",
+    "Console receipt includes verified cleanup",
+    "Real verification failure preserves the primary error",
+    "A committed disable alone cannot produce PASS",
+    "Real SQL permission error is separately reported",
+    "Independent read confirms disable despite deliberately denied verification",
+    "Fault-test harness also disables and verifies before exiting"
+  ],
+  "results": [
+    {
+      "scenario": "forced_failure_after_enable",
+      "exitCode": 1,
+      "status": "FAIL",
+      "primaryFailure": {
+        "code": "FORCED_AFTER_ENABLE"
+      },
+      "cleanup": {
+        "status": "PASS",
+        "disableCommitted": true,
+        "verified": true,
+        "storedEnabled": false,
+        "effectiveEnabled": false,
+        "killSwitch": true,
+        "errors": []
+      },
+      "independentControl": {
+        "storedEnabled": false,
+        "effectiveEnabled": false,
+        "killSwitch": true
+      }
+    },
+    {
+      "scenario": "full_success",
+      "exitCode": 0,
+      "status": "PASS",
+      "primaryFailure": null,
+      "cleanup": {
+        "status": "PASS",
+        "disableCommitted": true,
+        "verified": true,
+        "storedEnabled": false,
+        "effectiveEnabled": false,
+        "killSwitch": true,
+        "errors": []
+      },
+      "independentControl": {
+        "storedEnabled": false,
+        "effectiveEnabled": false,
+        "killSwitch": true
+      }
+    },
+    {
+      "scenario": "primary_and_verification_failure",
+      "status": "FAIL",
+      "primaryFailure": {
+        "code": "FORCED_AFTER_ENABLE"
+      },
+      "cleanup": {
+        "status": "FAIL",
+        "disableCommitted": true,
+        "verified": false,
+        "storedEnabled": null,
+        "effectiveEnabled": null,
+        "killSwitch": null,
+        "errors": [
+          {
+            "stage": "verify",
+            "code": "42501"
+          }
+        ]
+      },
+      "independentControl": {
+        "storedEnabled": false,
+        "effectiveEnabled": false,
+        "killSwitch": true
+      }
+    }
+  ]
+}

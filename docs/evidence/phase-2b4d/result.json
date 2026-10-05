@@ -1,5 +1,15 @@
 {
   "status": "PASS",
+  "primaryFailure": null,
+  "cleanup": {
+    "status": "PASS",
+    "disableCommitted": true,
+    "verified": true,
+    "storedEnabled": false,
+    "effectiveEnabled": false,
+    "killSwitch": true,
+    "errors": []
+  },
   "assertions": 80,
   "checks": [
     "Repeat deployment skips identical committed checksums",
