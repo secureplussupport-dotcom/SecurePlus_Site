@@ -12,6 +12,13 @@
     "killSwitch": true,
     "errors": []
   },
+  "lifecycle": [
+    "workload_close_started",
+    "workload_closed",
+    "cleanup_connection_opened",
+    "cleanup_connection_opened"
+  ],
+  "samplerFailureCode": null,
   "assertions": 14,
   "checks": [
     "Repeat deployment skips identical committed checksums",

@@ -95,3 +95,47 @@ test('pool close and cleanup connection failures never skip disable or replace t
  const unavailable=await runWithControlCleanup({connect:()=>{throw {code:'ECONNREFUSED'};},run:async()=>{},close:async()=>{}});
  assert.equal(unavailable.status,'FAIL');assert.equal(unavailable.cleanup.errors.length,2);assert.equal(unavailable.cleanup.storedEnabled,null);
 });
+
+const {runWithSampler}=await import('./lib/operational-sampler.mjs');
+const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
+const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+test('sampler ECONNRESET after workload completion settles before pool close and verified cleanup',{timeout:2000},async()=>{
+ const started=deferred(),query=deferred(),{connect,order}=cleanupFixture();let calls=0;
+ const outcome=runWithControlCleanup({connect,close:async()=>order.push('workload_close'),run:()=>runWithSampler({intervalMs:1,
+  sample:async()=>{calls++;started.resolve();try{await query.promise;}finally{order.push('sample_settled');}},
+  run:async()=>{await started.promise;order.push('workload_finished');}
+ })});
+ await started.promise;await delay(10);
+ assert.equal(calls,1);assert.ok(!order.includes('workload_close'));assert.ok(!order.includes('disable_connect'));
+ query.reject(Object.assign(new Error('Synthetic connection reset'),{code:'ECONNRESET'}));
+ const result=await outcome;
+ assert.equal(result.status,'FAIL');assert.equal(result.primaryFailure.code,'ECONNRESET');assert.equal(result.cleanup.status,'PASS');
+ assert.ok(order.indexOf('sample_settled')<order.indexOf('workload_close'));
+ assert.ok(order.indexOf('workload_close')<order.indexOf('disable_connect'));
+ assert.ok(order.indexOf('disable_commit')<order.indexOf('verify_connect'));
+ await delay(10);assert.equal(calls,1);
+});
+test('first sampler rejection stops its timer and waits for the workload even if it also fails',{timeout:2000},async()=>{
+ const sampled=deferred(),work=deferred();let calls=0,settled=false;
+ const error=Object.assign(new Error('First failure'),{code:'ECONNRESET'});
+ const result=runWithSampler({intervalMs:1,sample:()=>{calls++;sampled.resolve();throw error;},run:()=>work.promise}).then(()=>null,e=>{settled=true;return e;});
+ await sampled.promise;await delay(10);
+ assert.equal(calls,1);assert.equal(settled,false);
+ work.reject(Object.assign(new Error('Later workload failure'),{code:'ERR_ASSERTION'}));
+ assert.equal(await result,error);await delay(10);assert.equal(calls,1);
+});
+test('earlier workload failure is preserved while the final sample is still awaited',{timeout:2000},async()=>{
+ const started=deferred(),query=deferred();let settled=false;
+ const first=Object.assign(new Error('Workload failure'),{code:'ERR_ASSERTION'});
+ const result=runWithSampler({intervalMs:1,sample:()=>{started.resolve();return query.promise;},run:async()=>{await started.promise;throw first;}}).then(()=>null,e=>{settled=true;return e;});
+ await started.promise;await delay(10);assert.equal(settled,false);
+ query.reject(Object.assign(new Error('Later sample failure'),{code:'ECONNRESET'}));
+ assert.equal(await result,first);
+});
+test('successful sampler has no overlap or callbacks after stop',{timeout:2000},async()=>{
+ const started=deferred(),query=deferred(),work=deferred();let calls=0,active=0,peak=0;
+ const result=runWithSampler({intervalMs:1,sample:async()=>{calls++;active++;peak=Math.max(peak,active);started.resolve();await query.promise;active--;},run:()=>work.promise});
+ await started.promise;await delay(10);assert.equal(calls,1);
+ work.resolve('finished');query.resolve();assert.equal(await result,'finished');
+ const stoppedCalls=calls;await delay(10);assert.equal(calls,stoppedCalls);assert.equal(peak,1);assert.equal(active,0);
+});

@@ -10,16 +10,19 @@ import {createTrustedProjectionDrain,rebuildTrustedLearningOwner} from '../serve
 import {createCentralControlReader} from '../server/adaptive/central-control.mjs';
 import {createOperationalMonitor} from '../server/adaptive/operational-monitor.mjs';
 import {appendErasureIntent,reconcileErasureJournal,readErasureJournal} from '../server/adaptive/recovery-journal.mjs';
-import {runWithControlCleanup} from './lib/operational-cleanup.mjs';
+import {runWithControlCleanup,failureCode} from './lib/operational-cleanup.mjs';
+import {runWithSampler} from './lib/operational-sampler.mjs';
 import {withdrawShadow,resumePendingErasures} from '../server/adaptive/deletion.mjs';
 const checks=[],check=(value,label)=>{assert.ok(value,label);checks.push(label);};
 const reject=async(fn,label,code)=>{await assert.rejects(fn,code?{code}:undefined);checks.push(label);};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const env={ADAPTIVE_RUNTIME_ENVIRONMENT:'disposable_local',ADAPTIVE_SHADOW_WRITES_ENABLED:'true',ADAPTIVE_SHADOW_WRITES_KILL_SWITCH:'false'};
-const fault=process.argv.includes('--fail-after-enable');
-if(process.argv.slice(2).some(arg=>arg!=='--fail-after-enable'))throw new Error('Unknown local rehearsal argument');
+const fault=process.argv.includes('--fail-after-enable'),samplerFault=process.argv.includes('--fail-sampler-query');
+if(process.argv.slice(2).some(arg=>!['--fail-after-enable','--fail-sampler-query'].includes(arg))||(fault&&samplerFault))throw new Error('Unknown or conflicting local rehearsal argument');
+const faultPrefix=fault?'forced-failure-':samplerFault?'sampler-failure-':'';
+const lifecycle=[];let samplerFailureCode=null;
 const saveEvidence=(name,value)=>{
- if(!fault||['result','final-control'].includes(name))persistEvidence(fault?'forced-failure-'+name:name,value);
+ if(!faultPrefix||['result','final-control'].includes(name))persistEvidence(faultPrefix+name,value);
 };
 // Invalidate a previous receipt before a new run can enable anything.
 saveEvidence('result',{status:'RUNNING'});
@@ -30,12 +33,14 @@ async function crash(owner,phase,onPause){return new Promise((resolve,reject)=>{
  const timer=setTimeout(()=>{child.kill('SIGKILL');reject(new Error('Crash fixture timeout'));},15000);
  child.on('message',async r=>{receipt=r;try{await onPause?.(r);}catch(error){reject(error);}finally{child.kill('SIGKILL');}});child.on('exit',()=>{clearTimeout(timer);receipt?resolve(receipt):reject(new Error('Crash fixture failed'));});
  });}
-const outcome=await runWithControlCleanup({connect,close:async()=>{
+const outcome=await runWithControlCleanup({connect:()=>{lifecycle.push('cleanup_connection_opened');return connect();},close:async()=>{
+ lifecycle.push('workload_close_started');
  const results=await Promise.allSettled([
   ...Object.values(purposes??{}).map(x=>Promise.resolve().then(()=>x.end())),
   Promise.resolve().then(()=>sql?.end({timeout:1}))
  ]);
  const failed=results.find(r=>r.status==='rejected');if(failed)throw failed.reason;
+ lifecycle.push('workload_closed');
 },run:async()=>{
  sql=await resetDatabase();const first=await deploy(sql);const firstInventory=await inventory(sql);
  check((await deploy(sql)).every(x=>x.skipped),'Repeat deployment skips identical committed checksums');
@@ -180,8 +185,41 @@ const outcome=await runWithControlCleanup({connect,close:async()=>{
  const loadData=await fixture(sql,purposes.ingest),load=[];
  for(const answers of [10,500])for(const concurrency of [1,2,4]){
   const owners=await Promise.all(Array.from({length:concurrency},()=>loadData.owner(answers)));
-  let peakConnections=0,peakLeases=0,sampling=false;const sampler=setInterval(async()=>{if(sampling)return;sampling=true;try{const [m]=await sql`select (select count(*)::int from pg_stat_activity where usename like 'adaptive_%_login') connections,(select count(*)::int from adaptive_private.projection_jobs where status='leased' and lease_until>clock_timestamp()) leases`;peakConnections=Math.max(peakConnections,m.connections);peakLeases=Math.max(peakLeases,m.leases);}finally{sampling=false;}},20);
-  const start=performance.now();let runs;try{runs=await Promise.all(owners.map(o=>drainOwner(purposes.worker,o.id)));}finally{clearInterval(sampler);while(sampling)await sleep(5);}
+  let peakConnections=0,peakLeases=0;
+  const sampleQuery="select (select count(*)::int from pg_stat_activity where usename like 'adaptive_%_login') connections,(select count(*)::int from adaptive_private.projection_jobs where status='leased' and lease_until>clock_timestamp()) leases";
+  const start=performance.now();let runs;
+  lifecycle.push('sampling_started');
+  try{runs=await runWithSampler({sample:async()=>{
+   try{
+    let metrics;
+    if(samplerFault){
+     // Terminate the actual sampling backend while its query is in flight.
+     // The extra sleep only gives the fault injector a deterministic window.
+     const [{pid,enabled}]=await sql`select pg_backend_pid() pid,enabled from adaptive_private.runtime_control where singleton`;
+     check(enabled,'Sampler fault occurs with stored control enabled');
+     const killer=connect();let pending;
+     try{
+      pending=sql.unsafe(sampleQuery+',pg_sleep(3)').then(value=>({value}),error=>({error}));
+      let active=false;
+      for(let n=0;n<100;n++){
+       const [state]=await killer`select wait_event from pg_stat_activity where pid=${pid}`;
+       if(state?.wait_event==='PgSleep'){active=true;break;}await sleep(10);
+      }
+      check(active,'Real sampler query is in flight before connection termination');
+      lifecycle.push('sampler_query_in_flight');
+      check((await killer`select pg_terminate_backend(${pid}) terminated`)[0].terminated,'Actual sampler backend terminated');
+      const result=await pending;if(result.error)throw result.error;
+      throw new Error('Sampler connection failure was not observed');
+     }finally{await pending;await killer.end({timeout:1});}
+    }else metrics=await sql.unsafe(sampleQuery);
+    const [m]=metrics;peakConnections=Math.max(peakConnections,m.connections);peakLeases=Math.max(peakLeases,m.leases);
+   }catch(error){samplerFailureCode??=failureCode(error);lifecycle.push('sampler_query_failed');throw error;}
+  },run:async()=>{
+   // Keep all owner drains within the lifecycle even if one fails early.
+   const settled=await Promise.allSettled(owners.map(o=>drainOwner(purposes.worker,o.id)));
+   const failure=settled.find(x=>x.status==='rejected');if(failure)throw failure.reason;
+   return settled.map(x=>x.value);
+  }});}finally{lifecycle.push('sampling_settled');}
   check(peakConnections<=3&&peakLeases<=2,'Sampled connection and global lease ceilings hold');
   const elapsed=Math.round(performance.now()-start),latencies=runs.map(x=>x.elapsedMs).sort((a,b)=>a-b);
   check(runs.every(x=>x.claims===2),'Concurrent owner histories converge in two claims');
@@ -195,7 +233,7 @@ const outcome=await runWithControlCleanup({connect,close:async()=>{
 }});
 // PASS is impossible until disable commits and a fresh connection verifies it.
 saveEvidence('final-control',outcome.cleanup);
-saveEvidence('result',{...outcome,assertions:checks.length,checks,migrations:migrations.map(({name,sha256})=>({name,sha256}))});
-const receipt={...outcome,assertions:checks.length,lastCompleted:checks.at(-1)??'setup'};
+saveEvidence('result',{...outcome,lifecycle,samplerFailureCode,assertions:checks.length,checks,migrations:migrations.map(({name,sha256})=>({name,sha256}))});
+const receipt={...outcome,lifecycle,samplerFailureCode,assertions:checks.length,lastCompleted:checks.at(-1)??'setup'};
 if(outcome.status==='PASS')console.log(JSON.stringify(receipt));
 else{console.error(JSON.stringify(receipt));process.exitCode=1;}

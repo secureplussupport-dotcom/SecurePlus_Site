@@ -10,6 +10,25 @@
     "killSwitch": true,
     "errors": []
   },
+  "lifecycle": [
+    "sampling_started",
+    "sampling_settled",
+    "sampling_started",
+    "sampling_settled",
+    "sampling_started",
+    "sampling_settled",
+    "sampling_started",
+    "sampling_settled",
+    "sampling_started",
+    "sampling_settled",
+    "sampling_started",
+    "sampling_settled",
+    "workload_close_started",
+    "workload_closed",
+    "cleanup_connection_opened",
+    "cleanup_connection_opened"
+  ],
+  "samplerFailureCode": null,
   "assertions": 80,
   "checks": [
     "Repeat deployment skips identical committed checksums",

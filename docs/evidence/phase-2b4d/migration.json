@@ -3,7 +3,7 @@
     {
       "name": "20261001170334_adaptive_learning_persistence_foundation.sql",
       "sha256": "35a3161ee7023b808ad0b88eb9b2534025adf4365e45883191c72fc2884a7790",
-      "elapsedMs": 61
+      "elapsedMs": 62
     },
     {
       "name": "20261002232053_adaptive_deletion_shadow_isolation.sql",
@@ -18,19 +18,19 @@
     {
       "name": "20261003200440_adaptive_trusted_learning_runtime.sql",
       "sha256": "528821f54cd881b23e6ef2fffe1f3cb704a206def618407714abdc9fae562866",
-      "elapsedMs": 7
+      "elapsedMs": 9
     },
     {
       "name": "20261004072830_adaptive_operational_controls.sql",
       "sha256": "e46f7fef2e8b07924a05646f6499055986afbef453581aeca0adb8bd7ffaad28",
-      "elapsedMs": 3
+      "elapsedMs": 4
     }
   ],
   "second": [
     {
       "name": "20261001170334_adaptive_learning_persistence_foundation.sql",
       "sha256": "35a3161ee7023b808ad0b88eb9b2534025adf4365e45883191c72fc2884a7790",
-      "elapsedMs": 132
+      "elapsedMs": 79
     },
     {
       "name": "20261002232053_adaptive_deletion_shadow_isolation.sql",
@@ -40,22 +40,22 @@
     {
       "name": "20261003043634_adaptive_durable_runtime.sql",
       "sha256": "2e81d681c1b648850372f5a34c6f64d0481338d1b303ca844f47584de1c4634a",
-      "elapsedMs": 21
+      "elapsedMs": 16
     },
     {
       "name": "20261003200440_adaptive_trusted_learning_runtime.sql",
       "sha256": "528821f54cd881b23e6ef2fffe1f3cb704a206def618407714abdc9fae562866",
-      "elapsedMs": 8
+      "elapsedMs": 10
     },
     {
       "name": "20261004072830_adaptive_operational_controls.sql",
       "sha256": "e46f7fef2e8b07924a05646f6499055986afbef453581aeca0adb8bd7ffaad28",
-      "elapsedMs": 6
+      "elapsedMs": 3
     }
   ],
   "failures": {
-    "statementFailureMs": 242,
-    "lockFailureMs": 113,
+    "statementFailureMs": 226,
+    "lockFailureMs": 108,
     "interruption": "Actual backend termination before commit; schema absent afterward"
   },
   "inventory": {

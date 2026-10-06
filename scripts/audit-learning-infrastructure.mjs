@@ -19,7 +19,7 @@ const ingest=asRole('adaptive_ingest'),worker=asRole('adaptive_worker'),erasure=
 const logs=[],q=createDurableQueue(worker,{log:r=>logs.push(r)}),deleteQueue=createDurableQueue(erasure,{log:r=>logs.push(r)});
 const v={mappingVersion:'local-map-v1',algorithmVersion:'local-algo-v1',configurationVersion:'local-config-v1'};
 let n=0;const check=(value,label)=>{assert.ok(value,label);n++;};
-const rejects=async(fn,label)=>{await assert.rejects(fn,undefined,label);n++;};
+const rejects=async(fn,label,code)=>{await assert.rejects(fn,code?{code}:undefined,label);n++;};
 const pause=()=>{let resolve;return {promise:new Promise(r=>resolve=r),resolve:()=>resolve()};};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const owners=[];let revision,compiled;
@@ -130,8 +130,19 @@ try{
  await rejects(()=>q.complete(lostJob),'Lost acknowledgment cannot complete replacement lease');await withdrawShadow(erasure,lost,cleanup);
  // Real clock expiry during computation: final fence check rolls the whole transaction back.
  const aging=await owner();await graph(aging);const agingJob=await claimed(aging);
- await rejects(()=>rebuildAdaptiveOwner(worker,aging,{job:agingJob,enrollmentId:agingJob.enrollmentId,now:new Date(Date.now()+2000).toISOString(),project:async()=>{await sleep(30100);return [];}}),'Lease expiring during computation cannot publish or mark replay ready');
- check((await sql`select replay_status from adaptive_private.owner_state where owner_id=${aging}`)[0].replay_status==='idle','Expired publication rolls back replay state');
+ let expiryObserved=false;
+ await rejects(()=>rebuildAdaptiveOwner(worker,aging,{job:agingJob,enrollmentId:agingJob.enrollmentId,now:new Date(Date.now()+2000).toISOString(),project:async()=>{
+  // Observe the actual database clock instead of assuming that a host timer
+  // with 100ms headroom proves expiry in a separate VM. Do not age the lease.
+  const deadline=performance.now()+45000;
+  while(performance.now()<deadline){
+   const [lease]=await sql`select lease_until<=clock_timestamp() expired from adaptive_private.projection_jobs where job_id=${agingJob.id}`;
+   if(lease?.expired){expiryObserved=true;return [];}
+   await sleep(100);
+  }
+  throw new Error('Database lease expiry was not observed within the test deadline');
+ }}),'Lease expiring during computation cannot publish or mark replay ready','55000');
+ check(expiryObserved&&(await sql`select replay_status from adaptive_private.owner_state where owner_id=${aging}`)[0].replay_status==='idle','Observed database-clock expiry rolls back replay state');
  await withdrawShadow(erasure,aging,cleanup);
  // Actual worker-process exit, both after claim and inside a replay transaction.
  for(const mode of ['claim','compute']){

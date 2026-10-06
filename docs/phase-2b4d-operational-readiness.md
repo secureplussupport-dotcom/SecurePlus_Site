@@ -1,6 +1,6 @@
 # Phase 2B-4D — operational readiness
 
-Initial validation: **4 October 2026, Asia/Singapore**. Cleanup remediation: **5 October 2026**. Starting commit: `cf196f8786d0392e051ae9c30084d606f46947e6`.
+Initial validation: **4 October 2026, Asia/Singapore**. Cleanup remediation: **5 October 2026**. Sampler remediation: **6 October 2026**. Starting commit: `cf196f8786d0392e051ae9c30084d606f46947e6`.
 
 ## Verdict: local remediation PASS; Phase 2B-5 ON HOLD
 
@@ -22,11 +22,26 @@ Actual PostgreSQL 17.6 checks, using the fixed disposable target:
 | --- | --- | --- | --- |
 | Complete operational rehearsal | PASS, exit 0, 80 assertions | Disable committed and verified | false / false |
 | Deliberate exception immediately after first enable | FAIL, exit 1, `FORCED_AFTER_ENABLE` preserved | Disable committed and verified | false / false |
+| Actual sampling backend terminated after enablement | FAIL, exit 1, `CONNECTION_CLOSED` preserved | Disable committed and verified | false / false |
 | Primary exception plus denied verification connection | FAIL, primary error preserved | FAIL, separate SQLSTATE `42501`; disable committed but verification refused | false / false |
 
-The last case deliberately uses the restricted worker role for the verification read. It proves that a cleanup failure is reported even when an independent administrator can later confirm the database is disabled. The fault-test harness then performs its own successful disable/verification. These three scenarios pass **18 regression assertions**. Ten operation unit tests additionally cover commit ordering, stale stored enablement, unknown/malformed state, connection and pool-close errors, and dual-error privacy. The isolated full-stack regression wrapper also disables and independently verifies its PostgreSQL 17.11 control in `finally`.
+The last case deliberately uses the restricted worker role for the verification read. It proves that a cleanup failure is reported even when an independent administrator can later confirm the database is disabled. The fault-test harness then performs its own successful disable/verification. These four scenarios pass **33 regression assertions**. Fourteen operation unit tests additionally cover commit ordering, stale stored enablement, unknown/malformed state, connection and pool-close errors, dual-error privacy, pending-sample races, first-error retention and non-overlapping sampling. The isolated full-stack regression wrapper also disables and independently verifies its PostgreSQL 17.11 control in `finally`.
 
-See [exit-path proof](evidence/phase-2b4d/cleanup-regression.json), [successful final-control receipt](evidence/phase-2b4d/final-control.json), [forced-failure receipt](evidence/phase-2b4d/forced-failure-result.json), [validation and final observations](evidence/phase-2b4d/validation.json), and [package checksums](evidence/phase-2b4d/cleanup-checksums.json). The five migration files and runtime/product code are unchanged by this remediation. No production read or write was needed for the cleanup fix; live facts below retain their original 4 October observation date.
+See [exit-path proof](evidence/phase-2b4d/cleanup-regression.json), [successful final-control receipt](evidence/phase-2b4d/final-control.json), [forced-failure receipt](evidence/phase-2b4d/forced-failure-result.json), [sampler-failure receipt and lifecycle](evidence/phase-2b4d/sampler-failure-result.json), [validation and final observations](evidence/phase-2b4d/validation.json), and [package checksums](evidence/phase-2b4d/cleanup-checksums.json). The five migration files and runtime/product code are unchanged by this remediation. No production read or write was needed for the cleanup fix; live facts below retain their original 4 October observation date.
+
+## Sampler lifecycle remediation — 6 October
+
+A second independent review of `53640b9f4bcff5ce3a42c5f2412af65ef1af997b` found an ordinary failure path outside the cleanup wrapper: the async `setInterval` callback could reject independently of the awaited workload. A connection failure in that callback could terminate Node before workload closure, disable/verification or a final receipt. The previous completion/error proof did not cover that timer path.
+
+The runner now uses an awaited sampling scope. Timer callbacks attach their rejection handler immediately, record the first sample failure, stop scheduling and prevent overlap. The scope stops its timer and awaits any in-flight sample on both workload success and failure, then propagates the first observed error through the existing `runWithControlCleanup` path. Owner drains are also settled together before connections close. This does not rely on a global unhandled-rejection handler.
+
+The new database regression terminates the actual sampling backend during the ordinary load query, with a three-second sleep added solely to make the fault window deterministic. It first verifies stored control is enabled and the query is in flight, then terminates that backend through a separate disposable administrator connection. With strict Node unhandled-rejection handling enabled, the driver returns `CONNECTION_CLOSED`; that code matches both the stored sampler error and the final primary-failure receipt. The run exits 1 with final FAIL evidence and successful cleanup, and an independent administrator confirms stored/effective enabled=false. No PASS receipt is emitted for the failed run.
+
+The sanitized lifecycle records this order: sampling started, sampler query in flight, sampler query failed, sampling settled, workload close started, workload closed, then fresh disable/verification connections. The regression checks the order and that only one sampler failure occurred. Unit tests also inject `ECONNRESET` while a sample is pending after workload completion, prove later workload failure cannot replace an earlier sampler error, preserve earlier workload failure while settling its last sample, and prove successful sampling never overlaps or continues after stop.
+
+During development, the first integration assertion incorrectly expected PostgreSQL SQLSTATE `57P01`; the actual driver exposed `CONNECTION_CLOSED`. That test run failed its expectation while the runner still completed verified cleanup. The corrected test asserts the observed driver code and equality across the original sampler error and both final receipts. The final evidence contains the subsequent complete passing run, not a reclassification of that failed test.
+
+The first full-stack infrastructure rerun failed the existing fixed-host-sleep lease-expiry expectation. A temporary diagnostic copy then passed and observed only about 177 ms of database-confirmed expiry at the end of the 30.1-second host wait; the original transient cause was not established. The fixture now waits for actual database-clock expiry within a 45-second test deadline, requires SQLSTATE `55000`, and verifies that expiry was observed inside the projector before accepting rollback. It neither rewrites nor artificially ages the 30-second lease. This is a stronger validation condition, not a runtime change. The failed run and diagnostic transcript hashes are retained separately from the final complete regression run.
 
 ## Environment and parity
 
@@ -71,13 +86,13 @@ The full chain ran twice from fresh representative pre-adaptive data. Existing M
 
 | Migration | SHA-256 | First / second run ms |
 | --- | --- | --- |
-| `20261001170334_adaptive_learning_persistence_foundation.sql` | `35a3161ee7023b808ad0b88eb9b2534025adf4365e45883191c72fc2884a7790` | 61 / 132 |
+| `20261001170334_adaptive_learning_persistence_foundation.sql` | `35a3161ee7023b808ad0b88eb9b2534025adf4365e45883191c72fc2884a7790` | 62 / 79 |
 | `20261002232053_adaptive_deletion_shadow_isolation.sql` | `d02f367614388d0145a1b68772c9f0873b05f2919ff5710a5fa45ef68f28be9b` | 13 / 18 |
-| `20261003043634_adaptive_durable_runtime.sql` | `2e81d681c1b648850372f5a34c6f64d0481338d1b303ca844f47584de1c4634a` | 14 / 21 |
-| `20261003200440_adaptive_trusted_learning_runtime.sql` | `528821f54cd881b23e6ef2fffe1f3cb704a206def618407714abdc9fae562866` | 7 / 8 |
-| `20261004072830_adaptive_operational_controls.sql` | `e46f7fef2e8b07924a05646f6499055986afbef453581aeca0adb8bd7ffaad28` | 3 / 6 |
+| `20261003043634_adaptive_durable_runtime.sql` | `2e81d681c1b648850372f5a34c6f64d0481338d1b303ca844f47584de1c4634a` | 14 / 16 |
+| `20261003200440_adaptive_trusted_learning_runtime.sql` | `528821f54cd881b23e6ef2fffe1f3cb704a206def618407714abdc9fae562866` | 9 / 10 |
+| `20261004072830_adaptive_operational_controls.sql` | `e46f7fef2e8b07924a05646f6499055986afbef453581aeca0adb8bd7ffaad28` | 4 / 3 |
 
-The default migration budgets are 1 second of lock waiting and 10 seconds per statement. Failure drills deliberately reduce them: statement-timeout failure took **242 ms** including preceding DDL; lock-timeout failure took **113 ms**. The tests require SQLSTATE `57014` and `55P03`, respectively. Killing an actual migration backend during its open transaction also left no adaptive schema or committed migration entry. Retrying the unchanged chain succeeded.
+The default migration budgets are 1 second of lock waiting and 10 seconds per statement. Failure drills deliberately reduce them: statement-timeout failure took **226 ms** including preceding DDL; lock-timeout failure took **108 ms**. The tests require SQLSTATE `57014` and `55P03`, respectively. Killing an actual migration backend during its open transaction also left no adaptive schema or committed migration entry. Retrying the unchanged chain succeeded.
 
 The evidence inventory records all adaptive columns, constraints, indexes, triggers, function-body digests, definer ownership/search paths, table/function ACLs, PUBLIC execution, RLS policies, role attributes/memberships and extension versions. Fresh resets produced identical inventories. New and prior migrations remain additive; prior migration files were not edited.
 
@@ -87,16 +102,16 @@ Rollback decision: abort and verify atomic rollback before commit; after commit 
 
 | Boundary | Actual proof | Recovery |
 | --- | --- | --- |
-| claim | SIGKILL after durable claim | 155 ms; 2 subsequent claims |
-| compute | SIGKILL after full pinned computation inside its transaction | 139 ms; 2 subsequent claims |
-| publication | SIGKILL after current-generation publication, before acknowledgment | 74 ms; 1 subsequent claims |
-| ack | SIGKILL after acknowledgment | 5 ms; 0 subsequent claims |
-| scheduler | SIGKILL during authenticated local scheduler drain after claim | 175 ms; 2 subsequent claims |
-| database_restart | Actual Docker database stop/start with a live durable lease | 1496 ms |
+| claim | SIGKILL after durable claim | 153 ms; 2 subsequent claims |
+| compute | SIGKILL after full pinned computation inside its transaction | 142 ms; 2 subsequent claims |
+| publication | SIGKILL after current-generation publication, before acknowledgment | 84 ms; 1 subsequent claims |
+| ack | SIGKILL after acknowledgment | 7 ms; 0 subsequent claims |
+| scheduler | SIGKILL during authenticated local scheduler drain after claim | 162 ms; 2 subsequent claims |
+| database_restart | Actual Docker database stop/start with a live durable lease | 1699 ms |
 
 Crash cases retained exactly two unique review tasks and a current-generation projection. Old leases could not acknowledge. The new crash matrix expires selected synthetic leases administratively to avoid five serial 30-second waits; the earlier infrastructure suite still performs the actual 30-second wall-clock expiry test. These recovery timings exclude that artificial lease-aging step and are not RTO guarantees.
 
-The ordinary transaction-barrier drill acknowledged disable after **255 ms**, waiting for the admitted transaction. A separate real full-model child paused during computation; disable remained pending until process death rolled back the transaction, then old publication/acknowledgment was fenced. Re-enable converged without duplicate tasks. Tests also cover default-off, stale control, new ingestion rejection, global two-lease cap, owner serialization, overlapping scheduler calls, invalid learner scheduler authority, queued/retry work, durable dead-letter/quarantine and observable aggregate states.
+The ordinary transaction-barrier drill acknowledged disable after **257 ms**, waiting for the admitted transaction. A separate real full-model child paused during computation; disable remained pending until process death rolled back the transaction, then old publication/acknowledgment was fenced. Re-enable converged without duplicate tasks. Tests also cover default-off, stale control, new ingestion rejection, global two-lease cap, owner serialization, overlapping scheduler calls, invalid learner scheduler authority, queued/retry work, durable dead-letter/quarantine and observable aggregate states.
 
 ## Backup and erasure reconciliation
 
@@ -114,14 +129,14 @@ Each workload first ingests complete immutable synthetic history, then measures 
 
 | Answers per owner | Concurrent owners / samples | Batch replay ms | Owner latency min–max ms | Completed owners/s | Peak purpose connections / leases |
 | --- | --- | --- | --- | --- | --- |
-| 10 | 1 / 1 | 242 | 242–242 | 4.13 | 2 / 1 |
-| 10 | 2 / 2 | 412 | 409–412 | 4.85 | 2 / 2 |
-| 10 | 4 / 4 | 863 | 460–863 | 4.63 | 2 / 2 |
-| 500 | 1 / 1 | 302 | 302–302 | 3.31 | 2 / 1 |
-| 500 | 2 / 2 | 466 | 463–466 | 4.29 | 2 / 2 |
-| 500 | 4 / 4 | 1083 | 588–1083 | 3.69 | 2 / 2 |
+| 10 | 1 / 1 | 208 | 207–207 | 4.81 | 2 / 1 |
+| 10 | 2 / 2 | 398 | 394–398 | 5.03 | 2 / 2 |
+| 10 | 4 / 4 | 815 | 429–815 | 4.91 | 2 / 2 |
+| 500 | 1 / 1 | 366 | 366–366 | 2.73 | 2 / 1 |
+| 500 | 2 / 2 | 606 | 602–605 | 3.3 | 2 / 2 |
+| 500 | 4 / 4 | 1240 | 665–1239 | 3.23 | 2 / 2 |
 
-Cold full replay: **241 ms**, two claims. All 14 measured owners converged in two claims; no load failure or duplicate output occurred. Ingestion timings are retained separately in the machine-readable evidence; they are excluded from replay throughput. No percentiles are claimed for 1/2/4 samples. The observed range is not a tail-latency bound.
+Cold full replay: **178 ms**, two claims. All 14 measured owners converged in two claims; no load failure or duplicate output occurred. Ingestion timings are retained separately in the machine-readable evidence; they are excluded from replay throughput. No percentiles are claimed for 1/2/4 samples. The observed range is not a tail-latency bound.
 
 **Tested ceiling:** four concurrent owners, 500 retained answers each, one connection per purpose, two active leases. **Conservative next local operating budget:** two concurrent owners at this history size (50% of tested owner concurrency), retaining the two-lease cap. This is a local safety margin, not an extrapolated production capacity or maximum sustainable throughput. Larger history limits remain fail-closed at 10,000 answers / 2,000 sessions / 8 MiB snapshot, with a 2-second isolated model deadline and 128/32 MiB worker heap-generation limits. Production instance count, memory, pooler and scheduler overlap need their own budgets.
 
@@ -154,14 +169,14 @@ The sampled fault-injection run raises expected dead-letter, quarantine, lease-r
 
 ## Validation and evidence package
 
-The 5 October remediation reran the full target-version operational rehearsal, target HTTP isolation, cleanup regression, operations/boundary/runtime unit suites, and full-stack infrastructure/trusted-runtime/deletion/database-boundary checks. Other rows retain their passing 4 October evidence; unchanged schema/runtime/UI work did not require repeating every earlier audit. Migration, recovery and load timings above are the 5 October rerun, not the original measurements.
+The 6 October sampler remediation reran the full target-version operational rehearsal, target HTTP isolation, cleanup regression, operations/boundary/runtime unit suites, and full-stack infrastructure/trusted-runtime/deletion/database-boundary checks. Other rows retain their passing 4 October evidence; unchanged schema/runtime/UI work did not require repeating every earlier audit. Migration, recovery and load timings above are the 6 October rerun, not the original measurements.
 
 | Check | Result |
 | --- | --- |
 | Exact-version operational database/process rehearsal | PASS, 80 assertions |
 | Target PostgreSQL 17.6 + PostgREST HTTP isolation | PASS, 75 assertions; working control, real signed synthetic owners and anonymous requests |
-| Control/monitor/journal/cleanup tests | PASS, 10 tests including dual failures and commit ordering |
-| Actual cleanup exit paths | PASS, 18 assertions; normal, forced failure and separately denied verification |
+| Control/monitor/journal/cleanup/sampler tests | PASS, 14 tests including dual failures, pending samples and timer races |
+| Actual cleanup exit paths | PASS, 33 assertions; normal, forced failure, sampler connection failure and separately denied verification |
 | Earlier durable infrastructure | PASS, 116 assertions |
 | Earlier trusted plans and complete model | PASS, 103 assertions |
 | Earlier deletion/shadow isolation | PASS, 262 assertions, including the new private control table |
@@ -187,7 +202,7 @@ Evidence files:
 - [Target API results](evidence/phase-2b4d/target-api.json)
 - [Operations runbook](phase-2b4d-operations-runbook.md)
 
-Reproduction: pull the pinned official image; run `node scripts/start-learning-rehearsal.mjs`, then `npm run audit:learning-operations:cleanup` (forced exit, full success, and verification failure), `node scripts/audit-learning-target-api.mjs` and `npm run audit:learning-operations`. The destructive reset runner checks the exact disposable container/image and uses only its fixed loopback database. It must not be adapted to accept arbitrary remote URLs. Test passwords/journal files/backups stay outside Git. Final read-only inspection still found PostgreSQL 17.6 with no adaptive schema, adaptive public relation or adaptive role in production. For the established full-stack regression matrix, install all five migrations in an unlinked CLI workdir, reset locally, explicitly enable only its synthetic control for the test duration, run both rollback SQL suites and every earlier learning audit, then lint/advisors/build/site scans. Return local control to disabled afterward.
+Reproduction: pull the pinned official image; run `node scripts/start-learning-rehearsal.mjs`, then `npm run audit:learning-operations:cleanup` (forced exit, sampler connection failure, full success, and verification failure), `node scripts/audit-learning-target-api.mjs` and `npm run audit:learning-operations`. The destructive reset runner checks the exact disposable container/image and uses only its fixed loopback database. It must not be adapted to accept arbitrary remote URLs. Test passwords/journal files/backups stay outside Git. Final read-only inspection still found PostgreSQL 17.6 with no adaptive schema, adaptive public relation or adaptive role in production. For the established full-stack regression matrix, install all five migrations in an unlinked CLI workdir, reset locally, explicitly enable only its synthetic control for the test duration, run both rollback SQL suites and every earlier learning audit, then lint/advisors/build/site scans. Return local control to disabled afterward.
 
 ## Remaining production gates
 
@@ -199,4 +214,4 @@ Reproduction: pull the pinned official image; run `node scripts/start-learning-r
 
 **Phase 2B-5 remains on hold pending independent review of this remediation.** This verdict is not permission to migrate, deploy, activate shadow writes or change learners' experience.
 
-Documentation rechecked on 5 October: [current changelog](https://supabase.com/changelog.md), [transaction-local settings and connection state](https://supabase.com/docs/guides/troubleshooting/resolving-cannot-execute-update-in-a-read-only-transaction-on-transaction-pooler-connections-ef582c). No schema or dependency upgrade is part of this cleanup. Prior documentation reviewed: [Supabase backup/restore](https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore), [RLS and grants](https://supabase.com/docs/guides/database/postgres/row-level-security), [database functions](https://supabase.com/docs/guides/database/functions), [Data API grant change](https://supabase.com/changelog/45329-breaking-change-tables-not-exposed-to-data-and-graphql-api-automatically), [PostgreSQL minor-version change](https://supabase.com/changelog/postgres-15-19-17-11-breaking-changes). Matching an older target engine is compatibility evidence, not approval to leave that production version unchanged indefinitely.
+Changelog rechecked on 6 October; relevant documentation checked on 5 October: [current changelog](https://supabase.com/changelog.md), [transaction-local settings and connection state](https://supabase.com/docs/guides/troubleshooting/resolving-cannot-execute-update-in-a-read-only-transaction-on-transaction-pooler-connections-ef582c). No schema or dependency upgrade is part of this cleanup. Prior documentation reviewed: [Supabase backup/restore](https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore), [RLS and grants](https://supabase.com/docs/guides/database/postgres/row-level-security), [database functions](https://supabase.com/docs/guides/database/functions), [Data API grant change](https://supabase.com/changelog/45329-breaking-change-tables-not-exposed-to-data-and-graphql-api-automatically), [PostgreSQL minor-version change](https://supabase.com/changelog/postgres-15-19-17-11-breaking-changes). Matching an older target engine is compatibility evidence, not approval to leave that production version unchanged indefinitely.

@@ -1,20 +1,35 @@
 {
   "status": "PASS",
-  "assertions": 18,
+  "assertions": 33,
   "checks": [
-    "Expected process exit for forced failure",
+    "Expected process exit for forced_failure_after_enable",
     "Result matches actual exit",
     "Primary failure is preserved independently",
     "Cleanup commits disable and verifies it",
     "Independent psql observes disabled stored and effective control",
     "Console receipt includes verified cleanup",
     "Forced failure never prints a PASS receipt",
-    "Expected process exit for success",
+    "Workload connections settle before cleanup opens fresh connections",
+    "Expected process exit for sampler_query_failure",
     "Result matches actual exit",
     "Primary failure is preserved independently",
     "Cleanup commits disable and verifies it",
     "Independent psql observes disabled stored and effective control",
     "Console receipt includes verified cleanup",
+    "Forced failure never prints a PASS receipt",
+    "Workload connections settle before cleanup opens fresh connections",
+    "Actual sampler failure settles before workload close and disable/verification",
+    "Sampler failure was injected after actual enablement",
+    "Original sampler error code is retained in the persisted and console failure receipts",
+    "First sampler error stops subsequent samples",
+    "Strict rejection process exits through the final failure receipt",
+    "Expected process exit for full_success",
+    "Result matches actual exit",
+    "Primary failure is preserved independently",
+    "Cleanup commits disable and verifies it",
+    "Independent psql observes disabled stored and effective control",
+    "Console receipt includes verified cleanup",
+    "Workload connections settle before cleanup opens fresh connections",
     "Real verification failure preserves the primary error",
     "A committed disable alone cannot produce PASS",
     "Real SQL permission error is separately reported",
@@ -38,6 +53,46 @@
         "killSwitch": true,
         "errors": []
       },
+      "lifecycle": [
+        "workload_close_started",
+        "workload_closed",
+        "cleanup_connection_opened",
+        "cleanup_connection_opened"
+      ],
+      "samplerFailureCode": null,
+      "independentControl": {
+        "storedEnabled": false,
+        "effectiveEnabled": false,
+        "killSwitch": true
+      }
+    },
+    {
+      "scenario": "sampler_query_failure",
+      "exitCode": 1,
+      "status": "FAIL",
+      "primaryFailure": {
+        "code": "CONNECTION_CLOSED"
+      },
+      "cleanup": {
+        "status": "PASS",
+        "disableCommitted": true,
+        "verified": true,
+        "storedEnabled": false,
+        "effectiveEnabled": false,
+        "killSwitch": true,
+        "errors": []
+      },
+      "lifecycle": [
+        "sampling_started",
+        "sampler_query_in_flight",
+        "sampler_query_failed",
+        "sampling_settled",
+        "workload_close_started",
+        "workload_closed",
+        "cleanup_connection_opened",
+        "cleanup_connection_opened"
+      ],
+      "samplerFailureCode": "CONNECTION_CLOSED",
       "independentControl": {
         "storedEnabled": false,
         "effectiveEnabled": false,
@@ -58,6 +113,25 @@
         "killSwitch": true,
         "errors": []
       },
+      "lifecycle": [
+        "sampling_started",
+        "sampling_settled",
+        "sampling_started",
+        "sampling_settled",
+        "sampling_started",
+        "sampling_settled",
+        "sampling_started",
+        "sampling_settled",
+        "sampling_started",
+        "sampling_settled",
+        "sampling_started",
+        "sampling_settled",
+        "workload_close_started",
+        "workload_closed",
+        "cleanup_connection_opened",
+        "cleanup_connection_opened"
+      ],
+      "samplerFailureCode": null,
       "independentControl": {
         "storedEnabled": false,
         "effectiveEnabled": false,

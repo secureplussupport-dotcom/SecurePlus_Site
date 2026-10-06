@@ -92,5 +92,63 @@
       "secureplus-4d-cleanup-fullstack.log": "3ab3fa20f9184ef244daf5ff5752afeb7adb62a379427efccc597864318b81de",
       "secureplus-4d-cleanup-target-api.log": "7bc55753c7e5bbef16386d43dffe7ad0e463c2a3e0bf27116901492b90106d6f"
     }
+  },
+  "samplerRemediation": {
+    "date": "2026-10-06",
+    "baseline": "53640b9f4bcff5ce3a42c5f2412af65ef1af997b",
+    "status": "PASS",
+    "scope": "Awaited sampler lifecycle, fault regression, and database-clock expiry fixture; runtime, migrations and learner code unchanged",
+    "readiness": {
+      "phase2b4dLocalRemediation": "PASS",
+      "phase2b5": "ON HOLD pending independent review",
+      "production": "NOT READY"
+    },
+    "counts": {
+      "operational": 80,
+      "cleanupRegression": 33,
+      "operationsUnitTests": 14,
+      "pureBoundary": 15,
+      "runtime": 40,
+      "targetApi": 75,
+      "infrastructure": 116,
+      "trustedRuntime": 103,
+      "deletionIsolation": 262,
+      "databaseBoundary": 18
+    },
+    "samplerFault": {
+      "method": "Terminate the actual in-flight sampling backend after verifying stored control enabled",
+      "primaryCode": "CONNECTION_CLOSED",
+      "exitCode": 1,
+      "cleanup": "PASS",
+      "strictUnhandledRejections": true
+    },
+    "developmentFindings": [
+      "Initial sampler integration expectation used SQLSTATE 57P01; observed driver code was CONNECTION_CLOSED. Cleanup was confirmed even on that assertion failure. Final test checks equality with the captured sampler error.",
+      "Initial infrastructure fixed-host-sleep expiry expectation failed. Diagnostic original test passed with about 177ms of confirmed database expiry; original transient cause unestablished. Fixture now waits for observed database-clock expiry within 45 seconds and requires SQLSTATE 55000 and rollback. Runtime lease remains 30 seconds."
+    ],
+    "retainedEvidence": "Top-level counts/lint/advisors/build/site/live observation date from 4 October; remediation section is 5 October. This section records the 6 October reruns. No live inspection or action in this remediation.",
+    "finalControlObservedAtUtc": "2026-10-06T01:37:58.264611+00:00",
+    "finalDisposableControls": {
+      "target176": {
+        "serverVersion": "17.6",
+        "storedEnabled": false,
+        "effectiveEnabled": false,
+        "killSwitch": true
+      },
+      "fullstack1711": {
+        "serverVersion": "17.11",
+        "storedEnabled": false,
+        "effectiveEnabled": false,
+        "killSwitch": true
+      }
+    },
+    "localTranscriptHashes": {
+      "secureplus-4d-sampler-database.log": "b6c871f505c11600deea91a8a34bb6349f7d4c625556be1b53a69cace4626b2e",
+      "secureplus-4d-sampler-unit.log": "b9568f974269d252f4ea725cff299fee7d152453b53b1ad435155090e54febfe",
+      "secureplus-4d-sampler-fullstack.log": "4d7550f348db40b83790319d8c7a53e4aa96c23dde848e223b34f4e59262b513",
+      "secureplus-4d-sampler-target-api.log": "7bc55753c7e5bbef16386d43dffe7ad0e463c2a3e0bf27116901492b90106d6f",
+      "secureplus-4d-sampler-fullstack-first-failure.log": "1ab0c210ec5afc01ca08b16d4f1d5afb6b393c04dc4885beb4381c5d7577d900",
+      "secureplus-4d-sampler-diagnostic.log": "54dd79be5f4191afe465cd0bc7607599c1316f0b902452010fc5db938b4ae27d"
+    }
   }
 }

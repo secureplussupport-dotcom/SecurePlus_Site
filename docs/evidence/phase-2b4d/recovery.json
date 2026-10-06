@@ -69,33 +69,33 @@
     {
       "phase": "claim",
       "claims": 2,
-      "recoveryMs": 155
+      "recoveryMs": 153
     },
     {
       "phase": "compute",
       "claims": 2,
-      "recoveryMs": 139
+      "recoveryMs": 142
     },
     {
       "phase": "publication",
       "claims": 1,
-      "recoveryMs": 74
+      "recoveryMs": 84
     },
     {
       "phase": "ack",
       "claims": 0,
-      "recoveryMs": 5
+      "recoveryMs": 7
     },
     {
       "phase": "scheduler",
       "claims": 2,
-      "recoveryMs": 175
+      "recoveryMs": 162
     },
     {
       "phase": "database_restart",
-      "recoveryMs": 1496
+      "recoveryMs": 1699
     }
   ],
-  "killAcknowledgmentMs": 255,
+  "killAcknowledgmentMs": 257,
   "backupKind": "isolated custom-format pg_dump with stale enabled control; runtime logins revoked before restore; forced disable and external authenticated erasure checkpoint before readmission"
 }
