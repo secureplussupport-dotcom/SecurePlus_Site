@@ -1,0 +1,355 @@
+{
+  "method": "Production fingerprints compared with local JSON objects via disposable PostgreSQL jsonb::text SHA-256; no private payload export",
+  "overrides": [
+    {
+      "id": "m013",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m015",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m020",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m025",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m027",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m031",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m048",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m070",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m105",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m130",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m200",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m287",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m309",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m402",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m404",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m420",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m432",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m433",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m437",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m443",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m679",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m690",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m706",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m707",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m708",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m709",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m710",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m711",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m712",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m713",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m714",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m715",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m716",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m717",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m718",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m719",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m720",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m721",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m722",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m723",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m724",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m725",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m726",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m727",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m728",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m729",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m730",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m731",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m732",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m733",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "m734",
+      "kind": "mcq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "p030",
+      "kind": "pbq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "p223",
+      "kind": "pbq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "p224",
+      "kind": "pbq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "p225",
+      "kind": "pbq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    },
+    {
+      "id": "p226",
+      "kind": "pbq",
+      "capturedSignatureMatches": true,
+      "payloadMatches": true
+    }
+  ],
+  "pbqs": [
+    {
+      "id": "p003",
+      "localAppQuestionHash": "d346c708d7ff921e65bfe11e634e81aed29f76f2cd4bbcab61e8bed231788441",
+      "appQuestionMatches": false,
+      "payloadMatches": false
+    },
+    {
+      "id": "p017",
+      "localAppQuestionHash": "4d7ab3d6ec392773e0683003ab5c4139e05305aa88f473f61bba4267faa9bc6f",
+      "appQuestionMatches": false,
+      "payloadMatches": false
+    }
+  ]
+}

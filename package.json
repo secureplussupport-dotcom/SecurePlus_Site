@@ -33,7 +33,9 @@
     "audit:learning-trusted-runtime": "node scripts/audit-trusted-learning-runtime.mjs",
     "audit:learning-operations": "node --test scripts/audit-learning-operations.mjs",
     "audit:learning-operations:database": "node scripts/rehearse-learning-operations.mjs",
-    "audit:learning-operations:cleanup": "node scripts/audit-learning-operations-cleanup.mjs"
+    "audit:learning-operations:cleanup": "node scripts/audit-learning-operations-cleanup.mjs",
+    "build:content-mapping": "node scripts/build-content-mapping.mjs",
+    "audit:content-mapping": "node --test scripts/audit-content-mapping.mjs && node scripts/build-content-mapping.mjs --check"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.105.3",

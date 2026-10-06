@@ -1,0 +1,2527 @@
+# Phase 2B-5 editorial decisions
+
+All decisions are OPEN. No entry is human-approved. Match IDs and source hashes to mapping-package.json before reviewing. Do not paste grading keys, option-indexed feedback, learner records or private payloads into this document.
+
+- **P0 pbq:p003 — private_variant**: Keep fallback and private revisions separate; review the later private publication before claiming complete mapping.
+- **P0 pbq:p017 — private_variant**: Keep fallback and private revisions separate; review the later private publication before claiming complete mapping.
+- **P0 private:pbq:p003 — private_source_review**: Review the exact private payload inside an approved secured environment; map the revision and compile its ID without adding grading content to review exports.
+- **P0 private:pbq:p017 — private_source_review**: Review the exact private payload inside an approved secured environment; map the revision and compile its ID without adding grading content to review exports.
+- **P1 continuity.bia — independent_family_shortage**: Commission or approve at least three genuinely independent scenario families before post-miss transfer claims.
+- **P1 intervention:daily-challenges — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:starter-deck — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:weak-area-deck — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 mcq:m001 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m002 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m003 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m004 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m005 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m006 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m007 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m008 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m009 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m010 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m011 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m012 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m013 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m014 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m015 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m016 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m017 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m018 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m019 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m020 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m021 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m022 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m023 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m024 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m025 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m026 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m027 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m028 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m029 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m030 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m031 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m032 — pilot_human_review**: Confirm or reject the existing pilot mapping against this exact revision; agent review is not human approval.
+- **P1 mcq:m033 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m034 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m035 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m036 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m037 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m038 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m039 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m040 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m041 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m042 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m043 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m044 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m045 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m046 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m047 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m048 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m049 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m050 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m051 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m052 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m053 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m054 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m055 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m056 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m057 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m058 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m059 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m060 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m061 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m062 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m063 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m064 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m065 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m066 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m067 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m068 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m069 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m070 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m071 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m072 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m073 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m074 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m075 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m076 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m077 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m078 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m079 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m080 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m081 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m082 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m083 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m084 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m085 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m086 — pilot_human_review**: Confirm or reject the existing pilot mapping against this exact revision; agent review is not human approval.
+- **P1 mcq:m087 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m088 — pilot_human_review**: Confirm or reject the existing pilot mapping against this exact revision; agent review is not human approval.
+- **P1 mcq:m089 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m090 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m091 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m092 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m093 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m094 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m095 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m096 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m097 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m098 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m099 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m100 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m101 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m102 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m103 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m104 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m105 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m106 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m107 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m108 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m109 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m110 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m111 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m112 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m113 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m114 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m115 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m116 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m117 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m118 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m119 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m120 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m121 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m122 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m123 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m124 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m125 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m126 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m127 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m128 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m129 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m130 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m131 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m132 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m133 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m134 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m135 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m136 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m137 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m138 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m139 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m140 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m141 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m142 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m143 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m144 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m145 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m147 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m148 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m149 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m151 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m152 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m153 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m154 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m155 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m157 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m158 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m159 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m160 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m161 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m163 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m165 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m166 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m168 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m169 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m170 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m171 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m172 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m173 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m174 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m175 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m176 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m177 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m179 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m180 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m181 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m182 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m183 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m184 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m185 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m186 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m187 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m188 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m189 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m190 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m191 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m193 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m194 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m195 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m196 — pilot_human_review**: Confirm or reject the existing pilot mapping against this exact revision; agent review is not human approval.
+- **P1 mcq:m198 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m200 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m201 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m202 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m203 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m204 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m205 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m206 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m207 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m208 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m210 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m211 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m212 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m214 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m215 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m216 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m217 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m218 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m221 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m222 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m224 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m226 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m227 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m229 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m232 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m234 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m235 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m238 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m241 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m242 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m243 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m244 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m248 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m250 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m251 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m252 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m253 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m256 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m258 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m259 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m260 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m261 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m262 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m266 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m267 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m268 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m270 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m271 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m272 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m275 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m278 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m280 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m282 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m283 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m284 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m285 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m286 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m287 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m288 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m290 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m291 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m292 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m294 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m296 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m298 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m299 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m305 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m306 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m312 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m314 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m318 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m319 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m321 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m322 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m333 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m334 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m340 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m343 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m349 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m352 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m355 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m356 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m361 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m366 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m371 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m373 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m374 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m376 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m379 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m389 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m393 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m398 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m399 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m401 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m402 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m403 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m404 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m405 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m406 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m407 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m408 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m410 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m411 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m413 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m416 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m417 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m418 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m420 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m423 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m425 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m426 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m427 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m432 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m433 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m439 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m441 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m442 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m443 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m451 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m456 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m502 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m601 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m602 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m603 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m604 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m605 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m606 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m607 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m608 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m609 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m610 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m611 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m612 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m613 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m614 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m615 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m616 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m617 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m618 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m619 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m620 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m621 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m622 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m623 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m624 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m625 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m626 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m627 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m628 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m629 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m630 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m631 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m632 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m633 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m634 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m635 — pilot_human_review**: Confirm or reject the existing pilot mapping against this exact revision; agent review is not human approval.
+- **P1 mcq:m636 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m637 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m638 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m639 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m640 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m641 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m642 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m643 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m644 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m645 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m646 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m647 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m648 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m649 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m650 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m651 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m652 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m653 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m654 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m655 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m656 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m657 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m658 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m659 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m660 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m705 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m706 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m707 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m708 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m709 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m710 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m711 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m712 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m713 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m714 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m715 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m717 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m718 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m721 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m722 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m723 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m724 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m725 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m726 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m727 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m728 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m729 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m730 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m731 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m733 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 mcq:m734 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 page:public/security-plus-acronyms/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-cryptography-practice/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-daily-challenge/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-domain-1-practice/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-domain-2-practice/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-domain-3-practice/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-domain-4-practice/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-domain-5-practice/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-exam-objectives/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-mcq-practice/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-pbq-practice/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-port-numbers/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-practice-questions/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-study-guide/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/security-plus-study-plan/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 page:public/sy0-601-vs-sy0-701/index.html — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 pbq:p001 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p002 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p003 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p004 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p004 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p005 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p005 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p006 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p006 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p007 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p007 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p008 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p008 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p009 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p010 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p011 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p011 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p012 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p012 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p013 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p014 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p015 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p016 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p017 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p018 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p018 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p019 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p019 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p020 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p021 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p022 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p022 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p023 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p024 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p024 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p025 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p026 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p027 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p028 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p029 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p029 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p030 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p030 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p031 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p031 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p032 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p033 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p034 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p035 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p035 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p036 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p036 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p037 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p037 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p038 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p039 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p040 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p041 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p041 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p042 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p043 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p043 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p044 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p045 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p046 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p046 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p047 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p048 — pilot_human_review**: Confirm or reject the existing pilot mapping against this exact revision; agent review is not human approval.
+- **P1 pbq:p049 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p050 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p050 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p051 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p052 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p052 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p054 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p054 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p055 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p056 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p056 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p057 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p058 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p060 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p061 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p061 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p062 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p062 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p064 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p066 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p067 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p067 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p068 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p069 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p069 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p070 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p073 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p073 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p074 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p075 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p077 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p077 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p078 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p079 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p079 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p080 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p082 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p082 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p083 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p083 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p084 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p085 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p085 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p086 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p089 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p094 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p095 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p095 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p096 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p099 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p211 — pilot_human_review**: Confirm or reject the existing pilot mapping against this exact revision; agent review is not human approval.
+- **P1 pbq:p223 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p223 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
+- **P1 pbq:p224 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p225 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p226 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 recovery.mtd — independent_family_shortage**: Commission or approve at least three genuinely independent scenario families before post-miss transfer claims.
+- **P1 recovery.mttr — independent_family_shortage**: Commission or approve at least three genuinely independent scenario families before post-miss transfer claims.
+- **P1 recovery.rpo — independent_family_shortage**: Commission or approve at least three genuinely independent scenario families before post-miss transfer claims.
+- **P1 recovery.rto — independent_family_shortage**: Commission or approve at least three genuinely independent scenario families before post-miss transfer claims.
+- **P1 sy0701.objective.1.1 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.1.2 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.1.3 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.1.4 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.2.1 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.2.2 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.2.3 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.2.4 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.2.5 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.3.1 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.3.2 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.3.3 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.3.4 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.4.1 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.4.2 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.4.3 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.4.4 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.4.5 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.4.6 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.4.7 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.4.8 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.4.9 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.5.1 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.5.2 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.5.3 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.5.4 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.5.5 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.objective.5.6 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.802-1x — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.aaa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.acl — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.aes-aes-256 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.aes — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ah — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ai — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.air-gap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ale — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.amplified-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.anonymization — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ap-wap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.api-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.api — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.application-whitelisting-blacklisting — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.aro — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.arp-poisoning — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.arp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.attack-surface — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.aup — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.av — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.bcp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.bec — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.bios — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.birthday-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.bloatware — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.bpa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.brute-force — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.buffer-overflow — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.byod-cope-cyod — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.byod — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ca — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.captcha — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.car — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.casb — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ccmp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.certificate — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.chain-of-custody — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cia-triad — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cia — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cio-cso — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cirt-cert — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cis — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cloud-responsibility-matrix — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cold-site — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.collision-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.command-injection — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.community-cloud — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.compensating-control — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.containment — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.control-plane — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.controller — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.coop — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.credential-replay — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.crl — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.csf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.csr — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.csrf-xsrf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ctf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cve — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cvss — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-at-rest — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-classification — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-controller — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-custodian-steward — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-in-transit-motion — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-in-use — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-masking-obfuscation — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-owner — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-ownership — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-plane — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-processor — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.data-subject — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ddos — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.deauthentication — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.defense-in-depth — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dep — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.des — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dhcp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dhe — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dictionary-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.digital-signature — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.directory-traversal — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dkim — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dll — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dlp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dmarc — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dmz — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dns-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dns-filtering — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dns — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dos — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.downgrade-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.drp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dumpster-diving — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.eap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.east-west-traffic — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ecc — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ecdhe — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ecdsa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.edr — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ef — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.efs-fde — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.eradication — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.esp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.evil-twin — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.extranet — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.faas — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.facl — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.false-negative — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.false-positive — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.fault-tolerance — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.federation — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.fim — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.firewall — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.firmware-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ftps-sftp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.gamification — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.gdpr — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.geographic-dispersal — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.governance — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.gpo — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.gpu — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ha — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hardening — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hashing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hdd-ssd — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hids-nids — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hipaa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hips-nips — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hmac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hot-site — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hsm — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hybrid-cloud — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.iaas-paas-saas — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.iac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.icmp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ics — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.idp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.impersonation — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.indicator-of-compromise — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.injection-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.injection — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.intranet — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.iot — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ipfix — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ipsec — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.irp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.isms — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.iso — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.isp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.jailbreaking-rooting — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.jit — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.jump-box-bastion-host — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.kerberos — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.keylogger — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.lan — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ldap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.leap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.least-privilege-principle — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.least-privilege — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.legal-hold — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.load-balancing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.log-aggregation — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.log-integrity — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.logic-bomb — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.mac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.malicious-update — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.mdm — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.memory-dump — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.memory-injection — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.mfa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.microsegmentation — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ml — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.moa-mou — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.mpls — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.msa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.mssp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.mtbf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.mttf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.nat-pat — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.nda — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.netflow — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.nist — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.north-south-traffic — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ntp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.oauth — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ocsp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.oid — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.oidc — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.on-path-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.order-of-volatility — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.os — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ot-ics — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.p2p — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pam — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.password-spraying — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.passwordless — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.patch-management — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pci-dss — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pdu-ups — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pem — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.perimeter-security — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pfs — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.phi — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.phishing-simulations — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.phishing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.physical-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.picerl — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pii — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.piv — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pkcs — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pki — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.playbook-runbook — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.policy — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pretexting — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.private-cloud — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.privilege-escalation — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.processor — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.provisioning-deprovisioning — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.provisioning — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pseudo-anonymization — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.psk — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.public-cloud — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pup — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.qualitative-risk-analysis — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.quantitative-risk-analysis — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ra — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.race-condition — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.radius — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.raid-0 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.raid-1 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.raid-5 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.raid-6 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.raid — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.rainbow-table — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ransomware — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.rat — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.rbac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.rc4 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.rdp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.reflected-network-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.rfid-nfc-cloning — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.right-to-audit-clause — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.risk-acceptance — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.risk-appetite — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.risk-avoidance — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.risk-mitigation-reduction — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.risk-register — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.risk-tolerance — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.risk-transference — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.rogue-ap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.roi — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.role-based-security-training — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.rootkit — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.rsa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.salting — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.saml — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sandboxing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sase — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.scada — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.scap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.scep — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.screened-subnet — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sd-wan — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sdk — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sdlc-sdlm — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sdn — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.secure-baseline — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.security-steering-committee — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sed — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.segmentation — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.seh — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.selinux — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.session-token — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sha — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.shared-responsibility-model — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.shoulder-surfing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.side-loading — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.siem — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sla — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sle — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.smishing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.smtp-smtps — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.snmp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.soar — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.soc — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sow — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.spear-phishing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.spyware — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sqli — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.srtp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ssh — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ssl-tls — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sso — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ssrf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.stix — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.supply-chain-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.supply-chain-risk — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.swg — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.syslog — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.tacacs — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.tailgating — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.taxii — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.tcp-ip — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.threat-actor — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.tls — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.tokenization — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.tou — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.tpm — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.trojan — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.typosquatting — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ueba — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.uem — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.vendor-risk-assessment — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.virus — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.vishing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.vlan-hopping — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.vlan — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.vm-escape — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.vm — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.vpc — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.vpn — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.vulnerability-scan — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.vulnerability-scanning — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.waf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.warm-site — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.watering-hole — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.whaling — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.wids-wips — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.wireless-jamming — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.worm — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.wpa-wep — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.wpa3 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.xdr — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.xss — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.zero-trust — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.zta — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P2 check:access-control-pam — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:api-session-browser-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:cloud-containers-automation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:crypto-modes-pqc-transition — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:data-classification-lifecycle — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:data-legal-responsibility — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:dns-time-management-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:endpoint-mobile-hardening — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:enterprise-network-segmentation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:federation-modern-auth — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:forensics-recovery — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:governance-change-vendors — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:identity-zero-trust — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:incident-response-monitoring — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:ipsec-secure-media — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:kerberos-aaa-enterprise-auth — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:keys-passwords-encryption — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:malware-indicators-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:network-defense-architecture — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:network-protocols-ports — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:ot-iot-cyber-physical — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:pki-email-trust — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:platform-cloud-hardening — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:resilience-assets-physical — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:risk-resilience-governance — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:secure-software-applications — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:security-foundations-controls — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:security-operations-automation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:software-memory-concurrency — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:threat-actors-surfaces — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:web-social-dns-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 check:wifi-access-defense — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:application-software-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter3-architecture-models — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter3-architecture-resilience-acronyms — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter3-cloud-deployment-models — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter3-data-lifecycle-protection — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter3-network-design-zones — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter3-resilience-recovery — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter4-forensics-response — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter4-hardening-baselines — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter4-monitoring-logging — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter4-vulnerability-access-ops — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter5-awareness-training — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter5-governance-data-roles — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter5-risk-analysis-response — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:chapter5-vendor-supply-chain — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:cloud-endpoint-infrastructure — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:cloud-mobile-hardware-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:crypto-keys-pki — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:cryptographic-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:identity-authentication — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:malware-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:network-architecture-protocols — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:network-wireless-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:password-credential-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:risk-governance-business — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:security-operations-response — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:security-principles-access-models — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:social-engineering-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 deck:threat-intel-protection — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m001 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m002 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m003 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m004 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m005 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m006 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m007 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m008 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m009 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m010 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m011 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m012 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m013 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m014 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m015 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m016 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m017 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m018 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m019 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m020 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m021 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m022 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m023 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m024 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m025 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m026 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m027 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m028 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m029 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m030 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m031 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m032 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m033 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m034 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m035 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m036 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m037 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m038 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m039 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m040 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m041 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m042 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m043 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m044 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m045 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m046 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m047 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m048 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m049 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m050 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m051 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m052 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m053 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m054 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m055 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m056 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m057 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m058 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m059 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m060 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m061 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m062 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m063 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m064 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m065 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m066 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m067 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m068 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m069 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m070 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m071 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m072 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m073 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m074 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m075 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m076 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m077 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m078 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m079 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m080 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m081 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m082 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m083 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m084 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m085 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m086 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m087 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m088 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m089 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m090 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m091 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m092 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m093 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m094 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m095 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m096 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m097 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m098 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m099 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m100 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m101 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m102 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m103 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m104 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m105 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m106 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m107 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m108 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m109 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m110 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m111 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m112 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m113 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m114 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m115 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m116 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m117 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m118 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m119 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m120 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m121 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m122 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m123 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m124 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m125 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m126 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m127 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m128 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m129 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m130 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m131 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m132 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m133 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m134 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m135 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m136 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m137 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m138 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m139 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m140 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m141 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m142 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m143 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m144 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m145 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m147 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m148 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m149 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m151 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m152 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m153 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m154 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m155 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m157 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m158 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m159 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m160 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m161 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m163 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m165 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m166 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m168 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m169 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m170 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m171 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m172 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m173 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m174 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m175 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m176 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m177 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m179 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m180 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m181 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m182 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m183 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m184 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m185 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m186 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m187 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m188 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m189 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m190 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m191 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m193 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m194 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m195 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m196 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m198 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m200 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m201 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m202 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m203 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m204 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m205 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m206 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m207 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m208 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m210 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m211 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m212 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m214 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m215 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m216 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m217 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m218 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m221 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m222 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m224 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m226 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m227 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m229 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m232 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m234 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m235 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m238 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m241 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m242 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m243 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m244 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m248 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m250 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m251 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m252 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m253 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m256 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m258 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m259 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m260 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m261 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m262 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m266 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m267 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m268 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m270 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m271 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m272 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m275 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m278 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m280 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m282 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m283 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m284 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m285 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m286 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m287 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m288 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m290 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m291 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m292 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m294 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m296 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m298 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m299 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m305 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m306 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m312 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m314 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m318 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m319 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m321 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m322 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m333 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m334 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m340 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m343 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m349 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m352 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m355 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m356 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m361 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m366 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m371 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m373 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m374 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m376 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m379 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m389 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m393 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m398 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m399 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m401 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m402 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m403 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m404 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m405 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m406 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m407 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m408 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m410 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m411 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m413 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m416 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m417 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m418 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m420 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m423 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m425 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m426 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m427 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m432 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m433 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m439 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m441 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m442 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m443 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m451 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m456 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m502 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m601 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m602 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m603 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m604 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m605 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m606 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m607 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m608 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m609 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m610 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m611 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m612 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m613 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m614 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m615 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m616 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m617 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m618 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m619 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m620 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m621 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m622 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m623 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m624 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m625 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m626 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m627 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m628 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m629 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m630 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m631 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m632 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m633 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m634 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m635 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m636 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m637 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m638 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m639 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m640 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m641 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m642 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m643 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m644 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m645 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m646 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m647 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m648 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m649 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m650 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m651 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m652 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m653 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m654 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m655 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m656 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m657 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m658 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m659 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m660 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m705 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m706 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m707 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m708 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m709 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m710 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m711 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m712 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m713 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m714 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m715 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m717 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m718 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m721 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m722 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m723 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m724 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m725 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m726 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m727 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m728 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m729 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m730 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m731 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m733 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:mcq:m734 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p001 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p002 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p003 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p004 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p005 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p006 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p007 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p008 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p009 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p010 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p011 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p012 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p013 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p014 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p015 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p016 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p017 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p018 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p019 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p020 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p021 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p022 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p023 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p024 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p025 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p026 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p027 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p028 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p029 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p030 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p031 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p032 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p033 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p034 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p035 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p036 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p037 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p038 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p039 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p040 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p041 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p042 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p043 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p044 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p045 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p046 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p047 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p048 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p049 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p050 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p051 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p052 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p054 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p055 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p056 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p057 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p058 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p060 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p061 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p062 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p064 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p066 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p067 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p068 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p069 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p070 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p073 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p074 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p075 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p077 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p078 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p079 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p080 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p082 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p083 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p084 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p085 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p086 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p089 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p094 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p095 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p096 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p099 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p211 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p223 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p224 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p225 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:pbq:p226 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-api-attack-application-programming-interface-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-buffer-overflow-buffer-overflow — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-command-injection-command-injection — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-csrf-xsrf-cross-site-request-forgery — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-directory-traversal-directory-traversal — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-injection-attack-injection-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-malicious-update-malicious-software-update — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-memory-injection-memory-injection — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-privilege-escalation-privilege-escalation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-race-condition-time-of-check-time-of-use-race-condition — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-sqli-sql-injection — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-ssrf-server-side-request-forgery — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-application-software-attacks-xss-cross-site-scripting — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-chapter3-architecture-resilience-acronyms-faas-function-as-a-service — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-chapter3-architecture-resilience-acronyms-ha-high-availability — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-chapter3-architecture-resilience-acronyms-raid-redundant-array-of-independent-disks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-chapter3-architecture-resilience-acronyms-zta-zero-trust-architecture — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-ai-artificial-intelligence — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-api-application-programming-interface — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-bios-basic-input-output-system — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-byod-cope-cyod-bring-your-own-device-corporate-owned-personally-enabled-choose-your-own-device — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-casb-cloud-access-security-broker — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-dep-data-execution-prevention — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-dll-dynamic-link-library — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-edr-endpoint-detection-and-response — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-efs-fde-encrypting-file-system-full-disk-encryption — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-gpu-graphics-processing-unit — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-hdd-ssd-hard-disk-drive-solid-state-drive — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-hids-nids-host-based-network-based-intrusion-detection-system — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-hips-nips-host-based-network-based-intrusion-prevention-system — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-iaas-paas-saas-infrastructure-platform-software-as-a-service — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-iac-infrastructure-as-code — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-iot-internet-of-things — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-mac-media-access-control-address — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-mdm-mobile-device-management — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-ml-machine-learning — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-os-operating-system — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-ot-ics-operational-technology-industrial-control-systems — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-pdu-ups-power-distribution-unit-uninterruptible-power-supply — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-sase-secure-access-service-edge — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-scada-supervisory-control-and-data-acquisition — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-sdk-software-development-kit — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-sdlc-sdlm-software-development-life-cycle-software-development-life-cycle-methodology — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-sed-self-encrypting-drive — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-seh-structured-exception-handler — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-selinux-security-enhanced-linux — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-soc-system-on-chip — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-uem-unified-endpoint-management — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-endpoint-infrastructure-vm-virtual-machine — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-mobile-hardware-attacks-firmware-attack-firmware-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-mobile-hardware-attacks-jailbreaking-rooting-jailbreaking-rooting — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-mobile-hardware-attacks-physical-attack-physical-and-environmental-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-mobile-hardware-attacks-side-loading-side-loading — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-mobile-hardware-attacks-supply-chain-attack-supply-chain-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cloud-mobile-hardware-attacks-vm-escape-virtual-machine-escape — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-aes-aes-256-advanced-encryption-standard — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-ah-authentication-header — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-ca-certificate-authority — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-crl-certificate-revocation-list — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-csr-certificate-signing-request — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-des-data-encryption-standard — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-dhe-diffie-hellman-ephemeral — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-ecc-elliptic-curve-cryptography — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-ecdhe-elliptic-curve-diffie-hellman-ephemeral — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-ecdsa-elliptic-curve-digital-signature-algorithm — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-hmac-hash-based-message-authentication-code — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-hsm-hardware-security-module — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-ocsp-online-certificate-status-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-pem-privacy-enhanced-mail — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-pfs-perfect-forward-secrecy — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-pkcs-public-key-cryptography-standards — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-pki-public-key-infrastructure — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-psk-pre-shared-key — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-ra-registration-authority — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-rc4-rivest-cipher-4 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-rsa-rivest-shamir-adleman — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-scep-simple-certificate-enrollment-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-sha-secure-hash-algorithm — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-crypto-keys-pki-tpm-trusted-platform-module — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cryptographic-attacks-birthday-attack-birthday-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cryptographic-attacks-collision-attack-collision-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-cryptographic-attacks-downgrade-attack-downgrade-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-captcha-completely-automated-public-turing-test-to-tell-computers-and-humans-apart — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-eap-extensible-authentication-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-idp-identity-provider — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-leap-lightweight-extensible-authentication-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-mfa-multi-factor-authentication — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-oauth-open-authorization — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-oidc-openid-connect — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-pap-password-authentication-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-piv-personal-identity-verification — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-radius-remote-authentication-dial-in-user-service — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-saml-security-assertion-markup-language — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-sso-single-sign-on — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-identity-authentication-tacacs-terminal-access-controller-access-control-system-plus — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-malware-attacks-bloatware-bloatware — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-malware-attacks-keylogger-keylogger — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-malware-attacks-logic-bomb-logic-bomb — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-malware-attacks-pup-potentially-unwanted-program — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-malware-attacks-ransomware-ransomware — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-malware-attacks-rat-remote-access-trojan — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-malware-attacks-rootkit-rootkit — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-malware-attacks-spyware-spyware — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-malware-attacks-trojan-trojan — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-malware-attacks-virus-virus — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-malware-attacks-worm-worm — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-ap-wap-access-point-wireless-access-point — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-arp-address-resolution-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-dhcp-dynamic-host-configuration-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-dmz-demilitarized-zone — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-dns-domain-name-system — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-facl-file-system-access-control-list — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-ftps-sftp-file-transfer-protocol-secure-ssh-file-transfer-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-icmp-internet-control-message-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-ipsec-internet-protocol-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-lan-local-area-network — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-ldap-lightweight-directory-access-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-mpls-multiprotocol-label-switching — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-nat-pat-network-address-translation-port-address-translation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-ntp-network-time-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-p2p-peer-to-peer — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-rdp-remote-desktop-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-sd-wan-software-defined-wide-area-network — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-sdn-software-defined-networking — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-smtp-smtps-simple-mail-transfer-protocol-secure-smtp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-snmp-simple-network-management-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-srtp-secure-real-time-transport-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-ssh-secure-shell — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-ssl-tls-secure-sockets-layer-transport-layer-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-tcp-ip-transmission-control-protocol-internet-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-vlan-virtual-local-area-network — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-vpc-virtual-private-cloud — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-vpn-virtual-private-network — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-architecture-protocols-wpa-wep-wi-fi-protected-access-wired-equivalent-privacy — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-amplified-attack-amplified-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-arp-poisoning-arp-poisoning-spoofing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-ddos-distributed-denial-of-service — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-deauthentication-disassociation-deauthentication — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-dns-attack-domain-name-system-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-dos-denial-of-service — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-evil-twin-evil-twin — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-on-path-attack-on-path-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-reflected-network-attack-reflected-network-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-rfid-nfc-cloning-rfid-nfc-tag-cloning — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-rogue-ap-rogue-access-point — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-vlan-hopping-vlan-hopping — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-network-wireless-attacks-wireless-jamming-wireless-jamming — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-password-credential-attacks-brute-force-brute-force-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-password-credential-attacks-credential-replay-credential-replay — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-password-credential-attacks-dictionary-attack-dictionary-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-password-credential-attacks-password-spraying-password-spraying — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-password-credential-attacks-rainbow-table-rainbow-table-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-ale-annualized-loss-expectancy — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-aro-annualized-rate-of-occurrence — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-bcp-business-continuity-plan — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-bia-business-impact-analysis — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-bpa-business-partners-agreement — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-cis-center-for-internet-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-coop-continuity-of-operations-plan — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-csf-cybersecurity-framework — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-ctf-capture-the-flag — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-ef-exposure-factor — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-gdpr-general-data-protection-regulation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-hipaa-health-insurance-portability-and-accountability-act — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-isms-information-security-management-system — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-iso-international-organization-for-standardization — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-isp-internet-service-provider — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-moa-mou-memorandum-of-agreement-memorandum-of-understanding — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-msa-master-service-agreement — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-mtbf-mean-time-between-failures — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-mttf-mean-time-to-failure — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-mttr-mean-time-to-repair-recover — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-nda-non-disclosure-agreement — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-nist-national-institute-of-standards-and-technology — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-oid-object-identifier — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-pci-dss-payment-card-industry-data-security-standard — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-phi-protected-health-information — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-pii-personally-identifiable-information — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-roi-return-on-investment — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-rpo-recovery-point-objective — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-rto-recovery-time-objective — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-sla-service-level-agreement — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-sle-single-loss-expectancy — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-risk-governance-business-sow-statement-of-work — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-car-corrective-action-report — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-cio-cso-chief-information-officer-chief-security-officer — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-cirt-cert-computer-incident-response-team-computer-emergency-response-team — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-cve-common-vulnerabilities-and-exposures — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-cvss-common-vulnerability-scoring-system — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-drp-disaster-recovery-plan — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-gpo-group-policy-object — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-ipfix-internet-protocol-flow-information-export — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-irp-incident-response-plan — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-jit-just-in-time-access — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-mssp-managed-security-service-provider — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-pam-privileged-access-management — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-picerl-preparation-identification-containment-eradication-recovery-and-lessons-learned — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-siem-security-information-and-event-management — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-soar-security-orchestration-automation-and-response — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-soc-security-operations-center — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-ueba-user-and-entity-behavior-analytics — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-operations-response-xdr-extended-detection-and-response — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-principles-access-models-aaa-authentication-authorization-and-accounting — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-principles-access-models-acl-access-control-list — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-principles-access-models-aup-acceptable-use-policy — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-principles-access-models-cia-confidentiality-integrity-and-availability — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-principles-access-models-dac-discretionary-access-control — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-principles-access-models-mac-mandatory-access-control — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-principles-access-models-rbac-role-based-access-control — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-principles-access-models-rbac-rule-based-access-control — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-security-principles-access-models-tou-time-of-use — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-bec-business-email-compromise — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-dumpster-diving-dumpster-diving — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-impersonation-impersonation-brand-impersonation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-phishing-phishing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-pretexting-pretexting — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-shoulder-surfing-shoulder-surfing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-smishing-sms-phishing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-spear-phishing-spear-phishing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-tailgating-tailgating-piggybacking — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-typosquatting-typosquatting — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-vishing-voice-phishing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-watering-hole-watering-hole-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-social-engineering-attacks-whaling-whaling — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-threat-intel-protection-av-antivirus — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-threat-intel-protection-dkim-domainkeys-identified-mail — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-threat-intel-protection-dlp-data-loss-prevention — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-threat-intel-protection-dmarc-domain-based-message-authentication-reporting-and-conformance — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-threat-intel-protection-fim-file-integrity-monitoring — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-threat-intel-protection-scap-security-content-automation-protocol — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-threat-intel-protection-stix-structured-threat-information-expression — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-threat-intel-protection-swg-secure-web-gateway — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-threat-intel-protection-taxii-trusted-automated-exchange-of-indicator-information — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-threat-intel-protection-waf-web-application-firewall — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-acronym-threat-intel-protection-wids-wips-wireless-intrusion-detection-prevention-system — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-architecture-models-control-plane — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-architecture-models-data-plane — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-architecture-models-defense-in-depth — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-architecture-models-microsegmentation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-architecture-models-perimeter-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-cloud-deployment-models-community-cloud — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-cloud-deployment-models-hybrid-cloud — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-cloud-deployment-models-private-cloud — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-cloud-deployment-models-public-cloud — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-cloud-deployment-models-shared-responsibility-model — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-data-lifecycle-protection-anonymization — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-data-lifecycle-protection-data-at-rest — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-data-lifecycle-protection-data-in-transit-motion — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-data-lifecycle-protection-data-in-use — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-data-lifecycle-protection-data-masking-obfuscation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-data-lifecycle-protection-pseudo-anonymization — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-data-lifecycle-protection-tokenization — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-network-design-zones-air-gap — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-network-design-zones-east-west-traffic — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-network-design-zones-extranet — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-network-design-zones-intranet — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-network-design-zones-jump-box-bastion-host — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-network-design-zones-north-south-traffic — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-network-design-zones-screened-subnet — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-resilience-recovery-cold-site — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-resilience-recovery-fault-tolerance — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-resilience-recovery-geographic-dispersal — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-resilience-recovery-hot-site — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-resilience-recovery-load-balancing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-resilience-recovery-raid-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-resilience-recovery-raid-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-resilience-recovery-raid-5 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-resilience-recovery-raid-6 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter3-resilience-recovery-warm-site — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-forensics-response-chain-of-custody — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-forensics-response-containment — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-forensics-response-eradication — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-forensics-response-legal-hold — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-forensics-response-memory-dump — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-forensics-response-order-of-volatility — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-forensics-response-playbook-runbook — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-hardening-baselines-application-whitelisting-blacklisting — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-hardening-baselines-hardening — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-hardening-baselines-sandboxing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-hardening-baselines-secure-baseline — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-monitoring-logging-log-aggregation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-monitoring-logging-log-integrity — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-monitoring-logging-netflow — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-monitoring-logging-syslog — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-vulnerability-access-ops-compensating-control — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-vulnerability-access-ops-false-negative — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-vulnerability-access-ops-false-positive — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-vulnerability-access-ops-least-privilege-principle — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-vulnerability-access-ops-patch-management — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-vulnerability-access-ops-provisioning-deprovisioning — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter4-vulnerability-access-ops-vulnerability-scanning — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-awareness-training-gamification — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-awareness-training-phishing-simulations — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-awareness-training-role-based-security-training — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-governance-data-roles-data-controller — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-governance-data-roles-data-custodian-steward — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-governance-data-roles-data-owner — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-governance-data-roles-data-ownership — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-governance-data-roles-data-processor — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-governance-data-roles-governance — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-governance-data-roles-security-steering-committee — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-risk-analysis-response-qualitative-risk-analysis — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-risk-analysis-response-quantitative-risk-analysis — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-risk-analysis-response-risk-acceptance — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-risk-analysis-response-risk-appetite — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-risk-analysis-response-risk-avoidance — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-risk-analysis-response-risk-mitigation-reduction — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-risk-analysis-response-risk-register — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-risk-analysis-response-risk-tolerance — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-risk-analysis-response-risk-transference — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-vendor-supply-chain-right-to-audit-clause — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-vendor-supply-chain-supply-chain-risk — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 flashcard:sy0701-term-chapter5-vendor-supply-chain-vendor-risk-assessment — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:daily-challenges — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:starter-deck — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:weak-area-deck — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:access-control-pam — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:api-session-browser-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:cloud-containers-automation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:crypto-modes-pqc-transition — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:data-classification-lifecycle — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:data-legal-responsibility — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:dns-time-management-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:endpoint-mobile-hardening — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:enterprise-network-segmentation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:federation-modern-auth — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:forensics-recovery — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:governance-change-vendors — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:identity-zero-trust — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:incident-response-monitoring — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:ipsec-secure-media — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:kerberos-aaa-enterprise-auth — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:keys-passwords-encryption — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:malware-indicators-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:network-defense-architecture — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:network-protocols-ports — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:ot-iot-cyber-physical — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:pki-email-trust — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:platform-cloud-hardening — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:resilience-assets-physical — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:risk-resilience-governance — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:secure-software-applications — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:security-foundations-controls — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:security-operations-automation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:software-memory-concurrency — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:threat-actors-surfaces — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:web-social-dns-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 keywords:wifi-access-defense — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:access-control-pam — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:api-session-browser-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:cloud-containers-automation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:crypto-modes-pqc-transition — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:data-classification-lifecycle — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:data-legal-responsibility — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:dns-time-management-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:endpoint-mobile-hardening — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:enterprise-network-segmentation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:federation-modern-auth — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:forensics-recovery — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:governance-change-vendors — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:identity-zero-trust — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:incident-response-monitoring — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:ipsec-secure-media — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:kerberos-aaa-enterprise-auth — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:keys-passwords-encryption — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:malware-indicators-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:network-defense-architecture — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:network-protocols-ports — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:ot-iot-cyber-physical — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:pki-email-trust — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:platform-cloud-hardening — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:resilience-assets-physical — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:risk-resilience-governance — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:secure-software-applications — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:security-foundations-controls — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:security-operations-automation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:software-memory-concurrency — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:threat-actors-surfaces — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:web-social-dns-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 lesson:wifi-access-defense — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-acronyms/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-cryptography-practice/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-daily-challenge/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-domain-1-practice/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-domain-2-practice/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-domain-3-practice/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-domain-4-practice/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-domain-5-practice/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-exam-objectives/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-mcq-practice/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-pbq-practice/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-port-numbers/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-practice-questions/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-study-guide/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/security-plus-study-plan/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 page:public/sy0-601-vs-sy0-701/index.html — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:access-control-pam:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:access-control-pam:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:access-control-pam:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:api-session-browser-security:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:api-session-browser-security:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:api-session-browser-security:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:cloud-containers-automation:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:cloud-containers-automation:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:cloud-containers-automation:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:crypto-modes-pqc-transition:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:crypto-modes-pqc-transition:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:crypto-modes-pqc-transition:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:data-classification-lifecycle:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:data-classification-lifecycle:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:data-classification-lifecycle:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:data-legal-responsibility:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:data-legal-responsibility:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:data-legal-responsibility:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:dns-time-management-security:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:dns-time-management-security:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:dns-time-management-security:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:endpoint-mobile-hardening:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:endpoint-mobile-hardening:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:endpoint-mobile-hardening:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:enterprise-network-segmentation:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:enterprise-network-segmentation:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:enterprise-network-segmentation:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:federation-modern-auth:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:federation-modern-auth:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:federation-modern-auth:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:forensics-recovery:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:forensics-recovery:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:forensics-recovery:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:governance-change-vendors:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:governance-change-vendors:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:governance-change-vendors:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:identity-zero-trust:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:identity-zero-trust:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:identity-zero-trust:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:incident-response-monitoring:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:incident-response-monitoring:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:incident-response-monitoring:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:ipsec-secure-media:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:ipsec-secure-media:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:ipsec-secure-media:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:kerberos-aaa-enterprise-auth:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:kerberos-aaa-enterprise-auth:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:kerberos-aaa-enterprise-auth:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:keys-passwords-encryption:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:keys-passwords-encryption:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:keys-passwords-encryption:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:malware-indicators-attacks:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:malware-indicators-attacks:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:malware-indicators-attacks:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:network-defense-architecture:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:network-defense-architecture:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:network-defense-architecture:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:network-protocols-ports:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:network-protocols-ports:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:network-protocols-ports:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:ot-iot-cyber-physical:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:ot-iot-cyber-physical:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:ot-iot-cyber-physical:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:pki-email-trust:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:pki-email-trust:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:pki-email-trust:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:platform-cloud-hardening:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:platform-cloud-hardening:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:platform-cloud-hardening:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:resilience-assets-physical:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:resilience-assets-physical:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:resilience-assets-physical:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:risk-resilience-governance:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:risk-resilience-governance:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:risk-resilience-governance:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:secure-software-applications:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:secure-software-applications:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:secure-software-applications:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:security-foundations-controls:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:security-foundations-controls:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:security-foundations-controls:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:security-operations-automation:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:security-operations-automation:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:security-operations-automation:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:software-memory-concurrency:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:software-memory-concurrency:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:software-memory-concurrency:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:threat-actors-surfaces:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:threat-actors-surfaces:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:threat-actors-surfaces:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:web-social-dns-attacks:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:web-social-dns-attacks:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:web-social-dns-attacks:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:wifi-access-defense:practice-keyword-0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:wifi-access-defense:practice-keyword-1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 practice:wifi-access-defense:practice-keyword-2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 private:explanation:pbq:p003 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 private:explanation:pbq:p017 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 recovery.mtd — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 recovery.mttr — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 section:access-control-pam:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:access-control-pam:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:access-control-pam:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:api-session-browser-security:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:api-session-browser-security:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:api-session-browser-security:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:api-session-browser-security:3 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:cloud-containers-automation:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:cloud-containers-automation:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:cloud-containers-automation:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:cloud-containers-automation:3 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:cloud-containers-automation:4 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:crypto-modes-pqc-transition:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:crypto-modes-pqc-transition:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:crypto-modes-pqc-transition:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:crypto-modes-pqc-transition:3 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:data-classification-lifecycle:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:data-classification-lifecycle:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:data-classification-lifecycle:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:data-legal-responsibility:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:data-legal-responsibility:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:data-legal-responsibility:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:dns-time-management-security:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:dns-time-management-security:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:dns-time-management-security:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:dns-time-management-security:3 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:endpoint-mobile-hardening:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:endpoint-mobile-hardening:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:endpoint-mobile-hardening:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:enterprise-network-segmentation:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:enterprise-network-segmentation:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:enterprise-network-segmentation:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:federation-modern-auth:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:federation-modern-auth:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:forensics-recovery:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:forensics-recovery:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:forensics-recovery:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:governance-change-vendors:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:governance-change-vendors:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:governance-change-vendors:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:identity-zero-trust:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:identity-zero-trust:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:identity-zero-trust:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:incident-response-monitoring:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:incident-response-monitoring:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:incident-response-monitoring:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:incident-response-monitoring:3 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:incident-response-monitoring:4 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:ipsec-secure-media:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:ipsec-secure-media:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:kerberos-aaa-enterprise-auth:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:kerberos-aaa-enterprise-auth:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:kerberos-aaa-enterprise-auth:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:keys-passwords-encryption:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:keys-passwords-encryption:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:keys-passwords-encryption:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:keys-passwords-encryption:3 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:malware-indicators-attacks:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:malware-indicators-attacks:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:malware-indicators-attacks:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:network-defense-architecture:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:network-defense-architecture:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:network-defense-architecture:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:network-protocols-ports:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:network-protocols-ports:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:network-protocols-ports:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:ot-iot-cyber-physical:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:ot-iot-cyber-physical:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:ot-iot-cyber-physical:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:ot-iot-cyber-physical:3 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:pki-email-trust:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:pki-email-trust:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:platform-cloud-hardening:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:platform-cloud-hardening:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:platform-cloud-hardening:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:resilience-assets-physical:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:resilience-assets-physical:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:resilience-assets-physical:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:risk-resilience-governance:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:risk-resilience-governance:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:risk-resilience-governance:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:risk-resilience-governance:3 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:risk-resilience-governance:4 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:secure-software-applications:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:secure-software-applications:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:secure-software-applications:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:security-foundations-controls:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:security-foundations-controls:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:security-foundations-controls:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:security-foundations-controls:3 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:security-operations-automation:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:security-operations-automation:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:security-operations-automation:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:security-operations-automation:3 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:software-memory-concurrency:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:software-memory-concurrency:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:software-memory-concurrency:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:threat-actors-surfaces:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:threat-actors-surfaces:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:threat-actors-surfaces:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:threat-actors-surfaces:3 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:web-social-dns-attacks:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:web-social-dns-attacks:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:web-social-dns-attacks:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:wifi-access-defense:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 section:wifi-access-defense:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 sy0701.objective.1.1 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.1.1 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.1.2 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.1.2 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.1.3 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.1.3 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.1.4 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.1.4 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.2.1 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.2.1 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.2.2 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.2.2 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.2.3 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.2.3 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.2.4 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.2.4 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.2.5 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.2.5 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.3.1 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.3.1 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.3.2 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.3.2 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.3.3 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.3.3 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.3.4 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.3.4 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.4.1 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.4.1 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.4.2 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.4.2 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.4.3 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.4.3 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.4.4 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.4.4 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.4.5 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.4.5 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.4.6 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.4.6 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.4.7 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.4.7 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.4.8 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.4.8 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.4.9 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.4.9 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.5.1 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.5.1 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.5.2 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.5.2 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.5.3 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.5.3 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.5.4 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.5.4 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.5.5 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.5.5 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.objective.5.6 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.objective.5.6 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.802-1x — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.802-1x — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.aaa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.acl — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.aes-aes-256 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.aes — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.aes — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ah — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ai — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.air-gap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ale — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.amplified-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.anonymization — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ap-wap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.api-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.api — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.application-whitelisting-blacklisting — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.aro — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.arp-poisoning — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.arp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.attack-surface — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.attack-surface — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.aup — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.av — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.bcp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.bec — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.bios — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.birthday-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.bloatware — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.bpa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.brute-force — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.buffer-overflow — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.byod-cope-cyod — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.byod — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.byod — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ca — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.captcha — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.car — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.casb — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ccmp — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.ccmp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.certificate — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.certificate — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.chain-of-custody — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cia-triad — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.cia-triad — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cia — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cio-cso — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cirt-cert — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cis — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cloud-responsibility-matrix — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.cloud-responsibility-matrix — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cold-site — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.collision-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.command-injection — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.community-cloud — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.compensating-control — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.containment — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.control-plane — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.controller — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.controller — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.coop — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.credential-replay — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.crl — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.csf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.csr — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.csrf-xsrf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ctf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cve — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cvss — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-at-rest — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-classification — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.data-classification — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-controller — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-custodian-steward — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-in-transit-motion — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-in-use — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-masking-obfuscation — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-owner — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-ownership — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-plane — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-processor — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.data-subject — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.data-subject — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ddos — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.deauthentication — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.defense-in-depth — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dep — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.des — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dhcp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dhe — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dictionary-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.digital-signature — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.digital-signature — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.directory-traversal — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dkim — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dll — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dlp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dmarc — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dmz — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dns-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dns-filtering — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.dns-filtering — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dns — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dos — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.downgrade-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.drp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dumpster-diving — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.eap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.east-west-traffic — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ecc — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ecdhe — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ecdsa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.edr — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ef — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.efs-fde — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.eradication — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.esp — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.esp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.evil-twin — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.extranet — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.faas — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.facl — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.false-negative — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.false-positive — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.fault-tolerance — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.federation — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.federation — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.fim — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.firewall — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.firewall — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.firmware-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ftps-sftp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.gamification — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.gdpr — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.geographic-dispersal — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.governance — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.gpo — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.gpu — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ha — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hardening — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hashing — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.hashing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hdd-ssd — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hids-nids — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hipaa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hips-nips — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hmac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hot-site — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hsm — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hybrid-cloud — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.iaas-paas-saas — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.iac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.icmp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ics — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.ics — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.idp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.impersonation — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.indicator-of-compromise — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.indicator-of-compromise — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.injection-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.injection — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.injection — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.intranet — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.iot — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ipfix — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ipsec — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.irp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.isms — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.iso — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.isp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.jailbreaking-rooting — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.jit — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.jump-box-bastion-host — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.kerberos — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.kerberos — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.keylogger — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.lan — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ldap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.leap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.least-privilege-principle — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.least-privilege — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.least-privilege — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.legal-hold — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.load-balancing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.log-aggregation — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.log-integrity — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.logic-bomb — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.mac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.malicious-update — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.mdm — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.memory-dump — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.memory-injection — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.mfa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.microsegmentation — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ml — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.moa-mou — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.mpls — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.msa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.mssp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.mtbf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.mttf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.nat-pat — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.nda — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.netflow — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.nist — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.north-south-traffic — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ntp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.oauth — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ocsp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.oid — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.oidc — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.on-path-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.order-of-volatility — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.os — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ot-ics — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.p2p — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pam — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.password-spraying — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.passwordless — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.passwordless — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.patch-management — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pci-dss — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pdu-ups — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pem — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.perimeter-security — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pfs — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.phi — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.phishing-simulations — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.phishing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.physical-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.picerl — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pii — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.piv — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pkcs — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pki — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.playbook-runbook — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.policy — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.policy — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pretexting — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.private-cloud — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.privilege-escalation — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.processor — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.processor — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.provisioning-deprovisioning — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.provisioning — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.provisioning — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pseudo-anonymization — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.psk — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.public-cloud — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pup — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.qualitative-risk-analysis — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.quantitative-risk-analysis — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ra — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.race-condition — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.radius — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.raid-0 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.raid-1 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.raid-5 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.raid-6 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.raid — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.rainbow-table — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ransomware — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.rat — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.rbac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.rc4 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.rdp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.reflected-network-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.rfid-nfc-cloning — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.right-to-audit-clause — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.risk-acceptance — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.risk-appetite — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.risk-avoidance — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.risk-mitigation-reduction — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.risk-register — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.risk-tolerance — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.risk-transference — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.rogue-ap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.roi — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.role-based-security-training — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.rootkit — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.rsa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.salting — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.salting — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.saml — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sandboxing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sase — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.scada — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.scap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.scep — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.screened-subnet — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sd-wan — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sdk — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sdlc-sdlm — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sdn — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.secure-baseline — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.security-steering-committee — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sed — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.segmentation — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.segmentation — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.seh — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.selinux — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.session-token — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.session-token — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sha — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.shared-responsibility-model — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.shoulder-surfing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.side-loading — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.siem — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sla — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sle — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.smishing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.smtp-smtps — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.snmp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.soar — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.soc — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sow — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.spear-phishing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.spyware — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sqli — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.srtp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ssh — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ssl-tls — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sso — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ssrf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.stix — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.supply-chain-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.supply-chain-risk — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.swg — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.syslog — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.tacacs — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.tailgating — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.taxii — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.tcp-ip — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.threat-actor — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.threat-actor — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.tls — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.tls — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.tokenization — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.tou — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.tpm — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.trojan — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.typosquatting — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ueba — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.uem — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.vendor-risk-assessment — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.virus — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.vishing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.vlan-hopping — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.vlan — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.vm-escape — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.vm — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.vpc — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.vpn — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.vulnerability-scan — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.vulnerability-scan — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.vulnerability-scanning — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.waf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.warm-site — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.watering-hole — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.whaling — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.wids-wips — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.wireless-jamming — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.worm — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.wpa-wep — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.wpa3 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.wpa3 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.xdr — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.xss — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.zero-trust — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.zero-trust — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.zta — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 traps:access-control-pam — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:api-session-browser-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:cloud-containers-automation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:crypto-modes-pqc-transition — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:data-classification-lifecycle — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:data-legal-responsibility — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:dns-time-management-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:endpoint-mobile-hardening — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:enterprise-network-segmentation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:federation-modern-auth — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:forensics-recovery — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:governance-change-vendors — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:identity-zero-trust — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:incident-response-monitoring — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:ipsec-secure-media — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:kerberos-aaa-enterprise-auth — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:keys-passwords-encryption — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:malware-indicators-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:network-defense-architecture — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:network-protocols-ports — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:ot-iot-cyber-physical — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:pki-email-trust — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:platform-cloud-hardening — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:resilience-assets-physical — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:risk-resilience-governance — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:secure-software-applications — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:security-foundations-controls — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:security-operations-automation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:software-memory-concurrency — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:threat-actors-surfaces — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:web-social-dns-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 traps:wifi-access-defense — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.

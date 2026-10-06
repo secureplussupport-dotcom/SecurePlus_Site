@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-06",
+  "status": "PASS",
+  "checks": {
+    "build": "PASS; existing chunk-size warning",
+    "siteAudits": 8,
+    "contentMapping": 13,
+    "learningPilot": "all replay and catalogue checks passed",
+    "persistence": 20,
+    "staticMigration": 213,
+    "runtimeBoundaryOperationsUnit": 69,
+    "freshDatabase": 26,
+    "infrastructure": 116,
+    "trustedRuntime": 103,
+    "deletionShadowIsolation": 262,
+    "boundaryDatabase": 18
+  },
+  "initialAttempt": "Database audit correctly rejected previously populated disposable fixtures; reset only the local Supabase stack and reran database/infrastructure/trusted/deletion/boundary suite successfully.",
+  "production": {
+    "readOnly": true,
+    "adaptiveSchemaPresent": false,
+    "overrides": 56,
+    "activeOverrides": 56,
+    "pbqs": 2,
+    "gradingPayloadsExported": false,
+    "learnerRecordsRead": false
+  },
+  "finalControl": {
+    "postgres176": {
+      "storedEnabled": false,
+      "effectiveEnabled": false,
+      "killSwitch": true
+    },
+    "supabaseAuthStack": {
+      "storedEnabled": false,
+      "effectiveEnabled": false,
+      "killSwitch": true
+    }
+  },
+  "logs": [
+    {
+      "localPath": "/tmp/secureplus-2b5-build.log",
+      "sha256": "c954f80576c6a92f4aaf99633af6d2153eab53c3bb5138f2845cc8f9c4e8668e"
+    },
+    {
+      "localPath": "/tmp/secureplus-2b5-site.log",
+      "sha256": "dd2f9f87e0ce0be45924f5af4d5b3bd6cf6daa67c62a4ac622840146955343ca"
+    },
+    {
+      "localPath": "/tmp/secureplus-2b5-pilot.log",
+      "sha256": "37a513229e4f3a5d35f58ddec38905f56b960e97f9cfdb1ef447a2dae409ad89"
+    },
+    {
+      "localPath": "/tmp/secureplus-2b5-persistence.log",
+      "sha256": "694c619381aa1f249f5783f8de3dbd9fc20d2703df4c8bb78e90205ce7a83e2b"
+    },
+    {
+      "localPath": "/tmp/secureplus-2b5-migration.log",
+      "sha256": "ea1f29a563606dc4654c7ab72ec3d651288b2b5d5f6965fb9ca747207476e5f1"
+    },
+    {
+      "localPath": "/tmp/secureplus-2b5-unit.log",
+      "sha256": "c6651eece173d2352a083737c9accb437b1461501b317d92ccb9bfd77309e3f7"
+    },
+    {
+      "localPath": "/tmp/secureplus-2b5-mapping.log",
+      "sha256": "194a72ab22e568f6b4de08d6d1b401577e8335fb2645224fa00934dafea308de"
+    },
+    {
+      "localPath": "/tmp/secureplus-2b5-fullstack-fresh.log",
+      "sha256": "73029575974b9706b3b26c162ec87e8b329e65ce80d57d5a85701183d03a0b1f"
+    }
+  ],
+  "notRepeated": "Destructive operational backup/restore/load rehearsal was not rerun; no runtime or migration code changed. Its approved baseline artifacts remain unchanged; operations unit regressions passed."
+}

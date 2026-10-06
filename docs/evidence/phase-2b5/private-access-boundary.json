@@ -1,0 +1,46 @@
+{
+  "method": "authenticated_read_only_rls_metadata",
+  "scope": "Catalogue SELECT policies only; no user records inspected. Management visibility is not anonymous or Pro-session proof.",
+  "rls": [
+    {
+      "table": "pbqs",
+      "enabled": true
+    },
+    {
+      "table": "question_overrides",
+      "enabled": true
+    }
+  ],
+  "observed_at": "2026-10-06T02:15:47.372145+00:00",
+  "select_policies": [
+    {
+      "roles": [
+        "authenticated"
+      ],
+      "table": "pbqs",
+      "using": "((is_pro = false) OR (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = ( SELECT auth.uid() AS uid)) AND ((profiles.tier = 'pro'::text) OR (profiles.pro_trial_until > now()) OR (COALESCE(profiles.subscription_status, ''::text) = ANY (ARRAY['active'::text, 'trialing'::text])))))) OR (EXISTS ( SELECT 1\n   FROM cipher_coin_unlocks\n  WHERE ((cipher_coin_unlocks.user_id = ( SELECT auth.uid() AS uid)) AND (cipher_coin_unlocks.unlock_type = 'pbq'::text) AND (cipher_coin_unlocks.resource_id = pbqs.id)))))"
+    },
+    {
+      "roles": [
+        "anon"
+      ],
+      "table": "pbqs",
+      "using": "(is_pro = false)"
+    },
+    {
+      "roles": [
+        "authenticated"
+      ],
+      "table": "pbqs",
+      "using": "(EXISTS ( SELECT 1\n   FROM app_admins\n  WHERE (lower(app_admins.email) = lower(COALESCE((auth.jwt() ->> 'email'::text), ''::text)))))"
+    },
+    {
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "table": "question_overrides",
+      "using": "(status = 'active'::text)"
+    }
+  ]
+}

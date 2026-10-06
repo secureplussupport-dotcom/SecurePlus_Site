@@ -1,0 +1,11 @@
+{
+  "algorithm": "SHA-256",
+  "files": {
+    "mapping-package.json": "46c5f0991ba3a4abe3b58a01bcd34d89c77361da454145dcc204cc49166113b1",
+    "review-queue.md": "d0fc8c2b524ca5f7ddc3f543ce53e038b737368a2989597adaa127c428758557",
+    "review-guide.md": "be6a81c290c8ff1992d56f212638466744b3605f760f3f92d6f79ef3111366b1",
+    "private-catalogue-read.json": "ab41620421c0449309a096bc678aaa4b05088188d2c8da7666d7429cc4e10ce1",
+    "private-reconciliation.json": "53ba4921ed4ffb67d1da312fea8938a8f902c8a372cc083de9e4bbc71e7a8924",
+    "private-access-boundary.json": "29e2e673da4bf5d5dc7eb8cfd306c21050814092226988adf13d6c6e52feaa75"
+  }
+}
