@@ -4,6 +4,10 @@ NOT READY. This is a proposal package, not completed semantic mapping or permiss
 
 The census contains 395 effective local MCQs, 88 local PBQs, and 2 later private PBQ variants, plus 9 separately authored signup starter questions and 14 independently authored guest teaching records. Only 7 question mappings carry an existing reviewed pilot primary concept; 489 question revisions need semantic mapping. Candidate term matching has **zero mastery weight** and is not coverage.
 
+## Recorded source choices
+
+Local p003 and private p017 are selected for future canonical mapping. The original human record and immutable baseline hash are retained in source-selection-decisions.json. This does not change effective publication or approve semantic mappings. The two original mixed source-choice queue items now have precise residual follow-ups; private semantic review remains open. Start the next identity review with review-batch.md.
+
 ## How to review
 
 1. Verify checksums.json and run `npm run audit:content-mapping`.

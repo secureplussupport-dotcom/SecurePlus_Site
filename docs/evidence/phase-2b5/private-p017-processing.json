@@ -1,0 +1,18 @@
+{
+  "questionId": "p017",
+  "projectId": "uscaqeymulsaeqxjvbfq",
+  "method": "authenticated_read_only_fingerprint_and_schema_metadata",
+  "observedAt": "2026-10-06T23:22:37.129850Z",
+  "sourceSignature": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+  "appQuestionSignature": "sha256:5b89d4c9e5abeecb72f1c3e369c0a8819f75f839e695ce24c82486804435da7e",
+  "matchesSelectedCapturedRevision": true,
+  "appQuestionShape": "object",
+  "choicesShape": "array",
+  "compilerStatus": "not_compiled_secure_handoff_unavailable",
+  "trustedRevisionId": null,
+  "contentSha256": null,
+  "blocker": "Authenticated MCP access returns serialized tool results. No protected in-memory handoff to the Node compiler is available here without placing the private payload in tool arguments or a file. The actual private payload was not retrieved or compiled; schema metadata alone does not certify grammar support.",
+  "readOnly": true,
+  "privatePayloadExported": false,
+  "learnerRecordsRead": false
+}

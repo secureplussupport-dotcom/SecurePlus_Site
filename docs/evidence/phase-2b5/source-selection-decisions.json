@@ -1,0 +1,77 @@
+{
+  "editorialSelections": {
+    "recordPath": "docs/phase-2b5-editorial-review-record.md",
+    "recordSha256": "943b06eb101db5d1616cf0cd5289b798c0ce984700993b8561e8537cf2988ec0",
+    "baselineCommit": "967365f33737950c6057a1130a896f5b6a86e162",
+    "baselinePackageSha256": "2704b7fb7ccf4ecf2042edc4ac1f0015abd9ed4d12059dee5e664562be9c7ad5",
+    "decisionCommit": "4f17b410a67308e2868c119b67e32a88d504cea8",
+    "scope": "Source choice and pair comparison only; not effective publication, semantic mapping or activation approval.",
+    "decisions": [
+      {
+        "questionId": "p003",
+        "selectedRecordId": "pbq:p003",
+        "nonselectedRecordId": "private:pbq:p003",
+        "selectedSourceSignature": "sha256:bfa663d1470b46e02d7a8b5d27267636c0f71659ea09f4a88c2c5f8a078889ef",
+        "nonselectedSourceSignature": "sha256:f2eb1e715fa9fcda87ada668d7d17dfdf6b44840328d5ffeb460e3a342e502f2",
+        "objective": "4.9",
+        "id": "source-selection:p003",
+        "comparison": "same_skill_materially_different",
+        "independentFamilyApproved": false,
+        "semanticApproved": false,
+        "publicationChangeApproved": false
+      },
+      {
+        "questionId": "p017",
+        "selectedRecordId": "private:pbq:p017",
+        "nonselectedRecordId": "pbq:p017",
+        "selectedSourceSignature": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+        "nonselectedSourceSignature": "sha256:01e6ca9f28f585eeff75d84f3023a55abb04d60aea972ba2f754892defa6ceed",
+        "objective": "5.2",
+        "id": "source-selection:p017",
+        "comparison": "same_skill_materially_different",
+        "independentFamilyApproved": false,
+        "semanticApproved": false,
+        "publicationChangeApproved": false
+      }
+    ]
+  },
+  "privateRevisionProcessing": {
+    "questionId": "p017",
+    "projectId": "uscaqeymulsaeqxjvbfq",
+    "method": "authenticated_read_only_fingerprint_and_schema_metadata",
+    "observedAt": "2026-10-06T23:22:37.129850Z",
+    "sourceSignature": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "appQuestionSignature": "sha256:5b89d4c9e5abeecb72f1c3e369c0a8819f75f839e695ce24c82486804435da7e",
+    "matchesSelectedCapturedRevision": true,
+    "appQuestionShape": "object",
+    "choicesShape": "array",
+    "compilerStatus": "not_compiled_secure_handoff_unavailable",
+    "trustedRevisionId": null,
+    "contentSha256": null,
+    "blocker": "Authenticated MCP access returns serialized tool results. No protected in-memory handoff to the Node compiler is available here without placing the private payload in tool arguments or a file. The actual private payload was not retrieved or compiled; schema metadata alone does not certify grammar support.",
+    "readOnly": true,
+    "privatePayloadExported": false,
+    "learnerRecordsRead": false,
+    "selectionStatus": "historical_choice_fingerprint_confirmed"
+  },
+  "reconciledItems": [
+    {
+      "originalQueueItemId": "pbq:p003:private_variant",
+      "resolvedAspects": [
+        "canonical_source_choice",
+        "pair_same_skill_materially_different"
+      ],
+      "remainingQueueItemId": "pbq:p003:source_selection_followup",
+      "decisionId": "source-selection:p003"
+    },
+    {
+      "originalQueueItemId": "pbq:p017:private_variant",
+      "resolvedAspects": [
+        "canonical_source_choice",
+        "pair_same_skill_materially_different"
+      ],
+      "remainingQueueItemId": "pbq:p017:source_selection_followup",
+      "decisionId": "source-selection:p017"
+    }
+  ]
+}

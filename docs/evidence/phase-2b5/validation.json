@@ -1,32 +1,89 @@
 {
-  "date": "2026-10-06",
-  "baseline": "8a44f3f07e7cd9001628a92d2df2f109b61484c9",
-  "status": "PASS",
+  "date": "2026-10-07",
+  "baseline": "4f17b410a67308e2868c119b67e32a88d504cea8",
+  "censusBaseline": "967365f33737950c6057a1130a896f5b6a86e162",
+  "status": "PASS_LOCAL_CHECKS_PRIVATE_COMPILATION_BLOCKED",
   "checks": {
-    "build": "PASS; existing chunk-size warning",
-    "siteAudits": 8,
-    "contentMapping": 23,
-    "learningPilot": "all replay and catalogue checks passed",
-    "persistence": 20,
-    "staticMigration": 213,
-    "runtimeBoundaryOperationsUnit": 69,
-    "freshDatabase": 26,
-    "infrastructure": 116,
-    "trustedRuntime": 103,
-    "deletionShadowIsolation": 262,
-    "boundaryDatabase": 18
+    "contentMapping": 28,
+    "learningRuntime": 40,
+    "learningPilot": "PASS replay and catalogue checks",
+    "immutableBaselineBinding": "PASS exact original package and four source fingerprints",
+    "deploymentSkip": "PASS",
+    "releaseManifestFiles": 25
   },
-  "regressionProof": "Two focused GuestFeaturePreview tests initially failed on absent teaching revisions and selectors. All 23 tests now pass, including removal of each of 14 demos, source/reachability/parent/selector drift, unapproved adaptive inclusion, missing timer exclusion, actual function source-unit coverage, independent per-topic value hashes and answer-free exports. Existing glossary and delivery-selector regressions remain passing.",
+  "census": {
+    "sourceSelections": 2,
+    "reconciledSourceSelectionAspects": 4,
+    "records": 1878,
+    "mcqs": 395,
+    "localPbqs": 88,
+    "guestDemoRecords": 14,
+    "guestDemoAssessments": 2,
+    "starterQuestions": 9,
+    "glossaryDefinitions": 162,
+    "glossaryWithLocalReferences": 153,
+    "deliveredSelectors": 26,
+    "privatePbqVariants": 2,
+    "primaryQuestionProposals": 7,
+    "unresolvedQuestionMappings": 489,
+    "concepts": 435,
+    "exclusions": 1209,
+    "reviewQueue": 2954
+  },
+  "priorityCounts": {
+    "P0": 3,
+    "P1": 1070,
+    "P2": 1881
+  },
+  "regressionProof": "Two source-choice reproduction tests failed before implementation. Five added tests now pass, rejecting stale bindings, contradictory/missing revisions, semantic approval fields and private payload leaks, while preserving actual publication precedence and all variants/explanations. Synthetic compiler input exercises absent, drift, invalid/unsupported and compiled outcomes; actual private p017 was not compiled.",
   "productionEvidence": {
-    "status": "captured_prior_read_only_evidence_not_refreshed_during_remediation",
-    "observedAt": "2026-10-06T01:45:12.946078+00:00",
-    "capturedAdaptiveSchemaPresent": false,
-    "overrides": 56,
-    "pbqs": 2,
-    "productionAccessDuringRemediation": false,
-    "gradingPayloadsExported": false,
-    "learnerRecordsRead": false
+    "questionId": "p017",
+    "projectId": "uscaqeymulsaeqxjvbfq",
+    "method": "authenticated_read_only_fingerprint_and_schema_metadata",
+    "observedAt": "2026-10-06T23:22:37.129850Z",
+    "sourceSignature": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "appQuestionSignature": "sha256:5b89d4c9e5abeecb72f1c3e369c0a8819f75f839e695ce24c82486804435da7e",
+    "matchesSelectedCapturedRevision": true,
+    "appQuestionShape": "object",
+    "choicesShape": "array",
+    "compilerStatus": "not_compiled_secure_handoff_unavailable",
+    "trustedRevisionId": null,
+    "contentSha256": null,
+    "blocker": "Authenticated MCP access returns serialized tool results. No protected in-memory handoff to the Node compiler is available here without placing the private payload in tool arguments or a file. The actual private payload was not retrieved or compiled; schema metadata alone does not certify grammar support.",
+    "readOnly": true,
+    "privatePayloadExported": false,
+    "learnerRecordsRead": false,
+    "selectionStatus": "historical_choice_fingerprint_confirmed"
   },
+  "priorRegressionEvidence": {
+    "commit": "967365f33737950c6057a1130a896f5b6a86e162",
+    "validationSha256": "35fc9a2995e9572c0b3e7865ac24b139ecceaa4827aaa5ec45772c3d7237dc10",
+    "checks": {
+      "build": "PASS; existing chunk-size warning",
+      "siteAudits": 8,
+      "contentMapping": 23,
+      "learningPilot": "all replay and catalogue checks passed",
+      "persistence": 20,
+      "staticMigration": 213,
+      "runtimeBoundaryOperationsUnit": 69,
+      "freshDatabase": 26,
+      "infrastructure": 116,
+      "trustedRuntime": 103,
+      "deletionShadowIsolation": 262,
+      "boundaryDatabase": 18
+    },
+    "wholeCatalogueCapture": {
+      "status": "captured_prior_read_only_evidence_not_refreshed_during_remediation",
+      "observedAt": "2026-10-06T01:45:12.946078+00:00",
+      "capturedAdaptiveSchemaPresent": false,
+      "overrides": 56,
+      "pbqs": 2,
+      "productionAccessDuringRemediation": false,
+      "gradingPayloadsExported": false,
+      "learnerRecordsRead": false
+    }
+  },
+  "controlObservedAt": "2026-10-06T23:30:15.748707+00:00",
   "finalControl": {
     "postgres176": {
       "storedEnabled": false,
@@ -41,74 +98,40 @@
   },
   "logs": [
     {
-      "localPath": "/tmp/secureplus-2b5-guest-build.log",
-      "sha256": "f1a2ce97db4b89d4e2aae74466a7e46b721c3c547c9f90589ef59141d50148d5",
+      "localPath": "/tmp/secureplus-2b5-selections-red.log",
+      "sha256": "35075094efc427767db82132d125fc4ef947f3b24b0d00387f58453df8254cdb",
+      "expectedStatus": "initial_failing_reproduction"
+    },
+    {
+      "localPath": "/tmp/secureplus-2b5-selections-focused.log",
+      "sha256": "1fa58c81dea6815280c6bdb0375569ab4c3fdaed1682d10065870dbba6fa9cac",
       "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-guest-site.log",
-      "sha256": "dd2f9f87e0ce0be45924f5af4d5b3bd6cf6daa67c62a4ac622840146955343ca",
+      "localPath": "/tmp/secureplus-2b5-selections-generate.log",
+      "sha256": "c8f4d46895ae9b5e0feecbcebdab5771f60c50dea643a12ae1422fe35ccd96a6",
       "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-guest-pilot.log",
+      "localPath": "/tmp/secureplus-2b5-selections-mapping.log",
+      "sha256": "5cf46e554e82512927753d5bc00e512e750bba1852e1b76ee01547832d9ea3d2",
+      "expectedStatus": "PASS"
+    },
+    {
+      "localPath": "/tmp/secureplus-2b5-selections-runtime.log",
+      "sha256": "fa15911da65fcb408aae08c36580cad451ce74722adb5ca81977e90fa344bceb",
+      "expectedStatus": "PASS"
+    },
+    {
+      "localPath": "/tmp/secureplus-2b5-selections-pilot.log",
       "sha256": "37a513229e4f3a5d35f58ddec38905f56b960e97f9cfdb1ef447a2dae409ad89",
       "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-guest-persistence.log",
-      "sha256": "694c619381aa1f249f5783f8de3dbd9fc20d2703df4c8bb78e90205ce7a83e2b",
+      "localPath": "/tmp/secureplus-2b5-selections-baseline.log",
+      "sha256": "72f3faafcf69145745107952584b565eefd18b326c651f1e8de8bae09c1b7574",
       "expectedStatus": "PASS"
-    },
-    {
-      "localPath": "/tmp/secureplus-2b5-guest-migration.log",
-      "sha256": "ea1f29a563606dc4654c7ab72ec3d651288b2b5d5f6965fb9ca747207476e5f1",
-      "expectedStatus": "PASS"
-    },
-    {
-      "localPath": "/tmp/secureplus-2b5-guest-unit.log",
-      "sha256": "fd5dfa3755783c0c0ed2eb4b8ce4281becfc0154ad32ea8dbb8a02029936d6fe",
-      "expectedStatus": "PASS"
-    },
-    {
-      "localPath": "/tmp/secureplus-2b5-guest-mapping.log",
-      "sha256": "631629ebc9bf61bc30052d6cedd09238408306fdfcab9f2136f0b4d2b30a6f99",
-      "expectedStatus": "PASS"
-    },
-    {
-      "localPath": "/tmp/secureplus-2b5-guest-fullstack.log",
-      "sha256": "e45d8604831d73200bea360a02820604f1e7db7f00002a2ae0969597a1e13f58",
-      "expectedStatus": "PASS"
-    },
-    {
-      "localPath": "/tmp/secureplus-2b5-guest-generate.log",
-      "sha256": "fc0f38a188cff53526748c9f4e94f4f19d0ca35fa26e69d6d7dbdcd1f22d1843",
-      "expectedStatus": "PASS"
-    },
-    {
-      "localPath": "/tmp/secureplus-2b5-guest-local-reset.log",
-      "sha256": "23431c8f3ba8aacd8ede2ed54f82145c581abd37d9243a6d297b4e6c9775701c",
-      "expectedStatus": "PASS"
-    },
-    {
-      "localPath": "/tmp/secureplus-2b5-guest-red.log",
-      "sha256": "8ec7528e5d74e332306a246f6ab3fdd06a10767ec66824fba44373303e0ebfe1",
-      "expectedStatus": "initial_failing_reproduction"
     }
   ],
-  "notRepeated": "Operational backup/restore/load rehearsal was not rerun; no runtime or migration code changed. Approved baseline artifacts remain unchanged; operations unit regressions passed.",
-  "census": {
-    "records": 1878,
-    "guestDemoRecords": 14,
-    "guestDemoAssessments": 2,
-    "deliveredSelectors": 26,
-    "unresolvedQuestionMappings": 489,
-    "exclusions": 1209,
-    "reviewQueue": 2954,
-    "priorities": {
-      "P0": 4,
-      "P1": 1069,
-      "P2": 1881
-    }
-  }
+  "notRepeated": "Build/site, persistence, migration, database/boundary/operations suites and destructive operational rehearsal were not rerun. This slice changes offline mapping artifacts and helper logic only; application/runtime compiler/migration code remains unchanged."
 }

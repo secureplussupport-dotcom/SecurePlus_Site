@@ -2,8 +2,7 @@
 
 All decisions are OPEN. No entry is human-approved. Match IDs and source hashes to mapping-package.json before reviewing. Do not paste grading keys, option-indexed feedback, learner records or private payloads into this document.
 
-- **P0 pbq:p003 — private_variant**: Keep fallback and private revisions separate; review the later private publication before claiming complete mapping.
-- **P0 pbq:p017 — private_variant**: Keep fallback and private revisions separate; review the later private publication before claiming complete mapping.
+- **P0 pbq:p003 — source_selection_followup**: Local p003 is selected for future canonical mapping, but the newer private publication still wins for eligible live callers. Resolve this delivery/selection divergence only through a separately authorized publication decision.
 - **P0 private:pbq:p003 — private_source_review**: Review the exact private payload inside an approved secured environment; map the revision and compile its ID without adding grading content to review exports.
 - **P0 private:pbq:p017 — private_source_review**: Review the exact private payload inside an approved secured environment; map the revision and compile its ID without adding grading content to review exports.
 - **P1 continuity.bia — independent_family_shortage**: Commission or approve at least three genuinely independent scenario families before post-miss transfer claims.
@@ -523,6 +522,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 pbq:p015 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
 - **P1 pbq:p016 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
 - **P1 pbq:p017 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
+- **P1 pbq:p017 — source_selection_followup**: Local p017 is not selected for future canonical mapping, but remains a delivered fallback. Retain its census, explanation and unresolved semantics; decide future fallback handling separately.
 - **P1 pbq:p018 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
 - **P1 pbq:p018 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
 - **P1 pbq:p019 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.

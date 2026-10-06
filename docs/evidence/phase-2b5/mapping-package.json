@@ -5,10 +5,73 @@
   "activationAllowed": false,
   "humanApproved": false,
   "scope": "Source-level delivery census plus authenticated catalogue fingerprints. No browser-session or private semantic completeness claim.",
+  "editorialSelections": {
+    "recordPath": "docs/phase-2b5-editorial-review-record.md",
+    "recordSha256": "943b06eb101db5d1616cf0cd5289b798c0ce984700993b8561e8537cf2988ec0",
+    "baselineCommit": "967365f33737950c6057a1130a896f5b6a86e162",
+    "baselinePackageSha256": "2704b7fb7ccf4ecf2042edc4ac1f0015abd9ed4d12059dee5e664562be9c7ad5",
+    "decisionCommit": "4f17b410a67308e2868c119b67e32a88d504cea8",
+    "scope": "Source choice and pair comparison only; not effective publication, semantic mapping or activation approval.",
+    "decisions": [
+      {
+        "questionId": "p003",
+        "selectedRecordId": "pbq:p003",
+        "nonselectedRecordId": "private:pbq:p003",
+        "selectedSourceSignature": "sha256:bfa663d1470b46e02d7a8b5d27267636c0f71659ea09f4a88c2c5f8a078889ef",
+        "nonselectedSourceSignature": "sha256:f2eb1e715fa9fcda87ada668d7d17dfdf6b44840328d5ffeb460e3a342e502f2",
+        "objective": "4.9",
+        "id": "source-selection:p003",
+        "comparison": "same_skill_materially_different",
+        "independentFamilyApproved": false,
+        "semanticApproved": false,
+        "publicationChangeApproved": false
+      },
+      {
+        "questionId": "p017",
+        "selectedRecordId": "private:pbq:p017",
+        "nonselectedRecordId": "pbq:p017",
+        "selectedSourceSignature": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+        "nonselectedSourceSignature": "sha256:01e6ca9f28f585eeff75d84f3023a55abb04d60aea972ba2f754892defa6ceed",
+        "objective": "5.2",
+        "id": "source-selection:p017",
+        "comparison": "same_skill_materially_different",
+        "independentFamilyApproved": false,
+        "semanticApproved": false,
+        "publicationChangeApproved": false
+      }
+    ]
+  },
+  "privateRevisionProcessing": {
+    "questionId": "p017",
+    "projectId": "uscaqeymulsaeqxjvbfq",
+    "method": "authenticated_read_only_fingerprint_and_schema_metadata",
+    "observedAt": "2026-10-06T23:22:37.129850Z",
+    "sourceSignature": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "appQuestionSignature": "sha256:5b89d4c9e5abeecb72f1c3e369c0a8819f75f839e695ce24c82486804435da7e",
+    "matchesSelectedCapturedRevision": true,
+    "appQuestionShape": "object",
+    "choicesShape": "array",
+    "compilerStatus": "not_compiled_secure_handoff_unavailable",
+    "trustedRevisionId": null,
+    "contentSha256": null,
+    "blocker": "Authenticated MCP access returns serialized tool results. No protected in-memory handoff to the Node compiler is available here without placing the private payload in tool arguments or a file. The actual private payload was not retrieved or compiled; schema metadata alone does not certify grammar support.",
+    "readOnly": true,
+    "privatePayloadExported": false,
+    "learnerRecordsRead": false,
+    "selectionStatus": "historical_choice_fingerprint_confirmed"
+  },
   "sources": [
     {
       "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
       "sha256": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/private-p017-processing.json",
+      "sha256": "c86075ee2c67b777089dff79b815bd17327b09e41f54068e361aeab1857821f8"
+    },
+    {
+      "path": "docs/phase-2b5-editorial-review-record.md",
+      "sha256": "943b06eb101db5d1616cf0cd5289b798c0ce984700993b8561e8537cf2988ec0"
     },
     {
       "path": "package.json",
@@ -80,15 +143,19 @@
     },
     {
       "path": "scripts/audit-content-mapping.mjs",
-      "sha256": "8aec73d310bbad50f550a912bf7c1c10105e270198e1b38197c48f1036a9958f"
+      "sha256": "b295962e54b65a8fb095e91dd93e859511bc77900b614765df92ca26f0ef0bea"
     },
     {
       "path": "scripts/build-content-mapping.mjs",
-      "sha256": "19b1b1c272dc1b41b028e168fac2484221987d35712c3f7ae75c4264d4cc9609"
+      "sha256": "f69d83710adbeb6d989274b8f852d246246c5b773850e00e1e7e9e4f5ef2b37b"
     },
     {
       "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
       "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "scripts/lib/content-mapping/editorial-selections.mjs",
+      "sha256": "fa413d0c9cf1d8ac4c6ee6285a0536b91906a93dacd1e9754bc83cc3bf383baa"
     },
     {
       "path": "scripts/lib/content-mapping/guest-preview.mjs",
@@ -96,7 +163,7 @@
     },
     {
       "path": "scripts/lib/content-mapping/package.mjs",
-      "sha256": "bd6a2bc2817078acf2e85df4c93d2465b0a33fa03173e6c559a994dfee16fcce"
+      "sha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748"
     },
     {
       "path": "scripts/lib/content-mapping/publication.mjs",
@@ -192,6 +259,8 @@
     }
   ],
   "counts": {
+    "sourceSelections": 2,
+    "reconciledSourceSelectionAspects": 4,
     "records": 1878,
     "mcqs": 395,
     "localPbqs": 88,
@@ -98450,6 +98519,11 @@
       "questionFormat": "TERMINAL SIM",
       "duplicateStemSignature": "sha256:e46702c3d95c6ed01b1983d3f5f48d9070a0d41f6069659cd56964b302dd254d",
       "persistenceContentKind": null,
+      "editorialSourceSelection": {
+        "decisionId": "source-selection:p003",
+        "selectedForFutureCanonicalMapping": true,
+        "changesPublication": false
+      },
       "proposedConceptLinks": [
         {
           "conceptId": "sy0701.objective.4.9",
@@ -99128,6 +99202,11 @@
       "questionFormat": "SCENARIO",
       "duplicateStemSignature": "sha256:0ca8c1a00f7359e527a044338b8d7d1044a24daedf0ffa87d6906ded13a967c1",
       "persistenceContentKind": null,
+      "editorialSourceSelection": {
+        "decisionId": "source-selection:p017",
+        "selectedForFutureCanonicalMapping": false,
+        "changesPublication": false
+      },
       "proposedConceptLinks": [
         {
           "conceptId": "sy0701.objective.5.2",
@@ -107542,6 +107621,11 @@
       "questionId": "p003",
       "questionFormat": "TERMINAL SIM",
       "persistenceContentKind": null,
+      "editorialSourceSelection": {
+        "decisionId": "source-selection:p003",
+        "selectedForFutureCanonicalMapping": false,
+        "changesPublication": false
+      },
       "proposedConceptLinks": [
         {
           "conceptId": "sy0701.objective.4.9",
@@ -107584,6 +107668,11 @@
       "questionId": "p017",
       "questionFormat": "SCENARIO",
       "persistenceContentKind": null,
+      "editorialSourceSelection": {
+        "decisionId": "source-selection:p017",
+        "selectedForFutureCanonicalMapping": true,
+        "changesPublication": false
+      },
       "proposedConceptLinks": [
         {
           "conceptId": "sy0701.objective.5.2",
@@ -128487,19 +128576,11 @@
   },
   "reviewQueue": [
     {
-      "id": "pbq:p003:private_variant",
+      "id": "pbq:p003:source_selection_followup",
       "priority": "P0",
       "recordId": "pbq:p003",
-      "reason": "private_variant",
-      "decision": "Keep fallback and private revisions separate; review the later private publication before claiming complete mapping.",
-      "status": "open"
-    },
-    {
-      "id": "pbq:p017:private_variant",
-      "priority": "P0",
-      "recordId": "pbq:p017",
-      "reason": "private_variant",
-      "decision": "Keep fallback and private revisions separate; review the later private publication before claiming complete mapping.",
+      "reason": "source_selection_followup",
+      "decision": "Local p003 is selected for future canonical mapping, but the newer private publication still wins for eligible live callers. Resolve this delivery/selection divergence only through a separately authorized publication decision.",
       "status": "open"
     },
     {
@@ -132652,6 +132733,14 @@
       "recordId": "pbq:p017",
       "reason": "concept_and_family_review",
       "decision": "Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.",
+      "status": "open"
+    },
+    {
+      "id": "pbq:p017:source_selection_followup",
+      "priority": "P1",
+      "recordId": "pbq:p017",
+      "reason": "source_selection_followup",
+      "decision": "Local p017 is not selected for future canonical mapping, but remains a delivered fallback. Retain its census, explanation and unresolved semantics; decide future fallback handling separately.",
       "status": "open"
     },
     {

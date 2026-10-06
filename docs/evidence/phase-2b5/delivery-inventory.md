@@ -1,6 +1,6 @@
 # Delivered learning support and selectors
 
-Agent inventory only; all editorial decisions remain open. Definitions and learner-specific outputs are withheld. Hashes bind exact revisions in mapping-package.json.
+Agent delivery inventory; semantic decisions remain open. The separately recorded PBQ source choices are reconciled without changing publication. Definitions and learner-specific outputs are withheld. Hashes bind exact revisions in mapping-package.json.
 
 ## Glossary
 
