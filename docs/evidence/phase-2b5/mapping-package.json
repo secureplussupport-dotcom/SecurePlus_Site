@@ -143,7 +143,7 @@
     },
     {
       "path": "scripts/audit-content-mapping.mjs",
-      "sha256": "b295962e54b65a8fb095e91dd93e859511bc77900b614765df92ca26f0ef0bea"
+      "sha256": "424db61ffc44ae9e68b185bce4e4957751fc710e08f8d40390a8424ca3b5f613"
     },
     {
       "path": "scripts/build-content-mapping.mjs",
@@ -155,7 +155,7 @@
     },
     {
       "path": "scripts/lib/content-mapping/editorial-selections.mjs",
-      "sha256": "fa413d0c9cf1d8ac4c6ee6285a0536b91906a93dacd1e9754bc83cc3bf383baa"
+      "sha256": "a8faca0d5ba9837e1296d5de5a97f7ed77f9664d745f7ecd52835a1f3f5e5d5d"
     },
     {
       "path": "scripts/lib/content-mapping/guest-preview.mjs",

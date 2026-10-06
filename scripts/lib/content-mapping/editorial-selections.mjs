@@ -1,6 +1,5 @@
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {compileRevision} from '../../../server/adaptive/revision.mjs';
 
 export const RECORD_PATH='docs/phase-2b5-editorial-review-record.md';
 const RECORD_SHA='943b06eb101db5d1616cf0cd5289b798c0ce984700993b8561e8537cf2988ec0';
@@ -49,19 +48,6 @@ export function validateEditorialSelections(value,records) {
   }
  }
  return true;
-}
-
-// Secured callers supply an already normalized question privately in memory.
-// No payload, compiler error text or grading components escape this helper.
-export function compilePrivateSelection(question,sourceSignature,expectedSignature) {
- const result={sourceSignature:/^sha256:[a-f0-9]{64}$/.test(sourceSignature)?sourceSignature:null,trustedRevisionId:null,contentSha256:null};
- if(!question)return {...result,status:'source_unavailable'};
- if(expectedSignature!==PAIRS[1].selectedSourceSignature||sourceSignature!==expectedSignature)return {...result,status:'source_drift'};
- try{
-  requireThat(question.id==='p017','wrong private identity');
-  const r=compileRevision(question,'pbq');
-  return {...result,status:'compiled',trustedRevisionId:r.revisionId,contentSha256:r.contentSha256};
- }catch{return {...result,status:'unsupported_or_invalid_revision'};}
 }
 
 export function readPrivateProcessing(evidence=JSON.parse(readFileSync('docs/evidence/phase-2b5/private-p017-processing.json'))) {

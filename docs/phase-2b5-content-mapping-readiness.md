@@ -1,6 +1,6 @@
 # Phase 2B-5 content mapping readiness
 
-Date: 2026-10-07. Source-selection baseline: `4f17b410a67308e2868c119b67e32a88d504cea8`. Census baseline: `967365f33737950c6057a1130a896f5b6a86e162`. Original operational baseline: `96d206d1190070a374c34a366b824151205ceed6`.
+Date: 2026-10-07. Private-helper remediation baseline: `54915d4e331efcb2a95ebe893f857030e3d62992`. Source-selection baseline: `4f17b410a67308e2868c119b67e32a88d504cea8`. Census baseline: `967365f33737950c6057a1130a896f5b6a86e162`. Original operational baseline: `96d206d1190070a374c34a366b824151205ceed6`.
 
 **Verdict: NOT READY.** The census omissions identified by the independent review are remediated. The reproducible census, proposal tooling and editorial queue are available, but full semantic mapping is incomplete. This report does not mark Phase 2B-5 mapping complete, claim human approval, authorize a migration, or authorize live adaptive learning or Phase 3.
 
@@ -81,7 +81,7 @@ The unchanged owner record selects local `p003` and private Supabase `p017`, and
 
 Two source choices and two pair-comparison aspects are reconciled. The two old mixed `private_variant` queue entries are replaced with precise residual follow-ups. No concept mapping, mastery weight, family independence or live-publication approval is inferred. Selecting local p003 does not override its newer private publication for eligible live callers. Selecting private p017 does not erase the delivered local fallback. All four question revisions and four explanation bundles remain in the census. The open queue remains the same size because each mixed entry retains a distinct unanswered follow-up; its priority distribution changes.
 
-Read-only authenticated p017 metadata on 2026-10-07 at 07:22 Singapore time confirmed the selected payload fingerprint `sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42`. The appQuestion fingerprint also matches the captured revision. An object with array-shaped choices is not proof of complete compiler support. The actual protected payload was not retrieved or compiled: the available MCP connector returns serialized tool results, and this session has no protected in-memory handoff to the existing Node compiler without putting that payload into tool arguments or a file. This is an execution-path blocker, not a disconnected database or an unsupported-grammar claim. Private p017 retains null trusted revision/content IDs. The tested helper can compile privately supplied normalized input and returns only hashes/IDs or bounded failure statuses; its successful tests use synthetic content, not private p017.
+Read-only authenticated p017 metadata on 2026-10-07 at 07:22 Singapore time confirmed the selected payload fingerprint `sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42`. The appQuestion fingerprint also matches the captured revision. An object with array-shaped choices is not proof of complete compiler support. The actual protected payload was not retrieved or compiled: the available MCP connector returns serialized tool results, and this session has no protected in-memory handoff to the existing Node compiler without putting that payload into tool arguments or a file. This is an execution-path blocker, not a disconnected database or an unsupported-grammar claim. Private p017 retains null trusted revision/content IDs. The unused private compilation helper has been removed: it trusted a caller-supplied source fingerprint without proving that the supplied payload matched that fingerprint. A local or synthetic p017 could therefore be mislabeled as the selected private revision. The remaining reader accepts metadata only and rejects any claimed compilation or non-null trusted ID/content hash. A future secured compilation path must verify the actual source payload against its PostgreSQL fingerprint before compiling; no such path exists in this package. The dated private metadata was not refreshed during this remediation.
 
 The next batch contains the five pilot identities and 28 objective topics. Identity, granularity, exact objective/role, family independence and intervention decisions are still pending. The original human record is preserved unchanged; no approval is self-referential or extended to the regenerated package.
 
@@ -101,15 +101,15 @@ Exact duplicate stem, duplicate identity, orphan concept/reference, stale or ret
 
 ## Validation and reproduction
 
-Passed for this source-selection slice:
+Passed for this private-helper remediation:
 
-- `npm run audit:content-mapping`: 28 tests, byte-for-byte regeneration and artifact hashes.
+- `npm run audit:content-mapping`: 29 tests, byte-for-byte regeneration and artifact hashes.
 - `npm run audit:learning-runtime`: 40 tests covering the existing compiler, runtime and isolation behavior; learning-pilot replay/catalogue checks.
-- Focused adversarial tests reject stale baseline/decision/source hashes, nonexistent or contradictory selected revisions, semantic approvals, private payload export fields, changed human records and unverified private compilation. They preserve actual publication precedence, all alternative explanations, null private IDs, and honest absent/drift/unsupported outcomes. The compiler's successful private-path test is synthetic only.
+- Focused adversarial tests reject stale baseline/decision/source hashes, nonexistent or contradictory selected revisions, semantic approvals, private payload export fields, changed human records and unverified private compilation. They preserve actual publication precedence, all alternative explanations and null private IDs. The new regression rejects promotion of a substituted local p017 revision even when its caller asserts the exact selected private fingerprint, and requires the unverified helper export to be absent. The synthetic private-compilation success assertion was removed.
 - `git diff --check`, source import/privacy checks, release-manifest validation and the Vercel deployment-skip check.
 - Fresh read-only local control checks: stored enabled false, effective enabled false and kill switch true on the PostgreSQL 17.6 rehearsal target and local Auth stack.
 
-Two focused reproduction tests failed before this slice consumed the human choices; all five added tests now pass. The prior census baseline passed build, all eight site audits, 20 persistence scenarios, 213 static migration checks, 69 runtime/boundary/operations tests and 525 local database assertions. Those broader suites and the operational backup/restore/load rehearsal were not repeated for these offline-only changes. Their dated evidence is retained in validation.json as prior evidence, not a new run. No app, routed API, runtime compiler, database migration or operational adapter was changed. No live migration or production write was performed.
+The new caller-asserted-fingerprint regression failed before helper removal and now passes; both focused private-boundary tests pass. The earlier source-selection slice had two failing reproductions before consuming the human choices and passed 28 mapping tests; its validation checksum is retained separately as prior evidence. The prior census baseline passed build, all eight site audits, 20 persistence scenarios, 213 static migration checks, 69 runtime/boundary/operations tests and 525 local database assertions. Those broader suites and the operational backup/restore/load rehearsal were not repeated for these offline-only changes. Their dated evidence is retained in validation.json as prior evidence, not a new run. No app, routed API, runtime compiler, database migration or operational adapter was changed. No live migration or production write was performed.
 
 Offline package reproduction:
 
@@ -128,22 +128,14 @@ The approval package remains on hold. The two recorded PBQ source choices are in
 
 A later runtime integration needs separately approved adapters for unsupported content kinds/grammars, complete validated version publication, and the existing production-readiness/operations gates. No live migration, activation, shadow cohort, learner change, deployment, pricing/legal change or Phase 3 work was performed or authorized here.
 
-## Exact source-selection slice files
+## Exact private-helper remediation files
 
-- `scripts/lib/content-mapping/editorial-selections.mjs` — pinned decision reader/validator and metadata-only private compiler helper.
-- `scripts/lib/content-mapping/package.mjs` — separate source choices, residual queues, processing status and provenance inputs.
-- `scripts/build-content-mapping.mjs` — generated selection ledger, 33-identity batch, guide and checksum updates.
-- `scripts/audit-content-mapping.mjs` — reproductions, stale/contradictory approval checks, unchanged precedence and private-boundary tests.
-- `docs/phase-2b5-content-mapping-readiness.md` — this updated report.
-- `docs/evidence/phase-2b5/private-p017-processing.json` — fresh read-only metadata evidence and the processing blocker.
-- `docs/evidence/phase-2b5/source-selection-decisions.json` — generated exact choices and reconciled/residual aspect ledger.
-- `docs/evidence/phase-2b5/review-batch.md` — next five-pilot/28-topic review batch.
-- `docs/evidence/phase-2b5/mapping-package.json` — regenerated package and matrices.
-- `docs/evidence/phase-2b5/delivery-inventory.md` — corrected source-choice versus semantic-review wording.
-- `docs/evidence/phase-2b5/review-guide.md` — instructions for already recorded choices and the next batch.
-- `docs/evidence/phase-2b5/review-queue.md` — precise remaining decisions.
-- `docs/evidence/phase-2b5/checksums.json` — generated artifact hashes.
-- `docs/evidence/phase-2b5/validation.json` — current checks separated from historical broader regressions.
-- `docs/evidence/phase-2b5/release-checksums.json` — complete checksum manifest excluding itself.
+- `scripts/lib/content-mapping/editorial-selections.mjs` — removes the unused, unverified compilation helper and compiler import; preserves pinned decisions and blocked metadata-only processing.
+- `scripts/audit-content-mapping.mjs` — replaces synthetic success claims with metadata rejection and substituted-local-revision regressions.
+- `docs/phase-2b5-content-mapping-readiness.md` — this corrected report.
+- `docs/evidence/phase-2b5/mapping-package.json` — regenerated source hashes; selections, counts, queues and null private IDs remain unchanged.
+- `docs/evidence/phase-2b5/checksums.json` — regenerated artifact hashes.
+- `docs/evidence/phase-2b5/validation.json` — current checks separated from historical evidence.
+- `docs/evidence/phase-2b5/release-checksums.json` — refreshed complete manifest excluding itself.
 
-`docs/phase-2b5-editorial-review-record.md` is unchanged and included as an input in the release manifest.
+The owner decision record, dated private p017 evidence, selection ledger and review batch remain unchanged. No private payload was retrieved or compiled, and no app, runtime, migration or production behavior changed.

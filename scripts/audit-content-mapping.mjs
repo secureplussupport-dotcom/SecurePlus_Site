@@ -4,7 +4,8 @@ import {readFileSync,readdirSync} from 'node:fs';
 import {buildPackage,digest,detectCatalogueIssues} from './lib/content-mapping/package.mjs';
 import {verifyDeliveryInventory,readGlossary,readSelectors} from './lib/content-mapping/delivery-inventory.mjs';
 import {readGuestPreview,verifyGuestPreview} from './lib/content-mapping/guest-preview.mjs';
-import {readEditorialSelections,validateEditorialSelections,compilePrivateSelection,readPrivateProcessing} from './lib/content-mapping/editorial-selections.mjs';
+import * as editorialSelections from './lib/content-mapping/editorial-selections.mjs';
+import {readEditorialSelections,validateEditorialSelections,readPrivateProcessing} from './lib/content-mapping/editorial-selections.mjs';
 import {getDeepDiveRecommendations} from '../src/lib/deepDiveRecommendations.js';
 import {publicationPipeline} from './lib/content-mapping/publication.mjs';
 import {readLearningPilotBank,contentSignature} from './lib/read-learning-pilot-bank.mjs';
@@ -215,21 +216,26 @@ test('source selection preserves actual publication precedence and all alternati
  }
  assert.equal(pkg.counts.records,1878);assert.equal(pkg.counts.unresolvedQuestionMappings,489);
 });
-test('private compiler path fails closed without source or exact fingerprint and never exports payload',()=>{
- const signature=pkg.editorialSelections.decisions[1].selectedSourceSignature;
- const question={id:'p017',type:'SCENARIO',choices:['Private synthetic A','Private synthetic B'],correct:0,explanation:'Private synthetic explanation'};
- assert.equal(compilePrivateSelection(null,null,signature).status,'source_unavailable');
- assert.equal(compilePrivateSelection(null,'Private synthetic secret',signature).sourceSignature,null);
- assert.equal(compilePrivateSelection(question,'sha256:'+'0'.repeat(64),signature).status,'source_drift');
- assert.equal(compilePrivateSelection({...question,blanks:[]},signature,signature).status,'unsupported_or_invalid_revision');
- assert.equal(compilePrivateSelection({...question,id:'p003'},signature,signature).status,'unsupported_or_invalid_revision');
- const r=compilePrivateSelection(question,signature,signature);assert.equal(r.status,'compiled');assert.equal(r.trustedRevisionId,compileRevision(question,'pbq').revisionId);
- assert.deepEqual(Object.keys(r).sort(),['contentSha256','sourceSignature','status','trustedRevisionId']);
- assert.ok(!JSON.stringify(r).includes('Private synthetic'));
+test('private processing accepts metadata only and keeps uncompiled revisions blocked',()=>{
  const evidence=JSON.parse(readFileSync('docs/evidence/phase-2b5/private-p017-processing.json'));
  assert.equal(readPrivateProcessing(evidence).selectionStatus,'historical_choice_fingerprint_confirmed');
  assert.equal(readPrivateProcessing({...evidence,sourceSignature:'sha256:'+'0'.repeat(64)}).selectionStatus,'new_revision_pending_human_review');
- assert.throws(()=>readPrivateProcessing({...evidence,payload:question}),/export field/);
- assert.throws(()=>readPrivateProcessing({...evidence,trustedRevisionId:r.trustedRevisionId}),/unverified private compilation/);
+ assert.throws(()=>readPrivateProcessing({...evidence,sourceSignature:'invalid'}),/fingerprint/);
+ assert.throws(()=>readPrivateProcessing({...evidence,payload:bank.pbqs.find(q=>q.id==='p017')}),/export field/);
  assert.equal(pkg.privateRevisionProcessing.trustedRevisionId,null);
+ assert.equal(pkg.privateRevisionProcessing.contentSha256,null);
+});
+
+test('caller-asserted private signature cannot promote a substituted local revision',()=>{
+ assert.equal(Object.hasOwn(editorialSelections,'compilePrivateSelection'),false);
+ const evidence=JSON.parse(readFileSync('docs/evidence/phase-2b5/private-p017-processing.json'));
+ const local=compileRevision(bank.pbqs.find(q=>q.id==='p017'),'pbq');
+ assert.equal(evidence.sourceSignature,pkg.editorialSelections.decisions[1].selectedSourceSignature);
+ for(const forged of [
+  {...evidence,trustedRevisionId:local.revisionId},
+  {...evidence,contentSha256:local.contentSha256},
+  {...evidence,compilerStatus:'compiled',trustedRevisionId:local.revisionId,contentSha256:local.contentSha256},
+ ])assert.throws(()=>readPrivateProcessing(forged),/unverified private compilation/);
+ assert.equal(pkg.records.find(r=>r.id==='private:pbq:p017').trustedRevisionId,null);
+ assert.equal(pkg.records.find(r=>r.id==='private:pbq:p017').contentSha256,null);
 });

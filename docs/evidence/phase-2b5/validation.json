@@ -4,7 +4,7 @@
   "censusBaseline": "967365f33737950c6057a1130a896f5b6a86e162",
   "status": "PASS_LOCAL_CHECKS_PRIVATE_COMPILATION_BLOCKED",
   "checks": {
-    "contentMapping": 28,
+    "contentMapping": 29,
     "learningRuntime": 40,
     "learningPilot": "PASS replay and catalogue checks",
     "immutableBaselineBinding": "PASS exact original package and four source fingerprints",
@@ -35,7 +35,7 @@
     "P1": 1070,
     "P2": 1881
   },
-  "regressionProof": "Two source-choice reproduction tests failed before implementation. Five added tests now pass, rejecting stale bindings, contradictory/missing revisions, semantic approval fields and private payload leaks, while preserving actual publication precedence and all variants/explanations. Synthetic compiler input exercises absent, drift, invalid/unsupported and compiled outcomes; actual private p017 was not compiled.",
+  "regressionProof": "Caller-asserted private fingerprint regression failed while the unused helper was exported and passes after removal. Both focused private-boundary tests pass. A substituted local p017 trusted ID/hash cannot be promoted using the selected private fingerprint: metadata processing rejects non-null IDs, content hashes and compiled status. Payload/export fields and malformed fingerprints are rejected; source drift remains pending human review. Actual private p017 was not retrieved or compiled; its IDs remain null. All source choices, variants, explanations, counts, queues and actual publication precedence are preserved.",
   "productionEvidence": {
     "questionId": "p017",
     "projectId": "uscaqeymulsaeqxjvbfq",
@@ -83,7 +83,7 @@
       "learnerRecordsRead": false
     }
   },
-  "controlObservedAt": "2026-10-06T23:30:15.748707+00:00",
+  "controlObservedAt": "2026-10-06T23:36:12.825247+00:00",
   "finalControl": {
     "postgres176": {
       "storedEnabled": false,
@@ -98,40 +98,50 @@
   },
   "logs": [
     {
-      "localPath": "/tmp/secureplus-2b5-selections-red.log",
-      "sha256": "35075094efc427767db82132d125fc4ef947f3b24b0d00387f58453df8254cdb",
+      "localPath": "/tmp/secureplus-2b5-private-binding-red.log",
+      "sha256": "a662e29be0d5465e2fe85230eecfc7f4944ee875688a4174a808f8f27972c9c7",
       "expectedStatus": "initial_failing_reproduction"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-selections-focused.log",
-      "sha256": "1fa58c81dea6815280c6bdb0375569ab4c3fdaed1682d10065870dbba6fa9cac",
+      "localPath": "/tmp/secureplus-2b5-private-binding-focused.log",
+      "sha256": "43cbc7c5e183fab22b93ff9fda4caff4a15e0f06dbf18d076e63e63620c45447",
       "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-selections-generate.log",
-      "sha256": "c8f4d46895ae9b5e0feecbcebdab5771f60c50dea643a12ae1422fe35ccd96a6",
+      "localPath": "/tmp/secureplus-2b5-private-binding-generate.log",
+      "sha256": "318b24606d8a9221bdb5cde456afc1dab6536820a28358a8ba94be03db920844",
       "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-selections-mapping.log",
-      "sha256": "5cf46e554e82512927753d5bc00e512e750bba1852e1b76ee01547832d9ea3d2",
+      "localPath": "/tmp/secureplus-2b5-private-binding-mapping.log",
+      "sha256": "3222128da9b778d8fd1d8c69ba1f9c7fa563f35565a22d9a23b276284c709f9a",
       "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-selections-runtime.log",
-      "sha256": "fa15911da65fcb408aae08c36580cad451ce74722adb5ca81977e90fa344bceb",
+      "localPath": "/tmp/secureplus-2b5-private-binding-runtime.log",
+      "sha256": "3ea1097aa794ab6e6789c6c8904c581e5f37bf8bf3c03606b0ce371784949e73",
       "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-selections-pilot.log",
+      "localPath": "/tmp/secureplus-2b5-private-binding-pilot.log",
       "sha256": "37a513229e4f3a5d35f58ddec38905f56b960e97f9cfdb1ef447a2dae409ad89",
-      "expectedStatus": "PASS"
-    },
-    {
-      "localPath": "/tmp/secureplus-2b5-selections-baseline.log",
-      "sha256": "72f3faafcf69145745107952584b565eefd18b326c651f1e8de8bae09c1b7574",
       "expectedStatus": "PASS"
     }
   ],
-  "notRepeated": "Build/site, persistence, migration, database/boundary/operations suites and destructive operational rehearsal were not rerun. This slice changes offline mapping artifacts and helper logic only; application/runtime compiler/migration code remains unchanged."
+  "notRepeated": "Build/site, persistence, migration, database/boundary/operations suites and destructive operational rehearsal were not rerun. This remediation removes an unused offline helper and replaces its tests; application/runtime compiler/migration code remains unchanged. No production access occurred; dated production metadata is prior evidence.",
+  "remediationBaseline": "54915d4e331efcb2a95ebe893f857030e3d62992",
+  "priorSourceSelectionEvidence": {
+    "commit": "54915d4e331efcb2a95ebe893f857030e3d62992",
+    "validationSha256": "2def0b0d4711606494342fdefe56f0e2ab8b439480fe9476db29e50dad78c38e",
+    "checks": {
+      "contentMapping": 28,
+      "learningRuntime": 40,
+      "learningPilot": "PASS replay and catalogue checks",
+      "immutableBaselineBinding": "PASS exact original package and four source fingerprints",
+      "deploymentSkip": "PASS",
+      "releaseManifestFiles": 25
+    },
+    "limitation": "The removed helper trusted a supplied fingerprint rather than binding the actual input payload. Its synthetic success assertion did not prove private revision compilation. Private processing remained blocked and no helper caller existed outside tests."
+  },
+  "productionEvidenceNotRefreshedDuringRemediation": true
 }
