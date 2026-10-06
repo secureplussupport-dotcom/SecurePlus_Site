@@ -2,7 +2,7 @@
 
 NOT READY. This is a proposal package, not completed semantic mapping or permission to activate adaptive learning.
 
-The census contains 395 effective local MCQs, 88 local PBQs, and 2 later private PBQ variants, plus 9 separately authored signup starter questions. Only 7 question mappings carry an existing reviewed pilot primary concept; 487 question revisions need semantic mapping. Candidate term matching has **zero mastery weight** and is not coverage.
+The census contains 395 effective local MCQs, 88 local PBQs, and 2 later private PBQ variants, plus 9 separately authored signup starter questions and 14 independently authored guest teaching records. Only 7 question mappings carry an existing reviewed pilot primary concept; 489 question revisions need semantic mapping. Candidate term matching has **zero mastery weight** and is not coverage.
 
 ## How to review
 
@@ -22,7 +22,15 @@ Counts overlap: lessons contain sections, checks and keyword guides; explanation
 | explanation_bundle | 494 |
 | flashcard | 313 |
 | glossary_definition | 162 |
-| intervention_selector | 23 |
+| guest_demo_explanation | 2 |
+| guest_demo_feedback | 2 |
+| guest_demo_flashcard | 1 |
+| guest_demo_hint | 1 |
+| guest_demo_lesson_prompt | 3 |
+| guest_demo_mcq | 1 |
+| guest_demo_pbq | 1 |
+| guest_demo_review_path | 3 |
+| intervention_selector | 26 |
 | keyword_guide | 32 |
 | lesson | 32 |
 | lesson_check | 128 |

@@ -1,7 +1,7 @@
 {
   "status": "agent_scoped_inventory_pending_human",
   "reviewDate": "2026-10-06",
-  "scope": "Explicit source-level census of delivered learning selectors and glossary. Any change in these delivery sources requires reviewing inventory completeness before updating this guard. Not human approval.",
+  "scope": "Explicit source-level census of delivered learning selectors and glossary. Any change in these delivery sources requires reviewing inventory completeness before updating this guard. Not human approval. GuestFeaturePreview independently authored teaching branches and selector/reachability bindings reviewed in the final census remediation.",
   "selectorIds": [
     "cipher-study-routing",
     "daily-challenges",
@@ -11,6 +11,9 @@
     "flashcard-navigation",
     "flashcard-study-pass",
     "glossary-delivery",
+    "guest-feature-lesson-topic",
+    "guest-feature-review-topic",
+    "guest-feature-teaching",
     "guest-pbq-preview",
     "lesson-navigation",
     "lesson-related-pbq",

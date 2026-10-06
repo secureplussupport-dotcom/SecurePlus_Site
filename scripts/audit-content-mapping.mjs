@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import {buildPackage,digest,detectCatalogueIssues} from './lib/content-mapping/package.mjs';
 import {verifyDeliveryInventory,readGlossary,readSelectors} from './lib/content-mapping/delivery-inventory.mjs';
+import {readGuestPreview,verifyGuestPreview} from './lib/content-mapping/guest-preview.mjs';
 import {getDeepDiveRecommendations} from '../src/lib/deepDiveRecommendations.js';
 import {publicationPipeline} from './lib/content-mapping/publication.mjs';
 import {readLearningPilotBank,contentSignature} from './lib/read-learning-pilot-bank.mjs';
@@ -126,5 +127,49 @@ test('delivered selector metadata and real lesson recommendation outputs resolve
 test('separate signup starter revisions and explanations are retained without fabricated runtime identities',()=>{
  const starters=pkg.records.filter(r=>r.kind==='starter_question');assert.equal(starters.length,9);
  for(const r of starters){assert.equal(r.trustedRevisionId,null);assert.ok(pkg.records.some(x=>x.parentId===r.id&&x.kind==='explanation_bundle'));assert.ok(pkg.reviewQueue.some(x=>x.recordId===r.id&&x.reason==='starter_semantic_review'));}
- assert.equal(pkg.counts.unresolvedQuestionMappings,pkg.records.filter(r=>['mcq','pbq','starter_question'].includes(r.kind)&&!r.primaryConceptId).length);
+ assert.equal(pkg.counts.unresolvedQuestionMappings,pkg.records.filter(r=>['mcq','pbq','starter_question','guest_demo_mcq','guest_demo_pbq'].includes(r.kind)&&!r.primaryConceptId).length);
+});
+
+test('GuestFeaturePreview teaching sub-surfaces have independent revision records',()=>{
+ const required=['flashcard:mfa','mcq:access-control','mcq:feedback','mcq:solution-explanation','mcq:distractor-explanation','pbq:incident-response-ordering','pbq:feedback','pbq:hint','review-path:pki','review-path:iam','review-path:logs','lesson-prompt:web-attacks','lesson-prompt:dns-attacks','lesson-prompt:phishing'];
+ for(const suffix of required){const r=pkg.records.find(r=>r.id==='guest-demo:'+suffix);assert.ok(r,suffix);assert.ok(r.sourceUnits.length);assert.ok(r.reachability.length);assert.equal(r.weight,0);assert.equal(r.trustedRevisionId,null);assert.equal(r.semanticMappingStatus,'unresolved_marketing_teaching_demo');}
+ assert.equal(pkg.records.filter(r=>r.scope==='marketing_teaching_demo').length,required.length);
+});
+test('GuestFeaturePreview selector coverage binds teaching, review topics and lesson topics',()=>{
+ for(const suffix of ['guest-feature-teaching','guest-feature-review-topic','guest-feature-lesson-topic']){
+  const r=pkg.records.find(r=>r.id==='intervention:'+suffix);assert.ok(r,suffix);
+  assert.ok(r.selector.sourceUnits.some(u=>u.startLine>=24376&&u.startLine<=24614));
+  assert.ok(r.selector.deliveryEvidence.some(e=>e.marker.includes('GuestFeaturePreview')));
+ }
+});
+test('guest completeness guard rejects every omission, source drift and unapproved inclusion',()=>{
+ assert.ok(verifyGuestPreview(pkg));
+ for(const item of readGuestPreview().records){
+  const copy=structuredClone(pkg);copy.records=copy.records.filter(r=>r.id!==item.id);
+  assert.throws(()=>verifyGuestPreview(copy),/Incomplete/);
+ }
+ const mutate=change=>{const copy=structuredClone(pkg);change(copy);assert.throws(()=>verifyGuestPreview(copy),/GuestFeaturePreview/);};
+ const first=p=>p.records.find(r=>r.scope==='marketing_teaching_demo');
+ mutate(p=>first(p).sourceSignature='sha256:'+'0'.repeat(64));
+ mutate(p=>first(p).sourceUnits[0].startLine++);
+ mutate(p=>first(p).reachability=[]);
+ mutate(p=>p.records.find(r=>r.kind==='guest_demo_explanation').parentId='guest-demo:flashcard:mfa');
+ mutate(p=>first(p).linkedSelectorIds=[]);
+ mutate(p=>first(p).weight=1);
+ mutate(p=>first(p).primaryConceptId='recovery.rto');
+ mutate(p=>p.exclusions=p.exclusions.filter(r=>r.id!=='guest-demo:exam-timer'));
+ mutate(p=>{for(const r of p.records.filter(r=>r.kind==='intervention_selector'))r.selector.sourceUnits=r.selector.sourceUnits.filter(u=>u.anchor!=='function GuestFeaturePreview(');});
+});
+test('guest topic revisions bind their exact values while exports withhold teaching and grading text',()=>{
+ const source=readFileSync('src/App.jsx','utf8');
+ const a=source.indexOf('    const reviewPaths={'),b=source.indexOf('    const activePath=',a);
+ const paths=Function(`"use strict";${source.slice(a,b)};return reviewPaths;`)();
+ const c=source.indexOf('  const lessons=['),d=source.indexOf('  const activeLesson=',c);
+ const lessons=Function(`"use strict";${source.slice(c,d)};return lessons;`)();
+ const rows=pkg.records.filter(r=>r.scope==='marketing_teaching_demo'),text=JSON.stringify(rows);
+ for(const r of rows){for(const u of r.sourceUnits){const lineStart=source.split('\n').slice(0,u.startLine-1).join('\n').length+1,start=source.indexOf(u.anchor,lineStart),code=source.slice(start,source.indexOf(u.endAnchor,start+u.anchor.length));assert.equal(u.sourceSignature,contentSignature(code));}assert.equal(r.persistenceContentKind,null);}
+ for(const [topic,value] of Object.entries(paths)){const r=rows.find(r=>r.kind==='guest_demo_review_path'&&r.topic===topic);assert.equal(r.sourceSignature,contentSignature({id:r.id.slice(11),value}));for(const step of value.steps)assert.ok(!text.includes(JSON.stringify(step)));}
+ for(const value of lessons){const r=rows.find(r=>r.kind==='guest_demo_lesson_prompt'&&r.topic===value.title);assert.equal(r.sourceSignature,contentSignature({id:r.id.slice(11),value}));assert.ok(!text.includes(value.prompt));}
+ const forbidden=new Set(['code','definition','prompt','steps','expected','choices','correct','options','feedback','payload']);
+ const walk=x=>{if(x&&typeof x==='object')for(const [key,value] of Object.entries(x)){assert.ok(!forbidden.has(key),key);walk(value);}};walk(rows);
 });

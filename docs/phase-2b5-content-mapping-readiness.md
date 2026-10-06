@@ -1,6 +1,6 @@
 # Phase 2B-5 content mapping readiness
 
-Date: 2026-10-06. Remediation baseline: `9b895861628d9050aeff84eebec68222585754e7`. Original operational baseline: `96d206d1190070a374c34a366b824151205ceed6`.
+Date: 2026-10-06. Remediation baseline: `8a44f3f07e7cd9001628a92d2df2f109b61484c9`. Original operational baseline: `96d206d1190070a374c34a366b824151205ceed6`.
 
 **Verdict: NOT READY.** The census omissions identified by the independent review are remediated. The reproducible census, proposal tooling and editorial queue are available, but full semantic mapping is incomplete. This report does not mark Phase 2B-5 mapping complete, claim human approval, authorize a migration, or authorize live adaptive learning or Phase 3.
 
@@ -10,7 +10,7 @@ The approved requirements remain `docs/secureplus-rebrand-master-plan.md`; `docs
 
 - [Review guide](evidence/phase-2b5/review-guide.md): counting rules, review procedure, schema and privacy limitations.
 - [Mapping package](evidence/phase-2b5/mapping-package.json): exact source revisions, existing trusted question IDs where supported, proposed concept links, evidence scope, exclusions, matrices and open decisions.
-- [Delivered support/selector inventory](evidence/phase-2b5/delivery-inventory.md): all 162 glossary revisions, lexical source links, and 23 delivered selectors with source locations, inputs, targets and determinism boundaries.
+- [Delivered support/selector inventory](evidence/phase-2b5/delivery-inventory.md): all 162 glossary revisions, lexical source links, 14 guest teaching records, and 26 delivered selectors with source locations, inputs, targets and determinism boundaries.
 - [Prioritized editorial queue](evidence/phase-2b5/review-queue.md): every decision remains open.
 - [Artifact checksums](evidence/phase-2b5/checksums.json) and [release checksums](evidence/phase-2b5/release-checksums.json).
 - [Validation](evidence/phase-2b5/validation.json): current checks and final local runtime controls.
@@ -45,13 +45,14 @@ The inspection found `question_overrides`, `question_override_history` and `pbqs
 | Lesson checks | 128 | 32 self-checks plus 96 actually displayed generated questions |
 | Public instructional/SEO pages | 16 | Separate coarse inventory; no approved persistence adapter |
 | Glossary definitions | 162 | Exact per-definition hashes, stable term identities, source locations and conditional delivery |
-| Intervention selectors | 23 | Delivered algorithms and navigation selectors; no learner-specific outputs |
-| Total overlapping records | 1,861 | Not a count of independent questions or learning opportunities |
-| Excluded/source-layer records | 1,208 | Includes retired, disabled, raw superseded layers, unused helper outputs and unavailable external scope |
+| Guest teaching demo records | 14 | Two assessments, one card, two explanations, two feedback bundles, one hint, three fixed review paths and three teaching prompts |
+| Intervention selectors | 26 | Delivered algorithms and navigation selectors; no learner-specific outputs |
+| Total overlapping records | 1,878 | Not a count of independent questions or learning opportunities |
+| Excluded/source-layer records | 1,209 | Includes retired, disabled, raw superseded layers, unused helper outputs and unavailable external scope |
 
-The generated practice helper produces 171 questions, but the app displays only the first three per lesson: 96 active and 75 excluded. Another 337 helper-generated cards are not delivered by the app. Both groups are excluded from active coverage. Raw-layer exclusions overlap identities and must not be interpreted as 1,208 removed questions.
+The generated practice helper produces 171 questions, but the app displays only the first three per lesson: 96 active and 75 excluded. Another 337 helper-generated cards are not delivered by the app. Both groups are excluded from active coverage. Raw-layer exclusions overlap identities and must not be interpreted as 1,209 removed questions.
 
-Only seven question revisions carry an existing pilot primary-concept proposal: five MCQs and two coarse PBQs. **487 question revisions remain unresolved**: 390 bank MCQs, nine signup starter questions, 86 local PBQs and the two private variants. Literal terms and objective tags are explicitly low-confidence candidates, not inferred primary concepts or semantic coverage. Their mastery weight is zero.
+Only seven question revisions carry an existing pilot primary-concept proposal: five MCQs and two coarse PBQs. **489 question revisions remain unresolved**: 390 bank MCQs, nine signup starter questions, 86 local PBQs, two private variants and the two guest demo assessments. Literal terms and objective tags are explicitly low-confidence candidates, not inferred primary concepts or semantic coverage. Their mastery weight is zero.
 
 There are 435 catalogue nodes: five existing pending-human mastery concepts, 28 proposed objective topics and 402 proposed supporting terms. Proposed support terms are not automatically promoted to mastery concepts. The 430 new node identities require synonym, ambiguity, scope and granularity review before any canonical version can be approved.
 
@@ -65,15 +66,19 @@ Of the 162 definitions, 136 occur in the current question/lesson corpus. Includi
 
 The selector registry covers weak and starter decks; daily challenges; Deep Dive recommendations; flashcard-related lessons; Smart Review; next PBQ/deck; random/starred decks; general/signup diagnostics; MCQ launch and result paths; exams; PBQ browsing/random practice; dashboard weak-area actions; Cipher routing; lesson search/steps/end actions; related-PBQ routing; flashcard browsing/pass navigation; glossary lookup; and guest PBQ preview. Each record binds source units, dependency hashes, delivery call sites, input categories, output kinds and deterministic/time/random boundaries. No actual learner selection instance is exported. The nine signup questions were discovered while tracing the diagnostic selectors and have their own question/explanation records rather than being hidden inside an App-file hash.
 
+The final review also identified `GuestFeaturePreview`, reached from the default unauthenticated root through `GuestDashboardGate` and `GuestFeatureShowcaseCard`. It contains independently authored teaching; the existing `guest-pbq-preview` selector only navigates to real bank content and cannot represent this demo. Fourteen separate revisions now bind the MFA definition, access-control MCQ/feedback, solution and distractor explanations, ordering PBQ/feedback/hint, three hardcoded review paths and three Deep Dive prompts. Three selectors bind the complete preview function and guest reachability chain, review dictionary selection and lesson prompt selection. Source units include exact anchors, line locations and hashes; per-topic value hashes distinguish each fixed path/prompt without exporting its body.
+
+These marketing demos remain outside adaptive evidence: null trusted revision IDs, zero mastery weights and explicitly unresolved objective/concept scope. The PBQ is coarse and reveals the next step through a hint; it cannot establish independent unaided transfer. The review percentages and miss signals are synthetic illustrations, not learner measurements. The clock/pause/progress illustration contains no authored question or subject teaching and has its own source-bound exclusion. No product behavior or marketing copy changed. The glossary's 153-reference count still describes the explicitly inspected question/lesson/card/starter corpus; it does not claim a new semantic link to these demos.
+
 Explicit selector exclusions distinguish the unwired adaptive scheduler/model, non-learning admin/account/cosmetic actions, and learner-specific saved/personalized instances. Source-level coverage is reviewed against the current delivery files; no claim is made that static analysis can prove every future selector. `delivery-surface-review.json` deliberately fails closed on a change to a reviewed delivery source. Regeneration alone cannot bless such a change: the inventory must be reviewed and that guard deliberately updated. Tests also reject removed glossary/selector rows, changed per-definition/selector revisions, orphan usage links, missing manifest sources and unreviewed selector-scope changes. The guard is an agent inventory checkpoint, not human editorial approval.
 
 ## Gaps and decisions
 
-The queue has **2,906 open decisions: P0 4; P1 1,038; P2 1,864**. Decisions overlap records.
+The queue has **2,954 open decisions: P0 4; P1 1,069; P2 1,881**. Decisions overlap records.
 
 - P0: review the two private revisions and reconcile their two local fallbacks. Bind any future mapping to the exact private revision.
-- P1: resolve 476 bank question concept/family mappings and nine starter mappings; explicitly review all seven pilot mappings; review 430 proposed taxonomy nodes; handle 36 unsupported trusted revisions; resolve 66 missing objective assignments; confirm delivery/use of nine locally unreferenced glossary entries; and address independent-family shortages for all five existing mastery concepts.
-- P2: review 1,376 instructional records, 57 missing mapped interventions and 431 nodes without a mapped direct assessment. Supporting nodes need not become mastery nodes.
+- P1: resolve 476 bank question concept/family mappings and nine starter mappings; explicitly review all seven pilot mappings; review 430 proposed taxonomy nodes; handle 36 unsupported trusted revisions; resolve 83 missing objective assignments; review the 14 guest demo scopes and marketing learner claims; confirm delivery/use of nine locally unreferenced glossary entries; and address independent-family shortages for all five existing mastery concepts.
+- P2: review 1,393 instructional records, 57 missing mapped interventions and 431 nodes without a mapped direct assessment. Supporting nodes need not become mastery nodes.
 
 No scenario family has human approval. A different ID, matching keyword or a later appearance does not establish novelty. Existing RTO MCQs share one identification family; none of the five pilot concepts has sufficient independently reviewed variants to justify broad transfer coverage. Coarse PBQs emit no per-concept mastery weight.
 
@@ -86,14 +91,14 @@ Exact duplicate stem, duplicate identity, orphan concept/reference, stale or ret
 Passed on the current source:
 
 - `npm run build`; all eight `npm run audit` site audits, including editorial and strict question-bank checks. Build retains the existing chunk-size warning.
-- `npm run audit:content-mapping`: 19 tests plus byte-for-byte regeneration and hash checks.
+- `npm run audit:content-mapping`: 23 tests plus byte-for-byte regeneration and hash checks.
 - Learning pilot checks; 20 persistence scenarios; 213 static migration checks.
 - 69 runtime/boundary/operations unit tests.
 - Fresh disposable database: 26 database, 116 infrastructure, 103 trusted-runtime, 262 deletion/shadow-isolation and 18 boundary-database assertions.
 - Source import scans keep the package outside browser/API imports; privacy checks reject grading/answer-bearing export fields and question stems. Existing live code and migration files are unchanged.
 - Final controls on both the PostgreSQL 17.6 rehearsal target and local Auth stack: stored enabled false, effective enabled false, kill switch true.
 
-The two initial reproduction tests failed on the original package: zero glossary entries and missing delivered selector records. The corrected package passes those tests and adversarial removal/drift checks. For the current database regression run, only the known disposable local Supabase stack was reset before running all five database suites; the earlier populated-database rejection belongs to the original delivery, not this run. The approved operational backup/restore/load rehearsal was not repeated because this package changes no runtime or migration code. Its baseline artifacts remain unchanged; operations unit regressions passed. This is not a new production-scale load claim.
+Two focused guest-preview reproduction tests failed against the remediation baseline: absent independent teaching revisions and absent teaching/topic selectors. All 23 mapping tests now pass, including removal of each of the 14 sub-surfaces, altered source/reachability/parent links, unapproved adaptive inclusion, missing timer exclusion and missing actual preview function coverage. Tests independently verify per-topic value hashes and reject answer-bearing export fields. The earlier glossary/selector reproductions and completeness regressions remain in the suite. For the current database regression run, only the known disposable local Supabase stack was reset before running all five database suites; the earlier populated-database rejection belongs to the original delivery, not this run. The approved operational backup/restore/load rehearsal was not repeated because this package changes no runtime or migration code. Its baseline artifacts remain unchanged; operations unit regressions passed. This is not a new production-scale load claim.
 
 Offline package reproduction:
 
@@ -114,13 +119,14 @@ A later runtime integration needs separately approved adapters for unsupported c
 
 ## Exact remediation files
 
-- `scripts/lib/content-mapping/delivery-inventory.mjs` — new definition reader, selector registry, provenance and completeness guard.
-- `scripts/lib/content-mapping/package.mjs` — glossary/starter/selector records, source links, concepts, counts and queues.
+- `scripts/lib/content-mapping/guest-preview.mjs` — exact guest teaching revisions, source units, reachability, timer exclusion and completeness guard.
+- `scripts/lib/content-mapping/delivery-inventory.mjs` — three guest teaching/topic selectors added to the existing registry.
+- `scripts/lib/content-mapping/package.mjs` — guest records/exclusion and regenerated counts, matrices and queues.
 - `scripts/build-content-mapping.mjs` — guard enforcement and generated human-readable delivery inventory.
 - `scripts/audit-content-mapping.mjs` — failing reproductions and completeness/drift/reference regressions.
 - `docs/phase-2b5-content-mapping-readiness.md` — this corrected report.
 - `docs/evidence/phase-2b5/delivery-surface-review.json` — reviewed delivery-source hashes and selector scope.
-- `docs/evidence/phase-2b5/delivery-inventory.md` — glossary and selector review details.
+- `docs/evidence/phase-2b5/delivery-inventory.md` — glossary, guest demo and selector review details.
 - `docs/evidence/phase-2b5/mapping-package.json` — regenerated machine-readable census and matrices.
 - `docs/evidence/phase-2b5/review-guide.md` — corrected review instructions/counts.
 - `docs/evidence/phase-2b5/review-queue.md` — regenerated prioritized decisions.

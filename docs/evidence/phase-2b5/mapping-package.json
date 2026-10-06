@@ -8,7 +8,7 @@
   "sources": [
     {
       "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
-      "sha256": "7e6cb0d3ecaf750f75c3800ef03e5f89de741ab5c2669195d841b59822f59a7a"
+      "sha256": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
     },
     {
       "path": "package.json",
@@ -80,19 +80,23 @@
     },
     {
       "path": "scripts/audit-content-mapping.mjs",
-      "sha256": "f10f92c79d87edf65cbe131112f493b80b928f21e87419388deec006f7e8e0ea"
+      "sha256": "8aec73d310bbad50f550a912bf7c1c10105e270198e1b38197c48f1036a9958f"
     },
     {
       "path": "scripts/build-content-mapping.mjs",
-      "sha256": "6f0077ca90cbdc200adcd0c05ad1be8398df20164abcb647d27b1bdf6b549701"
+      "sha256": "19b1b1c272dc1b41b028e168fac2484221987d35712c3f7ae75c4264d4cc9609"
     },
     {
       "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
-      "sha256": "1d607dc596c37c60007fe5bed6c1ea74ffd632749979cfe2f1ceb5e771b79d6d"
+      "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "scripts/lib/content-mapping/guest-preview.mjs",
+      "sha256": "ec697f6be0823e631776e3406b3d5bc0f4fd4046ef38f396e6bf15f730b9fba3"
     },
     {
       "path": "scripts/lib/content-mapping/package.mjs",
-      "sha256": "24f90d4f4cce5730423520a768a4f14d5ede9344f7be06e7aebfcf5862d109b0"
+      "sha256": "bd6a2bc2817078acf2e85df4c93d2465b0a33fa03173e6c559a994dfee16fcce"
     },
     {
       "path": "scripts/lib/content-mapping/publication.mjs",
@@ -188,19 +192,21 @@
     }
   ],
   "counts": {
-    "records": 1861,
+    "records": 1878,
     "mcqs": 395,
     "localPbqs": 88,
+    "guestDemoRecords": 14,
+    "guestDemoAssessments": 2,
     "starterQuestions": 9,
     "glossaryDefinitions": 162,
     "glossaryWithLocalReferences": 153,
-    "deliveredSelectors": 23,
+    "deliveredSelectors": 26,
     "privatePbqVariants": 2,
     "primaryQuestionProposals": 7,
-    "unresolvedQuestionMappings": 487,
+    "unresolvedQuestionMappings": 489,
     "concepts": 435,
-    "exclusions": 1208,
-    "reviewQueue": 2906
+    "exclusions": 1209,
+    "reviewQueue": 2954
   },
   "concepts": [
     {
@@ -71340,6 +71346,1080 @@
       ]
     },
     {
+      "id": "guest-demo:flashcard:mfa",
+      "kind": "guest_demo_flashcard",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:7c6fdfee68d901b9579887094e8d8d5af1df43fc31e848ee19f4be07554b6ae3",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Separately authored reachable marketing teaching/assessment demo. Exact source is bound; content and grading values are withheld. Semantic/objective mapping and adaptive inclusion require editorial review.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "  if(type===\"flashcards\"){",
+          "endAnchor": "  if(type===\"mcq\"){",
+          "startLine": 24401,
+          "endLine": 24433,
+          "sourceSignature": "sha256:7929632726beb831730ec6dbe6289cd815684deec8f6478e2d8595e2be5d7a41"
+        },
+        {
+          "path": "src/App.jsx",
+          "anchor": "                <div className=\"guest-flip-definition\">",
+          "endAnchor": "              </div>\n            </div>",
+          "startLine": 24423,
+          "endLine": 24426,
+          "sourceSignature": "sha256:7fbd3df1077b3b549e643eb019d0d2b742e418acadc2ec54df3fd592c4058b50"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching"
+      ],
+      "contentType": "flashcard",
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:lesson-prompt:dns-attacks",
+      "kind": "guest_demo_lesson_prompt",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:f6cc1b5aa9f56c1a2d53ee6182b01e132aaed74959051482b0af13cb9edb33ed",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Separately authored reachable marketing teaching/assessment demo. Exact source is bound; content and grading values are withheld. Semantic/objective mapping and adaptive inclusion require editorial review.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "  const lessons=[",
+          "endAnchor": "  const activeLesson=",
+          "startLine": 24613,
+          "endLine": 24618,
+          "sourceSignature": "sha256:4f1644766e097fdd0f8c6eb3c02a11f53c91d97442cf36a451e9c957021c0554"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching",
+        "intervention:guest-feature-lesson-topic"
+      ],
+      "topic": "DNS Attacks",
+      "contentType": "teaching_prompt",
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:lesson-prompt:phishing",
+      "kind": "guest_demo_lesson_prompt",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:a7f99625a1b3fff9983b09f868e58d56e24bb47dd82732366951d99a7faff864",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Separately authored reachable marketing teaching/assessment demo. Exact source is bound; content and grading values are withheld. Semantic/objective mapping and adaptive inclusion require editorial review.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "  const lessons=[",
+          "endAnchor": "  const activeLesson=",
+          "startLine": 24613,
+          "endLine": 24618,
+          "sourceSignature": "sha256:4f1644766e097fdd0f8c6eb3c02a11f53c91d97442cf36a451e9c957021c0554"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching",
+        "intervention:guest-feature-lesson-topic"
+      ],
+      "topic": "Phishing",
+      "contentType": "teaching_prompt",
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:lesson-prompt:web-attacks",
+      "kind": "guest_demo_lesson_prompt",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:41f34defe6fabeeba1400ed3ebb9076f9bf25084c44bcde635c15495434a80f8",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Separately authored reachable marketing teaching/assessment demo. Exact source is bound; content and grading values are withheld. Semantic/objective mapping and adaptive inclusion require editorial review.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "  const lessons=[",
+          "endAnchor": "  const activeLesson=",
+          "startLine": 24613,
+          "endLine": 24618,
+          "sourceSignature": "sha256:4f1644766e097fdd0f8c6eb3c02a11f53c91d97442cf36a451e9c957021c0554"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching",
+        "intervention:guest-feature-lesson-topic"
+      ],
+      "topic": "Web Attacks",
+      "contentType": "teaching_prompt",
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:mcq:access-control",
+      "kind": "guest_demo_mcq",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:f48c1f3b4c6de579cb2505622e244fffdea3808bfbe0e6f1126a41ca992c4408",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "direct",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Separately authored reachable marketing teaching/assessment demo. Exact source is bound; content and grading values are withheld. Semantic/objective mapping and adaptive inclusion require editorial review.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "  if(type===\"mcq\"){",
+          "endAnchor": "  if(type===\"explanations\"){",
+          "startLine": 24433,
+          "endLine": 24459,
+          "sourceSignature": "sha256:8d066a17625f4d515733355f320736e53fc0e151337e82a0aaf411043cb866db"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching"
+      ],
+      "contentType": "mcq",
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:mcq:distractor-explanation",
+      "kind": "guest_demo_explanation",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:a2b3092d84444effefc3104459ecd871d1fb18883cd78d916bc97a4a6c2dd6b3",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Separately authored reachable marketing teaching/assessment demo. Exact source is bound; content and grading values are withheld. Semantic/objective mapping and adaptive inclusion require editorial review.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "        <button\n          className={`guest-explanation-card wrong",
+          "endAnchor": "      </div>\n    );",
+          "startLine": 24472,
+          "endLine": 24481,
+          "sourceSignature": "sha256:ccf7868de73130585adf9881795d2b0d13581a64c953d1af3e1bd030ce660671"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching"
+      ],
+      "parentId": "guest-demo:mcq:access-control",
+      "contentType": "explanation",
+      "instructionalRole": "distractor",
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:mcq:feedback",
+      "kind": "guest_demo_feedback",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:5076e0ab10894734c7eda1e3710fc5645cd6763de862147d9b4969a503c981fc",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Separately authored reachable marketing teaching/assessment demo. Exact source is bound; content and grading values are withheld. Semantic/objective mapping and adaptive inclusion require editorial review.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "        <div className={`guest-demo-feedback",
+          "endAnchor": "      </div>\n    );",
+          "startLine": 24453,
+          "endLine": 24456,
+          "sourceSignature": "sha256:2ad0aa7aa2ef6c4662e6e6d5e4c3aad3017e09df4b62498372dc1264c4d743fb"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching"
+      ],
+      "parentId": "guest-demo:mcq:access-control",
+      "contentType": "feedback_bundle",
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:mcq:solution-explanation",
+      "kind": "guest_demo_explanation",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:d958c4954fd6bad856e8cd7de842e6f10c9321e115d08de814a0db3459bc8e75",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Separately authored reachable marketing teaching/assessment demo. Exact source is bound; content and grading values are withheld. Semantic/objective mapping and adaptive inclusion require editorial review.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "        <button\n          className={`guest-explanation-card correct",
+          "endAnchor": "        <button\n          className={`guest-explanation-card wrong",
+          "startLine": 24463,
+          "endLine": 24472,
+          "sourceSignature": "sha256:3806c977a9da581d6acc40cd62268879c992672265e0dbee762b90d0abc989ae"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching"
+      ],
+      "parentId": "guest-demo:mcq:access-control",
+      "contentType": "explanation",
+      "instructionalRole": "solution",
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:pbq:feedback",
+      "kind": "guest_demo_feedback",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:380f2a079f6eda09df5feb9d9d1caaf352380c2ddb460c55b87e84810530a055",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Separately authored reachable marketing teaching/assessment demo. Exact source is bound; content and grading values are withheld. Semantic/objective mapping and adaptive inclusion require editorial review.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "        <div className={`guest-demo-feedback",
+          "endAnchor": "        {pbqSlots.some(Boolean)",
+          "startLine": 24536,
+          "endLine": 24539,
+          "sourceSignature": "sha256:373ce777296c88d47d51cd7ead674006ed132501198bd00bdd8417f848e6e481"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching"
+      ],
+      "parentId": "guest-demo:pbq:incident-response-ordering",
+      "contentType": "feedback_bundle",
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:pbq:hint",
+      "kind": "guest_demo_hint",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:eccaba10b85ef73fdc750a2189a1ab9b523aa74a57f709f7612af3c42c1907b5",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Visible next-step hint depends on the internal sequence comparison. Review assistance and novelty before attributing any performance; no sequence/key values are exported.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "            const isHint=",
+          "endAnchor": "            return (",
+          "startLine": 24519,
+          "endLine": 24520,
+          "sourceSignature": "sha256:043531fcb12d21c948a626c53edc62b1b68783a6703ea2980b697b1bac1052eb"
+        },
+        {
+          "path": "src/App.jsx",
+          "anchor": "                className={isHint?",
+          "endAnchor": "                type=\"button\"",
+          "startLine": 24523,
+          "endLine": 24524,
+          "sourceSignature": "sha256:7f815f2b4c52ab1f799e33c82815751ff3b69919f3fa26a2629e4d61ecfba82d"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching"
+      ],
+      "parentId": "guest-demo:pbq:incident-response-ordering",
+      "contentType": "guided_hint",
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:pbq:incident-response-ordering",
+      "kind": "guest_demo_pbq",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:171ad8b185b224dddf731f19c46acb987537392c6708bb016d41dfaae08245b8",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "coarse",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Separately authored reachable marketing teaching/assessment demo. Exact source is bound; content and grading values are withheld. Semantic/objective mapping and adaptive inclusion require editorial review.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "  if(type===\"pbq\"){",
+          "endAnchor": "  if(type===\"exam\"){",
+          "startLine": 24484,
+          "endLine": 24543,
+          "sourceSignature": "sha256:d33beae7dca9753dffcdfa7fe2b2fae33348106ecbe2d82342e4188405ea5c43"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching"
+      ],
+      "contentType": "ordering_pbq",
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:review-path:iam",
+      "kind": "guest_demo_review_path",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:9e018d89f0780e2e7fe865d5a7689ec0d6d04bf9cc5ca7dabb70bfc501a45dc3",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Hardcoded illustrative path and synthetic progress/miss signals. It is not generated from learner history or the adaptive runtime; semantic/objective scope remains unresolved.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "    const reviewPaths={",
+          "endAnchor": "    const activePath=",
+          "startLine": 24566,
+          "endLine": 24571,
+          "sourceSignature": "sha256:09e25851719896c3ae23bb0105bfddd538f32e5145910e758d66e2416583e718"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching",
+        "intervention:guest-feature-review-topic"
+      ],
+      "topic": "IAM",
+      "contentType": "fixed_review_path",
+      "syntheticSignals": true,
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:review-path:logs",
+      "kind": "guest_demo_review_path",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:19242ef1b5b5468830dd115a527cb933eb54f9a58358403e2b222ed55ec52555",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Hardcoded illustrative path and synthetic progress/miss signals. It is not generated from learner history or the adaptive runtime; semantic/objective scope remains unresolved.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "    const reviewPaths={",
+          "endAnchor": "    const activePath=",
+          "startLine": 24566,
+          "endLine": 24571,
+          "sourceSignature": "sha256:09e25851719896c3ae23bb0105bfddd538f32e5145910e758d66e2416583e718"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching",
+        "intervention:guest-feature-review-topic"
+      ],
+      "topic": "Logs",
+      "contentType": "fixed_review_path",
+      "syntheticSignals": true,
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "guest-demo:review-path:pki",
+      "kind": "guest_demo_review_path",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:1c14cd2132bba45cedd768b6a2d0ffede6ebdc65f938bb45e7662c19eca1ae03",
+      "publicationStatus": "active_guest_demo",
+      "evidenceScope": "local_source_reachable_default_guest_gate",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Hardcoded illustrative path and synthetic progress/miss signals. It is not generated from learner history or the adaptive runtime; semantic/objective scope remains unresolved.",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "    const reviewPaths={",
+          "endAnchor": "    const activePath=",
+          "startLine": 24566,
+          "endLine": 24571,
+          "sourceSignature": "sha256:09e25851719896c3ae23bb0105bfddd538f32e5145910e758d66e2416583e718"
+        }
+      ],
+      "scope": "marketing_teaching_demo",
+      "semanticMappingStatus": "unresolved_marketing_teaching_demo",
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "linkedSelectorIds": [
+        "intervention:guest-feature-teaching",
+        "intervention:guest-feature-review-topic"
+      ],
+      "topic": "PKI",
+      "contentType": "fixed_review_path",
+      "syntheticSignals": true,
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
       "id": "intervention:cipher-study-routing",
       "kind": "intervention_selector",
       "source": "src/App.jsx + src/App.jsx",
@@ -71990,6 +73070,239 @@
               33258,
               33262,
               33276
+            ]
+          }
+        ],
+        "inclusionRationale": "Delivered source-level selection capability; included even when it only chooses existing content. No learner-specific output is exported."
+      },
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "intervention:guest-feature-lesson-topic",
+      "kind": "intervention_selector",
+      "source": "src/App.jsx",
+      "sourceSignature": "sha256:70d3f678f4cebce9ec239c8db58be0a25ff863721f632ecfd71780410b73e87d",
+      "publicationStatus": "active",
+      "evidenceScope": "local_effective_source",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Delivered source-level selection capability; included even when it only chooses existing content. No learner-specific output is exported.",
+      "selector": {
+        "inputs": [
+          "selected preview title",
+          "fixed authored prompt list"
+        ],
+        "targetKinds": [
+          "guest_demo_lesson_prompt"
+        ],
+        "determinism": "Fixed title lookup with first-prompt fallback; content changes only with explicit topic selection.",
+        "mappingDependencies": "Three standalone teaching prompts are distinct from the Deep Dive lesson catalogue; no canonical objective mapping is approved.",
+        "sourceUnits": [
+          {
+            "path": "src/App.jsx",
+            "anchor": "  const lessons=[",
+            "endAnchor": "function GuestFeatureShowcaseCard(",
+            "startLine": 24613,
+            "endLine": 24638,
+            "sourceSignature": "sha256:d731f8957e9a40cc303d6a0ca454c934dc8aa0bb9a762894f905bc13935cbd35"
+          }
+        ],
+        "dependencies": [
+          {
+            "path": "src/App.jsx",
+            "sha256": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49"
+          }
+        ],
+        "deliveryEvidence": [
+          {
+            "path": "src/App.jsx",
+            "marker": "<GuestFeaturePreview type={feature.id}",
+            "lines": [
+              24671
+            ]
+          }
+        ],
+        "inclusionRationale": "Delivered source-level selection capability; included even when it only chooses existing content. No learner-specific output is exported."
+      },
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "intervention:guest-feature-review-topic",
+      "kind": "intervention_selector",
+      "source": "src/App.jsx",
+      "sourceSignature": "sha256:f4f196810c3ef01191c6bc9474edd9c99ed9ff5d44f06574900c37d4447396de",
+      "publicationStatus": "active",
+      "evidenceScope": "local_effective_source",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Delivered source-level selection capability; included even when it only chooses existing content. No learner-specific output is exported.",
+      "selector": {
+        "inputs": [
+          "selected synthetic topic",
+          "fixed authored path dictionary"
+        ],
+        "targetKinds": [
+          "guest_demo_review_path"
+        ],
+        "determinism": "User-selected dictionary lookup; default PKI topic; displayed percentages/miss signals and queue labels are hardcoded, not learner measurements.",
+        "mappingDependencies": "Three illustrative review paths teach priorities but provide no verified personalization or mastery evidence.",
+        "sourceUnits": [
+          {
+            "path": "src/App.jsx",
+            "anchor": "  if(type===\"review\"){",
+            "endAnchor": "  const lessons=[",
+            "startLine": 24565,
+            "endLine": 24613,
+            "sourceSignature": "sha256:81cb385b1c315cb255e9d0dda9333c4990fec338668205b0cf0ef3461c2875d2"
+          }
+        ],
+        "dependencies": [
+          {
+            "path": "src/App.jsx",
+            "sha256": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49"
+          }
+        ],
+        "deliveryEvidence": [
+          {
+            "path": "src/App.jsx",
+            "marker": "<GuestFeaturePreview type={feature.id}",
+            "lines": [
+              24671
+            ]
+          }
+        ],
+        "inclusionRationale": "Delivered source-level selection capability; included even when it only chooses existing content. No learner-specific output is exported."
+      },
+      "persistenceContentKind": null,
+      "proposedConceptLinks": []
+    },
+    {
+      "id": "intervention:guest-feature-teaching",
+      "kind": "intervention_selector",
+      "source": "src/App.jsx + src/App.jsx + src/App.jsx",
+      "sourceSignature": "sha256:c1b884830ca2a9e52d91cc367918b2a34918ecc93ada4a21a90b3d29621fa864",
+      "publicationStatus": "active",
+      "evidenceScope": "local_effective_source",
+      "objectiveCodes": [],
+      "domainIds": [],
+      "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+      "reviewStatus": "pending",
+      "trustedRevisionId": null,
+      "contentSha256": null,
+      "confidence": "low",
+      "precision": "support_only",
+      "primaryRole": "primary",
+      "secondaryRole": "secondary",
+      "weightPolicy": "proposal_only_no_runtime_effect",
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
+      "candidateConceptIds": [],
+      "weight": 0,
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Delivered source-level selection capability; included even when it only chooses existing content. No learner-specific output is exported.",
+      "selector": {
+        "inputs": [
+          "hardcoded feature type",
+          "in-view state",
+          "local flip/choice/sequence/focus state"
+        ],
+        "targetKinds": [
+          "guest_demo_flashcard",
+          "guest_demo_mcq",
+          "guest_demo_explanation",
+          "guest_demo_feedback",
+          "guest_demo_pbq",
+          "guest_demo_hint",
+          "guest_demo_review_path",
+          "guest_demo_lesson_prompt"
+        ],
+        "determinism": "Fixed authored branches selected by feature ID; local interactions reveal content. MFA auto-flip depends on time/reduced-motion preference. No adaptive selection or learner history.",
+        "mappingDependencies": "Reachable default guest landing demos are separately authored teaching surfaces. The timed-exam clock branch is explicitly excluded as noninstructional illustration; this is distinct from navigation to a real PBQ.",
+        "sourceUnits": [
+          {
+            "path": "src/App.jsx",
+            "anchor": "function GuestFeaturePreview(",
+            "endAnchor": "function GuestFeatureShowcaseCard(",
+            "startLine": 24376,
+            "endLine": 24638,
+            "sourceSignature": "sha256:5942d76b4e24374e2067c320b3e35e83b8da73351e96e79e835bd20144ec7170"
+          },
+          {
+            "path": "src/App.jsx",
+            "anchor": "function GuestFeatureShowcaseCard(",
+            "endAnchor": "function GuestDashboardGate(",
+            "startLine": 24638,
+            "endLine": 24676,
+            "sourceSignature": "sha256:deee5daa4a4f20b3a9e56eeeae7c7da84628b1c1a8b16a49bea1d52888f11943"
+          },
+          {
+            "path": "src/App.jsx",
+            "anchor": "function GuestDashboardGate(",
+            "endAnchor": "function GuestLockedPage(",
+            "startLine": 24676,
+            "endLine": 24779,
+            "sourceSignature": "sha256:cdd3d972e725feecf55ad1fd73e63a690580d23bc89dc15da124b41edcd09ce6"
+          }
+        ],
+        "dependencies": [
+          {
+            "path": "src/App.jsx",
+            "sha256": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49"
+          }
+        ],
+        "deliveryEvidence": [
+          {
+            "path": "src/App.jsx",
+            "marker": "<GuestDashboardGate ",
+            "lines": [
+              34697
+            ]
+          },
+          {
+            "path": "src/App.jsx",
+            "marker": "<GuestFeatureShowcaseCard ",
+            "lines": [
+              24739
+            ]
+          },
+          {
+            "path": "src/App.jsx",
+            "marker": "<GuestFeaturePreview type={feature.id}",
+            "lines": [
+              24671
             ]
           }
         ],
@@ -119665,6 +120978,54 @@
       "reason": "No evidence of completeness for unpublished local editor state, storage objects, or external authoring systems."
     },
     {
+      "id": "guest-demo:exam-timer",
+      "kind": "guest_demo_exclusion",
+      "status": "marketing_noninstructional_illustration",
+      "source": "src/App.jsx:GuestFeaturePreview",
+      "sourceSignature": "sha256:528cc1087e76658439a6af5b056088fc7d726decbc2ad8fdc54ee029634b10a1",
+      "sourceUnits": [
+        {
+          "path": "src/App.jsx",
+          "anchor": "  if(type===\"exam\"){",
+          "endAnchor": "  if(type===\"review\"){",
+          "startLine": 24543,
+          "endLine": 24565,
+          "sourceSignature": "sha256:528cc1087e76658439a6af5b056088fc7d726decbc2ad8fdc54ee029634b10a1"
+        }
+      ],
+      "reachability": [
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestDashboardGate ",
+          "lines": [
+            34697
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "{showcaseFeatures.map(",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeatureShowcaseCard ",
+          "lines": [
+            24739
+          ]
+        },
+        {
+          "path": "src/App.jsx",
+          "marker": "<GuestFeaturePreview type={feature.id}",
+          "lines": [
+            24671
+          ]
+        }
+      ],
+      "reason": "Clock/pause/progress illustration with a synthetic question number; no independently authored question, subject teaching or assessment. Excluded from adaptive learning-content mapping."
+    },
+    {
       "id": "imported:mcq:m601",
       "kind": "mcq",
       "status": "superseded_source_layer",
@@ -123860,7 +125221,15 @@
       "explanation_bundle": 494,
       "flashcard": 313,
       "glossary_definition": 162,
-      "intervention_selector": 23,
+      "guest_demo_explanation": 2,
+      "guest_demo_feedback": 2,
+      "guest_demo_flashcard": 1,
+      "guest_demo_hint": 1,
+      "guest_demo_lesson_prompt": 3,
+      "guest_demo_mcq": 1,
+      "guest_demo_pbq": 1,
+      "guest_demo_review_path": 3,
+      "intervention_selector": 26,
       "keyword_guide": 32,
       "lesson": 32,
       "lesson_check": 128,
@@ -123872,17 +125241,18 @@
       "starter_question": 9
     },
     "byConfidence": {
-      "low": 1540,
+      "low": 1557,
       "medium": 321
     },
     "byEvidenceScope": {
       "authenticated_metadata_only_semantics_unreviewed": 4,
-      "local_effective_source": 1374,
-      "local_source_and_authenticated_override_fingerprints": 483
+      "local_effective_source": 1377,
+      "local_source_and_authenticated_override_fingerprints": 483,
+      "local_source_reachable_default_guest_gate": 14
     },
     "byNovelty": {
       "existing_pilot_family_not_independently_approved": 7,
-      "unreviewed": 1854
+      "unreviewed": 1871
     },
     "byFamily": {
       "combined-recovery-and-retention-design": 1,
@@ -123890,7 +125260,7 @@
       "outer-business-interruption-limit": 1,
       "restoration-target-identification": 2,
       "supplied-recovery-priority-ordering": 1,
-      "unassigned": 1854,
+      "unassigned": 1871,
       "versioned-backup-interval": 1
     },
     "byObjective": {
@@ -127373,6 +128743,230 @@
       "status": "open"
     },
     {
+      "id": "guest-demo:flashcard:mfa:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:flashcard:mfa",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:flashcard:mfa:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:flashcard:mfa",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:lesson-prompt:dns-attacks:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:lesson-prompt:dns-attacks",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:lesson-prompt:dns-attacks:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:lesson-prompt:dns-attacks",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:lesson-prompt:phishing:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:lesson-prompt:phishing",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:lesson-prompt:phishing:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:lesson-prompt:phishing",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:lesson-prompt:web-attacks:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:lesson-prompt:web-attacks",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:lesson-prompt:web-attacks:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:lesson-prompt:web-attacks",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:access-control:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:mcq:access-control",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:access-control:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:mcq:access-control",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:distractor-explanation:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:mcq:distractor-explanation",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:distractor-explanation:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:mcq:distractor-explanation",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:feedback:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:mcq:feedback",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:feedback:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:mcq:feedback",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:solution-explanation:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:mcq:solution-explanation",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:solution-explanation:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:mcq:solution-explanation",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:pbq:feedback:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:pbq:feedback",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:pbq:feedback:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:pbq:feedback",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:pbq:hint:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:pbq:hint",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:pbq:hint:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:pbq:hint",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:pbq:incident-response-ordering:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:pbq:incident-response-ordering",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:pbq:incident-response-ordering:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:pbq:incident-response-ordering",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:review-path:iam:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:review-path:iam",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:review-path:iam:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:review-path:iam",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:review-path:logs:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:review-path:logs",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:review-path:logs:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:review-path:logs",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:review-path:pki:guest_demo_editorial_scope",
+      "priority": "P1",
+      "recordId": "guest-demo:review-path:pki",
+      "reason": "guest_demo_editorial_scope",
+      "decision": "Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:review-path:pki:missing_objective",
+      "priority": "P1",
+      "recordId": "guest-demo:review-path:pki",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
       "id": "intervention:cipher-study-routing:missing_objective",
       "priority": "P1",
       "recordId": "intervention:cipher-study-routing",
@@ -127432,6 +129026,30 @@
       "id": "intervention:glossary-delivery:missing_objective",
       "priority": "P1",
       "recordId": "intervention:glossary-delivery",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "intervention:guest-feature-lesson-topic:missing_objective",
+      "priority": "P1",
+      "recordId": "intervention:guest-feature-lesson-topic",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "intervention:guest-feature-review-topic:missing_objective",
+      "priority": "P1",
+      "recordId": "intervention:guest-feature-review-topic",
+      "reason": "missing_objective",
+      "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
+      "status": "open"
+    },
+    {
+      "id": "intervention:guest-feature-teaching:missing_objective",
+      "priority": "P1",
+      "recordId": "intervention:guest-feature-teaching",
       "reason": "missing_objective",
       "decision": "Assign the exact SY0-701 objective or explicitly mark outside exam scope.",
       "status": "open"
@@ -143677,6 +145295,118 @@
       "status": "open"
     },
     {
+      "id": "guest-demo:flashcard:mfa:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:flashcard:mfa",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:lesson-prompt:dns-attacks:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:lesson-prompt:dns-attacks",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:lesson-prompt:phishing:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:lesson-prompt:phishing",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:lesson-prompt:web-attacks:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:lesson-prompt:web-attacks",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:access-control:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:mcq:access-control",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:distractor-explanation:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:mcq:distractor-explanation",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:feedback:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:mcq:feedback",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:mcq:solution-explanation:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:mcq:solution-explanation",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:pbq:feedback:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:pbq:feedback",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:pbq:hint:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:pbq:hint",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:pbq:incident-response-ordering:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:pbq:incident-response-ordering",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:review-path:iam:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:review-path:iam",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:review-path:logs:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:review-path:logs",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "guest-demo:review-path:pki:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "guest-demo:review-path:pki",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
       "id": "intervention:cipher-study-routing:instructional_mapping_review",
       "priority": "P2",
       "recordId": "intervention:cipher-study-routing",
@@ -143736,6 +145466,30 @@
       "id": "intervention:glossary-delivery:instructional_mapping_review",
       "priority": "P2",
       "recordId": "intervention:glossary-delivery",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "intervention:guest-feature-lesson-topic:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "intervention:guest-feature-lesson-topic",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "intervention:guest-feature-review-topic:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "intervention:guest-feature-review-topic",
+      "reason": "instructional_mapping_review",
+      "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
+      "status": "open"
+    },
+    {
+      "id": "intervention:guest-feature-teaching:instructional_mapping_review",
+      "priority": "P2",
+      "recordId": "intervention:guest-feature-teaching",
       "reason": "instructional_mapping_review",
       "decision": "Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.",
       "status": "open"

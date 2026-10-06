@@ -1,13 +1,13 @@
 {
   "algorithm": "SHA-256",
   "files": {
-    "delivery-inventory.md": "caae06f3607cce0a75848cce2b7de9d3246260d0f33be53c113d1d7187e06f99",
-    "mapping-package.json": "c05d8c8fd24bf84b5454876ad9395abbcceae8e51494f4e8d658caa340793136",
-    "review-queue.md": "6f7c6b1e25e8ea99442991f70dd78289ca381dc53c39d4140f40037920587618",
-    "review-guide.md": "47147d2a8d8f528b595ca3d4d76d87c418101add72416a4d7b8377df201afacb",
+    "delivery-inventory.md": "b5be343dc42af1e31fcd05d34fba6fd84f40032af6abfd235ce75a4050db0b6c",
+    "mapping-package.json": "2704b7fb7ccf4ecf2042edc4ac1f0015abd9ed4d12059dee5e664562be9c7ad5",
+    "review-queue.md": "d8449fa1f603f95d3f17cf7353b1498e051519ae2f9b80df46feaec2aa5076da",
+    "review-guide.md": "5d41ea72634676e0a98d4e2cad67f83e9a13fc3fda6d8b8e4eda745ff634785c",
     "private-catalogue-read.json": "ab41620421c0449309a096bc678aaa4b05088188d2c8da7666d7429cc4e10ce1",
     "private-reconciliation.json": "53ba4921ed4ffb67d1da312fea8938a8f902c8a372cc083de9e4bbc71e7a8924",
     "private-access-boundary.json": "29e2e673da4bf5d5dc7eb8cfd306c21050814092226988adf13d6c6e52feaa75",
-    "delivery-surface-review.json": "7e6cb0d3ecaf750f75c3800ef03e5f89de741ab5c2669195d841b59822f59a7a"
+    "delivery-surface-review.json": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
   }
 }

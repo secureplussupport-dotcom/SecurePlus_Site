@@ -171,6 +171,27 @@ All 162 definitions are separately inventoried; 153 have local lexical reference
 | Zero Trust | 2398 | 21 | sha256:c3a81449e394d49da56bd2b8783423d3dc888ce541bea864925c873cb23f24f7 |
 | ZTA | 2392 | 1 | sha256:783435b66103df8113c5eb82c3556e83aac4af9a88ce7e53db0b39079a5d42f9 |
 
+## Guest teaching demos
+
+All 14 independently authored guest teaching records have source units, revision hashes, reachability and selector links in mapping-package.json. Their semantic scope is unresolved and mastery weights are zero. The exam-clock illustration has a source-bound exclusion because it contains no question or subject teaching.
+
+| Identity | Kind | Source lines | Revision SHA-256 |
+| --- | --- | --- | --- |
+| guest-demo:flashcard:mfa | guest_demo_flashcard | 24401–24433, 24423–24426 | sha256:7c6fdfee68d901b9579887094e8d8d5af1df43fc31e848ee19f4be07554b6ae3 |
+| guest-demo:lesson-prompt:dns-attacks | guest_demo_lesson_prompt | 24613–24618 | sha256:f6cc1b5aa9f56c1a2d53ee6182b01e132aaed74959051482b0af13cb9edb33ed |
+| guest-demo:lesson-prompt:phishing | guest_demo_lesson_prompt | 24613–24618 | sha256:a7f99625a1b3fff9983b09f868e58d56e24bb47dd82732366951d99a7faff864 |
+| guest-demo:lesson-prompt:web-attacks | guest_demo_lesson_prompt | 24613–24618 | sha256:41f34defe6fabeeba1400ed3ebb9076f9bf25084c44bcde635c15495434a80f8 |
+| guest-demo:mcq:access-control | guest_demo_mcq | 24433–24459 | sha256:f48c1f3b4c6de579cb2505622e244fffdea3808bfbe0e6f1126a41ca992c4408 |
+| guest-demo:mcq:distractor-explanation | guest_demo_explanation | 24472–24481 | sha256:a2b3092d84444effefc3104459ecd871d1fb18883cd78d916bc97a4a6c2dd6b3 |
+| guest-demo:mcq:feedback | guest_demo_feedback | 24453–24456 | sha256:5076e0ab10894734c7eda1e3710fc5645cd6763de862147d9b4969a503c981fc |
+| guest-demo:mcq:solution-explanation | guest_demo_explanation | 24463–24472 | sha256:d958c4954fd6bad856e8cd7de842e6f10c9321e115d08de814a0db3459bc8e75 |
+| guest-demo:pbq:feedback | guest_demo_feedback | 24536–24539 | sha256:380f2a079f6eda09df5feb9d9d1caaf352380c2ddb460c55b87e84810530a055 |
+| guest-demo:pbq:hint | guest_demo_hint | 24519–24520, 24523–24524 | sha256:eccaba10b85ef73fdc750a2189a1ab9b523aa74a57f709f7612af3c42c1907b5 |
+| guest-demo:pbq:incident-response-ordering | guest_demo_pbq | 24484–24543 | sha256:171ad8b185b224dddf731f19c46acb987537392c6708bb016d41dfaae08245b8 |
+| guest-demo:review-path:iam | guest_demo_review_path | 24566–24571 | sha256:9e018d89f0780e2e7fe865d5a7689ec0d6d04bf9cc5ca7dabb70bfc501a45dc3 |
+| guest-demo:review-path:logs | guest_demo_review_path | 24566–24571 | sha256:19242ef1b5b5468830dd115a527cb933eb54f9a58358403e2b222ed55ec52555 |
+| guest-demo:review-path:pki | guest_demo_review_path | 24566–24571 | sha256:1c14cd2132bba45cedd768b6a2d0ffede6ebdc65f938bb45e7662c19eca1ae03 |
+
 ## Delivered selectors
 
 ### intervention:cipher-study-routing
@@ -252,6 +273,36 @@ All 162 definitions are separately inventoried; 153 have local lexical reference
 - Mapping dependencies: Definitions are conditional inline support; corpus matches do not prove a browser tooltip was opened.
 - Source units: src/App.jsx:20657–20765; src/App.jsx:2404–2445
 - Delivery sites: src/App.jsx:20776,20803,20808,20811,21071,21078,21080,21098,21114,22971,22985,23168,25800,25804,25827,25995,25996,26177,26178,26304,26419,26457,26492,26502,27264,27280,27416,27438,30156,30161,30166,30178,30184,30188,30197,30207,30210,30217,31224,31228,33258,33262,33276
+
+### intervention:guest-feature-lesson-topic
+
+- Exact revision: sha256:70d3f678f4cebce9ec239c8db58be0a25ff863721f632ecfd71780410b73e87d
+- Inputs: selected preview title; fixed authored prompt list
+- Target kinds: guest_demo_lesson_prompt
+- Behavior boundary: Fixed title lookup with first-prompt fallback; content changes only with explicit topic selection.
+- Mapping dependencies: Three standalone teaching prompts are distinct from the Deep Dive lesson catalogue; no canonical objective mapping is approved.
+- Source units: src/App.jsx:24613–24638
+- Delivery sites: src/App.jsx:24671
+
+### intervention:guest-feature-review-topic
+
+- Exact revision: sha256:f4f196810c3ef01191c6bc9474edd9c99ed9ff5d44f06574900c37d4447396de
+- Inputs: selected synthetic topic; fixed authored path dictionary
+- Target kinds: guest_demo_review_path
+- Behavior boundary: User-selected dictionary lookup; default PKI topic; displayed percentages/miss signals and queue labels are hardcoded, not learner measurements.
+- Mapping dependencies: Three illustrative review paths teach priorities but provide no verified personalization or mastery evidence.
+- Source units: src/App.jsx:24565–24613
+- Delivery sites: src/App.jsx:24671
+
+### intervention:guest-feature-teaching
+
+- Exact revision: sha256:c1b884830ca2a9e52d91cc367918b2a34918ecc93ada4a21a90b3d29621fa864
+- Inputs: hardcoded feature type; in-view state; local flip/choice/sequence/focus state
+- Target kinds: guest_demo_flashcard, guest_demo_mcq, guest_demo_explanation, guest_demo_feedback, guest_demo_pbq, guest_demo_hint, guest_demo_review_path, guest_demo_lesson_prompt
+- Behavior boundary: Fixed authored branches selected by feature ID; local interactions reveal content. MFA auto-flip depends on time/reduced-motion preference. No adaptive selection or learner history.
+- Mapping dependencies: Reachable default guest landing demos are separately authored teaching surfaces. The timed-exam clock branch is explicitly excluded as noninstructional illustration; this is distinct from navigation to a real PBQ.
+- Source units: src/App.jsx:24376–24638; src/App.jsx:24638–24676; src/App.jsx:24676–24779
+- Delivery sites: src/App.jsx:34697; src/App.jsx:24739; src/App.jsx:24671
 
 ### intervention:guest-pbq-preview
 

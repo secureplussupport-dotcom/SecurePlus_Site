@@ -34,6 +34,34 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 glossary:p12 — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 glossary:pfx — glossary_usage_unconfirmed**: Confirm delivery against private/runtime text before retiring this definition; no local source reference was observed.
 - **P1 glossary:pfx — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:flashcard:mfa — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:flashcard:mfa — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:lesson-prompt:dns-attacks — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:lesson-prompt:dns-attacks — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:lesson-prompt:phishing — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:lesson-prompt:phishing — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:lesson-prompt:web-attacks — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:lesson-prompt:web-attacks — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:mcq:access-control — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:mcq:access-control — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:mcq:distractor-explanation — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:mcq:distractor-explanation — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:mcq:feedback — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:mcq:feedback — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:mcq:solution-explanation — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:mcq:solution-explanation — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:pbq:feedback — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:pbq:feedback — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:pbq:hint — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:pbq:hint — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:pbq:incident-response-ordering — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:pbq:incident-response-ordering — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:review-path:iam — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:review-path:iam — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:review-path:logs — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:review-path:logs — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 guest-demo:review-path:pki — guest_demo_editorial_scope**: Review this exact marketing teaching revision, objective/concept scope and learner claims. Keep it outside adaptive evidence until separately approved.
+- **P1 guest-demo:review-path:pki — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 intervention:cipher-study-routing — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 intervention:daily-challenges — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 intervention:deep-dive-recommendations — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
@@ -42,6 +70,9 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 intervention:flashcard-navigation — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 intervention:flashcard-study-pass — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 intervention:glossary-delivery — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:guest-feature-lesson-topic — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:guest-feature-review-topic — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:guest-feature-teaching — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 intervention:guest-pbq-preview — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 intervention:lesson-navigation — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 intervention:lesson-related-pbq — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
@@ -2072,6 +2103,20 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 glossary:xss — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 glossary:zero%20trust — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 glossary:zta — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:flashcard:mfa — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:lesson-prompt:dns-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:lesson-prompt:phishing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:lesson-prompt:web-attacks — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:mcq:access-control — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:mcq:distractor-explanation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:mcq:feedback — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:mcq:solution-explanation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:pbq:feedback — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:pbq:hint — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:pbq:incident-response-ordering — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:review-path:iam — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:review-path:logs — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 guest-demo:review-path:pki — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 intervention:cipher-study-routing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 intervention:daily-challenges — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 intervention:deep-dive-recommendations — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
@@ -2080,6 +2125,9 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 intervention:flashcard-navigation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 intervention:flashcard-study-pass — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 intervention:glossary-delivery — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:guest-feature-lesson-topic — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:guest-feature-review-topic — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:guest-feature-teaching — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 intervention:guest-pbq-preview — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 intervention:lesson-navigation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 intervention:lesson-related-pbq — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
