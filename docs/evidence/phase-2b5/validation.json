@@ -1,10 +1,11 @@
 {
   "date": "2026-10-06",
+  "baseline": "9b895861628d9050aeff84eebec68222585754e7",
   "status": "PASS",
   "checks": {
     "build": "PASS; existing chunk-size warning",
     "siteAudits": 8,
-    "contentMapping": 13,
+    "contentMapping": 19,
     "learningPilot": "all replay and catalogue checks passed",
     "persistence": 20,
     "staticMigration": 213,
@@ -15,13 +16,14 @@
     "deletionShadowIsolation": 262,
     "boundaryDatabase": 18
   },
-  "initialAttempt": "Database audit correctly rejected previously populated disposable fixtures; reset only the local Supabase stack and reran database/infrastructure/trusted/deletion/boundary suite successfully.",
-  "production": {
-    "readOnly": true,
-    "adaptiveSchemaPresent": false,
+  "regressionProof": "Two focused tests initially failed on absent glossary rows and missing selectors. All 19 tests now pass, including adversarial row deletion, revision/source drift, usage referential integrity, and actual deterministic lesson recommendation outputs for every bank MCQ.",
+  "productionEvidence": {
+    "status": "captured_prior_read_only_evidence_not_refreshed_during_remediation",
+    "observedAt": "2026-10-06T01:45:12.946078+00:00",
+    "capturedAdaptiveSchemaPresent": false,
     "overrides": 56,
-    "activeOverrides": 56,
     "pbqs": 2,
+    "productionAccessDuringRemediation": false,
     "gradingPayloadsExported": false,
     "learnerRecordsRead": false
   },
@@ -39,37 +41,50 @@
   },
   "logs": [
     {
-      "localPath": "/tmp/secureplus-2b5-build.log",
-      "sha256": "c954f80576c6a92f4aaf99633af6d2153eab53c3bb5138f2845cc8f9c4e8668e"
+      "localPath": "/tmp/secureplus-2b5-remediation-build.log",
+      "sha256": "04b61f19e700fbecf80a7a080c52df3026c6eec3996a44ac2b772c87c89b2cfa",
+      "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-site.log",
-      "sha256": "dd2f9f87e0ce0be45924f5af4d5b3bd6cf6daa67c62a4ac622840146955343ca"
+      "localPath": "/tmp/secureplus-2b5-remediation-site.log",
+      "sha256": "dd2f9f87e0ce0be45924f5af4d5b3bd6cf6daa67c62a4ac622840146955343ca",
+      "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-pilot.log",
-      "sha256": "37a513229e4f3a5d35f58ddec38905f56b960e97f9cfdb1ef447a2dae409ad89"
+      "localPath": "/tmp/secureplus-2b5-remediation-pilot.log",
+      "sha256": "37a513229e4f3a5d35f58ddec38905f56b960e97f9cfdb1ef447a2dae409ad89",
+      "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-persistence.log",
-      "sha256": "694c619381aa1f249f5783f8de3dbd9fc20d2703df4c8bb78e90205ce7a83e2b"
+      "localPath": "/tmp/secureplus-2b5-remediation-persistence.log",
+      "sha256": "694c619381aa1f249f5783f8de3dbd9fc20d2703df4c8bb78e90205ce7a83e2b",
+      "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-migration.log",
-      "sha256": "ea1f29a563606dc4654c7ab72ec3d651288b2b5d5f6965fb9ca747207476e5f1"
+      "localPath": "/tmp/secureplus-2b5-remediation-migration.log",
+      "sha256": "ea1f29a563606dc4654c7ab72ec3d651288b2b5d5f6965fb9ca747207476e5f1",
+      "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-unit.log",
-      "sha256": "c6651eece173d2352a083737c9accb437b1461501b317d92ccb9bfd77309e3f7"
+      "localPath": "/tmp/secureplus-2b5-remediation-unit.log",
+      "sha256": "32878fa161c5e34c13380d6715ba00789fa1e60d1eb01ca89fdf7bc882da7bd6",
+      "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-mapping.log",
-      "sha256": "194a72ab22e568f6b4de08d6d1b401577e8335fb2645224fa00934dafea308de"
+      "localPath": "/tmp/secureplus-2b5-remediation-mapping.log",
+      "sha256": "4d24c03c995200d514db985bda04a4c59adbb57b6899f08d07271598f9ae9591",
+      "expectedStatus": "PASS"
     },
     {
-      "localPath": "/tmp/secureplus-2b5-fullstack-fresh.log",
-      "sha256": "73029575974b9706b3b26c162ec87e8b329e65ce80d57d5a85701183d03a0b1f"
+      "localPath": "/tmp/secureplus-2b5-remediation-fullstack.log",
+      "sha256": "a6565223e9ae622600ff2bac7e55c7f57bc9d66aad83b0698ca8aa64a9817dfb",
+      "expectedStatus": "PASS"
+    },
+    {
+      "localPath": "/tmp/secureplus-2b5-remediation-red.log",
+      "sha256": "f8f376fdfeec3695be4dd248897393c9fdae6c769d86a33d3374be7c00c40ec6",
+      "expectedStatus": "initial_failing_reproduction"
     }
   ],
-  "notRepeated": "Destructive operational backup/restore/load rehearsal was not rerun; no runtime or migration code changed. Its approved baseline artifacts remain unchanged; operations unit regressions passed."
+  "notRepeated": "Operational backup/restore/load rehearsal was not rerun; no runtime or migration code changed. Approved baseline artifacts remain unchanged; operations unit regressions passed."
 }

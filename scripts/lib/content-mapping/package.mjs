@@ -2,6 +2,7 @@ import {readFileSync,readdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {readLearningPilotBank,contentSignature} from '../read-learning-pilot-bank.mjs';
 import {readAuthoredInputs} from '../read-authored-bank.mjs';
+import {readGlossary,readSelectors,readStarterQuestions,DELIVERY_SOURCE_PATHS} from './delivery-inventory.mjs';
 import {publicationPipeline} from './publication.mjs';
 import {compileRevision} from '../../../server/adaptive/revision.mjs';
 import {PUBLISHED_CONTENT_SNAPSHOT,isSnapshotDisabled} from '../../../src/data/sy0701PublishedSnapshot.js';
@@ -20,14 +21,14 @@ const slug=value=>String(value).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace
 const unique=x=>[...new Set(x)].sort();
 const sorted=x=>x.sort((a,b)=>a.id.localeCompare(b.id,'en'));
 const group=(rows,key)=>Object.fromEntries(unique(rows.map(key)).map(k=>[k,rows.filter(r=>key(r)===k).length]));
-export const SOURCE_PATHS=[
+export const SOURCE_PATHS=[...new Set([
   'package.json','src/App.jsx', ...readdirSync('src/data').filter(x=>x.endsWith('.js')).map(x=>'src/data/'+x),
-  'src/lib/deepDiveStudy.js','server/adaptive/revision.mjs','src/lib/learningPersistenceContracts.js',
+  ...DELIVERY_SOURCE_PATHS, 'scripts/lib/content-mapping/delivery-inventory.mjs','docs/evidence/phase-2b5/delivery-surface-review.json','src/lib/deepDiveStudy.js','server/adaptive/revision.mjs','src/lib/learningPersistenceContracts.js',
   'scripts/lib/read-authored-bank.mjs','scripts/lib/read-learning-pilot-bank.mjs',
   'scripts/lib/content-mapping/publication.mjs','scripts/lib/content-mapping/package.mjs',
   'scripts/build-content-mapping.mjs','scripts/audit-content-mapping.mjs','scripts/reconcile-content-catalogue.mjs',
   ...readdirSync('public').filter(x=>{try{return readdirSync('public/'+x).includes('index.html')}catch{return false}}).map(x=>'public/'+x+'/index.html'),
-].sort();
+])].sort();
 
 export function buildPackage() {
   const proof=JSON.parse(readFileSync('docs/evidence/phase-2b5/private-catalogue-read.json'));
@@ -49,8 +50,11 @@ export function buildPackage() {
   };
   for(const c of SY0701_ACRONYM_CARDS)addTerm(c.acronym,c.objectiveCodes,'src/data/sy0701AcronymFlashcards.js');
   for(const d of CONCEPT_DEEP_DIVES){const p=getSy0701DeepDiveProfile(d);for(const k of p.keywordGuide)addTerm(k.term,p.objectiveCodes,'src/data/sy0701DeepDiveMap.js');}
+  const glossary=readGlossary();
+  for(const term of Object.keys(glossary.terms))addTerm(term,[],'src/App.jsx:GLOSSARY_TERMS');
   concepts.push(...terms.values());
-  const rows=[],exclusions=[],issues=[];
+  const rows=[],exclusions=[],issues=[],usageSources=[];
+  const strings=value=>typeof value==='string'?[value]:Array.isArray(value)?value.flatMap(strings):value&&typeof value==='object'?Object.values(value).flatMap(strings):[];
   const issue=(priority,id,reason,decision)=>issues.push({id:`${id}:${reason}`,priority,recordId:id,reason,decision,status:'open'});
   function row(id,kind,source,value,objectives=[],extra={}) {
     const codes=unique(objectives.filter(Boolean));
@@ -58,7 +62,9 @@ export function buildPackage() {
     if(!codes.length)issue('P1',id,'missing_objective','Assign the exact SY0-701 objective or explicitly mark outside exam scope.');
     for(const c of codes)if(!SY0701_OBJECTIVES[c])issue('P0',id,'invalid_objective','Resolve the unknown objective code against the approved syllabus.');
     r.persistenceContentKind=({flashcard:'flashcard',lesson:'lesson',lesson_section:'lesson_section',lesson_check:'lesson_check'})[kind]||null;
-    rows.push(r);return r;
+    rows.push(r);
+    if(['mcq','pbq','lesson','flashcard','starter_question'].includes(kind)&&!id.startsWith('private:'))usageSources.push({record:r,matches:new Set(strings(value).flatMap(glossary.matchTerms))});
+    return r;
   }
   const addTerms=(r,text)=>{
     const corpus=String(text).toLowerCase();
@@ -104,12 +110,20 @@ export function buildPackage() {
     for(const c of buildDeepDiveFlashcards(d))exclusions.push({id:`unused-card:${c.id}`,kind:'flashcard',status:'not_delivered',reason:'Helper output is not imported by the app.',sourceSignature:contentSignature(c)});
   }
   for(const path of SOURCE_PATHS.filter(p=>p.startsWith('public/')))row(`page:${path}`,'public_learning_page',path,readFileSync(path,'utf8'),[],{rationale:'Public instructional/SEO page recorded separately. No adaptive content-kind adapter or reviewed semantic mapping exists.'});
-  // Dynamic collections select from the already-counted bank. Never read users.
-  const app=readFileSync('src/App.jsx','utf8');
-  for(const [name,start,end] of [['weak-area-deck','const buildCipherWeakFlashcardSet =','const buildCipherStarterFlashcardSet ='],['starter-deck','const buildCipherStarterFlashcardSet =','const getFlashcardRelatedDeepDives ='],['daily-challenges','const DAILY_CHALLENGES =','// ═']]){
-    const a=app.indexOf(start),b=app.indexOf(end,a+start.length);if(a<0||b<0)throw new Error('Missing intervention source');
-    row(`intervention:${name}`,'intervention_selector','src/App.jsx',app.slice(a,b),[],{rationale:'Selector reuses existing items; learner-specific instances are excluded. No independently authored remediation sequence is claimed.'});
+  const starters=readStarterQuestions();
+  for(const [level,questions] of Object.entries(starters.sets))for(const q of questions){
+    const r=row(`starter:${q.id}`,'starter_question','src/App.jsx:ATHENA_STARTER_QUESTION_SETS',q,[],{contentId:q.id,domainIds:[String(q.ch)],experienceLevel:level,definitionSource:starters.provenance,precision:'direct',rationale:'Delivered signup diagnostic and general-diagnostic fallback; separate from the 395-question MCQ bank. No existing trusted grammar accepts this identity. Objective/concept/family mapping remains unresolved.'});
+    addTerms(r,q.q);issue('P1',r.id,'starter_semantic_review','Map the exact standalone starter revision, objective and family; define an approved identity adapter before adaptive use.');
+    row(`explanation:starter:${q.id}`,'explanation_bundle',r.source,{exp:q.exp,wrongFeedback:q.wrongFeedback},[],{parentId:r.id,domainIds:[String(q.ch)],rationale:'Starter explanation bundle; answer and feedback values are withheld from review exports.'});
   }
+  for(const [term,definition] of Object.entries(glossary.terms)){
+    const refs=usageSources.filter(item=>item.matches.has(term)).map(({record:r})=>({recordId:r.id,sourceSignature:r.sourceSignature})).sort((a,b)=>a.recordId.localeCompare(b.recordId,'en'));
+    const objectiveCodes=unique(usageSources.filter(item=>item.matches.has(term)).flatMap(({record:r})=>r.objectiveCodes));
+    const r=row(`glossary:${encodeURIComponent(term.toLowerCase())}`,'glossary_definition','src/App.jsx:GLOSSARY_TERMS',{term,definition},objectiveCodes,{term,definitionSource:glossary.definitionLocations[term],definitionSignature:contentSignature(definition),primaryConceptId:addTerm(term,[],'src/App.jsx:GLOSSARY_TERMS'),confidence:'low',publicationStatus:'available_conditional',sourceUnits:glossary.sourceUnits,usageReferences:refs,usageStatus:refs.length?'observed_local_source_reference':'no_local_reference_observed',objectiveProvenance:'Union of referencing source tags; broad candidates, not a reviewed definition-to-objective mapping.',rationale:'Separately authored inline definition. All definitions are retained because current-corpus absence cannot prove unused across private/live inputs. Lexical source linkage does not prove tooltip delivery or mastery.'});
+    if(!refs.length)issue('P1',r.id,'glossary_usage_unconfirmed','Confirm delivery against private/runtime text before retiring this definition; no local source reference was observed.');
+  }
+  for(const item of readSelectors())row(`intervention:${item.id}`,'intervention_selector',item.selector.sourceUnits.map(s=>s.path).join(' + '),item,[],{sourceSignature:item.sourceSignature,selector:item.selector,rationale:item.selector.inclusionRationale});
+  exclusions.push({id:'selector:unwired-adaptive-model',kind:'selector_exclusion',status:'not_delivered',reason:'src/lib/reviewScheduler.js and server/adaptive selectors remain unwired. Their tests do not establish current learner delivery.'},{id:'selector:admin-and-account-actions',kind:'selector_exclusion',status:'outside_learning_selection',reason:'Admin editing, access/payment decisions, cosmetic preferences and account actions are not learning-content selectors. Entitlement inputs are documented on the delivered selectors that use them.'},{id:'selector:learner-instance-outputs',kind:'selector_exclusion',status:'unavailable_not_queried',reason:'Saved, starred and personalized selection instances depend on learner records. Algorithms are inventoried; actual learner inputs/outputs are not read.'});
   const authored=readAuthoredInputs();
   for(const kind of ['mcq','pbq'])for(const [layer,items] of Object.entries({authored:authored.authored[kind],imported:authored.imported[kind]}))for(const q of items){const active=published[kind+'s'].some(x=>x.id===q.id);const retired=(kind==='mcq'?RETIRED_MCQ_REVIEW:RETIRED_PBQ_REVIEW)[q.id];exclusions.push({id:`${layer}:${kind}:${q.id}`,kind,status:retired?'retired':isSnapshotDisabled(q.id,kind)?'disabled':authored.excluded[kind].includes(q.id)?'low_quality_excluded':active?'superseded_source_layer':'unavailable',reason:retired?'Editorial retirement':isSnapshotDisabled(q.id,kind)?'Published disable':active?'Use final effective revision, not this raw layer.':'Not present in effective local bank',sourceSignature:contentSignature(q)});}
   for(const p of PUBLISHED_CONTENT_SNAPSHOT)exclusions.push({id:`snapshot:${p.question_kind}:${p.question_id}`,kind:p.question_kind,status:p.action==='disable'?'disabled':'superseded_source_layer',reason:'Captured payload merges before editorial corrections; current matching override does not reapply payload.',sourceSignature:contentSignature(p)});
@@ -125,7 +139,7 @@ export function buildPackage() {
   for(const d of SY0701_DOMAINS){const count=rows.filter(r=>r.kind==='mcq'&&r.domainIds.includes(String(d.id))).length;matrices.byDomain[d.id]={mcqs:count,bankPercent:Number((count/mcqCount*100).toFixed(2)),blueprintWeight:d.weight,deltaPercentagePoints:Number((count/mcqCount*100-d.weight).toFixed(2))};}
   for(const c of concepts){const direct=rows.filter(r=>r.kind==='mcq'&&r.primaryConceptId===c.id);const support=rows.filter(r=>!['mcq','pbq'].includes(r.kind)&&(r.primaryConceptId===c.id||r.secondaryConceptIds.includes(c.id)));const families=unique(direct.map(r=>r.scenarioFamily).filter(Boolean));matrices.byConcept[c.id]={directMcqs:direct.length,supportRecords:support.length,candidateRecords:rows.filter(r=>r.candidateConceptIds.includes(c.id)).length,reviewedFamilyCount:families.length,humanApprovedFamilyCount:0};if(c.nodeKind==='mastery_concept'&&families.length<3)issue('P1',c.id,'independent_family_shortage','Commission or approve at least three genuinely independent scenario families before post-miss transfer claims.');if(!support.length)issue('P2',c.id,'missing_mapped_intervention','Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.');if(!direct.length)issue('P2',c.id,'no_direct_assessment','Review the assessment gap; support concepts need not become mastery nodes.');}
   for(const r of rows)r.proposedConceptLinks=[...(r.primaryConceptId?[{conceptId:r.primaryConceptId,role:'primary',weight:r.weight}]:[]),...r.secondaryConceptIds.map(conceptId=>({conceptId,role:'secondary',weight:0})),...r.candidateConceptIds.filter(id=>id!==r.primaryConceptId&&!r.secondaryConceptIds.includes(id)).map(conceptId=>({conceptId,role:'unresolved_candidate',weight:0}))];
-  return {schemaVersion:1,mappingVersion:VERSION,verdict:'NOT READY',activationAllowed:false,humanApproved:false,scope:'Source-level delivery census plus authenticated catalogue fingerprints. No browser-session or private semantic completeness claim.',sources:SOURCE_PATHS.map(path=>({path,sha256:digest(readFileSync(path))})),counts:{records:rows.length,mcqs:mcqCount,localPbqs:published.pbqs.length,privatePbqVariants:proof.pbqs.length,primaryQuestionProposals:rows.filter(r=>['mcq','pbq'].includes(r.kind)&&r.primaryConceptId).length,unresolvedQuestionMappings:rows.filter(r=>['mcq','pbq'].includes(r.kind)&&!r.primaryConceptId).length,concepts:concepts.length,exclusions:exclusions.length,reviewQueue:issues.length},concepts:sorted(concepts),records:sorted(rows),exclusions:sorted(exclusions),matrices,reviewQueue:issues.sort((a,b)=>a.priority.localeCompare(b.priority)||a.id.localeCompare(b.id,'en'))};
+  return {schemaVersion:1,mappingVersion:VERSION,verdict:'NOT READY',activationAllowed:false,humanApproved:false,scope:'Source-level delivery census plus authenticated catalogue fingerprints. No browser-session or private semantic completeness claim.',sources:SOURCE_PATHS.map(path=>({path,sha256:digest(readFileSync(path))})),counts:{records:rows.length,mcqs:mcqCount,localPbqs:published.pbqs.length,starterQuestions:rows.filter(r=>r.kind==='starter_question').length,glossaryDefinitions:rows.filter(r=>r.kind==='glossary_definition').length,glossaryWithLocalReferences:rows.filter(r=>r.kind==='glossary_definition'&&r.usageReferences.length).length,deliveredSelectors:rows.filter(r=>r.kind==='intervention_selector').length,privatePbqVariants:proof.pbqs.length,primaryQuestionProposals:rows.filter(r=>['mcq','pbq'].includes(r.kind)&&r.primaryConceptId).length,unresolvedQuestionMappings:rows.filter(r=>['mcq','pbq','starter_question'].includes(r.kind)&&!r.primaryConceptId).length,concepts:concepts.length,exclusions:exclusions.length,reviewQueue:issues.length},concepts:sorted(concepts),records:sorted(rows),exclusions:sorted(exclusions),matrices,reviewQueue:issues.sort((a,b)=>a.priority.localeCompare(b.priority)||a.id.localeCompare(b.id,'en'))};
 }
 
 // Pure checks also accept adversarial fixture catalogues, so a clean current

@@ -7,8 +7,55 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P0 private:pbq:p003 — private_source_review**: Review the exact private payload inside an approved secured environment; map the revision and compile its ID without adding grading content to review exports.
 - **P0 private:pbq:p017 — private_source_review**: Review the exact private payload inside an approved secured environment; map the revision and compile its ID without adding grading content to review exports.
 - **P1 continuity.bia — independent_family_shortage**: Commission or approve at least three genuinely independent scenario families before post-miss transfer claims.
+- **P1 explanation:starter:athena-new-confidentiality — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 explanation:starter:athena-new-mfa — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 explanation:starter:athena-new-phishing — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 explanation:starter:athena-pro-hash — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 explanation:starter:athena-pro-least-privilege — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 explanation:starter:athena-pro-ransomware — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 explanation:starter:athena-study-firewall — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 explanation:starter:athena-study-rpo — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 explanation:starter:athena-study-siem — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 glossary:cors — glossary_usage_unconfirmed**: Confirm delivery against private/runtime text before retiring this definition; no local source reference was observed.
+- **P1 glossary:cors — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 glossary:csirt — glossary_usage_unconfirmed**: Confirm delivery against private/runtime text before retiring this definition; no local source reference was observed.
+- **P1 glossary:csirt — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 glossary:der — glossary_usage_unconfirmed**: Confirm delivery against private/runtime text before retiring this definition; no local source reference was observed.
+- **P1 glossary:der — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 glossary:dnat — glossary_usage_unconfirmed**: Confirm delivery against private/runtime text before retiring this definition; no local source reference was observed.
+- **P1 glossary:dnat — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 glossary:grc — glossary_usage_unconfirmed**: Confirm delivery against private/runtime text before retiring this definition; no local source reference was observed.
+- **P1 glossary:grc — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 glossary:hotp — glossary_usage_unconfirmed**: Confirm delivery against private/runtime text before retiring this definition; no local source reference was observed.
+- **P1 glossary:hotp — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 glossary:mttd — glossary_usage_unconfirmed**: Confirm delivery against private/runtime text before retiring this definition; no local source reference was observed.
+- **P1 glossary:mttd — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 glossary:p12 — glossary_usage_unconfirmed**: Confirm delivery against private/runtime text before retiring this definition; no local source reference was observed.
+- **P1 glossary:p12 — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 glossary:pfx — glossary_usage_unconfirmed**: Confirm delivery against private/runtime text before retiring this definition; no local source reference was observed.
+- **P1 glossary:pfx — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:cipher-study-routing — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 intervention:daily-challenges — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:deep-dive-recommendations — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:diagnostic — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:exam-selection — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:flashcard-navigation — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:flashcard-study-pass — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:glossary-delivery — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:guest-pbq-preview — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:lesson-navigation — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:lesson-related-pbq — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:next-flashcard-deck — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:next-related-pbq — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:pbq-catalogue-selection — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:practice-launch — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:random-flashcards — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:related-flashcard-lessons — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:signup-diagnostic — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:smart-review — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:starred-flashcards — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 intervention:starter-deck — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 intervention:weak-area-actions — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 intervention:weak-area-deck — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
 - **P1 mcq:m001 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
 - **P1 mcq:m002 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
@@ -549,6 +596,24 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 recovery.mttr — independent_family_shortage**: Commission or approve at least three genuinely independent scenario families before post-miss transfer claims.
 - **P1 recovery.rpo — independent_family_shortage**: Commission or approve at least three genuinely independent scenario families before post-miss transfer claims.
 - **P1 recovery.rto — independent_family_shortage**: Commission or approve at least three genuinely independent scenario families before post-miss transfer claims.
+- **P1 starter:athena-new-confidentiality — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 starter:athena-new-confidentiality — starter_semantic_review**: Map the exact standalone starter revision, objective and family; define an approved identity adapter before adaptive use.
+- **P1 starter:athena-new-mfa — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 starter:athena-new-mfa — starter_semantic_review**: Map the exact standalone starter revision, objective and family; define an approved identity adapter before adaptive use.
+- **P1 starter:athena-new-phishing — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 starter:athena-new-phishing — starter_semantic_review**: Map the exact standalone starter revision, objective and family; define an approved identity adapter before adaptive use.
+- **P1 starter:athena-pro-hash — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 starter:athena-pro-hash — starter_semantic_review**: Map the exact standalone starter revision, objective and family; define an approved identity adapter before adaptive use.
+- **P1 starter:athena-pro-least-privilege — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 starter:athena-pro-least-privilege — starter_semantic_review**: Map the exact standalone starter revision, objective and family; define an approved identity adapter before adaptive use.
+- **P1 starter:athena-pro-ransomware — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 starter:athena-pro-ransomware — starter_semantic_review**: Map the exact standalone starter revision, objective and family; define an approved identity adapter before adaptive use.
+- **P1 starter:athena-study-firewall — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 starter:athena-study-firewall — starter_semantic_review**: Map the exact standalone starter revision, objective and family; define an approved identity adapter before adaptive use.
+- **P1 starter:athena-study-rpo — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 starter:athena-study-rpo — starter_semantic_review**: Map the exact standalone starter revision, objective and family; define an approved identity adapter before adaptive use.
+- **P1 starter:athena-study-siem — missing_objective**: Assign the exact SY0-701 objective or explicitly mark outside exam scope.
+- **P1 starter:athena-study-siem — starter_semantic_review**: Map the exact standalone starter revision, objective and family; define an approved identity adapter before adaptive use.
 - **P1 sy0701.objective.1.1 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.objective.1.2 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.objective.1.3 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -579,6 +644,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.objective.5.6 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.802-1x — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.aaa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.abac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.acl — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.aes-aes-256 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.aes — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -589,17 +655,22 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.amplified-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.anonymization — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ap-wap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.api-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.api — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.application-whitelisting-blacklisting — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.apt — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.aro — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.arp-poisoning — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.arp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.aslr — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.att-ck — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.attack-surface — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.aup — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.av — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.bcp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.bec — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.bgp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.bios — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.birthday-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.bloatware — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -612,7 +683,9 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.captcha — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.car — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.casb — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cbc — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ccmp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cctv — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.certificate — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.chain-of-custody — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.cia-triad — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -620,6 +693,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.cio-cso — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.cirt-cert — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.cis — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ciso — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.cloud-responsibility-matrix — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.cold-site — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.collision-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -630,15 +704,21 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.control-plane — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.controller — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.coop — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cope — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cors — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.credential-replay — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.crl — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.csf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.csirt — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.csr — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.csrf-xsrf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.csrf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ctf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.cve — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.cvss — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.cyod — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.dac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dast — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.data-at-rest — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.data-classification — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.data-controller — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -655,7 +735,9 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.deauthentication — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.defense-in-depth — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.dep — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.der — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.des — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dh — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.dhcp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.dhe — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.dictionary-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -666,9 +748,11 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.dlp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.dmarc — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.dmz — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dnat — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.dns-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.dns-filtering — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.dns — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.dnssec — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.dos — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.downgrade-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.drp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -681,6 +765,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.edr — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ef — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.efs-fde — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.encryption — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.eradication — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.esp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.evil-twin — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -689,31 +774,42 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.facl — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.false-negative — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.false-positive — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.far — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.fault-tolerance — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.fde — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.federation — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.fim — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.firewall — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.firmware-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.frr — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ftps-sftp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.gamification — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.gcm — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.gdpr — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.geographic-dispersal — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.governance — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.gpo — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.gpu — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.grc — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ha — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.hardening — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.hashing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.hdd-ssd — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.hids-nids — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hids — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.hipaa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.hips-nips — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hips — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.hmac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.hot-site — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hotp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.hsm — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.hvac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.hybrid-cloud — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.iaas-paas-saas — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.iaas — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.iac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.iam — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.icmp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ics — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.idp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -722,6 +818,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.injection-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.injection — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.intranet — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ioc — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.iot — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ipfix — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ipsec — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -732,10 +829,12 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.jailbreaking-rooting — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.jit — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.jump-box-bastion-host — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.kdc — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.kerberos — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.keylogger — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.lan — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ldap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ldaps — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.leap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.least-privilege-principle — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.least-privilege — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -746,21 +845,32 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.logic-bomb — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.mac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.malicious-update — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.mam — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.md5 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.mdm — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.memory-dump — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.memory-injection — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.mfa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.microsegmentation — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.mitm — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ml — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.moa-mou — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.moa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.mou — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.mpls — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.msa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.mssp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.mtbf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.mttd — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.mttf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.nac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.nat-pat — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.nat — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.nda — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.netflow — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ngfw — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.nids — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.nips — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.nist — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.north-south-traffic — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ntp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -771,18 +881,24 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.on-path-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.order-of-volatility — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.os — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.osint — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ot-ics — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.owasp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.p12 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.p2p — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.paas — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.pam — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.pap — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.password-spraying — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.passwordless — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pat — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.patch-management — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.pci-dss — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.pdu-ups — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.pem — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.perimeter-security — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.pfs — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.pfx — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.phi — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.phishing-simulations — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.phishing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -819,6 +935,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.rat — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.rbac — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.rc4 — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.rce — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.rdp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.reflected-network-attack — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.rfid-nfc-cloning — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -835,8 +952,11 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.role-based-security-training — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.rootkit — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.rsa — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.s-mime — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.saas — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.salting — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.saml — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.san — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.sandboxing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.sase — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.scada — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -869,9 +989,11 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.sow — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.spear-phishing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.spyware — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.sql-injection — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.sqli — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.srtp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ssh — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ssid — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ssl-tls — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.sso — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ssrf — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -887,12 +1009,17 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 sy0701.term.threat-actor — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.tls — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.tokenization — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.totp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.tou — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.tpm — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.trojan — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.ttp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.typosquatting — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.udp — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.ueba — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.uefi — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.uem — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
+- **P1 sy0701.term.vdi — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.vendor-risk-assessment — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.virus — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
 - **P1 sy0701.term.vishing — taxonomy_review**: Confirm stable canonical identity, merge synonyms, split overloaded terms, and decide whether a support node warrants a separately assessed mastery concept.
@@ -1461,6 +1588,15 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 explanation:pbq:p224 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 explanation:pbq:p225 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 explanation:pbq:p226 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:starter:athena-new-confidentiality — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:starter:athena-new-mfa — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:starter:athena-new-phishing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:starter:athena-pro-hash — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:starter:athena-pro-least-privilege — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:starter:athena-pro-ransomware — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:starter:athena-study-firewall — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:starter:athena-study-rpo — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 explanation:starter:athena-study-siem — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 flashcard:sy0701-acronym-application-software-attacks-api-attack-application-programming-interface-attack — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 flashcard:sy0701-acronym-application-software-attacks-buffer-overflow-buffer-overflow — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 flashcard:sy0701-acronym-application-software-attacks-command-injection-command-injection — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
@@ -1774,8 +1910,190 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 flashcard:sy0701-term-chapter5-vendor-supply-chain-right-to-audit-clause — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 flashcard:sy0701-term-chapter5-vendor-supply-chain-supply-chain-risk — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 flashcard:sy0701-term-chapter5-vendor-supply-chain-vendor-risk-assessment — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:aaa — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:abac — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:acl — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:aes — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ah — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ale — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ap — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:api — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:apt — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:aro — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:arp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:aslr — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:att%26ck — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:aup — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:av — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:bcp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:bgp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:bia — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:bios — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:bpa — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:byod — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ca — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:casb — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:cbc — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ccmp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:cctv — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:cia — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ciso — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:coop — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:cope — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:cors — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:crl — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:csirt — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:csr — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:csrf — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:cve — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:cvss — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:cyod — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:dac — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:dast — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ddos — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:dep — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:der — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:dh — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:dhcp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:dhe — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:dkim — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:dlp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:dmarc — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:dnat — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:dnssec — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:drp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:eap — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ecc — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:edr — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:encryption — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:far — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:fde — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:fim — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:frr — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:gcm — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:gdpr — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:gpo — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:grc — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:hashing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:hids — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:hips — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:hmac — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:hotp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:hsm — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:hvac — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:iaas — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:iam — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:icmp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:idp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ioc — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ipsec — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:kdc — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ldap — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ldaps — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:mac — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:mam — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:md5 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:mdm — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:mfa — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:mitm — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:moa — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:mou — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:mtbf — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:mttd — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:mttf — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:mttr — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:nac — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:nat — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:nda — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ngfw — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:nids — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:nips — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:nist — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ntp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:oauth — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ocsp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:oidc — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:osint — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:owasp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:p12 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:paas — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:pam — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:pat — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:pci-dss — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:pem — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:pfs — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:pfx — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:phi — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:pii — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:pki — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:raid — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:rat — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:rbac — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:rce — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:rpo — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:rsa — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:rto — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:s%2Fmime — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:saas — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:saml — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:san — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:sase — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:scada — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:sdn — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:siem — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:sla — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:sle — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:soar — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:soc — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:sow — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:sql%20injection — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:sqli — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:srtp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ssh — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ssid — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:sso — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ssrf — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:stix — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:swg — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:tacacs%2B — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:taxii — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:tls — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:tokenization — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:totp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:tpm — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:ttp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:udp — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:uefi — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:vdi — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:vpc — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:vpn — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:waf — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:xdr — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:xss — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:zero%20trust — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 glossary:zta — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:cipher-study-routing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 intervention:daily-challenges — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:deep-dive-recommendations — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:diagnostic — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:exam-selection — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:flashcard-navigation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:flashcard-study-pass — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:glossary-delivery — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:guest-pbq-preview — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:lesson-navigation — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:lesson-related-pbq — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:next-flashcard-deck — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:next-related-pbq — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:pbq-catalogue-selection — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:practice-launch — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:random-flashcards — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:related-flashcard-lessons — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:signup-diagnostic — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:smart-review — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:starred-flashcards — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 intervention:starter-deck — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 intervention:weak-area-actions — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 intervention:weak-area-deck — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 keywords:access-control-pam — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 keywords:api-session-browser-security — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
@@ -2063,6 +2381,15 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 section:web-social-dns-attacks:2 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 section:wifi-access-defense:0 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 section:wifi-access-defense:1 — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 starter:athena-new-confidentiality — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 starter:athena-new-mfa — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 starter:athena-new-phishing — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 starter:athena-pro-hash — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 starter:athena-pro-least-privilege — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 starter:athena-pro-ransomware — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 starter:athena-study-firewall — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 starter:athena-study-rpo — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
+- **P2 starter:athena-study-siem — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.
 - **P2 sy0701.objective.1.1 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.objective.1.1 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.objective.1.2 — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
@@ -2122,9 +2449,9 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.802-1x — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.802-1x — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.aaa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.abac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.acl — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.aes-aes-256 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
-- **P2 sy0701.term.aes — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.aes — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ah — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ai — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2133,18 +2460,23 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.amplified-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.anonymization — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ap-wap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.api-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.api — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.application-whitelisting-blacklisting — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.apt — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.aro — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.arp-poisoning — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.arp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.aslr — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.att-ck — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.attack-surface — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.attack-surface — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.aup — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.av — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.bcp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.bec — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.bgp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.bios — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.birthday-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.bloatware — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2152,14 +2484,14 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.brute-force — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.buffer-overflow — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.byod-cope-cyod — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
-- **P2 sy0701.term.byod — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.byod — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ca — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.captcha — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.car — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.casb — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
-- **P2 sy0701.term.ccmp — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
+- **P2 sy0701.term.cbc — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ccmp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cctv — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.certificate — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.certificate — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.chain-of-custody — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2169,6 +2501,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.cio-cso — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.cirt-cert — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.cis — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ciso — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.cloud-responsibility-matrix — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.cloud-responsibility-matrix — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.cold-site — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2181,15 +2514,21 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.controller — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.controller — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.coop — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cope — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cors — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.credential-replay — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.crl — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.csf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.csirt — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.csr — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.csrf-xsrf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.csrf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ctf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.cve — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.cvss — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.cyod — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.dac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dast — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.data-at-rest — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.data-classification — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.data-classification — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2208,7 +2547,9 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.deauthentication — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.defense-in-depth — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.dep — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.der — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.des — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dh — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.dhcp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.dhe — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.dictionary-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2220,10 +2561,12 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.dlp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.dmarc — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.dmz — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dnat — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.dns-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.dns-filtering — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.dns-filtering — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.dns — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.dnssec — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.dos — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.downgrade-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.drp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2236,6 +2579,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.edr — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ef — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.efs-fde — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.encryption — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.eradication — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.esp — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.esp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2245,34 +2589,44 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.facl — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.false-negative — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.false-positive — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.far — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.fault-tolerance — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.fde — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.federation — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.federation — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.fim — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.firewall — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.firewall — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.firmware-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.frr — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ftps-sftp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.gamification — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.gcm — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.gdpr — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.geographic-dispersal — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.governance — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.gpo — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.gpu — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.grc — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ha — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.hardening — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
-- **P2 sy0701.term.hashing — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.hashing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.hdd-ssd — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.hids-nids — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hids — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.hipaa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.hips-nips — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hips — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.hmac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.hot-site — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hotp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.hsm — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.hvac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.hybrid-cloud — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.iaas-paas-saas — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.iaas — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.iac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.iam — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.icmp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ics — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.ics — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2284,6 +2638,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.injection — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.injection — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.intranet — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ioc — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.iot — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ipfix — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ipsec — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2294,11 +2649,13 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.jailbreaking-rooting — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.jit — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.jump-box-bastion-host — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.kdc — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.kerberos — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.kerberos — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.keylogger — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.lan — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ldap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ldaps — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.leap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.least-privilege-principle — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.least-privilege — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
@@ -2310,21 +2667,32 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.logic-bomb — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.mac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.malicious-update — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.mam — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.md5 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.mdm — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.memory-dump — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.memory-injection — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.mfa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.microsegmentation — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.mitm — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ml — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.moa-mou — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.moa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.mou — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.mpls — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.msa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.mssp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.mtbf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.mttd — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.mttf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.nac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.nat-pat — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.nat — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.nda — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.netflow — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ngfw — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.nids — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.nips — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.nist — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.north-south-traffic — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ntp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2335,19 +2703,25 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.on-path-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.order-of-volatility — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.os — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.osint — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ot-ics — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.owasp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.p12 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.p2p — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.paas — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.pam — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.pap — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.password-spraying — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.passwordless — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.passwordless — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pat — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.patch-management — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.pci-dss — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.pdu-ups — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.pem — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.perimeter-security — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.pfs — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.pfx — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.phi — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.phishing-simulations — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.phishing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2387,6 +2761,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.rat — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.rbac — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.rc4 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.rce — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.rdp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.reflected-network-attack — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.rfid-nfc-cloning — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2403,9 +2778,12 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.role-based-security-training — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.rootkit — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.rsa — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.s-mime — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.saas — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.salting — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.salting — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.saml — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.san — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.sandboxing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.sase — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.scada — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2440,9 +2818,11 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.sow — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.spear-phishing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.spyware — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.sql-injection — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.sqli — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.srtp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ssh — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ssid — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ssl-tls — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.sso — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ssrf — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2457,15 +2837,19 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.tcp-ip — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.threat-actor — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.threat-actor — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
-- **P2 sy0701.term.tls — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.tls — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.tokenization — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.totp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.tou — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.tpm — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.trojan — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.ttp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.typosquatting — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.udp — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.ueba — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.uefi — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.uem — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
+- **P2 sy0701.term.vdi — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.vendor-risk-assessment — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.virus — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.vishing — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
@@ -2490,7 +2874,6 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P2 sy0701.term.wpa3 — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.xdr — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.xss — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
-- **P2 sy0701.term.zero-trust — missing_mapped_intervention**: Find or author an exact mapped instructional intervention; candidate mentions are not sufficient.
 - **P2 sy0701.term.zero-trust — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 sy0701.term.zta — no_direct_assessment**: Review the assessment gap; support concepts need not become mastery nodes.
 - **P2 traps:access-control-pam — instructional_mapping_review**: Confirm exact revision, concept scope, objective specificity, role and usefulness after a miss; do not treat exposure as mastery.

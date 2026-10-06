@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import {buildPackage,digest,detectCatalogueIssues} from './lib/content-mapping/package.mjs';
+import {verifyDeliveryInventory,readGlossary,readSelectors} from './lib/content-mapping/delivery-inventory.mjs';
+import {getDeepDiveRecommendations} from '../src/lib/deepDiveRecommendations.js';
 import {publicationPipeline} from './lib/content-mapping/publication.mjs';
 import {readLearningPilotBank,contentSignature} from './lib/read-learning-pilot-bank.mjs';
 import {PUBLISHED_CONTENT_SNAPSHOT} from '../src/data/sy0701PublishedSnapshot.js';
@@ -72,4 +74,57 @@ test('adversarial duplicates, conflicts, stale revisions and orphan references a
 test('new package stays out of browser and routed API import graph',()=>{
  const files=['src','api'].flatMap(root=>readdirSync(root,{recursive:true}).filter(p=>/\.(jsx?|mjs)$/.test(p)).map(p=>root+'/'+p));
  for(const file of files){const source=readFileSync(file,'utf8');assert.ok(!/from\s*['"][^'"]*(?:content-mapping|server\/adaptive|phase-2b5)/.test(source));}
+});
+
+test('delivered glossary has a row-level census instead of only an App hash',()=>{
+ const source=readFileSync('src/App.jsx','utf8');
+ const a=source.indexOf('const ACRONYM_GLOSSARY_TERMS ='),b=source.indexOf('const ACRONYM_TERMS_SORTED =',a);
+ const terms=Function(`"use strict";${source.slice(a,b)};return GLOSSARY_TERMS;`)();
+ assert.equal(Object.keys(terms).length,162);
+ const entries=[...pkg.records,...pkg.exclusions].filter(r=>r.kind==='glossary_definition');
+ assert.equal(entries.length,Object.keys(terms).length);
+ for(const [term,definition] of Object.entries(terms)){
+  const r=entries.find(r=>r.term===term);assert.ok(r,term);assert.equal(r.definitionSignature,contentSignature(definition));
+ }
+});
+test('all known delivered learning selectors are inventoried with exact source provenance',()=>{
+ for(const id of ['deep-dive-recommendations','related-flashcard-lessons','smart-review','next-related-pbq','next-flashcard-deck','random-flashcards','starred-flashcards','diagnostic','practice-launch','exam-selection']){
+  const r=pkg.records.find(r=>r.id===`intervention:${id}`);assert.ok(r,id);assert.ok(r.selector.inputs.length);assert.ok(r.selector.targetKinds.length);assert.ok(r.selector.sourceUnits.length);assert.ok(r.selector.deliveryEvidence.length);
+ }
+ assert.ok(pkg.sources.some(s=>s.path==='src/lib/deepDiveRecommendations.js'));
+});
+
+test('glossary uses renderer boundaries, binds source usage, and retains unobserved definitions',()=>{
+ const {matchTerms}=readGlossary();
+ assert.deepEqual(matchTerms('**SQL injection** RTO notRTOx'),['RTO','SQL injection']);
+ assert.ok(verifyDeliveryInventory(pkg));
+ const entries=pkg.records.filter(r=>r.kind==='glossary_definition');
+ assert.equal(entries.filter(r=>r.usageReferences.some(x=>/^(mcq|pbq|lesson):/.test(x.recordId))).length,136);
+ assert.equal(entries.filter(r=>r.usageReferences.length).length,153);
+ for(const r of entries){assert.equal(r.weight,0);assert.equal(r.trustedRevisionId,null);assert.equal(r.definitionSource.path,'src/App.jsx');assert.ok(r.definitionSource.line>2230);}
+ assert.ok(entries.some(r=>r.usageStatus==='no_local_reference_observed'));
+});
+test('missing glossary/selector rows and revision drift fail the completeness guard',()=>{
+ for(const kind of ['glossary_definition','intervention_selector']){
+  const copy=structuredClone(pkg);copy.records.splice(copy.records.findIndex(r=>r.kind===kind),1);
+  assert.throws(()=>verifyDeliveryInventory(copy),/Incomplete/);
+ }
+ const drift=structuredClone(pkg);drift.records.find(r=>r.kind==='glossary_definition').definitionSignature='sha256:'+'0'.repeat(64);
+ assert.throws(()=>verifyDeliveryInventory(drift),/Glossary revision mismatch/);
+ const selector=structuredClone(pkg);selector.records.find(r=>r.kind==='intervention_selector').sourceSignature='sha256:'+'0'.repeat(64);
+ assert.throws(()=>verifyDeliveryInventory(selector),/Selector revision mismatch/);
+ const orphan=structuredClone(pkg);orphan.records.find(r=>r.kind==='glossary_definition'&&r.usageReferences.length).usageReferences[0].recordId='absent';
+ assert.throws(()=>verifyDeliveryInventory(orphan),/Invalid glossary usage/);
+ assert.throws(()=>verifyDeliveryInventory(pkg,{readSource:path=>readFileSync(path,'utf8')+(path==='src/App.jsx'?'\nfunction newLearningSelector() {}':'')}),/Delivery source drift/);
+});
+test('delivered selector metadata and real lesson recommendation outputs resolve to catalogue kinds',()=>{
+ const kinds=new Set(pkg.records.map(r=>r.kind));
+ for(const s of readSelectors())for(const kind of s.selector.targetKinds)assert.ok(kinds.has(kind),kind);
+ const lessons=new Set(pkg.records.filter(r=>r.kind==='lesson').map(r=>r.id));
+ for(const q of bank.mcqs){const a=getDeepDiveRecommendations([q],{limit:2}),b=getDeepDiveRecommendations([q],{limit:2});assert.deepEqual(a,b);for(const result of a)assert.ok(lessons.has('lesson:'+result.id));}
+});
+test('separate signup starter revisions and explanations are retained without fabricated runtime identities',()=>{
+ const starters=pkg.records.filter(r=>r.kind==='starter_question');assert.equal(starters.length,9);
+ for(const r of starters){assert.equal(r.trustedRevisionId,null);assert.ok(pkg.records.some(x=>x.parentId===r.id&&x.kind==='explanation_bundle'));assert.ok(pkg.reviewQueue.some(x=>x.recordId===r.id&&x.reason==='starter_semantic_review'));}
+ assert.equal(pkg.counts.unresolvedQuestionMappings,pkg.records.filter(r=>['mcq','pbq','starter_question'].includes(r.kind)&&!r.primaryConceptId).length);
 });

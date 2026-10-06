@@ -1,0 +1,40 @@
+{
+  "status": "agent_scoped_inventory_pending_human",
+  "reviewDate": "2026-10-06",
+  "scope": "Explicit source-level census of delivered learning selectors and glossary. Any change in these delivery sources requires reviewing inventory completeness before updating this guard. Not human approval.",
+  "selectorIds": [
+    "cipher-study-routing",
+    "daily-challenges",
+    "deep-dive-recommendations",
+    "diagnostic",
+    "exam-selection",
+    "flashcard-navigation",
+    "flashcard-study-pass",
+    "glossary-delivery",
+    "guest-pbq-preview",
+    "lesson-navigation",
+    "lesson-related-pbq",
+    "next-flashcard-deck",
+    "next-related-pbq",
+    "pbq-catalogue-selection",
+    "practice-launch",
+    "random-flashcards",
+    "related-flashcard-lessons",
+    "signup-diagnostic",
+    "smart-review",
+    "starred-flashcards",
+    "starter-deck",
+    "weak-area-actions",
+    "weak-area-deck"
+  ],
+  "sources": {
+    "src/App.jsx": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49",
+    "src/lib/deepDiveRecommendations.js": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479",
+    "src/lib/deepDiveStudy.js": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459",
+    "src/data/sy0701AcronymFlashcards.js": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1",
+    "src/data/sy0701DeepDiveMap.js": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff",
+    "src/data/conceptDeepDives.js": "b478e16240c95b70a79cf0679aff683fc08f18dd11947c4046ecd880ec1ce17f",
+    "src/data/conceptDeepDivesStudyGuide.js": "340cc43dacd9c8706da4fb5a7a92c3a7104e36e4fbec6efec13d39522e17ab43",
+    "src/data/conceptDeepDivesPrinterGuide.js": "196982096671e5b10867402da328992cb29503c415615ac9eb5e674d4475d006"
+  }
+}
