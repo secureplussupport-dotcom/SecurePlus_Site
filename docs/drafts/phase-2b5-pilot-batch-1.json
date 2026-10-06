@@ -1,0 +1,691 @@
+{
+  "batchId": "phase-2b5-pilot-draft-1",
+  "date": "2026-10-07",
+  "baselineCommit": "8eafd87fc0a0758470f78d27113309059068b3b2",
+  "status": "DRAFT_PENDING_HUMAN_EDITORIAL_REVIEW",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "mappingVersionProposal": "pilot-draft-1-unapproved",
+  "sources": [
+    {
+      "id": "sy0701-objectives",
+      "title": "CompTIA Security+ SY0-701 Exam Objectives, Version 5.0",
+      "url": "https://assets.ctfassets.net/82ripq7fjls2/6TYWUym0Nudqa8nGEnegjG/0f9b974d3b1837fe85ab8e6553f4d623/CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf",
+      "locator": "PDF page 14: objective 5.2, BIA sub-bullets; PDF page 19: MTTR acronym expansion",
+      "accuracyUse": "Objective 5.2 explicitly names BIA, RTO, RPO and mean time to repair. Acronym list expands MTTR as mean time to recover. MTD is supporting continuity context, not an explicitly named bullet."
+    },
+    {
+      "id": "nist-800-34",
+      "title": "NIST SP 800-34 Rev. 1, Contingency Planning Guide for Federal Information Systems",
+      "url": "https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-34r1.pdf",
+      "locator": "Sections 3.2.1-3.2.3; printed pages 17-19 (PDF pages 31-33)",
+      "accuracyUse": "Distinguishes system restoration, recoverable data point and business downtime; includes process reprocessing and dependencies in continuity planning."
+    },
+    {
+      "id": "ibm-mttr",
+      "title": "IBM: Mean Time to Repair",
+      "url": "https://www.ibm.com/think/topics/mttr",
+      "locator": "Formula and challenges: repair start/end definitions",
+      "accuracyUse": "Uses total defined repair duration divided by completed repairs; boundaries must be comparable. Its worked example contains an inconsistent final sentence; use the formula, cross-check below, and recompute our own values."
+    },
+    {
+      "id": "ibm-mttr-crosscheck",
+      "title": "IBM: MTTR vs. MTBF",
+      "url": "https://www.ibm.com/think/topics/mttr-vs-mtbf",
+      "locator": "What is mean time to repair; Differences between MTBF and MTTR",
+      "accuracyUse": "Independently checks the repair average formula and distinguishes duration from operating time between failures."
+    }
+  ],
+  "questions": [
+    {
+      "id": "draft.pilot1.rto.01",
+      "stem": "A retailer requires checkout to resume within 30 minutes of an outage and permits up to one hour of lost transactions. In a recovery exercise, checkout becomes usable after 45 minutes and the restored transactions are 20 minutes old at the outage. Which statement about the service-restoration requirement is correct?",
+      "options": [
+        "It was met because the restored data is only 20 minutes old.",
+        "It was met because service returned within the one-hour data-loss allowance.",
+        "It was missed because checkout became usable 15 minutes after the 30-minute deadline.",
+        "It was missed because every recovery must finish within the 20-minute age of the data."
+      ],
+      "correctOption": 2,
+      "explanation": "The service took 45 minutes against a 30-minute RTO. The 20-minute lost-data window fits the separate one-hour allowance. Meeting a data target does not compensate for late service restoration.",
+      "optionFeedback": [
+        "Data age does not shorten the actual service outage; checkout still took 45 minutes against a 30-minute requirement.",
+        "One hour is the data-loss allowance, not the service deadline. The service deadline remains 30 minutes.",
+        "Correct: 45 minutes of elapsed restoration exceeds the 30-minute service target by 15 minutes.",
+        "Twenty minutes is the age of the recoverable data at the outage, not a deadline for completing restoration."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "interpretation",
+      "difficulty": "medium",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.rto",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "recovery-exercise-time-versus-data",
+      "familyRationale": "Unlike m032/m635 metric naming, adjudicates an observed service-restoration outcome without substituting the separate data allowance. The question asks only about the service target; RPO is distractor contrast, with no secondary mastery attribution.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "45 > 30; 20 <= 60. Service usability and data age are explicitly stated; no recovery guarantee inferred from architecture labels."
+    },
+    {
+      "id": "draft.pilot1.rto.02",
+      "stem": "A portal has a 40-minute RTO measured from outage until users can complete a transaction. Its tested runbook must restore identity services for 15 minutes, then restore the portal for 20 minutes, then validate transactions for 10 minutes. The steps cannot overlap. What does the exercise show?",
+      "options": [
+        "The end-to-end runbook takes 45 minutes and misses the RTO.",
+        "The runbook meets the RTO because restoring the portal itself takes only 20 minutes.",
+        "The runbook takes 25 minutes because validation can replace identity restoration.",
+        "The runbook meets the RTO because none of the individual steps lasts 40 minutes."
+      ],
+      "correctOption": 0,
+      "explanation": "The required sequential path is 15 + 20 + 10 = 45 minutes. Its end point is usable transactions, so dependencies and validation are included. The team must reduce and retest that path against the 40-minute target.",
+      "optionFeedback": [
+        "Correct: add all required non-overlapping steps up to the specified acceptable service level.",
+        "The portal cannot provide the specified service before its identity dependency and validation are complete.",
+        "The stem requires all three steps and forbids overlap; dropping the portal restoration or another step is invalid.",
+        "A limit on the whole outage is not a separate allowance for every step."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "calculation",
+      "difficulty": "medium",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.rto",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "serial-recovery-dependency-budget",
+      "familyRationale": "Requires critical-path budgeting rather than naming a metric or sorting supplied recovery priorities as in p048. Distinct from the outcome comparison in draft.rto.01; no architecture or retention choice from p211.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "15 + 20 + 10 = 45 > 40. Dependency order, lack of overlap and clock boundaries are explicit."
+    },
+    {
+      "id": "draft.pilot1.rto.03",
+      "stem": "A service owner sets a 45-minute RTO for each disruption. A hosting proposal advertises 99.99% monthly availability but supplies no maximum outage duration, recovery test results or dependency-restoration commitments. Which conclusion is justified before accepting the proposal?",
+      "options": [
+        "The availability percentage guarantees every outage will end within 45 minutes.",
+        "The percentage proves the recovery point objective is shorter than 45 minutes.",
+        "No recovery test is needed because monthly availability is higher than 99%.",
+        "The percentage alone cannot establish the RTO; require evidence for end-to-end restoration within 45 minutes."
+      ],
+      "correctOption": 3,
+      "explanation": "An aggregate availability claim does not specify a tested per-disruption restoration bound. Acceptance needs evidence about the required service, dependencies and recovery time. A percentage is also not evidence of recoverable data age.",
+      "optionFeedback": [
+        "A monthly aggregate does not, by itself, define or prove a maximum duration for each individual disruption.",
+        "Availability describes service time, not the age of data that can be recovered.",
+        "A high advertised percentage does not demonstrate that this service can meet its recovery target.",
+        "Correct: ask for a recovery commitment and realistic end-to-end test evidence against the stated target."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "evidence_evaluation",
+      "difficulty": "hard",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.rto",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "availability-contract-versus-outage-target",
+      "familyRationale": "Evaluates an evidence gap in a contract, rather than metric identification, recovery arithmetic or the supplied combined design of p211. Hard is a proposed inference load, not a calibrated label.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "No particular monthly downtime or contractual guarantee is invented; conclusion is limited to the evidence supplied."
+    },
+    {
+      "id": "draft.pilot1.rpo.01",
+      "stem": "A booking database fails at 09:20. The latest successfully tested recovery point contains all committed bookings through 08:55. There is no other recoverable copy. What data-loss window would this recovery point leave?",
+      "options": [
+        "5 minutes",
+        "25 minutes",
+        "55 minutes",
+        "The time required to restart the database"
+      ],
+      "correctOption": 1,
+      "explanation": "The recovery point is 25 minutes before the failure. Bookings committed during that interval are outside the available copy. This is a data-loss window; the stem gives no service-restoration duration.",
+      "optionFeedback": [
+        "The difference between 08:55 and 09:20 is 25 minutes, not five.",
+        "Correct: compare the failure time with the last recoverable committed data.",
+        "Fifty-five is the minute value in the earlier clock time, not the elapsed interval.",
+        "Restart duration answers a restoration-time question, not the age of recoverable data."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "interpretation",
+      "difficulty": "easy",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.rpo",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "recoverable-point-timeline",
+      "familyRationale": "Reads an actual recovered timeline instead of choosing backup frequency as in m088. It measures a potential window, not an approved objective or proof that all missing bookings actually occurred.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "09:20 minus 08:55 = 25 minutes; timestamps share the same date/time zone and no alternative copy exists."
+    },
+    {
+      "id": "draft.pilot1.rpo.02",
+      "stem": "An order service acknowledges writes after storing them on the primary. Replication to a recovery site is asynchronous, and a burst of orders can remain queued on the primary for an unknown duration. The primary and its queue could be lost together. Management permits no more than ten minutes of lost orders. What evidence is most relevant to checking that requirement?",
+      "options": [
+        "A measured upper bound on the age of acknowledged orders not yet durably recoverable at the recovery site",
+        "The recovery server's advertised CPU speed",
+        "The average time users take to enter an order",
+        "A screenshot showing that the replica process is running"
+      ],
+      "correctOption": 0,
+      "explanation": "The relevant exposure is acknowledged data that would disappear with the primary before becoming durably recoverable elsewhere. A running replica does not bound backlog age. Measure and test the worst relevant recoverable-data lag against the ten-minute allowance.",
+      "optionFeedback": [
+        "Correct: a bounded recoverable-data lag can be compared with the permitted loss window.",
+        "CPU speed alone cannot prove that recent acknowledged orders have reached a durable recovery copy.",
+        "Order-entry duration does not tell how much committed data could be lost with the primary.",
+        "A healthy-looking process can still have a backlog older than the allowed window."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "scenario_application",
+      "difficulty": "medium",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.rpo",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "asynchronous-replication-durability-gap",
+      "familyRationale": "Requires durability and backlog evidence in an asynchronous failure model, rather than changing the interval in m088 or subtracting two provided timestamps. No claim that replication alone preserves historical clean versions.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "Unknown queue duration cannot certify a ten-minute RPO. Scope is primary-site loss; corruption/history is tested separately in draft.rpo.03."
+    },
+    {
+      "id": "draft.pilot1.rpo.03",
+      "stem": "A database has a 15-minute RPO. At 14:00, responders stop the database after discovering corruption that began at 11:00 and affected every later copy. Restore testing confirms the latest usable clean recovery point is 10:55. No transaction logs or other clean copies can reconstruct later data. New snapshots were taken every five minutes. Which assessment is correct?",
+      "options": [
+        "The RPO is met because snapshots were frequent.",
+        "The 13:55 corrupted snapshot meets the RPO because it is recent.",
+        "The available clean recovery point leaves a 185-minute window, so the 15-minute RPO is not met.",
+        "The RPO depends only on how quickly the corrupted server restarts."
+      ],
+      "correctOption": 2,
+      "explanation": "The usable point is 10:55, which is 185 minutes before 14:00. Recent corrupted snapshots are not usable recovery points. Snapshot cadence cannot substitute for recoverability when the stated clean reconstruction paths are absent.",
+      "optionFeedback": [
+        "Frequent copies do not meet the objective if those copies contain unrecoverable corruption.",
+        "The stem explicitly rules out all later copies as usable clean recovery points.",
+        "Correct: evaluate the latest usable point, not merely the most recent snapshot timestamp.",
+        "Restart speed cannot recover missing clean data or reduce its age at the interruption."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "evidence_evaluation",
+      "difficulty": "hard",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.rpo",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "corruption-clean-recovery-point",
+      "familyRationale": "Applies usable-point selection after delayed corruption, beyond m088's explicitly successful, tested version schedule. Shares the general backup domain with m088; editor must judge whether clean-point reasoning is sufficiently independent.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "14:00 minus 10:55 = 185 minutes > 15; corruption begins before later copies, and clean logs/reconstruction are explicitly excluded."
+    },
+    {
+      "id": "draft.pilot1.mtd.01",
+      "stem": "A dispatch team can absorb an outage for up to four hours by clearing the resulting backlog later. Beyond four hours, shipments miss a stated contractual cutoff and management considers the harm unacceptable. Its technology team aims to restore the system in one hour. What is the maximum tolerable downtime for the dispatch function in this scenario?",
+      "options": [
+        "One hour, because that is the technology restoration target",
+        "The average duration of past repairs",
+        "Four hours, because that is the outer acceptable disruption limit",
+        "The time between the last backup and the outage"
+      ],
+      "correctOption": 2,
+      "explanation": "The four-hour business tolerance is the outer interruption limit. The one-hour restoration target is intended to leave time for business recovery before that limit. This supporting continuity concept is not an explicitly named SY0-701 objective bullet.",
+      "optionFeedback": [
+        "One hour is the chosen restoration target, which is shorter than the stated business tolerance.",
+        "An observed repair average does not set the business's unacceptable-harm boundary.",
+        "Correct: use the business impact threshold specified in the scenario.",
+        "Backup age concerns recoverable data, not how long dispatch disruption is tolerable."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "interpretation",
+      "difficulty": "easy",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.mtd",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "supporting_context_not_explicit_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "outer-business-interruption-limit",
+      "familyRationale": "Shares m196's business-limit-versus-restoration-target distinction. Retained as an easier value-interpretation check, not a new independent family. New MTD family proposals are the workaround reassessment and business reprocessing scenarios.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "The scenario defines the business threshold; no external legal or contractual deadline is asserted."
+    },
+    {
+      "id": "draft.pilot1.mtd.02",
+      "stem": "A warehouse previously could tolerate only two hours without its automated picking system. A tested manual process now sustains the required shipping service for eight hours, after which capacity limits cause unacceptable business disruption. Management accepts that impact assessment. What should continuity planners do with the business downtime tolerance?",
+      "options": [
+        "Keep two hours permanently because hardware and software have not changed.",
+        "Reassess the business tolerance using the validated workaround and its eight-hour limit, then review recovery targets.",
+        "Set the tolerance equal to the backup frequency.",
+        "Make the tolerance unlimited because a manual process exists."
+      ],
+      "correctOption": 1,
+      "explanation": "Tolerance follows business impact and feasible continuity arrangements. The accepted manual process changes the impact timeline, but has a finite capacity limit. Recovery targets still need review; the scenario does not automatically approve an eight-hour technical RTO.",
+      "optionFeedback": [
+        "Business impact can change even when the technical assets remain the same.",
+        "Correct: include the tested workaround and its limits in the business tolerance assessment.",
+        "Backup frequency is not a measure of how long shipping can continue acceptably.",
+        "The workaround stops sustaining the required service after eight hours, so it does not remove the limit."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "scenario_application",
+      "difficulty": "medium",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.mtd",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "supporting_context_not_explicit_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "manual-workaround-changes-business-tolerance",
+      "familyRationale": "Tests reassessment when an alternative business process changes tolerance, unlike m196 definition and draft.mtd.01 threshold reading. Manual effectiveness is stipulated, not inferred from paper procedures alone.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "Validated service capacity and management acceptance are explicit. Does not equate new MTD with an automatically approved technical target."
+    },
+    {
+      "id": "draft.pilot1.mtd.03",
+      "stem": "A finance function has a six-hour maximum tolerable downtime. After an outage, its database is restored in four hours. Staff must then complete two and a half hours of non-overlapping reconciliation before the function can resume acceptable operations. No workaround is available. Which finding follows?",
+      "options": [
+        "The function stayed within tolerance because the database returned in four hours.",
+        "The tolerance is the age of the restored database backup.",
+        "The reconciliation can be ignored because the server is already online.",
+        "The total interruption is six and a half hours, exceeding the business tolerance by 30 minutes."
+      ],
+      "correctOption": 3,
+      "explanation": "Acceptable business operation resumes after 4 + 2.5 = 6.5 hours. Technical restoration alone does not finish the business interruption. The six-hour tolerance is exceeded by half an hour.",
+      "optionFeedback": [
+        "The business remains interrupted during the required reconciliation even though the database is available.",
+        "Data age is a recovery-point issue, distinct from elapsed business interruption.",
+        "The scenario requires reconciliation before acceptable operations can resume and excludes a workaround.",
+        "Correct: include both sequential phases and compare the result with the business limit."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "calculation",
+      "difficulty": "hard",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.mtd",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "supporting_context_not_explicit_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "technical-recovery-plus-business-reprocessing",
+      "familyRationale": "Evaluates business resumption after technical recovery, distinct from m196 naming, impact-threshold reading and workaround reassessment. Related to draft.rto.02 timing, but measures the business boundary, not the system target.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "4 + 2.5 = 6.5 hours; 6.5 - 6 = 0.5 hours. This NIST-supported MTD context is not claimed as a separate explicit exam bullet."
+    },
+    {
+      "id": "draft.pilot1.mttr.01",
+      "stem": "A team defines repair time as elapsed time from service failure to verified service restoration. Three completed failures took 20, 30 and 40 minutes to repair under that definition. What is the mean time to repair for these failures?",
+      "options": [
+        "30 minutes",
+        "40 minutes",
+        "90 minutes",
+        "The agreed service-restoration target"
+      ],
+      "correctOption": 0,
+      "explanation": "The observed durations total 90 minutes across three completed repairs, giving a mean of 30 minutes. It is an observed average under the stated clock definition, not a target or the longest repair.",
+      "optionFeedback": [
+        "Correct: (20 + 30 + 40) / 3 = 30 minutes.",
+        "Forty minutes is the longest observed repair, not their average.",
+        "Ninety minutes is the total repair time; divide it by the three repairs.",
+        "An agreed target is not calculated from observed repair durations."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "calculation",
+      "difficulty": "easy",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.mttr",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "observed-repair-duration-average",
+      "familyRationale": "Fills the absent direct MTTR MCQ slot with an observed-data calculation; no existing pilot MCQ calculates this metric.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "ibm-mttr",
+        "ibm-mttr-crosscheck"
+      ],
+      "accuracyCheck": "90 / 3 = 30; all completed incidents use one explicit definition. Exam objective says repair; its acronym list also uses recover."
+    },
+    {
+      "id": "draft.pilot1.mttr.02",
+      "stem": "A service has a target of restoration within 60 minutes for each outage. Under a consistent failure-to-verified-restoration clock, its last three repair durations were 10, 10 and 100 minutes. A report shows MTTR of 40 minutes. Which interpretation is correct?",
+      "options": [
+        "All three outages met the target because 40 is below 60.",
+        "MTTR is 100 minutes because the longest outage defines the mean.",
+        "The reported mean is correct, but one outage exceeded the restoration target.",
+        "The repair durations prove that no committed data was lost."
+      ],
+      "correctOption": 2,
+      "explanation": "The mean is (10 + 10 + 100) / 3 = 40 minutes. An average below a target does not show that every observation met it; the 100-minute outage exceeded 60 minutes. These timings say nothing about recovered data age.",
+      "optionFeedback": [
+        "A mean hides individual values; the 100-minute observation fails the per-outage target.",
+        "The largest observation is not the arithmetic mean.",
+        "Correct: distinguish the observed average from the target and inspect individual incidents.",
+        "Repair-duration data alone cannot establish the recovered data-loss window."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "interpretation",
+      "difficulty": "medium",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.mttr",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "mean-versus-incident-tail",
+      "familyRationale": "Uses distribution/outlier interpretation, not another average calculation alone. RTO is a contextual contrast; primary evidence proposal is understanding the limits of MTTR.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "ibm-mttr",
+        "ibm-mttr-crosscheck"
+      ],
+      "accuracyCheck": "(10 + 10 + 100) / 3 = 40; exactly one observation exceeds 60. No percentile, reliability forecast or guarantee inferred."
+    },
+    {
+      "id": "draft.pilot1.mttr.03",
+      "stem": "A dashboard claims an automation rollout reduced MTTR from 32 to 12 minutes. Before rollout, the clock ran from service failure until users could complete a validated transaction. After rollout, it starts only when a technician begins repair and stops when the server boots; no comparable transaction-restoration timings are retained. What is the strongest supported conclusion?",
+      "options": [
+        "Automation definitely cut end-to-end service recovery by 20 minutes.",
+        "The values use different clock boundaries, so they do not establish an improvement in the original recovery metric.",
+        "The new value proves every outage meets the recovery time objective.",
+        "The new value proves the system fails less frequently."
+      ],
+      "correctOption": 1,
+      "explanation": "The reporting definition changed at both ends. The two means cannot establish a change in the original failure-to-usable-service duration without comparable measurements. Repair averages also do not prove every target is met or measure failure frequency.",
+      "optionFeedback": [
+        "The difference may result from excluding detection, waiting and validation rather than faster end-to-end recovery.",
+        "Correct: compare consistent definitions before attributing a change to the rollout.",
+        "A mean with narrower boundaries does not prove a per-outage service-restoration guarantee.",
+        "Failure frequency is not determined by a repair-duration average."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "evidence_evaluation",
+      "difficulty": "hard",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.mttr",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "repair-measurement-boundary-change",
+      "familyRationale": "Assesses validity of a changed measurement contract, distinct from average calculation and outlier interpretation. No causal effect is inferred from two incomparable reports.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "ibm-mttr",
+        "ibm-mttr-crosscheck"
+      ],
+      "accuracyCheck": "Stated boundary differences make causal improvement unproven. Source discusses inconsistent repair start/end definitions; no claim that all organizations must use one universal clock."
+    },
+    {
+      "id": "draft.pilot1.bia.01",
+      "stem": "A team has an inventory of servers and replacement prices but has not analyzed the business consequences of outages. To begin a useful business impact analysis for an appointment service, which input should it obtain next?",
+      "options": [
+        "The recovery team's server boot sequence and configuration templates",
+        "The replacement prices and depreciation schedule of the database equipment",
+        "The security team's annual estimates of attack likelihood against the portal",
+        "Business owners' time-dependent disruption impacts and viable workarounds"
+      ],
+      "correctOption": 3,
+      "explanation": "Asset prices alone do not show how interruption affects the business. Business-owner input about functions, time-dependent consequences and feasible alternatives makes the impact assessment useful for continuity decisions.",
+      "optionFeedback": [
+        "Technical restoration instructions support a recovery plan but do not establish the missing business impact of losing the service.",
+        "Asset accounting does not capture how interruption affects supported business functions over time.",
+        "Likelihood estimates contribute to risk analysis but do not describe the missing consequences of disruption.",
+        "Correct: establish business effects and feasible continuity assumptions with their owners."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "scenario_application",
+      "difficulty": "easy",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "continuity.bia",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "business-impact-input-elicitation",
+      "familyRationale": "Chooses the missing evidence needed to perform BIA, instead of identifying the document title as m086 does. Avoids ranking assets by price or inventing domain-specific safety requirements.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "NIST BIA covers processes, impacts and resources. Alternative operation must be confirmed feasible, not assumed from a plan label."
+    },
+    {
+      "id": "draft.pilot1.bia.02",
+      "stem": "A business impact analysis finds that order fulfillment cannot operate without a shared identity service. Fulfillment has a one-hour recovery need; a reporting application using the same identity service can wait a day. The identity server has no direct revenue line item. How should planners treat it?",
+      "options": [
+        "Give it low priority because it earns no direct revenue.",
+        "Include its dependency on fulfillment in recovery priorities so it is available in time for the critical process.",
+        "Schedule it solely around the reporting application's one-day need.",
+        "Prioritize it only if it is the most expensive server to replace."
+      ],
+      "correctOption": 1,
+      "explanation": "Recovery priorities must reflect the processes a resource enables. A shared resource can be critical even without direct revenue. Its availability must support fulfillment; the exact implementation schedule still requires tested dependency and resource planning.",
+      "optionFeedback": [
+        "Indirect enablement of a critical process can make a resource important despite having no direct revenue.",
+        "Correct: use the dependent critical function's needs when setting resource recovery priorities.",
+        "The less urgent application does not remove the more urgent dependency.",
+        "Replacement cost alone does not establish operational criticality."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "scenario_application",
+      "difficulty": "medium",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "continuity.bia",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "shared-dependency-recovery-priority",
+      "familyRationale": "Tests identifying an enabling dependency and its impact, rather than following supplied hospital priorities in p048 or naming the BIA document in m086. Exact time calculation is intentionally absent.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "Dependency is explicitly required; no universal rule that identity always restores first, and no component RTO is fabricated."
+    },
+    {
+      "id": "draft.pilot1.bia.03",
+      "stem": "Last year, a BIA allowed a claims portal to be unavailable for a day because staff could process requests by phone. The company now accepts time-sensitive partner submissions only through that portal, and the phone process cannot handle them. A proposal copies the old recovery priority because outage probability and server prices are unchanged. What is the best response?",
+      "options": [
+        "Reassess disruption impacts, partner time constraints and viable alternatives with business owners before retaining the old priority.",
+        "Retain the old priority because BIA measures only the probability of an outage.",
+        "Retain the old priority because the same hardware is used.",
+        "Replace the BIA with a vulnerability scan and derive recovery priority from patch severity."
+      ],
+      "correctOption": 0,
+      "explanation": "The business function and effective alternatives changed, so the old impact assumptions may be invalid. Unchanged outage likelihood and asset price do not establish unchanged consequences. Updated business evidence must inform any new recovery priority.",
+      "optionFeedback": [
+        "Correct: review the changed service and continuity assumptions; do not fabricate a new deadline without owner evidence.",
+        "Probability is relevant to risk assessment, but BIA needs the consequences of disruption to the current business.",
+        "Technical sameness does not imply that business impacts or dependencies are unchanged.",
+        "Patch severity cannot substitute for analysis of the current function's disruption consequences."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "evidence_evaluation",
+      "difficulty": "hard",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "continuity.bia",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "changed-business-service-impact-scope",
+      "familyRationale": "Tests stale-scope reassessment after a business-model and fallback change, distinct from collecting initial inputs and identifying a shared technical dependency. Related to draft.mtd.02 workarounds but asks whether BIA evidence remains valid, not the numerical tolerance.",
+      "familyIndependenceApproved": false,
+      "editorialStatus": "agent_reviewed_pending_human",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "Partner time constraints are scenario facts; no actual regulation or contract rule is asserted and no new recovery target is invented."
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,readdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {readLearningPilotBank,contentSignature} from './lib/read-learning-pilot-bank.mjs';
+import {QUESTION_MAPPINGS} from '../src/data/learningMappings.js';
+const batchPath='docs/drafts/phase-2b5-pilot-batch-1.json';
+const reportPath='docs/phase-2b5-pilot-coverage-gap-ledger.md';
+const evidencePath='docs/evidence/phase-2b5/pilot-draft-validation.json';
+const hash=p=>createHash('sha256').update(readFileSync(p)).digest('hex');
+const batch=JSON.parse(readFileSync(batchPath)),bank=readLearningPilotBank();
+const pkg=JSON.parse(readFileSync('docs/evidence/phase-2b5/mapping-package.json'));
+assert.equal(hash('docs/evidence/phase-2b5/mapping-package.json'),'056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97','Reviewed package changed; re-review draft coverage');
+assert.equal(contentSignature(bank),'sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391','Effective local bank changed; re-review drafts');
+assert.equal(batch.status,'DRAFT_PENDING_HUMAN_EDITORIAL_REVIEW');
+assert.equal(batch.baselineCommit,'8eafd87fc0a0758470f78d27113309059068b3b2');
+for(const k of ['humanApproved','published','activationAllowed','privatePayloadIncluded'])assert.equal(batch[k],false);
+assert.equal(pkg.humanApproved,false);assert.equal(pkg.activationAllowed,false);
+const concepts=['recovery.rto','recovery.rpo','recovery.mtd','recovery.mttr','continuity.bia'];
+const sourceIds=new Set(batch.sources.map(s=>s.id));
+const unique=values=>new Set(values.map(v=>v.trim().toLowerCase())).size===values.length;
+const meaningful=s=>typeof s==='string'&&s.trim().length>=25;
+assert.equal(batch.questions.length,15);assert(unique(batch.questions.map(q=>q.id)));
+for(const q of batch.questions){
+ assert.match(q.id,/^draft\.pilot1\.(rto|rpo|mtd|mttr|bia)\.0[123]$/);
+ assert(![...bank.mcqs,...bank.pbqs].some(r=>r.id===q.id));
+ assert(!pkg.records.some(r=>r.questionId===q.id));
+ assert(!QUESTION_MAPPINGS.some(r=>r.questionId===q.id));
+ assert(concepts.includes(q.primaryConceptProposal));assert.deepEqual(q.secondaryConceptProposals,[]);
+ assert.deepEqual(q.objectiveCodes,['5.2']);assert.equal(q.domainId,'sy0701.domain-5');
+ assert.equal(q.chapterId,'sy0701.objective-5.2');assert.equal(q.topicId,'business-continuity-metrics');
+ assert.equal(q.format,'mcq');assert(['easy','medium','hard'].includes(q.difficulty));
+ assert.equal(q.difficultyStatus,'proposed_uncalibrated');assert.equal(q.editorialStatus,'agent_reviewed_pending_human');
+ for(const k of ['familyIndependenceApproved','humanApproved','published'])assert.equal(q[k],false);
+ assert.equal(q.masteryWeight,0);assert(meaningful(q.stem)&&meaningful(q.explanation));
+ assert.equal(q.options.length,4);assert(unique(q.options));
+ assert(Number.isInteger(q.correctOption)&&q.correctOption>=0&&q.correctOption<4);
+ assert.equal(q.optionFeedback.length,4);assert(q.optionFeedback.every(meaningful));
+ assert.match(q.scenarioFamilyProposal,/^[a-z]+(?:-[a-z]+)+$/);
+ assert(meaningful(q.familyRationale)&&meaningful(q.accuracyCheck));
+ assert(q.sourceRefs.length>=2&&q.sourceRefs.every(s=>sourceIds.has(s)));
+ assert.equal(q.objectiveScope,q.primaryConceptProposal==='recovery.mtd'?'supporting_context_not_explicit_bullet':'explicit_bia_bullet');
+}
+const answer=id=>{const q=batch.questions.find(q=>q.id==='draft.pilot1.'+id);return q.options[q.correctOption];};
+// Recompute authored numerical answers, independently of their explanations.
+assert.equal(answer('rpo.01'),`${(9*60+20)-(8*60+55)} minutes`);
+assert(answer('rpo.03').includes(`${(14*60)-(10*60+55)}-minute`));
+assert(answer('rto.02').includes(`${15+20+10} minutes`));assert(15+20+10>40);
+assert.equal(answer('mttr.01'),`${(20+30+40)/3} minutes`);
+assert.equal((10+10+100)/3,40);assert.equal([10,10,100].filter(v=>v>60).length,1);
+assert(answer('mttr.02').includes('one outage'));
+assert.equal((4+2.5-6)*60,30);assert(answer('mtd.03').includes('30 minutes'));
+// Numerical substitutions and punctuation do not create lexical novelty.
+const tokens=s=>new Set(s.toLowerCase().replace(/\d+(?::\d+)?(?:\.\d+)?/g,' # ').match(/[a-z]+|#/g)||[]);
+const similarity=(a,b)=>{const x=tokens(a),y=tokens(b);return [...x].filter(t=>y.has(t)).length/new Set([...x,...y]).size;};
+assert.equal(similarity('Restore service in 4 hours.','RESTORE service in 6 hours!'),1);
+assert(similarity('A portal restores in 4 hours.','A database restores in 6 hours.')>=0.6);
+const stem=q=>[q.q,q.title,q.scenario,q.question].filter(Boolean).join(' ');
+const catalogue=[...bank.mcqs,...bank.pbqs].map(q=>({id:q.id,text:stem(q)}));
+const nearest=batch.questions.map(q=>{
+ const candidates=[...catalogue,...batch.questions.filter(d=>d.id!==q.id).map(d=>({id:d.id,text:d.stem}))];
+ const ranked=candidates.map(c=>({id:c.id,score:Number(similarity(q.stem,c.text).toFixed(4))})).sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id));
+ assert(ranked[0].score<0.65,q.id+': near-copy candidate requires revision/review');
+ return {draftId:q.id,nearest:ranked.slice(0,3)};
+});
+const coverage=concepts.map(concept=>{
+ const mapped=QUESTION_MAPPINGS.filter(m=>m.primaryConceptId===concept&&m.evidencePrecision==='direct');
+ for(const m of mapped){const q=bank.mcqs.find(q=>q.id===m.questionId);assert(q);assert.equal(contentSignature(q),m.questionRevision);assert.equal(q.difficulty,m.difficulty);}
+ const drafts=batch.questions.filter(q=>q.primaryConceptProposal===concept);
+ return {conceptId:concept,existingDirectMcqs:mapped.map(m=>({questionId:m.questionId,sourceSignature:m.questionRevision,difficulty:m.difficulty,format:m.format,skill:m.cognitiveSkill,family:m.scenarioFamily})),coarsePbqs:QUESTION_MAPPINGS.filter(m=>m.evidencePrecision==='coarse'&&(m.primaryConceptId===concept||m.secondaryConceptIds.includes(concept))).map(m=>m.questionId),existingDirectFamilies:new Set(mapped.map(m=>m.scenarioFamily)).size,humanApprovedFamilies:0,draftsByDifficulty:Object.fromEntries(['easy','medium','hard'].map(d=>[d,drafts.filter(q=>q.difficulty===d).length])),draftFormats:['mcq'],newFamilyProposals:[...new Set(drafts.map(q=>q.scenarioFamilyProposal))].filter(f=>!mapped.some(m=>m.scenarioFamily===f)),draftsApprovedForEvidence:0};
+});
+assert.deepEqual(coverage.map(c=>c.existingDirectMcqs.length),[2,1,1,0,1]);
+assert.deepEqual(coverage.map(c=>c.newFamilyProposals.length),[3,3,2,3,3]);
+assert.equal(batch.questions.find(q=>q.id==='draft.pilot1.mtd.01').scenarioFamilyProposal,'outer-business-interruption-limit');
+const mentions=/\b(RTO|RPO|MTD|MTTR|BIA)\b|recovery (time|point) objective|maximum tolerable downtime|mean time to (repair|recover)|business impact analysis/i;
+const matches=[...bank.mcqs,...bank.pbqs].filter(q=>mentions.test(JSON.stringify(q))).map(q=>q.id);
+assert.deepEqual(matches,['m032','m086','m088','m196','m635','p048','p211']);
+for(const root of ['src','api','server'])for(const file of readdirSync(root,{recursive:true}).filter(f=>/\.(jsx?|mjs)$/.test(f)))assert(!readFileSync(root+'/'+file,'utf8').includes('phase-2b5-pilot-batch-1'),'Draft batch imported by runtime');
+const evidence={status:'PASS_OFFLINE_DRAFT_CHECKS_NOT_EDITORIAL_APPROVAL',date:batch.date,baselineCommit:batch.baselineCommit,bankCounts:{mcqs:bank.mcqs.length,pbqs:bank.pbqs.length},bankSignature:contentSignature(bank),pilotMentionQuestionIds:matches,coverage,nearDuplicateMethod:'Number-normalized stem token Jaccard; threshold 0.65; top three comparisons include all 483 effective local questions and other drafts. Lexical screen only; semantic review is separate and private p003/p017 payloads are unavailable.',nearDuplicateResults:nearest,checks:{drafts:15,directMappingsBoundToRevision:5,numericAnswers:'PASS recomputed',approvalAndPublication:'false; zero mastery weight; no active mapping/import',scope:'MTD supporting context; proposed difficulty; secondary roles absent'},limitations:['No human approval, psychometric calibration or demonstrated transfer effectiveness.','No new live catalogue/private-payload inspection; local captured publication only.','MTD easy draft shares the existing family; 14 new family labels are proposals, not 14 approved independent families.','PBQ component evidence and MTD/BIA teaching gaps remain open.'],sha256:Object.fromEntries([batchPath,reportPath,'scripts/audit-pilot-drafts.mjs','docs/evidence/phase-2b5/mapping-package.json'].map(p=>[p,hash(p)]))};
+const output=JSON.stringify(evidence,null,2)+'\n';
+if(process.argv.includes('--write'))writeFileSync(evidencePath,output);
+else assert.equal(readFileSync(evidencePath,'utf8'),output,'Stale draft evidence; review and rerun --write');
+console.log(JSON.stringify({status:evidence.status,drafts:15,newFamilyProposals:14,humanApprovedFamilies:0,bankCounts:evidence.bankCounts,batchSha256:hash(batchPath)}));

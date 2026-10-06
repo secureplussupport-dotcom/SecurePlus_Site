@@ -1,0 +1,451 @@
+{
+  "status": "PASS_OFFLINE_DRAFT_CHECKS_NOT_EDITORIAL_APPROVAL",
+  "date": "2026-10-07",
+  "baselineCommit": "8eafd87fc0a0758470f78d27113309059068b3b2",
+  "bankCounts": {
+    "mcqs": 395,
+    "pbqs": 88
+  },
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "pilotMentionQuestionIds": [
+    "m032",
+    "m086",
+    "m088",
+    "m196",
+    "m635",
+    "p048",
+    "p211"
+  ],
+  "coverage": [
+    {
+      "conceptId": "recovery.rto",
+      "existingDirectMcqs": [
+        {
+          "questionId": "m032",
+          "sourceSignature": "sha256:072ce4c7b9f8e0f1f70dbea7320cebfb13d18d482093240eb98485850478e200",
+          "difficulty": "easy",
+          "format": "mcq",
+          "skill": "interpretation",
+          "family": "restoration-target-identification"
+        },
+        {
+          "questionId": "m635",
+          "sourceSignature": "sha256:d2f6ffed09aa5b1fd7a933da2e5e531906923f96ef00c90b910b184b0cc25233",
+          "difficulty": "easy",
+          "format": "mcq",
+          "skill": "identification",
+          "family": "restoration-target-identification"
+        }
+      ],
+      "coarsePbqs": [
+        "p211",
+        "p048"
+      ],
+      "existingDirectFamilies": 1,
+      "humanApprovedFamilies": 0,
+      "draftsByDifficulty": {
+        "easy": 0,
+        "medium": 2,
+        "hard": 1
+      },
+      "draftFormats": [
+        "mcq"
+      ],
+      "newFamilyProposals": [
+        "recovery-exercise-time-versus-data",
+        "serial-recovery-dependency-budget",
+        "availability-contract-versus-outage-target"
+      ],
+      "draftsApprovedForEvidence": 0
+    },
+    {
+      "conceptId": "recovery.rpo",
+      "existingDirectMcqs": [
+        {
+          "questionId": "m088",
+          "sourceSignature": "sha256:d828be6f37d110e5cf80620d9c7aa4b8129dbc28cbf1e221233f19baadf01158",
+          "difficulty": "medium",
+          "format": "mcq",
+          "skill": "scenario_application",
+          "family": "versioned-backup-interval"
+        }
+      ],
+      "coarsePbqs": [
+        "p211"
+      ],
+      "existingDirectFamilies": 1,
+      "humanApprovedFamilies": 0,
+      "draftsByDifficulty": {
+        "easy": 1,
+        "medium": 1,
+        "hard": 1
+      },
+      "draftFormats": [
+        "mcq"
+      ],
+      "newFamilyProposals": [
+        "recoverable-point-timeline",
+        "asynchronous-replication-durability-gap",
+        "corruption-clean-recovery-point"
+      ],
+      "draftsApprovedForEvidence": 0
+    },
+    {
+      "conceptId": "recovery.mtd",
+      "existingDirectMcqs": [
+        {
+          "questionId": "m196",
+          "sourceSignature": "sha256:064871a82f7228185d753db57a4ff070d965ea05ffbf8499a65dbad23303a600",
+          "difficulty": "medium",
+          "format": "mcq",
+          "skill": "distinction",
+          "family": "outer-business-interruption-limit"
+        }
+      ],
+      "coarsePbqs": [],
+      "existingDirectFamilies": 1,
+      "humanApprovedFamilies": 0,
+      "draftsByDifficulty": {
+        "easy": 1,
+        "medium": 1,
+        "hard": 1
+      },
+      "draftFormats": [
+        "mcq"
+      ],
+      "newFamilyProposals": [
+        "manual-workaround-changes-business-tolerance",
+        "technical-recovery-plus-business-reprocessing"
+      ],
+      "draftsApprovedForEvidence": 0
+    },
+    {
+      "conceptId": "recovery.mttr",
+      "existingDirectMcqs": [],
+      "coarsePbqs": [],
+      "existingDirectFamilies": 0,
+      "humanApprovedFamilies": 0,
+      "draftsByDifficulty": {
+        "easy": 1,
+        "medium": 1,
+        "hard": 1
+      },
+      "draftFormats": [
+        "mcq"
+      ],
+      "newFamilyProposals": [
+        "observed-repair-duration-average",
+        "mean-versus-incident-tail",
+        "repair-measurement-boundary-change"
+      ],
+      "draftsApprovedForEvidence": 0
+    },
+    {
+      "conceptId": "continuity.bia",
+      "existingDirectMcqs": [
+        {
+          "questionId": "m086",
+          "sourceSignature": "sha256:314994d739ecbe82485e02f29dda4c628773b1ff363b93913182892515e52872",
+          "difficulty": "medium",
+          "format": "mcq",
+          "skill": "identification",
+          "family": "critical-function-impact-document"
+        }
+      ],
+      "coarsePbqs": [],
+      "existingDirectFamilies": 1,
+      "humanApprovedFamilies": 0,
+      "draftsByDifficulty": {
+        "easy": 1,
+        "medium": 1,
+        "hard": 1
+      },
+      "draftFormats": [
+        "mcq"
+      ],
+      "newFamilyProposals": [
+        "business-impact-input-elicitation",
+        "shared-dependency-recovery-priority",
+        "changed-business-service-impact-scope"
+      ],
+      "draftsApprovedForEvidence": 0
+    }
+  ],
+  "nearDuplicateMethod": "Number-normalized stem token Jaccard; threshold 0.65; top three comparisons include all 483 effective local questions and other drafts. Lexical screen only; semantic review is separate and private p003/p017 payloads are unavailable.",
+  "nearDuplicateResults": [
+    {
+      "draftId": "draft.pilot1.rto.01",
+      "nearest": [
+        {
+          "id": "draft.pilot1.mttr.02",
+          "score": 0.2281
+        },
+        {
+          "id": "m635",
+          "score": 0.1957
+        },
+        {
+          "id": "draft.pilot1.rpo.02",
+          "score": 0.1944
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.rto.02",
+      "nearest": [
+        {
+          "id": "m032",
+          "score": 0.1556
+        },
+        {
+          "id": "draft.pilot1.mttr.03",
+          "score": 0.1408
+        },
+        {
+          "id": "draft.pilot1.mtd.03",
+          "score": 0.1343
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.rto.03",
+      "nearest": [
+        {
+          "id": "m635",
+          "score": 0.1556
+        },
+        {
+          "id": "m713",
+          "score": 0.1556
+        },
+        {
+          "id": "draft.pilot1.mttr.02",
+          "score": 0.1552
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.rpo.01",
+      "nearest": [
+        {
+          "id": "draft.pilot1.rpo.03",
+          "score": 0.2031
+        },
+        {
+          "id": "m029",
+          "score": 0.1633
+        },
+        {
+          "id": "m200",
+          "score": 0.1525
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.rpo.02",
+      "nearest": [
+        {
+          "id": "draft.pilot1.rto.01",
+          "score": 0.1944
+        },
+        {
+          "id": "m733",
+          "score": 0.1791
+        },
+        {
+          "id": "p017",
+          "score": 0.1585
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.rpo.03",
+      "nearest": [
+        {
+          "id": "draft.pilot1.rpo.01",
+          "score": 0.2031
+        },
+        {
+          "id": "draft.pilot1.rto.01",
+          "score": 0.1644
+        },
+        {
+          "id": "m177",
+          "score": 0.1452
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.mtd.01",
+      "nearest": [
+        {
+          "id": "draft.pilot1.mtd.03",
+          "score": 0.2254
+        },
+        {
+          "id": "p017",
+          "score": 0.1795
+        },
+        {
+          "id": "m111",
+          "score": 0.1587
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.mtd.02",
+      "nearest": [
+        {
+          "id": "m244",
+          "score": 0.1351
+        },
+        {
+          "id": "draft.pilot1.mtd.01",
+          "score": 0.125
+        },
+        {
+          "id": "m229",
+          "score": 0.1231
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.mtd.03",
+      "nearest": [
+        {
+          "id": "draft.pilot1.mtd.01",
+          "score": 0.2254
+        },
+        {
+          "id": "draft.pilot1.rto.01",
+          "score": 0.194
+        },
+        {
+          "id": "m088",
+          "score": 0.1695
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.mttr.01",
+      "nearest": [
+        {
+          "id": "draft.pilot1.mttr.02",
+          "score": 0.2979
+        },
+        {
+          "id": "draft.pilot1.mttr.03",
+          "score": 0.2063
+        },
+        {
+          "id": "m089",
+          "score": 0.1905
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.mttr.02",
+      "nearest": [
+        {
+          "id": "draft.pilot1.mttr.01",
+          "score": 0.2979
+        },
+        {
+          "id": "draft.pilot1.rto.01",
+          "score": 0.2281
+        },
+        {
+          "id": "m635",
+          "score": 0.1951
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.mttr.03",
+      "nearest": [
+        {
+          "id": "draft.pilot1.mttr.01",
+          "score": 0.2063
+        },
+        {
+          "id": "draft.pilot1.mttr.02",
+          "score": 0.1791
+        },
+        {
+          "id": "draft.pilot1.rto.01",
+          "score": 0.1644
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.bia.01",
+      "nearest": [
+        {
+          "id": "m086",
+          "score": 0.1951
+        },
+        {
+          "id": "m402",
+          "score": 0.1778
+        },
+        {
+          "id": "m626",
+          "score": 0.1707
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.bia.02",
+      "nearest": [
+        {
+          "id": "m244",
+          "score": 0.1667
+        },
+        {
+          "id": "draft.pilot1.bia.01",
+          "score": 0.15
+        },
+        {
+          "id": "m008",
+          "score": 0.1455
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot1.bia.03",
+      "nearest": [
+        {
+          "id": "p017",
+          "score": 0.1429
+        },
+        {
+          "id": "draft.pilot1.rpo.02",
+          "score": 0.1412
+        },
+        {
+          "id": "m087",
+          "score": 0.1333
+        }
+      ]
+    }
+  ],
+  "checks": {
+    "drafts": 15,
+    "directMappingsBoundToRevision": 5,
+    "numericAnswers": "PASS recomputed",
+    "approvalAndPublication": "false; zero mastery weight; no active mapping/import",
+    "scope": "MTD supporting context; proposed difficulty; secondary roles absent"
+  },
+  "limitations": [
+    "No human approval, psychometric calibration or demonstrated transfer effectiveness.",
+    "No new live catalogue/private-payload inspection; local captured publication only.",
+    "MTD easy draft shares the existing family; 14 new family labels are proposals, not 14 approved independent families.",
+    "PBQ component evidence and MTD/BIA teaching gaps remain open."
+  ],
+  "sha256": {
+    "docs/drafts/phase-2b5-pilot-batch-1.json": "91e83b7afbc56901bc1a37ae426763024456d8d90ae486c2d2833ff076826bda",
+    "docs/phase-2b5-pilot-coverage-gap-ledger.md": "623c06f79069b672a15818ddfe6bafcb9cd1314c37efc4b74e694da90c721d7c",
+    "scripts/audit-pilot-drafts.mjs": "4d0d8dd2e2308f41544c1469da5698c58485578e2cde43506fed47b4ab7cb1e0",
+    "docs/evidence/phase-2b5/mapping-package.json": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+  }
+}
