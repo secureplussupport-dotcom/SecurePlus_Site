@@ -1,0 +1,2632 @@
+{
+  "packetId": "phase-2b5-objective12-zero-trust-mapping-proposals-v1",
+  "date": "2026-10-07",
+  "baselineCommit": "667165a66688e1dbb2f024e9c665eea6e186ff20",
+  "status": "LOCAL_SEMANTIC_PROPOSALS_NOT_READY",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "newFamilyCredit": 0,
+  "sourceBindings": [
+    {
+      "path": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "sha256": "0ba95c5c8f8a00e091daa9d852de0350a01ca00bedcba7c317155ea94cad88a9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "sha256": "46cf5a704690aa85606a1167b72f221aea09234635e3062aec067e7967abb4c9"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/mapping-package.json",
+      "sha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/release-checksums.json",
+      "sha256": "98e7e0ed45b5fd17f1be50c4cd36eba53bf289de26a427810e061274dcfb3403"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-batch.md",
+      "sha256": "1a039e6f4778a585128b0d4167536c46a53d13130476b6144ffa946f2f464713"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-guide.md",
+      "sha256": "a9cc1fff35873d84d90bec1c5c6f4613fdb46defae5a8b2a87b4b7c554ffd33b"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
+      "sha256": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
+    },
+    {
+      "path": "docs/secureplus-rebrand-master-plan.md",
+      "sha256": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c"
+    },
+    {
+      "path": "docs/phase-1-product-loop-audit.md",
+      "sha256": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10"
+    },
+    {
+      "path": "src/data/conceptDeepDives.js",
+      "sha256": "b478e16240c95b70a79cf0679aff683fc08f18dd11947c4046ecd880ec1ce17f"
+    },
+    {
+      "path": "src/data/sy0701DeepDiveMap.js",
+      "sha256": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff"
+    },
+    {
+      "path": "src/data/learningConcepts.js",
+      "sha256": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac"
+    },
+    {
+      "path": "src/data/learningMappings.js",
+      "sha256": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+    },
+    {
+      "path": "src/lib/deepDiveStudy.js",
+      "sha256": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459"
+    },
+    {
+      "path": "src/lib/deepDiveRecommendations.js",
+      "sha256": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479"
+    },
+    {
+      "path": "scripts/lib/read-learning-pilot-bank.mjs",
+      "sha256": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac"
+    },
+    {
+      "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
+      "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "scripts/lib/content-mapping/package.mjs",
+      "sha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748"
+    },
+    {
+      "path": "server/adaptive/revision.mjs",
+      "sha256": "a2fc241dd45a60fe4e9898f8133187402ef07d9e0a5e2f721f4ad6ba33b73451"
+    }
+  ],
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "census": {
+    "scope": "exact effective local candidates; no authenticated refresh, live/browser delivery or private semantic completeness claim",
+    "sourcePrecedence": "Existing readLearningPilotBank publication precedence and unchanged mapping-package capture; raw/imported/retired/disabled layers are not extra questions. Captured publication signatures and local semantic signatures remain separate.",
+    "broadObjective12Records": [
+      {
+        "recordId": "check:identity-zero-trust",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:184738ced5cb2d0680c78b8867c36b402eb80de4937e6891bc125e02dcbee97a",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "check:resilience-assets-physical",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:3f1750b1f13d4c6e0459cd5206c1ef1e59a46ad0586608cb94e7be8014a701d2",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "check:security-foundations-controls",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:a9f7ec57e9dd77365f89d3b4ebd44d6d3aa31bc0640bf250479ddf66ab227b47",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "deck:identity-authentication",
+        "kind": "deck_container",
+        "sourceRevision": "sha256:d0d54efa15b84feee564d7513c9a6d0ed118afcfcebe2cebb0f2c6cf4581f377",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "deck:security-principles-access-models",
+        "kind": "deck_container",
+        "sourceRevision": "sha256:b93d19664fddd6cd284c61b6674701bb09b8fa24ca20889eab6aee5bf5b992bc",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "explanation:mcq:m002",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:7827f5a304829bc05c0b2d4eb0a4ae3d1f10dd85bda340609a4e4ec0b7efe902",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m007",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:788aee6cbb256f5235a1cc0740ee31491924b4f73240d2d58ba23a9c30cb7023",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "explanation:mcq:m033",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:ae366b98c89f7bfe2cca6db63843475fa1dfd4ab582cca77ab6edf7268304cad",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m036",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:eed5f882bb6f39bad613b512227d105db620b43a1ca0261899543a1e1147a0d6",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m038",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:228dad1ed8b0da455cf75804f2071c0126245e6043312b6fd546ab4c49a3d369",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "explanation:mcq:m044",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:960efbdb390162e2cdda69d4153d16ade19c0a25e10f046dbf1de1bb5bbcdbcc",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m057",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:0f4f77d2edcad198ba34cc44817cf243552b60ec456901a084dcbc3fdbba6ee7",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m103",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:d5a0de534d013afadd13584ec0b223b2844a170ee2de134c30b33aeac690563b",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m114",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:8536ebcc5c7474157a304c76441088dc146d61f4361ef717f8ed6c4a9f232c1e",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m158",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:e06846845d3ecefbb8bc6d8a5791941286a1198f12ff9e15de44200464443c8a",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "explanation:mcq:m201",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:7ca573f7755386f58ad22a4685feb5dedfd2ae1bd2dc4c0b1a0ce141cf6aaa0c",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m226",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:9ef28694e185c0cfcf41f52028c3c0e5d20140f0fd10fe7f8afebcb3ae0728d3",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "explanation:mcq:m260",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:c7438b04745133f66f273df9563a299ae4334ced2b4239a472f43c18eb0442a4",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m399",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:c141ebfa210f51bbb1d0a645b371c7ad59c4b53e1fe6cb632bdb921e4ee532bb",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m413",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:3b18ac0f04c1b58fc33e0597c310e595a5a434d92042f15d22b33144d4f3f4f4",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m602",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:b4202ae30a2dd013b1efc593a65dcc9e76dbeac1723772a031d115f8ab0a95c2",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m621",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:55d8234e8a11c29e7448d6e5d4a833c680ea111e5ef994293c575d88dc11defb",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "explanation:mcq:m642",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:ed57087b7575350e34845e5c712c5d4c8190705681b50cb7ad2411f141439164",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m653",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:720359a18177045658007f6af6f30d73a6298cf1cf434ea0d7770b845c03e8b8",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:mcq:m656",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:bffacf4740475eb03541ee72ce2cdb773bf8610df1fcb878a07a3c3d5bf574d1",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "explanation:pbq:p055",
+        "kind": "explanation_bundle",
+        "sourceRevision": "sha256:a40837cf0dc64bec322b40c7b1bfdcd4b78c929bfc78823e1a1c40682586d95b",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-captcha-completely-automated-public-turing-test-to-tell-computers-and-humans-apart",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:931096148d0d5f279f80722c622af361661aeb16ce2e6e739953ced8697a6b46",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-eap-extensible-authentication-protocol",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:eb31374acc5bfe0df7bda938910e4f9e1a9c5cecb9f24bbb52b584559bb260fe",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-idp-identity-provider",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:a86920f1f57b19bc509a2c5eba89e986ef71f9d475f115db66dab04585047f31",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-leap-lightweight-extensible-authentication-protocol",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:9eb50e676c5343d1b0d946e53ae4db2d910215022a79b0cfac568743f2cb6592",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-mfa-multi-factor-authentication",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:4204001d5bb7881f50166591eea9fb9e19d3016078a92b41d2481a6934d914ad",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-oauth-open-authorization",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:8ca8cfa534fded4011338a3a914caa22f28fcbce1ff937012e4edc533f7eba1c",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-oidc-openid-connect",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:9ac8a1525e1e0b870d424d770327852261511e4581d5b2eb3969f22bd53640c7",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-pap-password-authentication-protocol",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:5e2b738d347be3d5e850d0849d2aef07ec8f3743b8cd2cc75acf84a6fed5292d",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-piv-personal-identity-verification",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:ed4a3097725b314d74e22f271b600c9a7a2cf24b07b6dc807a6dac9cde73de48",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-radius-remote-authentication-dial-in-user-service",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:2f5af4254f1f9b4733ea7cdf0f5565175929ca620f21833b601a94a53f3a6dec",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-saml-security-assertion-markup-language",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:6a87b0d8e8b2159283046c3e80a7d469b186c1f2be4bb830269e5a9cc71fc57d",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-sso-single-sign-on",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:fd2872d81b0e984417c86a7a33485e878def3abcd27709198cee7cd37992e56c",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-tacacs-terminal-access-controller-access-control-system-plus",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:38d2781fa95798ceb52df9697c53abac579df402815a743c1a52c5ae6d93ab16",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-security-principles-access-models-aaa-authentication-authorization-and-accounting",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:87bb6802ccc8a205d1539df522a00f4d7409caaa6211f796b3324c27d2a8c708",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-security-principles-access-models-acl-access-control-list",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:c71f342efb58d7d27a6e83a42be314898a989f90e6ee028b1a4af87ecf65f471",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-security-principles-access-models-aup-acceptable-use-policy",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:f72ca61dcb2c905832c723b39dd660789245902bbe56b7ce161973aac1ef156f",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-security-principles-access-models-cia-confidentiality-integrity-and-availability",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:e4758fadc6d24aaa85f0901a41ad71051ed8fa24ec65d25c6f028ab95d250fda",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-security-principles-access-models-dac-discretionary-access-control",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:f7ccccc3058db98804926212bc9fd69d5f5de6753c0d7727637ffaba14b52b06",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-security-principles-access-models-mac-mandatory-access-control",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:52cea94fb79c0f29a3b1083b7f0d688420cd1e352e91e81d338eafd6c4006e03",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-security-principles-access-models-rbac-role-based-access-control",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:08f89c2253fb6848946d44acf051f3fad1a2d3eac3efa70c376aad9d43f4922f",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-security-principles-access-models-rbac-rule-based-access-control",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:50e19e9240bfe85f44df3b8a6c27b1abda9d689908ac1a48be5d0c4bb261c855",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "flashcard:sy0701-acronym-security-principles-access-models-tou-time-of-use",
+        "kind": "flashcard",
+        "sourceRevision": "sha256:1b29010794a85ff96eee4e021f06abd5d4d6425a82b2eb270e7b6267c42648ab",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:aaa",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:0af02c407a4f6076acfe8e3d183c7e44512eab55cbcd00c82d7ad74101f1004d",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:acl",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:bb131401aa48e86b64c07650670b6683ff5b6ba438e2fe84308115336c24c2de",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:aup",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:9d17f3bb0c9471338918ed1f099cb558de7b9dbdaf30fefee98bd94c3ba62e6b",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:bia",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:fba7d9e4ca7b2ca2afce03b574269efdb495b82ba76b564c992d28daedbfdfda",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:cctv",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:ac2726ca02efe2089901ab188374a25a47e46b086fda4b09983e13410ba8c98a",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:cia",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:e7c28871613cacf874f34e2df922233096a4a6e2b1af8c265e6d8d219b093f2d",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:dac",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:5a93866981bf83545031ddf19d6f5bc03a6b35f9b152c70f849fb140524eaad7",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:dlp",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:fb5ccc169e04a52b80785e9a4ede5228e305fbd817acb17eef7df8aca52cd7a4",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:eap",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:4aa67736faf054b2ae9dc11dba50e420da1ed842876bed912b49c5b41b15b95d",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:encryption",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:84e0be46e7bf560613e28fd9d4fed9749b5756bd1532bbdb1bbbe4cb5e3b6ee5",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:idp",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:a8047591cc988672ea6fdbb2e0314d791ec089e291a9ad63cee009c8b48c87e9",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:ldap",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:326c1c8685fd8009b7abd60a3adb4cc8b087eb31f8082fdc7ea8ea79f6fbcd70",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:mac",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:09f1b253770e93f9225f07f0a3eac23f29710cfd0a452e0ab6c41c7cc44b41f3",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:mfa",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:84bfa0c7079e79cbceaf02734e2c0a14142b90a92b6ea0775f00fa8b0d0246ac",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:mtbf",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:3da7c4ec5d0cf88b5e40bcfb572df6c6909e65e73e3d22a291164205e4ec5674",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:mttr",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:09b9dd6eebf37a22c75b8c89f22c7dacf5a61fe36252cd6835d09f27b5785220",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:nist",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:465d82bcfbda9daed74431e8ed2444088c8ab0d116d6c22f2e67a727bc39ceed",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:oauth",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:41f924c99a917456eb7a0836cd30c5af0ec21a900a15bac9d6f1e5e325460047",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:oidc",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:0bea1b9e32906b09f106ad12128b65489130c3c60633dead4743991e1a77c18d",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:pki",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:d0b3a9f4074ed5ef3b6e7bb84c25c5cc10e308852cfdd8a0b39742120fcbb1bd",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:rbac",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:d38e8531479d948b3f801141c582a74610dd3160407f58c2399a499bb611be10",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:rpo",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:0072bb6d79cb376e815aefffa9f50ba56cc6aac47862a1382f5e1ad894445ed3",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:rto",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:6693d06a0896075072466fb9864ef786033543d3f35b8a584f91b85c737bfada",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:saml",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:1ba53c6f0036debe76673de2c4f6da7f4820ed905b26e9174d73a95894f0f03c",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:siem",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:dd6820fbdbeed499c603f2760fd90d0aae7df6b33d08845ffa7846c0d27f9156",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "glossary:sso",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:c2fe9c03761a9c7ade90ab35a9799c23e4357082468b4f6c43a58f3a51ec927d",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:tacacs%2B",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:5040d572d6f28e27b7a8d8b304236a7491749b18c57849f83f6d58606117a7ef",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:vpn",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:cc87bee792b26651d79b8e7f13f57bea531baf6827fa3f6ece066dd8a6a513f6",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "glossary:zero%20trust",
+        "kind": "glossary_definition",
+        "sourceRevision": "sha256:9c6dcc6339d9e3adea1ea438688151b528a16352c3daaba1fd07ca6da4385342",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "keywords:identity-zero-trust",
+        "kind": "keyword_guide",
+        "sourceRevision": "sha256:6cf20707b85a10d25f62a5cdef3f8e0f29f88beac27614ea7c50fe78c78bd81e",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "keywords:resilience-assets-physical",
+        "kind": "keyword_guide",
+        "sourceRevision": "sha256:e2064bf6cbc45563c17fcb5e8e6f5b8a1eca952036ee9335c5d42544ee8086ca",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "keywords:security-foundations-controls",
+        "kind": "keyword_guide",
+        "sourceRevision": "sha256:906bd002922d31528b8c251858689ccfbc2badef799a86fedac2434395595a26",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "lesson:identity-zero-trust",
+        "kind": "lesson",
+        "sourceRevision": "sha256:72351fb5a6b276cb2d1a6280c24cef6cd5f8262213ea0e2065865fcd92f83a95",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "lesson:resilience-assets-physical",
+        "kind": "lesson",
+        "sourceRevision": "sha256:4f1f26144729884a9096f730ac4bdae5840e55e0980b863efe51a0be933e8d3d",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "lesson:security-foundations-controls",
+        "kind": "lesson",
+        "sourceRevision": "sha256:11afeadc87aa745928cad17bd8c1141f96a1b421c3c4f9134767e22c47420c6c",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "mcq:m002",
+        "kind": "mcq",
+        "sourceRevision": "sha256:636f490ab49ad778e428bc3fd6f1eb47e843a305f70af1e3e7d145c3641bdf42",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m007",
+        "kind": "mcq",
+        "sourceRevision": "sha256:26500a91b7746fca51633125d39cdd277e7253c82f1b1d6d849971adb4573d2a",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "mcq:m033",
+        "kind": "mcq",
+        "sourceRevision": "sha256:bfbba08ade1d45068e487d94cddfcb5a075dc5e1440993b46bf625ffa75cbe4e",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m036",
+        "kind": "mcq",
+        "sourceRevision": "sha256:b848558b1e3c5ec83a0a971519bf23f1c1da77d140d907bbfd064d85b9df7cc6",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m038",
+        "kind": "mcq",
+        "sourceRevision": "sha256:402e12c8bb3343b6c284c0e5bf8f52c7476837a11f058d8099ac32a9533f7073",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "mcq:m044",
+        "kind": "mcq",
+        "sourceRevision": "sha256:88daba2856cd7c6b49266beeeb3d80cc65a342e78a9ee90e65e54f711bf66011",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m057",
+        "kind": "mcq",
+        "sourceRevision": "sha256:3a44fa5567eb832f7e3a1a6424df63ce0934cb12054dd136b9818eac4014a9b6",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m103",
+        "kind": "mcq",
+        "sourceRevision": "sha256:e6fa94df97ee49e8df81be92ada8900a158718c2f9420bc8c4baf9a403be56db",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m114",
+        "kind": "mcq",
+        "sourceRevision": "sha256:d21c64437775f90ea37872d67595c94731c547d8b830281a38ffdf6ae8451754",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m158",
+        "kind": "mcq",
+        "sourceRevision": "sha256:e2ddf0ef8c4d245cf037081c45c045533416bf7c30efd4d0c5aa15538b4e0dab",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "mcq:m201",
+        "kind": "mcq",
+        "sourceRevision": "sha256:dd6d52d2f3f4733bc13cb5b07e0ebe5517da6a40814173e42a77e81d3a0ed21b",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m226",
+        "kind": "mcq",
+        "sourceRevision": "sha256:0f718c9c09b4ff16145364a21fa9df50e6fa8a5ec7910a24f0834103976acd2f",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "mcq:m260",
+        "kind": "mcq",
+        "sourceRevision": "sha256:b22bce185e1ccbbdcd0270804621bd13485533cfeed245a122bb790c47224448",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m399",
+        "kind": "mcq",
+        "sourceRevision": "sha256:862fb2b7d4755dd3f8f878b40a9c898975201e94ba531acbc4d808321d5e5e86",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m413",
+        "kind": "mcq",
+        "sourceRevision": "sha256:830b2a6069e16128a8724db3b293b25f27230da01910812fce0f7d15befcd820",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m602",
+        "kind": "mcq",
+        "sourceRevision": "sha256:f4d4d4f0d82c359b8e983633383ae113d1299f2b4055c52dd9cdce8c856297f6",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m621",
+        "kind": "mcq",
+        "sourceRevision": "sha256:2fefc9b505bb60cd02d17cb20fa5339d0fe87149dea0148e09d9faf744ea0ff1",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "mcq:m642",
+        "kind": "mcq",
+        "sourceRevision": "sha256:b258adcb498cde288176d1b33471d8c6de410272115e6abf4454d3306574cf43",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m653",
+        "kind": "mcq",
+        "sourceRevision": "sha256:d3f895559293491692341daed63661d54b59986d02c27633fdd969bff1a59be3",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "mcq:m656",
+        "kind": "mcq",
+        "sourceRevision": "sha256:d9093fc2f63c5311af3a651f2eeaeabcbd59653e4bf26c7fb2cc60f06c5e900f",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "pbq:p055",
+        "kind": "pbq",
+        "sourceRevision": "sha256:e07b7f1fe17a728e93b54da3fdaf74e107334ad3585483c6da7fb50f9c4530a9",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "practice:identity-zero-trust:practice-keyword-0",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:afaff13b70d33da554956b4fbfeb214705505dac5b32213852803033e3f01d4a",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "practice:identity-zero-trust:practice-keyword-1",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:50b5158ac13a344623e06d01fad55fe9bbd1c903531382ee96361b2cd03cf806",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "practice:identity-zero-trust:practice-keyword-2",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:06967cdcea09d22d5ab0fad25e6197072f8068ba349ef0d4bf4196b88993e6f7",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "practice:resilience-assets-physical:practice-keyword-0",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:7058c4d8920536b92bc0074eaa7d4c37e44c99641ba64b58a518a5724c933dea",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "practice:resilience-assets-physical:practice-keyword-1",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:53d23b583df1ed4b9658bc7ae6cbb50db840658a9430a87e57a09fdff72ddbc8",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "practice:resilience-assets-physical:practice-keyword-2",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:56b2ad697bb2915c365c83d877ef7cda89f6811aae7b77b79071020f7580b07a",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "practice:security-foundations-controls:practice-keyword-0",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:a454bc1158e2991f0bc521cd2918473535971f1a3132fc2a8f0ba3a985197c11",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "practice:security-foundations-controls:practice-keyword-1",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:a12289bb36b9b982fc3f20e81d15602810182b0927436e2f89adfd0f234276a3",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "practice:security-foundations-controls:practice-keyword-2",
+        "kind": "lesson_check",
+        "sourceRevision": "sha256:19d75ee6c6c787bc5665a89ff14321370eafd9394539a9ef7a11d2fb417d2ea7",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "section:identity-zero-trust:0",
+        "kind": "lesson_section",
+        "sourceRevision": "sha256:4ebcc8fd31bbbde34bf701e83159dad1a08a8c90b5fb3e9e9226f940e1eb994f",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "section:identity-zero-trust:1",
+        "kind": "lesson_section",
+        "sourceRevision": "sha256:1e85045db3029f3b5f170e8bc1f20ee70e46722c48353dd3971c2aae9a98f1e4",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "section:identity-zero-trust:2",
+        "kind": "lesson_section",
+        "sourceRevision": "sha256:568f555c924e7548e8e2f4809112f05e51a81980de5ea2a67259abf1fcd0dee3",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "section:resilience-assets-physical:0",
+        "kind": "lesson_section",
+        "sourceRevision": "sha256:b0c4612c17557acbf134558540f3a05d4b78ec95a05d409cdfbb10f5ae0ccdfb",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "section:resilience-assets-physical:1",
+        "kind": "lesson_section",
+        "sourceRevision": "sha256:b0cee02c7ac294cb5e4d5912bb3acb90f2c147f4055f4fbe04d7dbfcd454ac3b",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "section:resilience-assets-physical:2",
+        "kind": "lesson_section",
+        "sourceRevision": "sha256:bce611ec1ee6434ee8372da746420e6bd43934d458010d5f81445489fdbcf0fa",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "section:security-foundations-controls:0",
+        "kind": "lesson_section",
+        "sourceRevision": "sha256:21c65aef6eeb0447d8a499e24cdf7e2a0011708c41ccc6953c0dbca0c4a03ace",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "section:security-foundations-controls:1",
+        "kind": "lesson_section",
+        "sourceRevision": "sha256:db151aa9526360ad5e4bdc3f5fe87664e93b102c4985de8b0e5759abec370fe7",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "section:security-foundations-controls:2",
+        "kind": "lesson_section",
+        "sourceRevision": "sha256:8e4378e4fbdfd218ede700556b8b7d327d48727443a828091418013e265d9dfb",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "section:security-foundations-controls:3",
+        "kind": "lesson_section",
+        "sourceRevision": "sha256:43ce931c8b74d5b08d941aba41a999f4c254a98e53700dac541e3ff3e88a07d4",
+        "disposition": "prior_objective11_disposition"
+      },
+      {
+        "recordId": "traps:identity-zero-trust",
+        "kind": "lesson_traps",
+        "sourceRevision": "sha256:c75abe5a13029c97b8f958e1159b3ed38314abe6cbe355d2f55e9966648d1be7",
+        "disposition": "new_slice_proposal"
+      },
+      {
+        "recordId": "traps:resilience-assets-physical",
+        "kind": "lesson_traps",
+        "sourceRevision": "sha256:914d1abcba14a20df8090d5c56e830148147cb82c51d8942a86aa35b87e0d03b",
+        "disposition": "remaining_candidate_not_semantically_reviewed_here"
+      },
+      {
+        "recordId": "traps:security-foundations-controls",
+        "kind": "lesson_traps",
+        "sourceRevision": "sha256:09181464bfec51b4c3a19c9ed0782d6b3d47ee8e4ef74de564e05515c0aeaedb",
+        "disposition": "prior_objective11_disposition"
+      }
+    ],
+    "effectiveQuestionRevisions": [
+      {
+        "recordId": "mcq:m002",
+        "sourceRevision": "sha256:669477a91777fe032ec929403ba6090f4d668c04d8545b862f7e79479f6f600e",
+        "publishedRecordSignature": "sha256:636f490ab49ad778e428bc3fd6f1eb47e843a305f70af1e3e7d145c3641bdf42",
+        "feedbackRecordId": "explanation:mcq:m002",
+        "feedbackRevision": "sha256:7827f5a304829bc05c0b2d4eb0a4ae3d1f10dd85bda340609a4e4ec0b7efe902",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "47712632-25b8-80b4-8679-c898a7fa7a0a",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m007",
+        "sourceRevision": "sha256:368f0e9e2f1c37c2817671370692aa0a2bb19bdfe3075e10537ad2e0ba094c78",
+        "publishedRecordSignature": "sha256:26500a91b7746fca51633125d39cdd277e7253c82f1b1d6d849971adb4573d2a",
+        "feedbackRecordId": "explanation:mcq:m007",
+        "feedbackRevision": "sha256:788aee6cbb256f5235a1cc0740ee31491924b4f73240d2d58ba23a9c30cb7023",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "b2e3f3d8-7ed7-8d5c-b0f4-1540c1a321b0",
+        "disposition": "new_slice_question"
+      },
+      {
+        "recordId": "mcq:m033",
+        "sourceRevision": "sha256:0f0b2b9762088eef27050b53bab734649916e0669c9707b82ef508a89e89b0a7",
+        "publishedRecordSignature": "sha256:bfbba08ade1d45068e487d94cddfcb5a075dc5e1440993b46bf625ffa75cbe4e",
+        "feedbackRecordId": "explanation:mcq:m033",
+        "feedbackRevision": "sha256:ae366b98c89f7bfe2cca6db63843475fa1dfd4ab582cca77ab6edf7268304cad",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "c79fd812-4651-8a2d-8fb3-8c729b7930c1",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m036",
+        "sourceRevision": "sha256:1dee34654fb75836dcec8ac018146157578c73435f24900494aab3a15b2ddbff",
+        "publishedRecordSignature": "sha256:b848558b1e3c5ec83a0a971519bf23f1c1da77d140d907bbfd064d85b9df7cc6",
+        "feedbackRecordId": "explanation:mcq:m036",
+        "feedbackRevision": "sha256:eed5f882bb6f39bad613b512227d105db620b43a1ca0261899543a1e1147a0d6",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "50c63529-e32a-870b-bb8d-989044301381",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m038",
+        "sourceRevision": "sha256:3a938b3629b5f12a738da7d2e9e1fbb74eec03a9f1b73b8f282e67fa9dcd2fc8",
+        "publishedRecordSignature": "sha256:402e12c8bb3343b6c284c0e5bf8f52c7476837a11f058d8099ac32a9533f7073",
+        "feedbackRecordId": "explanation:mcq:m038",
+        "feedbackRevision": "sha256:228dad1ed8b0da455cf75804f2071c0126245e6043312b6fd546ab4c49a3d369",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "5b603617-a6c6-8858-b349-00d51e4be334",
+        "disposition": "new_slice_question"
+      },
+      {
+        "recordId": "mcq:m044",
+        "sourceRevision": "sha256:76071927231ee07af95301f819537d12d50b22d3c43145b6ea4aa4d6c86895b5",
+        "publishedRecordSignature": "sha256:88daba2856cd7c6b49266beeeb3d80cc65a342e78a9ee90e65e54f711bf66011",
+        "feedbackRecordId": "explanation:mcq:m044",
+        "feedbackRevision": "sha256:960efbdb390162e2cdda69d4153d16ade19c0a25e10f046dbf1de1bb5bbcdbcc",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "6098c35f-9cf1-83ad-8268-893e59c215ce",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m057",
+        "sourceRevision": "sha256:14319e5c2b666796c3fbb6dfd0dcd28717337cf137c3241ccc933442bb39d7fa",
+        "publishedRecordSignature": "sha256:3a44fa5567eb832f7e3a1a6424df63ce0934cb12054dd136b9818eac4014a9b6",
+        "feedbackRecordId": "explanation:mcq:m057",
+        "feedbackRevision": "sha256:0f4f77d2edcad198ba34cc44817cf243552b60ec456901a084dcbc3fdbba6ee7",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "1bb1ee65-5bbf-889c-bf66-e9cec6f8433f",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m103",
+        "sourceRevision": "sha256:5cf99bc71adb8bed0e98dda3d70b289d96d1fff8e584ffc93cc9455579f1a5e7",
+        "publishedRecordSignature": "sha256:e6fa94df97ee49e8df81be92ada8900a158718c2f9420bc8c4baf9a403be56db",
+        "feedbackRecordId": "explanation:mcq:m103",
+        "feedbackRevision": "sha256:d5a0de534d013afadd13584ec0b223b2844a170ee2de134c30b33aeac690563b",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "0ce6ae44-6a1d-86ad-83bb-02ea1a553d16",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m114",
+        "sourceRevision": "sha256:5414e5e2ad495dbdaae8bd96a14fbbb1bda60e42315036105b1ff4d7df57140e",
+        "publishedRecordSignature": "sha256:d21c64437775f90ea37872d67595c94731c547d8b830281a38ffdf6ae8451754",
+        "feedbackRecordId": "explanation:mcq:m114",
+        "feedbackRevision": "sha256:8536ebcc5c7474157a304c76441088dc146d61f4361ef717f8ed6c4a9f232c1e",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "769248c3-02ec-8e0a-aadd-9a549775d731",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m158",
+        "sourceRevision": "sha256:495cb5b7f2cc5b8069c1f9c36de70e86e0f287af49911cb678a4bed22026c148",
+        "publishedRecordSignature": "sha256:e2ddf0ef8c4d245cf037081c45c045533416bf7c30efd4d0c5aa15538b4e0dab",
+        "feedbackRecordId": "explanation:mcq:m158",
+        "feedbackRevision": "sha256:e06846845d3ecefbb8bc6d8a5791941286a1198f12ff9e15de44200464443c8a",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "d78dd5e6-daa5-8254-aa7d-2eef1b7da58e",
+        "disposition": "new_slice_question"
+      },
+      {
+        "recordId": "mcq:m201",
+        "sourceRevision": "sha256:5baf4b34010e58380b1ef85bb956361fccf72a63313fd26e6e5a3c77385c4aa4",
+        "publishedRecordSignature": "sha256:dd6d52d2f3f4733bc13cb5b07e0ebe5517da6a40814173e42a77e81d3a0ed21b",
+        "feedbackRecordId": "explanation:mcq:m201",
+        "feedbackRevision": "sha256:7ca573f7755386f58ad22a4685feb5dedfd2ae1bd2dc4c0b1a0ce141cf6aaa0c",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "2bbff816-9c8b-8ce6-95f8-a59eae6b29dd",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m226",
+        "sourceRevision": "sha256:f161c6080760aba37012e8d682dd06c627c8f3b3b4962d903f842dd2fe94fb46",
+        "publishedRecordSignature": "sha256:0f718c9c09b4ff16145364a21fa9df50e6fa8a5ec7910a24f0834103976acd2f",
+        "feedbackRecordId": "explanation:mcq:m226",
+        "feedbackRevision": "sha256:9ef28694e185c0cfcf41f52028c3c0e5d20140f0fd10fe7f8afebcb3ae0728d3",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "21a265fa-e596-85e4-9230-ef9196dbac64",
+        "disposition": "new_slice_question"
+      },
+      {
+        "recordId": "mcq:m260",
+        "sourceRevision": "sha256:9bea8e8c3b682004b81cf1a31ea35e2b1dcda51e80bb756cc00c0751e94be0b4",
+        "publishedRecordSignature": "sha256:b22bce185e1ccbbdcd0270804621bd13485533cfeed245a122bb790c47224448",
+        "feedbackRecordId": "explanation:mcq:m260",
+        "feedbackRevision": "sha256:c7438b04745133f66f273df9563a299ae4334ced2b4239a472f43c18eb0442a4",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "52683327-dd28-8af0-ac8e-999052cab91c",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m399",
+        "sourceRevision": "sha256:f85bf72ed0f91bf7b81a099fdb1b2acce15339a78319c9404a2da7941747f1c1",
+        "publishedRecordSignature": "sha256:862fb2b7d4755dd3f8f878b40a9c898975201e94ba531acbc4d808321d5e5e86",
+        "feedbackRecordId": "explanation:mcq:m399",
+        "feedbackRevision": "sha256:c141ebfa210f51bbb1d0a645b371c7ad59c4b53e1fe6cb632bdb921e4ee532bb",
+        "difficultyObserved": "medium",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "45744b3e-8a30-8fb7-9780-ac49e9813547",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m413",
+        "sourceRevision": "sha256:b500cb34562aa7bec0e9005dbd0a4932e936b5c72d9968fe02dc4fb8e9bf3cf9",
+        "publishedRecordSignature": "sha256:830b2a6069e16128a8724db3b293b25f27230da01910812fce0f7d15befcd820",
+        "feedbackRecordId": "explanation:mcq:m413",
+        "feedbackRevision": "sha256:3b18ac0f04c1b58fc33e0597c310e595a5a434d92042f15d22b33144d4f3f4f4",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "e920cdb1-dc90-8f70-83a9-813d787b4a51",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m602",
+        "sourceRevision": "sha256:359a9357cba17b92613eebb91cac55bbd3b45b024e08c4cb147c666d918ddba8",
+        "publishedRecordSignature": "sha256:f4d4d4f0d82c359b8e983633383ae113d1299f2b4055c52dd9cdce8c856297f6",
+        "feedbackRecordId": "explanation:mcq:m602",
+        "feedbackRevision": "sha256:b4202ae30a2dd013b1efc593a65dcc9e76dbeac1723772a031d115f8ab0a95c2",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "3f0dea26-1b81-8aad-b0ed-fd715b9617fa",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m621",
+        "sourceRevision": "sha256:38c62bcaf0cbdad6e07a5f79b7527179131cfd6682e177804a80ea357d1c0e29",
+        "publishedRecordSignature": "sha256:2fefc9b505bb60cd02d17cb20fa5339d0fe87149dea0148e09d9faf744ea0ff1",
+        "feedbackRecordId": "explanation:mcq:m621",
+        "feedbackRevision": "sha256:55d8234e8a11c29e7448d6e5d4a833c680ea111e5ef994293c575d88dc11defb",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "a96ed48b-b8f7-89c3-abe6-99d0eed77117",
+        "disposition": "new_slice_question"
+      },
+      {
+        "recordId": "mcq:m642",
+        "sourceRevision": "sha256:3c7bff9f4f2bac3196e9292b794f381e4fe2c165abd6d599a2a0346f3dab5a21",
+        "publishedRecordSignature": "sha256:b258adcb498cde288176d1b33471d8c6de410272115e6abf4454d3306574cf43",
+        "feedbackRecordId": "explanation:mcq:m642",
+        "feedbackRevision": "sha256:ed57087b7575350e34845e5c712c5d4c8190705681b50cb7ad2411f141439164",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "17859930-87bf-899c-8294-b69e927925aa",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m653",
+        "sourceRevision": "sha256:905ebf48219f0c927b56c6cbdfcd98fe706d123c1237b79dfbc8fe9abaf342c8",
+        "publishedRecordSignature": "sha256:d3f895559293491692341daed63661d54b59986d02c27633fdd969bff1a59be3",
+        "feedbackRecordId": "explanation:mcq:m653",
+        "feedbackRevision": "sha256:720359a18177045658007f6af6f30d73a6298cf1cf434ea0d7770b845c03e8b8",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "707137f9-2ca9-843a-a683-09d46a31caaa",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "mcq:m656",
+        "sourceRevision": "sha256:3ed61411eba8e58093e682402f5d04a3da8f055d8a3e50d2b3269f5f2fc85f42",
+        "publishedRecordSignature": "sha256:d9093fc2f63c5311af3a651f2eeaeabcbd59653e4bf26c7fb2cc60f06c5e900f",
+        "feedbackRecordId": "explanation:mcq:m656",
+        "feedbackRevision": "sha256:bffacf4740475eb03541ee72ce2cdb773bf8610df1fcb878a07a3c3d5bf574d1",
+        "difficultyObserved": "easy",
+        "formatObserved": "MCQ",
+        "precisionObserved": "direct",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "d275b265-7c1a-8b9f-ae9c-7b126f6ac02c",
+        "disposition": "remaining_question"
+      },
+      {
+        "recordId": "pbq:p055",
+        "sourceRevision": "sha256:8f2ccd0e3b8dcd93b3d0c52a8f930b25bfe4df261d68ab45bfbbf05c6da90838",
+        "publishedRecordSignature": "sha256:e07b7f1fe17a728e93b54da3fdaf74e107334ad3585483c6da7fb50f9c4530a9",
+        "feedbackRecordId": "explanation:pbq:p055",
+        "feedbackRevision": "sha256:a40837cf0dc64bec322b40c7b1bfdcd4b78c929bfc78823e1a1c40682586d95b",
+        "difficultyObserved": "easy",
+        "formatObserved": "ORDERING",
+        "precisionObserved": "coarse",
+        "publicationStatusObserved": "active",
+        "trustedRevisionIdObserved": "104cba30-a3e6-8594-9d9f-f1b8880eca60",
+        "disposition": "remaining_question"
+      }
+    ],
+    "lessonCandidates": [
+      {
+        "lessonId": "identity-zero-trust",
+        "containerRevision": "sha256:72351fb5a6b276cb2d1a6280c24cef6cd5f8262213ea0e2065865fcd92f83a95",
+        "profileCodesObserved": [
+          "4.6",
+          "1.2"
+        ],
+        "beyondSectionIndexes": [
+          2
+        ],
+        "recordIds": [
+          "check:identity-zero-trust",
+          "keywords:identity-zero-trust",
+          "lesson:identity-zero-trust",
+          "practice:identity-zero-trust:practice-keyword-0",
+          "practice:identity-zero-trust:practice-keyword-1",
+          "practice:identity-zero-trust:practice-keyword-2",
+          "section:identity-zero-trust:0",
+          "section:identity-zero-trust:1",
+          "section:identity-zero-trust:2",
+          "traps:identity-zero-trust"
+        ],
+        "displayedGeneratedCheckIds": [
+          "practice:identity-zero-trust:practice-keyword-0",
+          "practice:identity-zero-trust:practice-keyword-1",
+          "practice:identity-zero-trust:practice-keyword-2"
+        ],
+        "unusedGeneratedCheckIds": [],
+        "disposition": "new_slice_lesson"
+      },
+      {
+        "lessonId": "security-foundations-controls",
+        "containerRevision": "sha256:11afeadc87aa745928cad17bd8c1141f96a1b421c3c4f9134767e22c47420c6c",
+        "profileCodesObserved": [
+          "1.1",
+          "1.2"
+        ],
+        "beyondSectionIndexes": [
+          3
+        ],
+        "recordIds": [
+          "check:security-foundations-controls",
+          "keywords:security-foundations-controls",
+          "lesson:security-foundations-controls",
+          "practice:security-foundations-controls:practice-keyword-0",
+          "practice:security-foundations-controls:practice-keyword-1",
+          "practice:security-foundations-controls:practice-keyword-2",
+          "section:security-foundations-controls:0",
+          "section:security-foundations-controls:1",
+          "section:security-foundations-controls:2",
+          "section:security-foundations-controls:3",
+          "traps:security-foundations-controls"
+        ],
+        "displayedGeneratedCheckIds": [
+          "practice:security-foundations-controls:practice-keyword-0",
+          "practice:security-foundations-controls:practice-keyword-1",
+          "practice:security-foundations-controls:practice-keyword-2"
+        ],
+        "unusedGeneratedCheckIds": [
+          "practice:security-foundations-controls:practice-compare-0-0",
+          "practice:security-foundations-controls:practice-compare-0-1",
+          "practice:security-foundations-controls:practice-compare-0-2"
+        ],
+        "disposition": "prior_objective11_lesson"
+      },
+      {
+        "lessonId": "resilience-assets-physical",
+        "containerRevision": "sha256:4f1f26144729884a9096f730ac4bdae5840e55e0980b863efe51a0be933e8d3d",
+        "profileCodesObserved": [
+          "3.4",
+          "4.2",
+          "1.2"
+        ],
+        "beyondSectionIndexes": [],
+        "recordIds": [
+          "check:resilience-assets-physical",
+          "keywords:resilience-assets-physical",
+          "lesson:resilience-assets-physical",
+          "practice:resilience-assets-physical:practice-keyword-0",
+          "practice:resilience-assets-physical:practice-keyword-1",
+          "practice:resilience-assets-physical:practice-keyword-2",
+          "section:resilience-assets-physical:0",
+          "section:resilience-assets-physical:1",
+          "section:resilience-assets-physical:2",
+          "traps:resilience-assets-physical"
+        ],
+        "displayedGeneratedCheckIds": [
+          "practice:resilience-assets-physical:practice-keyword-0",
+          "practice:resilience-assets-physical:practice-keyword-1",
+          "practice:resilience-assets-physical:practice-keyword-2"
+        ],
+        "unusedGeneratedCheckIds": [
+          "practice:resilience-assets-physical:practice-compare-1-0",
+          "practice:resilience-assets-physical:practice-compare-1-1",
+          "practice:resilience-assets-physical:practice-compare-1-2"
+        ],
+        "disposition": "census_only_not_new_semantic_review"
+      }
+    ]
+  },
+  "denominator": {
+    "broadObjective12Candidates": 126,
+    "effectiveMcqs": 20,
+    "effectivePbqs": 1,
+    "feedbackBundles": 21,
+    "lessonContainers": 3,
+    "lessonRelatedRecords": 31,
+    "alreadyDispositionedInObjective11": 34,
+    "newSliceRecords": 20,
+    "newMcqs": 5,
+    "newFeedbackBundles": 5,
+    "newLessonRecords": 10,
+    "distinctDispositionedObjective12CandidatesIncludingPrior": 54,
+    "remainingObjective12Candidates": 72,
+    "remainingEffectiveMcqs": 15,
+    "remainingEffectivePbqs": 1,
+    "note": "Broad candidates include inherited tags and lexical source unions; 54 agent dispositions are not 54 objective skills, approved mappings or independently delivered/evidence units."
+  },
+  "reusedPriorDispositionReferences": [
+    {
+      "recordId": "check:security-foundations-controls",
+      "sourceRevision": "sha256:a9f7ec57e9dd77365f89d3b4ebd44d6d3aa31bc0640bf250479ddf66ab227b47",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "priorProposalRevision": "sha256:a9f7ec57e9dd77365f89d3b4ebd44d6d3aa31bc0640bf250479ddf66ab227b47"
+    },
+    {
+      "recordId": "deck:security-principles-access-models",
+      "sourceRevision": "sha256:b93d19664fddd6cd284c61b6674701bb09b8fa24ca20889eab6aee5bf5b992bc",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:b93d19664fddd6cd284c61b6674701bb09b8fa24ca20889eab6aee5bf5b992bc"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-aaa-authentication-authorization-and-accounting",
+      "sourceRevision": "sha256:87bb6802ccc8a205d1539df522a00f4d7409caaa6211f796b3324c27d2a8c708",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:87bb6802ccc8a205d1539df522a00f4d7409caaa6211f796b3324c27d2a8c708"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-acl-access-control-list",
+      "sourceRevision": "sha256:c71f342efb58d7d27a6e83a42be314898a989f90e6ee028b1a4af87ecf65f471",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:c71f342efb58d7d27a6e83a42be314898a989f90e6ee028b1a4af87ecf65f471"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-aup-acceptable-use-policy",
+      "sourceRevision": "sha256:f72ca61dcb2c905832c723b39dd660789245902bbe56b7ce161973aac1ef156f",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:f72ca61dcb2c905832c723b39dd660789245902bbe56b7ce161973aac1ef156f"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-cia-confidentiality-integrity-and-availability",
+      "sourceRevision": "sha256:e4758fadc6d24aaa85f0901a41ad71051ed8fa24ec65d25c6f028ab95d250fda",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:e4758fadc6d24aaa85f0901a41ad71051ed8fa24ec65d25c6f028ab95d250fda"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-dac-discretionary-access-control",
+      "sourceRevision": "sha256:f7ccccc3058db98804926212bc9fd69d5f5de6753c0d7727637ffaba14b52b06",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:f7ccccc3058db98804926212bc9fd69d5f5de6753c0d7727637ffaba14b52b06"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-mac-mandatory-access-control",
+      "sourceRevision": "sha256:52cea94fb79c0f29a3b1083b7f0d688420cd1e352e91e81d338eafd6c4006e03",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:52cea94fb79c0f29a3b1083b7f0d688420cd1e352e91e81d338eafd6c4006e03"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-rbac-role-based-access-control",
+      "sourceRevision": "sha256:08f89c2253fb6848946d44acf051f3fad1a2d3eac3efa70c376aad9d43f4922f",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:08f89c2253fb6848946d44acf051f3fad1a2d3eac3efa70c376aad9d43f4922f"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-rbac-rule-based-access-control",
+      "sourceRevision": "sha256:50e19e9240bfe85f44df3b8a6c27b1abda9d689908ac1a48be5d0c4bb261c855",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:50e19e9240bfe85f44df3b8a6c27b1abda9d689908ac1a48be5d0c4bb261c855"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-tou-time-of-use",
+      "sourceRevision": "sha256:1b29010794a85ff96eee4e021f06abd5d4d6425a82b2eb270e7b6267c42648ab",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:1b29010794a85ff96eee4e021f06abd5d4d6425a82b2eb270e7b6267c42648ab"
+    },
+    {
+      "recordId": "glossary:aaa",
+      "sourceRevision": "sha256:0af02c407a4f6076acfe8e3d183c7e44512eab55cbcd00c82d7ad74101f1004d",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:0af02c407a4f6076acfe8e3d183c7e44512eab55cbcd00c82d7ad74101f1004d"
+    },
+    {
+      "recordId": "glossary:acl",
+      "sourceRevision": "sha256:bb131401aa48e86b64c07650670b6683ff5b6ba438e2fe84308115336c24c2de",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:bb131401aa48e86b64c07650670b6683ff5b6ba438e2fe84308115336c24c2de"
+    },
+    {
+      "recordId": "glossary:aup",
+      "sourceRevision": "sha256:9d17f3bb0c9471338918ed1f099cb558de7b9dbdaf30fefee98bd94c3ba62e6b",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:9d17f3bb0c9471338918ed1f099cb558de7b9dbdaf30fefee98bd94c3ba62e6b"
+    },
+    {
+      "recordId": "glossary:cctv",
+      "sourceRevision": "sha256:ac2726ca02efe2089901ab188374a25a47e46b086fda4b09983e13410ba8c98a",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:ac2726ca02efe2089901ab188374a25a47e46b086fda4b09983e13410ba8c98a"
+    },
+    {
+      "recordId": "glossary:cia",
+      "sourceRevision": "sha256:e7c28871613cacf874f34e2df922233096a4a6e2b1af8c265e6d8d219b093f2d",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:e7c28871613cacf874f34e2df922233096a4a6e2b1af8c265e6d8d219b093f2d"
+    },
+    {
+      "recordId": "glossary:dac",
+      "sourceRevision": "sha256:5a93866981bf83545031ddf19d6f5bc03a6b35f9b152c70f849fb140524eaad7",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:5a93866981bf83545031ddf19d6f5bc03a6b35f9b152c70f849fb140524eaad7"
+    },
+    {
+      "recordId": "glossary:encryption",
+      "sourceRevision": "sha256:84e0be46e7bf560613e28fd9d4fed9749b5756bd1532bbdb1bbbe4cb5e3b6ee5",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:84e0be46e7bf560613e28fd9d4fed9749b5756bd1532bbdb1bbbe4cb5e3b6ee5"
+    },
+    {
+      "recordId": "glossary:mac",
+      "sourceRevision": "sha256:09f1b253770e93f9225f07f0a3eac23f29710cfd0a452e0ab6c41c7cc44b41f3",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:09f1b253770e93f9225f07f0a3eac23f29710cfd0a452e0ab6c41c7cc44b41f3"
+    },
+    {
+      "recordId": "glossary:mfa",
+      "sourceRevision": "sha256:84bfa0c7079e79cbceaf02734e2c0a14142b90a92b6ea0775f00fa8b0d0246ac",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:84bfa0c7079e79cbceaf02734e2c0a14142b90a92b6ea0775f00fa8b0d0246ac"
+    },
+    {
+      "recordId": "glossary:nist",
+      "sourceRevision": "sha256:465d82bcfbda9daed74431e8ed2444088c8ab0d116d6c22f2e67a727bc39ceed",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:465d82bcfbda9daed74431e8ed2444088c8ab0d116d6c22f2e67a727bc39ceed"
+    },
+    {
+      "recordId": "glossary:rbac",
+      "sourceRevision": "sha256:d38e8531479d948b3f801141c582a74610dd3160407f58c2399a499bb611be10",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:d38e8531479d948b3f801141c582a74610dd3160407f58c2399a499bb611be10"
+    },
+    {
+      "recordId": "glossary:siem",
+      "sourceRevision": "sha256:dd6820fbdbeed499c603f2760fd90d0aae7df6b33d08845ffa7846c0d27f9156",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:dd6820fbdbeed499c603f2760fd90d0aae7df6b33d08845ffa7846c0d27f9156"
+    },
+    {
+      "recordId": "glossary:zero%20trust",
+      "sourceRevision": "sha256:9c6dcc6339d9e3adea1ea438688151b528a16352c3daaba1fd07ca6da4385342",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "priorProposalRevision": "sha256:9c6dcc6339d9e3adea1ea438688151b528a16352c3daaba1fd07ca6da4385342"
+    },
+    {
+      "recordId": "keywords:security-foundations-controls",
+      "sourceRevision": "sha256:906bd002922d31528b8c251858689ccfbc2badef799a86fedac2434395595a26",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "priorProposalRevision": "sha256:906bd002922d31528b8c251858689ccfbc2badef799a86fedac2434395595a26"
+    },
+    {
+      "recordId": "lesson:security-foundations-controls",
+      "sourceRevision": "sha256:11afeadc87aa745928cad17bd8c1141f96a1b421c3c4f9134767e22c47420c6c",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "priorProposalRevision": "sha256:11afeadc87aa745928cad17bd8c1141f96a1b421c3c4f9134767e22c47420c6c"
+    },
+    {
+      "recordId": "practice:security-foundations-controls:practice-keyword-0",
+      "sourceRevision": "sha256:a454bc1158e2991f0bc521cd2918473535971f1a3132fc2a8f0ba3a985197c11",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "priorProposalRevision": "sha256:a454bc1158e2991f0bc521cd2918473535971f1a3132fc2a8f0ba3a985197c11"
+    },
+    {
+      "recordId": "practice:security-foundations-controls:practice-keyword-1",
+      "sourceRevision": "sha256:a12289bb36b9b982fc3f20e81d15602810182b0927436e2f89adfd0f234276a3",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "priorProposalRevision": "sha256:a12289bb36b9b982fc3f20e81d15602810182b0927436e2f89adfd0f234276a3"
+    },
+    {
+      "recordId": "practice:security-foundations-controls:practice-keyword-2",
+      "sourceRevision": "sha256:19d75ee6c6c787bc5665a89ff14321370eafd9394539a9ef7a11d2fb417d2ea7",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "priorProposalRevision": "sha256:19d75ee6c6c787bc5665a89ff14321370eafd9394539a9ef7a11d2fb417d2ea7"
+    },
+    {
+      "recordId": "section:security-foundations-controls:0",
+      "sourceRevision": "sha256:21c65aef6eeb0447d8a499e24cdf7e2a0011708c41ccc6953c0dbca0c4a03ace",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "priorProposalRevision": "sha256:21c65aef6eeb0447d8a499e24cdf7e2a0011708c41ccc6953c0dbca0c4a03ace"
+    },
+    {
+      "recordId": "section:security-foundations-controls:1",
+      "sourceRevision": "sha256:db151aa9526360ad5e4bdc3f5fe87664e93b102c4985de8b0e5759abec370fe7",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "priorProposalRevision": "sha256:db151aa9526360ad5e4bdc3f5fe87664e93b102c4985de8b0e5759abec370fe7"
+    },
+    {
+      "recordId": "section:security-foundations-controls:2",
+      "sourceRevision": "sha256:8e4378e4fbdfd218ede700556b8b7d327d48727443a828091418013e265d9dfb",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "priorProposalRevision": "sha256:8e4378e4fbdfd218ede700556b8b7d327d48727443a828091418013e265d9dfb"
+    },
+    {
+      "recordId": "section:security-foundations-controls:3",
+      "sourceRevision": "sha256:43ce931c8b74d5b08d941aba41a999f4c254a98e53700dac541e3ff3e88a07d4",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "priorProposalRevision": "sha256:43ce931c8b74d5b08d941aba41a999f4c254a98e53700dac541e3ff3e88a07d4"
+    },
+    {
+      "recordId": "traps:security-foundations-controls",
+      "sourceRevision": "sha256:09181464bfec51b4c3a19c9ed0782d6b3d47ee8e4ef74de564e05515c0aeaedb",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "priorProposalRevision": "sha256:09181464bfec51b4c3a19c9ed0782d6b3d47ee8e4ef74de564e05515c0aeaedb"
+    }
+  ],
+  "questionProposals": [
+    {
+      "recordId": "mcq:m007",
+      "questionId": "m007",
+      "kind": "mcq",
+      "sourceRevision": "sha256:368f0e9e2f1c37c2817671370692aa0a2bb19bdfe3075e10537ad2e0ba094c78",
+      "publishedRecordSignature": "sha256:26500a91b7746fca51633125d39cdd277e7253c82f1b1d6d849971adb4573d2a",
+      "capturedTrustedRevisionId": "b2e3f3d8-7ed7-8d5c-b0f4-1540c1a321b0",
+      "evidencePrecisionObserved": "direct",
+      "objectiveObserved": "1.2",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "retain_source_easy_not_calibrated_or_promoted",
+      "assessedUnderstanding": "Reject automatic trust for internal network traffic",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [
+        {
+          "conceptId": "sy0701.term.zero-trust",
+          "role": "assessed_supporting_meaning",
+          "weight": 0
+        }
+      ],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Rejection of location-based implicit trust under explicit access policy"
+      ],
+      "topicContextProposal": "sy0701.objective.1.2",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.2"
+        ],
+        "status": "named_zero_trust_principle_or_model"
+      },
+      "familyLabelProposal": "implicit-network-trust-rejection",
+      "familyRelation": "shared_framework_recognition_decision_not_four_independent_families",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "deliveryBinding": "mcq-renderer",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "security-foundations-controls",
+          "identity-zero-trust"
+        ],
+        "approvedRemediation": false
+      },
+      "rationale": "The required distinction is explicit access verification rather than location-based trust. Separation of duties is a distractor; it is not independently assessed."
+    },
+    {
+      "recordId": "mcq:m038",
+      "questionId": "m038",
+      "kind": "mcq",
+      "sourceRevision": "sha256:3a938b3629b5f12a738da7d2e9e1fbb74eec03a9f1b73b8f282e67fa9dcd2fc8",
+      "publishedRecordSignature": "sha256:402e12c8bb3343b6c284c0e5bf8f52c7476837a11f058d8099ac32a9533f7073",
+      "capturedTrustedRevisionId": "5b603617-a6c6-8858-b349-00d51e4be334",
+      "evidencePrecisionObserved": "direct",
+      "objectiveObserved": "1.2",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "retain_source_easy_not_calibrated_or_promoted",
+      "assessedUnderstanding": "Distinguish the policy engine access decision from administration and enforcement",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [
+        "sy0701.term.zero-trust"
+      ],
+      "withheldMasteryMeanings": [
+        "Policy-engine access-decision role, separated from administrator and enforcer"
+      ],
+      "topicContextProposal": "sy0701.objective.1.2",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.2"
+        ],
+        "status": "named_policy_engine_role"
+      },
+      "familyLabelProposal": "zero-trust-policy-engine-role",
+      "familyRelation": "reasoning_label_only_no_approved_independence",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "deliveryBinding": "mcq-renderer",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "security-foundations-controls",
+          "identity-zero-trust"
+        ],
+        "approvedRemediation": false
+      },
+      "rationale": "This requires the specific policy-evaluation component. A broad Zero Trust, control-plane, PDP or PEP identity cannot replace that missing assessed identity. SIEM signals and administrator/enforcer contrasts do not create secondary mastery."
+    },
+    {
+      "recordId": "mcq:m158",
+      "questionId": "m158",
+      "kind": "mcq",
+      "sourceRevision": "sha256:495cb5b7f2cc5b8069c1f9c36de70e86e0f287af49911cb678a4bed22026c148",
+      "publishedRecordSignature": "sha256:e2ddf0ef8c4d245cf037081c45c045533416bf7c30efd4d0c5aa15538b4e0dab",
+      "capturedTrustedRevisionId": "d78dd5e6-daa5-8254-aa7d-2eef1b7da58e",
+      "evidencePrecisionObserved": "direct",
+      "objectiveObserved": "1.2",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "retain_source_easy_not_calibrated_or_promoted",
+      "assessedUnderstanding": "Recognize a model that rejects location-based implicit trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [
+        {
+          "conceptId": "sy0701.term.zero-trust",
+          "role": "assessed_supporting_meaning",
+          "weight": 0
+        }
+      ],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Rejection of location-based implicit trust under explicit access policy"
+      ],
+      "topicContextProposal": "sy0701.objective.1.2",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.2"
+        ],
+        "status": "named_zero_trust_principle_or_model"
+      },
+      "familyLabelProposal": "implicit-network-trust-rejection",
+      "familyRelation": "shared_framework_recognition_decision_not_four_independent_families",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "deliveryBinding": "mcq-renderer",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "security-foundations-controls",
+          "identity-zero-trust"
+        ],
+        "approvedRemediation": false
+      },
+      "rationale": "Framework identification rests on the same rejected perimeter-trust assumption as m007, m226 and m621. Layering and obscurity alternatives supply no separate assessed concept."
+    },
+    {
+      "recordId": "mcq:m226",
+      "questionId": "m226",
+      "kind": "mcq",
+      "sourceRevision": "sha256:f161c6080760aba37012e8d682dd06c627c8f3b3b4962d903f842dd2fe94fb46",
+      "publishedRecordSignature": "sha256:0f718c9c09b4ff16145364a21fa9df50e6fa8a5ec7910a24f0834103976acd2f",
+      "capturedTrustedRevisionId": "21a265fa-e596-85e4-9230-ef9196dbac64",
+      "evidencePrecisionObserved": "direct",
+      "objectiveObserved": "1.2",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "retain_source_easy_not_calibrated_or_promoted",
+      "assessedUnderstanding": "Identify the rejected assumption of automatically trusting internal users and devices",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [
+        {
+          "conceptId": "sy0701.term.zero-trust",
+          "role": "assessed_supporting_meaning",
+          "weight": 0
+        }
+      ],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Rejection of location-based implicit trust under explicit access policy"
+      ],
+      "topicContextProposal": "sy0701.objective.1.2",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.2"
+        ],
+        "status": "named_zero_trust_principle_or_model"
+      },
+      "familyLabelProposal": "implicit-network-trust-rejection",
+      "familyRelation": "shared_framework_recognition_decision_not_four_independent_families",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "deliveryBinding": "mcq-renderer",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "security-foundations-controls",
+          "identity-zero-trust"
+        ],
+        "approvedRemediation": false
+      },
+      "rationale": "This reverses the wording of the same implicit-trust distinction. Authentication, encryption and MFA are alternatives/contrasts; they are not secondary evidence."
+    },
+    {
+      "recordId": "mcq:m621",
+      "questionId": "m621",
+      "kind": "mcq",
+      "sourceRevision": "sha256:38c62bcaf0cbdad6e07a5f79b7527179131cfd6682e177804a80ea357d1c0e29",
+      "publishedRecordSignature": "sha256:2fefc9b505bb60cd02d17cb20fa5339d0fe87149dea0148e09d9faf744ea0ff1",
+      "capturedTrustedRevisionId": "a96ed48b-b8f7-89c3-abe6-99d0eed77117",
+      "evidencePrecisionObserved": "direct",
+      "objectiveObserved": "1.2",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "retain_source_easy_not_calibrated_or_promoted",
+      "assessedUnderstanding": "Recognize context-based access evaluation without location-based default trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [
+        {
+          "conceptId": "sy0701.term.zero-trust",
+          "role": "assessed_supporting_meaning",
+          "weight": 0
+        }
+      ],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Rejection of location-based implicit trust under explicit access policy"
+      ],
+      "topicContextProposal": "sy0701.objective.1.2",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.2"
+        ],
+        "status": "named_zero_trust_principle_or_model"
+      },
+      "familyLabelProposal": "implicit-network-trust-rejection",
+      "familyRelation": "shared_framework_recognition_decision_not_four_independent_families",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "deliveryBinding": "mcq-renderer",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "security-foundations-controls",
+          "identity-zero-trust"
+        ],
+        "approvedRemediation": false
+      },
+      "rationale": "Device posture makes the wording more specific but the requested response still identifies the same architecture. It does not assess constructing policy or require a password prompt for every interaction."
+    }
+  ],
+  "explanationProposals": [
+    {
+      "recordId": "explanation:mcq:m007",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:788aee6cbb256f5235a1cc0740ee31491924b4f73240d2d58ba23a9c30cb7023",
+      "objectiveCodesObserved": [
+        "1.2"
+      ],
+      "parentId": "mcq:m007",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "parentQuestionRevision": "sha256:368f0e9e2f1c37c2817671370692aa0a2bb19bdfe3075e10537ad2e0ba094c78",
+      "roleProposal": "conditional_feedback_teaching",
+      "conceptLinkProposals": [
+        "sy0701.term.zero-trust"
+      ],
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "familyRelation": "same_question_feedback_no_new_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_feedback_access_selected_wrong_option_details",
+      "usefulnessAfterMissProposal": {
+        "status": "source_review_only_not_validated_recovery",
+        "rationale": "The feedback rejects implicit trust and explains alternatives. Repeating this feedback or sibling framework-recognition questions is not fresh transfer evidence."
+      }
+    },
+    {
+      "recordId": "explanation:mcq:m038",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:228dad1ed8b0da455cf75804f2071c0126245e6043312b6fd546ab4c49a3d369",
+      "objectiveCodesObserved": [
+        "1.2"
+      ],
+      "parentId": "mcq:m038",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "parentQuestionRevision": "sha256:3a938b3629b5f12a738da7d2e9e1fbb74eec03a9f1b73b8f282e67fa9dcd2fc8",
+      "roleProposal": "conditional_feedback_teaching",
+      "conceptLinkProposals": [
+        "sy0701.term.zero-trust"
+      ],
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "familyRelation": "same_question_feedback_no_new_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_feedback_access_selected_wrong_option_details",
+      "usefulnessAfterMissProposal": {
+        "status": "source_review_only_not_validated_recovery",
+        "rationale": "The feedback separates engine, administrator and enforcer, which the selected lesson only distinguishes at aggregate PDP-versus-PEP level. It is answer-linked correction, not a new independent assessment."
+      }
+    },
+    {
+      "recordId": "explanation:mcq:m158",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:e06846845d3ecefbb8bc6d8a5791941286a1198f12ff9e15de44200464443c8a",
+      "objectiveCodesObserved": [
+        "1.2"
+      ],
+      "parentId": "mcq:m158",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "parentQuestionRevision": "sha256:495cb5b7f2cc5b8069c1f9c36de70e86e0f287af49911cb678a4bed22026c148",
+      "roleProposal": "conditional_feedback_teaching",
+      "conceptLinkProposals": [
+        "sy0701.term.zero-trust"
+      ],
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "familyRelation": "same_question_feedback_no_new_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_feedback_access_selected_wrong_option_details",
+      "usefulnessAfterMissProposal": {
+        "status": "source_review_only_not_validated_recovery",
+        "rationale": "The feedback rejects implicit trust and explains alternatives. Repeating this feedback or sibling framework-recognition questions is not fresh transfer evidence."
+      }
+    },
+    {
+      "recordId": "explanation:mcq:m226",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:9ef28694e185c0cfcf41f52028c3c0e5d20140f0fd10fe7f8afebcb3ae0728d3",
+      "objectiveCodesObserved": [
+        "1.2"
+      ],
+      "parentId": "mcq:m226",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "parentQuestionRevision": "sha256:f161c6080760aba37012e8d682dd06c627c8f3b3b4962d903f842dd2fe94fb46",
+      "roleProposal": "conditional_feedback_teaching",
+      "conceptLinkProposals": [
+        "sy0701.term.zero-trust"
+      ],
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "familyRelation": "same_question_feedback_no_new_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_feedback_access_selected_wrong_option_details",
+      "usefulnessAfterMissProposal": {
+        "status": "source_review_only_not_validated_recovery",
+        "rationale": "The feedback rejects implicit trust and explains alternatives. Repeating this feedback or sibling framework-recognition questions is not fresh transfer evidence."
+      }
+    },
+    {
+      "recordId": "explanation:mcq:m621",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:55d8234e8a11c29e7448d6e5d4a833c680ea111e5ef994293c575d88dc11defb",
+      "objectiveCodesObserved": [
+        "1.2"
+      ],
+      "parentId": "mcq:m621",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "parentQuestionRevision": "sha256:38c62bcaf0cbdad6e07a5f79b7527179131cfd6682e177804a80ea357d1c0e29",
+      "roleProposal": "conditional_feedback_teaching",
+      "conceptLinkProposals": [
+        "sy0701.term.zero-trust"
+      ],
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "familyRelation": "same_question_feedback_no_new_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_feedback_access_selected_wrong_option_details",
+      "usefulnessAfterMissProposal": {
+        "status": "source_review_only_not_validated_recovery",
+        "rationale": "The feedback rejects implicit trust and explains alternatives. Repeating this feedback or sibling framework-recognition questions is not fresh transfer evidence."
+      }
+    }
+  ],
+  "instructionalProposals": [
+    {
+      "recordId": "lesson:identity-zero-trust",
+      "kind": "lesson",
+      "sourceRevision": "sha256:72351fb5a6b276cb2d1a6280c24cef6cd5f8262213ea0e2065865fcd92f83a95",
+      "objectiveCodesObserved": [
+        "1.2",
+        "4.6"
+      ],
+      "parentId": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "roleProposal": "mixed_identity_lifecycle_zero_trust_optional_service_account_container",
+      "objectiveCodesProposal": [
+        "4.6",
+        "1.2"
+      ],
+      "conceptLinkProposals": [],
+      "withheldCanonicalCandidates": [],
+      "subunits": [],
+      "usefulnessAfterMissProposal": {
+        "status": "partial_unvalidated_teaching",
+        "rationale": "Contains general access governance and trust vocabulary. One container does not supply separate mastery, and the engine-versus-administrator distinction required by m038 is not developed."
+      },
+      "deliveryBinding": "lesson-renderer",
+      "deliveryGate": "pro_tier_lesson_selection_guided_step_or_practice_submission",
+      "difficultyObserved": {
+        "lesson": "Applied",
+        "profileDomain": 4
+      },
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration"
+    },
+    {
+      "recordId": "section:identity-zero-trust:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:4ebcc8fd31bbbde34bf701e83159dad1a08a8c90b5fb3e9e9226f940e1eb994f",
+      "objectiveCodesObserved": [
+        "1.2",
+        "4.6"
+      ],
+      "parentId": "lesson:identity-zero-trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "roleProposal": "identity_lifecycle_and_governed_automation_teaching",
+      "objectiveCodesProposal": [
+        "4.6"
+      ],
+      "contextObjectiveCodesProposal": [
+        "4.7",
+        "5.1"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.iam",
+        "sy0701.term.provisioning"
+      ],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.least-privilege",
+        "sy0701.term.least-privilege-principle"
+      ],
+      "subunits": [
+        {
+          "path": "body[0]",
+          "sourceRevision": "sha256:a5014bf891eb98add005d5765abf2efb1ce32237f21f4b03d25f4c1960ad077e",
+          "meaningProposal": "Joiner, mover, review and leaver events change access through its lifecycle.",
+          "objectiveCodesProposal": [
+            "4.6"
+          ],
+          "conceptLinkProposals": [
+            "sy0701.term.iam",
+            "sy0701.term.provisioning"
+          ],
+          "withheldCanonicalCandidates": [
+            "sy0701.term.least-privilege",
+            "sy0701.term.least-privilege-principle"
+          ],
+          "status": "instructional_scope_pending",
+          "weight": 0
+        },
+        {
+          "path": "body[1]",
+          "sourceRevision": "sha256:9b4747dd42d3521e7d03febc54963541827b456a1066edebb6bea45a4f5c219b",
+          "meaningProposal": "Automation still needs approvals, exception handling and an accountable source of truth.",
+          "objectiveCodesProposal": [
+            "4.7"
+          ],
+          "conceptLinkProposals": [],
+          "withheldCanonicalCandidates": [],
+          "status": "related_governance_context_not_whole_objective_coverage",
+          "weight": 0
+        }
+      ],
+      "usefulnessAfterMissProposal": {
+        "status": "outside_selected_assessed_decisions",
+        "rationale": "Useful lifecycle context, but it does not explain location-based trust rejection or the policy-engine role. Do not attach a new assessed meaning merely because the whole lesson inherits 1.2."
+      },
+      "deliveryBinding": "lesson-renderer",
+      "deliveryGate": "pro_tier_lesson_selection_guided_step_or_practice_submission",
+      "difficultyObserved": {
+        "lesson": "Applied",
+        "profileDomain": 4
+      },
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration"
+    },
+    {
+      "recordId": "section:identity-zero-trust:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:1e85045db3029f3b5f170e8bc1f20ee70e46722c48353dd3971c2aae9a98f1e4",
+      "objectiveCodesObserved": [
+        "1.2",
+        "4.6"
+      ],
+      "parentId": "lesson:identity-zero-trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "roleProposal": "aggregate_decision_versus_enforcement_teaching",
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.zero-trust"
+      ],
+      "withheldCanonicalCandidates": [],
+      "withheldPreciseMeanings": [
+        "PDP decision aggregation and PEP enforcement; exact identities absent",
+        "Policy engine versus administrator distinction not authored here"
+      ],
+      "subunits": [],
+      "usefulnessAfterMissProposal": {
+        "status": "partial_for_m038_not_complete_remediation",
+        "rationale": "Explains aggregate decision versus access-path enforcement. It does not split the decision point into engine and administrator, so it is insufficient by itself for the m038 alternatives."
+      },
+      "deliveryBinding": "lesson-renderer",
+      "deliveryGate": "pro_tier_lesson_selection_guided_step_or_practice_submission",
+      "difficultyObserved": {
+        "lesson": "Applied",
+        "profileDomain": 4
+      },
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration"
+    },
+    {
+      "recordId": "section:identity-zero-trust:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:568f555c924e7548e8e2f4809112f05e51a81980de5ea2a67259abf1fcd0dee3",
+      "objectiveCodesObserved": [
+        "1.2",
+        "4.6"
+      ],
+      "parentId": "lesson:identity-zero-trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "roleProposal": "optional_directory_and_managed_service_account_context",
+      "objectiveCodesProposal": null,
+      "contextObjectiveCodesProposal": [
+        "4.6"
+      ],
+      "deliveredScopeObserved": "beyond_textbook",
+      "conceptLinkProposals": [
+        "sy0701.term.ldap"
+      ],
+      "withheldCanonicalCandidates": [],
+      "withheldPreciseMeanings": [
+        "AD DS and gMSA have no precise existing nodes in this catalogue"
+      ],
+      "subunits": [
+        {
+          "path": "body[0]",
+          "sourceRevision": "sha256:9f052b14db75f090cb1459e44d939dfa3d4bc4aa80b6122b79416bfd9faea67d",
+          "meaningProposal": "Legacy protocol/configuration risk is distinct from declaring a directory platform obsolete.",
+          "objectiveCodesProposal": [],
+          "conceptLinkProposals": [
+            "sy0701.term.ldap"
+          ],
+          "withheldCanonicalCandidates": [],
+          "status": "optional_beyond_textbook_context",
+          "weight": 0
+        },
+        {
+          "path": "body[1]",
+          "sourceRevision": "sha256:9b839d1b3a5efef4d4c03e25fbbdbbba74b26ef0ee95f4c632d09f8b2ed8d7e3",
+          "meaningProposal": "Supported workloads can use directory-managed service passwords with host authorization.",
+          "objectiveCodesProposal": [],
+          "conceptLinkProposals": [],
+          "withheldCanonicalCandidates": [],
+          "status": "optional_beyond_textbook_context",
+          "weight": 0
+        }
+      ],
+      "usefulnessAfterMissProposal": {
+        "status": "outside_selected_assessed_decisions",
+        "rationale": "Service-account modernization does not explain the selected Zero Trust decisions. Preserve the optional renderer boundary and do not claim gMSA operation or assessment coverage."
+      },
+      "deliveryBinding": "lesson-renderer",
+      "deliveryGate": "pro_tier_lesson_selection_guided_step_or_practice_submission",
+      "difficultyObserved": {
+        "lesson": "Applied",
+        "profileDomain": 4
+      },
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration"
+    },
+    {
+      "recordId": "keywords:identity-zero-trust",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:6cf20707b85a10d25f62a5cdef3f8e0f29f88beac27614ea7c50fe78c78bd81e",
+      "objectiveCodesObserved": [
+        "1.2",
+        "4.6"
+      ],
+      "parentId": "lesson:identity-zero-trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "roleProposal": "mixed_identity_and_zero_trust_definition_support",
+      "objectiveCodesProposal": [
+        "4.6",
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.provisioning",
+        "sy0701.term.zero-trust"
+      ],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.least-privilege",
+        "sy0701.term.least-privilege-principle"
+      ],
+      "subunits": [
+        {
+          "path": "[0]",
+          "sourceRevision": "sha256:3d40e9494ebc3f2e1739d78737072a07b6ac22eb83be5976c18bde422354eb2f",
+          "meaningProposal": "Account creation and initial permissions are provisioning.",
+          "objectiveCodesProposal": [
+            "4.6"
+          ],
+          "conceptLinkProposals": [
+            "sy0701.term.provisioning"
+          ],
+          "withheldCanonicalCandidates": [],
+          "status": "instructional_scope_pending",
+          "weight": 0
+        },
+        {
+          "path": "[1]",
+          "sourceRevision": "sha256:90ce866d4ffb288b17eb578f8d1d6221e3fec54e91f6d50e66c67da6658f4e3b",
+          "meaningProposal": "Access should be limited to required scope and duration.",
+          "objectiveCodesProposal": [
+            "4.6"
+          ],
+          "conceptLinkProposals": [],
+          "withheldCanonicalCandidates": [
+            "sy0701.term.least-privilege",
+            "sy0701.term.least-privilege-principle"
+          ],
+          "status": "instructional_scope_pending",
+          "weight": 0
+        },
+        {
+          "path": "[2]",
+          "sourceRevision": "sha256:527b25a45ac82d5aafb6c31b5c6ab6c09f37dcc60be45a0e99d4da030e4a6070",
+          "meaningProposal": "Access is evaluated under policy without automatic trust.",
+          "objectiveCodesProposal": [
+            "1.2"
+          ],
+          "conceptLinkProposals": [
+            "sy0701.term.zero-trust"
+          ],
+          "withheldCanonicalCandidates": [],
+          "status": "instructional_scope_pending",
+          "weight": 0
+        }
+      ],
+      "usefulnessAfterMissProposal": {
+        "status": "limited_definition_recall_not_transfer",
+        "rationale": "The trust keyword can refresh the common framework-recognition decision. Definitions do not assess applied policy design or distinguish the engine from the administrator."
+      },
+      "deliveryBinding": "lesson-renderer",
+      "deliveryGate": "pro_tier_lesson_selection_guided_step_or_practice_submission",
+      "difficultyObserved": {
+        "lesson": "Applied",
+        "profileDomain": 4
+      },
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration"
+    },
+    {
+      "recordId": "traps:identity-zero-trust",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:c75abe5a13029c97b8f958e1159b3ed38314abe6cbe355d2f55e9966648d1be7",
+      "objectiveCodesObserved": [
+        "1.2",
+        "4.6"
+      ],
+      "parentId": "lesson:identity-zero-trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "roleProposal": "mixed_trust_role_and_optional_service_account_reminders",
+      "objectiveCodesProposal": [
+        "1.2",
+        "4.6"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.zero-trust"
+      ],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.least-privilege",
+        "sy0701.term.least-privilege-principle"
+      ],
+      "subunits": [
+        {
+          "path": "[0]",
+          "sourceRevision": "sha256:4a10e463ece95e2db971699a64cf0558ce69a61c7e52a98fc3ff77a1c189ce4f",
+          "meaningProposal": "Verify explicitly and limit access without treating usability as forbidden.",
+          "objectiveCodesProposal": [
+            "1.2"
+          ],
+          "conceptLinkProposals": [
+            "sy0701.term.zero-trust"
+          ],
+          "withheldCanonicalCandidates": [
+            "sy0701.term.least-privilege",
+            "sy0701.term.least-privilege-principle"
+          ],
+          "status": "instructional_scope_pending",
+          "weight": 0
+        },
+        {
+          "path": "[1]",
+          "sourceRevision": "sha256:6dbe72cedb81f8b60eb35817de9587c142d1b8c16538f5916424b82c075494a6",
+          "meaningProposal": "Decision and enforcement are separate aggregate roles.",
+          "objectiveCodesProposal": [
+            "1.2"
+          ],
+          "conceptLinkProposals": [],
+          "withheldCanonicalCandidates": [],
+          "status": "instructional_scope_pending",
+          "weight": 0
+        },
+        {
+          "path": "[2]",
+          "sourceRevision": "sha256:3c3e139a29ae6ca9083ea078e946ab50e351f0d776ed014060862dfbae0c2481",
+          "meaningProposal": "Managed service passwords do not solve excessive privileges.",
+          "objectiveCodesProposal": [],
+          "conceptLinkProposals": [],
+          "withheldCanonicalCandidates": [],
+          "status": "optional_service_account_context",
+          "weight": 0
+        }
+      ],
+      "usefulnessAfterMissProposal": {
+        "status": "reminder_only_not_validated_recovery",
+        "rationale": "Brief reminders overlap authored sections. The PDP/PEP reminder still does not resolve engine-versus-administrator alternatives, and optional service-account material is not new Zero Trust evidence."
+      },
+      "deliveryBinding": "lesson-renderer",
+      "deliveryGate": "pro_tier_lesson_selection_guided_step_or_practice_submission",
+      "difficultyObserved": {
+        "lesson": "Applied",
+        "profileDomain": 4
+      },
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration"
+    },
+    {
+      "recordId": "check:identity-zero-trust",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:184738ced5cb2d0680c78b8867c36b402eb80de4937e6891bc125e02dcbee97a",
+      "objectiveCodesObserved": [
+        "1.2",
+        "4.6"
+      ],
+      "parentId": "lesson:identity-zero-trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "roleProposal": "identity_mover_self_reveal_study_check",
+      "objectiveCodesProposal": [
+        "4.6"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.iam"
+      ],
+      "withheldCanonicalCandidates": [],
+      "subunits": [],
+      "usefulnessAfterMissProposal": {
+        "status": "outside_selected_assessed_decisions",
+        "rationale": "The authored check concerns changing access when a job changes. Its revealed model answer is study support rather than a trusted adaptive event or Zero Trust component test."
+      },
+      "deliveryBinding": "lesson-renderer",
+      "deliveryGate": "pro_tier_lesson_selection_guided_step_or_practice_submission",
+      "difficultyObserved": {
+        "lesson": "Applied",
+        "profileDomain": 4
+      },
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration"
+    },
+    {
+      "recordId": "practice:identity-zero-trust:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:afaff13b70d33da554956b4fbfeb214705505dac5b32213852803033e3f01d4a",
+      "objectiveCodesObserved": [
+        "1.2",
+        "4.6"
+      ],
+      "parentId": "lesson:identity-zero-trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "roleProposal": "generated_definition_match_not_attested_assessment",
+      "objectiveCodesProposal": null,
+      "objectiveContextCodesProposal": [
+        "4.6",
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.provisioning",
+        "sy0701.term.zero-trust"
+      ],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.least-privilege",
+        "sy0701.term.least-privilege-principle"
+      ],
+      "subunits": [],
+      "familyRelation": "same_keyword_guide_no_independent_family",
+      "usefulnessAfterMissProposal": {
+        "status": "definition_recall_only_not_transfer",
+        "rationale": "Links describe the entire candidate vocabulary, not the individual keyed term. These repeated definition matches do not test policy-engine discrimination or make a new applied family."
+      },
+      "deliveryBinding": "lesson-renderer",
+      "deliveryGate": "pro_tier_lesson_selection_guided_step_or_practice_submission",
+      "difficultyObserved": {
+        "lesson": "Applied",
+        "profileDomain": 4
+      },
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration"
+    },
+    {
+      "recordId": "practice:identity-zero-trust:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:50b5158ac13a344623e06d01fad55fe9bbd1c903531382ee96361b2cd03cf806",
+      "objectiveCodesObserved": [
+        "1.2",
+        "4.6"
+      ],
+      "parentId": "lesson:identity-zero-trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "roleProposal": "generated_definition_match_not_attested_assessment",
+      "objectiveCodesProposal": null,
+      "objectiveContextCodesProposal": [
+        "4.6",
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.provisioning",
+        "sy0701.term.zero-trust"
+      ],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.least-privilege",
+        "sy0701.term.least-privilege-principle"
+      ],
+      "subunits": [],
+      "familyRelation": "same_keyword_guide_no_independent_family",
+      "usefulnessAfterMissProposal": {
+        "status": "definition_recall_only_not_transfer",
+        "rationale": "Links describe the entire candidate vocabulary, not the individual keyed term. These repeated definition matches do not test policy-engine discrimination or make a new applied family."
+      },
+      "deliveryBinding": "lesson-renderer",
+      "deliveryGate": "pro_tier_lesson_selection_guided_step_or_practice_submission",
+      "difficultyObserved": {
+        "lesson": "Applied",
+        "profileDomain": 4
+      },
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration"
+    },
+    {
+      "recordId": "practice:identity-zero-trust:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:06967cdcea09d22d5ab0fad25e6197072f8068ba349ef0d4bf4196b88993e6f7",
+      "objectiveCodesObserved": [
+        "1.2",
+        "4.6"
+      ],
+      "parentId": "lesson:identity-zero-trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "roleProposal": "generated_definition_match_not_attested_assessment",
+      "objectiveCodesProposal": null,
+      "objectiveContextCodesProposal": [
+        "4.6",
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.provisioning",
+        "sy0701.term.zero-trust"
+      ],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.least-privilege",
+        "sy0701.term.least-privilege-principle"
+      ],
+      "subunits": [],
+      "familyRelation": "same_keyword_guide_no_independent_family",
+      "usefulnessAfterMissProposal": {
+        "status": "definition_recall_only_not_transfer",
+        "rationale": "Links describe the entire candidate vocabulary, not the individual keyed term. These repeated definition matches do not test policy-engine discrimination or make a new applied family."
+      },
+      "deliveryBinding": "lesson-renderer",
+      "deliveryGate": "pro_tier_lesson_selection_guided_step_or_practice_submission",
+      "difficultyObserved": {
+        "lesson": "Applied",
+        "profileDomain": 4
+      },
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration"
+    }
+  ],
+  "remainingObjective12RecordIds": [
+    "check:resilience-assets-physical",
+    "deck:identity-authentication",
+    "explanation:mcq:m002",
+    "explanation:mcq:m033",
+    "explanation:mcq:m036",
+    "explanation:mcq:m044",
+    "explanation:mcq:m057",
+    "explanation:mcq:m103",
+    "explanation:mcq:m114",
+    "explanation:mcq:m201",
+    "explanation:mcq:m260",
+    "explanation:mcq:m399",
+    "explanation:mcq:m413",
+    "explanation:mcq:m602",
+    "explanation:mcq:m642",
+    "explanation:mcq:m653",
+    "explanation:mcq:m656",
+    "explanation:pbq:p055",
+    "flashcard:sy0701-acronym-identity-authentication-captcha-completely-automated-public-turing-test-to-tell-computers-and-humans-apart",
+    "flashcard:sy0701-acronym-identity-authentication-eap-extensible-authentication-protocol",
+    "flashcard:sy0701-acronym-identity-authentication-idp-identity-provider",
+    "flashcard:sy0701-acronym-identity-authentication-leap-lightweight-extensible-authentication-protocol",
+    "flashcard:sy0701-acronym-identity-authentication-mfa-multi-factor-authentication",
+    "flashcard:sy0701-acronym-identity-authentication-oauth-open-authorization",
+    "flashcard:sy0701-acronym-identity-authentication-oidc-openid-connect",
+    "flashcard:sy0701-acronym-identity-authentication-pap-password-authentication-protocol",
+    "flashcard:sy0701-acronym-identity-authentication-piv-personal-identity-verification",
+    "flashcard:sy0701-acronym-identity-authentication-radius-remote-authentication-dial-in-user-service",
+    "flashcard:sy0701-acronym-identity-authentication-saml-security-assertion-markup-language",
+    "flashcard:sy0701-acronym-identity-authentication-sso-single-sign-on",
+    "flashcard:sy0701-acronym-identity-authentication-tacacs-terminal-access-controller-access-control-system-plus",
+    "glossary:bia",
+    "glossary:dlp",
+    "glossary:eap",
+    "glossary:idp",
+    "glossary:ldap",
+    "glossary:mtbf",
+    "glossary:mttr",
+    "glossary:oauth",
+    "glossary:oidc",
+    "glossary:pki",
+    "glossary:rpo",
+    "glossary:rto",
+    "glossary:saml",
+    "glossary:sso",
+    "glossary:tacacs%2B",
+    "glossary:vpn",
+    "keywords:resilience-assets-physical",
+    "lesson:resilience-assets-physical",
+    "mcq:m002",
+    "mcq:m033",
+    "mcq:m036",
+    "mcq:m044",
+    "mcq:m057",
+    "mcq:m103",
+    "mcq:m114",
+    "mcq:m201",
+    "mcq:m260",
+    "mcq:m399",
+    "mcq:m413",
+    "mcq:m602",
+    "mcq:m642",
+    "mcq:m653",
+    "mcq:m656",
+    "pbq:p055",
+    "practice:resilience-assets-physical:practice-keyword-0",
+    "practice:resilience-assets-physical:practice-keyword-1",
+    "practice:resilience-assets-physical:practice-keyword-2",
+    "section:resilience-assets-physical:0",
+    "section:resilience-assets-physical:1",
+    "section:resilience-assets-physical:2",
+    "traps:resilience-assets-physical"
+  ],
+  "unusedSelectedLessonHelpers": [
+    {
+      "recordId": "unused-card:identity-zero-trust:check",
+      "sourceRevision": "sha256:9f66f3b6593517296ffd898f7aeb9db404061602f41fa0ae2844982f81538e2b",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:identity-zero-trust:core",
+      "sourceRevision": "sha256:4b86bb057a109e2dbcbdbc20fd184e1bec7d65073a29558155587ffdd118981c",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:identity-zero-trust:trap-0",
+      "sourceRevision": "sha256:4e833d5ac03989c4f029fee6442e9d0e305d425059a5b6c864674da330badb57",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:identity-zero-trust:trap-1",
+      "sourceRevision": "sha256:d85f15556a90da4a155eaf005542efeb5fba1957f2549708cc665757b36b9e15",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:identity-zero-trust:trap-2",
+      "sourceRevision": "sha256:fe21ec65b8082aad423b04b7ed1354faaaddba457e96ca94b3523e9b0dfea2b0",
+      "status": "not_delivered"
+    }
+  ],
+  "selectorBindings": [
+    {
+      "recordId": "intervention:deep-dive-recommendations",
+      "sourceRevision": "sha256:c05f9bf90cfd71e54cf47587e2f10c473d2a5b7ac23da274b920db6313c5c569",
+      "limitation": "Objective/topic hints and lexical overlap can use explanations and options internally. Export no matched private text or learner instances; these are legacy recommendations, not approved mastery links."
+    },
+    {
+      "recordId": "intervention:lesson-navigation",
+      "sourceRevision": "sha256:96bb76e903452092f979401acb1f6917f0d6c68dd3b6223956d610625aca7891",
+      "limitation": "Includes free-preview gating, lesson search, guided steps and related flashcard end action. Other lesson end actions delegate to separately inventoried selectors."
+    },
+    {
+      "recordId": "intervention:practice-launch",
+      "sourceRevision": "sha256:3068f284d528b579176264da5a129cd35fc34a6e581ece2c8a49cb133a1df84a",
+      "limitation": "Normal, missed, starred and focused chapter launchers, result recommendations and replay/resume paths use existing question/lesson sources."
+    }
+  ],
+  "deliveryBindings": [
+    {
+      "id": "mcq-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function MCQPractice(",
+      "endAnchor": "function UpgradeModal(",
+      "startLine": 24992,
+      "endLine": 25873,
+      "sourceSignature": "sha256:f96053d990c9e6e98bebb88af15b18766c3996a962879e7d178b21e5baa2556d"
+    },
+    {
+      "id": "lesson-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function ConceptDeepDivesPage(",
+      "endAnchor": "function FlashcardsPage(",
+      "startLine": 31239,
+      "endLine": 31898,
+      "sourceSignature": "sha256:73bedc41a26c97312747cd945c691668a2b37f90fc15e8a0d6bbb7d796a4de7e"
+    }
+  ],
+  "deliveryLimitations": [
+    "Source-level MCQ launch, Pro feedback and results recommendations are conditional on existing access/session state; no actual attempt was made.",
+    "All five local single-miss fixtures rank security-foundations-controls then identity-zero-trust with limit two. The first lesson is already dispositioned, not newly counted; ranking is a legacy source-selection result, not approved usefulness or observed learner exposure.",
+    "The selected Domain 4 identity lesson requires Pro access; it contains only three generated keyword checks, all displayed. No hypothetical comparison checks or unused helper flashcards are added.",
+    "Model answer reveals, lesson completion toggles and practice scores are local study interactions, not approved mastery evidence. Paragraphs, reminders, generated vocabulary checks and feedback overlap."
+  ],
+  "canonicalBoundary": {
+    "topicId": "sy0701.objective.1.2",
+    "topicIsMastery": false,
+    "newMasteryIdentities": 0,
+    "primaryMasteryProposalsWithheld": 5,
+    "supportingZeroTrustRoleOnly": true,
+    "missingPreciseMeanings": [
+      "Policy engine access decision",
+      "Policy administrator path administration",
+      "PDP aggregation versus PEP enforcement",
+      "AD DS and gMSA optional context"
+    ],
+    "ambiguousLeastPrivilegeCandidates": [
+      "sy0701.term.least-privilege",
+      "sy0701.term.least-privilege-principle"
+    ],
+    "priorAmbiguitiesUnchanged": [
+      "CIA versus CIA-triad",
+      "MAC cross-domain meanings",
+      "Role-based versus rule-based RBAC",
+      "TOU access-window/race-condition discrepancy"
+    ]
+  },
+  "phaseWideBacklog": {
+    "packageRecordsUnchanged": 1878,
+    "reviewQueueUnchanged": 2954,
+    "unresolvedQuestionMappingsUnchanged": 489,
+    "existingPrimaryQuestionProposalsUnchanged": 7,
+    "taxonomyUnchanged": {
+      "masteryConcepts": 5,
+      "topics": 28,
+      "supportingConcepts": 402
+    },
+    "humanApprovedNewMappings": 0
+  },
+  "privateBoundary": {
+    "recordId": "private:pbq:p017",
+    "sourceRevision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "trustedRevisionId": null,
+    "payloadReviewed": false,
+    "masteryWeight": 0,
+    "status": "SELECTED_PRIVATE_REVISION_UNAVAILABLE_NO_FALLBACK_SUBSTITUTION"
+  },
+  "humanDecisionReferences": {
+    "checklist": "docs/evidence/phase-2b5/review-batch.md",
+    "guide": "docs/evidence/phase-2b5/review-guide.md",
+    "requiredBinding": "Future separate signed owner decisions must bind current package SHA, this packet SHA and exact semantic revisions; prior source selection is not taxonomy/mapping approval.",
+    "humanApprovalRequestedThisTurn": false,
+    "pending": [
+      "Decide narrower assessed Zero Trust and component identities without auto-promoting topics/support nodes.",
+      "Approve/reject shared implicit-trust family relation, easy difficulty disposition and support/contrast exclusions.",
+      "Resolve least-privilege alias identities while retaining prior CIA/MAC/RBAC/TOU withholdings.",
+      "Assess partial lesson usefulness, especially missing engine-versus-administrator teaching after m038; any authored correction is a separate scope.",
+      "Review the remaining 15 MCQs, coarse p055, 16 feedback bundles and other 40 broad teaching/context candidates."
+    ]
+  },
+  "officialReferences": [
+    {
+      "url": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be",
+      "scope": "SY0-701 version 7.0: objective 1.2 Zero Trust principles/components versus 4.6 identity lifecycle. Scope interpretations remain Codex proposals."
+    },
+    {
+      "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-207.pdf",
+      "scope": "Section 3 separates engine, administrator and enforcement; PDP aggregates engine and administrator. No implicit trust solely from location/ownership."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-managed-service-accounts/group-managed-service-accounts/manage-group-managed-service-accounts",
+      "scope": "Supported gMSA service account password handling; optional lesson context only, not new assessment or Windows configuration work."
+    }
+  ]
+}
