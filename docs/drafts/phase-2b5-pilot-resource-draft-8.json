@@ -1,0 +1,763 @@
+{
+  "batchId": "phase-2b5-pilot-draft-8",
+  "date": "2026-10-07",
+  "baselineCommit": "06d180005063de0cd4bb9da6487a57524bb56859",
+  "status": "LOCAL_RTO_RESOURCE_DRAFT_MTD_CEILING_NOT_READY",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "mappingVersionProposal": "pilot-draft-8-unapproved",
+  "newQuestions": 1,
+  "newFamilyCredit": 0,
+  "eligibleEvidence": 0,
+  "sourceBindings": {
+    "docs/secureplus-rebrand-master-plan.md": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c",
+    "docs/phase-1-product-loop-audit.md": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10",
+    "docs/evidence/phase-2b5/mapping-package.json": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97",
+    "docs/evidence/phase-2b5/delivery-inventory.md": "d57d67b65d52312620bd474a072a878a1ad353bceabfc253ed43024dca1b77a1",
+    "docs/drafts/phase-2b5-objective34-semantic-proposals.json": "ceb33e92b12cde3c0a2c19f6d089f7b88f6cacf3263c86efc491f8b5b88cdaa2",
+    "docs/drafts/phase-2b5-objective52-pilot-mapping-proposals.json": "de062252046dffcfde6de11ce7e328cf72bbec142be180c300c0ecc3f003f25c",
+    "docs/phase-2b5-pilot-owner-decision-packet.md": "01f96e9c4edff2ef61d25c296fb96c585ad1a00db0709f47c0d261b7fbb5d953",
+    "scripts/lib/read-learning-pilot-bank.mjs": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac",
+    "scripts/lib/content-mapping/delivery-inventory.mjs": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6",
+    "src/data/learningConcepts.js": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac",
+    "src/data/learningMappings.js": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d",
+    "docs/drafts/phase-2b5-cross-objective34-census.json": "2613a81bfc9a9720a90f5225d1265df3f538f5bcf543e29c9a4a2dc9b224b782",
+    "docs/drafts/phase-2b5-recovery-overlap-semantic-proposals.json": "165bbc1ba1f709a91ef26d426b9c9a24541a9b7dc3a845e4937f02d27eb2e900",
+    "docs/phase-2b5-recovery-overlap-semantic-review.md": "2e778f47338085467aab60ed4e6b0a7e9473224357d9e3bc64f7f77d91ea9db4",
+    "docs/phase-2b5-platform-cloud-semantic-review.md": "25b58d483790550ccb54a5b47254c5020dec051bd6f10fd8caca622ba1c8bce8",
+    "docs/phase-2b5-pilot-coverage-gap-ledger.md": "623c06f79069b672a15818ddfe6bafcb9cd1314c37efc4b74e694da90c721d7c",
+    "docs/drafts/phase-2b5-pilot-batch-1.json": "91e83b7afbc56901bc1a37ae426763024456d8d90ae486c2d2833ff076826bda",
+    "docs/drafts/phase-2b5-pilot-batch-4.json": "7be45316dda58c45685e06c9d2062a58b6dfda6b56b898d7050ff2b28412714e",
+    "docs/drafts/phase-2b5-pilot-pbq-draft-2.json": "94adaf1c9ca90370636bc3c8c20a6e51156964a4f1871905d23a88cbe9d5ae02",
+    "docs/drafts/phase-2b5-pilot-teaching-draft-3.json": "84757c5c7bec067e5baee182487525f3f843aa9e709af257b307be0c1655a921",
+    "docs/drafts/phase-2b5-pilot-batch-1-family-decision.md": "f52a03d0c01659b282346b4d0a9056e493427564350ed7bb633e206c1df4d0dd",
+    "docs/drafts/phase-2b5-pilot-batch-1-content-decision.md": "5533ad164524476407c543c2111dcacfcebb10e22d811f1fa468d03a62a30304",
+    "src/lib/learningConfig.js": "deb3cf1982cd81e5cb77324031826084c60394788f395ee13e5aa65b9f403c58",
+    "docs/drafts/phase-2b5-pilot-power-draft-5.json": "27cde25ba68bce538fb06a50d58a6d0c9534da18e7b707b14037529f78e3c084",
+    "docs/drafts/phase-2b5-pilot-site-draft-6.json": "7a52e3491331c2c43531f899b0751cc267e29ebb4191dc876a61086d8eaf0120",
+    "docs/drafts/phase-2b5-pilot-diversity-draft-7.json": "ddc96648347f48ba8d9c3d3466e1ee1c3edac5c4f6021a77022b8058b7d7baa2",
+    "docs/drafts/phase-2b5-contextual-recovery-dispositions.json": "b56ea7848cd59bfea552c82a7d28535317c21f3c7f5bc03d1e4fd6c0481bc2bb",
+    "docs/phase-2b5-contextual-recovery-review.md": "3aebebd59d6b07e652770d143f219c988131f8a01df59ebca34e5a6a194074e0",
+    "scripts/audit-contextual-recovery-dispositions.mjs": "f641d319d93df7807bff281dfcb600d42ad20db67431087ac29d56ead3aa7e4c",
+    "src/lib/learningEvidence.js": "d2731d1dceea1e52f75c460d1c324132dd2711dce91d1460294506e78e9dc6d5",
+    "src/lib/conceptMastery.js": "947da9d227ad84b8054f82b7625ddefbb73daa8193406ceb413cdd9788791813",
+    "src/lib/reviewScheduler.js": "75c228e92d29da56f9a704349efd8aac2b34a53aaddbff4befab206327cdab1c",
+    "docs/evidence/phase-2b5/release-checksums.json": "98e7e0ed45b5fd17f1be50c4cd36eba53bf289de26a427810e061274dcfb3403",
+    "docs/drafts/phase-2b5-pilot-exposure-rehearsal.json": "9332cd6c242d59e73bd03d768452d85a03db29449e77acd2cc85ad903413556f",
+    "docs/phase-2b5-pilot-exposure-rehearsal.md": "897003e92c6847284f0859be69c24f5e7d42ab22605fc04e4cc69b9d2d6b8962",
+    "scripts/rehearse-pilot-exposure.mjs": "243b8ea13b87fbb88a32fdc949bde516553c016a33dd2240eb20ad281599ac55",
+    "docs/phase-2b5-recovery-test-draft-precheck.md": "a78dd2193fad19ed90acca3f7a4129bb91506c89570802eba9b39cc413a16d33"
+  },
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "sources": [
+    {
+      "id": "sy0701-objectives",
+      "title": "CompTIA Security+ SY0-701 Exam Objectives, Version 5.0",
+      "url": "https://assets.ctfassets.net/82ripq7fjls2/6TYWUym0Nudqa8nGEnegjG/0f9b974d3b1837fe85ab8e6553f4d623/CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf",
+      "checkedOn": "2026-10-07",
+      "locator": "PDF page14: objective5.2 BIA/RTO; page9: objective3.4 capacity planning and recovery testing",
+      "accuracyUse": "RTO is an explicit BIA bullet. Shared-resource recovery feasibility is our scenario application of that target with capacity context, not an official question or objective reassignment. MTD is not an explicit named bullet."
+    },
+    {
+      "id": "nist-800-34",
+      "title": "NIST SP800-34 Rev.1, Contingency Planning Guide for Federal Information Systems",
+      "url": "https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-34r1.pdf",
+      "checkedOn": "2026-10-07",
+      "locator": "Printed pages17-20: sections3.2.1-3.2.3 and3.4.1; PDF pages31-34",
+      "accuracyUse": "Background guidance links restoration targets, resources, priorities and recovery strategies. The one-appliance nonpreemptive job model and durations are explicit hypothetical facts, not a claimed NIST scheduling prescription or federal requirement."
+    }
+  ],
+  "discovery": {
+    "allEffectiveQuestions": 483,
+    "screenCount": 133,
+    "screenIds": [
+      "m001",
+      "m002",
+      "m007",
+      "m008",
+      "m017",
+      "m019",
+      "m021",
+      "m022",
+      "m023",
+      "m032",
+      "m035",
+      "m037",
+      "m042",
+      "m052",
+      "m064",
+      "m065",
+      "m072",
+      "m076",
+      "m080",
+      "m083",
+      "m086",
+      "m087",
+      "m088",
+      "m091",
+      "m095",
+      "m102",
+      "m105",
+      "m118",
+      "m126",
+      "m128",
+      "m133",
+      "m136",
+      "m137",
+      "m145",
+      "m148",
+      "m155",
+      "m159",
+      "m161",
+      "m168",
+      "m169",
+      "m173",
+      "m174",
+      "m177",
+      "m188",
+      "m191",
+      "m196",
+      "m203",
+      "m204",
+      "m206",
+      "m207",
+      "m211",
+      "m216",
+      "m222",
+      "m234",
+      "m235",
+      "m241",
+      "m242",
+      "m243",
+      "m244",
+      "m256",
+      "m262",
+      "m266",
+      "m292",
+      "m294",
+      "m305",
+      "m343",
+      "m349",
+      "m374",
+      "m401",
+      "m402",
+      "m404",
+      "m410",
+      "m418",
+      "m425",
+      "m451",
+      "m604",
+      "m606",
+      "m612",
+      "m613",
+      "m619",
+      "m622",
+      "m626",
+      "m627",
+      "m630",
+      "m635",
+      "m638",
+      "m639",
+      "m642",
+      "m645",
+      "m650",
+      "m652",
+      "m654",
+      "m705",
+      "m708",
+      "m709",
+      "m717",
+      "m721",
+      "m725",
+      "m727",
+      "m731",
+      "p002",
+      "p004",
+      "p005",
+      "p007",
+      "p009",
+      "p016",
+      "p017",
+      "p018",
+      "p020",
+      "p022",
+      "p025",
+      "p026",
+      "p028",
+      "p030",
+      "p034",
+      "p039",
+      "p040",
+      "p041",
+      "p043",
+      "p046",
+      "p048",
+      "p058",
+      "p060",
+      "p064",
+      "p080",
+      "p084",
+      "p085",
+      "p086",
+      "p096",
+      "p099",
+      "p211",
+      "p223",
+      "p224"
+    ],
+    "screenSignature": "sha256:81cd72eea2b485eeb33c7bca2140c4211f1b260837bca4c6147ceee5359f7c35",
+    "screenPattern": "\\bRTO\\b|\\bMTD\\b|recovery time objective|maximum tolerable downtime|recover|restor|continu|downtime|capacit|bottleneck|prioriti|shared|concurrent|sequential|critical.path|unacceptable|business impact|tolerab",
+    "screenMeaning": "Broad full-record vocabulary triage; not proof of semantic absence. All133 candidate stems/scenarios inspected; full answer logic inspected for the27 relevant/adjacent records below.",
+    "fullyInspected": [
+      {
+        "id": "m022",
+        "sourceRevision": "sha256:cb6e0262b401bd3dd390baa4d74541395db3d1a5bb746a214e497df6eb8a2b42"
+      },
+      {
+        "id": "m023",
+        "sourceRevision": "sha256:3ad290fb1838ddbc6f2f6250170046c1eaed6824e2378a2fec2dd24835f80601"
+      },
+      {
+        "id": "m032",
+        "sourceRevision": "sha256:072ce4c7b9f8e0f1f70dbea7320cebfb13d18d482093240eb98485850478e200"
+      },
+      {
+        "id": "m076",
+        "sourceRevision": "sha256:41341f734cc87c01d5ab0d75cf49d0883f143a46fbf3f3227f94680f225c9946"
+      },
+      {
+        "id": "m086",
+        "sourceRevision": "sha256:314994d739ecbe82485e02f29dda4c628773b1ff363b93913182892515e52872"
+      },
+      {
+        "id": "m088",
+        "sourceRevision": "sha256:d828be6f37d110e5cf80620d9c7aa4b8129dbc28cbf1e221233f19baadf01158"
+      },
+      {
+        "id": "m091",
+        "sourceRevision": "sha256:dd25a6cd140935abf9b605cdf96343403b2cb0d94a0948ea07fc93137832f456"
+      },
+      {
+        "id": "m169",
+        "sourceRevision": "sha256:d6a0066dc38862a889f4b8284c5551ef9749ad1f6305e95e367839bf3ed6f481"
+      },
+      {
+        "id": "m173",
+        "sourceRevision": "sha256:65e71d025ae17c215a4ffaf6597a183608015fab96a1b055c00aab884675eafb"
+      },
+      {
+        "id": "m177",
+        "sourceRevision": "sha256:2e89d8324231ae6f8409c567e81ab5fcf483d7cf26de2d03f674dd9a8a174f8b"
+      },
+      {
+        "id": "m188",
+        "sourceRevision": "sha256:9a4ba2a3984d1c617158826443e2b9f82231325583384dc4753bffcd8ef08cb4"
+      },
+      {
+        "id": "m196",
+        "sourceRevision": "sha256:064871a82f7228185d753db57a4ff070d965ea05ffbf8499a65dbad23303a600"
+      },
+      {
+        "id": "m203",
+        "sourceRevision": "sha256:910ccfa059f7479c9ae251ece5bcc72f7c2babb64aa8f5190f37caf87227ee0e"
+      },
+      {
+        "id": "m244",
+        "sourceRevision": "sha256:a8eb0dc53befc70dde7354592666cde02fd9c14948d87824ab40ded6492331d4"
+      },
+      {
+        "id": "m374",
+        "sourceRevision": "sha256:602f4fed9cbf1850496dcc2567c8a22049f481deb25b8427c22f3c9b60f76609"
+      },
+      {
+        "id": "m425",
+        "sourceRevision": "sha256:677b5a8a4a2961773348753b0975668f7b4f16b615ca66fb30e1871d320f5720"
+      },
+      {
+        "id": "m604",
+        "sourceRevision": "sha256:7a9ed8ab3cc331ed01be1376ff14b252baee3ec0d05771400790c2686a0651b3"
+      },
+      {
+        "id": "m627",
+        "sourceRevision": "sha256:0a6aa4f22bf194f7b77254c00ee7bb2673919cfb04cceb72b62ee24cc642ba97"
+      },
+      {
+        "id": "m635",
+        "sourceRevision": "sha256:d2f6ffed09aa5b1fd7a933da2e5e531906923f96ef00c90b910b184b0cc25233"
+      },
+      {
+        "id": "m645",
+        "sourceRevision": "sha256:d2c59cf5f2e8d3efeb675e8b32c28c60a8380c8482f1d2fdd006f795060959d2"
+      },
+      {
+        "id": "m731",
+        "sourceRevision": "sha256:05d1a751d7177a2721e82695648a51bdf63c8e63829943e9415bbc1a75f97d26"
+      },
+      {
+        "id": "p004",
+        "sourceRevision": "sha256:024b18d1e37f4fa4d26b25d7cafe1bdda2d5c638b69b97e08a5bb54e1cd95921"
+      },
+      {
+        "id": "p025",
+        "sourceRevision": "sha256:aabd8deed903a60bc629232d60292a99f84f1654ed14c9b8df0e03d5d2b437de"
+      },
+      {
+        "id": "p026",
+        "sourceRevision": "sha256:330dec138ad30780f639184c307ffa4f842c337a9c0d41ee4d66e1c935e12a7d"
+      },
+      {
+        "id": "p048",
+        "sourceRevision": "sha256:1bdd92c36eb76a8913a88d952c56e1c89da0194911d986cbda588de3efa29d5e"
+      },
+      {
+        "id": "p060",
+        "sourceRevision": "sha256:e1dcc81f83790ad665a6ab2d7bb098b2941eb772c0e5334d2f5a6063caeb2aa6"
+      },
+      {
+        "id": "p211",
+        "sourceRevision": "sha256:bf0a42cc62da920122329a6253d9aaff8fd5f9a35038153d581650e132be81c3"
+      }
+    ],
+    "pilotComparisons": [
+      {
+        "id": "m032",
+        "sourceRevision": "sha256:072ce4c7b9f8e0f1f70dbea7320cebfb13d18d482093240eb98485850478e200",
+        "concept": "recovery.rto",
+        "family": "restoration-target-identification",
+        "assessedDecision": "interpret the specified service restoration target",
+        "comparison": "Names/interprets one restoration target; does not evaluate simultaneous resource contention."
+      },
+      {
+        "id": "m635",
+        "sourceRevision": "sha256:d2f6ffed09aa5b1fd7a933da2e5e531906923f96ef00c90b910b184b0cc25233",
+        "concept": "recovery.rto",
+        "family": "restoration-target-identification",
+        "assessedDecision": "identify a service restoration target",
+        "comparison": "Names/interprets one restoration target; does not evaluate simultaneous resource contention."
+      },
+      {
+        "id": "draft.pilot1.rto.01",
+        "sourceRevision": "sha256:0c02af9290c2e442a27888217255d922a4da46f611aebeca53252d521e1c1410",
+        "concept": "recovery.rto",
+        "family": "recovery-exercise-time-versus-data",
+        "assessedDecision": "Service-test deadline versus separate recovered-data age",
+        "comparison": "Adjudicates one observed service duration against a target while rejecting data-age substitution. Related target comparison, without shared-resource choice."
+      },
+      {
+        "id": "draft.pilot1.rto.02",
+        "sourceRevision": "sha256:44d18f20dfc792c96ecb837abb87e42bce9ec7fa3e0cb37e1b0e73938ad4ca51",
+        "concept": "recovery.rto",
+        "family": "serial-recovery-dependency-budget",
+        "assessedDecision": "Serial dependency plus transaction-validation duration",
+        "comparison": "Nearest draft: sums a fixed serial dependency path for one service. New proposal tests both possible orders for two independent services with different fixed deadlines; isolated job compliance and earliest-target ordering are insufficient. A broad recovery-budget family may still subsume both; independent gate may merge/reject."
+      },
+      {
+        "id": "draft.pilot1.rto.03",
+        "sourceRevision": "sha256:db8a7a5ae700c89cd4c7cff82de19a62f744d292e8e52bdc39c758d79df04f1c",
+        "concept": "recovery.rto",
+        "family": "availability-contract-versus-outage-target",
+        "assessedDecision": "Aggregate availability claim versus per-outage evidence",
+        "comparison": "Rejects an aggregate uptime promise as per-outage evidence; new proposal supplies tested durations and examines scheduling feasibility rather than missing evidence."
+      },
+      {
+        "id": "m088",
+        "sourceRevision": "sha256:d828be6f37d110e5cf80620d9c7aa4b8129dbc28cbf1e221233f19baadf01158",
+        "concept": "recovery.rpo",
+        "family": "versioned-backup-interval",
+        "assessedDecision": "choose versioned backup cadence under tested restoration assumptions",
+        "comparison": "Chooses version cadence under successful tested-restore assumptions; data-point evidence, not service-deadline feasibility."
+      },
+      {
+        "id": "draft.pilot1.rpo.01",
+        "sourceRevision": "sha256:4a2e6aca65bbd3112f74165063c14fd01059fd1e1e9c9b417c13d3e9d82dc580",
+        "concept": "recovery.rpo",
+        "family": "recoverable-point-timeline",
+        "assessedDecision": "Data-loss window from the usable recovery point",
+        "comparison": "Subtracts recovery-point time from failure time; no two-service restoration scheduling."
+      },
+      {
+        "id": "draft.pilot1.rpo.02",
+        "sourceRevision": "sha256:d2a818614a06ffdfa7ab66a3f5118ce0757b43de4d55b0fb08859bd3596098b4",
+        "concept": "recovery.rpo",
+        "family": "asynchronous-replication-durability-gap",
+        "assessedDecision": "Acknowledged-write durability backlog age",
+        "comparison": "Finds durable acknowledged-write lag evidence; no repair-resource scheduling."
+      },
+      {
+        "id": "draft.pilot1.rpo.03",
+        "sourceRevision": "sha256:34a7642f2690c7365f268645017ea09679e39ef82209d69fa4e2f57326304027",
+        "concept": "recovery.rpo",
+        "family": "corruption-clean-recovery-point",
+        "assessedDecision": "Clean usable point after delayed corruption",
+        "comparison": "Selects the latest usable clean recovery point after corruption; not service restoration sequencing."
+      },
+      {
+        "id": "draft.pilot4.rpo.01",
+        "sourceRevision": "sha256:0bb25eecfea655b2e031ba7f1c74a6b0cb276aeff92478e9ad55d430a2283ad6",
+        "concept": "recovery.rpo",
+        "family": "incomplete-transaction-log-recovery-chain",
+        "assessedDecision": "Derive usable point from a contiguous recovery-log chain",
+        "comparison": "Derives a reconstructible point before checking RPO. No data-chain or missing-log assumptions here."
+      },
+      {
+        "id": "m196",
+        "sourceRevision": "sha256:064871a82f7228185d753db57a4ff070d965ea05ffbf8499a65dbad23303a600",
+        "concept": "recovery.mtd",
+        "family": "outer-business-interruption-limit",
+        "assessedDecision": "distinguish the outer business interruption limit",
+        "comparison": "Identifies or reads the outer business tolerance; does not assess two resource-constrained restoration deadlines."
+      },
+      {
+        "id": "draft.pilot1.mtd.01",
+        "sourceRevision": "sha256:725b38a856c56cbb50a2c54ddfb22804cb70177ef775d48f2c06b1804880c5a4",
+        "concept": "recovery.mtd",
+        "family": "outer-business-interruption-limit",
+        "assessedDecision": "Identify outer tolerable business limit; same as m196",
+        "comparison": "Identifies or reads the outer business tolerance; does not assess two resource-constrained restoration deadlines."
+      },
+      {
+        "id": "draft.pilot1.mtd.02",
+        "sourceRevision": "sha256:2f82fcb4cc39213677fd31189d8a02edd9fb28f19a2adfbde47a93b8f8649bf2",
+        "concept": "recovery.mtd",
+        "family": "manual-workaround-changes-business-tolerance",
+        "assessedDecision": "Reassess tolerance with a validated finite workaround",
+        "comparison": "Reassesses accepted business tolerance with an effective finite workaround. New proposal fixes accepted RTOs and excludes alternatives, without changing impacts or tolerance."
+      },
+      {
+        "id": "draft.pilot1.mtd.03",
+        "sourceRevision": "sha256:c32f96c192b8c2a867cdf6df6817048c75ccb595130d8664f227c4de27f2723e",
+        "concept": "recovery.mtd",
+        "family": "technical-recovery-plus-business-reprocessing",
+        "assessedDecision": "Include business reprocessing after technology restore",
+        "comparison": "Sums technical restoration plus required business reconciliation for one process. Closely related end-to-end time discipline, but no two-service shared-resource order test."
+      },
+      {
+        "id": "draft.pilot4.mtd.01",
+        "sourceRevision": "sha256:842a20d8a9cf1b9082412ba1b07a0af43ea39d36b322970ff2cbd2f3fd0a4513",
+        "concept": "recovery.mtd",
+        "family": "earliest-unacceptable-impact-constraint",
+        "assessedDecision": "Earliest of mandatory unacceptable-impact limits",
+        "comparison": "Chooses the minimum accepted impact limit for one process. New proposal checks completion times for two fixed system targets, without setting MTD."
+      },
+      {
+        "id": "draft.pilot1.mttr.01",
+        "sourceRevision": "sha256:d3c914af3e5a18c71bef0ba80515f7ddf4ef7990fb28c1f563506774ab0ed629",
+        "concept": "recovery.mttr",
+        "family": "observed-repair-duration-average",
+        "assessedDecision": "Compute mean under a stipulated common clock",
+        "comparison": "Computes an observed mean, not per-service feasibility under joint resource use."
+      },
+      {
+        "id": "draft.pilot1.mttr.02",
+        "sourceRevision": "sha256:6b8679aa2003b8d4d2b0cbb3efcfb73690ba3ee5ec6b193dc83abe323b5e8670",
+        "concept": "recovery.mttr",
+        "family": "mean-versus-incident-tail",
+        "assessedDecision": "A favorable mean can hide a long individual incident",
+        "comparison": "Checks one completed outlier against a target despite a favorable mean. New proposal uses deterministic stipulated job durations, not an average or completed sample."
+      },
+      {
+        "id": "draft.pilot1.mttr.03",
+        "sourceRevision": "sha256:453a2a3512dbdd09c5a052e11c112c40e4a4e100594f56bcc21d1cc0afed2721",
+        "concept": "recovery.mttr",
+        "family": "repair-measurement-boundary-change",
+        "assessedDecision": "Reject comparison across changed clock boundaries",
+        "comparison": "Rejects incomparable changed clock definitions; new proposal fixes identical outage-to-usability clock boundaries."
+      },
+      {
+        "id": "draft.pilot4.mttr.01",
+        "sourceRevision": "sha256:f76d66d4f69dbc8849fc6e44bb224dc9a8974209493ccea7bdb268fada5958c4",
+        "concept": "recovery.mttr",
+        "family": "open-incidents-completion-bias",
+        "assessedDecision": "Completed-only mean omits a still-open long outage",
+        "comparison": "Reports an unfinished incident separately from completed-only mean; no censored endpoint or cohort bias in supplied job durations."
+      },
+      {
+        "id": "draft.pilot4.mttr.02",
+        "sourceRevision": "sha256:b69ac5211b131d9bb0a1da496bca4e0e311ebd8fe17d2c69ac7d0df0d5b441be",
+        "concept": "recovery.mttr",
+        "family": "repair-mean-versus-aggregate-downtime",
+        "assessedDecision": "Lower repair mean can coexist with higher total downtime",
+        "comparison": "Combines counts and means for total observed interruption. Related distinction between individual and aggregate timing, but no shared-resource scheduling or fixed deadlines."
+      },
+      {
+        "id": "m086",
+        "sourceRevision": "sha256:314994d739ecbe82485e02f29dda4c628773b1ff363b93913182892515e52872",
+        "concept": "continuity.bia",
+        "family": "critical-function-impact-document",
+        "assessedDecision": "identify the business-impact analysis document",
+        "comparison": "Identifies the BIA document; does not calculate feasible restoration schedules."
+      },
+      {
+        "id": "draft.pilot1.bia.01",
+        "sourceRevision": "sha256:b87056e46a53446ea26f8f6c5c79962001d41f7760a08c14253fa773a46b88d4",
+        "concept": "continuity.bia",
+        "family": "business-impact-input-elicitation",
+        "assessedDecision": "Obtain missing owner impact and alternative inputs",
+        "comparison": "Chooses missing owner impact/workaround inputs; no new owner input or tolerance is inferred here."
+      },
+      {
+        "id": "draft.pilot1.bia.02",
+        "sourceRevision": "sha256:5928f56f507076432c8145a3a98842dcb5e2cc067ce44967b97e6f7629c2e152",
+        "concept": "continuity.bia",
+        "family": "shared-dependency-recovery-priority",
+        "assessedDecision": "Prioritize an enabling shared dependency",
+        "comparison": "Nearest adjacent BIA draft: assigns priority to a required enabling resource. New services are independent and compete for an appliance; no enabling-service dependency or revenue-derived priority is inferred."
+      },
+      {
+        "id": "draft.pilot1.bia.03",
+        "sourceRevision": "sha256:c07d1540bc153e5ac475a8f89459114a0f89d030098f576184aaf484d68ea360",
+        "concept": "continuity.bia",
+        "family": "changed-business-service-impact-scope",
+        "assessedDecision": "Reassess changed business scope and alternatives",
+        "comparison": "Reassesses changed business scope and alternatives. New proposal leaves business scope and accepted targets unchanged."
+      },
+      {
+        "id": "draft.pilot4.bia.01",
+        "sourceRevision": "sha256:552911ee3cb987ef28eb969b3db3b95522e7fd062e8f28d345284c96248040fb",
+        "concept": "continuity.bia",
+        "family": "overlapping-business-impact-double-count",
+        "assessedDecision": "Consolidate duplicate reports of the same process loss",
+        "comparison": "Consolidates duplicate process-loss reports without erasing dependencies; no loss arithmetic here."
+      },
+      {
+        "id": "draft.pilot4.bia.02",
+        "sourceRevision": "sha256:646426faae8fdad6b91ca9c548a4f18aaf38576532a8e74cc4cc02320f79c03d",
+        "concept": "continuity.bia",
+        "family": "workaround-capacity-impact-shortfall",
+        "assessedDecision": "Validate manual workload deficit before assigning impact",
+        "comparison": "Nearest capacity theme: determines an alternative-process backlog and missing owner impact. New proposal evaluates two fixed RTOs under tested restore-job contention, not arrival-rate backlog or BIA consequence assignment."
+      }
+    ],
+    "worksheetRowsCompared": [
+      {
+        "id": "draft.pilot2.pbq.01:rto",
+        "family": "recovery-exercise-time-versus-data",
+        "reusesDraft": "draft.pilot1.rto.01",
+        "sourceRevision": "sha256:b1a49206dcb1287982a27601d55cd5d729fc92be654e4b41a4bfd726b8a6ebf3",
+        "independentFamilyCredit": 0
+      },
+      {
+        "id": "draft.pilot2.pbq.01:rpo",
+        "family": "recoverable-point-timeline",
+        "reusesDraft": "draft.pilot1.rpo.01",
+        "sourceRevision": "sha256:1a163b47071852dade90d67c5db65f7c51374de9d696adbaef5e8cda1ba6d614",
+        "independentFamilyCredit": 0
+      },
+      {
+        "id": "draft.pilot2.pbq.01:mtd",
+        "family": "technical-recovery-plus-business-reprocessing",
+        "reusesDraft": "draft.pilot1.mtd.03",
+        "sourceRevision": "sha256:f0b70b131ed6e03c4b7001975d424ad38c79453abeb25712130fa48b6c009c1e",
+        "independentFamilyCredit": 0
+      },
+      {
+        "id": "draft.pilot2.pbq.02:mttr",
+        "family": "observed-repair-duration-average",
+        "reusesDraft": "draft.pilot1.mttr.01",
+        "sourceRevision": "sha256:71fb83f260a7328abf792f595f718db96f516c7bf9fb85f622fe9032b8c58826",
+        "independentFamilyCredit": 0
+      },
+      {
+        "id": "draft.pilot2.pbq.02:bia-input",
+        "family": "business-impact-input-elicitation",
+        "reusesDraft": "draft.pilot1.bia.01",
+        "sourceRevision": "sha256:8eede76c8c4b799c94931450fd3d5e8bf7f6df1bfddf7a25d18a653e909fe124",
+        "independentFamilyCredit": 0
+      },
+      {
+        "id": "draft.pilot2.pbq.02:bia-dependency",
+        "family": "shared-dependency-recovery-priority",
+        "reusesDraft": "draft.pilot1.bia.02",
+        "sourceRevision": "sha256:300e6cc0c6de6b82e68bb94d7a9527666ba23ba558f90339a2e4f609f0c8799a",
+        "independentFamilyCredit": 0
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": "draft.pilot8.rto.01",
+      "stem": "In a site-outage recovery exercise, dispatch and invoicing fail at the same instant. Dispatch has a 30-minute RTO; invoicing has a 40-minute RTO. Both clocks run from that outage until each service is validated and usable. Tested restore jobs take 25 minutes for dispatch and 20 minutes for invoicing, including all validation. Both jobs require the same restore appliance, which is available immediately but can run only one job at a time. Jobs cannot overlap or be interrupted; the services have no dependencies on each other and no acceptable alternative is available. The accepted targets remain fixed. Which assessment of the current recovery plan is correct?",
+      "options": [
+        "Dispatch first meets both RTOs because each individual restore duration is below its service target.",
+        "Invoicing first meets both RTOs because completing the shorter job first removes dispatch waiting time.",
+        "Neither serial order meets both RTOs; revise and retest the recovery capacity or job durations.",
+        "Starting both jobs together meets both RTOs because their separate tested durations remain unchanged."
+      ],
+      "correctOption": 2,
+      "explanation": "Dispatch first finishes at 25 minutes, but invoicing then finishes at 45 and misses its 40-minute RTO. Invoicing first finishes at 20 minutes, but dispatch then finishes at 45 and misses its 30-minute RTO. Individually short jobs do not demonstrate that the shared resource can meet both outage-to-usable-service targets. Reordering alone cannot fix this plan; a changed capacity or duration must be validated against the fixed targets.",
+      "optionFeedback": [
+        "Dispatch completes within 30 minutes, but invoicing waits for it and finishes at 25 + 20 = 45 minutes, later than its 40-minute target.",
+        "Invoicing completes in 20 minutes, but dispatch then finishes at 20 + 25 = 45 minutes, later than its 30-minute target. The shorter job does not eliminate waiting.",
+        "Correct: both permitted orders leave the second service late. Revise and retest the resource plan or durations; do not treat an approved target as proof that the current plan meets it.",
+        "The single appliance cannot run these jobs concurrently. Separate-job timings do not validate a parallel plan with a resource that is unavailable."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "scenario_application",
+      "difficulty": "hard",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.rto",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "contextObjectiveCodes": [
+        "3.4"
+      ],
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "exclusive-recovery-resource-deadline-feasibility",
+      "familyRelation": "proposed_distinct_reasoning_pending_independent_gate",
+      "familyRationale": "Tests joint feasibility of two independent service targets with one exclusive resource. p048 orders supplied targets but provides no job durations or achieved deadlines; batch1 rto.02 budgets one fixed dependency chain. This proposal requires checking both allowed orders and recognizing that priority order alone cannot resolve an infeasible capacity plan. Shared timing/priority reasoning is disclosed; a broad recovery-budget family could subsume this question, so no family credit or independence approval is granted.",
+      "comparisonIds": [
+        "m032",
+        "m635",
+        "draft.pilot1.rto.01",
+        "draft.pilot1.rto.02",
+        "draft.pilot1.rto.03",
+        "m088",
+        "draft.pilot1.rpo.01",
+        "draft.pilot1.rpo.02",
+        "draft.pilot1.rpo.03",
+        "draft.pilot4.rpo.01",
+        "m196",
+        "draft.pilot1.mtd.01",
+        "draft.pilot1.mtd.02",
+        "draft.pilot1.mtd.03",
+        "draft.pilot4.mtd.01",
+        "draft.pilot1.mttr.01",
+        "draft.pilot1.mttr.02",
+        "draft.pilot1.mttr.03",
+        "draft.pilot4.mttr.01",
+        "draft.pilot4.mttr.02",
+        "m086",
+        "draft.pilot1.bia.01",
+        "draft.pilot1.bia.02",
+        "draft.pilot1.bia.03",
+        "draft.pilot4.bia.01",
+        "draft.pilot4.bia.02",
+        "p048",
+        "p026",
+        "p211"
+      ],
+      "familyIndependenceApproved": false,
+      "newFamilyCredit": 0,
+      "masteryWeight": 0,
+      "humanApproved": false,
+      "published": false,
+      "activationAllowed": false,
+      "editorialStatus": "codex_reviewed_under_delegation",
+      "reviewer": "Codex implementation agent; author adversarial comparison completed, independent monitor gate pending; not personal human review",
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "25 <= 30; 20 <= 40 in isolation. Dispatch then invoicing gives 25/45, with 45 > 40. Invoicing then dispatch gives 20/45, with 45 > 30. Exactly two nonpreemptive serial orders exist under the stated model. No guaranteed benefit from buying an appliance, new RTO/MTD, live recovery success or universal scheduling algorithm is asserted.",
+      "testModel": {
+        "outageMinute": 0,
+        "exclusiveResourceCount": 1,
+        "preemptionAllowed": false,
+        "parallelAllowed": false,
+        "jobs": [
+          {
+            "id": "dispatch",
+            "durationMinutes": 25,
+            "rtoMinutes": 30
+          },
+          {
+            "id": "invoicing",
+            "durationMinutes": 20,
+            "rtoMinutes": 40
+          }
+        ]
+      }
+    }
+  ],
+  "questionRevisions": {
+    "draft.pilot8.rto.01": "sha256:dba2f8da1eb56a200d0626255ad4f5a304de54e745c823b63a0edf85482b5a48"
+  },
+  "rejectedIdeas": [
+    {
+      "id": "rto-parallel-join-budget",
+      "concept": "recovery.rto",
+      "decision": "Budget parallel dependency branches and their required join/validation.",
+      "disposition": "reject_as_unproven_family_extension",
+      "comparisonIds": [
+        "draft.pilot1.rto.02",
+        "p026"
+      ],
+      "reason": "The approved serial draft already expressly frames its reasoning as critical-path budgeting. Replacing addition with a branch maximum alone does not establish a new independent assessed decision; do not relabel scheduling arithmetic to fill the exposure deficit."
+    },
+    {
+      "id": "rto-reset-clock-at-dr-declaration",
+      "concept": "recovery.rto",
+      "decision": "Include elapsed outage time before disaster declaration instead of resetting the clock.",
+      "disposition": "reject_as_boundary_variant",
+      "comparisonIds": [
+        "draft.pilot1.rto.02",
+        "draft.pilot1.mttr.03",
+        "p026"
+      ],
+      "reason": "Existing end-to-end dependency budgeting and measurement-boundary questions already require the specified start/end contract. New names and a declaration delay are insufficient novelty."
+    },
+    {
+      "id": "mtd-residual-reprocessing-budget",
+      "concept": "recovery.mtd",
+      "decision": "Subtract technical restoration from a tolerable window to find remaining business reprocessing time.",
+      "disposition": "reject_as_duplicate",
+      "comparisonIds": [
+        "draft.pilot1.mtd.03",
+        "draft.pilot2.pbq.01:mtd"
+      ],
+      "reason": "Reverses the same technical-recovery-plus-business-reprocessing inequality. Arithmetic direction is not a new family."
+    },
+    {
+      "id": "mtd-fixed-cutoff-calendar-window",
+      "concept": "recovery.mtd",
+      "decision": "Convert an accepted business cutoff and outage timestamp into an outer tolerable duration.",
+      "disposition": "reject_as_definition_constraint_variant",
+      "comparisonIds": [
+        "m196",
+        "draft.pilot1.mtd.01",
+        "draft.pilot4.mtd.01"
+      ],
+      "reason": "Reads the same outer business limit or earliest accepted impact constraint using clock notation. Does not introduce a genuinely different understanding beyond existing limit-reading/constraint families."
+    },
+    {
+      "id": "mtd-insurance-or-budget-exception",
+      "concept": "recovery.mtd",
+      "decision": "Reject automatically extending business tolerance after insurance purchase or an IT funding exception.",
+      "disposition": "reject_as_scope_and_semantic_overlap",
+      "comparisonIds": [
+        "m188",
+        "m374",
+        "m604",
+        "m731",
+        "draft.pilot1.mtd.02",
+        "draft.pilot1.bia.03"
+      ],
+      "reason": "The answer turns on risk transfer/exception governance and impact reassessment, already represented; it would not provide clean new direct MTD evidence. MTD remains supporting BIA context, not a separate named exam bullet."
+    }
+  ],
+  "remainingLimits": {
+    "rtoStickyRelapseDeficitInUnchangedRehearsal": 3,
+    "mtdStickyRelapseDeficitInUnchangedRehearsal": 3,
+    "projectionUpdated": false,
+    "acceptedNewMtdDrafts": 0,
+    "approvedNewIndependentFamilies": 0,
+    "psychometricIndependenceVerified": false,
+    "calibratedDifficulty": false,
+    "privateBoundary": {
+      "questionId": "p017",
+      "selectedSourceRevision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+      "payloadAvailable": false,
+      "sourceReadRefreshed": false,
+      "localFallbackMaySubstitute": false,
+      "trustedRevisionId": null
+    },
+    "notReady": true
+  }
+}
