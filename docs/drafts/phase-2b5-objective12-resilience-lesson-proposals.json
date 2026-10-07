@@ -1,0 +1,1433 @@
+{
+  "schemaVersion": 1,
+  "status": "LOCAL_SEMANTIC_PROPOSALS_NOT_READY",
+  "baselineCommit": "0f9f01349f15fcd1f9192785d1d02b2fd4ca94ba",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "newFamilyCredit": 0,
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "sourceBindings": [
+    {
+      "path": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "sha256": "0ba95c5c8f8a00e091daa9d852de0350a01ca00bedcba7c317155ea94cad88a9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "sha256": "46cf5a704690aa85606a1167b72f221aea09234635e3062aec067e7967abb4c9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "sha256": "fce8683567473a28ce8e903190e977345339f33df022ef56425c18d3bdfe225d"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "sha256": "d45c0d959c4cc0171b401f2df5ab1ee38d7bf717e3ce08c9d008d4dac61a6c20"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-p055-mapping-proposals.json",
+      "sha256": "40e1d58143f8dd4853f0496f5aca6d4abab031f59681bd625f7c144e41f3296e"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/mapping-package.json",
+      "sha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/release-checksums.json",
+      "sha256": "98e7e0ed45b5fd17f1be50c4cd36eba53bf289de26a427810e061274dcfb3403"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-batch.md",
+      "sha256": "1a039e6f4778a585128b0d4167536c46a53d13130476b6144ffa946f2f464713"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-guide.md",
+      "sha256": "a9cc1fff35873d84d90bec1c5c6f4613fdb46defae5a8b2a87b4b7c554ffd33b"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
+      "sha256": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
+    },
+    {
+      "path": "docs/secureplus-rebrand-master-plan.md",
+      "sha256": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c"
+    },
+    {
+      "path": "docs/phase-1-product-loop-audit.md",
+      "sha256": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10"
+    },
+    {
+      "path": "src/data/conceptDeepDives.js",
+      "sha256": "b478e16240c95b70a79cf0679aff683fc08f18dd11947c4046ecd880ec1ce17f"
+    },
+    {
+      "path": "src/data/sy0701DeepDiveMap.js",
+      "sha256": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff"
+    },
+    {
+      "path": "src/data/learningConcepts.js",
+      "sha256": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac"
+    },
+    {
+      "path": "src/data/learningMappings.js",
+      "sha256": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+    },
+    {
+      "path": "src/lib/deepDiveStudy.js",
+      "sha256": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459"
+    },
+    {
+      "path": "src/lib/deepDiveRecommendations.js",
+      "sha256": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479"
+    },
+    {
+      "path": "scripts/lib/read-learning-pilot-bank.mjs",
+      "sha256": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac"
+    },
+    {
+      "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
+      "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "scripts/lib/content-mapping/package.mjs",
+      "sha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748"
+    },
+    {
+      "path": "server/adaptive/revision.mjs",
+      "sha256": "a2fc241dd45a60fe4e9898f8133187402ef07d9e0a5e2f721f4ad6ba33b73451"
+    },
+    {
+      "path": "src/App.jsx",
+      "sha256": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49"
+    },
+    {
+      "path": "src/data/sy0701AcronymFlashcards.js",
+      "sha256": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1"
+    }
+  ],
+  "denominator": {
+    "broadObjective12Candidates": 126,
+    "priorDistinctDispositions": 86,
+    "newInstructionalOrContainerRecords": 10,
+    "newQuestions": 0,
+    "newFeedbackBundles": 0,
+    "combinedDistinctDispositions": 96,
+    "remainingCandidates": 30,
+    "remainingQuestions": 0,
+    "remainingFeedbackBundles": 0,
+    "remainingCards": 13,
+    "remainingGlossaryDefinitions": 16,
+    "remainingDeckContainers": 1
+  },
+  "instructionalProposals": [
+    {
+      "recordId": "lesson:resilience-assets-physical",
+      "kind": "lesson",
+      "sourceRevision": "sha256:4f1f26144729884a9096f730ac4bdae5840e55e0980b863efe51a0be933e8d3d",
+      "parentId": null,
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "meaning": "Mixed navigation container; aliases and objective chips are not separately taught or assessed. BIA and alternate-site aliases do not establish BIA/MTD or hot/warm/cold-site coverage.",
+      "roleProposal": "navigation_container_not_independent_instruction",
+      "subunits": [],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "section:resilience-assets-physical:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:b0c4612c17557acbf134558540f3a05d4b78ec95a05d409cdfbb10f5ae0ccdfb",
+      "parentId": "lesson:resilience-assets-physical",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": [
+        "4.2"
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "meaning": "Asset ownership, support state and disposal; no recovery-metric mastery.",
+      "roleProposal": "conditional_instruction",
+      "subunits": [
+        {
+          "path": "body[0]",
+          "sourceRevision": "sha256:93cdc435c2b5b002ab86934320f6d8499a2650696d3072dd4990cae65aec337c",
+          "objectiveCodesProposal": [
+            "4.2"
+          ],
+          "conceptLinkProposals": [],
+          "meaning": "Inventory/ownership and unsupported asset treatment; approved configuration is contextual, not a full baseline lesson.",
+          "weight": 0
+        },
+        {
+          "path": "body[1]",
+          "sourceRevision": "sha256:458bc8c517a22a802a8abf527af6f8ac8cb429c52f0947ece0c8c170309d5150",
+          "objectiveCodesProposal": [
+            "4.2"
+          ],
+          "conceptLinkProposals": [],
+          "meaning": "Sanitization decisions depend on media, confidentiality, reuse and policy; deletion alone is insufficient. No exact canonical sanitization identity is proposed.",
+          "weight": 0
+        }
+      ],
+      "deliveredScopeObserved": "exam",
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "section:resilience-assets-physical:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:b0cee02c7ac294cb5e4d5912bb3acb90f2c147f4055f4fbe04d7dbfcd454ac3b",
+      "parentId": "lesson:resilience-assets-physical",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "recovery.rto",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "recovery.rpo",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "recovery.mttr",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.mtbf",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Four metric distinctions; related 3.4 recovery design context. Retains three existing pending pilot teaching links, with no new assessment mapping.",
+      "roleProposal": "conditional_instruction",
+      "subunits": [
+        {
+          "path": "table.rows[0]",
+          "sourceRevision": "sha256:7b881436690a281abe6971ac1deff28db9ee9884df115e9702769bcdc238a0e5",
+          "objectiveCodesProposal": [
+            "5.2"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "recovery.rto",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Restoration target, not guarantee.",
+          "weight": 0
+        },
+        {
+          "path": "table.rows[1]",
+          "sourceRevision": "sha256:fcc85122dc7193fde0a3d218c3c5ce0706f3ff1a29fa87aedbaba7a364043657",
+          "objectiveCodesProposal": [
+            "5.2"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "recovery.rpo",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Data-loss period, not outage duration.",
+          "weight": 0
+        },
+        {
+          "path": "table.rows[2]",
+          "sourceRevision": "sha256:d1fb35978bba5e747014f292dee6ca042f3070f0f69e67edabd6830f85ffc8e7",
+          "objectiveCodesProposal": [
+            "5.2"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "recovery.mttr",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Average repair/restoration, not incident deadline.",
+          "weight": 0
+        },
+        {
+          "path": "table.rows[3]",
+          "sourceRevision": "sha256:55adb4697cf293e17ff785a334303127818478e061c0685070ec1d6bc3bdd33b",
+          "objectiveCodesProposal": [
+            "5.2"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.mtbf",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Repairable-failure operating interval, not non-repairable lifetime.",
+          "weight": 0
+        }
+      ],
+      "deliveredScopeObserved": "exam",
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [
+        "recovery.rto",
+        "recovery.rpo",
+        "recovery.mttr"
+      ],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "section:resilience-assets-physical:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:bce611ec1ee6434ee8372da746420e6bd43934d458010d5f81445489fdbcf0fa",
+      "parentId": "lesson:resilience-assets-physical",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "meaning": "Mixed resilience and physical/deception instruction; scope is assigned per paragraph.",
+      "roleProposal": "conditional_instruction",
+      "subunits": [
+        {
+          "path": "body[0]",
+          "sourceRevision": "sha256:e330a5e9a368eb421f9ec3a012410da58e85736cde087c116cf492ccfed11cc7",
+          "objectiveCodesProposal": [
+            "3.4"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.fault-tolerance",
+              "role": "instructional_support_only",
+              "weight": 0
+            },
+            {
+              "conceptId": "sy0701.term.load-balancing",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Redundancy, availability and fault tolerance differ; shared failures and corruption still require independent recovery testing. Availability language cannot imply RTO/RPO/MTTR evidence.",
+          "weight": 0
+        },
+        {
+          "path": "body[1]",
+          "sourceRevision": "sha256:58307577bdeb4fa20edc567a19a205672918d09c260e3a307096378aa8f9d41b",
+          "objectiveCodesProposal": [
+            "1.2"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.defense-in-depth",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Threat/site-dependent physical layers and safely isolated monitored deception; 1.1 functions are context, not individual assessments. No invented exact honeypot or vestibule identity.",
+          "weight": 0
+        }
+      ],
+      "deliveredScopeObserved": "exam",
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "keywords:resilience-assets-physical",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:e2064bf6cbc45563c17fcb5e8e6f5b8a1eca952036ee9335c5d42544ee8086ca",
+      "parentId": "lesson:resilience-assets-physical",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "recovery.rto",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "recovery.rpo",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.secure-baseline",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Mixed definition guide; missing profile codes 5.2 and 4.1 are proposals only, not active tag corrections.",
+      "roleProposal": "conditional_instruction",
+      "subunits": [
+        {
+          "path": "[0]",
+          "sourceRevision": "sha256:4b06e73644e534cd275d590192538dce5ee35fda5591a96df9da586f273101bd",
+          "objectiveCodesProposal": [
+            "5.2"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "recovery.rto",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Named recovery timing instruction, with related 3.4 architecture context.",
+          "weight": 0
+        },
+        {
+          "path": "[1]",
+          "sourceRevision": "sha256:a42279643c9b7a03e132ecd3b44faa9b504df5b447882bbf2a41535438c34fcd",
+          "objectiveCodesProposal": [
+            "5.2"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "recovery.rpo",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Named recovery timing instruction, with related 3.4 architecture context.",
+          "weight": 0
+        },
+        {
+          "path": "[2]",
+          "sourceRevision": "sha256:e83d5dcbff04de9e70efe21abe878ee94863f92f97363938600fcfc375617a3f",
+          "objectiveCodesProposal": [
+            "4.1"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.secure-baseline",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Approved baseline establishment/deployment/maintenance, not an independently assessed 1.2 security concept.",
+          "weight": 0
+        }
+      ],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "traps:resilience-assets-physical",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:914d1abcba14a20df8090d5c56e830148147cb82c51d8942a86aa35b87e0d03b",
+      "parentId": "lesson:resilience-assets-physical",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "meaning": "Mixed recap; repeated distinctions are not independent outcomes.",
+      "roleProposal": "conditional_instruction",
+      "subunits": [
+        {
+          "path": "[0]",
+          "sourceRevision": "sha256:21144afdc5d29197097081192438f3cce28c17fc236e670e59744278295771d1",
+          "objectiveCodesProposal": [
+            "5.2"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "recovery.rto",
+              "role": "instructional_support_only",
+              "weight": 0
+            },
+            {
+              "conceptId": "recovery.rpo",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Restoration versus data-loss timing; overlaps table, guide and self-check.",
+          "weight": 0
+        },
+        {
+          "path": "[1]",
+          "sourceRevision": "sha256:30a2575026964291014dd9bdc732343c93ffcd7f0980a760df0b67bcea318a41",
+          "objectiveCodesProposal": [
+            "3.4"
+          ],
+          "conceptLinkProposals": [],
+          "meaning": "Availability does not replace independently tested backups; no exact high-availability node is proposed.",
+          "weight": 0
+        },
+        {
+          "path": "[2]",
+          "sourceRevision": "sha256:0f14c08e437d474c184fb1913fa9e50ff561a8908a073f77fe72c490ab9ca704",
+          "objectiveCodesProposal": [
+            "1.2"
+          ],
+          "conceptLinkProposals": [],
+          "meaning": "Monitored decoy, not real secret storage; overlaps physical/deception paragraph and prior m260 feedback.",
+          "weight": 0
+        }
+      ],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "check:resilience-assets-physical",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:3f1750b1f13d4c6e0459cd5206c1ef1e59a46ad0586608cb94e7be8014a701d2",
+      "parentId": "lesson:resilience-assets-physical",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "recovery.rto",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "recovery.rpo",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Service-return target versus tolerated data-loss window; learner reveals model answer. No submitted grading, trusted revision, delayed transfer or numeric/key export.",
+      "roleProposal": "model_answer_reveal_not_assessment",
+      "subunits": [],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "coarse",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "practice:resilience-assets-physical:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:7058c4d8920536b92bc0074eaa7d4c37e44c99641ba64b58a518a5724c933dea",
+      "parentId": "lesson:resilience-assets-physical",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "recovery.rto",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "recovery.rpo",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.secure-baseline",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Delivered definition match from the same three-entry vocabulary guide; all vocabulary context is shared rather than revealing a per-check keyed concept.",
+      "roleProposal": "generated_recall_not_trusted_mastery",
+      "subunits": [],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "coarse",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "familyRelation": "same_keyword_guide_no_independent_family"
+    },
+    {
+      "recordId": "practice:resilience-assets-physical:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:53d23b583df1ed4b9658bc7ae6cbb50db840658a9430a87e57a09fdff72ddbc8",
+      "parentId": "lesson:resilience-assets-physical",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "recovery.rto",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "recovery.rpo",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.secure-baseline",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Delivered definition match from the same three-entry vocabulary guide; all vocabulary context is shared rather than revealing a per-check keyed concept.",
+      "roleProposal": "generated_recall_not_trusted_mastery",
+      "subunits": [],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "coarse",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "familyRelation": "same_keyword_guide_no_independent_family"
+    },
+    {
+      "recordId": "practice:resilience-assets-physical:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:56b2ad697bb2915c365c83d877ef7cda89f6811aae7b77b79071020f7580b07a",
+      "parentId": "lesson:resilience-assets-physical",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "recovery.rto",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "recovery.rpo",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.secure-baseline",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Delivered definition match from the same three-entry vocabulary guide; all vocabulary context is shared rather than revealing a per-check keyed concept.",
+      "roleProposal": "generated_recall_not_trusted_mastery",
+      "subunits": [],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "coarse",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "familyRelation": "same_keyword_guide_no_independent_family"
+    }
+  ],
+  "deliveryBindings": [
+    {
+      "id": "lesson-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function ConceptDeepDivesPage(",
+      "endAnchor": "function FlashcardsPage(",
+      "startLine": 31239,
+      "endLine": 31898,
+      "sourceSignature": "sha256:73bedc41a26c97312747cd945c691668a2b37f90fc15e8a0d6bbb7d796a4de7e"
+    },
+    {
+      "id": "progressive-paragraph-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function DeepDiveReadableBites(",
+      "endAnchor": "function ConceptDeepDivesPage(",
+      "startLine": 31203,
+      "endLine": 31239,
+      "sourceSignature": "sha256:914339c3ddd3934892b67c8a89e7b870c07c671f77b3e792c25b081d1e879a6e"
+    }
+  ],
+  "selectorBindings": [
+    {
+      "recordId": "intervention:deep-dive-recommendations",
+      "sourceRevision": "sha256:c05f9bf90cfd71e54cf47587e2f10c473d2a5b7ac23da274b920db6313c5c569",
+      "limitation": "Objective/topic hints and lexical overlap can use explanations and options internally. Export no matched private text or learner instances; these are legacy recommendations, not approved mastery links."
+    },
+    {
+      "recordId": "intervention:lesson-navigation",
+      "sourceRevision": "sha256:96bb76e903452092f979401acb1f6917f0d6c68dd3b6223956d610625aca7891",
+      "limitation": "Includes free-preview gating, lesson search, guided steps and related flashcard end action. Other lesson end actions delegate to separately inventoried selectors."
+    },
+    {
+      "recordId": "intervention:lesson-related-pbq",
+      "sourceRevision": "sha256:beeeda0e5bbece13337727c60f0d35df0fbd3d2884eda83232c58406c29d64fe",
+      "limitation": "Lesson-to-PBQ and chapter-review actions use coarse domain links, not exact concept diagnosis."
+    }
+  ],
+  "deliveryObservations": {
+    "sourceOnly": true,
+    "freshBrowserDelivery": false,
+    "lessonId": "resilience-assets-physical",
+    "freePreviewLessonId": "web-social-dns-attacks",
+    "resilienceIsFreePreview": false,
+    "accessGate": "pro_or_fixed_other_preview",
+    "guidedSteps": 6,
+    "keywordCount": 3,
+    "comparisonRows": 4,
+    "comparisonDisplay": "one_selected_row_at_a_time",
+    "bodyDisplay": "first_sentence_visible_supporting_detail_in_native_details",
+    "beyondSectionIndexes": [],
+    "authoredProfileCodes": [
+      "3.4",
+      "4.2",
+      "1.2"
+    ],
+    "displayedGeneratedCheckIds": [
+      "practice:resilience-assets-physical:practice-keyword-0",
+      "practice:resilience-assets-physical:practice-keyword-1",
+      "practice:resilience-assets-physical:practice-keyword-2"
+    ],
+    "generatedHelperCheckCount": 6,
+    "generatedComparisonChecksDelivered": 0,
+    "generatedMtbfComparisonExists": false,
+    "feedbackGate": "submitted_practice_for_accessible_lesson_no_separate_pro_feedback_gate",
+    "feedbackDetail": "all_wrong_options_in_collapsed_details",
+    "completion": "local_self_report_not_mastery",
+    "practiceResult": "local_same_definition_guide_best_score_not_trusted_mastery",
+    "relatedDeckIdObserved": "security-principles-access-models",
+    "relatedDeckDisposition": "first_objective_overlap_not_new_review_or_recovery_recommendation"
+  },
+  "existingPilotTeachingReference": {
+    "sourceRevision": "sha256:726e137375e24c82a6e6b0581d1c981ae4fce853f1c2a5299baa67dd6bda3b60",
+    "contentId": "resilience-assets-physical:recovery-metrics",
+    "sectionRecordId": "section:resilience-assets-physical:1",
+    "conceptIds": [
+      "recovery.rto",
+      "recovery.rpo",
+      "recovery.mttr"
+    ],
+    "rowLabels": [
+      "RTO",
+      "RPO",
+      "MTTR"
+    ],
+    "status": "existing_agent_reviewed_pending_human_not_new_approved_link",
+    "locatorIsUiAnchor": false,
+    "newRecord": false
+  },
+  "unusedSelectedLessonHelpers": [
+    {
+      "recordId": "practice:resilience-assets-physical:practice-compare-1-0",
+      "sourceRevision": "sha256:7f22f63b81899339ede1a6a6aba5afcb3c23cd3bf74ca135c7aef653217282c2",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "practice:resilience-assets-physical:practice-compare-1-1",
+      "sourceRevision": "sha256:0eb27a06a16a13baa9bd0d567075ef4017a3e2446b6fd044aae6b3fa71a52a7a",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "practice:resilience-assets-physical:practice-compare-1-2",
+      "sourceRevision": "sha256:f56152614cd732eceb0119f2a3c2118f7e87460948ecf1bc1aa153a01593c424",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:resilience-assets-physical:check",
+      "sourceRevision": "sha256:bb12169db51fc7996648ceb6e1846affc8a3a666632f91f0447993bce2734f66",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:resilience-assets-physical:core",
+      "sourceRevision": "sha256:630f601bc0a8546f3d1ccaff0976b4c84b41a60f83312c42239ac9bb9560a61c",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:resilience-assets-physical:table-1-0",
+      "sourceRevision": "sha256:3311ce6979af339dbcc5443473556b430c7a135be1dd68e683566b1301a98c5e",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:resilience-assets-physical:table-1-1",
+      "sourceRevision": "sha256:f8bbf683473f81299ce8e9bc07b5dc683669b2f44bac98b1a8e279b7672ec6b9",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:resilience-assets-physical:table-1-2",
+      "sourceRevision": "sha256:7a1cc56a5e9778bf326bca6ee0758858f817873ffefdb67c11fe528d4d8a2fe6",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:resilience-assets-physical:table-1-3",
+      "sourceRevision": "sha256:72d8c92598d916645c26380b50fd43d33946dae7b7d668e472b1ae716b4ff458",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:resilience-assets-physical:trap-0",
+      "sourceRevision": "sha256:c688c025598484f68e9cdb7c73bf9793242f1cc1e34d3b87a986a09d7b7edf51",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:resilience-assets-physical:trap-1",
+      "sourceRevision": "sha256:f03b8b953c2c576c3326647e650ef4f74fd4e8a598d053a8d26b5686fbdcd1eb",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:resilience-assets-physical:trap-2",
+      "sourceRevision": "sha256:54ee259c286dd8aa96945c4f68bb58a41b455f4e9faca42b6b9b24ddaae4a0cd",
+      "status": "not_delivered"
+    }
+  ],
+  "missUsefulnessProbes": [
+    {
+      "questionRecordId": "mcq:m002",
+      "parentRevision": "sha256:669477a91777fe032ec929403ba6090f4d668c04d8545b862f7e79479f6f600e",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "resilience-assets-physical"
+      ],
+      "status": "partial_availability_context_not_CIA_definition",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m033",
+      "parentRevision": "sha256:0f0b2b9762088eef27050b53bab734649916e0669c9707b82ef508a89e89b0a7",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "resilience-assets-physical"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m036",
+      "parentRevision": "sha256:1dee34654fb75836dcec8ac018146157578c73435f24900494aab3a15b2ddbff",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "resilience-assets-physical"
+      ],
+      "status": "partial_vestibule_context_not_complete_door_interlock_teaching",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m044",
+      "parentRevision": "sha256:76071927231ee07af95301f819537d12d50b22d3c43145b6ea4aa4d6c86895b5",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "identity-zero-trust"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m057",
+      "parentRevision": "sha256:14319e5c2b666796c3fbb6dfd0dcd28717337cf137c3241ccc933442bb39d7fa",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "identity-zero-trust"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m103",
+      "parentRevision": "sha256:5cf99bc71adb8bed0e98dda3d70b289d96d1fff8e584ffc93cc9455579f1a5e7",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "resilience-assets-physical"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m114",
+      "parentRevision": "sha256:5414e5e2ad495dbdaae8bd96a14fbbb1bda60e42315036105b1ff4d7df57140e",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "identity-zero-trust"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m201",
+      "parentRevision": "sha256:5baf4b34010e58380b1ef85bb956361fccf72a63313fd26e6e5a3c77385c4aa4",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "identity-zero-trust"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m260",
+      "parentRevision": "sha256:9bea8e8c3b682004b81cf1a31ea35e2b1dcda51e80bb756cc00c0751e94be0b4",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "resilience-assets-physical",
+        "security-foundations-controls"
+      ],
+      "status": "useful_decoy_recognition_teaching_not_validated_recovery",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m399",
+      "parentRevision": "sha256:f85bf72ed0f91bf7b81a099fdb1b2acce15339a78319c9404a2da7941747f1c1",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "resilience-assets-physical"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m413",
+      "parentRevision": "sha256:b500cb34562aa7bec0e9005dbd0a4932e936b5c72d9968fe02dc4fb8e9bf3cf9",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "identity-zero-trust"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m602",
+      "parentRevision": "sha256:359a9357cba17b92613eebb91cac55bbd3b45b024e08c4cb147c666d918ddba8",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "identity-zero-trust",
+        "resilience-assets-physical"
+      ],
+      "status": "partial_vestibule_context_not_complete_door_interlock_teaching",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m642",
+      "parentRevision": "sha256:3c7bff9f4f2bac3196e9292b794f381e4fe2c165abd6d599a2a0346f3dab5a21",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "identity-zero-trust",
+        "security-foundations-controls"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m653",
+      "parentRevision": "sha256:905ebf48219f0c927b56c6cbdfcd98fe706d123c1237b79dfbc8fe9abaf342c8",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "identity-zero-trust"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m656",
+      "parentRevision": "sha256:3ed61411eba8e58093e682402f5d04a3da8f055d8a3e50d2b3269f5f2fc85f42",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "resilience-assets-physical"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m007",
+      "parentRevision": "sha256:368f0e9e2f1c37c2817671370692aa0a2bb19bdfe3075e10537ad2e0ba094c78",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "identity-zero-trust"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m038",
+      "parentRevision": "sha256:3a938b3629b5f12a738da7d2e9e1fbb74eec03a9f1b73b8f282e67fa9dcd2fc8",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "identity-zero-trust"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m158",
+      "parentRevision": "sha256:495cb5b7f2cc5b8069c1f9c36de70e86e0f287af49911cb678a4bed22026c148",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "identity-zero-trust"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m226",
+      "parentRevision": "sha256:f161c6080760aba37012e8d682dd06c627c8f3b3b4962d903f842dd2fe94fb46",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "identity-zero-trust"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m621",
+      "parentRevision": "sha256:38c62bcaf0cbdad6e07a5f79b7527179131cfd6682e177804a80ea357d1c0e29",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "lessonIds": [
+        "security-foundations-controls",
+        "identity-zero-trust"
+      ],
+      "status": "outside_required_decision_not_targeted_remediation",
+      "type": "pure_local_single_miss_fixture_not_learner_history",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    }
+  ],
+  "overlapBoundary": {
+    "priorP055Reference": {
+      "recordId": "pbq:p055",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective12-p055-mapping-proposals.json",
+      "sourceRevision": "sha256:8f2ccd0e3b8dcd93b3d0c52a8f930b25bfe4df261d68ab45bfbbf05c6da90838",
+      "status": "general_physical_context_not_site_specific_ordering_correction"
+    },
+    "priorFoundationLessonId": "security-foundations-controls",
+    "priorIdentityLessonId": "identity-zero-trust",
+    "priorQuestionPacketsDoNotGainNewFamilies": true,
+    "metricRowGuideTrapAndCheckAreCorrelatedInstruction": true,
+    "containerAliasesAndInheritedTagsAreNotIndependentEvidence": true,
+    "unusedOutputsExcluded": true
+  },
+  "canonicalBoundary": {
+    "newMasteryIdentities": 0,
+    "topicOrSupportPromotionAllowed": false,
+    "ambiguousCiaCandidatesWithheld": [
+      "sy0701.term.cia",
+      "sy0701.term.cia-triad"
+    ],
+    "availabilityIsNotRecoveryMetricEvidence": true,
+    "aliasOnlyBiaAndNoMtdInstruction": true,
+    "priorAmbiguitiesUnchanged": [
+      "CIA versus CIA-triad",
+      "MAC cross-domain meanings",
+      "Role-based versus rule-based RBAC",
+      "TOU access-window/race-condition discrepancy"
+    ],
+    "missingExactIdentitiesWithheld": [
+      "asset ownership/inventory",
+      "media sanitization",
+      "high availability/redundancy",
+      "honeypot/deception identity",
+      "access vestibule identity"
+    ]
+  },
+  "separatelyScopedFollowups": [
+    {
+      "kind": "objective_metadata",
+      "status": "proposal_only_no_active_edit",
+      "detail": "Inherited chips label every keyword and paragraph 3.4/4.2/1.2; recovery metrics need 5.2 and secure baseline needs 4.1 per-unit review."
+    },
+    {
+      "kind": "content_precision",
+      "status": "proposal_only_no_active_edit",
+      "detail": "NIST 800-88r2 distinguishes sanitization verification from validation; paragraph mentions verification but does not teach final acceptance validation."
+    },
+    {
+      "kind": "accessibility",
+      "status": "source_observation_not_browser_audit_no_active_edit",
+      "detail": "Keyword/comparison tabs and radio choices use buttons and selected state but no arrow-key group handler or explicit tab-to-panel IDs in their rendering blocks; verify keyboard/screen-reader behavior in a separately scoped UI change."
+    }
+  ],
+  "remainingObjective12Records": [
+    {
+      "recordId": "deck:identity-authentication",
+      "kind": "deck_container",
+      "sourceRevision": "sha256:d0d54efa15b84feee564d7513c9a6d0ed118afcfcebe2cebb0f2c6cf4581f377",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-captcha-completely-automated-public-turing-test-to-tell-computers-and-humans-apart",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:931096148d0d5f279f80722c622af361661aeb16ce2e6e739953ced8697a6b46",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-eap-extensible-authentication-protocol",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:eb31374acc5bfe0df7bda938910e4f9e1a9c5cecb9f24bbb52b584559bb260fe",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-idp-identity-provider",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:a86920f1f57b19bc509a2c5eba89e986ef71f9d475f115db66dab04585047f31",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-leap-lightweight-extensible-authentication-protocol",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:9eb50e676c5343d1b0d946e53ae4db2d910215022a79b0cfac568743f2cb6592",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-mfa-multi-factor-authentication",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:4204001d5bb7881f50166591eea9fb9e19d3016078a92b41d2481a6934d914ad",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-oauth-open-authorization",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:8ca8cfa534fded4011338a3a914caa22f28fcbce1ff937012e4edc533f7eba1c",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-oidc-openid-connect",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:9ac8a1525e1e0b870d424d770327852261511e4581d5b2eb3969f22bd53640c7",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-pap-password-authentication-protocol",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:5e2b738d347be3d5e850d0849d2aef07ec8f3743b8cd2cc75acf84a6fed5292d",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-piv-personal-identity-verification",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:ed4a3097725b314d74e22f271b600c9a7a2cf24b07b6dc807a6dac9cde73de48",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-radius-remote-authentication-dial-in-user-service",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:2f5af4254f1f9b4733ea7cdf0f5565175929ca620f21833b601a94a53f3a6dec",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-saml-security-assertion-markup-language",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:6a87b0d8e8b2159283046c3e80a7d469b186c1f2be4bb830269e5a9cc71fc57d",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-sso-single-sign-on",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:fd2872d81b0e984417c86a7a33485e878def3abcd27709198cee7cd37992e56c",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-tacacs-terminal-access-controller-access-control-system-plus",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:38d2781fa95798ceb52df9697c53abac579df402815a743c1a52c5ae6d93ab16",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:bia",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:fba7d9e4ca7b2ca2afce03b574269efdb495b82ba76b564c992d28daedbfdfda",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:dlp",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:fb5ccc169e04a52b80785e9a4ede5228e305fbd817acb17eef7df8aca52cd7a4",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:eap",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:4aa67736faf054b2ae9dc11dba50e420da1ed842876bed912b49c5b41b15b95d",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:idp",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:a8047591cc988672ea6fdbb2e0314d791ec089e291a9ad63cee009c8b48c87e9",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:ldap",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:326c1c8685fd8009b7abd60a3adb4cc8b087eb31f8082fdc7ea8ea79f6fbcd70",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:mtbf",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:3da7c4ec5d0cf88b5e40bcfb572df6c6909e65e73e3d22a291164205e4ec5674",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:mttr",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:09b9dd6eebf37a22c75b8c89f22c7dacf5a61fe36252cd6835d09f27b5785220",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:oauth",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:41f924c99a917456eb7a0836cd30c5af0ec21a900a15bac9d6f1e5e325460047",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:oidc",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:0bea1b9e32906b09f106ad12128b65489130c3c60633dead4743991e1a77c18d",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:pki",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:d0b3a9f4074ed5ef3b6e7bb84c25c5cc10e308852cfdd8a0b39742120fcbb1bd",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:rpo",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:0072bb6d79cb376e815aefffa9f50ba56cc6aac47862a1382f5e1ad894445ed3",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:rto",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:6693d06a0896075072466fb9864ef786033543d3f35b8a584f91b85c737bfada",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:saml",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:1ba53c6f0036debe76673de2c4f6da7f4820ed905b26e9174d73a95894f0f03c",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:sso",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:c2fe9c03761a9c7ade90ab35a9799c23e4357082468b4f6c43a58f3a51ec927d",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:tacacs%2B",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:5040d572d6f28e27b7a8d8b304236a7491749b18c57849f83f6d58606117a7ef",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:vpn",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:cc87bee792b26651d79b8e7f13f57bea531baf6827fa3f6ece066dd8a6a513f6",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    }
+  ],
+  "phaseWideBacklog": {
+    "packageRecordsUnchanged": 1878,
+    "reviewQueueUnchanged": 2954,
+    "unresolvedQuestionMappingsUnchanged": 489,
+    "existingPrimaryQuestionProposalsUnchanged": 7,
+    "taxonomyUnchanged": {
+      "masteryConcepts": 5,
+      "topics": 28,
+      "supportingConcepts": 402
+    },
+    "humanApprovedNewMappings": 0,
+    "eligibleNewEvidence": 0
+  },
+  "privateBoundary": {
+    "recordId": "private:pbq:p017",
+    "sourceRevision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "trustedRevisionId": null,
+    "payloadReviewed": false,
+    "masteryWeight": 0,
+    "status": "SELECTED_PRIVATE_REVISION_UNAVAILABLE_NO_FALLBACK_SUBSTITUTION"
+  },
+  "humanDecisionReferences": {
+    "humanApprovalRequestedThisTurn": false,
+    "ownerDecision": "All proposals remain pending; no competence, publication, queue closure or migration approval."
+  }
+}
