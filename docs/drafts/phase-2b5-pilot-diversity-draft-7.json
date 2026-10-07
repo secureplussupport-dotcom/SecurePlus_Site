@@ -1,0 +1,207 @@
+{
+  "batchId": "phase-2b5-pilot-diversity-draft-7",
+  "date": "2026-10-07",
+  "baselineCommit": "9ed4134b4729fa1173b29d72311bee0835b3e656",
+  "status": "CODEX_REVIEWED_UNDER_DELEGATION_PENDING_INDEPENDENT_GATE",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "newFamilyCredit": 0,
+  "authority": {
+    "sourceHumanMessageId": "01a113bf-b3d5-7e12-bb2a-e0c3c2ddc701",
+    "exactInstruction": "you dont need my approval for the next questions or family tags anymore. just execute.",
+    "scope": "Prospective local question and family decisions; no personal human review or canonical/scope/calibration/activation approval."
+  },
+  "sourceBindings": {
+    "docs/secureplus-rebrand-master-plan.md": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c",
+    "docs/phase-1-product-loop-audit.md": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10",
+    "docs/evidence/phase-2b5/mapping-package.json": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97",
+    "docs/evidence/phase-2b5/delivery-inventory.md": "d57d67b65d52312620bd474a072a878a1ad353bceabfc253ed43024dca1b77a1",
+    "docs/drafts/phase-2b5-pilot-batch-1.json": "91e83b7afbc56901bc1a37ae426763024456d8d90ae486c2d2833ff076826bda",
+    "docs/drafts/phase-2b5-pilot-batch-4.json": "7be45316dda58c45685e06c9d2062a58b6dfda6b56b898d7050ff2b28412714e",
+    "docs/drafts/phase-2b5-pilot-pbq-draft-2.json": "94adaf1c9ca90370636bc3c8c20a6e51156964a4f1871905d23a88cbe9d5ae02",
+    "docs/drafts/phase-2b5-pilot-teaching-draft-3.json": "84757c5c7bec067e5baee182487525f3f843aa9e709af257b307be0c1655a921",
+    "docs/drafts/phase-2b5-cross-objective34-census.json": "2613a81bfc9a9720a90f5225d1265df3f538f5bcf543e29c9a4a2dc9b224b782",
+    "docs/phase-2b5-pilot-owner-decision-packet.md": "01f96e9c4edff2ef61d25c296fb96c585ad1a00db0709f47c0d261b7fbb5d953",
+    "scripts/lib/read-learning-pilot-bank.mjs": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac",
+    "src/data/learningConcepts.js": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac",
+    "src/data/learningMappings.js": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d",
+    "docs/drafts/phase-2b5-pilot-power-draft-5.json": "27cde25ba68bce538fb06a50d58a6d0c9534da18e7b707b14037529f78e3c084",
+    "docs/drafts/phase-2b5-pilot-site-draft-6.json": "7a52e3491331c2c43531f899b0751cc267e29ebb4191dc876a61086d8eaf0120"
+  },
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "sources": [
+    {
+      "id": "sy0701-objectives",
+      "url": "https://assets.ctfassets.net/82ripq7fjls2/6TYWUym0Nudqa8nGEnegjG/0f9b974d3b1837fe85ab8e6553f4d623/CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf",
+      "locator": "PDF page9, objective3.4 Platform diversity and Multi-cloud systems; no assertion that all vendor dependencies are independent.",
+      "checked": "2026-10-07"
+    },
+    {
+      "id": "aws-dependencies",
+      "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/aws-multi-region-fundamentals/fundamental-3.html",
+      "locator": "Internal/third-party dependencies, authentication, shared fate, failover and configuration dependencies. General principle applied to a hypothetical multi-cloud case, not product-specific outage behavior.",
+      "checked": "2026-10-07"
+    },
+    {
+      "id": "aws-fault-isolation",
+      "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_fault_isolation_multiaz_region_system.html",
+      "locator": "Anti-pattern: mismatched component resilience; multiple-Region guidance to avoid dependencies that weaken isolation. No universal requirement to use more clouds.",
+      "checked": "2026-10-07"
+    }
+  ],
+  "privateBoundary": {
+    "questionId": "p017",
+    "selectedSourceRevision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "payloadAvailable": false,
+    "sourceReadRefreshed": false,
+    "localFallbackMaySubstitute": false,
+    "trustedRevisionId": null
+  },
+  "questions": [
+    {
+      "id": "draft.pilot7.diversity.01",
+      "stem": "An enrolment service runs on Cloud A and Cloud B using different operating-system platforms. A drill makes every Cloud A service unavailable for 30 minutes. The requirement is to resume validated submissions, including new user sign-ins, within five minutes while preserving fresh MFA, authorisation and current revocation checks. Both submission paths currently call the sole identity provider hosted in Cloud A; existing tokens cannot satisfy this workflow without those fresh checks. Testing confirms that Cloud B has usable data and sufficient capacity, and its network, DNS, keys and failover controls require no Cloud A service. An improvement may add at most $5,000 per month; the listed costs are fixed. Which single plan addresses the remaining shared failure dependency while meeting these requirements?",
+      "options": [
+        "Add a third compute deployment at another cloud for $4,500 per month, keeping the sole identity provider in Cloud A.",
+        "Change Cloud B to another operating-system platform for $2,500 per month, keeping the sole identity provider in Cloud A.",
+        "Add an approved, pre-provisioned identity path in Cloud B for $4,000 per month; it has protected current identity/policy state, needs no Cloud A service, and passes the required security and submission checks in three minutes with Cloud A unavailable.",
+        "Keep one-hour cached tokens for $1,000 per month and bypass fresh MFA and current revocation checks during the Cloud A outage."
+      ],
+      "correctOption": 2,
+      "optionFeedback": [
+        "A third compute deployment still needs the sole identity provider in Cloud A. During the stated Cloud A outage, it cannot perform the fresh MFA and revocation checks required for submissions; provider count does not remove that shared dependency.",
+        "Changing Cloud B to another operating-system platform does not make the Cloud A identity provider available. The existing operating-system diversity already leaves both submission paths dependent on the same authentication service.",
+        "Correct: this approved path operates without Cloud A, preserves required MFA, authorisation and revocation checks, and resumes validated submissions in three minutes. Its $4,000 monthly cost is within the $5,000 cap. The test supports this stated failure case, not universal independence.",
+        "Bypassing fresh MFA and current revocation checks violates the explicit security requirements. Keeping old tokens may help other permitted workflows, but it cannot make this submission process acceptable under the stated policy."
+      ],
+      "explanation": "Correct: this approved path operates without Cloud A, preserves required MFA, authorisation and revocation checks, and resumes validated submissions in three minutes. Its $4,000 monthly cost is within the $5,000 cap. The test supports this stated failure case, not universal independence.",
+      "format": "mcq",
+      "cognitiveSkill": "scenario_application",
+      "difficulty": "medium",
+      "difficultyStatus": "proposed_uncalibrated",
+      "objectiveCodesProposal": [
+        "3.4"
+      ],
+      "objectiveScopeProposal": "platform_diversity_and_multicloud_shared_failure_context",
+      "objectiveScopeApproved": false,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "taxonomyBlocker": "No approved mastery identity for correlated runtime failures across diverse platforms/clouds is established. Do not promote cloud labels or an RTO/IAM contrast into approved canonical mastery roles.",
+      "scenarioFamilyProposal": "diverse-platforms-shared-authentication-fate",
+      "familyRelation": "proposed_distinct_reasoning_pending_independent_gate",
+      "familyRationale": "Assess the required runtime dependency that survives compute/provider/platform diversity and permits one outage to block both paths. draft.pilot1.bia.02 and its worksheet row prioritise restoring a shared identity resource; draft.pilot1.rto.02 sums one serial restoration path. This item instead rejects added compute or OS diversity that preserves the shared runtime cut point, and selects a tested independent secure path. m451 concerns compromise powers from a shared privileged token, not continuity during identity-provider outage. Related shared-dependency reasoning is disclosed; local editorial distinction remains proposed and may be merged at the independent gate, with no psychometric independence claim.",
+      "familyIndependenceApproved": false,
+      "newFamilyCredit": 0,
+      "masteryWeight": 0,
+      "humanApproved": false,
+      "published": false,
+      "editorialStatus": "codex_reviewed_under_delegation",
+      "comparisonIds": [
+        "m161",
+        "m065",
+        "m451",
+        "m217",
+        "m708",
+        "p211",
+        "p045",
+        "draft.pilot1.bia.02",
+        "draft.pilot1.rto.02",
+        "draft.pilot1.rto.03",
+        "draft.pilot1.rpo.02",
+        "draft.pilot2.pbq.02:bia-dependency",
+        "draft.pilot5.power.01",
+        "draft.pilot6.site.01"
+      ],
+      "accuracyCheck": "Cloud A unavailable30 min > allowed5. Extra compute or different OS retains required identityA dependency. Independent pre-provisioned approved identityB path tested3<=5 min, cost4000<=5000, all stipulated security checks retained. Cached-token bypass fails required fresh checks. No vendor/region/platform label proves independence; no universal token-cache prohibition, data-loss guarantee or outage probability multiplication."
+    }
+  ],
+  "search": {
+    "bankCount": 483,
+    "rules": [
+      {
+        "id": "cloud_and_dependency",
+        "pattern": "\\b(?:multi[- ]?cloud|divers\\w*|correlat\\w*|common[- ](?:cause|mode)|failure[- ]domain\\w*|single[- ]point|dependenc\\w*|provider\\w*|vendor\\w*|cloud|identity|DNS|region\\w*|control[- ]plane|redundan\\w*|failover)\\b",
+        "flags": "i"
+      },
+      {
+        "id": "implicit_shared_failure",
+        "pattern": "\\b(?:platform\\w*|identical|shared|common|availability|outage|fail\\w*|resilien\\w*|operating system|software stack|same image|same version)\\b",
+        "flags": "i"
+      }
+    ],
+    "initialRetainedCount": 162,
+    "initialIdsSignature": "sha256:9aa6c061eac9bf8f3eb5b2926c57ce8e9dcbe90aeab4dd6b3e71ba2e7272e3cf",
+    "supplementalAddedCount": 69,
+    "supplementalIdsSignature": "sha256:8218a0f57604c6b37cc0200e0d8cffdd2f17089e338ed998975f21f275a0e3fe",
+    "retainedCount": 231,
+    "screenedIdsSignature": "sha256:94c45c8ccb39b4c4c87b035d6cfa1ea4ecf52c51c971b9857f98046756452b58",
+    "unmatchedCount": 252,
+    "completeSemanticCoverageClaim": false,
+    "fullyReviewedCount": 46,
+    "additionalManualComparisons": [
+      "m708"
+    ],
+    "priorMcqsReviewed": 23,
+    "worksheetRowsReviewed": 6,
+    "teachingDraftsCompared": 3,
+    "similarCorrelatedDependencyReasoningFound": 0
+  },
+  "limitations": [
+    "All 483 local effective assessments screened; 231 lexical candidates triaged by stated assessment goal, 46 plausible/comparison assessments fully reviewed. Others are not claimed fully semantically reviewed.",
+    "Screening cannot establish exhaustive absence, private/live content completeness or psychometric independence.",
+    "Source bindings and exact local/published revisions apply only to the described local comparison.",
+    "One original unpublished, zero-weight item under prospective delegation; no personal human review or approved scope/difficulty/canonical identity.",
+    "The hypothetical drill, independent path and security/cost facts are stipulated; real dependencies require end-to-end testing for each failure mode."
+  ],
+  "candidateReviews": [
+    {"questionId":"m017","originalObjective":"3.1","localRevision":"sha256:2bb2f7bff349037cee9fefeb56fb39121550a1cea801de40a6f3c7bc3669dd57","capturedPublishedRevision":"sha256:aa53f015a990b5264783c290f06689558cda7498cb5daae6de99ec8e81af677e","classification":"different_assessed_understanding","assessedUnderstanding":"IaaS guest patching responsibility"},
+    {"questionId":"m021","originalObjective":"3.1","localRevision":"sha256:204daa60136d2e612526c235c9a26e6cf2bd5f2618f7a939eb35cc281e4884a7","capturedPublishedRevision":"sha256:99e9894f9843b03fef9a77a2bde45ec7ef5f0141c6c4fda3bd6127b8ee352722","classification":"different_assessed_understanding","assessedUnderstanding":"Private cloud exclusive tenancy"},
+    {"questionId":"m058","originalObjective":"3.1","localRevision":"sha256:dc9981b3c1fef21b7fd0fb988d99e1d62fb52fc6bbccea765b6e34298d4867ce","capturedPublishedRevision":"sha256:48a436ee5d71a2c78ffb27a5e255e7d6dd7afe94a36245042718aaf7f1419575","classification":"different_assessed_understanding","assessedUnderstanding":"SaaS service model"},
+    {"questionId":"m060","originalObjective":"3.1","localRevision":"sha256:f9c2b3001494eab07251a0e1be96ddc43a3759215ceb008f84ea749cbaa4ead3","capturedPublishedRevision":"sha256:8cfd8ebcc6ffd4ef26acb1aa69bef4adaf5c622179fc92052712d6bf2a9185e1","classification":"different_assessed_understanding","assessedUnderstanding":"Managed platform remediation responsibility"},
+    {"questionId":"m063","originalObjective":"3.2","localRevision":"sha256:41666d56c0028ef1b56fe249b420c762562d776a8c6cce674b7a8020a3a743d0","capturedPublishedRevision":"sha256:8a20782eca1d71b7db43f50189a227916bfda8521ea88bd2dd8f37b08dd3441d","classification":"different_assessed_understanding","assessedUnderstanding":"Application-specific least privilege"},
+    {"questionId":"m065","originalObjective":"3.1","localRevision":"sha256:ee4162c50750a594dc4347dc2134c5cedd0935d4bcad42e4092592d626103914","capturedPublishedRevision":"sha256:d32a1d2e5719af57cbefa7660438f9441fd1986dc389bc159d7697aa17292d44","classification":"different_assessed_understanding","assessedUnderstanding":"Internal workload segmentation and service identities"},
+    {"questionId":"m080","originalObjective":"5.3","localRevision":"sha256:d4d91e1bec16c7d5cceac0479e9aa476231b30174f33351899e49c5b9fe8f3d4","capturedPublishedRevision":"sha256:1d61889837d88afefd622b8eb731d6539db536dfcfe6e67d164ff2b5214d6301","classification":"different_assessed_understanding","assessedUnderstanding":"Vendor due diligence"},
+    {"questionId":"m091","originalObjective":"5.3","localRevision":"sha256:dd25a6cd140935abf9b605cdf96343403b2cb0d94a0948ea07fc93137832f456","capturedPublishedRevision":"sha256:01e8f6b2b5fd1866afce5484b9086ecb10feef7bdf23e52bce223f9f740c2606","classification":"different_assessed_understanding","assessedUnderstanding":"Service-level agreement definition"},
+    {"questionId":"m100","originalObjective":"5.3","localRevision":"sha256:8d5ce87ce3954bffea285723e24e71de16bc575821a6b11932cd3fd24a63f738","capturedPublishedRevision":"sha256:fd03c2dfa593d4f029db88205841874af37582a9cd2462ba64e48458d230d631","classification":"different_assessed_understanding","assessedUnderstanding":"Contracted audit right"},
+    {"questionId":"m108","originalObjective":"4.6","localRevision":"sha256:b335eec142f744ce9f5edab646cc3463ba65b7b54be67b7780d272d8a21e9ba1","capturedPublishedRevision":"sha256:fefa58222e920a962eb60e2619267ed828c7ae05253312e1c8cc3e76fec8f666","classification":"different_assessed_understanding","assessedUnderstanding":"SSO definition"},
+    {"questionId":"m115","originalObjective":"1.1","localRevision":"sha256:2e55b99d1dcd728ac12e1017a1e47f7b7d00454e92475c83ede97108fec2f316","capturedPublishedRevision":"sha256:4976564c0348b8f69e31b3df92e064ac45cf6577b9166b11e140118e576dfb77","classification":"different_assessed_understanding","assessedUnderstanding":"Layered breach protection"},
+    {"questionId":"m148","originalObjective":"3.1","localRevision":"sha256:2d0e814625ec8928034cf8d8a57933de9514457f0854bc6f74a69dd3c57b06ee","capturedPublishedRevision":"sha256:cf7b56e0379976b42939af3e0ac111991a03006c18240b051b428cac6d75e18d","classification":"different_assessed_understanding","assessedUnderstanding":"IaaS guest patching responsibility"},
+    {"questionId":"m149","originalObjective":"3.1","localRevision":"sha256:6daca08bc693a23863d6c47926a5d70198b0d76d6ed7b22b26b8cd3459857082","capturedPublishedRevision":"sha256:71b5a566e3f42ca5daab58936d8be33db14ae183a37d066f239ce6e3db47d006","classification":"different_assessed_understanding","assessedUnderstanding":"Unsanctioned cloud-service discovery"},
+    {"questionId":"m154","originalObjective":"3.1","localRevision":"sha256:1add7f20a50d1ae6b01d5d08e2b1ae4a92fb94e55b4f63ac925d326b4ce61ce8","capturedPublishedRevision":"sha256:05b7d4cbc5f454d8559066f5f6481895dd8352b755bc4aed2ebd65eae2ffcc3e","classification":"different_assessed_understanding","assessedUnderstanding":"Safety-aware medical-device segmentation"},
+    {"questionId":"m157","originalObjective":"3.1","localRevision":"sha256:e5b142204bd330a678809ff661b631f03c10148234f1e4d63f306d001177756f","capturedPublishedRevision":"sha256:1d12ff2462422f094054832f409afcab63abffe70808e288b81e37dbd0a32b31","classification":"different_assessed_understanding","assessedUnderstanding":"IaC security scanning"},
+    {"questionId":"m160","originalObjective":"4.3","localRevision":"sha256:ac38e5930510855968f604a5ea3f9a82af543a94ac1741b5ce2a84ff9572fb8a","capturedPublishedRevision":"sha256:cda211e8c48b23e0caccfb5d5c6b79496925c0847da8a98215ea89fd676fc775","classification":"different_assessed_understanding","assessedUnderstanding":"Vulnerable software dependency remediation"},
+    {"questionId":"m161","originalObjective":"3.1","localRevision":"sha256:7d303eccefc8f17dcb9157c96e64cbd7c649fd5badf6b8859881a242df86c97d","capturedPublishedRevision":"sha256:f661f8607ef3ea6b330da60f780f869cee9f71722f7cb5445811f950cc4688fd","classification":"different_assessed_understanding","assessedUnderstanding":"Hybrid-cloud integration definition"},
+    {"questionId":"m190","originalObjective":"5.3","localRevision":"sha256:a8290fab7476a3c905e7e61dceaa5ac2faa96d5b3b221d4c88f91617d66ca84e","capturedPublishedRevision":"sha256:6d5a7750b20d121d0df24c60d134ff325f0c8616206c9c7938d0d5f25a57f82f","classification":"different_assessed_understanding","assessedUnderstanding":"Outsourced data accountability"},
+    {"questionId":"m217","originalObjective":"4.6","localRevision":"sha256:9ef44d4ea205afa3dc27af971bfe8cd9e5c4cd5f6920628f124732d8b5e24407","capturedPublishedRevision":"sha256:bfacd7eaab59fbbc21947628d5ff7fd68bcfb714ee6bb50584d83db7c717b879","classification":"different_assessed_understanding","assessedUnderstanding":"IdP SAML assertion responsibility"},
+    {"questionId":"m227","originalObjective":"3.2","localRevision":"sha256:375efcb484b70dd505777752d249ac99f40fa923a32e0b0c441a5f95d3875e77","capturedPublishedRevision":"sha256:dcf3575a0f1f8d4dd0b351c467a8c62c33d25d365a44d98eb5f4d76e96520b9e","classification":"different_assessed_understanding","assessedUnderstanding":"Layered application/database access boundary"},
+    {"questionId":"m292","originalObjective":"3.2","localRevision":"sha256:c1ed9ee655ae49f87ea76e91ed1cb110202e37f37f13ea056ab3838135c3d367","capturedPublishedRevision":"sha256:e1f44c8c28b312de57de7a51802fefc1e8f15b38cd0cef1ef91e27147dfd83f5","classification":"different_assessed_understanding","assessedUnderstanding":"Logical guest-network isolation"},
+    {"questionId":"m294","originalObjective":"3.1","localRevision":"sha256:1c7909132ca127cb4275b548c5dcc6e99eb8d1c0c61a0399fcb48b5818f60e3c","capturedPublishedRevision":"sha256:fe1148f4b4fc28cbd17796bdab505ed8b6c7b32cf61c9e23f6564d6dfd16b14e","classification":"different_assessed_understanding","assessedUnderstanding":"Public cloud deployment definition"},
+    {"questionId":"m296","originalObjective":"3.1","localRevision":"sha256:64e1afe3db4578b59b12ceec7c195ebf8d723f448c8bdf887e4e58e488806e3e","capturedPublishedRevision":"sha256:faa8c0c470e4cc1ef5df18ea6302d022f4b1a8a7cd6ead0346f88bcfc54bc593","classification":"different_assessed_understanding","assessedUnderstanding":"Approved-region deployment guardrails"},
+    {"questionId":"m306","originalObjective":"4.1","localRevision":"sha256:02f76297f139d0c6e19a77d384ff4f6dafacdee5be44a5b91571f49ad59c7eda","capturedPublishedRevision":"sha256:c0c51bee4fdb2ce0da9a7fe4c43e7cbeb5da6e8f581ab86cf4fe24703547f848","classification":"different_assessed_understanding","assessedUnderstanding":"Public object exposure"},
+    {"questionId":"m312","originalObjective":"4.4","localRevision":"sha256:948c392e5d2fb65421a11251e483a180ef7e55f8cbf689fa7701201b79b925ac","capturedPublishedRevision":"sha256:beb30e7104437b044b1160ebfe9dc0f5857fe87b1059daf9e5c438872b399d59","classification":"different_assessed_understanding","assessedUnderstanding":"Multi-source threat detection"},
+    {"questionId":"m318","originalObjective":"4.6","localRevision":"sha256:e89e6054de71e742a2f10ef975c37ec82a4f241b442b591fe4999a22f3ea7e91","capturedPublishedRevision":"sha256:aaffabaf9e66a0b11cb7991196d08e712ff74590aeb0d160a29b155bdf46d048","classification":"different_assessed_understanding","assessedUnderstanding":"Emergency identity takeover protection"},
+    {"questionId":"m321","originalObjective":"3.2","localRevision":"sha256:f17f5b8973af73df11eadc08b2f2c749cd51c8cc436fd6952e35f78b954954eb","capturedPublishedRevision":"sha256:777e70e5cce6fc271c6844f38fff50e6e5d7c9ee368768108d2e931056699493","classification":"different_assessed_understanding","assessedUnderstanding":"Inline cloud upload control"},
+    {"questionId":"m343","originalObjective":"4.6","localRevision":"sha256:034ca1e41e46a1044316f33c551c9197cad529ba468ca9ab5f6b679a9a3b17f9","capturedPublishedRevision":"sha256:6d95aeb1451fa8fe7c021e15941c3fc501a7ee571c9c7edcd455f4708f0ea072","classification":"different_assessed_understanding","assessedUnderstanding":"Identity lifecycle automation"},
+    {"questionId":"m451","originalObjective":"3.1","localRevision":"sha256:e19169354bd398409e77e144b06dfe2b267545736c95ffb2b5f391c584b703ee","capturedPublishedRevision":"sha256:581790333882b1766e4a908e2c7637a7679364f4853edbdf4c4401e338ca49e7","classification":"different_assessed_understanding","assessedUnderstanding":"Shared privileged workload credential blast radius"},
+    {"questionId":"m619","originalObjective":"3.1","localRevision":"sha256:d7711530f57b6f99b5639c38e9803dedc7857161313800b401fb27a95c3e84bc","capturedPublishedRevision":"sha256:791c5ca5f484b77af374524e240595a3bbbd52a202b151e4fcca8060c2693d91","classification":"different_assessed_understanding","assessedUnderstanding":"VLAN segmentation definition"},
+    {"questionId":"m620","originalObjective":"3.1","localRevision":"sha256:30ae6832a39a534fe0ef81009d925c828ee6e63d534018d2a812041a8bd32cbb","capturedPublishedRevision":"sha256:de74f8237e1e8262f706b13654cccede32dc03bcac11f7d84e4729a2068ea4c8","classification":"different_assessed_understanding","assessedUnderstanding":"IaaS guest responsibility"},
+    {"questionId":"m645","originalObjective":"5.3","localRevision":"sha256:d2c59cf5f2e8d3efeb675e8b32c28c60a8380c8482f1d2fdd006f795060959d2","capturedPublishedRevision":"sha256:5d7c7e9bd5d168ecabb490df0e639b2d5059ae55f0ac75fa7952fde75e0c6e40","classification":"different_assessed_understanding","assessedUnderstanding":"SLA metrics and remedies"},
+    {"questionId":"m650","originalObjective":"3.1","localRevision":"sha256:58531ff815a8910921a16b3645f4842a1becad7868a924457d34f0d0c95d6833","capturedPublishedRevision":"sha256:f1b318fe509e9ce48e9a7ddce443012f64fe7999fe2503d76feff0b3c23e24a7","classification":"different_assessed_understanding","assessedUnderstanding":"Customer/provider responsibility matrix"},
+    {"questionId":"m708","originalObjective":"2.5","localRevision":"sha256:481a23bb7fdd5bcd3a0e6a8a4af41778d35ad4bca540cf2ec7a65155cb36ef9f","capturedPublishedRevision":"sha256:577082ff94caf4c00d31dfbf45b06c6476de8329d45428d653b3fd8f2254a5c7","classification":"different_assessed_understanding","assessedUnderstanding":"Upstream DDoS capacity and origin restriction"},
+    {"questionId":"m726","originalObjective":"4.6","localRevision":"sha256:0a28df818cd000fedad20c0adfcdb8b7f70cdb6dc2f81aa78ae2db0ae9eedd58","capturedPublishedRevision":"sha256:4e4bec1b156fa8ba63811fac5c7aabe6e35ee3c33808ee7b757c85e24abe4bd1","classification":"different_assessed_understanding","assessedUnderstanding":"XML federation protocol"},
+    {"questionId":"p016","originalObjective":"3.1","localRevision":"sha256:fdc72259431c0e0afb8f66de17ec649fdf357b7cef81a2ff81341997d3b73e04","capturedPublishedRevision":"sha256:55c976890065c776f03bda25e4e882c416b408779a90fa625232d75c865abb90","classification":"different_assessed_understanding","assessedUnderstanding":"IaaS guest task ownership"},
+    {"questionId":"p022","originalObjective":"3.1","localRevision":"sha256:326e74855bc0c77ae2ae2dadae25a8d1a640585916f35b1e4d457a3faea79e6d","capturedPublishedRevision":"sha256:9c565befe591d2a27b7df83a77b49ae5398086e7cef654afc2a1efab43050442","classification":"different_assessed_understanding","assessedUnderstanding":"Hypervisor responsibility boundary"},
+    {"questionId":"p026","originalObjective":"3.4","localRevision":"sha256:330dec138ad30780f639184c307ffa4f842c337a9c0d41ee4d66e1c935e12a7d","capturedPublishedRevision":"sha256:11ece8d248047097c1f2896fc3af53cb047ab1bb8d0c5b518f39d859e2b174c0","classification":"different_assessed_understanding","assessedUnderstanding":"Authorised recovery sequence and validation"},
+    {"questionId":"p045","originalObjective":"4.6","localRevision":"sha256:acdb7d4fb09c1d2f99576bc7688fa48e7a41710b2edd3c051dbc81159cdda48d","capturedPublishedRevision":"sha256:98d9422d969422d60900db87a207177eefde11983c7453b24b5c2652c5ecbaf6","classification":"different_assessed_understanding","assessedUnderstanding":"Kerberos timestamp and replay checks"},
+    {"questionId":"p047","originalObjective":"3.1","localRevision":"sha256:e8c6224a1a171fc8f0cdd240eb6ddf895c320c110fd058d4c33a46ac71ca15d7","capturedPublishedRevision":"sha256:40673106108cfa0b41a29e2e48608a4883c40f2733fb72fa5215766af0d9c1e7","classification":"different_assessed_understanding","assessedUnderstanding":"Public storage guardrail"},
+    {"questionId":"p048","originalObjective":"5.2","localRevision":"sha256:1bdd92c36eb76a8913a88d952c56e1c89da0194911d986cbda588de3efa29d5e","capturedPublishedRevision":"sha256:c363b32b3efd0f4ae36fd5a58da0c0c6dbc5c5098d2031b5ef164387dcaa7f27","classification":"different_assessed_understanding","assessedUnderstanding":"Stated recovery priority order"},
+    {"questionId":"p074","originalObjective":"3.3","localRevision":"sha256:2d2eff06504f7ddd55298e030f9719f7098a38e401130fad04bdcce1e4d1d802","capturedPublishedRevision":"sha256:7ee473a2c651f593d2798fc93e0c6e590bde88bfca3594c89d30a3b191c2c842","classification":"different_assessed_understanding","assessedUnderstanding":"Least-privilege object access"},
+    {"questionId":"p077","originalObjective":"3.1","localRevision":"sha256:d9d2fe093b7ed46cbfd8cfc45978e415555c169cdea8ce056b9a414abe737072","capturedPublishedRevision":"sha256:9e07e58f1b321662775d7f35b0e8bbefd5c0a31758a91791bae54af4af8883ae","classification":"different_assessed_understanding","assessedUnderstanding":"Cloud model responsibilities and CASB"},
+    {"questionId":"p080","originalObjective":"4.3","localRevision":"sha256:4a7a14e3fd1bf524b38bcc52b8bc909e663a97309e94e424a52a60dc3bfa569d","capturedPublishedRevision":"sha256:41a6cb78ec812daa614107c508f3f2e655f055bed5e6eed87fe0a0d07e68765d","classification":"different_assessed_understanding","assessedUnderstanding":"Exploitable dependency prioritisation"},
+    {"questionId":"p211","originalObjective":"3.4","localRevision":"sha256:bf0a42cc62da920122329a6253d9aaff8fd5f9a35038153d581650e132be81c3","capturedPublishedRevision":"sha256:62894e03c5f39c75b69713ef7c7ad5205ce73da9f42097744f159636f8758f91","classification":"different_assessed_understanding","assessedUnderstanding":"Mixed recovery site, backup and retention design"},
+    {"questionId":"p225","originalObjective":"4.6","localRevision":"sha256:11742d3825952b636a18ae732c2c2806efe2fbd5607f42758f3e2cad8c8beda0","capturedPublishedRevision":"sha256:e13f5d0225a78a03a9aae80a9a7c6f13879855059cef123b288a0859a4af30de","classification":"different_assessed_understanding","assessedUnderstanding":"Federation versus delegated API access"}
+  ]
+}
