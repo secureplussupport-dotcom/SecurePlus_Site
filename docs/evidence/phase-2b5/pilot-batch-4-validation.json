@@ -1,0 +1,202 @@
+{
+  "status": "PASS_OFFLINE_DRAFT_CHECKS_PENDING_INDEPENDENT_EDITORIAL_GATE",
+  "date": "2026-10-07",
+  "baselineCommit": "08b77cd10f618a06dc8e05baa6f6da8344a0258c",
+  "questions": 6,
+  "candidateNewFamilies": 6,
+  "reusedFamilies": 0,
+  "independentlyApprovedNewFamilies": 0,
+  "eligibleEvidence": 0,
+  "bankCounts": {
+    "mcqs": 395,
+    "pbqs": 88
+  },
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "distribution": [
+    {
+      "conceptId": "recovery.mtd",
+      "medium": 1,
+      "hard": 0
+    },
+    {
+      "conceptId": "recovery.mttr",
+      "medium": 1,
+      "hard": 1
+    },
+    {
+      "conceptId": "continuity.bia",
+      "medium": 2,
+      "hard": 0
+    },
+    {
+      "conceptId": "recovery.rpo",
+      "medium": 0,
+      "hard": 1
+    }
+  ],
+  "checks": {
+    "keysAndFeedback": "six keys / 24 feedback entries; recomputed arithmetic and chain; negative schema/approval fixtures",
+    "adversarialRevision": "Corrected unfinished-time/count distractor from80 to100 before freezing draft",
+    "activeArtifacts": "25 release-manifest files unchanged",
+    "boundary": "Zero weight, no active mapping or runtime reference; MTD supporting scope"
+  },
+  "nearDuplicateMethod": "Number-normalized stem token Jaccard <0.65. All483 effective questions,15 prior MCQs,6 worksheet rows,3 teaching drafts and5 sibling questions per draft. Teaching is comparison context only; scores do not approve semantic independence.",
+  "nearDuplicateResults": [
+    {
+      "draftId": "draft.pilot4.mtd.01",
+      "nearest": [
+        {
+          "id": "draft.pilot4.bia.02",
+          "kind": "same_batch",
+          "revision": "sha256:646426faae8fdad6b91ca9c548a4f18aaf38576532a8e74cc4cc02320f79c03d",
+          "score": 0.2118
+        },
+        {
+          "id": "draft.pilot4.bia.01",
+          "kind": "same_batch",
+          "revision": "sha256:552911ee3cb987ef28eb969b3db3b95522e7fd062e8f28d345284c96248040fb",
+          "score": 0.2078
+        },
+        {
+          "id": "draft.pilot1.mtd.01",
+          "kind": "prior_mcq",
+          "revision": "sha256:725b38a856c56cbb50a2c54ddfb22804cb70177ef775d48f2c06b1804880c5a4",
+          "score": 0.1923
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot4.mttr.01",
+      "nearest": [
+        {
+          "id": "draft.pilot1.mttr.03",
+          "kind": "prior_mcq",
+          "revision": "sha256:453a2a3512dbdd09c5a052e11c112c40e4a4e100594f56bcc21d1cc0afed2721",
+          "score": 0.2469
+        },
+        {
+          "id": "draft.pilot1.mttr.02",
+          "kind": "prior_mcq",
+          "revision": "sha256:6b8679aa2003b8d4d2b0cbb3efcfb73690ba3ee5ec6b193dc83abe323b5e8670",
+          "score": 0.2464
+        },
+        {
+          "id": "draft.pilot1.mttr.01",
+          "kind": "prior_mcq",
+          "revision": "sha256:d3c914af3e5a18c71bef0ba80515f7ddf4ef7990fb28c1f563506774ab0ed629",
+          "score": 0.2388
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot4.mttr.02",
+      "nearest": [
+        {
+          "id": "draft.pilot1.mttr.02",
+          "kind": "prior_mcq",
+          "revision": "sha256:6b8679aa2003b8d4d2b0cbb3efcfb73690ba3ee5ec6b193dc83abe323b5e8670",
+          "score": 0.2813
+        },
+        {
+          "id": "draft.pilot4.mttr.01",
+          "kind": "same_batch",
+          "revision": "sha256:f76d66d4f69dbc8849fc6e44bb224dc9a8974209493ccea7bdb268fada5958c4",
+          "score": 0.2381
+        },
+        {
+          "id": "draft.pilot1.mttr.01",
+          "kind": "prior_mcq",
+          "revision": "sha256:d3c914af3e5a18c71bef0ba80515f7ddf4ef7990fb28c1f563506774ab0ed629",
+          "score": 0.197
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot4.bia.01",
+      "nearest": [
+        {
+          "id": "draft.pilot4.bia.02",
+          "kind": "same_batch",
+          "revision": "sha256:646426faae8fdad6b91ca9c548a4f18aaf38576532a8e74cc4cc02320f79c03d",
+          "score": 0.2346
+        },
+        {
+          "id": "draft.pilot4.mtd.01",
+          "kind": "same_batch",
+          "revision": "sha256:842a20d8a9cf1b9082412ba1b07a0af43ea39d36b322970ff2cbd2f3fd0a4513",
+          "score": 0.2078
+        },
+        {
+          "id": "draft.pilot1.bia.02",
+          "kind": "prior_mcq",
+          "revision": "sha256:5928f56f507076432c8145a3a98842dcb5e2cc067ce44967b97e6f7629c2e152",
+          "score": 0.1857
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot4.bia.02",
+      "nearest": [
+        {
+          "id": "draft.pilot4.bia.01",
+          "kind": "same_batch",
+          "revision": "sha256:552911ee3cb987ef28eb969b3db3b95522e7fd062e8f28d345284c96248040fb",
+          "score": 0.2346
+        },
+        {
+          "id": "draft.pilot4.mtd.01",
+          "kind": "same_batch",
+          "revision": "sha256:842a20d8a9cf1b9082412ba1b07a0af43ea39d36b322970ff2cbd2f3fd0a4513",
+          "score": 0.2118
+        },
+        {
+          "id": "m173",
+          "kind": "effective_question",
+          "revision": "sha256:65e71d025ae17c215a4ffaf6597a183608015fab96a1b055c00aab884675eafb",
+          "score": 0.1728
+        }
+      ]
+    },
+    {
+      "draftId": "draft.pilot4.rpo.01",
+      "nearest": [
+        {
+          "id": "draft.pilot1.rpo.01",
+          "kind": "prior_mcq",
+          "revision": "sha256:4a2e6aca65bbd3112f74165063c14fd01059fd1e1e9c9b417c13d3e9d82dc580",
+          "score": 0.2857
+        },
+        {
+          "id": "draft.pilot1.rpo.03",
+          "kind": "prior_mcq",
+          "revision": "sha256:34a7642f2690c7365f268645017ea09679e39ef82209d69fa4e2f57326304027",
+          "score": 0.2405
+        },
+        {
+          "id": "draft.pilot2.pbq.01:rpo",
+          "kind": "prior_worksheet_row",
+          "revision": "sha256:1a163b47071852dade90d67c5db65f7c51374de9d696adbaef5e8cda1ba6d614",
+          "score": 0.1635
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Author review under delegated authority; independent monitor gate pending, not personally human-reviewed.",
+    "Six distinct-family proposals; no integrated independent-family or mastery credit.",
+    "Workaround and recoverability themes overlap earlier drafts; independent gate may merge or reject families.",
+    "No private p003/p017 payloads, fresh live bank/browser checks, learner calibration or demonstrated transfer.",
+    "Canonical tags, scope and difficulty approvals, integrations and remaining phase gates stay open; production NOT READY."
+  ],
+  "sha256": {
+    "docs/drafts/phase-2b5-pilot-batch-4.json": "7be45316dda58c45685e06c9d2062a58b6dfda6b56b898d7050ff2b28412714e",
+    "docs/phase-2b5-pilot-batch-4-review.md": "015a8e506dfddea4b992f5b10689e1b5d88d13d7912d5fbb2ca6922e4ae05a94",
+    "scripts/audit-pilot-batch-4.mjs": "147f5ee40fe713a104d74074fcfd2851ea5b05034b05996b69854d6b2302ef94",
+    "docs/drafts/phase-2b5-pilot-batch-1.json": "91e83b7afbc56901bc1a37ae426763024456d8d90ae486c2d2833ff076826bda",
+    "docs/drafts/phase-2b5-pilot-pbq-draft-2.json": "94adaf1c9ca90370636bc3c8c20a6e51156964a4f1871905d23a88cbe9d5ae02",
+    "docs/drafts/phase-2b5-pilot-teaching-draft-3.json": "84757c5c7bec067e5baee182487525f3f843aa9e709af257b307be0c1655a921",
+    "docs/drafts/phase-2b5-objective52-pilot-mapping-proposals.json": "de062252046dffcfde6de11ce7e328cf72bbec142be180c300c0ecc3f003f25c",
+    "docs/evidence/phase-2b5/mapping-package.json": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97",
+    "docs/drafts/phase-2b5-pilot-batch-1-family-decision.md": "f52a03d0c01659b282346b4d0a9056e493427564350ed7bb633e206c1df4d0dd"
+  }
+}

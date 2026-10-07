@@ -1,0 +1,371 @@
+{
+  "batchId": "phase-2b5-pilot-draft-4",
+  "date": "2026-10-07",
+  "baselineCommit": "08b77cd10f618a06dc8e05baa6f6da8344a0258c",
+  "status": "CODEX_REVIEWED_UNDER_DELEGATION_PENDING_INDEPENDENT_GATE",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "authority": {
+    "kind": "prospective_local_authoring_delegation",
+    "sourceChatId": "01a0ec5b-7f84-71f1-920b-7b0cd42850d2",
+    "sourceTurnId": "01a113bf-b154-7c83-96b0-1023ff85e229",
+    "sourceHumanMessageId": "01a113bf-b3d5-7e12-bb2a-e0c3c2ddc701",
+    "exactInstruction": "you dont need my approval for the next questions or family tags anymore. just execute.",
+    "record": "docs/drafts/phase-2b5-pilot-batch-1-family-decision.md",
+    "boundary": "Prospective local content and family judgments only; not personal human review, canonical metadata approval, publication or activation."
+  },
+  "sources": [
+    {
+      "id": "sy0701-objectives",
+      "title": "CompTIA Security+ SY0-701 Exam Objectives, Version 5.0",
+      "url": "https://assets.ctfassets.net/82ripq7fjls2/6TYWUym0Nudqa8nGEnegjG/0f9b974d3b1837fe85ab8e6553f4d623/CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf",
+      "locator": "PDF page 14: objective 5.2, BIA sub-bullets; PDF page 19: MTTR acronym expansion",
+      "accuracyUse": "Objective 5.2 explicitly names BIA, RTO, RPO and mean time to repair. Acronym list expands MTTR as mean time to recover. MTD is supporting continuity context, not an explicitly named bullet."
+    },
+    {
+      "id": "nist-800-34",
+      "title": "NIST SP 800-34 Rev. 1, Contingency Planning Guide for Federal Information Systems",
+      "url": "https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-34r1.pdf",
+      "locator": "Sections 3.2.1-3.2.3; printed pages 17-19 (PDF pages 31-33)",
+      "accuracyUse": "Distinguishes system restoration, recoverable data point and business downtime; includes process reprocessing and dependencies in continuity planning."
+    },
+    {
+      "id": "ibm-mttr",
+      "title": "IBM: Mean Time to Repair",
+      "url": "https://www.ibm.com/think/topics/mttr",
+      "locator": "Formula and challenges: repair start/end definitions",
+      "accuracyUse": "Uses total defined repair duration divided by completed repairs; boundaries must be comparable. Its worked example contains an inconsistent final sentence; use the formula, cross-check below, and recompute our own values."
+    },
+    {
+      "id": "ibm-mttr-crosscheck",
+      "title": "IBM: MTTR vs. MTBF",
+      "url": "https://www.ibm.com/think/topics/mttr-vs-mtbf",
+      "locator": "What is mean time to repair; Differences between MTBF and MTTR",
+      "accuracyUse": "Independently checks the repair average formula and distinguishes duration from operating time between failures."
+    }
+  ],
+  "questions": [
+    {
+      "id": "draft.pilot4.mtd.01",
+      "stem": "During a BIA, owners agree on three maximum interruption limits for the same dispatch process: 3 hours for missed shipments, 8 hours for financial loss and 10 hours for reputational harm. Every limit uses the same outage-to-acceptable-business-operation clock, and exceeding any one is unacceptable. No workaround exists. What is the largest MTD consistent with all three accepted limits?",
+      "options": [
+        "10 hours, using the longest accepted impact limit",
+        "7 hours, averaging the three accepted impact limits",
+        "3 hours, using the earliest unacceptable-impact limit",
+        "8 hours, using the financial-loss impact limit"
+      ],
+      "correctOption": 2,
+      "explanation": "Correct: the interruption must be no longer than min(3, 8, 10) = 3 hours. A longer MTD violates at least the accepted shipment constraint. This business limit does not itself specify an approved technical RTO.",
+      "optionFeedback": [
+        "Ten hours would exceed the three-hour shipment limit and the eight-hour financial limit; all accepted constraints must hold.",
+        "The average is seven hours, but averaging does not preserve the three-hour shipment constraint. Each limit must hold separately.",
+        "Correct: the interruption must be no longer than min(3, 8, 10) = 3 hours. A longer MTD violates at least the accepted shipment constraint. This business limit does not itself specify an approved technical RTO.",
+        "Using only financial loss disregards the earlier shipment constraint. The stem makes exceeding any accepted impact limit unacceptable."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "scenario_application",
+      "difficulty": "medium",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.mtd",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "supporting_context_not_explicit_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "earliest-unacceptable-impact-constraint",
+      "familyRelation": "proposed_distinct_reasoning_pending_independent_gate",
+      "familyRationale": "m196 and draft.pilot1.mtd.01 identify/read one outer limit. This item reconciles multiple owner-accepted constraints for one process and one clock, choosing their minimum rather than their maximum or mean. It does not repeat recovery-plus-reprocessing or workaround reassessment. Editorial reasoning distinction is proposed; no psychometric independence claim.",
+      "comparisonIds": [
+        "m196",
+        "draft.pilot1.mtd.01",
+        "draft.pilot1.mtd.02",
+        "draft.pilot1.mtd.03",
+        "draft.pilot2.pbq.01:mtd"
+      ],
+      "familyIndependenceApproved": false,
+      "newFamilyCredit": 0,
+      "editorialStatus": "codex_reviewed_under_delegation",
+      "reviewer": "Codex implementation agent; separate author adversarial pass, independent monitor gate pending",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "min(3,8,10)=3; (3+8+10)/3=7. All clocks and acceptance rules are stipulated. Supporting MTD context under BIA, not a newly claimed explicit exam bullet."
+    },
+    {
+      "id": "draft.pilot4.mttr.01",
+      "stem": "A service measures repair duration from failure until users can complete a verified transaction. At a reporting cutoff, three repairs have completed in 20 minutes each; a fourth outage is still ongoing after 240 minutes. The dashboard defines its MTTR as the mean of completed repairs only and displays 20 minutes. Management claims this proves all four outages were brief. Which assessment is best supported?",
+      "options": [
+        "The completed-repair MTTR is 75 minutes after including the unfinished outage as a completed repair.",
+        "The completed-repair MTTR is 20 minutes, but the ongoing 240-minute outage must be reported separately and contradicts the claim about all four.",
+        "The completed-repair MTTR is 100 minutes because all elapsed minutes are divided by the three completed repairs.",
+        "The completed-repair MTTR is 20 minutes, and the unfinished outage can be omitted when concluding all four outages were brief."
+      ],
+      "correctOption": 1,
+      "explanation": "Correct: (20 + 20 + 20) / 3 = 20 minutes for the completed subset. The fourth outage has already lasted 240 minutes and its final duration is unknown; show that open case separately. The subset average cannot justify a conclusion about all four outages.",
+      "optionFeedback": [
+        "Seventy-five treats 240 minutes as a completed duration. The ongoing repair has no verified end time and is excluded from the explicitly defined completed-repair mean.",
+        "Correct: (20 + 20 + 20) / 3 = 20 minutes for the completed subset. The fourth outage has already lasted 240 minutes and its final duration is unknown; show that open case separately. The subset average cannot justify a conclusion about all four outages.",
+        "One hundred divides completed and unfinished elapsed time by only three repairs. That does not implement the stated completed-repair measurement.",
+        "Excluding the open case from this defined mean is valid; excluding it from a claim about all four outages is not. Its 240-minute elapsed duration is already known."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "evidence_evaluation",
+      "difficulty": "hard",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.mttr",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "open-incidents-completion-bias",
+      "familyRelation": "proposed_distinct_reasoning_pending_independent_gate",
+      "familyRationale": "Unlike draft.pilot1.mttr.02, the long incident has not completed and cannot be entered as a final observation. Unlike mttr.03, the clock is unchanged. Assesses reporting-cohort selection and the unobserved endpoint, not just computing a mean or spotting a completed outlier.",
+      "comparisonIds": [
+        "draft.pilot1.mttr.01",
+        "draft.pilot1.mttr.02",
+        "draft.pilot1.mttr.03",
+        "draft.pilot2.pbq.02:mttr"
+      ],
+      "familyIndependenceApproved": false,
+      "newFamilyCredit": 0,
+      "editorialStatus": "codex_reviewed_under_delegation",
+      "reviewer": "Codex implementation agent; separate author adversarial pass, independent monitor gate pending",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "ibm-mttr",
+        "ibm-mttr-crosscheck"
+      ],
+      "accuracyCheck": "Completed durations total 60 / count 3 = 20. Ongoing elapsed 240 is a lower bound, not its final duration. Values 75 and 100 implement different, invalid formulas for the explicitly stated dashboard contract. No universal open-incident policy or causal forecast is asserted."
+    },
+    {
+      "id": "draft.pilot4.mttr.02",
+      "stem": "Two equal-length reporting periods cover the same service and use the same failure-to-verified-usability repair clock. Period A has 10 completed repairs with MTTR of 30 minutes. Period B has 30 completed repairs with MTTR of 15 minutes. Every recorded outage is fully contained in its period, outages do not overlap, and no other downtime occurred. Which conclusion about these recorded interruptions is correct?",
+      "options": [
+        "Total interruption fell from 300 to 150 minutes because the mean was halved.",
+        "Total interruption stayed at 300 minutes because both periods have equal length.",
+        "Total interruption fell from 450 to 300 minutes because repairs completed faster.",
+        "Total interruption rose from 300 to 450 minutes despite the lower mean repair duration."
+      ],
+      "correctOption": 3,
+      "explanation": "Correct: period A totals 10 times 30 = 300 minutes and period B totals 30 times 15 = 450 minutes. MTTR decreased, but the greater count raised aggregate interruption by 150 minutes. This describes these observations, not future failure frequency.",
+      "optionFeedback": [
+        "Fifteen is the mean across 30 repairs in period B, not across ten. Its total is 30 times 15 = 450 minutes.",
+        "Equal observation-period lengths do not imply equal downtime. Repair count and mean together determine each stated total.",
+        "The totals are reversed: period A is 10 times 30 = 300, while period B is 30 times 15 = 450 minutes.",
+        "Correct: period A totals 10 times 30 = 300 minutes and period B totals 30 times 15 = 450 minutes. MTTR decreased, but the greater count raised aggregate interruption by 150 minutes. This describes these observations, not future failure frequency."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "interpretation",
+      "difficulty": "medium",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.mttr",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "repair-mean-versus-aggregate-downtime",
+      "familyRelation": "proposed_distinct_reasoning_pending_independent_gate",
+      "familyRationale": "Contrasts a per-repair mean with aggregate interruption across different incident counts. draft.pilot1.mttr.01 calculates a mean, mttr.02 contrasts a mean with an individual tail, and mttr.03 changes clock definitions. Here both clocks and periods are comparable, but the number of completed interruptions changes.",
+      "comparisonIds": [
+        "draft.pilot1.mttr.01",
+        "draft.pilot1.mttr.02",
+        "draft.pilot1.mttr.03",
+        "draft.pilot2.pbq.02:mttr"
+      ],
+      "familyIndependenceApproved": false,
+      "newFamilyCredit": 0,
+      "editorialStatus": "codex_reviewed_under_delegation",
+      "reviewer": "Codex implementation agent; separate author adversarial pass, independent monitor gate pending",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "ibm-mttr",
+        "ibm-mttr-crosscheck"
+      ],
+      "accuracyCheck": "10*30=300;30*15=450;450-300=150. Non-overlap, complete containment and no other downtime permit summing durations. No MTBF calculation or forecast is needed."
+    },
+    {
+      "id": "draft.pilot4.bia.01",
+      "stem": "A BIA estimates losses for one order-fulfillment outage. Both the ordering application and inventory application are required for the same business process. Each application report lists $8,000 of canceled orders. Owners verify that both reports refer to exactly the same canceled orders, with no other loss identified. How should analysts consolidate the stated business impact?",
+      "options": [
+        "$8,000 once, retaining both application dependencies and checking for any distinct additional impacts.",
+        "$16,000, adding each application report because both applications are required.",
+        "$4,000, dividing the reported loss between the two application dependencies.",
+        "$0, excluding canceled-order losses until the applications have replacement prices."
+      ],
+      "correctOption": 0,
+      "explanation": "Correct: the verified business loss is $8,000 once. Two resource dependencies do not create two copies of the same lost orders. Preserve both dependencies and investigate distinct consequences separately; do not infer that this one loss exhausts every possible impact.",
+      "optionFeedback": [
+        "Correct: the verified business loss is $8,000 once. Two resource dependencies do not create two copies of the same lost orders. Preserve both dependencies and investigate distinct consequences separately; do not infer that this one loss exhausts every possible impact.",
+        "Both applications can be critical dependencies while their reports describe the same loss. Adding them would double-count the canceled orders.",
+        "Allocating a loss between dependency records does not halve the process-level loss. The verified canceled orders still total $8,000.",
+        "Replacement prices measure a different consequence. The stated canceled-order business loss is already identified and must not be discarded."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "scenario_application",
+      "difficulty": "medium",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "continuity.bia",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "overlapping-business-impact-double-count",
+      "familyRelation": "proposed_distinct_reasoning_pending_independent_gate",
+      "familyRationale": "m086 identifies BIA, draft.pilot1.bia.01 elicits missing inputs, bia.02 prioritizes a shared dependency and bia.03 reviews changed scope. This item reconciles overlapping resource-level reports into one verified process loss while preserving dependencies. It is not SLE/ALE multiplication or generic asset valuation.",
+      "comparisonIds": [
+        "m086",
+        "m029",
+        "m644",
+        "draft.pilot1.bia.01",
+        "draft.pilot1.bia.02",
+        "draft.pilot1.bia.03",
+        "draft.pilot2.pbq.02:bia-dependency"
+      ],
+      "familyIndependenceApproved": false,
+      "newFamilyCredit": 0,
+      "editorialStatus": "codex_reviewed_under_delegation",
+      "reviewer": "Codex implementation agent; separate author adversarial pass, independent monitor gate pending",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "Both reports are explicitly the same 8000 loss: unique loss 8000, naive addition 16000, arbitrary halving 4000. No annual frequency, exposure factor or universal loss attribution rule inferred."
+    },
+    {
+      "id": "draft.pilot4.bia.02",
+      "stem": "For the first hour of an order-system outage, arrivals are fixed at 50 orders per hour and the initial backlog is zero. A tested manual workaround can complete only 20 orders per hour, with no other processing path. Owners require the full arrival workload to be handled for acceptable operation. A BIA proposal records no interruption impact because a manual workaround exists. What finding should challenge that proposal?",
+      "options": [
+        "The workaround handles the workload because completing any orders means acceptable operation has resumed.",
+        "The workaround leaves 20 orders unprocessed in the hour, so only its completed volume should inform impact.",
+        "The workaround leaves 30 orders unprocessed in the hour; assess the resulting delay and impacts with owners.",
+        "The workaround leaves 50 orders unprocessed in the hour, so its tested capacity should be ignored."
+      ],
+      "correctOption": 2,
+      "explanation": "Correct: 50 arriving minus 20 completed leaves 30 orders unprocessed after one hour. The tested alternative is insufficient for the accepted workload. Assess the consequences of that backlog with owners before assigning impact or retaining targets; no new tolerance deadline is implied.",
+      "optionFeedback": [
+        "The accepted operating criterion requires the full 50-order workload. Partial processing does not meet that explicitly stated criterion.",
+        "Twenty orders is the completed volume, not the deficit. The unprocessed volume is 50 minus 20 = 30 orders.",
+        "Correct: 50 arriving minus 20 completed leaves 30 orders unprocessed after one hour. The tested alternative is insufficient for the accepted workload. Assess the consequences of that backlog with owners before assigning impact or retaining targets; no new tolerance deadline is implied.",
+        "The workaround does process 20 orders. Ignoring that capacity overstates the backlog; the deficit is 30 orders, not 50."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "scenario_application",
+      "difficulty": "medium",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "continuity.bia",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "workaround-capacity-impact-shortfall",
+      "familyRelation": "proposed_distinct_reasoning_pending_independent_gate",
+      "familyRationale": "draft.pilot1.mtd.02 stipulates an effective, accepted workaround; bia.01 asks which input to collect, and bia.03 asks whether changed scope requires reassessment. This item tests a quantitative feasibility claim about a measured alternative against the stated acceptable workload. Shared workaround theme is disclosed; independent review may merge it if this is only an extension of the prior reassessment family.",
+      "comparisonIds": [
+        "draft.pilot1.mtd.02",
+        "draft.pilot1.bia.01",
+        "draft.pilot1.bia.03",
+        "draft.pilot2.pbq.02:bia-input"
+      ],
+      "familyIndependenceApproved": false,
+      "newFamilyCredit": 0,
+      "editorialStatus": "codex_reviewed_under_delegation",
+      "reviewer": "Codex implementation agent; separate author adversarial pass, independent monitor gate pending",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "One hour*(50-20)=30 unprocessed orders from zero backlog. Constant rates and lack of another path stipulated. No extrapolated MTD/RTO, regulatory rule, revenue loss or indefinite linear forecast is invented."
+    },
+    {
+      "id": "draft.pilot4.rpo.01",
+      "stem": "A database fails at 12:45 and has a 15-minute RPO. A verified base snapshot is at 12:00. Usable log blocks cover 12:00-12:10, 12:10-12:20 and 12:30-12:40, but the 12:20-12:30 block is missing. This restore tool requires every intervening log block and cannot skip a gap. There is no later base snapshot or other reconstruction path. All times are on the same date and timezone. What recoverable point and data-loss window are supported?",
+      "options": [
+        "12:40, giving a 5-minute window that meets the RPO.",
+        "12:20, giving a 25-minute window that misses the RPO.",
+        "12:30, giving a 15-minute window that meets the RPO.",
+        "12:00, giving a 45-minute window that misses the RPO."
+      ],
+      "correctOption": 1,
+      "explanation": "Correct: the uninterrupted path from the base reaches 12:20. The missing block prevents applying the later block, so the supported point is 12:20. At failure at 12:45, the potentially lost-data window is 25 minutes, exceeding the 15-minute RPO. Log timestamps alone do not prove a complete recovery path.",
+      "optionFeedback": [
+        "The 12:30-12:40 block cannot be applied without the missing preceding block under the stated restore rule. Its latest timestamp alone is not a reconstructible point.",
+        "Correct: the uninterrupted path from the base reaches 12:20. The missing block prevents applying the later block, so the supported point is 12:20. At failure at 12:45, the potentially lost-data window is 25 minutes, exceeding the 15-minute RPO. Log timestamps alone do not prove a complete recovery path.",
+        "The missing block prevents reconstructing 12:30. Meeting a deadline numerically is insufficient without a usable path to that data point.",
+        "The first two usable blocks extend the base to 12:20. Restricting recovery to the base ignores the explicitly valid contiguous blocks."
+      ],
+      "format": "mcq",
+      "cognitiveSkill": "calculation",
+      "difficulty": "hard",
+      "difficultyStatus": "proposed_uncalibrated",
+      "primaryConceptProposal": "recovery.rpo",
+      "secondaryConceptProposals": [],
+      "objectiveCodes": [
+        "5.2"
+      ],
+      "objectiveScope": "explicit_bia_bullet",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenarioFamilyProposal": "incomplete-transaction-log-recovery-chain",
+      "familyRelation": "proposed_distinct_reasoning_pending_independent_gate",
+      "familyRationale": "m088 selects a backup interval; draft.pilot1.rpo.01 supplies the recoverable point and rpo.03 excludes corrupted later copies. Here the solver must first derive the point by checking a contiguous reconstruction path. m177 supplies related backup-chain teaching but does not assess RPO compliance. Shared recoverability theme is disclosed; independence is an editorial proposal, not an experimental result.",
+      "comparisonIds": [
+        "m088",
+        "m177",
+        "draft.pilot1.rpo.01",
+        "draft.pilot1.rpo.02",
+        "draft.pilot1.rpo.03",
+        "draft.pilot2.pbq.01:rpo"
+      ],
+      "familyIndependenceApproved": false,
+      "newFamilyCredit": 0,
+      "editorialStatus": "codex_reviewed_under_delegation",
+      "reviewer": "Codex implementation agent; separate author adversarial pass, independent monitor gate pending",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "sourceRefs": [
+        "sy0701-objectives",
+        "nist-800-34"
+      ],
+      "accuracyCheck": "Base 720 minutes after midnight; contiguous blocks 720-730 and 730-740 reach 740. Missing 740-750 prevents applying 750-760. Failure 765 minus 740 = 25 > 15. This tool-specific chain rule is a scenario stipulation, not a universal database-log claim. The window does not imply 25 minutes of actual populated transactions lost."
+    }
+  ]
+}
