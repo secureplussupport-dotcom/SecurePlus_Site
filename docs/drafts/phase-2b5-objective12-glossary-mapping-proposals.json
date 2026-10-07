@@ -1,0 +1,1681 @@
+{
+  "schemaVersion": 1,
+  "status": "LOCAL_SEMANTIC_PROPOSALS_NOT_READY",
+  "baselineCommit": "db08782733045a6c379109c1b6cf70e157d9a8cf",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "newFamilyCredit": 0,
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "sourceBindings": [
+    {
+      "path": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "sha256": "0ba95c5c8f8a00e091daa9d852de0350a01ca00bedcba7c317155ea94cad88a9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "sha256": "46cf5a704690aa85606a1167b72f221aea09234635e3062aec067e7967abb4c9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "sha256": "fce8683567473a28ce8e903190e977345339f33df022ef56425c18d3bdfe225d"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "sha256": "d45c0d959c4cc0171b401f2df5ab1ee38d7bf717e3ce08c9d008d4dac61a6c20"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-p055-mapping-proposals.json",
+      "sha256": "40e1d58143f8dd4853f0496f5aca6d4abab031f59681bd625f7c144e41f3296e"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-resilience-lesson-proposals.json",
+      "sha256": "8dd1cae60ca07bad8d4046e7653beafd05f4f02bd66d12763cd0c621a90a36de"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/mapping-package.json",
+      "sha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/release-checksums.json",
+      "sha256": "98e7e0ed45b5fd17f1be50c4cd36eba53bf289de26a427810e061274dcfb3403"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-batch.md",
+      "sha256": "1a039e6f4778a585128b0d4167536c46a53d13130476b6144ffa946f2f464713"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-guide.md",
+      "sha256": "a9cc1fff35873d84d90bec1c5c6f4613fdb46defae5a8b2a87b4b7c554ffd33b"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
+      "sha256": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
+    },
+    {
+      "path": "docs/secureplus-rebrand-master-plan.md",
+      "sha256": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c"
+    },
+    {
+      "path": "docs/phase-1-product-loop-audit.md",
+      "sha256": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10"
+    },
+    {
+      "path": "src/data/conceptDeepDives.js",
+      "sha256": "b478e16240c95b70a79cf0679aff683fc08f18dd11947c4046ecd880ec1ce17f"
+    },
+    {
+      "path": "src/data/sy0701DeepDiveMap.js",
+      "sha256": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff"
+    },
+    {
+      "path": "src/data/learningConcepts.js",
+      "sha256": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac"
+    },
+    {
+      "path": "src/data/learningMappings.js",
+      "sha256": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+    },
+    {
+      "path": "src/lib/deepDiveStudy.js",
+      "sha256": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459"
+    },
+    {
+      "path": "src/lib/deepDiveRecommendations.js",
+      "sha256": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479"
+    },
+    {
+      "path": "scripts/lib/read-learning-pilot-bank.mjs",
+      "sha256": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac"
+    },
+    {
+      "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
+      "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "scripts/lib/content-mapping/package.mjs",
+      "sha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748"
+    },
+    {
+      "path": "server/adaptive/revision.mjs",
+      "sha256": "a2fc241dd45a60fe4e9898f8133187402ef07d9e0a5e2f721f4ad6ba33b73451"
+    },
+    {
+      "path": "src/App.jsx",
+      "sha256": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49"
+    },
+    {
+      "path": "src/data/sy0701AcronymFlashcards.js",
+      "sha256": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+      "sha256": "143dde6ff3996d594cd7981101c530048902c894449641f972cc38f8aa1c58fe"
+    }
+  ],
+  "denominator": {
+    "broadObjective12Candidates": 126,
+    "priorDistinctDispositions": 110,
+    "newSliceRecords": 16,
+    "newGlossaryDefinitions": 16,
+    "objectDefinitions": 16,
+    "verifiedLocalSourceOccurrences": 15,
+    "unverifiedGlossaryDelivery": 1,
+    "newQuestions": 0,
+    "newFeedbackBundles": 0,
+    "combinedDistinctDispositions": 126,
+    "remainingCandidates": 0
+  },
+  "instructionalProposals": [
+    {
+      "recordId": "glossary:bia",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:fba7d9e4ca7b2ca2afce03b574269efdb495b82ba76b564c992d28daedbfdfda",
+      "definitionRevision": "sha256:a232cf720e20eba8185b2162e0ea5a84c04cfbb404679aa9dbcc92807c313e6a",
+      "renderedEntryRevision": "sha256:a232cf720e20eba8185b2162e0ea5a84c04cfbb404679aa9dbcc92807c313e6a",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2253
+      },
+      "definitionShape": "object",
+      "termObserved": "BIA",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4"
+      ],
+      "existingPrimarySupportCandidate": "continuity.bia",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Critical operations, dependencies and disruption impact inform continuity priorities; BIA is a process, not a recovery target or a completed impact analysis.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "continuity.bia",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "5.2"
+        ],
+        "contextCodes": [
+          "3.4"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 5,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m196",
+        "parentLocalRevision": "sha256:064871a82f7228185d753db57a4ff070d965ea05ffbf8499a65dbad23303a600",
+        "parentPublishedRevision": "sha256:c7d172bacf975a87dd3b79a33d1ff48182005a31eab9fc1fe4610b6e24c6000f",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:7559b923979eaf8544c2b072e267b922ce479ee444cccd442625da54d7394781",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Useful process vocabulary after a continuity miss, but the definition does not teach impact scoring, MTD versus RTO, dependency prioritization or how to conduct the analysis."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-risk-governance-business-bia-business-impact-analysis",
+        "catalogueRevision": "sha256:4f20941f4c13f2fc5830a29d7fc4d65882da22cba3355dc8c88a5b2c3a581e72",
+        "deliveredRevision": "sha256:cb822008cfb4d13467187ebf56d918fa16a1248aa26db3169a95238a723daedb",
+        "priorPacketPath": null,
+        "status": "source_comparison_only_no_additional_card_disposition",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:dlp",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:fb5ccc169e04a52b80785e9a4ede5228e305fbd817acb17eef7df8aca52cd7a4",
+      "definitionRevision": "sha256:aac2ec4a5df45f631c81877eb95d6c4bd44563f833bf2cfebe979dce9a25fca6",
+      "renderedEntryRevision": "sha256:aac2ec4a5df45f631c81877eb95d6c4bd44563f833bf2cfebe979dce9a25fca6",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2283
+      },
+      "definitionShape": "object",
+      "termObserved": "DLP",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "1.4",
+        "2.2",
+        "2.4",
+        "3.1",
+        "3.3",
+        "4.2",
+        "4.4",
+        "4.5",
+        "5.4"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.dlp",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Sensitive-data movement detection or blocking according to policy; confidentiality context does not imply every CIA property or a fixed detective/preventive category.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.dlp",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.4",
+          "4.5"
+        ],
+        "contextCodes": [
+          "3.3",
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 10,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m075",
+        "parentLocalRevision": "sha256:a391a405016095f19fcf571712775daf8785f68cc8a5128335a01e9244704565",
+        "parentPublishedRevision": "sha256:19820b6b2a7471179b63bdda651c8db958323001823fb822e17d8800e24978b0",
+        "fieldGroup": "options",
+        "fieldGroupRevision": "sha256:72515af68e9f67a608689bab65f097dfe3377332d6fe59b7485c79d92512a04e",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "May refresh the purpose of content/egress controls; it does not identify where a policy applies, false-positive tradeoffs, data classification or the best control in a scenario."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-threat-intel-protection-dlp-data-loss-prevention",
+        "catalogueRevision": "sha256:b4c13ced5a0c33344f789c8ca071ecb890a627871d2d67376a929dfa881cb9d7",
+        "deliveredRevision": "sha256:d502e7c55cab7c5a684fddffa9aca6b1352d12f8689ae1e63d7a44653b466c7f",
+        "priorPacketPath": null,
+        "status": "source_comparison_only_no_additional_card_disposition",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:eap",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:4aa67736faf054b2ae9dc11dba50e420da1ed842876bed912b49c5b41b15b95d",
+      "definitionRevision": "sha256:8f8c7355265add02761171a897f48adb9d72c123e28f81356b4a46bbba8d33be",
+      "renderedEntryRevision": "sha256:8f8c7355265add02761171a897f48adb9d72c123e28f81356b4a46bbba8d33be",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2288
+      },
+      "definitionShape": "object",
+      "termObserved": "EAP",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "1.4",
+        "2.2",
+        "3.2",
+        "4.1",
+        "4.5"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.eap",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Extensible framework for authentication methods used in network access; neither an encryption algorithm nor one uniformly strong authentication method.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.eap",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.1"
+        ],
+        "contextCodes": [
+          "4.6",
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 4,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m712",
+        "parentLocalRevision": "sha256:1290e2657dd20918ce021afb14f1f943f467daec86e129422ac0c9261ea7ad48",
+        "parentPublishedRevision": "sha256:3c7104473e3371858c0a4b5eecac7299686a01646eb4efb1ce789174c27d2e62",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:ac3d0e5e07ee166c648bb16a07874cce631266ffc2fa12f29ec2c9406d76b300",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Refreshes framework recognition; choosing an EAP method, validating server trust, AAA roles and Zero Trust decisions require separate instruction."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-eap-extensible-authentication-protocol",
+        "catalogueRevision": "sha256:eb31374acc5bfe0df7bda938910e4f9e1a9c5cecb9f24bbb52b584559bb260fe",
+        "deliveredRevision": "sha256:0e8b878f82b464c21b80c0d735966f58c99eab9ca55d7870f01d0c9f76ff93b0",
+        "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+        "status": "prior_review_preserved_vocabulary_overlap_no_new_family",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:idp",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:a8047591cc988672ea6fdbb2e0314d791ec089e291a9ad63cee009c8b48c87e9",
+      "definitionRevision": "sha256:1cebb0e7585be4e6d3d770145907ee16147f7ae0ae57b8338d50d0c5ea0dcb44",
+      "renderedEntryRevision": "sha256:1cebb0e7585be4e6d3d770145907ee16147f7ae0ae57b8338d50d0c5ea0dcb44",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2309
+      },
+      "definitionShape": "object",
+      "termObserved": "IdP",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "1.4",
+        "3.2",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.idp",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Federation provider authenticates users and issues identity assertions or tokens; it is not interchangeable with authorization policy or an LDAP protocol.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.idp",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 3,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m726",
+        "parentLocalRevision": "sha256:0a28df818cd000fedad20c0adfcdb8b7f70cdb6dc2f81aa78ae2db0ae9eedd58",
+        "parentPublishedRevision": "sha256:4e4bec1b156fa8ba63811fac5c7aabe6e35ee3c33808ee7b757c85e24abe4bd1",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:109b160f2bd9f89c3fb461f87ab8df913d58053ba9739f878ca8af59f137a7ce",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Helps distinguish provider from relying party at vocabulary level; issuer/audience validation, trust configuration and authorization decisions are absent."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-idp-identity-provider",
+        "catalogueRevision": "sha256:a86920f1f57b19bc509a2c5eba89e986ef71f9d475f115db66dab04585047f31",
+        "deliveredRevision": "sha256:5c5e76a276d79ee14b29b885b77c84a90cca914938f828df586d2b235c3f1dea",
+        "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+        "status": "prior_review_preserved_vocabulary_overlap_no_new_family",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:ldap",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:326c1c8685fd8009b7abd60a3adb4cc8b087eb31f8082fdc7ea8ea79f6fbcd70",
+      "definitionRevision": "sha256:110ec1a3cc152dec5e5beb33a33de811d5818eac51bba19dfd28bb4c37093dd8",
+      "renderedEntryRevision": "sha256:110ec1a3cc152dec5e5beb33a33de811d5818eac51bba19dfd28bb4c37093dd8",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2313
+      },
+      "definitionShape": "object",
+      "termObserved": "LDAP",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "2.3",
+        "3.2",
+        "3.3",
+        "3.4",
+        "4.1",
+        "4.3",
+        "4.5",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.ldap",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Protocol for directory query and modification; directory access is distinct from an identity-provider service, federation assertion format and encrypted transport.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.ldap",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "4.5"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 13,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m034",
+        "parentLocalRevision": "sha256:965a25861c159891b5a31e515ba36785d352adf2eb9f929b34da44ba6b0ca7ab",
+        "parentPublishedRevision": "sha256:532800d62c6615ea73d6cac1dee1c161448580341d0b325b770914cfc2bfa6d7",
+        "fieldGroup": "options",
+        "fieldGroupRevision": "sha256:4c134b4be36feccc3d4a79b1353e975dedc725188333360892ea409176b2ef92",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Refreshes directory purpose; it does not teach bind security, TLS, directory permissions, ports or protocol selection for network-device administration."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-network-architecture-protocols-ldap-lightweight-directory-access-protocol",
+        "catalogueRevision": "sha256:1d2966ec5c5cf2448d0ddb96a2a7ee78acbebfe56e2182331920b87ba4f6dd5e",
+        "deliveredRevision": "sha256:9d11982cff523d65298fae87ee4197ca59a47410dcbff93d52445cbe8dd40a9a",
+        "priorPacketPath": null,
+        "status": "source_comparison_only_no_additional_card_disposition",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:mtbf",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:3da7c4ec5d0cf88b5e40bcfb572df6c6909e65e73e3d22a291164205e4ec5674",
+      "definitionRevision": "sha256:71625e7b0634ffa5008a737c7143c6ac0cff9abdc3e60279a61125e03c342334",
+      "renderedEntryRevision": "sha256:71625e7b0634ffa5008a737c7143c6ac0cff9abdc3e60279a61125e03c342334",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2323
+      },
+      "definitionShape": "object",
+      "termObserved": "MTBF",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.mtbf",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Average interval between failures of repairable systems; not non-repairable lifetime, restoration duration or a per-incident deadline.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.mtbf",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "5.2"
+        ],
+        "contextCodes": [
+          "3.4"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 2,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "no_verified_local_rendered_occurrence_in_checked_sources",
+      "verifiedSurfaceExample": null,
+      "postMissUsefulnessProposal": {
+        "status": "semantic_vocabulary_only_delivery_unverified",
+        "approvedRemediation": false,
+        "rationale": "Semantically useful reliability vocabulary but no verified local inline-tooltip occurrence; a card or table mention cannot be claimed as delivered glossary remediation."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-risk-governance-business-mtbf-mean-time-between-failures",
+        "catalogueRevision": "sha256:c0b9e867a10eb680032a8f85f9000bf7f30a0ca6c919adcb33b1ddbf51eb850a",
+        "deliveredRevision": "sha256:cad04e3400b97b5796a845d6aa236a263bf3a2936461e94b56334b6dd58169b7",
+        "priorPacketPath": null,
+        "status": "source_comparison_only_no_additional_card_disposition",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:mttr",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:09b9dd6eebf37a22c75b8c89f22c7dacf5a61fe36252cd6835d09f27b5785220",
+      "definitionRevision": "sha256:769ae53401583ed797b74089d262347de92f3d3ffdceade00eece4416de53594",
+      "renderedEntryRevision": "sha256:769ae53401583ed797b74089d262347de92f3d3ffdceade00eece4416de53594",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2326
+      },
+      "definitionShape": "object",
+      "termObserved": "MTTR",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4"
+      ],
+      "existingPrimarySupportCandidate": "recovery.mttr",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "The authored definition mixes failure repair with incident response timing; exact recovery.mttr linkage is withheld pending a repair/recover versus respond distinction.",
+      "conceptLinkProposals": [],
+      "withheldCanonicalCandidates": [
+        "recovery.mttr"
+      ],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [],
+        "contextCodes": [
+          "5.2",
+          "4.8"
+        ],
+        "status": "precise_scope_withheld_context_only"
+      },
+      "sourceReferenceCount": 6,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m635",
+        "parentLocalRevision": "sha256:d2f6ffed09aa5b1fd7a933da2e5e531906923f96ef00c90b910b184b0cc25233",
+        "parentPublishedRevision": "sha256:3df3c1be0e2e4477d1ed3e517e1eb521a67533b7dd3b84f72854efeeb9ebfcd0",
+        "fieldGroup": "options",
+        "fieldGroupRevision": "sha256:2e81a6a51cca0a7140b596e8c0e27316b67967ee73af2aa4d9470b8a75e059bf",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "ambiguous_definition_not_approved_remediation",
+        "approvedRemediation": false,
+        "rationale": "Unsafe as targeted recovery correction while two different clocks are combined; the prior repair/recover card and table are narrower and must retain their dispositions."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-risk-governance-business-mttr-mean-time-to-repair-recover",
+        "catalogueRevision": "sha256:e0df2c38a13edc4d27a6835abc6e470a8c74880a68577a320d99b33a516ccbd7",
+        "deliveredRevision": "sha256:0ae2a131b213dd744826c08f893086b84e82c9a7ab193c971baf1554c3195c48",
+        "priorPacketPath": null,
+        "status": "source_comparison_only_no_additional_card_disposition",
+        "relation": "card_repair_recover_meaning_narrower_than_glossary_respond"
+      }
+    },
+    {
+      "recordId": "glossary:oauth",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:41f924c99a917456eb7a0836cd30c5af0ec21a900a15bac9d6f1e5e325460047",
+      "definitionRevision": "sha256:7954c273e7e3d3a3f9d1746a080cbb02483cfff888a63861c3a8e57be39da133",
+      "renderedEntryRevision": "sha256:7954c273e7e3d3a3f9d1746a080cbb02483cfff888a63861c3a8e57be39da133",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2336
+      },
+      "definitionShape": "object",
+      "termObserved": "OAuth",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "1.4",
+        "3.2",
+        "4.1",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.oauth",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Delegated resource authorization through tokens, distinct from OIDC authentication; not a claim that every historical grant avoids disclosing a password.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.oauth",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 7,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m077",
+        "parentLocalRevision": "sha256:3563719350e899c48bfd6ecb8a5419ae4d2222deb53b71bcb7e84ec33212bb23",
+        "parentPublishedRevision": "sha256:42e5a1b6ec4f06ab003f88d1646fe77c5c3def46137dc8a22550352f7f4fce4b",
+        "fieldGroup": "options",
+        "fieldGroupRevision": "sha256:62826927f7e6b4ef63a1997d6de00c98b0a3a2fda2c88185febdc5efcc2c479c",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Useful authorization-versus-login reminder; scopes, grants, audience and token validation remain untaught, so reading this does not repair a protocol-selection miss."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-oauth-open-authorization",
+        "catalogueRevision": "sha256:8ca8cfa534fded4011338a3a914caa22f28fcbce1ff937012e4edc533f7eba1c",
+        "deliveredRevision": "sha256:5e28db725346bf13c55d726d858cabcb02a4312c7e5a6d50502462c8529e9a54",
+        "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+        "status": "prior_review_preserved_vocabulary_overlap_no_new_family",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:oidc",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:0bea1b9e32906b09f106ad12128b65489130c3c60633dead4743991e1a77c18d",
+      "definitionRevision": "sha256:048ff281bcc24c5afdf1b44222b14ccc52e4055a3678c79190028cc359511e4d",
+      "renderedEntryRevision": "sha256:048ff281bcc24c5afdf1b44222b14ccc52e4055a3678c79190028cc359511e4d",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2338
+      },
+      "definitionShape": "object",
+      "termObserved": "OIDC",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "1.4",
+        "3.2",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.oidc",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Authentication and identity claims layered on OAuth 2.0; neither an access-token-only login shortcut nor an assurance that claims are validated.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.oidc",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 3,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "pbq:p225",
+        "parentLocalRevision": "sha256:11742d3825952b636a18ae732c2c2806efe2fbd5607f42758f3e2cad8c8beda0",
+        "parentPublishedRevision": "sha256:e13f5d0225a78a03a9aae80a9a7c6f13879855059cef123b288a0859a4af30de",
+        "fieldGroup": "option_feedback",
+        "fieldGroupRevision": "sha256:9d6a8ab6c48335a91f78b5cc33ccd73513b652c5917b3c65e3dc2ffac7f15e5d",
+        "renderedGroupRevision": "sha256:46200cc4f816ffd29aaee7aed84beba1a2d9134f577865c1ca5a8c5dc3c5a487",
+        "rendererBinding": "pbq-renderer",
+        "gate": "accessible_selected_pbq_then_submission_and_all_option_review",
+        "separateSolutionRendered": false,
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Useful contrast with OAuth when a learner opens PBQ feedback; it does not teach flow selection, ID-token validation or relying-party trust."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-oidc-openid-connect",
+        "catalogueRevision": "sha256:9ac8a1525e1e0b870d424d770327852261511e4581d5b2eb3969f22bd53640c7",
+        "deliveredRevision": "sha256:21cfca10fe8b17be11fbefb88c17edc77dd26c43483ac32416d10d8920e216e6",
+        "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+        "status": "prior_review_preserved_vocabulary_overlap_no_new_family",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:pki",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:d0b3a9f4074ed5ef3b6e7bb84c25c5cc10e308852cfdd8a0b39742120fcbb1bd",
+      "definitionRevision": "sha256:5dc5c3e97ba7730c3c3dd61a9bb8e25089903eeb56ddcf632b975514830851e3",
+      "renderedEntryRevision": "sha256:5dc5c3e97ba7730c3c3dd61a9bb8e25089903eeb56ddcf632b975514830851e3",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2350
+      },
+      "definitionShape": "object",
+      "termObserved": "PKI",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "1.4",
+        "3.1",
+        "3.3",
+        "4.5",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.pki",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Certificate-based public-key trust infrastructure comprising authorities, certificates, policies and keys; supporting encryption does not itself guarantee protected data.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.pki",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "1.4"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 49,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m222",
+        "parentLocalRevision": "sha256:53e6d5329fdb3caf8d22e8a1c3b5dc256fee6af294bf46d62aad7cd83b582e88",
+        "parentPublishedRevision": "sha256:b1972a9b4af2e0c64a2e55f1c865b06879fb1b023e5ca0f6cf56a3de91d57ec0",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:270c1d51f804ce03013575d2f4807313949bdabade00b4bcb49882535f6fd837",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Refreshes certificate trust context; certificate lifecycle, path validation, revocation, key usage and a Zero Trust policy role require additional teaching."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-crypto-keys-pki-pki-public-key-infrastructure",
+        "catalogueRevision": "sha256:17402ee0731f4413a82cac3a360af6cb65b8612112fbd588489e1a0899858320",
+        "deliveredRevision": "sha256:fce294c9fbdee1b4e206adcf8ecf1a4f99e7b3d109ebc036467a3e5ba2e680ac",
+        "priorPacketPath": null,
+        "status": "source_comparison_only_no_additional_card_disposition",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:rpo",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:0072bb6d79cb376e815aefffa9f50ba56cc6aac47862a1382f5e1ad894445ed3",
+      "definitionRevision": "sha256:f35cd309230ea540f793e3c17f529e7e34e4be75c26fcf59f1030ff21a750769",
+      "renderedEntryRevision": "sha256:f35cd309230ea540f793e3c17f529e7e34e4be75c26fcf59f1030ff21a750769",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2355
+      },
+      "definitionShape": "object",
+      "termObserved": "RPO",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2",
+        "4.8",
+        "4.9",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5"
+      ],
+      "existingPrimarySupportCandidate": "recovery.rpo",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Acceptable data loss expressed as a time interval to a recovery point; distinct from restoration duration and actual successful recovery.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "recovery.rpo",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "5.2"
+        ],
+        "contextCodes": [
+          "3.4"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 11,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m088",
+        "parentLocalRevision": "sha256:d828be6f37d110e5cf80620d9c7aa4b8129dbc28cbf1e221233f19baadf01158",
+        "parentPublishedRevision": "sha256:1a2b43e815c9c682156636929e645c41a914979b8dbe766e32eff25867f8de29",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:6987194af162ed20190199b8b94d636e6cb4a5262aebeb17dc848c10af84883e",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Refreshes the data-loss clock, but cannot choose a backup strategy, compute recovery loss from a scenario or distinguish every continuity metric."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-risk-governance-business-rpo-recovery-point-objective",
+        "catalogueRevision": "sha256:7d35d3d116551635ab28c5ede0352984b1b849a9301e6ca0d6befa8ffcbff5dd",
+        "deliveredRevision": "sha256:9529f6c44b5b55d0475d1a03e9fdff2b0853314e353ad846c615529d4e1fa84b",
+        "priorPacketPath": null,
+        "status": "source_comparison_only_no_additional_card_disposition",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:rto",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:6693d06a0896075072466fb9864ef786033543d3f35b8a584f91b85c737bfada",
+      "definitionRevision": "sha256:a618a44c323d9245cbb382f6daa26f93dd294697db3cf6eb211ba492b50c78f8",
+      "renderedEntryRevision": "sha256:a618a44c323d9245cbb382f6daa26f93dd294697db3cf6eb211ba492b50c78f8",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2356
+      },
+      "definitionShape": "object",
+      "termObserved": "RTO",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5"
+      ],
+      "existingPrimarySupportCandidate": "recovery.rto",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Acceptable service restoration time target after disruption; distinct from data-loss tolerance, MTTR average and maximum tolerable business disruption.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "recovery.rto",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "5.2"
+        ],
+        "contextCodes": [
+          "3.4"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 9,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m032",
+        "parentLocalRevision": "sha256:072ce4c7b9f8e0f1f70dbea7320cebfb13d18d482093240eb98485850478e200",
+        "parentPublishedRevision": "sha256:c6c2951ce7458d7a61cb32f71f16c289e576c68f59663a80d75adf26b00630bc",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:e35342b5734a4ec791479806de5a41d274cf9b594fef0813b024a82634e76552",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Refreshes restoration timing, but the definition does not teach MTD relationships, acceptable service levels, strategy selection or evidence that a target was met."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-risk-governance-business-rto-recovery-time-objective",
+        "catalogueRevision": "sha256:8074a2a7c533c4f7dab5e4267a990ad914ce565b68eaa9806e31f739d27243a6",
+        "deliveredRevision": "sha256:26081cff934382f30b5fb5d07a8c1ea9c280d211e3ee7567793b1250fb7461cb",
+        "priorPacketPath": null,
+        "status": "source_comparison_only_no_additional_card_disposition",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:saml",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:1ba53c6f0036debe76673de2c4f6da7f4820ed905b26e9174d73a95894f0f03c",
+      "definitionRevision": "sha256:5c1ee2205f935b1515941428b27c0e12f46f28e9b613f1510c284b80829837c7",
+      "renderedEntryRevision": "sha256:5c1ee2205f935b1515941428b27c0e12f46f28e9b613f1510c284b80829837c7",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2360
+      },
+      "definitionShape": "object",
+      "termObserved": "SAML",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "1.4",
+        "3.2",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.saml",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "XML assertion exchange for authentication, attributes or authorization contexts, commonly used in federated SSO; assertion format is not the user experience itself.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.saml",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 6,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m217",
+        "parentLocalRevision": "sha256:9ef44d4ea205afa3dc27af971bfe8cd9e5c4cd5f6920628f124732d8b5e24407",
+        "parentPublishedRevision": "sha256:bfacd7eaab59fbbc21947628d5ff7fd68bcfb714ee6bb50584d83db7c717b879",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:e8b4194b5b2545f64372ff624a89fa2917b10b6048797d58911455001fcd4751",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Helps recognize XML assertion vocabulary; issuer, audience, signature, replay protections and SAML versus OIDC deployment selection are absent."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-saml-security-assertion-markup-language",
+        "catalogueRevision": "sha256:6a87b0d8e8b2159283046c3e80a7d469b186c1f2be4bb830269e5a9cc71fc57d",
+        "deliveredRevision": "sha256:cbf11f86bce08b180f087492319d51c135963e678762db54ade525f43b92a3c0",
+        "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+        "status": "prior_review_preserved_vocabulary_overlap_no_new_family",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:sso",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:c2fe9c03761a9c7ade90ab35a9799c23e4357082468b4f6c43a58f3a51ec927d",
+      "definitionRevision": "sha256:3f5ad60c9dce95c38b947428f32f55271088d1981bf43e7bef30a04a0829ae98",
+      "renderedEntryRevision": "sha256:3f5ad60c9dce95c38b947428f32f55271088d1981bf43e7bef30a04a0829ae98",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2375
+      },
+      "definitionShape": "object",
+      "termObserved": "SSO",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "1.4",
+        "3.2",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.sso",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "One login/session across multiple applications; sign-in experience is distinct from federation across trust domains and from any single assertion protocol.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.sso",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 6,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m108",
+        "parentLocalRevision": "sha256:b335eec142f744ce9f5edab646cc3463ba65b7b54be67b7780d272d8a21e9ba1",
+        "parentPublishedRevision": "sha256:fefa58222e920a962eb60e2619267ed828c7ae05253312e1c8cc3e76fec8f666",
+        "fieldGroup": "options",
+        "fieldGroupRevision": "sha256:163ce57763b1714307b14508e6a045c5b70ba77d7678a7271f52c885eb6bcf52",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Refreshes the one-login experience; it does not establish federation trust, provisioning, session security or authentication/authorization separation."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-sso-single-sign-on",
+        "catalogueRevision": "sha256:fd2872d81b0e984417c86a7a33485e878def3abcd27709198cee7cd37992e56c",
+        "deliveredRevision": "sha256:4d83d4b7e428082b2895fd20e70153abb0663f05d3eb3d7ed90aab043f1fcac3",
+        "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+        "status": "prior_review_preserved_vocabulary_overlap_no_new_family",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:tacacs%2B",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:5040d572d6f28e27b7a8d8b304236a7491749b18c57849f83f6d58606117a7ef",
+      "definitionRevision": "sha256:9b907695f0e02b0c6444ee3b8f9f3c6e790f725a602a636326cbe92d79b6a19d",
+      "renderedEntryRevision": "sha256:9b907695f0e02b0c6444ee3b8f9f3c6e790f725a602a636326cbe92d79b6a19d",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2380
+      },
+      "definitionShape": "object",
+      "termObserved": "TACACS+",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "1.4",
+        "3.2",
+        "4.1",
+        "4.5",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.tacacs",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Network-device administration AAA protocol with separated functions; preserve the plus identity and withhold any inference that legacy packet obfuscation is modern encryption.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.tacacs",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2",
+          "4.5"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 4,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m034",
+        "parentLocalRevision": "sha256:965a25861c159891b5a31e515ba36785d352adf2eb9f929b34da44ba6b0ca7ab",
+        "parentPublishedRevision": "sha256:532800d62c6615ea73d6cac1dee1c161448580341d0b325b770914cfc2bfa6d7",
+        "fieldGroup": "options",
+        "fieldGroupRevision": "sha256:4c134b4be36feccc3d4a79b1353e975dedc725188333360892ea409176b2ef92",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Useful device-administration vocabulary, but the encrypted-payload wording needs a separate content correction before security assurances or protocol-selection remediation are approved."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-identity-authentication-tacacs-terminal-access-controller-access-control-system-plus",
+        "catalogueRevision": "sha256:38d2781fa95798ceb52df9697c53abac579df402815a743c1a52c5ae6d93ab16",
+        "deliveredRevision": "sha256:adaa0d5a78e1d81b4e348aa3a8472afc52b7dcccedae5fa920fc9c6d2d0ee939",
+        "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+        "status": "prior_review_preserved_vocabulary_overlap_no_new_family",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    },
+    {
+      "recordId": "glossary:vpn",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:cc87bee792b26651d79b8e7f13f57bea531baf6827fa3f6ece066dd8a6a513f6",
+      "definitionRevision": "sha256:d37c8585b28e4245ccac451985c4e950459785ebc3158f770229464844398ace",
+      "renderedEntryRevision": "sha256:d37c8585b28e4245ccac451985c4e950459785ebc3158f770229464844398ace",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2388
+      },
+      "definitionShape": "object",
+      "termObserved": "VPN",
+      "publicationStatusObserved": "available_conditional",
+      "precisionObserved": "support_only",
+      "objectiveCodesObserved": [
+        "1.2",
+        "1.4",
+        "2.3",
+        "2.4",
+        "3.2",
+        "3.3",
+        "3.4",
+        "4.1",
+        "4.5",
+        "4.6",
+        "4.8"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.vpn",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "meaningProposal": "Secure encrypted VPN connection over an untrusted network in this authored context; not every service bearing a VPN label, encryption algorithm or end-to-end application guarantee.",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.vpn",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "3.2"
+        ],
+        "contextCodes": [
+          "1.4",
+          "4.5"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "sourceReferenceCount": 16,
+      "sourceReferencesAreDeliveryProof": false,
+      "deliveryBinding": "glossary-delivery",
+      "deliveryStatus": "verified_local_source_rendered_token_not_browser_open",
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m130",
+        "parentLocalRevision": "sha256:dcc990fe9da339410868c4cc6f819ac97571985680f183f19be880e727d33d4d",
+        "parentPublishedRevision": "sha256:e98125daab9cd548380179230c7b8912d04a28200e33584463df2b143f719d4d",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:a933a598e285d72c21efe494761b16e6a9f28b2c477b04ef10bb095240daeb1d",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "vocabulary_support_not_validated_recovery",
+        "approvedRemediation": false,
+        "rationale": "Refreshes tunnel purpose; endpoint trust, split tunneling, IPsec/TLS selection, routing, key management and per-application protection are not taught."
+      },
+      "cardOverlap": {
+        "recordId": "flashcard:sy0701-acronym-network-architecture-protocols-vpn-virtual-private-network",
+        "catalogueRevision": "sha256:ba9de88a25f5c00d13da887e62634ed17fa028792c53e1205e6d357af1b158e7",
+        "deliveredRevision": "sha256:ff4b97cadb8648d608e20b6656673f3962f1794ca08519a3c234c2ec15cfb100",
+        "priorPacketPath": null,
+        "status": "source_comparison_only_no_additional_card_disposition",
+        "relation": "related_same_term_instruction_not_independent_evidence"
+      }
+    }
+  ],
+  "deliveryBindings": [
+    {
+      "id": "glossary-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function GlossaryText(",
+      "endAnchor": "function PBQProseText(",
+      "startLine": 20677,
+      "endLine": 20765,
+      "sourceSignature": "sha256:8cdcb8f9d8d103e5efb12d98da73e95941f6024ca365178a8d8e13304386c27a"
+    },
+    {
+      "id": "stem-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function QuestionStemText(",
+      "endAnchor": "function ChBadge(",
+      "startLine": 20800,
+      "endLine": 20816,
+      "sourceSignature": "sha256:13bb673e97f1509d064378b49b31886a75ea8d0d854d5cc2c0bd76e357028b7d"
+    },
+    {
+      "id": "mcq-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function MCQPractice(",
+      "endAnchor": "function UpgradeModal(",
+      "startLine": 24992,
+      "endLine": 25873,
+      "sourceSignature": "sha256:f96053d990c9e6e98bebb88af15b18766c3996a962879e7d178b21e5baa2556d"
+    },
+    {
+      "id": "pbq-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function PBQSim(",
+      "endAnchor": "function ExamMode(",
+      "startLine": 26211,
+      "endLine": 26638,
+      "sourceSignature": "sha256:bc90afd8023b53dcb4c26115dd86eb6b500d8a3637afd8661a922cbe58ffa98e"
+    },
+    {
+      "id": "pbq-prose-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function PBQProseText(",
+      "endAnchor": "function splitQuestionStem(",
+      "startLine": 20765,
+      "endLine": 20782,
+      "sourceSignature": "sha256:37fe00b75da3fa7d80d41254c09868151f83469e5fa61e94325bb4982d1bb215"
+    },
+    {
+      "id": "pbq-feedback-helper",
+      "path": "src/App.jsx",
+      "anchor": "function pbqFeedbackBody(",
+      "endAnchor": "function inferPbqObjective(",
+      "startLine": 15789,
+      "endLine": 15799,
+      "sourceSignature": "sha256:47f0e0b55aa03305380db13b5d773be43edc1aeab792ddb6995ee29fe51c9626"
+    },
+    {
+      "id": "lesson-body-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function DeepDiveReadableBites(",
+      "endAnchor": "function ConceptDeepDivesPage(",
+      "startLine": 31203,
+      "endLine": 31239,
+      "sourceSignature": "sha256:914339c3ddd3934892b67c8a89e7b870c07c671f77b3e792c25b081d1e879a6e"
+    },
+    {
+      "id": "lesson-page-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function ConceptDeepDivesPage(",
+      "endAnchor": "function FlashcardsPage(",
+      "startLine": 31239,
+      "endLine": 31898,
+      "sourceSignature": "sha256:73bedc41a26c97312747cd945c691668a2b37f90fc15e8a0d6bbb7d796a4de7e"
+    },
+    {
+      "id": "card-study-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function AcronymFlashcardLab(",
+      "endAnchor": "function DeepDiveReadableBites(",
+      "startLine": 30903,
+      "endLine": 31203,
+      "sourceSignature": "sha256:81cd27d0747dacb011d3f18802c4d1fbe83d3a09421d7731c62853d91008b79e"
+    },
+    {
+      "id": "pbq-bank-gate",
+      "path": "src/App.jsx",
+      "anchor": "function PBQBank(",
+      "endAnchor": "function PBQSim(",
+      "startLine": 25917,
+      "endLine": 26211,
+      "sourceSignature": "sha256:aaf1c9ec108f185aba89c14b6841cc6e1170f6a3de365e93039b0fe81e01d7e7"
+    },
+    {
+      "id": "pbq-selected-gate",
+      "path": "src/App.jsx",
+      "anchor": "  const pbqLocalFallback=",
+      "endAnchor": "  const navItems=[",
+      "startLine": 34766,
+      "endLine": 34809,
+      "sourceSignature": "sha256:0c411efb29943f4f9202d35fe8a7903332b3702c73f209154b4a5d02769c633c"
+    }
+  ],
+  "selectorBinding": {
+    "recordId": "intervention:glossary-delivery",
+    "sourceRevision": "sha256:8684bb55616f18bd246f9ed2873ff8ed21769e6f8285588dbeb87a2ebb775ef2",
+    "limitation": "Definitions are conditional inline support; corpus matches do not prove a browser tooltip was opened."
+  },
+  "deliveryObservations": {
+    "sourceOnly": true,
+    "freshBrowserDelivery": false,
+    "noLearnerStateOrSyncExecuted": true,
+    "glossaryActivation": "matched_rendered_token_then_click_or_enter_or_space",
+    "definitionPopoverPlainJsxNoRecursiveGlossary": true,
+    "mcqOptionTooltipInteractionLimit": "nested_role_button_inside_option_button; submitted_disabled_parent_not_browser_verified",
+    "mcqStemAndOptions": "selected_question_no_submission_feedback_gate_for_the_bound_probes",
+    "mcqFeedback": "submission_plus_Pro_and_wrong_selected_option_for_inline_wrong_feedback",
+    "oidcProbe": "p225_submitted_all_option_review_PBQProseText_then_GlossaryText",
+    "oidcStandaloneSolutionSuppressed": true,
+    "pbqAccess": "selected_effective_question_available_and_opened_via_Pro_preview_or_coin_unlock; p225_is_not_p001_preview; configured_remote_payload_not_refreshed",
+    "mtbf": "card_and_lesson_table_plain_JSX_no_tooltip_proof; not_a_global_unused_content_claim",
+    "sourceReferencesDoNotEstablishExposure": true
+  },
+  "canonicalBoundary": {
+    "newCanonicalIdentities": 0,
+    "topicOrSupportPromotionAllowed": false,
+    "proposedSupportNodeLinks": 12,
+    "existingMasteryNodesUsedOnlyAsZeroWeightInstructionalSupport": [
+      "continuity.bia",
+      "recovery.rpo",
+      "recovery.rto"
+    ],
+    "withheldExactRecoveryLink": [
+      "recovery.mttr"
+    ],
+    "priorAmbiguitiesUnchanged": [
+      "CIA versus CIA-triad",
+      "MAC cross-domain meanings",
+      "Role-based versus rule-based RBAC",
+      "TOU access-window/race-condition discrepancy"
+    ],
+    "authorizationAndAuthenticationNotMerged": true,
+    "tacacsPlusNotLegacyTacacs": true
+  },
+  "overlapGroups": [
+    {
+      "newRecordIds": [
+        "glossary:eap",
+        "glossary:idp",
+        "glossary:oauth",
+        "glossary:oidc",
+        "glossary:saml",
+        "glossary:sso",
+        "glossary:tacacs%2B"
+      ],
+      "priorReferences": [
+        {
+          "recordId": "flashcard:sy0701-acronym-identity-authentication-eap-extensible-authentication-protocol",
+          "sourceRevision": "sha256:eb31374acc5bfe0df7bda938910e4f9e1a9c5cecb9f24bbb52b584559bb260fe",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json"
+        },
+        {
+          "recordId": "flashcard:sy0701-acronym-identity-authentication-idp-identity-provider",
+          "sourceRevision": "sha256:a86920f1f57b19bc509a2c5eba89e986ef71f9d475f115db66dab04585047f31",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json"
+        },
+        {
+          "recordId": "flashcard:sy0701-acronym-identity-authentication-oauth-open-authorization",
+          "sourceRevision": "sha256:8ca8cfa534fded4011338a3a914caa22f28fcbce1ff937012e4edc533f7eba1c",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json"
+        },
+        {
+          "recordId": "flashcard:sy0701-acronym-identity-authentication-oidc-openid-connect",
+          "sourceRevision": "sha256:9ac8a1525e1e0b870d424d770327852261511e4581d5b2eb3969f22bd53640c7",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json"
+        },
+        {
+          "recordId": "flashcard:sy0701-acronym-identity-authentication-saml-security-assertion-markup-language",
+          "sourceRevision": "sha256:6a87b0d8e8b2159283046c3e80a7d469b186c1f2be4bb830269e5a9cc71fc57d",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json"
+        },
+        {
+          "recordId": "flashcard:sy0701-acronym-identity-authentication-sso-single-sign-on",
+          "sourceRevision": "sha256:fd2872d81b0e984417c86a7a33485e878def3abcd27709198cee7cd37992e56c",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json"
+        },
+        {
+          "recordId": "flashcard:sy0701-acronym-identity-authentication-tacacs-terminal-access-controller-access-control-system-plus",
+          "sourceRevision": "sha256:38d2781fa95798ceb52df9697c53abac579df402815a743c1a52c5ae6d93ab16",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json"
+        }
+      ],
+      "relation": "same_identity_term_card_and_glossary_no_independent_family_or_validated_recovery"
+    },
+    {
+      "newRecordIds": [
+        "glossary:bia",
+        "glossary:mtbf",
+        "glossary:mttr",
+        "glossary:rpo",
+        "glossary:rto"
+      ],
+      "priorReferences": [
+        {
+          "recordId": "lesson:resilience-assets-physical",
+          "sourceRevision": "sha256:4f1f26144729884a9096f730ac4bdae5840e55e0980b863efe51a0be933e8d3d",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-resilience-lesson-proposals.json"
+        },
+        {
+          "recordId": "section:resilience-assets-physical:1",
+          "sourceRevision": "sha256:b0cee02c7ac294cb5e4d5912bb3acb90f2c147f4055f4fbe04d7dbfcd454ac3b",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-resilience-lesson-proposals.json"
+        },
+        {
+          "recordId": "keywords:resilience-assets-physical",
+          "sourceRevision": "sha256:e2064bf6cbc45563c17fcb5e8e6f5b8a1eca952036ee9335c5d42544ee8086ca",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-resilience-lesson-proposals.json"
+        },
+        {
+          "recordId": "traps:resilience-assets-physical",
+          "sourceRevision": "sha256:914d1abcba14a20df8090d5c56e830148147cb82c51d8942a86aa35b87e0d03b",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-resilience-lesson-proposals.json"
+        },
+        {
+          "recordId": "check:resilience-assets-physical",
+          "sourceRevision": "sha256:3f1750b1f13d4c6e0459cd5206c1ef1e59a46ad0586608cb94e7be8014a701d2",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-resilience-lesson-proposals.json"
+        }
+      ],
+      "relation": "BIA_alias_only_in_lesson; repair_recover_table_narrower_than_MTTR_glossary; recovery_vocabulary_overlap_not_new_outcomes"
+    },
+    {
+      "newRecordIds": [
+        "glossary:dlp",
+        "glossary:eap",
+        "glossary:idp",
+        "glossary:ldap",
+        "glossary:oauth",
+        "glossary:oidc",
+        "glossary:pki",
+        "glossary:saml",
+        "glossary:sso",
+        "glossary:tacacs%2B",
+        "glossary:vpn"
+      ],
+      "priorReferences": [
+        {
+          "recordId": "lesson:identity-zero-trust",
+          "sourceRevision": "sha256:72351fb5a6b276cb2d1a6280c24cef6cd5f8262213ea0e2065865fcd92f83a95",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json"
+        },
+        {
+          "recordId": "lesson:security-foundations-controls",
+          "sourceRevision": "sha256:11afeadc87aa745928cad17bd8c1141f96a1b421c3c4f9134767e22c47420c6c",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json"
+        }
+      ],
+      "relation": "term_definitions_do_not_teach_Zero_Trust_policy_roles_CIA_distinctions_physical_control_choices_least_privilege_split_duties_dual_control_or_control_categories"
+    }
+  ],
+  "priorAssessmentBoundary": {
+    "priorObjective12QuestionAndFeedbackDispositionsUnchanged": true,
+    "glossaryLookupInDistractorOrFeedbackIsNotCorrectnessOrAdditionalAssessment": true,
+    "existingFamilyLabelsUnchanged": true,
+    "approvedRemediation": false,
+    "newFamilyCredit": 0
+  },
+  "separatelyScopedFollowups": [
+    {
+      "recordId": "glossary:mttr",
+      "status": "pending_separate_content_identity_decision",
+      "detail": "Distinguish repair/recover from incident response clock before canonical linkage; do not change the prior card/table or invent a new concept here."
+    },
+    {
+      "recordId": "glossary:tacacs%2B",
+      "status": "pending_separate_content_correction",
+      "detail": "Replace the implication of modern encrypted payload security with accurate RFC8907 obfuscation and secured-transport context; no teaching edit in this slice."
+    },
+    {
+      "recordId": "glossary:mtbf",
+      "status": "conditional_delivery_unverified",
+      "detail": "Do not fabricate a tooltip occurrence from card/table/reference metadata; a later delivery change or real occurrence needs separate verification."
+    }
+  ],
+  "remainingObjective12Records": [],
+  "phaseWideBacklog": {
+    "packageRecordsUnchanged": 1878,
+    "reviewQueueUnchanged": 2954,
+    "unresolvedQuestionMappingsUnchanged": 489,
+    "existingPrimaryQuestionProposalsUnchanged": 7,
+    "taxonomyUnchanged": {
+      "masteryConcepts": 5,
+      "topics": 28,
+      "supportingConcepts": 402
+    },
+    "humanApprovedNewMappings": 0,
+    "eligibleNewEvidence": 0
+  },
+  "privateBoundary": {
+    "recordId": "private:pbq:p017",
+    "sourceRevision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "trustedRevisionId": null,
+    "payloadReviewed": false,
+    "masteryWeight": 0,
+    "status": "SELECTED_PRIVATE_REVISION_UNAVAILABLE_NO_FALLBACK_SUBSTITUTION"
+  },
+  "humanDecisionReferences": {
+    "humanApprovalRequestedThisTurn": false,
+    "ownerDecision": "All proposals remain pending; no queue closure, competence, publication or migration approval."
+  }
+}
