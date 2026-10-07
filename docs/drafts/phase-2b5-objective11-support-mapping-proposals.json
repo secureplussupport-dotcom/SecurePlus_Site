@@ -1,0 +1,1787 @@
+{
+  "packetId": "phase-2b5-objective11-support-mapping-proposals-v1",
+  "date": "2026-10-07",
+  "baselineCommit": "79f0176d37133ef34baa7445934cc442815ac238",
+  "status": "LOCAL_SEMANTIC_PROPOSALS_NOT_READY",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "newFamilyCredit": 0,
+  "sourceBindings": [
+    {
+      "path": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "sha256": "0ba95c5c8f8a00e091daa9d852de0350a01ca00bedcba7c317155ea94cad88a9"
+    },
+    {
+      "path": "docs/phase-2b5-objective11-controls-mapping-review.md",
+      "sha256": "bb3f009704b379f5533ffeb1b1806117a72e75ca12652017d6553df6c3726e9c"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/mapping-package.json",
+      "sha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/release-checksums.json",
+      "sha256": "98e7e0ed45b5fd17f1be50c4cd36eba53bf289de26a427810e061274dcfb3403"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-batch.md",
+      "sha256": "1a039e6f4778a585128b0d4167536c46a53d13130476b6144ffa946f2f464713"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-guide.md",
+      "sha256": "a9cc1fff35873d84d90bec1c5c6f4613fdb46defae5a8b2a87b4b7c554ffd33b"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
+      "sha256": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
+    },
+    {
+      "path": "docs/secureplus-rebrand-master-plan.md",
+      "sha256": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c"
+    },
+    {
+      "path": "docs/phase-1-product-loop-audit.md",
+      "sha256": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10"
+    },
+    {
+      "path": "src/data/sy0701AcronymFlashcards.js",
+      "sha256": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1"
+    },
+    {
+      "path": "src/data/sy0701DeepDiveMap.js",
+      "sha256": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff"
+    },
+    {
+      "path": "src/data/learningConcepts.js",
+      "sha256": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac"
+    },
+    {
+      "path": "src/data/learningMappings.js",
+      "sha256": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+    },
+    {
+      "path": "scripts/lib/read-learning-pilot-bank.mjs",
+      "sha256": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac"
+    },
+    {
+      "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
+      "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "scripts/lib/content-mapping/package.mjs",
+      "sha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748"
+    }
+  ],
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "denominator": {
+    "selectedRecords": 24,
+    "flashcards": 9,
+    "glossaryDefinitions": 14,
+    "deckContainers": 1,
+    "authoredInstructionalRecordsExcludingContainer": 23,
+    "previousSliceRecords": 45,
+    "combinedDistinctObjective11Candidates": 69,
+    "remainingObjective11CandidatesWithoutAnAgentProposal": 0,
+    "remainingPackageRecordsOutsideCombinedSlices": 1809,
+    "note": "69/69 broad candidates have source-bound agent dispositions, not approved mappings. Overlap, ambiguous identities and usefulness remain unresolved."
+  },
+  "instructionalProposals": [
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-aaa-authentication-authorization-and-accounting",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:87bb6802ccc8a205d1539df522a00f4d7409caaa6211f796b3324c27d2a8c708",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.aaa",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "AAA",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.aaa",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Identity verification, permission decisions and activity records are separate roles.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "1.2"
+        ],
+        "contextCodes": [],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Recall the identity/access/activity vocabulary; it does not teach control-function classification or diagnose a mistaken answer."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "parentDeckRecordId": "deck:security-principles-access-models",
+      "deliveredCardRevision": "sha256:ce136d904800a17a61d6920b6ccaf2d5019eb83c3bbfdd59ba4f90228c99561d",
+      "catalogueCardRevision": "sha256:87bb6802ccc8a205d1539df522a00f4d7409caaa6211f796b3324c27d2a8c708",
+      "deliveryBinding": "flashcard-study-pass",
+      "availableModes": [
+        "definition",
+        "acronym"
+      ],
+      "exampleModeAvailable": false,
+      "familyRelation": "same_authored_card_across_modes_shuffle_and_reuse_not_new_evidence",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-acl-access-control-list",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:c71f342efb58d7d27a6e83a42be314898a989f90e6ee028b1a4af87ecf65f471",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.acl",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "ACL",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.acl",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Permission rules allow or deny access to an object or network resource.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.5",
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Recognize access-list terminology; this is not rule ordering practice or a proof that every access list has one control function."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "parentDeckRecordId": "deck:security-principles-access-models",
+      "deliveredCardRevision": "sha256:3f832f7c8ec751c8b68215fdb98b947f5a38522dc90d108f7843eaa92624f293",
+      "catalogueCardRevision": "sha256:c71f342efb58d7d27a6e83a42be314898a989f90e6ee028b1a4af87ecf65f471",
+      "deliveryBinding": "flashcard-study-pass",
+      "availableModes": [
+        "definition",
+        "acronym"
+      ],
+      "exampleModeAvailable": false,
+      "familyRelation": "same_authored_card_across_modes_shuffle_and_reuse_not_new_evidence",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-aup-acceptable-use-policy",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:f72ca61dcb2c905832c723b39dd660789245902bbe56b7ce161973aac1ef156f",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.aup",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "AUP",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.aup",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "A policy describes permitted and forbidden use of organizational systems.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "5.1"
+        ],
+        "contextCodes": [
+          "1.1"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Recognize policy purpose; no direct directive/managerial classification, enforcement or policy-development skill is taught."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "parentDeckRecordId": "deck:security-principles-access-models",
+      "deliveredCardRevision": "sha256:ddc0f84e361b2b3f9e0f6111d4735ad5cc8fa3cda93f3f04a9574f383734735b",
+      "catalogueCardRevision": "sha256:f72ca61dcb2c905832c723b39dd660789245902bbe56b7ce161973aac1ef156f",
+      "deliveryBinding": "flashcard-study-pass",
+      "availableModes": [
+        "definition",
+        "acronym"
+      ],
+      "exampleModeAvailable": false,
+      "familyRelation": "same_authored_card_across_modes_shuffle_and_reuse_not_new_evidence",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-cia-confidentiality-integrity-and-availability",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:e4758fadc6d24aaa85f0901a41ad71051ed8fa24ec65d25c6f028ab95d250fda",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.cia",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "CIA",
+      "conceptLinkProposals": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.cia",
+        "sy0701.term.cia-triad"
+      ],
+      "meaningProposal": "Security goals concern disclosure, unwanted change and service availability.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "1.2"
+        ],
+        "contextCodes": [],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Fundamental vocabulary can refresh the three goals. Canonical alias choice remains withheld; this is not control-type mastery."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "parentDeckRecordId": "deck:security-principles-access-models",
+      "deliveredCardRevision": "sha256:4fc0e299932f6bff8aa0ee25949d129a21c24c90ae4793522c230ffd3119c4a4",
+      "catalogueCardRevision": "sha256:e4758fadc6d24aaa85f0901a41ad71051ed8fa24ec65d25c6f028ab95d250fda",
+      "deliveryBinding": "flashcard-study-pass",
+      "availableModes": [
+        "definition",
+        "acronym"
+      ],
+      "exampleModeAvailable": false,
+      "familyRelation": "same_authored_card_across_modes_shuffle_and_reuse_not_new_evidence",
+      "ambiguityStatus": "withheld_identity_pending_editorial_decision"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-dac-discretionary-access-control",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:f7ccccc3058db98804926212bc9fd69d5f5de6753c0d7727637ffaba14b52b06",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.dac",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "DAC",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.dac",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "The resource owner controls access decisions.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Differentiate owner discretion from centrally imposed labels at definition level; no scenario application is provided."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "parentDeckRecordId": "deck:security-principles-access-models",
+      "deliveredCardRevision": "sha256:b291ff3584a060ab5a6fb86e67a04d46159b0ea628547b4d94c8e93fae47ebaa",
+      "catalogueCardRevision": "sha256:f7ccccc3058db98804926212bc9fd69d5f5de6753c0d7727637ffaba14b52b06",
+      "deliveryBinding": "flashcard-study-pass",
+      "availableModes": [
+        "definition",
+        "acronym"
+      ],
+      "exampleModeAvailable": false,
+      "familyRelation": "same_authored_card_across_modes_shuffle_and_reuse_not_new_evidence",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-mac-mandatory-access-control",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:52cea94fb79c0f29a3b1083b7f0d688420cd1e352e91e81d338eafd6c4006e03",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.mac",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "MAC",
+      "conceptLinkProposals": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.mac"
+      ],
+      "meaningProposal": "The card specifically describes centrally imposed labels and policy for access.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Useful access-model reminder only after a scoped identity exists. The canonical MAC node is overloaded with networking meanings; do not merge them."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "parentDeckRecordId": "deck:security-principles-access-models",
+      "deliveredCardRevision": "sha256:4661621355bf220fab297db91cde8ffdf1a3d223701e7d26ac2cc3977360d47d",
+      "catalogueCardRevision": "sha256:52cea94fb79c0f29a3b1083b7f0d688420cd1e352e91e81d338eafd6c4006e03",
+      "deliveryBinding": "flashcard-study-pass",
+      "availableModes": [
+        "definition",
+        "acronym"
+      ],
+      "exampleModeAvailable": false,
+      "familyRelation": "same_authored_card_across_modes_shuffle_and_reuse_not_new_evidence",
+      "ambiguityStatus": "withheld_identity_pending_editorial_decision"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-rbac-role-based-access-control",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:08f89c2253fb6848946d44acf051f3fad1a2d3eac3efa70c376aad9d43f4922f",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.rbac",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "RBAC-role",
+      "conceptLinkProposals": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.rbac"
+      ],
+      "meaningProposal": "Job-role membership governs permission assignment.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Role and rule cards must stay separate meanings. One generic RBAC identity cannot resolve their distinct mechanisms."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "parentDeckRecordId": "deck:security-principles-access-models",
+      "deliveredCardRevision": "sha256:b8388a490d302e24d8ba0f0dc778fd30c32560fa5056b6066fb1d42d61b70750",
+      "catalogueCardRevision": "sha256:08f89c2253fb6848946d44acf051f3fad1a2d3eac3efa70c376aad9d43f4922f",
+      "deliveryBinding": "flashcard-study-pass",
+      "availableModes": [
+        "definition",
+        "acronym"
+      ],
+      "exampleModeAvailable": false,
+      "familyRelation": "same_authored_card_across_modes_shuffle_and_reuse_not_new_evidence",
+      "ambiguityStatus": "withheld_identity_pending_editorial_decision"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-rbac-rule-based-access-control",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:50e19e9240bfe85f44df3b8a6c27b1abda9d689908ac1a48be5d0c4bb261c855",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.rbac",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "RBAC-rule",
+      "conceptLinkProposals": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.rbac"
+      ],
+      "meaningProposal": "Conditions such as device, location or time determine permissions.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "This is rule logic, not job-role membership. Similar acronym recall is not evidence of distinguishing the mechanisms."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "parentDeckRecordId": "deck:security-principles-access-models",
+      "deliveredCardRevision": "sha256:a9e5fe65f7d897dab05a539a5277a24ba7f2ae31ca76649026c7423071b2e0d9",
+      "catalogueCardRevision": "sha256:50e19e9240bfe85f44df3b8a6c27b1abda9d689908ac1a48be5d0c4bb261c855",
+      "deliveryBinding": "flashcard-study-pass",
+      "availableModes": [
+        "definition",
+        "acronym"
+      ],
+      "exampleModeAvailable": false,
+      "familyRelation": "same_authored_card_across_modes_shuffle_and_reuse_not_new_evidence",
+      "ambiguityStatus": "withheld_identity_pending_editorial_decision"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-tou-time-of-use",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:1b29010794a85ff96eee4e021f06abd5d4d6425a82b2eb270e7b6267c42648ab",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.tou",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "TOU",
+      "conceptLinkProposals": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.tou"
+      ],
+      "meaningProposal": "The delivered card describes permitted access windows.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Withhold the TOU identity: this local time-window meaning differs from the official race-condition time-of-use term. No 2.3 race-condition teaching or mastery may be inferred."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "parentDeckRecordId": "deck:security-principles-access-models",
+      "deliveredCardRevision": "sha256:d3e229bdbce076b39e9f9fa53e43568fb8eefef177916235fd1dc6ec34fa81a6",
+      "catalogueCardRevision": "sha256:1b29010794a85ff96eee4e021f06abd5d4d6425a82b2eb270e7b6267c42648ab",
+      "deliveryBinding": "flashcard-study-pass",
+      "availableModes": [
+        "definition",
+        "acronym"
+      ],
+      "exampleModeAvailable": false,
+      "familyRelation": "same_authored_card_across_modes_shuffle_and_reuse_not_new_evidence",
+      "ambiguityStatus": "withheld_identity_pending_editorial_decision"
+    },
+    {
+      "recordId": "glossary:aaa",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:0af02c407a4f6076acfe8e3d183c7e44512eab55cbcd00c82d7ad74101f1004d",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "3.2",
+        "4.1",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.aaa",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "AAA",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.aaa",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Identity, allowed actions and activity records are summarized.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "1.2"
+        ],
+        "contextCodes": [],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Short vocabulary reminder; no evidence that the learner can apply each role in a new scenario."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:8acef8d4134df50ec216a00f70892bdaecbb63f74972c0ec16b382df48ac3818",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2236
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 11,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m034",
+        "parentLocalRevision": "sha256:965a25861c159891b5a31e515ba36785d352adf2eb9f929b34da44ba6b0ca7ab",
+        "fieldGroup": "wrong_option_feedback",
+        "fieldGroupRevision": "sha256:2350b2c704949d0ed4d0de9465b429cf7bb855f26d0fd6501e66e3369aba4b2c",
+        "rendererBinding": "mcq-renderer",
+        "gate": "submission_and_feedback_access_gate",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "glossary:acl",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:bb131401aa48e86b64c07650670b6683ff5b6ba438e2fe84308115336c24c2de",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "2.5",
+        "3.2",
+        "4.4",
+        "4.5",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.acl",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "ACL",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.acl",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Permit/deny rules can control file, device and network access.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.5",
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "A short access-list contrast can support terminology after a miss, but not configuration, rule ordering or control classification."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:f07f485dcbc096914d3c0888b5d4fbc44e2cd3746d06a82986141708729e4b64",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2238
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 10,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m101",
+        "parentLocalRevision": "sha256:80b2bf88b54b6661639cbb424a392fceddc341bb2c7ff12cced30c637a4630b4",
+        "fieldGroup": "wrong_option_feedback",
+        "fieldGroupRevision": "sha256:501eacab360eddadcc4cb4a107fc783f045941d3641e53a71a651477724a5462",
+        "rendererBinding": "mcq-renderer",
+        "gate": "submission_and_feedback_access_gate",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "glossary:aup",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:9d17f3bb0c9471338918ed1f099cb558de7b9dbdaf30fefee98bd94c3ba62e6b",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "5.1"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.aup",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "AUP",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.aup",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Policy sets limits on organizational system use.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "5.1"
+        ],
+        "contextCodes": [
+          "1.1"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Policy meaning only; no independent directive-function outcome, management decision or governance competence."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:279c5d91e5c53cc0487ba1de1315710c727789051e85bdd5171c789dd34fd92a",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2249
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 2,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m083",
+        "parentLocalRevision": "sha256:14e6abef51ef9ce6bb7308c02e0c06504cf9dd97a6026774dda330a8e7f7b79e",
+        "fieldGroup": "explanation",
+        "fieldGroupRevision": "sha256:01c0f93240d5ff88f6f98e1bc9966f6029f2a49a756418755779a42be2ad4b30",
+        "rendererBinding": "mcq-renderer",
+        "gate": "submission_and_feedback_access_gate",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "glossary:cctv",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:ac2726ca02efe2089901ab188374a25a47e46b086fda4b09983e13410ba8c98a",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.cctv",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "CCTV",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.cctv",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Surveillance is described as physical security with detective and deterrent functions.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "1.1",
+          "1.2"
+        ],
+        "contextCodes": [],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Limited purpose reminder for m102; the definition does not explain why a warning sign is deterrent whereas recording detects. Do not assume every camera always supplies both functions."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:5f468ab6449c817995815367c57fc7af8d8f607f6b49791dfa0ad4b36a01a578",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2261
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 3,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m036",
+        "parentLocalRevision": "sha256:1dee34654fb75836dcec8ac018146157578c73435f24900494aab3a15b2ddbff",
+        "fieldGroup": "options",
+        "fieldGroupRevision": "sha256:a543909decf5bcd05129fb110f8892f8b7b1a2e1225d68c264756fbce9b96af3",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "glossary:cia",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:e7c28871613cacf874f34e2df922233096a4a6e2b1af8c265e6d8d219b093f2d",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "3.3"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.cia",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "CIA",
+      "conceptLinkProposals": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.cia",
+        "sy0701.term.cia-triad"
+      ],
+      "meaningProposal": "Three fundamental protection goals form the security triad.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "1.2"
+        ],
+        "contextCodes": [],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Alias identity remains withheld. Definition exposure cannot prove discrimination among applied goals."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:ad2fbb628d160d92d98a516cda51a16cf1fe278d6b1b1bcabb3ac81cbe27e358",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2262
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 7,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m002",
+        "parentLocalRevision": "sha256:669477a91777fe032ec929403ba6090f4d668c04d8545b862f7e79479f6f600e",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:67d6140fae8d840de53cb75a99eced9b80cfda3ecb2fe03dec44ce88b7bbdb97",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "withheld_identity_pending_editorial_decision"
+    },
+    {
+      "recordId": "glossary:dac",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:5a93866981bf83545031ddf19d6f5bc03a6b35f9b152c70f849fb140524eaad7",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.dac",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "DAC",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.dac",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Access discretion belongs to the resource owner.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "A brief model distinction without permissions practice; overlaps the delivered DAC card."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:e3179fb3fbad851bb437c9139e2591c81d63f04c3ec50af32314b0d69b0095d1",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2274
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 5,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m040",
+        "parentLocalRevision": "sha256:62f71fc640f3b793efccc6cca4381c0960ac48e069be5898bcbffeae94eaa5d3",
+        "fieldGroup": "options",
+        "fieldGroupRevision": "sha256:86133e44cd5aea0b2819be40d70fcd252303bbf69714451beb78708d78a1c79d",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "glossary:encryption",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:84e0be46e7bf560613e28fd9d4fed9749b5756bd1532bbdb1bbbe4cb5e3b6ee5",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "4.1",
+        "4.2",
+        "4.3",
+        "4.4",
+        "4.5",
+        "4.8",
+        "4.9",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.encryption",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "Encryption",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.encryption",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Key-based reversible transformation protects readable information.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "1.4"
+        ],
+        "contextCodes": [
+          "1.2",
+          "3.3"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Refresh encryption vocabulary; does not establish key management, algorithm choice, integrity or data-recovery competence."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:e5b9bc01f0bfc7ee88499f5eb879eae80dfa6eb1e67db63a48399b9c1935f090",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2401
+      },
+      "definitionShape": "string",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 104,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m008",
+        "parentLocalRevision": "sha256:7fd4e8361a56edff7bc705de341346177de0b0af0f3f836bc10938c910b3ebb5",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:49dfa33caf242073a42f5b17e74afb7344167f4fb3a14bedfdd8c004febc519b",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "glossary:mac",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:09f1b253770e93f9225f07f0a3eac23f29710cfd0a452e0ab6c41c7cc44b41f3",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "4.1",
+        "4.4",
+        "4.5",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.mac",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "MAC",
+      "conceptLinkProposals": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.mac"
+      ],
+      "meaningProposal": "The same inline token offers both mandatory access and network hardware-address meanings.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [],
+        "contextCodes": [
+          "4.6",
+          "3.1"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "The current definition mixes distinct domains. Require context and owner identity split before any precise support attribution."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:2db0690d0590b6e71d236011b57de165229802c610a788a3c1a3267ac38a153e",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2315
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 23,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m014",
+        "parentLocalRevision": "sha256:9e0b2847cb7e5975dad529964094c06879183d2f21b0da19086b61bcf944228e",
+        "fieldGroup": "wrong_option_feedback",
+        "fieldGroupRevision": "sha256:af483d0c782addeea5dce0e0d1808f5475f01c02024f5d7872671f5017a22ad2",
+        "rendererBinding": "mcq-renderer",
+        "gate": "submission_and_feedback_access_gate",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "withheld_identity_pending_editorial_decision"
+    },
+    {
+      "recordId": "glossary:mfa",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:84bfa0c7079e79cbceaf02734e2c0a14142b90a92b6ea0775f00fa8b0d0246ac",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.4",
+        "2.2",
+        "2.3",
+        "2.4",
+        "3.2",
+        "4.1",
+        "4.5",
+        "4.6",
+        "4.9",
+        "5.2"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.mfa",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "MFA",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.mfa",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Authentication uses multiple different kinds of factor.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.6"
+        ],
+        "contextCodes": [
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Factor vocabulary may support m601 only as an unvalidated editorial hypothesis. It does not explain technical-category classification or compensating alternatives in m003/m203."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:aba7fc062e32ed69691a00063ec791a5e376abbab65ed3c4a54d4c285a602ad3",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2319
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 24,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m003",
+        "parentLocalRevision": "sha256:b5af0dd37b2d3ef2ad74b99e2200e789e681f5143375da00468c42710b86898c",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:6116e37db11261954839a4a16892687c2b4f1b74830b6776a8cf941bc7fe48b0",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "glossary:nist",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:465d82bcfbda9daed74431e8ed2444088c8ab0d116d6c22f2e67a727bc39ceed",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "4.1",
+        "4.2",
+        "4.3",
+        "4.4",
+        "4.5",
+        "4.6",
+        "4.7",
+        "4.8",
+        "4.9",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.nist",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "NIST",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.nist",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "The definition identifies a standards and framework publisher.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [],
+        "contextCodes": [
+          "5.1"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Agency recognition is background context. It does not teach a specific framework, compliance obligation or every objective appearing in its source-reference union."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:b43986cc46e50dcad49db15911f9c8fd348a76d1cb5f8260d176694bd9d7a92c",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2334
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 31,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m168",
+        "parentLocalRevision": "sha256:09519c28c5c14e9b7fc7a4631ed298e4959e8dd37b543897422c80a1d8f81b07",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:08dd918bf2147c1bdbae15ddef828a8c70d56b6d5f6b9e54aa97c7e9a4b941c4",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "glossary:rbac",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:d38e8531479d948b3f801141c582a74610dd3160407f58c2399a499bb611be10",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "4.6"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.rbac",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "RBAC",
+      "conceptLinkProposals": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.rbac"
+      ],
+      "meaningProposal": "The inline definition combines job roles and conditional permission rules.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [],
+        "contextCodes": [
+          "4.6",
+          "1.2"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Withhold precise canonical support until role-based and rule-based meanings are separated. A combined acronym popover cannot validate either mechanism."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:fa8831e28e26c780116b422409d9939c281daa22ea6ae2d050a34a6d2fa2eeb9",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2353
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 8,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m040",
+        "parentLocalRevision": "sha256:62f71fc640f3b793efccc6cca4381c0960ac48e069be5898bcbffeae94eaa5d3",
+        "fieldGroup": "options",
+        "fieldGroupRevision": "sha256:86133e44cd5aea0b2819be40d70fcd252303bbf69714451beb78708d78a1c79d",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "withheld_identity_pending_editorial_decision"
+    },
+    {
+      "recordId": "glossary:siem",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:dd6820fbdbeed499c603f2760fd90d0aae7df6b33d08845ffa7846c0d27f9156",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "2.4",
+        "3.1",
+        "4.3",
+        "4.4",
+        "4.5",
+        "4.7",
+        "4.8",
+        "4.9"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.siem",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "SIEM",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.siem",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Central collection and correlation of logs support event detection.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "4.4"
+        ],
+        "contextCodes": [
+          "4.9"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Tool-purpose vocabulary can help an accounting/logging contrast, but not incident diagnosis, tool configuration or an approved detective mastery identity."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:dbd71490ce538f5f0f8244a1838b8c9fceb490cab3228aac0d02b276c5f1273c",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2365
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 22,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m024",
+        "parentLocalRevision": "sha256:c96b8e95149e58d0243ce8c91301184e5d5c165fbfce3c9d2aca37ca549bff03",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:c245631a66916da7b35d5fd01f8b095b30331d406b4190f19994dea496dba78a",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "glossary:waf",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:d346059694d798d3ca6f2f819c940577bfaa990bcb43093a5d58d4878518fffc",
+      "objectiveCodesObserved": [
+        "1.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "3.1",
+        "3.2",
+        "4.2",
+        "4.3",
+        "4.4",
+        "4.5"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.waf",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "WAF",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.waf",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "An application-layer web filter can identify and stop malicious requests.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "3.2"
+        ],
+        "contextCodes": [
+          "4.5",
+          "1.1"
+        ],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "Device purpose only; no product selection or applied request analysis. m402 has a metadata WAF match but none in rendered question/option/feedback prose, so its tooltip is not proven there."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:5f144fa029f35f29aa75d3a64a2688d1c0501d5847b548b759447e777145cf7c",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2389
+      },
+      "definitionShape": "object",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 13,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m078",
+        "parentLocalRevision": "sha256:d5444eb2fe35280de31b4533c6109cdd43178856b7b67e51815b441affbf23f7",
+        "fieldGroup": "options",
+        "fieldGroupRevision": "sha256:66ec7b6df30da0f21aab5ba20d7e227fc32204fb353008e224fa409371b8dab6",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "glossary:zero%20trust",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:9c6dcc6339d9e3adea1ea438688151b528a16352c3daaba1fd07ca6da4385342",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "2.5",
+        "3.1",
+        "3.2",
+        "3.4",
+        "4.5",
+        "4.6",
+        "4.7"
+      ],
+      "existingPrimarySupportCandidate": "sy0701.term.zero-trust",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "termObserved": "Zero Trust",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.zero-trust",
+          "role": "instructional_support",
+          "weight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Location alone does not establish trust for users, devices and access.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [
+          "1.2"
+        ],
+        "contextCodes": [],
+        "status": "agent_inference_pending_owner_not_active_retagging"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "unvalidated_editorial_hypothesis",
+        "rationale": "A model reminder only; not a proof of policy-engine design or a single mandated authentication method for every request."
+      },
+      "roleProposal": "definition_and_recall_support_not_assessment",
+      "definitionRevision": "sha256:c3a81449e394d49da56bd2b8783423d3dc888ce541bea864925c873cb23f24f7",
+      "definitionSource": {
+        "path": "src/App.jsx",
+        "line": 2398
+      },
+      "definitionShape": "string",
+      "deliveryBinding": "glossary-delivery",
+      "publicationStatusObserved": "available_conditional",
+      "sourceReferenceCount": 21,
+      "sourceReferencesAreDeliveryProof": false,
+      "verifiedSurfaceExample": {
+        "parentRecordId": "mcq:m007",
+        "parentLocalRevision": "sha256:368f0e9e2f1c37c2817671370692aa0a2bb19bdfe3075e10537ad2e0ba094c78",
+        "fieldGroup": "stem",
+        "fieldGroupRevision": "sha256:4607e662886a4a6485a557f1b301e72f2bf2c434b4260a4cbb7c4dddef377b27",
+        "rendererBinding": "mcq-renderer",
+        "gate": "selected_question_and_rendered_text",
+        "scope": "delivery_probe_only_not_semantic_review_of_parent"
+      },
+      "familyRelation": "conditional_definition_reveal_not_independent_assessment",
+      "ambiguityStatus": "support_meaning_proposed"
+    },
+    {
+      "recordId": "deck:security-principles-access-models",
+      "kind": "deck_container",
+      "sourceRevision": "sha256:b93d19664fddd6cd284c61b6674701bb09b8fa24ca20889eab6aee5bf5b992bc",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3"
+      ],
+      "existingPrimarySupportCandidate": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "roleProposal": "navigation_container_overlapping_nine_cards",
+      "conceptLinkProposals": [],
+      "withheldCanonicalCandidates": [],
+      "meaningProposal": "Container groups different security and access meanings; it is not an independently assessed concept.",
+      "objectiveScopeProposal": {
+        "instructionalCodes": [],
+        "contextCodes": [
+          "1.2",
+          "4.6",
+          "5.1"
+        ],
+        "status": "child_meanings_only_no_whole_deck_coverage"
+      },
+      "postMissUsefulnessProposal": {
+        "status": "broad_navigation_only_not_exact_remediation",
+        "rationale": "Broad inherited tags and lesson rankings do not identify which precise concept a learner missed."
+      },
+      "childRecordIds": [
+        "flashcard:sy0701-acronym-security-principles-access-models-aaa-authentication-authorization-and-accounting",
+        "flashcard:sy0701-acronym-security-principles-access-models-acl-access-control-list",
+        "flashcard:sy0701-acronym-security-principles-access-models-aup-acceptable-use-policy",
+        "flashcard:sy0701-acronym-security-principles-access-models-cia-confidentiality-integrity-and-availability",
+        "flashcard:sy0701-acronym-security-principles-access-models-dac-discretionary-access-control",
+        "flashcard:sy0701-acronym-security-principles-access-models-mac-mandatory-access-control",
+        "flashcard:sy0701-acronym-security-principles-access-models-rbac-role-based-access-control",
+        "flashcard:sy0701-acronym-security-principles-access-models-rbac-rule-based-access-control",
+        "flashcard:sy0701-acronym-security-principles-access-models-tou-time-of-use"
+      ],
+      "familyRelation": "container_overlaps_children_not_new_instruction_or_evidence",
+      "deliveryBinding": "flashcard-navigation",
+      "mobileQuickStartObserved": true,
+      "relatedLessonIdsObserved": [
+        "security-foundations-controls",
+        "access-control-pam",
+        "kerberos-aaa-enterprise-auth"
+      ],
+      "relatedLessonsRequireAccess": true
+    }
+  ],
+  "overlapGroups": [
+    {
+      "term": "AAA",
+      "recordIds": [
+        "flashcard:sy0701-acronym-security-principles-access-models-aaa-authentication-authorization-and-accounting",
+        "glossary:aaa"
+      ],
+      "relation": "different_source_revisions_same_or_ambiguous_vocabulary_not_independent_evidence"
+    },
+    {
+      "term": "ACL",
+      "recordIds": [
+        "flashcard:sy0701-acronym-security-principles-access-models-acl-access-control-list",
+        "glossary:acl"
+      ],
+      "relation": "different_source_revisions_same_or_ambiguous_vocabulary_not_independent_evidence"
+    },
+    {
+      "term": "AUP",
+      "recordIds": [
+        "flashcard:sy0701-acronym-security-principles-access-models-aup-acceptable-use-policy",
+        "glossary:aup"
+      ],
+      "relation": "different_source_revisions_same_or_ambiguous_vocabulary_not_independent_evidence"
+    },
+    {
+      "term": "CIA",
+      "recordIds": [
+        "flashcard:sy0701-acronym-security-principles-access-models-cia-confidentiality-integrity-and-availability",
+        "glossary:cia"
+      ],
+      "relation": "different_source_revisions_same_or_ambiguous_vocabulary_not_independent_evidence"
+    },
+    {
+      "term": "DAC",
+      "recordIds": [
+        "flashcard:sy0701-acronym-security-principles-access-models-dac-discretionary-access-control",
+        "glossary:dac"
+      ],
+      "relation": "different_source_revisions_same_or_ambiguous_vocabulary_not_independent_evidence"
+    },
+    {
+      "term": "MAC",
+      "recordIds": [
+        "flashcard:sy0701-acronym-security-principles-access-models-mac-mandatory-access-control",
+        "glossary:mac"
+      ],
+      "relation": "different_source_revisions_same_or_ambiguous_vocabulary_not_independent_evidence"
+    },
+    {
+      "term": "RBAC",
+      "recordIds": [
+        "flashcard:sy0701-acronym-security-principles-access-models-rbac-role-based-access-control",
+        "flashcard:sy0701-acronym-security-principles-access-models-rbac-rule-based-access-control",
+        "glossary:rbac"
+      ],
+      "relation": "different_source_revisions_same_or_ambiguous_vocabulary_not_independent_evidence"
+    }
+  ],
+  "selectorBindings": [
+    {
+      "id": "intervention:flashcard-navigation",
+      "sourceRevision": "sha256:e88530855f742ee5cf01f085d8138fa95c30373bf477aa1d1f43c7a14eb592a1",
+      "limitation": "Includes three mobile quick sets, saved/shared deck restoration and explicit deck/mode choice. Stored learner instances are excluded."
+    },
+    {
+      "id": "intervention:flashcard-study-pass",
+      "sourceRevision": "sha256:f394533691556b6234ba22aa955ef14f44a63ae0aaa42de8c63b65c0baad7797",
+      "limitation": "Term/acronym/example presentation, pass navigation and related lesson/deck actions reuse authored content. Self-rating is not trusted mastery evidence."
+    },
+    {
+      "id": "intervention:glossary-delivery",
+      "sourceRevision": "sha256:8684bb55616f18bd246f9ed2873ff8ed21769e6f8285588dbeb87a2ebb775ef2",
+      "limitation": "Definitions are conditional inline support; corpus matches do not prove a browser tooltip was opened."
+    },
+    {
+      "id": "intervention:lesson-navigation",
+      "sourceRevision": "sha256:96bb76e903452092f979401acb1f6917f0d6c68dd3b6223956d610625aca7891",
+      "limitation": "Includes free-preview gating, lesson search, guided steps and related flashcard end action. Other lesson end actions delegate to separately inventoried selectors."
+    },
+    {
+      "id": "intervention:random-flashcards",
+      "sourceRevision": "sha256:5067328f9c5ada8d7a95711a4b05cb83c92fa548a9dc532ba27d49e4f21edd78",
+      "limitation": "Selection, dividers and saved-ID hydration reuse authored cards. Saved user deck contents are excluded."
+    },
+    {
+      "id": "intervention:related-flashcard-lessons",
+      "sourceRevision": "sha256:3911f68afa8755b7ae87ff029b37600e9554e17f09190fb0b28703d66efe43af",
+      "limitation": "Terms, objective overlap and domain matching; no canonical adaptive mapping dependence."
+    },
+    {
+      "id": "intervention:starred-flashcards",
+      "sourceRevision": "sha256:4cd813dfd6f3ff8510bc7f7d373966cdfa697b15aa921e541c5ed49a3a1b3079",
+      "limitation": "Selection algorithm included; personal selections are not catalogue revisions and are not queried."
+    },
+    {
+      "id": "intervention:weak-area-deck",
+      "sourceRevision": "sha256:9d831a1f889d9a71e04dec1677daa175c981da5660b16474b2dc2cc14a59fa9f",
+      "limitation": "Broad topic matching and chapter fallback; no adaptive canonical concept map is consulted."
+    }
+  ],
+  "deliveryBindings": [
+    {
+      "id": "mcq-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function MCQPractice(",
+      "endAnchor": "function UpgradeModal(",
+      "startLine": 24992,
+      "endLine": 25873,
+      "sourceSignature": "sha256:f96053d990c9e6e98bebb88af15b18766c3996a962879e7d178b21e5baa2556d"
+    },
+    {
+      "id": "question-stem-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function QuestionStemText(",
+      "endAnchor": "function ChBadge(",
+      "startLine": 20800,
+      "endLine": 20816,
+      "sourceSignature": "sha256:13bb673e97f1509d064378b49b31886a75ea8d0d854d5cc2c0bd76e357028b7d"
+    },
+    {
+      "id": "card-modes",
+      "path": "src/App.jsx",
+      "anchor": "const flashcardSetType=",
+      "endAnchor": "function FlashcardModeCipher(",
+      "startLine": 30820,
+      "endLine": 30828,
+      "sourceSignature": "sha256:48c7c9641d30588a56665a3222e74a04b68ada48281ef3a01d3005bed56a1c62"
+    },
+    {
+      "id": "glossary-entry-reader",
+      "path": "src/App.jsx",
+      "anchor": "  const getEntry=term=>{",
+      "endAnchor": "  const splitGlossaryParts=",
+      "startLine": 20683,
+      "endLine": 20694,
+      "sourceSignature": "sha256:5d7ffa4038ba4e336d0fcbda85c6fa51e983c363be9eee138e484cc2534334a2"
+    }
+  ],
+  "deliveryLimitations": [
+    "All nine authored cards are reachable through the free standard deck; study modes reveal/reuse the same content. They have no scenario examples. Local or synced Got it labels are self-ratings, not attested mastery. No learner state was read or written.",
+    "Glossary references in the package scan every string including metadata and card text. Actual card faces use plain JSX, not GlossaryText. Metadata/source matches alone cannot prove inline definition delivery. Each of the 14 definitions has one separate source-bound MCQ rendered-field probe; no browser popover opening is claimed.",
+    "Random/starred/weak-area selectors reuse authored cards. Weak-area decks use legacy chapter/topic/token matches and related lessons use broad text/objective/domain ranking, not canonical diagnosis. Saved or personalized learner instances are outside scope.",
+    "Related lesson access is gated; optional CSF context remains beyond textbook in the prior lesson slice. No unused helper card or extra generated check is added to this 24-record denominator."
+  ],
+  "ambiguityBoundary": {
+    "withheldInstructionalIdentities": 8,
+    "proposedSupportLinkedRecords": 15,
+    "containerRecords": 1,
+    "topicPromotions": 0,
+    "controlCategoryFunctionMasteryIdentitiesCreated": 0,
+    "decisions": [
+      "CIA alias choice withheld for card and glossary.",
+      "MAC access-model card is precise but the canonical acronym is overloaded; mixed inline definition also stays withheld.",
+      "Role-based and rule-based cards retain distinct meanings; the shared RBAC node and mixed glossary cannot resolve them.",
+      "TOU card teaches an access window, unlike official objective 2.3 time-of-use race conditions. Withhold sy0701.term.tou, retain 4.6 context as a proposal, and require separate editorial correction before claiming official acronym alignment."
+    ]
+  },
+  "phaseWideBacklog": {
+    "packageRecordsUnchanged": 1878,
+    "reviewQueueUnchanged": 2954,
+    "unresolvedQuestionMappingsUnchanged": 489,
+    "existingPrimaryQuestionProposalsUnchanged": 7,
+    "taxonomyUnchanged": {
+      "masteryConcepts": 5,
+      "topics": 28,
+      "supportingConcepts": 402
+    },
+    "humanApprovedNewMappings": 0
+  },
+  "privateBoundary": {
+    "recordId": "private:pbq:p017",
+    "sourceRevision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "trustedRevisionId": null,
+    "payloadReviewed": false,
+    "masteryWeight": 0,
+    "status": "SELECTED_PRIVATE_REVISION_UNAVAILABLE_NO_FALLBACK_SUBSTITUTION"
+  },
+  "humanDecisionReferences": {
+    "checklist": "docs/evidence/phase-2b5/review-batch.md",
+    "guide": "docs/evidence/phase-2b5/review-guide.md",
+    "requiredBinding": "Separate signed owner decisions must bind current package SHA, this packet SHA and exact instructional revisions; source approvals are not semantic approvals.",
+    "humanApprovalRequestedThisTurn": false,
+    "pending": [
+      "Approve or reject scoped instructional/support roles and post-miss usefulness, not exposure-based mastery.",
+      "Resolve CIA aliases and MAC/RBAC meaning splits before linking them precisely.",
+      "Decide how to correct or relabel the TOU card; current delivered meaning is retained only as verified source fact.",
+      "Review inherited objective unions and container/card/glossary overlap; 69 proposals do not close the human review queue."
+    ]
+  },
+  "officialReferences": [
+    {
+      "url": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be",
+      "documentVersion": "7.0",
+      "scope": "Official source already linked by the card module; scope judgments are Codex proposals. Objective 1.2 fundamentals/physical surveillance, 1.4 encryption, 3.2 WAF, 4.4 SIEM, 4.5 access lists, 4.6 access models/MFA/time-of-day and 5.1 AUP. Objective 2.3 TOU concerns race conditions; source card access-window meaning must not substitute."
+    }
+  ]
+}
