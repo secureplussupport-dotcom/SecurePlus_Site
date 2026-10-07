@@ -1,0 +1,299 @@
+{
+  "batchId": "phase-2b5-pilot-pbq-draft-2",
+  "date": "2026-10-07",
+  "baselineCommit": "e5cc39f7eeacdc083cc8900a1ec6835cb5532762",
+  "status": "CODEX_REVIEWED_UNDER_DELEGATION_PENDING_INDEPENDENT_GATE",
+  "reviewAuthority": "Prospective local authoring delegated in human message 01a113bf-b3d5-7e12-bb2a-e0c3c2ddc701; see phase-2b5-pilot-batch-1-family-decision.md.",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "mappingVersionProposal": "pilot-pbq-draft-2-offline",
+  "sources": [
+    {
+      "id": "sy0701-objectives",
+      "title": "CompTIA Security+ SY0-701 Exam Objectives, Version 5.0",
+      "url": "https://assets.ctfassets.net/82ripq7fjls2/6TYWUym0Nudqa8nGEnegjG/0f9b974d3b1837fe85ab8e6553f4d623/CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf",
+      "locator": "PDF page 14: objective 5.2, BIA sub-bullets; PDF page 19: MTTR acronym expansion",
+      "accuracyUse": "Objective 5.2 explicitly names BIA, RTO, RPO and mean time to repair. Acronym list expands MTTR as mean time to recover. MTD is supporting continuity context, not an explicitly named bullet."
+    },
+    {
+      "id": "nist-800-34",
+      "title": "NIST SP 800-34 Rev. 1, Contingency Planning Guide for Federal Information Systems",
+      "url": "https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-34r1.pdf",
+      "locator": "Sections 3.2.1-3.2.3; printed pages 17-19 (PDF pages 31-33)",
+      "accuracyUse": "Distinguishes system restoration, recoverable data point and business downtime; includes process reprocessing and dependencies in continuity planning."
+    },
+    {
+      "id": "ibm-mttr",
+      "title": "IBM: Mean Time to Repair",
+      "url": "https://www.ibm.com/think/topics/mttr",
+      "locator": "Formula and challenges: repair start/end definitions",
+      "accuracyUse": "Uses total defined repair duration divided by completed repairs; boundaries must be comparable. Its worked example contains an inconsistent final sentence; use the formula, cross-check below, and recompute our own values."
+    }
+  ],
+  "gradingPolicy": {
+    "mode": "independent_row_choices",
+    "unanswered": "not_evidence",
+    "feedbackTiming": "after_complete_submission",
+    "crossConceptPropagation": false,
+    "sameConceptComponents": "one correlated observation group per parent; never count as independent successes",
+    "masteryWeight": 0
+  },
+  "exercises": [
+    {
+      "id": "draft.pilot2.pbq.01",
+      "title": "Complete a recovery-exercise worksheet",
+      "format": "pbq_design",
+      "responseMode": "row_single_choice",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenario": "A retailer runs a recovery exercise on one day in one time zone. Checkout stops at 10:00. The agreed service-restoration target is 45 minutes from interruption until checkout transactions work. Restore testing confirms that the only usable recovery point contains all committed transactions through 09:50; the data-loss allowance is 15 minutes. Checkout passes transaction validation at 10:50. The finance process then needs 70 minutes of non-overlapping reconciliation before acceptable operations resume. No workaround is available, and the total acceptable business-interruption limit is 110 minutes.",
+      "instructions": "Select one finding for each worksheet row. Each row uses the supplied exercise facts. A correct row does not determine the result of another row.",
+      "parts": [
+        {
+          "id": "rto",
+          "prompt": "Complete the service-restoration row: compare verified checkout availability with the 45-minute RTO.",
+          "options": [
+            "Met: 10 minutes is within 45 minutes.",
+            "Missed: 50 minutes exceeds 45 minutes.",
+            "Met: 50 minutes is within the 110-minute business limit.",
+            "Missed: the 15-minute data-loss allowance is the service deadline."
+          ],
+          "correctOption": 1,
+          "optionFeedback": [
+            "Ten minutes is the recoverable-data age at the outage, not the service outage duration.",
+            "Correct: checkout was unavailable from 10:00 to 10:50, five minutes beyond its 45-minute target.",
+            "The business interruption limit does not replace the shorter agreed service-restoration target.",
+            "The data-loss allowance controls the age of recoverable data, not how long checkout may remain unavailable."
+          ],
+          "explanation": "Correct: checkout was unavailable from 10:00 to 10:50, five minutes beyond its 45-minute target.",
+          "primaryConceptProposal": "recovery.rto",
+          "secondaryConceptProposals": [],
+          "objectiveCodes": [
+            "5.2"
+          ],
+          "objectiveScope": "explicit_bia_bullet",
+          "difficulty": "medium",
+          "difficultyStatus": "proposed_uncalibrated",
+          "cognitiveSkill": "interpretation",
+          "scenarioFamilyProposal": "recovery-exercise-time-versus-data",
+          "familyRelation": "same_reasoning_as_prior_draft",
+          "comparisonDraftId": "draft.pilot1.rto.01",
+          "newFamilyCredit": 0,
+          "masteryWeight": 0,
+          "humanApproved": false,
+          "familyIndependenceApproved": false,
+          "sourceRefs": [
+            "sy0701-objectives",
+            "nist-800-34"
+          ]
+        },
+        {
+          "id": "rpo",
+          "prompt": "Complete the recoverable-data row: compare the available recovery point with the 15-minute RPO.",
+          "options": [
+            "Missed: service restoration took 50 minutes.",
+            "Missed: the business process took 120 minutes to resume.",
+            "Met: the recoverable-data window is 10 minutes.",
+            "Met: a 45-minute RTO always guarantees a 15-minute RPO."
+          ],
+          "correctOption": 2,
+          "optionFeedback": [
+            "Service-restoration time is separate from the age of recoverable data at the outage.",
+            "Business resumption duration does not determine which committed records are in the restored copy.",
+            "Correct: 10:00 minus 09:50 is ten minutes, within the fifteen-minute data-loss allowance.",
+            "Meeting or setting a service time target cannot guarantee any particular recoverable-data window."
+          ],
+          "explanation": "Correct: 10:00 minus 09:50 is ten minutes, within the fifteen-minute data-loss allowance.",
+          "primaryConceptProposal": "recovery.rpo",
+          "secondaryConceptProposals": [],
+          "objectiveCodes": [
+            "5.2"
+          ],
+          "objectiveScope": "explicit_bia_bullet",
+          "difficulty": "easy",
+          "difficultyStatus": "proposed_uncalibrated",
+          "cognitiveSkill": "interpretation",
+          "scenarioFamilyProposal": "recoverable-point-timeline",
+          "familyRelation": "same_reasoning_as_prior_draft",
+          "comparisonDraftId": "draft.pilot1.rpo.01",
+          "newFamilyCredit": 0,
+          "masteryWeight": 0,
+          "humanApproved": false,
+          "familyIndependenceApproved": false,
+          "sourceRefs": [
+            "sy0701-objectives",
+            "nist-800-34"
+          ]
+        },
+        {
+          "id": "mtd",
+          "prompt": "Complete the business-interruption row: include required reconciliation before acceptable operation resumes.",
+          "options": [
+            "Missed: the process resumes after 120 minutes, ten minutes beyond its 110-minute limit.",
+            "Met: the server was available after 50 minutes.",
+            "Met: reconciliation takes 70 minutes, below 110 minutes.",
+            "Missed: ten minutes of recoverable-data age must be added to 120 minutes of interruption."
+          ],
+          "correctOption": 0,
+          "optionFeedback": [
+            "Correct: fifty minutes of system restoration plus seventy non-overlapping minutes of required reconciliation gives 120 minutes of business interruption.",
+            "Technical restoration does not end this process interruption; the required reconciliation must also finish.",
+            "Seventy minutes omits the initial fifty minutes during which the process was also interrupted.",
+            "Recoverable-data age is a different measure; it is not extra elapsed business interruption time."
+          ],
+          "explanation": "Correct: fifty minutes of system restoration plus seventy non-overlapping minutes of required reconciliation gives 120 minutes of business interruption.",
+          "primaryConceptProposal": "recovery.mtd",
+          "secondaryConceptProposals": [],
+          "objectiveCodes": [
+            "5.2"
+          ],
+          "objectiveScope": "supporting_context_not_explicit_bullet",
+          "difficulty": "medium",
+          "difficultyStatus": "proposed_uncalibrated",
+          "cognitiveSkill": "calculation",
+          "scenarioFamilyProposal": "technical-recovery-plus-business-reprocessing",
+          "familyRelation": "same_reasoning_as_prior_draft",
+          "comparisonDraftId": "draft.pilot1.mtd.03",
+          "newFamilyCredit": 0,
+          "masteryWeight": 0,
+          "humanApproved": false,
+          "familyIndependenceApproved": false,
+          "sourceRefs": [
+            "sy0701-objectives",
+            "nist-800-34"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "draft.pilot2.pbq.02",
+      "title": "Complete incident and business-impact review rows",
+      "format": "pbq_design",
+      "responseMode": "row_single_choice",
+      "domainId": "sy0701.domain-5",
+      "chapterId": "sy0701.objective-5.2",
+      "topicId": "business-continuity-metrics",
+      "scenario": "A review pack contains three completed incident durations of 20, 40 and 60 minutes, all measured from service failure to verified service restoration. Separately, an approved BIA says fulfillment must resume within one hour and requires a shared identity service; reporting also uses identity but can wait a day. Identity has no direct revenue line item. A new returns service has only a server replacement-cost inventory and no disruption-impact assessment. No exact resource restoration schedule or returns recovery target has been approved.",
+      "instructions": "Complete the three review rows. Use the common incident clock for MTTR, obtain missing business evidence for returns, and apply the established fulfillment dependency to recovery planning.",
+      "parts": [
+        {
+          "id": "mttr",
+          "prompt": "Complete the incident-metrics row: select the observed MTTR under the stated common measurement boundaries.",
+          "options": [
+            "120 minutes",
+            "60 minutes",
+            "The one-hour fulfillment recovery need",
+            "40 minutes"
+          ],
+          "correctOption": 3,
+          "optionFeedback": [
+            "120 minutes is the total of the three completed repair durations; divide by three for the mean.",
+            "Sixty minutes is the longest observed duration, rather than the arithmetic mean of all three.",
+            "The agreed recovery need is a target, not the observed average of these completed repairs.",
+            "Correct: (20 + 40 + 60) / 3 is forty minutes under the common failure-to-verified-restoration definition."
+          ],
+          "explanation": "Correct: (20 + 40 + 60) / 3 is forty minutes under the common failure-to-verified-restoration definition.",
+          "primaryConceptProposal": "recovery.mttr",
+          "secondaryConceptProposals": [],
+          "objectiveCodes": [
+            "5.2"
+          ],
+          "objectiveScope": "explicit_bia_bullet",
+          "difficulty": "easy",
+          "difficultyStatus": "proposed_uncalibrated",
+          "cognitiveSkill": "calculation",
+          "scenarioFamilyProposal": "observed-repair-duration-average",
+          "familyRelation": "same_reasoning_as_prior_draft",
+          "comparisonDraftId": "draft.pilot1.mttr.01",
+          "newFamilyCredit": 0,
+          "masteryWeight": 0,
+          "humanApproved": false,
+          "familyIndependenceApproved": false,
+          "sourceRefs": [
+            "sy0701-objectives",
+            "ibm-mttr"
+          ]
+        },
+        {
+          "id": "bia-input",
+          "prompt": "Complete the missing-input row for a new returns service whose worksheet currently lists only server replacement costs.",
+          "options": [
+            "Obtain time-dependent disruption impacts and feasible alternatives from the service owners.",
+            "Copy the fulfillment service recovery need because the two services use the same vendor.",
+            "Use the most expensive asset as the business impact estimate.",
+            "Replace the impact worksheet with the server boot instructions."
+          ],
+          "correctOption": 0,
+          "optionFeedback": [
+            "Correct: business-owner evidence about disruption consequences and workable alternatives supplies the impact information absent from an asset-price inventory.",
+            "A shared vendor does not prove that two business functions have the same impacts or recovery needs.",
+            "Replacement cost alone does not describe the consequences of interrupting the supported business process.",
+            "A technical runbook supports restoration but cannot replace the missing analysis of business impacts."
+          ],
+          "explanation": "Correct: business-owner evidence about disruption consequences and workable alternatives supplies the impact information absent from an asset-price inventory.",
+          "primaryConceptProposal": "continuity.bia",
+          "secondaryConceptProposals": [],
+          "objectiveCodes": [
+            "5.2"
+          ],
+          "objectiveScope": "explicit_bia_bullet",
+          "difficulty": "medium",
+          "difficultyStatus": "proposed_uncalibrated",
+          "cognitiveSkill": "scenario_application",
+          "scenarioFamilyProposal": "business-impact-input-elicitation",
+          "familyRelation": "same_reasoning_as_prior_draft",
+          "comparisonDraftId": "draft.pilot1.bia.01",
+          "newFamilyCredit": 0,
+          "masteryWeight": 0,
+          "humanApproved": false,
+          "familyIndependenceApproved": false,
+          "sourceRefs": [
+            "sy0701-objectives",
+            "nist-800-34"
+          ]
+        },
+        {
+          "id": "bia-dependency",
+          "prompt": "Complete the dependency-priority row for the shared identity service used by fulfillment and reporting.",
+          "options": [
+            "Prioritize it only according to the reporting service, which can wait a day.",
+            "Put it last because it has no direct revenue line item.",
+            "Plan its recovery to support fulfillment in time for the one-hour business need.",
+            "Give it a one-hour repair duration automatically, without checking the dependent service runbook."
+          ],
+          "correctOption": 2,
+          "optionFeedback": [
+            "The less urgent reporting function does not remove the identity service dependency of the more urgent fulfillment function.",
+            "An enabling resource can be critical because of the business functions it supports, even without direct revenue.",
+            "Correct: reflect the urgent dependent function in resource planning and test the end-to-end schedule; the worksheet does not supply an exact identity restoration budget.",
+            "Giving the dependency the entire hour may leave no time for dependent service recovery and validation; an exact budget needs the tested runbook."
+          ],
+          "explanation": "Correct: reflect the urgent dependent function in resource planning and test the end-to-end schedule; the worksheet does not supply an exact identity restoration budget.",
+          "primaryConceptProposal": "continuity.bia",
+          "secondaryConceptProposals": [],
+          "objectiveCodes": [
+            "5.2"
+          ],
+          "objectiveScope": "explicit_bia_bullet",
+          "difficulty": "medium",
+          "difficultyStatus": "proposed_uncalibrated",
+          "cognitiveSkill": "scenario_application",
+          "scenarioFamilyProposal": "shared-dependency-recovery-priority",
+          "familyRelation": "same_reasoning_as_prior_draft",
+          "comparisonDraftId": "draft.pilot1.bia.02",
+          "newFamilyCredit": 0,
+          "masteryWeight": 0,
+          "humanApproved": false,
+          "familyIndependenceApproved": false,
+          "sourceRefs": [
+            "sy0701-objectives",
+            "nist-800-34"
+          ]
+        }
+      ]
+    }
+  ]
+}
