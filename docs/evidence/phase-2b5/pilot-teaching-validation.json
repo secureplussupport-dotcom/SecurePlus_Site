@@ -1,0 +1,141 @@
+{
+  "status": "PASS_LOCAL_REUSE_BINDING_AND_DRAFT_CHECKS_NOT_APPROVAL",
+  "date": "2026-10-07",
+  "baselineCommit": "c9a73fb16d01f1e85710f5a4a29d60de4d28accb",
+  "counts": {
+    "lessons": 32,
+    "sections": 106,
+    "cards": 313,
+    "glossary": 162,
+    "localBankExplanations": 483,
+    "starterExplanations": 9,
+    "reusedLinks": 5,
+    "newDrafts": 3,
+    "eligibleEvidence": 0
+  },
+  "corpusSignature": "sha256:a892b4af5e6ba0637aa9559ed5bde6aefc247c7653ec15f592b0b0b68f0de5c4",
+  "namedTeachingCensus": {
+    "mtd": {
+      "sections": [],
+      "cards": [],
+      "glossary": [],
+      "explanations": [
+        "m196"
+      ],
+      "lessonSupport": [],
+      "starterExplanations": [],
+      "metadataOnlyAliases": []
+    },
+    "bia": {
+      "sections": [],
+      "cards": [
+        "flashcard:sy0701-acronym-risk-governance-business-bia-business-impact-analysis"
+      ],
+      "glossary": [
+        "glossary:bia"
+      ],
+      "explanations": [
+        "m086",
+        "p048"
+      ],
+      "lessonSupport": [],
+      "starterExplanations": [],
+      "metadataOnlyAliases": [
+        "resilience-assets-physical"
+      ]
+    }
+  },
+  "relatedSectionCandidates": [
+    "section:risk-resilience-governance:1",
+    "section:security-operations-automation:2",
+    "section:resilience-assets-physical:2",
+    "section:governance-change-vendors:1",
+    "section:governance-change-vendors:2"
+  ],
+  "reusedBindings": [
+    {
+      "recordId": "flashcard:sy0701-acronym-risk-governance-business-bia-business-impact-analysis",
+      "sourceSignature": "sha256:4f20941f4c13f2fc5830a29d7fc4d65882da22cba3355dc8c88a5b2c3a581e72",
+      "conceptLinkProposal": "continuity.bia",
+      "roleProposal": "definition_support",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "rationale": "Reuse the existing correct BIA card; do not author another definition card."
+    },
+    {
+      "recordId": "glossary:bia",
+      "sourceSignature": "sha256:fba7d9e4ca7b2ca2afce03b574269efdb495b82ba76b564c992d28daedbfdfda",
+      "conceptLinkProposal": "continuity.bia",
+      "roleProposal": "conditional_definition_support",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "rationale": "Reuse the existing BIA tooltip as brief support; conditional rendering does not establish a full lesson."
+    },
+    {
+      "recordId": "explanation:mcq:m086",
+      "sourceSignature": "sha256:d9f180ccad693795d5785229a27e2454e80757f0c0927de080c0772b29c66463",
+      "conceptLinkProposal": "continuity.bia",
+      "roleProposal": "post_answer_definition_support",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "rationale": "Reuse the effective explanation and document contrasts; do not treat seeing the answer explanation as a fresh assessment."
+    },
+    {
+      "recordId": "explanation:mcq:m196",
+      "sourceSignature": "sha256:01e59bb482e01d1be17984fcd1f005b779ac29b3cbce7407ca596ba7861314cb",
+      "conceptLinkProposal": "recovery.mtd",
+      "roleProposal": "post_answer_boundary_support",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "rationale": "Reuse the effective MTD/RTO distinction. Raw authored text was superseded; only this bound effective bundle is proposed."
+    },
+    {
+      "recordId": "section:resilience-assets-physical:1",
+      "sourceSignature": "sha256:b0cee02c7ac294cb5e4d5912bb3acb90f2c147f4055f4fbe04d7dbfcd454ac3b",
+      "conceptLinkProposal": "recovery.mtd",
+      "roleProposal": "contrast_only_not_direct_mtd_teaching",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "rationale": "Existing RTO/RPO/MTTR rows are useful context but contain no MTD row and do not fill the MTD lesson gap. Inherited lesson objectives remain separate from a proposed 5.2 teaching link."
+    }
+  ],
+  "draftBindings": [
+    {
+      "id": "draft.pilot3.mtd.card",
+      "contentSignature": "sha256:1a3b5411a3fd0e56fecb3bbe0ae7becfaffdf063a9637e6e17f4113944334e63"
+    },
+    {
+      "id": "draft.pilot3.mtd.section",
+      "contentSignature": "sha256:c79ecdac697044d9abf5d25db51093c78bb7121006f1f0f7c68b6d8e94db4d20"
+    },
+    {
+      "id": "draft.pilot3.bia.section",
+      "contentSignature": "sha256:359102c1481e4f34263426651bd6fea2556e9bf5d1b7f42371c0b2e4ecc3bb36"
+    }
+  ],
+  "checks": {
+    "stalePackageOrContent": "rejected",
+    "unavailablePrivateOrMissingSource": "rejected",
+    "fabricatedApproval": "rejected",
+    "workedExample": "330 minutes total; 30 minutes tolerance remains",
+    "activeArtifacts": "all release checksums unchanged"
+  },
+  "limitations": [
+    "Named-term census plus bounded manual semantic review; no claim that absence of a keyword proves absence of all useful teaching.",
+    "Metadata aliases and inherited objectives do not establish dedicated teaching coverage.",
+    "Local effective source only; no browser, private-payload or live inspection.",
+    "Generated unused cards, public SEO pages and guest marketing demos are outside this bounded teaching slice.",
+    "All teaching links, primary/supporting roles and exact objective scope remain proposals."
+  ],
+  "sha256": {
+    "docs/drafts/phase-2b5-pilot-teaching-draft-3.json": "84757c5c7bec067e5baee182487525f3f843aa9e709af257b307be0c1655a921",
+    "docs/phase-2b5-pilot-teaching-review.md": "0340d47aaaf018899a069fd62fce5102c3a8208b055b179072a4ca33d0595c9a",
+    "scripts/audit-pilot-teaching-drafts.mjs": "1e4e22a9cb9167926acc279c8906826afcfa69a41348820206be0d6992a51e29",
+    "docs/evidence/phase-2b5/mapping-package.json": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "packetId": "phase-2b5-pilot-teaching-draft-3",
+  "date": "2026-10-07",
+  "baselineCommit": "c9a73fb16d01f1e85710f5a4a29d60de4d28accb",
+  "status": "AUTHOR_REVIEWED_SUPPORT_ONLY_PENDING_LINK_GATE",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "authorReview": "Codex local factual/content review; no claim of human approval, approved canonical roles or completed independent editorial gate.",
+  "sources": [
+    {
+      "id": "sy0701-objectives",
+      "url": "https://assets.ctfassets.net/82ripq7fjls2/6TYWUym0Nudqa8nGEnegjG/0f9b974d3b1837fe85ab8e6553f4d623/CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf",
+      "locator": "PDF page 14, objective 5.2: BIA explicit; MTD not an explicit listed bullet."
+    },
+    {
+      "id": "nist-800-34",
+      "url": "https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-34r1.pdf",
+      "locator": "Sections 3.2.1-3.2.3; printed pages 16-19: business impact inputs, MTD/RTO/RPO, reprocessing, resources and recovery priorities."
+    }
+  ],
+  "reusedLinks": [
+    {
+      "recordId": "flashcard:sy0701-acronym-risk-governance-business-bia-business-impact-analysis",
+      "sourceSignature": "sha256:4f20941f4c13f2fc5830a29d7fc4d65882da22cba3355dc8c88a5b2c3a581e72",
+      "conceptLinkProposal": "continuity.bia",
+      "roleProposal": "definition_support",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "rationale": "Reuse the existing correct BIA card; do not author another definition card."
+    },
+    {
+      "recordId": "glossary:bia",
+      "sourceSignature": "sha256:fba7d9e4ca7b2ca2afce03b574269efdb495b82ba76b564c992d28daedbfdfda",
+      "conceptLinkProposal": "continuity.bia",
+      "roleProposal": "conditional_definition_support",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "rationale": "Reuse the existing BIA tooltip as brief support; conditional rendering does not establish a full lesson."
+    },
+    {
+      "recordId": "explanation:mcq:m086",
+      "sourceSignature": "sha256:d9f180ccad693795d5785229a27e2454e80757f0c0927de080c0772b29c66463",
+      "conceptLinkProposal": "continuity.bia",
+      "roleProposal": "post_answer_definition_support",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "rationale": "Reuse the effective explanation and document contrasts; do not treat seeing the answer explanation as a fresh assessment."
+    },
+    {
+      "recordId": "explanation:mcq:m196",
+      "sourceSignature": "sha256:01e59bb482e01d1be17984fcd1f005b779ac29b3cbce7407ca596ba7861314cb",
+      "conceptLinkProposal": "recovery.mtd",
+      "roleProposal": "post_answer_boundary_support",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "rationale": "Reuse the effective MTD/RTO distinction. Raw authored text was superseded; only this bound effective bundle is proposed."
+    },
+    {
+      "recordId": "section:resilience-assets-physical:1",
+      "sourceSignature": "sha256:b0cee02c7ac294cb5e4d5912bb3acb90f2c147f4055f4fbe04d7dbfcd454ac3b",
+      "conceptLinkProposal": "recovery.mtd",
+      "roleProposal": "contrast_only_not_direct_mtd_teaching",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "rationale": "Existing RTO/RPO/MTTR rows are useful context but contain no MTD row and do not fill the MTD lesson gap. Inherited lesson objectives remain separate from a proposed 5.2 teaching link."
+    }
+  ],
+  "drafts": [
+    {
+      "id": "draft.pilot3.mtd.card",
+      "kind": "flashcard",
+      "primaryConceptLinkProposal": "recovery.mtd",
+      "supportingConceptLinksProposal": [],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "objectiveScopeProposal": "supporting_context_not_explicit_bullet",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "contentSignature": "sha256:1a3b5411a3fd0e56fecb3bbe0ae7becfaffdf063a9637e6e17f4113944334e63",
+      "content": {
+        "acronym": "MTD",
+        "expansion": "Maximum Tolerable Downtime",
+        "meaning": "The outer limit on interruption before a business process suffers unacceptable harm. Count time until acceptable business operation resumes, including required work after system restoration. RTO is a restoration target within that business limit; RPO concerns recoverable data age."
+      }
+    },
+    {
+      "id": "draft.pilot3.mtd.section",
+      "kind": "lesson_section",
+      "primaryConceptLinkProposal": "recovery.mtd",
+      "supportingConceptLinksProposal": [
+        {
+          "conceptId": "recovery.rto",
+          "relation": "contrast_and_recovery_planning"
+        },
+        {
+          "conceptId": "recovery.rpo",
+          "relation": "contrast_only"
+        },
+        {
+          "conceptId": "recovery.mttr",
+          "relation": "contrast_only"
+        }
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "objectiveScopeProposal": "supporting_context_not_explicit_bullet",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "contentSignature": "sha256:c79ecdac697044d9abf5d25db51093c78bb7121006f1f0f7c68b6d8e94db4d20",
+      "content": {
+        "title": "Count interruption until the business can resume",
+        "body": [
+          "A server being online does not always mean the business is operating again. Maximum tolerable downtime (MTD) is the business process interruption limit. Work with process owners to define acceptable operation and what disruption becomes unacceptable. Set recovery targets and test the full path against that limit.",
+          "For example, a process can tolerate six hours of interruption. Its system is restored four hours after the outage, followed by ninety minutes of required reconciliation. The steps cannot overlap and no workaround is available. Acceptable business operation resumes after five and a half hours, leaving thirty minutes before the six-hour limit. This exercise fits the limit; it does not guarantee future recovery.",
+          "Allow time for required business work when setting the system recovery target (RTO). Do not substitute a favorable average repair time for a deadline or add the age of recovered data (RPO) to elapsed business interruption. A manual workaround changes the analysis only if its capacity, duration and acceptable service have been validated."
+        ],
+        "table": {
+          "columns": [
+            "Measure",
+            "What to count in this example"
+          ],
+          "rows": [
+            [
+              "System restoration",
+              "Four hours from outage to system availability"
+            ],
+            [
+              "Required business work",
+              "Ninety additional minutes before acceptable operation"
+            ],
+            [
+              "Total interruption",
+              "Four hours + ninety minutes = five and a half hours"
+            ],
+            [
+              "Remaining tolerance",
+              "Six hours minus five and a half hours = thirty minutes"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "draft.pilot3.bia.section",
+      "kind": "lesson_section",
+      "primaryConceptLinkProposal": "continuity.bia",
+      "supportingConceptLinksProposal": [],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "objectiveScopeProposal": "explicit_bia_bullet",
+      "mappingReviewStatus": "proposal_pending_editorial_gate",
+      "humanApproved": false,
+      "published": false,
+      "masteryWeight": 0,
+      "contentSignature": "sha256:359102c1481e4f34263426651bd6fea2556e9bf5d1b7f42371c0b2e4ecc3bb36",
+      "content": {
+        "title": "Build recovery priorities from business impacts",
+        "body": [
+          "Start with the business functions and their owners. Ask what an interruption prevents, how its consequences change over time, which people and resources the function needs, and which alternatives really work. An equipment-price inventory alone cannot answer those questions. Business impact analysis (BIA) informs continuity planning and recovery targets; it is not the recovery runbook itself.",
+          "Suppose a business has established that dispatch must resume within one hour, while an annual reporting process can wait a day. Dispatch depends on a shared identity service that has no direct revenue line item. Recovery planning must account for that dependency in time to support dispatch. Do not assign the identity service the whole hour without checking the time needed for dispatch restoration and validation. The exact resource schedule needs tested evidence.",
+          "Document the impact assumptions and feasible alternatives, then review them when the service or its dependencies change. Outage likelihood is useful risk context, but unchanged likelihood does not prove that business consequences are unchanged. A promised manual workaround is not adequate evidence until its actual capacity and limitations are understood."
+        ],
+        "table": {
+          "columns": [
+            "Ask the business owner",
+            "Why the answer matters"
+          ],
+          "rows": [
+            [
+              "Which function is interrupted?",
+              "Identify the work and people affected, rather than only an asset price"
+            ],
+            [
+              "How do consequences change over time?",
+              "Identify tolerable disruption and recovery needs"
+            ],
+            [
+              "Which resources and external services are required?",
+              "Plan for dependencies, including those without direct revenue"
+            ],
+            [
+              "Which alternative operation is feasible?",
+              "Validate capacity and duration before relying on a workaround"
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "workedExampleCheck": {
+    "systemRestoreMinutes": 240,
+    "reconciliationMinutes": 90,
+    "nonOverlapping": true,
+    "workaroundAvailable": false,
+    "businessToleranceMinutes": 360,
+    "totalInterruptionMinutes": 330,
+    "remainingToleranceMinutes": 30
+  },
+  "residualGates": [
+    "Independent accuracy/usefulness review and exact concept/role/objective links pending.",
+    "Current batch 1 metadata and canonical taxonomy identities remain unapproved.",
+    "No published MTD card or dedicated MTD/BIA section is added by this packet.",
+    "Reading teaching content gives no mastery evidence or independent family credit.",
+    "Private payload review, component PBQ integration, variant capacity and live readiness remain open."
+  ]
+}
