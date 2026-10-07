@@ -1,0 +1,1410 @@
+{
+  "schemaVersion": 1,
+  "status": "LOCAL_SEMANTIC_PROPOSALS_NOT_READY",
+  "baselineCommit": "b7bedcd1b86bd9fff788487d24143391b434381a",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "newFamilyCredit": 0,
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "sourceBindings": [
+    {
+      "path": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "sha256": "0ba95c5c8f8a00e091daa9d852de0350a01ca00bedcba7c317155ea94cad88a9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "sha256": "46cf5a704690aa85606a1167b72f221aea09234635e3062aec067e7967abb4c9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "sha256": "fce8683567473a28ce8e903190e977345339f33df022ef56425c18d3bdfe225d"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "sha256": "d45c0d959c4cc0171b401f2df5ab1ee38d7bf717e3ce08c9d008d4dac61a6c20"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-p055-mapping-proposals.json",
+      "sha256": "40e1d58143f8dd4853f0496f5aca6d4abab031f59681bd625f7c144e41f3296e"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-resilience-lesson-proposals.json",
+      "sha256": "8dd1cae60ca07bad8d4046e7653beafd05f4f02bd66d12763cd0c621a90a36de"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/mapping-package.json",
+      "sha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/release-checksums.json",
+      "sha256": "98e7e0ed45b5fd17f1be50c4cd36eba53bf289de26a427810e061274dcfb3403"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-batch.md",
+      "sha256": "1a039e6f4778a585128b0d4167536c46a53d13130476b6144ffa946f2f464713"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-guide.md",
+      "sha256": "a9cc1fff35873d84d90bec1c5c6f4613fdb46defae5a8b2a87b4b7c554ffd33b"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
+      "sha256": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
+    },
+    {
+      "path": "docs/secureplus-rebrand-master-plan.md",
+      "sha256": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c"
+    },
+    {
+      "path": "docs/phase-1-product-loop-audit.md",
+      "sha256": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10"
+    },
+    {
+      "path": "src/data/conceptDeepDives.js",
+      "sha256": "b478e16240c95b70a79cf0679aff683fc08f18dd11947c4046ecd880ec1ce17f"
+    },
+    {
+      "path": "src/data/sy0701DeepDiveMap.js",
+      "sha256": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff"
+    },
+    {
+      "path": "src/data/learningConcepts.js",
+      "sha256": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac"
+    },
+    {
+      "path": "src/data/learningMappings.js",
+      "sha256": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+    },
+    {
+      "path": "src/lib/deepDiveStudy.js",
+      "sha256": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459"
+    },
+    {
+      "path": "src/lib/deepDiveRecommendations.js",
+      "sha256": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479"
+    },
+    {
+      "path": "scripts/lib/read-learning-pilot-bank.mjs",
+      "sha256": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac"
+    },
+    {
+      "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
+      "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "scripts/lib/content-mapping/package.mjs",
+      "sha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748"
+    },
+    {
+      "path": "server/adaptive/revision.mjs",
+      "sha256": "a2fc241dd45a60fe4e9898f8133187402ef07d9e0a5e2f721f4ad6ba33b73451"
+    },
+    {
+      "path": "src/App.jsx",
+      "sha256": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49"
+    },
+    {
+      "path": "src/data/sy0701AcronymFlashcards.js",
+      "sha256": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+      "sha256": "143dde6ff3996d594cd7981101c530048902c894449641f972cc38f8aa1c58fe"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-glossary-mapping-proposals.json",
+      "sha256": "377378ea1423ceafead0d73bfaace111e0a7181eb1da50200ec5454fe386c32e"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/private-catalogue-read.json",
+      "sha256": "ab41620421c0449309a096bc678aaa4b05088188d2c8da7666d7429cc4e10ce1"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/private-reconciliation.json",
+      "sha256": "53ba4921ed4ffb67d1da312fea8938a8f902c8a372cc083de9e4bbc71e7a8924"
+    },
+    {
+      "path": "scripts/lib/content-mapping/publication.mjs",
+      "sha256": "c540681dd727c01003505c050744e3d13c73486dd027bb99adaaf96b843d77e7"
+    },
+    {
+      "path": "scripts/lib/read-authored-bank.mjs",
+      "sha256": "e5fdce4aeeaf9971bbdb9ea269b3ae5fe9a57392df19b21879c59968ca5d8b2e"
+    },
+    {
+      "path": "src/data/sy0701PublishedSnapshot.js",
+      "sha256": "c5455fafd76fe974bb6dcb54b0562fc5ee5935da8387f7bfe48036760d4a8e9a"
+    },
+    {
+      "path": "src/data/sy0701EditorialReview.js",
+      "sha256": "0f32ac6be52a67cdeee239b5342a27505f240c9da122d0ced74df1fbb53480bb"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "sha256": "191d496358740cc07567452eb64fd1d2f3ab508cd83279a6c1f840355bc8ee67"
+    }
+  ],
+  "denominator": {
+    "broadObjective13Candidates": 46,
+    "priorDistinctDispositions": 28,
+    "newInstructionalOrContainerRecords": 10,
+    "newMcqs": 0,
+    "newPbqs": 0,
+    "newFeedbackBundles": 0,
+    "combinedDistinctDispositions": 38,
+    "remainingCandidates": 8,
+    "remainingGlossaryDefinitions": 8
+  },
+  "priorDispositionReferences": [
+    {
+      "recordId": "deck:security-principles-access-models",
+      "sourceRevision": "sha256:b93d19664fddd6cd284c61b6674701bb09b8fa24ca20889eab6aee5bf5b992bc",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "explanation:mcq:m232",
+      "sourceRevision": "sha256:4b3b9bc81bab4dbd31a047c5942eeae5b7e8df87dfcdd26824f2f982e857d1eb",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "explanation:mcq:m416",
+      "sourceRevision": "sha256:06b1e322cd544634e133c91ff11dfd9662843f7159a12f1b01e3e37e7dacc478",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "explanation:mcq:m639",
+      "sourceRevision": "sha256:aff28d08167f851b2863585d37507ade3b0be97b8766adb614fc6ff4bc616d0b",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "explanation:mcq:m649",
+      "sourceRevision": "sha256:bf859c02c67b328d83d10b60c96026a991e54c54d3700595753bc52d12c0575f",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-aaa-authentication-authorization-and-accounting",
+      "sourceRevision": "sha256:87bb6802ccc8a205d1539df522a00f4d7409caaa6211f796b3324c27d2a8c708",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-acl-access-control-list",
+      "sourceRevision": "sha256:c71f342efb58d7d27a6e83a42be314898a989f90e6ee028b1a4af87ecf65f471",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-aup-acceptable-use-policy",
+      "sourceRevision": "sha256:f72ca61dcb2c905832c723b39dd660789245902bbe56b7ce161973aac1ef156f",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-cia-confidentiality-integrity-and-availability",
+      "sourceRevision": "sha256:e4758fadc6d24aaa85f0901a41ad71051ed8fa24ec65d25c6f028ab95d250fda",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-dac-discretionary-access-control",
+      "sourceRevision": "sha256:f7ccccc3058db98804926212bc9fd69d5f5de6753c0d7727637ffaba14b52b06",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-mac-mandatory-access-control",
+      "sourceRevision": "sha256:52cea94fb79c0f29a3b1083b7f0d688420cd1e352e91e81d338eafd6c4006e03",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-rbac-role-based-access-control",
+      "sourceRevision": "sha256:08f89c2253fb6848946d44acf051f3fad1a2d3eac3efa70c376aad9d43f4922f",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-rbac-rule-based-access-control",
+      "sourceRevision": "sha256:50e19e9240bfe85f44df3b8a6c27b1abda9d689908ac1a48be5d0c4bb261c855",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-principles-access-models-tou-time-of-use",
+      "sourceRevision": "sha256:1b29010794a85ff96eee4e021f06abd5d4d6425a82b2eb270e7b6267c42648ab",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "glossary:aaa",
+      "sourceRevision": "sha256:0af02c407a4f6076acfe8e3d183c7e44512eab55cbcd00c82d7ad74101f1004d",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "glossary:acl",
+      "sourceRevision": "sha256:bb131401aa48e86b64c07650670b6683ff5b6ba438e2fe84308115336c24c2de",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "glossary:aup",
+      "sourceRevision": "sha256:9d17f3bb0c9471338918ed1f099cb558de7b9dbdaf30fefee98bd94c3ba62e6b",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "glossary:cia",
+      "sourceRevision": "sha256:e7c28871613cacf874f34e2df922233096a4a6e2b1af8c265e6d8d219b093f2d",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "glossary:dac",
+      "sourceRevision": "sha256:5a93866981bf83545031ddf19d6f5bc03a6b35f9b152c70f849fb140524eaad7",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "glossary:encryption",
+      "sourceRevision": "sha256:84e0be46e7bf560613e28fd9d4fed9749b5756bd1532bbdb1bbbe4cb5e3b6ee5",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "glossary:mac",
+      "sourceRevision": "sha256:09f1b253770e93f9225f07f0a3eac23f29710cfd0a452e0ab6c41c7cc44b41f3",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "glossary:nist",
+      "sourceRevision": "sha256:465d82bcfbda9daed74431e8ed2444088c8ab0d116d6c22f2e67a727bc39ceed",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "glossary:rbac",
+      "sourceRevision": "sha256:d38e8531479d948b3f801141c582a74610dd3160407f58c2399a499bb611be10",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "glossary:siem",
+      "sourceRevision": "sha256:dd6820fbdbeed499c603f2760fd90d0aae7df6b33d08845ffa7846c0d27f9156",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "mcq:m232",
+      "sourceRevision": "sha256:3ce1b1265a9f275c31a5d4898fabe0caef6168be87fda46726ee3ac74c6edfbd",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "mcq:m416",
+      "sourceRevision": "sha256:98449d5f155b631c10b60cfd25a46a601c3a7e5513750397493c578c02ddd7e4",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "mcq:m639",
+      "sourceRevision": "sha256:9f41ece28d8c032d8899a85e1d497370db14fe59ca0ac61c6a8dc9d784f8ce02",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "mcq:m649",
+      "sourceRevision": "sha256:8415b87b82ac006cbeeedd6e20ca4f186371d488cf71b32d96cebaca4965c7ac",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "status": "prior_disposition_preserved"
+    }
+  ],
+  "instructionalProposals": [
+    {
+      "recordId": "lesson:governance-change-vendors",
+      "kind": "lesson",
+      "sourceRevision": "sha256:759a9aa949a6daf6632db8b5d21eef3a1d585364aae7e512230661354b6552dc",
+      "parentId": null,
+      "objectiveCodesObserved": [
+        "1.3",
+        "5.1",
+        "5.3",
+        "5.6"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "meaning": "Mixed navigation container; title, aliases, objectives and four chips neither establish full objective coverage nor safe reversibility. No MOU/MOA or measured recovery teaching is inferred.",
+      "roleProposal": "navigation_container_not_independent_instruction",
+      "subunits": [],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "section:governance-change-vendors:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:d34873589b02fd5454a08fd8cb2b2780f4d3a1246901b4ee4ce65ff858b44133",
+      "parentId": "lesson:governance-change-vendors",
+      "objectiveCodesObserved": [
+        "1.3",
+        "5.1",
+        "5.3",
+        "5.6"
+      ],
+      "objectiveCodesProposal": [
+        "5.1"
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.policy",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Document-purpose distinctions; encryption and secret rotation are examples, not independently taught cryptography or incident response.",
+      "roleProposal": "conditional_instruction",
+      "subunits": [
+        {
+          "path": "table.rows[0]",
+          "sourceRevision": "sha256:937222d8b66aba1d4f36ec0e2dd14da6f63c6cc323849313ddd8d94aeabb93fa",
+          "objectiveCodesProposal": [
+            "5.1"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.policy",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Management direction; exact policy supporting identity only.",
+          "weight": 0
+        },
+        {
+          "path": "table.rows[1]",
+          "sourceRevision": "sha256:156e5bd297eb8e248f193fb9ef9a408292e0aa992951418dc5f95ea2567de471",
+          "objectiveCodesProposal": [
+            "5.1"
+          ],
+          "conceptLinkProposals": [],
+          "meaning": "Mandatory measurable technical requirements; no exact standard identity in this taxonomy.",
+          "weight": 0
+        },
+        {
+          "path": "table.rows[2]",
+          "sourceRevision": "sha256:205182b6d397879683e157a5c6a3902d9fef99ce98485266bbe93b82636a53fc",
+          "objectiveCodesProposal": [
+            "5.1"
+          ],
+          "conceptLinkProposals": [],
+          "meaning": "Repeatable task steps; no exact procedure identity.",
+          "weight": 0
+        },
+        {
+          "path": "table.rows[3]",
+          "sourceRevision": "sha256:473e604849561b21fbd7bf482342048e7ecf840bd41fa76cc6fdea251e041459",
+          "objectiveCodesProposal": [
+            "5.1"
+          ],
+          "conceptLinkProposals": [],
+          "meaning": "Advisory judgement; no exact guideline identity.",
+          "weight": 0
+        }
+      ],
+      "deliveredScopeObserved": "exam",
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "section:governance-change-vendors:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:abae115b69fbdb0d46950a0a95700c322b18f5181d0f554dfb614cb89fcbbdcc",
+      "parentId": "lesson:governance-change-vendors",
+      "objectiveCodesObserved": [
+        "1.3",
+        "5.1",
+        "5.3",
+        "5.6"
+      ],
+      "objectiveCodesProposal": [
+        "1.3"
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "meaning": "Change-record checklist and qualified emergency governance; no assessed execution or recovery-time guarantee.",
+      "roleProposal": "conditional_instruction",
+      "subunits": [
+        {
+          "path": "body[0]",
+          "sourceRevision": "sha256:5b8797afd0c2b7b866ba1e64d722e1e3f3cce84ace5b277f38bce12987890900",
+          "objectiveCodesProposal": [
+            "1.3"
+          ],
+          "conceptLinkProposals": [],
+          "meaning": "Owner, impact, dependencies, tests, approvals, window, rollback criteria/backout and configuration evidence; repository history is not deployed-state proof.",
+          "weight": 0
+        },
+        {
+          "path": "body[1]",
+          "sourceRevision": "sha256:c29d1ac40ce4a703300f1df894bc04c437055696c77bc174460181effd07b339",
+          "objectiveCodesProposal": [
+            "1.3"
+          ],
+          "conceptLinkProposals": [],
+          "meaning": "Expedited approval remains controlled, tested as possible, monitored and reviewed; urgency is conditional, not an automatic bypass.",
+          "weight": 0
+        }
+      ],
+      "deliveredScopeObserved": "exam",
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "section:governance-change-vendors:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:448df5a8baabd387a88c57d90ac1de82044dd91635f938194c79f55836ad0685",
+      "parentId": "lesson:governance-change-vendors",
+      "objectiveCodesObserved": [
+        "1.3",
+        "5.1",
+        "5.3",
+        "5.6"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.vendor-risk-assessment",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.phishing-simulations",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Mixed supplier risk and awareness instruction; separate each paragraph rather than inherit every profile code.",
+      "roleProposal": "conditional_instruction",
+      "subunits": [
+        {
+          "path": "body[0]",
+          "sourceRevision": "sha256:1f64b0f1fecb4f30b00b8533c345af2172bdf4c1ed514fd0fbf0e3293ad985b5",
+          "objectiveCodesProposal": [
+            "5.3"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.vendor-risk-assessment",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Due diligence, assurance, contract responsibilities and exit assistance; SLA/SOW/NDA labels do not establish precise obligations or legal adequacy.",
+          "weight": 0
+        },
+        {
+          "path": "body[1]",
+          "sourceRevision": "sha256:de90c2140ad015f71b52f2c1010967442e7b29213f1cf1908e5c28bf9c73eda8",
+          "objectiveCodesProposal": [
+            "5.6"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.phishing-simulations",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Role-aware recurring learning, reporting and supportive simulations; course completion is not demonstrated safer behavior.",
+          "weight": 0
+        }
+      ],
+      "deliveredScopeObserved": "exam",
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "keywords:governance-change-vendors",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:c8d3272001891b7d8d5c9b8b567213f2f2cc38283cd5390fad58cb7ad24eec49",
+      "parentId": "lesson:governance-change-vendors",
+      "objectiveCodesObserved": [
+        "1.3",
+        "5.1",
+        "5.3",
+        "5.6"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.policy",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.risk-register",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.secure-baseline",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.phishing",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Four definitions span scopes outside the inherited profile; meaning-specific support links only.",
+      "roleProposal": "conditional_instruction",
+      "subunits": [
+        {
+          "path": "[0]",
+          "sourceRevision": "sha256:3c8b767942f0ebb06e9832becf4c60fdf864abe298185ae327fffcff1036717e",
+          "objectiveCodesProposal": [
+            "5.1"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.policy",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Policy management intent.",
+          "weight": 0
+        },
+        {
+          "path": "[1]",
+          "sourceRevision": "sha256:52094e71a779537307ba384b26fa7858b7a44b5ec79965260b2344512cb8fbc7",
+          "objectiveCodesProposal": [
+            "5.2"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.risk-register",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Risk-register ownership, ratings, treatment and status; objective 5.2 is absent from profile chips.",
+          "weight": 0
+        },
+        {
+          "path": "[2]",
+          "sourceRevision": "sha256:e83d5dcbff04de9e70efe21abe878ee94863f92f97363938600fcfc375617a3f",
+          "objectiveCodesProposal": [
+            "4.1"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.secure-baseline",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Secure configuration baseline; objective 4.1 with change context, not measured recovery.",
+          "weight": 0
+        },
+        {
+          "path": "[3]",
+          "sourceRevision": "sha256:937d17ee01469fbaf18e77f9c3b44dc69b1cac665b883b7d2e7ce39ae5dd9d4c",
+          "objectiveCodesProposal": [
+            "2.2"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.phishing",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Deceptive-message attack definition; objective 2.2 contextually supports 5.6, not assessed awareness outcomes.",
+          "weight": 0
+        }
+      ],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "traps:governance-change-vendors",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:2a67b09d232a39802334953cab9d4c7eb26646aa68c3900e770032034610a1de",
+      "parentId": "lesson:governance-change-vendors",
+      "objectiveCodesObserved": [
+        "1.3",
+        "5.1",
+        "5.3",
+        "5.6"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.vendor-risk-assessment",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Document-purpose, emergency-evidence and supplier-assurance cautions are distinct scopes, not three extra assessment families.",
+      "roleProposal": "conditional_instruction",
+      "subunits": [
+        {
+          "path": "[0]",
+          "sourceRevision": "sha256:d4a7fac4df077ba456a7b45c5c66877d8b9285a41063a7fdc36d2d172f9a8a6d",
+          "objectiveCodesProposal": [
+            "5.1"
+          ],
+          "conceptLinkProposals": [],
+          "meaning": "Advisory versus mandatory document distinction; no precise canonical guideline/standard identity.",
+          "weight": 0
+        },
+        {
+          "path": "[1]",
+          "sourceRevision": "sha256:722ef0194dfa9135d18739bc401791bf4c8a0c8565874faba20a5cfdce00f102",
+          "objectiveCodesProposal": [
+            "1.3"
+          ],
+          "conceptLinkProposals": [],
+          "meaning": "Emergency evidence and retrospective review; no primary change identity or new mastery.",
+          "weight": 0
+        },
+        {
+          "path": "[2]",
+          "sourceRevision": "sha256:263b4150eb63c9898407f78772652924e5a8dff8ec3310e2f973e7a89759db00",
+          "objectiveCodesProposal": [
+            "5.3"
+          ],
+          "conceptLinkProposals": [
+            {
+              "conceptId": "sy0701.term.vendor-risk-assessment",
+              "role": "instructional_support_only",
+              "weight": 0
+            }
+          ],
+          "meaning": "Certification is a limited assurance input, not comprehensive service/control effectiveness.",
+          "weight": 0
+        }
+      ],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "support_only",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "check:governance-change-vendors",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:ab6c39a7cddec533e00cccd1996d940097dda4150665f720b5933a58cbeef8da",
+      "parentId": "lesson:governance-change-vendors",
+      "objectiveCodesObserved": [
+        "1.3",
+        "5.1",
+        "5.3",
+        "5.6"
+      ],
+      "objectiveCodesProposal": [
+        "5.1"
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "meaning": "Model-answer reveal repeats standard classification; TLS is incidental context, not crypto configuration competence.",
+      "roleProposal": "model_answer_reveal_not_assessment",
+      "subunits": [],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "coarse",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "practice:governance-change-vendors:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:20cf9643adce231600062029c15363e0ef8d4757e438ebd3e8160788310bd36d",
+      "parentId": "lesson:governance-change-vendors",
+      "objectiveCodesObserved": [
+        "1.3",
+        "5.1",
+        "5.3",
+        "5.6"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.policy",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.risk-register",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.secure-baseline",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.phishing",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Generated definition recognition repeats the same keyword guide; shared guide context only, no keyed per-check mapping or change decision.",
+      "roleProposal": "derived_definition_practice_not_independent_evidence",
+      "subunits": [],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "coarse",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "familyRelation": "same_keyword_guide_no_independent_family",
+      "guideContextReference": {
+        "recordId": "keywords:governance-change-vendors",
+        "sourceRevision": "sha256:c8d3272001891b7d8d5c9b8b567213f2f2cc38283cd5390fad58cb7ad24eec49"
+      }
+    },
+    {
+      "recordId": "practice:governance-change-vendors:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:08c7fdd9324efe35a67c33be3cd90433c3d8d9a50189f066f060db92b5d9daf1",
+      "parentId": "lesson:governance-change-vendors",
+      "objectiveCodesObserved": [
+        "1.3",
+        "5.1",
+        "5.3",
+        "5.6"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.policy",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.risk-register",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.secure-baseline",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.phishing",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Generated definition recognition repeats the same keyword guide; shared guide context only, no keyed per-check mapping or change decision.",
+      "roleProposal": "derived_definition_practice_not_independent_evidence",
+      "subunits": [],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "coarse",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "familyRelation": "same_keyword_guide_no_independent_family",
+      "guideContextReference": {
+        "recordId": "keywords:governance-change-vendors",
+        "sourceRevision": "sha256:c8d3272001891b7d8d5c9b8b567213f2f2cc38283cd5390fad58cb7ad24eec49"
+      }
+    },
+    {
+      "recordId": "practice:governance-change-vendors:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:9b6d9359874c13d8e5bb58e07a2b6b7efcafabe1c6b26968049f3605b4eea367",
+      "parentId": "lesson:governance-change-vendors",
+      "objectiveCodesObserved": [
+        "1.3",
+        "5.1",
+        "5.3",
+        "5.6"
+      ],
+      "objectiveCodesProposal": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.policy",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.risk-register",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.secure-baseline",
+          "role": "instructional_support_only",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.phishing",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "meaning": "Generated definition recognition repeats the same keyword guide; shared guide context only, no keyed per-check mapping or change decision.",
+      "roleProposal": "derived_definition_practice_not_independent_evidence",
+      "subunits": [],
+      "deliveredScopeObserved": null,
+      "precisionObserved": "coarse",
+      "packageSecondaryConceptsObserved": [],
+      "publicationStatusObserved": "active",
+      "difficultyObserved": "Applied",
+      "difficultyDisposition": "instructional_Applied_label_not_assessment_calibration",
+      "trustedRevisionId": null,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "familyRelation": "same_keyword_guide_no_independent_family",
+      "guideContextReference": {
+        "recordId": "keywords:governance-change-vendors",
+        "sourceRevision": "sha256:c8d3272001891b7d8d5c9b8b567213f2f2cc38283cd5390fad58cb7ad24eec49"
+      }
+    }
+  ],
+  "deliveryBindings": [
+    {
+      "id": "lesson-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function ConceptDeepDivesPage(",
+      "endAnchor": "function FlashcardsPage(",
+      "startLine": 31239,
+      "endLine": 31898,
+      "sourceSignature": "sha256:73bedc41a26c97312747cd945c691668a2b37f90fc15e8a0d6bbb7d796a4de7e"
+    },
+    {
+      "id": "progressive-paragraph-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function DeepDiveReadableBites(",
+      "endAnchor": "function ConceptDeepDivesPage(",
+      "startLine": 31203,
+      "endLine": 31239,
+      "sourceSignature": "sha256:914339c3ddd3934892b67c8a89e7b870c07c671f77b3e792c25b081d1e879a6e"
+    },
+    {
+      "id": "sentence-splitter",
+      "path": "src/App.jsx",
+      "anchor": "function splitReadableSentences(",
+      "endAnchor": "function expectedExamSeconds(",
+      "startLine": 1331,
+      "endLine": 1338,
+      "sourceSignature": "sha256:3a13a1865e6f069fe25d22250d932b6ed3c803b10dbc39b849528ea8fc0f1650"
+    },
+    {
+      "id": "lesson-end-actions",
+      "path": "src/App.jsx",
+      "anchor": "  const handleAddDeepDiveWeakTopicToReview=",
+      "endAnchor": "  const handleGuestPbqPreview=",
+      "startLine": 34435,
+      "endLine": 34456,
+      "sourceSignature": "sha256:16c7033ca8dc9b86e754176db4ac94fb5d2484c7059667801e1e329d6f445f3c"
+    }
+  ],
+  "selectorBindings": [
+    {
+      "recordId": "intervention:deep-dive-recommendations",
+      "sourceRevision": "sha256:c05f9bf90cfd71e54cf47587e2f10c473d2a5b7ac23da274b920db6313c5c569",
+      "limitation": "Objective/topic hints and lexical overlap can use explanations and options internally. Export no matched private text or learner instances; these are legacy recommendations, not approved mastery links."
+    },
+    {
+      "recordId": "intervention:lesson-navigation",
+      "sourceRevision": "sha256:96bb76e903452092f979401acb1f6917f0d6c68dd3b6223956d610625aca7891",
+      "limitation": "Includes free-preview gating, lesson search, guided steps and related flashcard end action. Other lesson end actions delegate to separately inventoried selectors."
+    },
+    {
+      "recordId": "intervention:lesson-related-pbq",
+      "sourceRevision": "sha256:beeeda0e5bbece13337727c60f0d35df0fbd3d2884eda83232c58406c29d64fe",
+      "limitation": "Lesson-to-PBQ and chapter-review actions use coarse domain links, not exact concept diagnosis."
+    }
+  ],
+  "deliveryObservations": {
+    "sourceOnly": true,
+    "freshBrowserDelivery": false,
+    "noLearnerStateOrSyncExecuted": true,
+    "lessonId": "governance-change-vendors",
+    "freePreviewLessonId": "web-social-dns-attacks",
+    "selectedLessonIsFreePreview": false,
+    "accessGate": "Pro_required_for_selected_lesson_guests_and_free_receive_access_prompt",
+    "guidedSteps": 6,
+    "keywordCount": 4,
+    "comparisonRows": 4,
+    "comparisonDisplay": "one_selected_row_at_a_time_initial_Policy",
+    "keywordDisplay": "one_selected_definition_at_a_time_initial_policy",
+    "bodyDisplay": "first_sentence_visible_supporting_detail_in_native_details",
+    "paragraphDelivery": [
+      {
+        "recordId": "section:governance-change-vendors:1",
+        "path": "body[0]",
+        "firstVisibleRevision": "sha256:3ba215f1059fc1d4911e4f6ecec7912cf6ba482243511369762464b23163f4ee",
+        "collapsedDetailRevision": "sha256:d63211128acbb74e7a60013b57a26e4b3da16ae938064b98765f2bb8c1ef6fdb",
+        "sentenceCount": 2,
+        "delivery": "first_sentence_then_native_details"
+      },
+      {
+        "recordId": "section:governance-change-vendors:1",
+        "path": "body[1]",
+        "firstVisibleRevision": "sha256:7f79f639280cb1ad17613365c16a59e32f4b101dcf9dc51a5a22fe8b619c2e88",
+        "collapsedDetailRevision": "sha256:f0bf7f12f32bb792d1bbf57b07bcda8971eccfd0a55b9b7a176a03be5e3267df",
+        "sentenceCount": 2,
+        "delivery": "first_sentence_then_native_details"
+      },
+      {
+        "recordId": "section:governance-change-vendors:2",
+        "path": "body[0]",
+        "firstVisibleRevision": "sha256:f3a40689e473c240d7984f358ece877f9fb08503e1ef509ba55ab04ab17c382c",
+        "collapsedDetailRevision": "sha256:6d35ec95004bb8330fa45c75dee274020ea2747e71c4dc4be8251dc0c3b4102d",
+        "sentenceCount": 4,
+        "delivery": "first_sentence_then_native_details"
+      },
+      {
+        "recordId": "section:governance-change-vendors:2",
+        "path": "body[1]",
+        "firstVisibleRevision": "sha256:e473c919a5310d4d4c3f6bad534127cefeaddc88ba799eb6db8ab92ae5e1c008",
+        "collapsedDetailRevision": "sha256:11fbd785fa5c4af56cceb4cba81b22417732650640b0c048b4fad6849d1f729c",
+        "sentenceCount": 3,
+        "delivery": "first_sentence_then_native_details"
+      }
+    ],
+    "beyondSectionIndexes": [],
+    "authoredProfileCodes": [
+      "5.1",
+      "1.3",
+      "5.3",
+      "5.6"
+    ],
+    "displayedGeneratedCheckIds": [
+      "practice:governance-change-vendors:practice-keyword-0",
+      "practice:governance-change-vendors:practice-keyword-1",
+      "practice:governance-change-vendors:practice-keyword-2"
+    ],
+    "generatedHelperCheckCount": 6,
+    "generatedComparisonChecksDelivered": 0,
+    "generatedGuidelineComparisonReturned": false,
+    "unusedHelperFlashcards": 9,
+    "feedbackGate": "submitted_practice_for_accessible_lesson_no_separate_Pro_feedback_gate",
+    "feedbackDetail": "main_feedback_then_all_wrong_options_in_collapsed_details",
+    "revealCheck": "toggle_only_no_submitted_grader",
+    "sources": "native_collapsed_details",
+    "completion": "local_self_report_not_mastery",
+    "practiceResult": "local_same_guide_best_score_not_trusted_mastery",
+    "relatedDeckIdObserved": "security-principles-access-models",
+    "lessonEndActionChapterId": 5,
+    "relatedActionsDisposition": "first_objective_overlap_deck_and_coarse_domain5_review_PBQ_not_exact_change_remediation"
+  },
+  "unusedSelectedLessonHelpers": [
+    {
+      "recordId": "practice:governance-change-vendors:practice-compare-0-0",
+      "sourceRevision": "sha256:2f3f59c7c8f266c4eed57e77f732d8eaa704db5d800af9842593bcb81e462647",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "practice:governance-change-vendors:practice-compare-0-1",
+      "sourceRevision": "sha256:5e22ef1098b306314e2418d08d302cc0d8e0e8d76b6dec23648b09301bc674c3",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "practice:governance-change-vendors:practice-compare-0-2",
+      "sourceRevision": "sha256:9318534fa883216e9ecf32b3a9784c0a1962741d0d36373c3b9ea97daa1c78c9",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:governance-change-vendors:check",
+      "sourceRevision": "sha256:1fc13ada9aae30b9c49147d829d0f8371eb2ccbcbcbd169ce91236411951b740",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:governance-change-vendors:core",
+      "sourceRevision": "sha256:d2c1513fdbc6a63a883145b4ad964dd256ace4f7ff929677fe5d42743f9351f0",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:governance-change-vendors:table-0-0",
+      "sourceRevision": "sha256:ff6233811841f868dfb16b19ea42c6483dbb785fec025dd0092c3af1493f0a59",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:governance-change-vendors:table-0-1",
+      "sourceRevision": "sha256:cc64c1ee7ad892804b16fa879ce2e705b068be895149e74c2e84711357c5c395",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:governance-change-vendors:table-0-2",
+      "sourceRevision": "sha256:17f9b207633c6e9f2f9e32a5b9209c469f182f6e3536f4e2668c534e07e58fd9",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:governance-change-vendors:table-0-3",
+      "sourceRevision": "sha256:ab8e7633abba944f925f1d9966a5d5805c73823fc609e5136c0c4f7747636bab",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:governance-change-vendors:trap-0",
+      "sourceRevision": "sha256:d370c77c72a34cd79bf1af43d7cb087ccd71a7bcb9d141391ae9b92c86c5b4d3",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:governance-change-vendors:trap-1",
+      "sourceRevision": "sha256:8fb44b65092642ef344c05e3567f7eebd4633776ee90d63ffbac02c0eddd4df5",
+      "status": "not_delivered"
+    },
+    {
+      "recordId": "unused-card:governance-change-vendors:trap-2",
+      "sourceRevision": "sha256:b267bc05ae24581cd71ce1e2ea0eefb8c2bae371c92e630a75671ae736ac885a",
+      "status": "not_delivered"
+    }
+  ],
+  "missUsefulnessProbes": [
+    {
+      "questionRecordId": "mcq:m232",
+      "parentRevision": "sha256:6b10df539b0495cafb7fc6be6e9de1dda0492b16b0d4517a9e58102e1d1ff52c",
+      "parentPublishedRevision": "sha256:3ce1b1265a9f275c31a5d4898fabe0caef6168be87fda46726ee3ac74c6edfbd",
+      "feedbackRecordId": "explanation:mcq:m232",
+      "feedbackRevision": "sha256:4b3b9bc81bab4dbd31a047c5942eeae5b7e8df87dfcdd26824f2f982e857d1eb",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "type": "local_single_miss_fixture_not_learner_session",
+      "limit": 2,
+      "lessonIds": [
+        "governance-change-vendors"
+      ],
+      "reviewedLessonRevision": "sha256:759a9aa949a6daf6632db8b5d21eef3a1d585364aae7e512230661354b6552dc",
+      "reviewedSectionReference": {
+        "recordId": "section:governance-change-vendors:1",
+        "sourceRevision": "sha256:abae115b69fbdb0d46950a0a95700c322b18f5181d0f554dfb614cb89fcbbdcc"
+      },
+      "status": "partial_change_process_not_material_risk_reapproval_decision",
+      "rationale": "The question and feedback teach renewed review after a material risk changes an approved migration. The lesson names impact/approvals and qualifies emergency governance but gives no explicit post-approval risk trigger or decision.",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m416",
+      "parentRevision": "sha256:18a85a02057ae85c20725056d083c232bbcd4f54b9bd4b99973d5f799a4c10c4",
+      "parentPublishedRevision": "sha256:98449d5f155b631c10b60cfd25a46a601c3a7e5513750397493c578c02ddd7e4",
+      "feedbackRecordId": "explanation:mcq:m416",
+      "feedbackRevision": "sha256:06b1e322cd544634e133c91ff11dfd9662843f7159a12f1b01e3e37e7dacc478",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "type": "local_single_miss_fixture_not_learner_session",
+      "limit": 2,
+      "lessonIds": [
+        "governance-change-vendors",
+        "risk-resilience-governance"
+      ],
+      "reviewedLessonRevision": "sha256:759a9aa949a6daf6632db8b5d21eef3a1d585364aae7e512230661354b6552dc",
+      "reviewedSectionReference": {
+        "recordId": "section:governance-change-vendors:1",
+        "sourceRevision": "sha256:abae115b69fbdb0d46950a0a95700c322b18f5181d0f554dfb614cb89fcbbdcc"
+      },
+      "status": "partial_test_and_history_context_not_CI_CD_combined_gate",
+      "rationale": "The question and feedback distinguish a combined peer-review/build/test/deploy workflow from DAST, pentesting and broad lifecycle processes. The lesson mentions tests and version review history, not that pipeline or those contrasts.",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m639",
+      "parentRevision": "sha256:2cd6edd338b5f061d0a6bf95b6027441b14cfaff2796a5dc106c0d65b6cf1fd6",
+      "parentPublishedRevision": "sha256:9f41ece28d8c032d8899a85e1d497370db14fe59ca0ac61c6a8dc9d784f8ce02",
+      "feedbackRecordId": "explanation:mcq:m639",
+      "feedbackRevision": "sha256:aff28d08167f851b2863585d37507ade3b0be97b8766adb614fc6ff4bc616d0b",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "type": "local_single_miss_fixture_not_learner_session",
+      "limit": 2,
+      "lessonIds": [
+        "governance-change-vendors",
+        "risk-resilience-governance"
+      ],
+      "reviewedLessonRevision": "sha256:759a9aa949a6daf6632db8b5d21eef3a1d585364aae7e512230661354b6552dc",
+      "reviewedSectionReference": {
+        "recordId": "section:governance-change-vendors:1",
+        "sourceRevision": "sha256:abae115b69fbdb0d46950a0a95700c322b18f5181d0f554dfb614cb89fcbbdcc"
+      },
+      "status": "partial_backout_checklist_not_plan_name_correction_or_execution",
+      "rationale": "The question and feedback define the reversal document and contrast impact analysis, continuity and generic playbooks. The lesson lists backout steps and rollback criteria, useful context without defining that document, its execution or recovery verification.",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    },
+    {
+      "questionRecordId": "mcq:m649",
+      "parentRevision": "sha256:3b404f3b046d809b757bed4021ad1d6ad85eaf2f8e46963fefd48c1f75efed3a",
+      "parentPublishedRevision": "sha256:8415b87b82ac006cbeeedd6e20ca4f186371d488cf71b32d96cebaca4965c7ac",
+      "feedbackRecordId": "explanation:mcq:m649",
+      "feedbackRevision": "sha256:bf859c02c67b328d83d10b60c96026a991e54c54d3700595753bc52d12c0575f",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "type": "local_single_miss_fixture_not_learner_session",
+      "limit": 2,
+      "lessonIds": [
+        "governance-change-vendors",
+        "security-foundations-controls"
+      ],
+      "reviewedLessonRevision": "sha256:759a9aa949a6daf6632db8b5d21eef3a1d585364aae7e512230661354b6552dc",
+      "reviewedSectionReference": {
+        "recordId": "section:governance-change-vendors:1",
+        "sourceRevision": "sha256:abae115b69fbdb0d46950a0a95700c322b18f5181d0f554dfb614cb89fcbbdcc"
+      },
+      "status": "partial_approval_evidence_context_not_policy_required_CAB_record_contrast",
+      "rationale": "The policy-specific stem and feedback distinguish management authorisation from hash, availability and alert evidence. The lesson names approvals and resulting configuration evidence without the required CAB record or those contrasting proofs.",
+      "approvedRemediation": false,
+      "independentEvidence": false,
+      "weight": 0
+    }
+  ],
+  "overlapBoundary": {
+    "priorQuestionPacketsDoNotGainNewFamilies": true,
+    "documentTableTrapAndRevealAreCorrelatedInstruction": true,
+    "keywordGuideAndThreePracticesAreCorrelatedInstruction": true,
+    "containerAliasesAndInheritedTagsAreNotIndependentEvidence": true,
+    "unusedOutputsExcluded": true,
+    "localCompletionAndScoreAreNotAssessedEvidence": true
+  },
+  "canonicalBoundary": {
+    "masteryIdentitiesAvailable": [
+      "continuity.bia",
+      "recovery.mtd",
+      "recovery.mttr",
+      "recovery.rpo",
+      "recovery.rto"
+    ],
+    "newMasteryIdentities": 0,
+    "newCanonicalIdentities": 0,
+    "topicOrSupportPromotionAllowed": false,
+    "objective13TopicIsNotMastery": true,
+    "recoveryNamesInBackoutContextGrantNoRecoveryCredit": true,
+    "withheldMissingPreciseIdentities": [
+      "standard",
+      "procedure",
+      "guideline",
+      "change-risk-reapproval",
+      "change-release-gates",
+      "backout-plan",
+      "change-approval-record"
+    ],
+    "priorAmbiguitiesUnchanged": [
+      "CIA versus CIA-triad",
+      "MAC cross-domain meanings",
+      "Role-based versus rule-based RBAC",
+      "TOU access-window/race-condition discrepancy"
+    ],
+    "priorMttrWithheldUnchanged": [
+      "recovery.mttr"
+    ],
+    "priorMtbfDeliveryUnverifiedUnchanged": true
+  },
+  "separatelyScopedFollowups": [
+    {
+      "kind": "content_scope_metadata",
+      "status": "proposal_only_no_edit",
+      "detail": "Per-keyword chips and generated source text inherit all four profile codes although dictionary meanings span 5.1,5.2,4.1,2.2. Separate meaning scope from container tags."
+    },
+    {
+      "kind": "content_teaching",
+      "status": "proposal_only_no_edit",
+      "detail": "Change record checklist does not explicitly correct post-approval material risk, combined CI/CD gates, backout-plan naming or policy-required CAB authorisation evidence. Review targeted instruction before claiming remediation."
+    },
+    {
+      "kind": "content_practice",
+      "status": "proposal_only_no_edit",
+      "detail": "Delivered first-three keyword checks contain no change-specific decision; helper document comparison checks and nine cards are unused. Any future assessment needs separate authored revision, role, family and calibration decisions."
+    },
+    {
+      "kind": "content_coverage",
+      "status": "proposal_only_no_edit",
+      "detail": "Alias MOU/MOA and objective exit/data-return intent do not establish detailed instruction. Contracts and awareness share a section but distinct scopes; no legal adequacy or full objective coverage is asserted."
+    },
+    {
+      "kind": "delivery_routing",
+      "status": "proposal_only_no_edit",
+      "detail": "First overlapping deck is security-principles-access-models; end actions use domain5 despite four change questions in chapter1. Review diagnosis-specific routing separately."
+    },
+    {
+      "kind": "delivery_accessibility",
+      "status": "source_observed_not_fresh_browser_verified",
+      "detail": "Keyword tab and comparison radio blocks have selection attributes but no group arrow-key handlers or associated panel controls. Verify keyboard and screen-reader behavior in a dedicated delivery pass."
+    }
+  ],
+  "remainingObjective13Records": [
+    {
+      "recordId": "glossary:dast",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:85c036d7e158e6e9fabafe19bfba71555c0651d7a00afb7b47cd3ccd4be9fb60",
+      "status": "remaining_glossary_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:far",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:a505e429bf2fae93c84ad7224cf31d11d36f98dd0fc7ea127308c675624d759d",
+      "status": "remaining_glossary_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:moa",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:45f5161c89cd4f074f3a71ce3bb3eae12c159980cdcb260ce18bd61307d23b4b",
+      "status": "remaining_glossary_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:mou",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:143ed4af65757e763fc3da0813263a781aa7efd33dc50a085a3571d020b1f15d",
+      "status": "remaining_glossary_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:nda",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:fec98b55554b11c678339beb94dfc710f7c7b8b0e41b778814e85d587349e74a",
+      "status": "remaining_glossary_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:sla",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:34e8644fe2cb8de9b9ca8ae6a5b4c3ee3c45959d18f13d1941cb3251305d5a0e",
+      "status": "remaining_glossary_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:sow",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:69d797ff47b0b050ef4674e5b56114b5c2e720c9b189bb123cceff89347bbafb",
+      "status": "remaining_glossary_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:tls",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:228f0edd7995d12f74e6ff28da67f69071fde494c8dc4a531606b69acaaba377",
+      "status": "remaining_glossary_candidate_not_semantically_reviewed_here"
+    }
+  ],
+  "phaseWideBacklog": {
+    "packageRecordsUnchanged": 1878,
+    "reviewQueueUnchanged": 2954,
+    "unresolvedQuestionMappingsUnchanged": 489,
+    "existingPrimaryQuestionProposalsUnchanged": 7,
+    "taxonomyUnchanged": {
+      "masteryConcepts": 5,
+      "topics": 28,
+      "supportingConcepts": 402
+    },
+    "humanApprovedNewMappings": 0,
+    "eligibleNewEvidence": 0
+  },
+  "privateBoundary": {
+    "recordId": "private:pbq:p017",
+    "sourceRevision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "trustedRevisionId": null,
+    "payloadReviewed": false,
+    "masteryWeight": 0,
+    "status": "SELECTED_PRIVATE_REVISION_UNAVAILABLE_NO_FALLBACK_SUBSTITUTION"
+  },
+  "humanDecisionReferences": {
+    "humanApprovalRequestedThisTurn": false,
+    "ownerDecision": "All proposals remain pending; no queue closure, competence, publication or migration approval."
+  }
+}
