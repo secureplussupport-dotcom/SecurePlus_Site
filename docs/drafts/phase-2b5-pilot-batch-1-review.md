@@ -1,6 +1,6 @@
 # Pilot batch 1 — remaining metadata choices
 
-7 October 2026, Asia/Singapore. **All fifteen questions have owner-approved content.** See the [source-attributed decision record](phase-2b5-pilot-batch-1-content-decision.md). This form does not ask you to approve their wording, answers or explanations again. Every box below is blank and concerns only a remaining decision.
+7 October 2026, Asia/Singapore. **All fifteen questions have owner-approved content, and the fourteen family judgments are approved.** See the [content record](phase-2b5-pilot-batch-1-content-decision.md) and [family record](phase-2b5-pilot-batch-1-family-decision.md). This form does not ask you to approve their wording, answers or explanations again. Every box below is blank and concerns only a remaining decision.
 
 - Exact [draft batch](phase-2b5-pilot-batch-1.json), SHA-256 `91e83b7afbc56901bc1a37ae426763024456d8d90ae486c2d2833ff076826bda`.
 - Exact [mapping package](../evidence/phase-2b5/mapping-package.json), SHA-256 `056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97`.
@@ -12,7 +12,7 @@ All short IDs below begin `draft.pilot1.`. For each choice, either check to **ke
 
 ## 1. Main skill tags and secondary roles
 
-These five choices approve only the stated primary tag for the named questions and the current proposal of **no secondary concepts**. They do not approve difficulty, objective scope or family independence.
+These five choices approve only the stated primary tag for the named questions and the current proposal of **no secondary concepts**. Difficulty and scope remain separate. Family decisions are already recorded.
 
 - [ ] **T-RTO** — Keep rto.01, rto.02 and rto.03 tagged RTO (`recovery.rto`): judge whether service is restored within its target time; no secondary concepts.
 - [ ] **T-RPO** — Keep rpo.01, rpo.02 and rpo.03 tagged RPO (`recovery.rpo`): judge how much recent data is recoverable or could be lost; no secondary concepts.
@@ -35,36 +35,19 @@ These choices approve only the exact difficulty/skill labels in the batch. “Ha
 - [ ] **S-COMMON** — Keep all fifteen as MCQs under objective 5.2, domain `sy0701.domain-5`, chapter `sy0701.objective-5.2`, topic `business-continuity-metrics`; keep RTO/RPO/MTTR/BIA as explicit BIA objective scope. MTD's supporting-scope choice remains separate.
 - [ ] **S-MTD** — Keep mtd.01–03 as supporting continuity context under objective 5.2, without presenting MTD as an explicitly listed SY0-701 exam bullet.
 
-## 4. Genuinely different scenario families
+## Completed family review
 
-Each choice approves only the exact named family proposal for its question, as independent of existing direct families and the other approved new families for that concept. Read the rationale in the batch; distinct IDs or different numbers are insufficient. Select **merge** instead if two questions use the same reasoning. Content and primary-tag approval do not imply independence.
-
-- [ ] **F-rto.01** — Distinct RTO family: service-versus-data requirement judgment (`recovery-exercise-time-versus-data`).
-- [ ] **F-rto.02** — Distinct RTO family: add a serial dependency-and-validation path (`serial-recovery-dependency-budget`).
-- [ ] **F-rto.03** — Distinct RTO family: evaluate an availability contract's missing outage-time evidence (`availability-contract-versus-outage-target`).
-- [ ] **F-rpo.01** — Distinct RPO family: read a recoverable-data timeline (`recoverable-point-timeline`).
-- [ ] **F-rpo.02** — Distinct RPO family: assess asynchronous replication durability and backlog evidence (`asynchronous-replication-durability-gap`).
-- [ ] **F-rpo.03** — Distinct RPO family: choose a usable clean point after delayed corruption (`corruption-clean-recovery-point`); compare with existing m088 before keeping separate.
-- [ ] **F-mtd.02** — Distinct MTD family: reassess tolerance after a validated manual workaround (`manual-workaround-changes-business-tolerance`).
-- [ ] **F-mtd.03** — Distinct MTD family: include business reprocessing after technical recovery (`technical-recovery-plus-business-reprocessing`).
-- [ ] **F-mttr.01** — Distinct MTTR family: calculate an observed duration average (`observed-repair-duration-average`).
-- [ ] **F-mttr.02** — Distinct MTTR family: recognize a mean hiding an individual long outage (`mean-versus-incident-tail`).
-- [ ] **F-mttr.03** — Distinct MTTR family: detect changed repair measurement boundaries (`repair-measurement-boundary-change`).
-- [ ] **F-bia.01** — Distinct BIA family: obtain missing business-impact inputs (`business-impact-input-elicitation`).
-- [ ] **F-bia.02** — Distinct BIA family: identify a shared enabling dependency (`shared-dependency-recovery-priority`).
-- [ ] **F-bia.03** — Distinct BIA family: reassess stale impact assumptions after a business change (`changed-business-service-impact-scope`).
-
-**mtd.01 remains grouped with existing m196 in `outer-business-interruption-limit`, with no novelty credit and no independence box.** No family decision changes the approved content.
+The owner's “all pass” reply approved the fourteen exact family judgments in the [separate family record](phase-2b5-pilot-batch-1-family-decision.md). mtd.01 stays in m196's existing family with zero novelty credit. The rpo.03/m088 clean-point reasoning caveat is preserved. There is no repeat family-approval request here; future local question and family work is authorized without further approval requests.
 
 ## Correction format
 
 ```text
 Batch SHA-256: 91e83b7afbc56901bc1a37ae426763024456d8d90ae486c2d2833ff076826bda
 Mapping package SHA-256: 056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97
-Decision ID: T-RPO / D-RPO / S-MTD / F-rpo.03 (choose one)
+Decision ID: T-RPO / D-RPO / S-COMMON / S-MTD (choose one)
 Questions affected:
-Choice: keep / revise / reject / merge (choose one)
-Requested tag, secondary role, difficulty, scope or family change:
+Choice: keep / revise / reject (choose one)
+Requested concept tag, secondary role, difficulty, skill or scope change:
 Reason:
 ```
 

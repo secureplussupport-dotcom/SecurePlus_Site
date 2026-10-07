@@ -1,6 +1,6 @@
 # What the pilot question tags mean
 
-7 October 2026. Your approval of all fifteen questions is recorded as [content approval](phase-2b5-pilot-batch-1-content-decision.md). The labels below are still proposals. [Remaining choices](phase-2b5-pilot-batch-1-review.md) ask only about these labels, difficulty, scope and scenario families.
+7 October 2026. Your approval of all fifteen questions is recorded as [content approval](phase-2b5-pilot-batch-1-content-decision.md). The labels below are still proposals. [Remaining choices](phase-2b5-pilot-batch-1-review.md) ask only about concept labels, difficulty/skills and scope. The owner's [fourteen family judgments](phase-2b5-pilot-batch-1-family-decision.md) are now recorded separately.
 
 A **concept tag** names the specific understanding a question checks. It lets the future review system choose useful practice after a miss. The code, such as `recovery.rto`, is simply a stable internal name for that skill.
 
@@ -16,7 +16,7 @@ All short question IDs here have the prefix `draft.pilot1.`. Each tag is propose
 
 **Primary concept** means the main skill being assessed. **Secondary concept** means another skill genuinely needed to solve the same question. All fifteen drafts currently propose one primary concept and **no secondary concepts**. Related terms used as context, contrasts or distractors do not automatically become secondary evidence. For example, rto.01 mentions a data-loss allowance, but asks whether the service-restoration deadline was met; it proposes only RTO. Reviewing an RPO comparison can help explain that miss without labeling RPO weak.
 
-A **scenario family** groups questions that use the same reasoning pattern. Changing a company name or four hours to six hours still tests the same pattern. rto.02 asks you to add required recovery steps; rto.03 asks whether a monthly availability claim proves a per-outage recovery target. Those are proposed different families because the reasoning changes. A human reviewer still needs to accept that distinction. mtd.01 is deliberately grouped with existing m196 and receives no new-family credit.
+A **scenario family** groups questions that use the same reasoning pattern. Changing a company name or four hours to six hours still tests the same pattern. rto.02 asks you to add required recovery steps; rto.03 asks whether a monthly availability claim proves a per-outage recovery target. Those families use different reasoning; the owner has accepted that distinction in the separate family record. mtd.01 is deliberately grouped with existing m196 and receives no new-family credit.
 
 **Difficulty** is a proposed learning level: easy for straightforward interpretation/calculation, medium for applying or comparing requirements, hard for evaluating evidence and assumptions. These levels have not been measured with learners. You can ask to change a difficulty without rejecting an approved question.
 
