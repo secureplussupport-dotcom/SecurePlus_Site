@@ -1,0 +1,715 @@
+{
+  "packetId": "phase-2b5-objective12-p055-mapping-proposals-v1",
+  "date": "2026-10-07",
+  "baselineCommit": "0761b78a00f9336b02e826c6f513619651628fe8",
+  "status": "LOCAL_SEMANTIC_PROPOSALS_NOT_READY",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "newFamilyCredit": 0,
+  "sourceBindings": [
+    {
+      "path": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "sha256": "0ba95c5c8f8a00e091daa9d852de0350a01ca00bedcba7c317155ea94cad88a9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "sha256": "46cf5a704690aa85606a1167b72f221aea09234635e3062aec067e7967abb4c9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "sha256": "fce8683567473a28ce8e903190e977345339f33df022ef56425c18d3bdfe225d"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "sha256": "d45c0d959c4cc0171b401f2df5ab1ee38d7bf717e3ce08c9d008d4dac61a6c20"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/mapping-package.json",
+      "sha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/release-checksums.json",
+      "sha256": "98e7e0ed45b5fd17f1be50c4cd36eba53bf289de26a427810e061274dcfb3403"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/private-catalogue-read.json",
+      "sha256": "ab41620421c0449309a096bc678aaa4b05088188d2c8da7666d7429cc4e10ce1"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/private-reconciliation.json",
+      "sha256": "53ba4921ed4ffb67d1da312fea8938a8f902c8a372cc083de9e4bbc71e7a8924"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-batch.md",
+      "sha256": "1a039e6f4778a585128b0d4167536c46a53d13130476b6144ffa946f2f464713"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-guide.md",
+      "sha256": "a9cc1fff35873d84d90bec1c5c6f4613fdb46defae5a8b2a87b4b7c554ffd33b"
+    },
+    {
+      "path": "docs/secureplus-rebrand-master-plan.md",
+      "sha256": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c"
+    },
+    {
+      "path": "docs/phase-1-product-loop-audit.md",
+      "sha256": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10"
+    },
+    {
+      "path": "scripts/lib/read-learning-pilot-bank.mjs",
+      "sha256": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac"
+    },
+    {
+      "path": "scripts/lib/read-authored-bank.mjs",
+      "sha256": "e5fdce4aeeaf9971bbdb9ea269b3ae5fe9a57392df19b21879c59968ca5d8b2e"
+    },
+    {
+      "path": "scripts/lib/content-mapping/publication.mjs",
+      "sha256": "c540681dd727c01003505c050744e3d13c73486dd027bb99adaaf96b843d77e7"
+    },
+    {
+      "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
+      "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "src/data/sy0701PublishedSnapshot.js",
+      "sha256": "c5455fafd76fe974bb6dcb54b0562fc5ee5935da8387f7bfe48036760d4a8e9a"
+    },
+    {
+      "path": "src/data/sy0701PbqReview.js",
+      "sha256": "4186e735e497204cdbf5f372f1e265361f3df3444320b8a45212477e13442754"
+    },
+    {
+      "path": "src/data/sy0701ConciseExplanations.js",
+      "sha256": "03c2ff91a5e8a2732e6bcfb9ffa45dbbd2c1027c730250ccf4348ac4249aa354"
+    },
+    {
+      "path": "src/data/learningMappings.js",
+      "sha256": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+    },
+    {
+      "path": "src/data/learningConcepts.js",
+      "sha256": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac"
+    },
+    {
+      "path": "server/adaptive/revision.mjs",
+      "sha256": "a2fc241dd45a60fe4e9898f8133187402ef07d9e0a5e2f721f4ad6ba33b73451"
+    }
+  ],
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "scope": "One effective local/captured p055 ordering PBQ and its feedback; no remaining instructional record is newly reviewed.",
+  "denominator": {
+    "broadObjective12Candidates": 126,
+    "priorDistinctDispositions": 84,
+    "newRecords": 2,
+    "newPbqs": 1,
+    "newFeedbackBundles": 1,
+    "newMcqs": 0,
+    "newInstructionalRecords": 0,
+    "combinedDistinctDispositions": 86,
+    "combinedEffectiveMcqs": 20,
+    "combinedEffectivePbqs": 1,
+    "combinedQuestionFeedbackBundles": 21,
+    "remainingCandidates": 40,
+    "remainingQuestions": 0,
+    "remainingQuestionFeedbackBundles": 0,
+    "remainingInstructionalOrContainerRecords": 40,
+    "note": "All effective local objective-1.2 questions have agent dispositions; this is not signed approval, queue closure, whole-bank completeness or eligible evidence."
+  },
+  "publicationBoundary": {
+    "sourcePrecedence": "Authored input plus captured snapshot, active/disabled filtering, merged editorial and concise patches, then reviewed-safe enhancement and byte-reconciled captured override pipeline.",
+    "rawAuthoredCount": 1,
+    "rawImportedCount": 0,
+    "capturedSnapshotP055Rows": 0,
+    "capturedOverrideP055Rows": 0,
+    "privateMetadataP055Rows": 0,
+    "publicationDifference": "_baseOrder only; semantic and feedback fields match the effective local object.",
+    "oldRawContentDisposition": "Old empty scenario and unqualified prevention statement are superseded, not current assessed content or additional records.",
+    "currentEditorialCorrectionRequired": false,
+    "localReviewMaintainsExplicitObjective": true,
+    "freshAuthenticatedRead": false,
+    "freshBrowserDelivery": false,
+    "laterLivePrivateOrAdminRevisionNotRuledOut": true
+  },
+  "questionProposals": [
+    {
+      "recordId": "pbq:p055",
+      "questionId": "p055",
+      "kind": "pbq",
+      "sourceRevision": "sha256:8f2ccd0e3b8dcd93b3d0c52a8f930b25bfe4df261d68ab45bfbbf05c6da90838",
+      "publishedRecordSignature": "sha256:e07b7f1fe17a728e93b54da3fdaf74e107334ad3585483c6da7fb50f9c4530a9",
+      "capturedTrustedRevisionId": "104cba30-a3e6-8594-9d9f-f1b8880eca60",
+      "trustedContentSha256": "104cba30a3e625945d9ff1b8880eca6012dd173fe649c95fdaf284c7431ac158",
+      "publicationStatusObserved": "active",
+      "objectiveObserved": "1.2",
+      "domainObserved": "1",
+      "formatObserved": "ORDERING",
+      "precisionObserved": "coarse",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "retain_source_easy_no_empirical_calibration_or_format_promotion",
+      "reviewedFieldGroups": [
+        "scenario_and_task",
+        "all_item_labels",
+        "full_ordering_key",
+        "all_item_explanations",
+        "overall_explanation",
+        "hint_and_editorial_precedence"
+      ],
+      "assessedUnderstanding": "Arrange controls according to explicit spatial relationships in this one supplied site layout",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.2"
+        ],
+        "contextCodes": [],
+        "status": "site_specific_spatial_relationship_within_physical_security",
+        "activeObjectiveTagChanged": false,
+        "limit": "The explicit layout supplies spatial relationships; this is not a universal control hierarchy, control-design exercise or separately assessed category/function for each item."
+      },
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "contextCanonicalRoleProposals": [
+        {
+          "conceptId": "sy0701.term.defense-in-depth",
+          "role": "layered_control_context_not_independent_principle_or_design_assessment",
+          "weight": 0
+        }
+      ],
+      "withheldPreciseMeaning": "Site-specific outside-to-inside spatial placement of physical controls has no existing precise mastery identity.",
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "partialConceptWeights": [],
+      "partialWeightsAllowed": false,
+      "familyLabelProposal": "stated-site-physical-layer-spatial-order",
+      "familyStatus": "different_required_decision_proposal_not_approved_independent_family",
+      "itemCountObserved": 5,
+      "excludedEvidenceClaims": [
+        "Five placements are correlated within one given layout, not five independent physical-control competences.",
+        "CCTV, fencing, guard, access vestibule, badge, biometric reader and rack vocabulary do not independently assess identity, category, function or implementation.",
+        "An ordering interaction does not imply incident-response, containment, recovery, RTO/RPO or operational-sequence competence.",
+        "Random display order, retries, feedback and exam reuse do not create a new scenario family or delayed-transfer evidence.",
+        "Successful compilation creates a revision identity, not approval, ingestion eligibility or runtime activation."
+      ],
+      "deliveryBinding": "pbq-simulator"
+    }
+  ],
+  "explanationProposals": [
+    {
+      "recordId": "explanation:pbq:p055",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:a40837cf0dc64bec322b40c7b1bfdcd4b78c929bfc78823e1a1c40682586d95b",
+      "parentId": "pbq:p055",
+      "parentLocalRevision": "sha256:8f2ccd0e3b8dcd93b3d0c52a8f930b25bfe4df261d68ab45bfbbf05c6da90838",
+      "parentPublishedRevision": "sha256:e07b7f1fe17a728e93b54da3fdaf74e107334ad3585483c6da7fb50f9c4530a9",
+      "parentTrustedRevision": "104cba30-a3e6-8594-9d9f-f1b8880eca60",
+      "roleProposal": "answer_linked_layout_correction_and_qualified_physical_context",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.2"
+        ],
+        "contextCodes": [],
+        "status": "site_specific_spatial_relationship_within_physical_security",
+        "activeObjectiveTagChanged": false,
+        "limit": "The explicit layout supplies spatial relationships; this is not a universal control hierarchy, control-design exercise or separately assessed category/function for each item."
+      },
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.defense-in-depth",
+          "role": "instructional_layering_context",
+          "weight": 0
+        },
+        {
+          "conceptId": "sy0701.term.tailgating",
+          "role": "qualified_risk_context_not_control_identity_or_guarantee",
+          "weight": 0
+        }
+      ],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "trustedRevisionId": null,
+      "familyRelation": "same_parent_layout_feedback_no_independent_family",
+      "deliveryBinding": "pbq-simulator",
+      "deliveryGate": "submitted_simulator_for_accessible_question_no_separate_pro_feedback_gate",
+      "usefulnessAfterMissProposal": {
+        "status": "specific_layout_correction_not_validated_recovery",
+        "rationale": "Simulator compares placements and displays authored item location explanations, plus the qualified general explanation. This can correct reading of this supplied layout; it does not teach universal site design, guarantee tailgating prevention or establish fresh assessment evidence. Exam review renders only the general solution for this format."
+      }
+    }
+  ],
+  "priorFamilyComparisons": [
+    {
+      "priorRecordIds": [
+        "mcq:m036",
+        "mcq:m602"
+      ],
+      "priorFamilyLabel": "controlled-vestibule-recognition",
+      "relation": "Shared physical vocabulary; prior MCQs identify/select a vestibule, while p055 orders supplied site positions. No separate vestibule outcome is created."
+    },
+    {
+      "priorRecordIds": [
+        "mcq:m115"
+      ],
+      "priorFamilyLabel": "layered-protection-recognition",
+      "relation": "Layering is related context; p055 does not ask to name the principle or choose a layered architecture. A different prompt is not automatic approved novelty."
+    },
+    {
+      "priorRecordIds": [
+        "mcq:m102"
+      ],
+      "priorFamilyLabel": "event-recording-detective-function",
+      "relation": "Camera context is shared, but placing a site layer does not assess camera detection function."
+    }
+  ],
+  "gradingBoundary": {
+    "interaction": "shuffled_authored_items_drag_or_pointer_reorder",
+    "wholeResult": "exact_order_match",
+    "simulatorPartDisplay": "one_position_match_per_expected_item",
+    "legacyReturnScore": "matched_positions_divided_by_five_with_whole_correct_boolean",
+    "trustedResult": "coarse_binary_whole_order_match",
+    "compiledItemCount": 5,
+    "compiledPositionCount": 5,
+    "partialMasteryAttributionAllowed": false,
+    "probeScope": "pure_source_extraction_and_existing_grader_no_attempt_or_write",
+    "probes": [
+      {
+        "case": "exact_supplied_layout",
+        "legacyWholeCorrect": true,
+        "legacyMatchedPositions": 5,
+        "legacyPartCount": 5,
+        "legacyScore": 1,
+        "trustedWholeCorrect": true,
+        "trustedScore": 1,
+        "trustedPrecision": "coarse"
+      },
+      {
+        "case": "two_placements_swapped",
+        "legacyWholeCorrect": false,
+        "legacyMatchedPositions": 3,
+        "legacyPartCount": 5,
+        "legacyScore": 0.6,
+        "trustedWholeCorrect": false,
+        "trustedScore": 0,
+        "trustedPrecision": "coarse"
+      },
+      {
+        "case": "all_placements_rotated",
+        "legacyWholeCorrect": false,
+        "legacyMatchedPositions": 0,
+        "legacyPartCount": 5,
+        "legacyScore": 0,
+        "trustedWholeCorrect": false,
+        "trustedScore": 0,
+        "trustedPrecision": "coarse"
+      }
+    ]
+  },
+  "selectorBindings": [
+    {
+      "recordId": "intervention:exam-selection",
+      "sourceRevision": "sha256:1904fadabb741f53ac262ed9e6100595d0d260a756d4aa8887739860ea431315",
+      "limitation": "Exam sampling, incorrect/flagged review and weakest-topic summary reuse bank revisions. Payment/voucher operations are not executed by this audit."
+    },
+    {
+      "recordId": "intervention:next-related-pbq",
+      "sourceRevision": "sha256:d0bf4ead5b984dc63ae04943dbbe0ca512f481ba27fde00c46387ed489819e75",
+      "limitation": "Next-question behavior is coarse legacy chapter/type matching, not concept mastery or independently proven novelty."
+    },
+    {
+      "recordId": "intervention:pbq-catalogue-selection",
+      "sourceRevision": "sha256:a043b959e69c25e991b29b7db13224867f83a137ce5a3cf0f7f728d6343e7580",
+      "limitation": "Includes filtered browsing and random-practice selection. Unlock state is a runtime input, not exported learner data."
+    }
+  ],
+  "deliveryBindings": [
+    {
+      "id": "pbq-simulator",
+      "path": "src/App.jsx",
+      "anchor": "function PBQSim(",
+      "endAnchor": "function ExamModeGuideModal(",
+      "startLine": 26211,
+      "endLine": 26570,
+      "sourceSignature": "sha256:d40ca985f6d0e69a4eb75ad9e9a06d68cad183729cd917b5974afb65fff9d690"
+    },
+    {
+      "id": "ordering-interaction",
+      "path": "src/App.jsx",
+      "anchor": "function SortableOrderList(",
+      "endAnchor": "function StreakCelebrationModal(",
+      "startLine": 22462,
+      "endLine": 22503,
+      "sourceSignature": "sha256:25987b6491d7e9aacf48bb32847dfe79bdf09b31d5f9c57908e11aa2f5a50f7b"
+    },
+    {
+      "id": "pbq-catalogue",
+      "path": "src/App.jsx",
+      "anchor": "function PBQBank(",
+      "endAnchor": "function PBQSim(",
+      "startLine": 25917,
+      "endLine": 26211,
+      "sourceSignature": "sha256:aaf1c9ec108f185aba89c14b6841cc6e1170f6a3de365e93039b0fe81e01d7e7"
+    },
+    {
+      "id": "exam-surface",
+      "path": "src/App.jsx",
+      "anchor": "function ExamMode(",
+      "endAnchor": "function CipherRewardToast(",
+      "startLine": 26638,
+      "endLine": 27494,
+      "sourceSignature": "sha256:ae299d34297e1f794ce9badbe2606ce0093080f6d699ae762e261211ebb0c6e1"
+    },
+    {
+      "id": "legacy-pbq-return",
+      "path": "src/App.jsx",
+      "anchor": "  const handlePBQDone=useCallback(",
+      "endAnchor": "  const CSS=makeCSS(t);",
+      "startLine": 34497,
+      "endLine": 34522,
+      "sourceSignature": "sha256:3d42f7a91b28af088579274f6db1cc759d7cfec7f4eba52cebcddeb0da0bdd49"
+    },
+    {
+      "id": "active-pbq-source",
+      "path": "src/App.jsx",
+      "anchor": "  const pbqLocalFallback=",
+      "endAnchor": "  if(pbqQ) return(",
+      "startLine": 34766,
+      "endLine": 34775,
+      "sourceSignature": "sha256:0879ffc88987079ef2bf7dbe96ba7a285988e1947cd4f393535e6df2a7bc5960"
+    }
+  ],
+  "deliveryObservations": {
+    "previewQuestionId": "p001",
+    "p055IsFreePreview": false,
+    "bankAccess": "Pro or existing coin unlock; guest/free preview alone does not grant p055.",
+    "simulatorPreSubmission": [
+      "title",
+      "scenario",
+      "item_labels_in_current_display_order",
+      "generic_ordering_workspace_header"
+    ],
+    "orderingTaskFieldSeparatelyRendered": false,
+    "orderingHintRendered": false,
+    "simulatorPostSubmission": [
+      "whole_verdict",
+      "general_solution",
+      "matched_position_count",
+      "authored_item_location_solutions",
+      "expected_order_if_whole_result_wrong"
+    ],
+    "simulatorHasSeparateProFeedbackGate": false,
+    "examEligibility": "non_enrichment_p055_is_in_local_exam_ready_pool; actual sampling/entitlement/learner exposure not executed",
+    "examHintRemoval": "recursive_hint_fields_only_no_new_source_mapping",
+    "examPostSubmission": "whole_result_and_general_solution; no_ordering_part_location_solution_renderer",
+    "nextRelatedProbe": {
+      "type": "empty_history_local_source_fixture_not_session",
+      "nextQuestionId": "p010",
+      "approvedRemediation": false
+    },
+    "retryCreatesNewEvidence": false,
+    "keyboardReorderControlsObserved": false,
+    "sourceOnly": true
+  },
+  "deliveryFollowups": [
+    "Generic simulator steps/order phrasing should not be interpreted as chronological security actions for this spatial task; current title and scenario specify direction.",
+    "SortableOrderList source contains drag/pointer handlers but no keyboard reordering control; any accessibility fix needs separately scoped implementation.",
+    "Legacy partial scores/capture and saved attempt callbacks are not trusted concept evidence; the focused check invokes only pure source logic, never capture/save/achievement actions."
+  ],
+  "remainingObjective12Records": [
+    {
+      "recordId": "check:resilience-assets-physical",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:3f1750b1f13d4c6e0459cd5206c1ef1e59a46ad0586608cb94e7be8014a701d2",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "deck:identity-authentication",
+      "kind": "deck_container",
+      "sourceRevision": "sha256:d0d54efa15b84feee564d7513c9a6d0ed118afcfcebe2cebb0f2c6cf4581f377",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-captcha-completely-automated-public-turing-test-to-tell-computers-and-humans-apart",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:931096148d0d5f279f80722c622af361661aeb16ce2e6e739953ced8697a6b46",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-eap-extensible-authentication-protocol",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:eb31374acc5bfe0df7bda938910e4f9e1a9c5cecb9f24bbb52b584559bb260fe",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-idp-identity-provider",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:a86920f1f57b19bc509a2c5eba89e986ef71f9d475f115db66dab04585047f31",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-leap-lightweight-extensible-authentication-protocol",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:9eb50e676c5343d1b0d946e53ae4db2d910215022a79b0cfac568743f2cb6592",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-mfa-multi-factor-authentication",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:4204001d5bb7881f50166591eea9fb9e19d3016078a92b41d2481a6934d914ad",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-oauth-open-authorization",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:8ca8cfa534fded4011338a3a914caa22f28fcbce1ff937012e4edc533f7eba1c",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-oidc-openid-connect",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:9ac8a1525e1e0b870d424d770327852261511e4581d5b2eb3969f22bd53640c7",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-pap-password-authentication-protocol",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:5e2b738d347be3d5e850d0849d2aef07ec8f3743b8cd2cc75acf84a6fed5292d",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-piv-personal-identity-verification",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:ed4a3097725b314d74e22f271b600c9a7a2cf24b07b6dc807a6dac9cde73de48",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-radius-remote-authentication-dial-in-user-service",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:2f5af4254f1f9b4733ea7cdf0f5565175929ca620f21833b601a94a53f3a6dec",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-saml-security-assertion-markup-language",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:6a87b0d8e8b2159283046c3e80a7d469b186c1f2be4bb830269e5a9cc71fc57d",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-sso-single-sign-on",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:fd2872d81b0e984417c86a7a33485e878def3abcd27709198cee7cd37992e56c",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-identity-authentication-tacacs-terminal-access-controller-access-control-system-plus",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:38d2781fa95798ceb52df9697c53abac579df402815a743c1a52c5ae6d93ab16",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:bia",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:fba7d9e4ca7b2ca2afce03b574269efdb495b82ba76b564c992d28daedbfdfda",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:dlp",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:fb5ccc169e04a52b80785e9a4ede5228e305fbd817acb17eef7df8aca52cd7a4",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:eap",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:4aa67736faf054b2ae9dc11dba50e420da1ed842876bed912b49c5b41b15b95d",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:idp",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:a8047591cc988672ea6fdbb2e0314d791ec089e291a9ad63cee009c8b48c87e9",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:ldap",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:326c1c8685fd8009b7abd60a3adb4cc8b087eb31f8082fdc7ea8ea79f6fbcd70",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:mtbf",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:3da7c4ec5d0cf88b5e40bcfb572df6c6909e65e73e3d22a291164205e4ec5674",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:mttr",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:09b9dd6eebf37a22c75b8c89f22c7dacf5a61fe36252cd6835d09f27b5785220",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:oauth",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:41f924c99a917456eb7a0836cd30c5af0ec21a900a15bac9d6f1e5e325460047",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:oidc",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:0bea1b9e32906b09f106ad12128b65489130c3c60633dead4743991e1a77c18d",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:pki",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:d0b3a9f4074ed5ef3b6e7bb84c25c5cc10e308852cfdd8a0b39742120fcbb1bd",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:rpo",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:0072bb6d79cb376e815aefffa9f50ba56cc6aac47862a1382f5e1ad894445ed3",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:rto",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:6693d06a0896075072466fb9864ef786033543d3f35b8a584f91b85c737bfada",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:saml",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:1ba53c6f0036debe76673de2c4f6da7f4820ed905b26e9174d73a95894f0f03c",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:sso",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:c2fe9c03761a9c7ade90ab35a9799c23e4357082468b4f6c43a58f3a51ec927d",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:tacacs%2B",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:5040d572d6f28e27b7a8d8b304236a7491749b18c57849f83f6d58606117a7ef",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:vpn",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:cc87bee792b26651d79b8e7f13f57bea531baf6827fa3f6ece066dd8a6a513f6",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "keywords:resilience-assets-physical",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:e2064bf6cbc45563c17fcb5e8e6f5b8a1eca952036ee9335c5d42544ee8086ca",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "lesson:resilience-assets-physical",
+      "kind": "lesson",
+      "sourceRevision": "sha256:4f1f26144729884a9096f730ac4bdae5840e55e0980b863efe51a0be933e8d3d",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "practice:resilience-assets-physical:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:7058c4d8920536b92bc0074eaa7d4c37e44c99641ba64b58a518a5724c933dea",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "practice:resilience-assets-physical:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:53d23b583df1ed4b9658bc7ae6cbb50db840658a9430a87e57a09fdff72ddbc8",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "practice:resilience-assets-physical:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:56b2ad697bb2915c365c83d877ef7cda89f6811aae7b77b79071020f7580b07a",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "section:resilience-assets-physical:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:b0c4612c17557acbf134558540f3a05d4b78ec95a05d409cdfbb10f5ae0ccdfb",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "section:resilience-assets-physical:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:b0cee02c7ac294cb5e4d5912bb3acb90f2c147f4055f4fbe04d7dbfcd454ac3b",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "section:resilience-assets-physical:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:bce611ec1ee6434ee8372da746420e6bd43934d458010d5f81445489fdbcf0fa",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "traps:resilience-assets-physical",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:914d1abcba14a20df8090d5c56e830148147cb82c51d8942a86aa35b87e0d03b",
+      "status": "remaining_instructional_candidate_not_semantically_reviewed_here"
+    }
+  ],
+  "canonicalBoundary": {
+    "masteryTaxonomy": "five_existing_recovery_concepts_only",
+    "primaryMasteryProposalsWithheld": 1,
+    "newMasteryIdentities": 0,
+    "assessedCanonicalIdentitiesProposed": 0,
+    "topicOrSupportPromotionAllowed": false,
+    "priorCIAAndLeastPrivilegeAliasesUnchanged": true,
+    "priorMAC_RBAC_TOUWithholdingsUnchanged": true,
+    "noAutomaticControlIdentityFromItemPosition": true
+  },
+  "phaseWideBacklog": {
+    "packageRecordsUnchanged": 1878,
+    "reviewQueueUnchanged": 2954,
+    "unresolvedQuestionMappingsUnchanged": 489,
+    "existingPrimaryQuestionProposalsUnchanged": 7,
+    "taxonomyUnchanged": {
+      "masteryConcepts": 5,
+      "topics": 28,
+      "supportingConcepts": 402
+    },
+    "humanApprovedNewMappings": 0,
+    "eligibleNewEvidence": 0
+  },
+  "privateBoundary": {
+    "recordId": "private:pbq:p017",
+    "sourceRevision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "trustedRevisionId": null,
+    "payloadReviewed": false,
+    "masteryWeight": 0,
+    "status": "SELECTED_PRIVATE_REVISION_UNAVAILABLE_NO_FALLBACK_SUBSTITUTION"
+  },
+  "humanDecisionReferences": {
+    "checklist": "docs/evidence/phase-2b5/review-batch.md",
+    "guide": "docs/evidence/phase-2b5/review-guide.md",
+    "requiredBinding": "Future separate signed decisions must bind package SHA, packet SHA and exact local/publication/trusted revision; source selection and compilation are not semantic approval.",
+    "humanApprovalRequestedThisTurn": false,
+    "pending": [
+      "Decide the precise assessed spatial relationship identity and support scope without promoting topics or inventing approved nodes.",
+      "Review the proposed family comparison and keep correlated placements, retries and feedback at zero independent credit.",
+      "Confirm source difficulty, mode-specific feedback usefulness and delivery limitations; any renderer/accessibility work is a separate scope.",
+      "Review the residual 40 instructional/container candidates and preserve outstanding private/owner decisions."
+    ]
+  },
+  "officialReferences": [
+    {
+      "url": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be",
+      "scope": "SY0-701 version 7.0 objective 1.2 names physical-security controls; the local scenario supplies placement relations. The syllabus does not prescribe this site order or approve partial concept weights."
+    }
+  ]
+}
