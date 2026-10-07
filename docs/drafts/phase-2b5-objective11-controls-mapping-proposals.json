@@ -1,0 +1,1934 @@
+{
+  "packetId": "phase-2b5-objective11-controls-mapping-proposals-v1",
+  "date": "2026-10-07",
+  "baselineCommit": "a63ba76e6e0e851762b4d474b7ed1a4a8f39a3af",
+  "status": "LOCAL_SEMANTIC_PROPOSALS_NOT_READY",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "newFamilyCredit": 0,
+  "sourceBindings": [
+    {
+      "path": "docs/secureplus-rebrand-master-plan.md",
+      "sha256": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c"
+    },
+    {
+      "path": "docs/phase-1-product-loop-audit.md",
+      "sha256": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/mapping-package.json",
+      "sha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/release-checksums.json",
+      "sha256": "98e7e0ed45b5fd17f1be50c4cd36eba53bf289de26a427810e061274dcfb3403"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-batch.md",
+      "sha256": "1a039e6f4778a585128b0d4167536c46a53d13130476b6144ffa946f2f464713"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-guide.md",
+      "sha256": "a9cc1fff35873d84d90bec1c5c6f4613fdb46defae5a8b2a87b4b7c554ffd33b"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
+      "sha256": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
+    },
+    {
+      "path": "docs/phase-2b5-editorial-review-record.md",
+      "sha256": "943b06eb101db5d1616cf0cd5289b798c0ce984700993b8561e8537cf2988ec0"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-contextual-recovery-dispositions.json",
+      "sha256": "b56ea7848cd59bfea552c82a7d28535317c21f3c7f5bc03d1e4fd6c0481bc2bb"
+    },
+    {
+      "path": "src/data/learningConcepts.js",
+      "sha256": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac"
+    },
+    {
+      "path": "src/data/learningMappings.js",
+      "sha256": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+    },
+    {
+      "path": "src/lib/deepDiveStudy.js",
+      "sha256": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459"
+    },
+    {
+      "path": "src/data/conceptDeepDives.js",
+      "sha256": "b478e16240c95b70a79cf0679aff683fc08f18dd11947c4046ecd880ec1ce17f"
+    },
+    {
+      "path": "src/data/sy0701DeepDiveMap.js",
+      "sha256": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff"
+    },
+    {
+      "path": "scripts/lib/read-learning-pilot-bank.mjs",
+      "sha256": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac"
+    },
+    {
+      "path": "scripts/lib/content-mapping/package.mjs",
+      "sha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748"
+    },
+    {
+      "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
+      "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "server/adaptive/revision.mjs",
+      "sha256": "a2fc241dd45a60fe4e9898f8133187402ef07d9e0a5e2f721f4ad6ba33b73451"
+    }
+  ],
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "denominator": {
+    "packageRecords": 1878,
+    "broadObjective11CandidateRecords": 69,
+    "selectedRecords": 45,
+    "effectiveObjective11Questions": 17,
+    "mcqs": 15,
+    "pbqs": 2,
+    "explanationBundles": 17,
+    "lessonRecords": 11,
+    "remainingObjective11CandidateRecords": 24,
+    "remainingPackageRecordsOutsideThisPacket": 1833,
+    "note": "This is a bounded agent proposal review, not reduction of the signed-review queue. Explanation/lesson/container/check counts overlap; 45 is not independent coverage."
+  },
+  "remainingObjective11RecordIds": [
+    "deck:security-principles-access-models",
+    "flashcard:sy0701-acronym-security-principles-access-models-aaa-authentication-authorization-and-accounting",
+    "flashcard:sy0701-acronym-security-principles-access-models-acl-access-control-list",
+    "flashcard:sy0701-acronym-security-principles-access-models-aup-acceptable-use-policy",
+    "flashcard:sy0701-acronym-security-principles-access-models-cia-confidentiality-integrity-and-availability",
+    "flashcard:sy0701-acronym-security-principles-access-models-dac-discretionary-access-control",
+    "flashcard:sy0701-acronym-security-principles-access-models-mac-mandatory-access-control",
+    "flashcard:sy0701-acronym-security-principles-access-models-rbac-role-based-access-control",
+    "flashcard:sy0701-acronym-security-principles-access-models-rbac-rule-based-access-control",
+    "flashcard:sy0701-acronym-security-principles-access-models-tou-time-of-use",
+    "glossary:aaa",
+    "glossary:acl",
+    "glossary:aup",
+    "glossary:cctv",
+    "glossary:cia",
+    "glossary:dac",
+    "glossary:encryption",
+    "glossary:mac",
+    "glossary:mfa",
+    "glossary:nist",
+    "glossary:rbac",
+    "glossary:siem",
+    "glossary:waf",
+    "glossary:zero%20trust"
+  ],
+  "phaseWideBacklog": {
+    "reviewQueueUnchanged": 2954,
+    "unresolvedQuestionMappingsUnchanged": 489,
+    "existingPrimaryQuestionProposalsUnchanged": 7,
+    "taxonomy": {
+      "masteryConcepts": 5,
+      "topics": 28,
+      "supportingConcepts": 402
+    },
+    "humanApprovedNewMappings": 0,
+    "note": "1833 package records are outside this packet; previous proposal packets can overlap them. This is not a count of globally uninspected records."
+  },
+  "deliveryBindings": [
+    {
+      "id": "lesson-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function ConceptDeepDivesPage(",
+      "endAnchor": "function FlashcardsPage(",
+      "startLine": 31239,
+      "endLine": 31898,
+      "sourceSignature": "sha256:73bedc41a26c97312747cd945c691668a2b37f90fc15e8a0d6bbb7d796a4de7e"
+    },
+    {
+      "id": "mcq-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function MCQPractice(",
+      "endAnchor": "function UpgradeModal(",
+      "startLine": 24992,
+      "endLine": 25873,
+      "sourceSignature": "sha256:f96053d990c9e6e98bebb88af15b18766c3996a962879e7d178b21e5baa2556d"
+    },
+    {
+      "id": "pbq-renderer",
+      "path": "src/App.jsx",
+      "anchor": "function PBQSim(",
+      "endAnchor": "function CipherRewardToast(",
+      "startLine": 26211,
+      "endLine": 27494,
+      "sourceSignature": "sha256:b65984d37d04ca17a85f07cbf48f2d7451c77bda577d7933267763cd94d21a2f"
+    }
+  ],
+  "questionProposals": [
+    {
+      "recordId": "mcq:m001",
+      "questionId": "m001",
+      "kind": "mcq",
+      "sourceRevision": "sha256:6c1f9bf0d5032a4f4c0e92c28117a380f3ab8eb0e97b1b36386d775862aee337",
+      "publishedRecordSignature": "sha256:dc6921b6a2d8d02cdc5b7fa6eaa561a1164d438d849dd084b1cb2adec1e30c26",
+      "capturedTrustedRevisionId": "feb4c86c-0d4d-8a64-81c2-86168ad90f6e",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Identify discouragement as the stated control function",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Deterrent function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "discouragement-versus-enforcement",
+      "familyRelation": "shared_discouragement_decision",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "The stated purpose is to discourage an attempted intrusion. Physical placement does not make physical category an independently assessed target."
+    },
+    {
+      "recordId": "mcq:m003",
+      "questionId": "m003",
+      "kind": "mcq",
+      "sourceRevision": "sha256:b5af0dd37b2d3ef2ad74b99e2200e789e681f5143375da00468c42710b86898c",
+      "publishedRecordSignature": "sha256:5fb28e62c558e47aba85e04316c603f403bd46ac398b0d50395649be69ac14b2",
+      "capturedTrustedRevisionId": "6f939e0e-e075-8a30-9fc4-e49ca48a5f9c",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "medium",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Recognize substitution for an unavailable required control",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [
+        {
+          "conceptId": "sy0701.term.compensating-control",
+          "role": "assessed_supporting_meaning",
+          "masteryWeight": 0
+        }
+      ],
+      "supportConceptProposals": [
+        "sy0701.term.mfa"
+      ],
+      "withheldMasteryMeanings": [],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "unavailable-control-substitution",
+      "familyRelation": "shared_control_substitution_decision",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "The alternative addresses a constraint on the preferred control. Recognition of a compensating control does not establish equivalent protection or approve residual risk."
+    },
+    {
+      "recordId": "mcq:m101",
+      "questionId": "m101",
+      "kind": "mcq",
+      "sourceRevision": "sha256:80b2bf88b54b6661639cbb424a392fceddc341bb2c7ff12cced30c637a4630b4",
+      "publishedRecordSignature": "sha256:6c326f27c195e2a342b741138b4c13fff5581afc95e588f3146f347b593841aa",
+      "capturedTrustedRevisionId": "ba0b69ab-b280-8321-966a-e3793e95a314",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Distinguish a warning of surveillance from enforcement",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [
+        "sy0701.term.cctv"
+      ],
+      "withheldMasteryMeanings": [
+        "Deterrent function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "discouragement-versus-enforcement",
+      "familyRelation": "shared_discouragement_decision",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "The sign communicates consequences; neither active camera detection nor access blocking is required. This repeats the discouragement decision in m001, m401 and m603."
+    },
+    {
+      "recordId": "mcq:m102",
+      "questionId": "m102",
+      "kind": "mcq",
+      "sourceRevision": "sha256:290ade5a6f21195d19d2078b5356559fa7ae03ee8d65b8c4a6715c4681846cb6",
+      "publishedRecordSignature": "sha256:8cec7081ec8ae5a7af62d4ca15b9e9eb71ed58077ee372e08e581e3517871303",
+      "capturedTrustedRevisionId": "b9bd7075-4e2e-8815-82f1-7746b2adc762",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Classify recording events for subsequent investigation",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [
+        "sy0701.term.cctv"
+      ],
+      "withheldMasteryMeanings": [
+        "Detective function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "event-recording-detective-function",
+      "familyRelation": "reasoning_label_only_not_approved_independence",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "The required distinction is evidence collection after observation, rather than blocking. Possible additional camera functions are contextual, not separate evidence."
+    },
+    {
+      "recordId": "mcq:m115",
+      "questionId": "m115",
+      "kind": "mcq",
+      "sourceRevision": "sha256:2e55b99d1dcd728ac12e1017a1e47f7b7d00454e92475c83ede97108fec2f316",
+      "publishedRecordSignature": "sha256:4976564c0348b8f69e31b3df92e064ac45cf6577b9166b11e140118e576dfb77",
+      "capturedTrustedRevisionId": "583fa763-7819-8171-84d4-b2a54c74f88e",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Recognize overlapping layers of protection",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [
+        {
+          "conceptId": "sy0701.term.defense-in-depth",
+          "role": "assessed_supporting_meaning",
+          "masteryWeight": 0
+        }
+      ],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [],
+        "contextCodes": [
+          "1.1"
+        ],
+        "status": "related_layering_principle_not_named_1_1_bullet"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "layered-protection-recognition",
+      "familyRelation": "reasoning_label_only_not_approved_independence",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "Layer overlap is the assessed meaning. Retain the observed objective tag while marking the principle as related context rather than a named control-category/function bullet. Do not inherit objectives from the support node."
+    },
+    {
+      "recordId": "mcq:m202",
+      "questionId": "m202",
+      "kind": "mcq",
+      "sourceRevision": "sha256:9261f71cb82408257fa6762a3a458d5e6d3e5ef20c09f5341498b39550ffd39d",
+      "publishedRecordSignature": "sha256:87ff8ae590255da62e6d1f0861e78717f0291c0873aebebb0b74c3c2c43f5267",
+      "capturedTrustedRevisionId": "89ea6298-a99a-8df1-b557-35c496ce7687",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Classify suppression of damage after an event starts",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Corrective function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "post-event-damage-suppression",
+      "familyRelation": "reasoning_label_only_not_approved_independence",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "The suppression action addresses an event already underway. The device category and the trigger mechanism are not independently assessed targets."
+    },
+    {
+      "recordId": "mcq:m203",
+      "questionId": "m203",
+      "kind": "mcq",
+      "sourceRevision": "sha256:910ccfa059f7479c9ae251ece5bcc72f7c2babb64aa8f5190f37caf87227ee0e",
+      "publishedRecordSignature": "sha256:747773c4517b098bc403d0a662598ff24ab0c9479e892e29ccad178085c22916",
+      "capturedTrustedRevisionId": "d64c8091-4033-8027-ac7a-e695dbcf5a03",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "medium",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Recognize a documented approved alternative when the preferred control is infeasible",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [
+        {
+          "conceptId": "sy0701.term.compensating-control",
+          "role": "assessed_supporting_meaning",
+          "masteryWeight": 0
+        }
+      ],
+      "supportConceptProposals": [
+        "sy0701.term.mfa"
+      ],
+      "withheldMasteryMeanings": [],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "unavailable-control-substitution",
+      "familyRelation": "shared_control_substitution_decision",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "Approval and documentation contextualize the alternative. They do not create a new independent skill beyond m003 or prove equivalence of protection."
+    },
+    {
+      "recordId": "mcq:m204",
+      "questionId": "m204",
+      "kind": "mcq",
+      "sourceRevision": "sha256:779fb94ea7870efa69873c623854fb6fdcc0fcc5d451e933cc98b8b9f2e26f3a",
+      "publishedRecordSignature": "sha256:634f8cc08116b881b2d5ee30249d5ffdc0b8de021b8f4c45be7539b125d75e29",
+      "capturedTrustedRevisionId": "98430387-dc9c-8854-a35c-38d4c7efa171",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "medium",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Distinguish weakness discovery from preventive enforcement",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Detective function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "weakness-discovery-versus-blocking",
+      "familyRelation": "reasoning_label_only_not_approved_independence",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "Both activities discover weaknesses. Selecting a combined classification supplies one graded response, not two independent competence observations."
+    },
+    {
+      "recordId": "mcq:m205",
+      "questionId": "m205",
+      "kind": "mcq",
+      "sourceRevision": "sha256:06ff365f3f3910d79076d58622470e63622c1a1c7b92688ee9efa4d2f178def5",
+      "publishedRecordSignature": "sha256:536bcff7e295e641594173762be3b96edeb397ae8339f28bea894d7993cd3d77",
+      "capturedTrustedRevisionId": "bf50ad53-8882-8f79-ba49-058b2df3c9cc",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "medium",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Distinguish policy ownership and accountability from delivery of an activity",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Managerial category"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "governance-versus-operational-delivery",
+      "familyRelation": "reasoning_label_only_not_approved_independence",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "The management decision and policy accountability are required; the operational act of delivering training is a distractor distinction, not a second assessed category."
+    },
+    {
+      "recordId": "mcq:m234",
+      "questionId": "m234",
+      "kind": "mcq",
+      "sourceRevision": "sha256:95b0873c45d85822124c6a64e68ab21a619995c6803908c331e116db5061723a",
+      "publishedRecordSignature": "sha256:75651b9811e8b850525069b8eb5cf295175620a2cdaed110543d188a30bdb143",
+      "capturedTrustedRevisionId": "5df3d2ef-31eb-8eb0-95cf-1c1532597b20",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Classify training intended to avoid a future disclosure",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [
+        "sy0701.term.phishing"
+      ],
+      "withheldMasteryMeanings": [
+        "Preventive function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "preventive-training-purpose",
+      "familyRelation": "reasoning_label_only_not_approved_independence",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "The stated prevention purpose determines the classification. The attack example is context; the question does not independently assess attack diagnosis or all training categories."
+    },
+    {
+      "recordId": "mcq:m401",
+      "questionId": "m401",
+      "kind": "mcq",
+      "sourceRevision": "sha256:940597491ea9d488772fd4d20ec7ecbc75fcf7f8f4e45f68961406bb1aa9cf0b",
+      "publishedRecordSignature": "sha256:f2c41c1dfb9e6e544a6e41b7ae8e0c5703e45c6575ee4e7f3c7129acfed91672",
+      "capturedTrustedRevisionId": "4b452603-f0aa-8e16-b430-17d296ead410",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Classify a warning of consequences without access enforcement",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Deterrent function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "discouragement-versus-enforcement",
+      "familyRelation": "shared_discouragement_decision",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "A notice discourages attempted access. Its wording does not supply an independently assessed directive outcome. This repeats the existing discouragement family."
+    },
+    {
+      "recordId": "mcq:m402",
+      "questionId": "m402",
+      "kind": "mcq",
+      "sourceRevision": "sha256:95501077b3bfd6aa0ea49da37648935c12a2a6a4ea2422c2eccea436c1450185",
+      "publishedRecordSignature": "sha256:925c207ef693a49366db38f720a835bdd206bcf1d356bfe7f82cf405a0a5f87a",
+      "capturedTrustedRevisionId": "b48c652f-f772-8a89-a1db-b46825bdc87d",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "medium",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Classify identifying and blocking a malicious request together",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Detective function",
+        "Preventive function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "combined-detection-and-prevention",
+      "familyRelation": "reasoning_label_only_not_approved_independence",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [
+        "Do not create a WAF assessed role from acronym metadata."
+      ],
+      "rationale": "Two actions are required but the response is graded as a whole. A WAF acronym in metadata is insufficient to assess product identity; no component outcome or automatic WAF role is proposed."
+    },
+    {
+      "recordId": "mcq:m601",
+      "questionId": "m601",
+      "kind": "mcq",
+      "sourceRevision": "sha256:e116dd1f9b3c3bf2973b215e3db6c8af08ce43564e00ccaee9f8fd9665045ce7",
+      "publishedRecordSignature": "sha256:db92a97817a471e844750801a83bef4a3ce7a5d30dd7dcd24122fc5a829eaba0",
+      "capturedTrustedRevisionId": "d5ea40c0-ae76-8872-8ed2-6070371089a7",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Distinguish system-enforced authentication category and credential-factor types",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [
+        {
+          "conceptId": "sy0701.term.mfa",
+          "role": "assessed_supporting_meaning",
+          "masteryWeight": 0
+        }
+      ],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Technical category",
+        "Knowledge and possession authentication factors"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [
+          "1.2",
+          "4.6"
+        ],
+        "status": "control_category_with_authentication_factor_scope_pending"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "technical-authentication-category-and-factors",
+      "familyRelation": "reasoning_label_only_not_approved_independence",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "The factor distinction is directly needed alongside category classification. MFA stays an assessed supporting meaning with zero weight; a physical token does not establish a physical-control-category answer. Mixed 1.1 and authentication context requires owner scope review."
+    },
+    {
+      "recordId": "mcq:m603",
+      "questionId": "m603",
+      "kind": "mcq",
+      "sourceRevision": "sha256:56dea583c0c00b6bc531eec0b687a1e0b06cc8941d16f6c166ed057de1f296df",
+      "publishedRecordSignature": "sha256:5806eb819ca97b2017dbde462367781942b7c31774cd486e01bcca09c87585d2",
+      "capturedTrustedRevisionId": "7886f8f6-a814-8dfb-a2e1-fb2d42bd0fb0",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Classify a warning banner by its discouragement purpose",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Deterrent function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "discouragement-versus-enforcement",
+      "familyRelation": "shared_discouragement_decision",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "The banner communicates consequences. It does not itself prevent access; wording alone does not create directive credit or a new family."
+    },
+    {
+      "recordId": "mcq:m654",
+      "questionId": "m654",
+      "kind": "mcq",
+      "sourceRevision": "sha256:60cdb857d84fd0947558e8410f8b117c26481ce2b385a28dc92c299116a25c69",
+      "publishedRecordSignature": "sha256:fd70b82c75980c749b4bbc2bf98d7848c27025ecda0c7cdbefb5ec7b37d1b814",
+      "capturedTrustedRevisionId": "b074247f-7ddc-8849-b102-289711a9a010",
+      "capturedPrecision": "direct",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "medium",
+      "formatObserved": "MCQ",
+      "assessedUnderstanding": "Classify a release gate that blocks an unvalidated update",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [
+        "sy0701.term.digital-signature"
+      ],
+      "withheldMasteryMeanings": [
+        "Preventive function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "preventive-release-enforcement",
+      "familyRelation": "reasoning_label_only_not_approved_independence",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "Release enforcement is the assessed action. Cryptographic signature validation is contextual and does not establish separate signature competence."
+    },
+    {
+      "recordId": "pbq:p021",
+      "questionId": "p021",
+      "kind": "pbq",
+      "sourceRevision": "sha256:a5d39c8da3af6dfd01a00dd0d9da5bfa231a47c9105079b6bd611f1b449953bb",
+      "publishedRecordSignature": "sha256:47228d65a7bd4dd9305bcb2b38a5209345898ad0385c657018d353e4a5f94263",
+      "capturedTrustedRevisionId": "8bcaeb1b-c235-8ab2-910c-9e5258f3be21",
+      "capturedPrecision": "coarse",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "medium",
+      "formatObserved": "SCENARIO",
+      "assessedUnderstanding": "Distinguish passive alerting from blocking and classify the mechanism category",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Technical category",
+        "Detective function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "passive-alert-category-and-function",
+      "familyRelation": "reasoning_label_only_not_approved_independence",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [
+        "Generic IDS has no exact canonical identity; do not infer HIDS or NIDS assessment from terminology."
+      ],
+      "rationale": "The out-of-band mechanism alerts without blocking. The whole-choice SCENARIO result cannot attribute either dimension separately. No generic IDS canonical node exists; host/network-specific or umbrella nodes are withheld."
+    },
+    {
+      "recordId": "pbq:p060",
+      "questionId": "p060",
+      "kind": "pbq",
+      "sourceRevision": "sha256:e1dcc81f83790ad665a6ab2d7bb098b2941eb772c0e5334d2f5a6063caeb2aa6",
+      "publishedRecordSignature": "sha256:53563e470843e176d437b40d386ce7072de5e1e0cfd37d4b7095d1542c267af6",
+      "capturedTrustedRevisionId": "807e23cb-92f1-8c67-befc-bf2eb4b98716",
+      "capturedPrecision": "coarse",
+      "objectiveObserved": "1.1",
+      "domainObserved": "1",
+      "difficultyObserved": "easy",
+      "formatObserved": "HOTSPOT",
+      "assessedUnderstanding": "Identify restoration misclassified as prevention",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "supportConceptProposals": [],
+      "withheldMasteryMeanings": [
+        "Corrective function"
+      ],
+      "topicContextProposal": "sy0701.objective.1.1",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "objectiveReassignmentProposal": null,
+      "familyLabelProposal": "corrective-restoration-control-classification",
+      "familyRelation": "reused_exact_contextual_proposal",
+      "familyReviewStatus": "agent_comparison_pending_independent_gate",
+      "componentProposals": [],
+      "componentEvidenceWeight": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "ambiguityExclusions": [],
+      "rationale": "Reuse the exact contextual-recovery proposal family. Restoration vocabulary does not assess RTO, RPO, MTD, MTTR or BIA. The whole HOTSPOT result does not create four component observations."
+    }
+  ],
+  "explanationProposals": [
+    {
+      "recordId": "explanation:mcq:m001",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:b368a7399b52c03919dbb795eb2afed04b99598324cf56e2a79c17ff7a23d2cd",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m001",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:6c1f9bf0d5032a4f4c0e92c28117a380f3ab8eb0e97b1b36386d775862aee337",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m001",
+      "conceptLinkProposals": [],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m003",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:750e39c21d77ae259d0006facc2ad0e2b83f38a8dbe0b305e1cb854b8b7e36eb",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m003",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:b5af0dd37b2d3ef2ad74b99e2200e789e681f5143375da00468c42710b86898c",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m003",
+      "conceptLinkProposals": [
+        "sy0701.term.compensating-control",
+        "sy0701.term.mfa"
+      ],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m101",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:67eb08629803d9c61159e067f035f9c00a221c22de807a9697167a7f8be49ea5",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m101",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:80b2bf88b54b6661639cbb424a392fceddc341bb2c7ff12cced30c637a4630b4",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m101",
+      "conceptLinkProposals": [
+        "sy0701.term.cctv"
+      ],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m102",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:0b1116d5a37ce7d08f26ccbabf66ff916ef99b6be4c7c2ff1ebb45d6ec34f60a",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m102",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:290ade5a6f21195d19d2078b5356559fa7ae03ee8d65b8c4a6715c4681846cb6",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m102",
+      "conceptLinkProposals": [
+        "sy0701.term.cctv"
+      ],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m115",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:6e7b83c21b67bda588c3602b8833bedf28a5b3f765a4a2172d6511971c93d754",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m115",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:2e55b99d1dcd728ac12e1017a1e47f7b7d00454e92475c83ede97108fec2f316",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m115",
+      "conceptLinkProposals": [
+        "sy0701.term.defense-in-depth"
+      ],
+      "objectiveScopeProposal": {
+        "assessedCodes": [],
+        "contextCodes": [
+          "1.1"
+        ],
+        "status": "related_layering_principle_not_named_1_1_bullet"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m202",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:cf31fe10637b4ea652e8538f9f029c2932b84267c5ffb539cf139e3648b17f60",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m202",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:9261f71cb82408257fa6762a3a458d5e6d3e5ef20c09f5341498b39550ffd39d",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m202",
+      "conceptLinkProposals": [],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m203",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:1fe94d454822686a999f0a54633e74073136d2a888e5b1352215ce8e42ecd72e",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m203",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:910ccfa059f7479c9ae251ece5bcc72f7c2babb64aa8f5190f37caf87227ee0e",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m203",
+      "conceptLinkProposals": [
+        "sy0701.term.compensating-control",
+        "sy0701.term.mfa"
+      ],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m204",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:d7c32772020d4f79d5aa8ecedab0f5f19291652e6da6bf4aa1e7cec75836bd0c",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m204",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:779fb94ea7870efa69873c623854fb6fdcc0fcc5d451e933cc98b8b9f2e26f3a",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m204",
+      "conceptLinkProposals": [],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m205",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:e3bfdafb56816190453a1c9dd2e9d6cfeb87049c0c6c068bddbb909ae13f210d",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m205",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:06ff365f3f3910d79076d58622470e63622c1a1c7b92688ee9efa4d2f178def5",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m205",
+      "conceptLinkProposals": [],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m234",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:79b19ea7d53b182b06cec1a11ba7a6eb71992c0f4980cef2e2c8e590d8ce2c68",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m234",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:95b0873c45d85822124c6a64e68ab21a619995c6803908c331e116db5061723a",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m234",
+      "conceptLinkProposals": [
+        "sy0701.term.phishing"
+      ],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m401",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:f36174c2b7124915eef480b132d3b2ee8da752bf4cb332ce2df8818986dbcb1c",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m401",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:940597491ea9d488772fd4d20ec7ecbc75fcf7f8f4e45f68961406bb1aa9cf0b",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m401",
+      "conceptLinkProposals": [],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m402",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:ddaa3992ad9565dc0bc2e8596b4d63439a15ff8f1d68f0226abba2ef39938127",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m402",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:95501077b3bfd6aa0ea49da37648935c12a2a6a4ea2422c2eccea436c1450185",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m402",
+      "conceptLinkProposals": [],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m601",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:d552c16a76b482c0c9161f2e2d996aaff93710eb895c1d0a2edf44f243511de7",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m601",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:e116dd1f9b3c3bf2973b215e3db6c8af08ce43564e00ccaee9f8fd9665045ce7",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m601",
+      "conceptLinkProposals": [
+        "sy0701.term.mfa"
+      ],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [
+          "1.2",
+          "4.6"
+        ],
+        "status": "control_category_with_authentication_factor_scope_pending"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m603",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:3224ca47eb433d22db9fb991ab784003ee3da5bb3ebd96566eb556d3beed4533",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m603",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:56dea583c0c00b6bc531eec0b687a1e0b06cc8941d16f6c166ed057de1f296df",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m603",
+      "conceptLinkProposals": [],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:mcq:m654",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:c587f98cad628d6f930b969ef312980d57f232fd21277a0b976dd33c7beb004f",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "mcq:m654",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:60cdb857d84fd0947558e8410f8b117c26481ce2b385a28dc92c299116a25c69",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "mcq:m654",
+      "conceptLinkProposals": [
+        "sy0701.term.digital-signature"
+      ],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:pbq:p021",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:9dfb52f22a390b43b88f08158f2aef00a13c436fd18be6e7c34bf35e68d2cfdc",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "pbq:p021",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:a5d39c8da3af6dfd01a00dd0d9da5bfa231a47c9105079b6bd611f1b449953bb",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "pbq:p021",
+      "conceptLinkProposals": [],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "pbq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    },
+    {
+      "recordId": "explanation:pbq:p060",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:ec2ce3b7d132108a43e3a5cc5e28e17625d01cd1d3a19548be40526bbf0766b4",
+      "objectiveCodesObserved": [
+        "1.1"
+      ],
+      "parentId": "pbq:p060",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "parentQuestionRevision": "sha256:e1dcc81f83790ad665a6ab2d7bb098b2941eb772c0e5334d2f5a6063caeb2aa6",
+      "roleProposal": "conditional_corrective_teaching_not_new_assessment",
+      "semanticParentProposal": "pbq:p060",
+      "conceptLinkProposals": [],
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "1.1"
+        ],
+        "contextCodes": [],
+        "status": "named_control_category_or_function"
+      },
+      "familyRelation": "same_question_feedback_not_independent_family",
+      "deliveryBinding": "pbq-renderer",
+      "deliveryLimitation": "Submission and access/feedback gates apply. A bundle inventories possible feedback; not every explanation or wrong-option feedback is shown in one attempt. No learner exposure was observed.",
+      "rationale": "Full available explanation and wrong-option/selection feedback inspected in memory. Follow the parent assessed distinction; contextual contrasts do not supply secondary mastery. No answer, option index or feedback payload is exported."
+    }
+  ],
+  "instructionalProposals": [
+    {
+      "recordId": "lesson:security-foundations-controls",
+      "kind": "lesson",
+      "sourceRevision": "sha256:11afeadc87aa745928cad17bd8c1141f96a1b421c3c4f9134767e22c47420c6c",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "parentId": null,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "roleProposal": "mixed_lesson_container",
+      "objectiveCodesProposal": [
+        "1.1",
+        "1.2"
+      ],
+      "conceptLinkProposals": [],
+      "rationale": "Container combines controls, fundamental concepts and optional framework material. Child records overlap and cannot add independent coverage.",
+      "subunits": [],
+      "deliveryBinding": "lesson-renderer",
+      "deliveryLimitation": "Source-level reachability after lesson selection; this lesson requires Pro access because the free preview is a different lesson. No browser session or learner exposure was verified."
+    },
+    {
+      "recordId": "section:security-foundations-controls:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:21c65aef6eeb0447d8a499e24cdf7e2a0011708c41ccc6953c0dbca0c4a03ace",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "parentId": "lesson:security-foundations-controls",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "roleProposal": "fundamental_security_property_teaching",
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.digital-signature"
+      ],
+      "rationale": "Security properties and nonrepudiation are 1.2 teaching. Authenticity is related context; a signature example does not assess cryptographic operations.",
+      "subunits": [
+        {
+          "path": "table.rows[3]",
+          "sourceRevision": "sha256:8fa057707d7e4c664afb5fc31bc53826cc9fc9b9b19ed187af10e3d3c25d552c",
+          "meaning": "Authenticity is related property context, not an explicit 1.1 control label.",
+          "objectiveCodesProposal": [
+            "1.2"
+          ],
+          "conceptLinkProposals": [],
+          "status": "related_property_context",
+          "masteryWeight": 0
+        }
+      ],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.cia",
+        "sy0701.term.cia-triad"
+      ],
+      "deliveryBinding": "lesson-renderer",
+      "deliveryLimitation": "Source-level reachability after lesson selection; this lesson requires Pro access because the free preview is a different lesson. No browser session or learner exposure was verified."
+    },
+    {
+      "recordId": "section:security-foundations-controls:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:db151aa9526360ad5e4bdc3f5fe87664e93b102c4985de8b0e5759abec370fe7",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "parentId": "lesson:security-foundations-controls",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "roleProposal": "mixed_control_classification_and_identity_teaching",
+      "objectiveCodesProposal": [
+        "1.1",
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.aaa"
+      ],
+      "rationale": "Control category/function and identity/access/activity are different lenses. Split the two source-bound paragraphs for scope review without manufacturing assessed components.",
+      "subunits": [
+        {
+          "path": "body[0]",
+          "sourceRevision": "sha256:e3bbba6b5fb57237fba7cf2be465f5d075331affebec96c25b37f239c6417a75",
+          "meaning": "Control categories and functions can coexist.",
+          "objectiveCodesProposal": [
+            "1.1"
+          ],
+          "conceptLinkProposals": [],
+          "status": "named_objective_context",
+          "masteryWeight": 0
+        },
+        {
+          "path": "body[1]",
+          "sourceRevision": "sha256:8466a41b27f7701a1b888db0b807f1975c05c745a1889442d6b9b5f38a9e3288",
+          "meaning": "Identification, authentication, authorization and activity records have separate roles.",
+          "objectiveCodesProposal": [
+            "1.2"
+          ],
+          "conceptLinkProposals": [
+            "sy0701.term.aaa"
+          ],
+          "status": "named_objective_context",
+          "masteryWeight": 0
+        }
+      ],
+      "deliveryBinding": "lesson-renderer",
+      "deliveryLimitation": "Source-level reachability after lesson selection; this lesson requires Pro access because the free preview is a different lesson. No browser session or learner exposure was verified."
+    },
+    {
+      "recordId": "section:security-foundations-controls:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:8e4378e4fbdfd218ede700556b8b7d327d48727443a828091418013e265d9dfb",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "parentId": "lesson:security-foundations-controls",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "roleProposal": "fundamental_security_property_memory_support",
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.aaa",
+        "sy0701.term.digital-signature",
+        "sy0701.term.siem"
+      ],
+      "rationale": "Examples support fundamental meanings, not signature competence, recovery planning or tool operation. Ordinary logs and timestamps alone do not guarantee strong nonrepudiation.",
+      "subunits": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.cia",
+        "sy0701.term.cia-triad"
+      ],
+      "deliveryBinding": "lesson-renderer",
+      "deliveryLimitation": "Source-level reachability after lesson selection; this lesson requires Pro access because the free preview is a different lesson. No browser session or learner exposure was verified."
+    },
+    {
+      "recordId": "section:security-foundations-controls:3",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:43ce931c8b74d5b08d941aba41a999f4c254a98e53700dac541e3ff3e88a07d4",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "parentId": "lesson:security-foundations-controls",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "roleProposal": "optional_framework_and_gap_analysis_context",
+      "objectiveCodesProposal": null,
+      "conceptLinkProposals": [
+        "sy0701.term.csf",
+        "sy0701.term.nist"
+      ],
+      "rationale": "The delivered renderer marks the entire section beyond textbook. Framework functions operate together. Gap analysis has intrinsic 1.2 relevance but stays inside the currently optional section; do not promote the whole section to 1.1.",
+      "deliveredScopeObserved": "beyond_textbook",
+      "subunits": [
+        {
+          "path": "body[0]",
+          "sourceRevision": "sha256:d8b100380d3bcecd5cd3a7732a27c75a4b4cffcbb5c0cc8b030ce5f4c8f1b795",
+          "meaning": "CSF 2.0 framework context; functions are not a mandatory sequence.",
+          "objectiveCodesProposal": [],
+          "conceptLinkProposals": [
+            "sy0701.term.csf",
+            "sy0701.term.nist"
+          ],
+          "status": "beyond_textbook",
+          "masteryWeight": 0
+        },
+        {
+          "path": "body[1]",
+          "sourceRevision": "sha256:dea452fd76c820bc6eeaae8d4277181060cf2bbbb76634211b782586f12f5d92",
+          "meaning": "Compare current and target states and document accountable improvement.",
+          "objectiveCodesProposal": [
+            "1.2"
+          ],
+          "conceptLinkProposals": [],
+          "status": "intrinsic_1_2_within_delivered_beyond_textbook_section",
+          "masteryWeight": 0
+        }
+      ],
+      "withheldMasteryMeanings": [
+        "Gap analysis: no existing precise canonical node"
+      ],
+      "deliveryBinding": "lesson-renderer",
+      "deliveryLimitation": "Source-level reachability after lesson selection; this lesson requires Pro access because the free preview is a different lesson. No browser session or learner exposure was verified."
+    },
+    {
+      "recordId": "keywords:security-foundations-controls",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:906bd002922d31528b8c251858689ccfbc2badef799a86fedac2434395595a26",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "parentId": "lesson:security-foundations-controls",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "roleProposal": "fundamental_term_definition_support",
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.aaa",
+        "sy0701.term.zero-trust"
+      ],
+      "rationale": "All three authored keywords are fundamental 1.2 concepts despite inherited 1.1/1.2 tags. Alias identity requires owner review; exposure is not mastery.",
+      "subunits": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.cia",
+        "sy0701.term.cia-triad"
+      ],
+      "deliveryBinding": "lesson-renderer",
+      "deliveryLimitation": "Source-level reachability after lesson selection; this lesson requires Pro access because the free preview is a different lesson. No browser session or learner exposure was verified."
+    },
+    {
+      "recordId": "traps:security-foundations-controls",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:09181464bfec51b4c3a19c9ed0782d6b3d47ee8e4ef74de564e05515c0aeaedb",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "parentId": "lesson:security-foundations-controls",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "roleProposal": "mixed_classification_identity_and_optional_framework_reminders",
+      "objectiveCodesProposal": [
+        "1.1",
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.csf",
+        "sy0701.term.zero-trust"
+      ],
+      "rationale": "The three reminders have different scope. Optional CSF context and Zero Trust do not add control mastery; the category/function reminder overlaps section 1.",
+      "subunits": [
+        {
+          "path": "[0]",
+          "sourceRevision": "sha256:da32e6cd82f7718515f204051cb6bbbd65a78615d74979eff20609699a2e87b8",
+          "meaning": "Framework version context.",
+          "objectiveCodesProposal": [],
+          "conceptLinkProposals": [
+            "sy0701.term.csf"
+          ],
+          "status": "optional_framework_context",
+          "masteryWeight": 0
+        },
+        {
+          "path": "[1]",
+          "sourceRevision": "sha256:7be135a77022f716e84e3360e9d8bbeab9dd4a15b07295a5010d763bf6d84a10",
+          "meaning": "Category and function are different classification axes.",
+          "objectiveCodesProposal": [
+            "1.1"
+          ],
+          "conceptLinkProposals": [],
+          "status": "named_objective_context",
+          "masteryWeight": 0
+        },
+        {
+          "path": "[2]",
+          "sourceRevision": "sha256:94b5d6bac4d59fe4095afce503d31968724c422c473b76be741298f79e166453",
+          "meaning": "Remove implicit trust without assuming uniform authentication.",
+          "objectiveCodesProposal": [
+            "1.2"
+          ],
+          "conceptLinkProposals": [
+            "sy0701.term.zero-trust"
+          ],
+          "status": "named_objective_context",
+          "masteryWeight": 0
+        }
+      ],
+      "deliveryBinding": "lesson-renderer",
+      "deliveryLimitation": "Source-level reachability after lesson selection; this lesson requires Pro access because the free preview is a different lesson. No browser session or learner exposure was verified."
+    },
+    {
+      "recordId": "check:security-foundations-controls",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:a9f7ec57e9dd77365f89d3b4ebd44d6d3aa31bc0640bf250479ddf66ab227b47",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "parentId": "lesson:security-foundations-controls",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "roleProposal": "self_reveal_gap_analysis_recall",
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "conceptLinkProposals": [],
+      "rationale": "The available self-check asks about current-to-target comparison. Revealing a model answer is study support, not an attested adaptive response.",
+      "subunits": [],
+      "withheldMasteryMeanings": [
+        "Gap analysis: no existing precise canonical node"
+      ],
+      "trustedRevisionId": null,
+      "deliveryBinding": "lesson-renderer",
+      "deliveryLimitation": "Source-level reachability after lesson selection; this lesson requires Pro access because the free preview is a different lesson. No browser session or learner exposure was verified."
+    },
+    {
+      "recordId": "practice:security-foundations-controls:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:a454bc1158e2991f0bc521cd2918473535971f1a3132fc2a8f0ba3a985197c11",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "parentId": "lesson:security-foundations-controls",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "roleProposal": "definition_matching_study_check",
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.aaa",
+        "sy0701.term.zero-trust"
+      ],
+      "rationale": "Inspect the full displayed check and feedback in memory. Shared candidate vocabulary concerns fundamentals, not control categories/functions. Individual keyed term is withheld; links describe the whole vocabulary context, not the keyed concept.",
+      "subunits": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.cia",
+        "sy0701.term.cia-triad"
+      ],
+      "familyLabelProposal": "sibling-keyword-definition-match",
+      "familyRelation": "generated_from_same_keyword_guide_no_independence_credit",
+      "trustedRevisionId": null,
+      "deliveryBinding": "lesson-renderer",
+      "deliveryLimitation": "Source-level reachability after lesson selection; this lesson requires Pro access because the free preview is a different lesson. No browser session or learner exposure was verified."
+    },
+    {
+      "recordId": "practice:security-foundations-controls:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:a12289bb36b9b982fc3f20e81d15602810182b0927436e2f89adfd0f234276a3",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "parentId": "lesson:security-foundations-controls",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "roleProposal": "definition_matching_study_check",
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.aaa",
+        "sy0701.term.zero-trust"
+      ],
+      "rationale": "Inspect the full displayed check and feedback in memory. Shared candidate vocabulary concerns fundamentals, not control categories/functions. Individual keyed term is withheld; links describe the whole vocabulary context, not the keyed concept.",
+      "subunits": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.cia",
+        "sy0701.term.cia-triad"
+      ],
+      "familyLabelProposal": "sibling-keyword-definition-match",
+      "familyRelation": "generated_from_same_keyword_guide_no_independence_credit",
+      "trustedRevisionId": null,
+      "deliveryBinding": "lesson-renderer",
+      "deliveryLimitation": "Source-level reachability after lesson selection; this lesson requires Pro access because the free preview is a different lesson. No browser session or learner exposure was verified."
+    },
+    {
+      "recordId": "practice:security-foundations-controls:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:19d75ee6c6c787bc5665a89ff14321370eafd9394539a9ef7a11d2fb417d2ea7",
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2"
+      ],
+      "parentId": "lesson:security-foundations-controls",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "independentEvidence": false,
+      "roleProposal": "definition_matching_study_check",
+      "objectiveCodesProposal": [
+        "1.2"
+      ],
+      "conceptLinkProposals": [
+        "sy0701.term.aaa",
+        "sy0701.term.zero-trust"
+      ],
+      "rationale": "Inspect the full displayed check and feedback in memory. Shared candidate vocabulary concerns fundamentals, not control categories/functions. Individual keyed term is withheld; links describe the whole vocabulary context, not the keyed concept.",
+      "subunits": [],
+      "withheldCanonicalCandidates": [
+        "sy0701.term.cia",
+        "sy0701.term.cia-triad"
+      ],
+      "familyLabelProposal": "sibling-keyword-definition-match",
+      "familyRelation": "generated_from_same_keyword_guide_no_independence_credit",
+      "trustedRevisionId": null,
+      "deliveryBinding": "lesson-renderer",
+      "deliveryLimitation": "Source-level reachability after lesson selection; this lesson requires Pro access because the free preview is a different lesson. No browser session or learner exposure was verified."
+    }
+  ],
+  "generatedChecksExcluded": [
+    {
+      "recordId": "practice:security-foundations-controls:practice-compare-0-0",
+      "sourceRevision": "sha256:469a4c690bbfd9d812dc7f1ac27599ba344992c73d89b8314c9088ec19928249",
+      "disposition": "not_delivered_not_slice_coverage",
+      "masteryWeight": 0
+    },
+    {
+      "recordId": "practice:security-foundations-controls:practice-compare-0-1",
+      "sourceRevision": "sha256:29d6800ca5965c534773d436d4cdae6c5f952101ec941652a0af61dab3fafe73",
+      "disposition": "not_delivered_not_slice_coverage",
+      "masteryWeight": 0
+    },
+    {
+      "recordId": "practice:security-foundations-controls:practice-compare-0-2",
+      "sourceRevision": "sha256:b2bfcf0d72db8436664cff563eafd5ada043bd2fa1bccba567db8a15906bbf96",
+      "disposition": "not_delivered_not_slice_coverage",
+      "masteryWeight": 0
+    }
+  ],
+  "canonicalBoundary": {
+    "topicId": "sy0701.objective.1.1",
+    "topicIsMastery": false,
+    "primaryConceptProposalsWithheld": 17,
+    "reason": "Existing taxonomy has five continuity/recovery mastery identities only. Named control categories/functions have no approved precise mastery identities. Use existing support IDs without promotion; retain plain assessed meanings for human decisions, not invented IDs.",
+    "ambiguousAliases": [
+      "sy0701.term.cia",
+      "sy0701.term.cia-triad"
+    ],
+    "absentIdentityMeanings": [
+      "Control categories and functions",
+      "Authentication factor distinction",
+      "Generic intrusion detection",
+      "Gap analysis"
+    ]
+  },
+  "humanDecisionReferences": {
+    "checklist": "docs/evidence/phase-2b5/review-batch.md",
+    "guide": "docs/evidence/phase-2b5/review-guide.md",
+    "requiredBinding": "Future separate signed human review must bind current mapping-package SHA and this proposal packet SHA, exact question/teaching revisions and decision scope.",
+    "pending": [
+      "Retain objective 1.1 as topic; decide narrower assessable identities and support-node promotion only after exact source review.",
+      "Approve/reject assessed supporting meanings, contextual exclusions, m115 scope and m601 mixed authentication scope.",
+      "Resolve CIA alias merge and missing gap-analysis/generic IDS identities; no fabricated taxonomy to clear the queue.",
+      "Approve/reject family relations and usefulness of conditional teaching; repeated warnings and substitute controls share decisions.",
+      "Coarse p021/p060 whole results remain withheld from component mastery."
+    ],
+    "existingApprovalScope": "Recorded p003/p017 source choices concern future canonical source selection; they do not approve these control mappings.",
+    "humanApprovalRequestedThisTurn": false
+  },
+  "privateBoundary": {
+    "recordId": "private:pbq:p017",
+    "sourceRevision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "trustedRevisionId": null,
+    "payloadReviewed": false,
+    "primaryConceptProposal": null,
+    "secondaryConceptProposals": [],
+    "masteryWeight": 0,
+    "status": "SELECTED_PRIVATE_REVISION_UNAVAILABLE_NO_FALLBACK_SUBSTITUTION"
+  },
+  "officialReferences": [
+    {
+      "url": "https://assets.ctfassets.net/82ripq7fjls2/6TYWUym0Nudqa8nGEnegjG/0f9b974d3b1837fe85ab8e6553f4d623/CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf",
+      "scope": "Objective 1.1 categories/functions versus objective 1.2 fundamentals; scope rows are Codex inferences, not CompTIA approval."
+    },
+    {
+      "url": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf",
+      "scope": "CSF 2.0 six concurrent functions; optional framework context does not create objective 1.1 evidence."
+    }
+  ]
+}
