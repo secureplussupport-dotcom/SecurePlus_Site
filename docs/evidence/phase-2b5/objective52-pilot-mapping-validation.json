@@ -1,0 +1,117 @@
+{
+  "status": "PASS_BOUND_LOCAL_SEMANTIC_PROPOSALS_NOT_APPROVAL",
+  "date": "2026-10-07",
+  "baselineCommit": "2044c4e9b2b8478ddefd02920ea6d4e47a66365f",
+  "counts": {
+    "objective52Mcqs": 21,
+    "objective52Pbqs": 6,
+    "additionalPbqs": 1,
+    "reviewedQuestionRevisions": 28,
+    "directPilotProposals": 5,
+    "coarseContextOnly": 2,
+    "outsidePilot": 21,
+    "instructionalUnits": 19,
+    "instructionalRecords": 17,
+    "unresolvedInstructionalUnits": 1,
+    "unreviewablePrivateRevisions": 1,
+    "eligibleNewEvidence": 0
+  },
+  "coverage": [
+    {
+      "conceptId": "recovery.rto",
+      "directMcqs": [
+        "m032",
+        "m635"
+      ],
+      "observedDifficultyCounts": {
+        "easy": 2,
+        "medium": 0,
+        "hard": 0
+      },
+      "existingReasoningFamilies": 1,
+      "humanApprovedBankFamilies": 0,
+      "activeDirectComponentPbqs": 0,
+      "eligibleDrafts": 0
+    },
+    {
+      "conceptId": "recovery.rpo",
+      "directMcqs": [
+        "m088"
+      ],
+      "observedDifficultyCounts": {
+        "easy": 0,
+        "medium": 1,
+        "hard": 0
+      },
+      "existingReasoningFamilies": 1,
+      "humanApprovedBankFamilies": 0,
+      "activeDirectComponentPbqs": 0,
+      "eligibleDrafts": 0
+    },
+    {
+      "conceptId": "recovery.mtd",
+      "directMcqs": [
+        "m196"
+      ],
+      "observedDifficultyCounts": {
+        "easy": 0,
+        "medium": 1,
+        "hard": 0
+      },
+      "existingReasoningFamilies": 1,
+      "humanApprovedBankFamilies": 0,
+      "activeDirectComponentPbqs": 0,
+      "eligibleDrafts": 0
+    },
+    {
+      "conceptId": "recovery.mttr",
+      "directMcqs": [],
+      "observedDifficultyCounts": {
+        "easy": 0,
+        "medium": 0,
+        "hard": 0
+      },
+      "existingReasoningFamilies": 0,
+      "humanApprovedBankFamilies": 0,
+      "activeDirectComponentPbqs": 0,
+      "eligibleDrafts": 0
+    },
+    {
+      "conceptId": "continuity.bia",
+      "directMcqs": [
+        "m086"
+      ],
+      "observedDifficultyCounts": {
+        "easy": 0,
+        "medium": 1,
+        "hard": 0
+      },
+      "existingReasoningFamilies": 1,
+      "humanApprovedBankFamilies": 0,
+      "activeDirectComponentPbqs": 0,
+      "eligibleDrafts": 0
+    }
+  ],
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "checks": {
+    "fullObjective52Selection": "all 21 MCQs and 6 PBQs plus p211",
+    "keywordOnlyPromotion": "ALE to BIA rejected",
+    "coarseAttribution": "p211 direct primary rejected",
+    "scope": "MTD explicit-bullet claim rejected",
+    "secondary": "RTO contrast does not create RPO evidence",
+    "revisions": "local/published signatures separate; stale and draft changes rejected",
+    "activeArtifacts": "all release files unchanged"
+  },
+  "limitations": [
+    "Semantics are agent-reviewed proposals, not human approval or calibrated competence.",
+    "Private p017 selected revision unreviewable; fallback cannot substitute.",
+    "MTTR glossary withheld for definition-boundary review.",
+    "No active mappings, evidence weights, publication or runtime changed."
+  ],
+  "sha256": {
+    "docs/drafts/phase-2b5-objective52-pilot-mapping-proposals.json": "de062252046dffcfde6de11ce7e328cf72bbec142be180c300c0ecc3f003f25c",
+    "docs/phase-2b5-objective52-pilot-mapping-review.md": "e92e52e2e4a282aabcbbe8fc9856c5eca9f0264cbe00fc189591712de02e8934",
+    "scripts/audit-objective52-pilot-mapping.mjs": "136667ef7e243b0f12308aab3b42471accd61ae34ce8dc8259e74fa3e5a6cbcf",
+    "docs/evidence/phase-2b5/mapping-package.json": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+  }
+}
