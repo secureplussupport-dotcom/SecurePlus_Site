@@ -1,0 +1,972 @@
+{
+  "packetId": "phase-2b5-current-instructional-unit-scope",
+  "date": "2026-10-07",
+  "baselineCommit": "63c3c63d7d5e6030c1f6257d7d4b6fc924718586",
+  "status": "LOCAL_UNIT_SCOPE_PROPOSALS_NOT_READY",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "sourceBindings": {
+    "docs/drafts/phase-2b5-objective52-pilot-mapping-proposals.json": "de062252046dffcfde6de11ce7e328cf72bbec142be180c300c0ecc3f003f25c",
+    "docs/evidence/phase-2b5/mapping-package.json": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97",
+    "docs/phase-2b5-pilot-owner-decision-packet.md": "01f96e9c4edff2ef61d25c296fb96c585ad1a00db0709f47c0d261b7fbb5d953",
+    "docs/evidence/phase-2b5/delivery-surface-review.json": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
+  },
+  "deliverySourceBindings": {
+    "src/App.jsx": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49",
+    "src/lib/deepDiveRecommendations.js": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479",
+    "src/lib/deepDiveStudy.js": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459",
+    "src/data/sy0701AcronymFlashcards.js": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1",
+    "src/data/sy0701DeepDiveMap.js": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff",
+    "src/data/conceptDeepDives.js": "b478e16240c95b70a79cf0679aff683fc08f18dd11947c4046ecd880ec1ce17f",
+    "src/data/conceptDeepDivesStudyGuide.js": "340cc43dacd9c8706da4fb5a7a92c3a7104e36e4fbec6efec13d39522e17ab43",
+    "src/data/conceptDeepDivesPrinterGuide.js": "196982096671e5b10867402da328992cb29503c415615ac9eb5e674d4475d006"
+  },
+  "officialSource": {
+    "url": "https://assets.ctfassets.net/82ripq7fjls2/6TYWUym0Nudqa8nGEnegjG/0f9b974d3b1837fe85ab8e6553f4d623/CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf",
+    "title": "CompTIA Security+ SY0-701 Exam Objectives Version 5.0",
+    "locators": [
+      "PDF page 14, objective 5.2: BIA and RTO/RPO/MTTR/MTBF",
+      "PDF page 9, objective 3.4: backups frequency/recovery/replication"
+    ],
+    "reviewed": "2026-10-07"
+  },
+  "deliveryBindings": [
+    {
+      "id": "cards",
+      "path": "src/App.jsx",
+      "startAnchor": "function AcronymFlashcardLab(",
+      "endAnchor": "function DeepDiveReadableBites(",
+      "sourceRevision": "sha256:81cd27d0747dacb011d3f18802c4d1fbe83d3a09421d7731c62853d91008b79e",
+      "startLine": 30903,
+      "endLine": 31203
+    },
+    {
+      "id": "glossary",
+      "path": "src/App.jsx",
+      "startAnchor": "function GlossaryText(",
+      "endAnchor": "function PBQProseText(",
+      "sourceRevision": "sha256:8cdcb8f9d8d103e5efb12d98da73e95941f6024ca365178a8d8e13304386c27a",
+      "startLine": 20677,
+      "endLine": 20765
+    },
+    {
+      "id": "lesson",
+      "path": "src/App.jsx",
+      "startAnchor": "function ConceptDeepDivesPage(",
+      "endAnchor": "function FlashcardsPage(",
+      "sourceRevision": "sha256:73bedc41a26c97312747cd945c691668a2b37f90fc15e8a0d6bbb7d796a4de7e",
+      "startLine": 31239,
+      "endLine": 31898
+    },
+    {
+      "id": "practice-feedback",
+      "path": "src/App.jsx",
+      "startAnchor": "function MCQPractice(",
+      "endAnchor": "function UpgradeModal(",
+      "sourceRevision": "sha256:f96053d990c9e6e98bebb88af15b18766c3996a962879e7d178b21e5baa2556d",
+      "startLine": 24992,
+      "endLine": 25873
+    }
+  ],
+  "units": [
+    {
+      "unitId": "T01",
+      "recordId": "flashcard:sy0701-acronym-risk-governance-business-rto-recovery-time-objective",
+      "parentRevision": "sha256:8074a2a7c533c4f7dab5e4267a990ad914ce565b68eaa9806e31f739d27243a6",
+      "subunit": null,
+      "unitRevision": "sha256:8074a2a7c533c4f7dab5e4267a990ad914ce565b68eaa9806e31f739d27243a6",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The card defines the service restoration target. Definition support belongs to objective 5.2 RTO; its business-document deck label does not justify 5.1, 5.3 or 5.4.",
+      "reviewedText": {
+        "id": "sy0701-acronym-risk-governance-business-rto-recovery-time-objective",
+        "acronym": "RTO",
+        "expansion": "Recovery Time Objective",
+        "meaning": "Target time for restoring a process or service after disruption.",
+        "topic": "Risk, governance, privacy, and continuity",
+        "setId": "risk-governance-business",
+        "setTitle": "Risk, governance, and business documents",
+        "setType": "acronym",
+        "objectiveCodes": [
+          "5.1",
+          "5.2",
+          "5.3",
+          "5.4"
+        ],
+        "chapterId": 5,
+        "chapterTitle": "Security Program Management and Oversight"
+      },
+      "conceptLinkProposals": [
+        "recovery.rto"
+      ],
+      "roleProposal": "definition_support",
+      "delivery": {
+        "sourceBindingId": "cards",
+        "level": "source_reachable_conditionally",
+        "conditions": "Select the risk-governance-business deck and navigate to this card. Definition mode shows meaning on the front; acronym mode requires reveal. These four cards have no example, so example-only filtering does not deliver them.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T02",
+      "recordId": "glossary:rto",
+      "parentRevision": "sha256:6693d06a0896075072466fb9864ef786033543d3f35b8a584f91b85c737bfada",
+      "subunit": null,
+      "unitRevision": "sha256:6693d06a0896075072466fb9864ef786033543d3f35b8a584f91b85c737bfada",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The tooltip defines maximum acceptable service-restoration time. Its text supports 5.2 RTO when opened; unioned objectives of pages containing the term are not definition scope.",
+      "reviewedText": {
+        "term": "RTO",
+        "definition": {
+          "fullName": "Recovery Time Objective",
+          "definition": "Maximum acceptable time to restore service after an outage."
+        }
+      },
+      "conceptLinkProposals": [
+        "recovery.rto"
+      ],
+      "roleProposal": "conditional_definition_support",
+      "delivery": {
+        "sourceBindingId": "glossary",
+        "level": "source_reachable_conditionally",
+        "conditions": "A matching RTO token must occur in text actually rendered through GlossaryText, then its term button must be clicked or activated by keyboard. A lexical corpus match is availability, not an opened tooltip.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T03",
+      "recordId": "flashcard:sy0701-acronym-risk-governance-business-rpo-recovery-point-objective",
+      "parentRevision": "sha256:7d35d3d116551635ab28c5ede0352984b1b849a9301e6ca0d6befa8ffcbff5dd",
+      "subunit": null,
+      "unitRevision": "sha256:7d35d3d116551635ab28c5ede0352984b1b849a9301e6ca0d6befa8ffcbff5dd",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The card defines acceptable data loss measured in time. This supports 5.2 RPO, independent of broad governance-deck scope.",
+      "reviewedText": {
+        "id": "sy0701-acronym-risk-governance-business-rpo-recovery-point-objective",
+        "acronym": "RPO",
+        "expansion": "Recovery Point Objective",
+        "meaning": "Maximum acceptable data loss measured in time.",
+        "topic": "Risk, governance, privacy, and continuity",
+        "setId": "risk-governance-business",
+        "setTitle": "Risk, governance, and business documents",
+        "setType": "acronym",
+        "objectiveCodes": [
+          "5.1",
+          "5.2",
+          "5.3",
+          "5.4"
+        ],
+        "chapterId": 5,
+        "chapterTitle": "Security Program Management and Oversight"
+      },
+      "conceptLinkProposals": [
+        "recovery.rpo"
+      ],
+      "roleProposal": "definition_support",
+      "delivery": {
+        "sourceBindingId": "cards",
+        "level": "source_reachable_conditionally",
+        "conditions": "Select the risk-governance-business deck and navigate to this card. Definition mode shows meaning on the front; acronym mode requires reveal. These four cards have no example, so example-only filtering does not deliver them.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T04",
+      "recordId": "glossary:rpo",
+      "parentRevision": "sha256:0072bb6d79cb376e815aefffa9f50ba56cc6aac47862a1382f5e1ad894445ed3",
+      "subunit": null,
+      "unitRevision": "sha256:0072bb6d79cb376e815aefffa9f50ba56cc6aac47862a1382f5e1ad894445ed3",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2",
+        "4.8",
+        "4.9",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The tooltip defines acceptable data loss measured in time. This supports 5.2 RPO only as conditional definition teaching; all referencing-page objectives are not inherited.",
+      "reviewedText": {
+        "term": "RPO",
+        "definition": {
+          "fullName": "Recovery Point Objective",
+          "definition": "Maximum acceptable data loss measured in time."
+        }
+      },
+      "conceptLinkProposals": [
+        "recovery.rpo"
+      ],
+      "roleProposal": "conditional_definition_support",
+      "delivery": {
+        "sourceBindingId": "glossary",
+        "level": "source_reachable_conditionally",
+        "conditions": "A matching RPO token must occur in text actually rendered through GlossaryText, then its term button must be clicked or activated by keyboard. A lexical corpus match is availability, not an opened tooltip.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T05",
+      "recordId": "flashcard:sy0701-acronym-risk-governance-business-mttr-mean-time-to-repair-recover",
+      "parentRevision": "sha256:e0df2c38a13edc4d27a6835abc6e470a8c74880a68577a320d99b33a516ccbd7",
+      "subunit": null,
+      "unitRevision": "sha256:e0df2c38a13edc4d27a6835abc6e470a8c74880a68577a320d99b33a516ccbd7",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The card teaches average repair/restoration time. This matches 5.2 MTTR repair/recover, without attributing incident-response scope or measured learner proficiency.",
+      "reviewedText": {
+        "id": "sy0701-acronym-risk-governance-business-mttr-mean-time-to-repair-recover",
+        "acronym": "MTTR",
+        "expansion": "Mean Time to Repair / Recover",
+        "meaning": "Average time needed to repair a failure or restore service.",
+        "topic": "Risk, governance, privacy, and continuity",
+        "setId": "risk-governance-business",
+        "setTitle": "Risk, governance, and business documents",
+        "setType": "acronym",
+        "objectiveCodes": [
+          "5.1",
+          "5.2",
+          "5.3",
+          "5.4"
+        ],
+        "chapterId": 5,
+        "chapterTitle": "Security Program Management and Oversight"
+      },
+      "conceptLinkProposals": [
+        "recovery.mttr"
+      ],
+      "roleProposal": "definition_support",
+      "delivery": {
+        "sourceBindingId": "cards",
+        "level": "source_reachable_conditionally",
+        "conditions": "Select the risk-governance-business deck and navigate to this card. Definition mode shows meaning on the front; acronym mode requires reveal. These four cards have no example, so example-only filtering does not deliver them.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T06",
+      "recordId": "glossary:mttr",
+      "parentRevision": "sha256:09b9dd6eebf37a22c75b8c89f22c7dacf5a61fe36252cd6835d09f27b5785220",
+      "subunit": null,
+      "unitRevision": "sha256:09b9dd6eebf37a22c75b8c89f22c7dacf5a61fe36252cd6835d09f27b5785220",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4"
+      ],
+      "objectiveCodesProposal": null,
+      "scopeKind": "withheld_definition_boundary",
+      "scopeRationale": "The full name and definition conflate repair/restoration with responding to an active incident. A repair/recover unit scope cannot be justified until that boundary is resolved. No 4.8 response mapping is inferred from one word.",
+      "reviewedText": {
+        "term": "MTTR",
+        "definition": {
+          "fullName": "Mean Time To Repair / Mean Time To Respond",
+          "definition": "Average time to restore failed equipment or respond to an active incident."
+        }
+      },
+      "conceptLinkProposals": [],
+      "roleProposal": "withhold_pending_definition_boundary",
+      "delivery": {
+        "sourceBindingId": "glossary",
+        "level": "source_reachable_conditionally",
+        "conditions": "A matching MTTR token must occur in text actually rendered through GlossaryText, then its term button must be clicked or activated by keyboard. A lexical corpus match is availability, not an opened tooltip.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T07",
+      "recordId": "flashcard:sy0701-acronym-risk-governance-business-bia-business-impact-analysis",
+      "parentRevision": "sha256:4f20941f4c13f2fc5830a29d7fc4d65882da22cba3355dc8c88a5b2c3a581e72",
+      "subunit": null,
+      "unitRevision": "sha256:4f20941f4c13f2fc5830a29d7fc4d65882da22cba3355dc8c88a5b2c3a581e72",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The card teaches identifying critical functions and downtime impact. This is 5.2 BIA; a governance deck does not make the card teach governance, vendors or compliance.",
+      "reviewedText": {
+        "id": "sy0701-acronym-risk-governance-business-bia-business-impact-analysis",
+        "acronym": "BIA",
+        "expansion": "Business Impact Analysis",
+        "meaning": "Process that identifies critical functions and the business impact of downtime.",
+        "topic": "Risk, governance, privacy, and continuity",
+        "setId": "risk-governance-business",
+        "setTitle": "Risk, governance, and business documents",
+        "setType": "acronym",
+        "objectiveCodes": [
+          "5.1",
+          "5.2",
+          "5.3",
+          "5.4"
+        ],
+        "chapterId": 5,
+        "chapterTitle": "Security Program Management and Oversight"
+      },
+      "conceptLinkProposals": [
+        "continuity.bia"
+      ],
+      "roleProposal": "definition_support",
+      "delivery": {
+        "sourceBindingId": "cards",
+        "level": "source_reachable_conditionally",
+        "conditions": "Select the risk-governance-business deck and navigate to this card. Definition mode shows meaning on the front; acronym mode requires reveal. These four cards have no example, so example-only filtering does not deliver them.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T08",
+      "recordId": "glossary:bia",
+      "parentRevision": "sha256:fba7d9e4ca7b2ca2afce03b574269efdb495b82ba76b564c992d28daedbfdfda",
+      "subunit": null,
+      "unitRevision": "sha256:fba7d9e4ca7b2ca2afce03b574269efdb495b82ba76b564c992d28daedbfdfda",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The tooltip describes critical operations, dependencies, downtime limits and business impact. These support 5.2 BIA when opened; no broad objective union is adopted.",
+      "reviewedText": {
+        "term": "BIA",
+        "definition": {
+          "fullName": "Business Impact Analysis",
+          "definition": "Continuity process identifying critical operations, dependencies, downtime limits, and business impact."
+        }
+      },
+      "conceptLinkProposals": [
+        "continuity.bia"
+      ],
+      "roleProposal": "conditional_definition_support",
+      "delivery": {
+        "sourceBindingId": "glossary",
+        "level": "source_reachable_conditionally",
+        "conditions": "A matching BIA token must occur in text actually rendered through GlossaryText, then its term button must be clicked or activated by keyboard. A lexical corpus match is availability, not an opened tooltip.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T09",
+      "recordId": "explanation:mcq:m032",
+      "parentRevision": "sha256:6dd5ba5bcf4c07b3a9907abc40c2ce0f58019703678f86a253ea3ffbfe690753",
+      "subunit": null,
+      "unitRevision": "sha256:6dd5ba5bcf4c07b3a9907abc40c2ce0f58019703678f86a253ea3ffbfe690753",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "5.2"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The main explanation defines RTO and contrasts RPO; wrong feedback distinguishes MTTR. This is 5.2 recovery-metric support after an answer, not fresh evidence or a lesson on architecture.",
+      "reviewedText": {
+        "exp": "RTO is the target time to restore an acceptable service level. RPO instead concerns tolerable data loss; neither guarantees successful recovery.",
+        "wrongFeedback": {
+          "0": "Backup frequency is related to RPO (Recovery Point Objective), not RTO.",
+          "2": "The amount of acceptable data loss is the RPO (Recovery Point Objective). RTO concerns restoration TIME.",
+          "3": "Average repair duration is MTTR, whereas the RTO is the planned restoration target for this service."
+        }
+      },
+      "conceptLinkProposals": [
+        "recovery.rto"
+      ],
+      "roleProposal": "post_answer_support",
+      "delivery": {
+        "sourceBindingId": "practice-feedback",
+        "level": "source_reachable_conditionally",
+        "conditions": "Select an eligible set containing m032 in main MCQ practice, select an answer and submit; user.tier must equal pro to show current.exp. Selected wrong-choice feedback additionally requires a wrong submitted choice. The complete bundle is not displayed at once.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T10",
+      "recordId": "explanation:mcq:m086",
+      "parentRevision": "sha256:d9f180ccad693795d5785229a27e2454e80757f0c0927de080c0772b29c66463",
+      "subunit": null,
+      "unitRevision": "sha256:d9f180ccad693795d5785229a27e2454e80757f0c0927de080c0772b29c66463",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "5.2"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The explanation identifies BIA and distinguishes its outputs from continuity, recovery and incident plans. This supports 5.2 BIA; mentioning an IRP does not teach 4.8 incident-response processes.",
+      "reviewedText": {
+        "exp": "A BIA identifies critical functions and disruption impacts. Its findings inform continuity planning and recovery targets such as RTO and RPO.",
+        "wrongFeedback": {
+          "0": "A DRP focuses on recovering IT systems after a disaster — it uses the outputs from the BIA.",
+          "2": "A BCP defines HOW operations will continue — it is the plan built from BIA findings.",
+          "3": "An IRP guides responses to security incidents — not broad operational disruptions."
+        }
+      },
+      "conceptLinkProposals": [
+        "continuity.bia"
+      ],
+      "roleProposal": "post_answer_support",
+      "delivery": {
+        "sourceBindingId": "practice-feedback",
+        "level": "source_reachable_conditionally",
+        "conditions": "Select an eligible set containing m086 in main MCQ practice, select an answer and submit; user.tier must equal pro to show current.exp. Selected wrong-choice feedback additionally requires a wrong submitted choice. The complete bundle is not displayed at once.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T11",
+      "recordId": "explanation:mcq:m088",
+      "parentRevision": "sha256:976cd811b722a507ee4eb2e3770978d8c9330e963a3468fb494ea977f4c1c7ad",
+      "subunit": null,
+      "unitRevision": "sha256:976cd811b722a507ee4eb2e3770978d8c9330e963a3468fb494ea977f4c1c7ad",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "5.2"
+      ],
+      "objectiveCodesProposal": [
+        "5.2",
+        "3.4"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The explanation checks a four-hour RPO against three-hour versioned backups and warns that replication can copy deletion. This supports 5.2 RPO and 3.4 backup frequency/recovery/replication. The second code follows from actual backup reasoning, not parent question or deck tags.",
+      "reviewedText": {
+        "exp": "Three-hour versioned backups meet the four-hour RPO if backups and restoration work. Replication without history may copy the deletion instead of preserving a recoverable version.",
+        "wrongFeedback": {
+          "0": "Weekly backups can lose days of changes, exceeding a four-hour recovery-point target.",
+          "1": "Daily backups can leave nearly 24 hours between recoverable points, exceeding the target.",
+          "3": "Replication can copy the deletion. Without retained history, it provides no earlier recoverable version."
+        }
+      },
+      "conceptLinkProposals": [
+        "recovery.rpo"
+      ],
+      "roleProposal": "post_answer_support",
+      "delivery": {
+        "sourceBindingId": "practice-feedback",
+        "level": "source_reachable_conditionally",
+        "conditions": "Select an eligible set containing m088 in main MCQ practice, select an answer and submit; user.tier must equal pro to show current.exp. Selected wrong-choice feedback additionally requires a wrong submitted choice. The complete bundle is not displayed at once.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T12",
+      "recordId": "explanation:mcq:m196",
+      "parentRevision": "sha256:01e59bb482e01d1be17984fcd1f005b779ac29b3cbce7407ca596ba7861314cb",
+      "subunit": null,
+      "unitRevision": "sha256:01e59bb482e01d1be17984fcd1f005b779ac29b3cbce7407ca596ba7861314cb",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "5.2"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "supporting_context_not_explicit_bullet",
+      "scopeRationale": "The explanation distinguishes the outer business interruption limit from RTO and contrasts RPO/MTTR. Propose 5.2 supporting BIA/continuity context only; MTD is not an explicit named exam bullet.",
+      "reviewedText": {
+        "exp": "MTD is the outer tolerable interruption limit. RTO targets restoration early enough to support business recovery within that limit.",
+        "wrongFeedback": {
+          "0": "RPO concerns the acceptable age of recovered data, not the total tolerable business interruption.",
+          "2": "RTO is the restoration target used in recovery planning, not the entire outer business tolerance window.",
+          "3": "MTTR measures average repair time, not the maximum interruption the business can tolerate."
+        }
+      },
+      "conceptLinkProposals": [
+        "recovery.mtd"
+      ],
+      "roleProposal": "post_answer_support",
+      "delivery": {
+        "sourceBindingId": "practice-feedback",
+        "level": "source_reachable_conditionally",
+        "conditions": "Select an eligible set containing m196 in main MCQ practice, select an answer and submit; user.tier must equal pro to show current.exp. Selected wrong-choice feedback additionally requires a wrong submitted choice. The complete bundle is not displayed at once.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T13",
+      "recordId": "explanation:mcq:m635",
+      "parentRevision": "sha256:a9a267ae7e054d8cfcab65205886b799ee38948e760d01a69d8ab4fd8ea1d360",
+      "subunit": null,
+      "unitRevision": "sha256:a9a267ae7e054d8cfcab65205886b799ee38948e760d01a69d8ab4fd8ea1d360",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "5.2"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The explanation distinguishes a service-restoration target from data-loss tolerance, average repair and annual frequency. Propose 5.2 RTO metric support; a contrast alone does not assign a new topic or secondary mastery.",
+      "reviewedText": {
+        "exp": "RTO targets service-restoration time within the tolerable interruption. RPO measures data-loss tolerance instead.",
+        "wrongFeedback": {
+          "0": "RPO concerns acceptable data loss measured backward from disruption, not service restoration duration.",
+          "2": "MTTR is an average repair-duration measure, not this specified recovery target.",
+          "3": "ARO estimates event frequency per year rather than recovery time."
+        }
+      },
+      "conceptLinkProposals": [
+        "recovery.rto"
+      ],
+      "roleProposal": "post_answer_support",
+      "delivery": {
+        "sourceBindingId": "practice-feedback",
+        "level": "source_reachable_conditionally",
+        "conditions": "Select an eligible set containing m635 in main MCQ practice, select an answer and submit; user.tier must equal pro to show current.exp. Selected wrong-choice feedback additionally requires a wrong submitted choice. The complete bundle is not displayed at once.",
+        "lessonId": null,
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T14",
+      "recordId": "section:resilience-assets-physical:1",
+      "parentRevision": "sha256:b0cee02c7ac294cb5e4d5912bb3acb90f2c147f4055f4fbe04d7dbfcd454ac3b",
+      "subunit": null,
+      "unitRevision": "sha256:b0cee02c7ac294cb5e4d5912bb3acb90f2c147f4055f4fbe04d7dbfcd454ac3b",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The table defines and contrasts RTO, RPO, MTTR and MTBF. All four are 5.2 BIA metrics. The complete table is a support unit; it has no MTD row or BIA-process teaching. Parent physical-security/asset/hardening objectives are not supported by this table.",
+      "reviewedText": {
+        "title": "Recovery metrics answer different questions",
+        "table": {
+          "columns": [
+            "Metric",
+            "Decision it supports",
+            "Do not confuse it with"
+          ],
+          "rows": [
+            [
+              "RTO",
+              "Target time to restore an acceptable service level",
+              "A guarantee that recovery will finish on time"
+            ],
+            [
+              "RPO",
+              "Maximum targeted period of data loss measured backward from disruption",
+              "How long the outage may last"
+            ],
+            [
+              "MTTR",
+              "Average time to repair or restore",
+              "A per-incident deadline"
+            ],
+            [
+              "MTBF",
+              "Average operating time between repairable failures",
+              "The lifetime of a non-repairable item"
+            ]
+          ]
+        }
+      },
+      "conceptLinkProposals": [
+        "recovery.rto",
+        "recovery.rpo",
+        "recovery.mttr"
+      ],
+      "roleProposal": "metric_contrast_support",
+      "delivery": {
+        "sourceBindingId": "lesson",
+        "level": "source_reachable_conditionally",
+        "conditions": "Open resilience-assets-physical through the Pro lesson gate, choose section index 1, and select each comparison tab. The first RTO row is initial; RPO, MTTR and MTBF require selecting their tabs. DeepDiveReadableBites has no body for this section and returns null; the adjacent table renderer supplies teaching.",
+        "lessonId": "resilience-assets-physical",
+        "keywordIndex": null,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T15",
+      "recordId": "keywords:risk-resilience-governance",
+      "parentRevision": "sha256:5a7dbaaf7a16c19ba23056b5da5951468836851469deed48f04d822e23926014",
+      "subunit": {
+        "term": "RTO",
+        "sourceRevision": "sha256:4b06e73644e534cd275d590192538dce5ee35fda5591a96df9da586f273101bd"
+      },
+      "unitRevision": "sha256:4b06e73644e534cd275d590192538dce5ee35fda5591a96df9da586f273101bd",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "5.2",
+        "5.5"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The exact RTO keyword definition is a service-restoration target. Propose 5.2 RTO support for this term only; risk-register, SLE, ALE and parent 5.5 assurance text are outside this subunit.",
+      "reviewedText": {
+        "term": "RTO",
+        "meaning": "Recovery time objective is the target time for restoring a service."
+      },
+      "conceptLinkProposals": [
+        "recovery.rto"
+      ],
+      "roleProposal": "exact_keyword_definition_support",
+      "delivery": {
+        "sourceBindingId": "lesson",
+        "level": "source_reachable_conditionally",
+        "conditions": "Open risk-resilience-governance through the Pro lesson gate, use Guided lesson / Exam keywords, then select the RTO tab (initial tab is another term). Generated practice covers only the first three keyword entries; that separate assessment is not adopted here.",
+        "lessonId": "risk-resilience-governance",
+        "keywordIndex": 3,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false,
+        "generatedPracticeFirstThreeIncludesTerm": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T16",
+      "recordId": "keywords:risk-resilience-governance",
+      "parentRevision": "sha256:5a7dbaaf7a16c19ba23056b5da5951468836851469deed48f04d822e23926014",
+      "subunit": {
+        "term": "RPO",
+        "sourceRevision": "sha256:a42279643c9b7a03e132ecd3b44faa9b504df5b447882bbf2a41535438c34fcd"
+      },
+      "unitRevision": "sha256:a42279643c9b7a03e132ecd3b44faa9b504df5b447882bbf2a41535438c34fcd",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "5.2",
+        "5.5"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The exact RPO keyword definition teaches data-loss tolerance in time. Propose 5.2 RPO for this term only; no assurance or whole-guide scope is inherited.",
+      "reviewedText": {
+        "term": "RPO",
+        "meaning": "Recovery point objective is the maximum acceptable amount of data loss measured in time."
+      },
+      "conceptLinkProposals": [
+        "recovery.rpo"
+      ],
+      "roleProposal": "exact_keyword_definition_support",
+      "delivery": {
+        "sourceBindingId": "lesson",
+        "level": "source_reachable_conditionally",
+        "conditions": "Open risk-resilience-governance through the Pro lesson gate, use Guided lesson / Exam keywords, then select the RPO tab (initial tab is another term). Generated practice covers only the first three keyword entries; that separate assessment is not adopted here.",
+        "lessonId": "risk-resilience-governance",
+        "keywordIndex": 4,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false,
+        "generatedPracticeFirstThreeIncludesTerm": false
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T17",
+      "recordId": "keywords:resilience-assets-physical",
+      "parentRevision": "sha256:e2064bf6cbc45563c17fcb5e8e6f5b8a1eca952036ee9335c5d42544ee8086ca",
+      "subunit": {
+        "term": "RTO",
+        "sourceRevision": "sha256:4b06e73644e534cd275d590192538dce5ee35fda5591a96df9da586f273101bd"
+      },
+      "unitRevision": "sha256:4b06e73644e534cd275d590192538dce5ee35fda5591a96df9da586f273101bd",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The exact RTO keyword definition teaches service-restoration target time. Propose 5.2 support despite parent 1.2/3.4/4.2 labels; the term alone does not teach physical security or hardening.",
+      "reviewedText": {
+        "term": "RTO",
+        "meaning": "Recovery time objective is the target time for restoring a service."
+      },
+      "conceptLinkProposals": [
+        "recovery.rto"
+      ],
+      "roleProposal": "exact_keyword_definition_support",
+      "delivery": {
+        "sourceBindingId": "lesson",
+        "level": "source_reachable_conditionally",
+        "conditions": "Open resilience-assets-physical through the Pro lesson gate, use Guided lesson / Exam keywords, where this RTO definition is the initial tab. Generated practice covers only the first three keyword entries; that separate assessment is not adopted here.",
+        "lessonId": "resilience-assets-physical",
+        "keywordIndex": 0,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false,
+        "generatedPracticeFirstThreeIncludesTerm": true
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T18",
+      "recordId": "keywords:resilience-assets-physical",
+      "parentRevision": "sha256:e2064bf6cbc45563c17fcb5e8e6f5b8a1eca952036ee9335c5d42544ee8086ca",
+      "subunit": {
+        "term": "RPO",
+        "sourceRevision": "sha256:a42279643c9b7a03e132ecd3b44faa9b504df5b447882bbf2a41535438c34fcd"
+      },
+      "unitRevision": "sha256:a42279643c9b7a03e132ecd3b44faa9b504df5b447882bbf2a41535438c34fcd",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "1.2",
+        "3.4",
+        "4.2"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The exact RPO keyword definition teaches data-loss tolerance in time. Propose 5.2 support despite parent 1.2/3.4/4.2 labels. No architecture technique is specified by the definition alone.",
+      "reviewedText": {
+        "term": "RPO",
+        "meaning": "Recovery point objective is the maximum acceptable amount of data loss measured in time."
+      },
+      "conceptLinkProposals": [
+        "recovery.rpo"
+      ],
+      "roleProposal": "exact_keyword_definition_support",
+      "delivery": {
+        "sourceBindingId": "lesson",
+        "level": "source_reachable_conditionally",
+        "conditions": "Open resilience-assets-physical through the Pro lesson gate, use Guided lesson / Exam keywords, then select the RPO tab (initial tab is another term). Generated practice covers only the first three keyword entries; that separate assessment is not adopted here.",
+        "lessonId": "resilience-assets-physical",
+        "keywordIndex": 1,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false,
+        "generatedPracticeFirstThreeIncludesTerm": true
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    },
+    {
+      "unitId": "T19",
+      "recordId": "keywords:forensics-recovery",
+      "parentRevision": "sha256:8fa59661ea635d3ad55b72c7db5e5104aae79ec3beb700d409551dbafba55a52",
+      "subunit": {
+        "term": "RPO",
+        "sourceRevision": "sha256:a42279643c9b7a03e132ecd3b44faa9b504df5b447882bbf2a41535438c34fcd"
+      },
+      "unitRevision": "sha256:a42279643c9b7a03e132ecd3b44faa9b504df5b447882bbf2a41535438c34fcd",
+      "priorScopeProposal": null,
+      "objectiveCodesObserved": [
+        "3.4",
+        "4.8",
+        "4.9"
+      ],
+      "objectiveCodesProposal": [
+        "5.2"
+      ],
+      "scopeKind": "explicit_objective_support",
+      "scopeRationale": "The exact RPO definition teaches data-loss tolerance in time. Propose 5.2 RPO; the forensics parent does not make this definition teach 4.8 incident response or 4.9 investigation. No backup mechanism is present in this isolated term.",
+      "reviewedText": {
+        "term": "RPO",
+        "meaning": "Recovery point objective is the maximum acceptable amount of data loss measured in time."
+      },
+      "conceptLinkProposals": [
+        "recovery.rpo"
+      ],
+      "roleProposal": "exact_keyword_definition_support",
+      "delivery": {
+        "sourceBindingId": "lesson",
+        "level": "source_reachable_conditionally",
+        "conditions": "Open forensics-recovery through the Pro lesson gate, use Guided lesson / Exam keywords, then select the RPO tab (initial tab is another term). Generated practice covers only the first three keyword entries; that separate assessment is not adopted here.",
+        "lessonId": "forensics-recovery",
+        "keywordIndex": 2,
+        "browserObserved": false,
+        "learnerExposureVerified": false,
+        "selectedForDeliveryVerified": false,
+        "generatedPracticeFirstThreeIncludesTerm": true
+      },
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_scope_proposal_pending_owner_and_independent_gate"
+    }
+  ],
+  "limitations": [
+    "Semantic scope proposals only, not owner approval or active mapping changes.",
+    "Code reachability is not browser-observed delivery, enrollment entitlement or evidence that a learner viewed the unit.",
+    "MTTR glossary remains withheld; scope null.",
+    "MTD explanation is supporting continuity context only.",
+    "No whole-guide/lesson/deck promotion, generated question adoption, fresh private payload or production inspection.",
+    "The original 27-choice owner packet remains unchanged and pending; these new scope bytes need a separate deliberate review binding."
+  ]
+}
