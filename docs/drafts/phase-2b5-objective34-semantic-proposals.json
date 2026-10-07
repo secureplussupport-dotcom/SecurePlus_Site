@@ -1,0 +1,319 @@
+{
+  "packetId": "phase-2b5-objective34-assessment-semantic-slice",
+  "date": "2026-10-07",
+  "baselineCommit": "3fada82e998ade0c1a33b6385bace618aa92325c",
+  "status": "LOCAL_SEMANTIC_PROPOSALS_NOT_READY",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "sourceBindings": {
+    "docs/evidence/phase-2b5/mapping-package.json": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97",
+    "docs/drafts/phase-2b5-objective52-pilot-mapping-proposals.json": "de062252046dffcfde6de11ce7e328cf72bbec142be180c300c0ecc3f003f25c",
+    "docs/drafts/phase-2b5-instructional-unit-scope-proposals.json": "18d9b7fc2114672c02d14eeeff23db5a36a2f5528b36c005262be50fdf9f09fb",
+    "docs/drafts/phase-2b5-pilot-batch-1.json": "91e83b7afbc56901bc1a37ae426763024456d8d90ae486c2d2833ff076826bda",
+    "docs/drafts/phase-2b5-pilot-pbq-draft-2.json": "94adaf1c9ca90370636bc3c8c20a6e51156964a4f1871905d23a88cbe9d5ae02",
+    "docs/drafts/phase-2b5-pilot-batch-4.json": "7be45316dda58c45685e06c9d2062a58b6dfda6b56b898d7050ff2b28412714e",
+    "docs/phase-2b5-pilot-owner-decision-packet.md": "01f96e9c4edff2ef61d25c296fb96c585ad1a00db0709f47c0d261b7fbb5d953",
+    "src/data/learningConcepts.js": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac",
+    "src/data/learningMappings.js": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+  },
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "selection": "All effective local MCQ/PBQ records whose current objective equals 3.4; no inference of all bank-wide or private/live 3.4 coverage.",
+  "questionProposals": [
+    {
+      "recordId": "mcq:m177",
+      "questionId": "m177",
+      "kind": "mcq",
+      "sourceRevision": "sha256:2e89d8324231ae6f8409c567e81ab5fcf483d7cf26de2d03f674dd9a8a174f8b",
+      "publishedRecordSignature": "sha256:130c3e1866be5e83816ebcc844897f19faf0fe5e449b2b1a78f455377caf1c5e",
+      "objectiveObserved": "3.4",
+      "domainObserved": "3",
+      "difficultyObserved": "easy",
+      "formatObserved": "mcq",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "disposition": "unresolved_mastery_identity",
+      "supportConceptProposals": [],
+      "familyLabelProposal": "differential-backup-restore-set-identification",
+      "familyRelation": "existing_question_reasoning_label_only",
+      "assessedUnderstanding": "Identify changed-since-full backup semantics and the required full-plus-latest-differential restore set.",
+      "rationale": "The answer requires differential versus incremental/full/snapshot understanding. It supplies no elapsed restoration requirement or recoverable-data-age comparison, so RTO/RPO are not directly assessed. The existing taxonomy has no reviewed mastery identity for this backup-type/restore-set understanding; objective 3.4 is a topic, not that identity.",
+      "cognitiveSkillProposal": "identification",
+      "taxonomyBlocker": "No existing mastery identity; do not invent a canonical backup concept or promote a topic/support term.",
+      "comparisonIds": [
+        "m088",
+        "draft.pilot1.rpo.01",
+        "draft.pilot1.rpo.03",
+        "draft.pilot4.rpo.01"
+      ],
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_semantic_proposal_pending_independent_and_owner_gate",
+      "compilerObservation": {
+        "status": "supported_local_grammar",
+        "revisionId": "e6fc50f8-f1dc-8a1e-84d6-01100ba73a36",
+        "contentSha256": "e6fc50f8f1dc5a1e44d601100ba73a365e6241ba7dcea72d21428e0aaad1037a",
+        "evidencePrecision": "direct",
+        "componentMasterySupported": false
+      }
+    },
+    {
+      "recordId": "pbq:p026",
+      "questionId": "p026",
+      "kind": "pbq",
+      "sourceRevision": "sha256:330dec138ad30780f639184c307ffa4f842c337a9c0d41ee4d66e1c935e12a7d",
+      "publishedRecordSignature": "sha256:11ece8d248047097c1f2896fc3af53cb047ab1bb8d0c5b518f39d859e2b174c0",
+      "objectiveObserved": "3.4",
+      "domainObserved": "3",
+      "difficultyObserved": "medium",
+      "formatObserved": "ORDERING",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "disposition": "coarse_context_only",
+      "supportConceptProposals": [
+        "sy0701.term.bcp",
+        "sy0701.term.drp"
+      ],
+      "familyLabelProposal": "authorized-recovery-validation-before-cutover-sequence",
+      "familyRelation": "existing_question_reasoning_label_only",
+      "assessedUnderstanding": "Order the stated activation, restore, acceptance and planned cutover dependencies after life safety is addressed.",
+      "rationale": "The whole ordering result concerns the supplied BCP/DR workflow. It does not calculate a service target, data-loss window, average repair time or perform BIA. BCP/DRP are existing provisional supporting nodes only; no primary/secondary mastery role or row success is proposed.",
+      "cognitiveSkillProposal": "sequence",
+      "taxonomyBlocker": "Recovery workflow has no approved mastery granularity; supporting-node identities/objective unions remain pending.",
+      "comparisonIds": [
+        "p048",
+        "draft.pilot1.rto.02",
+        "draft.pilot2.pbq.01"
+      ],
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_semantic_proposal_pending_independent_and_owner_gate",
+      "compilerObservation": {
+        "status": "supported_local_grammar",
+        "revisionId": "183cc013-d5f5-8e33-9bfb-5e70f07262f3",
+        "contentSha256": "183cc013d5f5de331bfb5e70f07262f34b3920789ee9fdcf88de393e42030176",
+        "evidencePrecision": "coarse",
+        "componentMasterySupported": false
+      }
+    },
+    {
+      "recordId": "pbq:p211",
+      "questionId": "p211",
+      "kind": "pbq",
+      "sourceRevision": "sha256:bf0a42cc62da920122329a6253d9aaff8fd5f9a35038153d581650e132be81c3",
+      "publishedRecordSignature": "sha256:62894e03c5f39c75b69713ef7c7ad5205ce73da9f42097744f159636f8758f91",
+      "objectiveObserved": "3.4",
+      "domainObserved": "3",
+      "difficultyObserved": "medium",
+      "formatObserved": "SCENARIO",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "disposition": "coarse_context_only",
+      "supportConceptProposals": [
+        "recovery.rto",
+        "recovery.rpo"
+      ],
+      "familyLabelProposal": "combined-recovery-and-retention-design",
+      "familyRelation": "same_as_existing_pilot_and_objective52_proposal",
+      "assessedUnderstanding": "Choose one complete design satisfying tested service recovery, data-loss bounds and protected log retention.",
+      "rationale": "One whole-choice result mixes RTO/RPO with enforced immutable retention. Retain only support context for the two pilot concepts; cannot isolate any concept or component success. The WORM requirement is storage retention, not malware Worm; existing sy0701.term.worm is semantically wrong for it and must not be linked.",
+      "cognitiveSkillProposal": "scenario_application",
+      "taxonomyBlocker": "Immutable-retention understanding has no appropriate reviewed identity; reject malware Worm collision.",
+      "comparisonIds": [
+        "m088",
+        "draft.pilot1.rto.03",
+        "draft.pilot1.rpo.02",
+        "draft.pilot4.rpo.01"
+      ],
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "reviewStatus": "agent_semantic_proposal_pending_independent_and_owner_gate",
+      "compilerObservation": {
+        "status": "supported_local_grammar",
+        "revisionId": "b6ef4a30-8fa1-8d38-ab20-eded240d827a",
+        "contentSha256": "b6ef4a308fa18d38ab20eded240d827abd4a9e37b3abe75bfc29f09e3e6a4d7a",
+        "evidencePrecision": "coarse",
+        "componentMasterySupported": false
+      }
+    }
+  ],
+  "teachingDependencies": [
+    {
+      "recordId": "explanation:mcq:m177",
+      "sourceRevision": "sha256:efdd39834fb4a1e11151f6ad60770382e2d6b47eb6f20891d5afa47f87d5fc5c",
+      "questionIds": [
+        "m177"
+      ],
+      "roleProposal": "post_answer_support",
+      "rationale": "Explains full-plus-latest-differential versus incremental chain; this same-question answer reveal gives no fresh family or mastery evidence.",
+      "objectiveCodesProposal": null,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "browserObserved": false
+    },
+    {
+      "recordId": "explanation:pbq:p026",
+      "sourceRevision": "sha256:ba72d7ce7ae949ace4908a2092818e27be0321781fd7734586731027db94cbd3",
+      "questionIds": [
+        "p026"
+      ],
+      "roleProposal": "post_answer_support",
+      "rationale": "Explains stated activation/validation order and item-specific feedback; whole-response correctness does not establish concept/component mastery.",
+      "objectiveCodesProposal": null,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "browserObserved": false
+    },
+    {
+      "recordId": "explanation:pbq:p211",
+      "sourceRevision": "sha256:9831b5fb55788f52cea2c225bbaa2f2a28c2ff60c9d7450b35dd28addecedd2a",
+      "questionIds": [
+        "p211"
+      ],
+      "roleProposal": "post_answer_support",
+      "rationale": "Explains tested targets and immutable retention; all options are a single mixed-design response, not separately graded rows.",
+      "objectiveCodesProposal": null,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "browserObserved": false
+    },
+    {
+      "recordId": "glossary:bcp",
+      "sourceRevision": "sha256:40e1eb82d935f7c22b659d59d0f9a9a47563c7f094490697aa55231f11c261ef",
+      "questionIds": [
+        "p026"
+      ],
+      "roleProposal": "conditional_definition_support",
+      "rationale": "Defines business-process continuity; only an opened matching tooltip teaches it, and this definition alone does not supply a runbook order.",
+      "objectiveCodesProposal": null,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "browserObserved": false
+    },
+    {
+      "recordId": "glossary:drp",
+      "sourceRevision": "sha256:767773a99ed1cbe72f9e73d71c6c74f41ef0daffe4813403f3e3ec1a57c64605",
+      "questionIds": [
+        "p026"
+      ],
+      "roleProposal": "conditional_definition_support",
+      "rationale": "Defines damaged-service restoration; tooltip availability alone is not observed teaching or a specific acceptance/cutover runbook.",
+      "objectiveCodesProposal": null,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "browserObserved": false
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-risk-governance-business-bcp-business-continuity-plan",
+      "sourceRevision": "sha256:99661adf33592bbfd30525e55ff3b5a178fe252a62763b850ab9db18ad0f98f0",
+      "questionIds": [
+        "p026"
+      ],
+      "roleProposal": "definition_support",
+      "rationale": "Card clarifies what BCP means; broad governance-deck objectives are not workflow evidence or approved unit scope.",
+      "objectiveCodesProposal": null,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "browserObserved": false
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-security-operations-response-drp-disaster-recovery-plan",
+      "sourceRevision": "sha256:66ca50eea998f19b776738ecaff09af54a577ef2622610d1c20600f6c04b413a",
+      "questionIds": [
+        "p026"
+      ],
+      "roleProposal": "definition_support",
+      "rationale": "Card clarifies IT disaster recovery; broad operations-deck objectives do not define this unit scope or prove a recovery sequence.",
+      "objectiveCodesProposal": null,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "browserObserved": false
+    },
+    {
+      "recordId": "section:forensics-recovery:2",
+      "sourceRevision": "sha256:92296e75f65fdbdf34c6a3d1932b048af7499e446cb1c1b01feb04507e4d4561",
+      "questionIds": [
+        "m177",
+        "p211"
+      ],
+      "roleProposal": "mechanism_contrast_support",
+      "rationale": "Contrasts journal/snapshot/replica/backup failure domains and recoverability. It does not explicitly teach differential restore sets or WORM enforcement against administrators.",
+      "objectiveCodesProposal": null,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "browserObserved": false
+    },
+    {
+      "recordId": "section:resilience-assets-physical:1",
+      "sourceRevision": "sha256:b0cee02c7ac294cb5e4d5912bb3acb90f2c147f4055f4fbe04d7dbfcd454ac3b",
+      "questionIds": [
+        "p211"
+      ],
+      "roleProposal": "metric_contrast_support",
+      "rationale": "Explains RTO/RPO/MTTR/MTBF; helps interpret recovery requirements without supplying retention enforcement or isolated PBQ evidence.",
+      "objectiveCodesProposal": null,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "browserObserved": false
+    },
+    {
+      "recordId": "explanation:mcq:m088",
+      "sourceRevision": "sha256:976cd811b722a507ee4eb2e3770978d8c9330e963a3468fb494ea977f4c1c7ad",
+      "questionIds": [
+        "m177",
+        "p211"
+      ],
+      "roleProposal": "post_answer_support",
+      "rationale": "Explains RPO, retained backup versions and replication copying deletion. It remains the prior T11 scope proposal, not a new approval or differential-backup lesson.",
+      "objectiveCodesProposal": null,
+      "humanApproved": false,
+      "masteryWeight": 0,
+      "browserObserved": false
+    }
+  ],
+  "taxonomyBoundary": {
+    "existingMasteryConceptIds": [
+      "continuity.bia",
+      "recovery.mtd",
+      "recovery.mttr",
+      "recovery.rpo",
+      "recovery.rto"
+    ],
+    "supportNodesUsed": [
+      "sy0701.term.bcp",
+      "sy0701.term.drp"
+    ],
+    "rejectedCollision": {
+      "conceptId": "sy0701.term.worm",
+      "actualName": "Worm",
+      "actualObjectives": [
+        "2.4",
+        "4.1"
+      ],
+      "actualNodeKind": "supporting_concept",
+      "reason": "Malware Worm is not write-once/read-many retention. No mapping promotion by case-insensitive slug."
+    }
+  },
+  "privateBoundary": {
+    "questionId": "p017",
+    "selectedSourceRevision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "trustedRevisionId": null,
+    "primaryConceptProposal": null,
+    "secondaryConceptProposals": [],
+    "payloadAvailable": false,
+    "sourceReadRefreshed": false,
+    "localFallbackMaySubstitute": false
+  },
+  "limitations": [
+    "Current objective labels select three local assessments only; broader cross-objective coverage and private catalogue completeness remain unclaimed.",
+    "No new canonical mastery identities, approved roles/skills/difficulty/scope or psychometric independence.",
+    "Compiler acceptance is observed locally; both PBQs remain coarse with zero component evidence.",
+    "Ten teaching dependencies are source-bound proposals with no browser observation or newly approved unit scope.",
+    "No active mappings, runtime, owner packet, publication or live behavior changed; production NOT READY."
+  ]
+}

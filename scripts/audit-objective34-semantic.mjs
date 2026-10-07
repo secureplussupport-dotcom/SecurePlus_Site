@@ -1,0 +1,57 @@
+import assert from 'node:assert/strict';
+import {readFileSync,readdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {readLearningPilotBank,contentSignature} from './lib/read-learning-pilot-bank.mjs';
+import {compileRevision} from '../server/adaptive/revision.mjs';
+import {LEARNING_CONCEPTS} from '../src/data/learningConcepts.js';
+import {QUESTION_MAPPINGS} from '../src/data/learningMappings.js';
+import {CONCEPT_DEEP_DIVES} from '../src/data/conceptDeepDives.js';
+import {SY0701_ACRONYM_CARDS} from '../src/data/sy0701AcronymFlashcards.js';
+import {readGlossary} from './lib/content-mapping/delivery-inventory.mjs';
+const path='docs/drafts/phase-2b5-objective34-semantic-proposals.json',p=JSON.parse(readFileSync(path)),hash=f=>createHash('sha256').update(readFileSync(f)).digest('hex');
+for(const [f,h] of Object.entries(p.sourceBindings))assert.equal(hash(f),h,f+' comparison drift');
+assert.equal(p.sourceBindings['docs/evidence/phase-2b5/mapping-package.json'],'056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97');
+assert.equal(p.sourceBindings['docs/drafts/phase-2b5-objective52-pilot-mapping-proposals.json'],'de062252046dffcfde6de11ce7e328cf72bbec142be180c300c0ecc3f003f25c');
+assert.equal(p.sourceBindings['docs/phase-2b5-pilot-owner-decision-packet.md'],'01f96e9c4edff2ef61d25c296fb96c585ad1a00db0709f47c0d261b7fbb5d953');
+const pkg=JSON.parse(readFileSync('docs/evidence/phase-2b5/mapping-package.json')),bank=readLearningPilotBank(),qById=new Map([...bank.mcqs,...bank.pbqs].map(q=>[q.id,q]));
+assert.equal(p.bankSignature,contentSignature(bank));assert.equal(p.bankSignature,'sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391');
+assert.equal(p.baselineCommit,'3fada82e998ade0c1a33b6385bace618aa92325c');assert.equal(p.status,'LOCAL_SEMANTIC_PROPOSALS_NOT_READY');
+for(const k of ['humanApproved','published','activationAllowed','privatePayloadIncluded'])assert.equal(p[k],false);assert.equal(p.masteryWeight,0);
+assert.deepEqual(p.questionProposals.map(r=>r.questionId),['m177','p026','p211']);
+assert.deepEqual(p.questionProposals.map(r=>r.questionId).sort(),[...qById.values()].filter(q=>q.objective==='3.4').map(q=>q.id).sort());
+assert.deepEqual(pkg.records.filter(r=>['mcq','pbq'].includes(r.kind)&&!r.id.startsWith('private:')&&r.objectiveCodes.includes('3.4')).map(r=>r.questionId).sort(),['m177','p026','p211']);
+const row=id=>p.questionProposals.find(r=>r.questionId===id);
+function validateRow(r){
+ const q=qById.get(r.questionId),record=pkg.records.find(x=>x.id===r.recordId);assert(q&&record);
+ assert.equal(r.sourceRevision,contentSignature(q),'Stale local revision');assert.equal(r.sourceRevision,record.localRevisionSignature);assert.equal(r.publishedRecordSignature,record.sourceSignature);
+ assert.equal(r.objectiveObserved,'3.4');assert.equal(r.domainObserved,'3');assert.equal(r.difficultyObserved,q.difficulty);assert.equal(r.formatObserved,r.kind==='mcq'?'mcq':q.type);
+ assert.equal(r.primaryConceptProposal,null,'No topic/keyword/coarse promotion to mastery');assert.deepEqual(r.secondaryConceptProposals,[]);
+ assert.deepEqual(r.supportConceptProposals,r.questionId==='p026'?['sy0701.term.bcp','sy0701.term.drp']:r.questionId==='p211'?['recovery.rto','recovery.rpo']:[]);
+ assert.equal(r.disposition,r.questionId==='m177'?'unresolved_mastery_identity':'coarse_context_only');
+ for(const k of ['masteryWeight','newFamilyCredit'])assert.equal(r[k],0);assert.equal(r.humanApproved,false);assert(r.rationale.length>100&&r.taxonomyBlocker.length>50);
+ for(const id of r.supportConceptProposals)assert(pkg.concepts.some(c=>c.id===id));
+ const rev=compileRevision(q,r.kind);assert.equal(r.compilerObservation.revisionId,rev.revisionId);assert.equal(r.compilerObservation.contentSha256,rev.contentSha256);assert.equal(rev.revisionId,record.trustedRevisionId);
+ assert.equal(r.compilerObservation.status,'supported_local_grammar');assert.equal(r.compilerObservation.evidencePrecision,r.kind==='mcq'?'direct':'coarse');assert.equal(r.compilerObservation.componentMasterySupported,false);
+}
+p.questionProposals.forEach(validateRow);
+const old=JSON.parse(readFileSync('docs/drafts/phase-2b5-objective52-pilot-mapping-proposals.json')).questionProposals.find(r=>r.questionId==='p211');assert.deepEqual(row('p211').supportConceptProposals,old.supportConceptProposals);assert.equal(row('p211').familyLabelProposal,old.familyLabelProposal);assert.equal(row('p211').familyLabelProposal,QUESTION_MAPPINGS.find(r=>r.questionId==='p211').scenarioFamily);
+assert.deepEqual(qById.get('p026').correctOrder,['e','b','a','c','d','f']);assert.equal(qById.get('m177').opts[qById.get('m177').correct],'Differential backup');
+assert.deepEqual([...p.taxonomyBoundary.existingMasteryConceptIds].sort(),LEARNING_CONCEPTS.map(c=>c.id).sort());
+const worm=pkg.concepts.find(c=>c.id==='sy0701.term.worm');assert.equal(worm.name,'Worm');assert.deepEqual(worm.objectiveCodes,['2.4','4.1']);assert.equal(worm.nodeKind,'supporting_concept');assert.equal(p.taxonomyBoundary.rejectedCollision.actualName,worm.name);assert(!p.questionProposals.some(r=>r.supportConceptProposals.includes(worm.id)));
+const g=readGlossary(),exp=q=>({exp:q.exp,explanation:q.explanation,wrongFeedback:q.wrongFeedback,optionFeedback:q.optionFeedback,items:q.items,blanks:q.blanks,selectionFeedback:q.selectionFeedback});
+const sources=new Map([...bank.mcqs.map(q=>['explanation:mcq:'+q.id,exp(q)]),...bank.pbqs.map(q=>['explanation:pbq:'+q.id,exp(q)]),...SY0701_ACRONYM_CARDS.map(c=>['flashcard:'+c.id,c]),...['BCP','DRP'].map(term=>['glossary:'+term.toLowerCase(),{term,definition:g.terms[term]}]),...CONCEPT_DEEP_DIVES.flatMap(d=>d.sections.map((s,i)=>['section:'+d.id+':'+i,s]))]);
+assert.equal(p.teachingDependencies.length,10);assert.equal(new Set(p.teachingDependencies.map(d=>d.recordId)).size,10);
+for(const d of p.teachingDependencies){assert.equal(d.sourceRevision,contentSignature(sources.get(d.recordId)));assert.equal(d.sourceRevision,pkg.records.find(r=>r.id===d.recordId).sourceSignature);assert(d.questionIds.every(id=>row(id)));assert.equal(d.objectiveCodesProposal,null);assert.equal(d.humanApproved,false);assert.equal(d.masteryWeight,0);assert.equal(d.browserObserved,false);assert(d.rationale.length>80);}
+assert.equal(p.privateBoundary.selectedSourceRevision,pkg.privateRevisionProcessing.sourceSignature);assert.equal(p.privateBoundary.selectedSourceRevision,'sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42');assert.equal(p.privateBoundary.trustedRevisionId,null);assert.equal(p.privateBoundary.primaryConceptProposal,null);assert.deepEqual(p.privateBoundary.secondaryConceptProposals,[]);for(const k of ['payloadAvailable','sourceReadRefreshed','localFallbackMaySubstitute'])assert.equal(p.privateBoundary[k],false);
+for(const [id,patch] of [['m177',{primaryConceptProposal:'recovery.rpo'}],['m177',{primaryConceptProposal:'sy0701.objective.3.4'}],['p026',{secondaryConceptProposals:['continuity.bia']}],['p211',{supportConceptProposals:['sy0701.term.worm']}],['p211',{masteryWeight:1}],['m177',{sourceRevision:'sha256:'+'0'.repeat(64)}]])assert.throws(()=>validateRow({...row(id),...patch}));
+// ponytail: lexical candidates are a screen, not proof of semantic family independence.
+const tokens=s=>new Set(s.toLowerCase().replace(/\d+(?::\d+)?(?:\.\d+)?/g,' # ').match(/[a-z]+|#/g)||[]),similarity=(a,b)=>{const x=tokens(a),y=tokens(b);return [...x].filter(t=>y.has(t)).length/new Set([...x,...y]).size;};
+assert.equal(similarity('Restore in 4 hours.','RESTORE in 6 hours!'),1);
+const stem=q=>[q.q,q.title,q.scenario,q.question,q.diagram].filter(Boolean).join(' ');
+const drafts=['docs/drafts/phase-2b5-pilot-batch-1.json','docs/drafts/phase-2b5-pilot-batch-4.json'].flatMap(f=>JSON.parse(readFileSync(f)).questions.map(q=>({id:q.id,text:q.stem})));
+const worksheets=JSON.parse(readFileSync('docs/drafts/phase-2b5-pilot-pbq-draft-2.json')).exercises.flatMap(e=>e.parts.map(q=>({id:e.id+':'+q.id,text:e.scenario+' '+q.prompt})));
+const comparisons=[...qById.values()].map(q=>({id:q.id,text:stem(q)})).concat(drafts,worksheets);
+const nearest=p.questionProposals.map(r=>({questionId:r.questionId,nearest:comparisons.filter(c=>c.id!==r.questionId).map(c=>({id:c.id,score:Number(similarity(stem(qById.get(r.questionId)),c.text).toFixed(4))})).sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id)).slice(0,3)}));
+const manifest=JSON.parse(readFileSync('docs/evidence/phase-2b5/release-checksums.json'));for(const [f,h] of Object.entries(manifest.files))assert.equal(hash(f),h,f+' active artifact changed');
+for(const root of ['src','api','server'])for(const f of readdirSync(root,{recursive:true}).filter(f=>/\.(jsx?|mjs)$/.test(f)))assert(!readFileSync(root+'/'+f,'utf8').includes('phase-2b5-objective34-semantic-proposals'),'Runtime imported proposal');
+console.log(JSON.stringify({status:'PASS_OBJECTIVE34_LOCAL_PROPOSALS_NOT_READY',questions:3,observedDistribution:{easyMcq:1,mediumPbqs:2,hard:0},familyLabels:3,directPilotPrimaryProposals:0,newQuestionOrIndependentFamilyCredit:0,coarsePbqs:2,supportedGrammars:3,teachingDependencies:10,eligibleEvidence:0,packetSha256:hash(path),nearDuplicateCandidates:nearest}));
