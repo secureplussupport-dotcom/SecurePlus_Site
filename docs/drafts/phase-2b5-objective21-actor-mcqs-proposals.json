@@ -1,0 +1,2755 @@
+{
+  "schemaVersion": 1,
+  "status": "LOCAL_SEMANTIC_PROPOSALS_NOT_READY",
+  "baselineCommit": "6ec15709f236b1528eb00097612606e2704b7e44",
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "privatePayloadIncluded": false,
+  "masteryWeight": 0,
+  "newFamilyCredit": 0,
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "sourceBindings": [
+    {
+      "path": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "sha256": "0ba95c5c8f8a00e091daa9d852de0350a01ca00bedcba7c317155ea94cad88a9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "sha256": "46cf5a704690aa85606a1167b72f221aea09234635e3062aec067e7967abb4c9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "sha256": "fce8683567473a28ce8e903190e977345339f33df022ef56425c18d3bdfe225d"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "sha256": "d45c0d959c4cc0171b401f2df5ab1ee38d7bf717e3ce08c9d008d4dac61a6c20"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-p055-mapping-proposals.json",
+      "sha256": "40e1d58143f8dd4853f0496f5aca6d4abab031f59681bd625f7c144e41f3296e"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-resilience-lesson-proposals.json",
+      "sha256": "8dd1cae60ca07bad8d4046e7653beafd05f4f02bd66d12763cd0c621a90a36de"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/mapping-package.json",
+      "sha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/release-checksums.json",
+      "sha256": "98e7e0ed45b5fd17f1be50c4cd36eba53bf289de26a427810e061274dcfb3403"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-batch.md",
+      "sha256": "1a039e6f4778a585128b0d4167536c46a53d13130476b6144ffa946f2f464713"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-guide.md",
+      "sha256": "a9cc1fff35873d84d90bec1c5c6f4613fdb46defae5a8b2a87b4b7c554ffd33b"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
+      "sha256": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
+    },
+    {
+      "path": "docs/secureplus-rebrand-master-plan.md",
+      "sha256": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c"
+    },
+    {
+      "path": "docs/phase-1-product-loop-audit.md",
+      "sha256": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10"
+    },
+    {
+      "path": "src/data/conceptDeepDives.js",
+      "sha256": "b478e16240c95b70a79cf0679aff683fc08f18dd11947c4046ecd880ec1ce17f"
+    },
+    {
+      "path": "src/data/sy0701DeepDiveMap.js",
+      "sha256": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff"
+    },
+    {
+      "path": "src/data/learningConcepts.js",
+      "sha256": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac"
+    },
+    {
+      "path": "src/data/learningMappings.js",
+      "sha256": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+    },
+    {
+      "path": "src/lib/deepDiveStudy.js",
+      "sha256": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459"
+    },
+    {
+      "path": "src/lib/deepDiveRecommendations.js",
+      "sha256": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479"
+    },
+    {
+      "path": "scripts/lib/read-learning-pilot-bank.mjs",
+      "sha256": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac"
+    },
+    {
+      "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
+      "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "scripts/lib/content-mapping/package.mjs",
+      "sha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748"
+    },
+    {
+      "path": "server/adaptive/revision.mjs",
+      "sha256": "a2fc241dd45a60fe4e9898f8133187402ef07d9e0a5e2f721f4ad6ba33b73451"
+    },
+    {
+      "path": "src/App.jsx",
+      "sha256": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49"
+    },
+    {
+      "path": "src/data/sy0701AcronymFlashcards.js",
+      "sha256": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+      "sha256": "143dde6ff3996d594cd7981101c530048902c894449641f972cc38f8aa1c58fe"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-glossary-mapping-proposals.json",
+      "sha256": "377378ea1423ceafead0d73bfaace111e0a7181eb1da50200ec5454fe386c32e"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/private-catalogue-read.json",
+      "sha256": "ab41620421c0449309a096bc678aaa4b05088188d2c8da7666d7429cc4e10ce1"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/private-reconciliation.json",
+      "sha256": "53ba4921ed4ffb67d1da312fea8938a8f902c8a372cc083de9e4bbc71e7a8924"
+    },
+    {
+      "path": "scripts/lib/content-mapping/publication.mjs",
+      "sha256": "c540681dd727c01003505c050744e3d13c73486dd027bb99adaaf96b843d77e7"
+    },
+    {
+      "path": "scripts/lib/read-authored-bank.mjs",
+      "sha256": "e5fdce4aeeaf9971bbdb9ea269b3ae5fe9a57392df19b21879c59968ca5d8b2e"
+    },
+    {
+      "path": "src/data/sy0701PublishedSnapshot.js",
+      "sha256": "c5455fafd76fe974bb6dcb54b0562fc5ee5935da8387f7bfe48036760d4a8e9a"
+    },
+    {
+      "path": "src/data/sy0701EditorialReview.js",
+      "sha256": "0f32ac6be52a67cdeee239b5342a27505f240c9da122d0ced74df1fbb53480bb"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "sha256": "191d496358740cc07567452eb64fd1d2f3ab508cd83279a6c1f840355bc8ee67"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective13-governance-lesson-proposals.json",
+      "sha256": "ada7377ce290d0ba11485923910cbd4f071b8ed91fa8114235b712fe06a513bc"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective13-glossary-mapping-proposals.json",
+      "sha256": "a3d25ef32d9e07424ef448ff32e1b0fa6c38c1c0a51e42fbb90f2a36ba0184e7"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-password-mcq-proposals.json",
+      "sha256": "cb88cdfee8cbf4f6a6386f89572029c9d35e43519b9dd3acd9bcdc2910382ee2"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-encryption-keyuse-proposals.json",
+      "sha256": "c70dfd0c824e86a259679d3b77f21eb470c993a6a677907844beca2b6b79f459"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-custody-pki-signatures-proposals.json",
+      "sha256": "bc452ce1e68c91f2627251cc817b5706edc847d8c96bd0b214ba1dc7eece23f6"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-certificate-lifecycle-proposals.json",
+      "sha256": "a0985e8b84c69b0d70cd1ecdb35d887a207cad5bdf83195aa4193a0bf2e14fae"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-hashing-password-proposals.json",
+      "sha256": "3dc23520359035e91a10ac4a6e6f864782a0032e23ae40fcd2236b87f32d7a88"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-key-origin-proposals.json",
+      "sha256": "38210cbc2c70f49c44ce68405b61f747fbab7a0717000715ee3dbcc6773f8a7e"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-obfuscation-proposals.json",
+      "sha256": "c268a776e1d222fddde6a3913e6950ffc50f9000131b473722f908147ae6bb4a"
+    },
+    {
+      "path": "src/data/sy0701PbqReview.js",
+      "sha256": "4186e735e497204cdbf5f372f1e265361f3df3444320b8a45212477e13442754"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pbq-role-matching-proposals.json",
+      "sha256": "36c8dcb2deff1af78414465706a399c8e09341c09d9a9afba2e96b4556fa18ba"
+    },
+    {
+      "path": "scripts/audit-objective14-pbq-role-matching.mjs",
+      "sha256": "c42c53ba822741fa61587d5d218b832e33b0f12eb7bece7f21b6573432447d7c"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pbq-role-matching-review.md",
+      "sha256": "66193a7d7640e4814316314714ca665c8e1649b939da511c16a03742213c7a7a"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-pbqs-proposals.json",
+      "sha256": "7a5fb1b1d82708211f332b6f748aba2051e494adbca18f2a850fe0a61e503ea0"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-pbqs.mjs",
+      "sha256": "ab6f9ed9b8a4d55db3b97c6964038da96cc327fd0db0abe4113372788810c695"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-pbqs-review.md",
+      "sha256": "f45aeef11c0add027c9c04a25e7921ad03efe133099aabcd5310860e545546bb"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-terminal-pbqs-proposals.json",
+      "sha256": "90501520c07fb1966fe6d9a04edb121fdfd5710298701e9c860fd8e718ecb209"
+    },
+    {
+      "path": "scripts/audit-objective14-terminal-pbqs.mjs",
+      "sha256": "aed5a7b22b4c4a73bd605a9915ac28d143c02b21a9a5fe0d71e116c08c16339d"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-terminal-pbqs-review.md",
+      "sha256": "2ae0f684805fb9ef6c9e9ff8602b3460fd4a06adfd149ea82a23b00c4196acee"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-final-pbqs-proposals.json",
+      "sha256": "67dc31de331b3a5dcaeae140683354e3afa0f3cb30971a68086bed3006bb5056"
+    },
+    {
+      "path": "scripts/audit-objective14-final-pbqs.mjs",
+      "sha256": "327fef1f2da5d92c0758106141bec6dedab8e4a8e6b8087b196d3c3fa7e0b9b0"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-final-pbqs-review.md",
+      "sha256": "b8d6970c42994ce757016b8b5bd8e369bafb4c99c420356e91937b1d6f9ccd57"
+    },
+    {
+      "path": "src/data/conceptDeepDivesPrinterGuide.js",
+      "sha256": "196982096671e5b10867402da328992cb29503c415615ac9eb5e674d4475d006"
+    },
+    {
+      "path": "src/data/conceptDeepDivesStudyGuide.js",
+      "sha256": "340cc43dacd9c8706da4fb5a7a92c3a7104e36e4fbec6efec13d39522e17ab43"
+    },
+    {
+      "path": "src/data/sy0701LessonReview.js",
+      "sha256": "66ea36eb9de2bd82c264e0db2062084aa54e3dc23c256812751bd5404af4dd41"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-keys-lesson-proposals.json",
+      "sha256": "5aefe5670ccaf5239707c84c3af9641ac90c59d24aa09c305942d5b44fc307df"
+    },
+    {
+      "path": "scripts/audit-objective14-keys-lesson.mjs",
+      "sha256": "68b9821853db49c749c45a5baa57a9ed4dbb5bc24123523c241927c3d79c07c1"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-keys-lesson-review.md",
+      "sha256": "838f7c54df900542a129f597d438edcdba23486e79eca7e30801ff58474061c8"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-modes-lesson-proposals.json",
+      "sha256": "d4c1b5486c6538a72cd7dbb4e073e74e8dc1aec5726d6389abdda92f5e399cf6"
+    },
+    {
+      "path": "scripts/audit-objective14-modes-lesson.mjs",
+      "sha256": "22f65b96c0c50173a5b35464c71a7ecbdfc26f19383a9b62ad6451e7afe928be"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-modes-lesson-review.md",
+      "sha256": "62e4f456d521d3ed974332cb8c3ff0cbfc63e12244480422c1c14448fc9a62ea"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-lesson-proposals.json",
+      "sha256": "f58e590b5ea7a049f401b14344cc46c9883f42f9b7155c4cb979d1f52c35fee6"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-lesson.mjs",
+      "sha256": "b57fe502fc26b75a2ed449af5306f85673bf5ab152d6733e6b1eb5c9f8a37353"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-lesson-review.md",
+      "sha256": "bdb5ef191cc8c2b364c74857df89cc0de523ee6e526d0f6e1d73d7edf0eb1f14"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-cards-proposals.json",
+      "sha256": "f53d9ebe64bb6ddbbbd53c8172354093813d815f84938ad4bff48910f99f75fa"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-cards.mjs",
+      "sha256": "e416cb48d746abfa1435fed4a605c2016a6400411dba68240e730f57c25bca02"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-cards-review.md",
+      "sha256": "e198a2a7b19fb45a3abd9a584a7e917720e1351229c6da3c885d6338e9df93f1"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-algorithm-cards-proposals.json",
+      "sha256": "a51fdc4514d4307cd161b5d9fa0984ff767e7e01ae7a5bc3aecb4efe49606120"
+    },
+    {
+      "path": "scripts/audit-objective14-algorithm-cards.mjs",
+      "sha256": "2fbe094f0f1a11653b040a5cbc053a9f36834cbd00d0fee1c6cd0000d46fb246"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-algorithm-cards-review.md",
+      "sha256": "3288e97802ed745682eb7c9e8ee52e731792d66628a90b9fbb6c15bf6e4dbb2a"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-exchange-cards-proposals.json",
+      "sha256": "b00c4e8e87785cae40b17aacf8ece8170334da0fe29d2e9acb964d21121a0670"
+    },
+    {
+      "path": "scripts/audit-objective14-exchange-cards.mjs",
+      "sha256": "d5f43a4905cdfb72bcb393b65aec9a4068f82363506ac533d01b0654eef98fec"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-exchange-cards-review.md",
+      "sha256": "90dc93b41064df984a0c0b4df71c885b11af6d85279884e55e8ef78205bd2a18"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-attack-cards-proposals.json",
+      "sha256": "f7a01a4675143132e502ec33cc2e6630b7f8748bbdaad7243d395410531c024d"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-attack-cards-review.md",
+      "sha256": "bf0a67785728f921758f57d653de3ab165b9106df59c465be167f443ec9952e6"
+    },
+    {
+      "path": "scripts/audit-objective14-attack-cards.mjs",
+      "sha256": "c527fdafdf06626713caadb263af28154325bb9c67153166e8b13b26190ec0f9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-crypto-glossary-proposals.json",
+      "sha256": "6ff229373bb6f6f98acf4a4907d4541183e49e61a6089da24aa53addd67c91ce"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-crypto-glossary-review.md",
+      "sha256": "be275577a7822d211d6b099c2a598468c74be6b2cbd35979c0b37f942de9bac1"
+    },
+    {
+      "path": "scripts/audit-objective14-crypto-glossary.mjs",
+      "sha256": "6f244be6b9c124b885e0d2a2df2b45a2a71e60359291e7898d78af6a72d50cd2"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-agreement-glossary-proposals.json",
+      "sha256": "85bc2ed1b25309db1700fc5c09627c342051863dab870a59aad8925e34e7fbf2"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-agreement-glossary-review.md",
+      "sha256": "4bab787459a14c9e48e42aa5092b5ae8ba73b62fef864bc4cd853e8adaab2ce0"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-agreement-glossary.mjs",
+      "sha256": "51e2986fecbadefc943c6d667d35eac57c00c4b4215b2a2fc959a9ae493cc8b8"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-network-email-glossary-proposals.json",
+      "sha256": "e32f4374c1067fbd493fd289cead64eb42dbe1cfa60e77ceed423b3fdf1a3632"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-network-email-glossary-review.md",
+      "sha256": "945c6dabfad14cdcf7ba50da03a5ba907a1b1e70d4b1a865157d32a45b1bfb18"
+    },
+    {
+      "path": "scripts/audit-objective14-network-email-glossary.mjs",
+      "sha256": "dedd168dbf1dc924878b6a46b1b924f23ffdfcdfc2fa8ee213c54fa968082e41"
+    },
+    {
+      "path": "docs/phase-2b5-content-mapping-readiness.md",
+      "sha256": "99bce555bab95b54476c67582a397f0078f4af5c24ac435ca5b51773929ba524"
+    },
+    {
+      "path": "docs/phase-2b5-pilot-owner-decision-packet.md",
+      "sha256": "01f96e9c4edff2ef61d25c296fb96c585ad1a00db0709f47c0d261b7fbb5d953"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-final-glossary-proposals.json",
+      "sha256": "edf36fa40c7c03c30990476413a969a01375699c556819dbabfefc35f85e496f"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-final-glossary-review.md",
+      "sha256": "ec31630fc343d5178760b0c0975a2cf72b079094fbac9e9f4b20b5e8a6ff843d"
+    },
+    {
+      "path": "scripts/audit-objective14-final-glossary.mjs",
+      "sha256": "07ade284db3dcda85572b6b04efdb87c1704ee65b6af46a19b3831841e161010"
+    }
+  ],
+  "denominator": {
+    "broadObjective21Candidates": 34,
+    "byKind": {
+      "explanation_bundle": 9,
+      "glossary_definition": 5,
+      "keyword_guide": 1,
+      "lesson": 1,
+      "lesson_check": 4,
+      "lesson_section": 4,
+      "lesson_traps": 1,
+      "mcq": 7,
+      "pbq": 2
+    },
+    "priorDistinctDispositions": 1,
+    "priorByKind": {
+      "glossary_definition": 1
+    },
+    "newRecords": 14,
+    "newMcqs": 7,
+    "newFeedbackBundles": 7,
+    "newPbqs": 0,
+    "newInstructionalRecords": 0,
+    "combinedDistinctDispositions": 15,
+    "remainingCandidates": 19,
+    "remainingByKind": {
+      "explanation_bundle": 2,
+      "glossary_definition": 4,
+      "keyword_guide": 1,
+      "lesson": 1,
+      "lesson_check": 4,
+      "lesson_section": 4,
+      "lesson_traps": 1,
+      "pbq": 2
+    }
+  },
+  "candidateCensus": [
+    {
+      "recordId": "check:threat-actors-surfaces",
+      "kind": "lesson_check",
+      "localEffectiveRevision": "sha256:b6afdc61fa76d18178a7880663d0583cef6847fb6f244ea5f571707057e64319",
+      "catalogueRevision": "sha256:b6afdc61fa76d18178a7880663d0583cef6847fb6f244ea5f571707057e64319",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "explanation:mcq:m013",
+      "kind": "explanation_bundle",
+      "localEffectiveRevision": "sha256:f25164d9e01b08be720db96c98ff466a69ef5869ec2fc96832f6fbd4a83911d6",
+      "catalogueRevision": "sha256:f25164d9e01b08be720db96c98ff466a69ef5869ec2fc96832f6fbd4a83911d6",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "explanation:mcq:m121",
+      "kind": "explanation_bundle",
+      "localEffectiveRevision": "sha256:5bcca2eedf2b5f96e57b1a4723e8a626d8260f2679cb7018ad4a4482d36a2d12",
+      "catalogueRevision": "sha256:5bcca2eedf2b5f96e57b1a4723e8a626d8260f2679cb7018ad4a4482d36a2d12",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "explanation:mcq:m122",
+      "kind": "explanation_bundle",
+      "localEffectiveRevision": "sha256:af9695b73661ebd5eff18bd4df6743705dd4af40f6f0223a80603613e034dd45",
+      "catalogueRevision": "sha256:af9695b73661ebd5eff18bd4df6743705dd4af40f6f0223a80603613e034dd45",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "explanation:mcq:m139",
+      "kind": "explanation_bundle",
+      "localEffectiveRevision": "sha256:68e65551e8d192c4cb4499a8659f7508692773ec7f218d3453bb033c13c5e4f7",
+      "catalogueRevision": "sha256:68e65551e8d192c4cb4499a8659f7508692773ec7f218d3453bb033c13c5e4f7",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "explanation:mcq:m252",
+      "kind": "explanation_bundle",
+      "localEffectiveRevision": "sha256:dd156b9b0e392e9ef752d793b0fb7d9d008fdb708969a75db67ff957087f3f10",
+      "catalogueRevision": "sha256:dd156b9b0e392e9ef752d793b0fb7d9d008fdb708969a75db67ff957087f3f10",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "explanation:mcq:m439",
+      "kind": "explanation_bundle",
+      "localEffectiveRevision": "sha256:579ca9b133c51777d7c77c5924f1223d43f8ef75327af147749b62a0cc4ae1ed",
+      "catalogueRevision": "sha256:579ca9b133c51777d7c77c5924f1223d43f8ef75327af147749b62a0cc4ae1ed",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "explanation:mcq:m617",
+      "kind": "explanation_bundle",
+      "localEffectiveRevision": "sha256:80178aa556ca9f5da326839e0763982d38e676fde91d95c835a9031d958ecaf8",
+      "catalogueRevision": "sha256:80178aa556ca9f5da326839e0763982d38e676fde91d95c835a9031d958ecaf8",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "explanation:pbq:p006",
+      "kind": "explanation_bundle",
+      "localEffectiveRevision": "sha256:4e387c651b8816227f1f9c6b389827a58bbded6bc11d32ae64e3d4fd1d29533b",
+      "catalogueRevision": "sha256:4e387c651b8816227f1f9c6b389827a58bbded6bc11d32ae64e3d4fd1d29533b",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "explanation:pbq:p069",
+      "kind": "explanation_bundle",
+      "localEffectiveRevision": "sha256:82b63474261454dfd42b54de34372b6062ec726f81c3fea9ec9194bbca5fc66a",
+      "catalogueRevision": "sha256:82b63474261454dfd42b54de34372b6062ec726f81c3fea9ec9194bbca5fc66a",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:apt",
+      "kind": "glossary_definition",
+      "localEffectiveRevision": "sha256:776565dd4fd824adbac86de04939eec5f9005faad3f018e12544cd89a847362b",
+      "catalogueRevision": "sha256:776565dd4fd824adbac86de04939eec5f9005faad3f018e12544cd89a847362b",
+      "publicationStatusObserved": "available_conditional",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "3.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:arp",
+      "kind": "glossary_definition",
+      "localEffectiveRevision": "sha256:e37e17f5cf3427abea6e8a1ed06e085c6aefa24d7ed3543953c6527e2e408837",
+      "catalogueRevision": "sha256:e37e17f5cf3427abea6e8a1ed06e085c6aefa24d7ed3543953c6527e2e408837",
+      "publicationStatusObserved": "available_conditional",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "3.2",
+        "3.3",
+        "3.4",
+        "4.1",
+        "4.4",
+        "4.9"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:att%26ck",
+      "kind": "glossary_definition",
+      "localEffectiveRevision": "sha256:832175c5ffe18576ffdbffb0ff63b809f8d91eadcb24c25e244accf652b2377d",
+      "catalogueRevision": "sha256:832175c5ffe18576ffdbffb0ff63b809f8d91eadcb24c25e244accf652b2377d",
+      "publicationStatusObserved": "available_conditional",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "4.1",
+        "4.3",
+        "4.4",
+        "4.5",
+        "4.8",
+        "4.9"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:ddos",
+      "kind": "glossary_definition",
+      "localEffectiveRevision": "sha256:006f9f658d0d48d33b37af0b303ad698383f3e241cc7be1f7b1d34f02263f478",
+      "catalogueRevision": "sha256:006f9f658d0d48d33b37af0b303ad698383f3e241cc7be1f7b1d34f02263f478",
+      "publicationStatusObserved": "available_conditional",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "3.2",
+        "3.4",
+        "4.4",
+        "4.5"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "glossary:nist",
+      "kind": "glossary_definition",
+      "localEffectiveRevision": "sha256:465d82bcfbda9daed74431e8ed2444088c8ab0d116d6c22f2e67a727bc39ceed",
+      "catalogueRevision": "sha256:465d82bcfbda9daed74431e8ed2444088c8ab0d116d6c22f2e67a727bc39ceed",
+      "publicationStatusObserved": "available_conditional",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "4.1",
+        "4.2",
+        "4.3",
+        "4.4",
+        "4.5",
+        "4.6",
+        "4.7",
+        "4.8",
+        "4.9",
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "prior_disposition_preserved"
+    },
+    {
+      "recordId": "keywords:threat-actors-surfaces",
+      "kind": "keyword_guide",
+      "localEffectiveRevision": "sha256:a6aed5dc43f7a3c1ae0a52ebdee32048e3e3fa558bb890a28c22b295b956ddf2",
+      "catalogueRevision": "sha256:a6aed5dc43f7a3c1ae0a52ebdee32048e3e3fa558bb890a28c22b295b956ddf2",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "lesson:threat-actors-surfaces",
+      "kind": "lesson",
+      "localEffectiveRevision": "sha256:da7bf6d1fe6ce25e9bafb89247e70582bfeb249cfa399351006ea58cdeeda771",
+      "catalogueRevision": "sha256:da7bf6d1fe6ce25e9bafb89247e70582bfeb249cfa399351006ea58cdeeda771",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "mcq:m013",
+      "kind": "mcq",
+      "localEffectiveRevision": "sha256:a35dbfae128cd0be765226582039cda1f83fca45761597003f5aebdeec0939ee",
+      "catalogueRevision": "sha256:365c2f2389ae9ffb2722662279cc1c2eb0d20701980efd696c3348938834da1d",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": "fab7e43a-b72f-84f0-a31c-9ba31d7d41cd",
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "mcq:m121",
+      "kind": "mcq",
+      "localEffectiveRevision": "sha256:8fd2d1a3da0357d50fd3a4727c2c4e6669a6ae6ed354690e8159f053fe57c4b7",
+      "catalogueRevision": "sha256:7329849003a920c42d442db0641d1c3f76c2064c1b17c803b4b47b332f9eeb9a",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": "7f796541-09bc-8225-a666-35331950cd69",
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "mcq:m122",
+      "kind": "mcq",
+      "localEffectiveRevision": "sha256:ea7e06a924f2909f17258c360a5eafeef01b378f542755785b82cf19170f12be",
+      "catalogueRevision": "sha256:4015e207050677fc866e233cf661c8b001c60e557de173271c0a166709852139",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": "ef3b5bec-6f4f-8e33-8e3f-37d7e29bf048",
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "mcq:m139",
+      "kind": "mcq",
+      "localEffectiveRevision": "sha256:f451ca4c02236504de25078290922fbb5c5330e3d413b8181a6833c9603ecf4e",
+      "catalogueRevision": "sha256:db8e59ff5e52b20cf20f3b9b4993a11e8352c9e8fac4df8652d6a325cf2399f7",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": "15cb2ca8-925f-8d6f-8c26-186b5ae0f0d8",
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "mcq:m252",
+      "kind": "mcq",
+      "localEffectiveRevision": "sha256:80236b273f5930b5f949624150f8abb1880e60dd6347c423f30e51ca9560cb65",
+      "catalogueRevision": "sha256:fc98326bdaf5762256e489dcc0151f13ca1235490fc3249524e20ba0ec93d845",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": "219f4a19-4159-8c2a-8c63-55ab517c8be7",
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "mcq:m439",
+      "kind": "mcq",
+      "localEffectiveRevision": "sha256:82891e95264650dc02019a5a17b0750976a64509f6a2fd6c3a7d0fd61c39a912",
+      "catalogueRevision": "sha256:eb29912aea00532864a4d90f6cf155aee2f2651deec4c69a36e30b4f73acc66c",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": "610ac554-2cb8-8ad7-ba14-94f8a405073f",
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "mcq:m617",
+      "kind": "mcq",
+      "localEffectiveRevision": "sha256:048ad2790fc9adba45d1b70da709a52749bdca922837ad14895fe3d49a76c1c6",
+      "catalogueRevision": "sha256:da05157a7584c3a96f03344c3d4434b1575794debd01a0cbef60527dc65763d8",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": "51e6fb6e-0362-8088-af3d-2c6c53b285ec",
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "new_pending_agent_disposition"
+    },
+    {
+      "recordId": "pbq:p006",
+      "kind": "pbq",
+      "localEffectiveRevision": "sha256:e732a99ad0a435fedcaa932f65d570c2db45c50bc66696345b7a6fc9bdf9d49e",
+      "catalogueRevision": "sha256:446aaff94539dd7908a7dae8c5aa563382ae9171839f7faceedf76d39f64d3ba",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "pbq:p069",
+      "kind": "pbq",
+      "localEffectiveRevision": "sha256:f7d150af55a7067dfe9cbeef717d2d4e3d674e4acc8fd68f65d2eb923ee86243",
+      "catalogueRevision": "sha256:208236cfe0faedc9e166a0c50e227b289254a85ec8612032a2131e5b0bb4dd76",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "practice:threat-actors-surfaces:practice-keyword-0",
+      "kind": "lesson_check",
+      "localEffectiveRevision": "sha256:42f430ed28047bc3207168aef70bdae90e559bdc74a127ca80713a6e7e55f2e9",
+      "catalogueRevision": "sha256:42f430ed28047bc3207168aef70bdae90e559bdc74a127ca80713a6e7e55f2e9",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "practice:threat-actors-surfaces:practice-keyword-1",
+      "kind": "lesson_check",
+      "localEffectiveRevision": "sha256:f01c0dd89ac30e7bfb83907375949fcf598d3632510c5b84d224246c89fe1d06",
+      "catalogueRevision": "sha256:f01c0dd89ac30e7bfb83907375949fcf598d3632510c5b84d224246c89fe1d06",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "practice:threat-actors-surfaces:practice-keyword-2",
+      "kind": "lesson_check",
+      "localEffectiveRevision": "sha256:2764e9d3fa9c29953dd44d0b353d07215e3df331cc363060382454e1630d80c2",
+      "catalogueRevision": "sha256:2764e9d3fa9c29953dd44d0b353d07215e3df331cc363060382454e1630d80c2",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "section:threat-actors-surfaces:0",
+      "kind": "lesson_section",
+      "localEffectiveRevision": "sha256:a4927a9276b935391ed3b9649931d580fd5222093f11820b8aa2f12e91271c2b",
+      "catalogueRevision": "sha256:a4927a9276b935391ed3b9649931d580fd5222093f11820b8aa2f12e91271c2b",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "section:threat-actors-surfaces:1",
+      "kind": "lesson_section",
+      "localEffectiveRevision": "sha256:8ea7f6b945d41773b079fa78caf1a51b23273a1d1e61a80d3591520c01e82e97",
+      "catalogueRevision": "sha256:8ea7f6b945d41773b079fa78caf1a51b23273a1d1e61a80d3591520c01e82e97",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "section:threat-actors-surfaces:2",
+      "kind": "lesson_section",
+      "localEffectiveRevision": "sha256:8d004f8ca49a7aaa2d375aeb00a298b523d5ce03f769d315ae30a18cd3cbcad7",
+      "catalogueRevision": "sha256:8d004f8ca49a7aaa2d375aeb00a298b523d5ce03f769d315ae30a18cd3cbcad7",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "section:threat-actors-surfaces:3",
+      "kind": "lesson_section",
+      "localEffectiveRevision": "sha256:0d87178b917bb284b77148e694fc3eedecaaec9fc8dc975b2eb215761d119ccf",
+      "catalogueRevision": "sha256:0d87178b917bb284b77148e694fc3eedecaaec9fc8dc975b2eb215761d119ccf",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    },
+    {
+      "recordId": "traps:threat-actors-surfaces",
+      "kind": "lesson_traps",
+      "localEffectiveRevision": "sha256:09d78311e8035617fd33b331f268e692499c78a72126c86e4fe866ce7d3deadc",
+      "catalogueRevision": "sha256:09d78311e8035617fd33b331f268e692499c78a72126c86e4fe866ce7d3deadc",
+      "publicationStatusObserved": "active",
+      "trustedRevisionObserved": null,
+      "objectiveCodesObserved": [
+        "2.1",
+        "2.2"
+      ],
+      "preciseObjective21AssessmentApproved": false,
+      "status": "remaining_not_semantically_reviewed_here"
+    }
+  ],
+  "priorDispositionReferences": [
+    {
+      "recordId": "glossary:nist",
+      "sourceRevision": "sha256:465d82bcfbda9daed74431e8ed2444088c8ab0d116d6c22f2e67a727bc39ceed",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json"
+    }
+  ],
+  "remainingObjective21RecordIds": [
+    "check:threat-actors-surfaces",
+    "explanation:pbq:p006",
+    "explanation:pbq:p069",
+    "glossary:apt",
+    "glossary:arp",
+    "glossary:att%26ck",
+    "glossary:ddos",
+    "keywords:threat-actors-surfaces",
+    "lesson:threat-actors-surfaces",
+    "pbq:p006",
+    "pbq:p069",
+    "practice:threat-actors-surfaces:practice-keyword-0",
+    "practice:threat-actors-surfaces:practice-keyword-1",
+    "practice:threat-actors-surfaces:practice-keyword-2",
+    "section:threat-actors-surfaces:0",
+    "section:threat-actors-surfaces:1",
+    "section:threat-actors-surfaces:2",
+    "section:threat-actors-surfaces:3",
+    "traps:threat-actors-surfaces"
+  ],
+  "selectedQuestionRecordIds": [
+    "mcq:m013",
+    "mcq:m121",
+    "mcq:m122",
+    "mcq:m139",
+    "mcq:m252",
+    "mcq:m439",
+    "mcq:m617"
+  ],
+  "selectedFeedbackRecordIds": [
+    "explanation:mcq:m013",
+    "explanation:mcq:m121",
+    "explanation:mcq:m122",
+    "explanation:mcq:m139",
+    "explanation:mcq:m252",
+    "explanation:mcq:m439",
+    "explanation:mcq:m617"
+  ],
+  "questionProposals": [
+    {
+      "recordId": "mcq:m013",
+      "questionId": "m013",
+      "kind": "mcq",
+      "sourceRevision": "sha256:a35dbfae128cd0be765226582039cda1f83fca45761597003f5aebdeec0939ee",
+      "publishedRecordSignature": "sha256:365c2f2389ae9ffb2722662279cc1c2eb0d20701980efd696c3348938834da1d",
+      "trustedRevisionObserved": "fab7e43a-b72f-84f0-a31c-9ba31d7d41cd",
+      "trustedRevisionIsNotApprovedMapping": true,
+      "authoredRevision": "sha256:7e23e11ad8bd25514e03f01e994d6655009dd44e67b0df5c7d47a7425c11e65d",
+      "preEditorialSnapshotMergedRevision": "sha256:e75bc7115a2ea11cd40a80b76559f333bee21f94961636a7034d6354df8c22a6",
+      "authoredSourceObserved": "local_authored_literal",
+      "publicationOrderingObserved": {
+        "baseOrder": 13,
+        "adminOrder": 61
+      },
+      "capturedRevisionBindings": [
+        {
+          "snapshotRevision": "sha256:e75bc7115a2ea11cd40a80b76559f333bee21f94961636a7034d6354df8c22a6",
+          "capturedContentSha256": "52df5f9c9e842c6b9c8d757d387928dfe7160bff1577564464a5568eb86e2f85",
+          "updatedAt": "2026-08-04T12:51:00.484+00:00",
+          "reconciliationMatches": true
+        }
+      ],
+      "captureScope": "dated_bound_fingerprints_not_fresh_live_read",
+      "publicationStatusObserved": "active",
+      "precisionObserved": "direct",
+      "formatObserved": "MCQ",
+      "objectiveObserved": "2.1",
+      "domainObserved": "2",
+      "topicObserved": "Threat Actors",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "retain_effective_source_label_without_calibration",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "contextCanonicalRoleProposals": [],
+      "withheldCanonicalCandidates": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "assessedUnderstanding": "Recognize the supplied high-resource, zero-day and prolonged targeted-access profile as the offered APT category, without identifying an actual sponsor.",
+      "withheldPreciseMeaning": "Recognize the supplied high-resource, zero-day and prolonged targeted-access profile as the offered APT category, without identifying an actual sponsor.",
+      "contentQualification": "Nation-state funding and advanced exploits are stated premises, not inferred telemetry or universal APT requirements. Eighteen months is no fixed APT threshold; a persistent actor may use common tools. APT is not synonymous with nation-state or necessarily external: trusted access, sponsors and motives can overlap. Main feedback overemphasizes long stealth as the key clue unless supplied capability/resources remain explicit. No identity, exploit, defender adaptation or investigative skill was verified.",
+      "actorAttributes": {
+        "resources": "nation_state_funding_supplied",
+        "capability": "zero_days_supplied",
+        "motive": "unstated",
+        "relationship": "not_explicitly_established",
+        "persistence": "18_months_supplied"
+      },
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.1"
+        ],
+        "contextCodes": [],
+        "status": "agent_inferred_narrow_actor_attribute_or_motive_recognition_pending_owner",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "skillRoleProposal": "bounded_category_or_pattern_recognition_not_executed_investigation",
+      "familyLabelProposal": "persistent-targeted-APT-profile-recognition",
+      "familyStatus": "agent_comparison_pending_owner_not_approved_independence",
+      "decisionRevision": "sha256:f9bd527bca98c64df6b087fc3d2bc62317c81507868cf78a4d6b0ac7579594e2",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "effective_question_selected_from_existing_pool_and_set_started",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "threat-actors-surfaces",
+          "malware-indicators-attacks"
+        ],
+        "approvedRemediation": false
+      },
+      "optionShuffleProbe": {
+        "type": "isolated_fixed_random_permutation_no_learner_session",
+        "randomValue": 0,
+        "derivedRevision": "sha256:52d15f7dd8db6f4a6d5a04dbfb586bdb2a79ff4aefcbd99115151acad04909d2",
+        "sameAuthoredDecision": true,
+        "newFamilyCredit": 0,
+        "feedbackRemapChecked": true
+      }
+    },
+    {
+      "recordId": "mcq:m121",
+      "questionId": "m121",
+      "kind": "mcq",
+      "sourceRevision": "sha256:8fd2d1a3da0357d50fd3a4727c2c4e6669a6ae6ed354690e8159f053fe57c4b7",
+      "publishedRecordSignature": "sha256:7329849003a920c42d442db0641d1c3f76c2064c1b17c803b4b47b332f9eeb9a",
+      "trustedRevisionObserved": "7f796541-09bc-8225-a666-35331950cd69",
+      "trustedRevisionIsNotApprovedMapping": true,
+      "authoredRevision": "sha256:aa25a72b9989e6bd948e6e7dcd1d31eaecd7847d9eed09be703723162b25bbc7",
+      "preEditorialSnapshotMergedRevision": "sha256:aa25a72b9989e6bd948e6e7dcd1d31eaecd7847d9eed09be703723162b25bbc7",
+      "authoredSourceObserved": "local_authored_literal",
+      "publicationOrderingObserved": {
+        "baseOrder": 121,
+        "adminOrder": null
+      },
+      "capturedRevisionBindings": [],
+      "captureScope": "dated_bound_fingerprints_not_fresh_live_read",
+      "publicationStatusObserved": "active",
+      "precisionObserved": "direct",
+      "formatObserved": "MCQ",
+      "objectiveObserved": "2.1",
+      "domainObserved": "2",
+      "topicObserved": "Threat Actors & Motivations",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "retain_effective_source_label_without_calibration",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "contextCanonicalRoleProposals": [],
+      "withheldCanonicalCandidates": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "assessedUnderstanding": "Recognize explicitly limited expertise and reliance on existing tools as the unskilled-attacker category; curiosity/notoriety are supplied example motives.",
+      "withheldPreciseMeaning": "Recognize explicitly limited expertise and reliance on existing tools as the unskilled-attacker category; curiosity/notoriety are supplied example motives.",
+      "contentQualification": "Public tools are used by skilled attackers, defenders and testers as well as inexperienced attackers. The item explicitly supplies low skill; tooling alone cannot infer skill, sponsorship or motives. Curiosity/notoriety are not required or exclusive; nation-state is sponsorship, hacktivism motivation, and insider a trusted relationship. No capability test, exploit operation or attribution is performed.",
+      "actorAttributes": {
+        "resources": "unstated",
+        "capability": "limited_skill_supplied",
+        "motive": "curiosity_or_notoriety_supplied",
+        "relationship": "unstated",
+        "persistence": "unstated"
+      },
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.1"
+        ],
+        "contextCodes": [],
+        "status": "agent_inferred_narrow_actor_attribute_or_motive_recognition_pending_owner",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "skillRoleProposal": "bounded_category_or_pattern_recognition_not_executed_investigation",
+      "familyLabelProposal": "explicit-low-expertise-tool-dependence-recognition",
+      "familyStatus": "agent_comparison_pending_owner_not_approved_independence",
+      "decisionRevision": "sha256:44d397431f8f29d18e3966338ad58ccfa9de9cc322d7418fa4d100abf9c02a9c",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "effective_question_selected_from_existing_pool_and_set_started",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "threat-actors-surfaces",
+          "malware-indicators-attacks"
+        ],
+        "approvedRemediation": false
+      },
+      "optionShuffleProbe": {
+        "type": "isolated_fixed_random_permutation_no_learner_session",
+        "randomValue": 0,
+        "derivedRevision": "sha256:100c370561ba2ea405d0f9245745a95cefdf91cdc433f152019d9a5142e8cb1d",
+        "sameAuthoredDecision": true,
+        "newFamilyCredit": 0,
+        "feedbackRemapChecked": true
+      }
+    },
+    {
+      "recordId": "mcq:m122",
+      "questionId": "m122",
+      "kind": "mcq",
+      "sourceRevision": "sha256:ea7e06a924f2909f17258c360a5eafeef01b378f542755785b82cf19170f12be",
+      "publishedRecordSignature": "sha256:4015e207050677fc866e233cf661c8b001c60e557de173271c0a166709852139",
+      "trustedRevisionObserved": "ef3b5bec-6f4f-8e33-8e3f-37d7e29bf048",
+      "trustedRevisionIsNotApprovedMapping": true,
+      "authoredRevision": "sha256:ce841945fa6f1c77e713bac165fd6b06a79490bad56e5594df3d9d191987aee8",
+      "preEditorialSnapshotMergedRevision": "sha256:ce841945fa6f1c77e713bac165fd6b06a79490bad56e5594df3d9d191987aee8",
+      "authoredSourceObserved": "local_authored_literal",
+      "publicationOrderingObserved": {
+        "baseOrder": 122,
+        "adminOrder": null
+      },
+      "capturedRevisionBindings": [],
+      "captureScope": "dated_bound_fingerprints_not_fresh_live_read",
+      "publicationStatusObserved": "active",
+      "precisionObserved": "direct",
+      "formatObserved": "MCQ",
+      "objectiveObserved": "2.1",
+      "domainObserved": "2",
+      "topicObserved": "Threat Actors & Motivations",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "retain_effective_source_label_without_calibration",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "contextCanonicalRoleProposals": [],
+      "withheldCanonicalCandidates": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "assessedUnderstanding": "Recognize sustained targeted intellectual-property collection as the offered APT-like campaign pattern; advanced resources/capability and actor attribution are not established.",
+      "withheldPreciseMeaning": "Recognize sustained targeted intellectual-property collection as the offered APT-like campaign pattern; advanced resources/capability and actor attribution are not established.",
+      "contentQualification": "Long dwell and targeted theft fit the offered option but are insufficient to establish NIST advanced expertise/significant resources, adaptive persistence or a nation-state sponsor. Persistent ordinary crime or insider collection can overlap; retain pattern-recognition context only with precise linking held. DDoS is an availability attack rather than an actor identity, and the item does not assess DDoS implementation. A14-month surface variant supplies no new family or timed recovery evidence.",
+      "actorAttributes": {
+        "resources": "unstated",
+        "capability": "not_established_by_dwell_time",
+        "motive": "targeted_IP_collection_supplied",
+        "relationship": "unstated",
+        "persistence": "14_months_supplied"
+      },
+      "objectiveScopeProposal": {
+        "assessedCodes": [],
+        "contextCodes": [
+          "2.1"
+        ],
+        "status": "campaign_pattern_context_only_precise_actor_link_withheld",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "skillRoleProposal": "bounded_category_or_pattern_recognition_not_executed_investigation",
+      "familyLabelProposal": "persistent-targeted-APT-profile-recognition",
+      "familyStatus": "agent_comparison_pending_owner_not_approved_independence",
+      "decisionRevision": "sha256:ce1a4ba0402be9f0e00a0b87310f82730b240abffcb15d21c0001e5dd528702a",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "effective_question_selected_from_existing_pool_and_set_started",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "threat-actors-surfaces",
+          "malware-indicators-attacks"
+        ],
+        "approvedRemediation": false
+      },
+      "optionShuffleProbe": {
+        "type": "isolated_fixed_random_permutation_no_learner_session",
+        "randomValue": 0,
+        "derivedRevision": "sha256:cf487aa2a92bc7d9aa60fffdc37f03d9ec9e64f07e162872f1366c10ddb53b27",
+        "sameAuthoredDecision": true,
+        "newFamilyCredit": 0,
+        "feedbackRemapChecked": true
+      }
+    },
+    {
+      "recordId": "mcq:m139",
+      "questionId": "m139",
+      "kind": "mcq",
+      "sourceRevision": "sha256:f451ca4c02236504de25078290922fbb5c5330e3d413b8181a6833c9603ecf4e",
+      "publishedRecordSignature": "sha256:db8e59ff5e52b20cf20f3b9b4993a11e8352c9e8fac4df8652d6a325cf2399f7",
+      "trustedRevisionObserved": "15cb2ca8-925f-8d6f-8c26-186b5ae0f0d8",
+      "trustedRevisionIsNotApprovedMapping": true,
+      "authoredRevision": "sha256:bbf1d08aa68398e77bf1da8c64b6df31bb2f305a8dd205fd24af6806f1e3aa7a",
+      "preEditorialSnapshotMergedRevision": "sha256:bbf1d08aa68398e77bf1da8c64b6df31bb2f305a8dd205fd24af6806f1e3aa7a",
+      "authoredSourceObserved": "local_authored_literal",
+      "publicationOrderingObserved": {
+        "baseOrder": 139,
+        "adminOrder": null
+      },
+      "capturedRevisionBindings": [],
+      "captureScope": "dated_bound_fingerprints_not_fresh_live_read",
+      "publicationStatusObserved": "active",
+      "precisionObserved": "direct",
+      "formatObserved": "MCQ",
+      "objectiveObserved": "2.1",
+      "domainObserved": "2",
+      "topicObserved": "Threat Actors & Motivations",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "retain_effective_source_label_without_calibration",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "contextCanonicalRoleProposals": [],
+      "withheldCanonicalCandidates": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "assessedUnderstanding": "Recognize the stated primarily profit-driven ransomware/payment-card criminal pattern as organised cybercrime, without making the technique or motive exclusive.",
+      "withheldPreciseMeaning": "Recognize the stated primarily profit-driven ransomware/payment-card criminal pattern as organised cybercrime, without making the technique or motive exclusive.",
+      "contentQualification": "The described primary financial motive supports the typical organised-crime vocabulary choice, not exclusive attribution. States and insiders can seek money; ransomware may serve other goals and organised crime need not deploy it. Insider describes entrusted access and can overlap a financial motive. No malware mechanism, payment-card exploit, victim investigation or uniquely identified group is assessed.",
+      "actorAttributes": {
+        "resources": "unstated",
+        "capability": "not_assessed",
+        "motive": "primary_financial_gain_supplied",
+        "relationship": "insider_relationship_not_established",
+        "persistence": "unstated"
+      },
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.1"
+        ],
+        "contextCodes": [],
+        "status": "agent_inferred_narrow_actor_attribute_or_motive_recognition_pending_owner",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "skillRoleProposal": "bounded_category_or_pattern_recognition_not_executed_investigation",
+      "familyLabelProposal": "organised-profit-crime-pattern-recognition",
+      "familyStatus": "agent_comparison_pending_owner_not_approved_independence",
+      "decisionRevision": "sha256:2579eb5e74eede63df18780c1afddf489d5c33ff9ac94d31a96083eb031f500c",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "effective_question_selected_from_existing_pool_and_set_started",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "threat-actors-surfaces",
+          "malware-indicators-attacks"
+        ],
+        "approvedRemediation": false
+      },
+      "optionShuffleProbe": {
+        "type": "isolated_fixed_random_permutation_no_learner_session",
+        "randomValue": 0,
+        "derivedRevision": "sha256:0c2ae7673be4a7483957ba2497359c1dcaf2b11bcf4fc4e3e1070d05fe044acf",
+        "sameAuthoredDecision": true,
+        "newFamilyCredit": 0,
+        "feedbackRemapChecked": true
+      }
+    },
+    {
+      "recordId": "mcq:m252",
+      "questionId": "m252",
+      "kind": "mcq",
+      "sourceRevision": "sha256:80236b273f5930b5f949624150f8abb1880e60dd6347c423f30e51ca9560cb65",
+      "publishedRecordSignature": "sha256:fc98326bdaf5762256e489dcc0151f13ca1235490fc3249524e20ba0ec93d845",
+      "trustedRevisionObserved": "219f4a19-4159-8c2a-8c63-55ab517c8be7",
+      "trustedRevisionIsNotApprovedMapping": true,
+      "authoredRevision": "sha256:7a8c553a5f89e13c87a484fde768b4bb4d5301c61c6f2a279d2c4c030c52839e",
+      "preEditorialSnapshotMergedRevision": "sha256:7a8c553a5f89e13c87a484fde768b4bb4d5301c61c6f2a279d2c4c030c52839e",
+      "authoredSourceObserved": "local_authored_literal",
+      "publicationOrderingObserved": {
+        "baseOrder": 224,
+        "adminOrder": null
+      },
+      "capturedRevisionBindings": [],
+      "captureScope": "dated_bound_fingerprints_not_fresh_live_read",
+      "publicationStatusObserved": "active",
+      "precisionObserved": "direct",
+      "formatObserved": "MCQ",
+      "objectiveObserved": "2.1",
+      "domainObserved": "2",
+      "topicObserved": "Common Threats",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "retain_effective_source_label_without_calibration",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "contextCanonicalRoleProposals": [],
+      "withheldCanonicalCandidates": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "assessedUnderstanding": "Recognize sustained covert R&D collection as the offered persistent-threat pattern; patience and duration do not establish sophistication, sponsorship or actor identity.",
+      "withheldPreciseMeaning": "Recognize sustained covert R&D collection as the offered persistent-threat pattern; patience and duration do not establish sophistication, sponsorship or actor identity.",
+      "contentQualification": "Eleven months and patient covert theft do not establish advanced capability/resources, sponsorship, external origin or a unique group. The APT option is contextual best-fit recognition with precise actor linking held. Quiet campaigns may seek money and an insider can act intentionally over a long period; the accidental-disclosure distractor is explicitly accidental. Do not restore superseded claims that crime is always brief/noisy or insiders always act quickly.",
+      "actorAttributes": {
+        "resources": "unstated",
+        "capability": "not_established_by_patience",
+        "motive": "targeted_RD_collection_supplied",
+        "relationship": "unstated",
+        "persistence": "11_months_supplied"
+      },
+      "objectiveScopeProposal": {
+        "assessedCodes": [],
+        "contextCodes": [
+          "2.1"
+        ],
+        "status": "campaign_pattern_context_only_precise_actor_link_withheld",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "skillRoleProposal": "bounded_category_or_pattern_recognition_not_executed_investigation",
+      "familyLabelProposal": "persistent-targeted-APT-profile-recognition",
+      "familyStatus": "agent_comparison_pending_owner_not_approved_independence",
+      "decisionRevision": "sha256:2f9edea46748c9e8c1c0095414ef38a8c9f1ef4e956c1ae5e009c607db07f3c0",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "effective_question_selected_from_existing_pool_and_set_started",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "threat-actors-surfaces",
+          "malware-indicators-attacks"
+        ],
+        "approvedRemediation": false
+      },
+      "optionShuffleProbe": {
+        "type": "isolated_fixed_random_permutation_no_learner_session",
+        "randomValue": 0,
+        "derivedRevision": "sha256:fcdafe8593173ce5d54ea18581e94fd236e07e8f09bc0d87c33bdd3a946dba57",
+        "sameAuthoredDecision": true,
+        "newFamilyCredit": 0,
+        "feedbackRemapChecked": true
+      }
+    },
+    {
+      "recordId": "mcq:m439",
+      "questionId": "m439",
+      "kind": "mcq",
+      "sourceRevision": "sha256:82891e95264650dc02019a5a17b0750976a64509f6a2fd6c3a7d0fd61c39a912",
+      "publishedRecordSignature": "sha256:eb29912aea00532864a4d90f6cf155aee2f2651deec4c69a36e30b4f73acc66c",
+      "trustedRevisionObserved": "610ac554-2cb8-8ad7-ba14-94f8a405073f",
+      "trustedRevisionIsNotApprovedMapping": true,
+      "authoredRevision": "sha256:0e73c828979fd14a87b8961d062ab86a4af83c1fba695004189de9441479ddb7",
+      "preEditorialSnapshotMergedRevision": "sha256:0e73c828979fd14a87b8961d062ab86a4af83c1fba695004189de9441479ddb7",
+      "authoredSourceObserved": "local_authored_literal",
+      "publicationOrderingObserved": {
+        "baseOrder": 303,
+        "adminOrder": null
+      },
+      "capturedRevisionBindings": [],
+      "captureScope": "dated_bound_fingerprints_not_fresh_live_read",
+      "publicationStatusObserved": "active",
+      "precisionObserved": "direct",
+      "formatObserved": "MCQ",
+      "objectiveObserved": "2.1",
+      "domainObserved": "2",
+      "topicObserved": "Insider Threats",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "retain_effective_source_label_without_calibration",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "contextCanonicalRoleProposals": [],
+      "withheldCanonicalCandidates": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "assessedUnderstanding": "Recognize confirmed deliberate misuse of legitimate employee database access for unauthorised resale as a malicious-insider context.",
+      "withheldPreciseMeaning": "Recognize confirmed deliberate misuse of legitimate employee database access for unauthorised resale as a malicious-insider context.",
+      "contentQualification": "Intent and the employee actor are explicitly confirmed by investigation in the effective item. Export timing alone cannot distinguish legitimate business, accident, malicious insider or stolen credentials. An insider can be malicious or unwitting and a malicious insider can act for several motives or assist a state/criminal campaign; a stolen employee account alone does not establish employee intent. Resale is supplied, not derived evidence; no investigative attribution or preventive control is executed.",
+      "actorAttributes": {
+        "resources": "unstated",
+        "capability": "not_assessed",
+        "motive": "unauthorised_resale_supplied",
+        "relationship": "employee_legitimate_access_confirmed",
+        "persistence": "not_needed_for_decision"
+      },
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.1"
+        ],
+        "contextCodes": [],
+        "status": "agent_inferred_narrow_actor_attribute_or_motive_recognition_pending_owner",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "skillRoleProposal": "bounded_category_or_pattern_recognition_not_executed_investigation",
+      "familyLabelProposal": "confirmed-intentional-entrusted-access-misuse-recognition",
+      "familyStatus": "agent_comparison_pending_owner_not_approved_independence",
+      "decisionRevision": "sha256:0d65394045b4a105d92327f88a041efbe2d28b7c9aee00da6b1021106ff46116",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "effective_question_selected_from_existing_pool_and_set_started",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "threat-actors-surfaces",
+          "malware-indicators-attacks"
+        ],
+        "approvedRemediation": false
+      },
+      "optionShuffleProbe": {
+        "type": "isolated_fixed_random_permutation_no_learner_session",
+        "randomValue": 0,
+        "derivedRevision": "sha256:8a1fa4ab0a40237cc117ed479b457a935ef7fa8b2c9158f6331a1d45365f7c71",
+        "sameAuthoredDecision": true,
+        "newFamilyCredit": 0,
+        "feedbackRemapChecked": true
+      }
+    },
+    {
+      "recordId": "mcq:m617",
+      "questionId": "m617",
+      "kind": "mcq",
+      "sourceRevision": "sha256:048ad2790fc9adba45d1b70da709a52749bdca922837ad14895fe3d49a76c1c6",
+      "publishedRecordSignature": "sha256:da05157a7584c3a96f03344c3d4434b1575794debd01a0cbef60527dc65763d8",
+      "trustedRevisionObserved": "51e6fb6e-0362-8088-af3d-2c6c53b285ec",
+      "trustedRevisionIsNotApprovedMapping": true,
+      "authoredRevision": "sha256:1e204630ad0d7f2dd0c61738f61b01dc573d6eb0b310b35d83285f462c29b30f",
+      "preEditorialSnapshotMergedRevision": "sha256:1e204630ad0d7f2dd0c61738f61b01dc573d6eb0b310b35d83285f462c29b30f",
+      "authoredSourceObserved": "local_authored_literal",
+      "publicationOrderingObserved": {
+        "baseOrder": 326,
+        "adminOrder": null
+      },
+      "capturedRevisionBindings": [],
+      "captureScope": "dated_bound_fingerprints_not_fresh_live_read",
+      "publicationStatusObserved": "active",
+      "precisionObserved": "direct",
+      "formatObserved": "MCQ",
+      "objectiveObserved": "2.1",
+      "domainObserved": "2",
+      "topicObserved": "Threat Actors",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "retain_effective_source_label_without_calibration",
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "assessedCanonicalRoleProposals": [],
+      "contextCanonicalRoleProposals": [],
+      "withheldCanonicalCandidates": [],
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "assessedUnderstanding": "Recognize the stated national strategic espionage goal as nation-state category vocabulary, without attributing a real campaign from funding or persistence alone.",
+      "withheldPreciseMeaning": "Recognize the stated national strategic espionage goal as nation-state category vocabulary, without attributing a real campaign from funding or persistence alone.",
+      "contentQualification": "National strategic leverage is the supplied distinguishing goal. High funding, persistence or infrastructure targeting alone cannot establish state sponsorship, and state actors can also seek financial gains. Nation-state, APT campaign behavior and sophistication are not one identity. Shadow IT concerns unapproved technology/oversight, not a national-espionage actor inferred here. No geolocation, intelligence assessment, infrastructure compromise or specific campaign attribution is performed.",
+      "actorAttributes": {
+        "resources": "high_funding_supplied",
+        "capability": "not_assessed",
+        "motive": "national_strategic_espionage_supplied",
+        "relationship": "state_goal_stated_no_real_attribution",
+        "persistence": "long_term_campaign_supplied"
+      },
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.1"
+        ],
+        "contextCodes": [],
+        "status": "agent_inferred_narrow_actor_attribute_or_motive_recognition_pending_owner",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "skillRoleProposal": "bounded_category_or_pattern_recognition_not_executed_investigation",
+      "familyLabelProposal": "stated-national-strategic-goal-recognition",
+      "familyStatus": "agent_comparison_pending_owner_not_approved_independence",
+      "decisionRevision": "sha256:537e59ce1d793fb1478c07623b31e68f84c200e4109010ac14dce0fa54f17685",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "effective_question_selected_from_existing_pool_and_set_started",
+      "legacyLessonProbe": {
+        "type": "local_single_miss_fixture_not_learner_session",
+        "limit": 2,
+        "lessonIds": [
+          "threat-actors-surfaces",
+          "malware-indicators-attacks"
+        ],
+        "approvedRemediation": false
+      },
+      "optionShuffleProbe": {
+        "type": "isolated_fixed_random_permutation_no_learner_session",
+        "randomValue": 0,
+        "derivedRevision": "sha256:51c4ddff4038d34cf8616b9ab4141182ddb10052cfa21f358e2cdb42b1fa46b9",
+        "sameAuthoredDecision": true,
+        "newFamilyCredit": 0,
+        "feedbackRemapChecked": true
+      }
+    }
+  ],
+  "explanationProposals": [
+    {
+      "recordId": "explanation:mcq:m013",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m013",
+      "sourceRevision": "sha256:f25164d9e01b08be720db96c98ff466a69ef5869ec2fc96832f6fbd4a83911d6",
+      "parentLocalRevision": "sha256:a35dbfae128cd0be765226582039cda1f83fca45761597003f5aebdeec0939ee",
+      "parentPublishedRevision": "sha256:365c2f2389ae9ffb2722662279cc1c2eb0d20701980efd696c3348938834da1d",
+      "mainCorrectionRevision": "sha256:0606e29819fdcba0892c4e6e26be43861614420429a4810b7ed7eb794989e113",
+      "wrongFeedbackRevision": "sha256:9bb90b7b437777d81c3df9efcf46be7634b2611986aa35f5bd9a37d74f0affed",
+      "roleProposal": "conditional_answer_linked_feedback_teaching",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_main_feedback_and_selected_wrong_option_details",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.1"
+        ],
+        "contextCodes": [],
+        "status": "agent_inferred_narrow_actor_attribute_or_motive_recognition_pending_owner",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "withheldCanonicalCandidates": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyRelation": "same_parent_feedback_not_independent_family",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.threat-actor",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "authoredWrongCorrections": 3,
+      "renderedWrongFeedbackUsesAuthoredText": true,
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:e5c4ca600ab88b468ffaa11165c4df768a9d7d430c40fa64352437c3b4ade34e",
+          "correctionRevision": "sha256:b4c080044077a3191ea46b08d6300aa7e0cd40b35135d6ce9699c26d5b746bab",
+          "teachingRationale": "Limited skill/tool reliance does not best fit the explicitly supplied advanced profile; common tools alone would not exclude an APT.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:98bf1c5e163475e424ad7a635c6fc73477eb5d76135ef445607d4e02129ac689",
+          "correctionRevision": "sha256:3a1e59fe3609abefac378d07c54e31a7d41b50c7f767112346d9ba77fca6dd11",
+          "teachingRationale": "Political/publicity motive is not established by stealth; hacktivists need not always be noisy or brief.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:f2ea3fa5895febe56b8c75b83769f898ea0747da2fe0ef7312c83585b2108682",
+          "correctionRevision": "sha256:70c55a5ea3805c76e08556bc8323002c55a03f33846581737a7bbd6dfb7363c8",
+          "teachingRationale": "Insider access is not established, but external status is also not explicit; insider cooperation cannot be ruled out universally.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "contentQualification": "Nation-state funding and advanced exploits are stated premises, not inferred telemetry or universal APT requirements. Eighteen months is no fixed APT threshold; a persistent actor may use common tools. APT is not synonymous with nation-state or necessarily external: trusted access, sponsors and motives can overlap. Main feedback overemphasizes long stealth as the key clue unless supplied capability/resources remain explicit. No identity, exploit, defender adaptation or investigative skill was verified.",
+      "usefulnessAfterMissProposal": {
+        "status": "source_reasoned_correction_not_validated_recovery",
+        "rationale": "Contrast the supplied access, motive and capability dimensions for this parent decision while retaining its qualification holds; these corrections do not demonstrate real attribution, transfer, independent success or recovery.",
+        "approvedRemediation": false,
+        "learnerObservedRecovery": false,
+        "weight": 0
+      }
+    },
+    {
+      "recordId": "explanation:mcq:m121",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m121",
+      "sourceRevision": "sha256:5bcca2eedf2b5f96e57b1a4723e8a626d8260f2679cb7018ad4a4482d36a2d12",
+      "parentLocalRevision": "sha256:8fd2d1a3da0357d50fd3a4727c2c4e6669a6ae6ed354690e8159f053fe57c4b7",
+      "parentPublishedRevision": "sha256:7329849003a920c42d442db0641d1c3f76c2064c1b17c803b4b47b332f9eeb9a",
+      "mainCorrectionRevision": "sha256:4105fc2cb72f7c489c00381cd7ea1d410f85a2a763e38b2b6428357c8385551f",
+      "wrongFeedbackRevision": "sha256:1d6cbbc5ffae15e8eec74a8c3577c4eba0e053d75da2bb87d739b186f5274a68",
+      "roleProposal": "conditional_answer_linked_feedback_teaching",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_main_feedback_and_selected_wrong_option_details",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.1"
+        ],
+        "contextCodes": [],
+        "status": "agent_inferred_narrow_actor_attribute_or_motive_recognition_pending_owner",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "withheldCanonicalCandidates": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyRelation": "same_parent_feedback_not_independent_family",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.threat-actor",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "authoredWrongCorrections": 3,
+      "renderedWrongFeedbackUsesAuthoredText": true,
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:160671fada5ac7b1de8f0cb1108a23b1fde06a55f8d634798e7daf0dec1a717a",
+          "correctionRevision": "sha256:219233222559862681515aa5001d06b050de03f1b07cab6494d6f951031b3fce",
+          "teachingRationale": "Sponsorship/strategic goal is a different dimension from the expressly limited capability.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:98bf1c5e163475e424ad7a635c6fc73477eb5d76135ef445607d4e02129ac689",
+          "correctionRevision": "sha256:5505a40e92e4f8568c2ef4ea8506bae05e53b67c4db9f3dee27ec460eadd7bf1",
+          "teachingRationale": "Ideological motivation is not the stated distinguishing low-skill attribute.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:f2ea3fa5895febe56b8c75b83769f898ea0747da2fe0ef7312c83585b2108682",
+          "correctionRevision": "sha256:e08eb3118473f7e19254cb20eb4594ab73da17053e1475c698f4712e95bcf45a",
+          "teachingRationale": "No trusted-access relationship is supplied.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "contentQualification": "Public tools are used by skilled attackers, defenders and testers as well as inexperienced attackers. The item explicitly supplies low skill; tooling alone cannot infer skill, sponsorship or motives. Curiosity/notoriety are not required or exclusive; nation-state is sponsorship, hacktivism motivation, and insider a trusted relationship. No capability test, exploit operation or attribution is performed.",
+      "usefulnessAfterMissProposal": {
+        "status": "source_reasoned_correction_not_validated_recovery",
+        "rationale": "Contrast the supplied access, motive and capability dimensions for this parent decision while retaining its qualification holds; these corrections do not demonstrate real attribution, transfer, independent success or recovery.",
+        "approvedRemediation": false,
+        "learnerObservedRecovery": false,
+        "weight": 0
+      }
+    },
+    {
+      "recordId": "explanation:mcq:m122",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m122",
+      "sourceRevision": "sha256:af9695b73661ebd5eff18bd4df6743705dd4af40f6f0223a80603613e034dd45",
+      "parentLocalRevision": "sha256:ea7e06a924f2909f17258c360a5eafeef01b378f542755785b82cf19170f12be",
+      "parentPublishedRevision": "sha256:4015e207050677fc866e233cf661c8b001c60e557de173271c0a166709852139",
+      "mainCorrectionRevision": "sha256:637f739de66ca287d57a88db56c060e90a0bf968f815578d9147b9d4a6ae5605",
+      "wrongFeedbackRevision": "sha256:cfbcdd51a41922ae8712f0c65f0870dd1bcbe5fbd3d1e98e8cacc0168694a923",
+      "roleProposal": "conditional_answer_linked_feedback_teaching",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_main_feedback_and_selected_wrong_option_details",
+      "objectiveScopeProposal": {
+        "assessedCodes": [],
+        "contextCodes": [
+          "2.1"
+        ],
+        "status": "campaign_pattern_context_only_precise_actor_link_withheld",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "withheldCanonicalCandidates": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyRelation": "same_parent_feedback_not_independent_family",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.threat-actor",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "authoredWrongCorrections": 3,
+      "renderedWrongFeedbackUsesAuthoredText": true,
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:a35781c9a45a50dd9e5d27e551dff8374ce2522af5e8be1460fbee6168b62f4c",
+          "correctionRevision": "sha256:a22e5cca23e83ab71297b8297b5909e99ad9b52229c903d7e54d0678221d7995",
+          "teachingRationale": "Opportunistic crime is a weaker offered pattern, but persistent crime is not excluded in the real world.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:f3e084c693a85bf9388bd768aa19782156d5430ffd93adc91067898282971d13",
+          "correctionRevision": "sha256:77a0fc5e2e231bd734b242776fe8fbd87a49cff19b0fc704551213567079e7a5",
+          "teachingRationale": "Availability exhaustion differs from sustained collection and does not identify an actor.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:2fa28a25a6b2e1ef52e778b3a7fce603319449ab690b743b8c5436506aadfa5e",
+          "correctionRevision": "sha256:9f67f09789435c6af96691ba7dfe0171fcb96cf31ae91f6590f559e8348162f0",
+          "teachingRationale": "Limited-skill option is weaker than the described targeted campaign, but duration alone proves no skill.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "contentQualification": "Long dwell and targeted theft fit the offered option but are insufficient to establish NIST advanced expertise/significant resources, adaptive persistence or a nation-state sponsor. Persistent ordinary crime or insider collection can overlap; retain pattern-recognition context only with precise linking held. DDoS is an availability attack rather than an actor identity, and the item does not assess DDoS implementation. A14-month surface variant supplies no new family or timed recovery evidence.",
+      "usefulnessAfterMissProposal": {
+        "status": "source_reasoned_correction_not_validated_recovery",
+        "rationale": "Contrast the supplied access, motive and capability dimensions for this parent decision while retaining its qualification holds; these corrections do not demonstrate real attribution, transfer, independent success or recovery.",
+        "approvedRemediation": false,
+        "learnerObservedRecovery": false,
+        "weight": 0
+      }
+    },
+    {
+      "recordId": "explanation:mcq:m139",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m139",
+      "sourceRevision": "sha256:68e65551e8d192c4cb4499a8659f7508692773ec7f218d3453bb033c13c5e4f7",
+      "parentLocalRevision": "sha256:f451ca4c02236504de25078290922fbb5c5330e3d413b8181a6833c9603ecf4e",
+      "parentPublishedRevision": "sha256:db8e59ff5e52b20cf20f3b9b4993a11e8352c9e8fac4df8652d6a325cf2399f7",
+      "mainCorrectionRevision": "sha256:6e1d37b4e266250a10dd185402de6d30effa1a0ff1f86250ba7d70dcf8ee904f",
+      "wrongFeedbackRevision": "sha256:0b2cd129901ce37f28e14be2920dec4f186b676b48448a67a5f4fc114f688556",
+      "roleProposal": "conditional_answer_linked_feedback_teaching",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_main_feedback_and_selected_wrong_option_details",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.1"
+        ],
+        "contextCodes": [],
+        "status": "agent_inferred_narrow_actor_attribute_or_motive_recognition_pending_owner",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "withheldCanonicalCandidates": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyRelation": "same_parent_feedback_not_independent_family",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.threat-actor",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "authoredWrongCorrections": 3,
+      "renderedWrongFeedbackUsesAuthoredText": true,
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:160671fada5ac7b1de8f0cb1108a23b1fde06a55f8d634798e7daf0dec1a717a",
+          "correctionRevision": "sha256:bf410f22a072237f6d8271a670a1137ecd5eea9408204de4d4d0648654e06cfe",
+          "teachingRationale": "State objectives are not a financial-gain exclusion; the question asks for the typical organised profit pattern.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:98bf1c5e163475e424ad7a635c6fc73477eb5d76135ef445607d4e02129ac689",
+          "correctionRevision": "sha256:dda44c1089bd1a2d348be8a740ce0a78674e3a6ef4bd741755f929544da49b9f",
+          "teachingRationale": "Political/ideological motive is a different stated category criterion, not a technique-specific rule.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:f2ea3fa5895febe56b8c75b83769f898ea0747da2fe0ef7312c83585b2108682",
+          "correctionRevision": "sha256:e75dc9f7c36b6b97b44b9383c067202856b692a14f54650cae84f2e85b4e7fab",
+          "teachingRationale": "Financial motive alone does not prove an insider relationship; criminal insiders remain possible.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "contentQualification": "The described primary financial motive supports the typical organised-crime vocabulary choice, not exclusive attribution. States and insiders can seek money; ransomware may serve other goals and organised crime need not deploy it. Insider describes entrusted access and can overlap a financial motive. No malware mechanism, payment-card exploit, victim investigation or uniquely identified group is assessed.",
+      "usefulnessAfterMissProposal": {
+        "status": "source_reasoned_correction_not_validated_recovery",
+        "rationale": "Contrast the supplied access, motive and capability dimensions for this parent decision while retaining its qualification holds; these corrections do not demonstrate real attribution, transfer, independent success or recovery.",
+        "approvedRemediation": false,
+        "learnerObservedRecovery": false,
+        "weight": 0
+      }
+    },
+    {
+      "recordId": "explanation:mcq:m252",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m252",
+      "sourceRevision": "sha256:dd156b9b0e392e9ef752d793b0fb7d9d008fdb708969a75db67ff957087f3f10",
+      "parentLocalRevision": "sha256:80236b273f5930b5f949624150f8abb1880e60dd6347c423f30e51ca9560cb65",
+      "parentPublishedRevision": "sha256:fc98326bdaf5762256e489dcc0151f13ca1235490fc3249524e20ba0ec93d845",
+      "mainCorrectionRevision": "sha256:fb51822e667544aecdcf70a2b1e6603f982b0077f294f94b0c440bd8b0c530f5",
+      "wrongFeedbackRevision": "sha256:46fe97ccf59e9ab8569e7ea985e6030c5c8d4d3570b157a1c662a3d64020dbd8",
+      "roleProposal": "conditional_answer_linked_feedback_teaching",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_main_feedback_and_selected_wrong_option_details",
+      "objectiveScopeProposal": {
+        "assessedCodes": [],
+        "contextCodes": [
+          "2.1"
+        ],
+        "status": "campaign_pattern_context_only_precise_actor_link_withheld",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "withheldCanonicalCandidates": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyRelation": "same_parent_feedback_not_independent_family",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.threat-actor",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "authoredWrongCorrections": 3,
+      "renderedWrongFeedbackUsesAuthoredText": true,
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:ab187539be9e4b4938a20bd43d48604eb27e3a3fe9855e6129712ab94b1ee9dc",
+          "correctionRevision": "sha256:b4cbd819f7b1b9095bd367381d705525484493909dee4c4d5a164c1d9514820f",
+          "teachingRationale": "Opportunistic classification is a weaker fit to stated persistent targeting, not proof of sophisticated attribution.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:19f57ebf9ccd7433f513c6e9f6dcd19de6a13b01c840f83df2d5148e3062d42c",
+          "correctionRevision": "sha256:2c22c69a6458daeb3545083c8805b9b00e8bcb9f56c9d9be3cf902dbee8d6d4c",
+          "teachingRationale": "No publicity or ideological objective is supplied; quiet hacktivism is not universally impossible.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:5e3809a260ad513c19c4fde5fb8c83b66a52d418784d5207da90e98bb1c5e4e7",
+          "correctionRevision": "sha256:10edf7987d23ccba99476ea0b373e59fdb18cd226b22503335ad5a03e62485e7",
+          "teachingRationale": "Accidental disclosure conflicts with the expressly repeated intentional attacker access, not with all insider activity.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "contentQualification": "Eleven months and patient covert theft do not establish advanced capability/resources, sponsorship, external origin or a unique group. The APT option is contextual best-fit recognition with precise actor linking held. Quiet campaigns may seek money and an insider can act intentionally over a long period; the accidental-disclosure distractor is explicitly accidental. Do not restore superseded claims that crime is always brief/noisy or insiders always act quickly.",
+      "usefulnessAfterMissProposal": {
+        "status": "source_reasoned_correction_not_validated_recovery",
+        "rationale": "Contrast the supplied access, motive and capability dimensions for this parent decision while retaining its qualification holds; these corrections do not demonstrate real attribution, transfer, independent success or recovery.",
+        "approvedRemediation": false,
+        "learnerObservedRecovery": false,
+        "weight": 0
+      }
+    },
+    {
+      "recordId": "explanation:mcq:m439",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m439",
+      "sourceRevision": "sha256:579ca9b133c51777d7c77c5924f1223d43f8ef75327af147749b62a0cc4ae1ed",
+      "parentLocalRevision": "sha256:82891e95264650dc02019a5a17b0750976a64509f6a2fd6c3a7d0fd61c39a912",
+      "parentPublishedRevision": "sha256:eb29912aea00532864a4d90f6cf155aee2f2651deec4c69a36e30b4f73acc66c",
+      "mainCorrectionRevision": "sha256:2068b98dc3254d21b9203f94d019037bf9ccf4f0fc2f76b4a4c1f59de35e0c99",
+      "wrongFeedbackRevision": "sha256:0e87370c9db2bf35ac3e654b17ba84f5da247378d7e610fc2a43b1545119902f",
+      "roleProposal": "conditional_answer_linked_feedback_teaching",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_main_feedback_and_selected_wrong_option_details",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.1"
+        ],
+        "contextCodes": [],
+        "status": "agent_inferred_narrow_actor_attribute_or_motive_recognition_pending_owner",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "withheldCanonicalCandidates": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyRelation": "same_parent_feedback_not_independent_family",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.threat-actor",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "authoredWrongCorrections": 3,
+      "renderedWrongFeedbackUsesAuthoredText": true,
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:02eb34811fea65e0b572fe88ec449ba6840643334d8fa80e5d7e3963fb642d5b",
+          "correctionRevision": "sha256:564948eb5754d336780ddcee7b50fb04badb3a29a610e3999fd85cfe3f9c732b",
+          "teachingRationale": "The supplied actor has legitimate employee access and confirmed intentional conduct, rather than an accidental external disclosure.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:7ebda71dffb43abfffad9b240915e0d960f02c5e3cd2d2b7f0559d4610498f0b",
+          "correctionRevision": "sha256:60fc68f3c0a0dd413b306115adbca81fc6f6a2ad2aeb949b6e052761b692ed20",
+          "teachingRationale": "Explicit deliberate unauthorised resale conflicts with inadvertent error; bulk activity alone would not establish intent.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:799915d7c2b59734f4a9663c21f033f3e7d0f1191e811c5248671ecbee46ecee",
+          "correctionRevision": "sha256:57b8fc30240ab3d4f2a64a369516a21f1b9f9aa9a717f61f90863b29e8f7e0ea",
+          "teachingRationale": "The effective scenario identifies employee misuse, not merely an external person impersonating credentials.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "contentQualification": "Intent and the employee actor are explicitly confirmed by investigation in the effective item. Export timing alone cannot distinguish legitimate business, accident, malicious insider or stolen credentials. An insider can be malicious or unwitting and a malicious insider can act for several motives or assist a state/criminal campaign; a stolen employee account alone does not establish employee intent. Resale is supplied, not derived evidence; no investigative attribution or preventive control is executed.",
+      "usefulnessAfterMissProposal": {
+        "status": "source_reasoned_correction_not_validated_recovery",
+        "rationale": "Contrast the supplied access, motive and capability dimensions for this parent decision while retaining its qualification holds; these corrections do not demonstrate real attribution, transfer, independent success or recovery.",
+        "approvedRemediation": false,
+        "learnerObservedRecovery": false,
+        "weight": 0
+      }
+    },
+    {
+      "recordId": "explanation:mcq:m617",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m617",
+      "sourceRevision": "sha256:80178aa556ca9f5da326839e0763982d38e676fde91d95c835a9031d958ecaf8",
+      "parentLocalRevision": "sha256:048ad2790fc9adba45d1b70da709a52749bdca922837ad14895fe3d49a76c1c6",
+      "parentPublishedRevision": "sha256:da05157a7584c3a96f03344c3d4434b1575794debd01a0cbef60527dc65763d8",
+      "mainCorrectionRevision": "sha256:69bb5e17995e4c5605543a8dc9f7e74ad4ce0b70790948aaf43c580101e5726e",
+      "wrongFeedbackRevision": "sha256:260a4fda3310983e513bd537b7bb2449176eea1168c78df1c00b39a3b9aa8c59",
+      "roleProposal": "conditional_answer_linked_feedback_teaching",
+      "deliveryBinding": "mcq-renderer",
+      "deliveryGate": "submitted_pro_main_feedback_and_selected_wrong_option_details",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.1"
+        ],
+        "contextCodes": [],
+        "status": "agent_inferred_narrow_actor_attribute_or_motive_recognition_pending_owner",
+        "coverage": "bounded_recognition_not_full_objective_or_investigative_attribution",
+        "APTIsExplicitObjectiveActorBullet": false,
+        "activeObjectiveTagChanged": false
+      },
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "withheldCanonicalCandidates": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyRelation": "same_parent_feedback_not_independent_family",
+      "conceptLinkProposals": [
+        {
+          "conceptId": "sy0701.term.threat-actor",
+          "role": "instructional_support_only",
+          "weight": 0
+        }
+      ],
+      "authoredWrongCorrections": 3,
+      "renderedWrongFeedbackUsesAuthoredText": true,
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:36de779e41395af5c53f47d562cc0aa1016d76c9f87511468a0fe609ce7ce9ed",
+          "correctionRevision": "sha256:5f9763b3eeba315e657bf18c175d2d5cf51031428a8b071664447f26b4a7c658",
+          "teachingRationale": "The question explicitly states national leverage; ideological goals can overlap without proving a real sponsor.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:e5871a29d3146d2625065213c91d31abf2895121583d58084309bf8acf137f8e",
+          "correctionRevision": "sha256:24463b33094148c9d4aeda8153f847e2eee2705ba509682345c369304fc63da9",
+          "teachingRationale": "Profit-driven organised crime is a weaker offered primary goal; state activity can still pursue money.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:2af3d008fa53f7f44df899ea47ef13b4257ed0571baba8cc9280cf22f279c0d7",
+          "correctionRevision": "sha256:f77d8465ccf4a37e8c0403aa887ad76876d610fbfb7d20d7e83a94cb2016e1b7",
+          "teachingRationale": "Unapproved technology use/oversight is a different context from the stated national-espionage category.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "contentQualification": "National strategic leverage is the supplied distinguishing goal. High funding, persistence or infrastructure targeting alone cannot establish state sponsorship, and state actors can also seek financial gains. Nation-state, APT campaign behavior and sophistication are not one identity. Shadow IT concerns unapproved technology/oversight, not a national-espionage actor inferred here. No geolocation, intelligence assessment, infrastructure compromise or specific campaign attribution is performed.",
+      "usefulnessAfterMissProposal": {
+        "status": "source_reasoned_correction_not_validated_recovery",
+        "rationale": "Contrast the supplied access, motive and capability dimensions for this parent decision while retaining its qualification holds; these corrections do not demonstrate real attribution, transfer, independent success or recovery.",
+        "approvedRemediation": false,
+        "learnerObservedRecovery": false,
+        "weight": 0
+      }
+    }
+  ],
+  "instructionalProposals": [],
+  "familyGroups": [
+    {
+      "familyLabelProposal": "persistent-targeted-APT-profile-recognition",
+      "recordIds": [
+        "mcq:m013",
+        "mcq:m122",
+        "mcq:m252"
+      ],
+      "status": "provisional_semantic_comparison_not_independence_approval",
+      "independenceApproved": false,
+      "newFamilyCredit": 0
+    },
+    {
+      "familyLabelProposal": "explicit-low-expertise-tool-dependence-recognition",
+      "recordIds": [
+        "mcq:m121"
+      ],
+      "status": "provisional_semantic_comparison_not_independence_approval",
+      "independenceApproved": false,
+      "newFamilyCredit": 0
+    },
+    {
+      "familyLabelProposal": "organised-profit-crime-pattern-recognition",
+      "recordIds": [
+        "mcq:m139"
+      ],
+      "status": "provisional_semantic_comparison_not_independence_approval",
+      "independenceApproved": false,
+      "newFamilyCredit": 0
+    },
+    {
+      "familyLabelProposal": "confirmed-intentional-entrusted-access-misuse-recognition",
+      "recordIds": [
+        "mcq:m439"
+      ],
+      "status": "provisional_semantic_comparison_not_independence_approval",
+      "independenceApproved": false,
+      "newFamilyCredit": 0
+    },
+    {
+      "familyLabelProposal": "stated-national-strategic-goal-recognition",
+      "recordIds": [
+        "mcq:m617"
+      ],
+      "status": "provisional_semantic_comparison_not_independence_approval",
+      "independenceApproved": false,
+      "newFamilyCredit": 0
+    }
+  ],
+  "priorComparisons": [
+    {
+      "currentQuestionIds": [
+        "m122",
+        "m252"
+      ],
+      "relation": "prior_availability_loss_is_DDoS_distractor_context_not_APT_actor_family",
+      "priorReferences": [
+        {
+          "recordId": "mcq:m002",
+          "sourceRevision": "sha256:636f490ab49ad778e428bc3fd6f1eb47e843a305f70af1e3e7d145c3641bdf42",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json"
+        },
+        {
+          "recordId": "explanation:mcq:m002",
+          "sourceRevision": "sha256:7827f5a304829bc05c0b2d4eb0a4ae3d1f10dd85bda340609a4e4ec0b7efe902",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json"
+        }
+      ],
+      "priorExactActorFamilyReuseEstablished": false,
+      "independenceApproved": false,
+      "newFamilyCredit": 0
+    },
+    {
+      "currentQuestionIds": [
+        "m439"
+      ],
+      "relation": "prior_internal_location_trust_rejection_is_access_policy_not_confirmed_insider_intent_family",
+      "priorReferences": [
+        {
+          "recordId": "mcq:m007",
+          "sourceRevision": "sha256:26500a91b7746fca51633125d39cdd277e7253c82f1b1d6d849971adb4573d2a",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json"
+        },
+        {
+          "recordId": "explanation:mcq:m007",
+          "sourceRevision": "sha256:788aee6cbb256f5235a1cc0740ee31491924b4f73240d2d58ba23a9c30cb7023",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json"
+        },
+        {
+          "recordId": "mcq:m158",
+          "sourceRevision": "sha256:e2ddf0ef8c4d245cf037081c45c045533416bf7c30efd4d0c5aa15538b4e0dab",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json"
+        },
+        {
+          "recordId": "explanation:mcq:m158",
+          "sourceRevision": "sha256:e06846845d3ecefbb8bc6d8a5791941286a1198f12ff9e15de44200464443c8a",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json"
+        },
+        {
+          "recordId": "mcq:m226",
+          "sourceRevision": "sha256:0f718c9c09b4ff16145364a21fa9df50e6fa8a5ec7910a24f0834103976acd2f",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json"
+        },
+        {
+          "recordId": "explanation:mcq:m226",
+          "sourceRevision": "sha256:9ef28694e185c0cfcf41f52028c3c0e5d20140f0fd10fe7f8afebcb3ae0728d3",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json"
+        }
+      ],
+      "priorExactActorFamilyReuseEstablished": false,
+      "independenceApproved": false,
+      "newFamilyCredit": 0
+    }
+  ],
+  "priorActorFamilyScan": [],
+  "collisionInspections": [
+    {
+      "recordId": "check:threat-actors-surfaces",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:b6afdc61fa76d18178a7880663d0583cef6847fb6f244ea5f571707057e64319",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "explanation:pbq:p006",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:4e387c651b8816227f1f9c6b389827a58bbded6bc11d32ae64e3d4fd1d29533b",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "explanation:pbq:p069",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:82b63474261454dfd42b54de34372b6062ec726f81c3fea9ec9194bbca5fc66a",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "glossary:apt",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:776565dd4fd824adbac86de04939eec5f9005faad3f018e12544cd89a847362b",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "glossary:arp",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:e37e17f5cf3427abea6e8a1ed06e085c6aefa24d7ed3543953c6527e2e408837",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "glossary:att%26ck",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:832175c5ffe18576ffdbffb0ff63b809f8d91eadcb24c25e244accf652b2377d",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "glossary:ddos",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:006f9f658d0d48d33b37af0b303ad698383f3e241cc7be1f7b1d34f02263f478",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "keywords:threat-actors-surfaces",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:a6aed5dc43f7a3c1ae0a52ebdee32048e3e3fa558bb890a28c22b295b956ddf2",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "lesson:threat-actors-surfaces",
+      "kind": "lesson",
+      "sourceRevision": "sha256:da7bf6d1fe6ce25e9bafb89247e70582bfeb249cfa399351006ea58cdeeda771",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "pbq:p006",
+      "kind": "pbq",
+      "sourceRevision": "sha256:446aaff94539dd7908a7dae8c5aa563382ae9171839f7faceedf76d39f64d3ba",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "pbq:p069",
+      "kind": "pbq",
+      "sourceRevision": "sha256:208236cfe0faedc9e166a0c50e227b289254a85ec8612032a2131e5b0bb4dd76",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "practice:threat-actors-surfaces:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:42f430ed28047bc3207168aef70bdae90e559bdc74a127ca80713a6e7e55f2e9",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "practice:threat-actors-surfaces:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:f01c0dd89ac30e7bfb83907375949fcf598d3632510c5b84d224246c89fe1d06",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "practice:threat-actors-surfaces:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:2764e9d3fa9c29953dd44d0b353d07215e3df331cc363060382454e1630d80c2",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "section:threat-actors-surfaces:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:a4927a9276b935391ed3b9649931d580fd5222093f11820b8aa2f12e91271c2b",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "section:threat-actors-surfaces:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:8ea7f6b945d41773b079fa78caf1a51b23273a1d1e61a80d3591520c01e82e97",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "section:threat-actors-surfaces:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:8d004f8ca49a7aaa2d375aeb00a298b523d5ce03f769d315ae30a18cd3cbcad7",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "section:threat-actors-surfaces:3",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:0d87178b917bb284b77148e694fc3eedecaaec9fc8dc975b2eb215761d119ccf",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    },
+    {
+      "recordId": "traps:threat-actors-surfaces",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:09d78311e8035617fd33b331f268e692499c78a72126c86e4fe866ce7d3deadc",
+      "status": "collision_inventory_only_no_new_semantic_disposition",
+      "newDispositions": 0,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0
+    }
+  ],
+  "glossaryCollisionInspections": [
+    {
+      "recordId": "glossary:apt",
+      "sourceRevision": "sha256:776565dd4fd824adbac86de04939eec5f9005faad3f018e12544cd89a847362b",
+      "definitionRevision": "sha256:e2e3cf5217867789813bdc37b190654828c4886abcfe1b8dfbf3d05d5a1ba373",
+      "priorPacketPath": null,
+      "status": "collision_inspection_only_not_disposition",
+      "precisionHold": "APT_not_nation_state_synonym_or_explicit_2_1_actor_bullet"
+    },
+    {
+      "recordId": "glossary:arp",
+      "sourceRevision": "sha256:e37e17f5cf3427abea6e8a1ed06e085c6aefa24d7ed3543953c6527e2e408837",
+      "definitionRevision": "sha256:1affccc9d43c052defe5e073a7a422cfba8d5c4455490daed4dbdf328ea843ba",
+      "priorPacketPath": null,
+      "status": "collision_inspection_only_not_disposition",
+      "precisionHold": "tag_union_from_shared_mixed_lesson_not_precise_actor_assessment"
+    },
+    {
+      "recordId": "glossary:att%26ck",
+      "sourceRevision": "sha256:832175c5ffe18576ffdbffb0ff63b809f8d91eadcb24c25e244accf652b2377d",
+      "definitionRevision": "sha256:ef632f0d8bc21656f4bd9282d6752000115f8f283b7670c447b151a290fc8440",
+      "priorPacketPath": null,
+      "status": "collision_inspection_only_not_disposition",
+      "precisionHold": "tag_union_from_shared_mixed_lesson_not_precise_actor_assessment"
+    },
+    {
+      "recordId": "glossary:ddos",
+      "sourceRevision": "sha256:006f9f658d0d48d33b37af0b303ad698383f3e241cc7be1f7b1d34f02263f478",
+      "definitionRevision": "sha256:834a498c442ed4cf9d2b9ce1a8d454846835c9ccbb4e8444f2eb0a495d464780",
+      "priorPacketPath": null,
+      "status": "collision_inspection_only_not_disposition",
+      "precisionHold": "tag_union_from_shared_mixed_lesson_not_precise_actor_assessment"
+    },
+    {
+      "recordId": "glossary:nist",
+      "sourceRevision": "sha256:465d82bcfbda9daed74431e8ed2444088c8ab0d116d6c22f2e67a727bc39ceed",
+      "definitionRevision": "sha256:b43986cc46e50dcad49db15911f9c8fd348a76d1cb5f8260d176694bd9d7a92c",
+      "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "status": "prior_disposition_preserved_no_2_1_scope_inheritance",
+      "precisionHold": "agency_definition_prior5_1_context_not_all_tagged_objectives"
+    }
+  ],
+  "otherCollisionBindings": [
+    {
+      "recordId": "pbq:p006",
+      "localEffectiveRevision": "sha256:e732a99ad0a435fedcaa932f65d570c2db45c50bc66696345b7a6fc9bdf9d49e",
+      "catalogueRevision": "sha256:446aaff94539dd7908a7dae8c5aa563382ae9171839f7faceedf76d39f64d3ba",
+      "status": "matching_actor_recognition_overlap_inspection_only_no_new_disposition_or_components",
+      "newDispositions": 0
+    },
+    {
+      "recordId": "pbq:p069",
+      "localEffectiveRevision": "sha256:f7d150af55a7067dfe9cbeef717d2d4e3d674e4acc8fd68f65d2eb923ee86243",
+      "catalogueRevision": "sha256:208236cfe0faedc9e166a0c50e227b289254a85ec8612032a2131e5b0bb4dd76",
+      "status": "matching_actor_recognition_overlap_inspection_only_no_new_disposition_or_components",
+      "newDispositions": 0
+    },
+    {
+      "recordId": "lesson:threat-actors-surfaces",
+      "catalogueRevision": "sha256:da7bf6d1fe6ce25e9bafb89247e70582bfeb249cfa399351006ea58cdeeda771",
+      "status": "mixed_actor_vector_social_engineering_lesson_inspection_only_not_full_2_1",
+      "newDispositions": 0
+    }
+  ],
+  "deliveryBindings": [
+    {
+      "id": "mcq-delivery-unit-0",
+      "path": "src/App.jsx",
+      "anchor": "function MCQPractice(",
+      "endAnchor": "function UpgradeModal(",
+      "startLine": 24992,
+      "endLine": 25873,
+      "sourceSignature": "sha256:f96053d990c9e6e98bebb88af15b18766c3996a962879e7d178b21e5baa2556d"
+    },
+    {
+      "id": "mcq-delivery-unit-1",
+      "path": "src/App.jsx",
+      "anchor": "function shuffleMcqOptions(",
+      "endAnchor": "function playAnswerSound(",
+      "startLine": 1242,
+      "endLine": 1262,
+      "sourceSignature": "sha256:3c9b98e4a0f51aefc810c2ba3e2bf99685c81f60b33e5e8951fa86b466966b45"
+    },
+    {
+      "id": "mcq-delivery-unit-2",
+      "path": "src/App.jsx",
+      "anchor": "function getWrongOptionFeedback(",
+      "endAnchor": "function MCQFeedbackVerdict(",
+      "startLine": 1140,
+      "endLine": 1145,
+      "sourceSignature": "sha256:f8ca69570cdc8f6b76b6455c35203bb7e8090d5961b606adf5347d3314188316"
+    }
+  ],
+  "selectorBindings": [
+    {
+      "recordId": "intervention:deep-dive-recommendations",
+      "sourceRevision": "sha256:c05f9bf90cfd71e54cf47587e2f10c473d2a5b7ac23da274b920db6313c5c569"
+    },
+    {
+      "recordId": "intervention:practice-launch",
+      "sourceRevision": "sha256:3068f284d528b579176264da5a129cd35fc34a6e581ece2c8a49cb133a1df84a"
+    }
+  ],
+  "deliveryObservations": {
+    "sourceOnly": true,
+    "freshBrowserDelivery": false,
+    "noLearnerStateOrSyncExecuted": true,
+    "guestPracticeAvailable": true,
+    "questionsConditionalOnExistingPool": true,
+    "mainExplanationGate": "submitted_and_Pro",
+    "wrongFeedbackGate": "submitted_and_Pro_and_selected_wrong_option",
+    "shuffleAddsIndependentEvidence": false,
+    "legacyRecommendationsAreReviewedInstruction": false,
+    "publicationFingerprintIsNotLiveDeploymentProof": true
+  },
+  "objective14Boundary": {
+    "candidateCount": 235,
+    "distinctAgentDispositions": 235,
+    "remainingCandidates": 0,
+    "agentCandidateReviewComplete": true,
+    "ownerApprovalComplete": false,
+    "fullObjective14Coverage": false,
+    "phase2b5Ready": false,
+    "eligibleNewEvidence": 0,
+    "sourcePacketPath": "docs/drafts/phase-2b5-objective14-final-glossary-proposals.json",
+    "sourcePacketSha256": "edf36fa40c7c03c30990476413a969a01375699c556819dbabfefc35f85e496f",
+    "priorCanonicalHolds": {
+      "masteryIdentitiesAvailable": [
+        "continuity.bia",
+        "recovery.mtd",
+        "recovery.mttr",
+        "recovery.rpo",
+        "recovery.rto"
+      ],
+      "primaryMasteryProposalsWithheld": 7,
+      "newCanonicalIdentities": 0,
+      "assessedCanonicalIdentitiesProposed": 0,
+      "topicOrSupportPromotionAllowed": false,
+      "objective14TopicIsNotMastery": true,
+      "passwordHashNotIntegrityOrAuthenticityEvidence": true,
+      "encryptionContrastNotConfidentialityMastery": true,
+      "bcryptIdentityNotInvented": true,
+      "priorAmbiguitiesUnchanged": [
+        "CIA versus CIA-triad",
+        "MAC cross-domain meanings",
+        "Role-based versus rule-based RBAC",
+        "TOU access-window/race-condition discrepancy"
+      ],
+      "priorMttrWithheldUnchanged": [
+        "recovery.mttr"
+      ],
+      "priorMtbfDeliveryUnverifiedUnchanged": true,
+      "priorFarCommonWordHoldUnchanged": true,
+      "priorMoaMouLinksWithheldUnchanged": [
+        "sy0701.term.moa",
+        "sy0701.term.mou"
+      ],
+      "cryptoSupportLinksAreNotMastery": true,
+      "aeadTagAuthenticationIsNotCertifiedSenderIdentity": true,
+      "forwardSecrecyIsNotEndpointOrRecoveryEvidence": true,
+      "hsmNameIsNotValidatedCustody": true,
+      "reportedChecksDoNotEstablishUnperformedChecks": true,
+      "signatureMismatchDoesNotIdentifyUniqueCause": true,
+      "nonRepudiationNeedsIdentityAndCustody": true,
+      "recoveryWordInEscrowOrPkiRecoveryDoesNotAssessRecoveryClock": true,
+      "caaIdentityNotInvented": true,
+      "protocolNameOrStatusIsNotFullCertificateValidation": true,
+      "m221WildcardNameMatchIsFeedbackNotExecutedSkill": true,
+      "collisionNotPreimageOrPasswordGuessing": true,
+      "saltNotPerGuessCostOrDecryption": true,
+      "digestNameNotExecutedIntegrityOrOrigin": true,
+      "m404HistoricalParametersNotApproved": true,
+      "preimageDistractorsNotAssessedCanonicalRoles": true,
+      "fdeNameOrInferenceNotExecutedKeyProtection": true,
+      "publicEncryptionKeyNameNotVerifiedOwnership": true,
+      "AESKeySpaceMarginNotPracticalBreakOrAuthentication": true,
+      "ShorsConditionNotPracticalAttackOrMigration": true,
+      "signatureSelectionMethodNotMeasuredDeviceWinner": true,
+      "m622ReusesPriorHsmName": true,
+      "steganographyIdentityNotInvented": true,
+      "concealmentNotEncryptionUndetectabilityOrExecution": true,
+      "tokenLookupNotAnonymizationOrVaultValidation": true,
+      "physicalVaultWordNotTokenMappingConcept": true,
+      "completeLocalMcqDispositionNotObjectiveOrPhaseApproval": true,
+      "unsupportedSelectFillTrustedRevisionNotInvented": true,
+      "partScoresNotTrustedOrConceptMastery": true,
+      "compositePartsNotIndependentFamilies": true,
+      "keyWrappingOrKdfIdentityNotInvented": true,
+      "measuredBootNotSecureBootEnforcement": true,
+      "orderingTrustIsWholeQuestionCoarse": true,
+      "workflowOrderNotExecutedOperations": true,
+      "certificateRoleNamesNotCompleteTrustValidation": true,
+      "p033ApprovedBaselineNotImplementedInThisSlice": true,
+      "terminalTextNotCryptoExecution": true,
+      "terminalSubstringNotCommandSyntaxSkill": true,
+      "singleChoiceOnlyNoTerminalPartialEvidence": true,
+      "p002ReusesPriorIntegrityFamily": true,
+      "p057KeyTrustIsPremiseNotVerifiedCustody": true,
+      "ciaAliasChoiceRemainsWithheld": true,
+      "staticHotspotAnnotationsNotSubskills": true,
+      "p037UnsupportedFieldsNotStrippedForTrust": true,
+      "p224SnapshotNotAuthoredOrFreshLivePayload": true,
+      "p224ReusesPriorForwardSecrecyFamily": true,
+      "p037ReusesPriorPasswordStorageFamily": true,
+      "p049CombinedChoiceNotSeparateProtocolAndSuiteScores": true,
+      "completeLocalQuestionDispositionNotObjectiveOrPhaseApproval": true,
+      "newMasteryIdentities": 0,
+      "preciseCryptoEnclaveKEKLedgerPepperAlgorithmIdentitiesWithheld": [
+        "KEK",
+        "Secure Enclave",
+        "blockchain/distributed ledger",
+        "pepper",
+        "Argon2id",
+        "scrypt",
+        "bcrypt"
+      ],
+      "wholeGuidePracticeLinksNotKeyedRoles": true,
+      "precisePQCNonceCTR_KEMIdentitiesWithheld": [
+        "ML-KEM",
+        "ML-DSA",
+        "SLH-DSA",
+        "AEAD",
+        "nonce",
+        "CTR",
+        "KEM",
+        "crypto agility"
+      ],
+      "optionalSupportNotExamMastery": true,
+      "mixedEmailGuideNotPreciseObjective14": true,
+      "preciseEmailIdentitiesWithheld": [
+        "SPF",
+        "CAA",
+        "OCSP stapling"
+      ],
+      "existingSupportScopeMismatchHeld": {
+        "DKIM": "package_has_2.2_2.4_4.2_not_4.5;no_active_change",
+        "S_MIME": "empty_package_objectives;teaching_context_only"
+      },
+      "RA_explicit_registration_not_global_Recovery_Agent_merge": true,
+      "CSR_not_CSRF": true,
+      "proposedSupportNodeLinks": 4,
+      "withheldContentErrorLink": "sy0701.term.rsa",
+      "compound_AES_FDE_and_MAC_senses_not_merged": true,
+      "withheldCurrentSliceContentErrorLinks": [],
+      "priorRSAContentErrorLinkPreserved": "sy0701.term.rsa",
+      "CSR_CSRF_DH_DHE_ECDHE_ECC_ECDSA_HSM_TPM_not_merged": true,
+      "priorOCSPContentErrorLinksPreserved": [
+        "sy0701.term.ocsp"
+      ],
+      "contextOnlyDefinitionIds": [
+        "glossary:bios",
+        "glossary:pem"
+      ],
+      "existingSupportMetadataMismatchesHeld": true,
+      "network_email_compound_and_algorithm_identities_not_merged": true,
+      "priorIPsecContentErrorLinksPreserved": [
+        "sy0701.term.ipsec"
+      ],
+      "withheldCurrentSliceQualificationLinks": [
+        "sy0701.term.pfs",
+        "sy0701.term.san",
+        "sy0701.term.tokenization"
+      ],
+      "SAN_polysemy_not_certificate_storage_mastery_union": true,
+      "Tokenization_sensitive_reference_limits_not_erased": true
+    },
+    "unchangedDispositions": true
+  },
+  "canonicalBoundary": {
+    "masteryIdentitiesAvailable": [
+      "continuity.bia",
+      "recovery.mtd",
+      "recovery.mttr",
+      "recovery.rpo",
+      "recovery.rto"
+    ],
+    "primaryMasteryProposalsWithheld": 7,
+    "newCanonicalIdentities": 0,
+    "newApprovedConcepts": 0,
+    "newAssessedCanonicalRoles": 0,
+    "objective21TopicIsNotMastery": true,
+    "APT_NationState_InsiderAndTechniqueNotMerged": true,
+    "preciseActorCapabilityHolds": [
+      "mcq:m122",
+      "mcq:m252"
+    ],
+    "newFamilyIndependenceApproved": false
+  },
+  "phaseWideBacklog": {
+    "packageRecordsUnchanged": 1878,
+    "reviewQueueUnchanged": 2954,
+    "unresolvedQuestionMappingsUnchanged": 489,
+    "existingPrimaryQuestionProposalsUnchanged": 7,
+    "taxonomyUnchanged": {
+      "masteryConcepts": 5,
+      "topics": 28,
+      "supportingConcepts": 402
+    },
+    "humanApprovedNewMappings": 0,
+    "eligibleNewEvidence": 0
+  },
+  "privateBoundary": {
+    "recordId": "private:pbq:p017",
+    "sourceRevision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+    "trustedRevisionId": null,
+    "payloadReviewed": false,
+    "masteryWeight": 0,
+    "status": "SELECTED_PRIVATE_REVISION_UNAVAILABLE_NO_FALLBACK_SUBSTITUTION"
+  },
+  "humanDecisionReferences": {
+    "humanApprovalRequestedThisTurn": false,
+    "ownerDecision": "All proposals remain pending; no queue closure, competence, publication or migration approval."
+  },
+  "officialScopeReview": {
+    "url": "https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be",
+    "documentVersion": "SY0-701 objectives v7",
+    "section": "2.1",
+    "explicitActors": [
+      "Nation-state",
+      "Unskilled attacker",
+      "Hacktivist",
+      "Insider threat",
+      "Organized crime",
+      "Shadow IT"
+    ],
+    "attributeDimensions": [
+      "Internal/external",
+      "Resources/funding",
+      "Level of sophistication/capability"
+    ],
+    "APTIsExplicitActorBullet": false,
+    "tagUnionNotPreciseScope": true,
+    "fullObjectiveCoverage": false,
+    "humanApproved": false
+  },
+  "primarySourceReferences": [
+    {
+      "url": "https://csrc.nist.gov/glossary/term/advanced_persistent_threat",
+      "use": "resource_capability_repeated_adaptive_persistence_not_fixed_dwell_time_zero_day_or_state_requirement"
+    },
+    {
+      "url": "https://csrc.nist.gov/glossary/term/insider_threat",
+      "use": "authorised_access_with_witting_or_unwitting_harm_not_export_pattern_proof_of_intent"
+    },
+    {
+      "url": "https://attack.mitre.org/groups/index.html",
+      "use": "activity_cluster_names_and_overlapping_associations_not_definitive_unique_attribution"
+    },
+    {
+      "url": "https://attack.mitre.org/software/",
+      "use": "public_tools_used_by_defenders_testers_and_adversaries_not_skill_identity_proof"
+    },
+    {
+      "url": "https://attack.mitre.org/groups/G0082/",
+      "use": "state_sponsorship_and_financial_operations_can_overlap_not_money_implies_nonstate"
+    }
+  ],
+  "negativeDispositions": [
+    {
+      "claim": "APT_as_explicit_2_1_actor_bullet_or_nation_state_synonym",
+      "allowed": false
+    },
+    {
+      "claim": "dwell_months_as_advanced_resources_or_unique_actor_identity",
+      "allowed": false
+    },
+    {
+      "claim": "public_tools_as_unskilled_or_curiosity_proof",
+      "allowed": false
+    },
+    {
+      "claim": "profit_ransomware_as_exclusive_organised_crime_attribution",
+      "allowed": false
+    },
+    {
+      "claim": "export_schedule_as_confirmed_employee_intent",
+      "allowed": false
+    },
+    {
+      "claim": "funding_persistence_as_state_sponsor_proof",
+      "allowed": false
+    },
+    {
+      "claim": "three_APT_variants_as_three_independent_families",
+      "allowed": false
+    },
+    {
+      "claim": "DDoS_ransomware_distractors_as_assessed_secondary_roles",
+      "allowed": false
+    },
+    {
+      "claim": "PBQ_lesson_children_glossary_collisions_as_new_dispositions",
+      "allowed": false
+    },
+    {
+      "claim": "NIST_tag_union_as_all_objective_coverage",
+      "allowed": false
+    },
+    {
+      "claim": "235_prior_1_4_agent_dispositions_as_phase_approval",
+      "allowed": false
+    },
+    {
+      "claim": "passing_tests_or_trusted_ID_as_approved_mastery_or_evidence",
+      "allowed": false
+    },
+    {
+      "claim": "private_payload_or_historical_fingerprint_as_current_review",
+      "allowed": false
+    }
+  ]
+}
