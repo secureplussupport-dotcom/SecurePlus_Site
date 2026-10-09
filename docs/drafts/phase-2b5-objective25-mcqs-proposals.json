@@ -1,0 +1,3030 @@
+{
+  "schemaVersion": 1,
+  "status": "LOCAL_AGENT_REVIEW_NOT_READY",
+  "baselineCommit": "2f8354d457514c8bf029b52a574448d5e863ca74",
+  "sourceBindings": [
+    {
+      "path": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "sha256": "0ba95c5c8f8a00e091daa9d852de0350a01ca00bedcba7c317155ea94cad88a9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "sha256": "46cf5a704690aa85606a1167b72f221aea09234635e3062aec067e7967abb4c9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "sha256": "fce8683567473a28ce8e903190e977345339f33df022ef56425c18d3bdfe225d"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "sha256": "d45c0d959c4cc0171b401f2df5ab1ee38d7bf717e3ce08c9d008d4dac61a6c20"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-p055-mapping-proposals.json",
+      "sha256": "40e1d58143f8dd4853f0496f5aca6d4abab031f59681bd625f7c144e41f3296e"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-resilience-lesson-proposals.json",
+      "sha256": "8dd1cae60ca07bad8d4046e7653beafd05f4f02bd66d12763cd0c621a90a36de"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/mapping-package.json",
+      "sha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/release-checksums.json",
+      "sha256": "98e7e0ed45b5fd17f1be50c4cd36eba53bf289de26a427810e061274dcfb3403"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-batch.md",
+      "sha256": "1a039e6f4778a585128b0d4167536c46a53d13130476b6144ffa946f2f464713"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-guide.md",
+      "sha256": "a9cc1fff35873d84d90bec1c5c6f4613fdb46defae5a8b2a87b4b7c554ffd33b"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
+      "sha256": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
+    },
+    {
+      "path": "docs/secureplus-rebrand-master-plan.md",
+      "sha256": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c"
+    },
+    {
+      "path": "docs/phase-1-product-loop-audit.md",
+      "sha256": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10"
+    },
+    {
+      "path": "src/data/conceptDeepDives.js",
+      "sha256": "b478e16240c95b70a79cf0679aff683fc08f18dd11947c4046ecd880ec1ce17f"
+    },
+    {
+      "path": "src/data/sy0701DeepDiveMap.js",
+      "sha256": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff"
+    },
+    {
+      "path": "src/data/learningConcepts.js",
+      "sha256": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac"
+    },
+    {
+      "path": "src/data/learningMappings.js",
+      "sha256": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+    },
+    {
+      "path": "src/lib/deepDiveStudy.js",
+      "sha256": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459"
+    },
+    {
+      "path": "src/lib/deepDiveRecommendations.js",
+      "sha256": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479"
+    },
+    {
+      "path": "scripts/lib/read-learning-pilot-bank.mjs",
+      "sha256": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac"
+    },
+    {
+      "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
+      "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "scripts/lib/content-mapping/package.mjs",
+      "sha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748"
+    },
+    {
+      "path": "server/adaptive/revision.mjs",
+      "sha256": "a2fc241dd45a60fe4e9898f8133187402ef07d9e0a5e2f721f4ad6ba33b73451"
+    },
+    {
+      "path": "src/App.jsx",
+      "sha256": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49"
+    },
+    {
+      "path": "src/data/sy0701AcronymFlashcards.js",
+      "sha256": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+      "sha256": "143dde6ff3996d594cd7981101c530048902c894449641f972cc38f8aa1c58fe"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-glossary-mapping-proposals.json",
+      "sha256": "377378ea1423ceafead0d73bfaace111e0a7181eb1da50200ec5454fe386c32e"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/private-catalogue-read.json",
+      "sha256": "ab41620421c0449309a096bc678aaa4b05088188d2c8da7666d7429cc4e10ce1"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/private-reconciliation.json",
+      "sha256": "53ba4921ed4ffb67d1da312fea8938a8f902c8a372cc083de9e4bbc71e7a8924"
+    },
+    {
+      "path": "scripts/lib/content-mapping/publication.mjs",
+      "sha256": "c540681dd727c01003505c050744e3d13c73486dd027bb99adaaf96b843d77e7"
+    },
+    {
+      "path": "scripts/lib/read-authored-bank.mjs",
+      "sha256": "e5fdce4aeeaf9971bbdb9ea269b3ae5fe9a57392df19b21879c59968ca5d8b2e"
+    },
+    {
+      "path": "src/data/sy0701PublishedSnapshot.js",
+      "sha256": "c5455fafd76fe974bb6dcb54b0562fc5ee5935da8387f7bfe48036760d4a8e9a"
+    },
+    {
+      "path": "src/data/sy0701EditorialReview.js",
+      "sha256": "0f32ac6be52a67cdeee239b5342a27505f240c9da122d0ced74df1fbb53480bb"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "sha256": "191d496358740cc07567452eb64fd1d2f3ab508cd83279a6c1f840355bc8ee67"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective13-governance-lesson-proposals.json",
+      "sha256": "ada7377ce290d0ba11485923910cbd4f071b8ed91fa8114235b712fe06a513bc"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective13-glossary-mapping-proposals.json",
+      "sha256": "a3d25ef32d9e07424ef448ff32e1b0fa6c38c1c0a51e42fbb90f2a36ba0184e7"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-password-mcq-proposals.json",
+      "sha256": "cb88cdfee8cbf4f6a6386f89572029c9d35e43519b9dd3acd9bcdc2910382ee2"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-encryption-keyuse-proposals.json",
+      "sha256": "c70dfd0c824e86a259679d3b77f21eb470c993a6a677907844beca2b6b79f459"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-custody-pki-signatures-proposals.json",
+      "sha256": "bc452ce1e68c91f2627251cc817b5706edc847d8c96bd0b214ba1dc7eece23f6"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-certificate-lifecycle-proposals.json",
+      "sha256": "a0985e8b84c69b0d70cd1ecdb35d887a207cad5bdf83195aa4193a0bf2e14fae"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-hashing-password-proposals.json",
+      "sha256": "3dc23520359035e91a10ac4a6e6f864782a0032e23ae40fcd2236b87f32d7a88"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-key-origin-proposals.json",
+      "sha256": "38210cbc2c70f49c44ce68405b61f747fbab7a0717000715ee3dbcc6773f8a7e"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-obfuscation-proposals.json",
+      "sha256": "c268a776e1d222fddde6a3913e6950ffc50f9000131b473722f908147ae6bb4a"
+    },
+    {
+      "path": "src/data/sy0701PbqReview.js",
+      "sha256": "4186e735e497204cdbf5f372f1e265361f3df3444320b8a45212477e13442754"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pbq-role-matching-proposals.json",
+      "sha256": "36c8dcb2deff1af78414465706a399c8e09341c09d9a9afba2e96b4556fa18ba"
+    },
+    {
+      "path": "scripts/audit-objective14-pbq-role-matching.mjs",
+      "sha256": "c42c53ba822741fa61587d5d218b832e33b0f12eb7bece7f21b6573432447d7c"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pbq-role-matching-review.md",
+      "sha256": "66193a7d7640e4814316314714ca665c8e1649b939da511c16a03742213c7a7a"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-pbqs-proposals.json",
+      "sha256": "7a5fb1b1d82708211f332b6f748aba2051e494adbca18f2a850fe0a61e503ea0"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-pbqs.mjs",
+      "sha256": "ab6f9ed9b8a4d55db3b97c6964038da96cc327fd0db0abe4113372788810c695"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-pbqs-review.md",
+      "sha256": "f45aeef11c0add027c9c04a25e7921ad03efe133099aabcd5310860e545546bb"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-terminal-pbqs-proposals.json",
+      "sha256": "90501520c07fb1966fe6d9a04edb121fdfd5710298701e9c860fd8e718ecb209"
+    },
+    {
+      "path": "scripts/audit-objective14-terminal-pbqs.mjs",
+      "sha256": "aed5a7b22b4c4a73bd605a9915ac28d143c02b21a9a5fe0d71e116c08c16339d"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-terminal-pbqs-review.md",
+      "sha256": "2ae0f684805fb9ef6c9e9ff8602b3460fd4a06adfd149ea82a23b00c4196acee"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-final-pbqs-proposals.json",
+      "sha256": "67dc31de331b3a5dcaeae140683354e3afa0f3cb30971a68086bed3006bb5056"
+    },
+    {
+      "path": "scripts/audit-objective14-final-pbqs.mjs",
+      "sha256": "327fef1f2da5d92c0758106141bec6dedab8e4a8e6b8087b196d3c3fa7e0b9b0"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-final-pbqs-review.md",
+      "sha256": "b8d6970c42994ce757016b8b5bd8e369bafb4c99c420356e91937b1d6f9ccd57"
+    },
+    {
+      "path": "src/data/conceptDeepDivesPrinterGuide.js",
+      "sha256": "196982096671e5b10867402da328992cb29503c415615ac9eb5e674d4475d006"
+    },
+    {
+      "path": "src/data/conceptDeepDivesStudyGuide.js",
+      "sha256": "340cc43dacd9c8706da4fb5a7a92c3a7104e36e4fbec6efec13d39522e17ab43"
+    },
+    {
+      "path": "src/data/sy0701LessonReview.js",
+      "sha256": "66ea36eb9de2bd82c264e0db2062084aa54e3dc23c256812751bd5404af4dd41"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-keys-lesson-proposals.json",
+      "sha256": "5aefe5670ccaf5239707c84c3af9641ac90c59d24aa09c305942d5b44fc307df"
+    },
+    {
+      "path": "scripts/audit-objective14-keys-lesson.mjs",
+      "sha256": "68b9821853db49c749c45a5baa57a9ed4dbb5bc24123523c241927c3d79c07c1"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-keys-lesson-review.md",
+      "sha256": "838f7c54df900542a129f597d438edcdba23486e79eca7e30801ff58474061c8"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-modes-lesson-proposals.json",
+      "sha256": "d4c1b5486c6538a72cd7dbb4e073e74e8dc1aec5726d6389abdda92f5e399cf6"
+    },
+    {
+      "path": "scripts/audit-objective14-modes-lesson.mjs",
+      "sha256": "22f65b96c0c50173a5b35464c71a7ecbdfc26f19383a9b62ad6451e7afe928be"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-modes-lesson-review.md",
+      "sha256": "62e4f456d521d3ed974332cb8c3ff0cbfc63e12244480422c1c14448fc9a62ea"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-lesson-proposals.json",
+      "sha256": "f58e590b5ea7a049f401b14344cc46c9883f42f9b7155c4cb979d1f52c35fee6"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-lesson.mjs",
+      "sha256": "b57fe502fc26b75a2ed449af5306f85673bf5ab152d6733e6b1eb5c9f8a37353"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-lesson-review.md",
+      "sha256": "bdb5ef191cc8c2b364c74857df89cc0de523ee6e526d0f6e1d73d7edf0eb1f14"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-cards-proposals.json",
+      "sha256": "f53d9ebe64bb6ddbbbd53c8172354093813d815f84938ad4bff48910f99f75fa"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-cards.mjs",
+      "sha256": "e416cb48d746abfa1435fed4a605c2016a6400411dba68240e730f57c25bca02"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-cards-review.md",
+      "sha256": "e198a2a7b19fb45a3abd9a584a7e917720e1351229c6da3c885d6338e9df93f1"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-algorithm-cards-proposals.json",
+      "sha256": "a51fdc4514d4307cd161b5d9fa0984ff767e7e01ae7a5bc3aecb4efe49606120"
+    },
+    {
+      "path": "scripts/audit-objective14-algorithm-cards.mjs",
+      "sha256": "2fbe094f0f1a11653b040a5cbc053a9f36834cbd00d0fee1c6cd0000d46fb246"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-algorithm-cards-review.md",
+      "sha256": "3288e97802ed745682eb7c9e8ee52e731792d66628a90b9fbb6c15bf6e4dbb2a"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-exchange-cards-proposals.json",
+      "sha256": "b00c4e8e87785cae40b17aacf8ece8170334da0fe29d2e9acb964d21121a0670"
+    },
+    {
+      "path": "scripts/audit-objective14-exchange-cards.mjs",
+      "sha256": "d5f43a4905cdfb72bcb393b65aec9a4068f82363506ac533d01b0654eef98fec"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-exchange-cards-review.md",
+      "sha256": "90dc93b41064df984a0c0b4df71c885b11af6d85279884e55e8ef78205bd2a18"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-attack-cards-proposals.json",
+      "sha256": "f7a01a4675143132e502ec33cc2e6630b7f8748bbdaad7243d395410531c024d"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-attack-cards-review.md",
+      "sha256": "bf0a67785728f921758f57d653de3ab165b9106df59c465be167f443ec9952e6"
+    },
+    {
+      "path": "scripts/audit-objective14-attack-cards.mjs",
+      "sha256": "c527fdafdf06626713caadb263af28154325bb9c67153166e8b13b26190ec0f9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-crypto-glossary-proposals.json",
+      "sha256": "6ff229373bb6f6f98acf4a4907d4541183e49e61a6089da24aa53addd67c91ce"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-crypto-glossary-review.md",
+      "sha256": "be275577a7822d211d6b099c2a598468c74be6b2cbd35979c0b37f942de9bac1"
+    },
+    {
+      "path": "scripts/audit-objective14-crypto-glossary.mjs",
+      "sha256": "6f244be6b9c124b885e0d2a2df2b45a2a71e60359291e7898d78af6a72d50cd2"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-agreement-glossary-proposals.json",
+      "sha256": "85bc2ed1b25309db1700fc5c09627c342051863dab870a59aad8925e34e7fbf2"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-agreement-glossary-review.md",
+      "sha256": "4bab787459a14c9e48e42aa5092b5ae8ba73b62fef864bc4cd853e8adaab2ce0"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-agreement-glossary.mjs",
+      "sha256": "51e2986fecbadefc943c6d667d35eac57c00c4b4215b2a2fc959a9ae493cc8b8"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-network-email-glossary-proposals.json",
+      "sha256": "e32f4374c1067fbd493fd289cead64eb42dbe1cfa60e77ceed423b3fdf1a3632"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-network-email-glossary-review.md",
+      "sha256": "945c6dabfad14cdcf7ba50da03a5ba907a1b1e70d4b1a865157d32a45b1bfb18"
+    },
+    {
+      "path": "scripts/audit-objective14-network-email-glossary.mjs",
+      "sha256": "dedd168dbf1dc924878b6a46b1b924f23ffdfcdfc2fa8ee213c54fa968082e41"
+    },
+    {
+      "path": "docs/phase-2b5-content-mapping-readiness.md",
+      "sha256": "99bce555bab95b54476c67582a397f0078f4af5c24ac435ca5b51773929ba524"
+    },
+    {
+      "path": "docs/phase-2b5-pilot-owner-decision-packet.md",
+      "sha256": "01f96e9c4edff2ef61d25c296fb96c585ad1a00db0709f47c0d261b7fbb5d953"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-final-glossary-proposals.json",
+      "sha256": "edf36fa40c7c03c30990476413a969a01375699c556819dbabfefc35f85e496f"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-final-glossary-review.md",
+      "sha256": "ec31630fc343d5178760b0c0975a2cf72b079094fbac9e9f4b20b5e8a6ff843d"
+    },
+    {
+      "path": "scripts/audit-objective14-final-glossary.mjs",
+      "sha256": "07ade284db3dcda85572b6b04efdb87c1704ee65b6af46a19b3831841e161010"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective21-actor-mcqs-proposals.json",
+      "sha256": "b672ced8213158debee33aa0296fc72ff8eb3b2a96a8c9dcf6ac1a59a4662a25"
+    },
+    {
+      "path": "docs/phase-2b5-objective21-actor-mcqs-review.md",
+      "sha256": "0410c06ca1502d1a0acf17df549a7d471ad536ad5c06900ef7e5b3b5ff4dfa50"
+    },
+    {
+      "path": "scripts/audit-objective21-actor-mcqs.mjs",
+      "sha256": "87acb92f626b8bbceff7db84d278823f87a1e2a170bd0e3f49829c6ca82e18b8"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective21-actor-pbqs-proposals.json",
+      "sha256": "e8ff7558f0fabfdc96a1cf7d1cb685835e39ccb8ee7cbf78a7dba36d669a0360"
+    },
+    {
+      "path": "docs/phase-2b5-objective21-actor-pbqs-review.md",
+      "sha256": "6bbbc99893f29eb6b26f2545777b0877208130857cc81195dd8cc347c193d1ba"
+    },
+    {
+      "path": "scripts/audit-objective21-actor-pbqs.mjs",
+      "sha256": "f3b510182650bc232228686a4d2aab2f6ff53a23b5559b501cc85f480d88a73f"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective21-actor-lesson-proposals.json",
+      "sha256": "3d82f64523a17bfd9730d2616ceaafb94f5e3a1bab911629a9d97862498a4566"
+    },
+    {
+      "path": "docs/phase-2b5-objective21-actor-lesson-review.md",
+      "sha256": "2e60bd7ed31d9c124af3616368ce4d4be4ced8e726f79925b9264c0373e29418"
+    },
+    {
+      "path": "scripts/audit-objective21-actor-lesson.mjs",
+      "sha256": "c73a393a661924c7b0b1d881d48cba1aa9ed52cfb775ad954035cb43bbe69289"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective21-final-glossary-proposals.json",
+      "sha256": "42627fec1d58061b8ca2f68d935bd3a292d3a98ad1e84e2d9b11a9e903486d08"
+    },
+    {
+      "path": "docs/phase-2b5-objective21-final-glossary-review.md",
+      "sha256": "cf4aa9ce4e9da28b6b25c716494ac453225573a0529fcc9c445ce84a023bd97e"
+    },
+    {
+      "path": "scripts/audit-objective21-final-glossary.mjs",
+      "sha256": "83712136fb96e14a551e99a35e2aab9c9c07106c8aaefede684809e88e8b8ffb"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective22-channel-mcqs-proposals.json",
+      "sha256": "41446e63bedc822b85960fb94d540fe4a31e4f9a1cc3a271171604d13e602699"
+    },
+    {
+      "path": "docs/phase-2b5-objective22-channel-mcqs-review.md",
+      "sha256": "927d7bd0ed461e6ba0a1a848ed3f871c755aeeecfb30c6219735fbc39f7c22a6"
+    },
+    {
+      "path": "scripts/audit-objective22-channel-mcqs.mjs",
+      "sha256": "b5136f9ce107d74ae68ae399e523c818bd91c50ea638d4198baf10ee76e73fd0"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective22-targeting-mcqs-proposals.json",
+      "sha256": "5d88243d88a1fec3254b0f84fbc2cf244cddf54848f9f663b78792850e696b46"
+    },
+    {
+      "path": "docs/phase-2b5-objective22-targeting-mcqs-review.md",
+      "sha256": "ce4f14159d3a1b8e8fb4596b06af0d294e6b777c946100eae80d37c64dbd8c21"
+    },
+    {
+      "path": "scripts/audit-objective22-targeting-mcqs.mjs",
+      "sha256": "3fbcb86f2869b9a12f89cb9c3c0b67b4a7518930920e78a65331058fcc84661b"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective22-final-mcqs-proposals.json",
+      "sha256": "45b802ac854c4436957037c8019ee618e64cce0476d210fdc7c190b8afc9eea9"
+    },
+    {
+      "path": "docs/phase-2b5-question-review-ledger.json",
+      "sha256": "e0ceeec3c5cc8adb94b36175954a8cefaebcb4f29f4c66aa38c400f65de3bb12"
+    },
+    {
+      "path": "scripts/lib/content-mapping/review-triage.mjs",
+      "sha256": "319a822746d02c2da113b62b63ebbe0dffc2fb0da529f6551242fa9704dec088"
+    },
+    {
+      "path": "scripts/audit-question-review-fastlane.mjs",
+      "sha256": "1ca9483f8c6054f7a318961e2898e08042ecdf659d38c0854b9009a90cc81c96"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective23-fastlane-proposals.json",
+      "sha256": "adeeea7e891c96eb7a68e23d8cfa2bf3c8bfdafebf4387f844526cf2e607492c"
+    },
+    {
+      "path": "docs/phase-2b5-question-review-fastlane.md",
+      "sha256": "dfd785c39e7ab336e8e56bdd4e8a1908af107926fde6e1fd29d0f541a0061468"
+    },
+    {
+      "path": "scripts/audit-objective23-final-mcqs.mjs",
+      "sha256": "4280a9e2e2bbbf5ee4256e608f88e28f5f685fcc0f35edc2392c62ab6d31f169"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective23-final-mcqs-proposals.json",
+      "sha256": "a5289bda4c9001ff77d6efec9fdf0033bd6f1bdea4c8670c9104c7a520b8234d"
+    },
+    {
+      "path": "docs/phase-2b5-objective23-final-mcqs-review.md",
+      "sha256": "097a7ec9e8f57e97dc48017c5052003314793aeee6dbe294266fabfed1a2f738"
+    },
+    {
+      "path": "scripts/audit-objective24-priority-mcqs.mjs",
+      "sha256": "b06c248a23d6418a81a55456a8da69ed646ac934be94e2b98c0f38928af0e6d4"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective24-priority-mcqs-proposals.json",
+      "sha256": "c641a0126c803a4c3f9eaa5286fcea6b045b7ad5e69e7781b76152d428bb7051"
+    },
+    {
+      "path": "docs/phase-2b5-objective24-priority-mcqs-review.md",
+      "sha256": "9d2acd443047f1d35deb142a9b5aefbe2055206d38e1d8ea517f755dde61fbae"
+    },
+    {
+      "path": "scripts/audit-objective24-second-mcqs.mjs",
+      "sha256": "cca322c556f320a65170528016acd6499cd7c9da00ddce8b44edfcb03b5334f5"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective24-second-mcqs-proposals.json",
+      "sha256": "dafe0ed8bcae43eb8863748418ee042458bf43ac8793e726a462bade69bf9f8b"
+    },
+    {
+      "path": "docs/phase-2b5-objective24-second-mcqs-review.md",
+      "sha256": "855a71373b16c9af90c1219f01f36b899201170992e838b5e8e27ca9d474c3e8"
+    },
+    {
+      "path": "scripts/audit-objective24-final-mcqs.mjs",
+      "sha256": "87b98369b2086a6efdfe97081dc54def92ff9292f68e2fdc57bea533e03f5715"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective24-final-mcqs-proposals.json",
+      "sha256": "80368750e5730e108cb6ef045d5c1956f0155118876773466374c5af4a2cc1f3"
+    },
+    {
+      "path": "docs/phase-2b5-objective24-final-mcqs-review.md",
+      "sha256": "d358a2494b22b628a8eb691a78aa85143456fd549eb18cde3384fc551fdd2057"
+    },
+    {
+      "path": "scripts/audit-objective25-mcqs.mjs",
+      "sha256": "f70b7777d8c82fb1a49c5a03a3285da76db3de13dbb0b9c679cf8f5d932b0d37"
+    }
+  ],
+  "triageLedgerBinding": {
+    "path": "docs/phase-2b5-question-review-ledger.json",
+    "sha256": "e0ceeec3c5cc8adb94b36175954a8cefaebcb4f29f4c66aa38c400f65de3bb12",
+    "rebuiltFromCurrentSourceAndMatched": true,
+    "inventoryOnly": true,
+    "baselinePriorQuestions": 125,
+    "substantiveOverlayPackets": [
+      {
+        "path": "docs/drafts/phase-2b5-objective23-fastlane-proposals.json",
+        "sha256": "adeeea7e891c96eb7a68e23d8cfa2bf3c8bfdafebf4387f844526cf2e607492c"
+      },
+      {
+        "path": "docs/drafts/phase-2b5-objective23-final-mcqs-proposals.json",
+        "sha256": "a5289bda4c9001ff77d6efec9fdf0033bd6f1bdea4c8670c9104c7a520b8234d"
+      },
+      {
+        "path": "docs/drafts/phase-2b5-objective24-priority-mcqs-proposals.json",
+        "sha256": "c641a0126c803a4c3f9eaa5286fcea6b045b7ad5e69e7781b76152d428bb7051"
+      },
+      {
+        "path": "docs/drafts/phase-2b5-objective24-second-mcqs-proposals.json",
+        "sha256": "dafe0ed8bcae43eb8863748418ee042458bf43ac8793e726a462bade69bf9f8b"
+      },
+      {
+        "path": "docs/drafts/phase-2b5-objective24-final-mcqs-proposals.json",
+        "sha256": "80368750e5730e108cb6ef045d5c1956f0155118876773466374c5af4a2cc1f3"
+      }
+    ],
+    "currentPriorQuestions": 183
+  },
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "selectionPolicy": "All 10 undispositioned objective 2.5 MCQs by existing triage priority then record ID; structural cues do not prove correctness or semantic error",
+  "selectedQuestionRecordIds": [
+    "mcq:m708",
+    "mcq:m134",
+    "mcq:m138",
+    "mcq:m261",
+    "mcq:m011",
+    "mcq:m014",
+    "mcq:m113",
+    "mcq:m133",
+    "mcq:m165",
+    "mcq:m284"
+  ],
+  "selectedFeedbackRecordIds": [
+    "explanation:mcq:m708",
+    "explanation:mcq:m134",
+    "explanation:mcq:m138",
+    "explanation:mcq:m261",
+    "explanation:mcq:m011",
+    "explanation:mcq:m014",
+    "explanation:mcq:m113",
+    "explanation:mcq:m133",
+    "explanation:mcq:m165",
+    "explanation:mcq:m284"
+  ],
+  "deferredObjective25QuestionRecordIds": [],
+  "questionProposals": [
+    {
+      "recordId": "mcq:m708",
+      "questionId": "m708",
+      "kind": "mcq",
+      "sourceRevision": "sha256:481a23bb7fdd5bcd3a0e6a8a4af41778d35ad4bca540cf2ec7a65155cb36ef9f",
+      "publishedRecordSignature": "sha256:577082ff94caf4c00d31dfbf45b06c6476de8329d45428d653b3fd8f2254a5c7",
+      "revisions": {
+        "localEffective": "sha256:481a23bb7fdd5bcd3a0e6a8a4af41778d35ad4bca540cf2ec7a65155cb36ef9f",
+        "publishedCatalogue": "sha256:577082ff94caf4c00d31dfbf45b06c6476de8329d45428d653b3fd8f2254a5c7",
+        "trustedCompilerObserved": "eda004a6-65e5-85b7-801c-a3f6126b7ed9",
+        "trustedContentSha256Observed": "eda004a665e505b7401ca3f6126b7ed913b101fa0c09a71509a65f3e12739196",
+        "authored": null,
+        "preEditorialSnapshotMerged": "sha256:ec0d5f068acd11364c330e6771e5481f8c38e1f34f5acc8af8b49675309968f1",
+        "feedbackBundle": "sha256:aab802a49c3a4fdfe5afea1044d530feae792adece0b7d22e4a3dcd3756b439b"
+      },
+      "sourcePriority": 130,
+      "triageFlags": {
+        "capturedOverride": true,
+        "snapshotOnlySource": true,
+        "importedSource": false,
+        "effectiveEditorialChanged": true,
+        "stemChanged": false,
+        "optionsChanged": false,
+        "possibleMultiSkillCue": false,
+        "priorQualificationHold": false,
+        "unsupportedPbqGrading": false,
+        "feedbackChanged": false,
+        "missingOrFallbackWrongFeedback": false,
+        "feedbackSemanticReviewPending": true
+      },
+      "capturedOverrideBindings": [
+        {
+          "captureIdentityRevision": "sha256:8017788de95d9efc4ca63bffabd17df0159ff31b2f1213ed283f7eb6fc07029f",
+          "capturedAt": "2026-07-05T04:12:59.494+00:00",
+          "payloadFingerprint": "cd9358574a12fec2793944739eef7dd105d9cc1fef84125d01fcb9a0f8cd31a2",
+          "snapshotRevision": "sha256:5f5a85d74cb0a693a1a2704dabaceec73e59f32063ea93ebf8fd2b44a205dca6"
+        }
+      ],
+      "snapshotReplayChecked": true,
+      "sourceLayerDisposition": "snapshot_only_no_authored_or_imported_substitute",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Choose a suitably provisioned distributed upstream DDoS/CDN service with restricted origin access for the stated edge-capacity requirement; not guaranteed absorption or hidden-origin safety.",
+      "contentQualification": "HOLD any CDN/reverse-proxy/NGFW product label as guaranteed DDoS absorption, permanently hidden origin IP or full attack coverage. The effective choice explicitly requires suitable DDoS capability and restricted origin access; the other paths remain local to the constrained connection. Origin history, alternate DNS/services and direct reachability can bypass the service; actual capacity, layer coverage and dependencies matter. Old snapshot unconditional shield/crash-prevention wording is superseded by editorial content despite the same key index. One combined capacity/protection/origin choice supplies no separate implemented components. Preserve DDoS actor/source-count, channel and product-category holds; no service, origin restriction, attack traffic, outage or recovery is tested.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "skillRoleProposal": "one_combined_upstream_control_choice_not_executed_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "upstream-distributed-availability-control-choice",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:a3ae8dd3909856ff76a785a28baf106c512a8f577ee7d97d6e89db0f668b6af3",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m134",
+      "questionId": "m134",
+      "kind": "mcq",
+      "sourceRevision": "sha256:6f4703668c18d06dc3cbd7f3c63bf799a56f68576853ec812da6da6769a90b09",
+      "publishedRecordSignature": "sha256:11f5f65fbbeaff3e67e13ecc5cba5c6692ba7fcee5ef480d24aa19c3d0722b97",
+      "revisions": {
+        "localEffective": "sha256:6f4703668c18d06dc3cbd7f3c63bf799a56f68576853ec812da6da6769a90b09",
+        "publishedCatalogue": "sha256:11f5f65fbbeaff3e67e13ecc5cba5c6692ba7fcee5ef480d24aa19c3d0722b97",
+        "trustedCompilerObserved": "014d03cd-62d6-88f0-bedd-1fec105fb502",
+        "trustedContentSha256Observed": "014d03cd62d6e8f07edd1fec105fb502d8eae64c693124748872a3512f580ff2",
+        "authored": "sha256:242e4d33096cd62c57cd2862a0fcd75705d4b8e9fd87a96b1ba4b2d7221fbb1f",
+        "preEditorialSnapshotMerged": "sha256:242e4d33096cd62c57cd2862a0fcd75705d4b8e9fd87a96b1ba4b2d7221fbb1f",
+        "feedbackBundle": "sha256:d5c5a01be04836cd5da4154eb8a4413ebe67f2d5f9acee99863617d6c2915165"
+      },
+      "sourcePriority": 20,
+      "triageFlags": {
+        "capturedOverride": false,
+        "snapshotOnlySource": false,
+        "importedSource": false,
+        "effectiveEditorialChanged": true,
+        "stemChanged": true,
+        "optionsChanged": false,
+        "possibleMultiSkillCue": false,
+        "priorQualificationHold": false,
+        "unsupportedPbqGrading": false,
+        "feedbackChanged": true,
+        "missingOrFallbackWrongFeedback": false,
+        "feedbackSemanticReviewPending": true
+      },
+      "capturedOverrideBindings": [],
+      "snapshotReplayChecked": false,
+      "sourceLayerDisposition": "authored_equals_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize that no released fix limits what patching can address; the selected option adds a zero-day label whose prior unknownness and exact numbered scope remain held.",
+      "contentQualification": "HOLD absence of a released patch as sufficient zero-day evidence. Newly discovered does not specify discovery-time vendor/defender unknownness; the retained keyed option still asserts zero-day while the main feedback only establishes patch unavailability. Prior m130/m613 unknown-flaw qualifications remain; do not turn lack of a fix into unknownness or failed patching. HOLD exact whole 2.5 assessed scope: this asks what a gap illustrates rather than selecting or explaining a particular enterprise mitigation; retain patching-limit context without forcing 2.3. Suggested isolation/least privilege/monitoring may reduce exposure, not universally address the flaw or demonstrate a defense. No actual exploit, vendor notice, fix, isolation, protection or remedy is observed.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [],
+        "contextCodes": [
+          "2.5"
+        ],
+        "status": "held_whole_numbered_gap_recognition_scope"
+      },
+      "skillRoleProposal": "patching_limit_recognition_numbered_scope_held",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "unavailable-fix-patching-limit-recognition",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:f4fbb0863d30cad7cdd90707e7aaeff4150d08b74a188de80595c3398f086427",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m138",
+      "questionId": "m138",
+      "kind": "mcq",
+      "sourceRevision": "sha256:564ad7d30e82d9ed9c925fb7e81076e1251833a46d16b2bf96f9cf705d898a2d",
+      "publishedRecordSignature": "sha256:90a41bbf225dea23a71426e6d4c8a1f244a4c9c7bedd4ae76b02fcb5f66136c3",
+      "revisions": {
+        "localEffective": "sha256:564ad7d30e82d9ed9c925fb7e81076e1251833a46d16b2bf96f9cf705d898a2d",
+        "publishedCatalogue": "sha256:90a41bbf225dea23a71426e6d4c8a1f244a4c9c7bedd4ae76b02fcb5f66136c3",
+        "trustedCompilerObserved": "5d8dff63-474c-8972-9a12-86c44eb18b09",
+        "trustedContentSha256Observed": "5d8dff63474cd9721a1286c44eb18b09b6a5c4579053ebbcc1d0c5f58048c2cd",
+        "authored": "sha256:fda64338bd6e8bae96015284b7c82ab81e7bdb6875e4f3f0b2b73222eba0b8ac",
+        "preEditorialSnapshotMerged": "sha256:fda64338bd6e8bae96015284b7c82ab81e7bdb6875e4f3f0b2b73222eba0b8ac",
+        "feedbackBundle": "sha256:ab3774be3cf13910fa5dc2b0d2735f02cdcbf3b1e437d534a80d9fd18479b7e5"
+      },
+      "sourcePriority": 20,
+      "triageFlags": {
+        "capturedOverride": false,
+        "snapshotOnlySource": false,
+        "importedSource": false,
+        "effectiveEditorialChanged": true,
+        "stemChanged": true,
+        "optionsChanged": false,
+        "possibleMultiSkillCue": false,
+        "priorQualificationHold": false,
+        "unsupportedPbqGrading": false,
+        "feedbackChanged": true,
+        "missingOrFallbackWrongFeedback": false,
+        "feedbackSemanticReviewPending": true
+      },
+      "capturedOverrideBindings": [],
+      "snapshotReplayChecked": false,
+      "sourceLayerDisposition": "authored_equals_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Choose enforced DMZ-to-database path restrictions while preserving one required connection; allowed traffic remains a potential attack path.",
+      "contentQualification": "HOLD firewall rules as preventing all pivoting, access or escalation, port-only allow rules as sufficient, and required application traffic as automatically safe. The current stem limits other paths while expressly preserving one application connection. Source/destination/service restrictions and application/database authorisation remain separate needs. The authored cannot-reach-DB guarantee is superseded. AV, authentication and logging can contribute but are not the offered path-policy mechanism; controls can be combined. One rule choice supplies no independent source, destination, port or database-permission components. Correlate with m133 general segmentation; no firewall, request, compromise containment or prevention is implemented.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "skillRoleProposal": "one_path_policy_choice_not_independent_components",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "enforced-network-boundary-purpose",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:8c5833cfb4922171ae4f5cfc6e9e6b659a801d7e84534122713e6d8bf5e49163",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m261",
+      "questionId": "m261",
+      "kind": "mcq",
+      "sourceRevision": "sha256:cbf18c28a7079f2cf29a0fb07bb724470e14eb76db66718aa29291bea3002113",
+      "publishedRecordSignature": "sha256:aff082d1bcde1d0a380851f50b4f828074352e63dc42eb325ecf8ca4a697094b",
+      "revisions": {
+        "localEffective": "sha256:cbf18c28a7079f2cf29a0fb07bb724470e14eb76db66718aa29291bea3002113",
+        "publishedCatalogue": "sha256:aff082d1bcde1d0a380851f50b4f828074352e63dc42eb325ecf8ca4a697094b",
+        "trustedCompilerObserved": "324d3a76-c784-8857-8832-b091b9547473",
+        "trustedContentSha256Observed": "324d3a76c784d857c832b091b95474737d77f0ddf282d7104a69dd5989f1ffba",
+        "authored": "sha256:a99e1b213d8d4db8bb0f9a4e9ae28628064f929d213ad68d07ea13603dda26b0",
+        "preEditorialSnapshotMerged": "sha256:a99e1b213d8d4db8bb0f9a4e9ae28628064f929d213ad68d07ea13603dda26b0",
+        "feedbackBundle": "sha256:f2b912ffbffbda3e86bb548411fadcbe900a9db7375e882e56c750b7688c1917"
+      },
+      "sourcePriority": 20,
+      "triageFlags": {
+        "capturedOverride": false,
+        "snapshotOnlySource": false,
+        "importedSource": false,
+        "effectiveEditorialChanged": true,
+        "stemChanged": true,
+        "optionsChanged": false,
+        "possibleMultiSkillCue": false,
+        "priorQualificationHold": false,
+        "unsupportedPbqGrading": false,
+        "feedbackChanged": true,
+        "missingOrFallbackWrongFeedback": false,
+        "feedbackSemanticReviewPending": true
+      },
+      "capturedOverrideBindings": [],
+      "snapshotReplayChecked": false,
+      "sourceLayerDisposition": "authored_equals_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Choose WAF interpretation aligned with the stated application decoding to address the supplied inspection gap; not generic decoding or implemented SQL-injection prevention.",
+      "contentQualification": "HOLD Base64 alone as SQL injection, every application/WAF as decoding every encoding automatically, normalisation as universal prevention or a product-category swap as guaranteed parsing parity. The effective stem explicitly supplies application decoding and WAF raw-field inspection mismatch; authored generic encoded-bypass and raw-input-is-trivially-bypassed claims are superseded. Align field scope, order, character handling and bounded transformations with actual application semantics and test; do not arbitrarily decode all inputs. Current main teaching names parameterised queries as remediation context, not an assessed implemented defense or independent SQL skill. Preserve prior SQL/query, WAF/NGFW/TLS visibility and input-boundary holds. No input, payload, decoder, query, firewall or attack executes.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "skillRoleProposal": "inspection_gap_control_choice_not_implemented_SQL_remedy",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "application-inspection-interpretation-alignment",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:38e16e78e8d1fa9b560c19880cfc668fec3e8701bc2fcbe6a39649351cf921fd",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m011",
+      "questionId": "m011",
+      "kind": "mcq",
+      "sourceRevision": "sha256:88da4a14414c2084272ed3181faba4a1d217f5bf51e11dbb62ebe4387aad818b",
+      "publishedRecordSignature": "sha256:490ff6e04557684fe0d546a92c8ee12e1308fa8d36e75dbdcb983fe8a6ef7ab2",
+      "revisions": {
+        "localEffective": "sha256:88da4a14414c2084272ed3181faba4a1d217f5bf51e11dbb62ebe4387aad818b",
+        "publishedCatalogue": "sha256:490ff6e04557684fe0d546a92c8ee12e1308fa8d36e75dbdcb983fe8a6ef7ab2",
+        "trustedCompilerObserved": "4288123f-3ae6-81a0-9f35-32899e1d1e79",
+        "trustedContentSha256Observed": "4288123f3ae671a0df3532899e1d1e79f4d35ff1db33cf579168f2e7274c8316",
+        "authored": "sha256:dac43e844078d44e6665330fc9081f09ea2e979117baec9645a3b8075f2b5a7b",
+        "preEditorialSnapshotMerged": "sha256:dac43e844078d44e6665330fc9081f09ea2e979117baec9645a3b8075f2b5a7b",
+        "feedbackBundle": "sha256:4cd3e816f089ccbdb259494a3b809dd72d3b38b52b76678bbd66bbcefdd06b91"
+      },
+      "sourcePriority": 10,
+      "triageFlags": {
+        "capturedOverride": false,
+        "snapshotOnlySource": false,
+        "importedSource": false,
+        "effectiveEditorialChanged": true,
+        "stemChanged": false,
+        "optionsChanged": false,
+        "possibleMultiSkillCue": false,
+        "priorQualificationHold": false,
+        "unsupportedPbqGrading": false,
+        "feedbackChanged": true,
+        "missingOrFallbackWrongFeedback": false,
+        "feedbackSemanticReviewPending": true
+      },
+      "capturedOverrideBindings": [],
+      "snapshotReplayChecked": false,
+      "sourceLayerDisposition": "authored_equals_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Choose SYN cookies to reduce allocation of half-open TCP state for the supplied incomplete-handshake flood; not protection against every DDoS or guaranteed availability.",
+      "contentQualification": "HOLD spoofed addresses as unique host/actor counts, SYN cookies as blocking volumetric link saturation, authentication of a benign peer, zero server processing cost, or universal safe handling of every TCP option/stack. Cookies delay full per-connection state until a validated handshake completion; some implementation work/resources remain. Current main feedback corrects the authored zero-memory shorthand. Longer half-open timeouts can prolong pressure; blocking all TCP conflicts with legitimate TCP availability; an IDS may drive a separate response but passive sensing alone does not enforce this mitigation. No packets, cookie, backlog, platform configuration, outage or recovery is measured; preserve DDoS/freshness qualifications.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "skillRoleProposal": "state_exhaustion_control_choice_not_measured_availability",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "half-open-connection-state-control-choice",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:382bf70fabf977f9abe15485b83783119ba23ec75f2977d4e4ed559306317f2c",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m014",
+      "questionId": "m014",
+      "kind": "mcq",
+      "sourceRevision": "sha256:9e0b2847cb7e5975dad529964094c06879183d2f21b0da19086b61bcf944228e",
+      "publishedRecordSignature": "sha256:fb61c4803e1f2dc751c8b636ccdddb5a96035669265c9a66de13ff06c9620aca",
+      "revisions": {
+        "localEffective": "sha256:9e0b2847cb7e5975dad529964094c06879183d2f21b0da19086b61bcf944228e",
+        "publishedCatalogue": "sha256:fb61c4803e1f2dc751c8b636ccdddb5a96035669265c9a66de13ff06c9620aca",
+        "trustedCompilerObserved": "596ef161-743f-814a-a9c4-e04fc48d9391",
+        "trustedContentSha256Observed": "596ef161743f714a69c4e04fc48d939196ea1be422040630efc12dae8b96895a",
+        "authored": "sha256:badb3a68c5ed15b6f016616e6c0160b5a5c6003742b5121d4dd9daf3632e9ff9",
+        "preEditorialSnapshotMerged": "sha256:badb3a68c5ed15b6f016616e6c0160b5a5c6003742b5121d4dd9daf3632e9ff9",
+        "feedbackBundle": "sha256:0bb7f85de886611d43d3aa68eb31e450fe6e6e4c02592e41bce38556539c78ec"
+      },
+      "sourcePriority": 10,
+      "triageFlags": {
+        "capturedOverride": false,
+        "snapshotOnlySource": false,
+        "importedSource": false,
+        "effectiveEditorialChanged": true,
+        "stemChanged": false,
+        "optionsChanged": false,
+        "possibleMultiSkillCue": false,
+        "priorQualificationHold": false,
+        "unsupportedPbqGrading": false,
+        "feedbackChanged": true,
+        "missingOrFallbackWrongFeedback": false,
+        "feedbackSemanticReviewPending": true
+      },
+      "capturedOverrideBindings": [],
+      "snapshotReplayChecked": false,
+      "sourceLayerDisposition": "authored_equals_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize minimum task-required access as least privilege; separation of duties and other access controls are compatible and may also constrain permissions.",
+      "contentQualification": "HOLD minimum permission scope as an implemented guarantee of safe access, every role definition as accurate, and separation of duties as never restricting permissions. The retained SoD correction says it does not restrict permission scope and reduces it to multiple people completing a process; static conflicting-role restrictions can implement it. Hold that precise contrast while retaining minimum task access as the offered principle. MAC labels can enforce access consistent with least privilege; MAC acronym/network-address polysemy must not force another canonical concept. Job rotation can affect role assignments but is not the minimum-scope principle. Correlate closely with m113; no entitlements, account, fraud reduction or compromise impact is tested.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "skillRoleProposal": "minimum_permission_principle_recognition",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "minimum-required-access-principle",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:9f45e284730b1c32bdd86e67b41d98b3957c1727fbdbdda866cb8dd071f0a746",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m113",
+      "questionId": "m113",
+      "kind": "mcq",
+      "sourceRevision": "sha256:86222bdb5f8d4f9d0c946113eedfa3d46df43fc76fb0eae6404ab7811bcc81fb",
+      "publishedRecordSignature": "sha256:526ce893c10c5820afffb7d1eedc56c8463c3295cbfa0dd2a673d19ccf0ee246",
+      "revisions": {
+        "localEffective": "sha256:86222bdb5f8d4f9d0c946113eedfa3d46df43fc76fb0eae6404ab7811bcc81fb",
+        "publishedCatalogue": "sha256:526ce893c10c5820afffb7d1eedc56c8463c3295cbfa0dd2a673d19ccf0ee246",
+        "trustedCompilerObserved": "07471a72-621d-86a6-aca3-3b83d8a845e8",
+        "trustedContentSha256Observed": "07471a72621d26a62ca33b83d8a845e84dc793748ab24196faf2e5715c5a599b",
+        "authored": "sha256:5b3c6374bd16eb315d17838ac782b928b7a9e9b74eac61482402c3882cad4b6c",
+        "preEditorialSnapshotMerged": "sha256:5b3c6374bd16eb315d17838ac782b928b7a9e9b74eac61482402c3882cad4b6c",
+        "feedbackBundle": "sha256:820c6b6db5279aa9cd52b2d3baf89b4951d3b1e79d9c3c53adcbf4b0b0c8b608"
+      },
+      "sourcePriority": 10,
+      "triageFlags": {
+        "capturedOverride": false,
+        "snapshotOnlySource": false,
+        "importedSource": false,
+        "effectiveEditorialChanged": true,
+        "stemChanged": false,
+        "optionsChanged": false,
+        "possibleMultiSkillCue": false,
+        "priorQualificationHold": false,
+        "unsupportedPbqGrading": false,
+        "feedbackChanged": true,
+        "missingOrFallbackWrongFeedback": false,
+        "feedbackSemanticReviewPending": true
+      },
+      "capturedOverrideBindings": [],
+      "snapshotReplayChecked": false,
+      "sourceLayerDisposition": "authored_equals_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recall least privilege as duty-required permission scope for users/systems; seniority and request-process rules do not alone define necessary access.",
+      "contentQualification": "HOLD job title/seniority as sufficient required permissions, all users as forbidden any justified administrative task, request approval as least privilege by itself or reduced compromise damage as measured. Minimum actual task/function scope is the supplied principle; correct role definitions, enforcement and changing duties still require review. An approval workflow can support governance and temporary privilege without defining the minimum necessary rights. Authored domain 1 is superseded by effective domain 2/objective 2.5. Correlate closely with m014, with no approved family independence, live permission check or prevention/recovery outcome.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "skillRoleProposal": "minimum_permission_principle_recall",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "minimum-required-access-principle",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:01323fa974e33530e55bbd6a0f46e50229725e3e7f23f38179f97272fc077332",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m133",
+      "questionId": "m133",
+      "kind": "mcq",
+      "sourceRevision": "sha256:bc131fd266982181f5f0cdc6b7d6b4d087007ef57472ca170a7a965ee3aa6b40",
+      "publishedRecordSignature": "sha256:bceee931b0dc2485f16a85d89190abb62d78f760bfd26e1b1be671748b0bbb5f",
+      "revisions": {
+        "localEffective": "sha256:bc131fd266982181f5f0cdc6b7d6b4d087007ef57472ca170a7a965ee3aa6b40",
+        "publishedCatalogue": "sha256:bceee931b0dc2485f16a85d89190abb62d78f760bfd26e1b1be671748b0bbb5f",
+        "trustedCompilerObserved": "5e87ea77-821b-8d06-84d4-80c979bb2543",
+        "trustedContentSha256Observed": "5e87ea77821b0d0644d480c979bb2543032fdde25203b524620645a37ccfc329",
+        "authored": "sha256:22cf5d4f170490f2ac4e634745d53856844cd147fbfeeeb718ecffb77d88f039",
+        "preEditorialSnapshotMerged": "sha256:22cf5d4f170490f2ac4e634745d53856844cd147fbfeeeb718ecffb77d88f039",
+        "feedbackBundle": "sha256:877cb08d5373dde46f33cb694ace4fa70c5c76be437e201d0fc73fc8dc8578e3"
+      },
+      "sourcePriority": 10,
+      "triageFlags": {
+        "capturedOverride": false,
+        "snapshotOnlySource": false,
+        "importedSource": false,
+        "effectiveEditorialChanged": true,
+        "stemChanged": false,
+        "optionsChanged": false,
+        "possibleMultiSkillCue": false,
+        "priorQualificationHold": false,
+        "unsupportedPbqGrading": false,
+        "feedbackChanged": true,
+        "missingOrFallbackWrongFeedback": false,
+        "feedbackSemanticReviewPending": true
+      },
+      "capturedOverrideBindings": [],
+      "snapshotReplayChecked": false,
+      "sourceLayerDisposition": "authored_equals_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize enforced network segmentation as a way to limit lateral reachability; VLAN/subnet labels or rate policies alone do not prove isolation.",
+      "contentQualification": "HOLD subnet/VLAN separation alone as enforced isolation, every segmented network as eliminating lateral movement, NAT as a universal security boundary, or QoS/throttling as unable to drop traffic under any policy. Current main explicitly requires enforced rules. Performance controls can shape/drop traffic but do not by themselves implement the offered zone-authorisation policy. Correlate with m138 which preserves a required path, without granting independent family/component evidence. No topology, rule, segmentation rollout, route, throughput, intrusion or movement is measured.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "skillRoleProposal": "segmentation_purpose_recognition_not_rollout",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "enforced-network-boundary-purpose",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:cf7488f1889ffbe4cede891634c5c73a77290c7348bbff8c3a2f99d0c302796d",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m165",
+      "questionId": "m165",
+      "kind": "mcq",
+      "sourceRevision": "sha256:835461495dda4e75bfe5b8d37cee4e665750f85b8f6efea1eba8aa3aee780a66",
+      "publishedRecordSignature": "sha256:522f2d87b61d7ce9963f84076323987b12ced548f50bbd8e743f9a4c9d0c1404",
+      "revisions": {
+        "localEffective": "sha256:835461495dda4e75bfe5b8d37cee4e665750f85b8f6efea1eba8aa3aee780a66",
+        "publishedCatalogue": "sha256:522f2d87b61d7ce9963f84076323987b12ced548f50bbd8e743f9a4c9d0c1404",
+        "trustedCompilerObserved": "89a04ce9-eeaa-85ef-961b-e8e49ed87af0",
+        "trustedContentSha256Observed": "89a04ce9eeaa25efd61be8e49ed87af0ab83f57d6dea1d48512a6e6f34c98c00",
+        "authored": "sha256:5eba79a02bcd560763eb35cd7b8c18882009486d87b2b08511cffc966eb36a73",
+        "preEditorialSnapshotMerged": "sha256:5eba79a02bcd560763eb35cd7b8c18882009486d87b2b08511cffc966eb36a73",
+        "feedbackBundle": "sha256:c9ba354a7a6313135eb7d766d3c14d369e0d4be585ca363da9f1dcad434014e9"
+      },
+      "sourcePriority": 10,
+      "triageFlags": {
+        "capturedOverride": false,
+        "snapshotOnlySource": false,
+        "importedSource": false,
+        "effectiveEditorialChanged": true,
+        "stemChanged": false,
+        "optionsChanged": false,
+        "possibleMultiSkillCue": false,
+        "priorQualificationHold": false,
+        "unsupportedPbqGrading": false,
+        "feedbackChanged": true,
+        "missingOrFallbackWrongFeedback": false,
+        "feedbackSemanticReviewPending": true
+      },
+      "capturedOverrideBindings": [],
+      "snapshotReplayChecked": false,
+      "sourceLayerDisposition": "authored_equals_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize non-executable-page enforcement as the offered DEP/NX mechanism; write permissions and complete exploit prevention are separate concerns.",
+      "contentQualification": "HOLD DEP/NX as necessarily implementing strict writable-XOR-executable policy, eliminating buffer corruption/code reuse, protecting every process/configuration or establishing that injected data was present/executed. The supplied protected-page mechanism is meaningful; NX hardware and OS/page-permission policy cooperate. Current main corrects the authored not-both-writable-and-executable guarantee. ASLR, canaries and CFG address different limited mechanisms and may combine; none is separately keyed evidence. DEP is inferred general hardening context, not a named 2.5 bullet, and authored domain 3 is superseded. No memory permissions, exploit, bypass, CPU or installed protection is tested.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "skillRoleProposal": "page_protection_purpose_recognition_not_exploit_test",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "non-executable-page-purpose-recognition",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:7f2c34e773eef0dbba5ad5f99a7c89ed35ca4a2313cfe1cac7191e39e72b842f",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m284",
+      "questionId": "m284",
+      "kind": "mcq",
+      "sourceRevision": "sha256:42a4f13d6bb071c7c80a80fc65cf060811f859c8aea45f5e07d758edbd0f8446",
+      "publishedRecordSignature": "sha256:d025246e1c1e7f2d9a223a22d663097e7098ca115c96ce971ef04623f60b7e68",
+      "revisions": {
+        "localEffective": "sha256:42a4f13d6bb071c7c80a80fc65cf060811f859c8aea45f5e07d758edbd0f8446",
+        "publishedCatalogue": "sha256:d025246e1c1e7f2d9a223a22d663097e7098ca115c96ce971ef04623f60b7e68",
+        "trustedCompilerObserved": "23a8834d-e000-8adc-8800-06015ba5bde6",
+        "trustedContentSha256Observed": "23a8834de0005adc480006015ba5bde69cfaff116a3f591f737fb24f5a048bec",
+        "authored": "sha256:362b81c488f6e038ea77f7da4cb9d64d167c062146fe4c17b214c9bb47f60170",
+        "preEditorialSnapshotMerged": "sha256:362b81c488f6e038ea77f7da4cb9d64d167c062146fe4c17b214c9bb47f60170",
+        "feedbackBundle": "sha256:32e7c0e30b7e3084982bb1ac80b73fe5ef3115f21c80646e79925fbb2e28ef18"
+      },
+      "sourcePriority": 10,
+      "triageFlags": {
+        "capturedOverride": false,
+        "snapshotOnlySource": false,
+        "importedSource": false,
+        "effectiveEditorialChanged": true,
+        "stemChanged": false,
+        "optionsChanged": false,
+        "possibleMultiSkillCue": false,
+        "priorQualificationHold": false,
+        "unsupportedPbqGrading": false,
+        "feedbackChanged": true,
+        "missingOrFallbackWrongFeedback": false,
+        "feedbackSemanticReviewPending": true
+      },
+      "capturedOverrideBindings": [],
+      "snapshotReplayChecked": false,
+      "sourceLayerDisposition": "authored_equals_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Choose removal of stipulated unused legacy services to reduce unnecessary exposed functionality; dependency and change checks are required and host risk remains.",
+      "contentQualification": "HOLD removal as eliminating every host risk, disabling as identical to uninstalling, all legacy-protocol deployments as identical cleartext configurations or TLS retrofit as automatically safe. The fictional stem declares no production need; current main adds dependency/change checks. ACLs, encryption and segmentation can help required services, but retaining these stipulated unused services preserves exposure/maintenance. One combined disable/remove choice supplies no separately observed decommissioning actions. No live process, package, dependency, change, service removal, network test or residual exposure is measured; preserve TLS/access/product and remediation qualifications.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "skillRoleProposal": "one_combined_removal_choice_not_implemented_change",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "unnecessary-functionality-removal-purpose",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:28264d8ac1c45670ac66a9a6cb5d679eb477e9e96cb0291b77d49c466d9c9157",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    }
+  ],
+  "explanationProposals": [
+    {
+      "recordId": "explanation:mcq:m708",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m708",
+      "sourceRevision": "sha256:aab802a49c3a4fdfe5afea1044d530feae792adece0b7d22e4a3dcd3756b439b",
+      "parentLocalRevision": "sha256:481a23bb7fdd5bcd3a0e6a8a4af41778d35ad4bca540cf2ec7a65155cb36ef9f",
+      "parentPublishedRevision": "sha256:577082ff94caf4c00d31dfbf45b06c6476de8329d45428d653b3fd8f2254a5c7",
+      "mainCorrectionRevision": "sha256:fdc7726e86816417eaf171c9a02fd217326878c30b795e8ba7ef010a4df9aeaa",
+      "wrongFeedbackRevision": "sha256:8d600419bf0e177f90312c98cb78a747933ded55e8377a08a59b85f74239052c",
+      "mainTeachingUnderstanding": "Distributed upstream filtering/capacity and origin restriction fit the specified need; service limits prevent any absolute protection claim.",
+      "contentQualification": "HOLD any CDN/reverse-proxy/NGFW product label as guaranteed DDoS absorption, permanently hidden origin IP or full attack coverage. The effective choice explicitly requires suitable DDoS capability and restricted origin access; the other paths remain local to the constrained connection. Origin history, alternate DNS/services and direct reachability can bypass the service; actual capacity, layer coverage and dependencies matter. Old snapshot unconditional shield/crash-prevention wording is superseded by editorial content despite the same key index. One combined capacity/protection/origin choice supplies no separate implemented components. Preserve DDoS actor/source-count, channel and product-category holds; no service, origin restriction, attack traffic, outage or recovery is tested.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:22f5897df0c9bf01640b3f6a816981181befa06d68d43746da603bc010eeb62c",
+          "correctionRevision": "sha256:47f0993a6c4af19a42a574f186240273956dc7d16d41fb574c51a79d2c4a69d5",
+          "teachingRationale": "A single proxy on the stipulated saturated connection lacks the specified geographically distributed upstream absorption.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:79e04a7372e9cec2c11b7aa8bce4fedef598fed90675793b02d63555e6d9082f",
+          "correctionRevision": "sha256:30baf68c4843ecc4b98d0d094f7244c7cbcc89157062f744f871fb24506a7902",
+          "teachingRationale": "Host filtering happens after traffic reaches the origin link; it cannot undo upstream saturation.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:bae6ca0582f8facec121cdbb36df4a0b2c6d0f2044d3351e5bf338f6687b6b48",
+          "correctionRevision": "sha256:f9b80710d6ffb2eaff44d626faaafcf8f643c3a9381660c1ccc31c5632af7517",
+          "teachingRationale": "Address translation on the same connection supplies neither the specified global edge capacity nor upstream traffic scrubbing.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m134",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m134",
+      "sourceRevision": "sha256:d5c5a01be04836cd5da4154eb8a4413ebe67f2d5f9acee99863617d6c2915165",
+      "parentLocalRevision": "sha256:6f4703668c18d06dc3cbd7f3c63bf799a56f68576853ec812da6da6769a90b09",
+      "parentPublishedRevision": "sha256:11f5f65fbbeaff3e67e13ecc5cba5c6692ba7fcee5ef480d24aa19c3d0722b97",
+      "mainCorrectionRevision": "sha256:704027cdd4f5a8443bb2b5df6b4398b5d20de25e32fc6280089e0d20dadd8740",
+      "wrongFeedbackRevision": "sha256:1275b9132f136ac7c96a650e603dcfd04e730771ade5bf3e8205aabc7ef10c2e",
+      "mainTeachingUnderstanding": "No vendor fix means no available patch removes this flaw; isolation, privilege limits and monitoring are suggested exposure reduction, not verified remedies.",
+      "contentQualification": "HOLD absence of a released patch as sufficient zero-day evidence. Newly discovered does not specify discovery-time vendor/defender unknownness; the retained keyed option still asserts zero-day while the main feedback only establishes patch unavailability. Prior m130/m613 unknown-flaw qualifications remain; do not turn lack of a fix into unknownness or failed patching. HOLD exact whole 2.5 assessed scope: this asks what a gap illustrates rather than selecting or explaining a particular enterprise mitigation; retain patching-limit context without forcing 2.3. Suggested isolation/least privilege/monitoring may reduce exposure, not universally address the flaw or demonstrate a defense. No actual exploit, vendor notice, fix, isolation, protection or remedy is observed.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [],
+        "contextCodes": [
+          "2.5"
+        ],
+        "status": "held_whole_numbered_gap_recognition_scope"
+      },
+      "withheldPreciseContrast": "zero_day_unknownness_and_numbered_gap_scope",
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:0cfbd45ee8a58fb11cc244f650a45ca3c43c159785ab08963bb336c38671925f",
+          "correctionRevision": "sha256:56d33a447838b94200aca4f91717c1d35ab34b195a280b8f614ea648b443c0a6",
+          "teachingRationale": "Prompt application of available fixes does not imply failure when no fix exists.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:a6eeac116b9c972d7de78018d5acb7f5fe32db9a92afcacc8045d94e5d9080b4",
+          "correctionRevision": "sha256:23fefb8676fd68ab728f6c521899ea842c79ed7134590a57cb554055f532c8f2",
+          "teachingRationale": "No antivirus absence is supplied, and a product label is not a guarantee against unknown flaws.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:b00852f08c329f1e2ee698bac22397b557db31cab7732800c9e0c1ceb674ea20",
+          "correctionRevision": "sha256:835fa64c16e1b61557711117222303eea8444e0b607fc9a916100a1c74b9e129",
+          "teachingRationale": "No firewall absence is supplied; reduced exposure differs from an unavailable vendor remedy.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m138",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m138",
+      "sourceRevision": "sha256:ab3774be3cf13910fa5dc2b0d2735f02cdcbf3b1e437d534a80d9fd18479b7e5",
+      "parentLocalRevision": "sha256:564ad7d30e82d9ed9c925fb7e81076e1251833a46d16b2bf96f9cf705d898a2d",
+      "parentPublishedRevision": "sha256:90a41bbf225dea23a71426e6d4c8a1f244a4c9c7bedd4ae76b02fcb5f66136c3",
+      "mainCorrectionRevision": "sha256:be35334162460def71655fb6a3c7ca16198ca6fd617e3b248f5866e39f3f4425",
+      "wrongFeedbackRevision": "sha256:cd353582bbccba6a6ab9dc25ca41360a198a3e9b66a5a65051d4d6ccd94e7d4a",
+      "mainTeachingUnderstanding": "Permit only required sources/destinations/ports, and separately protect/monitor the allowed application/database path.",
+      "contentQualification": "HOLD firewall rules as preventing all pivoting, access or escalation, port-only allow rules as sufficient, and required application traffic as automatically safe. The current stem limits other paths while expressly preserving one application connection. Source/destination/service restrictions and application/database authorisation remain separate needs. The authored cannot-reach-DB guarantee is superseded. AV, authentication and logging can contribute but are not the offered path-policy mechanism; controls can be combined. One rule choice supplies no independent source, destination, port or database-permission components. Correlate with m133 general segmentation; no firewall, request, compromise containment or prevention is implemented.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:970edf2eb8dd5c543cdd69249c8d8e3b59fa170ef6ec4660baabf990ce7ad319",
+          "correctionRevision": "sha256:a68d7b09deeba86cd1e3dc4c1cd19410ce1f21225961b402f9a6927ad361b88e",
+          "teachingRationale": "Host malware detection differs from explicit permitted inter-zone network paths; both controls may contribute.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:2ce0a9fe6de66da30f2b00b4d89489022a3779880fef40a3d7c9883f55d05ef7",
+          "correctionRevision": "sha256:d2bfb52887b065003fe07ad7e64eafa6d8ff05497f330b82b67b52c881c6bab8",
+          "teachingRationale": "Authentication strength differs from network-service reachability and permitted-path authorisation.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:15a261340fbffbaea1f002afe947b0a29e074dce35d226e8ef2ac9a489d07510",
+          "correctionRevision": "sha256:3889eed8ceffb0e147d15a5ff37147dad19bf2ca215863164d0b9408235108f9",
+          "teachingRationale": "Logging supports investigation or a separate automated response; passive logs do not alone enforce boundary denial.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m261",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m261",
+      "sourceRevision": "sha256:f2b912ffbffbda3e86bb548411fadcbe900a9db7375e882e56c750b7688c1917",
+      "parentLocalRevision": "sha256:cbf18c28a7079f2cf29a0fb07bb724470e14eb76db66718aa29291bea3002113",
+      "parentPublishedRevision": "sha256:aff082d1bcde1d0a380851f50b4f828074352e63dc42eb325ecf8ca4a697094b",
+      "mainCorrectionRevision": "sha256:18e3fa8a60881056e615afd56db89609386ea0832c99e06a51dfe46789e46766",
+      "wrongFeedbackRevision": "sha256:d0f9dbc99a4559fba1a1c38c1a53ff13ea064d059a63cb5976aa8277cfd106af",
+      "mainTeachingUnderstanding": "Align inspection with the stipulated application parsing and test; parameter binding is suggested SQL remediation, not executed protection.",
+      "contentQualification": "HOLD Base64 alone as SQL injection, every application/WAF as decoding every encoding automatically, normalisation as universal prevention or a product-category swap as guaranteed parsing parity. The effective stem explicitly supplies application decoding and WAF raw-field inspection mismatch; authored generic encoded-bypass and raw-input-is-trivially-bypassed claims are superseded. Align field scope, order, character handling and bounded transformations with actual application semantics and test; do not arbitrarily decode all inputs. Current main teaching names parameterised queries as remediation context, not an assessed implemented defense or independent SQL skill. Preserve prior SQL/query, WAF/NGFW/TLS visibility and input-boundary holds. No input, payload, decoder, query, firewall or attack executes.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:3ee8391ee615cdefc7751bdee3205efdcbb2f1f6cb05064af3c300c52e4c7760",
+          "correctionRevision": "sha256:58598fae433a15e9cf953b2e3b124f9f48b16d5241cf664e47520c87a8636ca0",
+          "teachingRationale": "New signatures do not repair the stipulated lack of required field decoding.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:895ed881935cd766263bde8f3681c6271061b592612bcbed9db184794c5ceb34",
+          "correctionRevision": "sha256:f44dfe0b104b58f4a965feef4a2fbe06de73eb45dfcd194aae08e292bb779caa",
+          "teachingRationale": "Constraining request rate differs from fixing interpretation mismatch, without proving either control universally ineffective.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:54cf0176a7686d4d9e9f87d81f8249d530647a93e3b6f7551a94c8159e38d284",
+          "correctionRevision": "sha256:540c195a0c8f1ef86cc0cab15f27728b75f2233de9360a40af7f6e6597d031ad",
+          "teachingRationale": "Replacing a product category does not by itself establish application-equivalent decoding/parsing.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m011",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m011",
+      "sourceRevision": "sha256:4cd3e816f089ccbdb259494a3b809dd72d3b38b52b76678bbd66bbcefdd06b91",
+      "parentLocalRevision": "sha256:88da4a14414c2084272ed3181faba4a1d217f5bf51e11dbb62ebe4387aad818b",
+      "parentPublishedRevision": "sha256:490ff6e04557684fe0d546a92c8ee12e1308fa8d36e75dbdcb983fe8a6ef7ab2",
+      "mainCorrectionRevision": "sha256:4ff23291dbffdadab7bc38fd01bddc0b8ad6ca80c2528474c558498ef6c40461",
+      "wrongFeedbackRevision": "sha256:ac9f26cf7b2547e554a5c0f493f746eaf764d91b41587e3962ba5266dc591ac3",
+      "mainTeachingUnderstanding": "SYN cookies defer full half-open connection state allocation until valid handshake completion; they do not recover saturated upstream bandwidth.",
+      "contentQualification": "HOLD spoofed addresses as unique host/actor counts, SYN cookies as blocking volumetric link saturation, authentication of a benign peer, zero server processing cost, or universal safe handling of every TCP option/stack. Cookies delay full per-connection state until a validated handshake completion; some implementation work/resources remain. Current main feedback corrects the authored zero-memory shorthand. Longer half-open timeouts can prolong pressure; blocking all TCP conflicts with legitimate TCP availability; an IDS may drive a separate response but passive sensing alone does not enforce this mitigation. No packets, cookie, backlog, platform configuration, outage or recovery is measured; preserve DDoS/freshness qualifications.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:0d0a767705cc3a5d00f80ea98d5321af090fd9b28bbcf2092edd8845fcec4d41",
+          "correctionRevision": "sha256:1f542ee2104001ddbf20b49d2c5e373489a74938958281b63f2ffbfca20fa398",
+          "teachingRationale": "Longer retained half-open state can prolong resource pressure; no timer or stack is measured.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:2e9acd3ea253b8abd44f761499a416de20d6a96d021c01f97a1a634664d30528",
+          "correctionRevision": "sha256:7cab763fcfc5e52376e3520c3109f2797b55b72f3f52e4724ea62bca02f888e4",
+          "teachingRationale": "All-TCP blocking also denies legitimate TCP services; no successful control is enacted.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:388a66efa6fe234a367e521c61b782acd3d0457f896e79c8d61d70c610967f74",
+          "correctionRevision": "sha256:392bce2717ebcb628b96cccb4b4bb698d20140905ff9e43986d68cfbda87d24a",
+          "teachingRationale": "A sensor can support response, but passive alerting alone does not delay server connection-state allocation.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m014",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m014",
+      "sourceRevision": "sha256:0bb7f85de886611d43d3aa68eb31e450fe6e6e4c02592e41bce38556539c78ec",
+      "parentLocalRevision": "sha256:9e0b2847cb7e5975dad529964094c06879183d2f21b0da19086b61bcf944228e",
+      "parentPublishedRevision": "sha256:fb61c4803e1f2dc751c8b636ccdddb5a96035669265c9a66de13ff06c9620aca",
+      "mainCorrectionRevision": "sha256:aa7fd0140d6978383d8140e243efa1492f26f7e60cc0ff0527d6f079735069bd",
+      "wrongFeedbackRevision": "sha256:af483d0c782addeea5dce0e0d1808f5475f01c02024f5d7872671f5017a22ad2",
+      "mainTeachingUnderstanding": "Least privilege grants task-required access and can limit misuse; the principle does not itself prove correct rights or enforcement.",
+      "contentQualification": "HOLD minimum permission scope as an implemented guarantee of safe access, every role definition as accurate, and separation of duties as never restricting permissions. The retained SoD correction says it does not restrict permission scope and reduces it to multiple people completing a process; static conflicting-role restrictions can implement it. Hold that precise contrast while retaining minimum task access as the offered principle. MAC labels can enforce access consistent with least privilege; MAC acronym/network-address polysemy must not force another canonical concept. Job rotation can affect role assignments but is not the minimum-scope principle. Correlate closely with m113; no entitlements, account, fraud reduction or compromise impact is tested.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": "separation_of_duties_permission_scope_exclusivity",
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:8a5e3805fa26cae1144c646b3c6a30d805aaba013871e10e28a484a5d643d50f",
+          "correctionRevision": "sha256:b981b0a59e83f87bfa71ca35c988ac74a95e1ccdae1eb8eb1a8d46e2c644a4aa",
+          "teachingRationale": "Separate incompatible duties may constrain role/permission combinations; the retained cannot-restrict-permissions claim is held.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:ed6e84e7a42073125fb1c3407bdae18cac578ba186da18cb431e7adc17642761",
+          "correctionRevision": "sha256:753be31097774a3c842c917f58f0c28998c52bac6a82eaa4063ed7946b166174",
+          "teachingRationale": "Role rotation is different from minimum required rights, even though it can change access assignments.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:85587ba249b41997889d9f92c7a88659cebdad846617b442b2c46e35f230e905",
+          "correctionRevision": "sha256:18fbc85e9e39ca2531a6facabaac7ff0e9b36df05c61e90aeb7ee043f0f80a3e",
+          "teachingRationale": "Label-based mandatory access control can implement permissions compatible with least privilege; model and principle differ.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m113",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m113",
+      "sourceRevision": "sha256:820c6b6db5279aa9cd52b2d3baf89b4951d3b1e79d9c3c53adcbf4b0b0c8b608",
+      "parentLocalRevision": "sha256:86222bdb5f8d4f9d0c946113eedfa3d46df43fc76fb0eae6404ab7811bcc81fb",
+      "parentPublishedRevision": "sha256:526ce893c10c5820afffb7d1eedc56c8463c3295cbfa0dd2a673d19ccf0ee246",
+      "mainCorrectionRevision": "sha256:6df2820e0aa019a607f24b2a06e1d40f4c97d53ec8fffab87845acb863d23704",
+      "wrongFeedbackRevision": "sha256:35fd3a160b01bf1d0079beed79f7ba4b13a5d0e889b8e68867271f70b7b0320b",
+      "mainTeachingUnderstanding": "Minimum necessary granted rights define least privilege; how rights are requested is a separate supporting governance process.",
+      "contentQualification": "HOLD job title/seniority as sufficient required permissions, all users as forbidden any justified administrative task, request approval as least privilege by itself or reduced compromise damage as measured. Minimum actual task/function scope is the supplied principle; correct role definitions, enforcement and changing duties still require review. An approval workflow can support governance and temporary privilege without defining the minimum necessary rights. Authored domain 1 is superseded by effective domain 2/objective 2.5. Correlate closely with m014, with no approved family independence, live permission check or prevention/recovery outcome.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:ebd67a97b8a032b192ca7124e69946eb74e3dab08a649aa24b1634a7cd2385a2",
+          "correctionRevision": "sha256:bd9ec4cd52c25bb415004bcd6faa9123d730b68c983d82ec21af3081fe1f3855",
+          "teachingRationale": "Universal administrator rights exceed most task needs; justified administrative work still needs appropriate privileges.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:40990cb7a00fa1263c9579bb2034dd7097eaa67f607751b4264e25b8c799782f",
+          "correctionRevision": "sha256:b45789345fadcbf762618ca35d3cda5b0aa01d02c3bfbd391c81e43e4bf19e78",
+          "teachingRationale": "Another person’s seniority does not determine this subject’s task requirements.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:c7040efd01d105ce1b066fd1c5d23455e514f251fba4f3495d32a195b20ac6b0",
+          "correctionRevision": "sha256:c6cee758970ad6044d7dda1cdbc3bdad76ad2e8f3f8ac952c784d3c3905c1db8",
+          "teachingRationale": "Approval workflow can support access governance but does not define minimum necessary granted rights.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m133",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m133",
+      "sourceRevision": "sha256:877cb08d5373dde46f33cb694ace4fa70c5c76be437e201d0fc73fc8dc8578e3",
+      "parentLocalRevision": "sha256:bc131fd266982181f5f0cdc6b7d6b4d087007ef57472ca170a7a965ee3aa6b40",
+      "parentPublishedRevision": "sha256:bceee931b0dc2485f16a85d89190abb62d78f760bfd26e1b1be671748b0bbb5f",
+      "mainCorrectionRevision": "sha256:31fd439eaaff0aa7d96488e77ba4208f2faf3877575f94df69c84644db878f7a",
+      "wrongFeedbackRevision": "sha256:d5bbd4e6d56951548142665036992a1f5633be6992c4ff371ccb425c7028885b",
+      "mainTeachingUnderstanding": "Enforced traffic boundaries can limit lateral paths; segment labels alone are not isolation.",
+      "contentQualification": "HOLD subnet/VLAN separation alone as enforced isolation, every segmented network as eliminating lateral movement, NAT as a universal security boundary, or QoS/throttling as unable to drop traffic under any policy. Current main explicitly requires enforced rules. Performance controls can shape/drop traffic but do not by themselves implement the offered zone-authorisation policy. Correlate with m138 which preserves a required path, without granting independent family/component evidence. No topology, rule, segmentation rollout, route, throughput, intrusion or movement is measured.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:66a06aa46336d517619d93a24756ef854b1ead9a7e4885046adab07362eef755",
+          "correctionRevision": "sha256:753a6e72e5e3b329d408149353c20218475e4a20ff09312c1dc590fcdb84b255",
+          "teachingRationale": "Address translation alone is not the required enforced inter-zone policy; other gateway features may coexist.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:f84565bd4c54a9a4303c24118a217b13e8aab4f17858277073bb13d57ab5348c",
+          "correctionRevision": "sha256:14b9aa7bd9d5dec2ecbcee2f834ba41384ebe0296b1e33318b7950b735ff6192",
+          "teachingRationale": "Traffic prioritisation differs from authorising lateral paths; QoS may still shape/drop packets.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:5ded16b3cde60126e2c7a7d20efa916267959a4a81c66414b20916fded7fa30f",
+          "correctionRevision": "sha256:99aaaef1ad5f6ca692e163b810f6d2b3ccf331b59514d276785256b2b11e8d20",
+          "teachingRationale": "Rate constraints may alter traffic volume without denying the same reachable application path.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m165",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m165",
+      "sourceRevision": "sha256:c9ba354a7a6313135eb7d766d3c14d369e0d4be585ca363da9f1dcad434014e9",
+      "parentLocalRevision": "sha256:835461495dda4e75bfe5b8d37cee4e665750f85b8f6efea1eba8aa3aee780a66",
+      "parentPublishedRevision": "sha256:522f2d87b61d7ce9963f84076323987b12ced548f50bbd8e743f9a4c9d0c1404",
+      "mainCorrectionRevision": "sha256:95775cb41f6ba4cf4c93926e8793742d0d4b5a2d1b65c1a18f19866360503012",
+      "wrongFeedbackRevision": "sha256:f64f400fccdb9e7906fba1d9c7b84f965c6434bc016b5b61008686b6d211b4c9",
+      "mainTeachingUnderstanding": "Non-executable pages block execution from those pages, not all exploitation or every writable/executable configuration.",
+      "contentQualification": "HOLD DEP/NX as necessarily implementing strict writable-XOR-executable policy, eliminating buffer corruption/code reuse, protecting every process/configuration or establishing that injected data was present/executed. The supplied protected-page mechanism is meaningful; NX hardware and OS/page-permission policy cooperate. Current main corrects the authored not-both-writable-and-executable guarantee. ASLR, canaries and CFG address different limited mechanisms and may combine; none is separately keyed evidence. DEP is inferred general hardening context, not a named 2.5 bullet, and authored domain 3 is superseded. No memory permissions, exploit, bypass, CPU or installed protection is tested.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:81e6776649260387d57c8e9763c0d961c12067143099b31c65e30549ac65b4d1",
+          "correctionRevision": "sha256:2ef7137412d05a5b85735c7ba5bba891402842be74ac56250457ff1405400f95",
+          "teachingRationale": "Address randomisation is a different mechanism from non-executable page permissions.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:3b8986f7c69dbd795a429d9907a2461be1057f32abbb5454093e2a5e84ffc6d8",
+          "correctionRevision": "sha256:64e82116b978367a8b9109cec7ec868e1f86a71f68cfc15bfd1c321c11b69db0",
+          "teachingRationale": "Canaries detect certain corruption rather than setting page execution permissions.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:e3cca9fab2afef801aab9eb0e8c9ae81a44822c9fcb33e46521553ac22896b4e",
+          "correctionRevision": "sha256:a8cce8529e2ffac633b245b22e0d36498ae3dbd2e684614d1cf447b193056133",
+          "teachingRationale": "CFG constrains some indirect transfers rather than providing the NX page-protection mechanism.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m284",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m284",
+      "sourceRevision": "sha256:32e7c0e30b7e3084982bb1ac80b73fe5ef3115f21c80646e79925fbb2e28ef18",
+      "parentLocalRevision": "sha256:42a4f13d6bb071c7c80a80fc65cf060811f859c8aea45f5e07d758edbd0f8446",
+      "parentPublishedRevision": "sha256:d025246e1c1e7f2d9a223a22d663097e7098ca115c96ce971ef04623f60b7e68",
+      "mainCorrectionRevision": "sha256:9c47d2efa394da54294f33904e486b9373f4b6794078f5af3c3c1946ec035ca7",
+      "wrongFeedbackRevision": "sha256:b3af019d83b8ca2d11a1608d8d20665112a35aa97d34f2e0be758b455fd9fcb0",
+      "mainTeachingUnderstanding": "Remove stipulated unnecessary services after dependency/change checks to reduce exposed functionality without claiming a risk-free host.",
+      "contentQualification": "HOLD removal as eliminating every host risk, disabling as identical to uninstalling, all legacy-protocol deployments as identical cleartext configurations or TLS retrofit as automatically safe. The fictional stem declares no production need; current main adds dependency/change checks. ACLs, encryption and segmentation can help required services, but retaining these stipulated unused services preserves exposure/maintenance. One combined disable/remove choice supplies no separately observed decommissioning actions. No live process, package, dependency, change, service removal, network test or residual exposure is measured; preserve TLS/access/product and remediation qualifications.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.5"
+        ],
+        "contextCodes": [],
+        "status": "narrow_control_purpose_or_choice_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:30c076f8df0cac538338513a254d0b0b842dda7e03554d1c98596ba44f338f73",
+          "correctionRevision": "sha256:4c3a0055872668173211aea87e26964e454f7d416a7feb74da23ce0448d5cf64",
+          "teachingRationale": "Retrofitting encryption preserves stipulated unnecessary functionality and does not create a business requirement.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:09beec32667a47059b4b8356fa2fb008a48a25d4ddcbd6947040d5fb6068c0cc",
+          "correctionRevision": "sha256:43b3b9bd75394ee11556b6aae6f560e91a43af657a9c32444b1e4952dc679c6a",
+          "teachingRationale": "Reachability restrictions can reduce access but retaining unnecessary services preserves their code/maintenance exposure.",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:8466f792b8ac0735030e5eb653981593e25c4c9b67f390275a3785b4bdbc8dbe",
+          "correctionRevision": "sha256:b6fc17428ecafc17534951fe6a8f3f878bf7ccd53fb297605666d06a4c1313db",
+          "teachingRationale": "Moving unused services changes placement while leaving unnecessary functionality and risk present.",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    }
+  ],
+  "instructionalProposals": [],
+  "comparisonGroups": [
+    {
+      "recordIds": [
+        "mcq:m708",
+        "mcq:m011",
+        "mcq:m615",
+        "mcq:m710",
+        "mcq:m259",
+        "mcq:m049",
+        "mcq:m143",
+        "glossary:ddos",
+        "glossary:ngfw"
+      ],
+      "comparisonUnderstanding": "Upstream volumetric capacity and local half-open-state defenses address different bottlenecks. Prior attack recognition/combined reflection labels do not establish defense performance, unique hosts or actors. Preserve DNS composite/source-count and product-capability qualifications; attack and mitigation are not interchangeable evidence.",
+      "revisions": [
+        {
+          "recordId": "mcq:m708",
+          "sourceRevision": "sha256:577082ff94caf4c00d31dfbf45b06c6476de8329d45428d653b3fd8f2254a5c7",
+          "localRevision": "sha256:481a23bb7fdd5bcd3a0e6a8a4af41778d35ad4bca540cf2ec7a65155cb36ef9f",
+          "priorPacketPath": null,
+          "priorDispositionRevision": null,
+          "status": "current_substantive_disposition"
+        },
+        {
+          "recordId": "mcq:m011",
+          "sourceRevision": "sha256:490ff6e04557684fe0d546a92c8ee12e1308fa8d36e75dbdcb983fe8a6ef7ab2",
+          "localRevision": "sha256:88da4a14414c2084272ed3181faba4a1d217f5bf51e11dbb62ebe4387aad818b",
+          "priorPacketPath": null,
+          "priorDispositionRevision": null,
+          "status": "current_substantive_disposition"
+        },
+        {
+          "recordId": "mcq:m615",
+          "sourceRevision": "sha256:84f897d0940c7ae19cac2c0b9faeb47f7ab6623dedff8c772821c216a54a7cb4",
+          "localRevision": "sha256:c463c6d1564c40991413db2530e63844e3c969a6a3bee038de8c0e8a48e9302c",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective24-second-mcqs-proposals.json",
+          "priorDispositionRevision": "sha256:cd1246fb11b41c424ea4e3a42b12bfd4b422f79ea6ee43ddc141eb75319ec8ab",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m710",
+          "sourceRevision": "sha256:3389dba3b9a622ef84ac99c521e3370d88715692207e10573a4fed3171216a03",
+          "localRevision": "sha256:0d39d2e0690c7a52c4f565ff0bc6bc14dc301af5be466add4b96e6f3246f5311",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective24-priority-mcqs-proposals.json",
+          "priorDispositionRevision": "sha256:403a4abf0858321f08168de692db4588fde04f6316c8a7ee97adbc86f3899821",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m259",
+          "sourceRevision": "sha256:6df72ebf9843573f5d876d69bd5dd9209a0d9f0f13b51dcc890a4f135e352490",
+          "localRevision": "sha256:327d868e0d02b09ca85c8b183cd03ec65a868d68f8d1f3f1c50b039c5a59fcc1",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective24-priority-mcqs-proposals.json",
+          "priorDispositionRevision": "sha256:50ca52b09824a50623f02a389e42af5891ac9fbd7ba3205b6ff37836d9e2908c",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m049",
+          "sourceRevision": "sha256:977b766098bf0a6b2cd43d71a16032dacfaa085aa500d535ec68b692d4e0967b",
+          "localRevision": "sha256:959d947df83dded6b2e729f8a3b07d9968f75739fc8efa99ebbbcf1c31b6725e",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective24-final-mcqs-proposals.json",
+          "priorDispositionRevision": "sha256:de2e2f59f6e348f96574ad87ac0720c937af5036b3d26bdae8cfc57acf45cbfe",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m143",
+          "sourceRevision": "sha256:df801a5b089e78a054eb4662540a670c065b0f8cff3a9cab757cafae14d4167e",
+          "localRevision": "sha256:35d50ee8a043f1b8c0388f97140de2b00716ae26a1994da1a86f5720e08c933d",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective24-final-mcqs-proposals.json",
+          "priorDispositionRevision": "sha256:ad71689e3fa2b7efd44e8079a20c582ea9bc524f7e36fc12a8b9fc6062e04274",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "glossary:ddos",
+          "sourceRevision": "sha256:006f9f658d0d48d33b37af0b303ad698383f3e241cc7be1f7b1d34f02263f478",
+          "localRevision": null,
+          "priorPacketPath": "docs/drafts/phase-2b5-objective21-final-glossary-proposals.json",
+          "priorDispositionRevision": "sha256:ada3a4e2af1f59ee4c37f2563a621100bf826c57d52e9548bf9899a80f1dc433",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "glossary:ngfw",
+          "sourceRevision": "sha256:c00615d1ef296e1444ac5b7d94e145185454c5cd8624b7231ae1c98b43ec3add",
+          "localRevision": null,
+          "priorPacketPath": "docs/drafts/phase-2b5-objective14-network-email-glossary-proposals.json",
+          "priorDispositionRevision": "sha256:2cdd8aa2f3b33a113afaec79e6ac2e6b47ecd09e9f77c6c01c8a24d5892e0228",
+          "status": "prior_disposition_reference_only"
+        }
+      ],
+      "newFamilyCredit": 0,
+      "independenceApproved": false
+    },
+    {
+      "recordIds": [
+        "mcq:m134",
+        "mcq:m130",
+        "mcq:m613",
+        "mcq:m707",
+        "mcq:m305",
+        "mcq:m258"
+      ],
+      "comparisonUnderstanding": "Unknownness before awareness, lack of a fix, control choices and recognition of a purpose/gap have different precise scopes. m134 lacks explicit prior unknownness and its whole numbered gap scope stays held; no 2.3 or cleared prior 2.4/2.3 scope is inferred.",
+      "revisions": [
+        {
+          "recordId": "mcq:m134",
+          "sourceRevision": "sha256:11f5f65fbbeaff3e67e13ecc5cba5c6692ba7fcee5ef480d24aa19c3d0722b97",
+          "localRevision": "sha256:6f4703668c18d06dc3cbd7f3c63bf799a56f68576853ec812da6da6769a90b09",
+          "priorPacketPath": null,
+          "priorDispositionRevision": null,
+          "status": "current_substantive_disposition"
+        },
+        {
+          "recordId": "mcq:m130",
+          "sourceRevision": "sha256:e98125daab9cd548380179230c7b8912d04a28200e33584463df2b143f719d4d",
+          "localRevision": "sha256:dcc990fe9da339410868c4cc6f819ac97571985680f183f19be880e727d33d4d",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective23-fastlane-proposals.json",
+          "priorDispositionRevision": "sha256:f9b7ec04482358ab5a077880cd6f7fe3aa43845c79d8be1ecb904d5749b59f54",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m613",
+          "sourceRevision": "sha256:1a27b92a66fc09ad764801dafb52f55f92fc2f23d3895f55fe7014595a2f1938",
+          "localRevision": "sha256:ac4d7fa825e8936881aa61ea8c85c4b5a84192975e1bf61c36e688f4d6afe36d",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective23-fastlane-proposals.json",
+          "priorDispositionRevision": "sha256:3b7876f7c1e2d41d920ebabde6aecbb633ea54b83e18c8d1b389777da4fa0990",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m707",
+          "sourceRevision": "sha256:5d05f84d35b70184b0ce72ce9bc971a6b2ff272c2ff1e33d6af143e13919f319",
+          "localRevision": "sha256:ef22c24699b55b9696353acf90debe2ad00d6f4b67a1f6a15398afa8ecd03a71",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective24-priority-mcqs-proposals.json",
+          "priorDispositionRevision": "sha256:b29123e2c7223bc0cb92fb3ed8003d582f29bb3fc814729a8376d7a25860a624",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m305",
+          "sourceRevision": "sha256:6f2c24377f75ead1769061fbf26c310fb0f4c1f31dcfc406efc297a74e1fd610",
+          "localRevision": "sha256:df2d92a1a3d3c87e502b2d99cb61145da492285a7bb4ec47da25caaed7731ea8",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective23-fastlane-proposals.json",
+          "priorDispositionRevision": "sha256:19c0e87f047f0f46ce19aee2e5813203ba950d5a9a8637bafb04303ca9b1518a",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m258",
+          "sourceRevision": "sha256:854495124a75feda6df5e30b8419e44f1de3a46dd6b91af39bc1a808d7d82e93",
+          "localRevision": "sha256:0baba46f798f4d64c5ca87ed0a37c79a973fa458f01374b703bcd11b338e2572",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective24-priority-mcqs-proposals.json",
+          "priorDispositionRevision": "sha256:83b0029bc66043725eec858ea952d33f2cb767fffe46d54cb84233fae9236c9c",
+          "status": "prior_disposition_reference_only"
+        }
+      ],
+      "newFamilyCredit": 0,
+      "independenceApproved": false
+    },
+    {
+      "recordIds": [
+        "mcq:m138",
+        "mcq:m133",
+        "mcq:m014",
+        "mcq:m113",
+        "glossary:acl",
+        "glossary:zero%20trust"
+      ],
+      "comparisonUnderstanding": "m138/m133 closely correlate enforced path boundaries; m014/m113 closely correlate minimum permission scope. Role/permission purpose differs from required port reachability and allowed-path authorisation. Controls can support one another without exclusive taxonomy, independently approved families or implemented safety.",
+      "revisions": [
+        {
+          "recordId": "mcq:m138",
+          "sourceRevision": "sha256:90a41bbf225dea23a71426e6d4c8a1f244a4c9c7bedd4ae76b02fcb5f66136c3",
+          "localRevision": "sha256:564ad7d30e82d9ed9c925fb7e81076e1251833a46d16b2bf96f9cf705d898a2d",
+          "priorPacketPath": null,
+          "priorDispositionRevision": null,
+          "status": "current_substantive_disposition"
+        },
+        {
+          "recordId": "mcq:m133",
+          "sourceRevision": "sha256:bceee931b0dc2485f16a85d89190abb62d78f760bfd26e1b1be671748b0bbb5f",
+          "localRevision": "sha256:bc131fd266982181f5f0cdc6b7d6b4d087007ef57472ca170a7a965ee3aa6b40",
+          "priorPacketPath": null,
+          "priorDispositionRevision": null,
+          "status": "current_substantive_disposition"
+        },
+        {
+          "recordId": "mcq:m014",
+          "sourceRevision": "sha256:fb61c4803e1f2dc751c8b636ccdddb5a96035669265c9a66de13ff06c9620aca",
+          "localRevision": "sha256:9e0b2847cb7e5975dad529964094c06879183d2f21b0da19086b61bcf944228e",
+          "priorPacketPath": null,
+          "priorDispositionRevision": null,
+          "status": "current_substantive_disposition"
+        },
+        {
+          "recordId": "mcq:m113",
+          "sourceRevision": "sha256:526ce893c10c5820afffb7d1eedc56c8463c3295cbfa0dd2a673d19ccf0ee246",
+          "localRevision": "sha256:86222bdb5f8d4f9d0c946113eedfa3d46df43fc76fb0eae6404ab7811bcc81fb",
+          "priorPacketPath": null,
+          "priorDispositionRevision": null,
+          "status": "current_substantive_disposition"
+        },
+        {
+          "recordId": "glossary:acl",
+          "sourceRevision": "sha256:bb131401aa48e86b64c07650670b6683ff5b6ba438e2fe84308115336c24c2de",
+          "localRevision": null,
+          "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+          "priorDispositionRevision": "sha256:e692c332ab3fea2743c70f4cb77c76415d99a07c7239f5301ca5a940e61621d6",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "glossary:zero%20trust",
+          "sourceRevision": "sha256:9c6dcc6339d9e3adea1ea438688151b528a16352c3daaba1fd07ca6da4385342",
+          "localRevision": null,
+          "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+          "priorDispositionRevision": "sha256:dc5e01269b64c7aac555bc4fccda12989b99ef2645a49ed6fec580ff73fee6f1",
+          "status": "prior_disposition_reference_only"
+        }
+      ],
+      "newFamilyCredit": 0,
+      "independenceApproved": false
+    },
+    {
+      "recordIds": [
+        "mcq:m261",
+        "mcq:m611",
+        "mcq:m012",
+        "mcq:m129",
+        "mcq:m282",
+        "glossary:waf",
+        "glossary:ngfw",
+        "glossary:tls"
+      ],
+      "comparisonUnderstanding": "A stipulated decoding mismatch is an inspection control choice, different from recognising changed SQL query meaning or file-boundary escape. WAF/NGFW/channel labels do not prove parsing parity or payload visibility. Parameter binding/remediation mentions and encoded example words add no assessed SQL defense or independent component.",
+      "revisions": [
+        {
+          "recordId": "mcq:m261",
+          "sourceRevision": "sha256:aff082d1bcde1d0a380851f50b4f828074352e63dc42eb325ecf8ca4a697094b",
+          "localRevision": "sha256:cbf18c28a7079f2cf29a0fb07bb724470e14eb76db66718aa29291bea3002113",
+          "priorPacketPath": null,
+          "priorDispositionRevision": null,
+          "status": "current_substantive_disposition"
+        },
+        {
+          "recordId": "mcq:m611",
+          "sourceRevision": "sha256:cd910094231808026c2f960b38254bbb6846727a4399394588fedc7ba4668d56",
+          "localRevision": "sha256:9a097307e6c86ea92e9efc8cdea599f9758d648975bf65f91217f31c7083845e",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective23-fastlane-proposals.json",
+          "priorDispositionRevision": "sha256:beb2c5a6caca6bec6f854e6f06444e63249a15033e8b9c91520b1b268ed2fdad",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m012",
+          "sourceRevision": "sha256:44b450081b90c3e7b11346258e1f99d95aa0a0d9a907799159aa8435f1addd31",
+          "localRevision": "sha256:0fec537e8b1256ccdf90bfcde33e9bfc0fab658431d3f5a859867f9e5ec66c87",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective23-final-mcqs-proposals.json",
+          "priorDispositionRevision": "sha256:f9060ebe41ac884c9e1c75539164198e98faae4a9bf5a34c96d7f84441a2ab8c",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m129",
+          "sourceRevision": "sha256:485a3d365c80ce14829963b2c2fea41c05cabe19719d9854be41a63a02e30769",
+          "localRevision": "sha256:58555ae72c1a9331cb336d25d5afd0aef7cac57d7519c1bec15c6b2b4888232e",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective23-final-mcqs-proposals.json",
+          "priorDispositionRevision": "sha256:17f57ad7c79873aae44cd82571d91a83298c1126e55b8a3d88eedaad667fe216",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m282",
+          "sourceRevision": "sha256:7803d78870d666dc39978440333d0da20a8929ea01c2001701bbcb2e106fa468",
+          "localRevision": "sha256:f6c987cef9bd4d2b066ba681159ff1c234a7bf0614a8883b63326b5939935b7e",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective23-final-mcqs-proposals.json",
+          "priorDispositionRevision": "sha256:7d72244d9f8c41d200c863dbe7a8e8f2cace7cfa5520112904ae696b658bb7e7",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "glossary:waf",
+          "sourceRevision": "sha256:d346059694d798d3ca6f2f819c940577bfaa990bcb43093a5d58d4878518fffc",
+          "localRevision": null,
+          "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+          "priorDispositionRevision": "sha256:c00adad5c56cff4f65a5eaec2c0d854bf03366c5e1d2f45c2ed04d12aeb732fb",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "glossary:ngfw",
+          "sourceRevision": "sha256:c00615d1ef296e1444ac5b7d94e145185454c5cd8624b7231ae1c98b43ec3add",
+          "localRevision": null,
+          "priorPacketPath": "docs/drafts/phase-2b5-objective14-network-email-glossary-proposals.json",
+          "priorDispositionRevision": "sha256:2cdd8aa2f3b33a113afaec79e6ac2e6b47ecd09e9f77c6c01c8a24d5892e0228",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "glossary:tls",
+          "sourceRevision": "sha256:228f0edd7995d12f74e6ff28da67f69071fde494c8dc4a531606b69acaaba377",
+          "localRevision": null,
+          "priorPacketPath": "docs/drafts/phase-2b5-objective13-glossary-mapping-proposals.json",
+          "priorDispositionRevision": "sha256:adec57e4a3e239fe874bd20c706e5842d48f64c1b9dd55d5e50848a52eb9618f",
+          "status": "prior_disposition_reference_only"
+        }
+      ],
+      "newFamilyCredit": 0,
+      "independenceApproved": false
+    },
+    {
+      "recordIds": [
+        "mcq:m165",
+        "mcq:m287",
+        "mcq:m053",
+        "mcq:m284",
+        "glossary:encryption",
+        "glossary:tls"
+      ],
+      "comparisonUnderstanding": "Non-executable-page policy differs from buffer-boundary flaw recognition and removal of unnecessary service functionality. Page rights, corruption prevention, code-reuse defenses, safe retirement and encryption purpose are not one skill; no implemented protection, TLS guarantee or observed recovery follows.",
+      "revisions": [
+        {
+          "recordId": "mcq:m165",
+          "sourceRevision": "sha256:522f2d87b61d7ce9963f84076323987b12ced548f50bbd8e743f9a4c9d0c1404",
+          "localRevision": "sha256:835461495dda4e75bfe5b8d37cee4e665750f85b8f6efea1eba8aa3aee780a66",
+          "priorPacketPath": null,
+          "priorDispositionRevision": null,
+          "status": "current_substantive_disposition"
+        },
+        {
+          "recordId": "mcq:m287",
+          "sourceRevision": "sha256:27e1938813f0723921d566230aea3c667e3936261ca7c0d0986a3af8485d7705",
+          "localRevision": "sha256:7c96c22876a6503b74743dfc19c3bbf614f795dc0625c5b0de1ed401e321d3e7",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective23-fastlane-proposals.json",
+          "priorDispositionRevision": "sha256:d4ee16a94c1900e881e7a479de7797cf8e9402734a6fbf7e3deec717799834a6",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m053",
+          "sourceRevision": "sha256:f41bb6408c78d4018e58213c0cb4fdec1a86ac7e40c5d3951a45189d6663978e",
+          "localRevision": "sha256:fed11ae6ee55502eeaca4c8feecb6aa491656a1d9d99f8bdcf2323baaef1cb36",
+          "priorPacketPath": "docs/drafts/phase-2b5-objective23-final-mcqs-proposals.json",
+          "priorDispositionRevision": "sha256:a7222930dcd479ddaf6fd56b2e9a038b599e1b398e4ec00b448725129bdfd4f8",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "mcq:m284",
+          "sourceRevision": "sha256:d025246e1c1e7f2d9a223a22d663097e7098ca115c96ce971ef04623f60b7e68",
+          "localRevision": "sha256:42a4f13d6bb071c7c80a80fc65cf060811f859c8aea45f5e07d758edbd0f8446",
+          "priorPacketPath": null,
+          "priorDispositionRevision": null,
+          "status": "current_substantive_disposition"
+        },
+        {
+          "recordId": "glossary:encryption",
+          "sourceRevision": "sha256:84e0be46e7bf560613e28fd9d4fed9749b5756bd1532bbdb1bbbe4cb5e3b6ee5",
+          "localRevision": null,
+          "priorPacketPath": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+          "priorDispositionRevision": "sha256:2a738065ba0e7347ffb61150ca7f69f5c4977292e878aded18b68c3b5fad1b69",
+          "status": "prior_disposition_reference_only"
+        },
+        {
+          "recordId": "glossary:tls",
+          "sourceRevision": "sha256:228f0edd7995d12f74e6ff28da67f69071fde494c8dc4a531606b69acaaba377",
+          "localRevision": null,
+          "priorPacketPath": "docs/drafts/phase-2b5-objective13-glossary-mapping-proposals.json",
+          "priorDispositionRevision": "sha256:adec57e4a3e239fe874bd20c706e5842d48f64c1b9dd55d5e50848a52eb9618f",
+          "status": "prior_disposition_reference_only"
+        }
+      ],
+      "newFamilyCredit": 0,
+      "independenceApproved": false
+    }
+  ],
+  "priorBatchComparisons": [
+    {
+      "recordId": "mcq:m143",
+      "sourceRevision": "sha256:35d50ee8a043f1b8c0388f97140de2b00716ae26a1994da1a86f5720e08c933d",
+      "publishedRecordSignature": "sha256:df801a5b089e78a054eb4662540a670c065b0f8cff3a9cab757cafae14d4167e",
+      "feedbackRevision": "sha256:0f5b8fe3816ffa82573497bdc147a6269ec4b2a5cfeb33cee50b978f6ea1d34a",
+      "priorDecisionRevision": "sha256:ad71689e3fa2b7efd44e8079a20c582ea9bc524f7e36fc12a8b9fc6062e04274",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m010",
+      "sourceRevision": "sha256:eb946ca23cb794f1bb4193eefb9d504c5348a83823dc623fb64a47f8e7409ffd",
+      "publishedRecordSignature": "sha256:c461bb5ade5b674104f45954eb212d34cf1be4618f020048320ebf17259a8b8e",
+      "feedbackRevision": "sha256:5c7077210136d744bd26388406372b4c52dc9fe3ea63276d18bc75370970500d",
+      "priorDecisionRevision": "sha256:7696c6442ccc7f2360c0118c39013455fe8dd447c542a1bf2aae4c212d935735",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m016",
+      "sourceRevision": "sha256:de03addf80bff42e50a7ae08fda213414cd8068a3a3b32dce3673a8200de1355",
+      "publishedRecordSignature": "sha256:a8f4bf2b00df3a10c7e72eb71e980e4a0a4bd57bce1fe4f66de14c6d0f0557fb",
+      "feedbackRevision": "sha256:d8526ba3c7e55204725a7ae68d1ec89aef521b9a1226ca265beabb7808372665",
+      "priorDecisionRevision": "sha256:120bef864694b55827555083651a0a529a0309026a1c05f364b800e41d7e4448",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m024",
+      "sourceRevision": "sha256:c96b8e95149e58d0243ce8c91301184e5d5c165fbfce3c9d2aca37ca549bff03",
+      "publishedRecordSignature": "sha256:b102a61127bd362fbdf450896058a2404eb9eaee8a2b3c51035fb0f500977b3e",
+      "feedbackRevision": "sha256:39f25fa8117567b9c6c7c288abbdcdcfda3eeb2156de2f23dad3b26e2d89259b",
+      "priorDecisionRevision": "sha256:03a4cc3bc3849fb7f0a4ec7c9b5c9187aef4e0b8541150a7ccc9aacb318739cc",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m049",
+      "sourceRevision": "sha256:959d947df83dded6b2e729f8a3b07d9968f75739fc8efa99ebbbcf1c31b6725e",
+      "publishedRecordSignature": "sha256:977b766098bf0a6b2cd43d71a16032dacfaa085aa500d535ec68b692d4e0967b",
+      "feedbackRevision": "sha256:01b0966e3f06e791651a5c584c0911fc4c6b0ee57b6e49de0579d4a69cc64cfb",
+      "priorDecisionRevision": "sha256:de2e2f59f6e348f96574ad87ac0720c937af5036b3d26bdae8cfc57acf45cbfe",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m054",
+      "sourceRevision": "sha256:c83e6da75ce48fb5ab361c6a5618d5d367e659cad6acc6c1dc78c80092f642af",
+      "publishedRecordSignature": "sha256:4474b5ae635d832bb4f2ca50c06da02d0957ff9c2d2d86d01852176ba6d1cfa5",
+      "feedbackRevision": "sha256:90c73bb0303b3c35e42c3491d55f9a39a7b3a1a51b1cd526dc2c2d09049858f4",
+      "priorDecisionRevision": "sha256:e5016ad527d07eb947314d7934014ffc1d497ce4fe71bda6f5860961c3841d26",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m094",
+      "sourceRevision": "sha256:a7ea93f763674594a85edf978e8740aa2cf67fbee13d4d551cd16bd12a8f5497",
+      "publishedRecordSignature": "sha256:3cdff6e7066a53ec8fbbdb4d2597f0de3b2925d11081db59bd044cef3834500a",
+      "feedbackRevision": "sha256:617658339819b2dec24c1ec82bc0317f609a4a193b65a806a5f282aecaf6ce5e",
+      "priorDecisionRevision": "sha256:fc91ccd49850c6335ac9a7de0090d7df6ba49df043b7bffdf776a7989556e8d1",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m125",
+      "sourceRevision": "sha256:3e06332d3a8c70ef32aca4b3806db2a500f96f5232e26682965248d92871c24c",
+      "publishedRecordSignature": "sha256:608fb4b9790547f47226d0fe0f38b5a90a570c78fe7e30c83aa388d32c5bfaf8",
+      "feedbackRevision": "sha256:0e20b755f5b59495914bffb0082277e47957774d7f471fae532e5f35a24ba7c8",
+      "priorDecisionRevision": "sha256:2940cef7435533992f24de5b02ffdd68cc0a3dce25bc6fc64fd4542ff295a3b5",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m126",
+      "sourceRevision": "sha256:636d4207c4161422aaf3d1b577077b1f618665e13615b565d74a2f24c4df20fc",
+      "publishedRecordSignature": "sha256:dc0a6d5627b47cf64a097d4fa9e4e7d422a8514da53d133b43a354ad53142cb3",
+      "feedbackRevision": "sha256:0d3c026eed6f278293be5df18d1646b1e58908069e7bd2fde1b91b423454db03",
+      "priorDecisionRevision": "sha256:a84f286e7c386698911363848175c78bebfd7229a8f119d48fd1f7f20f162d27",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m132",
+      "sourceRevision": "sha256:0c6c26580b208af69e634819542d38dee3ce863815f949ba9606b59cc57b9632",
+      "publishedRecordSignature": "sha256:aebfc34aacc6f2d7322b51d44e8137ca3300cf6efb5b68e3d9b21a662e439d1b",
+      "feedbackRevision": "sha256:114d88a47095c4c2b894172e34f5fe710552a9ecedf01103a1e2a39e779cc357",
+      "priorDecisionRevision": "sha256:77d8f7f8ec76113c2114fa1f146461b44a01f4989802bbad8ece188289f45440",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m256",
+      "sourceRevision": "sha256:c53bc9cbd04b85676d82a4ead5ea579c6ef32da2ec44d67c4c5d4997168b4f28",
+      "publishedRecordSignature": "sha256:b494dd91802583eca35de6d2e4260696eb3c63d875bd2d50d1ad6b58d0930e46",
+      "feedbackRevision": "sha256:db501eeb8b4e8dfb3bcca03be36b504ed7234af673fdb65ea816a660ba396dc2",
+      "priorDecisionRevision": "sha256:ede1b5ef267b570deb36bb09a56d63028e28dcea06352593e89d7daef0c3cf4c",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m268",
+      "sourceRevision": "sha256:8050811db2206a943bf49a43d17eea9872f874d0291d5c2d3ac04d974ceba461",
+      "publishedRecordSignature": "sha256:331fa617c626ffbee0ed4f7bd673645cee45998451e4bbf9210bc1e18d2cb3a5",
+      "feedbackRevision": "sha256:f7181f27e9a8b1d59c55236659c4ad1da983371272229da2292e0c600c0d8939",
+      "priorDecisionRevision": "sha256:6451f26fc3d24409990af13ddcb8c4e7b5cb34120deae42149e1ac879e7e5c40",
+      "status": "prior_substantive_reference_no_new_credit"
+    },
+    {
+      "recordId": "mcq:m290",
+      "sourceRevision": "sha256:54d5220160db57d2eae7a947924c2ccd1f5196e5ebd251d5a5677273c1fc8a66",
+      "publishedRecordSignature": "sha256:7c6110309116ce03412d8f9054f57d4835fc4d5f21ef680934e0271f1bb2eeef",
+      "feedbackRevision": "sha256:2689e686f01ca8816cb845d3cb60eb3dc825851db5a19a902861bde0c46ae838",
+      "priorDecisionRevision": "sha256:e96bbfa55fe174a702daff8361dd871f1aa1f3ba48a8e7120f693d754f81df4b",
+      "status": "prior_substantive_reference_no_new_credit"
+    }
+  ],
+  "priorHolds": {
+    "sourcePacketPath": "docs/drafts/phase-2b5-objective24-final-mcqs-proposals.json",
+    "sha256": "80368750e5730e108cb6ef045d5c1956f0155118876773466374c5af4a2cc1f3",
+    "inheritedHolds": {
+      "sourcePacketPath": "docs/drafts/phase-2b5-objective24-second-mcqs-proposals.json",
+      "sha256": "dafe0ed8bcae43eb8863748418ee042458bf43ac8793e726a462bade69bf9f8b",
+      "inheritedHolds": {
+        "sourcePacketPath": "docs/drafts/phase-2b5-objective24-priority-mcqs-proposals.json",
+        "sha256": "c641a0126c803a4c3f9eaa5286fcea6b045b7ad5e69e7781b76152d428bb7051",
+        "earlierHolds": {
+          "sourcePacketPath": "docs/drafts/phase-2b5-objective23-final-mcqs-proposals.json",
+          "sha256": "a5289bda4c9001ff77d6efec9fdf0033bd6f1bdea4c8670c9104c7a520b8234d",
+          "objective23Holds": {
+            "sourcePacketPath": "docs/drafts/phase-2b5-objective23-fastlane-proposals.json",
+            "sha256": "adeeea7e891c96eb7a68e23d8cfa2bf3c8bfdafebf4387f844526cf2e607492c",
+            "m305WholeScopeHold": {
+              "recordId": "mcq:m305",
+              "sourceRevision": "sha256:df2d92a1a3d3c87e502b2d99cb61145da492285a7bb4ec47da25caaed7731ea8",
+              "objectiveScopeProposal": {
+                "assessedCodes": [],
+                "contextCodes": [
+                  "2.3"
+                ],
+                "status": "held_whole_numbered_mitigation_choice_scope"
+              },
+              "contentQualification": "HOLD precise whole-item 2.3 assessment scope: the offered decision chooses a mitigation, whereas 2.3 is vulnerability explanation. Retain 2.3 misconfiguration context; do not force a second numbered objective. No actual cache poisoning attacker input, HTTP header policy, cross-user isolation test, purge, reconfiguration or recovery is performed. Shared-cache privacy differs from transport encryption; no universal claim about all authenticated caching follows."
+            },
+            "m135ComponentHold": "composite_component_independence",
+            "priorHolds": {
+              "sourcePacketPath": "docs/drafts/phase-2b5-objective22-final-mcqs-proposals.json",
+              "sourcePacketSha256": "45b802ac854c4436957037c8019ee618e64cce0476d210fdc7c190b8afc9eea9",
+              "unchangedBoundaries": [
+                "canonicalBoundary",
+                "objective14Boundary",
+                "objective21Boundary",
+                "priorPbqBoundary",
+                "priorChannelBoundary",
+                "priorTargetingBoundary",
+                "privateBoundary",
+                "humanDecisionReferences"
+              ],
+              "m046HeldContrast": "named_individual_requirement_in_spear_phishing_wrong_feedback",
+              "m432WholeNumberedScopeHeld": true,
+              "privateP017Revision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+              "privateP017Reviewed": false,
+              "activePackageSha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+            }
+          },
+          "objective23FeedbackHolds": [
+            {
+              "recordId": "explanation:mcq:m051",
+              "sourceRevision": "sha256:9fd294d1870eb991dd260432c8cf3fea903a3a8d12a16e34e9ff22eec546915b",
+              "withheldPreciseContrast": "exclusive_reflected_vs_DOM_taxonomy",
+              "contentQualification": "HOLD reflected and DOM-based XSS as universally exclusive categories, all stored XSS as server-only or every visitor exposure, HttpOnly/CSP as universal XSS prevention, and every XSS as cookie theft. The supplied immediate response path supports the offered reflected pattern; client/server and stored/reflected dimensions can overlap. Cookie access is a fictional outcome, not measured browser entitlement or security. Do not approve a precise mutually-exclusive DOM-versus-reflected contrast from the wrong feedback."
+            },
+            {
+              "recordId": "explanation:mcq:m052",
+              "sourceRevision": "sha256:0d54e1224e62e4776834daeb59c8c71c7c0161e38d63d3cb4910b8fb28733462",
+              "withheldPreciseContrast": "mass_assignment_requires_all_parameters",
+              "contentQualification": "HOLD predictable/sequential IDs as required for IDOR, ownership as the only valid authorisation policy, login as object permission, or mass assignment as necessarily binding all submitted fields. Missing object/action authorisation supports the decision; random IDs alone do not repair it. The retained all-parameters mass-assignment correction is overbroad and precise contrast is held. SSRF/CSRF/property-binding can coexist with permission failures; no defense is implemented."
+            },
+            {
+              "recordId": "explanation:mcq:m055",
+              "sourceRevision": "sha256:8590e0b8e1a4f2c6399ad1773020c3cb3b6d8938cea44e55c2cf7fa5cfeeca36",
+              "withheldPreciseContrast": "directory_traversal_requires_literal_dotdot",
+              "contentQualification": "HOLD a symlink alone as TOCTOU, an uncoordinated lock/file descriptor as universal prevention, or directory traversal as requiring literal dot-dot-slash. The described check-use gap supports the offered TOCTOU decision, but the retained directory-traversal wrong correction is too narrow; preserve its precise-contrast hold. Repeating or shortening separate checks does not eliminate the race. Correlate with m248; do not infer this subtype from every m612 shared-state race."
+            },
+            {
+              "recordId": "explanation:mcq:m145",
+              "sourceRevision": "sha256:9993f6e88de3bc70b2d267cd43a9097416d9bc76ea6252e27a2aa9fad5f2713d",
+              "withheldPreciseContrast": "tester_authentication_not_stated",
+              "contentQualification": "HOLD sequential numbers as necessary for IDOR, object enumeration alone as proof of missing checks absent the supplied unauthorised access, and the tester as necessarily authenticated. Current wrong feedback asserts authentication that the effective stem does not state; retain that exact premise hold. IDOR/object authorisation still explains access to records belonging to other users. No login-session, SSRF or implemented permission-check outcome is supplied; correlate with m052 and prior operation-permission m271."
+            }
+          ]
+        },
+        "objective24HeldDispositions": [
+          {
+            "recordId": "explanation:mcq:m707",
+            "sourceRevision": "sha256:7dc726b37a78dbe4440d464e9ebf86777148fb54122f0fb2b8411e4de7a7eb8e",
+            "withheldPreciseContrast": "whole_numbered_mitigation_choice_scope",
+            "contentQualification": "HOLD whole numbered 2.4 assessment scope: the keyed decision selects a mitigation rather than analyzes an indicator. Retain replay context without forcing another numbered objective. Fresh challenges require binding, validation and reuse/expiry enforcement; merely adding a nonce, timestamp, signature, password-at-rest protection or shorter session lifetime does not universally prevent reuse. One combined choice supplies no independently keyed freshness components. Old attack/mitigation pair and metadata-only DNSSEC/MITM references do not establish those skills or tooltip delivery; no verifier or replay defense executes.",
+            "objectiveScopeProposal": {
+              "assessedCodes": [],
+              "contextCodes": [
+                "2.4"
+              ],
+              "status": "held_whole_numbered_mitigation_choice_scope"
+            }
+          },
+          {
+            "recordId": "explanation:mcq:m710",
+            "sourceRevision": "sha256:ba04bb61f9fb597992442ee3237a62791ec3fc0403eea8885767b1619144f4dd",
+            "withheldPreciseContrast": "combined_mechanism_component_independence",
+            "contentQualification": "HOLD spoofed sources as unique attacker/host counts, UDP/open recursion alone as sufficient amplification without size asymmetry, all DNS as UDP, all TCP amplification as impossible, or authoritative DNS as never an amplifier. The supplied small-query/large-reply path supports reflection plus amplification in one combined choice, not three trusted components. DNSSEC authenticates data rather than stopping reflected traffic; no universal factor, crash, botnet or implemented anti-spoofing is established. Correlate with m259 and retain prior DDoS glossary/actor holds.",
+            "objectiveScopeProposal": {
+              "assessedCodes": [
+                "2.4"
+              ],
+              "contextCodes": [],
+              "status": "narrow_scenario_recognition_or_mechanism_inferred_pending_owner"
+            }
+          },
+          {
+            "recordId": "explanation:mcq:m050",
+            "sourceRevision": "sha256:2c73fc5ab16afc9991d039625a3bd4bee9bb200431500a15b1f22be9831e95f7",
+            "withheldPreciseContrast": "DNS_amplification_target_and_backbone_BGP_shorthand",
+            "contentQualification": "HOLD forged replies alone as cached poisoning absent the supplied cache acceptance, DNSSEC as encrypted queries or universal safety/availability, DNS amplification as necessarily targeting the resolver itself, or BGP hijacking as confined to backbone routers. Current caching evidence corrects the authored interception-only ambiguity. The retained amplification option shorthand and backbone-level wrong correction need precise qualifications; keep their contrast hold without rewriting learner content. ARP/BGP/DNS mechanisms may coexist. No signed answer, route or effective resolver defense is validated.",
+            "objectiveScopeProposal": {
+              "assessedCodes": [
+                "2.4"
+              ],
+              "contextCodes": [],
+              "status": "narrow_scenario_recognition_or_mechanism_inferred_pending_owner"
+            }
+          },
+          {
+            "recordId": "explanation:mcq:m258",
+            "sourceRevision": "sha256:61a7c865bf1c0a0cda9e143d616fdfd41d70a0159a01e24ca66c438d437ae862",
+            "withheldPreciseContrast": "whole_numbered_persistence_purpose_scope",
+            "contentQualification": "HOLD whole numbered 2.4 scope: this choice identifies persistence purpose rather than a specific malicious indicator; retain malicious-code context with exact alignment pending. Scheduled tasks also support legitimate work and multiple adversary goals; here post-compromise malicious relaunch is explicit. Persistence is not proof of an APT actor, long dwell, initial access, exfiltration or discovery. The authored ATT&CK ID/masquerading recall and unconditional Task-Scheduler-log event claim are superseded. Event4698 is conditional Security auditing, not verified execution or successful detection. No task or event log is created/read.",
+            "objectiveScopeProposal": {
+              "assessedCodes": [],
+              "contextCodes": [
+                "2.4"
+              ],
+              "status": "held_whole_numbered_persistence_purpose_scope"
+            }
+          }
+        ]
+      },
+      "objective24SecondHeldDispositions": [
+        {
+          "recordId": "explanation:mcq:m442",
+          "sourceRevision": "sha256:616d4c773ea790ddbbea65b813bd2ff1b4dbf5c0ab3001c48d7e413c1b7436f5",
+          "withheldPreciseContrast": "document_chain_not_delivery_macro_or_targeting_proof",
+          "contentQualification": "HOLD this process chain or encoded command as proof of a macro, spear-phishing attachment, named/role-targeted victim, malicious intent, LSASS dumping, pass-the-hash or registry persistence. The supplied parent-child relationship supports a first hypothesis only; legitimate automation and other document-trigger paths require investigation. Base64 is encoding rather than proof of encryption. Authored ATT&CK ID nesting and Event4688 provenance/command-line/targeting assumptions are superseded. No content is decoded/executed, provenance verified, event audited or learner investigation observed. Preserve m046 named-individual, actor and m258 persistence holds.",
+          "objectiveScopeProposal": {
+            "assessedCodes": [
+              "2.4"
+            ],
+            "contextCodes": [],
+            "status": "narrow_scenario_recognition_or_hypothesis_inferred_pending_owner"
+          }
+        },
+        {
+          "recordId": "explanation:mcq:m633",
+          "sourceRevision": "sha256:e220e57f791bcefc56ae01f8a3495b0dc5835bd3b8943f295ed9b60d9395e85b",
+          "withheldPreciseContrast": "lookalike_alone_not_typosquatting",
+          "contentQualification": "HOLD a cloned destination alone as registrar hijacking, every takeover as requiring the same account-theft path, or domain hijacking as the same as resolver-cache poisoning, typo registration or on-path positioning. Here registrar access and settings alteration are explicit. The current typosquatting correction uses broad look-alike shorthand: resemblance alone does not establish deliberate mistyping, and Unicode/homograph ambiguity remains held. Preserve m015 typo hold and m050/m706 DNS qualifications. Imported domain1/generic feedback is superseded; no real registrar, records, registration or defenses are checked.",
+          "objectiveScopeProposal": {
+            "assessedCodes": [
+              "2.4"
+            ],
+            "contextCodes": [],
+            "status": "narrow_scenario_recognition_or_hypothesis_inferred_pending_owner"
+          }
+        },
+        {
+          "recordId": "explanation:mcq:m441",
+          "sourceRevision": "sha256:2ddd3752c130f8bd890c21fbbc473e6544bb49a61e43b21e936a944673bf6a92",
+          "withheldPreciseContrast": "unusual_DNS_not_confirmed_DGA_or_C2",
+          "contentQualification": "HOLD changing or statistically unusual names, fixed timing, same IP range or outbound DNS alone as a confirmed DGA, C2, malware executable, file hash, inbound connection or actor identity. Current category choice and main feedback remove the authored definitive DGA-C2 inference. No process/file/registration evidence is supplied here, unlike m285 and prior m131. DNS and timing are correlated observations within one keyed decision, not two trusted components. Suspicion warrants investigation; no statistical classifier, telemetry, threat lookup or confirmed compromise is measured.",
+          "objectiveScopeProposal": {
+            "assessedCodes": [
+              "2.4"
+            ],
+            "contextCodes": [],
+            "status": "narrow_scenario_recognition_or_hypothesis_inferred_pending_owner"
+          }
+        }
+      ]
+    },
+    "objective24FinalHeldDispositions": [
+      {
+        "recordId": "explanation:mcq:m024",
+        "sourceRevision": "sha256:39f25fa8117567b9c6c7c288abbdcdcfda3eeb2156de2f23dad3b26e2d89259b",
+        "withheldPreciseContrast": "authentication_success_and_cryptomining_specificity_not_stated",
+        "contentQualification": "HOLD location/time anomalies as proven compromise, accurate physical geolocation, concurrently active sessions, impossible legitimate activity or successful authentication as an explicit stem result. Current main feedback qualifies VPN/geolocation false positives. Wrong feedback says both logins succeeded although the stem only says authenticating; that premise is held. Its resource-consumption contrast overemphasises cryptomining: resource anomalies have many malicious and benign causes. Lockout depends on policy, not a universal threshold; out-of-cycle logging needs an activity baseline. No real SIEM, clocks, timestamps, travel, sessions, credentials or baseline is checked. Authored domain4/likely-attacker inference is superseded; exact 2.4 indicator recognition remains pending.",
+        "objectiveScopeProposal": {
+          "assessedCodes": [
+            "2.4"
+          ],
+          "contextCodes": [],
+          "status": "narrow_indicator_or_behavior_recognition_inferred_pending_owner"
+        }
+      },
+      {
+        "recordId": "explanation:mcq:m049",
+        "sourceRevision": "sha256:01b0966e3f06e791651a5c584c0911fc4c6b0ee57b6e49de0579d4a69cc64cfb",
+        "withheldPreciseContrast": "DNS_contrasts_not_exclusive_and_distribution_not_stated",
+        "contentQualification": "HOLD every DNS response ratio as 50x, DNS traffic alone as a flood, distribution or achieved outage as stated, and poisoning/hijacking/zone-transfer as categorically unable to coexist with amplification. The stem supplies a 60-to-3000-byte example and victim-directed replies but main feedback supplies spoofing/open-resolver context; do not invent observed source spoofing, multiple attackers or reflector counts. Current wrong corrections retain absolute no-amplification/no-flood shorthand and DNS hijacking as only malicious-site redirection. Zone transfer is data copying; unauthorised disclosure is conditional. One combined answer is not separate ratio, reflection and DDoS evidence. Preserve m710/m259 correlation and m050 DNS target/BGP hold; no request or mitigation executes.",
+        "objectiveScopeProposal": {
+          "assessedCodes": [
+            "2.4"
+          ],
+          "contextCodes": [],
+          "status": "narrow_indicator_or_behavior_recognition_inferred_pending_owner"
+        }
+      },
+      {
+        "recordId": "explanation:mcq:m094",
+        "sourceRevision": "sha256:617658339819b2dec24c1ec82bc0317f609a4a193b65a806a5f282aecaf6ce5e",
+        "withheldPreciseContrast": "kernel_privilege_and_exclusive_concealment_not_stated",
+        "contentQualification": "HOLD administrator access as kernel-level execution, rootkits as kernel-only, local-tool detection as universally impossible, bootable forensics as the only remedy, or concealment as incompatible with adware/worm/spyware behavior. Main feedback now says tools may be unreliable and independent analysis may help; old universal detection/removal claims are superseded. The retained adware correction introduces kernel-level privilege absent from the stem and rules out concealment too absolutely; preserve that precise contrast hold. Supplied OS-call filtering supports the offered rootkit trait, closely correlated with m433. No privilege escalation, live host analysis, detection or restored trust is observed.",
+        "objectiveScopeProposal": {
+          "assessedCodes": [
+            "2.4"
+          ],
+          "contextCodes": [],
+          "status": "narrow_indicator_or_behavior_recognition_inferred_pending_owner"
+        }
+      },
+      {
+        "recordId": "explanation:mcq:m125",
+        "sourceRevision": "sha256:0e20b755f5b59495914bffb0082277e47957774d7f471fae532e5f35a24ba7c8",
+        "withheldPreciseContrast": "whole_numbered_definition_recall_scope",
+        "contentQualification": "HOLD whole numbered 2.4 assessment scope: this asks for a malware definition rather than analysis of a concrete malicious indicator. Retain worm/propagation context without forcing another numbered objective. No host-program attachment differs from no files anywhere, and autonomous propagation need not require vulnerabilities or exclude user-assisted delivery in every worm. Trojan/ransomware/virus traits can be blended; current ransomware correction permits worm-like behavior. Correlate closely with m054, with no implemented propagation or independently approved family.",
+        "objectiveScopeProposal": {
+          "assessedCodes": [],
+          "contextCodes": [
+            "2.4"
+          ],
+          "status": "held_whole_numbered_definition_recall_scope"
+        }
+      },
+      {
+        "recordId": "explanation:mcq:m256",
+        "sourceRevision": "sha256:db501eeb8b4e8dfb3bcca03be36b504ed7234af673fdb65ea816a660ba396dc2",
+        "withheldPreciseContrast": "whole_numbered_definition_recall_scope",
+        "contentQualification": "HOLD whole numbered 2.4 assessment scope: this is a definition recall item, not a supplied indicator-analysis scenario. Retain ransomware context without forcing another numbered objective. Current main teaching qualifies encryption as one behavior, possible disclosure threats and unreliable recovery; the stem does not assess exfiltration, RaaS or triple-extortion terminology. Neither payment nor a displayed promise establishes restoration/deletion of stolen copies. Correlate with m126 and preserve taxonomy overlap; no payment, response or successful recovery is observed.",
+        "objectiveScopeProposal": {
+          "assessedCodes": [],
+          "contextCodes": [
+            "2.4"
+          ],
+          "status": "held_whole_numbered_definition_recall_scope"
+        }
+      },
+      {
+        "recordId": "explanation:mcq:m268",
+        "sourceRevision": "sha256:f7181f27e9a8b1d59c55236659c4ad1da983371272229da2292e0c600c0d8939",
+        "withheldPreciseContrast": "whole_numbered_definition_and_adware_alignment_scope",
+        "contentQualification": "HOLD whole numbered 2.4 assessment scope for definition recall and precise named-bullet alignment: adware is not itself a listed SY0-701 v7 2.4 malware bullet, although the examples are nonexhaustive. Retain advertising/malware context without converting adware to bloatware/spyware or forcing another objective. Advertising alone, consent wording or revenue motive does not establish malicious installation, legitimacy or legal classification. The stem stipulates malware; adware can track users and coexist with keylogging/extortion. No actual advertisement, consent, tracking, revenue or removal is measured.",
+        "objectiveScopeProposal": {
+          "assessedCodes": [],
+          "contextCodes": [
+            "2.4"
+          ],
+          "status": "held_definition_recall_and_adware_alignment_scope"
+        }
+      }
+    ]
+  },
+  "objective25Census": [
+    {
+      "recordId": "check:enterprise-network-segmentation",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:90578aff86eed19d65056374e1399d94a5f9838acdad5280a270451866f6ecbd",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "check:platform-cloud-hardening",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:974e3f8e04231fd6c0ebf0a8a5be9ff5ef58ac03891942e0f5a46608a5c6df18",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "check:software-memory-concurrency",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:f2b5cd4acf47bfb902b8cb6944b00aebb3a753a7c5834d60f31cb82a1d3a7d78",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "explanation:mcq:m011",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:4cd3e816f089ccbdb259494a3b809dd72d3b38b52b76678bbd66bbcefdd06b91",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m014",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:0bb7f85de886611d43d3aa68eb31e450fe6e6e4c02592e41bce38556539c78ec",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m113",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:820c6b6db5279aa9cd52b2d3baf89b4951d3b1e79d9c3c53adcbf4b0b0c8b608",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m133",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:877cb08d5373dde46f33cb694ace4fa70c5c76be437e201d0fc73fc8dc8578e3",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m134",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:d5c5a01be04836cd5da4154eb8a4413ebe67f2d5f9acee99863617d6c2915165",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m138",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:ab3774be3cf13910fa5dc2b0d2735f02cdcbf3b1e437d534a80d9fd18479b7e5",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m165",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:c9ba354a7a6313135eb7d766d3c14d369e0d4be585ca363da9f1dcad434014e9",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m261",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:f2b912ffbffbda3e86bb548411fadcbe900a9db7375e882e56c750b7688c1917",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m284",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:32e7c0e30b7e3084982bb1ac80b73fe5ef3115f21c80646e79925fbb2e28ef18",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m708",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:aab802a49c3a4fdfe5afea1044d530feae792adece0b7d22e4a3dcd3756b439b",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:acl",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:bb131401aa48e86b64c07650670b6683ff5b6ba438e2fe84308115336c24c2de",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:aslr",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:4ad86bdd0915aa445de2d68862ff0b5f2ba9d8c6e1dac1429ae9acdf9901e8ad",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:bios",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:b0bbf26e4f62411c54ecfe48554091c95111359a2c1015a4e8f622a670321d6c",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:ddos",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:006f9f658d0d48d33b37af0b303ad698383f3e241cc7be1f7b1d34f02263f478",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:dep",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:97733918a6c97cb5bc69398a86c3d0792211beb354d9276886fb9470814418c8",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:encryption",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:84e0be46e7bf560613e28fd9d4fed9749b5756bd1532bbdb1bbbe4cb5e3b6ee5",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:mac",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:09f1b253770e93f9225f07f0a3eac23f29710cfd0a452e0ab6c41c7cc44b41f3",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:nac",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:1f0709e9b53fbae1ff9ab42fd02c698b0f35e3f8110f870d6f76d6dc5d2e858f",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:nat",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:6b3622986b0ad0241210d372effd909cda2ab1f80e54ec190aed2b2aa1e3ecb1",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:ngfw",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:c00615d1ef296e1444ac5b7d94e145185454c5cd8624b7231ae1c98b43ec3add",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:nist",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:465d82bcfbda9daed74431e8ed2444088c8ab0d116d6c22f2e67a727bc39ceed",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:sql%20injection",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:909f227de99d25202e56848a2ba7f3543e8e3f96bde902dcd5d7c2468dfa7110",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:tls",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:228f0edd7995d12f74e6ff28da67f69071fde494c8dc4a531606b69acaaba377",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:uefi",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:b1be5c6590e6cd3fd70d779862665222bfc264f97a225b1f05f6ebb39b781c3a",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:waf",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:d346059694d798d3ca6f2f819c940577bfaa990bcb43093a5d58d4878518fffc",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:zero%20trust",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:9c6dcc6339d9e3adea1ea438688151b528a16352c3daaba1fd07ca6da4385342",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "keywords:enterprise-network-segmentation",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:7caeafa6a0879a781c3964ca9d8b1cb24aa43b71573e912fe44a6d81eba8be24",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "keywords:platform-cloud-hardening",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:103ac1491571b499e8df8b2af2ca3dc25af52dc1226a5f1ffe99107462330477",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "keywords:software-memory-concurrency",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:3c3739fa1b50f826e27ca6c0bd7ec76b44fbddaea214671aa7b8d9dd98a88c1f",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "lesson:enterprise-network-segmentation",
+      "kind": "lesson",
+      "sourceRevision": "sha256:5abd866beaf8ffaf59c8eba06681ce9c1f3db86c12e138a6be666670a8b8c3dd",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "lesson:platform-cloud-hardening",
+      "kind": "lesson",
+      "sourceRevision": "sha256:deaba07011672f1542e82fdac38d5a67035bbc0925b2806f302f9fb494bf51de",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "lesson:software-memory-concurrency",
+      "kind": "lesson",
+      "sourceRevision": "sha256:70f61bd8b08e8a4f7914e41133bd1375c891c4e0412196456658117a56cfc4ed",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "mcq:m011",
+      "kind": "mcq",
+      "sourceRevision": "sha256:490ff6e04557684fe0d546a92c8ee12e1308fa8d36e75dbdcb983fe8a6ef7ab2",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m014",
+      "kind": "mcq",
+      "sourceRevision": "sha256:fb61c4803e1f2dc751c8b636ccdddb5a96035669265c9a66de13ff06c9620aca",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m113",
+      "kind": "mcq",
+      "sourceRevision": "sha256:526ce893c10c5820afffb7d1eedc56c8463c3295cbfa0dd2a673d19ccf0ee246",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m133",
+      "kind": "mcq",
+      "sourceRevision": "sha256:bceee931b0dc2485f16a85d89190abb62d78f760bfd26e1b1be671748b0bbb5f",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m134",
+      "kind": "mcq",
+      "sourceRevision": "sha256:11f5f65fbbeaff3e67e13ecc5cba5c6692ba7fcee5ef480d24aa19c3d0722b97",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m138",
+      "kind": "mcq",
+      "sourceRevision": "sha256:90a41bbf225dea23a71426e6d4c8a1f244a4c9c7bedd4ae76b02fcb5f66136c3",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m165",
+      "kind": "mcq",
+      "sourceRevision": "sha256:522f2d87b61d7ce9963f84076323987b12ced548f50bbd8e743f9a4c9d0c1404",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m261",
+      "kind": "mcq",
+      "sourceRevision": "sha256:aff082d1bcde1d0a380851f50b4f828074352e63dc42eb325ecf8ca4a697094b",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m284",
+      "kind": "mcq",
+      "sourceRevision": "sha256:d025246e1c1e7f2d9a223a22d663097e7098ca115c96ce971ef04623f60b7e68",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m708",
+      "kind": "mcq",
+      "sourceRevision": "sha256:577082ff94caf4c00d31dfbf45b06c6476de8329d45428d653b3fd8f2254a5c7",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "practice:enterprise-network-segmentation:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:62a807172deb001a5a1187666eb6fcdb2f398dcbbd58191b62bf732f59d89c41",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:enterprise-network-segmentation:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:7d4f32733dfef610a586ac6eca90b80072a0a18d163e40eda5b36d1b6cd4a403",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:enterprise-network-segmentation:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:f8c68e7d532816f1a96200789041b672a9a00bb35676900abe1906d1f09abf2d",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:platform-cloud-hardening:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:9e05abe73c45f8b347fea5ad3e72a8d16e54a728bd3bc4fc7beefcc76b4077e9",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:platform-cloud-hardening:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:ca56bb48f799481a34d9aeb166419de25baec7719844934e01653e7f373138a5",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:platform-cloud-hardening:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:9f39b9be5fd9cd00bf8677a37f6a4105d7e139eb938d68f9b90d3456ea957839",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:software-memory-concurrency:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:6708c71a4a95ac766cab4223041830470b1e9f95c27f62d80c166e45c91e4a3d",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:software-memory-concurrency:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:9a2537c9410592c57b13d5455621785e53fcead2a9b6d0e81617e5eb86a88b1a",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:software-memory-concurrency:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:569f075b6dc2a5625f9cc145468d44f584641c47a8bcf3b38eb5e03896acd1e5",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:enterprise-network-segmentation:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:a71470d26e509ffb3429abc9f58e0f23182aa0fe20164a20bf93086acdb1de6f",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:enterprise-network-segmentation:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:af48cf70d2d7b5bd919af19d2e3b66ecce8defb7f35f13d983045b389a839b70",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:enterprise-network-segmentation:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:8cf13886e9c7ea053da8481bd4f70e8c347ec81c0a7d60879e6cd3e2050a5b2d",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:platform-cloud-hardening:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:2bd5e20ea4f3dcb1e435199b7bb6e059ded387597a20f5163c715ab4c09113b8",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:platform-cloud-hardening:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:6e6b29a407961cbee9fda028efa35c68c3dec1010629bda3a0a5dfdd491e52b3",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:platform-cloud-hardening:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:d5fc15c17b4677f51e26bd6b11bc239ef73643d213563f56e8fcc26b6080ece5",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:software-memory-concurrency:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:83f046334a963aa2a6059a6368f2302330e7b9bb46264118475feb69ead5a482",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:software-memory-concurrency:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:564a3e7a4fa1bd43fcaf084e2eb7d9629cb738df72acaa267621d90871c629e0",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:software-memory-concurrency:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:1b5f406c348ae3dcc94e6899df22b0344d9f4fb8ee3d378af1aa4dc9cc68540c",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "traps:enterprise-network-segmentation",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:e8943ba86e12e9698951bedf4823a7c960d916813d8adbc47c7cc190b36c2b90",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "traps:platform-cloud-hardening",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:e370e4c0371f279ebe197fafae4b21dbc2d447ea4a4c55f914904fac01266837",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "traps:software-memory-concurrency",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:6f06501cef2c130f2c6ae8c08f6bec919d958092365bcbc130ce604e7ad9c8e1",
+      "status": "inventory_only_deferred"
+    }
+  ],
+  "objective25Denominator": {
+    "broadCandidates": 66,
+    "priorAgentDispositions": 10,
+    "newAgentDispositions": 20,
+    "combinedAgentDispositions": 30,
+    "remaining": 36,
+    "remainingByKind": {
+      "glossary_definition": 6,
+      "keyword_guide": 3,
+      "lesson": 3,
+      "lesson_check": 12,
+      "lesson_section": 9,
+      "lesson_traps": 3
+    }
+  },
+  "remainingObjective25RecordIds": [
+    "check:enterprise-network-segmentation",
+    "check:platform-cloud-hardening",
+    "check:software-memory-concurrency",
+    "glossary:aslr",
+    "glossary:dep",
+    "glossary:nac",
+    "glossary:nat",
+    "glossary:sql%20injection",
+    "glossary:uefi",
+    "keywords:enterprise-network-segmentation",
+    "keywords:platform-cloud-hardening",
+    "keywords:software-memory-concurrency",
+    "lesson:enterprise-network-segmentation",
+    "lesson:platform-cloud-hardening",
+    "lesson:software-memory-concurrency",
+    "practice:enterprise-network-segmentation:practice-keyword-0",
+    "practice:enterprise-network-segmentation:practice-keyword-1",
+    "practice:enterprise-network-segmentation:practice-keyword-2",
+    "practice:platform-cloud-hardening:practice-keyword-0",
+    "practice:platform-cloud-hardening:practice-keyword-1",
+    "practice:platform-cloud-hardening:practice-keyword-2",
+    "practice:software-memory-concurrency:practice-keyword-0",
+    "practice:software-memory-concurrency:practice-keyword-1",
+    "practice:software-memory-concurrency:practice-keyword-2",
+    "section:enterprise-network-segmentation:0",
+    "section:enterprise-network-segmentation:1",
+    "section:enterprise-network-segmentation:2",
+    "section:platform-cloud-hardening:0",
+    "section:platform-cloud-hardening:1",
+    "section:platform-cloud-hardening:2",
+    "section:software-memory-concurrency:0",
+    "section:software-memory-concurrency:1",
+    "section:software-memory-concurrency:2",
+    "traps:enterprise-network-segmentation",
+    "traps:platform-cloud-hardening",
+    "traps:software-memory-concurrency"
+  ],
+  "bankProgress": {
+    "denominator": 483,
+    "mcqDenominator": 395,
+    "pbqDenominator": 88,
+    "priorQuestions": 183,
+    "newQuestions": 10,
+    "combinedQuestions": 193,
+    "remainingQuestions": 290,
+    "combinedMcqs": 177,
+    "remainingMcqs": 218,
+    "combinedLocalPbqs": 16,
+    "remainingLocalPbqs": 72,
+    "pairedFeedbackCombined": 193,
+    "pairedFeedbackRemaining": 290
+  },
+  "separateAssessmentDenominator": {
+    "privateVariants": 2,
+    "starterAssessments": 9,
+    "guestDemoAssessments": 2
+  },
+  "deliveryBindings": [
+    {
+      "path": "src/App.jsx",
+      "anchor": "function MCQPractice(",
+      "endAnchor": "function UpgradeModal(",
+      "startLine": 24992,
+      "endLine": 25873,
+      "sourceSignature": "sha256:f96053d990c9e6e98bebb88af15b18766c3996a962879e7d178b21e5baa2556d"
+    },
+    {
+      "path": "src/App.jsx",
+      "anchor": "function shuffleMcqOptions(",
+      "endAnchor": "function playAnswerSound(",
+      "startLine": 1242,
+      "endLine": 1262,
+      "sourceSignature": "sha256:3c9b98e4a0f51aefc810c2ba3e2bf99685c81f60b33e5e8951fa86b466966b45"
+    },
+    {
+      "path": "src/App.jsx",
+      "anchor": "function getWrongOptionFeedback(",
+      "endAnchor": "function MCQFeedbackVerdict(",
+      "startLine": 1140,
+      "endLine": 1145,
+      "sourceSignature": "sha256:f8ca69570cdc8f6b76b6455c35203bb7e8090d5961b606adf5347d3314188316"
+    }
+  ],
+  "practiceSelectorBinding": "sha256:3068f284d528b579176264da5a129cd35fc34a6e581ece2c8a49cb133a1df84a",
+  "feedbackGate": "submitted_pro_main_selected_wrong_only",
+  "tooltipDeliveryObserved": false,
+  "scopeSkillDifficultyCanonicalFamilyWeightEvidenceTeachingPublicationApproved": false,
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "masteryWeight": 0,
+  "eligibleEvidence": false,
+  "activeUnresolvedMappingsUnchanged": 489,
+  "unchangedReleaseHashes": 25,
+  "negativeMutationChecks": 138
+}
