@@ -1,0 +1,3135 @@
+{
+  "schemaVersion": 1,
+  "status": "LOCAL_AGENT_REVIEW_NOT_READY",
+  "baselineCommit": "4fd78e6f91cb51797249af4d396be13f8883695f",
+  "sourceBindings": [
+    {
+      "path": "docs/drafts/phase-2b5-objective11-controls-mapping-proposals.json",
+      "sha256": "0ba95c5c8f8a00e091daa9d852de0350a01ca00bedcba7c317155ea94cad88a9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective11-support-mapping-proposals.json",
+      "sha256": "46cf5a704690aa85606a1167b72f221aea09234635e3062aec067e7967abb4c9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-zero-trust-mapping-proposals.json",
+      "sha256": "fce8683567473a28ce8e903190e977345339f33df022ef56425c18d3bdfe225d"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-foundations-mcq-proposals.json",
+      "sha256": "d45c0d959c4cc0171b401f2df5ab1ee38d7bf717e3ce08c9d008d4dac61a6c20"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-p055-mapping-proposals.json",
+      "sha256": "40e1d58143f8dd4853f0496f5aca6d4abab031f59681bd625f7c144e41f3296e"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-resilience-lesson-proposals.json",
+      "sha256": "8dd1cae60ca07bad8d4046e7653beafd05f4f02bd66d12763cd0c621a90a36de"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/mapping-package.json",
+      "sha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/release-checksums.json",
+      "sha256": "98e7e0ed45b5fd17f1be50c4cd36eba53bf289de26a427810e061274dcfb3403"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-batch.md",
+      "sha256": "1a039e6f4778a585128b0d4167536c46a53d13130476b6144ffa946f2f464713"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/review-guide.md",
+      "sha256": "a9cc1fff35873d84d90bec1c5c6f4613fdb46defae5a8b2a87b4b7c554ffd33b"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
+      "sha256": "c57fea32997f551560a2846433b108131a3844e3c713f620f4b7ed51ae14207a"
+    },
+    {
+      "path": "docs/secureplus-rebrand-master-plan.md",
+      "sha256": "2a5c20f1a1584b4117a0b44f6446db04e265a34cf1870910d5cd8be00752e19c"
+    },
+    {
+      "path": "docs/phase-1-product-loop-audit.md",
+      "sha256": "5d1a2ad1180e96d428e8b77f97841b1eb2c11659235c8450ba40d80ba78b5c10"
+    },
+    {
+      "path": "src/data/conceptDeepDives.js",
+      "sha256": "b478e16240c95b70a79cf0679aff683fc08f18dd11947c4046ecd880ec1ce17f"
+    },
+    {
+      "path": "src/data/sy0701DeepDiveMap.js",
+      "sha256": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff"
+    },
+    {
+      "path": "src/data/learningConcepts.js",
+      "sha256": "90dfc8eda4cd0c5231fc7e35e66516e818bfc6720331eef6c0125f340c9085ac"
+    },
+    {
+      "path": "src/data/learningMappings.js",
+      "sha256": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+    },
+    {
+      "path": "src/lib/deepDiveStudy.js",
+      "sha256": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459"
+    },
+    {
+      "path": "src/lib/deepDiveRecommendations.js",
+      "sha256": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479"
+    },
+    {
+      "path": "scripts/lib/read-learning-pilot-bank.mjs",
+      "sha256": "369aaf440baf35c4441ab3f6608d081243576b0cbd3d2983b176e9ff057fafac"
+    },
+    {
+      "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
+      "sha256": "3e5bbf044e77268b64408eb4462e0998f4116c9ac5bcd4e241c1a4c01c8c24a6"
+    },
+    {
+      "path": "scripts/lib/content-mapping/package.mjs",
+      "sha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748"
+    },
+    {
+      "path": "server/adaptive/revision.mjs",
+      "sha256": "a2fc241dd45a60fe4e9898f8133187402ef07d9e0a5e2f721f4ad6ba33b73451"
+    },
+    {
+      "path": "src/App.jsx",
+      "sha256": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49"
+    },
+    {
+      "path": "src/data/sy0701AcronymFlashcards.js",
+      "sha256": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-flashcards-mapping-proposals.json",
+      "sha256": "143dde6ff3996d594cd7981101c530048902c894449641f972cc38f8aa1c58fe"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective12-glossary-mapping-proposals.json",
+      "sha256": "377378ea1423ceafead0d73bfaace111e0a7181eb1da50200ec5454fe386c32e"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/private-catalogue-read.json",
+      "sha256": "ab41620421c0449309a096bc678aaa4b05088188d2c8da7666d7429cc4e10ce1"
+    },
+    {
+      "path": "docs/evidence/phase-2b5/private-reconciliation.json",
+      "sha256": "53ba4921ed4ffb67d1da312fea8938a8f902c8a372cc083de9e4bbc71e7a8924"
+    },
+    {
+      "path": "scripts/lib/content-mapping/publication.mjs",
+      "sha256": "c540681dd727c01003505c050744e3d13c73486dd027bb99adaaf96b843d77e7"
+    },
+    {
+      "path": "scripts/lib/read-authored-bank.mjs",
+      "sha256": "e5fdce4aeeaf9971bbdb9ea269b3ae5fe9a57392df19b21879c59968ca5d8b2e"
+    },
+    {
+      "path": "src/data/sy0701PublishedSnapshot.js",
+      "sha256": "c5455fafd76fe974bb6dcb54b0562fc5ee5935da8387f7bfe48036760d4a8e9a"
+    },
+    {
+      "path": "src/data/sy0701EditorialReview.js",
+      "sha256": "0f32ac6be52a67cdeee239b5342a27505f240c9da122d0ced74df1fbb53480bb"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective13-change-mcq-proposals.json",
+      "sha256": "191d496358740cc07567452eb64fd1d2f3ab508cd83279a6c1f840355bc8ee67"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective13-governance-lesson-proposals.json",
+      "sha256": "ada7377ce290d0ba11485923910cbd4f071b8ed91fa8114235b712fe06a513bc"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective13-glossary-mapping-proposals.json",
+      "sha256": "a3d25ef32d9e07424ef448ff32e1b0fa6c38c1c0a51e42fbb90f2a36ba0184e7"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-password-mcq-proposals.json",
+      "sha256": "cb88cdfee8cbf4f6a6386f89572029c9d35e43519b9dd3acd9bcdc2910382ee2"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-encryption-keyuse-proposals.json",
+      "sha256": "c70dfd0c824e86a259679d3b77f21eb470c993a6a677907844beca2b6b79f459"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-custody-pki-signatures-proposals.json",
+      "sha256": "bc452ce1e68c91f2627251cc817b5706edc847d8c96bd0b214ba1dc7eece23f6"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-certificate-lifecycle-proposals.json",
+      "sha256": "a0985e8b84c69b0d70cd1ecdb35d887a207cad5bdf83195aa4193a0bf2e14fae"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-hashing-password-proposals.json",
+      "sha256": "3dc23520359035e91a10ac4a6e6f864782a0032e23ae40fcd2236b87f32d7a88"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-key-origin-proposals.json",
+      "sha256": "38210cbc2c70f49c44ce68405b61f747fbab7a0717000715ee3dbcc6773f8a7e"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-obfuscation-proposals.json",
+      "sha256": "c268a776e1d222fddde6a3913e6950ffc50f9000131b473722f908147ae6bb4a"
+    },
+    {
+      "path": "src/data/sy0701PbqReview.js",
+      "sha256": "4186e735e497204cdbf5f372f1e265361f3df3444320b8a45212477e13442754"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pbq-role-matching-proposals.json",
+      "sha256": "36c8dcb2deff1af78414465706a399c8e09341c09d9a9afba2e96b4556fa18ba"
+    },
+    {
+      "path": "scripts/audit-objective14-pbq-role-matching.mjs",
+      "sha256": "c42c53ba822741fa61587d5d218b832e33b0f12eb7bece7f21b6573432447d7c"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pbq-role-matching-review.md",
+      "sha256": "66193a7d7640e4814316314714ca665c8e1649b939da511c16a03742213c7a7a"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-pbqs-proposals.json",
+      "sha256": "7a5fb1b1d82708211f332b6f748aba2051e494adbca18f2a850fe0a61e503ea0"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-pbqs.mjs",
+      "sha256": "ab6f9ed9b8a4d55db3b97c6964038da96cc327fd0db0abe4113372788810c695"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-pbqs-review.md",
+      "sha256": "f45aeef11c0add027c9c04a25e7921ad03efe133099aabcd5310860e545546bb"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-terminal-pbqs-proposals.json",
+      "sha256": "90501520c07fb1966fe6d9a04edb121fdfd5710298701e9c860fd8e718ecb209"
+    },
+    {
+      "path": "scripts/audit-objective14-terminal-pbqs.mjs",
+      "sha256": "aed5a7b22b4c4a73bd605a9915ac28d143c02b21a9a5fe0d71e116c08c16339d"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-terminal-pbqs-review.md",
+      "sha256": "2ae0f684805fb9ef6c9e9ff8602b3460fd4a06adfd149ea82a23b00c4196acee"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-final-pbqs-proposals.json",
+      "sha256": "67dc31de331b3a5dcaeae140683354e3afa0f3cb30971a68086bed3006bb5056"
+    },
+    {
+      "path": "scripts/audit-objective14-final-pbqs.mjs",
+      "sha256": "327fef1f2da5d92c0758106141bec6dedab8e4a8e6b8087b196d3c3fa7e0b9b0"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-final-pbqs-review.md",
+      "sha256": "b8d6970c42994ce757016b8b5bd8e369bafb4c99c420356e91937b1d6f9ccd57"
+    },
+    {
+      "path": "src/data/conceptDeepDivesPrinterGuide.js",
+      "sha256": "196982096671e5b10867402da328992cb29503c415615ac9eb5e674d4475d006"
+    },
+    {
+      "path": "src/data/conceptDeepDivesStudyGuide.js",
+      "sha256": "340cc43dacd9c8706da4fb5a7a92c3a7104e36e4fbec6efec13d39522e17ab43"
+    },
+    {
+      "path": "src/data/sy0701LessonReview.js",
+      "sha256": "66ea36eb9de2bd82c264e0db2062084aa54e3dc23c256812751bd5404af4dd41"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-keys-lesson-proposals.json",
+      "sha256": "5aefe5670ccaf5239707c84c3af9641ac90c59d24aa09c305942d5b44fc307df"
+    },
+    {
+      "path": "scripts/audit-objective14-keys-lesson.mjs",
+      "sha256": "68b9821853db49c749c45a5baa57a9ed4dbb5bc24123523c241927c3d79c07c1"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-keys-lesson-review.md",
+      "sha256": "838f7c54df900542a129f597d438edcdba23486e79eca7e30801ff58474061c8"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-modes-lesson-proposals.json",
+      "sha256": "d4c1b5486c6538a72cd7dbb4e073e74e8dc1aec5726d6389abdda92f5e399cf6"
+    },
+    {
+      "path": "scripts/audit-objective14-modes-lesson.mjs",
+      "sha256": "22f65b96c0c50173a5b35464c71a7ecbdfc26f19383a9b62ad6451e7afe928be"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-modes-lesson-review.md",
+      "sha256": "62e4f456d521d3ed974332cb8c3ff0cbfc63e12244480422c1c14448fc9a62ea"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-lesson-proposals.json",
+      "sha256": "f58e590b5ea7a049f401b14344cc46c9883f42f9b7155c4cb979d1f52c35fee6"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-lesson.mjs",
+      "sha256": "b57fe502fc26b75a2ed449af5306f85673bf5ab152d6733e6b1eb5c9f8a37353"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-lesson-review.md",
+      "sha256": "bdb5ef191cc8c2b364c74857df89cc0de523ee6e526d0f6e1d73d7edf0eb1f14"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-cards-proposals.json",
+      "sha256": "f53d9ebe64bb6ddbbbd53c8172354093813d815f84938ad4bff48910f99f75fa"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-cards.mjs",
+      "sha256": "e416cb48d746abfa1435fed4a605c2016a6400411dba68240e730f57c25bca02"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-cards-review.md",
+      "sha256": "e198a2a7b19fb45a3abd9a584a7e917720e1351229c6da3c885d6338e9df93f1"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-algorithm-cards-proposals.json",
+      "sha256": "a51fdc4514d4307cd161b5d9fa0984ff767e7e01ae7a5bc3aecb4efe49606120"
+    },
+    {
+      "path": "scripts/audit-objective14-algorithm-cards.mjs",
+      "sha256": "2fbe094f0f1a11653b040a5cbc053a9f36834cbd00d0fee1c6cd0000d46fb246"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-algorithm-cards-review.md",
+      "sha256": "3288e97802ed745682eb7c9e8ee52e731792d66628a90b9fbb6c15bf6e4dbb2a"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-exchange-cards-proposals.json",
+      "sha256": "b00c4e8e87785cae40b17aacf8ece8170334da0fe29d2e9acb964d21121a0670"
+    },
+    {
+      "path": "scripts/audit-objective14-exchange-cards.mjs",
+      "sha256": "d5f43a4905cdfb72bcb393b65aec9a4068f82363506ac533d01b0654eef98fec"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-exchange-cards-review.md",
+      "sha256": "90dc93b41064df984a0c0b4df71c885b11af6d85279884e55e8ef78205bd2a18"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-attack-cards-proposals.json",
+      "sha256": "f7a01a4675143132e502ec33cc2e6630b7f8748bbdaad7243d395410531c024d"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-attack-cards-review.md",
+      "sha256": "bf0a67785728f921758f57d653de3ab165b9106df59c465be167f443ec9952e6"
+    },
+    {
+      "path": "scripts/audit-objective14-attack-cards.mjs",
+      "sha256": "c527fdafdf06626713caadb263af28154325bb9c67153166e8b13b26190ec0f9"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-crypto-glossary-proposals.json",
+      "sha256": "6ff229373bb6f6f98acf4a4907d4541183e49e61a6089da24aa53addd67c91ce"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-crypto-glossary-review.md",
+      "sha256": "be275577a7822d211d6b099c2a598468c74be6b2cbd35979c0b37f942de9bac1"
+    },
+    {
+      "path": "scripts/audit-objective14-crypto-glossary.mjs",
+      "sha256": "6f244be6b9c124b885e0d2a2df2b45a2a71e60359291e7898d78af6a72d50cd2"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-pki-agreement-glossary-proposals.json",
+      "sha256": "85bc2ed1b25309db1700fc5c09627c342051863dab870a59aad8925e34e7fbf2"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-pki-agreement-glossary-review.md",
+      "sha256": "4bab787459a14c9e48e42aa5092b5ae8ba73b62fef864bc4cd853e8adaab2ce0"
+    },
+    {
+      "path": "scripts/audit-objective14-pki-agreement-glossary.mjs",
+      "sha256": "51e2986fecbadefc943c6d667d35eac57c00c4b4215b2a2fc959a9ae493cc8b8"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-network-email-glossary-proposals.json",
+      "sha256": "e32f4374c1067fbd493fd289cead64eb42dbe1cfa60e77ceed423b3fdf1a3632"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-network-email-glossary-review.md",
+      "sha256": "945c6dabfad14cdcf7ba50da03a5ba907a1b1e70d4b1a865157d32a45b1bfb18"
+    },
+    {
+      "path": "scripts/audit-objective14-network-email-glossary.mjs",
+      "sha256": "dedd168dbf1dc924878b6a46b1b924f23ffdfcdfc2fa8ee213c54fa968082e41"
+    },
+    {
+      "path": "docs/phase-2b5-content-mapping-readiness.md",
+      "sha256": "99bce555bab95b54476c67582a397f0078f4af5c24ac435ca5b51773929ba524"
+    },
+    {
+      "path": "docs/phase-2b5-pilot-owner-decision-packet.md",
+      "sha256": "01f96e9c4edff2ef61d25c296fb96c585ad1a00db0709f47c0d261b7fbb5d953"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective14-final-glossary-proposals.json",
+      "sha256": "edf36fa40c7c03c30990476413a969a01375699c556819dbabfefc35f85e496f"
+    },
+    {
+      "path": "docs/phase-2b5-objective14-final-glossary-review.md",
+      "sha256": "ec31630fc343d5178760b0c0975a2cf72b079094fbac9e9f4b20b5e8a6ff843d"
+    },
+    {
+      "path": "scripts/audit-objective14-final-glossary.mjs",
+      "sha256": "07ade284db3dcda85572b6b04efdb87c1704ee65b6af46a19b3831841e161010"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective21-actor-mcqs-proposals.json",
+      "sha256": "b672ced8213158debee33aa0296fc72ff8eb3b2a96a8c9dcf6ac1a59a4662a25"
+    },
+    {
+      "path": "docs/phase-2b5-objective21-actor-mcqs-review.md",
+      "sha256": "0410c06ca1502d1a0acf17df549a7d471ad536ad5c06900ef7e5b3b5ff4dfa50"
+    },
+    {
+      "path": "scripts/audit-objective21-actor-mcqs.mjs",
+      "sha256": "87acb92f626b8bbceff7db84d278823f87a1e2a170bd0e3f49829c6ca82e18b8"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective21-actor-pbqs-proposals.json",
+      "sha256": "e8ff7558f0fabfdc96a1cf7d1cb685835e39ccb8ee7cbf78a7dba36d669a0360"
+    },
+    {
+      "path": "docs/phase-2b5-objective21-actor-pbqs-review.md",
+      "sha256": "6bbbc99893f29eb6b26f2545777b0877208130857cc81195dd8cc347c193d1ba"
+    },
+    {
+      "path": "scripts/audit-objective21-actor-pbqs.mjs",
+      "sha256": "f3b510182650bc232228686a4d2aab2f6ff53a23b5559b501cc85f480d88a73f"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective21-actor-lesson-proposals.json",
+      "sha256": "3d82f64523a17bfd9730d2616ceaafb94f5e3a1bab911629a9d97862498a4566"
+    },
+    {
+      "path": "docs/phase-2b5-objective21-actor-lesson-review.md",
+      "sha256": "2e60bd7ed31d9c124af3616368ce4d4be4ced8e726f79925b9264c0373e29418"
+    },
+    {
+      "path": "scripts/audit-objective21-actor-lesson.mjs",
+      "sha256": "c73a393a661924c7b0b1d881d48cba1aa9ed52cfb775ad954035cb43bbe69289"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective21-final-glossary-proposals.json",
+      "sha256": "42627fec1d58061b8ca2f68d935bd3a292d3a98ad1e84e2d9b11a9e903486d08"
+    },
+    {
+      "path": "docs/phase-2b5-objective21-final-glossary-review.md",
+      "sha256": "cf4aa9ce4e9da28b6b25c716494ac453225573a0529fcc9c445ce84a023bd97e"
+    },
+    {
+      "path": "scripts/audit-objective21-final-glossary.mjs",
+      "sha256": "83712136fb96e14a551e99a35e2aab9c9c07106c8aaefede684809e88e8b8ffb"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective22-channel-mcqs-proposals.json",
+      "sha256": "41446e63bedc822b85960fb94d540fe4a31e4f9a1cc3a271171604d13e602699"
+    },
+    {
+      "path": "docs/phase-2b5-objective22-channel-mcqs-review.md",
+      "sha256": "927d7bd0ed461e6ba0a1a848ed3f871c755aeeecfb30c6219735fbc39f7c22a6"
+    },
+    {
+      "path": "scripts/audit-objective22-channel-mcqs.mjs",
+      "sha256": "b5136f9ce107d74ae68ae399e523c818bd91c50ea638d4198baf10ee76e73fd0"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective22-targeting-mcqs-proposals.json",
+      "sha256": "5d88243d88a1fec3254b0f84fbc2cf244cddf54848f9f663b78792850e696b46"
+    },
+    {
+      "path": "docs/phase-2b5-objective22-targeting-mcqs-review.md",
+      "sha256": "ce4f14159d3a1b8e8fb4596b06af0d294e6b777c946100eae80d37c64dbd8c21"
+    },
+    {
+      "path": "scripts/audit-objective22-targeting-mcqs.mjs",
+      "sha256": "3fbcb86f2869b9a12f89cb9c3c0b67b4a7518930920e78a65331058fcc84661b"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective22-final-mcqs-proposals.json",
+      "sha256": "45b802ac854c4436957037c8019ee618e64cce0476d210fdc7c190b8afc9eea9"
+    },
+    {
+      "path": "docs/phase-2b5-question-review-ledger.json",
+      "sha256": "e0ceeec3c5cc8adb94b36175954a8cefaebcb4f29f4c66aa38c400f65de3bb12"
+    },
+    {
+      "path": "scripts/lib/content-mapping/review-triage.mjs",
+      "sha256": "319a822746d02c2da113b62b63ebbe0dffc2fb0da529f6551242fa9704dec088"
+    },
+    {
+      "path": "scripts/audit-question-review-fastlane.mjs",
+      "sha256": "1ca9483f8c6054f7a318961e2898e08042ecdf659d38c0854b9009a90cc81c96"
+    },
+    {
+      "path": "docs/drafts/phase-2b5-objective23-fastlane-proposals.json",
+      "sha256": "adeeea7e891c96eb7a68e23d8cfa2bf3c8bfdafebf4387f844526cf2e607492c"
+    },
+    {
+      "path": "docs/phase-2b5-question-review-fastlane.md",
+      "sha256": "dfd785c39e7ab336e8e56bdd4e8a1908af107926fde6e1fd29d0f541a0061468"
+    },
+    {
+      "path": "scripts/audit-objective23-final-mcqs.mjs",
+      "sha256": "4280a9e2e2bbbf5ee4256e608f88e28f5f685fcc0f35edc2392c62ab6d31f169"
+    }
+  ],
+  "triageLedgerBinding": {
+    "path": "docs/phase-2b5-question-review-ledger.json",
+    "sha256": "e0ceeec3c5cc8adb94b36175954a8cefaebcb4f29f4c66aa38c400f65de3bb12",
+    "rebuiltFromCurrentSourceAndMatched": true,
+    "inventoryOnly": true,
+    "baselinePriorQuestions": 125,
+    "substantivePriorOverlayPacket": "docs/drafts/phase-2b5-objective23-fastlane-proposals.json",
+    "substantivePriorOverlaySha256": "adeeea7e891c96eb7a68e23d8cfa2bf3c8bfdafebf4387f844526cf2e607492c",
+    "currentPriorQuestions": 135
+  },
+  "bankSignature": "sha256:b308564f2dbef0530c62ce288513aedf211b21d0199caa704d39b2a272540391",
+  "selectedQuestionRecordIds": [
+    "mcq:m267",
+    "mcq:m282",
+    "mcq:m012",
+    "mcq:m051",
+    "mcq:m052",
+    "mcq:m053",
+    "mcq:m055",
+    "mcq:m062",
+    "mcq:m129",
+    "mcq:m141",
+    "mcq:m145"
+  ],
+  "selectedFeedbackRecordIds": [
+    "explanation:mcq:m267",
+    "explanation:mcq:m282",
+    "explanation:mcq:m012",
+    "explanation:mcq:m051",
+    "explanation:mcq:m052",
+    "explanation:mcq:m053",
+    "explanation:mcq:m055",
+    "explanation:mcq:m062",
+    "explanation:mcq:m129",
+    "explanation:mcq:m141",
+    "explanation:mcq:m145"
+  ],
+  "questionProposals": [
+    {
+      "recordId": "mcq:m267",
+      "questionId": "m267",
+      "kind": "mcq",
+      "sourceRevision": "sha256:9a7f52576e55aa9401da5207c2dc292a5b7d0befe2a0d89dbb891bad8f5fb580",
+      "publishedRecordSignature": "sha256:90f8600ecaf176f9b205bf4abc10f165ec50d675e2debda0a1e2afe1bb87f2ee",
+      "revisions": {
+        "localEffective": "sha256:9a7f52576e55aa9401da5207c2dc292a5b7d0befe2a0d89dbb891bad8f5fb580",
+        "publishedCatalogue": "sha256:90f8600ecaf176f9b205bf4abc10f165ec50d675e2debda0a1e2afe1bb87f2ee",
+        "trustedCompilerObserved": "b5ad1482-3298-8aa6-b810-9f40869805a0",
+        "trustedContentSha256Observed": "b5ad148232987aa6b8109f40869805a0f3796ce6bbf8df4972fa5e48aa14a0d6",
+        "authored": "sha256:f7f39aab7801a47ef39727d5b293d68d9a137f99f02091962f6aa3b1b3decfd6",
+        "preEditorialSnapshotMerged": "sha256:f7f39aab7801a47ef39727d5b293d68d9a137f99f02091962f6aa3b1b3decfd6",
+        "feedbackBundle": "sha256:025b1f3a06679f4c37469d0e23eefbbda9294889dc8925434157cc143a44a89d"
+      },
+      "capturedOverrideBindings": [],
+      "sourcePriority": 25,
+      "sourceLayerDisposition": "authored_equals_snapshot_merged_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize enabled external entity resolution as a conditional XXE exposure/risk in the supplied XML application; demonstrated exploitability is held.",
+      "contentQualification": "HOLD enabled parser functionality alone as a demonstrated exploit or guaranteed file disclosure, SSRF, denial of service, arbitrary command execution or SQL/XSS effect. Attacker-controlled external entities, parser resolver access and returned data are not demonstrated. Current unsafe-entity feedback is conditional; authored blanket billion-laughs/SSRF mechanism and malformed example are superseded. XXE is inferred application/web context, not an explicit named 2.3 bullet or independently approved tested skill.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [],
+        "contextCodes": [
+          "2.3"
+        ],
+        "status": "held_demonstrated_exploitability_inferred_XML_exposure_context"
+      },
+      "skillRoleProposal": "bounded_recognition_or_risk_explanation_not_implemented_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "xml-external-resource-risk",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:a9ece929d7209612cf600cd7ae4969bcc701b740e7b2d6bf62b6b21be435636c",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m282",
+      "questionId": "m282",
+      "kind": "mcq",
+      "sourceRevision": "sha256:f6c987cef9bd4d2b066ba681159ff1c234a7bf0614a8883b63326b5939935b7e",
+      "publishedRecordSignature": "sha256:7803d78870d666dc39978440333d0da20a8929ea01c2001701bbcb2e106fa468",
+      "revisions": {
+        "localEffective": "sha256:f6c987cef9bd4d2b066ba681159ff1c234a7bf0614a8883b63326b5939935b7e",
+        "publishedCatalogue": "sha256:7803d78870d666dc39978440333d0da20a8929ea01c2001701bbcb2e106fa468",
+        "trustedCompilerObserved": "50fa829b-bf17-8c29-b08f-ec2908229547",
+        "trustedContentSha256Observed": "50fa829bbf173c29f08fec2908229547fe22830503a61833124c829aaa762ee3",
+        "authored": "sha256:b02b73a7802c3442b3dfd728bfc6e240e9d61a87f5e9143fff4ed3b15e7f25ef",
+        "preEditorialSnapshotMerged": "sha256:b02b73a7802c3442b3dfd728bfc6e240e9d61a87f5e9143fff4ed3b15e7f25ef",
+        "feedbackBundle": "sha256:47bcca1da1ac8e1d3b6ab461ee33b34081515c2a42348226048eab69f1b5ef4b"
+      },
+      "capturedOverrideBindings": [],
+      "sourcePriority": 25,
+      "sourceLayerDisposition": "authored_equals_snapshot_merged_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize attacker-controlled file resolution escaping an intended directory boundary as path traversal.",
+      "contentQualification": "HOLD literal dot-dot-slash as necessary for all traversal, basename/string-prefix checks as sufficient containment, or path escape as SQL/XSS/SSRF evidence. Current stem supplies relative path escape; absolute/encoded paths and symlink races can require different handling. Authorised IDs/resolved containment teaching is not an implemented filesystem defense. Exact 2.3 web-vulnerability versus 2.4 indicator alignment remains pending; no numbered code is forced.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "skillRoleProposal": "bounded_recognition_or_risk_explanation_not_implemented_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "file-boundary-traversal-recognition",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:b31f553f439b32bac0a1245e028e790e752b805091f6207479ba19446539b9a9",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m012",
+      "questionId": "m012",
+      "kind": "mcq",
+      "sourceRevision": "sha256:0fec537e8b1256ccdf90bfcde33e9bfc0fab658431d3f5a859867f9e5ec66c87",
+      "publishedRecordSignature": "sha256:44b450081b90c3e7b11346258e1f99d95aa0a0d9a907799159aa8435f1addd31",
+      "revisions": {
+        "localEffective": "sha256:0fec537e8b1256ccdf90bfcde33e9bfc0fab658431d3f5a859867f9e5ec66c87",
+        "publishedCatalogue": "sha256:44b450081b90c3e7b11346258e1f99d95aa0a0d9a907799159aa8435f1addd31",
+        "trustedCompilerObserved": "34e51887-0418-852e-8225-56978cc46fc8",
+        "trustedContentSha256Observed": "34e518870418952e022556978cc46fc8d1602772502d3a77b6e82209a634ff61",
+        "authored": "sha256:208823d188d56e23be96ee445156a72a941e5821ab98b63359b5e92e4d3f66be",
+        "preEditorialSnapshotMerged": "sha256:208823d188d56e23be96ee445156a72a941e5821ab98b63359b5e92e4d3f66be",
+        "feedbackBundle": "sha256:b7c0a6321aefa1eb991e0ac9481da710e078a8afae152024361b5912947d4ad1"
+      },
+      "capturedOverrideBindings": [],
+      "sourcePriority": 20,
+      "sourceLayerDisposition": "authored_equals_snapshot_merged_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize input changing SQL query logic and the supplied login bypass as SQL injection; no exploit or prevention is executed.",
+      "contentQualification": "HOLD every unsanitised value or this literal fragment as universally sufficient SQL exploitation; the fictional stem explicitly supplies altered query/login outcome. Parameter binding is teaching, not an executed protection. Broad SQL/query recognition overlaps m129 and prior m611 despite different answer indices, topic wording or login-versus-table example. No independently approved family or full 2.3 coverage.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "skillRoleProposal": "bounded_recognition_or_risk_explanation_not_implemented_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "sql-query-interpretation-recognition",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:980f6912f4b35d11fbdc3fe32d520cf3a6529aa713adc2e4cf1e9847fe8caeb7",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m051",
+      "questionId": "m051",
+      "kind": "mcq",
+      "sourceRevision": "sha256:1129e35f3765b06d76126cf2037f2f1a4228ed7bd8df4635b14a20e48bbb5d61",
+      "publishedRecordSignature": "sha256:35bfe7a31d3194c8994b46cac8fb3d01a822ed88d19ec61a85b8894092e15483",
+      "revisions": {
+        "localEffective": "sha256:1129e35f3765b06d76126cf2037f2f1a4228ed7bd8df4635b14a20e48bbb5d61",
+        "publishedCatalogue": "sha256:35bfe7a31d3194c8994b46cac8fb3d01a822ed88d19ec61a85b8894092e15483",
+        "trustedCompilerObserved": "88938aad-e7c5-8094-afcf-c7834463cafd",
+        "trustedContentSha256Observed": "88938aade7c590946fcfc7834463cafda0817eb5f76e30d70729c00ca51b0378",
+        "authored": "sha256:dd9208d3e8b6de44d0c07e8cad3c04ea0af535e5d9ad297f965c799a5df89fd6",
+        "preEditorialSnapshotMerged": "sha256:dd9208d3e8b6de44d0c07e8cad3c04ea0af535e5d9ad297f965c799a5df89fd6",
+        "feedbackBundle": "sha256:9fd294d1870eb991dd260432c8cf3fea903a3a8d12a16e34e9ff22eec546915b"
+      },
+      "capturedOverrideBindings": [],
+      "sourcePriority": 10,
+      "sourceLayerDisposition": "authored_equals_snapshot_merged_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize unsafe immediate server-response reflection and supplied browser execution as the offered reflected-XSS pattern; exclusive subtype taxonomy is held.",
+      "contentQualification": "HOLD reflected and DOM-based XSS as universally exclusive categories, all stored XSS as server-only or every visitor exposure, HttpOnly/CSP as universal XSS prevention, and every XSS as cookie theft. The supplied immediate response path supports the offered reflected pattern; client/server and stored/reflected dimensions can overlap. Cookie access is a fictional outcome, not measured browser entitlement or security. Do not approve a precise mutually-exclusive DOM-versus-reflected contrast from the wrong feedback.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "skillRoleProposal": "bounded_recognition_or_risk_explanation_not_implemented_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "reflected-browser-script-pattern",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:dd8213a929ee4f341f2a7fe98562aa1dfee7d74cfa7f1025ef6495c884c518db",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m052",
+      "questionId": "m052",
+      "kind": "mcq",
+      "sourceRevision": "sha256:8ac2105f5306441865f44ca05c99383871ab05816db168ef9b28b14f54221064",
+      "publishedRecordSignature": "sha256:a3b6f9e17f187da14c9a6a6ebf18ab4143b764a8581d161a6dc461801e37e7b1",
+      "revisions": {
+        "localEffective": "sha256:8ac2105f5306441865f44ca05c99383871ab05816db168ef9b28b14f54221064",
+        "publishedCatalogue": "sha256:a3b6f9e17f187da14c9a6a6ebf18ab4143b764a8581d161a6dc461801e37e7b1",
+        "trustedCompilerObserved": "4e5cb294-fdd1-83f3-b2b4-866e36d8d2fe",
+        "trustedContentSha256Observed": "4e5cb294fdd1a3f332b4866e36d8d2fedcc4a89b282752a9233302a18e26784e",
+        "authored": "sha256:a7f88f9bf31fd9bcddbacfef5550a255ade5c3432e10f6a1a885eda712aedb86",
+        "preEditorialSnapshotMerged": "sha256:a7f88f9bf31fd9bcddbacfef5550a255ade5c3432e10f6a1a885eda712aedb86",
+        "feedbackBundle": "sha256:0d54e1224e62e4776834daeb59c8c71c7c0161e38d63d3cb4910b8fb28733462"
+      },
+      "capturedOverrideBindings": [],
+      "sourcePriority": 10,
+      "sourceLayerDisposition": "authored_equals_snapshot_merged_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize access to unauthorised client-selected order objects despite authentication as IDOR/missing object permission checks.",
+      "contentQualification": "HOLD predictable/sequential IDs as required for IDOR, ownership as the only valid authorisation policy, login as object permission, or mass assignment as necessarily binding all submitted fields. Missing object/action authorisation supports the decision; random IDs alone do not repair it. The retained all-parameters mass-assignment correction is overbroad and precise contrast is held. SSRF/CSRF/property-binding can coexist with permission failures; no defense is implemented.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "skillRoleProposal": "bounded_recognition_or_risk_explanation_not_implemented_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "permission-enforcement-recognition",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:893b745e5ce96232160af0abb18fa9523fedc9a5c6c150c6d03b6044f53839e4",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m053",
+      "questionId": "m053",
+      "kind": "mcq",
+      "sourceRevision": "sha256:fed11ae6ee55502eeaca4c8feecb6aa491656a1d9d99f8bdcf2323baaef1cb36",
+      "publishedRecordSignature": "sha256:f41bb6408c78d4018e58213c0cb4fdec1a86ac7e40c5d3951a45189d6663978e",
+      "revisions": {
+        "localEffective": "sha256:fed11ae6ee55502eeaca4c8feecb6aa491656a1d9d99f8bdcf2323baaef1cb36",
+        "publishedCatalogue": "sha256:f41bb6408c78d4018e58213c0cb4fdec1a86ac7e40c5d3951a45189d6663978e",
+        "trustedCompilerObserved": "d3fd4d6d-c332-8827-95f2-68cf1caa6b74",
+        "trustedContentSha256Observed": "d3fd4d6dc332482755f268cf1caa6b74b31d94dc3ed2b38a73c8c10a95069de0",
+        "authored": "sha256:827cdd4cca38928ab4d76e8e161291b6e9382835d6594a7dc5d38ab5891e9964",
+        "preEditorialSnapshotMerged": "sha256:827cdd4cca38928ab4d76e8e161291b6e9382835d6594a7dc5d38ab5891e9964",
+        "feedbackBundle": "sha256:8a563594bf2d4e5f810c05b806955efe6f1a71ff92e8966c5975f58b478cc2df"
+      },
+      "capturedOverrideBindings": [],
+      "sourcePriority": 10,
+      "sourceLayerDisposition": "authored_equals_snapshot_merged_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize copying oversized input beyond a fixed buffer boundary as buffer overflow; no guaranteed execution-flow takeover.",
+      "contentQualification": "HOLD out-of-bounds writes as guaranteed control-flow takeover or stack-only exploitation, and XSS/browser versus memory as universal non-overlapping system layers. Current race correction uses general timing/order rather than the authored TOCTOU-only definition. Bounds checking is teaching, not tested memory-safe implementation. Correlate with prior m287, whose superseded format-string source must not return.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "skillRoleProposal": "bounded_recognition_or_risk_explanation_not_implemented_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "buffer-boundary-recognition",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:ebb26819b8a33744c1b45fd578b3367a3f30b6c08275e2110437c327035f5c1c",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m055",
+      "questionId": "m055",
+      "kind": "mcq",
+      "sourceRevision": "sha256:ece23fd1072822b684857e8a9c9821781cd8542752a0267214f52545eb33cf54",
+      "publishedRecordSignature": "sha256:97f700eefaf59c72d7861c261c0de51a6d3dc588e46e12bc75b999d1f422e9e0",
+      "revisions": {
+        "localEffective": "sha256:ece23fd1072822b684857e8a9c9821781cd8542752a0267214f52545eb33cf54",
+        "publishedCatalogue": "sha256:97f700eefaf59c72d7861c261c0de51a6d3dc588e46e12bc75b999d1f422e9e0",
+        "trustedCompilerObserved": "efb0c0fb-0d1c-89a7-83d8-f3626c57e7ce",
+        "trustedContentSha256Observed": "efb0c0fb0d1c59a703d8f3626c57e7ce81f0e1f443074c3f425ba2510316f054",
+        "authored": "sha256:6ef9ba6d961c866eeae0031df29dfd88df8148a85c73fd1dd7a08741f6d0d392",
+        "preEditorialSnapshotMerged": "sha256:6ef9ba6d961c866eeae0031df29dfd88df8148a85c73fd1dd7a08741f6d0d392",
+        "feedbackBundle": "sha256:8590e0b8e1a4f2c6399ad1773020c3cb3b6d8938cea44e55c2cf7fa5cfeeca36"
+      },
+      "capturedOverrideBindings": [],
+      "sourcePriority": 10,
+      "sourceLayerDisposition": "authored_equals_snapshot_merged_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize resource substitution between path validation and opening as TOCTOU; not all races are check-use races.",
+      "contentQualification": "HOLD a symlink alone as TOCTOU, an uncoordinated lock/file descriptor as universal prevention, or directory traversal as requiring literal dot-dot-slash. The described check-use gap supports the offered TOCTOU decision, but the retained directory-traversal wrong correction is too narrow; preserve its precise-contrast hold. Repeating or shortening separate checks does not eliminate the race. Correlate with m248; do not infer this subtype from every m612 shared-state race.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "skillRoleProposal": "bounded_recognition_or_risk_explanation_not_implemented_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "shared-resource-race-recognition",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:cf16f946ec3756d47329ca9241042594481c2d946ba7dc48504c57e22e7c5a0d",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m062",
+      "questionId": "m062",
+      "kind": "mcq",
+      "sourceRevision": "sha256:62c85bc48b9ddd41de3383b8ff6dfd9d453e5396e924263a99905b1bcef8c3b3",
+      "publishedRecordSignature": "sha256:8438ed78b28025bfdb13af49a2522ecffdad99993e56097643c7fc182e351ee2",
+      "revisions": {
+        "localEffective": "sha256:62c85bc48b9ddd41de3383b8ff6dfd9d453e5396e924263a99905b1bcef8c3b3",
+        "publishedCatalogue": "sha256:8438ed78b28025bfdb13af49a2522ecffdad99993e56097643c7fc182e351ee2",
+        "trustedCompilerObserved": "932df34a-ae46-8e50-8cbb-e13e2a12b59e",
+        "trustedContentSha256Observed": "932df34aae463e50ccbbe13e2a12b59e1f01e378681942caafa08a84ddaa2b91",
+        "authored": "sha256:336d2c429087f1fc308ad013908d42282b956f19d39277a35208d077b06da935",
+        "preEditorialSnapshotMerged": "sha256:336d2c429087f1fc308ad013908d42282b956f19d39277a35208d077b06da935",
+        "feedbackBundle": "sha256:84a6f4d88f98ae47bd7cff2c4d942024aca2b26dc16ee5a8839aae54a2d0550b"
+      },
+      "capturedOverrideBindings": [],
+      "sourcePriority": 10,
+      "sourceLayerDisposition": "authored_equals_snapshot_merged_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize guest isolation escape as the virtualisation-specific concern among the offered generic threats; no actual escape or isolation defense.",
+      "contentQualification": "HOLD every VM boundary sharing operation as escape, an actual hypervisor exploit or access to all VMs as established, or virtualised environments as physically separate from hardware. Among the offered choices, escape specifically concerns the guest isolation boundary; malware/data breach/phishing occur in both. Authored domain 3 wording becomes effective objective 2.3, but architecture/resource-reuse/defense scopes are not separately assessed or approved.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "skillRoleProposal": "bounded_recognition_or_risk_explanation_not_implemented_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "guest-isolation-escape-recognition",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:05c3b9e19d614b9e5767fd82ef6620a8ef6bcb68edc737c5893c4c1b252aa208",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m129",
+      "questionId": "m129",
+      "kind": "mcq",
+      "sourceRevision": "sha256:58555ae72c1a9331cb336d25d5afd0aef7cac57d7519c1bec15c6b2b4888232e",
+      "publishedRecordSignature": "sha256:485a3d365c80ce14829963b2c2fea41c05cabe19719d9854be41a63a02e30769",
+      "revisions": {
+        "localEffective": "sha256:58555ae72c1a9331cb336d25d5afd0aef7cac57d7519c1bec15c6b2b4888232e",
+        "publishedCatalogue": "sha256:485a3d365c80ce14829963b2c2fea41c05cabe19719d9854be41a63a02e30769",
+        "trustedCompilerObserved": "aee7d71b-0ca1-83e8-a907-41255aa26774",
+        "trustedContentSha256Observed": "aee7d71b0ca113e8a90741255aa26774451a4ea7b8969d97773ab49fa8a58f02",
+        "authored": "sha256:6b3b16ddbbd278db91414386b2088ef50b15ed0f50b18ba68c6c81e9135a74a4",
+        "preEditorialSnapshotMerged": "sha256:6b3b16ddbbd278db91414386b2088ef50b15ed0f50b18ba68c6c81e9135a74a4",
+        "feedbackBundle": "sha256:02630c441386ee01dc0b56dffedb8d9af145493720a6a083bbe140375056267d"
+      },
+      "capturedOverrideBindings": [],
+      "sourcePriority": 10,
+      "sourceLayerDisposition": "authored_equals_snapshot_merged_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize user input manipulating database query structure as SQL injection; correlate with m012 and prior m611.",
+      "contentQualification": "HOLD lack of sanitisation alone as SQL injection, validation/escaping alone as universal prevention, or this definition wording as independent transfer from m012/m611. Current stem supplies changed query logic and feedback separates data from syntax. No database execution, login bypass, system compromise, defense or learner recovery occurs.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "skillRoleProposal": "bounded_recognition_or_risk_explanation_not_implemented_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "sql-query-interpretation-recognition",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:b779c9e3f6e13b431e30dda95440c11184667cc5fb73738ce5f3c3d4dfa3a991",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m141",
+      "questionId": "m141",
+      "kind": "mcq",
+      "sourceRevision": "sha256:a7cee68a42bb2d5c1df14ac0f79d95add0caf35351cf0c68625f0520f5093451",
+      "publishedRecordSignature": "sha256:c998a8b458bb5f8a386e312e7ac4371f1e4bac1a99ebf6a06ff8b8b54a467423",
+      "revisions": {
+        "localEffective": "sha256:a7cee68a42bb2d5c1df14ac0f79d95add0caf35351cf0c68625f0520f5093451",
+        "publishedCatalogue": "sha256:c998a8b458bb5f8a386e312e7ac4371f1e4bac1a99ebf6a06ff8b8b54a467423",
+        "trustedCompilerObserved": "1e650a8b-05ee-82d8-91bb-6b476c25fdb2",
+        "trustedContentSha256Observed": "1e650a8b05ee62d891bb6b476c25fdb2068091607da2cd57162d5827bd383b72",
+        "authored": "sha256:51b752725dc19a8fc61a20f208f614223170e2a0bd0afe62c6c1afd4e50bdad7",
+        "preEditorialSnapshotMerged": "sha256:51b752725dc19a8fc61a20f208f614223170e2a0bd0afe62c6c1afd4e50bdad7",
+        "feedbackBundle": "sha256:78f3e9ec8f9ff36104ba874816c422d857e6366d4f5c2cd97d4a099ef75f4f31"
+      },
+      "capturedOverrideBindings": [],
+      "sourcePriority": 10,
+      "sourceLayerDisposition": "authored_equals_snapshot_merged_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "easy",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize verbose internal error details exposed to users as information disclosure through improper error handling.",
+      "contentQualification": "HOLD hostname/version/stack trace exposure as proof of SQL injection, IDOR, CSRF, successful intrusion, precise OWASP ranking or required 4.4 monitoring skill. The offered compound label names one error-disclosure decision, not two independent skills. Generic public errors and protected diagnostic logs are suggested teaching; no logging/security implementation or effectiveness is measured. Disclosure outcome overlaps m305 but does not clear its mitigation-choice scope hold.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "skillRoleProposal": "bounded_recognition_or_risk_explanation_not_implemented_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "error-detail-disclosure-recognition",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:78a9212fd745abe7d01f8d8861e5e14db144896f71e46bd616e8f9421d536ece",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    },
+    {
+      "recordId": "mcq:m145",
+      "questionId": "m145",
+      "kind": "mcq",
+      "sourceRevision": "sha256:052167c5822bb6d91805e854cbe3198c90a997ea0c37630887b9415df778156b",
+      "publishedRecordSignature": "sha256:d2a01b5febebd21b89b99c20eab60efdf00a252e2275922b1c89260d6152ee65",
+      "revisions": {
+        "localEffective": "sha256:052167c5822bb6d91805e854cbe3198c90a997ea0c37630887b9415df778156b",
+        "publishedCatalogue": "sha256:d2a01b5febebd21b89b99c20eab60efdf00a252e2275922b1c89260d6152ee65",
+        "trustedCompilerObserved": "c3b69ef0-fe5f-8e3d-9df3-fec8c187406e",
+        "trustedContentSha256Observed": "c3b69ef0fe5f4e3dddf3fec8c187406e1c4b079f695e5d45c23118843fada7cc",
+        "authored": "sha256:8d9f9f3f0cd7b6e18662799b11a13284eab27bfd6ae908d0586df26f19100c8f",
+        "preEditorialSnapshotMerged": "sha256:8d9f9f3f0cd7b6e18662799b11a13284eab27bfd6ae908d0586df26f19100c8f",
+        "feedbackBundle": "sha256:9993f6e88de3bc70b2d267cd43a9097416d9bc76ea6252e27a2aa9fad5f2713d"
+      },
+      "capturedOverrideBindings": [],
+      "sourcePriority": 10,
+      "sourceLayerDisposition": "authored_equals_snapshot_merged_preeditorial_but_differs_from_effective",
+      "difficultyObserved": "medium",
+      "difficultyDisposition": "source_label_uncalibrated",
+      "assessedUnderstanding": "Recognize access to records belonging to other users by changing a client-selected object reference as IDOR; tester authentication is not stated.",
+      "contentQualification": "HOLD sequential numbers as necessary for IDOR, object enumeration alone as proof of missing checks absent the supplied unauthorised access, and the tester as necessarily authenticated. Current wrong feedback asserts authentication that the effective stem does not state; retain that exact premise hold. IDOR/object authorisation still explains access to records belonging to other users. No login-session, SSRF or implemented permission-check outcome is supplied; correlate with m052 and prior operation-permission m271.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "skillRoleProposal": "bounded_recognition_or_risk_explanation_not_implemented_defense",
+      "numberOfKeyedDecisions": 1,
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "familyLabelProposal": "permission-enforcement-recognition",
+      "familyStatus": "provisional_comparison_no_independence_approval",
+      "optionShuffleProbe": {
+        "derivedRevision": "sha256:b736ce6cfb92cef4ca8895952697be9132eae9cb066be2b3218de8f594dc8fb6",
+        "fixedRandomness": 0,
+        "decisionPreserved": true,
+        "feedbackRemapChecked": true,
+        "newFamilyCredit": 0
+      }
+    }
+  ],
+  "explanationProposals": [
+    {
+      "recordId": "explanation:mcq:m267",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m267",
+      "sourceRevision": "sha256:025b1f3a06679f4c37469d0e23eefbbda9294889dc8925434157cc143a44a89d",
+      "parentLocalRevision": "sha256:9a7f52576e55aa9401da5207c2dc292a5b7d0befe2a0d89dbb891bad8f5fb580",
+      "parentPublishedRevision": "sha256:90f8600ecaf176f9b205bf4abc10f165ec50d675e2debda0a1e2afe1bb87f2ee",
+      "mainCorrectionRevision": "sha256:8dc3911638a16019717fc404e61c0bddaea2a737655bd75ec9a6f1146f05ca6f",
+      "wrongFeedbackRevision": "sha256:fcc11e0c552f31631d23bbd3667f4f7356552bb2586ea34dddfa0e56c1bea175",
+      "mainTeachingUnderstanding": "Unsafe external entities can resolve local or network resources; harden the actual parser and unnecessary DTD/entity features, without inferring a demonstrated exploit.",
+      "contentQualification": "HOLD enabled parser functionality alone as a demonstrated exploit or guaranteed file disclosure, SSRF, denial of service, arbitrary command execution or SQL/XSS effect. Attacker-controlled external entities, parser resolver access and returned data are not demonstrated. Current unsafe-entity feedback is conditional; authored blanket billion-laughs/SSRF mechanism and malformed example are superseded. XXE is inferred application/web context, not an explicit named 2.3 bullet or independently approved tested skill.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [],
+        "contextCodes": [
+          "2.3"
+        ],
+        "status": "held_demonstrated_exploitability_inferred_XML_exposure_context"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:c6ec1005f1bb1ee10b925b6e566d5e52eb37ddd8a5821ac592134366a79cd430",
+          "correctionRevision": "sha256:71eb40d1688b415e2a51be0f9473e7d610a0dcc162831b46a7354a07ad5cb794",
+          "teachingRationale": "Entity resolution is not SQL statement manipulation.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:5a4272be39192774c0c954f596f1ed58b386f7e2b231597cca72dcc99a723cea",
+          "correctionRevision": "sha256:c88773f2c94a89fa58c681aae8d25e70a6161ed66f933330fa3798d1270fc074",
+          "teachingRationale": "Server-side XML resolution is not the supplied unsafe browser-rendering path.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:5ca976a785d8fee6ab9a67a3b54dc7168b0655305ae20e22fba9a7e7426fdb13",
+          "correctionRevision": "sha256:2e7425a7287a8d7e2fcc026241405ca8b676d9a6ea1d0ea89ae144253d2e5892",
+          "teachingRationale": "Resolving external resources does not by itself execute a command shell.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m282",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m282",
+      "sourceRevision": "sha256:47bcca1da1ac8e1d3b6ab461ee33b34081515c2a42348226048eab69f1b5ef4b",
+      "parentLocalRevision": "sha256:f6c987cef9bd4d2b066ba681159ff1c234a7bf0614a8883b63326b5939935b7e",
+      "parentPublishedRevision": "sha256:7803d78870d666dc39978440333d0da20a8929ea01c2001701bbcb2e106fa468",
+      "mainCorrectionRevision": "sha256:e148256d9478e8927026f88105146609fc3c473e81358af1b03dd9a972d1129c",
+      "wrongFeedbackRevision": "sha256:2e804287dd5ef919d384dfd99f19f4f1d3192fb3be464ed1cf0bab0f233335ef",
+      "mainTeachingUnderstanding": "Restrict authorised file selection and resolved containment with safe symlink handling; raw string prefix checks are insufficient.",
+      "contentQualification": "HOLD literal dot-dot-slash as necessary for all traversal, basename/string-prefix checks as sufficient containment, or path escape as SQL/XSS/SSRF evidence. Current stem supplies relative path escape; absolute/encoded paths and symlink races can require different handling. Authorised IDs/resolved containment teaching is not an implemented filesystem defense. Exact 2.3 web-vulnerability versus 2.4 indicator alignment remains pending; no numbered code is forced.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:c6ec1005f1bb1ee10b925b6e566d5e52eb37ddd8a5821ac592134366a79cd430",
+          "correctionRevision": "sha256:870e976a2d41101a8ad382a6698c37abaf3c65869e23efdb1216710c3d1e9455",
+          "teachingRationale": "Filesystem location differs from executable SQL structure.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:0efccb3d0b102284fbb8699854589569032854cc838e0082832ccb81621a38db",
+          "correctionRevision": "sha256:108c469f0d73b207d5095ab3a3413368ef518833a0d99f8b276431f889ca49ef",
+          "teachingRationale": "The supplied boundary escape is not browser script execution.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:24e5ed22ed259d28670b85dfc00c00306264c1dae91f9558f208a9541ccaf766",
+          "correctionRevision": "sha256:55ce34e9b49b8d931dabaa183d72370d01319ccd301e081e59c02aa2514282ce",
+          "teachingRationale": "The stem supplies local file resolution rather than an attacker-directed server network request.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m012",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m012",
+      "sourceRevision": "sha256:b7c0a6321aefa1eb991e0ac9481da710e078a8afae152024361b5912947d4ad1",
+      "parentLocalRevision": "sha256:0fec537e8b1256ccdf90bfcde33e9bfc0fab658431d3f5a859867f9e5ec66c87",
+      "parentPublishedRevision": "sha256:44b450081b90c3e7b11346258e1f99d95aa0a0d9a907799159aa8435f1addd31",
+      "mainCorrectionRevision": "sha256:acbe7a524878d686927d8999945bda988f8f13f54188f58e8aa51336761912d9",
+      "wrongFeedbackRevision": "sha256:4df9fda5a5ea799aa9d5c01cf4ba15187dd9a898302aae93f7aed64289feafa9",
+      "mainTeachingUnderstanding": "Keep query data separate from executable syntax; the stated bypass is fictional recognition, not an executed SQL test.",
+      "contentQualification": "HOLD every unsanitised value or this literal fragment as universally sufficient SQL exploitation; the fictional stem explicitly supplies altered query/login outcome. Parameter binding is teaching, not an executed protection. Broad SQL/query recognition overlaps m129 and prior m611 despite different answer indices, topic wording or login-versus-table example. No independently approved family or full 2.3 coverage.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:4440646c9b67c755cd43357c3df7afc1c49286fe2547d4e340320a9854ceb91c",
+          "correctionRevision": "sha256:d795bd898326aaf042b29084cfb892402a0d2350b5a7877ae17effe114aaf771",
+          "teachingRationale": "Browser script interpretation differs from SQL query manipulation.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:21402957c69ae91b74d24c7bb59b5a57a19ee9195c461c72bc68ba0d9e6176b1",
+          "correctionRevision": "sha256:b364be3cdcda3e23f4fe2fa462428a18bdf88722216ef2b03e214803339032d6",
+          "teachingRationale": "No write beyond allocated memory is supplied.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:13e70ed664d03372d81a3077144e9e48a6c964f44ca60a57af31072fc51faf13",
+          "correctionRevision": "sha256:777be6e3dccbdddd2986146cbb977d98f27d85137cf4485fefb50032e4d8a7a7",
+          "teachingRationale": "No file path boundary is abused in this query scenario.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m051",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m051",
+      "sourceRevision": "sha256:9fd294d1870eb991dd260432c8cf3fea903a3a8d12a16e34e9ff22eec546915b",
+      "parentLocalRevision": "sha256:1129e35f3765b06d76126cf2037f2f1a4228ed7bd8df4635b14a20e48bbb5d61",
+      "parentPublishedRevision": "sha256:35bfe7a31d3194c8994b46cac8fb3d01a822ed88d19ec61a85b8894092e15483",
+      "mainCorrectionRevision": "sha256:d9db9f7825d39c0dea62dc6694257d07fd5ba2dd450d22e05d3641c9135ece2d",
+      "wrongFeedbackRevision": "sha256:ba8fdcf045bcc3d9b2fdbf5232e8ad0e99fab7b826ff355147722b22ccb18a9a",
+      "mainTeachingUnderstanding": "Apply context-aware output handling; HttpOnly restricts cookie reading and does not prevent all XSS, while subtype dimensions can overlap.",
+      "contentQualification": "HOLD reflected and DOM-based XSS as universally exclusive categories, all stored XSS as server-only or every visitor exposure, HttpOnly/CSP as universal XSS prevention, and every XSS as cookie theft. The supplied immediate response path supports the offered reflected pattern; client/server and stored/reflected dimensions can overlap. Cookie access is a fictional outcome, not measured browser entitlement or security. Do not approve a precise mutually-exclusive DOM-versus-reflected contrast from the wrong feedback.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": "exclusive_reflected_vs_DOM_taxonomy",
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:e5fbd97a5a907c7c61babb88ebc589aa07fb6503bab73104ba0b13dff607e061",
+          "correctionRevision": "sha256:95b48cfbed35d9f03bc80b232b1ac1a50828c887e0c9a5e13542863576e92bbd",
+          "teachingRationale": "Immediate response reflection differs from retained-content delivery; storage is not necessarily server-only.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:b6ab68480df66c3ece682bccdc46f5d1eef87a71922d1c6247c11a8b6a178b86",
+          "correctionRevision": "sha256:6a6b680d0a0eec1e1826f518b8bdb1e39b412f6634c2afa2fa9afb584466b59f",
+          "teachingRationale": "The immediate server response is the supplied clue; DOM and reflected dimensions are not universally exclusive.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:c6ec1005f1bb1ee10b925b6e566d5e52eb37ddd8a5821ac592134366a79cd430",
+          "correctionRevision": "sha256:9e3fdf4f6f990ba50a108319b18ea4ca7f1b1070c7eeddb04846209108597b77",
+          "teachingRationale": "The supplied browser script path is not database query interpretation.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m052",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m052",
+      "sourceRevision": "sha256:0d54e1224e62e4776834daeb59c8c71c7c0161e38d63d3cb4910b8fb28733462",
+      "parentLocalRevision": "sha256:8ac2105f5306441865f44ca05c99383871ab05816db168ef9b28b14f54221064",
+      "parentPublishedRevision": "sha256:a3b6f9e17f187da14c9a6a6ebf18ab4143b764a8581d161a6dc461801e37e7b1",
+      "mainCorrectionRevision": "sha256:20471109c9882584bd829ac0aa1e217c2460d2140f4c9e7f7ab89ea0b08a761e",
+      "wrongFeedbackRevision": "sha256:b0ff6b79c26137d5ce79b71d646b55c4bd6d9d910345141d002b0ee8fa50f6de",
+      "mainTeachingUnderstanding": "Enforce caller permission for the requested object and action; identifier unpredictability is no substitute for authorisation.",
+      "contentQualification": "HOLD predictable/sequential IDs as required for IDOR, ownership as the only valid authorisation policy, login as object permission, or mass assignment as necessarily binding all submitted fields. Missing object/action authorisation supports the decision; random IDs alone do not repair it. The retained all-parameters mass-assignment correction is overbroad and precise contrast is held. SSRF/CSRF/property-binding can coexist with permission failures; no defense is implemented.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": "mass_assignment_requires_all_parameters",
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:bded7173b5630f257e7f52a7b2f96f8162d3e0e962f5dcc7bf9f482210502064",
+          "correctionRevision": "sha256:7abeede3c4a52bb48ba9bb9634be41f06d9ebf2b9f374a5ddc8d2301d4ada833",
+          "teachingRationale": "No attacker-controlled server network request is supplied; object permission is missing.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:0186ea522d8c77c3bc2b48b316985821b3c1ab4fc5a3a283b922b13dfe4d44cc",
+          "correctionRevision": "sha256:160f57bf1cb1d584d8228b3615c8f4ce9a6afe3bafc30cba06491fd5c4f09663",
+          "teachingRationale": "The stated problem is object authorisation rather than a forged browser request, though these flaws can coexist.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:5a0bf9701cec3b7fddfbc70e5ec430dbbbf4fd3c296e70dddb43cd64e25e1aaa",
+          "correctionRevision": "sha256:917c25c3903d83ee30ee79529485aa88dab9acbff72904eb7df5fd39e0447a1e",
+          "teachingRationale": "The supplied issue is object access; mass assignment need not bind all parameters, so the literal all-fields contrast is held.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m053",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m053",
+      "sourceRevision": "sha256:8a563594bf2d4e5f810c05b806955efe6f1a71ff92e8966c5975f58b478cc2df",
+      "parentLocalRevision": "sha256:fed11ae6ee55502eeaca4c8feecb6aa491656a1d9d99f8bdcf2323baaef1cb36",
+      "parentPublishedRevision": "sha256:f41bb6408c78d4018e58213c0cb4fdec1a86ac7e40c5d3951a45189d6663978e",
+      "mainCorrectionRevision": "sha256:0b0cff26e461f63a500775c9ac48e7d8064bcdc05174adc4989214dbeb555ecd",
+      "wrongFeedbackRevision": "sha256:ce846551412f93d58b11700c603a07ae5a075338041d2c09b1b8695acb5d2f33",
+      "mainTeachingUnderstanding": "Prevent writes beyond allocated bounds; memory corruption can affect execution but does not guarantee code execution.",
+      "contentQualification": "HOLD out-of-bounds writes as guaranteed control-flow takeover or stack-only exploitation, and XSS/browser versus memory as universal non-overlapping system layers. Current race correction uses general timing/order rather than the authored TOCTOU-only definition. Bounds checking is teaching, not tested memory-safe implementation. Correlate with prior m287, whose superseded format-string source must not return.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:c6ec1005f1bb1ee10b925b6e566d5e52eb37ddd8a5821ac592134366a79cd430",
+          "correctionRevision": "sha256:d1564ce2cab2305756ba38315d80b8af5623575abeb2d29ce25db022f48e7cec",
+          "teachingRationale": "The supplied memory-boundary write does not change SQL query logic.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:0efccb3d0b102284fbb8699854589569032854cc838e0082832ccb81621a38db",
+          "correctionRevision": "sha256:83d6f960192fb87370746efe3bc26a62eee126ea53b32f0405d93207dccfd020",
+          "teachingRationale": "The supplied recognition concerns memory bounds rather than a browser scripting flaw; do not universalise separate layers.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:3e5fcc8460e03ef524d20c60469cc15cdd64df5eed6285fb76e88f2f3959ca08",
+          "correctionRevision": "sha256:202ea8f1feadf5ddcb2970d874d2dcbb6b3c3ffb947acafa6695ece39d123135",
+          "teachingRationale": "No timing/ordering cause is supplied by the unchecked oversized copy.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m055",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m055",
+      "sourceRevision": "sha256:8590e0b8e1a4f2c6399ad1773020c3cb3b6d8938cea44e55c2cf7fa5cfeeca36",
+      "parentLocalRevision": "sha256:ece23fd1072822b684857e8a9c9821781cd8542752a0267214f52545eb33cf54",
+      "parentPublishedRevision": "sha256:97f700eefaf59c72d7861c261c0de51a6d3dc588e46e12bc75b999d1f422e9e0",
+      "mainCorrectionRevision": "sha256:edb78f61b42d9bc66716bda765f7810c0e0e6ecf1bc8cd72a143c1e6d8b904d9",
+      "wrongFeedbackRevision": "sha256:ef34f1778ba24da76148a7ee1319e994615eba373f5021a0565c181777c5370d",
+      "mainTeachingUnderstanding": "Bind the checked condition to the resource actually used through suitable atomic operations; separate repeated checks retain a race.",
+      "contentQualification": "HOLD a symlink alone as TOCTOU, an uncoordinated lock/file descriptor as universal prevention, or directory traversal as requiring literal dot-dot-slash. The described check-use gap supports the offered TOCTOU decision, but the retained directory-traversal wrong correction is too narrow; preserve its precise-contrast hold. Repeating or shortening separate checks does not eliminate the race. Correlate with m248; do not infer this subtype from every m612 shared-state race.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": "directory_traversal_requires_literal_dotdot",
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:21402957c69ae91b74d24c7bb59b5a57a19ee9195c461c72bc68ba0d9e6176b1",
+          "correctionRevision": "sha256:76cefcda051d3e39869806560871363ca2d75f839cc59526a07adc7a0e07c469",
+          "teachingRationale": "No buffer-boundary write is supplied.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:c6ec1005f1bb1ee10b925b6e566d5e52eb37ddd8a5821ac592134366a79cd430",
+          "correctionRevision": "sha256:7bb61616951321fb89198148b8299456dfb78c83d76f563f65d3847c3a3ee4ba",
+          "teachingRationale": "No SQL statement interpretation is supplied by the file timing sequence.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:13e70ed664d03372d81a3077144e9e48a6c964f44ca60a57af31072fc51faf13",
+          "correctionRevision": "sha256:7cbcbe071df0596350edb8c6db27ca92aa18d7006a9f09bc408085c34712a278",
+          "teachingRationale": "The check-use gap supplies TOCTOU; traversal does not require literal dot-dot-slash, so the absolute distinction is held.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m062",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m062",
+      "sourceRevision": "sha256:84a6f4d88f98ae47bd7cff2c4d942024aca2b26dc16ee5a8839aae54a2d0550b",
+      "parentLocalRevision": "sha256:62c85bc48b9ddd41de3383b8ff6dfd9d453e5396e924263a99905b1bcef8c3b3",
+      "parentPublishedRevision": "sha256:8438ed78b28025bfdb13af49a2522ecffdad99993e56097643c7fc182e351ee2",
+      "mainCorrectionRevision": "sha256:99540cc43cf1da6a59524a1d55ae778da9674bc2195000643eb2bcfee8b5efa0",
+      "wrongFeedbackRevision": "sha256:d22194cecceeb2c0cfe3c634b572e8fd4ae944a3e4edb8e5eaa85db7b9d2a9ce",
+      "mainTeachingUnderstanding": "Explain crossing a guest isolation boundary toward a hypervisor, host or other guests; no actual virtual machine is tested.",
+      "contentQualification": "HOLD every VM boundary sharing operation as escape, an actual hypervisor exploit or access to all VMs as established, or virtualised environments as physically separate from hardware. Among the offered choices, escape specifically concerns the guest isolation boundary; malware/data breach/phishing occur in both. Authored domain 3 wording becomes effective objective 2.3, but architecture/resource-reuse/defense scopes are not separately assessed or approved.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:afcc6b80fb12f466dc83897b4348441a0843f8bf5f66e6b305316e87b404595f",
+          "correctionRevision": "sha256:66c88335e7b2d323bd72410819e3d7e69e56af2ba527bb24a3af8796dae49f08",
+          "teachingRationale": "Malware can affect physical and virtual systems.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:ee4c1f504652560e9e224db12f3ae7e3e0448acfb01bf7b103aabb5522add3bc",
+          "correctionRevision": "sha256:fdea2239ba14ef66a197958112b79b0808a397add7b7fa2d0ee798e4ddff1078",
+          "teachingRationale": "Data breaches are not specific to virtualisation.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:c614989a8fe09aae5e9619cbe216560047e17ee7ae90d699b436f55393fb0b55",
+          "correctionRevision": "sha256:2e7f1a0e2c2f002d8bc9029313cdbe3a40540f11c374a77fcca6951c9de31a32",
+          "teachingRationale": "User deception is not exclusive to virtualised infrastructure; all phishing is not limited to email/web.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m129",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m129",
+      "sourceRevision": "sha256:02630c441386ee01dc0b56dffedb8d9af145493720a6a083bbe140375056267d",
+      "parentLocalRevision": "sha256:58555ae72c1a9331cb336d25d5afd0aef7cac57d7519c1bec15c6b2b4888232e",
+      "parentPublishedRevision": "sha256:485a3d365c80ce14829963b2c2fea41c05cabe19719d9854be41a63a02e30769",
+      "mainCorrectionRevision": "sha256:01d0f4e81f7952e3cf4f4bea3ba821264b3cfa7b61ee8d12a5d7e234be8b8713",
+      "wrongFeedbackRevision": "sha256:ff96680a7a009013619ff4358a60fa2a0ccfc74399f1268c7f76da2183ccf9c6",
+      "mainTeachingUnderstanding": "Separate executable SQL structure from data, without treating a definition repeat as independent family evidence.",
+      "contentQualification": "HOLD lack of sanitisation alone as SQL injection, validation/escaping alone as universal prevention, or this definition wording as independent transfer from m012/m611. Current stem supplies changed query logic and feedback separates data from syntax. No database execution, login bypass, system compromise, defense or learner recovery occurs.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:3ecfa2ce24ef60baaee9cb3624d7fb5b7fee4acad23e123ef868b92aed63795c",
+          "correctionRevision": "sha256:53c5da20636f7c048cb09449b58cef303427a1f3f0a26e04404d7f5ba2019b73",
+          "teachingRationale": "Browser code execution differs from SQL query interpretation.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:21402957c69ae91b74d24c7bb59b5a57a19ee9195c461c72bc68ba0d9e6176b1",
+          "correctionRevision": "sha256:26c27defdb6a589d535e07914382de77f871ac3e044a5dd2ebc7751260e01e22",
+          "teachingRationale": "No memory-boundary violation is supplied.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:13e70ed664d03372d81a3077144e9e48a6c964f44ca60a57af31072fc51faf13",
+          "correctionRevision": "sha256:ebda1eeaabc052bd5d779c719fb642cf13c1cb1f382f7801c160fdb1b0997fb8",
+          "teachingRationale": "No filesystem path selection is supplied.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m141",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m141",
+      "sourceRevision": "sha256:78f3e9ec8f9ff36104ba874816c422d857e6366d4f5c2cd97d4a099ef75f4f31",
+      "parentLocalRevision": "sha256:a7cee68a42bb2d5c1df14ac0f79d95add0caf35351cf0c68625f0520f5093451",
+      "parentPublishedRevision": "sha256:c998a8b458bb5f8a386e312e7ac4371f1e4bac1a99ebf6a06ff8b8b54a467423",
+      "mainCorrectionRevision": "sha256:a7486134f9ba8a3c22ebae5046645f0df7cee97aa156636e4ce8d3d6226a72e6",
+      "wrongFeedbackRevision": "sha256:e2203320c1ef380458c6d659c8e6ba9260ca485b44d8948bf0213396a8d7525d",
+      "mainTeachingUnderstanding": "Keep internal diagnostics in protected logs and show safe public errors; exposure recognition does not demonstrate logging controls.",
+      "contentQualification": "HOLD hostname/version/stack trace exposure as proof of SQL injection, IDOR, CSRF, successful intrusion, precise OWASP ranking or required 4.4 monitoring skill. The offered compound label names one error-disclosure decision, not two independent skills. Generic public errors and protected diagnostic logs are suggested teaching; no logging/security implementation or effectiveness is measured. Disclosure outcome overlaps m305 but does not clear its mitigation-choice scope hold.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": null,
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:c6ec1005f1bb1ee10b925b6e566d5e52eb37ddd8a5821ac592134366a79cd430",
+          "correctionRevision": "sha256:8398150d02da080799030cd257b66d7fbd96f58eba07fc7a732b33b10fec48d3",
+          "teachingRationale": "A stack trace alone does not establish input changing query behavior.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:06ca7954c2a84c91fdf1222f09183873a9c4ce0d906965b54c0598cfcba8409a",
+          "correctionRevision": "sha256:2a47acd27e5ccad2c92216eca5d9b9e2e630773ce98af08c099dc42fa13d05b9",
+          "teachingRationale": "No cross-user object access bypass is supplied.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:e762ae425a94bf158b0f6d19c2776112ac24b3e8f30f3f951f7fd8af4d4f8eb6",
+          "correctionRevision": "sha256:39395f0ae70d911fda7525786e3be65911311ede774c8eaaaa108e0716cac852",
+          "teachingRationale": "Verbose diagnostics differ from inducing an authenticated browser request.",
+          "qualificationStatus": "bounded_contrast_pending_owner",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    },
+    {
+      "recordId": "explanation:mcq:m145",
+      "kind": "explanation_bundle",
+      "parentId": "mcq:m145",
+      "sourceRevision": "sha256:9993f6e88de3bc70b2d267cd43a9097416d9bc76ea6252e27a2aa9fad5f2713d",
+      "parentLocalRevision": "sha256:052167c5822bb6d91805e854cbe3198c90a997ea0c37630887b9415df778156b",
+      "parentPublishedRevision": "sha256:d2a01b5febebd21b89b99c20eab60efdf00a252e2275922b1c89260d6152ee65",
+      "mainCorrectionRevision": "sha256:a3f1a66220d3f61533385a48a9b5dfddd21d462c99c5b070b332ecfb46ee28d7",
+      "wrongFeedbackRevision": "sha256:f2dce0dbbbd268c6fd4d972a099797aa8d905565433152dc09fb08e074a148a6",
+      "mainTeachingUnderstanding": "Enforce object-level permissions server-side; changing ID format does not fix missing authorisation and stem authentication remains unspecified.",
+      "contentQualification": "HOLD sequential numbers as necessary for IDOR, object enumeration alone as proof of missing checks absent the supplied unauthorised access, and the tester as necessarily authenticated. Current wrong feedback asserts authentication that the effective stem does not state; retain that exact premise hold. IDOR/object authorisation still explains access to records belonging to other users. No login-session, SSRF or implemented permission-check outcome is supplied; correlate with m052 and prior operation-permission m271.",
+      "objectiveScopeProposal": {
+        "assessedCodes": [
+          "2.3"
+        ],
+        "contextCodes": [],
+        "status": "narrow_recognition_or_explanation_inferred_pending_owner"
+      },
+      "withheldPreciseContrast": "tester_authentication_not_stated",
+      "roleProposal": "conditional_parent_feedback_not_assessed_secondary",
+      "deliveryGate": "submitted_pro_main_selected_wrong_only",
+      "distractorCorrections": [
+        {
+          "choiceRevision": "sha256:cfc800956fc8e03d1183dd54b55e4bdb59aa6d3f294e3355c3359e05d0c98c7e",
+          "correctionRevision": "sha256:00e53d29c471a18d0b70f9d3bb95de1d182ed08eb7de4f60c8103ef701d2ffb9",
+          "teachingRationale": "Changing an object ID need not inject SQL syntax.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:f7392dffc01411bb333afa9e3e7cbe2372a65fd11fe8f9f49d53a9cbb9584a59",
+          "correctionRevision": "sha256:3d823c78a8028581ddc34adb2be698227e9e2648b4166d132e1e54ff1edcdc59",
+          "teachingRationale": "The supplied failure is object authorisation; the feedback assertion that the tester is authenticated is unsupported by the stem.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        },
+        {
+          "choiceRevision": "sha256:bded7173b5630f257e7f52a7b2f96f8162d3e0e962f5dcc7bf9f482210502064",
+          "correctionRevision": "sha256:e5c3f7caf887081ba54317e95a617cefc2e5a07c41b2862fbb329eefcd6a96cf",
+          "teachingRationale": "Direct selection of an unauthorised object differs from causing a server-side network request.",
+          "qualificationStatus": "bundle_precise_contrast_hold_preserved",
+          "assessedSecondary": false,
+          "weight": 0
+        }
+      ],
+      "primaryConceptProposal": null,
+      "secondaryConceptProposals": [],
+      "conceptLinkProposals": [],
+      "trustedRevisionId": null,
+      "masteryWeight": 0,
+      "newFamilyCredit": 0,
+      "humanApproved": false,
+      "published": false,
+      "independentEvidence": false,
+      "approvedRemediation": false,
+      "learnerObservedRecovery": false
+    }
+  ],
+  "instructionalProposals": [],
+  "comparisonGroups": [
+    {
+      "familyLabelProposal": "sql-query-interpretation-recognition",
+      "recordIds": [
+        "mcq:m611",
+        "mcq:m012",
+        "mcq:m129"
+      ],
+      "revisions": [
+        {
+          "recordId": "mcq:m611",
+          "localEffective": "sha256:9a097307e6c86ea92e9efc8cdea599f9758d648975bf65f91217f31c7083845e",
+          "publishedCatalogue": "sha256:cd910094231808026c2f960b38254bbb6846727a4399394588fedc7ba4668d56",
+          "trustedCompilerObserved": "46d2a9eb-3f69-8578-b035-bc0a800ec35f",
+          "trustedContentSha256Observed": "46d2a9eb3f69d5787035bc0a800ec35f1c8ecc1716b78184838cad1af687926a",
+          "authored": "sha256:52e6d2b6f726f7fbb75ed6f6c506fcf479110cfa3fd294b3c58d3412019b4794",
+          "preEditorialSnapshotMerged": "sha256:52e6d2b6f726f7fbb75ed6f6c506fcf479110cfa3fd294b3c58d3412019b4794",
+          "feedbackBundle": "sha256:92ac58cd92218f9dea5298e14b792e5f9b72946ea8e63e620213f689bd3314ea"
+        },
+        {
+          "recordId": "mcq:m012",
+          "localEffective": "sha256:0fec537e8b1256ccdf90bfcde33e9bfc0fab658431d3f5a859867f9e5ec66c87",
+          "publishedCatalogue": "sha256:44b450081b90c3e7b11346258e1f99d95aa0a0d9a907799159aa8435f1addd31",
+          "trustedCompilerObserved": "34e51887-0418-852e-8225-56978cc46fc8",
+          "trustedContentSha256Observed": "34e518870418952e022556978cc46fc8d1602772502d3a77b6e82209a634ff61",
+          "authored": "sha256:208823d188d56e23be96ee445156a72a941e5821ab98b63359b5e92e4d3f66be",
+          "preEditorialSnapshotMerged": "sha256:208823d188d56e23be96ee445156a72a941e5821ab98b63359b5e92e4d3f66be",
+          "feedbackBundle": "sha256:b7c0a6321aefa1eb991e0ac9481da710e078a8afae152024361b5912947d4ad1"
+        },
+        {
+          "recordId": "mcq:m129",
+          "localEffective": "sha256:58555ae72c1a9331cb336d25d5afd0aef7cac57d7519c1bec15c6b2b4888232e",
+          "publishedCatalogue": "sha256:485a3d365c80ce14829963b2c2fea41c05cabe19719d9854be41a63a02e30769",
+          "trustedCompilerObserved": "aee7d71b-0ca1-83e8-a907-41255aa26774",
+          "trustedContentSha256Observed": "aee7d71b0ca113e8a90741255aa26774451a4ea7b8969d97773ab49fa8a58f02",
+          "authored": "sha256:6b3b16ddbbd278db91414386b2088ef50b15ed0f50b18ba68c6c81e9135a74a4",
+          "preEditorialSnapshotMerged": "sha256:6b3b16ddbbd278db91414386b2088ef50b15ed0f50b18ba68c6c81e9135a74a4",
+          "feedbackBundle": "sha256:02630c441386ee01dc0b56dffedb8d9af145493720a6a083bbe140375056267d"
+        }
+      ],
+      "qualification": "Same broad query interpretation demand;login/table wording and answer index establish no independence.",
+      "newFamilyCredit": 0,
+      "independenceApproved": false
+    },
+    {
+      "familyLabelProposal": "buffer-boundary-recognition",
+      "recordIds": [
+        "mcq:m287",
+        "mcq:m053"
+      ],
+      "revisions": [
+        {
+          "recordId": "mcq:m287",
+          "localEffective": "sha256:7c96c22876a6503b74743dfc19c3bbf614f795dc0625c5b0de1ed401e321d3e7",
+          "publishedCatalogue": "sha256:27e1938813f0723921d566230aea3c667e3936261ca7c0d0986a3af8485d7705",
+          "trustedCompilerObserved": "cbcb422c-a14e-8cc1-acc8-3809a41b3812",
+          "trustedContentSha256Observed": "cbcb422ca14e9cc12cc83809a41b3812ff66f39388ba2fc61920b6610622a33f",
+          "authored": "sha256:a205cf393232cb3d4e9f65db188deecec56100650ab19da453dd4d179c863029",
+          "preEditorialSnapshotMerged": "sha256:ecb6e06bb81776ee50719a2b27f4f66746d0472d14429c88992275a8fba68314",
+          "feedbackBundle": "sha256:8ccf9050c0a6045143021de9d148c5575ff7519a5d042bf7d307bbc7b7e60e39"
+        },
+        {
+          "recordId": "mcq:m053",
+          "localEffective": "sha256:fed11ae6ee55502eeaca4c8feecb6aa491656a1d9d99f8bdcf2323baaef1cb36",
+          "publishedCatalogue": "sha256:f41bb6408c78d4018e58213c0cb4fdec1a86ac7e40c5d3951a45189d6663978e",
+          "trustedCompilerObserved": "d3fd4d6d-c332-8827-95f2-68cf1caa6b74",
+          "trustedContentSha256Observed": "d3fd4d6dc332482755f268cf1caa6b74b31d94dc3ed2b38a73c8c10a95069de0",
+          "authored": "sha256:827cdd4cca38928ab4d76e8e161291b6e9382835d6594a7dc5d38ab5891e9964",
+          "preEditorialSnapshotMerged": "sha256:827cdd4cca38928ab4d76e8e161291b6e9382835d6594a7dc5d38ab5891e9964",
+          "feedbackBundle": "sha256:8a563594bf2d4e5f810c05b806955efe6f1a71ff92e8966c5975f58b478cc2df"
+        }
+      ],
+      "qualification": "Same unchecked memory-copy demand;retain superseded format-string hold.",
+      "newFamilyCredit": 0,
+      "independenceApproved": false
+    },
+    {
+      "familyLabelProposal": "shared-resource-race-recognition",
+      "recordIds": [
+        "mcq:m612",
+        "mcq:m248",
+        "mcq:m055"
+      ],
+      "revisions": [
+        {
+          "recordId": "mcq:m612",
+          "localEffective": "sha256:f54b98b66662ec7ee548aa68332361c03eee1eb9f21423590918cb13f79ee2d0",
+          "publishedCatalogue": "sha256:ed76f2083004f664ec798c38dee2c02350150f8c7d667f0f96505f1d19dee49e",
+          "trustedCompilerObserved": "dd18ec6a-8d8e-8b25-b80e-8314feb8ce85",
+          "trustedContentSha256Observed": "dd18ec6a8d8e3b25b80e8314feb8ce85675a277e683aae0f7a18123f0387b704",
+          "authored": "sha256:7294181d1560b4a734e253ac46b42af5aa9222fb54caaa572b8e4440ee5c3ac0",
+          "preEditorialSnapshotMerged": "sha256:7294181d1560b4a734e253ac46b42af5aa9222fb54caaa572b8e4440ee5c3ac0",
+          "feedbackBundle": "sha256:5ad3377a124b3224c3191c9dccf3fbe5cc8f7b675b0ba98fde79a4f3c7721f60"
+        },
+        {
+          "recordId": "mcq:m248",
+          "localEffective": "sha256:3721fcd4d05251e311b7b2d30aa08b6dc22e7f365d78d01b5433017cd0104c65",
+          "publishedCatalogue": "sha256:ac7266190ba3db82d0abbcd4fc17c8c4b6b1902fbe31e677cc0e606edc9f3827",
+          "trustedCompilerObserved": "82ebbd7d-8824-8eec-84ea-0dc8678639e0",
+          "trustedContentSha256Observed": "82ebbd7d8824aeec44ea0dc8678639e0250cb4e00efad1415f4f29a823fc853d",
+          "authored": "sha256:7422b4c76314a5eaa2478cb020701d3849ac71648f3b386e706294541704d472",
+          "preEditorialSnapshotMerged": "sha256:7422b4c76314a5eaa2478cb020701d3849ac71648f3b386e706294541704d472",
+          "feedbackBundle": "sha256:e289c36ccaffe74cfbb61ca1ac034d760e4b8e3858461b8496fe1afe2ed3164c"
+        },
+        {
+          "recordId": "mcq:m055",
+          "localEffective": "sha256:ece23fd1072822b684857e8a9c9821781cd8542752a0267214f52545eb33cf54",
+          "publishedCatalogue": "sha256:97f700eefaf59c72d7861c261c0de51a6d3dc588e46e12bc75b999d1f422e9e0",
+          "trustedCompilerObserved": "efb0c0fb-0d1c-89a7-83d8-f3626c57e7ce",
+          "trustedContentSha256Observed": "efb0c0fb0d1c59a703d8f3626c57e7ce81f0e1f443074c3f425ba2510316f054",
+          "authored": "sha256:6ef9ba6d961c866eeae0031df29dfd88df8148a85c73fd1dd7a08741f6d0d392",
+          "preEditorialSnapshotMerged": "sha256:6ef9ba6d961c866eeae0031df29dfd88df8148a85c73fd1dd7a08741f6d0d392",
+          "feedbackBundle": "sha256:8590e0b8e1a4f2c6399ad1773020c3cb3b6d8938cea44e55c2cf7fa5cfeeca36"
+        }
+      ],
+      "qualification": "General shared-state ordering and specific check-use substitution differ;narrow TOCTOU pair is correlated;no subtype novelty approval.",
+      "newFamilyCredit": 0,
+      "independenceApproved": false
+    },
+    {
+      "familyLabelProposal": "permission-enforcement-recognition",
+      "recordIds": [
+        "mcq:m271",
+        "mcq:m052",
+        "mcq:m145"
+      ],
+      "revisions": [
+        {
+          "recordId": "mcq:m271",
+          "localEffective": "sha256:b592644606967c07c25ad52c7501aa779a0e71154a919a04715d0a3d7793da38",
+          "publishedCatalogue": "sha256:58e112c61a134be03064287e073e8f9bb84c65f85d12f4219e2d3630bed7e126",
+          "trustedCompilerObserved": "d441e4dc-0a69-8cb6-a34d-9a1244a30d30",
+          "trustedContentSha256Observed": "d441e4dc0a69ecb6a34d9a1244a30d3097cb4315cdc893020289956256851e7b",
+          "authored": "sha256:a1defa43b712bf4614a7939f34658414c50dbd46792b87006608c27fe629a097",
+          "preEditorialSnapshotMerged": "sha256:a1defa43b712bf4614a7939f34658414c50dbd46792b87006608c27fe629a097",
+          "feedbackBundle": "sha256:7c6885925a8db674e6f76b724f24faba34cfd571733286cbd473fdd3767f0c93"
+        },
+        {
+          "recordId": "mcq:m052",
+          "localEffective": "sha256:8ac2105f5306441865f44ca05c99383871ab05816db168ef9b28b14f54221064",
+          "publishedCatalogue": "sha256:a3b6f9e17f187da14c9a6a6ebf18ab4143b764a8581d161a6dc461801e37e7b1",
+          "trustedCompilerObserved": "4e5cb294-fdd1-83f3-b2b4-866e36d8d2fe",
+          "trustedContentSha256Observed": "4e5cb294fdd1a3f332b4866e36d8d2fedcc4a89b282752a9233302a18e26784e",
+          "authored": "sha256:a7f88f9bf31fd9bcddbacfef5550a255ade5c3432e10f6a1a885eda712aedb86",
+          "preEditorialSnapshotMerged": "sha256:a7f88f9bf31fd9bcddbacfef5550a255ade5c3432e10f6a1a885eda712aedb86",
+          "feedbackBundle": "sha256:0d54e1224e62e4776834daeb59c8c71c7c0161e38d63d3cb4910b8fb28733462"
+        },
+        {
+          "recordId": "mcq:m145",
+          "localEffective": "sha256:052167c5822bb6d91805e854cbe3198c90a997ea0c37630887b9415df778156b",
+          "publishedCatalogue": "sha256:d2a01b5febebd21b89b99c20eab60efdf00a252e2275922b1c89260d6152ee65",
+          "trustedCompilerObserved": "c3b69ef0-fe5f-8e3d-9df3-fec8c187406e",
+          "trustedContentSha256Observed": "c3b69ef0fe5f4e3dddf3fec8c187406e1c4b079f695e5d45c23118843fada7cc",
+          "authored": "sha256:8d9f9f3f0cd7b6e18662799b11a13284eab27bfd6ae908d0586df26f19100c8f",
+          "preEditorialSnapshotMerged": "sha256:8d9f9f3f0cd7b6e18662799b11a13284eab27bfd6ae908d0586df26f19100c8f",
+          "feedbackBundle": "sha256:9993f6e88de3bc70b2d267cd43a9097416d9bc76ea6252e27a2aa9fad5f2713d"
+        }
+      ],
+      "qualification": "Operation versus object permissions are related;no independently approved family;retain mass-assignment and authentication feedback holds.",
+      "newFamilyCredit": 0,
+      "independenceApproved": false
+    }
+  ],
+  "priorComparisons": [
+    {
+      "recordId": "mcq:m287",
+      "sourceRevision": "sha256:7c96c22876a6503b74743dfc19c3bbf614f795dc0625c5b0de1ed401e321d3e7",
+      "publishedRecordSignature": "sha256:27e1938813f0723921d566230aea3c667e3936261ca7c0d0986a3af8485d7705",
+      "feedbackSourceRevision": "sha256:8ccf9050c0a6045143021de9d148c5575ff7519a5d042bf7d307bbc7b7e60e39",
+      "status": "prior_substantive_disposition_preserved_not_new_credit"
+    },
+    {
+      "recordId": "mcq:m723",
+      "sourceRevision": "sha256:6acafdbf464bd0af07cc9f81bf658a7a34abeed2d6ed548b91aafdf691c57afa",
+      "publishedRecordSignature": "sha256:c51a5ae883314b98262e2e49b86017eacbb88bb7a14120b9dd68b9e9e58e34b6",
+      "feedbackSourceRevision": "sha256:f8055590f6a5cccd81005d5fde8f315cfad1216fd5eabd9298243c74ba9f2525",
+      "status": "prior_substantive_disposition_preserved_not_new_credit"
+    },
+    {
+      "recordId": "mcq:m130",
+      "sourceRevision": "sha256:dcc990fe9da339410868c4cc6f819ac97571985680f183f19be880e727d33d4d",
+      "publishedRecordSignature": "sha256:e98125daab9cd548380179230c7b8912d04a28200e33584463df2b143f719d4d",
+      "feedbackSourceRevision": "sha256:17f626755dd932ad8710001bfd8b2fb3580d22725a0ed25ec36d10e481db6ec7",
+      "status": "prior_substantive_disposition_preserved_not_new_credit"
+    },
+    {
+      "recordId": "mcq:m135",
+      "sourceRevision": "sha256:8d25f7ece504db48316896a41e494061900c89283632c285e47ae3b47897aff5",
+      "publishedRecordSignature": "sha256:472c437eeaa97351b837abf5ad1c134abfd025e81b79461ed0439b97e7fcb5c3",
+      "feedbackSourceRevision": "sha256:7981634e3bcb622c6d3898be29b31d2d9ab3f003cf90b7f95395e763805b444a",
+      "status": "prior_substantive_disposition_preserved_not_new_credit"
+    },
+    {
+      "recordId": "mcq:m613",
+      "sourceRevision": "sha256:ac4d7fa825e8936881aa61ea8c85c4b5a84192975e1bf61c36e688f4d6afe36d",
+      "publishedRecordSignature": "sha256:1a27b92a66fc09ad764801dafb52f55f92fc2f23d3895f55fe7014595a2f1938",
+      "feedbackSourceRevision": "sha256:d5def08540136ca4326ffaee2c6d261e4c5040f66c572591922b2557e0185a98",
+      "status": "prior_substantive_disposition_preserved_not_new_credit"
+    },
+    {
+      "recordId": "mcq:m611",
+      "sourceRevision": "sha256:9a097307e6c86ea92e9efc8cdea599f9758d648975bf65f91217f31c7083845e",
+      "publishedRecordSignature": "sha256:cd910094231808026c2f960b38254bbb6846727a4399394588fedc7ba4668d56",
+      "feedbackSourceRevision": "sha256:92ac58cd92218f9dea5298e14b792e5f9b72946ea8e63e620213f689bd3314ea",
+      "status": "prior_substantive_disposition_preserved_not_new_credit"
+    },
+    {
+      "recordId": "mcq:m612",
+      "sourceRevision": "sha256:f54b98b66662ec7ee548aa68332361c03eee1eb9f21423590918cb13f79ee2d0",
+      "publishedRecordSignature": "sha256:ed76f2083004f664ec798c38dee2c02350150f8c7d667f0f96505f1d19dee49e",
+      "feedbackSourceRevision": "sha256:5ad3377a124b3224c3191c9dccf3fbe5cc8f7b675b0ba98fde79a4f3c7721f60",
+      "status": "prior_substantive_disposition_preserved_not_new_credit"
+    },
+    {
+      "recordId": "mcq:m271",
+      "sourceRevision": "sha256:b592644606967c07c25ad52c7501aa779a0e71154a919a04715d0a3d7793da38",
+      "publishedRecordSignature": "sha256:58e112c61a134be03064287e073e8f9bb84c65f85d12f4219e2d3630bed7e126",
+      "feedbackSourceRevision": "sha256:7c6885925a8db674e6f76b724f24faba34cfd571733286cbd473fdd3767f0c93",
+      "status": "prior_substantive_disposition_preserved_not_new_credit"
+    },
+    {
+      "recordId": "mcq:m305",
+      "sourceRevision": "sha256:df2d92a1a3d3c87e502b2d99cb61145da492285a7bb4ec47da25caaed7731ea8",
+      "publishedRecordSignature": "sha256:6f2c24377f75ead1769061fbf26c310fb0f4c1f31dcfc406efc297a74e1fd610",
+      "feedbackSourceRevision": "sha256:0d895cabe78f15ea5f42a72e779b93398181a71f6ee61733cc5e5e2bd6ece79f",
+      "status": "prior_substantive_disposition_preserved_not_new_credit"
+    },
+    {
+      "recordId": "mcq:m248",
+      "sourceRevision": "sha256:3721fcd4d05251e311b7b2d30aa08b6dc22e7f365d78d01b5433017cd0104c65",
+      "publishedRecordSignature": "sha256:ac7266190ba3db82d0abbcd4fc17c8c4b6b1902fbe31e677cc0e606edc9f3827",
+      "feedbackSourceRevision": "sha256:e289c36ccaffe74cfbb61ca1ac034d760e4b8e3858461b8496fe1afe2ed3164c",
+      "status": "prior_substantive_disposition_preserved_not_new_credit"
+    }
+  ],
+  "priorObjective23Holds": {
+    "sourcePacketPath": "docs/drafts/phase-2b5-objective23-fastlane-proposals.json",
+    "sha256": "adeeea7e891c96eb7a68e23d8cfa2bf3c8bfdafebf4387f844526cf2e607492c",
+    "m305WholeScopeHold": {
+      "recordId": "mcq:m305",
+      "sourceRevision": "sha256:df2d92a1a3d3c87e502b2d99cb61145da492285a7bb4ec47da25caaed7731ea8",
+      "objectiveScopeProposal": {
+        "assessedCodes": [],
+        "contextCodes": [
+          "2.3"
+        ],
+        "status": "held_whole_numbered_mitigation_choice_scope"
+      },
+      "contentQualification": "HOLD precise whole-item 2.3 assessment scope: the offered decision chooses a mitigation, whereas 2.3 is vulnerability explanation. Retain 2.3 misconfiguration context; do not force a second numbered objective. No actual cache poisoning attacker input, HTTP header policy, cross-user isolation test, purge, reconfiguration or recovery is performed. Shared-cache privacy differs from transport encryption; no universal claim about all authenticated caching follows."
+    },
+    "m135ComponentHold": "composite_component_independence",
+    "priorHolds": {
+      "sourcePacketPath": "docs/drafts/phase-2b5-objective22-final-mcqs-proposals.json",
+      "sourcePacketSha256": "45b802ac854c4436957037c8019ee618e64cce0476d210fdc7c190b8afc9eea9",
+      "unchangedBoundaries": [
+        "canonicalBoundary",
+        "objective14Boundary",
+        "objective21Boundary",
+        "priorPbqBoundary",
+        "priorChannelBoundary",
+        "priorTargetingBoundary",
+        "privateBoundary",
+        "humanDecisionReferences"
+      ],
+      "m046HeldContrast": "named_individual_requirement_in_spear_phishing_wrong_feedback",
+      "m432WholeNumberedScopeHeld": true,
+      "privateP017Revision": "sha256:c1ed8cd5e1a8953d431a71e5377ab68bf92e9a61f756060134d8bc05d2a3dc42",
+      "privateP017Reviewed": false,
+      "activePackageSha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97"
+    }
+  },
+  "objective23Census": [
+    {
+      "recordId": "check:api-session-browser-security",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:3d19ed1f09ae6602367a1972ec899f422f80fc2de94670d7f4c5ebe8d9ad2299",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "check:malware-indicators-attacks",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:87cf1455067b3e753f557e3daac585e395e6047289ba07d56b22b4ddff78f331",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "check:secure-software-applications",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:f77492b250b22da69afa8c517ddb88e2aee9de7b3e49a02bcfa369c6953e83fe",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "check:software-memory-concurrency",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:f2b5cd4acf47bfb902b8cb6944b00aebb3a753a7c5834d60f31cb82a1d3a7d78",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "check:web-social-dns-attacks",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:8219dec4076261ae3e916072d0f6b212799bad3a5a508434cc87928a5ab546c1",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "deck:application-software-attacks",
+      "kind": "deck_container",
+      "sourceRevision": "sha256:05cf767412a8b48b5a1528784eb2222567d20b95152475846e2b35c8def10689",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "deck:cryptographic-attacks",
+      "kind": "deck_container",
+      "sourceRevision": "sha256:4c942a2199ca3411e7a6f173b6c1d14f8685742229a3bbafc990c7698d2a28bb",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "deck:network-wireless-attacks",
+      "kind": "deck_container",
+      "sourceRevision": "sha256:b49b8877e3116020e115b84682da191d51fcc785ec59d2f978753a92d6ee1db8",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "explanation:mcq:m012",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:b7c0a6321aefa1eb991e0ac9481da710e078a8afae152024361b5912947d4ad1",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m051",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:9fd294d1870eb991dd260432c8cf3fea903a3a8d12a16e34e9ff22eec546915b",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m052",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:0d54e1224e62e4776834daeb59c8c71c7c0161e38d63d3cb4910b8fb28733462",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m053",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:8a563594bf2d4e5f810c05b806955efe6f1a71ff92e8966c5975f58b478cc2df",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m055",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:8590e0b8e1a4f2c6399ad1773020c3cb3b6d8938cea44e55c2cf7fa5cfeeca36",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m062",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:84a6f4d88f98ae47bd7cff2c4d942024aca2b26dc16ee5a8839aae54a2d0550b",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m129",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:02630c441386ee01dc0b56dffedb8d9af145493720a6a083bbe140375056267d",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m130",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:17f626755dd932ad8710001bfd8b2fb3580d22725a0ed25ec36d10e481db6ec7",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m135",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:7981634e3bcb622c6d3898be29b31d2d9ab3f003cf90b7f95395e763805b444a",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m141",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:78f3e9ec8f9ff36104ba874816c422d857e6366d4f5c2cd97d4a099ef75f4f31",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m145",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:9993f6e88de3bc70b2d267cd43a9097416d9bc76ea6252e27a2aa9fad5f2713d",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m248",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:e289c36ccaffe74cfbb61ca1ac034d760e4b8e3858461b8496fe1afe2ed3164c",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m267",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:025b1f3a06679f4c37469d0e23eefbbda9294889dc8925434157cc143a44a89d",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m271",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:7c6885925a8db674e6f76b724f24faba34cfd571733286cbd473fdd3767f0c93",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m282",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:47bcca1da1ac8e1d3b6ab461ee33b34081515c2a42348226048eab69f1b5ef4b",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m287",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:8ccf9050c0a6045143021de9d148c5575ff7519a5d042bf7d307bbc7b7e60e39",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m305",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:0d895cabe78f15ea5f42a72e779b93398181a71f6ee61733cc5e5e2bd6ece79f",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m611",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:92ac58cd92218f9dea5298e14b792e5f9b72946ea8e63e620213f689bd3314ea",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m612",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:5ad3377a124b3224c3191c9dccf3fbe5cc8f7b675b0ba98fde79a4f3c7721f60",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m613",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:d5def08540136ca4326ffaee2c6d261e4c5040f66c572591922b2557e0185a98",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:mcq:m723",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:f8055590f6a5cccd81005d5fde8f315cfad1216fd5eabd9298243c74ba9f2525",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "explanation:pbq:p008",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:055d01a71fdf84cc8cac683da4bcafb63d5f9cbd32da25fb08ee7b9c52cab2c3",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "explanation:pbq:p032",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:d79d9e6a82b64592722ddf3b4a99b379a91401eaead2fc19162e5056de561af6",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "explanation:pbq:p062",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:d53f49dea0f225e2af4e3da1c6cae5855e4c04a2f21297e566462fac72fead99",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "explanation:pbq:p068",
+      "kind": "explanation_bundle",
+      "sourceRevision": "sha256:ea94ddfd59fe9ef35867ca1391bae6357cf2c0d35a488b851c79c237a92b915a",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-api-attack-application-programming-interface-attack",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:f25b2a6d7194124d498a37bfb0904c6aebd0d50ae5c1986f858bb539509d1780",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-buffer-overflow-buffer-overflow",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:9d5a25c4a672c2474e7547e10bff010dc08a57ba35c7e023968b7daf7bc5b2ba",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-command-injection-command-injection",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:78f889a5099b1d0109ac269ebbfa0544670c5ecdee6f320028606cf2830f5d16",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-csrf-xsrf-cross-site-request-forgery",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:26c652badf9204d0899bdc9a2996b5be24840a9cbf7005822c4259b5cd56b72c",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-directory-traversal-directory-traversal",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:8558c91e818f7765d37b399d421e0b56c945c579f2ef7337e4c41340607a8f8a",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-injection-attack-injection-attack",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:3844ca92ad0e4a66bfc81f055ca2e3c4db1383124117d1f07d9cbc2adf4077bb",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-malicious-update-malicious-software-update",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:1653b6c59bb15321b443093848568b3c5ef16088607f6723141baf6aa00acc99",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-memory-injection-memory-injection",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:96cbddba3db46a345caa69b7112f861cdee097897014ee16823da709fd46b336",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-privilege-escalation-privilege-escalation",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:36899d2d170f748b05f9f47baa30ec66927389ba92d83ac70eb5e4604fafdf63",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-race-condition-time-of-check-time-of-use-race-condition",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:632899030c6679af1d00bc90dd7d3f915546ac327e7317d1834d5f3904de600a",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-sqli-sql-injection",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:536b9138c2bc2f9ca651ed2919d4c5edb418338127cce860d5994ef123b41b45",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-ssrf-server-side-request-forgery",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:0e5262320eed8919984ae92a4a2f48dfe057bf60bc8ecf2f36d934336138b4be",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-application-software-attacks-xss-cross-site-scripting",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:5a6925fa7f6b7b14635e9306e45dfce1a12e1cc7b1d79b9e0526e7918ff17972",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-cryptographic-attacks-birthday-attack-birthday-attack",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:72c35a3551622ebd485b28c8fe7a0b66a345fa8cff1c9f7cc9ea79fed7270abb",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-cryptographic-attacks-collision-attack-collision-attack",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:c4f42dadb9122a7184a7f1bc2d9bd3a978bcec03c4cb96f956280c5b111ded7a",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-cryptographic-attacks-downgrade-attack-downgrade-attack",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:f03dfdcc25f6810ac59a05d0ba604aaf1c68f8986e5e10a212e178860fb2c8c4",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-amplified-attack-amplified-attack",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:258c69054bab280f2e64a29a708f9d47c9fbb246bde96b695cb9f34c834fcc31",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-arp-poisoning-arp-poisoning-spoofing",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:2564a338db7038ad71dd800cb2141ad6c3d91c6fa80ee5b7cc2d6ad892e8929c",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-ddos-distributed-denial-of-service",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:f0ad9cd60a874fa1da23ac5622104bb7b1e5e71c30e3c04323db5b944334c7f0",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-deauthentication-disassociation-deauthentication",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:5d1b036d29a94d03a47c072994ee14efcbf02b7bab9c555ee1ad18046bc0dd5b",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-dns-attack-domain-name-system-attack",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:a76bb25a68c1b11cd8ef737383e0435b680bb509b31e2ea0ff489ceef80a6c42",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-dos-denial-of-service",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:82ac2fa68628dbc29d39a2d2f4c7e2de2e2aa30efa329c2bfc1ec1d624b2c402",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-evil-twin-evil-twin",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:3f7e0aa7900e16b0d2ab7a72ec1b193d4e59acc00915b0190d1b428ae3c665b8",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-on-path-attack-on-path-attack",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:2c5fc5c750615d6ae939d0ed9b7e4c28fa541f50d5730301aa57f9bf499c46ae",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-reflected-network-attack-reflected-network-attack",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:201c3581d4d4b810d0fd32d3ebd67c38fd4273f61b6be8e53f6ecc618f262612",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-rfid-nfc-cloning-rfid-nfc-tag-cloning",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:3a140125e6ebb27b95265001404aecc0d1ca7c3bcb4798c1906e7151c38a300d",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-rogue-ap-rogue-access-point",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:f14f2df395332491137c1cfb2be1f54d4033f94d2bf59b7f3e85ef898c23a40f",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-vlan-hopping-vlan-hopping",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:3c9725310b1655f8979dc0607309d01a8b01dad6517d8295f3420eb67f7517ea",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "flashcard:sy0701-acronym-network-wireless-attacks-wireless-jamming-wireless-jamming",
+      "kind": "flashcard",
+      "sourceRevision": "sha256:5ef368fb80e87faa26f31f882cb14f1f48fe988117623995b58f00879d99a363",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:ap",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:708c770924ae118808fdf24ef00358c80007ec52b10046258c08aec2c12b20e8",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:api",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:999e825c2baec0991170313c5024ad5ccae5c4b880ade1ec053b6856a8d149fd",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:arp",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:e37e17f5cf3427abea6e8a1ed06e085c6aefa24d7ed3543953c6527e2e408837",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:aslr",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:4ad86bdd0915aa445de2d68862ff0b5f2ba9d8c6e1dac1429ae9acdf9901e8ad",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:att%26ck",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:832175c5ffe18576ffdbffb0ff63b809f8d91eadcb24c25e244accf652b2377d",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:csrf",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:f3e03b6c152953bbb6903b55e4ff9fb3c3b9f8737bc5150e8426a680c54fbfa3",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:cve",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:99721fe88dfc544e1f5a61d3daa5dde7469c71454e153183f47795bb9d17ebc0",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:dast",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:85c036d7e158e6e9fabafe19bfba71555c0651d7a00afb7b47cd3ccd4be9fb60",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:ddos",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:006f9f658d0d48d33b37af0b303ad698383f3e241cc7be1f7b1d34f02263f478",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:dep",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:97733918a6c97cb5bc69398a86c3d0792211beb354d9276886fb9470814418c8",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:dnssec",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:3e2355397f6d1f28b63a2727b3eeee86f229cc80604844f1ce1ca766379aa111",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:encryption",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:84e0be46e7bf560613e28fd9d4fed9749b5756bd1532bbdb1bbbe4cb5e3b6ee5",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:hashing",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:9b38cfffdb7d5d268911d11f4cbd151f485ca00af69d2ba184a0ddc7ec35eff5",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:ioc",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:098235c55a6fc111d198b55ec1893e9b1c3b59086adf335924c235ab1d0fad58",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:ldap",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:326c1c8685fd8009b7abd60a3adb4cc8b087eb31f8082fdc7ea8ea79f6fbcd70",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:mac",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:09f1b253770e93f9225f07f0a3eac23f29710cfd0a452e0ab6c41c7cc44b41f3",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:mfa",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:84bfa0c7079e79cbceaf02734e2c0a14142b90a92b6ea0775f00fa8b0d0246ac",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:nist",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:465d82bcfbda9daed74431e8ed2444088c8ab0d116d6c22f2e67a727bc39ceed",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:ntp",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:09e493b5033a00ce9693a3d80c08a8cd436bb6e20681337f4cc5b5e0795dc9e5",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:owasp",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:558065aa1f1fad5fcf6c6a8cdd7971f19ec03dc31f885a9e84f83f2f878c098e",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:rat",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:f181ecad3e3a00356db3002d5063767bbc7eb66d095d26027fa1862f88e62f21",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:sql%20injection",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:909f227de99d25202e56848a2ba7f3543e8e3f96bde902dcd5d7c2468dfa7110",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:sqli",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:87b715a70e29d6d69c740fda8937ddef73413a2ee2758c3952f69d511231605f",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:ssrf",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:0860ec621a7576ded867822860d9022ceea59514dcbae585775e62e8ccc8128a",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:tls",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:228f0edd7995d12f74e6ff28da67f69071fde494c8dc4a531606b69acaaba377",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:ttp",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:197e49a8f2409c5bcb7e416d8c028798be524376028cce32dd8c6e0d8c10e1e7",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "glossary:vpn",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:cc87bee792b26651d79b8e7f13f57bea531baf6827fa3f6ece066dd8a6a513f6",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:waf",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:d346059694d798d3ca6f2f819c940577bfaa990bcb43093a5d58d4878518fffc",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "glossary:xss",
+      "kind": "glossary_definition",
+      "sourceRevision": "sha256:69d128777e77a09677aef61fc0507c67beacb39345e7d485531b65c58c63c5e6",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "keywords:api-session-browser-security",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:bb94655e1186659b1928c153312e988b6fc636725ad9b261846d0c95efa130a6",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "keywords:malware-indicators-attacks",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:da9e0de125baee761a112baaf0beeed22403ca0d749c54c0d92ff76c30885f9f",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "keywords:secure-software-applications",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:a91ec09262ea06bd9ba3a18548e16a41427bdaa2bd3ba6bea9aef16ed9230a5d",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "keywords:software-memory-concurrency",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:3c3739fa1b50f826e27ca6c0bd7ec76b44fbddaea214671aa7b8d9dd98a88c1f",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "keywords:web-social-dns-attacks",
+      "kind": "keyword_guide",
+      "sourceRevision": "sha256:85fa402627bc1849f4100cc8f54f38ed38d9be194614ccd04c9c015b0fe1d1a2",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "lesson:api-session-browser-security",
+      "kind": "lesson",
+      "sourceRevision": "sha256:c4a2c1185f246ab462ad0a20cc9bc0448aba4639a8971b576245d935930f33e1",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "lesson:malware-indicators-attacks",
+      "kind": "lesson",
+      "sourceRevision": "sha256:a33d9db766472673585845fde91fe284bd2980a40c1e4474a6b96b169a7edc23",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "lesson:secure-software-applications",
+      "kind": "lesson",
+      "sourceRevision": "sha256:5e1ae97dbfaee40566cd7cc35f273623c2491b805e3c9a5b1e9177435abc3aa8",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "lesson:software-memory-concurrency",
+      "kind": "lesson",
+      "sourceRevision": "sha256:70f61bd8b08e8a4f7914e41133bd1375c891c4e0412196456658117a56cfc4ed",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "lesson:web-social-dns-attacks",
+      "kind": "lesson",
+      "sourceRevision": "sha256:a4de336332e79c8530cae86101c4fd2db1af46bdf4ce04617a76c9a8a75da799",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "mcq:m012",
+      "kind": "mcq",
+      "sourceRevision": "sha256:44b450081b90c3e7b11346258e1f99d95aa0a0d9a907799159aa8435f1addd31",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m051",
+      "kind": "mcq",
+      "sourceRevision": "sha256:35bfe7a31d3194c8994b46cac8fb3d01a822ed88d19ec61a85b8894092e15483",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m052",
+      "kind": "mcq",
+      "sourceRevision": "sha256:a3b6f9e17f187da14c9a6a6ebf18ab4143b764a8581d161a6dc461801e37e7b1",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m053",
+      "kind": "mcq",
+      "sourceRevision": "sha256:f41bb6408c78d4018e58213c0cb4fdec1a86ac7e40c5d3951a45189d6663978e",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m055",
+      "kind": "mcq",
+      "sourceRevision": "sha256:97f700eefaf59c72d7861c261c0de51a6d3dc588e46e12bc75b999d1f422e9e0",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m062",
+      "kind": "mcq",
+      "sourceRevision": "sha256:8438ed78b28025bfdb13af49a2522ecffdad99993e56097643c7fc182e351ee2",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m129",
+      "kind": "mcq",
+      "sourceRevision": "sha256:485a3d365c80ce14829963b2c2fea41c05cabe19719d9854be41a63a02e30769",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m130",
+      "kind": "mcq",
+      "sourceRevision": "sha256:e98125daab9cd548380179230c7b8912d04a28200e33584463df2b143f719d4d",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m135",
+      "kind": "mcq",
+      "sourceRevision": "sha256:472c437eeaa97351b837abf5ad1c134abfd025e81b79461ed0439b97e7fcb5c3",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m141",
+      "kind": "mcq",
+      "sourceRevision": "sha256:c998a8b458bb5f8a386e312e7ac4371f1e4bac1a99ebf6a06ff8b8b54a467423",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m145",
+      "kind": "mcq",
+      "sourceRevision": "sha256:d2a01b5febebd21b89b99c20eab60efdf00a252e2275922b1c89260d6152ee65",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m248",
+      "kind": "mcq",
+      "sourceRevision": "sha256:ac7266190ba3db82d0abbcd4fc17c8c4b6b1902fbe31e677cc0e606edc9f3827",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m267",
+      "kind": "mcq",
+      "sourceRevision": "sha256:90f8600ecaf176f9b205bf4abc10f165ec50d675e2debda0a1e2afe1bb87f2ee",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m271",
+      "kind": "mcq",
+      "sourceRevision": "sha256:58e112c61a134be03064287e073e8f9bb84c65f85d12f4219e2d3630bed7e126",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m282",
+      "kind": "mcq",
+      "sourceRevision": "sha256:7803d78870d666dc39978440333d0da20a8929ea01c2001701bbcb2e106fa468",
+      "status": "new_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m287",
+      "kind": "mcq",
+      "sourceRevision": "sha256:27e1938813f0723921d566230aea3c667e3936261ca7c0d0986a3af8485d7705",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m305",
+      "kind": "mcq",
+      "sourceRevision": "sha256:6f2c24377f75ead1769061fbf26c310fb0f4c1f31dcfc406efc297a74e1fd610",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m611",
+      "kind": "mcq",
+      "sourceRevision": "sha256:cd910094231808026c2f960b38254bbb6846727a4399394588fedc7ba4668d56",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m612",
+      "kind": "mcq",
+      "sourceRevision": "sha256:ed76f2083004f664ec798c38dee2c02350150f8c7d667f0f96505f1d19dee49e",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m613",
+      "kind": "mcq",
+      "sourceRevision": "sha256:1a27b92a66fc09ad764801dafb52f55f92fc2f23d3895f55fe7014595a2f1938",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "mcq:m723",
+      "kind": "mcq",
+      "sourceRevision": "sha256:c51a5ae883314b98262e2e49b86017eacbb88bb7a14120b9dd68b9e9e58e34b6",
+      "status": "prior_agent_disposition_pending_owner"
+    },
+    {
+      "recordId": "pbq:p008",
+      "kind": "pbq",
+      "sourceRevision": "sha256:77931f0e67e63cbedbabaa00d156f89f35d0cc58a1703e123ab6976d627ebcfd",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "pbq:p032",
+      "kind": "pbq",
+      "sourceRevision": "sha256:bc6ef0f7f70ec9d153ff2231396e8239ab04da403a913f80160644d96f5a9389",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "pbq:p062",
+      "kind": "pbq",
+      "sourceRevision": "sha256:e515dd546d25f9b11060e8f652e1df7ae656ccb279331a3d7ddf7a0024ba7c7a",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "pbq:p068",
+      "kind": "pbq",
+      "sourceRevision": "sha256:e9a35b00d503b0da9ebb3a0573ef12d50956d10379194798196c34ef47c21367",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:api-session-browser-security:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:29fe781b3b04c72ce11e2f2367068e3a3d89ee41ee9ddfd05781ef7a834a91f8",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:api-session-browser-security:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:a2cd6f1cb0bce211c5a0a9b14b4937ace030f00824212f3d0df0e7f1ff4d7c03",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:api-session-browser-security:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:f7f31b14045194869d4e998d53c194176a41982cb9be7d67faaf2d0b27f08558",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:malware-indicators-attacks:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:55496d470efcd1815dcba1f1746b6659826874bb7989b8ecbe5ebad836ee11b4",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:malware-indicators-attacks:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:b5082125bdf9e30845da63e5657d10aa6ab50da2bf39a9316904a03ef025d5c4",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:malware-indicators-attacks:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:3c877d5369675f6c3c3c62438d6d09d1dbb9d0f3d66a12282d64e45242749322",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:secure-software-applications:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:6afd4f8c6c03a39693d617c27d56be1db31365bd1ab29b3c9fb5f8a1e0f941c5",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:secure-software-applications:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:c72559c86bba1482852b380af1cdfaaf0d41fc1317be0864c7dfce92b869a8b6",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:secure-software-applications:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:cb171ae1d6a1948b9f36c3edc7d9fec27cbdd94f53d3380c4d4026c458831701",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:software-memory-concurrency:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:6708c71a4a95ac766cab4223041830470b1e9f95c27f62d80c166e45c91e4a3d",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:software-memory-concurrency:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:9a2537c9410592c57b13d5455621785e53fcead2a9b6d0e81617e5eb86a88b1a",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:software-memory-concurrency:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:569f075b6dc2a5625f9cc145468d44f584641c47a8bcf3b38eb5e03896acd1e5",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:web-social-dns-attacks:practice-keyword-0",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:e39ef97b2c8e7c3ace038884cb0f3788274bbf0b11519495fc6de1b0f8b256db",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:web-social-dns-attacks:practice-keyword-1",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:8f4b5edd7f53721eb0fc0840ee79e4a116da964bc01fc8b7d9b194e6c606f817",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "practice:web-social-dns-attacks:practice-keyword-2",
+      "kind": "lesson_check",
+      "sourceRevision": "sha256:7a2c5118651d538fe87522569531e20d1440757e49fab56a5aff518ebc47abab",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:api-session-browser-security:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:e480a366caac46e23d72e45061aae0b24afac2f55259958c7f152941fffd5c70",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:api-session-browser-security:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:0a0199d2e7e6df07e4c5e07dcd8992c106bd5d255dc551fde1f3297e45227bfa",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:api-session-browser-security:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:3f22069b980420a89ef23d9559602fdd6677e64e96cb1cef0399164fa39e0556",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:api-session-browser-security:3",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:a69a365575a2f428f80eb561557a97a98c4d4ab38bd84d72892c52d2e6ed8912",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:malware-indicators-attacks:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:fc3dbdde9001c1c83d5ddbe4220f51173cfee5690dc9a8c49ec6c3d01b48dae3",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:malware-indicators-attacks:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:72d4e6fa76e559375583981ab618f0b4fdff56e496c08edcde24f3346d753182",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:malware-indicators-attacks:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:e904814d3345f5923d97ea7aaae43728b007dd3257f5ff74e9751f30f080255f",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:secure-software-applications:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:46fbee80cecee3ca79f87911fddb54476809d7924ec41ebfcb1440d15d76145f",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:secure-software-applications:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:02224d0d2b53c5421e7542174de4e4c021266265eebe6197621ae58906b16613",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:secure-software-applications:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:29ebbe38f7cdab02fd915bb0a5eb1de0145d74f9ca4206a31741198d13a39b01",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:software-memory-concurrency:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:83f046334a963aa2a6059a6368f2302330e7b9bb46264118475feb69ead5a482",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:software-memory-concurrency:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:564a3e7a4fa1bd43fcaf084e2eb7d9629cb738df72acaa267621d90871c629e0",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:software-memory-concurrency:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:1b5f406c348ae3dcc94e6899df22b0344d9f4fb8ee3d378af1aa4dc9cc68540c",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:web-social-dns-attacks:0",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:8bbc726436aa76989ab8bd4e2c947ddcab052e31cfc9e0e4558de5cfbc818a42",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:web-social-dns-attacks:1",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:821ebb475a9f223bb0567abe7e168029c860127851e9e5c9d1fa8607b813b129",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "section:web-social-dns-attacks:2",
+      "kind": "lesson_section",
+      "sourceRevision": "sha256:fa874b6a8b9a6ff2cd4a708e10701e6b7ac783bcda792426beb49949f8bdd5e0",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "traps:api-session-browser-security",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:734b956c049f549f8ba40f6e438c153f408b3ab4200876d3013e604addb92612",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "traps:malware-indicators-attacks",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:bed44d8dcae3c4b46242c7bb6f5afce6fcb8b72c8a62ee87fce4aaa2ca01fa65",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "traps:secure-software-applications",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:e01ad9f23b18296dafc85c761da3f55375a34c61fa581a7bd258215ae217a0aa",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "traps:software-memory-concurrency",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:6f06501cef2c130f2c6ae8c08f6bec919d958092365bcbc130ce604e7ad9c8e1",
+      "status": "inventory_only_deferred"
+    },
+    {
+      "recordId": "traps:web-social-dns-attacks",
+      "kind": "lesson_traps",
+      "sourceRevision": "sha256:4f48d7e18b429cda7dc76ac944aee91c13b4ec65cb36e04ce242ab237f634b01",
+      "status": "inventory_only_deferred"
+    }
+  ],
+  "objective23Denominator": {
+    "broadCandidates": 162,
+    "priorAgentDispositions": 38,
+    "newAgentDispositions": 22,
+    "combinedAgentDispositions": 60,
+    "remaining": 102,
+    "remainingByKind": {
+      "deck_container": 2,
+      "explanation_bundle": 4,
+      "flashcard": 26,
+      "glossary_definition": 15,
+      "keyword_guide": 5,
+      "lesson": 5,
+      "lesson_check": 20,
+      "lesson_section": 16,
+      "lesson_traps": 5,
+      "pbq": 4
+    }
+  },
+  "bankProgress": {
+    "denominator": 483,
+    "mcqDenominator": 395,
+    "pbqDenominator": 88,
+    "priorQuestions": 135,
+    "newQuestions": 11,
+    "combinedQuestions": 146,
+    "remainingQuestions": 337,
+    "combinedMcqs": 130,
+    "combinedLocalPbqs": 16,
+    "pairedFeedbackCombined": 146,
+    "pairedFeedbackRemaining": 337,
+    "remainingMcqs": 265,
+    "remainingLocalPbqs": 72
+  },
+  "remainingObjective23QuestionRecordIds": [],
+  "remainingObjective23RecordIds": [
+    "check:api-session-browser-security",
+    "check:malware-indicators-attacks",
+    "check:secure-software-applications",
+    "check:software-memory-concurrency",
+    "check:web-social-dns-attacks",
+    "deck:application-software-attacks",
+    "deck:network-wireless-attacks",
+    "explanation:pbq:p008",
+    "explanation:pbq:p032",
+    "explanation:pbq:p062",
+    "explanation:pbq:p068",
+    "flashcard:sy0701-acronym-application-software-attacks-api-attack-application-programming-interface-attack",
+    "flashcard:sy0701-acronym-application-software-attacks-buffer-overflow-buffer-overflow",
+    "flashcard:sy0701-acronym-application-software-attacks-command-injection-command-injection",
+    "flashcard:sy0701-acronym-application-software-attacks-csrf-xsrf-cross-site-request-forgery",
+    "flashcard:sy0701-acronym-application-software-attacks-directory-traversal-directory-traversal",
+    "flashcard:sy0701-acronym-application-software-attacks-injection-attack-injection-attack",
+    "flashcard:sy0701-acronym-application-software-attacks-malicious-update-malicious-software-update",
+    "flashcard:sy0701-acronym-application-software-attacks-memory-injection-memory-injection",
+    "flashcard:sy0701-acronym-application-software-attacks-privilege-escalation-privilege-escalation",
+    "flashcard:sy0701-acronym-application-software-attacks-race-condition-time-of-check-time-of-use-race-condition",
+    "flashcard:sy0701-acronym-application-software-attacks-sqli-sql-injection",
+    "flashcard:sy0701-acronym-application-software-attacks-ssrf-server-side-request-forgery",
+    "flashcard:sy0701-acronym-application-software-attacks-xss-cross-site-scripting",
+    "flashcard:sy0701-acronym-network-wireless-attacks-amplified-attack-amplified-attack",
+    "flashcard:sy0701-acronym-network-wireless-attacks-arp-poisoning-arp-poisoning-spoofing",
+    "flashcard:sy0701-acronym-network-wireless-attacks-ddos-distributed-denial-of-service",
+    "flashcard:sy0701-acronym-network-wireless-attacks-deauthentication-disassociation-deauthentication",
+    "flashcard:sy0701-acronym-network-wireless-attacks-dns-attack-domain-name-system-attack",
+    "flashcard:sy0701-acronym-network-wireless-attacks-dos-denial-of-service",
+    "flashcard:sy0701-acronym-network-wireless-attacks-evil-twin-evil-twin",
+    "flashcard:sy0701-acronym-network-wireless-attacks-on-path-attack-on-path-attack",
+    "flashcard:sy0701-acronym-network-wireless-attacks-reflected-network-attack-reflected-network-attack",
+    "flashcard:sy0701-acronym-network-wireless-attacks-rfid-nfc-cloning-rfid-nfc-tag-cloning",
+    "flashcard:sy0701-acronym-network-wireless-attacks-rogue-ap-rogue-access-point",
+    "flashcard:sy0701-acronym-network-wireless-attacks-vlan-hopping-vlan-hopping",
+    "flashcard:sy0701-acronym-network-wireless-attacks-wireless-jamming-wireless-jamming",
+    "glossary:ap",
+    "glossary:api",
+    "glossary:aslr",
+    "glossary:csrf",
+    "glossary:cve",
+    "glossary:dep",
+    "glossary:ioc",
+    "glossary:ntp",
+    "glossary:owasp",
+    "glossary:rat",
+    "glossary:sql%20injection",
+    "glossary:sqli",
+    "glossary:ssrf",
+    "glossary:ttp",
+    "glossary:xss",
+    "keywords:api-session-browser-security",
+    "keywords:malware-indicators-attacks",
+    "keywords:secure-software-applications",
+    "keywords:software-memory-concurrency",
+    "keywords:web-social-dns-attacks",
+    "lesson:api-session-browser-security",
+    "lesson:malware-indicators-attacks",
+    "lesson:secure-software-applications",
+    "lesson:software-memory-concurrency",
+    "lesson:web-social-dns-attacks",
+    "pbq:p008",
+    "pbq:p032",
+    "pbq:p062",
+    "pbq:p068",
+    "practice:api-session-browser-security:practice-keyword-0",
+    "practice:api-session-browser-security:practice-keyword-1",
+    "practice:api-session-browser-security:practice-keyword-2",
+    "practice:malware-indicators-attacks:practice-keyword-0",
+    "practice:malware-indicators-attacks:practice-keyword-1",
+    "practice:malware-indicators-attacks:practice-keyword-2",
+    "practice:secure-software-applications:practice-keyword-0",
+    "practice:secure-software-applications:practice-keyword-1",
+    "practice:secure-software-applications:practice-keyword-2",
+    "practice:software-memory-concurrency:practice-keyword-0",
+    "practice:software-memory-concurrency:practice-keyword-1",
+    "practice:software-memory-concurrency:practice-keyword-2",
+    "practice:web-social-dns-attacks:practice-keyword-0",
+    "practice:web-social-dns-attacks:practice-keyword-1",
+    "practice:web-social-dns-attacks:practice-keyword-2",
+    "section:api-session-browser-security:0",
+    "section:api-session-browser-security:1",
+    "section:api-session-browser-security:2",
+    "section:api-session-browser-security:3",
+    "section:malware-indicators-attacks:0",
+    "section:malware-indicators-attacks:1",
+    "section:malware-indicators-attacks:2",
+    "section:secure-software-applications:0",
+    "section:secure-software-applications:1",
+    "section:secure-software-applications:2",
+    "section:software-memory-concurrency:0",
+    "section:software-memory-concurrency:1",
+    "section:software-memory-concurrency:2",
+    "section:web-social-dns-attacks:0",
+    "section:web-social-dns-attacks:1",
+    "section:web-social-dns-attacks:2",
+    "traps:api-session-browser-security",
+    "traps:malware-indicators-attacks",
+    "traps:secure-software-applications",
+    "traps:software-memory-concurrency",
+    "traps:web-social-dns-attacks"
+  ],
+  "deliveryBindings": [
+    {
+      "path": "src/App.jsx",
+      "anchor": "function MCQPractice(",
+      "endAnchor": "function UpgradeModal(",
+      "startLine": 24992,
+      "endLine": 25873,
+      "sourceSignature": "sha256:f96053d990c9e6e98bebb88af15b18766c3996a962879e7d178b21e5baa2556d"
+    },
+    {
+      "path": "src/App.jsx",
+      "anchor": "function shuffleMcqOptions(",
+      "endAnchor": "function playAnswerSound(",
+      "startLine": 1242,
+      "endLine": 1262,
+      "sourceSignature": "sha256:3c9b98e4a0f51aefc810c2ba3e2bf99685c81f60b33e5e8951fa86b466966b45"
+    },
+    {
+      "path": "src/App.jsx",
+      "anchor": "function getWrongOptionFeedback(",
+      "endAnchor": "function MCQFeedbackVerdict(",
+      "startLine": 1140,
+      "endLine": 1145,
+      "sourceSignature": "sha256:f8ca69570cdc8f6b76b6455c35203bb7e8090d5961b606adf5347d3314188316"
+    }
+  ],
+  "practiceSelectorBinding": "sha256:3068f284d528b579176264da5a129cd35fc34a6e581ece2c8a49cb133a1df84a",
+  "feedbackGate": "submitted_pro_main_selected_wrong_only",
+  "tooltipDeliveryObserved": false,
+  "scopeSkillDifficultyCanonicalFamilyWeightEvidenceTeachingPublicationApproved": false,
+  "humanApproved": false,
+  "published": false,
+  "activationAllowed": false,
+  "masteryWeight": 0,
+  "eligibleEvidence": false,
+  "activeUnresolvedMappingsUnchanged": 489,
+  "unchangedReleaseHashes": 25,
+  "negativeMutationChecks": 225
+}
