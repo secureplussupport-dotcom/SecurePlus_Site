@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { canonicalPayload } from '../../src/lib/learningPersistenceContracts.js';
 import { LEARNING_CONFIG } from '../../src/lib/learningConfig.js';
+import { isMcqIdentity } from '../../src/lib/learningEvidence.js';
 import { assessReplayChronology } from './chronology.mjs';
 
 export const digest = value => createHash('sha256').update(canonicalPayload(value)).digest('hex');
@@ -9,7 +10,7 @@ export const requireRuntime = (ok, message) => { if (!ok) throw Object.assign(ne
 export const RUNTIME_LIMITS = Object.freeze({evidence:10000,sessions:2000,history:10000,catalogue:2000,bytes:8*1024*1024,cpuMs:2000});
 export function algorithmContract() {
   const files=['../../src/lib/learningEvidence.js','../../src/lib/conceptMastery.js','../../src/lib/reviewScheduler.js','./learning-projector.mjs','./runtime-bundle.mjs','./session-plans.mjs','./trusted-learning-runtime.mjs'];
-  return {implementation:'secureplus-phase2a-v1',modules:Object.fromEntries(files.map(name=>[name,createHash('sha256').update(readFileSync(new URL(name,import.meta.url))).digest('hex')]))};
+  return {implementation:'secureplus-mcq-only-v1',modules:Object.fromEntries(files.map(name=>[name,createHash('sha256').update(readFileSync(new URL(name,import.meta.url))).digest('hex')]))};
 }
 const bounded = (rows, max) => { requireRuntime(rows.length<=max,'Retained history exceeds replay limit');return rows; };
 export async function assertSnapshotBudget(tx,ownerId) {
@@ -45,6 +46,7 @@ export async function loadRuntimeBundle(tx, versions) {
   const mappings=bounded(await tx`select m.*,q.question_id,q.question_type,q.scenario_family,q.difficulty,q.content_signature from public.adaptive_question_mappings m join public.adaptive_question_revisions q using(revision_id) where m.mapping_version=${m} order by m.revision_id,m.concept_role,m.concept_id limit ${limit}`,RUNTIME_LIMITS.catalogue);
   const contents=bounded(await tx`select m.*,c.content_id,c.content_kind,c.content_signature from public.adaptive_content_mappings m join public.adaptive_content_revisions c using(content_revision_id) where m.mapping_version=${m} order by m.content_revision_id,m.concept_id limit ${limit}`,RUNTIME_LIMITS.catalogue);
   requireRuntime(concepts.length>0&&mappings.length>0&&[...concepts,...relationships,...mappings,...contents].every(r=>r.review_status==='human_approved'),'Catalogue lacks approval or mappings');
+  requireRuntime(mappings.every(r=>r.question_type==='mcq'),'Adaptive catalogue must be MCQ-only');
   // Payload pins the complete sealed catalogue, not a best-effort live lookup.
   const catalogue={concepts,relationships,mappings,contents};
   const manifest=JSON.parse(JSON.stringify(catalogue));
@@ -65,9 +67,12 @@ export async function loadCompleteSnapshot(tx,snapshot,job) {
   }
   const result=JSON.parse(JSON.stringify({...snapshot,...history,bundle,enrollmentId:job.enrollmentId}));
   requireRuntime(Buffer.byteLength(JSON.stringify(result))<=RUNTIME_LIMITS.bytes,'Replay payload exceeds byte budget');
+  const mcqIds=new Set(bundle.catalogue.mappings.filter(m=>m.question_type==='mcq').map(m=>m.revision_id));
+  const mcqEvidence=result.evidence.filter(e=>isMcqIdentity({questionId:e.question_id,format:e.question_type??(mcqIds.has(e.revision_id)?'mcq':undefined)}));
+  const mcqSessions=result.sessions.filter(s=>mcqEvidence.some(e=>e.session_id===s.session_id)||result.plans.some(p=>p.session_id===s.session_id&&p.items.some(i=>mcqIds.has(i.revisionId))));
   const chronology=assessReplayChronology({ownerId:owner,now:result.now,
-    sessions:result.sessions.map(s=>({ownerId:owner,sessionId:s.session_id,setIndex:Number(s.set_index),startedAt:s.started_at,closedAt:s.closed_at??null})),
-    evidence:result.evidence.filter(e=>e.session_id).map(e=>({ownerId:owner,evidenceId:e.evidence_id,sessionId:e.session_id,setIndex:Number(e.set_index),occurredAt:e.occurred_at,receivedAt:e.received_at,supersedesEvidenceId:e.supersedes_evidence_id}))});
+    sessions:mcqSessions.map(s=>({ownerId:owner,sessionId:s.session_id,setIndex:Number(s.set_index),startedAt:s.started_at,closedAt:s.closed_at??null})),
+    evidence:mcqEvidence.filter(e=>e.session_id).map(e=>({ownerId:owner,evidenceId:e.evidence_id,sessionId:e.session_id,setIndex:Number(e.set_index),occurredAt:e.occurred_at,receivedAt:e.received_at,supersedesEvidenceId:e.supersedes_evidence_id}))});
   requireRuntime(chronology.status==='ready_for_replay','Chronology must be resolved before trusted planning');
   return result;
 }

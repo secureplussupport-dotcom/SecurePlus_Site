@@ -214,7 +214,7 @@ test('source selection preserves actual publication precedence and all alternati
   assert.ok(pkg.records.some(r=>r.id===prefix+'pbq:'+id));
   assert.ok(pkg.records.some(r=>r.id===prefix+'explanation:pbq:'+id));
  }
- assert.equal(pkg.counts.records,1878);assert.equal(pkg.counts.unresolvedQuestionMappings,489);
+ assert.equal(pkg.counts.records,1878);assert.equal(pkg.counts.unresolvedQuestionMappings,491);assert.deepEqual(pkg.adaptiveScope,{eligibleQuestionKinds:['mcq'],effectiveMcqs:395,mappedMcqs:5,unmappedMcqs:390,pbqsExcluded:true,syntheticFixturesIncluded:false,approvedForActivation:false});assert(pkg.records.filter(r=>r.kind==='pbq').every(r=>r.primaryConceptId===null));
 });
 test('private processing accepts metadata only and keeps uncompiled revisions blocked',()=>{
  const evidence=JSON.parse(readFileSync('docs/evidence/phase-2b5/private-p017-processing.json'));

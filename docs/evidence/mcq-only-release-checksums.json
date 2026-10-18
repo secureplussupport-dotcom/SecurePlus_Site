@@ -1,0 +1,473 @@
+{
+  "activationAllowed": false,
+  "adaptiveScope": {
+    "approvedForActivation": false,
+    "effectiveMcqs": 395,
+    "eligibleQuestionKinds": [
+      "mcq"
+    ],
+    "mappedMcqs": 5,
+    "pbqsExcluded": true,
+    "syntheticFixturesIncluded": false,
+    "unmappedMcqs": 390
+  },
+  "baselineCommit": "115bd2c0ac443ab3d5b5c574c0074506fbf75ee9",
+  "effectiveMappingPackageSha256": "6a76e1d028433ff5cc371fd7cf5a92325ce24f13b1862bb7f654dc2c8e4d08a3",
+  "files": {
+    "docs/evidence/phase-2b5/checksums.json": "55ad43dfa8aa0713b4de845be8d08f9832b27b798a9fccce77e3c1f068ae8293",
+    "docs/evidence/phase-2b5/mapping-package.json": "6a76e1d028433ff5cc371fd7cf5a92325ce24f13b1862bb7f654dc2c8e4d08a3",
+    "docs/evidence/phase-2b5/review-batch.md": "0564a5d0bd457b5ab4b2871ba4de99cd645cb9473d5e392f2f0154cd2c28ff5a",
+    "docs/evidence/phase-2b5/review-guide.md": "1dfd7c366bfe2ef1674797b907e334e823b6acd1b8d6d9f8785408241ff78cc6",
+    "docs/evidence/phase-2b5/review-queue.md": "816bb758622278d28b7e6bd97c21181a66731e56179586734e5486605abdbd82",
+    "docs/mcq-adaptive-release-candidate.md": "3fa6056b454f445075c8be64c80558009232ba4063b0360e7780c00a1cbd48c4",
+    "scripts/audit-content-mapping.mjs": "aae84e7bc5f30b7d5126f72e8a6a6b7817b968633b80d1e0bfc5c3120bfbdbd8",
+    "scripts/audit-learning-pilot.mjs": "4f8101ba13e9686f920b20c579d080a0fd9e95c77ad4767b7180b6cfc72846a1",
+    "scripts/audit-mcq-only-release.mjs": "b48aa377ad932cfe4552b79716f444b4bacafa358d745ee56d9b8c3bfcaed6b0",
+    "scripts/audit-trusted-learning-runtime.mjs": "d3dad94e915c1d9f54803ba808748b6d765c5d1bd22ead079c13f50a367187c0",
+    "scripts/build-content-mapping.mjs": "7cd277d8dcc22f8214f5177e50f0f591435f3116afd19a4b456002a802a027e7",
+    "scripts/fixtures/mcq-release-candidate.json": "080142db9fc7864664b08f0970641bea8a232804b0aac1a22632c3657571411b",
+    "scripts/lib/content-mapping/package.mjs": "2ccfe07c1e93b61a9570458ebc9703941e38767e959fdb2de9504dfca72b0e0a",
+    "scripts/lib/mcq-release-candidate.mjs": "b1c866ec6767925fb3090b7a12823e4b9e2e1df5a619dc925630f529e4d5e2be",
+    "scripts/lib/trusted-learning-fixture.mjs": "4150f412e50325797420a5376c746de3e5222962b9bfdaabb6a3d26192d98da4",
+    "scripts/run-mcq-release-candidate.mjs": "5c247e9bbb7c5258cd35140f939a80ce9099ced827f21651a5b9ba4a21ea0ef7",
+    "server/adaptive/learning-projector.mjs": "3cd088ed8e5b86ee7c1ab38a84828f0e672e88f423c38fde8423e31ae2f3b61d",
+    "server/adaptive/persistence.mjs": "7652708859c3dd9b71e09b24a6d0cc10cc11bd70a69bd96227dbf09b8adff957",
+    "server/adaptive/projection-worker.mjs": "11cd90f827eadd9bb085c969b6d1be10c904dc6f0bdbf7ff80c245458ddd938e",
+    "server/adaptive/runtime-bundle.mjs": "7727c3b8003f6704dde828fe04aec1867bfcad59ef46241c859e5ebe4adb11d6",
+    "server/adaptive/session-plans.mjs": "cec44f0c9b7c6f7f9d793535d55851ca027311673cc1fc35c0a6fea8f9aec75c",
+    "src/data/learningMappings.js": "ccfa1cd4aef15f333d16c387df7ba543b5ac997e6258d9c5c0d2dfe8df42bd5f",
+    "src/lib/learningEvidence.js": "e921ef68c5c83893d1ed760998dfa3d609e11ec6761613a291194575f54f218a"
+  },
+  "humanApproved": false,
+  "legacyContentHoldsRetained": 181,
+  "liveDatabaseTested": false,
+  "productionEnvironmentVerified": false,
+  "rehearsals": {
+    "real": {
+      "receipt": {
+        "activationAllowed": false,
+        "afterMissCount": 4,
+        "coverage": [
+          {
+            "conceptId": "recovery.rto",
+            "questionCount": 2,
+            "scenarioFamilies": 1,
+            "synthetic": 0
+          },
+          {
+            "conceptId": "recovery.rpo",
+            "questionCount": 1,
+            "scenarioFamilies": 1,
+            "synthetic": 0
+          },
+          {
+            "conceptId": "recovery.mtd",
+            "questionCount": 1,
+            "scenarioFamilies": 1,
+            "synthetic": 0
+          },
+          {
+            "conceptId": "recovery.mttr",
+            "questionCount": 0,
+            "scenarioFamilies": 0,
+            "synthetic": 0
+          },
+          {
+            "conceptId": "continuity.bia",
+            "questionCount": 1,
+            "scenarioFamilies": 1,
+            "synthetic": 0
+          }
+        ],
+        "deterministicPlanRevision": "sha256:060700e3afc003fbf64ab86cd235dcb405e8bea3819337069e97e412104f2626",
+        "effectiveBankMcqs": 395,
+        "humanApproved": false,
+        "initialCount": 5,
+        "mode": "SOURCE_BOUND_LOCAL_REHEARSAL",
+        "productionReady": false,
+        "relatedReview": [
+          {
+            "conceptId": "recovery.rpo",
+            "role": "supporting"
+          },
+          {
+            "conceptId": "recovery.rto",
+            "role": "direct"
+          },
+          {
+            "conceptId": "recovery.mtd",
+            "role": "supporting"
+          },
+          {
+            "conceptId": "recovery.mttr",
+            "role": "supporting"
+          },
+          {
+            "conceptId": "continuity.bia",
+            "role": "supporting"
+          },
+          {
+            "conceptId": "continuity.metrics",
+            "role": "supporting"
+          }
+        ],
+        "sourceBindings": [
+          {
+            "questionId": "m032",
+            "revisionId": "ae3aee37-3e4a-8312-bbe7-6923d73e1e87",
+            "source": "effective_local_mcq",
+            "sourceRevision": "sha256:072ce4c7b9f8e0f1f70dbea7320cebfb13d18d482093240eb98485850478e200"
+          },
+          {
+            "questionId": "m635",
+            "revisionId": "a66b0bf3-eb6a-88ec-b085-844f9b7bffb8",
+            "source": "effective_local_mcq",
+            "sourceRevision": "sha256:d2f6ffed09aa5b1fd7a933da2e5e531906923f96ef00c90b910b184b0cc25233"
+          },
+          {
+            "questionId": "m088",
+            "revisionId": "bf7e5265-0b34-8eb5-8f28-47f06e97e2b6",
+            "source": "effective_local_mcq",
+            "sourceRevision": "sha256:d828be6f37d110e5cf80620d9c7aa4b8129dbc28cbf1e221233f19baadf01158"
+          },
+          {
+            "questionId": "m196",
+            "revisionId": "444fa220-b0e7-8e54-992f-acf7d2821b56",
+            "source": "effective_local_mcq",
+            "sourceRevision": "sha256:064871a82f7228185d753db57a4ff070d965ea05ffbf8499a65dbad23303a600"
+          },
+          {
+            "questionId": "m086",
+            "revisionId": "1cee50a6-e0b3-8877-9433-8fd76492c82a",
+            "source": "effective_local_mcq",
+            "sourceRevision": "sha256:314994d739ecbe82485e02f29dda4c628773b1ff363b93913182892515e52872"
+          }
+        ],
+        "sourceBoundMcqs": 5,
+        "status": "LOCAL_MCQ_ALGORITHM_REHEARSAL",
+        "syntheticTestMcqs": 0,
+        "transferTask": "unavailable"
+      },
+      "sha256": "508f08b28905b1a67972d98a8aaff0780fa1beee739289ec80d2df97282467c0"
+    },
+    "synthetic": {
+      "receipt": {
+        "activationAllowed": false,
+        "afterMissCount": 10,
+        "coverage": [
+          {
+            "conceptId": "recovery.rto",
+            "questionCount": 7,
+            "scenarioFamilies": 6,
+            "synthetic": 5
+          },
+          {
+            "conceptId": "recovery.rpo",
+            "questionCount": 6,
+            "scenarioFamilies": 6,
+            "synthetic": 5
+          },
+          {
+            "conceptId": "recovery.mtd",
+            "questionCount": 6,
+            "scenarioFamilies": 6,
+            "synthetic": 5
+          },
+          {
+            "conceptId": "recovery.mttr",
+            "questionCount": 6,
+            "scenarioFamilies": 6,
+            "synthetic": 6
+          },
+          {
+            "conceptId": "continuity.bia",
+            "questionCount": 6,
+            "scenarioFamilies": 6,
+            "synthetic": 5
+          }
+        ],
+        "deterministicPlanRevision": "sha256:c5c6b2a72d462646456454efd9e9fcdbec52fbc2320a2b7c46c3589b77a1d630",
+        "effectiveBankMcqs": 395,
+        "humanApproved": false,
+        "initialCount": 10,
+        "mode": "SYNTHETIC_ALGORITHM_TEST",
+        "productionReady": false,
+        "relatedReview": [
+          {
+            "conceptId": "recovery.rpo",
+            "role": "supporting"
+          },
+          {
+            "conceptId": "recovery.rto",
+            "role": "direct"
+          },
+          {
+            "conceptId": "recovery.mtd",
+            "role": "supporting"
+          },
+          {
+            "conceptId": "recovery.mttr",
+            "role": "supporting"
+          },
+          {
+            "conceptId": "continuity.bia",
+            "role": "supporting"
+          },
+          {
+            "conceptId": "continuity.metrics",
+            "role": "supporting"
+          }
+        ],
+        "sourceBindings": [
+          {
+            "questionId": "m032",
+            "revisionId": "ae3aee37-3e4a-8312-bbe7-6923d73e1e87",
+            "source": "effective_local_mcq",
+            "sourceRevision": "sha256:072ce4c7b9f8e0f1f70dbea7320cebfb13d18d482093240eb98485850478e200"
+          },
+          {
+            "questionId": "m635",
+            "revisionId": "a66b0bf3-eb6a-88ec-b085-844f9b7bffb8",
+            "source": "effective_local_mcq",
+            "sourceRevision": "sha256:d2f6ffed09aa5b1fd7a933da2e5e531906923f96ef00c90b910b184b0cc25233"
+          },
+          {
+            "questionId": "m088",
+            "revisionId": "bf7e5265-0b34-8eb5-8f28-47f06e97e2b6",
+            "source": "effective_local_mcq",
+            "sourceRevision": "sha256:d828be6f37d110e5cf80620d9c7aa4b8129dbc28cbf1e221233f19baadf01158"
+          },
+          {
+            "questionId": "m196",
+            "revisionId": "444fa220-b0e7-8e54-992f-acf7d2821b56",
+            "source": "effective_local_mcq",
+            "sourceRevision": "sha256:064871a82f7228185d753db57a4ff070d965ea05ffbf8499a65dbad23303a600"
+          },
+          {
+            "questionId": "m086",
+            "revisionId": "1cee50a6-e0b3-8877-9433-8fd76492c82a",
+            "source": "effective_local_mcq",
+            "sourceRevision": "sha256:314994d739ecbe82485e02f29dda4c628773b1ff363b93913182892515e52872"
+          },
+          {
+            "questionId": "m980001",
+            "revisionId": "fb00a2f3-46a5-8992-a512-af1bd14659c9",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:56d9276a2719863048ab78a19fe48e8c67af27da907660909d77cab16a81019e"
+          },
+          {
+            "questionId": "m980002",
+            "revisionId": "729e8545-2dcf-8720-84fe-d5f039aba360",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:eb68ab3aa5c7382ca2a963d98f3536b296e53d0c30c792241492facc928b57d5"
+          },
+          {
+            "questionId": "m980003",
+            "revisionId": "56845a03-c322-8614-9c1e-2952211c05bb",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:95a694179148d898fef5484969e8e6c99787d1b8f547db7fe9b688ce71e5cca5"
+          },
+          {
+            "questionId": "m980004",
+            "revisionId": "234f2eff-a70d-850d-983b-06568b9aef92",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:04548df82fa143f3ccd16d9caed5f6f114c4db2f354e1cb5cb7961b882f8ee73"
+          },
+          {
+            "questionId": "m980005",
+            "revisionId": "2619f026-73d0-86de-8eb4-c8a337267934",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:b4655770ab52b1f1fa56174793924a6daabe1415f05621cafa5c0345ef8b31ce"
+          },
+          {
+            "questionId": "m980006",
+            "revisionId": "1f2aa2fa-bf78-839a-b16b-912c36ec2e2f",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:ecd1974df81d6407e477598bcb0a274f1222b24efa2fa583830ec0443d1651bc"
+          },
+          {
+            "questionId": "m980007",
+            "revisionId": "a31c9d04-58c9-8522-a099-172c44c4f199",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:f8400ed28c4a5173829ed756cf8be99f7a6d55791cdf4895b695f7ec739d3668"
+          },
+          {
+            "questionId": "m980008",
+            "revisionId": "357eba97-fb3d-86a2-a162-5a7f5ec925be",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:5bad0f9e826693adf2b11d629fbd27e6aa119cdf1f1c6c0680c2f21b00b27781"
+          },
+          {
+            "questionId": "m980009",
+            "revisionId": "6f5b46ab-f4df-8642-9dcb-0da15d468932",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:9f82deba1a39beee256fa24900214870d4cd9710a4bc0fa4efc27066b446cabd"
+          },
+          {
+            "questionId": "m980010",
+            "revisionId": "af9982f9-e51b-8325-85a3-9dae7696b142",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:d3b0391d57272e359e25639b26940f54ccba422e7d125aa1dad94bc16a219ef6"
+          },
+          {
+            "questionId": "m980011",
+            "revisionId": "b9e2b261-864a-8600-81dc-3cf8dbefc0c6",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:7acf024293dcb337c3349ec409fed45b8004c29f9ca6466be6506e26cd1c8e33"
+          },
+          {
+            "questionId": "m980012",
+            "revisionId": "065b171b-4f3c-8dd0-9616-4bf27331e65a",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:e2f30d035d1bdcfdc3c259725d2a8f59798908e47cae7d2dcbad2e743601175b"
+          },
+          {
+            "questionId": "m980013",
+            "revisionId": "14751967-d79c-8321-b293-a91f7ee5ea2e",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:879981837b23a3a5c6a6440bdea6afa57fb5c0ab0e9fe120cd0200b0d4ac7c02"
+          },
+          {
+            "questionId": "m980014",
+            "revisionId": "741dd174-5c4c-84fa-92e0-d2b6e9924292",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:08669aa74e9b5c34c880fe6d4dc507ac2214241e1f985981247230394abe39fe"
+          },
+          {
+            "questionId": "m980015",
+            "revisionId": "f91c06ff-2629-84fe-9186-50e11c2b483f",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:54a1d94911a952a8619d5f391d018ea65ceb13b14bd84500e0d83a1c308611b1"
+          },
+          {
+            "questionId": "m980016",
+            "revisionId": "2fd0601c-890b-8567-b4a5-3115077cd061",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:2b0355bf3e058026221339b52d4e851d0f78a0c72a7ad815043b64438d23e503"
+          },
+          {
+            "questionId": "m980017",
+            "revisionId": "0fdab99c-4481-8830-a659-4fa2aae25b07",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:49a9219155b69790dbfe6471b0daf6898490a728531cd83e6ffbb40a87b7076b"
+          },
+          {
+            "questionId": "m980018",
+            "revisionId": "e102983c-91e6-88b2-ae3b-158db907522b",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:36ea6a72264666c3aa9264cd49444a33b6920b9d0a613804ecef3ff24be8720c"
+          },
+          {
+            "questionId": "m980019",
+            "revisionId": "2513f7f1-b78c-8de3-b0b8-545ba4d58280",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:74cb0c9a2b427faced85979f4334afe283b4095c170a71e10c508ae1256c9dc2"
+          },
+          {
+            "questionId": "m980020",
+            "revisionId": "63009786-25a8-8c2a-a7bd-a46569763b2b",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:4687b0e7d0d4bec596d4c858514b9c8bcad04ee9171954a98929894d97fe8f03"
+          },
+          {
+            "questionId": "m980021",
+            "revisionId": "f0eae230-3789-8a20-90ae-d72579ed89be",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:245c7f14a7a4368cc1b7aa0133b4a85b3d30c0cb8786e93e407264c791b712f8"
+          },
+          {
+            "questionId": "m980022",
+            "revisionId": "efdf6d21-1a6c-8c3e-b8d1-a5f571f93a45",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:20331e01ff774b19168ecad5a45e52d403c12e59ecde0721839654fe3db5d2dd"
+          },
+          {
+            "questionId": "m980023",
+            "revisionId": "9e6f5a26-9b0f-807b-8b02-b7204e15fdd9",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:d9a0a50174a06df6309d03a3ac2492895159fd1bb187b1d865897299e793a36a"
+          },
+          {
+            "questionId": "m980024",
+            "revisionId": "0f875efc-72aa-880c-83c9-561330e06ccb",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:9f686eb3ca10e29664101065506e1506e2cea295063324aa5136933421ffeb0d"
+          },
+          {
+            "questionId": "m980025",
+            "revisionId": "7a17ef4f-4c20-813e-9f1e-715ccfa859f8",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:79870c57f9866fa6b2c6cec5fb88da531a2776f215d46610907cfcc5b79a48ff"
+          },
+          {
+            "questionId": "m980026",
+            "revisionId": "93ad9a87-3721-8197-830c-6afb08d98451",
+            "source": "synthetic_test_only",
+            "sourceRevision": "sha256:c2dd240d95fa3ffda3087f79b23194c0e79689501e2130af98074e48b53e2301"
+          }
+        ],
+        "sourceBoundMcqs": 5,
+        "status": "LOCAL_MCQ_ALGORITHM_REHEARSAL",
+        "syntheticTestMcqs": 26,
+        "transferTask": "eligible"
+      },
+      "sha256": "9d626b1874942256ba16b3633c5a0fdd0ce37cd0a88de39626541d574c6dddca"
+    }
+  },
+  "schemaVersion": 1,
+  "status": "LOCAL_MCQ_ALGORITHM_RC_PRODUCTION_NO_GO",
+  "supersededHistoricalProtectedPins": [
+    {
+      "currentSha256": "55ad43dfa8aa0713b4de845be8d08f9832b27b798a9fccce77e3c1f068ae8293",
+      "historicalSha256": "517a75ae00d4141cb2df090ea57e8f85b14d44aa3b941d1471c13604729ee538",
+      "path": "docs/evidence/phase-2b5/checksums.json"
+    },
+    {
+      "currentSha256": "6a76e1d028433ff5cc371fd7cf5a92325ce24f13b1862bb7f654dc2c8e4d08a3",
+      "historicalSha256": "056c891376cbeaf273e8f8b5c740699ac645c85476b852d8bd8ee0c3c659de97",
+      "path": "docs/evidence/phase-2b5/mapping-package.json"
+    },
+    {
+      "currentSha256": "0564a5d0bd457b5ab4b2871ba4de99cd645cb9473d5e392f2f0154cd2c28ff5a",
+      "historicalSha256": "1a039e6f4778a585128b0d4167536c46a53d13130476b6144ffa946f2f464713",
+      "path": "docs/evidence/phase-2b5/review-batch.md"
+    },
+    {
+      "currentSha256": "1dfd7c366bfe2ef1674797b907e334e823b6acd1b8d6d9f8785408241ff78cc6",
+      "historicalSha256": "a9cc1fff35873d84d90bec1c5c6f4613fdb46defae5a8b2a87b4b7c554ffd33b",
+      "path": "docs/evidence/phase-2b5/review-guide.md"
+    },
+    {
+      "currentSha256": "816bb758622278d28b7e6bd97c21181a66731e56179586734e5486605abdbd82",
+      "historicalSha256": "0d94f801c19e5e2102a0555a7cdda7c6f03f7d61ed1c44b64d913c69bdd53fac",
+      "path": "docs/evidence/phase-2b5/review-queue.md"
+    },
+    {
+      "currentSha256": "aae84e7bc5f30b7d5126f72e8a6a6b7817b968633b80d1e0bfc5c3120bfbdbd8",
+      "historicalSha256": "424db61ffc44ae9e68b185bce4e4957751fc710e08f8d40390a8424ca3b5f613",
+      "path": "scripts/audit-content-mapping.mjs"
+    },
+    {
+      "currentSha256": "7cd277d8dcc22f8214f5177e50f0f591435f3116afd19a4b456002a802a027e7",
+      "historicalSha256": "f69d83710adbeb6d989274b8f852d246246c5b773850e00e1e7e9e4f5ef2b37b",
+      "path": "scripts/build-content-mapping.mjs"
+    },
+    {
+      "currentSha256": "2ccfe07c1e93b61a9570458ebc9703941e38767e959fdb2de9504dfca72b0e0a",
+      "historicalSha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748",
+      "path": "scripts/lib/content-mapping/package.mjs"
+    }
+  ],
+  "tests": {
+    "boundary": 15,
+    "buildPassed": true,
+    "mapping-tests": 29,
+    "operations": 14,
+    "persistenceScenarios": 20,
+    "pilotReplayPassed": true,
+    "release-tests": 25,
+    "runtime": 40
+  },
+  "unchangedHistoricalProtectedPins": 17,
+  "unrelatedDirtyEntriesPreserved": 8
+}

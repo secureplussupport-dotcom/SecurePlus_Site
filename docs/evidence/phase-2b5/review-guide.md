@@ -2,7 +2,7 @@
 
 NOT READY. This is a proposal package, not completed semantic mapping or permission to activate adaptive learning.
 
-The census contains 395 effective local MCQs, 88 local PBQs, and 2 later private PBQ variants, plus 9 separately authored signup starter questions and 14 independently authored guest teaching records. Only 7 question mappings carry an existing reviewed pilot primary concept; 489 question revisions need semantic mapping. Candidate term matching has **zero mastery weight** and is not coverage.
+The census contains 395 effective local MCQs, 88 local PBQs, and 2 later private PBQ variants, plus 9 separately authored signup starter questions and 14 independently authored guest teaching records. Only 5 question mappings carry an existing reviewed pilot primary concept; 491 question revisions need semantic mapping. Candidate term matching has **zero mastery weight** and is not coverage.
 
 ## Recorded source choices
 
@@ -83,6 +83,10 @@ Inherited deck/lesson objective tags are broad candidates; counts below are not 
 ## Schema boundaries
 
 The trusted question compiler supplies UUID revision IDs only when the actual grammar is supported. Source SHA-256 and trusted semantic SHA-256 are different namespaces. Unsupported private/PBQ/content records have null trusted IDs; no UUID is invented. New terms are proposed supporting nodes and objective nodes are topics. Promotion to mastery concepts needs editorial decisions and independently assessed evidence. Roles/weights on instructional rows are review metadata, not new database columns. Explanations, pages, guides, deck containers and selectors have no approved persistence content-kind adapter. They remain catalogue-only.
+
+## MCQ-only adaptive scope
+
+The adaptive algorithm uses MCQs only: 395 effective MCQs, five source-bound mapping proposals and 390 MCQs without a primary mapping. PBQs remain in the general content census but are excluded from adaptive coverage, mastery and scheduling requirements. Synthetic algorithm-test fixtures are not published content or coverage. The aggregate unresolvedQuestionMappings count includes nonadaptive content; use adaptiveScope for algorithm readiness.
 
 ## Privacy and runtime
 

@@ -12,7 +12,7 @@ import { CONCEPT_DEEP_DIVES } from '../src/data/conceptDeepDives.js';
 import { SY0701_OBJECTIVES } from '../src/data/sy0701DeepDiveMap.js';
 
 const { mcqs, pbqs } = readLearningPilotBank();
-const active = new Map([...mcqs, ...pbqs].map(q => [q.id, q]));
+const active = new Map(mcqs.map(q => [q.id, q]));
 const conceptIds = new Set(LEARNING_CONCEPTS.map(c => c.id));
 const graphIds = new Set([...conceptIds, ...SUPPORT_NODES.map(n => n.id)]);
 assert.equal(conceptIds.size, 5);
@@ -152,9 +152,8 @@ assertReplay('sets advanced without time', [miss], { ...early, recall: 'waiting'
 assertReplay('continued misses become sticky', [miss, answer('repeat-miss', 'm032', false, hour, 1), answer('third-miss', 'm032', false, 2 * hour, 2)], { state: 'sticky', level: 'limited', contradictions: ['miss', 'repeat-miss', 'third-miss'], reason: 'continued_misses_across_sets' });
 const noGraph = calculateConceptMastery([miss], standard);
 assert.deepEqual(noGraph, scheduleConceptReview([miss], { ...standard, relationships: [] }).model);
-for (const q of ['p211', 'p048']) for (const correct of [true, false]) {
-  const coarse = calculateConceptMastery([answer(`coarse-${q}`, q, correct, 0, 0)], standard);
-  assert(Object.values(coarse.concepts).every(c => c.state === 'not_enough_evidence' && c.effectiveSampleSize === 0));
+for (const questionId of ['p211', 'p048']) for (const correct of [true, false]) {
+  assert.throws(() => calculateConceptMastery([{ eventId: `excluded-${questionId}`, kind: 'answer', questionId, questionRevision: 'excluded-pbq', correct, occurredAt: base, setIndex: 0 }], standard), /Unknown revision/);
 }
 assert.throws(() => calculateConceptMastery([miss, { ...miss, correct: true }], standard), /Conflicting duplicate/);
 assert.throws(() => calculateConceptMastery([{ ...miss, questionRevision: 'unknown' }], standard), /Unknown revision/);

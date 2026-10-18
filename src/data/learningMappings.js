@@ -14,15 +14,7 @@ export const QUESTION_MAPPINGS = freeze([
   mapping('m088', 'd828be6f37d110e5cf80620d9c7aa4b8129dbc28cbf1e221233f19baadf01158', 'recovery.rpo', 'medium', 'versioned-backup-interval', 'scenario_application'),
   mapping('m196', '064871a82f7228185d753db57a4ff070d965ea05ffbf8499a65dbad23303a600', 'recovery.mtd', 'medium', 'outer-business-interruption-limit', 'distinction'),
   mapping('m086', '314994d739ecbe82485e02f29dda4c628773b1ff363b93913182892515e52872', 'continuity.bia', 'medium', 'critical-function-impact-document', 'identification'),
-  mapping('p211', 'bf0a42cc62da920122329a6253d9aaff8fd5f9a35038153d581650e132be81c3', 'recovery.rto', 'medium', 'combined-recovery-and-retention-design', 'scenario_application', {
-    secondaryConceptIds: ['recovery.rpo'], objectiveCodes: ['3.4'], domainId: 'sy0701.domain-3', chapterId: 'sy0701.objective-3.4',
-    format: 'pbq', evidencePrecision: 'coarse',
-    limitation: 'One whole-choice result mixes service recovery, data recovery and WORM retention. Retain context but emit no per-concept mastery evidence, including on a correct answer.',
-  }),
-  mapping('p048', '1bdd92c36eb76a8913a88d952c56e1c89da0194911d986cbda588de3efa29d5e', 'recovery.rto', 'medium', 'supplied-recovery-priority-ordering', 'sequence', {
-    format: 'pbq', evidencePrecision: 'coarse',
-    limitation: 'Orders supplied BIA recovery targets; does not independently diagnose metric understanding. Current attempt records lack item-level results. No per-concept mastery evidence.',
-  }),
+
 ]);
 
 const content = (contentId, kind, conceptIds, extra = {}) => ({

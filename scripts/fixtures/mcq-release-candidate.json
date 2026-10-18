@@ -1,0 +1,685 @@
+{
+  "schemaVersion": 1,
+  "status": "SYNTHETIC_ALGORITHM_TEST_ONLY",
+  "published": false,
+  "humanApproved": false,
+  "sourceAuthority": "Existing continuity concept definitions plus fictional test premises; not editorial-reviewed product questions",
+  "rows": [
+    {
+      "conceptId": "recovery.rto",
+      "scenarioFamily": "restore-clock-deadline",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980001",
+        "q": "A dispatch service fails at 09:20. Its agreed restoration target is 75 minutes. What time is the target deadline for acceptable service?",
+        "opts": [
+          "10:35",
+          "09:35",
+          "10:20",
+          "11:20"
+        ],
+        "correct": 0,
+        "exp": "The restoration deadline is 75 minutes after 09:20: 10:35. This is a service-restoration target, not a data-loss window.",
+        "wrongFeedback": {
+          "1": "This choice does not match the stated target or observation. The restoration deadline is 75 minutes after 09:20: 10:35. This is a service-restoration target, not a data-loss window.",
+          "2": "This choice does not match the stated target or observation. The restoration deadline is 75 minutes after 09:20: 10:35. This is a service-restoration target, not a data-loss window.",
+          "3": "This choice does not match the stated target or observation. The restoration deadline is 75 minutes after 09:20: 10:35. This is a service-restoration target, not a data-loss window."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.rto",
+      "scenarioFamily": "restore-target-test-result",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980002",
+        "q": "A recovery exercise restores acceptable service in 55 minutes. The service restoration target is 40 minutes. Which assessment follows?",
+        "opts": [
+          "The target was met because service returned",
+          "The exercise missed the restoration target by 15 minutes",
+          "The recovery point objective must be 15 minutes",
+          "The maximum tolerable downtime is necessarily 55 minutes"
+        ],
+        "correct": 1,
+        "exp": "Compare observed restoration time with its target: 55 exceeds 40 by 15. Neither data-loss tolerance nor the business interruption limit is supplied.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. Compare observed restoration time with its target: 55 exceeds 40 by 15. Neither data-loss tolerance nor the business interruption limit is supplied.",
+          "2": "This choice does not match the stated target or observation. Compare observed restoration time with its target: 55 exceeds 40 by 15. Neither data-loss tolerance nor the business interruption limit is supplied.",
+          "3": "This choice does not match the stated target or observation. Compare observed restoration time with its target: 55 exceeds 40 by 15. Neither data-loss tolerance nor the business interruption limit is supplied."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.rto",
+      "scenarioFamily": "restore-design-choice",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980003",
+        "q": "A service must be restored within 30 minutes. Tested recovery designs take 20, 45, 70 or 90 minutes under the stated conditions. Which design meets that time target?",
+        "opts": [
+          "The 45-minute design",
+          "The 70-minute design",
+          "The tested 20-minute design",
+          "The 90-minute design"
+        ],
+        "correct": 2,
+        "exp": "Only 20 minutes is within the supplied 30-minute restoration target; this does not prove future performance outside the tested conditions.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. Only 20 minutes is within the supplied 30-minute restoration target; this does not prove future performance outside the tested conditions.",
+          "1": "This choice does not match the stated target or observation. Only 20 minutes is within the supplied 30-minute restoration target; this does not prove future performance outside the tested conditions.",
+          "3": "This choice does not match the stated target or observation. Only 20 minutes is within the supplied 30-minute restoration target; this does not prove future performance outside the tested conditions."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.rto",
+      "scenarioFamily": "restore-acceptable-service-measure",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980004",
+        "q": "The agreed recovery target ends when customers can submit orders successfully. Servers boot after 10 minutes, but order submission works after 35 minutes. Which observation measures restoration against that target?",
+        "opts": [
+          "The 10-minute server boot",
+          "The timestamp of the last backup",
+          "The average disk replacement time",
+          "The 35-minute return of successful order submission"
+        ],
+        "correct": 3,
+        "exp": "Measure the agreed acceptable service, not merely a component boot. The stated restoration observation is 35 minutes.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. Measure the agreed acceptable service, not merely a component boot. The stated restoration observation is 35 minutes.",
+          "1": "This choice does not match the stated target or observation. Measure the agreed acceptable service, not merely a component boot. The stated restoration observation is 35 minutes.",
+          "2": "This choice does not match the stated target or observation. Measure the agreed acceptable service, not merely a component boot. The stated restoration observation is 35 minutes."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.rto",
+      "scenarioFamily": "restore-target-business-limit",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980005",
+        "q": "A business can tolerate at most six hours of interruption. Its service restoration target is two hours. Which value should the recovery team use as its planned restoration objective?",
+        "opts": [
+          "Two hours",
+          "Six hours",
+          "The average repair time from last month",
+          "The age of the last backup"
+        ],
+        "correct": 0,
+        "exp": "The two-hour target is the restoration objective. The six-hour outer business limit is a different constraint, not permission to miss the target.",
+        "wrongFeedback": {
+          "1": "This choice does not match the stated target or observation. The two-hour target is the restoration objective. The six-hour outer business limit is a different constraint, not permission to miss the target.",
+          "2": "This choice does not match the stated target or observation. The two-hour target is the restoration objective. The six-hour outer business limit is a different constraint, not permission to miss the target.",
+          "3": "This choice does not match the stated target or observation. The two-hour target is the restoration objective. The six-hour outer business limit is a different constraint, not permission to miss the target."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.rpo",
+      "scenarioFamily": "data-window-latest-recoverable",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980006",
+        "q": "A failure occurs at 14:00. The latest recoverable committed data is from 13:40. The allowed data-loss window is 30 minutes. What does this establish?",
+        "opts": [
+          "Service was restored within 20 minutes",
+          "The 20-minute data-loss window is within the stated tolerance",
+          "The business can tolerate only 20 minutes of downtime",
+          "No data can have been lost"
+        ],
+        "correct": 1,
+        "exp": "The recovered point is 20 minutes before failure, within the 30-minute data-loss tolerance. This says nothing about restoration duration.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. The recovered point is 20 minutes before failure, within the 30-minute data-loss tolerance. This says nothing about restoration duration.",
+          "2": "This choice does not match the stated target or observation. The recovered point is 20 minutes before failure, within the 30-minute data-loss tolerance. This says nothing about restoration duration.",
+          "3": "This choice does not match the stated target or observation. The recovered point is 20 minutes before failure, within the 30-minute data-loss tolerance. This says nothing about restoration duration."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.rpo",
+      "scenarioFamily": "data-window-design-interval",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980007",
+        "q": "An application permits at most ten minutes of lost committed updates. Assume each supplied design reliably preserves all updates up to its stated interval. Which interval meets that tolerance?",
+        "opts": [
+          "A fifteen-minute recoverable interval",
+          "A thirty-minute recoverable interval",
+          "A five-minute recoverable interval",
+          "A sixty-minute recoverable interval"
+        ],
+        "correct": 2,
+        "exp": "Under the explicit reliability assumption, five minutes is within ten; larger recoverable intervals can exceed the tolerated loss window.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. Under the explicit reliability assumption, five minutes is within ten; larger recoverable intervals can exceed the tolerated loss window.",
+          "1": "This choice does not match the stated target or observation. Under the explicit reliability assumption, five minutes is within ten; larger recoverable intervals can exceed the tolerated loss window.",
+          "3": "This choice does not match the stated target or observation. Under the explicit reliability assumption, five minutes is within ten; larger recoverable intervals can exceed the tolerated loss window."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.rpo",
+      "scenarioFamily": "data-window-target-breach",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980008",
+        "q": "A system may lose at most 15 minutes of committed data. A recovery test can recover only to 25 minutes before the failure. What failed?",
+        "opts": [
+          "A 15-minute restoration deadline was necessarily exceeded",
+          "The system necessarily exceeded its maximum downtime",
+          "The mean repair time is ten minutes",
+          "The tolerated recovery-point window was exceeded by ten minutes"
+        ],
+        "correct": 3,
+        "exp": "The test loses a 25-minute window where only 15 was permitted. Restoration time and average repair time were not supplied.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. The test loses a 25-minute window where only 15 was permitted. Restoration time and average repair time were not supplied.",
+          "1": "This choice does not match the stated target or observation. The test loses a 25-minute window where only 15 was permitted. Restoration time and average repair time were not supplied.",
+          "2": "This choice does not match the stated target or observation. The test loses a 25-minute window where only 15 was permitted. Restoration time and average repair time were not supplied."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.rpo",
+      "scenarioFamily": "data-window-independence-from-downtime",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980009",
+        "q": "Two systems both restore service in one hour. System A recovers data to one minute before failure; B recovers to 40 minutes before failure. Which has the smaller observed data-loss window?",
+        "opts": [
+          "System A",
+          "System B",
+          "Both, because restoration took one hour",
+          "Neither, because data loss is measured in server count"
+        ],
+        "correct": 0,
+        "exp": "Recovery-point loss concerns how far back recovered data lies. One minute is smaller than 40 even with equal restoration duration.",
+        "wrongFeedback": {
+          "1": "This choice does not match the stated target or observation. Recovery-point loss concerns how far back recovered data lies. One minute is smaller than 40 even with equal restoration duration.",
+          "2": "This choice does not match the stated target or observation. Recovery-point loss concerns how far back recovered data lies. One minute is smaller than 40 even with equal restoration duration.",
+          "3": "This choice does not match the stated target or observation. Recovery-point loss concerns how far back recovered data lies. One minute is smaller than 40 even with equal restoration duration."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.rpo",
+      "scenarioFamily": "data-window-approved-change",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980010",
+        "q": "A business reduces acceptable lost-update history from one hour to five minutes. Which requirement has tightened?",
+        "opts": [
+          "The mean time to repair",
+          "The recovery point objective",
+          "The outer interruption limit necessarily became five minutes",
+          "The time to restore the application necessarily became five minutes"
+        ],
+        "correct": 1,
+        "exp": "The changed requirement is the acceptable data-loss window, which is distinct from service restoration time.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. The changed requirement is the acceptable data-loss window, which is distinct from service restoration time.",
+          "2": "This choice does not match the stated target or observation. The changed requirement is the acceptable data-loss window, which is distinct from service restoration time.",
+          "3": "This choice does not match the stated target or observation. The changed requirement is the acceptable data-loss window, which is distinct from service restoration time."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.mtd",
+      "scenarioFamily": "business-limit-exercise-impact",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980011",
+        "q": "The business declares interruption becomes unacceptable after eight hours. A test leaves the function unavailable for nine hours. Which boundary was crossed?",
+        "opts": [
+          "Only the last-backup age",
+          "Only the average component repair time",
+          "The maximum tolerable downtime",
+          "A newly supplied recovery point objective"
+        ],
+        "correct": 2,
+        "exp": "Nine hours exceeds the stated outer business interruption limit of eight hours.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. Nine hours exceeds the stated outer business interruption limit of eight hours.",
+          "1": "This choice does not match the stated target or observation. Nine hours exceeds the stated outer business interruption limit of eight hours.",
+          "3": "This choice does not match the stated target or observation. Nine hours exceeds the stated outer business interruption limit of eight hours."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.mtd",
+      "scenarioFamily": "business-limit-vs-objective",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980012",
+        "q": "A proposed service restoration target is seven hours, but the business declares harm unacceptable after five hours. What planning conflict exists?",
+        "opts": [
+          "The recovery point objective must be seven hours",
+          "The mean repair time must be five hours",
+          "There is no conflict if seven is a target",
+          "The restoration target is later than the tolerable interruption limit"
+        ],
+        "correct": 3,
+        "exp": "A planned return after seven hours falls beyond the five-hour outer business limit; the plan needs reconciliation rather than treating the limit as optional.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. A planned return after seven hours falls beyond the five-hour outer business limit; the plan needs reconciliation rather than treating the limit as optional.",
+          "1": "This choice does not match the stated target or observation. A planned return after seven hours falls beyond the five-hour outer business limit; the plan needs reconciliation rather than treating the limit as optional.",
+          "2": "This choice does not match the stated target or observation. A planned return after seven hours falls beyond the five-hour outer business limit; the plan needs reconciliation rather than treating the limit as optional."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.mtd",
+      "scenarioFamily": "business-limit-owner-input",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980013",
+        "q": "Who should supply the acceptable interruption limit for a business function during recovery planning?",
+        "opts": [
+          "The accountable business stakeholders evaluating disruption impacts",
+          "A technician using average repair times alone",
+          "A backup tool using the latest snapshot timestamp",
+          "A firewall using its packet count"
+        ],
+        "correct": 0,
+        "exp": "Business impact and tolerance determine the outer interruption limit. Technical repair measurements and backup timestamps answer different questions.",
+        "wrongFeedback": {
+          "1": "This choice does not match the stated target or observation. Business impact and tolerance determine the outer interruption limit. Technical repair measurements and backup timestamps answer different questions.",
+          "2": "This choice does not match the stated target or observation. Business impact and tolerance determine the outer interruption limit. Technical repair measurements and backup timestamps answer different questions.",
+          "3": "This choice does not match the stated target or observation. Business impact and tolerance determine the outer interruption limit. Technical repair measurements and backup timestamps answer different questions."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.mtd",
+      "scenarioFamily": "business-limit-not-observed-duration",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980014",
+        "q": "A function has a ten-hour maximum tolerable interruption. Last week a repair took three hours. Which statement remains supported?",
+        "opts": [
+          "The maximum tolerable downtime automatically becomes three hours",
+          "Ten hours remains the declared outer limit; one repair observation does not redefine it",
+          "The recovery point objective is three hours",
+          "All future repairs will finish in three hours"
+        ],
+        "correct": 1,
+        "exp": "A declared business tolerance is not an observed repair duration, and one observation is not a future guarantee.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. A declared business tolerance is not an observed repair duration, and one observation is not a future guarantee.",
+          "2": "This choice does not match the stated target or observation. A declared business tolerance is not an observed repair duration, and one observation is not a future guarantee.",
+          "3": "This choice does not match the stated target or observation. A declared business tolerance is not an observed repair duration, and one observation is not a future guarantee."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.mtd",
+      "scenarioFamily": "business-limit-priority-compare",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980015",
+        "q": "Under the supplied impact assessments, Function A becomes unacceptable after two hours and Function B after twelve. With other constraints equal, which has the tighter interruption limit?",
+        "opts": [
+          "Function B",
+          "Both because they share a building",
+          "Function A",
+          "Neither because backup age is unknown"
+        ],
+        "correct": 2,
+        "exp": "The two-hour outer business interruption limit is tighter than twelve hours; the comparison is explicitly limited to supplied impact constraints.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. The two-hour outer business interruption limit is tighter than twelve hours; the comparison is explicitly limited to supplied impact constraints.",
+          "1": "This choice does not match the stated target or observation. The two-hour outer business interruption limit is tighter than twelve hours; the comparison is explicitly limited to supplied impact constraints.",
+          "3": "This choice does not match the stated target or observation. The two-hour outer business interruption limit is tighter than twelve hours; the comparison is explicitly limited to supplied impact constraints."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.mttr",
+      "scenarioFamily": "repair-average-duration",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980016",
+        "q": "Three completed repairs took 20, 40 and 60 minutes. What is the arithmetic mean repair time for these incidents?",
+        "opts": [
+          "20 minutes",
+          "60 minutes",
+          "120 minutes",
+          "40 minutes"
+        ],
+        "correct": 3,
+        "exp": "The total is 120 minutes across three repairs, so the mean is 40 minutes.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. The total is 120 minutes across three repairs, so the mean is 40 minutes.",
+          "1": "This choice does not match the stated target or observation. The total is 120 minutes across three repairs, so the mean is 40 minutes.",
+          "2": "This choice does not match the stated target or observation. The total is 120 minutes across three repairs, so the mean is 40 minutes."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.mttr",
+      "scenarioFamily": "repair-weighted-aggregate",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980017",
+        "q": "One team records one repair taking 100 minutes; another records nine repairs taking 10 minutes each. What is the combined mean per repair?",
+        "opts": [
+          "19 minutes",
+          "55 minutes",
+          "10 minutes",
+          "100 minutes"
+        ],
+        "correct": 0,
+        "exp": "Total repair time is 190 minutes across ten repairs: 19. Averaging the two team averages without weighting their repair counts would be incorrect.",
+        "wrongFeedback": {
+          "1": "This choice does not match the stated target or observation. Total repair time is 190 minutes across ten repairs: 19. Averaging the two team averages without weighting their repair counts would be incorrect.",
+          "2": "This choice does not match the stated target or observation. Total repair time is 190 minutes across ten repairs: 19. Averaging the two team averages without weighting their repair counts would be incorrect.",
+          "3": "This choice does not match the stated target or observation. Total repair time is 190 minutes across ten repairs: 19. Averaging the two team averages without weighting their repair counts would be incorrect."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.mttr",
+      "scenarioFamily": "repair-mean-not-deadline",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980018",
+        "q": "A report says completed incidents averaged 45 minutes to repair. Which interpretation is justified?",
+        "opts": [
+          "Every repair completed within 45 minutes",
+          "The observed mean was 45 minutes; individual repairs may differ",
+          "The service restoration target is necessarily 45 minutes",
+          "The acceptable data-loss window is 45 minutes"
+        ],
+        "correct": 1,
+        "exp": "An observed mean summarizes the sample. It is neither a deadline guarantee nor a restoration or data-loss target.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. An observed mean summarizes the sample. It is neither a deadline guarantee nor a restoration or data-loss target.",
+          "2": "This choice does not match the stated target or observation. An observed mean summarizes the sample. It is neither a deadline guarantee nor a restoration or data-loss target.",
+          "3": "This choice does not match the stated target or observation. An observed mean summarizes the sample. It is neither a deadline guarantee nor a restoration or data-loss target."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.mttr",
+      "scenarioFamily": "repair-trend-same-population",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980019",
+        "q": "Using the same measurement boundaries and comparable incidents, mean repair duration falls from 80 to 50 minutes. What improved in this measurement?",
+        "opts": [
+          "Every future outage is guaranteed under 50 minutes",
+          "The recovery point objective automatically decreased",
+          "Average observed repair duration decreased by 30 minutes",
+          "The business interruption limit automatically decreased"
+        ],
+        "correct": 2,
+        "exp": "The supplied comparable measure improved by 30 minutes. No target or future guarantee follows from that observation alone.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. The supplied comparable measure improved by 30 minutes. No target or future guarantee follows from that observation alone.",
+          "1": "This choice does not match the stated target or observation. The supplied comparable measure improved by 30 minutes. No target or future guarantee follows from that observation alone.",
+          "3": "This choice does not match the stated target or observation. The supplied comparable measure improved by 30 minutes. No target or future guarantee follows from that observation alone."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.mttr",
+      "scenarioFamily": "repair-boundary-completed-sample",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980020",
+        "q": "A report divides 240 minutes of completed repair work by six repaired incidents. Which metric is being calculated?",
+        "opts": [
+          "A recovery point objective of 40 minutes",
+          "A maximum tolerable downtime of 240 minutes",
+          "A mandatory service restoration deadline of six minutes",
+          "Mean time to repair of 40 minutes"
+        ],
+        "correct": 3,
+        "exp": "Repair time divided by the number of completed repairs produces the observed mean: 240/6 = 40 minutes.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. Repair time divided by the number of completed repairs produces the observed mean: 240/6 = 40 minutes.",
+          "1": "This choice does not match the stated target or observation. Repair time divided by the number of completed repairs produces the observed mean: 240/6 = 40 minutes.",
+          "2": "This choice does not match the stated target or observation. Repair time divided by the number of completed repairs produces the observed mean: 240/6 = 40 minutes."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "recovery.mttr",
+      "scenarioFamily": "repair-mean-compared-to-target",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980021",
+        "q": "The restoration target is 30 minutes, while recent repairs averaged 50. What does the 50-minute value represent?",
+        "opts": [
+          "An observed average that warrants investigation against the target",
+          "The new automatically approved restoration target",
+          "The maximum acceptable lost-data window",
+          "Proof that every repair missed the target"
+        ],
+        "correct": 0,
+        "exp": "The mean describes observations; the target remains 30. A mean alone does not identify every individual outcome.",
+        "wrongFeedback": {
+          "1": "This choice does not match the stated target or observation. The mean describes observations; the target remains 30. A mean alone does not identify every individual outcome.",
+          "2": "This choice does not match the stated target or observation. The mean describes observations; the target remains 30. A mean alone does not identify every individual outcome.",
+          "3": "This choice does not match the stated target or observation. The mean describes observations; the target remains 30. A mean alone does not identify every individual outcome."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "continuity.bia",
+      "scenarioFamily": "impact-versus-threat-likelihood",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980022",
+        "q": "A team records which business functions stop, financial impacts by outage duration and critical dependencies. Which analysis are they performing?",
+        "opts": [
+          "Only password auditing",
+          "Business impact analysis",
+          "Only exploit likelihood scoring",
+          "Only packet inspection"
+        ],
+        "correct": 1,
+        "exp": "The work assesses business consequences and dependencies of disruption; it is not merely the probability of a threat.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. The work assesses business consequences and dependencies of disruption; it is not merely the probability of a threat.",
+          "2": "This choice does not match the stated target or observation. The work assesses business consequences and dependencies of disruption; it is not merely the probability of a threat.",
+          "3": "This choice does not match the stated target or observation. The work assesses business consequences and dependencies of disruption; it is not merely the probability of a threat."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "continuity.bia",
+      "scenarioFamily": "impact-prioritize-function",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980023",
+        "q": "A supplied impact study shows payroll disruption causes a mandatory-payment failure today, while an archive can wait a week. What supports recovery prioritization?",
+        "opts": [
+          "Only which server is newest",
+          "Only how many application icons exist",
+          "The documented business impact and timing of each disrupted function",
+          "Only which disk is easiest to replace"
+        ],
+        "correct": 2,
+        "exp": "Business disruption consequences and their timing inform recovery priority; technical convenience alone does not set it.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. Business disruption consequences and their timing inform recovery priority; technical convenience alone does not set it.",
+          "1": "This choice does not match the stated target or observation. Business disruption consequences and their timing inform recovery priority; technical convenience alone does not set it.",
+          "3": "This choice does not match the stated target or observation. Business disruption consequences and their timing inform recovery priority; technical convenience alone does not set it."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "continuity.bia",
+      "scenarioFamily": "impact-dependency-discovery",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980024",
+        "q": "A critical ordering process depends on an identity service and a payment gateway. Why record those dependencies in the impact analysis?",
+        "opts": [
+          "Dependencies prove no disruption is possible",
+          "Dependencies set every recovery-point target to zero",
+          "Dependencies eliminate the need for business-owner input",
+          "Recovery priorities must account for services needed to restore the business function"
+        ],
+        "correct": 3,
+        "exp": "Understanding critical-function dependencies supports coherent recovery planning without proving resilience or setting every target automatically.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. Understanding critical-function dependencies supports coherent recovery planning without proving resilience or setting every target automatically.",
+          "1": "This choice does not match the stated target or observation. Understanding critical-function dependencies supports coherent recovery planning without proving resilience or setting every target automatically.",
+          "2": "This choice does not match the stated target or observation. Understanding critical-function dependencies supports coherent recovery planning without proving resilience or setting every target automatically."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "continuity.bia",
+      "scenarioFamily": "impact-output-to-planning",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980025",
+        "q": "Which output is appropriate from a business impact analysis for recovery planners?",
+        "opts": [
+          "Critical functions, disruption impacts and recovery-priority inputs",
+          "A guarantee that every outage is prevented",
+          "A completed exploit against every host",
+          "A universal patch order based only on CVSS"
+        ],
+        "correct": 0,
+        "exp": "Impact analysis supplies business priorities and consequences; it does not itself prevent outages or replace vulnerability analysis.",
+        "wrongFeedback": {
+          "1": "This choice does not match the stated target or observation. Impact analysis supplies business priorities and consequences; it does not itself prevent outages or replace vulnerability analysis.",
+          "2": "This choice does not match the stated target or observation. Impact analysis supplies business priorities and consequences; it does not itself prevent outages or replace vulnerability analysis.",
+          "3": "This choice does not match the stated target or observation. Impact analysis supplies business priorities and consequences; it does not itself prevent outages or replace vulnerability analysis."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    },
+    {
+      "conceptId": "continuity.bia",
+      "scenarioFamily": "impact-reassessment-change",
+      "reviewStatus": "synthetic_test_only",
+      "question": {
+        "id": "m980026",
+        "q": "A formerly optional reporting service becomes necessary for a daily contractual settlement. What recovery-planning action follows?",
+        "opts": [
+          "Keep the old priority solely because its server is unchanged",
+          "Reassess its business impact, dependencies and recovery priorities",
+          "Treat its backup age as the only relevant impact measure",
+          "Assume the new requirement proves the service is resilient"
+        ],
+        "correct": 1,
+        "exp": "Changed business dependence can change interruption impacts and planning priorities even when technical infrastructure is unchanged.",
+        "wrongFeedback": {
+          "0": "This choice does not match the stated target or observation. Changed business dependence can change interruption impacts and planning priorities even when technical infrastructure is unchanged.",
+          "2": "This choice does not match the stated target or observation. Changed business dependence can change interruption impacts and planning priorities even when technical infrastructure is unchanged.",
+          "3": "This choice does not match the stated target or observation. Changed business dependence can change interruption impacts and planning priorities even when technical infrastructure is unchanged."
+        },
+        "ch": "5",
+        "topic": "Business continuity metrics",
+        "objective": "5.2",
+        "difficulty": "medium"
+      }
+    }
+  ]
+}

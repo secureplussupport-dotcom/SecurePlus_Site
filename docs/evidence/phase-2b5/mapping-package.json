@@ -1,6 +1,17 @@
 {
   "schemaVersion": 1,
   "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
+  "adaptiveScope": {
+    "eligibleQuestionKinds": [
+      "mcq"
+    ],
+    "effectiveMcqs": 395,
+    "mappedMcqs": 5,
+    "unmappedMcqs": 390,
+    "pbqsExcluded": true,
+    "syntheticFixturesIncluded": false,
+    "approvedForActivation": false
+  },
   "verdict": "NOT READY",
   "activationAllowed": false,
   "humanApproved": false,
@@ -143,11 +154,11 @@
     },
     {
       "path": "scripts/audit-content-mapping.mjs",
-      "sha256": "424db61ffc44ae9e68b185bce4e4957751fc710e08f8d40390a8424ca3b5f613"
+      "sha256": "aae84e7bc5f30b7d5126f72e8a6a6b7817b968633b80d1e0bfc5c3120bfbdbd8"
     },
     {
       "path": "scripts/build-content-mapping.mjs",
-      "sha256": "f69d83710adbeb6d989274b8f852d246246c5b773850e00e1e7e9e4f5ef2b37b"
+      "sha256": "7cd277d8dcc22f8214f5177e50f0f591435f3116afd19a4b456002a802a027e7"
     },
     {
       "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
@@ -163,7 +174,7 @@
     },
     {
       "path": "scripts/lib/content-mapping/package.mjs",
-      "sha256": "1029eb4ae67ff8ecaebb200fcaed986c65ecef37614265f2521941b035ece748"
+      "sha256": "2ccfe07c1e93b61a9570458ebc9703941e38767e959fdb2de9504dfca72b0e0a"
     },
     {
       "path": "scripts/lib/content-mapping/publication.mjs",
@@ -207,7 +218,7 @@
     },
     {
       "path": "src/data/learningMappings.js",
-      "sha256": "ff0ce6342b951dde794cc5ca3bb8d37122fa3037f6dad9fe942fe88961689c7d"
+      "sha256": "ccfa1cd4aef15f333d16c387df7ba543b5ac997e6258d9c5c0d2dfe8df42bd5f"
     },
     {
       "path": "src/data/sy0701AcronymFlashcards.js",
@@ -271,8 +282,8 @@
     "glossaryWithLocalReferences": 153,
     "deliveredSelectors": 26,
     "privatePbqVariants": 2,
-    "primaryQuestionProposals": 7,
-    "unresolvedQuestionMappings": 489,
+    "primaryQuestionProposals": 5,
+    "unresolvedQuestionMappings": 491,
     "concepts": 435,
     "exclusions": 1209,
     "reviewQueue": 2954
@@ -28957,7 +28968,6 @@
       "secondaryConceptIds": [],
       "candidateConceptIds": [
         "continuity.bia",
-        "recovery.rto",
         "sy0701.objective.5.2",
         "sy0701.term.bcp"
       ],
@@ -28970,11 +28980,6 @@
       "proposedConceptLinks": [
         {
           "conceptId": "continuity.bia",
-          "role": "unresolved_candidate",
-          "weight": 0
-        },
-        {
-          "conceptId": "recovery.rto",
           "role": "unresolved_candidate",
           "weight": 0
         },
@@ -30606,8 +30611,6 @@
       "primaryConceptId": null,
       "secondaryConceptIds": [],
       "candidateConceptIds": [
-        "recovery.rpo",
-        "recovery.rto",
         "sy0701.objective.3.4"
       ],
       "weight": 0,
@@ -30617,16 +30620,6 @@
       "parentId": "pbq:p211",
       "persistenceContentKind": null,
       "proposedConceptLinks": [
-        {
-          "conceptId": "recovery.rpo",
-          "role": "unresolved_candidate",
-          "weight": 0
-        },
-        {
-          "conceptId": "recovery.rto",
-          "role": "unresolved_candidate",
-          "weight": 0
-        },
         {
           "conceptId": "sy0701.objective.3.4",
           "role": "unresolved_candidate",
@@ -80675,7 +80668,7 @@
       "weight": 1,
       "scenarioFamily": "restoration-target-identification",
       "novelty": "existing_pilot_family_not_independently_approved",
-      "rationale": "Existing pilot editorial mapping matches its exact source revision. PBQs remain coarse with zero per-concept mastery weight.",
+      "rationale": "Existing MCQ-only pilot editorial mapping matches its exact source revision; it is not human approval.",
       "questionId": "m032",
       "localRevisionSignature": "sha256:072ce4c7b9f8e0f1f70dbea7320cebfb13d18d482093240eb98485850478e200",
       "questionFormat": "MCQ",
@@ -83224,7 +83217,7 @@
       "weight": 1,
       "scenarioFamily": "critical-function-impact-document",
       "novelty": "existing_pilot_family_not_independently_approved",
-      "rationale": "Existing pilot editorial mapping matches its exact source revision. PBQs remain coarse with zero per-concept mastery weight.",
+      "rationale": "Existing MCQ-only pilot editorial mapping matches its exact source revision; it is not human approval.",
       "questionId": "m086",
       "localRevisionSignature": "sha256:314994d739ecbe82485e02f29dda4c628773b1ff363b93913182892515e52872",
       "questionFormat": "MCQ",
@@ -83318,7 +83311,7 @@
       "weight": 1,
       "scenarioFamily": "versioned-backup-interval",
       "novelty": "existing_pilot_family_not_independently_approved",
-      "rationale": "Existing pilot editorial mapping matches its exact source revision. PBQs remain coarse with zero per-concept mastery weight.",
+      "rationale": "Existing MCQ-only pilot editorial mapping matches its exact source revision; it is not human approval.",
       "questionId": "m088",
       "localRevisionSignature": "sha256:d828be6f37d110e5cf80620d9c7aa4b8129dbc28cbf1e221233f19baadf01158",
       "questionFormat": "MCQ",
@@ -88090,7 +88083,7 @@
       "weight": 1,
       "scenarioFamily": "outer-business-interruption-limit",
       "novelty": "existing_pilot_family_not_independently_approved",
-      "rationale": "Existing pilot editorial mapping matches its exact source revision. PBQs remain coarse with zero per-concept mastery weight.",
+      "rationale": "Existing MCQ-only pilot editorial mapping matches its exact source revision; it is not human approval.",
       "questionId": "m196",
       "localRevisionSignature": "sha256:064871a82f7228185d753db57a4ff070d965ea05ffbf8499a65dbad23303a600",
       "questionFormat": "MCQ",
@@ -95456,7 +95449,7 @@
       "weight": 1,
       "scenarioFamily": "restoration-target-identification",
       "novelty": "existing_pilot_family_not_independently_approved",
-      "rationale": "Existing pilot editorial mapping matches its exact source revision. PBQs remain coarse with zero per-concept mastery weight.",
+      "rationale": "Existing MCQ-only pilot editorial mapping matches its exact source revision; it is not human approval.",
       "questionId": "m635",
       "localRevisionSignature": "sha256:d2f6ffed09aa5b1fd7a933da2e5e531906923f96ef00c90b910b184b0cc25233",
       "questionFormat": "MCQ",
@@ -100687,15 +100680,15 @@
         "5"
       ],
       "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
-      "reviewStatus": "agent_reviewed_pending_human",
+      "reviewStatus": "pending",
       "trustedRevisionId": "03eff309-9850-8e82-bda0-6b98cba703ae",
       "contentSha256": "03eff3099850be82fda06b98cba703ae09cb64239b6482be0b55b4b8cd1bc711",
-      "confidence": "medium",
+      "confidence": "low",
       "precision": "coarse",
       "primaryRole": "primary",
       "secondaryRole": "secondary",
       "weightPolicy": "proposal_only_no_runtime_effect",
-      "primaryConceptId": "recovery.rto",
+      "primaryConceptId": null,
       "secondaryConceptIds": [],
       "candidateConceptIds": [
         "continuity.bia",
@@ -100703,20 +100696,15 @@
         "sy0701.term.bcp"
       ],
       "weight": 0,
-      "scenarioFamily": "supplied-recovery-priority-ordering",
-      "novelty": "existing_pilot_family_not_independently_approved",
-      "rationale": "Existing pilot editorial mapping matches its exact source revision. PBQs remain coarse with zero per-concept mastery weight.",
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Objective metadata supplies support-only topic candidates; it does not identify the concept being tested. Literal terms from the stem or instructional text are candidates only; no answer choices or grading key selected these candidates.",
       "questionId": "p048",
       "localRevisionSignature": "sha256:1bdd92c36eb76a8913a88d952c56e1c89da0194911d986cbda588de3efa29d5e",
       "questionFormat": "ORDERING",
       "duplicateStemSignature": "sha256:c3bfd20b5e4077f0b53010dfca9b593e8258d120a15ae66459387f85c2283f05",
       "persistenceContentKind": null,
       "proposedConceptLinks": [
-        {
-          "conceptId": "recovery.rto",
-          "role": "primary",
-          "weight": 0
-        },
         {
           "conceptId": "continuity.bia",
           "role": "unresolved_candidate",
@@ -102459,41 +102447,29 @@
         "3"
       ],
       "mappingVersion": "sy0701-full-catalogue-editorial-draft-v1",
-      "reviewStatus": "agent_reviewed_pending_human",
+      "reviewStatus": "pending",
       "trustedRevisionId": "b6ef4a30-8fa1-8d38-ab20-eded240d827a",
       "contentSha256": "b6ef4a308fa18d38ab20eded240d827abd4a9e37b3abe75bfc29f09e3e6a4d7a",
-      "confidence": "medium",
+      "confidence": "low",
       "precision": "coarse",
       "primaryRole": "primary",
       "secondaryRole": "secondary",
       "weightPolicy": "proposal_only_no_runtime_effect",
-      "primaryConceptId": "recovery.rto",
-      "secondaryConceptIds": [
-        "recovery.rpo"
-      ],
+      "primaryConceptId": null,
+      "secondaryConceptIds": [],
       "candidateConceptIds": [
         "sy0701.objective.3.4"
       ],
       "weight": 0,
-      "scenarioFamily": "combined-recovery-and-retention-design",
-      "novelty": "existing_pilot_family_not_independently_approved",
-      "rationale": "Existing pilot editorial mapping matches its exact source revision. PBQs remain coarse with zero per-concept mastery weight.",
+      "scenarioFamily": null,
+      "novelty": "unreviewed",
+      "rationale": "Objective metadata supplies support-only topic candidates; it does not identify the concept being tested.",
       "questionId": "p211",
       "localRevisionSignature": "sha256:bf0a42cc62da920122329a6253d9aaff8fd5f9a35038153d581650e132be81c3",
       "questionFormat": "SCENARIO",
       "duplicateStemSignature": "sha256:7d60495ba2b98128af3f22b99199fe93a04e05a9ee2e62c66c21c46f6ff00869",
       "persistenceContentKind": null,
       "proposedConceptLinks": [
-        {
-          "conceptId": "recovery.rto",
-          "role": "primary",
-          "weight": 0
-        },
-        {
-          "conceptId": "recovery.rpo",
-          "role": "secondary",
-          "weight": 0
-        },
         {
           "conceptId": "sy0701.objective.3.4",
           "role": "unresolved_candidate",
@@ -125330,8 +125306,8 @@
       "starter_question": 9
     },
     "byConfidence": {
-      "low": 1557,
-      "medium": 321
+      "low": 1559,
+      "medium": 319
     },
     "byEvidenceScope": {
       "authenticated_metadata_only_semantics_unreviewed": 4,
@@ -125340,16 +125316,14 @@
       "local_source_reachable_default_guest_gate": 14
     },
     "byNovelty": {
-      "existing_pilot_family_not_independently_approved": 7,
-      "unreviewed": 1871
+      "existing_pilot_family_not_independently_approved": 5,
+      "unreviewed": 1873
     },
     "byFamily": {
-      "combined-recovery-and-retention-design": 1,
       "critical-function-impact-document": 1,
       "outer-business-interruption-limit": 1,
       "restoration-target-identification": 2,
-      "supplied-recovery-priority-ordering": 1,
-      "unassigned": 1871,
+      "unassigned": 1873,
       "versioned-backup-interval": 1
     },
     "byObjective": {
@@ -125530,14 +125504,14 @@
       "recovery.rto": {
         "directMcqs": 2,
         "supportRecords": 3,
-        "candidateRecords": 9,
+        "candidateRecords": 7,
         "reviewedFamilyCount": 1,
         "humanApprovedFamilyCount": 0
       },
       "recovery.rpo": {
         "directMcqs": 1,
         "supportRecords": 3,
-        "candidateRecords": 8,
+        "candidateRecords": 7,
         "reviewedFamilyCount": 1,
         "humanApprovedFamilyCount": 0
       },
@@ -133088,11 +133062,11 @@
       "status": "open"
     },
     {
-      "id": "pbq:p048:pilot_human_review",
+      "id": "pbq:p048:concept_and_family_review",
       "priority": "P1",
       "recordId": "pbq:p048",
-      "reason": "pilot_human_review",
-      "decision": "Confirm or reject the existing pilot mapping against this exact revision; agent review is not human approval.",
+      "reason": "concept_and_family_review",
+      "decision": "Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.",
       "status": "open"
     },
     {
@@ -133496,11 +133470,11 @@
       "status": "open"
     },
     {
-      "id": "pbq:p211:pilot_human_review",
+      "id": "pbq:p211:concept_and_family_review",
       "priority": "P1",
       "recordId": "pbq:p211",
-      "reason": "pilot_human_review",
-      "decision": "Confirm or reject the existing pilot mapping against this exact revision; agent review is not human approval.",
+      "reason": "concept_and_family_review",
+      "decision": "Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.",
       "status": "open"
     },
     {

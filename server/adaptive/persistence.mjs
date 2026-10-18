@@ -32,7 +32,7 @@ function normalizeSessionPlan(plan) {
   requireThat(SOURCES.has(plan.source) && MODES.has(plan.mode), 'Invalid session source or mode');
   requireThat(plan.seed == null || (typeof plan.seed === 'string' && plan.seed.length <= 200), 'Invalid session seed');
   integer(plan.requestedCount, 'requested count', revisionIds.length, 500);
-  integer(plan.requestedPbqCount, 'requested PBQ count', 0, plan.requestedCount);
+  requireThat(plan.requestedPbqCount === 0, 'Adaptive sessions must be MCQ-only');
   return {
     sessionId: uuid(plan.sessionId, 'session ID'), source: plan.source, mode: plan.mode, seed: plan.seed ?? null,
     requestedCount: plan.requestedCount, requestedPbqCount: plan.requestedPbqCount,
@@ -66,6 +66,7 @@ export async function startAdaptiveSession(sql, authenticatedOwnerId, input) {
     `;
     requireThat(revisions.length === plan.revisionIds.length, 'Unknown session revision');
     const byId = new Map(revisions.map(row => [row.revision_id, row]));
+    requireThat(revisions.every(r => r.question_type === 'mcq'), 'Adaptive sessions must be MCQ-only');
     const actualPbqCount = plan.revisionIds.filter(id => byId.get(id)?.question_type === 'pbq').length;
     requireThat(actualPbqCount <= plan.requestedPbqCount, 'Actual PBQ count exceeds requested count');
     const [session] = await tx`
@@ -177,6 +178,7 @@ export async function ingestAdaptiveAnswer(sql, authenticatedOwnerId, input) {
       from public.adaptive_answer_components where revision_id=${answer.revisionId}
       order by component_id
     `;
+    requireThat(record.question_type === 'mcq', 'Adaptive answers must be MCQ-only');
     const compiled = record.grading_payload?.compiledRevision;
     requireThat(compiled && compiled.revisionId === record.revision_id && compiled.questionId === record.question_id &&
       compiled.questionType === record.question_type && `sha256:${compiled.contentSha256}` === record.content_signature,
@@ -199,7 +201,7 @@ export async function ingestAdaptiveAnswer(sql, authenticatedOwnerId, input) {
         select q.question_id, q.scenario_family
         from public.adaptive_answer_evidence e
         join public.adaptive_question_revisions q on q.revision_id=e.revision_id
-        where e.owner_id=${ownerId} and e.provenance='complete'
+        where e.owner_id=${ownerId} and e.provenance='complete' and q.question_type='mcq'
         order by e.receipt_index
       `;
       classification = exposure.some(row => row.question_id === record.question_id) ? 'exact_repeat' :

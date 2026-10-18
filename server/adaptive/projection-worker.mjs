@@ -34,7 +34,7 @@ export async function rebuildAdaptiveOwner(sql, ownerId, { now = null, project, 
       limit 2001
     `;
     const evidence = await tx`
-      select e.*,s.set_index,q.scenario_family,m.model_revision_key
+      select e.*,s.set_index,q.scenario_family,q.question_type,m.model_revision_key
       from public.adaptive_answer_evidence e
       left join public.adaptive_sessions s on s.owner_id=e.owner_id and s.session_id=e.session_id
       left join public.adaptive_question_revisions q on q.revision_id=e.revision_id

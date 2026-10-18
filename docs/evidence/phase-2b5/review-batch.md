@@ -14,7 +14,7 @@ For each identity, choose keep, rename, merge or split. A concept is a specific 
 | recovery.mtd | Maximum Tolerable Downtime | mcq:m196 | 0 | Pending: keep / rename / merge / split; exact objective and roles |
 | recovery.mttr | Mean Time to Repair / Recover | none | 0 | Pending: keep / rename / merge / split; exact objective and roles |
 | recovery.rpo | Recovery Point Objective | mcq:m088 | 0 | Pending: keep / rename / merge / split; exact objective and roles |
-| recovery.rto | Recovery Time Objective | mcq:m032, mcq:m635, pbq:p048, pbq:p211 | 0 | Pending: keep / rename / merge / split; exact objective and roles |
+| recovery.rto | Recovery Time Objective | mcq:m032, mcq:m635 | 0 | Pending: keep / rename / merge / split; exact objective and roles |
 
 Exact proposed question revisions:
 
@@ -23,8 +23,6 @@ Exact proposed question revisions:
 - mcq:m088: sha256:1a2b43e815c9c682156636929e645c41a914979b8dbe766e32eff25867f8de29; proposed concept recovery.rpo; proposed family versioned-backup-interval.
 - mcq:m196: sha256:c7d172bacf975a87dd3b79a33d1ff48182005a31eab9fc1fe4610b6e24c6000f; proposed concept recovery.mtd; proposed family outer-business-interruption-limit.
 - mcq:m635: sha256:3df3c1be0e2e4477d1ed3e517e1eb521a67533b7dd3b84f72854efeeb9ebfcd0; proposed concept recovery.rto; proposed family restoration-target-identification.
-- pbq:p048: sha256:c363b32b3efd0f4ae36fd5a58da0c0c6dbc5c5098d2031b5ef164387dcaa7f27; proposed concept recovery.rto; proposed family supplied-recovery-priority-ordering.
-- pbq:p211: sha256:62894e03c5f39c75b69713ef7c7ad5205ce73da9f42097744f159636f8758f91; proposed concept recovery.rto; proposed family combined-recovery-and-retention-design.
 
 ## 28 objective topics
 

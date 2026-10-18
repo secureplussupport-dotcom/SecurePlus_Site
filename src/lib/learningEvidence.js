@@ -12,10 +12,16 @@ const requireString = (value, label) => {
   if (typeof value !== 'string' || !value.trim()) throw new Error(`Missing ${label}`);
   return value;
 };
+// Prefer trusted format metadata; numeric MCQ IDs retain legacy exposure when metadata is absent.
+export function isMcqIdentity({questionId,format}) {
+  return typeof questionId === 'string' && !/^p\d+$/i.test(questionId) && (format === undefined ? /^m\d+$/i.test(questionId) : format === 'mcq');
+}
+
 export function validateMappings(mappings, concepts, config) {
   const ids = new Set(concepts.map(c => c.id));
   const seen = new Set();
   for (const m of mappings) {
+    if (m.format !== 'mcq' || !isMcqIdentity(m)) throw new Error('Adaptive mappings must be MCQ-only');
     const key = `${m.questionId}@${m.questionRevision}`;
     if (seen.has(key)) throw new Error(`Duplicate mapping ${key}`);
     seen.add(key);
@@ -43,9 +49,10 @@ export function normalizeLearningEvidence(raw, {
     for (const [key, value] of Object.entries(versions(config))) if (input[key] !== undefined && input[key] !== value) throw new Error(`Incompatible ${key} ${eventId}`);
     let event = { eventId, kind: input.kind, occurredAt, setIndex: input.setIndex, ...versions(config) };
     if (input.kind === 'answer') {
+      if ((input.format !== undefined && input.format !== 'mcq') || (input.questionType !== undefined && input.questionType !== 'mcq')) throw new Error('Adaptive answers must be MCQ-only');
       const m = byRevision.get(`${input.questionId}@${input.questionRevision}`);
       if (!m || typeof input.correct !== 'boolean') throw new Error(`Unknown revision or invalid correctness ${eventId}`);
-      event = { ...event, questionId: m.questionId, questionRevision: m.questionRevision,
+      event = { ...event, format: 'mcq', questionId: m.questionId, questionRevision: m.questionRevision,
         primaryConceptId: m.primaryConceptId, secondaryConceptIds: [...m.secondaryConceptIds],
         conceptRoles: [{ conceptId: m.primaryConceptId, role: 'primary' }, ...m.secondaryConceptIds.map(conceptId => ({ conceptId, role: 'secondary' }))],
         correct: input.correct, scenarioFamily: m.scenarioFamily, difficulty: m.difficulty,
@@ -65,8 +72,9 @@ export function normalizeLearningEvidence(raw, {
   let lastSet = -1;
   // Trusted full-history adapters may conservatively retain exposure from
   // incomplete or differently versioned history without awarding evidence.
-  const seenQuestions = new Set(priorExposure.map(e => e.questionId).filter(Boolean));
-  const seenScenarios = new Set(priorExposure.map(e => e.scenarioFamily).filter(Boolean));
+  const mcqExposure = priorExposure.filter(e => isMcqIdentity({questionId:e.questionId,format:e.questionType??e.format??mappings.find(m=>m.questionId===e.questionId)?.format}));
+  const seenQuestions = new Set(mcqExposure.map(e => e.questionId).filter(Boolean));
+  const seenScenarios = new Set(mcqExposure.map(e => e.scenarioFamily).filter(Boolean));
   for (const event of sorted) {
     if (event.setIndex < lastSet) throw new Error('Set index must be monotonic with occurrence time');
     lastSet = event.setIndex;

@@ -566,7 +566,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 pbq:p046 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
 - **P1 pbq:p046 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
 - **P1 pbq:p047 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
-- **P1 pbq:p048 — pilot_human_review**: Confirm or reject the existing pilot mapping against this exact revision; agent review is not human approval.
+- **P1 pbq:p048 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
 - **P1 pbq:p049 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
 - **P1 pbq:p050 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
 - **P1 pbq:p050 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
@@ -617,7 +617,7 @@ All decisions are OPEN. No entry is human-approved. Match IDs and source hashes 
 - **P1 pbq:p095 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
 - **P1 pbq:p096 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
 - **P1 pbq:p099 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
-- **P1 pbq:p211 — pilot_human_review**: Confirm or reject the existing pilot mapping against this exact revision; agent review is not human approval.
+- **P1 pbq:p211 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
 - **P1 pbq:p223 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
 - **P1 pbq:p223 — unsupported_revision**: Review compiler support separately; keep this revision unavailable to adaptive ingestion.
 - **P1 pbq:p224 — concept_and_family_review**: Read the effective question in the secured source view, choose primary/secondary canonical concepts, resolve candidates, and assign a justified family and novelty decision.
