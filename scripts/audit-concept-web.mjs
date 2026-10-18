@@ -17,6 +17,8 @@ test('every acronym card has one distinct concept tag', () => {
 test('the web has explicit, valid, symmetric neighbors', () => {
   const ids = new Set(CONCEPT_TAGS.map(tag => tag.id));
   const edges = new Set();
+  assert(CONCEPT_WEB_EDGES.length >= 100);
+  assert(new Set(CONCEPT_WEB_EDGES.flatMap(edge => [edge.left, edge.right])).size >= 150);
   for (const { left, right } of CONCEPT_WEB_EDGES) {
     assert(ids.has(left) && ids.has(right) && left !== right);
     const key = [left, right].sort().join(':');
@@ -27,4 +29,5 @@ test('the web has explicit, valid, symmetric neighbors', () => {
   }
   assert(relatedConceptTagIds('recovery.rto').includes('recovery.rpo'));
   assert(!relatedConceptTagIds('acronym.soc-chip').includes('acronym.soc-operations'));
+  assert(relatedConceptTagIds('acronym.soc-operations').includes('acronym.siem'));
 });

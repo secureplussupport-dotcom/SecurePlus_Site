@@ -26,6 +26,7 @@ export const CONCEPT_TAGS = Object.freeze([
 ]);
 
 const byAcronym = acronym => {
+  if (acronym === 'SOC') return 'acronym.soc-operations';
   const matches = CONCEPT_TAGS.filter(tag => tag.acronym.toLowerCase() === acronym.toLowerCase());
   if (matches.length !== 1) throw new Error(`Ambiguous or missing concept: ${acronym}`);
   return matches[0].id;
@@ -33,12 +34,46 @@ const byAcronym = acronym => {
 
 // Only explicit links are review neighbors; sharing a flashcard set creates no edge.
 const additionalPairs = [
-  ['BIA', 'BCP'], ['BCP', 'DRP'],
-  ['PKI', 'CA'], ['CA', 'RA'], ['CRL', 'OCSP'],
-  ['SSO', 'SAML'], ['SSO', 'OIDC'],
-  ['SIEM', 'SOAR'], ['CVE', 'CVSS'], ['PAM', 'JIT'],
-  ['Phishing', 'Spear Phishing'], ['Spear Phishing', 'Whaling'], ['Vishing', 'Smishing'],
-  ['Injection Attack', 'SQLi'], ['Injection Attack', 'Command Injection'],
+  // Continuity, recovery, and risk measures.
+  ['BIA', 'BCP'], ['BCP', 'DRP'], ['BCP', 'COOP'], ['BIA', 'COOP'],
+  ['DRP', 'RTO'], ['DRP', 'RPO'], ['HA', 'RTO'], ['HA', 'RAID'], ['HA', 'PDU / UPS'],
+  ['MTBF', 'MTTF'], ['MTBF', 'MTTR'], ['ALE', 'ARO'], ['ALE', 'SLE'], ['SLE', 'EF'], ['SLA', 'RTO'],
+  // Cryptography and certificate trust.
+  ['PKI', 'CA'], ['PKI', 'PKCS'], ['CA', 'RA'], ['CA', 'CSR'], ['CA', 'SCEP'],
+  ['CRL', 'OCSP'], ['RSA', 'ECC'], ['ECC', 'ECDSA'], ['AES / AES-256', 'DES'], ['DES', 'RC4'],
+  ['DHE', 'ECDHE'], ['DHE', 'PFS'], ['ECDHE', 'PFS'], ['HMAC', 'SHA'], ['HSM', 'TPM'], ['AH', 'IPsec'],
+  // Identity and access.
+  ['SSO', 'SAML'], ['SSO', 'OIDC'], ['SSO', 'IdP'], ['OIDC', 'OAuth'], ['IdP', 'LDAP'],
+  ['AAA', 'RADIUS'], ['AAA', 'TACACS+'], ['RADIUS', 'TACACS+'], ['EAP', 'LEAP'], ['PAP', 'LEAP'],
+  ['MFA', 'PIV'], ['PAM', 'JIT'], ['PAM', 'AAA'], ['ACL', 'FACL'],
+  // Attack variations and the specific controls that address them.
+  ['DoS', 'DDoS'], ['DDoS', 'Reflected Network Attack'], ['Reflected Network Attack', 'Amplified Attack'],
+  ['Rogue AP', 'Evil Twin'], ['Wireless Jamming', 'Deauthentication'],
+  ['Injection Attack', 'SQLi'], ['Injection Attack', 'Command Injection'], ['Injection Attack', 'XSS'],
+  ['XSS', 'CSRF / XSRF'], ['API Attack', 'SSRF'], ['Buffer Overflow', 'Memory Injection'],
+  ['Brute Force', 'Dictionary Attack'], ['Brute Force', 'Password Spraying'], ['Dictionary Attack', 'Rainbow Table'],
+  ['Phishing', 'Spear Phishing'], ['Spear Phishing', 'Whaling'], ['Phishing', 'Vishing'],
+  ['Phishing', 'Smishing'], ['Vishing', 'Smishing'], ['Phishing', 'Typosquatting'],
+  ['BEC', 'Impersonation'], ['Impersonation', 'Pretexting'],
+  ['Trojan', 'RAT'], ['Virus', 'Worm'], ['Ransomware', 'Trojan'],
+  ['Collision Attack', 'Birthday Attack'], ['Firmware Attack', 'BIOS'],
+  ['Supply Chain Attack', 'Malicious Update'], ['Side-Loading', 'Jailbreaking / Rooting'], ['VM Escape', 'VM'],
+  // Detection, response, and vulnerability management.
+  ['SIEM', 'SOAR'], ['SIEM', 'UEBA'], ['SIEM', 'SOC'], ['SOAR', 'SOC'],
+  ['EDR', 'XDR'], ['EDR', 'AV'], ['HIDS / NIDS', 'HIPS / NIPS'], ['HIDS / NIDS', 'FIM'],
+  ['WIDS / WIPS', 'Rogue AP'], ['WIDS / WIPS', 'AP / WAP'], ['WAF', 'SQLi'], ['WAF', 'XSS'],
+  ['DMARC', 'DKIM'], ['STIX', 'TAXII'], ['SCAP', 'CVE'], ['CVE', 'CVSS'],
+  ['IRP', 'PICERL'], ['IRP', 'CIRT / CERT'], ['CIRT / CERT', 'SOC'], ['SOC', 'MSSP'],
+  // Networks, cloud, devices, and data protection.
+  ['ARP', 'ARP Poisoning'], ['VLAN', 'VLAN Hopping'], ['DNS', 'DNS Attack'],
+  ['VPN', 'IPsec'], ['VPN', 'SSL / TLS'], ['FTPS / SFTP', 'SSH'], ['FTPS / SFTP', 'SSL / TLS'],
+  ['LAN', 'VLAN'], ['SDN', 'SD-WAN'], ['SASE', 'CASB'], ['SASE', 'ZTA'],
+  ['MDM', 'UEM'], ['MDM', 'BYOD / COPE / CYOD'], ['OT / ICS', 'SCADA'], ['IoT', 'OT / ICS'],
+  ['IaaS / PaaS / SaaS', 'FaaS'], ['IaaS / PaaS / SaaS', 'CASB'],
+  ['EFS / FDE', 'SED'], ['TPM', 'SED'], ['RAID', 'HDD / SSD'], ['AP / WAP', 'WPA / WEP'],
+  // Security governance and protected data.
+  ['GDPR', 'PII'], ['HIPAA', 'PHI'], ['PCI DSS', 'PII'],
+  ['NIST', 'CSF'], ['ISO', 'ISMS'], ['CAR', 'PICERL'], ['MOA / MOU', 'MSA'], ['MSA', 'SOW'],
 ];
 const pairs = [
   ...CONCEPT_RELATIONSHIPS.filter(edge => CONCEPT_TAGS.some(tag => tag.id === edge.sourceConceptId) && CONCEPT_TAGS.some(tag => tag.id === edge.targetConceptId))
