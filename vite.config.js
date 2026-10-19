@@ -11,6 +11,7 @@ export default defineConfig({
       input: {
         app: `${projectRoot}index.html`,
         flashcards: `${projectRoot}security-plus-flashcards/index.html`,
+        smartReviewDemo: `${projectRoot}smart-review-demo.html`,
       },
     },
   },

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Review concept demo</title>
+    <style>
+      body { margin: 0; padding: 28px; color: #e8f3f7; background: #0d1722; font: 16px/1.5 system-ui, sans-serif; }
+      main { max-width: 680px; margin: 40px auto; }
+      h1 { margin-bottom: 8px; line-height: 1.2; }
+      p { color: #b8c9d2; }
+      .card { margin: 16px 0; padding: 20px; border: 1px solid #35505e; border-radius: 14px; background: #172735; }
+      .tag { color: #81e1ca; font-weight: 700; }
+      button { padding: 11px 16px; border: 0; border-radius: 9px; color: #08231c; background: #81e1ca; font: inherit; font-weight: 700; cursor: pointer; }
+      button.secondary { margin-left: 8px; color: #e8f3f7; background: #35505e; }
+      ol { padding-left: 22px; }
+      li { margin: 12px 0; }
+      small { color: #a9bec9; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Smart Review: concept selection</h1>
+      <p>This isolated demo uses sample MCQs and the same selection function as the preview. It does not sign in, save an attempt, or change the live site.</p>
+      <section class="card">
+        <strong>Example missed question</strong>
+        <p>Which metric sets the target time to restore a service after an outage? <span class="tag">#RTO</span></p>
+        <button id="miss">Mark this MCQ wrong</button>
+        <button class="secondary" id="reset">Reset</button>
+      </section>
+      <section class="card" aria-live="polite">
+        <strong>Next Smart Review picks</strong>
+        <div id="result"><p>Mark the example wrong to see the next two questions.</p></div>
+      </section>
+      <small>Sample content only. The full site still needs a signed-in test before production release.</small>
+    </main>
+    <script type="module" src="/src/smart-review-demo.js"></script>
+  </body>
+</html>
