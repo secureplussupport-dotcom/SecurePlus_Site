@@ -1,6 +1,6 @@
 {
   "status": "agent_scoped_inventory_pending_human",
-  "reviewDate": "2026-10-06",
+  "reviewDate": "2026-10-19",
   "scope": "Explicit source-level census of delivered learning selectors and glossary. Any change in these delivery sources requires reviewing inventory completeness before updating this guard. Not human approval. GuestFeaturePreview independently authored teaching branches and selector/reachability bindings reviewed in the final census remediation.",
   "selectorIds": [
     "cipher-study-routing",
@@ -31,7 +31,7 @@
     "weak-area-deck"
   ],
   "sources": {
-    "src/App.jsx": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049",
+    "src/App.jsx": "5612c23b499c79b57bd3a7b9709c77c61809f17d38a3ba48acaf26a15115bfaf",
     "src/lib/deepDiveRecommendations.js": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479",
     "src/lib/deepDiveStudy.js": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459",
     "src/data/sy0701AcronymFlashcards.js": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1",

@@ -3,14 +3,14 @@
   "files": {
     "source-selection-decisions.json": "a515196a942c96797e77032b28892272092595f9eb0482043e3e4df0c6db0ad4",
     "review-batch.md": "0564a5d0bd457b5ab4b2871ba4de99cd645cb9473d5e392f2f0154cd2c28ff5a",
-    "delivery-inventory.md": "68d0947e6b86195feac6dd2196eab9dccc824ff16e469fde0e6be314664737f9",
-    "mapping-package.json": "50fa0b004f2922f5d6e24ee9de0047df7eb3880d3332abfda7bd0a479fb50e4d",
+    "delivery-inventory.md": "15a74bc45c991f8adebd20b4371198ff4cbb81e7c4a0ac33b553537aee37c4d1",
+    "mapping-package.json": "a2cda9775b30cd08bd8492730acb9532e566c352faff48bc7858eb334037879a",
     "review-queue.md": "816bb758622278d28b7e6bd97c21181a66731e56179586734e5486605abdbd82",
     "review-guide.md": "1dfd7c366bfe2ef1674797b907e334e823b6acd1b8d6d9f8785408241ff78cc6",
     "private-catalogue-read.json": "ab41620421c0449309a096bc678aaa4b05088188d2c8da7666d7429cc4e10ce1",
     "private-reconciliation.json": "53ba4921ed4ffb67d1da312fea8938a8f902c8a372cc083de9e4bbc71e7a8924",
     "private-access-boundary.json": "29e2e673da4bf5d5dc7eb8cfd306c21050814092226988adf13d6c6e52feaa75",
-    "delivery-surface-review.json": "260e5a47b12e904b1a31cdd235f06229f6f5cd3a4bf5804995fcc23d3ea6e139",
+    "delivery-surface-review.json": "2803f8f33dab7286391a50d31fec6b3186fb16716930b53f155a840631f9485e",
     "private-p017-processing.json": "c86075ee2c67b777089dff79b815bd17327b09e41f54068e361aeab1857821f8"
   }
 }
