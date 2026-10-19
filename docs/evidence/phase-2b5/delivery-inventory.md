@@ -406,11 +406,11 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:smart-review
 
-- Exact revision: sha256:501f5213b33901b4107075a75ab85154638248a87d51f3be44cf86ebdaf49a81
+- Exact revision: sha256:9bf880fa4dde2e28efb1485c768438dacd00c591b17288e4ead5521e6c2f9276
 - Inputs: MCQ bank and concept tags; attempt chronology; direct concept neighbors; starred IDs; focus topics/chapter; count; mode; current time
 - Target kinds: mcq
-- Behavior boundary: Smart ranking is stable for fixed now and history; random mode uses Math.random. Available same-tag and direct-neighbor MCQs precede diversity-filled results after a miss.
-- Mapping dependencies: Latest missed MCQ tags and one-hop concept links reserve available repair questions; existing SM-2 timing and topic/chapter signals fill the remaining set. No learner history is read by the inventory.
+- Behavior boundary: Smart ranking is stable for fixed now and history; random mode uses Math.random. Available same-tag alternatives, original missed MCQs, then direct-neighbor MCQs precede diversity-filled results.
+- Mapping dependencies: Latest missed MCQ tags and one-hop concept links reserve available repair questions. The original missed MCQ remains in the next set while its latest answer is wrong, subject to set capacity; existing SM-2 timing and topic/chapter signals fill the remainder. No learner history is read by the inventory.
 - Source units: src/App.jsx:1886–2061
 - Delivery sites: src/App.jsx:25091,25097,25110; src/App.jsx:25140
 

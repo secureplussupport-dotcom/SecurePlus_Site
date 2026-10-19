@@ -27,6 +27,13 @@ export function conceptRepairAnchors(ranked, latestAttempts, count) {
     }
   };
   for (const tag of missedTags) pick(tag, true);
+  // Keep each missed MCQ in the next review set until its latest answer is correct.
+  for (const entry of ranked) {
+    if (missedQuestionIds.has(entry.question.id) && !used.has(entry.question.id) && selected.length < count) {
+      selected.push(entry);
+      used.add(entry.question.id);
+    }
+  }
   for (const tag of relatedTags) pick(tag, false);
   return selected;
 }

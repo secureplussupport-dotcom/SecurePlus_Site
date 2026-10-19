@@ -162,7 +162,7 @@
     },
     {
       "path": "scripts/lib/content-mapping/delivery-inventory.mjs",
-      "sha256": "1487e625c61223b0a11fbae14c308c752833bff49cd44263b5016a0aaa283180"
+      "sha256": "caad157e502345d865dd4a886a41e688e6566fde90dd13a521e45fdd37dd101e"
     },
     {
       "path": "scripts/lib/content-mapping/editorial-selections.mjs",
@@ -74108,7 +74108,7 @@
       "id": "intervention:smart-review",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:501f5213b33901b4107075a75ab85154638248a87d51f3be44cf86ebdaf49a81",
+      "sourceSignature": "sha256:9bf880fa4dde2e28efb1485c768438dacd00c591b17288e4ead5521e6c2f9276",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -74143,8 +74143,8 @@
         "targetKinds": [
           "mcq"
         ],
-        "determinism": "Smart ranking is stable for fixed now and history; random mode uses Math.random. Available same-tag and direct-neighbor MCQs precede diversity-filled results after a miss.",
-        "mappingDependencies": "Latest missed MCQ tags and one-hop concept links reserve available repair questions; existing SM-2 timing and topic/chapter signals fill the remaining set. No learner history is read by the inventory.",
+        "determinism": "Smart ranking is stable for fixed now and history; random mode uses Math.random. Available same-tag alternatives, original missed MCQs, then direct-neighbor MCQs precede diversity-filled results.",
+        "mappingDependencies": "Latest missed MCQ tags and one-hop concept links reserve available repair questions. The original missed MCQ remains in the next set while its latest answer is wrong, subject to set capacity; existing SM-2 timing and topic/chapter signals fill the remainder. No learner history is read by the inventory.",
         "sourceUnits": [
           {
             "path": "src/App.jsx",
@@ -74170,7 +74170,7 @@
           },
           {
             "path": "src/lib/mcqConceptReview.js",
-            "sha256": "047e84d36e2b932219ecaa4aebeb81a1c04f64ddd6535984372430473016dec8"
+            "sha256": "cce6f59c28c39bcf0e2d3b64a9de16ca43834c60d66c6c88aa1406ca815022f5"
           }
         ],
         "deliveryEvidence": [
