@@ -140,7 +140,7 @@ test('GuestFeaturePreview teaching sub-surfaces have independent revision record
 test('GuestFeaturePreview selector coverage binds teaching, review topics and lesson topics',()=>{
  for(const suffix of ['guest-feature-teaching','guest-feature-review-topic','guest-feature-lesson-topic']){
   const r=pkg.records.find(r=>r.id==='intervention:'+suffix);assert.ok(r,suffix);
-  assert.ok(r.selector.sourceUnits.some(u=>u.startLine>=24376&&u.startLine<=24614));
+  assert.ok(r.selector.sourceUnits.some(u=>u.path==='src/App.jsx'&&['function GuestFeaturePreview(','  if(type==="review"){','  const lessons=['].includes(u.anchor)));
   assert.ok(r.selector.deliveryEvidence.some(e=>e.marker.includes('GuestFeaturePreview')));
  }
 });

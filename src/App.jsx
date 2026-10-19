@@ -3,6 +3,8 @@ import { createPortal } from "react-dom";
 import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701EditorialReview.js";
 import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
 import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from "./data/sy0701PublishedSnapshot.js";
+import { CONCEPT_TAGS } from "./data/sy0701ConceptWeb.js";
+import approvedMcqTags from "./data/mcqConceptTagAssignments.json";
 import {
   ArrowLeft,
   BadgeCheck,
@@ -12343,7 +12345,8 @@ function applySy0701StudyNoteEnhancement(question) {
 }
 
 const BASE_MCQ_BANK = mergePublishedSnapshot([...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id)),"mcq").filter(isMcqEditoriallyActive).map(applySy0701StudyNoteEnhancement).map(applyMcqEditorialReview).map(ensureMcqWrongFeedback);
-let MCQ_BANK = BASE_MCQ_BANK;
+const approvedMcqTagsById=new Map(approvedMcqTags.assignments.map(row=>[row.questionId,row.conceptTagIds]));
+let MCQ_BANK = BASE_MCQ_BANK.map(question=>({...question,conceptTagIds:approvedMcqTagsById.get(question.id)||[]}));
 
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK — original, accurate, clearly scoped content
@@ -16230,6 +16233,11 @@ function applyQuestionOverrides(rows=[]) {
   };
   MCQ_BANK=mergeBank(BASE_MCQ_BANK,"mcq");
   PBQ_BANK=mergeBank(BASE_PBQ_BANK,"pbq");
+}
+
+function applyApprovedMcqTags(rows=[]) {
+  const overridden=new Set(rows.filter(row=>row.status==="active"&&row.question_kind==="mcq"&&row.action==="upsert"&&!isCapturedOverride(row)).map(row=>row.question_id));
+  MCQ_BANK=MCQ_BANK.map(question=>({...question,conceptTagIds:overridden.has(question.id)?question.conceptTagIds||[]:approvedMcqTagsById.get(question.id)||[]}));
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -28688,6 +28696,7 @@ function makeAdminQuestionTemplate(kind, nextOrder=1, sourceBank=[]) {
     beyondTextbook:false,
     order:String(nextOrder),
     q:"",
+    conceptTagIds:[],
     opts:["","","",""],
     correct:0,
     exp:"",
@@ -28747,6 +28756,7 @@ function questionToAdminForm(question,kind,index) {
     beyondTextbook:Boolean(question.beyondTextbook),
     order,
     q:question.q||question.question||"",
+    conceptTagIds:Array.isArray(question.conceptTagIds)?question.conceptTagIds:[],
     opts:Array.isArray(question.opts)?[...question.opts].slice(0,4):["","","",""],
     correct:Number.isInteger(question.correct)?question.correct:0,
     exp:question.exp||question.explanation||"",
@@ -28849,6 +28859,9 @@ function cleanAdminQuestionPayload(form,kind) {
       exp,
       wrongFeedback
     });
+    const conceptTagIds=[...new Set(form.conceptTagIds||[])];
+    if(conceptTagIds.some(id=>!CONCEPT_TAGS.some(tag=>tag.id===id))) throw new Error("Choose concept tags from the menu.");
+    question.conceptTagIds=conceptTagIds;
     question.acronyms=getMcqAcronyms(question);
     return {
       question,
@@ -29294,6 +29307,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
   const [status,setStatus]=useState("");
   const [error,setError]=useState("");
   const [codeSearch,setCodeSearch]=useState("");
+  const [conceptSearch,setConceptSearch]=useState("");
   const [sortMode,setSortMode]=useState("order");
   const [qualityFilter,setQualityFilter]=useState("all");
   const [showBankDashboard,setShowBankDashboard]=useState(false);
@@ -29879,7 +29893,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
               </div>
             ):(
               <div style={{fontSize:12,color:t.textSec,lineHeight:1.55}}>
-                None detected yet. Known acronyms will be saved as tags and underlined automatically in practice pages.
+                None detected yet. Known acronyms will be underlined automatically in practice pages; choose concept tags below separately.
               </div>
             )}
           </div>
@@ -29891,6 +29905,20 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
                   {topicOptions.map(topic=><option key={topic} value={topic}>{topic}</option>)}
                 </select>
               </AdminField>
+              <div className="card" style={{padding:"12px 14px",marginTop:12,background:t.panel,borderColor:t.border}}>
+                <label htmlFor="admin-concept-search" style={{display:"block",fontSize:13,fontWeight:900,color:t.text,marginBottom:6}}>Concept tags</label>
+                <div style={{fontSize:12,color:t.textSec,marginBottom:8}}>Choose every concept this MCQ tests. Tags are separate from auto-detected acronyms.</div>
+                <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
+                  {(form.conceptTagIds||[]).map(id=>{
+                    const tag=CONCEPT_TAGS.find(item=>item.id===id);
+                    return tag?<button key={id} type="button" className="chip" onClick={()=>updateField("conceptTagIds",form.conceptTagIds.filter(value=>value!==id))} aria-label={`Remove ${tag.tag}`} style={{cursor:"pointer"}}>{tag.tag} ×</button>:null;
+                  })}
+                </div>
+                <input id="admin-concept-search" className="input" type="search" value={conceptSearch} onChange={e=>setConceptSearch(e.target.value)} placeholder="Search tag or concept"/>
+                {conceptSearch.trim()&&<div style={{display:"grid",gap:4,maxHeight:180,overflowY:"auto",marginTop:6}}>
+                  {CONCEPT_TAGS.filter(tag=>`${tag.tag} ${tag.name} ${tag.acronym}`.toLowerCase().includes(conceptSearch.trim().toLowerCase())&&!(form.conceptTagIds||[]).includes(tag.id)).slice(0,12).map(tag=><button key={tag.id} type="button" className="btn btn-ghost" onClick={()=>{updateField("conceptTagIds",[...(form.conceptTagIds||[]),tag.id]);setConceptSearch("");}} style={{textAlign:"left",justifyContent:"flex-start"}}>{tag.tag} — {tag.name}</button>)}
+                </div>}
+              </div>
               <div style={{height:12}}/>
               <AdminTextArea label="Question" value={form.q} onChange={v=>updateField("q",v)} placeholder={"Write the MCQ question here.\n\nPress Enter twice to start a new paragraph."} rows={5}/>
               <div style={{fontSize:11,color:t.textDim,lineHeight:1.55,marginTop:-4,marginBottom:12}}>Paragraphs, blank lines, and intentional spaces will appear in practice exactly as entered here.</div>
@@ -33684,6 +33712,7 @@ export default function App() {
         .eq("status","active");
       if(error) throw error;
       applyQuestionOverrides(data||[]);
+      applyApprovedMcqTags(data||[]);
       setQuestionBankVersion(v=>v+1);
     }catch(error){
       console.warn("Unable to load question overrides", error);

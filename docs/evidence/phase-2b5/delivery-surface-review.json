@@ -31,7 +31,7 @@
     "weak-area-deck"
   ],
   "sources": {
-    "src/App.jsx": "f7ee10eb1685036dff67b6f4fdd700ad6c30a87ceef7361f127e536056e40d49",
+    "src/App.jsx": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089",
     "src/lib/deepDiveRecommendations.js": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479",
     "src/lib/deepDiveStudy.js": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459",
     "src/data/sy0701AcronymFlashcards.js": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1",

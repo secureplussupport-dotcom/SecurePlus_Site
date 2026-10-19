@@ -1,0 +1,868 @@
+{
+  "status": "owner_approved_for_mcq_tag_metadata",
+  "approvedOn": "2026-10-19",
+  "draftSha256": "fdba7ff158005a03d3667070dc138588894ae58e2a1a1532fc133a3d8fae7327",
+  "scope": "All proposed tags on 59 clear and 61 flagged MCQs; does not activate Smart Review; excludes 275 without proposals and all PBQs.",
+  "questionCount": 120,
+  "tagAssignments": 138,
+  "assignments": [
+    {
+      "questionId": "m015",
+      "sourceSignature": "sha256:81ce768b1dcb74a2a598f4ff95e0c57e010549a21d4605c01a83347d892d232d",
+      "conceptTagIds": [
+        "acronym.typosquatting"
+      ]
+    },
+    {
+      "questionId": "m025",
+      "sourceSignature": "sha256:c396b02d896a7e4fdc9b2724fe7b7e71c98b21101c9ea2237b9aeb57ae9c26ae",
+      "conceptTagIds": [
+        "acronym.sha"
+      ]
+    },
+    {
+      "questionId": "m048",
+      "sourceSignature": "sha256:74aca84123d8322369b918b4880f8a64ae7582b704fa7ee34ee49ac35f10b38f",
+      "conceptTagIds": [
+        "acronym.logic-bomb"
+      ]
+    },
+    {
+      "questionId": "m287",
+      "sourceSignature": "sha256:27e1938813f0723921d566230aea3c667e3936261ca7c0d0986a3af8485d7705",
+      "conceptTagIds": [
+        "acronym.buffer-overflow"
+      ]
+    },
+    {
+      "questionId": "m432",
+      "sourceSignature": "sha256:53cd2bea0b841558d530fa013f8880cae4a35bcd48ef077f39e9b88317c1e049",
+      "conceptTagIds": [
+        "acronym.tailgating"
+      ]
+    },
+    {
+      "questionId": "m433",
+      "sourceSignature": "sha256:8c4a6a1927cbf8fcbfc8a090aabdc7710f8da4937989c4117c6bf47dde306f2a",
+      "conceptTagIds": [
+        "acronym.rootkit"
+      ]
+    },
+    {
+      "questionId": "m443",
+      "sourceSignature": "sha256:01d3d29eb0bec7a41420ce7d3c2e81e93043b49aabc205ec676eb61eada62212",
+      "conceptTagIds": [
+        "acronym.dns"
+      ]
+    },
+    {
+      "questionId": "m706",
+      "sourceSignature": "sha256:16d0da55a14758403ee09db32da3255147f381c2b46082126a43796bb9b87658",
+      "conceptTagIds": [
+        "acronym.dns"
+      ]
+    },
+    {
+      "questionId": "m708",
+      "sourceSignature": "sha256:577082ff94caf4c00d31dfbf45b06c6476de8329d45428d653b3fd8f2254a5c7",
+      "conceptTagIds": [
+        "acronym.ddos"
+      ]
+    },
+    {
+      "questionId": "m714",
+      "sourceSignature": "sha256:11684e43490d8c20a9c0ef4063628d74e256697be64650b1c48ef3ba80ad0212",
+      "conceptTagIds": [
+        "acronym.tpm"
+      ]
+    },
+    {
+      "questionId": "m715",
+      "sourceSignature": "sha256:c878fee2d99490b21104f76659552863e8a427ef3412ccd0f951c8c1b6625d9d",
+      "conceptTagIds": [
+        "acronym.dns",
+        "acronym.vpn"
+      ]
+    },
+    {
+      "questionId": "m718",
+      "sourceSignature": "sha256:7e5e24e6d31914ef03ae78090b0eab363d073548e03857158d27919016f01c86",
+      "conceptTagIds": [
+        "acronym.dhcp"
+      ]
+    },
+    {
+      "questionId": "m722",
+      "sourceSignature": "sha256:2c4603d9954a350731727a111cccc51862c15603d7a3c75436147562e70a8846",
+      "conceptTagIds": [
+        "acronym.stix",
+        "acronym.taxii"
+      ]
+    },
+    {
+      "questionId": "m726",
+      "sourceSignature": "sha256:4e4bec1b156fa8ba63811fac5c7aabe6e35ee3c33808ee7b757c85e24abe4bd1",
+      "conceptTagIds": [
+        "acronym.saml"
+      ]
+    },
+    {
+      "questionId": "m727",
+      "sourceSignature": "sha256:c4dd95bd26b9bc13ec6f6fd8403fd39ea090f843ac61ad3285882aba92fb8368",
+      "conceptTagIds": [
+        "acronym.eap",
+        "acronym.radius"
+      ]
+    },
+    {
+      "questionId": "m728",
+      "sourceSignature": "sha256:b78e3a233730dd513b8964ba6ece92868d33acaf4fca07b2e358500614c33cb9",
+      "conceptTagIds": [
+        "acronym.hsm"
+      ]
+    },
+    {
+      "questionId": "m734",
+      "sourceSignature": "sha256:cf809b251b2114ee50161ae7bfc679c5612b18a0850dd6178f2cb09058a096e9",
+      "conceptTagIds": [
+        "acronym.ocsp"
+      ]
+    },
+    {
+      "questionId": "m004",
+      "sourceSignature": "sha256:c7ddc81b2da047dd9603e03f0c5c7971add35b734fb6f6debb50c44381b22be4",
+      "conceptTagIds": [
+        "acronym.rainbow-table"
+      ]
+    },
+    {
+      "questionId": "m009",
+      "sourceSignature": "sha256:8c8bc0dc23ba0789c8227e794908075bac7454c222b85b197308b8f20b976e01",
+      "conceptTagIds": [
+        "acronym.vishing",
+        "acronym.pretexting"
+      ]
+    },
+    {
+      "questionId": "m010",
+      "sourceSignature": "sha256:c461bb5ade5b674104f45954eb212d34cf1be4618f020048320ebf17259a8b8e",
+      "conceptTagIds": [
+        "acronym.keylogger"
+      ]
+    },
+    {
+      "questionId": "m012",
+      "sourceSignature": "sha256:44b450081b90c3e7b11346258e1f99d95aa0a0d9a907799159aa8435f1addd31",
+      "conceptTagIds": [
+        "acronym.sqli"
+      ]
+    },
+    {
+      "questionId": "m016",
+      "sourceSignature": "sha256:a8f4bf2b00df3a10c7e72eb71e980e4a0a4bd57bce1fe4f66de14c6d0f0557fb",
+      "conceptTagIds": [
+        "acronym.logic-bomb"
+      ]
+    },
+    {
+      "questionId": "m032",
+      "sourceSignature": "sha256:c6c2951ce7458d7a61cb32f71f16c289e576c68f59663a80d75adf26b00630bc",
+      "conceptTagIds": [
+        "recovery.rto"
+      ]
+    },
+    {
+      "questionId": "m037",
+      "sourceSignature": "sha256:78763b2122115c07981c24789450b9e9d8558479c2e4d52f6b8b6b5cbe33f8cd",
+      "conceptTagIds": [
+        "acronym.ocsp"
+      ]
+    },
+    {
+      "questionId": "m040",
+      "sourceSignature": "sha256:6fc72f5d795585a85851b7c715fd43b95b1008a5c04f7695fa9e3628654b2a6d",
+      "conceptTagIds": [
+        "acronym.mac-access-control",
+        "acronym.mac-address"
+      ]
+    },
+    {
+      "questionId": "m042",
+      "sourceSignature": "sha256:89d00972fc767cb9c0fd6f1c0d388c0fb5328cd7ded5d4d190dc99023eb3ecfa",
+      "conceptTagIds": [
+        "acronym.rainbow-table"
+      ]
+    },
+    {
+      "questionId": "m046",
+      "sourceSignature": "sha256:8d52edcd73b4917066f3cb448b8513ea961354e648f517e6f017202e4c8aefad",
+      "conceptTagIds": [
+        "acronym.phishing"
+      ]
+    },
+    {
+      "questionId": "m049",
+      "sourceSignature": "sha256:977b766098bf0a6b2cd43d71a16032dacfaa085aa500d535ec68b692d4e0967b",
+      "conceptTagIds": [
+        "acronym.ddos",
+        "acronym.dns"
+      ]
+    },
+    {
+      "questionId": "m050",
+      "sourceSignature": "sha256:65c4ee68ffe72eec382921dcbda4da36c7c955a8f341dbdabc688a44c5fb173c",
+      "conceptTagIds": [
+        "acronym.dns"
+      ]
+    },
+    {
+      "questionId": "m051",
+      "sourceSignature": "sha256:35bfe7a31d3194c8994b46cac8fb3d01a822ed88d19ec61a85b8894092e15483",
+      "conceptTagIds": [
+        "acronym.xss"
+      ]
+    },
+    {
+      "questionId": "m053",
+      "sourceSignature": "sha256:f41bb6408c78d4018e58213c0cb4fdec1a86ac7e40c5d3951a45189d6663978e",
+      "conceptTagIds": [
+        "acronym.buffer-overflow"
+      ]
+    },
+    {
+      "questionId": "m054",
+      "sourceSignature": "sha256:4474b5ae635d832bb4f2ca50c06da02d0957ff9c2d2d86d01852176ba6d1cfa5",
+      "conceptTagIds": [
+        "acronym.worm"
+      ]
+    },
+    {
+      "questionId": "m055",
+      "sourceSignature": "sha256:97f700eefaf59c72d7861c261c0de51a6d3dc588e46e12bc75b999d1f422e9e0",
+      "conceptTagIds": [
+        "acronym.race-condition"
+      ]
+    },
+    {
+      "questionId": "m062",
+      "sourceSignature": "sha256:8438ed78b28025bfdb13af49a2522ecffdad99993e56097643c7fc182e351ee2",
+      "conceptTagIds": [
+        "acronym.vm-escape"
+      ]
+    },
+    {
+      "questionId": "m066",
+      "sourceSignature": "sha256:45d15ed1949be7386f12e0e291ade8ae2a42b8f2300a37e0426e470231d90acf",
+      "conceptTagIds": [
+        "acronym.siem"
+      ]
+    },
+    {
+      "questionId": "m077",
+      "sourceSignature": "sha256:42e5a1b6ec4f06ab003f88d1646fe77c5c3def46137dc8a22550352f7f4fce4b",
+      "conceptTagIds": [
+        "acronym.oauth"
+      ]
+    },
+    {
+      "questionId": "m078",
+      "sourceSignature": "sha256:61c563fc93cda34e5931ee615b2040575bb3a32e798ab83f0b9e8da70416384d",
+      "conceptTagIds": [
+        "acronym.ipfix"
+      ]
+    },
+    {
+      "questionId": "m082",
+      "sourceSignature": "sha256:0f867cc4d8322a193ebe43acf754fe101f71ac7dfbca33a3b5788d59039167e3",
+      "conceptTagIds": [
+        "acronym.hipaa"
+      ]
+    },
+    {
+      "questionId": "m083",
+      "sourceSignature": "sha256:be58a0f41f811fa4f016838c29fada592cbe2ef46ebf42651ebeed3dbc439ad0",
+      "conceptTagIds": [
+        "acronym.aup"
+      ]
+    },
+    {
+      "questionId": "m086",
+      "sourceSignature": "sha256:9e148f874378cf9c70ce57a1a2a285ecb6900911fe8bc5adf6c94e2d6b061d2f",
+      "conceptTagIds": [
+        "continuity.bia"
+      ]
+    },
+    {
+      "questionId": "m088",
+      "sourceSignature": "sha256:1a2b43e815c9c682156636929e645c41a914979b8dbe766e32eff25867f8de29",
+      "conceptTagIds": [
+        "recovery.rpo"
+      ]
+    },
+    {
+      "questionId": "m091",
+      "sourceSignature": "sha256:01e8f6b2b5fd1866afce5484b9086ecb10feef7bdf23e52bce223f9f740c2606",
+      "conceptTagIds": [
+        "acronym.sla"
+      ]
+    },
+    {
+      "questionId": "m094",
+      "sourceSignature": "sha256:3cdff6e7066a53ec8fbbdb4d2597f0de3b2925d11081db59bd044cef3834500a",
+      "conceptTagIds": [
+        "acronym.rootkit"
+      ]
+    },
+    {
+      "questionId": "m097",
+      "sourceSignature": "sha256:3303bf6f34dd24c5cfb46b94e3c0fe39b6a4f384370e8843535a1b1cd37502b1",
+      "conceptTagIds": [
+        "acronym.sqli",
+        "acronym.xss"
+      ]
+    },
+    {
+      "questionId": "m099",
+      "sourceSignature": "sha256:fb1d816c255f43a4ccf3f02f081dfea0841f267111fc4e04df4955010e8573f8",
+      "conceptTagIds": [
+        "acronym.pci-dss"
+      ]
+    },
+    {
+      "questionId": "m108",
+      "sourceSignature": "sha256:fefa58222e920a962eb60e2619267ed828c7ae05253312e1c8cc3e76fec8f666",
+      "conceptTagIds": [
+        "acronym.sso"
+      ]
+    },
+    {
+      "questionId": "m109",
+      "sourceSignature": "sha256:27d53d7917a27700932b2e5b2022d5bee594e87470d9b5f6fd656e2d3b5bbe50",
+      "conceptTagIds": [
+        "acronym.mac-access-control",
+        "acronym.mac-address"
+      ]
+    },
+    {
+      "questionId": "m110",
+      "sourceSignature": "sha256:e107a869a2a1c8d48f8c8446ce329ddc723b2c96e3c625671e410b1ad5f947e1",
+      "conceptTagIds": [
+        "acronym.ocsp"
+      ]
+    },
+    {
+      "questionId": "m111",
+      "sourceSignature": "sha256:1cc5bc685aedd219588ef0d3fc13d1f4764a7075ce396544d163c113b69a71ab",
+      "conceptTagIds": [
+        "acronym.csr"
+      ]
+    },
+    {
+      "questionId": "m112",
+      "sourceSignature": "sha256:24270c96e53312d5830c20f3860b281019f99187d00311616dfe6603d67910f9",
+      "conceptTagIds": [
+        "acronym.dns"
+      ]
+    },
+    {
+      "questionId": "m118",
+      "sourceSignature": "sha256:2a41a414cc5b77ab9d2108ea3ef353d0b63412ae5f143790b35c22072fce66f3",
+      "conceptTagIds": [
+        "acronym.hsm"
+      ]
+    },
+    {
+      "questionId": "m123",
+      "sourceSignature": "sha256:478b4cdacf957d24859d16b585d01a3e64956450c548b83f30ca74dbedafee9f",
+      "conceptTagIds": [
+        "acronym.phishing"
+      ]
+    },
+    {
+      "questionId": "m124",
+      "sourceSignature": "sha256:28b6b8081a40b1064dedc07053cd023c0bd5c6f0f1e002c3272cbff31ac4251c",
+      "conceptTagIds": [
+        "acronym.bec"
+      ]
+    },
+    {
+      "questionId": "m125",
+      "sourceSignature": "sha256:608fb4b9790547f47226d0fe0f38b5a90a570c78fe7e30c83aa388d32c5bfaf8",
+      "conceptTagIds": [
+        "acronym.worm"
+      ]
+    },
+    {
+      "questionId": "m126",
+      "sourceSignature": "sha256:dc0a6d5627b47cf64a097d4fa9e4e7d422a8514da53d133b43a354ad53142cb3",
+      "conceptTagIds": [
+        "acronym.ransomware"
+      ]
+    },
+    {
+      "questionId": "m127",
+      "sourceSignature": "sha256:50fb1a758cb2195828589a3eace34e7dfd3d36ebe8062a974c6b974551f790cb",
+      "conceptTagIds": [
+        "acronym.supply-chain-attack"
+      ]
+    },
+    {
+      "questionId": "m129",
+      "sourceSignature": "sha256:485a3d365c80ce14829963b2c2fea41c05cabe19719d9854be41a63a02e30769",
+      "conceptTagIds": [
+        "acronym.sqli"
+      ]
+    },
+    {
+      "questionId": "m136",
+      "sourceSignature": "sha256:c8c747ba4c3fbbfafc27cee3496d782435e8d61041fd97416c07657e40dd9112",
+      "conceptTagIds": [
+        "acronym.on-path-attack"
+      ]
+    },
+    {
+      "questionId": "m138",
+      "sourceSignature": "sha256:90a41bbf225dea23a71426e6d4c8a1f244a4c9c7bedd4ae76b02fcb5f66136c3",
+      "conceptTagIds": [
+        "acronym.dmz"
+      ]
+    },
+    {
+      "questionId": "m140",
+      "sourceSignature": "sha256:4ce67ee43c2e463c6b18f25614ce5dfe3b9c750bf8c1eaefb39e9612c20580ae",
+      "conceptTagIds": [
+        "acronym.dns"
+      ]
+    },
+    {
+      "questionId": "m148",
+      "sourceSignature": "sha256:cf7b56e0379976b42939af3e0ac111991a03006c18240b051b428cac6d75e18d",
+      "conceptTagIds": [
+        "acronym.os"
+      ]
+    },
+    {
+      "questionId": "m149",
+      "sourceSignature": "sha256:71b5a566e3f42ca5daab58936d8be33db14ae183a37d066f239ce6e3db47d006",
+      "conceptTagIds": [
+        "acronym.casb"
+      ]
+    },
+    {
+      "questionId": "m154",
+      "sourceSignature": "sha256:05b7d4cbc5f454d8559066f5f6481895dd8352b755bc4aed2ebd65eae2ffcc3e",
+      "conceptTagIds": [
+        "acronym.vlan"
+      ]
+    },
+    {
+      "questionId": "m157",
+      "sourceSignature": "sha256:1d12ff2462422f094054832f409afcab63abffe70808e288b81e37dbd0a32b31",
+      "conceptTagIds": [
+        "acronym.iac"
+      ]
+    },
+    {
+      "questionId": "m158",
+      "sourceSignature": "sha256:e2ddf0ef8c4d245cf037081c45c045533416bf7c30efd4d0c5aa15538b4e0dab",
+      "conceptTagIds": [
+        "acronym.zta"
+      ]
+    },
+    {
+      "questionId": "m165",
+      "sourceSignature": "sha256:522f2d87b61d7ce9963f84076323987b12ced548f50bbd8e743f9a4c9d0c1404",
+      "conceptTagIds": [
+        "acronym.dep"
+      ]
+    },
+    {
+      "questionId": "m166",
+      "sourceSignature": "sha256:6afff95069aaadd156dbf45d39f864cbefc67f7877e1221720dbd5472b9100bf",
+      "conceptTagIds": [
+        "acronym.siem"
+      ]
+    },
+    {
+      "questionId": "m185",
+      "sourceSignature": "sha256:73184dcedb783e80d9adb264fac272d8900e518552becd322d836f2e051630b8",
+      "conceptTagIds": [
+        "acronym.stix",
+        "acronym.taxii"
+      ]
+    },
+    {
+      "questionId": "m186",
+      "sourceSignature": "sha256:6581dfd373df8b50d13ffd646745e895789f4e00af8577161d93025b0b4a215d",
+      "conceptTagIds": [
+        "acronym.gdpr"
+      ]
+    },
+    {
+      "questionId": "m191",
+      "sourceSignature": "sha256:2374eb465a319541d81e2f26777898afc03c9cfd91f86a1d51cc995ca6fe1ac5",
+      "conceptTagIds": [
+        "acronym.csf",
+        "acronym.nist"
+      ]
+    },
+    {
+      "questionId": "m194",
+      "sourceSignature": "sha256:e597fd010332e17efdc380319469f1f37b17fa1a9cad4fc2410054ca98871f78",
+      "conceptTagIds": [
+        "acronym.phishing"
+      ]
+    },
+    {
+      "questionId": "m195",
+      "sourceSignature": "sha256:743ab2ae1d774b20ebdd43c3c6cb3a33eabe9636db2a26e3b9fae55b647237c1",
+      "conceptTagIds": [
+        "acronym.iso"
+      ]
+    },
+    {
+      "questionId": "m196",
+      "sourceSignature": "sha256:c7d172bacf975a87dd3b79a33d1ff48182005a31eab9fc1fe4610b6e24c6000f",
+      "conceptTagIds": [
+        "recovery.mtd"
+      ]
+    },
+    {
+      "questionId": "m210",
+      "sourceSignature": "sha256:5a3187f497cc79b5f5d2fcd72c6f5f43dcb06ec89a0164ddd7d99845a70fa9c6",
+      "conceptTagIds": [
+        "acronym.rsa"
+      ]
+    },
+    {
+      "questionId": "m214",
+      "sourceSignature": "sha256:d121d807b8699e164d0846f869b944dcd334d7f8b47af3b18b2d3734b918d943",
+      "conceptTagIds": [
+        "acronym.downgrade-attack"
+      ]
+    },
+    {
+      "questionId": "m217",
+      "sourceSignature": "sha256:bfacd7eaab59fbbc21947628d5ff7fd68bcfb714ee6bb50584d83db7c717b879",
+      "conceptTagIds": [
+        "acronym.idp",
+        "acronym.saml"
+      ]
+    },
+    {
+      "questionId": "m253",
+      "sourceSignature": "sha256:44945626c9a6978c484639c7c46bf3ea44e1e278c240503af3782a38480eb2c9",
+      "conceptTagIds": [
+        "acronym.smishing"
+      ]
+    },
+    {
+      "questionId": "m256",
+      "sourceSignature": "sha256:b494dd91802583eca35de6d2e4260696eb3c63d875bd2d50d1ad6b58d0930e46",
+      "conceptTagIds": [
+        "acronym.ransomware"
+      ]
+    },
+    {
+      "questionId": "m259",
+      "sourceSignature": "sha256:6df72ebf9843573f5d876d69bd5dd9209a0d9f0f13b51dcc890a4f135e352490",
+      "conceptTagIds": [
+        "acronym.ddos"
+      ]
+    },
+    {
+      "questionId": "m261",
+      "sourceSignature": "sha256:aff082d1bcde1d0a380851f50b4f828074352e63dc42eb325ecf8ca4a697094b",
+      "conceptTagIds": [
+        "acronym.waf"
+      ]
+    },
+    {
+      "questionId": "m266",
+      "sourceSignature": "sha256:7dfe16daf04dfdbaf7c464cc4a5499c206bb1f9a2d5224e6589d0883f1302f86",
+      "conceptTagIds": [
+        "acronym.password-spraying"
+      ]
+    },
+    {
+      "questionId": "m275",
+      "sourceSignature": "sha256:28bd3d164124407231bc95826504bbde22ec0291eb9509db2c0c4a88bdb9dc80",
+      "conceptTagIds": [
+        "acronym.arp-poisoning",
+        "acronym.arp"
+      ]
+    },
+    {
+      "questionId": "m278",
+      "sourceSignature": "sha256:e659f37d0531da4d816943f953f8c1bde820c99a9e82e225f12a88c52363bc90",
+      "conceptTagIds": [
+        "acronym.dmarc"
+      ]
+    },
+    {
+      "questionId": "m286",
+      "sourceSignature": "sha256:04ef020cb540983248d98cc5ec8d729504335255b0ef8d19514e673ea596ae9d",
+      "conceptTagIds": [
+        "acronym.waf"
+      ]
+    },
+    {
+      "questionId": "m290",
+      "sourceSignature": "sha256:7c6110309116ce03412d8f9054f57d4835fc4d5f21ef680934e0271f1bb2eeef",
+      "conceptTagIds": [
+        "acronym.spyware",
+        "acronym.keylogger"
+      ]
+    },
+    {
+      "questionId": "m291",
+      "sourceSignature": "sha256:91ecd9bab7c5a66ff1f243abdfc3f8baf5f236afeeafc737c09316801f8364f7",
+      "conceptTagIds": [
+        "acronym.dmz"
+      ]
+    },
+    {
+      "questionId": "m292",
+      "sourceSignature": "sha256:e1f44c8c28b312de57de7a51802fefc1e8f15b38cd0cef1ef91e27147dfd83f5",
+      "conceptTagIds": [
+        "acronym.vlan"
+      ]
+    },
+    {
+      "questionId": "m299",
+      "sourceSignature": "sha256:d8d29d4e94594824ee5056acc5075ec4fdfe52d2d3da66192b37badcc9f5c756",
+      "conceptTagIds": [
+        "acronym.vpn"
+      ]
+    },
+    {
+      "questionId": "m314",
+      "sourceSignature": "sha256:ab5f5ccd45ac4f242d5e9b46a9955de05926d893f04c239aed5ade6fa2eb5ae5",
+      "conceptTagIds": [
+        "acronym.ipsec",
+        "acronym.vpn"
+      ]
+    },
+    {
+      "questionId": "m318",
+      "sourceSignature": "sha256:aaffabaf9e66a0b11cb7991196d08e712ff74590aeb0d160a29b155bdf46d048",
+      "conceptTagIds": [
+        "acronym.mfa"
+      ]
+    },
+    {
+      "questionId": "m319",
+      "sourceSignature": "sha256:d3802d414b3a98a81c90e333f9c98a127c05606dcf1e6c4cdefb06e6a2ba3561",
+      "conceptTagIds": [
+        "acronym.oauth"
+      ]
+    },
+    {
+      "questionId": "m376",
+      "sourceSignature": "sha256:272eda04a41eab7b2018bced5dcdbfcf37903ca9e5d9032185ac5ab51a183a0c",
+      "conceptTagIds": [
+        "acronym.hipaa"
+      ]
+    },
+    {
+      "questionId": "m411",
+      "sourceSignature": "sha256:72583836b562c8be3ae5896c50dd64825a53a50e8c8f4c5129cd78a1c963ec95",
+      "conceptTagIds": [
+        "acronym.ocsp"
+      ]
+    },
+    {
+      "questionId": "m423",
+      "sourceSignature": "sha256:46b1f9d8969bcda57e1d2696c75762c04b1a0c09c1442d95958b1fd80d75f095",
+      "conceptTagIds": [
+        "acronym.stix",
+        "acronym.taxii"
+      ]
+    },
+    {
+      "questionId": "m427",
+      "sourceSignature": "sha256:0f7af5063c21e10c1a04ed2509e86a0aaa5522e833f4e02584d36550ea76d5e3",
+      "conceptTagIds": [
+        "acronym.command-injection"
+      ]
+    },
+    {
+      "questionId": "m441",
+      "sourceSignature": "sha256:c0abfb995151229981a6b1e3404cd46e7f1f1cbe2f38abb5f8ad70b7383d34a7",
+      "conceptTagIds": [
+        "acronym.dns"
+      ]
+    },
+    {
+      "questionId": "m451",
+      "sourceSignature": "sha256:581790333882b1766e4a908e2c7637a7679364f4853edbdf4c4401e338ca49e7",
+      "conceptTagIds": [
+        "acronym.api"
+      ]
+    },
+    {
+      "questionId": "m502",
+      "sourceSignature": "sha256:ddcd6181dd7ddcd62fa48dcb6774156eb98f3e83c50492f65371df3cb8e707a3",
+      "conceptTagIds": [
+        "acronym.phishing"
+      ]
+    },
+    {
+      "questionId": "m608",
+      "sourceSignature": "sha256:61a4692725b2be1e8e44dc765e9182a3208528f8e3f52b75dae02d5ad21a3409",
+      "conceptTagIds": [
+        "acronym.phishing"
+      ]
+    },
+    {
+      "questionId": "m609",
+      "sourceSignature": "sha256:17c21263687fa89751ebe4e0fe81ad4e3f1978ca45474d1dcae3c3c49be5d057",
+      "conceptTagIds": [
+        "acronym.vishing"
+      ]
+    },
+    {
+      "questionId": "m610",
+      "sourceSignature": "sha256:84abbb400f3a753b2a86cd2986b61464e837242f0904485ebb0a5ccdb83c3ca1",
+      "conceptTagIds": [
+        "acronym.on-path-attack"
+      ]
+    },
+    {
+      "questionId": "m611",
+      "sourceSignature": "sha256:cd910094231808026c2f960b38254bbb6846727a4399394588fedc7ba4668d56",
+      "conceptTagIds": [
+        "acronym.sqli"
+      ]
+    },
+    {
+      "questionId": "m612",
+      "sourceSignature": "sha256:ed76f2083004f664ec798c38dee2c02350150f8c7d667f0f96505f1d19dee49e",
+      "conceptTagIds": [
+        "acronym.race-condition"
+      ]
+    },
+    {
+      "questionId": "m615",
+      "sourceSignature": "sha256:84f897d0940c7ae19cac2c0b9faeb47f7ab6623dedff8c772821c216a54a7cb4",
+      "conceptTagIds": [
+        "acronym.dos",
+        "acronym.ddos"
+      ]
+    },
+    {
+      "questionId": "m618",
+      "sourceSignature": "sha256:27575e53b715642c5bc25ada42ea08a8b322f6bb8ebdfff7c3de2d3f30d9a169",
+      "conceptTagIds": [
+        "acronym.siem"
+      ]
+    },
+    {
+      "questionId": "m619",
+      "sourceSignature": "sha256:791c5ca5f484b77af374524e240595a3bbbd52a202b151e4fcca8060c2693d91",
+      "conceptTagIds": [
+        "acronym.lan",
+        "acronym.vlan"
+      ]
+    },
+    {
+      "questionId": "m620",
+      "sourceSignature": "sha256:de74f8237e1e8262f706b13654cccede32dc03bcac11f7d84e4729a2068ea4c8",
+      "conceptTagIds": [
+        "acronym.os"
+      ]
+    },
+    {
+      "questionId": "m621",
+      "sourceSignature": "sha256:2fefc9b505bb60cd02d17cb20fa5339d0fe87149dea0148e09d9faf744ea0ff1",
+      "conceptTagIds": [
+        "acronym.zta"
+      ]
+    },
+    {
+      "questionId": "m622",
+      "sourceSignature": "sha256:214cd7b11e1ac955bfff369269c34ab1716accab6e39392e23ebdf1d82cfd6cb",
+      "conceptTagIds": [
+        "acronym.hsm"
+      ]
+    },
+    {
+      "questionId": "m623",
+      "sourceSignature": "sha256:5661f47c6e1112cd2be31efb1d4586e3757fe289890976464debb1e4fbaaabfe",
+      "conceptTagIds": [
+        "acronym.mdm"
+      ]
+    },
+    {
+      "questionId": "m632",
+      "sourceSignature": "sha256:e8fe290134e6f03e848a23ce6070cb6c16676e45a78f1f99dc8dba03d7bab9d8",
+      "conceptTagIds": [
+        "acronym.brute-force"
+      ]
+    },
+    {
+      "questionId": "m635",
+      "sourceSignature": "sha256:3df3c1be0e2e4477d1ed3e517e1eb521a67533b7dd3b84f72854efeeb9ebfcd0",
+      "conceptTagIds": [
+        "recovery.rto"
+      ]
+    },
+    {
+      "questionId": "m637",
+      "sourceSignature": "sha256:a4451e35d3537cf7b0b4c541ffb09838408eef6cde553a67020fab8cdd486915",
+      "conceptTagIds": [
+        "acronym.dlp"
+      ]
+    },
+    {
+      "questionId": "m638",
+      "sourceSignature": "sha256:95693229e5696ca26308d4dee0669304557e466907dda28ef2aa61fe300f19df",
+      "conceptTagIds": [
+        "acronym.iac"
+      ]
+    },
+    {
+      "questionId": "m644",
+      "sourceSignature": "sha256:85b4b1de37a8d224b299ac3fabb3aaca222a3e13b5b5bd3782cc887da73940f7",
+      "conceptTagIds": [
+        "acronym.sle"
+      ]
+    },
+    {
+      "questionId": "m645",
+      "sourceSignature": "sha256:5d7c7e9bd5d168ecabb490df0e639b2d5059ae55f0ac75fa7952fde75e0c6e40",
+      "conceptTagIds": [
+        "acronym.sla"
+      ]
+    },
+    {
+      "questionId": "m646",
+      "sourceSignature": "sha256:a90f314b8a925bcf401846021cff1aeb81721fb29d20893ab878937a2253a1da",
+      "conceptTagIds": [
+        "acronym.whaling"
+      ]
+    },
+    {
+      "questionId": "m658",
+      "sourceSignature": "sha256:928875a831a0c5e3db6f493541d706ae522bf02215def4a671667f157c34aaa4",
+      "conceptTagIds": [
+        "acronym.phishing",
+        "acronym.spear-phishing"
+      ]
+    },
+    {
+      "questionId": "m659",
+      "sourceSignature": "sha256:bd8c597389138e56c7dd0f01a52ab297e696d1538e33f1591b86764892c8af90",
+      "conceptTagIds": [
+        "acronym.smishing"
+      ]
+    },
+    {
+      "questionId": "m660",
+      "sourceSignature": "sha256:de8972e38b69e868c719ee994be77e6ac234c34ec37f6d96927f9bf3c7bed1d3",
+      "conceptTagIds": [
+        "acronym.on-path-attack"
+      ]
+    }
+  ]
+}

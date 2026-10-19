@@ -1,0 +1,8 @@
+{
+  "status": "owner_approved_for_mcq_tag_metadata",
+  "approvedOn": "2026-10-19",
+  "draftSha256": "fdba7ff158005a03d3667070dc138588894ae58e2a1a1532fc133a3d8fae7327",
+  "scope": "All proposed tags on 59 clear and 61 flagged MCQs; does not activate Smart Review; excludes 275 without proposals and all PBQs.",
+  "questionCount": 120,
+  "tagAssignments": 138
+}
