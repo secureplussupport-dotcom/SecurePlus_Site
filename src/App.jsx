@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701EditorialReview.js";
 import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
 import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from "./data/sy0701PublishedSnapshot.js";
-import { CONCEPT_TAGS } from "./data/sy0701ConceptWeb.js";
+import { CONCEPT_TAGS, inferMcqConceptTagIds } from "./data/sy0701ConceptWeb.js";
 import mcqTagAssignments from "./data/mcqConceptTagAssignments.json";
 import {
   ArrowLeft,
@@ -29418,6 +29418,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
   },[historyExpanded]);
 
   const updateField=(field,value)=>setForm(prev=>({...prev,[field]:value}));
+  const withAutoMcqTags=(current,q)=>({...current,q,conceptTagIds:[...new Set([...(current.conceptTagIds||[]),...inferMcqConceptTagIds(q)])]});
   const changeChapter=chId=>setForm(prev=>{
     const topicOptions=getAdminTopicOptions(kind,chId,bank,kind==="mcq"?prev.topic:prev.cat);
     const currentTopic=kind==="mcq"?prev.topic:prev.cat;
@@ -29916,7 +29917,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
               </AdminField>
               <div className="card" style={{padding:"12px 14px",marginTop:12,background:t.panel,borderColor:t.border}}>
                 <label htmlFor="admin-concept-search" style={{display:"block",fontSize:13,fontWeight:900,color:t.text,marginBottom:6}}>Concept tags</label>
-                <div style={{fontSize:12,color:t.textSec,marginBottom:8}}>Choose every concept this MCQ tests. Tags are separate from auto-detected acronyms.</div>
+                <div style={{fontSize:12,color:t.textSec,marginBottom:8}}>Exact concepts in the question text are tagged automatically, including full names such as Recovery Time Objective → #RTO. Review or change the tags here; ambiguous acronyms need manual selection.</div>
                 <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
                   {(form.conceptTagIds||[]).map(id=>{
                     const tag=CONCEPT_TAGS.find(item=>item.id===id);
@@ -29924,12 +29925,13 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
                   })}
                 </div>
                 <input id="admin-concept-search" className="input" type="search" value={conceptSearch} onChange={e=>setConceptSearch(e.target.value)} placeholder="Search tag or concept"/>
+                <button type="button" className="btn btn-outline" style={{marginTop:8,fontSize:12}} onClick={()=>setForm(prev=>withAutoMcqTags(prev,prev.q))}>Auto-tag from question text</button>
                 {conceptQuery&&<div style={{display:"grid",gap:4,maxHeight:180,overflowY:"auto",marginTop:6}}>
                   {CONCEPT_TAGS.filter(tag=>[tag.tag.replace(/^#/,""),tag.name,tag.acronym].some(label=>String(label||"").toLowerCase().startsWith(conceptQuery))&&!(form.conceptTagIds||[]).includes(tag.id)).slice(0,12).map(tag=><button key={tag.id} type="button" className="btn btn-ghost" onClick={()=>{updateField("conceptTagIds",[...(form.conceptTagIds||[]),tag.id]);setConceptSearch("");}} style={{textAlign:"left",justifyContent:"flex-start"}}>{tag.tag} — {tag.name}</button>)}
                 </div>}
               </div>
               <div style={{height:12}}/>
-              <AdminTextArea label="Question" value={form.q} onChange={v=>updateField("q",v)} placeholder={"Write the MCQ question here.\n\nPress Enter twice to start a new paragraph."} rows={5}/>
+              <AdminTextArea label="Question" value={form.q} onChange={v=>setForm(prev=>withAutoMcqTags(prev,v))} placeholder={"Write the MCQ question here.\n\nPress Enter twice to start a new paragraph."} rows={5}/>
               <div style={{fontSize:11,color:t.textDim,lineHeight:1.55,marginTop:-4,marginBottom:12}}>Paragraphs, blank lines, and intentional spaces will appear in practice exactly as entered here.</div>
               <div style={{height:12}}/>
               <div style={{display:"grid",gap:10}}>

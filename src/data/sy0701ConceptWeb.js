@@ -27,6 +27,24 @@ export const CONCEPT_TAGS = Object.freeze([
   ...mcqExtensions.concepts.map(concept => Object.freeze(concept)),
 ]);
 
+const autoTagTerms = new Map();
+for (const tag of CONCEPT_TAGS) {
+  for (const term of new Set([tag.acronym, tag.name])) {
+    const key = String(term || '').trim().replace(/\s+/g, ' ').toLowerCase();
+    if (!key) continue;
+    autoTagTerms.set(key, new Set([...(autoTagTerms.get(key) || []), tag.id]));
+  }
+}
+const autoTagMatchers = [...autoTagTerms].filter(([, ids]) => ids.size === 1).map(([term, ids]) => ({
+  id: [...ids][0],
+  pattern: new RegExp(`(^|[^A-Za-z0-9])${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+')}(?=$|[^A-Za-z0-9])`, 'i'),
+}));
+
+export function inferMcqConceptTagIds(questionText) {
+  const text = String(questionText || '').replace(/\*\*|__|==/g, '').replace(/\s+/g, ' ');
+  return [...new Set(autoTagMatchers.filter(({ pattern }) => pattern.test(text)).map(({ id }) => id))];
+}
+
 const byAcronym = acronym => {
   if (acronym === 'SOC') return 'acronym.soc-operations';
   const matches = CONCEPT_TAGS.filter(tag => tag.acronym.toLowerCase() === acronym.toLowerCase());
