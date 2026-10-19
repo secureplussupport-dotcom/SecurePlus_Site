@@ -29308,6 +29308,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
   const [error,setError]=useState("");
   const [codeSearch,setCodeSearch]=useState("");
   const [conceptSearch,setConceptSearch]=useState("");
+  const conceptQuery=conceptSearch.trim().replace(/^#/,"").toLowerCase();
   const [sortMode,setSortMode]=useState("order");
   const [qualityFilter,setQualityFilter]=useState("all");
   const [showBankDashboard,setShowBankDashboard]=useState(false);
@@ -29609,9 +29610,17 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
       </div>
 
       <div className="card" style={{padding:"18px 20px",marginBottom:16,borderColor:`${t.green}35`,background:`${t.green}07`}}>
-        <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-          Use the form below like a normal admin panel. The site stores your changes safely in Supabase; regular users cannot edit these records.
-        </div>
+        {kind==="mcq"?(
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}>
+            <div>
+              <div style={{fontSize:15,fontWeight:900,color:t.text}}>MCQ concept tags</div>
+              <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>Choose an existing MCQ below, add or remove its tags, then save the question.</div>
+            </div>
+            <button type="button" className="btn btn-primary" onClick={()=>document.getElementById("admin-concept-search")?.scrollIntoView({behavior:"smooth",block:"center"})}>Open tag picker</button>
+          </div>
+        ):(
+          <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>Use the form below like a normal admin panel. The site stores your changes safely in Supabase; regular users cannot edit these records.</div>
+        )}
       </div>
 
       <div className="card" style={{padding:"16px 18px",marginBottom:16}}>
@@ -29915,8 +29924,8 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
                   })}
                 </div>
                 <input id="admin-concept-search" className="input" type="search" value={conceptSearch} onChange={e=>setConceptSearch(e.target.value)} placeholder="Search tag or concept"/>
-                {conceptSearch.trim()&&<div style={{display:"grid",gap:4,maxHeight:180,overflowY:"auto",marginTop:6}}>
-                  {CONCEPT_TAGS.filter(tag=>`${tag.tag} ${tag.name} ${tag.acronym}`.toLowerCase().includes(conceptSearch.trim().toLowerCase())&&!(form.conceptTagIds||[]).includes(tag.id)).slice(0,12).map(tag=><button key={tag.id} type="button" className="btn btn-ghost" onClick={()=>{updateField("conceptTagIds",[...(form.conceptTagIds||[]),tag.id]);setConceptSearch("");}} style={{textAlign:"left",justifyContent:"flex-start"}}>{tag.tag} — {tag.name}</button>)}
+                {conceptQuery&&<div style={{display:"grid",gap:4,maxHeight:180,overflowY:"auto",marginTop:6}}>
+                  {CONCEPT_TAGS.filter(tag=>[tag.tag.replace(/^#/,""),tag.name,tag.acronym].some(label=>String(label||"").toLowerCase().startsWith(conceptQuery))&&!(form.conceptTagIds||[]).includes(tag.id)).slice(0,12).map(tag=><button key={tag.id} type="button" className="btn btn-ghost" onClick={()=>{updateField("conceptTagIds",[...(form.conceptTagIds||[]),tag.id]);setConceptSearch("");}} style={{textAlign:"left",justifyContent:"flex-start"}}>{tag.tag} — {tag.name}</button>)}
                 </div>}
               </div>
               <div style={{height:12}}/>
