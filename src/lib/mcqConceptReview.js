@@ -1,10 +1,16 @@
-import { relatedConceptTagIds } from '../data/sy0701ConceptWeb.js';
+import { CONCEPT_TAGS } from '../data/sy0701ConceptTags.js';
 
-export function effectiveMcqConceptTagIds(question, assignedTags = []) {
-  return Array.isArray(question.conceptTagIds) ? question.conceptTagIds : assignedTags;
+const knownTagIds = new Set(CONCEPT_TAGS.map(tag => tag.id));
+
+export function effectiveMcqConceptTagIds(question, assignedTags = [], taggingVersion) {
+  // Older Question Manager saves contain IDs from the retired catalogue.
+  // A save made with this version (including an intentional empty list) wins.
+  const tags = question.taggingVersion === taggingVersion && Array.isArray(question.conceptTagIds)
+    ? question.conceptTagIds : assignedTags;
+  return [...new Set(tags.filter(id => knownTagIds.has(id)))];
 }
 
-// Reserve available MCQs for a missed concept and its direct web neighbors.
+// Reserve available MCQs for the exact concepts missed, then repeat the missed item.
 export function conceptRepairAnchors(ranked, latestAttempts, count) {
   const byId = new Map(ranked.map(entry => [entry.question.id, entry.question]));
   const missedQuestionIds = new Set();
@@ -14,7 +20,6 @@ export function conceptRepairAnchors(ranked, latestAttempts, count) {
     missedQuestionIds.add(questionId);
     for (const tag of byId.get(questionId).conceptTagIds || []) missedTags.add(tag);
   }
-  const relatedTags = new Set([...missedTags].flatMap(relatedConceptTagIds).filter(tag => !missedTags.has(tag)));
   const selected = [];
   const used = new Set();
   const pick = (tag, preferNew) => {
@@ -26,14 +31,20 @@ export function conceptRepairAnchors(ranked, latestAttempts, count) {
       used.add(choice.question.id);
     }
   };
-  for (const tag of missedTags) pick(tag, true);
-  // Keep each missed MCQ in the next review set until its latest answer is correct.
+  // One new same-tag question comes first; keep room for the original miss.
+  let firstTag;
+  for (const tag of missedTags) {
+    const before = selected.length;
+    pick(tag, true);
+    if (selected.length > before) { firstTag = tag; break; }
+  }
+  // Keep each missed MCQ in review until its latest answer is correct.
   for (const entry of ranked) {
     if (missedQuestionIds.has(entry.question.id) && !used.has(entry.question.id) && selected.length < count) {
       selected.push(entry);
       used.add(entry.question.id);
     }
   }
-  for (const tag of relatedTags) pick(tag, false);
+  for (const tag of missedTags) if (tag !== firstTag) pick(tag, true);
   return selected;
 }

@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701EditorialReview.js";
 import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
 import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from "./data/sy0701PublishedSnapshot.js";
-import { CONCEPT_TAGS, inferMcqConceptTagIds } from "./data/sy0701ConceptWeb.js";
+import { CONCEPT_TAGS, MCQ_TAGGING_VERSION, inferMcqConceptTagIds, searchMcqConceptTags } from "./data/sy0701ConceptTags.js";
 import { conceptRepairAnchors, effectiveMcqConceptTagIds } from "./lib/mcqConceptReview.js";
 import mcqTagAssignments from "./data/mcqConceptTagAssignments.json";
 import {
@@ -12349,7 +12349,7 @@ function applySy0701StudyNoteEnhancement(question) {
 
 const BASE_MCQ_BANK = mergePublishedSnapshot([...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id)),"mcq").filter(isMcqEditoriallyActive).map(applySy0701StudyNoteEnhancement).map(applyMcqEditorialReview).map(ensureMcqWrongFeedback);
 const mcqTagsById=new Map(mcqTagAssignments.assignments.map(row=>[row.questionId,row.conceptTagIds]));
-let MCQ_BANK = BASE_MCQ_BANK.map(question=>({...question,conceptTagIds:mcqTagsById.get(question.id)||[]}));
+let MCQ_BANK = BASE_MCQ_BANK.map(question=>({...question,conceptTagIds:mcqTagsById.get(question.id)||[],taggingVersion:MCQ_TAGGING_VERSION}));
 
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK — original, accurate, clearly scoped content
@@ -16225,6 +16225,7 @@ function applyQuestionOverrides(rows=[]) {
         if(payload.id&&payload.id!==id) payload.id=id;
         const sortOrder=Number(row.sort_order);
         const next={...(byId.get(id)||{}),...payload,id};
+        if(kind==="mcq"&&Array.isArray(payload.conceptTagIds)&&payload.taggingVersion!==MCQ_TAGGING_VERSION) delete next.taggingVersion;
         if(Number.isFinite(sortOrder)&&sortOrder>0) next._adminOrder=sortOrder;
         byId.set(id, kind==="mcq" ? ensureMcqWrongFeedback(next) : next);
       });
@@ -16239,7 +16240,7 @@ function applyQuestionOverrides(rows=[]) {
 }
 
 function applyAssignedMcqTags() {
-  MCQ_BANK=MCQ_BANK.map(question=>({...question,conceptTagIds:effectiveMcqConceptTagIds(question,mcqTagsById.get(question.id)||[])}));
+  MCQ_BANK=MCQ_BANK.map(question=>({...question,conceptTagIds:effectiveMcqConceptTagIds(question,mcqTagsById.get(question.id)||[],MCQ_TAGGING_VERSION),taggingVersion:MCQ_TAGGING_VERSION}));
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -28864,6 +28865,7 @@ function cleanAdminQuestionPayload(form,kind) {
     const conceptTagIds=[...new Set(form.conceptTagIds||[])];
     if(conceptTagIds.some(id=>!CONCEPT_TAGS.some(tag=>tag.id===id))) throw new Error("Choose concept tags from the menu.");
     question.conceptTagIds=conceptTagIds;
+    question.taggingVersion=MCQ_TAGGING_VERSION;
     question.acronyms=getMcqAcronyms(question);
     return {
       question,
@@ -29311,6 +29313,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
   const [codeSearch,setCodeSearch]=useState("");
   const [conceptSearch,setConceptSearch]=useState("");
   const conceptQuery=conceptSearch.trim().replace(/^#/,"").toLowerCase();
+  const conceptSuggestions=searchMcqConceptTags(conceptQuery,form.conceptTagIds||[]);
   const [sortMode,setSortMode]=useState("order");
   const [qualityFilter,setQualityFilter]=useState("all");
   const [showBankDashboard,setShowBankDashboard]=useState(false);
@@ -29919,7 +29922,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
               </AdminField>
               <div className="card" style={{padding:"12px 14px",marginTop:12,background:t.panel,borderColor:t.border}}>
                 <label htmlFor="admin-concept-search" style={{display:"block",fontSize:13,fontWeight:900,color:t.text,marginBottom:6}}>Concept tags</label>
-                <div style={{fontSize:12,color:t.textSec,marginBottom:8}}>Exact concepts in the question text are tagged automatically, including full names such as Recovery Time Objective → #RTO. Review or change the tags here; ambiguous acronyms need manual selection.</div>
+                <div style={{fontSize:12,color:t.textSec,marginBottom:8}}>These are the MCQ concepts used by Smart Review. Gemini's primary and secondary tags are prefilled; distractor tags do not drive review. You can add or remove more than one tag here.</div>
                 <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
                   {(form.conceptTagIds||[]).map(id=>{
                     const tag=CONCEPT_TAGS.find(item=>item.id===id);
@@ -29927,9 +29930,9 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
                   })}
                 </div>
                 <input id="admin-concept-search" className="input" type="search" value={conceptSearch} onChange={e=>setConceptSearch(e.target.value)} placeholder="Search tag or concept"/>
-                <button type="button" className="btn btn-outline" style={{marginTop:8,fontSize:12}} onClick={()=>setForm(prev=>withAutoMcqTags(prev,prev.q))}>Auto-tag from question text</button>
+                <button type="button" className="btn btn-outline" style={{marginTop:8,fontSize:12}} onClick={()=>setForm(prev=>withAutoMcqTags(prev,prev.q))}>Add exact-term matches from question text</button>
                 {conceptQuery&&<div style={{display:"grid",gap:4,maxHeight:180,overflowY:"auto",marginTop:6}}>
-                  {CONCEPT_TAGS.filter(tag=>[tag.tag.replace(/^#/,""),tag.name,tag.acronym].some(label=>String(label||"").toLowerCase().startsWith(conceptQuery))&&!(form.conceptTagIds||[]).includes(tag.id)).slice(0,12).map(tag=><button key={tag.id} type="button" className="btn btn-ghost" onClick={()=>{updateField("conceptTagIds",[...(form.conceptTagIds||[]),tag.id]);setConceptSearch("");}} style={{textAlign:"left",justifyContent:"flex-start"}}>{tag.tag} — {tag.name}</button>)}
+                  {conceptSuggestions.map(tag=><button key={tag.id} type="button" className="btn btn-ghost" onClick={()=>{updateField("conceptTagIds",[...(form.conceptTagIds||[]),tag.id]);setConceptSearch("");}} style={{textAlign:"left",justifyContent:"flex-start"}}>{tag.tag} — {tag.name}</button>)}
                 </div>}
               </div>
               <div style={{height:12}}/>

@@ -1,11 +1,9 @@
 import assert from 'node:assert/strict';
-import { inferMcqConceptTagIds } from '../src/data/sy0701ConceptWeb.js';
+import { inferMcqConceptTagIds } from '../src/data/sy0701ConceptTags.js';
 
-assert.deepEqual(inferMcqConceptTagIds('What is the Recovery Time Objective (RTO)?'), ['recovery.rto']);
-assert.deepEqual(inferMcqConceptTagIds('What does **recovery time objective** mean?'), ['recovery.rto']);
-assert.deepEqual(inferMcqConceptTagIds('What is an RTO?'), ['recovery.rto']);
-assert.deepEqual(inferMcqConceptTagIds('What is a retrospective?'), []);
-assert.deepEqual(inferMcqConceptTagIds('What is MAC?'), []);
-assert.deepEqual(inferMcqConceptTagIds('What is mandatory access control?'), ['acronym.mac-access-control']);
+assert(inferMcqConceptTagIds('What is MFA?').includes('iam.mfa'));
+assert(inferMcqConceptTagIds('What is multi-factor authentication?').includes('iam.mfa'));
+assert(!inferMcqConceptTagIds('What is a retrospective?').includes('risk.bia-rto-rpo'));
+assert(!inferMcqConceptTagIds('What is MAC?').some(id => id.includes('mac')));
 
-console.log('MCQ auto-tag term matching passed.');
+console.log('MCQ exact-term auto-tag matching passed.');

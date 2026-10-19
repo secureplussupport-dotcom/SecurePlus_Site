@@ -17,21 +17,3 @@ export const LEARNING_CONCEPTS = freeze([
   concept('recovery.mttr', 'Mean Time to Repair / Recover', 'Average time needed to repair a failure or restore service, rather than a recovery deadline.', ['MTTR']),
   concept('continuity.bia', 'Business Impact Analysis', 'Identifies critical business functions and disruption impacts to inform recovery planning.', ['BIA']),
 ]);
-
-// Explicit support-only graph nodes: no mastery state is calculated for these.
-export const SUPPORT_NODES = freeze([
-  { id: 'continuity.metrics', name: 'Business continuity metrics', kind: 'topic', topicId: 'business-continuity-metrics' },
-  { id: 'recovery.backup-frequency', name: 'Backup frequency', kind: 'supporting_concept' },
-]);
-const edge = (sourceConceptId, targetConceptId, type, direction, editorialWeight) => ({
-  sourceConceptId, targetConceptId, type, direction, editorialWeight,
-  reviewStatus: EDITORIAL_STATUS, mappingVersion: MAPPING_VERSION,
-});
-export const CONCEPT_RELATIONSHIPS = freeze([
-  edge('recovery.rto', 'recovery.rpo', 'commonly_confused_with', 'bidirectional', 1),
-  edge('recovery.rto', 'recovery.mttr', 'contrasts_with', 'bidirectional', 0.9),
-  edge('recovery.rto', 'recovery.mtd', 'contrasts_with', 'bidirectional', 0.9),
-  ...['rto', 'rpo', 'mtd', 'mttr'].map(id => edge('continuity.bia', `recovery.${id}`, 'prerequisite_for', 'forward', 0.8)),
-  ...['rto', 'rpo', 'mtd', 'mttr'].map(id => edge(`recovery.${id}`, 'continuity.metrics', 'part_of', 'forward', 0.5)),
-  edge('recovery.rpo', 'recovery.backup-frequency', 'applied_with', 'bidirectional', 0.8),
-]);

@@ -1,24 +1,17 @@
 import { LEARNING_CONFIG, versions } from './learningConfig.js';
-import { LEARNING_CONCEPTS, CONCEPT_RELATIONSHIPS } from '../data/learningConcepts.js';
+import { LEARNING_CONCEPTS } from '../data/learningConcepts.js';
 import { QUESTION_MAPPINGS, CONTENT_MAPPINGS } from '../data/learningMappings.js';
 import { calculateConceptMastery } from './conceptMastery.js';
 import { compareIds } from './learningEvidence.js';
 
-// Only this recommendation path reads the graph. The evidence/calculator never do.
+// Relationship recommendations are retired; default to direct concept support only.
 export function recommendConceptSupport(conceptId, {
-  contentMappings = CONTENT_MAPPINGS, relationships = CONCEPT_RELATIONSHIPS, config = LEARNING_CONFIG,
+  contentMappings = CONTENT_MAPPINGS, config = LEARNING_CONFIG,
 } = {}) {
   const approved = x => x.mappingVersion === config.mappingVersion && config.allowedReviewStatuses.includes(x.editorialStatus ?? x.reviewStatus);
-  const links = [{ conceptId, role: 'direct', reason: 'direct_concept_review', editorialWeight: 1 }];
-  for (const edge of relationships.filter(approved)) {
-    let other;
-    if (edge.sourceConceptId === conceptId) other = edge.targetConceptId;
-    if (edge.targetConceptId === conceptId && (edge.direction === 'bidirectional' || edge.type === 'prerequisite_for')) other = edge.sourceConceptId;
-    if (other) links.push({ conceptId: other, role: 'supporting', reason: edge.type, editorialWeight: edge.editorialWeight });
-  }
-  return links.map(link => ({ ...link, content: contentMappings.filter(c => approved(c) && c.conceptIds.includes(link.conceptId)),
-    createsMasteryEvidence: false, ...versions(config),
-  })).sort((a, b) => b.editorialWeight - a.editorialWeight || compareIds(a.conceptId, b.conceptId));
+  return [{ conceptId, role: 'direct', reason: 'direct_concept_review', editorialWeight: 1,
+    content: contentMappings.filter(c => approved(c) && c.conceptIds.includes(conceptId)),
+    createsMasteryEvidence: false, ...versions(config) }];
 }
 function seededOrder(seed, id) {
   // Stable integer hash for tie-breaking only; no randomness or wall clock.

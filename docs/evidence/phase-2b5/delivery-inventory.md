@@ -177,42 +177,42 @@ All 14 independently authored guest teaching records have source units, revision
 
 | Identity | Kind | Source lines | Revision SHA-256 |
 | --- | --- | --- | --- |
-| guest-demo:flashcard:mfa | guest_demo_flashcard | 24411–24443, 24433–24436 | sha256:b6b07be8b4644142059f0bb2b13a536d5f77ac0db57a191ca0a85593dc830472 |
-| guest-demo:lesson-prompt:dns-attacks | guest_demo_lesson_prompt | 24623–24628 | sha256:f6cc1b5aa9f56c1a2d53ee6182b01e132aaed74959051482b0af13cb9edb33ed |
-| guest-demo:lesson-prompt:phishing | guest_demo_lesson_prompt | 24623–24628 | sha256:a7f99625a1b3fff9983b09f868e58d56e24bb47dd82732366951d99a7faff864 |
-| guest-demo:lesson-prompt:web-attacks | guest_demo_lesson_prompt | 24623–24628 | sha256:41f34defe6fabeeba1400ed3ebb9076f9bf25084c44bcde635c15495434a80f8 |
-| guest-demo:mcq:access-control | guest_demo_mcq | 24443–24469 | sha256:e6b704024ec272cef5daccc4e358eb1f3d8cdce7fc56d73d3f46552a685bae6d |
-| guest-demo:mcq:distractor-explanation | guest_demo_explanation | 24482–24491 | sha256:af9994102144e082cfb8698a2b2901901a9f77ba8ca569973f07212ce8370122 |
-| guest-demo:mcq:feedback | guest_demo_feedback | 24463–24466 | sha256:6a6ba2c4fb848d5e7d1269132b076cad9739d280e0aa0c05984f46db91ea7a30 |
-| guest-demo:mcq:solution-explanation | guest_demo_explanation | 24473–24482 | sha256:0902235765e8b32654df979afbe5b845817d1f2bcf6b8a1e1297c988beee3903 |
-| guest-demo:pbq:feedback | guest_demo_feedback | 24546–24549 | sha256:9120d4b8c66fb33c551e658a1f5d67184b13d977d7d433fdb369dc092d00ceae |
-| guest-demo:pbq:hint | guest_demo_hint | 24529–24530, 24533–24534 | sha256:96e4faa50726c02fc73bf28a81f16afda40e297199920b80ff73d1d58fa66aae |
-| guest-demo:pbq:incident-response-ordering | guest_demo_pbq | 24494–24553 | sha256:f6b3acd0fa4e0b3791f86a894d864a8a1d7ea1e2c26050f549df73f761ccfbe9 |
-| guest-demo:review-path:iam | guest_demo_review_path | 24576–24581 | sha256:9e018d89f0780e2e7fe865d5a7689ec0d6d04bf9cc5ca7dabb70bfc501a45dc3 |
-| guest-demo:review-path:logs | guest_demo_review_path | 24576–24581 | sha256:19242ef1b5b5468830dd115a527cb933eb54f9a58358403e2b222ed55ec52555 |
-| guest-demo:review-path:pki | guest_demo_review_path | 24576–24581 | sha256:1c14cd2132bba45cedd768b6a2d0ffede6ebdc65f938bb45e7662c19eca1ae03 |
+| guest-demo:flashcard:mfa | guest_demo_flashcard | 24412–24444, 24434–24437 | sha256:308fae1e7b6e1fcded160d8dc6607966080dcc4b0105a0d0a1f822a732b581d3 |
+| guest-demo:lesson-prompt:dns-attacks | guest_demo_lesson_prompt | 24624–24629 | sha256:f6cc1b5aa9f56c1a2d53ee6182b01e132aaed74959051482b0af13cb9edb33ed |
+| guest-demo:lesson-prompt:phishing | guest_demo_lesson_prompt | 24624–24629 | sha256:a7f99625a1b3fff9983b09f868e58d56e24bb47dd82732366951d99a7faff864 |
+| guest-demo:lesson-prompt:web-attacks | guest_demo_lesson_prompt | 24624–24629 | sha256:41f34defe6fabeeba1400ed3ebb9076f9bf25084c44bcde635c15495434a80f8 |
+| guest-demo:mcq:access-control | guest_demo_mcq | 24444–24470 | sha256:7f88f143a81bb39cc34557498cc34f95382f513dd5aad197c699cad7764087bc |
+| guest-demo:mcq:distractor-explanation | guest_demo_explanation | 24483–24492 | sha256:cbf0c247b1c44b6de57bdd25c99391e28804daaf1924f1df8d77b22f3f870d93 |
+| guest-demo:mcq:feedback | guest_demo_feedback | 24464–24467 | sha256:d44a45c05c9d5a65af982ba31e046e424c6a59fbf7474d398e0620e4e6151358 |
+| guest-demo:mcq:solution-explanation | guest_demo_explanation | 24474–24483 | sha256:42d2175dc7a4442999581f068638c83572afdf1765cdd6689a5207a7ea092bee |
+| guest-demo:pbq:feedback | guest_demo_feedback | 24547–24550 | sha256:992196bbcaa00f7938f9ddbdaa67d376beef30bbf12e33ddb5a1bb38744da9c8 |
+| guest-demo:pbq:hint | guest_demo_hint | 24530–24531, 24534–24535 | sha256:6a03c13f9f6b35a778834b8d88c7120045397713e8dc9b7928bd2372d6478f0b |
+| guest-demo:pbq:incident-response-ordering | guest_demo_pbq | 24495–24554 | sha256:9b89051eee6fbc273f3efa362bc9e16e673fd0f97913620c941fe5c3430e08b4 |
+| guest-demo:review-path:iam | guest_demo_review_path | 24577–24582 | sha256:9e018d89f0780e2e7fe865d5a7689ec0d6d04bf9cc5ca7dabb70bfc501a45dc3 |
+| guest-demo:review-path:logs | guest_demo_review_path | 24577–24582 | sha256:19242ef1b5b5468830dd115a527cb933eb54f9a58358403e2b222ed55ec52555 |
+| guest-demo:review-path:pki | guest_demo_review_path | 24577–24582 | sha256:1c14cd2132bba45cedd768b6a2d0ffede6ebdc65f938bb45e7662c19eca1ae03 |
 
 ## Delivered selectors
 
 ### intervention:cipher-study-routing
 
-- Exact revision: sha256:4ec5f772bece87d4a3053333a61b952d3cf7ec3f813679e7366b15600ac3a1fe
+- Exact revision: sha256:2dd281ea8fe4ffb00642203f5117d4f7f1b9f49fad76d3596d136633ebd669c7
 - Inputs: current view; attempt-derived weak chapter/topics; tier; supplied assistant deck
 - Target kinds: mcq, flashcard
 - Behavior boundary: Preset choices and stable weak-chapter scoring; explicit supplied deck takes precedence over weak/starter fallback.
 - Mapping dependencies: Preset study guidance routes to Smart Review or flashcards; it is not an independent adaptive model or new instructional content.
-- Source units: src/App.jsx:27943–28218; src/App.jsx:33612–33618
-- Delivery sites: src/App.jsx:34972
+- Source units: src/App.jsx:27944–28219; src/App.jsx:33615–33621
+- Delivery sites: src/App.jsx:34975
 
 ### intervention:daily-challenges
 
-- Exact revision: sha256:0abd238aa2025ece8e5384f1a87ea06cbb9a0f8f29e6376f91682fb0d5003c37
+- Exact revision: sha256:162e003d8b1db5ac0ada0e00db53f2eb113dc7205dbfcd3eace11daee6fbd45a
 - Inputs: local calendar weekday; hardcoded question IDs; effective banks
 - Target kinds: mcq, pbq
 - Behavior boundary: Weekday chooses a fixed ID list; missing IDs are filtered; MCQ options are randomized.
 - Mapping dependencies: Daily challenge and landing widget use the same authored selector; actual learner results are excluded.
-- Source units: src/App.jsx:16248–16282; src/App.jsx:22766–23038; src/App.jsx:23064–23216
-- Delivery sites: src/App.jsx:22767; src/App.jsx:23065
+- Source units: src/App.jsx:16249–16283; src/App.jsx:22767–23039; src/App.jsx:23065–23217
+- Delivery sites: src/App.jsx:22768; src/App.jsx:23066
 
 ### intervention:deep-dive-recommendations
 
@@ -222,117 +222,117 @@ All 14 independently authored guest teaching records have source units, revision
 - Behavior boundary: Stable for fixed ordered input and source data; score, evidence count and study order break ties; first miss domain controls fallback.
 - Mapping dependencies: Objective/topic hints and lexical overlap can use explanations and options internally. Export no matched private text or learner instances; these are legacy recommendations, not approved mastery links.
 - Source units: src/lib/deepDiveRecommendations.js:1–186
-- Delivery sites: src/App.jsx:24147; src/App.jsx:25273; src/App.jsx:25696
+- Delivery sites: src/App.jsx:24148; src/App.jsx:25274; src/App.jsx:25697
 
 ### intervention:diagnostic
 
-- Exact revision: sha256:1593315bb65006aa40b24ed679855780b5c217079f2ef48c0d13d92f8516e96d
+- Exact revision: sha256:01466bfa852468572678fed1ba35835f2c837ab90aa7d7adc1001e29ac853868
 - Inputs: effective MCQs; chapter order; concise fallback sets
 - Target kinds: mcq, starter_question
 - Behavior boundary: Stable easiest concise per-chapter choice and fallback; displayed answer options randomized.
 - Mapping dependencies: Five-question diagnostic; weak chapter action is based on that diagnostic, not validated adaptive mastery.
-- Source units: src/App.jsx:2061–2082; src/App.jsx:33172–33329
-- Delivery sites: src/App.jsx:33173
+- Source units: src/App.jsx:2061–2082; src/App.jsx:33175–33332
+- Delivery sites: src/App.jsx:33176
 
 ### intervention:exam-selection
 
-- Exact revision: sha256:ee568fadbcba49144846e5daad79f18cb9797d00cbf996f5d7d51ebec23df6e6
+- Exact revision: sha256:0a7b256017aca10db482664078d5f31755d7d20905ba1a6ce73e7ebc83155f11
 - Inputs: effective banks; requested MCQ/PBQ counts; access state; exam results
 - Target kinds: mcq, pbq
 - Behavior boundary: Math.random samples non-enrichment content; PBQs precede MCQs; review filtering uses local exam results.
 - Mapping dependencies: Exam sampling, incorrect/flagged review and weakest-topic summary reuse bank revisions. Payment/voucher operations are not executed by this audit.
-- Source units: src/App.jsx:26648–27504
-- Delivery sites: src/App.jsx:34944
+- Source units: src/App.jsx:26649–27505
+- Delivery sites: src/App.jsx:34947
 
 ### intervention:flashcard-navigation
 
-- Exact revision: sha256:329750df51ee40dcb3e0ae319508ed08055c3bfa5456ce68aa0207a36989dcaf
+- Exact revision: sha256:ef4cd8bcc1115149825b40d49e4a465b13a697e44e280824f7761fa77b3d88cf
 - Inputs: chapter filter; requested/saved/shared/assistant deck IDs; mode; authored cards
 - Target kinds: flashcard, deck_container
 - Behavior boundary: Fixed catalogue order for browsing; shared/saved IDs resolve to current authored cards; random generation delegated.
 - Mapping dependencies: Includes three mobile quick sets, saved/shared deck restoration and explicit deck/mode choice. Stored learner instances are excluded.
-- Source units: src/App.jsx:31939–32738
-- Delivery sites: src/App.jsx:34777,34955
+- Source units: src/App.jsx:31942–32741
+- Delivery sites: src/App.jsx:34780,34958
 
 ### intervention:flashcard-study-pass
 
-- Exact revision: sha256:742cd5181042cdf0f86271c9b49cc7340e32313b63c319aa6359967f379a9d51
+- Exact revision: sha256:51c35a572672d9f39611404bc32119a2cc1181fbe8ba2bb8fa34930b1a00289e
 - Inputs: deck; mode; card order; local pass progress
 - Target kinds: flashcard, lesson, deck_container
 - Behavior boundary: Default/source or saved order; example mode filters cards; shuffle is random; completion/next-deck navigation is deterministic for fixed state.
 - Mapping dependencies: Term/acronym/example presentation, pass navigation and related lesson/deck actions reuse authored content. Self-rating is not trusted mastery evidence.
-- Source units: src/App.jsx:30944–31244
-- Delivery sites: src/App.jsx:31498,32469
+- Source units: src/App.jsx:30947–31247
+- Delivery sites: src/App.jsx:31501,32472
 
 ### intervention:glossary-delivery
 
-- Exact revision: sha256:cdd838d2dddeee8350a051152badceaaedd2977f24e5b48a67b9b240dc7dac55
+- Exact revision: sha256:20d335c1bc6bcbb43045d6404642ae01ff01f7cd8e32aaadc1b1fec6ad9c29d5
 - Inputs: rendered text; glossary definitions
 - Target kinds: glossary_definition
 - Behavior boundary: Case-insensitive longest-first boundary matching within inline formatting segments; deterministic for exact text.
 - Mapping dependencies: Definitions are conditional inline support; corpus matches do not prove a browser tooltip was opened.
-- Source units: src/App.jsx:20667–20775; src/App.jsx:2409–2450
-- Delivery sites: src/App.jsx:20786,20813,20818,20821,21081,21088,21090,21108,21124,22981,22995,23178,25810,25814,25837,26005,26006,26187,26188,26314,26429,26467,26502,26512,27274,27290,27426,27448,30197,30202,30207,30219,30225,30229,30238,30248,30251,30258,31265,31269,33299,33303,33317
+- Source units: src/App.jsx:20668–20776; src/App.jsx:2409–2450
+- Delivery sites: src/App.jsx:20787,20814,20819,20822,21082,21089,21091,21109,21125,22982,22996,23179,25811,25815,25838,26006,26007,26188,26189,26315,26430,26468,26503,26513,27275,27291,27427,27449,30200,30205,30210,30222,30228,30232,30241,30251,30254,30261,31268,31272,33302,33306,33320
 
 ### intervention:guest-feature-lesson-topic
 
-- Exact revision: sha256:08ede4f6e05e17467a2d11677ee3767acd35e274c3dfa75a84e740980448bb4e
+- Exact revision: sha256:8bad16fa6bb9636d3efcc3fc7a1402e11daf628a858effa5f3c16dc59a65847e
 - Inputs: selected preview title; fixed authored prompt list
 - Target kinds: guest_demo_lesson_prompt
 - Behavior boundary: Fixed title lookup with first-prompt fallback; content changes only with explicit topic selection.
 - Mapping dependencies: Three standalone teaching prompts are distinct from the Deep Dive lesson catalogue; no canonical objective mapping is approved.
-- Source units: src/App.jsx:24623–24648
-- Delivery sites: src/App.jsx:24681
+- Source units: src/App.jsx:24624–24649
+- Delivery sites: src/App.jsx:24682
 
 ### intervention:guest-feature-review-topic
 
-- Exact revision: sha256:9a1e4feacd6106e9e709081a0e2a7972f89b394cd968f7a80923b3434cfa4346
+- Exact revision: sha256:8538693765345216b59572534347fbe318609ecaf3772e352248f15e3f060ac8
 - Inputs: selected synthetic topic; fixed authored path dictionary
 - Target kinds: guest_demo_review_path
 - Behavior boundary: User-selected dictionary lookup; default PKI topic; displayed percentages/miss signals and queue labels are hardcoded, not learner measurements.
 - Mapping dependencies: Three illustrative review paths teach priorities but provide no verified personalization or mastery evidence.
-- Source units: src/App.jsx:24575–24623
-- Delivery sites: src/App.jsx:24681
+- Source units: src/App.jsx:24576–24624
+- Delivery sites: src/App.jsx:24682
 
 ### intervention:guest-feature-teaching
 
-- Exact revision: sha256:188f65708aa89e1e926e1c89361a7763942b44cba45056c7ef5db9971a1f68bc
+- Exact revision: sha256:8ad5ef5772b565d56af67f0b8b483414416fc40833631267bcb60967175bec29
 - Inputs: hardcoded feature type; in-view state; local flip/choice/sequence/focus state
 - Target kinds: guest_demo_flashcard, guest_demo_mcq, guest_demo_explanation, guest_demo_feedback, guest_demo_pbq, guest_demo_hint, guest_demo_review_path, guest_demo_lesson_prompt
 - Behavior boundary: Fixed authored branches selected by feature ID; local interactions reveal content. MFA auto-flip depends on time/reduced-motion preference. No adaptive selection or learner history.
 - Mapping dependencies: Reachable default guest landing demos are separately authored teaching surfaces. The timed-exam clock branch is explicitly excluded as noninstructional illustration; this is distinct from navigation to a real PBQ.
-- Source units: src/App.jsx:24386–24648; src/App.jsx:24648–24686; src/App.jsx:24686–24789
-- Delivery sites: src/App.jsx:34739; src/App.jsx:24749; src/App.jsx:24681
+- Source units: src/App.jsx:24387–24649; src/App.jsx:24649–24687; src/App.jsx:24687–24790
+- Delivery sites: src/App.jsx:34742; src/App.jsx:24750; src/App.jsx:24682
 
 ### intervention:guest-pbq-preview
 
-- Exact revision: sha256:3248b62a5da89f84313a8d25c139e3edc0415e3c8591806ff262081ab6de4da6
+- Exact revision: sha256:49f99727b9e15e05c7b31abcb131775178ebd73e6d7983b783efa01f32d530a7
 - Inputs: live/local bank; fixed free-preview ID
 - Target kinds: pbq
 - Behavior boundary: Find the fixed preview in live bank, then local bank, otherwise null.
 - Mapping dependencies: Single free-preview routing is not adaptive recommendation.
-- Source units: src/App.jsx:34498–34507
-- Delivery sites: src/App.jsx:34621,34739
+- Source units: src/App.jsx:34501–34510
+- Delivery sites: src/App.jsx:34624,34742
 
 ### intervention:lesson-navigation
 
-- Exact revision: sha256:71ac74812928a3561770b2a76d46eec3f10d569ce9af820042111d62982732ba
+- Exact revision: sha256:c766c8ac527bc0e9119a924cba88a7bb0921d92a87a05b9494a5b0399380b1d4
 - Inputs: query/domain; lesson selection; tier; lesson profile; local study step
 - Target kinds: lesson, lesson_section, lesson_check, deck_container
 - Behavior boundary: Study-order sorting, fixed section/check order, first three generated checks and first overlapping-objective deck are deterministic.
 - Mapping dependencies: Includes free-preview gating, lesson search, guided steps and related flashcard end action. Other lesson end actions delegate to separately inventoried selectors.
-- Source units: src/App.jsx:31280–31939
-- Delivery sites: src/App.jsx:34778,34954
+- Source units: src/App.jsx:31283–31942
+- Delivery sites: src/App.jsx:34781,34957
 
 ### intervention:lesson-related-pbq
 
-- Exact revision: sha256:de7e23809801c523287155a006fb77e0bfc1eba703a54af2114c269d8f62bd14
+- Exact revision: sha256:1fcda247e19945031d1f6de184926734d7d2d07014bda4b8ce89a5bbfc23d115
 - Inputs: lesson chapter; effective PBQ bank; tier/unlocked IDs
 - Target kinds: pbq, mcq
 - Behavior boundary: First accessible same-chapter PBQ, then same-chapter candidate, then free preview; inaccessible result routes to access UI.
 - Mapping dependencies: Lesson-to-PBQ and chapter-review actions use coarse domain links, not exact concept diagnosis.
-- Source units: src/App.jsx:34477–34498
-- Delivery sites: src/App.jsx:34954
+- Source units: src/App.jsx:34480–34501
+- Delivery sites: src/App.jsx:34957
 
 ### intervention:next-flashcard-deck
 
@@ -342,37 +342,37 @@ All 14 independently authored guest teaching records have source units, revision
 - Behavior boundary: Cyclic source-order successor; unknown deck returns first deck.
 - Mapping dependencies: Continue-studying recommendation is ordered navigation, not personalized mastery.
 - Source units: src/App.jsx:467–472
-- Delivery sites: src/App.jsx:31969
+- Delivery sites: src/App.jsx:31972
 
 ### intervention:next-related-pbq
 
-- Exact revision: sha256:1908353fd1ce3117e38f39942d8b23d233a1bb5f564a1f6119d50abf97ea6a2f
+- Exact revision: sha256:4a7376f0975de534374d5124ae3cef82a87ecd184d3efcf309517c58b0a554a0
 - Inputs: current PBQ; successful attempt IDs; effective PBQ bank order
 - Target kinds: pbq
 - Behavior boundary: First unsolved same chapter/type, then same chapter, then cyclic bank successor; deterministic for fixed inputs.
 - Mapping dependencies: Next-question behavior is coarse legacy chapter/type matching, not concept mastery or independently proven novelty.
-- Source units: src/App.jsx:16282–16294
-- Delivery sites: src/App.jsx:34815
+- Source units: src/App.jsx:16283–16295
+- Delivery sites: src/App.jsx:34818
 
 ### intervention:pbq-catalogue-selection
 
-- Exact revision: sha256:7b86d81a7aba6085e48b57f0f2d7715b232f3041ae1541a6806b572b2975f636
+- Exact revision: sha256:666d9584e44f7e92816c9fad4eff15024c335403e6971e852123d95ea9b65b39
 - Inputs: bank; chapter/type/missed/starred filters; attempts; tier; visible count
 - Target kinds: pbq
 - Behavior boundary: Stable progress/source-order list with free preview priority; random practice favors unseen then missed, with random enrichment downweighting.
 - Mapping dependencies: Includes filtered browsing and random-practice selection. Unlock state is a runtime input, not exported learner data.
-- Source units: src/App.jsx:25927–26221
-- Delivery sites: src/App.jsx:34942
+- Source units: src/App.jsx:25928–26222
+- Delivery sites: src/App.jsx:34945
 
 ### intervention:practice-launch
 
-- Exact revision: sha256:cf5c474f3a631616480e8da7368517ffc9015c9776b595aaa8c36d2e838dc355
+- Exact revision: sha256:cf5f643215df266c9d065d6634c380d59371c3326c1cc6b4b4273e884d0126ca
 - Inputs: bank and filters; guest/account status; missed/starred IDs; chapter review request; session results
 - Target kinds: mcq, lesson
 - Behavior boundary: Filters and Smart Review inputs are deterministic for fixed state/time; option shuffling and random practice are not.
 - Mapping dependencies: Normal, missed, starred and focused chapter launchers, result recommendations and replay/resume paths use existing question/lesson sources.
-- Source units: src/App.jsx:25002–25883
-- Delivery sites: src/App.jsx:34742,34939
+- Source units: src/App.jsx:25003–25884
+- Delivery sites: src/App.jsx:34745,34942
 
 ### intervention:random-flashcards
 
@@ -382,7 +382,7 @@ All 14 independently authored guest teaching records have source units, revision
 - Behavior boundary: Random unless preserveOrder is supplied; source order preserved on saved-deck hydration; generated color can depend on Date.now.
 - Mapping dependencies: Selection, dividers and saved-ID hydration reuse authored cards. Saved user deck contents are excluded.
 - Source units: src/App.jsx:417–472; src/App.jsx:500–573
-- Delivery sites: src/App.jsx:32261,32300; src/App.jsx:31948
+- Delivery sites: src/App.jsx:32264,32303; src/App.jsx:31951
 
 ### intervention:related-flashcard-lessons
 
@@ -392,27 +392,27 @@ All 14 independently authored guest teaching records have source units, revision
 - Behavior boundary: Stable score/source-order ranking; at most three; starred collection returns none.
 - Mapping dependencies: Terms, objective overlap and domain matching; no canonical adaptive mapping dependence.
 - Source units: src/App.jsx:737–773; src/App.jsx:659–660
-- Delivery sites: src/App.jsx:31017
+- Delivery sites: src/App.jsx:31020
 
 ### intervention:signup-diagnostic
 
-- Exact revision: sha256:546a54b1b6ee8107ebbc65d46ec89b6fb007097248b4175b515043336b7e1701
+- Exact revision: sha256:92fe1ed46ac40e44ee21870983df7a57385d20d48e119cb075996d1c9289b6fc
 - Inputs: declared experience level; authored starter sets
 - Target kinds: starter_question
 - Behavior boundary: Fixed per-experience set and source order.
 - Mapping dependencies: Separate authored signup diagnostic revisions; also fallbacks for the general diagnostic.
-- Source units: src/App.jsx:21896–22000
-- Delivery sites: src/App.jsx:22009; src/App.jsx:23460
+- Source units: src/App.jsx:21897–22001
+- Delivery sites: src/App.jsx:22010; src/App.jsx:23461
 
 ### intervention:smart-review
 
-- Exact revision: sha256:9bf880fa4dde2e28efb1485c768438dacd00c591b17288e4ead5521e6c2f9276
-- Inputs: MCQ bank and concept tags; attempt chronology; direct concept neighbors; starred IDs; focus topics/chapter; count; mode; current time
+- Exact revision: sha256:64b7127a0f5a5d1a81b5cbba494f48c2cca52f92923ca24df697aef1ca8dd33f
+- Inputs: MCQ bank and concept tags; attempt chronology; same-tag repair; starred IDs; focus topics/chapter; count; mode; current time
 - Target kinds: mcq
-- Behavior boundary: Smart ranking is stable for fixed now and history; random mode uses Math.random. Available same-tag alternatives, original missed MCQs, then direct-neighbor MCQs precede diversity-filled results.
-- Mapping dependencies: Latest missed MCQ tags and one-hop concept links reserve available repair questions. The original missed MCQ remains in the next set while its latest answer is wrong, subject to set capacity; existing SM-2 timing and topic/chapter signals fill the remainder. No learner history is read by the inventory.
+- Behavior boundary: Smart ranking is stable for fixed now and history; random mode uses Math.random. Available same-tag alternatives and original missed MCQs precede diversity-filled results.
+- Mapping dependencies: Latest missed MCQ tags reserve available same-tag repair questions. The original missed MCQ remains in the next set while its latest answer is wrong, subject to set capacity; existing SM-2 timing and topic/chapter signals fill the remainder. No learner history is read by the inventory.
 - Source units: src/App.jsx:1886–2061
-- Delivery sites: src/App.jsx:25091,25097,25110; src/App.jsx:25140
+- Delivery sites: src/App.jsx:25092,25098,25111; src/App.jsx:25141
 
 ### intervention:starred-flashcards
 
@@ -422,7 +422,7 @@ All 14 independently authored guest teaching records have source units, revision
 - Behavior boundary: Filters in authored card order; deterministic for fixed selected IDs.
 - Mapping dependencies: Selection algorithm included; personal selections are not catalogue revisions and are not queried.
 - Source units: src/App.jsx:386–417
-- Delivery sites: src/App.jsx:24114,31956; src/App.jsx:31957
+- Delivery sites: src/App.jsx:24115,31959; src/App.jsx:31960
 
 ### intervention:starter-deck
 
@@ -432,17 +432,17 @@ All 14 independently authored guest teaching records have source units, revision
 - Behavior boundary: Stable source ordering; priority-topic slices followed by source-order fallback, at most 18.
 - Mapping dependencies: Default Pro assistant deck when no supplied/weak-area deck exists.
 - Source units: src/App.jsx:701–737
-- Delivery sites: src/App.jsx:33616
+- Delivery sites: src/App.jsx:33619
 
 ### intervention:weak-area-actions
 
-- Exact revision: sha256:5bbe3dcd518f633142e4edb75d725e6d3870727c48ed40b58307cd4b8a98515d
+- Exact revision: sha256:6536a42fd2201bb6870336455e81eaae61a0a9dc580c16181c2033e3e9246119
 - Inputs: latest MCQ outcomes; chapter/topic aggregates; bank
 - Target kinds: mcq, lesson, flashcard
 - Behavior boundary: Stable weighted miss/repeated-miss/accuracy ranking for fixed history and bank order.
 - Mapping dependencies: Dashboard chooses a weak chapter, then offers review, lessons and a deck. Broad signals are not canonical concept mappings.
-- Source units: src/App.jsx:24126–24155
-- Delivery sites: src/App.jsx:24146
+- Source units: src/App.jsx:24127–24156
+- Delivery sites: src/App.jsx:24147
 
 ### intervention:weak-area-deck
 
@@ -452,7 +452,7 @@ All 14 independently authored guest teaching records have source units, revision
 - Behavior boundary: Stable for fixed input order; scores topic/term/token overlap and takes at most 18.
 - Mapping dependencies: Broad topic matching and chapter fallback; no adaptive canonical concept map is consulted.
 - Source units: src/App.jsx:659–701
-- Delivery sites: src/App.jsx:24150; src/App.jsx:33616
+- Delivery sites: src/App.jsx:24151; src/App.jsx:33619
 
 ## Completeness guard
 

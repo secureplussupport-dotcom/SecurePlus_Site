@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { readLearningPilotBank, contentSignature } from './lib/read-learning-pilot-bank.mjs';
-import { LEARNING_CONCEPTS, SUPPORT_NODES, CONCEPT_RELATIONSHIPS, MAPPING_VERSION } from '../src/data/learningConcepts.js';
+import { LEARNING_CONCEPTS, MAPPING_VERSION } from '../src/data/learningConcepts.js';
 import { QUESTION_MAPPINGS, CONTENT_MAPPINGS } from '../src/data/learningMappings.js';
 import { LEARNING_CONFIG, versions } from '../src/lib/learningConfig.js';
 import { normalizeLearningEvidence } from '../src/lib/learningEvidence.js';
@@ -14,20 +14,12 @@ import { SY0701_OBJECTIVES } from '../src/data/sy0701DeepDiveMap.js';
 const { mcqs, pbqs } = readLearningPilotBank();
 const active = new Map(mcqs.map(q => [q.id, q]));
 const conceptIds = new Set(LEARNING_CONCEPTS.map(c => c.id));
-const graphIds = new Set([...conceptIds, ...SUPPORT_NODES.map(n => n.id)]);
 assert.equal(conceptIds.size, 5);
 assert.equal(new Set(QUESTION_MAPPINGS.map(m => m.questionId)).size, QUESTION_MAPPINGS.length);
 for (const c of LEARNING_CONCEPTS) {
   assert(c.description && c.name && c.topicId && c.chapterId && c.editorialStatus);
   assert.equal(c.mappingVersion, MAPPING_VERSION);
   c.objectiveCodes.forEach(code => assert(SY0701_OBJECTIVES[code]));
-}
-for (const e of CONCEPT_RELATIONSHIPS) {
-  assert(graphIds.has(e.sourceConceptId) && graphIds.has(e.targetConceptId));
-  assert(['commonly_confused_with', 'contrasts_with', 'prerequisite_for', 'part_of', 'applied_with'].includes(e.type));
-  assert(['bidirectional', 'forward'].includes(e.direction));
-  assert(e.editorialWeight > 0 && e.editorialWeight <= 1 && e.reviewStatus);
-  assert.equal(e.mappingVersion, MAPPING_VERSION);
 }
 for (const m of QUESTION_MAPPINGS) {
   const q = active.get(m.questionId);
@@ -106,10 +98,10 @@ function assertReplay(name, history, expected, options = {}) {
     assert(!history.some(e => e.questionId === transfer.questionId));
     assert.notEqual(transfer.questionId, recall.questionId);
   }
-  const support = result.recommendations.find(r => r.conceptId === 'recovery.rpo');
-  assert.equal(support.role, 'supporting');
-  assert.equal(support.reason, 'commonly_confused_with');
-  assert(support.content.some(c => c.contentId.endsWith('rpo-recovery-point-objective')));
+  const support = result.recommendations.find(r => r.conceptId === 'recovery.rto');
+  assert.equal(support.role, 'direct');
+  assert.equal(support.reason, 'direct_concept_review');
+  assert.equal(result.recommendations.some(r => r.conceptId === 'recovery.rpo'), false);
   assert.equal(support.createsMasteryEvidence, false);
   [result, result.model, state, transfer, recall, support, ...result.model.evidence].forEach(checkVersions);
   // Every named replay checks deterministic output and immutable input.
@@ -137,7 +129,7 @@ assertReplay('09 recent contradiction blocks proof', [miss, fresh1, fresh2, answ
 assertReplay('10 relapse after proven', [...proven, answer('relapse', 'fixture.rto.3', false, 4 * day, 4)], { state: 'needs_attention', level: 'limited', contradictions: ['relapse'], reason: 'relapse_after_proven', original: 'fixture.rto.3' });
 assertReplay('11a mastered', [...proven, mastered], { state: 'mastered', level: 'spaced', contradictions: [], reason: 'spaced_retention_after_proven', transfer: 'completed', recall: 'completed' });
 assertReplay('11b relapse after mastered', [...proven, mastered, answer('late-relapse', 'fixture.rto.3', false, 12 * day, 6)], { state: 'needs_attention', level: 'limited', contradictions: ['late-relapse'], reason: 'relapse_after_mastered', original: 'fixture.rto.3' });
-assertReplay('12 RPO support without RPO evidence', [miss], early);
+assertReplay('12 no related-concept support', [miss], early);
 assertReplay('13 duplicate and out-of-order evidence', [fresh2, miss, fresh1, miss, fresh1], { state: 'improving', level: 'varied', contradictions: ['miss'], reason: 'multiple_fresh_successes', transfer: 'completed' });
 const shortage = assertReplay('14 actual bank variant shortage', [miss], { ...early, transfer: 'unavailable' }, { mappings: QUESTION_MAPPINGS });
 assert(shortage.tasks.find(t => t.kind === 'transfer').reasons.includes('insufficient_variant_coverage'));
@@ -152,6 +144,7 @@ assertReplay('sets advanced without time', [miss], { ...early, recall: 'waiting'
 assertReplay('continued misses become sticky', [miss, answer('repeat-miss', 'm032', false, hour, 1), answer('third-miss', 'm032', false, 2 * hour, 2)], { state: 'sticky', level: 'limited', contradictions: ['miss', 'repeat-miss', 'third-miss'], reason: 'continued_misses_across_sets' });
 const noGraph = calculateConceptMastery([miss], standard);
 assert.deepEqual(noGraph, scheduleConceptReview([miss], { ...standard, relationships: [] }).model);
+assert.equal(scheduleConceptReview([miss], { ...standard, relationships: [{ sourceConceptId: 'recovery.rto', targetConceptId: 'recovery.rpo', type: 'commonly_confused_with', direction: 'bidirectional', editorialWeight: 1 }] }).recommendations.some(row => row.conceptId === 'recovery.rpo'), false);
 for (const questionId of ['p211', 'p048']) for (const correct of [true, false]) {
   assert.throws(() => calculateConceptMastery([{ eventId: `excluded-${questionId}`, kind: 'answer', questionId, questionRevision: 'excluded-pbq', correct, occurredAt: base, setIndex: 0 }], standard), /Unknown revision/);
 }
@@ -230,5 +223,5 @@ const secondaryCapsMappings = mappings.map(m => existing.includes(m.questionId) 
 assert.equal(scheduleConceptReview([miss], { ...standard, mappings: secondaryCapsMappings, existingQuestionIds: existing }).selected.length, 0);
 // Verify the pilot has not been wired into existing learner flows.
 assert(!/from\s+['"][^'"]*(learningConcepts|learningMappings|learningEvidence|learningConfig|conceptMastery|reviewScheduler)/.test(readFileSync('src/App.jsx', 'utf8')));
-console.log(`PASS catalogue: ${LEARNING_CONCEPTS.length} concepts, ${CONCEPT_RELATIONSHIPS.length} edges, ${QUESTION_MAPPINGS.length} effective mappings, ${CONTENT_MAPPINGS.length} content links (${mcqs.length} MCQs / ${pbqs.length} PBQs searched)`);
+console.log(`PASS catalogue: ${LEARNING_CONCEPTS.length} legacy pilot concepts, no relationship edges, ${QUESTION_MAPPINGS.length} effective mappings, ${CONTENT_MAPPINGS.length} content links (${mcqs.length} MCQs / ${pbqs.length} PBQs searched)`);
 console.log('PASS all replay, validation, non-attribution, cap and determinism checks. Local synthetic prototype only.');
