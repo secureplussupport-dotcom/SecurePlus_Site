@@ -4,6 +4,7 @@ import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701Ed
 import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
 import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from "./data/sy0701PublishedSnapshot.js";
 import { CONCEPT_TAGS, inferMcqConceptTagIds } from "./data/sy0701ConceptWeb.js";
+import { conceptRepairAnchors, effectiveMcqConceptTagIds } from "./lib/mcqConceptReview.js";
 import mcqTagAssignments from "./data/mcqConceptTagAssignments.json";
 import {
   ArrowLeft,
@@ -2010,7 +2011,7 @@ function rankSmartReviewQuestions(questions, attempts, starredIds=new Set(), opt
   }).sort((a,b)=>b.score-a.score||String(a.question.id).localeCompare(String(b.question.id)));
 }
 
-function selectDiverseSmartReview(ranked, count) {
+function selectDiverseSmartReview(ranked, count, priority=[]) {
   const requested=Math.max(0,Math.min(count,ranked.length));
   if(!requested)return [];
   const picked=[];
@@ -2036,6 +2037,7 @@ function selectDiverseSmartReview(ranked, count) {
     if(question.beyondTextbook)beyondCount+=1;
   };
 
+  priority.forEach(entry=>add(entry,false,false));
   ranked.forEach(entry=>add(entry,true));
   ranked.forEach(entry=>add(entry,false));
   ranked.forEach(entry=>add(entry,false,false));
@@ -2052,7 +2054,8 @@ function buildMcqPracticePool(questions, attempts, count, mode="smart", starredI
     const randomRanked=shuffle(questions).map(question=>({question}));
     return selectDiverseSmartReview(randomRanked,count);
   }
-  return selectDiverseSmartReview(rankSmartReviewQuestions(questions,attempts,starredIds,options),count);
+  const ranked=rankSmartReviewQuestions(questions,attempts,starredIds,options);
+  return selectDiverseSmartReview(ranked,count,conceptRepairAnchors(ranked,getLatestMcqAttempts(attempts),count));
 }
 
 function buildDiagnosticQuestions() {
@@ -16235,9 +16238,8 @@ function applyQuestionOverrides(rows=[]) {
   PBQ_BANK=mergeBank(BASE_PBQ_BANK,"pbq");
 }
 
-function applyAssignedMcqTags(rows=[]) {
-  const overridden=new Set(rows.filter(row=>row.status==="active"&&row.question_kind==="mcq"&&row.action==="upsert"&&!isCapturedOverride(row)).map(row=>row.question_id));
-  MCQ_BANK=MCQ_BANK.map(question=>({...question,conceptTagIds:overridden.has(question.id)?question.conceptTagIds||[]:mcqTagsById.get(question.id)||[]}));
+function applyAssignedMcqTags() {
+  MCQ_BANK=MCQ_BANK.map(question=>({...question,conceptTagIds:effectiveMcqConceptTagIds(question,mcqTagsById.get(question.id)||[])}));
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -33723,7 +33725,7 @@ export default function App() {
         .eq("status","active");
       if(error) throw error;
       applyQuestionOverrides(data||[]);
-      applyAssignedMcqTags(data||[]);
+      applyAssignedMcqTags();
       setQuestionBankVersion(v=>v+1);
     }catch(error){
       console.warn("Unable to load question overrides", error);
