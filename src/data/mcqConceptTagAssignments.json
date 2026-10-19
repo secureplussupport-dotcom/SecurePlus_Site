@@ -1,0 +1,3196 @@
+{
+  "status": "mixed_owner_approved_and_codex_tagged_mcq_metadata",
+  "ownerApprovedOn": "2026-10-19",
+  "draftSha256": "fdba7ff158005a03d3667070dc138588894ae58e2a1a1532fc133a3d8fae7327",
+  "scope": "395 effective MCQs only; 120 earlier owner-approved, 275 Codex-tagged for owner review. Metadata only; no Smart Review activation or PBQ tagging.",
+  "ownerApprovedCount": 120,
+  "codexTaggedCount": 275,
+  "questionCount": 395,
+  "tagAssignments": 419,
+  "assignments": [
+    {
+      "questionId": "m001",
+      "sourceSignature": "sha256:dc6921b6a2d8d02cdc5b7fa6eaa561a1164d438d849dd084b1cb2adec1e30c26",
+      "conceptTagIds": [
+        "mcq.deterrent-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m002",
+      "sourceSignature": "sha256:636f490ab49ad778e428bc3fd6f1eb47e843a305f70af1e3e7d145c3641bdf42",
+      "conceptTagIds": [
+        "mcq.availability"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m003",
+      "sourceSignature": "sha256:5fb28e62c558e47aba85e04316c603f403bd46ac398b0d50395649be69ac14b2",
+      "conceptTagIds": [
+        "mcq.compensating-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m004",
+      "sourceSignature": "sha256:c7ddc81b2da047dd9603e03f0c5c7971add35b734fb6f6debb50c44381b22be4",
+      "conceptTagIds": [
+        "acronym.rainbow-table"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m005",
+      "sourceSignature": "sha256:7cc915ab13ac304be75245549591e6f9d1762d5d7469205696dfc5ea60ca6388",
+      "conceptTagIds": [
+        "mcq.certificate-trust"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m006",
+      "sourceSignature": "sha256:1673dbaa555bd15e2bf2094a32ecd2bc2164b441eb95e62c7e14e7fd7693944d",
+      "conceptTagIds": [
+        "mcq.biometrics"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m007",
+      "sourceSignature": "sha256:26500a91b7746fca51633125d39cdd277e7253c82f1b1d6d849971adb4573d2a",
+      "conceptTagIds": [
+        "acronym.zta"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m008",
+      "sourceSignature": "sha256:72930df0747b36c5436ce8e9787e788be67b1a34675bf322fd9df7d149191b93",
+      "conceptTagIds": [
+        "mcq.asymmetric-encryption"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m009",
+      "sourceSignature": "sha256:8c8bc0dc23ba0789c8227e794908075bac7454c222b85b197308b8f20b976e01",
+      "conceptTagIds": [
+        "acronym.vishing",
+        "acronym.pretexting"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m010",
+      "sourceSignature": "sha256:c461bb5ade5b674104f45954eb212d34cf1be4618f020048320ebf17259a8b8e",
+      "conceptTagIds": [
+        "acronym.keylogger"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m011",
+      "sourceSignature": "sha256:490ff6e04557684fe0d546a92c8ee12e1308fa8d36e75dbdcb983fe8a6ef7ab2",
+      "conceptTagIds": [
+        "mcq.syn-cookies"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m012",
+      "sourceSignature": "sha256:44b450081b90c3e7b11346258e1f99d95aa0a0d9a907799159aa8435f1addd31",
+      "conceptTagIds": [
+        "acronym.sqli"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m013",
+      "sourceSignature": "sha256:365c2f2389ae9ffb2722662279cc1c2eb0d20701980efd696c3348938834da1d",
+      "conceptTagIds": [
+        "mcq.apt"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m014",
+      "sourceSignature": "sha256:fb61c4803e1f2dc751c8b636ccdddb5a96035669265c9a66de13ff06c9620aca",
+      "conceptTagIds": [
+        "mcq.least-privilege"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m015",
+      "sourceSignature": "sha256:81ce768b1dcb74a2a598f4ff95e0c57e010549a21d4605c01a83347d892d232d",
+      "conceptTagIds": [
+        "acronym.typosquatting"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m016",
+      "sourceSignature": "sha256:a8f4bf2b00df3a10c7e72eb71e980e4a0a4bd57bce1fe4f66de14c6d0f0557fb",
+      "conceptTagIds": [
+        "acronym.logic-bomb"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m017",
+      "sourceSignature": "sha256:aa53f015a990b5264783c290f06689558cda7498cb5daae6de99ec8e81af677e",
+      "conceptTagIds": [
+        "mcq.shared-responsibility"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m018",
+      "sourceSignature": "sha256:b684f26cb4d5745909acf11519eeb6ece92415e2b0a852a83bf50701da6f712f",
+      "conceptTagIds": [
+        "mcq.fail-closed"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m019",
+      "sourceSignature": "sha256:962a73aed701a6ccf3a81ce3573dccd83e8a838196f84021d884725a4128bbf1",
+      "conceptTagIds": [
+        "mcq.tokenization"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m020",
+      "sourceSignature": "sha256:14b58f3f688168f7cf35154be8408967fd83a587417ce55caccb50abec3be89c",
+      "conceptTagIds": [
+        "mcq.segmentation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m021",
+      "sourceSignature": "sha256:99e9894f9843b03fef9a77a2bde45ec7ef5f0141c6c4fda3bd6127b8ee352722",
+      "conceptTagIds": [
+        "mcq.private-cloud"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m022",
+      "sourceSignature": "sha256:fd22bf355231936c7f21585698442963ed4ebab1db70c1fb228ff1c777b62e0f",
+      "conceptTagIds": [
+        "mcq.containment"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m023",
+      "sourceSignature": "sha256:04d4f32abd4faf91b23fa38ca1762642d868fa0aa489d4eb9c56777396b0daa0",
+      "conceptTagIds": [
+        "mcq.risk-based-remediation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m024",
+      "sourceSignature": "sha256:b102a61127bd362fbdf450896058a2404eb9eaee8a2b3c51035fb0f500977b3e",
+      "conceptTagIds": [
+        "mcq.impossible-travel"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m025",
+      "sourceSignature": "sha256:c396b02d896a7e4fdc9b2724fe7b7e71c98b21101c9ea2237b9aeb57ae9c26ae",
+      "conceptTagIds": [
+        "acronym.sha"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m026",
+      "sourceSignature": "sha256:203971a2c7bc845c6fa1d4304eb3534ab91c0e52b63855eb37505562b6fb8ba0",
+      "conceptTagIds": [
+        "mcq.provisioning"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m027",
+      "sourceSignature": "sha256:4b5f5f1fb2429c80a1a744173a8e15448bcd26a1dd3da711e3f943cf4396e203",
+      "conceptTagIds": [
+        "mcq.mobile-application-management"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m028",
+      "sourceSignature": "sha256:9705fb3239bc6ef489aa7b4e71234597b742c3a3f94f1c79c2df16981b1a1c9f",
+      "conceptTagIds": [
+        "mcq.security-standard"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m029",
+      "sourceSignature": "sha256:d039ad829f09e9ab901da4c9e6ab80eaea7a120c8387b6d1e3bdfe0f846aff20",
+      "conceptTagIds": [
+        "acronym.ale"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m030",
+      "sourceSignature": "sha256:956012d51a3dab919060234e4b98f924b56b5959eee304026607265b4a15c56d",
+      "conceptTagIds": [
+        "mcq.right-to-erasure"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m031",
+      "sourceSignature": "sha256:cf219bb7392f3a4e62dbb1191bd2819eaed209cdf0964dfa0aaa91b52da2e36f",
+      "conceptTagIds": [
+        "mcq.risk-transfer"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m032",
+      "sourceSignature": "sha256:c6c2951ce7458d7a61cb32f71f16c289e576c68f59663a80d75adf26b00630bc",
+      "conceptTagIds": [
+        "recovery.rto"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m033",
+      "sourceSignature": "sha256:bfbba08ade1d45068e487d94cddfcb5a075dc5e1440993b46bf625ffa75cbe4e",
+      "conceptTagIds": [
+        "mcq.integrity"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m034",
+      "sourceSignature": "sha256:532800d62c6615ea73d6cac1dee1c161448580341d0b325b770914cfc2bfa6d7",
+      "conceptTagIds": [
+        "mcq.kerberos"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m035",
+      "sourceSignature": "sha256:67ef816a43dd7ea4dd08f6f073f84a1c3a8a3fb4c318810abf1711948ae6994d",
+      "conceptTagIds": [
+        "acronym.aes-aes-256"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m036",
+      "sourceSignature": "sha256:b848558b1e3c5ec83a0a971519bf23f1c1da77d140d907bbfd064d85b9df7cc6",
+      "conceptTagIds": [
+        "mcq.mantrap"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m037",
+      "sourceSignature": "sha256:78763b2122115c07981c24789450b9e9d8558479c2e4d52f6b8b6b5cbe33f8cd",
+      "conceptTagIds": [
+        "acronym.ocsp"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m038",
+      "sourceSignature": "sha256:402e12c8bb3343b6c284c0e5bf8f52c7476837a11f058d8099ac32a9533f7073",
+      "conceptTagIds": [
+        "mcq.zero-trust-policy-engine"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m039",
+      "sourceSignature": "sha256:8ea090ae40184e9285149f0d61fa954f6f70d77ca7e24ee86c7fa20e71e60e02",
+      "conceptTagIds": [
+        "mcq.hashing"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m040",
+      "sourceSignature": "sha256:6fc72f5d795585a85851b7c715fd43b95b1008a5c04f7695fa9e3628654b2a6d",
+      "conceptTagIds": [
+        "acronym.mac-access-control",
+        "acronym.mac-address"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m041",
+      "sourceSignature": "sha256:79c0387cdfdd003eeae566956c6b770fb235ae88457702aad0bff3908e942b18",
+      "conceptTagIds": [
+        "acronym.mfa"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m042",
+      "sourceSignature": "sha256:89d00972fc767cb9c0fd6f1c0d388c0fb5328cd7ded5d4d190dc99023eb3ecfa",
+      "conceptTagIds": [
+        "acronym.rainbow-table"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m043",
+      "sourceSignature": "sha256:ed2fca0564b506acb06bdd08b4d9c1131fc01d30ff83beabe4c7ee8e55389a58",
+      "conceptTagIds": [
+        "mcq.certificate-trust"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m044",
+      "sourceSignature": "sha256:88daba2856cd7c6b49266beeeb3d80cc65a342e78a9ee90e65e54f711bf66011",
+      "conceptTagIds": [
+        "mcq.separation-of-duties"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m045",
+      "sourceSignature": "sha256:9667c81878c10f3d669f92a13e0cf37f371a30cd234548c889fd8cf4efaf893b",
+      "conceptTagIds": [
+        "mcq.password-hashing"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m046",
+      "sourceSignature": "sha256:8d52edcd73b4917066f3cb448b8513ea961354e648f517e6f017202e4c8aefad",
+      "conceptTagIds": [
+        "acronym.phishing"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m047",
+      "sourceSignature": "sha256:72a2d03297636f704f0490577aba72f3fe1bdfeb5c1ae9fc87d42e3c89140e94",
+      "conceptTagIds": [
+        "mcq.baiting"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m048",
+      "sourceSignature": "sha256:74aca84123d8322369b918b4880f8a64ae7582b704fa7ee34ee49ac35f10b38f",
+      "conceptTagIds": [
+        "acronym.logic-bomb"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m049",
+      "sourceSignature": "sha256:977b766098bf0a6b2cd43d71a16032dacfaa085aa500d535ec68b692d4e0967b",
+      "conceptTagIds": [
+        "acronym.ddos",
+        "acronym.dns"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m050",
+      "sourceSignature": "sha256:65c4ee68ffe72eec382921dcbda4da36c7c955a8f341dbdabc688a44c5fb173c",
+      "conceptTagIds": [
+        "acronym.dns"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m051",
+      "sourceSignature": "sha256:35bfe7a31d3194c8994b46cac8fb3d01a822ed88d19ec61a85b8894092e15483",
+      "conceptTagIds": [
+        "acronym.xss"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m052",
+      "sourceSignature": "sha256:a3b6f9e17f187da14c9a6a6ebf18ab4143b764a8581d161a6dc461801e37e7b1",
+      "conceptTagIds": [
+        "mcq.idor"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m053",
+      "sourceSignature": "sha256:f41bb6408c78d4018e58213c0cb4fdec1a86ac7e40c5d3951a45189d6663978e",
+      "conceptTagIds": [
+        "acronym.buffer-overflow"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m054",
+      "sourceSignature": "sha256:4474b5ae635d832bb4f2ca50c06da02d0957ff9c2d2d86d01852176ba6d1cfa5",
+      "conceptTagIds": [
+        "acronym.worm"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m055",
+      "sourceSignature": "sha256:97f700eefaf59c72d7861c261c0de51a6d3dc588e46e12bc75b999d1f422e9e0",
+      "conceptTagIds": [
+        "acronym.race-condition"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m056",
+      "sourceSignature": "sha256:a8aeff27feb01bf3af360fb487b7196791611370464b9f2dba49bb46ce955b08",
+      "conceptTagIds": [
+        "mcq.router"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m057",
+      "sourceSignature": "sha256:3a44fa5567eb832f7e3a1a6424df63ce0934cb12054dd136b9818eac4014a9b6",
+      "conceptTagIds": [
+        "mcq.separation-of-duties"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m058",
+      "sourceSignature": "sha256:48a436ee5d71a2c78ffb27a5e255e7d6dd7afe94a36245042718aaf7f1419575",
+      "conceptTagIds": [
+        "mcq.saas"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m059",
+      "sourceSignature": "sha256:2b017bc60ba9083b580ab327493330222a032ae34fd99ef0fa24fca57a5a4470",
+      "conceptTagIds": [
+        "mcq.data-in-use"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m060",
+      "sourceSignature": "sha256:8cfd8ebcc6ffd4ef26acb1aa69bef4adaf5c622179fc92052712d6bf2a9185e1",
+      "conceptTagIds": [
+        "mcq.shared-responsibility"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m061",
+      "sourceSignature": "sha256:88c55c85d067cbb5b83d9f92d32dee1aab2d647a4ed1bc98f983fe9354f2ddd4",
+      "conceptTagIds": [
+        "mcq.air-gap"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m062",
+      "sourceSignature": "sha256:8438ed78b28025bfdb13af49a2522ecffdad99993e56097643c7fc182e351ee2",
+      "conceptTagIds": [
+        "acronym.vm-escape"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m063",
+      "sourceSignature": "sha256:8a20782eca1d71b7db43f50189a227916bfda8521ea88bd2dd8f37b08dd3441d",
+      "conceptTagIds": [
+        "mcq.ztna"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m064",
+      "sourceSignature": "sha256:be73dc7f40cbde6d3e46e3c259b1ad0566f35deaeeea89102a9d950ebf1e1ddb",
+      "conceptTagIds": [
+        "mcq.data-masking"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m065",
+      "sourceSignature": "sha256:d32a1d2e5719af57cbefa7660438f9441fd1986dc389bc159d7697aa17292d44",
+      "conceptTagIds": [
+        "mcq.segmentation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m066",
+      "sourceSignature": "sha256:45d15ed1949be7386f12e0e291ade8ae2a42b8f2300a37e0426e470231d90acf",
+      "conceptTagIds": [
+        "acronym.siem"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m067",
+      "sourceSignature": "sha256:3dd0a2662f314cc4c29160e36e467b245534915095654e5d942c535608f4110f",
+      "conceptTagIds": [
+        "mcq.cope"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m068",
+      "sourceSignature": "sha256:760692a1871d296df077e37d57cfb13e224c7c879b8a75700eb17b4631bc0d93",
+      "conceptTagIds": [
+        "mcq.tabletop-exercise"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m069",
+      "sourceSignature": "sha256:4cd8da31aa769795d92e80a78ebd86ff2ea029d50502a9f78ece10ece93aebad",
+      "conceptTagIds": [
+        "mcq.stateful-inspection"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m070",
+      "sourceSignature": "sha256:e327f3dd0c944226e061b644cbbf3e040d6584caab368c903e1b32c5220c3c69",
+      "conceptTagIds": [
+        "mcq.evidence-integrity"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m071",
+      "sourceSignature": "sha256:0c6ae6a713ed207ffa70cebb917bd65a109dde04ff78d75188ffb8d5f4a50088",
+      "conceptTagIds": [
+        "mcq.patch-verification"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m072",
+      "sourceSignature": "sha256:847cb3781e40ff3a13e5df8d8aaae2cb592fa50ec3802d95c3936d05aece24b5",
+      "conceptTagIds": [
+        "mcq.privilege-creep"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m073",
+      "sourceSignature": "sha256:f647319f15282b8ea419c810d6e156d3f3668636100f2d9f8e6e7190f10e2e50",
+      "conceptTagIds": [
+        "mcq.anti-forensics"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m074",
+      "sourceSignature": "sha256:17fda413de91f19e082209e20f0f403e318ecf1abcc605bd0154d0f01712eccd",
+      "conceptTagIds": [
+        "mcq.cvss-environmental"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m075",
+      "sourceSignature": "sha256:19820b6b2a7471179b63bdda651c8db958323001823fb822e17d8800e24978b0",
+      "conceptTagIds": [
+        "acronym.efs-fde"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m076",
+      "sourceSignature": "sha256:cd78b24e743ff5f0ee860f2f61a6ed111d706495a2c88ee95051c1ea69bf4dc9",
+      "conceptTagIds": [
+        "mcq.detection-tuning"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m077",
+      "sourceSignature": "sha256:42e5a1b6ec4f06ab003f88d1646fe77c5c3def46137dc8a22550352f7f4fce4b",
+      "conceptTagIds": [
+        "acronym.oauth"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m078",
+      "sourceSignature": "sha256:61c563fc93cda34e5931ee615b2040575bb3a32e798ab83f0b9e8da70416384d",
+      "conceptTagIds": [
+        "acronym.ipfix"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m079",
+      "sourceSignature": "sha256:62f1bc8eb45ae92a761cdbc713825fbb3b5b737058c049320692e632c53e45d1",
+      "conceptTagIds": [
+        "mcq.security-procedure"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m080",
+      "sourceSignature": "sha256:1d61889837d88afefd622b8eb731d6539db536dfcfe6e67d164ff2b5214d6301",
+      "conceptTagIds": [
+        "mcq.vendor-due-diligence"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m081",
+      "sourceSignature": "sha256:a07cadb76c95b999c564ccaddac93e1ffa61afed8412298d1ec5a923a0a3bb46",
+      "conceptTagIds": [
+        "mcq.control-cost-benefit"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m082",
+      "sourceSignature": "sha256:0f867cc4d8322a193ebe43acf754fe101f71ac7dfbca33a3b5788d59039167e3",
+      "conceptTagIds": [
+        "acronym.hipaa"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m083",
+      "sourceSignature": "sha256:be58a0f41f811fa4f016838c29fada592cbe2ef46ebf42651ebeed3dbc439ad0",
+      "conceptTagIds": [
+        "acronym.aup"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m084",
+      "sourceSignature": "sha256:847c49a064a10b826730e20d59e41349873505341e7a7ea516e27094d25616d4",
+      "conceptTagIds": [
+        "mcq.security-guideline"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m085",
+      "sourceSignature": "sha256:ef98cea85db2a541d41660f2679692ab97c1ae6dd027340a264ba1b84f433c7d",
+      "conceptTagIds": [
+        "mcq.data-controller"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m086",
+      "sourceSignature": "sha256:9e148f874378cf9c70ce57a1a2a285ecb6900911fe8bc5adf6c94e2d6b061d2f",
+      "conceptTagIds": [
+        "continuity.bia"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m087",
+      "sourceSignature": "sha256:6f1bc5811ed998fa9c18e42a28f4130451467f22ff165a8e5880cd80e42740d2",
+      "conceptTagIds": [
+        "mcq.risk-avoidance"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m088",
+      "sourceSignature": "sha256:1a2b43e815c9c682156636929e645c41a914979b8dbe766e32eff25867f8de29",
+      "conceptTagIds": [
+        "recovery.rpo"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m089",
+      "sourceSignature": "sha256:95c45a9690f719f91954eb168282bb93c20db667db57a9a7cdc908a0c5e1231a",
+      "conceptTagIds": [
+        "mcq.risk-matrix"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m090",
+      "sourceSignature": "sha256:9c97be753d5dad20eba36c44b89c165a9ad4bb0c1fb5db0b50a869721e1edf2b",
+      "conceptTagIds": [
+        "mcq.right-to-erasure"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m091",
+      "sourceSignature": "sha256:01e8f6b2b5fd1866afce5484b9086ecb10feef7bdf23e52bce223f9f740c2606",
+      "conceptTagIds": [
+        "acronym.sla"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m092",
+      "sourceSignature": "sha256:fa07744198e2c68d51fe7bc18d8df6ffb5e61922a95e6fc0c63e545c042268f8",
+      "conceptTagIds": [
+        "mcq.breach-notification"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m093",
+      "sourceSignature": "sha256:4745c195b1ebf9d5995f01c4d3c76a20c07b9a440b1ed3e4f4fadca545971f8c",
+      "conceptTagIds": [
+        "mcq.security-audit"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m094",
+      "sourceSignature": "sha256:3cdff6e7066a53ec8fbbdb4d2597f0de3b2925d11081db59bd044cef3834500a",
+      "conceptTagIds": [
+        "acronym.rootkit"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m095",
+      "sourceSignature": "sha256:d6482b5ad3b6d127d089ee79f3a1cc188e742028089a16b3b93d91ecdde71ac2",
+      "conceptTagIds": [
+        "mcq.fail-closed"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m096",
+      "sourceSignature": "sha256:b077cc3716779361d0aa270671211466af279523fe55e9871a2a83b6968d428f",
+      "conceptTagIds": [
+        "mcq.application-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m097",
+      "sourceSignature": "sha256:3303bf6f34dd24c5cfb46b94e3c0fe39b6a4f384370e8843535a1b1cd37502b1",
+      "conceptTagIds": [
+        "acronym.sqli",
+        "acronym.xss"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m098",
+      "sourceSignature": "sha256:7e89439267b360992279bf23f5bb86805074818d0a8db0ca522b912ce5c922cb",
+      "conceptTagIds": [
+        "mcq.memory-snapshot"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m099",
+      "sourceSignature": "sha256:fb1d816c255f43a4ccf3f02f081dfea0841f267111fc4e04df4955010e8573f8",
+      "conceptTagIds": [
+        "acronym.pci-dss"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m100",
+      "sourceSignature": "sha256:fd03c2dfa593d4f029db88205841874af37582a9cd2462ba64e48458d230d631",
+      "conceptTagIds": [
+        "mcq.right-to-audit"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m101",
+      "sourceSignature": "sha256:6c326f27c195e2a342b741138b4c13fff5581afc95e588f3146f347b593841aa",
+      "conceptTagIds": [
+        "mcq.deterrent-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m102",
+      "sourceSignature": "sha256:8cec7081ec8ae5a7af62d4ca15b9e9eb71ed58077ee372e08e581e3517871303",
+      "conceptTagIds": [
+        "mcq.detective-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m103",
+      "sourceSignature": "sha256:e6fa94df97ee49e8df81be92ada8900a158718c2f9420bc8c4baf9a403be56db",
+      "conceptTagIds": [
+        "mcq.integrity"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m104",
+      "sourceSignature": "sha256:f61e8d4995dccecd821c9ff52f2126e00f5c8aece8a85b28fc11178fcb466a0e",
+      "conceptTagIds": [
+        "mcq.password-hashing"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m105",
+      "sourceSignature": "sha256:ae6892bd44078585575a07e743dbf7ba6e752920f155d4f4d77c8377f71c6167",
+      "conceptTagIds": [
+        "mcq.asymmetric-encryption"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m106",
+      "sourceSignature": "sha256:f44bd7b6aead24e5ec93a006140ee70fa7c88e8bc2d43160e151f3c8fd4085f9",
+      "conceptTagIds": [
+        "acronym.pfs"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m107",
+      "sourceSignature": "sha256:6dd9a881e80e93630ea1dc4377bb51ae30f136c2d4f600b3259d5a6248810efc",
+      "conceptTagIds": [
+        "acronym.mfa"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m108",
+      "sourceSignature": "sha256:fefa58222e920a962eb60e2619267ed828c7ae05253312e1c8cc3e76fec8f666",
+      "conceptTagIds": [
+        "acronym.sso"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m109",
+      "sourceSignature": "sha256:27d53d7917a27700932b2e5b2022d5bee594e87470d9b5f6fd656e2d3b5bbe50",
+      "conceptTagIds": [
+        "acronym.mac-access-control",
+        "acronym.mac-address"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m110",
+      "sourceSignature": "sha256:e107a869a2a1c8d48f8c8446ce329ddc723b2c96e3c625671e410b1ad5f947e1",
+      "conceptTagIds": [
+        "acronym.ocsp"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m111",
+      "sourceSignature": "sha256:1cc5bc685aedd219588ef0d3fc13d1f4764a7075ce396544d163c113b69a71ab",
+      "conceptTagIds": [
+        "acronym.csr"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m112",
+      "sourceSignature": "sha256:24270c96e53312d5830c20f3860b281019f99187d00311616dfe6603d67910f9",
+      "conceptTagIds": [
+        "acronym.dns"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m113",
+      "sourceSignature": "sha256:526ce893c10c5820afffb7d1eedc56c8463c3295cbfa0dd2a673d19ccf0ee246",
+      "conceptTagIds": [
+        "mcq.least-privilege"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m114",
+      "sourceSignature": "sha256:d21c64437775f90ea37872d67595c94731c547d8b830281a38ffdf6ae8451754",
+      "conceptTagIds": [
+        "mcq.separation-of-duties"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m115",
+      "sourceSignature": "sha256:4976564c0348b8f69e31b3df92e064ac45cf6577b9166b11e140118e576dfb77",
+      "conceptTagIds": [
+        "mcq.defense-in-depth"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m116",
+      "sourceSignature": "sha256:3ace1423968785eceedeb0a7a59628742c2437436201fbac01d72929f4a0f966",
+      "conceptTagIds": [
+        "mcq.md5"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m117",
+      "sourceSignature": "sha256:555cd4d8c345d8fc2f9b493ef8bfe7a6555513ec90ebba6e61b65834cfe991b5",
+      "conceptTagIds": [
+        "mcq.biometrics"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m118",
+      "sourceSignature": "sha256:2a41a414cc5b77ab9d2108ea3ef353d0b63412ae5f143790b35c22072fce66f3",
+      "conceptTagIds": [
+        "acronym.hsm"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m119",
+      "sourceSignature": "sha256:4be15e417976c531e4d8b26dede18085601262f53cade136cbee4aad713d1557",
+      "conceptTagIds": [
+        "mcq.provisioning"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m120",
+      "sourceSignature": "sha256:9479c9a025418cadc535777423ce5a138b60a49bbfe5c1d2cba9513e88e6de3a",
+      "conceptTagIds": [
+        "mcq.kerberos"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m121",
+      "sourceSignature": "sha256:7329849003a920c42d442db0641d1c3f76c2064c1b17c803b4b47b332f9eeb9a",
+      "conceptTagIds": [
+        "mcq.unskilled-attacker"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m122",
+      "sourceSignature": "sha256:4015e207050677fc866e233cf661c8b001c60e557de173271c0a166709852139",
+      "conceptTagIds": [
+        "mcq.apt"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m123",
+      "sourceSignature": "sha256:478b4cdacf957d24859d16b585d01a3e64956450c548b83f30ca74dbedafee9f",
+      "conceptTagIds": [
+        "acronym.phishing"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m124",
+      "sourceSignature": "sha256:28b6b8081a40b1064dedc07053cd023c0bd5c6f0f1e002c3272cbff31ac4251c",
+      "conceptTagIds": [
+        "acronym.bec"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m125",
+      "sourceSignature": "sha256:608fb4b9790547f47226d0fe0f38b5a90a570c78fe7e30c83aa388d32c5bfaf8",
+      "conceptTagIds": [
+        "acronym.worm"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m126",
+      "sourceSignature": "sha256:dc0a6d5627b47cf64a097d4fa9e4e7d422a8514da53d133b43a354ad53142cb3",
+      "conceptTagIds": [
+        "acronym.ransomware"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m127",
+      "sourceSignature": "sha256:50fb1a758cb2195828589a3eace34e7dfd3d36ebe8062a974c6b974551f790cb",
+      "conceptTagIds": [
+        "acronym.supply-chain-attack"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m128",
+      "sourceSignature": "sha256:343c49a39f6b31ab758541c7b8b85cee6d71eed51851601f62663a684813fa4a",
+      "conceptTagIds": [
+        "mcq.risk-based-remediation",
+        "acronym.cvss"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m129",
+      "sourceSignature": "sha256:485a3d365c80ce14829963b2c2fea41c05cabe19719d9854be41a63a02e30769",
+      "conceptTagIds": [
+        "acronym.sqli"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m130",
+      "sourceSignature": "sha256:e98125daab9cd548380179230c7b8912d04a28200e33584463df2b143f719d4d",
+      "conceptTagIds": [
+        "mcq.zero-day"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m131",
+      "sourceSignature": "sha256:9e30162d7055fda6c737fc23506c01ca409735839aab8665ee6723f32cbb314b",
+      "conceptTagIds": [
+        "mcq.c2-beaconing"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m132",
+      "sourceSignature": "sha256:aebfc34aacc6f2d7322b51d44e8137ca3300cf6efb5b68e3d9b21a662e439d1b",
+      "conceptTagIds": [
+        "mcq.masquerading"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m133",
+      "sourceSignature": "sha256:bceee931b0dc2485f16a85d89190abb62d78f760bfd26e1b1be671748b0bbb5f",
+      "conceptTagIds": [
+        "mcq.segmentation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m134",
+      "sourceSignature": "sha256:11f5f65fbbeaff3e67e13ecc5cba5c6692ba7fcee5ef480d24aa19c3d0722b97",
+      "conceptTagIds": [
+        "mcq.zero-day"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m135",
+      "sourceSignature": "sha256:472c437eeaa97351b837abf5ad1c134abfd025e81b79461ed0439b97e7fcb5c3",
+      "conceptTagIds": [
+        "mcq.unsafe-file-upload"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m136",
+      "sourceSignature": "sha256:c8c747ba4c3fbbfafc27cee3496d782435e8d61041fd97416c07657e40dd9112",
+      "conceptTagIds": [
+        "acronym.on-path-attack"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m137",
+      "sourceSignature": "sha256:33208ec4d9fbd7191cb983406c62243cab09585b513a0120aa9a1e3746369a84",
+      "conceptTagIds": [
+        "mcq.steganography"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m138",
+      "sourceSignature": "sha256:90a41bbf225dea23a71426e6d4c8a1f244a4c9c7bedd4ae76b02fcb5f66136c3",
+      "conceptTagIds": [
+        "acronym.dmz"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m139",
+      "sourceSignature": "sha256:db8e59ff5e52b20cf20f3b9b4993a11e8352c9e8fac4df8652d6a325cf2399f7",
+      "conceptTagIds": [
+        "mcq.cybercriminal-group"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m140",
+      "sourceSignature": "sha256:4ce67ee43c2e463c6b18f25614ce5dfe3b9c750bf8c1eaefb39e9612c20580ae",
+      "conceptTagIds": [
+        "acronym.dns"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m141",
+      "sourceSignature": "sha256:c998a8b458bb5f8a386e312e7ac4371f1e4bac1a99ebf6a06ff8b8b54a467423",
+      "conceptTagIds": [
+        "mcq.information-disclosure"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m142",
+      "sourceSignature": "sha256:43039dc1e9b6b2333c4f11019deb8d9280111a72db619c5f1440294ee595ed73",
+      "conceptTagIds": [
+        "mcq.application-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m143",
+      "sourceSignature": "sha256:df801a5b089e78a054eb4662540a670c065b0f8cff3a9cab757cafae14d4167e",
+      "conceptTagIds": [
+        "acronym.amplified-attack"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m144",
+      "sourceSignature": "sha256:9f61210101cc688af9e7293fb6e7611aa4f25c259b39721c2e9de4cb1c87c9b3",
+      "conceptTagIds": [
+        "mcq.spf"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m145",
+      "sourceSignature": "sha256:d2a01b5febebd21b89b99c20eab60efdf00a252e2275922b1c89260d6152ee65",
+      "conceptTagIds": [
+        "mcq.idor"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m147",
+      "sourceSignature": "sha256:8b13bb5c2bdeddf669fef19bf2f4c0565ad98857855b9072174796ccfa5e208b",
+      "conceptTagIds": [
+        "mcq.segmentation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m148",
+      "sourceSignature": "sha256:cf7b56e0379976b42939af3e0ac111991a03006c18240b051b428cac6d75e18d",
+      "conceptTagIds": [
+        "acronym.os"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m149",
+      "sourceSignature": "sha256:71b5a566e3f42ca5daab58936d8be33db14ae183a37d066f239ce6e3db47d006",
+      "conceptTagIds": [
+        "acronym.casb"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m151",
+      "sourceSignature": "sha256:68c4201e8141da0bcbdd2d8cffb65e23ad9cf1c64811cddd66752cdd5d28fd59",
+      "conceptTagIds": [
+        "mcq.router"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m152",
+      "sourceSignature": "sha256:99b635366c54d90fa1d94d312a86243f0b41f2cfd0a33a1dc9ef42d95ca87a6e",
+      "conceptTagIds": [
+        "mcq.port-security"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m153",
+      "sourceSignature": "sha256:471da03a251c3529b1c59f5a82393b1e5e47901ed8c29d1c84da81988c9a7c9e",
+      "conceptTagIds": [
+        "mcq.ipsec-transport-mode"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m154",
+      "sourceSignature": "sha256:05b7d4cbc5f454d8559066f5f6481895dd8352b755bc4aed2ebd65eae2ffcc3e",
+      "conceptTagIds": [
+        "acronym.vlan"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m155",
+      "sourceSignature": "sha256:8d5142e2a2c2fc38c542a585dea8a282fae27d655db3ca5966ef24e3a568515a",
+      "conceptTagIds": [
+        "mcq.threat-modeling"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m157",
+      "sourceSignature": "sha256:1d12ff2462422f094054832f409afcab63abffe70808e288b81e37dbd0a32b31",
+      "conceptTagIds": [
+        "acronym.iac"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m158",
+      "sourceSignature": "sha256:e2ddf0ef8c4d245cf037081c45c045533416bf7c30efd4d0c5aa15538b4e0dab",
+      "conceptTagIds": [
+        "acronym.zta"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m159",
+      "sourceSignature": "sha256:d9fa6aa36c4b80766985cfada52fad7821e1886589c5799673b2ef55fbabd1ed",
+      "conceptTagIds": [
+        "acronym.efs-fde"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m160",
+      "sourceSignature": "sha256:cda211e8c48b23e0caccfb5d5c6b79496925c0847da8a98215ea89fd676fc775",
+      "conceptTagIds": [
+        "mcq.dependency-remediation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m161",
+      "sourceSignature": "sha256:f661f8607ef3ea6b330da60f780f869cee9f71722f7cb5445811f950cc4688fd",
+      "conceptTagIds": [
+        "mcq.hybrid-cloud"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m163",
+      "sourceSignature": "sha256:c07c7350f2509a887db9cec967ebf02d383d49dc0b2817248883c59d140e84a9",
+      "conceptTagIds": [
+        "mcq.parameterized-queries"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m165",
+      "sourceSignature": "sha256:522f2d87b61d7ce9963f84076323987b12ced548f50bbd8e743f9a4c9d0c1404",
+      "conceptTagIds": [
+        "acronym.dep"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m166",
+      "sourceSignature": "sha256:6afff95069aaadd156dbf45d39f864cbefc67f7877e1221720dbd5472b9100bf",
+      "conceptTagIds": [
+        "acronym.siem"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m168",
+      "sourceSignature": "sha256:8f9914aa29a822efbef8f29b568c4ab85645a3b69d0d4500860234c8f5fc0f94",
+      "conceptTagIds": [
+        "mcq.incident-response-lifecycle"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m169",
+      "sourceSignature": "sha256:1a878922a8087fba62842e0e0f137c12e62cb9d258b793ea2db1aa94eb9e0676",
+      "conceptTagIds": [
+        "mcq.containment"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m170",
+      "sourceSignature": "sha256:0ae8274bc3f6bf4442c7462561b3d3590eb57db5044cd332e5d39fad1adbebd2",
+      "conceptTagIds": [
+        "mcq.chain-of-custody"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m171",
+      "sourceSignature": "sha256:e1bbd2ee93467972a6f4333965a436fb677c38249d8db3599db789590438f7aa",
+      "conceptTagIds": [
+        "mcq.order-of-volatility"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m172",
+      "sourceSignature": "sha256:d1f953a23140994b2d1b13f06af19eb484ab92ffc47b50951aefacf0b2301155",
+      "conceptTagIds": [
+        "mcq.credentialed-scan"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m173",
+      "sourceSignature": "sha256:5f1d81d0e344bce361d2ed5f5fda5895b36e8ff2ea8d208e958a4f83e066fcc5",
+      "conceptTagIds": [
+        "mcq.risk-based-remediation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m174",
+      "sourceSignature": "sha256:10649aee1ec742306de35d061bc6a4029c4656c3c7e7d2b67186e140fdab66ec",
+      "conceptTagIds": [
+        "mcq.kev"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m175",
+      "sourceSignature": "sha256:1e30ac1ecefa43f2e1a408ad9497f0e6c7501f84faf4aa1c2385c55a41c5f996",
+      "conceptTagIds": [
+        "mcq.privilege-creep"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m176",
+      "sourceSignature": "sha256:81872c902f5583b1f01ebf766c31c88687a4b079a752d848fc0cc59876287aa3",
+      "conceptTagIds": [
+        "mcq.endpoint-telemetry"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m177",
+      "sourceSignature": "sha256:130c3e1866be5e83816ebcc844897f19faf0fe5e449b2b1a78f455377caf1c5e",
+      "conceptTagIds": [
+        "mcq.differential-backup"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m179",
+      "sourceSignature": "sha256:dc857feea06a2ea12e6fc531c2d3b819b78a302cae2f036b0153f29b623e8bf9",
+      "conceptTagIds": [
+        "mcq.anomaly-detection"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m180",
+      "sourceSignature": "sha256:db23f1d5f10418b50fc518689169e6300733e22b55b279ab0db99aacbd1a632c",
+      "conceptTagIds": [
+        "acronym.pam"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m181",
+      "sourceSignature": "sha256:06e004a91adc2efe292da33dcb24c223558ef3af5d4e17f133c852e48802185e",
+      "conceptTagIds": [
+        "mcq.unknown-environment-test"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m182",
+      "sourceSignature": "sha256:31385c804f6c619159ae61efbffe9443d2c74f9dbd209072c4958bd8aa788643",
+      "conceptTagIds": [
+        "mcq.lessons-learned"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m183",
+      "sourceSignature": "sha256:c6b9b00db243f97972beb3449605679734e2e90a8b8427490ffd264873e78333",
+      "conceptTagIds": [
+        "acronym.soar"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m184",
+      "sourceSignature": "sha256:d0db1639fc462ce57869fffe7433cf3247253e44e04a58210592e8b7af50e55f",
+      "conceptTagIds": [
+        "mcq.posture-assessment",
+        "mcq.nac"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m185",
+      "sourceSignature": "sha256:73184dcedb783e80d9adb264fac272d8900e518552becd322d836f2e051630b8",
+      "conceptTagIds": [
+        "acronym.stix",
+        "acronym.taxii"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m186",
+      "sourceSignature": "sha256:6581dfd373df8b50d13ffd646745e895789f4e00af8577161d93025b0b4a215d",
+      "conceptTagIds": [
+        "acronym.gdpr"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m187",
+      "sourceSignature": "sha256:2ad59a96e7687fd8214400512b1877784a349962ed9584b4bc87d22eaeab4a9d",
+      "conceptTagIds": [
+        "mcq.breach-notification"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m188",
+      "sourceSignature": "sha256:9c4b159ab8c9f47123465c587540285b46c0554aef65d2fe149c2bcd5981f840",
+      "conceptTagIds": [
+        "mcq.risk-acceptance"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m189",
+      "sourceSignature": "sha256:3e503d6dec1e71df9f9e126552622fc33104bff9a0cdd8e538d3eac8d9f79760",
+      "conceptTagIds": [
+        "acronym.ale"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m190",
+      "sourceSignature": "sha256:6d5a7750b20d121d0df24c60d134ff325f0c8616206c9c7938d0d5f25a57f82f",
+      "conceptTagIds": [
+        "mcq.shared-responsibility"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m191",
+      "sourceSignature": "sha256:2374eb465a319541d81e2f26777898afc03c9cfd91f86a1d51cc995ca6fe1ac5",
+      "conceptTagIds": [
+        "acronym.csf",
+        "acronym.nist"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m193",
+      "sourceSignature": "sha256:44e27ce837f6da4a6da5e94d9894e7a499a8018a728710fb315a17971b948af0",
+      "conceptTagIds": [
+        "mcq.data-classification"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m194",
+      "sourceSignature": "sha256:e597fd010332e17efdc380319469f1f37b17fa1a9cad4fc2410054ca98871f78",
+      "conceptTagIds": [
+        "acronym.phishing"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m195",
+      "sourceSignature": "sha256:743ab2ae1d774b20ebdd43c3c6cb3a33eabe9636db2a26e3b9fae55b647237c1",
+      "conceptTagIds": [
+        "acronym.iso"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m196",
+      "sourceSignature": "sha256:c7d172bacf975a87dd3b79a33d1ff48182005a31eab9fc1fe4610b6e24c6000f",
+      "conceptTagIds": [
+        "recovery.mtd"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m198",
+      "sourceSignature": "sha256:19772afb416bcba3578ee130c4f3db1bbf36ae1ac0c4eaacad6e998ae05c0cc4",
+      "conceptTagIds": [
+        "mcq.tokenization"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m200",
+      "sourceSignature": "sha256:a476ce31ba5e5909690992fb7ee7680b094a469ecbebb91682d3f34e6fb027dc",
+      "conceptTagIds": [
+        "mcq.security-standard"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m201",
+      "sourceSignature": "sha256:dd6d52d2f3f4733bc13cb5b07e0ebe5517da6a40814173e42a77e81d3a0ed21b",
+      "conceptTagIds": [
+        "mcq.dual-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m202",
+      "sourceSignature": "sha256:87ff8ae590255da62e6d1f0861e78717f0291c0873aebebb0b74c3c2c43f5267",
+      "conceptTagIds": [
+        "mcq.corrective-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m203",
+      "sourceSignature": "sha256:747773c4517b098bc403d0a662598ff24ab0c9479e892e29ccad178085c22916",
+      "conceptTagIds": [
+        "mcq.compensating-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m204",
+      "sourceSignature": "sha256:634f8cc08116b881b2d5ee30249d5ffdc0b8de021b8f4c45be7539b125d75e29",
+      "conceptTagIds": [
+        "mcq.detective-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m205",
+      "sourceSignature": "sha256:536bcff7e295e641594173762be3b96edeb397ae8339f28bea894d7993cd3d77",
+      "conceptTagIds": [
+        "mcq.managerial-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m206",
+      "sourceSignature": "sha256:97a923bec228e620f2fb34e752e0243f0eb3c7f2574b1e9be61b7013f9ea64bf",
+      "conceptTagIds": [
+        "mcq.diffie-hellman"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m207",
+      "sourceSignature": "sha256:6d320a9b93cbac92b67b6ca57f3e2b41eabda10fdaf268d947217cc208829cde",
+      "conceptTagIds": [
+        "mcq.collision-resistance"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m208",
+      "sourceSignature": "sha256:e1f81a2df6a1751db3bad10c3ed09b4e329e7ddd07b9f7a4104ff1a4dbc0582a",
+      "conceptTagIds": [
+        "mcq.data-origin-authentication"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m210",
+      "sourceSignature": "sha256:5a3187f497cc79b5f5d2fcd72c6f5f43dcb06ec89a0164ddd7d99845a70fa9c6",
+      "conceptTagIds": [
+        "acronym.rsa"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m211",
+      "sourceSignature": "sha256:6e30768ba4facc0a72760c9aa92f9372d3d43c80b69faa3970eb19d99bb401c7",
+      "conceptTagIds": [
+        "mcq.password-salt"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m212",
+      "sourceSignature": "sha256:b81dd4672b62e76bd0d62eab5331df13fa0ad125a69ea07e55c3d3efa3899d22",
+      "conceptTagIds": [
+        "mcq.aes-gcm"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m214",
+      "sourceSignature": "sha256:d121d807b8699e164d0846f869b944dcd334d7f8b47af3b18b2d3734b918d943",
+      "conceptTagIds": [
+        "acronym.downgrade-attack"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m215",
+      "sourceSignature": "sha256:a6a5f5c8a11d4cbf0ffd39b535826752be47b912b37b034914d85beabfb7931f",
+      "conceptTagIds": [
+        "mcq.authentication-factors"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m216",
+      "sourceSignature": "sha256:0597b87f412b122318cbb8b57a57b84c106d05cebd411f97350936b96c1e56b6",
+      "conceptTagIds": [
+        "mcq.webauthn"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m217",
+      "sourceSignature": "sha256:bfacd7eaab59fbbc21947628d5ff7fd68bcfb714ee6bb50584d83db7c717b879",
+      "conceptTagIds": [
+        "acronym.idp",
+        "acronym.saml"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m218",
+      "sourceSignature": "sha256:fab6b571d99fe33e14483fe1e2f749e0b2fb61f72d15bdd2a333d6e81cb0ab6d",
+      "conceptTagIds": [
+        "mcq.biometrics"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m221",
+      "sourceSignature": "sha256:4c44893c9db697aeebee8d70c8f34398500c04a8d217e57a89b8b0bdbb8f1812",
+      "conceptTagIds": [
+        "mcq.wildcard-certificate"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m222",
+      "sourceSignature": "sha256:b1972a9b4af2e0c64a2e55f1c865b06879fb1b023e5ca0f6cf56a3de91d57ec0",
+      "conceptTagIds": [
+        "mcq.certificate-revocation",
+        "acronym.ca"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m224",
+      "sourceSignature": "sha256:5a4eb3951d1fe6b0134eb5f8aa57c2334086d6c3535bc2892134044392ff060e",
+      "conceptTagIds": [
+        "mcq.certificate-revocation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m226",
+      "sourceSignature": "sha256:0f718c9c09b4ff16145364a21fa9df50e6fa8a5ec7910a24f0834103976acd2f",
+      "conceptTagIds": [
+        "acronym.zta"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m227",
+      "sourceSignature": "sha256:dcf3575a0f1f8d4dd0b351c467a8c62c33d25d365a44d98eb5f4d76e96520b9e",
+      "conceptTagIds": [
+        "mcq.defense-in-depth"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m229",
+      "sourceSignature": "sha256:722141497ee219dcb14a79f2ae9993fdaa2481812d48c5c491aab219752b131d",
+      "conceptTagIds": [
+        "mcq.account-lockout"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m232",
+      "sourceSignature": "sha256:3ce1b1265a9f275c31a5d4898fabe0caef6168be87fda46726ee3ac74c6edfbd",
+      "conceptTagIds": [
+        "mcq.change-approval"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m234",
+      "sourceSignature": "sha256:75651b9811e8b850525069b8eb5cf295175620a2cdaed110543d188a30bdb143",
+      "conceptTagIds": [
+        "mcq.preventive-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m235",
+      "sourceSignature": "sha256:dbe449a285dcc83ca807895ae73f8b0af4ae2b1541f622443e2c1693d25f63b4",
+      "conceptTagIds": [
+        "mcq.inactivity-lock"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m238",
+      "sourceSignature": "sha256:03d3833b646b20c06b1edbacc316a9c101c9333daa4560e53b3e03fd76c159cc",
+      "conceptTagIds": [
+        "mcq.certificate-trust"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m241",
+      "sourceSignature": "sha256:c53c15bccea4a948adfdbd170cd571826c9da05cdcf43dda376d2000a90e4b42",
+      "conceptTagIds": [
+        "mcq.ioc"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m242",
+      "sourceSignature": "sha256:6d0be6238e3ddae343d9b5670a0837841262ef6c75a6481af073f6b9ff2755ac",
+      "conceptTagIds": [
+        "mcq.tlp"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m243",
+      "sourceSignature": "sha256:43ef6fee110eda9d9dee3dfc7263df1f9b69b744129ac1edd4fb20ca5a1c6d20",
+      "conceptTagIds": [
+        "mcq.threat-intelligence-validation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m244",
+      "sourceSignature": "sha256:6f664f6ef121ad4bfddeba76b0101df99afd081f3dcccc65a31c9ab936aac106",
+      "conceptTagIds": [
+        "mcq.risk-based-remediation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m248",
+      "sourceSignature": "sha256:ac7266190ba3db82d0abbcd4fc17c8c4b6b1902fbe31e677cc0e606edc9f3827",
+      "conceptTagIds": [
+        "mcq.toctou"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m250",
+      "sourceSignature": "sha256:aaf4d75d5b3c27a2003447d92432789826eb5bb20746e4a4828c7522f4d7883e",
+      "conceptTagIds": [
+        "acronym.supply-chain-attack"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m251",
+      "sourceSignature": "sha256:de68a2ae7258fe490f4eb5a20ae73d79aa4a22fbfa28597dfd9fe3b7aa26b3b5",
+      "conceptTagIds": [
+        "acronym.watering-hole"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m252",
+      "sourceSignature": "sha256:fc98326bdaf5762256e489dcc0151f13ca1235490fc3249524e20ba0ec93d845",
+      "conceptTagIds": [
+        "mcq.apt"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m253",
+      "sourceSignature": "sha256:44945626c9a6978c484639c7c46bf3ea44e1e278c240503af3782a38480eb2c9",
+      "conceptTagIds": [
+        "acronym.smishing"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m256",
+      "sourceSignature": "sha256:b494dd91802583eca35de6d2e4260696eb3c63d875bd2d50d1ad6b58d0930e46",
+      "conceptTagIds": [
+        "acronym.ransomware"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m258",
+      "sourceSignature": "sha256:854495124a75feda6df5e30b8419e44f1de3a46dd6b91af39bc1a808d7d82e93",
+      "conceptTagIds": [
+        "mcq.persistence"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m259",
+      "sourceSignature": "sha256:6df72ebf9843573f5d876d69bd5dd9209a0d9f0f13b51dcc890a4f135e352490",
+      "conceptTagIds": [
+        "acronym.ddos"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m260",
+      "sourceSignature": "sha256:b22bce185e1ccbbdcd0270804621bd13485533cfeed245a122bb790c47224448",
+      "conceptTagIds": [
+        "mcq.honeypot"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m261",
+      "sourceSignature": "sha256:aff082d1bcde1d0a380851f50b4f828074352e63dc42eb325ecf8ca4a697094b",
+      "conceptTagIds": [
+        "acronym.waf"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m262",
+      "sourceSignature": "sha256:1f9500a7409fe646c1048ea785084dd0c92bb5324b68212dbdc3e61c8a3d6934",
+      "conceptTagIds": [
+        "mcq.risk-based-remediation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m266",
+      "sourceSignature": "sha256:7dfe16daf04dfdbaf7c464cc4a5499c206bb1f9a2d5224e6589d0883f1302f86",
+      "conceptTagIds": [
+        "acronym.password-spraying"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m267",
+      "sourceSignature": "sha256:90f8600ecaf176f9b205bf4abc10f165ec50d675e2debda0a1e2afe1bb87f2ee",
+      "conceptTagIds": [
+        "mcq.xxe"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m268",
+      "sourceSignature": "sha256:331fa617c626ffbee0ed4f7bd673645cee45998451e4bbf9210bc1e18d2cb3a5",
+      "conceptTagIds": [
+        "mcq.adware"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m270",
+      "sourceSignature": "sha256:d236da3d226fc2252a4bc940aa21e8a01b3d71cc460254a1fc7235ecc9c564af",
+      "conceptTagIds": [
+        "mcq.hsts"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m271",
+      "sourceSignature": "sha256:58e112c61a134be03064287e073e8f9bb84c65f85d12f4219e2d3630bed7e126",
+      "conceptTagIds": [
+        "mcq.broken-access-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m272",
+      "sourceSignature": "sha256:3baec6a32cfebf3b3646984f523741a1eeaf7403e676c3ed9f4f95b7561952b4",
+      "conceptTagIds": [
+        "mcq.cryptomining-malware"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m275",
+      "sourceSignature": "sha256:28bd3d164124407231bc95826504bbde22ec0291eb9509db2c0c4a88bdb9dc80",
+      "conceptTagIds": [
+        "acronym.arp-poisoning",
+        "acronym.arp"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m278",
+      "sourceSignature": "sha256:e659f37d0531da4d816943f953f8c1bde820c99a9e82e225f12a88c52363bc90",
+      "conceptTagIds": [
+        "acronym.dmarc"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m280",
+      "sourceSignature": "sha256:471ae5e8ae0ebc856501c9724620d3a2b75e6ad985d3d9e0fb43fff293667132",
+      "conceptTagIds": [
+        "mcq.credential-stuffing"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m282",
+      "sourceSignature": "sha256:7803d78870d666dc39978440333d0da20a8929ea01c2001701bbcb2e106fa468",
+      "conceptTagIds": [
+        "acronym.directory-traversal"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m283",
+      "sourceSignature": "sha256:84f446a876e167afd815b93d286df6147a31fb92cd4b2ad6367b4e64297f53a9",
+      "conceptTagIds": [
+        "acronym.vishing"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m284",
+      "sourceSignature": "sha256:d025246e1c1e7f2d9a223a22d663097e7098ca115c96ce971ef04623f60b7e68",
+      "conceptTagIds": [
+        "mcq.attack-surface-reduction"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m285",
+      "sourceSignature": "sha256:2e05f406c4546fbda0d600e3bf3175e6ab26222c9745c31875b9308b49d79de8",
+      "conceptTagIds": [
+        "mcq.c2-beaconing"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m286",
+      "sourceSignature": "sha256:04ef020cb540983248d98cc5ec8d729504335255b0ef8d19514e673ea596ae9d",
+      "conceptTagIds": [
+        "acronym.waf"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m287",
+      "sourceSignature": "sha256:27e1938813f0723921d566230aea3c667e3936261ca7c0d0986a3af8485d7705",
+      "conceptTagIds": [
+        "acronym.buffer-overflow"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m288",
+      "sourceSignature": "sha256:f0bd42af97654b957c44ea63ce6f462c9a926e587a7711e5964bcff8565a9311",
+      "conceptTagIds": [
+        "mcq.payment-verification"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m290",
+      "sourceSignature": "sha256:7c6110309116ce03412d8f9054f57d4835fc4d5f21ef680934e0271f1bb2eeef",
+      "conceptTagIds": [
+        "acronym.spyware",
+        "acronym.keylogger"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m291",
+      "sourceSignature": "sha256:91ecd9bab7c5a66ff1f243abdfc3f8baf5f236afeeafc737c09316801f8364f7",
+      "conceptTagIds": [
+        "acronym.dmz"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m292",
+      "sourceSignature": "sha256:e1f44c8c28b312de57de7a51802fefc1e8f15b38cd0cef1ef91e27147dfd83f5",
+      "conceptTagIds": [
+        "acronym.vlan"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m294",
+      "sourceSignature": "sha256:fe1148f4b4fc28cbd17796bdab505ed8b6c7b32cf61c9e23f6564d6dfd16b14e",
+      "conceptTagIds": [
+        "mcq.public-cloud"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m296",
+      "sourceSignature": "sha256:faa8c0c470e4cc1ef5df18ea6302d022f4b1a8a7cd6ead0346f88bcfc54bc593",
+      "conceptTagIds": [
+        "mcq.cloud-policy-guardrails"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m298",
+      "sourceSignature": "sha256:cf441190dd3ec99b095af08299aef02ecc0fea8204669637f5f18c862d8ef869",
+      "conceptTagIds": [
+        "mcq.three-tier-architecture"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m299",
+      "sourceSignature": "sha256:d8d29d4e94594824ee5056acc5075ec4fdfe52d2d3da66192b37badcc9f5c756",
+      "conceptTagIds": [
+        "acronym.vpn"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m305",
+      "sourceSignature": "sha256:6f2c24377f75ead1769061fbf26c310fb0f4c1f31dcfc406efc297a74e1fd610",
+      "conceptTagIds": [
+        "mcq.cache-isolation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m306",
+      "sourceSignature": "sha256:c0c51bee4fdb2ce0da9a7fe4c43e7cbeb5da6e8f581ab86cf4fe24703547f848",
+      "conceptTagIds": [
+        "mcq.public-bucket-exposure"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m312",
+      "sourceSignature": "sha256:beb30e7104437b044b1160ebfe9dc0f5857fe87b1059daf9e5c438872b399d59",
+      "conceptTagIds": [
+        "mcq.threat-detection"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m314",
+      "sourceSignature": "sha256:ab5f5ccd45ac4f242d5e9b46a9955de05926d893f04c239aed5ade6fa2eb5ae5",
+      "conceptTagIds": [
+        "acronym.ipsec",
+        "acronym.vpn"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m318",
+      "sourceSignature": "sha256:aaffabaf9e66a0b11cb7991196d08e712ff74590aeb0d160a29b155bdf46d048",
+      "conceptTagIds": [
+        "acronym.mfa"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m319",
+      "sourceSignature": "sha256:d3802d414b3a98a81c90e333f9c98a127c05606dcf1e6c4cdefb06e6a2ba3561",
+      "conceptTagIds": [
+        "acronym.oauth"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m321",
+      "sourceSignature": "sha256:777e70e5cce6fc271c6844f38fff50e6e5d7c9ee368768108d2e931056699493",
+      "conceptTagIds": [
+        "mcq.inline-proxy"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m322",
+      "sourceSignature": "sha256:3648d22f35aecd551bb281c6fd7e53c16aa0e054a49fe4cbb85e8bc695464074",
+      "conceptTagIds": [
+        "mcq.shift-left"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m333",
+      "sourceSignature": "sha256:ae38fca4b0c6ecad82bd18510a92dfc938f1e325aa4b92c632c3f91662dafd1d",
+      "conceptTagIds": [
+        "mcq.threat-hunting"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m334",
+      "sourceSignature": "sha256:e276a8688ea7ec9653862970ebccb100f10458a1c6591e56a398fb636013dcdc",
+      "conceptTagIds": [
+        "mcq.containment"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m340",
+      "sourceSignature": "sha256:04f82a86285772dfe31159fee4d33646ac76835308f661365442825176668477",
+      "conceptTagIds": [
+        "mcq.known-environment-test"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m343",
+      "sourceSignature": "sha256:6d95aeb1451fa8fe7c021e15941c3fc501a7ee571c9c7edcd455f4708f0ea072",
+      "conceptTagIds": [
+        "mcq.identity-lifecycle"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m349",
+      "sourceSignature": "sha256:ef9dce091dd4d0036be9bc7abb5c9e2c0c8f126542cf0f66c3b369616240c494",
+      "conceptTagIds": [
+        "mcq.vulnerability-assessment",
+        "mcq.penetration-testing"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m352",
+      "sourceSignature": "sha256:3771e25eaa648988d814e2b1177088cf675640c0ad7851f45204e933b9e03e6f",
+      "conceptTagIds": [
+        "mcq.tabletop-exercise"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m355",
+      "sourceSignature": "sha256:142400625d89d1268c42db400409f07f2ab6e7a8e8c2d9c1d6fa2e07f37d43b6",
+      "conceptTagIds": [
+        "mcq.privilege-creep"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m356",
+      "sourceSignature": "sha256:c5ea4ff7456b35248e072dfcc82b53317f8b447784206297c6ca622a05270dfe",
+      "conceptTagIds": [
+        "mcq.inline-proxy"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m361",
+      "sourceSignature": "sha256:ebfc1c4d055c568a9c147b1682e63d7a32888cced8e354461c12c1ed3bdb4c99",
+      "conceptTagIds": [
+        "acronym.siem"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m366",
+      "sourceSignature": "sha256:18a6839fe668ebc3b543f47544ec2d010cc0a203b7f4c79b1db1561460a261f8",
+      "conceptTagIds": [
+        "mcq.endpoint-telemetry"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m371",
+      "sourceSignature": "sha256:a2a24b122e9215c90f326164ff419dd50f9eb203610827b98e1683a3658b82ad",
+      "conceptTagIds": [
+        "mcq.security-policy"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m373",
+      "sourceSignature": "sha256:e82dcb1570801c364b6f3c00b560afaef140064d22f2b7ea2c20a70935fec32c",
+      "conceptTagIds": [
+        "acronym.ale"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m374",
+      "sourceSignature": "sha256:1d440834bda229af24cd40005e83f3989849669e059ae775ef1972e0c86e0917",
+      "conceptTagIds": [
+        "mcq.risk-mitigation",
+        "mcq.risk-transfer"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m376",
+      "sourceSignature": "sha256:272eda04a41eab7b2018bced5dcdbfcf37903ca9e5d9032185ac5ab51a183a0c",
+      "conceptTagIds": [
+        "acronym.hipaa"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m379",
+      "sourceSignature": "sha256:04ff1b174814085ef99178f348cceb19fec47a513b8602b87f21f581a55b4703",
+      "conceptTagIds": [
+        "mcq.purpose-limitation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m389",
+      "sourceSignature": "sha256:ecf6b9e344c091e685f4df3bdb3200e173f73b7026dc1a9b19cd857752632188",
+      "conceptTagIds": [
+        "mcq.synthetic-data"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m393",
+      "sourceSignature": "sha256:9d5751c61e1eff4056b0edd215818ecbf0c5e8f7bc63bec761e4a3ce0f7b26c1",
+      "conceptTagIds": [
+        "mcq.data-portability"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m398",
+      "sourceSignature": "sha256:f4a6fb812f1ff34b9f7c7cf64e49498b5d1fe68b6ba1c0b61e9cc71fe359997c",
+      "conceptTagIds": [
+        "mcq.security-procedure"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m399",
+      "sourceSignature": "sha256:862fb2b7d4755dd3f8f878b40a9c898975201e94ba531acbc4d808321d5e5e86",
+      "conceptTagIds": [
+        "mcq.integrity"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m401",
+      "sourceSignature": "sha256:f2c41c1dfb9e6e544a6e41b7ae8e0c5703e45c6575ee4e7f3c7129acfed91672",
+      "conceptTagIds": [
+        "mcq.deterrent-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m402",
+      "sourceSignature": "sha256:925c207ef693a49366db38f720a835bdd206bcf1d356bfe7f82cf405a0a5f87a",
+      "conceptTagIds": [
+        "mcq.detective-control",
+        "mcq.preventive-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m403",
+      "sourceSignature": "sha256:ded064fe4515ce2de92242b541313d29edc9908d93e4c15c9e849a39d4df0693",
+      "conceptTagIds": [
+        "mcq.hashing"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m404",
+      "sourceSignature": "sha256:c981bde5c52b2ca5d42c9ceac1bad3961adc204151668ccfdf0085091d0f9763",
+      "conceptTagIds": [
+        "mcq.password-salt"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m405",
+      "sourceSignature": "sha256:554cc3888cf660576144bdf031bd764c6ba8b863b423edf03310dffbe28a6c3c",
+      "conceptTagIds": [
+        "acronym.pfs"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m406",
+      "sourceSignature": "sha256:6f91e09b0373241abc3ede79fd7b4054a781439e9ec88b47c0b2b0a1e2bc584e",
+      "conceptTagIds": [
+        "mcq.crypto-strength"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m407",
+      "sourceSignature": "sha256:ec9a7032a408c477c227bf8c5b55fbdd95110aa54fe2136626502e637938fdd9",
+      "conceptTagIds": [
+        "mcq.nac"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m408",
+      "sourceSignature": "sha256:575516b356fad1be5b0ac4fb9368b5423b4c821af3f9a365552a6bba5e782326",
+      "conceptTagIds": [
+        "mcq.authenticator-user-verification"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m410",
+      "sourceSignature": "sha256:c0de6408d34793f59d0f69f5eb7001c1fcd02772379314e5114e5ddf095c40db",
+      "conceptTagIds": [
+        "mcq.certificate-trust"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m411",
+      "sourceSignature": "sha256:72583836b562c8be3ae5896c50dd64825a53a50e8c8f4c5129cd78a1c963ec95",
+      "conceptTagIds": [
+        "acronym.ocsp"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m413",
+      "sourceSignature": "sha256:830b2a6069e16128a8724db3b293b25f27230da01910812fce0f7d15befcd820",
+      "conceptTagIds": [
+        "mcq.least-privilege"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m416",
+      "sourceSignature": "sha256:98449d5f155b631c10b60cfd25a46a601c3a7e5513750397493c578c02ddd7e4",
+      "conceptTagIds": [
+        "mcq.shift-left"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m417",
+      "sourceSignature": "sha256:eabe76691616e921555756cbc35089fcaa20d449e8e763e4bdd4b47f1de9b2f6",
+      "conceptTagIds": [
+        "mcq.shift-left"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m418",
+      "sourceSignature": "sha256:321582d429c0c6fd7f8d66bd492c5342ae3d03693c3f93958b842591068fd3e6",
+      "conceptTagIds": [
+        "acronym.ssl-tls"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m420",
+      "sourceSignature": "sha256:25bef71bd540bed4e2cfa5126ef531f9eeb2e6a817be9070f54ad633998ccc0d",
+      "conceptTagIds": [
+        "acronym.ssh"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m423",
+      "sourceSignature": "sha256:46b1f9d8969bcda57e1d2696c75762c04b1a0c09c1442d95958b1fd80d75f095",
+      "conceptTagIds": [
+        "acronym.stix",
+        "acronym.taxii"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m425",
+      "sourceSignature": "sha256:fcb9cd2f1b30893c39c4f93e3166ba711faaf61db5bebe7d9eb0261ef6074204",
+      "conceptTagIds": [
+        "mcq.risk-based-remediation"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m426",
+      "sourceSignature": "sha256:22f0350c6453b2f068b636e0c0731df67d8a9ddda2f87102d5f27bcdd79a527e",
+      "conceptTagIds": [
+        "mcq.credentialed-scan"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m427",
+      "sourceSignature": "sha256:0f7af5063c21e10c1a04ed2509e86a0aaa5522e833f4e02584d36550ea76d5e3",
+      "conceptTagIds": [
+        "acronym.command-injection"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m432",
+      "sourceSignature": "sha256:53cd2bea0b841558d530fa013f8880cae4a35bcd48ef077f39e9b88317c1e049",
+      "conceptTagIds": [
+        "acronym.tailgating"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m433",
+      "sourceSignature": "sha256:8c4a6a1927cbf8fcbfc8a090aabdc7710f8da4937989c4117c6bf47dde306f2a",
+      "conceptTagIds": [
+        "acronym.rootkit"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m439",
+      "sourceSignature": "sha256:eb29912aea00532864a4d90f6cf155aee2f2651deec4c69a36e30b4f73acc66c",
+      "conceptTagIds": [
+        "mcq.malicious-insider"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m441",
+      "sourceSignature": "sha256:c0abfb995151229981a6b1e3404cd46e7f1f1cbe2f38abb5f8ad70b7383d34a7",
+      "conceptTagIds": [
+        "acronym.dns"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m442",
+      "sourceSignature": "sha256:cf81acfcdf166706cc6fd43f60ef1e7f2c1d4439cfaf9666e374ce772959d8df",
+      "conceptTagIds": [
+        "mcq.endpoint-telemetry"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m443",
+      "sourceSignature": "sha256:01d3d29eb0bec7a41420ce7d3c2e81e93043b49aabc205ec676eb61eada62212",
+      "conceptTagIds": [
+        "acronym.dns"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m451",
+      "sourceSignature": "sha256:581790333882b1766e4a908e2c7637a7679364f4853edbdf4c4401e338ca49e7",
+      "conceptTagIds": [
+        "acronym.api"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m456",
+      "sourceSignature": "sha256:1cd0ad946af7238eeaf2bc60be3266f0b9674f6f2fcb48be50f1f787cda9cf32",
+      "conceptTagIds": [
+        "mcq.file-permissions"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m502",
+      "sourceSignature": "sha256:ddcd6181dd7ddcd62fa48dcb6774156eb98f3e83c50492f65371df3cb8e707a3",
+      "conceptTagIds": [
+        "acronym.phishing"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m601",
+      "sourceSignature": "sha256:db92a97817a471e844750801a83bef4a3ce7a5d30dd7dcd24122fc5a829eaba0",
+      "conceptTagIds": [
+        "acronym.mfa"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m602",
+      "sourceSignature": "sha256:f4d4d4f0d82c359b8e983633383ae113d1299f2b4055c52dd9cdce8c856297f6",
+      "conceptTagIds": [
+        "mcq.mantrap"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m603",
+      "sourceSignature": "sha256:5806eb819ca97b2017dbde462367781942b7c31774cd486e01bcca09c87585d2",
+      "conceptTagIds": [
+        "mcq.deterrent-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m604",
+      "sourceSignature": "sha256:9cddab46a617924d7b15522dc07c1811fd8263b37f29c7cf21e3b06e5e7b5434",
+      "conceptTagIds": [
+        "mcq.risk-transfer"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m605",
+      "sourceSignature": "sha256:9f984362b71d8ecef9740f68650c01868b8d3258f38637d5c46e99120e6671ea",
+      "conceptTagIds": [
+        "mcq.risk-appetite"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m606",
+      "sourceSignature": "sha256:aa2c82072dac821898899138b4ae809d6ec22071585f461f9b0ced5512f41bac",
+      "conceptTagIds": [
+        "mcq.confidentiality"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m607",
+      "sourceSignature": "sha256:11d55f2d23ce888d8a2b52cef35c56c141bfb013975e41edd262f3df05183021",
+      "conceptTagIds": [
+        "mcq.passive-reconnaissance"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m608",
+      "sourceSignature": "sha256:61a4692725b2be1e8e44dc765e9182a3208528f8e3f52b75dae02d5ad21a3409",
+      "conceptTagIds": [
+        "acronym.phishing"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m609",
+      "sourceSignature": "sha256:17c21263687fa89751ebe4e0fe81ad4e3f1978ca45474d1dcae3c3c49be5d057",
+      "conceptTagIds": [
+        "acronym.vishing"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m610",
+      "sourceSignature": "sha256:84abbb400f3a753b2a86cd2986b61464e837242f0904485ebb0a5ccdb83c3ca1",
+      "conceptTagIds": [
+        "acronym.on-path-attack"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m611",
+      "sourceSignature": "sha256:cd910094231808026c2f960b38254bbb6846727a4399394588fedc7ba4668d56",
+      "conceptTagIds": [
+        "acronym.sqli"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m612",
+      "sourceSignature": "sha256:ed76f2083004f664ec798c38dee2c02350150f8c7d667f0f96505f1d19dee49e",
+      "conceptTagIds": [
+        "acronym.race-condition"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m613",
+      "sourceSignature": "sha256:1a27b92a66fc09ad764801dafb52f55f92fc2f23d3895f55fe7014595a2f1938",
+      "conceptTagIds": [
+        "mcq.zero-day"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m614",
+      "sourceSignature": "sha256:dd1510945f985d6bd5c3e95079c67c5c3dce9bbd17e1fa6028df1c86acc4fd08",
+      "conceptTagIds": [
+        "mcq.provisioning"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m615",
+      "sourceSignature": "sha256:84f897d0940c7ae19cac2c0b9faeb47f7ab6623dedff8c772821c216a54a7cb4",
+      "conceptTagIds": [
+        "acronym.dos",
+        "acronym.ddos"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m616",
+      "sourceSignature": "sha256:ea9064ab76c33753c6144803e662ac70c506957852ef5942bc98474e69b0fbc4",
+      "conceptTagIds": [
+        "mcq.spf"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m617",
+      "sourceSignature": "sha256:da05157a7584c3a96f03344c3d4434b1575794debd01a0cbef60527dc65763d8",
+      "conceptTagIds": [
+        "mcq.nation-state-actor"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m618",
+      "sourceSignature": "sha256:27575e53b715642c5bc25ada42ea08a8b322f6bb8ebdfff7c3de2d3f30d9a169",
+      "conceptTagIds": [
+        "acronym.siem"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m619",
+      "sourceSignature": "sha256:791c5ca5f484b77af374524e240595a3bbbd52a202b151e4fcca8060c2693d91",
+      "conceptTagIds": [
+        "acronym.lan",
+        "acronym.vlan"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m620",
+      "sourceSignature": "sha256:de74f8237e1e8262f706b13654cccede32dc03bcac11f7d84e4729a2068ea4c8",
+      "conceptTagIds": [
+        "acronym.os"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m621",
+      "sourceSignature": "sha256:2fefc9b505bb60cd02d17cb20fa5339d0fe87149dea0148e09d9faf744ea0ff1",
+      "conceptTagIds": [
+        "acronym.zta"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m622",
+      "sourceSignature": "sha256:214cd7b11e1ac955bfff369269c34ab1716accab6e39392e23ebdf1d82cfd6cb",
+      "conceptTagIds": [
+        "acronym.hsm"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m623",
+      "sourceSignature": "sha256:5661f47c6e1112cd2be31efb1d4586e3757fe289890976464debb1e4fbaaabfe",
+      "conceptTagIds": [
+        "acronym.mdm"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m624",
+      "sourceSignature": "sha256:eb73697022826dafe4a0cbfea105b02a6a0773815168fb492a2147626b6acbc5",
+      "conceptTagIds": [
+        "mcq.password-salt"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m625",
+      "sourceSignature": "sha256:37c94719760dd5c3e5e645597831e6248ff9543888b14d8cacd47b2c319ae7c3",
+      "conceptTagIds": [
+        "mcq.steganography"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m626",
+      "sourceSignature": "sha256:33384792e690766b9f904578e838c7351beb7fa32dc38f39ee78903b100ba172",
+      "conceptTagIds": [
+        "mcq.asymmetric-encryption"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m627",
+      "sourceSignature": "sha256:ee9386cf8cffdf01d2ac18166a142c2df57e504ccf14b93169f2b141720706ea",
+      "conceptTagIds": [
+        "mcq.containment"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m628",
+      "sourceSignature": "sha256:fe6a9f864495c1d4663327cd93588e5d8adcdd4d53c0c1df30bc5ca78802980f",
+      "conceptTagIds": [
+        "mcq.false-negative"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m629",
+      "sourceSignature": "sha256:1339cd42c15aba1d8ad2363b8759310ead909fdf4c57ba2358b1aab8d0b71f11",
+      "conceptTagIds": [
+        "mcq.lessons-learned"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m630",
+      "sourceSignature": "sha256:bb150186f2849cac763db0bb502bd2f0354b41c0612c20ba4ce90312c3a5bcfa",
+      "conceptTagIds": [
+        "mcq.tabletop-exercise"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m631",
+      "sourceSignature": "sha256:1f99fb6b6c209e3651d6411f6d3d04cea87c10c09d1bebc7b6cb24e6fc465a2b",
+      "conceptTagIds": [
+        "mcq.degaussing"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m632",
+      "sourceSignature": "sha256:e8fe290134e6f03e848a23ce6070cb6c16676e45a78f1f99dc8dba03d7bab9d8",
+      "conceptTagIds": [
+        "acronym.brute-force"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m633",
+      "sourceSignature": "sha256:f845c56a9cbd6728940bf15df952be260ea070222f665c664da4eeb4be95c206",
+      "conceptTagIds": [
+        "mcq.domain-hijacking"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m634",
+      "sourceSignature": "sha256:7d9e0f158bdc0794f87afd2eff723f45578f4cc7e7ce34740ac353b9e568e56f",
+      "conceptTagIds": [
+        "mcq.posture-assessment"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m635",
+      "sourceSignature": "sha256:3df3c1be0e2e4477d1ed3e517e1eb521a67533b7dd3b84f72854efeeb9ebfcd0",
+      "conceptTagIds": [
+        "recovery.rto"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m636",
+      "sourceSignature": "sha256:a09fe3e43599902d378fbfb28d795b048aba28ff452941bc2f4b6e26cb698a35",
+      "conceptTagIds": [
+        "acronym.ssh"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m637",
+      "sourceSignature": "sha256:a4451e35d3537cf7b0b4c541ffb09838408eef6cde553a67020fab8cdd486915",
+      "conceptTagIds": [
+        "acronym.dlp"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m638",
+      "sourceSignature": "sha256:95693229e5696ca26308d4dee0669304557e466907dda28ef2aa61fe300f19df",
+      "conceptTagIds": [
+        "acronym.iac"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m639",
+      "sourceSignature": "sha256:9f41ece28d8c032d8899a85e1d497370db14fe59ca0ac61c6a8dc9d784f8ce02",
+      "conceptTagIds": [
+        "mcq.backout-plan"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m640",
+      "sourceSignature": "sha256:682e2daca1636ae41b7e24c0372563661dda5450f242fcc26864c06e061cb0e8",
+      "conceptTagIds": [
+        "mcq.data-owner"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m641",
+      "sourceSignature": "sha256:571a7447f12d0254287e94d2fe2a94df2e6e34754c0658872f9e422fe28b1de6",
+      "conceptTagIds": [
+        "mcq.regulatory-requirement"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m642",
+      "sourceSignature": "sha256:b258adcb498cde288176d1b33471d8c6de410272115e6abf4454d3306574cf43",
+      "conceptTagIds": [
+        "mcq.dual-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m643",
+      "sourceSignature": "sha256:ede54a18269ad28f0be5e8bd88ca056a46e0bdc5b877ec7132f4c7247ee6a722",
+      "conceptTagIds": [
+        "mcq.security-audit"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m644",
+      "sourceSignature": "sha256:85b4b1de37a8d224b299ac3fabb3aaca222a3e13b5b5bd3782cc887da73940f7",
+      "conceptTagIds": [
+        "acronym.sle"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m645",
+      "sourceSignature": "sha256:5d7c7e9bd5d168ecabb490df0e639b2d5059ae55f0ac75fa7952fde75e0c6e40",
+      "conceptTagIds": [
+        "acronym.sla"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m646",
+      "sourceSignature": "sha256:a90f314b8a925bcf401846021cff1aeb81721fb29d20893ab878937a2253a1da",
+      "conceptTagIds": [
+        "acronym.whaling"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m647",
+      "sourceSignature": "sha256:2bde9dab0ea291586353de3af1914aaf23e4d2319c8a8b260582ec15e1ffab65",
+      "conceptTagIds": [
+        "mcq.sast"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m648",
+      "sourceSignature": "sha256:45e1f7d20c2f3573535930dec0b9603cd94861bf659d0c46d0b12509b869d23c",
+      "conceptTagIds": [
+        "mcq.tokenization"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m649",
+      "sourceSignature": "sha256:8415b87b82ac006cbeeedd6e20ca4f186371d488cf71b32d96cebaca4965c7ac",
+      "conceptTagIds": [
+        "mcq.change-approval"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m650",
+      "sourceSignature": "sha256:f1b318fe509e9ce48e9a7ddce443012f64fe7999fe2503d76feff0b3c23e24a7",
+      "conceptTagIds": [
+        "mcq.shared-responsibility"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m651",
+      "sourceSignature": "sha256:44f4ea59e4e4fe5161f1e3a5f4850bb8c691621977d77ddaa0d2092d56ab527f",
+      "conceptTagIds": [
+        "mcq.control-cost-benefit"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m652",
+      "sourceSignature": "sha256:199d4d28816e70bddc0ed53a88f1e4936430a828dbef0b25d580922f59106745",
+      "conceptTagIds": [
+        "mcq.digital-signatures"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m653",
+      "sourceSignature": "sha256:d3f895559293491692341daed63661d54b59986d02c27633fdd969bff1a59be3",
+      "conceptTagIds": [
+        "mcq.least-privilege"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m654",
+      "sourceSignature": "sha256:fd70b82c75980c749b4bbc2bf98d7848c27025ecda0c7cdbefb5ec7b37d1b814",
+      "conceptTagIds": [
+        "mcq.preventive-control"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m655",
+      "sourceSignature": "sha256:6a9e22721c6b2bda245cfad7054b2b701a30f221af3bfe0f42030079e039b739",
+      "conceptTagIds": [
+        "mcq.risk-avoidance"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m656",
+      "sourceSignature": "sha256:d9093fc2f63c5311af3a651f2eeaeabcbd59653e4bf26c7fb2cc60f06c5e900f",
+      "conceptTagIds": [
+        "mcq.integrity"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m657",
+      "sourceSignature": "sha256:972d8b4b6cbd0157a3825e00e2e9848ad58d7061d3e458fcf52a40da34d0c6a7",
+      "conceptTagIds": [
+        "mcq.passive-reconnaissance"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m658",
+      "sourceSignature": "sha256:928875a831a0c5e3db6f493541d706ae522bf02215def4a671667f157c34aaa4",
+      "conceptTagIds": [
+        "acronym.phishing",
+        "acronym.spear-phishing"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m659",
+      "sourceSignature": "sha256:bd8c597389138e56c7dd0f01a52ab297e696d1538e33f1591b86764892c8af90",
+      "conceptTagIds": [
+        "acronym.smishing"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m660",
+      "sourceSignature": "sha256:de8972e38b69e868c719ee994be77e6ac234c34ec37f6d96927f9bf3c7bed1d3",
+      "conceptTagIds": [
+        "acronym.on-path-attack"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m705",
+      "sourceSignature": "sha256:eb78b5c2a743d8171ec60851398c6a8646a4a00ebc35db3f7977870fe64d2c65",
+      "conceptTagIds": [
+        "acronym.pfs"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m706",
+      "sourceSignature": "sha256:16d0da55a14758403ee09db32da3255147f381c2b46082126a43796bb9b87658",
+      "conceptTagIds": [
+        "acronym.dns"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m707",
+      "sourceSignature": "sha256:5d05f84d35b70184b0ce72ce9bc971a6b2ff272c2ff1e33d6af143e13919f319",
+      "conceptTagIds": [
+        "mcq.replay-prevention"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m708",
+      "sourceSignature": "sha256:577082ff94caf4c00d31dfbf45b06c6476de8329d45428d653b3fd8f2254a5c7",
+      "conceptTagIds": [
+        "acronym.ddos"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m709",
+      "sourceSignature": "sha256:81c5bcf99dba1ac1545c17546a6f4448f81a825d333b0bb045ce8c993fa62a2d",
+      "conceptTagIds": [
+        "mcq.port-mirroring"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m710",
+      "sourceSignature": "sha256:3389dba3b9a622ef84ac99c521e3370d88715692207e10573a4fed3171216a03",
+      "conceptTagIds": [
+        "acronym.amplified-attack"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m711",
+      "sourceSignature": "sha256:94b07b3adfc61f318717aab79d391b098925efb827984f58bcf9d4e91ee38bf9",
+      "conceptTagIds": [
+        "mcq.idor"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m712",
+      "sourceSignature": "sha256:3c7104473e3371858c0a4b5eecac7299686a01646eb4efb1ce789174c27d2e62",
+      "conceptTagIds": [
+        "mcq.8021x-authenticator"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m713",
+      "sourceSignature": "sha256:2892009538c2455fd6e78c3072458d1c045b18b0f6affe1aec88d0337f7a09a2",
+      "conceptTagIds": [
+        "mcq.digital-signatures"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m714",
+      "sourceSignature": "sha256:11684e43490d8c20a9c0ef4063628d74e256697be64650b1c48ef3ba80ad0212",
+      "conceptTagIds": [
+        "acronym.tpm"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m715",
+      "sourceSignature": "sha256:c878fee2d99490b21104f76659552863e8a427ef3412ccd0f951c8c1b6625d9d",
+      "conceptTagIds": [
+        "acronym.dns",
+        "acronym.vpn"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m717",
+      "sourceSignature": "sha256:c3ba8e2730c2be1a46551d9f4d71622efc44de4aa664e4499d4fab4e2214c803",
+      "conceptTagIds": [
+        "acronym.pfs"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m718",
+      "sourceSignature": "sha256:7e5e24e6d31914ef03ae78090b0eab363d073548e03857158d27919016f01c86",
+      "conceptTagIds": [
+        "acronym.dhcp"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m721",
+      "sourceSignature": "sha256:352dd839883b1afd0fea654266806f0bfe0542322600a65fedee320bf14059e3",
+      "conceptTagIds": [
+        "mcq.webauthn"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m722",
+      "sourceSignature": "sha256:2c4603d9954a350731727a111cccc51862c15603d7a3c75436147562e70a8846",
+      "conceptTagIds": [
+        "acronym.stix",
+        "acronym.taxii"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m723",
+      "sourceSignature": "sha256:c51a5ae883314b98262e2e49b86017eacbb88bb7a14120b9dd68b9e9e58e34b6",
+      "conceptTagIds": [
+        "acronym.csrf-xsrf"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m724",
+      "sourceSignature": "sha256:ca3b03d17fc5a5c6b786a59e234ca7a4546159ce03d38b65ab1cc66022e2ef9b",
+      "conceptTagIds": [
+        "mcq.e-discovery"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m725",
+      "sourceSignature": "sha256:00e888b663ac632d10362151a523fa8851b4771b3b55199a578f0755221673b3",
+      "conceptTagIds": [
+        "mcq.strategic-intelligence"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m726",
+      "sourceSignature": "sha256:4e4bec1b156fa8ba63811fac5c7aabe6e35ee3c33808ee7b757c85e24abe4bd1",
+      "conceptTagIds": [
+        "acronym.saml"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m727",
+      "sourceSignature": "sha256:c4dd95bd26b9bc13ec6f6fd8403fd39ea090f843ac61ad3285882aba92fb8368",
+      "conceptTagIds": [
+        "acronym.eap",
+        "acronym.radius"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m728",
+      "sourceSignature": "sha256:b78e3a233730dd513b8964ba6ece92868d33acaf4fca07b2e358500614c33cb9",
+      "conceptTagIds": [
+        "acronym.hsm"
+      ],
+      "reviewStatus": "owner_approved"
+    },
+    {
+      "questionId": "m729",
+      "sourceSignature": "sha256:f1201df9f30bfb7c139e882ae4ba7c56f223b781181417a0f8e9311916972804",
+      "conceptTagIds": [
+        "mcq.jump-server"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m730",
+      "sourceSignature": "sha256:381efa743a6585a45208e8928ab38fef807b3b3072d6ec2fb191ed879413ea26",
+      "conceptTagIds": [
+        "mcq.mac-spoofing"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m731",
+      "sourceSignature": "sha256:cbb7b009fe490c4ad9b07f0e4452eb485961c5456d1dcb54f4cad7e265a8e8f6",
+      "conceptTagIds": [
+        "mcq.risk-exception"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m733",
+      "sourceSignature": "sha256:161e3c37aa3fe81fff4e8f038e720f9de71f57b9fe63d0c606dc28611e17fff1",
+      "conceptTagIds": [
+        "mcq.risk-acceptance"
+      ],
+      "reviewStatus": "codex_tagged_pending_owner_review"
+    },
+    {
+      "questionId": "m734",
+      "sourceSignature": "sha256:cf809b251b2114ee50161ae7bfc679c5612b18a0850dd6178f2cb09058a096e9",
+      "conceptTagIds": [
+        "acronym.ocsp"
+      ],
+      "reviewStatus": "owner_approved"
+    }
+  ]
+}
