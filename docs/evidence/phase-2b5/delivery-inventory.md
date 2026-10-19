@@ -196,7 +196,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:cipher-study-routing
 
-- Exact revision: sha256:bfb0e2b59b4523bc178371fb9ec2e90266c91e3a0baf5ef912bf5b2570d1de63
+- Exact revision: sha256:0ee1dab3827bf282f0769916ec8e7cc4d9765a7ed49193def3ba6bcc2558b0bb
 - Inputs: current view; attempt-derived weak chapter/topics; tier; supplied assistant deck
 - Target kinds: mcq, flashcard
 - Behavior boundary: Preset choices and stable weak-chapter scoring; explicit supplied deck takes precedence over weak/starter fallback.
@@ -206,7 +206,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:daily-challenges
 
-- Exact revision: sha256:329df51a88e2fb991eba07ca6642bcbdcae7db0994e0a8b72f4c3b7c90a8c676
+- Exact revision: sha256:5f47fe31f23b203d878b5d91a5e659f9620835cf86c60fc3b32454b0526a7dd0
 - Inputs: local calendar weekday; hardcoded question IDs; effective banks
 - Target kinds: mcq, pbq
 - Behavior boundary: Weekday chooses a fixed ID list; missing IDs are filtered; MCQ options are randomized.
@@ -226,7 +226,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:diagnostic
 
-- Exact revision: sha256:e4fbaedc0c990ba14ed614ee966e0a0053ab875cb526de90479ac8e5b43bcc3c
+- Exact revision: sha256:2d4cebc90819afd4a4cd926272256d87b50ced0ed191afaf957a079b183f5b9c
 - Inputs: effective MCQs; chapter order; concise fallback sets
 - Target kinds: mcq, starter_question
 - Behavior boundary: Stable easiest concise per-chapter choice and fallback; displayed answer options randomized.
@@ -236,7 +236,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:exam-selection
 
-- Exact revision: sha256:d2afbaf0815ebf582b3192176f5a7ab2fea906560dfb7cdb07856cb4ebf41ed3
+- Exact revision: sha256:2ea1e0280b013059da1d4998fdff21af0e3a05dff2bf880a723c94659842acf1
 - Inputs: effective banks; requested MCQ/PBQ counts; access state; exam results
 - Target kinds: mcq, pbq
 - Behavior boundary: Math.random samples non-enrichment content; PBQs precede MCQs; review filtering uses local exam results.
@@ -266,7 +266,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:glossary-delivery
 
-- Exact revision: sha256:8206bb376e47ffe3e342ab8156057beead8202c0249fe45f99ca3afb46f53bac
+- Exact revision: sha256:62cd79828504eb3f6747622706117619a006936da296dbe3c5e312fb277217da
 - Inputs: rendered text; glossary definitions
 - Target kinds: glossary_definition
 - Behavior boundary: Case-insensitive longest-first boundary matching within inline formatting segments; deterministic for exact text.
@@ -276,7 +276,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:guest-feature-lesson-topic
 
-- Exact revision: sha256:59d1eb3fd21f4c5dcd9968905127d5d5dd67179acd294f446ab7a29cfe682b46
+- Exact revision: sha256:648c53de73145cd893b5fe32a2c2133df40a460f864d7c41a8ea7f3a96f79e84
 - Inputs: selected preview title; fixed authored prompt list
 - Target kinds: guest_demo_lesson_prompt
 - Behavior boundary: Fixed title lookup with first-prompt fallback; content changes only with explicit topic selection.
@@ -286,7 +286,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:guest-feature-review-topic
 
-- Exact revision: sha256:9a731803b4ac2d1b2f1426f18f452dfffd5cb50f925405c917f7e152304acc95
+- Exact revision: sha256:02ffc0a33688c0b3c6737b97ed4c0ba3d92dd8a66c5c7534bd9e557baef771d6
 - Inputs: selected synthetic topic; fixed authored path dictionary
 - Target kinds: guest_demo_review_path
 - Behavior boundary: User-selected dictionary lookup; default PKI topic; displayed percentages/miss signals and queue labels are hardcoded, not learner measurements.
@@ -296,7 +296,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:guest-feature-teaching
 
-- Exact revision: sha256:c8ea8439499dc2ba5e65e2bcb347e4533610c54223a178ae3cc9a948f59d6556
+- Exact revision: sha256:be1476c14ffedcd1fb34f198eb5ab3377c659d9da0eda7676122f0708818921b
 - Inputs: hardcoded feature type; in-view state; local flip/choice/sequence/focus state
 - Target kinds: guest_demo_flashcard, guest_demo_mcq, guest_demo_explanation, guest_demo_feedback, guest_demo_pbq, guest_demo_hint, guest_demo_review_path, guest_demo_lesson_prompt
 - Behavior boundary: Fixed authored branches selected by feature ID; local interactions reveal content. MFA auto-flip depends on time/reduced-motion preference. No adaptive selection or learner history.
@@ -306,7 +306,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:guest-pbq-preview
 
-- Exact revision: sha256:8d9897e2fa0397ef4516c2dea1608a5dc5bdf86aa8903e6d529781d9d89a5e07
+- Exact revision: sha256:18cccd552078240eacfb4e4b105e2e68676b80d698c68ac8a210845e7de2246c
 - Inputs: live/local bank; fixed free-preview ID
 - Target kinds: pbq
 - Behavior boundary: Find the fixed preview in live bank, then local bank, otherwise null.
@@ -326,7 +326,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:lesson-related-pbq
 
-- Exact revision: sha256:677aa0cadcb7e248907a0f42adf5229cabdc2413530d1fc65cda3acf1aabe502
+- Exact revision: sha256:b545aa5d27ed68d1468b84dba014f3b4dbfc914e0e6f5ac5b168acc66e8ba626
 - Inputs: lesson chapter; effective PBQ bank; tier/unlocked IDs
 - Target kinds: pbq, mcq
 - Behavior boundary: First accessible same-chapter PBQ, then same-chapter candidate, then free preview; inaccessible result routes to access UI.
@@ -346,7 +346,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:next-related-pbq
 
-- Exact revision: sha256:4d3e0fdcb795d0887762715244b3eb78e1bb5b457cfbdf06810163a57e947733
+- Exact revision: sha256:0ba2a6d6059e06362697429a787b2b8239f6f875f66fd28f96da55412af0fd4d
 - Inputs: current PBQ; successful attempt IDs; effective PBQ bank order
 - Target kinds: pbq
 - Behavior boundary: First unsolved same chapter/type, then same chapter, then cyclic bank successor; deterministic for fixed inputs.
@@ -356,7 +356,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:pbq-catalogue-selection
 
-- Exact revision: sha256:f3a8be01d15b41d3a164cfead8c95b72b004be3b8758f63c09184e42990498c3
+- Exact revision: sha256:616af67b9366b9a8d09ac807fb633408096e9a0df1e51b477f7e46b7bc9e5d6a
 - Inputs: bank; chapter/type/missed/starred filters; attempts; tier; visible count
 - Target kinds: pbq
 - Behavior boundary: Stable progress/source-order list with free preview priority; random practice favors unseen then missed, with random enrichment downweighting.
@@ -366,7 +366,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:practice-launch
 
-- Exact revision: sha256:18bc79314bc2c75a19beda20aa68d10e65f2b86ce7de7f131e668e6e8aaa5457
+- Exact revision: sha256:7e11977748be5285cbdf5334e4a4c7e8d424fd12008afe49010c30e2c9e1f91f
 - Inputs: bank and filters; guest/account status; missed/starred IDs; chapter review request; session results
 - Target kinds: mcq, lesson
 - Behavior boundary: Filters and Smart Review inputs are deterministic for fixed state/time; option shuffling and random practice are not.
@@ -396,7 +396,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:signup-diagnostic
 
-- Exact revision: sha256:75d54bc49095acd55026d330d74e9b49e4b9ce7ebf280bc30e12376a241506e6
+- Exact revision: sha256:5ae01ccdbc001f75110193dc8f60670b54a6366daafc9db6e1595f136ed9d164
 - Inputs: declared experience level; authored starter sets
 - Target kinds: starter_question
 - Behavior boundary: Fixed per-experience set and source order.
@@ -406,7 +406,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:smart-review
 
-- Exact revision: sha256:4666a0744cf0fd7033b87b93df85e98872e5800b592669d743e5a30b94f9bbcd
+- Exact revision: sha256:a8b940b6e871db5c94fefabc89bf9b755dc55a882d6a6b58b92a2b152c1ba006
 - Inputs: MCQ bank; attempt chronology; starred IDs; focus topics/chapter; count; mode; current time
 - Target kinds: mcq
 - Behavior boundary: Smart ranking is stable for fixed now and history; random mode uses Math.random. Diversity caps are relaxed in later passes.
@@ -436,7 +436,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:weak-area-actions
 
-- Exact revision: sha256:9f51014767ecc6225c9b157e2f4c2a9fc9502b2ba299b3ad45e1709fe4b77197
+- Exact revision: sha256:8e40133abdbc369ae0350b62ca20962ddfaec67ccb14709138ce655c70342454
 - Inputs: latest MCQ outcomes; chapter/topic aggregates; bank
 - Target kinds: mcq, lesson, flashcard
 - Behavior boundary: Stable weighted miss/repeated-miss/accuracy ranking for fixed history and bank order.

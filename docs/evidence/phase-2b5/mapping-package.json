@@ -74,7 +74,7 @@
   "sources": [
     {
       "path": "docs/evidence/phase-2b5/delivery-surface-review.json",
-      "sha256": "a20bafc77fb9ba5ba86fc625a291b7618063b13bcb6fd3e7a4c0b015e66b0856"
+      "sha256": "260e5a47b12e904b1a31cdd235f06229f6f5cd3a4bf5804995fcc23d3ea6e139"
     },
     {
       "path": "docs/evidence/phase-2b5/private-p017-processing.json",
@@ -198,7 +198,7 @@
     },
     {
       "path": "src/App.jsx",
-      "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+      "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
     },
     {
       "path": "src/data/conceptDeepDives.js",
@@ -226,7 +226,7 @@
     },
     {
       "path": "src/data/sy0701ConceptWeb.js",
-      "sha256": "db6991416267a570546dc17be06fd40c2405b0c66cf8d8d1ce836363c2025f90"
+      "sha256": "70675b598c87f4782110c7ba935933f92dc98ff16342281bd3cc8fca75192833"
     },
     {
       "path": "src/data/sy0701ConciseExplanations.js",
@@ -72489,7 +72489,7 @@
       "id": "intervention:cipher-study-routing",
       "kind": "intervention_selector",
       "source": "src/App.jsx + src/App.jsx",
-      "sourceSignature": "sha256:bfb0e2b59b4523bc178371fb9ec2e90266c91e3a0baf5ef912bf5b2570d1de63",
+      "sourceSignature": "sha256:0ee1dab3827bf282f0769916ec8e7cc4d9765a7ed49193def3ba6bcc2558b0bb",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -72544,7 +72544,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           },
           {
             "path": "src/data/sy0701AcronymFlashcards.js",
@@ -72569,7 +72569,7 @@
       "id": "intervention:daily-challenges",
       "kind": "intervention_selector",
       "source": "src/App.jsx + src/App.jsx + src/App.jsx",
-      "sourceSignature": "sha256:329df51a88e2fb991eba07ca6642bcbdcae7db0994e0a8b72f4c3b7c90a8c676",
+      "sourceSignature": "sha256:5f47fe31f23b203d878b5d91a5e659f9620835cf86c60fc3b32454b0526a7dd0",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -72631,7 +72631,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -72751,7 +72751,7 @@
       "id": "intervention:diagnostic",
       "kind": "intervention_selector",
       "source": "src/App.jsx + src/App.jsx",
-      "sourceSignature": "sha256:e4fbaedc0c990ba14ed614ee966e0a0053ab875cb526de90479ac8e5b43bcc3c",
+      "sourceSignature": "sha256:2d4cebc90819afd4a4cd926272256d87b50ced0ed191afaf957a079b183f5b9c",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -72805,7 +72805,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -72826,7 +72826,7 @@
       "id": "intervention:exam-selection",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:d2afbaf0815ebf582b3192176f5a7ab2fea906560dfb7cdb07856cb4ebf41ed3",
+      "sourceSignature": "sha256:2ea1e0280b013059da1d4998fdff21af0e3a05dff2bf880a723c94659842acf1",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -72873,7 +72873,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -73033,7 +73033,7 @@
       "id": "intervention:glossary-delivery",
       "kind": "intervention_selector",
       "source": "src/App.jsx + src/App.jsx",
-      "sourceSignature": "sha256:8206bb376e47ffe3e342ab8156057beead8202c0249fe45f99ca3afb46f53bac",
+      "sourceSignature": "sha256:62cd79828504eb3f6747622706117619a006936da296dbe3c5e312fb277217da",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -73085,7 +73085,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -73148,7 +73148,7 @@
       "id": "intervention:guest-feature-lesson-topic",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:59d1eb3fd21f4c5dcd9968905127d5d5dd67179acd294f446ab7a29cfe682b46",
+      "sourceSignature": "sha256:648c53de73145cd893b5fe32a2c2133df40a460f864d7c41a8ea7f3a96f79e84",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -73192,7 +73192,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -73213,7 +73213,7 @@
       "id": "intervention:guest-feature-review-topic",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:9a731803b4ac2d1b2f1426f18f452dfffd5cb50f925405c917f7e152304acc95",
+      "sourceSignature": "sha256:02ffc0a33688c0b3c6737b97ed4c0ba3d92dd8a66c5c7534bd9e557baef771d6",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -73257,7 +73257,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -73278,7 +73278,7 @@
       "id": "intervention:guest-feature-teaching",
       "kind": "intervention_selector",
       "source": "src/App.jsx + src/App.jsx + src/App.jsx",
-      "sourceSignature": "sha256:c8ea8439499dc2ba5e65e2bcb347e4533610c54223a178ae3cc9a948f59d6556",
+      "sourceSignature": "sha256:be1476c14ffedcd1fb34f198eb5ab3377c659d9da0eda7676122f0708818921b",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -73346,7 +73346,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -73381,7 +73381,7 @@
       "id": "intervention:guest-pbq-preview",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:8d9897e2fa0397ef4516c2dea1608a5dc5bdf86aa8903e6d529781d9d89a5e07",
+      "sourceSignature": "sha256:18cccd552078240eacfb4e4b105e2e68676b80d698c68ac8a210845e7de2246c",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -73425,7 +73425,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -73531,7 +73531,7 @@
       "id": "intervention:lesson-related-pbq",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:677aa0cadcb7e248907a0f42adf5229cabdc2413530d1fc65cda3acf1aabe502",
+      "sourceSignature": "sha256:b545aa5d27ed68d1468b84dba014f3b4dbfc914e0e6f5ac5b168acc66e8ba626",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -73577,7 +73577,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -73663,7 +73663,7 @@
       "id": "intervention:next-related-pbq",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:4d3e0fdcb795d0887762715244b3eb78e1bb5b457cfbdf06810163a57e947733",
+      "sourceSignature": "sha256:0ba2a6d6059e06362697429a787b2b8239f6f875f66fd28f96da55412af0fd4d",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -73708,7 +73708,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -73729,7 +73729,7 @@
       "id": "intervention:pbq-catalogue-selection",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:f3a8be01d15b41d3a164cfead8c95b72b004be3b8758f63c09184e42990498c3",
+      "sourceSignature": "sha256:616af67b9366b9a8d09ac807fb633408096e9a0df1e51b477f7e46b7bc9e5d6a",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -73776,7 +73776,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -73797,7 +73797,7 @@
       "id": "intervention:practice-launch",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:18bc79314bc2c75a19beda20aa68d10e65f2b86ce7de7f131e668e6e8aaa5457",
+      "sourceSignature": "sha256:7e11977748be5285cbdf5334e4a4c7e8d424fd12008afe49010c30e2c9e1f91f",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -73845,7 +73845,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           },
           {
             "path": "src/lib/deepDiveRecommendations.js",
@@ -74036,7 +74036,7 @@
       "id": "intervention:signup-diagnostic",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:75d54bc49095acd55026d330d74e9b49e4b9ce7ebf280bc30e12376a241506e6",
+      "sourceSignature": "sha256:5ae01ccdbc001f75110193dc8f60670b54a6366daafc9db6e1595f136ed9d164",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -74080,7 +74080,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -74108,7 +74108,7 @@
       "id": "intervention:smart-review",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:4666a0744cf0fd7033b87b93df85e98872e5800b592669d743e5a30b94f9bbcd",
+      "sourceSignature": "sha256:a8b940b6e871db5c94fefabc89bf9b755dc55a882d6a6b58b92a2b152c1ba006",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -74157,7 +74157,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           }
         ],
         "deliveryEvidence": [
@@ -74326,7 +74326,7 @@
       "id": "intervention:weak-area-actions",
       "kind": "intervention_selector",
       "source": "src/App.jsx",
-      "sourceSignature": "sha256:9f51014767ecc6225c9b157e2f4c2a9fc9502b2ba299b3ad45e1709fe4b77197",
+      "sourceSignature": "sha256:8e40133abdbc369ae0350b62ca20962ddfaec67ccb14709138ce655c70342454",
       "publicationStatus": "active",
       "evidenceScope": "local_effective_source",
       "objectiveCodes": [],
@@ -74373,7 +74373,7 @@
         "dependencies": [
           {
             "path": "src/App.jsx",
-            "sha256": "0369630cc943c2510ae72b33bc017c83e32fd3271a76d7d1f82bed2ab1c5a089"
+            "sha256": "1fec7388a6d19e12a9e6602ff724ccc456df0d80e1e842e4a3f79e1690894049"
           },
           {
             "path": "src/lib/deepDiveRecommendations.js",

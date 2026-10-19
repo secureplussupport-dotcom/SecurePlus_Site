@@ -4,7 +4,7 @@ import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701Ed
 import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
 import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from "./data/sy0701PublishedSnapshot.js";
 import { CONCEPT_TAGS } from "./data/sy0701ConceptWeb.js";
-import approvedMcqTags from "./data/mcqConceptTagAssignments.json";
+import mcqTagAssignments from "./data/mcqConceptTagAssignments.json";
 import {
   ArrowLeft,
   BadgeCheck,
@@ -12345,8 +12345,8 @@ function applySy0701StudyNoteEnhancement(question) {
 }
 
 const BASE_MCQ_BANK = mergePublishedSnapshot([...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id)),"mcq").filter(isMcqEditoriallyActive).map(applySy0701StudyNoteEnhancement).map(applyMcqEditorialReview).map(ensureMcqWrongFeedback);
-const approvedMcqTagsById=new Map(approvedMcqTags.assignments.map(row=>[row.questionId,row.conceptTagIds]));
-let MCQ_BANK = BASE_MCQ_BANK.map(question=>({...question,conceptTagIds:approvedMcqTagsById.get(question.id)||[]}));
+const mcqTagsById=new Map(mcqTagAssignments.assignments.map(row=>[row.questionId,row.conceptTagIds]));
+let MCQ_BANK = BASE_MCQ_BANK.map(question=>({...question,conceptTagIds:mcqTagsById.get(question.id)||[]}));
 
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK — original, accurate, clearly scoped content
@@ -16235,9 +16235,9 @@ function applyQuestionOverrides(rows=[]) {
   PBQ_BANK=mergeBank(BASE_PBQ_BANK,"pbq");
 }
 
-function applyApprovedMcqTags(rows=[]) {
+function applyAssignedMcqTags(rows=[]) {
   const overridden=new Set(rows.filter(row=>row.status==="active"&&row.question_kind==="mcq"&&row.action==="upsert"&&!isCapturedOverride(row)).map(row=>row.question_id));
-  MCQ_BANK=MCQ_BANK.map(question=>({...question,conceptTagIds:overridden.has(question.id)?question.conceptTagIds||[]:approvedMcqTagsById.get(question.id)||[]}));
+  MCQ_BANK=MCQ_BANK.map(question=>({...question,conceptTagIds:overridden.has(question.id)?question.conceptTagIds||[]:mcqTagsById.get(question.id)||[]}));
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -33712,7 +33712,7 @@ export default function App() {
         .eq("status","active");
       if(error) throw error;
       applyQuestionOverrides(data||[]);
-      applyApprovedMcqTags(data||[]);
+      applyAssignedMcqTags(data||[]);
       setQuestionBankVersion(v=>v+1);
     }catch(error){
       console.warn("Unable to load question overrides", error);

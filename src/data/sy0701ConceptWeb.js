@@ -1,5 +1,6 @@
 import { SY0701_ACRONYM_CARDS } from './sy0701AcronymFlashcards.js';
 import { CONCEPT_RELATIONSHIPS, LEARNING_CONCEPTS } from './learningConcepts.js';
+import mcqExtensions from './mcqConceptExtensions.json' with { type: 'json' };
 
 const slug = value => String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const label = value => `#${String(value).trim().replace(/\s*\/\s*/g, '-').replace(/\s+/g, '-')}`;
@@ -23,6 +24,7 @@ export const CONCEPT_TAGS = Object.freeze([
   ...LEARNING_CONCEPTS.filter(concept => !SY0701_ACRONYM_CARDS.some(card => card.setType === 'acronym' && concept.aliases.some(alias => alias.toLowerCase() === card.acronym.toLowerCase())))
     .map(concept => Object.freeze({ id: concept.id, tag: label(concept.aliases[0]), name: concept.name,
       acronym: concept.aliases[0], sourceCardId: null, chapterId: null })),
+  ...mcqExtensions.concepts.map(concept => Object.freeze(concept)),
 ]);
 
 const byAcronym = acronym => {
@@ -79,6 +81,7 @@ const pairs = [
   ...CONCEPT_RELATIONSHIPS.filter(edge => CONCEPT_TAGS.some(tag => tag.id === edge.sourceConceptId) && CONCEPT_TAGS.some(tag => tag.id === edge.targetConceptId))
     .map(edge => [edge.sourceConceptId, edge.targetConceptId]),
   ...additionalPairs.map(([left, right]) => [byAcronym(left), byAcronym(right)]),
+  ...mcqExtensions.edges.map(edge => [edge.left, edge.right]),
 ];
 export const CONCEPT_WEB_EDGES = Object.freeze(pairs.map(([left, right]) => Object.freeze({ left, right })));
 

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { SY0701_ACRONYM_CARDS } from '../src/data/sy0701AcronymFlashcards.js';
 import { CONCEPT_TAGS, CONCEPT_WEB_EDGES, relatedConceptTagIds } from '../src/data/sy0701ConceptWeb.js';
+import mcqExtensions from '../src/data/mcqConceptExtensions.json' with { type: 'json' };
 
 test('every acronym card has one distinct concept tag', () => {
   const cards = SY0701_ACRONYM_CARDS.filter(card => card.setType === 'acronym');
@@ -30,4 +31,7 @@ test('the web has explicit, valid, symmetric neighbors', () => {
   assert(relatedConceptTagIds('recovery.rto').includes('recovery.rpo'));
   assert(!relatedConceptTagIds('acronym.soc-chip').includes('acronym.soc-operations'));
   assert(relatedConceptTagIds('acronym.soc-operations').includes('acronym.siem'));
+  for (const concept of mcqExtensions.concepts) {
+    assert(relatedConceptTagIds(concept.id).length > 0, `Isolated MCQ concept ${concept.id}`);
+  }
 });

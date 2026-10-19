@@ -3,10 +3,10 @@ import { readFileSync } from 'node:fs';
 import { readLearningPilotBank, contentSignature } from './lib/read-learning-pilot-bank.mjs';
 import { publicationPipeline } from './lib/content-mapping/publication.mjs';
 import { CONCEPT_TAGS } from '../src/data/sy0701ConceptWeb.js';
-import approved from '../src/data/mcqConceptTagAssignments.json' with { type: 'json' };
+import tagged from '../src/data/mcqConceptTagAssignments.json' with { type: 'json' };
 
-assert.equal(approved.status, 'owner_approved_for_mcq_tag_metadata');
-assert.match(approved.draftSha256, /^[0-9a-f]{64}$/);
+assert.equal(tagged.status, 'mixed_owner_approved_and_codex_tagged_mcq_metadata');
+assert.match(tagged.draftSha256, /^[0-9a-f]{64}$/);
 const proof = JSON.parse(readFileSync('docs/evidence/phase-2b5/private-catalogue-read.json'));
 const reconciliation = JSON.parse(readFileSync('docs/evidence/phase-2b5/private-reconciliation.json'));
 const safeOverrides = proof.overrides.filter(row => reconciliation.overrides.some(x =>
@@ -15,12 +15,16 @@ const questions = publicationPipeline(readLearningPilotBank()).overrides(safeOve
 const byQuestion = new Map(questions.map(question => [question.id, question]));
 const knownTags = new Set(CONCEPT_TAGS.map(tag => tag.id));
 assert.equal(questions.length, 395);
-assert.equal(approved.assignments.length, 120);
-assert.equal(new Set(approved.assignments.map(row => row.questionId)).size, 120);
-assert.equal(approved.assignments.reduce((n, row) => n + row.conceptTagIds.length, 0), 138);
-for (const row of approved.assignments) {
+assert.equal(tagged.assignments.length, 395);
+assert.equal(new Set(tagged.assignments.map(row => row.questionId)).size, 395);
+assert.deepEqual(new Set(tagged.assignments.map(row => row.questionId)), new Set(questions.map(row => row.id)));
+assert.equal(tagged.assignments.reduce((n, row) => n + row.conceptTagIds.length, 0), tagged.tagAssignments);
+assert.equal(tagged.assignments.filter(row => row.reviewStatus === 'owner_approved').length, 120);
+assert.equal(tagged.assignments.filter(row => row.reviewStatus === 'codex_tagged_pending_owner_review').length, 275);
+for (const row of tagged.assignments) {
   assert(row.questionId.startsWith('m'));
   assert.equal(row.sourceSignature, contentSignature(byQuestion.get(row.questionId)));
   assert(row.conceptTagIds.length > 0 && row.conceptTagIds.every(id => knownTags.has(id)));
+  assert.equal(new Set(row.conceptTagIds).size, row.conceptTagIds.length);
 }
-console.log('PASS: 120 owner-approved MCQs, 138 source-bound tags; 275 missing-tag MCQs and all PBQs excluded.');
+console.log(`PASS: 395/395 source-bound MCQs, ${tagged.tagAssignments} tags; 120 owner-approved, 275 Codex-tagged pending review; PBQs excluded.`);
