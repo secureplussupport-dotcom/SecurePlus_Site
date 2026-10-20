@@ -1,0 +1,707 @@
+{
+  "scope": "Owner-supplied primary-only retag for the next 100 original active MCQs",
+  "sourceSha256": "34b7c045e30535683b4ae0668295ee6dbf7e33e0fefa5fb05efd8664648111b6",
+  "questionCount": 100,
+  "assignments": [
+    {
+      "questionId": "m101",
+      "chapter": "1",
+      "topic": "Security Controls",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.ctrl-deter"
+    },
+    {
+      "questionId": "m102",
+      "chapter": "1",
+      "topic": "Security Controls",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.ctrl-detect"
+    },
+    {
+      "questionId": "m103",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.cia-triad"
+    },
+    {
+      "questionId": "m104",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.masking-salting"
+    },
+    {
+      "questionId": "m105",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "cry.asym-rsa"
+    },
+    {
+      "questionId": "m106",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.diffie-hellman"
+    },
+    {
+      "questionId": "m107",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.mfa"
+    },
+    {
+      "questionId": "m108",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.sso-federation"
+    },
+    {
+      "questionId": "m109",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.dac-mac"
+    },
+    {
+      "questionId": "m110",
+      "chapter": "1",
+      "topic": "PKI & Certificates",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "cry.pki-revocation"
+    },
+    {
+      "questionId": "m111",
+      "chapter": "1",
+      "topic": "PKI & Certificates",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "cry.pki-csr"
+    },
+    {
+      "questionId": "m112",
+      "chapter": "1",
+      "topic": "PKI & Certificates",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.pki-ca"
+    },
+    {
+      "questionId": "m113",
+      "chapter": "2",
+      "topic": "Mitigations",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.least-privilege"
+    },
+    {
+      "questionId": "m114",
+      "chapter": "1",
+      "topic": "Security Principles",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.sep-of-duties"
+    },
+    {
+      "questionId": "m115",
+      "chapter": "1",
+      "topic": "Security Principles",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.defense-in-depth"
+    },
+    {
+      "questionId": "m116",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "cry.hash-md5"
+    },
+    {
+      "questionId": "m117",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.auth-factors"
+    },
+    {
+      "questionId": "m118",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.hsm-tpm"
+    },
+    {
+      "questionId": "m119",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.provisioning"
+    },
+    {
+      "questionId": "m120",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "iam.kerberos"
+    },
+    {
+      "questionId": "m121",
+      "chapter": "2",
+      "topic": "Threat Actors & Motivations",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.actor-scriptkiddie"
+    },
+    {
+      "questionId": "m122",
+      "chapter": "2",
+      "topic": "Threat Actors & Motivations",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.actor-apt"
+    },
+    {
+      "questionId": "m123",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.phishing"
+    },
+    {
+      "questionId": "m124",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.whaling"
+    },
+    {
+      "questionId": "m125",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.actor-apt"
+    },
+    {
+      "questionId": "m126",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.mal-ransomware"
+    },
+    {
+      "questionId": "m127",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "risk.sbom"
+    },
+    {
+      "questionId": "m128",
+      "chapter": "4",
+      "topic": "Vulnerability Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "vul.cvss-cve"
+    },
+    {
+      "questionId": "m129",
+      "chapter": "2",
+      "topic": "Vulnerability Types",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.app-sqli"
+    },
+    {
+      "questionId": "m130",
+      "chapter": "2",
+      "topic": "Vulnerability Types",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "vul.zero-day"
+    },
+    {
+      "questionId": "m131",
+      "chapter": "2",
+      "topic": "Indicators of Compromise",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.iocs"
+    },
+    {
+      "questionId": "m132",
+      "chapter": "2",
+      "topic": "Indicators of Compromise",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.mitre-attack"
+    },
+    {
+      "questionId": "m133",
+      "chapter": "2",
+      "topic": "Mitigation Techniques",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "arch.segmentation"
+    },
+    {
+      "questionId": "m134",
+      "chapter": "2",
+      "topic": "Mitigation Techniques",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "vul.zero-day"
+    },
+    {
+      "questionId": "m135",
+      "chapter": "2",
+      "topic": "Vulnerability Types",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "vul.input-validation"
+    },
+    {
+      "questionId": "m136",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.on-path-mitm"
+    },
+    {
+      "questionId": "m137",
+      "chapter": "1",
+      "topic": "Cryptography Basics",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "cry.steganography"
+    },
+    {
+      "questionId": "m138",
+      "chapter": "2",
+      "topic": "Mitigation Techniques",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "net.app-ngfw"
+    },
+    {
+      "questionId": "m139",
+      "chapter": "2",
+      "topic": "Threat Actors & Motivations",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.actor-crime"
+    },
+    {
+      "questionId": "m140",
+      "chapter": "4",
+      "topic": "Investigation Data",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "net.proto-dnssec"
+    },
+    {
+      "questionId": "m141",
+      "chapter": "2",
+      "topic": "Vulnerability Types",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "vul.input-validation"
+    },
+    {
+      "questionId": "m142",
+      "chapter": "4",
+      "topic": "Endpoint Hardening",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ops.app-control"
+    },
+    {
+      "questionId": "m143",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.dos-ddos"
+    },
+    {
+      "questionId": "m144",
+      "chapter": "4",
+      "topic": "Email Security",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "net.proto-email"
+    },
+    {
+      "questionId": "m145",
+      "chapter": "2",
+      "topic": "Vulnerability Types",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "arch.api-security"
+    },
+    {
+      "questionId": "m147",
+      "chapter": "3",
+      "topic": "Network Architecture",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "arch.segmentation"
+    },
+    {
+      "questionId": "m148",
+      "chapter": "3",
+      "topic": "Cloud Architecture",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "arch.shared-resp"
+    },
+    {
+      "questionId": "m149",
+      "chapter": "3",
+      "topic": "Cloud Architecture",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.actor-shadow-it"
+    },
+    {
+      "questionId": "m151",
+      "chapter": "3",
+      "topic": "Infrastructure Security",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "arch.segmentation"
+    },
+    {
+      "questionId": "m152",
+      "chapter": "3",
+      "topic": "Infrastructure Security",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ops.port-hardening"
+    },
+    {
+      "questionId": "m153",
+      "chapter": "3",
+      "topic": "Network Architecture",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "net.proto-ipsec"
+    },
+    {
+      "questionId": "m154",
+      "chapter": "3",
+      "topic": "Infrastructure Security",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "arch.segmentation"
+    },
+    {
+      "questionId": "m155",
+      "chapter": "5",
+      "topic": "Secure Development Governance",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.mitre-attack"
+    },
+    {
+      "questionId": "m157",
+      "chapter": "3",
+      "topic": "Cloud Architecture",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ops.os-baseline"
+    },
+    {
+      "questionId": "m158",
+      "chapter": "1",
+      "topic": "Zero Trust",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.zero-trust"
+    },
+    {
+      "questionId": "m159",
+      "chapter": "1",
+      "topic": "Cryptography Basics",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "data.states"
+    },
+    {
+      "questionId": "m160",
+      "chapter": "4",
+      "topic": "Vulnerability Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "risk.sbom"
+    },
+    {
+      "questionId": "m161",
+      "chapter": "3",
+      "topic": "Cloud Architecture",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "arch.cloud-deploy"
+    },
+    {
+      "questionId": "m163",
+      "chapter": "4",
+      "topic": "Application Security",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.app-sqli"
+    },
+    {
+      "questionId": "m165",
+      "chapter": "2",
+      "topic": "Hardening Techniques",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "vul.mem-overflow"
+    },
+    {
+      "questionId": "m166",
+      "chapter": "4",
+      "topic": "Security Monitoring",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ops.siem"
+    },
+    {
+      "questionId": "m168",
+      "chapter": "4",
+      "topic": "Incident Response",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ir.lifecycle-nist"
+    },
+    {
+      "questionId": "m169",
+      "chapter": "4",
+      "topic": "Incident Response",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ir.lifecycle-nist"
+    },
+    {
+      "questionId": "m170",
+      "chapter": "4",
+      "topic": "Digital Forensics",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ir.chain-of-custody"
+    },
+    {
+      "questionId": "m171",
+      "chapter": "4",
+      "topic": "Digital Forensics",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ir.volatility-order"
+    },
+    {
+      "questionId": "m172",
+      "chapter": "4",
+      "topic": "Vulnerability Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ops.scan-credentialed"
+    },
+    {
+      "questionId": "m173",
+      "chapter": "4",
+      "topic": "Vulnerability Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "vul.cvss-cve"
+    },
+    {
+      "questionId": "m174",
+      "chapter": "4",
+      "topic": "Vulnerability Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.threat-feeds"
+    },
+    {
+      "questionId": "m175",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.provisioning"
+    },
+    {
+      "questionId": "m176",
+      "chapter": "4",
+      "topic": "Investigation Data",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ops.logs-syslog"
+    },
+    {
+      "questionId": "m177",
+      "chapter": "3",
+      "topic": "Resilience & Recovery",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "data.backups"
+    },
+    {
+      "questionId": "m179",
+      "chapter": "4",
+      "topic": "Security Monitoring",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "net.app-ids-ips"
+    },
+    {
+      "questionId": "m180",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "iam.pam"
+    },
+    {
+      "questionId": "m181",
+      "chapter": "5",
+      "topic": "Audits & Assessments",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ops.scan-discovery"
+    },
+    {
+      "questionId": "m182",
+      "chapter": "4",
+      "topic": "Incident Response",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ir.lifecycle-nist"
+    },
+    {
+      "questionId": "m183",
+      "chapter": "4",
+      "topic": "Security Monitoring",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ops.soar"
+    },
+    {
+      "questionId": "m184",
+      "chapter": "4",
+      "topic": "Network Access Control",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ops.port-hardening"
+    },
+    {
+      "questionId": "m185",
+      "chapter": "4",
+      "topic": "Threat Intelligence Automation",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.threat-feeds"
+    },
+    {
+      "questionId": "m186",
+      "chapter": "5",
+      "topic": "Governance & Compliance",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "gov.gdpr-hipaa-pci"
+    },
+    {
+      "questionId": "m187",
+      "chapter": "5",
+      "topic": "Governance & Compliance",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "gov.gdpr-hipaa-pci"
+    },
+    {
+      "questionId": "m188",
+      "chapter": "5",
+      "topic": "Risk Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "risk.treatment"
+    },
+    {
+      "questionId": "m189",
+      "chapter": "5",
+      "topic": "Risk Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "risk.quant-ale-aro"
+    },
+    {
+      "questionId": "m190",
+      "chapter": "5",
+      "topic": "Risk Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "risk.vendor-audit"
+    },
+    {
+      "questionId": "m191",
+      "chapter": "5",
+      "topic": "Security Frameworks",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "gov.nist-csf"
+    },
+    {
+      "questionId": "m193",
+      "chapter": "3",
+      "topic": "Data Classification",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "data.classification"
+    },
+    {
+      "questionId": "m194",
+      "chapter": "5",
+      "topic": "Security Awareness",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "gov.training-phish"
+    },
+    {
+      "questionId": "m195",
+      "chapter": "5",
+      "topic": "Security Frameworks",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "gov.iso-27001"
+    },
+    {
+      "questionId": "m196",
+      "chapter": "5",
+      "topic": "Risk Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "risk.bia-rto-rpo"
+    },
+    {
+      "questionId": "m198",
+      "chapter": "3",
+      "topic": "Data Protection",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.tokenization"
+    },
+    {
+      "questionId": "m200",
+      "chapter": "5",
+      "topic": "Security Frameworks",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "gov.policy-aup"
+    },
+    {
+      "questionId": "m201",
+      "chapter": "1",
+      "topic": "Control Categories",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.sep-of-duties"
+    },
+    {
+      "questionId": "m202",
+      "chapter": "1",
+      "topic": "Control Categories",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.ctrl-correct"
+    },
+    {
+      "questionId": "m203",
+      "chapter": "1",
+      "topic": "Control Categories",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "sec.ctrl-compensate"
+    },
+    {
+      "questionId": "m204",
+      "chapter": "1",
+      "topic": "Control Categories",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "sec.ctrl-detect"
+    },
+    {
+      "questionId": "m205",
+      "chapter": "1",
+      "topic": "Control Categories",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "sec.ctrl-admin"
+    },
+    {
+      "questionId": "m206",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "cry.diffie-hellman"
+    },
+    {
+      "questionId": "m207",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.hash-sha"
+    },
+    {
+      "questionId": "m208",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "sec.non-repudiation"
+    },
+    {
+      "questionId": "m210",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.asym-rsa"
+    },
+    {
+      "questionId": "m211",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "cry.masking-salting"
+    }
+  ]
+}

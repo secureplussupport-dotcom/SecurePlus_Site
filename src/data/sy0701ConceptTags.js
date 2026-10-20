@@ -1,4 +1,5 @@
 import assignments from './mcqConceptTagAssignments.json' with { type: 'json' };
+import originalVocabulary from './mcqConceptTagVocabulary.json' with { type: 'json' };
 import tagGroups from './mcqConceptTagGroups.json' with { type: 'json' };
 import { SY0701_ACRONYM_CARDS } from './sy0701AcronymFlashcards.js';
 
@@ -9,9 +10,8 @@ export const MCQ_CONCEPT_TAG_GROUPS = tagGroups;
 const groupByTagId = new Map(Object.entries(tagGroups).flatMap(([group, { minimumQuestions, minimumQuestionsByDifficulty, tagIds }]) =>
   tagIds.map(id => [id, { group, minimumQuestions, minimumQuestionsByDifficulty }])));
 
-const ids = [...new Set([...groupByTagId.keys(), ...assignments.assignments.flatMap(row => [
-  row.primaryTagId, ...row.secondaryTagIds, ...row.distractorTagIds,
-])])].sort();
+// Tag choices must remain available after an owner removes their last assignment.
+const ids = [...new Set([...originalVocabulary, ...groupByTagId.keys()])].sort();
 
 // Keep Gemini's IDs intact. A display name is only a readable rendering of
 // the ID; it does not assert a new definition or a relationship to other tags.
