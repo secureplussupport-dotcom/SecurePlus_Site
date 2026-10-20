@@ -86,7 +86,7 @@ export function readSelectors() {
   }).sort(byId);
 }
 
-export const DELIVERY_SOURCE_PATHS=[APP,'server/mcq-engine/engine.mjs','server/mcq-engine/catalogue.mjs','server/mcq-engine/http.mjs','src/lib/mcqEngineClient.js','src/lib/deepDiveRecommendations.js','src/lib/deepDiveStudy.js','src/data/sy0701AcronymFlashcards.js','src/data/sy0701DeepDiveMap.js','src/data/conceptDeepDives.js','src/data/conceptDeepDivesStudyGuide.js','src/data/conceptDeepDivesPrinterGuide.js'];
+export const DELIVERY_SOURCE_PATHS=[APP,'src/lib/mcqDifficulty.js','server/mcq-engine/engine.mjs','server/mcq-engine/catalogue.mjs','server/mcq-engine/http.mjs','src/lib/mcqEngineClient.js','src/lib/deepDiveRecommendations.js','src/lib/deepDiveStudy.js','src/data/sy0701AcronymFlashcards.js','src/data/sy0701DeepDiveMap.js','src/data/conceptDeepDives.js','src/data/conceptDeepDivesStudyGuide.js','src/data/conceptDeepDivesPrinterGuide.js'];
 export function verifyDeliveryInventory(pkg,{readSource=path=>readFileSync(path)}={}) {
   const guard=JSON.parse(readFileSync('docs/evidence/phase-2b5/delivery-surface-review.json'));
   for(const path of DELIVERY_SOURCE_PATHS)if(guard.sources[path]!==fileHash(readSource(path)))throw new Error(`Delivery source drift: review selector/glossary completeness for ${path}`);
