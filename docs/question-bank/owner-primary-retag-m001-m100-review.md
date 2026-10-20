@@ -1,0 +1,13 @@
+# First 100 original MCQs: owner primary-only retag
+
+The owner supplied one existing concept tag for each of `m001`–`m100`. The exact 100-row selection and pasted-source SHA-256 are recorded in `owner-primary-retag-m001-m100.json`. Every ID, chapter, topic, difficulty label, and tag ID matches the original active 395-MCQ catalogue and available tag vocabulary. PBQs and the 54 newer Question Manager MCQs are outside this change.
+
+The source assignments now contain exactly one counted concept tag for each selected question: `primaryTagId` and `conceptTagIds[0]` equal the owner's selection, while `secondaryTagIds` is empty. Ninety-three selected primaries stayed the same; seven changed (`m004`, `m028`, `m041`, `m054`, `m079`, `m084`, `m090`). Historical distractor metadata, which does not drive mastery, remains intact. The other 295 original assignments are unchanged.
+
+Ten selected questions have active Question Manager content overrides. None has a current-version tag override, so the source assignment remains authoritative for their effective tags. Eight of those ten have revised live wording; the selected tags are retained as supplied. `m025` and `m027` are Core in their live content overrides although the owner's list, based on the original source, labels them Applied. This batch changes no question text, answer, or difficulty.
+
+The effective 449-MCQ catalogue resolves all 100 selected questions to the owner's single primary tag, including those with content overrides. The number of multi-tag MCQs falls from 395 to 295. Under the owner's half-credit rule, the calculated bank shortfall moves from 319 to 326 single-tag additions (125 Core, 201 Applied); removing secondary-tag credit can raise a gap despite increasing primary-tag credit. `arch.air-gap` on `m061` and `arch.virtualization` on `m062` each have no other same-tag MCQ in the current effective bank, so they cannot provide a distinct same-concept remediation variant yet.
+
+The original Gemini source hash and assignment version remain in place so current-version Question Manager saves and the 54 newer tagged MCQs keep working. The owner retag batch has separate source provenance in the assignment file. No tag relationships, PBQ mappings, or question content were changed.
+
+Validation: the focused assignment and tag-catalogue checks passed; all 14 MCQ engine tests, all 29 content-mapping tests, strict question-bank audit, editorial audit, production build, and `git diff --check` passed. The content-mapping evidence package was regenerated to bind the updated assignment file; its adaptive activation status remains false. A direct comparison with the prior commit confirmed that `m101`–`m395` and all 100 distractor/difficulty metadata records are unchanged.

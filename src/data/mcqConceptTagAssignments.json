@@ -1,6 +1,6 @@
 {
   "version": "gemini-mcq-tags-2026-10-20",
-  "source": "Owner-supplied Gemini MCQ classification; distractor tags are metadata only",
+  "source": "Owner-supplied Gemini MCQ classification with owner primary-only retag for m001-m100; distractor tags are metadata only",
   "sourceSha256": "926cda35788960c82c834e4713352947fcf810ce217394d9844aee2b9f398cec",
   "questionCount": 395,
   "tagCount": 170,
@@ -8,9 +8,7 @@
     {
       "questionId": "m001",
       "primaryTagId": "sec.ctrl-deter",
-      "secondaryTagIds": [
-        "sec.ctrl-phys"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.ctrl-prevent",
         "sec.ctrl-detect",
@@ -19,33 +17,26 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.ctrl-deter",
-        "sec.ctrl-phys"
+        "sec.ctrl-deter"
       ]
     },
     {
       "questionId": "m002",
       "primaryTagId": "sec.cia-triad",
-      "secondaryTagIds": [
-        "att.dos-ddos"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.non-repudiation"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.cia-triad",
-        "att.dos-ddos"
+        "sec.cia-triad"
       ]
     },
     {
       "questionId": "m003",
       "primaryTagId": "sec.ctrl-compensate",
-      "secondaryTagIds": [
-        "iam.mfa",
-        "ops.logs-syslog"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.ctrl-prevent",
         "sec.ctrl-correct",
@@ -54,18 +45,13 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "sec.ctrl-compensate",
-        "iam.mfa",
-        "ops.logs-syslog"
+        "sec.ctrl-compensate"
       ]
     },
     {
       "questionId": "m004",
-      "primaryTagId": "cry.masking-salting",
-      "secondaryTagIds": [
-        "att.pwd-rainbow",
-        "cry.hash-sha"
-      ],
+      "primaryTagId": "att.pwd-rainbow",
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.pwd-bruteforce",
         "att.on-path-mitm"
@@ -73,69 +59,52 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "cry.masking-salting",
-        "att.pwd-rainbow",
-        "cry.hash-sha"
+        "att.pwd-rainbow"
       ]
     },
     {
       "questionId": "m005",
       "primaryTagId": "cry.pki-ca",
-      "secondaryTagIds": [
-        "net.proto-tls",
-        "cry.pki-certs"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "cry.pki-revocation"
       ],
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.7,
       "conceptTagIds": [
-        "cry.pki-ca",
-        "net.proto-tls",
-        "cry.pki-certs"
+        "cry.pki-ca"
       ]
     },
     {
       "questionId": "m006",
       "primaryTagId": "iam.auth-factors",
-      "secondaryTagIds": [
-        "iam.mfa"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "iam.fido2-passwordless"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "iam.auth-factors",
-        "iam.mfa"
+        "iam.auth-factors"
       ]
     },
     {
       "questionId": "m007",
       "primaryTagId": "sec.zero-trust",
-      "secondaryTagIds": [
-        "arch.ztna",
-        "net.app-ngfw"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.sep-of-duties"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "sec.zero-trust",
-        "arch.ztna",
-        "net.app-ngfw"
+        "sec.zero-trust"
       ]
     },
     {
       "questionId": "m008",
       "primaryTagId": "cry.asym-rsa",
-      "secondaryTagIds": [
-        "cry.asym-ecc"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "cry.sym-aes",
         "cry.diffie-hellman",
@@ -144,17 +113,13 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "cry.asym-rsa",
-        "cry.asym-ecc"
+        "cry.asym-rsa"
       ]
     },
     {
       "questionId": "m009",
       "primaryTagId": "att.vishing-smishing",
-      "secondaryTagIds": [
-        "att.pretexting",
-        "att.social-principles"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.phishing",
         "att.watering-hole"
@@ -162,17 +127,13 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "att.vishing-smishing",
-        "att.pretexting",
-        "att.social-principles"
+        "att.vishing-smishing"
       ]
     },
     {
       "questionId": "m010",
       "primaryTagId": "att.mal-trojan",
-      "secondaryTagIds": [
-        "ops.edr-xdr"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.mal-ransomware",
         "att.mal-rootkit"
@@ -180,34 +141,26 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "att.mal-trojan",
-        "ops.edr-xdr"
+        "att.mal-trojan"
       ]
     },
     {
       "questionId": "m011",
       "primaryTagId": "att.dos-ddos",
-      "secondaryTagIds": [
-        "net.app-ngfw",
-        "arch.api-security"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "net.app-ids-ips"
       ],
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.5,
       "conceptTagIds": [
-        "att.dos-ddos",
-        "net.app-ngfw",
-        "arch.api-security"
+        "att.dos-ddos"
       ]
     },
     {
       "questionId": "m012",
       "primaryTagId": "att.app-sqli",
-      "secondaryTagIds": [
-        "vul.input-validation"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.app-xss",
         "vul.mem-overflow",
@@ -216,17 +169,13 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "att.app-sqli",
-        "vul.input-validation"
+        "att.app-sqli"
       ]
     },
     {
       "questionId": "m013",
       "primaryTagId": "att.actor-apt",
-      "secondaryTagIds": [
-        "vul.zero-day",
-        "att.threat-feeds"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.actor-scriptkiddie",
         "att.actor-hacktivist",
@@ -235,17 +184,13 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "att.actor-apt",
-        "vul.zero-day",
-        "att.threat-feeds"
+        "att.actor-apt"
       ]
     },
     {
       "questionId": "m014",
       "primaryTagId": "sec.least-privilege",
-      "secondaryTagIds": [
-        "iam.rbac"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.sep-of-duties",
         "iam.dac-mac"
@@ -253,16 +198,13 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.least-privilege",
-        "iam.rbac"
+        "sec.least-privilege"
       ]
     },
     {
       "questionId": "m015",
       "primaryTagId": "att.phishing",
-      "secondaryTagIds": [
-        "att.social-principles"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.watering-hole",
         "att.vishing-smishing"
@@ -270,16 +212,13 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "att.phishing",
-        "att.social-principles"
+        "att.phishing"
       ]
     },
     {
       "questionId": "m016",
       "primaryTagId": "att.actor-insider",
-      "secondaryTagIds": [
-        "ops.app-control"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.mal-trojan",
         "att.mal-ransomware",
@@ -288,17 +227,13 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "att.actor-insider",
-        "ops.app-control"
+        "att.actor-insider"
       ]
     },
     {
       "questionId": "m017",
       "primaryTagId": "arch.shared-resp",
-      "secondaryTagIds": [
-        "arch.cloud-models",
-        "ops.patch-mgmt"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.ctrl-phys",
         "arch.virtualization"
@@ -306,33 +241,26 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "arch.shared-resp",
-        "arch.cloud-models",
-        "ops.patch-mgmt"
+        "arch.shared-resp"
       ]
     },
     {
       "questionId": "m018",
       "primaryTagId": "sec.ctrl-prevent",
-      "secondaryTagIds": [
-        "net.app-ngfw"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "net.app-load-balancer"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.ctrl-prevent",
-        "net.app-ngfw"
+        "sec.ctrl-prevent"
       ]
     },
     {
       "questionId": "m019",
       "primaryTagId": "cry.tokenization",
-      "secondaryTagIds": [
-        "data.reg-pii-phi"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "cry.sym-aes",
         "cry.hash-sha",
@@ -341,17 +269,13 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "cry.tokenization",
-        "data.reg-pii-phi"
+        "cry.tokenization"
       ]
     },
     {
       "questionId": "m020",
       "primaryTagId": "arch.segmentation",
-      "secondaryTagIds": [
-        "sec.ctrl-compensate",
-        "arch.air-gap"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "risk.treatment",
         "ops.edr-xdr"
@@ -359,106 +283,78 @@
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.5,
       "conceptTagIds": [
-        "arch.segmentation",
-        "sec.ctrl-compensate",
-        "arch.air-gap"
+        "arch.segmentation"
       ]
     },
     {
       "questionId": "m021",
       "primaryTagId": "arch.cloud-deploy",
-      "secondaryTagIds": [
-        "arch.cloud-models"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "arch.cloud-deploy"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "arch.cloud-deploy",
-        "arch.cloud-models"
+        "arch.cloud-deploy"
       ]
     },
     {
       "questionId": "m022",
       "primaryTagId": "ir.lifecycle-nist",
-      "secondaryTagIds": [
-        "att.mal-ransomware",
-        "arch.segmentation"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ir.lifecycle-nist"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "ir.lifecycle-nist",
-        "att.mal-ransomware",
-        "arch.segmentation"
+        "ir.lifecycle-nist"
       ]
     },
     {
       "questionId": "m023",
       "primaryTagId": "vul.cvss-cve",
-      "secondaryTagIds": [
-        "risk.qual-matrix",
-        "ops.scan-credentialed"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "net.app-ngfw"
       ],
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.6,
       "conceptTagIds": [
-        "vul.cvss-cve",
-        "risk.qual-matrix",
-        "ops.scan-credentialed"
+        "vul.cvss-cve"
       ]
     },
     {
       "questionId": "m024",
       "primaryTagId": "att.iocs",
-      "secondaryTagIds": [
-        "ops.siem",
-        "ops.ueba"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "iam.provisioning"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "att.iocs",
-        "ops.siem",
-        "ops.ueba"
+        "att.iocs"
       ]
     },
     {
       "questionId": "m025",
       "primaryTagId": "ir.forensic-hash",
-      "secondaryTagIds": [
-        "ir.forensic-imaging",
-        "ir.chain-of-custody"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ops.edr-xdr"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "ir.forensic-hash",
-        "ir.forensic-imaging",
-        "ir.chain-of-custody"
+        "ir.forensic-hash"
       ]
     },
     {
       "questionId": "m026",
       "primaryTagId": "iam.provisioning",
-      "secondaryTagIds": [
-        "iam.rbac",
-        "sec.least-privilege"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.sep-of-duties",
         "iam.dac-mac"
@@ -466,17 +362,13 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "iam.provisioning",
-        "iam.rbac",
-        "sec.least-privilege"
+        "iam.provisioning"
       ]
     },
     {
       "questionId": "m027",
       "primaryTagId": "ops.mdm-mam",
-      "secondaryTagIds": [
-        "ops.byod"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ops.mdm-mam",
         "ops.byod"
@@ -484,164 +376,130 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "ops.mdm-mam",
-        "ops.byod"
+        "ops.mdm-mam"
       ]
     },
     {
       "questionId": "m028",
-      "primaryTagId": "sec.change-mgmt",
-      "secondaryTagIds": [
-        "gov.policy-aup",
-        "att.pwd-bruteforce"
-      ],
+      "primaryTagId": "gov.policy-aup",
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "gov.policy-aup"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.change-mgmt",
-        "gov.policy-aup",
-        "att.pwd-bruteforce"
+        "gov.policy-aup"
       ]
     },
     {
       "questionId": "m029",
       "primaryTagId": "risk.quant-ale-aro",
-      "secondaryTagIds": [
-        "risk.quant-sle-ef"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "risk.quant-sle-ef"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "risk.quant-ale-aro",
-        "risk.quant-sle-ef"
+        "risk.quant-ale-aro"
       ]
     },
     {
       "questionId": "m030",
       "primaryTagId": "gov.gdpr-hipaa-pci",
-      "secondaryTagIds": [
-        "data.reg-pii-phi",
-        "data.sanitization"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "gov.gdpr-hipaa-pci"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "gov.gdpr-hipaa-pci",
-        "data.reg-pii-phi",
-        "data.sanitization"
+        "gov.gdpr-hipaa-pci"
       ]
     },
     {
       "questionId": "m031",
       "primaryTagId": "risk.treatment",
-      "secondaryTagIds": [
-        "risk.inherent-residual"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "risk.treatment"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "risk.treatment",
-        "risk.inherent-residual"
+        "risk.treatment"
       ]
     },
     {
       "questionId": "m032",
       "primaryTagId": "risk.bia-rto-rpo",
-      "secondaryTagIds": [
-        "data.ha-clustering"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "data.backups"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "risk.bia-rto-rpo",
-        "data.ha-clustering"
+        "risk.bia-rto-rpo"
       ]
     },
     {
       "questionId": "m033",
       "primaryTagId": "sec.cia-triad",
-      "secondaryTagIds": [
-        "data.backups"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.non-repudiation"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.cia-triad",
-        "data.backups"
+        "sec.cia-triad"
       ]
     },
     {
       "questionId": "m034",
       "primaryTagId": "iam.kerberos",
-      "secondaryTagIds": [
-        "iam.sso-federation"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "iam.radius-tacacs"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "iam.kerberos",
-        "iam.sso-federation"
+        "iam.kerberos"
       ]
     },
     {
       "questionId": "m035",
       "primaryTagId": "cry.sym-aes",
-      "secondaryTagIds": [
-        "cry.key-mgmt"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "cry.cipher-modes"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "cry.sym-aes",
-        "cry.key-mgmt"
+        "cry.sym-aes"
       ]
     },
     {
       "questionId": "m036",
       "primaryTagId": "sec.ctrl-phys",
-      "secondaryTagIds": [
-        "att.tailgating"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "iam.auth-factors"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.ctrl-phys",
-        "att.tailgating"
+        "sec.ctrl-phys"
       ]
     },
     {
       "questionId": "m037",
       "primaryTagId": "cry.pki-revocation",
-      "secondaryTagIds": [
-        "net.proto-tls"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "cry.pki-certs",
         "cry.key-mgmt"
@@ -649,50 +507,39 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "cry.pki-revocation",
-        "net.proto-tls"
+        "cry.pki-revocation"
       ]
     },
     {
       "questionId": "m038",
       "primaryTagId": "sec.zero-trust",
-      "secondaryTagIds": [
-        "arch.ztna",
-        "iam.abac"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ops.siem"
       ],
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.5,
       "conceptTagIds": [
-        "sec.zero-trust",
-        "arch.ztna",
-        "iam.abac"
+        "sec.zero-trust"
       ]
     },
     {
       "questionId": "m039",
       "primaryTagId": "cry.hash-sha",
-      "secondaryTagIds": [
-        "cry.masking-salting"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "cry.sym-aes"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "cry.hash-sha",
-        "cry.masking-salting"
+        "cry.hash-sha"
       ]
     },
     {
       "questionId": "m040",
       "primaryTagId": "iam.dac-mac",
-      "secondaryTagIds": [
-        "data.classification"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "iam.rbac",
         "iam.abac"
@@ -700,33 +547,26 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "iam.dac-mac",
-        "data.classification"
+        "iam.dac-mac"
       ]
     },
     {
       "questionId": "m041",
-      "primaryTagId": "iam.mfa",
-      "secondaryTagIds": [
-        "iam.auth-factors"
-      ],
+      "primaryTagId": "iam.auth-factors",
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "iam.auth-factors"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "iam.mfa",
         "iam.auth-factors"
       ]
     },
     {
       "questionId": "m042",
       "primaryTagId": "att.pwd-rainbow",
-      "secondaryTagIds": [
-        "cry.hash-md5",
-        "cry.masking-salting"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.pwd-bruteforce",
         "att.pwd-stuffing"
@@ -734,17 +574,13 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "att.pwd-rainbow",
-        "cry.hash-md5",
-        "cry.masking-salting"
+        "att.pwd-rainbow"
       ]
     },
     {
       "questionId": "m043",
       "primaryTagId": "cry.pki-ca",
-      "secondaryTagIds": [
-        "net.proto-tls"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "cry.asym-rsa",
         "cry.asym-ecc"
@@ -752,32 +588,26 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "cry.pki-ca",
-        "net.proto-tls"
+        "cry.pki-ca"
       ]
     },
     {
       "questionId": "m044",
       "primaryTagId": "sec.sep-of-duties",
-      "secondaryTagIds": [
-        "sec.least-privilege"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.least-privilege"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.sep-of-duties",
-        "sec.least-privilege"
+        "sec.sep-of-duties"
       ]
     },
     {
       "questionId": "m045",
       "primaryTagId": "cry.masking-salting",
-      "secondaryTagIds": [
-        "att.pwd-bruteforce"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "cry.hash-sha",
         "cry.hash-md5",
@@ -786,16 +616,13 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "cry.masking-salting",
-        "att.pwd-bruteforce"
+        "cry.masking-salting"
       ]
     },
     {
       "questionId": "m046",
       "primaryTagId": "att.phishing",
-      "secondaryTagIds": [
-        "att.social-principles"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.whaling",
         "att.spear-phishing",
@@ -804,16 +631,13 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "att.phishing",
-        "att.social-principles"
+        "att.phishing"
       ]
     },
     {
       "questionId": "m047",
       "primaryTagId": "att.social-principles",
-      "secondaryTagIds": [
-        "sec.ctrl-phys"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.phishing",
         "att.pretexting",
@@ -822,16 +646,13 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "att.social-principles",
-        "sec.ctrl-phys"
+        "att.social-principles"
       ]
     },
     {
       "questionId": "m048",
       "primaryTagId": "att.actor-insider",
-      "secondaryTagIds": [
-        "ops.fim"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.mal-trojan",
         "att.mal-ransomware"
@@ -839,32 +660,26 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "att.actor-insider",
-        "ops.fim"
+        "att.actor-insider"
       ]
     },
     {
       "questionId": "m049",
       "primaryTagId": "att.dos-ddos",
-      "secondaryTagIds": [
-        "net.proto-dnssec"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.dns-poisoning"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "att.dos-ddos",
-        "net.proto-dnssec"
+        "att.dos-ddos"
       ]
     },
     {
       "questionId": "m050",
       "primaryTagId": "att.dns-poisoning",
-      "secondaryTagIds": [
-        "net.proto-dnssec"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.dos-ddos",
         "att.arp-poisoning"
@@ -872,33 +687,26 @@
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.4,
       "conceptTagIds": [
-        "att.dns-poisoning",
-        "net.proto-dnssec"
+        "att.dns-poisoning"
       ]
     },
     {
       "questionId": "m051",
       "primaryTagId": "att.app-xss",
-      "secondaryTagIds": [
-        "vul.input-validation"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.app-sqli"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "att.app-xss",
-        "vul.input-validation"
+        "att.app-xss"
       ]
     },
     {
       "questionId": "m052",
       "primaryTagId": "arch.api-security",
-      "secondaryTagIds": [
-        "iam.rbac",
-        "vul.input-validation"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.app-ssrf",
         "att.app-csrf"
@@ -906,17 +714,13 @@
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.4,
       "conceptTagIds": [
-        "arch.api-security",
-        "iam.rbac",
-        "vul.input-validation"
+        "arch.api-security"
       ]
     },
     {
       "questionId": "m053",
       "primaryTagId": "vul.mem-overflow",
-      "secondaryTagIds": [
-        "vul.input-validation"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.app-sqli",
         "att.app-xss",
@@ -925,16 +729,13 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "vul.mem-overflow",
-        "vul.input-validation"
+        "vul.mem-overflow"
       ]
     },
     {
       "questionId": "m054",
-      "primaryTagId": "att.actor-apt",
-      "secondaryTagIds": [
-        "ops.edr-xdr"
-      ],
+      "primaryTagId": "ops.edr-xdr",
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.mal-trojan",
         "att.mal-ransomware"
@@ -942,16 +743,13 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "att.actor-apt",
         "ops.edr-xdr"
       ]
     },
     {
       "questionId": "m055",
       "primaryTagId": "vul.race-condition",
-      "secondaryTagIds": [
-        "ops.os-baseline"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "vul.mem-overflow",
         "att.app-sqli",
@@ -960,99 +758,78 @@
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.6,
       "conceptTagIds": [
-        "vul.race-condition",
-        "ops.os-baseline"
+        "vul.race-condition"
       ]
     },
     {
       "questionId": "m056",
       "primaryTagId": "arch.segmentation",
-      "secondaryTagIds": [
-        "net.app-ngfw"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ops.port-hardening"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "arch.segmentation",
-        "net.app-ngfw"
+        "arch.segmentation"
       ]
     },
     {
       "questionId": "m057",
       "primaryTagId": "sec.sep-of-duties",
-      "secondaryTagIds": [
-        "sec.least-privilege"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.defense-in-depth"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.sep-of-duties",
-        "sec.least-privilege"
+        "sec.sep-of-duties"
       ]
     },
     {
       "questionId": "m058",
       "primaryTagId": "arch.cloud-models",
-      "secondaryTagIds": [
-        "arch.shared-resp"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "arch.cloud-models"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "arch.cloud-models",
-        "arch.shared-resp"
+        "arch.cloud-models"
       ]
     },
     {
       "questionId": "m059",
       "primaryTagId": "data.states",
-      "secondaryTagIds": [
-        "cry.sym-aes"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "data.states"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "data.states",
-        "cry.sym-aes"
+        "data.states"
       ]
     },
     {
       "questionId": "m060",
       "primaryTagId": "arch.shared-resp",
-      "secondaryTagIds": [
-        "arch.cloud-models",
-        "ops.patch-mgmt"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "gov.policy-aup"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "arch.shared-resp",
-        "arch.cloud-models",
-        "ops.patch-mgmt"
+        "arch.shared-resp"
       ]
     },
     {
       "questionId": "m061",
       "primaryTagId": "arch.air-gap",
-      "secondaryTagIds": [
-        "arch.segmentation",
-        "sec.ctrl-phys"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "arch.dmz",
         "sec.zero-trust"
@@ -1060,36 +837,26 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "arch.air-gap",
-        "arch.segmentation",
-        "sec.ctrl-phys"
+        "arch.air-gap"
       ]
     },
     {
       "questionId": "m062",
       "primaryTagId": "arch.virtualization",
-      "secondaryTagIds": [
-        "arch.containers",
-        "vul.mem-overflow"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.phishing"
       ],
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "arch.virtualization",
-        "arch.containers",
-        "vul.mem-overflow"
+        "arch.virtualization"
       ]
     },
     {
       "questionId": "m063",
       "primaryTagId": "arch.ztna",
-      "secondaryTagIds": [
-        "sec.zero-trust",
-        "sec.least-privilege"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "arch.vpn",
         "arch.dmz"
@@ -1097,17 +864,13 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.4,
       "conceptTagIds": [
-        "arch.ztna",
-        "sec.zero-trust",
-        "sec.least-privilege"
+        "arch.ztna"
       ]
     },
     {
       "questionId": "m064",
       "primaryTagId": "cry.masking-salting",
-      "secondaryTagIds": [
-        "data.reg-pii-phi"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "cry.tokenization",
         "cry.sym-aes",
@@ -1116,34 +879,26 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "cry.masking-salting",
-        "data.reg-pii-phi"
+        "cry.masking-salting"
       ]
     },
     {
       "questionId": "m065",
       "primaryTagId": "arch.microsegmentation",
-      "secondaryTagIds": [
-        "sec.least-privilege",
-        "arch.cloud-deploy"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "net.app-ngfw"
       ],
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.6,
       "conceptTagIds": [
-        "arch.microsegmentation",
-        "sec.least-privilege",
-        "arch.cloud-deploy"
+        "arch.microsegmentation"
       ]
     },
     {
       "questionId": "m066",
       "primaryTagId": "ops.siem",
-      "secondaryTagIds": [
-        "ops.logs-syslog"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "net.app-ids-ips",
         "net.app-ngfw",
@@ -1152,65 +907,52 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "ops.siem",
-        "ops.logs-syslog"
+        "ops.siem"
       ]
     },
     {
       "questionId": "m067",
       "primaryTagId": "ops.byod",
-      "secondaryTagIds": [
-        "ops.mdm-mam"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ops.byod"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "ops.byod",
-        "ops.mdm-mam"
+        "ops.byod"
       ]
     },
     {
       "questionId": "m068",
       "primaryTagId": "ir.tabletop-drills",
-      "secondaryTagIds": [
-        "ir.lifecycle-nist"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ops.scan-credentialed"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "ir.tabletop-drills",
-        "ir.lifecycle-nist"
+        "ir.tabletop-drills"
       ]
     },
     {
       "questionId": "m069",
       "primaryTagId": "net.app-ngfw",
-      "secondaryTagIds": [
-        "net.app-ids-ips"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "net.app-proxy"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "net.app-ngfw",
-        "net.app-ids-ips"
+        "net.app-ngfw"
       ]
     },
     {
       "questionId": "m070",
       "primaryTagId": "ir.forensic-hash",
-      "secondaryTagIds": [
-        "ir.forensic-imaging",
-        "ir.chain-of-custody"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "cry.sym-aes",
         "gov.gdpr-hipaa-pci"
@@ -1218,82 +960,65 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "ir.forensic-hash",
-        "ir.forensic-imaging",
-        "ir.chain-of-custody"
+        "ir.forensic-hash"
       ]
     },
     {
       "questionId": "m071",
       "primaryTagId": "ops.patch-mgmt",
-      "secondaryTagIds": [
-        "ops.scan-credentialed"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.change-mgmt"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "ops.patch-mgmt",
-        "ops.scan-credentialed"
+        "ops.patch-mgmt"
       ]
     },
     {
       "questionId": "m072",
       "primaryTagId": "iam.provisioning",
-      "secondaryTagIds": [
-        "sec.least-privilege"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.sep-of-duties"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "iam.provisioning",
-        "sec.least-privilege"
+        "iam.provisioning"
       ]
     },
     {
       "questionId": "m073",
       "primaryTagId": "ir.chain-of-custody",
-      "secondaryTagIds": [
-        "ops.logs-syslog"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ir.volatility-order"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "ir.chain-of-custody",
-        "ops.logs-syslog"
+        "ir.chain-of-custody"
       ]
     },
     {
       "questionId": "m074",
       "primaryTagId": "vul.cvss-cve",
-      "secondaryTagIds": [
-        "risk.qual-matrix"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "vul.cvss-cve"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "vul.cvss-cve",
-        "risk.qual-matrix"
+        "vul.cvss-cve"
       ]
     },
     {
       "questionId": "m075",
       "primaryTagId": "data.states",
-      "secondaryTagIds": [
-        "cry.sym-aes",
-        "ops.port-hardening"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ops.edr-xdr",
         "data.dlp"
@@ -1301,33 +1026,26 @@
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "data.states",
-        "cry.sym-aes",
-        "ops.port-hardening"
+        "data.states"
       ]
     },
     {
       "questionId": "m076",
       "primaryTagId": "ops.siem",
-      "secondaryTagIds": [
-        "ops.logs-syslog"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ops.siem"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "ops.siem",
-        "ops.logs-syslog"
+        "ops.siem"
       ]
     },
     {
       "questionId": "m077",
       "primaryTagId": "iam.oauth-oidc",
-      "secondaryTagIds": [
-        "iam.sso-federation"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "iam.saml",
         "iam.kerberos"
@@ -1335,16 +1053,13 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "iam.oauth-oidc",
-        "iam.sso-federation"
+        "iam.oauth-oidc"
       ]
     },
     {
       "questionId": "m078",
       "primaryTagId": "ops.netflow-pcap",
-      "secondaryTagIds": [
-        "ops.siem"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ops.netflow-pcap",
         "net.app-ids-ips",
@@ -1353,84 +1068,65 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "ops.netflow-pcap",
-        "ops.siem"
+        "ops.netflow-pcap"
       ]
     },
     {
       "questionId": "m079",
-      "primaryTagId": "sec.change-mgmt",
-      "secondaryTagIds": [
-        "gov.policy-aup",
-        "ir.lifecycle-nist"
-      ],
+      "primaryTagId": "gov.policy-aup",
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "gov.policy-aup"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.change-mgmt",
-        "gov.policy-aup",
-        "ir.lifecycle-nist"
+        "gov.policy-aup"
       ]
     },
     {
       "questionId": "m080",
       "primaryTagId": "risk.vendor-audit",
-      "secondaryTagIds": [
-        "gov.soc2",
-        "risk.agreements"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "risk.treatment"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "risk.vendor-audit",
-        "gov.soc2",
-        "risk.agreements"
+        "risk.vendor-audit"
       ]
     },
     {
       "questionId": "m081",
       "primaryTagId": "risk.quant-ale-aro",
-      "secondaryTagIds": [
-        "risk.treatment"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "risk.quant-ale-aro"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.5,
       "conceptTagIds": [
-        "risk.quant-ale-aro",
-        "risk.treatment"
+        "risk.quant-ale-aro"
       ]
     },
     {
       "questionId": "m082",
       "primaryTagId": "gov.gdpr-hipaa-pci",
-      "secondaryTagIds": [
-        "data.reg-pii-phi"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "gov.gdpr-hipaa-pci"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "gov.gdpr-hipaa-pci",
-        "data.reg-pii-phi"
+        "gov.gdpr-hipaa-pci"
       ]
     },
     {
       "questionId": "m083",
       "primaryTagId": "gov.policy-aup",
-      "secondaryTagIds": [
-        "gov.training-roles"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "gov.policy-retention",
         "data.classification"
@@ -1438,16 +1134,13 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "gov.policy-aup",
-        "gov.training-roles"
+        "gov.policy-aup"
       ]
     },
     {
       "questionId": "m084",
-      "primaryTagId": "sec.change-mgmt",
-      "secondaryTagIds": [
-        "gov.policy-aup"
-      ],
+      "primaryTagId": "gov.policy-aup",
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.change-mgmt",
         "gov.policy-aup"
@@ -1455,146 +1148,117 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.change-mgmt",
         "gov.policy-aup"
       ]
     },
     {
       "questionId": "m085",
       "primaryTagId": "gov.gdpr-hipaa-pci",
-      "secondaryTagIds": [
-        "risk.vendor-audit",
-        "data.reg-pii-phi"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "gov.gdpr-hipaa-pci"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "gov.gdpr-hipaa-pci",
-        "risk.vendor-audit",
-        "data.reg-pii-phi"
+        "gov.gdpr-hipaa-pci"
       ]
     },
     {
       "questionId": "m086",
       "primaryTagId": "risk.bia-rto-rpo",
-      "secondaryTagIds": [
-        "data.ha-clustering"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ir.lifecycle-nist"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "risk.bia-rto-rpo",
-        "data.ha-clustering"
+        "risk.bia-rto-rpo"
       ]
     },
     {
       "questionId": "m087",
       "primaryTagId": "risk.treatment",
-      "secondaryTagIds": [
-        "risk.appetite-tolerance"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "risk.treatment"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "risk.treatment",
-        "risk.appetite-tolerance"
+        "risk.treatment"
       ]
     },
     {
       "questionId": "m088",
       "primaryTagId": "risk.bia-rto-rpo",
-      "secondaryTagIds": [
-        "data.backups"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "data.ha-clustering"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.3,
       "conceptTagIds": [
-        "risk.bia-rto-rpo",
-        "data.backups"
+        "risk.bia-rto-rpo"
       ]
     },
     {
       "questionId": "m089",
       "primaryTagId": "risk.qual-matrix",
-      "secondaryTagIds": [
-        "risk.appetite-tolerance"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "risk.qual-matrix"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "risk.qual-matrix",
-        "risk.appetite-tolerance"
+        "risk.qual-matrix"
       ]
     },
     {
       "questionId": "m090",
-      "primaryTagId": "gov.gdpr-hipaa-pci",
-      "secondaryTagIds": [
-        "gov.policy-retention"
-      ],
+      "primaryTagId": "gov.policy-retention",
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "gov.gdpr-hipaa-pci"
       ],
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.6,
       "conceptTagIds": [
-        "gov.gdpr-hipaa-pci",
         "gov.policy-retention"
       ]
     },
     {
       "questionId": "m091",
       "primaryTagId": "risk.agreements",
-      "secondaryTagIds": [
-        "risk.vendor-audit"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "risk.agreements"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "risk.agreements",
-        "risk.vendor-audit"
+        "risk.agreements"
       ]
     },
     {
       "questionId": "m092",
       "primaryTagId": "gov.gdpr-hipaa-pci",
-      "secondaryTagIds": [
-        "ir.lifecycle-nist"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ir.lifecycle-nist"
       ],
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.5,
       "conceptTagIds": [
-        "gov.gdpr-hipaa-pci",
-        "ir.lifecycle-nist"
+        "gov.gdpr-hipaa-pci"
       ]
     },
     {
       "questionId": "m093",
       "primaryTagId": "gov.iso-27001",
-      "secondaryTagIds": [
-        "ops.scan-discovery"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ops.scan-credentialed",
         "att.threat-feeds"
@@ -1602,65 +1266,52 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "gov.iso-27001",
-        "ops.scan-discovery"
+        "gov.iso-27001"
       ]
     },
     {
       "questionId": "m094",
       "primaryTagId": "att.mal-rootkit",
-      "secondaryTagIds": [
-        "ops.os-baseline"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.mal-trojan"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.2,
       "conceptTagIds": [
-        "att.mal-rootkit",
-        "ops.os-baseline"
+        "att.mal-rootkit"
       ]
     },
     {
       "questionId": "m095",
       "primaryTagId": "sec.ctrl-prevent",
-      "secondaryTagIds": [
-        "net.app-ngfw"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "sec.defense-in-depth"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "sec.ctrl-prevent",
-        "net.app-ngfw"
+        "sec.ctrl-prevent"
       ]
     },
     {
       "questionId": "m096",
       "primaryTagId": "ops.app-control",
-      "secondaryTagIds": [
-        "ops.logs-syslog"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ops.os-baseline"
       ],
       "cognitiveLevel": "Application",
       "difficultyWeight": 1.4,
       "conceptTagIds": [
-        "ops.app-control",
-        "ops.logs-syslog"
+        "ops.app-control"
       ]
     },
     {
       "questionId": "m097",
       "primaryTagId": "net.app-waf",
-      "secondaryTagIds": [
-        "att.app-sqli",
-        "att.app-xss"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "att.dos-ddos",
         "net.app-ngfw"
@@ -1668,35 +1319,26 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "net.app-waf",
-        "att.app-sqli",
-        "att.app-xss"
+        "net.app-waf"
       ]
     },
     {
       "questionId": "m098",
       "primaryTagId": "ir.volatility-order",
-      "secondaryTagIds": [
-        "ir.forensic-imaging",
-        "arch.virtualization"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "ir.forensic-imaging"
       ],
       "cognitiveLevel": "Analysis",
       "difficultyWeight": 1.6,
       "conceptTagIds": [
-        "ir.volatility-order",
-        "ir.forensic-imaging",
-        "arch.virtualization"
+        "ir.volatility-order"
       ]
     },
     {
       "questionId": "m099",
       "primaryTagId": "gov.gdpr-hipaa-pci",
-      "secondaryTagIds": [
-        "data.reg-pii-phi"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "gov.iso-27001",
         "gov.soc2"
@@ -1704,24 +1346,20 @@
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1,
       "conceptTagIds": [
-        "gov.gdpr-hipaa-pci",
-        "data.reg-pii-phi"
+        "gov.gdpr-hipaa-pci"
       ]
     },
     {
       "questionId": "m100",
       "primaryTagId": "risk.agreements",
-      "secondaryTagIds": [
-        "risk.vendor-audit"
-      ],
+      "secondaryTagIds": [],
       "distractorTagIds": [
         "risk.agreements"
       ],
       "cognitiveLevel": "Recall",
       "difficultyWeight": 1.1,
       "conceptTagIds": [
-        "risk.agreements",
-        "risk.vendor-audit"
+        "risk.agreements"
       ]
     },
     {
@@ -6864,6 +6502,13 @@
         "cry.pki-ca",
         "net.proto-tls"
       ]
+    }
+  ],
+  "ownerRetagBatches": [
+    {
+      "questionIdRange": "m001-m100",
+      "questionCount": 100,
+      "sourceSha256": "dc0e7c31d85ef72563d6a4ad7d1b34af6a534818a15edab35d5f1d1623004d67"
     }
   ]
 }
