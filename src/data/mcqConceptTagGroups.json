@@ -3,7 +3,7 @@
     "minimumQuestions": 8,
     "minimumQuestionsByDifficulty": {"core": 2, "applied": 6},
     "tagIds": [
-      "iam.mfa", "iam.auth-factors", "iam.fido2-passwordless", "iam.saml",
+      "iam.mfa", "iam.auth-factors", "iam.saml",
       "iam.oauth-oidc", "iam.rbac", "iam.pam", "att.app-sqli", "att.app-xss",
       "att.app-csrf", "att.app-ssrf", "att.pwd-spraying", "att.pwd-stuffing",
       "att.on-path-mitm", "att.mal-ransomware", "att.dos-ddos", "net.app-ngfw",
@@ -18,7 +18,7 @@
     "minimumQuestions": 5,
     "minimumQuestionsByDifficulty": {"core": 2, "applied": 3},
     "tagIds": [
-      "att.actor-apt", "att.actor-insider", "att.actor-crime", "att.threat-feeds",
+      "iam.fido2-passwordless", "att.actor-apt", "att.actor-insider", "att.actor-crime", "att.threat-feeds",
       "att.mitre-attack", "att.iocs", "att.phishing", "att.spear-phishing",
       "att.whaling", "att.vishing-smishing", "att.tailgating", "att.social-principles",
       "data.classification", "data.reg-pii-phi", "data.states", "data.dlp",
