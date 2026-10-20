@@ -8,7 +8,7 @@ import { createMcqHandler } from '../server/mcq-engine/http.mjs';
 import base from '../server/mcq-engine/base-catalogue.json' with {type:'json'};
 import groups from '../src/data/mcqConceptTagGroups.json' with {type:'json'};
 
-test('two MCQ levels retain source questions, answer IDs, and pending benchmarks',()=>{
+test('two MCQ levels retain source questions, answer IDs, and owner benchmarks',()=>{
   assert.deepEqual(['easy','medium','hard','core','applied'].map(normalizeMcqDifficulty),['core','applied','applied','core','applied']);
   const bank=effectiveCatalogue();assert.equal(bank.length,base.length);
   for(const q of base){
@@ -19,7 +19,10 @@ test('two MCQ levels retain source questions, answer IDs, and pending benchmarks
   }
   const edit={question_id:'m001',question_kind:'mcq',status:'active',action:'upsert',updated_at:'2099-01-01',payload:{difficulty:'applied'}};
   assert.equal(effectiveCatalogue([edit]).find(q=>q.id==='m001').difficulty,'applied');
-  assert(Object.values(groups).every(g=>g.minimumQuestionsByDifficulty===null));
+  for(const [name,expected] of Object.entries({"Heavy weight":{core:2,applied:6},Standard:{core:2,applied:3},Niche:{core:2,applied:1}})){
+    assert.deepEqual(groups[name].minimumQuestionsByDifficulty,expected);
+    assert.equal(groups[name].minimumQuestions,expected.core+expected.applied);
+  }
 });
 
 test('Core and Applied filters include their legacy levels; invalid filters fail',async()=>{

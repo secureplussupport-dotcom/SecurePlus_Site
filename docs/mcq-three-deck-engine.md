@@ -19,7 +19,7 @@ The prose rules take precedence where the provided pseudocode differs: weakest-f
 
 MCQs use **Core** and **Applied** in practice, exam/diagnostic question labels, Question Manager and adaptive API responses. Legacy `easy` maps to `core`; legacy `medium` and `hard` both map to `applied`. Stored source records and immutable session snapshots retain their historical bytes; normalization happens when reading, filtering and projecting questions. Existing saved sets display the new labels without changing their answer keys or score history. New Question Manager MCQs save `core` or `applied`. PBQ difficulty levels remain unchanged.
 
-Concept group total minimums remain 8/5/3. Per-difficulty minimums are `null` (awaiting owner benchmarks); the retired Easy/Medium/Hard quotas must not be used as current targets.
+Concept group minimums are Heavy weight: 2 Core + 6 Applied (8 total), Standard: 2 Core + 3 Applied (5 total), and Niche: 2 Core + 1 Applied (3 total). These are bank stocking minimums, not adaptive sampling quotas. Extra questions are allowed. The retired Easy/Medium/Hard quotas must not be used as current targets.
 
 Live delivery verified 20 October 2026: runtime commit `14e01e4`, Vercel deployment `dpl_CHAfQwSjQLdHF3BEwRxmAjvqUQK7`, promoted to https://www.secureplusprep.com/. Public bundle `/assets/main-DXOWmacn.js`; guest practice visibly displayed both Core and Applied. Local screenshots: `output/mcq-core-live.png` and `output/mcq-applied-live.png`. Fourteen focused tests, disposable SQL/API integration, full application audit/build and 29 refreshed content-mapping tests passed. Signed-in filter/manager interactions were verified in code and automated tests, not with a live authenticated browser account. No database migration was needed.
 
