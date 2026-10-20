@@ -406,7 +406,7 @@ All 14 independently authored guest teaching records have source units, revision
 
 ### intervention:smart-review
 
-- Exact revision: sha256:d973f4b8c9f259f45d7b769f4345af678d54f69206a82e03564009bf0df2e597
+- Exact revision: sha256:5d192272b89fdabf197517c3f823098f275157c52161bc0bf7df40aae8c59a3f
 - Inputs: effective MCQ primary tags; server mastery scores; failed-question cooldowns; seen question IDs; set size 10–30; random sampling
 - Target kinds: mcq
 - Behavior boundary: State-pinned batch with 20/30/50 waterfall quotas; Fisher-Yates question/option shuffle and weighted discovery.

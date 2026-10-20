@@ -1,0 +1,707 @@
+{
+  "scope": "Owner-supplied primary-only retag for active original MCQs 201-300",
+  "sourceSha256": "0f3d52f27d694dda53c4e9cc5debda48b4a0ea52b052c50a0c1092c2e03d9c5d",
+  "questionCount": 100,
+  "assignments": [
+    {
+      "questionId": "m212",
+      "chapter": "1",
+      "topic": "Cryptography Concepts",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.cipher-modes"
+    },
+    {
+      "questionId": "m214",
+      "chapter": "2",
+      "topic": "Cryptographic Attacks",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.on-path-mitm"
+    },
+    {
+      "questionId": "m215",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.auth-factors"
+    },
+    {
+      "questionId": "m216",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "iam.fido2-passwordless"
+    },
+    {
+      "questionId": "m217",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.saml"
+    },
+    {
+      "questionId": "m218",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.auth-factors"
+    },
+    {
+      "questionId": "m221",
+      "chapter": "1",
+      "topic": "PKI & Certificate Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "cry.pki-certs"
+    },
+    {
+      "questionId": "m222",
+      "chapter": "1",
+      "topic": "PKI & Certificate Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.pki-revocation"
+    },
+    {
+      "questionId": "m224",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.pki-revocation"
+    },
+    {
+      "questionId": "m226",
+      "chapter": "1",
+      "topic": "Security Principles",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.zero-trust"
+    },
+    {
+      "questionId": "m227",
+      "chapter": "3",
+      "topic": "Secure Architecture",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "sec.defense-in-depth"
+    },
+    {
+      "questionId": "m229",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.pwd-bruteforce"
+    },
+    {
+      "questionId": "m232",
+      "chapter": "1",
+      "topic": "Security Policies & Procedures",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "sec.change-mgmt"
+    },
+    {
+      "questionId": "m234",
+      "chapter": "1",
+      "topic": "Security Policies & Procedures",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.ctrl-prevent"
+    },
+    {
+      "questionId": "m235",
+      "chapter": "4",
+      "topic": "Endpoint Hardening",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ops.os-baseline"
+    },
+    {
+      "questionId": "m238",
+      "chapter": "1",
+      "topic": "PKI & Certificate Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.pki-ca"
+    },
+    {
+      "questionId": "m241",
+      "chapter": "4",
+      "topic": "Threat Intelligence",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.iocs"
+    },
+    {
+      "questionId": "m242",
+      "chapter": "3",
+      "topic": "Data Handling",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.threat-feeds"
+    },
+    {
+      "questionId": "m243",
+      "chapter": "4",
+      "topic": "Threat Intelligence",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.threat-feeds"
+    },
+    {
+      "questionId": "m244",
+      "chapter": "4",
+      "topic": "Vulnerability Types",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "vul.cvss-cve"
+    },
+    {
+      "questionId": "m248",
+      "chapter": "2",
+      "topic": "Vulnerability Types",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "vul.race-condition"
+    },
+    {
+      "questionId": "m250",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "risk.sbom"
+    },
+    {
+      "questionId": "m251",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.watering-hole"
+    },
+    {
+      "questionId": "m252",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.actor-apt"
+    },
+    {
+      "questionId": "m253",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.vishing-smishing"
+    },
+    {
+      "questionId": "m256",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.mal-ransomware"
+    },
+    {
+      "questionId": "m258",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.mitre-attack"
+    },
+    {
+      "questionId": "m259",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.dos-ddos"
+    },
+    {
+      "questionId": "m260",
+      "chapter": "1",
+      "topic": "Deception and Disruption",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.honeypot"
+    },
+    {
+      "questionId": "m261",
+      "chapter": "2",
+      "topic": "Mitigation Techniques",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "net.app-waf"
+    },
+    {
+      "questionId": "m262",
+      "chapter": "4",
+      "topic": "Mitigation Techniques",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ops.patch-mgmt"
+    },
+    {
+      "questionId": "m266",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.pwd-spraying"
+    },
+    {
+      "questionId": "m267",
+      "chapter": "2",
+      "topic": "Vulnerability Types",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.app-xxe"
+    },
+    {
+      "questionId": "m268",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.actor-crime"
+    },
+    {
+      "questionId": "m270",
+      "chapter": "4",
+      "topic": "Mitigation Techniques",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "net.proto-tls"
+    },
+    {
+      "questionId": "m271",
+      "chapter": "2",
+      "topic": "Vulnerability Types",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.rbac"
+    },
+    {
+      "questionId": "m272",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.actor-crime"
+    },
+    {
+      "questionId": "m275",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.arp-poisoning"
+    },
+    {
+      "questionId": "m278",
+      "chapter": "4",
+      "topic": "Mitigation Techniques",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "net.proto-email"
+    },
+    {
+      "questionId": "m280",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.pwd-stuffing"
+    },
+    {
+      "questionId": "m282",
+      "chapter": "2",
+      "topic": "Vulnerability Types",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.app-dir-traversal"
+    },
+    {
+      "questionId": "m283",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.vishing-smishing"
+    },
+    {
+      "questionId": "m284",
+      "chapter": "2",
+      "topic": "Mitigation Techniques",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ops.port-hardening"
+    },
+    {
+      "questionId": "m285",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.iocs"
+    },
+    {
+      "questionId": "m286",
+      "chapter": "3",
+      "topic": "Mitigation Techniques",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "net.app-waf"
+    },
+    {
+      "questionId": "m287",
+      "chapter": "2",
+      "topic": "Vulnerability Types",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "vul.mem-overflow"
+    },
+    {
+      "questionId": "m288",
+      "chapter": "5",
+      "topic": "Security Awareness",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.spear-phishing"
+    },
+    {
+      "questionId": "m290",
+      "chapter": "2",
+      "topic": "Common Threats",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.mal-trojan"
+    },
+    {
+      "questionId": "m291",
+      "chapter": "3",
+      "topic": "Network Architecture",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "arch.dmz"
+    },
+    {
+      "questionId": "m292",
+      "chapter": "3",
+      "topic": "Network Architecture",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "arch.segmentation"
+    },
+    {
+      "questionId": "m294",
+      "chapter": "3",
+      "topic": "Cloud Security",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "arch.cloud-deploy"
+    },
+    {
+      "questionId": "m296",
+      "chapter": "3",
+      "topic": "Cloud Security",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "gov.policy-aup"
+    },
+    {
+      "questionId": "m298",
+      "chapter": "3",
+      "topic": "Application Architecture",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "arch.segmentation"
+    },
+    {
+      "questionId": "m299",
+      "chapter": "3",
+      "topic": "Network Architecture",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "arch.vpn"
+    },
+    {
+      "questionId": "m305",
+      "chapter": "2",
+      "topic": "Misconfiguration",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "net.app-proxy"
+    },
+    {
+      "questionId": "m306",
+      "chapter": "4",
+      "topic": "Cloud Security",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "arch.cloud-models"
+    },
+    {
+      "questionId": "m312",
+      "chapter": "4",
+      "topic": "Security Monitoring",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ops.siem"
+    },
+    {
+      "questionId": "m314",
+      "chapter": "3",
+      "topic": "Network Architecture",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "net.proto-ipsec"
+    },
+    {
+      "questionId": "m318",
+      "chapter": "4",
+      "topic": "Privileged Access",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.pam"
+    },
+    {
+      "questionId": "m319",
+      "chapter": "4",
+      "topic": "Federation and Delegation",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "iam.oauth-oidc"
+    },
+    {
+      "questionId": "m321",
+      "chapter": "3",
+      "topic": "Cloud Security",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "net.app-proxy"
+    },
+    {
+      "questionId": "m322",
+      "chapter": "4",
+      "topic": "Application Architecture",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "vul.input-validation"
+    },
+    {
+      "questionId": "m333",
+      "chapter": "4",
+      "topic": "Security Monitoring",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.threat-feeds"
+    },
+    {
+      "questionId": "m334",
+      "chapter": "4",
+      "topic": "Incident Response",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ir.lifecycle-nist"
+    },
+    {
+      "questionId": "m340",
+      "chapter": "5",
+      "topic": "Penetration Testing",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ops.scan-credentialed"
+    },
+    {
+      "questionId": "m343",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.provisioning"
+    },
+    {
+      "questionId": "m349",
+      "chapter": "4",
+      "topic": "Vulnerability Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ops.scan-discovery"
+    },
+    {
+      "questionId": "m352",
+      "chapter": "4",
+      "topic": "Incident Response",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ir.tabletop-drills"
+    },
+    {
+      "questionId": "m355",
+      "chapter": "4",
+      "topic": "Identity Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "iam.provisioning"
+    },
+    {
+      "questionId": "m356",
+      "chapter": "4",
+      "topic": "Security Monitoring",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "net.app-proxy"
+    },
+    {
+      "questionId": "m361",
+      "chapter": "4",
+      "topic": "Security Monitoring",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ops.siem"
+    },
+    {
+      "questionId": "m366",
+      "chapter": "4",
+      "topic": "Security Monitoring",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ops.siem"
+    },
+    {
+      "questionId": "m371",
+      "chapter": "5",
+      "topic": "Governance",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "gov.policy-aup"
+    },
+    {
+      "questionId": "m373",
+      "chapter": "5",
+      "topic": "Risk Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "risk.quant-ale-aro"
+    },
+    {
+      "questionId": "m374",
+      "chapter": "5",
+      "topic": "Risk Management",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "risk.treatment"
+    },
+    {
+      "questionId": "m376",
+      "chapter": "5",
+      "topic": "Compliance",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "gov.gdpr-hipaa-pci"
+    },
+    {
+      "questionId": "m379",
+      "chapter": "5",
+      "topic": "Data Privacy",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "gov.gdpr-hipaa-pci"
+    },
+    {
+      "questionId": "m389",
+      "chapter": "3",
+      "topic": "Data Protection",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.masking-salting"
+    },
+    {
+      "questionId": "m393",
+      "chapter": "5",
+      "topic": "Data Privacy",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "gov.gdpr-hipaa-pci"
+    },
+    {
+      "questionId": "m398",
+      "chapter": "5",
+      "topic": "Governance",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "gov.policy-aup"
+    },
+    {
+      "questionId": "m399",
+      "chapter": "1",
+      "topic": "Security Principles",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "sec.cia-triad"
+    },
+    {
+      "questionId": "m401",
+      "chapter": "1",
+      "topic": "Control Types",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.ctrl-deter"
+    },
+    {
+      "questionId": "m402",
+      "chapter": "1",
+      "topic": "Control Types",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "sec.ctrl-detect"
+    },
+    {
+      "questionId": "m403",
+      "chapter": "1",
+      "topic": "Cryptography",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "cry.hash-sha"
+    },
+    {
+      "questionId": "m404",
+      "chapter": "1",
+      "topic": "Cryptography",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "att.pwd-rainbow"
+    },
+    {
+      "questionId": "m405",
+      "chapter": "1",
+      "topic": "Cryptography",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.diffie-hellman"
+    },
+    {
+      "questionId": "m406",
+      "chapter": "1",
+      "topic": "Cryptography",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.asym-ecc"
+    },
+    {
+      "questionId": "m407",
+      "chapter": "4",
+      "topic": "Network Access Control",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "ops.port-hardening"
+    },
+    {
+      "questionId": "m408",
+      "chapter": "4",
+      "topic": "Authentication",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "iam.fido2-passwordless"
+    },
+    {
+      "questionId": "m410",
+      "chapter": "1",
+      "topic": "PKI",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.pki-ca"
+    },
+    {
+      "questionId": "m411",
+      "chapter": "1",
+      "topic": "PKI",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "cry.pki-revocation"
+    },
+    {
+      "questionId": "m413",
+      "chapter": "1",
+      "topic": "Security Principles",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.least-privilege"
+    },
+    {
+      "questionId": "m416",
+      "chapter": "1",
+      "topic": "Change & Config Management",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "sec.sep-of-duties"
+    },
+    {
+      "questionId": "m417",
+      "chapter": "3",
+      "topic": "Infrastructure as Code",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ops.os-baseline"
+    },
+    {
+      "questionId": "m418",
+      "chapter": "3",
+      "topic": "Secure Protocols",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "net.proto-tls"
+    },
+    {
+      "questionId": "m420",
+      "chapter": "3",
+      "topic": "Secure Protocols",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "net.proto-ssh"
+    },
+    {
+      "questionId": "m423",
+      "chapter": "4",
+      "topic": "Threat Intelligence",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "att.threat-feeds"
+    },
+    {
+      "questionId": "m425",
+      "chapter": "4",
+      "topic": "Vulnerability Scanning",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "vul.cvss-cve"
+    },
+    {
+      "questionId": "m426",
+      "chapter": "4",
+      "topic": "Vulnerability Scanning",
+      "suppliedDifficulty": "applied",
+      "primaryTagId": "ops.scan-credentialed"
+    },
+    {
+      "questionId": "m427",
+      "chapter": "2",
+      "topic": "Application Vulnerabilities",
+      "suppliedDifficulty": "core",
+      "primaryTagId": "vul.input-validation"
+    }
+  ]
+}

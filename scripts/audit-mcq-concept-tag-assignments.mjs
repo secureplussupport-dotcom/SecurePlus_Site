@@ -6,6 +6,7 @@ import { normalizeMcqDifficulty } from '../src/lib/mcqDifficulty.js';
 import tagged from '../src/data/mcqConceptTagAssignments.json' with { type: 'json' };
 import firstOwnerRetag from '../docs/question-bank/owner-primary-retag-m001-m100.json' with { type: 'json' };
 import secondOwnerRetag from '../docs/question-bank/owner-primary-retag-m101-m211.json' with { type: 'json' };
+import thirdOwnerRetag from '../docs/question-bank/owner-primary-retag-m212-m427.json' with { type: 'json' };
 
 const questions = publicationPipeline(readLearningPilotBank()).overrides([]).mcqs;
 const bankIds = new Set(questions.map(row => row.id));
@@ -19,7 +20,7 @@ assert.equal(tagged.tagCount, 170);
 assert.equal(tagged.assignments.length, 395);
 assert.equal(new Set(tagged.assignments.map(row => row.questionId)).size, 395);
 assert.deepEqual(new Set(tagged.assignments.map(row => row.questionId)), bankIds);
-const ownerRetags = [firstOwnerRetag, secondOwnerRetag];
+const ownerRetags = [firstOwnerRetag, secondOwnerRetag, thirdOwnerRetag];
 const retagById = new Map();
 assert.equal(tagged.ownerRetagBatches.length, ownerRetags.length);
 for (const [index, batch] of ownerRetags.entries()) {
