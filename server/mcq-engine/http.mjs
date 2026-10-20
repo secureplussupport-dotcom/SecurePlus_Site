@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { getBearerToken, getJsonBody, getSupabaseAdmin, json, requireJsonContentType } from '../../api/_utils.js';
 import { ENGINE_VERSION, EngineError, generateSet, learnerQuestion } from './engine.mjs';
 import { loadCatalogue } from './catalogue.mjs';
+import { normalizeMcqDifficulty, MCQ_DIFFICULTIES } from '../../src/lib/mcqDifficulty.js';
 
 const uuid = value => typeof value === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
 async function rpc(client, name, args) {
@@ -41,10 +42,11 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
         if (!Number.isInteger(count) || count < 10 || count > 30) throw new EngineError('Choose 10–30 questions.');
         const filters = body.filters || {};
         if (filters.chapter && !/^[1-5]$/.test(filters.chapter)) throw new EngineError('Invalid chapter.');
-        if (filters.difficulty && !['easy', 'medium', 'hard'].includes(filters.difficulty)) throw new EngineError('Invalid difficulty.');
+        const difficulty = normalizeMcqDifficulty(filters.difficulty);
+        if (filters.difficulty && !MCQ_DIFFICULTIES.includes(difficulty)) throw new EngineError('Invalid difficulty.');
         if (filters.topic && (typeof filters.topic !== 'string' || filters.topic.length > 200)) throw new EngineError('Invalid topic.');
         const bank = (await catalogue(client)).filter(q => q.concept_tag &&
-          (!filters.chapter || q.chapter === filters.chapter) && (!filters.difficulty || q.difficulty === filters.difficulty) && (!filters.topic || q.topic === filters.topic));
+          (!filters.chapter || q.chapter === filters.chapter) && (!difficulty || normalizeMcqDifficulty(q.difficulty) === difficulty) && (!filters.topic || q.topic === filters.topic));
         for (let attempt = 0; attempt < 3; attempt++) {
           const state = await rpc(client, 'mcq_engine_state', { p_user_id: userId });
           const questions = generateSet(bank, state, count);

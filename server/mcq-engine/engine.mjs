@@ -1,4 +1,5 @@
 // The owner's three-deck MCQ specification. No relationships or legacy SM-2 rules.
+import { normalizeMcqDifficulty } from '../../src/lib/mcqDifficulty.js';
 export const ENGINE_VERSION = 'mcq-three-deck-v1';
 
 export class EngineError extends Error {
@@ -51,6 +52,6 @@ export function generateSet(bank, state, count, random = Math.random) {
 
 export function learnerQuestion(q) {
   return { id: q.id, concept_tag: q.concept_tag, domain: q.domain, prompt: q.prompt,
-    chapter: q.chapter, topic: q.topic, difficulty: q.difficulty,
+    chapter: q.chapter, topic: q.topic, difficulty: normalizeMcqDifficulty(q.difficulty),
     options: q.options.map(({ id, text }) => ({ id, text })) };
 }

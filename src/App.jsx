@@ -5,6 +5,7 @@ import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701Pb
 import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from "./data/sy0701PublishedSnapshot.js";
 import { CONCEPT_TAGS, MCQ_TAGGING_VERSION, inferMcqConceptTagIds, searchMcqConceptTags } from "./data/sy0701ConceptTags.js";
 import { effectiveMcqConceptTagIds } from "./lib/mcqConceptReview.js";
+import { normalizeMcqDifficulty } from "./lib/mcqDifficulty.js";
 import mcqTagAssignments from "./data/mcqConceptTagAssignments.json";
 import { mcqEngineEnabled, mcqEngineRequest, practiceQuestion, recordStandaloneMcq } from "./lib/mcqEngineClient.js";
 import {
@@ -1931,7 +1932,7 @@ function buildDiagnosticQuestions() {
     const chapterPool=MCQ_BANK
       .filter(q=>
         q.ch===ch.id
-        && q.difficulty==="easy"
+        && normalizeMcqDifficulty(q.difficulty)==="core"
         && !q.beyondTextbook
         && String(q.q||"").length<=180
         && Array.isArray(q.opts)
@@ -12191,7 +12192,7 @@ function applySy0701StudyNoteEnhancement(question) {
 
 const BASE_MCQ_BANK = mergePublishedSnapshot([...MCQ_BANK_RAW, ...IMPORTED_MCQ_BANK].filter(q=>!LOW_QUALITY_MCQ_IDS.has(q.id)),"mcq").filter(isMcqEditoriallyActive).map(applySy0701StudyNoteEnhancement).map(applyMcqEditorialReview).map(ensureMcqWrongFeedback);
 const mcqTagsById=new Map(mcqTagAssignments.assignments.map(row=>[row.questionId,row.conceptTagIds]));
-let MCQ_BANK = BASE_MCQ_BANK.map(question=>({...question,conceptTagIds:mcqTagsById.get(question.id)||[],taggingVersion:MCQ_TAGGING_VERSION}));
+let MCQ_BANK = BASE_MCQ_BANK.map(question=>({...question,difficulty:normalizeMcqDifficulty(question.difficulty),conceptTagIds:mcqTagsById.get(question.id)||[],taggingVersion:MCQ_TAGGING_VERSION}));
 
 // ═══════════════════════════════════════════════════════════════
 // PBQ BANK — original, accurate, clearly scoped content
@@ -16082,7 +16083,7 @@ function applyQuestionOverrides(rows=[]) {
 }
 
 function applyAssignedMcqTags() {
-  MCQ_BANK=MCQ_BANK.map(question=>({...question,conceptTagIds:effectiveMcqConceptTagIds(question,mcqTagsById.get(question.id)||[],MCQ_TAGGING_VERSION),taggingVersion:MCQ_TAGGING_VERSION}));
+  MCQ_BANK=MCQ_BANK.map(question=>({...question,difficulty:normalizeMcqDifficulty(question.difficulty),conceptTagIds:effectiveMcqConceptTagIds(question,mcqTagsById.get(question.id)||[],MCQ_TAGGING_VERSION),taggingVersion:MCQ_TAGGING_VERSION}));
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -20467,13 +20468,15 @@ function SimBadge({type,t}) {
 }
 function difficultyMeta(d) {
   return ({
+    core:{c:"#10b981",label:"Core",glow:"0 0 14px rgba(16,185,129,.55)"},
+    applied:{c:"#f59e0b",label:"Applied",glow:"0 0 14px rgba(245,158,11,.55)"},
     easy:{c:"#10b981",label:"Easy",glow:"0 0 14px rgba(16,185,129,.55)"},
     medium:{c:"#f59e0b",label:"Medium",glow:"0 0 14px rgba(245,158,11,.55)"},
     hard:{c:"#ef4444",label:"Hard",glow:"0 0 14px rgba(239,68,68,.55)"},
   })[String(d||"").toLowerCase()] || {c:"#10b981",label:"Easy",glow:"0 0 14px rgba(16,185,129,.55)"};
 }
-function DiffBadge({d,t}) {
-  const {c,label,glow}=difficultyMeta(d);
+function DiffBadge({d,t,mcq=false}) {
+  const {c,label,glow}=difficultyMeta(mcq?normalizeMcqDifficulty(d):d);
   return <span className="chip difficulty-chip" style={{background:`${c}15`,color:c,borderColor:`${c}45`,textShadow:glow,boxShadow:`inset 0 0 0 1px ${c}10, 0 0 18px ${c}18`}}>{label}</span>;
 }
 function QuestionCodeChip({id,t}) {
@@ -22811,7 +22814,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
         <div style={{display:"flex",gap:8,marginBottom:10,flexWrap:"wrap"}}>
           <ChBadge chId={current.ch} t={t}/>
           {showQuestionCodes&&<QuestionCodeChip id={current.id} t={t}/>}
-          <DiffBadge d={current.difficulty} t={t}/>
+          <DiffBadge d={current.difficulty} t={t} mcq/>
           <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
           <BeyondTextbookTag question={current} t={t}/>
         </div>
@@ -22999,7 +23002,7 @@ function LandingDailyChallengeWidget({t,onPractice}) {
               <div className="demo-question" style={{marginBottom:12}}>
                 <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
                   <ChBadge chId={current.ch} t={t}/>
-                  <DiffBadge d={current.difficulty} t={t}/>
+                  <DiffBadge d={current.difficulty} t={t} mcq/>
                   <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
                 </div>
                 <div className="landing-challenge-question"><QuestionStemText text={current.q} t={t}/></div>
@@ -24892,9 +24895,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   ];
   const difficultyOptions=[
     {value:"all",label:"All Difficulties"},
-    {value:"easy",label:"Easy",...difficultyMeta("easy")},
-    {value:"medium",label:"Medium",...difficultyMeta("medium")},
-    {value:"hard",label:"Hard",...difficultyMeta("hard")},
+    {value:"core",label:"Core",...difficultyMeta("core")},
+    {value:"applied",label:"Applied",...difficultyMeta("applied")},
   ];
   const topicOptions=[
     {value:"all",label:"All Topics"},
@@ -24905,7 +24907,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
   const filtered=bank.filter(q=>{
     if(chFilter!=="all"&&q.ch!==chFilter)return false;
-    if(activeDiffFilter!=="all"&&q.difficulty!==activeDiffFilter)return false;
+    if(activeDiffFilter!=="all"&&normalizeMcqDifficulty(q.difficulty)!==activeDiffFilter)return false;
     if(activeTopicFilter!=="all"&&q.topic!==activeTopicFilter)return false;
     return true;
   });
@@ -25196,7 +25198,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
                 <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
                   <ChBadge chId={q.ch} t={t}/>
                   {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
-                  <DiffBadge d={q.difficulty} t={t}/>
+                  <DiffBadge d={q.difficulty} t={t} mcq/>
                   <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{q.topic}</span>
                   <BeyondTextbookTag question={q} t={t}/>
                 </div>
@@ -25643,7 +25645,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
           <ChBadge chId={current.ch} t={t}/>
           {showQuestionCodes&&<QuestionCodeChip id={current.id} t={t}/>}
-          <DiffBadge d={current.difficulty} t={t}/>
+          <DiffBadge d={current.difficulty} t={t} mcq/>
           <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
           <BeyondTextbookTag question={current} t={t}/>
           {!isGuest&&(
@@ -27244,7 +27246,7 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
             <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
               {current.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
               {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
-              <DiffBadge d={q.difficulty} t={t}/>
+              <DiffBadge d={q.difficulty} t={t} mcq={current.kind==="mcq"}/>
               <span className="chip meta-chip">{current.kind==="mcq"?"MCQ":"PBQ"}</span>
               {flagged[qi]&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}45`}}>Flagged for review</span>}
             </div>
@@ -28571,7 +28573,7 @@ function makeAdminQuestionTemplate(kind, nextOrder=1, sourceBank=[]) {
     id:nextCode,
     ch:chapter.id,
     topic:chapter.topics[0],
-    difficulty:"medium",
+    difficulty:"applied",
     beyondTextbook:false,
     order:String(nextOrder),
     q:"",
@@ -28631,7 +28633,7 @@ function questionToAdminForm(question,kind,index) {
     id:question.id||"",
     ch:String(question.ch||"1"),
     topic:question.topic||question.cat||"",
-    difficulty:String(question.difficulty||"medium").toLowerCase(),
+    difficulty:normalizeMcqDifficulty(question.difficulty||"applied"),
     beyondTextbook:Boolean(question.beyondTextbook),
     order,
     q:question.q||question.question||"",
@@ -28698,9 +28700,9 @@ function cleanAdminShortCode(value,{field="Code",max=40}={}) {
 
 function cleanAdminQuestionPayload(form,kind) {
   const id=cleanAdminQuestionId(form.id);
-  const difficulty=String(form.difficulty||"medium").toLowerCase();
+  const difficulty=kind==="mcq"?normalizeMcqDifficulty(form.difficulty||"applied"):String(form.difficulty||"medium").toLowerCase();
   const sortOrder=Math.max(1,Number.parseInt(form.order,10)||1);
-  if(!["easy","medium","hard"].includes(difficulty)) throw new Error("Difficulty must be Easy, Medium, or Hard.");
+  if(!(kind==="mcq"?["core","applied"]:["easy","medium","hard"]).includes(difficulty)) throw new Error(kind==="mcq"?"Difficulty must be Core or Applied.":"Difficulty must be Easy, Medium, or Hard.");
   if(kind==="mcq") {
     const q=cleanAdminSafeText(form.q,{field:"MCQ question",max:3000});
     const opts=(form.opts||[]).map((opt,index)=>cleanAdminSafeText(opt,{field:`MCQ option ${String.fromCharCode(65+index)}`,max:800,multiline:false}));
@@ -29227,8 +29229,8 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
       if(sortMode==="code-asc") return String(a.id).localeCompare(String(b.id),undefined,{numeric:true,sensitivity:"base"});
       if(sortMode==="code-desc") return String(b.id).localeCompare(String(a.id),undefined,{numeric:true,sensitivity:"base"});
       if(sortMode==="difficulty") {
-        const rank={easy:1,medium:2,hard:3};
-        return (rank[a.difficulty]||9)-(rank[b.difficulty]||9)||String(a.id).localeCompare(String(b.id),undefined,{numeric:true,sensitivity:"base"});
+        const rank={core:1,applied:2,easy:1,medium:2,hard:3};
+        return (rank[kind==="mcq"?normalizeMcqDifficulty(a.difficulty):a.difficulty]||9)-(rank[kind==="mcq"?normalizeMcqDifficulty(b.difficulty):b.difficulty]||9)||String(a.id).localeCompare(String(b.id),undefined,{numeric:true,sensitivity:"base"});
       }
       const ao=Number(a._adminOrder||a._baseOrder||Number.MAX_SAFE_INTEGER);
       const bo=Number(b._adminOrder||b._baseOrder||Number.MAX_SAFE_INTEGER);
@@ -29238,7 +29240,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
   const selectedIndex=bank.findIndex(q=>q.id===selectedId);
   const selectedQuestion=selectedIndex>=0?bank[selectedIndex]:null;
   const isEditing=Boolean(selectedQuestion);
-  const difficultyColor=form.difficulty==="easy"?t.green:form.difficulty==="hard"?t.red:t.amber;
+  const difficultyColor=["core","easy"].includes(form.difficulty)?t.green:form.difficulty==="hard"?t.red:t.amber;
   const selectedChapter=getChapterById(form.ch);
   const topicOptions=getAdminTopicOptions(kind,form.ch,bank,kind==="mcq"?form.topic:form.cat);
   const formQuality=useMemo(()=>kind==="mcq"?analyzeMcqQuality(form,bank):null,[bank,form,kind]);
@@ -29747,9 +29749,14 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
             </AdminField>
             <AdminField label="Difficulty">
               <select className="input" value={form.difficulty} onChange={e=>updateField("difficulty",e.target.value)} style={{color:difficultyColor,fontWeight:900}}>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
+                {kind==="mcq"?<>
+                  <option value="core">Core</option>
+                  <option value="applied">Applied</option>
+                </>:<>
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </>}
               </select>
             </AdminField>
             <AdminField label="Order">
@@ -33163,7 +33170,7 @@ function DiagnosticQuiz({user,t,onComplete}) {
         <div className="card question-card" style={{padding:"20px 22px",marginBottom:16,background:t.panel}}>
           <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:12}}>
             <ChBadge chId={current.ch} t={t}/>
-            <DiffBadge d={current.difficulty} t={t}/>
+            <DiffBadge d={current.difficulty} t={t} mcq/>
             <span className="chip meta-chip" style={{fontSize:11}}>{current.topic}</span>
           </div>
           <div className="question-text" style={{fontSize:17,lineHeight:1.7,color:t.text}}>

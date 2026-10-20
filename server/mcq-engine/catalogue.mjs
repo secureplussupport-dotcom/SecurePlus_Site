@@ -5,6 +5,7 @@ import { effectiveMcqConceptTagIds } from '../../src/lib/mcqConceptReview.js';
 import { isCapturedOverride } from '../../src/data/sy0701PublishedSnapshot.js';
 import { isMcqEditoriallyActive } from '../../src/data/sy0701EditorialReview.js';
 import { EngineError } from './engine.mjs';
+import { normalizeMcqDifficulty } from '../../src/lib/mcqDifficulty.js';
 
 const assigned = new Map(assignments.assignments.map(row => [row.questionId, row]));
 export function optionId(question, index) {
@@ -28,7 +29,7 @@ export function effectiveCatalogue(overrides = []) {
     // A deliberately untagged question remains available to manual practice,
     // but cannot create an invented mastery concept.
     return { id: q.id, format: 'mcq', concept_tag: concept || null, domain: `Domain ${q.ch}`,
-      chapter: q.ch, topic: q.topic, difficulty: q.difficulty, prompt: q.q,
+      chapter: q.ch, topic: q.topic, difficulty: normalizeMcqDifficulty(q.difficulty), prompt: q.q,
       explanation: q.exp || '', options: q.opts.map((text, index) => ({ id: optionId(q, index), text, is_correct: index === q.correct,
         feedback: q.wrongFeedback?.[index] || '' })) };
   });

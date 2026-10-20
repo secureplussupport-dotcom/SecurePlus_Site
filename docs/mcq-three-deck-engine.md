@@ -15,6 +15,12 @@ This replaces the prior MCQ review algorithm under the owner's 20 October 2026 s
 
 The prose rules take precedence where the provided pseudocode differs: weakest-first remediation, weakest/oldest fallback, and quarantine protection. Rounding uses nearest integer with halves rounded upward.
 
+## MCQ difficulty levels
+
+MCQs use **Core** and **Applied** in practice, exam/diagnostic question labels, Question Manager and adaptive API responses. Legacy `easy` maps to `core`; legacy `medium` and `hard` both map to `applied`. Stored source records and immutable session snapshots retain their historical bytes; normalization happens when reading, filtering and projecting questions. Existing saved sets display the new labels without changing their answer keys or score history. New Question Manager MCQs save `core` or `applied`. PBQ difficulty levels remain unchanged.
+
+Concept group total minimums remain 8/5/3. Per-difficulty minimums are `null` (awaiting owner benchmarks); the retired Easy/Medium/Hard quotas must not be used as current targets.
+
 ## Tags and existing progress
 
 The specification has one scored concept per question. The engine uses the imported primary tag when it is still selected in Question Manager, otherwise the first selected valid tag. Secondary and distractor classifications remain in the tag data; they do not receive extra scoring credit. BIA/RTO/RPO remain one `risk.bia-rto-rpo` group as approved by the owner. An intentionally untagged question remains available to manual practice but is excluded from adaptive generation until tagged.

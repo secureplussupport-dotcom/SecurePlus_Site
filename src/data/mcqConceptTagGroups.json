@@ -1,7 +1,7 @@
 {
   "Heavy weight": {
     "minimumQuestions": 8,
-    "minimumQuestionsByDifficulty": { "easy": 2, "medium": 4, "hard": 2 },
+    "minimumQuestionsByDifficulty": null,
     "tagIds": [
       "iam.mfa", "iam.auth-factors", "iam.fido2-passwordless", "iam.saml",
       "iam.oauth-oidc", "iam.rbac", "iam.pam", "att.app-sqli", "att.app-xss",
@@ -16,7 +16,7 @@
   },
   "Standard": {
     "minimumQuestions": 5,
-    "minimumQuestionsByDifficulty": { "easy": 1, "medium": 3, "hard": 1 },
+    "minimumQuestionsByDifficulty": null,
     "tagIds": [
       "att.actor-apt", "att.actor-insider", "att.actor-crime", "att.threat-feeds",
       "att.mitre-attack", "att.iocs", "att.phishing", "att.spear-phishing",
@@ -33,7 +33,7 @@
   },
   "Niche": {
     "minimumQuestions": 3,
-    "minimumQuestionsByDifficulty": { "easy": 2, "medium": 1, "hard": 0 },
+    "minimumQuestionsByDifficulty": null,
     "tagIds": [
       "cry.sym-chacha20", "cry.sym-legacy", "cry.cipher-modes", "cry.steganography",
       "cry.tokenization", "cry.hash-md5", "cry.hmac", "att.quishing", "att.deepfake",
