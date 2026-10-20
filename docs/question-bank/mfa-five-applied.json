@@ -1,0 +1,132 @@
+[
+  {
+    "id": "m735",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "An organization requires contractors logging into a secure repository to input a complex alphanumeric password and the answer to a personal security question. Despite this two-step sequence, an external compliance audit flags the system for lacking multi-factor authentication (MFA).\n\nWhich issue explains the auditor's finding?",
+    "opts": [
+      "Both credentials belong to the same underlying authentication factor.",
+      "Security questions cannot be cryptographically validated through PKI.",
+      "Session tokens are created prior to completing the secondary challenge.",
+      "Knowledge-based inputs cannot establish non-repudiation in audit logs."
+    ],
+    "correct": 0,
+    "exp": "MFA requires authenticators from at least two distinct categories: something you know, something you have, or something you are. Passwords and security questions both represent \"something you know\" (knowledge factor), making this two-step verification rather than multi-factor.",
+    "wrongFeedback": {
+      "1": "Public Key Infrastructure (PKI) validates digital certificates, not knowledge-based questions. While PKI is common in enterprise environments, its absence does not dictate whether an authentication flow qualifies as MFA.",
+      "2": "Pre-issuing session tokens before verification is a session management vulnerability, but it does not address the auditor's specific finding regarding factor classification.",
+      "3": "Non-repudiation ensures an entity cannot deny an action, but the primary compliance failure here is factor independence, not log non-repudiation."
+    },
+    "conceptTagIds": [
+      "iam.mfa"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied MFA Applied batch; accuracy-edited by Codex"
+  },
+  {
+    "id": "m736",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "An administrator discovers that an attacker gained unauthorized system access after repeatedly triggering push approval alerts on a manager's smartphone until an alert was accepted.\n\nWhich control directly mitigates this specific attack vector?",
+    "opts": [
+      "Enforcing biometric verification to unlock the mobile device screen.",
+      "Shortening the idle session timeout value on the centralized server.",
+      "Requiring the user to enter a matching code shown on the login screen.",
+      "Disabling out-of-band communication channels across the network edge."
+    ],
+    "correct": 2,
+    "exp": "Number matching reduces blind push approvals in MFA-fatigue attacks: the user must enter the code displayed by the initiating sign-in into the authenticator app. It is a mitigation, not a guarantee against social engineering or phishing; phishing-resistant authentication is stronger.",
+    "wrongFeedback": {
+      "0": "Screen-unlock biometrics control access to the phone. They do not require the user to confirm that they initiated this specific sign-in, so an unlocked phone or a distracted user can still approve an unsolicited push.",
+      "1": "Session timeouts limit exposure after a session is established, but they do not stop the initial unauthorized approval from granting access.",
+      "3": "Removing the push channel makes that authentication method unavailable. It does not provide the targeted transaction confirmation that number matching adds; offline authenticator codes also do not inherently require out-of-band network delivery."
+    },
+    "conceptTagIds": [
+      "iam.mfa"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied MFA Applied batch; accuracy-edited by Codex"
+  },
+  {
+    "id": "m737",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "An enterprise deploys time-based one-time passwords (TOTP) alongside directory passwords. An employee falls for a spear-phishing site that proxies the legitimate login portal in real time, granting the attacker access.\n\nWhich replacement best resists this real-time phishing-relay attack?",
+    "opts": [
+      "SMS verification codes delivered via separate cellular networks.",
+      "FIDO2 hardware security keys requiring PIN or biometric user verification.",
+      "Geofencing rules that block incoming traffic from foreign subnets.",
+      "Push notifications requiring a fingerprint scan on enrolled phones."
+    ],
+    "correct": 1,
+    "exp": "FIDO2/WebAuthn uses relying-party-bound public-key credentials, with the browser and verifier enforcing the expected origin and relying party. An attacker-controlled phishing domain cannot reuse authentication for the legitimate site. PIN or biometric user verification activates the key as a multi-factor authenticator. This resists phishing relay; it does not guarantee protection from every form of endpoint or session compromise.",
+    "wrongFeedback": {
+      "0": "An SMS one-time code can be entered into the fraudulent form and relayed to the legitimate site in real time. A separate delivery channel does not cryptographically bind that code to the site where the victim enters it.",
+      "2": "Geofencing can be evaded if attackers route reverse-proxy traffic through local IP proxies or host their infrastructure within the organization's approved region.",
+      "3": "Standard push notifications\u2014even those requiring biometric device unlocking\u2014do not cryptographically bind the authentication handshake to the browser's visited domain, leaving them susceptible to proxy relay."
+    },
+    "conceptTagIds": [
+      "iam.mfa"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied MFA Applied batch; accuracy-edited by Codex"
+  },
+  {
+    "id": "m738",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "A security information and event management (SIEM) tool alerts that a valid user account authenticated from London and Tokyo within a forty-five-minute window.\n\nWhich identity and access management capability best addresses this threat while minimizing administrative overhead?",
+    "opts": [
+      "Triggering an automated account lockout that requires administrative reset.",
+      "Revoking all assigned role-based permissions until identity re-verification.",
+      "Enforcing a self-service password reset routed to an external email address.",
+      "Invoking a risk-based policy that requires MFA step-up before allowing the suspicious sign-in."
+    ],
+    "correct": 3,
+    "exp": "Risk-based authentication evaluates signals such as impossible travel and can require a registered additional factor before completing a suspicious sign-in. Automated step-up can verify the user without an administrative account reset. Location alone is not proof of compromise; confirmed compromised sessions should also be revoked.",
+    "wrongFeedback": {
+      "0": "Hard account lockouts force legitimate users to contact help-desk support whenever network routing anomalies or corporate VPNs trigger false positives, inflating administrative costs.",
+      "1": "Revoking permissions modifies authorization assignments rather than verifying identity, requiring administrative intervention to reconstruct access rights.",
+      "2": "Password resets do not resolve compromised session cookies and routing reset links to external personal mailboxes introduces external interception risks."
+    },
+    "conceptTagIds": [
+      "iam.mfa"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied MFA Applied batch; accuracy-edited by Codex"
+  },
+  {
+    "id": "m739",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "A company implements smart cards for desktop workstation authentication. To save time, staff leave their cards inserted in the card readers overnight, relying on entering a four-digit PIN to unlock the computer each morning.\n\nWhat is the primary security impact of this operational practice?",
+    "opts": [
+      "The possession factor loses practical protection because the card is available to anyone at the workstation.",
+      "The short PIN length makes the smart card vulnerable to brute force.",
+      "The workstation log fails to maintain cryptographic non-repudiation.",
+      "The public key certificates on the card expire without notification."
+    ],
+    "correct": 0,
+    "exp": "The card and its PIN remain two distinct authentication factors; leaving the card inserted does not technically convert the protocol to single-factor authentication. It weakens custody of the possession factor: someone with physical access already has the card available and may authenticate if they obtain its PIN. Users should remove and secure their cards when leaving.",
+    "wrongFeedback": {
+      "1": "The scenario does not establish whether this card permits enough PIN guesses to make brute force the primary issue. Retry limits vary by implementation. The stated operational failure is leaving the physical authenticator available at the workstation.",
+      "2": "Leaving a card inserted does not by itself remove cryptographic logging or signatures. It does weaken confidence that the legitimate owner controlled each use; a signature alone does not prove the owner was physically present.",
+      "3": "Certificate expiration is dictated by Public Key Infrastructure (PKI) validity periods and Certificate Authority (CA) lifecycle monitoring, independent of card insertion state."
+    },
+    "conceptTagIds": [
+      "iam.mfa"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied MFA Applied batch; accuracy-edited by Codex"
+  }
+]
