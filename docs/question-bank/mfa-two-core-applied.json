@@ -1,0 +1,50 @@
+[
+  {
+    "id": "m789",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "core",
+    "q": "A user logs into a portal using a password and a code from a physical hardware token. Which authentication factor categories are being used?",
+    "opts": [
+      "Something you know and something you are",
+      "Something you have and somewhere you are",
+      "Something you know and something you have",
+      "Something you are and something you have"
+    ],
+    "correct": 2,
+    "exp": "A password represents \"something you know,\" and a physical token represents \"something you have.\"",
+    "wrongFeedback": {
+      "0": "A hardware token is a possession factor (\"have\"), not a biometric trait (\"are\").",
+      "1": "A password is a knowledge factor (\"know\"), not a geographic attribute (\"somewhere\").",
+      "3": "Neither authentication credential relies on biometric characteristics (\"something you are\")."
+    },
+    "conceptTagIds": ["iam.mfa"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied MFA Core/Applied batch"
+  },
+  {
+    "id": "m790",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "An organization protects its web portal using a password and a time-based one-time passcode (TOTP). An employee enters both credentials into a lookalike phishing site, and an attacker immediately logs into the victim's legitimate account. Which factor explains why multi-factor authentication failed to prevent this breach?",
+    "opts": [
+      "The authentication mechanism relied on static session cookies that never expire.",
+      "The one-time code was intercepted and relayed to the service before expiration.",
+      "The mobile application failed to implement secure out-of-band communication.",
+      "The encryption keys used to generate the temporary passcodes were compromised."
+    ],
+    "correct": 1,
+    "exp": "Standard TOTP passcodes lack cryptographic binding to the website's domain origin. An adversary-in-the-middle (AiTM) reverse proxy can capture the submitted code and submit it to the genuine portal before the 30-second window lapses.",
+    "wrongFeedback": {
+      "0": "Session cookie expiration settings govern persistent access after authentication occurs, but they do not cause or explain the initial credential bypass during the login handshake.",
+      "2": "TOTP generation is computed locally using a shared secret and current time; it does not require an out-of-band transmission channel (unlike SMS or push alerts).",
+      "3": "The attacker did not reverse-engineer or steal the underlying HMAC secret key stored on the server; they simply harvested and forwarded the user-supplied output in real time."
+    },
+    "conceptTagIds": ["iam.mfa"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied MFA Core/Applied batch"
+  }
+]

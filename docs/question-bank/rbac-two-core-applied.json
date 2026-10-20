@@ -1,0 +1,50 @@
+[
+  {
+    "id": "m791",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "core",
+    "q": "An IT administrator wants to simplify user provisioning by assigning shared folder permissions to specific job titles rather than configuring individual user accounts. Which access control scheme should be implemented?",
+    "opts": [
+      "Mandatory access control governed by classification tags",
+      "Discretionary access control managed by resource owners",
+      "Role-based access control mapped to defined job duties",
+      "Rule-based access control dictated by system parameters"
+    ],
+    "correct": 2,
+    "exp": "Role-based access control (RBAC) binds permissions to functional roles rather than individuals, streamlining provisioning when users join or change positions.",
+    "wrongFeedback": {
+      "0": "Mandatory access control (MAC) restricts access based on fixed data classification labels and user clearance levels, not organizational job titles.",
+      "1": "Discretionary access control (DAC) allows individual resource owners to decide who can access files, which increases administrative overhead.",
+      "3": "Rule-based access control applies operational constraints (such as time-of-day restrictions or firewall rules) rather than user job functions."
+    },
+    "conceptTagIds": ["iam.rbac"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied RBAC Core/Applied batch"
+  },
+  {
+    "id": "m792",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "A clinic permits physicians to view patient records, but wants to block access if a physician attempts to log in from a personal smartphone outside the hospital network. Why is standard role-based access control alone insufficient to enforce this policy?",
+    "opts": [
+      "It grants access based on user job functions rather than dynamic environmental factors",
+      "It delegates authorization decisions to individual data owners rather than central policy",
+      "It enforces mandatory security clearance tags that override temporary connection rules",
+      "It permits higher-tier medical accounts to automatically inherit lower-tier permissions"
+    ],
+    "correct": 0,
+    "exp": "Standard RBAC makes static authorization decisions based strictly on assigned roles; it lacks native mechanisms to evaluate runtime contextual attributes like device ownership, network location, or IP address (which requires ABAC).",
+    "wrongFeedback": {
+      "1": "Delegating authorization to individual data owners describes discretionary access control (DAC), not an architectural limitation of RBAC.",
+      "2": "Security clearance tags and mandatory labels characterize mandatory access control (MAC), which is not part of standard RBAC deployments.",
+      "3": "Role inheritance allows senior tiers to inherit subordinate privileges, but it does not cause or explain the inability to inspect incoming network connections."
+    },
+    "conceptTagIds": ["iam.rbac"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied RBAC Core/Applied batch"
+  }
+]
