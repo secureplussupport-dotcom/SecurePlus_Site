@@ -1,0 +1,98 @@
+[
+  {
+    "id": "m762",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "An application displays no database errors, but crafted input causes deliberate response delays that reveal hidden table contents. What core flaw enables this data extraction?",
+    "opts": [
+      "The database parses untrusted client input as executable commands",
+      "The application layer leaks session state across concurrent clients",
+      "The web frontend reflects unencoded user input back to the browser",
+      "The network transport protocol exposes variable packet stream sizes"
+    ],
+    "correct": 0,
+    "exp": "Even without error messages or visible output (blind SQLi), the vulnerability exists because the database engine interprets untrusted input as executable command logic rather than literal data.",
+    "wrongFeedback": {
+      "1": "Leaking session state describes session hijacking or broken access control, not inferential database query execution.",
+      "2": "Reflecting unencoded input leads to cross-site scripting (XSS), which executes scripts in client browsers rather than targeting backend databases.",
+      "3": "Variable network packet sizes relate to side-channel traffic analysis, not deliberate database execution delays."
+    },
+    "conceptTagIds": ["att.app-sqli"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SQL injection Applied batch"
+  },
+  {
+    "id": "m763",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A developer attempts to prevent SQL injection by stripping single quotes from user input before appending it to a query. Why does this defense fail?",
+    "opts": [
+      "Reverse proxies re-encode stripped characters before query processing",
+      "Stored procedures automatically bypass custom input validation logic",
+      "Numeric parameters do not require quotation marks to modify syntax",
+      "Database engines reject concatenated queries lacking escape symbols"
+    ],
+    "correct": 2,
+    "exp": "In numeric contexts (such as `WHERE id = [input]`), no quotes are needed to append operators and alter query execution logic.",
+    "wrongFeedback": {
+      "0": "Reverse proxies do not reconstruct or re-insert characters that have been removed by application filters.",
+      "1": "Stored procedures remain vulnerable if they concatenate input dynamically inside the routine.",
+      "3": "Databases execute concatenated strings normally regardless of whether escape symbols or terminating characters are used."
+    },
+    "conceptTagIds": ["att.app-sqli"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SQL injection Applied batch"
+  },
+  {
+    "id": "m764",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "An attacker successfully injects SQL into a web portal, but the database engine blocks access to underlying system tables. Which control limited this breach?",
+    "opts": [
+      "Network microsegmentation isolating database subnets from web servers",
+      "Least privilege configured on the application's database account",
+      "A perimeter web application firewall filtering encrypted web traffic",
+      "Static code analysis performed during the software build process"
+    ],
+    "correct": 1,
+    "exp": "Enforcing least privilege ensures the database service account only has rights to its specific schema, containing the blast radius of a successful injection.",
+    "wrongFeedback": {
+      "0": "Network segmentation isolates host traffic, but does not limit permissions within an established database session.",
+      "2": "A WAF filters traffic at the perimeter; the scenario states the injection payload already reached and executed on the database.",
+      "3": "Static analysis is a pre-release testing tool, not an operational runtime control that restricts database permissions."
+    },
+    "conceptTagIds": ["att.app-sqli"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SQL injection Applied batch"
+  },
+  {
+    "id": "m765",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "An authentication form receives an injection payload, but the attempt fails because the application uses parameterized queries. What prevented this exploit?",
+    "opts": [
+      "The database engine executes automatic transaction rollbacks on syntax errors",
+      "The web server strips metacharacters from memory before database transmission",
+      "The application hashes user input before embedding it into dynamic SQL logic",
+      "The database precompiles the query and processes all input strictly as data"
+    ],
+    "correct": 3,
+    "exp": "Parameterized queries precompile the SQL statement structure with placeholders, ensuring the database treats user input strictly as literal values rather than executable code.",
+    "wrongFeedback": {
+      "0": "Parameterized queries do not generate syntax errors because input values are safely isolated from execution logic.",
+      "1": "Parameterization does not rely on stripping characters; it preserves the original input string without modifying it.",
+      "2": "Hashing secures stored passwords, but does not protect against SQL injection if dynamic string concatenation is used."
+    },
+    "conceptTagIds": ["att.app-sqli"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SQL injection Applied batch"
+  }
+]
