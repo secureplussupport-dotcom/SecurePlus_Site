@@ -1,0 +1,210 @@
+[
+  {
+    "id": "m754",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "core",
+    "q": "An enterprise needs a solution that securely stores shared domain administrator passwords and automatically changes the credential value immediately after an engineer finishes an administrative session. Which technology directly fulfills this requirement?",
+    "opts": [
+      "Hardware security module",
+      "Privileged access management",
+      "Self-service password reset",
+      "Identity federation provider"
+    ],
+    "correct": 1,
+    "exp": "A PAM solution manages elevated accounts, offering secure credential vaulting and automated password rotation upon session check-in.",
+    "wrongFeedback": {
+      "0": "An HSM secures and manages cryptographic keys for operations like TLS and digital signatures, not user or admin passwords.",
+      "2": "SSPR allows standard end users to reset forgotten personal passwords without help desk interaction.",
+      "3": "Federation enables authentication across disparate trust domains using shared tokens rather than managing internal administrative credentials."
+    },
+    "conceptTagIds": [
+      "iam.pam"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied PAM Core and Applied batch"
+  },
+  {
+    "id": "m755",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "core",
+    "q": "A security architect eliminates permanent, 24/7 administrative rights across server support accounts by granting elevated permissions only upon ticket approval for a set duration. Which concept is being implemented?",
+    "opts": [
+      "Mandatory access control",
+      "Identity federation tokens",
+      "Role-based group nesting",
+      "Just-in-time provisioning"
+    ],
+    "correct": 3,
+    "exp": "Just-In-Time (JIT) access provides temporary, on-demand elevated privileges for a specific task window, removing standing administrative exposure.",
+    "wrongFeedback": {
+      "0": "MAC enforces access through fixed classification labels and user clearance levels rather than temporal role adjustments.",
+      "1": "Federation tokens relay authenticated claims between distinct organizations or applications.",
+      "2": "Group nesting structures roles hierarchically to inherit permissions, which maintains standing privileges rather than eliminating them."
+    },
+    "conceptTagIds": [
+      "iam.pam"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied PAM Core and Applied batch"
+  },
+  {
+    "id": "m756",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "Multiple database administrators sign in using a shared root service account during weekend maintenance windows. During an audit, investigators discover an unauthorized schema deletion but cannot determine who performed it. Which control directly resolves this lack of accountability?",
+    "opts": [
+      "Proxied session recording with individual credential checkout",
+      "Database transactional replication across secondary clusters",
+      "Granular packet filtering implemented on internal gateways",
+      "Stricter complexity requirements for shared service accounts"
+    ],
+    "correct": 0,
+    "exp": "Checking out shared accounts through a PAM portal ties the shared credential to a specific user for that time window, and session recording captures actions taken during the session.",
+    "wrongFeedback": {
+      "1": "Replication provides high availability and fault tolerance, but it synchronizes unauthorized changes rather than identifying who made them.",
+      "2": "Packet filtering controls network traffic flow by port and IP, providing no individual attribution within an authorized administrative connection.",
+      "3": "Password complexity strengthens credentials against brute-force attacks, but does not address the accountability issue of multiple users sharing the same account."
+    },
+    "conceptTagIds": [
+      "iam.pam"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied PAM Core and Applied batch"
+  },
+  {
+    "id": "m757",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "A cloud identity provider experiences an unplanned outage, preventing staff from completing multi-factor authentication to access the management console. An administrator accesses the tenancy using an emergency break-glass account. Which operational control is most critical for this account?",
+    "opts": [
+      "Updating its password quarterly via standard directory sync",
+      "Delegating identical credential sets to multiple technicians",
+      "Triggering high-priority alerts whenever the account is used",
+      "Requiring federated single sign-on for console authentication"
+    ],
+    "correct": 2,
+    "exp": "Break-glass accounts possess immense privileges and should be used only during emergencies; alerting ensures any activation is investigated immediately.",
+    "wrongFeedback": {
+      "0": "Break-glass accounts must remain independent of standard directory services to avoid lockouts if the directory itself fails.",
+      "1": "Distributing emergency credentials among multiple technicians increases exposure risk and undermines access auditing.",
+      "3": "Relying on federated single sign-on defeats the account's purpose, as it would fail during the identity provider outage described."
+    },
+    "conceptTagIds": [
+      "iam.pam"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied PAM Core and Applied batch"
+  },
+  {
+    "id": "m758",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "A third-party contractor completes scheduled updates on enterprise switches using high-level administrative credentials. The security team wants to ensure the contractor cannot reuse those credentials later, without requiring administrators to manually reconfigure passwords. Which mechanism fulfills this requirement?",
+    "opts": [
+      "Sending multi-factor authorization codes to the vendor email",
+      "Automatically rotating the password when the session checks in",
+      "Disabling external switch interface ports after working hours",
+      "Requiring weekly managerial review of external engineer logs"
+    ],
+    "correct": 1,
+    "exp": "PAM credential vaulting automatically rotates and resets account secrets as soon as a user \"checks in\" the credential, neutralizing lingering access without manual effort.",
+    "wrongFeedback": {
+      "0": "MFA codes verify identity at login, but they do not invalidate static credentials or prevent subsequent login attempts if the contractor retains the token mechanism.",
+      "2": "Disabling switch ports stops network traffic, but does not secure the administrative credentials themselves from being used over other paths or subsequent sessions.",
+      "3": "Log reviews are detective controls that discover unauthorized activity after it happens, rather than preventing credential reuse."
+    },
+    "conceptTagIds": [
+      "iam.pam"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied PAM Core and Applied batch"
+  },
+  {
+    "id": "m759",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "An enterprise discovers that individual junior administrators are making unapproved, disruptive firewall changes during night shifts. Which PAM capability prevents a single engineer from independently carrying out high-impact modifications?",
+    "opts": [
+      "Immutable centralized syslog aggregation",
+      "Mandatory physical biometric verification",
+      "Behavioral user activity anomaly scoring",
+      "Multi-party operational approval workflows"
+    ],
+    "correct": 3,
+    "exp": "Multi-party approvals (dual control / dual custody) enforce that an administrative action requires review and sign-off from a second authorized party before execution.",
+    "wrongFeedback": {
+      "0": "Centralized logging creates an audit trail for post-incident review, but it does not prevent the initial execution of unauthorized changes.",
+      "1": "Biometrics verify user identity, but confirm only who the user is—not whether their intended administrative action is authorized.",
+      "2": "Anomaly scoring detects unusual behavioral patterns, but functions primarily as a detection or alerting mechanism rather than an upfront gate."
+    },
+    "conceptTagIds": [
+      "iam.pam"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied PAM Core and Applied batch"
+  },
+  {
+    "id": "m760",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "An adversary compromises an administrative workstation and dumps memory contents to harvest cached hashes, planning to move laterally to the domain controller. Which administrative model best minimizes the risk of this attack succeeding?",
+    "opts": [
+      "Enforcing temporary privilege elevation only when needed",
+      "Enforcing sixteen-character complex alphanumeric phrases",
+      "Enforcing smart card access across all administrative hubs",
+      "Deploying deep packet inspection at core distribution nodes"
+    ],
+    "correct": 0,
+    "exp": "Removing standing administrative rights (via JIT/ephemeral sessions) means privileged tokens and credentials are not continuously cached in local workstation memory, starving adversaries of lateral movement material.",
+    "wrongFeedback": {
+      "1": "Password complexity resists brute-force attacks, but if an attacker dumps the credential hash directly from memory, password length does not prevent pass-the-hash or pass-the-ticket reuse.",
+      "2": "Smart cards offer strong multi-factor authentication, but once an authenticated session is active, memory artifacts and tickets can still be dumped from a compromised endpoint.",
+      "3": "Deep packet inspection inspects network payloads in transit, which does not prevent an attacker from executing local LSASS memory dumping on an endpoint."
+    },
+    "conceptTagIds": [
+      "iam.pam"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied PAM Core and Applied batch"
+  },
+  {
+    "id": "m761",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "A continuous deployment pipeline requires database administrator rights to apply table updates, but developers have hardcoded the credentials into plain-text deployment scripts. Which PAM capability remediates this vulnerability?",
+    "opts": [
+      "Session monitoring proxies terminating automated pipelines",
+      "Break-glass accounts secured inside physical server vaults",
+      "Centralized secrets vaulting with programmatic token injection",
+      "Automated script obfuscation shielding database connections"
+    ],
+    "correct": 2,
+    "exp": "Secrets management within PAM enables pipelines and applications to retrieve dynamic, short-lived credentials via an API at runtime, removing hardcoded passwords from code.",
+    "wrongFeedback": {
+      "0": "Session monitoring records interactive human sessions; it does not solve the insecure storage of credentials in machine scripts.",
+      "1": "Physical break-glass accounts are reserved for human disaster recovery, not automated pipeline operations.",
+      "3": "Code obfuscation attempts to conceal text, but is merely security through obscurity; credentials can still be extracted by analyzing memory or de-obfuscating scripts."
+    },
+    "conceptTagIds": [
+      "iam.pam"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied PAM Core and Applied batch"
+  }
+]

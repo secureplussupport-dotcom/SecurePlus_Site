@@ -1,19 +1,19 @@
 # MCQs to add: Core and Applied
 
-Checked 2026-10-20T08:22:05.152Z. Current effective bank: 414 MCQs (228 Core, 186 Applied), including 72 current active live Question Manager records merged using production precedence.
+Checked 2026-10-20T08:25:43.270Z. Current effective bank: 422 MCQs (230 Core, 192 Applied), including 80 current active live Question Manager records merged using production precedence.
 
 Count one-tag questions as 1 per assigned tag; questions with two or more assigned tags count as 0.5 per assigned tag. Only selected primary/secondary concept tags count; distractor-only metadata does not. Former Easy is Core; former Medium and Hard are combined into Applied before calculating the shortfall. Round each positive shortfall up to a whole question. Extra questions are allowed. PBQs are excluded.
 
 **Each new question below should have one intended concept tag.** If new questions have multiple tags, they earn only 0.5 each, so more questions will be needed. These are inventory shortfalls, not unique-content quality judgments. Concepts without an assigned Heavy weight/Standard/Niche group have no benchmark in this report.
 
-**Add 354 single-tag MCQs: 125 Core and 229 Applied.**
+**Add 346 single-tag MCQs: 123 Core and 223 Applied.**
 
 | Group | Add Core | Add Applied | Total |
 |---|---:|---:|---:|
-| Heavy weight | 24 | 117 | 141 |
+| Heavy weight | 22 | 111 | 133 |
 | Standard | 30 | 79 | 109 |
 | Niche | 71 | 33 | 104 |
-| **Total** | **125** | **229** | **354** |
+| **Total** | **123** | **223** | **346** |
 
 ## Heavy weight
 
@@ -26,7 +26,7 @@ Numbers below are additional questions to write, not current bank counts. All ar
 | iam.mfa | 0 | 0 | 0 |
 | iam.auth-factors | 0 | 0 | 0 |
 | iam.rbac | 0 | 0 | 0 |
-| iam.pam | 2 | 6 | 8 |
+| iam.pam | 0 | 0 | 0 |
 | att.app-sqli | 0 | 4 | 4 |
 | att.app-xss | 2 | 5 | 7 |
 | att.app-csrf | 2 | 6 | 8 |
