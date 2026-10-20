@@ -1,0 +1,132 @@
+[
+  {
+    "id": "m740",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "A user logs into an internal portal by submitting their domain password and answering two personal security questions. Which design flaw prevents this system from achieving multi-factor authentication?",
+    "opts": [
+      "The secondary verification mechanism fails to provide non-repudiation during access audits.",
+      "Both required inputs fall exclusively under the \"something you know\" factor category.",
+      "The authentication workflow lacks an out-of-band communication channel for validation.",
+      "User-defined security answers do not exhibit sufficient cryptographic key entropy."
+    ],
+    "correct": 1,
+    "exp": "MFA requires credentials from two or more distinct categories. Passwords and security questions are both something you know (knowledge factor). Combining them creates multi-step authentication, not multi-factor.",
+    "wrongFeedback": {
+      "0": "Non-repudiation ensures a user cannot deny an action they performed; the architectural failure here is factor redundancy, not audit integrity.",
+      "2": "An out-of-band channel (such as a cellular network for SMS or push notifications) is one delivery method, but MFA does not strictly mandate it.",
+      "3": "While predictable answers to security questions lower security strength, weak entropy is a credential hygiene issue rather than the root failure of factor diversity."
+    },
+    "conceptTagIds": [
+      "iam.auth-factors"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied auth-factors Applied batch"
+  },
+  {
+    "id": "m741",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "An authentication platform monitors a user's typing cadence, mouse acceleration, and touchscreen pressure during sign-in. Which factor category is being evaluated?",
+    "opts": [
+      "Something you are, evaluated via persistent physiological characteristics.",
+      "Somewhere you are, inferred from anomalous device positioning vectors.",
+      "Something you have, verified through hardware telemetry sensor signals.",
+      "Something you do, determined by observable habitual interaction patterns."
+    ],
+    "correct": 3,
+    "exp": "\"Something you do\" encompasses behavioral biometrics, measuring dynamic, repeatable human mannerisms like keystroke dynamics, gait, and mouse movement.",
+    "wrongFeedback": {
+      "0": "\"Something you are\" covers static, physiological biometrics such as fingerprints, facial geometry, retina scans, or iris scans.",
+      "1": "\"Somewhere you are\" evaluates location attributes, such as GPS coordinates, Wi-Fi location, or IP geofencing.",
+      "2": "\"Something you have\" involves possession of physical or digital artifacts (e.g., smart cards, hardware tokens, software authenticators)."
+    },
+    "conceptTagIds": [
+      "iam.auth-factors"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied auth-factors Applied batch"
+  },
+  {
+    "id": "m742",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "To access a secure server room, an engineer taps an RFID badge on the door reader and inserts a PKI smart card into the rack terminal. Why does this design fail to satisfy MFA?",
+    "opts": [
+      "Both credentials belong exclusively to the \"something you have\" factor category.",
+      "RFID proximity chips lack cryptographic challenge-response mutual validation.",
+      "The terminal smart card interface cannot validate contextual user location attributes.",
+      "Physical access controls must validate credentials through an external identity broker."
+    ],
+    "correct": 0,
+    "exp": "Both the RFID card and the PKI smart card represent something you have (possession factor). Presenting two separate items from the same category establishes defense-in-depth, but fails the fundamental definition of MFA.",
+    "wrongFeedback": {
+      "1": "The technical limitations of standard proximity cards do not change the underlying factor classification of the credentials.",
+      "2": "Physical badging at a doorway inherently confirms physical proximity; the missing element is a different factor category (such as a PIN or biometric scan).",
+      "3": "Centralized brokers (like RADIUS or TACACS+) streamline management, but standalone or distributed credential checks still qualify as MFA if diverse factor categories are used."
+    },
+    "conceptTagIds": [
+      "iam.auth-factors"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied auth-factors Applied batch"
+  },
+  {
+    "id": "m743",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "A remote worker provides a password and an authenticator code, but access is denied because their IP address geolocates to an unapproved country. Which factor category blocked this session?",
+    "opts": [
+      "Something you have, because the client hardware failed cryptographic network validation.",
+      "Something you do, because irregular browsing telemetry triggered defensive rate limits.",
+      "Somewhere you are, because situational geographic attributes failed conditional policy.",
+      "Something you are, because behavioral identity baselines flagged an anomaly profile."
+    ],
+    "correct": 2,
+    "exp": "\"Somewhere you are\" evaluates location-based contextual attributes (such as IP geofencing, GPS coordinates, or impossible travel time) to enforce access boundaries.",
+    "wrongFeedback": {
+      "0": "The user's authenticator app and device registration were valid; hardware possession was not the failing check.",
+      "1": "\"Something you do\" applies to behavioral biometrics (like typing rhythm), not network routing or IP geolocation.",
+      "3": "\"Something you are\" refers to biological or physiological traits, which are unrelated to geographic IP addresses."
+    },
+    "conceptTagIds": [
+      "iam.auth-factors"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied auth-factors Applied batch"
+  },
+  {
+    "id": "m744",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "A user scans their face to unlock their phone, opens a software authenticator, and types the six-digit code alongside their password into an external VPN client. How many distinct factors did the VPN gateway evaluate?",
+    "opts": [
+      "Three factors, because physiological biometrics, hardware possession, and knowledge were authenticated.",
+      "Two factors, because the biometric check only granted local access to the possession token.",
+      "One factor, because software-generated rotating codes derive directly from user identity profiles.",
+      "Two factors, because authenticator codes and static domain passwords share identical trust tiers."
+    ],
+    "correct": 1,
+    "exp": "The facial scan serves only to unlock the local possession artifact (the phone). The remote VPN gateway evaluates exactly two factors: something you know (password) and something you have (the time-based one-time code).",
+    "wrongFeedback": {
+      "0": "The VPN gateway never receives, processes, or validates the facial biometric data; the biometric verification occurred entirely locally on the phone.",
+      "2": "A password combined with a rotating TOTP code constitutes two distinct and valid factor categories (knowledge and possession).",
+      "3": "While the factor count is two, the rationale is false; passwords and authenticator codes operate across separate factor categories with different trust properties."
+    },
+    "conceptTagIds": [
+      "iam.auth-factors"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied auth-factors Applied batch"
+  }
+]
