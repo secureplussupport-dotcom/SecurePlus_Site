@@ -1,0 +1,47 @@
+{
+  "Heavy weight": {
+    "minimumQuestions": 7,
+    "tagIds": [
+      "iam.mfa", "iam.auth-factors", "iam.fido2-passwordless", "iam.saml",
+      "iam.oauth-oidc", "iam.rbac", "iam.pam", "att.app-sqli", "att.app-xss",
+      "att.app-csrf", "att.app-ssrf", "att.pwd-spraying", "att.pwd-stuffing",
+      "att.on-path-mitm", "att.mal-ransomware", "att.dos-ddos", "net.app-ngfw",
+      "net.app-waf", "net.wifi-802-1x", "net.proto-tls", "arch.segmentation",
+      "arch.ztna", "arch.shared-resp", "ops.siem", "ops.edr-xdr",
+      "ops.logs-syslog", "ir.lifecycle-nist", "ir.volatility-order",
+      "ir.chain-of-custody", "cry.pki-ca", "cry.pki-revocation",
+      "cry.diffie-hellman", "cry.masking-salting"
+    ]
+  },
+  "Standard": {
+    "minimumQuestions": 5,
+    "tagIds": [
+      "att.actor-apt", "att.actor-insider", "att.actor-crime", "att.threat-feeds",
+      "att.mitre-attack", "att.iocs", "att.phishing", "att.spear-phishing",
+      "att.whaling", "att.vishing-smishing", "att.tailgating", "att.social-principles",
+      "data.classification", "data.reg-pii-phi", "data.states", "data.dlp",
+      "data.sanitization", "data.backups", "data.immutable-321", "ops.os-baseline",
+      "ops.port-hardening", "ops.patch-mgmt", "ops.scan-credentialed", "vul.cvss-cve",
+      "vul.zero-day", "vul.input-validation", "risk.treatment", "risk.quant-ale-aro",
+      "risk.quant-sle-ef", "risk.bia-rto-rpo", "risk.agreements", "risk.sbom",
+      "gov.nist-csf", "gov.iso-27001", "gov.gdpr-hipaa-pci", "gov.policy-aup",
+      "gov.training-phish", "arch.cloud-models", "arch.cloud-deploy", "arch.dmz",
+      "arch.vpn", "arch.containers", "arch.api-security"
+    ]
+  },
+  "Niche": {
+    "minimumQuestions": 3,
+    "tagIds": [
+      "cry.sym-chacha20", "cry.sym-legacy", "cry.cipher-modes", "cry.steganography",
+      "cry.tokenization", "cry.hash-md5", "cry.hmac", "att.quishing", "att.deepfake",
+      "att.dumpster-diving", "att.app-xxe", "att.app-dir-traversal", "att.deauth",
+      "att.evil-twin", "att.pass-the-hash", "att.kerberoasting",
+      "att.actor-scriptkiddie", "att.actor-shadow-it", "att.kill-chain",
+      "att.diamond-model", "vul.race-condition", "vul.resource-exhaustion",
+      "vul.unquoted-path", "net.proto-snmpv3", "net.proto-sftp", "net.app-load-balancer",
+      "arch.sdn", "arch.sase-edge", "arch.air-gap", "arch.microsegmentation",
+      "ops.fim", "ops.ueba", "ops.soar", "ir.tabletop-drills", "gov.cis-controls",
+      "gov.soc2", "gov.nist-sp800", "risk.inherent-residual", "risk.appetite-tolerance"
+    ]
+  }
+}

@@ -1,17 +1,25 @@
 import assignments from './mcqConceptTagAssignments.json' with { type: 'json' };
+import tagGroups from './mcqConceptTagGroups.json' with { type: 'json' };
 import { SY0701_ACRONYM_CARDS } from './sy0701AcronymFlashcards.js';
 
 export const MCQ_TAGGING_VERSION = assignments.version;
 
-const ids = [...new Set(assignments.assignments.flatMap(row => [
+// Owner-defined bank minimums, not sampling weights or verified exam frequencies.
+export const MCQ_CONCEPT_TAG_GROUPS = tagGroups;
+const groupByTagId = new Map(Object.entries(tagGroups).flatMap(([group, { minimumQuestions, tagIds }]) =>
+  tagIds.map(id => [id, { group, minimumQuestions }])));
+
+const ids = [...new Set([...groupByTagId.keys(), ...assignments.assignments.flatMap(row => [
   row.primaryTagId, ...row.secondaryTagIds, ...row.distractorTagIds,
-]))].sort();
+])])].sort();
 
 // Keep Gemini's IDs intact. A display name is only a readable rendering of
 // the ID; it does not assert a new definition or a relationship to other tags.
 export const CONCEPT_TAGS = Object.freeze(ids.map(id => {
   const name = id.split('.').at(-1).replace(/-/g, ' ');
-  return Object.freeze({ id, tag: `#${id}`, name, acronym: name, sourceCardId: null, chapterId: null });
+  return Object.freeze({ id, tag: `#${id}`, name, acronym: name, sourceCardId: null, chapterId: null,
+    group: groupByTagId.get(id)?.group ?? null,
+    minimumQuestions: groupByTagId.get(id)?.minimumQuestions ?? null });
 }));
 
 const normalize = value => String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
