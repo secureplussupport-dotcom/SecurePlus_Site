@@ -21,6 +21,8 @@ MCQs use **Core** and **Applied** in practice, exam/diagnostic question labels, 
 
 Concept group total minimums remain 8/5/3. Per-difficulty minimums are `null` (awaiting owner benchmarks); the retired Easy/Medium/Hard quotas must not be used as current targets.
 
+Live delivery verified 20 October 2026: runtime commit `14e01e4`, Vercel deployment `dpl_CHAfQwSjQLdHF3BEwRxmAjvqUQK7`, promoted to https://www.secureplusprep.com/. Public bundle `/assets/main-DXOWmacn.js`; guest practice visibly displayed both Core and Applied. Local screenshots: `output/mcq-core-live.png` and `output/mcq-applied-live.png`. Fourteen focused tests, disposable SQL/API integration, full application audit/build and 29 refreshed content-mapping tests passed. Signed-in filter/manager interactions were verified in code and automated tests, not with a live authenticated browser account. No database migration was needed.
+
 ## Tags and existing progress
 
 The specification has one scored concept per question. The engine uses the imported primary tag when it is still selected in Question Manager, otherwise the first selected valid tag. Secondary and distractor classifications remain in the tag data; they do not receive extra scoring credit. BIA/RTO/RPO remain one `risk.bia-rto-rpo` group as approved by the owner. An intentionally untagged question remains available to manual practice but is excluded from adaptive generation until tagged.
