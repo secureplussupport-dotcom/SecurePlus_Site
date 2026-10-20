@@ -46,6 +46,19 @@ Run `npm run audit:mcq-engine` and `npm run audit:mcq-engine:database`. The latt
 
 The preview inspection sidebar shows the active question's scored primary tag, secondary tags and distractor tags, each question's actual stored Retest/Remediation/Discovery allocation, and the current encountered concepts below 80 with their scores. Its Start another set button calls the same generator. Inspection fields and event hooks exist only in the loopback preview; production payloads and screens are unchanged. Set `MCQ_PREVIEW_PORT` to choose another local port. Run `node scripts/test-mcq-preview-inspection.mjs` to verify the metadata projection excludes grading keys.
 
-Browser verification on 20 October: generated ten MCQs, submitted a wrong answer, observed server feedback, reloaded the page and resumed the same saved answer. This is local proof; hosted Supabase/PostgREST and Vercel behavior still need rollout verification.
+Local browser verification on 20 October: generated ten MCQs, submitted a wrong answer, observed server feedback, reloaded the page and resumed the same saved answer.
 
-Activation is off by default. Before activation, apply and verify the migration on the intended database, set server `MCQ_ENGINE_ENABLED=true` and build flag `VITE_MCQ_ENGINE_ENABLED=true`, then deploy and verify a real authenticated generate/answer/resume flow. Both flags must match. Keep commits `[skip deploy]` until the live migration/deployment gate is approved. Rollback disables both flags; the new tables can remain intact for recovery. No live migration or deployment was performed during implementation.
+Activation is off by default in source. The owner approved production rollout on 20 October 2026; both production flags are now `true`.
+
+### Production delivery, 20 October 2026
+
+- Source commit: `6635b45a5364b825772c0b0f12201c86901b8a80`, deployed from a clean Git archive. Unrelated local Android/generated/draft files were excluded.
+- Vercel deployment: `dpl_6toHqcALqRKWpjLUneugh9pe3M8C`, Ready and promoted to https://www.secureplusprep.com/. Unique deployment: https://secure-plus-site-kij0978m6-secureplussupport-dotcoms-projects.vercel.app.
+- Migration applied to Supabase project `uscaqeymulsaeqxjvbfq`. Migration SHA256: `3407f4a67fff20fab2b9baf6e10ed77ad148eb05ddcdbe8285085a6298be152f`.
+- All six engine tables have RLS enabled; anon/authenticated lack table access and RPC execution, while service_role can execute the four RPCs. Security advisor reports the intentionally policy-free private tables as INFO only.
+- A real PostgreSQL transaction verified ten-question session creation, wrong-answer score 15, cooldown 30, retry idempotency, state version 1 and owned-session retrieval. The transaction was rolled back; a follow-up confirmed zero test users/questions/sessions remained. The first smoke attempt used one question and correctly hit the minimum-set-size validation before being corrected to ten.
+- All four public POST routes return the expected unauthenticated 401. An invalid bearer token returns the expected sign-in-again 401, rather than a configuration failure.
+- Public HTML serves `/assets/main-j-VIc6_r.js`, which contains the new session API and 30-other-MCQ copy and excludes the preview inspector marker. The live browser opened a 30-question guest MCQ set with 395 available questions. Screenshot: `output/mcq-engine-live-release.png` (local, untracked).
+- Verification limit: no authenticated browser account was available. Hosted authenticated generate/answer/resume through HTTP has not been exercised; the corresponding local API-to-PostgreSQL flow and live SQL functions passed separately. Guest practice is not evidence of adaptive selection.
+
+Rollback: disable both production flags, rebuild and redeploy (the frontend flag is a build-time value), or promote the prior deployment `dpl_6wn9Czz7Z4mgToWCbkUvnCcDFcZR`. Leave the new tables intact so recorded progress remains recoverable. Prior deployment URL: https://secure-plus-site-dvk28hykb-secureplussupport-dotcoms-projects.vercel.app.
