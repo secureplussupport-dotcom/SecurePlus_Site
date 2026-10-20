@@ -1,19 +1,19 @@
 # MCQs to add: Core and Applied
 
-Checked 2026-10-20T08:10:15.225Z. Current effective bank: 405 MCQs (226 Core, 179 Applied), including 63 current active live Question Manager records merged using production precedence.
+Checked 2026-10-20T08:13:39.946Z. Current effective bank: 409 MCQs (228 Core, 181 Applied), including 67 current active live Question Manager records merged using production precedence.
 
 Count one-tag questions as 1 per assigned tag; questions with two or more assigned tags count as 0.5 per assigned tag. Only selected primary/secondary concept tags count; distractor-only metadata does not. Former Easy is Core; former Medium and Hard are combined into Applied before calculating the shortfall. Round each positive shortfall up to a whole question. Extra questions are allowed. PBQs are excluded.
 
 **Each new question below should have one intended concept tag.** If new questions have multiple tags, they earn only 0.5 each, so more questions will be needed. These are inventory shortfalls, not unique-content quality judgments. Concepts without an assigned Heavy weight/Standard/Niche group have no benchmark in this report.
 
-**Add 369 single-tag MCQs: 127 Core and 242 Applied.**
+**Add 365 single-tag MCQs: 125 Core and 240 Applied.**
 
 | Group | Add Core | Add Applied | Total |
 |---|---:|---:|---:|
 | Heavy weight | 27 | 133 | 160 |
-| Standard | 29 | 76 | 105 |
+| Standard | 27 | 74 | 101 |
 | Niche | 71 | 33 | 104 |
-| **Total** | **127** | **242** | **369** |
+| **Total** | **125** | **240** | **365** |
 
 ## Heavy weight
 
@@ -64,7 +64,7 @@ Numbers below are additional questions to write, not current bank counts. All ar
 
 | Concept tag | Add Core | Add Applied | Total |
 |---|---:|---:|---:|
-| iam.fido2-passwordless | 2 | 2 | 4 |
+| iam.fido2-passwordless | 0 | 0 | 0 |
 | att.actor-apt | 0 | 1 | 1 |
 | att.actor-insider | 1 | 3 | 4 |
 | att.actor-crime | 1 | 3 | 4 |
