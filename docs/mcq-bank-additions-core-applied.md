@@ -1,19 +1,19 @@
 # MCQs to add: Core and Applied
 
-Checked 2026-10-20T08:36:08.723Z. Current effective bank: 433 MCQs (232 Core, 201 Applied), including 91 current active live Question Manager records merged using production precedence.
+Checked 2026-10-20T08:41:39.026Z. Current effective bank: 441 MCQs (234 Core, 207 Applied), including 99 current active live Question Manager records merged using production precedence.
 
 Count one-tag questions as 1 per assigned tag; questions with two or more assigned tags count as 0.5 per assigned tag. Only selected primary/secondary concept tags count; distractor-only metadata does not. Former Easy is Core; former Medium and Hard are combined into Applied before calculating the shortfall. Round each positive shortfall up to a whole question. Extra questions are allowed. PBQs are excluded.
 
 **Each new question below should have one intended concept tag.** If new questions have multiple tags, they earn only 0.5 each, so more questions will be needed. These are inventory shortfalls, not unique-content quality judgments. Concepts without an assigned Heavy weight/Standard/Niche group have no benchmark in this report.
 
-**Add 335 single-tag MCQs: 121 Core and 214 Applied.**
+**Add 327 single-tag MCQs: 119 Core and 208 Applied.**
 
 | Group | Add Core | Add Applied | Total |
 |---|---:|---:|---:|
-| Heavy weight | 20 | 102 | 122 |
+| Heavy weight | 18 | 96 | 114 |
 | Standard | 30 | 79 | 109 |
 | Niche | 71 | 33 | 104 |
-| **Total** | **121** | **214** | **335** |
+| **Total** | **119** | **208** | **327** |
 
 ## Heavy weight
 
@@ -29,7 +29,7 @@ Numbers below are additional questions to write, not current bank counts. All ar
 | iam.pam | 0 | 0 | 0 |
 | att.app-sqli | 0 | 0 | 0 |
 | att.app-xss | 0 | 0 | 0 |
-| att.app-csrf | 2 | 6 | 8 |
+| att.app-csrf | 0 | 0 | 0 |
 | att.app-ssrf | 2 | 6 | 8 |
 | att.pwd-spraying | 2 | 6 | 8 |
 | att.pwd-stuffing | 2 | 6 | 8 |

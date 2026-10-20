@@ -1,0 +1,210 @@
+[
+  {
+    "id": "m773",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "core",
+    "q": "An employee with an active intranet session visits an external blog. The blog page invisibly submits an HTTP form to the intranet portal, modifying the employee's contact details without their knowledge. What attack occurred?",
+    "opts": [
+      "Server-side request forgery",
+      "Stored cross-site scripting",
+      "Cross-site request forgery",
+      "Structured query injection"
+    ],
+    "correct": 2,
+    "exp": "CSRF tricks an authenticated user's browser into transmitting unauthorized state-changing requests to a trusted application.",
+    "wrongFeedback": {
+      "0": "SSRF forces an application server to make requests to backend resources, rather than exploiting a client's browser to submit requests.",
+      "1": "Stored XSS injects malicious client-side script into a database to execute in victims' browsers, rather than forging form submissions.",
+      "3": "SQL injection manipulates backend database queries using unvalidated input, not unauthorized client HTTP submissions."
+    },
+    "conceptTagIds": [
+      "att.app-csrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied CSRF Core and Applied batch"
+  },
+  {
+    "id": "m774",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "core",
+    "q": "Which defensive countermeasure embeds a unique, unpredictable secret value into forms to verify that state-changing requests were intentionally submitted by the user?",
+    "opts": [
+      "Anti-CSRF synchronizer tokens",
+      "Transport layer security certificates",
+      "Secure network address translations",
+      "Dynamic database prepared statements"
+    ],
+    "correct": 0,
+    "exp": "Anti-CSRF tokens provide a unique, server-validated secret tied to the user's session that an external origin cannot read or predict.",
+    "wrongFeedback": {
+      "1": "TLS certificates secure transport layer encryption and verify server identity, but do not prevent forged cross-origin requests.",
+      "2": "NAT translates private IP addresses to public ones for routing, providing no protection against application-layer request forgery.",
+      "3": "Prepared statements prevent SQL injection by precompiling database queries, but offer no defense against unauthorized HTTP requests."
+    },
+    "conceptTagIds": [
+      "att.app-csrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied CSRF Core and Applied batch"
+  },
+  {
+    "id": "m775",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "An attacker crafts a webpage that initiates an unauthorized transfer on a banking site. The victim visits the page, and the transfer succeeds despite the attacker never seeing or handling the victim's session cookie. What architectural behavior enables this outcome?",
+    "opts": [
+      "The web server reflects the attacker's script payload directly into the response",
+      "The target database trusts all incoming connections originated from public ports",
+      "The victim's browser executes embedded shell scripts within local memory cache",
+      "The browser automatically attaches stored site credentials to outbound requests"
+    ],
+    "correct": 3,
+    "exp": "Browsers automatically send stored ambient credentials (such as cookies or HTTP basic authentication) whenever a request is made to the target domain.",
+    "wrongFeedback": {
+      "0": "Reflecting input strings into page responses describes reflected XSS, which is not required for a standard CSRF exploit.",
+      "1": "Database connectivity settings control backend network traffic, not whether a web application accepts client requests.",
+      "2": "Browsers execute sandboxed JavaScript and do not execute operating system shell scripts directly from web cache."
+    },
+    "conceptTagIds": [
+      "att.app-csrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied CSRF Core and Applied batch"
+  },
+  {
+    "id": "m776",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "An organization wants to mitigate cross-site request forgery across its web apps without rewriting backend form validation logic or altering HTML templates. Which cookie attribute best accomplishes this goal?",
+    "opts": [
+      "Setting the HttpOnly flag to hide cookies from all client-side scripts",
+      "Configuring the SameSite attribute to restrict cross-origin deliveries",
+      "Adding the Secure flag to guarantee transmission over encrypted tunnels",
+      "Reducing the session cookie expiration time to five minutes of inactivity"
+    ],
+    "correct": 1,
+    "exp": "The SameSite attribute (Strict or Lax) instructs browsers not to include the cookie on cross-site requests, neutralizing CSRF without changing form code.",
+    "wrongFeedback": {
+      "0": "The HttpOnly flag protects session cookies from being read via JavaScript during XSS attacks, but does not block automatic transmission during CSRF.",
+      "2": "The Secure flag ensures cookies are transmitted only across HTTPS connections, but allows them to be sent along with cross-origin requests.",
+      "3": "Short expiration times limit the vulnerability window, but do not stop forged requests while the user session remains active."
+    },
+    "conceptTagIds": [
+      "att.app-csrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied CSRF Core and Applied batch"
+  },
+  {
+    "id": "m777",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A developer implements anti-CSRF tokens on an account portal. However, an attacker successfully submits forged requests simply by omitting the token parameter entirely from their automated submission. What implementation flaw exists?",
+    "opts": [
+      "The client browser failed to encrypt the request using modern TLS protocols",
+      "The application stored session credentials inside volatile local memory pools",
+      "The backend server only validated incoming tokens when a value was provided",
+      "The web proxy stripped outbound HTTP header metadata before final routing"
+    ],
+    "correct": 2,
+    "exp": "The validation logic mistakenly checked token equality only when present, allowing requests that omitted the token parameter entirely to pass through.",
+    "wrongFeedback": {
+      "0": "TLS protects data in transit from interception, but does not enforce application-level input token validation.",
+      "1": "Memory storage methods for session credentials do not dictate whether request verification routines run on the server.",
+      "3": "Intermediary proxies forward request payloads normally; this failure stems from incomplete verification logic on the application server."
+    },
+    "conceptTagIds": [
+      "att.app-csrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied CSRF Core and Applied batch"
+  },
+  {
+    "id": "m778",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "An internal portal allows managers to approve equipment requests by clicking a link formatted as https://portal/approve?id=102. An attacker embeds this URL inside an <img> tag on an external website, causing managers to unknowingly approve requests. Which design flaw made this exploit trivial?",
+    "opts": [
+      "Using idempotent HTTP GET requests to execute state-changing actions",
+      "Failing to bind the administrator's network subnet to directory accounts",
+      "Permitting users to view web pages that lack transport encryption headers",
+      "Disabling database transaction rollbacks on conflicting ledger balances"
+    ],
+    "correct": 0,
+    "exp": "HTTP GET requests should be safe and idempotent. Using GET for state changes allows external resources (like <img> tags) to trigger actions automatically on page load.",
+    "wrongFeedback": {
+      "1": "Subnet binding restricts access by IP range, but does not protect authorized internal managers browsing external websites.",
+      "2": "Missing transport encryption enables eavesdropping, but does not cause browsers to execute state changes from media tags.",
+      "3": "Database rollbacks maintain transaction consistency during database failures, rather than restricting HTTP verbs used by application handlers."
+    },
+    "conceptTagIds": [
+      "att.app-csrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied CSRF Core and Applied batch"
+  },
+  {
+    "id": "m779",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "An application requires a hidden, cryptographically random token with every state-changing form submission. Despite this defense, an attacker successfully forces users to change their profile passwords. What vulnerability most likely undermined the token protection?",
+    "opts": [
+      "An insecure direct object reference exposing predictable invoice numbers",
+      "A misconfigured directory permission allowing anonymous network browsing",
+      "An unpatched database service account with elevated system privileges",
+      "A cross-site scripting flaw that allowed scripts to read the page markup"
+    ],
+    "correct": 3,
+    "exp": "XSS runs script within the target origin's security context, allowing an attacker to read DOM elements (including hidden anti-CSRF tokens) and forge requests.",
+    "wrongFeedback": {
+      "0": "IDOR vulnerabilities bypass authorization to access distinct object IDs, but cannot read or steal tokens from other user sessions.",
+      "1": "Anonymous file share browsing exposes local server directories, not the dynamic memory and DOM of active client sessions.",
+      "2": "Excessive database account privileges expand data access on the backend, but do not bypass client-side anti-CSRF protections."
+    },
+    "conceptTagIds": [
+      "att.app-csrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied CSRF Core and Applied batch"
+  },
+  {
+    "id": "m780",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A financial platform wants to ensure that even if a user falls victim to cross-site request forgery, an unauthorized party cannot change the account's registered email address. Which control provides the most reliable defense?",
+    "opts": [
+      "Forcing browsers to cache static visual components across client sessions",
+      "Requiring users to re-enter their current password before modifying settings",
+      "Implementing complex password character rules during user account creation",
+      "Restricting web portal access to verified operating system patch baselines"
+    ],
+    "correct": 1,
+    "exp": "Re-authentication (step-up authentication) stops CSRF because an external website cannot supply the user's password to complete the update form.",
+    "wrongFeedback": {
+      "0": "Asset caching improves page load performance, but provides zero security control against forged cross-site requests.",
+      "2": "Password complexity prevents brute-force password guessing, but does not stop unauthorized form submissions inside an authenticated session.",
+      "3": "Endpoint compliance checks ensure the host is patched, but do not prevent a patched machine's browser from sending forged cross-origin requests."
+    },
+    "conceptTagIds": [
+      "att.app-csrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied CSRF Core and Applied batch"
+  }
+]
