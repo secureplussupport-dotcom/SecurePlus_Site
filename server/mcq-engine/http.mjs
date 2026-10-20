@@ -43,7 +43,7 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
         const filters = body.filters || {};
         if (filters.chapter && !/^[1-5]$/.test(filters.chapter)) throw new EngineError('Invalid chapter.');
         const difficulty = normalizeMcqDifficulty(filters.difficulty);
-        if (filters.difficulty && !MCQ_DIFFICULTIES.includes(difficulty)) throw new EngineError('Invalid difficulty.');
+        if (filters.difficulty && (typeof filters.difficulty !== 'string' || !MCQ_DIFFICULTIES.includes(difficulty))) throw new EngineError('Invalid difficulty.');
         if (filters.topic && (typeof filters.topic !== 'string' || filters.topic.length > 200)) throw new EngineError('Invalid topic.');
         const bank = (await catalogue(client)).filter(q => q.concept_tag &&
           (!filters.chapter || q.chapter === filters.chapter) && (!difficulty || normalizeMcqDifficulty(q.difficulty) === difficulty) && (!filters.topic || q.topic === filters.topic));

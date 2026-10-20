@@ -25,7 +25,7 @@ test('two MCQ levels retain source questions, answer IDs, and pending benchmarks
 test('Core and Applied filters include their legacy levels; invalid filters fail',async()=>{
   const client={auth:{getUser:async()=>({data:{user:{id:'test-owner'}}})},rpc:async name=>({data:name==='mcq_engine_state'?{version:0,mastery:[],failed:[],history:[]}:true})};
   const handler=createMcqHandler({admin:()=>client,enabled:()=>true,catalogue:async()=>effectiveCatalogue()});
-  for(const [filter,expected] of [['core','core'],['applied','applied'],['easy','core'],['medium','applied'],['hard','applied'],['expert',null]]){
+  for(const [filter,expected] of [['core','core'],['applied','applied'],['easy','core'],['medium','applied'],['hard','applied'],['expert',null],[['core'],null]]){
     let body;const response={setHeader(){},end(value){body=JSON.parse(value);}};
     await handler({method:'POST',headers:{authorization:'Bearer test','content-type':'application/json'},query:{operation:'generate'},body:{set_size:10,filters:{difficulty:filter}}},response);
     assert.equal(response.statusCode,expected?200:400,filter);
