@@ -1,0 +1,132 @@
+[
+  {
+    "id": "m749",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "A help desk implements a three-tier support structure. Management wants Tier 3 technicians to automatically receive all rights granted to Tier 1 and Tier 2 staff without administrators manually duplicating individual permissions across each account. Which access control implementation directly supports this design?",
+    "opts": [
+      "Establishing discretionary authorization tokens across support tiers",
+      "Implementing an inheritance model between defined functional roles",
+      "Enforcing static separation of duties during account provisioning",
+      "Applying mandatory sensitivity classification labels to help tickets"
+    ],
+    "correct": 1,
+    "exp": "Hierarchical RBAC enables senior roles to automatically inherit the permissions of lower-tier roles, eliminating manual duplication across experience levels.",
+    "wrongFeedback": {
+      "0": "Discretionary permissions rely on resource owners granting rights individually, requiring manual management rather than systematic multi-tier inheritance.",
+      "2": "Static separation of duties prevents users from holding conflicting roles, rather than passing baseline rights up an organizational hierarchy.",
+      "3": "Mandatory access control uses sensitivity labels and clearances, which govern data confidentiality rather than job progression tiers."
+    },
+    "conceptTagIds": [
+      "iam.rbac"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied RBAC Applied batch"
+  },
+  {
+    "id": "m750",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "An accounting clerk is authorized to submit vendor payment requests and approve final disbursements. However, the software blocks the clerk from approving any payment request that they submitted themselves. Which access mechanism enforces this restriction?",
+    "opts": [
+      "Dynamic separation of duties enforced at transaction execution time",
+      "Static separation of duties enforced during initial account creation",
+      "Discretionary access control delegated directly to departmental leads",
+      "Mandatory access control assigned using data classification tags"
+    ],
+    "correct": 0,
+    "exp": "Dynamic Separation of Duties (DSD) permits an identity to hold multiple authorized roles, but prevents those conflicting roles from being executed within the same business transaction.",
+    "wrongFeedback": {
+      "1": "Static Separation of Duties (SSD) blocks an identity from ever being assigned conflicting roles at the provisioning level.",
+      "2": "Discretionary access control leaves authorization decisions to data owners rather than enforcing programmatic workflow constraints.",
+      "3": "Mandatory access control governs access via security clearances and object labels rather than evaluating transactional integrity."
+    },
+    "conceptTagIds": [
+      "iam.rbac"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied RBAC Applied batch"
+  },
+  {
+    "id": "m751",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "A company with 300 employees discovers its directory contains over 1,200 unique access groups, with many groups created to serve only one worker's specific duties. Which operational problem does this scenario illustrate?",
+    "opts": [
+      "Privilege escalation resulting from unmonitored directory delegation",
+      "Permission inheritance failures within nested organizational branches",
+      "Inconsistent access caused by decentralized resource owner approvals",
+      "Role explosion caused by excessively granular permission groupings"
+    ],
+    "correct": 3,
+    "exp": "Role explosion happens when roles are defined too specifically for individuals, eliminating the administrative efficiency and scalability of RBAC abstraction.",
+    "wrongFeedback": {
+      "0": "Privilege escalation involves an unauthorized elevation of privileges, not administrators defining an excessive number of valid groups.",
+      "1": "Inheritance failures describe child directories failing to receive parent attributes, not an overproliferation of access roles.",
+      "2": "Decentralized owner approvals characterize DAC, whereas group governance sprawl is an administrative failure within an RBAC architecture."
+    },
+    "conceptTagIds": [
+      "iam.rbac"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied RBAC Applied batch"
+  },
+  {
+    "id": "m752",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "An enterprise requires that inventory staff update database records only while connected to internal warehouse Wi-Fi during business hours. Why is standard role-based access control alone unable to meet this goal?",
+    "opts": [
+      "It cannot separate read and write privileges across data storage tiers",
+      "It requires resource owners to authorize every network access request",
+      "It evaluates static job assignments rather than runtime context factors",
+      "It mandates sensitivity labels that override network filtering rules"
+    ],
+    "correct": 2,
+    "exp": "Standard RBAC makes decisions based strictly on assigned user roles and cannot natively evaluate dynamic variables like network location, time of day, or device posture (which require ABAC or Rule-BAC).",
+    "wrongFeedback": {
+      "0": "RBAC easily isolates specific permissions (such as read, write, or execute) by binding them directly to functional roles.",
+      "1": "Per-request owner authorization describes DAC workflows; RBAC enforces access through centralized role definitions.",
+      "3": "Mandatory sensitivity labels belong to MAC models and do not represent a design constraint of standard role-based access."
+    },
+    "conceptTagIds": [
+      "iam.rbac"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied RBAC Applied batch"
+  },
+  {
+    "id": "m753",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "An operations specialist transfers to the compliance department. Three months later, an audit reveals the employee still possesses system administration rights from their former position alongside their new audit permissions. What operational failure occurred?",
+    "opts": [
+      "Failing to revoke obsolete functional roles upon internal job transfer",
+      "Inadvertent lateral movement across segmented internal network zones",
+      "Flawed inheritance settings within the central directory tree structure",
+      "Authentication drift between disconnected identity provider databases"
+    ],
+    "correct": 0,
+    "exp": "Failing to de-provision previous roles during an internal job transition causes privilege creep, accumulating excessive privileges that violate the principle of least privilege.",
+    "wrongFeedback": {
+      "1": "Lateral movement is an adversary technique used to traverse a compromised network, not an identity lifecycle failure.",
+      "2": "Directory inheritance applies to hierarchical group nesting or folder ACLs, not residual role assignments on an individual account.",
+      "3": "Authentication drift involves unsynchronized credential stores, whereas this issue represents an authorization lifecycle oversight."
+    },
+    "conceptTagIds": [
+      "iam.rbac"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied RBAC Applied batch"
+  }
+]
