@@ -1,0 +1,184 @@
+[
+  {
+    "id": "m766",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "core",
+    "q": "A discussion forum allows users to share messages. An attacker submits a comment containing JavaScript. Every user who views the thread automatically executes the script in their browser. What vulnerability is present?",
+    "opts": [
+      "Reflected cross-site scripting",
+      "Stored cross-site scripting",
+      "Cross-site request forgery",
+      "Structured query injection"
+    ],
+    "correct": 1,
+    "exp": "Stored (persistent) XSS occurs when malicious input is saved in a backend database or datastore and served to any user requesting that content.",
+    "wrongFeedback": {
+      "0": "Reflected XSS requires the payload to be delivered via an immediate request (such as a link) and reflected back, rather than saved on the server.",
+      "2": "CSRF tricks an authenticated user into submitting unwanted commands to a trusted application, rather than executing injected client-side script.",
+      "3": "SQL injection targets the database engine to manipulate backend query execution, not the rendering of client-side scripts in user browsers."
+    },
+    "conceptTagIds": [
+      "att.app-xss"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied XSS Core and Applied batch"
+  },
+  {
+    "id": "m767",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "core",
+    "q": "An application renders user-submitted names directly onto a profile page. Which development practice prevents malicious scripts from executing in the browser while preserving the user's intended display text?",
+    "opts": [
+      "Context-aware output encoding",
+      "Parameterized prepared queries",
+      "Transport layer certificate pinning",
+      "SameSite session cookie attributes"
+    ],
+    "correct": 0,
+    "exp": "Output encoding transforms special characters (like < and >) into safe HTML entities (like &lt; and &gt;), rendering them as harmless text rather than executable script code.",
+    "wrongFeedback": {
+      "1": "Parameterized queries prevent SQL injection at the database tier, but do not prevent browsers from executing script tags rendered in HTML markup.",
+      "2": "Certificate pinning prevents man-in-the-middle attacks on TLS sessions; it provides no protection against client-side script injection.",
+      "3": "SameSite cookie attributes mitigate Cross-Site Request Forgery (CSRF) by restricting cross-origin cookie delivery, but do not prevent XSS execution."
+    },
+    "conceptTagIds": [
+      "att.app-xss"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied XSS Core and Applied batch"
+  },
+  {
+    "id": "m768",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A user clicks a link sent in an email that contains an encoded string in the URL parameters. The target website immediately displays a search results page containing the encoded string, triggering an unauthorized pop-up alert without storing any data on the host server. What enabled this exploit?",
+    "opts": [
+      "The host server executed backend shell commands included within the request path",
+      "The database layer processed unescaped syntax embedded inside the search field",
+      "The browser retained expired administrative session tokens from an edge proxy",
+      "The web server reflected unsanitized request parameters directly into page markup"
+    ],
+    "correct": 3,
+    "exp": "In reflected XSS, the web server mirrors untrusted input from the HTTP request (e.g., query string) straight into the immediate HTML response without sanitization.",
+    "wrongFeedback": {
+      "0": "Executing shell commands through request parameters describes command injection, not client-side script execution in a browser.",
+      "1": "The scenario describes script execution in the client browser without data persistence, not database syntax manipulation (SQLi).",
+      "2": "Stale session tokens relate to session management or replay flaws, not the immediate execution of URL-supplied scripts."
+    },
+    "conceptTagIds": [
+      "att.app-xss"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied XSS Core and Applied batch"
+  },
+  {
+    "id": "m769",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A penetration tester enters a script into a client application using a URL fragment identifier (#). The script executes in the user's browser, but web server access logs show no trace of the malicious payload. Why did this exploit bypass the server logs?",
+    "opts": [
+      "The reverse proxy sanitized input strings before creating server-side access logs",
+      "The database driver filtered malicious syntax using prepared statement bindings",
+      "The client-side browser script processed the fragment locally without a server call",
+      "The transport protocol encrypted the script payload to evade server inspection rules"
+    ],
+    "correct": 2,
+    "exp": "DOM-based XSS executes entirely within the Document Object Model on the client side; browsers do not send URI fragments (the text following #) in HTTP requests to the server.",
+    "wrongFeedback": {
+      "0": "Proxies do not scrub fragments from logs because browsers do not transmit URI fragments to network proxies in standard HTTP requests.",
+      "1": "Database operations are not involved, as the payload never reached the backend server or its database tier.",
+      "3": "Transport encryption (TLS) hides traffic from third-party interceptors, but the web server still decrypts and logs incoming paths received at the endpoint."
+    },
+    "conceptTagIds": [
+      "att.app-xss"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied XSS Core and Applied batch"
+  },
+  {
+    "id": "m770",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A web page is vulnerable to reflected XSS, but when an attacker injects an inline <script> tag referencing an external domain, the browser refuses to fetch or execute the remote file. Which defensive configuration blocked this action?",
+    "opts": [
+      "An HTTP Strict Transport Security header enforcing encrypted communications",
+      "A Content Security Policy header restricting allowable script execution sources",
+      "An anti-CSRF token verified against state-changing server transaction requests",
+      "An automated database transaction rollback triggered by unexpected string inputs"
+    ],
+    "correct": 1,
+    "exp": "A Content Security Policy (CSP) header specifies trusted sources of executable scripts, allowing the browser to block unauthorized inline scripts or third-party script sources.",
+    "wrongFeedback": {
+      "0": "HSTS enforces HTTPS connections over TLS, but does not dictate which domains a browser is permitted to load scripts from.",
+      "2": "Anti-CSRF tokens validate the intent of state-changing POST/PUT requests, but do not stop a browser from executing injected JavaScript.",
+      "3": "Database rollbacks handle backend data integrity errors; they cannot restrict browser-level script execution policies."
+    },
+    "conceptTagIds": [
+      "att.app-xss"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied XSS Core and Applied batch"
+  },
+  {
+    "id": "m771",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "An attacker successfully executes arbitrary JavaScript within a victim's active session, yet their script fails when attempting to read the user's active session token using document.cookie. Which implementation prevented the credential theft?",
+    "opts": [
+      "Configuring the HttpOnly flag on the cookie to block script read operations",
+      "Requiring multi-factor authentication whenever user account settings change",
+      "Applying context-aware output encoding across all public profile text fields",
+      "Restricting administrative management console logins to private subnet ranges"
+    ],
+    "correct": 0,
+    "exp": "The HttpOnly flag instructs the browser that the cookie should not be accessible via client-side scripts (such as document.cookie), mitigating session hijacking via XSS.",
+    "wrongFeedback": {
+      "1": "Step-up MFA protects specific actions against unauthorized submission, but does not prevent scripts from reading accessible cookie stores.",
+      "2": "Output encoding prevents script tags from executing in the first place; the prompt states the script successfully executed.",
+      "3": "Network subnet restrictions limit administrative reachability, but do not prevent script-based cookie theft on authorized endpoints."
+    },
+    "conceptTagIds": [
+      "att.app-xss"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied XSS Core and Applied batch"
+  },
+  {
+    "id": "m772",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A developer strips <script> and </script> tags from input fields to prevent XSS. An attacker bypasses this control by submitting <img src=\"x\" onerror=\"alert(1)\">, successfully executing JavaScript. What fundamental architectural flaw allowed this bypass?",
+    "opts": [
+      "Inline image elements bypass browser rendering pipelines during script execution",
+      "The application firewall failed to decrypt incoming secure transport payloads",
+      "Database prepared statements do not filter embedded media object references",
+      "Relying on keyword blacklists fails to account for HTML event handler triggers"
+    ],
+    "correct": 3,
+    "exp": "Blacklisting specific keywords (like <script>) is an unreliable defense because HTML allows code execution via attributes and event handlers (such as onerror, onload, and onmouseover).",
+    "wrongFeedback": {
+      "0": "Images follow normal DOM rendering and parsing rules; they do not possess special bypass mechanisms in browser rendering engines.",
+      "1": "WAF inspection issues relate to network-edge filtering, not the application's underlying code-level validation flaw.",
+      "2": "Prepared statements prevent SQL command injection; they do not sanitize HTML tags rendered on a front-end interface."
+    },
+    "conceptTagIds": [
+      "att.app-xss"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied XSS Core and Applied batch"
+  }
+]
