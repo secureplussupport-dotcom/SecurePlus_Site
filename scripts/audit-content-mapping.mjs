@@ -104,7 +104,7 @@ test('glossary uses renderer boundaries, binds source usage, and retains unobser
  const entries=pkg.records.filter(r=>r.kind==='glossary_definition');
  assert.equal(entries.filter(r=>r.usageReferences.some(x=>/^(mcq|pbq|lesson):/.test(x.recordId))).length,136);
  assert.equal(entries.filter(r=>r.usageReferences.length).length,153);
- for(const r of entries){assert.equal(r.weight,0);assert.equal(r.trustedRevisionId,null);assert.equal(r.definitionSource.path,'src/App.jsx');assert.ok(r.definitionSource.line>2230);}
+ for(const r of entries){assert.equal(r.weight,0);assert.equal(r.trustedRevisionId,null);assert.equal(r.definitionSource.path,'src/App.jsx');assert.ok(r.definitionSource.line>0);assert.ok(readFileSync('src/App.jsx','utf8').split('\n')[r.definitionSource.line-1].includes(JSON.stringify(r.term)));}
  assert.ok(entries.some(r=>r.usageStatus==='no_local_reference_observed'));
 });
 test('missing glossary/selector rows and revision drift fail the completeness guard',()=>{

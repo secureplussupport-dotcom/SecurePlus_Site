@@ -1,4 +1,6 @@
-# MCQ-only adaptive algorithm — local release candidate
+# Archived MCQ-only adaptive algorithm — local release candidate
+
+Superseded on 20 October 2026 by the owner-supplied three-deck specification. See [the replacement engine](mcq-three-deck-engine.md). The evidence below describes the retired prototype, not the current release path.
 
 The local algorithm candidate is implemented and tested end to end. It is default OFF and has no live route, migration, credentials, enrollment or activation change. This release supersedes the earlier assumption that PBQ concept tagging or grammar work is an adaptive-learning prerequisite. PBQs remain standalone practice; their catalogue/editorial queue is not an adaptive release gate.
 

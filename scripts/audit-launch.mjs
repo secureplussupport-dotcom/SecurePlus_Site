@@ -256,7 +256,7 @@ if (!errors.length) {
   requirePattern("src/App.jsx", /const guestMoreItems=\[\s*\{id:"objectives",label:"SY0-701 Exam Guide"\},\s*\{id:"deep-dives",label:"Concept Deep Dives"\},\s*\{id:"privacy",label:"Privacy Policy"\},\s*\{id:"terms",label:"Terms & Conditions"\},\s*\];/, "guest More menu should contain the exam guide, deep dives, privacy, and terms links");
   requireContains("src/App.jsx", "guest-top-nav-more-menu", "guest secondary navigation should open in an expandable More menu");
   requireContains("src/App.jsx", "clearLocalAuthState({preserveRoute:true})", "guest session restoration must preserve direct routes such as the canonical Flashcards page");
-  requireContains("src/App.jsx", "const quizSizes = isGuest ? [10,20,30] : [10,20,30,40,50]", "guest MCQ practice should offer fixed 10, 20, or 30 question sets");
+  requireContains("src/App.jsx", "const quizSizes = [10,20,30]", "MCQ practice should offer fixed 10, 20, or 30 question sets");
   requireContains("src/App.jsx", 'const activeDiffFilter=isGuest?"all":diffFilter', "guest MCQ practice must not filter by difficulty");
   requireContains("src/App.jsx", 'const activeTopicFilter=isGuest?"all":topicFilter', "guest MCQ practice must not filter by topic");
   requireContains("src/App.jsx", '<FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>', "guest MCQ practice should still allow chapter filtering");

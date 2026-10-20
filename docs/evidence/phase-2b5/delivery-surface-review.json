@@ -1,7 +1,7 @@
 {
   "status": "agent_scoped_inventory_pending_human",
   "reviewDate": "2026-10-20",
-  "scope": "Explicit source-level census of delivered learning selectors and glossary. Any change in these delivery sources requires reviewing inventory completeness before updating this guard. Not human approval. Smart Review now reserves exact same-tag MCQs only; selector count and glossary boundaries remain unchanged. GuestFeaturePreview independently authored teaching branches and selector/reachability bindings reviewed in the final census remediation.",
+  "scope": "Agent source-level selector/glossary census, not human approval. Owner-specified three-deck MCQ engine replaces legacy SM-2 and immediate tag repair; service selector, catalogue, API and client reviewed. All 26 selector identities and glossary boundaries retained. PBQ source content unchanged.",
   "selectorIds": [
     "cipher-study-routing",
     "daily-challenges",
@@ -31,13 +31,17 @@
     "weak-area-deck"
   ],
   "sources": {
-    "src/App.jsx": "84d808cdaca1874dd9fccc287d310da748ac7501500339cf6895344f7bb71535",
+    "src/App.jsx": "37de0852eb7e2aff893e1f8a173a2939cf0a9606892323a67a3919d1798ca2f5",
     "src/lib/deepDiveRecommendations.js": "e79f387dbf98cefd9e22e6af3cf8e98c1428cf34e45b2ac2e929cf9f79400479",
     "src/lib/deepDiveStudy.js": "b7e8fbd0f3c635765a4c48df19a46ec1e624f99f815a62cf6ce925b6e3624459",
     "src/data/sy0701AcronymFlashcards.js": "39d2905c3b957321ef9244bfed61591739e23fe9354d89279f5deda8b90586b1",
     "src/data/sy0701DeepDiveMap.js": "e23d5d77e07931ae2ded6af4d2ed344df053efa32fe02bffdfe61272bb3143ff",
     "src/data/conceptDeepDives.js": "b478e16240c95b70a79cf0679aff683fc08f18dd11947c4046ecd880ec1ce17f",
     "src/data/conceptDeepDivesStudyGuide.js": "340cc43dacd9c8706da4fb5a7a92c3a7104e36e4fbec6efec13d39522e17ab43",
-    "src/data/conceptDeepDivesPrinterGuide.js": "196982096671e5b10867402da328992cb29503c415615ac9eb5e674d4475d006"
+    "src/data/conceptDeepDivesPrinterGuide.js": "196982096671e5b10867402da328992cb29503c415615ac9eb5e674d4475d006",
+    "server/mcq-engine/engine.mjs": "2dc6de7819fb1ca914eb4d6df48fa0090d7ec813a3b9b8ab6b59b805f8f627e6",
+    "server/mcq-engine/catalogue.mjs": "92eb806b25526a6aaa2cc5f1c981a3778a1ef4fbc1cbef9146331efba1633cb3",
+    "server/mcq-engine/http.mjs": "b1522b741dafe38f03c0eb886a12bc9a20e783453a23c3d3898c2091062d77ba",
+    "src/lib/mcqEngineClient.js": "ba486a06346025b0b71d740f160be3801a82a1f037dbd1227f8f34763c80275b"
   }
 }

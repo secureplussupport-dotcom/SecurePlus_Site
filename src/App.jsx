@@ -4,8 +4,9 @@ import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701Ed
 import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
 import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from "./data/sy0701PublishedSnapshot.js";
 import { CONCEPT_TAGS, MCQ_TAGGING_VERSION, inferMcqConceptTagIds, searchMcqConceptTags } from "./data/sy0701ConceptTags.js";
-import { conceptRepairAnchors, effectiveMcqConceptTagIds } from "./lib/mcqConceptReview.js";
+import { effectiveMcqConceptTagIds } from "./lib/mcqConceptReview.js";
 import mcqTagAssignments from "./data/mcqConceptTagAssignments.json";
+import { mcqEngineEnabled, mcqEngineRequest, practiceQuestion, recordStandaloneMcq } from "./lib/mcqEngineClient.js";
 import {
   ArrowLeft,
   BadgeCheck,
@@ -1229,6 +1230,10 @@ function analyzeMcqQuality(question,bank=[]) {
   };
 }
 function buildQuestionReport({kind,question,selected,correct}) {
+  if(question?.optionIds){
+    selected=question.optionIds.indexOf(selected);
+    correct=question.optionIds.indexOf(correct);
+  }
   const id=question?.id||"unknown";
   const title=question?.q||question?.question||question?.title||"Question";
   return {
@@ -1259,7 +1264,10 @@ function shuffleMcqOptions(question) {
     opts: shuffled.map(entry=>entry.text),
     correct: shuffled.findIndex(entry=>entry.index===question.correct),
     wrongFeedback,
-    originalCorrect: question.correct,
+    originalCorrect: question.originalCorrect??question.correct,
+    originalOptions: question.originalOptions||question.opts,
+    engineAnswerEventId:crypto.randomUUID(),
+    originalOptionIndexes: shuffled.map(entry=>question.originalOptionIndexes?.[entry.index]??entry.index),
   };
 }
 function playAnswerSound(correct=true) {
@@ -1889,39 +1897,6 @@ function getAttemptDate(attempt) {
   return Number.isNaN(date.getTime()) ? new Date() : date;
 }
 
-function calculateSm2State(history) {
-  const sorted = [...history].sort((a,b)=>getAttemptDate(a)-getAttemptDate(b));
-  let repetitions = 0;
-  let interval = 0;
-  let easeFactor = 2.5;
-  let dueAt = new Date(0);
-  let lastCorrect = null;
-
-  sorted.forEach(attempt=>{
-    const quality = attempt.correct ? 4 : 2;
-    const attemptDate = getAttemptDate(attempt);
-
-    if(quality < 3){
-      repetitions = 0;
-      interval = 1;
-    } else {
-      repetitions += 1;
-      if(repetitions === 1) interval = 1;
-      else if(repetitions === 2) interval = 6;
-      else interval = Math.max(1, Math.round(interval * easeFactor));
-    }
-
-    const diff = 5 - quality;
-    easeFactor = Math.max(1.3, easeFactor + (0.1 - diff * (0.08 + diff * 0.02)));
-    dueAt = new Date(attemptDate.getTime() + interval * 24 * 60 * 60 * 1000);
-    lastCorrect = attempt.correct;
-  });
-
-  return { repetitions, interval, easeFactor, dueAt, lastCorrect, attempts: sorted.length };
-}
-
-const REVIEW_DAY_MS = 24 * 60 * 60 * 1000;
-
 function getMcqAttemptHistories(attempts=[]) {
   const grouped = new Map();
   attempts.filter(a=>a.mcq).forEach(attempt=>{
@@ -1940,122 +1915,13 @@ function getLatestMcqAttempts(attempts=[]) {
   return latest;
 }
 
-function rankSmartReviewQuestions(questions, attempts, starredIds=new Set(), options={}) {
-  const now = options.now instanceof Date ? options.now : new Date();
-  const histories = getMcqAttemptHistories(attempts);
-  const focusTopics = new Set([...(options.focusTopics||[])].map(String));
-  const directMissedIds = new Set([...(options.directMissedIds||[])].map(String));
-  const focusChapterId = options.focusChapterId ? String(options.focusChapterId) : null;
-  const topicStats = new Map();
-  const chapterStats = new Map();
-
-  attempts.filter(attempt=>attempt.mcq).forEach(attempt=>{
-    const topicKey=`${String(attempt.ch||"")}::${String(attempt.topic||"")}`;
-    const topic=topicStats.get(topicKey)||{correct:0,total:0};
-    topic.total+=1;
-    if(attempt.correct)topic.correct+=1;
-    topicStats.set(topicKey,topic);
-
-    const chapterKey=String(attempt.ch||"");
-    const chapter=chapterStats.get(chapterKey)||{correct:0,total:0};
-    chapter.total+=1;
-    if(attempt.correct)chapter.correct+=1;
-    chapterStats.set(chapterKey,chapter);
-  });
-
-  return questions.map(question=>{
-    const history=histories.get(question.id)||[];
-    const state=calculateSm2State(history);
-    const latest=history[history.length-1]||null;
-    const lastSeenAt=latest?getAttemptDate(latest):null;
-    const daysSinceSeen=lastSeenAt?Math.max(0,(now-lastSeenAt)/REVIEW_DAY_MS):null;
-    const due=Boolean(history.length&&state.dueAt<=now);
-    const daysOverdue=due?Math.max(0,(now-state.dueAt)/REVIEW_DAY_MS):0;
-    let wrongStreak=0;
-    for(let index=history.length-1;index>=0;index-=1){
-      if(history[index].correct)break;
-      wrongStreak+=1;
-    }
-
-    const topic=topicStats.get(`${String(question.ch||"")}::${String(question.topic||"")}`)||{correct:0,total:0};
-    const chapter=chapterStats.get(String(question.ch||""))||{correct:0,total:0};
-    const topicAccuracy=topic.total?topic.correct/topic.total:1;
-    const chapterAccuracy=chapter.total?chapter.correct/chapter.total:1;
-    const isDirectMiss=directMissedIds.has(String(question.id));
-    const isFocusTopic=focusTopics.has(String(question.topic||""));
-    const isFocusChapter=focusChapterId&&String(question.ch)===focusChapterId;
-    const isStarred=starredIds.has(question.id);
-    const isUnseen=history.length===0;
-    let score=0;
-    const reasons=[];
-
-    if(isDirectMiss){score+=64;reasons.push("latest miss");}
-    if(latest?.correct===false){score+=42;reasons.push("needs repair");}
-    if(wrongStreak){score+=Math.min(28,wrongStreak*10);reasons.push(`${wrongStreak} recent miss${wrongStreak===1?"":"es"}`);}
-    if(due){score+=20+Math.min(18,daysOverdue*2);reasons.push("due now");}
-    if(isStarred){score+=16;reasons.push("starred");}
-    if(isFocusTopic){score+=24;reasons.push("related concept");}
-    if(isFocusChapter){score+=6;}
-    if(topic.total>=2&&topicAccuracy<.75){score+=(1-topicAccuracy)*24;reasons.push("low topic accuracy");}
-    if(chapter.total>=3&&chapterAccuracy<.72){score+=(1-chapterAccuracy)*12;}
-    if(daysSinceSeen!==null&&daysSinceSeen>7){score+=Math.min(14,(daysSinceSeen-7)*.8);reasons.push("memory refresh");}
-    if(isUnseen){score+=isFocusTopic?13:8;reasons.push("new coverage");}
-    if(latest?.correct&&daysSinceSeen!==null&&daysSinceSeen<2)score-=30;
-    if(latest?.correct&&history.length>3)score-=Math.min(15,(history.length-3)*3);
-    if(question.difficulty==="hard"&&chapter.total>=3&&chapterAccuracy<.6)score-=12;
-    if(question.difficulty==="medium"&&chapter.total>=3&&chapterAccuracy<.7)score+=4;
-    if(question.difficulty==="hard"&&chapterAccuracy>=.8)score+=5;
-    if(question.beyondTextbook&&!isStarred)score-=10;
-
-    return {question,score,reasons,state,latest,topicAccuracy,chapterAccuracy};
-  }).sort((a,b)=>b.score-a.score||String(a.question.id).localeCompare(String(b.question.id)));
-}
-
-function selectDiverseSmartReview(ranked, count, priority=[]) {
-  const requested=Math.max(0,Math.min(count,ranked.length));
-  if(!requested)return [];
-  const picked=[];
-  const used=new Set();
-  const topicCounts=new Map();
-  const topicCap=requested<=3?2:Math.max(2,Math.ceil(requested*.35));
-  const hardCap=Math.max(1,Math.floor(requested*.35));
-  const beyondCap=Math.max(1,Math.floor(requested*.1));
-  let hardCount=0;
-  let beyondCount=0;
-
-  const add=(entry,enforceDiversity=true,enforceBeyondLimit=true)=>{
-    const question=entry.question;
-    if(used.has(question.id)||picked.length>=requested)return;
-    const topic=String(question.topic||"Core concepts");
-    if(enforceDiversity&&(topicCounts.get(topic)||0)>=topicCap)return;
-    if(enforceDiversity&&question.difficulty==="hard"&&hardCount>=hardCap)return;
-    if(enforceBeyondLimit&&question.beyondTextbook&&beyondCount>=beyondCap)return;
-    picked.push(question);
-    used.add(question.id);
-    topicCounts.set(topic,(topicCounts.get(topic)||0)+1);
-    if(question.difficulty==="hard")hardCount+=1;
-    if(question.beyondTextbook)beyondCount+=1;
-  };
-
-  priority.forEach(entry=>add(entry,false,false));
-  ranked.forEach(entry=>add(entry,true));
-  ranked.forEach(entry=>add(entry,false));
-  ranked.forEach(entry=>add(entry,false,false));
-  return picked;
-}
-
-function rankQuestionsBySm2(questions, attempts, starredIds=new Set(), options={}) {
-  return rankSmartReviewQuestions(questions,attempts,starredIds,options).map(entry=>entry.question);
-}
-
-function buildMcqPracticePool(questions, attempts, count, mode="smart", starredIds=new Set(), options={}) {
-  const shuffle = arr => [...arr].sort(()=>Math.random()-.5);
-  if(mode!=="smart") {
-    const randomRanked=shuffle(questions).map(question=>({question}));
-    return selectDiverseSmartReview(randomRanked,count);
+function buildMcqPracticePool(questions, attempts, count) {
+  const shuffled=[...questions];
+  for(let i=shuffled.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];
   }
-  const ranked=rankSmartReviewQuestions(questions,attempts,starredIds,options);
-  return selectDiverseSmartReview(ranked,count,conceptRepairAnchors(ranked,getLatestMcqAttempts(attempts),count));
+  return shuffled.slice(0,count);
 }
 
 function buildDiagnosticQuestions() {
@@ -2077,30 +1943,6 @@ function buildDiagnosticQuestions() {
     if(chapterPool[0]||fallback)picked.push(chapterPool[0]||fallback);
   });
   return picked.slice(0,5).map(shuffleMcqOptions);
-}
-
-function getReviewSummary(attempts, questionBank=MCQ_BANK) {
-  const now = new Date();
-  const grouped = new Map();
-  attempts.filter(a=>a.mcq).forEach(attempt=>{
-    if(!grouped.has(attempt.qid)) grouped.set(attempt.qid, []);
-    grouped.get(attempt.qid).push(attempt);
-  });
-
-  let due = 0;
-  let weak = 0;
-  grouped.forEach(history=>{
-    const state = calculateSm2State(history);
-    if(state.dueAt <= now) due += 1;
-    if(state.lastCorrect === false) weak += 1;
-  });
-
-  return {
-    due,
-    weak,
-    learned: grouped.size,
-    untouched: Math.max(0, questionBank.length - grouped.size),
-  };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -22777,6 +22619,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   const [answerBurst,setAnswerBurst]=useState(null);
   const [shareStatus,setShareStatus]=useState("");
   const streakRecordedRef=useRef(false);
+  const answerSaving=useRef(false);
 
   const questions = useMemo(()=>challenge.type==="mcq5"
     ? challenge.qids.map(id=>MCQ_BANK.find(q=>q.id===id)).filter(Boolean).map(shuffleMcqOptions)
@@ -22807,8 +22650,12 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
     });
   },[step,totalQuestions,results.length,user?.email,onCoinReward]);
 
-  const submitQ = () => {
-    if(selected===null) return;
+  const submitQ = async () => {
+    if(selected===null||submitted||answerSaving.current) return;
+    answerSaving.current=true;
+    try{if(user?.authProvider==="supabase")await recordStandaloneMcq(current,selected);}
+    catch(error){alert(error.message);answerSaving.current=false;return;}
+    answerSaving.current=false;
     const correct = selected === current.correct;
     capture("daily_question_answered", { question_id: current.id, correct, signed_in: Boolean(user) });
     setResults(r=>[...r,{qid:current.id,correct,selected}]);
@@ -23628,7 +23475,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     {type:"flashcards",plan:"free",color:"#0ea5e9",title:"Security+ flashcards",body:"The easiest gateway into SecurePlus: open chapter-grouped acronyms, terms, and attack clues without an account, then save starred cards when you sign up."},
     {type:"mcq",plan:"free",color:"#2f7df6",title:"Full MCQ practice",body:"Guests and free accounts can access every MCQ question. Create an account when you want answers, scores, and progress to follow you."},
     {type:"pbq",plan:"pro",color:"#f59e0b",title:"PBQ simulations",body:"Practice firewall decisions, terminal logs, Select & Fill, ordering, hotspot, and scenario tasks before exam day pressure."},
-    {type:"review",plan:"free",color:"#14b8a6",title:"Smart Review",body:"SecurePlus brings missed questions back first and spaces out correct questions, so your weak areas get the most attention."},
+    {type:"review",plan:"free",color:"#14b8a6",title:"Smart Review",body:"SecurePlus mixes delayed retests, unseen questions for weak concepts, and new syllabus coverage."},
     {type:"exam",plan:"pro",color:"#8b5cf6",title:"Exam-style mode",body:"Pro users can run timed mixed MCQ/PBQ sets, flag questions, review detailed solutions, and estimate readiness."},
   ];
   const faqItems=[
@@ -23638,7 +23485,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     {q:"Is there a mobile-friendly layout?",a:"Yes. The app is designed for phones, tablets, and desktop browsers, including mobile practice sessions."},
     {q:"Can I practise without creating an account?",a:"Yes. Visitors can open Flashcards, access all MCQ questions, and try the Daily Challenge. Progress, starred cards, and review history are saved after sign-up."},
     {q:"Why start with Flashcards?",a:"Flashcards are quick, low-pressure, and easy to share. They help new learners build Security+ vocabulary before attempting harder MCQs and PBQs."},
-    {q:"What does Smart Review do?",a:"It uses an SM-2 inspired review model to prioritise wrong answers and bring topics back at better intervals. Example: got 2.4 wrong? It comes back tomorrow. Got it right? It waits a week."},
+    {q:"What does Smart Review do?",a:"It combines delayed retests, unseen questions for weak concepts, and new syllabus coverage. A missed question waits for 30 other MCQ answers before retesting."},
     {q:"What does Pro unlock?",a:`${PRO_ACADEMY_PASS_DESCRIPTION} ${PRO_ACADEMY_PASS_PRICE}, renewing every 3 months until cancelled.`},
     {q:"Is SecurePlus affiliated with CompTIA?",a:"No. CompTIA and Security+ are trademarks of CompTIA. SecurePlus is an independent practice platform."},
   ];
@@ -25025,6 +24872,15 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [starredView,setStarredView]=useState(false);
   const [sessionStartedAt,setSessionStartedAt]=useState(null);
   const [sessionContext,setSessionContext]=useState(null);
+  const [engineState,setEngineState]=useState(null);
+  const [engineError,setEngineError]=useState("");
+  const [engineBusy,setEngineBusy]=useState(false);
+  const answerInFlight=useRef(false);
+  const answerEvents=useRef(new Map());
+  const refreshEngineState=useCallback(()=>{
+    if(!isGuest&&mcqEngineEnabled)mcqEngineRequest("state").then(setEngineState).catch(()=>{});
+  },[isGuest]);
+  useEffect(refreshEngineState,[refreshEngineState,attempts.length]);
   const starredSet=useMemo(()=>new Set(starred),[starred]);
   const starredMcqs=useMemo(()=>bank.filter(q=>starredSet.has(starKey("mcq",q.id))),[bank,starredSet]);
   const starredQuestionIds=useMemo(()=>new Set(starredMcqs.map(question=>question.id)),[starredMcqs]);
@@ -25053,8 +24909,12 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     if(activeTopicFilter!=="all"&&q.topic!==activeTopicFilter)return false;
     return true;
   });
-  const reviewSummary = getReviewSummary(attempts,bank);
-  const quizSizes = isGuest ? [10,20,30] : [10,20,30,40,50];
+  const reviewSummary = {
+    due:engineState?.failed?.filter(row=>row.cooldown_counter<=0).length??"—",
+    weak:engineState?.mastery?.filter(row=>row.score<80).length??"—",
+    untouched:engineState?Math.max(0,bank.length-engineState.history.length):"—",
+  };
+  const quizSizes = [10,20,30];
   const sessionMinimum = 10;
   const latestMcqAttempts=getLatestMcqAttempts(attempts);
   const missedMcqIds=[...latestMcqAttempts.entries()].filter(([,attempt])=>attempt.correct===false).map(([questionId])=>questionId);
@@ -25088,57 +24948,35 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     if(available.length && !available.includes(quizCount)) setQuizCount(available[available.length-1]);
   },[filtered.length,quizCount,started]);
 
+  const startEngineQuiz=async(filters={},count=quizCount)=>{
+    if(engineBusy)return;
+    setEngineBusy(true);setEngineError("");
+    try{
+      if(!mcqEngineEnabled)throw new Error("The new Smart Review engine is awaiting activation.");
+      const plan=await mcqEngineRequest("generate",{set_size:Math.max(10,Math.min(30,count)),filters});
+      const pool=plan.questions.map(q=>practiceQuestion(q,plan.session_id));
+      setSessionContext({kind:"smart",label:"Smart Review",engineSessionId:plan.session_id});
+      setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
+      answerEvents.current.clear();
+      capture("mcq_quiz_started",{review_mode:"three_deck",question_count:pool.length,tier:user.tier});
+    }catch(error){setEngineError(error.message);}finally{setEngineBusy(false);}
+  };
   const startQuiz=()=>{
-    const pool=buildMcqPracticePool(filtered, attempts, Math.min(quizCount,filtered.length), reviewMode, starredQuestionIds).map(shuffleMcqOptions);
-    capture("mcq_quiz_started", { review_mode: reviewMode, chapter: chFilter, difficulty: activeDiffFilter, topic: activeTopicFilter, question_count: pool.length, tier: user.tier });
-    setSessionContext({kind:reviewMode,label:reviewMode==="smart"?"Smart Review":"MCQ Practice"});
+    if(!isGuest&&reviewMode==="smart")return startEngineQuiz({chapter:chFilter==="all"?undefined:chFilter,difficulty:activeDiffFilter==="all"?undefined:activeDiffFilter,topic:activeTopicFilter==="all"?undefined:activeTopicFilter});
+    setEngineError("");
+    const pool=buildMcqPracticePool(filtered,attempts,Math.min(quizCount,filtered.length)).map(shuffleMcqOptions);
+    capture("mcq_quiz_started",{review_mode:"random",question_count:pool.length,tier:user.tier});
+    setSessionContext({kind:"random",label:"MCQ Practice"});
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());
   };
-  const startMissedQuiz=()=>{
-    const pool=buildMcqPracticePool(missedQuestions,attempts,Math.min(50,missedQuestions.length),"smart",starredQuestionIds,{directMissedIds:missedMcqIds}).map(shuffleMcqOptions);
-    capture("mcq_missed_review_started", { question_count: pool.length, tier: user.tier });
-    setSessionContext({kind:"missed",label:"Missed-question repair"});
-    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());
-  };
-  const startChapterSmartReview=useCallback((chapterId,requestedCount=10,source="chapter_review")=>{
+  const startMissedQuiz=()=>startEngineQuiz({},quizCount);
+  const startChapterSmartReview=useCallback((chapterId,requestedCount=10)=>{
     if(!chapterId||isGuest)return;
-    const chapterKey=String(chapterId);
-    const latestAttempts=getLatestMcqAttempts(attempts);
-    const chapterQuestions=bank.filter(question=>String(question.ch)===chapterKey);
-    const missedIds=new Set(chapterQuestions.filter(question=>latestAttempts.get(question.id)?.correct===false).map(question=>question.id));
-    const missedTopics=new Set(chapterQuestions.filter(question=>missedIds.has(question.id)).map(question=>question.topic).filter(Boolean));
-    const count=Math.max(1,Math.min(Number(requestedCount)||10,chapterQuestions.length));
-    const pool=buildMcqPracticePool(
-      chapterQuestions,
-      attempts,
-      count,
-      "smart",
-      starredQuestionIds,
-      {focusChapterId:chapterKey,focusTopics:missedTopics,directMissedIds:missedIds}
-    ).map(shuffleMcqOptions);
-    if(!pool.length)return;
-    const chapter=CHAPTERS.find(item=>item.id===chapterKey);
-    setChFilter(String(chapterId));
-    setDiffFilter("all");
-    setTopicFilter("all");
-    setReviewMode("smart");
-    setQuizCount(pool.length);
-    setQuestions(pool);
-    setQi(0);
-    setSelected(null);
-    setSubmitted(false);
-    setDraftSelections([]);
-    setResults([]);
-    setDone(false);
-    setFinishedReviewMode(false);
-    setStarted(true);
-    setSessionStartedAt(Date.now());
-    setStarredView(false);
-    setSessionContext({kind:"weak-area",label:`Chapter ${chapterKey} repair sprint`,chapterId:chapterKey,chapterTitle:chapter?.title||"Focused review",source});
-    capture("mcq_chapter_smart_review_started", { chapter: chapterKey, question_count: pool.length, missed_topic_count: missedTopics.size, source, tier: user.tier });
-  },[attempts,bank,isGuest,starredQuestionIds,user.tier]);
+    setChFilter(String(chapterId));setDiffFilter("all");setTopicFilter("all");setReviewMode("smart");
+    startEngineQuiz({chapter:String(chapterId)},Math.max(10,Math.min(30,Number(requestedCount)||10)));
+  },[isGuest,engineBusy,user.tier]);
   const startStarredQuiz=()=>{
-    const pool=rankQuestionsBySm2(starredMcqs,attempts,new Set(starredMcqs.map(q=>q.id))).slice(0,Math.min(50,starredMcqs.length)).map(shuffleMcqOptions);
+    const pool=buildMcqPracticePool(starredMcqs,attempts,Math.min(30,starredMcqs.length)).map(shuffleMcqOptions);
     capture("mcq_starred_review_started", { question_count: pool.length, tier: user.tier });
     setSessionContext({kind:"starred",label:"Starred-question review"});
     setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
@@ -25167,6 +25005,22 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const continueQuiz=async()=>{
     const saved=await DB.getPracticeSession(sessionKey);
     if(!saved?.questions?.length)return;
+    if(saved.sessionContext?.engineSessionId){
+      try{
+        const plan=await mcqEngineRequest("resume",{session_id:saved.sessionContext.engineSessionId});
+        saved.questions=plan.questions.map(q=>practiceQuestion(q,plan.session_id));
+        saved.results=[];
+        for(const answer of plan.answers){
+          const i=saved.questions.findIndex(q=>q.id===answer.question_id);
+          if(i<0)continue;
+          const evaluation=answer.response;
+          saved.questions[i]={...saved.questions[i],correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:{[answer.selected_option_id]:evaluation.selected_feedback}};
+          saved.results[i]={qid:answer.question_id,correct:evaluation.is_correct,selected:answer.selected_option_id,mcq:true,ch:saved.questions[i].ch};
+        }
+        saved.submitted=Boolean(saved.results[saved.qi||0]);
+        if(saved.submitted)saved.selected=saved.results[saved.qi||0].selected;
+      }catch(error){setEngineError(error.message);return;}
+    }
     setQuestions(saved.questions);
     setQi(saved.qi||0);
     setSelected(saved.selected ?? saved.draftSelections?.[saved.qi||0] ?? null);
@@ -25200,6 +25054,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   },[isGuest,onSessionComplete,questions,results,sessionStartedAt]);
   const goToQuestion=index=>{
     if(index<0||index>=questions.length)return;
+    if(answerInFlight.current)return;
     setQi(index);
     setSelected(results[index]?.selected ?? draftSelections[index] ?? null);
     setSubmitted(Boolean(results[index]));
@@ -25219,17 +25074,25 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     capture("mcq_completed_question_reviewed", { question_id: questions[index].id, correct: result.correct, tier: user.tier });
   };
 
-  const submitQ=()=>{
-    if(selected===null)return;
-    const correct=selected===current.correct;
-    const r={qid:current.id,correct,selected,title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",topic:current.topic,difficulty:current.difficulty,mcq:true,createdAt:new Date().toISOString()};
-    capture("mcq_question_answered", { question_id: current.id, chapter: current.ch, difficulty: current.difficulty, topic: current.topic, correct, tier: user.tier });
-    setResults(rs=>{const next=[...rs];next[qi]=r;return next;});
-    if(!results[qi]) onSave(r);
-    playAnswerSound(correct);
-    setAnswerBurst({correct,key:Date.now()});
-    setTimeout(()=>setAnswerBurst(null),1700);
-    setSubmitted(true);setShowWrong(false);
+  const submitQ=async()=>{
+    if(selected===null||results[qi]||answerInFlight.current)return;
+    answerInFlight.current=true;setEngineBusy(true);setEngineError("");
+    try{
+      let evaluation=null;
+      if(current.engineSessionId){
+        const event=answerEvents.current.get(current.id)||crypto.randomUUID();
+        answerEvents.current.set(current.id,event);
+        evaluation=await mcqEngineRequest("answer",{session_id:current.engineSessionId,event_id:event,question_id:current.id,selected_option_id:selected});
+        setQuestions(prev=>prev.map((q,i)=>i===qi?{...q,correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:{[selected]:evaluation.selected_feedback}}:q));
+      }else if(!isGuest){evaluation=await recordStandaloneMcq(current,selected);}
+      const correct=evaluation?evaluation.is_correct:selected===current.correct;
+      const r={qid:current.id,correct,selected,title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",topic:current.topic,difficulty:current.difficulty,mcq:true,createdAt:new Date().toISOString()};
+      capture("mcq_question_answered",{question_id:current.id,chapter:current.ch,correct,tier:user.tier});
+      setResults(rs=>{const next=[...rs];next[qi]=r;return next;});
+      onSave(r);refreshEngineState();
+      playAnswerSound(correct);setAnswerBurst({correct,key:Date.now()});
+      setTimeout(()=>setAnswerBurst(null),1700);setSubmitted(true);setShowWrong(false);
+    }catch(error){setEngineError(error.message);}finally{answerInFlight.current=false;setEngineBusy(false);}
   };
   const nextQ=()=>{
     if(qi<questions.length-1) goToQuestion(qi+1);
@@ -25254,6 +25117,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     setDone(true);
   };
   const retakeCurrentQuiz=()=>{
+    if(sessionContext?.engineSessionId)return startEngineQuiz({},quizCount);
+    setQuestions(prev=>prev.map(q=>({...q,engineAnswerEventId:crypto.randomUUID()})));
     setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setShowWrong(false);setSessionStartedAt(Date.now());
   };
 
@@ -25350,6 +25215,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
   if(!started) return(
     <div className={`mcq-setup-screen fu ${isGuest?"guest-mcq-setup":""}`} style={{padding:"24px",maxWidth:1040,margin:"0 auto"}}>
+      {engineError&&<p role="alert" style={{color:t.red,marginBottom:12}}>{engineError}</p>}
       <header className="practice-page-head">
         <div className="practice-page-heading">
           <div className="practice-page-icon"><BookOpenCheck size={23} strokeWidth={2.3}/></div>
@@ -25374,13 +25240,13 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <div>
             <div className="label" style={{color:t.green}}>Step 1 · Choose your practice style</div>
             <h3>{isGuest?"Choose a simple guest set":"How should SecurePlus choose your questions?"}</h3>
-            <p>{isGuest?"Guest practice uses random Security+ questions from your selected chapter. Create an account later to save results and unlock Smart Review.":"Use Smart Review to revisit weak or due topics, or choose Random Practice for a fresh mixed set."}</p>
+            <p>{isGuest?"Guest practice uses random Security+ questions from your selected chapter. Create an account later to save results and unlock Smart Review.":"Smart Review mixes delayed retests, weak concepts, and new questions. Missed questions return after 30 other MCQ answers."}</p>
           </div>
           {!isGuest&&(
             <div className="setup-stats">
               {[
-                {label:"Due",value:reviewSummary.due,color:t.amber},
-                {label:"Weak",value:reviewSummary.weak,color:t.red},
+                {label:"Ready retests",value:reviewSummary.due,color:t.amber},
+                {label:"Weak concepts",value:reviewSummary.weak,color:t.red},
                 {label:"New",value:reviewSummary.untouched,color:t.accent},
               ].map(item=>(
                 <div key={item.label} className="setup-stat">
@@ -25410,7 +25276,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <div className="practice-mode-grid">
             <button className={`practice-mode-card ${reviewMode==="smart"?"active":""}`} style={{"--mode-color":t.green}} onClick={()=>setReviewMode("smart")} aria-pressed={reviewMode==="smart"}>
               <span className="practice-mode-icon"><Brain size={19}/></span>
-              <span><strong>Smart Review</strong><small>Prioritises due, missed, and starred questions.</small></span>
+              <span><strong>Smart Review</strong><small>Delayed retests, weak concepts, and new questions.</small></span>
               <span className="practice-mode-check"><Check size={13} strokeWidth={3}/></span>
             </button>
             <button className={`practice-mode-card ${reviewMode==="random"?"active":""}`} style={{"--mode-color":t.accent}} onClick={()=>setReviewMode("random")} aria-pressed={reviewMode==="random"}>
@@ -25471,7 +25337,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           </div>
         </div>
         <div className="mcq-launch-action">
-          <button className="btn btn-primary" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum}>
+          <button className="btn btn-primary" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
             Start questions now →
           </button>
           <small>{filtered.length>=sessionMinimum?`${filtered.length} questions available for this choice.`:`Only ${filtered.length} questions match. Choose all chapters to start.`}</small>
@@ -25586,8 +25452,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
             <div className="practice-builder-count">{quizCount}</div>
             <div><strong>{isGuest?"Guest practice set":reviewMode==="smart"?"Smart Review set":"Random practice set"}</strong><small>{filtered.length>=sessionMinimum?`${filtered.length} questions match your focus`:`Only ${filtered.length} match — broaden your filters`}</small></div>
           </div>
-          <button className="btn btn-primary" style={{minWidth:170}} onClick={startQuiz} disabled={filtered.length<sessionMinimum}>
-            {`Start questions now →`}
+          <button className="btn btn-primary" style={{minWidth:170}} onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
+            {engineBusy?"Preparing set…":"Start questions now →"}
           </button>
         </div>
       </div>
@@ -25647,7 +25513,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
               ?"You have a good base. Review the misses below, then try a focused set while the ideas are fresh."
               :"Mistakes are useful data. Review the missed concepts now and they will become easier to recognise next time."}</p>
           <div className="practice-result-actions">
-            <button className="btn btn-primary" onClick={retakeCurrentQuiz}>Retry this set</button>
+            <button className="btn btn-primary" onClick={retakeCurrentQuiz}>{sessionContext?.engineSessionId?"Start another set":"Retry this set"}</button>
             <button className="btn btn-ghost" onClick={()=>{setStarted(false);setDone(false);setFinishedReviewMode(false);}}>Build a new quiz</button>
           </div>
         </div>
@@ -25746,6 +25612,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
   return(
     <div style={{padding:"24px",maxWidth:700,margin:"0 auto"}} className="fu active-practice-screen mcq-question-screen" key={qi}>
+      {engineError&&<p role="alert" style={{color:t.red,marginBottom:12}}>{engineError}</p>}
       <header className="practice-session-header">
         <div className="practice-session-top">
           <div className="practice-session-name"><span>{finishedReviewMode?<CheckCircle2 size={16}/>:sessionContext?.kind==="weak-area"?<Brain size={16}/>:<BookOpenCheck size={16}/>}</span>{finishedReviewMode?"Answered Set Review":sessionContext?.label||"MCQ Practice"}</div>
@@ -25793,18 +25660,19 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       {/* Options */}
       <div className="practice-option-list" style={{display:"flex",flexDirection:"column",gap:9,marginBottom:20}}>
         {current.opts.map((opt,i)=>{
+          const optionValue=current.optionIds?.[i]??i;
           let cls="opt";
-          if(submitted){cls+=" done"; if(i===current.correct)cls+=" ok"; else if(i===selected&&i!==current.correct)cls+=" bad";}
-          else if(selected===i)cls+=" sel";
-          const showSelectedWrongFeedback=submitted&&canSeeFeedback&&i===selected&&i!==current.correct;
+          if(submitted){cls+=" done"; if(optionValue===current.correct)cls+=" ok"; else if(optionValue===selected&&optionValue!==current.correct)cls+=" bad";}
+          else if(selected===optionValue)cls+=" sel";
+          const showSelectedWrongFeedback=submitted&&canSeeFeedback&&optionValue===selected&&optionValue!==current.correct;
           return(
             <button
               type="button"
-              key={i}
+              key={optionValue}
               className={cls}
-              aria-pressed={!submitted&&selected===i}
-              disabled={submitted}
-              onClick={()=>{if(submitted)return;setSelected(i);setDraftSelections(prev=>{const next=[...prev];next[qi]=i;return next;});}}
+              aria-pressed={!submitted&&selected===optionValue}
+              disabled={submitted||engineBusy}
+              onClick={()=>{if(submitted||engineBusy)return;setSelected(optionValue);setDraftSelections(prev=>{const next=[...prev];next[qi]=optionValue;return next;});}}
             >
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
               <div className="option-body">
@@ -25812,12 +25680,12 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
                 {showSelectedWrongFeedback&&(
                   <div className="option-inline-feedback">
                     <strong>Why this choice is wrong:</strong>
-                    <GlossaryText text={getWrongOptionFeedback(current, i)} t={t}/>
+                    <GlossaryText text={current.engineSessionId?current.wrongFeedback?.[optionValue]:getWrongOptionFeedback(current, i)} t={t}/>
                   </div>
                 )}
               </div>
-              {submitted&&i===current.correct&&<Check size={18} color={t.green} strokeWidth={2.8}/>}
-              {submitted&&i===selected&&i!==current.correct&&<X size={18} color={t.red} strokeWidth={2.8}/>}
+              {submitted&&optionValue===current.correct&&<Check size={18} color={t.green} strokeWidth={2.8}/>}
+              {submitted&&optionValue===selected&&optionValue!==current.correct&&<X size={18} color={t.red} strokeWidth={2.8}/>}
             </button>
           );
         })}
@@ -25825,9 +25693,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
       {!submitted?(
         <div className="practice-action-bar">
-          <div className="practice-action-copy"><strong>{selected===null?"Choose one answer":"Answer selected"}</strong>{selected===null?"Select the option you think is strongest.":`Option ${String.fromCharCode(65+selected)} is ready to submit.`}</div>
-          <button className="btn btn-primary" style={{minWidth:190}} disabled={selected===null} onClick={submitQ}>
-            Check my answer →
+          <div className="practice-action-copy"><strong>{selected===null?"Choose one answer":"Answer selected"}</strong>{selected===null?"Select the option you think is strongest.":`Option ${String.fromCharCode(65+(current.optionIds?current.optionIds.indexOf(selected):selected))} is ready to submit.`}</div>
+          <button className="btn btn-primary" style={{minWidth:190}} disabled={selected===null||engineBusy} onClick={submitQ}>
+            {engineBusy?"Saving answer…":"Check my answer →"}
           </button>
         </div>
       ):(
@@ -26826,7 +26694,15 @@ function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamP
       }
     }
     setSubmittingExam(true);
-    window.setTimeout(()=>{
+    window.setTimeout(async()=>{
+      try{
+        if(user?.authProvider==="supabase"){
+          for(let index=0;index<questions.length;index++){
+            const item=questions[index];
+            if(item.kind==="mcq"&&answers[index]?.selected!=null)await recordStandaloneMcq(item.q,answers[index].selected);
+          }
+        }
+      }catch(error){alert(error.message);setSubmittingExam(false);return;}
       const rows=questions.map((item,index)=>{
         const q=item.q;
         return {
@@ -28028,7 +27904,7 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
     }
   };
 
-  const explainSmartReview=()=>addMessage("cipher","Smart Review now weighs your latest answer, repeated misses, due date, time since practice, topic and chapter accuracy, starred questions, difficulty fit, and recent repetition. It then spreads the set across concepts so one topic does not crowd out everything else.");
+  const explainSmartReview=()=>addMessage("cipher","Smart Review uses three decks: 20% delayed retests, 30% unseen questions for weak concepts, and 50% discovery. Empty decks pass their slots forward. Concept scores start at 50, gain 20 for a correct answer, and lose 35 for a miss. Scores of 80 or more are mastered.");
 
   const explainCoins=()=>addMessage("cipher",`Cipher Coins let free users unlock premium practice through consistent study. Daily Challenge and perfect sets earn coins. PBQ unlocks cost ${CIPHER_COIN_COSTS.pbq} coins, and Exam Vouchers cost ${CIPHER_COIN_COSTS.examPass} coins. Pro is still the faster route when your exam is soon because it removes coin requirements.`);
 
@@ -28122,7 +27998,7 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
       : "I’ll prioritise recent misses and lower-accuracy questions from this chapter.";
     addMessage(
       "cipher",
-      `Prepared: 10 Smart Review questions for ${weakChapter}.\n${topicLine}\nThe set will mix missed concepts, recent weak signals, and spaced review so it does not feel repetitive.`,
+      `Prepared: 10 Smart Review questions for ${weakChapter}.\n${topicLine}\nThe set will mix delayed retests, unseen questions for weak concepts, and discovery.`,
       {kind:"sprintConfirm",meta:{chapterId:context.weakChapterId}}
     );
   };
@@ -30477,7 +30353,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
     "Everything in Free, including the full MCQ bank",
     `${PBQ_BANK.length} performance-based simulations across 8 task types`,
     "Timed Exam Mode with mixed MCQ and PBQ practice",
-    "Smart Review that prioritises missed and starred questions",
+    "Smart Review with delayed retests and concept remediation",
     "Detailed solutions, chapter analytics, and next-step guidance",
     "Zero Cipher Coin requirements—open every Pro tool whenever you need it",
   ];
@@ -33180,6 +33056,7 @@ function DiagnosticQuiz({user,t,onComplete}) {
   const [results,setResults]=useState([]);
   const [saving,setSaving]=useState(false);
   const [showSummary,setShowSummary]=useState(false);
+  const answerSaving=useRef(false);
   const current=questions[index];
   const correctCount=results.filter(r=>r.correct).length;
   const done=showSummary&&questions.length>0&&results.length===questions.length;
@@ -33189,8 +33066,12 @@ function DiagnosticQuiz({user,t,onComplete}) {
   }).filter(item=>item.total>0);
   const weakChapters=chapterResults.filter(item=>item.correct<item.total).sort((a,b)=>(a.correct/a.total)-(b.correct/b.total));
 
-  const submit=()=>{
-    if(selected===null||!current)return;
+  const submit=async()=>{
+    if(selected===null||!current||submitted||answerSaving.current)return;
+    answerSaving.current=true;
+    try{if(user?.authProvider==="supabase")await recordStandaloneMcq(current,selected);}
+    catch(error){alert(error.message);answerSaving.current=false;return;}
+    answerSaving.current=false;
     const correct=selected===current.correct;
     const attempt={
       qid:current.id,

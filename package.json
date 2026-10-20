@@ -35,7 +35,11 @@
     "audit:learning-operations:database": "node scripts/rehearse-learning-operations.mjs",
     "audit:learning-operations:cleanup": "node scripts/audit-learning-operations-cleanup.mjs",
     "build:content-mapping": "node scripts/build-content-mapping.mjs",
-    "audit:content-mapping": "node --test scripts/audit-content-mapping.mjs && node scripts/build-content-mapping.mjs --check"
+    "audit:content-mapping": "node --test scripts/audit-content-mapping.mjs && node scripts/build-content-mapping.mjs --check",
+    "build:mcq-engine": "node scripts/build-mcq-engine-catalogue.mjs",
+    "audit:mcq-engine": "node --test scripts/test-mcq-three-deck.mjs scripts/test-mcq-engine-http.mjs && node scripts/build-mcq-engine-catalogue.mjs --check",
+    "audit:mcq-engine:database": "node scripts/test-mcq-engine-database.mjs",
+    "prebuild": "node scripts/build-mcq-engine-catalogue.mjs --check"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.105.3",
@@ -50,6 +54,7 @@
     "@capacitor/android": "^8.5.0",
     "@capacitor/cli": "^8.5.0",
     "@capacitor/core": "^8.5.0",
+    "@electric-sql/pglite": "0.5.10",
     "@vitejs/plugin-react": "6.0.1",
     "vite": "8.1.0"
   },
