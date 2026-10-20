@@ -1,0 +1,210 @@
+[
+  {
+    "id": "m781",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "core",
+    "q": "An attacker enters a local network address into a website form, causing the web server to send an unauthorized HTTP request to an internal system behind the firewall. What attack occurred?",
+    "opts": [
+      "Cross-site scripting (XSS)",
+      "Structured query injection (SQLi)",
+      "Server-side request forgery (SSRF)",
+      "Cross-site request forgery (CSRF)"
+    ],
+    "correct": 2,
+    "exp": "SSRF occurs when an attacker tricks a backend server into initiating unauthorized network requests to internal or loopback resources.",
+    "wrongFeedback": {
+      "0": "XSS executes malicious scripts inside a victim’s client browser rather than forcing a backend server to query internal networks.",
+      "1": "SQLi injects malicious syntax into database queries to manipulate data, not sending outbound network requests.",
+      "3": "CSRF tricks an authenticated client browser into submitting unwanted actions to a website, rather than the server making requests."
+    },
+    "conceptTagIds": [
+      "att.app-ssrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SSRF Core and Applied batch"
+  },
+  {
+    "id": "m782",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "core",
+    "q": "Which mitigation directly prevents server-side request forgery (SSRF) by restricting the external web addresses an application server is allowed to fetch?",
+    "opts": [
+      "Enforcing a strict destination URL allowlist",
+      "Configuring HttpOnly flags on session cookies",
+      "Implementing parameterized SQL database queries",
+      "Enforcing complex multi-factor authentication"
+    ],
+    "correct": 0,
+    "exp": "URL allowlisting explicitly limits the domains and IP addresses the server can query, blocking calls to loopback or private internal addresses.",
+    "wrongFeedback": {
+      "1": "The `HttpOnly` flag stops client-side scripts from reading session cookies during XSS attacks, but does not limit server network calls.",
+      "2": "Parameterized queries prevent SQL injection at the database tier, providing no control over server-initiated HTTP requests.",
+      "3": "MFA verifies human user identity during authentication, but does not stop an application from fetching unauthorized external URLs."
+    },
+    "conceptTagIds": [
+      "att.app-ssrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SSRF Core and Applied batch"
+  },
+  {
+    "id": "m783",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "An attacker submits http://169.254.169.254/latest/meta-data/iam/ into an invoice import field on a cloud-hosted app, successfully exfiltrating temporary cloud credentials. What core design flaw enabled this extraction?",
+    "opts": [
+      "The database engine automatically processed unescaped parameters",
+      "The metadata endpoint implicitly trusted requests from the host",
+      "The browser automatically forwarded ambient identity credentials",
+      "The application failed to enforce strong administrative passwords"
+    ],
+    "correct": 1,
+    "exp": "Link-local metadata services (169.254.169.254) trust network requests originating from the virtual instance itself, allowing SSRF to retrieve underlying role credentials.",
+    "wrongFeedback": {
+      "0": "Cloud metadata services are HTTP endpoints queried over the network, not database engines executing unescaped SQL syntax.",
+      "2": "Browser-managed ambient credentials enable client-side CSRF, whereas here the request originated directly from the backend cloud server.",
+      "3": "Password complexity has no bearing on metadata exfiltration because instance metadata endpoints typically authenticate by network origin rather than passwords."
+    },
+    "conceptTagIds": [
+      "att.app-ssrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SSRF Core and Applied batch"
+  },
+  {
+    "id": "m784",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A web server processes outgoing webhook notifications configured by end users. What network-level architecture control prevents attackers from abusing this service to scan private internal corporate subnets?",
+    "opts": [
+      "Blocking incoming ICMP echo requests at the edge perimeter",
+      "Terminating secure socket layer sessions at an edge load balancer",
+      "Restricting server egress traffic from reaching RFC 1918 spaces",
+      "Implementing web application firewall inspection on client inputs"
+    ],
+    "correct": 2,
+    "exp": "Egress filtering at the network firewall prevents the application server from initiating connections to private internal address ranges (RFC 1918), neutralizing internal SSRF pivots.",
+    "wrongFeedback": {
+      "0": "Disabling incoming ICMP stops external ping sweeps, but does not block the backend server from initiating internal TCP scans.",
+      "1": "SSL termination offloads encryption processing at the perimeter, providing no restrictions on where backend servers route outbound requests.",
+      "3": "While a WAF provides Layer 7 perimeter filtering, it is an application-layer control; egress firewall rules provide the definitive network-level control."
+    },
+    "conceptTagIds": [
+      "att.app-ssrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SSRF Core and Applied batch"
+  },
+  {
+    "id": "m785",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A document converter accepts external URLs to import text files. An attacker enters file:///etc/passwd, and the server returns the contents of the local user configuration file. What design oversight permitted this bypass?",
+    "opts": [
+      "Failing to restrict supported protocol handlers within the URL parser",
+      "Allowing dynamic database rollbacks during unhandled file read errors",
+      "Omitting SameSite attributes on sensitive administrative cookies",
+      "Storing operating system configuration files in encrypted disk blocks"
+    ],
+    "correct": 0,
+    "exp": "URL parsers should explicitly permit only web protocols (such as HTTP and HTTPS); allowing alternative URI schemes like file:// or gopher:// enables direct local file disclosure.",
+    "wrongFeedback": {
+      "1": "Database rollbacks manage data integrity during transactional errors, which is irrelevant to filesystem reading operations.",
+      "2": "The SameSite cookie attribute mitigates client-side CSRF, whereas this attack targets local server files via backend URI handlers.",
+      "3": "Full-disk encryption protects data at rest against physical theft, but does not prevent the running operating system from reading files requested by a valid service."
+    },
+    "conceptTagIds": [
+      "att.app-ssrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SSRF Core and Applied batch"
+  },
+  {
+    "id": "m786",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A developer blocks requests to 127.0.0.1 and localhost to protect an internal API. An attacker enters http://2130706433 (the integer format of 127.0.0.1) and successfully reaches the API. Why did this defense fail?",
+    "opts": [
+      "Integer IP representations force web proxies to drop request headers",
+      "String-based blacklists fail to account for alternative address formats",
+      "Transport layer encryption automatically decodes non-standard IP strings",
+      "The API gateway bypassed routing checks due to session state caching"
+    ],
+    "correct": 1,
+    "exp": "Input validation based on blacklisting specific string patterns (like literal 127.0.0.1) fails against obfuscated representations such as integer notation, hex, octal, or custom DNS lookups that resolve to loopback.",
+    "wrongFeedback": {
+      "0": "Proxies do not strip request headers simply because an IP address is formatted as a 32-bit integer.",
+      "2": "Transport encryption (TLS) protects payload confidentiality; it does not parse or rewrite destination IP address encodings.",
+      "3": "Session caching maintains active user state and does not alter how host addresses are parsed or resolved."
+    },
+    "conceptTagIds": [
+      "att.app-ssrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SSRF Core and Applied batch"
+  },
+  {
+    "id": "m787",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A security engineer evaluates an application where user-controlled URLs cause backend workers to pull internal metrics. What key architectural relationship makes this vulnerability fundamentally different from CSRF?",
+    "opts": [
+      "It relies on compromised client browsers executing untrusted JavaScript",
+      "It requires valid administrative session tokens embedded in URL paths",
+      "It targets internal infrastructure trusting the backend server's identity",
+      "It abuses external third-party origins trusting inbound customer cookies"
+    ],
+    "correct": 2,
+    "exp": "CSRF exploits the trust a web app has in the user's browser, whereas SSRF exploits the trust that internal infrastructure or APIs place in the application server.",
+    "wrongFeedback": {
+      "0": "Relying on browser execution of scripts characterizes XSS, whereas SSRF requests originate directly from the backend server.",
+      "1": "SSRF does not require administrative session tokens in the URL; the request succeeds because internal networks often trust the calling server's network location.",
+      "3": "Abusing ambient credentials (cookies) held by the user's browser describes CSRF, not server-side request manipulation."
+    },
+    "conceptTagIds": [
+      "att.app-ssrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SSRF Core and Applied batch"
+  },
+  {
+    "id": "m788",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "A web server contains an unpatched SSRF vulnerability. However, when an attacker sends a GET request to the cloud metadata address (http://169.254.169.254), the request returns 401 Unauthorized and denies credential extraction. Which mitigation successfully stopped this exploit?",
+    "opts": [
+      "Requiring custom session token headers for all metadata requests",
+      "Disabling all inbound security group rules on web application ports",
+      "Rotating cloud infrastructure access keys automatically every 24 hours",
+      "Enforcing context-aware output encoding across incoming HTTP queries"
+    ],
+    "correct": 0,
+    "exp": "Modern cloud metadata protections (such as AWS IMDSv2) require a session-oriented PUT request to obtain an authorization token header before querying metadata, blocking simple GET-based SSRF exploits.",
+    "wrongFeedback": {
+      "1": "Closing inbound web ports would disable the application entirely, rather than securing the instance's outbound metadata access.",
+      "2": "Key rotation limits the lifespan of stolen credentials, but does not block the active retrieval of the newly rotated key via the metadata endpoint.",
+      "3": "Output encoding prevents browser-rendered XSS attacks and has no effect on outbound server-side HTTP calls to metadata addresses."
+    },
+    "conceptTagIds": [
+      "att.app-ssrf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SSRF Core and Applied batch"
+  }
+]
