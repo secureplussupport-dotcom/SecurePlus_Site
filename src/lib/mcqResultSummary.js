@@ -70,3 +70,9 @@ export function buildMcqResultSummary({ questions, results, chapters, engineStat
   const nextFocus = [...missed.values()].filter(entry => progressAvailable && (streaks.get(entry.tag) || 0) >= 2 && entry.lesson);
   return { domains, strongest, weakPoints, nextFocus };
 }
+
+// Guests keep report streaks only for this open practice page; no mastery is invented.
+export function advanceConceptStreak(streaks, tag, correct) {
+  if (!tag) return streaks;
+  return { ...streaks, [tag]: correct ? 0 : Math.min(2, (streaks[tag] || 0) + 1) };
+}

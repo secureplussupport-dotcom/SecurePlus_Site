@@ -5,7 +5,7 @@ import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701Pb
 import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from "./data/sy0701PublishedSnapshot.js";
 import { CONCEPT_TAGS, MCQ_TAGGING_VERSION, inferMcqConceptTagIds, searchMcqConceptTags } from "./data/sy0701ConceptTags.js";
 import { McqSetResults } from "./components/McqSetResults.jsx";
-import { buildMcqResultSummary } from "./lib/mcqResultSummary.js";
+import { buildMcqResultSummary, advanceConceptStreak } from "./lib/mcqResultSummary.js";
 import { effectiveMcqConceptTagIds } from "./lib/mcqConceptReview.js";
 import { normalizeMcqDifficulty } from "./lib/mcqDifficulty.js";
 import mcqTagAssignments from "./data/mcqConceptTagAssignments.json";
@@ -25006,6 +25006,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [engineState,setEngineState]=useState(null);
   const [engineError,setEngineError]=useState("");
   const [engineStateError,setEngineStateError]=useState(false);
+  const [localConceptStreaks,setLocalConceptStreaks]=useState({});
   const [engineBusy,setEngineBusy]=useState(false);
   const answerInFlight=useRef(false);
   const answerEvents=useRef(new Map());
@@ -25218,6 +25219,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       const r={qid:current.id,correct,selected,conceptTag:evaluation?.concept_tag||current.conceptTagIds?.[0],title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",topic:current.topic,difficulty:current.difficulty,mcq:true,createdAt:new Date().toISOString()};
       capture("mcq_question_answered",{question_id:current.id,chapter:current.ch,correct,tier:user.tier});
       setResults(rs=>{const next=[...rs];next[qi]=r;return next;});
+      setLocalConceptStreaks(streaks=>advanceConceptStreak(streaks,r.conceptTag,correct));
       onSave(r);await refreshEngineState();
       playAnswerSound(correct);setAnswerBurst({correct,key:Date.now()});
       setTimeout(()=>setAnswerBurst(null),1700);setSubmitted(true);setShowWrong(false);
@@ -25423,7 +25425,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   );
 
   if(done) return <McqSetResults correct={correctCount} total={questions.length} t={t}
-    summary={buildMcqResultSummary({questions,results,chapters:CHAPTERS,engineState,progressAvailable:!engineStateError})}
+    summary={buildMcqResultSummary({questions,results,chapters:CHAPTERS,engineState:!isGuest&&mcqEngineEnabled?engineState:{concept_streaks:Object.entries(localConceptStreaks).map(([concept_tag,wrong_streak])=>({concept_tag,wrong_streak}))},progressAvailable:!engineStateError})}
     onStart={startQuiz} starting={engineBusy} startError={engineError}
     onReview={()=>reviewCompletedQuestion(0)} onOpenLesson={onOpenDeepDive}
     guestPrompt={isGuest?guestSignupPrompt:null} progressError={engineStateError} onRetryProgress={refreshEngineState}/>;

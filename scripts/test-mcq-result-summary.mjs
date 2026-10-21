@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildMcqResultSummary, conceptDeepDive } from '../src/lib/mcqResultSummary.js';
+import { buildMcqResultSummary, conceptDeepDive, advanceConceptStreak } from '../src/lib/mcqResultSummary.js';
 import { CONCEPT_TAGS } from '../src/data/sy0701ConceptTags.js';
 const chapters = [1,2,3,4,5].map(id => ({ id: String(id), title: `Chapter ${id}` }));
 const questions = [
@@ -43,4 +43,14 @@ test('perfect and empty sets have no weak points or focus; strongest breaks ties
   const report=buildMcqResultSummary({questions,results:results.map(()=>({correct:true})),chapters});
   assert.equal(report.strongest.chapter.id,'4');assert.equal(report.weakPoints.length,0);assert.equal(report.nextFocus.length,0);
   assert.deepEqual(buildMcqResultSummary({questions:[],results:[],chapters}).domains,[]);
+});
+
+test('guest streaks span local sets, reset only on that concept, and never invent mastery',()=>{
+  let streaks=advanceConceptStreak({},'ops.logs-syslog',false);
+  streaks=advanceConceptStreak(streaks,'iam.mfa',true);
+  streaks=advanceConceptStreak(streaks,'ops.logs-syslog',false);
+  assert.equal(streaks['ops.logs-syslog'],2);
+  streaks=advanceConceptStreak(streaks,'ops.logs-syslog',true);
+  assert.equal(streaks['ops.logs-syslog'],0);
+  assert.equal(advanceConceptStreak(streaks,null,false),streaks);
 });
