@@ -25270,7 +25270,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <div>
             <h3>{isGuest?"Ready to answer questions?":mcqEngineEnabled&&reviewMode==="smart"?"Personalised MCQ set":"Your MCQ set"}</h3>
             <p>{isGuest?"Press the button to begin now. Changing chapter or set size below is optional.":mcqEngineEnabled&&reviewMode==="smart"?"Smart Review mixes due retests, questions for concepts that need attention, and new syllabus coverage.":"Practise a fresh set. You can change its scope below."}</p>
-            {!isGuest&&mcqEngineEnabled&&<div className="setup-stats" aria-label="Why this set is recommended">
+            {!isGuest&&mcqEngineEnabled&&reviewMode==="smart"&&<div className="setup-stats" aria-label="Why this set is recommended">
               {[
                 {label:"Due retests",value:reviewSummary.due,color:t.amber},
                 {label:"Concepts below target",value:reviewSummary.weak,color:t.red},
@@ -25356,17 +25356,6 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         </section>
       )}
 
-      {user.tier==="free"&&(
-        <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.accent}30`,background:`${t.accent}06`}}>
-          <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
-            <div style={{flex:1}}>
-              <div style={{fontWeight:600,fontSize:14,color:t.text}}>MCQs stay free. Pro adds exam-style PBQs.</div>
-              <div style={{fontSize:13,color:t.textSec}}>When you are ready to practise terminal, log, ordering, and Select &amp; Fill simulations, the {PRO_ACADEMY_PASS_NAME} is {PRO_ACADEMY_PASS_PRICE}.</div>
-            </div>
-            <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={onUpgrade}>See Pro PBQs</button>
-          </div>
-        </div>
-      )}
       <PracticeSetupDisclosure isGuest={isGuest}>
       <div className="card practice-filter-card" style={{padding:"20px 24px",marginBottom:isGuest?16:0}}>
         <div className="practice-builder-head">
@@ -25459,6 +25448,22 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         </div>}
       </div>
       </PracticeSetupDisclosure>
+      {user.tier==="free"&&(
+        <details className="practice-secondary">
+          <summary>Explore Pro PBQ practice</summary>
+          <div className="practice-secondary-content">
+            <div className="card" style={{padding:"16px 20px",marginBottom:0,borderColor:`${t.accent}30`,background:`${t.accent}06`}}>
+              <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+                <div style={{flex:1}}>
+                  <div style={{fontWeight:600,fontSize:14,color:t.text}}>MCQs stay free. Pro adds exam-style PBQs.</div>
+                  <div style={{fontSize:13,color:t.textSec}}>When you are ready to practise terminal, log, ordering, and Select &amp; Fill simulations, the {PRO_ACADEMY_PASS_NAME} is {PRO_ACADEMY_PASS_PRICE}.</div>
+                </div>
+                <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={onUpgrade}>See Pro PBQs</button>
+              </div>
+            </div>
+          </div>
+        </details>
+      )}
 
       {/* Chapter overview */}
       <details className="practice-secondary">
