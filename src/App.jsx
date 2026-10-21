@@ -16941,6 +16941,9 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .mcq-review-queue-card em{display:grid;place-items:center;min-width:34px;height:34px;padding:0 9px;border-radius:999px;background:color-mix(in srgb,var(--queue-color) 14%,${t.surface});color:var(--queue-color);font-style:normal;font-size:12px;font-weight:950;}
 .mcq-hub-heading{margin-bottom:22px;}
 .mcq-hub-heading h2{font-size:28px;color:${t.text};margin:0;}
+.mcq-hub-heading p{margin:6px 0 0;color:${t.textSec};font-size:14px;line-height:1.6;}
+.mcq-hub-description{position:relative;z-index:1;margin:0;color:${t.textSec};font-size:14px;line-height:1.6;text-align:center;max-width:540px;}
+.mcq-customise-description{margin:0 0 16px;color:${t.textSec};font-size:13px;line-height:1.6;}
 .mcq-top-modes{margin-bottom:20px;z-index:5;}
 .mcq-mode-choice{position:relative;min-width:0;}
 .mcq-mode-choice .practice-mode-card{width:100%;min-height:76px;}
@@ -25265,7 +25268,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
   if(!started) return(
     <div className="mcq-setup-screen mcq-hub-screen fu" style={{padding:"24px",maxWidth:1040,margin:"0 auto"}}>
-      <header className="mcq-hub-heading"><h2>MCQ practice</h2></header>
+      <header className="mcq-hub-heading"><h2>MCQ practice</h2><p>Build confidence, one question at a time.</p></header>
       <div className="practice-mode-grid mcq-top-modes" role="group" aria-label="Question selection mode">
         {practiceModes.map(({id,label,Icon,color,description})=>(
           <div key={id} className="mcq-mode-choice" onMouseEnter={()=>setModeInfo(id)} onMouseLeave={event=>{if(!event.currentTarget.contains(document.activeElement))setModeInfo(null);}} onFocus={()=>setModeInfo(id)} onBlur={event=>{if(!event.currentTarget.contains(event.relatedTarget))setModeInfo(null);}} onKeyDown={event=>{if(event.key==="Escape"){setModeInfo(null);event.stopPropagation();}}}>
@@ -25280,6 +25283,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       </div>
 
       <section className="mcq-launch-pad mcq-practice-hub" aria-label="Start MCQ practice">
+        <p className="mcq-hub-description">Choose your pace. Make this set count.</p>
         <div className="setup-stats mcq-hub-stats" aria-label="Review diagnostics" title={isGuest?"Sign in to see your review diagnostics":undefined}>
           <div className="setup-stat">
             <strong className="mcq-hub-number" style={{color:t.amber}}>{reviewSummary.due}</strong>
@@ -25317,6 +25321,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
       <PracticeSetupDisclosure>
         <div className="practice-filter-card" style={{padding:"4px 6px 0"}}>
+          <p className="mcq-customise-description">Narrow your next set to the areas you want to work on.</p>
           {(chFilter!=="all"||diffFilter!=="all"||topicFilter!=="all")&&<button className="btn btn-ghost" type="button" style={{fontSize:12,marginBottom:12}} onClick={()=>{setChFilter("all");setDiffFilter("all");setTopicFilter("all");}}><X size={14} aria-hidden="true"/> Reset filters</button>}
           <div className="practice-filter-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
             <div>
