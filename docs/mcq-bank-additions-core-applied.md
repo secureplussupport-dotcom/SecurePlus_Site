@@ -1,19 +1,19 @@
 # MCQs to add: Core and Applied
 
-Checked 2026-10-21T02:00:06.375Z. Current effective bank: 498 MCQs (246 Core, 252 Applied), including 156 current active live Question Manager records merged using production precedence.
+Checked 2026-10-21T02:01:21.743Z. Current effective bank: 505 MCQs (248 Core, 257 Applied), including 163 current active live Question Manager records merged using production precedence.
 
 Count one-tag questions as 1 per assigned tag; questions with two or more assigned tags count as 0.5 per assigned tag. Only selected primary/secondary concept tags count; distractor-only metadata does not. Former Easy is Core; former Medium and Hard are combined into Applied before calculating the shortfall. Round each positive shortfall up to a whole question. Extra questions are allowed. PBQs are excluded.
 
 **Each new question below should have one intended concept tag.** If new questions have multiple tags, they earn only 0.5 each, so more questions will be needed. These are inventory shortfalls, not unique-content quality judgments. Concepts without an assigned Heavy weight/Standard/Niche group have no benchmark in this report.
 
-**Add 266 single-tag MCQs: 111 Core and 155 Applied.**
+**Add 259 single-tag MCQs: 109 Core and 150 Applied.**
 
 | Group | Add Core | Add Applied | Total |
 |---|---:|---:|---:|
-| Heavy weight | 10 | 38 | 48 |
+| Heavy weight | 8 | 33 | 41 |
 | Standard | 32 | 86 | 118 |
 | Niche | 69 | 31 | 100 |
-| **Total** | **111** | **155** | **266** |
+| **Total** | **109** | **150** | **259** |
 
 ## Heavy weight
 
@@ -40,7 +40,7 @@ Numbers below are additional questions to write, not current bank counts. All ar
 | net.app-waf | 0 | 0 | 0 |
 | net.proto-tls | 0 | 0 | 0 |
 | arch.segmentation | 0 | 0 | 0 |
-| arch.ztna | 2 | 5 | 7 |
+| arch.ztna | 0 | 0 | 0 |
 | ops.siem | 0 | 3 | 3 |
 | ops.edr-xdr | 1 | 6 | 7 |
 | ops.logs-syslog | 2 | 5 | 7 |

@@ -1,0 +1,184 @@
+[
+  {
+    "id": "m838",
+    "ch": "3",
+    "topic": "Security Architecture",
+    "difficulty": "core",
+    "q": "An organization replaces its legacy remote-access VPN with a Zero Trust Network Access (ZTNA) solution. What is the fundamental change in how remote users access internal resources?",
+    "opts": [
+      "Users are granted access to specific applications rather than the broad network",
+      "Users must authenticate using physical smart cards rather than mobile push apps",
+      "User sessions route across private leased lines instead of the public internet",
+      "User traffic is encrypted using asymmetric algorithms instead of symmetric ciphers"
+    ],
+    "correct": 0,
+    "exp": "Traditional VPNs grant broad Layer 3 network access upon connection, whereas ZTNA creates isolated, per-application connections that prevent users from seeing or accessing the underlying network.",
+    "wrongFeedback": {
+      "1": "ZTNA supports modern, flexible MFA options (including authenticator apps and FIDO2 keys); it does not mandate legacy smart cards.",
+      "2": "ZTNA operates over standard internet transport paths, securing application traffic via encrypted tunnels rather than requiring expensive dedicated leased lines.",
+      "3": "ZTNA uses standard TLS/IPsec architectures where asymmetric keys handle the handshake and symmetric ciphers encrypt the bulk data."
+    },
+    "conceptTagIds": [
+      "arch.ztna"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied ZTNA Core/Applied batch"
+  },
+  {
+    "id": "m839",
+    "ch": "3",
+    "topic": "Security Architecture",
+    "difficulty": "core",
+    "q": "Which operational tenet forms the foundational baseline of a Zero Trust architecture under the SY0-701 syllabus?",
+    "opts": [
+      "Trusting all internal hosts after they complete an initial perimeter verification",
+      "Encrypting local application storage drives using public key infrastructure",
+      "Assuming breach and verifying trust explicitly for every single access request",
+      "Delegating file authorization decisions directly to departmental asset owners"
+    ],
+    "correct": 2,
+    "exp": "The core philosophy of Zero Trust is \"never trust, always verify\" and \"assume breach,\" requiring every access request to be explicitly authenticated, authorized, and validated regardless of network location.",
+    "wrongFeedback": {
+      "0": "Assuming internal traffic is safe represents the obsolete \"castle-and-moat\" perimeter model that Zero Trust explicitly eliminates.",
+      "1": "Encrypting storage protects data at rest, but does not define the overarching architectural model for controlling access.",
+      "3": "Delegating access to asset owners describes Discretionary Access Control (DAC), not the systematic enforcement of Zero Trust policies."
+    },
+    "conceptTagIds": [
+      "arch.ztna"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied ZTNA Core/Applied batch"
+  },
+  {
+    "id": "m840",
+    "ch": "3",
+    "topic": "Security Architecture",
+    "difficulty": "applied",
+    "q": "A penetration tester performs port scans against an enterprise's external IP addresses to find internal business applications, but discovers all inbound ports appear closed. Despite this, authorized staff can remotely access these applications. How does ZTNA achieve this architecture?",
+    "opts": [
+      "By rotating external DNS records continuously to evade automated scanning tools",
+      "By transmitting unencrypted discovery beacons across public internet nodes",
+      "By using reverse proxy lookups to bind client hardware MAC addresses to ports",
+      "By having internal application connectors initiate outbound tunnels to a broker"
+    ],
+    "correct": 3,
+    "exp": "ZTNA renders applications \"dark\" to internet scanning by having internal connectors establish outbound-only connections to a secure cloud broker, requiring zero open inbound listening ports on the enterprise firewall.",
+    "wrongFeedback": {
+      "0": "Fast-flux DNS cycling is an evasion technique used by malware botnets, not an enterprise network access architecture.",
+      "1": "ZTNA encrypts communications end-to-end and does not transmit unencrypted discovery beacons across public networks.",
+      "2": "MAC addresses operate at Layer 2 and do not traverse the routed public internet to control external port states."
+    },
+    "conceptTagIds": [
+      "arch.ztna"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied ZTNA Core/Applied batch"
+  },
+  {
+    "id": "m841",
+    "ch": "3",
+    "topic": "Security Architecture",
+    "difficulty": "applied",
+    "q": "An attacker uses compromised credentials to sign in to an internal wiki service through the company's remote portal. The attacker then attempts to ping and port-scan database servers located on the same subnet, but all scans fail. What architectural feature prevented this discovery?",
+    "opts": [
+      "The gateway deployed deep packet inspection to decrypt database SQL queries",
+      "The connection created an application micro-tunnel rather than a network route",
+      "The identity provider enforced static separation of duties during provisioning",
+      "The internal directory service implemented digital certificate key pinning"
+    ],
+    "correct": 1,
+    "exp": "ZTNA provides point-to-point application micro-segmentation. Because the client is not joined to the internal network subnet, the attacker has no network visibility or route to discover adjacent resources.",
+    "wrongFeedback": {
+      "0": "Deep packet inspection inspects payload content, but does not explain why network-layer discovery and scanning failed completely.",
+      "2": "Separation of duties prevents a single user from holding conflicting business roles, not network-level packet traversal.",
+      "3": "Certificate pinning prevents man-in-the-middle attacks on TLS sessions, rather than isolating network-level scanning."
+    },
+    "conceptTagIds": [
+      "arch.ztna"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied ZTNA Core/Applied batch"
+  },
+  {
+    "id": "m842",
+    "ch": "3",
+    "topic": "Security Architecture",
+    "difficulty": "applied",
+    "q": "A remote employee signs in to an enterprise portal from a managed laptop. An hour into the session, the employee disables the endpoint's antivirus software. Within seconds, the user's active cloud session is terminated. What ZTNA capability caused this revocation?",
+    "opts": [
+      "Continuous device posture assessment evaluating endpoint security compliance",
+      "Network address translation monitoring private endpoint interface modifications",
+      "Role-based access control re-evaluating annual directory security assignments",
+      "Stateful packet filtering resetting connections on non-standard socket ports"
+    ],
+    "correct": 0,
+    "exp": "Unlike traditional VPNs that check compliance only during the initial handshake, ZTNA performs continuous validation, immediately restricting or terminating access if device posture drops below defined security baselines.",
+    "wrongFeedback": {
+      "1": "NAT manages Layer 3 IP mapping and does not inspect client antivirus or local host software states.",
+      "2": "RBAC governs user job roles and rights, not real-time changes to local endpoint security configurations.",
+      "3": "Stateful firewalls monitor transport-layer connection states, lacking native awareness of client-side antivirus runtime status."
+    },
+    "conceptTagIds": [
+      "arch.ztna"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied ZTNA Core/Applied batch"
+  },
+  {
+    "id": "m843",
+    "ch": "3",
+    "topic": "Security Architecture",
+    "difficulty": "applied",
+    "q": "An organization needs to grant external software contractors access to a single internal issue-tracking tool. The contractors use unmanaged personal devices, and the security team refuses to install software agents or grant broad internal IP access. Which solution best meets these requirements?",
+    "opts": [
+      "Setting up a site-to-site IPsec tunnel between the company and the vendor office",
+      "Granting access through a jump box deployed within an air-gapped server room",
+      "Deploying an agentless ZTNA web portal with integrated identity-aware proxying",
+      "Configuring port security rules on the internal physical distribution switches"
+    ],
+    "correct": 2,
+    "exp": "Agentless ZTNA leverages an identity-aware reverse proxy in a browser, allowing unmanaged personal devices to access a specific web application securely without installing local endpoint agents or granting network-level access.",
+    "wrongFeedback": {
+      "0": "Site-to-site tunnels link entire networks together, exposing the broader internal subnet and failing to isolate access to a single application.",
+      "1": "Jump boxes deployed in air-gapped rooms require physical presence or network routing that conflicts with the unmanaged, remote contractor scenario.",
+      "3": "Port security operates on local physical switch ports in an office, offering no protection or delivery mechanism for remote contractors over the internet."
+    },
+    "conceptTagIds": [
+      "arch.ztna"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied ZTNA Core/Applied batch"
+  },
+  {
+    "id": "m844",
+    "ch": "3",
+    "topic": "Security Architecture",
+    "difficulty": "applied",
+    "q": "A remote worker submits valid credentials and passes an MFA challenge. However, the access broker blocks the connection because the request originates from an unrecognized device operating in a country where the organization has no presence. Which component evaluated these attributes to make the block decision?",
+    "opts": [
+      "Hardware security module enforcing symmetric cryptographic handshakes",
+      "Forward proxy server caching outbound client web request data streams",
+      "Host-based intrusion prevention system blocking unauthorized driver loads",
+      "Policy Decision Point analyzing contextual risk and environmental variables"
+    ],
+    "correct": 3,
+    "exp": "In Zero Trust architecture (NIST SP 800-207), the Policy Decision Point (PDP) evaluates contextual signals (device health, geolocation, user behavior, and identity) to determine whether to authorize access, which the Policy Enforcement Point (PEP) then executes.",
+    "wrongFeedback": {
+      "0": "An HSM secures and processes cryptographic keys, rather than evaluating access control policies or contextual connection attributes.",
+      "1": "A forward proxy filters and accelerates outbound web traffic for internal users, not managing inbound authentication policy decisions.",
+      "2": "An HIPS detects and blocks suspicious process activities locally on an operating system, rather than evaluating remote network access rules."
+    },
+    "conceptTagIds": [
+      "arch.ztna"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied ZTNA Core/Applied batch"
+  }
+]
