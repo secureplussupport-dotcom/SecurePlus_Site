@@ -16915,6 +16915,17 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .mcq-launch-action{position:relative;z-index:1;display:grid;gap:8px;justify-items:stretch;min-width:240px;}
 .mcq-launch-action .btn{min-height:58px!important;border-radius:18px!important;font-size:16px!important;font-weight:950!important;box-shadow:0 18px 38px ${t.accent}2c!important;}
 .mcq-launch-action small{display:block;text-align:center;color:${t.textDim};font-size:11px;font-weight:850;line-height:1.35;}
+.mcq-primary-count{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}
+.mcq-primary-count button{min-height:38px;border:1px solid ${t.border};border-radius:10px;background:${t.panel};color:${t.text};font:inherit;font-size:12px;font-weight:900;cursor:pointer;}
+.mcq-primary-count button:hover:not(:disabled),.mcq-primary-count button.active{border-color:${t.accent};background:${t.accent}17;color:${t.accent};}
+.mcq-primary-count button:focus-visible{outline:2px solid ${t.accent};outline-offset:2px;}
+.mcq-primary-count button:disabled{opacity:.45;cursor:not-allowed;}
+.mcq-launch-main .setup-stats{margin-top:12px;}
+.mcq-customise-modes{margin:0 0 14px;}
+.mcq-customise-modes:has(> :only-child){grid-template-columns:1fr;}
+.mcq-customise>.practice-secondary-content{padding:0 10px 10px;}
+.mcq-customise .practice-filter-card{box-shadow:none;}
+.mcq-other-practice .mcq-review-queue-row{margin:0;}
 .mcq-review-queue-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 16px;}
 .mcq-review-queue-card{position:relative;overflow:hidden;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;min-height:96px;padding:15px;border:1px solid color-mix(in srgb,var(--queue-color) 38%,${t.border});border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,var(--queue-color) 12%,${t.surface}),${t.panel});color:${t.text};text-align:left;cursor:pointer;box-shadow:0 16px 34px color-mix(in srgb,var(--queue-color) 10%,transparent);transition:transform .18s,border-color .18s,box-shadow .18s,opacity .18s;}
 .mcq-review-queue-card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--queue-color);}
@@ -18273,13 +18284,17 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-value-card strong{display:block;margin-bottom:6px;color:${t.text};font-size:14px;line-height:1.35;}
 .guest-value-card p{color:${t.textSec};font-size:12px;line-height:1.65;}
 .guest-feature-showcase{display:grid;gap:18px;margin-top:18px;}
+.guest-learning-loop-intro{max-width:700px;padding:24px 4px 6px;}
+.guest-learning-loop-intro .label{color:${t.green};}
+.guest-learning-loop-intro h2{margin:8px 0 10px;color:${t.text};font-size:clamp(27px,3vw,38px);line-height:1.12;text-wrap:balance;}
+.guest-learning-loop-intro p{max-width:620px;margin:0;color:${t.textSec};font-size:14px;line-height:1.7;}
 .guest-feature-showcase-card{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,.82fr) minmax(300px,1fr);gap:24px;align-items:center;min-height:260px;padding:30px;border:1px solid color-mix(in srgb,var(--feature-color) 35%,${t.border});border-radius:24px;background:linear-gradient(135deg,color-mix(in srgb,var(--feature-color) 12%,${t.surface}),${t.panel} 58%,color-mix(in srgb,var(--feature-color) 9%,${t.surface}));box-shadow:0 22px 54px rgba(7,12,24,.11);opacity:0;transform:translateY(-34px) scale(.985);transition:opacity .58s ease var(--feature-delay,0ms),transform .78s cubic-bezier(.16,1,.3,1) var(--feature-delay,0ms),border-color .2s ease,box-shadow .2s ease;will-change:opacity,transform;}
 .guest-feature-showcase-card.is-visible{opacity:1;transform:none;will-change:auto;}
 .guest-feature-showcase-card::after{content:"";position:absolute;right:-120px;top:-110px;width:270px;height:270px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--feature-color) 20%,transparent),transparent 68%);pointer-events:none;}
 .guest-feature-showcase-card:focus-within{border-color:color-mix(in srgb,var(--feature-color) 70%,${t.border});box-shadow:0 24px 58px color-mix(in srgb,var(--feature-color) 14%,transparent);}
 .guest-feature-copy{position:relative;z-index:1;display:grid;justify-items:start;gap:12px;}
 .guest-feature-kicker{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border-radius:999px;border:1px solid color-mix(in srgb,var(--feature-color) 42%,transparent);background:color-mix(in srgb,var(--feature-color) 12%,transparent);color:var(--feature-color);font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;}
-.guest-feature-copy h2{margin:0;color:${t.text};font-size:clamp(28px,3vw,42px);line-height:1.05;text-wrap:balance;}
+.guest-feature-copy h3{margin:0;color:${t.text};font-size:clamp(28px,3vw,42px);line-height:1.05;text-wrap:balance;}
 .guest-feature-copy p{max-width:410px;margin:0;color:${t.textSec};font-size:14px;line-height:1.65;font-weight:650;}
 .guest-feature-copy .btn{margin-top:5px;border-color:color-mix(in srgb,var(--feature-color) 48%,${t.border});box-shadow:0 12px 26px color-mix(in srgb,var(--feature-color) 15%,transparent);}
 .guest-feature-visual{position:relative;z-index:1;min-height:190px;border:1px solid color-mix(in srgb,var(--feature-color) 34%,${t.border});border-radius:22px;background:linear-gradient(145deg,${t.surface},color-mix(in srgb,var(--feature-color) 9%,${t.panel}));box-shadow:inset 0 1px 0 rgba(255,255,255,.08);overflow:hidden;}
@@ -19212,7 +19227,7 @@ body{background:
   .guest-flip-card-stage{height:158px!important;width:min(92%,360px)!important;}
   .guest-flip-face{padding:16px 16px!important;border-radius:16px!important;}
   .guest-flip-definition{font-size:11.5px!important;line-height:1.45!important;}
-  .guest-feature-copy h2{font-size:clamp(25px,8vw,34px)!important;}
+  .guest-feature-copy h3{font-size:clamp(25px,8vw,34px)!important;}
   .guest-feature-visual.review{padding:18px 14px 32px!important;}
   .guest-smart-studio{grid-template-columns:1fr!important;gap:8px!important;}
   .guest-smart-signal-row{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
@@ -24525,7 +24540,7 @@ function GuestFeatureShowcaseCard({feature,t,index}) {
     >
       <div className="guest-feature-copy">
         <span className="guest-feature-kicker">{feature.label}</span>
-        <h2>{feature.title}</h2>
+        <h3>{feature.title}</h3>
         <p>{feature.body}</p>
         {feature.button&&feature.action&&<button className="btn btn-outline" type="button" onClick={feature.action}>{feature.button}</button>}
       </div>
@@ -24543,14 +24558,11 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
     capture("landing_full_mcq_bank_clicked",{source});
     onPractice();
   };
-  const showcaseFeatures=[
-    {id:"flashcards",label:"Rapid Recall",color:"#8b5cf6",title:"Flashcards",body:"Flip high-yield terms until recall becomes automatic.",button:"Open flashcards",action:onFlashcards},
-    {id:"review",label:"Personalisation",color:t.green,title:"Smart Review",body:"Turn missed concepts into a focused, adaptive repair route."},
-    {id:"mcq",label:"Exam Readiness",color:t.accent,title:"MCQ practice",body:"Answer realistic questions and expose gaps immediately.",button:"Start MCQs",action:onPractice},
-    {id:"explanations",label:"Answer Clarity",color:t.green,title:"Quality explanations",body:"See why the right answer works and why each distractor fails."},
-    {id:"pbq",label:"Hands On Mastery",color:t.amber,title:"PBQ simulator",body:"Make the decisions Security+ expects you to apply.",button:"Try a PBQ",action:onPreviewPbq},
-    {id:"exam",label:"Timed Performance",color:t.red,title:"Exam mode",body:"Practise under a live clock so pace becomes part of your preparation."},
-    {id:"deep",label:"Foundational Clarity",color:"#8b5cf6",title:"Concept Deep Dives",body:"Learn a difficult concept, then test it in the same flow.",button:"Open lessons",action:onConcepts||(()=>startSignup("concept_deep_dives"))},
+  const learningSteps=[
+    {id:"mcq",label:"1 · Diagnose",color:t.accent,title:"Find the gap",body:"Answer a short Security+ set. Your results show which concepts need another look.",button:"Try free MCQs",action:onPractice},
+    {id:"explanations",label:"2 · Understand",color:t.green,title:"See why",body:"Review the right answer and each plausible alternative so a miss becomes a useful lesson."},
+    {id:"flashcards",label:"3 · Strengthen",color:"#8b5cf6",title:"Make it stick",body:"Use focused flashcards to recall the terms behind the questions you missed.",button:"Open flashcards",action:onFlashcards},
+    {id:"review",label:"4 · Prove",color:t.green,title:"Test it again",body:"After you save your progress, Smart Review brings missed concepts back in later sets so you can check your improvement."},
   ];
   return (
     <div className="dashboard-shell" data-page-label="Guest main landing page">
@@ -24558,25 +24570,25 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
         <div className="home-hero-copy brilliant-hero-copy">
           <div className="guest-objective-chip">100% Aligned to CompTIA SY0-701 Objectives</div>
           <h1 className="home-title brilliant-title guest-tagline-title">
-            <span className="guest-tagline-support">Clear study paths.</span>
-            <span className="guest-tagline-support">Real scenarios.</span>
-            <span className="guest-tagline-main"><strong>Pass</strong> Security+ with <strong>confidence</strong>.</span>
+            <span className="guest-tagline-support">Diagnose your weak spots.</span>
+            <span className="guest-tagline-support">Follow your path.</span>
+            <span className="guest-tagline-main"><strong>Pass</strong> with confidence.</span>
           </h1>
           <p className="guest-hero-description">
-            Master active-recall MCQs and real PBQ simulations. Track weak domains with smart reviews and sit for your exam ready to score 750+.
+            Practise Security+ questions, understand what you missed, and return to those concepts in later sets. Start free; create an account when you want to save your progress.
           </p>
           <div className="guest-bank-cta-block">
             <div className="home-cta-row brilliant-action-row guest-hero-primary-actions single">
               <button className="btn guest-hero-practice-cta" type="button" onClick={()=>launchFullMcq("guest_hero")}>
-                Launch Full MCQ Bank <span aria-hidden="true">→</span>
+                Start free MCQ practice <span aria-hidden="true">→</span>
               </button>
             </div>
             <p className="guest-bank-cta-note">Explore free questions across all five domains <span aria-hidden="true">•</span> No sign-up required</p>
           </div>
           <div className="guest-hero-proof-row" aria-label="SecurePlus practice benefits">
-            <span>Practice by domain</span>
-            <span>Hands-on PBQ Stimulator</span>
-            <span>100% Free Flashcards</span>
+            <span>Find a gap</span>
+            <span>Understand the answer</span>
+            <span>Review it later</span>
           </div>
         </div>
         <div className="brilliant-lesson-shell">
@@ -24596,8 +24608,13 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
         </div>
       </section>
 
-      <section className="guest-feature-showcase" aria-label="SecurePlus study features">
-        {showcaseFeatures.map((feature,index)=><GuestFeatureShowcaseCard key={feature.id} feature={feature} t={t} index={index}/>)}
+      <section className="guest-feature-showcase" aria-labelledby="guest-learning-loop-title">
+        <div className="guest-learning-loop-intro">
+          <span className="label">The SecurePlus study loop</span>
+          <h2 id="guest-learning-loop-title">One next step after every answer.</h2>
+          <p>Diagnose → Understand → Strengthen → Prove. See how practice turns into a focused plan instead of another random score.</p>
+        </div>
+        {learningSteps.map((feature,index)=><GuestFeatureShowcaseCard key={feature.id} feature={feature} t={t} index={index}/>)}
       </section>
 
       <details className="seo-resource-section seo-resource-disclosure landing-section" aria-labelledby="guest-security-study-resources-title">
@@ -24850,6 +24867,16 @@ function AchievementsPage({user,t,onBack}) {
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
+function PracticeSetupDisclosure({isGuest,children}) {
+  if(isGuest)return children;
+  return (
+    <details className="practice-secondary mcq-customise">
+      <summary><span>Customise practice</span><small>Mode, chapter, difficulty and topic</small></summary>
+      <div className="practice-secondary-content">{children}</div>
+    </details>
+  );
+}
+
 function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null,onSessionComplete,mcqBank=MCQ_BANK}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
   const sessionKey=`mcq:${practiceSessionOwner(user)}`;
@@ -24858,8 +24885,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [chFilter,setChFilter]=useState("all");
   const [diffFilter,setDiffFilter]=useState("all");
   const [topicFilter,setTopicFilter]=useState("all");
-  const [reviewMode,setReviewMode]=useState(isGuest?"random":"smart");
-  const [quizCount,setQuizCount]=useState(isGuest?5:10);
+  const [reviewMode,setReviewMode]=useState(isGuest||!mcqEngineEnabled?"random":"smart");
+  const [quizCount,setQuizCount]=useState(10);
   const [started,setStarted]=useState(false);
   const [questions,setQuestions]=useState([]);
   const [qi,setQi]=useState(0);
@@ -25223,8 +25250,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <div className="practice-page-icon"><BookOpenCheck size={23} strokeWidth={2.3}/></div>
           <div>
             <div className="label" style={{color:t.accent}}>Knowledge practice</div>
-            <h2>{isGuest?"Start a free MCQ set":"MCQ Practice"}</h2>
-            <p>{isGuest?"Choose 10, 20, or 30 questions and filter by chapter without creating an account.":"Build a focused question set and get clear feedback as you work."}</p>
+            <h2>{isGuest?"Start a free MCQ set":mcqEngineEnabled?"Your next MCQ set":"MCQ practice"}</h2>
+            <p>{isGuest?"Choose 10, 20, or 30 questions and filter by chapter without creating an account.":mcqEngineEnabled?"Start with a short set shaped by your prior answers.":"Start a focused question set and review every answer."}</p>
           </div>
         </div>
         <div className="practice-page-meta">
@@ -25237,67 +25264,46 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         <TrustBadge t={t}/>
       </div>
 
-      <section className="practice-setup-hero">
-        <div className="practice-setup-copy">
+      <section className="mcq-launch-pad" aria-label="Start MCQ question set">
+        <div className="mcq-launch-main">
+          <span className="mcq-launch-icon"><Play size={25} fill="currentColor"/></span>
           <div>
-            <div className="label" style={{color:t.green}}>Step 1 · Choose your practice style</div>
-            <h3>{isGuest?"Choose a simple guest set":"How should SecurePlus choose your questions?"}</h3>
-            <p>{isGuest?"Guest practice uses random Security+ questions from your selected chapter. Create an account later to save results and unlock Smart Review.":"Smart Review mixes delayed retests, weak concepts, and new questions. Missed questions return after 30 other MCQ answers."}</p>
-          </div>
-          {!isGuest&&(
-            <div className="setup-stats">
+            <h3>{isGuest?"Ready to answer questions?":mcqEngineEnabled&&reviewMode==="smart"?"Personalised MCQ set":"Your MCQ set"}</h3>
+            <p>{isGuest?"Press the button to begin now. Changing chapter or set size below is optional.":mcqEngineEnabled&&reviewMode==="smart"?"Smart Review mixes due retests, questions for concepts that need attention, and new syllabus coverage.":"Practise a fresh set. You can change its scope below."}</p>
+            {!isGuest&&mcqEngineEnabled&&<div className="setup-stats" aria-label="Why this set is recommended">
               {[
-                {label:"Ready retests",value:reviewSummary.due,color:t.amber},
-                {label:"Weak concepts",value:reviewSummary.weak,color:t.red},
-                {label:"New",value:reviewSummary.untouched,color:t.accent},
+                {label:"Due retests",value:reviewSummary.due,color:t.amber},
+                {label:"Concepts below target",value:reviewSummary.weak,color:t.red},
+                {label:"Unseen questions",value:reviewSummary.untouched,color:t.accent},
               ].map(item=>(
                 <div key={item.label} className="setup-stat">
                   <div style={{fontSize:18,fontWeight:800,color:item.color}}>{item.value}</div>
                   <div className="label">{item.label}</div>
                 </div>
               ))}
+            </div>}
+            <div className="mcq-launch-steps" aria-label="Selected MCQ setup">
+              <span><strong>{quizCount}</strong> questions</span>
+              <span>{launchChapterLabel}</span>
+              <span>{launchModeLabel}</span>
             </div>
-          )}
+          </div>
         </div>
-        {isGuest?(
-          <div className="guest-mcq-path-grid">
-            {[
-              ["1","Choose chapter","Filter broadly by exam chapter only.",Layers3,t.accent],
-              ["2","Pick set size","10, 20, or 30 questions. No account required.",ListChecks,t.green],
-              ["3","Save if useful","Turn results into Smart Review after signup.",Brain,t.amber],
-            ].map(([step,title,body,Icon,color])=>(
-              <article key={step} style={{"--path-color":color}}>
-                <span>{step}</span>
-                <Icon size={19}/>
-                <strong>{title}</strong>
-                <small>{body}</small>
-              </article>
-            ))}
-          </div>
-        ):(
-          <div className="practice-mode-grid">
-            <button className={`practice-mode-card ${reviewMode==="smart"?"active":""}`} style={{"--mode-color":t.green}} onClick={()=>setReviewMode("smart")} aria-pressed={reviewMode==="smart"}>
-              <span className="practice-mode-icon"><Brain size={19}/></span>
-              <span><strong>Smart Review</strong><small>Delayed retests, weak concepts, and new questions.</small></span>
-              <span className="practice-mode-check"><Check size={13} strokeWidth={3}/></span>
-            </button>
-            <button className={`practice-mode-card ${reviewMode==="random"?"active":""}`} style={{"--mode-color":t.accent}} onClick={()=>setReviewMode("random")} aria-pressed={reviewMode==="random"}>
-              <span className="practice-mode-icon"><Sparkles size={19}/></span>
-              <span><strong>Random Practice</strong><small>Creates a fresh set from your selected scope.</small></span>
-              <span className="practice-mode-check"><Check size={13} strokeWidth={3}/></span>
-            </button>
-          </div>
-        )}
-        {isGuest&&(
-          <div className="guest-mcq-lock-note">
-            <LockKeyhole size={15}/>
-            <span>Topic, difficulty, and Smart Review use saved history, so they unlock after account creation.</span>
-          </div>
-        )}
+        <div className="mcq-launch-action">
+          {!isGuest&&<div className="mcq-primary-count" role="group" aria-label="Questions in this set">
+            {quizSizes.map(size=><button key={size} type="button" className={quizCount===size?"active":""} aria-pressed={quizCount===size} disabled={filtered.length<size} onClick={()=>setQuizCount(size)}>{size}</button>)}
+          </div>}
+          <button className="btn btn-primary" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
+            {engineBusy?"Preparing set…":isGuest?"Start questions now →":mcqEngineEnabled&&reviewMode==="smart"?"Start my personalised set →":"Start my set →"}
+          </button>
+          <small>{filtered.length>=sessionMinimum?`${filtered.length} questions available for this choice.`:`Only ${filtered.length} questions match. Choose all chapters to start.`}</small>
+        </div>
       </section>
 
       {!isGuest&&(
-        <section className="mcq-review-queue-row" aria-label="MCQ review queues">
+        <details className="practice-secondary mcq-other-practice">
+          <summary><span>Other practice options</span><small>Resume, missed and starred questions</small></summary>
+          <section className="mcq-review-queue-row practice-secondary-content" aria-label="MCQ review queues">
           <button className="mcq-review-queue-card unfinished" type="button" disabled={!resumeAvailable} onClick={continueQuiz}>
             <span className="mcq-review-queue-icon"><Clock3 size={21}/></span>
             <span>
@@ -25306,11 +25312,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
             </span>
             <em>{resumeAvailable?"Continue":"0"}</em>
           </button>
-          <button className="mcq-review-queue-card missed" type="button" disabled={!missedQuestions.length} onClick={startMissedQuiz}>
+          <button className="mcq-review-queue-card missed" type="button" disabled={!mcqEngineEnabled||!missedQuestions.length} onClick={startMissedQuiz}>
             <span className="mcq-review-queue-icon"><Target size={21}/></span>
             <span>
               <strong>Missed MCQ</strong>
-              <small>{missedQuestions.length?`Repair ${missedQuestions.length} incorrect question${missedQuestions.length===1?"":"s"}`:"No missed MCQs yet"}</small>
+              <small>{!mcqEngineEnabled?"Smart Review is not active":missedQuestions.length?`Repair ${missedQuestions.length} incorrect question${missedQuestions.length===1?"":"s"}`:"No missed MCQs yet"}</small>
             </span>
             <em>{missedQuestions.length}</em>
           </button>
@@ -25322,29 +25328,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
             </span>
             <em>{starredMcqs.length}</em>
           </button>
-        </section>
+          </section>
+        </details>
       )}
-
-      <section className="mcq-launch-pad" aria-label="Start MCQ question set">
-        <div className="mcq-launch-main">
-          <span className="mcq-launch-icon"><Play size={25} fill="currentColor"/></span>
-          <div>
-            <h3>Ready to answer questions?</h3>
-            <p>Press the button to begin now. Changing chapter or set size below is optional.</p>
-            <div className="mcq-launch-steps" aria-label="Selected MCQ setup">
-              <span><strong>{quizCount}</strong> questions</span>
-              <span>{launchChapterLabel}</span>
-              <span>{launchModeLabel}</span>
-            </div>
-          </div>
-        </div>
-        <div className="mcq-launch-action">
-          <button className="btn btn-primary" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
-            Start questions now →
-          </button>
-          <small>{filtered.length>=sessionMinimum?`${filtered.length} questions available for this choice.`:`Only ${filtered.length} questions match. Choose all chapters to start.`}</small>
-        </div>
-      </section>
 
       {isGuest&&(
         <section className="guest-mcq-showcase">
@@ -25381,17 +25367,30 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           </div>
         </div>
       )}
-      <div className="card practice-filter-card" style={{padding:"20px 24px",marginBottom:16}}>
+      <PracticeSetupDisclosure isGuest={isGuest}>
+      <div className="card practice-filter-card" style={{padding:"20px 24px",marginBottom:isGuest?16:0}}>
         <div className="practice-builder-head">
           <div>
             <div className="label" style={{color:t.accent}}>Optional setup</div>
-            <h3>Want a different set?</h3>
-            <p>Use these controls only if you want to change the chapter or number of questions before starting.</p>
+            <h3>{isGuest?"Want a different set?":"Choose your own focus"}</h3>
+            <p>{isGuest?"Use these controls only if you want to change the chapter or number of questions before starting.":"Change the mode, chapter, difficulty or topic. Your set will still contain 10–30 questions."}</p>
           </div>
           {(chFilter!=="all"||diffFilter!=="all"||topicFilter!=="all")&&(
             <button className="btn btn-ghost" style={{fontSize:11,minHeight:34,padding:"7px 10px"}} onClick={()=>{setChFilter("all");setDiffFilter("all");setTopicFilter("all");}}><X size={14}/> Reset filters</button>
           )}
         </div>
+        {!isGuest&&<div className="practice-mode-grid mcq-customise-modes" role="group" aria-label="Question selection mode">
+          {mcqEngineEnabled&&<button type="button" className={`practice-mode-card ${reviewMode==="smart"?"active":""}`} style={{"--mode-color":t.green}} onClick={()=>setReviewMode("smart")} aria-pressed={reviewMode==="smart"}>
+            <span className="practice-mode-icon"><Brain size={19}/></span>
+            <span><strong>Smart Review</strong><small>Due retests, weak concepts and new questions.</small></span>
+            <span className="practice-mode-check"><Check size={13} strokeWidth={3}/></span>
+          </button>}
+          <button type="button" className={`practice-mode-card ${reviewMode==="random"?"active":""}`} style={{"--mode-color":t.accent}} onClick={()=>setReviewMode("random")} aria-pressed={reviewMode==="random"}>
+            <span className="practice-mode-icon"><Sparkles size={19}/></span>
+            <span><strong>Random practice</strong><small>A fresh set from the scope you choose.</small></span>
+            <span className="practice-mode-check"><Check size={13} strokeWidth={3}/></span>
+          </button>
+        </div>}
         <div className="practice-builder-step">
           <div className="practice-step-head"><span className="practice-step-index">1</span><strong>Choose chapter</strong><span>{filtered.length} matching questions</span></div>
           <div className="practice-filter-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
@@ -25432,7 +25431,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
             </div>
           )}
         </div>
-        <div className="practice-builder-step">
+        {isGuest&&<div className="practice-builder-step">
           <div className="practice-step-head"><span className="practice-step-index">2</span><strong>Choose number of questions</strong><span>{quizCount} selected</span></div>
           <div className={`quiz-length-grid ${isGuest?"guest-length-grid":""}`} style={{display:"grid",gridTemplateColumns:`repeat(${quizSizes.length},minmax(0,1fr))`,gap:8}}>
             {quizSizes.map(size=>(
@@ -25448,8 +25447,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
               </button>
             ))}
           </div>
-        </div>
-        <div className="practice-builder-footer">
+        </div>}
+        {isGuest&&<div className="practice-builder-footer">
           <div className="practice-builder-result">
             <div className="practice-builder-count">{quizCount}</div>
             <div><strong>{isGuest?"Guest practice set":reviewMode==="smart"?"Smart Review set":"Random practice set"}</strong><small>{filtered.length>=sessionMinimum?`${filtered.length} questions match your focus`:`Only ${filtered.length} match — broaden your filters`}</small></div>
@@ -25457,8 +25456,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <button className="btn btn-primary" style={{minWidth:170}} onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
             {engineBusy?"Preparing set…":"Start questions now →"}
           </button>
-        </div>
+        </div>}
       </div>
+      </PracticeSetupDisclosure>
 
       {/* Chapter overview */}
       <details className="practice-secondary">
