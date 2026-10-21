@@ -1,0 +1,26 @@
+[
+  {
+    "id": "m819",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "core",
+    "q": "A public web server becomes unresponsive after being flooded with simultaneous, overwhelming traffic originating from thousands of geographically dispersed, compromised hosts controlled by a central command server. Which attack is occurring?",
+    "opts": [
+      "Man-in-the-middle attack",
+      "Server-side request forgery",
+      "Distributed denial-of-service",
+      "Domain name system poisoning"
+    ],
+    "correct": 2,
+    "exp": "A distributed denial-of-service (DDoS) attack uses multiple compromised endpoints (a botnet) to exhaust a target's system resources or network bandwidth, denying availability to legitimate users.",
+    "wrongFeedback": {
+      "0": "A man-in-the-middle (on-path) attack intercepts or alters communications between two legitimate parties rather than overwhelming a host with high-volume traffic.",
+      "1": "Server-side request forgery coerces a server into initiating unauthorized network requests to internal resources, rather than taking a server offline via distributed traffic floods.",
+      "3": "DNS poisoning corrupts name resolution cache entries to redirect client traffic to fraudulent destinations, rather than knocking a server offline through sheer request volume."
+    },
+    "conceptTagIds": ["att.dos-ddos"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied DDoS Core question"
+  }
+]
