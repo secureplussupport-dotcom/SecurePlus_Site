@@ -1,0 +1,26 @@
+[
+  {
+    "id": "m793",
+    "ch": "4",
+    "topic": "Identity & Access Management",
+    "difficulty": "applied",
+    "q": "To access a secure facility, an engineer swipes a corporate badge and then scans an assigned RFID key fob against the sensor to unlock the door. Which statement accurately assesses this authentication process?",
+    "opts": [
+      "The system enforced multifactor authentication by validating two independent electronic devices",
+      "The system performed contextual authentication by confirming the physical coordinates of the user",
+      "The system executed single-factor verification using two credentials from the same factor category",
+      "The system achieved mutual authentication by confirming trust across both communicating endpoints"
+    ],
+    "correct": 2,
+    "exp": "True MFA requires two or more *different* factor types (e.g., something you know, have, or are). Combining a badge and an RFID key fob merely pairs two possession factors, remaining single-factor authentication.",
+    "wrongFeedback": {
+      "0": "Presenting two separate physical items does not achieve multifactor authentication if both items belong to the same factor category (\"something you have\").",
+      "1": "Contextual (adaptive) authentication evaluates environmental attributes—such as time of day, device posture, or IP geolocation—rather than possession tokens.",
+      "3": "Mutual authentication requires both sides of a connection (client and server) to verify each other's identity, which is unrelated to a user presenting two credentials to an access reader."
+    },
+    "conceptTagIds": ["iam.auth-factors"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied authentication factors Applied question"
+  }
+]
