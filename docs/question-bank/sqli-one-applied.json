@@ -1,0 +1,26 @@
+[
+  {
+    "id": "m805",
+    "ch": "2",
+    "topic": "Application Vulnerabilities",
+    "difficulty": "applied",
+    "q": "An organization configures an input filter that automatically removes all <script> tags and HTML entities from web form submissions. Despite this control, an attacker enters text that causes the backend database to execute arbitrary management commands. Why did this defensive measure fail to prevent the attack?",
+    "opts": [
+      "The filter targeted browser execution syntax rather than database parser metacharacters",
+      "The web application firewall re-encoded stripped characters before routing the query",
+      "The database engine executed the incoming request through a privileged root service account",
+      "The transport layer protocol bypassed input inspection by using secure TLS cipher suites"
+    ],
+    "correct": 0,
+    "exp": "Removing <script> tags and HTML entities mitigates Cross-Site Scripting (XSS) in the browser, but it leaves database metacharacters (such as quotes, semicolons, and comment indicators) untouched, allowing SQL injection to reach the database interpreter.",
+    "wrongFeedback": {
+      "1": "Firewalls and web proxies inspect and forward network traffic; they do not reconstruct or re-insert characters that application filtering routines have stripped.",
+      "2": "Running under an overly privileged service account explains why severe actions like dropping tables could execute, but it does not explain why the input filter failed to intercept the malicious payload.",
+      "3": "TLS secures data in transit across the network; it terminates before or at the application server and does not prevent server-side application logic from inspecting input fields."
+    },
+    "conceptTagIds": ["att.app-sqli"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SQL injection Applied question"
+  }
+]

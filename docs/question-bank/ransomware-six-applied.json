@@ -1,0 +1,158 @@
+[
+  {
+    "id": "m813",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "An organization successfully restores all encrypted servers from unaffected offline backups without communicating with the attacker. Forty-eight hours later, executive leadership receives an email threatening public release of proprietary financial records unless payment is made. Which technique does this scenario describe?",
+    "opts": [
+      "Pretexting targeting corporate executives",
+      "Cryptographic key exhaustion tactics",
+      "Double extortion ransomware operations",
+      "Business email compromise redirection"
+    ],
+    "correct": 2,
+    "exp": "Double extortion combines local data encryption (denial of availability) with prior data exfiltration (threat to confidentiality), rendering offline data restoration insufficient on its own.",
+    "wrongFeedback": {
+      "0": "Pretexting involves creating an invented scenario to manipulate someone into divulging information or funds, rather than threatening to leak already-exfiltrated sensitive records.",
+      "1": "Key exhaustion refers to analyzing cryptographic state spaces to derive keys, which is unrelated to extortion schemes leveraging stolen data.",
+      "3": "Business email compromise impersonates executives or trusted vendors to reroute financial transactions, rather than demanding ransom under threat of public disclosure."
+    },
+    "conceptTagIds": [
+      "att.mal-ransomware"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.mal-ransomware batch"
+  },
+  {
+    "id": "m814",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "A systems administrator attempts to restore an infected workstation using built-in operating system snapshots, but discovers that all local restore points and recovery catalogs were permanently deleted immediately prior to file encryption. What mechanism caused this recovery failure?",
+    "opts": [
+      "Explicit commands disabling volume shadow services",
+      "Physical sector corruption across local storage partitions",
+      "Microcode updates locking firmware storage controllers",
+      "Memory exhaustion purging volatile cache directories"
+    ],
+    "correct": 0,
+    "exp": "Modern ransomware scripts actively execute management commands (such as invoking vssadmin or WMI queries) to delete Volume Shadow Copies and inhibit local system recovery before encrypting files.",
+    "wrongFeedback": {
+      "1": "Physical sector damage reflects hardware failure, not deliberate software commands executed by a malicious script to remove local OS restore points.",
+      "2": "Microcode updates modify processor logic at boot and do not manage or purge OS-level file snapshot databases.",
+      "3": "Memory exhaustion affects volatile RAM processes, whereas restore points and shadow copies reside on non-volatile disk storage."
+    },
+    "conceptTagIds": [
+      "att.mal-ransomware"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.mal-ransomware batch"
+  },
+  {
+    "id": "m815",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "A company schedules automated nightly backups to a network-attached storage appliance that continuously maps to active domain accounts. When ransomware infects an administrative workstation, the backup archives become unusable. Which control would have best protected the backup files?",
+    "opts": [
+      "Expanding backup appliance network bandwidth",
+      "Switching from differential to incremental backups",
+      "Encrypting transport sessions using secure protocols",
+      "Storing secondary copies on immutable repositories"
+    ],
+    "correct": 3,
+    "exp": "Immutable repositories enforce Write Once, Read Many (WORM) storage or maintain air-gapped isolation, preventing ransomware with domain credentials from encrypting or deleting historical backup images.",
+    "wrongFeedback": {
+      "0": "Increasing network bandwidth accelerates data transfer speeds, but does not isolate stored data from malicious modification or encryption.",
+      "1": "Changing the backup interval type alters how data changes are tracked, but leaves the underlying destination repository equally vulnerable to network traversal.",
+      "2": "Transport encryption (such as TLS or IPsec) shields data in transit from eavesdropping, but does not stop an authorized administrative connection from modifying destination files."
+    },
+    "conceptTagIds": [
+      "att.mal-ransomware"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.mal-ransomware batch"
+  },
+  {
+    "id": "m816",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "A security technician notices an endpoint actively renaming network share files with .locked extensions and generating unusual outbound network traffic. What is the most effective immediate containment step that preserves forensic artifacts?",
+    "opts": [
+      "Reboot the infected machine into administrative safe mode",
+      "Disconnect the network interface from the local subnet",
+      "Power off the physical system unit via the power switch",
+      "Run an immediate full file-system antimalware scan"
+    ],
+    "correct": 1,
+    "exp": "Isolating the endpoint from the network stops active lateral propagation and file encryption on remote network shares while keeping volatile RAM intact for forensic analysis.",
+    "wrongFeedback": {
+      "0": "Rebooting terminates running processes and purges volatile system memory (RAM), destroying decryption keys that might be recoverable in memory.",
+      "2": "Hard-powering off the system instantly erases volatile memory contents, eliminating valuable in-memory execution traces and potential cryptographic artifacts.",
+      "3": "Running an active antimalware scan consumes significant I/O, does not instantly stop active file renaming across network shares, and can alter filesystem timestamps."
+    },
+    "conceptTagIds": [
+      "att.mal-ransomware"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.mal-ransomware batch"
+  },
+  {
+    "id": "m817",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "A forensic analyst examines a ransomware binary and discovers that it uses AES to encrypt local files, but wraps each AES key with an embedded RSA public key before saving the ransom note. Why does this design prevent analysts from recovering the files locally?",
+    "opts": [
+      "Symmetric ciphers permanently erase raw data from storage sectors",
+      "Public-key algorithms scramble memory to prevent runtime analysis",
+      "The matching private key resides solely on threat actor systems",
+      "Hybrid encryption destroys mathematical relationships within files"
+    ],
+    "correct": 2,
+    "exp": "In hybrid encryption schemes, files are encrypted rapidly with symmetric keys (AES), which are then encrypted using the attacker's public key (RSA); the corresponding private key required for decryption never touches the victim host.",
+    "wrongFeedback": {
+      "0": "Symmetric ciphers transform plaintext into ciphertext through mathematical substitution and permutation; they do not erase underlying storage sectors.",
+      "1": "Public-key encryption does not scramble or corrupt endpoint system memory; it encrypts target cryptographic keys during execution.",
+      "3": "Hybrid encryption preserves structured cryptographic relationships; it combines performance with secure asymmetric key transport rather than destroying mathematical structures."
+    },
+    "conceptTagIds": [
+      "att.mal-ransomware"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.mal-ransomware batch"
+  },
+  {
+    "id": "m818",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "An organization discovers that a ransomware binary was simultaneously pushed to 400 workstations at midnight using Group Policy Objects, with internal credentials that were harvested two weeks earlier. What does this delivery method indicate about the intrusion?",
+    "opts": [
+      "It was a human-operated campaign following internal staging",
+      "It relied on autonomous network worm propagation routines",
+      "It was delivered exclusively through a zero-day drive-by download",
+      "It was executed using unauthenticated broadcast packets"
+    ],
+    "correct": 0,
+    "exp": "Human-operated ransomware involves an adversary gaining initial access, establishing persistence, and performing lateral movement over weeks to stage deployment before triggering enterprise-wide encryption via native administrative tools (Living off the Land).",
+    "wrongFeedback": {
+      "1": "Autonomous worms exploit software vulnerabilities to propagate automatically and rapidly without waiting weeks or using centrally managed Group Policy distributions.",
+      "2": "Drive-by downloads infect individual web clients through browser exploits; they do not distribute software centrally through Active Directory Group Policy Objects.",
+      "3": "Group Policy deployments require authenticated administrative access within the domain directory architecture, not unauthenticated broadcast network traffic."
+    },
+    "conceptTagIds": [
+      "att.mal-ransomware"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.mal-ransomware batch"
+  }
+]

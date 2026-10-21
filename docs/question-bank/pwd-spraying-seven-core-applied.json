@@ -1,0 +1,184 @@
+[
+  {
+    "id": "m806",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "core",
+    "q": "An attacker systematically tests a single common password (Welcome2024!) across hundreds of distinct corporate user accounts to gain initial access. Which attack is being executed?",
+    "opts": [
+      "Credential stuffing",
+      "Dictionary attack",
+      "Password spraying",
+      "Session hijacking"
+    ],
+    "correct": 2,
+    "exp": "Password spraying tests one or a few common passwords across a wide range of user accounts to discover weak passwords without triggering account lockouts.",
+    "wrongFeedback": {
+      "0": "Credential stuffing uses matched pairs of stolen usernames and passwords obtained from prior third-party data breaches, rather than trying one common guess across many accounts.",
+      "1": "A traditional dictionary attack cycles through an extensive list of words against one or a few specific user accounts until one succeeds.",
+      "3": "Session hijacking steals an existing, authenticated user session token or cookie, rather than guessing authentication credentials at a login prompt."
+    },
+    "conceptTagIds": [
+      "att.pwd-spraying"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-spraying batch"
+  },
+  {
+    "id": "m807",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "core",
+    "q": "An adversary adopts a password spraying technique against an enterprise identity portal rather than a conventional brute-force attack. What defensive safeguard is this technique designed to evade?",
+    "opts": [
+      "Account lockout policies based on repeated failed attempts",
+      "Mandatory output sanitization on incoming web credentials",
+      "Certificate pinning configured on client operating systems",
+      "Mutual authentication required by directory web services"
+    ],
+    "correct": 0,
+    "exp": "Traditional brute-force attacks rapidly guess multiple passwords against a single account, quickly hitting lockout limits. Password spraying tries one password per account, evading single-account lockout thresholds.",
+    "wrongFeedback": {
+      "1": "Input/output sanitization prevents injection vulnerabilities (like XSS and SQLi) and has no bearing on credential guessing attempts.",
+      "2": "Certificate pinning prevents man-in-the-middle attacks on TLS sessions, not automated password guessing against public authentication endpoints.",
+      "3": "Mutual authentication requires both client and server to validate identities using certificates; it is not a control bypassed by password spraying."
+    },
+    "conceptTagIds": [
+      "att.pwd-spraying"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-spraying batch"
+  },
+  {
+    "id": "m808",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "A SOC analyst notices that within one hour, 500 distinct employee accounts each experienced exactly one failed sign-in attempt from a single cloud-hosted IP address, but no individual user was locked out. What is the most accurate assessment of this activity?",
+    "opts": [
+      "Stolen username and password pairs are being validated in bulk via credential stuffing",
+      "A compromised internal host is conducting an offline rainbow table hash calculation",
+      "A distributed denial-of-service script is attempting to exhaust identity provider memory",
+      "An attacker is testing a small set of passwords across the organization to avoid alert limits"
+    ],
+    "correct": 3,
+    "exp": "The telltale sign of password spraying in authentication telemetry is a horizontal distribution of failures: a single source IP attempting one or two passwords across many distinct user accounts in a short time frame.",
+    "wrongFeedback": {
+      "0": "Credential stuffing tests known username-password pairs from data leaks, which typically produces sporadic individual failures rather than a synchronized single attempt across hundreds of distinct accounts.",
+      "1": "Rainbow tables are used for offline cryptographic hash cracking, which produces no network traffic or identity provider sign-in failure logs.",
+      "2": "A volumetric DoS attack floods network pipes or web servers with overwhelming traffic, not deliberate, spaced login attempts across valid account names."
+    },
+    "conceptTagIds": [
+      "att.pwd-spraying"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-spraying batch"
+  },
+  {
+    "id": "m809",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "An organization has an account lockout policy that locks any user account after five failed login attempts within fifteen minutes. Despite this policy, an external attacker successfully compromises several user accounts without triggering a single lockout event. Why was the lockout policy ineffective?",
+    "opts": [
+      "The attacker decrypted central database hashes using precomputed hash tables",
+      "The attacker tested only one or two common passwords per user across many accounts",
+      "The account lockout rule applies exclusively to on-premises Kerberos authentication",
+      "The attacker exploited cross-site scripting to extract plaintext user credentials"
+    ],
+    "correct": 1,
+    "exp": "Lockout counters track failed attempts on a per-account basis. Testing only one or two passwords per user stays safely under the five-attempt threshold, rendering the lockout rule useless.",
+    "wrongFeedback": {
+      "0": "Precomputed hash cracking occurs offline against stolen database dumps, whereas this scenario describes a live authentication compromise that bypassed online lockouts.",
+      "2": "Enterprise lockout policies in modern directories synchronize across hybrid environments (cloud and on-premises) unless fundamentally broken.",
+      "3": "XSS steals active session cookies or client-side tokens from browsers; it is not a technique that compromises accounts via password-guessing bypasses."
+    },
+    "conceptTagIds": [
+      "att.pwd-spraying"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-spraying batch"
+  },
+  {
+    "id": "m810",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "An organization wants to neutralize password spraying attacks against its cloud email portal. Employees frequently choose predictable passwords like Summer2024! that comply with standard length and complexity rules. Which countermeasure most effectively stops this attack vector?",
+    "opts": [
+      "Increasing the mandatory minimum password length from eight to ten characters",
+      "Reducing the global account lockout threshold from five attempts down to three",
+      "Enforcing multifactor authentication and screening against banned password lists",
+      "Mandating that users change their network passwords every thirty days"
+    ],
+    "correct": 2,
+    "exp": "Banned password lists (dynamic password screening) prevent users from selecting predictable corporate or seasonal patterns, while MFA stops unauthorized access even if the correct password is guessed.",
+    "wrongFeedback": {
+      "0": "Passwords like Summer2024! already exceed ten characters and satisfy complexity requirements, meaning length increases alone do not block seasonal or predictable choices.",
+      "1": "Lowering the threshold to three attempts does not prevent an attacker who tests only one password per account, while significantly increasing legitimate user lockouts (denial of service).",
+      "3": "Frequent password rotation policies actually encourage users to adopt predictable, incremental variations (e.g., Spring2024! to Summer2024!), worsening the vulnerability to spraying."
+    },
+    "conceptTagIds": [
+      "att.pwd-spraying"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-spraying batch"
+  },
+  {
+    "id": "m811",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "An attacker attempts to gain access to an enterprise directory. In Scenario X, they test Company2024! across 2,000 corporate usernames. In Scenario Y, they test 2,000 distinct, previously breached username-and-password combinations purchased on the dark web. How do these attack methods differ?",
+    "opts": [
+      "Scenario X relies on common guessable passwords, whereas Scenario Y uses known valid pairs",
+      "Scenario X executes directly in memory, whereas Scenario Y runs against external web services",
+      "Scenario X targets administrator tokens, whereas Scenario Y targets standard employee logins",
+      "Scenario X triggers immediate account lockouts, whereas Scenario Y bypasses audit event logs"
+    ],
+    "correct": 0,
+    "exp": "Scenario X is password spraying (testing a single probable password across many identities). Scenario Y is credential stuffing (testing known, matched username/password credentials harvested from unrelated breaches).",
+    "wrongFeedback": {
+      "1": "Both attacks are network-based application-layer attacks carried out against public login portals or APIs, not local in-memory exploits.",
+      "2": "Neither attack specifically differentiates between administrators and standard employees during initial mass testing; both target directory lists indiscriminately.",
+      "3": "Password spraying (Scenario X) is deliberately designed not to trigger lockouts, and credential stuffing (Scenario Y) generates authentication audit logs just like any other login attempt."
+    },
+    "conceptTagIds": [
+      "att.pwd-spraying"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-spraying batch"
+  },
+  {
+    "id": "m812",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "An attacker uses residential proxies to rotate their IP address after every ten login attempts while testing two seasonal passwords across thousands of corporate email accounts. Which adaptive security feature is best equipped to detect and block this distributed spray?",
+    "opts": [
+      "Disabling external password reset portals during non-business working hours",
+      "Enforcing static separation of duties between remote workers and local IT",
+      "Extending account lockout durations from thirty minutes to twenty-four hours",
+      "Risk-based authentication evaluating global failure patterns and user context"
+    ],
+    "correct": 3,
+    "exp": "Risk-based (adaptive) authentication looks beyond single-IP limits, analyzing anomalies across the tenant (e.g., impossible travel, unknown device profiles, and fleet-wide failure spikes) to challenge suspicious attempts with step-up verification.",
+    "wrongFeedback": {
+      "0": "Shutting down password reset portals does not protect the main authentication endpoint being sprayed.",
+      "1": "Separation of duties prevents a single user from holding conflicting operational permissions, but has no relation to external authentication defenses.",
+      "2": "Longer lockout periods do not solve the problem because the attacker keeps per-user attempts below the threshold; if anything, it amplifies denial-of-service risks for legitimate staff."
+    },
+    "conceptTagIds": [
+      "att.pwd-spraying"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-spraying batch"
+  }
+]
