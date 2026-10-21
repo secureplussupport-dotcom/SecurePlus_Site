@@ -16939,36 +16939,85 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .mcq-review-queue-card strong{color:${t.text};font-size:14px;line-height:1.2;}
 .mcq-review-queue-card small{margin-top:4px;color:${t.textSec};font-size:11px;font-weight:800;line-height:1.35;}
 .mcq-review-queue-card em{display:grid;place-items:center;min-width:34px;height:34px;padding:0 9px;border-radius:999px;background:color-mix(in srgb,var(--queue-color) 14%,${t.surface});color:var(--queue-color);font-style:normal;font-size:12px;font-weight:950;}
-.mcq-hub-heading{margin-bottom:22px;}
-.mcq-hub-heading h2{font-size:28px;color:${t.text};margin:0;}
-.mcq-hub-heading p{margin:6px 0 0;color:${t.textSec};font-size:14px;line-height:1.6;}
-.mcq-hub-description{position:relative;z-index:1;margin:0;color:${t.textSec};font-size:14px;line-height:1.6;text-align:center;max-width:540px;}
+.mcq-hub-screen{max-width:1080px;margin:0 auto;padding:36px 32px 48px;}
+.mcq-hub-heading{margin-bottom:28px;}
+.mcq-hub-heading h2{font-size:32px;line-height:1.2;letter-spacing:-.035em;color:${t.text};margin:0;}
+.mcq-hub-heading p{margin:8px 0 0;color:${t.textSec};font-size:14px;line-height:1.6;}
+.mcq-hub-description{margin:0 0 20px;color:${t.textSec};font-size:14px;line-height:1.6;max-width:360px;}
 .mcq-customise-description{margin:0 0 16px;color:${t.textSec};font-size:13px;line-height:1.6;}
-.mcq-top-modes{margin-bottom:20px;z-index:5;}
+.mcq-hub-screen .mcq-top-modes{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin-bottom:24px;gap:14px;z-index:5;}
 .mcq-mode-choice{position:relative;min-width:0;}
-.mcq-mode-choice .practice-mode-card{width:100%;min-height:76px;}
-.mcq-mode-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.mcq-mode-title strong{margin:0;}
-.mcq-mode-recommended{padding:3px 7px;border-radius:999px;background:${t.green}18;color:${t.text};font-size:10px;font-weight:800;}
-.mcq-mode-choice .practice-mode-card:not(.active) .practice-mode-icon{background:${t.panel};color:${t.textDim};}
-.mcq-mode-description{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:20;padding:13px 15px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};color:${t.textSec};font-size:12px;line-height:1.6;box-shadow:0 14px 32px rgba(0,0,0,.18);}
+.mcq-mode-choice .practice-mode-card{width:100%;min-height:88px;padding:18px;gap:14px;border-radius:14px;background:${t.surface};box-shadow:none;transition:border-color .16s ease,background .16s ease,box-shadow .16s ease;}
+.mcq-mode-choice .practice-mode-card:hover:not(:disabled){transform:none;box-shadow:none;}
+.mcq-mode-choice .practice-mode-card.active{border-color:var(--mode-color);background:color-mix(in srgb,var(--mode-color) 7%,${t.surface});box-shadow:inset 0 0 0 1px var(--mode-color);}
+.mcq-mode-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.mcq-mode-title strong{margin:0;font-size:16px;font-weight:750;}
+.mcq-mode-recommended{padding:4px 8px;border-radius:6px;background:${t.green}17;color:${t.text};font-size:10px;line-height:1.4;font-weight:700;}
+.mcq-mode-choice .practice-mode-card:not(.active) .practice-mode-icon{background:${t.panel};color:${t.textSec};}
+.mcq-mode-description{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:20;padding:14px 16px;border:1px solid ${t.border};border-radius:12px;background:${t.surface};color:${t.textSec};font-size:13px;line-height:1.6;box-shadow:0 12px 32px rgba(0,0,0,.14);}
 .mcq-mode-description::before{content:"";position:absolute;left:0;right:0;top:-9px;height:9px;}
-.mcq-practice-hub.mcq-launch-pad{grid-template-columns:minmax(0,1fr);justify-items:center;gap:18px;padding:28px;}
-.mcq-practice-hub .mcq-hub-stats{position:relative;z-index:1;width:min(100%,560px);grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px;}
-.mcq-hub-stats .setup-stat{padding:18px 12px;display:grid;gap:6px;align-content:start;}
-.mcq-hub-number{font-size:30px;line-height:1.1;font-weight:800;font-variant-numeric:tabular-nums;}
-.mcq-hub-stats .setup-stat>span{color:${t.textSec};font-size:12px;line-height:1.45;}
-.mcq-practice-hub .mcq-primary-count{position:relative;z-index:1;width:min(100%,360px);gap:10px;}
-.mcq-practice-hub .mcq-primary-count button{min-height:44px;border-radius:999px;font-size:14px;}
-.mcq-practice-hub .mcq-hub-start{position:relative;z-index:1;width:min(100%,360px);min-height:50px;justify-content:center;}
-.mcq-hub-error{position:relative;z-index:1;color:${t.red};font-size:13px;text-align:center;}
-.mcq-hub-screen .mcq-review-queue-card{grid-template-columns:auto minmax(0,1fr);}
+.mcq-practice-hub.mcq-launch-pad{grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);align-items:center;gap:32px;padding:32px;margin-bottom:20px;border:1px solid ${t.border};border-radius:20px;background:${t.surface};box-shadow:0 4px 18px rgba(0,0,0,.035);overflow:visible;}
+.mcq-practice-hub.mcq-launch-pad::after{display:none;}
+.mcq-hub-overview{min-width:0;}
+.mcq-practice-hub .mcq-hub-stats{width:100%;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px;}
+.mcq-hub-stats .setup-stat{min-width:0;padding:18px 16px;display:grid;gap:12px;text-align:left;border-radius:12px;border:1px solid ${t.border};background:${t.panel}80;}
+.mcq-metric-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.mcq-metric-top svg{opacity:.8;flex-shrink:0;}
+.mcq-hub-number{font-size:36px;line-height:1;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;}
+.mcq-hub-stats .setup-stat>span{color:${t.textSec};font-size:12px;line-height:1.5;font-weight:550;max-width:140px;}
+.mcq-session-controls{min-width:0;padding-left:32px;border-left:1px solid ${t.border};}
+.mcq-session-size{min-width:0;margin:0;padding:0;border:0;}
+.mcq-session-size legend{padding:0;margin:0 0 12px;color:${t.text};font-size:14px;font-weight:700;}
+.mcq-practice-hub .mcq-primary-count{width:100%;padding:5px;gap:5px;border:1px solid ${t.border};border-radius:14px;background:${t.panel};}
+.mcq-practice-hub .mcq-primary-count button{min-height:48px;border:1px solid transparent;border-radius:10px;background:transparent;font-size:16px;font-weight:750;color:${t.textSec};transition:background .16s ease,border-color .16s ease,box-shadow .16s ease;}
+.mcq-practice-hub .mcq-primary-count button.active{background:${t.surface};color:color-mix(in srgb,${t.accent} 75%,${t.text});border-color:${t.accent};box-shadow:0 2px 6px rgba(0,0,0,.06);}
+.mcq-practice-hub .mcq-primary-count button:hover:not(:disabled):not(.active){background:${t.surface}80;color:${t.text};}
+.mcq-practice-hub .mcq-hub-start{width:100%;min-height:54px;margin-top:18px;justify-content:center;gap:10px;border-radius:12px;font-size:15px;font-weight:750;background:color-mix(in srgb,${t.accent} 82%,#000);color:#fff;box-shadow:0 4px 10px ${t.accent}18;transition:background .16s ease,box-shadow .16s ease;}
+.mcq-practice-hub .mcq-hub-start:hover:not(:disabled){transform:none;background:color-mix(in srgb,${t.accent} 72%,#000);box-shadow:0 6px 14px ${t.accent}22;}
+.mcq-hub-screen button:active:not(:disabled){filter:brightness(.97);}
+.mcq-hub-error{margin-top:12px;color:${t.red};font-size:13px;line-height:1.5;}
+.mcq-hub-screen .mcq-review-queue-row{gap:12px;margin-bottom:24px;}
+.mcq-hub-screen .mcq-review-queue-card{grid-template-columns:auto minmax(0,1fr) auto;min-height:96px;gap:12px;padding:18px 16px;border-radius:14px;border-color:color-mix(in srgb,var(--queue-color) 28%,${t.border});background:color-mix(in srgb,var(--queue-color) 4%,${t.surface});box-shadow:none;transition:background .16s ease,border-color .16s ease;}
+.mcq-hub-screen .mcq-review-queue-card::after{width:3px;}
+.mcq-hub-screen .mcq-review-queue-card:hover:not(:disabled){transform:none;box-shadow:none;background:color-mix(in srgb,var(--queue-color) 9%,${t.surface});border-color:var(--queue-color);}
+.mcq-hub-screen .mcq-review-queue-card strong{font-size:13px;line-height:1.4;font-weight:700;}
+.mcq-hub-screen .mcq-review-queue-card small{margin-top:4px;font-size:12px!important;line-height:1.5!important;font-weight:500;}
+.mcq-hub-screen .mcq-review-queue-icon{width:38px;height:38px;border-radius:11px;box-shadow:none;}
+.mcq-queue-arrow{color:var(--queue-color);opacity:.8;}
+.mcq-hub-screen .mcq-review-queue-card:disabled{opacity:1;}
 .mcq-hub-screen .mcq-review-queue-card:not(.is-ready){--queue-color:${t.textDim};background:${t.surface};border-color:${t.border};box-shadow:none;}
-.mcq-hub-screen .mcq-review-queue-card:not(.is-ready)::after{background:${t.border};}
+.mcq-hub-screen .mcq-review-queue-card:not(.is-ready)::after{display:none;}
 .mcq-hub-screen .mcq-review-queue-card:not(.is-ready) strong{color:${t.textSec};}
-.mcq-hub-screen .mcq-customise>.practice-secondary-content{padding:0 18px 18px;}
+.mcq-hub-screen .mcq-review-queue-card:not(.is-ready) .mcq-queue-arrow{opacity:0;}
+.mcq-hub-screen .mcq-customise{border-radius:14px;box-shadow:none;}
+.mcq-hub-screen .mcq-customise summary{padding:18px 20px;font-size:13px;font-weight:700;min-height:64px;}
+.mcq-hub-screen .mcq-customise summary::after{border-radius:8px;font-size:19px;}
+.mcq-hub-screen .mcq-customise>.practice-secondary-content{padding:4px 18px 22px;}
 .mcq-hub-screen .mcq-customise[open]{overflow:visible;}
 .mcq-hub-screen button:focus-visible,.mcq-hub-screen summary:focus-visible{outline:2px solid ${t.accent};outline-offset:3px;}
+@media(max-width:900px){
+  .mcq-session-controls{padding:24px 0 0;border-left:0;border-top:1px solid ${t.border};width:100%;}
+  .mcq-hub-screen .mcq-practice-hub{grid-template-columns:1fr!important;gap:24px;}
+  .mcq-hub-description{max-width:none;}
+}
+@media(max-width:540px){
+  .mcq-hub-screen{padding:24px 16px 32px;}
+  .mcq-hub-heading{margin-bottom:24px;}
+  .mcq-hub-heading h2{font-size:28px;}
+  .mcq-top-modes.practice-mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;margin-bottom:16px;}
+  .mcq-mode-choice .practice-mode-card{grid-template-columns:32px minmax(0,1fr);gap:12px;padding:14px;min-height:130px;align-content:start;}
+  .mcq-mode-choice .practice-mode-icon{grid-column:1;grid-row:1;width:32px;height:32px;}
+  .mcq-mode-choice .practice-mode-check{grid-column:2;grid-row:1;justify-self:end;align-self:center;}
+  .mcq-mode-title{grid-row:2;grid-column:1/-1;gap:6px;align-items:flex-start;flex-direction:column;}
+  .mcq-mode-title strong{font-size:14px;}
+  .mcq-mode-description{width:min(310px,calc(100vw - 48px));right:auto;}
+  .mcq-mode-choice:last-child .mcq-mode-description{left:auto;right:0;}
+  .mcq-hub-screen .mcq-practice-hub.mcq-launch-pad{padding:20px!important;border-radius:16px!important;gap:20px;}
+  .mcq-hub-stats .setup-stat{padding:16px 12px;gap:10px;}
+  .mcq-hub-number{font-size:30px;}
+  .mcq-metric-top svg{width:17px;height:17px;}
+  .mcq-hub-screen .mcq-review-queue-card{padding:14px!important;min-height:78px!important;}
+}
 .practice-summary{margin-top:16px;padding:12px 14px;background:${t.panel};border:1px solid ${t.border};border-radius:8px;font-size:13px;color:${t.textSec};display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .practice-summary strong{color:${t.text};font-weight:900;}
 .practice-action-bar{position:relative;z-index:10;margin-top:10px;padding:10px;border:1px solid ${t.border};border-radius:10px;background:${t.surface}eb;backdrop-filter:blur(16px);box-shadow:0 14px 30px rgba(0,0,0,.12);display:flex;gap:10px;justify-content:center;align-items:center;}
@@ -25267,7 +25316,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   );
 
   if(!started) return(
-    <div className="mcq-setup-screen mcq-hub-screen fu" style={{padding:"24px",maxWidth:1040,margin:"0 auto"}}>
+    <div className="mcq-setup-screen mcq-hub-screen fu">
       <header className="mcq-hub-heading"><h2>MCQ practice</h2><p>Build confidence, one question at a time.</p></header>
       <div className="practice-mode-grid mcq-top-modes" role="group" aria-label="Question selection mode">
         {practiceModes.map(({id,label,Icon,color,description})=>(
@@ -25283,39 +25332,49 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       </div>
 
       <section className="mcq-launch-pad mcq-practice-hub" aria-label="Start MCQ practice">
-        <p className="mcq-hub-description">Choose your pace. Make this set count.</p>
-        <div className="setup-stats mcq-hub-stats" aria-label="Review diagnostics" title={isGuest?"Sign in to see your review diagnostics":undefined}>
-          <div className="setup-stat">
-            <strong className="mcq-hub-number" style={{color:t.amber}}>{reviewSummary.due}</strong>
-            <span>Questions due for retest</span>
-          </div>
-          <div className="setup-stat">
-            <strong className="mcq-hub-number" style={{color:t.red}}>{reviewSummary.weak}</strong>
-            <span>Concepts to improve</span>
+        <div className="mcq-hub-overview">
+          <p className="mcq-hub-description">Choose your pace. Make this set count.</p>
+          <div className="setup-stats mcq-hub-stats" aria-label="Review diagnostics" title={isGuest?"Sign in to see your review diagnostics":undefined}>
+            <div className="setup-stat">
+              <div className="mcq-metric-top" style={{color:t.amber}}><strong className="mcq-hub-number">{reviewSummary.due}</strong><Clock3 size={20} aria-hidden="true"/></div>
+              <span>Questions due for retest</span>
+            </div>
+            <div className="setup-stat">
+              <div className="mcq-metric-top" style={{color:t.red}}><strong className="mcq-hub-number">{reviewSummary.weak}</strong><Target size={20} aria-hidden="true"/></div>
+              <span>Concepts to improve</span>
+            </div>
           </div>
         </div>
-        <div className="mcq-primary-count" role="group" aria-label="Questions in this set">
-          {quizSizes.map(size=><button key={size} type="button" className={quizCount===size?"active":""} aria-label={`${size} questions`} aria-pressed={quizCount===size} disabled={filtered.length<size} onClick={()=>setQuizCount(size)}>{size}</button>)}
+        <div className="mcq-session-controls">
+          <fieldset className="mcq-session-size">
+            <legend>Number of questions</legend>
+            <div className="mcq-primary-count">
+              {quizSizes.map(size=><button key={size} type="button" className={quizCount===size?"active":""} aria-label={`${size} questions`} aria-pressed={quizCount===size} disabled={filtered.length<size} onClick={()=>setQuizCount(size)}>{size}</button>)}
+            </div>
+          </fieldset>
+          {engineError&&<p className="mcq-hub-error" role="alert">{engineError}</p>}
+          {filtered.length<sessionMinimum&&<p className="mcq-hub-error" role="status">Not enough questions match. Broaden your filters to start.</p>}
+          <button className="btn btn-primary mcq-hub-start" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
+            {engineBusy?"Preparing set…":"Start my set"}<ChevronRight size={18} aria-hidden="true"/>
+          </button>
         </div>
-        {engineError&&<p className="mcq-hub-error" role="alert">{engineError}</p>}
-        {filtered.length<sessionMinimum&&<p className="mcq-hub-error" role="status">Not enough questions match. Broaden your filters to start.</p>}
-        <button className="btn btn-primary mcq-hub-start" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
-          {engineBusy?"Preparing set…":"Start my set"}<ChevronRight size={18} aria-hidden="true"/>
-        </button>
       </section>
 
       <section className="mcq-review-queue-row" aria-label="MCQ review queues">
         <button className={`mcq-review-queue-card unfinished ${resumeAvailable?"is-ready":""}`} type="button" disabled={!resumeAvailable} onClick={continueQuiz}>
           <span className="mcq-review-queue-icon"><Clock3 size={21} aria-hidden="true"/></span>
           <span><strong>Unfinished MCQs</strong><small>{resumeAvailable?"Continue your saved set":"No pending sets!"}</small></span>
+          <ChevronRight className="mcq-queue-arrow" size={16} aria-hidden="true"/>
         </button>
         <button className={`mcq-review-queue-card missed ${missedQuestions.length&&mcqEngineEnabled&&!isGuest?"is-ready":""}`} type="button" disabled={isGuest||!mcqEngineEnabled||!missedQuestions.length||engineBusy} onClick={startMissedQuiz}>
           <span className="mcq-review-queue-icon"><Target size={21} aria-hidden="true"/></span>
           <span><strong>Missed MCQs</strong><small>{missedQuestions.length?`Repair ${missedQuestions.length} incorrect question${missedQuestions.length===1?"":"s"}`:"You’re on a roll!"}</small></span>
+          <ChevronRight className="mcq-queue-arrow" size={16} aria-hidden="true"/>
         </button>
         <button className="mcq-review-queue-card starred is-ready" type="button" onClick={()=>isGuest?requestSignup():setStarredView(true)}>
           <span className="mcq-review-queue-icon"><Star size={21} fill="currentColor" aria-hidden="true"/></span>
           <span><strong>Starred MCQs</strong><small>{starredMcqs.length?"Let’s review your list!":"Build your review list now!"}</small></span>
+          <ChevronRight className="mcq-queue-arrow" size={16} aria-hidden="true"/>
         </button>
       </section>
 
