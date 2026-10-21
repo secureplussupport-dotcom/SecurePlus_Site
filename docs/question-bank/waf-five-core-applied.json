@@ -1,0 +1,132 @@
+[
+  {
+    "id": "m826",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "core",
+    "q": "An organization needs a dedicated security control to inspect incoming HTTP requests and protect public-facing web servers from application-layer attacks like SQL injection. Which technology best meets this requirement?",
+    "opts": [
+      "Stateful perimeter packet filtering firewall",
+      "Virtual private network encryption gateway",
+      "Dedicated web application firewall appliance",
+      "Forward proxy content filtering cache server"
+    ],
+    "correct": 2,
+    "exp": "A Web Application Firewall (WAF) operates at Layer 7 to inspect incoming HTTP/HTTPS traffic, blocking web attacks like SQLi and XSS before they reach the server.",
+    "wrongFeedback": {
+      "0": "Stateful packet filtering firewalls operate primarily at Layers 3 and 4 (IP addresses and ports), lacking deep inspection capabilities for HTTP application-layer payloads.",
+      "1": "A VPN gateway encrypts network communications between endpoints, providing secure remote access rather than filtering malicious web payloads.",
+      "3": "A forward proxy regulates outbound employee web browsing requests, whereas protecting public-facing web servers requires inspecting inbound traffic."
+    },
+    "conceptTagIds": [
+      "net.app-waf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied WAF Core/Applied batch"
+  },
+  {
+    "id": "m827",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "A critical zero-day vulnerability is discovered in an enterprise web app's login form. Testing a permanent code patch will take two weeks. Which action provides the fastest compensating control to block exploitation immediately?",
+    "opts": [
+      "Implementing a custom pattern-matching rule on the reverse proxy WAF",
+      "Migrating the backend database cluster into an isolated internal subnet",
+      "Enforcing full disk encryption across all active production web instances",
+      "Revoking active administrative session tokens from edge network routers"
+    ],
+    "correct": 0,
+    "exp": "A WAF allows administrators to deploy \"virtual patches\" by creating custom Layer 7 signature or regex rules that filter out attack patterns before requests reach the vulnerable application code.",
+    "wrongFeedback": {
+      "1": "Isolating the database is good segmentation practice, but it does not prevent an attacker from exploiting the web app's login logic from the outside.",
+      "2": "Full-disk encryption protects data at rest against physical drive theft; it provides zero protection against live application-layer exploits.",
+      "3": "Revoking router administration tokens secures network infrastructure management, but has no effect on incoming public web requests targeting the web application."
+    },
+    "conceptTagIds": [
+      "net.app-waf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied WAF Core/Applied batch"
+  },
+  {
+    "id": "m828",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "An enterprise deploys an inline WAF to protect a customer portal, but security logs reveal that SQL injection attacks sent over HTTPS pass through undetected. What configuration is missing on the WAF?",
+    "opts": [
+      "Binding user directory memberships to stateful firewall routing tables",
+      "Restricting incoming web traffic to verified internal RFC 1918 subnets",
+      "Enabling continuous transaction rollback routines on backend databases",
+      "Terminating TLS sessions using the web server's private certificate"
+    ],
+    "correct": 3,
+    "exp": "Because HTTPS encrypts payload contents end-to-end, an inline WAF cannot inspect HTTP headers or query strings without terminating TLS, which requires installing the web server's private certificate.",
+    "wrongFeedback": {
+      "0": "Mapping user identities to firewall rules (User-ID) authenticates internal users, but does not enable the inspection of encrypted web traffic payloads.",
+      "1": "Restricting traffic to RFC 1918 (private) subnets would block legitimate public internet customers from reaching the public portal.",
+      "2": "Database rollbacks preserve transaction integrity during execution errors, but do not inspect or block incoming malicious web traffic."
+    },
+    "conceptTagIds": [
+      "net.app-waf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied WAF Core/Applied batch"
+  },
+  {
+    "id": "m829",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "An attacker submits an SQL injection payload using double URL encoding (%2527). The WAF fails to detect the attack and passes it to the database, where it successfully executes. Why did the WAF fail to block this request?",
+    "opts": [
+      "The database engine automatically bypassed application-level validation",
+      "The WAF evaluated raw input strings without recursively decoding the data",
+      "The reverse proxy dropped HTTP response headers during transport routing",
+      "The application server processed the request over an unencrypted channel"
+    ],
+    "correct": 1,
+    "exp": "If a WAF decodes input only once, %2527 resolves to %27, which does not match a plain quote (') signature. If the backend application performs a second decode pass, the payload executes unless the WAF applies recursive normalization.",
+    "wrongFeedback": {
+      "0": "Databases execute whatever queries are passed to them; they do not selectively bypass application filters on their own initiative.",
+      "2": "Dropping HTTP response headers affects data sent back to the client, not how incoming request payloads are inspected.",
+      "3": "Running over an unencrypted channel (HTTP) makes payload inspection easier for a WAF, not harder; the failure here stems from encoding evasion, not encryption."
+    },
+    "conceptTagIds": [
+      "net.app-waf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied WAF Core/Applied batch"
+  },
+  {
+    "id": "m830",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "An organization needs to prevent cross-site request forgery and cookie tampering on its customer portal. Why does the security architect require a dedicated WAF rather than relying on the perimeter NGFW?",
+    "opts": [
+      "A WAF inspects network routing protocols to block spoofed IP addresses",
+      "A WAF provides automated endpoint isolation for infected client laptops",
+      "A WAF specializes in inspecting HTTP session state, cookies, and headers",
+      "A WAF enforces static access control policies based on user job roles"
+    ],
+    "correct": 2,
+    "exp": "While NGFWs possess application awareness, dedicated WAFs specialize in deep HTTP/HTTPS analysis, including parsing session cookies, validating anti-CSRF tokens, and inspecting web application parameters.",
+    "wrongFeedback": {
+      "0": "Inspecting Layer 3 routing protocols (like BGP or OSPF) is a router or network firewall capability, not a web application security function.",
+      "1": "Isolating infected client devices is a function of Endpoint Detection and Response (EDR), not a web gateway control.",
+      "3": "Enforcing role-based access control (RBAC) is an identity and directory management function, not the operational distinction between NGFWs and WAFs."
+    },
+    "conceptTagIds": [
+      "net.app-waf"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied WAF Core/Applied batch"
+  }
+]

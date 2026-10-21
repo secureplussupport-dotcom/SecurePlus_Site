@@ -1,0 +1,158 @@
+[
+  {
+    "id": "m831",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "core",
+    "q": "During a Transport Layer Security (TLS) handshake, how are asymmetric and symmetric encryption algorithms combined to secure client-server communications?",
+    "opts": [
+      "Asymmetric encryption protects bulk transmission, while symmetric keys verify server root identity",
+      "Asymmetric encryption exchanges a shared secret, while symmetric encryption protects session data",
+      "Symmetric encryption validates client certificates, while asymmetric keys compress outgoing data",
+      "Symmetric encryption generates public key pairs, while asymmetric ciphers negotiate network ports"
+    ],
+    "correct": 1,
+    "exp": "TLS uses asymmetric cryptography (public/private keys) during the handshake to authenticate the server and securely establish a shared session key, which is then used by symmetric ciphers (e.g., AES) for high-speed bulk data encryption.",
+    "wrongFeedback": {
+      "0": "Asymmetric encryption is computationally expensive and is not used for bulk data transmission; digital certificates (asymmetric) verify server identity.",
+      "2": "Certificate validation uses asymmetric cryptography (digital signatures and public keys), not symmetric keys.",
+      "3": "Key generation for asymmetric ciphers is mathematical and internal to the algorithm; symmetric ciphers do not generate public keys or negotiate network ports."
+    },
+    "conceptTagIds": [
+      "net.proto-tls"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied TLS Core/Applied batch"
+  },
+  {
+    "id": "m832",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "core",
+    "q": "A security architect requires all enterprise web servers to enforce Perfect Forward Secrecy (PFS) in their TLS cipher suites. What primary protection does this deliver?",
+    "opts": [
+      "It compresses payload traffic to accelerate client-to-server TLS handshake negotiation times",
+      "It enforces mutual authentication by verifying cryptographic client certificates on each request",
+      "It prevents compromised server private keys from decrypting previously recorded session traffic",
+      "It restricts client web connections strictly to verified corporate hardware and operating systems"
+    ],
+    "correct": 2,
+    "exp": "PFS generates unique, temporary (ephemeral) session keys for each connection. If the server’s long-term private key is later stolen, an attacker still cannot decrypt previously captured and stored network sessions.",
+    "wrongFeedback": {
+      "0": "PFS introduces ephemeral key generation, which slightly increases cryptographic overhead rather than compressing payload data or speeding up handshakes.",
+      "1": "Verifying client certificates describes mutual TLS (mTLS), not forward secrecy.",
+      "3": "Restricting access based on endpoint compliance is a zero-trust or network access control (NAC) capability, not a cryptographic property of TLS session keys."
+    },
+    "conceptTagIds": [
+      "net.proto-tls"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied TLS Core/Applied batch"
+  },
+  {
+    "id": "m833",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "An enterprise implements a microservices architecture where internal services communicate across a shared subnet. The security team wants to ensure that services not only encrypt their traffic, but also cryptographically authenticate each other before processing any API calls. Which implementation best meets this requirement?",
+    "opts": [
+      "Implementing mutual TLS to require two-way cryptographic certificate validation",
+      "Enforcing wildcard digital certificates across all internal service domain names",
+      "Upgrading internal load balancers to terminate transport sessions at the boundary",
+      "Disabling ephemeral key exchange ciphers on internal service endpoint proxies"
+    ],
+    "correct": 0,
+    "exp": "Mutual TLS (mTLS) requires both the client and the server to present and validate digital certificates, ensuring bidirectional authentication and encryption between microservices.",
+    "wrongFeedback": {
+      "1": "Wildcard certificates simplify certificate management across multiple subdomains, but standard one-way TLS still authenticates only the server to the client.",
+      "2": "Terminating TLS at a perimeter load balancer decrypts traffic early, leaving backend service-to-service communications unencrypted and unauthenticated.",
+      "3": "Disabling ephemeral key ciphers reduces security by eliminating forward secrecy, and does nothing to authenticate calling services."
+    },
+    "conceptTagIds": [
+      "net.proto-tls"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied TLS Core/Applied batch"
+  },
+  {
+    "id": "m834",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "A network analyst captures traffic during a client-server connection and observes an on-path attacker injecting packets that force the negotiation to abandon modern ciphers in favor of an obsolete, vulnerable algorithm suite. Which weakness makes this attack possible?",
+    "opts": [
+      "Enabling server-side certificate stapling without authoritative revocation checks",
+      "Requiring ephemeral Diffie-Hellman parameters during session key negotiation",
+      "Configuring excessive time-to-live values on cached DNS address resolution records",
+      "Supporting backward compatibility with deprecated versions and legacy cipher suites"
+    ],
+    "correct": 3,
+    "exp": "Downgrade attacks succeed when servers retain backward compatibility with insecure legacy protocols (e.g., SSL 3.0 or TLS 1.0) and weak ciphers, allowing an on-path attacker to intercept the handshake and coerce both sides into using flawed cryptography.",
+    "wrongFeedback": {
+      "0": "OCSP stapling optimizes certificate revocation checking; misconfiguring it does not force cipher suite downgrades.",
+      "1": "Ephemeral Diffie-Hellman provides strong forward secrecy and protects against key compromise, rather than enabling downgrade exploits.",
+      "2": "DNS TTL values dictate caching duration on resolvers and have no role in the cryptographic cipher negotiation of a TLS handshake."
+    },
+    "conceptTagIds": [
+      "net.proto-tls"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied TLS Core/Applied batch"
+  },
+  {
+    "id": "m835",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "A company deploys an edge gateway that performs deep packet inspection on outbound HTTPS sessions. Immediately after activation, employees report that their web browsers display security warnings indicating that the certificate authority is untrusted. What configuration step was missed?",
+    "opts": [
+      "Disabling the gateway's stateful packet inspection rules during peak business hours",
+      "Installing the gateway's internal root certificate authority into workstation trust stores",
+      "Configuring client browsers to ignore all digital certificate revocation list updates",
+      "Replacing wildcard server certificates with individual domain name verification records"
+    ],
+    "correct": 1,
+    "exp": "To inspect encrypted traffic, the gateway acts as a forward proxy, generating certificates on the fly to re-encrypt sessions. Workstations must trust the gateway’s internal root CA certificate in their local trust stores to avoid untrusted issuer warnings.",
+    "wrongFeedback": {
+      "0": "Disabling packet inspection degrades security monitoring and does not resolve certificate trust errors in browser endpoints.",
+      "2": "Disabling revocation checks bypasses critical validity checks and does not solve the root issue of an untrusted signing CA.",
+      "3": "Server certificate formats on external websites do not affect how client systems validate intermediate interception certificates issued by an internal proxy."
+    },
+    "conceptTagIds": [
+      "net.proto-tls"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied TLS Core/Applied batch"
+  },
+  {
+    "id": "m836",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "An operations team updates its web infrastructure to TLS 1.3. A legacy network monitoring appliance that previously decrypted and inspected traffic by passively listening to handshakes with a static copy of the server's private key can no longer read session payloads. Why did this monitoring method fail?",
+    "opts": [
+      "TLS 1.3 mandates client-side certificates for all public browser connection handshakes",
+      "TLS 1.3 delegates session symmetric key generation to external hardware security modules",
+      "TLS 1.3 compresses all application-layer headers into unreadable binary control blocks",
+      "TLS 1.3 eliminates static RSA key exchange in favor of mandatory ephemeral key exchanges"
+    ],
+    "correct": 3,
+    "exp": "TLS 1.3 completely removed static RSA key exchange (where session keys could be decrypted using the server's static private key) and mandates ephemeral Diffie-Hellman key exchange, ensuring Perfect Forward Secrecy and preventing passive decryption by external taps.",
+    "wrongFeedback": {
+      "0": "Client certificates are optional in TLS 1.3 and are used primarily in specialized architectures like mTLS, not default public web traffic.",
+      "1": "Key generation remains between the negotiating client and server endpoints; HSMs are optional backend hardware, not a protocol mandate.",
+      "2": "TLS 1.3 actually removed transport-level compression to protect against side-channel compression attacks (such as CRIME)."
+    },
+    "conceptTagIds": [
+      "net.proto-tls"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied TLS Core/Applied batch"
+  }
+]
