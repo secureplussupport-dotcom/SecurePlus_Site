@@ -1,0 +1,74 @@
+[
+  {
+    "id": "m845",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "A SIEM search for a suspicious IP returns firewall drop events, but misses web server authentication failures from the same address. Which ingestion feature was misconfigured?",
+    "opts": [
+      "Alert thresholding based on aggregate event rates",
+      "Retention scheduling defining storage archive tiers",
+      "Data normalization mapping fields to a common schema",
+      "Hashing algorithms verifying centralized log integrity"
+    ],
+    "correct": 2,
+    "exp": "Normalization standardizes disparate vendor formats into a unified schema so one search query captures matching fields across all sources.",
+    "wrongFeedback": {
+      "0": "Alert thresholding triggers notifications on volume spikes, but does not affect field parsing across distinct log types.",
+      "1": "Retention policies govern storage lifecycle and data aging, having no impact on how incoming fields are indexed.",
+      "3": "Hashing provides cryptographic tamper detection for stored archives, rather than parsing search terms across multi-vendor logs."
+    },
+    "conceptTagIds": ["ops.siem"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SIEM Applied batch"
+  },
+  {
+    "id": "m846",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "An attacker triggers an action sequence matching a 60-second correlation rule, yet no alert fires despite both systems delivering logs. What infrastructure defect caused this failure?",
+    "opts": [
+      "Clock drift between reporting system timestamps",
+      "Storage write-once lockouts freezing database tables",
+      "Signature mismatches in parsing application headers",
+      "Network throttling dropping security event batches"
+    ],
+    "correct": 0,
+    "exp": "Correlation rules depend on synchronized clocks; without accurate NTP alignment, timestamps fall outside the correlation time window.",
+    "wrongFeedback": {
+      "1": "WORM controls protect historical records from being deleted or modified, but do not prevent new logs from being evaluated.",
+      "2": "Signature mismatches cause parsing errors at ingestion, whereas correlation rules evaluate parsed event states.",
+      "3": "The scenario explicitly confirms that both systems successfully delivered their logs to the SIEM."
+    },
+    "conceptTagIds": ["ops.siem"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SIEM Applied batch"
+  },
+  {
+    "id": "m847",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "An authorized user slowly exfiltrates small batches of files over three weeks, staying below static threshold alerts. Which SIEM feature detects this activity?",
+    "opts": [
+      "Forward proxy filtering on external outbound tunnels",
+      "Stateful packet rules monitoring session durations",
+      "Write-once-read-many storage for archival evidence",
+      "User and entity behavior analytics tracking baselines"
+    ],
+    "correct": 3,
+    "exp": "UEBA establishes baseline profiles for users and assets, identifying subtle deviations over extended periods that bypass static rules.",
+    "wrongFeedback": {
+      "0": "Forward proxies inspect outbound web traffic, but cannot determine if an authorized user's internal file access is anomalous.",
+      "1": "Stateful inspection tracks transport connections, lacking context into long-term user data access trends.",
+      "2": "WORM storage preserves historical log integrity for audits, but provides no analytical detection capabilities."
+    },
+    "conceptTagIds": ["ops.siem"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied SIEM Applied batch"
+  }
+]
