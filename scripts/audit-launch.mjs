@@ -261,7 +261,7 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'const activeTopicFilter=isGuest?"all":topicFilter', "guest MCQ practice must not filter by topic");
   requireContains("src/App.jsx", '<FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>', "guest MCQ practice should still allow chapter filtering");
   const mcqSource=read("src/App.jsx").split("function MCQPractice(")[1].split("function UpgradeModal(")[0];
-  const mcqSetup=mcqSource.split("  if(!started) return(")[1].split("  if(done&&isGuest) return(")[0];
+  const mcqSetup=mcqSource.split("  if(!started) return(")[1].split("  if(done) return <McqSetResults")[0];
   const disclosure=read("src/App.jsx").split("function PracticeSetupDisclosure(")[1].split("function MCQPractice(")[0];
   if(!mcqSource.includes('const [reviewMode,setReviewMode]=useState("smart")')) push(errors,"src/App.jsx","MCQ setup must default to Smart Review");
   if(!mcqSource.includes('if(isGuest&&reviewMode==="smart")return requestSignup()')) push(errors,"src/App.jsx","guest Smart Review must request an account rather than silently run random practice");

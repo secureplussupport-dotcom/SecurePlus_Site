@@ -4,6 +4,8 @@ import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701Ed
 import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
 import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from "./data/sy0701PublishedSnapshot.js";
 import { CONCEPT_TAGS, MCQ_TAGGING_VERSION, inferMcqConceptTagIds, searchMcqConceptTags } from "./data/sy0701ConceptTags.js";
+import { McqSetResults } from "./components/McqSetResults.jsx";
+import { buildMcqResultSummary } from "./lib/mcqResultSummary.js";
 import { effectiveMcqConceptTagIds } from "./lib/mcqConceptReview.js";
 import { normalizeMcqDifficulty } from "./lib/mcqDifficulty.js";
 import mcqTagAssignments from "./data/mcqConceptTagAssignments.json";
@@ -25003,13 +25005,18 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [sessionContext,setSessionContext]=useState(null);
   const [engineState,setEngineState]=useState(null);
   const [engineError,setEngineError]=useState("");
+  const [engineStateError,setEngineStateError]=useState(false);
   const [engineBusy,setEngineBusy]=useState(false);
   const answerInFlight=useRef(false);
   const answerEvents=useRef(new Map());
   const refreshEngineState=useCallback(()=>{
-    if(!isGuest&&mcqEngineEnabled)mcqEngineRequest("state").then(setEngineState).catch(()=>{});
+    if(isGuest||!mcqEngineEnabled)return Promise.resolve(null);
+    return mcqEngineRequest("state").then(state=>{
+      setEngineState(previous=>!previous||state.version>=previous.version?state:previous);
+      setEngineStateError(false);return state;
+    }).catch(()=>{setEngineStateError(true);return null;});
   },[isGuest]);
-  useEffect(refreshEngineState,[refreshEngineState,attempts.length]);
+  useEffect(()=>{refreshEngineState();},[refreshEngineState,attempts.length]);
   const starredSet=useMemo(()=>new Set(starred),[starred]);
   const starredMcqs=useMemo(()=>bank.filter(q=>starredSet.has(starKey("mcq",q.id))),[bank,starredSet]);
   const starredQuestionIds=useMemo(()=>new Set(starredMcqs.map(question=>question.id)),[starredMcqs]);
@@ -25137,7 +25144,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           if(i<0)continue;
           const evaluation=answer.response;
           saved.questions[i]={...saved.questions[i],correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:{[answer.selected_option_id]:evaluation.selected_feedback}};
-          saved.results[i]={qid:answer.question_id,correct:evaluation.is_correct,selected:answer.selected_option_id,mcq:true,ch:saved.questions[i].ch};
+          saved.results[i]={qid:answer.question_id,correct:evaluation.is_correct,selected:answer.selected_option_id,mcq:true,ch:saved.questions[i].ch,conceptTag:evaluation.concept_tag};
         }
         saved.submitted=Boolean(saved.results[saved.qi||0]);
         if(saved.submitted)saved.selected=saved.results[saved.qi||0].selected;
@@ -25208,10 +25215,10 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         setQuestions(prev=>prev.map((q,i)=>i===qi?{...q,correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:{[selected]:evaluation.selected_feedback}}:q));
       }else if(!isGuest){evaluation=await recordStandaloneMcq(current,selected);}
       const correct=evaluation?evaluation.is_correct:selected===current.correct;
-      const r={qid:current.id,correct,selected,title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",topic:current.topic,difficulty:current.difficulty,mcq:true,createdAt:new Date().toISOString()};
+      const r={qid:current.id,correct,selected,conceptTag:evaluation?.concept_tag||current.conceptTagIds?.[0],title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",topic:current.topic,difficulty:current.difficulty,mcq:true,createdAt:new Date().toISOString()};
       capture("mcq_question_answered",{question_id:current.id,chapter:current.ch,correct,tier:user.tier});
       setResults(rs=>{const next=[...rs];next[qi]=r;return next;});
-      onSave(r);refreshEngineState();
+      onSave(r);await refreshEngineState();
       playAnswerSound(correct);setAnswerBurst({correct,key:Date.now()});
       setTimeout(()=>setAnswerBurst(null),1700);setSubmitted(true);setShowWrong(false);
     }catch(error){setEngineError(error.message);}finally{answerInFlight.current=false;setEngineBusy(false);}
@@ -25238,15 +25245,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     setFinishedReviewMode(false);
     setDone(true);
   };
-  const retakeCurrentQuiz=()=>{
-    if(sessionContext?.engineSessionId)return startEngineQuiz({},quizCount);
-    setQuestions(prev=>prev.map(q=>({...q,engineAnswerEventId:crypto.randomUUID()})));
-    setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setShowWrong(false);setSessionStartedAt(Date.now());
-  };
 
   const correctCount=results.filter(r=>r?.correct).length;
-  const scorePct=questions.length?correctCount/questions.length:0;
-  const canSeeFeedback = user.tier === "pro";
+  const canSeeFeedback = user.tier === "pro" || finishedReviewMode;
   const chapterEvaluation=CHAPTERS.map(ch=>{
     const chapterResults=results.map((r,index)=>r?{...r,question:questions[index]}:null).filter(r=>r&&r.ch===ch.id);
     const missed=chapterResults.filter(r=>!r.correct);
@@ -25258,7 +25259,6 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const sessionMissedQuestions=results
     .map((result,index)=>result&&!result.correct?questions[index]:null)
     .filter(Boolean);
-  const sessionLessonPath=getDeepDiveRecommendations(sessionMissedQuestions,{limit:2});
   const guestWeakChapter=weakChapters[0]||null;
   const guestWeakTopics=guestWeakChapter?.focusTopics||[];
   const saveGuestSmartReview=async()=>{
@@ -25422,138 +25422,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     </div>
   );
 
-  if(done&&isGuest) return(
-    <div className="mcq-results-screen guest-results-screen fu">
-      <GuestCompletionMoment correct={correctCount} total={questions.length}>
-        <div className="guest-completion-actions">
-          <button className="btn btn-primary" onClick={()=>reviewCompletedQuestion(Math.max(0,results.findIndex(result=>result&&!result.correct)))}>{sessionMissedQuestions.length?"Review missed questions":"Review your answers"}<ChevronRight size={16}/></button>
-          <button className="btn btn-outline" onClick={()=>{setStarted(false);setDone(false);setFinishedReviewMode(false);}}>Start a new set</button>
-        </div>
-        <small className="guest-completion-note">This is your practice snapshot, not an exam-readiness score.</small>
-      </GuestCompletionMoment>
-      <div className="guest-result-next-step"><div className="label">Make your next session count</div>{guestSignupPrompt}<p>Your result is not saved to an account yet. Creating one is free.</p></div>
-      <details className="card guest-result-review">
-        <summary>Explore your {questions.length} answers <ChevronDown size={16}/></summary>
-        <div className="practice-review-list">{results.map((result,index)=><button key={result.qid} type="button" className="practice-review-row" style={{"--review-color":result.correct?t.green:t.amber}} onClick={()=>reviewCompletedQuestion(index)}>
-          <span className="practice-review-status">{result.correct?<Check size={16}/>:<RotateCcw size={16}/>}</span><span>{questions[index]?.q}</span><small>{result.correct?"Correct":"Revisit"}</small>
-        </button>)}</div>
-      </details>
-      <button className="btn btn-ghost" onClick={retakeCurrentQuiz}><RotateCcw size={14}/>Retry the same set</button>
-    </div>
-  );
-
-  if(done) return(
-    <div className="fu mcq-results-screen" style={{padding:"24px",maxWidth:760,margin:"0 auto",textAlign:"center"}}>
-      <section className="practice-result-hero" style={{"--result-color":scorePct>=.8?t.green:scorePct>=.5?t.amber:t.red}}>
-        <div className="practice-score-ring" style={{"--score":Math.round(scorePct*100),"--ring":scorePct>=.8?t.green:scorePct>=.5?t.amber:t.red}}>
-          <strong>{Math.round(scorePct*100)}%</strong>
-          <small>{correctCount} / {questions.length} correct</small>
-        </div>
-        <div className="practice-result-copy">
-          <div className="practice-result-kicker">Practice complete</div>
-          <h2>{scorePct>=.8?"Strong work.":scorePct>=.5?"Good progress.":"A useful first pass."}</h2>
-          <p>{scorePct>=.8
-            ?"You are showing solid recall across this set. Keep the momentum by spacing the next review."
-            :scorePct>=.5
-              ?"You have a good base. Review the misses below, then try a focused set while the ideas are fresh."
-              :"Mistakes are useful data. Review the missed concepts now and they will become easier to recognise next time."}</p>
-          <div className="practice-result-actions">
-            <button className="btn btn-primary" onClick={retakeCurrentQuiz}>{sessionContext?.engineSessionId?"Start another set":"Retry this set"}</button>
-            <button className="btn btn-ghost" onClick={()=>{setStarted(false);setDone(false);setFinishedReviewMode(false);}}>Build a new quiz</button>
-          </div>
-        </div>
-      </section>
-      {isGuest&&guestSignupPrompt}
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,margin:"22px 0 10px",textAlign:"left"}}>
-        <div>
-          <div style={{fontSize:11,fontWeight:900,textTransform:"uppercase",color:t.accent}}>Answer review</div>
-          <h3 style={{fontSize:19,color:t.text}}>Tap any question to review it</h3>
-          <p style={{fontSize:12,color:t.textSec,lineHeight:1.55,marginTop:3}}>Review correct and incorrect answers in their answered state.</p>
-        </div>
-        <span className="chip" style={{color:t.textSec,borderColor:t.border,background:t.panel}}>{results.length} answered</span>
-      </div>
-      <div className="card practice-review-list" style={{padding:"16px 20px",marginBottom:16,textAlign:"left"}}>
-        {results.map((r,i)=>(
-          <button key={i} type="button" className="practice-review-row" style={{"--review-color":r.correct?t.green:t.red}} onClick={()=>reviewCompletedQuestion(i)}>
-            <span className="practice-review-status">{r.correct?<Check size={16} strokeWidth={3}/>:<X size={16} strokeWidth={3}/>}</span>
-            <span>{questions[i]?.q?.slice(0,88)}{questions[i]?.q?.length>88?"...":""}</span>
-            <small>{r.correct?"Review correct":"Review miss"}</small>
-          </button>
-        ))}
-      </div>
-      {!isGuest&&user.tier!=="pro"&&sessionLessonPath.length>0&&(
-        <SmartReviewLessonPath recommendations={sessionLessonPath} onOpenDeepDive={onOpenDeepDive} source="mcq_result" title="Concept lessons matched to this set"/>
-      )}
-      {user.tier==="pro"?(
-        <div className="card" style={{padding:"16px 18px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}28`,background:`${t.accent}05`}}>
-          <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:10,flexWrap:"wrap"}}>
-            <div>
-              <div style={{fontWeight:900,color:t.text,fontSize:15}}>Pro evaluation</div>
-              <div style={{fontSize:12,color:t.textDim}}>Based on this set</div>
-            </div>
-            <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}25`}}>Pro evaluation</span>
-          </div>
-          {weakChapters.length===0?(
-            <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-              No weak chapter detected in this set. Next: run a timed Exam Mode set or continue Smart Review.
-            </div>
-          ):(
-            <div style={{display:"grid",gap:9}}>
-              <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
-                Work on {weakChapters.map(item=>`Ch.${item.chapter.id}`).join(", ")} first. Open the matched lesson, then retry Smart Review.
-              </div>
-              {weakChapters.map(item=>{
-                const accuracy=Math.round((item.correct/item.total)*100);
-                const topics=item.focusTopics.length?item.focusTopics.join(" and "):item.chapter.title;
-                const lessonPath=getDeepDiveRecommendations(
-                  sessionMissedQuestions.filter(question=>question.ch===item.chapter.id),
-                  {limit:1}
-                );
-                const lesson=lessonPath[0];
-                return(
-                  <div key={item.chapter.id} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) auto",gap:10,alignItems:"center",padding:"11px 12px",border:`1px solid ${t.border}`,borderRadius:10,background:t.surface}}>
-                    <div style={{minWidth:0}}>
-                      <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap",marginBottom:4}}>
-                        <div style={{fontSize:13,fontWeight:900,color:t.text}}>Ch.{item.chapter.id}: {item.chapter.title}</div>
-                        <span style={{fontSize:12,fontWeight:900,color:accuracy>=75?t.green:accuracy>=50?t.amber:t.red}}>{accuracy}%</span>
-                      </div>
-                      <div style={{fontSize:12,color:t.textSec,lineHeight:1.5}}>
-                        Focus: {topics}{lesson?` · Lesson: ${lesson.title}`:""}
-                      </div>
-                    </div>
-                    {lesson?(
-                      <button className="btn btn-outline" type="button" style={{fontSize:12,minHeight:36,padding:"8px 12px",whiteSpace:"nowrap"}} onClick={()=>onOpenDeepDive?.(lesson.id,{source:"mcq_result_pro_evaluation"})}>
-                        Learn <ChevronRight size={14}/>
-                      </button>
-                    ):(
-                      <div style={{fontSize:12,fontWeight:700,color:accuracy>=75?t.green:accuracy>=50?t.amber:t.red}}>{accuracy}%</div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      ):(
-        <div className="card" style={{padding:"16px 20px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
-          <div style={{fontWeight:700,color:t.text,fontSize:14,marginBottom:4}}>Pro unlocks your improvement plan</div>
-          <div style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:10}}>
-            After each MCQ test, Pro shows which chapters need work and suggests what to study next, such as PKI, access control, or incident response concepts.
-          </div>
-          <button className="btn btn-outline" style={{fontSize:12}} onClick={onUpgrade}>See Pro</button>
-        </div>
-      )}
-      {user.tier==="free"&&(
-        <div className="card" style={{padding:"16px 20px",marginBottom:16,textAlign:"left",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
-          <div style={{fontWeight:700,color:t.text,fontSize:14,marginBottom:4}}>Want the PBQ side of the exam too?</div>
-          <div style={{fontSize:13,color:t.textSec,lineHeight:1.65,marginBottom:10}}>
-            Your MCQ practice stays free. The {PRO_ACADEMY_PASS_NAME} adds hands-on PBQ simulations for {PRO_ACADEMY_PASS_PRICE}.
-          </div>
-          <button className="btn btn-outline" style={{fontSize:12}} onClick={onUpgrade}>Preview Pro PBQs</button>
-        </div>
-      )}
-    </div>
-  );
+  if(done) return <McqSetResults correct={correctCount} total={questions.length} t={t}
+    summary={buildMcqResultSummary({questions,results,chapters:CHAPTERS,engineState,progressAvailable:!engineStateError})}
+    onStart={startQuiz} starting={engineBusy} startError={engineError}
+    onReview={()=>reviewCompletedQuestion(0)} onOpenLesson={onOpenDeepDive}
+    guestPrompt={isGuest?guestSignupPrompt:null} progressError={engineStateError} onRetryProgress={refreshEngineState}/>;
 
   return(
     <div style={{padding:"24px",maxWidth:700,margin:"0 auto"}} className="fu active-practice-screen mcq-question-screen" key={qi}>
@@ -34573,7 +34446,7 @@ export default function App() {
               <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onFlashcards={()=>setView("flashcards")} onConcepts={()=>setView("deep-dives")}/>
             )}
             {view==="mcq"&&(
-              <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion} mcqBank={liveMcqBank}/>
+              <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion} mcqBank={liveMcqBank}/>
             )}
             {view==="pbq"&&(
               activeGuestPbq ? (
