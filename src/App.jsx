@@ -16939,84 +16939,104 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .mcq-review-queue-card strong{color:${t.text};font-size:14px;line-height:1.2;}
 .mcq-review-queue-card small{margin-top:4px;color:${t.textSec};font-size:11px;font-weight:800;line-height:1.35;}
 .mcq-review-queue-card em{display:grid;place-items:center;min-width:34px;height:34px;padding:0 9px;border-radius:999px;background:color-mix(in srgb,var(--queue-color) 14%,${t.surface});color:var(--queue-color);font-style:normal;font-size:12px;font-weight:950;}
-.mcq-hub-screen{max-width:1080px;margin:0 auto;padding:36px 32px 48px;}
-.mcq-hub-heading{margin-bottom:28px;}
-.mcq-hub-heading h2{font-size:32px;line-height:1.2;letter-spacing:-.035em;color:${t.text};margin:0;}
-.mcq-hub-heading p{margin:8px 0 0;color:${t.textSec};font-size:14px;line-height:1.6;}
-.mcq-hub-description{margin:0 0 20px;color:${t.textSec};font-size:14px;line-height:1.6;max-width:360px;}
+.mcq-hub-screen{--mcq-stage:#123a32;--mcq-stage-ink:#f2fff8;--mcq-stage-muted:#bdd4ca;--mcq-stage-line:#41675a;max-width:1120px;margin:0 auto;padding:36px 32px 48px;}
+.mcq-hub-heading{display:flex;align-items:center;gap:18px;margin-bottom:28px;}
+.mcq-page-mark{display:grid;place-items:center;width:58px;height:58px;flex-shrink:0;border-radius:18px;background:var(--mcq-stage);color:var(--mcq-stage-ink);box-shadow:inset 0 0 0 1px #ffffff14;}
+.mcq-hub-heading h2{font-size:38px;line-height:1.15;letter-spacing:-.045em;color:${t.text};margin:0;}
+.mcq-hub-heading p{margin:7px 0 0;color:${t.textSec};font-size:14px;line-height:1.6;}
 .mcq-customise-description{margin:0 0 16px;color:${t.textSec};font-size:13px;line-height:1.6;}
-.mcq-hub-screen .mcq-top-modes{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin-bottom:24px;gap:14px;z-index:5;}
+.mcq-hub-screen .mcq-top-modes{grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:6px;margin-bottom:22px;gap:6px;border:1px solid ${t.border};border-radius:20px;background:${t.panel};z-index:5;}
 .mcq-mode-choice{position:relative;min-width:0;}
-.mcq-mode-choice .practice-mode-card{width:100%;min-height:88px;padding:18px;gap:14px;border-radius:14px;background:${t.surface};box-shadow:none;transition:border-color .16s ease,background .16s ease,box-shadow .16s ease;}
-.mcq-mode-choice .practice-mode-card:hover:not(:disabled){transform:none;box-shadow:none;}
-.mcq-mode-choice .practice-mode-card.active{border-color:var(--mode-color);background:color-mix(in srgb,var(--mode-color) 7%,${t.surface});box-shadow:inset 0 0 0 1px var(--mode-color);}
+.mcq-mode-choice .practice-mode-card{width:100%;min-height:82px;padding:16px 20px;gap:14px;border:1px solid transparent;border-radius:14px;background:transparent;box-shadow:none;transition:border-color .16s ease,background .16s ease,box-shadow .16s ease;}
+.mcq-mode-choice .practice-mode-card:hover:not(:disabled){transform:none;background:${t.surface}90;box-shadow:none;}
+.mcq-mode-choice .practice-mode-card.active{border-color:color-mix(in srgb,var(--mode-color) 55%,${t.border});background:color-mix(in srgb,var(--mode-color) 9%,${t.surface});box-shadow:0 2px 6px rgba(0,0,0,.04),inset 0 3px 0 var(--mode-color);}
 .mcq-mode-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .mcq-mode-title strong{margin:0;font-size:16px;font-weight:750;}
-.mcq-mode-recommended{padding:4px 8px;border-radius:6px;background:${t.green}17;color:${t.text};font-size:10px;line-height:1.4;font-weight:700;}
-.mcq-mode-choice .practice-mode-card:not(.active) .practice-mode-icon{background:${t.panel};color:${t.textSec};}
-.mcq-mode-description{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:20;padding:14px 16px;border:1px solid ${t.border};border-radius:12px;background:${t.surface};color:${t.textSec};font-size:13px;line-height:1.6;box-shadow:0 12px 32px rgba(0,0,0,.14);}
-.mcq-mode-description::before{content:"";position:absolute;left:0;right:0;top:-9px;height:9px;}
-.mcq-practice-hub.mcq-launch-pad{grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);align-items:center;gap:32px;padding:32px;margin-bottom:20px;border:1px solid ${t.border};border-radius:20px;background:${t.surface};box-shadow:0 4px 18px rgba(0,0,0,.035);overflow:visible;}
+.mcq-mode-recommended{padding:4px 8px;border-radius:999px;background:${t.green}1b;color:${t.text};font-size:10px;line-height:1.4;font-weight:700;}
+.mcq-mode-choice .practice-mode-card:not(.active) .practice-mode-icon{background:${t.surface};color:${t.textSec};}
+.mcq-mode-description{position:absolute;top:calc(100% + 10px);left:0;right:0;z-index:20;padding:14px 16px;border:1px solid ${t.border};border-radius:12px;background:${t.surface};color:${t.textSec};font-size:13px;line-height:1.6;box-shadow:0 12px 32px rgba(0,0,0,.14);}
+.mcq-mode-description::before{content:"";position:absolute;left:0;right:0;top:-11px;height:11px;}
+.mcq-practice-hub.mcq-launch-pad{grid-template-columns:minmax(0,1.08fr) minmax(280px,1fr);align-items:stretch;gap:0;padding:0;margin-bottom:22px;border:1px solid ${t.border};border-radius:24px;background:${t.surface};box-shadow:0 12px 28px rgba(0,0,0,.055);overflow:hidden;}
 .mcq-practice-hub.mcq-launch-pad::after{display:none;}
-.mcq-hub-overview{min-width:0;}
-.mcq-practice-hub .mcq-hub-stats{width:100%;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px;}
-.mcq-hub-stats .setup-stat{min-width:0;padding:18px 16px;display:grid;gap:12px;text-align:left;border-radius:12px;border:1px solid ${t.border};background:${t.panel}80;}
-.mcq-metric-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.mcq-metric-top svg{opacity:.8;flex-shrink:0;}
-.mcq-hub-number{font-size:36px;line-height:1;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;}
-.mcq-hub-stats .setup-stat>span{color:${t.textSec};font-size:12px;line-height:1.5;font-weight:550;max-width:140px;}
-.mcq-session-controls{min-width:0;padding-left:32px;border-left:1px solid ${t.border};}
+.mcq-hub-overview{position:relative;isolation:isolate;overflow:hidden;min-width:0;padding:34px;background:var(--mcq-stage);color:var(--mcq-stage-ink);}
+.mcq-hub-overview::before,.mcq-hub-overview::after{content:"";position:absolute;z-index:-1;pointer-events:none;right:-80px;top:-116px;width:280px;height:280px;border:1px solid #ffffff15;border-radius:50%;}
+.mcq-hub-overview::after{right:-42px;top:-78px;width:204px;height:204px;box-shadow:0 0 0 38px #ffffff04;}
+.mcq-hub-description{margin:0 0 30px;max-width:340px;color:var(--mcq-stage-ink);font-size:23px;font-weight:650;line-height:1.35;letter-spacing:-.025em;text-align:left;}
+.mcq-practice-hub .mcq-hub-stats{width:100%;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:22px;}
+.mcq-hub-stats .setup-stat{min-width:0;padding:0;display:grid;gap:12px;text-align:left;border:0;border-radius:0;background:transparent;}
+.mcq-hub-stats .setup-stat+ .setup-stat{padding-left:22px;border-left:1px solid var(--mcq-stage-line);}
+.mcq-metric-top{display:flex;align-items:center;justify-content:space-between;gap:10px;color:color-mix(in srgb,var(--metric-color) 76%,#fff);}
+.mcq-metric-top svg{flex-shrink:0;opacity:.8;}
+.mcq-hub-number{font-size:58px;line-height:1;font-weight:800;letter-spacing:-.055em;font-variant-numeric:tabular-nums;}
+.mcq-hub-stats .setup-stat>span{color:var(--mcq-stage-muted);font-size:12px;line-height:1.5;font-weight:550;max-width:150px;}
+.mcq-session-controls{display:flex;flex-direction:column;justify-content:center;min-width:0;padding:34px;border:0;background:linear-gradient(145deg,${t.surface},${t.panel}65);}
 .mcq-session-size{min-width:0;margin:0;padding:0;border:0;}
-.mcq-session-size legend{padding:0;margin:0 0 12px;color:${t.text};font-size:14px;font-weight:700;}
-.mcq-practice-hub .mcq-primary-count{width:100%;padding:5px;gap:5px;border:1px solid ${t.border};border-radius:14px;background:${t.panel};}
-.mcq-practice-hub .mcq-primary-count button{min-height:48px;border:1px solid transparent;border-radius:10px;background:transparent;font-size:16px;font-weight:750;color:${t.textSec};transition:background .16s ease,border-color .16s ease,box-shadow .16s ease;}
-.mcq-practice-hub .mcq-primary-count button.active{background:${t.surface};color:color-mix(in srgb,${t.accent} 75%,${t.text});border-color:${t.accent};box-shadow:0 2px 6px rgba(0,0,0,.06);}
-.mcq-practice-hub .mcq-primary-count button:hover:not(:disabled):not(.active){background:${t.surface}80;color:${t.text};}
-.mcq-practice-hub .mcq-hub-start{width:100%;min-height:54px;margin-top:18px;justify-content:center;gap:10px;border-radius:12px;font-size:15px;font-weight:750;background:color-mix(in srgb,${t.accent} 82%,#000);color:#fff;box-shadow:0 4px 10px ${t.accent}18;transition:background .16s ease,box-shadow .16s ease;}
-.mcq-practice-hub .mcq-hub-start:hover:not(:disabled){transform:none;background:color-mix(in srgb,${t.accent} 72%,#000);box-shadow:0 6px 14px ${t.accent}22;}
+.mcq-session-size legend{padding:0;margin:0 0 16px;color:${t.text};font-size:14px;font-weight:750;}
+.mcq-practice-hub .mcq-primary-count{width:100%;padding:0;gap:10px;border:0;border-radius:0;background:transparent;}
+.mcq-practice-hub .mcq-primary-count button{min-height:64px;border:1px solid ${t.border};border-radius:14px;background:${t.surface};font-size:23px;font-weight:800;color:${t.textSec};transition:background .16s ease,border-color .16s ease,box-shadow .16s ease;}
+.mcq-practice-hub .mcq-primary-count button.active{background:color-mix(in srgb,var(--practice-accent) 10%,${t.surface});color:color-mix(in srgb,var(--practice-accent) 70%,${t.text});border-color:var(--practice-accent);box-shadow:inset 0 0 0 1px var(--practice-accent);}
+.mcq-practice-hub .mcq-primary-count button:hover:not(:disabled):not(.active){border-color:var(--practice-accent);color:${t.text};}
+.mcq-practice-hub .mcq-hub-start{width:100%;min-height:58px;margin-top:22px;padding:12px 16px 12px 22px;justify-content:space-between;gap:14px;border:1px solid var(--mcq-stage);border-radius:14px;font-size:15px;font-weight:750;background:var(--mcq-stage);color:var(--mcq-stage-ink);box-shadow:none;transition:background .16s ease,box-shadow .16s ease;}
+.mcq-start-arrow{display:grid;place-items:center;width:30px;height:30px;flex-shrink:0;border-radius:50%;background:#ffffff16;color:var(--mcq-stage-ink);}
+.mcq-practice-hub .mcq-hub-start:hover:not(:disabled){transform:none;background:#0b2b24;box-shadow:0 5px 14px rgba(0,0,0,.12);}
 .mcq-hub-screen button:active:not(:disabled){filter:brightness(.97);}
 .mcq-hub-error{margin-top:12px;color:${t.red};font-size:13px;line-height:1.5;}
-.mcq-hub-screen .mcq-review-queue-row{gap:12px;margin-bottom:24px;}
-.mcq-hub-screen .mcq-review-queue-card{grid-template-columns:auto minmax(0,1fr) auto;min-height:96px;gap:12px;padding:18px 16px;border-radius:14px;border-color:color-mix(in srgb,var(--queue-color) 28%,${t.border});background:color-mix(in srgb,var(--queue-color) 4%,${t.surface});box-shadow:none;transition:background .16s ease,border-color .16s ease;}
-.mcq-hub-screen .mcq-review-queue-card::after{width:3px;}
-.mcq-hub-screen .mcq-review-queue-card:hover:not(:disabled){transform:none;box-shadow:none;background:color-mix(in srgb,var(--queue-color) 9%,${t.surface});border-color:var(--queue-color);}
-.mcq-hub-screen .mcq-review-queue-card strong{font-size:13px;line-height:1.4;font-weight:700;}
-.mcq-hub-screen .mcq-review-queue-card small{margin-top:4px;font-size:12px!important;line-height:1.5!important;font-weight:500;}
-.mcq-hub-screen .mcq-review-queue-icon{width:38px;height:38px;border-radius:11px;box-shadow:none;}
-.mcq-queue-arrow{color:var(--queue-color);opacity:.8;}
+.mcq-hub-screen .mcq-review-queue-row{gap:0;margin-bottom:22px;border:1px solid ${t.border};border-radius:18px;background:${t.surface};overflow:hidden;}
+.mcq-hub-screen .mcq-review-queue-card{grid-template-columns:auto minmax(0,1fr) auto;min-height:108px;gap:12px;padding:20px;border:0;border-radius:0;background:transparent;box-shadow:none;transition:background .16s ease;}
+.mcq-hub-screen .mcq-review-queue-card:not(:last-child){border-right:1px solid ${t.border};}
+.mcq-hub-screen .mcq-review-queue-card::after{top:auto;bottom:0;left:20px;right:20px;width:auto;height:2px;opacity:.65;}
+.mcq-hub-screen .mcq-review-queue-card.is-ready{background:color-mix(in srgb,var(--queue-color) 4%,${t.surface});}
+.mcq-hub-screen .mcq-review-queue-card:hover:not(:disabled){transform:none;box-shadow:none;background:color-mix(in srgb,var(--queue-color) 9%,${t.surface});}
+.mcq-hub-screen .mcq-review-queue-card strong{font-size:13px;line-height:1.4;font-weight:750;}
+.mcq-hub-screen .mcq-review-queue-card small{margin-top:5px;font-size:12px!important;line-height:1.5!important;font-weight:500;}
+.mcq-hub-screen .mcq-review-queue-icon{width:40px;height:40px;border-radius:50%;box-shadow:none;}
+.mcq-queue-arrow{color:var(--queue-color);opacity:.85;}
 .mcq-hub-screen .mcq-review-queue-card:disabled{opacity:1;}
-.mcq-hub-screen .mcq-review-queue-card:not(.is-ready){--queue-color:${t.textDim};background:${t.surface};border-color:${t.border};box-shadow:none;}
+.mcq-hub-screen .mcq-review-queue-card:not(.is-ready){--queue-color:${t.textDim};background:${t.surface};box-shadow:none;}
 .mcq-hub-screen .mcq-review-queue-card:not(.is-ready)::after{display:none;}
 .mcq-hub-screen .mcq-review-queue-card:not(.is-ready) strong{color:${t.textSec};}
 .mcq-hub-screen .mcq-review-queue-card:not(.is-ready) .mcq-queue-arrow{opacity:0;}
-.mcq-hub-screen .mcq-customise{border-radius:14px;box-shadow:none;}
+.mcq-hub-screen .mcq-customise{border-radius:14px;box-shadow:none;background:${t.panel}70;}
 .mcq-hub-screen .mcq-customise summary{padding:18px 20px;font-size:13px;font-weight:700;min-height:64px;}
-.mcq-hub-screen .mcq-customise summary::after{border-radius:8px;font-size:19px;}
+.mcq-hub-screen .mcq-customise summary::after{border-radius:50%;font-size:19px;}
 .mcq-hub-screen .mcq-customise>.practice-secondary-content{padding:4px 18px 22px;}
 .mcq-hub-screen .mcq-customise[open]{overflow:visible;}
 .mcq-hub-screen button:focus-visible,.mcq-hub-screen summary:focus-visible{outline:2px solid ${t.accent};outline-offset:3px;}
 @media(max-width:900px){
-  .mcq-session-controls{padding:24px 0 0;border-left:0;border-top:1px solid ${t.border};width:100%;}
-  .mcq-hub-screen .mcq-practice-hub{grid-template-columns:1fr!important;gap:24px;}
+  .mcq-hub-screen .mcq-practice-hub{grid-template-columns:1fr!important;gap:0;}
+  .mcq-hub-screen .mcq-practice-hub.mcq-launch-pad{padding:0!important;}
+  .mcq-hub-overview,.mcq-session-controls{padding:28px;}
   .mcq-hub-description{max-width:none;}
+}
+@media(max-width:860px){
+  .mcq-hub-screen .mcq-review-queue-card:not(:last-child){border-right:0;border-bottom:1px solid ${t.border};}
+  .mcq-hub-screen .mcq-review-queue-card::after{left:auto;right:0;top:16px;bottom:16px;width:3px;height:auto;}
 }
 @media(max-width:540px){
   .mcq-hub-screen{padding:24px 16px 32px;}
-  .mcq-hub-heading{margin-bottom:24px;}
+  .mcq-hub-heading{gap:12px;margin-bottom:24px;align-items:flex-start;}
+  .mcq-page-mark{width:42px;height:42px;border-radius:13px;}
+  .mcq-page-mark svg{width:22px;height:22px;}
   .mcq-hub-heading h2{font-size:28px;}
-  .mcq-top-modes.practice-mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px;margin-bottom:16px;}
-  .mcq-mode-choice .practice-mode-card{grid-template-columns:32px minmax(0,1fr);gap:12px;padding:14px;min-height:130px;align-content:start;}
-  .mcq-mode-choice .practice-mode-icon{grid-column:1;grid-row:1;width:32px;height:32px;}
+  .mcq-hub-heading p{font-size:13px;line-height:1.5;margin-top:6px;}
+  .mcq-top-modes.practice-mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:5px;margin-bottom:16px;border-radius:17px;padding:5px;}
+  .mcq-mode-choice .practice-mode-card{grid-template-columns:30px minmax(0,1fr);gap:10px;padding:12px;min-height:124px;align-content:start;border-radius:12px;}
+  .mcq-mode-choice .practice-mode-icon{grid-column:1;grid-row:1;width:30px;height:30px;}
   .mcq-mode-choice .practice-mode-check{grid-column:2;grid-row:1;justify-self:end;align-self:center;}
   .mcq-mode-title{grid-row:2;grid-column:1/-1;gap:6px;align-items:flex-start;flex-direction:column;}
-  .mcq-mode-title strong{font-size:14px;}
+  .mcq-mode-title strong{font-size:13px;}
+  .mcq-mode-recommended{font-size:9px;padding:3px 6px;}
   .mcq-mode-description{width:min(310px,calc(100vw - 48px));right:auto;}
   .mcq-mode-choice:last-child .mcq-mode-description{left:auto;right:0;}
-  .mcq-hub-screen .mcq-practice-hub.mcq-launch-pad{padding:20px!important;border-radius:16px!important;gap:20px;}
-  .mcq-hub-stats .setup-stat{padding:16px 12px;gap:10px;}
-  .mcq-hub-number{font-size:30px;}
+  .mcq-hub-screen .mcq-practice-hub.mcq-launch-pad{padding:0!important;border-radius:20px!important;gap:0;}
+  .mcq-hub-overview,.mcq-session-controls{padding:24px;}
+  .mcq-hub-description{font-size:21px;margin-bottom:26px;}
+  .mcq-hub-screen .mcq-hub-stats{gap:16px;}
+  .mcq-hub-stats .setup-stat+ .setup-stat{padding-left:16px;}
+  .mcq-hub-number{font-size:44px;}
   .mcq-metric-top svg{width:17px;height:17px;}
-  .mcq-hub-screen .mcq-review-queue-card{padding:14px!important;min-height:78px!important;}
+  .mcq-hub-screen .mcq-primary-count button{min-height:58px;font-size:21px;}
+  .mcq-hub-screen .mcq-review-queue-card{padding:16px!important;min-height:84px!important;}
 }
 .practice-summary{margin-top:16px;padding:12px 14px;background:${t.panel};border:1px solid ${t.border};border-radius:8px;font-size:13px;color:${t.textSec};display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .practice-summary strong{color:${t.text};font-weight:900;}
@@ -25316,8 +25336,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   );
 
   if(!started) return(
-    <div className="mcq-setup-screen mcq-hub-screen fu">
-      <header className="mcq-hub-heading"><h2>MCQ practice</h2><p>Build confidence, one question at a time.</p></header>
+    <div className="mcq-setup-screen mcq-hub-screen fu" style={{"--practice-accent":reviewMode==="smart"?t.green:t.accent}}>
+      <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h2>MCQ practice</h2><p>Build confidence, one question at a time.</p></div></header>
       <div className="practice-mode-grid mcq-top-modes" role="group" aria-label="Question selection mode">
         {practiceModes.map(({id,label,Icon,color,description})=>(
           <div key={id} className="mcq-mode-choice" onMouseEnter={()=>setModeInfo(id)} onMouseLeave={event=>{if(!event.currentTarget.contains(document.activeElement))setModeInfo(null);}} onFocus={()=>setModeInfo(id)} onBlur={event=>{if(!event.currentTarget.contains(event.relatedTarget))setModeInfo(null);}} onKeyDown={event=>{if(event.key==="Escape"){setModeInfo(null);event.stopPropagation();}}}>
@@ -25336,11 +25356,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <p className="mcq-hub-description">Choose your pace. Make this set count.</p>
           <div className="setup-stats mcq-hub-stats" aria-label="Review diagnostics" title={isGuest?"Sign in to see your review diagnostics":undefined}>
             <div className="setup-stat">
-              <div className="mcq-metric-top" style={{color:t.amber}}><strong className="mcq-hub-number">{reviewSummary.due}</strong><Clock3 size={20} aria-hidden="true"/></div>
+              <div className="mcq-metric-top" style={{"--metric-color":t.amber}}><strong className="mcq-hub-number">{reviewSummary.due}</strong><Clock3 size={20} aria-hidden="true"/></div>
               <span>Questions due for retest</span>
             </div>
             <div className="setup-stat">
-              <div className="mcq-metric-top" style={{color:t.red}}><strong className="mcq-hub-number">{reviewSummary.weak}</strong><Target size={20} aria-hidden="true"/></div>
+              <div className="mcq-metric-top" style={{"--metric-color":t.red}}><strong className="mcq-hub-number">{reviewSummary.weak}</strong><Target size={20} aria-hidden="true"/></div>
               <span>Concepts to improve</span>
             </div>
           </div>
@@ -25355,7 +25375,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           {engineError&&<p className="mcq-hub-error" role="alert">{engineError}</p>}
           {filtered.length<sessionMinimum&&<p className="mcq-hub-error" role="status">Not enough questions match. Broaden your filters to start.</p>}
           <button className="btn btn-primary mcq-hub-start" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
-            {engineBusy?"Preparing set…":"Start my set"}<ChevronRight size={18} aria-hidden="true"/>
+            {engineBusy?"Preparing set…":"Start my set"}<span className="mcq-start-arrow"><ChevronRight size={18} aria-hidden="true"/></span>
           </button>
         </div>
       </section>
