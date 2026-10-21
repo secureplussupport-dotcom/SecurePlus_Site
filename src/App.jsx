@@ -16939,6 +16939,33 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .mcq-review-queue-card strong{color:${t.text};font-size:14px;line-height:1.2;}
 .mcq-review-queue-card small{margin-top:4px;color:${t.textSec};font-size:11px;font-weight:800;line-height:1.35;}
 .mcq-review-queue-card em{display:grid;place-items:center;min-width:34px;height:34px;padding:0 9px;border-radius:999px;background:color-mix(in srgb,var(--queue-color) 14%,${t.surface});color:var(--queue-color);font-style:normal;font-size:12px;font-weight:950;}
+.mcq-hub-heading{margin-bottom:22px;}
+.mcq-hub-heading h2{font-size:28px;color:${t.text};margin:0;}
+.mcq-top-modes{margin-bottom:20px;z-index:5;}
+.mcq-mode-choice{position:relative;min-width:0;}
+.mcq-mode-choice .practice-mode-card{width:100%;min-height:76px;}
+.mcq-mode-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.mcq-mode-title strong{margin:0;}
+.mcq-mode-recommended{padding:3px 7px;border-radius:999px;background:${t.green}18;color:${t.text};font-size:10px;font-weight:800;}
+.mcq-mode-choice .practice-mode-card:not(.active) .practice-mode-icon{background:${t.panel};color:${t.textDim};}
+.mcq-mode-description{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:20;padding:13px 15px;border:1px solid ${t.border};border-radius:10px;background:${t.surface};color:${t.textSec};font-size:12px;line-height:1.6;box-shadow:0 14px 32px rgba(0,0,0,.18);}
+.mcq-mode-description::before{content:"";position:absolute;left:0;right:0;top:-9px;height:9px;}
+.mcq-practice-hub.mcq-launch-pad{grid-template-columns:minmax(0,1fr);justify-items:center;gap:18px;padding:28px;}
+.mcq-practice-hub .mcq-hub-stats{position:relative;z-index:1;width:min(100%,560px);grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px;}
+.mcq-hub-stats .setup-stat{padding:18px 12px;display:grid;gap:6px;align-content:start;}
+.mcq-hub-number{font-size:30px;line-height:1.1;font-weight:800;font-variant-numeric:tabular-nums;}
+.mcq-hub-stats .setup-stat>span{color:${t.textSec};font-size:12px;line-height:1.45;}
+.mcq-practice-hub .mcq-primary-count{position:relative;z-index:1;width:min(100%,360px);gap:10px;}
+.mcq-practice-hub .mcq-primary-count button{min-height:44px;border-radius:999px;font-size:14px;}
+.mcq-practice-hub .mcq-hub-start{position:relative;z-index:1;width:min(100%,360px);min-height:50px;justify-content:center;}
+.mcq-hub-error{position:relative;z-index:1;color:${t.red};font-size:13px;text-align:center;}
+.mcq-hub-screen .mcq-review-queue-card{grid-template-columns:auto minmax(0,1fr);}
+.mcq-hub-screen .mcq-review-queue-card:not(.is-ready){--queue-color:${t.textDim};background:${t.surface};border-color:${t.border};box-shadow:none;}
+.mcq-hub-screen .mcq-review-queue-card:not(.is-ready)::after{background:${t.border};}
+.mcq-hub-screen .mcq-review-queue-card:not(.is-ready) strong{color:${t.textSec};}
+.mcq-hub-screen .mcq-customise>.practice-secondary-content{padding:0 18px 18px;}
+.mcq-hub-screen .mcq-customise[open]{overflow:visible;}
+.mcq-hub-screen button:focus-visible,.mcq-hub-screen summary:focus-visible{outline:2px solid ${t.accent};outline-offset:3px;}
 .practice-summary{margin-top:16px;padding:12px 14px;background:${t.panel};border:1px solid ${t.border};border-radius:8px;font-size:13px;color:${t.textSec};display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
 .practice-summary strong{color:${t.text};font-weight:900;}
 .practice-action-bar{position:relative;z-index:10;margin-top:10px;padding:10px;border:1px solid ${t.border};border-radius:10px;background:${t.surface}eb;backdrop-filter:blur(16px);box-shadow:0 14px 30px rgba(0,0,0,.12);display:flex;gap:10px;justify-content:center;align-items:center;}
@@ -24867,11 +24894,10 @@ function AchievementsPage({user,t,onBack}) {
 // ═══════════════════════════════════════════════════════════════
 // MCQ PRACTICE
 // ═══════════════════════════════════════════════════════════════
-function PracticeSetupDisclosure({isGuest,children}) {
-  if(isGuest)return children;
+function PracticeSetupDisclosure({children}) {
   return (
     <details className="practice-secondary mcq-customise">
-      <summary><span>Customise practice</span><small>Mode, chapter, difficulty and topic</small></summary>
+      <summary><span>Customised practice</span></summary>
       <div className="practice-secondary-content">{children}</div>
     </details>
   );
@@ -24885,7 +24911,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [chFilter,setChFilter]=useState("all");
   const [diffFilter,setDiffFilter]=useState("all");
   const [topicFilter,setTopicFilter]=useState("all");
-  const [reviewMode,setReviewMode]=useState(isGuest||!mcqEngineEnabled?"random":"smart");
+  const [reviewMode,setReviewMode]=useState("smart");
+  const [modeInfo,setModeInfo]=useState(null);
   const [quizCount,setQuizCount]=useState(10);
   const [started,setStarted]=useState(false);
   const [questions,setQuestions]=useState([]);
@@ -24917,8 +24944,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
   const allTopics=[...new Set(bank.map(q=>q.topic))].sort();
   const chapterOptions=[
-    {value:"all",label:`All Chapters (${bank.length})`},
-    ...CHAPTERS.map(ch=>({value:ch.id,label:`Ch.${ch.id}: ${ch.title} (${bank.filter(q=>q.ch===ch.id).length})`})),
+    {value:"all",label:"All chapters"},
+    ...CHAPTERS.map(ch=>({value:ch.id,label:`Ch.${ch.id}: ${ch.title}`})),
   ];
   const difficultyOptions=[
     {value:"all",label:"All Difficulties"},
@@ -24941,28 +24968,21 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const reviewSummary = {
     due:engineState?.failed?.filter(row=>row.cooldown_counter<=0).length??"—",
     weak:engineState?.mastery?.filter(row=>row.score<80).length??"—",
-    untouched:engineState?Math.max(0,bank.length-engineState.history.length):"—",
   };
   const quizSizes = [10,20,30];
   const sessionMinimum = 10;
   const latestMcqAttempts=getLatestMcqAttempts(attempts);
   const missedMcqIds=[...latestMcqAttempts.entries()].filter(([,attempt])=>attempt.correct===false).map(([questionId])=>questionId);
   const missedQuestions=bank.filter(q=>missedMcqIds.includes(q.id));
-  const selectedChapter=chFilter==="all"?null:CHAPTERS.find(ch=>ch.id===chFilter);
-  const guestMcqBenefits=[
-    {title:"No account needed",body:"Try the question bank first. Sign up only when saving progress matters.",Icon:ShieldCheck,color:t.green},
-    {title:"Instant weak-area clue",body:"Your result highlights the chapter that needs attention.",Icon:Target,color:t.amber},
-    {title:"Save Smart Review later",body:"Create a free account after the set to keep your repair queue.",Icon:Brain,color:t.accent},
+  const practiceModes=[
+    {id:"smart",label:"Smart Review",Icon:Brain,color:t.green,description:"Mix due retests, questions for concepts that need improvement, and new questions. Sign in to save your progress."},
+    {id:"random",label:"Randomised",Icon:Sparkles,color:t.accent,description:"Practise a fresh mix of questions using your selected chapter, difficulty and topic. No account needed for a random set."},
   ];
-  const guestLengthLabels={10:"Quick warm-up",20:"Focused session",30:"Deep practice"};
-  const launchChapterLabel=selectedChapter?`Chapter ${selectedChapter.id}: ${selectedChapter.title}`:"All chapters";
-  const launchModeLabel=isGuest?"Random practice":reviewMode==="smart"?"Smart Review":"Random practice";
 
   useEffect(()=>{
     if(!isGuest)return;
     setDiffFilter("all");
     setTopicFilter("all");
-    setReviewMode("random");
     setQuizCount(count=>[10,20,30].includes(count)?count:10);
   },[isGuest]);
 
@@ -24991,6 +25011,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     }catch(error){setEngineError(error.message);}finally{setEngineBusy(false);}
   };
   const startQuiz=()=>{
+    if(isGuest&&reviewMode==="smart")return requestSignup();
     if(!isGuest&&reviewMode==="smart")return startEngineQuiz({chapter:chFilter==="all"?undefined:chFilter,difficulty:activeDiffFilter==="all"?undefined:activeDiffFilter,topic:activeTopicFilter==="all"?undefined:activeTopicFilter});
     setEngineError("");
     const pool=buildMcqPracticePool(filtered,attempts,Math.min(quizCount,filtered.length)).map(shuffleMcqOptions);
@@ -25243,145 +25264,60 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   );
 
   if(!started) return(
-    <div className={`mcq-setup-screen fu ${isGuest?"guest-mcq-setup":""}`} style={{padding:"24px",maxWidth:1040,margin:"0 auto"}}>
-      {engineError&&<p role="alert" style={{color:t.red,marginBottom:12}}>{engineError}</p>}
-      <header className="practice-page-head">
-        <div className="practice-page-heading">
-          <div className="practice-page-icon"><BookOpenCheck size={23} strokeWidth={2.3}/></div>
-          <div>
-            <div className="label" style={{color:t.accent}}>Knowledge practice</div>
-            <h2>{isGuest?"Start a free MCQ set":mcqEngineEnabled?"Your next MCQ set":"MCQ practice"}</h2>
-            <p>{isGuest?"Choose 10, 20, or 30 questions and filter by chapter without creating an account.":mcqEngineEnabled?"Start with a short set shaped by your prior answers.":"Start a focused question set and review every answer."}</p>
+    <div className="mcq-setup-screen mcq-hub-screen fu" style={{padding:"24px",maxWidth:1040,margin:"0 auto"}}>
+      <header className="mcq-hub-heading"><h2>MCQ practice</h2></header>
+      <div className="practice-mode-grid mcq-top-modes" role="group" aria-label="Question selection mode">
+        {practiceModes.map(({id,label,Icon,color,description})=>(
+          <div key={id} className="mcq-mode-choice" onMouseEnter={()=>setModeInfo(id)} onMouseLeave={event=>{if(!event.currentTarget.contains(document.activeElement))setModeInfo(null);}} onFocus={()=>setModeInfo(id)} onBlur={event=>{if(!event.currentTarget.contains(event.relatedTarget))setModeInfo(null);}} onKeyDown={event=>{if(event.key==="Escape"){setModeInfo(null);event.stopPropagation();}}}>
+            <button type="button" className={`practice-mode-card ${reviewMode===id?"active":""}`} style={{"--mode-color":color}} aria-label={id==="smart"?"Smart Review, Recommended":label} aria-pressed={reviewMode===id} aria-describedby={modeInfo===id?`mcq-mode-description-${id}`:undefined} onClick={()=>{setReviewMode(id);setModeInfo(id);setEngineError("");}}>
+              <span className="practice-mode-icon"><Icon size={19} aria-hidden="true"/></span>
+              <span className="mcq-mode-title"><strong>{label}</strong>{id==="smart"&&<span className="mcq-mode-recommended">Recommended</span>}</span>
+              <span className="practice-mode-check"><Check size={13} strokeWidth={3} aria-hidden="true"/></span>
+            </button>
+            {modeInfo===id&&<div id={`mcq-mode-description-${id}`} className="mcq-mode-description" role="tooltip">{description}</div>}
           </div>
-        </div>
-        <div className="practice-page-meta">
-          <span className="practice-meta-pill"><strong>{bank.length}</strong> questions</span>
-          <span className="practice-meta-pill"><strong>5</strong> chapters</span>
-          <span className="practice-meta-pill">SY0-701</span>
-        </div>
-      </header>
-      <div style={{marginBottom:16}}>
-        <TrustBadge t={t}/>
+        ))}
       </div>
 
-      <section className="mcq-launch-pad" aria-label="Start MCQ question set">
-        <div className="mcq-launch-main">
-          <span className="mcq-launch-icon"><Play size={25} fill="currentColor"/></span>
-          <div>
-            <h3>{isGuest?"Ready to answer questions?":mcqEngineEnabled&&reviewMode==="smart"?"Personalised MCQ set":"Your MCQ set"}</h3>
-            <p>{isGuest?"Press the button to begin now. Changing chapter or set size below is optional.":mcqEngineEnabled&&reviewMode==="smart"?"Smart Review mixes due retests, questions for concepts that need attention, and new syllabus coverage.":"Practise a fresh set. You can change its scope below."}</p>
-            {!isGuest&&mcqEngineEnabled&&reviewMode==="smart"&&<div className="setup-stats" aria-label="Why this set is recommended">
-              {[
-                {label:"Due retests",value:reviewSummary.due,color:t.amber},
-                {label:"Concepts below target",value:reviewSummary.weak,color:t.red},
-                {label:"Unseen questions",value:reviewSummary.untouched,color:t.accent},
-              ].map(item=>(
-                <div key={item.label} className="setup-stat">
-                  <div style={{fontSize:18,fontWeight:800,color:item.color}}>{item.value}</div>
-                  <div className="label">{item.label}</div>
-                </div>
-              ))}
-            </div>}
-            <div className="mcq-launch-steps" aria-label="Selected MCQ setup">
-              <span><strong>{quizCount}</strong> questions</span>
-              <span>{launchChapterLabel}</span>
-              <span>{launchModeLabel}</span>
-            </div>
+      <section className="mcq-launch-pad mcq-practice-hub" aria-label="Start MCQ practice">
+        <div className="setup-stats mcq-hub-stats" aria-label="Review diagnostics" title={isGuest?"Sign in to see your review diagnostics":undefined}>
+          <div className="setup-stat">
+            <strong className="mcq-hub-number" style={{color:t.amber}}>{reviewSummary.due}</strong>
+            <span>Questions due for retest</span>
+          </div>
+          <div className="setup-stat">
+            <strong className="mcq-hub-number" style={{color:t.red}}>{reviewSummary.weak}</strong>
+            <span>Concepts to improve</span>
           </div>
         </div>
-        <div className="mcq-launch-action">
-          {!isGuest&&<div className="mcq-primary-count" role="group" aria-label="Questions in this set">
-            {quizSizes.map(size=><button key={size} type="button" className={quizCount===size?"active":""} aria-pressed={quizCount===size} disabled={filtered.length<size} onClick={()=>setQuizCount(size)}>{size}</button>)}
-          </div>}
-          <button className="btn btn-primary" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
-            {engineBusy?"Preparing set…":isGuest?"Start questions now →":mcqEngineEnabled&&reviewMode==="smart"?"Start my personalised set →":"Start my set →"}
-          </button>
-          <small>{filtered.length>=sessionMinimum?`${filtered.length} questions available for this choice.`:`Only ${filtered.length} questions match. Choose all chapters to start.`}</small>
+        <div className="mcq-primary-count" role="group" aria-label="Questions in this set">
+          {quizSizes.map(size=><button key={size} type="button" className={quizCount===size?"active":""} aria-label={`${size} questions`} aria-pressed={quizCount===size} disabled={filtered.length<size} onClick={()=>setQuizCount(size)}>{size}</button>)}
         </div>
+        {engineError&&<p className="mcq-hub-error" role="alert">{engineError}</p>}
+        {filtered.length<sessionMinimum&&<p className="mcq-hub-error" role="status">Not enough questions match. Broaden your filters to start.</p>}
+        <button className="btn btn-primary mcq-hub-start" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
+          {engineBusy?"Preparing set…":"Start my set"}<ChevronRight size={18} aria-hidden="true"/>
+        </button>
       </section>
 
-      {!isGuest&&(
-        <details className="practice-secondary mcq-other-practice">
-          <summary><span>Other practice options</span><small>Resume, missed and starred questions</small></summary>
-          <section className="mcq-review-queue-row practice-secondary-content" aria-label="MCQ review queues">
-          <button className="mcq-review-queue-card unfinished" type="button" disabled={!resumeAvailable} onClick={continueQuiz}>
-            <span className="mcq-review-queue-icon"><Clock3 size={21}/></span>
-            <span>
-              <strong>Unfinished MCQ</strong>
-              <small>{resumeAvailable?"Continue your saved set":"No unfinished set"}</small>
-            </span>
-            <em>{resumeAvailable?"Continue":"0"}</em>
-          </button>
-          <button className="mcq-review-queue-card missed" type="button" disabled={!mcqEngineEnabled||!missedQuestions.length} onClick={startMissedQuiz}>
-            <span className="mcq-review-queue-icon"><Target size={21}/></span>
-            <span>
-              <strong>Missed MCQ</strong>
-              <small>{!mcqEngineEnabled?"Smart Review is not active":missedQuestions.length?`Repair ${missedQuestions.length} incorrect question${missedQuestions.length===1?"":"s"}`:"No missed MCQs yet"}</small>
-            </span>
-            <em>{missedQuestions.length}</em>
-          </button>
-          <button className="mcq-review-queue-card starred" type="button" onClick={()=>setStarredView(true)}>
-            <span className="mcq-review-queue-icon"><Star size={21} fill="currentColor"/></span>
-            <span>
-              <strong>Starred MCQ</strong>
-              <small>{starredMcqs.length?`Review ${starredMcqs.length} saved question${starredMcqs.length===1?"":"s"}`:"Build a saved review list"}</small>
-            </span>
-            <em>{starredMcqs.length}</em>
-          </button>
-          </section>
-        </details>
-      )}
+      <section className="mcq-review-queue-row" aria-label="MCQ review queues">
+        <button className={`mcq-review-queue-card unfinished ${resumeAvailable?"is-ready":""}`} type="button" disabled={!resumeAvailable} onClick={continueQuiz}>
+          <span className="mcq-review-queue-icon"><Clock3 size={21} aria-hidden="true"/></span>
+          <span><strong>Unfinished MCQs</strong><small>{resumeAvailable?"Continue your saved set":"No pending sets!"}</small></span>
+        </button>
+        <button className={`mcq-review-queue-card missed ${missedQuestions.length&&mcqEngineEnabled&&!isGuest?"is-ready":""}`} type="button" disabled={isGuest||!mcqEngineEnabled||!missedQuestions.length||engineBusy} onClick={startMissedQuiz}>
+          <span className="mcq-review-queue-icon"><Target size={21} aria-hidden="true"/></span>
+          <span><strong>Missed MCQs</strong><small>{missedQuestions.length?`Repair ${missedQuestions.length} incorrect question${missedQuestions.length===1?"":"s"}`:"You’re on a roll!"}</small></span>
+        </button>
+        <button className="mcq-review-queue-card starred is-ready" type="button" onClick={()=>isGuest?requestSignup():setStarredView(true)}>
+          <span className="mcq-review-queue-icon"><Star size={21} fill="currentColor" aria-hidden="true"/></span>
+          <span><strong>Starred MCQs</strong><small>{starredMcqs.length?"Let’s review your list!":"Build your review list now!"}</small></span>
+        </button>
+      </section>
 
-      {isGuest&&(
-        <section className="guest-mcq-showcase">
-          <div className="guest-mcq-showcase-copy">
-            <div className="label" style={{color:t.accent}}>Practice studio</div>
-            <h3>Try the real study loop before signing up.</h3>
-            <p>Pick a chapter, choose 10–30 MCQs, then see what SecurePlus would save into Smart Review if you create an account.</p>
-            <div className="guest-mcq-benefit-grid">
-              {guestMcqBenefits.map(({title,body,Icon,color})=>(
-                <article key={title} style={{"--guest-benefit-color":color}}>
-                  <span><Icon size={17}/></span>
-                  <strong>{title}</strong>
-                  <small>{body}</small>
-                </article>
-              ))}
-            </div>
-            <div className="guest-mcq-save-strip">
-              <Sparkles size={17}/>
-              <span><strong>After your set:</strong> save your weak-area result, streaks, and Smart Review queue with an account.</span>
-              <button type="button" className="btn btn-primary" onClick={requestSignup}>Create account</button>
-            </div>
-          </div>
-        </section>
-      )}
-
-      <PracticeSetupDisclosure isGuest={isGuest}>
-      <div className="card practice-filter-card" style={{padding:"20px 24px",marginBottom:isGuest?16:0}}>
-        <div className="practice-builder-head">
-          <div>
-            <div className="label" style={{color:t.accent}}>Optional setup</div>
-            <h3>{isGuest?"Want a different set?":"Choose your own focus"}</h3>
-            <p>{isGuest?"Use these controls only if you want to change the chapter or number of questions before starting.":"Change the mode, chapter, difficulty or topic. Your set will still contain 10–30 questions."}</p>
-          </div>
-          {(chFilter!=="all"||diffFilter!=="all"||topicFilter!=="all")&&(
-            <button className="btn btn-ghost" style={{fontSize:11,minHeight:34,padding:"7px 10px"}} onClick={()=>{setChFilter("all");setDiffFilter("all");setTopicFilter("all");}}><X size={14}/> Reset filters</button>
-          )}
-        </div>
-        {!isGuest&&<div className="practice-mode-grid mcq-customise-modes" role="group" aria-label="Question selection mode">
-          {mcqEngineEnabled&&<button type="button" className={`practice-mode-card ${reviewMode==="smart"?"active":""}`} style={{"--mode-color":t.green}} onClick={()=>setReviewMode("smart")} aria-pressed={reviewMode==="smart"}>
-            <span className="practice-mode-icon"><Brain size={19}/></span>
-            <span><strong>Smart Review</strong><small>Due retests, weak concepts and new questions.</small></span>
-            <span className="practice-mode-check"><Check size={13} strokeWidth={3}/></span>
-          </button>}
-          <button type="button" className={`practice-mode-card ${reviewMode==="random"?"active":""}`} style={{"--mode-color":t.accent}} onClick={()=>setReviewMode("random")} aria-pressed={reviewMode==="random"}>
-            <span className="practice-mode-icon"><Sparkles size={19}/></span>
-            <span><strong>Random practice</strong><small>A fresh set from the scope you choose.</small></span>
-            <span className="practice-mode-check"><Check size={13} strokeWidth={3}/></span>
-          </button>
-        </div>}
-        <div className="practice-builder-step">
-          <div className="practice-step-head"><span className="practice-step-index">1</span><strong>Choose chapter</strong><span>{filtered.length} matching questions</span></div>
+      <PracticeSetupDisclosure>
+        <div className="practice-filter-card" style={{padding:"4px 6px 0"}}>
+          {(chFilter!=="all"||diffFilter!=="all"||topicFilter!=="all")&&<button className="btn btn-ghost" type="button" style={{fontSize:12,marginBottom:12}} onClick={()=>{setChFilter("all");setDiffFilter("all");setTopicFilter("all");}}><X size={14} aria-hidden="true"/> Reset filters</button>}
           <div className="practice-filter-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Chapter</label>
@@ -25390,97 +25326,15 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Difficulty</label>
               <FilterSelect value={diffFilter} onChange={setDiffFilter} options={difficultyOptions} disabled={isGuest} label="Difficulty filter"/>
-              {isGuest&&<div style={{fontSize:11,color:t.textDim,marginTop:6}}>Create an account to filter by difficulty.</div>}
             </div>
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Topic</label>
               <FilterSelect value={topicFilter} onChange={setTopicFilter} options={topicOptions} disabled={isGuest} label="Topic filter"/>
-              {isGuest&&<div style={{fontSize:11,color:t.textDim,marginTop:6}}>Create an account to filter by topic.</div>}
             </div>
           </div>
-          {isGuest&&(
-            <div style={{marginTop:14,padding:"12px 14px",borderRadius:7,background:`${t.accent}08`,border:`1px solid ${t.accent}25`,fontSize:12,color:t.textSec,lineHeight:1.6}}>
-              Guest users can choose chapter and fixed set size only. Topic, difficulty, Smart Review, and saved weak-area history unlock after account creation.
-            </div>
-          )}
-          {isGuest&&(
-            <div className="guest-chapter-choice-grid" aria-label="Guest chapter quick choices">
-              <button type="button" className={chFilter==="all"?"active":""} style={{"--chapter-choice-color":t.accent}} onClick={()=>setChFilter("all")}>
-                <span>All</span>
-                <strong>Mixed chapters</strong>
-                <small>{bank.length} questions available</small>
-              </button>
-              {CHAPTERS.map(ch=>(
-                <button key={ch.id} type="button" className={chFilter===ch.id?"active":""} style={{"--chapter-choice-color":chapterColor(ch.id)}} onClick={()=>setChFilter(ch.id)}>
-                  <span>Ch.{ch.id}</span>
-                  <strong>{ch.title}</strong>
-                  <small>{bank.filter(q=>q.ch===ch.id).length} questions · {ch.weight}% exam weight</small>
-                </button>
-              ))}
-            </div>
-          )}
+          {isGuest&&<p style={{marginTop:12,fontSize:12,color:t.textSec}}>Sign in to filter by difficulty or topic.</p>}
         </div>
-        {isGuest&&<div className="practice-builder-step">
-          <div className="practice-step-head"><span className="practice-step-index">2</span><strong>Choose number of questions</strong><span>{quizCount} selected</span></div>
-          <div className={`quiz-length-grid ${isGuest?"guest-length-grid":""}`} style={{display:"grid",gridTemplateColumns:`repeat(${quizSizes.length},minmax(0,1fr))`,gap:8}}>
-            {quizSizes.map(size=>(
-              <button
-                key={size}
-                className={`btn ${quizCount===size?"btn-primary":"btn-ghost"}`}
-                style={{fontSize:12,padding:"8px 10px",minHeight:isGuest?58:36}}
-                disabled={filtered.length<size}
-                onClick={()=>setQuizCount(size)}
-              >
-                <span>{size}<span style={{fontSize:9,opacity:.7}}> Qs</span></span>
-                {isGuest&&<small>{guestLengthLabels[size]}</small>}
-              </button>
-            ))}
-          </div>
-        </div>}
-        {isGuest&&<div className="practice-builder-footer">
-          <div className="practice-builder-result">
-            <div className="practice-builder-count">{quizCount}</div>
-            <div><strong>{isGuest?"Guest practice set":reviewMode==="smart"?"Smart Review set":"Random practice set"}</strong><small>{filtered.length>=sessionMinimum?`${filtered.length} questions match your focus`:`Only ${filtered.length} match — broaden your filters`}</small></div>
-          </div>
-          <button className="btn btn-primary" style={{minWidth:170}} onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
-            {engineBusy?"Preparing set…":"Start questions now →"}
-          </button>
-        </div>}
-      </div>
       </PracticeSetupDisclosure>
-      {user.tier==="free"&&(
-        <details className="practice-secondary">
-          <summary>Explore Pro PBQ practice</summary>
-          <div className="practice-secondary-content">
-            <div className="card" style={{padding:"16px 20px",marginBottom:0,borderColor:`${t.accent}30`,background:`${t.accent}06`}}>
-              <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
-                <div style={{flex:1}}>
-                  <div style={{fontWeight:600,fontSize:14,color:t.text}}>MCQs stay free. Pro adds exam-style PBQs.</div>
-                  <div style={{fontSize:13,color:t.textSec}}>When you are ready to practise terminal, log, ordering, and Select &amp; Fill simulations, the {PRO_ACADEMY_PASS_NAME} is {PRO_ACADEMY_PASS_PRICE}.</div>
-                </div>
-                <button className="btn btn-outline" style={{fontSize:12,flexShrink:0}} onClick={onUpgrade}>See Pro PBQs</button>
-              </div>
-            </div>
-          </div>
-        </details>
-      )}
-
-      {/* Chapter overview */}
-      <details className="practice-secondary">
-        <summary><span>Browse all five exam chapters</span><span style={{fontSize:11,color:t.textDim,fontWeight:700}}>Optional</span></summary>
-        <div className="practice-secondary-content practice-chapter-grid">
-          {CHAPTERS.map(ch=>(
-            <div key={ch.id} className="chapter-card" style={{display:"flex",gap:12,alignItems:"center",padding:"10px 14px",borderRadius:8,background:chFilter===ch.id?`${chapterColor(ch.id)}12`:t.panel,cursor:"pointer",border:`1px solid ${chFilter===ch.id?chapterColor(ch.id):t.border}`,transition:"all .15s"}} onClick={()=>setChFilter(ch.id===chFilter?"all":ch.id)}>
-              <ChapterIcon id={ch.id}/>
-              <div style={{flex:1}}>
-                <div style={{fontSize:13,fontWeight:600,color:t.text}}>Ch.{ch.id}: {ch.title}</div>
-                <div style={{fontSize:11,color:t.textDim}}>{ch.weight}% of exam · {bank.filter(q=>q.ch===ch.id).length} questions available</div>
-              </div>
-              <span className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}25`,fontSize:11}}>{ch.weight}%</span>
-            </div>
-          ))}
-        </div>
-      </details>
     </div>
   );
 
