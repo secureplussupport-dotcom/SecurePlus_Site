@@ -1,0 +1,184 @@
+[
+  {
+    "id": "m855",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "core",
+    "q": "A network administrator configures edge switches to send diagnostic event messages to a central log server using standard cleartext syslog. Which transport protocol and destination port does this traffic use by default?",
+    "opts": [
+      "Transmission Control Protocol on destination port 22",
+      "User Datagram Protocol on destination port 514",
+      "Transmission Control Protocol on destination port 443",
+      "User Datagram Protocol on destination port 161"
+    ],
+    "correct": 1,
+    "exp": "Traditional, unencrypted syslog operates over UDP port 514 by default for low-overhead, connectionless log transport.",
+    "wrongFeedback": {
+      "0": "TCP port 22 is assigned to Secure Shell (SSH) and SFTP traffic, not standard syslog transmission.",
+      "2": "TCP port 443 is designated for encrypted web traffic using HTTPS over TLS, not traditional syslog.",
+      "3": "UDP port 161 is assigned to Simple Network Management Protocol (SNMP) polling queries, not syslog event forwarding."
+    },
+    "conceptTagIds": [
+      "ops.logs-syslog"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied logs and syslog Core and Applied batch"
+  },
+  {
+    "id": "m856",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "core",
+    "q": "A security engineer examines a standardized syslog message header. Which two metadata components combine to produce the message priority (PRI) value?",
+    "opts": [
+      "Source IP address and network subnet mask",
+      "Application hash and session sequence token",
+      "Transport protocol and destination socket port",
+      "Facility code and event severity level"
+    ],
+    "correct": 3,
+    "exp": "In standard syslog (RFC 5424), the PRI field is mathematically derived by multiplying the facility code by 8 and adding the numerical severity level (0–7).",
+    "wrongFeedback": {
+      "0": "Network addressing is handled at the IP routing layer rather than encoded within the application-level syslog PRI field.",
+      "1": "Syslog headers do not natively calculate cryptographic process hashes or session tokens to format priority values.",
+      "2": "Port and transport data are managed by Layer 4 socket headers rather than within the syslog payload PRI structure."
+    },
+    "conceptTagIds": [
+      "ops.logs-syslog"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied logs and syslog Core and Applied batch"
+  },
+  {
+    "id": "m857",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "During a routine security audit, an analyst captures network traffic and observes operational logs—including administrative username references—transmitted in cleartext between internal Linux hosts and a collection daemon. Which configuration change eliminates this exposure?",
+    "opts": [
+      "Binding the syslog service daemon to broadcast interfaces",
+      "Restricting log forwarding strictly to non-business hours",
+      "Upgrading transmission to use syslog over TLS on TCP port 6514",
+      "Lowering the minimum recorded event threshold to severity level 7"
+    ],
+    "correct": 2,
+    "exp": "Secure syslog (Syslog-ng / rsyslog over TLS) uses TCP port 6514 to encrypt log transport, preventing on-path eavesdropping and credential leakage.",
+    "wrongFeedback": {
+      "0": "Binding syslog to broadcast interfaces transmits log messages to every host on the subnet, increasing exposure rather than encrypting data.",
+      "1": "Changing the transmission schedule merely alters when data moves; cleartext credentials remain completely exposed to network sniffing.",
+      "3": "Severity level 7 represents Debug-level logging, which drastically increases log verbosity without applying cryptographic confidentiality."
+    },
+    "conceptTagIds": [
+      "ops.logs-syslog"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied logs and syslog Core and Applied batch"
+  },
+  {
+    "id": "m858",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "A network switch experiences an unexpected crash following a brief broadcast storm. When the incident response team reviews the central syslog repository, all switch log messages immediately preceding the crash are missing. What protocol characteristic caused this gap in evidence?",
+    "opts": [
+      "Standard syslog uses connectionless UDP and drops messages during network congestion",
+      "Switch memory buffers purge older event logs whenever high-priority alerts fire",
+      "The central syslog daemon automatically blocks senders generating high packet rates",
+      "Syslog transport headers discard events that lack valid cryptographic signatures"
+    ],
+    "correct": 0,
+    "exp": "Traditional syslog relies on UDP, which lacks delivery verification, retransmission, and flow control; when network saturation occurs, dropped packets are permanently lost.",
+    "wrongFeedback": {
+      "1": "Local buffer overflows typically overwrite the oldest circular entries, not the active events generated during an ongoing crash.",
+      "2": "Syslog daemons process incoming packets as received and do not natively drop senders unless explicitly scripted with rate-limiting firewalls.",
+      "3": "Standard syslog does not require or validate cryptographic packet signatures, so lack of signatures does not cause dropped logs."
+    },
+    "conceptTagIds": [
+      "ops.logs-syslog"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied logs and syslog Core and Applied batch"
+  },
+  {
+    "id": "m859",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "An attacker compromises a local administrative account on a database server and executes commands to purge the local /var/log directory. However, the security operations team still has an intact record of every command executed by the attacker. What architectural design preserved this evidence?",
+    "opts": [
+      "The database server stored its system journals in unallocated drive space",
+      "The host continuously forwarded event entries to an isolated remote collector",
+      "The operating system applied immutable file permissions to all local text logs",
+      "The local storage controller created automated hourly volume shadow snapshots"
+    ],
+    "correct": 1,
+    "exp": "Real-time remote log forwarding ensures that log entries are transmitted to an external syslog server as they occur, preserving the forensic audit trail even if local logs are wiped.",
+    "wrongFeedback": {
+      "0": "Active logging engines write to structured files in active filesystems, not directly into raw, unallocated drive sectors.",
+      "2": "An attacker with root administrative access can override local file permissions, strip immutable flags, and wipe local storage.",
+      "3": "Hourly snapshots leave a significant timing window where newly executed actions can be destroyed before the next snapshot cycle runs."
+    },
+    "conceptTagIds": [
+      "ops.logs-syslog"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied logs and syslog Core and Applied batch"
+  },
+  {
+    "id": "m860",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "A SIEM administrator notices that local storage on the collector is filling up too fast because a firewall is sending massive amounts of routine connection events. The administrator reconfigures the firewall's syslog filter from Notice (5) to Error (3). What is the operational outcome of this change?",
+    "opts": [
+      "The collector stops receiving hardware system alerts and critical kernel panics",
+      "The firewall begins encrypting stored event payloads using asymmetric keys",
+      "The firewall completely stops recording administrative authentication attempts",
+      "The collector ingests fewer routine operational logs while retaining severe failure notices"
+    ],
+    "correct": 3,
+    "exp": "Syslog severity numbers range from 0 (most severe) to 7 (least severe). Moving the threshold from 5 to 3 discards less critical informational events (levels 4 and 5), reducing log volume.",
+    "wrongFeedback": {
+      "0": "In syslog severity ranking, lower numbers denote higher severity (0 is Emergency, 1 is Alert, 2 is Critical, 3 is Error); severe alerts are retained.",
+      "1": "Adjusting the severity threshold filters message volume; it has no effect on transport encryption or cryptographic algorithms.",
+      "2": "Authentication failures typically log at severity 3 (Error) or higher, meaning critical access failures are still recorded."
+    },
+    "conceptTagIds": [
+      "ops.logs-syslog"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied logs and syslog Core and Applied batch"
+  },
+  {
+    "id": "m861",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "A SOC engineer wants to write a parser that isolates user sign-ins and sudo privilege escalations across hundreds of heterogeneous Linux hosts without capturing routine web server or print daemon telemetry. Which standard syslog header field should the parser filter on?",
+    "opts": [
+      "Checksum integrity hash",
+      "Facility classification code",
+      "Ephemeral source socket",
+      "Network sequence identifier"
+    ],
+    "correct": 1,
+    "exp": "Syslog facility codes identify the source subsystem generating the message (such as auth or authpriv for authentication events, versus daemon or mail), allowing parsers to cleanly isolate specific event types.",
+    "wrongFeedback": {
+      "0": "Syslog headers do not natively include a cryptographic checksum integrity hash in standard RFC message formatting.",
+      "2": "Ephemeral source sockets change dynamically with every new transport connection and provide no information about the underlying software subsystem.",
+      "3": "While some structured logging formats use sequence counters, standard syslog uses facility and severity headers to classify operational event origins."
+    },
+    "conceptTagIds": [
+      "ops.logs-syslog"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied logs and syslog Core and Applied batch"
+  }
+]

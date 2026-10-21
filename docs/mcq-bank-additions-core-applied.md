@@ -1,19 +1,19 @@
 # MCQs to add: Core and Applied
 
-Checked 2026-10-21T09:56:34.102Z. Current effective bank: 515 MCQs (249 Core, 266 Applied), including 173 current active live Question Manager records merged using production precedence.
+Checked 2026-10-21T11:32:04.198Z. Current effective bank: 522 MCQs (251 Core, 271 Applied), including 180 current active live Question Manager records merged using production precedence.
 
 Count one-tag questions as 1 per assigned tag; questions with two or more assigned tags count as 0.5 per assigned tag. Only selected primary/secondary concept tags count; distractor-only metadata does not. Former Easy is Core; former Medium and Hard are combined into Applied before calculating the shortfall. Round each positive shortfall up to a whole question. Extra questions are allowed. PBQs are excluded.
 
 **Each new question below should have one intended concept tag.** If new questions have multiple tags, they earn only 0.5 each, so more questions will be needed. These are inventory shortfalls, not unique-content quality judgments. Concepts without an assigned Heavy weight/Standard/Niche group have no benchmark in this report.
 
-**Add 249 single-tag MCQs: 108 Core and 141 Applied.**
+**Add 242 single-tag MCQs: 106 Core and 136 Applied.**
 
 | Group | Add Core | Add Applied | Total |
 |---|---:|---:|---:|
-| Heavy weight | 7 | 24 | 31 |
+| Heavy weight | 5 | 19 | 24 |
 | Standard | 32 | 86 | 118 |
 | Niche | 69 | 31 | 100 |
-| **Total** | **108** | **141** | **249** |
+| **Total** | **106** | **136** | **242** |
 
 ## Heavy weight
 
@@ -43,7 +43,7 @@ Numbers below are additional questions to write, not current bank counts. All ar
 | arch.ztna | 0 | 0 | 0 |
 | ops.siem | 0 | 0 | 0 |
 | ops.edr-xdr | 0 | 0 | 0 |
-| ops.logs-syslog | 2 | 5 | 7 |
+| ops.logs-syslog | 0 | 0 | 0 |
 | ir.lifecycle-nist | 0 | 5 | 5 |
 | ir.volatility-order | 2 | 4 | 6 |
 | ir.chain-of-custody | 1 | 4 | 5 |
