@@ -1,0 +1,26 @@
+[
+  {
+    "id": "m837",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "An attacker compromises a workstation in the accounting department. When attempting to run port scans against adjacent workstations located in the same room and IP subnet, all discovery traffic is blocked while outbound internet access remains functional. Which architectural control is preventing this lateral reconnaissance?",
+    "opts": [
+      "Dynamic ARP inspection applied at the local network switch",
+      "Network microsegmentation isolating peer workload traffic",
+      "Physical air gaps established between departmental offices",
+      "Port security rules restricting unauthorized hardware addresses"
+    ],
+    "correct": 1,
+    "exp": "Microsegmentation enforces granular, policy-based isolation between individual endpoints or workloads within the same network segment, specifically preventing unauthorized lateral (east-west) traffic even if devices share an IP subnet.",
+    "wrongFeedback": {
+      "0": "Dynamic ARP Inspection (DAI) prevents Layer 2 address resolution poisoning by validating ARP packets against the DHCP snooping binding database; it does not block general Layer 3/4 network scans between hosts.",
+      "2": "An air gap physically isolates a network from all external connections, leaving no physical or logical link. Since the workstation retains outbound internet connectivity, it is not air-gapped.",
+      "3": "Port security restricts the number or specific MAC addresses allowed to attach to a physical switch port to stop rogue devices or MAC flooding; it does not filter traffic between already-authorized devices."
+    },
+    "conceptTagIds": ["arch.segmentation"],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied segmentation Applied question"
+  }
+]
