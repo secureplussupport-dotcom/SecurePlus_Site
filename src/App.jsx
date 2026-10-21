@@ -34484,7 +34484,7 @@ export default function App() {
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
             {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={assistantFlashcardSet} starred={guestStarred} onToggleStar={handleGuestToggleStar} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
-            {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={guestUser} onAddWeakTopicToReview={goToSignup} onTryRelatedPbq={handleGuestPbqPreview} onOpenFlashcards={handleOpenFlashcards} onUpgrade={goToSignup}/>}
+            {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={guestUser} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} onAddWeakTopicToReview={goToSignup} onTryRelatedPbq={handleGuestPbqPreview} onOpenFlashcards={handleOpenFlashcards} onUpgrade={goToSignup}/>}
             {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
             {view==="terms"&&<LegalPage type="terms" t={t}/>}
             {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
