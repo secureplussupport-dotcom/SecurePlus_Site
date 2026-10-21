@@ -1,19 +1,19 @@
 # MCQs to add: Core and Applied
 
-Checked 2026-10-21T01:54:33.267Z. Current effective bank: 480 MCQs (242 Core, 238 Applied), including 138 current active live Question Manager records merged using production precedence.
+Checked 2026-10-21T01:55:54.371Z. Current effective bank: 486 MCQs (243 Core, 243 Applied), including 144 current active live Question Manager records merged using production precedence.
 
 Count one-tag questions as 1 per assigned tag; questions with two or more assigned tags count as 0.5 per assigned tag. Only selected primary/secondary concept tags count; distractor-only metadata does not. Former Easy is Core; former Medium and Hard are combined into Applied before calculating the shortfall. Round each positive shortfall up to a whole question. Extra questions are allowed. PBQs are excluded.
 
 **Each new question below should have one intended concept tag.** If new questions have multiple tags, they earn only 0.5 each, so more questions will be needed. These are inventory shortfalls, not unique-content quality judgments. Concepts without an assigned Heavy weight/Standard/Niche group have no benchmark in this report.
 
-**Add 284 single-tag MCQs: 115 Core and 169 Applied.**
+**Add 278 single-tag MCQs: 114 Core and 164 Applied.**
 
 | Group | Add Core | Add Applied | Total |
 |---|---:|---:|---:|
-| Heavy weight | 14 | 52 | 66 |
+| Heavy weight | 13 | 47 | 60 |
 | Standard | 32 | 86 | 118 |
 | Niche | 69 | 31 | 100 |
-| **Total** | **115** | **169** | **284** |
+| **Total** | **114** | **164** | **278** |
 
 ## Heavy weight
 
@@ -36,7 +36,7 @@ Numbers below are additional questions to write, not current bank counts. All ar
 | att.on-path-mitm | 0 | 0 | 0 |
 | att.mal-ransomware | 0 | 0 | 0 |
 | att.dos-ddos | 0 | 0 | 0 |
-| net.app-ngfw | 1 | 5 | 6 |
+| net.app-ngfw | 0 | 0 | 0 |
 | net.app-waf | 1 | 4 | 5 |
 | net.proto-tls | 2 | 4 | 6 |
 | arch.segmentation | 0 | 1 | 1 |

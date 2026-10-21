@@ -1,0 +1,158 @@
+[
+  {
+    "id": "m820",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "core",
+    "q": "An organization upgrades from a legacy stateful firewall to a next-generation firewall (NGFW). Which capability fundamentally differentiates this new appliance from their previous perimeter firewall?",
+    "opts": [
+      "Tracking TCP three-way handshake states to permit return traffic",
+      "Filtering inbound packets based on source and destination IP blocks",
+      "Inspecting application-layer payload contents to identify protocols",
+      "Translating private local subnet addresses into public internet routings"
+    ],
+    "correct": 2,
+    "exp": "NGFWs perform Deep Packet Inspection (DPI) up through Layer 7, identifying and validating application payloads regardless of the port being used.",
+    "wrongFeedback": {
+      "0": "Tracking connection state across TCP handshakes is a standard feature of legacy stateful packet inspection (SPI) firewalls.",
+      "1": "Filtering based on Layer 3 network addresses and Layer 4 port numbers is standard packet filtering common to all firewall generations.",
+      "3": "Network Address Translation (NAT) is a basic routing and perimeter security function available on almost all legacy routers and firewalls."
+    },
+    "conceptTagIds": [
+      "net.app-ngfw"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied NGFW Core/Applied batch"
+  },
+  {
+    "id": "m821",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "A legacy firewall allows outbound traffic on TCP port 443. An employee configures an unauthorized remote access tool to transmit its traffic across port 443, successfully evading the security team's port-based blocklists. Which capability of an NGFW detects and halts this communication?",
+    "opts": [
+      "Deep packet inspection identifying the underlying protocol signature",
+      "Reverse proxy caching accelerating outbound transmission requests",
+      "Port security binding the host MAC address to physical switch ports",
+      "Stateful connection tracking monitoring the initial TCP handshakes"
+    ],
+    "correct": 0,
+    "exp": "Application awareness inspects packet payloads to identify true protocol signatures (e.g., SSH, RDP, or remote shell tools), blocking non-HTTPS applications hiding on port 443.",
+    "wrongFeedback": {
+      "1": "Proxy caching stores and serves frequently requested web assets to improve performance, rather than evaluating protocol signatures for anomaly detection.",
+      "2": "Port security operates at Layer 2 on local network switches to restrict physical MAC addresses, not Layer 7 perimeter protocol verification.",
+      "3": "Stateful tracking verifies valid TCP handshakes, but if the remote tool completes a standard TCP handshake on port 443, stateful tracking alone permits the session."
+    },
+    "conceptTagIds": [
+      "net.app-ngfw"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied NGFW Core/Applied batch"
+  },
+  {
+    "id": "m822",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "An enterprise deploys an NGFW with built-in intrusion prevention signatures to block malware downloads. However, an employee downloads a known malicious payload from an HTTPS-enabled website, and the firewall triggers no alerts. What configuration is required on the NGFW to intercept this threat?",
+    "opts": [
+      "Disabling split-tunneling across client virtual private networks",
+      "Binding dynamic host configuration leases to user directory objects",
+      "Increasing stateful connection table memory limits for high traffic",
+      "Implementing outbound TLS decryption and certificate inspection"
+    ],
+    "correct": 3,
+    "exp": "Because TLS encrypts payload data end-to-end, the NGFW cannot match IPS signatures against encrypted streams without acting as a TLS proxy (break-and-inspect) to decrypt the session.",
+    "wrongFeedback": {
+      "0": "Forcing all remote client traffic through a VPN tunnel does not help the gateway inspect encrypted payload content if SSL/TLS inspection is disabled.",
+      "1": "Mapping DHCP leases to user accounts ties traffic to identity (User-ID), but does not decrypt or reveal hidden payload contents inside HTTPS sessions.",
+      "2": "Increasing connection table capacity prevents dropped sessions during heavy load, but does not allow the firewall to read encrypted payloads."
+    },
+    "conceptTagIds": [
+      "net.app-ngfw"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied NGFW Core/Applied batch"
+  },
+  {
+    "id": "m823",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "An enterprise assigns dynamic IP addresses to workstations using DHCP. The security team wants to restrict access to administrative cloud portals so that only members of the IT management group can reach them, regardless of which workstation or IP address they use. Which NGFW feature fulfills this requirement without requiring static IP reservations?",
+    "opts": [
+      "Enforcing network address translation to unify internal subnets",
+      "Integrating directory service authentication with user-aware policies",
+      "Deploying stateful connection timeouts across all gateway interfaces",
+      "Configuring media access control address filters at the firewall port"
+    ],
+    "correct": 1,
+    "exp": "User-ID integration maps directory accounts (e.g., Active Directory groups) directly to firewall access rules, enforcing authorization by identity rather than transient IP addresses.",
+    "wrongFeedback": {
+      "0": "NAT translates private IPs to public IPs, which aggregates traffic but cannot distinguish individual user permissions within an internal subnet.",
+      "2": "Connection timeouts close inactive sessions to conserve firewall state memory and provide no identity-based access differentiation.",
+      "3": "MAC filtering operates at Layer 2 and ties access to physical hardware rather than user accounts, failing if a user changes workstations."
+    },
+    "conceptTagIds": [
+      "net.app-ngfw"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied NGFW Core/Applied batch"
+  },
+  {
+    "id": "m824",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "A company wants staff to view files on a popular public cloud storage platform, but wants to prevent employees from uploading proprietary documents to that same service. How does an NGFW achieve this granular restriction where traditional firewalls fail?",
+    "opts": [
+      "By deploying intrusion detection rules that terminate all active sessions",
+      "By blocking all domain name service queries resolving to the cloud hosts",
+      "By evaluating discrete functional actions within the application session",
+      "By restricting client traffic using bandwidth throttling on edge interfaces"
+    ],
+    "correct": 2,
+    "exp": "NGFW application awareness recognizes specific micro-operations and API calls within a single application (e.g., allowing \"view/download\" while denying \"upload/post\").",
+    "wrongFeedback": {
+      "0": "An IDS detects known attack signatures and anomalies; it is not designed to enforce granular read versus write business policy within legitimate cloud services.",
+      "1": "Blocking DNS queries or IP ranges cuts off access to the domain entirely, preventing both downloads (which the company wants to permit) and uploads.",
+      "3": "Bandwidth throttling limits data transfer rates to conserve network throughput, but does not distinguish between upload and download authorization."
+    },
+    "conceptTagIds": [
+      "net.app-ngfw"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied NGFW Core/Applied batch"
+  },
+  {
+    "id": "m825",
+    "ch": "3",
+    "topic": "Network Security",
+    "difficulty": "applied",
+    "q": "A network team enables full SSL decryption, antivirus scanning, and deep packet inspection on their primary edge firewall. Shortly after, users experience significant browsing delays during peak working hours, despite abundant internet bandwidth. What operational trade-off explains this latency?",
+    "opts": [
+      "Cryptographic processing and payload reconstruction consume heavy CPU resources",
+      "The firewall exhausts available private IP addresses inside its dynamic NAT pool",
+      "Upstream internet service providers rate-limit unencrypted inspection data streams",
+      "Stateful connection tables drop outbound sessions due to corrupt routing entries"
+    ],
+    "correct": 0,
+    "exp": "Decrypting TLS traffic, reconstructing full packet streams, and running deep inspection signatures across Layer 7 payloads requires substantial CPU and ASIC compute power, introducing latency under peak loads.",
+    "wrongFeedback": {
+      "1": "NAT pool exhaustion causes connection failures (timeouts/dropped new sessions) rather than uniform latency across established web traffic.",
+      "2": "Upstream ISPs route standard encrypted packets re-wrapped by the firewall; they do not rate-limit or observe the gateway's internal inspection processes.",
+      "3": "Routing table corruption causes packet loss and unreachable destinations, not consistent latency across normal operational web sessions."
+    },
+    "conceptTagIds": [
+      "net.app-ngfw"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied NGFW Core/Applied batch"
+  }
+]
