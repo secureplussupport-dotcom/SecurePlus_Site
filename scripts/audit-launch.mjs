@@ -260,11 +260,17 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'const activeDiffFilter=isGuest?"all":diffFilter', "guest MCQ practice must not filter by difficulty");
   requireContains("src/App.jsx", 'const activeTopicFilter=isGuest?"all":topicFilter', "guest MCQ practice must not filter by topic");
   requireContains("src/App.jsx", '<FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>', "guest MCQ practice should still allow chapter filtering");
-  requireContains("src/App.jsx", "guest-mcq-showcase", "guest MCQ practice should use a more engaging conversion-focused showcase");
-  requireContains("src/App.jsx", "guest-mcq-benefit-grid", "guest MCQ practice should explain the value of saving progress");
-  requireContains("src/App.jsx", "guest-chapter-choice-grid", "guest MCQ practice should provide visual chapter choices");
-  requireContains("src/App.jsx", "guest-length-grid", "guest MCQ practice should make fixed set sizes visually prominent");
-  requireContains("src/App.jsx", "mcq-launch-pad", "MCQ practice should expose a prominent launch panel above detailed controls");
+  const mcqSource=read("src/App.jsx").split("function MCQPractice(")[1].split("function UpgradeModal(")[0];
+  const mcqSetup=mcqSource.split("  if(!started) return(")[1].split("  if(done&&isGuest) return(")[0];
+  const disclosure=read("src/App.jsx").split("function PracticeSetupDisclosure(")[1].split("function MCQPractice(")[0];
+  if(!mcqSource.includes('const [reviewMode,setReviewMode]=useState("smart")')) push(errors,"src/App.jsx","MCQ practice must default to Smart Review");
+  if(!mcqSource.includes('if(isGuest&&reviewMode==="smart")return requestSignup()')) push(errors,"src/App.jsx","guest Smart Review must request an account rather than silently run random practice");
+  if(!mcqSetup.includes('aria-label="Question selection mode"')||!mcqSetup.includes("Recommended")||mcqSetup.indexOf('aria-label="Question selection mode"')>mcqSetup.indexOf("<PracticeSetupDisclosure>")) push(errors,"src/App.jsx","recommended Smart Review and Random practice must be visible above customization");
+  if(!disclosure.includes('<details className="practice-secondary mcq-customise">')||disclosure.includes("if(isGuest)")) push(errors,"src/App.jsx","customization must start collapsed for guests and members");
+  for(const label of ["Unfinished MCQ","Starred MCQ","Missed MCQ"]){
+    if(!mcqSetup.includes(label)||mcqSetup.indexOf(label)>mcqSetup.indexOf("<PracticeSetupDisclosure>")) push(errors,"src/App.jsx",`${label} must remain visible outside customization`);
+  }
+  if(/mcq-launch-steps|practice-meta-pill|bank.length|matching questions|questions available|<details/.test(mcqSetup)) push(errors,"src/App.jsx","MCQ setup must omit summary chips, inventory totals, and collapsed review queues");
   requireContains("src/App.jsx", "Start questions now", "MCQ practice should use obvious start-button copy");
   requireContains("src/App.jsx", "Use 50 coins or unlock all PBQs with Pro", "PBQ interest should present both the coin and Pro paths");
   requireContains("src/App.jsx", "ATHENA_STARTER_QUESTION_SETS", "new-user starter questions should use the concise curated onboarding set");
