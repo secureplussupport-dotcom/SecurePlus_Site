@@ -1,0 +1,184 @@
+[
+  {
+    "id": "m794",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "core",
+    "q": "An attacker acquires a database containing millions of username and password pairs leaked from an online retailer. They use an automated script to test those identical credential pairs against an unrelated banking portal. Which attack is being conducted?",
+    "opts": [
+      "Session hijacking",
+      "Credential stuffing",
+      "Password spraying",
+      "Rainbow table cracking"
+    ],
+    "correct": 1,
+    "exp": "Credential stuffing uses automated tools to test large lists of stolen, paired credentials from one breach against other unrelated sites.",
+    "wrongFeedback": {
+      "0": "Session hijacking involves intercepting or taking over an existing, valid session token rather than authenticating with username-password combinations.",
+      "2": "Password spraying tests a single common password across many different user accounts to avoid lockouts, rather than testing known pairs.",
+      "3": "Rainbow tables are precomputed cryptographic tables used for offline password hash cracking, not live web portal authentication."
+    },
+    "conceptTagIds": [
+      "att.pwd-stuffing"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-stuffing batch"
+  },
+  {
+    "id": "m795",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "A streaming service suffers widespread unauthorized account takeovers. Forensic investigators confirm that the service's own user database was never breached and its web code contains no vulnerabilities. What user habit enabled this compromise?",
+    "opts": [
+      "Reusing identical passwords across unrelated external online services",
+      "Accessing media applications over unsecured public wireless networks",
+      "Failing to clear local browser cookies and history upon session exit",
+      "Clicking untrusted links embedded inside unsolicited phishing emails"
+    ],
+    "correct": 0,
+    "exp": "Credential stuffing depends on the widespread human habit of password reuse; when a third-party platform is breached, those valid credentials work on the user's other accounts.",
+    "wrongFeedback": {
+      "1": "Unsecured Wi-Fi allows packet sniffing or person-in-the-middle attacks, but does not explain systematic, automated credential abuse without active interception.",
+      "2": "Retaining browser cookies can expose active sessions locally, but does not yield valid plaintext password pairs to external automated bots.",
+      "3": "Phishing targets individuals to harvest specific credentials, whereas the scenario describes a broad exploit that succeeded without attacking the company's users directly."
+    },
+    "conceptTagIds": [
+      "att.pwd-stuffing"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-stuffing batch"
+  },
+  {
+    "id": "m796",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "A SOC analyst reviews web server authentication logs and observes 500,000 login attempts within two hours. Each attempt targets a distinct username with a unique, complex password, resulting in a 2% success rate. Which attack is occurring?",
+    "opts": [
+      "A dictionary attack systematically testing words against administrative accounts",
+      "A password spray attempting seasonal phrase patterns across the directory",
+      "A credential stuffing run using harvested pairs from prior external leaks",
+      "A distributed brute-force attack attempting every character combination"
+    ],
+    "correct": 2,
+    "exp": "Credential stuffing manifests as a high-volume automated test of unique username-password pairs harvested from past breaches, characteristically yielding a modest success rate (~1–3%).",
+    "wrongFeedback": {
+      "0": "Dictionary attacks repeatedly target one or a small group of accounts with wordlists, rather than testing hundreds of thousands of distinct usernames once.",
+      "1": "Password spraying tests the same common password across many users, whereas these logs show a unique, distinct password for each individual username.",
+      "3": "Pure brute force tests sequential mathematical permutations against specific targets, which does not match a pattern of unique, valid-looking credentials per account."
+    },
+    "conceptTagIds": [
+      "att.pwd-stuffing"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-stuffing batch"
+  },
+  {
+    "id": "m797",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "An enterprise enforces sixteen-character passwords, requiring uppercase, lowercase, numbers, and symbols. Despite this policy, employee accounts are still regularly accessed by unauthorized external actors using breached dark web dumps. Which countermeasure most effectively eliminates this exposure?",
+    "opts": [
+      "Decreasing the account lockout threshold from five failed attempts to three",
+      "Requiring employees to manually rotate their passwords every thirty days",
+      "Deploying network intrusion detection sensors at the perimeter firewall",
+      "Enforcing multifactor authentication across all external access portals"
+    ],
+    "correct": 3,
+    "exp": "MFA blocks credential stuffing because an adversary possessing a valid reused password still lacks the second required verification factor (e.g., authenticator app or hardware key).",
+    "wrongFeedback": {
+      "0": "Lowering lockout thresholds does not prevent compromised logins because the attacker only needs a single attempt when they possess the correct password.",
+      "1": "Frequent rotations encourage predictable variations and do not stop an attacker who acquires the active password from an external compromise.",
+      "2": "NIDS analyzes network packets for malicious traffic patterns, but legitimate authentication traffic using valid credentials appears normal to signature sensors."
+    },
+    "conceptTagIds": [
+      "att.pwd-stuffing"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-stuffing batch"
+  },
+  {
+    "id": "m798",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "An attacker runs an automated script to validate stolen credentials against an enterprise portal. To bypass rate-limiting controls, the attacker routes every attempt through a rotating residential proxy pool, submitting only one attempt per IP address. Which defensive control best mitigates this automated campaign?",
+    "opts": [
+      "Implementing geo-blocking on IP address ranges from non-operating countries",
+      "Integrating behavioral bot detection and adaptive CAPTCHA challenges",
+      "Restricting web portal access to systems running verified corporate agents",
+      "Applying mandatory output encoding on all returned authentication data"
+    ],
+    "correct": 1,
+    "exp": "When rate limiting fails due to distributed IP proxies, bot mitigation (analyzing client telemetry, mouse dynamics, and CAPTCHAs) successfully identifies and stops automated non-human submissions.",
+    "wrongFeedback": {
+      "0": "Residential proxy pools rent compromised devices globally, allowing attackers to route requests through legitimate domestic consumer IPs that bypass geo-blocks.",
+      "2": "Restricting access via corporate agents secures managed internal endpoints, but cannot protect public customer-facing portals where users bring diverse personal devices.",
+      "3": "Output encoding prevents client-side cross-site scripting (XSS) and has no bearing on validating incoming automated login submissions."
+    },
+    "conceptTagIds": [
+      "att.pwd-stuffing"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-stuffing batch"
+  },
+  {
+    "id": "m799",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "An organization investigates two distinct automated identity attacks. In Case X, the adversary tests the phrase Winter2024! against 5,000 corporate email addresses. In Case Y, the adversary tests 5,000 distinct credential pairs purchased from an illicit online forum. What core difference distinguishes these attacks?",
+    "opts": [
+      "Case X relies on password guessing, whereas Case Y exploits credential reuse",
+      "Case X targets network hardware, whereas Case Y targets application services",
+      "Case X triggers account lockouts, whereas Case Y evades all audit event logs",
+      "Case X runs directly in memory, whereas Case Y executes across web endpoints"
+    ],
+    "correct": 0,
+    "exp": "Case X is password spraying (guessing one likely password across many accounts), while Case Y is credential stuffing (testing known, previously compromised username/password pairs).",
+    "wrongFeedback": {
+      "1": "Both attacks target application-layer authentication endpoints, not network switching or routing hardware.",
+      "2": "Case X is specifically calculated to stay under lockout thresholds, and Case Y produces standard authentication event logs for every attempt.",
+      "3": "Both attacks are network-based authentication requests against web or directory interfaces, not local in-memory exploits."
+    },
+    "conceptTagIds": [
+      "att.pwd-stuffing"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-stuffing batch"
+  },
+  {
+    "id": "m800",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "A SaaS vendor wants to proactively neutralize credential stuffing during account registration and password resets, without increasing user friction during normal daily logins. Which implementation best meets this goal?",
+    "opts": [
+      "Requiring users to solve complex graphical puzzles during every active login",
+      "Enforcing mandatory account lockouts after two failed authentication tries",
+      "Checking submitted passwords against a database of known compromised secrets",
+      "Mandating that users choose passwords with a minimum length of twenty signs"
+    ],
+    "correct": 2,
+    "exp": "Screening passwords at creation or reset against known breach corpuses (e.g., Have I Been Pwned / NIST SP 800-63B guidelines) stops users from setting passwords that adversaries already possess.",
+    "wrongFeedback": {
+      "0": "Presenting graphical puzzles (CAPTCHAs) on every normal login introduces substantial daily user friction, violating the scenario constraint.",
+      "1": "Aggressive lockout policies increase operational disruption and leave users vulnerable to denial-of-service, without preventing credential reuse at creation.",
+      "3": "Minimum length rules help prevent brute-force attacks, but if a user chooses a long password that was previously leaked elsewhere, credential stuffing still succeeds."
+    },
+    "conceptTagIds": [
+      "att.pwd-stuffing"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.pwd-stuffing batch"
+  }
+]

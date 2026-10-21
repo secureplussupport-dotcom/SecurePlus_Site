@@ -1,0 +1,106 @@
+[
+  {
+    "id": "m801",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "An employee on an office network can reach external websites, but an on-path attacker intercepts all their outbound traffic by responding to Layer 2 broadcast resolution queries with the attacker's own physical address. Which network switch feature prevents this interception?",
+    "opts": [
+      "Port security locking access to known physical hardware addresses",
+      "Dynamic ARP inspection validated against DHCP snooping data",
+      "Spanning tree protocol guard disabling rogue networking bridges",
+      "Access control lists blocking unauthorized transport layer ports"
+    ],
+    "correct": 1,
+    "exp": "Dynamic ARP Inspection (DAI) compares incoming ARP packets against the trusted DHCP snooping database, discarding forged ARP replies that enable Layer 2 on-path (ARP poisoning) attacks.",
+    "wrongFeedback": {
+      "0": "Port security restricts the number or specific MAC addresses allowed on a switch port to prevent MAC flooding, but it does not inspect the contents of ARP packets.",
+      "2": "Spanning tree guards (such as BPDU Guard) prevent unauthorized switches from altering the network bridge topology, not Layer 2 address resolution spoofing.",
+      "3": "Standard ACLs filter traffic based on IP addresses and transport port numbers (Layers 3 and 4), whereas ARP operates at Layer 2 and bypasses standard IP ACLs."
+    },
+    "conceptTagIds": [
+      "att.on-path-mitm"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.on-path-mitm batch"
+  },
+  {
+    "id": "m802",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "While connected to hotel Wi-Fi, an executive navigates to their banking portal. An on-path attacker intercepts the initial connection and proxies the session, keeping the executive on an unencrypted HTTP link while maintaining an encrypted HTTPS session with the bank. Which control prevents this downgrade?",
+    "opts": [
+      "Deploying DNS security extensions across authoritative servers",
+      "Configuring contextual multi-factor authentication on logins",
+      "Setting the SameSite cookie attribute to strict on all forms",
+      "Implementing HTTP Strict Transport Security response headers"
+    ],
+    "correct": 3,
+    "exp": "HTTP Strict Transport Security (HSTS) forces web browsers to interact with the domain exclusively over encrypted HTTPS connections, preventing on-path SSL stripping/downgrade attacks.",
+    "wrongFeedback": {
+      "0": "DNSSEC ensures the authenticity and integrity of DNS query responses, but it does not prevent an on-path attacker from intercepting and modifying subsequent HTTP traffic.",
+      "1": "Multi-factor authentication protects against stolen credentials, but it does not stop an attacker from intercepting session cookies or cleartext traffic during a downgraded HTTP session.",
+      "2": "The SameSite attribute mitigates Cross-Site Request Forgery (CSRF) by limiting cross-origin cookie transmission, but it does not mandate transport encryption."
+    },
+    "conceptTagIds": [
+      "att.on-path-mitm"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.on-path-mitm batch"
+  },
+  {
+    "id": "m803",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "An attacker deploys an on-path proxy to intercept encrypted traffic between a corporate mobile app and its backend API. The proxy presents a valid digital certificate issued by a private root CA installed on the phone, yet the mobile app immediately aborts the connection. What mechanism blocked the interception?",
+    "opts": [
+      "Certificate pinning enforcing expected server keys in the app",
+      "Mutual authentication verifying client hardware identities",
+      "Dynamic routing protocols isolating rogue network gateways",
+      "Symmetric encryption using ephemeral keys for web sessions"
+    ],
+    "correct": 0,
+    "exp": "Certificate pinning hardcodes the expected server certificate or public key directly inside the client application; when the on-path proxy presents a substituted certificate (even if signed by a trusted root CA), validation fails and the app terminates the session.",
+    "wrongFeedback": {
+      "1": "Mutual authentication (mTLS) requires the client to present a certificate to the server, but it does not inherently enforce that the client reject alternate valid server certificates.",
+      "2": "Dynamic routing protocols (like OSPF or BGP) calculate optimal network paths between routers and do not inspect or validate application-layer TLS certificates.",
+      "3": "Ephemeral key exchanges provide forward secrecy, but they still complete successfully through an on-path proxy if the client trusts the certificate presented during the handshake."
+    },
+    "conceptTagIds": [
+      "att.on-path-mitm"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.on-path-mitm batch"
+  },
+  {
+    "id": "m804",
+    "ch": "2",
+    "topic": "Threats, Vulnerabilities & Mitigations",
+    "difficulty": "applied",
+    "q": "A security analyst discovers that an on-path attacker intercepted valid authentication tokens on an internal web application and re-transmitted them to impersonate legitimate personnel, without modifying the underlying messages. Which countermeasure directly mitigates this technique?",
+    "opts": [
+      "Requiring complex alphanumeric phrases for all user accounts",
+      "Scanning endpoints regularly for unpatched browser software",
+      "Embedding unique nonces and short expiration limits in tokens",
+      "Disabling split tunneling on all remote virtual connections"
+    ],
+    "correct": 2,
+    "exp": "Replay attacks rely on re-transmitting unaltered tokens; incorporating cryptographic nonces (one-time numbers), timestamps, and short time-to-live (TTL) limits ensures captured tokens cannot be re-used.",
+    "wrongFeedback": {
+      "0": "Password complexity defends against brute-force and dictionary guessing, but does not stop an attacker from reusing an already-captured, valid authentication token.",
+      "1": "Patching client software addresses local execution vulnerabilities, but does not defend against the capture and re-use of tokens transmitted across the network.",
+      "3": "Disabling split tunneling forces all remote endpoint traffic through a corporate VPN tunnel, but does not protect against on-path replay attacks occurring within the trusted network path."
+    },
+    "conceptTagIds": [
+      "att.on-path-mitm"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied att.on-path-mitm batch"
+  }
+]

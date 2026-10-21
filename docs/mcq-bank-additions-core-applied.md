@@ -1,19 +1,19 @@
 # MCQs to add: Core and Applied
 
-Checked 2026-10-20T16:00:07.314Z. Current effective bank: 454 MCQs (238 Core, 216 Applied), including 112 current active live Question Manager records merged using production precedence.
+Checked 2026-10-21T01:50:21.804Z. Current effective bank: 465 MCQs (239 Core, 226 Applied), including 123 current active live Question Manager records merged using production precedence.
 
 Count one-tag questions as 1 per assigned tag; questions with two or more assigned tags count as 0.5 per assigned tag. Only selected primary/secondary concept tags count; distractor-only metadata does not. Former Easy is Core; former Medium and Hard are combined into Applied before calculating the shortfall. Round each positive shortfall up to a whole question. Extra questions are allowed. PBQs are excluded.
 
 **Each new question below should have one intended concept tag.** If new questions have multiple tags, they earn only 0.5 each, so more questions will be needed. These are inventory shortfalls, not unique-content quality judgments. Concepts without an assigned Heavy weight/Standard/Niche group have no benchmark in this report.
 
-**Add 319 single-tag MCQs: 119 Core and 200 Applied.**
+**Add 299 single-tag MCQs: 118 Core and 181 Applied.**
 
 | Group | Add Core | Add Applied | Total |
 |---|---:|---:|---:|
-| Heavy weight | 20 | 86 | 106 |
-| Standard | 30 | 83 | 113 |
+| Heavy weight | 17 | 64 | 81 |
+| Standard | 32 | 86 | 118 |
 | Niche | 69 | 31 | 100 |
-| **Total** | **119** | **200** | **319** |
+| **Total** | **118** | **181** | **299** |
 
 ## Heavy weight
 
@@ -32,17 +32,15 @@ Numbers below are additional questions to write, not current bank counts. All ar
 | att.app-csrf | 0 | 0 | 0 |
 | att.app-ssrf | 0 | 0 | 0 |
 | att.pwd-spraying | 2 | 5 | 7 |
-| att.pwd-stuffing | 1 | 6 | 7 |
-| att.on-path-mitm | 0 | 4 | 4 |
+| att.pwd-stuffing | 0 | 0 | 0 |
+| att.on-path-mitm | 0 | 0 | 0 |
 | att.mal-ransomware | 0 | 6 | 6 |
 | att.dos-ddos | 1 | 0 | 1 |
 | net.app-ngfw | 1 | 5 | 6 |
 | net.app-waf | 1 | 4 | 5 |
-| net.wifi-802-1x | 2 | 4 | 6 |
 | net.proto-tls | 2 | 4 | 6 |
 | arch.segmentation | 0 | 1 | 1 |
 | arch.ztna | 2 | 5 | 7 |
-| arch.shared-resp | 0 | 5 | 5 |
 | ops.siem | 0 | 3 | 3 |
 | ops.edr-xdr | 1 | 6 | 7 |
 | ops.logs-syslog | 2 | 5 | 7 |
@@ -51,7 +49,6 @@ Numbers below are additional questions to write, not current bank counts. All ar
 | ir.chain-of-custody | 1 | 4 | 5 |
 | cry.pki-ca | 2 | 1 | 3 |
 | cry.pki-revocation | 0 | 2 | 2 |
-| cry.diffie-hellman | 0 | 3 | 3 |
 | cry.masking-salting | 0 | 3 | 3 |
 
 ## Standard
@@ -65,6 +62,9 @@ Numbers below are additional questions to write, not current bank counts. All ar
 | iam.fido2-passwordless | 0 | 0 | 0 |
 | iam.saml | 1 | 2 | 3 |
 | iam.oauth-oidc | 2 | 1 | 3 |
+| cry.diffie-hellman | 0 | 0 | 0 |
+| net.wifi-802-1x | 2 | 1 | 3 |
+| arch.shared-resp | 0 | 2 | 2 |
 | att.actor-apt | 0 | 1 | 1 |
 | att.actor-insider | 0 | 2 | 2 |
 | att.actor-crime | 0 | 3 | 3 |

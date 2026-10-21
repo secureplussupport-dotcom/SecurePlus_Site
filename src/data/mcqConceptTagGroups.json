@@ -7,11 +7,11 @@
       "att.app-sqli", "att.app-xss",
       "att.app-csrf", "att.app-ssrf", "att.pwd-spraying", "att.pwd-stuffing",
       "att.on-path-mitm", "att.mal-ransomware", "att.dos-ddos", "net.app-ngfw",
-      "net.app-waf", "net.wifi-802-1x", "net.proto-tls", "arch.segmentation",
-      "arch.ztna", "arch.shared-resp", "ops.siem", "ops.edr-xdr",
+      "net.app-waf", "net.proto-tls", "arch.segmentation",
+      "arch.ztna", "ops.siem", "ops.edr-xdr",
       "ops.logs-syslog", "ir.lifecycle-nist", "ir.volatility-order",
       "ir.chain-of-custody", "cry.pki-ca", "cry.pki-revocation",
-      "cry.diffie-hellman", "cry.masking-salting"
+      "cry.masking-salting"
     ]
   },
   "Standard": {
@@ -19,6 +19,7 @@
     "minimumQuestionsByDifficulty": {"core": 2, "applied": 3},
     "tagIds": [
       "iam.fido2-passwordless", "iam.saml", "iam.oauth-oidc",
+      "cry.diffie-hellman", "net.wifi-802-1x", "arch.shared-resp",
       "att.actor-apt", "att.actor-insider", "att.actor-crime", "att.threat-feeds",
       "att.mitre-attack", "att.iocs", "att.phishing", "att.spear-phishing",
       "att.whaling", "att.vishing-smishing", "att.tailgating", "att.social-principles",
