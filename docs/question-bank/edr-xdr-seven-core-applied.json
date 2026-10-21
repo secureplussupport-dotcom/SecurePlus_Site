@@ -1,0 +1,184 @@
+[
+  {
+    "id": "m848",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "core",
+    "q": "An enterprise replaces legacy antivirus on employee laptops with software that provides continuous behavioral tracking, process tree visualization, and remote host containment. Which technology was deployed?",
+    "opts": [
+      "Next-generation firewall (NGFW)",
+      "Endpoint detection and response (EDR)",
+      "Security information and event management (SIEM)",
+      "Network access control (NAC)"
+    ],
+    "correct": 1,
+    "exp": "EDR software resides on host endpoints to monitor behavioral anomalies, trace parent-child process execution, and execute remote response actions like containment.",
+    "wrongFeedback": {
+      "0": "An NGFW inspects and filters network traffic at the perimeter or internal boundaries, rather than monitoring local operating system processes and host memory.",
+      "2": "A SIEM aggregates, normalizes, and correlates log data across the enterprise, but does not natively run as a host agent tracking internal OS kernel processes.",
+      "3": "NAC assesses endpoint compliance before granting network switch or wireless access, rather than providing continuous process-level threat hunting."
+    },
+    "conceptTagIds": [
+      "ops.edr-xdr"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied EDR/XDR Core and Applied batch"
+  },
+  {
+    "id": "m849",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "A SOC analyst detects active malware beaconing from a workstation. The analyst immediately cuts the machine's access to the local subnet and internet, yet maintains an active remote session to inspect the system. Which capability was used?",
+    "opts": [
+      "Dynamic ARP inspection applied at the local network switch",
+      "Port security MAC lockdown triggered on the patch panel",
+      "Endpoint isolation preserving administrative management channels",
+      "DNS sinkholing configured on authoritative enterprise servers"
+    ],
+    "correct": 2,
+    "exp": "EDR endpoint isolation severs the host's operating system network stack from other hosts and the internet, while keeping an encrypted management tunnel open to the EDR console for remote remediation.",
+    "wrongFeedback": {
+      "0": "Dynamic ARP Inspection (DAI) prevents Layer 2 ARP poisoning; it does not selectively sever a host's IP routing while keeping remote telemetry alive.",
+      "1": "Port security shuts down switch ports or blocks unauthorized MACs, which would terminate all network connectivity including the analyst's remote investigation session.",
+      "3": "DNS sinkholing redirects malicious domain queries to a controlled IP, but leaves the infected host fully capable of communicating with internal IP addresses."
+    },
+    "conceptTagIds": [
+      "ops.edr-xdr"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied EDR/XDR Core and Applied batch"
+  },
+  {
+    "id": "m850",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "An incident response team analyzes an intrusion involving a phishing email, a stolen cloud session token, and a PowerShell script executed on an endpoint. The local host agent alerted on the script, but could not link it to the email or cloud login. Which solution natively bridges this visibility gap?",
+    "opts": [
+      "Extended detection and response correlating cross-domain telemetry",
+      "Host-based intrusion prevention blocking unauthorized memory writes",
+      "Dedicated web application firewalls inspecting inbound HTTP headers",
+      "Network access control servers evaluating client patch baselines"
+    ],
+    "correct": 0,
+    "exp": "Extended Detection and Response (XDR) integrates and automatically correlates telemetry across endpoints, identity providers, cloud workloads, and email systems into unified incident timelines.",
+    "wrongFeedback": {
+      "1": "HIPS operates strictly at the local operating system level, lacking visibility into external cloud identity providers or mail server gateways.",
+      "2": "A WAF protects public web applications from incoming Layer 7 exploits; it has no visibility into endpoint PowerShell commands or inbound employee phishing emails.",
+      "3": "NAC assesses device health before allowing network connection, providing no capability to stitch together multi-vector attack chains."
+    },
+    "conceptTagIds": [
+      "ops.edr-xdr"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied EDR/XDR Core and Applied batch"
+  },
+  {
+    "id": "m851",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "An attacker uses built-in administrative tools like PowerShell and WMI to move laterally without writing custom executable files to disk. How does an EDR platform detect this activity where traditional antivirus fails?",
+    "opts": [
+      "By comparing executable file hashes against public threat databases",
+      "By decrypting local disk sectors prior to system kernel boot sequences",
+      "By scanning static script files stored in administrative shared folders",
+      "By analyzing anomalous process relationships and runtime command arguments"
+    ],
+    "correct": 3,
+    "exp": "EDR evaluates runtime behavior—such as parent-child process lineages (e.g., word.exe spawning powershell.exe) and anomalous command-line parameters—to detect malicious intent regardless of whether files are written to disk.",
+    "wrongFeedback": {
+      "0": "Living-off-the-land (LotL) attacks abuse legitimate, signed operating system binaries (like powershell.exe), meaning their static file hashes are recognized as safe by hash checks.",
+      "1": "Pre-boot sector decryption protects data at rest during initial startup, but cannot evaluate runtime process behavior once the operating system is running.",
+      "2": "Fileless and memory-resident techniques execute commands directly in memory or via encoded CLI strings, leaving no static script files on disk to scan."
+    },
+    "conceptTagIds": [
+      "ops.edr-xdr"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied EDR/XDR Core and Applied batch"
+  },
+  {
+    "id": "m852",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "Upon verifying an alert, a security tool automatically terminates a malicious script, revokes the user's active cloud session tokens, and removes the originating phishing message from all company inboxes. Which architecture coordinates this response?",
+    "opts": [
+      "A local endpoint detection agent executing host firewall script rules",
+      "An extended detection and response platform coordinating across silos",
+      "A web application firewall enforcing Layer 7 inspection filters",
+      "A forward proxy server terminating outbound client transport tunnels"
+    ],
+    "correct": 1,
+    "exp": "XDR provides coordinated cross-domain response actions, allowing an incident response engine to trigger mitigations across endpoints, cloud identity providers, and email gateways simultaneously.",
+    "wrongFeedback": {
+      "0": "An EDR agent operates locally on the endpoint; it cannot modify cloud directory tokens or delete messages stored on cloud email exchange servers.",
+      "2": "A WAF inspects inbound web traffic targeting web servers and does not interact with user mailboxes or host-level operating system processes.",
+      "3": "A forward proxy regulates and inspects outbound employee web traffic, lacking native capabilities to purge emails or revoke cloud identity tokens."
+    },
+    "conceptTagIds": [
+      "ops.edr-xdr"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied EDR/XDR Core and Applied batch"
+  },
+  {
+    "id": "m853",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "An adversary reboots an infected server to clear volatile memory and disrupt live forensic analysis. How can an investigator using an EDR platform still reconstruct the adversary's executed commands and child processes?",
+    "opts": [
+      "EDR automatically flashes backup firmware images onto motherboards",
+      "EDR recovers purged memory structures from unallocated disk space",
+      "EDR continuously streams process execution telemetry to cloud storage",
+      "EDR prevents operating systems from completing unauthorized reboots"
+    ],
+    "correct": 2,
+    "exp": "EDR agents continuously record and transmit process telemetry, registry edits, network sockets, and command strings to a centralized cloud repository in real time, preserving the audit trail even if the host is rebooted or destroyed.",
+    "wrongFeedback": {
+      "0": "EDR monitors and protects operating system operations; it does not rewrite or reflash hardware motherboard firmware during system restarts.",
+      "1": "Volatile RAM requires continuous electrical power; once power cycles during a reboot, unallocated RAM contents dissipate and cannot be retrieved from disk space.",
+      "3": "While EDR can terminate individual processes or isolate networks, standard agents do not block low-level hardware resets, kernel panics, or physical power cycling."
+    },
+    "conceptTagIds": [
+      "ops.edr-xdr"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied EDR/XDR Core and Applied batch"
+  },
+  {
+    "id": "m854",
+    "ch": "4",
+    "topic": "Security Operations",
+    "difficulty": "applied",
+    "q": "A SOC wants out-of-the-box cross-vector correlation across endpoints, cloud workloads, and identity providers with native automated containment, avoiding the need to engineer and maintain custom orchestration playbooks. Which solution best meets this requirement?",
+    "opts": [
+      "An open-source log collector archiving raw syslog events to storage",
+      "A standalone vulnerability scanner prioritizing unpatched web hosts",
+      "A perimeter next-generation firewall inspecting internal routing zones",
+      "An extended detection and response suite with unified native controls"
+    ],
+    "correct": 3,
+    "exp": "XDR provides deep, vendor-integrated telemetry correlation and built-in response mechanisms across endpoints, cloud, and identity natively, unlike traditional SIEM/SOAR platforms that often require extensive custom rule and playbook maintenance.",
+    "wrongFeedback": {
+      "0": "Raw log collectors provide central storage for compliance, but lack correlation algorithms, threat detection engines, and automated remediation capabilities.",
+      "1": "Vulnerability scanners identify known security weaknesses at rest; they do not correlate live telemetry or execute automated incident responses.",
+      "2": "NGFWs protect network boundaries, but have no visibility into host memory, cloud directory authentications, or native endpoint remediation workflows."
+    },
+    "conceptTagIds": [
+      "ops.edr-xdr"
+    ],
+    "taggingVersion": "gemini-mcq-tags-2026-10-20",
+    "beyondTextbook": false,
+    "source": "Owner-supplied EDR/XDR Core and Applied batch"
+  }
+]
