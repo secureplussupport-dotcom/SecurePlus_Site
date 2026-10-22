@@ -1,3 +1,4 @@
+import { practiceActivity } from './dashboardMetrics.js';
 // Readiness uses the same mastery rule, replayed over MCQ sets and Exams only.
 export function localReadinessEvidence(attempts = []) {
   const concepts = new Map(), chapters = {};
@@ -12,7 +13,7 @@ export function localReadinessEvidence(attempts = []) {
     }
     total++;
   }
-  return {concepts:[...concepts.values()],chapters,total,unclassified:0};
+  return {concepts:[...concepts.values()],chapters,total,unclassified:0,activity:practiceActivity(attempts)};
 }
 
 export function summarizeReadiness(evidence = {}) {
@@ -25,6 +26,6 @@ export function summarizeReadiness(evidence = {}) {
   const byChapter = {};
   for(const c of unmastered) {const key=/^[1-5]$/.test(c.chapter)?c.chapter:'unknown';byChapter[key]=(byChapter[key]||0)+1;}
   return {score,mean,attempted:concepts.length,mastered,unmastered:unmastered.length,byChapter,
-    chapters:evidence.chapters || {},unclassified:evidence.unclassified || 0,
+    activity:evidence.activity || null,chapters:evidence.chapters || {},unclassified:evidence.unclassified || 0,
     level:mean>=80?'Exam ready':mean>=60?'Growing confidence':mean>=30?'Building momentum':'Just starting'};
 }

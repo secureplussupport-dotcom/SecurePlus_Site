@@ -7,6 +7,7 @@ import { CONCEPT_TAGS, MCQ_TAGGING_VERSION, inferMcqConceptTagIds, searchMcqConc
 import { McqExam, ExamModeGuide, examThemeVars } from "./components/McqExam.jsx";
 import { buildMcqExam, formatExamTime, EXAM_SECONDS_PER_QUESTION } from "./lib/mcqExam.js";
 import { useQuestionPacing } from "./lib/useQuestionPacing.js";
+import { DashboardMetrics } from "./components/DashboardMetrics.jsx";
 import { useExamReadiness, ReadinessBreakdown } from "./components/ExamReadiness.jsx";
 import { McqSetResults } from "./components/McqSetResults.jsx";
 import { buildMcqResultSummary, advanceConceptStreak } from "./lib/mcqResultSummary.js";
@@ -22676,7 +22677,7 @@ function AdminProTestSwitch({user,t,onModeChange}) {
 // ═══════════════════════════════════════════════════════════════
 // DAILY CHALLENGE VIEW (no login required)
 // ═══════════════════════════════════════════════════════════════
-function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinReward}) {
+function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinReward,onSave}) {
   const challenge = getTodayChallenge();
   const [step, setStep] = useState("intro"); // intro | quiz | done
   const [qIndex, setQIndex] = useState(0);
@@ -22729,6 +22730,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
     const correct = selected === current.correct;
     capture("daily_question_answered", { question_id: current.id, correct, signed_in: Boolean(user) });
     setResults(r=>[...r,{qid:current.id,correct,selected}]);
+    onSave?.({qid:current.id,correct,selected,mcq:true,readinessSource:"daily-challenge",conceptTag:current.conceptTagIds?.[0],ch:current.ch,topic:current.topic,title:current.q.slice(0,80),createdAt:new Date().toISOString()});
     playAnswerSound(correct);
     setAnswerBurst({correct,key:Date.now()});
     setTimeout(()=>setAnswerBurst(null),1700);
@@ -24014,8 +24016,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   const [showReadinessLab,setShowReadinessLab]=useState(false);
   const activityProfile=getActivityProfile(attempts);
   const readinessProfile=useExamReadiness(user,attempts);
-  const questionsDone=activityProfile.uniqueQuestions;
-  const accuracy=activityProfile.accuracy;
+  const questionsDone=readinessProfile.activity?.total ?? activityProfile.uniqueQuestions;
   const readiness=readinessProfile.score;
   const readinessColor=readiness>=80?t.green:t.accent;
   const isPro = user.tier==="pro";
@@ -24025,7 +24026,6 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
     loadDailyStreak(user).then(info=>{if(active)setStreakInfo(info);});
     return()=>{active=false;};
   },[user?.email]);
-  const uniquePbqs=activityProfile.uniquePbqs;
   const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
   const showStarredDashboardSet=starredFlashcards.length>=5;
   const showAssistantDashboardSet=Boolean(assistantFlashcardSet?.cards?.length);
@@ -24112,22 +24112,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
         {showReadinessLab&&<ReadinessBreakdown profile={readinessProfile} chapters={CHAPTERS}/>}
       </section>
 
-      <div className="dashboard-stat-grid">
-        {[
-          {label:"Accuracy",value:`${accuracy}%`,color:t.accent,Icon:Target},
-          {label:"Questions Done",value:questionsDone,color:"#8b5cf6",Icon:BookOpenCheck},
-          {label:"Daily Streak",value:streakInfo.streak,color:t.amber,Icon:Flame},
-          {label:"PBQs Complete",value:uniquePbqs,color:t.green,Icon:Puzzle},
-        ].map(s=>(
-          <div key={s.label} className="game-stat">
-            <div style={{display:"flex",justifyContent:"space-between",gap:8,alignItems:"center",marginBottom:10}}>
-              <div className="label">{s.label}</div>
-              <span className="game-stat-icon" style={{"--game-color":s.color}}><s.Icon size={19} strokeWidth={2.2}/></span>
-            </div>
-            <div style={{fontSize:30,fontWeight:900,color:s.color,lineHeight:1}}>{s.value}</div>
-          </div>
-        ))}
-      </div>
+      <DashboardMetrics profile={readinessProfile} streak={streakInfo} tier={user.tier} t={t}/>
 
       <section className="dashboard-action-grid dashboard-action-grid-clean" aria-label="Dashboard action recommendations">
         <div className="card weak-action-card">
@@ -33642,7 +33627,7 @@ export default function App() {
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)&&!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
           </div>
-          {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward}/>}
+          {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward} onSave={handleSaveAttempt}/>}
           {view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onUnlockPbq={handleUnlockPbq} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}
           {false&&view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}

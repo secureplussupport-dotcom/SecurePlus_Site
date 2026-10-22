@@ -13,6 +13,8 @@ await db.exec(readFileSync('supabase/migrations/20261021163006_mcq_result_concep
 await db.exec(readFileSync('supabase/migrations/20261022030000_mcq_question_pacing.sql','utf8'));
 await db.exec(readFileSync('supabase/migrations/20261022060000_mcq_exam_readiness.sql','utf8'));
 await db.exec(readFileSync('supabase/migrations/20261022090000_mcq_core_recovery.sql','utf8'));
+await db.exec('create table public.attempts(user_id uuid,question_type text,correct boolean,created_at timestamptz);grant select on public.attempts to service_role;');
+await db.exec(readFileSync('supabase/migrations/20261022110000_dashboard_practice_metrics.sql','utf8'));
 const user = '00000000-0000-4000-8000-000000000001', other = '00000000-0000-4000-8000-000000000002';
 const sid = '00000000-0000-4000-8000-000000000010', good = '00000000-0000-4000-8000-000000000020', bad = '00000000-0000-4000-8000-000000000021';
 const questions = Array.from({ length: 40 }, (_, i) => ({ id: `m${i}`, format: 'mcq', concept_tag: 'risk.bia-rto-rpo', options: [{ id: good, text: 'yes', is_correct: true }, { id: bad, text: 'no', is_correct: false }], explanation: 'Why' }));
@@ -151,7 +153,8 @@ assert.deepEqual(report.chapters,{'1':{total:2,correct:2},'2':{total:1,correct:0
 assert.notEqual((await state(readinessUser)).mastery.find(c=>c.concept_tag==='a').score,90);
 const sourceEvent=randomUUID();const original=await sourced('b',true,'diagnostic','3',sourceEvent);
 assert.deepEqual(await sourced('b',true,'mcq-set','1',sourceEvent),original);
-assert.deepEqual(await readiness(),report); // Retry cannot reclassify a diagnostic.
+assert.deepEqual((await readiness()).concepts,report.concepts); // Retry cannot reclassify a diagnostic.
+assert.equal((await readiness()).activity.total,6);
 await scalar('select public.mcq_engine_answer($1,$2,null,$3,$4,$5)',[readinessUser,randomUUID(),'m0',good,JSON.stringify({...questions[0],concept_tag:'legacy'})]);
 assert.equal((await readiness()).unclassified,1);assert.equal((await readiness()).concepts.length,2);
 const legacySession=randomUUID();
@@ -225,5 +228,13 @@ const jumped=await recoveryCall(jumpedQuestions[3],0,jumpedSid);
 assert.equal(jumped.output.session_questions[4].difficulty,'core');
 assert.equal(jumped.output.session_questions[0].difficulty,'applied');
 console.log('PASS Core recovery: live-session second miss, Core substitution, source snapshots, resumed plan, retry idempotence, correct reset, stale/foreign rejection and grants.');
+
+// Overall metrics include all MCQ activities and legacy practice, without mirrored duplicates.
+const countsBefore=(await readiness()).activity;
+await db.query("insert into public.attempts values($1,'mcq',true,'2000-01-01'),($1,'pbq',true,'2000-01-01'),($1,'mcq',true,'2099-01-01')",[readinessUser]);
+const totals=(await readiness()).activity;
+assert.equal(totals.total,countsBefore.total+1);assert.equal(totals.correct,countsBefore.correct+1);
+assert.equal((await readiness()).concepts.length,3); // Metrics do not alter readiness.
+console.log('PASS dashboard metrics: all MCQ event sources, repeats, legacy cutover, no PBQs or mirrored double credit.');
 await db.close();
 console.log('PASS disposable PostgreSQL: migration, scores, 30-answer delay, idempotency, rollback, owner isolation, stale plan rejection, snapshot grading, RLS/grants.');
