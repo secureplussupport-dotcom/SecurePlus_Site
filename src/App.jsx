@@ -16142,8 +16142,6 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .dashboard-readiness-focus span{font-size:clamp(58px,7vw,82px);letter-spacing:-.07em;text-shadow:0 12px 28px color-mix(in srgb,var(--readiness-color) 24%,transparent);}
 .dashboard-readiness-focus small{margin-top:12px;font-size:14px;letter-spacing:.08em;color:${t.text};}
 .dashboard-readiness-caption{position:relative;display:inline-flex;align-items:center;gap:7px;margin-bottom:13px;padding:7px 11px;border-radius:999px;border:1px solid color-mix(in srgb,var(--readiness-color) 34%,${t.border});background:color-mix(in srgb,var(--readiness-color) 10%,${t.surface});color:var(--readiness-color);font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;}
-.dashboard-readiness-bar{position:relative;width:min(220px,78%);height:10px;margin:16px auto 0;border-radius:999px;background:${t.border};overflow:hidden;}
-.dashboard-readiness-bar span{display:block;width:var(--readiness);height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--readiness-color),${t.accent},${t.green});box-shadow:0 0 18px color-mix(in srgb,var(--readiness-color) 42%,transparent);}
 .readiness-lab{position:relative;overflow:hidden;margin-bottom:18px;padding:22px;border-color:color-mix(in srgb,var(--readiness-color) 34%,${t.border})!important;background:radial-gradient(circle at 92% 6%,color-mix(in srgb,var(--readiness-color) 15%,transparent),transparent 30%),linear-gradient(135deg,${t.surface},${t.panel})!important;}
 .dashboard-readiness-reveal{animation:softReveal .28s cubic-bezier(.16,1,.3,1) both;}
 .readiness-lab::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--readiness-color);}
@@ -24095,8 +24093,6 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
               <div className="dashboard-readiness-caption"><Gauge size={14}/> Exam readiness</div>
               <span>{readinessProfile.status==="ready"&&readiness!=null?`${readiness}%`:"—"}</span>
               <small role="status">{readinessProfile.status==="loading"?"Loading your progress…":readinessProfile.status==="error"?"Progress unavailable":readinessProfile.level}</small>
-              <small>80% · Exam ready</small>
-              <div className="dashboard-readiness-bar" aria-hidden="true"><span/></div>
             </div>
           </div>
           <button
