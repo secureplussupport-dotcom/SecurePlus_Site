@@ -25426,7 +25426,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
   if(done) return <McqSetResults correct={correctCount} total={questions.length} t={t}
     summary={buildMcqResultSummary({questions,results,chapters:CHAPTERS,engineState:!isGuest&&mcqEngineEnabled?engineState:{concept_streaks:Object.entries(localConceptStreaks).map(([concept_tag,wrong_streak])=>({concept_tag,wrong_streak}))},progressAvailable:!engineStateError})}
-    onStart={startQuiz} starting={engineBusy} startError={engineError}
+    onStart={()=>{setStarted(false);setDone(false);setFinishedReviewMode(false);setEngineError("");setModeInfo(null);window.scrollTo({top:0,behavior:"instant"});}}
     onReview={()=>reviewCompletedQuestion(0)} onOpenLesson={onOpenDeepDive}
     guestPrompt={isGuest?guestSignupPrompt:null} progressError={engineStateError} onRetryProgress={refreshEngineState}/>;
 
