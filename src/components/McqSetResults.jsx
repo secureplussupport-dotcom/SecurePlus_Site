@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import './McqSetResults.css';
 import { formatExamTime } from '../lib/mcqExam.js';
-import { ArrowRight, BookOpenCheck, ChevronDown, RotateCcw, Target, Trophy } from 'lucide-react';
+import { ArrowRight, BookOpenCheck, ChevronDown, RotateCcw, Target, Trophy, X } from 'lucide-react';
 
 export function McqSetResults({ correct, total, summary, t, onStart, onReview, onOpenLesson, guestPrompt, progressError, onRetryProgress, starting, startError, exam = null }) {
   const heading = useRef(null);
@@ -13,7 +13,7 @@ export function McqSetResults({ correct, total, summary, t, onStart, onReview, o
     heading.current?.closest('.mcq-set-results')?.scrollIntoView({ block: 'start', behavior: 'instant' });
   }, []);
   const openLesson = item => onOpenLesson?.(item.lesson.id, { source: 'mcq_set_result', conceptTag: item.tag });
-  return <div className="mcq-results-screen mcq-set-results" style={{ '--result-color': color, '--result-text': t.text, '--result-muted': t.textSec, '--result-border': t.border, '--result-surface': t.surface, '--result-accent': t.accent, '--result-green': t.green, '--result-red': t.red }}>
+  return <div className="mcq-results-screen mcq-set-results" style={{ '--result-color': color, '--result-text': t.text, '--result-muted': t.textSec, '--result-border': t.border, '--result-surface': t.surface, '--result-accent': t.accent, '--result-green': t.green, '--result-red': t.red, '--result-amber': t.amber }}>
     <section className="mcq-result-moment" aria-label={exam?"MCQ exam report":"MCQ set results"}>
       <div className="practice-result-kicker">{exam?'Exam complete':'Practice complete'}</div>
       <div className="mcq-animated-score" data-empty={percent === 0} role="img" aria-label={`${percent} percent. ${correct} of ${total} correct.`}>
@@ -57,12 +57,24 @@ export function McqSetResults({ correct, total, summary, t, onStart, onReview, o
     </section>}
 
     <section className={`mcq-next-focus ${summary.nextFocus.length ? 'has-focus' : ''}`} aria-labelledby="mcq-focus-heading">
-      <div className="mcq-focus-heading"><span><Target size={21}/></span><h3 id="mcq-focus-heading">YOUR NEXT FOCUS</h3></div>
-      {summary.nextFocus.length ? <>
-        <h4>A concept worth a closer look.</h4>
-        <p>You missed these concepts twice in a row, with no correct answer on the same concept in between. Take a short Deep Dive before your next set.</p>
-        <div className="mcq-focus-links">{summary.nextFocus.map(item => <button key={item.tag} className="mcq-focus-link" onClick={() => openLesson(item)}><span><small>CONCEPT DEEP DIVE</small><strong>#{item.tag}</strong><span>{item.lesson.title}</span></span><ArrowRight size={21}/></button>)}</div>
-      </> : <><h4>{summary.weakPoints.length ? 'Turn a miss into a stronger next answer.' : 'Give your recall a little space.'}</h4><p>{summary.weakPoints.length ? 'Review your answers and explore the weak points below. A concept-specific Deep Dive appears here after two consecutive misses on that concept.' : 'No weak points from this set need a lesson right now. Return for another set to check what sticks.'}</p></>}
+      <div className="mcq-focus-intro">
+        <div className="mcq-focus-heading"><span><Target size={19}/></span><h3 id="mcq-focus-heading">YOUR NEXT FOCUS</h3></div>
+        {summary.nextFocus.length ? <>
+          <h4>Break the repeat.<br/><em>Build the recall.</em></h4>
+          <p>Two misses in a row, with no correct answer in between. Revisit the idea before your next set.</p>
+          <div className="mcq-focus-pattern" role="img" aria-label="Two consecutive misses. Next step: a Concept Deep Dive.">
+            <span><i><X size={15}/></i><small>Miss</small></span><b aria-hidden="true"/>
+            <span><i><X size={15}/></i><small>Miss</small></span><b aria-hidden="true"/>
+            <span className="mcq-focus-pattern-next"><i><BookOpenCheck size={18}/></i><small>Revisit</small></span>
+          </div>
+        </> : <><h4>{summary.weakPoints.length ? 'Make the next answer click.' : 'Give your recall a little space.'}</h4><p>{summary.weakPoints.length ? 'Review your answers and explore the weak points below. A concept-specific Deep Dive appears here after two consecutive misses on that concept.' : 'No weak points from this set need a lesson right now. Return for another set to check what sticks.'}</p></>}
+      </div>
+      {summary.nextFocus.length>0&&<div className="mcq-focus-links">{summary.nextFocus.map((item,index) => <button key={item.tag} className="mcq-focus-link" style={{'--focus-tint':index%2?t.green:t.accent,'--focus-delay':`${Math.min(index,4)*45}ms`}} onClick={() => openLesson(item)} aria-label={`Open Deep Dive for ${item.tag}: ${item.lesson.title}`}>
+        <span className="mcq-focus-card-top"><span className="mcq-focus-book"><BookOpenCheck size={19}/></span><small>CONCEPT DEEP DIVE</small><span className="mcq-focus-card-number" aria-hidden="true">{String(index+1).padStart(2,'0')}</span></span>
+        <span className="mcq-focus-tag">#{item.tag}</span>
+        <span className="mcq-focus-lesson-title">{item.lesson.title}</span>
+        <span className="mcq-focus-card-footer"><span>Open Deep Dive</span><i><ArrowRight size={17}/></i></span>
+      </button>)}</div>}
       {progressError && <p className="mcq-progress-error" role="status">Mastery and repeat-miss history could not be refreshed. <button onClick={onRetryProgress}>Retry progress</button></p>}
     </section>
 
