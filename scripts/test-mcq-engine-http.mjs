@@ -79,3 +79,18 @@ test('browser projection binds option UUIDs and standalone option IDs match serv
   const shuffled = { ...raw, opts: ['B', 'A'], correct: 0, originalOptions: raw.opts, originalCorrect: 1, originalOptionIndexes: [1, 0] };
   assert.equal(await client.standaloneOptionId(shuffled, 0), optionId(raw, 1));
 });
+
+
+test('optional pacing is bounded, owner-bound and routed to atomic recording; invalid input never reaches RPC',async()=>{
+  const calls=[];
+  const client={auth:{getUser:async()=>({data:{user:{id:user}}})},rpc:async(name,args)=>{calls.push({name,args});return {data:{is_correct:true,elapsed_ms:args.p_elapsed_ms}};}};
+  const bank=effectiveCatalogue();const q=bank[0];
+  const handler=createMcqHandler({enabled:()=>true,admin:()=>client,catalogue:async()=>bank});
+  const body={event_id:id,question_id:q.id,selected_option_id:q.options[0].id,elapsed_ms:72000,user_id:id};
+  assert.equal((await invoke(handler,'answer',body)).status,200);
+  assert.equal(calls[0].name,'mcq_engine_answer_paced');assert.equal(calls[0].args.p_user_id,user);assert.equal(calls[0].args.p_elapsed_ms,72000);
+  for(const elapsed_ms of [-1,0.5,'12',86400001])assert.equal((await invoke(handler,'answer',{...body,elapsed_ms})).status,400);
+  assert.equal(calls.length,1);
+  const legacy={...body};delete legacy.elapsed_ms;
+  await invoke(handler,'answer',legacy);assert.equal(calls[1].name,'mcq_engine_answer');
+});

@@ -35,9 +35,9 @@ export async function standaloneOptionId(question, selectedIndex) {
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-5${hex.slice(13, 16)}-a${hex.slice(17, 20)}-${hex.slice(20, 32)}`;
 }
 
-export async function recordStandaloneMcq(question, selectedIndex) {
+export async function recordStandaloneMcq(question, selectedIndex, elapsedMs = null) {
   if (!mcqEngineEnabled || selectedIndex == null) return null;
   question.engineAnswerEventId ||= crypto.randomUUID();
   return mcqEngineRequest('answer', { event_id: question.engineAnswerEventId, question_id: question.id,
-    selected_option_id: await standaloneOptionId(question, selectedIndex) });
+    selected_option_id: await standaloneOptionId(question, selectedIndex), ...(elapsedMs == null ? {} : {elapsed_ms: elapsedMs}) });
 }

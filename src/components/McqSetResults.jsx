@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
 import './McqSetResults.css';
+import { pacingSummary, formatQuestionPace } from '../lib/mcqPacing.js';
 import { formatExamTime } from '../lib/mcqExam.js';
-import { ArrowRight, BookOpenCheck, ChevronDown, RotateCcw, Target, Trophy, X } from 'lucide-react';
+import { ArrowRight, BookOpenCheck, ChevronDown, RotateCcw, Target, Trophy, X, Clock3 } from 'lucide-react';
 
-export function McqSetResults({ correct, total, summary, t, onStart, onReview, onOpenLesson, guestPrompt, progressError, onRetryProgress, starting, startError, exam = null }) {
+export function McqSetResults({ correct, total, summary, t, onStart, onReview, onOpenLesson, guestPrompt, progressError, onRetryProgress, starting, startError, exam = null, questions = [], results = [] }) {
   const heading = useRef(null);
+  const pacing=pacingSummary(questions,results);
   const percent = total ? Math.round(correct / total * 100) : 0;
   const color = exam ? t.accent : percent >= 80 ? t.green : percent >= 50 ? t.amber : t.red;
   const colors = [t.accent, t.red, t.purple || '#8b5cf6', t.green, t.amber];
@@ -26,6 +28,7 @@ export function McqSetResults({ correct, total, summary, t, onStart, onReview, o
       <h2 ref={heading} tabIndex={-1}>{exam ? 'Your exam, mapped.' : percent >= 80 ? 'Strong work.' : percent >= 50 ? 'Good progress.' : 'A useful first pass.'}</h2>
       <p>{exam ? 'One timed run. A clearer picture of what to revisit. This is an accuracy snapshot, not a pass or fail.' : percent >= 80 ? 'You are showing solid recall across this set. Keep the momentum by spacing the next review.' : percent >= 50 ? 'You have a good base. Review your misses, then try a focused set while the ideas are fresh.' : 'Mistakes are useful data. Review the missed concepts now and they will become easier to recognise next time.'}</p>
       {exam&&<div className={`mcq-exam-time-result ${exam.elapsed>exam.permitted?'is-overtime':''}`}><span>Time taken</span><strong>{formatExamTime(exam.elapsed)}</strong><span>/ {formatExamTime(exam.permitted)} permitted</span>{exam.elapsed>exam.permitted&&<b>Overtime</b>}</div>}
+      {pacing.measured>0&&<div className="mcq-result-pace"><Clock3 size={15}/><span>Average pace</span><strong>{formatQuestionPace(pacing.averageMs)}</strong><span>per question</span>{pacing.measured<questions.length&&<small>({pacing.measured} of {questions.length} recorded)</small>}</div>}
       <div className="mcq-result-actions">
         {exam?<>
           <button className="btn btn-primary" onClick={onReview}><RotateCcw size={16}/> Review your answers</button>
@@ -88,6 +91,12 @@ export function McqSetResults({ correct, total, summary, t, onStart, onReview, o
         </li>)}</ul> : <div className="mcq-weak-empty">No weak points to revisit from this set.</div>}
       </div>
     </details>
+    {questions.length>0&&<details className="mcq-weak-points mcq-pacing-details">
+      <summary><span><Clock3 size={18}/> Pacing by question</span><ChevronDown size={18}/></summary>
+      <div className="mcq-weak-content"><p>Time viewing each question before marking, including revisits. Explanations and time with this page hidden are excluded. Pacing does not affect mastery or question selection.</p>
+        <ol className="mcq-pacing-list">{pacing.rows.map(row=><li key={row.id}><span>Question {row.number}</span><strong>{formatQuestionPace(row.elapsedMs)}</strong></li>)}</ol>
+      </div>
+    </details>}
     {guestPrompt && <div className="mcq-result-guest-save">{guestPrompt}</div>}
   </div>;
 }

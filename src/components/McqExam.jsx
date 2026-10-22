@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpenCheck, ChevronRight, Clock3, Flag, HelpCircle, ListChecks, RotateCcw, X } from 'lucide-react';
+import { useQuestionPacing } from '../lib/useQuestionPacing.js';
 import { McqSetResults } from './McqSetResults.jsx';
 import { advanceConceptStreak, buildMcqResultSummary } from '../lib/mcqResultSummary.js';
 import { examConceptTag, examTiming, formatExamTime } from '../lib/mcqExam.js';
@@ -63,10 +64,12 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
   const [localStreaks, setLocalStreaks] = useState(initialStreaks);
   const inFlight = useRef(false);
   const submissionTime = useRef(null);
+  const submissionPacing = useRef(null);
   const pressTimer = useRef(null);
   const longPressed = useRef(false);
   const cloudProgress = user?.authProvider === 'supabase' && mcqEngineEnabled;
   const q = questions[qi];
+  const pacing=useQuestionPacing(q?.id,isVisible&&view==='taking'&&!submissionLocked);
   const timing = examTiming(startedAt, finishedAt??submissionTime.current, questions.length, now);
   const answeredCount = Object.keys(answers).length;
   useEffect(()=>{
@@ -103,13 +106,15 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
     const flags=Object.values(flagged).filter(Boolean).length;
     if((unanswered||flags)&&!confirmed){setConfirmAction('submit');return;}
     setConfirmAction(null);
+    submissionPacing.current??=pacing.snapshot();
     inFlight.current=true;setSubmissionLocked(true);setMarking(true);setError('');const finish=submissionTime.current??Date.now();submissionTime.current=finish;
     try{
       const completed=[];
       for(let index=0;index<questions.length;index++){
         const question=questions[index];const selected=answers[index];
-        const evaluation=cloudProgress&&selected!=null?await recordStandaloneMcq(question,selected):null;
-        completed.push({qid:question.id,correct:evaluation?evaluation.is_correct:selected===question.correct,selected,
+        const elapsedMs=submissionPacing.current[question.id]==null?null:Math.min(86400000,submissionPacing.current[question.id]);
+        const evaluation=cloudProgress&&selected!=null?await recordStandaloneMcq(question,selected,elapsedMs):null;
+        completed.push({qid:question.id,elapsedMs:evaluation?.elapsed_ms??elapsedMs,correct:evaluation?evaluation.is_correct:selected===question.correct,selected,
           title:question.q.slice(0,80),ch:question.ch,topic:question.topic,conceptTag:evaluation?.concept_tag||examConceptTag(question),
           mcq:true,exam:true,createdAt:new Date(finish+index).toISOString()});
       }
@@ -125,10 +130,10 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
   const retake = ()=>{
     setConfirmAction(null);
     setQuestions(previous=>freshQuestions(previous));setAnswers({});setEliminated({});setFlagged({});setRows([]);setQi(0);
-    submissionTime.current=null;setStartedAt(Date.now());setNow(Date.now());setFinishedAt(null);setError('');setSubmissionLocked(false);setView('taking');
+    pacing.reset({});submissionPacing.current=null;submissionTime.current=null;setStartedAt(Date.now());setNow(Date.now());setFinishedAt(null);setError('');setSubmissionLocked(false);setView('taking');
     window.scrollTo({top:0,behavior:'instant'});
   };
-  if(view==='report')return <McqSetResults correct={rows.filter(row=>row.correct).length} total={questions.length} t={t}
+  if(view==='report')return <McqSetResults questions={questions} results={rows} correct={rows.filter(row=>row.correct).length} total={questions.length} t={t}
     summary={buildMcqResultSummary({questions,results:rows,chapters,engineState:cloudProgress?engineState:{concept_streaks:Object.entries(localStreaks).map(([concept_tag,wrong_streak])=>({concept_tag,wrong_streak}))},progressAvailable:!progressError})}
     onStart={onReturn} onReview={()=>{setQi(0);setView('review');window.scrollTo({top:0,behavior:'instant'});}}
     onOpenLesson={onOpenDeepDive} progressError={progressError} onRetryProgress={refreshProgress}

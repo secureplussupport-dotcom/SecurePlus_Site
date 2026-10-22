@@ -13,7 +13,8 @@ await db.exec(`create role anon;create role authenticated;create role service_ro
   create schema auth;create table auth.users(id uuid primary key);insert into auth.users values('${userId}');`);
 await db.exec(readFileSync('supabase/migrations/20261019163949_mcq_three_deck_engine.sql', 'utf8'));
 await db.exec(readFileSync('supabase/migrations/20261021163006_mcq_result_concept_streaks.sql', 'utf8'));
-const allowed = new Set(['mcq_engine_state', 'mcq_engine_create_session', 'mcq_engine_answer', 'mcq_engine_session']);
+await db.exec(readFileSync('supabase/migrations/20261022030000_mcq_question_pacing.sql','utf8'));
+const allowed = new Set(['mcq_engine_answer_paced','mcq_engine_state', 'mcq_engine_create_session', 'mcq_engine_answer', 'mcq_engine_session']);
 const client = { auth: { getUser: async token => ({ data: { user: token === 'disposable-local-preview' ? { id: userId } : null } }) },
   rpc: async (name, args) => {
     if (!allowed.has(name)) throw new Error('Unknown local RPC');

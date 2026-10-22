@@ -6,6 +6,7 @@ import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from ".
 import { CONCEPT_TAGS, MCQ_TAGGING_VERSION, inferMcqConceptTagIds, searchMcqConceptTags } from "./data/sy0701ConceptTags.js";
 import { McqExam, ExamModeGuide, examThemeVars } from "./components/McqExam.jsx";
 import { buildMcqExam, formatExamTime, EXAM_SECONDS_PER_QUESTION } from "./lib/mcqExam.js";
+import { useQuestionPacing } from "./lib/useQuestionPacing.js";
 import { McqSetResults } from "./components/McqSetResults.jsx";
 import { buildMcqResultSummary, advanceConceptStreak } from "./lib/mcqResultSummary.js";
 import { effectiveMcqConceptTagIds } from "./lib/mcqConceptReview.js";
@@ -25030,6 +25031,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [engineStateError,setEngineStateError]=useState(false);
   const [localConceptStreaks,setLocalConceptStreaks]=useState({});
   const [engineBusy,setEngineBusy]=useState(false);
+  const pacing=useQuestionPacing(questions[qi]?.id, isVisible&&started&&!done&&!finishedReviewMode&&!submitted&&!engineBusy);
   const answerInFlight=useRef(false);
   const answerEvents=useRef(new Map());
   const refreshEngineState=useCallback(()=>{
@@ -25108,7 +25110,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       const pool=plan.questions.map(q=>practiceQuestion(q,plan.session_id));
       setExamQuestions(null);setExamMode(false);
       setSessionContext({kind:"smart",label:"Smart Review",engineSessionId:plan.session_id});
-      setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
+      pacing.reset({});setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
       answerEvents.current.clear();
       capture("mcq_quiz_started",{review_mode:"three_deck",question_count:pool.length,tier:user.tier});
     }catch(error){setEngineError(error.message);}finally{setEngineBusy(false);}
@@ -25120,7 +25122,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     const pool=buildMcqPracticePool(filtered,attempts,Math.min(quizCount,filtered.length)).map(shuffleMcqOptions);
     capture("mcq_quiz_started",{review_mode:"random",question_count:pool.length,tier:user.tier});
     setSessionContext({kind:"random",label:"MCQ Practice"});
-    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());
+    pacing.reset({});setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());
   };
   const startMissedQuiz=()=>startEngineQuiz({},quizCount);
   const startChapterSmartReview=useCallback((chapterId,requestedCount=10)=>{
@@ -25132,7 +25134,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     const pool=buildMcqPracticePool(starredMcqs,attempts,Math.min(30,starredMcqs.length)).map(shuffleMcqOptions);
     capture("mcq_starred_review_started", { question_count: pool.length, tier: user.tier });
     setSessionContext({kind:"starred",label:"Starred-question review"});
-    setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
+    pacing.reset({});setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
   };
 
   useEffect(()=>{
@@ -25152,7 +25154,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   useEffect(()=>{
     if(isGuest)return;
     if(!started||done||finishedReviewMode||!questions.length)return;
-    DB.savePracticeSession(sessionKey,{questions,qi,selected,submitted,draftSelections,results,sessionContext,done:false,updatedAt:new Date().toISOString()});
+    DB.savePracticeSession(sessionKey,{questions,qi,selected,submitted,draftSelections,results,sessionContext,pacingMs:pacing.snapshot(),done:false,updatedAt:new Date().toISOString()});
   },[isGuest,sessionKey,started,done,finishedReviewMode,questions,qi,selected,submitted,draftSelections,results,sessionContext]);
 
   const continueQuiz=async()=>{
@@ -25168,12 +25170,13 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           if(i<0)continue;
           const evaluation=answer.response;
           saved.questions[i]={...saved.questions[i],correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:{[answer.selected_option_id]:evaluation.selected_feedback}};
-          saved.results[i]={qid:answer.question_id,correct:evaluation.is_correct,selected:answer.selected_option_id,mcq:true,ch:saved.questions[i].ch,conceptTag:evaluation.concept_tag};
+          saved.results[i]={qid:answer.question_id,correct:evaluation.is_correct,selected:answer.selected_option_id,mcq:true,ch:saved.questions[i].ch,conceptTag:evaluation.concept_tag,elapsedMs:evaluation.elapsed_ms??null};
         }
         saved.submitted=Boolean(saved.results[saved.qi||0]);
         if(saved.submitted)saved.selected=saved.results[saved.qi||0].selected;
       }catch(error){setEngineError(error.message);return;}
     }
+    pacing.reset(saved.pacingMs||Object.fromEntries((saved.results||[]).filter(row=>row?.elapsedMs!=null).map(row=>[row.qid,row.elapsedMs])));
     setQuestions(saved.questions);
     setQi(saved.qi||0);
     setSelected(saved.selected ?? saved.draftSelections?.[saved.qi||0] ?? null);
@@ -25229,17 +25232,18 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
 
   const submitQ=async()=>{
     if(selected===null||results[qi]||answerInFlight.current)return;
+    const elapsedMs=Math.min(86400000,pacing.snapshot()[current.id]??0);
     answerInFlight.current=true;setEngineBusy(true);setEngineError("");
     try{
       let evaluation=null;
       if(current.engineSessionId){
         const event=answerEvents.current.get(current.id)||crypto.randomUUID();
         answerEvents.current.set(current.id,event);
-        evaluation=await mcqEngineRequest("answer",{session_id:current.engineSessionId,event_id:event,question_id:current.id,selected_option_id:selected});
+        evaluation=await mcqEngineRequest("answer",{session_id:current.engineSessionId,event_id:event,question_id:current.id,selected_option_id:selected,elapsed_ms:elapsedMs});
         setQuestions(prev=>prev.map((q,i)=>i===qi?{...q,correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:{[selected]:evaluation.selected_feedback}}:q));
-      }else if(!isGuest){evaluation=await recordStandaloneMcq(current,selected);}
+      }else if(!isGuest){evaluation=await recordStandaloneMcq(current,selected,elapsedMs);}
       const correct=evaluation?evaluation.is_correct:selected===current.correct;
-      const r={qid:current.id,correct,selected,conceptTag:evaluation?.concept_tag||current.conceptTagIds?.[0],title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",topic:current.topic,difficulty:current.difficulty,mcq:true,createdAt:new Date().toISOString()};
+      const r={qid:current.id,correct,selected,elapsedMs:evaluation?.elapsed_ms??elapsedMs,conceptTag:evaluation?.concept_tag||current.conceptTagIds?.[0],title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",topic:current.topic,difficulty:current.difficulty,mcq:true,createdAt:new Date().toISOString()};
       capture("mcq_question_answered",{question_id:current.id,chapter:current.ch,correct,tier:user.tier});
       setResults(rs=>{const next=[...rs];next[qi]=r;return next;});
       setLocalConceptStreaks(streaks=>advanceConceptStreak(streaks,r.conceptTag,correct));
@@ -25482,7 +25486,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     </div>
   );
 
-  if(done) return <McqSetResults correct={correctCount} total={questions.length} t={t}
+  if(done) return <McqSetResults questions={questions} results={results} correct={correctCount} total={questions.length} t={t}
     summary={buildMcqResultSummary({questions,results,chapters:CHAPTERS,engineState:!isGuest&&mcqEngineEnabled?engineState:{concept_streaks:Object.entries(localConceptStreaks).map(([concept_tag,wrong_streak])=>({concept_tag,wrong_streak}))},progressAvailable:!engineStateError})}
     onStart={()=>{setStarted(false);setDone(false);setFinishedReviewMode(false);setEngineError("");setModeInfo(null);window.scrollTo({top:0,behavior:"instant"});}}
     onReview={()=>reviewCompletedQuestion(0)} onOpenLesson={onOpenDeepDive}

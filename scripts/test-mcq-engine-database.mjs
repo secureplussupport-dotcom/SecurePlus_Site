@@ -10,6 +10,7 @@ await db.exec(`create role anon; create role authenticated; create role service_
   insert into auth.users values('00000000-0000-4000-8000-000000000001'),('00000000-0000-4000-8000-000000000002');`);
 await db.exec(readFileSync('supabase/migrations/20261019163949_mcq_three_deck_engine.sql', 'utf8'));
 await db.exec(readFileSync('supabase/migrations/20261021163006_mcq_result_concept_streaks.sql', 'utf8'));
+await db.exec(readFileSync('supabase/migrations/20261022030000_mcq_question_pacing.sql','utf8'));
 const user = '00000000-0000-4000-8000-000000000001', other = '00000000-0000-4000-8000-000000000002';
 const sid = '00000000-0000-4000-8000-000000000010', good = '00000000-0000-4000-8000-000000000020', bad = '00000000-0000-4000-8000-000000000021';
 const questions = Array.from({ length: 40 }, (_, i) => ({ id: `m${i}`, format: 'mcq', concept_tag: 'risk.bia-rto-rpo', options: [{ id: good, text: 'yes', is_correct: true }, { id: bad, text: 'no', is_correct: false }], explanation: 'Why' }));
@@ -100,5 +101,34 @@ assert.equal((await state(other)).concept_streaks.find(row=>row.concept_tag==='o
 const beforeReplay=await state(other);
 await scalar('select public.mcq_engine_answer($1,$2,$3,$4,$5,null)',[other,event,crossSession,'m0',bad]);
 assert.deepEqual(await state(other),beforeReplay);
+
+// Pacing is descriptive, atomic and immutable on retries; scoring is identical.
+const paceEvent=randomUUID();
+const pacedArgs=[user,paceEvent,null,'m0',good,JSON.stringify(questions[0]),72000];
+const scoreBefore=(await state(user)).mastery.find(r=>r.concept_tag==='risk.bia-rto-rpo').score;
+const paced=await scalar('select public.mcq_engine_answer_paced($1,$2,$3,$4,$5,$6,$7)',pacedArgs);
+assert.equal(paced.elapsed_ms,72000);assert.equal(paced.concept_score,Math.min(100,scoreBefore+20));
+const paceState=await state(user);
+assert.deepEqual(await scalar('select public.mcq_engine_answer_paced($1,$2,$3,$4,$5,$6,$7)',[...pacedArgs.slice(0,6),1000]),paced);
+assert.deepEqual(await state(user),paceState);
+assert.equal((await scalar('select public.mcq_engine_answer($1,$2,$3,$4,$5,$6)',pacedArgs.slice(0,6))).elapsed_ms,72000);
+const historical=await scalar('select public.mcq_engine_answer_paced($1,$2,$3,$4,$5,$6,$7)',[other,event,crossSession,'m0',bad,null,1000]);
+assert.equal(historical.elapsed_ms,undefined); // No invented backfill on legacy events.
+await assert.rejects(scalar('select public.mcq_engine_answer_paced($1,$2,$3,$4,$5,$6,$7)',[user,randomUUID(),null,'m0',good,JSON.stringify(questions[0]),-1]),/Invalid question pacing/);
+assert.deepEqual(await state(user),paceState);
+for(const role of ['anon','authenticated']){
+  await db.exec(`set role ${role}`);
+  await assert.rejects(scalar('select public.mcq_engine_answer_paced($1,$2,$3,$4,$5,$6,$7)',pacedArgs),/permission denied/);
+  await db.exec('reset role');
+}
+const pacedSessionEvent=randomUUID();
+const pacedSession=await scalar('select public.mcq_engine_answer_paced($1,$2,$3,$4,$5,$6,$7)',[user,pacedSessionEvent,sid,'m9',bad,null,32500]);
+assert.equal(pacedSession.elapsed_ms,32500);
+const resumedPacing=await scalar('select public.mcq_engine_session($1,$2)',[user,sid]);
+assert.equal(resumedPacing.answers.find(row=>row.question_id==='m9').response.elapsed_ms,32500);
+const pacingReplayState=await state(user);
+assert.equal((await scalar('select public.mcq_engine_answer_paced($1,$2,$3,$4,$5,$6,$7)',[user,randomUUID(),sid,'m9',bad,null,1000])).elapsed_ms,32500);
+assert.deepEqual(await state(user),pacingReplayState);
+console.log('PASS pacing: exact elapsed storage, unchanged scores, replay immutability, legacy unknowns, invalid rollback, service-only grants.');
 await db.close();
 console.log('PASS disposable PostgreSQL: migration, scores, 30-answer delay, idempotency, rollback, owner isolation, stale plan rejection, snapshot grading, RLS/grants.');

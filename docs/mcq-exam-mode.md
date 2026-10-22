@@ -12,3 +12,9 @@ Exam mode lives in MCQ practice. Legacy Exam links open this setup with the togg
 - Review is the primary CTA. Retake keeps the questions, clears answers/flags and restarts the clock with new answer event IDs. Another exam returns to setup with mode/count retained in component memory only. Reload resets setup. Only guide completion is remembered in local storage.
 
 Validation: focused selection/timing tests against fixtures and the effective catalogue; existing HTTP/SQL grading, idempotency and access-isolation suites; browser checks of free/Pro controls, guide, submission, report, definitions, retake, return state and responsive layout. Local test account data is disposable and does not establish live learner coverage.
+
+## Question pacing
+
+Practice and exams accumulate foreground viewing time per question, including revisits. Feedback/answer review, grading latency, hidden browser pages and time in other app views are excluded. Exam wall-clock time still includes breaks and can exceed the sum of viewing times. Retakes reset the stopwatch. Saved practice restores captured viewing times; historical/unvisited questions without measurements are shown as “Not recorded,” never fabricated as zero. Reports show mean measured pace and a collapsed per-question breakdown.
+
+The optional `elapsed_ms` answer field is validated as an integer from 0 through 86,400,000 (24 hours). The service-only `mcq_engine_answer_paced` RPC calls existing grading in the same transaction and stores the measurement inside the private history response. First submission wins across retries; legacy events stay unmeasured. Pacing is descriptive only and does not alter mastery, cooldowns, or question selection. PBQs are excluded.
