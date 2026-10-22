@@ -25101,7 +25101,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         const event=answerEvents.current.get(current.id)||crypto.randomUUID();
         answerEvents.current.set(current.id,event);
         evaluation=await mcqEngineRequest("answer",{session_id:current.engineSessionId,event_id:event,question_id:current.id,selected_option_id:selected,elapsed_ms:elapsedMs,practice_source:"mcq-set"});
-        setQuestions(prev=>prev.map((q,i)=>i===qi?{...q,correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:{[selected]:evaluation.selected_feedback}}:q));
+        setQuestions(prev=>{
+          const updated=evaluation.session_questions?.map(q=>({...prev.find(old=>old.id===q.id),...practiceQuestion(q,current.engineSessionId)})) || prev;
+          return updated.map(q=>q.id===current.id?{...q,correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:{[selected]:evaluation.selected_feedback}}:q);
+        });
+        if(evaluation.session_questions)setDraftSelections(prev=>evaluation.session_questions.map((q,i)=>questions[i]?.id===q.id?prev[i]??null:null));
       }else if(!isGuest){evaluation=await recordStandaloneMcq(current,selected,elapsedMs,"mcq-set");}
       const correct=evaluation?evaluation.is_correct:selected===current.correct;
       const r={readinessSource:"mcq-set",qid:current.id,correct,selected,elapsedMs:evaluation?.elapsed_ms??elapsedMs,conceptTag:evaluation?.concept_tag||current.conceptTagIds?.[0],title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",topic:current.topic,difficulty:current.difficulty,mcq:true,createdAt:new Date().toISOString()};

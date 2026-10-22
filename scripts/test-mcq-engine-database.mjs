@@ -12,6 +12,7 @@ await db.exec(readFileSync('supabase/migrations/20261019163949_mcq_three_deck_en
 await db.exec(readFileSync('supabase/migrations/20261021163006_mcq_result_concept_streaks.sql', 'utf8'));
 await db.exec(readFileSync('supabase/migrations/20261022030000_mcq_question_pacing.sql','utf8'));
 await db.exec(readFileSync('supabase/migrations/20261022060000_mcq_exam_readiness.sql','utf8'));
+await db.exec(readFileSync('supabase/migrations/20261022090000_mcq_core_recovery.sql','utf8'));
 const user = '00000000-0000-4000-8000-000000000001', other = '00000000-0000-4000-8000-000000000002';
 const sid = '00000000-0000-4000-8000-000000000010', good = '00000000-0000-4000-8000-000000000020', bad = '00000000-0000-4000-8000-000000000021';
 const questions = Array.from({ length: 40 }, (_, i) => ({ id: `m${i}`, format: 'mcq', concept_tag: 'risk.bia-rto-rpo', options: [{ id: good, text: 'yes', is_correct: true }, { id: bad, text: 'no', is_correct: false }], explanation: 'Why' }));
@@ -171,5 +172,58 @@ actor=readinessUser;
 const apiReadiness=await call('readiness',{user_id:user});assert.equal(apiReadiness.status,200);assert.deepEqual(apiReadiness.output,await readiness());
 actor=other;assert.notDeepEqual((await call('readiness',{user_id:readinessUser})).output,await readiness());
 console.log('PASS readiness: scoped mastery replay, chapter evidence, legacy exclusion, owned legacy sets, immutable source, auth ownership and restricted grants.');
+
+// A streak formed inside a pinned set changes only the next encounter with that tag.
+const recoveryUser='00000000-0000-4000-8000-000000000004';
+await db.query('insert into auth.users values($1)',[recoveryUser]);
+actor=recoveryUser;
+const recoveryQuestions=Array.from({length:10},(_,i)=>({...questions[i],id:`mrecovery${i}`,concept_tag:i<3?'recover':'other',chapter:'1',topic:'Recovery test',difficulty:'applied',practice_filters:{chapter:'1'}}));
+const core={...recoveryQuestions[2],id:'mrecoverycore',difficulty:'core'};
+const recoverySid=randomUUID();
+await scalar('select public.mcq_engine_create_session($1,$2,0,$3)',[recoveryUser,recoverySid,JSON.stringify(recoveryQuestions)]);
+const recoveryHandler=createMcqHandler({enabled:()=>true,admin:()=>service,catalogue:async()=>[...recoveryQuestions,core]});
+const recoveryCall=async(question,index,sessionId=recoverySid)=>{
+  let output;const res={setHeader(){},end(value){output=JSON.parse(value);}};
+  const request={event_id:randomUUID(),session_id:sessionId,question_id:question.id,selected_option_id:index?good:bad,practice_source:'mcq-set'};
+  await recoveryHandler({method:'POST',headers:{authorization:'Bearer test','content-type':'application/json'},query:{operation:'answer'},body:request},res);
+  assert.equal(res.statusCode,200);return {output,request};
+};
+const firstMiss=await recoveryCall(recoveryQuestions[0],0);
+assert.equal(firstMiss.output.session_questions[2].difficulty,'applied');
+const secondMiss=await recoveryCall(recoveryQuestions[1],0);
+assert.equal(secondMiss.output.session_questions[2].id,core.id);
+assert.equal(secondMiss.output.session_questions[2].difficulty,'core');
+assert.equal(secondMiss.output.session_questions.length,10);
+assert(!JSON.stringify(secondMiss.output.session_questions).includes('is_correct'));
+assert(!JSON.stringify(secondMiss.output.session_questions).includes('explanation'));
+const recoveredPlan=await scalar('select public.mcq_engine_session($1,$2)',[recoveryUser,recoverySid]);
+assert.deepEqual(recoveredPlan.questions.slice(0,2),recoveryQuestions.slice(0,2));
+assert.equal(recoveredPlan.questions[2].id,core.id);
+// A lost response returns the already-updated plan without grading twice.
+let replayOutput;const replayRes={setHeader(){},end(value){replayOutput=JSON.parse(value);}};
+const recoveryVersion=(await state(recoveryUser)).version;
+await recoveryHandler({method:'POST',headers:{authorization:'Bearer test','content-type':'application/json'},query:{operation:'answer'},body:secondMiss.request},replayRes);
+assert.deepEqual(replayOutput,secondMiss.output);assert.equal((await state(recoveryUser)).version,recoveryVersion);
+await recoveryCall(core,1);
+assert.equal((await state(recoveryUser)).concept_streaks.find(s=>s.concept_tag==='recover').wrong_streak,0);
+const finalPlan=await scalar('select public.mcq_engine_session($1,$2)',[recoveryUser,recoverySid]);
+const replace=(qs,i,q)=>qs.map((old,index)=>index===i?q:old);
+await assert.rejects(scalar('select public.mcq_engine_recover_session($1,$2,$3,$4)',[recoveryUser,recoverySid,(await state(recoveryUser)).version,JSON.stringify(replace(finalPlan.questions,0,{...recoveryQuestions[0],prompt:'changed'}))]),/immutable/);
+assert.equal(await scalar('select public.mcq_engine_recover_session($1,$2,$3,$4)',[other,recoverySid,(await state(other)).version,JSON.stringify(finalPlan.questions)]),false);
+assert.equal(await scalar('select public.mcq_engine_recover_session($1,$2,-1,$3)',[recoveryUser,recoverySid,JSON.stringify(finalPlan.questions)]),false);
+for(const role of ['anon','authenticated']){
+  await db.exec(`set role ${role}`);
+  await assert.rejects(scalar('select public.mcq_engine_recover_session($1,$2,0,$3)',[recoveryUser,recoverySid,JSON.stringify(finalPlan.questions)]),/permission denied/);
+  await db.exec('reset role');
+}
+// Skipping around the set must recover the next forward encounter, not an earlier slot.
+const jumpedSid=randomUUID();
+const jumpedQuestions=recoveryQuestions.map((q,i)=>({...q,concept_tag:i<5?'recover':'other'}));
+await scalar('select public.mcq_engine_create_session($1,$2,$3,$4)',[recoveryUser,jumpedSid,(await state(recoveryUser)).version,JSON.stringify(jumpedQuestions)]);
+await recoveryCall(jumpedQuestions[1],0,jumpedSid);
+const jumped=await recoveryCall(jumpedQuestions[3],0,jumpedSid);
+assert.equal(jumped.output.session_questions[4].difficulty,'core');
+assert.equal(jumped.output.session_questions[0].difficulty,'applied');
+console.log('PASS Core recovery: live-session second miss, Core substitution, source snapshots, resumed plan, retry idempotence, correct reset, stale/foreign rejection and grants.');
 await db.close();
 console.log('PASS disposable PostgreSQL: migration, scores, 30-answer delay, idempotency, rollback, owner isolation, stale plan rejection, snapshot grading, RLS/grants.');

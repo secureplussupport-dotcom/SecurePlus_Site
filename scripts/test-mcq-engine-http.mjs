@@ -55,6 +55,8 @@ test('generation retries state races; errors fail closed rather than reverting t
 test('answer submission delegates grading to the transaction with a pinned session', async () => {
   let args;
   const client = { auth: { getUser: async () => ({ data: { user: { id: user } } }) }, rpc: async (name, payload) => {
+    if(name==='mcq_engine_state')return {data:state};
+    if(name==='mcq_engine_session')return {data:{questions:[],answers:[]}};
     assert.equal(name, 'mcq_engine_answer'); args = payload;
     return { data: { is_correct: true, correct_option_id: id, explanation: 'After answer only.' } };
   } };

@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { getBearerToken, getJsonBody, getSupabaseAdmin, json, requireJsonContentType } from '../../api/_utils.js';
-import { ENGINE_VERSION, EngineError, generateSet, learnerQuestion } from './engine.mjs';
+import { ENGINE_VERSION, EngineError, generateSet, learnerQuestion, prioritizeCoreRecovery } from './engine.mjs';
 import { loadCatalogue } from './catalogue.mjs';
 import { normalizeMcqDifficulty, MCQ_DIFFICULTIES } from '../../src/lib/mcqDifficulty.js';
 
@@ -13,6 +13,33 @@ async function rpc(client, name, args) {
     throw new EngineError('MCQ progress could not be saved. Please retry.', 503);
   }
   return data;
+}
+
+// Reconcile pending questions after grading, including retries of a lost response.
+async function recoverPendingQuestions(client, userId, sessionId, currentQuestionId, catalogue) {
+  for(let attempt=0;attempt<3;attempt++) {
+    const state=await rpc(client,'mcq_engine_state',{p_user_id:userId});
+    const plan=await rpc(client,'mcq_engine_session',{p_user_id:userId,p_session_id:sessionId});
+    if(!plan)throw new EngineError('Saved set not found.',404);
+    const answered=new Set(plan.answers.map(row=>row.question_id));
+    const currentIndex=plan.questions.findIndex(q=>q.id===currentQuestionId);
+    const pendingIndexes=plan.questions.map((q,i)=>i).filter(i=>!answered.has(plan.questions[i].id))
+      .sort((a,b)=>Number(a<=currentIndex)-Number(b<=currentIndex) || a-b);
+    const pending=pendingIndexes.map(i=>plan.questions[i]);
+    if(!pending.some(q=>(state.concept_streaks || []).some(s=>s.concept_tag===q.concept_tag && s.wrong_streak>=2)))return plan.questions;
+    const common=key=>new Set(plan.questions.map(q=>q[key])).size===1?plan.questions[0]?.[key]:undefined;
+    const filters=plan.questions[0]?.practice_filters || {chapter:common('chapter'),topic:common('topic'),difficulty:common('difficulty')};
+    const bank=(await catalogue(client)).filter(q=>q.concept_tag && !answered.has(q.id) &&
+      (!filters.chapter || q.chapter===filters.chapter) &&
+      (!filters.topic || q.topic===filters.topic) &&
+      (!filters.difficulty || normalizeMcqDifficulty(q.difficulty)===normalizeMcqDifficulty(filters.difficulty)));
+    const recovered=prioritizeCoreRecovery(pending,bank,state);
+    const replacements=new Map(pendingIndexes.map((slot,i)=>[slot,recovered[i]]));
+    const questions=plan.questions.map((q,i)=>replacements.get(i) || q);
+    if(JSON.stringify(questions)===JSON.stringify(plan.questions))return questions;
+    if(await rpc(client,'mcq_engine_recover_session',{p_user_id:userId,p_session_id:sessionId,p_version:state.version,p_questions:questions}))return questions;
+  }
+  throw new EngineError('Progress changed while preparing Core recovery. Please retry.',409);
 }
 
 export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => process.env.MCQ_ENGINE_ENABLED === 'true', catalogue = loadCatalogue } = {}) {
@@ -50,7 +77,7 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
           (!filters.chapter || q.chapter === filters.chapter) && (!difficulty || normalizeMcqDifficulty(q.difficulty) === difficulty) && (!filters.topic || q.topic === filters.topic));
         for (let attempt = 0; attempt < 3; attempt++) {
           const state = await rpc(client, 'mcq_engine_state', { p_user_id: userId });
-          const questions = generateSet(bank, state, count);
+          const questions = generateSet(bank, state, count).map(q=>({...q,practice_filters:filters}));
           const id = randomUUID();
           if (await rpc(client, 'mcq_engine_create_session', { p_user_id: userId, p_session_id: id, p_version: state.version, p_questions: questions })) {
             return json(res, 200, { session_id: id, version: ENGINE_VERSION, questions: questions.map(learnerQuestion) });
@@ -68,8 +95,10 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
           standalone = (await catalogue(client)).find(q => q.id === body.question_id);
           if (!standalone) throw new EngineError('This MCQ is unavailable.', 404);
         }
-        return json(res, 200, await rpc(client, body.practice_source != null ? 'mcq_engine_answer_sourced' : body.elapsed_ms == null ? 'mcq_engine_answer' : 'mcq_engine_answer_paced', { p_user_id: userId, p_event_id: body.event_id,
-          p_session_id: body.session_id || null, p_question_id: body.question_id, p_option_id: body.selected_option_id, p_standalone: standalone, ...(body.practice_source != null ? { p_elapsed_ms: body.elapsed_ms ?? null, p_source: body.practice_source } : body.elapsed_ms == null ? {} : { p_elapsed_ms: body.elapsed_ms }) }));
+        const evaluation = await rpc(client, body.practice_source != null ? 'mcq_engine_answer_sourced' : body.elapsed_ms == null ? 'mcq_engine_answer' : 'mcq_engine_answer_paced', { p_user_id: userId, p_event_id: body.event_id,
+          p_session_id: body.session_id || null, p_question_id: body.question_id, p_option_id: body.selected_option_id, p_standalone: standalone, ...(body.practice_source != null ? { p_elapsed_ms: body.elapsed_ms ?? null, p_source: body.practice_source } : body.elapsed_ms == null ? {} : { p_elapsed_ms: body.elapsed_ms }) });
+        if(body.session_id)evaluation.session_questions=(await recoverPendingQuestions(client,userId,body.session_id,body.question_id,catalogue)).map(learnerQuestion);
+        return json(res,200,evaluation);
       }
       return json(res, 404, { error: 'MCQ endpoint not found.' });
     } catch (error) {

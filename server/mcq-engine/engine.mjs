@@ -15,6 +15,25 @@ export function fisherYates(values, random = Math.random) {
   return result;
 }
 
+// Recovery changes the next encounter with the concept, not its mastery score.
+export function prioritizeCoreRecovery(planned, bank, state, random = Math.random) {
+  const result=[...planned];
+  const failed=new Map(state.failed.map(row=>[row.question_id,row]));
+  const seen=new Set(state.history.map(row=>row.question_id));
+  for(const {concept_tag,wrong_streak} of state.concept_streaks || []) {
+    if(wrong_streak<2)continue;
+    const first=result.findIndex(q=>q.concept_tag===concept_tag);
+    if(first<0 || normalizeMcqDifficulty(result[first].difficulty)==='core')continue;
+    const existing=result.findIndex(q=>q.concept_tag===concept_tag && normalizeMcqDifficulty(q.difficulty)==='core');
+    if(existing>=0){[result[first],result[existing]]=[result[existing],result[first]];continue;}
+    const core=bank.filter(q=>!result.some(selected=>selected.id===q.id) && q.concept_tag===concept_tag && normalizeMcqDifficulty(q.difficulty)==='core' &&
+      (!failed.has(q.id) || failed.get(q.id).cooldown_counter<=0))
+      .sort((a,b)=>Number(seen.has(a.id))-Number(seen.has(b.id)) || a.id.localeCompare(b.id))[0];
+    if(core)result[first]={...core,options:fisherYates(core.options,random),deck:2,practice_filters:result[first].practice_filters};
+  }
+  return result;
+}
+
 export function generateSet(bank, state, count, random = Math.random) {
   if (!Number.isInteger(count) || count < 10 || count > 30) throw new EngineError('Choose 10–30 questions.');
   const questions = new Map(bank.map(q => [q.id, q]));
@@ -47,7 +66,7 @@ export function generateSet(bank, state, count, random = Math.random) {
     .sort((a, b) => score(a) - score(b) || seen.get(a.id).localeCompare(seen.get(b.id)) || a.id.localeCompare(b.id));
   take(fallback, count - selected.length, 3);
   if (selected.length !== count) throw new EngineError(`Only ${selected.length} eligible MCQs are available. Broaden your filters or finish another set while missed questions cool down.`, 409);
-  return fisherYates(selected, random).map(q => ({ ...q, options: fisherYates(q.options, random) }));
+  return prioritizeCoreRecovery(fisherYates(selected, random),bank,state,random).map(q => ({ ...q, options: fisherYates(q.options, random) }));
 }
 
 export function learnerQuestion(q) {

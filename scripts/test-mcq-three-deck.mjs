@@ -49,3 +49,22 @@ test('PBQs and duplicate catalogue IDs are rejected', () => {
   assert.throws(() => generateSet([...bank, { ...question('p001'), format: 'pbq' }], empty(), 10));
   assert.throws(() => generateSet([...bank, bank[0]], empty(), 10));
 });
+
+test('after two concept misses, its next selected question is Core when eligible Core exists',()=>{
+  const recoveryBank=bank.map((q,i)=>({...q,difficulty:i===39?'core':'applied'}));
+  const state={...empty(),mastery:[{concept_tag:'a',score:0}],concept_streaks:[{concept_tag:'a',wrong_streak:2}]};
+  const random=seeded();
+  for(let i=0;i<20;i++){
+    const set=generateSet(recoveryBank,state,10,random);
+    assert.equal(set.find(q=>q.concept_tag==='a').difficulty,'core');
+    assert.equal(set.length,10);assert.equal(new Set(set.map(q=>q.id)).size,10);
+  }
+});
+test('Core recovery respects cooldown, falls back if unavailable and never triggers after one miss',()=>{
+  const recoveryBank=bank.map((q,i)=>({...q,difficulty:i===39?'easy':'applied'}));
+  const state={...empty(),mastery:[{concept_tag:'a',score:0}],concept_streaks:[{concept_tag:'a',wrong_streak:2}],failed:[{question_id:'m039',cooldown_counter:1,created_at:'2026-01-01'}]};
+  assert(!generateSet(recoveryBank,state,10,seeded()).some(q=>q.id==='m039'));
+  assert.equal(generateSet(recoveryBank.map(q=>({...q,difficulty:'applied'})),state,10,seeded()).length,10);
+  const base={...state,failed:[],concept_streaks:[{concept_tag:'a',wrong_streak:1}]};
+  assert.deepEqual(generateSet(recoveryBank,base,10,seeded()),generateSet(recoveryBank,{...base,concept_streaks:[]},10,seeded()));
+});

@@ -15,7 +15,8 @@ await db.exec(readFileSync('supabase/migrations/20261019163949_mcq_three_deck_en
 await db.exec(readFileSync('supabase/migrations/20261021163006_mcq_result_concept_streaks.sql', 'utf8'));
 await db.exec(readFileSync('supabase/migrations/20261022030000_mcq_question_pacing.sql','utf8'));
 await db.exec(readFileSync('supabase/migrations/20261022060000_mcq_exam_readiness.sql','utf8'));
-const allowed = new Set(['mcq_engine_readiness','mcq_engine_answer_sourced','mcq_engine_answer_paced','mcq_engine_state', 'mcq_engine_create_session', 'mcq_engine_answer', 'mcq_engine_session']);
+await db.exec(readFileSync('supabase/migrations/20261022090000_mcq_core_recovery.sql','utf8'));
+const allowed = new Set(['mcq_engine_recover_session','mcq_engine_readiness','mcq_engine_answer_sourced','mcq_engine_answer_paced','mcq_engine_state', 'mcq_engine_create_session', 'mcq_engine_answer', 'mcq_engine_session']);
 const client = { auth: { getUser: async token => ({ data: { user: token === 'disposable-local-preview' ? { id: userId } : null } }) },
   rpc: async (name, args) => {
     if (!allowed.has(name)) throw new Error('Unknown local RPC');
