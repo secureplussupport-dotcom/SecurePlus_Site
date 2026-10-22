@@ -37,7 +37,7 @@
     "build:content-mapping": "node scripts/build-content-mapping.mjs",
     "audit:content-mapping": "node --test scripts/audit-content-mapping.mjs && node scripts/build-content-mapping.mjs --check",
     "build:mcq-engine": "node scripts/build-mcq-engine-catalogue.mjs",
-    "audit:mcq-engine": "node --test scripts/test-mcq-result-summary.mjs scripts/test-mcq-three-deck.mjs scripts/test-mcq-engine-http.mjs scripts/test-mcq-difficulty.mjs && node scripts/build-mcq-engine-catalogue.mjs --check",
+    "audit:mcq-engine": "node --test scripts/test-mcq-exam.mjs scripts/test-mcq-result-summary.mjs scripts/test-mcq-three-deck.mjs scripts/test-mcq-engine-http.mjs scripts/test-mcq-difficulty.mjs && node scripts/build-mcq-engine-catalogue.mjs --check",
     "audit:mcq-engine:database": "node scripts/test-mcq-engine-database.mjs",
     "prebuild": "node scripts/build-mcq-engine-catalogue.mjs --check"
   },

@@ -236,11 +236,11 @@ if (!errors.length) {
   requireContains("src/App.jsx", "cleanAdminQuestionId", "Question Manager must validate question IDs before saving questions");
   requireContains("src/App.jsx", "HTML/script tag", "Question Manager should give a clear unsafe-content error for pasted markup");
   requireContains("src/App.jsx", 'return saveQuestionOverrideRequest({kind:"pbq"', "PBQ saves should use the validated server route");
-  requireContains("src/App.jsx", 'n.id==="exam"&&user.tier!=="pro"&&coinWallet.examPasses<1?"coins":n.id', "free users without an Exam pass should be redirected to the Coin Vault");
+  requireContains("src/App.jsx", 'role="switch" aria-checked={examMode}', "Exam mode should be integrated into MCQ setup");
   requireContains("src/App.jsx", "isFreePBQPreview", "free users should only get the configured PBQ preview");
   requireContains("src/App.jsx", '!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)', "PBQ start handler should allow only previews, Pro access, or permanent coin unlocks");
   requireContains("src/App.jsx", 'performCipherCoinAction(user,"check_in")', "signed-in users should receive an idempotent daily check-in attempt");
-  requireContains("src/App.jsx", 'onConsumeExamPass={handleConsumeExamPass}', "free Exam Mode access must consume a pass at start");
+  requireContains("src/App.jsx", 'if(type!=="pbq"||busy||isPro)return;', "timed MCQ exams should not require coin purchases");
   requireContains("src/App.jsx", "tier: hasProAccess ? \"pro\" : \"free\"", "the app should use the same trusted Pro profile signals as PBQ RLS");
   requireContains("src/App.jsx", "mergeRemotePBQBanks(PBQ_BANK,remotePbqBank)", "partial remote PBQ results must not replace the complete local PBQ baseline");
   requireContains("src/App.jsx", 'const SELECT_FILL_PBQ_TYPE = "SELECT & FILL"', "fill-blank and legacy matching PBQs should share one visible format");

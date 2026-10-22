@@ -34,3 +34,23 @@ test('timer uses wall time, freezes on submission, and flags overtime strictly a
   assert.equal(examTiming(1000,null,50,0).elapsed,0);
   assert.equal(formatExamTime(3601),'1:00:01');assert.equal(formatExamTime(72),'01:12');
 });
+
+test('the effective question bank can supply every exam size without repeating a primary concept past its cap',async()=>{
+  const {effectiveCatalogue}=await import('../server/mcq-engine/catalogue.mjs');
+  const actual=effectiveCatalogue().map(q=>({id:q.id,opts:q.options,conceptTagIds:[q.concept_tag]}));
+  for(const count of [10,20,30,50]){
+    const exam=buildMcqExam(actual,count,true,seeded(count));
+    assert.equal(exam.length,count);
+    const frequencies={};for(const q of exam)frequencies[examConceptTag(q)]=(frequencies[examConceptTag(q)]||0)+1;
+    assert.ok(Object.values(frequencies).every(value=>value<=Math.ceil(count/10)));
+  }
+});
+
+test('each sufficiently stocked exam retains Heavyweight > Standard > Niche, with random questions inside each tier',()=>{
+  for(const count of [10,11,20,30,37,50]){
+    const exam=buildMcqExam(bank,count,true,seeded(count));
+    const counts=[0,0,0];for(const q of exam)counts[Math.floor(tags.indexOf(examConceptTag(q))/5)]++;
+    assert.deepEqual(counts,[Math.round(count/2),Math.round(count/3),count-Math.round(count/2)-Math.round(count/3)]);
+  }
+  assert.notDeepEqual(buildMcqExam(bank,20,true,seeded(1)).map(q=>q.id),buildMcqExam(bank,20,true,seeded(2)).map(q=>q.id));
+});

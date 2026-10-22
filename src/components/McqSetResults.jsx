@@ -1,20 +1,21 @@
 import { useEffect, useRef } from 'react';
 import './McqSetResults.css';
+import { formatExamTime } from '../lib/mcqExam.js';
 import { ArrowRight, BookOpenCheck, ChevronDown, RotateCcw, Target, Trophy } from 'lucide-react';
 
-export function McqSetResults({ correct, total, summary, t, onStart, onReview, onOpenLesson, guestPrompt, progressError, onRetryProgress, starting, startError }) {
+export function McqSetResults({ correct, total, summary, t, onStart, onReview, onOpenLesson, guestPrompt, progressError, onRetryProgress, starting, startError, exam = null }) {
   const heading = useRef(null);
   const percent = total ? Math.round(correct / total * 100) : 0;
-  const color = percent >= 80 ? t.green : percent >= 50 ? t.amber : t.red;
+  const color = exam ? t.accent : percent >= 80 ? t.green : percent >= 50 ? t.amber : t.red;
   const colors = [t.accent, t.red, t.purple || '#8b5cf6', t.green, t.amber];
   useEffect(() => {
     heading.current?.focus({ preventScroll: true });
     heading.current?.closest('.mcq-set-results')?.scrollIntoView({ block: 'start', behavior: 'instant' });
   }, []);
   const openLesson = item => onOpenLesson?.(item.lesson.id, { source: 'mcq_set_result', conceptTag: item.tag });
-  return <div className="mcq-results-screen mcq-set-results" style={{ '--result-color': color, '--result-text': t.text, '--result-muted': t.textSec, '--result-border': t.border, '--result-surface': t.surface, '--result-accent': t.accent, '--result-green': t.green }}>
-    <section className="mcq-result-moment" aria-label="MCQ set results">
-      <div className="practice-result-kicker">Practice complete</div>
+  return <div className="mcq-results-screen mcq-set-results" style={{ '--result-color': color, '--result-text': t.text, '--result-muted': t.textSec, '--result-border': t.border, '--result-surface': t.surface, '--result-accent': t.accent, '--result-green': t.green, '--result-red': t.red }}>
+    <section className="mcq-result-moment" aria-label={exam?"MCQ exam report":"MCQ set results"}>
+      <div className="practice-result-kicker">{exam?'Exam complete':'Practice complete'}</div>
       <div className="mcq-animated-score" data-empty={percent === 0} role="img" aria-label={`${percent} percent. ${correct} of ${total} correct.`}>
         <svg viewBox="0 0 180 180" aria-hidden="true">
           <circle className="mcq-score-track" cx="90" cy="90" r="78"/>
@@ -22,11 +23,17 @@ export function McqSetResults({ correct, total, summary, t, onStart, onReview, o
         </svg>
         <div><strong>{percent}<span>%</span></strong><small>{correct} / {total} correct</small></div>
       </div>
-      <h2 ref={heading} tabIndex={-1}>{percent >= 80 ? 'Strong work.' : percent >= 50 ? 'Good progress.' : 'A useful first pass.'}</h2>
-      <p>{percent >= 80 ? 'You are showing solid recall across this set. Keep the momentum by spacing the next review.' : percent >= 50 ? 'You have a good base. Review your misses, then try a focused set while the ideas are fresh.' : 'Mistakes are useful data. Review the missed concepts now and they will become easier to recognise next time.'}</p>
+      <h2 ref={heading} tabIndex={-1}>{exam ? 'Your exam, mapped.' : percent >= 80 ? 'Strong work.' : percent >= 50 ? 'Good progress.' : 'A useful first pass.'}</h2>
+      <p>{exam ? 'One timed run. A clearer picture of what to revisit. This is an accuracy snapshot, not a pass or fail.' : percent >= 80 ? 'You are showing solid recall across this set. Keep the momentum by spacing the next review.' : percent >= 50 ? 'You have a good base. Review your misses, then try a focused set while the ideas are fresh.' : 'Mistakes are useful data. Review the missed concepts now and they will become easier to recognise next time.'}</p>
+      {exam&&<div className={`mcq-exam-time-result ${exam.elapsed>exam.permitted?'is-overtime':''}`}><span>Time taken</span><strong>{formatExamTime(exam.elapsed)}</strong><span>/ {formatExamTime(exam.permitted)} permitted</span>{exam.elapsed>exam.permitted&&<b>Overtime</b>}</div>}
       <div className="mcq-result-actions">
-        <button className="btn btn-primary" disabled={starting} onClick={onStart}>{starting ? 'Preparing set…' : 'Start another set'} <ArrowRight size={17}/></button>
-        <button className="btn btn-outline" onClick={onReview}><RotateCcw size={16}/> Review your answers</button>
+        {exam?<>
+          <button className="btn btn-primary" onClick={onReview}><RotateCcw size={16}/> Review your answers</button>
+          <button className="btn btn-outline" onClick={onStart}>Start another exam <ArrowRight size={17}/></button>
+        </>:<>
+          <button className="btn btn-primary" disabled={starting} onClick={onStart}>{starting ? 'Preparing set…' : 'Start another set'} <ArrowRight size={17}/></button>
+          <button className="btn btn-outline" onClick={onReview}><RotateCcw size={16}/> Review your answers</button>
+        </>}
       </div>
       {startError && <p role="alert">{startError}</p>}
     </section>

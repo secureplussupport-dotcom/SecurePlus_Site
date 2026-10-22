@@ -4,6 +4,8 @@ import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701Ed
 import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
 import { mergePublishedSnapshot, isCapturedOverride, preferReviewedPbq } from "./data/sy0701PublishedSnapshot.js";
 import { CONCEPT_TAGS, MCQ_TAGGING_VERSION, inferMcqConceptTagIds, searchMcqConceptTags } from "./data/sy0701ConceptTags.js";
+import { McqExam, ExamModeGuide, examThemeVars } from "./components/McqExam.jsx";
+import { buildMcqExam, formatExamTime, EXAM_SECONDS_PER_QUESTION } from "./lib/mcqExam.js";
 import { McqSetResults } from "./components/McqSetResults.jsx";
 import { buildMcqResultSummary, advanceConceptStreak } from "./lib/mcqResultSummary.js";
 import { effectiveMcqConceptTagIds } from "./lib/mcqConceptReview.js";
@@ -1992,7 +1994,7 @@ const ACHIEVEMENTS = [
   {id:"fortress_builder",title:"Fortress Builder",description:"Maintain a 30-day study streak.",star_value:3},
   {id:"flawless_victory",title:"Flawless Victory",description:"Score 100% on a full-length Exam Mode (min. 50 questions).",star_value:5},
   {id:"domain_master",title:"Domain Master",description:"Get 100% correct in a single study session for any chapter.",star_value:2},
-  {id:"speed_demon",title:"Speed Demon",description:"Complete a full-length Exam Mode in under 10 minutes with a passing score (>= 80%).",star_value:5},
+  {id:"speed_demon",title:"Speed Demon",description:"Complete a full-length Exam Mode in under 10 minutes with at least 80% accuracy.",star_value:5},
   {id:"blitz_run",title:"Blitz Run",description:"Complete a 10-question MCQ session in under 90 seconds with 100% accuracy.",star_value:3},
   {id:"pbq_crusher",title:"PBQ Crusher",description:"Complete all 105 PBQ simulations.",star_value:4},
   {id:"no_stone_unturned",title:"No Stone Unturned",description:"Practice every question in the active MCQ bank.",star_value:3},
@@ -23595,7 +23597,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     {type:"mcq",plan:"free",color:"#2f7df6",title:"Full MCQ practice",body:"Guests and free accounts can access every MCQ question. Create an account when you want answers, scores, and progress to follow you."},
     {type:"pbq",plan:"pro",color:"#f59e0b",title:"PBQ simulations",body:"Practice firewall decisions, terminal logs, Select & Fill, ordering, hotspot, and scenario tasks before exam day pressure."},
     {type:"review",plan:"free",color:"#14b8a6",title:"Smart Review",body:"SecurePlus mixes delayed retests, unseen questions for weak concepts, and new syllabus coverage."},
-    {type:"exam",plan:"pro",color:"#8b5cf6",title:"Exam-style mode",body:"Pro users can run timed mixed MCQ/PBQ sets, flag questions, review detailed solutions, and estimate readiness."},
+    {type:"exam",plan:"free",color:"#8b5cf6",title:"Exam-style mode",body:"Run timed MCQ exams, flag questions, and review answers after submission. Pro supports exams up to 50 questions."},
   ];
   const faqItems=[
     {q:"Are the questions identical to the real exam?",a:"No. SecurePlus uses original practice questions for learning and exam preparation."},
@@ -23842,7 +23844,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
             <div className="label" style={{color:t.green,marginBottom:8}}>Free account · No credit card</div>
             <h2 style={{color:t.text,marginBottom:10}}>Turn every practice answer into a smarter study plan.</h2>
             <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,maxWidth:520}}>
-              Your account saves your work and helps SecurePlus bring weak topics back at the right time. Start free and add Pro only if you want PBQ simulations and Exam Mode.
+              Your account saves your work and helps SecurePlus bring weak topics back at the right time. Start free and add Pro only if you want PBQ simulations and longer MCQ exams.
             </p>
             <div className="auth-benefit-list">
               <div className="auth-benefit-row">
@@ -24067,8 +24069,6 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   const readiness=readinessProfile.score;
   const readinessColor=readiness>=80?t.green:readiness>=65?t.accent:readiness>=45?t.amber:t.red;
   const isPro = user.tier==="pro";
-  const examPasses=Number(coinWallet?.examPasses||0);
-  const hasExamAccess=isPro||examPasses>0;
   const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
   const [chapterChartVisible,setChapterChartVisible]=useState(false);
   const chapterChartRef=useRef(null);
@@ -24155,7 +24155,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
           <div className="home-cta-row">
             <button className="btn btn-primary" onClick={()=>onNav("mcq")}>Start practice</button>
             <button className="btn btn-outline" onClick={()=>onNav("daily")}>Daily challenge</button>
-            <button className="btn btn-ghost" onClick={()=>onNav(hasExamAccess?"exam":"pricing")}>{hasExamAccess?"Exam mode":"View Pro"}</button>
+            <button className="btn btn-ghost" onClick={()=>onNav("exam")}>Exam mode</button>
           </div>
           <div style={{marginTop:12}}>
             <TrustBadge t={t}/>
@@ -24977,7 +24977,7 @@ function PracticeSetupDisclosure({children}) {
   );
 }
 
-function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null,onSessionComplete,mcqBank=MCQ_BANK}) {
+function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null,examRequest=null,onSessionComplete,mcqBank=MCQ_BANK}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
   const sessionKey=`mcq:${practiceSessionOwner(user)}`;
   const requestSignup=onSignup||onUpgrade;
@@ -24988,6 +24988,28 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [reviewMode,setReviewMode]=useState("smart");
   const [modeInfo,setModeInfo]=useState(null);
   const [quizCount,setQuizCount]=useState(10);
+  const [examMode,setExamMode]=useState(false);
+  const [examCount,setExamCount]=useState(10);
+  const [examQuestions,setExamQuestions]=useState(null);
+  const [showExamGuide,setShowExamGuide]=useState(false);
+  const guideKey=`secureplus-exam-guide-v2:${practiceSessionOwner(user)}`;
+  useEffect(()=>{
+    if(!examRequest)return;
+    setExamMode(true);
+    if(started&&!done)setResumeAvailable(true);
+    setStarted(false);setDone(false);setFinishedReviewMode(false);setStarredView(false);
+  },[examRequest]);
+  useEffect(()=>{if(user?.tier!=="pro")setExamCount(count=>[10,20,30].includes(count)?count:30);},[user?.tier]);
+  useEffect(()=>{
+    if(!examMode)return;
+    try{if(!localStorage.getItem(guideKey))setShowExamGuide(true);}catch{setShowExamGuide(true);}
+  },[examMode,guideKey]);
+  const closeExamGuide=()=>{try{localStorage.setItem(guideKey,"seen");}catch{}setShowExamGuide(false);};
+  const startExam=()=>{
+    try{setExamQuestions(buildMcqExam(bank,examCount,user?.tier==="pro").map(shuffleMcqOptions));setEngineError("");window.scrollTo({top:0,behavior:"instant"});}
+    catch(error){setEngineError(error.message);}
+  };
+
   const [started,setStarted]=useState(false);
   const [questions,setQuestions]=useState([]);
   const [qi,setQi]=useState(0);
@@ -25084,6 +25106,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       if(!mcqEngineEnabled)throw new Error("The new Smart Review engine is awaiting activation.");
       const plan=await mcqEngineRequest("generate",{set_size:Math.max(10,Math.min(30,count)),filters});
       const pool=plan.questions.map(q=>practiceQuestion(q,plan.session_id));
+      setExamQuestions(null);setExamMode(false);
       setSessionContext({kind:"smart",label:"Smart Review",engineSessionId:plan.session_id});
       setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
       answerEvents.current.clear();
@@ -25298,6 +25321,12 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     </div>
   );
 
+  if(examQuestions)return <McqExam initialQuestions={examQuestions} user={user} chapters={CHAPTERS} t={t}
+    onSave={onSave} onReturn={()=>{setExamQuestions(null);setEngineError("");window.scrollTo({top:0,behavior:"instant"});}}
+    onOpenDeepDive={onOpenDeepDive} onSessionComplete={onSessionComplete} onFocusModeChange={onFocusModeChange}
+    isVisible={isVisible} renderDefinitions={text=><GlossaryText text={text} t={t}/>}
+    initialStreaks={localConceptStreaks} onLocalStreaks={setLocalConceptStreaks}/>;
+
   if(starredView) return(
     <div style={{padding:"24px",maxWidth:860,margin:"0 auto"}}>
       <div className="page-title-row" style={{marginBottom:12}}>
@@ -25338,8 +25367,15 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   );
 
   if(!started) return(
-    <div className="mcq-setup-screen mcq-hub-screen fu" style={{"--practice-accent":reviewMode==="smart"?t.green:t.accent}}>
+    <div className="mcq-setup-screen mcq-hub-screen fu" style={{...examThemeVars(t),"--practice-accent":examMode?t.accent:reviewMode==="smart"?t.green:t.accent}}>
       <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h2>MCQ practice</h2><p>Build confidence, one question at a time.</p></div></header>
+      <div className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
+        <button type="button" role="switch" aria-checked={examMode} className="mcq-exam-toggle" onClick={()=>{setExamMode(value=>!value);setEngineError("");setModeInfo(null);}}>
+          <Clock3 size={22}/><span className="mcq-exam-toggle-copy"><strong>Exam mode</strong><small>A timed run. Your answers, revealed at the finish.</small></span><span className="mcq-exam-switch-track" aria-hidden="true"><i/></span>
+        </button>
+        {examMode&&<button type="button" className="btn btn-ghost mcq-exam-help" onClick={()=>setShowExamGuide(true)}><BookOpenCheck size={16}/>Exam guide</button>}
+      </div>
+      {!examMode&&<>
       <div className="practice-mode-grid mcq-top-modes" role="group" aria-label="Question selection mode">
         {practiceModes.map(({id,label,Icon,color,description})=>(
           <div key={id} className="mcq-mode-choice" onMouseEnter={()=>setModeInfo(id)} onMouseLeave={event=>{if(!event.currentTarget.contains(document.activeElement))setModeInfo(null);}} onFocus={()=>setModeInfo(id)} onBlur={event=>{if(!event.currentTarget.contains(event.relatedTarget))setModeInfo(null);}} onKeyDown={event=>{if(event.key==="Escape"){setModeInfo(null);event.stopPropagation();}}}>
@@ -25353,6 +25389,24 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         ))}
       </div>
 
+      </>}
+      {examMode?<section className="mcq-launch-pad mcq-practice-hub mcq-exam-setup" aria-label="Start timed MCQ exam">
+        <div className="mcq-hub-overview">
+          <p className="mcq-exam-eyebrow"><Clock3 size={15}/> MAKE ROOM TO FOCUS</p>
+          <h3>Find your exam rhythm.</h3>
+          <p className="mcq-hub-description">A fresh mix, a running clock, and a clear picture at the finish.</p>
+          <div className="mcq-exam-budget"><strong>{formatExamTime(examCount*EXAM_SECONDS_PER_QUESTION)}</strong><span>time allowance<small>72 seconds per question</small></span></div>
+          <div className="mcq-exam-rules"><span><Check size={14}/>Marked at the end</span><span><Check size={14}/>No definitions or hints</span><span><Check size={14}/>Balanced random mix</span></div>
+        </div>
+        <div className="mcq-session-controls">
+          <fieldset className="mcq-session-size"><legend>Number of questions</legend>
+            {user?.tier==="pro"?<div className="mcq-exam-slider"><div className="exam-length-output"><output htmlFor="exam-count">{examCount}</output><span>questions</span></div><input className="mcq-exam-length-slider" id="exam-count" type="range" min="10" max="50" step="1" value={examCount} aria-label="Exam question count" onChange={event=>setExamCount(Number(event.target.value))}/><div className="exam-slider-labels"><span>10 · Quick focus</span><span>50 · Full hour</span></div></div>:<div className="mcq-primary-count">{[10,20,30].map(size=><button key={size} type="button" aria-label={`${size} exam questions`} aria-pressed={examCount===size} className={examCount===size?"active":""} onClick={()=>setExamCount(size)}>{size}</button>)}</div>}
+          </fieldset>
+          {engineError&&<p className="mcq-hub-error" role="alert">{engineError}</p>}
+          <p className="mcq-exam-setup-note">Flag, skip and return freely. Submit when you’re ready—even if the clock runs over.</p>
+          <button className="btn btn-primary mcq-hub-start" type="button" onClick={startExam}>Start exam<span className="mcq-start-arrow"><ChevronRight size={18}/></span></button>
+        </div>
+      </section>:<>
       <section className="mcq-launch-pad mcq-practice-hub" aria-label="Start MCQ practice">
         <div className="mcq-hub-overview">
           <p className="mcq-hub-description">Choose your pace. Make this set count.</p>
@@ -25382,6 +25436,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
         </div>
       </section>
 
+      </>}
+      {!examMode&&<>
       <section className="mcq-review-queue-row" aria-label="MCQ review queues">
         <button className={`mcq-review-queue-card unfinished ${resumeAvailable?"is-ready":""}`} type="button" disabled={!resumeAvailable} onClick={continueQuiz}>
           <span className="mcq-review-queue-icon"><Clock3 size={21} aria-hidden="true"/></span>
@@ -25421,6 +25477,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           {isGuest&&<p style={{marginTop:12,fontSize:12,color:t.textSec}}>Sign in to filter by difficulty or topic.</p>}
         </div>
       </PracticeSetupDisclosure>
+      </>}
+      {showExamGuide&&<ExamModeGuide t={t} onClose={closeExamGuide}/>}
     </div>
   );
 
@@ -26266,938 +26324,6 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
 // ═══════════════════════════════════════════════════════════════
 // EXAM MODE
 // ═══════════════════════════════════════════════════════════════
-function ExamModeGuideModal({t,onClose}) {
-  const [step,setStep]=useState(0);
-  const slides=[
-    {
-      label:"Setup",
-      title:"Build your exam before you start",
-      body:"Choose 10 to 50 total questions, then use the split bar to decide how many PBQs and MCQs you want. PBQs appear first, just like a focused exam warm-up.",
-      bullets:["Slide toward PBQ for simulation-heavy practice.","Slide toward MCQ for faster knowledge checks.","Timer length scales with total question count."],
-    },
-    {
-      label:"During",
-      title:"Use exam tools while answering",
-      body:"The timer, answer map, previous/next buttons, and flag button stay available while you work through the exam.",
-      bullets:["Use the answer map to jump to any question.","Bold numbers are unanswered questions.","Amber outlines mean a question is flagged."],
-    },
-    {
-      label:"Eliminate",
-      title:"Cross out weak MCQ options",
-      body:"For MCQs, right-click an option to cross it out. On mobile, long-press an option. This is useful when you narrow the answer down before choosing.",
-      bullets:["Crossed-out options stay visible but faded.","Tap or click an option normally to select it.","Right-click or long-press again to undo the cross-out."],
-    },
-    {
-      label:"Review",
-      title:"Flag questions for final review",
-      body:"Press Flag for review when you want to return later. A corner ribbon appears on the question so it is hard to miss.",
-      bullets:["Submit warns you if anything is flagged or unanswered.","After submission, flagged questions remain marked in review.","Incorrect answers are bumped upward for easier review."],
-    },
-  ];
-  const current=slides[step];
-  const last=step===slides.length-1;
-
-  return(
-    <div className="onboarding-overlay" role="dialog" aria-modal="true" aria-label="Exam Mode guide">
-      <div className="onboarding-modal card">
-        <button className="btn btn-ghost" style={{position:"absolute",top:14,right:14,minHeight:32,padding:"4px 10px",fontSize:12}} onClick={onClose}>
-          Skip
-        </button>
-        <div className="chip" style={{background:`${t.accent}12`,color:t.accent,borderColor:`${t.accent}35`,marginBottom:14}}>
-          {current.label}
-        </div>
-        <h2 style={{fontSize:24,fontWeight:900,color:t.text,marginBottom:8}}>{current.title}</h2>
-        <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:18}}>{current.body}</p>
-        <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:22}}>
-          {current.bullets.map(item=>(
-            <div key={item} style={{display:"flex",gap:10,alignItems:"flex-start",fontSize:13,color:t.textSec,lineHeight:1.6}}>
-              <Check size={16} color={t.green} strokeWidth={2.6}/>
-              <span>{item}</span>
-            </div>
-          ))}
-        </div>
-        <div style={{display:"flex",gap:7,marginBottom:20}}>
-          {slides.map((_,i)=>(
-            <div key={i} style={{height:7,flex:1,borderRadius:99,background:i<=step?t.accent:t.border}}/>
-          ))}
-        </div>
-        <div style={{display:"flex",gap:10,justifyContent:"space-between",flexWrap:"wrap"}}>
-          <button className="btn btn-ghost" onClick={()=>setStep(s=>Math.max(0,s-1))} disabled={step===0}>
-            Back
-          </button>
-          <button className="btn btn-primary" onClick={()=>last?onClose():setStep(s=>s+1)}>
-            {last ? "Got it" : "Next"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ExamMode({user,attempts=[],onSave,onUpgrade,onOpenWallet,onConsumeExamPass,examPasses=0,t,showQuestionCodes=false,pbqBank=PBQ_BANK,mcqBank=MCQ_BANK,onSessionComplete}) {
-  const sessionKey=`exam:${practiceSessionOwner(user)}`;
-  const [questionCount,setQuestionCount]=useState(20);
-  const [pbqCount,setPbqCount]=useState(2);
-  const [started,setStarted]=useState(false);
-  const [done,setDone]=useState(false);
-  const [questions,setQuestions]=useState([]);
-  const [answers,setAnswers]=useState({});
-  const [qi,setQi]=useState(0);
-  const [flagged,setFlagged]=useState({});
-  const [timeLeft,setTimeLeft]=useState(3600);
-  const [timeSpent,setTimeSpent]=useState({});
-  const [saved,setSaved]=useState(false);
-  const [resumeAvailable,setResumeAvailable]=useState(false);
-  const [expandedReview,setExpandedReview]=useState({});
-  const [showExamGuide,setShowExamGuide]=useState(false);
-  const [submittingExam,setSubmittingExam]=useState(false);
-  const [showScoreDisclaimer,setShowScoreDisclaimer]=useState(false);
-  const [completedRows,setCompletedRows]=useState([]);
-  const [accessStarting,setAccessStarting]=useState(false);
-  const longPressTimers=useRef({});
-  const longPressActivated=useRef({});
-  const rightClickHandled=useRef({});
-
-  const isPro=user?.tier==="pro";
-  const sizes=[10,20,30,40,50];
-  const current=questions[qi];
-  const answer=answers[qi]||{};
-  const examDuration=questionCount*72;
-  const mcqCount=Math.max(0,questionCount-pbqCount);
-  const liveMcqs=mcqBank?.length ? mcqBank : MCQ_BANK;
-  const pbqPercent=questionCount?Math.round((pbqCount/questionCount)*100):0;
-  const mcqPercent=100-pbqPercent;
-  const examGuideKey=`exam-guide-seen:${practiceSessionOwner(user)}`;
-
-  const shuffle=arr=>[...arr].sort(()=>Math.random()-.5);
-  const formatTime=s=>{
-    const h=Math.floor(s/3600);
-    const m=Math.floor((s%3600)/60);
-    const sec=s%60;
-    if(h>0) return `${h}:${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
-    return `${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
-  };
-  const initAnswer=item=>{
-    if(item.kind==="mcq") return {selected:null,eliminated:{}};
-    const q=item.q;
-    return {
-      selected:null,
-      orderItems:q.type==="ORDERING"&&q.items?shuffle(q.items):[],
-      blanks:q.blanks?Object.fromEntries(q.blanks.map(b=>[b.id,""])):{},
-      termInput:"",
-    };
-  };
-  const updateQuestionCount=size=>{
-    setQuestionCount(size);
-    setPbqCount(prev=>Math.min(size,Math.max(0,Math.round(size*(prev/Math.max(1,questionCount))))));
-  };
-  const startExam=async()=>{
-    if(!isPro){
-      const confirmed=window.confirm("Start this practice exam now? One practice exam voucher will be used. Your voucher is not consumed if you cancel here.");
-      if(!confirmed)return;
-      setAccessStarting(true);
-      try{
-        const consumed=await onConsumeExamPass?.();
-        if(!consumed)return;
-      }finally{
-        setAccessStarting(false);
-      }
-    }
-    const examReadyPbqs=(pbqBank?.length?pbqBank:PBQ_BANK).filter(q=>!q.beyondTextbook&&(q.type!=="TERMINAL SIM"||q.choices||q.options));
-    const pickedPbq=shuffle(examReadyPbqs).slice(0,pbqCount).map(q=>({kind:"pbq",q:stripPbqHintsForExam(q)}));
-    const pickedMcq=shuffle(liveMcqs.filter(q=>!q.beyondTextbook)).slice(0,mcqCount).map(q=>({kind:"mcq",q:shuffleMcqOptions(q)}));
-    const examQs=[...pickedPbq,...pickedMcq];
-    setQuestions(examQs);
-    setAnswers(Object.fromEntries(examQs.map((item,index)=>[index,initAnswer(item)])));
-    setFlagged({});
-    setTimeSpent({});
-    setQi(0);
-    setTimeLeft(examDuration);
-    setDone(false);
-    setSaved(false);
-    setCompletedRows([]);
-    setStarted(true);
-    capture("exam_mode_started", { question_count: questionCount, pbq_count: pbqCount, tier: user.tier });
-  };
-
-  useEffect(()=>{
-    let active=true;
-    DB.getPracticeSession(sessionKey).then(saved=>{
-      if(active)setResumeAvailable(Boolean(saved&&!saved.done&&saved.questions?.length));
-    });
-    return()=>{active=false;};
-  },[sessionKey]);
-
-  useEffect(()=>{
-    if(!started||done||!questions.length)return;
-    DB.savePracticeSession(sessionKey,{questionCount,pbqCount,questions,answers,qi,flagged,timeLeft,timeSpent,done:false,updatedAt:new Date().toISOString()});
-  },[sessionKey,started,done,questionCount,pbqCount,questions,answers,qi,flagged,timeLeft,timeSpent]);
-
-  const continueExam=async()=>{
-    const saved=await DB.getPracticeSession(sessionKey);
-    if(!saved?.questions?.length)return;
-    setQuestionCount(saved.questionCount||saved.questions.length||20);
-    setPbqCount(Number.isInteger(saved.pbqCount)?saved.pbqCount:saved.questions.filter(item=>item.kind==="pbq").length);
-    setQuestions(saved.questions);
-    setAnswers(saved.answers||{});
-    setQi(saved.qi||0);
-    setFlagged(saved.flagged||{});
-    setTimeLeft(saved.timeLeft||examDuration);
-    setTimeSpent(saved.timeSpent||{});
-    setDone(false);
-    setSaved(false);
-    setCompletedRows([]);
-    setStarted(true);
-  };
-  const updateAnswer=patch=>setAnswers(prev=>({...prev,[qi]:{...(prev[qi]||{}),...patch}}));
-  const setAnswerAt=(index,patch)=>setAnswers(prev=>({...prev,[index]:{...(prev[index]||{}),...patch}}));
-  const selectMcqOption=optionIndex=>{
-    const eliminated={...(answer.eliminated||{})};
-    delete eliminated[optionIndex];
-    updateAnswer({selected:optionIndex,eliminated});
-  };
-  const toggleEliminatedOption=(optionIndex,questionIndex=qi)=>{
-    setAnswers(prev=>{
-      const currentAnswer=prev[questionIndex]||{};
-      const eliminated={...(currentAnswer.eliminated||{})};
-      const alreadyEliminated=Boolean(eliminated[optionIndex]);
-      if(alreadyEliminated) delete eliminated[optionIndex];
-      else {
-        const eliminatedCount=Object.values(eliminated).filter(Boolean).length;
-        if(eliminatedCount>=3) return prev;
-        eliminated[optionIndex]=true;
-      }
-      const selected=currentAnswer.selected===optionIndex&&!alreadyEliminated ? null : currentAnswer.selected;
-      return {...prev,[questionIndex]:{...currentAnswer,selected,eliminated}};
-    });
-  };
-  const startOptionLongPress=(optionIndex,e)=>{
-    longPressTimers.current[optionIndex]=window.setTimeout(()=>{
-      longPressActivated.current[optionIndex]=true;
-      toggleEliminatedOption(optionIndex);
-      if(navigator.vibrate) navigator.vibrate(12);
-    },520);
-  };
-  const clearOptionLongPress=optionIndex=>{
-    window.clearTimeout(longPressTimers.current[optionIndex]);
-    delete longPressTimers.current[optionIndex];
-  };
-  const pbqCorrect=(q,a={})=>{
-    if(["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type)) return a.selected===q.correct;
-    if(q.type==="ORDERING") return q.correctOrder?.every((id,i)=>a.orderItems?.[i]?.id===id);
-    if(q.type===SELECT_FILL_PBQ_TYPE) return q.blanks?.every(b=>isFillBlankAnswerCorrect(a.blanks?.[b.id],b));
-    return false;
-  };
-  const isCorrect=(item,a={})=>item.kind==="mcq" ? a.selected===item.q.correct : pbqCorrect(item.q,a);
-  const isAnswered=(item,a={})=>{
-    if(item.kind==="mcq") return a.selected!==null&&a.selected!==undefined;
-    const q=item.q;
-    if((q.choices||q.options)&&["TERMINAL SIM","HOTSPOT","LOG ANALYSIS","CONFIG/ACL","SCENARIO"].includes(q.type)) return a.selected!==null&&a.selected!==undefined;
-    if(q.type===SELECT_FILL_PBQ_TYPE) return q.blanks?.some(b=>(a.blanks?.[b.id]||"").trim());
-    if(q.type==="ORDERING") return Boolean(a.orderItems?.length);
-    return Boolean(a.termInput);
-  };
-  const answeredCount=questions.filter((item,index)=>isAnswered(item,answers[index])).length;
-  const correctCount=questions.filter((item,index)=>isCorrect(item,answers[index])).length;
-  const score=questions.length?Math.round((correctCount/questions.length)*100):0;
-
-  function submitExam(auto=false) {
-    if(done||submittingExam) return;
-    if(!auto){
-      const flaggedCount=Object.values(flagged).filter(Boolean).length;
-      const warnings=[];
-      if(answeredCount<questions.length) warnings.push(`${questions.length-answeredCount} unanswered question${questions.length-answeredCount===1?"":"s"}`);
-      if(flaggedCount) warnings.push(`${flaggedCount} flagged question${flaggedCount===1?"":"s"} for review`);
-      if(warnings.length){
-        const ok=window.confirm(`Final review checkpoint: you still have ${warnings.join(" and ")}. Are you sure you want to submit?`);
-        if(!ok) return;
-      }
-    }
-    setSubmittingExam(true);
-    window.setTimeout(async()=>{
-      try{
-        if(user?.authProvider==="supabase"){
-          for(let index=0;index<questions.length;index++){
-            const item=questions[index];
-            if(item.kind==="mcq"&&answers[index]?.selected!=null)await recordStandaloneMcq(item.q,answers[index].selected);
-          }
-        }
-      }catch(error){alert(error.message);setSubmittingExam(false);return;}
-      const rows=questions.map((item,index)=>{
-        const q=item.q;
-        return {
-          qid:q.id,
-          correct:isCorrect(item,answers[index]),
-          selected:answers[index]?.selected,
-          title:(item.kind==="mcq"?q.q:q.title).slice(0,80),
-          ch:q.ch,
-          domain:item.kind==="mcq"?(CHAPTERS.find(c=>c.id===q.ch)?.title||""):q.cat,
-          topic:item.kind==="mcq"?q.topic:q.type,
-          difficulty:q.difficulty,
-          mcq:item.kind==="mcq",
-          pbq:item.kind==="pbq",
-          exam:true,
-          timeSpentSeconds:timeSpent[index]||0,
-          createdAt:new Date().toISOString(),
-        };
-      });
-      if(!saved){
-        rows.forEach(row=>onSave(row));
-        setSaved(true);
-      }
-      const finalScore=rows.length?Math.round((rows.filter(r=>r.correct).length/rows.length)*100):0;
-      onSessionComplete?.({
-        session_type:"exam",
-        score:finalScore,
-        duration_seconds:Math.max(1,examDuration-timeLeft),
-        questions_count:rows.length,
-        chapter_id:null,
-      });
-      setCompletedRows(rows);
-      capture("exam_mode_completed", { question_count: questions.length, correct_count: rows.filter(r=>r.correct).length, score: finalScore, auto_submitted: auto, tier: user.tier });
-      DB.clearPracticeSession(sessionKey);
-      setDone(true);
-      setSubmittingExam(false);
-    },900);
-  }
-
-  useEffect(()=>{
-    if(!started||done||submittingExam)return;
-    if(timeLeft<=0){submitExam(true);return;}
-    const id=setInterval(()=>{
-      setTimeLeft(s=>Math.max(0,s-1));
-      setTimeSpent(prev=>({...prev,[qi]:(prev[qi]||0)+1}));
-    },1000);
-    return()=>clearInterval(id);
-  },[started,done,submittingExam,timeLeft,qi]);
-
-  const closeExamGuide=async()=>{
-    setShowExamGuide(false);
-    try{await storageSet(examGuideKey,"true");}catch{}
-    capture("exam_mode_guide_closed", { tier: user?.tier || "unknown" });
-  };
-
-  useEffect(()=>{
-    if(!isPro&&examPasses<1)return;
-    let active=true;
-    storageGet(examGuideKey).then(value=>{
-      if(active&&!value?.value) setShowExamGuide(true);
-    }).catch(()=>{if(active)setShowExamGuide(true);});
-    return()=>{active=false;};
-  },[examGuideKey,isPro,examPasses]);
-
-  if(!isPro&&examPasses<1) return(
-    <div className="exam-setup-screen fu" style={{padding:"28px 24px",maxWidth:760,margin:"0 auto"}}>
-      <div className="card" style={{padding:"24px",borderColor:`${t.accent}35`,background:`${t.accent}07`}}>
-        <div className="page-title-row" style={{marginBottom:10}}>
-          <NavGlyph type="exam" active/>
-          <h2 style={{fontSize:24,color:t.text}}>Unlock a full practice exam</h2>
-        </div>
-        <p style={{fontSize:14,color:t.textSec,lineHeight:1.7,marginBottom:16}}>
-          Exchange {CIPHER_COIN_COSTS.examPass} Cipher Coins for one SecurePlus practice exam voucher, or choose Pro for unlimited exams with zero coin requirements. This is not an official CompTIA exam voucher.
-        </p>
-        <div style={{marginBottom:16}}>
-          <TrustBadge t={t}/>
-        </div>
-        <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-          <button className="btn btn-primary" onClick={onOpenWallet}><CipherCoinIcon size={24}/> Get an Exam Voucher</button>
-          <button className="btn btn-outline" onClick={onUpgrade}>Choose Pro · zero coins</button>
-        </div>
-      </div>
-    </div>
-  );
-
-  if(!started) return(
-    <>
-    <div className="exam-setup-screen fu" style={{padding:"28px 24px",maxWidth:820,margin:"0 auto"}}>
-      <div className="page-title-row" style={{marginBottom:18}}>
-        <NavGlyph type="exam" active/>
-        <div>
-          <h2 style={{fontSize:26,color:t.text}}>Exam Mode</h2>
-          <p style={{fontSize:14,color:t.textSec}}>{isPro?"Unlimited timed mixed practice with zero coin requirements.":`${examPasses} practice exam voucher${examPasses===1?"":"s"} available · one is used when a new exam begins.`}</p>
-          <div style={{marginTop:9}}>
-            <TrustBadge t={t} compact/>
-          </div>
-        </div>
-      </div>
-      <div className="card" style={{padding:"10px",marginBottom:16,display:"flex",gap:8,flexWrap:"wrap"}}>
-        <button className="btn btn-primary" style={{fontSize:12}}>Practice Exam</button>
-      </div>
-      <div className="card" style={{padding:"20px 22px",marginBottom:16}}>
-        <div style={{fontWeight:800,color:t.text,marginBottom:8}}>Exam setup</div>
-        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:16}}>
-          Choose the exam length and adjust the MCQ/PBQ split. PBQs appear first. The timer scales by exam length: 50 questions gives 1 hour, 10 questions gives 12 minutes.
-        </p>
-        <label className="label" style={{display:"block",marginBottom:8}}>Total questions</label>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:8,marginBottom:16}}>
-          {sizes.map(size=>(
-            <button key={size} className={`btn ${questionCount===size?"btn-primary":"btn-ghost"}`} onClick={()=>updateQuestionCount(size)}>{size}</button>
-          ))}
-        </div>
-        <div style={{marginTop:4}}>
-          <div style={{display:"flex",justifyContent:"space-between",gap:12,alignItems:"center",marginBottom:10,flexWrap:"wrap"}}>
-            <div>
-              <div className="label" style={{marginBottom:3}}>Exam composition</div>
-              <div style={{fontSize:13,color:t.textSec}}>
-                {pbqCount} PBQ first · {mcqCount} MCQ after · {formatTime(examDuration)} timer
-              </div>
-            </div>
-            <div style={{display:"flex",gap:8,alignItems:"center",fontSize:12,fontWeight:900}}>
-              <span style={{color:t.amber}}>{pbqPercent}% PBQ</span>
-              <span style={{color:t.textDim}}>·</span>
-              <span style={{color:t.accent}}>{mcqPercent}% MCQ</span>
-            </div>
-          </div>
-          <div style={{position:"relative",padding:"16px 0 6px"}}>
-            <div style={{height:18,borderRadius:99,overflow:"hidden",display:"flex",border:`1px solid ${t.border}`,boxShadow:`inset 0 0 0 1px ${t.surface}`}}>
-              <div style={{width:`${pbqPercent}%`,background:`linear-gradient(90deg, ${t.amber}cc, ${t.amber}88)`,transition:"width .18s"}}/>
-              <div style={{width:`${mcqPercent}%`,background:`linear-gradient(90deg, ${t.accent}99, ${t.accent}dd)`,transition:"width .18s"}}/>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max={questionCount}
-              step="1"
-              value={pbqCount}
-              aria-label="PBQ count"
-              onChange={e=>setPbqCount(Number(e.target.value))}
-              style={{position:"absolute",left:0,right:0,top:6,width:"100%",height:38,opacity:.001,cursor:"ew-resize"}}
-            />
-            <div style={{position:"absolute",top:8,left:`clamp(0px, calc(${pbqPercent}% - 11px), calc(100% - 22px))`,width:22,height:34,borderRadius:99,background:t.surface,border:`2px solid ${t.text}`,boxShadow:"0 8px 20px rgba(0,0,0,.22)",pointerEvents:"none",transition:"left .18s"}}/>
-          </div>
-          <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:t.textDim,marginTop:4}}>
-            <span>100% MCQ</span>
-            <span>Balanced</span>
-            <span>100% PBQ</span>
-          </div>
-        </div>
-      </div>
-      {resumeAvailable&&(
-        <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
-          <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
-            <div style={{flex:1,minWidth:220}}>
-              <div style={{fontWeight:800,color:t.text,fontSize:14}}>Unfinished exam found</div>
-              <div style={{fontSize:13,color:t.textSec}}>Continue your previous exam with answers, flags, and timer restored.</div>
-            </div>
-            <button className="btn btn-primary" style={{fontSize:12}} onClick={continueExam}>Continue</button>
-          </div>
-        </div>
-      )}
-      <div className="card" style={{padding:"16px 20px",marginBottom:16,borderColor:`${t.amber}35`,background:`${t.amber}07`}}>
-        <div style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,color:t.amber,fontSize:14,marginBottom:4}}>
-          <span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}45`}}>Practice score</span>
-          <span>Pass/fail disclaimer</span>
-        </div>
-        <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>
-          SecurePlus uses <strong style={{color:t.amber}}>80%</strong> as a practice pass mark here. This is not an accurate CompTIA scoring model. The real Security+ exam uses a proprietary scaled score from 100 to 900, and PBQs can carry different weight.
-        </p>
-      </div>
-      <button className="btn btn-primary" style={{width:"100%",justifyContent:"center",padding:"13px"}} onClick={startExam} disabled={accessStarting}>
-        {accessStarting?"Opening exam...":isPro?"Start Exam →":"Use 1 pass & start →"}
-      </button>
-    </div>
-    {showExamGuide&&<ExamModeGuideModal t={t} onClose={closeExamGuide}/>}
-    </>
-  );
-
-  if(submittingExam) return <LoadingScreen t={t}/>;
-
-  const examReviewRows=questions.map((item,index)=>({
-    item,
-    index,
-    ok:isCorrect(item,answers[index]||{}),
-    seconds:timeSpent[index]||0,
-    target:expectedExamSeconds(item),
-  }));
-  const timingFocus=Object.values(examReviewRows.reduce((acc,row)=>{
-    const q=row.item.q;
-    const key=row.item.kind==="mcq" ? `Ch.${q.ch}: ${q.topic}` : `PBQ: ${q.type}`;
-    if(!acc[key]) acc[key]={key,total:0,slow:0,missed:0,seconds:0,target:0};
-    acc[key].total++;
-    acc[key].seconds+=row.seconds;
-    acc[key].target+=row.target;
-    if(!row.ok) acc[key].missed++;
-    if(row.seconds>row.target*1.35) acc[key].slow++;
-    return acc;
-  },{})).filter(item=>item.missed||item.slow).sort((a,b)=>(b.missed+b.slow)-(a.missed+a.slow)).slice(0,4);
-  const incorrectExamRows=examReviewRows.filter(row=>!row.ok);
-  const flaggedCount=Object.values(flagged).filter(Boolean).length;
-  const avgExamSeconds=examReviewRows.length?Math.round(examReviewRows.reduce((sum,row)=>sum+row.seconds,0)/examReviewRows.length):0;
-  const slowCount=examReviewRows.filter(row=>row.seconds>row.target*1.35).length;
-  const totalExamSeconds=examReviewRows.reduce((sum,row)=>sum+row.seconds,0);
-  const completionRate=questions.length?Math.round((answeredCount/questions.length)*100):0;
-  const combinedReadinessAttempts=[...completedRows,...attempts.filter(attempt=>!completedRows.includes(attempt))];
-  const reportReadiness=getReadinessProfile(combinedReadinessAttempts);
-  const reportReadinessColor=reportReadiness.score>=80?t.green:reportReadiness.score>=65?t.accent:reportReadiness.score>=45?t.amber:t.red;
-  const gradeLabel=score>=90?"Outstanding":score>=80?"Practice pass":score>=70?"Nearly there":score>=60?"Building skills":"Focus and rebuild";
-  const resultMessage=score>=90
-    ? "Excellent control of this exam set. Keep the result stable with another timed attempt after a short review gap."
-    : score>=80
-      ? "You cleared the SecurePlus practice target. Review the misses so this performance becomes repeatable."
-      : score>=70
-        ? "You are close to the practice target. A focused repair set can turn the weak areas into a pass."
-        : "Use the report below as a study plan. Repair the weakest area first, then retake only the missed questions.";
-  const typePerformance=[
-    {id:"mcq",label:"MCQ knowledge",rows:examReviewRows.filter(row=>row.item.kind==="mcq"),Icon:BookOpenCheck},
-    {id:"pbq",label:"PBQ application",rows:examReviewRows.filter(row=>row.item.kind==="pbq"),Icon:Puzzle},
-  ].filter(group=>group.rows.length).map(group=>({
-    ...group,
-    correct:group.rows.filter(row=>row.ok).length,
-    accuracy:Math.round((group.rows.filter(row=>row.ok).length/group.rows.length)*100),
-  }));
-  const topicPerformance=Object.values(examReviewRows.reduce((acc,row)=>{
-    const q=row.item.q;
-    const key=row.item.kind==="mcq"?(CHAPTERS.find(chapter=>chapter.id===q.ch)?.title||q.topic||"MCQ"):`PBQ · ${q.type}`;
-    if(!acc[key])acc[key]={key,total:0,correct:0};
-    acc[key].total++;
-    if(row.ok)acc[key].correct++;
-    return acc;
-  },{})).map(item=>({...item,accuracy:Math.round((item.correct/item.total)*100)}));
-  const strongestTopic=[...topicPerformance].sort((a,b)=>b.accuracy-a.accuracy||b.total-a.total)[0];
-  const focusTopic=[...topicPerformance].filter(item=>item.correct<item.total).sort((a,b)=>a.accuracy-b.accuracy||b.total-a.total)[0];
-  const reportDate=new Date(completedRows[0]?.createdAt||Date.now()).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"});
-  const printReport=()=>{
-    capture("exam_report_card_printed", { score, question_count:questions.length, tier:user.tier });
-    window.print();
-  };
-  const retakeIncorrectExam=()=>{
-    const missed=incorrectExamRows.map(row=>row.item);
-    if(!missed.length)return;
-    setQuestions(missed);
-    setAnswers(Object.fromEntries(missed.map((item,index)=>[index,initAnswer(item)])));
-    setFlagged({});
-    setTimeSpent({});
-    setExpandedReview({});
-    setQi(0);
-    setQuestionCount(missed.length);
-    setPbqCount(missed.filter(item=>item.kind==="pbq").length);
-    setTimeLeft(Math.max(1,missed.length)*72);
-    setDone(false);
-    setSaved(false);
-    setCompletedRows([]);
-    setSubmittingExam(false);
-    setStarted(true);
-    capture("exam_retake_incorrect_started", { question_count: missed.length, tier: user.tier });
-  };
-
-  if(done) return(
-    <div className="results-shell">
-      <section className="card exam-report-card" style={{"--report-color":score>=80?t.green:t.red,"--report-readiness-color":reportReadinessColor}}>
-        <header className="exam-report-header">
-          <div className="exam-report-brand">
-            <span><ShieldCheck size={25} strokeWidth={2.4}/></span>
-            <div><strong>SecurePlus</strong><small>Exam report card</small></div>
-          </div>
-          <div className="exam-report-date"><span>Completed</span><strong>{reportDate}</strong></div>
-        </header>
-
-        <div className="exam-report-hero">
-          <div className="exam-report-score">
-            <div className="exam-report-status-row">
-              <span>{score>=80?"Practice passed":"Below practice target"}</span>
-              <span className="info-popover">
-                <button className="info-btn" type="button" aria-label="Practice score disclaimer" onClick={()=>setShowScoreDisclaimer(value=>!value)}>i</button>
-                {showScoreDisclaimer&&(
-                  <span className="info-tooltip">
-                    SecurePlus uses 80% as a practice pass mark. This is not the official CompTIA scoring model; real exam scoring is proprietary and PBQs may carry different weight.
-                  </span>
-                )}
-              </span>
-            </div>
-            <RadialScore score={score} correct={correctCount} total={questions.length} t={t}/>
-          </div>
-          <div className="exam-report-summary">
-            <div className="exam-report-kicker">Candidate · {user.name}</div>
-            <h1>{gradeLabel}</h1>
-            <p>{resultMessage}</p>
-            <div className="exam-report-readiness">
-              <span className="exam-report-readiness-icon"><Gauge size={22} strokeWidth={2.4}/></span>
-              <div>
-                <small>Updated readiness</small>
-                <strong>{reportReadiness.score}/100 · {reportReadiness.level}</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="exam-report-metrics">
-          <div><span>Correct answers</span><strong style={{color:t.green}}>{correctCount}<small> / {questions.length}</small></strong></div>
-          <div><span>Completion</span><strong>{completionRate}%</strong></div>
-          <div><span>Total time</span><strong>{formatSecondsShort(totalExamSeconds)}</strong></div>
-          <div><span>Average pace</span><strong style={{color:slowCount?t.amber:t.green}}>{formatSecondsShort(avgExamSeconds)}</strong></div>
-        </div>
-
-        <div className="exam-report-section">
-          <div className="exam-report-section-title">
-            <div><span>Performance breakdown</span><strong>Knowledge and applied skills</strong></div>
-            <small>{flaggedCount} flagged · {slowCount} slow</small>
-          </div>
-          <div className="exam-report-type-grid">
-            {typePerformance.map(group=>(
-              <div key={group.id} className="exam-report-type">
-                <span className="exam-report-type-icon"><group.Icon size={20} strokeWidth={2.3}/></span>
-                <div>
-                  <span>{group.label}</span>
-                  <strong>{group.correct}/{group.rows.length} correct</strong>
-                </div>
-                <b style={{color:group.accuracy>=80?t.green:group.accuracy>=65?t.amber:t.red}}>{group.accuracy}%</b>
-                <div className="exam-report-type-meter"><span style={{width:`${group.accuracy}%`}}/></div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="exam-report-insights">
-          <div className="exam-report-insight strength">
-            <span><Trophy size={18} strokeWidth={2.4}/> Strongest signal</span>
-            <strong>{strongestTopic?.key||"Complete more questions"}</strong>
-            <p>{strongestTopic?`${strongestTopic.correct}/${strongestTopic.total} correct in this area.`:"A larger exam will reveal a clearer strength."}</p>
-          </div>
-          <div className="exam-report-insight focus">
-            <span><Target size={18} strokeWidth={2.4}/> Best next focus</span>
-            <strong>{focusTopic?.key||"Protect your result"}</strong>
-            <p>{focusTopic?`${focusTopic.total-focusTopic.correct} missed here. Retake the missed questions after reviewing explanations.`:"No missed topic cluster—repeat a timed set later to confirm consistency."}</p>
-          </div>
-        </div>
-
-        <footer className="exam-report-footer">
-          <span>This report is a SecurePlus practice summary, not an official CompTIA score report.</span>
-          <span>Use readiness to choose what to practise next, not to predict the official exam result.</span>
-        </footer>
-      </section>
-      <div className="score-actions">
-        <button className="btn btn-outline" onClick={printReport}>
-          <FileText size={16}/> Print / Save Report
-        </button>
-        <button className="btn btn-primary" disabled={!incorrectExamRows.length} onClick={retakeIncorrectExam}>
-          Retake Incorrect Questions
-        </button>
-        <button className="btn btn-outline" onClick={()=>{setStarted(false);setDone(false);}}>
-          New Full Exam
-        </button>
-        <button className="btn btn-ghost" onClick={()=>setStarted(false)}>
-          Back to Exam Setup
-        </button>
-      </div>
-      <div className="card" style={{padding:"18px 20px",marginBottom:18,borderColor:`${t.accent}28`,background:`${t.accent}05`}}>
-        <div style={{fontWeight:900,color:t.text,fontSize:16,marginBottom:4}}>Timing and topic analysis</div>
-        {timingFocus.length?(
-          <div className="analytics-grid">
-            {timingFocus.map(item=>{
-              const avg=Math.round(item.seconds/item.total);
-              const expected=Math.round(item.target/item.total);
-              const pacing=Math.min(100,Math.round((expected/Math.max(avg,1))*100));
-              return(
-                <div key={item.key} className="telemetry-card">
-                  <div style={{display:"flex",justifyContent:"space-between",gap:10,flexWrap:"wrap",marginBottom:8}}>
-                    <div style={{fontSize:13,fontWeight:800,color:t.text}}>{item.key}</div>
-                    <div style={{fontSize:12,fontWeight:800,color:item.missed?t.red:t.amber}}>
-                      {item.missed} missed · {item.slow} slow
-                    </div>
-                  </div>
-                  <div style={{display:"grid",gridTemplateColumns:"auto 1fr auto",gap:10,alignItems:"center"}}>
-                    <span style={{fontSize:12,color:t.textDim,fontWeight:800}}>Pace</span>
-                    <div className="telemetry-meter"><span style={{width:`${pacing}%`}}/></div>
-                    <span style={{fontSize:12,color:t.textSec,fontWeight:900}}>{formatSecondsShort(avg)} / {formatSecondsShort(expected)}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        ):(
-          <div style={{fontSize:13,color:t.textSec,lineHeight:1.7}}>Strong pacing. No major slow or missed topic cluster stood out in this exam.</div>
-        )}
-      </div>
-      <div className="review-toolbar">
-        <div>
-          <h3 style={{fontSize:20,color:t.text,marginBottom:4}}>Answer Review</h3>
-          <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>Missed questions appear first so you can repair weak spots quickly.</div>
-        </div>
-        <span className="review-count-pill">{incorrectExamRows.length} missed · {questions.length} total</span>
-        <button className="btn btn-outline" onClick={()=>{setStarted(false);setDone(false);}}>New Exam</button>
-      </div>
-      <div style={{display:"grid",gap:12}}>
-        {examReviewRows
-          .sort((a,b)=>Number(a.ok)-Number(b.ok)||a.index-b.index)
-          .map(({item,index,ok,seconds,target})=>{
-          const q=item.q;
-          const a=answers[index]||{};
-          const title=item.kind==="mcq"?q.q:q.title;
-          const expanded=Boolean(expandedReview[index]);
-          const reviewColor=ok?t.green:t.red;
-          const selectedLabel=a.selected!==null&&a.selected!==undefined ? `${String.fromCharCode(65+a.selected)}. ${q.opts?.[a.selected]||""}` : "Not answered";
-          const correctLabel=item.kind==="mcq" ? `${String.fromCharCode(65+q.correct)}. ${q.opts[q.correct]}` : "See solution below";
-          return(
-            <div
-              key={`${item.kind}-${q.id}`}
-              className={`card exam-review-card ${ok?"correct":"incorrect"}`}
-              style={{"--review-color":reviewColor}}
-              onClick={()=>setExpandedReview(prev=>({...prev,[index]:!prev[index]}))}
-            >
-              <div className="exam-review-main">
-                <div className="exam-review-head">
-                  <div className="exam-review-status">{ok?<Check size={17} strokeWidth={3}/>:<X size={17} strokeWidth={3}/>}</div>
-                  <div style={{minWidth:0}}>
-                    <div className="exam-review-meta">
-                      <span style={{fontWeight:950,color:reviewColor}}>{ok?"Correct":"Needs review"}</span>
-                      {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
-                      {item.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
-                      {flagged[index]&&<span className="chip" style={{background:`${t.amber}14`,color:t.amber,borderColor:`${t.amber}35`}}>Flagged</span>}
-                      <span className="chip" style={{background:seconds>target*1.35?`${t.amber}14`:t.panel,color:seconds>target*1.35?t.amber:t.textSec,borderColor:seconds>target*1.35?`${t.amber}35`:t.border}}>
-                        {formatSecondsShort(seconds)} / target {formatSecondsShort(target)}
-                      </span>
-                    </div>
-                    <div className="exam-review-title" style={{marginTop:8}}>
-                      {expanded ? <QuestionStemText text={title} t={t} compact/> : `${title.slice(0,150)}${title.length>150?"...":""}`}
-                    </div>
-                  </div>
-                  <div className="exam-review-toggle">{expanded?"Hide details":"View details"}</div>
-                </div>
-              {expanded&&item.kind==="pbq"&&(
-                <div style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:10}}>
-                  {q.scenario&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Scenario: </strong><PBQProseText text={q.scenario} t={t} paragraphGap={5}/></div>}
-                  {q.question&&<div style={{marginBottom:8}}><strong style={{color:t.text}}>Question: </strong><PBQProseText text={q.question} t={t} paragraphGap={5}/></div>}
-                  {(q.choices||q.options)?.length>0&&(
-                    <div style={{display:"grid",gap:7,marginTop:8}}>
-                      <strong style={{color:t.text}}>Option review</strong>
-                      {(q.choices||q.options||[]).map((choice,choiceIndex)=>{
-                        const optionCorrect=choiceIndex===q.correct;
-                        const wasSelected=a.selected===choiceIndex;
-                        const feedback=q.optionFeedback?.[choiceIndex] || (optionCorrect ? ensureFeedbackLead(q.explanation||"",true) : q.wrongFeedback?.[choiceIndex] ? ensureFeedbackLead(q.wrongFeedback[choiceIndex],false) : buildPbqOptionFeedback(q,choiceIndex,choice,q.correct));
-                        return(
-                          <div key={choiceIndex} style={{padding:"9px 10px",borderRadius:9,border:`1px solid ${optionCorrect?t.green:wasSelected?t.red:t.border}35`,background:optionCorrect?`${t.green}08`:wasSelected?`${t.red}08`:t.panel}}>
-                            <div style={{display:"flex",gap:7,alignItems:"flex-start",color:t.text,lineHeight:1.55}}>
-                              <strong style={{color:optionCorrect?t.green:wasSelected?t.red:t.textSec}}>{String.fromCharCode(65+choiceIndex)}. {optionCorrect?"Correct.":"Incorrect."}</strong>
-                              <GlossaryText text={choice} t={t}/>
-                            </div>
-                            <div style={{fontSize:12,color:t.textSec,lineHeight:1.6,marginTop:5}}><PBQProseText text={pbqFeedbackBody(feedback)} t={t} paragraphGap={5}/></div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                  {q.type===SELECT_FILL_PBQ_TYPE&&q.blanks?.length>0&&(
-                    <div style={{display:"grid",gap:7,marginTop:8}}>
-                      <strong style={{color:t.text}}>Blank review</strong>
-                      {q.blanks.map((blank,blankIndex)=>{
-                        const userValue=a.blanks?.[blank.id]||"Not answered";
-                        const correct=isFillBlankAnswerCorrect(userValue,blank);
-                        return(
-                          <div key={blank.id||blankIndex} style={{padding:"9px 10px",borderRadius:9,border:`1px solid ${correct?t.green:t.red}35`,background:`${correct?t.green:t.red}08`}}>
-                            <div style={{color:t.text,lineHeight:1.55}}><GlossaryText text={blank.sentence} t={t}/></div>
-                            <div style={{marginTop:4,fontSize:12}}>Your answer: <strong style={{color:correct?t.green:t.red}}>{userValue}</strong></div>
-                            {!correct&&<div style={{fontSize:12}}>Correct answer: <strong style={{color:t.green}}>{blank.answer}</strong></div>}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                  {q.type!==SELECT_FILL_PBQ_TYPE&&q.items&&q.targets&&(
-                    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginTop:8}}>
-                      <div>
-                        <strong style={{color:t.text}}>Items</strong>
-                        {q.items.map(item=><div key={item.id}>- {item.label}</div>)}
-                      </div>
-                      <div>
-                        <strong style={{color:t.text}}>Targets</strong>
-                        {q.targets.map(target=><div key={target.id}>- {target.label}</div>)}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-              {item.kind==="mcq"&&(
-                <div className="answer-compare">
-                  <div className={`answer-compare-box ${ok?"correct":"yours"}`}>
-                    <strong>{ok?"Your answer":"Your answer"}</strong>
-                    {selectedLabel}
-                  </div>
-                  <div className="answer-compare-box correct">
-                    <strong>Correct answer</strong>
-                    {correctLabel}
-                  </div>
-                </div>
-              )}
-              {(item.kind==="mcq"||hasSeparatePbqSolution(q))&&<div className="solution-panel">
-                {item.kind==="mcq"?(
-                  <>
-                    <MCQFeedbackVerdict correct={ok} t={t} compact/>
-                    <div style={{marginTop:6}}>{q.exp}</div>
-                  </>
-                ):(
-                  <><strong style={{color:t.text}}>Solution: </strong>{q.explanation}</>
-                )}
-              </div>}
-              <div className="guidance-panel">
-                {examTimeGuidance(item,seconds,ok)}
-              </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-
-  const q=current?.q;
-  const timerGlow=timeLeft<=60 || (timeLeft>0&&timeLeft%60===0);
-  return(
-    <div style={{padding:"24px",maxWidth:960,margin:"0 auto"}}>
-      <div className="top-progress" aria-hidden="true"><span style={{width:`${((qi+1)/questions.length)*100}%`}}/></div>
-      <div className="card" style={{padding:"14px 16px",marginBottom:16,display:"flex",gap:12,alignItems:"center",flexWrap:"wrap",position:"sticky",top:12,zIndex:40}}>
-        <div className={`exam-timer ${timerGlow?"glow":""}`} style={{fontWeight:900,color:timeLeft<300?t.red:t.text,fontSize:20}}>{formatTime(timeLeft)}</div>
-        <div style={{fontSize:13,color:t.textSec}}>Question {qi+1} of {questions.length} · {answeredCount} answered</div>
-        <button className={`btn ${flagged[qi]?"btn-primary":"btn-ghost"}`} style={{marginLeft:"auto",fontSize:12}} onClick={()=>setFlagged(f=>({...f,[qi]:!f[qi]}))}>
-          {flagged[qi]?"Flagged":"Flag for review"}
-        </button>
-        <button className="btn btn-primary" style={{fontSize:12}} onClick={()=>submitExam(false)}>Submit Exam</button>
-      </div>
-
-      <div className="exam-layout">
-        <div>
-          <div style={{display:"flex",justifyContent:"space-between",gap:10,marginBottom:12}}>
-            <button className="btn btn-ghost" disabled={qi===0} onClick={()=>setQi(i=>Math.max(0,i-1))}>← Previous</button>
-            <button className="btn btn-ghost" disabled={qi===questions.length-1} onClick={()=>setQi(i=>Math.min(questions.length-1,i+1))}>Next →</button>
-          </div>
-          <div className={`card question-card ${current.kind==="pbq"?"pbq-scenario-card":""}`} style={{"--sim-color":current.kind==="pbq"?((Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent):undefined,padding:"20px 22px",marginBottom:16,position:"relative",overflow:"hidden"}}>
-            {flagged[qi]&&<div className="exam-flag-ribbon"><span>Review</span></div>}
-            <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
-              {current.kind==="mcq"?<ChBadge chId={q.ch} t={t}/>:<SimBadge type={q.type} t={t}/>}
-              {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
-              <DiffBadge d={q.difficulty} t={t} mcq={current.kind==="mcq"}/>
-              <span className="chip meta-chip">{current.kind==="mcq"?"MCQ":"PBQ"}</span>
-              {flagged[qi]&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}45`}}>Flagged for review</span>}
-            </div>
-            <div className="question-text" style={{fontSize:16,lineHeight:1.75,color:t.text,fontWeight:700}}>
-              <QuestionStemText text={current.kind==="mcq"?q.q:(q.question||q.title)} t={t}/>
-            </div>
-            {current.kind==="pbq"&&q.scenario&&(
-              <div className="scenario-text" style={{fontSize:13,color:t.textSec,lineHeight:1.58,marginTop:12}}>
-                <PBQProseText text={q.scenario} t={t} paragraphGap={5}/>
-              </div>
-            )}
-          </div>
-
-          {current.kind==="pbq"&&<PBQEvidenceViewer title="Code or configuration evidence" content={q?.codeBlock || q?.payload?.evidence?.codeBlock} language={q?.codeLanguage || q?.payload?.evidence?.codeLanguage} t={t} accent={(Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent}/>}
-          {current.kind==="pbq"&&<PBQEvidenceViewer title="Log evidence" content={q?.logData || q?.payload?.evidence?.logData} t={t} accent={(Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent}/>}
-          {current.kind==="pbq"&&<PBQEvidenceViewer title="Network diagram" content={q?.diagram || q?.payload?.evidence?.diagram} t={t} accent={(Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent}/>}
-          {current.kind==="pbq"&&<PBQEvidenceViewer title="Current configuration" content={q?.currentConfig || q?.payload?.evidence?.currentConfig} t={t} accent={(Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent}/>}
-
-          {current.kind==="mcq"&&(
-            <div style={{display:"grid",gap:9}}>
-              <div style={{fontSize:12,color:t.textDim,lineHeight:1.6}}>
-                Right-click an option, long-press on mobile, or use Strike to cross it out.
-              </div>
-              {q.opts.map((opt,index)=>{
-                const eliminated=Boolean(answer.eliminated?.[index]);
-                const eliminatedCount=Object.values(answer.eliminated||{}).filter(Boolean).length;
-                const strikeDisabled=!eliminated&&eliminatedCount>=3;
-                return(
-                <div
-                  key={index}
-                  className={`opt ${answer.selected===index&&!eliminated?"sel":""} ${eliminated?"eliminated":""}`}
-                  onClick={()=>{if(longPressActivated.current[index]){delete longPressActivated.current[index];return;}selectMcqOption(index);}}
-                  onContextMenu={e=>{
-                    e.preventDefault();
-                    if(rightClickHandled.current[index]){
-                      delete rightClickHandled.current[index];
-                      return;
-                    }
-                    toggleEliminatedOption(index);
-                  }}
-                  onPointerDown={e=>{
-                    if(e.pointerType==="mouse"&&e.button===2){
-                      e.preventDefault();
-                      rightClickHandled.current[index]=true;
-                      toggleEliminatedOption(index);
-                      return;
-                    }
-                    if(e.pointerType==="touch"||e.pointerType==="pen")startOptionLongPress(index,e);
-                  }}
-                  onPointerUp={()=>clearOptionLongPress(index)}
-                  onPointerCancel={()=>clearOptionLongPress(index)}
-                  onPointerLeave={()=>clearOptionLongPress(index)}
-                  title="Right-click, long-press, or use Strike to cross out"
-                >
-                  <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
-                  <span className="option-text" style={{fontSize:14,color:t.text,lineHeight:1.55}}><GlossaryText text={opt} t={t}/></span>
-                  <button
-                    type="button"
-                    className="btn btn-ghost"
-                    style={{marginLeft:"auto",fontSize:11,minHeight:30,padding:"4px 8px",flexShrink:0,color:eliminated?t.accent:t.textDim,borderColor:eliminated?`${t.accent}70`:t.border,opacity:strikeDisabled ? .55 : 1,cursor:strikeDisabled?"not-allowed":"pointer"}}
-                    onClick={e=>{e.stopPropagation();toggleEliminatedOption(index);}}
-                    disabled={strikeDisabled}
-                    aria-label={`${eliminated?"Undo elimination for":"Eliminate"} option ${String.fromCharCode(65+index)}`}
-                    title={strikeDisabled ? "At least one answer must remain unstruck." : `${eliminated?"Undo":"Strike"} option ${String.fromCharCode(65+index)}`}
-                  >
-                    {eliminated?"Undo":"Strike"}
-                  </button>
-                </div>
-              )})}
-            </div>
-          )}
-
-          {current.kind==="pbq"&&(q.choices||q.options)&&(
-            <div style={{display:"grid",gap:9}}>
-              {(q.choices||q.options||[]).map((choice,index)=>(
-                <div key={index} className={`opt ${answer.selected===index?"sel":""}`} onClick={()=>updateAnswer({selected:index})}>
-                  <div className="opt-ltr">{String.fromCharCode(65+index)}</div>
-                  <span className="option-text" style={{fontSize:14,color:t.text,lineHeight:1.55}}><GlossaryText text={choice} t={t}/></span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {current.kind==="pbq"&&q.type===SELECT_FILL_PBQ_TYPE&&(
-            <PBQSelectionWorkspace
-              q={q}
-              values={answer.blanks||{}}
-              onChange={(blankId,value)=>updateAnswer({blanks:{...(answer.blanks||{}),[blankId]:value}})}
-              t={t}
-              accent={(Object.values(SIM_TYPES).find(s=>s.id===q.type)?.color)||t.accent}
-              showHints={false}
-              compact
-            />
-          )}
-
-          {current.kind==="pbq"&&q.type==="ORDERING"&&(
-            <div>
-              <div style={{fontSize:12,color:t.textDim,marginBottom:10}}>Drag each answer to rank it from top to bottom.</div>
-              <SortableOrderList items={answer.orderItems||[]} onChange={next=>updateAnswer({orderItems:next})} t={t}/>
-            </div>
-          )}
-        </div>
-
-        <div className="card exam-map">
-          <div className="label" style={{marginBottom:10}}>Answer map</div>
-          <div className="exam-map-grid">
-            {questions.map((item,index)=>{
-              const active=index===qi;
-              const answered=isAnswered(item,answers[index]);
-              return(
-                <button
-                  key={index}
-                  className={`btn exam-map-btn ${active?"active":answered?"answered":"unanswered"} ${flagged[index]?"flagged":""}`}
-                  aria-label={`Question ${index+1}${answered?", answered":", unanswered"}${flagged[index]?", flagged":""}`}
-                  onClick={()=>setQi(index)}
-                >
-                  {index+1}
-                </button>
-              );
-            })}
-          </div>
-          <div style={{fontSize:11,color:t.textDim,lineHeight:1.6,marginTop:10}}>
-            Amber boxes need attention. Muted boxes are answered. Amber outline means flagged.
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════
-// PRICING
-// ═══════════════════════════════════════════════════════════════
 function CipherRewardToast({reward,onClose}) {
   const [isLeaving,setIsLeaving]=useState(false);
   const closeRef=useRef(onClose);
@@ -27243,20 +26369,20 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
   const walletGoal=isPro
     ? {label:"Pro access active",status:"Zero coins needed",progress:100}
     : remainingPbqCount===0
-      ? {label:"Next exam voucher",status:examGap?`${examGap} coins to go`:"Ready now",progress:examProgress}
+      ? {label:"PBQ collection complete",status:"Exams are free",progress:100}
       : pbqGap
         ? {label:"Next mystery PBQ",status:`${pbqGap} coins to go`,progress:pbqProgress}
         : {label:"Mystery PBQ ready",status:"You can reveal now",progress:100};
   const coachMessage=isPro
     ? "Your Pro plan already opens every PBQ and practice exam. Keep coins as a record of your study streak."
     : balance>=CIPHER_COIN_COSTS.examPass
-      ? "You have enough for either reward. Pick a permanent PBQ or save an exam voucher for a full practice run."
+      ? "You can reveal a permanent PBQ. Timed MCQ exams are free to start from the MCQ page."
       : balance>=CIPHER_COIN_COSTS.pbq
         ? "You can reveal a permanent mystery PBQ now. Your first three reveals follow the shared starter path."
         : `You are ${pbqGap} coins away from a mystery PBQ. A perfect MCQ set brings in 15.`;
   const scrollToSection=id=>document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"});
   const openExchange=type=>{
-    if(busy||isPro)return;
+    if(type!=="pbq"||busy||isPro)return;
     if(type==="pbq"&&(balance<CIPHER_COIN_COSTS.pbq||remainingPbqCount===0))return;
     if(type==="exam"&&balance<CIPHER_COIN_COSTS.examPass)return;
     setPendingExchange(type);
@@ -27284,7 +26410,7 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
         <div>
           <div className="cipher-vault-kicker"><CipherCoinIcon size={27}/> Your Coin Vault</div>
           <h1>Your effort has value.</h1>
-          <p>Turn steady study habits into PBQ access and SecurePlus practice exam vouchers. Earn coins by learning, then choose how you want to use them.</p>
+          <p>Turn steady study habits into permanent PBQ access. Timed MCQ exams are available without coins.</p>
           <div className="cipher-vault-trust" aria-label="Cipher Coin rules">
             <span><ShieldCheck size={14}/> Never expires</span>
             <span><CheckCircle2 size={14}/> No cash value</span>
@@ -27301,7 +26427,7 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
           <div className="cipher-wallet-meta">
             <div><small>Lifetime earned</small><b>{Number(wallet?.lifetimeEarned||0)}</b></div>
             <div><small>PBQs revealed</small><b>{unlockedPbqCount}</b></div>
-            <div><small>Exam vouchers</small><b>{Number(wallet?.examPasses||0)}</b></div>
+            <div><small>Timed exams</small><b>Free</b></div>
           </div>
           <div className="cipher-wallet-goal">
             <div className="cipher-wallet-goal-head"><span>{walletGoal.label}</span><strong>{walletGoal.status}</strong></div>
@@ -27323,7 +26449,7 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
       </nav>
 
       <section className="cipher-vault-section" id="cipher-spend">
-        <div className="cipher-vault-section-head"><div><span className="cipher-section-eyebrow">Choose your reward</span><h2>Use your coins</h2></div><p>PBQ reveals are permanent. Practice exam vouchers are single-use inside SecurePlus—not official CompTIA exam vouchers.</p></div>
+        <div className="cipher-vault-section-head"><div><span className="cipher-section-eyebrow">Choose your reward</span><h2>Use your coins</h2></div><p>PBQ reveals are permanent. Timed MCQ exams are free to start from the MCQ page.</p></div>
         <div className="cipher-spend-grid">
           <article className="cipher-spend-card pbq">
             <div className="cipher-spend-top"><div className="cipher-spend-visual"><Puzzle size={30}/></div><span className="cipher-spend-badge"><BadgeCheck size={13}/> Permanent unlock</span></div>
@@ -27335,12 +26461,9 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
             {isPro&&<div className="cipher-pro-zero"><Sparkles size={13}/> Pro has every PBQ with zero coin requirements.</div>}
           </article>
           <article className="cipher-spend-card exam">
-            <div className="cipher-spend-top"><div className="cipher-spend-visual"><ClipboardCheck size={30}/></div><span className="cipher-spend-badge"><Clock3 size={13}/> One full exam</span></div>
-            <h3>Practice exam voucher</h3>
-            <p>Run one complete timed SecurePlus practice exam. Your voucher is used only when the exam begins.</p>
-            <div className="cipher-access-meter"><div className="cipher-access-label"><span>Your balance</span><strong>{isPro?"Included with Pro":examGap?`${examGap} more needed`:"Ready to exchange"}</strong></div><div className="cipher-access-track" role="progressbar" aria-label="Progress toward a practice exam voucher" aria-valuemin="0" aria-valuemax={CIPHER_COIN_COSTS.examPass} aria-valuenow={Math.min(balance,CIPHER_COIN_COSTS.examPass)}><span style={{width:`${examProgress}%`}}/></div></div>
-            <div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={25}/>{CIPHER_COIN_COSTS.examPass} coins</span><button className="btn btn-primary" type="button" onClick={()=>openExchange("exam")} disabled={busy||isPro||balance<CIPHER_COIN_COSTS.examPass}>{isPro?"Included with Pro":examGap?`${examGap} more needed`:"Get Exam Voucher"}</button></div>
-            {isPro&&<div className="cipher-pro-zero"><Sparkles size={13}/> Pro runs unlimited practice exams without spending coins.</div>}
+            <div className="cipher-spend-top"><div className="cipher-spend-visual"><ClipboardCheck size={30}/></div><span className="cipher-spend-badge"><Clock3 size={13}/> No coins needed</span></div>
+            <h3>Timed MCQ exams</h3><p>Choose 10, 20 or 30 questions for free. Pro learners can use the slider for any exam size up to 50.</p>
+            <div className="cipher-cost-line"><span className="cipher-cost">Included</span><button className="btn btn-primary" type="button" onClick={()=>onNavigate("exam")}>Open Exam mode</button></div>
           </article>
         </div>
       </section>
@@ -27525,7 +26648,7 @@ function TrialExpiredPrompt({t,onUpgrade,onClose}) {
           <div className="label" style={{color:t.amber,marginBottom:8}}>Pro trial ended</div>
           <h2 style={{fontSize:26,fontWeight:900,color:t.text,marginBottom:10}}>Ready to keep Pro?</h2>
           <p style={{fontSize:14,color:t.textSec,lineHeight:1.75,marginBottom:18}}>
-            Your 7-day referral trial has expired. Choose the {PRO_ACADEMY_PASS_NAME} to keep PBQ simulations, Exam Mode, Smart Review, and detailed solutions.
+            Your 7-day referral trial has expired. Choose the {PRO_ACADEMY_PASS_NAME} to keep PBQ simulations, longer MCQ exams, Smart Review, and detailed solutions.
           </p>
           <div className="card" style={{padding:"14px 16px",marginBottom:18,background:`${t.accent}10`,borderColor:`${t.accent}35`}}>
             <div style={{fontSize:14,fontWeight:950,color:t.accent,marginBottom:4}}>{PRO_ACADEMY_PASS_NAME}</div>
@@ -27726,7 +26849,7 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
 
   const explainSmartReview=()=>addMessage("cipher","Smart Review uses three decks: 20% delayed retests, 30% unseen questions for weak concepts, and 50% discovery. Empty decks pass their slots forward. Concept scores start at 50, gain 20 for a correct answer, and lose 35 for a miss. Scores of 80 or more are mastered.");
 
-  const explainCoins=()=>addMessage("cipher",`Cipher Coins let free users unlock premium practice through consistent study. Daily Challenge and perfect sets earn coins. PBQ unlocks cost ${CIPHER_COIN_COSTS.pbq} coins, and Exam Vouchers cost ${CIPHER_COIN_COSTS.examPass} coins. Pro is still the faster route when your exam is soon because it removes coin requirements.`);
+  const explainCoins=()=>addMessage("cipher",`Cipher Coins let free users unlock premium practice through consistent study. Daily Challenge and perfect sets earn coins. PBQ unlocks cost ${CIPHER_COIN_COSTS.pbq} coins. Timed MCQ exams do not cost coins. Pro is still the faster route when your exam is soon because it removes coin requirements.`);
 
   const explainPbq=()=>addMessage("cipher","PBQs are scenario questions. Read the objective first, open the evidence only when needed, then solve the task step by step. If you are on mobile, use tap-based selections instead of drag-and-drop.");
 
@@ -27734,7 +26857,7 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
 
   const explainExamMode=()=>addMessage("cipher","Exam Mode is for rehearsal when you want pressure: timed practice, mixed objectives, review after submission, and a report card that points you toward chapters to repair next.");
 
-  const explainProPlan=()=>addMessage("cipher",`The ${PRO_ACADEMY_PASS_NAME} is convenience access. It unlocks all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements. Use coins if you have time; use Pro if your exam is soon.`);
+  const explainProPlan=()=>addMessage("cipher",`The ${PRO_ACADEMY_PASS_NAME} is convenience access. It unlocks all PBQs, MCQ exams up to 50 questions, Smart Review, report cards, and Concept Deep Dives with zero coin requirements. Use coins if you have time; use Pro if your exam is soon.`);
 
   const explainPaymentPolicy=()=>addMessage("cipher","Payments are handled through Stripe. SecurePlus does not store your card details. You can cancel renewal from the account support area before the next billing cycle, or contact support if the portal is unavailable.");
 
@@ -29980,7 +29103,7 @@ function ReferralClaimPrompt({result,t,onOpenWallet,onClose}) {
           <div className="label" style={{color:t.green,margin:"10px 0 8px"}}>Referral reward received</div>
           <h2 style={{fontSize:26,fontWeight:900,color:t.text,marginBottom:10}}>Your wallet gained {awarded || 100} Cipher Coins</h2>
           <p style={{fontSize:14,color:t.textSec,lineHeight:1.75,marginBottom:18}}>
-            Your friend’s code worked. Spend the coins on mystery PBQ reveals or save towards a SecurePlus practice exam voucher.
+            Your friend’s code worked. Spend the coins on mystery PBQ reveals. Timed MCQ exams are free to start.
           </p>
           <div className="card" style={{padding:"14px 16px",marginBottom:18,background:`${t.green}10`,borderColor:`${t.green}35`}}>
             <div style={{fontSize:28,fontWeight:900,color:t.green}}>+{awarded || 100} Cipher Coins</div>
@@ -30139,7 +29262,7 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
         <div className="label" style={{color:t.green,marginBottom:6}}>Referral Pro trial active</div>
         <div style={{fontWeight:900,color:t.text,fontSize:18,marginBottom:5}}>Your 7-day Pro trial ends in</div>
         <div style={{fontSize:13,color:t.textSec,lineHeight:1.6}}>
-          Trial ends {trialEnd}. Choose the 3-month Academy Pass to keep PBQ simulations, Exam Mode, Smart Review, and detailed solutions.
+          Trial ends {trialEnd}. Choose the 3-month Academy Pass to keep PBQ simulations, longer MCQ exams, Smart Review, and detailed solutions.
         </div>
       </div>
       <div className="trial-countdown-grid" aria-label={`Trial time left: ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`}>
@@ -30177,7 +29300,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
   const features=[
     "Everything in Free, including the full MCQ bank",
     `${PBQ_BANK.length} performance-based simulations across 8 task types`,
-    "Timed Exam Mode with mixed MCQ and PBQ practice",
+    "Timed MCQ exams up to 50 questions",
     "Smart Review with delayed retests and concept remediation",
     "Detailed solutions, chapter analytics, and next-step guidance",
     "Zero Cipher Coin requirements—open every Pro tool whenever you need it",
@@ -30185,7 +29308,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
   const premiumBenefits=[
     {label:"Personalised practice",free:"Basic review",freeIncluded:true,Icon:Brain,view:"dashboard"},
     {label:"Unlimited PBQs",free:"Preview only",freeIncluded:false,Icon:Puzzle,view:"pbq"},
-    {label:"Exam Mode",free:"Not included",freeIncluded:false,Icon:ClipboardCheck,view:"exam"},
+    {label:"Exam Mode",free:"10, 20 or 30 questions",freeIncluded:true,Icon:ClipboardCheck,view:"exam"},
     {label:"Concept Deep Dives",free:"Not included",freeIncluded:false,Icon:BookOpenCheck,view:"deep-dives"},
   ];
   const rawOwnerName=String(user?.name||user?.fullName||user?.email?.split("@")?.[0]||"").trim().split(/\s+/)[0] || "Your";
@@ -32676,7 +31799,7 @@ function OnboardingModal({user,wallet,t,onClose,onWallet,onPbq,onRefreshWallet})
       Icon:CalendarDays,
       animation:"cheer",
       title:"Study habits mint more",
-      body:"The loop is simple: Daily Challenge, earn coins, unlock a PBQ or exam voucher, read the report card, then return tomorrow.",
+      body:"The loop is simple: Daily Challenge, earn coins, unlock a PBQ, then return tomorrow. Timed MCQ exams are free.",
     },
     {
       id:"spend",
@@ -32751,7 +31874,7 @@ function OnboardingModal({user,wallet,t,onClose,onWallet,onPbq,onRefreshWallet})
               <div className="cipher-plan-budget"><span>Welcome budget</span><strong>{planRemaining}</strong><small>coins remaining</small></div>
               <div className="cipher-plan-actions">
                 <button type="button" onClick={()=>addToPlan("pbq")} disabled={planRemaining<CIPHER_COIN_COSTS.pbq}><Puzzle size={20}/><span><strong>Mystery PBQ</strong><small>{CIPHER_COIN_COSTS.pbq} coins · {planCounts.pbq||0} planned</small></span></button>
-                <button type="button" onClick={()=>addToPlan("examPass")} disabled={planRemaining<CIPHER_COIN_COSTS.examPass}><ClipboardCheck size={20}/><span><strong>Practice exam voucher</strong><small>{CIPHER_COIN_COSTS.examPass} coins · {planCounts.examPass||0} planned</small></span></button>
+                <div className="cipher-plan-note"><ClipboardCheck size={20}/><span><strong>Timed MCQ exams</strong><small>Free · no coins needed</small></span></div>
               </div>
               <div className="cipher-plan-note"><Sparkles size={15}/><span>The first three PBQ reveals are p014, p018, and p033. Later reveals are random.</span>{spendPlan.length>0&&<button type="button" onClick={()=>setSpendPlan([])}><RotateCcw size={13}/> Reset</button>}</div>
             </div>
@@ -33212,6 +32335,8 @@ export default function App() {
   const [pbqBankLoading,setPbqBankLoading]=useState(Boolean(isSupabaseConfigured));
   const [pbqBankError,setPbqBankError]=useState(null);
   const [smartReviewRequest,setSmartReviewRequest]=useState(null);
+  const [examEntryRequest,setExamEntryRequest]=useState(null);
+  useEffect(()=>{if(view==="exam"){setExamEntryRequest(Date.now());setView("mcq");}},[view]);
   const [deepDiveRequest,setDeepDiveRequest]=useState(null);
   const [flashcardSetRequest,setFlashcardSetRequest]=useState(()=>urlFlashcardSetRequest||null);
   const [assistantFlashcardSet,setAssistantFlashcardSet]=useState(null);
@@ -34448,7 +33573,7 @@ export default function App() {
               <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onFlashcards={()=>setView("flashcards")} onConcepts={()=>setView("deep-dives")}/>
             )}
             {view==="mcq"&&(
-              <MCQPractice user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion} mcqBank={liveMcqBank}/>
+              <MCQPractice examRequest={examEntryRequest} user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion} mcqBank={liveMcqBank}/>
             )}
             {view==="pbq"&&(
               activeGuestPbq ? (
@@ -34561,7 +33686,6 @@ export default function App() {
     {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},
     {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
     {id:"pbq",icon:"pbq",label:"PBQ Simulator",mobileLabel:"PBQ"},
-    {id:"exam",icon:"exam",label:"Exam Mode",mobileLabel:"Exam"},
     {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
     {id:"coins",icon:"coins",label:"Cipher Coins",mobileLabel:"Coins"},
     {id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"},
@@ -34607,7 +33731,7 @@ export default function App() {
           {/* Nav */}
           <nav style={{flex:1,padding:"10px 10px",display:"flex",flexDirection:"column",gap:2}}>
             {navItems.map(n=>(
-              <button type="button" key={n.id} data-mobile-primary={MOBILE_PRIMARY_NAV_IDS.has(n.id)?"true":"false"} aria-current={view===n.id?"page":undefined} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>setView(n.id==="exam"&&user.tier!=="pro"&&coinWallet.examPasses<1?"coins":n.id)}>
+              <button type="button" key={n.id} data-mobile-primary={MOBILE_PRIMARY_NAV_IDS.has(n.id)?"true":"false"} aria-current={view===n.id?"page":undefined} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>setView(n.id)}>
                 <NavGlyph type={n.icon} active={view===n.id}/>
                 <span className="nav-label"><span className="nav-label-desktop">{n.label}</span><span className="nav-label-mobile">{n.mobileLabel}</span></span>
               </button>
@@ -34645,12 +33769,11 @@ export default function App() {
           </div>
           {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
-            <MCQPractice user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
+            <MCQPractice examRequest={examEntryRequest} user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
           </div>
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)&&!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
           </div>
-          {view==="exam"&&<ExamMode user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onConsumeExamPass={handleConsumeExamPass} examPasses={coinWallet.examPasses} t={t} showQuestionCodes={isRootUser} pbqBank={livePbqBank} mcqBank={liveMcqBank} onSessionComplete={handleAchievementSessionComplete}/>}
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward}/>}
           {view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onUnlockPbq={handleUnlockPbq} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}
           {false&&view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
@@ -34673,7 +33796,7 @@ export default function App() {
           currentView={view}
           onNavigate={id=>{
             setMobileNavOpen(false);
-            setView(id==="exam"&&user.tier!=="pro"&&coinWallet.examPasses<1?"coins":id);
+            setView(id);
           }}
           onClose={()=>setMobileNavOpen(false)}
         />

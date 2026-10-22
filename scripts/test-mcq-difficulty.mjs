@@ -38,7 +38,8 @@ test('Core and Applied filters include their legacy levels; invalid filters fail
 
 test('MCQ screens and manager use two levels while PBQ controls retain three',()=>{
   const app=readFileSync('src/App.jsx','utf8');
-  assert(app.includes('<DiffBadge d={q.difficulty} t={t} mcq={current.kind==="mcq"}/>'));
+  assert(app.includes('<DiffBadge d={current.difficulty} t={t} mcq/>'));
+  assert(app.includes('<DiffBadge d={q.difficulty} t={t}/>'));
   assert(app.includes('<option value="core">Core</option>'));
   assert(app.includes('<option value="applied">Applied</option>'));
   assert(app.includes('kind==="mcq"?["core","applied"]:["easy","medium","hard"]'));

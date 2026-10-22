@@ -22,16 +22,24 @@ export function buildMcqExam(bank, count, pro = false, random = Math.random) {
   const cap = Math.ceil(count / 10);
   const capacity = [...buckets.values()].reduce((sum, bucket) => sum + Math.min(cap, bucket.questions.length), 0);
   if (capacity < count) throw new Error('Not enough distinct concepts for this exam. Choose a smaller set.');
+  const heavy = Math.round(count * 3 / 6);
+  const standard = Math.round(count * 2 / 6);
+  const targets = { 'Heavy weight': heavy, Standard: standard, Niche: count - heavy - standard };
+  const groupUsed = { 'Heavy weight': 0, Standard: 0, Niche: 0 };
   const picked = [];
   while (picked.length < count) {
     const available = [...buckets.values()].filter(bucket => bucket.used < cap && bucket.questions.length);
-    const eligibleGroups = Object.entries(EXAM_GROUP_WEIGHTS).filter(([group]) => available.some(bucket => bucket.group === group));
+    const availableGroups = Object.entries(EXAM_GROUP_WEIGHTS).filter(([group]) => available.some(bucket => bucket.group === group));
+    const underTarget = availableGroups.filter(([group]) => groupUsed[group] < targets[group]);
+    // Fill the 3:2:1 tier allocation; redistribute only when a tier lacks source questions.
+    const eligibleGroups = underTarget.length ? underTarget : availableGroups;
     let draw = random() * eligibleGroups.reduce((sum, [,weight]) => sum + weight, 0);
     const group = eligibleGroups.find(([, weight]) => (draw -= weight) < 0)?.[0] || eligibleGroups.at(-1)[0];
     const concepts = available.filter(bucket => bucket.group === group);
     const bucket = concepts[Math.floor(random() * concepts.length)];
     picked.push(bucket.questions.splice(Math.floor(random() * bucket.questions.length), 1)[0]);
     bucket.used += 1;
+    groupUsed[group] += 1;
   }
   for (let i = picked.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1));
