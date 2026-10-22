@@ -67,7 +67,12 @@ export function buildMcqResultSummary({ questions, results, chapters, engineStat
     repeated: progressAvailable && (streaks.get(entry.tag) || 0) >= 2,
   })).filter(entry => entry.score === null || entry.score <= 80)
     .sort((a, b) => Number(b.repeated) - Number(a.repeated) || b.count - a.count || a.tag.localeCompare(b.tag));
-  const nextFocus = [...missed.values()].filter(entry => progressAvailable && (streaks.get(entry.tag) || 0) >= 2 && entry.lesson);
+  const nextFocus = [...missed.values()].filter(entry => progressAvailable && (streaks.get(entry.tag) || 0) >= 2 && entry.lesson)
+    .map(entry => ({ ...entry, reason: 'repeat-miss', score: mastery.get(entry.tag) ?? null }));
+  const focusedTags = new Set(nextFocus.map(entry => entry.tag));
+  const lowestMastery = weakPoints.filter(entry => progressAvailable && entry.lesson && Number.isFinite(entry.score) && !focusedTags.has(entry.tag))
+    .sort((a, b) => a.score - b.score || a.tag.localeCompare(b.tag));
+  nextFocus.push(...lowestMastery.slice(0, Math.max(0, 2 - nextFocus.length)).map(entry => ({ ...entry, reason: 'lowest-mastery' })));
   return { domains, strongest, weakPoints, nextFocus };
 }
 

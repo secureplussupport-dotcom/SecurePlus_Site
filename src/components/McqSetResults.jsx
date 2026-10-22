@@ -6,6 +6,7 @@ import { ArrowRight, BookOpenCheck, ChevronDown, RotateCcw, Target, Trophy, X, C
 
 export function McqSetResults({ correct, total, summary, t, onStart, onReview, onOpenLesson, guestPrompt, progressError, onRetryProgress, starting, startError, exam = null, questions = [], results = [] }) {
   const heading = useRef(null);
+  const repeatFocusCount=summary.nextFocus.filter(item=>item.reason!=='lowest-mastery').length;
   const pacing=pacingSummary(questions,results);
   const percent = total ? Math.round(correct / total * 100) : 0;
   const color = exam ? t.accent : percent >= 80 ? t.green : percent >= 50 ? t.amber : t.red;
@@ -63,18 +64,19 @@ export function McqSetResults({ correct, total, summary, t, onStart, onReview, o
       <div className="mcq-focus-intro">
         <div className="mcq-focus-heading"><span><Target size={19}/></span><h3 id="mcq-focus-heading">YOUR NEXT FOCUS</h3></div>
         {summary.nextFocus.length ? <>
-          <h4>Break the repeat.<br/><em>Build the recall.</em></h4>
-          <p>Two misses in a row, with no correct answer in between. Revisit the idea before your next set.</p>
-          <div className="mcq-focus-pattern" role="img" aria-label="Two consecutive misses. Next step: a Concept Deep Dive.">
-            <span><i><X size={15}/></i><small>Miss</small></span><b aria-hidden="true"/>
-            <span><i><X size={15}/></i><small>Miss</small></span><b aria-hidden="true"/>
-            <span className="mcq-focus-pattern-next"><i><BookOpenCheck size={18}/></i><small>Revisit</small></span>
+          <h4>{repeatFocusCount?'Break the repeat.':'Start with the gaps.'}<br/><em>Build the recall.</em></h4>
+          <p>{repeatFocusCount===summary.nextFocus.length?'Two misses in a row, with no correct answer in between. Revisit the idea before your next set.':repeatFocusCount?'Repeat misses come first. Your lowest-mastery weak topics fill the remaining spot.':'Your weak topics with the lowest mastery scores come first. Revisit the ideas before your next set.'}</p>
+          <div className="mcq-focus-pattern" role="img" aria-label={repeatFocusCount?"Two consecutive misses. Next step: a Concept Deep Dive.":"Weak topic. Revisit the lesson, then practise."}>
+            <span><i>{repeatFocusCount?<X size={15}/>:<Target size={16}/>}</i><small>{repeatFocusCount?'Miss':'Weak topic'}</small></span><b aria-hidden="true"/>
+            <span><i>{repeatFocusCount?<X size={15}/>:<BookOpenCheck size={16}/>}</i><small>{repeatFocusCount?'Miss':'Revisit'}</small></span><b aria-hidden="true"/>
+            <span className="mcq-focus-pattern-next"><i>{repeatFocusCount?<BookOpenCheck size={18}/>:<RotateCcw size={17}/>}</i><small>{repeatFocusCount?'Revisit':'Practise'}</small></span>
           </div>
-        </> : <><h4>{summary.weakPoints.length ? 'Make the next answer click.' : 'Give your recall a little space.'}</h4><p>{summary.weakPoints.length ? 'Review your answers and explore the weak points below. A concept-specific Deep Dive appears here after two consecutive misses on that concept.' : 'No weak points from this set need a lesson right now. Return for another set to check what sticks.'}</p></>}
+        </> : <><h4>{summary.weakPoints.length ? 'Make the next answer click.' : 'Give your recall a little space.'}</h4><p>{summary.weakPoints.length ? 'Review your answers and explore the weak points below. Repeat misses and weak topics with recorded mastery scores can appear here as your next focus.' : 'No weak points from this set need a lesson right now. Return for another set to check what sticks.'}</p></>}
       </div>
       {summary.nextFocus.length>0&&<div className="mcq-focus-links">{summary.nextFocus.map((item,index) => <button key={item.tag} className="mcq-focus-link" style={{'--focus-tint':index%2?t.green:t.accent,'--focus-delay':`${Math.min(index,4)*45}ms`}} onClick={() => openLesson(item)} aria-label={`Open Deep Dive for ${item.tag}: ${item.lesson.title}`}>
         <span className="mcq-focus-card-top"><span className="mcq-focus-book"><BookOpenCheck size={19}/></span><small>CONCEPT DEEP DIVE</small><span className="mcq-focus-card-number" aria-hidden="true">{String(index+1).padStart(2,'0')}</span></span>
         <span className="mcq-focus-tag">#{item.tag}</span>
+        <span className="mcq-focus-reason">{item.reason==='lowest-mastery'?`${item.score}/100 mastery · Lowest mastery`:'Two consecutive misses'}</span>
         <span className="mcq-focus-lesson-title">{item.lesson.title}</span>
         <span className="mcq-focus-card-footer"><span>Open Deep Dive</span><i><ArrowRight size={17}/></i></span>
       </button>)}</div>}

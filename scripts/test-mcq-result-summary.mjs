@@ -54,3 +54,29 @@ test('guest streaks span local sets, reset only on that concept, and never inven
   assert.equal(streaks['ops.logs-syslog'],0);
   assert.equal(advanceConceptStreak(streaks,null,false),streaks);
 });
+
+const allMissed=results.map(()=>({correct:false}));
+const focusFor=(scores,streaks=[],extra={})=>buildMcqResultSummary({questions,results:allMissed,chapters,engineState:{mastery:Object.entries(scores).map(([concept_tag,score])=>({concept_tag,score})),concept_streaks:streaks.map(concept_tag=>({concept_tag,wrong_streak:2}))},...extra});
+test('empty focus promotes the two lowest known mastery scores, including zero',()=>{
+  const report=focusFor({'ops.logs-syslog':50,'ops.siem':0,'iam.mfa':15});
+  assert.deepEqual(report.nextFocus.map(row=>[row.tag,row.score,row.reason]),[['ops.siem',0,'lowest-mastery'],['iam.mfa',15,'lowest-mastery']]);
+});
+test('one repeat miss stays first and gains only the weakest different topic',()=>{
+  const report=focusFor({'ops.logs-syslog':70,'ops.siem':0,'iam.mfa':15},['ops.logs-syslog']);
+  assert.deepEqual(report.nextFocus.map(row=>[row.tag,row.reason]),[['ops.logs-syslog','repeat-miss'],['ops.siem','lowest-mastery']]);
+});
+test('two or more repeat topics are preserved, without fallback additions or duplicates',()=>{
+  for(const count of [2,3]){
+    const report=focusFor({'ops.logs-syslog':70,'ops.siem':60,'iam.mfa':0},questions.slice(0,count).map(q=>q.conceptTagIds[0]));
+    assert.equal(report.nextFocus.length,count);assert(report.nextFocus.every(row=>row.reason==='repeat-miss'));
+    assert.equal(new Set(report.nextFocus.map(row=>row.tag)).size,count);
+  }
+});
+test('fallback excludes unknown mastery, above 80, stale progress, and topics not missed in this set',()=>{
+  assert.equal(focusFor({'ops.logs-syslog':81}).nextFocus.length,0);
+  assert.equal(focusFor({'ops.logs-syslog':80}).nextFocus[0].score,80);
+  assert.equal(focusFor({'ops.logs-syslog':0},[],{progressAvailable:false}).nextFocus.length,0);
+  assert.equal(focusFor({'ops.logs-syslog':0},[],{results:results.map(()=>({correct:true}))}).nextFocus.length,0);
+  const report=focusFor({'ops.logs-syslog':20,'ops.siem':20,'iam.mfa':20});
+  assert.deepEqual(report.nextFocus.map(row=>row.tag),['iam.mfa','ops.logs-syslog']);
+});
