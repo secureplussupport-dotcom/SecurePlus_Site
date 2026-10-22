@@ -1,3 +1,4 @@
+import { CIPHER_COINS_ACTIVE, MASCOT_MANAGER_ACTIVE, isArchivedView } from "./lib/archivedFeatures.js";
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701EditorialReview.js";
@@ -175,6 +176,7 @@ function makeReferralCode(seed="secureplus") {
 }
 
 function getStoredReferralCode() {
+  if(!CIPHER_COINS_ACTIVE)return "";
   try {
     const url = new URL(window.location.href);
     const ref = (url.searchParams.get("ref") || "").trim().toUpperCase();
@@ -189,6 +191,7 @@ function getStoredReferralCode() {
 }
 
 function saveReferralCode(value) {
+  if(!CIPHER_COINS_ACTIVE)return "";
   const code = String(value || "").trim().toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0, 32);
   try {
     if (code) window.localStorage?.setItem("secureplus_referral_code", code);
@@ -936,6 +939,7 @@ async function loadCipherCoinWallet(user) {
 }
 
 async function runLocalCipherCoinAction(user,action,payload={}) {
+  if(!CIPHER_COINS_ACTIVE)return {ok:false,archived:true};
   const owner=cipherWalletOwner(user);
   const wallet=normalizeCipherWallet(await DB.getCipherWallet(owner)||{});
   const today=localDateKey();
@@ -1045,6 +1049,7 @@ async function runLocalCipherCoinAction(user,action,payload={}) {
 }
 
 async function performCipherCoinAction(user,action,payload={}) {
+  if(!CIPHER_COINS_ACTIVE)return {ok:false,archived:true};
   if(!user)throw new Error("Sign in to use Cipher Coins.");
   if(isSupabaseConfigured&&user.authProvider==="supabase"){
     const token=await getSupabaseAccessToken();
@@ -1061,6 +1066,7 @@ async function performCipherCoinAction(user,action,payload={}) {
   return runLocalCipherCoinAction(user,action,payload);
 }
 async function claimLocalReferralReward(user,referralCode) {
+  if(!CIPHER_COINS_ACTIVE)return null;
   const code=String(referralCode||"").trim().toUpperCase();
   if(!user||!code)return null;
   const referrerEmail=await DB.getReferralOwner(code);
@@ -1513,6 +1519,7 @@ async function waitForSupabaseProfile(authUser, attempts=4) {
 }
 
 async function claimReferralIfPresent(authUser) {
+  if(!CIPHER_COINS_ACTIVE)return null;
   if (!isSupabaseConfigured || !authUser?.authProvider || authUser.authProvider !== "supabase") return null;
   const referralCode = getStoredReferralCode() || String(authUser?.pendingReferralCode || authUser?.user_metadata?.pending_referral_code || "").trim().toUpperCase();
   if (!referralCode) return null;
@@ -22203,13 +22210,13 @@ function AthenaSignupJourney({t,form,setForm,setField,profile,setProfile,onMint,
             <label>Password<input className="input" name="password" type="password" autoComplete="new-password" placeholder="At least 8 characters" value={form.pass} onChange={setField("pass")}/></label>
             <label>Confirm password<input className="input" name="confirm-password" type="password" autoComplete="new-password" placeholder="Repeat password" value={form.confirm} onChange={setField("confirm")}/></label>
           </div>
-          <details className="auth-referral-details" open={Boolean(form.referral)||undefined}>
+          {CIPHER_COINS_ACTIVE&&<details className="auth-referral-details" open={Boolean(form.referral)||undefined}>
             <summary>Have a referral code?</summary>
             <div className="auth-referral-content">
               <input className="input" name="referral" autoComplete="off" placeholder="Optional code" value={form.referral} onChange={event=>setForm(current=>({...current,referral:event.target.value.toUpperCase()}))}/>
               <div className="auth-referral-coin-note"><CipherCoinIcon size={24}/><span>When this account is created, you and your friend each receive <strong>100 Cipher Coins</strong>.</span></div>
             </div>
-          </details>
+          </details>}
           <button type="submit" className="btn btn-primary athena-main-action" disabled={loading}>{loading?"Minting your IC...":"Create account & save my IC"} <ChevronRight size={17}/></button>
           <div className="auth-trust-line"><LockKeyhole size={13}/> Free account. No credit card. Pro is never added automatically.</div>
           <TrustBadge t={t} compact center style={{width:"100%"}}/>
@@ -22348,7 +22355,7 @@ function AcademySignupWizard({t,form,setForm,setField,onMint,loading,error,ok}) 
               ))}
             </div>
           </div>
-          <details className="auth-referral-details" open={Boolean(form.referral)||undefined}>
+          {CIPHER_COINS_ACTIVE&&<details className="auth-referral-details" open={Boolean(form.referral)||undefined}>
             <summary>Have a referral code?</summary>
             <div className="auth-referral-content">
               <input className="input" name="referral" autoComplete="off" placeholder="Optional code from a friend" value={form.referral} onChange={event=>setForm(f=>({...f,referral:event.target.value.toUpperCase()}))}/>
@@ -22356,7 +22363,7 @@ function AcademySignupWizard({t,form,setForm,setField,onMint,loading,error,ok}) 
                 A valid referral gives you and your friend 100 Cipher Coins after your account is created.
               </div>
             </div>
-          </details>
+          </details>}
           <div className="academy-preview-row">
             <AcademyAvatar avatarId={form.avatarId} size={54}/>
             <div><strong>{selectedAvatar?.label}</strong><span>{selectedAvatar?.hint}</span></div>
@@ -22792,7 +22799,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
           <h3 style={{fontSize:15,color:t.text,margin:"0 0 5px"}}>{streakInfo.completedToday?"Today is secured":"Protect your streak"}</h3>
           <div style={{fontSize:12,color:t.textSec,lineHeight:1.5}}>{recoveryMessage}</div>
           <div style={{fontSize:11,color:t.amber,fontWeight:800,marginTop:5,lineHeight:1.45}}>{weeklyBadge} · {tomorrowRewardPreview}</div>
-          {user&&<div style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:8,fontSize:11,fontWeight:900,color:t.amber}}><CipherCoinIcon size={18}/> Perfect score +5 coins · every fifth streak day +5</div>}
+          {CIPHER_COINS_ACTIVE&&user&&<div style={{display:"inline-flex",alignItems:"center",gap:5,marginTop:8,fontSize:11,fontWeight:900,color:t.amber}}><CipherCoinIcon size={18}/> Perfect score +5 coins · every fifth streak day +5</div>}
         </div>
       </details>
 
@@ -24183,9 +24190,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
         <div className="card dashboard-upgrade-card" style={{padding:"18px 20px",borderColor:`${t.amber}40`,background:`${t.amber}06`}}>
           <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:4}}>Ready for PBQs?</div>
           <div style={{fontSize:13,color:t.textSec,marginBottom:12}}>
-            Keep using all MCQs for free. Earn Cipher Coins to unlock individual PBQs, or choose Pro for all {PBQ_BANK.length} PBQs with zero coin requirements.
+            Keep using MCQ practice for free. Choose Pro to access all {PBQ_BANK.length} PBQs.
           </div>
-          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}><button className="btn btn-outline" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("coins")}><CipherCoinIcon size={22}/> Open Coin Vault</button><button className="btn btn-primary" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("pricing")}>Pro · zero coins</button></div>
+          <button className="btn btn-primary" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("pricing")}>Explore Pro</button>
         </div>
       )}
     </div>
@@ -25592,7 +25599,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
                   {!isPro&&isFreePBQPreview(q)&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}40`}}>Preview</span>}
-                  {!isPro&&unlockedSet.has(q.id)&&<span className="chip cipher-unlocked-chip"><CipherCoinIcon size={19}/> Coin unlocked</span>}
+                  {!isPro&&unlockedSet.has(q.id)&&<span className="chip cipher-unlocked-chip"><CheckCircle2 size={19}/> Unlocked</span>}
                   {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
@@ -25669,13 +25676,13 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
         <div className="card" style={{padding:"18px 22px",marginBottom:20,borderColor:`${t.amber}40`,background:`${t.amber}06`}}>
           <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
             <div style={{flex:1}}>
-              <div style={{fontWeight:800,fontSize:16,color:t.text,marginBottom:4}}>Use 50 coins or unlock all PBQs with Pro</div>
+              <div style={{fontWeight:800,fontSize:16,color:t.text,marginBottom:4}}>Unlock all PBQs with Pro</div>
               <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                Free users can try the marked preview and reveal a permanent mystery PBQ for <strong>{CIPHER_COIN_COSTS.pbq} Cipher Coins</strong>. Your first three reveals are p014, p018, and p033; later reveals are random. Pro includes every PBQ with zero coin requirements.
+                Try the marked free preview. Pro includes every PBQ; previously unlocked PBQs remain available.
               </div>
             </div>
             <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-              <button className="btn btn-outline" style={{flexShrink:0}} onClick={onOpenWallet}><CipherCoinIcon size={23}/> {coinBalance} coins</button>
+              {CIPHER_COINS_ACTIVE&&<button className="btn btn-outline" style={{flexShrink:0}} onClick={onOpenWallet}><CipherCoinIcon size={23}/> {coinBalance} coins</button>}
               <button className="btn btn-primary" style={{flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_access_banner", tier: user.tier });onUpgrade();}}>Unlock all PBQs with Pro →</button>
             </div>
           </div>
@@ -25687,14 +25694,14 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
           <div style={{display:"flex",gap:12,alignItems:"flex-start",flexWrap:"wrap"}}>
             <span className="section-icon" style={{"--section-color":t.accent}}><LockKeyhole size={21} strokeWidth={2.2}/></span>
             <div style={{flex:1,minWidth:220}}>
-              <div style={{fontWeight:800,fontSize:16,color:t.text,marginBottom:4}}>Use 50 coins or unlock all PBQs with Pro</div>
+              <div style={{fontWeight:800,fontSize:16,color:t.text,marginBottom:4}}>Unlock all PBQs with Pro</div>
               <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
-                Spend {CIPHER_COIN_COSTS.pbq} Cipher Coins to reveal one mystery PBQ permanently. The reveal may be a different question from {lockedQuestion.title}. Pro opens the complete bank with zero coin requirements.
+                Pro opens the complete PBQ bank. Previously unlocked questions remain available.
               </div>
             </div>
             <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-              <button className="btn btn-primary" style={{fontSize:13}} disabled={coinBusy||coinBalance<CIPHER_COIN_COSTS.pbq} onClick={async()=>{const unlocked=await onUnlockPbq?.();if(unlocked?.purchased||unlocked?.alreadyOwned)setLockedQuestion(null);}}><CipherCoinIcon size={22}/> {coinBalance<CIPHER_COIN_COSTS.pbq?`${CIPHER_COIN_COSTS.pbq-coinBalance} more needed`:`Use ${CIPHER_COIN_COSTS.pbq} coins`}</button>
-              {coinBalance<CIPHER_COIN_COSTS.pbq&&<button className="btn btn-outline" style={{fontSize:13}} onClick={onOpenWallet}>How to earn</button>}
+              {CIPHER_COINS_ACTIVE&&<button className="btn btn-primary" style={{fontSize:13}} disabled={coinBusy||coinBalance<CIPHER_COIN_COSTS.pbq} onClick={async()=>{const unlocked=await onUnlockPbq?.();if(unlocked?.purchased||unlocked?.alreadyOwned)setLockedQuestion(null);}}><CipherCoinIcon size={22}/> {coinBalance<CIPHER_COIN_COSTS.pbq?`${CIPHER_COIN_COSTS.pbq-coinBalance} more needed`:`Use ${CIPHER_COIN_COSTS.pbq} coins`}</button>}
+              {CIPHER_COINS_ACTIVE&&coinBalance<CIPHER_COIN_COSTS.pbq&&<button className="btn btn-outline" style={{fontSize:13}} onClick={onOpenWallet}>How to earn</button>}
               <button className="btn btn-outline" style={{fontSize:13}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "locked_pbq_prompt", question_id: lockedQuestion.id, tier: user.tier });onUpgrade();}}>Unlock all PBQs with Pro</button>
               <button className="btn btn-ghost" style={{fontSize:13}} onClick={()=>setLockedQuestion(null)}>Not now</button>
             </div>
@@ -25772,8 +25779,8 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
               <div style={{flex:1,minWidth:0}}>
                 <div style={{display:"flex",gap:8,marginBottom:5,flexWrap:"wrap"}}>
                   {preview&&!isPro&&<span className="chip" style={{background:`${t.amber}16`,color:t.amber,borderColor:`${t.amber}40`}}>Preview</span>}
-                  {!isPro&&coinUnlocked&&<span className="chip cipher-unlocked-chip"><CipherCoinIcon size={19}/> Coin unlocked</span>}
-                  {!canOpen&&<span className="chip cipher-locked-cost"><CipherCoinIcon size={19}/>{CIPHER_COIN_COSTS.pbq}</span>}
+                  {!isPro&&coinUnlocked&&<span className="chip cipher-unlocked-chip"><CheckCircle2 size={19}/> Unlocked</span>}
+                  {!canOpen&&<span className="chip cipher-locked-cost">Pro</span>}
                   {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
@@ -26135,14 +26142,14 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
                   <div style={{fontWeight:900,fontSize:16,color:t.text,marginBottom:4}}>That was your free PBQ preview</div>
                   <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
                     {isGuest
-                      ? "Create a free account, then use 50 Cipher Coins for a permanent PBQ reveal or unlock the complete bank with Pro."
-                      : `Use ${CIPHER_COIN_COSTS.pbq} Cipher Coins for a permanent PBQ reveal, or unlock every PBQ with the ${PRO_ACADEMY_PASS_NAME}.`}
+                      ? "Create a free account to continue, or unlock the complete PBQ bank with Pro."
+                      : `Unlock every PBQ with the ${PRO_ACADEMY_PASS_NAME}.`}
                   </div>
                 </div>
                 <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-                  <button className="btn btn-outline" style={{fontSize:13,flexShrink:0}} onClick={()=>{capture("coin_prompt_clicked", { source:"pbq_preview_complete", question_id:q.id, tier:isGuest?"guest":"free" });onOpenWallet?.();}}>
+                  {CIPHER_COINS_ACTIVE&&<button className="btn btn-outline" style={{fontSize:13,flexShrink:0}} onClick={()=>{capture("coin_prompt_clicked", { source:"pbq_preview_complete", question_id:q.id, tier:isGuest?"guest":"free" });onOpenWallet?.();}}>
                     {isGuest?"Create account to use 50 coins":`Use ${CIPHER_COIN_COSTS.pbq} coins`}
-                  </button>
+                  </button>}
                   <button className="btn btn-primary" style={{fontSize:13,flexShrink:0}} onClick={()=>{capture("upgrade_prompt_clicked", { source: "pbq_preview_complete", question_id: q.id });onUpgrade?.();}}>
                     {isGuest?"Create account for Pro":"Unlock all PBQs with Pro"}
                   </button>
@@ -26702,11 +26709,11 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
 
   const explainPbq=()=>addMessage("cipher","PBQs are scenario questions. Read the objective first, open the evidence only when needed, then solve the task step by step. If you are on mobile, use tap-based selections instead of drag-and-drop.");
 
-  const explainDailyChallenge=()=>addMessage("cipher","Daily Challenge is the daily habit loop: five focused Security+ questions, instant feedback, streak tracking, and coin rewards for perfect runs. It is designed to be short enough to complete every day.");
+  const explainDailyChallenge=()=>addMessage("cipher","Daily Challenge is the daily habit loop: five focused Security+ questions, instant feedback, and streak tracking. It is designed to be short enough to complete every day.");
 
   const explainExamMode=()=>addMessage("cipher","Exam Mode is for rehearsal when you want pressure: timed practice, mixed objectives, review after submission, and a report card that points you toward chapters to repair next.");
 
-  const explainProPlan=()=>addMessage("cipher",`The ${PRO_ACADEMY_PASS_NAME} is convenience access. It unlocks all PBQs, MCQ exams up to 50 questions, Smart Review, report cards, and Concept Deep Dives with zero coin requirements. Use coins if you have time; use Pro if your exam is soon.`);
+  const explainProPlan=()=>addMessage("cipher",`The ${PRO_ACADEMY_PASS_NAME} is convenience access. It unlocks all PBQs, MCQ exams up to 50 questions, Smart Review, report cards, and Concept Deep Dives for focused exam preparation.`);
 
   const explainPaymentPolicy=()=>addMessage("cipher","Payments are handled through Stripe. SecurePlus does not store your card details. You can cancel renewal from the account support area before the next billing cycle, or contact support if the portal is unavailable.");
 
@@ -26758,7 +26765,7 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
 
   const previewWeakFlashcards=()=>{
     if(!isPro){
-      addMessage("cipher","This is available in Pro mode. Pro lets me build a flashcard deck from your weak areas, then open it directly with zero coin requirements.");
+      addMessage("cipher","This is available in Pro mode. Pro lets me build a flashcard deck from your weak areas, then open it directly.");
       return;
     }
     if(!context.weakChapterId){
@@ -26806,13 +26813,12 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
     {label:"Start weak point area",detail:"Preview first",icon:<Play size={15}/>,action:previewSprint},
     {label:"Build weak flashcards",detail:isPro?"Pro targeted deck":"Pro mode",icon:<TextCursorInput size={15}/>,action:previewWeakFlashcards},
     {label:"Why these questions?",detail:"Smart Review logic",icon:<Brain size={15}/>,action:explainSmartReview},
-    {label:"Feature help",detail:"Coins, Pro, policies",icon:<Lightbulb size={15}/>,action:showFeatureHelp},
+    {label:"Feature help",detail:"Practice, Pro, policies",icon:<Lightbulb size={15}/>,action:showFeatureHelp},
     {label:"How should I approach PBQs?",detail:"Scenario strategy",icon:<ClipboardCheck size={15}/>,action:explainPbq},
   ];
 
   const featurePrompts=[
     {label:"Exam Mode",detail:"Timed exam practice",icon:<ClipboardList size={15}/>,action:explainExamMode},
-    {label:"Cipher Coins",detail:"Earning and spending",icon:<CircleDollarSign size={15}/>,action:explainCoins},
     {label:"Daily Challenge",detail:"Streaks and rewards",icon:<Flame size={15}/>,action:explainDailyChallenge},
     {label:"Pro Plan",detail:"What it unlocks",icon:<BadgeCheck size={15}/>,action:explainProPlan},
     {label:"Payment policy",detail:"Stripe and renewal",icon:<ShieldCheck size={15}/>,action:explainPaymentPolicy},
@@ -29152,7 +29158,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
     "Timed MCQ exams up to 50 questions",
     "Smart Review with delayed retests and concept remediation",
     "Detailed solutions, chapter analytics, and next-step guidance",
-    "Zero Cipher Coin requirements—open every Pro tool whenever you need it",
+    "Open every Pro tool whenever you need it",
   ];
   const premiumBenefits=[
     {label:"Personalised practice",free:"Basic review",freeIncluded:true,Icon:Brain,view:"dashboard"},
@@ -29169,7 +29175,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         <div className="page-title-row" style={{justifyContent:"center"}}><NavGlyph type="pricing" active/></div>
         <h2>Unlock Pro before your next practice set.</h2>
         <p>
-          Get PBQs, Exam Mode, personalised practice, and Concept Deep Dives with zero coin requirements.
+          Get PBQs, Exam Mode, personalised practice, and Concept Deep Dives.
         </p>
         <div className="upgrade-hero-cta-row">
           <button className="btn btn-primary" type="button" onClick={()=>startUpgrade("three_month")} disabled={billingLoading||isPro}>
@@ -29183,7 +29189,7 @@ function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccoun
         <div className="upgrade-plan-selector-head">
           <div>
             <h3 id="pro-plan-heading">Choose your Pro Academy Pass</h3>
-            <p>Both plans unlock the same Pro tools with zero Cipher Coin requirements.</p>
+            <p>Both plans unlock the same Pro tools.</p>
           </div>
         </div>
 
@@ -31762,7 +31768,7 @@ function ProWelcomeModal({user,t,onClose,onNavigate}) {
     {
       id:"pbq",
       title:"Start PBQ practice",
-      body:"Open the full PBQ simulator with no coin spending or preview limits.",
+      body:"Open the full PBQ simulator without preview limits.",
       Icon:Puzzle,
       color:t.accent,
       view:"pbq",
@@ -31807,7 +31813,7 @@ function ProWelcomeModal({user,t,onClose,onNavigate}) {
           <div>
             <h2 id="pro-welcome-title">Welcome to Pro, {firstName}.</h2>
             <p>
-              Your Pro Academy Pass is active. PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives now open with zero Cipher Coin requirements.
+              Your Pro Academy Pass is active. PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives are now available.
             </p>
           </div>
         </div>
@@ -32083,7 +32089,7 @@ const APP_HISTORY_VIEWS = Object.freeze(new Set([
 ]));
 
 function normalizeAppHistoryView(view) {
-  return APP_HISTORY_VIEWS.has(view) ? view : "dashboard";
+  return !isArchivedView(view)&&APP_HISTORY_VIEWS.has(view) ? view : "dashboard";
 }
 
 function isFlashcardsAppPath(pathname=window.location.pathname) {
@@ -32143,7 +32149,7 @@ export default function App() {
   const urlPricingRequest=initialParams.get("view")==="pricing"||initialParams.get("checkout")==="cancelled";
   const focusAcronymLibrary=Boolean(urlDeepDiveRequest&&initialParams.get("focus")==="acronyms");
   const devDeepDivePreview=Boolean(import.meta.env.DEV&&initialParams.get("preview")==="deep-dives");
-  const devCoinPreview=Boolean(import.meta.env.DEV&&initialParams.get("preview")==="coins");
+  const devCoinPreview=Boolean(CIPHER_COINS_ACTIVE&&import.meta.env.DEV&&initialParams.get("preview")==="coins");
   const [darkMode,setDarkMode]=useState(()=>{
     try{
       const stored=window.localStorage?.getItem(THEME_STORAGE_KEY);
@@ -32244,7 +32250,7 @@ export default function App() {
     }catch{}
   },[darkMode]);
   useEffect(()=>{
-    if(view==="achievements")setView("dashboard");
+    if(view==="achievements"||isArchivedView(view))setView("dashboard");
   },[view]);
   useEffect(()=>{
     if(loading)return;
@@ -32445,7 +32451,7 @@ export default function App() {
   },[refreshRemotePBQs,user?.tier,questionBankVersion]);
 
   const refreshMascotPlacements=useCallback(async()=>{
-    if(!isSupabaseConfigured)return;
+    if(!MASCOT_MANAGER_ACTIVE||!isSupabaseConfigured)return;
     try{
       const { data, error }=await supabase
         .from("mascot_placements")
@@ -32638,7 +32644,7 @@ export default function App() {
           setShowDiagnostic(false);
           setShowProWelcome(true);
           capture("pro_welcome_viewed", { source:"checkout_success" });
-        }else if(active&&!seen) setShowOnboarding(true);
+        }else if(active&&!seen&&CIPHER_COINS_ACTIVE) setShowOnboarding(true);
         else if(active&&!diagnosticDone&&accountAttempts.length===0) setShowDiagnostic(true);
         setLoading(false);
       };
@@ -32656,7 +32662,7 @@ export default function App() {
 
     (async()=>{
       const sess=await DB.getSession();
-      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){const entitledUser=applyAdminEntitlements(u);setUser(entitledUser);const a=await DB.getAttempts(entitledUser.email);const s=await DB.getStarred(starOwner(entitledUser));setAttempts(a);setStarred(s);const diagnosticDone=await DB.getDiagnosticDone(entitledUser.email);const seen=await DB.getOnboardingSeen(entitledUser.email);if(!seen)setShowOnboarding(true);else if(!diagnosticDone&&a.length===0)setShowDiagnostic(true);}}
+      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){const entitledUser=applyAdminEntitlements(u);setUser(entitledUser);const a=await DB.getAttempts(entitledUser.email);const s=await DB.getStarred(starOwner(entitledUser));setAttempts(a);setStarred(s);const diagnosticDone=await DB.getDiagnosticDone(entitledUser.email);const seen=await DB.getOnboardingSeen(entitledUser.email);if(!seen&&CIPHER_COINS_ACTIVE)setShowOnboarding(true);else if(!diagnosticDone&&a.length===0)setShowDiagnostic(true);}}
       setLoading(false);
     })();
     return()=>{active=false;};
@@ -32686,7 +32692,7 @@ export default function App() {
       setShowOnboarding(false);
       setShowDiagnostic(false);
       setFlashcardReviewConfirmation({count:flashcardImport.importedCount});
-    }else if(!seen) setShowOnboarding(true);
+    }else if(!seen&&CIPHER_COINS_ACTIVE) setShowOnboarding(true);
     else if(!diagnosticDone&&a.length===0) setShowDiagnostic(true);
     setAttempts(a);setStarred(s);setView(shouldShowFlashcardReviewConfirmation?"flashcards":"dashboard");setFlashcardSetRequest(shouldShowFlashcardReviewConfirmation&&flashcardImport.importedCount>0?STARRED_FLASHCARD_SET_ID:null);setShowDaily(false);
   },[forceSupabaseSignOut,importPendingGuestFlashcards,importPendingGuestSmartReview]);
@@ -32710,7 +32716,7 @@ export default function App() {
   },[user?.id,user?.email,user?.authProvider]);
 
   const runCipherAction=useCallback(async(action,payload={})=>{
-    if(!user)return null;
+    if(!CIPHER_COINS_ACTIVE||!user)return null;
     setCoinBusy(true);
     try{
       const result=await performCipherCoinAction(user,action,payload);
@@ -32735,7 +32741,7 @@ export default function App() {
         const loaded=await loadCipherCoinWallet(user);
         if(!active)return;
         setCoinWallet({...loaded,status:"ready",error:""});
-        const result=await performCipherCoinAction(user,"check_in");
+        const result=CIPHER_COINS_ACTIVE?await performCipherCoinAction(user,"check_in"):{awarded:false,wallet:loaded};
         if(!active)return;
         const wallet=result.wallet ? normalizeCipherWallet(result.wallet) : await loadCipherCoinWallet(user);
         if(!active)return;
@@ -33078,7 +33084,7 @@ export default function App() {
       await DB.saveDiagnosticDone(user.email);
       const seen=await DB.getOnboardingSeen(user.email);
       setShowDiagnostic(false);
-      if(!seen) setShowOnboarding(true);
+      if(!seen) setShowOnboarding(CIPHER_COINS_ACTIVE);
       setView("mcq");
       capture("diagnostic_completed", { correct_count: results.filter(r=>r.correct).length, question_count: results.length, tier: user.tier });
     }catch(error){
@@ -33176,7 +33182,7 @@ export default function App() {
       setView("pbq");
       return;
     }
-    setView(user?.tier==="free"?"coins":"pbq");
+    setView(user?.tier==="free"?"pricing":"pbq");
   },[coinWallet?.unlockedPbqIds,livePbqBank,user?.tier]);
   const handleGuestPbqPreview=useCallback(()=>{
     const preview=livePbqBank.find(isFreePBQPreview)||PBQ_BANK.find(isFreePBQPreview)||null;
@@ -33518,7 +33524,7 @@ export default function App() {
             onToggleStar={handleToggleStar}
             previewMode={pbqPreviewMode}
             onUpgrade={()=>setView("pricing")}
-            onOpenWallet={()=>setView("coins")}
+            onOpenWallet={()=>setView("pricing")}
             onReportQuestion={handleReportQuestion}
             showQuestionCodes={isRootUser}
           />
@@ -33536,7 +33542,6 @@ export default function App() {
     {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
     {id:"pbq",icon:"pbq",label:"PBQ Simulator",mobileLabel:"PBQ"},
     {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
-    {id:"coins",icon:"coins",label:"Cipher Coins",mobileLabel:"Coins"},
     {id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"},
     {id:"flashcards",icon:"flashcards",label:"Flashcards",mobileLabel:"Cards"},
     {id:"pricing",icon:"pricing",label:"Upgrade",mobileLabel:"Upgrade"},
@@ -33546,7 +33551,6 @@ export default function App() {
   if(isRootUser) {
     navItems.push({id:"feedback",icon:"feedback",label:"Internal Feedback",mobileLabel:"Feedback"});
     navItems.push({id:"question-admin",icon:"question-admin",label:"Question Manager",mobileLabel:"Manager"});
-    navItems.push({id:"mascot-admin",icon:"mascot-admin",label:"Mascot Manager",mobileLabel:"Mascot"});
   }
 
   return(
@@ -33573,7 +33577,7 @@ export default function App() {
           {/* User */}
           <div style={{padding:"12px 14px",borderBottom:`1px solid ${t.border}`}}>
             <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onUpdateAvatar={handleUpdateAvatar} onChangePassword={handleChangePassword} onLogout={handleLogout}/>
-            <div style={{marginTop:10}}><CipherCoinPill balance={coinWallet.balance} onClick={()=>setView("coins")}/></div>
+            {CIPHER_COINS_ACTIVE&&<div style={{marginTop:10}}><CipherCoinPill balance={coinWallet.balance} onClick={()=>setView("coins")}/></div>}
             <AdminProTestSwitch user={user} t={t} onModeChange={handleAdminProModeChange}/>
           </div>
 
@@ -33609,7 +33613,7 @@ export default function App() {
               <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:13,lineHeight:1.2,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> {SITE_BRAND_LOCKUP}</button>
             </div>
             <div style={{display:"flex",gap:6,alignItems:"center",flexShrink:0}}>
-              <CipherCoinPill compact balance={coinWallet.balance} onClick={()=>setView("coins")}/>
+              {CIPHER_COINS_ACTIVE&&<CipherCoinPill compact balance={coinWallet.balance} onClick={()=>setView("coins")}/>}
               <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={()=>setDarkMode(d=>!d)}>
                 {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
               </button>
@@ -33621,13 +33625,13 @@ export default function App() {
             <MCQPractice examRequest={examEntryRequest} user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
           </div>
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
-            <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)&&!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("coins")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
+            <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)&&!coinWallet.unlockedPbqIds.includes(q.id)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("pricing")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
           </div>
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward} onSave={handleSaveAttempt}/>}
-          {view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onUnlockPbq={handleUnlockPbq} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}
+          {CIPHER_COINS_ACTIVE&&view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onUnlockPbq={handleUnlockPbq} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}
           {false&&view==="achievements"&&<AchievementsPage user={user} t={t} onBack={()=>setView("dashboard")}/>}
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
-          {view==="referrals"&&<ReferralPage user={user} t={t}/>}
+          {CIPHER_COINS_ACTIVE&&view==="referrals"&&<ReferralPage user={user} t={t}/>}
           {view==="objectives"&&<ObjectivesPage t={t}/>}
           {view==="account"&&<AccountSupportPage user={user} t={t} onDeleteAccount={handleDeleteAccount} onCancelMembership={handleCancelMembership} onNavigate={setView} billingLoading={billingLoading}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
@@ -33636,8 +33640,8 @@ export default function App() {
           {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={effectiveAssistantFlashcardSet} user={user} starred={starred} onToggleStar={handleToggleStar} onRequireSignup={()=>setView("auth")} onOpenDeepDive={handleOpenDeepDive} onUpgrade={()=>setView("pricing")} reviewConfirmation={flashcardReviewConfirmation} onDismissReviewConfirmation={()=>setFlashcardReviewConfirmation(null)}/>}
           {isRootUser&&view==="feedback"&&<AdminFeedbackPage user={user} t={t} onEditQuestion={handleEditReportedQuestion}/>}
           {isRootUser&&view==="question-admin"&&<AdminQuestionManagerPage user={user} t={t} onQuestionBankRefresh={refreshQuestionBankOverrides} onPbqBankRefresh={refreshRemotePBQs} pbqBank={livePbqBank} initialTarget={adminQuestionTarget}/>}
-          {isRootUser&&view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
-          {!practiceFocusMode&&view!=="exam"&&view!=="mascot-admin"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
+          {MASCOT_MANAGER_ACTIVE&&isRootUser&&view==="mascot-admin"&&<AdminMascotManagerPage user={user} t={t} placements={mascotPlacements} onPublished={refreshMascotPlacements}/>}
+          {MASCOT_MANAGER_ACTIVE&&!practiceFocusMode&&view!=="exam"&&view!=="mascot-admin"&&<MascotPlacement placement={mascotPlacements.find(item=>item.page_key===view)}/>}
         </main>
         <MobileNavigationMenu
           open={mobileNavOpen}
@@ -33652,7 +33656,7 @@ export default function App() {
         {!practiceFocusMode&&!showOnboarding&&!showProWelcome&&["dashboard","mcq","pbq","daily","coins","objectives","pricing","flashcards"].includes(view)&&(
           <CipherAssistantDock user={user} attempts={attempts} currentView={view} onStartReview={handleStartChapterReview} onOpenFlashcards={handleOpenFlashcards} onUpgrade={()=>setView("pricing")}/>
         )}
-        {showOnboarding&&(
+        {CIPHER_COINS_ACTIVE&&showOnboarding&&(
           <OnboardingModal
             user={user}
             wallet={coinWallet}
@@ -33671,7 +33675,7 @@ export default function App() {
             onNavigate={setView}
           />
         )}
-        {referralClaimPrompt&&(
+        {CIPHER_COINS_ACTIVE&&referralClaimPrompt&&(
           <ReferralClaimPrompt
             result={referralClaimPrompt}
             t={t}
@@ -33681,7 +33685,7 @@ export default function App() {
         )}
         {questionReport&&<QuestionReportModal report={questionReport} user={user} t={t} onClose={()=>setQuestionReport(null)}/>}
         <AchievementCelebration ids={achievementUnlocks} t={t} onClose={()=>setAchievementUnlocks([])}/>
-        <CipherRewardToast reward={coinRewardToast} onClose={()=>setCoinRewardToast(null)}/>
+        {CIPHER_COINS_ACTIVE&&<CipherRewardToast reward={coinRewardToast} onClose={()=>setCoinRewardToast(null)}/>}
         {(accountDeletion.stage==="request"||accountDeletion.stage==="sent")&&(
           <AccountDeletionModal
             state={accountDeletion}

@@ -238,8 +238,8 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'return saveQuestionOverrideRequest({kind:"pbq"', "PBQ saves should use the validated server route");
   requireContains("src/App.jsx", 'role="switch" aria-checked={examMode}', "Exam mode should be integrated into MCQ setup");
   requireContains("src/App.jsx", "isFreePBQPreview", "free users should only get the configured PBQ preview");
-  requireContains("src/App.jsx", '!coinWallet.unlockedPbqIds.includes(q.id)?setView("coins"):setPbqQ(q)', "PBQ start handler should allow only previews, Pro access, or permanent coin unlocks");
-  requireContains("src/App.jsx", 'performCipherCoinAction(user,"check_in")', "signed-in users should receive an idempotent daily check-in attempt");
+  requireContains("src/App.jsx", '!coinWallet.unlockedPbqIds.includes(q.id)?setView("pricing"):setPbqQ(q)', "PBQ start handler must preserve previews, Pro access and historical unlocks while routing locked items to Pro");
+  requireContains("src/App.jsx", 'CIPHER_COINS_ACTIVE?await performCipherCoinAction(user,"check_in")', "archived economy must not run daily coin check-ins");
   requireContains("src/App.jsx", 'if(type!=="pbq"||busy||isPro)return;', "timed MCQ exams should not require coin purchases");
   requireContains("src/App.jsx", "tier: hasProAccess ? \"pro\" : \"free\"", "the app should use the same trusted Pro profile signals as PBQ RLS");
   requireContains("src/App.jsx", "mergeRemotePBQBanks(PBQ_BANK,remotePbqBank)", "partial remote PBQ results must not replace the complete local PBQ baseline");
@@ -273,7 +273,7 @@ if (!errors.length) {
     if(!mcqSetup.includes(label)) push(errors,"src/App.jsx",`MCQ hub is missing ${label}`);
   }
   if(mcqSetup.indexOf('aria-label="Question selection mode"')>mcqSetup.indexOf('aria-label="Start MCQ practice"')||mcqSetup.indexOf('aria-label="MCQ review queues"')>mcqSetup.indexOf("<PracticeSetupDisclosure>")) push(errors,"src/App.jsx","MCQ mode, hub, review queues and customization must follow the requested order");
-  requireContains("src/App.jsx", "Use 50 coins or unlock all PBQs with Pro", "PBQ interest should present both the coin and Pro paths");
+  requireContains("src/App.jsx", "Unlock all PBQs with Pro", "PBQ interest should present the active Pro path");
   requireContains("src/App.jsx", "ATHENA_STARTER_QUESTION_SETS", "new-user starter questions should use the concise curated onboarding set");
   requireContains("src/App.jsx", "picked.slice(0,5)", "the fallback new-account baseline should stay limited to five questions");
   requireContains("src/App.jsx", 'correct?"Correct.":"Incorrect."', "MCQ explanations should start with a standard colour-coded verdict");

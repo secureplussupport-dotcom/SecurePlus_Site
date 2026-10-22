@@ -1,3 +1,4 @@
+import { CIPHER_COINS_ACTIVE } from "../../src/lib/archivedFeatures.js";
 import {
   getBearerToken,
   getJsonBody,
@@ -88,6 +89,7 @@ async function callRpc(supabase, name, parameters) {
 }
 
 export default async function handler(req, res) {
+  if (!CIPHER_COINS_ACTIVE) return json(res, 410, { error: "Cipher Coins and referrals are archived.", archived: true });
   if (req.method !== "POST") {
     res.setHeader("allow", "POST");
     return json(res, 405, { error: "Method not allowed" });

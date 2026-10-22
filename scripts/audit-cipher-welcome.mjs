@@ -1,49 +1,35 @@
-import assert from "node:assert/strict";
-import {
-  CIPHER_WELCOME_GRANT,
-  ensureCipherWelcomeGrant,
-  isCipherWelcomeEligible,
-} from "../server/economy/welcome-grant.js";
-
-const legacyUser={id:"00000000-0000-0000-0000-000000000001",created_at:"2026-07-16T23:59:59.000Z"};
-const newUser={id:"00000000-0000-0000-0000-000000000002",created_at:"2026-07-18T00:00:00.000Z"};
-
-assert.equal(isCipherWelcomeEligible(legacyUser),false,"accounts predating the welcome economy must not receive a surprise grant");
-assert.equal(isCipherWelcomeEligible(newUser),true,"new accounts must be eligible for the welcome grant");
-assert.equal(isCipherWelcomeEligible({id:newUser.id,created_at:"invalid"}),false,"invalid creation dates must fail closed");
-
-let legacyRpcCalls=0;
-const legacyResult=await ensureCipherWelcomeGrant({rpc:async()=>{legacyRpcCalls+=1;}},legacyUser);
-assert.equal(legacyRpcCalls,0,"ineligible accounts must not call the privileged reward RPC");
-assert.equal(legacyResult.eligible,false);
-
-const rpcCalls=[];
-const ledgerReferences=new Set();
-let persistedBalance=0;
-const supabase={
-  rpc:async(name,parameters)=>{
-    rpcCalls.push({name,parameters});
-    const alreadyAwarded=ledgerReferences.has(parameters.reward_reference_key);
-    if(!alreadyAwarded){
-      ledgerReferences.add(parameters.reward_reference_key);
-      persistedBalance+=parameters.reward_amount;
-    }
-    return {data:{ok:true,awarded:!alreadyAwarded,amount:alreadyAwarded?0:parameters.reward_amount,balance:persistedBalance},error:null};
-  },
-};
-
-const first=await ensureCipherWelcomeGrant(supabase,newUser);
-persistedBalance-=50; // The learner unlocks one PBQ after receiving the gift.
-const retry=await ensureCipherWelcomeGrant(supabase,newUser);
-assert.equal(first.awarded,true,"the first eligible wallet check must persist 150 coins");
-assert.equal(retry.awarded,false,"a later wallet check must not duplicate the grant");
-assert.equal(retry.balance,100,"the saved balance must remain 100 after a later wallet check instead of losing or re-adding the grant");
-assert.equal(rpcCalls.length,2);
-for(const call of rpcCalls){
-  assert.equal(call.name,"award_cipher_coins");
-  assert.equal(call.parameters.reward_amount,CIPHER_WELCOME_GRANT);
-  assert.equal(call.parameters.reward_event_type,"onboarding_welcome");
-  assert.equal(call.parameters.reward_reference_key,`onboarding_welcome:${newUser.id}`);
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { CIPHER_COINS_ACTIVE, MASCOT_MANAGER_ACTIVE, isArchivedView } from '../src/lib/archivedFeatures.js';
+import { ensureCipherWelcomeGrant } from '../server/economy/welcome-grant.js';
+import coinAction from '../server/economy/coins-action.js';
+import referralClaim from '../server/economy/referral-claim.js';
+import referralProfile from '../server/economy/referral-me.js';
+import economy from '../api/economy.js';
+assert.equal(CIPHER_COINS_ACTIVE,false);
+assert.equal(MASCOT_MANAGER_ACTIVE,false);
+for(const view of ['coins','referrals','mascot-admin'])assert.equal(isArchivedView(view),true);
+for(const view of ['mcq','pbq','dashboard','question-admin'])assert.equal(isArchivedView(view),false);
+let calls=0;
+const result=await ensureCipherWelcomeGrant({rpc:()=>{calls++;throw Error('Archived system must not write');}},{id:'new-user',created_at:'2026-10-22'});
+assert.equal(calls,0);assert.equal(result.awarded,false);assert.equal(result.reason,'archived');
+for(const handler of [coinAction,referralClaim,referralProfile]){
+ const res={setHeader(){},status(n){this.statusCode=n;return this;},end(body){this.body=JSON.parse(body);return this;}};
+ await handler({method:'POST'},res);
+ assert.equal(res.statusCode,410);assert.equal(res.body.archived,true);
 }
-
-console.log("Cipher welcome grant audit passed.");
+for(const operation of ['coins-action','referrals-claim','referrals-me']){
+ const res={setHeader(){},status(n){this.statusCode=n;return this;},end(body){this.body=JSON.parse(body);return this;}};
+ await economy({method:'POST',query:{operation}},res);assert.equal(res.statusCode,410);
+}
+const app=readFileSync('src/App.jsx','utf8');
+assert(app.includes('if(!MASCOT_MANAGER_ACTIVE||!isSupabaseConfigured)return;'));
+assert(app.includes('if(!CIPHER_COINS_ACTIVE)return {ok:false,archived:true};'));
+assert(app.includes('isArchivedView(view)'));
+assert(!app.includes('navItems.push({id:"mascot-admin"'));
+assert(!app.includes('{id:"coins",icon:"coins",label:"Cipher Coins",mobileLabel:"Coins"}'));
+assert(readFileSync('server/attempts/submit.js','utf8').includes('if (CIPHER_COINS_ACTIVE && sessionType'));
+const migration=readFileSync('supabase/migrations/20261022120000_archive_coin_and_mascot_systems.sql','utf8');
+assert(migration.includes('FROM PUBLIC, anon, authenticated, service_role'));
+assert(!/DROP TABLE|DELETE FROM|TRUNCATE/i.test(migration));
+console.log('Archived systems audit passed: disabled routes, rejected actions/referrals, zero welcome writes, retained data and entitlements.');

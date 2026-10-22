@@ -1,3 +1,4 @@
+import { CIPHER_COINS_ACTIVE } from "../../src/lib/archivedFeatures.js";
 import {
   getBearerToken,
   getJsonBody,
@@ -102,7 +103,7 @@ export default async function handler(req, res) {
     if (insertError) throw insertError;
 
     let coinReward = null;
-    if (sessionType === "practice" && questionsCount >= 5 && score === 100) {
+    if (CIPHER_COINS_ACTIVE && sessionType === "practice" && questionsCount >= 5 && score === 100) {
       const rewardDate = new Date().toISOString().slice(0, 10);
       const { data: rewardData, error: rewardError } = await supabase.rpc("award_cipher_coins", {
         target_user_id: authData.user.id,

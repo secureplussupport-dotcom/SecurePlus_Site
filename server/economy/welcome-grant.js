@@ -1,3 +1,4 @@
+import { CIPHER_COINS_ACTIVE } from "../../src/lib/archivedFeatures.js";
 export const CIPHER_WELCOME_GRANT = 150;
 
 // The welcome economy first went live on 17 July 2026. Using the immutable
@@ -11,6 +12,7 @@ export function isCipherWelcomeEligible(authUser) {
 }
 
 export async function ensureCipherWelcomeGrant(supabase, authUser) {
+  if (!CIPHER_COINS_ACTIVE) return { ok: true, eligible: false, awarded: false, amount: 0, reason: "archived" };
   if (!isCipherWelcomeEligible(authUser)) {
     return { ok: true, eligible: false, awarded: false, amount: 0, reason: "account_predates_welcome_grant" };
   }
