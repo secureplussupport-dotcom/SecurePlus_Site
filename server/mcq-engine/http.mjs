@@ -30,6 +30,7 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
       requireJsonContentType(req);
       const body = await getJsonBody(req, { throwSafeErrors: true });
       const operation = req.query?.operation;
+      if (operation === 'readiness') return json(res, 200, await rpc(client, 'mcq_engine_readiness', { p_user_id: userId }));
       if (operation === 'state') return json(res, 200, await rpc(client, 'mcq_engine_state', { p_user_id: userId }));
       if (operation === 'resume') {
         if (!uuid(body.session_id)) throw new EngineError('Invalid session.');
@@ -61,13 +62,14 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
         if (!uuid(body.event_id) || (body.session_id != null && !uuid(body.session_id)) || !uuid(body.selected_option_id) ||
           typeof body.question_id !== 'string' || !/^m[a-z0-9_-]+$/i.test(body.question_id)) throw new EngineError('Invalid MCQ answer.');
         if (body.elapsed_ms != null && (!Number.isInteger(body.elapsed_ms) || body.elapsed_ms < 0 || body.elapsed_ms > 86400000)) throw new EngineError('Invalid question pacing.');
+        if (body.practice_source != null && !['mcq-set','exam','daily-challenge','diagnostic'].includes(body.practice_source)) throw new EngineError('Invalid activity source.');
         let standalone = null;
         if (!body.session_id) {
           standalone = (await catalogue(client)).find(q => q.id === body.question_id);
           if (!standalone) throw new EngineError('This MCQ is unavailable.', 404);
         }
-        return json(res, 200, await rpc(client, body.elapsed_ms == null ? 'mcq_engine_answer' : 'mcq_engine_answer_paced', { p_user_id: userId, p_event_id: body.event_id,
-          p_session_id: body.session_id || null, p_question_id: body.question_id, p_option_id: body.selected_option_id, p_standalone: standalone, ...(body.elapsed_ms == null ? {} : { p_elapsed_ms: body.elapsed_ms }) }));
+        return json(res, 200, await rpc(client, body.practice_source != null ? 'mcq_engine_answer_sourced' : body.elapsed_ms == null ? 'mcq_engine_answer' : 'mcq_engine_answer_paced', { p_user_id: userId, p_event_id: body.event_id,
+          p_session_id: body.session_id || null, p_question_id: body.question_id, p_option_id: body.selected_option_id, p_standalone: standalone, ...(body.practice_source != null ? { p_elapsed_ms: body.elapsed_ms ?? null, p_source: body.practice_source } : body.elapsed_ms == null ? {} : { p_elapsed_ms: body.elapsed_ms }) }));
       }
       return json(res, 404, { error: 'MCQ endpoint not found.' });
     } catch (error) {

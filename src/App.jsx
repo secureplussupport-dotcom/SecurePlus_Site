@@ -7,6 +7,7 @@ import { CONCEPT_TAGS, MCQ_TAGGING_VERSION, inferMcqConceptTagIds, searchMcqConc
 import { McqExam, ExamModeGuide, examThemeVars } from "./components/McqExam.jsx";
 import { buildMcqExam, formatExamTime, EXAM_SECONDS_PER_QUESTION } from "./lib/mcqExam.js";
 import { useQuestionPacing } from "./lib/useQuestionPacing.js";
+import { useExamReadiness, ReadinessBreakdown } from "./components/ExamReadiness.jsx";
 import { McqSetResults } from "./components/McqSetResults.jsx";
 import { buildMcqResultSummary, advanceConceptStreak } from "./lib/mcqResultSummary.js";
 import { effectiveMcqConceptTagIds } from "./lib/mcqConceptReview.js";
@@ -1374,7 +1375,7 @@ function formatSecondsShort(seconds=0) {
   return `${s}s`;
 }
 
-function getReadinessProfile(attempts=[]) {
+function getActivityProfile(attempts=[]) {
   const usable=attempts.filter(attempt=>typeof attempt?.correct==="boolean");
   const latestByQuestion=new Map();
   usable.forEach(attempt=>{
@@ -1383,62 +1384,9 @@ function getReadinessProfile(attempts=[]) {
     if(!current||getAttemptDate(attempt)>getAttemptDate(current))latestByQuestion.set(key,attempt);
   });
   const latestAttempts=[...latestByQuestion.values()];
-  const total=latestAttempts.length;
-  const correct=latestAttempts.filter(attempt=>attempt.correct).length;
-  const accuracy=total?Math.round((correct/total)*100):0;
-  const uniqueQuestions=new Set(latestByQuestion.keys());
-  const coveredChapters=new Set(latestAttempts.map(attempt=>String(attempt.ch||"")).filter(chapter=>CHAPTERS.some(item=>item.id===chapter)));
-  const uniquePbqs=new Set(usable.filter(attempt=>attempt.pbq).map(attempt=>attempt.qid||attempt.title)).size;
-  const examQuestions=new Set(usable.filter(attempt=>attempt.exam).map(attempt=>`${attempt.pbq?"pbq":"mcq"}:${attempt.qid||attempt.title||attempt.createdAt}`)).size;
-  const knowledge=Math.round(accuracy*Math.min(1,total/20));
-  const coverage=Math.round((coveredChapters.size/Math.max(1,CHAPTERS.length))*100);
-  const practice=Math.min(100,Math.round((uniqueQuestions.size/60)*100));
-  const application=Math.min(100,Math.round(Math.min(1,uniquePbqs/5)*55+Math.min(1,examQuestions/20)*45));
-  const score=Math.min(100,Math.round(knowledge*.45+coverage*.2+practice*.2+application*.15));
-  const level=score>=80?"Exam ready":score>=65?"Building confidence":score>=45?"Developing":score>=25?"Foundation":"Starting out";
-  const tone=score>=80?"ready":score>=65?"confident":score>=45?"developing":score>=25?"foundation":"starting";
-  return {
-    score,
-    accuracy,
-    total,
-    correct,
-    uniqueQuestions:uniqueQuestions.size,
-    uniquePbqs,
-    coveredChapters:coveredChapters.size,
-    examQuestions,
-    level,
-    tone,
-    pillars:[
-      {id:"knowledge",label:"Knowledge",value:knowledge,weight:"45%",help:"Accuracy, balanced by enough answer evidence"},
-      {id:"coverage",label:"Coverage",value:coverage,weight:"20%",help:"Security+ chapters you have practised"},
-      {id:"practice",label:"Practice",value:practice,weight:"20%",help:"Unique questions completed"},
-      {id:"application",label:"Applied skills",value:application,weight:"15%",help:"PBQ and Exam Mode experience"},
-    ],
-  };
-}
-
-function getReadinessEncouragement(profile={}) {
-  const score=Number(profile.score)||0;
-  if(score>=80)return {
-    title:"You’re in exam-ready territory",
-    body:"Strong work. Keep this level warm with timed sets, PBQ simulations, and a final pass through any stubborn weak topics.",
-  };
-  if(score>=65)return {
-    title:"You’re building real exam confidence",
-    body:"Good momentum. A few focused repairs can turn this into a stronger finish—prioritise missed concepts, then retest under light pressure.",
-  };
-  if(score>=45)return {
-    title:"You’re making the right progress",
-    body:"The base is forming. Keep converting missed questions into Smart Review, flashcards, and short chapter repairs.",
-  };
-  if(score>=25)return {
-    title:"Your foundation is coming together",
-    body:"This is the useful early stage. Small daily sets will quickly show which concepts are sticking and which need another pass.",
-  };
-  return {
-    title:"Your first momentum is starting",
-    body:"Start simple. A short MCQ set today gives SecurePlus enough signal to build a clearer next step for you.",
-  };
+  return {uniqueQuestions:latestAttempts.length,
+    accuracy:latestAttempts.length?Math.round(latestAttempts.filter(a=>a.correct).length/latestAttempts.length*100):0,
+    uniquePbqs:new Set(usable.filter(a=>a.pbq).map(a=>a.qid||a.title)).size};
 }
 
 function getPasswordIssue(password) {
@@ -22775,7 +22723,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   const submitQ = async () => {
     if(selected===null||submitted||answerSaving.current) return;
     answerSaving.current=true;
-    try{if(user?.authProvider==="supabase")await recordStandaloneMcq(current,selected);}
+    try{if(user?.authProvider==="supabase")await recordStandaloneMcq(current,selected,null,"daily-challenge");}
     catch(error){alert(error.message);answerSaving.current=false;return;}
     answerSaving.current=false;
     const correct = selected === current.correct;
@@ -24064,33 +24012,24 @@ function SmartReviewLessonPath({recommendations=[],onOpenDeepDive,source="smart_
 
 function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOpenFlashcards,coinWallet,t,starred=[],assistantFlashcardSet=null}) {
   const [showReadinessLab,setShowReadinessLab]=useState(false);
-  const readinessProfile=getReadinessProfile(attempts);
-  const questionsDone=readinessProfile.uniqueQuestions;
-  const accuracy=readinessProfile.accuracy;
+  const activityProfile=getActivityProfile(attempts);
+  const readinessProfile=useExamReadiness(user,attempts);
+  const questionsDone=activityProfile.uniqueQuestions;
+  const accuracy=activityProfile.accuracy;
   const readiness=readinessProfile.score;
-  const readinessColor=readiness>=80?t.green:readiness>=65?t.accent:readiness>=45?t.amber:t.red;
+  const readinessColor=readiness>=80?t.green:t.accent;
   const isPro = user.tier==="pro";
   const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
-  const [chapterChartVisible,setChapterChartVisible]=useState(false);
-  const chapterChartRef=useRef(null);
   useEffect(()=>{
     let active=true;
     loadDailyStreak(user).then(info=>{if(active)setStreakInfo(info);});
     return()=>{active=false;};
   },[user?.email]);
-  const uniquePbqs=readinessProfile.uniquePbqs;
+  const uniquePbqs=activityProfile.uniquePbqs;
   const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
   const showStarredDashboardSet=starredFlashcards.length>=5;
   const showAssistantDashboardSet=Boolean(assistantFlashcardSet?.cards?.length);
 
-  // Chapter performance
-  const chStats = {};
-  attempts.forEach(a=>{
-    if(!a.ch)return;
-    if(!chStats[a.ch])chStats[a.ch]={c:0,t:0};
-    chStats[a.ch].t++;
-    if(a.correct)chStats[a.ch].c++;
-  });
   const latestMcqAttempts=getLatestMcqAttempts(attempts);
   const mcqHistories=getMcqAttemptHistories(attempts);
   const weakChapterActions=CHAPTERS.map(ch=>{
@@ -24120,25 +24059,6 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
     weakTopics:primaryWeakAction.missedTopics,
   }):null;
   const weakFlashcardPreview=(primaryWeakFlashcardSet?.cards||[]).slice(0,4).map(card=>card.acronym||card.expansion||card.term).filter(Boolean);
-  const readinessEncouragement=getReadinessEncouragement(readinessProfile);
-
-  useEffect(()=>{
-    if(!showReadinessLab){
-      setChapterChartVisible(false);
-      return;
-    }
-    const node=chapterChartRef.current;
-    if(!node)return;
-    if(typeof IntersectionObserver==="undefined"){
-      setChapterChartVisible(true);
-      return;
-    }
-    const observer=new IntersectionObserver(entries=>{
-      if(entries.some(entry=>entry.isIntersecting))setChapterChartVisible(true);
-    },{threshold:.28,rootMargin:"0px 0px -8% 0px"});
-    observer.observe(node);
-    return()=>observer.disconnect();
-  },[showReadinessLab]);
 
   return(
     <div className="dashboard-shell">
@@ -24170,11 +24090,12 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
           />
         </div>
         <div className="home-hero-panel">
-          <div className="readiness-orbit dashboard-readiness-focus" style={{"--readiness":`${readiness}%`,"--readiness-color":readinessColor}}>
+          <div className="readiness-orbit dashboard-readiness-focus" style={{"--readiness":`${readiness ?? 0}%`,"--readiness-color":readinessColor}}>
             <div>
               <div className="dashboard-readiness-caption"><Gauge size={14}/> Exam readiness</div>
-              <span>{readiness}%</span>
-              <small>{readinessProfile.level}</small>
+              <span>{readinessProfile.status==="ready"&&readiness!=null?`${readiness}%`:"—"}</span>
+              <small role="status">{readinessProfile.status==="loading"?"Loading your progress…":readinessProfile.status==="error"?"Progress unavailable":readinessProfile.level}</small>
+              <small>80% · Exam ready</small>
               <div className="dashboard-readiness-bar" aria-hidden="true"><span/></div>
             </div>
           </div>
@@ -24182,6 +24103,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
             className="btn btn-outline dashboard-breakdown-toggle"
             type="button"
             aria-expanded={showReadinessLab}
+            aria-controls="exam-readiness-breakdown"
             onClick={()=>setShowReadinessLab(value=>!value)}
           >
             <Gauge size={17}/> {showReadinessLab?"Hide breakdown":"Break it down"}
@@ -24206,68 +24128,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
         ))}
       </div>
 
-      {showReadinessLab&&<section className={`card readiness-lab readiness-${readinessProfile.tone} dashboard-readiness-reveal`} style={{"--readiness-color":readinessColor}}>
-        <div className="readiness-lab-head">
-          <div>
-            <div className="label" style={{color:readinessColor}}>Your readiness lab</div>
-            <h2>{readinessEncouragement.title}</h2>
-            <p>{readinessEncouragement.body}</p>
-          </div>
-          <div className="readiness-level-badge">
-            <Gauge size={21} strokeWidth={2.4}/>
-            <span><strong>{readiness}</strong>/100</span>
-            <small>{readinessProfile.level}</small>
-          </div>
-        </div>
-        <div className="readiness-lab-body">
-          <div className="readiness-pillar-grid">
-            {readinessProfile.pillars.map(pillar=>(
-              <div key={pillar.id} className="readiness-pillar">
-                <div className="readiness-pillar-top">
-                  <span>{pillar.label}</span>
-                  <strong>{pillar.value}%</strong>
-                </div>
-                <div className="readiness-pillar-meter"><span style={{width:`${pillar.value}%`}}/></div>
-                <div className="readiness-pillar-help">{pillar.help}</div>
-                <span className="readiness-weight">{pillar.weight} of score</span>
-              </div>
-            ))}
-          </div>
-          <div className="readiness-trust-note">
-            Trust this as a direction finder: if a factor is low, practise that area next. Do not use it as an official pass/fail prediction.
-          </div>
-          <div ref={chapterChartRef} className={`readiness-chapter-chart ${chapterChartVisible?"visible":""}`} aria-label="Performance by chapter">
-            <div className="readiness-chart-head">
-              <div>
-                <div className="label" style={{color:readinessColor}}>Performance by chapter</div>
-                <h3>Where your score is strongest</h3>
-              </div>
-              <small>{Object.keys(chStats).length?`${Object.keys(chStats).length} chapter${Object.keys(chStats).length===1?"":"s"} with practice data`:"No chapter data yet"}</small>
-            </div>
-            {Object.keys(chStats).length===0?(
-              <div className="readiness-chart-empty">No attempts yet. Start MCQ Practice and this chart will fill as you answer questions.</div>
-            ):(
-              <div className="readiness-chart-bars">
-                {CHAPTERS.map(ch=>{
-                  const s=chStats[ch.id];
-                  if(!s)return null;
-                  const p=Math.round((s.c/s.t)*100);
-                  const barColor=p>=75?t.green:p>=50?t.amber:t.red;
-                  return(
-                    <div key={ch.id} className="readiness-chart-row" style={{"--bar-width":`${p}%`,"--bar-color":barColor}}>
-                      <div className="readiness-chart-label">
-                        <span><ChapterIcon id={ch.id} size={20}/> Ch.{ch.id} · {ch.title.split(",")[0]}</span>
-                        <strong>{p}%</strong>
-                      </div>
-                      <div className="readiness-chart-track"><span/></div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>}
+      {showReadinessLab&&<ReadinessBreakdown profile={readinessProfile} chapters={CHAPTERS}/>}
 
       <section className="dashboard-action-grid dashboard-action-grid-clean" aria-label="Dashboard action recommendations">
         <div className="card weak-action-card">
@@ -25239,11 +25100,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       if(current.engineSessionId){
         const event=answerEvents.current.get(current.id)||crypto.randomUUID();
         answerEvents.current.set(current.id,event);
-        evaluation=await mcqEngineRequest("answer",{session_id:current.engineSessionId,event_id:event,question_id:current.id,selected_option_id:selected,elapsed_ms:elapsedMs});
+        evaluation=await mcqEngineRequest("answer",{session_id:current.engineSessionId,event_id:event,question_id:current.id,selected_option_id:selected,elapsed_ms:elapsedMs,practice_source:"mcq-set"});
         setQuestions(prev=>prev.map((q,i)=>i===qi?{...q,correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:{[selected]:evaluation.selected_feedback}}:q));
-      }else if(!isGuest){evaluation=await recordStandaloneMcq(current,selected,elapsedMs);}
+      }else if(!isGuest){evaluation=await recordStandaloneMcq(current,selected,elapsedMs,"mcq-set");}
       const correct=evaluation?evaluation.is_correct:selected===current.correct;
-      const r={qid:current.id,correct,selected,elapsedMs:evaluation?.elapsed_ms??elapsedMs,conceptTag:evaluation?.concept_tag||current.conceptTagIds?.[0],title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",topic:current.topic,difficulty:current.difficulty,mcq:true,createdAt:new Date().toISOString()};
+      const r={readinessSource:"mcq-set",qid:current.id,correct,selected,elapsedMs:evaluation?.elapsed_ms??elapsedMs,conceptTag:evaluation?.concept_tag||current.conceptTagIds?.[0],title:current.q.slice(0,60),ch:current.ch,domain:CHAPTERS.find(c=>c.id===current.ch)?.title||"",topic:current.topic,difficulty:current.difficulty,mcq:true,createdAt:new Date().toISOString()};
       capture("mcq_question_answered",{question_id:current.id,chapter:current.ch,correct,tier:user.tier});
       setResults(rs=>{const next=[...rs];next[qi]=r;return next;});
       setLocalConceptStreaks(streaks=>advanceConceptStreak(streaks,r.conceptTag,correct));
@@ -26766,7 +26627,7 @@ function MascotGuide({
 
 function buildCipherAssistantContext(attempts=[],currentView="dashboard") {
   const latestAttempts=getLatestMcqAttempts(attempts);
-  const readiness=getReadinessProfile(attempts);
+  const readiness=getActivityProfile(attempts);
   const chapterSignals=CHAPTERS.map(chapter=>{
     const chapterAttempts=attempts.filter(attempt=>attempt.mcq&&String(attempt.ch)===chapter.id);
     const latestMisses=MCQ_BANK.filter(question=>question.ch===chapter.id&&latestAttempts.get(question.id)?.correct===false);
@@ -32021,7 +31882,7 @@ function DiagnosticQuiz({user,t,onComplete}) {
   const submit=async()=>{
     if(selected===null||!current||submitted||answerSaving.current)return;
     answerSaving.current=true;
-    try{if(user?.authProvider==="supabase")await recordStandaloneMcq(current,selected);}
+    try{if(user?.authProvider==="supabase")await recordStandaloneMcq(current,selected,null,"diagnostic");}
     catch(error){alert(error.message);answerSaving.current=false;return;}
     answerSaving.current=false;
     const correct=selected===current.correct;

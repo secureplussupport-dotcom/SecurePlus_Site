@@ -94,3 +94,15 @@ test('optional pacing is bounded, owner-bound and routed to atomic recording; in
   const legacy={...body};delete legacy.elapsed_ms;
   await invoke(handler,'answer',legacy);assert.equal(calls[1].name,'mcq_engine_answer');
 });
+
+test('readiness is authenticated and source labels are validated before storage',async()=>{
+  const calls=[];
+  const client={auth:{getUser:async()=>({data:{user:{id:user}}})},rpc:async(name,args)=>{calls.push({name,args});return {data:{concepts:[],chapters:{}}};}};
+  const bank=effectiveCatalogue(),q=bank[0];
+  const handler=createMcqHandler({enabled:()=>true,admin:()=>client,catalogue:async()=>bank});
+  const body={event_id:id,question_id:q.id,selected_option_id:q.options[0].id,practice_source:'exam'};
+  assert.equal((await invoke(handler,'answer',{...body,practice_source:'pbq'})).status,400);assert.equal(calls.length,0);
+  assert.equal((await invoke(handler,'answer',body)).status,200);assert.equal(calls[0].name,'mcq_engine_answer_sourced');assert.equal(calls[0].args.p_source,'exam');assert.equal(calls[0].args.p_elapsed_ms,null);
+  assert.equal((await invoke(handler,'readiness',{user_id:id})).status,200);assert.equal(calls[1].name,'mcq_engine_readiness');assert.equal(calls[1].args.p_user_id,user);
+  assert.equal((await invoke(handler,'readiness',{},'')).status,401);
+});

@@ -113,10 +113,10 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
       for(let index=0;index<questions.length;index++){
         const question=questions[index];const selected=answers[index];
         const elapsedMs=submissionPacing.current[question.id]==null?null:Math.min(86400000,submissionPacing.current[question.id]);
-        const evaluation=cloudProgress&&selected!=null?await recordStandaloneMcq(question,selected,elapsedMs):null;
+        const evaluation=cloudProgress&&selected!=null?await recordStandaloneMcq(question,selected,elapsedMs,"exam"):null;
         completed.push({qid:question.id,elapsedMs:evaluation?.elapsed_ms??elapsedMs,correct:evaluation?evaluation.is_correct:selected===question.correct,selected,
           title:question.q.slice(0,80),ch:question.ch,topic:question.topic,conceptTag:evaluation?.concept_tag||examConceptTag(question),
-          mcq:true,exam:true,createdAt:new Date(finish+index).toISOString()});
+          mcq:true,exam:true,readinessSource:"exam",createdAt:new Date(finish+index).toISOString()});
       }
       let streaks=localStreaks;
       completed.forEach(row=>{if(row.selected!=null)streaks=advanceConceptStreak(streaks,row.conceptTag,row.correct);});

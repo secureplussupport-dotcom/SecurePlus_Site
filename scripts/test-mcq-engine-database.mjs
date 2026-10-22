@@ -11,6 +11,7 @@ await db.exec(`create role anon; create role authenticated; create role service_
 await db.exec(readFileSync('supabase/migrations/20261019163949_mcq_three_deck_engine.sql', 'utf8'));
 await db.exec(readFileSync('supabase/migrations/20261021163006_mcq_result_concept_streaks.sql', 'utf8'));
 await db.exec(readFileSync('supabase/migrations/20261022030000_mcq_question_pacing.sql','utf8'));
+await db.exec(readFileSync('supabase/migrations/20261022060000_mcq_exam_readiness.sql','utf8'));
 const user = '00000000-0000-4000-8000-000000000001', other = '00000000-0000-4000-8000-000000000002';
 const sid = '00000000-0000-4000-8000-000000000010', good = '00000000-0000-4000-8000-000000000020', bad = '00000000-0000-4000-8000-000000000021';
 const questions = Array.from({ length: 40 }, (_, i) => ({ id: `m${i}`, format: 'mcq', concept_tag: 'risk.bia-rto-rpo', options: [{ id: good, text: 'yes', is_correct: true }, { id: bad, text: 'no', is_correct: false }], explanation: 'Why' }));
@@ -130,5 +131,45 @@ const pacingReplayState=await state(user);
 assert.equal((await scalar('select public.mcq_engine_answer_paced($1,$2,$3,$4,$5,$6,$7)',[user,randomUUID(),sid,'m9',bad,null,1000])).elapsed_ms,32500);
 assert.deepEqual(await state(user),pacingReplayState);
 console.log('PASS pacing: exact elapsed storage, unchanged scores, replay immutability, legacy unknowns, invalid rollback, service-only grants.');
+
+// Readiness has a separate, source-scoped mastery denominator and no legacy guesses.
+const readinessUser='00000000-0000-4000-8000-000000000003';
+await db.query('insert into auth.users values($1)',[readinessUser]);
+const readiness=()=>scalar('select public.mcq_engine_readiness($1)',[readinessUser]);
+assert.deepEqual((await readiness()).concepts,[]);
+const sourced=async(tag,correct,source,chapter='1',eventId=randomUUID())=>{
+  const q={...questions[0],concept_tag:tag,chapter};
+  return scalar('select public.mcq_engine_answer_sourced($1,$2,null,$3,$4,$5,$6,$7)',[readinessUser,eventId,'m0',correct?good:bad,JSON.stringify(q),1234,source]);
+};
+await sourced('a',true,'mcq-set');await sourced('a',true,'exam');
+await sourced('b',false,'exam','2');
+await sourced('a',false,'daily-challenge');await sourced('b',true,'diagnostic');
+const report=await readiness();
+assert.deepEqual(report.concepts,[{tag:'a',score:90,chapter:'1'},{tag:'b',score:15,chapter:'2'}]);
+assert.deepEqual(report.chapters,{'1':{total:2,correct:2},'2':{total:1,correct:0}});assert.equal(report.total,3);
+assert.notEqual((await state(readinessUser)).mastery.find(c=>c.concept_tag==='a').score,90);
+const sourceEvent=randomUUID();const original=await sourced('b',true,'diagnostic','3',sourceEvent);
+assert.deepEqual(await sourced('b',true,'mcq-set','1',sourceEvent),original);
+assert.deepEqual(await readiness(),report); // Retry cannot reclassify a diagnostic.
+await scalar('select public.mcq_engine_answer($1,$2,null,$3,$4,$5)',[readinessUser,randomUUID(),'m0',good,JSON.stringify({...questions[0],concept_tag:'legacy'})]);
+assert.equal((await readiness()).unclassified,1);assert.equal((await readiness()).concepts.length,2);
+const legacySession=randomUUID();
+await scalar('select public.mcq_engine_create_session($1,$2,$3,$4)',[readinessUser,legacySession,(await state(readinessUser)).version,JSON.stringify(questions.slice(0,10).map(q=>({...q,concept_tag:'owned',chapter:'4'})))]);
+await scalar('select public.mcq_engine_answer($1,$2,$3,$4,$5,null)',[readinessUser,randomUUID(),legacySession,'m0',good]);
+assert.equal((await readiness()).concepts.find(c=>c.tag==='owned').score,70);
+assert.deepEqual((await readiness()).chapters['4'],{total:1,correct:1});
+// Service-only endpoints, owner derived from auth, both legacy and new RPC paths.
+for(const role of ['anon','authenticated']){
+  await db.exec(`set role ${role}`);
+  await assert.rejects(readiness(),/permission denied/);
+  await assert.rejects(sourced('a',true,'mcq-set'),/permission denied/);
+  await db.exec('reset role');
+}
+await assert.rejects(sourced('a',true,'invented'),/Invalid activity source/);
+assert.equal((await readiness()).total,4);
+actor=readinessUser;
+const apiReadiness=await call('readiness',{user_id:user});assert.equal(apiReadiness.status,200);assert.deepEqual(apiReadiness.output,await readiness());
+actor=other;assert.notDeepEqual((await call('readiness',{user_id:readinessUser})).output,await readiness());
+console.log('PASS readiness: scoped mastery replay, chapter evidence, legacy exclusion, owned legacy sets, immutable source, auth ownership and restricted grants.');
 await db.close();
 console.log('PASS disposable PostgreSQL: migration, scores, 30-answer delay, idempotency, rollback, owner isolation, stale plan rejection, snapshot grading, RLS/grants.');
