@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useId } from 'react';
 import { mcqEngineEnabled, mcqEngineRequest } from '../lib/mcqEngineClient.js';
 import { localReadinessEvidence, summarizeReadiness } from '../lib/examReadiness.js';
 import './ExamReadiness.css';
@@ -24,11 +24,15 @@ export function useExamReadiness(user, attempts) {
 const percentage=(count,total)=>total?Number((count/total*100).toFixed(1)):0;
 const COLORS=['#6b9dff','#43c8bb','#b59bff','#e5b967','#64bddf'];
 function Donut({slices,total,label,center,centerLabel="concepts"}) {
+  const revealId=`er-pie-${useId().replace(/[^a-zA-Z0-9_-]/g,'')}`;
   let offset=0;
   return <div className="er-donut" role="img" aria-label={`${label}: ${slices.map(s=>`${s.label} ${total?percentage(s.count,total):0}% (${s.count})`).join(', ')}`}>
     <svg viewBox="0 0 120 120" aria-hidden="true">
       <circle cx="60" cy="60" r="46" fill="none" stroke="var(--er-track)" strokeWidth="13"/>
-      {slices.filter(s=>s.count>0).map(s=>{const length=s.count/total*100;const start=offset;offset+=length;return <circle key={s.label} cx="60" cy="60" r="46" pathLength="100" fill="none" stroke={s.color} strokeWidth="13" strokeDasharray={`${length} ${100-length}`} strokeDashoffset={-start} transform="rotate(-90 60 60)"/>;})}
+      <defs><mask id={revealId} maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120">
+        <circle className="er-pie-reveal" cx="60" cy="60" r="46" pathLength="100" fill="none" stroke="white" strokeWidth="16" strokeDasharray="100 100" strokeDashoffset="0" transform="rotate(-90 60 60)"/>
+      </mask></defs>
+      <g mask={`url(#${revealId})`}>{slices.filter(s=>s.count>0).map(s=>{const length=s.count/total*100;const start=offset;offset+=length;return <circle key={s.label} cx="60" cy="60" r="46" pathLength="100" fill="none" stroke={s.color} strokeWidth="13" strokeDasharray={`${length} ${100-length}`} strokeDashoffset={-start} transform="rotate(-90 60 60)"/>;})}</g>
     </svg>
     <div><strong>{center}</strong><small>{total?centerLabel:'No data yet'}</small></div>
   </div>;
@@ -52,7 +56,7 @@ export function ReadinessBreakdown({profile,chapters}) {
         <div className="er-bars"><div className="er-target" aria-hidden="true"/>
           {chapters.map((ch,i)=>{const stats=profile.chapters[ch.id];const value=stats?.total?stats.correct/stats.total*100:null;return <div className="er-row" key={ch.id}>
             <div className="er-row-label"><span style={{color:COLORS[i]}}>0{ch.id}</span><span>{ch.title}</span><strong>{value==null?'—':`${Math.round(value)}%`}</strong></div>
-            <div className="er-track" role="img" aria-label={`${ch.title}: ${value==null?'Not attempted':`${Math.round(value)}% accuracy, ${stats.correct} of ${stats.total} correct`}. Target accuracy 85%.`}><span style={{width:`${value ?? 0}%`,background:COLORS[i]}}/></div>
+            <div className="er-track" role="img" aria-label={`${ch.title}: ${value==null?'Not attempted':`${Math.round(value)}% accuracy, ${stats.correct} of ${stats.total} correct`}. Target accuracy 85%.`}><span style={{width:`${value ?? 0}%`,background:COLORS[i],animationDelay:`${i*40}ms`}}/></div>
           </div>;})}
         </div><div className="er-axis"><span>0%</span><span>100%</span></div>
       </div>

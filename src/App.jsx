@@ -24109,6 +24109,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
             <Gauge size={17}/> {showReadinessLab?"Hide breakdown":"Break it down"}
           </button>
         </div>
+        {showReadinessLab&&<ReadinessBreakdown profile={readinessProfile} chapters={CHAPTERS}/>}
       </section>
 
       <div className="dashboard-stat-grid">
@@ -24127,8 +24128,6 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
           </div>
         ))}
       </div>
-
-      {showReadinessLab&&<ReadinessBreakdown profile={readinessProfile} chapters={CHAPTERS}/>}
 
       <section className="dashboard-action-grid dashboard-action-grid-clean" aria-label="Dashboard action recommendations">
         <div className="card weak-action-card">

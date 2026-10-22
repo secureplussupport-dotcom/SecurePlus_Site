@@ -16,7 +16,7 @@ The authenticated `/api/sessions/readiness` endpoint obtains user identity from 
 - Chapter accuracy is correct / all eligible answers in that chapter. A common line spans all bars at 85%, labelled target accuracy. Unattempted chapters show a dash.
 - Mastery donut: mastered vs still-growing **attempted** concepts.
 - Chapter donut: each chapter's share of unmastered attempted concepts. A concept is attributed once, to its latest eligible source chapter. Unknown chapter evidence appears explicitly as unavailable.
-- Reduced-motion support; responsive dark/light layouts; readable chart labels and empty/error states.
+- Breakdown opens inside the hero, directly beneath the readiness score controls and before the dashboard metrics. Bars reveal with a short stagger; pie segments form through a clockwise SVG mask. Each opening replays the reveal. Reduced-motion settings show the completed charts immediately. Responsive dark/light layouts retain readable labels and empty/error states.
 
 ## Validation
 
