@@ -264,7 +264,7 @@ if (!errors.length) {
   if(!mcqSetup.includes("Recommended")||!mcqSource.includes('label:"Randomised"')) push(errors,"src/App.jsx","MCQ modes must retain recommended Smart Review and Randomised");
   if(!disclosure.includes('<details className="practice-secondary mcq-customise">')||disclosure.includes("if(isGuest)")) push(errors,"src/App.jsx","customization must default to collapsed for every user");
   if(/Unseen questions|questions available|matching questions|mcq-launch-steps|practice-meta-pill|Browse all five exam chapters|guest-mcq-showcase/.test(mcqSetup)) push(errors,"src/App.jsx","the MCQ hub must omit retired counters, introductory panels and chapter navigation");
-  for(const label of ["Questions due for retest","Concepts to improve","Number of questions","Start my set","No pending sets!","You’re on a roll!","Build your review list now!","Let’s review your list!"]){
+  for(const label of ["Retests due","Concepts to review","Questions","Start my set","No pending sets!","You’re on a roll!","Build your review list now!","Let’s review your list!"]){
     if(!mcqSetup.includes(label)) push(errors,"src/App.jsx",`MCQ hub is missing ${label}`);
   }
   if(mcqSetup.indexOf('aria-label="Question selection mode"')>mcqSetup.indexOf('aria-label="Start MCQ practice"')||mcqSetup.indexOf('aria-label="MCQ review queues"')>mcqSetup.indexOf("<PracticeSetupDisclosure>")) push(errors,"src/App.jsx","MCQ mode, hub, review queues and customization must follow the requested order");

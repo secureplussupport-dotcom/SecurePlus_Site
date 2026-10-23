@@ -16864,6 +16864,7 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .mcq-practice-hub.mcq-launch-pad{grid-template-columns:minmax(0,1.08fr) minmax(280px,1fr);align-items:stretch;gap:0;padding:0;margin-bottom:22px;border:1px solid ${t.border};border-radius:24px;background:${t.surface};box-shadow:0 12px 28px rgba(0,0,0,.055);overflow:hidden;}
 .mcq-practice-hub.mcq-launch-pad::after{display:none;}
 .mcq-hub-overview{position:relative;isolation:isolate;overflow:hidden;min-width:0;padding:34px;background:var(--mcq-stage);color:var(--mcq-stage-ink);}
+.mcq-practice-hub:not(.mcq-exam-setup) .mcq-hub-overview{display:flex;align-items:center;}
 .mcq-hub-overview::before,.mcq-hub-overview::after{content:"";position:absolute;z-index:-1;pointer-events:none;right:-80px;top:-116px;width:280px;height:280px;border:1px solid #ffffff15;border-radius:50%;}
 .mcq-hub-overview::after{right:-42px;top:-78px;width:204px;height:204px;box-shadow:0 0 0 38px #ffffff04;}
 .mcq-hub-description{margin:0 0 30px;max-width:340px;color:var(--mcq-stage-ink);font-size:23px;font-weight:650;line-height:1.35;letter-spacing:-.025em;text-align:left;}
@@ -16878,7 +16879,7 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
 .mcq-session-size{min-width:0;margin:0;padding:0;border:0;}
 .mcq-session-size legend{padding:0;margin:0 0 16px;color:${t.text};font-size:14px;font-weight:750;}
 .mcq-practice-hub .mcq-primary-count{width:100%;padding:0;gap:10px;border:0;border-radius:0;background:transparent;}
-.mcq-practice-hub .mcq-primary-count button{min-height:64px;border:1px solid ${t.border};border-radius:14px;background:${t.surface};font-size:23px;font-weight:800;color:${t.textSec};transition:background .16s ease,border-color .16s ease,box-shadow .16s ease;}
+.mcq-practice-hub .mcq-primary-count button{min-height:64px;border:1px solid ${t.border};border-radius:14px;background:${t.surface};font-size:32px;font-weight:800;color:${t.textSec};transition:background .16s ease,border-color .16s ease,box-shadow .16s ease;}
 .mcq-practice-hub .mcq-primary-count button.active{background:color-mix(in srgb,var(--practice-accent) 10%,${t.surface});color:color-mix(in srgb,var(--practice-accent) 70%,${t.text});border-color:var(--practice-accent);box-shadow:inset 0 0 0 1px var(--practice-accent);}
 .mcq-practice-hub .mcq-primary-count button:hover:not(:disabled):not(.active){border-color:var(--practice-accent);color:${t.text};}
 .mcq-practice-hub .mcq-hub-start{width:100%;min-height:58px;margin-top:22px;padding:12px 16px 12px 22px;justify-content:space-between;gap:14px;border:1px solid var(--mcq-stage);border-radius:14px;font-size:15px;font-weight:750;background:var(--mcq-stage);color:var(--mcq-stage-ink);box-shadow:none;transition:background .16s ease,box-shadow .16s ease;}
@@ -16940,7 +16941,7 @@ linear-gradient(135deg, ${t.surface}, ${t.panel} 55%, ${t.bg});box-shadow:0 28px
   .mcq-hub-stats .setup-stat+ .setup-stat{padding-left:16px;}
   .mcq-hub-number{font-size:44px;}
   .mcq-metric-top svg{width:17px;height:17px;}
-  .mcq-hub-screen .mcq-primary-count button{min-height:58px;font-size:21px;}
+  .mcq-hub-screen .mcq-primary-count button{min-height:58px;font-size:28px;}
   .mcq-hub-screen .mcq-review-queue-card{padding:16px!important;min-height:84px!important;}
 }
 .practice-summary{margin-top:16px;padding:12px 14px;background:${t.panel};border:1px solid ${t.border};border-radius:8px;font-size:13px;color:${t.textSec};display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
@@ -25136,7 +25137,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   if(!started) return(
     <div className="mcq-setup-screen mcq-hub-screen fu" style={{...examThemeVars(t),"--practice-accent":examMode?t.accent:reviewMode==="smart"?t.green:t.accent}}>
       {missedBatch!==null&&<div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Choose missed-question batch"><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Choose a batch before using your allowance.</p><label>Questions <input className="input" type="number" min="1" max={Math.min(missedQuestions.length,isPro?90:30,availableQuota??0)} value={missedBatch} onChange={e=>setMissedBatch(Number(e.target.value))}/></label><p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!Number.isInteger(missedBatch)||missedBatch<1||missedBatch>Math.min(missedQuestions.length,isPro?90:30,availableQuota??0)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>Practise {missedBatch} missed questions</button></div></div></div>}
-      <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h2>MCQ practice</h2><p>Build confidence, one question at a time.</p></div></header>
+      <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h2>MCQ practice</h2></div></header>
       <div className="card" role="status" style={{padding:"12px 16px",marginBottom:16,color:t.textSec}}>{isGuest?"Try 10 questions total, then create a free account to keep practising.":isPro?"Unlimited generation · Pro":"50 questions every rolling 12 hours"}<strong style={{marginLeft:10,color:t.text}}>{isPro?"∞":access?`${access.remaining} remaining`:"Loading allowance…"}</strong>{accessError&&<span> {accessError}</span>}{!isPro&&choices.remainder&&<button className="btn btn-outline" style={{marginLeft:12}} disabled={engineBusy} onClick={()=>startEngineQuiz({},choices.remainder,examMode?"exam":reviewMode)}>Practice remaining {choices.remainder}</button>}{isGuest&&access?.remaining===0&&<button className="btn btn-primary" onClick={requestSignup}>Create free account</button>}</div>
       <div hidden={isGuest} className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
         <button type="button" role="switch" aria-checked={examMode} className="mcq-exam-toggle" onClick={()=>{setExamMode(value=>!value);setEngineError("");setModeInfo(null);}}>
@@ -25168,7 +25169,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <div className="mcq-exam-rules"><span><Check size={14}/>Marked at the end</span><span><Check size={14}/>No definitions or hints</span><span><Check size={14}/>Balanced random mix</span></div>
         </div>
         <div className="mcq-session-controls">
-          <fieldset className="mcq-session-size"><legend>Number of questions</legend>
+          <fieldset className="mcq-session-size"><legend>Questions</legend>
             {isPro?<div className="mcq-exam-slider"><div className="exam-length-output"><output htmlFor="exam-count">{examCount}</output><span>questions</span></div><input className="mcq-exam-length-slider" id="exam-count" type="range" min="10" max="90" step="1" value={examCount} aria-label="Exam question count" onChange={event=>setExamCount(Number(event.target.value))}/><div className="exam-slider-labels"><span>10 · Quick focus</span><span>90 · Full rehearsal</span></div></div>:<div className="mcq-primary-count">{[...new Set([10,20,30,...(examCount>0&&examCount<30?[examCount]:[])])].map(size=><button key={size} type="button" aria-label={`${size} exam questions`} disabled={engineBusy||availableQuota==null||size>availableQuota} title={isPro?`Start ${size} questions`:availableQuota<size?`Needs ${size} questions; ${availableQuota} remain`:`${availableQuota-size} remaining after this set`} aria-pressed={examCount===size} className={examCount===size?"active":""} onClick={()=>setExamCount(size)}>{size}</button>)}</div>}
           </fieldset>
           {engineError&&<p className="mcq-hub-error" role="alert">{engineError}</p>}
@@ -25178,21 +25179,20 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       </section>:<>
       <section className="mcq-launch-pad mcq-practice-hub" aria-label="Start MCQ practice">
         <div className="mcq-hub-overview">
-          <p className="mcq-hub-description">Choose your pace. Make this set count.</p>
           <div className="setup-stats mcq-hub-stats" aria-label="Review diagnostics" title={isGuest?"Sign in to see your review diagnostics":undefined}>
             <div className="setup-stat">
               <div className="mcq-metric-top" style={{"--metric-color":t.amber}}><strong className="mcq-hub-number">{reviewSummary.due}</strong><Clock3 size={20} aria-hidden="true"/></div>
-              <span>Questions due for retest</span>
+              <span>Retests due</span>
             </div>
             <div className="setup-stat">
               <div className="mcq-metric-top" style={{"--metric-color":t.red}}><strong className="mcq-hub-number">{reviewSummary.weak}</strong><Target size={20} aria-hidden="true"/></div>
-              <span>Concepts to improve</span>
+              <span>Concepts to review</span>
             </div>
           </div>
         </div>
         <div className="mcq-session-controls">
           <fieldset className="mcq-session-size">
-            <legend>Number of questions</legend>
+            <legend>Questions</legend>
             <div className="mcq-primary-count">
               {[...new Set([...quizSizes,...(!isPro&&quizCount>0&&quizCount<30?[quizCount]:[])])].map(size=><button key={size} type="button" className={quizCount===size?"active":""} aria-label={`${size} questions`} aria-pressed={quizCount===size} disabled={filtered.length<size||availableQuota==null||size>availableQuota} title={isPro?`Start ${size} questions`:availableQuota<size?`Needs ${size} questions; ${availableQuota} remain`:`${availableQuota-size} remaining after this set`} onClick={()=>setQuizCount(size)}>{size}</button>)}
             </div>
