@@ -1,3 +1,4 @@
+import {FlashcardPreview} from "./components/FlashcardPreview.jsx";
 import "./components/FlashcardLibrary.css";
 import {flashcardFaces, personalisedFlashcards, personalisedFlashcardSet, partitionFlashcards} from "./lib/flashcardConcepts.js";
 import { GuestDiagnostic } from "./components/GuestDiagnostic.jsx";
@@ -30276,6 +30277,8 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     if(canSync)deleteSupabaseGeneratedFlashcardSet(user.id,set.id);
   };
   const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>mastered.includes(card.id)).length;
+  const domainNames={1:"Fundamentals",2:"Threats",3:"Architecture",4:"Operations",5:"Governance"};
+  const previewCard=SY0701_ACRONYM_CARDS.find(card=>card.acronym==="RTO");
   const term=query.trim().replace(/^#/,"").toLowerCase();
   const matches=set=>!term||[set.title,set.sectionTitle,...set.cards.flatMap(card=>[...card.keywords,...card.concept_tags])].join(" ").toLowerCase().includes(term);
   const groups=chapterGroups.filter(group=>domain==="all"||String(group.chapterId)===domain).map(group=>({...group,sets:group.sets.filter(matches)})).filter(group=>group.sets.length);
@@ -30285,14 +30288,12 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   return <div className="fc-library" style={palette}>
     {confirmation}
     <header className="fc-hero">
-      <div className="fc-hero-copy"><span className="fc-eyebrow"><NavGlyph type="flashcards" active/> THE RECALL LIBRARY · SY0-701</span>
-        <h1>Small cards.<br/><span>Stronger recall.</span></h1><p>Meet the term. Find the meaning. Make it stick.</p>
-        <div className="fc-hero-actions"><button className="btn btn-primary" onClick={()=>openSet(groups[0]?.sets[0]||SY0701_ACRONYM_SETS[0])}>Start a short deck <ArrowRight size={17}/></button><FlashcardShareActions t={t} compact/></div>
+      <div className="fc-hero-copy"><span className="fc-eyebrow"><NavGlyph type="flashcards" active/> FLASHCARDS / SY0-701</span>
+        <h1>Make it<br/><span>second nature.</span></h1><p>One term. A moment of recall.<br/>A little more confidence for exam day.</p>
+        <div className="fc-hero-actions"><button className="btn btn-primary" onClick={()=>openSet(groups[0]?.sets[0]||SY0701_ACRONYM_SETS[0])}>Find my first deck <ArrowRight size={17}/></button><FlashcardShareActions t={t} compact/></div>
       </div>
-      <div className="fc-recall-art" aria-label={`${totalMastered} of ${SY0701_ACRONYM_CARDS.length} cards remembered`}>
-        <div className="fc-paper fc-paper-back">01 / RECALL</div><div className="fc-paper fc-paper-mid">02 / REVEAL</div>
-        <div className="fc-paper fc-paper-front"><Brain size={29}/><span>Your growing knowledge</span><strong>{totalMastered}<small> / {SY0701_ACRONYM_CARDS.length}</small></strong><div className="fc-mini-track"><i style={{width:`${totalMastered/SY0701_ACRONYM_CARDS.length*100}%`}}/></div><span>cards remembered</span></div>
-      </div>
+      <FlashcardPreview card={previewCard}/>
+      <div className="fc-hero-stats"><span><strong>{SY0701_ACRONYM_SETS.length}</strong> focused decks</span><span><strong>{SY0701_ACRONYM_CARDS.length}</strong> terms to explore</span><span className="fc-recall-progress"><span className="fc-mini-track"><i style={{width:`${totalMastered/SY0701_ACRONYM_CARDS.length*100}%`}}/></span><strong>{totalMastered}</strong> remembered</span></div>
     </header>
     <section className="fc-personal" aria-labelledby="fc-personal-title"><div className="fc-personal-mark"><Sparkles size={24}/></div><div>
       <span className="fc-eyebrow">MADE FROM YOUR PRACTICE</span><h2 id="fc-personal-title">Your personalised set</h2>
@@ -30300,16 +30301,21 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
       {personalSets.length>0&&<div className="fc-personal-parts">{personalSets.map((set,index)=><button className="btn btn-primary" key={set.id} onClick={()=>openSet(set)}>{personalSets.length>1?`Review ${index+1}`:"Review my concepts"} <span>{set.cards.length} cards</span><ArrowRight size={15}/></button>)}</div>}
       {(progressStatus==="error"||progressStatus==="unavailable")&&<button className="btn btn-ghost" onClick={refreshPersonal}>Try again</button>}
       {!user&&<button className="btn btn-ghost" onClick={()=>onRequireSignup?.("flashcard_personalised")}>Save your learning with a free account <ArrowRight size={14}/></button>}
-    </div></section>
+    </div><div className="fc-personal-art" aria-hidden="true"><span/><span/><span><Brain size={24}/></span><i>BUILT AROUND YOU</i></div></section>
     <section className="fc-browse" aria-label="Browse flashcards by domain">
-      <div className="fc-browse-heading"><div><span className="fc-eyebrow">FIVE DOMAINS. ONE CLEAR PATH.</span><h2>Find your next small win.</h2></div><label className="fc-search"><Search size={17}/><input type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Find a term, deck or #tag" aria-label="Search flashcards"/></label></div>
-      <div className="fc-domain-tabs" role="group" aria-label="Filter by official exam domain"><button aria-pressed={domain==="all"} className={domain==="all"?"active":""} onClick={()=>setDomain("all")}>All domains</button>{chapterGroups.map(group=><button key={group.chapterId} aria-pressed={domain===String(group.chapterId)} className={domain===String(group.chapterId)?"active":""} style={{"--domain-color":chapterColor(group.chapterId)}} onClick={()=>setDomain(String(group.chapterId))}><span>0{group.chapterId}</span>{group.chapterTitle}</button>)}</div>
+      <div className="fc-browse-heading"><div><span className="fc-eyebrow">YOUR STUDY SHELF</span><h2>A place for every concept.</h2></div><label className="fc-search"><Search size={17}/><input type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Find a term, deck or #tag" aria-label="Search flashcards"/></label></div>
+      <div className="fc-domain-tabs" role="group" aria-label="Filter by official exam domain"><button aria-pressed={domain==="all"} className={domain==="all"?"active":""} onClick={()=>setDomain("all")}><Layers3 size={20}/><span className="fc-domain-tab-copy"><strong>The collection</strong><small>All five domains</small></span></button>{chapterGroups.map(group=><button key={group.chapterId} title={group.chapterTitle} aria-label={`Domain ${group.chapterId}: ${group.chapterTitle}`} aria-pressed={domain===String(group.chapterId)} className={domain===String(group.chapterId)?"active":""} style={{"--domain-color":chapterColor(group.chapterId)}} onClick={()=>setDomain(String(group.chapterId))}><span className="fc-tab-number">0{group.chapterId}</span><span className="fc-domain-tab-copy"><strong>{domainNames[group.chapterId]}</strong><small>{group.sets.length} decks</small></span></button>)}</div>
       {!groups.length&&<div className="fc-empty" role="status"><Search size={24}/><h3>No matching decks</h3><p>Try a term such as RTO, or a concept tag.</p><button className="btn btn-ghost" onClick={()=>{setQuery("");setDomain("all");}}>Clear search</button></div>}
       <div className="deep-dives-domain-groups fc-domain-groups">{groups.map(group=><section key={group.chapterId} className="fc-domain" style={{"--domain-color":chapterColor(group.chapterId)}}>
-        <header className="fc-domain-heading"><span className="fc-domain-number">0{group.chapterId}</span><div><span className="fc-eyebrow">DOMAIN {group.chapterId}.0</span><h2>{group.chapterTitle}</h2></div><span className="fc-domain-count">{group.sets.length} decks</span></header>
+        <header className="fc-domain-heading"><span className="fc-domain-number">0{group.chapterId}</span><div><span className="fc-eyebrow">DOMAIN {group.chapterId}.0</span><h2>{group.chapterTitle}</h2></div><span className="fc-domain-count">{group.sets.length} {group.sets.length===1?"deck":"decks"}</span></header>
         {[...new Set(group.sets.map(set=>set.sectionId))].map(sectionId=><div className="fc-section" key={sectionId}><h3><span>{sectionId}</span>{group.sets.find(set=>set.sectionId===sectionId).sectionTitle}</h3><div className="fc-deck-grid">{group.sets.filter(set=>set.sectionId===sectionId).map(set=>{
           const remembered=set.cards.filter(card=>mastered.includes(card.id)).length;
-          return <button className="fc-deck" key={set.id} onClick={()=>openSet(set)} aria-label={`Open ${set.title}: ${set.cards.length} cards`}><span className="fc-deck-top"><span>{set.code}</span><span>{set.cards.length} cards <ArrowUpRight size={16}/></span></span><strong>{set.title}</strong><span className="fc-deck-terms">{set.cards.slice(0,4).map(card=>card.acronym).join(" · ")}</span><span className="fc-deck-bottom"><span className="fc-mini-track"><i style={{width:`${remembered/set.cards.length*100}%`}}/></span><small>{remembered} remembered</small></span></button>;
+          const DeckIcon=({1:Fingerprint,2:Bug,3:Network,4:Radar,5:ClipboardList})[set.chapterId]||Layers3;
+          return <button className="fc-deck" key={set.id} onClick={()=>openSet(set)} aria-label={`Open ${set.title}: ${set.cards.length} cards`}>
+            <span className="fc-deck-top"><span className="fc-deck-emblem" aria-hidden="true"><DeckIcon size={23}/></span><span className="fc-deck-code">{set.code}</span><span className="fc-deck-count">{set.cards.length} cards</span></span>
+            <strong>{set.title}</strong><span className="fc-deck-terms">{set.cards.slice(0,3).map(card=><span key={card.id}>{card.acronym}</span>)}</span>
+            <span className="fc-deck-bottom"><span><span className="fc-mini-track"><i style={{width:`${remembered/set.cards.length*100}%`}}/></span><small>{remembered?`${remembered} remembered`:"A fresh start"}</small></span><span className="fc-deck-open" aria-hidden="true"><ArrowUpRight size={19}/></span></span></button>;
+
         })}</div></div>)}
       </section>)}</div>
     </section>
