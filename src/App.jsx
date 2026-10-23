@@ -25194,7 +25194,6 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <fieldset className="mcq-session-size">
             <legend>Number of questions</legend>
             <div className="mcq-primary-count">
-              {isPro&&<label>Set size <input className="input" type="number" min="1" max="90" value={quizCount} onChange={e=>setQuizCount(Number(e.target.value))}/></label>}
               {[...new Set([...quizSizes,...(!isPro&&quizCount>0&&quizCount<30?[quizCount]:[])])].map(size=><button key={size} type="button" className={quizCount===size?"active":""} aria-label={`${size} questions`} aria-pressed={quizCount===size} disabled={filtered.length<size||availableQuota==null||size>availableQuota} title={isPro?`Start ${size} questions`:availableQuota<size?`Needs ${size} questions; ${availableQuota} remain`:`${availableQuota-size} remaining after this set`} onClick={()=>setQuizCount(size)}>{size}</button>)}
             </div>
           </fieldset>
