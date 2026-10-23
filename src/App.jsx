@@ -24026,8 +24026,15 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
         <article className="dh-readiness" aria-label="Exam readiness">
           <div className="dh-readiness-top"><span className="dh-eyebrow"><Gauge size={15}/> EXAM READINESS</span><span className="dh-live-dot" aria-hidden="true"/></div>
           <div className="dh-score" style={{"--dh-score-color":readinessColor}}>
-            <svg viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="77"/><circle className="dh-score-fill" style={{opacity:readinessProfile.status==="ready"&&readiness!=null?1:0}} cx="90" cy="90" r="77" pathLength="100" strokeDasharray={`${readinessProfile.status==="ready"?(readiness ?? 0):0} 100`} transform="rotate(-90 90 90)"/></svg>
-            <div><strong>{readinessProfile.status==="ready"&&readiness!=null?<>{readiness}<small>%</small></>:"—"}</strong><span role="status">{readinessProfile.status==="loading"?"Loading your progress…":readinessProfile.status==="error"?"Progress unavailable":readinessProfile.level}</span></div>
+            <svg viewBox="0 0 200 200" aria-hidden="true">
+              <defs><linearGradient id="dashboard-readiness-arc" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stopColor="#30b9a4"/><stop offset="65%" stopColor="var(--dh-score-color)"/><stop offset="100%" stopColor="#e4c68b"/></linearGradient></defs>
+              <circle className="dh-dial-rim" cx="100" cy="100" r="97"/>
+              <circle className="dh-dial-ticks" cx="100" cy="100" r="91" pathLength="120" strokeDasharray=".35 1.65" transform="rotate(-90 100 100)"/>
+              <circle className="dh-dial-track" cx="100" cy="100" r="78"/>
+              <circle className="dh-score-fill" style={{opacity:readinessProfile.status==="ready"&&readiness!=null&&readiness>0?1:0}} cx="100" cy="100" r="78" pathLength="100" strokeDasharray={`${readinessProfile.status==="ready"?(readiness ?? 0):0} 100`} transform="rotate(-90 100 100)"/>
+              {readinessProfile.status==="ready"&&readiness!=null&&readiness>0&&<circle className="dh-dial-tip" cx="100" cy="22" r="4" transform={`rotate(${readiness*3.6} 100 100)`}/>}
+            </svg>
+            <div><Sparkles className="dh-dial-emblem" size={18} aria-hidden="true"/><strong>{readinessProfile.status==="ready"&&readiness!=null?<>{readiness}<small>%</small></>:"—"}</strong><span role="status">{readinessProfile.status==="loading"?"Loading your progress…":readinessProfile.status==="error"?"Progress unavailable":readinessProfile.level}</span></div>
           </div>
           <button className="dh-breakdown" type="button" aria-expanded={showReadinessLab} aria-controls="exam-readiness-breakdown" onClick={()=>setShowReadinessLab(value=>!value)}>{showReadinessLab?"Hide breakdown":"Break it down"}<ChevronDown size={16}/></button>
         </article>
