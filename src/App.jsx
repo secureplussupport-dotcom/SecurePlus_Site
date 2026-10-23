@@ -24012,18 +24012,16 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   return(
     <div className="dashboard-shell dh-home" style={{"--dh-text":t.text,"--dh-muted":t.textSec,"--dh-panel":t.panel,"--dh-surface":t.surface,"--dh-line":t.border,"--dh-accent":t.accent,"--dh-green":t.green,"--dh-amber":t.amber}}>
       <header className="dh-heading">
-        <div><span className="dh-eyebrow">YOUR STUDY SPACE / SY0-701</span><h1>Welcome back, {user.name.split(" ")[0]}<span>.</span></h1><p>A little practice. A little closer.</p></div>
-        <div className="dh-cipher"><span>YOUR STUDY COMPANION<strong>Let’s make it click.</strong></span><MascotAnimation animation={questionsDone?"scan":"wave"} size={88} interactive={false} label="Cipher, your study companion"/></div>
+        <div><span className="dh-eyebrow">YOUR STUDY SPACE / SY0-701</span><h1>Welcome back, {user.name.split(" ")[0]}<span>.</span></h1></div>
+        <div className="dh-cipher"><MascotAnimation animation={questionsDone?"scan":"wave"} size={88} interactive={false} label="Cipher, your study companion"/></div>
       </header>
 
       <section className="dh-launch-row" aria-label="Practice and exam readiness">
         <article className="dh-practice">
-          <span className="dh-eyebrow"><BookOpenCheck size={15}/> YOUR NEXT GOOD HABIT</span>
+          <span className="dh-eyebrow"><BookOpenCheck size={15}/> MCQ PRACTICE</span>
           <h2>Small steps.<br/><span>Stronger instincts.</span></h2>
-          <p>{questionsDone===0?"Your first set is the start of something good.":readiness>=80?"Keep your momentum. Put what you know to work.":"Pick up where you are. Smart Review takes it from there."}</p>
-          <div className="dh-practice-actions"><button className="btn dh-primary" onClick={()=>onNav("mcq")}>Start practice <ArrowRight size={18}/></button><button className="dh-text-button" onClick={()=>onNav("exam")}>Try exam mode <ArrowUpRight size={15}/></button></div>
+          <div className="dh-practice-actions"><button className="btn dh-primary" onClick={()=>onNav("mcq")}>Start practice <ArrowRight size={18}/></button><button className="dh-text-button" onClick={()=>onNav("exam")}>Exam mode <ArrowUpRight size={15}/></button></div>
           <div className="dh-practice-art" aria-hidden="true"><span/><span/><span/><ShieldCheck size={46} strokeWidth={1.2}/></div>
-          <span className="dh-practice-foot"><Sparkles size={13}/> A fresh chance to make it stick.</span>
         </article>
         <article className="dh-readiness" aria-label="Exam readiness">
           <div className="dh-readiness-top"><span className="dh-eyebrow"><Gauge size={15}/> EXAM READINESS</span><span className="dh-live-dot" aria-hidden="true"/></div>
@@ -24036,21 +24034,21 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
       </section>
       {showReadinessLab&&<ReadinessBreakdown profile={readinessProfile} chapters={CHAPTERS}/>}
 
-      <div className="dh-section-title"><h2>Your momentum</h2><span>Every answer adds up.</span></div>
+      <div className="dh-section-title"><h2>Your progress</h2></div>
       <DashboardMetrics quota={practiceAccess} profile={readinessProfile} streak={streakInfo} tier={user.tier} t={t}/>
 
-      <div className="dh-section-title"><h2>Made for your next step</h2><span>Less searching. More learning.</span></div>
+      <div className="dh-section-title"><h2>For you</h2></div>
       <section className="dh-next-grid" aria-label="Dashboard action recommendations">
         <article className={`dh-personal dh-widget ${showAssistantDashboardSet?"has-review":""}`}>
           <div className="dh-widget-top"><span className="dh-eyebrow"><Sparkles size={14}/> PERSONALISED FLASHCARDS</span><span className="dh-widget-icon"><Layers3 size={20}/></span></div>
-          <div className="dh-personal-body"><div><h3>{showAssistantDashboardSet?"A second look.\nA stronger memory.":"Make tricky\nterms click."}</h3><p>{showAssistantDashboardSet?"From concepts you missed twice in a row.":"Your practice shapes your personalised review."}</p></div><div className="dh-card-fan" aria-hidden="true"><i/><i/><i>{showAssistantDashboardSet?<><strong>{assistantFlashcardSet.cards.length}</strong><small>cards for you</small></>:<Brain size={36} strokeWidth={1.5}/>}</i></div></div>
+          <div className="dh-personal-body"><div><h3>{showAssistantDashboardSet?"Your review, ready.":"Make tricky\nterms click."}</h3><p>{showAssistantDashboardSet?"Concepts missed twice.":"Built from your practice."}</p></div><div className="dh-card-fan" aria-hidden="true"><i/><i/><i>{showAssistantDashboardSet?<><strong>{assistantFlashcardSet.cards.length}</strong><small>cards</small></>:<Brain size={36} strokeWidth={1.5}/>}</i></div></div>
           {weakFlashcardPreview.length>0&&<div className="dh-term-chips">{weakFlashcardPreview.map((term,index)=><span key={`${term}-${index}`}>{term}</span>)}</div>}
-          <button className="dh-widget-cta" onClick={()=>showAssistantDashboardSet?onOpenFlashcards?.(assistantFlashcardSet):onNav("flashcards")}>{showAssistantDashboardSet?"Open my personalised set":"Explore flashcards"}<ArrowRight size={18}/></button>
+          <button className="dh-widget-cta" onClick={()=>showAssistantDashboardSet?onOpenFlashcards?.(assistantFlashcardSet):onNav("flashcards")}>{showAssistantDashboardSet?"Review my cards":"Explore flashcards"}<ArrowRight size={18}/></button>
         </article>
         <article className="dh-focus dh-widget">
           <div className="dh-widget-top"><span className="dh-eyebrow"><Target size={14}/> YOUR NEXT FOCUS</span>{primaryWeakAction&&<span className="dh-chapter">CH. {primaryWeakAction.chapter.id}</span>}</div>
           <h3>{primaryWeakAction?primaryWeakAction.chapter.title:"Find your starting point."}</h3>
-          <p>{primaryWeakAction?"A little attention here can go a long way.":"Complete a set to find the concepts worth another look."}</p>
+          {!primaryWeakAction&&<p>Complete a set to find your focus.</p>}
           {primaryWeakAction&&<div className="dh-term-chips">{primaryWeakAction.missedTopics.slice(0,2).map(topic=><span key={topic}>{topic}</span>)}</div>}
           {primaryWeakAction&&<div className="dh-lesson-links" aria-label="Recommended Concept Deep Dive lessons">{primaryLessonPath.map(lesson=><button key={lesson.id} onClick={()=>onOpenDeepDive?.(lesson.id,{source:"dashboard_weak_area"})}><BookOpenCheck size={17}/><span>{lesson.title}</span><ArrowUpRight size={15}/></button>)}</div>}
           <button className="dh-widget-cta" onClick={()=>primaryWeakAction?onStartChapterReview?.(primaryWeakAction.chapter.id,{count:primaryWeakAction.reviewCount,source:"dashboard_weak_area"}):onNav("mcq")}>{primaryWeakAction?`Review ${primaryWeakAction.reviewCount} questions`:"Start my first set"}<ArrowRight size={18}/></button>
@@ -24058,11 +24056,11 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
       </section>
 
       <section className="dh-shortcuts" aria-label="More ways to learn">
-        <button className="dh-shortcut dh-daily" onClick={()=>onNav("daily")}><span className="dh-shortcut-icon"><Flame size={23}/></span><span><small>ONE SMALL DAILY WIN</small><strong>Daily challenge</strong><span>{streakInfo.completedToday?"Today’s challenge, completed.":"Keep the momentum going."}</span></span><ArrowUpRight size={19}/></button>
-        <button className="dh-shortcut dh-lessons" onClick={()=>onNav("deep-dives")}><span className="dh-shortcut-icon"><BookOpenCheck size={23}/></span><span><small>CONNECT THE DOTS</small><strong>Concept Deep Dives</strong><span>Go from remembering to understanding.</span></span><ArrowUpRight size={19}/></button>
-        {showStarredDashboardSet?<button className="dh-shortcut dh-saved" onClick={()=>onOpenFlashcards?.(STARRED_FLASHCARD_SET_ID)}><span className="dh-shortcut-icon"><Star size={23}/></span><span><small>YOUR KEEPERS</small><strong>{starredFlashcards.length} saved flashcards</strong><span>All your favourites. Another look.</span></span><ArrowUpRight size={19}/></button>:<button className="dh-shortcut dh-saved" onClick={()=>onNav("flashcards")}><span className="dh-shortcut-icon"><Layers3 size={23}/></span><span><small>A MOMENT OF RECALL</small><strong>Browse the decks</strong><span>Find your next “I know this.”</span></span><ArrowUpRight size={19}/></button>}
+        <button className="dh-shortcut dh-daily" onClick={()=>onNav("daily")}><span className="dh-shortcut-icon"><Flame size={23}/></span><span><strong>Daily challenge</strong>{streakInfo.completedToday&&<span>Completed today</span>}</span><ArrowUpRight size={19}/></button>
+        <button className="dh-shortcut dh-lessons" onClick={()=>onNav("deep-dives")}><span className="dh-shortcut-icon"><BookOpenCheck size={23}/></span><span><strong>Concept Deep Dives</strong></span><ArrowUpRight size={19}/></button>
+        {showStarredDashboardSet?<button className="dh-shortcut dh-saved" onClick={()=>onOpenFlashcards?.(STARRED_FLASHCARD_SET_ID)}><span className="dh-shortcut-icon"><Star size={23}/></span><span><strong>{starredFlashcards.length} saved flashcards</strong></span><ArrowUpRight size={19}/></button>:<button className="dh-shortcut dh-saved" onClick={()=>onNav("flashcards")}><span className="dh-shortcut-icon"><Layers3 size={23}/></span><span><strong>Browse the decks</strong></span><ArrowUpRight size={19}/></button>}
       </section>
-      {!isPro&&<aside className="dh-upgrade"><div><span className="dh-eyebrow">A LITTLE MORE ROOM TO PRACTISE</span><h3>Your pace. No generation limit.</h3><p>Pro adds unlimited MCQ generation and precise targeting.</p></div><button className="btn btn-outline" onClick={()=>onNav("pricing")}>Explore Pro passes <ArrowUpRight size={16}/></button></aside>}
+      {!isPro&&<aside className="dh-upgrade"><div><h3>More room to practise.</h3><p>Unlimited MCQs · precise targeting</p></div><button className="btn btn-outline" onClick={()=>onNav("pricing")}>Explore Pro passes <ArrowUpRight size={16}/></button></aside>}
     </div>
   );
 }
