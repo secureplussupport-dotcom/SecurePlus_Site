@@ -38,7 +38,7 @@ function Donut({slices,total,label,center,centerLabel="concepts"}) {
   </div>;
 }
 function Legend({slices,total}) {
-  return <ul className="er-legend">{slices.map(s=><li key={s.label}><i style={{background:s.color}}/><span>{s.label}</span><strong>{total?percentage(s.count,total):0}%</strong><small>{s.count}</small></li>)}</ul>;
+  return <ul className="er-legend">{slices.map(s=><li key={s.label}><i style={{background:s.color}}/><span>{s.label}</span><strong>{total?`${percentage(s.count,total)}%`:'—'}</strong><small aria-label={`${s.count} concepts`}>({s.count})</small></li>)}</ul>;
 }
 
 export function ReadinessBreakdown({profile,chapters}) {
@@ -47,11 +47,12 @@ export function ReadinessBreakdown({profile,chapters}) {
   const chapterSlices=chapters.map((ch,i)=>({label:`Ch. ${ch.id}`,count:byChapter[ch.id] || 0,color:COLORS[i]}));
   if(byChapter.unknown)chapterSlices.push({label:'Chapter unavailable',count:byChapter.unknown,color:'#a0aaba'});
   return <section id="exam-readiness-breakdown" className="er-breakdown" aria-label="Exam readiness breakdown">
-    <header><div><span className="er-eyebrow">YOUR READINESS, AT A GLANCE</span><h2>{profile.level}</h2></div><span className="er-milestone">80% · Exam ready</span></header>
+    <header><div><span className="er-eyebrow">READINESS BREAKDOWN</span><h2>{profile.level}</h2></div><span className="er-milestone">80% · Exam ready</span></header>
     {status==='loading'?<p role="status">Loading your MCQ and Exam progress…</p>:status==='error'?<p role="status">Your readiness couldn’t load. <button type="button" onClick={profile.retry}>Try again</button></p>:<>
-      <p className="er-scope">MCQ sets + Exam mode · {attempted} attempted concept{attempted===1?'':'s'} · Unattempted concepts excluded</p>
+      <p className="er-scope"><span><strong>{attempted}</strong> concepts attempted</span><span>MCQ + Exam</span><span>Unattempted excluded</span></p>
+      <div className="er-layout">
       <div className="er-chapters">
-        <h3>Chapter accuracy</h3>
+        <div className="er-card-heading"><h3>Chapter accuracy</h3><span>01—05</span></div>
         <div className="er-benchmark-label"><span>85% target accuracy</span></div>
         <div className="er-bars"><div className="er-target" aria-hidden="true"/>
           {chapters.map((ch,i)=>{const stats=profile.chapters[ch.id];const value=stats?.total?stats.correct/stats.total*100:null;return <div className="er-row" key={ch.id}>
@@ -61,8 +62,9 @@ export function ReadinessBreakdown({profile,chapters}) {
         </div><div className="er-axis"><span>0%</span><span>100%</span></div>
       </div>
       <div className="er-chart-grid">
-        <article><h3>Concept mastery</h3><p>Mastered at 80 points</p><Donut slices={masterySlices} total={attempted} label="Attempted concept mastery" centerLabel="mastered" center={attempted?`${percentage(mastered,attempted)}%`:'—'}/><Legend slices={masterySlices} total={attempted}/></article>
-        <article><h3>Where to grow next</h3><p>Chapter share of unmastered concepts</p><Donut slices={chapterSlices} total={unmastered} label="Unmastered concepts by chapter" center={unmastered || (attempted?'0':'—')}/>{unmastered?<Legend slices={chapterSlices.filter(s=>s.count)} total={unmastered}/>:<p className="er-empty">{attempted?'Every attempted concept is mastered. Keep your momentum!':'Your first set starts the picture.'}</p>}</article>
+        <article className="er-mastery"><div className="er-card-heading"><h3>Concept mastery</h3><span>80+ points</span></div><div className="er-chart-body"><Donut slices={masterySlices} total={attempted} label="Attempted concept mastery" centerLabel="mastered" center={attempted?`${percentage(mastered,attempted)}%`:'—'}/><Legend slices={masterySlices} total={attempted}/></div></article>
+        <article className="er-growth"><div className="er-card-heading"><h3>Where to grow</h3><span>By chapter</span></div><div className="er-chart-body"><Donut slices={chapterSlices} total={unmastered} label="Unmastered concepts by chapter" center={unmastered || (attempted?'0':'—')}/>{unmastered?<Legend slices={chapterSlices.filter(s=>s.count)} total={unmastered}/>:<p className="er-empty">{attempted?'All attempted concepts mastered.':'Complete a set to begin.'}</p>}</div></article>
+      </div>
       </div>
       {profile.unclassified>0&&<small className="er-history-note">Older answers without an activity label are excluded.</small>}
     </>}
