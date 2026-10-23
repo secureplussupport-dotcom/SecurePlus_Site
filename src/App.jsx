@@ -1,3 +1,5 @@
+import "./components/FlashcardLibrary.css";
+import {flashcardFaces, personalisedFlashcards, personalisedFlashcardSet, partitionFlashcards} from "./lib/flashcardConcepts.js";
 import { GuestDiagnostic } from "./components/GuestDiagnostic.jsx";
 import { BookmarkOrganiser } from "./components/BookmarkOrganiser.jsx";
 import { usePracticeAccess } from "./lib/usePracticeAccess.js";
@@ -22,6 +24,10 @@ import mcqTagAssignments from "./data/mcqConceptTagAssignments.json";
 import { mcqEngineEnabled, mcqEngineRequest, practiceQuestion, recordStandaloneMcq } from "./lib/mcqEngineClient.js";
 import {
   ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Search,
+  Shuffle,
   BadgeCheck,
   BookOpenCheck,
   Brain,
@@ -112,6 +118,7 @@ import {
   SY0701_ACRONYM_SETS,
   SY0701_ACRONYM_SOURCE,
   groupSy0701AcronymSetsByChapter,
+  getSy0701AcronymSet,
 } from "./data/sy0701AcronymFlashcards.js";
 import {
   buildDeepDivePracticeQuestions,
@@ -355,7 +362,7 @@ function TrustBadge({t,compact=false,center=false,style={}}) {
 
 const SEO_RESOURCE_LINKS = Object.freeze([
   { href:"/security-plus-practice-questions/", title:"Security+ practice questions", body:"Scenario-based Security+ practice with MCQs, PBQ previews, daily challenges, and review guidance." },
-  { href:"/security-plus-flashcards/", title:"CompTIA Security+ flashcards for SY0-701", body:"Study 313 original cards in 29 decks across all five exam domains, then use weak-area review with Pro." },
+  { href:"/security-plus-flashcards/", title:"CompTIA Security+ flashcards for SY0-701", body:"Study 502 term-first flashcards across all five exam domains, with personalised concept review." },
   { href:"/security-plus-acronyms/", title:"Security+ acronyms", body:"Flashcard-style definitions for common SY0-701 abbreviations." },
   { href:"/security-plus-port-numbers/", title:"Port numbers", body:"Quick review for common services, protocols, and exam clues." },
   { href:"/security-plus-pbq-practice/", title:"PBQ practice", body:"Security+ PBQ simulations for ACL logic, ports, protocols, logs, ordering, and select-and-fill tasks." },
@@ -430,7 +437,7 @@ const buildStarredFlashcardSet = cards => ({
   topic:"Saved flashcards",
   cards,
 });
-const RANDOM_FLASHCARD_COUNTS = [10,20,30];
+const RANDOM_FLASHCARD_COUNTS = [10,15,20];
 const RANDOM_FLASHCARD_COLORS = ["#0ea5e9","#14b8a6","#8b5cf6","#f59e0b","#ec4899","#22c55e","#6366f1","#f97316"];
 const clampRandomFlashcardCount = value => {
   const requested=Number(value)||10;
@@ -514,53 +521,10 @@ const readLocalFlashcardDefaultMode = owner => {
   }catch{return "";}
 };
 const buildRandomFlashcardSet = (input={}) => {
-  const {count=10,mode="definition",includeTerms=true,includeAcronyms=true,sourceCards=SY0701_ACRONYM_CARDS,title="Randomised flashcard set",savedId="",preserveOrder=false,color=""}=input;
-  const safeConfig=normalizeRandomFlashcardConfig({count,mode,includeTerms,includeAcronyms});
-  const safeCount=safeConfig.count;
-  const termCards=(sourceCards||[]).filter(card=>card.cardType==="term");
-  const acronymCards=(sourceCards||[]).filter(card=>card.cardType!=="term"&&card.cardType!=="divider"&&(safeConfig.mode==="acronym"?flashcardHasRealAcronym(card):true));
-  const useTerms=Boolean(safeConfig.includeTerms);
-  const useAcronyms=Boolean(safeConfig.includeAcronyms);
-  const selected=[];
-  if(useTerms&&useAcronyms){
-    const termTarget=Math.max(1,Math.floor(safeCount/2));
-    const acronymTarget=safeCount-termTarget;
-    const pickedTerms=(preserveOrder?termCards:shuffledFlashcardCards(termCards)).slice(0,termTarget);
-    const pickedAcronyms=(preserveOrder?acronymCards:shuffledFlashcardCards(acronymCards)).slice(0,acronymTarget);
-    if(safeConfig.mode==="acronym"){
-      selected.push(
-        ...pickedAcronyms,
-        makeFlashcardSectionDivider(`${savedId||RANDOM_FLASHCARD_SET_ID}-terms-divider`,FLASHCARD_DEFINITION_NEXT_LABEL,"#7c3aed"),
-        ...pickedTerms,
-      );
-    }else{
-      selected.push(
-        ...pickedTerms,
-        makeFlashcardSectionDivider(`${savedId||RANDOM_FLASHCARD_SET_ID}-acronyms-divider`,FLASHCARD_ACRONYM_SECTION_LABEL,"#0ea5e9"),
-        ...pickedAcronyms,
-      );
-    }
-  }else if(useTerms){
-    selected.push(...(preserveOrder?termCards:shuffledFlashcardCards(termCards)).slice(0,safeCount));
-  }else if(useAcronyms){
-    selected.push(...(preserveOrder?acronymCards:shuffledFlashcardCards(acronymCards)).slice(0,safeCount));
-  }
-  const nonDivider=selected.filter(card=>card.cardType!=="divider");
-  const setType=nonDivider.length&&nonDivider.every(card=>card.cardType==="term")?"term":"acronym";
-  return {
-    id:savedId||RANDOM_FLASHCARD_SET_ID,
-    title,
-    description:`${nonDivider.length} randomized cards · ${useTerms&&useAcronyms?"Terms and acronyms":useTerms?"Terms only":"Acronyms only"}.`,
-    setType,
-    objectiveCodes:[...new Set(nonDivider.flatMap(card=>card.objectiveCodes||[]))],
-    color:color||generatedFlashcardSetColor(savedId||`${safeCount}-${safeConfig.mode}-${Date.now()}`),
-    chapterId:0,
-    chapterTitle:"Randomised deck",
-    topic:"Randomised Security+ recall",
-    cards:selected,
-    generatedBy:"random_builder",
-    randomConfig:{count:safeCount,mode:getSafeFlashcardMode(safeConfig.mode,false,setType),includeTerms:useTerms,includeAcronyms:useAcronyms},
-  };
+  const cards=(input.preserveOrder?[...(input.sourceCards||SY0701_ACRONYM_CARDS)]:shuffledFlashcardCards(input.sourceCards||SY0701_ACRONYM_CARDS)).filter(card=>card.cardType!=="divider").slice(0,input.preserveOrder?30:clampRandomFlashcardCount(input.count));
+  return {id:input.savedId||RANDOM_FLASHCARD_SET_ID,title:input.title||"A fresh mix",description:`${cards.length} term-first flashcards.`,
+    setType:"term",objectiveCodes:[],color:input.color||"#5d8ef5",chapterId:0,chapterTitle:"Mixed recall",topic:"Mixed recall",cards,
+    generatedBy:"random_builder",randomConfig:{count:cards.length,mode:"acronym",includeTerms:true,includeAcronyms:true}};
 };
 const hydrateSavedRandomFlashcardSets = (items=[]) => {
   const cardMap=new Map(SY0701_ACRONYM_CARDS.map(card=>[card.id,card]));
@@ -24041,10 +24005,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   const primaryLessonPath=getDeepDiveRecommendations(primaryWeakAction?.missedQuestions||[],{limit:2});
   const primaryWeakConcepts=summarizeMissedConcepts(primaryWeakAction?.missedQuestions||[]);
   const primaryDeepDiveTitle=getRecommendedDeepDiveTitle(primaryLessonPath);
-  const primaryWeakFlashcardSet=primaryWeakAction?buildCipherWeakFlashcardSet({
-    weakChapterId:primaryWeakAction.chapter.id,
-    weakTopics:primaryWeakAction.missedTopics,
-  }):null;
+  const primaryWeakFlashcardSet=assistantFlashcardSet;
   const weakFlashcardPreview=(primaryWeakFlashcardSet?.cards||[]).slice(0,4).map(card=>card.acronym||card.expansion||card.term).filter(Boolean);
 
   return(
@@ -29263,26 +29224,6 @@ function FlashcardSavePrompt({t,onLogin,onSignup,onClose,mode="save"}) {
   );
 }
 
-const FLASHCARD_MODE_OPTIONS={
-  definition:{
-    id:"definition",
-    title:"Test Definition",
-    short:"See the definition first, then guess the term and acronym.",
-    label:"Definition mode",
-  },
-  acronym:{
-    id:"acronym",
-    title:"Test Acronym",
-    short:"See the acronym first, then guess the full term and definition.",
-    label:"Acronym mode",
-  },
-  example:{
-    id:"example",
-    title:"Guess from Example",
-    short:"Read a scenario clue and identify the full attack or term.",
-    label:"Scenario mode",
-  },
-};
 const FLASHCARD_DEFAULT_MODE_PREFIX="secureplus-flashcard-default-mode";
 const getFlashcardDefaultModeKey=owner=>`${FLASHCARD_DEFAULT_MODE_PREFIX}:${owner||"guest"}`;
 const FLASHCARD_INVENTORY_VISIBILITY_PREFIX="secureplus-flashcard-inventory-visibility";
@@ -29300,92 +29241,12 @@ const readFlashcardInventoryVisibility=owner=>{
   }
 };
 const flashcardSetType=set=>set?.setType==="term"||set?.cards?.every(card=>card.cardType==="term")?"term":"acronym";
-const getSafeFlashcardMode=(mode,hasExample=false,setType="acronym")=>{
-  if(setType==="term")return "definition";
-  if(mode==="example")return hasExample?"example":"definition";
-  return mode==="acronym"?"acronym":"definition";
-};
+const getSafeFlashcardMode=()=>"acronym";
 const flashcardSetHasExampleMode=set=>Boolean(set?.cards?.some(card=>card.example));
-
-function FlashcardModeCipher({mode}) {
-  const animation=mode==="definition"?"flashcardTeach":mode==="acronym"?"flashcardInspect":"flashcardThink";
-  return(
-    <div className={`flashcard-mode-cipher mode-${mode}`}>
-      <MascotAnimation animation={animation} size={108} interactive={false} label={`${FLASHCARD_MODE_OPTIONS[mode]?.title||"Flashcard"} Cipher animation`}/>
-    </div>
-  );
-}
-
-function FlashcardModeChooser({t,set=null,hasExample=false,currentMode="definition",defaultMode="",user=null,onChoose,onClose,context="open"}) {
-  const [makeDefault,setMakeDefault]=useState(false);
-  const signedIn=Boolean(user?.id||user?.email);
-  const termOnly=flashcardSetType(set)==="term";
-  const choices=termOnly
-    ? [FLASHCARD_MODE_OPTIONS.definition]
-    : [
-        FLASHCARD_MODE_OPTIONS.definition,
-        FLASHCARD_MODE_OPTIONS.acronym,
-        ...(hasExample?[FLASHCARD_MODE_OPTIONS.example]:[]),
-      ];
-  const title=context==="default"?"Choose your default flashcard mode":"Choose your flashcard mode";
-  const subtitle=context==="default"
-    ?"Signed-in users can skip this prompt for standard decks by saving a default."
-    :set?.title
-      ?`Set: ${set.title}`
-      :"Pick how you want to study this deck.";
-  const chooser=(
-    <div className="flashcard-mode-overlay" role="dialog" aria-modal="true" aria-labelledby="flashcard-mode-title" onMouseDown={onClose}>
-      <div className={`flashcard-mode-sheet ${hasExample?"has-example":"two-mode"}`} onMouseDown={event=>event.stopPropagation()}>
-        <button className="icon-btn flashcard-mode-close" type="button" aria-label="Close flashcard mode chooser" onClick={onClose}><X size={18}/></button>
-        <div className="flashcard-mode-intro">
-          <span className="deep-dive-preview-badge"><Brain size={13}/>Active recall setup</span>
-          <h2 id="flashcard-mode-title">{title}</h2>
-          <p>{subtitle}</p>
-        </div>
-        <div className="flashcard-mode-grid">
-          {choices.map(choice=>{
-            const active=currentMode===choice.id||defaultMode===choice.id;
-            const recommended=choice.id==="example";
-            return(
-              <button
-                key={choice.id}
-                type="button"
-                className={`flashcard-mode-card ${choice.id} ${active?"active":""}`}
-                onClick={()=>onChoose?.(choice.id,{makeDefault:makeDefault&&signedIn})}
-              >
-                {recommended&&<span className="flashcard-mode-recommended"><CheckCircle2 size={15}/>Recommended</span>}
-                <FlashcardModeCipher mode={choice.id}/>
-                <span className="flashcard-mode-copy">
-                  <strong>{choice.title}</strong>
-                  <small>{choice.short}</small>
-                </span>
-                <span className="flashcard-mode-action">{active?"Current choice":"Start this mode"}<ChevronRight size={15}/></span>
-              </button>
-            );
-          })}
-        </div>
-        <div className="flashcard-mode-footer">
-          {signedIn?(
-            <label className={`flashcard-default-checkbox ${makeDefault?"checked":""}`}>
-              <input type="checkbox" checked={makeDefault} onChange={event=>setMakeDefault(event.target.checked)}/>
-              <span><Check size={13}/></span>
-              <strong>Set as my default mode</strong>
-            </label>
-          ):(
-            <small>Guests can use every mode. Sign in if you want SecurePlus to remember your default.</small>
-          )}
-          <button className="btn btn-ghost" type="button" onClick={onClose}>Back</button>
-        </div>
-      </div>
-    </div>
-  );
-  return typeof document!=="undefined"&&document.body?createPortal(chooser,document.body):chooser;
-}
 
 function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,onSaveGeneratedSet,onSaveReviewSet,onOpenRecommendedSet,recommendedSet=null,initialMode="definition",onChangeModeRequest}) {
   const setType=flashcardSetType(acronymSet);
   const setKindLabel=setType==="term"?"Term":"Acronym";
-  const [direction,setDirection]=useState(()=>getSafeFlashcardMode(initialMode,flashcardSetHasExampleMode(acronymSet),setType));
   const [cardIndex,setCardIndex]=useState(0);
   const [cardOrder,setCardOrder]=useState(()=>acronymSet.cards.map(card=>card.id));
   const [isFlipped,setIsFlipped]=useState(false);
@@ -29400,53 +29261,18 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
     const included=new Set(ordered.map(card=>card.id));
     return [...ordered,...acronymSet.cards.filter(card=>!included.has(card.id))];
   },[acronymSet,cardOrder]);
-  const studyCards=direction==="example"?orderedCards.filter(card=>card.example):orderedCards;
+  const studyCards=orderedCards;
   const activeCard=studyCards[cardIndex]||studyCards[0]||orderedCards[0];
   const isDividerCard=activeCard?.cardType==="divider";
-  const activeCardIsTerm=activeCard?.cardType==="term";
-  const testsAcronym=direction==="acronym"&&!activeCardIsTerm&&flashcardHasRealAcronym(activeCard);
-  const asksFromExample=direction==="example";
+  const faces=flashcardFaces(activeCard||{});
+  const asksFromExample=false;
   const studyCardCount=studyCards.filter(card=>card.cardType!=="divider").length;
   const totalCardCount=acronymSet.cards.filter(card=>card.cardType!=="divider").length;
-  const frontPrompt=isDividerCard
-    ?"Section change"
-    :asksFromExample
-    ?"Guess the full attack name"
-    :testsAcronym
-      ?"Test the acronym"
-      :"Test the definition";
-  const frontText=isDividerCard
-    ?activeCard?.acronym
-    :asksFromExample
-    ?activeCard?.example
-    :testsAcronym
-      ?activeCard?.acronym
-      :activeCard?.meaning;
-  const answerLabel=isDividerCard
-    ?"Next section"
-    :asksFromExample
-    ?"Full attack name"
-    :testsAcronym
-      ?"Full term and definition"
-      :setType==="term"
-        ?"Term"
-        :"Term and acronym";
-  const answerMain=isDividerCard
-    ?activeCard?.expansion
-    :asksFromExample
-    ?activeCard?.expansion
-    :testsAcronym
-      ?activeCard?.expansion
-      :setType==="term"
-        ?activeCard?.expansion
-        :`${activeCard?.expansion} (${activeCard?.acronym})`;
-  const answerCopy=isDividerCard
-    ?activeCard?.meaning
-    :asksFromExample
-      ?`Exam meaning: ${activeCard?.meaning}`
-      :testsAcronym
-        ?`Definition: ${activeCard?.meaning}`
-        :"";
+  const frontPrompt="Test by term";
+  const frontText=faces.front;
+  const answerLabel=faces.fullForm?"Full form & meaning":"Meaning";
+  const answerMain=faces.fullForm||faces.front;
+  const answerCopy=faces.definition;
   const masteredCount=acronymSet.cards.filter(card=>card.cardType!=="divider"&&masteredIds.includes(card.id)).length;
   const progress=studyCards.length?Math.round(((cardIndex+1)/studyCards.length)*100):0;
   const flashcardStarredSet=useMemo(()=>new Set(starred||[]),[starred]);
@@ -29464,7 +29290,6 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   };
 
   useEffect(()=>{
-    setDirection(getSafeFlashcardMode(initialMode,flashcardSetHasExampleMode(acronymSet),flashcardSetType(acronymSet)));
     setCardIndex(0);
     setCardOrder(acronymSet.cards.map(card=>card.id));
     setIsFlipped(false);
@@ -29474,22 +29299,13 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
     setLearnMoreNotice("");
   },[acronymSet.id,initialMode]);
 
-  useEffect(()=>{
-    const safeMode=getSafeFlashcardMode(initialMode,hasExampleMode,setType);
-    setDirection(current=>current===safeMode?current:safeMode);
-    setCardIndex(0);
-    setIsFlipped(false);
-    setRatedCardsThisPass(new Set());
-    setShowCompletion(false);
-  },[initialMode,hasExampleMode,setType]);
-
   const moveCard=directionStep=>{
     const total=Math.max(studyCards.length,1);
     setCardIndex(current=>(current+directionStep+total)%total);
     setIsFlipped(false);
   };
   const rateCard=mastered=>{
-    if(!activeCard)return;
+    if(!activeCard||mastered&&!answerCopy)return;
     if(isDividerCard){
       moveCard(1);
       return;
@@ -29523,15 +29339,11 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
       onRequireSignup?.("flashcard_learn_more");
       return;
     }
-    if(user.tier!=="pro"){
-      setLearnMoreNotice("Concept Deep Dives are part of Pro. Flashcards remain free; Pro connects this set to guided lessons.");
-      return;
-    }
     onOpenDeepDive?.(dive.id,{mode:"learn",source:"flashcard_learn_more"});
   };
 
   return(
-    <article className="deep-dive-acronym-reader" style={{"--set-color":acronymSet.color,"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
+    <article className="deep-dive-acronym-reader fc-term-reader" style={{"--set-color":acronymSet.color,"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <div className="deep-dive-reader-topbar">
         <a className="btn btn-ghost deep-dive-back" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onClose();}}><ArrowLeft size={17}/> All Security+ flashcards</a>
         <span className="deep-dive-preview-badge"><Brain size={13}/> Active recall lab</span>
@@ -29545,13 +29357,13 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
           <span><Brain size={14}/>{totalCardCount} cards</span>
           <span><TextCursorInput size={14}/>{setKindLabel}</span>
           <span><ListChecks size={14}/>{acronymSet.chapterTitle}</span>
-          <a href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Checked against official SY0-701 list<ChevronRight size={13}/></a>
+          <span><ShieldCheck size={14}/>Term-first recall</span>
         </div>
       </header>
 
-      <section className="deep-dive-flashcard-studio" aria-label={`${acronymSet.title} acronym flashcards`}>
+      <section className="deep-dive-flashcard-studio" aria-label={`${acronymSet.title} term-first flashcards`}>
         <div className="deep-dive-flashcard-head">
-          <div><span className="deep-dive-eyebrow">{hasExampleMode?"Scenario attack drill":setType==="term"?"Definition drill":"Acronym drill"}</span><h2>{asksFromExample?"Read the example. Name the attack.":"Recall it, then flip"}</h2><p>{setType==="term"?"Term decks test definitions only: read the definition, recall the exam term, then flip.":hasExampleMode?"Use the example mode to practise recognizing attacks from real-world clues, then flip to check the full name.":"Test Acronym shows the acronym first. Test Definition shows the definition first. Flip to check the full term, acronym, and exam meaning."}</p></div>
+          <div><span className="deep-dive-eyebrow">A LITTLE RECALL, EVERY DAY</span><h2>What does it mean?</h2><p>Read the term or abbreviation. Recall its meaning, then turn the card.</p></div>
           <div className="deep-dive-flashcard-side">
             {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&acronymSet.id!==ASSISTANT_FLASHCARD_SET_ID&&!String(acronymSet.id||"").startsWith(SAVED_RANDOM_FLASHCARD_PREFIX)&&<FlashcardShareActions set={acronymSet} t={t}/>}
             <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {totalCardCount}<br/>mastered</span></div>
@@ -29560,7 +29372,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
         <div className="deep-dive-flashcard-toolbar">
           <span>{isDividerCard?"Section marker":`Card ${Math.min(studyCards.slice(0,cardIndex+1).filter(card=>card.cardType!=="divider").length||1,studyCardCount)} of ${studyCardCount}`}</span>
           <div className="deep-dives-progress-track"><span style={{width:`${progress}%`}}/></div>
-          {onChangeModeRequest&&<button className="btn btn-outline flashcard-change-mode-btn" type="button" onClick={onChangeModeRequest}><Brain size={15}/>{FLASHCARD_MODE_OPTIONS[direction]?.title||"Change mode"}</button>}
+
           <button className="btn btn-ghost" type="button" onClick={shuffleCards}><RotateCcw size={15}/>Shuffle</button>
         </div>
         {showCompletion&&(
@@ -29594,19 +29406,20 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
             {!isDividerCard&&(onToggleStar||onRequireSignup)&&<StarButton active={activeCardStarred} onToggle={toggleActiveFlashcardStar} label="Save flashcard for review" activeLabel="Remove flashcard from review set" showText text="Save for review" activeText="Saved"/>}
             <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
               <span className="deep-dive-flashcard-inner">
-                <span className={`deep-dive-flashcard-face deep-dive-flashcard-front ${isDividerCard?"flashcard-section-divider-face":""}`}>
+                <span aria-hidden={isFlipped} className={`deep-dive-flashcard-face deep-dive-flashcard-front ${isDividerCard?"flashcard-section-divider-face":""}`}>
                   <span className="deep-dive-flashcard-kind"><Brain size={15}/>{frontPrompt}</span>
                   <span className="deep-dive-flashcard-watermark"><BrandMark size={16}/>SecurePlus</span>
                   <small className="deep-dive-acronym-prompt">{activeCard.topic || acronymSet.topic}</small>
                   <strong>{frontText}</strong>
                   <span className="deep-dive-flashcard-hint">{asksFromExample?"Name the attack, then tap to reveal":"Say it aloud, then tap to reveal"}</span>
                 </span>
-                <span className={`deep-dive-flashcard-face deep-dive-flashcard-back ${isDividerCard?"flashcard-section-divider-face":""}`}>
+                <span aria-hidden={!isFlipped} className={`deep-dive-flashcard-face deep-dive-flashcard-back ${isDividerCard?"flashcard-section-divider-face":""}`}>
                   <span className="deep-dive-flashcard-kind"><Sparkles size={15}/>Answer</span>
                   <span className="deep-dive-flashcard-watermark"><BrandMark size={16}/>SecurePlus</span>
                   <small>{answerLabel}</small>
                   <strong>{answerMain}</strong>
-                  {answerCopy&&<p className="deep-dive-acronym-answer-copy">{answerCopy}</p>}
+                  {answerCopy?<p className="deep-dive-acronym-answer-copy">{answerCopy}</p>:<p className="fc-definition-pending">Definition not added yet.</p>}
+                  {activeCard.concept_tags?.length>0&&<span className="fc-card-tags">{activeCard.concept_tags.map(tag=><span key={tag}>#{tag}</span>)}</span>}
                   <span className="deep-dive-flashcard-hint">Tap to see the question again</span>
                 </span>
               </span>
@@ -29621,7 +29434,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
             ):(
 	              <div className="deep-dive-flashcard-rating" aria-label="Rate this card">
 	                <button className="btn btn-outline" type="button" onClick={()=>rateCard(false)}><RotateCcw size={16}/>Again</button>
-	                <button className="btn btn-primary" type="button" onClick={()=>rateCard(true)}><CheckCircle2 size={16}/>Got it</button>
+	                <button className="btn btn-primary" type="button" disabled={!answerCopy} title={!answerCopy?"A definition must be added before marking this card remembered.":undefined} onClick={()=>rateCard(true)}><CheckCircle2 size={16}/>Got it</button>
                     {acronymSet.id===STARRED_FLASHCARD_SET_ID&&activeCardStarred&&<button className="btn btn-ghost" type="button" onClick={()=>{toggleActiveFlashcardStar();rateCard(true);}}>Remove from review set</button>}
 	              </div>
             )}
@@ -29643,7 +29456,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
                   {user?.tier==="pro"
                     ?"Open the related guided lesson when you want more context."
                     : user
-                      ?"Flashcards stay free. Pro unlocks the linked Concept Deep Dive lesson path."
+                      ?"Open a related guided lesson when you want more context."
                       :"Create a free account to connect flashcards with more SecurePlus study features."}
                 </p>
                 <div className="flashcard-lesson-links">
@@ -29659,7 +29472,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
                 </div>
                 {learnMoreNotice&&<p className="flashcard-learn-more-note" role="status">{learnMoreNotice}</p>}
                 <div className="flashcard-learn-more-actions">
-                  {user&&user.tier!=="pro"&&<button className="btn btn-primary" type="button" onClick={onUpgrade}>View Pro</button>}
+
                   <button className="btn btn-ghost" type="button" onClick={()=>{setLearnMoreOpen(false);setLearnMoreNotice("");}}>Close</button>
                 </div>
               </div>
@@ -30375,800 +30188,136 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
   );
 }
 
-function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,showIntroInitially=false,assistantSet=null,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,reviewConfirmation=null,onDismissReviewConfirmation}) {
-  const signedIn=Boolean(user?.id||user?.email);
-  const [showQuickIntro,setShowQuickIntro]=useState(false);
-  const [selectedSetId,setSelectedSetId]=useState(null);
-  const [chapterFilter,setChapterFilter]=useState("all");
-  const [openFlashcardChapters,setOpenFlashcardChapters]=useState(()=>new Set(["1"]));
-  const [randomBuilderOpen,setRandomBuilderOpen]=useState(false);
-  const [randomConfig,setRandomConfig]=useState({count:10,mode:"definition",includeTerms:true,includeAcronyms:true});
-  const [randomFlashcardSet,setRandomFlashcardSet]=useState(null);
-  const [savedRandomSets,setSavedRandomSets]=useState(()=>readSavedRandomFlashcardSets(user));
-  const [inventoryNotice,setInventoryNotice]=useState("");
-  const [renamingSetId,setRenamingSetId]=useState(null);
-  const [renameDraft,setRenameDraft]=useState("");
-  const [randomisingAction,setRandomisingAction]=useState(null);
-  const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>readLocalMasteredFlashcardIds());
+function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,reviewConfirmation=null,onDismissReviewConfirmation}) {
+  const owner=starOwner(user);
+  const canSync=Boolean(user?.authProvider==="supabase"&&user?.id&&supabase);
+  const [mastered,setMastered]=useState(()=>user?[]:readLocalMasteredFlashcardIds());
+  const [savedSets,setSavedSets]=useState(()=>readSavedRandomFlashcardSets(user));
+  const [selected,setSelected]=useState(null);
+  const [domain,setDomain]=useState("all");
+  const [query,setQuery]=useState("");
+  const [count,setCount]=useState(10);
+  const currentOwner=useRef(owner);currentOwner.current=owner;
+  const [engineState,setEngineState]=useState(null);
+  const [progressStatus,setProgressStatus]=useState(user?"loading":"guest");
+  const [notice,setNotice]=useState("");
   const chapterGroups=useMemo(()=>groupSy0701AcronymSetsByChapter(),[]);
-  const visibleGroups=chapterFilter==="all"?chapterGroups:chapterGroups.filter(group=>String(group.chapterId)===chapterFilter);
-  const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
-  const starredFlashcardSet=useMemo(()=>buildStarredFlashcardSet(starredFlashcards),[starredFlashcards]);
-  const flashcardReviewSummary=useMemo(()=>summarizeFlashcardReviewSet(starredFlashcards),[starredFlashcards]);
-  const selectedSet=selectedSetId===STARRED_FLASHCARD_SET_ID
-    ? starredFlashcardSet
-    : selectedSetId===ASSISTANT_FLASHCARD_SET_ID
-      ? assistantSet
-      : selectedSetId===RANDOM_FLASHCARD_SET_ID
-        ? randomFlashcardSet
-        : savedRandomSets.find(set=>set.id===selectedSetId) || SY0701_ACRONYM_SETS.find(set=>set.id===selectedSetId) || null;
-  const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>masteredAcronymIds.includes(card.id)).length;
-  const progressPercent=SY0701_ACRONYM_CARDS.length?Math.round((totalMastered/SY0701_ACRONYM_CARDS.length)*100):0;
-  const mobileQuickSets=useMemo(()=>visibleGroups.flatMap(group=>group.sets).slice(0,3),[visibleGroups]);
-  const recommendedSet=useMemo(()=>getNextFlashcardSet(selectedSet),[selectedSet]);
-  const showAssistantDeck=user?.tier==="pro"&&Boolean(assistantSet?.cards?.length);
-  const defaultOwner=starOwner(user);
-  const [activeMode,setActiveMode]=useState("definition");
-  const [defaultMode,setDefaultMode]=useState("");
-  const [modeChooser,setModeChooser]=useState(null);
-  const [inventoryVisibility,setInventoryVisibility]=useState(()=>readFlashcardInventoryVisibility(defaultOwner));
-  const [inventoryCollapsed,setInventoryCollapsed]=useState(true);
-  const showStarredDecks=inventoryVisibility.starred;
-  const showGeneratedDecks=inventoryVisibility.generated;
-  const previousInventoryOwnerRef=useRef(defaultOwner);
-  const previousStarredCountRef=useRef(starredFlashcards.length);
-  const previousAssistantDeckRef=useRef(showAssistantDeck);
-  const completedCardsThisSessionRef=useRef(new Set());
-  const tenCardsCompletedCapturedRef=useRef(false);
-  const canSyncFlashcards=Boolean(user?.authProvider==="supabase"&&user?.id&&supabase);
-
+  const starCards=useMemo(()=>getStarredFlashcards(starred),[starred]);
+  const personalCards=useMemo(()=>personalisedFlashcards(engineState),[engineState]);
+  const personalSets=useMemo(()=>partitionFlashcards(personalCards).map((cards,index)=>({
+    id:`personalised-${index}`,title:`Personalised review${personalCards.length>20?` · ${index+1}`:""}`,
+    description:"Every card linked to your concepts missed twice in a row.",color:"#30b9a4",setType:"term",
+    chapterTitle:"Your concept review",topic:"Personalised review",cards,
+  })),[personalCards]);
+  const refreshPersonal=useCallback(()=>{
+    if(!canSync||!mcqEngineEnabled){setProgressStatus(user?"unavailable":"guest");return;}
+    setProgressStatus("loading");
+    return mcqEngineRequest("state").then(state=>{if(currentOwner.current===owner){setEngineState(state);setProgressStatus("ready");}})
+      .catch(()=>{if(currentOwner.current===owner)setProgressStatus("error");});
+  },[canSync,owner,user?.id]);
   useEffect(()=>{
-    if(!showIntroInitially)return;
-    try{
-      if(window.localStorage?.getItem(FLASHCARD_WELCOME_SEEN_KEY)!=="true")setShowQuickIntro(true);
-    }catch{
-      setShowQuickIntro(true);
+    let active=true;
+    setSelected(null);setEngineState(null);setMastered(user?[]:readLocalMasteredFlashcardIds());
+    setSavedSets(readSavedRandomFlashcardSets(user));
+    if(canSync){
+      loadSupabaseFlashcardMasteredIds(user.id).then(ids=>{if(active&&Array.isArray(ids))setMastered(ids);});
+      loadSupabaseGeneratedFlashcardSets(user.id).then(sets=>{if(active&&Array.isArray(sets))setSavedSets(sets);});
     }
-  },[showIntroInitially]);
-
-  useEffect(()=>{
-    if(!showQuickIntro)return undefined;
-    const handleKeyDown=event=>{
-      if(event.key!=="Escape")return;
-      try{window.localStorage?.setItem(FLASHCARD_WELCOME_SEEN_KEY,"true");}catch{}
-      setShowQuickIntro(false);
-    };
-    window.addEventListener("keydown",handleKeyDown);
-    return ()=>window.removeEventListener("keydown",handleKeyDown);
-  },[showQuickIntro]);
-
-  const closeQuickIntro=()=>{
-    try{window.localStorage?.setItem(FLASHCARD_WELCOME_SEEN_KEY,"true");}catch{}
-    capture("flashcards_quick_intro_completed",{signed_in:signedIn});
-    setShowQuickIntro(false);
-  };
-
-  useEffect(()=>{
-    setOpenFlashcardChapters(new Set([chapterFilter==="all"?"1":chapterFilter]));
-  },[chapterFilter]);
-  const toggleFlashcardChapter=chapterId=>setOpenFlashcardChapters(current=>{
-    const key=String(chapterId);
-    const next=new Set(current);
-    if(next.has(key))next.delete(key);
-    else next.add(key);
-    return next;
-  });
-
-  useEffect(()=>{
-    setSavedRandomSets(readSavedRandomFlashcardSets(user));
-  },[user?.id,user?.email]);
-
-  useEffect(()=>{
-    let cancelled=false;
-    if(!canSyncFlashcards)return undefined;
-    Promise.all([
-      loadSupabaseFlashcardMasteredIds(user.id),
-      loadSupabaseGeneratedFlashcardSets(user.id),
-      loadSupabaseFlashcardPreferences(user.id),
-    ]).then(([masteredIds,generatedSets,preferences])=>{
-      if(cancelled)return;
-      const shouldSeedCloud=!preferences;
-      const localMastered=readLocalMasteredFlashcardIds();
-      const nextMastered=Array.isArray(masteredIds)&&masteredIds.length?masteredIds:localMastered;
-      if(Array.isArray(nextMastered))setMasteredAcronymIds(nextMastered);
-      if(shouldSeedCloud&&Array.isArray(masteredIds)&&!masteredIds.length&&localMastered.length){
-        localMastered.forEach(cardId=>saveSupabaseFlashcardProgress(user.id,cardId,true));
-      }
-      if(Array.isArray(generatedSets)){
-        const localGenerated=readSavedRandomFlashcardSets(user);
-        const nextGenerated=generatedSets.length?generatedSets:localGenerated;
-        setSavedRandomSets(nextGenerated);
-        writeSavedRandomFlashcardSets(user,nextGenerated);
-        if(shouldSeedCloud&&!generatedSets.length&&localGenerated.length){
-          localGenerated.forEach(set=>saveSupabaseGeneratedFlashcardSet(user.id,set));
-        }
-      }
-      const localDefaultMode=readLocalFlashcardDefaultMode(defaultOwner);
-      if(preferences?.defaultMode)setDefaultMode(preferences.defaultMode);
-      else if(localDefaultMode&&shouldSeedCloud)saveSupabaseFlashcardPreferences(user.id,{defaultMode:localDefaultMode});
-      if(preferences?.inventoryVisibility)setInventoryVisibility(preferences.inventoryVisibility);
-      else if(shouldSeedCloud)saveSupabaseFlashcardPreferences(user.id,{inventoryVisibility:readFlashcardInventoryVisibility(defaultOwner)});
-    }).catch(error=>console.warn("Unable to sync flashcard state",error));
-    return ()=>{cancelled=true;};
-  },[canSyncFlashcards,defaultOwner,user?.id]);
-
-  useEffect(()=>{
-    if(!signedIn){
-      setDefaultMode("");
-      setMasteredAcronymIds(readLocalMasteredFlashcardIds());
-      return;
-    }
-    setDefaultMode(readLocalFlashcardDefaultMode(defaultOwner));
-  },[signedIn,defaultOwner]);
-
-  useEffect(()=>{
-    setInventoryVisibility(readFlashcardInventoryVisibility(defaultOwner));
-  },[defaultOwner]);
-
-  const toggleInventoryVisibility=section=>{
-    setInventoryVisibility(current=>{
-      const next={...current,[section]:!current[section]};
-      try{window.localStorage?.setItem(getFlashcardInventoryVisibilityKey(defaultOwner),JSON.stringify(next));}catch{}
-      if(canSyncFlashcards)saveSupabaseFlashcardPreferences(user.id,{inventoryVisibility:next});
-      capture("flashcards_inventory_visibility_toggled",{section,visible:next[section]});
-      return next;
-    });
-  };
-  const revealInventorySection=useCallback((section,notice="")=>{
-    setInventoryCollapsed(false);
-    if(section){
-      setInventoryVisibility(current=>({...current,[section]:true}));
-    }
-    if(notice)setInventoryNotice(notice);
-  },[]);
-
-  useEffect(()=>{
-    if(previousInventoryOwnerRef.current!==defaultOwner){
-      previousInventoryOwnerRef.current=defaultOwner;
-      previousStarredCountRef.current=starredFlashcards.length;
-      previousAssistantDeckRef.current=showAssistantDeck;
-      setInventoryCollapsed(true);
-    }
-  },[defaultOwner,showAssistantDeck,starredFlashcards.length]);
-
-  useEffect(()=>{
-    const previous=previousStarredCountRef.current;
-    if(starredFlashcards.length>previous){
-      revealInventorySection("starred","Starred flashcard added. Your saved-card deck is open for this session.");
-    }
-    previousStarredCountRef.current=starredFlashcards.length;
-  },[revealInventorySection,starredFlashcards.length]);
-
-  useEffect(()=>{
-    if(showAssistantDeck&&!previousAssistantDeckRef.current){
-      revealInventorySection(null,"Cipher generated a weak-area flashcard deck for this session.");
-    }
-    previousAssistantDeckRef.current=showAssistantDeck;
-  },[revealInventorySection,showAssistantDeck]);
-
-  const saveDefaultMode=mode=>{
-    if(!signedIn)return;
-    const safeMode=getSafeFlashcardMode(mode,true);
-    setDefaultMode(safeMode);
-    try{window.localStorage?.setItem(getFlashcardDefaultModeKey(defaultOwner),safeMode);}catch{}
-    if(canSyncFlashcards)saveSupabaseFlashcardPreferences(user.id,{defaultMode:safeMode});
-    capture("flashcards_default_mode_saved",{mode:safeMode});
-  };
-
-  const scrollToFlashcardTop=useCallback((smooth=true)=>{
-    const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-    window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:!smooth||reduceMotion?"auto":"smooth"}));
-  },[]);
-
-  const startFlashcardSet=useCallback((id,mode)=>{
-    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:id===ASSISTANT_FLASHCARD_SET_ID?assistantSet:id===RANDOM_FLASHCARD_SET_ID?randomFlashcardSet:savedRandomSets.find(item=>item.id===id)||SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
-    const safeMode=getSafeFlashcardMode(mode,flashcardSetHasExampleMode(set),flashcardSetType(set));
-    completedCardsThisSessionRef.current=new Set();
-    tenCardsCompletedCapturedRef.current=false;
-    setActiveMode(safeMode);
-    setSelectedSetId(id);
-    setModeChooser(null);
-    if(id===STARRED_FLASHCARD_SET_ID){
-      try{window.localStorage?.setItem(getReviewSetStorageKey(user),new Date().toISOString());}catch{}
-    }
-    capture("flashcards_set_opened",{set_id:id,mode:safeMode});
-    scrollToFlashcardTop(true);
-  },[assistantSet,randomFlashcardSet,savedRandomSets,scrollToFlashcardTop,starredFlashcardSet,user]);
-
-  const openSet=useCallback(id=>{
-    const set=id===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:id===ASSISTANT_FLASHCARD_SET_ID?assistantSet:id===RANDOM_FLASHCARD_SET_ID?randomFlashcardSet:savedRandomSets.find(item=>item.id===id)||SY0701_ACRONYM_SETS.find(item=>item.id===id)||null;
-    if(!set)return;
-    const hasExample=flashcardSetHasExampleMode(set);
-    if(id===RANDOM_FLASHCARD_SET_ID||String(id||"").startsWith(SAVED_RANDOM_FLASHCARD_PREFIX)){
-      startFlashcardSet(id,set.randomConfig?.mode||"definition");
-      return;
-    }
-    if(flashcardSetType(set)==="term"){
-      startFlashcardSet(id,"definition");
-      return;
-    }
-    const safeDefault=defaultMode?getSafeFlashcardMode(defaultMode,hasExample,flashcardSetType(set)):"";
-    const shouldChooseMode=!signedIn || hasExample || !safeDefault;
-    if(shouldChooseMode){
-      setModeChooser({context:"open",setId:id,hasExample});
-      return;
-    }
-    startFlashcardSet(id,safeDefault);
-  },[assistantSet,defaultMode,randomFlashcardSet,savedRandomSets,signedIn,starredFlashcardSet,startFlashcardSet]);
-
-  const startSomewhere=useCallback(()=>{
-    const starter=mobileQuickSets[0]||SY0701_ACRONYM_SETS[0];
-    if(starter)openSet(starter.id);
-  },[mobileQuickSets,openSet]);
-
-  const browseDecks=useCallback(()=>{
-    document.querySelector(".deep-dives-domain-groups")?.scrollIntoView({behavior:"smooth",block:"start"});
-  },[]);
-
-  const handleModeChosen=(mode,{makeDefault=false}={})=>{
-    const chooser=modeChooser;
-    const chooserSet=chooser?.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:chooser?.setId===ASSISTANT_FLASHCARD_SET_ID?assistantSet:chooser?.setId===RANDOM_FLASHCARD_SET_ID?randomFlashcardSet:savedRandomSets.find(item=>item.id===chooser?.setId)||SY0701_ACRONYM_SETS.find(item=>item.id===chooser?.setId)||null;
-    const safeMode=getSafeFlashcardMode(mode,chooser?.hasExample,flashcardSetType(chooserSet));
-    if(makeDefault)saveDefaultMode(safeMode);
-    if(chooser?.context==="default"){
-      setModeChooser(null);
-      return;
-    }
-    if(chooser?.context==="change"){
-      setActiveMode(safeMode);
-      setModeChooser(null);
-      capture("flashcards_mode_changed",{set_id:selectedSet?.id,mode:safeMode});
-      return;
-    }
-    if(chooser?.context==="open"&&chooser.setId){
-      startFlashcardSet(chooser.setId,safeMode);
-      return;
-    }
-    setModeChooser(null);
-  };
-
+    return()=>{active=false;};
+  },[owner,canSync]);
+  useEffect(()=>{refreshPersonal();},[refreshPersonal]);
   useEffect(()=>{
     if(!initialSetId)return;
-    if(initialSetId===ASSISTANT_FLASHCARD_SET_ID&&assistantSet?.cards?.length){
-      startFlashcardSet(ASSISTANT_FLASHCARD_SET_ID,"definition");
-    }else if(initialSetId===RANDOM_FLASHCARD_SET_ID){
-      const params=new URLSearchParams(typeof window!=="undefined"?window.location.search:"");
-      const cardIds=String(params.get("cards")||"").split(",").map(id=>id.trim()).filter(Boolean).slice(0,30);
-      const cardMap=new Map(SY0701_ACRONYM_CARDS.map(card=>[card.id,card]));
-      const cards=cardIds.map(id=>cardMap.get(id)).filter(Boolean);
-      if(cards.length){
-        const sharedSet={
-          id:RANDOM_FLASHCARD_SET_ID,
-          title:"Shared random deck",
-          topic:"Shared Security+ flashcards",
-          chapterTitle:"Randomised Security+ recall",
-          description:`${cards.length} shared flashcards · ${cards.some(card=>card.cardType==="term")&&cards.some(card=>card.cardType!=="term")?"Terms and acronyms":cards.every(card=>card.cardType==="term")?"Terms only":"Acronyms only"}.`,
-          color:generatedFlashcardSetColor(cardIds.join("-")),
-          setType:cards.every(card=>card.cardType==="term")?"term":"acronym",
-          generatedBy:"random_builder",
-          randomConfig:{mode:getSafeFlashcardMode(params.get("mode")||"definition",false,cards.every(card=>card.cardType==="term")?"term":"acronym")},
-          cards,
-        };
-        setRandomFlashcardSet(sharedSet);
-        setActiveMode(sharedSet.randomConfig.mode);
-        setSelectedSetId(RANDOM_FLASHCARD_SET_ID);
-        setModeChooser(null);
-        scrollToFlashcardTop(true);
-      }
-    }else if(initialSetId===STARRED_FLASHCARD_SET_ID || SY0701_ACRONYM_SETS.some(set=>set.id===initialSetId)){
-      openSet(initialSetId);
+    if(initialSetId===RANDOM_FLASHCARD_SET_ID){
+      const ids=new URLSearchParams(window.location.search).get("cards")?.split(",").slice(0,30)||[];
+      const shared=ids.map(id=>SY0701_ACRONYM_CARDS.find(card=>card.id===id)).filter(Boolean);
+      if(shared.length)setSelected(buildRandomFlashcardSet({sourceCards:shared,preserveOrder:true,title:"Shared recall mix"}));
+      onInitialSetHandled?.();return;
     }
-    onInitialSetHandled?.();
-  },[assistantSet,initialSetId,onInitialSetHandled,openSet,startFlashcardSet]);
-  useEffect(()=>{
-    if(selectedSetId===STARRED_FLASHCARD_SET_ID&&!starredFlashcards.length){
-      setSelectedSetId(null);
-    }
-  },[selectedSetId,starredFlashcards.length]);
-
-  const updateMasteredAcronyms=(cardId,mastered)=>{
-    const next=mastered
-      ?Array.from(new Set([...masteredAcronymIds,cardId]))
-      :masteredAcronymIds.filter(id=>id!==cardId);
-    setMasteredAcronymIds(next);
-    try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
-    if(canSyncFlashcards)saveSupabaseFlashcardProgress(user.id,cardId,mastered);
-    capture("flashcards_acronym_rated",{set_id:selectedSet?.id,card_id:cardId,mastered});
-    if(selectedSet?.id&&cardId){
-      completedCardsThisSessionRef.current.add(cardId);
-      const completedCount=completedCardsThisSessionRef.current.size;
-      if(completedCount>=10&&!tenCardsCompletedCapturedRef.current){
-        tenCardsCompletedCapturedRef.current=true;
-        capture("flashcards_ten_cards_completed",{
-          set_id:selectedSet.id,
-          mode:activeMode,
-          signed_in:signedIn,
-          tier:user?.tier || "guest",
-          completed_count:completedCount,
-        });
-      }
-    }
-  };
-  const buildAndOpenRandomSet=()=>{
-    const safeConfig=normalizeRandomFlashcardConfig(randomConfig);
-    const generatedId=`${RANDOM_FLASHCARD_SET_ID}-${Date.now()}`;
-    const built=buildRandomFlashcardSet({...safeConfig,color:generatedFlashcardSetColor(generatedId)});
-    setRandomConfig(safeConfig);
-    setRandomFlashcardSet(built);
-    setRandomBuilderOpen(false);
-    setInventoryNotice("");
-    capture("flashcards_random_set_generated",{count:safeConfig.count,mode:safeConfig.mode,include_terms:safeConfig.includeTerms,include_acronyms:safeConfig.includeAcronyms});
-    setActiveMode(getSafeFlashcardMode(safeConfig.mode,false,flashcardSetType(built)));
-    setSelectedSetId(RANDOM_FLASHCARD_SET_ID);
-    setModeChooser(null);
-    scrollToFlashcardTop(true);
-  };
-  const persistSavedRandomSet=(set,{openAfterSave=false}={})=>{
-    const cardCount=(set?.cards||[]).filter(card=>card.cardType!=="divider").length;
-    if(!cardCount)return null;
-    const saved={
-      ...set,
-      id:String(set.id||"").startsWith(SAVED_RANDOM_FLASHCARD_PREFIX)?set.id:`${SAVED_RANDOM_FLASHCARD_PREFIX}-${Date.now()}`,
-      title:set.title?.startsWith("Generated deck")?set.title:`Generated deck ${savedRandomSets.length+1}`,
-      savedAt:new Date().toISOString(),
-    };
-    const next=[saved,...savedRandomSets.filter(item=>item.id!==saved.id)].slice(0,8);
-    setSavedRandomSets(next);
-    writeSavedRandomFlashcardSets(user,next);
-    if(canSyncFlashcards)saveSupabaseGeneratedFlashcardSet(user.id,saved);
-    revealInventorySection("generated",`${saved.title} created with ${cardCount} cards.`);
-    setRandomBuilderOpen(false);
-    setRandomFlashcardSet(null);
-    setSelectedSetId(openAfterSave?saved.id:null);
-    capture("flashcards_random_set_saved",{card_count:cardCount,opened:Boolean(openAfterSave)});
-    scrollToFlashcardTop(true);
-    return saved;
-  };
-  const createSavedRandomSet=()=>{
-    if(!user){
-      onRequireSignup?.("flashcard_random_set");
-      return;
-    }
-    const safeConfig=normalizeRandomFlashcardConfig(randomConfig);
-    const generatedId=`${SAVED_RANDOM_FLASHCARD_PREFIX}-${Date.now()}`;
-    const built=buildRandomFlashcardSet({
-      ...safeConfig,
-      title:`Generated deck ${savedRandomSets.length+1}`,
-      savedId:generatedId,
-      color:generatedFlashcardSetColor(generatedId),
+    const set=initialSetId===STARRED_FLASHCARD_SET_ID?buildStarredFlashcardSet(starCards)
+      :initialSetId===ASSISTANT_FLASHCARD_SET_ID?personalSets[0]
+      :savedSets.find(item=>item.id===initialSetId)||getSy0701AcronymSet(initialSetId);
+    if(set?.cards?.length){setSelected(set);onInitialSetHandled?.();}
+    else if(initialSetId!==ASSISTANT_FLASHCARD_SET_ID||progressStatus!=="loading")onInitialSetHandled?.();
+  },[initialSetId,personalSets,progressStatus]);
+  const openSet=set=>{if(!set?.cards?.length)return;setSelected(set);setNotice("");scrollSecurePlusPageToTop({behavior:"auto"});capture("flashcards_set_opened",{set_id:set.id,mode:"term"});};
+  const rate=(id,remembered)=>{
+    setMastered(current=>{
+      const next=remembered?[...new Set([...current,id])]:current.filter(item=>item!==id);
+      if(!user)try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
+      return next;
     });
-    setRandomConfig(safeConfig);
-    persistSavedRandomSet(built,{openAfterSave:false});
+    if(canSync)saveSupabaseFlashcardProgress(user.id,id,remembered);
+    capture("flashcards_acronym_rated",{card_id:id,mastered:remembered,mode:"term"});
   };
-  const runRandomisingBuffer=(action,work)=>{
-    if(randomisingAction)return;
-    setRandomisingAction(action);
-    window.setTimeout(()=>{
-      work();
-      setRandomisingAction(null);
-    },850);
+  const randomSet=()=>{
+    const cards=shuffledFlashcardCards(SY0701_ACRONYM_CARDS).slice(0,count);
+    openSet({id:RANDOM_FLASHCARD_SET_ID,title:"A fresh mix",description:"A short recall session across the five domains.",
+      chapterTitle:"All five domains",topic:"Mixed recall",setType:"term",color:"#5d8ef5",cards,
+      randomConfig:{count,mode:"acronym",includeTerms:true,includeAcronyms:true}});
   };
-  const randomiseAndStudy=()=>runRandomisingBuffer("study",buildAndOpenRandomSet);
-  const randomiseAndSave=()=>{
-    if(!user){
-      onRequireSignup?.("flashcard_random_set");
-      return;
-    }
-    runRandomisingBuffer("save",createSavedRandomSet);
+  const saveSet=set=>{
+    if(!user){onRequireSignup?.("flashcard_random_set");return;}
+    const saved={...set,id:`${SAVED_RANDOM_FLASHCARD_PREFIX}-${Date.now()}`,savedAt:new Date().toISOString()};
+    const next=[saved,...savedSets].slice(0,8);setSavedSets(next);writeSavedRandomFlashcardSets(user,next);
+    if(canSync)saveSupabaseGeneratedFlashcardSet(user.id,saved);
+    setNotice("Your mix is saved.");
   };
-  const saveRandomSet=set=>{
-    if(!user){
-      onRequireSignup?.("flashcard_random_set");
-      return;
-    }
-    persistSavedRandomSet(set,{openAfterSave:false});
+  const renameMix=set=>{
+    const title=window.prompt("Name this saved mix",set.title)?.trim().slice(0,48);
+    if(!title)return;
+    const changed={...set,title};const next=savedSets.map(item=>item.id===set.id?changed:item);
+    setSavedSets(next);writeSavedRandomFlashcardSets(user,next);
+    if(canSync)saveSupabaseGeneratedFlashcardSet(user.id,changed);
   };
-  const startRenameGeneratedSet=(set,event)=>{
-    event?.stopPropagation?.();
-    setInventoryNotice("");
-    setRenamingSetId(set.id);
-    setRenameDraft(set.title||"");
+  const deleteMix=set=>{
+    if(!window.confirm(`Remove saved mix “${set.title}”? Your card progress stays saved.`))return;
+    const next=savedSets.filter(item=>item.id!==set.id);setSavedSets(next);writeSavedRandomFlashcardSets(user,next);
+    if(canSync)deleteSupabaseGeneratedFlashcardSet(user.id,set.id);
   };
-  const saveGeneratedSetName=(setId,event)=>{
-    event?.preventDefault?.();
-    event?.stopPropagation?.();
-    if(!user)return;
-    const cleanName=String(renameDraft||"").trim().slice(0,48);
-    if(!cleanName){
-      setInventoryNotice("Generated set name cannot be empty.");
-      return;
-    }
-    const next=savedRandomSets.map(set=>set.id===setId?{...set,title:cleanName}:set);
-    setSavedRandomSets(next);
-    writeSavedRandomFlashcardSets(user,next);
-    if(canSyncFlashcards){
-      const renamed=next.find(set=>set.id===setId);
-      if(renamed)saveSupabaseGeneratedFlashcardSet(user.id,renamed);
-    }
-    setRenamingSetId(null);
-    setRenameDraft("");
-    setInventoryNotice(`Renamed to ${cleanName}.`);
-    capture("flashcards_generated_set_renamed",{set_id:setId});
-  };
-  const deleteGeneratedSet=(set,event)=>{
-    event?.preventDefault?.();
-    event?.stopPropagation?.();
-    if(!user||!set?.id)return;
-    const confirmed=window.confirm(`Delete "${set.title}" from your generated flashcard decks?`);
-    if(!confirmed)return;
-    const next=savedRandomSets.filter(item=>item.id!==set.id);
-    setSavedRandomSets(next);
-    writeSavedRandomFlashcardSets(user,next);
-    if(canSyncFlashcards)deleteSupabaseGeneratedFlashcardSet(user.id,set.id);
-    if(renamingSetId===set.id){
-      setRenamingSetId(null);
-      setRenameDraft("");
-    }
-    setInventoryNotice(`Deleted ${set.title}.`);
-    capture("flashcards_generated_set_deleted",{set_id:set.id});
-  };
-  const renderRandomBuilder=(compact=false)=>(
-    <div
-      className={`deep-dive-acronym-set-card flashcards-topic-card flashcard-random-builder ${compact?"compact":""} ${randomBuilderOpen?"open":""}`}
-      style={{"--set-color":"#0ea5e9"}}
-      role="button"
-      tabIndex={0}
-      aria-expanded={randomBuilderOpen}
-      aria-label="Open randomised flashcard set builder"
-      onClick={()=>{if(!randomBuilderOpen)setRandomBuilderOpen(true);}}
-      onKeyDown={event=>{
-        if(event.key==="Enter"||event.key===" "){
-          event.preventDefault();
-          setRandomBuilderOpen(true);
-        }
-      }}
-    >
-      <button type="button" className="flashcard-random-plus" onClick={event=>{event.stopPropagation();setRandomBuilderOpen(value=>!value);}} aria-expanded={randomBuilderOpen}>
-        <span aria-hidden="true">+</span>
-        {!compact&&<strong>Randomised set</strong>}
-        <small>{compact?"Quickly build a 10, 20, or 30-card study set.":"Build a quick 10-30 card deck from terms, acronyms, or both."}</small>
-      </button>
-      {randomBuilderOpen&&(
-        <div className="flashcard-random-panel" onClick={event=>event.stopPropagation()}>
-          <div className="flashcard-random-intro">
-            <strong>How it works</strong>
-            <small>Pick the deck size, choose how the card tests you, then choose whether the pool uses terms, acronyms, or both.</small>
-          </div>
-          <div className="flashcard-random-group" style={{"--group-color":"#f59e0b"}}>
-            <span>Deck size <strong>{randomConfig.count} cards</strong></span>
-            <div className="flashcard-random-choice three" role="group" aria-label="Choose number of random flashcards">
-              {RANDOM_FLASHCARD_COUNTS.map(count=>(
-                <button key={count} type="button" className={randomConfig.count===count?"active":""} onClick={()=>setRandomConfig(config=>({...config,count}))}>{count}</button>
-              ))}
-            </div>
-          </div>
-          <div className="flashcard-random-group" style={{"--group-color":"#8b5cf6"}}>
-            <span>Test selector <strong>{randomConfig.mode==="acronym"?"Acronym":"Definition"}</strong></span>
-            <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard test mode">
-              {[
-                ["definition","Test Definition"],
-                ["acronym","Test Acronym"],
-              ].map(([mode,label])=>(
-                <button key={mode} type="button" className={randomConfig.mode===mode?"active":""} onClick={()=>setRandomConfig(config=>({...config,mode}))}>{label}</button>
-              ))}
-            </div>
-          </div>
-          <div className="flashcard-random-group" style={{"--group-color":"#14b8a6"}}>
-            <span>Content selector <strong>{randomConfig.includeTerms&&randomConfig.includeAcronyms?"Both":randomConfig.includeTerms?"Terms":"Acronyms"}</strong></span>
-            <div className="flashcard-random-choice" role="group" aria-label="Choose random flashcard content type">
-              {[
-                ["terms","Terms"],
-                ["acronyms","Acronyms"],
-                ["both","Both"],
-              ].map(([value,label])=>(
-                <button key={value} type="button" className={(value==="both"&&randomConfig.includeTerms&&randomConfig.includeAcronyms)||(value==="terms"&&randomConfig.includeTerms&&!randomConfig.includeAcronyms)||(value==="acronyms"&&!randomConfig.includeTerms&&randomConfig.includeAcronyms)?"active":""} onClick={()=>setRandomConfig(config=>{
-                  if(value==="terms")return {...config,includeTerms:true,includeAcronyms:false,mode:"definition"};
-                  if(value==="acronyms")return {...config,includeTerms:false,includeAcronyms:true};
-                  return {...config,includeTerms:true,includeAcronyms:true};
-                })}>{label}</button>
-              ))}
-            </div>
-          </div>
-          <div className="flashcard-random-actions">
-            <button className="btn btn-primary" type="button" onClick={randomiseAndSave} disabled={Boolean(randomisingAction)}><ListPlus size={15}/>{signedIn?"Create saved set":"Save after sign up"}</button>
-            <button className="btn btn-outline" type="button" onClick={randomiseAndStudy} disabled={Boolean(randomisingAction)}><Sparkles size={15}/>Study now</button>
-          </div>
-          {randomisingAction&&(
-            <div className="flashcard-randomising-buffer" role="status" aria-live="polite">
-              <div className="flashcard-randomising-card">
-                <MascotAnimation animation="thinking" size={72} interactive={false} label="Cipher randomising flashcards"/>
-                <strong>RANDOMISING...</strong>
-                <small>{randomisingAction==="save"?"Creating your generated deck":"Building your study set"}</small>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-
-  if(selectedSet){
-    return(
-      <>
-        {reviewConfirmation&&(
-          <div className="flashcard-review-confirmation" role="dialog" aria-modal="true" aria-labelledby="flashcard-review-confirmation-title">
-            <div className="flashcard-review-confirmation-card card">
-              <span><CheckCircle2 size={17}/> Review set saved</span>
-              <h2 id="flashcard-review-confirmation-title">Your {reviewConfirmation.count} selected card{reviewConfirmation.count===1?" is":"s are"} now in your account.</h2>
-              <p>Open your saved deck when you want to review only the cards you picked as a guest.</p>
-              <button className="btn btn-primary" type="button" onClick={onDismissReviewConfirmation}>Study my review set</button>
-            </div>
-          </div>
-        )}
-        <AcronymFlashcardLab acronymSet={selectedSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={()=>setSelectedSetId(null)} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade} onSaveGeneratedSet={saveRandomSet} onSaveReviewSet={reason=>user?openSet(STARRED_FLASHCARD_SET_ID):onRequireSignup?.(reason)} recommendedSet={recommendedSet} onOpenRecommendedSet={()=>recommendedSet&&openSet(recommendedSet.id)} initialMode={activeMode} onChangeModeRequest={flashcardSetType(selectedSet)==="term"?undefined:()=>setModeChooser({context:"change",setId:selectedSet.id,hasExample:flashcardSetHasExampleMode(selectedSet)})}/>
-        {modeChooser&&<FlashcardModeChooser t={t} set={selectedSet} hasExample={modeChooser.hasExample} currentMode={activeMode} defaultMode={defaultMode} user={user} context={modeChooser.context} onChoose={handleModeChosen} onClose={()=>setModeChooser(null)}/>}
-      </>
-    );
-  }
-
-  return(
-    <div className="deep-dives-page flashcards-page" style={{"--deep-accent":"#0ea5e9","--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
-      {reviewConfirmation&&(
-        <div className="flashcard-review-confirmation" role="dialog" aria-modal="true" aria-labelledby="flashcard-review-confirmation-title">
-          <div className="flashcard-review-confirmation-card card">
-            <span><CheckCircle2 size={17}/> Progress saved</span>
-            <h2 id="flashcard-review-confirmation-title">
-              {reviewConfirmation.count>0
-                ?`Your ${reviewConfirmation.count} selected card${reviewConfirmation.count===1?" is":"s are"} now in your account.`
-                :"Your flashcard progress is now attached to your account."}
-            </h2>
-            <p>{reviewConfirmation.count>0?"Open your saved deck when you want to review only the cards you picked as a guest.":"Continue studying Flashcards. Future starred cards, generated sets, and default mode can now stay with this account."}</p>
-            <button className="btn btn-primary" type="button" onClick={onDismissReviewConfirmation}>{reviewConfirmation.count>0?"Study my review set":"Continue to Flashcards"}</button>
-          </div>
-        </div>
-      )}
-      <section className="deep-dives-hero flashcards-hero">
-        <div className="deep-dives-hero-copy">
-          <div className="page-title-row"><NavGlyph type="flashcards" active/><h1>CompTIA Security+ Flashcards (SY0-701)</h1></div>
-          <div className="flashcards-mobile-quick" aria-label="Quick start flashcard sets">
-            <span>Start now</span>
-            <div>
-              {mobileQuickSets.map(set=>(
-                <button key={set.id} type="button" style={{"--set-color":set.color}} onClick={()=>openSet(set.id)}>
-                  <FlashcardSetIcon set={set} size={17}/>
-                  <strong>{set.title}</strong>
-                  <ChevronRight size={14}/>
-                </button>
-              ))}
-            </div>
-          </div>
-          <p>Study 313 interactive cards in 29 focused decks across all five SY0-701 domains. Use this last-minute Security+ recall pack before exam day and share the same set with friends. {SITE_TAGLINE}</p>
-          <div className="flashcard-guest-start-row">
-            <button className="btn btn-primary" type="button" onClick={startSomewhere}>Start me somewhere <ChevronRight size={16}/></button>
-            <button className="btn btn-outline" type="button" onClick={browseDecks}>Browse all decks</button>
-          </div>
-          <FlashcardShareActions t={t} compact/>
-        </div>
-        <div className="flashcards-hero-side">
-          <aside className="flashcards-cipher-card" aria-label="Cipher flashcard coach">
-            <MascotAnimation animation="flashcards" size={98} interactive hoverAnimation="cheer" reactionAnimations={["flashcards","thinking","cheer"]} label="Cipher flips through flashcards"/>
-            <strong>Cipher’s recall lab</strong>
-            <span className="flashcards-cipher-copy">Start without an account. Save mastery when you sign up.</span>
-          </aside>
-          {signedIn?(
-            <>
-              <div className="deep-dives-progress-card">
-                <div><span>Flashcard mastery</span><strong>{totalMastered}/{SY0701_ACRONYM_CARDS.length}</strong></div>
-                <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
-                <p>Marked cards stay saved on this device, so repeated practice becomes lighter over time.</p>
-              </div>
-              <button
-                className="flashcard-default-mode-card"
-                type="button"
-                onClick={()=>setModeChooser({context:"default",setId:null,hasExample:false})}
-              >
-                <span><CheckCircle2 size={16}/>{defaultMode?"Default mode saved":"Choose default mode"}</span>
-                <strong>{defaultMode?FLASHCARD_MODE_OPTIONS[defaultMode]?.title:"Choose each time"}</strong>
-                <small>Change how standard decks open.</small>
-              </button>
-            </>
-          ):(
-            <button className="flashcard-save-progress-cta" type="button" onClick={()=>onRequireSignup?.("flashcard_save_progress")}>
-              <span><CheckCircle2 size={18}/></span>
-              <span><strong>Save your progress</strong><small>Keep mastery, stars, and default mode</small></span>
-              <ChevronRight size={17}/>
-            </button>
-          )}
-        </div>
-      </section>
-
-      <section className="deep-dives-controls flashcards-controls" aria-label="Filter flashcards by chapter">
-        <div className="deep-dives-domain-map">
-          <button type="button" className={chapterFilter==="all"?"active":""} style={{"--chapter-filter-color":"#0ea5e9"}} onClick={()=>setChapterFilter("all")}><strong>All</strong><span>Chapters</span></button>
-          {chapterGroups.map(group=>(
-            <button key={group.chapterId} type="button" className={chapterFilter===String(group.chapterId)?"active":""} style={{"--chapter-filter-color":chapterColor(group.chapterId)}} onClick={()=>setChapterFilter(String(group.chapterId))}>
-              <strong>Ch. {group.chapterId}</strong><span>{group.chapterTitle}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {!signedIn&&(
-        <section className="flashcards-guest-random-row" aria-label="Randomised flashcard set">
-          <div>
-            <span>Quick builder</span>
-            <strong>Build a deck</strong>
-          </div>
-          {renderRandomBuilder(true)}
-        </section>
-      )}
-
-      {signedIn&&<section className={`deep-dives-domain-group flashcards-curated-set ${inventoryCollapsed?"collapsed":""}`} style={{"--set-color":"#f59e0b"}}>
-        <header>
-          <div><span>Your flashcard inventory</span><h2>Starred and generated decks</h2></div>
-          <div className="flashcard-inventory-header-actions">
-            <button type="button" className={`flashcard-inventory-collapse-btn ${inventoryCollapsed?"":"active"}`} aria-expanded={!inventoryCollapsed} onClick={()=>setInventoryCollapsed(value=>!value)}><ChevronRight size={14}/>{inventoryCollapsed?"Show inventory":"Shrink inventory"}</button>
-            <div className="flashcard-inventory-toggles" role="group" aria-label="Show or hide saved flashcard deck groups">
-              <button type="button" className={showStarredDecks?"active":""} aria-pressed={showStarredDecks} onClick={()=>toggleInventoryVisibility("starred")}><Star size={13}/>{showStarredDecks?"Hide":"Show"} Starred <span>{starredFlashcards.length}</span></button>
-              <button type="button" className={showGeneratedDecks?"active":""} aria-pressed={showGeneratedDecks} onClick={()=>toggleInventoryVisibility("generated")}><Sparkles size={13}/>{showGeneratedDecks?"Hide":"Show"} Generated <span>{savedRandomSets.length}</span></button>
-            </div>
-            <strong>{starredFlashcards.length+savedRandomSets.length+(showAssistantDeck?1:0)} saved</strong>
-          </div>
-        </header>
-        {!inventoryCollapsed&&inventoryNotice&&(
-          <div className="flashcard-inventory-notice" role="status">
-            <span><CheckCircle2 size={16}/>{inventoryNotice}</span>
-            <button className="btn btn-ghost" type="button" onClick={()=>setInventoryNotice("")}>Dismiss</button>
-          </div>
-        )}
-        {!inventoryCollapsed&&<div className="deep-dive-acronym-set-grid flashcards-inventory-grid">
-          {showStarredDecks&&<button
-            type="button"
-            className="deep-dive-acronym-set-card flashcards-topic-card"
-            style={{"--set-color":"#f59e0b"}}
-            onClick={()=>user&&starredFlashcards.length?openSet(STARRED_FLASHCARD_SET_ID):onRequireSignup?.("flashcard_curated_set")}
-            disabled={Boolean(user)&&!starredFlashcards.length}
-            aria-label={user?`Open your starred flashcards: ${starredFlashcards.length} saved`:"Sign up to create a starred flashcard set"}
-          >
-            <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Star size={21} strokeWidth={2.35} fill={starredFlashcards.length?"currentColor":"none"}/></span>
-            <span>
-              <em className="flashcard-type-badge">{starredFlashcardSet.setType==="term"?"Term":"Acronym"}</em>
-              <strong>{user?starredFlashcards.length?"Review your saved cards":"No starred flashcards yet":"Create your own set"}</strong>
-              <small>{user?flashcardReviewSummary.count?`Review saved cards across ${flashcardReviewSummary.chapters.join(", ") || "mixed chapters"}.`:"Press the star on any flashcard to save it here.":"Free guests can study all cards. Sign up to save a personal set."}</small>
-              <i>{flashcardReviewSummary.topics.join(" · ") || flashcardReviewSummary.label}</i>
-            </span>
-            <ChevronRight size={17}/>
-            <span className="deep-dive-acronym-set-progress"><span><i style={{width:`${starredFlashcards.length?100:8}%`}}/></span><span>{starredFlashcards.length}</span></span>
-          </button>}
-          {showAssistantDeck&&(
-            <button
-              type="button"
-              className="deep-dive-acronym-set-card flashcards-topic-card cipher-made-set-card"
-              style={{"--set-color":assistantSet.color||"#0ea5e9"}}
-              onClick={()=>openSet(ASSISTANT_FLASHCARD_SET_ID)}
-              aria-label={`Open ${assistantSet.title}`}
-            >
-              <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Brain size={21} strokeWidth={2.35}/></span>
-              <span>
-                <em className="flashcard-type-badge">Cipher made</em>
-                <strong>{assistantSet.title}</strong>
-                <small>{assistantSet.description}</small>
-                <i>{assistantSet.cards.filter(card=>card.cardType!=="divider").slice(0,4).map(card=>card.acronym).join(" · ")}</i>
-              </span>
-              <ChevronRight size={17}/>
-              <span className="deep-dive-acronym-set-progress"><span><i style={{width:"100%"}}/></span><span>{assistantSet.cards.filter(card=>card.cardType!=="divider").length}</span></span>
-            </button>
-          )}
-          {renderRandomBuilder()}
-          {showGeneratedDecks&&savedRandomSets.map(set=>(
-            <div
-              className="deep-dive-acronym-set-card flashcards-topic-card saved-random-set-card"
-              style={{"--set-color":set.color}}
-              key={set.id}
-              role="button"
-              tabIndex={0}
-              onClick={()=>openSet(set.id)}
-              onKeyDown={event=>{
-                if(event.key==="Enter"||event.key===" "){
-                  event.preventDefault();
-                  openSet(set.id);
-                }
-              }}
-              aria-label={`Open ${set.title}`}
-            >
-              <span className="deep-dive-acronym-set-icon flashcard-set-focus-icon"><Sparkles size={21} strokeWidth={2.35}/></span>
-              <span>
-                <em className="flashcard-type-badge">Generated</em>
-                {renamingSetId===set.id?(
-                  <span className="generated-set-rename" onClick={event=>event.stopPropagation()}>
-                    <input
-                      value={renameDraft}
-                      onChange={event=>setRenameDraft(event.target.value)}
-                      onKeyDown={event=>{
-                        if(event.key==="Enter")saveGeneratedSetName(set.id,event);
-                        if(event.key==="Escape"){event.stopPropagation();setRenamingSetId(null);setRenameDraft("");}
-                      }}
-                      autoFocus
-                      maxLength={48}
-                      aria-label={`Rename ${set.title}`}
-                    />
-                    <button className="btn btn-primary" type="button" onClick={event=>saveGeneratedSetName(set.id,event)}>Save</button>
-                  </span>
-                ):(
-                  <span className="generated-set-title-row">
-                    <strong>{set.title}</strong>
-                    <span className="generated-set-actions">
-                      <button className="icon-btn" type="button" onClick={event=>startRenameGeneratedSet(set,event)} aria-label={`Rename ${set.title}`}><PenLine size={14}/></button>
-                      <button className="icon-btn danger" type="button" onClick={event=>deleteGeneratedSet(set,event)} aria-label={`Delete ${set.title}`}><Trash2 size={14}/></button>
-                    </span>
-                  </span>
-                )}
-                <small>{set.description}</small>
-                <i>{set.cards.filter(card=>card.cardType!=="divider").slice(0,4).map(card=>card.acronym).join(" · ")}</i>
-              </span>
-              <ChevronRight size={17}/>
-              <span className="deep-dive-acronym-set-progress"><span><i style={{width:"100%"}}/></span><span>{set.cards.filter(card=>card.cardType!=="divider").length}</span></span>
-            </div>
-          ))}
-        </div>}
-      </section>}
-
-      <div className="deep-dives-domain-groups">
-        {visibleGroups.map(group=>{
-          const isOpen=openFlashcardChapters.has(String(group.chapterId));
-          return <section className="deep-dives-domain-group flashcards-chapter-group" key={group.chapterId}>
-            <header>
-              <button className="deep-dives-domain-toggle" type="button" aria-expanded={isOpen} onClick={()=>toggleFlashcardChapter(group.chapterId)}>
-                <div><span>Chapter {group.chapterId}</span><h2>{group.chapterTitle}</h2></div>
-                <span className="deep-dives-domain-toggle-meta"><strong>{group.sets.reduce((sum,set)=>sum+set.cards.length,0)} cards</strong><ChevronRight size={19}/></span>
-              </button>
-            </header>
-            {isOpen&&<div className="deep-dive-acronym-set-grid">
-              {group.sets.map(set=>{
-                const mastered=set.cards.filter(card=>masteredAcronymIds.includes(card.id)).length;
-                const setProgress=Math.round((mastered/set.cards.length)*100);
-                const topics=[...new Set(set.cards.map(card=>card.topic||set.topic).filter(Boolean))];
-                return(
-                  <button type="button" className="deep-dive-acronym-set-card flashcards-topic-card" style={{"--set-color":set.color}} key={set.id} onClick={()=>openSet(set.id)} aria-label={`Open ${set.title}: ${mastered} of ${set.cards.length} mastered`}>
-                    <FlashcardSetIcon set={set}/>
-                    <span>
-                      <em className="flashcard-type-badge">{set.setType==="term"?"Term":"Acronym"}</em>
-                      <strong>{set.title}</strong>
-                      <small>{set.cards.length} cards · {group.chapterTitle}</small>
-                      <i>{topics.join(" · ")}</i>
-                    </span>
-                    <ChevronRight size={17}/>
-                    <span className="deep-dive-acronym-set-progress"><span><i style={{width:`${setProgress}%`}}/></span><span>{mastered}/{set.cards.length}</span></span>
-                  </button>
-                );
-              })}
-            </div>}
-          </section>;
-        })}
+  const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>mastered.includes(card.id)).length;
+  const term=query.trim().replace(/^#/,"").toLowerCase();
+  const matches=set=>!term||[set.title,set.sectionTitle,...set.cards.flatMap(card=>[...card.keywords,...card.concept_tags])].join(" ").toLowerCase().includes(term);
+  const groups=chapterGroups.filter(group=>domain==="all"||String(group.chapterId)===domain).map(group=>({...group,sets:group.sets.filter(matches)})).filter(group=>group.sets.length);
+  const palette={"--fc-text":t.text,"--fc-muted":t.textSec,"--fc-panel":t.panel,"--fc-surface":t.surface,"--fc-line":t.border,"--fc-accent":t.accent};
+  const confirmation=reviewConfirmation&&<div className="fc-notice" role="status">Your flashcard progress is saved to your account. <button className="btn btn-ghost" onClick={onDismissReviewConfirmation}>Dismiss</button></div>;
+  if(selected)return <div className="fc-reader" style={palette}>{confirmation}{notice&&<p role="status">{notice}</p>}<AcronymFlashcardLab acronymSet={selected} masteredIds={mastered} onRate={rate} onClose={()=>{setSelected(null);refreshPersonal();}} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade} onSaveGeneratedSet={saveSet} onSaveReviewSet={()=>starCards.length?openSet(buildStarredFlashcardSet(starCards)):onRequireSignup?.("flashcard_review_set")} recommendedSet={getNextFlashcardSet(selected)} onOpenRecommendedSet={()=>openSet(getNextFlashcardSet(selected))}/></div>;
+  return <div className="fc-library" style={palette}>
+    {confirmation}
+    <header className="fc-hero">
+      <div className="fc-hero-copy"><span className="fc-eyebrow"><NavGlyph type="flashcards" active/> THE RECALL LIBRARY · SY0-701</span>
+        <h1>Small cards.<br/><span>Stronger recall.</span></h1><p>Meet the term. Find the meaning. Make it stick.</p>
+        <div className="fc-hero-actions"><button className="btn btn-primary" onClick={()=>openSet(groups[0]?.sets[0]||SY0701_ACRONYM_SETS[0])}>Start a short deck <ArrowRight size={17}/></button><FlashcardShareActions t={t} compact/></div>
       </div>
-
-      <div className="deep-dive-acronym-source-note"><ShieldCheck size={16}/><span>{SY0701_ACRONYM_SOURCE.reviewNote}</span></div>
-        {modeChooser&&<FlashcardModeChooser t={t} set={modeChooser.setId===STARRED_FLASHCARD_SET_ID?starredFlashcardSet:modeChooser.setId===ASSISTANT_FLASHCARD_SET_ID?assistantSet:modeChooser.setId===RANDOM_FLASHCARD_SET_ID?randomFlashcardSet:savedRandomSets.find(set=>set.id===modeChooser.setId)||SY0701_ACRONYM_SETS.find(set=>set.id===modeChooser.setId)||null} hasExample={modeChooser.hasExample} currentMode={activeMode} defaultMode={defaultMode} user={user} context={modeChooser.context} onChoose={handleModeChosen} onClose={()=>setModeChooser(null)}/>}
-        {showQuickIntro&&typeof document!=="undefined"&&document.body&&createPortal((
-          <div className="flashcard-intro-overlay" role="dialog" aria-modal="true" aria-labelledby="flashcard-intro-title" onMouseDown={closeQuickIntro}>
-            <section className="flashcard-intro-card" onMouseDown={event=>event.stopPropagation()}>
-              <button className="icon-btn flashcard-intro-close" type="button" aria-label="Close flashcard introduction" onClick={closeQuickIntro}><X size={18}/></button>
-              <div className="flashcard-intro-hero">
-                <MascotAnimation animation="flashcards" size={92} interactive={false} label="Cipher welcomes you to Flashcards"/>
-                <div><span>Quick introduction</span><h2 id="flashcard-intro-title">Your Security+ recall pack</h2><p>Pick a chapter, choose how you want to be tested, then tap each card to reveal the answer.</p></div>
-              </div>
-              <div className="flashcard-intro-steps" aria-label="Three steps to use Flashcards">
-                <div><strong>1</strong><span><b>Choose a chapter</b><small>Focus on one exam area.</small></span></div>
-                <div><strong>2</strong><span><b>Choose a mode</b><small>Test definitions or acronyms.</small></span></div>
-                <div><strong>3</strong><span><b>Tap to reveal</b><small>Mark what you remember.</small></span></div>
-              </div>
-              <button className="btn btn-primary flashcard-intro-start" type="button" onClick={closeQuickIntro}>Got it — show me the decks <ChevronRight size={17}/></button>
-              <small className="flashcard-intro-note">All standard flashcard decks can be studied without an account.</small>
-            </section>
-          </div>
-        ),document.body)}
-    </div>
-  );
+      <div className="fc-recall-art" aria-label={`${totalMastered} of ${SY0701_ACRONYM_CARDS.length} cards remembered`}>
+        <div className="fc-paper fc-paper-back">01 / RECALL</div><div className="fc-paper fc-paper-mid">02 / REVEAL</div>
+        <div className="fc-paper fc-paper-front"><Brain size={29}/><span>Your growing knowledge</span><strong>{totalMastered}<small> / {SY0701_ACRONYM_CARDS.length}</small></strong><div className="fc-mini-track"><i style={{width:`${totalMastered/SY0701_ACRONYM_CARDS.length*100}%`}}/></div><span>cards remembered</span></div>
+      </div>
+    </header>
+    <section className="fc-personal" aria-labelledby="fc-personal-title"><div className="fc-personal-mark"><Sparkles size={24}/></div><div>
+      <span className="fc-eyebrow">MADE FROM YOUR PRACTICE</span><h2 id="fc-personal-title">Your personalised set</h2>
+      <p>{progressStatus==="guest"?"Miss a concept twice in a row in MCQ practice, and its flashcards will meet you here.":progressStatus==="loading"?"Finding your concept review…":progressStatus==="error"||progressStatus==="unavailable"?"Your practice signals are unavailable right now.":personalCards.length?`${personalCards.length} cards linked to the concepts you missed twice in a row. Every matching card is included.`:"No repeat-miss concepts right now. Keep practising and this set will adapt."}</p>
+      {personalSets.length>0&&<div className="fc-personal-parts">{personalSets.map((set,index)=><button className="btn btn-primary" key={set.id} onClick={()=>openSet(set)}>{personalSets.length>1?`Review ${index+1}`:"Review my concepts"} <span>{set.cards.length} cards</span><ArrowRight size={15}/></button>)}</div>}
+      {(progressStatus==="error"||progressStatus==="unavailable")&&<button className="btn btn-ghost" onClick={refreshPersonal}>Try again</button>}
+      {!user&&<button className="btn btn-ghost" onClick={()=>onRequireSignup?.("flashcard_personalised")}>Save your learning with a free account <ArrowRight size={14}/></button>}
+    </div></section>
+    <section className="fc-browse" aria-label="Browse flashcards by domain">
+      <div className="fc-browse-heading"><div><span className="fc-eyebrow">FIVE DOMAINS. ONE CLEAR PATH.</span><h2>Find your next small win.</h2></div><label className="fc-search"><Search size={17}/><input type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Find a term, deck or #tag" aria-label="Search flashcards"/></label></div>
+      <div className="fc-domain-tabs" role="group" aria-label="Filter by official exam domain"><button aria-pressed={domain==="all"} className={domain==="all"?"active":""} onClick={()=>setDomain("all")}>All domains</button>{chapterGroups.map(group=><button key={group.chapterId} aria-pressed={domain===String(group.chapterId)} className={domain===String(group.chapterId)?"active":""} style={{"--domain-color":chapterColor(group.chapterId)}} onClick={()=>setDomain(String(group.chapterId))}><span>0{group.chapterId}</span>{group.chapterTitle}</button>)}</div>
+      {!groups.length&&<div className="fc-empty" role="status"><Search size={24}/><h3>No matching decks</h3><p>Try a term such as RTO, or a concept tag.</p><button className="btn btn-ghost" onClick={()=>{setQuery("");setDomain("all");}}>Clear search</button></div>}
+      <div className="deep-dives-domain-groups fc-domain-groups">{groups.map(group=><section key={group.chapterId} className="fc-domain" style={{"--domain-color":chapterColor(group.chapterId)}}>
+        <header className="fc-domain-heading"><span className="fc-domain-number">0{group.chapterId}</span><div><span className="fc-eyebrow">DOMAIN {group.chapterId}.0</span><h2>{group.chapterTitle}</h2></div><span className="fc-domain-count">{group.sets.length} decks</span></header>
+        {[...new Set(group.sets.map(set=>set.sectionId))].map(sectionId=><div className="fc-section" key={sectionId}><h3><span>{sectionId}</span>{group.sets.find(set=>set.sectionId===sectionId).sectionTitle}</h3><div className="fc-deck-grid">{group.sets.filter(set=>set.sectionId===sectionId).map(set=>{
+          const remembered=set.cards.filter(card=>mastered.includes(card.id)).length;
+          return <button className="fc-deck" key={set.id} onClick={()=>openSet(set)} aria-label={`Open ${set.title}: ${set.cards.length} cards`}><span className="fc-deck-top"><span>{set.code}</span><span>{set.cards.length} cards <ArrowUpRight size={16}/></span></span><strong>{set.title}</strong><span className="fc-deck-terms">{set.cards.slice(0,4).map(card=>card.acronym).join(" · ")}</span><span className="fc-deck-bottom"><span className="fc-mini-track"><i style={{width:`${remembered/set.cards.length*100}%`}}/></span><small>{remembered} remembered</small></span></button>;
+        })}</div></div>)}
+      </section>)}</div>
+    </section>
+    <section className="fc-toolbox"><div><span className="fc-eyebrow">MAKE IT YOURS</span><h2>A different way in.</h2><p>Keep favourites close, or change up your recall.</p></div><div className="fc-tool-actions"><button className="btn btn-outline" disabled={!starCards.length} onClick={()=>openSet(buildStarredFlashcardSet(starCards))}><Star size={17}/>Saved cards · {starCards.length}</button><label>Mix size <select value={count} onChange={event=>setCount(Number(event.target.value))}><option value={10}>10 cards</option><option value={15}>15 cards</option><option value={20}>20 cards</option></select></label><button className="btn btn-primary" onClick={randomSet}><Shuffle size={17}/>Shuffle a set</button></div>
+      {savedSets.length>0&&<details className="fc-saved"><summary>Your saved mixes · {savedSets.length}</summary><div>{savedSets.map(set=><div className="fc-saved-mix" key={set.id}><button className="btn btn-outline" onClick={()=>openSet(set)}>{set.title}<ArrowRight size={14}/></button><button className="icon-btn" aria-label={`Rename ${set.title}`} onClick={()=>renameMix(set)}><PenLine size={14}/></button><button className="icon-btn" aria-label={`Remove ${set.title}`} onClick={()=>deleteMix(set)}><Trash2 size={14}/></button></div>)}</div></details>}
+    </section>
+    <footer className="fc-footer"><ShieldCheck size={16}/><span>Organised under the five official SY0-701 domains. Study sections are custom groupings.</span><a href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer">Exam blueprint <ArrowUpRight size={13}/></a></footer>
+  </div>;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -32062,12 +31211,16 @@ export default function App() {
       scrollSecurePlusPageToTop({behavior:"auto"});
     }
   },[passwordRecovery,pbqQ?.id,showDiagnostic,showOnboarding,view]);
-  const effectiveAssistantFlashcardSet=useMemo(()=>{
-    if(user?.tier!=="pro")return assistantFlashcardSet;
-    if(assistantFlashcardSet?.cards?.length)return assistantFlashcardSet;
-    const weakContext=buildCipherAssistantContext(attempts,"flashcards");
-    return buildCipherWeakFlashcardSet(weakContext)||buildCipherStarterFlashcardSet();
-  },[assistantFlashcardSet,attempts,user?.tier]);
+  const [flashcardConceptState,setFlashcardConceptState]=useState(null);
+  useEffect(()=>{
+    let active=true;
+    setFlashcardConceptState(null);
+    if(view==="dashboard"&&user?.authProvider==="supabase"&&mcqEngineEnabled){
+      mcqEngineRequest("state").then(state=>{if(active)setFlashcardConceptState(state);}).catch(()=>{});
+    }
+    return()=>{active=false;};
+  },[user?.id,view,attempts.length]);
+  const effectiveAssistantFlashcardSet=useMemo(()=>personalisedFlashcardSet(flashcardConceptState),[flashcardConceptState]);
   const handleAdminProModeChange=useCallback(mode=>{
     if(!isAdminUser(user))return;
     const nextMode=mode==="free"?"free":"pro";

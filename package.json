@@ -11,7 +11,7 @@
     "android:open": "npx cap open android",
     "android:debug": "npm run android:sync && cd android && ./gradlew assembleDebug",
     "android:release": "npm run android:sync && cd android && ./gradlew bundleRelease",
-    "audit": "npm run audit:access-model && npm run audit:launch && npm run audit:coins && npm run audit:engagement && npm run audit:seo && npm run audit:pwa && npm run audit:deep-dives && npm run audit:editorial && npm run audit:qbank:strict",
+    "audit": "npm run audit:flashcards && npm run audit:access-model && npm run audit:launch && npm run audit:coins && npm run audit:engagement && npm run audit:seo && npm run audit:pwa && npm run audit:deep-dives && npm run audit:editorial && npm run audit:qbank:strict",
     "audit:access-model": "node --test scripts/test-access-model.mjs && node scripts/test-practice-access-database.mjs",
     "audit:editorial": "node scripts/audit-editorial.mjs",
     "audit:launch": "node scripts/audit-launch.mjs",
@@ -40,7 +40,8 @@
     "build:mcq-engine": "node scripts/build-mcq-engine-catalogue.mjs",
     "audit:mcq-engine": "node --test scripts/test-dashboard-metrics.mjs scripts/test-exam-readiness.mjs scripts/test-mcq-pacing.mjs scripts/test-mcq-exam.mjs scripts/test-mcq-result-summary.mjs scripts/test-mcq-three-deck.mjs scripts/test-mcq-engine-http.mjs scripts/test-mcq-difficulty.mjs && node scripts/build-mcq-engine-catalogue.mjs --check",
     "audit:mcq-engine:database": "node scripts/test-mcq-engine-database.mjs",
-    "prebuild": "node scripts/build-mcq-engine-catalogue.mjs --check"
+    "prebuild": "npm run audit:flashcards && node scripts/build-mcq-engine-catalogue.mjs --check",
+    "audit:flashcards": "node --test scripts/test-flashcard-bank.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.105.3",

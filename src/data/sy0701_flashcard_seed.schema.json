@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "domains",
+    "decks",
+    "cards",
+    "source_note",
+    "source_url",
+    "legacy_decks"
+  ],
+  "properties": {
+    "version": {
+      "type": "integer"
+    },
+    "domains": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "decks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "code",
+          "title",
+          "domain_id",
+          "section_id",
+          "section_title",
+          "card_ids"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "domain_id": {
+            "type": "integer"
+          },
+          "section_id": {
+            "type": "string"
+          },
+          "section_title": {
+            "type": "string"
+          },
+          "card_ids": {
+            "type": "array",
+            "minItems": 10,
+            "maxItems": 20,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "term",
+          "full_form",
+          "definition",
+          "exam_trap",
+          "port_or_protocol",
+          "example",
+          "definition_source",
+          "keywords",
+          "concept_tags",
+          "legacy_ids",
+          "domain_id",
+          "is_acronym"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "term": {
+            "type": "string"
+          },
+          "full_form": {
+            "type": "string"
+          },
+          "definition": {
+            "type": "string"
+          },
+          "exam_trap": {
+            "type": "string"
+          },
+          "port_or_protocol": {
+            "type": "string"
+          },
+          "example": {
+            "type": "string"
+          },
+          "definition_source": {
+            "type": "string"
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "concept_tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "legacy_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "domain_id": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "is_acronym": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "source_note": {
+      "type": "string"
+    },
+    "source_url": {
+      "type": "string"
+    },
+    "legacy_decks": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

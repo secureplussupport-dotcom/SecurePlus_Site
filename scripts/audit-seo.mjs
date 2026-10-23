@@ -226,7 +226,7 @@ if (thinFlashcardSlugs.length) {
 }
 
 const flashcardsPage = read("security-plus-flashcards/index.html");
-for (const proof of ["313", "29", "General Security Concepts", "Security Operations", "Pass Security+ with confidence."]) {
+for (const proof of ["502", "35", "General Security Concepts", "Security Operations", "Pass Security+ with confidence."]) {
   if (!flashcardsPage.includes(proof)) push(errors, "security-plus-flashcards/index.html", `missing flashcard proof: ${proof}`);
 }
 

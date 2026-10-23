@@ -1,3 +1,5 @@
+import { personalisedFlashcards } from '../src/lib/flashcardConcepts.js';
+import { SY0701_ACRONYM_CARDS } from '../src/data/sy0701AcronymFlashcards.js';
 // Run against disposable PostgreSQL in WASM; never connects to a live database.
 import { readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
@@ -38,6 +40,8 @@ assert.equal((await state(user)).concept_streaks[0].wrong_streak,0);
 assert.equal((await answer(0, bad, 1001)).concept_score, 65);
 assert.equal((await answer(0, bad, 1002)).concept_score, 30);
 assert.equal((await state(user)).concept_streaks[0].wrong_streak,2);
+assert.deepEqual(personalisedFlashcards(await state(user)),SY0701_ACRONYM_CARDS.filter(card=>card.concept_tags.includes('risk.bia-rto-rpo')));
+assert.equal(personalisedFlashcards(await state(other)).length,0);
 assert.deepEqual((await state(other)).concept_streaks,[]);
 assert.equal((await answer(0, bad, 1003)).concept_score, 0);
 assert.equal((await answer(0, bad, 1004)).concept_score, 0);
