@@ -29420,7 +29420,6 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
                   <small>{answerLabel}</small>
                   <strong>{answerMain}</strong>
                   {answerCopy?<p className="deep-dive-acronym-answer-copy">{answerCopy}</p>:<p className="fc-definition-pending">Definition not added yet.</p>}
-                  {activeCard.concept_tags?.length>0&&<span className="fc-card-tags">{activeCard.concept_tags.map(tag=><span key={tag}>#{tag}</span>)}</span>}
                   <span className="deep-dive-flashcard-hint">Tap to see the question again</span>
                 </span>
               </span>

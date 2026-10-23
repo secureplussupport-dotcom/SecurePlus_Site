@@ -103,7 +103,6 @@
 .fc-term-reader .deep-dive-flashcard-kind{left:24px;top:24px;color:var(--deep-muted);font-size:10px}
 .fc-term-reader .deep-dive-flashcard-watermark{display:none}
 .fc-term-reader .deep-dive-flashcard-hint{font-size:10px;bottom:20px}
-.fc-card-tags{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:100%}.fc-card-tags>span{font-size:10px;color:var(--set-color);padding:4px 8px;border:1px solid color-mix(in srgb,var(--set-color) 28%,transparent);border-radius:20px;overflow-wrap:anywhere}
 .fc-definition-pending{font-size:14px;font-weight:450;color:var(--deep-muted)}
 .fc-term-reader .deep-dive-flashcard-actions{flex-wrap:wrap;gap:10px}
 .fc-term-reader .deep-dive-flashcard-rating{flex-wrap:wrap}
