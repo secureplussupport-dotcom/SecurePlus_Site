@@ -1,24 +1,18 @@
-import { useEffect, useState, useId } from 'react';
+import { useId } from 'react';
+import {useLiveSnapshot} from '../lib/useLiveSnapshot.js';
+import {progressOwner} from '../lib/liveRefresh.js';
 import { mcqEngineEnabled, mcqEngineRequest } from '../lib/mcqEngineClient.js';
 import { localReadinessEvidence, summarizeReadiness } from '../lib/examReadiness.js';
 import './ExamReadiness.css';
+import {CipherLoader} from './CipherLoader.jsx';
 
+const loadReadiness=()=>mcqEngineRequest('readiness');
 export function useExamReadiness(user, attempts) {
-  const [revision,retry]=useState(0);
-  const [remote,setRemote]=useState(null);
   const cloud=user?.authProvider==='supabase';
-  const owner=user?.id || user?.email;
-  useEffect(()=>{
-    if(!cloud || !mcqEngineEnabled)return;
-    let active=true;
-    setRemote({owner,status:'loading'});
-    mcqEngineRequest('readiness').then(evidence=>{if(active)setRemote({owner,status:'ready',evidence});})
-      .catch(()=>{if(active)setRemote({owner,status:'error'});});
-    return()=>{active=false;};
-  },[cloud,owner,attempts,revision]);
+  const snapshot=useLiveSnapshot({owner:progressOwner(user),load:loadReadiness,enabled:cloud&&mcqEngineEnabled,revision:attempts});
   if(!cloud)return {...summarizeReadiness(localReadinessEvidence(attempts)),status:'ready'};
-  const state=remote?.owner===owner?remote:null;
-  return {...summarizeReadiness(state?.evidence),status:!mcqEngineEnabled?'error':state?.status || 'loading',retry:()=>retry(n=>n+1)};
+  return {...summarizeReadiness(snapshot.value || {}),status:!mcqEngineEnabled?'error':snapshot.status,
+    refreshing:snapshot.refreshing,refreshError:snapshot.error,updatedAt:snapshot.updatedAt,retry:snapshot.refresh};
 }
 
 const percentage=(count,total)=>total?Number((count/total*100).toFixed(1)):0;
@@ -48,7 +42,7 @@ export function ReadinessBreakdown({profile,chapters}) {
   if(byChapter.unknown)chapterSlices.push({label:'Chapter unavailable',count:byChapter.unknown,color:'#a0aaba'});
   return <section id="exam-readiness-breakdown" className="er-breakdown" aria-label="Exam readiness breakdown">
     <header><div><span className="er-eyebrow">READINESS BREAKDOWN</span><h2>{profile.level}</h2></div><span className="er-milestone">80% · Exam ready</span></header>
-    {status==='loading'?<p role="status">Loading your MCQ and Exam progress…</p>:status==='error'?<p role="status">Your readiness couldn’t load. <button type="button" onClick={profile.retry}>Try again</button></p>:<>
+    {status==='loading'?<CipherLoader compact label="Loading your progress…"/>:status==='error'?<p role="status">Your readiness couldn’t load. <button type="button" onClick={profile.retry}>Try again</button></p>:<>
       <p className="er-scope"><span><strong>{attempted}</strong> concepts attempted</span><span>MCQ + Exam</span><span>Unattempted excluded</span></p>
       <div className="er-layout">
       <div className="er-chapters">

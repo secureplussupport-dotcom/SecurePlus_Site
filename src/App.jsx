@@ -4,10 +4,13 @@ import "./components/FlashcardLibrary.css";
 import {flashcardFaces, personalisedFlashcards, personalisedFlashcardSet, partitionFlashcards} from "./lib/flashcardConcepts.js";
 import { GuestDiagnostic } from "./components/GuestDiagnostic.jsx";
 import { BookmarkOrganiser } from "./components/BookmarkOrganiser.jsx";
+import {CipherLoader} from "./components/CipherLoader.jsx";
+import {useLiveSnapshot} from "./lib/useLiveSnapshot.js";
+import {progressOwner} from "./lib/liveRefresh.js";
 import { usePracticeAccess } from "./lib/usePracticeAccess.js";
 import { generationChoices, isProProfile } from "./lib/accessModel.js";
 import { CIPHER_COINS_ACTIVE, MASCOT_MANAGER_ACTIVE, isArchivedView } from "./lib/archivedFeatures.js";
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo, useTransition } from "react";
 import { createPortal } from "react-dom";
 import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701EditorialReview.js";
 import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
@@ -1293,6 +1296,7 @@ async function completeDailyStreak(user) {
   const best=Math.max(Number(current.best)||0,streak);
   const next={streak,best,lastCompletedDate:today,updatedAt:new Date().toISOString()};
   await DB.saveDailyStreak(key,next);
+  window.dispatchEvent(new Event("daily-streak-changed"));
   return {...next,completedToday:true,alreadyCompleted,previousStreak:Number(current.streak)||0};
 }
 function getStreakRecoveryMessage(info={}) {
@@ -21145,34 +21149,7 @@ function AnswerBurst({result,t}) {
   );
 }
 function LoadingScreen({t}) {
-  const quotes=[
-    "Small reps compound into exam confidence.",
-    "Strong security instincts are built one scenario at a time.",
-    "Review the misses. That is where the score moves.",
-    "A calm analyst notices what a rushed analyst misses.",
-    "Practise like the PBQ is trying to trick you.",
-  ];
-  const [quote,setQuote]=useState(()=>quotes[Math.floor(Math.random()*quotes.length)]);
-  useEffect(()=>{
-    let timer;
-    const cycle=()=>{
-      timer=setTimeout(()=>{
-        setQuote(quotes[Math.floor(Math.random()*quotes.length)]);
-        cycle();
-      },1600+Math.random()*1800);
-    };
-    cycle();
-    return()=>clearTimeout(timer);
-  },[]);
-  return(
-    <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:t.bg,padding:24}}>
-      <div style={{display:"grid",justifyItems:"center",gap:18,textAlign:"center"}}>
-        <MascotAnimation animation="thinking" size={118} className="loading-mascot slow" label="Cipher is loading SecurePlus"/>
-        <div style={{fontWeight:900,color:t.text,fontSize:18}}>{SITE_TAGLINE}</div>
-        <div className="fu" key={quote} style={{color:t.textSec,fontSize:14,maxWidth:360,lineHeight:1.7}}>{quote}</div>
-      </div>
-    </div>
-  );
+  return <div style={{minHeight:"100vh",display:"grid",placeItems:"center",background:t.bg}}><CipherLoader t={t} label="Loading your study space…"/></div>;
 }
 
 function getAcademyStarState(totalStars=0) {
@@ -22644,6 +22621,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   const [shareStatus,setShareStatus]=useState("");
   const streakRecordedRef=useRef(false);
   const answerSaving=useRef(false);
+  const [answerBusy,setAnswerBusy]=useState(false);
 
   const questions = useMemo(()=>challenge.type==="mcq5"
     ? challenge.qids.map(id=>MCQ_BANK.find(q=>q.id===id)).filter(Boolean).map(shuffleMcqOptions)
@@ -22676,10 +22654,10 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
 
   const submitQ = async () => {
     if(selected===null||submitted||answerSaving.current) return;
-    answerSaving.current=true;
+    answerSaving.current=true;setAnswerBusy(true);
     try{if(user?.authProvider==="supabase")await recordStandaloneMcq(current,selected,null,"daily-challenge");}
-    catch(error){alert(error.message);answerSaving.current=false;return;}
-    answerSaving.current=false;
+    catch(error){alert(error.message);answerSaving.current=false;setAnswerBusy(false);return;}
+    answerSaving.current=false;setAnswerBusy(false);
     const correct = selected === current.correct;
     capture("daily_question_answered", { question_id: current.id, correct, signed_in: Boolean(user) });
     setResults(r=>[...r,{qid:current.id,correct,selected}]);
@@ -22715,6 +22693,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
     window.setTimeout(()=>setShareStatus(""),3200);
   };
 
+  if(answerBusy)return <CipherLoader t={t} label="Checking your answer…"/>;
   if(step==="intro") return (
     <div style={{padding:"34px 20px",maxWidth:660,margin:"0 auto",textAlign:"center"}} className="fu">
       <div className="card" style={{position:"relative",overflow:"hidden",padding:"34px 28px",borderColor:`${t.red}35`,background:`radial-gradient(circle at 88% 8%, ${t.amber}20, transparent 30%), linear-gradient(145deg, ${t.surface}, ${t.panel})`}}>
@@ -23331,6 +23310,8 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
 
   if(mode==="signup"&&showSignupJourney){
     return (
+      <>
+      {loading&&<CipherLoader t={t} overlay label="Creating your account…"/>}
       <AthenaSignupJourney
         t={t}
         form={form}
@@ -23347,11 +23328,13 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
         onEnter={onLogin}
         onHaveAccount={openLogin}
       />
+      </>
     );
   }
 
   return(
     <div className="auth-only-page fu">
+      {loading&&<CipherLoader t={t} overlay label={mode==="signup"?"Creating your account…":mode==="reset"?"Sending your reset link…":"Signing you in…"}/>}
       <a className="skip-link" href="#secureplus-main">Skip to sign in form</a>
       <main id="secureplus-main" className="auth-only-main">
         <section className="card auth-only-card" aria-labelledby="auth-only-title">
@@ -23966,21 +23949,15 @@ function SmartReviewLessonPath({recommendations=[],onOpenDeepDive,source="smart_
   );
 }
 
-function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOpenFlashcards,coinWallet,t,starred=[],assistantFlashcardSet=null}) {
-  const {access:practiceAccess}=usePracticeAccess(user);
+const DAILY_STREAK_EVENTS=["daily-streak-changed"];
+
+function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOpenFlashcards,coinWallet,t,starred=[],assistantFlashcardSet=null,readinessProfile,practiceAccess,streakInfo}) {
   const [showReadinessLab,setShowReadinessLab]=useState(false);
   const activityProfile=getActivityProfile(attempts);
-  const readinessProfile=useExamReadiness(user,attempts);
   const questionsDone=readinessProfile.activity?.total ?? activityProfile.uniqueQuestions;
   const readiness=readinessProfile.score;
   const readinessColor=readiness>=80?t.green:t.accent;
   const isPro = user.tier==="pro";
-  const [streakInfo,setStreakInfo]=useState({streak:0,best:0,completedToday:false});
-  useEffect(()=>{
-    let active=true;
-    loadDailyStreak(user).then(info=>{if(active)setStreakInfo(info);});
-    return()=>{active=false;};
-  },[user?.email]);
   const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
   const showStarredDashboardSet=starredFlashcards.length>=5;
   const showAssistantDashboardSet=Boolean(assistantFlashcardSet?.cards?.length);
@@ -24024,7 +24001,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
           <div className="dh-practice-art" aria-hidden="true"><span/><span/><span/><ShieldCheck size={46} strokeWidth={1.2}/></div>
         </article>
         <article className="dh-readiness" aria-label="Exam readiness">
-          <div className="dh-readiness-top"><span className="dh-eyebrow"><Gauge size={15}/> EXAM READINESS</span><span className="dh-live-dot" aria-hidden="true"/></div>
+          <div className="dh-readiness-top"><span className="dh-eyebrow"><Gauge size={15}/> EXAM READINESS</span><span className={`dh-live-dot ${readinessProfile.refreshing?"is-refreshing":""}`} title={readinessProfile.refreshing?"Updating progress":"Exam readiness"} aria-hidden="true"/></div>
           <div className="dh-score" style={{"--dh-score-color":readinessColor}}>
             <svg viewBox="0 0 200 200" aria-hidden="true">
               <defs><linearGradient id="dashboard-readiness-arc" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stopColor="#30b9a4"/><stop offset="65%" stopColor="var(--dh-score-color)"/><stop offset="100%" stopColor="#e4c68b"/></linearGradient></defs>
@@ -24041,7 +24018,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
       </section>
       {showReadinessLab&&<ReadinessBreakdown profile={readinessProfile} chapters={CHAPTERS}/>}
 
+      {readinessProfile.refreshError&&<p className="dh-progress-notice" role="status">Showing the last update. <button onClick={readinessProfile.retry}>Retry refresh</button></p>}
       <div className="dh-section-title"><h2>Your progress</h2></div>
+      {readinessProfile.status==="loading"&&<CipherLoader t={t} compact label="Updating your progress…"/>}
       <DashboardMetrics quota={practiceAccess} profile={readinessProfile} streak={streakInfo} tier={user.tier} t={t}/>
 
       <div className="dh-section-title"><h2>For you</h2></div>
@@ -24063,7 +24042,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
       </section>
 
       <section className="dh-shortcuts" aria-label="More ways to learn">
-        <button className="dh-shortcut dh-daily" onClick={()=>onNav("daily")}><span className="dh-shortcut-icon"><Flame size={23}/></span><span><strong>Daily challenge</strong>{streakInfo.completedToday&&<span>Completed today</span>}</span><ArrowUpRight size={19}/></button>
+        <button className="dh-shortcut dh-daily" onClick={()=>onNav("daily")}><span className="dh-shortcut-icon"><Flame size={23}/></span><span><strong>Daily challenge</strong>{streakInfo?.completedToday&&<span>Completed today</span>}</span><ArrowUpRight size={19}/></button>
         <button className="dh-shortcut dh-lessons" onClick={()=>onNav("deep-dives")}><span className="dh-shortcut-icon"><BookOpenCheck size={23}/></span><span><strong>Concept Deep Dives</strong></span><ArrowUpRight size={19}/></button>
         {showStarredDashboardSet?<button className="dh-shortcut dh-saved" onClick={()=>onOpenFlashcards?.(STARRED_FLASHCARD_SET_ID)}><span className="dh-shortcut-icon"><Star size={23}/></span><span><strong>{starredFlashcards.length} saved flashcards</strong></span><ArrowUpRight size={19}/></button>:<button className="dh-shortcut dh-saved" onClick={()=>onNav("flashcards")}><span className="dh-shortcut-icon"><Layers3 size={23}/></span><span><strong>Browse the decks</strong></span><ArrowUpRight size={19}/></button>}
       </section>
@@ -24696,9 +24675,9 @@ function PracticeSetupDisclosure({children}) {
   );
 }
 
-function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null,examRequest=null,onSessionComplete,mcqBank=MCQ_BANK}) {
+function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null,examRequest=null,onSessionComplete,mcqBank=MCQ_BANK}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
-  const {access,refresh:refreshAccess,error:accessError}=usePracticeAccess(user);
+  const {access,refresh:refreshAccess,error:accessError}=practiceAccessState;
   const isPro=access?access.isPro:user?.tier==="pro";
   const availableQuota=isGuest?access?.remaining:isPro?90:access?.remaining;
   const [missedBatch,setMissedBatch]=useState(null);
@@ -24741,6 +24720,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [draftSelections,setDraftSelections]=useState([]);
   const [results,setResults]=useState([]);
   const [done,setDone]=useState(false);
+  const [resultsPending,startResults]=useTransition();
   const [finishedReviewMode,setFinishedReviewMode]=useState(false);
   const [showWrong,setShowWrong]=useState(false);
   const [resumeAvailable,setResumeAvailable]=useState(false);
@@ -24833,7 +24813,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       if(generationRequest.current?.key!==requestKey)generationRequest.current={key:requestKey,id:crypto.randomUUID()};
       const requestId=generationRequest.current.id;
       const plan=await mcqEngineRequest("generate",{request_id:requestId,set_size:isGuest?10:count,mode:isGuest?"diagnostic":mode,filters:isPro?filters:{}});
-      generationRequest.current=null;setQuizCount(isGuest?10:count);await refreshAccess();
+      generationRequest.current=null;setQuizCount(isGuest?10:count);
       if(mode==="exam"){
         setExamCount(count);setExamResume(null);setExamQuestions(plan.questions.map(q=>({...practiceQuestion(q,null),engineAllocationId:plan.session_id})));return;
       }
@@ -24842,7 +24822,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       setSessionContext({kind:mode,label:isGuest?"Free diagnostic":mode==="smart"?"Smart Review":"MCQ practice",engineSessionId:isGuest?null:plan.session_id,createdAt:plan.createdAt});
       pacing.reset({});setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);answerEvents.current.clear();
       capture("mcq_quiz_started",{review_mode:mode,question_count:pool.length,tier:user.tier});
-    }catch(error){setEngineError(error.message);await refreshAccess();}finally{setEngineBusy(false);}
+    }catch(error){setEngineError(error.message);refreshAccess();}finally{setEngineBusy(false);}
   };
   const startQuiz=()=>startEngineQuiz({chapter:chFilter==="all"?undefined:chFilter,difficulty:activeDiffFilter==="all"?undefined:activeDiffFilter,topic:activeTopicFilter==="all"?undefined:activeTopicFilter},quizCount,reviewMode);
   const startMissedQuiz=()=>setMissedBatch(Math.max(1,Math.min(10,missedQuestions.length,availableQuota??0)));
@@ -24974,7 +24954,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       capture("mcq_question_answered",{question_id:current.id,chapter:current.ch,correct,tier:user.tier});
       setResults(rs=>{const next=[...rs];next[qi]=r;return next;});
       setLocalConceptStreaks(streaks=>advanceConceptStreak(streaks,r.conceptTag,correct));
-      onSave(r);await refreshEngineState();
+      onSave(r);refreshEngineState();
       playAnswerSound(correct);setAnswerBurst({correct,key:Date.now()});
       setTimeout(()=>setAnswerBurst(null),1700);setSubmitted(true);setShowWrong(false);
     }catch(error){setEngineError(error.message);}finally{answerInFlight.current=false;setEngineBusy(false);}
@@ -24986,7 +24966,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
       reportPracticeSession();
       DB.clearPracticeSession(sessionKey);
       setFinishedReviewMode(false);
-      setDone(true);
+      startResults(()=>setDone(true));
     }
   };
   const finishQuiz=()=>{
@@ -24999,7 +24979,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     reportPracticeSession();
     DB.clearPracticeSession(sessionKey);
     setFinishedReviewMode(false);
-    setDone(true);
+    startResults(()=>setDone(true));
   };
 
   const correctCount=results.filter(r=>r?.correct).length;
@@ -25052,6 +25032,9 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     </div>
   );
 
+  if(resultsPending)return <CipherLoader t={t} label="Preparing your results…"/>;
+  if(engineBusy&&!started)return <CipherLoader t={t} label="Creating your set…"/>;
+  if(engineBusy&&started&&!submitted)return <CipherLoader t={t} label="Checking your answer…"/>;
   if(examQuestions)return <McqExam initialQuestions={examQuestions} user={user} chapters={CHAPTERS} t={t}
     onSave={onSave} onReturn={()=>{setExamQuestions(null);setEngineError("");window.scrollTo({top:0,behavior:"instant"});}}
     onOpenDeepDive={onOpenDeepDive} onSessionComplete={onSessionComplete} onFocusModeChange={onFocusModeChange}
@@ -25353,6 +25336,7 @@ function UpgradeModal({price=PRO_ACADEMY_PASS_PRICE,onUpgrade,onClose,t}) {
 function PBQLoadingSkeleton({t}) {
   return(
     <div className="pbq-bank-screen fu" style={{padding:"24px",maxWidth:900,margin:"0 auto"}}>
+      <CipherLoader t={t} compact label="Loading practice…"/>
       <div className="card animate-pulse rounded-xl p-6" style={{padding:24,background:t.surface,border:`1px solid ${t.border}`}}>
         <div style={{height:22,width:"38%",borderRadius:8,background:t.border,marginBottom:14}}/>
         <div style={{height:14,width:"70%",borderRadius:8,background:t.panel,marginBottom:24}}/>
@@ -27121,7 +27105,7 @@ function AdminFeedbackPage({user,t,onEditQuestion}) {
         </div>
         <button className="btn btn-outline" style={{marginLeft:"auto",fontSize:12}} onClick={loadReports}>Refresh</button>
       </div>
-      {loading&&<div className="card" style={{padding:"18px 20px",color:t.textSec}}>Loading feedback...</div>}
+      {loading&&<CipherLoader t={t} compact label="Loading feedback…"/>}
       <Alert msg={error} t={t}/>
       {!loading&&!error&&(
         <div style={{display:"grid",gap:12}}>
@@ -30224,8 +30208,9 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     <section className={`fc-personal fc-personal-feature ${personalCards.length?"has-review":""}`} aria-labelledby="fc-personal-title">
       <div className="fc-personal-copy"><span className="fc-personal-badge"><Sparkles size={14}/> MADE FOR YOUR NEXT BREAKTHROUGH</span>
       <h2 id="fc-personal-title">Your personalised set.<br/><span>A little more “I’ve got this.”</span></h2>
-      <p>{progressStatus==="guest"?"Turn tricky concepts into familiar ones. After two misses on the same concept, every linked flashcard comes here for another look.":progressStatus==="loading"?"Finding your next useful review…":progressStatus==="error"||progressStatus==="unavailable"?"We couldn’t load your practice signals. Refresh to find the cards that need another look.":personalCards.length?`${personalCards.length} cards, chosen from the concepts you missed twice in a row. Give them another look, at your own pace.`:"Nothing needs a repeat review right now. Your next set will take shape as you practise."}</p>
+      {progressStatus!=="loading"&&<p>{progressStatus==="guest"?"Turn tricky concepts into familiar ones. After two misses on the same concept, every linked flashcard comes here for another look.":progressStatus==="loading"?"Finding your next useful review…":progressStatus==="error"||progressStatus==="unavailable"?"We couldn’t load your practice signals. Refresh to find the cards that need another look.":personalCards.length?`${personalCards.length} cards, chosen from the concepts you missed twice in a row. Give them another look, at your own pace.`:"Nothing needs a repeat review right now. Your next set will take shape as you practise."}</p>}
       {personalSets.length>0&&<div className="fc-personal-parts">{personalSets.map((set,index)=><button className="btn btn-primary" key={set.id} onClick={()=>openSet(set)}>{personalSets.length>1?`Open review ${index+1}`:"Let’s make it click"}<span>{set.cards.length} cards</span><ArrowRight size={17}/></button>)}</div>}
+      {progressStatus==="loading"&&<CipherLoader t={t} compact label="Finding your review…"/>}
       {(progressStatus==="error"||progressStatus==="unavailable")&&<button className="btn btn-primary fc-personal-cta" onClick={refreshPersonal}>Refresh my review <RotateCcw size={16}/></button>}
       {!user&&<><button className="btn btn-primary fc-personal-cta" onClick={()=>onRequireSignup?.("flashcard_personalised")}>Build my personalised set <ArrowRight size={17}/></button><small className="fc-personal-note">Included with your free account.</small></>}
       {progressStatus==="ready"&&!personalCards.length&&<span className="fc-personal-clear"><CheckCircle2 size={15}/> You’re keeping things moving.</span>}
@@ -30876,6 +30861,7 @@ function PasswordUpdateView({t,onDone}) {
 
   return(
     <div style={{minHeight:"100vh",display:"grid",placeItems:"center",padding:24}}>
+      {loading&&<CipherLoader t={t} overlay label="Updating your password…"/>}
       <div className="card" style={{width:"100%",maxWidth:430,padding:"28px 28px"}}>
         <div style={{display:"inline-flex",alignItems:"center",gap:10,padding:"7px 11px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel,marginBottom:20}}>
           <BrandMark size={28}/>
@@ -31001,9 +30987,25 @@ export default function App() {
   const [mobileNavOpen,setMobileNavOpen]=useState(false);
   const [user,setUser]=useState(null);
   const [loading,setLoading]=useState(true);
-  const [view,setView]=useState(()=>focusAcronymLibrary||urlFlashcardsRequest?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":devCoinPreview?"coins":"dashboard");
+  const [navigating,startNavigation]=useTransition();
+  const setView=useCallback(next=>startNavigation(()=>setViewImmediate(next)),[]);
+  const [view,setViewImmediate]=useState(()=>focusAcronymLibrary||urlFlashcardsRequest?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":devCoinPreview?"coins":"dashboard");
   const [flashcardsIntroRequested]=useState(()=>urlFlashcardsIntroRequest);
   const [attempts,setAttempts]=useState([]);
+  const readinessProfile=useExamReadiness(user,attempts);
+  const practiceAccessState=usePracticeAccess(user,!loading);
+  const loadHomeStreak=useCallback(()=>loadDailyStreak(user),[user?.id,user?.email,user?.authProvider]);
+  const homeStreak=useLiveSnapshot({owner:progressOwner(user),load:loadHomeStreak,enabled:Boolean(user)&&!loading,revision:attempts.length,events:DAILY_STREAK_EVENTS});
+  const previousMetricsView=useRef(view);
+  useEffect(()=>{
+    const changed=previousMetricsView.current!==view;
+    previousMetricsView.current=view;
+    if(!changed||view!=="dashboard"||loading)return;
+    if(readinessProfile.status==="ready")readinessProfile.retry?.();
+    if(practiceAccessState.status==="ready")practiceAccessState.refresh();
+    if(homeStreak.status==="ready")homeStreak.refresh();
+  },[view,loading]);
+
   const [starred,setStarred]=useState([]);
   const [guestStarred,setGuestStarred]=useState([]);
   const [pbqQ,setPbqQ]=useState(null);
@@ -32117,6 +32119,7 @@ export default function App() {
   if(loading) return(
     <>
       <style>{CSS}</style>
+      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
       <LoadingScreen t={t}/>
     </>
   );
@@ -32124,6 +32127,7 @@ export default function App() {
   if(passwordRecovery) return(
     <>
       <style>{CSS}</style>
+      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <PasswordUpdateView t={t} onDone={()=>{setPasswordRecovery(false);setView("dashboard");}}/>
       </div>
@@ -32133,6 +32137,7 @@ export default function App() {
   if(user&&accountDeletion.stage==="confirm") return(
     <>
       <style>{CSS}</style>
+      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
       <div style={{minHeight:"100vh",background:t.bg}}>
         <div style={{padding:"16px 22px",display:"flex",alignItems:"center",gap:9,borderBottom:`1px solid ${t.border}`,background:t.surface}}>
           <BrandMark size={32}/><strong style={{color:t.text}}>{SITE_BRAND_LOCKUP}</strong>
@@ -32153,6 +32158,7 @@ export default function App() {
   if(showDaily&&!user) return(
     <>
       <style>{CSS}</style>
+      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:14,lineHeight:1.2,color:t.text}}>{SITE_BRAND_LOCKUP}</span></button>
@@ -32169,6 +32175,7 @@ export default function App() {
   if(!user&&view==="auth") return(
     <>
       <style>{CSS}</style>
+      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
       <AuthView key={`auth-${authStartMode}-${authRequestId}`} onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={setView} onPracticeMcq={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} initialMode={authStartMode} securityNotice={accountDeletion.stage==="confirm"}/>
     </>
   );
@@ -32221,6 +32228,7 @@ export default function App() {
     return(
       <>
         <style>{CSS}</style>
+      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
         <div className={`app-shell guest-app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
           <a className="skip-link" href="#secureplus-main">Skip to study content</a>
           <header className="guest-top-nav">
@@ -32353,6 +32361,7 @@ export default function App() {
   if(user&&showDiagnostic) return(
     <>
       <style>{CSS}</style>
+      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
       <DiagnosticQuiz user={user} t={t} onComplete={handleDiagnosticComplete}/>
     </>
   );
@@ -32369,6 +32378,7 @@ export default function App() {
   if(pbqQ) return(
     <>
       <style>{CSS}</style>
+      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <button type="button" onClick={()=>{setPbqQ(null);setView("dashboard");}} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}>
@@ -32420,6 +32430,7 @@ export default function App() {
   return(
     <>
       <style>{CSS}</style>
+      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
       <div className={`app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
         <a className="skip-link" href="#secureplus-main">Skip to study content</a>
         {sidebarHidden&&(
@@ -32484,9 +32495,9 @@ export default function App() {
               <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onUpdateAvatar={handleUpdateAvatar} onChangePassword={handleChangePassword} onLogout={handleLogout} compact/>
             </div>
           </div>
-          {view==="dashboard"&&<Dashboard user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
+          {view==="dashboard"&&<Dashboard readinessProfile={readinessProfile} practiceAccess={practiceAccessState.access} streakInfo={homeStreak.value} user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
-            <MCQPractice examRequest={examEntryRequest} user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
+            <MCQPractice practiceAccessState={practiceAccessState} examRequest={examEntryRequest} user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
           </div>
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
             <PBQBank user={user} attempts={attempts} onStart={q=>setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("pricing")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>

@@ -13,3 +13,8 @@
 
 @media(max-width:500px){.dm-completed .dm-main{flex-wrap:wrap}.dm-completed .dm-number{font-size:clamp(26px,7.8vw,34px)}}
 .dm-allowance .dm-number small{display:block;margin:8px 0 0;font-size:11px;line-height:1.3}
+
+.dm-is-loading .dm-number,.dm-ring-pending,
+.dashboard-metrics[aria-busy=true] .dm-accuracy .dm-number,.dashboard-metrics[aria-busy=true] .dm-completed .dm-number{animation:dm-loading-pulse 1.2s ease-in-out infinite alternate}
+@keyframes dm-loading-pulse{from{opacity:.35}to{opacity:.85}}
+@media(prefers-reduced-motion:reduce){.dashboard-metrics .dm-number,.dm-ring-pending{animation:none!important}}

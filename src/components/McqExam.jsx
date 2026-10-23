@@ -6,6 +6,7 @@ import { advanceConceptStreak, buildMcqResultSummary } from '../lib/mcqResultSum
 import { examConceptTag, examTiming, formatExamTime } from '../lib/mcqExam.js';
 import { mcqEngineEnabled, mcqEngineRequest, recordStandaloneMcq } from '../lib/mcqEngineClient.js';
 import './McqExam.css';
+import {CipherLoader} from './CipherLoader.jsx';
 
 const freshQuestions = questions => questions.map(question => ({ ...question, engineAnswerEventId: crypto.randomUUID() }));
 export const examThemeVars = t => ({ '--exam-text': t.text, '--exam-muted': t.textSec, '--exam-surface': t.surface, '--exam-panel': t.panel, '--exam-border': t.border, '--exam-accent': t.accent, '--exam-green': t.green, '--exam-red': t.red, '--exam-amber': t.amber });
@@ -57,6 +58,7 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
   const [confirmAction,setConfirmAction]=useState(null);
   const [rows, setRows] = useState([]);
   const [marking, setMarking] = useState(false);
+  const [markedCount,setMarkedCount]=useState(0);
   const [submissionLocked, setSubmissionLocked] = useState(false);
   const [error, setError] = useState('');
   const [progressError, setProgressError] = useState(false);
@@ -108,7 +110,7 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
     if((unanswered||flags)&&!confirmed){setConfirmAction('submit');return;}
     setConfirmAction(null);
     submissionPacing.current??=pacing.snapshot();
-    inFlight.current=true;setSubmissionLocked(true);setMarking(true);setError('');const finish=submissionTime.current??Date.now();submissionTime.current=finish;
+    inFlight.current=true;setSubmissionLocked(true);setMarkedCount(0);setMarking(true);setError('');const finish=submissionTime.current??Date.now();submissionTime.current=finish;
     try{
       const completed=[];
       for(let index=0;index<questions.length;index++){
@@ -119,6 +121,7 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
         completed.push({qid:question.id,elapsedMs:evaluation?.elapsed_ms??elapsedMs,correct:selected!=null&&(evaluation?evaluation.is_correct:selected===question.correct),selected,
           title:question.q.slice(0,80),ch:question.ch,topic:question.topic,conceptTag:evaluation?.concept_tag||examConceptTag(question),
           mcq:true,exam:true,readinessSource:"exam",createdAt:new Date(finish+index).toISOString()});
+        setMarkedCount(index+1);
       }
       let streaks=localStreaks;
       completed.forEach(row=>{if(row.selected!=null)streaks=advanceConceptStreak(streaks,row.conceptTag,row.correct);});
@@ -140,6 +143,7 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
     pacing.reset({});submissionPacing.current=null;submissionTime.current=null;setStartedAt(Date.now());setNow(Date.now());setFinishedAt(null);setError('');setSubmissionLocked(false);setView('taking');
     window.scrollTo({top:0,behavior:'instant'});
   };
+  if(marking)return <CipherLoader t={t} label={markedCount===questions.length?'Updating your report…':'Tabulating your results…'} detail={`${markedCount} / ${questions.length} questions checked`}/>;
   if(view==='report')return <McqSetResults questions={questions} results={rows} correct={rows.filter(row=>row.correct).length} total={questions.length} t={t}
     summary={buildMcqResultSummary({questions,results:rows,chapters,engineState:cloudProgress?engineState:{concept_streaks:Object.entries(localStreaks).map(([concept_tag,wrong_streak])=>({concept_tag,wrong_streak}))},progressAvailable:!progressError})}
     onStart={onReturn} onReview={()=>{setQi(0);setView('review');window.scrollTo({top:0,behavior:'instant'});}}

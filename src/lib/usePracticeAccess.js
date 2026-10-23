@@ -1,8 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
-import { mcqEngineRequest } from './mcqEngineClient.js';
-export function usePracticeAccess(user){
- const [access,setAccess]=useState(null),[error,setError]=useState('');
- const refresh=useCallback(async()=>{try{const value=await mcqEngineRequest('access');setAccess(value);setError('');return value;}catch(err){setError(err.message);return null;}},[user?.id,user?.email,user?.authProvider]);
- useEffect(()=>{setAccess(null);refresh();const timer=setInterval(refresh,30000);const changed=()=>refresh();window.addEventListener('practice-access-changed',changed);return()=>{clearInterval(timer);window.removeEventListener('practice-access-changed',changed);};},[refresh]);
- return {access,error,refresh};
+import {useEffect} from 'react';
+import {mcqEngineRequest} from './mcqEngineClient.js';
+import {useLiveSnapshot} from './useLiveSnapshot.js';
+import {progressOwner} from './liveRefresh.js';
+const load=()=>mcqEngineRequest('access');
+const events=['practice-access-changed'];
+export function usePracticeAccess(user,enabled=true){
+  const snapshot=useLiveSnapshot({owner:progressOwner(user),load,enabled,events});
+  useEffect(()=>{
+    const release=Date.parse(snapshot.value?.resetAt);
+    if(!enabled||!Number.isFinite(release)||release<=Date.now())return;
+    const timer=setTimeout(()=>snapshot.refresh(),Math.min(release-Date.now()+50,2147483647));
+    return()=>clearTimeout(timer);
+  },[enabled,snapshot.value?.resetAt,snapshot.refresh]);
+  return {...snapshot,access:snapshot.value};
 }

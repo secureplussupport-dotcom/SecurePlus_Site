@@ -1,0 +1,12 @@
+.cipher-load{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;min-height:340px;padding:32px;color:var(--load-text);text-align:center}
+.cipher-load-art{position:relative;display:grid;place-items:center;width:146px;height:146px;flex-shrink:0;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--load-accent) 12%,transparent),transparent 72%)}
+.cipher-load-orbit{position:absolute;inset:0;border:1px solid var(--load-border);border-radius:50%}
+.cipher-load-orbit::after{content:'';position:absolute;inset:-1px;border:2px solid transparent;border-top-color:var(--load-accent);border-right-color:color-mix(in srgb,var(--load-accent) 20%,transparent);border-radius:50%;animation:cipher-load-turn 1.6s linear infinite}
+.cipher-load-copy{display:grid;justify-items:center;gap:10px;max-width:280px}.cipher-load-copy strong{font-size:20px;line-height:1.4;font-weight:650;letter-spacing:-.025em}.cipher-load-copy small{font-size:12px;color:var(--load-muted);font-variant-numeric:tabular-nums}
+.cipher-load-track{display:block;width:112px;height:4px;margin-top:3px;border-radius:8px;overflow:hidden;background:var(--load-border)}
+.cipher-load-track i{display:block;width:42%;height:100%;border-radius:inherit;background:var(--load-accent);animation:cipher-load-scan 1.2s ease-in-out infinite}
+.cipher-load.is-compact{flex-direction:row;gap:16px;min-height:94px;padding:14px 16px;text-align:left}.is-compact .cipher-load-art{width:64px;height:64px}.is-compact .cipher-load-copy{justify-items:start}.is-compact .cipher-load-copy strong{font-size:14px}.is-compact .cipher-load-track{width:88px;height:3px}
+.cipher-load.is-overlay{position:fixed;inset:0;z-index:2000;pointer-events:none;background:color-mix(in srgb,var(--load-bg) 88%,transparent);backdrop-filter:blur(3px)}
+@keyframes cipher-load-turn{to{transform:rotate(360deg)}}
+@keyframes cipher-load-scan{from{transform:translateX(-110%)}to{transform:translateX(345%)}}
+@media(prefers-reduced-motion:reduce){.cipher-load *{animation:none!important;transition:none!important}.cipher-load-track i{width:100%;opacity:.6}}
