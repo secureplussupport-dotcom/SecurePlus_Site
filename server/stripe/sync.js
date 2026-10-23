@@ -1,3 +1,4 @@
+import { fulfillAccessPass } from "./access-pass.js";
 import {
   getBearerToken,
   getJsonBody,
@@ -24,7 +25,7 @@ async function updateProfile(supabase, userId, patch) {
     .from("profiles")
     .update({ ...patch, updated_at: new Date().toISOString() })
     .eq("id", userId)
-    .select("id,email,tier,subscription_status,subscription_cancel_at_period_end,subscription_current_period_end,stripe_customer_id,stripe_subscription_id,pro_trial_until,referral_code")
+    .select("id,email,tier,subscription_status,subscription_cancel_at_period_end,subscription_current_period_end,pro_pass_expires_at,stripe_customer_id,stripe_subscription_id,pro_trial_until,referral_code")
     .maybeSingle();
 
   if (isCancellationSchemaError(error)) {
@@ -83,6 +84,11 @@ export default async function handler(req, res) {
         return json(res, 403, { error: "Checkout session does not belong to this user." });
       }
 
+      if(session.metadata?.access_pass){
+        await fulfillAccessPass(supabase,session);
+        const {data:updated,error:readError}=await supabase.from('profiles').select('*').eq('id',authUser.id).maybeSingle();
+        if(readError)throw readError;return json(res,200,{ok:true,profile:updated});
+      }
       customerId = typeof session.customer === "string" ? session.customer : session.customer?.id;
       subscription =
         typeof session.subscription === "string"
@@ -100,7 +106,10 @@ export default async function handler(req, res) {
     }
 
     if (!subscription) {
-      return json(res, 404, { error: "No Stripe subscription found for this account." });
+      const {data:passProfile,error:passError}=await supabase.from('profiles').select('*').eq('id',authUser.id).maybeSingle();
+      if(passError)throw passError;
+      if(Date.parse(passProfile?.pro_pass_expires_at)>Date.now())return json(res,200,{ok:true,profile:passProfile});
+      return json(res,404,{error:"No active Pro pass or subscription found for this account."});
     }
 
     const updatedProfile = await updateProfile(supabase, authUser.id, {

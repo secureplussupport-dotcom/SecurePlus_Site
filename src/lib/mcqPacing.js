@@ -1,3 +1,4 @@
+import { normalizeMcqDifficulty } from './mcqDifficulty.js';
 // Accumulate viewing time across revisits; callers pause for feedback and hidden pages.
 export function createQuestionPacing(initial = {}, now = () => performance.now()) {
   const times = { ...initial };
@@ -15,7 +16,7 @@ export function createQuestionPacing(initial = {}, now = () => performance.now()
 }
 
 export function pacingSummary(questions, results) {
-  const rows = questions.map((question, index) => ({ number: index + 1, id: question.id, elapsedMs: results[index]?.elapsedMs ?? null }));
+  const rows = questions.map((question, index) => ({ number: index + 1, id: question.id, elapsedMs: results[index]?.elapsedMs ?? null, targetMs:normalizeMcqDifficulty(question.difficulty)==='core'?45000:75000, difficulty:normalizeMcqDifficulty(question.difficulty) }));
   const measured = rows.filter(row => Number.isInteger(row.elapsedMs) && row.elapsedMs >= 0);
   return { rows, measured: measured.length, averageMs: measured.length ? Math.round(measured.reduce((sum, row) => sum + row.elapsedMs, 0) / measured.length) : null };
 }

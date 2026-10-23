@@ -1,3 +1,4 @@
+import { passLineItem } from "./access-pass.js";
 import {
   getBearerToken,
   getJsonBody,
@@ -6,57 +7,6 @@ import {
   json,
   requireEnv,
 } from "../../api/_utils.js";
-
-const PRO_ACADEMY_PASS_AMOUNT = 999;
-const PRO_ACADEMY_PASS_CURRENCY = "usd";
-const PRO_ACADEMY_PASS_INTERVAL = "month";
-const PRO_ACADEMY_PASS_INTERVAL_COUNT = 3;
-const PRO_MONTHLY_AMOUNT = 499;
-const PRO_MONTHLY_INTERVAL_COUNT = 1;
-const PRO_PLAN_CONFIGS = Object.freeze({
-  monthly: {
-    envName: "STRIPE_PRICE_PRO_MONTHLY",
-    amount: PRO_MONTHLY_AMOUNT,
-    intervalCount: PRO_MONTHLY_INTERVAL_COUNT,
-    metadataPlan: "pro_monthly",
-    description: "$4.99 USD recurring price billed every month",
-  },
-  three_month: {
-    envName: "STRIPE_PRICE_PRO",
-    amount: PRO_ACADEMY_PASS_AMOUNT,
-    intervalCount: PRO_ACADEMY_PASS_INTERVAL_COUNT,
-    metadataPlan: "pro_3_month_plus",
-    description: "$9.99 USD recurring price billed every 3 months",
-  },
-});
-const validatedPriceIds = new Map();
-
-function isConfiguredProPrice(price, planConfig) {
-  return Boolean(
-    price?.active &&
-    price?.type === "recurring" &&
-    price?.unit_amount === planConfig.amount &&
-    price?.currency === PRO_ACADEMY_PASS_CURRENCY &&
-    price?.recurring?.interval === PRO_ACADEMY_PASS_INTERVAL &&
-    price?.recurring?.interval_count === planConfig.intervalCount
-  );
-}
-
-async function getConfiguredProPriceId(stripe, planKey) {
-  if (validatedPriceIds.has(planKey)) return validatedPriceIds.get(planKey);
-  const planConfig = PRO_PLAN_CONFIGS[planKey];
-  const priceId = requireEnv(planConfig.envName);
-  const price = await stripe.prices.retrieve(priceId);
-  if (!isConfiguredProPrice(price, planConfig)) {
-    const error = new Error(
-      `${planConfig.envName} must be an active ${planConfig.description}.`
-    );
-    error.code = "invalid_pro_price";
-    throw error;
-  }
-  validatedPriceIds.set(planKey, price.id);
-  return price.id;
-}
 
 function successUrl(appUrl) {
   const base = process.env.STRIPE_SUCCESS_URL || `${appUrl}/?checkout=success`;
@@ -88,8 +38,9 @@ export default async function handler(req, res) {
     const token = getBearerToken(req);
     if (!token) return json(res, 401, { error: "Sign in before upgrading." });
     const body = await getJsonBody(req);
-    const planKey = body?.plan === "monthly" ? "monthly" : "three_month";
-    const planConfig = PRO_PLAN_CONFIGS[planKey];
+    const planKey=body?.plan;
+    if(!["sprint","comprehensive"].includes(planKey))return json(res,400,{error:"Choose a Sprint or Comprehensive Pass. Refresh the pricing page."});
+    const lineItem=passLineItem(planKey);
     const referralCode = String(body.referralCode || "")
       .trim()
       .toUpperCase()
@@ -147,34 +98,17 @@ export default async function handler(req, res) {
       if (error) throw error;
     }
 
-    const appUrl = process.env.APP_URL || req.headers.origin || "http://localhost:5173";
-    const selectedPriceId = await getConfiguredProPriceId(stripe, planKey);
+    const appUrl = process.env.APP_URL || "https://www.secureplusprep.com";
     const session = await stripe.checkout.sessions.create({
-      mode: "subscription",
+      mode: "payment",
+      adaptive_pricing: { enabled: false },
       customer: customerId,
       client_reference_id: authUser.id,
-      line_items: [
-        {
-          price: selectedPriceId,
-          quantity: 1,
-        },
-      ],
+      line_items:[lineItem],
       success_url: successUrl(appUrl),
       cancel_url: checkoutCancelUrl(appUrl),
-      metadata: {
-        supabase_user_id: authUser.id,
-        plan: planConfig.metadataPlan,
-        selected_plan: planKey,
-        referral_code: referralCode,
-      },
-      subscription_data: {
-        metadata: {
-          supabase_user_id: authUser.id,
-          plan: planConfig.metadataPlan,
-          selected_plan: planKey,
-          referral_code: referralCode,
-        },
-      },
+      metadata:{supabase_user_id:authUser.id,access_pass:planKey},
+      payment_intent_data:{metadata:{supabase_user_id:authUser.id,access_pass:planKey}},
     });
 
     return json(res, 200, { url: session.url });

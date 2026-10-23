@@ -11,7 +11,8 @@ export function activityAccuracy(activity) {
 
 export function quotaDisplay(quota, now = Date.now()) {
   if(!quota || !Number.isInteger(quota.limit) || quota.limit<=0 || !Number.isInteger(quota.remaining) ||
-    quota.remaining<0 || quota.remaining>quota.limit || !Number.isFinite(Date.parse(quota.resetAt)))return null;
+    quota.remaining<0 || quota.remaining>quota.limit || (quota.resetAt!==null&&!Number.isFinite(Date.parse(quota.resetAt))))return null;
+  if(quota.resetAt===null&&quota.remaining===quota.limit)return {...quota,refreshing:false,fill:1,timer:'All questions available',idle:true};
   const milliseconds=Date.parse(quota.resetAt)-now;
   if(milliseconds<=0)return {...quota,refreshing:true,fill:0,timer:'Refreshing allowance…'};
   const minutes=Math.ceil(milliseconds/60000);

@@ -1,13 +1,13 @@
 import groups from '../data/mcqConceptTagGroups.json' with { type: 'json' };
 
-export const EXAM_SECONDS_PER_QUESTION = 72;
+export const EXAM_SECONDS_PER_QUESTION = 60;
 export const EXAM_GROUP_WEIGHTS = { 'Heavy weight': 3, Standard: 2, Niche: 1 };
 const groupByTag = new Map(Object.entries(groups).flatMap(([group, value]) => value.tagIds.map(tag => [tag, group])));
 export const examConceptTag = question => question.conceptTagIds?.[0] || question.topic || question.id;
 
 export function buildMcqExam(bank, count, pro = false, random = Math.random) {
-  if (!Number.isInteger(count) || count < 10 || count > (pro ? 50 : 30) || (!pro && ![10,20,30].includes(count))) {
-    throw new Error(pro ? 'Choose 10–50 questions.' : 'Choose 10, 20 or 30 questions.');
+  if (!Number.isInteger(count) || count < 1 || count > (pro ? 90 : 30)) {
+    throw new Error(pro ? 'Choose 1–90 questions.' : 'Choose 1–30 questions.');
   }
   const seen = new Set();
   const buckets = new Map();

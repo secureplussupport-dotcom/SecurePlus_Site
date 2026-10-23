@@ -21,17 +21,18 @@ test('catalogue covers 395 MCQs and versioned manager edits preserve primary sel
   assert.equal(effectiveCatalogue([row]).find(q => q.id === 'm032').concept_tag, 'iam.mfa');
   assert(!effectiveCatalogue([{ ...row, action: 'disable' }]).some(q => q.id === 'm032'));
 });
-test('disabled and anonymous calls cannot reach storage', async () => {
+test('disabled calls and malformed guest generation cannot reach storage', async () => {
   const admin = () => { throw new Error('Storage must not open'); };
   assert.equal((await invoke(createMcqHandler({ admin, enabled: () => false }), 'generate')).status, 503);
-  assert.equal((await invoke(createMcqHandler({ admin, enabled: () => true }), 'generate', {}, '')).status, 401);
+  assert.equal((await invoke(createMcqHandler({ admin, enabled: () => true }), 'generate', {}, '')).status, 400);
 });
 test('server-generated sets strip secrets and owner identity ignores submitted user_id', async () => {
   let persisted;
   const client = { auth: { getUser: async () => ({ data: { user: { id: user } } }) }, rpc: async (name, args) => {
     assert.equal(args.p_user_id, user);
     if (name === 'mcq_engine_state') return { data: state };
-    if (name === 'mcq_engine_create_session') { persisted = args; return { data: true }; }
+    if(name==='practice_access_status')return {data:{isPro:false,maxSetSize:30,remaining:50}};
+    if (name === 'practice_create_set') { persisted = args; return { data: {created:true,questions:args.p_questions} }; }
     throw new Error(name);
   } };
   const handler = createMcqHandler({ enabled: () => true, admin: () => client, catalogue: async () => effectiveCatalogue() });
@@ -48,7 +49,7 @@ test('server-generated sets strip secrets and owner identity ignores submitted u
 });
 test('generation retries state races; errors fail closed rather than reverting to the old algorithm', async () => {
   let writes = 0;
-  const client = { auth: { getUser: async () => ({ data: { user: { id: user } } }) }, rpc: async name => ({ data: name === 'mcq_engine_state' ? state : (++writes > 1) }) };
+  const client = { auth: { getUser: async () => ({ data: { user: { id: user } } }) }, rpc: async (name,args) => ({ data: name==='practice_access_status'?{isPro:false,maxSetSize:30,remaining:50}:name === 'mcq_engine_state' ? state : {created:++writes>1,questions:args.p_questions} }) };
   const result = await invoke(createMcqHandler({ enabled: () => true, admin: () => client, catalogue: async () => effectiveCatalogue() }), 'generate', { set_size: 10 });
   assert.equal(result.status, 200); assert.equal(writes, 2);
 });
@@ -56,6 +57,7 @@ test('answer submission delegates grading to the transaction with a pinned sessi
   let args;
   const client = { auth: { getUser: async () => ({ data: { user: { id: user } } }) }, rpc: async (name, payload) => {
     if(name==='mcq_engine_state')return {data:state};
+    if(name==='practice_owned_set')return {data:{questions:[],mode:'smart',completed:false}};
     if(name==='mcq_engine_session')return {data:{questions:[],answers:[]}};
     assert.equal(name, 'mcq_engine_answer'); args = payload;
     return { data: { is_correct: true, correct_option_id: id, explanation: 'After answer only.' } };

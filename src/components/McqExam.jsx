@@ -15,7 +15,7 @@ export function ExamModeGuide({ t, onClose }) {
   const [step, setStep] = useState(0);
   const [flagged, setFlagged] = useState(false);
   const slides = [
-    { title: 'Set your challenge.', body: 'Choose your question count. The clock scales with it: 72 seconds per question. Free accounts can choose 10, 20 or 30; Pro can choose any count up to 50.' },
+    { title: 'Set your challenge.', body: 'Choose your question count. The clock scales with it: 60 seconds per question. Free accounts can choose 10, 20 or 30; Pro can choose any count up to 90.' },
     { title: 'A fresh mix. No hints.', body: 'Heavyweight concepts are sampled more often than Standard, then Niche. Concept repetition is capped. Smart Review, custom filters and clickable definitions stay off during the exam.' },
     { title: 'Keep moving. Come back.', body: 'Use the answer map to jump between questions. Flag anything uncertain and cross out weak options with Strike, a right-click or a long press. Try flagging the sample question below.' },
     { title: 'One submit. A clearer picture.', body: 'Nothing is marked until you submit. Your report shows accuracy, domains and time—not a pass or fail. Review every answer with definitions restored, or retake the same exam.' },
@@ -24,7 +24,7 @@ export function ExamModeGuide({ t, onClose }) {
   return <dialog ref={dialog} className="mcq-exam-guide" style={examThemeVars(t)} aria-labelledby="exam-guide-title" onCancel={event => { event.preventDefault(); onClose(); }}>
     <div className="exam-guide-top"><span><HelpCircle size={16}/> EXAM FIELD GUIDE</span><button type="button" className="btn btn-ghost" onClick={onClose}>Skip guide <X size={15}/></button></div>
     <div className="exam-guide-visual" aria-label={`Guide illustration ${step + 1}`}>
-      {step === 0 && <><span className="exam-guide-orbit"><Clock3 size={40}/></span><div className="exam-guide-counts"><span>10<small>12 min</small></span><span>20<small>24 min</small></span><span>50<small>60 min · Pro</small></span></div></>}
+      {step === 0 && <><span className="exam-guide-orbit"><Clock3 size={40}/></span><div className="exam-guide-counts"><span>10<small>10 min</small></span><span>20<small>20 min</small></span><span>90<small>90 min · Pro</small></span></div></>}
       {step === 1 && <div className="exam-guide-weights">{[['Heavyweight',3],['Standard',2],['Niche',1]].map(([label,weight])=><div key={label}><span>{label}</span><div>{Array.from({length:weight},(_,i)=><i key={i}/>)}</div><strong>{weight}×</strong></div>)}</div>}
       {step === 2 && <div className="exam-guide-demo"><div className="exam-guide-map">{[1,2,3,4,5].map(n=><span key={n} className={n===3&&flagged?'flagged':''}>{n===3&&flagged?<Flag size={16}/>:n}</span>)}</div><button className="btn btn-outline" onClick={()=>setFlagged(value=>!value)}><Flag size={16}/>{flagged?'Flagged—find it later':'Flag sample question 3'}</button></div>}
       {step === 3 && <div className="exam-guide-finish"><ListChecks size={44}/><span>Answer → Submit → Understand</span><small>Definitions return in answer review.</small></div>}
@@ -44,13 +44,13 @@ function ExamConfirmation({ action, unanswered, flags, onCancel, onConfirm, t })
   </dialog>;
 }
 
-export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn, onOpenDeepDive, onSessionComplete, onFocusModeChange, isVisible, renderDefinitions, initialStreaks = {}, onLocalStreaks }) {
-  const [questions, setQuestions] = useState(()=>freshQuestions(initialQuestions));
-  const [answers, setAnswers] = useState({});
+export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn, onOpenDeepDive, onSessionComplete, onFocusModeChange, isVisible, renderDefinitions, initialStreaks = {}, onLocalStreaks, savedState=null, onPersist }) {
+  const [questions, setQuestions] = useState(()=>savedState?.questions||freshQuestions(initialQuestions));
+  const [answers, setAnswers] = useState(savedState?.answers||{});
   const [eliminated, setEliminated] = useState({});
-  const [flagged, setFlagged] = useState({});
-  const [qi, setQi] = useState(0);
-  const [startedAt, setStartedAt] = useState(Date.now);
+  const [flagged, setFlagged] = useState(savedState?.flagged||{});
+  const [qi, setQi] = useState(savedState?.qi||0);
+  const [startedAt, setStartedAt] = useState(savedState?.startedAt||Date.now());
   const [now, setNow] = useState(Date.now);
   const [finishedAt, setFinishedAt] = useState(null);
   const [view, setView] = useState('taking');
@@ -69,7 +69,8 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
   const longPressed = useRef(false);
   const cloudProgress = user?.authProvider === 'supabase' && mcqEngineEnabled;
   const q = questions[qi];
-  const pacing=useQuestionPacing(q?.id,isVisible&&view==='taking'&&!submissionLocked);
+  const pacing=useQuestionPacing(q?.id,isVisible&&view==='taking'&&!submissionLocked,savedState?.pacingMs||{});
+  useEffect(()=>{if(view==='taking')onPersist?.({exam:true,questions,answers,flagged,qi,startedAt,pacingMs:pacing.snapshot(),sessionContext:{engineSessionId:questions[0]?.engineAllocationId,createdAt:savedState?.sessionContext?.createdAt||new Date(startedAt).toISOString()},done:false,updatedAt:new Date().toISOString()});else if(view==='report')onPersist?.(null);},[answers,flagged,qi,questions,view,startedAt]);
   const timing = examTiming(startedAt, finishedAt??submissionTime.current, questions.length, now);
   const answeredCount = Object.keys(answers).length;
   useEffect(()=>{
@@ -114,7 +115,8 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
         const question=questions[index];const selected=answers[index];
         const elapsedMs=submissionPacing.current[question.id]==null?null:Math.min(86400000,submissionPacing.current[question.id]);
         const evaluation=cloudProgress&&selected!=null?await recordStandaloneMcq(question,selected,elapsedMs,"exam"):null;
-        completed.push({qid:question.id,elapsedMs:evaluation?.elapsed_ms??elapsedMs,correct:evaluation?evaluation.is_correct:selected===question.correct,selected,
+        if(evaluation){question.correct=question.optionIds?.indexOf(evaluation.correct_option_id) ?? question.correct;question.exp=evaluation.explanation;question.wrongFeedback={...(question.wrongFeedback||{}),[selected]:evaluation.selected_feedback};}
+        completed.push({qid:question.id,elapsedMs:evaluation?.elapsed_ms??elapsedMs,correct:selected!=null&&(evaluation?evaluation.is_correct:selected===question.correct),selected,
           title:question.q.slice(0,80),ch:question.ch,topic:question.topic,conceptTag:evaluation?.concept_tag||examConceptTag(question),
           mcq:true,exam:true,readinessSource:"exam",createdAt:new Date(finish+index).toISOString()});
       }
@@ -122,6 +124,11 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
       completed.forEach(row=>{if(row.selected!=null)streaks=advanceConceptStreak(streaks,row.conceptTag,row.correct);});
       setLocalStreaks(streaks);onLocalStreaks?.(streaks);
       completed.forEach(row=>onSave?.(row));
+      if(cloudProgress&&questions[0]?.engineAllocationId){
+        await mcqEngineRequest('complete',{session_id:questions[0].engineAllocationId});
+        const review=await mcqEngineRequest('exam-review',{session_id:questions[0].engineAllocationId});
+        setQuestions(previous=>previous.map(q=>{const row=review.questions.find(r=>r.id===q.id);return row?{...q,correct:row.correct,exp:row.explanation,wrongFeedback:Object.fromEntries(row.feedback.map((text,i)=>[i,text]))}:q;}));
+      }
       setRows(completed);setFinishedAt(finish);await refreshProgress();
       onSessionComplete?.({session_type:'exam',score:Math.round(completed.filter(r=>r.correct).length/completed.length*100),duration_seconds:examTiming(startedAt,finish,questions.length).elapsed,questions_count:questions.length,chapter_id:null});
       setView('report');

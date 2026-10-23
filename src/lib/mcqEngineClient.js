@@ -4,14 +4,15 @@ export const mcqEngineEnabled = import.meta.env.VITE_MCQ_ENGINE_ENABLED === 'tru
 
 export async function mcqEngineRequest(operation, body = {}) {
   const token = await getSupabaseAccessToken();
-  if (!token) throw new Error('Sign in again to save your MCQ progress.');
+  if (!token && !['access','generate'].includes(operation)) throw new Error('Sign in again to save your MCQ progress.');
   // The same event ID is reused if a response is lost after its transaction commits.
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const response = await fetch(`/api/sessions/${operation}`, { method: 'POST',
-        headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify(body) });
+        headers: { 'content-type': 'application/json', ...(token?{authorization:`Bearer ${token}`}:{}) }, body: JSON.stringify(body) });
       const result = await response.json();
       if (!response.ok) throw Object.assign(new Error(result.error || 'Unable to save MCQ progress.'), { status: response.status });
+      if(result.access)window.dispatchEvent(new Event('practice-access-changed'));
       return result;
     } catch (error) {
       if (attempt || (error.status && error.status < 500) || operation === 'generate') throw error;
@@ -39,5 +40,5 @@ export async function recordStandaloneMcq(question, selectedIndex, elapsedMs = n
   if (!mcqEngineEnabled || selectedIndex == null) return null;
   question.engineAnswerEventId ||= crypto.randomUUID();
   return mcqEngineRequest('answer', { event_id: question.engineAnswerEventId, question_id: question.id,
-    selected_option_id: await standaloneOptionId(question, selectedIndex), ...(elapsedMs == null ? {} : {elapsed_ms: elapsedMs}), ...(source ? {practice_source: source} : {}) });
+    selected_option_id: question.optionIds?.[selectedIndex] ?? await standaloneOptionId(question, selectedIndex), ...(question.engineAllocationId?{allocation_id:question.engineAllocationId}:{}), ...(elapsedMs == null ? {} : {elapsed_ms: elapsedMs}), ...(source ? {practice_source: source} : {}) });
 }

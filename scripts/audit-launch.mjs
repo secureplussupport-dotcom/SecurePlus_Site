@@ -155,7 +155,7 @@ if (!errors.length) {
   requireContains("vercel.json", '"/api/attempts/submit"', "legacy attempts submit URL must rewrite to the attempts dispatcher");
   requireContains("vercel.json", '"/api/feedback/submit"', "legacy feedback submit URL must rewrite to the feedback dispatcher");
   requireContains("vercel.json", '"/api/question-overrides/save"', "legacy Question Manager save URL must rewrite to the Question Manager dispatcher");
-  requireContains("server/stripe/checkout.js", 'mode: "subscription"', "Stripe checkout must create a subscription session");
+  requireContains("server/stripe/checkout.js", 'mode: "payment"', "New Stripe purchases must be non-renewing payment sessions");
   requireContains("server/account/delete-request.js", 'from("account_deletion_requests")', "deletion requests must be stored server-side");
   requireContains("server/account/delete-request.js", 'process.env.RESEND_API_KEY', "deletion emails must use the configured transactional provider");
   requireContains("server/account/delete-request.js", 'supabase.auth.signInWithOtp', "deletion email must retain a safe Supabase fallback until transactional email is configured");
@@ -182,15 +182,6 @@ if (!errors.length) {
   requireContains("supabase/account-deletion.sql", "revoke all on table public.account_deletion_requests from anon, authenticated", "browser clients must not access deletion tokens");
   requireContains("supabase/account-deletion.sql", "grant usage on schema public to service_role", "the server role must be able to reach the deletion request table through the Data API");
   requireContains("supabase/account-deletion.sql", "notify pgrst, 'reload schema'", "account deletion setup should refresh the PostgREST schema cache");
-  requireContains("server/stripe/checkout.js", 'envName: "STRIPE_PRICE_PRO"', "Stripe checkout must use the configured three-month Pro price ID");
-  requireContains("server/stripe/checkout.js", 'envName: "STRIPE_PRICE_PRO_MONTHLY"', "Stripe checkout must use the configured monthly Pro price ID");
-  requireContains("server/stripe/checkout.js", "PRO_ACADEMY_PASS_AMOUNT = 999", "Stripe checkout must require the advertised $9.99 amount");
-  requireContains("server/stripe/checkout.js", "PRO_MONTHLY_AMOUNT = 499", "Stripe checkout must require the advertised $4.99 monthly amount");
-  requireContains("server/stripe/checkout.js", 'PRO_ACADEMY_PASS_INTERVAL = "month"', "Stripe checkout must use a monthly interval base");
-  requireContains("server/stripe/checkout.js", "PRO_ACADEMY_PASS_INTERVAL_COUNT = 3", "Stripe checkout must bill every three months");
-  requireContains("server/stripe/checkout.js", "PRO_MONTHLY_INTERVAL_COUNT = 1", "Stripe checkout must bill the monthly option every month");
-  requireContains("server/stripe/checkout.js", "isConfiguredProPrice", "Stripe checkout must validate each configured price before charging");
-  requireContains("server/stripe/checkout.js", 'body?.plan === "monthly" ? "monthly" : "three_month"', "Stripe checkout must allow only known server-side plan configurations");
   requireContains("server/stripe/checkout.js", "client_reference_id: authUser.id", "Stripe checkout must bind the session to the Supabase user id");
   requireContains("server/stripe/sync.js", "sessionUserId !== authUser.id", "Stripe sync must reject checkout sessions owned by another user");
   requireContains("server/stripe/webhook.js", "stripe.webhooks.constructEvent", "Stripe webhook must verify the webhook signature");
@@ -198,6 +189,10 @@ if (!errors.length) {
   requireContains("server/stripe/webhook.js", 'event.type === "customer.subscription.updated"', "Stripe webhook should handle subscription updates");
   requireContains("server/stripe/webhook.js", 'event.type === "customer.subscription.deleted"', "Stripe webhook should handle subscription deletion");
 
+  requireContains("server/stripe/checkout.js", 'passLineItem(planKey)', "checkout must use server-owned pass pricing");
+  requireContains("server/stripe/access-pass.js", "payment_status!=='paid'", "only verified paid pass sessions may grant access");
+  requireContains("src/lib/accessModel.js", "amount:1199", "Sprint Pass must cost $11.99");
+  requireContains("src/lib/accessModel.js", "amount:2499", "Comprehensive Pass must cost $24.99");
   const schema = read("supabase/schema.sql");
   for (const table of ["profiles", "attempts", "referrals", "starred_questions"]) {
     requireContains("supabase/schema.sql", `alter table ${table} enable row level security`, `${table} must have RLS enabled`);
@@ -238,7 +233,7 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'return saveQuestionOverrideRequest({kind:"pbq"', "PBQ saves should use the validated server route");
   requireContains("src/App.jsx", 'role="switch" aria-checked={examMode}', "Exam mode should be integrated into MCQ setup");
   requireContains("src/App.jsx", "isFreePBQPreview", "free users should only get the configured PBQ preview");
-  requireContains("src/App.jsx", '!coinWallet.unlockedPbqIds.includes(q.id)?setView("pricing"):setPbqQ(q)', "PBQ start handler must preserve previews, Pro access and historical unlocks while routing locked items to Pro");
+  requireContains("src/App.jsx", 'onStart={q=>setPbqQ(q)}', "Registered Free and Pro users must be able to start PBQs");
   requireContains("src/App.jsx", 'CIPHER_COINS_ACTIVE?await performCipherCoinAction(user,"check_in")', "archived economy must not run daily coin check-ins");
   requireContains("src/App.jsx", 'if(type!=="pbq"||busy||isPro)return;', "timed MCQ exams should not require coin purchases");
   requireContains("src/App.jsx", "tier: hasProAccess ? \"pro\" : \"free\"", "the app should use the same trusted Pro profile signals as PBQ RLS");
@@ -256,15 +251,15 @@ if (!errors.length) {
   requirePattern("src/App.jsx", /const guestMoreItems=\[\s*\{id:"objectives",label:"SY0-701 Exam Guide"\},\s*\{id:"deep-dives",label:"Concept Deep Dives"\},\s*\{id:"privacy",label:"Privacy Policy"\},\s*\{id:"terms",label:"Terms & Conditions"\},\s*\];/, "guest More menu should contain the exam guide, deep dives, privacy, and terms links");
   requireContains("src/App.jsx", "guest-top-nav-more-menu", "guest secondary navigation should open in an expandable More menu");
   requireContains("src/App.jsx", "clearLocalAuthState({preserveRoute:true})", "guest session restoration must preserve direct routes such as the canonical Flashcards page");
-  requireContains("src/App.jsx", "const quizSizes = [10,20,30]", "MCQ practice should offer fixed 10, 20, or 30 question sets");
-  requireContains("src/App.jsx", 'const activeDiffFilter=isGuest?"all":diffFilter', "guest MCQ practice must not filter by difficulty");
-  requireContains("src/App.jsx", 'const activeTopicFilter=isGuest?"all":topicFilter', "guest MCQ practice must not filter by topic");
-  requireContains("src/App.jsx", '<FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>', "guest MCQ practice should still allow chapter filtering");
+  requireContains("src/App.jsx", "const quizSizes = isGuest?[10]:[10,20,30]", "MCQ practice should offer fixed 10, 20, or 30 question sets");
+  requireContains("src/App.jsx", 'const activeDiffFilter=!isPro?"all":diffFilter', "guest MCQ practice must not filter by difficulty");
+  requireContains("src/App.jsx", 'const activeTopicFilter=!isPro?"all":topicFilter', "guest MCQ practice must not filter by topic");
+  requireContains("src/App.jsx", '<FilterSelect disabled={!isPro} value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>', "only Pro should allow chapter filtering");
   const mcqSource=read("src/App.jsx").split("function MCQPractice(")[1].split("function UpgradeModal(")[0];
   const mcqSetup=mcqSource.split("  if(!started) return(")[1].split("  if(done) return <McqSetResults")[0];
   const disclosure=read("src/App.jsx").split("function PracticeSetupDisclosure(")[1].split("function MCQPractice(")[0];
   if(!mcqSource.includes('const [reviewMode,setReviewMode]=useState("smart")')) push(errors,"src/App.jsx","MCQ setup must default to Smart Review");
-  if(!mcqSource.includes('if(isGuest&&reviewMode==="smart")return requestSignup()')) push(errors,"src/App.jsx","guest Smart Review must request an account rather than silently run random practice");
+  if(!mcqSource.includes('mode:isGuest?"diagnostic":mode')) push(errors,"src/App.jsx","guests must use only the bounded diagnostic");
   if(!mcqSetup.includes('role="tooltip"')||!mcqSetup.includes('event.key==="Escape"')||!mcqSetup.includes('onMouseEnter=')||!mcqSetup.includes('onFocus=')) push(errors,"src/App.jsx","mode descriptions must support hover, focus, click and Escape dismissal");
   if(!mcqSetup.includes("Recommended")||!mcqSource.includes('label:"Randomised"')) push(errors,"src/App.jsx","MCQ modes must retain recommended Smart Review and Randomised");
   if(!disclosure.includes('<details className="practice-secondary mcq-customise">')||disclosure.includes("if(isGuest)")) push(errors,"src/App.jsx","customization must default to collapsed for every user");
@@ -295,9 +290,9 @@ if (!errors.length) {
   requireContains("src/App.jsx", "document.body.style.overflow=\"hidden\"", "the centred login dialog should prevent the landing page from scrolling behind it");
   requirePattern("src/App.jsx", /user\?\.tier\s*===\s*"pro"\s*&&\s*\["active",\s*"trialing"\]\.includes\(user\?\.subscriptionStatus/, "paid Pro should depend on active/trialing subscription status");
   requireContains("src/App.jsx", 'fetch("/api/stripe/checkout"', "upgrade flow should call the server-side Stripe checkout endpoint");
-  requireContains("src/App.jsx", 'PRO_MONTHLY_PASS_PRICE = "$4.99 / month"', "pricing should offer the $4.99 monthly option");
+  requireContains("src/App.jsx", 'PRO_MONTHLY_PASS_PRICE = "$11.99 / 30 days"', "pricing should offer the $11.99 Sprint Pass");
   requireContains("src/App.jsx", 'PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus"', "pricing should name the recommended three-month option clearly");
-  requireContains("src/App.jsx", "Save $4.98 (33%) across 3 months", "pricing should explain the three-month savings honestly");
+  requireContains("src/App.jsx", "One payment. No automatic renewal.", "pricing must explain non-renewal");
   requireContains("src/App.jsx", "Recommended</span>", "pricing should visually recommend the three-month plan");
   requireContains("src/App.jsx", "plan:selectedPlan", "upgrade requests should send the selected plan without accepting a client price ID");
   if (/wallet\?\.status==="ready"\?Number\(wallet\?\.balance\|\|0\):CIPHER_WELCOME_GRANT/.test(app)) {

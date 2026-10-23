@@ -96,7 +96,7 @@ export function McqSetResults({ correct, total, summary, t, onStart, onReview, o
     {questions.length>0&&<details className="mcq-weak-points mcq-pacing-details">
       <summary><span><Clock3 size={18}/> Pacing by question</span><ChevronDown size={18}/></summary>
       <div className="mcq-weak-content"><p>Time viewing each question before marking, including revisits. Explanations and time with this page hidden are excluded. Pacing does not affect mastery or question selection.</p>
-        <ol className="mcq-pacing-list">{pacing.rows.map(row=><li key={row.id}><span>Question {row.number}</span><strong>{formatQuestionPace(row.elapsedMs)}</strong></li>)}</ol>
+        <ol className="mcq-pacing-list">{pacing.rows.map(row=><li key={row.id} style={row.elapsedMs>row.targetMs?{borderLeft:"3px solid var(--result-amber)",paddingLeft:12}:undefined}><span>Question {row.number}<small> · {row.difficulty} · target {row.targetMs/1000}s</small></span><strong>{formatQuestionPace(row.elapsedMs)}</strong>{row.elapsedMs>row.targetMs&&<small>Take a moment to review the reasoning, then practise recalling the key clue.</small>}</li>)}</ol>
       </div>
     </details>}
     {guestPrompt && <div className="mcq-result-guest-save">{guestPrompt}</div>}

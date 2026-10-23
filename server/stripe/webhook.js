@@ -1,3 +1,4 @@
+import { fulfillAccessPass } from "./access-pass.js";
 import {
   getRawBody,
   getStripe,
@@ -66,8 +67,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    if (event.type === "checkout.session.completed") {
+    if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
       const session = event.data.object;
+      if(session.metadata?.access_pass){
+        if(session.payment_status==='paid')await fulfillAccessPass(supabase,session);
+        return json(res,200,{received:true});
+      }
+      if(session.mode!=="subscription")return json(res,200,{received:true});
       const userId = session.metadata?.supabase_user_id || session.client_reference_id;
       const subscriptionId =
         typeof session.subscription === "string"

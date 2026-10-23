@@ -1,3 +1,4 @@
+import { guestOwner, accessRpc, chooseAccessSet, ownedSet, guestQuestion } from './access.mjs';
 import { randomUUID } from 'node:crypto';
 import { getBearerToken, getJsonBody, getSupabaseAdmin, json, requireJsonContentType } from '../../api/_utils.js';
 import { ENGINE_VERSION, EngineError, generateSet, learnerQuestion, prioritizeCoreRecovery } from './engine.mjs';
@@ -49,7 +50,18 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
     if (!enabled()) return json(res, 503, { error: 'The new MCQ engine is awaiting activation.' });
     try {
       const token = getBearerToken(req);
-      if (!token) return json(res, 401, { error: 'Sign in to save MCQ progress.' });
+      if (!token) {
+        if (!['generate','access'].includes(req.query?.operation)) return json(res,401,{error:'Create an account to save progress.'});
+        requireJsonContentType(req);const body=await getJsonBody(req,{throwSafeErrors:true});
+        if(req.query.operation==='generate'&&(body.mode!=='diagnostic'||body.set_size!==10||!uuid(body.request_id)))throw new EngineError('Guests can try one 10-question diagnostic.');
+        const client=admin(),key=guestOwner(req,res);
+        if(req.query.operation==='access')return json(res,200,await accessRpc(client,'practice_access_status',{p_user_id:null,p_guest_key:key}));
+        if(body.mode!=='diagnostic'||body.set_size!==10||!uuid(body.request_id))throw new EngineError('Guests can try one 10-question diagnostic.');
+        const bank=await catalogue(client);const questions=chooseAccessSet(bank,{failed:[]},10,'diagnostic',false);
+        const result=await accessRpc(client,'practice_create_set',{p_user_id:null,p_guest_key:key,p_request_id:body.request_id,p_mode:'diagnostic',p_questions:questions,p_filters:{},p_version:null});
+        if(result.quotaExceeded)return json(res,429,{error:'Your 10-question diagnostic is complete. Create a free account to continue.',access:result.access});
+        return json(res,200,{session_id:body.request_id,questions:result.questions.map(guestQuestion),access:result.access,createdAt:result.createdAt});
+      }
       const client = admin();
       const { data: auth, error } = await client.auth.getUser(token);
       if (error || !auth?.user || auth.user.is_anonymous) return json(res, 401, { error: 'Sign in again to continue.' });
@@ -57,47 +69,71 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
       requireJsonContentType(req);
       const body = await getJsonBody(req, { throwSafeErrors: true });
       const operation = req.query?.operation;
+      if(operation==='exam-review'){
+        if(!uuid(body.session_id))throw new EngineError('Invalid exam.');const plan=await ownedSet(client,userId,body.session_id);
+        if(plan.mode!=='exam'||!plan.completed)throw new EngineError('Submit the exam before reviewing answers.',403);
+        return json(res,200,{questions:plan.questions.map(guestQuestion)});
+      }
+      if (operation === 'access') return json(res,200,await accessRpc(client,'practice_access_status',{p_user_id:userId}));
+      if (operation === 'complete') {if(!uuid(body.session_id))throw new EngineError('Invalid session.');await ownedSet(client,userId,body.session_id);await accessRpc(client,'practice_complete_set',{p_user_id:userId,p_request_id:body.session_id});return json(res,200,{ok:true});}
+      if (operation === 'star') {
+        if(body.action==='list')return json(res,200,{stars:await accessRpc(client,'practice_list_stars',{p_user_id:userId})});
+        if(typeof body.key!=='string'||body.key.length>180)throw new EngineError('Invalid bookmark.');
+        if(body.action==='remove'){const {error}=await client.from('starred_questions').delete().eq('user_id',userId).eq('question_key',body.key);if(error)throw new EngineError('Unable to remove bookmark.',503);return json(res,200,{saved:false});}
+        if(body.action!=='save'||!Array.isArray(body.tags||[])||(body.tags||[]).some(x=>typeof x!=='string'))throw new EngineError('Invalid bookmark action.');
+        await accessRpc(client,'practice_list_stars',{p_user_id:userId});
+        return json(res,200,await accessRpc(client,'practice_save_star',{p_user_id:userId,p_key:body.key,p_type:body.type,p_id:body.id,p_replace:body.replace||null,p_label:body.label||'',p_tags:body.tags||[]}));
+      }
       if (operation === 'readiness') return json(res, 200, await rpc(client, 'mcq_engine_readiness', { p_user_id: userId }));
       if (operation === 'state') return json(res, 200, await rpc(client, 'mcq_engine_state', { p_user_id: userId }));
       if (operation === 'resume') {
         if (!uuid(body.session_id)) throw new EngineError('Invalid session.');
+        const allocation=await ownedSet(client,userId,body.session_id);
         const plan = await rpc(client, 'mcq_engine_session', { p_user_id: userId, p_session_id: body.session_id });
         if (!plan) throw new EngineError('Saved set not found.', 404);
-        return json(res, 200, { session_id: body.session_id, version: ENGINE_VERSION, questions: plan.questions.map(learnerQuestion), answers: plan.answers });
+        return json(res, 200, { session_id: body.session_id, version: ENGINE_VERSION, questions: plan.questions.map(learnerQuestion), answers: plan.answers,mode:allocation.mode,createdAt:allocation.createdAt });
       }
       if (operation === 'generate') {
-        const count = body.set_size;
-        if (!Number.isInteger(count) || count < 10 || count > 30) throw new EngineError('Choose 10–30 questions.');
-        const filters = body.filters || {};
-        if (filters.chapter && !/^[1-5]$/.test(filters.chapter)) throw new EngineError('Invalid chapter.');
-        const difficulty = normalizeMcqDifficulty(filters.difficulty);
-        if (filters.difficulty && (typeof filters.difficulty !== 'string' || !MCQ_DIFFICULTIES.includes(difficulty))) throw new EngineError('Invalid difficulty.');
-        if (filters.topic && (typeof filters.topic !== 'string' || filters.topic.length > 200)) throw new EngineError('Invalid topic.');
-        const bank = (await catalogue(client)).filter(q => q.concept_tag &&
-          (!filters.chapter || q.chapter === filters.chapter) && (!difficulty || normalizeMcqDifficulty(q.difficulty) === difficulty) && (!filters.topic || q.topic === filters.topic));
-        for (let attempt = 0; attempt < 3; attempt++) {
-          const state = await rpc(client, 'mcq_engine_state', { p_user_id: userId });
-          const questions = generateSet(bank, state, count).map(q=>({...q,practice_filters:filters}));
-          const id = randomUUID();
-          if (await rpc(client, 'mcq_engine_create_session', { p_user_id: userId, p_session_id: id, p_version: state.version, p_questions: questions })) {
-            return json(res, 200, { session_id: id, version: ENGINE_VERSION, questions: questions.map(learnerQuestion) });
-          }
+        const count=body.set_size,mode=body.mode||'smart';
+        const access=await accessRpc(client,'practice_access_status',{p_user_id:userId});
+        if(!Number.isInteger(count)||count<1||count>access.maxSetSize)throw new EngineError(`Choose 1–${access.maxSetSize} questions.`);
+        if(!['smart','random','exam','missed','starred'].includes(mode))throw new EngineError('Invalid practice mode.');
+        const filters=Object.fromEntries(Object.entries(body.filters||{}).filter(([,v])=>v!=null&&v!==''));
+        if(Object.keys(filters).some(k=>!['chapter','difficulty','topic'].includes(k)))throw new EngineError('Invalid filters.');
+        if(!access.isPro&&Object.keys(filters).length)throw new EngineError('Custom filters are available with Pro.',403);
+        if(mode==='exam'&&Object.keys(filters).length)throw new EngineError('Exam Mode uses an unfiltered mix.');
+        if(filters.chapter&&!/^[1-5]$/.test(filters.chapter))throw new EngineError('Invalid chapter.');
+        const difficulty=normalizeMcqDifficulty(filters.difficulty);
+        if(filters.difficulty&&(typeof filters.difficulty!=='string'||!MCQ_DIFFICULTIES.includes(difficulty)))throw new EngineError('Invalid difficulty.');
+        if(filters.topic&&(typeof filters.topic!=='string'||filters.topic.length>200))throw new EngineError('Invalid topic.');
+        let bank=(await catalogue(client)).filter(q=>q.concept_tag&&(!filters.chapter||q.chapter===filters.chapter)&&(!difficulty||normalizeMcqDifficulty(q.difficulty)===difficulty)&&(!filters.topic||q.topic===filters.topic));
+        if(mode==='starred'){const data=await accessRpc(client,'practice_list_stars',{p_user_id:userId});const ids=new Set(data.filter(r=>r.question_type==='mcq').map(r=>r.question_id));bank=bank.filter(q=>ids.has(q.id));}
+        const id=body.request_id||randomUUID();if(!uuid(id))throw new EngineError('Invalid generation request.');
+        for(let attempt=0;attempt<3;attempt++){
+          const state=await rpc(client,'mcq_engine_state',{p_user_id:userId});
+          const questions=chooseAccessSet(bank,state,count,mode,access.isPro).map(q=>({...q,practice_filters:filters}));
+          const result=await accessRpc(client,'practice_create_set',{p_user_id:userId,p_guest_key:null,p_request_id:id,p_mode:mode,p_questions:questions,p_filters:filters,p_version:state.version});
+          if(result.quotaExceeded)return json(res,429,{error:`This set needs ${count} questions; ${result.access.remaining} remain in your rolling 12-hour allowance.`,access:result.access});
+          if(result.created)return json(res,200,{session_id:id,version:ENGINE_VERSION,mode,questions:result.questions.map(learnerQuestion),access:result.access,createdAt:result.createdAt});
         }
-        throw new EngineError('Progress changed while building this set. Please retry.', 409);
+        throw new EngineError('Progress changed while building this set. Please retry.',409);
       }
       if (operation === 'answer') {
         if (!uuid(body.event_id) || (body.session_id != null && !uuid(body.session_id)) || !uuid(body.selected_option_id) ||
           typeof body.question_id !== 'string' || !/^m[a-z0-9_-]+$/i.test(body.question_id)) throw new EngineError('Invalid MCQ answer.');
         if (body.elapsed_ms != null && (!Number.isInteger(body.elapsed_ms) || body.elapsed_ms < 0 || body.elapsed_ms > 86400000)) throw new EngineError('Invalid question pacing.');
         if (body.practice_source != null && !['mcq-set','exam','daily-challenge','diagnostic'].includes(body.practice_source)) throw new EngineError('Invalid activity source.');
+        let allocation=null;
+        if(body.session_id)allocation=await ownedSet(client,userId,body.session_id);
+        if(body.allocation_id){if(!uuid(body.allocation_id))throw new EngineError('Invalid exam.');allocation=await ownedSet(client,userId,body.allocation_id);}
         let standalone = null;
         if (!body.session_id) {
-          standalone = (await catalogue(client)).find(q => q.id === body.question_id);
+          standalone = allocation?allocation.questions.find(q=>q.id===body.question_id):(await catalogue(client)).find(q => q.id === body.question_id);
           if (!standalone) throw new EngineError('This MCQ is unavailable.', 404);
         }
         const evaluation = await rpc(client, body.practice_source != null ? 'mcq_engine_answer_sourced' : body.elapsed_ms == null ? 'mcq_engine_answer' : 'mcq_engine_answer_paced', { p_user_id: userId, p_event_id: body.event_id,
           p_session_id: body.session_id || null, p_question_id: body.question_id, p_option_id: body.selected_option_id, p_standalone: standalone, ...(body.practice_source != null ? { p_elapsed_ms: body.elapsed_ms ?? null, p_source: body.practice_source } : body.elapsed_ms == null ? {} : { p_elapsed_ms: body.elapsed_ms }) });
-        if(body.session_id)evaluation.session_questions=(await recoverPendingQuestions(client,userId,body.session_id,body.question_id,catalogue)).map(learnerQuestion);
+        if(body.session_id && allocation?.mode==='smart')evaluation.session_questions=(await recoverPendingQuestions(client,userId,body.session_id,body.question_id,catalogue)).map(learnerQuestion);
         return json(res,200,evaluation);
       }
       return json(res, 404, { error: 'MCQ endpoint not found.' });

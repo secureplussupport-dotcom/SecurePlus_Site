@@ -15,6 +15,8 @@ await db.exec(readFileSync('supabase/migrations/20261022060000_mcq_exam_readines
 await db.exec(readFileSync('supabase/migrations/20261022090000_mcq_core_recovery.sql','utf8'));
 await db.exec('create table public.attempts(user_id uuid,question_type text,correct boolean,created_at timestamptz);grant select on public.attempts to service_role;');
 await db.exec(readFileSync('supabase/migrations/20261022110000_dashboard_practice_metrics.sql','utf8'));
+await db.exec(`create function auth.uid() returns uuid language sql as $$select null::uuid$$;create table public.profiles(id uuid primary key references auth.users(id),email text,tier text default 'free',subscription_status text,pro_trial_until timestamptz,updated_at timestamptz);create table public.app_admins(email text);create table public.pbqs(id text);create table public.starred_questions(user_id uuid,question_key text,question_type text,question_id text,created_at timestamptz default now(),primary key(user_id,question_key));grant all on public.profiles,public.app_admins,public.pbqs,public.starred_questions to service_role;`);
+await db.exec(readFileSync('supabase/migrations/20261022150000_practice_access_model.sql','utf8'));
 const user = '00000000-0000-4000-8000-000000000001', other = '00000000-0000-4000-8000-000000000002';
 const sid = '00000000-0000-4000-8000-000000000010', good = '00000000-0000-4000-8000-000000000020', bad = '00000000-0000-4000-8000-000000000021';
 const questions = Array.from({ length: 40 }, (_, i) => ({ id: `m${i}`, format: 'mcq', concept_tag: 'risk.bia-rto-rpo', options: [{ id: good, text: 'yes', is_correct: true }, { id: bad, text: 'no', is_correct: false }], explanation: 'Why' }));
@@ -184,6 +186,7 @@ const recoveryQuestions=Array.from({length:10},(_,i)=>({...questions[i],id:`mrec
 const core={...recoveryQuestions[2],id:'mrecoverycore',difficulty:'core'};
 const recoverySid=randomUUID();
 await scalar('select public.mcq_engine_create_session($1,$2,0,$3)',[recoveryUser,recoverySid,JSON.stringify(recoveryQuestions)]);
+await db.query("insert into mcq_engine.access_allocations(id,owner_key,user_id,mode,questions,count) select id,user_id::text,user_id,'smart',questions,jsonb_array_length(questions) from mcq_engine.sessions where id=$1",[recoverySid]);
 const recoveryHandler=createMcqHandler({enabled:()=>true,admin:()=>service,catalogue:async()=>[...recoveryQuestions,core]});
 const recoveryCall=async(question,index,sessionId=recoverySid)=>{
   let output;const res={setHeader(){},end(value){output=JSON.parse(value);}};
@@ -223,6 +226,7 @@ for(const role of ['anon','authenticated']){
 const jumpedSid=randomUUID();
 const jumpedQuestions=recoveryQuestions.map((q,i)=>({...q,concept_tag:i<5?'recover':'other'}));
 await scalar('select public.mcq_engine_create_session($1,$2,$3,$4)',[recoveryUser,jumpedSid,(await state(recoveryUser)).version,JSON.stringify(jumpedQuestions)]);
+await db.query("insert into mcq_engine.access_allocations(id,owner_key,user_id,mode,questions,count) select id,user_id::text,user_id,'smart',questions,jsonb_array_length(questions) from mcq_engine.sessions where id=$1",[jumpedSid]);
 await recoveryCall(jumpedQuestions[1],0,jumpedSid);
 const jumped=await recoveryCall(jumpedQuestions[3],0,jumpedSid);
 assert.equal(jumped.output.session_questions[4].difficulty,'core');

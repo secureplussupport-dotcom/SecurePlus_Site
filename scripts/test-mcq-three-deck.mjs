@@ -14,7 +14,7 @@ test('every allowed size is unique, upfront, and shuffled without answer keys', 
     assert(!JSON.stringify(set.map(learnerQuestion)).includes('secret'));
     for (const q of set) assert.deepEqual([...q.options.map(o => o.id)].sort(), bank.find(b => b.id === q.id).options.map(o => o.id).sort());
   }
-  for (const n of [9, 31, 10.5, '10']) assert.throws(() => generateSet(bank, empty(), n));
+  for (const n of [0, 91, 10.5, '10']) assert.throws(() => generateSet(bank, empty(), n));
 });
 test('20/30/50 quotas, oldest retests, weakest remediation and waterfall', () => {
   const state = empty(); state.mastery = [{ concept_tag: 'a', score: 15 }, { concept_tag: 'b', score: 70 }];

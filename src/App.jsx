@@ -1,3 +1,7 @@
+import { GuestDiagnostic } from "./components/GuestDiagnostic.jsx";
+import { BookmarkOrganiser } from "./components/BookmarkOrganiser.jsx";
+import { usePracticeAccess } from "./lib/usePracticeAccess.js";
+import { generationChoices, isProProfile } from "./lib/accessModel.js";
 import { CIPHER_COINS_ACTIVE, MASCOT_MANAGER_ACTIVE, isArchivedView } from "./lib/archivedFeatures.js";
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
@@ -248,10 +252,10 @@ const CIPHER_FIRST_PBQ_UNLOCKS = Object.freeze(["p014","p018","p033"]);
 const PRO_WELCOME_SEEN_KEY = "secureplus-pro-welcome-seen-v1";
 const SUPPORT_EMAIL = "secureplus.support@gmail.com";
 const PRO_ACADEMY_PASS_NAME = "Pro Academy Pass";
-const PRO_ACADEMY_PASS_PRICE = "$9.99 / 3 months";
-const PRO_MONTHLY_PASS_PRICE = "$4.99 / month";
+const PRO_ACADEMY_PASS_PRICE = "$24.99 / 90 days";
+const PRO_MONTHLY_PASS_PRICE = "$11.99 / 30 days";
 const PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus";
-const PRO_ACADEMY_PASS_DESCRIPTION = "Built around the typical Security+ study window. Unlock all PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives with zero coin requirements.";
+const PRO_ACADEMY_PASS_DESCRIPTION = "Unlimited generation, sets up to 90 questions, precise targeting and unlimited bookmarks. One payment; no automatic renewal.";
 const PRO_ACADEMY_PASS_TRUST = SITE_TAGLINE;
 const ADMIN_PRO_MODE_STORAGE_PREFIX = "secureplus-admin-pro-mode";
 const ADMIN_ONLY_APP_VIEWS = new Set(["feedback","question-admin","mascot-admin"]);
@@ -1440,7 +1444,7 @@ function formatSubscriptionDate(value) {
 function appUserFromProfile(authUser, profile) {
   const trialUntil = profile?.pro_trial_until ? new Date(profile.pro_trial_until) : null;
   const hasReferralTrial = trialUntil && trialUntil.getTime() > Date.now();
-  const hasStoredProTier = profile?.tier === "pro";
+  const hasStoredProTier = isProProfile(profile);
   const hasActiveSubscription = ["active", "trialing"].includes(profile?.subscription_status);
   const adminAccount = isAdminEmail(profile?.email || authUser?.email);
   const hasProAccess = adminAccount || hasStoredProTier || hasActiveSubscription || hasReferralTrial;
@@ -1456,6 +1460,7 @@ function appUserFromProfile(authUser, profile) {
     subscriptionStatus: profile?.subscription_status || null,
     subscriptionCancelAtPeriodEnd: Boolean(profile?.subscription_cancel_at_period_end),
     subscriptionCurrentPeriodEnd: profile?.subscription_current_period_end || null,
+    proPassExpiresAt:profile?.pro_pass_expires_at || null,
     proTrialUntil: profile?.pro_trial_until || null,
     referralTrialExpired: Boolean(trialUntil && trialUntil.getTime() <= Date.now() && profile?.tier !== "pro"),
     referralCode: profile?.referral_code || "",
@@ -1477,7 +1482,7 @@ async function getSupabaseProfile(authUser) {
   const isMissingProfileColumn=error=>error?.code === "42703" || /total_stars|avatar_id|full_name|created_at|cipher_coins|lifetime_cipher_coins|exam_passes|subscription_cancel_at_period_end|subscription_current_period_end/i.test(error?.message || "");
   let full = await supabase
     .from("profiles")
-    .select("id,email,full_name,avatar_id,tier,subscription_status,subscription_cancel_at_period_end,subscription_current_period_end,pro_trial_until,referral_code,total_stars,cipher_coins,lifetime_cipher_coins,exam_passes,created_at")
+    .select("id,email,full_name,avatar_id,tier,subscription_status,subscription_cancel_at_period_end,subscription_current_period_end,pro_pass_expires_at,pro_trial_until,referral_code,total_stars,cipher_coins,lifetime_cipher_coins,exam_passes,created_at")
     .eq("id", authUser.id)
     .maybeSingle();
 
@@ -1690,38 +1695,13 @@ async function submitAchievementSession(payload) {
 }
 
 async function loadSupabaseStarred(userId) {
-  if (!supabase || !userId) return null;
-  const { data, error } = await supabase
-    .from("starred_questions")
-    .select("question_key")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
-  if (error) {
-    console.warn("Unable to load starred questions", error);
-    return null;
-  }
-  return (data || []).map(row=>row.question_key).filter(Boolean);
+  if(!supabase||!userId)return null;
+  try{const result=await mcqEngineRequest("star",{action:"list"});return result.stars.map(row=>row.question_key).reverse();}
+  catch(error){console.warn("Unable to load starred questions",error);return null;}
 }
 
-async function saveSupabaseStar(userId, type, id, shouldStar) {
-  if (!supabase || !userId) return;
-  const question_key = starKey(type, id);
-  if (shouldStar) {
-    const { error } = await supabase.from("starred_questions").upsert({
-      user_id: userId,
-      question_key,
-      question_type: type,
-      question_id: id,
-    });
-    if (error) console.warn("Unable to save starred question", error);
-    return;
-  }
-  const { error } = await supabase
-    .from("starred_questions")
-    .delete()
-    .eq("user_id", userId)
-    .eq("question_key", question_key);
-  if (error) console.warn("Unable to remove starred question", error);
+async function saveSupabaseStar(userId,type,id,shouldStar,replace=null) {
+  return mcqEngineRequest("star",shouldStar?{action:"save",key:starKey(type,id),type,id,replace}:{action:"remove",key:starKey(type,id)});
 }
 
 const isValidFlashcardId = id => SY0701_ACRONYM_CARDS.some(card=>card.id===id);
@@ -21128,7 +21108,7 @@ function FilterSelect({value,onChange,options,disabled=false,label="Select"}) {
     </div>
   );
 }
-function StarButton({active,onToggle,label="Star question",activeLabel="Unstar question",showText=false,text="",activeText=""}) {
+function StarButton({active,onToggle,label="Star question",activeLabel="Unstar question",showText=false,text="",activeText="",capacity=null}) {
   const visibleText=active ? (activeText||text||activeLabel) : (text||label);
   return(
     <button
@@ -21140,7 +21120,7 @@ function StarButton({active,onToggle,label="Star question",activeLabel="Unstar q
       onClick={e=>{e.stopPropagation();onToggle?.();}}
     >
       <Star size={18} strokeWidth={2.2} fill={active?"currentColor":"none"}/>
-      {showText&&<span className="star-btn-label">{visibleText}</span>}
+      {showText&&<span className="star-btn-label">{visibleText}</span>}{capacity!=null&&<small aria-label={`${capacity} of 10 slots used`}>{capacity}/10{capacity>=10?" · full":""}</small>}
     </button>
   );
 }
@@ -22935,6 +22915,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
 
   if(challenge.type==="pbq" && pbq) return (
     <PBQSim
+            user={user}
       q={pbq}
       t={t}
       showQuestionCodes={showQuestionCodes}
@@ -23560,10 +23541,10 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     {q:"Which exam version is supported?",a:"The current question bank is built for CompTIA Security+ (SY0-701)."},
     {q:"How often is the question bank updated?",a:"The bank is reviewed and expanded as Security+ objectives and student weak areas change."},
     {q:"Is there a mobile-friendly layout?",a:"Yes. The app is designed for phones, tablets, and desktop browsers, including mobile practice sessions."},
-    {q:"Can I practise without creating an account?",a:"Yes. Visitors can open Flashcards, access all MCQ questions, and try the Daily Challenge. Progress, starred cards, and review history are saved after sign-up."},
+    {q:"Can I practise without creating an account?",a:"Yes. Visitors can try a 10-question diagnostic and every flashcard deck. Create a free account for 50 generated questions every rolling 12 hours, Daily Challenge and saved progress."},
     {q:"Why start with Flashcards?",a:"Flashcards are quick, low-pressure, and easy to share. They help new learners build Security+ vocabulary before attempting harder MCQs and PBQs."},
     {q:"What does Smart Review do?",a:"It combines delayed retests, unseen questions for weak concepts, and new syllabus coverage. A missed question waits for 30 other MCQ answers before retesting."},
-    {q:"What does Pro unlock?",a:`${PRO_ACADEMY_PASS_DESCRIPTION} ${PRO_ACADEMY_PASS_PRICE}, renewing every 3 months until cancelled.`},
+    {q:"What does Pro unlock?",a:`${PRO_ACADEMY_PASS_DESCRIPTION} ${PRO_ACADEMY_PASS_PRICE}, as a one-time, non-renewing purchase.`},
     {q:"Is SecurePlus affiliated with CompTIA?",a:"No. CompTIA and Security+ are trademarks of CompTIA. SecurePlus is an independent practice platform."},
   ];
   const learningPaths=[
@@ -23631,7 +23612,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
                 <div className="label brilliant-lesson-kicker">Start in 30 seconds</div>
                 <strong>Open a free flashcard deck</strong>
               </div>
-              <span className="brilliant-lesson-duration">2 min</span>
+              <span className="brilliant-lesson-duration">10 questions</span>
             </div>
             <MascotGuide
               animation="wave"
@@ -23776,7 +23757,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
               <div key={item} className="pricing-feature-row"><Check size={16} strokeWidth={2.6}/><div>{item}</div></div>
             ))}
             <button className="btn btn-primary" style={{width:"100%",marginTop:18,justifyContent:"center"}} onClick={()=>jumpToAuth("signup")}>Create account to unlock Pro</button>
-            <div style={{fontSize:11,color:t.textDim,textAlign:"center",marginTop:10}}>Renews every 3 months. Cancel anytime before the next renewal.</div>
+            <div style={{fontSize:11,color:t.textDim,textAlign:"center",marginTop:10}}>One payment for 90 days. No automatic renewal.</div>
           </div>
         </section>
 
@@ -24018,6 +23999,7 @@ function SmartReviewLessonPath({recommendations=[],onOpenDeepDive,source="smart_
 }
 
 function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOpenFlashcards,coinWallet,t,starred=[],assistantFlashcardSet=null}) {
+  const {access:practiceAccess}=usePracticeAccess(user);
   const [showReadinessLab,setShowReadinessLab]=useState(false);
   const activityProfile=getActivityProfile(attempts);
   const readinessProfile=useExamReadiness(user,attempts);
@@ -24115,7 +24097,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
         {showReadinessLab&&<ReadinessBreakdown profile={readinessProfile} chapters={CHAPTERS}/>}
       </section>
 
-      <DashboardMetrics profile={readinessProfile} streak={streakInfo} tier={user.tier} t={t}/>
+      <DashboardMetrics quota={practiceAccess} profile={readinessProfile} streak={streakInfo} tier={user.tier} t={t}/>
 
       <section className="dashboard-action-grid dashboard-action-grid-clean" aria-label="Dashboard action recommendations">
         <div className="card weak-action-card">
@@ -24188,11 +24170,11 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
 
       {!isPro&&(
         <div className="card dashboard-upgrade-card" style={{padding:"18px 20px",borderColor:`${t.amber}40`,background:`${t.amber}06`}}>
-          <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:4}}>Ready for PBQs?</div>
+          <div style={{fontWeight:600,fontSize:14,color:t.text,marginBottom:4}}>Preparing on a deadline?</div>
           <div style={{fontSize:13,color:t.textSec,marginBottom:12}}>
-            Keep using MCQ practice for free. Choose Pro to access all {PBQ_BANK.length} PBQs.
+            Keep using MCQ practice for free. Create a free account to use the complete bank. Pro adds unlimited generation and precise targeting.
           </div>
-          <button className="btn btn-primary" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("pricing")}>Explore Pro</button>
+          <button className="btn btn-primary" style={{fontSize:13,padding:"8px 16px"}} onClick={()=>onNav("pricing")}>Explore Pro passes</button>
         </div>
       )}
     </div>
@@ -24509,7 +24491,7 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
     onPractice();
   };
   const learningSteps=[
-    {id:"mcq",label:"1 · Diagnose",color:t.accent,title:"Find the gap",body:"Answer a short Security+ set. Your results show which concepts need another look.",button:"Try free MCQs",action:onPractice},
+    {id:"mcq",label:"1 · Diagnose",color:t.accent,title:"Find the gap",body:"Answer a short Security+ set. Your results show which concepts need another look.",button:"Try the 10-question diagnostic",action:onPractice},
     {id:"explanations",label:"2 · Understand",color:t.green,title:"See why",body:"Review the right answer and each plausible alternative so a miss becomes a useful lesson."},
     {id:"flashcards",label:"3 · Strengthen",color:"#8b5cf6",title:"Make it stick",body:"Use focused flashcards to recall the terms behind the questions you missed.",button:"Open flashcards",action:onFlashcards},
     {id:"review",label:"4 · Prove",color:t.green,title:"Test it again",body:"After you save your progress, Smart Review brings missed concepts back in later sets so you can check your improvement."},
@@ -24525,15 +24507,15 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
             <span className="guest-tagline-main"><strong>Pass</strong> with confidence.</span>
           </h1>
           <p className="guest-hero-description">
-            Practise Security+ questions, understand what you missed, and return to those concepts in later sets. Start free; create an account when you want to save your progress.
+            Practise Security+ questions, understand what you missed, and return to those concepts in later sets. Try ten diagnostic questions, then create a free account to save your baseline and continue.
           </p>
           <div className="guest-bank-cta-block">
             <div className="home-cta-row brilliant-action-row guest-hero-primary-actions single">
               <button className="btn guest-hero-practice-cta" type="button" onClick={()=>launchFullMcq("guest_hero")}>
-                Start free MCQ practice <span aria-hidden="true">→</span>
+                Try the 10-question diagnostic <span aria-hidden="true">→</span>
               </button>
             </div>
-            <p className="guest-bank-cta-note">Explore free questions across all five domains <span aria-hidden="true">•</span> No sign-up required</p>
+            <p className="guest-bank-cta-note">Ten questions across all five domains <span aria-hidden="true">•</span> No sign-up required</p>
           </div>
           <div className="guest-hero-proof-row" aria-label="SecurePlus practice benefits">
             <span>Find a gap</span>
@@ -24544,16 +24526,13 @@ function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashc
         <div className="brilliant-lesson-shell">
           <div className="brilliant-lesson-top">
             <div>
-              <div className="label brilliant-lesson-kicker">5-Question Daily Drill</div>
-              <strong>Test yourself in two minutes</strong>
+              <div className="label brilliant-lesson-kicker">10-Question Diagnostic</div>
+              <strong>Find your starting point</strong>
             </div>
-            <span className="brilliant-lesson-duration">2 min</span>
+            <span className="brilliant-lesson-duration">10 questions</span>
           </div>
           <div className="brilliant-daily-wrap">
-            <LandingDailyChallengeWidget
-              t={t}
-              onPractice={()=>launchFullMcq("daily_drill_completion")}
-            />
+            <GuestDiagnostic t={t} onSignup={onSignup} onSave={savePendingGuestSmartReview}/>
           </div>
         </div>
       </section>
@@ -24611,7 +24590,7 @@ function GuestLockedPage({t,onSignup,onLogin,onPractice,onDaily,title="Save your
         <div className="label" style={{color:t.accent,marginBottom:8}}>Account feature</div>
         <h2 style={{fontSize:26,color:t.text,marginBottom:8}}>{title}</h2>
         <p style={{fontSize:14,color:t.textSec,lineHeight:1.75,marginBottom:18}}>
-          Guests can freely try MCQ Practice and Daily Challenge. Create a free account or sign in to save progress, unlock personalised review, and access the rest of SecurePlus.
+          Guests can try ten diagnostic questions and every flashcard deck. Create a free account for Daily Challenge, full lessons, saved progress and 50 generated MCQs every rolling 12 hours.
         </p>
         <div style={{marginBottom:18}}>
           <TrustBadge t={t}/>
@@ -24828,6 +24807,11 @@ function PracticeSetupDisclosure({children}) {
 
 function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,onFocusModeChange,isVisible=true,starred=[],onToggleStar,onReportQuestion,showQuestionCodes=false,smartReviewRequest=null,examRequest=null,onSessionComplete,mcqBank=MCQ_BANK}) {
   const isGuest=user?.authProvider==="guest"||user?.loginMethod==="guest";
+  const {access,refresh:refreshAccess,error:accessError}=usePracticeAccess(user);
+  const isPro=access?access.isPro:user?.tier==="pro";
+  const availableQuota=isGuest?access?.remaining:isPro?90:access?.remaining;
+  const [missedBatch,setMissedBatch]=useState(null);
+  const choices=generationChoices(access,isPro);
   const sessionKey=`mcq:${practiceSessionOwner(user)}`;
   const requestSignup=onSignup||onUpgrade;
   const bank=mcqBank?.length ? mcqBank : MCQ_BANK;
@@ -24840,6 +24824,8 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [examMode,setExamMode]=useState(false);
   const [examCount,setExamCount]=useState(10);
   const [examQuestions,setExamQuestions]=useState(null);
+  const [examResume,setExamResume]=useState(null);
+  const saveExamDraft=useCallback(snapshot=>{if(isGuest)return; if(snapshot){DB.savePracticeSession(sessionKey,snapshot);setResumeAvailable(true);}else{DB.clearPracticeSession(sessionKey);setResumeAvailable(false);}},[sessionKey,isGuest]);
   const [showExamGuide,setShowExamGuide]=useState(false);
   const guideKey=`secureplus-exam-guide-v2:${practiceSessionOwner(user)}`;
   useEffect(()=>{
@@ -24854,10 +24840,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     try{if(!localStorage.getItem(guideKey))setShowExamGuide(true);}catch{setShowExamGuide(true);}
   },[examMode,guideKey]);
   const closeExamGuide=()=>{try{localStorage.setItem(guideKey,"seen");}catch{}setShowExamGuide(false);};
-  const startExam=()=>{
-    try{setExamQuestions(buildMcqExam(bank,examCount,user?.tier==="pro").map(shuffleMcqOptions));setEngineError("");window.scrollTo({top:0,behavior:"instant"});}
-    catch(error){setEngineError(error.message);}
-  };
+  const startExam=()=>startEngineQuiz({},examCount,"exam");
 
   const [started,setStarted]=useState(false);
   const [questions,setQuestions]=useState([]);
@@ -24881,6 +24864,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const [engineBusy,setEngineBusy]=useState(false);
   const pacing=useQuestionPacing(questions[qi]?.id, isVisible&&started&&!done&&!finishedReviewMode&&!submitted&&!engineBusy);
   const answerInFlight=useRef(false);
+  const generationRequest=useRef(null);
   const answerEvents=useRef(new Map());
   const refreshEngineState=useCallback(()=>{
     if(isGuest||!mcqEngineEnabled)return Promise.resolve(null);
@@ -24908,11 +24892,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     {value:"all",label:"All Topics"},
     ...allTopics.map(tp=>({value:tp,label:tp})),
   ];
-  const activeDiffFilter=isGuest?"all":diffFilter;
-  const activeTopicFilter=isGuest?"all":topicFilter;
+  const activeDiffFilter=!isPro?"all":diffFilter;
+  const activeTopicFilter=!isPro?"all":topicFilter;
 
   const filtered=bank.filter(q=>{
-    if(chFilter!=="all"&&q.ch!==chFilter)return false;
+    if(isPro&&chFilter!=="all"&&q.ch!==chFilter)return false;
     if(activeDiffFilter!=="all"&&normalizeMcqDifficulty(q.difficulty)!==activeDiffFilter)return false;
     if(activeTopicFilter!=="all"&&q.topic!==activeTopicFilter)return false;
     return true;
@@ -24921,14 +24905,14 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     due:engineState?.failed?.filter(row=>row.cooldown_counter<=0).length??"—",
     weak:engineState?.mastery?.filter(row=>row.score<80).length??"—",
   };
-  const quizSizes = [10,20,30];
-  const sessionMinimum = 10;
+  const quizSizes = isGuest?[10]:[10,20,30];
+  const sessionMinimum = 1;
   const latestMcqAttempts=getLatestMcqAttempts(attempts);
   const missedMcqIds=[...latestMcqAttempts.entries()].filter(([,attempt])=>attempt.correct===false).map(([questionId])=>questionId);
   const missedQuestions=bank.filter(q=>missedMcqIds.includes(q.id));
   const practiceModes=[
     {id:"smart",label:"Smart Review",Icon:Brain,color:t.green,description:"Mix due retests, questions for concepts that need improvement, and new questions. Sign in to save your progress."},
-    {id:"random",label:"Randomised",Icon:Sparkles,color:t.accent,description:"Practise a fresh mix of questions using your selected chapter, difficulty and topic. No account needed for a random set."},
+    {id:"random",label:"Randomised",Icon:Sparkles,color:t.accent,description:"Practise a fresh mix. Pro can target a chapter, difficulty or topic."},
   ];
 
   useEffect(()=>{
@@ -24944,46 +24928,40 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   },[isVisible,started,done,finishedReviewMode,onFocusModeChange]);
 
   useEffect(()=>{
-    if(started)return;
+    if(started||isPro)return;
     const available = quizSizes.filter(size=>filtered.length>=size);
-    if(available.length && !available.includes(quizCount)) setQuizCount(available[available.length-1]);
+    if(available.length && (quizCount>filtered.length||quizCount<1)) setQuizCount(available[available.length-1]);
   },[filtered.length,quizCount,started]);
 
-  const startEngineQuiz=async(filters={},count=quizCount)=>{
+  const startEngineQuiz=async(filters={},count=quizCount,mode="smart")=>{
     if(engineBusy)return;
+    if(isGuest&&access?.remaining===0)return requestSignup();
     setEngineBusy(true);setEngineError("");
     try{
-      if(!mcqEngineEnabled)throw new Error("The new Smart Review engine is awaiting activation.");
-      const plan=await mcqEngineRequest("generate",{set_size:Math.max(10,Math.min(30,count)),filters});
-      const pool=plan.questions.map(q=>practiceQuestion(q,plan.session_id));
+      const requestKey=JSON.stringify({count,mode,filters:isPro?filters:{}});
+      if(generationRequest.current?.key!==requestKey)generationRequest.current={key:requestKey,id:crypto.randomUUID()};
+      const requestId=generationRequest.current.id;
+      const plan=await mcqEngineRequest("generate",{request_id:requestId,set_size:isGuest?10:count,mode:isGuest?"diagnostic":mode,filters:isPro?filters:{}});
+      generationRequest.current=null;setQuizCount(isGuest?10:count);await refreshAccess();
+      if(mode==="exam"){
+        setExamCount(count);setExamResume(null);setExamQuestions(plan.questions.map(q=>({...practiceQuestion(q,null),engineAllocationId:plan.session_id})));return;
+      }
+      const pool=plan.questions.map(q=>isGuest?{...practiceQuestion(q,null),optionIds:undefined,correct:q.correct,exp:q.explanation,wrongFeedback:Object.fromEntries((q.feedback||[]).map((text,i)=>[i,text]))}:practiceQuestion(q,plan.session_id));
       setExamQuestions(null);setExamMode(false);
-      setSessionContext({kind:"smart",label:"Smart Review",engineSessionId:plan.session_id});
-      pacing.reset({});setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
-      answerEvents.current.clear();
-      capture("mcq_quiz_started",{review_mode:"three_deck",question_count:pool.length,tier:user.tier});
-    }catch(error){setEngineError(error.message);}finally{setEngineBusy(false);}
+      setSessionContext({kind:mode,label:isGuest?"Free diagnostic":mode==="smart"?"Smart Review":"MCQ practice",engineSessionId:isGuest?null:plan.session_id,createdAt:plan.createdAt});
+      pacing.reset({});setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);answerEvents.current.clear();
+      capture("mcq_quiz_started",{review_mode:mode,question_count:pool.length,tier:user.tier});
+    }catch(error){setEngineError(error.message);await refreshAccess();}finally{setEngineBusy(false);}
   };
-  const startQuiz=()=>{
-    if(isGuest&&reviewMode==="smart")return requestSignup();
-    if(!isGuest&&reviewMode==="smart")return startEngineQuiz({chapter:chFilter==="all"?undefined:chFilter,difficulty:activeDiffFilter==="all"?undefined:activeDiffFilter,topic:activeTopicFilter==="all"?undefined:activeTopicFilter});
-    setEngineError("");
-    const pool=buildMcqPracticePool(filtered,attempts,Math.min(quizCount,filtered.length)).map(shuffleMcqOptions);
-    capture("mcq_quiz_started",{review_mode:"random",question_count:pool.length,tier:user.tier});
-    setSessionContext({kind:"random",label:"MCQ Practice"});
-    pacing.reset({});setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());
-  };
-  const startMissedQuiz=()=>startEngineQuiz({},quizCount);
+  const startQuiz=()=>startEngineQuiz({chapter:chFilter==="all"?undefined:chFilter,difficulty:activeDiffFilter==="all"?undefined:activeDiffFilter,topic:activeTopicFilter==="all"?undefined:activeTopicFilter},quizCount,reviewMode);
+  const startMissedQuiz=()=>setMissedBatch(Math.max(1,Math.min(10,missedQuestions.length,availableQuota??0)));
   const startChapterSmartReview=useCallback((chapterId,requestedCount=10)=>{
     if(!chapterId||isGuest)return;
+    if(!isPro){setEngineError("Choose Smart Review to revisit weak concepts. Targeting one chapter is available with Pro.");return;}
     setChFilter(String(chapterId));setDiffFilter("all");setTopicFilter("all");setReviewMode("smart");
-    startEngineQuiz({chapter:String(chapterId)},Math.max(10,Math.min(30,Number(requestedCount)||10)));
-  },[isGuest,engineBusy,user.tier]);
-  const startStarredQuiz=()=>{
-    const pool=buildMcqPracticePool(starredMcqs,attempts,Math.min(30,starredMcqs.length)).map(shuffleMcqOptions);
-    capture("mcq_starred_review_started", { question_count: pool.length, tier: user.tier });
-    setSessionContext({kind:"starred",label:"Starred-question review"});
-    pacing.reset({});setQuestions(pool);setQi(0);setSelected(null);setSubmitted(false);setDraftSelections([]);setResults([]);setDone(false);setFinishedReviewMode(false);setStarted(true);setSessionStartedAt(Date.now());setStarredView(false);
-  };
+    startEngineQuiz({chapter:String(chapterId)},Math.max(1,Math.min(90,Number(requestedCount)||10)));
+  },[isGuest,engineBusy,isPro]);
+  const startStarredQuiz=()=>startEngineQuiz({},Math.max(1,Math.min(isPro?90:30,starredMcqs.length,availableQuota??0)),"starred");
 
   useEffect(()=>{
     if(!smartReviewRequest?.chapterId||!smartReviewRequest?.nonce)return;
@@ -24994,7 +24972,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     if(isGuest){setResumeAvailable(false);return;}
     let active=true;
     DB.getPracticeSession(sessionKey).then(saved=>{
-      if(active)setResumeAvailable(Boolean(saved&&!saved.done&&saved.questions?.length));
+      if(active)setResumeAvailable(Boolean(saved&&!saved.done&&saved.questions?.length&&(isPro||Date.parse(saved.sessionContext?.createdAt||saved.updatedAt)>Date.now()-43200000)));
     });
     return()=>{active=false;};
   },[isGuest,sessionKey]);
@@ -25008,6 +24986,11 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const continueQuiz=async()=>{
     const saved=await DB.getPracticeSession(sessionKey);
     if(!saved?.questions?.length)return;
+    if(!isPro&&Date.parse(saved.sessionContext?.createdAt||saved.updatedAt)<=Date.now()-43200000){setResumeAvailable(false);setEngineError("This unfinished set expired after 12 hours.");return;}
+    if(saved.exam){
+      try{await mcqEngineRequest("resume",{session_id:saved.sessionContext.engineSessionId});setExamResume(saved);setExamQuestions(saved.questions);setExamMode(true);}catch(error){setEngineError(error.message);if(error.status===410)setResumeAvailable(false);}return;
+    }
+    saved.sessionContext={...saved.sessionContext,createdAt:saved.sessionContext?.createdAt||saved.updatedAt};
     if(saved.sessionContext?.engineSessionId){
       try{
         const plan=await mcqEngineRequest("resume",{session_id:saved.sessionContext.engineSessionId});
@@ -25042,6 +25025,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
   const current=questions[qi];
   const answeredCount=results.filter(Boolean).length;
   const allAnswered=questions.length>0&&answeredCount===questions.length;
+  useEffect(()=>{if(allAnswered&&sessionContext?.engineSessionId)mcqEngineRequest("complete",{session_id:sessionContext.engineSessionId}).catch(()=>{});},[allAnswered,sessionContext?.engineSessionId]);
   const reportPracticeSession=useCallback(()=>{
     if(isGuest||!questions.length)return;
     const answered=results.filter(Boolean);
@@ -25181,51 +25165,17 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
     onSave={onSave} onReturn={()=>{setExamQuestions(null);setEngineError("");window.scrollTo({top:0,behavior:"instant"});}}
     onOpenDeepDive={onOpenDeepDive} onSessionComplete={onSessionComplete} onFocusModeChange={onFocusModeChange}
     isVisible={isVisible} renderDefinitions={text=><GlossaryText text={text} t={t}/>}
+    savedState={examResume} onPersist={saveExamDraft}
     initialStreaks={localConceptStreaks} onLocalStreaks={setLocalConceptStreaks}/>;
 
-  if(starredView) return(
-    <div style={{padding:"24px",maxWidth:860,margin:"0 auto"}}>
-      <div className="page-title-row" style={{marginBottom:12}}>
-        <NavGlyph type="mcq" active/>
-        <div>
-          <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>Starred MCQs</h2>
-          <p style={{fontSize:13,color:t.textSec}}>Questions you saved for future review.</p>
-        </div>
-      </div>
-      <div style={{display:"flex",gap:10,marginBottom:16,flexWrap:"wrap"}}>
-        <button className="btn btn-ghost" onClick={()=>setStarredView(false)}>← Back to MCQ Practice</button>
-        <button className="btn btn-primary" disabled={!starredMcqs.length} onClick={startStarredQuiz}>Practise Starred</button>
-      </div>
-      {starredMcqs.length?(
-        <div style={{display:"grid",gap:10}}>
-          {starredMcqs.map(q=>(
-            <div key={q.id} className="card card-hover" style={{padding:"14px 16px",display:"flex",gap:12,alignItems:"flex-start"}}>
-              <StarButton active onToggle={()=>onToggleStar?.("mcq",q.id)} label="Unstar question"/>
-              <div style={{flex:1,minWidth:0}}>
-                <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
-                  <ChBadge chId={q.ch} t={t}/>
-                  {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
-                  <DiffBadge d={q.difficulty} t={t} mcq/>
-                  <span className="chip" style={{background:t.panel,color:t.textSec,borderColor:t.border}}>{q.topic}</span>
-                  <BeyondTextbookTag question={q} t={t}/>
-                </div>
-                <div style={{fontSize:14,color:t.text,lineHeight:1.65}}><QuestionStemText text={q.q} t={t} compact/></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ):(
-        <div className="card" style={{padding:"20px 22px",color:t.textSec,fontSize:14,lineHeight:1.7}}>
-          No starred MCQs yet. Press the star while doing a question to save it here.
-        </div>
-      )}
-    </div>
-  );
+  if(starredView)return <BookmarkOrganiser questions={starredMcqs} pro={isPro} onToggle={onToggleStar} onPractise={startStarredQuiz} onBack={()=>setStarredView(false)} t={t}/>;
 
   if(!started) return(
     <div className="mcq-setup-screen mcq-hub-screen fu" style={{...examThemeVars(t),"--practice-accent":examMode?t.accent:reviewMode==="smart"?t.green:t.accent}}>
+      {missedBatch!==null&&<div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Choose missed-question batch"><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Choose a batch before using your allowance.</p><label>Questions <input className="input" type="number" min="1" max={Math.min(missedQuestions.length,isPro?90:30,availableQuota??0)} value={missedBatch} onChange={e=>setMissedBatch(Number(e.target.value))}/></label><p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!Number.isInteger(missedBatch)||missedBatch<1||missedBatch>Math.min(missedQuestions.length,isPro?90:30,availableQuota??0)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>Practise {missedBatch} missed questions</button></div></div></div>}
       <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h2>MCQ practice</h2><p>Build confidence, one question at a time.</p></div></header>
-      <div className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
+      <div className="card" role="status" style={{padding:"12px 16px",marginBottom:16,color:t.textSec}}>{isGuest?"Try 10 questions total, then create a free account to keep practising.":isPro?"Unlimited generation · Pro":"50 questions every rolling 12 hours"}<strong style={{marginLeft:10,color:t.text}}>{isPro?"∞":access?`${access.remaining} remaining`:"Loading allowance…"}</strong>{accessError&&<span> {accessError}</span>}{!isPro&&choices.remainder&&<button className="btn btn-outline" style={{marginLeft:12}} disabled={engineBusy} onClick={()=>startEngineQuiz({},choices.remainder,examMode?"exam":reviewMode)}>Practice remaining {choices.remainder}</button>}{isGuest&&access?.remaining===0&&<button className="btn btn-primary" onClick={requestSignup}>Create free account</button>}</div>
+      <div hidden={isGuest} className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
         <button type="button" role="switch" aria-checked={examMode} className="mcq-exam-toggle" onClick={()=>{setExamMode(value=>!value);setEngineError("");setModeInfo(null);}}>
           <Clock3 size={22}/><span className="mcq-exam-toggle-copy"><strong>Exam mode</strong><small>A timed run. Your answers, revealed at the finish.</small></span><span className="mcq-exam-switch-track" aria-hidden="true"><i/></span>
         </button>
@@ -25251,16 +25201,16 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <p className="mcq-exam-eyebrow"><Clock3 size={15}/> MAKE ROOM TO FOCUS</p>
           <h3>Find your exam rhythm.</h3>
           <p className="mcq-hub-description">A fresh mix, a running clock, and a clear picture at the finish.</p>
-          <div className="mcq-exam-budget"><strong>{formatExamTime(examCount*EXAM_SECONDS_PER_QUESTION)}</strong><span>time allowance<small>72 seconds per question</small></span></div>
+          <div className="mcq-exam-budget"><strong>{formatExamTime(examCount*EXAM_SECONDS_PER_QUESTION)}</strong><span>time allowance<small>60 seconds per question</small></span></div>
           <div className="mcq-exam-rules"><span><Check size={14}/>Marked at the end</span><span><Check size={14}/>No definitions or hints</span><span><Check size={14}/>Balanced random mix</span></div>
         </div>
         <div className="mcq-session-controls">
           <fieldset className="mcq-session-size"><legend>Number of questions</legend>
-            {user?.tier==="pro"?<div className="mcq-exam-slider"><div className="exam-length-output"><output htmlFor="exam-count">{examCount}</output><span>questions</span></div><input className="mcq-exam-length-slider" id="exam-count" type="range" min="10" max="50" step="1" value={examCount} aria-label="Exam question count" onChange={event=>setExamCount(Number(event.target.value))}/><div className="exam-slider-labels"><span>10 · Quick focus</span><span>50 · Full hour</span></div></div>:<div className="mcq-primary-count">{[10,20,30].map(size=><button key={size} type="button" aria-label={`${size} exam questions`} aria-pressed={examCount===size} className={examCount===size?"active":""} onClick={()=>setExamCount(size)}>{size}</button>)}</div>}
+            {isPro?<div className="mcq-exam-slider"><div className="exam-length-output"><output htmlFor="exam-count">{examCount}</output><span>questions</span></div><input className="mcq-exam-length-slider" id="exam-count" type="range" min="10" max="90" step="1" value={examCount} aria-label="Exam question count" onChange={event=>setExamCount(Number(event.target.value))}/><div className="exam-slider-labels"><span>10 · Quick focus</span><span>90 · Full rehearsal</span></div></div>:<div className="mcq-primary-count">{[...new Set([10,20,30,...(examCount>0&&examCount<30?[examCount]:[])])].map(size=><button key={size} type="button" aria-label={`${size} exam questions`} disabled={engineBusy||availableQuota==null||size>availableQuota} title={isPro?`Start ${size} questions`:availableQuota<size?`Needs ${size} questions; ${availableQuota} remain`:`${availableQuota-size} remaining after this set`} aria-pressed={examCount===size} className={examCount===size?"active":""} onClick={()=>setExamCount(size)}>{size}</button>)}</div>}
           </fieldset>
           {engineError&&<p className="mcq-hub-error" role="alert">{engineError}</p>}
           <p className="mcq-exam-setup-note">Flag, skip and return freely. Submit when you’re ready—even if the clock runs over.</p>
-          <button className="btn btn-primary mcq-hub-start" type="button" onClick={startExam}>Start exam<span className="mcq-start-arrow"><ChevronRight size={18}/></span></button>
+          <button className="btn btn-primary mcq-hub-start" type="button" disabled={engineBusy||availableQuota==null||examCount>availableQuota} onClick={startExam}>Start exam<span className="mcq-start-arrow"><ChevronRight size={18}/></span></button>
         </div>
       </section>:<>
       <section className="mcq-launch-pad mcq-practice-hub" aria-label="Start MCQ practice">
@@ -25281,12 +25231,13 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <fieldset className="mcq-session-size">
             <legend>Number of questions</legend>
             <div className="mcq-primary-count">
-              {quizSizes.map(size=><button key={size} type="button" className={quizCount===size?"active":""} aria-label={`${size} questions`} aria-pressed={quizCount===size} disabled={filtered.length<size} onClick={()=>setQuizCount(size)}>{size}</button>)}
+              {isPro&&<label>Set size <input className="input" type="number" min="1" max="90" value={quizCount} onChange={e=>setQuizCount(Number(e.target.value))}/></label>}
+              {[...new Set([...quizSizes,...(!isPro&&quizCount>0&&quizCount<30?[quizCount]:[])])].map(size=><button key={size} type="button" className={quizCount===size?"active":""} aria-label={`${size} questions`} aria-pressed={quizCount===size} disabled={filtered.length<size||availableQuota==null||size>availableQuota} title={isPro?`Start ${size} questions`:availableQuota<size?`Needs ${size} questions; ${availableQuota} remain`:`${availableQuota-size} remaining after this set`} onClick={()=>setQuizCount(size)}>{size}</button>)}
             </div>
           </fieldset>
           {engineError&&<p className="mcq-hub-error" role="alert">{engineError}</p>}
           {filtered.length<sessionMinimum&&<p className="mcq-hub-error" role="status">Not enough questions match. Broaden your filters to start.</p>}
-          <button className="btn btn-primary mcq-hub-start" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy}>
+          <button className="btn btn-primary mcq-hub-start" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy||availableQuota==null||quizCount>availableQuota||quizCount<1||!Number.isInteger(quizCount)}>
             {engineBusy?"Preparing set…":"Start my set"}<span className="mcq-start-arrow"><ChevronRight size={18} aria-hidden="true"/></span>
           </button>
         </div>
@@ -25300,7 +25251,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <span><strong>Unfinished MCQs</strong><small>{resumeAvailable?"Continue your saved set":"No pending sets!"}</small></span>
           <ChevronRight className="mcq-queue-arrow" size={16} aria-hidden="true"/>
         </button>
-        <button className={`mcq-review-queue-card missed ${missedQuestions.length&&mcqEngineEnabled&&!isGuest?"is-ready":""}`} type="button" disabled={isGuest||!mcqEngineEnabled||!missedQuestions.length||engineBusy} onClick={startMissedQuiz}>
+        <button className={`mcq-review-queue-card missed ${missedQuestions.length&&mcqEngineEnabled&&!isGuest?"is-ready":""}`} type="button" disabled={isGuest||!mcqEngineEnabled||!missedQuestions.length||engineBusy||!availableQuota} onClick={startMissedQuiz}>
           <span className="mcq-review-queue-icon"><Target size={21} aria-hidden="true"/></span>
           <span><strong>Missed MCQs</strong><small>{missedQuestions.length?`Repair ${missedQuestions.length} incorrect question${missedQuestions.length===1?"":"s"}`:"You’re on a roll!"}</small></span>
           <ChevronRight className="mcq-queue-arrow" size={16} aria-hidden="true"/>
@@ -25319,18 +25270,18 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <div className="practice-filter-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Chapter</label>
-              <FilterSelect value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>
+              <FilterSelect disabled={!isPro} value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>
             </div>
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Difficulty</label>
-              <FilterSelect value={diffFilter} onChange={setDiffFilter} options={difficultyOptions} disabled={isGuest} label="Difficulty filter"/>
+              <FilterSelect value={diffFilter} onChange={setDiffFilter} options={difficultyOptions} disabled={!isPro} label="Difficulty filter"/>
             </div>
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Topic</label>
-              <FilterSelect value={topicFilter} onChange={setTopicFilter} options={topicOptions} disabled={isGuest} label="Topic filter"/>
+              <FilterSelect value={topicFilter} onChange={setTopicFilter} options={topicOptions} disabled={!isPro} label="Topic filter"/>
             </div>
           </div>
-          {isGuest&&<p style={{marginTop:12,fontSize:12,color:t.textSec}}>Sign in to filter by difficulty or topic.</p>}
+          {!isPro&&<p style={{marginTop:12,fontSize:12,color:t.textSec}}>Granular chapter, difficulty and topic targeting is available with Pro.</p>}
         </div>
       </PracticeSetupDisclosure>
       </>}
@@ -25382,7 +25333,7 @@ function MCQPractice({user,attempts,onSave,onUpgrade,onOpenDeepDive,t,onSignup,o
           <BeyondTextbookTag question={current} t={t}/>
           {!isGuest&&(
             <span style={{marginLeft:"auto"}}>
-              <StarButton active={starredSet.has(starKey("mcq",current.id))} onToggle={()=>onToggleStar?.("mcq",current.id)} label="Star MCQ"/>
+              <StarButton capacity={!isPro&&!isGuest?starred.filter(k=>/^(mcq|pbq):/.test(k)).length:null} active={starredSet.has(starKey("mcq",current.id))} onToggle={()=>onToggleStar?.("mcq",current.id)} label="Star MCQ"/>
             </span>
           )}
         </div>
@@ -25534,7 +25485,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
   const [showMissedOnly,setShowMissedOnly]=useState(false);
   const [starredView,setStarredView]=useState(false);
   const [visibleCount,setVisibleCount]=useState(12);
-  const isPro=user.tier==="pro";
+  const isPro=user?.authProvider!=="guest"&&user?.loginMethod!=="guest";
   const unlockedSet=useMemo(()=>new Set(coinWallet?.unlockedPbqIds||[]),[coinWallet?.unlockedPbqIds]);
   const coinBalance=Number(coinWallet?.balance||0);
   const bank=pbqBank?.length ? pbqBank : [];
@@ -25791,7 +25742,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
                 <div className="pbq-list-subtitle"><GlossaryText text={q.cat} t={t}/>{done?` · ${ok?"Completed correctly":"Needs another pass"}`:" · Not attempted"}</div>
               </div>
               <div className="pbq-list-actions">
-                <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
+                <StarButton capacity={user&&user.tier!=="pro"&&user.authProvider!=="guest"?starred.filter(k=>/^(mcq|pbq):/.test(k)).length:null} active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
                 <span aria-label={done?(ok?"Completed correctly":"Answered incorrectly"):"Not attempted"}>{done?ok?<CheckCircle2 size={18} color={t.green} strokeWidth={2.4}/>:<XCircle size={18} color={t.red} strokeWidth={2.4}/>:<Circle size={17} color={t.textDim} strokeWidth={1.8}/>}</span>
                 <span className={`pbq-open-indicator ${canOpen?"":"locked"}`}>{canOpen?<Play size={16} fill="currentColor" strokeWidth={2}/>:<LockKeyhole size={16} strokeWidth={2.2}/>}</span>
               </div>
@@ -25821,7 +25772,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
 // ═══════════════════════════════════════════════════════════════
 // PBQ SIMULATOR
 // ═══════════════════════════════════════════════════════════════
-function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewMode=false,onUpgrade,onOpenWallet,isGuest=false,onReportQuestion,showQuestionCodes=false}) {
+function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewMode=false,onUpgrade,onOpenWallet,isGuest=false,onReportQuestion,showQuestionCodes=false,user=null}) {
   const evidence=q?.payload?.evidence || {};
   const [termInput,setTermInput]=useState("");
   const [termHistory,setTermHistory]=useState([]);
@@ -25925,7 +25876,7 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
             <TrustBadge t={t} compact/>
           </div>
         </div>
-        <StarButton active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
+        <StarButton capacity={user&&user.tier!=="pro"&&user.authProvider!=="guest"?starred.filter(k=>/^(mcq|pbq):/.test(k)).length:null} active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
       </header>
 
       {/* Scenario */}
@@ -26713,9 +26664,9 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
 
   const explainExamMode=()=>addMessage("cipher","Exam Mode is for rehearsal when you want pressure: timed practice, mixed objectives, review after submission, and a report card that points you toward chapters to repair next.");
 
-  const explainProPlan=()=>addMessage("cipher",`The ${PRO_ACADEMY_PASS_NAME} is convenience access. It unlocks all PBQs, MCQ exams up to 50 questions, Smart Review, report cards, and Concept Deep Dives for focused exam preparation.`);
+  const explainProPlan=()=>addMessage("cipher",`The ${PRO_ACADEMY_PASS_NAME} is convenience access. It unlocks all PBQs, MCQ exams up to 90 questions, Smart Review, report cards, and Concept Deep Dives for focused exam preparation.`);
 
-  const explainPaymentPolicy=()=>addMessage("cipher","Payments are handled through Stripe. SecurePlus does not store your card details. You can cancel renewal from the account support area before the next billing cycle, or contact support if the portal is unavailable.");
+  const explainPaymentPolicy=()=>addMessage("cipher","New Pro purchases are one-time passes through Stripe and never renew. Existing recurring subscriptions keep their original cancellation controls. SecurePlus does not store card details.");
 
   const explainTerms=()=>addMessage("cipher",`SecurePlus is an independent study platform aligned to SY0-701. ${SITE_TAGLINE}`);
 
@@ -29141,206 +29092,14 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
 }
 
 function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
-  const isPro=user?.tier==="pro";
-  const hasPaidSubscription=["active","trialing"].includes(user?.subscriptionStatus || "");
-  const isRenewalCancelled=Boolean(user?.subscriptionCancelAtPeriodEnd);
-  const subscriptionEndLabel=formatSubscriptionDate(user?.subscriptionCurrentPeriodEnd);
-  useEffect(()=>{
-    capture("upgrade_page_viewed", { tier:user?.tier || "guest", plans:"monthly_4_99,three_month_9_99" });
-  },[user?.tier]);
-  const startUpgrade=(plan="three_month")=>{
-    capture("upgrade_button_clicked", { source:"upgrade_page", tier:user?.tier || "guest", plan });
-    onUpgrade(plan);
-  };
-  const features=[
-    "Everything in Free, including the full MCQ bank",
-    `${PBQ_BANK.length} performance-based simulations across 8 task types`,
-    "Timed MCQ exams up to 50 questions",
-    "Smart Review with delayed retests and concept remediation",
-    "Detailed solutions, chapter analytics, and next-step guidance",
-    "Open every Pro tool whenever you need it",
-  ];
-  const premiumBenefits=[
-    {label:"Personalised practice",free:"Basic review",freeIncluded:true,Icon:Brain,view:"dashboard"},
-    {label:"Unlimited PBQs",free:"Preview only",freeIncluded:false,Icon:Puzzle,view:"pbq"},
-    {label:"Exam Mode",free:"10, 20 or 30 questions",freeIncluded:true,Icon:ClipboardCheck,view:"exam"},
-    {label:"Concept Deep Dives",free:"Not included",freeIncluded:false,Icon:BookOpenCheck,view:"deep-dives"},
-  ];
-  const rawOwnerName=String(user?.name||user?.fullName||user?.email?.split("@")?.[0]||"").trim().split(/\s+/)[0] || "Your";
-  const safeOwnerName=rawOwnerName.replace(/[^A-Za-z0-9'-]/g,"").slice(0,18) || "Your";
-  const essentialPlanName=safeOwnerName==="Your" ? "Your Essential" : `${safeOwnerName}${safeOwnerName.endsWith("s")?"'":"'s"} Essential`;
-  return(
-    <div className="upgrade-page">
-      <div className="upgrade-hero">
-        <div className="page-title-row" style={{justifyContent:"center"}}><NavGlyph type="pricing" active/></div>
-        <h2>Unlock Pro before your next practice set.</h2>
-        <p>
-          Get PBQs, Exam Mode, personalised practice, and Concept Deep Dives.
-        </p>
-        <div className="upgrade-hero-cta-row">
-          <button className="btn btn-primary" type="button" onClick={()=>startUpgrade("three_month")} disabled={billingLoading||isPro}>
-            {isPro?"Pro is active":billingLoading?"Opening checkout...":`Start ${essentialPlanName}`}
-          </button>
-          <div className="upgrade-plan-note"><ShieldCheck size={14}/> Best fit for the typical 3-month Security+ study window</div>
-        </div>
-      </div>
-
-      <section className="upgrade-plan-selector" aria-labelledby="pro-plan-heading">
-        <div className="upgrade-plan-selector-head">
-          <div>
-            <h3 id="pro-plan-heading">Choose your Pro Academy Pass</h3>
-            <p>Both plans unlock the same Pro tools.</p>
-          </div>
-        </div>
-
-        <div className="upgrade-plan-choice-grid">
-          <article className="upgrade-plan-option monthly">
-            <div className="upgrade-plan-option-top">
-              <span className="upgrade-plan-kicker">Most flexible</span>
-            </div>
-            <h3>Monthly Pro</h3>
-            <div className="upgrade-monthly-mascot-slot" aria-hidden="true">
-              <MascotAnimation animation="wave" size={86} interactive={false} label="Cipher beside the monthly plan"/>
-            </div>
-            <div className="upgrade-monthly-equivalent"><strong>$4.99</strong><span>per month</span></div>
-            <p className="upgrade-plan-math"><strong>Flexible.</strong> Best if you only need a short boost.</p>
-            <p className="upgrade-plan-summary">Full Pro access with the freedom to reassess each month.</p>
-            {isPro?(
-              <button className="btn btn-ghost upgrade-primary-cta" disabled><CheckCircle2 size={17}/> Pro is active</button>
-            ):(
-              <button className="btn btn-outline upgrade-primary-cta upgrade-monthly-cta" onClick={()=>startUpgrade("monthly")} disabled={billingLoading}>
-                {billingLoading?"Opening checkout...":`Choose ${PRO_MONTHLY_PASS_PRICE}`}
-              </button>
-            )}
-          </article>
-
-          <article className="upgrade-plan-option recommended">
-            <div className="upgrade-plan-option-top">
-              <span className="upgrade-plan-kicker">Best for exam preparation</span>
-              <span className="upgrade-recommended-badge"><Sparkles size={12}/> Recommended</span>
-            </div>
-            <h3>{essentialPlanName}</h3>
-            <p className="upgrade-pro-short-descriptor">Pro access for your 3-month Security+ study window.</p>
-            <div className="upgrade-price-row">
-              <div className="upgrade-price">$9.99</div>
-              <div className="upgrade-price-cycle">USD / 3 months<br/>renews every 3 months</div>
-            </div>
-            <div className="upgrade-monthly-equivalent"><strong>$3.33</strong><span>per month equivalent</span></div>
-            <div className="upgrade-savings-pill"><CheckCircle2 size={14}/> Save $4.98 (33%) across 3 months · Optimal Security+ study window</div>
-            <p className="upgrade-plan-math"><strong>Recommended.</strong> One focused study term at the lowest monthly equivalent.</p>
-            <p className="upgrade-plan-summary">{PRO_ACADEMY_PASS_DESCRIPTION}</p>
-            {isPro?(
-              <button className="btn btn-ghost upgrade-primary-cta" disabled><CheckCircle2 size={17}/> Pro is active</button>
-            ):(
-              <button className="btn btn-primary upgrade-primary-cta" onClick={()=>startUpgrade("three_month")} disabled={billingLoading}>
-                {billingLoading?"Opening secure checkout...":`Choose ${essentialPlanName} · ${PRO_ACADEMY_PASS_PRICE} →`}
-              </button>
-            )}
-          </article>
-        </div>
-
-      </section>
-
-      <section className="upgrade-benefit-stage" aria-labelledby="upgrade-benefit-stage-title">
-        <div className="upgrade-benefit-stage-copy">
-          <div className="label" style={{color:t.accent}}>Free vs Pro</div>
-          <h3 id="upgrade-benefit-stage-title">Unlock the full SecurePlus exam-prep loop.</h3>
-          <p>Free gets you started. Pro removes limits when your exam preparation needs applied practice and guided next steps.</p>
-        </div>
-        <div className="upgrade-benefit-board" aria-label="Free and Pro benefit comparison">
-          <div className="upgrade-benefit-labels">
-            <div className="upgrade-benefit-heading">Benefits</div>
-            {premiumBenefits.map(({label,Icon,view})=>(
-              <button key={label} type="button" className="upgrade-benefit-name" onClick={()=>onNavigate?.(view)} aria-label={`Open ${label}`}>
-                <span><Icon size={19}/></span>
-                {label}
-              </button>
-            ))}
-          </div>
-          <div className="upgrade-benefit-plan free">
-            <div className="upgrade-benefit-plan-title">Free</div>
-            {premiumBenefits.map(({label,free,freeIncluded})=>(
-              <div key={label} className={`upgrade-benefit-cell muted ${freeIncluded?"":"locked"}`}>
-                {freeIncluded?<Check size={18}/>:<XCircle size={18}/>}
-                <span>{free}</span>
-              </div>
-            ))}
-          </div>
-          <div className="upgrade-benefit-plan pro" aria-label="Pro plan includes all listed premium benefits">
-            <div className="upgrade-benefit-plan-title">
-              <span>Pro</span>
-              <em>Full access</em>
-            </div>
-            <div className="upgrade-benefit-phone">
-              {premiumBenefits.map(({label})=>(
-                <div key={label} className="upgrade-benefit-cell">
-                  <Check size={18}/>
-                  <span>Unlimited</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div className="upgrade-secondary-stack">
-        <details className="upgrade-secondary">
-          <summary>Payment security</summary>
-          <div className="upgrade-secondary-content">
-            <p>
-              Upgrade opens Stripe Checkout at <code>/api/stripe/checkout</code>. Payments are processed by Stripe, and SecurePlus does not store card details.
-            </p>
-          </div>
-        </details>
-      </div>
-
-      <div className="upgrade-shared-access">
-        <div>
-          <h4>Included with either Pro plan</h4>
-          <div className="upgrade-feature-list">
-            {features.map(feature=>(
-              <div key={feature} className="upgrade-feature"><CheckCircle2 size={16}/><span>{feature}</span></div>
-            ))}
-          </div>
-        </div>
-        <div className="upgrade-checkout-note">
-          <div className="upgrade-original-line"><ShieldCheck size={14}/>{PRO_ACADEMY_PASS_TRUST}</div>
-          <p><strong>Simple, secure billing.</strong> Stripe processes your payment. SecurePlus never stores your card details, and your free MCQ access remains available if you do not upgrade.</p>
-          <div className="upgrade-checkout-actions">
-            <span className="upgrade-trust-item"><LockKeyhole size={13}/> Stripe checkout</span>
-            <span className="upgrade-trust-item"><Check size={13}/> Cancel renewal anytime</span>
-          </div>
-          {isPro&&hasPaidSubscription&&(
-            <div className={`subscription-status-card ${isRenewalCancelled?"cancelled":""}`}>
-              <strong>{isRenewalCancelled?"Renewal cancelled":"Membership active"}</strong>
-              <span>
-                {isRenewalCancelled
-                  ? `You will not be billed again. Pro access remains until ${subscriptionEndLabel || "the current paid period ends"}.`
-                  : `You can stop the next bill anytime. Pro access remains through the current paid period after cancellation${subscriptionEndLabel ? ` (${subscriptionEndLabel})` : ""}.`}
-              </span>
-              <button className="btn btn-outline" type="button" onClick={onCancelMembership} disabled={billingLoading||isRenewalCancelled}>
-                {isRenewalCancelled?"Renewal already cancelled":billingLoading?"Cancelling renewal...":"Cancel renewal"}
-              </button>
-            </div>
-          )}
-          {!isPro&&(
-            <button className="btn btn-ghost" style={{width:"100%",justifyContent:"center",fontSize:11,marginTop:12}} onClick={onSyncBilling} disabled={billingLoading}>
-              Already paid? Refresh Pro status
-            </button>
-          )}
-        </div>
-      </div>
-
-      {!isPro&&(
-        <div className="upgrade-mobile-cta">
-          <button className="btn btn-primary" onClick={()=>startUpgrade("three_month")} disabled={billingLoading}>
-            {billingLoading?"Opening checkout...":`${essentialPlanName} · ${PRO_ACADEMY_PASS_PRICE}`}
-          </button>
-          <div className="upgrade-mobile-trust">Recommended · Save 33% vs monthly · {PRO_ACADEMY_PASS_TRUST}</div>
-        </div>
-      )}
-    </div>
-  );
+  const isPro=user?.tier==="pro",legacy=["active","trialing"].includes(user?.subscriptionStatus||"");
+  const plans=[{id:"sprint",name:"Sprint Pass",price:"11.99",days:30,description:"A focused final month before exam day."},{id:"comprehensive",name:"Comprehensive Pass",price:"24.99",days:90,description:"A full quarter to prepare on your schedule."}];
+  return <div className="upgrade-page"><section className="upgrade-hero"><div className="page-title-row" style={{justifyContent:"center"}}><NavGlyph type="pricing" active/></div><h2>Your pace. Your deadline.</h2><p>Free gives you the tools to prepare steadily. Pro gives you room to cram and target precisely.</p><div className="upgrade-plan-note"><ShieldCheck size={15}/> One payment. No automatic renewal.</div></section>
+  <section className="upgrade-plan-selector"><h3>Choose your Pro access pass</h3><div className="upgrade-plan-choice-grid">{plans.map(plan=><article key={plan.id} className={`upgrade-plan-option ${plan.id==="comprehensive"?"recommended":""}`}><div className="upgrade-plan-option-top"><span className="upgrade-plan-kicker">{plan.days} days</span>{plan.id==="comprehensive"&&<span className="upgrade-recommended-badge">Best value</span>}</div><h3>{plan.name}</h3><div className="upgrade-price-row"><div className="upgrade-price">${plan.price}</div><div className="upgrade-price-cycle">USD · one-time<br/>{plan.days} days of Pro</div></div><p className="upgrade-plan-summary">{plan.description}</p><button className="btn btn-primary upgrade-primary-cta" disabled={billingLoading||isPro} onClick={()=>onUpgrade(plan.id)}>{isPro?"Pro is active":billingLoading?"Opening checkout…":`Choose ${plan.name}`}</button><p className="upgrade-plan-math">Ends automatically. You won’t be billed again.</p></article>)}</div></section>
+  <section className="card" style={{padding:24,marginTop:24,overflowX:"auto"}}><h3>Everything you need. More room when you need it.</h3><table style={{width:"100%",textAlign:"left",borderSpacing:"12px 18px"}}><thead><tr><th>Study tools</th><th>Free account</th><th>Pro pass</th></tr></thead><tbody>{[
+   ["Question generation","50 every rolling 12 hours","Unlimited"],["Set size","Up to 30","Up to 90"],["Question repository & Exam Mode","Full access","Full access"],["Daily Challenge","Included · no quota use","Included"],["Flashcards & Concept Deep Dives","Full access","Full access"],["Chapter, topic & difficulty filters","—","Included"],["Question bookmarks","10 active slots","Unlimited · search, tags & categories"],["Identical exam retakes","No quota use","Unlimited"]
+  ].map(row=><tr key={row[0]}>{row.map((cell,i)=><td key={i}>{cell}</td>)}</tr>)}</tbody></table></section>
+  <section className="card" style={{padding:24,marginTop:20}}><h3>Your account</h3>{user?.proPassExpiresAt&&<p>Your pass ends {formatSubscriptionDate(user.proPassExpiresAt)}. It does not renew.</p>}{legacy&&<><p>Your existing recurring subscription is unchanged. {user.subscriptionCancelAtPeriodEnd?"Renewal is cancelled; access lasts until the paid period ends.":"You can still cancel its next renewal below."}</p><button className="btn btn-outline" disabled={billingLoading||user.subscriptionCancelAtPeriodEnd} onClick={onCancelMembership}>Cancel existing subscription renewal</button></>}<button className="btn btn-ghost" disabled={billingLoading} onClick={onSyncBilling}>Already paid? Refresh Pro status</button></section></div>;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -29684,12 +29443,10 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   const answerCopy=isDividerCard
     ?activeCard?.meaning
     :asksFromExample
-    ?`Exam meaning: ${activeCard?.meaning}`
-    :testsAcronym
-      ?`Definition: ${activeCard?.meaning}`
-      :setType==="term"
+      ?`Exam meaning: ${activeCard?.meaning}`
+      :testsAcronym
         ?`Definition: ${activeCard?.meaning}`
-        :`Acronym: ${activeCard?.acronym}. Definition: ${activeCard?.meaning}`;
+        :"";
   const masteredCount=acronymSet.cards.filter(card=>card.cardType!=="divider"&&masteredIds.includes(card.id)).length;
   const progress=studyCards.length?Math.round(((cardIndex+1)/studyCards.length)*100):0;
   const flashcardStarredSet=useMemo(()=>new Set(starred||[]),[starred]);
@@ -29849,7 +29606,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
                   <span className="deep-dive-flashcard-watermark"><BrandMark size={16}/>SecurePlus</span>
                   <small>{answerLabel}</small>
                   <strong>{answerMain}</strong>
-                  <p className="deep-dive-acronym-answer-copy">{answerCopy}</p>
+                  {answerCopy&&<p className="deep-dive-acronym-answer-copy">{answerCopy}</p>}
                   <span className="deep-dive-flashcard-hint">Tap to see the question again</span>
                 </span>
               </span>
@@ -29995,7 +29752,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
       return stored&&typeof stored==="object"&&!Array.isArray(stored)?stored:{};
     }catch{return {};}
   });
-  const isPro=user?.tier==="pro";
+  const isPro=Boolean(user&&user.authProvider!=="guest"&&user.loginMethod!=="guest");
   const freePreviewDive=CONCEPT_DEEP_DIVES.find(dive=>dive.id===FREE_DEEP_DIVE_PREVIEW_ID)||CONCEPT_DEEP_DIVES[0];
   const isLockedDeepDive=useCallback(id=>!isPro&&id!==freePreviewDive?.id,[freePreviewDive?.id,isPro]);
   const promptLockedDeepDive=useCallback((id,source="card")=>{
@@ -30487,7 +30244,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
         <div className="deep-dives-hero-copy">
           <span className="deep-dive-preview-badge"><Sparkles size={13}/>{isPro?"Personalized study library":"Free preview lesson"}</span>
           <div className="page-title-row"><NavGlyph type="deep-dives" active/><h1>Concept Deep Dives</h1></div>
-          <p>{isPro?"Follow the official SY0-701 path. Learn the exam words in plain English, compare similar answers, and practise with short checks instead of long notes.":"Preview Web Attacks, Phishing, and DNS Attacks for free. The rest of the guided lesson path unlocks with Pro."}</p>
+          <p>{isPro?"Follow the official SY0-701 path. Learn the exam words in plain English, compare similar answers, and practise with short checks instead of long notes.":"Preview Web Attacks, Phishing, and DNS Attacks for free. Create a free account for the full guided lesson path."}</p>
           <div className="deep-dives-proof">
             <span><BadgeCheck size={15}/>{isPro?CONCEPT_DEEP_DIVES.length:"1"} syllabus-mapped lesson{isPro?"s":" preview"}</span>
             <span><Crosshair size={15}/>5 official exam domains</span>
@@ -30499,7 +30256,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
         <div className="deep-dives-progress-card">
           <div><span>{isPro?"Study progress":"Preview progress"}</span><strong>{visibleCompletedIds.length}/{visibleLessonTotal}</strong></div>
           <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
-          <p>{isPro?(completedIds.length?"Continue with one short concept or open Flashcards from the main menu.":"Choose a lesson, learn one idea at a time, then practise it."):"Start with the free attacks lesson, then upgrade when you want the full guided path."}</p>
+          <p>{isPro?(completedIds.length?"Continue with one short concept or open Flashcards from the main menu.":"Choose a lesson, learn one idea at a time, then practise it."):"Start with the free attacks lesson, then create a free account for the full guided path."}</p>
           <div className="deep-dives-card-progress"><BookOpenCheck size={16}/><span><strong>{Math.max(0,visibleLessonTotal-visibleCompletedIds.length)}</strong> lesson{visibleLessonTotal-visibleCompletedIds.length===1?"":"s"} left in this {isPro?"path":"preview"}</span></div>
         </div>
       </section>
@@ -31496,7 +31253,7 @@ function LegalPage({type,t}) {
     },
     {
       title:"How we use information",
-      body:"We use your information to provide the practice platform, authenticate your account, process subscriptions through Stripe, send account emails through Supabase or our email provider, improve the product, and respond to support requests.",
+      body:"We use your information to provide the practice platform, authenticate your account, process access-pass payments and existing subscriptions through Stripe, send account emails through Supabase or our email provider, improve the product, and respond to support requests.",
     },
     {
       title:"Payments",
@@ -31520,8 +31277,8 @@ function LegalPage({type,t}) {
       body:"You are responsible for keeping your login information secure. You should use a real email address so you can verify your account, reset your password, and receive account notices.",
     },
     {
-      title:"Subscriptions",
-      body:"Paid access is billed through Stripe. Subscription features are unlocked only when Stripe and Supabase show an active or trialing subscription. You can cancel through the billing portal when available or by contacting support.",
+      title:"Pro passes and existing subscriptions",
+      body:"New Pro purchases are one-time access passes processed through Stripe: $11.99 USD for 30 days or $24.99 USD for 90 days. Passes expire automatically and never renew. Existing recurring subscriptions keep their original billing terms and cancellation controls. Access is granted only after payment is verified.",
     },
     {
       title:"Educational content",
@@ -31566,7 +31323,7 @@ function AccountSupportPage({user,t,onDeleteAccount,onCancelMembership,onNavigat
   const cards=[
     {title:"Contact support",body:"Email us for account, billing, content, or technical issues.",color:t.accent,Icon:MessageSquareWarning,action:"Email support",href:`mailto:${SUPPORT_EMAIL}`},
     {title:"Privacy policy",body:"See what account, payment, and practice data SecurePlus uses.",color:t.green,Icon:LockKeyhole,action:"Open privacy",view:"privacy"},
-    {title:"Terms & Conditions",body:"Review subscription, content, and acceptable-use terms.",color:t.amber,Icon:FileText,action:"Open terms",view:"terms"},
+    {title:"Terms & Conditions",body:"Review access-pass, existing subscription, content, and acceptable-use terms.",color:t.amber,Icon:FileText,action:"Open terms",view:"terms"},
   ];
   return(
     <div className="account-support-page">
@@ -31767,17 +31524,17 @@ function ProWelcomeModal({user,t,onClose,onNavigate}) {
   const choices=[
     {
       id:"pbq",
-      title:"Start PBQ practice",
-      body:"Open the full PBQ simulator without preview limits.",
+      title:"Build a focused set",
+      body:"Generate without a quota and target a chapter, topic or difficulty.",
       Icon:Puzzle,
       color:t.accent,
-      view:"pbq",
-      cta:"Open PBQs",
+      view:"mcq",
+      cta:"Open MCQ practice",
     },
     {
       id:"exam",
       title:"Run Exam Mode",
-      body:"Use timed mixed practice and get a report card when you finish.",
+      body:"Rehearse with up to 90 questions and get a pacing report when you finish.",
       Icon:ClipboardCheck,
       color:t.green,
       view:"exam",
@@ -31813,7 +31570,7 @@ function ProWelcomeModal({user,t,onClose,onNavigate}) {
           <div>
             <h2 id="pro-welcome-title">Welcome to Pro, {firstName}.</h2>
             <p>
-              Your Pro Academy Pass is active. PBQs, Exam Mode, Smart Review, report cards, and Concept Deep Dives are now available.
+              Your Pro access is active: unlimited generation, precise targeting, exams up to 90 questions and unlimited question bookmarks.
             </p>
           </div>
         </div>
@@ -32199,6 +31956,13 @@ export default function App() {
   const [flashcardReviewConfirmation,setFlashcardReviewConfirmation]=useState(null);
   const [achievementUnlocks,setAchievementUnlocks]=useState([]);
   const [coinWallet,setCoinWallet]=useState(()=>({...emptyCipherWallet(),status:"idle"}));
+  useEffect(()=>{
+    if(user?.authProvider!=="supabase")return;
+    let active=true;const owner=user.id;
+    const refresh=()=>mcqEngineRequest("access").then(access=>{if(active)setUser(current=>!current||current.id!==owner||current.isAdmin?current:current.tier===(access.isPro?"pro":"free")&&current.proPassExpiresAt===access.passExpiresAt?current:{...current,tier:access.isPro?"pro":"free",proPassExpiresAt:access.passExpiresAt});}).catch(()=>{});
+    refresh();const id=setInterval(refresh,60000);return()=>{active=false;clearInterval(id);};
+  },[user?.id,user?.authProvider]);
+
   const [coinBusy,setCoinBusy]=useState(false);
   const [coinRewardToast,setCoinRewardToast]=useState(null);
   const [guestMoreOpen,setGuestMoreOpen]=useState(false);
@@ -32216,7 +31980,7 @@ export default function App() {
   );
   const useLocalPbqFallback=Boolean(
     isSupabaseConfigured
-    && user?.tier==="pro"
+    && Boolean(user)
     && !pbqBankLoading
     && (pbqBankError || remotePbqBank.length<PBQ_BANK.length)
   );
@@ -32645,7 +32409,7 @@ export default function App() {
           setShowProWelcome(true);
           capture("pro_welcome_viewed", { source:"checkout_success" });
         }else if(active&&!seen&&CIPHER_COINS_ACTIVE) setShowOnboarding(true);
-        else if(active&&!diagnosticDone&&accountAttempts.length===0) setShowDiagnostic(true);
+        else if(active&&!diagnosticDone&&accountAttempts.length===0) setShowDiagnostic(false);
         setLoading(false);
       };
 
@@ -32662,7 +32426,7 @@ export default function App() {
 
     (async()=>{
       const sess=await DB.getSession();
-      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){const entitledUser=applyAdminEntitlements(u);setUser(entitledUser);const a=await DB.getAttempts(entitledUser.email);const s=await DB.getStarred(starOwner(entitledUser));setAttempts(a);setStarred(s);const diagnosticDone=await DB.getDiagnosticDone(entitledUser.email);const seen=await DB.getOnboardingSeen(entitledUser.email);if(!seen&&CIPHER_COINS_ACTIVE)setShowOnboarding(true);else if(!diagnosticDone&&a.length===0)setShowDiagnostic(true);}}
+      if(sess?.loggedIn){const u=await DB.getUser(sess.email);if(u){const entitledUser=applyAdminEntitlements(u);setUser(entitledUser);const a=await DB.getAttempts(entitledUser.email);const s=await DB.getStarred(starOwner(entitledUser));setAttempts(a);setStarred(s);const diagnosticDone=await DB.getDiagnosticDone(entitledUser.email);const seen=await DB.getOnboardingSeen(entitledUser.email);if(!seen&&CIPHER_COINS_ACTIVE)setShowOnboarding(true);else if(!diagnosticDone&&a.length===0)setShowDiagnostic(false);}}
       setLoading(false);
     })();
     return()=>{active=false;};
@@ -32693,7 +32457,7 @@ export default function App() {
       setShowDiagnostic(false);
       setFlashcardReviewConfirmation({count:flashcardImport.importedCount});
     }else if(!seen&&CIPHER_COINS_ACTIVE) setShowOnboarding(true);
-    else if(!diagnosticDone&&a.length===0) setShowDiagnostic(true);
+    else if(!diagnosticDone&&a.length===0) setShowDiagnostic(false);
     setAttempts(a);setStarred(s);setView(shouldShowFlashcardReviewConfirmation?"flashcards":"dashboard");setFlashcardSetRequest(shouldShowFlashcardReviewConfirmation&&flashcardImport.importedCount>0?STARRED_FLASHCARD_SET_ID:null);setShowDaily(false);
   },[forceSupabaseSignOut,importPendingGuestFlashcards,importPendingGuestSmartReview]);
   const handleLogout=useCallback(async()=>{
@@ -32842,7 +32606,7 @@ export default function App() {
     if(user?.email) await DB.saveOnboardingSeen(user.email);
     setShowOnboarding(false);
     const diagnosticDone=user?.email ? await DB.getDiagnosticDone(user.email) : true;
-    if(!diagnosticDone&&attempts.length===0)setShowDiagnostic(true);
+    if(!diagnosticDone&&attempts.length===0)setShowDiagnostic(false);
   },[user,attempts.length]);
   const closeProWelcome=useCallback(()=>{
     markProWelcomeSeen(user);
@@ -32918,12 +32682,12 @@ export default function App() {
       }
       const syncedUser = await syncStripeProfile(authUser);
       if(!syncedUser){
-        alert("No active Stripe subscription was found for this account yet. If you just paid, wait 30 seconds and try again.");
+        alert("No active Pro pass or subscription was found yet. If you just paid, wait 30 seconds and try again.");
         return;
       }
       setUser(syncedUser);
       identifyUser(syncedUser);
-      alert(syncedUser.tier==="pro" ? "Pro status refreshed. Your account is Pro now." : "Stripe synced, but this account is not showing an active subscription.");
+      alert(syncedUser.tier==="pro" ? "Pro status refreshed. Your account is Pro now." : "Stripe synced, but this account has no active Pro pass or subscription.");
     }finally{
       setBillingLoading(false);
     }
@@ -33024,9 +32788,9 @@ export default function App() {
     }
     setAccountDeletion({...emptyAccountDeletionState(),stage:"request",email:user.email});
   },[user]);
-  const handleUpgrade=useCallback(async (plan="three_month")=>{
+  const handleUpgrade=useCallback(async (plan="comprehensive")=>{
     if(!user)return;
-    const selectedPlan=plan==="monthly"?"monthly":"three_month";
+    const selectedPlan=plan==="sprint"?"sprint":"comprehensive";
 
     if(!isSupabaseConfigured){
       alert("Stripe Checkout is ready in the project code, but Supabase env vars are not configured yet. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY, sign in with Supabase, then try again.");
@@ -33094,18 +32858,32 @@ export default function App() {
       setView("mcq");
     }
   },[user]);
-  const handleToggleStar=useCallback((type,id)=>{
-    if(!user)return;
-    const key=starKey(type,id);
-    setStarred(prev=>{
-      const exists=prev.includes(key);
-      const next=exists?prev.filter(item=>item!==key):[key,...prev];
-      DB.saveStarred(starOwner(user),next);
-      if(user.authProvider==="supabase") saveSupabaseStar(user.id,type,id,!exists);
-      capture("question_star_toggled", { type, id, starred: !exists, tier: user.tier });
-      return next;
-    });
-  },[user]);
+  useEffect(()=>{if(user?.authProvider!=="supabase")return;let active=true;loadSupabaseStarred(user.id).then(rows=>{if(active&&rows)setStarred(rows);});return()=>{active=false;};},[user?.id,user?.tier]);
+  const starMutationBusy=useRef(false);
+  const handleToggleStar=useCallback(async(type,id)=>{
+    if(!user||starMutationBusy.current)return;
+    starMutationBusy.current=true;
+    try{
+      const key=starKey(type,id),exists=starred.includes(key);let replaced=null;
+      if(user.authProvider==="supabase"){
+        let result=await saveSupabaseStar(user.id,type,id,!exists);
+        if(result.replaceRequired){
+          const oldId=result.oldest.split(":").slice(1).join(":");
+          const oldQuestion=liveMcqBank.find(q=>q.id===oldId)||livePbqBank.find(q=>q.id===oldId);
+          if(!window.confirm(`Your 10 question slots are full. Replace your oldest saved question: “${(oldQuestion?.q||oldQuestion?.title||oldId).slice(0,180)}”?`))return;
+          result=await saveSupabaseStar(user.id,type,id,true,result.oldest);
+          if(!result.saved)throw new Error("Your bookmarks changed. Please try again.");
+        }
+        replaced=result.replaced;
+      }else if(!exists&&type!==FLASHCARD_STAR_TYPE&&user.tier!=="pro"){
+        const slots=starred.filter(k=>!k.startsWith("flashcard:"));
+        if(slots.length>=10){replaced=slots.at(-1);if(!window.confirm(`Replace your oldest saved question (${replaced})? Your 10 question slots are full.`))return;}
+      }
+      const next=exists?starred.filter(k=>k!==key):[key,...starred.filter(k=>k!==replaced)];
+      setStarred(next);await DB.saveStarred(starOwner(user),next);
+      capture("question_star_toggled",{type,id,starred:!exists,tier:user.tier});
+    }catch(error){alert(error.message||"Unable to save bookmark.");}finally{starMutationBusy.current=false;}
+  },[user,starred,liveMcqBank,livePbqBank]);
   const handleGuestToggleStar=useCallback((type,id)=>{
     if(type!==FLASHCARD_STAR_TYPE||!id)return;
     const key=starKey(type,id);
@@ -33171,7 +32949,7 @@ export default function App() {
   const handleTryRelatedDeepDivePbq=useCallback(({chapterId,lessonId,title}={})=>{
     const chapterKey=String(chapterId||"");
     const unlockedIds=coinWallet?.unlockedPbqIds||[];
-    const accessible=question=>user?.tier==="pro"||isFreePBQPreview(question)||unlockedIds.includes(question.id);
+    const accessible=question=>Boolean(user);
     const related=livePbqBank.find(question=>String(question.ch)===chapterKey&&accessible(question))
       || livePbqBank.find(question=>String(question.ch)===chapterKey)
       || livePbqBank.find(isFreePBQPreview)
@@ -33428,11 +33206,12 @@ export default function App() {
               <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onFlashcards={()=>setView("flashcards")} onConcepts={()=>setView("deep-dives")}/>
             )}
             {view==="mcq"&&(
-              <MCQPractice examRequest={examEntryRequest} user={guestUser} attempts={[]} onSave={()=>{}} onUpgrade={goToSignup} onSignup={goToSignup} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={[]} onReportQuestion={handleReportQuestion} mcqBank={liveMcqBank}/>
+              <GuestDiagnostic t={t} onSignup={goToSignup} onSave={savePendingGuestSmartReview}/>
             )}
             {view==="pbq"&&(
               activeGuestPbq ? (
                 <PBQSim
+            user={user}
                   key={activeGuestPbq.id}
                   q={activeGuestPbq}
                   t={t}
@@ -33460,7 +33239,7 @@ export default function App() {
               )
             )}
             {view==="daily"&&(
-              <DailyChallenge t={t} onLogin={goToSignup}/>
+              <GuestLockedPage t={t} title="Create a free account for Daily Challenge" onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={goToSignup}/>
             )}
             {view==="objectives"&&<ObjectivesPage t={t}/>}
             {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={assistantFlashcardSet} starred={guestStarred} onToggleStar={handleGuestToggleStar} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
@@ -33497,11 +33276,11 @@ export default function App() {
   const pbqLocalFallback=pbqQ ? (PBQ_BANK.find(question=>question.id===pbqQ.id) || pbqQ) : null;
   const pbqUnlockedByCoins=Boolean(pbqQ&&coinWallet.unlockedPbqIds.includes(pbqQ.id));
   const activePbq=pbqQ
-    ? (livePbqBank.find(question=>question.id===pbqQ.id) || (pbqLocalFallback&&(pbqUnlockedByCoins||isFreePBQPreview(pbqLocalFallback)||!isSupabaseConfigured) ? pbqLocalFallback : null))
+    ? (livePbqBank.find(question=>question.id===pbqQ.id) || (pbqLocalFallback&&Boolean(user) ? pbqLocalFallback : null))
     : null;
-  const pbqPreviewMode=user?.tier!=="pro"&&isFreePBQPreview(activePbq);
+  const pbqPreviewMode=false;
   const pbqCoinUnlocked=Boolean(activePbq&&coinWallet.unlockedPbqIds.includes(activePbq.id));
-  const nextPbq=user?.tier==="pro"&&activePbq?getNextRelatedPBQ(activePbq,attempts,livePbqBank):null;
+  const nextPbq=activePbq?getNextRelatedPBQ(activePbq,attempts,livePbqBank):null;
 
   if(pbqQ) return(
     <>
@@ -33514,6 +33293,7 @@ export default function App() {
         </div>
         {pbqBankLoading ? <PBQLoadingSkeleton t={t}/> : activePbq ? (
           <PBQSim
+            user={user}
             key={activePbq.id}
             q={activePbq}
             nextQuestion={nextPbq}
@@ -33625,7 +33405,7 @@ export default function App() {
             <MCQPractice examRequest={examEntryRequest} user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
           </div>
           <div style={{display:view==="pbq"?"block":"none"}} aria-hidden={view!=="pbq"}>
-            <PBQBank user={user} attempts={attempts} onStart={q=>user.tier==="free"&&!isFreePBQPreview(q)&&!coinWallet.unlockedPbqIds.includes(q.id)?setView("pricing"):setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("pricing")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
+            <PBQBank user={user} attempts={attempts} onStart={q=>setPbqQ(q)} onUpgrade={()=>setView("pricing")} onOpenWallet={()=>setView("pricing")} onUnlockPbq={handleUnlockPbq} coinWallet={coinWallet} coinBusy={coinBusy} t={t} starred={starred} onToggleStar={handleToggleStar} showQuestionCodes={isRootUser} pbqBank={livePbqBank} isLoading={pbqBankLoading&&user.tier==="pro"} loadError={user.tier==="pro"&&!useLocalPbqFallback?pbqBankError:null}/>
           </div>
           {view==="daily"&&<DailyChallenge t={t} user={user} onLogin={()=>setView("dashboard")} showQuestionCodes={isRootUser} onCoinReward={handleDailyCoinReward} onSave={handleSaveAttempt}/>}
           {CIPHER_COINS_ACTIVE&&view==="coins"&&<CipherCoinVault user={user} wallet={coinWallet} onUnlockPbq={handleUnlockPbq} onBuyExamPass={handleBuyExamPass} onNavigate={setView} onRefresh={refreshCipherWallet} t={t} busy={coinBusy}/>}

@@ -11,6 +11,7 @@ test('practice metrics include repeated MCQ, Exam and Daily answers; exclude PBQ
 test('quota never invents limits, distinguishes expired data and formats a real reset time',()=>{
   const now=Date.parse('2026-10-22T00:00:00Z');
   assert.equal(quotaDisplay(null,now),null);
+  assert.equal(quotaDisplay({limit:50,remaining:50,resetAt:null},now).idle,true);
   assert.equal(quotaDisplay({limit:30,remaining:31,resetAt:'2026-10-22T12:00:00Z'},now),null);
   const live=quotaDisplay({limit:30,remaining:12,resetAt:'2026-10-22T03:04:01Z'},now);
   assert.equal(live.fill,.4);assert.equal(live.timer,'3h 05m');assert.equal(live.refreshing,false);

@@ -35,7 +35,7 @@ export function prioritizeCoreRecovery(planned, bank, state, random = Math.rando
 }
 
 export function generateSet(bank, state, count, random = Math.random) {
-  if (!Number.isInteger(count) || count < 10 || count > 30) throw new EngineError('Choose 10–30 questions.');
+  if (!Number.isInteger(count) || count < 1 || count > 90) throw new EngineError('Choose 1–90 questions.');
   const questions = new Map(bank.map(q => [q.id, q]));
   if (questions.size !== bank.length || bank.some(q => q.format !== 'mcq')) throw new EngineError('Invalid MCQ catalogue.', 503);
   const mastery = new Map(state.mastery.map(row => [row.concept_tag, row.score]));

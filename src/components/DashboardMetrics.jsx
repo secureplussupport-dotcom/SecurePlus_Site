@@ -41,8 +41,8 @@ export function DashboardMetrics({profile,streak,tier,t,quota=null}) {
       <header><span className="dm-icon">{isPro?<InfinityIcon size={18}/>:<Clock3 size={18}/>}</span><h3>Practice allowance</h3>{isPro&&<span className="dm-tier">PRO</span>}</header>
       {isPro?<><div className="dm-main"><strong className="dm-infinity" aria-label="Unlimited">∞</strong><div className="dm-infinity-halo" aria-hidden="true"><InfinityIcon size={40}/></div></div><p>Unlimited MCQ practice.</p><footer>Make room for your next breakthrough.</footer></>:<>
         <div className="dm-main"><strong className="dm-number">{allowance&&!allowance.refreshing?allowance.remaining:'—'}<small>MCQs left</small></strong><Ring value={allowance?.fill || 0} color={t.purple || '#a58aff'} pending={!allowance}><Clock3 size={20}/></Ring></div>
-        <p>{allowance?`Your ${allowance.limit}-question allowance`:'12-hour quota coming soon'}</p>
-        <footer className="dm-reset"><Clock3 size={13}/>{allowance?(allowance.refreshing?allowance.timer:<>Resets in <strong>{allowance.timer}</strong></>):'Your reset countdown will appear here.'}</footer>
+        <p>{allowance?`${allowance.limit} questions · rolling 12 hours`:'12-hour quota coming soon'}</p>
+        <footer className="dm-reset"><Clock3 size={13}/>{allowance?(allowance.refreshing||allowance.idle?allowance.timer:<>Next quota release in <strong>{allowance.timer}</strong></>):'Your reset countdown will appear here.'}</footer>
       </>}
     </article>
   </section>;
