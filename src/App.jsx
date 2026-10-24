@@ -31090,6 +31090,7 @@ export default function App() {
         await Promise.all(pending.map(attempt=>saveSupabaseAttempt(account.id,attempt,{throwOnError:true})));
       }else{
         for(const attempt of [...pending].reverse())await DB.saveAttempt(account.email,attempt);
+        if(pending[0]?.diagnosticSessionId){await storageDelete(GUEST_SMART_REVIEW_BRIDGE_KEY);clearGuestDiagnostic();}
       }
       capture("guest_smart_review_imported", {
         attempt_count:pending.length,
