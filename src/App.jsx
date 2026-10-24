@@ -32129,7 +32129,7 @@ export default function App() {
       {id:"flashcards",label:"Flashcards"},
     ];
     const guestMoreItems=[
-      {id:"about",label:"About us"},
+      {id:"about",label:"Why we’re different"},
       {id:"objectives",label:"SY0-701 Exam Guide"},
       {id:"deep-dives",label:"Concept Deep Dives"},
       {id:"privacy",label:"Privacy Policy"},

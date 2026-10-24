@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, BookOpenCheck, Check, Fingerprint, Heart, Layers3, MessageCircle, Route, ShieldCheck, Shuffle, Sparkles, Target, UsersRound } from 'lucide-react';
+import { ArrowDown, ArrowRight, BookOpenCheck, Check, Fingerprint, Heart, Layers3, MessageCircle, Route, ShieldCheck, Shuffle, Sparkles, Target, UsersRound } from 'lucide-react';
 import { SmartReviewStory } from './SmartReviewStory.jsx';
 import { MascotAnimation } from '../lib/MascotAnimation.jsx';
 import { FREE_GENERATION_LIMIT, GENERATION_WINDOW_MS } from '../lib/accessModel.js';
@@ -41,13 +41,29 @@ function PracticeComparison() {
 
 export function AboutUs({t,onStart,onExplore,feedbackHref,isGuest=true}) {
   const root=useScrollReveal();
-  return <div ref={root} className="guest-studio about-page" style={guestPalette(t)} data-page-label="About SecurePlus">
+  const explore=()=>{
+    const section=root.current?.querySelector('#about-hub');
+    section?.focus({preventScroll:true});
+    section?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
+  };
+  return <div ref={root} className="guest-studio about-page" style={guestPalette(t)} data-page-label="Why we're different">
     <header className="about-hero">
-      <div className="about-hero-copy"><span className="guest-eyebrow"><span className="about-small-dot"/> ABOUT SECUREPLUS</span><h1>Your effort.<br/><em>A clearer direction.</em></h1><p>Security+ prep should help you decide what to do next. We connect the learning, the revision and the practice around you.</p><button className="btn btn-primary about-primary" onClick={onStart}>{isGuest?'Find my starting point':'Open my practice hub'}<ArrowRight size={18}/></button><span className="about-hero-note">{isGuest?'Start with 10 Core questions. No account needed.':'Build on what you know. Focus on what needs work.'}</span><div className="about-hero-signature"><ShieldCheck size={17}/> Built for CompTIA Security+ · SY0-701</div></div>
+      <div className="about-hero-copy">
+        <span className="guest-eyebrow"><span className="about-small-dot"/> WHY WE’RE DIFFERENT</span>
+        <h1>Your effort.<br/><em>A clearer direction.</em></h1>
+        <p>A clear path from your first question to stronger concepts. Learn, recall and practise—all in one place.</p>
+        <button className="btn btn-primary about-primary" onClick={onStart}>{isGuest?'Find my starting point':'Open my practice hub'}<ArrowRight size={18}/></button>
+        <span className="about-hero-note">{isGuest?'Start with 10 Core questions. No account needed.':'Build on what you know. Focus on what needs work.'}</span>
+        <div className="about-hero-signature"><ShieldCheck size={17}/> Built for CompTIA Security+ · SY0-701</div>
+        <button type="button" className="about-scroll-cue" onClick={explore} aria-label="Explore how Deep Dives, flashcards and MCQs connect">
+          <span className="about-scroll-tools" aria-hidden="true"><BookOpenCheck size={19}/><i/><Layers3 size={19}/><i/><Target size={19}/></span>
+          <span>See how it connects</span><span className="about-scroll-arrow" aria-hidden="true"><ArrowDown size={19}/></span>
+        </button>
+      </div>
       <PracticeComparison/>
     </header>
 
-    <section className="about-hub" data-reveal aria-labelledby="about-hub-title">
+    <section id="about-hub" className="about-hub" tabIndex={-1} data-reveal aria-labelledby="about-hub-title">
       <div className="about-section-heading"><span className="guest-eyebrow">ONE CONNECTED STUDY HUB</span><h2 id="about-hub-title">Understand. Recall. Apply.</h2><p>Your resources belong together. Your study time should, too.</p></div>
       <div className="about-tools">{tools.map(({view,icon:Icon,title,name,copy,color,action},i)=><article key={view} style={{'--tool-color':color}}><div className="about-tool-art" aria-hidden="true"><span>0{i+1}</span><Icon size={49} strokeWidth={1.3}/><i/><i/></div><div className="about-tool-content"><span>{name}</span><h3>{title}</h3><p>{copy}</p><button onClick={()=>onExplore(view)}>{action}<ArrowRight size={17}/></button></div></article>)}</div>
     </section>

@@ -243,12 +243,12 @@ if (!errors.length) {
   requireContains("src/App.jsx", "selectionOptions:question.selectionOptions || []", "the shared PBQ selector options should persist in the Supabase payload");
   requireContains("src/App.jsx", 'distractors.length<2', "Question Manager should require at least two distractors for Select & Fill questions");
   requireContains("src/components/GuestLanding.jsx", "10 Q diagnostic", "the homepage should lead with the 10-question diagnostic CTA");
-  requireContains("src/components/GuestLanding.jsx", "About us", "the homepage should offer the About Us page as its secondary CTA");
+  requireContains("src/components/GuestLanding.jsx", "Why we’re different", "the homepage should offer the Why we’re different page as its secondary CTA");
   requireContains("src/components/GuestDiagnostic.jsx", "Start focused set", "diagnostic results should lead to signup and saved Smart Review progress");
   requireContains("src/App.jsx", "GUEST_SMART_REVIEW_BRIDGE_KEY", "guest quiz attempts should survive account creation for Smart Review");
   requireContains("src/App.jsx", 'allowedGuestViews=new Set(["dashboard","mcq","pbq","daily"', "guests should be able to enter the PBQ preview without signing in");
   requirePattern("src/App.jsx", /const guestTopNavItems=\[\s*\{id:"mcq",label:"MCQ practice"\},\s*\{id:"pbq",label:"PBQ Simulations"\},\s*\{id:"flashcards",label:"Flashcards"\},\s*\];/, "guest top navigation should keep only the three primary practice destinations visible");
-  requirePattern("src/App.jsx", /const guestMoreItems=\[\s*\{id:"about",label:"About us"\},\s*\{id:"objectives",label:"SY0-701 Exam Guide"\},\s*\{id:"deep-dives",label:"Concept Deep Dives"\},\s*\{id:"privacy",label:"Privacy Policy"\},\s*\{id:"terms",label:"Terms & Conditions"\},\s*\];/, "guest More menu should contain About Us, the exam guide, deep dives, privacy, and terms links");
+  requirePattern("src/App.jsx", /const guestMoreItems=\[\s*\{id:"about",label:"Why we’re different"\},\s*\{id:"objectives",label:"SY0-701 Exam Guide"\},\s*\{id:"deep-dives",label:"Concept Deep Dives"\},\s*\{id:"privacy",label:"Privacy Policy"\},\s*\{id:"terms",label:"Terms & Conditions"\},\s*\];/, "guest More menu should contain Why we’re different, the exam guide, deep dives, privacy, and terms links");
   requireContains("src/App.jsx", "guest-top-nav-more-menu", "guest secondary navigation should open in an expandable More menu");
   requireContains("src/App.jsx", "clearLocalAuthState({preserveRoute:true})", "guest session restoration must preserve direct routes such as the canonical Flashcards page");
   requireContains("src/App.jsx", "const quizSizes = isGuest?[10]:[10,20,30]", "MCQ practice should offer fixed 10, 20, or 30 question sets");
