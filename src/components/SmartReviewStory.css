@@ -57,8 +57,8 @@
 .sr-story-steps>button>span{color:color-mix(in srgb,var(--step-tint) 70%,var(--guest-text));background:color-mix(in srgb,var(--step-tint) 10%,transparent);width:32px;height:32px;flex:none;display:grid;place-items:center;border-radius:9px}
 .sr-story-steps>button.is-active{background:color-mix(in srgb,var(--step-tint) 13%,transparent)}
 .sr-story-steps>button.is-active>span{color:color-mix(in srgb,var(--step-tint) 75%,var(--guest-text))}
-.sr-story-steps b{background:var(--step-tint);animation:sr-step-clock 4200ms linear both;transform:scaleX(0)}
-.sr-flashcard-turn{animation-duration:4.2s}
+.sr-story-steps b{background:var(--step-tint);animation:sr-step-clock 5500ms linear both;transform:scaleX(0)}
+.sr-flashcard-turn{animation-duration:5.5s}
 @keyframes sr-step-clock{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes sr-frame-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes sr-frame-out{to{opacity:0;transform:translateY(-12px)}}

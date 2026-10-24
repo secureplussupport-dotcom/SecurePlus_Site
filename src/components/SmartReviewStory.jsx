@@ -55,7 +55,7 @@ export function SmartReviewStory() {
   const running=inView&&visible&&!reduced&&!engaged&&!hovered;
   useEffect(()=>{
     if(!running)return;
-    const timer=setTimeout(()=>setFrame(frame=>({scene:(frame.scene+1)%scenes.length,previous:frame.scene})),4200);
+    const timer=setTimeout(()=>setFrame(frame=>({scene:(frame.scene+1)%scenes.length,previous:frame.scene})),5500);
     return()=>clearTimeout(timer);
   },[scene,running]);
   useEffect(()=>{
