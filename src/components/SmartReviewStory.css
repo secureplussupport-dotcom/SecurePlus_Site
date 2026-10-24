@@ -42,3 +42,26 @@
 @media(prefers-reduced-motion:reduce){.sr-story .sr-cipher *,.sr-story .sr-cipher *::before,.sr-story .sr-cipher *::after{animation:none!important}}
 
 @media(max-width:430px){.sr-stage{height:540px;min-height:540px}.sr-set-card{grid-template-columns:.8fr 1.4fr}.sr-set-card p{line-height:1.5}.sr-set-card>strong{font-size:21px}}
+
+/* One continuous story: retain the outgoing scene while the next one enters. */
+.sr-scene-window{position:relative;isolation:isolate;overflow:hidden}
+.sr-scene-in{position:relative;animation:sr-frame-in 480ms var(--sr-ease) both}
+.sr-scene-out{position:absolute;inset:0;z-index:1;pointer-events:none;animation:sr-frame-out 280ms var(--sr-ease) both}
+.sr-stage{animation:none}
+.sr-story-toolbar .sr-auto-note{font-size:12px;letter-spacing:0;font-weight:500}
+.sr-story-steps>button:nth-child(1){--step-tint:var(--guest-blue)}
+.sr-story-steps>button:nth-child(2){--step-tint:#b28ce9}
+.sr-story-steps>button:nth-child(3){--step-tint:#d6aa62}
+.sr-story-steps>button:nth-child(4){--step-tint:var(--guest-accent)}
+.sr-story-steps>button{background:color-mix(in srgb,var(--step-tint) 4%,transparent);transition:background 180ms ease,color 180ms ease}
+.sr-story-steps>button>span{color:color-mix(in srgb,var(--step-tint) 70%,var(--guest-text));background:color-mix(in srgb,var(--step-tint) 10%,transparent);width:32px;height:32px;flex:none;display:grid;place-items:center;border-radius:9px}
+.sr-story-steps>button.is-active{background:color-mix(in srgb,var(--step-tint) 13%,transparent)}
+.sr-story-steps>button.is-active>span{color:color-mix(in srgb,var(--step-tint) 75%,var(--guest-text))}
+.sr-story-steps b{background:var(--step-tint);animation:sr-step-clock 4200ms linear both;transform:scaleX(0)}
+.sr-flashcard-turn{animation-duration:4.2s}
+@keyframes sr-step-clock{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes sr-frame-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sr-frame-out{to{opacity:0;transform:translateY(-12px)}}
+@media(hover:hover) and (pointer:fine){.sr-story-steps>button:hover{background:color-mix(in srgb,var(--step-tint) 14%,transparent)}}
+@media(max-width:430px){.sr-story-toolbar .sr-auto-note{font-size:11px;max-width:100px;text-align:right}.sr-story-steps>button{gap:8px}}
+@media(prefers-reduced-motion:reduce){.sr-scene-in{animation:none}.sr-story-steps b{animation:none;transform:scaleX(1)}}
