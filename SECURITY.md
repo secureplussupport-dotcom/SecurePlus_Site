@@ -1,66 +1,26 @@
-# Security Notes
+# Security notes
 
-## Secrets
+## Reporting
 
-Do not commit:
+Report potential vulnerabilities privately to **secureplus.support@gmail.com**. Include a reproducible description and the affected component; do not include live credentials or learner records in a public issue.
 
-- Stripe secret keys
-- Stripe webhook secrets
-- Supabase service role key
-- Database passwords
-- Google OAuth client secrets
-- `.env` or `.env.local`
+## Implemented boundaries
 
-Use Vercel environment variables for server-only secrets.
+- API routes verify the Supabase bearer token and derive the user identity on the server.
+- Adaptive state is held in a private schema with RLS and restricted browser-role access. Engine RPCs are invoked by the verified server using its service role.
+- Answer grading uses selected option IDs and owned question snapshots. Client-submitted correctness is not trusted by the adaptive engine.
+- Answer recording and guest diagnostic import use database transactions and idempotency checks.
+- Stripe webhook signatures and server-side fulfillment validate billing events. New purchases use one-time access passes; legacy subscription support is separate.
+- Account deletion has an authenticated confirmation flow. See the implementation before changing its token or email behavior.
 
-## Supabase RLS
+Relevant examples: [`http.mjs`](server/mcq-engine/http.mjs), [`MCQ engine migration`](supabase/migrations/20261019163949_mcq_three_deck_engine.sql), [`diagnostic import`](supabase/migrations/20261024012841_guest_diagnostic_handoff.sql), [`database tests`](scripts/test-mcq-engine-database.mjs).
 
-`supabase/schema.sql` enables Row Level Security.
+## Credentials
 
-Current policy model:
+Do not commit real `.env` files, service-role keys, database passwords, OAuth secrets, Stripe secrets or email-provider credentials. `.env.example` contains placeholders only. Browser `VITE_` values are public build inputs; never put privileged credentials there.
 
-- Authenticated users can read only their own profile.
-- Authenticated users can read only their own attempts.
-- Authenticated users can insert attempts only for their own `user_id`.
-- Users cannot directly update `profiles.tier`.
-- Stripe webhook/server-side code updates Pro membership.
+## Known boundaries
 
-## Stripe
+Practice content is available in the client bundle. The product is not a secure examination platform or an anti-cheating system. Client presentation gates should not be described as content secrecy.
 
-- Checkout route requires a valid Supabase bearer token.
-- Billing portal route requires a valid Supabase bearer token.
-- Webhook route verifies Stripe signature before updating Supabase.
-
-## Content Rendering
-
-The current app does not use `dangerouslySetInnerHTML`.
-
-If AI-generated HTML is ever rendered, sanitize it first:
-
-```js
-import DOMPurify from "dompurify";
-
-const safeHtml = DOMPurify.sanitize(aiHtml);
-
-return <div dangerouslySetInnerHTML={{ __html: safeHtml }} />;
-```
-
-Prefer rendering plain text or structured Markdown components instead of raw HTML.
-
-## Known Limitation
-
-Pro-only PBQ content is currently present in the frontend bundle. This is acceptable for prototype UX gating, but not for strong premium protection.
-
-Production fix:
-
-1. Store Pro-only content in Supabase or server-side files.
-2. Add an API route like `/api/content/pbq`.
-3. Verify the logged-in user's `profiles.tier`.
-4. Return PBQs only when `tier = 'pro'`.
-
-## Abuse Considerations
-
-- Rate limits are controlled in Supabase/hosting config, not by users.
-- Users cannot modify Supabase project rate limits through this app.
-- Account deletion and billing management require server-side token verification.
-- Search/database operations should use Supabase query builder or parameterized SQL only.
+Passing local audits does not establish that every deployed policy, external service or dependency is secure. Dependency advisories, connected permission checks and security review are separate work. CI and local tests must not use production learner accounts or production database writes.
