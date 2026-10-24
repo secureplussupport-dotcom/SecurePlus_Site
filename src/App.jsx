@@ -18087,7 +18087,7 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 @keyframes examHandle{0%{transform:rotate(-20deg);opacity:.3;}55%{transform:rotate(-60deg);opacity:1;}100%{transform:rotate(-45deg);opacity:1;}}
 @keyframes termsPage{0%{transform:rotateY(0);}55%{transform:rotateY(-28deg) translateX(-1px);}100%{transform:rotateY(0);}}
 @keyframes termsSign{0%{width:0;opacity:.2;}100%{width:8px;opacity:1;}}
-.fu{animation:fadeUp .35s cubic-bezier(.16,1,.3,1) both;}
+.fu{animation:fadeUp .16s cubic-bezier(.16,1,.3,1) both;}
 .chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700;border:1px solid;line-height:1.4;}
 .app-shell{display:flex;min-height:100vh;background:transparent;}
 .sidebar{width:236px;min-height:100vh;background:linear-gradient(180deg, ${t.surface}, ${t.panel}f2);border-right:1px solid ${t.border};display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;z-index:120;overflow:visible;box-shadow:10px 0 28px rgba(80,52,22,.07);}

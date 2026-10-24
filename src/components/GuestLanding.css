@@ -72,8 +72,8 @@
 [data-reveal].reveal-ready{opacity:0;transform:translateY(18px);transition:opacity 600ms var(--guest-ease),transform 600ms var(--guest-ease)}
 [data-reveal].is-revealed{opacity:1;transform:translateY(0)}
 .guest-diagnostic{--guest-ease:cubic-bezier(.23,1,.32,1)}
-.gd-question{animation:gd-question-enter 280ms var(--guest-ease) both}
-.gd-feedback{animation:gd-card-reveal 240ms var(--guest-ease) both}
+.gd-question{animation:gd-question-enter 160ms var(--guest-ease) both}
+.gd-feedback{animation:gd-card-reveal 160ms var(--guest-ease) both}
 .gd-results{animation:gd-question-enter 400ms var(--guest-ease) both}
 .gd-options>button{transition:border-color 160ms ease,background 160ms ease,transform 160ms var(--guest-ease)}
 .gd-options>button:active:not(:disabled){transform:scale(.99)}

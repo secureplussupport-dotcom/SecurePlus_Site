@@ -2,22 +2,46 @@ import { getSupabaseAccessToken } from './supabaseClient.js';
 
 export const mcqEngineEnabled = import.meta.env.VITE_MCQ_ENGINE_ENABLED === 'true';
 
-export async function mcqEngineRequest(operation, body = {}) {
-  const token = await getSupabaseAccessToken();
-  if (!token && !['access','generate'].includes(operation)) throw new Error('Sign in again to save your MCQ progress.');
+// Only concurrent access reads are shared, scoped to the current bearer token.
+// Never cache generated sets, learner state or authorisation decisions.
+const accessRequests = new Map();
+let guestCookieReady = false;
+
+async function sendEngineRequest(operation, body, token) {
   // The same event ID is reused if a response is lost after its transaction commits.
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const response = await fetch(`/api/sessions/${operation}`, { method: 'POST',
         headers: { 'content-type': 'application/json', ...(token?{authorization:`Bearer ${token}`}:{}) }, body: JSON.stringify(body) });
       const result = await response.json();
-      if (!response.ok) throw Object.assign(new Error(result.error || 'Unable to save MCQ progress.'), { status: response.status });
+      if (!response.ok) {
+        if (!token && operation === 'generate' && response.status === 400) guestCookieReady = false;
+        throw Object.assign(new Error(result.error || 'Unable to save MCQ progress.'), { status: response.status });
+      }
+      if (!token && operation === 'access') guestCookieReady = true;
       if(result.access)window.dispatchEvent(new Event('practice-access-changed'));
       return result;
     } catch (error) {
       if (attempt || (error.status && error.status < 500) || operation === 'generate') throw error;
     }
   }
+}
+
+export async function mcqEngineRequest(operation, body = {}) {
+  const token = await getSupabaseAccessToken();
+  if (!token && !['access','generate'].includes(operation)) throw new Error('Sign in again to save your MCQ progress.');
+  if (operation !== 'access') return sendEngineRequest(operation, body, token);
+  const key = token || 'guest';
+  if (!accessRequests.has(key)) {
+    const request = sendEngineRequest(operation, body, token).finally(() => accessRequests.delete(key));
+    accessRequests.set(key, request);
+  }
+  return accessRequests.get(key);
+}
+
+// Establish the signed cookie while the guest reads the page, without spending quota.
+export function prepareGuestDiagnostic() {
+  return guestCookieReady ? Promise.resolve() : mcqEngineRequest('access');
 }
 
 export function practiceQuestion(q, sessionId) {

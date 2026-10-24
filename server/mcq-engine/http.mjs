@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { getBearerToken, getJsonBody, getSupabaseAdmin, json, requireJsonContentType } from '../../api/_utils.js';
 import { ENGINE_VERSION, EngineError, generateSet, learnerQuestion, prioritizeCoreRecovery } from './engine.mjs';
 import { loadCatalogue } from './catalogue.mjs';
+import { PRO_MAX_SET_SIZE } from '../../src/lib/accessModel.js';
 import { normalizeMcqDifficulty, MCQ_DIFFICULTIES } from '../../src/lib/mcqDifficulty.js';
 
 const uuid = value => typeof value === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
@@ -106,22 +107,29 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
       }
       if (operation === 'generate') {
         const count=body.set_size,mode=body.mode||'smart';
-        const access=await accessRpc(client,'practice_access_status',{p_user_id:userId});
-        if(!Number.isInteger(count)||count<1||count>access.maxSetSize)throw new EngineError(`Choose 1–${access.maxSetSize} questions.`);
+        if(!Number.isInteger(count)||count<1||count>PRO_MAX_SET_SIZE)throw new EngineError('Choose a valid set size.');
         if(!['smart','random','exam','missed','starred'].includes(mode))throw new EngineError('Invalid practice mode.');
         const filters=Object.fromEntries(Object.entries(body.filters||{}).filter(([,v])=>v!=null&&v!==''));
         if(Object.keys(filters).some(k=>!['chapter','difficulty','topic'].includes(k)))throw new EngineError('Invalid filters.');
-        if(!access.isPro&&Object.keys(filters).length)throw new EngineError('Custom filters are available with Pro.',403);
         if(mode==='exam'&&Object.keys(filters).length)throw new EngineError('Exam Mode uses an unfiltered mix.');
         if(filters.chapter&&!/^[1-5]$/.test(filters.chapter))throw new EngineError('Invalid chapter.');
         const difficulty=normalizeMcqDifficulty(filters.difficulty);
         if(filters.difficulty&&(typeof filters.difficulty!=='string'||!MCQ_DIFFICULTIES.includes(difficulty)))throw new EngineError('Invalid difficulty.');
         if(filters.topic&&(typeof filters.topic!=='string'||filters.topic.length>200))throw new EngineError('Invalid topic.');
-        let bank=(await catalogue(client)).filter(q=>q.concept_tag&&(!filters.chapter||q.chapter===filters.chapter)&&(!difficulty||normalizeMcqDifficulty(q.difficulty)===difficulty)&&(!filters.topic||q.topic===filters.topic));
-        if(mode==='starred'){const data=await accessRpc(client,'practice_list_stars',{p_user_id:userId});const ids=new Set(data.filter(r=>r.question_type==='mcq').map(r=>r.question_id));bank=bank.filter(q=>ids.has(q.id));}
         const id=body.request_id||randomUUID();if(!uuid(id))throw new EngineError('Invalid generation request.');
+        // Independent owner-bound reads overlap; the atomic write still checks version/quota.
+        const [access,available,initialState,stars]=await Promise.all([
+          accessRpc(client,'practice_access_status',{p_user_id:userId}),
+          catalogue(client),
+          rpc(client,'mcq_engine_state',{p_user_id:userId}),
+          mode==='starred'?accessRpc(client,'practice_list_stars',{p_user_id:userId}):null,
+        ]);
+        if(count>access.maxSetSize)throw new EngineError(`Choose 1–${access.maxSetSize} questions.`);
+        if(!access.isPro&&Object.keys(filters).length)throw new EngineError('Custom filters are available with Pro.',403);
+        let bank=available.filter(q=>q.concept_tag&&(!filters.chapter||q.chapter===filters.chapter)&&(!difficulty||normalizeMcqDifficulty(q.difficulty)===difficulty)&&(!filters.topic||q.topic===filters.topic));
+        if(mode==='starred'){const ids=new Set(stars.filter(r=>r.question_type==='mcq').map(r=>r.question_id));bank=bank.filter(q=>ids.has(q.id));}
         for(let attempt=0;attempt<3;attempt++){
-          const state=await rpc(client,'mcq_engine_state',{p_user_id:userId});
+          const state=attempt===0?initialState:await rpc(client,'mcq_engine_state',{p_user_id:userId});
           const questions=chooseAccessSet(bank,state,count,mode,access.isPro).map(q=>({...q,practice_filters:filters}));
           const result=await accessRpc(client,'practice_create_set',{p_user_id:userId,p_guest_key:null,p_request_id:id,p_mode:mode,p_questions:questions,p_filters:filters,p_version:state.version});
           if(result.quotaExceeded)return json(res,429,{error:`This set needs ${count} questions; ${result.access.remaining} remain in your rolling 12-hour allowance.`,access:result.access});

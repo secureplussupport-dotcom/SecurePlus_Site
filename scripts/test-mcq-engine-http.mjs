@@ -110,3 +110,101 @@ test('readiness is authenticated and source labels are validated before storage'
   assert.equal((await invoke(handler,'readiness',{user_id:id})).status,200);assert.equal(calls[1].name,'mcq_engine_readiness');assert.equal(calls[1].args.p_user_id,user);
   assert.equal((await invoke(handler,'readiness',{},'')).status,401);
 });
+
+const deferred=()=>{let resolve;const promise=new Promise(yes=>{resolve=yes;});return {promise,resolve};};
+const tick=()=>new Promise(resolve=>setImmediate(resolve));
+test('generation overlaps reads only after authentication and writes only after all reads',async()=>{
+  const auth=deferred(),access=deferred(),bank=deferred(),progress=deferred(),calls=[];
+  const client={auth:{getUser:()=>auth.promise},rpc:async(name,args)=>{
+    assert.equal(args.p_user_id,user);calls.push(name);
+    if(name==='practice_access_status')return access.promise;
+    if(name==='mcq_engine_state')return progress.promise;
+    if(name==='practice_create_set')return {data:{created:true,questions:args.p_questions}};
+    assert.fail(name);
+  }};
+  const pending=invoke(createMcqHandler({enabled:()=>true,admin:()=>client,catalogue:()=>{calls.push('catalogue');return bank.promise;}}),'generate',{set_size:10});
+  await tick();assert.deepEqual(calls,[]);
+  auth.resolve({data:{user:{id:user}}});await tick();
+  assert.deepEqual(new Set(calls),new Set(['practice_access_status','catalogue','mcq_engine_state']));
+  access.resolve({data:{isPro:false,maxSetSize:30,remaining:50}});bank.resolve(effectiveCatalogue());await tick();
+  assert(!calls.includes('practice_create_set'));
+  progress.resolve({data:state});assert.equal((await pending).status,200);
+  assert.equal(calls.at(-1),'practice_create_set');
+});
+
+test('read failures and invalid identity cannot create or charge a set',async()=>{
+  let writes=0,reads=0;
+  const client={auth:{getUser:async()=>({data:{user:{id:user}}})},rpc:async name=>{
+    if(name==='practice_create_set')writes++;
+    return {data:name==='practice_access_status'?{isPro:false,maxSetSize:30}:state};
+  }};
+  const handler=createMcqHandler({enabled:()=>true,admin:()=>client,catalogue:async()=>{reads++;throw new Error('Read unavailable');}});
+  assert.equal((await invoke(handler,'generate',{set_size:10})).status,503);assert.equal(writes,0);
+  client.auth.getUser=async()=>({data:{user:null},error:new Error('Invalid token')});
+  assert.equal((await invoke(handler,'generate',{set_size:10})).status,401);assert.equal(reads,1);
+});
+
+test('version conflicts reread current mastery before trying the atomic write again',async()=>{
+  const versions=[];let reads=0;
+  const client={auth:{getUser:async()=>({data:{user:{id:user}}})},rpc:async(name,args)=>{
+    if(name==='practice_access_status')return {data:{isPro:false,maxSetSize:30,remaining:50}};
+    if(name==='mcq_engine_state')return {data:{...state,version:reads++}};
+    if(name==='practice_create_set'){versions.push(args.p_version);return {data:{created:versions.length>1,questions:args.p_questions}};}
+    assert.fail(name);
+  }};
+  const result=await invoke(createMcqHandler({enabled:()=>true,admin:()=>client,catalogue:async()=>effectiveCatalogue()}),'generate',{set_size:10});
+  assert.equal(result.status,200);assert.deepEqual(versions,[0,1]);assert.equal(reads,2);
+});
+
+let clientFixture=0;
+async function browserClient(auth='const getSupabaseAccessToken=async()=>null;') {
+  const source=readFileSync('src/lib/mcqEngineClient.js','utf8')
+    .replace("import { getSupabaseAccessToken } from './supabaseClient.js';",auth)
+    .replace("import.meta.env.VITE_MCQ_ENGINE_ENABLED === 'true'",'true');
+  return import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}#${++clientFixture}`);
+}
+const response=(body={},status=200)=>new Response(JSON.stringify(body),{status,headers:{'content-type':'application/json'}});
+
+test('concurrent allowance readers share work; later reads still refresh',async t=>{
+  const wait=deferred(),requests=[];
+  t.mock.method(globalThis,'fetch',async(url)=>{requests.push(url);return requests.length===1?wait.promise:response({remaining:40});});
+  const client=await browserClient();
+  const first=client.mcqEngineRequest('access'),second=client.mcqEngineRequest('access');
+  await tick();assert.equal(requests.length,1);wait.resolve(response({remaining:50}));
+  assert.deepEqual(await first,await second);await client.mcqEngineRequest('access');assert.equal(requests.length,2);
+});
+
+test('guest preparation is quota-free and finished before generation; sets are never cached',async t=>{
+  const requests=[];
+  t.mock.method(globalThis,'fetch',async(url)=>{requests.push(url);return response();});
+  const client=await browserClient();
+  await Promise.all([client.prepareGuestDiagnostic(),client.prepareGuestDiagnostic()]);
+  await client.prepareGuestDiagnostic();assert.deepEqual(requests,['/api/sessions/access']);
+  await client.mcqEngineRequest('generate',{request_id:id});await client.mcqEngineRequest('generate',{request_id:id});
+  assert.deepEqual(requests,['/api/sessions/access','/api/sessions/generate','/api/sessions/generate']);
+});
+
+test('failed preparation is retryable and a lost guest cookie invalidates readiness',async t=>{
+  let failing=true;const requests=[];
+  t.mock.method(globalThis,'fetch',async(url)=>{requests.push(url);return failing?response({error:'Unavailable'},503):response();});
+  const client=await browserClient();
+  await assert.rejects(client.prepareGuestDiagnostic(),/Unavailable/);assert.equal(requests.length,2);
+  failing=false;await client.prepareGuestDiagnostic();assert.equal(requests.length,3);
+  t.mock.method(globalThis,'fetch',async(url)=>{requests.push(url);return url.endsWith('generate')?response({error:'Enable cookies'},400):response();});
+  await assert.rejects(client.mcqEngineRequest('generate'),/Enable cookies/);
+  await client.prepareGuestDiagnostic();assert.equal(requests.at(-1),'/api/sessions/access');
+});
+
+test('allowance reads for different bearer tokens never share a response',async t=>{
+  const wait=deferred(),headers=[];
+  t.mock.method(globalThis,'fetch',async(_url,options)=>{headers.push(options.headers.authorization);await wait.promise;return response();});
+  const client=await browserClient("let next=0;const getSupabaseAccessToken=async()=>['owner-one','owner-two'][next++];");
+  const a=client.mcqEngineRequest('access'),b=client.mcqEngineRequest('access');
+  await tick();assert.deepEqual(headers,['Bearer owner-one','Bearer owner-two']);wait.resolve();await Promise.all([a,b]);
+});
+
+test('only the MCQ endpoint is placed beside the Singapore database',()=>{
+  const config=JSON.parse(readFileSync('vercel.json','utf8'));
+  assert.deepEqual(config.functions,{'api/sessions.js':{regions:['sin1']}});
+  assert.equal(config.regions,undefined);
+});

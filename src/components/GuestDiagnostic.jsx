@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { ArrowRight, Maximize2, Minimize2, Check, BookOpenCheck, Layers3, RotateCcw, Target, ShieldCheck, Fingerprint, Network, Radar } from 'lucide-react';
 import { CipherLoader } from './CipherLoader.jsx';
 import { MascotAnimation } from '../lib/MascotAnimation.jsx';
-import { mcqEngineRequest } from '../lib/mcqEngineClient.js';
+import { mcqEngineRequest, prepareGuestDiagnostic } from '../lib/mcqEngineClient.js';
 import { conceptDeepDive } from '../lib/mcqResultSummary.js';
 import './GuestLanding.css';
 
@@ -28,7 +28,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
   try{
    if(!generating)generating=(async()=>{
     // Establish the signed browser cookie before requesting a snapshot.
-    await mcqEngineRequest('access');
+    await prepareGuestDiagnostic();
     const request=current?.request_id || crypto.randomUUID();publish({request_id:request});
     const plan=await mcqEngineRequest('generate',{mode:'diagnostic',set_size:10,request_id:request});
     publish({request_id:request,questions:plan.questions,answers:{},checked:{},index:0,startedAt:Date.now()});
@@ -36,6 +36,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
    await generating;
   }catch(e){setError(e.message);}finally{setBusy(false);}
  };
+ useEffect(()=>{prepareGuestDiagnostic().catch(()=>{});},[]);
  useEffect(()=>{try{localStorage.removeItem('secureplus-guest-diagnostic-v1');}catch{}},[]);
  useEffect(()=>{if(startSignal>seenSignal.current){seenSignal.current=startSignal;start();}},[startSignal]);
  useEffect(()=>{
@@ -58,7 +59,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
   if(transitioning)return;
   setTransitioning(true);
   if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&questionBody.current?.animate){
-   await questionBody.current.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-8px)'}],{duration:140,easing:'cubic-bezier(.23,1,.32,1)',fill:'forwards'}).finished.catch(()=>{});
+   await questionBody.current.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-8px)'}],{duration:80,easing:'cubic-bezier(.23,1,.32,1)',fill:'forwards'}).finished.catch(()=>{});
   }
   if(current===draft)publish({...draft,index:index+1});
   setTransitioning(false);
