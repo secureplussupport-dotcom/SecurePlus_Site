@@ -23,3 +23,9 @@ Diagnostic answers initialize the selection engine’s mastery. The previously a
 `npm run audit:mcq-engine` includes `scripts/test-guest-diagnostic.mjs`: pool/domain bounds, Core-only selection, output projection, snapshot ownership, transactional rollback, replay protection, server grading, mastery/retest persistence, one-miss flashcard eligibility and service-only grants. Existing engine/database and full audit suites remain required. Browser checks cover compact marking, expanded explanation, complete results, signup entry, reload reset and phone layout. No real learner accounts are created for QA.
 
 The database migration is additive. Previous security-advisor warnings about Auth trigger functions and leaked-password protection are pre-existing; this migration uses invoker functions with service-role-only execution and a private RLS-protected table.
+
+## Animated product explanation
+
+The landing page and Why we're different page share `SmartReviewStory`: a labelled illustrative diagnostic miss, linked Deep Dive and turning flashcard, targeted/discovery/due-retest cards, and the original question answered correctly at a later retest. It does not generate attempts or mutate learner progress. The retest scene explicitly states the 30-other-answer eligibility rule.
+
+The four scenes play once while visible, with pause/replay and direct step controls. Playback stops offscreen or in a hidden tab. Reduced-motion users receive manual steps and static artwork. The fixed illustration stage prevents layout shifts between scenes. Supporting text, diagnostic options, captions and domain labels were enlarged; the catchphrase, two main landing CTAs and signup onboarding remain intact.
