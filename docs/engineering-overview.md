@@ -56,4 +56,4 @@ The [official Meta Global AI Developer Hackathon page](https://dev.meta.ai/event
 
 ## Verification boundaries
 
-Local engine/database tests are reproducible without live learner accounts. Connected signup, billing and deployed access behavior require separate environment-specific checks. The repository does not currently provide an enabled GitHub Actions pipeline; commands in `package.json` are the verification entry points.
+Local engine/database tests are reproducible without live learner accounts. Connected signup, billing and deployed access behavior require separate environment-specific checks. The repository privacy workflow scans for secrets and private-file paths on GitHub Actions. Product checks remain the commands in `package.json`; a passing privacy scan is not a full application quality or security gate.

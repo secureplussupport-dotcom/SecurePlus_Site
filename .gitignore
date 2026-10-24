@@ -8,3 +8,24 @@ dist
 !public/mascots/
 !public/mascots/*.png
 securityplus-FINAL.html
+
+# Local secrets and private operational exports are never portfolio material.
+.env.*
+!.env.example
+.pgpass
+*.pem
+*.key
+*.p12
+*.pfx
+*.dump
+*.bak
+*.sqlite
+*.sqlite3
+*.db
+output/
+review_exports/
+audit_artifacts/
+supabase/.temp/
+private_exports/
+backups/
+*.sarif

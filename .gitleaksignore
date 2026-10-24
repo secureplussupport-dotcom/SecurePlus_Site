@@ -1,0 +1,20 @@
+# Exact historical false positives reviewed against source, 2026-10-24.
+# No file, directory, rule or value-wide exemptions.
+4af7eaf0495102f1cc3acbfc05e57d6d03e4f29c:scripts/audit-public-learning-pages.mjs:sourcegraph-access-token:141
+0baaaf2ebfcfb8c88817bd2cea598ac7d92f96e5:scripts/audit-learner-routing-selectors.mjs:generic-api-key:60
+4af7eaf0495102f1cc3acbfc05e57d6d03e4f29c:docs/drafts/phase-2b5-public-learning-pages-proposals.json:sourcegraph-access-token:4
+4af7eaf0495102f1cc3acbfc05e57d6d03e4f29c:docs/drafts/phase-2b5-public-learning-pages-proposals.json:sourcegraph-access-token:12633
+4af7eaf0495102f1cc3acbfc05e57d6d03e4f29c:docs/drafts/phase-2b5-public-learning-pages-proposals.json:sentry-access-token:9556
+53d69d7f1b5f85974e076c5db748a320091cbbdd:docs/phase-2b5-api-malware-teaching-review.md:generic-api-key:298
+53d69d7f1b5f85974e076c5db748a320091cbbdd:scripts/audit-api-malware-teaching.mjs:generic-api-key:397
+3e704aa4e931a88b365aaf8d4e26a81d903c1b3e:docs/phase-2b5-objective14-pki-cards-review.md:generic-api-key:61
+3e704aa4e931a88b365aaf8d4e26a81d903c1b3e:scripts/audit-objective14-pki-cards.mjs:generic-api-key:138
+8a44f3f07e7cd9001628a92d2df2f109b61484c9:docs/evidence/phase-2b5/checksums.json:generic-api-key:10
+9b895861628d9050aeff84eebec68222585754e7:docs/evidence/phase-2b5/checksums.json:generic-api-key:9
+9b895861628d9050aeff84eebec68222585754e7:docs/evidence/phase-2b5/release-checksums.json:generic-api-key:7
+96d206d1190070a374c34a366b824151205ceed6:docs/evidence/phase-2b4d/validation.json:generic-api-key:149
+53640b9f4bcff5ce3a42c5f2412af65ef1af997b:docs/evidence/phase-2b4d/cleanup-checksums.json:generic-api-key:33
+53640b9f4bcff5ce3a42c5f2412af65ef1af997b:docs/evidence/phase-2b4d/validation.json:generic-api-key:93
+3b6c337cbb7cbfa527e305a52a0c6124efc9d2d3:docs/evidence/phase-2b4d/validation.json:generic-api-key:44
+a208ebfa4ec971e6d1e2b1cd8b6e06ae14be354f:docs/phase-2b1-persistence-design.md:generic-api-key:100
+91eaed9e33382449234cc02bec0641484ae8a1df:src/App.jsx:generic-api-key:1525

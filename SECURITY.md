@@ -19,6 +19,34 @@ Relevant examples: [`http.mjs`](server/mcq-engine/http.mjs), [`MCQ engine migrat
 
 Do not commit real `.env` files, service-role keys, database passwords, OAuth secrets, Stripe secrets or email-provider credentials. `.env.example` contains placeholders only. Browser `VITE_` values are public build inputs; never put privileged credentials there.
 
+## Public repository safeguards
+
+GitHub secret scanning and push protection are enabled. The `Repository privacy`
+workflow checks tracked paths and scans Git history with Gitleaks on pushes and pull
+requests. Its scanner version and download checksum are pinned; candidate values
+are redacted and no scan-report artifacts are uploaded.
+
+Local environment files, credential files, operational exports and database dumps
+are ignored and checked by `scripts/audit-repository-privacy.mjs`. These filename
+rules do not detect personal data pasted into an otherwise ordinary source file.
+Use synthetic/example identities in fixtures and screenshots; never commit learner
+records, billing exports, browser sessions or database backups.
+
+Before publishing changes:
+
+```bash
+node --test scripts/test-repository-privacy.mjs
+node scripts/audit-repository-privacy.mjs
+gitleaks git --log-opts="--all" --redact --no-banner .
+```
+
+`.gitleaksignore` contains only exact historical finding fingerprints reviewed as
+revision checksums, developer text or the explicit `password123` teaching example.
+It does not exempt whole files or disable scanner rules. Review each new finding;
+if an actual secret was published, revoke/rotate it before considering history
+cleanup. Removing a current file or adding an ignore rule does not erase history
+or copies already downloaded. Commit attribution remains public.
+
 ## Known boundaries
 
 Practice content is available in the client bundle. The product is not a secure examination platform or an anti-cheating system. Client presentation gates should not be described as content secrecy.
