@@ -15,7 +15,7 @@ export function guestOwner(req,res){
 }
 export async function accessRpc(client,name,args){
  const {data,error}=await client.rpc(name,args);
- if(error){const status=error.code==='42501'?403:error.code==='22023'?400:503;throw new EngineError(status===403?'This action is available with Pro.':status===400?'This set request is invalid.':'Practice access is temporarily unavailable. Please retry.',status);}return data;
+ if(error){const status=error.code==='P0001'&&name==='guest_diagnostic_create'?429:error.code==='42501'?403:error.code==='22023'?400:503;throw new EngineError(status===429?'Please wait before starting another diagnostic.':status===403?'This action is available with Pro.':status===400?'This set request is invalid.':'Practice access is temporarily unavailable. Please retry.',status);}return data;
 }
 export function chooseAccessSet(bank,state,count,mode,pro){
  if(mode==='diagnostic'){const chosen=[1,2,3,4,5].flatMap(ch=>fisherYates(bank.filter(q=>Number(q.chapter)===ch)).slice(0,2));if(chosen.length!==10)throw new EngineError('The diagnostic is temporarily unavailable.',503);return fisherYates(chosen);}

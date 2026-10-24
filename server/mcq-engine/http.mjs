@@ -1,3 +1,4 @@
+import { diagnosticSet, diagnosticQuestion } from './diagnostic.mjs';
 import { guestOwner, accessRpc, chooseAccessSet, ownedSet, guestQuestion } from './access.mjs';
 import { randomUUID } from 'node:crypto';
 import { getBearerToken, getJsonBody, getSupabaseAdmin, json, requireJsonContentType } from '../../api/_utils.js';
@@ -53,14 +54,13 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
       if (!token) {
         if (!['generate','access'].includes(req.query?.operation)) return json(res,401,{error:'Create an account to save progress.'});
         requireJsonContentType(req);const body=await getJsonBody(req,{throwSafeErrors:true});
-        if(req.query.operation==='generate'&&(body.mode!=='diagnostic'||body.set_size!==10||!uuid(body.request_id)))throw new EngineError('Guests can try one 10-question diagnostic.');
+        if(req.query.operation==='generate'&&(body.mode!=='diagnostic'||body.set_size!==10||!uuid(body.request_id)))throw new EngineError('Guests can try a 10-question diagnostic.');
         const client=admin(),key=guestOwner(req,res);
         if(req.query.operation==='access')return json(res,200,await accessRpc(client,'practice_access_status',{p_user_id:null,p_guest_key:key}));
-        if(body.mode!=='diagnostic'||body.set_size!==10||!uuid(body.request_id))throw new EngineError('Guests can try one 10-question diagnostic.');
-        const bank=await catalogue(client);const questions=chooseAccessSet(bank,{failed:[]},10,'diagnostic',false);
-        const result=await accessRpc(client,'practice_create_set',{p_user_id:null,p_guest_key:key,p_request_id:body.request_id,p_mode:'diagnostic',p_questions:questions,p_filters:{},p_version:null});
-        if(result.quotaExceeded)return json(res,429,{error:'Your 10-question diagnostic is complete. Create a free account to continue.',access:result.access});
-        return json(res,200,{session_id:body.request_id,questions:result.questions.map(guestQuestion),access:result.access,createdAt:result.createdAt});
+        if(body.mode!=='diagnostic'||body.set_size!==10||!uuid(body.request_id))throw new EngineError('Guests can try a 10-question diagnostic.');
+        const questions=diagnosticSet(await catalogue(client));
+        const diagnostic=await accessRpc(client,'guest_diagnostic_create',{p_guest_key:key,p_request_id:body.request_id,p_questions:questions});
+        return json(res,200,{session_id:body.request_id,questions:diagnostic.questions.map(diagnosticQuestion)});
       }
       const client = admin();
       const { data: auth, error } = await client.auth.getUser(token);
@@ -69,6 +69,12 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
       requireJsonContentType(req);
       const body = await getJsonBody(req, { throwSafeErrors: true });
       const operation = req.query?.operation;
+      if(operation==='diagnostic-import'){
+        if(!uuid(body.session_id)||!Array.isArray(body.answers)||body.answers.length!==10||
+          body.answers.some(a=>!a||typeof a.question_id!=='string'||!uuid(a.selected_option_id)))throw new EngineError('Invalid diagnostic results.');
+        const key=guestOwner(req,res);
+        return json(res,200,await accessRpc(client,'guest_diagnostic_import',{p_user_id:userId,p_guest_key:key,p_request_id:body.session_id,p_answers:body.answers}));
+      }
       if(operation==='exam-review'){
         if(!uuid(body.session_id))throw new EngineError('Invalid exam.');const plan=await ownedSet(client,userId,body.session_id);
         if(plan.mode!=='exam'||!plan.completed)throw new EngineError('Submit the exam before reviewing answers.',403);
@@ -85,7 +91,12 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
         return json(res,200,await accessRpc(client,'practice_save_star',{p_user_id:userId,p_key:body.key,p_type:body.type,p_id:body.id,p_replace:body.replace||null,p_label:body.label||'',p_tags:body.tags||[]}));
       }
       if (operation === 'readiness') return json(res, 200, await rpc(client, 'mcq_engine_readiness', { p_user_id: userId }));
-      if (operation === 'state') return json(res, 200, await rpc(client, 'mcq_engine_state', { p_user_id: userId }));
+      if (operation === 'state') {
+        const state=await rpc(client,'mcq_engine_state',{p_user_id:userId});
+        const {data,error}=await client.rpc('guest_diagnostic_focus',{p_user_id:userId});
+        if(error)throw new EngineError('Concept review could not be loaded. Please retry.',503);
+        return json(res,200,{...state,diagnostic_weak_tags:data});
+      }
       if (operation === 'resume') {
         if (!uuid(body.session_id)) throw new EngineError('Invalid session.');
         const allocation=await ownedSet(client,userId,body.session_id);

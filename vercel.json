@@ -43,6 +43,7 @@
     }
   ],
   "rewrites": [
+    {"source":"/api/sessions/diagnostic-import","destination":"/api/sessions?operation=diagnostic-import"},
     {"source":"/api/sessions/exam-review","destination":"/api/sessions?operation=exam-review"},
     {"source":"/api/sessions/access","destination":"/api/sessions?operation=access"},
     {"source":"/api/sessions/complete","destination":"/api/sessions?operation=complete"},

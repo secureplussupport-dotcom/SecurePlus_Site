@@ -8,6 +8,7 @@ export function flashcardFaces(card) {
 // A correct answer resets the server streak. Match IDs, never similarity or chapter labels.
 export function personalisedFlashcards(state, cards = SY0701_ACRONYM_CARDS) {
   const tags = new Set((state?.concept_streaks || []).filter(row => row.wrong_streak >= 2).map(row => row.concept_tag));
+  for(const tag of state?.diagnostic_weak_tags || [])tags.add(tag);
   return cards.filter(card => (card.concept_tags || []).some(tag => tags.has(tag)));
 }
 
@@ -29,6 +30,6 @@ export function personalisedFlashcardSet(state) {
   const cards = personalisedFlashcards(state);
   if (!cards.length) return null;
   return {id:'cipher-weak-area-flashcards',title:'Your personalised review',
-    description:'Every card linked to concepts missed twice in a row.',
+    description:'Cards matched to your missed concepts.',
     chapterTitle:'Your concept review',topic:'Personalised review',setType:'term',color:'#30b9a4',cards};
 }

@@ -1,0 +1,23 @@
+import { useState } from 'react';
+import { ArrowRight, Target, Layers3, BookOpenCheck, RotateCcw, Sparkles, Check } from 'lucide-react';
+import { MascotAnimation } from '../lib/MascotAnimation.jsx';
+import { GuestDiagnostic, guestPalette } from './GuestDiagnostic.jsx';
+import './GuestLanding.css';
+
+const steps=[
+ {icon:Target,word:'Find it.',title:'A miss becomes a direction.',copy:'Your answers reveal the concepts that need attention.',color:'#5c91f5'},
+ {icon:BookOpenCheck,word:'Get it.',title:'Understand the idea behind it.',copy:'Concept Deep Dives explain the why. Flashcards help you recall it.',color:'#b88af4'},
+ {icon:RotateCcw,word:'Keep it.',title:'Smart Review brings it back.',copy:'Practice targets weak concepts, schedules missed questions for retests, and keeps new topics in the mix.',color:'#33b7a3'},
+];
+export function GuestLanding({t,onSignup,onWhy,renderDefinitions,onSave}) {
+ const [startSignal,setStartSignal]=useState(0);
+ const start=()=>{setStartSignal(n=>n+1);document.getElementById('guest-diagnostic')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'center'});};
+ return <div className="guest-studio" style={guestPalette(t)} data-page-label="Guest main landing page">
+  <section className="gs-hero"><div className="gs-hero-copy"><span className="guest-eyebrow"><span className="gs-status-dot"/> SECURITY+ · SY0-701</span><h1><span>Diagnose your weak spots.</span><span>Follow your path.</span><strong>Pass with confidence.</strong></h1><p>A question. A clearer concept.<br/>A smarter next step.</p><div className="gs-actions"><button className="btn btn-primary" onClick={start}>10 Q diagnostic <ArrowRight size={18}/></button><button className="gs-why" onClick={onWhy}>Why we’re different <ArrowRight size={16}/></button></div><small>No account. No timer. Just a starting point.</small><div className="gs-path" aria-label="Connected learning path"><span><Target size={18}/> Diagnose</span><i/><span><Layers3 size={18}/> Strengthen</span><i/><span><RotateCcw size={18}/> Retest</span></div></div>
+  <div className="gs-diagnostic-stage"><span className="gs-stage-note">LET’S FIND YOUR FIRST WIN <Sparkles size={14}/></span><GuestDiagnostic t={t} onSignup={onSignup} onSave={onSave} renderDefinitions={renderDefinitions} startSignal={startSignal}/><span className="gs-stage-foot">Five domains. One personal starting point.</span></div></section>
+  <section className="gs-loop"><div className="gs-loop-heading"><span className="guest-eyebrow">IT ALL CONNECTS</span><h2>Less guesswork.<br/><span>More “I get it.”</span></h2><p>Your questions, lessons and flashcards work toward the same thing: stronger recall.</p></div><div className="gs-loop-cards">{steps.map(({icon:Icon,word,title,copy,color},i)=><article key={word} style={{'--step-color':color}}><header><Icon size={24}/><span>0{i+1}</span></header><h3>{word}</h3><strong>{title}</strong><p>{copy}</p></article>)}</div></section>
+ </div>;
+}
+export function WhyDifferent({t,onStart}) {
+ return <div className="guest-studio gs-different" style={guestPalette(t)}><div className="gs-different-head"><span className="guest-eyebrow">WHY SECUREPLUS</span><h1>Your next question<br/><em>has a purpose.</em></h1><p>Smart Review connects what you miss with what you practise next.</p><MascotAnimation animation="tip" size={160} label="Cipher guides your learning"/></div><div className="gs-difference-grid">{steps.map(({icon:Icon,word,title,copy,color})=><article key={word} style={{'--step-color':color}}><Icon size={30}/><span className="guest-eyebrow">{word}</span><h2>{title}</h2><p>{copy}</p></article>)}</div><section className="gs-example"><div><span className="guest-eyebrow">FOR EXAMPLE</span><h2>Miss a recovery question?</h2><p>Start with the recovery concept. Understand it in a Deep Dive, recall it with flashcards, then test your understanding in Smart Review.</p></div><ol><li><Target/> Recovery question <span>Missed</span></li><li><BookOpenCheck/> Concept Deep Dive <Check/></li><li><Layers3/> Matching flashcards <Check/></li><li><RotateCcw/> Future practice & retest <ArrowRight/></li></ol></section><div className="gs-different-cta"><h2>See your own next step.</h2><button className="btn btn-primary" onClick={onStart}>Try the 10 Q diagnostic <ArrowRight size={18}/></button><small>No account needed to try.</small></div></div>;
+}

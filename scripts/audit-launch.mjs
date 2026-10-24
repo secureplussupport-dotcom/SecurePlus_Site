@@ -242,9 +242,9 @@ if (!errors.length) {
   requireContains("src/App.jsx", "function PBQSelectionWorkspace", "Select & Fill PBQs should use the reusable tap-to-select workspace");
   requireContains("src/App.jsx", "selectionOptions:question.selectionOptions || []", "the shared PBQ selector options should persist in the Supabase payload");
   requireContains("src/App.jsx", 'distractors.length<2', "Question Manager should require at least two distractors for Select & Fill questions");
-  requireContains("src/App.jsx", "Start Free MCQ Practice", "the homepage should lead with the free MCQ practice CTA");
-  requireContains("src/App.jsx", "Try a PBQ Preview", "the homepage should offer a secondary PBQ preview CTA");
-  requireContains("src/App.jsx", "Create free account to save Smart Review", "guest results should invite learners to preserve their weak-area Smart Review");
+  requireContains("src/components/GuestLanding.jsx", "10 Q diagnostic", "the homepage should lead with the 10-question diagnostic CTA");
+  requireContains("src/components/GuestLanding.jsx", "Why we’re different", "the homepage should offer the connected-study explanation page as its secondary CTA");
+  requireContains("src/components/GuestDiagnostic.jsx", "Start focused set", "diagnostic results should lead to signup and saved Smart Review progress");
   requireContains("src/App.jsx", "GUEST_SMART_REVIEW_BRIDGE_KEY", "guest quiz attempts should survive account creation for Smart Review");
   requireContains("src/App.jsx", 'allowedGuestViews=new Set(["dashboard","mcq","pbq","daily"', "guests should be able to enter the PBQ preview without signing in");
   requirePattern("src/App.jsx", /const guestTopNavItems=\[\s*\{id:"mcq",label:"MCQ practice"\},\s*\{id:"pbq",label:"PBQ Simulations"\},\s*\{id:"flashcards",label:"Flashcards"\},\s*\];/, "guest top navigation should keep only the three primary practice destinations visible");

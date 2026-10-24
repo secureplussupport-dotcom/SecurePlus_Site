@@ -2,7 +2,8 @@ import {FlashcardDeck} from "./components/FlashcardDeck.jsx";
 import {FlashcardPreview} from "./components/FlashcardPreview.jsx";
 import "./components/FlashcardLibrary.css";
 import {flashcardFaces, personalisedFlashcards, personalisedFlashcardSet, partitionFlashcards} from "./lib/flashcardConcepts.js";
-import { GuestDiagnostic } from "./components/GuestDiagnostic.jsx";
+import { GuestLanding, WhyDifferent } from "./components/GuestLanding.jsx";
+import { GuestDiagnostic, clearGuestDiagnostic } from "./components/GuestDiagnostic.jsx";
 import { BookmarkOrganiser } from "./components/BookmarkOrganiser.jsx";
 import {CipherLoader} from "./components/CipherLoader.jsx";
 import {useLiveSnapshot} from "./lib/useLiveSnapshot.js";
@@ -816,10 +817,12 @@ async function takePendingGuestSmartReview() {
   try{
     const stored=await storageGet(GUEST_SMART_REVIEW_BRIDGE_KEY);
     if(!stored?.value)return [];
-    await storageDelete(GUEST_SMART_REVIEW_BRIDGE_KEY);
     const parsed=JSON.parse(stored.value);
-    if(Date.now()-Number(parsed?.createdAt||0)>GUEST_SMART_REVIEW_BRIDGE_TTL_MS)return [];
-    return Array.isArray(parsed?.attempts)?parsed.attempts.filter(attempt=>attempt?.qid):[];
+    if(Date.now()-Number(parsed?.createdAt||0)>(parsed?.attempts?.[0]?.diagnosticSessionId?7*24*60*60*1000:GUEST_SMART_REVIEW_BRIDGE_TTL_MS)){await storageDelete(GUEST_SMART_REVIEW_BRIDGE_KEY);return [];}
+    const rows=Array.isArray(parsed?.attempts)?parsed.attempts.filter(attempt=>attempt?.qid):[];
+    // Keep new diagnostic receipts until the server confirms an atomic import.
+    if(!rows[0]?.diagnosticSessionId)await storageDelete(GUEST_SMART_REVIEW_BRIDGE_KEY);
+    return rows;
   }catch{
     await storageDelete(GUEST_SMART_REVIEW_BRIDGE_KEY).catch(()=>{});
     return [];
@@ -23067,7 +23070,7 @@ function LandingDailyChallengeWidget({t,onPractice}) {
 // AUTH VIEW
 // ═══════════════════════════════════════════════════════════════
 function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initialMode="login",securityNotice=false}) {
-  const isReviewSignupStart=initialMode==="review-signup";
+  const isReviewSignupStart=initialMode==="review-signup" || initialMode==="signup-entry";
   const [mode,setMode]=useState(isReviewSignupStart?"signup":initialMode);
   const [showLoginModal,setShowLoginModal]=useState(initialMode==="login");
   const [showSignupJourney,setShowSignupJourney]=useState(initialMode==="signup");
@@ -23095,7 +23098,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
   const [loading,setLoading]=useState(false);
   const [mintedUser,setMintedUser]=useState(null);
   useEffect(()=>{
-    const isReviewSignup=initialMode==="review-signup";
+    const isReviewSignup=initialMode==="review-signup" || initialMode==="signup-entry";
     setMode(isReviewSignup?"signup":initialMode);
     setShowLoginModal(initialMode==="login");
     setShowSignupJourney(initialMode==="signup");
@@ -23331,6 +23334,8 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
       </>
     );
   }
+
+  if(initialMode==="signup-entry"&&mode==="signup"&&!showSignupJourney)return <div className="auth-only-page fu"><main className="auth-only-main"><section className="card auth-only-card"><span className="label" style={{color:t.green}}>YOUR NEXT STEP</span><h1>Your progress starts here.</h1><p className="auth-only-copy">Create your free account to save your diagnostic, keep your weak concepts in view, and practise with Smart Review.</p><div className="auth-only-form"><button className="btn btn-primary" onClick={()=>jumpToAuth("signup")}>Create my free account <ArrowRight size={17}/></button><button className="btn btn-ghost" onClick={openLogin}>Already have an account? Log in</button><button className="btn btn-ghost" onClick={()=>onNavigate("dashboard")}>Back to SecurePlus</button></div></section></main></div>;
 
   return(
     <div className="auth-only-page fu">
@@ -24351,106 +24356,8 @@ function GuestFeatureShowcaseCard({feature,t,index}) {
   );
 }
 
-function GuestDashboardGate({t,onSignup,onLogin,onPractice,onPreviewPbq,onFlashcards,onConcepts}) {
-  const startSignup=source=>{
-    capture("landing_signup_cta_clicked", { source });
-    onSignup();
-  };
-  const launchFullMcq=source=>{
-    capture("landing_full_mcq_bank_clicked",{source});
-    onPractice();
-  };
-  const learningSteps=[
-    {id:"mcq",label:"1 · Diagnose",color:t.accent,title:"Find the gap",body:"Answer a short Security+ set. Your results show which concepts need another look.",button:"Try the 10-question diagnostic",action:onPractice},
-    {id:"explanations",label:"2 · Understand",color:t.green,title:"See why",body:"Review the right answer and each plausible alternative so a miss becomes a useful lesson."},
-    {id:"flashcards",label:"3 · Strengthen",color:"#8b5cf6",title:"Make it stick",body:"Use focused flashcards to recall the terms behind the questions you missed.",button:"Open flashcards",action:onFlashcards},
-    {id:"review",label:"4 · Prove",color:t.green,title:"Test it again",body:"After you save your progress, Smart Review brings missed concepts back in later sets so you can check your improvement."},
-  ];
-  return (
-    <div className="dashboard-shell" data-page-label="Guest main landing page">
-      <section className="home-hero guest-home-hero brilliant-hero guest-conversion-hero">
-        <div className="home-hero-copy brilliant-hero-copy">
-          <div className="guest-objective-chip">100% Aligned to CompTIA SY0-701 Objectives</div>
-          <h1 className="home-title brilliant-title guest-tagline-title">
-            <span className="guest-tagline-support">Diagnose your weak spots.</span>
-            <span className="guest-tagline-support">Follow your path.</span>
-            <span className="guest-tagline-main"><strong>Pass</strong> with confidence.</span>
-          </h1>
-          <p className="guest-hero-description">
-            Practise Security+ questions, understand what you missed, and return to those concepts in later sets. Try ten diagnostic questions, then create a free account to save your baseline and continue.
-          </p>
-          <div className="guest-bank-cta-block">
-            <div className="home-cta-row brilliant-action-row guest-hero-primary-actions single">
-              <button className="btn guest-hero-practice-cta" type="button" onClick={()=>launchFullMcq("guest_hero")}>
-                Try the 10-question diagnostic <span aria-hidden="true">→</span>
-              </button>
-            </div>
-            <p className="guest-bank-cta-note">Ten questions across all five domains <span aria-hidden="true">•</span> No sign-up required</p>
-          </div>
-          <div className="guest-hero-proof-row" aria-label="SecurePlus practice benefits">
-            <span>Find a gap</span>
-            <span>Understand the answer</span>
-            <span>Review it later</span>
-          </div>
-        </div>
-        <div className="brilliant-lesson-shell">
-          <div className="brilliant-lesson-top">
-            <div>
-              <div className="label brilliant-lesson-kicker">10-Question Diagnostic</div>
-              <strong>Find your starting point</strong>
-            </div>
-            <span className="brilliant-lesson-duration">10 questions</span>
-          </div>
-          <div className="brilliant-daily-wrap">
-            <GuestDiagnostic t={t} onSignup={onSignup} onSave={savePendingGuestSmartReview}/>
-          </div>
-        </div>
-      </section>
-
-      <section className="guest-feature-showcase" aria-labelledby="guest-learning-loop-title">
-        <div className="guest-learning-loop-intro">
-          <span className="label">The SecurePlus study loop</span>
-          <h2 id="guest-learning-loop-title">One next step after every answer.</h2>
-          <p>Diagnose → Understand → Strengthen → Prove. See how practice turns into a focused plan instead of another random score.</p>
-        </div>
-        {learningSteps.map((feature,index)=><GuestFeatureShowcaseCard key={feature.id} feature={feature} t={t} index={index}/>)}
-      </section>
-
-      <details className="seo-resource-section seo-resource-disclosure landing-section" aria-labelledby="guest-security-study-resources-title">
-        <summary>
-          <div className="seo-resource-head">
-            <div>
-              <div className="label" style={{color:t.green}}>Optional study library</div>
-              <h2 id="guest-security-study-resources-title">Browse focused Security+ refreshers.</h2>
-            </div>
-            <p>Open this only when you need a quick topic page for acronyms, ports, PBQs, cryptography, or an SY0-701 domain.</p>
-          </div>
-          <span className="seo-resource-summary-icon" aria-hidden="true"><ChevronRight size={18}/></span>
-        </summary>
-        <div className="seo-resource-grid">
-          {SEO_RESOURCE_LINKS.map(resource=>(
-            <a key={`${resource.href}-${resource.title}`} className="seo-resource-link" href={resource.href}>
-              <strong>{resource.title}</strong>
-              <span>{resource.body}</span>
-              <em>Open resource →</em>
-            </a>
-          ))}
-        </div>
-      </details>
-
-      <section className="guest-final-cta">
-        <div>
-          <div className="label" style={{color:t.green}}>Ready when you are</div>
-          <h2>Make today's practice count tomorrow.</h2>
-          <p>Create your free account and SecurePlus will keep your progress, weak topics, and Smart Review queue ready for your next session.</p>
-        </div>
-        <div className="guest-final-actions">
-          <button className="btn btn-primary" onClick={()=>startSignup("closing_cta")}>Create my free account</button>
-          <button className="btn btn-ghost" onClick={onLogin}>I already have an account</button>
-        </div>
-      </section>
-    </div>
-  );
+function GuestDashboardGate({t,onSignup,onWhy}) {
+  return <GuestLanding t={t} onSignup={onSignup} onWhy={onWhy} onSave={savePendingGuestSmartReview} renderDefinitions={text=><GlossaryText text={text} t={t}/>}/>;
 }
 
 function GuestLockedPage({t,onSignup,onLogin,onPractice,onDaily,title="Save your progress first"}) {
@@ -30892,6 +30799,7 @@ function PasswordUpdateView({t,onDone}) {
 // ═══════════════════════════════════════════════════════════════
 const APP_HISTORY_VIEWS = Object.freeze(new Set([
   "dashboard",
+  "why-different",
   "mcq",
   "pbq",
   "exam",
@@ -31164,11 +31072,21 @@ export default function App() {
     capture("admin_pro_test_mode_changed", { mode: nextMode });
   },[user]);
 
+  const [guestImportError,setGuestImportError]=useState("");
   const importPendingGuestSmartReview=useCallback(async(account,existingAttempts=[])=>{
     const pending=await takePendingGuestSmartReview();
     if(!pending.length||!account)return existingAttempts;
     try{
       if(account.authProvider==="supabase"){
+        if(pending[0]?.diagnosticSessionId){
+          const imported=await mcqEngineRequest("diagnostic-import",{session_id:pending[0].diagnosticSessionId,answers:pending.map(row=>({question_id:row.qid,selected_option_id:row.selectedOptionId}))});
+          await storageDelete(GUEST_SMART_REVIEW_BRIDGE_KEY);
+          clearGuestDiagnostic();
+          setGuestImportError("");
+          const rows=(imported.attempts || []).map(row=>({...row,diagnosticImported:true}));
+          window.dispatchEvent(new Event("practice-access-changed"));
+          return rows.concat(existingAttempts.filter(old=>!rows.some(row=>row.qid===old.qid && new Date(row.createdAt).getTime()===new Date(old.createdAt).getTime())));
+        }
         await Promise.all(pending.map(attempt=>saveSupabaseAttempt(account.id,attempt,{throwOnError:true})));
       }else{
         for(const attempt of [...pending].reverse())await DB.saveAttempt(account.email,attempt);
@@ -31180,6 +31098,7 @@ export default function App() {
       return [...pending].sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)).concat(existingAttempts);
     }catch(error){
       await savePendingGuestSmartReview(pending);
+      setGuestImportError("Your diagnostic is still saved in this browser, but it has not synced to Smart Review. Please retry.");
       console.warn("Unable to attach guest Smart Review results",error);
       return existingAttempts;
     }
@@ -31478,6 +31397,7 @@ export default function App() {
         setUser(entitledUser);
         identifyUser(entitledUser);
         setAttempts(accountAttempts);
+        if(accountAttempts.some(row=>row.diagnosticImported))setView("mcq");
         setStarred(savedStarred);
         const diagnosticDone=await DB.getDiagnosticDone(appUser.email);
         const seen=await DB.getOnboardingSeen(appUser.email);
@@ -31544,7 +31464,7 @@ export default function App() {
       setFlashcardReviewConfirmation({count:flashcardImport.importedCount});
     }else if(!seen&&CIPHER_COINS_ACTIVE) setShowOnboarding(true);
     else if(!diagnosticDone&&a.length===0) setShowDiagnostic(false);
-    setAttempts(a);setStarred(s);setView(shouldShowFlashcardReviewConfirmation?"flashcards":"dashboard");setFlashcardSetRequest(shouldShowFlashcardReviewConfirmation&&flashcardImport.importedCount>0?STARRED_FLASHCARD_SET_ID:null);setShowDaily(false);
+    setAttempts(a);setStarred(s);setView(shouldShowFlashcardReviewConfirmation?"flashcards":a.some(row=>row.diagnosticImported)?"mcq":"dashboard");setFlashcardSetRequest(shouldShowFlashcardReviewConfirmation&&flashcardImport.importedCount>0?STARRED_FLASHCARD_SET_ID:null);setShowDaily(false);
   },[forceSupabaseSignOut,importPendingGuestFlashcards,importPendingGuestSmartReview]);
   const handleLogout=useCallback(async()=>{
     await forceSupabaseSignOut();
@@ -32196,9 +32116,9 @@ export default function App() {
         {id:"preview-pbq",amount:-50,balance_after:130,event_type:"pbq_unlock",created_at:new Date(Date.now()-172800000).toISOString()},
       ],
     });
-    const goToSignup=()=>{setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("signup");setAuthRequestId(id=>id+1);setView("auth");};
+    const goToSignup=()=>{capture("landing_signup_cta_clicked",{source:"guest_diagnostic_funnel"});setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("signup-entry");setAuthRequestId(id=>id+1);setView("auth");};
     const goToLogin=()=>{setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
-    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","objectives","flashcards","deep-dives","privacy","terms",...(devCoinPreview?["coins"]:[])]);
+    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","why-different","objectives","flashcards","deep-dives","privacy","terms",...(devCoinPreview?["coins"]:[])]);
     const guestTopNavItems=[
       {id:"mcq",label:"MCQ practice"},
       {id:"pbq",label:"PBQ Simulations"},
@@ -32278,7 +32198,6 @@ export default function App() {
                 {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
               </button>
               <button className="btn btn-ghost" type="button" onClick={goToLogin}>Log In</button>
-              <button className="btn btn-primary" type="button" onClick={goToSignup}>Get Started</button>
             </div>
           </header>
           <main id="secureplus-main" className="app-main guest-main fu">
@@ -32291,14 +32210,14 @@ export default function App() {
                   {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
                 </button>
                 <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToLogin}>Log In</button>
-                <button className="btn btn-primary" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToSignup}>Get Started</button>
               </div>
             </div>
             {view==="dashboard"&&(
-              <GuestDashboardGate t={t} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onFlashcards={()=>setView("flashcards")} onConcepts={()=>setView("deep-dives")}/>
+              <GuestDashboardGate t={t} onWhy={()=>setView("why-different")} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onFlashcards={()=>setView("flashcards")} onConcepts={()=>setView("deep-dives")}/>
             )}
+            {view==="why-different"&&<WhyDifferent t={t} onStart={()=>setView("mcq")}/>}
             {view==="mcq"&&(
-              <GuestDiagnostic t={t} onSignup={goToSignup} onSave={savePendingGuestSmartReview}/>
+              <GuestDiagnostic t={t} onSignup={goToSignup} onSave={savePendingGuestSmartReview} renderDefinitions={text=><GlossaryText text={text} t={t}/>}/>
             )}
             {view==="pbq"&&(
               activeGuestPbq ? (
@@ -32495,6 +32414,8 @@ export default function App() {
               <ProfileMenu user={user} t={t} onUpdateProfile={handleUpdateProfile} onUpdateAvatar={handleUpdateAvatar} onChangePassword={handleChangePassword} onLogout={handleLogout} compact/>
             </div>
           </div>
+          {guestImportError&&<div className="card" role="status" style={{padding:18,marginBottom:18}}>{guestImportError} <button className="btn btn-outline" onClick={async()=>setAttempts(await importPendingGuestSmartReview(user,attempts))}>Retry diagnostic sync</button></div>}
+          {view==="why-different"&&<WhyDifferent t={t} onStart={()=>setView("mcq")}/>}
           {view==="dashboard"&&<Dashboard readinessProfile={readinessProfile} practiceAccess={practiceAccessState.access} streakInfo={homeStreak.value} user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
             <MCQPractice practiceAccessState={practiceAccessState} examRequest={examEntryRequest} user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
