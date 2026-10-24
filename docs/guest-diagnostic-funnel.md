@@ -26,7 +26,7 @@ The database migration is additive. Previous security-advisor warnings about Aut
 
 ## Animated product explanation
 
-The landing page and Why we're different page share `SmartReviewStory`: a labelled illustrative diagnostic miss, linked Deep Dive and turning flashcard, targeted/discovery/due-retest cards, and the original question answered correctly at a later retest. It does not generate attempts or mutate learner progress. The retest scene explicitly states the 30-other-answer eligibility rule.
+The landing page and About Us page share `SmartReviewStory`: a labelled illustrative diagnostic miss, linked Deep Dive and turning flashcard, targeted/discovery/due-retest cards, and the original question answered correctly at a later retest. It does not generate attempts or mutate learner progress. The retest scene explicitly states the 30-other-answer eligibility rule.
 
 The four scenes loop automatically every 4.2 seconds with animated entrances and exits, coloured step markers and direct step controls. There is no pause/play button. Playback pauses offscreen, in a hidden tab, on mouse hover or while keyboard focus is inside the story. Reduced-motion users receive manual steps and static artwork. The fixed illustration stage prevents layout shifts between scenes. Supporting text, diagnostic options, captions and domain labels were enlarged; the catchphrase, two main landing CTAs and signup onboarding remain intact.
 

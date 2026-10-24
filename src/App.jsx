@@ -2,7 +2,8 @@ import {FlashcardDeck} from "./components/FlashcardDeck.jsx";
 import {FlashcardPreview} from "./components/FlashcardPreview.jsx";
 import "./components/FlashcardLibrary.css";
 import {flashcardFaces, personalisedFlashcards, personalisedFlashcardSet, partitionFlashcards} from "./lib/flashcardConcepts.js";
-import { GuestLanding, WhyDifferent } from "./components/GuestLanding.jsx";
+import { GuestLanding } from "./components/GuestLanding.jsx";
+import { AboutUs } from "./components/AboutUs.jsx";
 import { GuestDiagnostic, clearGuestDiagnostic } from "./components/GuestDiagnostic.jsx";
 import { BookmarkOrganiser } from "./components/BookmarkOrganiser.jsx";
 import {CipherLoader} from "./components/CipherLoader.jsx";
@@ -30800,6 +30801,7 @@ function PasswordUpdateView({t,onDone}) {
 const APP_HISTORY_VIEWS = Object.freeze(new Set([
   "dashboard",
   "why-different",
+  "about",
   "mcq",
   "pbq",
   "exam",
@@ -30873,6 +30875,7 @@ function scrollSecurePlusPageToTop({behavior="auto"}={}) {
 
 export default function App() {
   const initialParams=new URLSearchParams(window.location.search);
+  const urlAboutRequest=["about","why-different"].includes(initialParams.get("view"));
   const urlDeepDiveRequest=initialParams.get("view")==="deep-dives";
   const urlFlashcardsRequest=isFlashcardsAppPath()||initialParams.get("view")==="flashcards";
   const urlFlashcardsIntroRequest=Boolean(urlFlashcardsRequest&&initialParams.get("intro")==="1");
@@ -30897,7 +30900,7 @@ export default function App() {
   const [loading,setLoading]=useState(true);
   const [navigating,startNavigation]=useTransition();
   const setView=useCallback(next=>startNavigation(()=>setViewImmediate(next)),[]);
-  const [view,setViewImmediate]=useState(()=>focusAcronymLibrary||urlFlashcardsRequest?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":devCoinPreview?"coins":"dashboard");
+  const [view,setViewImmediate]=useState(()=>focusAcronymLibrary||urlFlashcardsRequest?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":urlAboutRequest?"about":devCoinPreview?"coins":"dashboard");
   const [flashcardsIntroRequested]=useState(()=>urlFlashcardsIntroRequest);
   const [attempts,setAttempts]=useState([]);
   const readinessProfile=useExamReadiness(user,attempts);
@@ -32119,13 +32122,14 @@ export default function App() {
     });
     const goToSignup=()=>{capture("landing_signup_cta_clicked",{source:"guest_diagnostic_funnel"});setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("signup-entry");setAuthRequestId(id=>id+1);setView("auth");};
     const goToLogin=()=>{setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
-    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","why-different","objectives","flashcards","deep-dives","privacy","terms",...(devCoinPreview?["coins"]:[])]);
+    const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","why-different","about","objectives","flashcards","deep-dives","privacy","terms",...(devCoinPreview?["coins"]:[])]);
     const guestTopNavItems=[
       {id:"mcq",label:"MCQ practice"},
       {id:"pbq",label:"PBQ Simulations"},
       {id:"flashcards",label:"Flashcards"},
     ];
     const guestMoreItems=[
+      {id:"about",label:"About us"},
       {id:"objectives",label:"SY0-701 Exam Guide"},
       {id:"deep-dives",label:"Concept Deep Dives"},
       {id:"privacy",label:"Privacy Policy"},
@@ -32214,9 +32218,9 @@ export default function App() {
               </div>
             </div>
             {view==="dashboard"&&(
-              <GuestDashboardGate t={t} onWhy={()=>setView("why-different")} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onFlashcards={()=>setView("flashcards")} onConcepts={()=>setView("deep-dives")}/>
+              <GuestDashboardGate t={t} onWhy={()=>setView("about")} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onFlashcards={()=>setView("flashcards")} onConcepts={()=>setView("deep-dives")}/>
             )}
-            {view==="why-different"&&<WhyDifferent t={t} onStart={()=>setView("mcq")}/>}
+            {["about","why-different"].includes(view)&&<AboutUs t={t} isGuest onStart={()=>setView("mcq")} onExplore={guestGo} feedbackHref={`mailto:${SUPPORT_EMAIL}?subject=SecurePlus%20feedback`}/>}
             {view==="mcq"&&(
               <GuestDiagnostic t={t} onSignup={goToSignup} onSave={savePendingGuestSmartReview} renderDefinitions={text=><GlossaryText text={text} t={t}/>}/>
             )}
@@ -32416,7 +32420,7 @@ export default function App() {
             </div>
           </div>
           {guestImportError&&<div className="card" role="status" style={{padding:18,marginBottom:18}}>{guestImportError} <button className="btn btn-outline" onClick={async()=>setAttempts(await importPendingGuestSmartReview(user,attempts))}>Retry diagnostic sync</button></div>}
-          {view==="why-different"&&<WhyDifferent t={t} onStart={()=>setView("mcq")}/>}
+          {["about","why-different"].includes(view)&&<AboutUs t={t} isGuest={false} onStart={()=>setView("mcq")} onExplore={setView} feedbackHref={`mailto:${SUPPORT_EMAIL}?subject=SecurePlus%20feedback`}/>}
           {view==="dashboard"&&<Dashboard readinessProfile={readinessProfile} practiceAccess={practiceAccessState.access} streakInfo={homeStreak.value} user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
             <MCQPractice practiceAccessState={practiceAccessState} examRequest={examEntryRequest} user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>

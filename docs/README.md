@@ -16,6 +16,7 @@
 | Area | Guide |
 | --- | --- |
 | Adaptive MCQs | [Three-deck engine](mcq-three-deck-engine.md) · [Core recovery](mcq-core-recovery.md) |
+| About SecurePlus | [About Us page](about-secureplus.md) |
 | Guest conversion | [Diagnostic and signup funnel](guest-diagnostic-funnel.md) |
 | Flashcards | [Flashcard rebuild](flashcards-rebuild.md) |
 | Reports | [Exam readiness](exam-readiness.md) · [Dashboard metrics](dashboard-metrics.md) |

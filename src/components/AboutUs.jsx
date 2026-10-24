@@ -1,0 +1,79 @@
+import { useState } from 'react';
+import { ArrowRight, BookOpenCheck, Check, Fingerprint, Heart, Layers3, MessageCircle, Route, ShieldCheck, Shuffle, Sparkles, Target, UsersRound } from 'lucide-react';
+import { SmartReviewStory } from './SmartReviewStory.jsx';
+import { MascotAnimation } from '../lib/MascotAnimation.jsx';
+import { FREE_GENERATION_LIMIT, GENERATION_WINDOW_MS } from '../lib/accessModel.js';
+import { guestPalette } from './GuestDiagnostic.jsx';
+import { useScrollReveal } from '../lib/useScrollReveal.js';
+import './AboutUs.css';
+
+const tools = [
+  {view:'deep-dives',icon:BookOpenCheck,title:'Understand it.',name:'Concept Deep Dives',copy:'Learn the idea behind the answer, in plain English.',color:'#b58aec',action:'Explore the lessons'},
+  {view:'flashcards',icon:Layers3,title:'Recall it.',name:'Flashcards',copy:'A quick reset for terms, acronyms and concepts.',color:'#d3a458',action:'Open the flashcards'},
+  {view:'mcq',icon:Target,title:'Apply it.',name:'Targeted MCQs',copy:'Test your understanding. Give your next set a direction.',color:'#729bf5',action:'Go to practice'},
+];
+
+function PracticeComparison() {
+  const [guided,setGuided]=useState(true);
+  return <div className="about-comparison">
+    <div className="about-comparison-top"><span>THE PRACTICE EXPERIENCE</span><ShieldCheck size={20}/></div>
+    <div className="about-mode-switch" role="group" aria-label="Compare practice approaches">
+      <button type="button" aria-pressed={!guided} onClick={()=>setGuided(false)}><Shuffle size={16}/>Random sets</button>
+      <button type="button" aria-pressed={guided} onClick={()=>setGuided(true)}><Route size={16}/>A study path</button>
+    </div>
+    <div className={`about-path-demo ${guided?'is-guided':'is-random'}`}>
+      <div className="about-demo-art" key={String(guided)} aria-hidden="true">
+        {guided?<>
+          <div className="about-demo-anchor"><Fingerprint size={24}/><div><small>A CONCEPT TO REVISIT</small><strong>Multi-factor authentication</strong></div><span>MFA</span></div>
+          <div className="about-demo-connector"><i/><i/><i/></div>
+          <div className="about-demo-route">{tools.map(({icon:Icon,title,name,color},i)=><div key={name} style={{'--tool-color':color}}><span>0{i+1}</span><Icon size={23}/><strong>{title}</strong></div>)}</div>
+          <div className="about-demo-next"><Check size={16}/><span>One concept. A manageable next step.</span></div>
+        </>:<>
+          <div className="about-random-stack"><div><small>NEXT QUESTION</small><strong>Encryption</strong><Shuffle size={22}/></div><div><small>NEXT QUESTION</small><strong>Network threats</strong><Shuffle size={22}/></div><div><small>NEXT QUESTION</small><strong>Access controls</strong><Shuffle size={22}/></div></div>
+          <div className="about-random-question">What should I work on next?</div>
+        </>}
+      </div>
+      <div className="about-comparison-caption" aria-live="polite"><h3>{guided?'A useful next step, every time.':'A bigger bank can still leave you guessing.'}</h3><p>{guided?'Your answers connect the concept to a lesson, a flashcard and targeted practice.':'An AI-generated bank can offer plenty of questions. Random tests alone do not turn those questions into a personal study plan.'}</p></div>
+    </div>
+    <span className="about-example-label">Illustrative comparison · not your learning results</span>
+  </div>;
+}
+
+export function AboutUs({t,onStart,onExplore,feedbackHref,isGuest=true}) {
+  const root=useScrollReveal();
+  return <div ref={root} className="guest-studio about-page" style={guestPalette(t)} data-page-label="About SecurePlus">
+    <header className="about-hero">
+      <div className="about-hero-copy"><span className="guest-eyebrow"><span className="about-small-dot"/> ABOUT SECUREPLUS</span><h1>Your effort.<br/><em>A clearer direction.</em></h1><p>Security+ prep should help you decide what to do next. We connect the learning, the revision and the practice around you.</p><button className="btn btn-primary about-primary" onClick={onStart}>{isGuest?'Find my starting point':'Open my practice hub'}<ArrowRight size={18}/></button><span className="about-hero-note">{isGuest?'Start with 10 Core questions. No account needed.':'Build on what you know. Focus on what needs work.'}</span><div className="about-hero-signature"><ShieldCheck size={17}/> Built for CompTIA Security+ · SY0-701</div></div>
+      <PracticeComparison/>
+    </header>
+
+    <section className="about-hub" data-reveal aria-labelledby="about-hub-title">
+      <div className="about-section-heading"><span className="guest-eyebrow">ONE CONNECTED STUDY HUB</span><h2 id="about-hub-title">Understand. Recall. Apply.</h2><p>Your resources belong together. Your study time should, too.</p></div>
+      <div className="about-tools">{tools.map(({view,icon:Icon,title,name,copy,color,action},i)=><article key={view} style={{'--tool-color':color}}><div className="about-tool-art" aria-hidden="true"><span>0{i+1}</span><Icon size={49} strokeWidth={1.3}/><i/><i/></div><div className="about-tool-content"><span>{name}</span><h3>{title}</h3><p>{copy}</p><button onClick={()=>onExplore(view)}>{action}<ArrowRight size={17}/></button></div></article>)}</div>
+    </section>
+
+    <section className="about-personal" data-reveal aria-labelledby="about-personal-title">
+      <div className="about-section-heading"><span className="guest-eyebrow">PERSONAL TO YOUR PROGRESS</span><h2 id="about-personal-title">Your answers shape your path.</h2><p>A realistic workplan starts with what you need, rather than another random test.</p></div>
+      <div className="about-personal-points"><div><span>01</span><h3>Find your focus.</h3><p>The diagnostic gives you a starting point. Concept mastery tracks where your understanding needs attention.</p></div><div><span>02</span><h3>Practise with purpose.</h3><p>Smart Review targets weak concepts, brings missed questions back when due, and mixes in new ground.</p></div><div><span>03</span><h3>Keep it connected.</h3><p>Lessons explain. Flashcards reinforce. Further practice helps you check whether the concept is sticking.</p></div></div>
+      <details className="about-adapts"><summary>How does my practice adapt?<ArrowRight size={18}/></summary><dl>
+        <div><dt>A concept needs attention.</dt><dd>Smart Review uses your concept mastery to target further practice, alongside new topics.</dd></div>
+        <div><dt>The same concept trips you up twice.</dt><dd>The next time that topic is tested, Smart Review selects a Core question if one is available.</dd></div>
+        <div><dt>A missed question comes back.</dt><dd>The original becomes eligible after 30 other MCQ answers. Answer it correctly to clear it from your missed queue.</dd></div>
+      </dl></details>
+      <SmartReviewStory/>
+    </section>
+
+    <section className="about-access" data-reveal aria-labelledby="about-access-title">
+      <div className="about-access-intro"><span className="guest-eyebrow"><Heart size={15}/> A USEFUL FREE WAY FORWARD</span><h2 id="about-access-title">Good learning<br/>should open doors.</h2><p>Your core study tools don’t require a paid plan. Create a free account for guided lessons, Smart Review and saved progress. Build a routine one concept at a time.</p><small>Optional paid passes add practice capacity and extra controls. Free-account generation limits apply.</small></div>
+      <div className="about-free-grid"><div><strong>10<span>Q</span></strong><h3>Your starting point</h3><p>Guest diagnostic. No account required.</p></div><div><strong>{FREE_GENERATION_LIMIT}<span> / {GENERATION_WINDOW_MS/3600000}h</span></strong><h3>Free-account practice</h3><p>MCQs with Smart Review and saved progress.</p></div><div><Layers3 size={27}/><h3>Every curated deck</h3><p>Flashcards available without a paid plan.</p></div><div><BookOpenCheck size={27}/><h3>The guided lesson path</h3><p>Free account for full access. Guests can preview.</p></div></div>
+    </section>
+
+    <section className="about-people" data-reveal aria-labelledby="about-people-title">
+      <div className="about-people-art" aria-hidden="true"><span><UsersRound size={43} strokeWidth={1.4}/></span><i><Heart size={20}/></i><i><Sparkles size={21}/></i><MascotAnimation animation="wave" size={96}/></div>
+      <div><span className="guest-eyebrow">THE PEOPLE BEHIND SECUREPLUS</span><h2 id="about-people-title">Edtech for more of us.</h2><p>We’re a team of individuals who believe in democratising education technology. Our aim is simple: make clear, connected Security+ preparation accessible to more people.</p><p>SecurePlus is still growing. Your experience helps us decide what to improve next.</p></div>
+    </section>
+
+    <section className="about-feedback" data-reveal aria-labelledby="about-feedback-title"><div><span className="guest-eyebrow"><MessageCircle size={16}/> BUILT WITH YOUR FEEDBACK</span><h2 id="about-feedback-title">Help shape the next step.</h2><p>An unclear explanation? A missing topic? Something that could work better? We’re listening.</p></div><a className="about-feedback-link" href={feedbackHref}>Share your feedback<ArrowRight size={19}/></a></section>
+    <footer className="about-final"><span>One concept. A little more confidence.</span><button className="btn btn-primary about-primary" onClick={onStart}>{isGuest?'Try the 10 Q diagnostic':'Start my next set'}<ArrowRight size={18}/></button></footer>
+  </div>;
+}

@@ -18,7 +18,7 @@
  .guest-app-shell .guest-top-nav-brand{max-width:calc(100% - 84px);min-height:32px}
  .guest-app-shell .guest-top-nav-brand>span{font-size:0;line-height:1}
  .guest-app-shell .guest-top-nav-brand>span::after{content:"SecurePlus";font-size:16px;font-weight:800;white-space:nowrap}
- .guest-app-shell:has(.guest-diagnostic) .guest-top-nav-links,.guest-app-shell:has(.gs-different) .guest-top-nav-links{display:none}
+ .guest-app-shell:has(.guest-diagnostic) .guest-top-nav-links,.guest-app-shell:has(.gs-different) .guest-top-nav-links,.guest-app-shell:has(.about-page) .guest-top-nav-links{display:none}
 }
 
 .gs-different-story{margin:40px 0}.gs-path{flex-wrap:wrap}.gd-welcome-art{gap:12px}.gd-question-actions>span{min-width:140px}.gd-domain-results small{line-height:1.6}.gd-domain-results{gap:10px}.gd-domain-results article{padding:15px 12px}.gd-recommendations button{min-height:42px}.gd-expand{width:42px;height:42px}.gs-hero-copy>p{font-size:20px}.gs-loop-heading>p{font-size:18px}.gs-difference-grid p{font-size:16px}
