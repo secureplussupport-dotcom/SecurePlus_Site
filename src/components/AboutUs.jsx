@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ArrowDown, ArrowRight, BookOpenCheck, Check, Fingerprint, Heart, Layers3, MessageCircle, Route, ShieldCheck, Shuffle, Sparkles, Target, UsersRound } from 'lucide-react';
+import { ArrowDown, ArrowRight, BookOpenCheck, Heart, Layers3, MessageCircle, ShieldCheck, Sparkles, Target, UsersRound } from 'lucide-react';
+import { PracticeComparison } from './PracticeComparison.jsx';
 import { SmartReviewStory } from './SmartReviewStory.jsx';
 import { MascotAnimation } from '../lib/MascotAnimation.jsx';
 import { FREE_GENERATION_LIMIT, GENERATION_WINDOW_MS } from '../lib/accessModel.js';
@@ -12,32 +12,6 @@ const tools = [
   {view:'flashcards',icon:Layers3,title:'Recall it.',name:'Flashcards',copy:'A quick reset for terms, acronyms and concepts.',color:'#d3a458',action:'Open the flashcards'},
   {view:'mcq',icon:Target,title:'Apply it.',name:'Targeted MCQs',copy:'Test your understanding. Give your next set a direction.',color:'#729bf5',action:'Go to practice'},
 ];
-
-function PracticeComparison() {
-  const [guided,setGuided]=useState(true);
-  return <div className="about-comparison">
-    <div className="about-comparison-top"><span>THE PRACTICE EXPERIENCE</span><ShieldCheck size={20}/></div>
-    <div className="about-mode-switch" role="group" aria-label="Compare practice approaches">
-      <button type="button" aria-pressed={!guided} onClick={()=>setGuided(false)}><Shuffle size={16}/>Random sets</button>
-      <button type="button" aria-pressed={guided} onClick={()=>setGuided(true)}><Route size={16}/>A study path</button>
-    </div>
-    <div className={`about-path-demo ${guided?'is-guided':'is-random'}`}>
-      <div className="about-demo-art" key={String(guided)} aria-hidden="true">
-        {guided?<>
-          <div className="about-demo-anchor"><Fingerprint size={24}/><div><small>A CONCEPT TO REVISIT</small><strong>Multi-factor authentication</strong></div><span>MFA</span></div>
-          <div className="about-demo-connector"><i/><i/><i/></div>
-          <div className="about-demo-route">{tools.map(({icon:Icon,title,name,color},i)=><div key={name} style={{'--tool-color':color}}><span>0{i+1}</span><Icon size={23}/><strong>{title}</strong></div>)}</div>
-          <div className="about-demo-next"><Check size={16}/><span>One concept. A manageable next step.</span></div>
-        </>:<>
-          <div className="about-random-stack"><div><small>NEXT QUESTION</small><strong>Encryption</strong><Shuffle size={22}/></div><div><small>NEXT QUESTION</small><strong>Network threats</strong><Shuffle size={22}/></div><div><small>NEXT QUESTION</small><strong>Access controls</strong><Shuffle size={22}/></div></div>
-          <div className="about-random-question">What should I work on next?</div>
-        </>}
-      </div>
-      <div className="about-comparison-caption" aria-live="polite"><h3>{guided?'A useful next step, every time.':'A bigger bank can still leave you guessing.'}</h3><p>{guided?'Your answers connect the concept to a lesson, a flashcard and targeted practice.':'An AI-generated bank can offer plenty of questions. Random tests alone do not turn those questions into a personal study plan.'}</p></div>
-    </div>
-    <span className="about-example-label">Illustrative comparison · not your learning results</span>
-  </div>;
-}
 
 export function AboutUs({t,onStart,onExplore,feedbackHref,isGuest=true}) {
   const root=useScrollReveal();
