@@ -32124,7 +32124,7 @@ export default function App() {
     const goToLogin=()=>{setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
     const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","why-different","about","objectives","flashcards","deep-dives","privacy","terms",...(devCoinPreview?["coins"]:[])]);
     const guestTopNavItems=[
-      {id:"mcq",label:"MCQ practice"},
+      {id:"mcq",label:"10Q Diagnostic"},
       {id:"pbq",label:"PBQ Simulations"},
       {id:"flashcards",label:"Flashcards"},
     ];
@@ -32222,7 +32222,7 @@ export default function App() {
             )}
             {["about","why-different"].includes(view)&&<AboutUs t={t} isGuest onStart={()=>setView("mcq")} onExplore={guestGo} feedbackHref={`mailto:${SUPPORT_EMAIL}?subject=SecurePlus%20feedback`}/>}
             {view==="mcq"&&(
-              <GuestDiagnostic t={t} onSignup={goToSignup} onSave={savePendingGuestSmartReview} renderDefinitions={text=><GlossaryText text={text} t={t}/>}/>
+              <GuestDiagnostic t={t} fullPage onSignup={goToSignup} onSave={savePendingGuestSmartReview} renderDefinitions={text=><GlossaryText text={text} t={t}/>}/>
             )}
             {view==="pbq"&&(
               activeGuestPbq ? (

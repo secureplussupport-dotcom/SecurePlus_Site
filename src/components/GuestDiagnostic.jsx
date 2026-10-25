@@ -18,7 +18,7 @@ const conceptName=tag=>String(tag || '').split('.').at(-1).replace(/-/g,' ').rep
 const domains=['Security concepts','Threats & mitigations','Security architecture','Security operations','Security management'];
 export const guestPalette=t=>({'--guest-bg':t.bg,'--guest-panel':t.surface,'--guest-text':t.text,'--guest-muted':t.textSec,'--guest-line':t.border,'--guest-accent':t.green || '#30b9a4','--guest-blue':'color-mix(in srgb,#729bf5 75%,var(--guest-text))'});
 
-export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,startSignal=0}) {
+export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,startSignal=0,fullPage=false}) {
  const draft=useSyncExternalStore(subscribe,snapshot,snapshot);
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[expanded,setExpanded]=useState(false),[saving,setSaving]=useState(false),[transitioning,setTransitioning]=useState(false);
  const questionBody=useRef(null),dialog=useRef(null),expandButton=useRef(null),heading=useRef(null),seenSignal=useRef(0);
@@ -46,6 +46,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
   return()=>{document.body.style.overflow=previous;expandButton.current?.focus();};
  },[expanded]);
  useEffect(()=>{if(draft?.questions?.length)heading.current?.focus({preventScroll:true});if(expanded&&dialog.current)dialog.current.scrollTop=0;},[draft?.index,expanded]);
+ const fullFormat=fullPage||expanded;
  const questions=draft?.questions || [],index=draft?.index || 0,answers=draft?.answers || {},checked=draft?.checked || {};
  const done=questions.length>0 && index===questions.length,q=questions[index],marked=checked[index];
  const rows=questions.map((q,i)=>({qid:q.id,selected:answers[i],correct:answers[i]===q.correct,ch:q.chapter,topic:q.topic,title:q.prompt,conceptTag:q.concept_tag,mcq:true,readinessSource:'diagnostic',diagnosticSessionId:draft.request_id,selectedOptionId:q.options[answers[i]]?.id,createdAt:new Date(draft.startedAt+i).toISOString()}));
@@ -64,8 +65,8 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
   if(current===draft)publish({...draft,index:index+1});
   setTransitioning(false);
  };
- const content=<section id={expanded?undefined:'guest-diagnostic'} className={`guest-diagnostic ${expanded?'is-expanded':''}`} style={guestPalette(t)} aria-label="10-question Core diagnostic">
-  <header className="gd-header"><span><i/> YOUR SECURITY+ CHECK-IN</span><button ref={expandButton} className="gd-expand" onClick={()=>setExpanded(!expanded)} aria-label={expanded?'Close full format':'Expand diagnostic'}>{expanded?<Minimize2 size={18}/>:<Maximize2 size={18}/>}</button></header>
+ const content=<section id={expanded?undefined:'guest-diagnostic'} className={`guest-diagnostic ${expanded?'is-expanded':''} ${fullFormat?'is-full-format':''} ${fullPage?'is-full-page':''}`} style={guestPalette(t)} aria-label="10-question Core diagnostic">
+  <header className="gd-header"><span><i/> {fullPage?'10Q DIAGNOSTIC':'YOUR SECURITY+ CHECK-IN'}</span>{!fullPage&&<button ref={expandButton} className="gd-expand" onClick={()=>setExpanded(!expanded)} aria-label={expanded?'Close full format':'Expand diagnostic'}>{expanded?<Minimize2 size={18}/>:<Maximize2 size={18}/>}</button>}</header>
   {busy?<CipherLoader t={t} label="Creating your diagnostic…"/>:!questions.length?<div className="gd-welcome">
    <div className="gd-security-visual" role="img" aria-label="Security+ study: identity, threats and network defence">
     <div className="gd-security-rings" aria-hidden="true"><i/><i/></div>
@@ -90,10 +91,13 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
   </div>:<div ref={questionBody} className="gd-question" key={`${draft.request_id}-${index}`} >
    <div className="gd-progress-copy"><span>{draft.reviewing?'ANSWER REVIEW':'CORE DIAGNOSTIC'}</span><strong>{index+1}<small> / 10</small></strong></div>
    <div className="gd-progress" role="progressbar" aria-label="Diagnostic answers checked" aria-valuemin={0} aria-valuemax={10} aria-valuenow={Object.keys(checked).length}>{questions.map((_,i)=><i key={i} className={checked[i]?'is-done':i===index?'is-current':''}/>)}</div>
-   <span className="gd-domain-label">DOMAIN {q.chapter} · {domains[Number(q.chapter)-1]}</span><h2 ref={heading} tabIndex={-1}>{renderDefinitions(q.prompt)}</h2>
-   <div className="gd-options">{q.options.map((o,i)=><button key={o.id} disabled={!!marked} aria-pressed={answers[index]===i} className={`${answers[index]===i?'is-selected':''} ${marked&&i===q.correct?'is-correct':''} ${marked&&answers[index]===i&&i!==q.correct?'is-missed':''}`} onClick={()=>publish({...draft,answers:{...answers,[index]:i}})}><span>{String.fromCharCode(65+i)}</span><span>{renderDefinitions(o.text)}</span>{marked&&i===q.correct&&<Check size={18}/>}</button>)}</div>
-   {marked&&<div className="gd-feedback" role="status"><strong>{answers[index]===q.correct?'That’s right.':'One to revisit.'}</strong>{expanded?<p>{renderDefinitions(q.explanation)}</p>:<button onClick={()=>setExpanded(true)}>See why in full format <Maximize2 size={14}/></button>}</div>}
-   <footer className="gd-question-actions"><span>{!expanded?'Tap underlined terms for definitions.':'Correct-answer explanation after every check.'}</span>{marked?<button className="btn btn-primary" disabled={transitioning} onClick={nextQuestion}>{index===9?'See my study path':'Next question'} <ArrowRight size={16}/></button>:<button className="btn btn-primary" disabled={answers[index]==null} onClick={()=>publish({...draft,checked:{...checked,[index]:true}})}>Check answer <Check size={16}/></button>}</footer>
+   <div className="gd-question-layout"><div className="gd-question-main">
+    <span className="gd-domain-label">DOMAIN {q.chapter} · {domains[Number(q.chapter)-1]}</span><h2 ref={heading} tabIndex={-1}>{renderDefinitions(q.prompt)}</h2>
+    <div className="gd-options">{q.options.map((o,i)=><button key={o.id} disabled={!!marked} aria-pressed={answers[index]===i} className={`${answers[index]===i?'is-selected':''} ${marked&&i===q.correct?'is-correct':''} ${marked&&answers[index]===i&&i!==q.correct?'is-missed':''}`} onClick={()=>publish({...draft,answers:{...answers,[index]:i}})}><span>{String.fromCharCode(65+i)}</span><span>{renderDefinitions(o.text)}</span><Check size={18} aria-hidden="true" className={`gd-option-check ${marked&&i===q.correct?'is-visible':''}`}/></button>)}</div>
+   </div><div className="gd-feedback-slot">
+    {marked?<div className="gd-feedback" role="status" tabIndex={0} aria-label="Answer feedback"><strong>{answers[index]===q.correct?'That’s right.':'One to revisit.'}</strong>{fullFormat?<p>{renderDefinitions(q.explanation)}</p>:<button onClick={()=>setExpanded(true)}>See why in full format <Maximize2 size={14}/></button>}</div>:<div className="gd-feedback-placeholder"><BookOpenCheck size={22}/><span>{fullFormat?'Your explanation appears here.':'Check your answer to see how you did.'}</span></div>}
+   </div></div>
+   <footer className="gd-question-actions"><span>{!fullFormat?'Tap underlined terms for definitions.':'Correct-answer explanation after every check.'}</span>{marked?<button className="btn btn-primary" disabled={transitioning} onClick={nextQuestion}>{index===9?'See my study path':'Next question'} <ArrowRight size={16}/></button>:<button className="btn btn-primary" disabled={answers[index]==null} onClick={()=>publish({...draft,checked:{...checked,[index]:true}})}>Check answer <Check size={16}/></button>}</footer>
   </div>}
   {error&&<p className="gd-error" role="alert">{error}</p>}
  </section>;
