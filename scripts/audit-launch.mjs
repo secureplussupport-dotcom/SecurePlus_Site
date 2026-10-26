@@ -292,8 +292,9 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'fetch("/api/stripe/checkout"', "upgrade flow should call the server-side Stripe checkout endpoint");
   requireContains("src/App.jsx", 'PRO_MONTHLY_PASS_PRICE = "$11.99 / 30 days"', "pricing should offer the $11.99 Sprint Pass");
   requireContains("src/App.jsx", 'PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus"', "pricing should name the recommended three-month option clearly");
-  requireContains("src/App.jsx", "One payment. No automatic renewal.", "pricing must explain non-renewal");
-  requireContains("src/App.jsx", "Recommended</span>", "pricing should visually recommend the three-month plan");
+  requireContains("src/App.jsx", "return <UpgradePage", "pricing must render the upgrade page");
+  requireContains("src/components/UpgradePage.jsx", "One payment. No automatic renewal.", "pricing must explain non-renewal");
+  requireContains("src/components/UpgradePage.jsx", 'recommended&&<span className="up-value">Best value</span>', "pricing should visually recommend the three-month plan");
   requireContains("src/App.jsx", "plan:selectedPlan", "upgrade requests should send the selected plan without accepting a client price ID");
   if (/wallet\?\.status==="ready"\?Number\(wallet\?\.balance\|\|0\):CIPHER_WELCOME_GRANT/.test(app)) {
     push(errors, "src/App.jsx", "onboarding must not display an unverified 150-coin balance while the persisted wallet is loading");

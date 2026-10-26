@@ -1,3 +1,4 @@
+import {UpgradePage} from "./components/UpgradePage.jsx";
 import {FlashcardDeck} from "./components/FlashcardDeck.jsx";
 import {FlashcardPreview} from "./components/FlashcardPreview.jsx";
 import "./components/FlashcardLibrary.css";
@@ -28865,15 +28866,8 @@ function TrialCountdownBanner({user,t,onExpired,onUpgrade}) {
   );
 }
 
-function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,onDeleteAccount,onNavigate,t,billingLoading=false}) {
-  const isPro=user?.tier==="pro",legacy=["active","trialing"].includes(user?.subscriptionStatus||"");
-  const plans=[{id:"sprint",name:"Sprint Pass",price:"11.99",days:30,description:"A focused final month before exam day."},{id:"comprehensive",name:"Comprehensive Pass",price:"24.99",days:90,description:"A full quarter to prepare on your schedule."}];
-  return <div className="upgrade-page"><section className="upgrade-hero"><div className="page-title-row" style={{justifyContent:"center"}}><NavGlyph type="pricing" active/></div><h2>Your pace. Your deadline.</h2><p>Free gives you the tools to prepare steadily. Pro gives you room to cram and target precisely.</p><div className="upgrade-plan-note"><ShieldCheck size={15}/> One payment. No automatic renewal.</div></section>
-  <section className="upgrade-plan-selector"><h3>Choose your Pro access pass</h3><div className="upgrade-plan-choice-grid">{plans.map(plan=><article key={plan.id} className={`upgrade-plan-option ${plan.id==="comprehensive"?"recommended":""}`}><div className="upgrade-plan-option-top"><span className="upgrade-plan-kicker">{plan.days} days</span>{plan.id==="comprehensive"&&<span className="upgrade-recommended-badge">Best value</span>}</div><h3>{plan.name}</h3><div className="upgrade-price-row"><div className="upgrade-price">${plan.price}</div><div className="upgrade-price-cycle">USD · one-time<br/>{plan.days} days of Pro</div></div><p className="upgrade-plan-summary">{plan.description}</p><button className="btn btn-primary upgrade-primary-cta" disabled={billingLoading||isPro} onClick={()=>onUpgrade(plan.id)}>{isPro?"Pro is active":billingLoading?"Opening checkout…":`Choose ${plan.name}`}</button><p className="upgrade-plan-math">Ends automatically. You won’t be billed again.</p></article>)}</div></section>
-  <section className="card" style={{padding:24,marginTop:24,overflowX:"auto"}}><h3>Everything you need. More room when you need it.</h3><table style={{width:"100%",textAlign:"left",borderSpacing:"12px 18px"}}><thead><tr><th>Study tools</th><th>Free account</th><th>Pro pass</th></tr></thead><tbody>{[
-   ["Question generation","50 every rolling 12 hours","Unlimited"],["Set size","Up to 30","Up to 90"],["Question repository & Exam Mode","Full access","Full access"],["Daily Challenge","Included · no quota use","Included"],["Flashcards & Concept Deep Dives","Full access","Full access"],["Chapter, topic & difficulty filters","—","Included"],["Question bookmarks","10 active slots","Unlimited · search, tags & categories"],["Identical exam retakes","No quota use","Unlimited"]
-  ].map(row=><tr key={row[0]}>{row.map((cell,i)=><td key={i}>{cell}</td>)}</tr>)}</tbody></table></section>
-  <section className="card" style={{padding:24,marginTop:20}}><h3>Your account</h3>{user?.proPassExpiresAt&&<p>Your pass ends {formatSubscriptionDate(user.proPassExpiresAt)}. It does not renew.</p>}{legacy&&<><p>Your existing recurring subscription is unchanged. {user.subscriptionCancelAtPeriodEnd?"Renewal is cancelled; access lasts until the paid period ends.":"You can still cancel its next renewal below."}</p><button className="btn btn-outline" disabled={billingLoading||user.subscriptionCancelAtPeriodEnd} onClick={onCancelMembership}>Cancel existing subscription renewal</button></>}<button className="btn btn-ghost" disabled={billingLoading} onClick={onSyncBilling}>Already paid? Refresh Pro status</button></section></div>;
+function Pricing({user,onUpgrade,onSyncBilling,onCancelMembership,t,billingLoading=false}) {
+  return <UpgradePage user={user} onUpgrade={onUpgrade} onSyncBilling={onSyncBilling} onCancelMembership={onCancelMembership} t={t} billingLoading={billingLoading} passEnds={user?.proPassExpiresAt?formatSubscriptionDate(user.proPassExpiresAt):null} mascot={<MascotAnimation animation="flashcards" size={103} interactive={false} label="Cipher"/>}/>;
 }
 
 // ═══════════════════════════════════════════════════════════════
