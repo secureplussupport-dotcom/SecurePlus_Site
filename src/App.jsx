@@ -23127,7 +23127,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     setMode(nextMode);
     setMintedUser(null);
     setShowLoginModal(false);
-    setShowSignupJourney(true);
+    setShowSignupJourney(mode==="signup");
     capture("landing_signup_cta_clicked", { source:"auth_landing" });
   };
   const handle=async event=>{
@@ -23326,7 +23326,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     );
   }
 
-  if(initialMode==="signup-entry"&&mode==="signup"&&!showSignupJourney)return <div className="auth-welcome">
+  if(mode==="signup"&&!showSignupJourney&&initialMode!=="review-signup")return <div className="auth-welcome">
     <div className="auth-welcome-art"><span className="auth-mini-brand"><BrandMark size={27}/> SecurePlus</span><div className="auth-cipher-halo"><MascotAnimation animation="wave" size={152} label="Cipher welcomes you"/></div><span className="auth-art-caption">Your next chapter<br/><strong>starts with you.</strong></span><div className="auth-connected-tools" aria-label="Connected study tools"><span><Target size={20}/></span><i/><span><Layers3 size={20}/></span><i/><span><BookOpenCheck size={20}/></span></div></div>
     <div className="auth-welcome-copy"><span className="auth-free-badge"><Sparkles size={14}/> YOUR FREE STUDY SPACE</span><h1>Make your next<br/>{" "}step count.</h1><p>Your weak spots become a clear path forward.</p><ul><li><Target size={19}/><span>Practice that targets your gaps</span></li><li><Layers3 size={19}/><span>Flashcards that make it stick</span></li><li><BookOpenCheck size={19}/><span>Deep Dives that make it click</span></li></ul><button className="btn btn-primary auth-create-cta" data-auth-primary onClick={()=>jumpToAuth("signup")}>Create my free account <ArrowRight size={20}/></button><small>No credit card needed. Your progress comes with you.</small><button className="auth-login-switch" onClick={openLogin}>Already have an account? <strong>Log in</strong> <ArrowRight size={14}/></button></div>
   </div>;
