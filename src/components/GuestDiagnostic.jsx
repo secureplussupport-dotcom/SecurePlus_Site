@@ -22,7 +22,7 @@ export const guestPalette=t=>({'--guest-bg':t.bg,'--guest-panel':t.surface,'--gu
 export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,startSignal=0,fullPage=false}) {
  const draft=useSyncExternalStore(subscribe,snapshot,snapshot);
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[expanded,setExpanded]=useState(false),[saving,setSaving]=useState(false),[transitioning,setTransitioning]=useState(false);
- const questionBody=useRef(null),dialog=useRef(null),expandButton=useRef(null),heading=useRef(null),seenSignal=useRef(0);
+ const host=useRef(null),questionBody=useRef(null),dialog=useRef(null),expandButton=useRef(null),heading=useRef(null),seenSignal=useRef(0);
  const start=async()=>{
   if(current?.questions?.length)return;
   setBusy(true);setError('');
@@ -50,6 +50,12 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
  const fullFormat=fullPage||expanded;
  const questions=draft?.questions || [],index=draft?.index || 0,answers=draft?.answers || {},checked=draft?.checked || {};
  const done=questions.length>0 && index===questions.length,q=questions[index],marked=checked[index],skipped=draft?.skipped?.[index]===true;
+ useEffect(()=>{
+  if(!done)return;
+  if(expanded){dialog.current.scrollTop=0;return;}
+  const hero=matchMedia('(min-width: 721px)').matches&&host.current?.closest('.gs-hero');
+  (hero||host.current)?.scrollIntoView({block:'start',behavior:'instant'});
+ },[done,expanded]);
  const rows=diagnosticRows(draft);
  const misses=[...new Map(rows.filter(r=>r.correct!==true).map(r=>[r.conceptTag,r])).values()];
  const skip=()=>publish({...draft,answers:{...answers,[index]:null},skipped:{...draft.skipped,[index]:true},checked:{...checked,[index]:true}});
@@ -66,7 +72,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
   if(current===draft)publish({...draft,index:index+1});
   setTransitioning(false);
  };
- const content=<section id={expanded?undefined:'guest-diagnostic'} className={`guest-diagnostic ${expanded?'is-expanded':''} ${fullFormat?'is-full-format':''} ${fullPage?'is-full-page':''}`} style={guestPalette(t)} aria-label="10-question Core diagnostic">
+ const content=<section ref={host} id={expanded?undefined:'guest-diagnostic'} className={`guest-diagnostic ${expanded?'is-expanded':''} ${fullFormat?'is-full-format':''} ${fullPage?'is-full-page':''}`} style={guestPalette(t)} aria-label="10-question Core diagnostic">
   <header className="gd-header"><span><i/> {fullPage?'10Q DIAGNOSTIC':'YOUR SECURITY+ CHECK-IN'}</span>{!fullPage&&<button ref={expandButton} className="gd-expand" onClick={()=>setExpanded(!expanded)} aria-label={expanded?'Close full format':'Expand diagnostic'}>{expanded?<Minimize2 size={18}/>:<Maximize2 size={18}/>}</button>}</header>
   {busy?<CipherLoader t={t} label="Creating your diagnostic…"/>:!questions.length?<div className="gd-welcome">
    <div className="gd-security-visual" role="img" aria-label="Security+ study: identity, threats and network defence">
@@ -82,8 +88,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
    <div className="gd-preview-domains" aria-label="All five exam domains">{domains.map((name,i)=><span key={name} title={name}>{['Security','Threats','Architecture','Operations','Risk'][i]}</span>)}</div>
    <button className="btn btn-primary" onClick={start}>Start my 10 Q diagnostic <ArrowRight size={18}/></button><small>No experience needed · No timer · No pressure</small>
   </div>:done?<div className="gd-results">
-   <div className="gd-path-ready"><MascotAnimation animation="wave" size={108} label="Cipher welcomes you to your learning path"/><span className="guest-eyebrow">A STARTING POINT, NOT A SCORE</span><h2 ref={heading} tabIndex={-1}>Your next steps are ready.</h2><p>You don’t need to know it all. That’s what we’re here for.</p></div>
-   <div className="gd-preview-counts"><div><strong>10</strong><span>Concepts explored</span></div><div><strong>{misses.length}</strong><span>To learn together</span></div><div><strong>5</strong><span>Domains discovered</span></div></div>
+   <div className="gd-path-ready"><MascotAnimation animation="wave" size={64} label="Cipher welcomes you to your learning path"/><span className="guest-eyebrow">A STARTING POINT, NOT A SCORE</span><h2 ref={heading} tabIndex={-1}>Your next steps are ready.</h2><p>You don’t need to know it all. That’s what we’re here for.</p></div>
    <div className="gd-focus gd-next-step">
     <span className="guest-eyebrow"><Sparkles size={15}/> YOUR NEXT STEP</span>
     {misses.length>0&&<div className="gd-topic-preview" aria-label="Topics to work on"><span>A few things to explore</span><div>{misses.slice(0,3).map(row=><span key={row.conceptTag}>{row.topic||conceptName(row.conceptTag)}</span>)}</div></div>}
@@ -97,6 +102,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
     </div>}
     <div className="gd-plan-signup"><span className="gd-plan-promise"><Sparkles size={17}/> Your topics. Your practice. Your pace.</span><button className="btn btn-primary gd-plan-cta" onClick={signup} disabled={saving}><span>{saving?'Saving your path…':'Build my free study plan'}</span><ArrowRight size={23}/></button><small>Create a free account to open your resources and keep your learning path.</small></div>
    </div>
+   <div className="gd-preview-counts"><div><strong>10</strong><span>Concepts explored</span></div><div><strong>{misses.length}</strong><span>To learn together</span></div><div><strong>5</strong><span>Domains discovered</span></div></div>
    <div className="gd-domain-results">{domains.map((name,i)=>{const result=rows.filter(r=>Number(r.ch)===i+1);return <article key={name} style={{'--domain-tint':['#5c91f5','#b88af4','#e2a743','#33b7a3','#d487b5'][i]}}><span>0{i+1}</span><strong>{result.length}<em> explored</em></strong><small>{name}</small><i><b style={{width:'100%'}}/></i></article>;})}</div>
    {misses.length>0&&<details className="gd-recommendations"><summary>Your learn-later list <span>{misses.length}</span></summary>{misses.map(row=>{const lesson=conceptDeepDive(row.conceptTag);return <article key={row.conceptTag}><strong>{row.topic||conceptName(row.conceptTag)}</strong><div><button onClick={signup}><BookOpenCheck size={15}/>{lesson?'Learn with a Deep Dive':'Explore this concept'} <ArrowRight size={14}/></button><button onClick={signup}><Layers3 size={15}/>Try matching flashcards <ArrowRight size={14}/></button></div></article>;})}</details>}
    <button className="btn btn-ghost" onClick={()=>publish({...draft,index:0,reviewing:true})}><RotateCcw size={15}/> Review your answers</button>
