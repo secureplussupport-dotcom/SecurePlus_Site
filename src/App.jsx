@@ -24652,7 +24652,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
       setEngineStateError(false);return state;
     }).catch(()=>{setEngineStateError(true);return null;});
   },[isGuest]);
-  useEffect(()=>{refreshEngineState();},[refreshEngineState,attempts.length]);
+  useEffect(()=>{refreshEngineState();window.addEventListener("guest-diagnostic-imported",refreshEngineState);return()=>window.removeEventListener("guest-diagnostic-imported",refreshEngineState);},[refreshEngineState,attempts.length]);
   const starredSet=useMemo(()=>new Set(starred),[starred]);
   const starredMcqs=useMemo(()=>bank.filter(q=>starredSet.has(starKey("mcq",q.id))),[bank,starredSet]);
   const starredQuestionIds=useMemo(()=>new Set(starredMcqs.map(question=>question.id)),[starredMcqs]);
@@ -24682,7 +24682,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
   });
   const reviewSummary = {
     due:engineState?.failed?.filter(row=>row.cooldown_counter<=0).length??"—",
-    weak:engineState?.mastery?.filter(row=>row.score<80).length??"—",
+    weak:engineState?new Set([...(engineState.mastery||[]).filter(row=>row.score<80).map(row=>row.concept_tag),...(engineState.diagnostic_weak_tags||[])]).size:"—",
   };
   const quizSizes = isGuest?[10]:[10,20,30];
   const sessionMinimum = 1;
@@ -30025,7 +30025,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   const personalCards=useMemo(()=>personalisedFlashcards(engineState),[engineState]);
   const personalSets=useMemo(()=>partitionFlashcards(personalCards).map((cards,index)=>({
     id:`personalised-${index}`,title:`Personalised review${personalCards.length>20?` · ${index+1}`:""}`,
-    description:"Every card linked to your concepts missed twice in a row.",color:"#30b9a4",setType:"term",
+    description:"Cards for concepts you’re learning or revisiting.",color:"#30b9a4",setType:"term",
     chapterTitle:"Your concept review",topic:"Personalised review",cards,
   })),[personalCards]);
   const refreshPersonal=useCallback(()=>{
@@ -30044,7 +30044,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     }
     return()=>{active=false;};
   },[owner,canSync]);
-  useEffect(()=>{refreshPersonal();},[refreshPersonal]);
+  useEffect(()=>{refreshPersonal();window.addEventListener("guest-diagnostic-imported",refreshPersonal);return()=>window.removeEventListener("guest-diagnostic-imported",refreshPersonal);},[refreshPersonal]);
   useEffect(()=>{
     if(!initialSetId)return;
     if(initialSetId===RANDOM_FLASHCARD_SET_ID){
@@ -31060,7 +31060,9 @@ export default function App() {
     let active=true;
     setFlashcardConceptState(null);
     if(view==="dashboard"&&user?.authProvider==="supabase"&&mcqEngineEnabled){
-      mcqEngineRequest("state").then(state=>{if(active)setFlashcardConceptState(state);}).catch(()=>{});
+      const load=()=>mcqEngineRequest("state").then(state=>{if(active)setFlashcardConceptState(state);}).catch(()=>{});
+      load();window.addEventListener("guest-diagnostic-imported",load);
+      return()=>{active=false;window.removeEventListener("guest-diagnostic-imported",load);};
     }
     return()=>{active=false;};
   },[user?.id,view,attempts.length]);
@@ -31082,12 +31084,13 @@ export default function App() {
     try{
       if(account.authProvider==="supabase"){
         if(pending[0]?.diagnosticSessionId){
-          const imported=await mcqEngineRequest("diagnostic-import",{session_id:pending[0].diagnosticSessionId,answers:pending.map(row=>({question_id:row.qid,selected_option_id:row.selectedOptionId}))});
+          const imported=await mcqEngineRequest("diagnostic-import",{session_id:pending[0].diagnosticSessionId,answers:pending.map(row=>({question_id:row.qid,selected_option_id:row.selectedOptionId,skipped:row.skipped===true}))});
           await storageDelete(GUEST_SMART_REVIEW_BRIDGE_KEY);
           clearGuestDiagnostic();
           setGuestImportError("");
           const rows=(imported.attempts || []).map(row=>({...row,diagnosticImported:true}));
           window.dispatchEvent(new Event("practice-access-changed"));
+          window.dispatchEvent(new Event("guest-diagnostic-imported"));
           return rows.concat(existingAttempts.filter(old=>!rows.some(row=>row.qid===old.qid && new Date(row.createdAt).getTime()===new Date(old.createdAt).getTime())));
         }
         await Promise.all(pending.map(attempt=>saveSupabaseAttempt(account.id,attempt,{throwOnError:true})));

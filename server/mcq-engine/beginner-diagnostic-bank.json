@@ -1,0 +1,422 @@
+[
+  {
+    "id": "diag-001",
+    "chapter": "1",
+    "concept_tag": "sec.cia-triad",
+    "topic": "Keeping information private",
+    "prompt": "Keeping a private message secret protects its…",
+    "options": [
+      "Confidentiality",
+      "Availability",
+      "Speed"
+    ],
+    "correct": 0,
+    "explanation": "Confidentiality means only the right people can read information."
+  },
+  {
+    "id": "diag-002",
+    "chapter": "1",
+    "concept_tag": "sec.ctrl-phys",
+    "topic": "Physical security",
+    "prompt": "Which item physically helps stop strangers entering an office?",
+    "options": [
+      "A locked door",
+      "A password reminder",
+      "A backup copy"
+    ],
+    "correct": 0,
+    "explanation": "A locked door is physical security: it helps protect a real place and the equipment inside."
+  },
+  {
+    "id": "diag-003",
+    "chapter": "1",
+    "concept_tag": "sec.least-privilege",
+    "topic": "Only the access you need",
+    "prompt": "A new employee only needs to read a folder. What access should they get?",
+    "options": [
+      "Read-only access",
+      "Permission to delete everything",
+      "Full administrator access"
+    ],
+    "correct": 0,
+    "explanation": "Least privilege means giving someone only the access they need for their task."
+  },
+  {
+    "id": "diag-004",
+    "chapter": "1",
+    "concept_tag": "cry.sym-aes",
+    "topic": "Encryption",
+    "prompt": "What does encryption do to a readable message?",
+    "options": [
+      "Scrambles it so a key is needed to read it",
+      "Deletes it forever",
+      "Makes it public"
+    ],
+    "correct": 0,
+    "explanation": "Encryption protects information by making it unreadable without the right key."
+  },
+  {
+    "id": "diag-005",
+    "chapter": "1",
+    "concept_tag": "cry.hash-sha",
+    "topic": "Checking for changes",
+    "prompt": "You want to check whether a downloaded file changed. What helps?",
+    "options": [
+      "Compare its hash with the trusted original",
+      "Change its name",
+      "Open it on a larger screen"
+    ],
+    "correct": 0,
+    "explanation": "A hash is a digital fingerprint. Comparing trusted hashes helps reveal changes to a file."
+  },
+  {
+    "id": "diag-006",
+    "chapter": "1",
+    "concept_tag": "sec.defense-in-depth",
+    "topic": "Layers of protection",
+    "prompt": "Why use a password, a firewall and backups together?",
+    "options": [
+      "Several layers protect you if one fails",
+      "One layer makes all others unnecessary",
+      "More tools guarantee nothing can go wrong"
+    ],
+    "correct": 0,
+    "explanation": "Defense in depth uses several layers of protection. No single layer is perfect."
+  },
+  {
+    "id": "diag-007",
+    "chapter": "2",
+    "concept_tag": "att.phishing",
+    "topic": "Spotting phishing",
+    "prompt": "An unexpected email asks for your password through a strange link. What might it be?",
+    "options": [
+      "Phishing",
+      "A backup",
+      "An update you already installed"
+    ],
+    "correct": 0,
+    "explanation": "Phishing is a deceptive message that tries to trick you into sharing information or taking an unsafe action."
+  },
+  {
+    "id": "diag-008",
+    "chapter": "2",
+    "concept_tag": "att.mal-ransomware",
+    "topic": "Ransomware",
+    "prompt": "Malicious software locks your files and demands money. What is this called?",
+    "options": [
+      "Ransomware",
+      "A firewall",
+      "A software patch"
+    ],
+    "correct": 0,
+    "explanation": "Ransomware blocks access to files or systems and demands a payment. It is a type of malicious software."
+  },
+  {
+    "id": "diag-009",
+    "chapter": "2",
+    "concept_tag": "att.dos-ddos",
+    "topic": "Overwhelming a website",
+    "prompt": "An attacker floods a website with traffic so real visitors cannot use it. What is the goal?",
+    "options": [
+      "Deny access to the service",
+      "Back up the website",
+      "Improve its speed"
+    ],
+    "correct": 0,
+    "explanation": "A denial-of-service attack overwhelms a service so legitimate users cannot access it."
+  },
+  {
+    "id": "diag-010",
+    "chapter": "2",
+    "concept_tag": "att.tailgating",
+    "topic": "Following someone through a secure door",
+    "prompt": "A stranger slips through a secure door behind an employee without using a badge. This is…",
+    "options": [
+      "Tailgating",
+      "Encryption",
+      "A software update"
+    ],
+    "correct": 0,
+    "explanation": "Tailgating means following an authorised person into a restricted area without getting permission."
+  },
+  {
+    "id": "diag-011",
+    "chapter": "2",
+    "concept_tag": "att.pwd-stuffing",
+    "topic": "Reused passwords",
+    "prompt": "Why is reusing the same password on several websites risky?",
+    "options": [
+      "A password stolen from one site may unlock others",
+      "It makes every password stronger",
+      "It automatically enables extra security"
+    ],
+    "correct": 0,
+    "explanation": "Attackers try stolen passwords on other sites. This is credential stuffing, and password reuse makes it easier."
+  },
+  {
+    "id": "diag-012",
+    "chapter": "2",
+    "concept_tag": "att.actor-insider",
+    "topic": "Insider threats",
+    "prompt": "An employee deliberately steals files they can access at work. This is an example of…",
+    "options": [
+      "An insider threat",
+      "A physical backup",
+      "A secure connection"
+    ],
+    "correct": 0,
+    "explanation": "An insider threat comes from someone with trusted access, such as an employee or contractor."
+  },
+  {
+    "id": "diag-013",
+    "chapter": "3",
+    "concept_tag": "arch.segmentation",
+    "topic": "Separating networks",
+    "prompt": "Why keep a guest Wi-Fi network separate from a company’s work network?",
+    "options": [
+      "Limit what visitors can reach",
+      "Give visitors every company file",
+      "Remove the need for any passwords"
+    ],
+    "correct": 0,
+    "explanation": "Network segmentation separates systems into groups and limits traffic between them."
+  },
+  {
+    "id": "diag-014",
+    "chapter": "3",
+    "concept_tag": "arch.cloud-models",
+    "topic": "Cloud services",
+    "prompt": "Using a provider’s servers over the internet instead of owning every server is an example of…",
+    "options": [
+      "Cloud computing",
+      "A locked filing cabinet",
+      "A paper-only office"
+    ],
+    "correct": 0,
+    "explanation": "Cloud computing lets you use a provider’s computing resources over a network, often the internet."
+  },
+  {
+    "id": "diag-015",
+    "chapter": "3",
+    "concept_tag": "data.backups",
+    "topic": "Backups",
+    "prompt": "What is the main reason to keep a backup of an important file?",
+    "options": [
+      "Recover it if the original is lost",
+      "Make the original impossible to edit",
+      "Automatically share it with everyone"
+    ],
+    "correct": 0,
+    "explanation": "A backup is a separate copy you can use to recover information after loss or damage."
+  },
+  {
+    "id": "diag-016",
+    "chapter": "3",
+    "concept_tag": "arch.vpn",
+    "topic": "Private network connections",
+    "prompt": "A VPN is mainly used to create what over another network?",
+    "options": [
+      "A protected connection",
+      "A public password list",
+      "A copy of every website"
+    ],
+    "correct": 0,
+    "explanation": "A virtual private network (VPN) creates a protected connection between endpoints over another network."
+  },
+  {
+    "id": "diag-017",
+    "chapter": "3",
+    "concept_tag": "net.proto-tls",
+    "topic": "Secure web connections",
+    "prompt": "Why is HTTPS useful when sending information to a website?",
+    "options": [
+      "It encrypts the connection",
+      "It guarantees the website is honest",
+      "It removes the need to check the address"
+    ],
+    "correct": 0,
+    "explanation": "HTTPS uses TLS to encrypt the connection. You still need to check that you are visiting the right website."
+  },
+  {
+    "id": "diag-018",
+    "chapter": "3",
+    "concept_tag": "arch.air-gap",
+    "topic": "Disconnected systems",
+    "prompt": "A computer has no network connection to other systems. This separation is called…",
+    "options": [
+      "An air gap",
+      "Single sign-on",
+      "A shared password"
+    ],
+    "correct": 0,
+    "explanation": "An air gap separates a system from other networks. Information can still reach it through other routes, such as removable drives."
+  },
+  {
+    "id": "diag-019",
+    "chapter": "4",
+    "concept_tag": "iam.mfa",
+    "topic": "Extra sign-in protection",
+    "prompt": "A sign-in asks for a password and a code from your phone. What does the extra step add?",
+    "options": [
+      "Another way to verify it is you",
+      "A public copy of the password",
+      "Permission to skip all future checks"
+    ],
+    "correct": 0,
+    "explanation": "Multi-factor authentication (MFA) checks different factor types, such as something you know and something you have."
+  },
+  {
+    "id": "diag-020",
+    "chapter": "4",
+    "concept_tag": "ops.patch-mgmt",
+    "topic": "Security updates",
+    "prompt": "Why should you install a trusted security update?",
+    "options": [
+      "It may fix known weaknesses",
+      "It always removes your password",
+      "It makes backups unnecessary"
+    ],
+    "correct": 0,
+    "explanation": "Security updates, or patches, can fix weaknesses that attackers might otherwise exploit."
+  },
+  {
+    "id": "diag-021",
+    "chapter": "4",
+    "concept_tag": "ops.logs-syslog",
+    "topic": "Activity logs",
+    "prompt": "What does a computer activity log help you find out?",
+    "options": [
+      "What happened and when",
+      "Which wallpaper looks best",
+      "How to avoid all future updates"
+    ],
+    "correct": 0,
+    "explanation": "Logs record events, such as sign-ins and errors, so people can investigate what happened."
+  },
+  {
+    "id": "diag-022",
+    "chapter": "4",
+    "concept_tag": "ir.lifecycle-nist",
+    "topic": "Responding to a suspicious event",
+    "prompt": "You notice suspicious activity on a work computer. What is a sensible first action?",
+    "options": [
+      "Report it through the approved channel",
+      "Hide it from the security team",
+      "Post company files online"
+    ],
+    "correct": 0,
+    "explanation": "Reporting suspicious activity helps the right team investigate and respond using the organisation’s incident process."
+  },
+  {
+    "id": "diag-023",
+    "chapter": "4",
+    "concept_tag": "data.dlp",
+    "topic": "Preventing data leaks",
+    "prompt": "A tool warns you before you email confidential customer files outside the company. What is it helping prevent?",
+    "options": [
+      "A data leak",
+      "A normal screen lock",
+      "A routine security update"
+    ],
+    "correct": 0,
+    "explanation": "Data loss prevention (DLP) helps detect and stop sensitive information being shared in unsafe ways."
+  },
+  {
+    "id": "diag-024",
+    "chapter": "4",
+    "concept_tag": "data.sanitization",
+    "topic": "Safe disposal of data",
+    "prompt": "Before selling an old company laptop, what should happen to its sensitive data?",
+    "options": [
+      "It should be securely removed using an approved method",
+      "Its files should only be renamed",
+      "It should be left for the buyer"
+    ],
+    "correct": 0,
+    "explanation": "Data sanitization uses an appropriate method to remove data so the next owner cannot recover it."
+  },
+  {
+    "id": "diag-025",
+    "chapter": "5",
+    "concept_tag": "gov.policy-aup",
+    "topic": "Rules for using work systems",
+    "prompt": "A document explains what staff may do on company devices. What is it?",
+    "options": [
+      "An acceptable use policy",
+      "An encryption key",
+      "A backup drive"
+    ],
+    "correct": 0,
+    "explanation": "An acceptable use policy (AUP) explains the rules for using an organisation’s technology."
+  },
+  {
+    "id": "diag-026",
+    "chapter": "5",
+    "concept_tag": "risk.treatment",
+    "topic": "Reducing risk",
+    "prompt": "A shop adds a lock to reduce the chance of theft. What is it doing?",
+    "options": [
+      "Reducing a risk",
+      "Guaranteeing theft is impossible",
+      "Making all risks public"
+    ],
+    "correct": 0,
+    "explanation": "Risk mitigation means taking steps to reduce the likelihood or impact of a problem."
+  },
+  {
+    "id": "diag-027",
+    "chapter": "5",
+    "concept_tag": "risk.bia-rto-rpo",
+    "topic": "Planning recovery",
+    "prompt": "A business sets a target to restore its payment service within two hours. What does that target describe?",
+    "options": [
+      "How soon service should return",
+      "How long a password should be",
+      "How many people work in the office"
+    ],
+    "correct": 0,
+    "explanation": "A recovery time objective (RTO) is the target time to restore a service after a disruption."
+  },
+  {
+    "id": "diag-028",
+    "chapter": "5",
+    "concept_tag": "gov.gdpr-hipaa-pci",
+    "topic": "Protecting personal information",
+    "prompt": "A customer’s home address is an example of…",
+    "options": [
+      "Personal information",
+      "A public software update",
+      "An encryption algorithm"
+    ],
+    "correct": 0,
+    "explanation": "Personal information can identify or relate to a person. Organisations need to handle it with care."
+  },
+  {
+    "id": "diag-029",
+    "chapter": "5",
+    "concept_tag": "gov.training-phish",
+    "topic": "Security awareness",
+    "prompt": "Practising how to spot suspicious emails helps employees do what?",
+    "options": [
+      "Recognise and report phishing",
+      "Stop needing any security controls",
+      "Share passwords more quickly"
+    ],
+    "correct": 0,
+    "explanation": "Security awareness training helps people recognise common risks and respond safely."
+  },
+  {
+    "id": "diag-030",
+    "chapter": "5",
+    "concept_tag": "risk.vendor-audit",
+    "topic": "Checking suppliers",
+    "prompt": "Before a company shares customer data with a new supplier, what should it check?",
+    "options": [
+      "How the supplier protects that data",
+      "Only the supplier’s logo colour",
+      "Whether the supplier likes the same software"
+    ],
+    "correct": 0,
+    "explanation": "Checking a supplier’s security helps a company understand the risks of sharing data with that supplier."
+  }
+]

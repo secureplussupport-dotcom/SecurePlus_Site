@@ -41,7 +41,8 @@ export function generateSet(bank, state, count, random = Math.random) {
   const mastery = new Map(state.mastery.map(row => [row.concept_tag, row.score]));
   const seen = new Map(state.history.map(row => [row.question_id, row.last_seen_at]));
   const failed = new Map(state.failed.map(row => [row.question_id, row]));
-  const score = q => mastery.get(q.concept_tag) ?? 50;
+  const previewFocus=new Set(state.diagnostic_weak_tags || []);
+  const score = q => mastery.get(q.concept_tag) ?? (previewFocus.has(q.concept_tag)?15:50);
   const selected = [];
   const used = new Set();
   const take = (rows, limit, deck) => {
@@ -54,8 +55,8 @@ export function generateSet(bank, state, count, random = Math.random) {
   take(eligible, retestTarget, 1);
   const remediationCapacity = remediationTarget + retestTarget - selected.length;
   const unseen = bank.filter(q => !seen.has(q.id) && !used.has(q.id) && !failed.has(q.id));
-  // Unencountered concepts belong in discovery; only recorded weak scores remediate.
-  take(fisherYates(unseen.filter(q => mastery.has(q.concept_tag) && score(q) < 80), random)
+  // Saved preview interests can seed remediation without inventing mastery evidence.
+  take(fisherYates(unseen.filter(q => (mastery.has(q.concept_tag)||previewFocus.has(q.concept_tag)) && score(q) < 80), random)
     .sort((a, b) => score(a) - score(b)), remediationCapacity, 2);
   const discovery = unseen.filter(q => !used.has(q.id)).map(q => ({ q,
     priority: -Math.log(Math.max(Number.MIN_VALUE, 1 - random())) / (score(q) >= 80 ? .5 : 1),

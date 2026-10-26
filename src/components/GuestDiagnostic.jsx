@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowRight, Maximize2, Minimize2, Check, BookOpenCheck, Layers3, RotateCcw, Target, ShieldCheck, Fingerprint, Network, Radar } from 'lucide-react';
+import { ArrowRight, Maximize2, Minimize2, Check, BookOpenCheck, Layers3, RotateCcw, Target, Sparkles, ShieldCheck, Fingerprint, Network, Radar } from 'lucide-react';
 import { CipherLoader } from './CipherLoader.jsx';
 import { MascotAnimation } from '../lib/MascotAnimation.jsx';
 import { mcqEngineRequest, prepareGuestDiagnostic } from '../lib/mcqEngineClient.js';
+import { diagnosticRows } from '../lib/guestDiagnosticProgress.js';
 import { conceptDeepDive } from '../lib/mcqResultSummary.js';
 import './GuestLanding.css';
 
@@ -31,7 +32,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
     await prepareGuestDiagnostic();
     const request=current?.request_id || crypto.randomUUID();publish({request_id:request});
     const plan=await mcqEngineRequest('generate',{mode:'diagnostic',set_size:10,request_id:request});
-    publish({request_id:request,questions:plan.questions,answers:{},checked:{},index:0,startedAt:Date.now()});
+    publish({request_id:request,questions:plan.questions,answers:{},checked:{},skipped:{},index:0,startedAt:Date.now()});
    })().finally(()=>{generating=null;});
    await generating;
   }catch(e){setError(e.message);}finally{setBusy(false);}
@@ -48,10 +49,10 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
  useEffect(()=>{if(draft?.questions?.length)heading.current?.focus({preventScroll:true});if(expanded&&dialog.current)dialog.current.scrollTop=0;},[draft?.index,expanded]);
  const fullFormat=fullPage||expanded;
  const questions=draft?.questions || [],index=draft?.index || 0,answers=draft?.answers || {},checked=draft?.checked || {};
- const done=questions.length>0 && index===questions.length,q=questions[index],marked=checked[index];
- const rows=questions.map((q,i)=>({qid:q.id,selected:answers[i],correct:answers[i]===q.correct,ch:q.chapter,topic:q.topic,title:q.prompt,conceptTag:q.concept_tag,mcq:true,readinessSource:'diagnostic',diagnosticSessionId:draft.request_id,selectedOptionId:q.options[answers[i]]?.id,createdAt:new Date(draft.startedAt+i).toISOString()}));
- const correct=rows.filter(r=>r.correct).length;
- const misses=[...new Map(rows.filter(r=>!r.correct).map(r=>[r.conceptTag,r])).values()];
+ const done=questions.length>0 && index===questions.length,q=questions[index],marked=checked[index],skipped=draft?.skipped?.[index]===true;
+ const rows=diagnosticRows(draft);
+ const misses=[...new Map(rows.filter(r=>r.correct!==true).map(r=>[r.conceptTag,r])).values()];
+ const skip=()=>publish({...draft,answers:{...answers,[index]:null},skipped:{...draft.skipped,[index]:true},checked:{...checked,[index]:true}});
  const signup=async()=>{
   setSaving(true);setError('');
   try{await onSave?.(rows);setExpanded(false);onSignup();}catch{setError('Your result could not be carried forward. Please try again.');}finally{setSaving(false);}
@@ -76,28 +77,28 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
     <span className="gd-security-node gd-node-network"><Network size={21}/> Networks</span>
     <div className="gd-security-cipher"><MascotAnimation animation="scan" size={82} label="Cipher guides your Security+ study"/></div>
    </div>
-   <h2>Find your Security+<br/>starting point.</h2><p>Spot the gaps. Get your next move.</p>
-   <div className="gd-welcome-stats"><span><strong>10</strong> Core questions</span><i/><span><strong>5</strong> Exam domains</span></div>
+   <h2>New to Security+?<br/>You’re in the right place.</h2><p>Try a little. Skip anything new. See your path.</p>
+   <div className="gd-welcome-stats"><span><strong>10</strong> easy questions</span><i/><span><strong>5</strong> Exam domains</span></div>
    <div className="gd-preview-domains" aria-label="All five exam domains">{domains.map((name,i)=><span key={name} title={name}>{['Security','Threats','Architecture','Operations','Risk'][i]}</span>)}</div>
-   <button className="btn btn-primary" onClick={start}>Start my 10 Q diagnostic <ArrowRight size={18}/></button><small>No account needed · No timer</small>
+   <button className="btn btn-primary" onClick={start}>Start my 10 Q diagnostic <ArrowRight size={18}/></button><small>No experience needed · No timer · No pressure</small>
   </div>:done?<div className="gd-results">
-   <span className="guest-eyebrow">YOUR FIRST STEP, TAKEN</span>
-   <div className="gd-score" role="img" aria-label={`${correct*10} percent, ${correct} of 10 correct`}><svg viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="77"/><circle className="gd-score-sweep" cx="90" cy="90" r="77" pathLength="100" strokeDasharray="100" style={{strokeDashoffset:100-correct*10}}/></svg><strong>{correct*10}<small>%</small><em>{correct} / 10 correct</em></strong></div>
-   <h2 ref={heading} tabIndex={-1}>{correct===10?'A strong starting point.':'Now we know where to start.'}</h2>
-   <div className="gd-focus"><span className="guest-eyebrow"><Target size={15}/> YOUR NEXT FOCUS</span><h3>{misses[0]?conceptName(misses[0].conceptTag):'Keep your recall sharp.'}</h3><p>{misses.length?'We’ll use your missed concepts in future Smart Review sets, with retests when they’re due.':'Save your baseline and let Smart Review help you keep building.'}</p><button className="btn btn-primary" onClick={signup} disabled={saving}>{saving?'Saving your path…':'Start focused set'} <ArrowRight size={17}/></button><small>Create a free account to keep this result.</small></div>
-   <div className="gd-domain-results">{domains.map((name,i)=>{const result=rows.filter(r=>Number(r.ch)===i+1),percent=result.filter(r=>r.correct).length/result.length*100;return <article key={name} style={{'--domain-tint':['#5c91f5','#b88af4','#e2a743','#33b7a3','#d487b5'][i]}}><span>0{i+1}</span><strong>{percent}%</strong><small>{name}</small><i><b style={{width:`${percent}%`}}/></i></article>;})}</div>
-   {misses.length>0&&<details className="gd-recommendations"><summary>Your missed concepts <span>{misses.length}</span></summary>{misses.map(row=>{const lesson=conceptDeepDive(row.conceptTag);return <article key={row.conceptTag}><strong>{conceptName(row.conceptTag)}</strong><div><button onClick={signup}><BookOpenCheck size={15}/>{lesson?'Concept Deep Dive':'Explore this concept'} <ArrowRight size={14}/></button><button onClick={signup}><Layers3 size={15}/>Matching flashcards <ArrowRight size={14}/></button></div></article>;})}</details>}
+   <div className="gd-path-ready"><MascotAnimation animation="wave" size={108} label="Cipher welcomes you to your learning path"/><span className="guest-eyebrow">A STARTING POINT, NOT A SCORE</span><h2 ref={heading} tabIndex={-1}>Your next steps are ready.</h2><p>You don’t need to know it all. That’s what we’re here for.</p></div>
+   <div className="gd-preview-counts"><div><strong>10</strong><span>Concepts explored</span></div><div><strong>{misses.length}</strong><span>To learn together</span></div><div><strong>5</strong><span>Domains discovered</span></div></div>
+   <div className="gd-focus"><span className="guest-eyebrow"><Sparkles size={15}/> YOUR LEARN-NEXT PREVIEW</span><h3>{misses[0]?misses[0].topic:'Keep your curiosity going.'}</h3><p>{misses.length?'We’ll help you understand it, remember it, and try it in your own Smart Review sets. Skipping is simply saying “let’s learn this”.':'You’ve met some of the basics. Your free account helps you explore more, one concept at a time.'}</p><div className="gd-plan-tools"><span><BookOpenCheck size={18}/>Plain-English lessons</span><span><Layers3 size={18}/>Matching flashcards</span><span><Target size={18}/>Practice that adapts</span></div><button className="btn btn-primary" onClick={signup} disabled={saving}>{saving?'Saving your path…':'Build my free study plan'} <ArrowRight size={17}/></button><small>Your learn-later topics come with you when you sign up.</small></div>
+   <div className="gd-domain-results">{domains.map((name,i)=>{const result=rows.filter(r=>Number(r.ch)===i+1);return <article key={name} style={{'--domain-tint':['#5c91f5','#b88af4','#e2a743','#33b7a3','#d487b5'][i]}}><span>0{i+1}</span><strong>{result.length}<em> explored</em></strong><small>{name}</small><i><b style={{width:'100%'}}/></i></article>;})}</div>
+   {misses.length>0&&<details className="gd-recommendations"><summary>Your learn-later list <span>{misses.length}</span></summary>{misses.map(row=>{const lesson=conceptDeepDive(row.conceptTag);return <article key={row.conceptTag}><strong>{row.topic||conceptName(row.conceptTag)}</strong><div><button onClick={signup}><BookOpenCheck size={15}/>{lesson?'Learn with a Deep Dive':'Explore this concept'} <ArrowRight size={14}/></button><button onClick={signup}><Layers3 size={15}/>Try matching flashcards <ArrowRight size={14}/></button></div></article>;})}</details>}
    <button className="btn btn-ghost" onClick={()=>publish({...draft,index:0,reviewing:true})}><RotateCcw size={15}/> Review your answers</button>
   </div>:<div ref={questionBody} className="gd-question" key={`${draft.request_id}-${index}`} >
-   <div className="gd-progress-copy"><span>{draft.reviewing?'ANSWER REVIEW':'CORE DIAGNOSTIC'}</span><strong>{index+1}<small> / 10</small></strong></div>
+   <div className="gd-progress-copy"><span>{draft.reviewing?'YOUR EXPLORATION':'A LITTLE TASTE OF SMART REVIEW'}</span><strong>{index+1}<small> / 10</small></strong></div>
    <div className="gd-progress" role="progressbar" aria-label="Diagnostic answers checked" aria-valuemin={0} aria-valuemax={10} aria-valuenow={Object.keys(checked).length}>{questions.map((_,i)=><i key={i} className={checked[i]?'is-done':i===index?'is-current':''}/>)}</div>
    <div className="gd-question-layout"><div className="gd-question-main">
     <span className="gd-domain-label">DOMAIN {q.chapter} · {domains[Number(q.chapter)-1]}</span><h2 ref={heading} tabIndex={-1}>{renderDefinitions(q.prompt)}</h2>
     <div className="gd-options">{q.options.map((o,i)=><button key={o.id} disabled={!!marked} aria-pressed={answers[index]===i} className={`${answers[index]===i?'is-selected':''} ${marked&&i===q.correct?'is-correct':''} ${marked&&answers[index]===i&&i!==q.correct?'is-missed':''}`} onClick={()=>publish({...draft,answers:{...answers,[index]:i}})}><span>{String.fromCharCode(65+i)}</span><span>{renderDefinitions(o.text)}</span><Check size={18} aria-hidden="true" className={`gd-option-check ${marked&&i===q.correct?'is-visible':''}`}/></button>)}</div>
    </div><div className="gd-feedback-slot">
-    {marked?<div className="gd-feedback" role="status" tabIndex={0} aria-label="Answer feedback"><strong>{answers[index]===q.correct?'That’s right.':'One to revisit.'}</strong>{fullFormat?<p>{renderDefinitions(q.explanation)}</p>:<button onClick={()=>setExpanded(true)}>See why in full format <Maximize2 size={14}/></button>}</div>:<div className="gd-feedback-placeholder"><BookOpenCheck size={22}/><span>{fullFormat?'Your explanation appears here.':'Check your answer to see how you did.'}</span></div>}
+    {marked?<div className="gd-feedback" role="status" tabIndex={0} aria-label="Answer feedback"><strong>{skipped?'Saved for your learning path.':answers[index]===q.correct?'You’ve got it!':'A new thing to learn.'}</strong>{fullFormat?<p>{skipped&&<span className="gd-skip-reassurance">Don’t worry! We’ll work on this later.</span>}{renderDefinitions(q.explanation)}</p>:<button onClick={()=>setExpanded(true)}>{skipped?'No worries—see this idea in full format':'See why in full format'} <Maximize2 size={14}/></button>}</div>:<div className="gd-feedback-placeholder"><BookOpenCheck size={22}/><span>{fullFormat?'A friendly explanation is waiting. Not sure? You can skip.':'Give it a try—or save it for later.'}</span></div>}
    </div></div>
-   <footer className="gd-question-actions"><span>{!fullFormat?'Tap underlined terms for definitions.':'Correct-answer explanation after every check.'}</span>{marked?<button className="btn btn-primary" disabled={transitioning} onClick={nextQuestion}>{index===9?'See my study path':'Next question'} <ArrowRight size={16}/></button>:<button className="btn btn-primary" disabled={answers[index]==null} onClick={()=>publish({...draft,checked:{...checked,[index]:true}})}>Check answer <Check size={16}/></button>}</footer>
+   <footer className="gd-question-actions"><div className="gd-skip-slot">{!marked?<button type="button" className="gd-skip-button" onClick={skip}><Sparkles size={21}/><span><strong>New to this?</strong><small>Skip & learn later</small></span><ArrowRight size={16}/></button>:<span className="gd-step-encouragement">{skipped?'No pressure. This is on your learn-later list.':index===9?'Look at that—you’ve explored all ten!':`${index+1} explored. Your path is taking shape.`}</span>}</div>{marked?<button className="btn btn-primary" disabled={transitioning} onClick={nextQuestion}>{index===9?'See my learning path':'Let’s keep exploring'} <ArrowRight size={16}/></button>:<button className="btn btn-primary" disabled={answers[index]==null} onClick={()=>publish({...draft,checked:{...checked,[index]:true}})}>Try my answer <Check size={16}/></button>}</footer>
+
   </div>}
   {error&&<p className="gd-error" role="alert">{error}</p>}
  </section>;

@@ -244,7 +244,7 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'distractors.length<2', "Question Manager should require at least two distractors for Select & Fill questions");
   requireContains("src/components/GuestLanding.jsx", "10 Q diagnostic", "the homepage should lead with the 10-question diagnostic CTA");
   requireContains("src/components/GuestLanding.jsx", "Why we’re different", "the homepage should offer the Why we’re different page as its secondary CTA");
-  requireContains("src/components/GuestDiagnostic.jsx", "Start focused set", "diagnostic results should lead to signup and saved Smart Review progress");
+  requireContains("src/components/GuestDiagnostic.jsx", "Build my free study plan", "diagnostic results should lead to signup and saved Smart Review progress");
   requireContains("src/App.jsx", "GUEST_SMART_REVIEW_BRIDGE_KEY", "guest quiz attempts should survive account creation for Smart Review");
   requireContains("src/App.jsx", 'allowedGuestViews=new Set(["dashboard","mcq","pbq","daily"', "guests should be able to enter the PBQ preview without signing in");
   requirePattern("src/App.jsx", /const guestTopNavItems=\[\s*\{id:"mcq",label:"10Q Diagnostic"\},\s*\{id:"pbq",label:"PBQ Simulations"\},\s*\{id:"flashcards",label:"Flashcards"\},\s*\];/, "guest top navigation should keep only the three primary practice destinations visible");
