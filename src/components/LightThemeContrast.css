@@ -1,0 +1,24 @@
+/* Scope to light mode; dark feature panels retain their own inverted palettes. */
+html[data-theme="light"] :is(input,textarea,select)::placeholder{color:#6c5842;opacity:1}
+html[data-theme="light"] :is(.input,.custom-select-btn,.fc-search,.s01-star){border-color:#968068}
+html[data-theme="light"] :is(.input,.custom-select-btn):focus-visible{outline-color:#a34800}
+html[data-theme="light"] :is(.guest-studio,.guest-diagnostic,.about-page,.sr-story,.practice-demo){--guest-blue:#3459a0;--guest-violet:#70458f;--guest-gold:#80521c}
+html[data-theme="light"] .gd-security-node>svg{color:color-mix(in srgb,var(--node-color) 35%,var(--guest-text))}
+html[data-theme="light"] .gd-preview-domains>span{color:color-mix(in srgb,var(--domain-color,var(--guest-blue)) 30%,var(--guest-text))}
+html[data-theme="light"] .fc-library :is(.fc-tab-number,.fc-domain-number,.fc-section>h3>span,.fc-deck-code,.fc-deck-emblem){color:color-mix(in srgb,var(--domain-color) 30%,var(--fc-text));opacity:1}
+html[data-theme="light"] .fc-library .fc-domain-tabs button.active{border-color:color-mix(in srgb,var(--domain-color) 40%,var(--fc-text))}
+html[data-theme="light"] .fc-library :is(.fc-personal-mark,.fc-personal-art){color:#17695c}
+html[data-theme="light"] .fc-library .fc-deck-bottom small{opacity:1}
+html[data-theme="light"] :is(.er-eyebrow,.er-scope,.er-card-heading>span,.er-axis,.er-legend small,.er-history-note,.er-donut small){opacity:1}
+html[data-theme="light"] .er-row-label>span:first-child{color:#534432!important}
+html[data-theme="light"] .er-target{opacity:.7}
+html[data-theme="light"] .er-legend i{outline:1px solid #77654f;outline-offset:1px}
+html[data-theme="light"] .dm-allowance{--dm-accent:#69439c!important}
+html[data-theme="light"] .mcq-focus-card-number{opacity:1;color:var(--result-muted)}
+html[data-theme="light"] .mcq-domain-node .mcq-domain-percent{color:color-mix(in srgb,var(--domain-color) 35%,var(--result-text))}
+html[data-theme="light"] .mcq-primary-count button:disabled{opacity:.7}
+html[data-theme="light"] :is(.er-breakdown,.mcq-set-results,.fc-library,.dh-home) :is(a,button):focus-visible{outline:3px solid #a34800;outline-offset:4px}
+html[data-theme="light"] :is(.deep-dive-acronym-reader-hero>span,.flashcard-type-badge,.flashcards-topic-card>span:nth-child(2)>i){color:color-mix(in srgb,var(--set-color) 30%,var(--deep-text))}
+html[data-theme="light"] :is(.deep-dive-acronym-prompt,.flashcard-change-mode-btn){color:color-mix(in srgb,var(--set-color) 30%,var(--deep-text))!important}
+html[data-theme="light"] .flashcard-share-btn.primary{background:#70458f;border-color:#70458f;color:#fff}
+html[data-theme="light"] :is(button,a,input,select,textarea,[tabindex]):focus-visible{outline:3px solid #a34800;outline-offset:4px}

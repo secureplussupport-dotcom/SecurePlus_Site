@@ -1,3 +1,5 @@
+import {THEMES} from "./lib/themes.js";
+import "./components/LightThemeContrast.css";
 import {UpgradePage} from "./components/UpgradePage.jsx";
 import {FlashcardDeck} from "./components/FlashcardDeck.jsx";
 import {FlashcardPreview} from "./components/FlashcardPreview.jsx";
@@ -1867,24 +1869,7 @@ function buildDiagnosticQuestions() {
 // ═══════════════════════════════════════════════════════════════
 // THEME
 // ═══════════════════════════════════════════════════════════════
-const THEMES = {
-  dark: {
-    bg:"#0c111b", surface:"#171e2b", panel:"#111824", border:"#2b3748",
-    text:"#f7f9fc", textSec:"#b2bdcf", textDim:"#77849a",
-    accent:"#4f8cff", accentHover:"#3476ed", green:"#20c997", red:"#ff5d73", amber:"#ffb020",
-    cardBg:"#171e2b", inputBg:"#0e1521",
-    codeBg:"#050814", codePanel:"#0a1020", codeBorder:"#27344d", codeText:"#d6e2ff",
-    codeMuted:"#7f8ba6", codePrompt:"#5eead4", codeCommand:"#93c5fd", codeError:"#fb7185", codeWarn:"#fbbf24",
-  },
-  light: {
-    bg:"#fff8ef", surface:"#fffdf8", panel:"#f7efe3", border:"#eadcc8",
-    text:"#2d2418", textSec:"#6b5b49", textDim:"#9a8974",
-    accent:"#d97706", accentHover:"#b45309", green:"#4d8f64", red:"#c2414b", amber:"#b7791f",
-    cardBg:"#fffdf8", inputBg:"#fffaf2",
-    codeBg:"#fffaf2", codePanel:"#f6efe4", codeBorder:"#dfcbb3", codeText:"#30271b",
-    codeMuted:"#8a7761", codePrompt:"#4d8f64", codeCommand:"#9a5b00", codeError:"#b4233c", codeWarn:"#9a5b00",
-  }
-};
+
 
 // ═══════════════════════════════════════════════════════════════
 // CHAPTER / DOMAIN STRUCTURE (Security+)

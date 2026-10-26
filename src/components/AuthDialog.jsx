@@ -23,7 +23,7 @@ export function AuthDialog({ t, onClose, returnFocus, children }) {
         const rect = event.currentTarget.getBoundingClientRect();
         if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose();
       }}
-      style={{ '--auth-bg': t.surface, '--auth-text': t.text, '--auth-muted': t.textSec, '--auth-line': t.border, '--auth-green': t.green, '--auth-blue': 'color-mix(in srgb,#729bf5 75%,var(--auth-text))' }}>
+      style={{ '--auth-bg': t.surface, '--auth-text': t.text, '--auth-muted': t.textSec, '--auth-line': t.border, '--auth-green': t.green, '--auth-blue': t.blue || 'color-mix(in srgb,#729bf5 75%,var(--auth-text))' }}>
       <button type="button" className="auth-dialog-close" aria-label="Close account popup" onClick={onClose}><X size={20}/></button>
       {children}
     </dialog>, document.body

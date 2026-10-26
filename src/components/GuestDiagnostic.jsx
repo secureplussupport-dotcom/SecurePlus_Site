@@ -17,7 +17,7 @@ const snapshot=()=>current;
 export const clearGuestDiagnostic=()=>publish(null);
 const conceptName=tag=>String(tag || '').split('.').at(-1).replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 const domains=['Security concepts','Threats & mitigations','Security architecture','Security operations','Security management'];
-export const guestPalette=t=>({'--guest-bg':t.bg,'--guest-panel':t.surface,'--guest-text':t.text,'--guest-muted':t.textSec,'--guest-line':t.border,'--guest-accent':t.green || '#30b9a4','--guest-blue':'color-mix(in srgb,#729bf5 75%,var(--guest-text))'});
+export const guestPalette=t=>({'--guest-bg':t.bg,'--guest-panel':t.surface,'--guest-text':t.text,'--guest-muted':t.textSec,'--guest-line':t.border,'--guest-accent':t.green || '#30b9a4','--guest-blue':t.blue || 'color-mix(in srgb,#729bf5 75%,var(--guest-text))','--guest-violet':t.purple,'--guest-gold':t.blue?t.amber:undefined});
 
 export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,startSignal=0,fullPage=false}) {
  const draft=useSyncExternalStore(subscribe,snapshot,snapshot);
