@@ -2,6 +2,7 @@ import {FlashcardDeck} from "./components/FlashcardDeck.jsx";
 import {FlashcardPreview} from "./components/FlashcardPreview.jsx";
 import "./components/FlashcardLibrary.css";
 import {flashcardFaces, personalisedFlashcards, personalisedFlashcardSet, partitionFlashcards} from "./lib/flashcardConcepts.js";
+import { AuthDialog } from "./components/AuthDialog.jsx";
 import { GuestLanding } from "./components/GuestLanding.jsx";
 import { AboutUs } from "./components/AboutUs.jsx";
 import { GuestDiagnostic, clearGuestDiagnostic } from "./components/GuestDiagnostic.jsx";
@@ -23129,17 +23130,6 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     setShowSignupJourney(true);
     capture("landing_signup_cta_clicked", { source:"auth_landing" });
   };
-  useEffect(()=>{
-    if(!showLoginModal)return;
-    const closeOnEscape=event=>{if(event.key==="Escape")setShowLoginModal(false);};
-    const previousOverflow=document.body.style.overflow;
-    document.body.style.overflow="hidden";
-    document.addEventListener("keydown",closeOnEscape);
-    return()=>{
-      document.body.style.overflow=previousOverflow;
-      document.removeEventListener("keydown",closeOnEscape);
-    };
-  },[showLoginModal]);
   const handle=async event=>{
     event?.preventDefault?.();
     resetMessages();setLoading(true);
@@ -23336,18 +23326,21 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
     );
   }
 
-  if(initialMode==="signup-entry"&&mode==="signup"&&!showSignupJourney)return <div className="auth-only-page fu"><main className="auth-only-main"><section className="card auth-only-card"><span className="label" style={{color:t.green}}>YOUR NEXT STEP</span><h1>Your progress starts here.</h1><p className="auth-only-copy">Create your free account to save your diagnostic, keep your weak concepts in view, and practise with Smart Review.</p><div className="auth-only-form"><button className="btn btn-primary" onClick={()=>jumpToAuth("signup")}>Create my free account <ArrowRight size={17}/></button><button className="btn btn-ghost" onClick={openLogin}>Already have an account? Log in</button><button className="btn btn-ghost" onClick={()=>onNavigate("dashboard")}>Back to SecurePlus</button></div></section></main></div>;
+  if(initialMode==="signup-entry"&&mode==="signup"&&!showSignupJourney)return <div className="auth-welcome">
+    <div className="auth-welcome-art"><span className="auth-mini-brand"><BrandMark size={27}/> SecurePlus</span><div className="auth-cipher-halo"><MascotAnimation animation="wave" size={152} label="Cipher welcomes you"/></div><span className="auth-art-caption">Your next chapter<br/><strong>starts with you.</strong></span><div className="auth-connected-tools" aria-label="Connected study tools"><span><Target size={20}/></span><i/><span><Layers3 size={20}/></span><i/><span><BookOpenCheck size={20}/></span></div></div>
+    <div className="auth-welcome-copy"><span className="auth-free-badge"><Sparkles size={14}/> YOUR FREE STUDY SPACE</span><h1>Make your next<br/>{" "}step count.</h1><p>Your weak spots become a clear path forward.</p><ul><li><Target size={19}/><span>Practice that targets your gaps</span></li><li><Layers3 size={19}/><span>Flashcards that make it stick</span></li><li><BookOpenCheck size={19}/><span>Deep Dives that make it click</span></li></ul><button className="btn btn-primary auth-create-cta" data-auth-primary onClick={()=>jumpToAuth("signup")}>Create my free account <ArrowRight size={20}/></button><small>No credit card needed. Your progress comes with you.</small><button className="auth-login-switch" onClick={openLogin}>Already have an account? <strong>Log in</strong> <ArrowRight size={14}/></button></div>
+  </div>;
 
   return(
     <div className="auth-only-page fu">
       {loading&&<CipherLoader t={t} overlay label={mode==="signup"?"Creating your account…":mode==="reset"?"Sending your reset link…":"Signing you in…"}/>}
-      <a className="skip-link" href="#secureplus-main">Skip to sign in form</a>
-      <main id="secureplus-main" className="auth-only-main">
+      <a className="skip-link" href="#secureplus-auth-main">Skip to sign in form</a>
+      <main id="secureplus-auth-main" className="auth-only-main">
         <section className="card auth-only-card" aria-labelledby="auth-only-title">
           <button type="button" className="auth-only-brand" onClick={()=>onNavigate("dashboard")}>
             <BrandMark size={36}/>
             <span>
-              <strong>{SITE_BRAND_LOCKUP}</strong>
+              <strong>SecurePlus</strong>
             </span>
           </button>
 
@@ -23369,7 +23362,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
                 ?"Reset your password"
                 :mode==="signup"
                   ?"Save your Security+ progress"
-                  :"Continue your Security+ practice"}
+                  :"Welcome back."}
           </h1>
           <p className="auth-only-copy">
             {securityNotice
@@ -23394,24 +23387,24 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
           <form className="auth-only-form" onSubmit={handle}>
             {mode==="signup"&&(
               <div>
-                <label>Name</label>
-                <input className="input" name="name" type="text" autoComplete="name" placeholder="What should we call you?" value={form.name} onChange={set("name")}/>
+                <label htmlFor="auth-name">Name</label>
+                <input className="input" id="auth-name" name="name" type="text" autoComplete="name" placeholder="What should we call you?" value={form.name} onChange={set("name")}/>
               </div>
             )}
             <div>
-              <label>Email</label>
-              <input className="input" name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={set("email")}/>
+              <label htmlFor="auth-email">Email</label>
+              <input className="input" id="auth-email" name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={set("email")}/>
             </div>
             {mode!=="reset"&&(
               <div>
-                <label>Password</label>
-                <input className="input" name="password" type="password" autoComplete={mode==="signup"?"new-password":"current-password"} placeholder={mode==="signup"?"Create a password":"Your password"} value={form.pass} onChange={set("pass")}/>
+                <label htmlFor="auth-password">Password</label>
+                <input className="input" id="auth-password" name="password" type="password" autoComplete={mode==="signup"?"new-password":"current-password"} placeholder={mode==="signup"?"Create a password":"Your password"} value={form.pass} onChange={set("pass")}/>
               </div>
             )}
             {mode==="signup"&&(
               <div>
-                <label>Confirm password</label>
-                <input className="input" name="confirm-password" type="password" autoComplete="new-password" placeholder="Repeat password" value={form.confirm} onChange={set("confirm")}/>
+                <label htmlFor="auth-confirm-password">Confirm password</label>
+                <input className="input" id="auth-confirm-password" name="confirm-password" type="password" autoComplete="new-password" placeholder="Repeat password" value={form.confirm} onChange={set("confirm")}/>
               </div>
             )}
             <button type="submit" className="btn btn-primary" disabled={loading}>
@@ -30899,8 +30892,11 @@ export default function App() {
   const [user,setUser]=useState(null);
   const [loading,setLoading]=useState(true);
   const [navigating,startNavigation]=useTransition();
-  const setView=useCallback(next=>startNavigation(()=>setViewImmediate(next)),[]);
+  const authReturnFocus=useRef(null);
+  const setView=useCallback(next=>{if(next==="auth"&&document.activeElement!==document.body)authReturnFocus.current=document.activeElement;startNavigation(()=>setViewImmediate(next));},[]);
   const [view,setViewImmediate]=useState(()=>focusAcronymLibrary||urlFlashcardsRequest?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":urlAboutRequest?"about":devCoinPreview?"coins":"dashboard");
+  const guestBackgroundView=useRef("dashboard");
+  useEffect(()=>{if(view!=="auth")guestBackgroundView.current=view;},[view]);
   const [flashcardsIntroRequested]=useState(()=>urlFlashcardsIntroRequest);
   const [attempts,setAttempts]=useState([]);
   const readinessProfile=useExamReadiness(user,attempts);
@@ -31045,7 +31041,7 @@ export default function App() {
           ?"password-recovery"
           :pbqQ?.id
             ?`pbq:${pbqQ.id}`
-            :`view:${view}`;
+            :`view:${view==="auth"?guestBackgroundView.current:view}`;
     if(lastPageKeyRef.current===null){
       lastPageKeyRef.current=pageKey;
       return;
@@ -32099,15 +32095,9 @@ export default function App() {
     </>
   );
 
-  if(!user&&view==="auth") return(
-    <>
-      <style>{CSS}</style>
-      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
-      <AuthView key={`auth-${authStartMode}-${authRequestId}`} onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={setView} onPracticeMcq={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} initialMode={authStartMode} securityNotice={accountDeletion.stage==="confirm"}/>
-    </>
-  );
 
   if(!user){
+    const guestView=view==="auth"?guestBackgroundView.current:view;
     const guestUser={name:"Guest",email:"guest@secureplus.local",tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"guest",loginMethod:"guest"};
     const guestCoinWallet=normalizeCipherWallet(emptyCipherWallet());
     const activeGuestPbq=pbqQ ? (livePbqBank.find(question=>question.id===pbqQ.id)||pbqQ) : null;
@@ -32152,12 +32142,13 @@ export default function App() {
       "deep-dives":"Create an account to preview Concept Deep Dives",
       pricing:"Sign up before upgrading",
       objectives:"Create an account to save your study path",
-    }[view] || "Create an account to save progress";
+    }[guestView] || "Create an account to save progress";
     return(
       <>
         <style>{CSS}</style>
       {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
-        <div className={`app-shell guest-app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
+        {view==="auth"&&<AuthDialog t={t} returnFocus={authReturnFocus.current} onClose={()=>setView(guestView)}><AuthView key={`auth-${authStartMode}-${authRequestId}`} onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={next=>setView(next==="dashboard"?guestView:next)} onPracticeMcq={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} initialMode={authStartMode} securityNotice={accountDeletion.stage==="confirm"}/></AuthDialog>}
+        <div className={`app-shell guest-app-shell ${practiceFocusMode?"practice-focus-mode":""}`} onFocusCapture={event=>{authReturnFocus.current=event.target;}}>
           <a className="skip-link" href="#secureplus-main">Skip to study content</a>
           <header className="guest-top-nav">
             <button type="button" className="guest-top-nav-brand" onClick={()=>guestGo("dashboard")} aria-label={`${SITE_BRAND_LOCKUP} guest landing page`}>
@@ -32169,8 +32160,8 @@ export default function App() {
                 <button
                   key={item.id}
                   type="button"
-                  className={`guest-top-nav-link ${view===item.id?"active":""}`}
-                  aria-current={view===item.id?"page":undefined}
+                  className={`guest-top-nav-link ${guestView===item.id?"active":""}`}
+                  aria-current={guestView===item.id?"page":undefined}
                   onClick={()=>guestGo(item.id)}
                 >
                   {item.label}
@@ -32191,8 +32182,8 @@ export default function App() {
                       <button
                         key={item.id}
                         type="button"
-                        className={`guest-top-nav-more-item ${view===item.id?"active":""}`}
-                        aria-current={view===item.id?"page":undefined}
+                        className={`guest-top-nav-more-item ${guestView===item.id?"active":""}`}
+                        aria-current={guestView===item.id?"page":undefined}
                         onClick={()=>guestGo(item.id)}
                       >
                         {item.label}
@@ -32220,14 +32211,14 @@ export default function App() {
                 <button className="btn btn-ghost" style={{fontSize:12,minHeight:34,padding:"6px 10px"}} onClick={goToLogin}>Log In</button>
               </div>
             </div>
-            {view==="dashboard"&&(
+            {guestView==="dashboard"&&(
               <GuestDashboardGate t={t} onWhy={()=>setView("about")} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} onFlashcards={()=>setView("flashcards")} onConcepts={()=>setView("deep-dives")}/>
             )}
-            {["about","why-different"].includes(view)&&<AboutUs t={t} isGuest onStart={()=>setView("mcq")} onExplore={guestGo} feedbackHref={`mailto:${SUPPORT_EMAIL}?subject=SecurePlus%20feedback`}/>}
-            {view==="mcq"&&(
+            {["about","why-different"].includes(guestView)&&<AboutUs t={t} isGuest onStart={()=>setView("mcq")} onExplore={guestGo} feedbackHref={`mailto:${SUPPORT_EMAIL}?subject=SecurePlus%20feedback`}/>}
+            {guestView==="mcq"&&(
               <GuestDiagnostic t={t} fullPage onSignup={goToSignup} onSave={savePendingGuestSmartReview} renderDefinitions={text=><GlossaryText text={text} t={t}/>}/>
             )}
-            {view==="pbq"&&(
+            {guestView==="pbq"&&(
               activeGuestPbq ? (
                 <PBQSim
             user={user}
@@ -32257,16 +32248,16 @@ export default function App() {
                 />
               )
             )}
-            {view==="daily"&&(
+            {guestView==="daily"&&(
               <GuestLockedPage t={t} title="Create a free account for Daily Challenge" onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={goToSignup}/>
             )}
-            {view==="objectives"&&<ObjectivesPage t={t}/>}
-            {view==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={assistantFlashcardSet} starred={guestStarred} onToggleStar={handleGuestToggleStar} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
-            {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={guestUser} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} onAddWeakTopicToReview={goToSignup} onTryRelatedPbq={handleGuestPbqPreview} onOpenFlashcards={handleOpenFlashcards} onUpgrade={goToSignup}/>}
-            {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
-            {view==="terms"&&<LegalPage type="terms" t={t}/>}
-            {devCoinPreview&&view==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
-            {!allowedGuestViews.has(view)&&(
+            {guestView==="objectives"&&<ObjectivesPage t={t}/>}
+            {guestView==="flashcards"&&<FlashcardsPage t={t} initialSetId={flashcardSetRequest} onInitialSetHandled={()=>setFlashcardSetRequest(null)} showIntroInitially={flashcardsIntroRequested} assistantSet={assistantFlashcardSet} starred={guestStarred} onToggleStar={handleGuestToggleStar} onRequireSignup={reason=>setFlashcardAuthPrompt(reason||"flashcard_star")}/>}
+            {guestView==="deep-dives"&&<ConceptDeepDivesPage t={t} user={guestUser} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} onAddWeakTopicToReview={goToSignup} onTryRelatedPbq={handleGuestPbqPreview} onOpenFlashcards={handleOpenFlashcards} onUpgrade={goToSignup}/>}
+            {guestView==="privacy"&&<LegalPage type="privacy" t={t}/>}
+            {guestView==="terms"&&<LegalPage type="terms" t={t}/>}
+            {devCoinPreview&&guestView==="coins"&&<CipherCoinVault user={guestUser} wallet={devCoinWallet} onUnlockPbq={()=>Promise.resolve(null)} onBuyExamPass={()=>{}} onNavigate={setView} onRefresh={()=>{}} t={t}/>}
+            {!allowedGuestViews.has(guestView)&&(
               <GuestLockedPage t={t} title={lockedTitle} onSignup={goToSignup} onLogin={goToLogin} onPractice={()=>setView("mcq")} onDaily={()=>setView("daily")}/>
             )}
           </main>
