@@ -30,7 +30,7 @@ test('legacy browser session ownership, atomic server grading, idempotent import
  try{
  await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key);
  create table public.attempts(id uuid primary key,user_id uuid references auth.users(id),question_id text,question_type text,title text,domain text,chapter text,correct boolean,created_at timestamptz default now());grant all on public.attempts to service_role;`);
- for(const file of ['20261019163949_mcq_three_deck_engine','20261021163006_mcq_result_concept_streaks','20261022030000_mcq_question_pacing','20261022060000_mcq_exam_readiness','20261024012841_guest_diagnostic_handoff','20261026045301_beginner_diagnostic_skips'])await db.exec(readFileSync(`supabase/migrations/${file}.sql`,'utf8'));
+ for(const file of ['20261019163949_mcq_three_deck_engine','20261021163006_mcq_result_concept_streaks','20261022030000_mcq_question_pacing','20261022060000_mcq_exam_readiness','20261024012841_guest_diagnostic_handoff','20261026053909_beginner_diagnostic_skips'])await db.exec(readFileSync(`supabase/migrations/${file}.sql`,'utf8'));
  const scalar=async(sql,args=[])=>Object.values((await db.query(sql,args)).rows[0])[0];
  const u=randomUUID(),other=randomUUID(),id=randomUUID(),key='guest:verified-browser';
  await db.query('insert into auth.users values($1),($2)',[u,other]);
@@ -94,7 +94,7 @@ test('beginner preview skips persist as learning priorities, not grades; isolati
  try{
  await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key);
  create table public.attempts(id uuid primary key,user_id uuid references auth.users(id),question_id text,question_type text,title text,domain text,chapter text,correct boolean,created_at timestamptz default now());grant all on public.attempts to service_role;`);
- for(const file of ['20261019163949_mcq_three_deck_engine','20261021163006_mcq_result_concept_streaks','20261022030000_mcq_question_pacing','20261022060000_mcq_exam_readiness','20261024012841_guest_diagnostic_handoff','20261026045301_beginner_diagnostic_skips'])await db.exec(readFileSync(`supabase/migrations/${file}.sql`,'utf8'));
+ for(const file of ['20261019163949_mcq_three_deck_engine','20261021163006_mcq_result_concept_streaks','20261022030000_mcq_question_pacing','20261022060000_mcq_exam_readiness','20261024012841_guest_diagnostic_handoff','20261026053909_beginner_diagnostic_skips'])await db.exec(readFileSync(`supabase/migrations/${file}.sql`,'utf8'));
  const scalar=async(sql,args=[])=>Object.values((await db.query(sql,args)).rows[0])[0];
  const u=randomUUID(),other=randomUUID(),mixedUser=randomUUID(),id=randomUUID(),key='guest:beginner';
  await db.query('insert into auth.users values($1),($2),($3)',[u,other,mixedUser]);
