@@ -12,7 +12,7 @@ import {CipherLoader} from "./components/CipherLoader.jsx";
 import {useLiveSnapshot} from "./lib/useLiveSnapshot.js";
 import {progressOwner} from "./lib/liveRefresh.js";
 import { usePracticeAccess } from "./lib/usePracticeAccess.js";
-import { generationChoices, isProProfile } from "./lib/accessModel.js";
+import { generationChoices, isProProfile, PRO_QUESTION_COUNTS } from "./lib/accessModel.js";
 import { CIPHER_COINS_ACTIVE, MASCOT_MANAGER_ACTIVE, isArchivedView } from "./lib/archivedFeatures.js";
 import { useState, useEffect, useCallback, useRef, useMemo, useTransition } from "react";
 import { createPortal } from "react-dom";
@@ -20726,6 +20726,7 @@ function NavGlyph({type,active}) {
     coins:Sparkles,
     referrals:Share2,
     objectives:ListChecks,
+    about:Sparkles,
     exam:ClipboardCheck,
     account:UserRound,
     privacy:LockKeyhole,
@@ -24606,7 +24607,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
     if(started&&!done)setResumeAvailable(true);
     setStarted(false);setDone(false);setFinishedReviewMode(false);setStarredView(false);
   },[examRequest]);
-  useEffect(()=>{if(user?.tier!=="pro")setExamCount(count=>[10,20,30].includes(count)?count:30);},[user?.tier]);
+  useEffect(()=>{setExamCount(count=>isPro?Math.min(90,Math.max(10,Math.ceil(count/10)*10)):[10,20,30].includes(count)?count:30);},[isPro]);
   useEffect(()=>{
     if(!examMode)return;
     try{if(!localStorage.getItem(guideKey))setShowExamGuide(true);}catch{setShowExamGuide(true);}
@@ -24678,8 +24679,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
     due:engineState?.failed?.filter(row=>row.cooldown_counter<=0).length??"—",
     weak:engineState?new Set([...(engineState.mastery||[]).filter(row=>row.score<80).map(row=>row.concept_tag),...(engineState.diagnostic_weak_tags||[])]).size:"—",
   };
-  const quizSizes = isGuest?[10]:[10,20,30];
-  const sessionMinimum = 1;
+  const quizSizes = isGuest?[10]:choices.sizes.map(option=>option.size);
   const latestMcqAttempts=getLatestMcqAttempts(attempts);
   const missedMcqIds=[...latestMcqAttempts.entries()].filter(([,attempt])=>attempt.correct===false).map(([questionId])=>questionId);
   const missedQuestions=bank.filter(q=>missedMcqIds.includes(q.id));
@@ -24706,6 +24706,8 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
     if(available.length && (quizCount>filtered.length||quizCount<1)) setQuizCount(available[available.length-1]);
   },[filtered.length,quizCount,started]);
 
+  useEffect(()=>{if(!started&&isPro)setQuizCount(count=>Math.min(90,Math.max(10,Math.ceil(count/10)*10)));},[started,isPro]);
+
   const startEngineQuiz=async(filters={},count=quizCount,mode="smart")=>{
     if(engineBusy)return;
     if(isGuest&&access?.remaining===0)return requestSignup();
@@ -24727,7 +24729,9 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
     }catch(error){setEngineError(error.message);refreshAccess();}finally{setEngineBusy(false);}
   };
   const startQuiz=()=>startEngineQuiz({chapter:chFilter==="all"?undefined:chFilter,difficulty:activeDiffFilter==="all"?undefined:activeDiffFilter,topic:activeTopicFilter==="all"?undefined:activeTopicFilter},quizCount,reviewMode);
-  const startMissedQuiz=()=>setMissedBatch(Math.max(1,Math.min(10,missedQuestions.length,availableQuota??0)));
+  const missedBatchLimit=Math.min(missedQuestions.length,isPro?90:30,availableQuota??0);
+  const missedBatchSizes=isPro?PRO_QUESTION_COUNTS.filter(size=>size<=missedBatchLimit):Array.from({length:Math.max(0,missedBatchLimit)},(_,i)=>i+1);
+  const startMissedQuiz=()=>setMissedBatch(isPro?(missedBatchLimit>=10?10:0):Math.max(1,Math.min(10,missedBatchLimit)));
   const startChapterSmartReview=useCallback((chapterId,requestedCount=10)=>{
     if(!chapterId||isGuest)return;
     if(!isPro){setEngineError("Choose Smart Review to revisit weak concepts. Targeting one chapter is available with Pro.");return;}
@@ -24948,7 +24952,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
 
   if(!started) return(
     <div className="mcq-setup-screen mcq-hub-screen fu" style={{...examThemeVars(t),"--practice-accent":examMode?t.accent:reviewMode==="smart"?t.green:t.accent}}>
-      {missedBatch!==null&&<div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Choose missed-question batch"><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Choose a batch before using your allowance.</p><label>Questions <input className="input" type="number" min="1" max={Math.min(missedQuestions.length,isPro?90:30,availableQuota??0)} value={missedBatch} onChange={e=>setMissedBatch(Number(e.target.value))}/></label><p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!Number.isInteger(missedBatch)||missedBatch<1||missedBatch>Math.min(missedQuestions.length,isPro?90:30,availableQuota??0)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>Practise {missedBatch} missed questions</button></div></div></div>}
+      {missedBatch!==null&&<div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Choose missed-question batch"><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Choose a batch before using your allowance.</p><label>Questions <select className="input" value={missedBatch} disabled={!missedBatchSizes.length} onChange={e=>setMissedBatch(Number(e.target.value))}>{!missedBatchSizes.length&&<option value={0}>No batch available</option>}{missedBatchSizes.map(size=><option key={size} value={size}>{size} questions</option>)}</select></label>{isPro&&!missedBatchSizes.length&&<p role="status">You have {missedQuestions.length} missed questions. A Pro batch starts at 10.</p>}<p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!missedBatchSizes.includes(missedBatch)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>{missedBatchSizes.length?`Practise ${missedBatch} missed questions`:"No batch available"}</button></div></div></div>}
       <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h2>MCQ practice</h2></div></header>
       <div className="card" role="status" style={{padding:"12px 16px",marginBottom:16,color:t.textSec}}>{isGuest?"Try 10 questions total, then create a free account to keep practising.":isPro?"Unlimited generation · Pro":"50 questions every rolling 12 hours"}<strong style={{marginLeft:10,color:t.text}}>{isPro?"∞":access?`${access.remaining} remaining`:"Loading allowance…"}</strong>{accessError&&<span> {accessError}</span>}{!isPro&&choices.remainder&&<button className="btn btn-outline" style={{marginLeft:12}} disabled={engineBusy} onClick={()=>startEngineQuiz({},choices.remainder,examMode?"exam":reviewMode)}>Practice remaining {choices.remainder}</button>}{isGuest&&access?.remaining===0&&<button className="btn btn-primary" onClick={requestSignup}>Create free account</button>}</div>
       <div hidden={isGuest} className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
@@ -24982,7 +24986,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
         </div>
         <div className="mcq-session-controls">
           <fieldset className="mcq-session-size"><legend>Questions</legend>
-            {isPro?<div className="mcq-exam-slider"><div className="exam-length-output"><output htmlFor="exam-count">{examCount}</output><span>questions</span></div><input className="mcq-exam-length-slider" id="exam-count" type="range" min="10" max="90" step="1" value={examCount} aria-label="Exam question count" onChange={event=>setExamCount(Number(event.target.value))}/><div className="exam-slider-labels"><span>10 · Quick focus</span><span>90 · Full rehearsal</span></div></div>:<div className="mcq-primary-count">{[...new Set([10,20,30,...(examCount>0&&examCount<30?[examCount]:[])])].map(size=><button key={size} type="button" aria-label={`${size} exam questions`} disabled={engineBusy||availableQuota==null||size>availableQuota} title={isPro?`Start ${size} questions`:availableQuota<size?`Needs ${size} questions; ${availableQuota} remain`:`${availableQuota-size} remaining after this set`} aria-pressed={examCount===size} className={examCount===size?"active":""} onClick={()=>setExamCount(size)}>{size}</button>)}</div>}
+            <div className="mcq-primary-count">{(isPro?PRO_QUESTION_COUNTS:[...new Set([10,20,30,...(examCount>0&&examCount<30?[examCount]:[])])]).map(size=><button key={size} type="button" aria-label={`${size} exam questions`} disabled={engineBusy||availableQuota==null||size>availableQuota} title={isPro?`Start ${size} questions`:availableQuota<size?`Needs ${size} questions; ${availableQuota} remain`:`${availableQuota-size} remaining after this set`} aria-pressed={examCount===size} className={examCount===size?"active":""} onClick={()=>setExamCount(size)}>{size}</button>)}</div>
           </fieldset>
           {engineError&&<p className="mcq-hub-error" role="alert">{engineError}</p>}
           <p className="mcq-exam-setup-note">Flag, skip and return freely. Submit when you’re ready—even if the clock runs over.</p>
@@ -25010,8 +25014,8 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
             </div>
           </fieldset>
           {engineError&&<p className="mcq-hub-error" role="alert">{engineError}</p>}
-          {filtered.length<sessionMinimum&&<p className="mcq-hub-error" role="status">Not enough questions match. Broaden your filters to start.</p>}
-          <button className="btn btn-primary mcq-hub-start" type="button" onClick={startQuiz} disabled={filtered.length<sessionMinimum||engineBusy||availableQuota==null||quizCount>availableQuota||quizCount<1||!Number.isInteger(quizCount)}>
+          {filtered.length<quizCount&&<p className="mcq-hub-error" role="status">Not enough questions match. Broaden your filters to start.</p>}
+          <button className="btn btn-primary mcq-hub-start" type="button" onClick={startQuiz} disabled={filtered.length<quizCount||engineBusy||availableQuota==null||quizCount>availableQuota||quizCount<1||!Number.isInteger(quizCount)}>
             {engineBusy?"Preparing set…":"Start my set"}<span className="mcq-start-arrow"><ChevronRight size={18} aria-hidden="true"/></span>
           </button>
         </div>
@@ -26255,7 +26259,7 @@ const MASCOT_PAGE_OPTIONS = [
   {id:"daily",label:"Daily Challenge",description:"Daily practice and streaks"},
   {id:"coins",label:"Cipher Coins",description:"Coin wallet, earning, and unlocks"},
   {id:"pricing",label:"Upgrade",description:"Plan and referral page"},
-  {id:"objectives",label:"Objectives",description:"SY0-701 objective guide"},
+  {id:"objectives",label:"Security+ Objectives",description:"SY0-701 objective guide"},
 ];
 const MASCOT_ANIMATION_OPTIONS = [
   {id:"idle",label:"Idle",description:"Calm welcome"},
@@ -30139,7 +30143,7 @@ function ObjectivesPage({t}) {
     <div style={{padding:"28px 24px",maxWidth:860,margin:"0 auto"}}>
       <div className="page-title-row">
         <NavGlyph type="objectives" active/>
-        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>Security+ exam map</h2>
+        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>Security+ Objectives</h2>
       </div>
       <p style={{color:t.textSec,fontSize:14,marginBottom:20}}>
         See how SecurePlus practice is grouped across the five current exam domains. Use the official CompTIA page below when you need the latest certification blueprint.
@@ -32116,8 +32120,8 @@ export default function App() {
       {id:"flashcards",label:"Flashcards"},
     ];
     const guestMoreItems=[
+      {id:"objectives",label:"Security+ Objectives"},
       {id:"about",label:"Why we’re different"},
-      {id:"objectives",label:"SY0-701 Exam Guide"},
       {id:"deep-dives",label:"Concept Deep Dives"},
       {id:"privacy",label:"Privacy Policy"},
       {id:"terms",label:"Terms & Conditions"},
@@ -32331,7 +32335,8 @@ export default function App() {
     {id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"},
     {id:"flashcards",icon:"flashcards",label:"Flashcards",mobileLabel:"Cards"},
     {id:"pricing",icon:"pricing",label:"Upgrade",mobileLabel:"Upgrade"},
-    {id:"objectives",icon:"objectives",label:"Objectives",mobileLabel:"Goals"},
+    {id:"objectives",icon:"objectives",label:"Security+ Objectives",mobileLabel:"Security+ Objectives"},
+    {id:"about",icon:"about",label:"Why we’re different",mobileLabel:"Why we’re different"},
     {id:"account",icon:"account",label:"Account & Support",mobileLabel:"Account"},
   ];
   if(isRootUser) {

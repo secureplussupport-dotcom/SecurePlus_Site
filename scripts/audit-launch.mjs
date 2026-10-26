@@ -248,10 +248,10 @@ if (!errors.length) {
   requireContains("src/App.jsx", "GUEST_SMART_REVIEW_BRIDGE_KEY", "guest quiz attempts should survive account creation for Smart Review");
   requireContains("src/App.jsx", 'allowedGuestViews=new Set(["dashboard","mcq","pbq","daily"', "guests should be able to enter the PBQ preview without signing in");
   requirePattern("src/App.jsx", /const guestTopNavItems=\[\s*\{id:"mcq",label:"10Q Diagnostic"\},\s*\{id:"pbq",label:"PBQ Simulations"\},\s*\{id:"flashcards",label:"Flashcards"\},\s*\];/, "guest top navigation should keep only the three primary practice destinations visible");
-  requirePattern("src/App.jsx", /const guestMoreItems=\[\s*\{id:"about",label:"Why we’re different"\},\s*\{id:"objectives",label:"SY0-701 Exam Guide"\},\s*\{id:"deep-dives",label:"Concept Deep Dives"\},\s*\{id:"privacy",label:"Privacy Policy"\},\s*\{id:"terms",label:"Terms & Conditions"\},\s*\];/, "guest More menu should contain Why we’re different, the exam guide, deep dives, privacy, and terms links");
+  requirePattern("src/App.jsx", /const guestMoreItems=\[\s*\{id:"objectives",label:"Security\+ Objectives"\},\s*\{id:"about",label:"Why we’re different"\},\s*\{id:"deep-dives",label:"Concept Deep Dives"\},\s*\{id:"privacy",label:"Privacy Policy"\},\s*\{id:"terms",label:"Terms & Conditions"\},\s*\];/, "guest More menu should contain Why we’re different, the exam guide, deep dives, privacy, and terms links");
   requireContains("src/App.jsx", "guest-top-nav-more-menu", "guest secondary navigation should open in an expandable More menu");
   requireContains("src/App.jsx", "clearLocalAuthState({preserveRoute:true})", "guest session restoration must preserve direct routes such as the canonical Flashcards page");
-  requireContains("src/App.jsx", "const quizSizes = isGuest?[10]:[10,20,30]", "MCQ practice should offer fixed 10, 20, or 30 question sets");
+  requireContains("src/App.jsx", "const quizSizes = isGuest?[10]:choices.sizes.map(option=>option.size)", "MCQ practice should use tier-aware fixed question counts");
   requireContains("src/App.jsx", 'const activeDiffFilter=!isPro?"all":diffFilter', "guest MCQ practice must not filter by difficulty");
   requireContains("src/App.jsx", 'const activeTopicFilter=!isPro?"all":topicFilter', "guest MCQ practice must not filter by topic");
   requireContains("src/App.jsx", '<FilterSelect disabled={!isPro} value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>', "only Pro should allow chapter filtering");
@@ -294,7 +294,7 @@ if (!errors.length) {
   requireContains("src/App.jsx", 'PRO_THREE_MONTH_PLAN_NAME = "3-Month Plus"', "pricing should name the recommended three-month option clearly");
   requireContains("src/App.jsx", "return <UpgradePage", "pricing must render the upgrade page");
   requireContains("src/components/UpgradePage.jsx", "One payment. No automatic renewal.", "pricing must explain non-renewal");
-  requireContains("src/components/UpgradePage.jsx", 'recommended&&<span className="up-value">Best value</span>', "pricing should visually recommend the three-month plan");
+  requireContains("src/components/UpgradePage.jsx", 'recommended&&<span className="up-value">Recommended</span>', "pricing should visually recommend the three-month plan");
   requireContains("src/App.jsx", "plan:selectedPlan", "upgrade requests should send the selected plan without accepting a client price ID");
   if (/wallet\?\.status==="ready"\?Number\(wallet\?\.balance\|\|0\):CIPHER_WELCOME_GRANT/.test(app)) {
     push(errors, "src/App.jsx", "onboarding must not display an unverified 150-coin balance while the persisted wallet is loading");

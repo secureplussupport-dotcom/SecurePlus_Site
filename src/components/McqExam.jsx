@@ -16,7 +16,7 @@ export function ExamModeGuide({ t, onClose }) {
   const [step, setStep] = useState(0);
   const [flagged, setFlagged] = useState(false);
   const slides = [
-    { title: 'Set your challenge.', body: 'Choose your question count. The clock scales with it: 60 seconds per question. Free accounts can choose 10, 20 or 30; Pro can choose any count up to 90.' },
+    { title: 'Set your challenge.', body: 'Choose your question count. The clock scales with it: 60 seconds per question. Free accounts can choose 10, 20 or 30; Pro can choose 10 through 90 in steps of 10.' },
     { title: 'A fresh mix. No hints.', body: 'Heavyweight concepts are sampled more often than Standard, then Niche. Concept repetition is capped. Smart Review, custom filters and clickable definitions stay off during the exam.' },
     { title: 'Keep moving. Come back.', body: 'Use the answer map to jump between questions. Flag anything uncertain and cross out weak options with Strike, a right-click or a long press. Try flagging the sample question below.' },
     { title: 'One submit. A clearer picture.', body: 'Nothing is marked until you submit. Your report shows accuracy, domains and time—not a pass or fail. Review every answer with definitions restored, or retake the same exam.' },

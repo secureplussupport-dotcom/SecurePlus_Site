@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { PASS_PLANS,generationChoices,isProProfile } from '../src/lib/accessModel.js';
+import { PASS_PLANS,generationChoices,isProProfile,PRO_QUESTION_COUNTS } from '../src/lib/accessModel.js';
 import { passLineItem,fulfillAccessPass } from '../server/stripe/access-pass.js';
 import { createMcqHandler } from '../server/mcq-engine/http.mjs';
 import { effectiveCatalogue } from '../server/mcq-engine/catalogue.mjs';
@@ -44,4 +44,14 @@ test('expired or unowned allocations cannot resume, answer or reveal exam keys',
 });
 test('core and applied pacing thresholds are descriptive and do not alter mastery',()=>{
  const r=pacingSummary([{id:'a',difficulty:'core'},{id:'b',difficulty:'applied'}],[{elapsedMs:46000},{elapsedMs:75000}]);assert.deepEqual(r.rows.map(q=>q.targetMs),[45000,75000]);assert(r.rows[0].elapsedMs>r.rows[0].targetMs);assert.equal(r.rows[1].elapsedMs,r.rows[1].targetMs);
+});
+
+test('Pro question-count options cover every ten-question increment through ninety',()=>{
+ const expected=[10,20,30,40,50,60,70,80,90];
+ assert.deepEqual(PRO_QUESTION_COUNTS,expected);
+ const pro=generationChoices({remaining:0},true);
+ assert.deepEqual(pro.sizes.map(option=>option.size),expected);
+ assert(pro.sizes.every(option=>option.enabled));
+ assert.equal(pro.remainder,null);
+ assert.deepEqual(generationChoices({remaining:50},false).sizes.map(option=>option.size),[10,20,30]);
 });
