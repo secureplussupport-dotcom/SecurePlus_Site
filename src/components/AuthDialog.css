@@ -1,5 +1,5 @@
 .auth-dialog{box-sizing:border-box;position:fixed;margin:auto;padding:0;width:min(870px,calc(100% - 40px));max-width:none;max-height:calc(100dvh - 48px);overflow:auto;border:1px solid var(--auth-line);border-radius:27px;background:var(--auth-bg);color:var(--auth-text);box-shadow:0 32px 100px #0005;overscroll-behavior:contain;animation:auth-popup-in 240ms cubic-bezier(.23,1,.32,1) both}
-.auth-dialog::backdrop{background:#07121f8c;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.auth-dialog::backdrop{background:#07121f8c;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .auth-dialog-close{position:absolute;right:15px;top:15px;z-index:10000;display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--auth-line);border-radius:50%;background:var(--auth-bg);color:var(--auth-muted);cursor:pointer}
 .auth-dialog button{font-family:inherit}
 .auth-dialog button:focus-visible,.auth-dialog input:focus-visible{outline:3px solid var(--auth-blue);outline-offset:4px}
