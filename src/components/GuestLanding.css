@@ -129,3 +129,11 @@
 @media(hover:hover) and (pointer:fine){.gd-skip-button:hover{background:color-mix(in srgb,#b58aec 15%,transparent);transform:translateY(-1px)}}
 @media(max-width:720px){.gd-progress-copy>span{font-size:10px;letter-spacing:.05em}.gd-preview-counts{gap:7px}.gd-preview-counts strong{font-size:30px}.gd-preview-counts span{font-size:11px}.gd-skip-slot{width:100%;flex-basis:100%;min-height:66px}.gd-skip-button{width:100%}.gd-skip-button>svg:last-child{margin-left:auto}.gd-step-encouragement{max-width:none}.gd-plan-tools{gap:13px}.gd-plan-tools>span{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.gd-skip-button{transition:none;transform:none}}
+
+/* Gentle outcome cues: learning opportunities stay warm, never alarming. */
+.guest-diagnostic{--gd-revisit:color-mix(in srgb,#c58a28 72%,var(--guest-text));--gd-skipped:color-mix(in srgb,#a67cce 72%,var(--guest-text))}
+.gd-options .is-missed{border-color:var(--gd-revisit);background:color-mix(in srgb,var(--gd-revisit) 10%,transparent)}
+.gd-feedback{--gd-feedback-tone:var(--guest-accent);background:color-mix(in srgb,var(--gd-feedback-tone) 9%,transparent);box-shadow:inset 3px 0 0 var(--gd-feedback-tone)}
+.gd-feedback.is-revisit{--gd-feedback-tone:var(--gd-revisit)}
+.gd-feedback.is-skipped{--gd-feedback-tone:var(--gd-skipped)}
+.gd-feedback>strong{color:var(--gd-feedback-tone)}
