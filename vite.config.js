@@ -10,6 +10,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         app: `${projectRoot}index.html`,
+        sec01Pilot: `${projectRoot}pilots/sec-01/index.html`,
         flashcards: `${projectRoot}security-plus-flashcards/index.html`,
       },
     },
