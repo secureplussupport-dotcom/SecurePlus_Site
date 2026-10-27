@@ -5,7 +5,8 @@ import {UpgradePage} from "./components/UpgradePage.jsx";
 import {FlashcardDeck} from "./components/FlashcardDeck.jsx";
 import {FlashcardPreview} from "./components/FlashcardPreview.jsx";
 import "./components/FlashcardLibrary.css";
-import {flashcardFaces, personalisedFlashcards, personalisedFlashcardSet, partitionFlashcards} from "./lib/flashcardConcepts.js";
+import {flashcardFaces, personalisedFlashcards, personalisedFlashcardSet, personalisedFlashcardGroups} from "./lib/flashcardConcepts.js";
+import {PersonalisedFlashcardGroups} from "./components/PersonalisedFlashcardGroups.jsx";
 import { AuthDialog } from "./components/AuthDialog.jsx";
 import { GuestLanding } from "./components/GuestLanding.jsx";
 import { AboutUs } from "./components/AboutUs.jsx";
@@ -24014,9 +24015,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
       <section className="dh-next-grid" aria-label="Dashboard action recommendations">
         <article className={`dh-personal dh-widget ${showAssistantDashboardSet?"has-review":""}`}>
           <div className="dh-widget-top"><span className="dh-eyebrow"><Sparkles size={14}/> PERSONALISED FLASHCARDS</span><span className="dh-widget-icon"><Layers3 size={20}/></span></div>
-          <div className="dh-personal-body"><div><h3>{showAssistantDashboardSet?"Your review, ready.":"Make tricky\nterms click."}</h3><p>{showAssistantDashboardSet?"Concepts missed twice.":"Built from your practice."}</p></div><div className="dh-card-fan" aria-hidden="true"><i/><i/><i>{showAssistantDashboardSet?<><strong>{assistantFlashcardSet.cards.length}</strong><small>cards</small></>:<Brain size={36} strokeWidth={1.5}/>}</i></div></div>
+          <div className="dh-personal-body"><div><h3>{showAssistantDashboardSet?assistantFlashcardSet.title:"Make tricky\nterms click."}</h3><p>{showAssistantDashboardSet?"Grouped by your review topics.":"Built from your practice."}</p></div><div className="dh-card-fan" aria-hidden="true"><i/><i/><i>{showAssistantDashboardSet?<><strong>{assistantFlashcardSet.cards.length}</strong><small>cards</small></>:<Brain size={36} strokeWidth={1.5}/>}</i></div></div>
           {weakFlashcardPreview.length>0&&<div className="dh-term-chips">{weakFlashcardPreview.map((term,index)=><span key={`${term}-${index}`}>{term}</span>)}</div>}
-          <button className="dh-widget-cta" onClick={()=>showAssistantDashboardSet?onOpenFlashcards?.(assistantFlashcardSet):onNav("flashcards")}>{showAssistantDashboardSet?"Review my cards":"Explore flashcards"}<ArrowRight size={18}/></button>
+          <button className="dh-widget-cta" onClick={()=>showAssistantDashboardSet?onOpenFlashcards?.(assistantFlashcardSet):onNav("flashcards")}>{showAssistantDashboardSet?(assistantFlashcardSet.topicCount>1?"Choose a topic":"Review my cards"):"Explore flashcards"}<ArrowRight size={18}/></button>
         </article>
         <article className="dh-focus dh-widget">
           <div className="dh-widget-top"><span className="dh-eyebrow"><Target size={14}/> YOUR NEXT FOCUS</span>{primaryWeakAction&&<span className="dh-chapter">CH. {primaryWeakAction.chapter.id}</span>}</div>
@@ -30000,11 +30001,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   const chapterGroups=useMemo(()=>groupSy0701AcronymSetsByChapter(),[]);
   const starCards=useMemo(()=>getStarredFlashcards(starred),[starred]);
   const personalCards=useMemo(()=>personalisedFlashcards(engineState),[engineState]);
-  const personalSets=useMemo(()=>partitionFlashcards(personalCards).map((cards,index)=>({
-    id:`personalised-${index}`,title:`Personalised review${personalCards.length>20?` · ${index+1}`:""}`,
-    description:"Cards for concepts you’re learning or revisiting.",color:"#30b9a4",setType:"term",
-    chapterTitle:"Your concept review",topic:"Personalised review",cards,
-  })),[personalCards]);
+  const personalSets=useMemo(()=>personalisedFlashcardGroups(personalCards),[personalCards]);
   const refreshPersonal=useCallback(()=>{
     if(!canSync||!mcqEngineEnabled){setProgressStatus(user?"unavailable":"guest");return;}
     setProgressStatus("loading");
@@ -30029,6 +30026,11 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
       const shared=ids.map(id=>SY0701_ACRONYM_CARDS.find(card=>card.id===id)).filter(Boolean);
       if(shared.length)setSelected(buildRandomFlashcardSet({sourceCards:shared,preserveOrder:true,title:"Shared recall mix"}));
       onInitialSetHandled?.();return;
+    }
+    if(initialSetId===ASSISTANT_FLASHCARD_SET_ID&&personalSets.length>1){
+      onInitialSetHandled?.();
+      window.requestAnimationFrame(()=>document.getElementById('fc-personal-title')?.scrollIntoView({block:'start',behavior:'auto'}));
+      return;
     }
     const set=initialSetId===STARRED_FLASHCARD_SET_ID?buildStarredFlashcardSet(starCards)
       :initialSetId===ASSISTANT_FLASHCARD_SET_ID?personalSets[0]
@@ -30092,9 +30094,9 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     </header>
     <section className={`fc-personal fc-personal-feature ${personalCards.length?"has-review":""}`} aria-labelledby="fc-personal-title">
       <div className="fc-personal-copy"><span className="fc-personal-badge"><Sparkles size={14}/> MADE FOR YOUR NEXT BREAKTHROUGH</span>
-      <h2 id="fc-personal-title">Your personalised set.<br/><span>A little more “I’ve got this.”</span></h2>
-      {progressStatus!=="loading"&&<p>{progressStatus==="guest"?"Turn tricky concepts into familiar ones. After two misses on the same concept, every linked flashcard comes here for another look.":progressStatus==="loading"?"Finding your next useful review…":progressStatus==="error"||progressStatus==="unavailable"?"We couldn’t load your practice signals. Refresh to find the cards that need another look.":personalCards.length?`${personalCards.length} cards, chosen from the concepts you missed twice in a row. Give them another look, at your own pace.`:"Nothing needs a repeat review right now. Your next set will take shape as you practise."}</p>}
-      {personalSets.length>0&&<div className="fc-personal-parts">{personalSets.map((set,index)=><button className="btn btn-primary" key={set.id} onClick={()=>openSet(set)}>{personalSets.length>1?`Open review ${index+1}`:"Let’s make it click"}<span>{set.cards.length} cards</span><ArrowRight size={17}/></button>)}</div>}
+      <h2 id="fc-personal-title">Your personalised topics.<br/><span>A little more “I’ve got this.”</span></h2>
+      {progressStatus!=="loading"&&<p>{progressStatus==="guest"?"Turn tricky concepts into familiar ones. After two misses on the same concept, every linked flashcard comes here for another look.":progressStatus==="loading"?"Finding your next useful review…":progressStatus==="error"||progressStatus==="unavailable"?"We couldn’t load your practice signals. Refresh to find the cards that need another look.":personalCards.length?`${personalCards.length} cards across ${personalSets.length} topic${personalSets.length===1?"":"s"}. Choose what to review.`:"Nothing needs a repeat review right now. Your next set will take shape as you practise."}</p>}
+      {personalSets.length>0&&<PersonalisedFlashcardGroups sets={personalSets} onOpen={openSet}/>}
       {progressStatus==="loading"&&<CipherLoader t={t} compact label="Finding your review…"/>}
       {(progressStatus==="error"||progressStatus==="unavailable")&&<button className="btn btn-primary fc-personal-cta" onClick={refreshPersonal}>Refresh my review <RotateCcw size={16}/></button>}
       {!user&&<><button className="btn btn-primary fc-personal-cta" onClick={()=>onRequireSignup?.("flashcard_personalised")}>Build my personalised set <ArrowRight size={17}/></button><small className="fc-personal-note">Included with your free account.</small></>}
