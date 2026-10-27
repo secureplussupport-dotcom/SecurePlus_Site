@@ -1,3 +1,4 @@
+import {AccountSupport} from "./components/AccountSupport.jsx";
 import {THEMES} from "./lib/themes.js";
 import "./components/LightThemeContrast.css";
 import {UpgradePage} from "./components/UpgradePage.jsx";
@@ -30264,73 +30265,8 @@ function LegalPage({type,t}) {
   );
 }
 
-function AccountSupportPage({user,t,onDeleteAccount,onCancelMembership,onNavigate,billingLoading=false}) {
-  const isPro=user?.tier==="pro";
-  const hasPaidSubscription=["active","trialing"].includes(user?.subscriptionStatus || "");
-  const isRenewalCancelled=Boolean(user?.subscriptionCancelAtPeriodEnd);
-  const subscriptionEndLabel=formatSubscriptionDate(user?.subscriptionCurrentPeriodEnd);
-  const cards=[
-    {title:"Contact support",body:"Email us for account, billing, content, or technical issues.",color:t.accent,Icon:MessageSquareWarning,action:"Email support",href:`mailto:${SUPPORT_EMAIL}`},
-    {title:"Privacy policy",body:"See what account, payment, and practice data SecurePlus uses.",color:t.green,Icon:LockKeyhole,action:"Open privacy",view:"privacy"},
-    {title:"Terms & Conditions",body:"Review access-pass, existing subscription, content, and acceptable-use terms.",color:t.amber,Icon:FileText,action:"Open terms",view:"terms"},
-  ];
-  return(
-    <div className="account-support-page">
-      <section className="card account-support-hero">
-        <div>
-          <div className="label" style={{color:t.accent}}>Account, legal, and support</div>
-          <h2>Manage the serious account stuff in one place.</h2>
-          <p>Use this page for support, legal documents, cancellation, and account deletion. Deletion still requires secure email verification before anything is removed.</p>
-          <div className="account-support-profile">
-            <span><UserRound size={16}/>{user?.email||"Signed-in account"}</span>
-            <span><ShieldCheck size={16}/>{isRenewalCancelled?"Pro until period end":isPro?"Pro active":"Free plan"}</span>
-          </div>
-        </div>
-        <div className="account-support-safe-card">
-          <ShieldCheck size={30}/>
-          <strong>Deletion is protected</strong>
-          <span>The red button sends a secure email link first. The email alone does not delete the account.</span>
-        </div>
-      </section>
-
-      <section className="account-support-grid">
-        {cards.map(card=>(
-          <article className="card account-support-card" style={{"--support-color":card.color}} key={card.title}>
-            <span><card.Icon size={22}/></span>
-            <h3>{card.title}</h3>
-            <p>{card.body}</p>
-            {card.href?(
-              <a className="btn btn-outline" href={card.href}>{card.action}</a>
-            ):(
-              <button className="btn btn-outline" type="button" onClick={()=>onNavigate(card.view)}>{card.action}</button>
-            )}
-          </article>
-        ))}
-      </section>
-
-      <section className="card account-danger-zone">
-        <div>
-          <div className="label" style={{color:t.red}}>Account controls</div>
-          <h3>Billing and deletion</h3>
-          <p>
-            {hasPaidSubscription
-              ? isRenewalCancelled
-                ? `Your renewal is already cancelled. You will not be billed again${subscriptionEndLabel ? `, and Pro access remains until ${subscriptionEndLabel}` : ""}.`
-                : `Cancel renewal if you only want to stop the next bill. Your Pro access remains until the current paid period ends${subscriptionEndLabel ? ` (${subscriptionEndLabel})` : ""}.`
-              : "No active Stripe membership is linked to this account. Delete account only if you want saved learning data removed too."}
-          </p>
-        </div>
-        <div className="account-danger-actions">
-          <button className="btn btn-outline" type="button" onClick={onCancelMembership} disabled={billingLoading||!hasPaidSubscription||isRenewalCancelled}>
-            {isRenewalCancelled?"Renewal already cancelled":billingLoading?"Cancelling renewal...":"Cancel renewal"}
-          </button>
-          <button className="btn btn-danger" type="button" onClick={onDeleteAccount}>
-            Delete account
-          </button>
-        </div>
-      </section>
-    </div>
-  );
+function AccountSupportPage(props) {
+  return <AccountSupport {...props} passEnd={formatSubscriptionDate(props.user?.proPassExpiresAt)} subscriptionEnd={formatSubscriptionDate(props.user?.subscriptionCurrentPeriodEnd)} supportEmail={SUPPORT_EMAIL} mascot={<MascotAnimation animation="flashcards" size={95} interactive={false} label="Cipher, here to help"/>}/>;
 }
 
 // ═══════════════════════════════════════════════════════════════
