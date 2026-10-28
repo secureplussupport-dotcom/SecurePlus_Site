@@ -1,0 +1,31 @@
+/* Keep native modal sizing compatible with the existing overlay layouts. */
+dialog.study-modal-frame{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;border:0;box-sizing:border-box;color:inherit;overflow:auto}
+dialog.study-modal-frame:not([open]){display:none!important}
+dialog.study-modal-frame::backdrop{background:transparent}
+
+/* Readable captions use opaque text, including on unavailable content. */
+body .label{font-size:13px;letter-spacing:.07em}
+body :is(.fc-eyebrow,.fc-personal-badge,.fc-domain-tab-copy small,.fc-cover-code,.fc-cover-count,.fc-footer,.fc-personal-note,.fc-library .fc-deck-bottom small,.fc-preview-top,.fc-preview-bottom,.fc-preview-content>small,.fc-cipher-host>div:first-child>span){font-size:13px;line-height:1.5;color:var(--fc-text);opacity:1;letter-spacing:.04em}
+body :is(.fc-preview-topic,.fc-preview-definition,.fc-hero-stats){font-size:14px;line-height:1.6;color:var(--fc-text)}
+body :is(.guest-eyebrow,.gs-stage-note,.gd-path-ready>.guest-eyebrow,.gd-step-encouragement){font-size:13px;line-height:1.5;color:var(--guest-text);opacity:1}
+body :is(.sr-eyebrow,.sr-story-eyebrow){font-size:13px;opacity:1}
+body :is(.deep-dive-card.locked,.deep-dive-card.locked:hover){opacity:1;filter:none;cursor:default}
+body :is(.deep-dive-card-index,.deep-dive-card-read,.deep-dive-card-chapter,.deep-dive-card-tags span,.deep-dive-card-scope,.deep-dive-card-footer,.deep-dive-preview-badge,.deep-dive-lock-badge,.deep-dive-preview-access-badge){font-size:13px;line-height:1.5;color:var(--deep-text);opacity:1;letter-spacing:.02em}
+body .deep-dive-card>p{font-size:14px;line-height:1.7;color:var(--deep-text)}
+body .deep-dive-card-top{gap:8px;flex-wrap:wrap}
+body .deep-dive-card-actions button{font-size:14px;min-height:44px;color:var(--deep-text)}
+body .deep-dive-card-footer{flex-wrap:wrap}
+body .flashcard-auth-card small{font-size:13px;line-height:1.6}
+.gd-answer-hint{font-size:14px;line-height:1.6;margin:10px 0 0;color:var(--guest-text)}
+body :is(button,a,input,select,textarea,[tabindex]):focus-visible{outline:3px solid #5277bd!important;outline-offset:3px!important}
+@media(max-width:600px){body .fc-cipher-host>div:first-child>span{font-size:12px}body .fc-domain-tab-copy small{font-size:13px}}
+@media(prefers-reduced-motion:reduce){dialog.study-modal-frame{animation:none}}
+body .pbq-list-card{cursor:default;opacity:1!important}
+.pbq-title-action{display:block;min-height:44px;width:100%;padding:5px 0;background:transparent;border:0;color:inherit;font:inherit;font-weight:inherit;text-align:left;cursor:pointer}
+body :is(.deep-dive-flashcard-kind,.deep-dive-flashcard-watermark,.deep-dive-flashcard-hint,.deep-dive-flashcard-face>small){font-size:13px;color:var(--deep-text);opacity:1;line-height:1.5}
+body :is(.as-eyebrow,.as-heading-mascot>.as-mascot-caption){font-size:13px;line-height:1.5;color:var(--as-text);letter-spacing:.04em}
+body .up-eyebrow{font-size:13px;line-height:1.5;letter-spacing:.04em}
+body :is(.sr-story-toolbar>span,.sr-story-toolbar .sr-auto-note,.sr-art-top,.sr-answer-art>span,.sr-concept-anchor>span,.sr-flashcard-art small,.sr-mini-timeline,.sr-example-note){font-size:13px;color:var(--guest-text);line-height:1.5;opacity:1}
+body :is(.mcq-result-eyebrow,.mcq-focus-card-footer){font-size:13px;line-height:1.5;color:var(--result-text)}
+body .deep-dive-card.locked>.deep-dive-lock-badge{position:static;align-self:flex-end;margin-bottom:12px}
+body :is(.deep-dive-card-index,.deep-dive-card-read,.deep-dive-card-chapter,.deep-dive-card-footer,.deep-dive-card-scope){font-weight:650}

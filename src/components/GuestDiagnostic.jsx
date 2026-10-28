@@ -1,7 +1,8 @@
+import {rememberModalOpener} from "../lib/modalFocus.js";
 import {SY0701_DOMAINS} from "../data/sy0701DeepDiveMap.js";
 import {diagnosticProgress} from "../lib/surfaceProgress.js";
 import {useDetailState} from "../lib/learnerPlace.js";
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowLeft, ArrowRight, Maximize2, Minimize2, Check, BookOpenCheck, Layers3, RotateCcw, Target, Save, X, Sparkles, ShieldCheck, Fingerprint, Network, Radar } from 'lucide-react';
 import { CipherLoader } from './CipherLoader.jsx';
@@ -25,6 +26,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
  const [expanded,setExpanded]=useDetailState("diagnostic");
  const [resumeVisible,setResumeVisible]=useState(()=>Boolean(snapshot()?.questions?.length&&!diagnosticComplete(snapshot())));
  const opener=useRef(null),openerLabel=useRef('');
+ const answerHintId=useId();
  const expand=()=>{opener.current=document.activeElement;openerLabel.current=opener.current?.getAttribute("aria-label")||opener.current?.textContent?.trim()||"";setExpanded(true);};
  const close=()=>setExpanded(null);
  const host=useRef(null),questionBody=useRef(null),dialog=useRef(null),expandButton=useRef(null),heading=useRef(null),seenSignal=useRef(0);
@@ -46,6 +48,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
  useEffect(()=>{if(startSignal>seenSignal.current){seenSignal.current=startSignal;start();}},[startSignal]);
  useEffect(()=>{
   if(!expanded)return;
+  rememberModalOpener(dialog.current,opener.current);
   dialog.current?.showModal();
   const previous=document.body.style.overflow;document.body.style.overflow='hidden';
   return()=>{document.body.style.overflow=previous;requestAnimationFrame(()=>{const target=opener.current?.isConnected?opener.current:[...document.querySelectorAll("button")].find(node=>(node.getAttribute("aria-label")||node.textContent.trim())===openerLabel.current)||expandButton.current;target?.focus({preventScroll:true});});};
@@ -122,12 +125,13 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
    <div className="gd-progress" role="progressbar" aria-label="Diagnostic questions attempted" aria-valuemin={0} aria-valuemax={progress.total} aria-valuenow={progress.attempted} aria-valuetext={`${progress.attempted} attempted, ${progress.skipped} skipped`}>{questions.map((_,i)=><i key={i} className={draft.skipped?.[i]?'is-skipped':checked[i]?'is-done':i===index?'is-current':''}/>)}</div>
    <div className="gd-question-layout"><div className="gd-question-main">
     <span className="gd-domain-label">DOMAIN {q.chapter} · {domains[Number(q.chapter)-1]}</span><h2 ref={heading} tabIndex={-1}>{renderDefinitions(q.prompt)}</h2>
-    <div className="gd-options">{q.options.map((o,i)=><button key={o.id} disabled={!!marked} aria-pressed={answers[index]===i} className={`${answers[index]===i?'is-selected':''} ${marked&&!skipped&&i===q.correct?'is-correct':''} ${marked&&answers[index]===i&&i!==q.correct?'is-missed':''}`} onClick={()=>publish({...draft,answers:{...answers,[index]:i}})}><span>{String.fromCharCode(65+i)}</span><span>{renderDefinitions(o.text)}</span><Check size={18} aria-hidden="true" className={`gd-option-check ${marked&&!skipped&&i===q.correct?'is-visible':''}`}/></button>)}</div>
+    <div className="gd-options">{q.options.map((o,i)=><button key={o.id} disabled={!!marked} aria-pressed={answers[index]===i} className={`${answers[index]===i?'is-selected':''} ${marked&&!skipped&&i===q.correct?'is-correct':''} ${marked&&answers[index]===i&&i!==q.correct?'is-missed':''}`} onClick={()=>publish({...draft,answers:{...answers,[index]:i}})}><span>{String.fromCharCode(65+i)}</span><span>{o.text}</span><Check size={18} aria-hidden="true" className={`gd-option-check ${marked&&!skipped&&i===q.correct?'is-visible':''}`}/></button>)}</div>
    </div><div className="gd-feedback-slot">
     {marked?<div className={`gd-feedback ${skipped?'is-skipped':answers[index]===q.correct?'is-correct':'is-revisit'}`} role="status" tabIndex={0} aria-label="Answer feedback"><strong>{skipped?'Saved for your learning path.':answers[index]===q.correct?'You’ve got it!':'A new thing to learn.'}</strong><p>{skipped?'Not attempted. Don’t worry—we’ll work on this later. Choose “Try this question” whenever you’re ready.':renderDefinitions(q.explanation)}</p></div>:<div className="gd-feedback-placeholder"><BookOpenCheck size={22}/><span>{fullFormat?'A friendly explanation is waiting. Not sure? You can skip.':'Give it a try—or save it for later.'}</span></div>}
    </div></div>
    <nav className="gd-question-navigation" aria-label="Diagnostic question navigation"><button className="btn btn-ghost" disabled={index===0||transitioning} onClick={()=>publish({...draft,index:index-1})}><ArrowLeft size={16}/> Previous question</button>{marked&&<button className="btn btn-ghost" onClick={()=>{const nextChecked={...checked};delete nextChecked[index];publish({...draft,checked:nextChecked,answers:{...answers,[index]:null},skipped:{...draft.skipped,[index]:false}});}}>{skipped?'Try this question':'Change my answer'}</button>}</nav>
-   <footer className="gd-question-actions"><div className="gd-skip-slot">{!marked?<button type="button" className="gd-skip-button" onClick={skip}><Sparkles size={21}/><span><strong>New to this?</strong><small>Skip & learn later</small></span><ArrowRight size={16}/></button>:<span className="gd-step-encouragement">{skipped?'No pressure. This is on your learn-later list.':index===9?'Look at that—you’ve explored all ten!':`${index+1} explored. Your path is taking shape.`}</span>}</div>{marked?<button className="btn btn-primary" disabled={transitioning} onClick={nextQuestion}>{index===9?'View results':'Continue'} <ArrowRight size={16}/></button>:<button className="btn btn-primary" disabled={answers[index]==null} onClick={()=>publish({...draft,checked:{...checked,[index]:true}})}>Check answer <Check size={16}/></button>}</footer>
+   <footer className="gd-question-actions"><div className="gd-skip-slot">{!marked?<button type="button" className="gd-skip-button" onClick={skip}><Sparkles size={21}/><span><strong>New to this?</strong><small>Skip & learn later</small></span><ArrowRight size={16}/></button>:<span className="gd-step-encouragement">{skipped?'No pressure. This is on your learn-later list.':index===9?'Look at that—you’ve explored all ten!':`${index+1} explored. Your path is taking shape.`}</span>}</div>{marked?<button className="btn btn-primary" disabled={transitioning} onClick={nextQuestion}>{index===9?'View results':'Continue'} <ArrowRight size={16}/></button>:<button className="btn btn-primary" aria-describedby={answers[index]==null?answerHintId:undefined} disabled={answers[index]==null} onClick={()=>publish({...draft,checked:{...checked,[index]:true}})}>Check answer <Check size={16}/></button>}</footer>
+   {!marked&&answers[index]==null&&<p id={answerHintId} className="gd-answer-hint" role="status">Choose an option to enable Check answer—or skip and learn later.</p>}
 
   </div>}
   {error&&<p className="gd-error" role="alert">{error}</p>}

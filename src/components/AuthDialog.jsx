@@ -1,3 +1,4 @@
+import {rememberModalOpener} from "../lib/modalFocus.js";
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
@@ -6,7 +7,7 @@ import './AuthDialog.css';
 export function AuthDialog({ t, onClose, returnFocus, children }) {
   const dialog = useRef(null);
   useEffect(() => {
-    const trigger = returnFocus || document.activeElement;
+    const trigger = rememberModalOpener(dialog.current,returnFocus || document.activeElement);
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     dialog.current.showModal();

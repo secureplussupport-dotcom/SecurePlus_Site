@@ -1,3 +1,4 @@
+import {modalReturnTarget,rememberModalOpener} from '../src/lib/modalFocus.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {AREA_NAMES,areaName,canonicalArea,domainName,domainLabel} from '../src/lib/navigationLabels.js';
@@ -21,4 +22,15 @@ test('official exam domains are shared by lesson, flashcard and navigation label
  }
  assert.equal(domainName('5'),'Security Program Management and Oversight');
  assert.equal(domainName('unknown'),'Domain unavailable');
+});
+
+test('nested study and signup dialogs return to the original control',()=>{
+ const original={closest:()=>null},studyDialog={},signupDialog={};
+ assert.equal(rememberModalOpener(studyDialog,original),original);
+ const studyButton={closest:()=>studyDialog};
+ assert.equal(modalReturnTarget(studyButton),original);
+ rememberModalOpener(signupDialog,studyButton);
+ assert.equal(modalReturnTarget({closest:()=>signupDialog}),original);
+ assert.equal(modalReturnTarget(original),original);
+ assert.equal(modalReturnTarget(null),null);
 });
