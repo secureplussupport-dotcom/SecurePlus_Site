@@ -4,6 +4,15 @@ Baseline requested: `1674c62`. Initial inspection found that free explanations,
 fast Google/email-link signup, guest diagnostic import, breadcrumbs and saved vs
 remembered definitions were already implemented. Those flows were retained.
 Later main accessibility commits through `0fa0925` were merged and retained too.
+Before delivery, main had advanced through PRs #1–#4 (`3ce4826`). Those were
+merged as well. The compact readiness layout revert stays in effect. Shared
+first-step/Smart Review helpers are reused; completed onboarding records and
+dated MCQ/card/challenge activity migrate once. Numeric streak seeds and section
+opens cannot prove completed activity, so they do not become invented days.
+Readiness now includes all 179 tags exactly once in primary reporting domains;
+the prior question-occurrence catalogue omitted untaught tags and repeated some
+across domains. The matching catalogue builder and completeness check now share
+the explicit domain mapping. Both readiness RPC migrations have been applied.
 The old profile/exam-plan signup wizard is not used.
 
 ## Delivered
@@ -26,7 +35,7 @@ The old profile/exam-plan signup wizard is not used.
   The dashboard explains today's qualifying activity. Undated numeric legacy
   streaks do not earn inferred days. Stored lesson completions can establish the
   first-lesson milestone but never backfill a streak date.
-- Persistent first MCQ set / completed lesson / rated deck milestones. All three
+- Persistent first MCQ set / completed lesson / opened deck milestones. All three
   checkmarks replace that card with the Study Plan widget.
 - Smart Review explanation and live due/cooldown/weakest indicators. Repair shows
   its result and allowance implications before generation; cancellation spends no

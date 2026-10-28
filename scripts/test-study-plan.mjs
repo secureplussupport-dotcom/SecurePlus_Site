@@ -1,7 +1,7 @@
 import test from'node:test';import assert from'node:assert/strict';
 import{studyPreferences,monthTarget,buildStudyPlan,focusOfDay}from'../src/lib/studyPlan.js';
 import{meaningfulDailyStreak}from'../src/lib/dailyStreak.js';
-import{recordStudyActivity,readStudyProgress,saveStudyPreferences,updateStudyProgress}from'../src/lib/studyProgress.js';
+import{recordStudyActivity,readStudyProgress,saveStudyPreferences,updateStudyProgress,importLegacyStudyProgress}from'../src/lib/studyProgress.js';
 const today='2026-10-28',lessons=Array.from({length:35},(_,i)=>({id:`l${i}`,domainId:i%5+1,title:`Lesson ${i}`})),decks=Array.from({length:5},(_,i)=>({id:`d${i}`,chapterId:i+1,title:`Deck ${i}`}));
 const plan=(preferences={},rest={})=>buildStudyPlan({preferences,today,lessons,decks,...rest});
 test('no date defaults to six weeks and 20 minutes; month is a target, never booked',()=>{const p=studyPreferences({},today);assert.equal(p.targetDate,'2026-12-09');assert.equal(p.dailyMinutes,20);assert.equal(plan().weeks.length,6);assert.equal(monthTarget('2028-02'),'2028-02-29');assert.equal(studyPreferences({targetKind:'target-month',targetMonth:'2026-11'},today).targetKind,'target-month');});
@@ -17,3 +17,9 @@ test('all mastered concepts and completed lessons leave no invented weak focus',
 test('all three onboarding steps persist and broken browser storage does not throw',()=>{const m=new Map(),storage={getItem:k=>m.get(k),setItem:(k,v)=>m.set(k,v)},u={id:'steps',authProvider:'supabase'};for(const type of ['mcq-set','lesson-complete','deck-complete'])recordStudyActivity(u,{type,lessonId:'lesson'},storage);assert(Object.values(readStudyProgress(u,storage).steps).every(Boolean));assert.equal(recordStudyActivity(u,{type:'mcq-set'},{getItem:()=>null,setItem:()=>{throw Error('blocked');}}),false);});
 
 test('first post-signup goal replaces the provisional week; later edits preserve it',()=>{const m=new Map(),storage={getItem:k=>m.get(k),setItem:(k,v)=>m.set(k,v)},u={id:'setup',authProvider:'supabase'};updateStudyProgress(u,s=>({...s,plan:{id:'provisional'}}),storage);saveStudyPreferences(u,{dailyMinutes:60},{initialSetup:true,storage});assert.equal(readStudyProgress(u,storage).plan,null);assert.equal(readStudyProgress(u,storage).preferences.dailyMinutes,60);assert.equal(readStudyProgress(u,storage).popupDone,true);updateStudyProgress(u,s=>({...s,plan:{id:'confirmed'}}),storage);saveStudyPreferences(u,{dailyMinutes:30},{storage});assert.equal(readStudyProgress(u,storage).plan.id,'confirmed');});
+
+test('remote PR progress migrates once without numeric seeds or section-open backfill',()=>{const m=new Map(),storage={getItem:k=>m.get(k),setItem:(k,v)=>m.set(k,v)},u={id:'legacy',authProvider:'supabase'};
+ importLegacyStudyProgress(u,{steps:{deck:true,lesson:true},days:{'2026-10-27':{mcq:10},'2026-10-26':{lessonSections:10},'2026-10-25':{flashcards:10}}},storage);
+ const state=readStudyProgress(u,storage),summary=meaningfulDailyStreak({days:state.days,today});assert.deepEqual(summary.dates,['2026-10-25','2026-10-27']);assert.equal(state.steps.flashcards,true);assert.equal(state.steps.lesson,true);assert.equal(state.steps.mcq,false);
+ importLegacyStudyProgress(u,{days:{'2026-10-24':{mcq:100}}},storage);assert(!readStudyProgress(u,storage).days['2026-10-24']);
+});

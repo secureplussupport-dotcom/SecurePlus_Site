@@ -1,7 +1,7 @@
 import {practiceActivity} from './dashboardMetrics.js';
-import domainByTag from '../data/readinessConceptDomains.json' with {type:'json'};
+import {READINESS_CONCEPT_CATALOGUE} from '../data/readinessConceptCatalogue.js';
 import {SY0701_DOMAINS} from '../data/sy0701Domains.js';
-export const READINESS_CATALOGUE=Object.entries(domainByTag).map(([tag,chapter])=>({tag,chapter:String(chapter)}));
+export const READINESS_CATALOGUE=Object.entries(READINESS_CONCEPT_CATALOGUE).flatMap(([chapter,tags])=>tags.map(tag=>({tag,chapter})));
 const day=86400000;
 const eligible=event=>!event.pbq&&!event.skipped&&event.selected!==null&&event.selected_option_id!==null&&typeof event.correct==='boolean'&&Boolean(event.conceptTag)&&['mcq-set','exam'].includes(event.readinessSource||(event.exam?'exam':''));
 export function localReadinessEvidence(attempts=[]){

@@ -2,7 +2,7 @@ import {PageSkeleton} from './components/PageSkeleton.jsx';
 import {smartReviewPreview} from './lib/smartReviewPreview.js';
 import {flashcardMatch} from './lib/flashcardSearch.js';
 import {StudyGoalPopup, StudyPlanPage, StudyPlanWidget, useStudyPlan} from './components/StudyPlan.jsx';
-import {recordStudyActivity, readStudyProgress} from './lib/studyProgress.js';
+import {recordStudyActivity, readStudyProgress, importLegacyStudyProgress} from './lib/studyProgress.js';
 import {modalReturnTarget} from "./lib/modalFocus.js";
 import {ModalFrame} from "./components/ModalFrame.jsx";
 import "./components/Readability.css";
@@ -200,6 +200,8 @@ const DB = {
   async saveReferralOwner(code,email) { try { if(code&&email)await storageSet(`refowner:${String(code).trim().toUpperCase()}`,normalizeEmail(email)); } catch {}},
   async getDailyStreak(key) { try { const r=await storageGet(`daily-streak:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
   async saveDailyStreak(key,data) { try { await storageSet(`daily-streak:${key}`,JSON.stringify(data)); } catch {}},
+  async getMeaningfulStudy(key) { const r=await storageGet(`meaningful-study:${key}`);return r?JSON.parse(r.value):null; },
+  async getFirstSteps(key) { const r=await storageGet(`first-steps:${key}`);return r?JSON.parse(r.value):null; },
   async getPracticeSession(key) { try { const r=await storageGet(`practice-session:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
   async savePracticeSession(key,data) { try { await storageSet(`practice-session:${key}`,JSON.stringify(data)); } catch {}},
   async clearPracticeSession(key) { try { await storageDelete(`practice-session:${key}`); } catch {}},
@@ -29739,7 +29741,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     if(set?.cards?.length){setSelected(set);onInitialSetHandled?.();}
     else if(initialSetId!==ASSISTANT_FLASHCARD_SET_ID||progressStatus!=="loading")onInitialSetHandled?.();
   },[initialSetId,personalSets,progressStatus]);
-  const openSet=set=>{if(!set?.cards?.length)return;setSelected(set);setNotice("");scrollSecurePlusPageToTop({behavior:"auto"});capture("flashcards_set_opened",{set_id:set.id,mode:"term"});};
+  const openSet=set=>{if(!set?.cards?.length)return;recordStudyActivity(user,{type:"deck-open",deckId:set.id});setSelected(set);setNotice("");scrollSecurePlusPageToTop({behavior:"auto"});capture("flashcards_set_opened",{set_id:set.id,mode:"term"});};
   const rate=(id,remembered)=>{
     setMastered(current=>{
       const next=remembered?[...new Set([...current,id])]:current.filter(item=>item!==id);
@@ -30531,6 +30533,13 @@ export default function App() {
   const [attempts,setAttempts]=useState([]);
   const readinessProfile=useExamReadiness(user,attempts);
   const study=useStudyPlan(user,attempts,readinessProfile);
+  useEffect(()=>{
+    if(!user)return;let active=true;const owner=dailyStreakOwner(user);
+    Promise.all([DB.getFirstSteps(owner),DB.getMeaningfulStudy(owner)]).then(([steps,activity])=>{
+      if(active)importLegacyStudyProgress(user,{steps,days:activity?.days});
+    }).catch(()=>{});
+    return()=>{active=false;};
+  },[user?.id,user?.email,user?.authProvider]);
   const practiceAccessState=usePracticeAccess(user,!loading);
   const previousMetricsView=useRef(view);
   useEffect(()=>{
