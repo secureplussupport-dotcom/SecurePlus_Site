@@ -42,3 +42,27 @@
 @media(prefers-reduced-motion:reduce){.er-breakdown,.er-track>span,.er-pie-reveal{animation:none}}
 .home-hero>.er-breakdown{position:relative;z-index:1;grid-column:1/-1;width:100%;min-width:0;margin:0}
 .readiness-evidence{padding:12px 16px;font-size:14px;line-height:1.6;color:var(--dh-text)}.readiness-evidence>span{display:block}.readiness-evidence p{margin:5px 0}.er-domain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:16px 0}.er-domain-grid article{border:1px solid var(--er-track);padding:18px;border-radius:16px;background:color-mix(in srgb,#6b9dff 4%,transparent);min-width:0}.er-domain-grid header{display:flex;justify-content:space-between;gap:10px;font-size:13px}.er-domain-grid h4{font-size:17px;margin:12px 0}.er-domain-score{font-size:30px}.er-domain-score small{font-size:13px}.er-domain-grid p,.er-domain-grid li{font-size:14px;line-height:1.6}.er-domain-grid ul{padding-left:18px;overflow-wrap:anywhere}.er-weighted-domains>small{font-size:13px}
+
+/* Compact breakdown v2: one mastery bar set in view, the rest behind
+   React-state tap-to-reveal sections (not native <details>). No body
+   text in the breakdown below 14px. */
+.er-pills{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 22px}
+.er-pill{font-size:14px;font-weight:650;padding:8px 14px;border-radius:30px;border:1px solid var(--er-track);background:color-mix(in srgb,#6b9dff 6%,transparent)}
+.er-domain-bars{display:grid;gap:6px;margin-bottom:14px}
+.er-domain-row{padding:8px 0 14px}
+.er-domain-row .er-row-label{font-size:15px}
+.er-domain-row .er-row-label strong{font-size:24px}
+.er-domain-meta{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px;font-size:14px;line-height:1.6;opacity:.85}
+.er-weight-chip{font-weight:700;padding:4px 10px;border-radius:20px;border:1px solid var(--er-track);background:color-mix(in srgb,#6b9dff 8%,transparent)}
+.er-note{font-size:15px;line-height:1.7;margin:12px 0;opacity:.85}
+.er-sections{display:grid;gap:12px;margin-top:22px}
+.er-breakdown .er-section-toggle{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:48px;padding:12px 16px;border:1px solid var(--er-track);border-radius:14px;background:color-mix(in srgb,#6b9dff 5%,transparent);font-size:16px;font-weight:700;cursor:pointer;text-decoration:none}
+.er-section-body{padding:6px 4px 10px}
+.er-section-body .er-row-label{font-size:15px}
+.er-section-body .er-legend li{font-size:15px}
+.er-section-body .er-legend strong{font-size:20px}
+.er-breakdown .er-eyebrow{font-size:12px}
+.er-breakdown .er-card-heading>span{font-size:14px}
+.er-breakdown .er-axis{font-size:14px}
+.er-breakdown .er-donut small{font-size:14px}
+.er-breakdown .er-legend small{font-size:14px}

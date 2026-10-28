@@ -91,3 +91,12 @@
 .dh-live-dot.is-refreshing{animation:dh-refresh-pulse 1s ease-in-out infinite alternate}
 @keyframes dh-refresh-pulse{from{opacity:.35}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.dh-live-dot.is-refreshing{animation:none}}
+
+/* Compact readiness widget v2: readable level text, coloured confidence pill, larger breakdown button. */
+.dh-score>div>span{font-size:14px;font-weight:700}
+.dh-confidence{display:inline-block;padding:6px 12px;border-radius:30px;border:1px solid var(--dh-line);background:var(--dh-surface);font-size:14px}
+.dh-confidence-high{color:#2e9e6b;border-color:#2e9e6b55;background:#2e9e6b14}
+.dh-confidence-medium{color:#b7791f;border-color:#b7791f55;background:#b7791f14}
+.dh-confidence-low{color:#4a7fd4;border-color:#4a7fd455;background:#4a7fd414}
+.dh-stale{display:inline-block;padding:6px 12px;border-radius:30px;border:1px solid #b7791f55;background:#b7791f14;color:#b7791f;font-size:14px;font-weight:700}
+.dh-breakdown{font-size:15px;min-height:48px;padding:14px}
