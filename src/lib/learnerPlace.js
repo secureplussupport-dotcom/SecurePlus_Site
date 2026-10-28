@@ -11,15 +11,19 @@ export function writePlace(key,value,storage){
   memory.set(key,value);
   try{(storage??globalThis.sessionStorage)?.setItem(`secureplus-place:${key}`,JSON.stringify(value));}catch{}
 }
-export function usePlaceState(key,initial){
-  const [state,setState]=useState(()=>({key,value:readPlace(key,initial)}));
+function placeStorage(persistent){
+  try{return persistent?globalThis.localStorage:globalThis.sessionStorage;}catch{return {getItem:()=>null,setItem:()=>{}};}
+}
+export function usePlaceState(key,initial,persistent=false){
+  const read=()=>readPlace(key,persistent?readPlace(key,initial,placeStorage(false)):initial,placeStorage(persistent));
+  const [state,setState]=useState(()=>({key,value:read()}));
   // A new lesson/account must never render the preceding key's progress.
-  const value=state.key===key?state.value:readPlace(key,initial);
+  const value=state.key===key?state.value:read();
   const latest=useRef(value);latest.current=value;
   const update=useCallback(next=>{
     const value=typeof next==='function'?next(latest.current):next;
-    latest.current=value;writePlace(key,value);setState(current=>current.key===key&&current.value===value?current:{key,value});
-  },[key]);
+    latest.current=value;writePlace(key,value,placeStorage(persistent));setState(current=>current.key===key&&current.value===value?current:{key,value});
+  },[key,persistent]);
   return [value,update];
 }
 

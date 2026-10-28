@@ -29018,7 +29018,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
   const [practiceSubmitted,setPracticeSubmitted]=usePlaceState(`${placeKey}:${selectedId}:practiceSubmitted`,false);
   const [practiceResults,setPracticeResults]=usePlaceState(`${placeKey}:${selectedId}:practiceResults`,[]);
   const handledLessonRequest=useRef(null);
-  const [sectionViews,setSectionViews]=usePlaceState(`${placeKey}:viewed-sections-v1`,{});
+  const [sectionViews,setSectionViews]=usePlaceState(`${placeKey}:viewed-sections-v1`,{},true);
   const completedIds=CONCEPT_DEEP_DIVES.filter(dive=>{const p=viewedSections(dive,sectionViews[dive.id]);return p.total>0&&p.viewed===p.total;}).map(dive=>dive.id);
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
     try{
