@@ -1,3 +1,6 @@
+import {modalReturnTarget} from "./lib/modalFocus.js";
+import {ModalFrame} from "./components/ModalFrame.jsx";
+import "./components/Readability.css";
 import "./components/SelectionStates.css";
 import {ViewBreadcrumb} from "./components/ViewBreadcrumb.jsx";
 import {areaName,canonicalArea,domainName} from "./lib/navigationLabels.js";
@@ -23,7 +26,7 @@ import {progressOwner} from "./lib/liveRefresh.js";
 import { usePracticeAccess } from "./lib/usePracticeAccess.js";
 import { generationChoices, isProProfile, PRO_QUESTION_COUNTS } from "./lib/accessModel.js";
 import { CIPHER_COINS_ACTIVE, MASCOT_MANAGER_ACTIVE, isArchivedView } from "./lib/archivedFeatures.js";
-import { useState, useEffect, useLayoutEffect, useCallback, useRef, useMemo, useTransition } from "react";
+import { useState, useEffect, useLayoutEffect, useCallback, useRef, useMemo, useTransition, useId } from "react";
 import { createPortal } from "react-dom";
 import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701EditorialReview.js";
 import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
@@ -20561,7 +20564,8 @@ function parseInlineFormats(value) {
   if(cursor<text.length) segments.push({text:text.slice(cursor)});
   return segments.length?segments:[{text}];
 }
-function GlossaryText({text,t,style}) {
+function GlossaryText({text,t,style,interactive=true}) {
+  const definitionId=useId();
   const [openTerm,setOpenTerm]=useState(null);
   const wrapRef=useRef(null);
   const terms=Object.keys(GLOSSARY_TERMS).sort((a,b)=>b.length-a.length);
@@ -20617,7 +20621,7 @@ function GlossaryText({text,t,style}) {
     <span ref={wrapRef} style={{whiteSpace:"pre-wrap",overflowWrap:"anywhere",...style}}>
       {parts.map((part,index)=>{
         const term=part.term?normalize(part.text):null;
-        if(!term) return <span key={`${part.text}-${index}`} style={formatStyle(part)}>{part.text}</span>;
+        if(!term||!interactive) return <span key={`${part.text}-${index}`} style={formatStyle(part)}>{part.text}</span>;
         const key=`${term}-${index}`;
         return(
           <span key={key} className="term-wrap" style={formatStyle(part)}>
@@ -20626,8 +20630,10 @@ function GlossaryText({text,t,style}) {
               tabIndex={0}
               className="term-link"
               aria-expanded={openTerm===key}
+              aria-describedby={openTerm===key?`${definitionId}-${index}`:undefined}
               onClick={e=>{e.stopPropagation();setOpenTerm(openTerm===key?null:key);}}
               onKeyDown={e=>{
+                if(e.key==="Escape"&&openTerm===key){e.preventDefault();e.stopPropagation();setOpenTerm(null);return;}
                 if(e.key!=="Enter"&&e.key!==" ")return;
                 e.preventDefault();
                 e.stopPropagation();
@@ -20637,7 +20643,7 @@ function GlossaryText({text,t,style}) {
               {part.text}
             </span>
             {openTerm===key&&(
-              <span className="term-pop" style={{background:t.surface,borderColor:t.border,color:t.text}} onClick={e=>e.stopPropagation()}>
+              <span id={`${definitionId}-${index}`} role="tooltip" className="term-pop" style={{background:t.surface,borderColor:t.border,color:t.text}} onClick={e=>e.stopPropagation()}>
                 <strong style={{color:t.accent}}>{term}</strong>
                 {getEntry(term).fullName&&<span style={{display:"block",marginTop:2,fontWeight:800,color:t.text}}>{getEntry(term).fullName}</span>}
                 <span style={{display:"block",marginTop:5,color:t.textSec}}>{getEntry(term).definition}</span>
@@ -20753,8 +20759,8 @@ function MobileNavigationMenu({open,items=[],currentView,onNavigate,onClose}) {
   },[onClose,open]);
   if(!open||typeof document==="undefined")return null;
   return createPortal(
-    <div className="mobile-nav-overlay" role="presentation" onMouseDown={onClose}>
-      <section className="mobile-nav-sheet" role="dialog" aria-modal="true" aria-labelledby="mobile-nav-title" onMouseDown={event=>event.stopPropagation()}>
+    <ModalFrame aria-labelledby="mobile-nav-title" className="mobile-nav-overlay" onMouseDown={onClose} onClose={onClose}>
+      <section className="mobile-nav-sheet" onMouseDown={event=>event.stopPropagation()}>
         <header>
           <div>
             <span>Study menu</span>
@@ -20776,7 +20782,7 @@ function MobileNavigationMenu({open,items=[],currentView,onNavigate,onClose}) {
           </button>)}
         </div>
       </section>
-    </div>,
+    </ModalFrame>,
     document.body
   );
 }
@@ -20895,7 +20901,7 @@ function PBQEvidenceViewer({title="Evidence",content,language="",t,accent}) {
       </div>
       <pre className="log-block pbq-evidence-preview">{text}</pre>
       {open&&(
-        <div className="pbq-evidence-overlay" role="dialog" aria-modal="true" aria-label={title} onClick={()=>setOpen(false)}>
+        <ModalFrame className="pbq-evidence-overlay" aria-label={title} onClick={()=>setOpen(false)} onClose={()=>setOpen(false)}>
           <div className="pbq-evidence-modal card" onClick={event=>event.stopPropagation()}>
             <div className="pbq-evidence-modal-head">
               <div>
@@ -20909,7 +20915,7 @@ function PBQEvidenceViewer({title="Evidence",content,language="",t,accent}) {
             </div>
             <pre className="log-block pbq-evidence-full">{text}</pre>
           </div>
-        </div>
+        </ModalFrame>
       )}
     </div>
   );
@@ -20989,8 +20995,8 @@ function PBQSelectionWorkspace({q,values={},onChange,t,accent,showHints=true,com
         ))}
       </div>
       {activeBlank&&typeof document!=="undefined"&&createPortal(
-        <div className="pbq-selector-overlay" role="presentation" style={{"--selection-color":accent||t.accent}} onClick={()=>setActiveBlankId(null)}>
-          <section className="pbq-selector-sheet" role="dialog" aria-modal="true" aria-labelledby="pbq-selector-title" onClick={event=>event.stopPropagation()}>
+        <ModalFrame aria-labelledby="pbq-selector-title" className="pbq-selector-overlay" style={{"--selection-color":accent||t.accent}} onClick={()=>setActiveBlankId(null)} onClose={()=>setActiveBlankId(null)}>
+          <section className="pbq-selector-sheet" onClick={event=>event.stopPropagation()}>
             <header className="pbq-selector-head">
               <div>
                 <div className="pbq-selector-kicker">Blank {blanks.findIndex(blank=>blank.id===activeBlank.id)+1} of {blanks.length}</div>
@@ -21000,7 +21006,7 @@ function PBQSelectionWorkspace({q,values={},onChange,t,accent,showHints=true,com
               <button type="button" className="btn btn-ghost" onClick={()=>setActiveBlankId(null)} aria-label="Close answer selector"><X size={17}/> Close</button>
             </header>
             <div className="pbq-selector-context"><GlossaryText text={activeBlank.sentence} t={t}/></div>
-            <div className="pbq-selector-options" role="listbox" aria-label="Available answers">
+            <div className="pbq-selector-options" role="group" aria-label="Available answers">
               {options.map((option,index)=>{
                 const selected=values?.[activeBlank.id]===option;
                 return(
@@ -21008,8 +21014,7 @@ function PBQSelectionWorkspace({q,values={},onChange,t,accent,showHints=true,com
                     type="button"
                     key={`${option}-${index}`}
                     className={`pbq-selector-option ${selected?"selected":""}`}
-                    role="option"
-                    aria-selected={selected}
+                    aria-pressed={selected}
                     onClick={()=>choose(activeBlank.id,option)}
                     autoFocus={index===0}
                   >
@@ -21025,7 +21030,7 @@ function PBQSelectionWorkspace({q,values={},onChange,t,accent,showHints=true,com
               {values?.[activeBlank.id]&&<button type="button" className="btn btn-ghost" onClick={()=>choose(activeBlank.id,"")}>Clear this blank</button>}
             </footer>
           </section>
-        </div>,
+        </ModalFrame>,
         document.body
       )}
     </div>
@@ -22826,12 +22831,12 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
           if(submitted){cls+=" done"; if(i===current.correct)cls+=" ok"; else if(i===selected&&i!==current.correct)cls+=" bad";}
           else if(selected===i)cls+=" sel";
           return(
-            <div key={i} className={cls} onClick={()=>!submitted&&setSelected(i)}>
+            <button type="button" key={i} className={cls} aria-pressed={selected===i} disabled={submitted} onClick={()=>!submitted&&setSelected(i)}>
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
-              <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.5}}><GlossaryText text={opt} t={t}/></span>
+              <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.5}}><GlossaryText text={opt} t={t} interactive={false}/></span>
               {submitted&&i===current.correct&&<Check size={18} color={t.green} strokeWidth={2.8}/>}
               {submitted&&i===selected&&i!==current.correct&&<X size={18} color={t.red} strokeWidth={2.8}/>}
-            </div>
+            </button>
           );
         })}
       </div>
@@ -23022,7 +23027,7 @@ function LandingDailyChallengeWidget({t,onPractice}) {
                       onClick={()=>!submitted&&setSelected(index)}
                     >
                       <span className="landing-challenge-letter">{String.fromCharCode(65+index)}</span>
-                      <span style={{flex:1}}><GlossaryText text={opt} t={t}/></span>
+                      <span style={{flex:1}}><GlossaryText text={opt} t={t} interactive={false}/></span>
                     </button>
                   );
                 })}
@@ -24609,7 +24614,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
 
   if(!started) return(
     <div className="mcq-setup-screen mcq-hub-screen fu" style={{...examThemeVars(t),"--practice-accent":examMode?t.accent:reviewMode==="smart"?t.green:t.accent}}>
-      {missedBatch!==null&&<div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Choose missed-question batch"><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Choose a batch before using your allowance.</p><label>Questions <select className="input" value={missedBatch} disabled={!missedBatchSizes.length} onChange={e=>setMissedBatch(Number(e.target.value))}>{!missedBatchSizes.length&&<option value={0}>No batch available</option>}{missedBatchSizes.map(size=><option key={size} value={size}>{size} questions</option>)}</select></label>{isPro&&!missedBatchSizes.length&&<p role="status">You have {missedQuestions.length} missed questions. A Pro batch starts at 10.</p>}<p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!missedBatchSizes.includes(missedBatch)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>{missedBatchSizes.length?`Practise ${missedBatch} missed questions`:"No batch available"}</button></div></div></div>}
+      {missedBatch!==null&&<ModalFrame className="streak-overlay" aria-label="Choose missed-question batch" onClose={()=>setMissedBatch(null)}><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Choose a batch before using your allowance.</p><label>Questions <select className="input" value={missedBatch} disabled={!missedBatchSizes.length} onChange={e=>setMissedBatch(Number(e.target.value))}>{!missedBatchSizes.length&&<option value={0}>No batch available</option>}{missedBatchSizes.map(size=><option key={size} value={size}>{size} questions</option>)}</select></label>{isPro&&!missedBatchSizes.length&&<p role="status">You have {missedQuestions.length} missed questions. A Pro batch starts at 10.</p>}<p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!missedBatchSizes.includes(missedBatch)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>{missedBatchSizes.length?`Practise ${missedBatch} missed questions`:"No batch available"}</button></div></div></ModalFrame>}
       <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h1>MCQ Practice</h1></div></header>
       <div className="card" role="status" style={{padding:"12px 16px",marginBottom:16,color:t.textSec}}>{isGuest?"Try 10 questions total, then create a free account to keep practising.":isPro?"Unlimited generation · Pro":"50 questions every rolling 12 hours"}<strong style={{marginLeft:10,color:t.text}}>{isPro?"∞":access?`${access.remaining} remaining`:"Loading allowance…"}</strong>{accessError&&<span> {accessError}</span>}{!isPro&&choices.remainder&&<button className="btn btn-outline" style={{marginLeft:12}} disabled={engineBusy} onClick={()=>startEngineQuiz({},choices.remainder,examMode?"exam":reviewMode)}>Practice remaining {choices.remainder}</button>}{isGuest&&access?.remaining===0&&<button className="btn btn-primary" onClick={requestSignup}>Create free account</button>}</div>
       <div hidden={isGuest} className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
@@ -24796,7 +24801,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
             >
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
               <div className="option-body">
-                <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
+                <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t} interactive={false}/></span>
                 {showWrongOptionFeedback&&(
                   <div className="option-inline-feedback">
                     <strong>Why this option is incorrect:</strong>
@@ -25154,16 +25159,12 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
           const coinUnlocked=unlockedSet.has(q.id);
           const canOpen=isPro||preview||coinUnlocked;
           const ch=CHAPTERS.find(c=>c.id===q.ch);
+          const openQuestion=()=>{if(canOpen){capture(preview&&!isPro?"pbq_preview_started":"pbq_started",{question_id:q.id,type:q.type,chapter:q.ch,tier:user.tier});onStart(q);}else openLockedPrompt(q);};
           return(
             <div
               key={q.id}
               className="card card-hover pbq-list-card"
-              role="button"
-              tabIndex={0}
-              aria-label={`${canOpen?"Open":"Locked"} PBQ: ${q.title}`}
               style={{opacity:canOpen?1:.75,borderColor:preview?`${t.amber}55`:ok?`${t.green}30`:done?`${t.red}25`:undefined,background:preview&&!isPro?`linear-gradient(135deg, ${t.amber}0d, ${t.surface})`:undefined}}
-              onKeyDown={event=>{if(event.key!=="Enter"&&event.key!==" ")return;event.preventDefault();if(canOpen){capture(preview&&!isPro?"pbq_preview_started":"pbq_started", { question_id:q.id,type:q.type,chapter:q.ch,tier:user.tier });onStart(q);}else openLockedPrompt(q);}}
-              onClick={()=>{if(canOpen){capture(preview&&!isPro?"pbq_preview_started":"pbq_started", { question_id: q.id, type: q.type, chapter: q.ch, tier: user.tier });onStart(q);}else{openLockedPrompt(q);}}}
             >
               <SimIcon type={q.type}/>
               <div style={{flex:1,minWidth:0}}>
@@ -25177,12 +25178,12 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
                   <BeyondTextbookTag question={q} t={t}/>
                   {ch&&<span style={{fontSize:13,fontWeight:800,color:t.textDim,display:"inline-flex",alignItems:"center",gap:5}}><ChapterIcon id={ch.id} size={16}/> Domain {ch.id}</span>}
                 </div>
-                <div className="pbq-list-title"><GlossaryText text={q.title} t={t}/></div>
+                <div className="pbq-list-title"><button className="pbq-title-action" type="button" aria-label={`${canOpen?"Open":"Locked"} PBQ: ${q.title}`} onClick={openQuestion}>{q.title}</button></div>
                 <div className="pbq-list-subtitle"><GlossaryText text={q.cat} t={t}/>{done?` · ${ok?"Completed correctly":"Needs another pass"}`:" · Not attempted"}</div>
               </div>
               <div className="pbq-list-actions">
                 <StarButton capacity={user&&user.tier!=="pro"&&user.authProvider!=="guest"?starred.filter(k=>/^(mcq|pbq):/.test(k)).length:null} active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
-                <span aria-label={done?(ok?"Completed correctly":"Answered incorrectly"):"Not attempted"}>{done?ok?<CheckCircle2 size={18} color={t.green} strokeWidth={2.4}/>:<XCircle size={18} color={t.red} strokeWidth={2.4}/>:<Circle size={17} color={t.textDim} strokeWidth={1.8}/>}</span>
+                <span role="img" aria-label={done?(ok?"Completed correctly":"Answered incorrectly"):"Not attempted"}>{done?ok?<CheckCircle2 size={18} color={t.green} strokeWidth={2.4}/>:<XCircle size={18} color={t.red} strokeWidth={2.4}/>:<Circle size={17} color={t.textDim} strokeWidth={1.8}/>}</span>
                 <span className={`pbq-open-indicator ${canOpen?"":"locked"}`}>{canOpen?<Play size={16} fill="currentColor" strokeWidth={2}/>:<LockKeyhole size={16} strokeWidth={2.2}/>}</span>
               </div>
             </div>
@@ -26558,7 +26559,7 @@ function QuestionReportModal({report,user,t,onClose}) {
   };
 
   return(
-    <div className="onboarding-overlay" role="dialog" aria-modal="true" aria-label="Report question issue">
+    <ModalFrame className="onboarding-overlay" aria-label="Report question issue" onClose={onClose}>
       <div className="onboarding-modal card feedback-modal">
         <div className="feedback-modal-header">
         <button className="btn btn-ghost" style={{position:"absolute",top:14,right:14,minHeight:32,padding:"4px 10px",fontSize:12}} onClick={onClose}>Close</button>
@@ -26583,7 +26584,7 @@ function QuestionReportModal({report,user,t,onClose}) {
           </div>
         </div>
         <label className="label" style={{display:"block",marginBottom:7}}>Issue type</label>
-        <select className="input" value={issueType} onChange={e=>setIssueType(e.target.value)} style={{marginBottom:12}}>
+        <select className="input" aria-label="Issue type" value={issueType} onChange={e=>setIssueType(e.target.value)} style={{marginBottom:12}}>
           <option value="inaccurate_answer">Inaccurate answer</option>
           <option value="obvious_answer">Answer is too obvious</option>
           <option value="confusing_context">Confusing context</option>
@@ -26595,6 +26596,7 @@ function QuestionReportModal({report,user,t,onClose}) {
         <label className="label" style={{display:"block",marginBottom:7}}>Description</label>
         <textarea
           className="input"
+          aria-label="Issue description"
           value={message}
           onChange={e=>{setMessage(e.target.value);setStatus("");setSubmitted(false);}}
           placeholder="Example: The correct answer seems wrong because..."
@@ -26611,7 +26613,7 @@ function QuestionReportModal({report,user,t,onClose}) {
           </div>
         )}
         <label className="label" style={{display:"block",marginBottom:7}}>Contact email optional</label>
-        <input className="input" value={contactEmail} onChange={e=>setContactEmail(e.target.value)} placeholder="you@example.com" style={{marginBottom:12}}/>
+        <input className="input" aria-label="Contact email (optional)" value={contactEmail} onChange={e=>setContactEmail(e.target.value)} placeholder="you@example.com" style={{marginBottom:12}}/>
         <Alert msg={error} t={t}/>
         {!submitted&&<Alert msg={status} type="success" t={t}/>}
         </div>
@@ -26620,7 +26622,7 @@ function QuestionReportModal({report,user,t,onClose}) {
           <button className="btn btn-primary" disabled={submitting||submitted||needsMoreWords||needsMoreCharacters} onClick={submit}>{submitting?"Submitting...":submitted?"Submitted":"Submit feedback"}</button>
         </div>
       </div>
-    </div>
+    </ModalFrame>
   );
 }
 
@@ -28385,7 +28387,7 @@ function AccountDeletionModal({state,user,t,onClose,onSend,onConfirm,onSwitchAcc
   const requestAgain=()=>onSend?.();
 
   return(
-    <div className="account-delete-overlay" role="dialog" aria-modal="true" aria-labelledby="account-delete-title" onMouseDown={()=>closeAllowed&&onClose?.()}>
+    <ModalFrame className="account-delete-overlay" aria-labelledby="account-delete-title" onMouseDown={()=>closeAllowed&&onClose?.()} onClose={()=>closeAllowed&&onClose?.()}>
       <div className="account-delete-modal" onMouseDown={event=>event.stopPropagation()}>
         <button className="account-delete-close" type="button" aria-label="Close account deletion" disabled={!closeAllowed} onClick={onClose}><X size={18}/></button>
         <div className={`account-delete-icon ${isSent?"sent":""}`}>
@@ -28459,7 +28461,7 @@ function AccountDeletionModal({state,user,t,onClose,onSend,onConfirm,onSwitchAcc
         </div>
         <div className="account-delete-support">Need help? <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a></div>
       </div>
-    </div>
+    </ModalFrame>
   );
 }
 
@@ -28677,7 +28679,7 @@ function FlashcardSavePrompt({t,onLogin,onSignup,onClose,mode="save"}) {
   const isLearnMore=mode==="learn_more";
   const isReviewSet=mode==="review_set";
   return(
-    <div className="flashcard-auth-nudge" role="dialog" aria-modal="true" aria-labelledby="flashcard-save-title" onMouseDown={onClose}>
+    <ModalFrame className="flashcard-auth-nudge" aria-labelledby="flashcard-save-title" onMouseDown={onClose} onClose={onClose}>
       <div className="flashcard-auth-card card" onMouseDown={event=>event.stopPropagation()}>
         <button className="icon-btn" type="button" aria-label={isLearnMore?"Close lesson path dialog":"Close flashcard save prompt"} onClick={onClose}><X size={18}/></button>
         <div className="flashcard-auth-icon">{isLearnMore?<BookOpenCheck size={23}/>:<Star size={23} fill="currentColor"/>}</div>
@@ -28691,7 +28693,7 @@ function FlashcardSavePrompt({t,onLogin,onSignup,onClose,mode="save"}) {
         </div>
         <small>{isLearnMore?"Subtle note: Flashcards stay free. Account features help connect the rest of your study path.":isReviewSet?"After signup, you will go straight back to the saved review set.":"Subtle note: starring is saved to your account. No payment needed."}</small>
       </div>
-    </div>
+    </ModalFrame>
   );
 }
 
@@ -28877,7 +28879,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
           {activeCardStarred&&<p className="flashcard-saved-note" role="status">This card is already in your saved-for-later list. Saving does not mark it remembered.</p>}
           <div className="deep-dive-flashcard-stage">
             {!isDividerCard&&(onToggleStar||onRequireSignup)&&<StarButton active={activeCardStarred} onToggle={toggleActiveFlashcardStar} label="Save flashcard for review" activeLabel="Remove flashcard from review set" showText text="Save for review" activeText="Saved"/>}
-            <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
+            <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?`${answerMain}. ${answerCopy||"Definition not added yet."} Show term.`:`${frontText}. Reveal definition.`} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
               <span className="deep-dive-flashcard-inner">
                 <span aria-hidden={isFlipped} className={`deep-dive-flashcard-face deep-dive-flashcard-front ${isDividerCard?"flashcard-section-divider-face":""}`}>
                   <span className="deep-dive-flashcard-kind"><Brain size={15}/>{frontPrompt}</span>
@@ -29612,11 +29614,6 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
                     className={`deep-dive-card ${locked?"locked":""} ${isNextUnread?"has-next-read":""} ${shakingDiveId===dive.id?"shake":""}`}
                     key={dive.id}
                     style={{"--chapter-color":chapterColor(syllabus.domainId)}}
-                    role={locked?"button":undefined}
-                    tabIndex={locked?0:undefined}
-                    aria-label={locked?`${syllabus.title} is a Pro lesson. Upgrade to unlock.`:undefined}
-                    onClick={locked?()=>promptLockedDeepDive(dive.id,"card"):undefined}
-                    onKeyDown={locked?event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();promptLockedDeepDive(dive.id,"card_keyboard");}}:undefined}
                   >
                     {locked&&<span className="deep-dive-lock-badge"><LockKeyhole size={12}/>Pro</span>}
                     {isFreePreview&&<span className="deep-dive-preview-access-badge"><BadgeCheck size={12}/>Free preview</span>}
@@ -29632,8 +29629,8 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
                     {syllabus.includesBeyondTextbook&&<div className="deep-dive-card-scope"><GraduationCap size={14}/>Includes clearly marked “Beyond the textbook” detail</div>}
                     <div className="deep-dive-card-footer"><span><Clock3 size={14}/>{dive.minutes} min</span><span><Puzzle size={14}/>Practice lab</span>{Number(practiceBestScores[dive.id])>0&&<span><Trophy size={14}/>{practiceBestScores[dive.id]}%</span>}</div>
                     <div className="deep-dive-card-actions">
-                      <button type="button" className="learn-action" onClick={event=>{event.stopPropagation();openDive(dive.id,"learn");}}><BookOpenCheck size={15}/>Learn</button>
-                      <button type="button" className="lab-action" onClick={event=>{event.stopPropagation();openDive(dive.id,"practice");}}><Puzzle size={15}/>Lab</button>
+                      <button type="button" className="learn-action" aria-label={`Learn: ${syllabus.title}${locked?" (requires account access)":""}`} onClick={event=>{event.stopPropagation();openDive(dive.id,"learn");}}><BookOpenCheck size={15}/>Learn</button>
+                      <button type="button" className="lab-action" aria-label={`Practice lab: ${syllabus.title}${locked?" (requires account access)":""}`} onClick={event=>{event.stopPropagation();openDive(dive.id,"practice");}}><Puzzle size={15}/>Lab</button>
                     </div>
                   </article>
                 );
@@ -29650,7 +29647,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
         </div>
       )}
       {lockedDivePrompt&&(
-        <div className="deep-dive-upgrade-prompt" role="dialog" aria-modal="true" aria-labelledby="deep-dive-upgrade-title" onMouseDown={()=>setLockedDivePrompt(null)}>
+        <ModalFrame className="deep-dive-upgrade-prompt" aria-labelledby="deep-dive-upgrade-title" onMouseDown={()=>setLockedDivePrompt(null)} onClose={()=>setLockedDivePrompt(null)}>
           <div className="deep-dive-upgrade-prompt-card" onMouseDown={event=>event.stopPropagation()}>
             <div className="deep-dive-upgrade-prompt-icon"><LockKeyhole size={24}/></div>
             <h3 id="deep-dive-upgrade-title">Unlock the full Concept Deep Dives path</h3>
@@ -29662,7 +29659,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
               <button className="btn btn-primary" type="button" onClick={()=>{setLockedDivePrompt(null);onUpgrade?.();}}>View Pro</button>
             </div>
           </div>
-        </div>
+        </ModalFrame>
       )}
     </div>
   );
@@ -30321,11 +30318,11 @@ function DiagnosticQuiz({user,t,onComplete}) {
               <button key={i} type="button" className={cls} style={{textAlign:"left"}} onClick={()=>!submitted&&setSelected(i)}>
                 <span className="opt-ltr">{String.fromCharCode(65+i)}</span>
                 <div className="option-body">
-                  <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
+                  <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t} interactive={false}/></span>
                   {showSelectedWrongFeedback&&(
                     <div className="option-inline-feedback">
                       <strong>Why this option is incorrect:</strong>
-                      <GlossaryText text={getWrongOptionFeedback(current, i)} t={t}/>
+                      <GlossaryText text={getWrongOptionFeedback(current, i)} t={t} interactive={false}/>
                     </div>
                   )}
                 </div>
@@ -30508,7 +30505,7 @@ export default function App() {
   const [loading,setLoading]=useState(true);
   const [navigating,startNavigation]=useTransition();
   const authReturnFocus=useRef(null);
-  const setView=useCallback(next=>{if(next==="auth"&&document.activeElement!==document.body)authReturnFocus.current=document.activeElement;startNavigation(()=>setViewImmediate(next));},[]);
+  const setView=useCallback(next=>{if(next==="auth"&&document.activeElement!==document.body)authReturnFocus.current=modalReturnTarget(document.activeElement);startNavigation(()=>setViewImmediate(next));},[]);
   const [view,setViewImmediate]=useState(()=>focusAcronymLibrary||urlFlashcardsRequest?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":urlAboutRequest?"about":devCoinPreview?"coins":readAppHistoryState().view);
   const guestBackgroundView=useRef("dashboard");
   useEffect(()=>{if(view!=="auth")guestBackgroundView.current=view;},[view]);
@@ -31759,7 +31756,7 @@ export default function App() {
         <style>{CSS}</style>
       {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
         {view==="auth"&&<AuthDialog t={t} returnFocus={authReturnFocus.current} onClose={()=>setView(guestView)}><AuthView key={`auth-${authStartMode}-${authRequestId}`} onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={next=>setView(next==="dashboard"?guestView:next)} onPracticeMcq={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} initialMode={authStartMode} securityNotice={accountDeletion.stage==="confirm"}/></AuthDialog>}
-        <div className={`app-shell guest-app-shell ${practiceFocusMode?"practice-focus-mode":""}`} onFocusCapture={event=>{authReturnFocus.current=event.target;}}>
+        <div className={`app-shell guest-app-shell ${practiceFocusMode?"practice-focus-mode":""}`} onFocusCapture={event=>{authReturnFocus.current=modalReturnTarget(event.target);}}>
           <a className="skip-link" href="#secureplus-main">Skip to study content</a>
           <header className="guest-top-nav">
             <button type="button" className="guest-top-nav-brand" onClick={()=>guestGo("dashboard")} aria-label={`${SITE_BRAND_LOCKUP} guest landing page`}>

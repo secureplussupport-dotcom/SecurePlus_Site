@@ -1,3 +1,4 @@
+import {rememberModalOpener} from "../lib/modalFocus.js";
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpenCheck, ChevronRight, Clock3, Flag, HelpCircle, ListChecks, RotateCcw, X } from 'lucide-react';
 import { useQuestionPacing } from '../lib/useQuestionPacing.js';
@@ -21,7 +22,11 @@ export function ExamModeGuide({ t, onClose }) {
     { title: 'Keep moving. Come back.', body: 'Use the answer map to jump between questions. Flag anything uncertain and cross out weak options with Strike, a right-click or a long press. Try flagging the sample question below.' },
     { title: 'One submit. A clearer picture.', body: 'Nothing is marked until you submit. Your report shows accuracy, domains and time—not a pass or fail. Review every answer with definitions restored, or retake the same exam.' },
   ];
-  useEffect(() => { dialog.current?.showModal(); }, []);
+  useEffect(() => {
+    const node=dialog.current,trigger=rememberModalOpener(node,document.activeElement);
+    node?.showModal();
+    return()=>{node?.close();requestAnimationFrame(()=>{if(trigger?.isConnected&&!document.querySelector('dialog[open]'))trigger.focus({preventScroll:true});});};
+  }, []);
   return <dialog ref={dialog} className="mcq-exam-guide" style={examThemeVars(t)} aria-labelledby="exam-guide-title" onCancel={event => { event.preventDefault(); onClose(); }}>
     <div className="exam-guide-top"><span><HelpCircle size={16}/> EXAM FIELD GUIDE</span><button type="button" className="btn btn-ghost" onClick={onClose}>Skip guide <X size={15}/></button></div>
     <div className="exam-guide-visual" aria-label={`Guide illustration ${step + 1}`}>
@@ -37,7 +42,11 @@ export function ExamModeGuide({ t, onClose }) {
 
 function ExamConfirmation({ action, unanswered, flags, onCancel, onConfirm, t }) {
   const dialog=useRef(null);
-  useEffect(()=>{dialog.current?.showModal();},[]);
+  useEffect(()=>{
+    const node=dialog.current,trigger=rememberModalOpener(node,document.activeElement);
+    node?.showModal();
+    return()=>{node?.close();requestAnimationFrame(()=>{if(trigger?.isConnected&&!document.querySelector('dialog[open]'))trigger.focus({preventScroll:true});});};
+  },[]);
   return <dialog ref={dialog} className="mcq-exam-guide mcq-exam-confirm" style={examThemeVars(t)} aria-labelledby="exam-confirm-title" onCancel={event=>{event.preventDefault();onCancel();}}>
     <h2 id="exam-confirm-title">{action==='retake'?'A fresh run at the same exam?':'Ready to submit?'}</h2>
     <p>{action==='retake'?'Your answers will clear and the clock will restart. You’ll answer the same questions again.':`${unanswered} unanswered · ${flags} flagged. Unanswered questions count as incorrect. You can review everything after submission.`}</p>

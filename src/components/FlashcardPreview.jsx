@@ -11,7 +11,7 @@ export function FlashcardPreview({card}) {
     <div className="fc-preview-sheet fc-preview-sheet-one" aria-hidden="true"/>
     <div className="fc-preview-sheet fc-preview-sheet-two" aria-hidden="true"/>
     <button type="button" className={`fc-preview-card ${revealed?'is-revealed':''}`}
-      aria-pressed={revealed} aria-label={revealed?'Preview RTO flashcard: show term':'Preview RTO flashcard: reveal meaning'}
+      aria-pressed={revealed} aria-label={revealed?`${face.fullForm}. ${face.definition}. Show term.`:`${face.front}. Preview flashcard: reveal meaning.`}
       onClick={()=>setRevealed(current=>!current)}>
       <span className="fc-preview-top"><span><Sparkles size={13}/> TRY A CARD</span><ArrowUpRight size={16}/></span>
       <span className="fc-preview-content" key={String(revealed)}>

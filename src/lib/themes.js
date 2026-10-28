@@ -2,7 +2,7 @@
 export const THEMES = {
   dark: {
     bg:"#0c111b", surface:"#171e2b", panel:"#111824", border:"#2b3748",
-    text:"#f7f9fc", textSec:"#b2bdcf", textDim:"#77849a",
+    text:"#f7f9fc", textSec:"#b2bdcf", textDim:"#9aa8be",
     accent:"#4f8cff", accentHover:"#3476ed", green:"#20c997", red:"#ff5d73", amber:"#ffb020",
     cardBg:"#171e2b", inputBg:"#0e1521",
     codeBg:"#050814", codePanel:"#0a1020", codeBorder:"#27344d", codeText:"#d6e2ff",
