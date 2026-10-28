@@ -1,6 +1,6 @@
 # Guest diagnostic and signup funnel
 
-The landing page preserves “Diagnose your weak spots. Follow your path. Pass with confidence.” The primary action starts the embedded diagnostic; the secondary action opens `?view=why-different`. Login remains available in the header. The signup entry is signup-first; the existing Athena account-creation journey is unchanged.
+The landing page preserves “Diagnose your weak spots. Follow your path. Pass with confidence.” The primary action starts the embedded diagnostic; the secondary action opens `?view=why-different`. Login remains available in the header. Signup opens a direct form: Google first, or one email field for a secure sign-in link. There is no pre-account profile, exam-plan, study-goal or starter-question wizard. Existing password login and reset remain available. New Google users are no longer signed out to force the retired profile journey.
 
 ## Question selection and feedback
 
@@ -33,3 +33,9 @@ The landing page uses `SmartReviewStory`; Why we’re different shows an actual 
 The four scenes loop automatically every 4.2 seconds with animated entrances and exits, coloured step markers and direct step controls. There is no pause/play button. Playback pauses offscreen, in a hidden tab, on mouse hover or while keyboard focus is inside the story. Reduced-motion users receive manual steps and static artwork. The fixed illustration stage prevents layout shifts between scenes. Supporting text, diagnostic options, captions and domain labels were enlarged; the catchphrase, two main landing CTAs and signup onboarding remain intact.
 
 The landing hero pairs Security+ identity/threat/network illustrations with a prominent blue diagnostic CTA. Scroll reveals run once; answer feedback, question transitions and results use short opacity/transform animations with reduced-motion alternatives. These are presentation changes; diagnostic selection, scoring and account handoff are unchanged.
+
+## Direct signup (2026-10-28)
+
+The email path uses Supabase `signInWithOtp` with `shouldCreateUser:true`; no password or study-profile fields are collected. The separate email-link login path sets `shouldCreateUser:false`. Only the origin is used for redirects. Sending a link does not mark the visitor signed in: Supabase must verify the email and establish a session first. The existing diagnostic and starred-card imports then run on verified login. Existing profile records are retained. Legacy in-flight OAuth profile receipts can still finish, but new signup does not create them.
+
+Reference: https://supabase.com/docs/guides/auth/auth-email-passwordless . Provider error/rate-limit messages are displayed, the submit action locks after a successful email request, and editing the email allows correction. `scripts/test-email-access.mjs` checks the request contract and removal of active wizard routes; it does not send live email.

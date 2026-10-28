@@ -45,3 +45,9 @@
 @media(prefers-reduced-motion:reduce){.auth-dialog{animation:none}}
 .auth-welcome-art{overflow:hidden}
 @media(max-width:650px){.auth-cipher-halo>.cipher-mascot{width:100px!important;height:100px!important}}
+.auth-fast .auth-google{width:100%;justify-content:center;min-height:48px;font-size:15px;border-radius:12px}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--auth-muted);font-size:13px}.auth-divider::before,.auth-divider::after{content:"";height:1px;flex:1;background:var(--auth-line)}
+.auth-diagnostic-note{display:flex;align-items:flex-start;gap:9px;padding:12px;border:1px solid var(--auth-line);border-radius:10px;font-size:14px;line-height:1.6;color:var(--auth-text)}.auth-diagnostic-note>svg{flex:none;margin-top:3px}
+.auth-email-note{font-size:13px;line-height:1.6;color:var(--auth-muted);margin:12px 0}
+.auth-fast-switches{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:16px}.auth-fast-switches button{min-height:36px;border:0;background:none;color:var(--auth-text);font:inherit;font-size:14px;text-decoration:underline;cursor:pointer}
+.auth-dialog .auth-fast{padding:24px 20px}.auth-dialog .auth-fast .auth-only-card{padding:16px}.auth-dialog .auth-fast .auth-only-brand{margin-bottom:12px}

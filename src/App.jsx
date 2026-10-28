@@ -144,6 +144,7 @@ import {
 } from "./lib/deepDiveRecommendations.js";
 import { getActiveDailyStreak } from "./lib/dailyStreak.js";
 
+import {sendEmailAccessLink} from "./lib/emailAccess.js";
 import {completedGuestDiagnosticRows,markGuestDiagnosticAuthOpened} from "./lib/guestDiagnosticStore.js";
 
 const SITE_BRAND_LOCKUP = "SecurePlus | CompTIA Security+™ Prep";
@@ -21477,16 +21478,6 @@ async function consumeFreshLoginOAuthIntent() {
   }
 }
 
-function shouldForceCipherOnboardingAfterLoginOAuth(authUser,{loginIntent=false,hadPendingAthena=false}={}) {
-  if(!loginIntent||hadPendingAthena||!authUser)return false;
-  const provider=String(authUser?.app_metadata?.provider||"").toLowerCase();
-  if(!provider.includes("google"))return false;
-  if(authUser?.user_metadata?.study_profile)return false;
-  const createdAt=Date.parse(authUser.created_at||"");
-  if(!Number.isFinite(createdAt))return false;
-  return Date.now()-createdAt<=LOGIN_OAUTH_INTENT_MAX_AGE_MS;
-}
-
 function UniversityICCard({profile,flipped,onFlip}) {
   const name=(profile.name||"").trim();
   const cardColour=getAthenaCardColour(profile.cardColour);
@@ -23064,408 +23055,78 @@ function LandingDailyChallengeWidget({t,onPractice}) {
 // ═══════════════════════════════════════════════════════════════
 // AUTH VIEW
 // ═══════════════════════════════════════════════════════════════
-function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initialMode="login",securityNotice=false}) {
-  const isReviewSignupStart=initialMode==="review-signup" || initialMode==="signup-entry";
-  const [mode,setMode]=useState(isReviewSignupStart?"signup":initialMode);
-  const [showLoginModal,setShowLoginModal]=useState(initialMode==="login");
-  const [showSignupJourney,setShowSignupJourney]=useState(initialMode==="signup");
-  const [activePath,setActivePath]=useState("flashcards");
-  const [form,setForm]=useState({name:"",email:"",pass:"",confirm:"",referral:getStoredReferralCode(),avatarId:"default-cipher"});
-  const [athenaProfile,setAthenaProfile]=useState({
-    name:"",
-    experience:"",
-    takingExam:"",
-    bookedTest:"",
-    examDate:"",
-    examDateDeferred:false,
-    dailyGoal:"",
-    chapterStatus:{},
-    chaptersReviewed:false,
-    chaptersSkipped:false,
-    diagnosticAnswers:{},
-    diagnosticScore:null,
-    diagnosticTotal:0,
-    diagnosticSkipped:false,
-    cardColour:"sage",
-  });
-  const [err,setErr]=useState("");
-  const [ok,setOk]=useState("");
-  const [loading,setLoading]=useState(false);
-  const [mintedUser,setMintedUser]=useState(null);
-  useEffect(()=>{
-    const isReviewSignup=initialMode==="review-signup" || initialMode==="signup-entry";
-    setMode(isReviewSignup?"signup":initialMode);
-    setShowLoginModal(initialMode==="login");
-    setShowSignupJourney(initialMode==="signup");
-    setErr("");
-    setOk("");
-    if(initialMode==="signup"||isReviewSignup){
-      capture("signup_form_viewed", { source:isReviewSignup?"flashcard_review_set":"guest_landing" });
-    }
-  },[initialMode]);
-  const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
-  const resetMessages=()=>{setErr("");setOk("");};
-  const openLogin=()=>{
-    setMode("login");
-    setMintedUser(null);
-    setShowSignupJourney(false);
-    resetMessages();
-    setShowLoginModal(true);
-  };
-  const jumpToAuth=nextMode=>{
-    if(nextMode==="login"){
-      openLogin();
-      return;
-    }
-    setMode(nextMode);
-    setMintedUser(null);
-    setShowLoginModal(false);
-    setShowSignupJourney(mode==="signup");
-    capture("landing_signup_cta_clicked", { source:"auth_landing" });
-  };
+function AuthView({onLogin,t,onNavigate,initialMode="login",securityNotice=false}) {
+  const initial=()=>["signup-entry","review-signup"].includes(initialMode)?"signup":initialMode;
+  const [mode,setMode]=useState(initial);
+  const [form,setForm]=useState({email:"",pass:"",referral:getStoredReferralCode()});
+  const [err,setErr]=useState(""),[ok,setOk]=useState(""),[loading,setLoading]=useState(false),[emailSent,setEmailSent]=useState(false);
+  const emailOnly=mode==="signup"||mode==="email-link";
+  const set=k=>event=>{setForm(current=>({...current,[k]:event.target.value}));setEmailSent(false);};
+  const changeMode=next=>{setMode(next);setErr("");setOk("");setEmailSent(false);};
+  useEffect(()=>{changeMode(initial());if(initial() === "signup")capture("signup_form_viewed",{source:initialMode==="review-signup"?"flashcard_review_set":"direct_signup"});},[initialMode]);
   const handle=async event=>{
-    event?.preventDefault?.();
-    resetMessages();setLoading(true);
+    event.preventDefault();setErr("");setOk("");setLoading(true);
     try{
       const email=normalizeEmail(form.email);
-      if(!email){setErr("Please enter your email.");setLoading(false);return;}
-
-      if(isSupabaseConfigured){
+      if(!email)throw new Error("Please enter your email.");
+      if(emailOnly){
+        if(!isSupabaseConfigured)throw new Error("Email links need the connected authentication service. Please use an existing demo login in local mode.");
+        const referralCode=saveReferralCode(form.referral);
+        if(initialMode==="review-signup")await saveFlashcardReviewAuthIntent({source:"email_link"});
+        capture(mode==="signup"?"signup_started":"login_started",{method:"email_link",has_referral:Boolean(referralCode)});
+        await sendEmailAccessLink(supabase.auth,{email,origin:window.location.origin,createUser:mode==="signup",referralCode});
+        setEmailSent(true);setOk("Check your inbox for your secure sign-in link. Open it in this browser to carry your saved diagnostic and flashcards into your account.");
+        capture("auth_email_link_requested",{source:mode});
+      }else if(isSupabaseConfigured){
         if(mode==="reset"){
-          const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
-          if(error) throw error;
-          capture("password_reset_requested");
-          setOk("Password reset email sent. Check your inbox.");
-          setLoading(false);
-          return;
-        }
-
-        if(mode==="login"){
-          const { data, error } = await supabase.auth.signInWithPassword({ email, password: form.pass });
-          if(error) throw error;
+          const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin});if(error)throw error;
+          capture("password_reset_requested");setOk("Password reset email sent. Check your inbox.");
+        }else{
+          const {data,error}=await supabase.auth.signInWithPassword({email,password:form.pass});if(error)throw error;
           const appUser=await waitForSupabaseProfile(data.user);
-          if(!appUser) throw new Error("This account profile could not be loaded. Please contact support if this continues.");
-          capture("login_completed", { method: "password" });
-          onLogin(appUser);
-        } else {
-          const referralCode = saveReferralCode(form.referral);
-          const directSignupName=(form.name||email.split("@")[0]||"SecurePlus Learner").trim();
-          capture("signup_started", { method: "password", has_referral: Boolean(referralCode), source:initialMode==="review-signup"?"flashcard_review_set":"standard" });
-          if(!directSignupName||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
-          if(form.pass!==form.confirm){setErr("Passwords do not match.");setLoading(false);return;}
-          const passwordIssue=getPasswordIssue(form.pass);
-          if(passwordIssue){setErr(passwordIssue);setLoading(false);return;}
-
-          const { data, error } = await supabase.auth.signUp({
-            email,
-            password: form.pass,
-            options: {
-              data: { name: directSignupName, full_name: directSignupName, avatar_id: form.avatarId || "default-cipher", pending_referral_code: referralCode, study_profile:initialMode==="review-signup"?null:toAthenaStudyProfile(athenaProfile) },
-              emailRedirectTo: window.location.origin,
-            },
-          });
-          if(error) throw error;
-          if(data.session?.user){
-            const appUser=await waitForSupabaseProfile(data.session.user);
-            if(!appUser) throw new Error("Your account was created, but the profile is still loading. Please sign in again in a moment.");
-            setOk("Account created! Welcome to SecurePlus.");
-            capture("signup_completed", { method: "password", confirmed_immediately: true, has_referral: Boolean(referralCode) });
-            onLogin(appUser);
-          } else {
-            capture("signup_email_confirmation_required", { has_referral: Boolean(referralCode) });
-            setOk("Almost done. Check your email, click Confirm signup, then come back here to sign in.");
-          }
+          if(!appUser)throw new Error("This account profile could not be loaded. Please contact support if this continues.");
+          capture("login_completed",{method:"password"});onLogin(appUser);
         }
-      } else {
-        await new Promise(r=>setTimeout(r,400));
-        if(mode==="reset"){setErr("Password reset requires Supabase environment variables.");setLoading(false);return;}
-        if(mode==="login"){
-          const user=await DB.getUser(email);
-          if(!user||user.password!==form.pass){setErr("Email or password is incorrect.");setLoading(false);return;}
-          await DB.saveReferralOwner(user.referralCode||makeReferralCode(user.email),user.email);
-          await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
-          capture("login_completed", { method: "local_demo" });
-          onLogin(user);
-        } else {
-          const directSignupName=(form.name||email.split("@")[0]||"SecurePlus Learner").trim();
-          capture("signup_started", { method: "local_demo", source:initialMode==="review-signup"?"flashcard_review_set":"standard" });
-          const referralCode = saveReferralCode(form.referral);
-          if(!directSignupName||!form.pass){setErr("Please fill in all fields.");setLoading(false);return;}
-          if(form.pass!==form.confirm){setErr("Passwords do not match.");setLoading(false);return;}
-          const passwordIssue=getPasswordIssue(form.pass);
-          if(passwordIssue){setErr(passwordIssue);setLoading(false);return;}
-          const exists=await DB.getUser(email);
-          if(exists){setErr("An account with this email already exists.");setLoading(false);return;}
-          const user={name:directSignupName,email,password:form.pass,tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:null,referralCode:makeReferralCode(email),avatarId:form.avatarId || "default-cipher",totalStars:0,studyProfile:initialMode==="review-signup"?null:toAthenaStudyProfile(athenaProfile)};
-          await DB.saveUser(user);
-          await runLocalCipherCoinAction(user,"onboarding_welcome");
-          if(referralCode)await claimLocalReferralReward(user,referralCode);
-          await DB.saveReferralOwner(user.referralCode,user.email);
-          await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
-          setOk("Account created! Welcome to SecurePlus.");
-          capture("signup_completed", { method: "local_demo" });
-          setTimeout(()=>onLogin(user),800);
-        }
+      }else{
+        if(mode==="reset")throw new Error("Password reset requires the connected authentication service.");
+        const user=await DB.getUser(email);if(!user||user.password!==form.pass)throw new Error("Email or password is incorrect.");
+        await DB.saveReferralOwner(user.referralCode||makeReferralCode(user.email),user.email);
+        await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});capture("login_completed",{method:"local_demo"});onLogin(user);
       }
-    } catch(e){setErr(e.message||"Something went wrong. Please try again.");}
-    setLoading(false);
+    }catch(error){setErr(error.message||"Unable to continue. Please try again.");}finally{setLoading(false);}
   };
-  const handleAcademyMint=async()=>{
-    resetMessages();setLoading(true);
+  const handleGoogle=async()=>{
+    setErr("");setOk("");setLoading(true);
     try{
-      const email=normalizeEmail(form.email);
-      const fullName=form.name.trim();
-      const avatarId=form.avatarId || "default-cipher";
-      const studyProfile=toAthenaStudyProfile(athenaProfile);
-      const referralCode = saveReferralCode(form.referral);
-      if(!email) throw new Error("Please enter your email.");
-      if(!fullName) throw new Error("Please enter your full name.");
-      if(!form.pass) throw new Error("Please enter a password.");
-      if(form.pass!==form.confirm) throw new Error("Passwords do not match.");
-      const passwordIssue=getPasswordIssue(form.pass);
-      if(passwordIssue) throw new Error(passwordIssue);
-
-      if(isSupabaseConfigured){
-        capture("signup_started", { method: "academy_password", has_referral: Boolean(referralCode), avatar_id: avatarId });
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password: form.pass,
-          options: {
-            data: { name: fullName, full_name: fullName, avatar_id: avatarId, pending_referral_code: referralCode, study_profile:studyProfile },
-            emailRedirectTo: window.location.origin,
-          },
-        });
-        if(error) throw error;
-        await DB.saveDiagnosticDone(email);
-        if(data.session?.user){
-          await updateSupabaseAcademyProfile(data.session.user.id,{fullName,avatarId});
-          const appUser=await waitForSupabaseProfile(data.session.user);
-          if(!appUser) throw new Error("Your account was created, but the profile is still loading. Please sign in again in a moment.");
-          const revealedUser={...appUser,name:fullName,avatarId,studyProfile};
-          setMintedUser(revealedUser);
-          setOk("Academy ID minted. Review your pass, then enter the dashboard.");
-          capture("signup_completed", { method: "academy_password", confirmed_immediately: true, has_referral: Boolean(referralCode), avatar_id: avatarId });
-        } else {
-          capture("signup_email_confirmation_required", { has_referral: Boolean(referralCode), avatar_id: avatarId });
-          setOk("Academy ID reserved. Check your email, click Confirm signup, then come back here to sign in.");
-        }
-      } else {
-        capture("signup_started", { method: "academy_local_demo", avatar_id: avatarId });
-        const exists=await DB.getUser(email);
-        if(exists) throw new Error("An account with this email already exists.");
-        const user={name:fullName,email,password:form.pass,tier:"free",joined:new Date().toISOString(),streak:0,authProvider:"local",loginMethod:"local",proTrialUntil:null,referralCode:makeReferralCode(email),avatarId,totalStars:0,studyProfile};
-        await DB.saveUser(user);
-        await runLocalCipherCoinAction(user,"onboarding_welcome");
-        if(referralCode)await claimLocalReferralReward(user,referralCode);
-        await DB.saveReferralOwner(user.referralCode,user.email);
-        await DB.saveSession({email:user.email,name:user.name,tier:user.tier,loggedIn:true});
-        await DB.saveDiagnosticDone(email);
-        setMintedUser(user);
-        setOk("Academy ID minted. Review your pass, then enter the dashboard.");
-        capture("signup_completed", { method: "academy_local_demo", avatar_id: avatarId });
-      }
-    } catch(e){
-      setErr(e.message||"Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+      saveReferralCode(form.referral);
+      if(initialMode==="review-signup")await saveFlashcardReviewAuthIntent({source:"google_auth"});
+      capture(mode==="signup"?"signup_started":"login_started",{method:"google"});
+      const {error}=await supabase.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.origin}});if(error)throw error;
+    }catch(error){setErr(error.message||"Unable to start Google sign in.");setLoading(false);}
   };
-  const startGoogleAuth=async({fromAcademy=false}={})=>{
-    resetMessages();setLoading(true);
-    try{
-      const referralCode=saveReferralCode(form.referral);
-      const fromReviewSignup=initialMode==="review-signup"&&mode==="signup"&&!fromAcademy;
-      if(fromAcademy)await savePendingAthenaOAuth(athenaProfile,{...form,referral:referralCode});
-      else if(fromReviewSignup)await saveFlashcardReviewAuthIntent({source:"google_auth"});
-      else await saveLoginOAuthIntent();
-      capture(mode==="signup"?"signup_started":"login_started", { method:fromAcademy?"academy_google":fromReviewSignup?"flashcard_review_google":"google", has_referral:Boolean(referralCode) });
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo: window.location.origin },
-      });
-      if(error) throw error;
-    } catch(e){
-      if(fromAcademy)await storageDelete(ATHENA_OAUTH_PENDING_KEY).catch(()=>{});
-      else if(initialMode==="review-signup"&&mode==="signup")await storageDelete(GUEST_FLASHCARD_REVIEW_AUTH_KEY).catch(()=>{});
-      else await storageDelete(LOGIN_OAUTH_INTENT_KEY).catch(()=>{});
-      setErr(e.message||"Unable to start Google sign in.");
-      setLoading(false);
-    }
-  };
-  const handleGoogle=()=>startGoogleAuth();
-  const handleAcademyGoogle=()=>startGoogleAuth({fromAcademy:true});
-
-  if(mode==="signup"&&showSignupJourney){
-    return (
-      <>
-      {loading&&<CipherLoader t={t} overlay label="Creating your account…"/>}
-      <AthenaSignupJourney
-        t={t}
-        form={form}
-        setForm={setForm}
-        setField={set}
-        profile={athenaProfile}
-        setProfile={setAthenaProfile}
-        onMint={handleAcademyMint}
-        onGoogle={handleAcademyGoogle}
-        loading={loading}
-        error={err}
-        ok={ok}
-        mintedUser={mintedUser}
-        onEnter={onLogin}
-        onHaveAccount={openLogin}
-      />
-      </>
-    );
-  }
-
-  if(mode==="signup"&&!showSignupJourney&&initialMode!=="review-signup")return <div className="auth-welcome">
-    <div className="auth-welcome-art"><span className="auth-mini-brand"><BrandMark size={27}/> SecurePlus</span><div className="auth-cipher-halo"><MascotAnimation animation="wave" size={152} label="Cipher welcomes you"/></div><span className="auth-art-caption">Your next chapter<br/><strong>starts with you.</strong></span><div className="auth-connected-tools" aria-label="Connected study tools"><span><Target size={20}/></span><i/><span><Layers3 size={20}/></span><i/><span><BookOpenCheck size={20}/></span></div></div>
-    <div className="auth-welcome-copy"><span className="auth-free-badge"><Sparkles size={14}/> YOUR FREE STUDY SPACE</span><h1>Make your next<br/>{" "}step count.</h1><p>Your weak spots become a clear path forward.</p><ul><li><Target size={19}/><span>Practice that targets your gaps</span></li><li><Layers3 size={19}/><span>Flashcards that make it stick</span></li><li><BookOpenCheck size={19}/><span>Deep Dives that make it click</span></li></ul><button className="btn btn-primary auth-create-cta" data-auth-primary onClick={()=>jumpToAuth("signup")}>Create my free account <ArrowRight size={20}/></button><small>{completedGuestDiagnosticRows().length?"Your exact diagnostic will import automatically after signup or login in this browser. No credit card needed.":"No credit card needed. Your progress comes with you."}</small><button className="auth-login-switch" onClick={openLogin}>Already have an account? <strong>Log in</strong> <ArrowRight size={14}/></button></div>
+  return <div className="auth-only-page auth-fast fu">
+    {loading&&<CipherLoader t={t} overlay label={emailOnly?"Sending your sign-in link…":"Connecting securely…"}/>}
+    <main id="secureplus-auth-main" className="auth-only-main"><section className="card auth-only-card" aria-labelledby="auth-only-title">
+      <button type="button" className="auth-only-brand" onClick={()=>onNavigate("dashboard")}><BrandMark size={32}/><strong>SecurePlus</strong></button>
+      <h1 id="auth-only-title">{securityNotice?"Sign in to continue safely":mode==="signup"?"Create your free account":mode==="reset"?"Reset your password":mode==="email-link"?"Sign in with email":"Welcome back."}</h1>
+      <p className="auth-only-copy">{securityNotice?"Use the account that requested deletion. You will review a final confirmation before anything is removed.":emailOnly?"Use Google or get a secure link by email. No password or profile setup needed.":mode==="reset"?"Enter your email for a password reset link.":"Sign in to your saved progress."}</p>
+      {completedGuestDiagnosticRows().length>0&&<p className="auth-diagnostic-note"><ShieldCheck size={17}/> Your exact diagnostic imports automatically after signup or login in this browser.</p>}
+      {initialMode==="review-signup"&&<p className="auth-diagnostic-note"><Star size={17}/> Your selected flashcards will be saved to your account.</p>}
+      <Alert msg={err} type="error" t={t}/><Alert msg={ok} type="success" t={t}/>
+      {mode!=="reset"&&isSupabaseConfigured&&<><button type="button" className="btn btn-outline auth-google" onClick={handleGoogle} disabled={loading}>Continue with Google <ArrowRight size={17}/></button><div className="auth-divider"><span>or use email</span></div></>}
+      <form className="auth-only-form" onSubmit={handle}>
+        <div><label htmlFor="auth-email">Email</label><input className="input" id="auth-email" name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={set("email")} required disabled={loading}/></div>
+        {mode==="login"&&<div><label htmlFor="auth-password">Password</label><input className="input" id="auth-password" name="password" type="password" autoComplete="current-password" value={form.pass} onChange={set("pass")} required disabled={loading}/></div>}
+        <button type="submit" className="btn btn-primary" disabled={loading||emailSent}>{emailSent?"Email sent — check your inbox":emailOnly?"Send my sign-in link":mode==="reset"?"Send reset link":"Log in"}<ArrowRight size={17}/></button>
+      </form>
+      {emailOnly&&<p className="auth-email-note">{mode==="signup"?"New here? The email link creates your free account. Already registered? It signs you in.":"Open the link in this browser to sign in."}</p>}
+      <div className="auth-fast-switches">
+        {mode==="login"&&<><button type="button" onClick={()=>changeMode("email-link")} disabled={loading}>Use an email link instead</button><button type="button" onClick={()=>changeMode("reset")} disabled={loading}>Forgot password?</button><button type="button" onClick={()=>changeMode("signup")} disabled={loading}>Create free account</button></>}
+        {mode!=="login"&&<button type="button" onClick={()=>changeMode("login")} disabled={loading}>{mode==="signup"?"Already have an account? Log in":"Back to password login"}</button>}
+      </div>
+      <div className="auth-only-links"><button type="button" className="btn btn-ghost" onClick={()=>onNavigate("privacy")}>Privacy</button><button type="button" className="btn btn-ghost" onClick={()=>onNavigate("terms")}>Terms</button></div>
+    </section></main>
   </div>;
-
-  return(
-    <div className="auth-only-page fu">
-      {loading&&<CipherLoader t={t} overlay label={mode==="signup"?"Creating your account…":mode==="reset"?"Sending your reset link…":"Signing you in…"}/>}
-      <a className="skip-link" href="#secureplus-auth-main">Skip to sign in form</a>
-      <main id="secureplus-auth-main" className="auth-only-main">
-        <section className="card auth-only-card" aria-labelledby="auth-only-title">
-          <button type="button" className="auth-only-brand" onClick={()=>onNavigate("dashboard")}>
-            <BrandMark size={36}/>
-            <span>
-              <strong>SecurePlus</strong>
-            </span>
-          </button>
-
-          {initialMode==="review-signup"&&(
-            <div className="flashcard-review-auth-copy">
-              <span><Star size={15} fill="currentColor"/> Save your review set</span>
-              <strong>No credit card required.</strong>
-              <small>Create an account and your selected flashcards will move into your saved review deck.</small>
-            </div>
-          )}
-
-          <div className="label" style={{color:securityNotice?t.red:t.accent,marginTop:initialMode==="review-signup"?14:0}}>
-            {securityNotice?"Account security":mode==="reset"?"Password reset":mode==="signup"?"Create your account":"Welcome back"}
-          </div>
-          <h1 id="auth-only-title">
-            {securityNotice
-              ?"Sign in to continue safely"
-              :mode==="reset"
-                ?"Reset your password"
-                :mode==="signup"
-                  ?"Save your Security+ progress"
-                  :"Welcome back."}
-          </h1>
-          <p className="auth-only-copy">
-            {securityNotice
-              ?"Use the same account that requested deletion. You will review one final confirmation before anything is removed."
-              :mode==="reset"
-                ?"Enter your email and we’ll send a secure reset link."
-                :mode==="signup"
-                  ?"Create a free account so your starred cards, scores, and review progress stay available."
-                  :"Your saved progress, starred cards, and review queue are waiting."}
-          </p>
-
-          {securityNotice&&(
-            <div className="auth-security-notice">
-              <ShieldCheck size={18}/>
-              <span><strong>The email did not delete your account.</strong>The secure link is waiting in this browser and will be checked against the account you sign in to.</span>
-            </div>
-          )}
-
-          <Alert msg={err} type="error" t={t}/>
-          <Alert msg={ok} type="success" t={t}/>
-
-          <form className="auth-only-form" onSubmit={handle}>
-            {mode==="signup"&&(
-              <div>
-                <label htmlFor="auth-name">Name</label>
-                <input className="input" id="auth-name" name="name" type="text" autoComplete="name" placeholder="What should we call you?" value={form.name} onChange={set("name")}/>
-              </div>
-            )}
-            <div>
-              <label htmlFor="auth-email">Email</label>
-              <input className="input" id="auth-email" name="email" type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" value={form.email} onChange={set("email")}/>
-            </div>
-            {mode!=="reset"&&(
-              <div>
-                <label htmlFor="auth-password">Password</label>
-                <input className="input" id="auth-password" name="password" type="password" autoComplete={mode==="signup"?"new-password":"current-password"} placeholder={mode==="signup"?"Create a password":"Your password"} value={form.pass} onChange={set("pass")}/>
-              </div>
-            )}
-            {mode==="signup"&&(
-              <div>
-                <label htmlFor="auth-confirm-password">Confirm password</label>
-                <input className="input" id="auth-confirm-password" name="confirm-password" type="password" autoComplete="new-password" placeholder="Repeat password" value={form.confirm} onChange={set("confirm")}/>
-              </div>
-            )}
-            <button type="submit" className="btn btn-primary" disabled={loading}>
-              {loading
-                ?"Processing..."
-                :mode==="reset"
-                  ?"Send Reset Email"
-                  :mode==="signup"
-                    ?initialMode==="review-signup"?"Create account and save set":"Create account"
-                    :"Log In"}
-            </button>
-            {isSupabaseConfigured&&mode==="login"&&(
-              <button type="button" className="btn btn-outline" onClick={handleGoogle} disabled={loading}>
-                Log in with Google
-              </button>
-            )}
-            {isSupabaseConfigured&&mode==="signup"&&(
-              <button type="button" className="btn btn-outline" onClick={handleGoogle} disabled={loading}>
-                Continue with Google
-              </button>
-            )}
-            {mode==="login"&&(
-              <button type="button" className="btn btn-ghost" onClick={()=>{setMode("reset");resetMessages();}} disabled={loading}>
-                Forgot password?
-              </button>
-            )}
-            {mode==="reset"&&(
-              <button type="button" className="btn btn-ghost" onClick={()=>{setMode("login");resetMessages();}} disabled={loading}>
-                Back to sign in
-              </button>
-            )}
-            {mode!=="login"&&(
-              <button type="button" className="btn btn-ghost" onClick={openLogin} disabled={loading}>
-                Already have an account? Log in
-              </button>
-            )}
-            {mode==="login"&&(
-              <button type="button" className="btn btn-outline" onClick={()=>jumpToAuth("signup")} disabled={loading}>
-                Create free account
-              </button>
-            )}
-          </form>
-
-          {!isSupabaseConfigured&&mode==="login"&&(
-            <div className="auth-demo-panel">
-              <div>DEMO ACCOUNT</div>
-              <p className="mono">Email: demo@secureplus.io · Password: demo123</p>
-              <button className="btn btn-ghost" type="button" onClick={async()=>{
-                let u=await DB.getUser("demo@secureplus.io");
-                if(!u){u={name:"Demo User",email:"demo@secureplus.io",password:"demo123",tier:"pro",joined:new Date().toISOString(),streak:14,authProvider:"local",loginMethod:"local"};await DB.saveUser(u);}
-                setForm(f=>({...f,email:"demo@secureplus.io",pass:"demo123"}));
-                await DB.saveSession({email:u.email,name:u.name,tier:u.tier,loggedIn:true});
-                onLogin(u);
-              }}>
-                Open demo workspace →
-              </button>
-            </div>
-          )}
-
-          <div className="auth-only-links">
-            <button type="button" className="btn btn-ghost" onClick={()=>onNavigate("dashboard")}>Back to guest practice</button>
-            <button type="button" className="btn btn-ghost" onClick={()=>onNavigate("privacy")}>Privacy Policy</button>
-            <button type="button" className="btn btn-ghost" onClick={()=>onNavigate("terms")}>Terms</button>
-          </div>
-        </section>
-      </main>
-    </div>
-  );
 
   /*
    * Archived 2026-09-02: legacy standalone marketing landing page.
@@ -31266,19 +30927,8 @@ export default function App() {
           if(active)setLoading(false);
           return;
         }
-        const hadPendingAthena=Boolean(await getFreshPendingAthenaOAuth());
         const verifiedUser=await applyPendingAthenaOAuth(verified.user);
-        const loginOAuthIntent=await consumeFreshLoginOAuthIntent();
-        if(shouldForceCipherOnboardingAfterLoginOAuth(verifiedUser,{loginIntent:loginOAuthIntent,hadPendingAthena})){
-          await forceSupabaseSignOut();
-          if(active){
-            setAuthStartMode("signup");
-            setAuthRequestId(id=>id+1);
-            setView("auth");
-            setLoading(false);
-          }
-          return;
-        }
+        await consumeFreshLoginOAuthIntent(); // Clear legacy redirect intent without forcing a profile wizard.
         if(isRecentlyDeletedAccount(verifiedUser)){
           await forceSupabaseSignOut();
           if(active)setLoading(false);
