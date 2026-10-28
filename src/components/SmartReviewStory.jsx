@@ -69,7 +69,15 @@ export function SmartReviewStory() {
       <div className="sr-narration"><div className="sr-cipher"><MascotAnimation animation={active.animation} size={128} label={`Cipher: ${active.label}`}/><span className="sr-cipher-spark" aria-hidden="true"><Sparkles size={20}/></span></div><span className="sr-scene-number">0{index+1} / 04</span><h3>{active.title}</h3><p>{active.copy}</p><span className="sr-example-note">Illustrated example · not your results</span></div></>;
   };
   return <section ref={host} className={`sr-story ${running?'is-playing':'is-paused'} ${reduced?'is-reduced':''}`} aria-label="See how Smart Review works" aria-roledescription="carousel" onPointerDown={()=>setEngaged(false)} onFocusCapture={event=>setEngaged(event.target.matches(':focus-visible'))} onBlurCapture={event=>{if(!event.currentTarget.contains(event.relatedTarget))setEngaged(false);}}>
-    <header className="sr-story-toolbar"><span><span className="sr-live-dot"/> SMART REVIEW, IN MOTION</span><span className="sr-auto-note">{reduced?'Choose a step below':'Your learning loop'}</span></header>
+    <header className="sr-story-toolbar"><span><span className="sr-live-dot"/> SMART REVIEW, IN MOTION</span><span className="sr-free-note"><Check size={15}/> Included with a free account</span></header>
+    <div className="sr-first-step" aria-labelledby="sr-first-step-title">
+      <h3 id="sr-first-step-title"><span>01</span> Start with a miss.</h3>
+      <div className="sr-first-examples">
+        <article><span>DOMAIN 5 · RECOVERY TIME</span><strong>Miss an RTO question?</strong><p><ArrowRight size={18}/> Practise another recovery-time question.</p></article>
+        <article><span>DOMAIN 2 · PHISHING</span><strong>Miss a phishing question?</strong><p><ArrowRight size={18}/> Practise spotting another phishing attempt.</p></article>
+      </div>
+      <p className="sr-diagnostic-link">Your diagnostic misses become your first Smart Review set.</p>
+    </div>
     <div className="sr-scene-window" aria-live="off">
       {previous!=null&&!reduced&&<div className="sr-story-body sr-scene-out" aria-hidden="true" inert>{renderScene(previous)}</div>}
       <div className="sr-story-body sr-scene-in" key={scene}>{renderScene(scene)}</div>
