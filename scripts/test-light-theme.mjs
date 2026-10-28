@@ -28,5 +28,5 @@ test('captions meet AA contrast in both themes without dimming locked content',(
 });
 
 test('shared keyboard focus ring meets 3:1 contrast on light and dark surfaces',()=>{
- for(const theme of Object.values(THEMES))for(const surface of ['bg','surface','panel','inputBg'])assert(contrast('#668bd5',theme[surface])>=3,`focus ring on ${surface}`);
+ for(const theme of Object.values(THEMES))for(const surface of ['bg','surface','panel','inputBg'])assert(contrast('#5277bd',theme[surface])>=3,`focus ring on ${surface}`);
 });
