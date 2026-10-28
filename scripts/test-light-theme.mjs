@@ -26,3 +26,7 @@ test('SEC-01 light keywords and labels meet 4.5:1 on its panels',()=>{
 test('captions meet AA contrast in both themes without dimming locked content',()=>{
  for(const theme of Object.values(THEMES))for(const surface of ['bg','surface','panel','inputBg'])for(const ink of ['text','textSec','textDim'])assert(contrast(theme[ink],theme[surface])>=4.5,`${ink} on ${surface}`);
 });
+
+test('shared keyboard focus ring meets 3:1 contrast on light and dark surfaces',()=>{
+ for(const theme of Object.values(THEMES))for(const surface of ['bg','surface','panel','inputBg'])assert(contrast('#668bd5',theme[surface])>=3,`focus ring on ${surface}`);
+});

@@ -17,7 +17,7 @@ body .deep-dive-card-actions button{font-size:14px;min-height:44px;color:var(--d
 body .deep-dive-card-footer{flex-wrap:wrap}
 body .flashcard-auth-card small{font-size:13px;line-height:1.6}
 .gd-answer-hint{font-size:14px;line-height:1.6;margin:10px 0 0;color:var(--guest-text)}
-body :is(button,a,input,select,textarea,[tabindex]):focus-visible{outline:3px solid #668bd5;outline-offset:3px}
+body :is(button,a,input,select,textarea,[tabindex]):focus-visible{outline:3px solid #668bd5!important;outline-offset:3px!important}
 @media(max-width:600px){body .fc-cipher-host>div:first-child>span{font-size:12px}body .fc-domain-tab-copy small{font-size:13px}}
 @media(prefers-reduced-motion:reduce){dialog.study-modal-frame{animation:none}}
 body .pbq-list-card{cursor:default;opacity:1!important}
