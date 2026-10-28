@@ -38,15 +38,15 @@ function Legend({slices,total}) {
 export function ReadinessBreakdown({profile,chapters}) {
   const {attempted,mastered,unmastered,byChapter,status}=profile;
   const masterySlices=[{label:'Mastered',count:mastered,color:'#43c8bb'},{label:'Still growing',count:unmastered,color:'#6b9dff'}];
-  const chapterSlices=chapters.map((ch,i)=>({label:`Ch. ${ch.id}`,count:byChapter[ch.id] || 0,color:COLORS[i]}));
-  if(byChapter.unknown)chapterSlices.push({label:'Chapter unavailable',count:byChapter.unknown,color:'#a0aaba'});
+  const chapterSlices=chapters.map((ch,i)=>({label:`Domain ${ch.id}`,count:byChapter[ch.id] || 0,color:COLORS[i]}));
+  if(byChapter.unknown)chapterSlices.push({label:'Domain unavailable',count:byChapter.unknown,color:'#a0aaba'});
   return <section id="exam-readiness-breakdown" className="er-breakdown" aria-label="Exam readiness breakdown">
     <header><div><span className="er-eyebrow">READINESS BREAKDOWN</span><h2>{profile.level}</h2></div><span className="er-milestone">80% · Exam ready</span></header>
     {status==='loading'?<CipherLoader compact label="Loading your progress…"/>:status==='error'?<p role="status">Your readiness couldn’t load. <button type="button" onClick={profile.retry}>Try again</button></p>:<>
       <p className="er-scope"><span><strong>{attempted}</strong> concepts attempted</span><span>MCQ + Exam</span><span>Unattempted excluded</span></p>
       <div className="er-layout">
       <div className="er-chapters">
-        <div className="er-card-heading"><h3>Chapter accuracy</h3><span>01—05</span></div>
+        <div className="er-card-heading"><h3>Domain accuracy</h3><span>01—05</span></div>
         <div className="er-benchmark-label"><span>85% target accuracy</span></div>
         <div className="er-bars"><div className="er-target" aria-hidden="true"/>
           {chapters.map((ch,i)=>{const stats=profile.chapters[ch.id];const value=stats?.total?stats.correct/stats.total*100:null;return <div className="er-row" key={ch.id}>
@@ -57,7 +57,7 @@ export function ReadinessBreakdown({profile,chapters}) {
       </div>
       <div className="er-chart-grid">
         <article className="er-mastery"><div className="er-card-heading"><h3>Concept mastery</h3><span>80+ points</span></div><div className="er-chart-body"><Donut slices={masterySlices} total={attempted} label="Attempted concept mastery" centerLabel="mastered" center={attempted?`${percentage(mastered,attempted)}%`:'—'}/><Legend slices={masterySlices} total={attempted}/></div></article>
-        <article className="er-growth"><div className="er-card-heading"><h3>Where to grow</h3><span>By chapter</span></div><div className="er-chart-body"><Donut slices={chapterSlices} total={unmastered} label="Unmastered concepts by chapter" center={unmastered || (attempted?'0':'—')}/>{unmastered?<Legend slices={chapterSlices.filter(s=>s.count)} total={unmastered}/>:<p className="er-empty">{attempted?'All attempted concepts mastered.':'Complete a set to begin.'}</p>}</div></article>
+        <article className="er-growth"><div className="er-card-heading"><h3>Where to grow</h3><span>By domain</span></div><div className="er-chart-body"><Donut slices={chapterSlices} total={unmastered} label="Unmastered concepts by domain" center={unmastered || (attempted?'0':'—')}/>{unmastered?<Legend slices={chapterSlices.filter(s=>s.count)} total={unmastered}/>:<p className="er-empty">{attempted?'All attempted concepts mastered.':'Complete a set to begin.'}</p>}</div></article>
       </div>
       </div>
       {profile.unclassified>0&&<small className="er-history-note">Older answers without an activity label are excluded.</small>}

@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, BookOpenCheck, Check, Layers3, RotateCcw, Sparkles, Target, X } from 'lucide-react';
 import { MascotAnimation } from '../lib/MascotAnimation.jsx';
 import './SmartReviewStory.css';
 
 const scenes = [
-  {label:'Spot the gap',title:'Track more than a score.',copy:'The missed question enters your review queue, alongside the concept it tests.',animation:'thinking'},
+  {label:'Spot the gap',title:'A miss becomes a plan.',copy:'Study it. Practise it. Revisit it.',animation:'thinking'},
   {label:'Study the concept',title:'Open the lesson or matching cards.',copy:'Explore the idea in a Deep Dive. Recall it with matching flashcards.',animation:'flashcards'},
   {label:'Build your next set',title:'Three kinds of question. One set.',copy:'Fresh questions target weak concepts, alongside new topics and retests when due.',animation:'scan'},
   {label:'Come back stronger',title:'Clear it from your missed queue.',copy:'The original missed question becomes eligible for a retest after 30 other MCQ answers.',animation:'cheer'},
@@ -40,23 +40,14 @@ function SetArtwork() {
 }
 
 export function SmartReviewStory() {
-  const host=useRef(null);
   const [{scene,previous},setFrame]=useState({scene:0,previous:null});
-  const [engaged,setEngaged]=useState(false),[inView,setInView]=useState(false),[visible,setVisible]=useState(true),[reduced,setReduced]=useState(()=>typeof matchMedia!=='undefined'&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [reduced,setReduced]=useState(()=>typeof matchMedia!=='undefined'&&matchMedia('(prefers-reduced-motion: reduce)').matches);
   useEffect(()=>{
     const motion=matchMedia('(prefers-reduced-motion: reduce)');
     const update=()=>setReduced(motion.matches);
-    update();motion.addEventListener('change',update);
-    const visibility=()=>setVisible(!document.hidden);visibility();document.addEventListener('visibilitychange',visibility);
-    const observer=new IntersectionObserver(([entry])=>setInView(entry.isIntersecting),{threshold:.25});
-    if(host.current)observer.observe(host.current);
-    return()=>{motion.removeEventListener('change',update);document.removeEventListener('visibilitychange',visibility);observer.disconnect();};
+    motion.addEventListener('change',update);
+    return()=>motion.removeEventListener('change',update);
   },[]);
-  const running=inView&&visible&&!reduced&&!engaged;
-  // The visible progress animation is the clock, so pauses cannot desynchronise it.
-  const advance=event=>{
-    if(event.animationName==='sr-step-clock'&&running)setFrame(frame=>({scene:(frame.scene+1)%scenes.length,previous:frame.scene}));
-  };
   useEffect(()=>{
     if(previous==null)return;
     const timer=setTimeout(()=>setFrame(frame=>({...frame,previous:null})),280);
@@ -66,10 +57,10 @@ export function SmartReviewStory() {
   const renderScene=index=>{
     const active=scenes[index];
     return <><div className="sr-stage" aria-label={`Illustrated example: ${active.label}`}><div className="sr-stage-grid" aria-hidden="true"/>{index===1?<LearningArtwork/>:index===2?<SetArtwork/>:<QuestionArtwork retest={index===3}/>}</div>
-      <div className="sr-narration"><div className="sr-cipher"><MascotAnimation animation={active.animation} size={128} label={`Cipher: ${active.label}`}/><span className="sr-cipher-spark" aria-hidden="true"><Sparkles size={20}/></span></div><span className="sr-scene-number">0{index+1} / 04</span><h3>{active.title}</h3><p>{active.copy}</p><span className="sr-example-note">Illustrated example · not your results</span></div></>;
+      <div className="sr-narration"><div className="sr-cipher"><MascotAnimation animation={active.animation} size={128} label={`Cipher: ${active.label}`}/><span className="sr-cipher-spark" aria-hidden="true"><Sparkles size={20}/></span></div><span className="sr-scene-number">0{index+1} / 04</span><h3>{active.title}</h3><p>{active.copy}</p><span className="sr-example-note">Example · choose a step below</span></div></>;
   };
-  return <section ref={host} className={`sr-story ${running?'is-playing':'is-paused'} ${reduced?'is-reduced':''}`} aria-label="See how Smart Review works" aria-roledescription="carousel" onPointerDown={()=>setEngaged(false)} onFocusCapture={event=>setEngaged(event.target.matches(':focus-visible'))} onBlurCapture={event=>{if(!event.currentTarget.contains(event.relatedTarget))setEngaged(false);}}>
-    <header className="sr-story-toolbar"><span><span className="sr-live-dot"/> SMART REVIEW, IN MOTION</span><span className="sr-free-note"><Check size={15}/> Included with a free account</span></header>
+  return <section className={`sr-story is-manual ${reduced?'is-reduced':''}`} aria-label="See how Smart Review works">
+    <header className="sr-story-toolbar"><span><span className="sr-live-dot"/> SMART REVIEW, STEP BY STEP</span><span className="sr-free-note"><Check size={15}/> Included with a free account</span></header>
     <div className="sr-first-step" aria-labelledby="sr-first-step-title">
       <h3 id="sr-first-step-title"><span>01</span> Start with a miss.</h3>
       <div className="sr-first-examples">
@@ -78,10 +69,10 @@ export function SmartReviewStory() {
       </div>
       <p className="sr-diagnostic-link">Your diagnostic misses become your first Smart Review set.</p>
     </div>
-    <div className="sr-scene-window" aria-live="off">
+    <div className="sr-scene-window" aria-live="polite">
       {previous!=null&&!reduced&&<div className="sr-story-body sr-scene-out" aria-hidden="true" inert>{renderScene(previous)}</div>}
       <div className="sr-story-body sr-scene-in" key={scene}>{renderScene(scene)}</div>
     </div>
-    <div className="sr-story-steps" role="group" aria-label="Explore the Smart Review steps">{scenes.map((item,index)=><button key={item.label} className={scene===index?'is-active':''} aria-pressed={scene===index} onClick={()=>choose(index)}><span>0{index+1}</span><strong>{item.label}</strong>{scene===index&&<i key={scene} aria-hidden="true"><b onAnimationEnd={advance}/></i>}</button>)}</div>
+    <div className="sr-story-steps" role="group" aria-label="Explore the Smart Review steps">{scenes.map((item,index)=><button key={item.label} className={scene===index?'is-active':''} aria-pressed={scene===index} onClick={()=>choose(index)}><span>0{index+1}</span><strong>{item.label}</strong></button>)}</div>
   </section>;
 }

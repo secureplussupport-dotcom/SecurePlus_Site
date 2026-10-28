@@ -184,3 +184,7 @@ html[data-theme="light"] .fc-personal-topic:hover{border-color:#17634f;backgroun
 .fc-personal-topic:focus-visible{outline:3px solid var(--fc-accent);outline-offset:3px}
 .flashcard-progress-key,.flashcard-saved-note{font-size:15px;line-height:1.6;color:var(--deep-text);margin:12px 0}
 .flashcard-saved-note{padding:10px 14px;border:1px solid var(--deep-border);border-radius:12px;background:var(--deep-surface)}
+/* A deck's title and terms do the work; progress appears only when earned. */
+.fc-deck-body{gap:14px;padding:20px 22px}.fc-deck-cover{height:112px}.fc-deck-bottom{padding-top:0;min-height:24px}.fc-deck-bottom>.fc-deck-open{margin-left:auto}
+.fc-library .fc-domain-tab-copy strong{font-size:13px;line-height:1.4}
+@media(max-width:600px){.fc-domain-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.fc-library .fc-domain-tab-copy strong{font-size:12px}.fc-deck-cover{height:100px}}

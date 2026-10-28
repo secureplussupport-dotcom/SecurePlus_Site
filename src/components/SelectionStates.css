@@ -1,0 +1,22 @@
+/* One selected treatment for study filters and the step-by-step demo. */
+:root{--study-selected-bg:#174f42;--study-selected-text:#fff;--study-selected-border:#174f42}
+html[data-theme="dark"]{--study-selected-bg:#225c4d;--study-selected-text:#fff;--study-selected-border:#75d7b8}
+:is(.fc-domain-tabs,.deep-dives-domain-map,.sr-story-steps) button[aria-pressed="true"]{background:var(--study-selected-bg)!important;color:var(--study-selected-text)!important;border-color:var(--study-selected-border)!important;box-shadow:inset 0 0 0 1px var(--study-selected-border)}
+:is(.fc-domain-tabs,.deep-dives-domain-map,.sr-story-steps) button[aria-pressed="true"] :is(strong,small,span,svg){color:var(--study-selected-text)!important;opacity:1}
+:is(.fc-domain-tabs,.deep-dives-domain-map,.sr-story-steps) button[aria-pressed="true"]::after{background:var(--study-selected-border)!important}
+:is(.fc-domain-tabs,.deep-dives-domain-map,.sr-story-steps) button:focus-visible{outline:3px solid var(--study-selected-border);outline-offset:3px}
+
+.sr-story-steps button[aria-pressed="true"]>span{background:rgba(255,255,255,.15)!important}
+
+/* Primary actions share a single brand colour; domain and status accents stay distinct. */
+body :is(.btn.btn-primary,.up-buy,.as-button-light,.gd-plan-cta){background:#174f42!important;color:#fff!important;border-color:#174f42!important;min-height:44px}
+body :is(.btn.btn-primary,.up-buy,.as-button-light,.gd-plan-cta):hover:not(:disabled){background:#103e33!important;color:#fff!important}
+body :is(.btn.btn-primary,.up-buy,.as-button-light,.gd-plan-cta):focus-visible{outline:3px solid #55ac91;outline-offset:3px}
+body :is(.icon-btn,.gd-expand,.auth-dialog-close,.star-btn,.deep-dives-search button,.fc-search button){min-width:44px!important;min-height:44px!important}
+body .star-btn{font-size:12px}
+body .star-btn svg{width:20px;height:20px}
+body .fc-search{padding-right:4px}
+body .fc-search input{min-width:0}
+body .fc-search input::-webkit-search-cancel-button{display:none}
+body .fc-search button{display:grid;place-items:center;flex-shrink:0;border:0;border-radius:8px;background:transparent;color:var(--fc-text);cursor:pointer}
+.fc-filter-count{font-size:15px;font-weight:650;color:var(--fc-text);margin:16px 0}

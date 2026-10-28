@@ -1,0 +1,17 @@
+.view-breadcrumb{padding:14px 24px 0;color:var(--location-text);font-size:14px;line-height:1.5}
+.view-breadcrumb ol{display:flex;align-items:center;gap:9px;flex-wrap:wrap;list-style:none;margin:0;padding:0}
+.view-breadcrumb li{display:inline-flex;align-items:center;gap:9px;min-width:0}
+.view-breadcrumb button{font:inherit;color:var(--location-muted);padding:5px 0;background:none;border:0;cursor:pointer}
+.view-breadcrumb button:hover{color:var(--location-text);text-decoration:underline;text-underline-offset:4px}
+.view-breadcrumb button:focus-visible{outline:2px solid var(--location-accent);outline-offset:4px;border-radius:3px}
+.view-breadcrumb [aria-current]{font-weight:750}
+.view-context-title{font-size:24px;line-height:1.25;margin:0 0 18px;font-weight:800;color:inherit}
+.guest-top-nav-more-trigger.active{box-shadow:inset 0 -3px 0 currentColor}
+.mobile-more-trigger.act{box-shadow:inset 0 -3px 0 currentColor}
+.mcq-hub-heading h1{font:inherit;font-size:clamp(27px,3vw,36px);font-weight:850;line-height:1.15;margin:0}
+.practice-session-name.view-context-title{font-size:16px;margin:0}
+.pbq-session-title h1{font-size:20px;line-height:1.35;margin:0}
+.fc-domain-tabs button{min-width:0}.fc-domain-tabs button strong,.fc-domain-tabs button>span{overflow-wrap:anywhere}
+@media(max-width:600px){.view-breadcrumb{padding:12px 16px 0;font-size:13px}.view-context-title{font-size:22px}}
+.deep-dives-domain-map button span{font-size:13px;line-height:1.4}
+@media(max-width:767px){.sidebar .nav-label{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2}}

@@ -19,3 +19,8 @@ export function flashcardProgress(cards,rememberedIds,savedKeys){
  const remembered=new Set(rememberedIds),saved=new Set(savedKeys);
  return {total:terms.length,remembered:terms.filter(card=>remembered.has(card.id)).length,saved:terms.filter(card=>saved.has(`flashcard:${card.id}`)).length};
 }
+
+export function confirmLessonCompletion(progress,confirm){
+ const unseen=Math.max(0,progress.total-progress.viewed);
+ return unseen===0||confirm(`${unseen} sections have not been viewed. Mark this lesson complete anyway?`);
+}

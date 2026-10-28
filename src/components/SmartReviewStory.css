@@ -57,9 +57,9 @@
 .sr-story-steps>button>span{color:color-mix(in srgb,var(--step-tint) 70%,var(--guest-text));background:color-mix(in srgb,var(--step-tint) 10%,transparent);width:32px;height:32px;flex:none;display:grid;place-items:center;border-radius:9px}
 .sr-story-steps>button.is-active{background:color-mix(in srgb,var(--step-tint) 13%,transparent)}
 .sr-story-steps>button.is-active>span{color:color-mix(in srgb,var(--step-tint) 75%,var(--guest-text))}
-.sr-story-steps b{background:var(--step-tint);animation:sr-step-clock 5500ms linear both;transform:scaleX(0)}
+
 .sr-flashcard-turn{animation-duration:5.5s}
-@keyframes sr-step-clock{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
 @keyframes sr-frame-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes sr-frame-out{to{opacity:0;transform:translateY(-12px)}}
 @media(hover:hover) and (pointer:fine){.sr-story-steps>button:hover{background:color-mix(in srgb,var(--step-tint) 14%,transparent)}}
@@ -82,3 +82,8 @@
 @media(max-width:760px){.sr-story-toolbar{align-items:flex-start;flex-direction:column;gap:10px}.sr-story-toolbar>span{max-width:none}.sr-story-toolbar .sr-free-note{font-size:14px}.sr-first-step{padding:20px}.sr-first-examples{grid-template-columns:1fr;gap:12px}}
 html[data-theme="light"] .sr-story .sr-story-steps>button>span{color:var(--guest-text)}
 html[data-theme="light"] .sr-story .sr-set-card>:is(span,small){color:color-mix(in srgb,var(--card-color) 30%,var(--guest-text))}
+.sr-story.is-manual .sr-story-steps b{animation:none;transform:none}
+.sr-story.is-manual .sr-story-body{min-height:410px}.sr-story.is-manual .sr-stage{height:410px;padding:28px}
+.sr-story.is-manual .sr-narration{padding:24px}.sr-story.is-manual .sr-narration h3{font-size:28px}.sr-story.is-manual .sr-narration p{line-height:1.55}
+.sr-story.is-manual .sr-cipher{height:88px;transform:scale(.82);transform-origin:left bottom;margin-bottom:0}
+@media(max-width:760px){.sr-story.is-manual .sr-stage{height:auto;min-height:350px}.sr-story.is-manual .sr-story-body{min-height:0}}

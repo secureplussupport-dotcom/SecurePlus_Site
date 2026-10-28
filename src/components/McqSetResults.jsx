@@ -26,7 +26,7 @@ export function McqSetResults({ correct, total, summary, t, onStart, onReview, o
         </svg>
         <div><strong>{percent}<span>%</span></strong><small>{correct} / {total} correct</small></div>
       </div>
-      <h2 ref={heading} tabIndex={-1}>{exam ? 'Your exam, mapped.' : percent >= 80 ? 'Strong work.' : percent >= 50 ? 'Good progress.' : 'A useful first pass.'}</h2>
+      <h1 ref={heading} tabIndex={-1}>{exam ? 'Your exam, mapped.' : percent >= 80 ? 'Strong work.' : percent >= 50 ? 'Good progress.' : 'A useful first pass.'}</h1>
       <p>{exam ? 'One timed run. A clearer picture of what to revisit. This is an accuracy snapshot, not a pass or fail.' : percent >= 80 ? 'You are showing solid recall across this set. Keep the momentum by spacing the next review.' : percent >= 50 ? 'You have a good base. Review your misses, then try a focused set while the ideas are fresh.' : 'Mistakes are useful data. Review the missed concepts now and they will become easier to recognise next time.'}</p>
       {exam&&<div className={`mcq-exam-time-result ${exam.elapsed>exam.permitted?'is-overtime':''}`}><span>Time taken</span><strong>{formatExamTime(exam.elapsed)}</strong><span>/ {formatExamTime(exam.permitted)} permitted</span>{exam.elapsed>exam.permitted&&<b>Overtime</b>}</div>}
       {pacing.measured>0&&<div className="mcq-result-pace"><Clock3 size={15}/><span>Average pace</span><strong>{formatQuestionPace(pacing.averageMs)}</strong><span>per question</span>{pacing.measured<questions.length&&<small>({pacing.measured} of {questions.length} recorded)</small>}</div>}

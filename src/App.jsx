@@ -1,4 +1,7 @@
-import {lessonSectionIds,viewedSections,answeredLabQuestions,flashcardProgress} from "./lib/surfaceProgress.js";
+import "./components/SelectionStates.css";
+import {ViewBreadcrumb} from "./components/ViewBreadcrumb.jsx";
+import {areaName,canonicalArea,domainName} from "./lib/navigationLabels.js";
+import {lessonSectionIds,viewedSections,answeredLabQuestions,flashcardProgress,confirmLessonCompletion} from "./lib/surfaceProgress.js";
 import {usePlaceState,useDetailState,useListPlace,writePlace} from "./lib/learnerPlace.js";
 import {AccountSupport} from "./components/AccountSupport.jsx";
 import {THEMES} from "./lib/themes.js";
@@ -433,7 +436,7 @@ const getFlashcardStarKeys = starredKeys => (starredKeys||[]).filter(key=>String
 const getReviewSetStorageKey = user => `${FLASHCARD_REVIEW_LAST_OPENED_PREFIX}:${starOwner(user)}`;
 const summarizeFlashcardReviewSet = cards => {
   const realCards=(cards||[]).filter(card=>card?.cardType!=="divider");
-  const chapterLabels=[...new Set(realCards.map(card=>card.chapterTitle||`Chapter ${card.chapterId||""}`).filter(Boolean))];
+  const chapterLabels=[...new Set(realCards.map(card=>card.chapterTitle||`Domain ${card.chapterId||""}`).filter(Boolean))];
   const topicLabels=[...new Set(realCards.map(card=>card.topic).filter(Boolean))];
   return {
     count:realCards.length,
@@ -691,7 +694,7 @@ const buildCipherWeakFlashcardSet = context => {
     objectiveCodes:[...new Set(selected.flatMap(card=>card.objectiveCodes||[]))],
     color:"#0ea5e9",
     chapterId:Number(chapterId),
-    chapterTitle:chapter?.title||`Chapter ${chapterId}`,
+    chapterTitle:chapter?.title||`Domain ${chapterId}`,
     topic:`Cipher weak-area deck · ${topicText}`,
     cards:selected,
     generatedBy:"cipher_assistant",
@@ -1364,7 +1367,7 @@ function expectedExamSeconds(item) {
 function examTimeGuidance(item, seconds=0, correct=false) {
   const target=expectedExamSeconds(item);
   const topic=item?.kind==="mcq" ? item.q.topic : item?.q?.type || "this PBQ type";
-  const chapter=item?.q?.ch ? `Chapter ${item.q.ch}` : "this area";
+  const chapter=item?.q?.ch ? `Domain ${item.q.ch}` : "this area";
   if(!correct) return `Review ${topic} in ${chapter}; accuracy matters before speed. Aim for about ${formatSecondsShort(target)} once the concept feels stable.`;
   if(seconds>target*1.45) return `Correct, but slow. Drill ${topic} so you can recognise the pattern closer to ${formatSecondsShort(target)}.`;
   if(seconds<Math.max(12,target*.35)) return `Very fast. Good if confident, but reread key words on ${topic} to avoid careless misses.`;
@@ -1897,6 +1900,7 @@ const CHAPTERS = [
   { id:"5", code:"5.0", title:"Security Program Management", emoji:"📋", weight:20,
     topics:["Governance","Risk Management","Compliance & Privacy","Security Policies","Business Continuity","Third-Party Risk"] },
 ];
+CHAPTERS.forEach(chapter=>{chapter.title=domainName(chapter.id);});
 
 const ACHIEVEMENT_STAR_TOTAL = 30;
 const ACHIEVEMENTS = [
@@ -20699,7 +20703,7 @@ function QuestionStemText({text,t,style,compact=false}) {
 function ChBadge({chId,t}) {
   const ch=CHAPTERS.find(c=>c.id===chId);
   if(!ch) return null;
-  return <span className="chip meta-chip" style={{fontSize:11}}><ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}</span>;
+  return <span className="chip meta-chip" style={{fontSize:11}}><ChapterIcon id={ch.id} size={18}/> Domain {ch.id}</span>;
 }
 function NavGlyph({type,active}) {
   if(type==="flashcards")return(
@@ -21710,7 +21714,7 @@ function AthenaCardLab({open,onClose,profile,setProfile,flipped,setFlipped}) {
               <span className={profile.name?.trim()?"done":""}><Check size={13}/> Name engraved</span>
               <span className={profile.takingExam?"done":""}><Check size={13}/> Pathway trim</span>
               <span className={profile.dailyGoal?"done":""}><Check size={13}/> Study goal encoded</span>
-              <span className={chapterComplete?"done":""}><Check size={13}/> Chapter map added</span>
+              <span className={chapterComplete?"done":""}><Check size={13}/> Domain map added</span>
             </div>
             <button className="btn btn-primary athena-main-action" type="button" onClick={onClose}>Return to my questions <ChevronRight size={16}/></button>
           </aside>
@@ -22696,7 +22700,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
           </span>
           <div>
             <div className="label" style={{color:t.red,marginBottom:7}}>Daily Challenge</div>
-            <h2 style={{fontSize:34,fontWeight:950,letterSpacing:"-.03em",marginBottom:8,color:t.text}}>{challenge.title}</h2>
+            <h1 style={{fontSize:34,fontWeight:950,letterSpacing:"-.03em",marginBottom:8,color:t.text}}>{challenge.title}</h1>
             <p style={{maxWidth:470,margin:"0 auto",color:t.textSec,fontSize:16,lineHeight:1.65}}>
               Five questions. One quick habit. Come back tomorrow for a fresh challenge.
             </p>
@@ -22739,7 +22743,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
       <div className="completion-icon" style={{"--completion-color":correctCount===totalQuestions?t.amber:correctCount>=Math.ceil(totalQuestions*.6)?t.green:t.accent}}>
         {correctCount===totalQuestions?<Trophy size={36} strokeWidth={2.1}/>:correctCount>=Math.ceil(totalQuestions*.6)?<CheckCircle2 size={36} strokeWidth={2.1}/>:<BookOpenCheck size={36} strokeWidth={2.1}/>}
       </div>
-      <h2 style={{fontSize:24,fontWeight:700,marginBottom:8,color:t.text}}>Challenge Complete!</h2>
+      <h1 style={{fontSize:24,fontWeight:700,marginBottom:8,color:t.text}}>Daily Challenge complete</h1>
       <div style={{fontSize:40,fontWeight:700,color:correctCount===totalQuestions?t.green:correctCount>=Math.ceil(totalQuestions*.6)?t.amber:t.red,marginBottom:8}}>
         {correctCount}/{totalQuestions}
       </div>
@@ -22795,6 +22799,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   // MCQ quiz flow for daily challenge
   if(challenge.type==="mcq5" && current) return (
     <div style={{padding:"24px",maxWidth:680,margin:"0 auto"}} className="fu" key={qIndex}>
+      <h1 className="view-context-title">Daily Challenge</h1>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:20}}>
         <div style={{display:"flex",gap:6}}>
           {questions.map((_,i)=>(
@@ -22841,7 +22846,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
             {current.opts.map((option,index)=>index!==current.correct&&<div key={index} style={{marginTop:10,padding:"10px 12px",border:`1px solid ${t.border}`,borderRadius:6,fontSize:13,color:t.textSec}}><strong>Option {String.fromCharCode(65+index)}: </strong><GlossaryText text={getWrongOptionFeedback(current,index)} t={t}/></div>)}
           </div>
           <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={nextQ}>
-            {qIndex<questions.length-1?"Next Question →":"See Results →"}
+            {qIndex<questions.length-1?"Continue →":"View results →"}
           </button>
           <AnswerBurst result={answerBurst} t={t}/>
         </>
@@ -22866,7 +22871,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
   return (
     <div style={{padding:"32px 24px",maxWidth:520,margin:"0 auto",textAlign:"center"}} className="fu">
       <div className="completion-icon" style={{"--completion-color":t.accent}}><Target size={36} strokeWidth={2.1}/></div>
-      <h2 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:8}}>Daily Challenge unavailable</h2>
+      <h1 style={{fontSize:22,fontWeight:700,color:t.text,marginBottom:8}}>Daily Challenge unavailable</h1>
       <p style={{color:t.textSec,marginBottom:18,fontSize:14}}>
         Today's challenge could not be loaded, so use the MCQ bank while we refresh it.
       </p>
@@ -24013,7 +24018,7 @@ function GuestLockedPage({t,onSignup,onLogin,onPractice,onDaily,title="Save your
     <div style={{padding:"24px",maxWidth:760,margin:"0 auto"}}>
       <div className="card" style={{padding:"28px",borderColor:`${t.accent}45`,background:`linear-gradient(135deg, ${t.accent}12, ${t.surface} 62%, ${t.green}0d)`}}>
         <div className="label" style={{color:t.accent,marginBottom:8}}>Account feature</div>
-        <h2 style={{fontSize:26,color:t.text,marginBottom:8}}>{title}</h2>
+        <h1 style={{fontSize:26,color:t.text,marginBottom:8}}>{title}</h1>
         <p style={{fontSize:14,color:t.textSec,lineHeight:1.75,marginBottom:18}}>
           Guests can try ten diagnostic questions and every flashcard deck. Create a free account for Daily Challenge, full lessons, saved progress and 50 generated MCQs every rolling 12 hours.
         </p>
@@ -24109,7 +24114,7 @@ function AchievementsPage({user,t,onBack}) {
       <div className="card achievements-hero" style={{display:"block"}}>
         <div className="page-title-row" style={{marginBottom:10}}>
           <NavGlyph type="achievements" active/>
-          <h2>Stars need a signed-in cloud account</h2>
+          <h1>Stars need a signed-in cloud account</h1>
         </div>
         <p>
           SecurePlus awards stars from the server after checking completed practice sessions. Sign in with a Supabase-backed account so achievements cannot be faked from the browser.
@@ -24125,7 +24130,7 @@ function AchievementsPage({user,t,onBack}) {
         <div className="achievement-star-display"><div><strong>…</strong><small>Loading</small></div></div>
         <div>
           <div className="label" style={{color:t.amber}}>Stars and achievements</div>
-          <h2>Checking your verified milestones</h2>
+          <h1>Checking your verified milestones</h1>
           <p>Loading the achievement definitions, unlock history, and total star balance.</p>
           <div className="achievement-progress"><span style={{width:"38%"}}/></div>
         </div>
@@ -24144,7 +24149,7 @@ function AchievementsPage({user,t,onBack}) {
         </div>
         <div>
           <div className="label" style={{color:t.amber}}>Verified milestone track</div>
-          <h2>Stars you earn from real progress</h2>
+          <h1>Stars you earn from real progress</h1>
           <p>
             Stars are awarded by SecurePlus after completed sessions are checked on the server. This keeps the system fair and makes future rewards harder to spoof.
           </p>
@@ -24306,8 +24311,8 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
 
   const allTopics=[...new Set(bank.map(q=>q.topic))].sort();
   const chapterOptions=[
-    {value:"all",label:"All chapters"},
-    ...CHAPTERS.map(ch=>({value:ch.id,label:`Ch.${ch.id}: ${ch.title}`})),
+    {value:"all",label:"All domains"},
+    ...CHAPTERS.map(ch=>({value:ch.id,label:`Domain ${ch.id}: ${ch.title}`})),
   ];
   const difficultyOptions=[
     {value:"all",label:"All Difficulties"},
@@ -24576,7 +24581,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
           </div>
           <div style={{fontWeight:900,fontSize:17,color:t.text,marginBottom:4}}>
             {guestWeakChapter
-              ? `Chapter ${guestWeakChapter.chapter.id}: ${guestWeakChapter.chapter.title}`
+              ? `Domain ${guestWeakChapter.chapter.id}: ${guestWeakChapter.chapter.title}`
               : "Keep this result in your Smart Review history"}
           </div>
           <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
@@ -24605,7 +24610,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
   if(!started) return(
     <div className="mcq-setup-screen mcq-hub-screen fu" style={{...examThemeVars(t),"--practice-accent":examMode?t.accent:reviewMode==="smart"?t.green:t.accent}}>
       {missedBatch!==null&&<div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Choose missed-question batch"><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Choose a batch before using your allowance.</p><label>Questions <select className="input" value={missedBatch} disabled={!missedBatchSizes.length} onChange={e=>setMissedBatch(Number(e.target.value))}>{!missedBatchSizes.length&&<option value={0}>No batch available</option>}{missedBatchSizes.map(size=><option key={size} value={size}>{size} questions</option>)}</select></label>{isPro&&!missedBatchSizes.length&&<p role="status">You have {missedQuestions.length} missed questions. A Pro batch starts at 10.</p>}<p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!missedBatchSizes.includes(missedBatch)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>{missedBatchSizes.length?`Practise ${missedBatch} missed questions`:"No batch available"}</button></div></div></div>}
-      <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h2>MCQ practice</h2></div></header>
+      <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h1>MCQ Practice</h1></div></header>
       <div className="card" role="status" style={{padding:"12px 16px",marginBottom:16,color:t.textSec}}>{isGuest?"Try 10 questions total, then create a free account to keep practising.":isPro?"Unlimited generation · Pro":"50 questions every rolling 12 hours"}<strong style={{marginLeft:10,color:t.text}}>{isPro?"∞":access?`${access.remaining} remaining`:"Loading allowance…"}</strong>{accessError&&<span> {accessError}</span>}{!isPro&&choices.remainder&&<button className="btn btn-outline" style={{marginLeft:12}} disabled={engineBusy} onClick={()=>startEngineQuiz({},choices.remainder,examMode?"exam":reviewMode)}>Practice remaining {choices.remainder}</button>}{isGuest&&access?.remaining===0&&<button className="btn btn-primary" onClick={requestSignup}>Create free account</button>}</div>
       <div hidden={isGuest} className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
         <button type="button" role="switch" aria-checked={examMode} className="mcq-exam-toggle" onClick={()=>{setExamMode(value=>!value);setEngineError("");setModeInfo(null);}}>
@@ -24700,7 +24705,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
           <div className="practice-filter-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Chapter</label>
-              <FilterSelect disabled={!isPro} value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>
+              <FilterSelect disabled={!isPro} value={chFilter} onChange={setChFilter} options={chapterOptions} label="Domain filter"/>
             </div>
             <div>
               <label className="label" style={{display:"block",marginBottom:6}}>Difficulty</label>
@@ -24730,7 +24735,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
       {engineError&&<p role="alert" style={{color:t.red,marginBottom:12}}>{engineError}</p>}
       <header className="practice-session-header">
         <div className="practice-session-top">
-          <div className="practice-session-name"><span>{finishedReviewMode?<CheckCircle2 size={16}/>:sessionContext?.kind==="weak-area"?<Brain size={16}/>:<BookOpenCheck size={16}/>}</span>{finishedReviewMode?"Answered Set Review":sessionContext?.label||"MCQ Practice"}</div>
+          <h1 className="practice-session-name view-context-title"><span>{finishedReviewMode?<CheckCircle2 size={16}/>:sessionContext?.kind==="weak-area"?<Brain size={16}/>:<BookOpenCheck size={16}/>}</span>{finishedReviewMode?"MCQ Practice · Answer Review":"MCQ Practice"}</h1>
           <div className="practice-session-count">Question {qi+1} of {questions.length} · {answeredCount} answered</div>
         </div>
         <div className="practice-session-progress" role="progressbar" aria-label="MCQ questions answered" aria-valuemin={0} aria-valuemax={questions.length} aria-valuenow={answeredCount}><span style={{width:`${(answeredCount/questions.length)*100}%`}}/></div>
@@ -24851,7 +24856,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
             <div className="practice-action-bar">
               <div className="practice-action-copy"><strong>{selected===current.correct?"Keep the momentum":"Use the feedback, then continue"}</strong>{qi<questions.length-1?"Your next question is ready.":allAnswered?"Your result summary is ready.":"Some questions still need answers."}</div>
               <button className="btn btn-primary" style={{minWidth:190}} onClick={qi<questions.length-1?nextQ:finishQuiz}>
-                {qi<questions.length-1?"Next Question →":allAnswered?"See Results →":"Review Unanswered →"}
+                {qi<questions.length-1?"Continue →":allAnswered?"View results →":"Review Unanswered →"}
               </button>
             </div>
           )}
@@ -24871,7 +24876,7 @@ function UpgradeModal({price=PRO_ACADEMY_PASS_PRICE,onUpgrade,onClose,t}) {
         <div className="page-title-row" style={{marginBottom:12}}>
           <span className="section-icon" style={{"--section-color":t.accent}}><LockKeyhole size={21} strokeWidth={2.3}/></span>
           <div>
-            <h2 style={{fontSize:24,color:t.text}}>PBQs are Pro content</h2>
+            <h1 style={{fontSize:24,color:t.text}}>PBQs are Pro content</h1>
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>Your current session cannot access this PBQ from the remote bank. Upgrade to unlock the full simulator.</p>
           </div>
         </div>
@@ -24974,7 +24979,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
           <p style={{fontSize:13,color:t.textSec}}>Performance-based questions saved for another pass.</p>
         </div>
       </div>
-      <button className="btn btn-ghost" style={{marginBottom:16}} onClick={()=>setStarredView(false)}>← Back to PBQ Bank</button>
+      <button className="btn btn-ghost" style={{marginBottom:16}} onClick={()=>setStarredView(false)}>← Back to PBQ Simulations</button>
       {starredPbqs.length?(
         <div style={{display:"grid",gap:10}}>
           {starredPbqs.map(q=>(
@@ -25011,7 +25016,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
           <div className="practice-page-icon"><Puzzle size={23} strokeWidth={2.3}/></div>
           <div>
             <div className="label" style={{color:t.green}}>Applied practice</div>
-            <h2>PBQ Simulator</h2>
+            <h1>PBQ Simulations</h1>
             <p>Practise the decisions, tools, and workflows behind exam scenarios.</p>
           </div>
         </div>
@@ -25039,7 +25044,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
           <div>
             <div className="label" style={{color:t.green}}>Your PBQ workspace</div>
             <h3>Choose a format, then practise one complete scenario.</h3>
-            <p>Use the filters below to focus on a simulation type or exam chapter. Attempted questions stay visible, with missed work prioritised for review.</p>
+            <p>Use the filters below to focus on a simulation type or exam domain. Attempted questions stay visible, with missed work prioritised for review.</p>
           </div>
           {isPro&&<button className="btn btn-primary" onClick={practiceRandomPbq}><Sparkles size={16}/> Start a recommended PBQ</button>}
         </div>
@@ -25129,10 +25134,10 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
 
       {/* Filters */}
       <div className="pbq-filter-panel">
-        <div className="pbq-chapter-filters" aria-label="Filter PBQs by chapter">
+        <div className="pbq-chapter-filters" aria-label="Filter PBQs by domain">
           {CHAPTERS.map(ch=>(
             <button key={ch.id} className="btn" style={{fontSize:13,padding:"7px 14px",background:chFilter===ch.id?`${t.accent}15`:"transparent",color:chFilter===ch.id?t.accent:t.textSec,border:`1px solid ${chFilter===ch.id?t.accent:t.border}`,transition:"all .15s"}} aria-pressed={chFilter===ch.id} onClick={()=>setChFilter(chFilter===ch.id?"all":ch.id)}>
-              <ChapterIcon id={ch.id} size={18}/> Ch.{ch.id}
+              <ChapterIcon id={ch.id} size={18}/> Domain {ch.id}
             </button>
           ))}
           {(chFilter!=="all"||typeFilter!=="all"||showMissedOnly)&&<button className="btn btn-ghost" style={{fontSize:13,padding:"7px 12px"}} onClick={()=>{setChFilter("all");setTypeFilter("all");setShowMissedOnly(false);}}><X size={14}/> Clear all</button>}
@@ -25170,7 +25175,7 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
                   <SimBadge type={q.type} t={t}/>
                   <DiffBadge d={q.difficulty} t={t}/>
                   <BeyondTextbookTag question={q} t={t}/>
-                  {ch&&<span style={{fontSize:13,fontWeight:800,color:t.textDim,display:"inline-flex",alignItems:"center",gap:5}}><ChapterIcon id={ch.id} size={16}/> Ch.{ch.id}</span>}
+                  {ch&&<span style={{fontSize:13,fontWeight:800,color:t.textDim,display:"inline-flex",alignItems:"center",gap:5}}><ChapterIcon id={ch.id} size={16}/> Domain {ch.id}</span>}
                 </div>
                 <div className="pbq-list-title"><GlossaryText text={q.title} t={t}/></div>
                 <div className="pbq-list-subtitle"><GlossaryText text={q.cat} t={t}/>{done?` · ${ok?"Completed correctly":"Needs another pass"}`:" · Not attempted"}</div>
@@ -25297,9 +25302,9 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
     <div className="pbq-question-screen fu active-practice-screen" style={{padding:"24px",maxWidth:860,margin:"0 auto"}}>
       {/* Header */}
       <header className="pbq-session-header">
-        <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>onDone(null)}>← Back to PBQ Bank</button>
+        <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>onDone(null)}>← Back to PBQ Simulations</button>
         <div className="pbq-session-title">
-          <strong><GlossaryText text={q.title} t={t}/></strong>
+          <h1><GlossaryText text={q.title} t={t}/></h1>
           <div className="pbq-session-meta">
             {showQuestionCodes&&<QuestionCodeChip id={q.id} t={t}/>}
             <SimBadge type={q.type} t={t}/>
@@ -25548,11 +25553,11 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
               Try Again
             </button>
             <button className="btn btn-primary" onClick={()=>onDone({qid:q.id,correct:isCorrect(),score:partResults.length?partCorrectCount/partResults.length:undefined,partCorrectCount,partCount:partResults.length,type:q.type,title:q.title,ch:q.ch,domain:q.cat,pbq:true})}>
-              Back to PBQ Bank
+              Back to PBQ Simulations
             </button>
             {nextQuestion&&(
               <button className="btn btn-primary" onClick={()=>onNext({qid:q.id,correct:isCorrect(),score:partResults.length?partCorrectCount/partResults.length:undefined,partCorrectCount,partCount:partResults.length,type:q.type,title:q.title,ch:q.ch,domain:q.cat,pbq:true})}>
-                Try a different PBQ →
+                Continue →
               </button>
             )}
           </div>
@@ -25698,7 +25703,7 @@ function CipherCoinVault({user,wallet,onUnlockPbq,onBuyExamPass,onNavigate,onRef
             <p>Your first three reveals follow p014 → p018 → p033. Later reveals are randomly selected from PBQs you do not own.</p>
             <div className="cipher-access-meter"><div className="cipher-access-label"><span>Your balance</span><strong>{isPro?"Included with Pro":pbqGap?`${pbqGap} more needed`:"Ready to reveal"}</strong></div><div className="cipher-access-track" role="progressbar" aria-label="Progress toward a mystery PBQ" aria-valuemin="0" aria-valuemax={CIPHER_COIN_COSTS.pbq} aria-valuenow={Math.min(balance,CIPHER_COIN_COSTS.pbq)}><span style={{width:`${pbqProgress}%`}}/></div></div>
             <div className="cipher-cost-line"><span className="cipher-cost"><CipherCoinIcon size={25}/>{CIPHER_COIN_COSTS.pbq} coins</span><button className="btn btn-primary" type="button" onClick={()=>openExchange("pbq")} disabled={busy||isPro||balance<CIPHER_COIN_COSTS.pbq||remainingPbqCount===0}>{isPro?"Included with Pro":remainingPbqCount===0?"All PBQs unlocked":pbqGap?`${pbqGap} more needed`:busy?"Revealing...":"Reveal a PBQ"}</button></div>
-            {lastUnlockedPbq&&<div className="cipher-reveal-result"><MascotAnimation animation="unlock" size={58} label="Cipher celebrates the PBQ reveal"/><span><small>New PBQ revealed</small><strong>{lastUnlockedPbq.title||lastUnlockedPbq.id}</strong><button type="button" onClick={()=>onNavigate("pbq")}>Open PBQ Bank →</button></span></div>}
+            {lastUnlockedPbq&&<div className="cipher-reveal-result"><MascotAnimation animation="unlock" size={58} label="Cipher celebrates the PBQ reveal"/><span><small>New PBQ revealed</small><strong>{lastUnlockedPbq.title||lastUnlockedPbq.id}</strong><button type="button" onClick={()=>onNavigate("pbq")}>Open PBQ Simulations →</button></span></div>}
             {isPro&&<div className="cipher-pro-zero"><Sparkles size={13}/> Pro has every PBQ with zero coin requirements.</div>}
           </article>
           <article className="cipher-spend-card exam">
@@ -25909,7 +25914,7 @@ function TrialExpiredPrompt({t,onUpgrade,onClose}) {
 const MASCOT_PAGE_OPTIONS = [
   {id:"dashboard",label:"Dashboard",description:"Welcome and progress overview"},
   {id:"mcq",label:"MCQ Practice",description:"Question setup and practice flow"},
-  {id:"pbq",label:"PBQ Simulator",description:"PBQ library and selection"},
+  {id:"pbq",label:areaName("pbq"),description:"PBQ library and selection"},
   {id:"exam",label:"Exam Mode",description:"Exam setup and test area"},
   {id:"daily",label:"Daily Challenge",description:"Daily practice and streaks"},
   {id:"coins",label:"Cipher Coins",description:"Coin wallet, earning, and unlocks"},
@@ -26037,7 +26042,7 @@ function CipherAssistantDock({user=null,attempts,currentView,onStartReview,onOpe
   const messagesEndRef=useRef(null);
   const typingTimersRef=useRef([]);
   const context=useMemo(()=>buildCipherAssistantContext(attempts,currentView),[attempts,currentView]);
-  const weakChapter=context.weakChapterId?`Chapter ${context.weakChapterId}: ${context.weakChapterTitle}`:null;
+  const weakChapter=context.weakChapterId?`Domain ${context.weakChapterId}: ${context.weakChapterTitle}`:null;
   const isPro=user?.tier==="pro";
 
   const clearTypingTimers=useCallback(()=>{
@@ -26571,7 +26576,7 @@ function QuestionReportModal({report,user,t,onClose}) {
           <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:8}}>
             <span className="chip meta-chip">{report.questionKind.toUpperCase()}</span>
             <span className="chip meta-chip">{report.questionId}</span>
-            {report.chapter&&<span className="chip meta-chip">Ch.{report.chapter}</span>}
+            {report.chapter&&<span className="chip meta-chip">Domain {report.chapter}</span>}
           </div>
           <div style={{fontSize:13,color:t.text,lineHeight:1.55,fontWeight:700}}>
             {String(report.title||"Question").slice(0,220)}{String(report.title||"").length>220?"...":""}
@@ -26661,7 +26666,7 @@ function AdminFeedbackPage({user,t,onEditQuestion}) {
       <div className="page-title-row" style={{marginBottom:16}}>
         <NavGlyph type="objectives" active/>
         <div>
-          <h2 style={{fontSize:24,color:t.text}}>Internal Feedback</h2>
+          <h1 style={{fontSize:24,color:t.text}}>Internal Feedback</h1>
           <p style={{fontSize:13,color:t.textSec}}>Root dashboard for question reports and user feedback.</p>
         </div>
         <button className="btn btn-outline" style={{marginLeft:"auto",fontSize:12}} onClick={loadReports}>Refresh</button>
@@ -27669,7 +27674,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
       <div className="page-title-row" style={{marginBottom:16}}>
         <NavGlyph type="objectives" active/>
         <div>
-          <h2 style={{fontSize:24,color:t.text}}>Question Manager</h2>
+          <h1 style={{fontSize:24,color:t.text}}>Question Manager</h1>
           <p style={{fontSize:13,color:t.textSec}}>Root-only visual editor for adding, changing, reordering, previewing, or deleting MCQ/PBQ questions.</p>
         </div>
       </div>
@@ -27712,7 +27717,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
                   <div style={{display:"flex",alignItems:"center",gap:8,minWidth:0}}>
                     <ChapterIcon id={item.chapter.id} size={24}/>
                     <div style={{fontSize:13,fontWeight:900,color:t.text,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>
-                      Ch.{item.chapter.id}: {item.chapter.title}
+                      Domain {item.chapter.id}: {item.chapter.title}
                     </div>
                   </div>
                   <span className="chip" style={{fontSize:11,background:`${chapterColor(item.chapter.id)}12`,borderColor:`${chapterColor(item.chapter.id)}36`,color:chapterColor(item.chapter.id)}}>{item.count}</span>
@@ -27919,11 +27924,11 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
 
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(145px,1fr))",gap:10,marginBottom:12}}>
             <AdminTextInput label="Question ID" value={form.id} onChange={v=>updateField("id",v)} placeholder={kind==="mcq"?"m-custom-001":"p-custom-001"}/>
-            <AdminField label="Chapter / domain">
+            <AdminField label="Exam domain">
               <select className="input" value={form.ch} onChange={e=>changeChapter(e.target.value)}>
                 {CHAPTERS.map(ch=>(
                   <option key={ch.id} value={ch.id}>
-                    Ch.{ch.id} ({ch.code}) - {ch.title}
+                    Domain {ch.id} ({ch.code}) - {ch.title}
                   </option>
                 ))}
               </select>
@@ -27979,7 +27984,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
 
           {kind==="mcq" ? (
             <>
-              <AdminField label={`Topic in Ch.${selectedChapter.id}`}>
+              <AdminField label={`Topic in Domain ${selectedChapter.id}`}>
                 <select className="input" value={form.topic} onChange={e=>updateField("topic",e.target.value)}>
                   {topicOptions.map(topic=><option key={topic} value={topic}>{topic}</option>)}
                 </select>
@@ -28050,7 +28055,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
                 </AdminField>
               </div>
               <div style={{height:12}}/>
-              <AdminField label={`Topic / category in Ch.${selectedChapter.id}`}>
+              <AdminField label={`Topic / category in Domain ${selectedChapter.id}`}>
                 <select className="input" value={form.cat} onChange={e=>updateField("cat",e.target.value)}>
                   {topicOptions.map(topic=><option key={topic} value={topic}>{topic}</option>)}
                 </select>
@@ -28250,7 +28255,7 @@ function AdminQuestionManagerPage({user,t,onQuestionBankRefresh,onPbqBankRefresh
           </div>
           <div className="question-card" style={{padding:18,background:t.surface,border:`1px solid ${t.border}`,borderRadius:12}}>
             <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14}}>
-              <span className="chip">Ch.{form.ch||"?"}</span>
+              <span className="chip">Domain {form.ch||"?"}</span>
               <span className="chip" style={{color:difficultyColor,borderColor:`${difficultyColor}44`,background:`${difficultyColor}10`,textTransform:"capitalize"}}>{form.difficulty}</span>
               <span className="chip">{kind.toUpperCase()}</span>
               <BeyondTextbookTag question={form} t={t}/>
@@ -28674,7 +28679,7 @@ function FlashcardSavePrompt({t,onLogin,onSignup,onClose,mode="save"}) {
   return(
     <div className="flashcard-auth-nudge" role="dialog" aria-modal="true" aria-labelledby="flashcard-save-title" onMouseDown={onClose}>
       <div className="flashcard-auth-card card" onMouseDown={event=>event.stopPropagation()}>
-        <button className="icon-btn" type="button" aria-label="Close flashcard save prompt" onClick={onClose}><X size={18}/></button>
+        <button className="icon-btn" type="button" aria-label={isLearnMore?"Close lesson path dialog":"Close flashcard save prompt"} onClick={onClose}><X size={18}/></button>
         <div className="flashcard-auth-icon">{isLearnMore?<BookOpenCheck size={23}/>:<Star size={23} fill="currentColor"/>}</div>
         <span className="deep-dive-preview-badge"><ShieldCheck size={13}/>{isLearnMore?"Account feature":isReviewSet?"No credit card required":"Free to study"}</span>
         <h2 id="flashcard-save-title">{isLearnMore?"Explore the full lesson path?":isReviewSet?"Save your review set?":"Save this flashcard?"}</h2>
@@ -29019,7 +29024,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
   const [practiceResults,setPracticeResults]=usePlaceState(`${placeKey}:${selectedId}:practiceResults`,[]);
   const handledLessonRequest=useRef(null);
   const [sectionViews,setSectionViews]=usePlaceState(`${placeKey}:viewed-sections-v1`,{},true);
-  const completedIds=CONCEPT_DEEP_DIVES.filter(dive=>{const p=viewedSections(dive,sectionViews[dive.id]);return p.total>0&&p.viewed===p.total;}).map(dive=>dive.id);
+  const [completedIds,setCompletedIds]=usePlaceState(`${placeKey}:confirmed-completions-v1`,[],true);
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
     try{
       const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
@@ -29297,7 +29302,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
                   return <button key={`${step.kind}-${step.title}`} type="button" className={`${lessonStep===index?"active":""} ${beyond?"beyond":""}`} aria-current={lessonStep===index?"step":undefined} onClick={()=>changeLessonStep(index)}><span>{index+1}</span><span>{step.title}{beyond&&<small>Beyond the textbook</small>}</span></button>;
                 })}
               </nav>
-              <span className="btn btn-ghost">{isComplete?<><CheckCircle2 size={16}/>All sections viewed</>:<><BookOpenCheck size={16}/>{lessonViewed.viewed}/{lessonViewed.total} sections viewed</>}</span>
+              <span className="btn btn-ghost">{lessonViewed.viewed===lessonViewed.total?<><CheckCircle2 size={16}/>All sections viewed</>:<><BookOpenCheck size={16}/>{lessonViewed.viewed}/{lessonViewed.total} sections viewed</>}</span>
               <small>Each section counts once when opened. Viewing is not a mastery score.</small>
             </aside>
 
@@ -29369,7 +29374,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
               <div className="deep-dive-step-actions">
                 <button className="btn btn-outline" type="button" disabled={lessonStep===0} onClick={()=>changeLessonStep(lessonStep-1)}><ArrowLeft size={16}/>Previous</button>
                 {lessonStep<lessonSteps.length-1?(
-                  <button className="btn btn-primary" type="button" onClick={()=>changeLessonStep(lessonStep+1)}>Next idea<ChevronRight size={16}/></button>
+                  <button className="btn btn-primary" type="button" onClick={()=>changeLessonStep(lessonStep+1)}>Continue<ChevronRight size={16}/></button>
                 ):(
                   <button className="btn btn-primary" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>Try the lab</button>
                 )}
@@ -29450,7 +29455,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
                   {!practiceSubmitted?(
                     <button className="btn btn-primary" type="button" disabled={!practiceChoice} onClick={submitPracticeAnswer}><Check size={16}/>Check answer</button>
                   ):(
-                    <button className="btn btn-primary" type="button" onClick={nextPracticeQuestion}>{practiceIndex===practiceQuestions.length-1?"See results":"Next challenge"}<ChevronRight size={16}/></button>
+                    <button className="btn btn-primary" type="button" onClick={nextPracticeQuestion}>{practiceIndex===practiceQuestions.length-1?"View results":"Continue"}<ChevronRight size={16}/></button>
                   )}
                 </div>
               </>
@@ -29484,7 +29489,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
           </section>
         )}
 
-        <section className="card deep-dive-lesson-actions">
+        {((studyMode==="learn"&&lessonStep===lessonSteps.length-1)||(studyMode==="practice"&&!activePracticeQuestion&&practiceQuestions.length>0))&&<section className="card deep-dive-lesson-actions">
           <div className="deep-dive-lesson-actions-head">
             <div className="deep-dive-lesson-actions-copy">
               <div className="label">End of lesson actions</div>
@@ -29495,16 +29500,20 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
             </div>
             <MascotAnimation animation="wave" size={72} interactive hoverAnimation="cheer" reactionAnimations={["wave","thinking","cheer"]} label="Cipher points to lesson actions"/>
           </div>
+          <button className="btn btn-primary" type="button" disabled={isComplete} onClick={()=>{
+            if(!confirmLessonCompletion(lessonViewed,message=>window.confirm(message)))return;
+            setCompletedIds(current=>current.includes(selectedDive.id)?current:[...current,selectedDive.id]);
+          }}>{isComplete?"Marked complete":"Mark complete"}</button>
           <div className="deep-dive-lesson-action-grid">
             <button className="btn deep-dive-lesson-btn-checkpoint" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>Checkpoint</button>
             <button className="btn deep-dive-lesson-btn-review" type="button" onClick={handleLessonReviewAction}><Brain size={16}/>Smart Review</button>
             <button className="btn deep-dive-lesson-btn-pbq" type="button" onClick={handleRelatedPbqAction}><Target size={16}/>Related PBQ</button>
             <a className="btn deep-dive-lesson-btn-flashcards" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();handleRelatedFlashcardsAction();}}><TextCursorInput size={16}/>Review related flashcards</a>
           </div>
-        </section>
+        </section>}
 
         <div className="deep-dive-reader-actions">
-          <span className="btn btn-ghost">{isComplete?<><CheckCircle2 size={16}/>All sections viewed</>:<><BookOpenCheck size={16}/>{lessonViewed.viewed}/{lessonViewed.total} sections viewed</>}</span>
+          <span className="btn btn-ghost">{lessonViewed.viewed===lessonViewed.total?<><CheckCircle2 size={16}/>All sections viewed</>:<><BookOpenCheck size={16}/>{lessonViewed.viewed}/{lessonViewed.total} sections viewed</>}</span>
           <button className="btn btn-outline" type="button" onClick={closeDive}>Choose another topic</button>
         </div>
       </article>
@@ -29569,8 +29578,8 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
           {query&&<button type="button" aria-label="Clear search" onClick={()=>setQuery("")}><X size={15}/></button>}
         </label>
         <div className="deep-dives-domain-map" aria-label="Filter by SY0-701 domain">
-          <button type="button" className={domainFilter==="all"?"active":""} onClick={()=>setDomainFilter("all")}><strong>All</strong><span>Study path</span></button>
-          {SY0701_DOMAINS.map(domain=><button key={domain.id} type="button" className={domainFilter===String(domain.id)?"active":""} onClick={()=>setDomainFilter(String(domain.id))}><strong>{domain.id}.0 · {domain.weight}%</strong><span>{domain.shortName}</span></button>)}
+          <button type="button" aria-pressed={domainFilter==="all"} className={domainFilter==="all"?"active":""} onClick={()=>setDomainFilter("all")}><strong>All</strong><span>Study path</span></button>
+          {SY0701_DOMAINS.map(domain=><button key={domain.id} type="button" aria-pressed={domainFilter===String(domain.id)} className={domainFilter===String(domain.id)?"active":""} onClick={()=>setDomainFilter(String(domain.id))}><strong>{domain.id}.0 · {domain.weight}%</strong><span>{domain.name}</span></button>)}
         </div>
       </section>
 
@@ -29754,12 +29763,15 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     const next=savedSets.filter(item=>item.id!==set.id);setSavedSets(next);writeSavedRandomFlashcardSets(user,next);
     if(canSync)deleteSupabaseGeneratedFlashcardSet(user.id,set.id);
   };
-  const totalMastered=SY0701_ACRONYM_CARDS.filter(card=>mastered.includes(card.id)).length;
-  const domainNames={1:"Fundamentals",2:"Threats",3:"Architecture",4:"Operations",5:"Governance"};
+  const domainNames=Object.fromEntries(SY0701_DOMAINS.map(domain=>[domain.id,domain.name]));
   const previewCard=SY0701_ACRONYM_CARDS.find(card=>card.acronym==="RTO");
   const term=query.trim().replace(/^#/,"").toLowerCase();
   const matches=set=>!term||[set.title,set.sectionTitle,...set.cards.flatMap(card=>[...card.keywords,...card.concept_tags])].join(" ").toLowerCase().includes(term);
   const groups=chapterGroups.filter(group=>domain==="all"||String(group.chapterId)===domain).map(group=>({...group,sets:group.sets.filter(matches)})).filter(group=>group.sets.length);
+  const visibleSets=groups.flatMap(group=>group.sets);
+  const visibleCardIds=new Set(visibleSets.flatMap(set=>set.cards.filter(card=>card.cardType!=="divider").map(card=>card.id)));
+  const visibleRemembered=[...visibleCardIds].filter(id=>mastered.includes(id)).length;
+  const hasFilter=Boolean(term||domain!=="all");
   const palette={"--fc-text":t.text,"--fc-muted":t.textSec,"--fc-panel":t.panel,"--fc-surface":t.surface,"--fc-line":t.border,"--fc-accent":t.accent};
   const confirmation=reviewConfirmation&&<div className="fc-notice" role="status">Your flashcard progress is saved to your account. <button className="btn btn-ghost" onClick={onDismissReviewConfirmation}>Dismiss</button></div>;
   if(selected)return <div className="fc-reader" style={palette}>{confirmation}{notice&&<p role="status">{notice}</p>}<AcronymFlashcardLab acronymSet={selected} masteredIds={mastered} onRate={rate} onClose={()=>{setSelected(null);refreshPersonal();}} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade} onSaveGeneratedSet={saveSet} onSaveReviewSet={()=>starCards.length?openSet(buildStarredFlashcardSet(starCards)):onRequireSignup?.("flashcard_review_set")} recommendedSet={getNextFlashcardSet(selected)} onOpenRecommendedSet={()=>openSet(getNextFlashcardSet(selected))}/></div>;
@@ -29771,7 +29783,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
         <div className="fc-hero-actions"><button className="btn btn-primary" onClick={()=>openSet(groups[0]?.sets[0]||SY0701_ACRONYM_SETS[0])}>Find my first deck <ArrowRight size={17}/></button><FlashcardShareActions t={t} compact/></div>
       </div>
       <div className="fc-hero-right"><div className="fc-cipher-host"><div><span>YOUR RECALL COMPANION</span><strong>Browse by domain.<br/>Save terms for review.</strong></div><MascotAnimation animation="flashcards" size={92} interactive={false} label="Cipher, your flashcard companion"/></div><FlashcardPreview card={previewCard}/></div>
-      <div className="fc-hero-stats"><span><strong>{SY0701_ACRONYM_SETS.length}</strong> focused decks</span><span><strong>{SY0701_ACRONYM_CARDS.length}</strong> terms to explore</span><span className="fc-recall-progress"><span className="fc-mini-track"><i style={{width:`${totalMastered/SY0701_ACRONYM_CARDS.length*100}%`}}/></span><strong>{totalMastered}</strong> remembered</span></div>
+      <div className="fc-hero-stats"><span><strong>{visibleSets.length}</strong> {hasFilter?(visibleSets.length===1?"matching deck":"matching decks"):"focused decks"}</span><span><strong>{visibleCardIds.size}</strong> {hasFilter?"cards in matching decks":"terms to explore"}</span><span className="fc-recall-progress"><span className="fc-mini-track"><i style={{width:`${visibleCardIds.size?visibleRemembered/visibleCardIds.size*100:0}%`}}/></span><strong>{visibleRemembered}</strong> remembered</span></div>
     </header>
     <section className={`fc-personal fc-personal-feature ${personalCards.length?"has-review":""}`} aria-labelledby="fc-personal-title">
       <div className="fc-personal-copy"><span className="fc-personal-badge"><Sparkles size={14}/> PERSONALISED FLASHCARDS</span>
@@ -29785,9 +29797,10 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
       </div><div className="fc-personal-visual" aria-hidden="true"><div className="fc-personal-halo"/><div className="fc-focus-slip fc-focus-slip-back"/><div className="fc-focus-slip fc-focus-slip-mid"/><div className="fc-focus-slip"><span><Sparkles size={14}/> YOUR NEXT CHAPTER</span><Brain size={45} strokeWidth={1.5}/><strong>Term first.<br/>Definition next.</strong><i>TERM-FIRST RECALL</i></div></div>
     </section>
     <section className="fc-browse" aria-label="Browse flashcards by domain">
-      <div className="fc-browse-heading"><div><span className="fc-eyebrow">YOUR STUDY SHELF</span><h2>A place for every concept.</h2></div><label className="fc-search"><Search size={17}/><input type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Find a term, deck or #tag" aria-label="Search flashcards"/></label></div>
+      <div className="fc-browse-heading"><div><span className="fc-eyebrow">YOUR STUDY SHELF</span><h2>A place for every concept.</h2></div><label className="fc-search"><Search size={17}/><input type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Find a term, deck or #tag" aria-label="Search flashcards"/>{query&&<button type="button" aria-label="Clear flashcard search" onClick={()=>setQuery("")}><X size={20}/></button>}</label></div>
       <div className="fc-domain-tabs" role="group" aria-label="Filter by official exam domain"><button aria-pressed={domain==="all"} className={domain==="all"?"active":""} onClick={()=>setDomain("all")}><Layers3 size={20}/><span className="fc-domain-tab-copy"><strong>The collection</strong><small>All five domains</small></span></button>{chapterGroups.map(group=><button key={group.chapterId} title={group.chapterTitle} aria-label={`Domain ${group.chapterId}: ${group.chapterTitle}`} aria-pressed={domain===String(group.chapterId)} className={domain===String(group.chapterId)?"active":""} style={{"--domain-color":chapterColor(group.chapterId)}} onClick={()=>setDomain(String(group.chapterId))}><span className="fc-tab-number">0{group.chapterId}</span><span className="fc-domain-tab-copy"><strong>{domainNames[group.chapterId]}</strong><small>{group.sets.length} decks</small></span></button>)}</div>
-      {!groups.length&&<div className="fc-empty" role="status"><Search size={24}/><h3>No matching decks</h3><p>Try a term such as RTO, or a concept tag.</p><button className="btn btn-ghost" onClick={()=>{setQuery("");setDomain("all");}}>Clear search</button></div>}
+      <p className="fc-filter-count" role="status">Showing {visibleSets.length} {visibleSets.length===1?"deck":"decks"} · {visibleCardIds.size} cards{domain!=="all"?` · Domain ${domain}`:""}{query?` · matching “${query}”`:""}</p>
+      {!groups.length&&<div className="fc-empty" role="status"><Search size={24}/><h3>No matching decks</h3><p>Try a term such as RTO, or a concept tag.</p><button className="btn btn-ghost" onClick={()=>setQuery("")}>Clear search</button></div>}
       <div className="deep-dives-domain-groups fc-domain-groups">{groups.map(group=><section key={group.chapterId} className="fc-domain" style={{"--domain-color":chapterColor(group.chapterId)}}>
         <header className="fc-domain-heading"><span className="fc-domain-number">0{group.chapterId}</span><div><span className="fc-eyebrow">DOMAIN {group.chapterId}.0</span><h2>{group.chapterTitle}</h2></div><span className="fc-domain-count">{group.sets.length} {group.sets.length===1?"deck":"decks"}</span></header>
         {[...new Set(group.sets.map(set=>set.sectionId))].map(sectionId=><div className="fc-section" key={sectionId}><h3><span>{sectionId}</span>{group.sets.find(set=>set.sectionId===sectionId).sectionTitle}</h3><div className="fc-deck-grid">{group.sets.filter(set=>set.sectionId===sectionId).map(set=>{
@@ -29812,7 +29825,7 @@ function ObjectivesPage({t}) {
     <div style={{padding:"28px 24px",maxWidth:860,margin:"0 auto"}}>
       <div className="page-title-row">
         <NavGlyph type="objectives" active/>
-        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>Security+ Objectives</h2>
+        <h1 style={{fontSize:24,fontWeight:800,color:t.text}}>Security+ Objectives</h1>
       </div>
       <p style={{color:t.textSec,fontSize:14,marginBottom:20}}>
         See how SecurePlus practice is grouped across the five current exam domains. Use the official CompTIA page below when you need the latest certification blueprint.
@@ -29851,7 +29864,7 @@ function ObjectivesPage({t}) {
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10}}>
           {[
             {label:"MCQ Bank",value:`${MCQ_BANK.length} questions`},
-            {label:"PBQ Bank",value:`${PBQ_BANK.length} simulations`},
+            {label:"PBQ Simulations",value:`${PBQ_BANK.length} simulations`},
             {label:"Domains",value:"5 objective areas"},
             {label:"Question Types",value:"MCQ, terminal, ordering, hotspot, Select & Fill, logs"},
           ].map(item=>(
@@ -29927,9 +29940,9 @@ function LegalPage({type,t}) {
     <div style={{padding:"28px 24px",maxWidth:780,margin:"0 auto"}}>
       <div className="page-title-row">
         <NavGlyph type={isPrivacy ? "privacy" : "terms"} active/>
-        <h2 style={{fontSize:24,fontWeight:800,color:t.text}}>
+        <h1 style={{fontSize:24,fontWeight:800,color:t.text}}>
           {isPrivacy ? "Privacy Policy" : "Terms & Conditions"}
-        </h2>
+        </h1>
       </div>
       <p style={{color:t.textSec,fontSize:14,marginBottom:20}}>
         Last updated: May 9, 2026. Questions? Contact{" "}
@@ -30063,7 +30076,7 @@ function OnboardingModal({user,wallet,t,onClose,onWallet,onPbq,onRefreshWallet})
           {slide.id==="ready"&&(
             <div className="cipher-ready-grid">
               <button type="button" onClick={()=>{onClose();onWallet?.();}}><CipherCoinIcon size={42}/><span><strong>Open Coin Vault</strong><small>See your balance, rewards, and redemptions.</small></span><ChevronRight size={18}/></button>
-              <button type="button" onClick={()=>{onClose();onPbq?.();}}><Puzzle size={25}/><span><strong>Visit PBQ Simulator</strong><small>Preview a PBQ or see your revealed collection.</small></span><ChevronRight size={18}/></button>
+              <button type="button" onClick={()=>{onClose();onPbq?.();}}><Puzzle size={25}/><span><strong>Visit PBQ Simulations</strong><small>Preview a PBQ or see your revealed collection.</small></span><ChevronRight size={18}/></button>
             </div>
           )}
         </div>
@@ -30097,7 +30110,7 @@ function ProWelcomeModal({user,t,onClose,onNavigate}) {
       Icon:Puzzle,
       color:t.accent,
       view:"mcq",
-      cta:"Open MCQ practice",
+      cta:"Open MCQ Practice",
     },
     {
       id:"exam",
@@ -30250,7 +30263,7 @@ function DiagnosticQuiz({user,t,onComplete}) {
               <div key={item.chapter.id} style={{padding:"12px 14px",border:`1px solid ${t.border}`,borderRadius:8,background:t.panel}}>
                 <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"center",marginBottom:6}}>
                   <div style={{display:"flex",alignItems:"center",gap:8,fontSize:13,fontWeight:900,color:t.text}}>
-                    <ChapterIcon id={item.chapter.id} size={22}/> Ch.{item.chapter.id}: {item.chapter.title}
+                    <ChapterIcon id={item.chapter.id} size={22}/> Domain {item.chapter.id}: {item.chapter.title}
                   </div>
                   <span style={{fontSize:13,fontWeight:900,color}}>{item.correct}/{item.total}</span>
                 </div>
@@ -30263,7 +30276,7 @@ function DiagnosticQuiz({user,t,onComplete}) {
           <div style={{fontWeight:900,color:t.text,fontSize:14,marginBottom:4}}>Recommended first move</div>
           <div style={{fontSize:13,color:t.textSec,lineHeight:1.65}}>
             {weakChapters.length
-              ? `Start Smart Review with ${weakChapters.slice(0,2).map(item=>`Chapter ${item.chapter.id}`).join(" and ")}. Missed diagnostic questions will be prioritised.`
+              ? `Start Smart Review with ${weakChapters.slice(0,2).map(item=>`Domain ${item.chapter.id}`).join(" and ")}. Missed diagnostic questions will be prioritised.`
               : "Strong baseline. Start Smart Review to keep these topics fresh over time."}
           </div>
         </div>
@@ -31680,6 +31693,7 @@ export default function App() {
       <style>{CSS}</style>
       {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
       <div style={{background:t.bg,minHeight:"100vh"}}>
+        <ViewBreadcrumb view="pbq" onNavigate={next=>{setPbqQ(null,{replace:true});setView(next);}} t={t}/>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/><span style={{fontWeight:700,fontSize:14,lineHeight:1.2,color:t.text}}>{SITE_BRAND_LOCKUP}</span></button>
           <div style={{display:"flex",gap:8}}>
@@ -31714,16 +31728,16 @@ export default function App() {
     const goToLogin=()=>{markGuestDiagnosticAuthOpened();setGuestMoreOpen(false);setPbqQ(null,{replace:true});setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
     const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","why-different","about","objectives","flashcards","deep-dives","privacy","terms",...(devCoinPreview?["coins"]:[])]);
     const guestTopNavItems=[
-      {id:"mcq",label:"10Q Diagnostic"},
-      {id:"pbq",label:"PBQ Simulations"},
-      {id:"flashcards",label:"Flashcards"},
+      {id:"mcq",label:areaName("mcq",true)},
+      {id:"pbq",label:areaName("pbq",true)},
+      {id:"flashcards",label:areaName("flashcards",true)},
     ];
     const guestMoreItems=[
-      {id:"objectives",label:"Security+ Objectives"},
-      {id:"about",label:"Why we’re different"},
-      {id:"deep-dives",label:"Concept Deep Dives"},
-      {id:"privacy",label:"Privacy Policy"},
-      {id:"terms",label:"Terms & Conditions"},
+      {id:"objectives",label:areaName("objectives",true)},
+      {id:"about",label:areaName("about",true)},
+      {id:"deep-dives",label:areaName("deep-dives",true)},
+      {id:"privacy",label:areaName("privacy",true)},
+      {id:"terms",label:areaName("terms",true)},
     ];
     const guestGo=id=>{
       setGuestMoreOpen(false);
@@ -31757,8 +31771,8 @@ export default function App() {
                 <button
                   key={item.id}
                   type="button"
-                  className={`guest-top-nav-link ${guestView===item.id?"active":""}`}
-                  aria-current={guestView===item.id?"page":undefined}
+                  className={`guest-top-nav-link ${canonicalArea(guestView)===item.id?"active":""}`}
+                  aria-current={canonicalArea(guestView)===item.id?"page":undefined}
                   onClick={()=>guestGo(item.id)}
                 >
                   {item.label}
@@ -31767,9 +31781,11 @@ export default function App() {
               <div ref={guestMoreRef} className={`guest-top-nav-more ${guestMoreOpen?"open":""}`}>
                 <button
                   type="button"
-                  className={`guest-top-nav-link guest-top-nav-more-trigger ${guestMoreItems.some(item=>item.id===view)?"active":""}`}
+                  className={`guest-top-nav-link guest-top-nav-more-trigger ${guestMoreItems.some(item=>item.id===canonicalArea(guestView))?"active":""}`}
                   aria-expanded={guestMoreOpen}
                   aria-controls="guest-more-menu"
+                  aria-current={guestMoreItems.some(item=>item.id===canonicalArea(guestView))?"true":undefined}
+                  aria-label={guestMoreItems.some(item=>item.id===canonicalArea(guestView))?`More pages: ${areaName(guestView,true)}`:"More pages"}
                   onClick={()=>setGuestMoreOpen(open=>!open)}
                 >
                   More <ChevronDown size={14} aria-hidden="true"/>
@@ -31779,8 +31795,8 @@ export default function App() {
                       <button
                         key={item.id}
                         type="button"
-                        className={`guest-top-nav-more-item ${guestView===item.id?"active":""}`}
-                        aria-current={guestView===item.id?"page":undefined}
+                        className={`guest-top-nav-more-item ${canonicalArea(guestView)===item.id?"active":""}`}
+                        aria-current={canonicalArea(guestView)===item.id?"page":undefined}
                         onClick={()=>guestGo(item.id)}
                       >
                         {item.label}
@@ -31798,6 +31814,7 @@ export default function App() {
           </header>
           <GuestDiagnosticSaveBanner t={t} onSignup={goToSignup} onViewResults={()=>setView("mcq")}/>
           <main id="secureplus-main" className="app-main guest-main fu">
+            <ViewBreadcrumb view={guestView} guest onNavigate={guestGo} t={t}/>
             <div className="mobile-topbar">
               <div>
                 <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:13,lineHeight:1.2,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> {SITE_BRAND_LOCKUP}</button>
@@ -31896,6 +31913,7 @@ export default function App() {
       <style>{CSS}</style>
       {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
       <div style={{background:t.bg,minHeight:"100vh"}}>
+        <ViewBreadcrumb view="pbq" onNavigate={next=>{setPbqQ(null,{replace:true});setView(next);}} t={t}/>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <button type="button" onClick={()=>{setPbqQ(null,{replace:true});setView("dashboard");}} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}>
             <BrandMark size={28}/><span style={{fontWeight:800,fontSize:14,lineHeight:1.2,color:t.text}}>{SITE_BRAND_LOCKUP}</span>
@@ -31928,20 +31946,20 @@ export default function App() {
   );
 
   const navItems=[
-    {id:"dashboard",icon:"dashboard",label:"Dashboard",mobileLabel:"Home"},
-    {id:"mcq",icon:"mcq",label:"MCQ Practice",mobileLabel:"MCQ"},
-    {id:"pbq",icon:"pbq",label:"PBQ Simulator",mobileLabel:"PBQ"},
-    {id:"daily",icon:"daily",label:"Daily Challenge",mobileLabel:"Daily"},
-    {id:"deep-dives",icon:"deep-dives",label:"Concept Deep Dives",mobileLabel:"Deep Dives"},
-    {id:"flashcards",icon:"flashcards",label:"Flashcards",mobileLabel:"Cards"},
-    {id:"pricing",icon:"pricing",label:"Upgrade",mobileLabel:"Upgrade"},
-    {id:"objectives",icon:"objectives",label:"Security+ Objectives",mobileLabel:"Security+ Objectives"},
-    {id:"about",icon:"about",label:"Why we’re different",mobileLabel:"Why we’re different"},
-    {id:"account",icon:"account",label:"Account & Support",mobileLabel:"Account"},
+    {id:"dashboard",icon:"dashboard",label:areaName("dashboard"),mobileLabel:areaName("dashboard")},
+    {id:"mcq",icon:"mcq",label:areaName("mcq"),mobileLabel:areaName("mcq")},
+    {id:"pbq",icon:"pbq",label:areaName("pbq"),mobileLabel:areaName("pbq")},
+    {id:"daily",icon:"daily",label:areaName("daily"),mobileLabel:areaName("daily")},
+    {id:"deep-dives",icon:"deep-dives",label:areaName("deep-dives"),mobileLabel:areaName("deep-dives")},
+    {id:"flashcards",icon:"flashcards",label:areaName("flashcards"),mobileLabel:areaName("flashcards")},
+    {id:"pricing",icon:"pricing",label:areaName("pricing"),mobileLabel:areaName("pricing")},
+    {id:"objectives",icon:"objectives",label:areaName("objectives"),mobileLabel:areaName("objectives")},
+    {id:"about",icon:"about",label:areaName("about"),mobileLabel:areaName("about")},
+    {id:"account",icon:"account",label:areaName("account"),mobileLabel:areaName("account")},
   ];
   if(isRootUser) {
-    navItems.push({id:"feedback",icon:"feedback",label:"Internal Feedback",mobileLabel:"Feedback"});
-    navItems.push({id:"question-admin",icon:"question-admin",label:"Question Manager",mobileLabel:"Manager"});
+    navItems.push({id:"feedback",icon:"feedback",label:areaName("feedback"),mobileLabel:areaName("feedback")});
+    navItems.push({id:"question-admin",icon:"question-admin",label:areaName("question-admin"),mobileLabel:areaName("question-admin")});
   }
 
   return(
@@ -31976,12 +31994,12 @@ export default function App() {
           {/* Nav */}
           <nav style={{flex:1,padding:"10px 10px",display:"flex",flexDirection:"column",gap:2}}>
             {navItems.map(n=>(
-              <button type="button" key={n.id} data-mobile-primary={MOBILE_PRIMARY_NAV_IDS.has(n.id)?"true":"false"} aria-current={view===n.id?"page":undefined} className={`nav-lnk ${view===n.id?"act":""}`} onClick={()=>setView(n.id)}>
-                <NavGlyph type={n.icon} active={view===n.id}/>
+              <button type="button" key={n.id} data-mobile-primary={MOBILE_PRIMARY_NAV_IDS.has(n.id)?"true":"false"} aria-current={canonicalArea(view)===n.id?"page":undefined} className={`nav-lnk ${canonicalArea(view)===n.id?"act":""}`} onClick={()=>setView(n.id)}>
+                <NavGlyph type={n.icon} active={canonicalArea(view)===n.id}/>
                 <span className="nav-label"><span className="nav-label-desktop">{n.label}</span><span className="nav-label-mobile">{n.mobileLabel}</span></span>
               </button>
             ))}
-            <button type="button" className={`nav-lnk mobile-more-trigger ${!MOBILE_PRIMARY_NAV_IDS.has(view)?"act":""}`} aria-expanded={mobileNavOpen} onClick={()=>setMobileNavOpen(true)}>
+            <button type="button" className={`nav-lnk mobile-more-trigger ${!MOBILE_PRIMARY_NAV_IDS.has(canonicalArea(view))?"act":""}`} aria-expanded={mobileNavOpen} aria-label={!MOBILE_PRIMARY_NAV_IDS.has(canonicalArea(view))?`More pages: ${areaName(view)}`:"More pages"} aria-current={!MOBILE_PRIMARY_NAV_IDS.has(canonicalArea(view))?"true":undefined} onClick={()=>setMobileNavOpen(true)}>
               <span className="nav-glyph" aria-hidden="true"><MoreHorizontal size={19}/></span>
               <span className="nav-label"><span className="nav-label-desktop">More</span><span className="nav-label-mobile">More</span></span>
             </button>
@@ -32000,6 +32018,7 @@ export default function App() {
 
         {/* Main content */}
         <main id="secureplus-main" className="app-main fu">
+          <ViewBreadcrumb view={view} onNavigate={setView} t={t}/>
           <div className="mobile-topbar">
             <div>
               <button type="button" onClick={()=>setView("dashboard")} style={{display:"flex",alignItems:"center",gap:8,fontWeight:800,fontSize:13,lineHeight:1.2,color:t.text,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}><BrandMark size={28}/> {SITE_BRAND_LOCKUP}</button>

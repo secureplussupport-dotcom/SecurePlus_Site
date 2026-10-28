@@ -26,7 +26,7 @@ export function FlashcardDeck({set, remembered, index, onOpen}) {
     </span>
     <span className="fc-deck-body"><strong>{set.title}</strong>
       <span className="fc-deck-terms">{set.cards.slice(0,3).map(card=><span key={card.id}>{card.acronym}</span>)}</span>
-      <span className="fc-deck-bottom"><span><span className="fc-mini-track"><i style={{width:`${remembered/set.cards.length*100}%`}}/></span><small>{remembered?`${remembered} remembered`:'Ready when you are'}</small></span><span className="fc-deck-open" aria-hidden="true"><ArrowUpRight size={20}/></span></span>
+      <span className="fc-deck-bottom">{remembered>0&&<span><span className="fc-mini-track"><i style={{width:`${remembered/set.cards.length*100}%`}}/></span><small>{remembered} remembered</small></span>}<span className="fc-deck-open" aria-hidden="true"><ArrowUpRight size={20}/></span></span>
     </span>
   </button>;
 }

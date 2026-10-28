@@ -247,14 +247,14 @@ if (!errors.length) {
   requireContains("src/components/GuestDiagnostic.jsx", "Build my free study plan", "diagnostic results should lead to signup and saved Smart Review progress");
   requireContains("src/App.jsx", "GUEST_SMART_REVIEW_BRIDGE_KEY", "guest quiz attempts should survive account creation for Smart Review");
   requireContains("src/App.jsx", 'allowedGuestViews=new Set(["dashboard","mcq","pbq","daily"', "guests should be able to enter the PBQ preview without signing in");
-  requirePattern("src/App.jsx", /const guestTopNavItems=\[\s*\{id:"mcq",label:"10Q Diagnostic"\},\s*\{id:"pbq",label:"PBQ Simulations"\},\s*\{id:"flashcards",label:"Flashcards"\},\s*\];/, "guest top navigation should keep only the three primary practice destinations visible");
-  requirePattern("src/App.jsx", /const guestMoreItems=\[\s*\{id:"objectives",label:"Security\+ Objectives"\},\s*\{id:"about",label:"Why we’re different"\},\s*\{id:"deep-dives",label:"Concept Deep Dives"\},\s*\{id:"privacy",label:"Privacy Policy"\},\s*\{id:"terms",label:"Terms & Conditions"\},\s*\];/, "guest More menu should contain Why we’re different, the exam guide, deep dives, privacy, and terms links");
+  requirePattern("src/App.jsx", /const guestTopNavItems=\[\s*\{id:"mcq",label:areaName\("mcq",true\)\},\s*\{id:"pbq",label:areaName\("pbq",true\)\},\s*\{id:"flashcards",label:areaName\("flashcards",true\)\},\s*\];/, "guest top navigation should keep only the three primary practice destinations visible");
+  requirePattern("src/App.jsx", /const guestMoreItems=\[\s*\{id:"objectives",label:areaName\("objectives",true\)\},\s*\{id:"about",label:areaName\("about",true\)\},\s*\{id:"deep-dives",label:areaName\("deep-dives",true\)\},\s*\{id:"privacy",label:areaName\("privacy",true\)\},\s*\{id:"terms",label:areaName\("terms",true\)\},\s*\];/, "guest More menu should contain Why we’re different, the exam guide, deep dives, privacy, and terms links");
   requireContains("src/App.jsx", "guest-top-nav-more-menu", "guest secondary navigation should open in an expandable More menu");
   requireContains("src/App.jsx", "clearLocalAuthState({preserveRoute:true})", "guest session restoration must preserve direct routes such as the canonical Flashcards page");
   requireContains("src/App.jsx", "const quizSizes = isGuest?[10]:choices.sizes.map(option=>option.size)", "MCQ practice should use tier-aware fixed question counts");
   requireContains("src/App.jsx", 'const activeDiffFilter=!isPro?"all":diffFilter', "guest MCQ practice must not filter by difficulty");
   requireContains("src/App.jsx", 'const activeTopicFilter=!isPro?"all":topicFilter', "guest MCQ practice must not filter by topic");
-  requireContains("src/App.jsx", '<FilterSelect disabled={!isPro} value={chFilter} onChange={setChFilter} options={chapterOptions} label="Chapter filter"/>', "only Pro should allow chapter filtering");
+  requireContains("src/App.jsx", '<FilterSelect disabled={!isPro} value={chFilter} onChange={setChFilter} options={chapterOptions} label="Domain filter"/>', "only Pro should allow domain filtering");
   const mcqSource=read("src/App.jsx").split("function MCQPractice(")[1].split("function UpgradeModal(")[0];
   const mcqSetup=mcqSource.split("  if(!started) return(")[1].split("  if(done) return <McqSetResults")[0];
   const disclosure=read("src/App.jsx").split("function PracticeSetupDisclosure(")[1].split("function MCQPractice(")[0];

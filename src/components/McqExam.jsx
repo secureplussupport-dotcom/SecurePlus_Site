@@ -153,6 +153,7 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
   const row=rows[qi];
   return <div className="mcq-exam-screen" style={examThemeVars(t)}>
     {confirmAction&&<ExamConfirmation action={confirmAction} unanswered={questions.length-answeredCount} flags={Object.values(flagged).filter(Boolean).length} onCancel={()=>setConfirmAction(null)} onConfirm={()=>confirmAction==='retake'?retake():submit(true)} t={t}/>}
+    <h1 className="view-context-title">MCQ Practice · Exam Mode</h1>
     <div className="top-progress" aria-hidden="true"><span style={{width:`${(qi+1)/questions.length*100}%`}}/></div>
     {reviewing&&<div className="mcq-exam-review-tools"><span><BookOpenCheck size={18}/> Answer review · definitions restored</span><button className="btn btn-outline" onClick={()=>setConfirmAction('retake')}><RotateCcw size={16}/>Retake exam</button><button className="btn btn-ghost" onClick={()=>setView('report')}>Back to report <ChevronRight size={16}/></button></div>}
     <header className="card mcq-exam-toolbar">
@@ -166,7 +167,7 @@ export function McqExam({ initialQuestions, user, chapters, t, onSave, onReturn,
         <nav className="mcq-exam-question-controls" aria-label="Exam question navigation"><button className="btn btn-ghost" disabled={qi===0||marking} onClick={()=>goTo(qi-1)}>← Previous</button><button className="btn btn-ghost" disabled={qi===questions.length-1||marking} onClick={()=>goTo(qi+1)}>Next →</button></nav>
         <div className="card question-card mcq-exam-stem">
           {flagged[qi]&&<div className="exam-flag-ribbon"><span>Review</span></div>}
-          <div className="mcq-exam-badges"><span className="chip">Ch.{q.ch}</span><span className="chip">MCQ</span>{flagged[qi]&&<span className="chip">Flagged for review</span>}</div>
+          <div className="mcq-exam-badges"><span className="chip">Domain {q.ch}</span><span className="chip">MCQ</span>{flagged[qi]&&<span className="chip">Flagged for review</span>}</div>
           <div className="question-text">{reviewing?renderDefinitions(q.q):q.q}</div>
         </div>
         {!reviewing&&<p className="mcq-exam-strike-tip">Right-click, long-press, or use Strike to cross out an option.</p>}

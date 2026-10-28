@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {diagnosticProgress,lessonSectionIds,viewedSections,answeredLabQuestions,flashcardProgress} from '../src/lib/surfaceProgress.js';
+import {diagnosticProgress,lessonSectionIds,viewedSections,answeredLabQuestions,flashcardProgress,confirmLessonCompletion} from '../src/lib/surfaceProgress.js';
 
 test('diagnostic attempts require a checked answer; skips and cursor are separate',()=>{
  const draft={questions:[{},{},{},{}],index:3,answers:{0:1,1:null,2:0},checked:{0:true,1:true},skipped:{1:true}};
@@ -26,4 +26,14 @@ test('bookmarks and remembered cards are independent; divider cards never count'
  assert.deepEqual(flashcardProgress(cards,[],[]),{total:2,remembered:0,saved:0});
  assert.deepEqual(flashcardProgress(cards,['a','a','divider'],['flashcard:b','flashcard:divider']),{total:2,remembered:1,saved:1});
  assert.equal(flashcardProgress(cards,['a'],[]).remembered,1,'unsaving must not alter recall');
+});
+
+test('skipped sections require confirmation without manufacturing section views',()=>{
+ const progress={viewed:2,total:6};
+ let prompts=0;
+ assert.equal(confirmLessonCompletion(progress,message=>{prompts++;assert.match(message,/4 sections/);return false;}),false);
+ assert.equal(confirmLessonCompletion(progress,()=>true),true);
+ assert.deepEqual(progress,{viewed:2,total:6});
+ assert.equal(confirmLessonCompletion({viewed:6,total:6},()=>{throw Error('No skipped sections');}),true);
+ assert.equal(prompts,1);
 });

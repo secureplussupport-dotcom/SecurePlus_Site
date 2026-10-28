@@ -1,3 +1,4 @@
+import {SY0701_DOMAINS} from "../data/sy0701DeepDiveMap.js";
 import {diagnosticProgress} from "../lib/surfaceProgress.js";
 import {useDetailState} from "../lib/learnerPlace.js";
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
@@ -15,10 +16,10 @@ import './GuestLanding.css';
 let generating=null;
 export const clearGuestDiagnostic=()=>publish(null);
 const conceptName=tag=>String(tag || '').split('.').at(-1).replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-const domains=['Security concepts','Threats & mitigations','Security architecture','Security operations','Security management'];
+const domains=SY0701_DOMAINS.map(domain=>domain.name);
 export const guestPalette=t=>({'--guest-bg':t.bg,'--guest-panel':t.surface,'--guest-text':t.text,'--guest-muted':t.textSec,'--guest-line':t.border,'--guest-accent':t.green || '#30b9a4','--guest-blue':t.blue || 'color-mix(in srgb,#729bf5 75%,var(--guest-text))','--guest-violet':t.purple,'--guest-gold':t.blue?t.amber:undefined});
 
-export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,startSignal=0,fullPage=false}) {
+export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,startSignal=0,fullPage=false,secondaryStart=false}) {
  const draft=useSyncExternalStore(subscribe,snapshot,snapshot);
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[saving,setSaving]=useState(false),[transitioning,setTransitioning]=useState(false);
  const [expanded,setExpanded]=useDetailState("diagnostic");
@@ -93,8 +94,8 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
    </div>
    <h2>New to Security+?<br/>You’re in the right place.</h2><p>Try a little. Skip anything new. See your path.</p>
    <div className="gd-welcome-stats"><span><strong>10</strong> easy questions</span><i/><span><strong>5</strong> Exam domains</span></div>
-   <div className="gd-preview-domains" aria-label="All five exam domains">{domains.map((name,i)=><span key={name} title={name}>{['Security','Threats','Architecture','Operations','Risk'][i]}</span>)}</div>
-   <button className="btn btn-primary" onClick={start}>Start my 10 Q diagnostic <ArrowRight size={18}/></button><small>No experience needed · No timer · No pressure</small>
+   <div className="gd-preview-domains" aria-label="All five exam domains">{domains.map((name,i)=><span key={name} title={name}>{`Domain ${i+1}`}</span>)}</div>
+   <button className={secondaryStart?"gd-start-link":"btn btn-primary"} onClick={start}>Start my 10 Q diagnostic <ArrowRight size={18}/></button><small>No experience needed · No timer · No pressure</small>
   </div>:done?<div className="gd-results">
    <div className="gd-path-ready"><MascotAnimation animation="wave" size={64} label="Cipher welcomes you to your learning path"/><span className="guest-eyebrow">A STARTING POINT, NOT A SCORE</span><h2 ref={heading} tabIndex={-1}>Your next steps are ready.</h2><p>You don’t need to know it all. That’s what we’re here for.</p></div>
    {!draft.noticeDismissed&&<div className="gd-save-notice" role="status"><Save size={21}/><div><strong>Not saved to an account yet.</strong><p>{!isDiagnosticBrowserSaved()?"Browser saving is unavailable. Keep this tab open and save to a free account before leaving.":!importable?"Your result is still in this browser. The seven-day account import window has ended.":`Saved only in this browser. Create a free account or log in here by ${importDeadline} to import this exact diagnostic, including your weak topics and retests. Save to your account before switching devices.`}</p><button className="gd-save-action" onClick={signup} disabled={saving}>{importable?'Save my results to a free account':'Create a free account'}<ArrowRight size={17}/></button></div><button className="gd-save-dismiss" onClick={()=>publish({...draft,noticeDismissed:true})} aria-label="Dismiss save reminder"><X size={18}/></button></div>}
@@ -126,12 +127,12 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
     {marked?<div className={`gd-feedback ${skipped?'is-skipped':answers[index]===q.correct?'is-correct':'is-revisit'}`} role="status" tabIndex={0} aria-label="Answer feedback"><strong>{skipped?'Saved for your learning path.':answers[index]===q.correct?'You’ve got it!':'A new thing to learn.'}</strong><p>{skipped?'Not attempted. Don’t worry—we’ll work on this later. Choose “Try this question” whenever you’re ready.':renderDefinitions(q.explanation)}</p></div>:<div className="gd-feedback-placeholder"><BookOpenCheck size={22}/><span>{fullFormat?'A friendly explanation is waiting. Not sure? You can skip.':'Give it a try—or save it for later.'}</span></div>}
    </div></div>
    <nav className="gd-question-navigation" aria-label="Diagnostic question navigation"><button className="btn btn-ghost" disabled={index===0||transitioning} onClick={()=>publish({...draft,index:index-1})}><ArrowLeft size={16}/> Previous question</button>{marked&&<button className="btn btn-ghost" onClick={()=>{const nextChecked={...checked};delete nextChecked[index];publish({...draft,checked:nextChecked,answers:{...answers,[index]:null},skipped:{...draft.skipped,[index]:false}});}}>{skipped?'Try this question':'Change my answer'}</button>}</nav>
-   <footer className="gd-question-actions"><div className="gd-skip-slot">{!marked?<button type="button" className="gd-skip-button" onClick={skip}><Sparkles size={21}/><span><strong>New to this?</strong><small>Skip & learn later</small></span><ArrowRight size={16}/></button>:<span className="gd-step-encouragement">{skipped?'No pressure. This is on your learn-later list.':index===9?'Look at that—you’ve explored all ten!':`${index+1} explored. Your path is taking shape.`}</span>}</div>{marked?<button className="btn btn-primary" disabled={transitioning} onClick={nextQuestion}>{index===9?'See my learning path':'Let’s keep exploring'} <ArrowRight size={16}/></button>:<button className="btn btn-primary" disabled={answers[index]==null} onClick={()=>publish({...draft,checked:{...checked,[index]:true}})}>Try my answer <Check size={16}/></button>}</footer>
+   <footer className="gd-question-actions"><div className="gd-skip-slot">{!marked?<button type="button" className="gd-skip-button" onClick={skip}><Sparkles size={21}/><span><strong>New to this?</strong><small>Skip & learn later</small></span><ArrowRight size={16}/></button>:<span className="gd-step-encouragement">{skipped?'No pressure. This is on your learn-later list.':index===9?'Look at that—you’ve explored all ten!':`${index+1} explored. Your path is taking shape.`}</span>}</div>{marked?<button className="btn btn-primary" disabled={transitioning} onClick={nextQuestion}>{index===9?'View results':'Continue'} <ArrowRight size={16}/></button>:<button className="btn btn-primary" disabled={answers[index]==null} onClick={()=>publish({...draft,checked:{...checked,[index]:true}})}>Check answer <Check size={16}/></button>}</footer>
 
   </div>}
   {error&&<p className="gd-error" role="alert">{error}</p>}
  </section>;
- return <>{expanded?<div className="gd-collapsed"><span>Your diagnostic is open in full format.</span><button className="btn btn-outline" onClick={()=>dialog.current?.focus()}>Return to diagnostic</button></div>:content}{expanded&&createPortal(<dialog ref={dialog} className="gd-dialog" aria-label="Diagnostic full format" onCancel={e=>{e.preventDefault();close();}} onClick={e=>{if(e.target===e.currentTarget)close();}}>{content}</dialog>,document.body)}</>;
+ return <>{fullPage&&<h1 className="view-context-title gd-page-title">10Q Diagnostic</h1>}{expanded?<div className="gd-collapsed"><span>Your diagnostic is open in full format.</span><button className="btn btn-outline" onClick={()=>dialog.current?.focus()}>Return to diagnostic</button></div>:content}{expanded&&createPortal(<dialog ref={dialog} className="gd-dialog" aria-label="Diagnostic full format" onCancel={e=>{e.preventDefault();close();}} onClick={e=>{if(e.target===e.currentTarget)close();}}>{content}</dialog>,document.body)}</>;
 }
 
 // Mounted once in the guest shell, so dismissing the prompt or auth dialog never loses the reminder.

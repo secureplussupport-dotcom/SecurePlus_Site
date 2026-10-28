@@ -232,3 +232,7 @@ body:has(.gd-save-banner) .guest-main{padding-bottom:160px}
 .gd-progress-copy>strong{white-space:nowrap}
 .gd-progress-copy>strong>small{font-size:13px}
 @media(max-width:480px){.gd-progress-copy{gap:10px}.gd-progress-copy>span{max-width:50%}}
+.gd-start-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:none;border:0;padding:10px 0;color:var(--guest-text);font:inherit;font-size:15px;font-weight:700;text-decoration:underline;text-underline-offset:5px;cursor:pointer}
+.gd-start-link:focus-visible{outline:3px solid var(--guest-blue);outline-offset:5px;border-radius:4px}
+.gs-path{padding:15px 0;margin-top:22px;color:var(--guest-text)}.gs-path span{font-size:15px;font-weight:650}.gs-path i{background:var(--guest-muted)}
+.gd-page-title{padding:20px 24px 0;color:inherit;margin-bottom:0}
