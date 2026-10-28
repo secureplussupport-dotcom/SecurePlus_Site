@@ -219,3 +219,10 @@
 body:has(.gd-save-banner) .guest-main{padding-bottom:160px}
 .gd-save-banner button:focus-visible{outline:3px solid var(--guest-blue);outline-offset:3px}
 @media(max-width:650px){.gd-save-banner{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}.gd-save-banner>svg{display:none}.gd-save-banner>div{grid-column:1/-1}.gd-save-banner .gd-save-action{width:100%}.gd-save-notice{gap:9px;padding:14px}.gd-save-notice>svg{display:none}body:has(.gd-save-banner) .guest-main{padding-bottom:210px}}
+
+/* Keep recovery and navigation visible without crowding the question. */
+.guest-diagnostic .gd-expand{width:auto;min-width:40px;display:inline-flex;gap:7px;padding:8px 12px;font-size:14px;font-weight:700;flex-shrink:0}
+.gd-resume{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;background:color-mix(in srgb,var(--guest-blue) 12%,var(--guest-panel));border-bottom:1px solid var(--guest-line);font-size:15px;color:var(--guest-text)}
+.gd-resume strong{display:block}.gd-resume button{white-space:nowrap}
+.gd-question-navigation{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:8px 0}.gd-question-navigation button:disabled{opacity:.45}
+@media(max-width:480px){.gd-resume{align-items:flex-start;flex-direction:column}.gd-header{gap:8px}.gd-header>span{font-size:11px}.gd-question-navigation .btn{font-size:13px;padding:9px}}

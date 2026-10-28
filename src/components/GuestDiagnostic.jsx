@@ -1,6 +1,7 @@
+import {useDetailState} from "../lib/learnerPlace.js";
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowRight, Maximize2, Minimize2, Check, BookOpenCheck, Layers3, RotateCcw, Target, Save, X, Sparkles, ShieldCheck, Fingerprint, Network, Radar } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Maximize2, Minimize2, Check, BookOpenCheck, Layers3, RotateCcw, Target, Save, X, Sparkles, ShieldCheck, Fingerprint, Network, Radar } from 'lucide-react';
 import { CipherLoader } from './CipherLoader.jsx';
 import { MascotAnimation } from '../lib/MascotAnimation.jsx';
 import { mcqEngineRequest, prepareGuestDiagnostic } from '../lib/mcqEngineClient.js';
@@ -18,7 +19,12 @@ export const guestPalette=t=>({'--guest-bg':t.bg,'--guest-panel':t.surface,'--gu
 
 export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,startSignal=0,fullPage=false}) {
  const draft=useSyncExternalStore(subscribe,snapshot,snapshot);
- const [busy,setBusy]=useState(false),[error,setError]=useState(''),[expanded,setExpanded]=useState(false),[saving,setSaving]=useState(false),[transitioning,setTransitioning]=useState(false);
+ const [busy,setBusy]=useState(false),[error,setError]=useState(''),[saving,setSaving]=useState(false),[transitioning,setTransitioning]=useState(false);
+ const [expanded,setExpanded]=useDetailState("diagnostic");
+ const [resumeVisible,setResumeVisible]=useState(()=>Boolean(snapshot()?.questions?.length&&!diagnosticComplete(snapshot())));
+ const opener=useRef(null),openerLabel=useRef('');
+ const expand=()=>{opener.current=document.activeElement;openerLabel.current=opener.current?.getAttribute("aria-label")||opener.current?.textContent?.trim()||"";setExpanded(true);};
+ const close=()=>setExpanded(null);
  const host=useRef(null),questionBody=useRef(null),dialog=useRef(null),expandButton=useRef(null),heading=useRef(null),seenSignal=useRef(0);
  const start=async()=>{
   if(snapshot()?.questions?.length)return;
@@ -40,7 +46,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
   if(!expanded)return;
   dialog.current?.showModal();
   const previous=document.body.style.overflow;document.body.style.overflow='hidden';
-  return()=>{document.body.style.overflow=previous;expandButton.current?.focus();};
+  return()=>{document.body.style.overflow=previous;requestAnimationFrame(()=>{const target=opener.current?.isConnected?opener.current:[...document.querySelectorAll("button")].find(node=>(node.getAttribute("aria-label")||node.textContent.trim())===openerLabel.current)||expandButton.current;target?.focus({preventScroll:true});});};
  },[expanded]);
  useEffect(()=>{if(draft?.questions?.length)heading.current?.focus({preventScroll:true});if(expanded&&dialog.current)dialog.current.scrollTop=0;},[draft?.index,expanded]);
  const fullFormat=fullPage||expanded;
@@ -59,7 +65,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
  const importDeadline=new Date((draft?.startedAt||Date.now())+DIAGNOSTIC_IMPORT_WINDOW).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
  const signup=async()=>{
   setSaving(true);setError('');
-  try{publish({...draft,savePromptOpened:true});if(importable&&isDiagnosticBrowserSaved())await onSave?.(rows);setExpanded(false);onSignup();}catch{setError('Your result could not be carried forward. Please try again.');}finally{setSaving(false);}
+  try{publish({...draft,savePromptOpened:true});if(importable&&isDiagnosticBrowserSaved())await onSave?.(rows);setExpanded(null,{replace:true});onSignup();}catch{setError('Your result could not be carried forward. Please try again.');}finally{setSaving(false);}
  };
  const nextQuestion=async()=>{
   if(transitioning)return;
@@ -71,7 +77,9 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
   setTransitioning(false);
  };
  const content=<section ref={host} id={expanded?undefined:'guest-diagnostic'} className={`guest-diagnostic ${expanded?'is-expanded':''} ${fullFormat?'is-full-format':''} ${fullPage?'is-full-page':''}`} style={guestPalette(t)} aria-label="10-question Core diagnostic">
-  <header className="gd-header"><span><i/> {fullPage?'10Q DIAGNOSTIC':'YOUR SECURITY+ CHECK-IN'}</span>{!fullPage&&<button ref={expandButton} className="gd-expand" onClick={()=>setExpanded(!expanded)} aria-label={expanded?'Close full format':'Expand diagnostic'}>{expanded?<Minimize2 size={18}/>:<Maximize2 size={18}/>}</button>}</header>
+  <header className="gd-header"><span><i/> {fullPage?'10Q DIAGNOSTIC':'YOUR SECURITY+ CHECK-IN'}</span>{!fullPage&&<button ref={expandButton} className="gd-expand" onClick={()=>expanded?close():expand()} aria-label={expanded?'Close full format':'Expand diagnostic'}>{expanded?<Minimize2 size={18}/>:<Maximize2 size={18}/>}<span>{expanded?"Close":"Expand"}</span></button>}</header>
+  {questions.length>0&&!done&&!isDiagnosticBrowserSaved()&&<p className="gd-error" role="status">Browser saving is unavailable. Keep this tab open to keep your progress.</p>}
+  {resumeVisible&&questions.length&&!done&&<div className="gd-resume" role="status"><span><strong>Your place is saved.</strong> Question {index+1} of 10 · this browser</span><button className="btn btn-outline" onClick={()=>{setResumeVisible(false);heading.current?.focus({preventScroll:true});}}>Resume diagnostic <ArrowRight size={16}/></button></div>}
   {busy?<CipherLoader t={t} label="Creating your diagnostic…"/>:!questions.length?<div className="gd-welcome">
    <div className="gd-security-visual" role="img" aria-label="Security+ study: identity, threats and network defence">
     <div className="gd-security-rings" aria-hidden="true"><i/><i/></div>
@@ -112,14 +120,15 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
     <span className="gd-domain-label">DOMAIN {q.chapter} · {domains[Number(q.chapter)-1]}</span><h2 ref={heading} tabIndex={-1}>{renderDefinitions(q.prompt)}</h2>
     <div className="gd-options">{q.options.map((o,i)=><button key={o.id} disabled={!!marked} aria-pressed={answers[index]===i} className={`${answers[index]===i?'is-selected':''} ${marked&&i===q.correct?'is-correct':''} ${marked&&answers[index]===i&&i!==q.correct?'is-missed':''}`} onClick={()=>publish({...draft,answers:{...answers,[index]:i}})}><span>{String.fromCharCode(65+i)}</span><span>{renderDefinitions(o.text)}</span><Check size={18} aria-hidden="true" className={`gd-option-check ${marked&&i===q.correct?'is-visible':''}`}/></button>)}</div>
    </div><div className="gd-feedback-slot">
-    {marked?<div className={`gd-feedback ${skipped?'is-skipped':answers[index]===q.correct?'is-correct':'is-revisit'}`} role="status" tabIndex={0} aria-label="Answer feedback"><strong>{skipped?'Saved for your learning path.':answers[index]===q.correct?'You’ve got it!':'A new thing to learn.'}</strong>{fullFormat?<p>{skipped&&<span className="gd-skip-reassurance">Don’t worry! We’ll work on this later.</span>}{renderDefinitions(q.explanation)}</p>:<button onClick={()=>setExpanded(true)}>{skipped?'No worries—see this idea in full format':'See why in full format'} <Maximize2 size={14}/></button>}</div>:<div className="gd-feedback-placeholder"><BookOpenCheck size={22}/><span>{fullFormat?'A friendly explanation is waiting. Not sure? You can skip.':'Give it a try—or save it for later.'}</span></div>}
+    {marked?<div className={`gd-feedback ${skipped?'is-skipped':answers[index]===q.correct?'is-correct':'is-revisit'}`} role="status" tabIndex={0} aria-label="Answer feedback"><strong>{skipped?'Saved for your learning path.':answers[index]===q.correct?'You’ve got it!':'A new thing to learn.'}</strong>{fullFormat?<p>{skipped&&<span className="gd-skip-reassurance">Don’t worry! We’ll work on this later.</span>}{renderDefinitions(q.explanation)}</p>:<button onClick={()=>expand()}>{skipped?'No worries—see this idea in full format':'See why in full format'} <Maximize2 size={14}/></button>}</div>:<div className="gd-feedback-placeholder"><BookOpenCheck size={22}/><span>{fullFormat?'A friendly explanation is waiting. Not sure? You can skip.':'Give it a try—or save it for later.'}</span></div>}
    </div></div>
+   <nav className="gd-question-navigation" aria-label="Diagnostic question navigation"><button className="btn btn-ghost" disabled={index===0||transitioning} onClick={()=>publish({...draft,index:index-1})}><ArrowLeft size={16}/> Previous question</button>{marked&&<button className="btn btn-ghost" onClick={()=>{const nextChecked={...checked};delete nextChecked[index];publish({...draft,checked:nextChecked,answers:{...answers,[index]:null},skipped:{...draft.skipped,[index]:false}});}}>{skipped?'Try this question':'Change my answer'}</button>}</nav>
    <footer className="gd-question-actions"><div className="gd-skip-slot">{!marked?<button type="button" className="gd-skip-button" onClick={skip}><Sparkles size={21}/><span><strong>New to this?</strong><small>Skip & learn later</small></span><ArrowRight size={16}/></button>:<span className="gd-step-encouragement">{skipped?'No pressure. This is on your learn-later list.':index===9?'Look at that—you’ve explored all ten!':`${index+1} explored. Your path is taking shape.`}</span>}</div>{marked?<button className="btn btn-primary" disabled={transitioning} onClick={nextQuestion}>{index===9?'See my learning path':'Let’s keep exploring'} <ArrowRight size={16}/></button>:<button className="btn btn-primary" disabled={answers[index]==null} onClick={()=>publish({...draft,checked:{...checked,[index]:true}})}>Try my answer <Check size={16}/></button>}</footer>
 
   </div>}
   {error&&<p className="gd-error" role="alert">{error}</p>}
  </section>;
- return <>{expanded?<div className="gd-collapsed"><span>Your diagnostic is open in full format.</span><button className="btn btn-outline" onClick={()=>dialog.current?.focus()}>Return to diagnostic</button></div>:content}{expanded&&createPortal(<dialog ref={dialog} className="gd-dialog" aria-label="Diagnostic full format" onCancel={()=>setExpanded(false)} onClick={e=>{if(e.target===e.currentTarget)setExpanded(false);}}>{content}</dialog>,document.body)}</>;
+ return <>{expanded?<div className="gd-collapsed"><span>Your diagnostic is open in full format.</span><button className="btn btn-outline" onClick={()=>dialog.current?.focus()}>Return to diagnostic</button></div>:content}{expanded&&createPortal(<dialog ref={dialog} className="gd-dialog" aria-label="Diagnostic full format" onCancel={e=>{e.preventDefault();close();}} onClick={e=>{if(e.target===e.currentTarget)close();}}>{content}</dialog>,document.body)}</>;
 }
 
 // Mounted once in the guest shell, so dismissing the prompt or auth dialog never loses the reminder.

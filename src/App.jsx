@@ -1,3 +1,4 @@
+import {usePlaceState,useDetailState,useListPlace,writePlace} from "./lib/learnerPlace.js";
 import {AccountSupport} from "./components/AccountSupport.jsx";
 import {THEMES} from "./lib/themes.js";
 import "./components/LightThemeContrast.css";
@@ -18,7 +19,7 @@ import {progressOwner} from "./lib/liveRefresh.js";
 import { usePracticeAccess } from "./lib/usePracticeAccess.js";
 import { generationChoices, isProProfile, PRO_QUESTION_COUNTS } from "./lib/accessModel.js";
 import { CIPHER_COINS_ACTIVE, MASCOT_MANAGER_ACTIVE, isArchivedView } from "./lib/archivedFeatures.js";
-import { useState, useEffect, useCallback, useRef, useMemo, useTransition } from "react";
+import { useState, useEffect, useLayoutEffect, useCallback, useRef, useMemo, useTransition } from "react";
 import { createPortal } from "react-dom";
 import { applyMcqEditorialReview, isMcqEditoriallyActive } from "./data/sy0701EditorialReview.js";
 import { applyPbqEditorialReview, isPbqEditoriallyActive } from "./data/sy0701PbqReview.js";
@@ -145,7 +146,7 @@ import {
 import { getActiveDailyStreak } from "./lib/dailyStreak.js";
 
 import {sendEmailAccessLink} from "./lib/emailAccess.js";
-import {completedGuestDiagnosticRows,markGuestDiagnosticAuthOpened} from "./lib/guestDiagnosticStore.js";
+import {completedGuestDiagnosticRows,markGuestDiagnosticAuthOpened,guestDiagnosticSnapshot,diagnosticComplete} from "./lib/guestDiagnosticStore.js";
 
 const SITE_BRAND_LOCKUP = "SecurePlus | CompTIA Security+™ Prep";
 const SITE_TAGLINE = "Clear study paths. Real scenarios. Pass Security+ with confidence.";
@@ -832,6 +833,8 @@ async function takePendingGuestSmartReview() {
     const parsed=JSON.parse(stored.value);
     if(Date.now()-Number(parsed?.createdAt||0)>(parsed?.attempts?.[0]?.diagnosticSessionId?7*24*60*60*1000:GUEST_SMART_REVIEW_BRIDGE_TTL_MS)){await storageDelete(GUEST_SMART_REVIEW_BRIDGE_KEY);return [];}
     const rows=Array.isArray(parsed?.attempts)?parsed.attempts.filter(attempt=>attempt?.qid):[];
+    // A learner revisiting a saved diagnostic must not import an older answer receipt.
+    if(rows[0]?.diagnosticSessionId&&guestDiagnosticSnapshot()?.questions?.length&&!diagnosticComplete(guestDiagnosticSnapshot()))return [];
     // Keep new diagnostic receipts until the server confirms an atomic import.
     if(!rows[0]?.diagnosticSessionId)await storageDelete(GUEST_SMART_REVIEW_BRIDGE_KEY);
     return rows;
@@ -24910,12 +24913,14 @@ function PBQLoadingSkeleton({t}) {
 }
 
 function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinWallet,coinBusy=false,t,starred=[],onToggleStar,showQuestionCodes=false,pbqBank=PBQ_BANK,isLoading=false,loadError=null}) {
-  const [chFilter,setChFilter]=useState("all");
-  const [typeFilter,setTypeFilter]=useState("all");
+  const placeKey=`pbq:${starOwner(user)}`;
+  useListPlace(placeKey,false);
+  const [chFilter,setChFilter]=usePlaceState(`${placeKey}:chapter`,"all");
+  const [typeFilter,setTypeFilter]=usePlaceState(`${placeKey}:typeFilter`,"all");
   const [lockedQuestion,setLockedQuestion]=useState(null);
-  const [showMissedOnly,setShowMissedOnly]=useState(false);
-  const [starredView,setStarredView]=useState(false);
-  const [visibleCount,setVisibleCount]=useState(12);
+  const [showMissedOnly,setShowMissedOnly]=usePlaceState(`${placeKey}:showMissedOnly`,false);
+  const [starredView,setStarredView]=usePlaceState(`${placeKey}:starredView`,false);
+  const [visibleCount,setVisibleCount]=usePlaceState(`${placeKey}:visibleCount`,12);
   const isPro=user?.authProvider!=="guest"&&user?.loginMethod!=="guest";
   const unlockedSet=useMemo(()=>new Set(coinWallet?.unlockedPbqIds||[]),[coinWallet?.unlockedPbqIds]);
   const coinBalance=Number(coinWallet?.balance||0);
@@ -24941,7 +24946,8 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
     return rank(a)-rank(b);
   });
   const visibleQuestions=displayQuestions.slice(0,visibleCount);
-  useEffect(()=>setVisibleCount(12),[chFilter,showMissedOnly,typeFilter]);
+  const previousFilters=useRef([chFilter,showMissedOnly,typeFilter]);
+  useEffect(()=>{const next=[chFilter,showMissedOnly,typeFilter];if(next.some((v,i)=>v!==previousFilters.current[i]))setVisibleCount(12);previousFilters.current=next;},[chFilter,showMissedOnly,typeFilter]);
   const openLockedPrompt=q=>{
     capture("pbq_locked_clicked", { question_id: q.id, type: q.type, chapter: q.ch });
     setLockedQuestion(q);
@@ -28710,9 +28716,10 @@ const flashcardSetHasExampleMode=set=>Boolean(set?.cards?.some(card=>card.exampl
 function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,starred=[],onToggleStar,onRequireSignup,onOpenDeepDive,onUpgrade,onSaveGeneratedSet,onSaveReviewSet,onOpenRecommendedSet,recommendedSet=null,initialMode="definition",onChangeModeRequest}) {
   const setType=flashcardSetType(acronymSet);
   const setKindLabel=setType==="term"?"Term":"Acronym";
-  const [cardIndex,setCardIndex]=useState(0);
-  const [cardOrder,setCardOrder]=useState(()=>acronymSet.cards.map(card=>card.id));
-  const [isFlipped,setIsFlipped]=useState(false);
+  const readerKey=`reader:${starOwner(user)}:${acronymSet.id}`;
+  const [cardIndex,setCardIndex]=usePlaceState(`${readerKey}:index`,0);
+  const [cardOrder,setCardOrder]=usePlaceState(`${readerKey}:order`,acronymSet.cards.map(card=>card.id));
+  const [isFlipped,setIsFlipped]=usePlaceState(`${readerKey}:flipped`,false);
   const [ratedCardsThisPass,setRatedCardsThisPass]=useState(()=>new Set());
   const [showCompletion,setShowCompletion]=useState(false);
   const [learnMoreOpen,setLearnMoreOpen]=useState(false);
@@ -28753,9 +28760,6 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   };
 
   useEffect(()=>{
-    setCardIndex(0);
-    setCardOrder(acronymSet.cards.map(card=>card.id));
-    setIsFlipped(false);
     setRatedCardsThisPass(new Set());
     setShowCompletion(false);
     setLearnMoreOpen(false);
@@ -28992,15 +28996,19 @@ function DeepDiveReadableBites({section,selectedProfile,t}) {
 }
 
 function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRequestHandled,focusAcronyms=false,onAddWeakTopicToReview,onTryRelatedPbq,onOpenFlashcards,onUpgrade}) {
-  const [query,setQuery]=useState("");
-  const [domainFilter,setDomainFilter]=useState("all");
-  const [openDomains,setOpenDomains]=useState(()=>new Set(["1"]));
-  const [selectedId,setSelectedId]=useState(null);
-  const [selectedAcronymSetId,setSelectedAcronymSetId]=useState(null);
+  const placeKey=`lessons:${starOwner(user)}`;
+  const [query,setQuery]=usePlaceState(`${placeKey}:query`,"");
+  const [domainFilter,setDomainFilter]=usePlaceState(`${placeKey}:domain`,"all");
+  const [openDomainIds,setOpenDomainIds]=usePlaceState(`${placeKey}:open-domains`,["1"]);
+  const openDomains=new Set(openDomainIds);
+  const setOpenDomains=next=>setOpenDomainIds(current=>[...(typeof next==="function"?next(new Set(current)):next)]);
+  const [selectedId,setSelectedId]=useDetailState(`${placeKey}:lesson`);
+  const [selectedAcronymSetId,setSelectedAcronymSetId]=useDetailState(`${placeKey}:cards`);
   const [lockedDivePrompt,setLockedDivePrompt]=useState(null);
   const [shakingDiveId,setShakingDiveId]=useState(null);
-  const [studyMode,setStudyMode]=useState("learn");
-  const [lessonStep,setLessonStep]=useState(0);
+  useListPlace(placeKey,selectedId||selectedAcronymSetId);
+  const [studyMode,setStudyMode]=usePlaceState(`${placeKey}:${selectedId}:mode`,"learn");
+  const [lessonStep,setLessonStep]=usePlaceState(`${placeKey}:${selectedId}:step`,0);
   const [isAnswerVisible,setIsAnswerVisible]=useState(false);
   const [selectedKeyword,setSelectedKeyword]=useState(0);
   const [comparisonIndex,setComparisonIndex]=useState(0);
@@ -29072,7 +29080,11 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
     domain,
     dives:filteredDives.filter(dive=>getSy0701DeepDiveProfile(dive)?.domainId===domain.id),
   })).filter(group=>group.dives.length),[filteredDives]);
+  const previousLessonFilters=useRef([query,domainFilter,isPro]);
   useEffect(()=>{
+    const next=[query,domainFilter,isPro];
+    if(next.every((v,i)=>v===previousLessonFilters.current[i]))return;
+    previousLessonFilters.current=next;
     if(query.trim()){
       setOpenDomains(new Set(groupedDives.map(group=>String(group.domain.id))));
       return;
@@ -29097,10 +29109,9 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
       promptLockedDeepDive(id,"open");
       return;
     }
-    setSelectedAcronymSetId(null);
+    if(selectedAcronymSetId)setSelectedAcronymSetId(null,{replace:true});
+    writePlace(`${placeKey}:${id}:mode`,mode==="cards"?"practice":mode);
     setSelectedId(id);
-    setStudyMode(mode==="cards"?"practice":mode);
-    setLessonStep(0);
     setIsAnswerVisible(false);
     setSelectedKeyword(0);
     setComparisonIndex(0);
@@ -29126,15 +29137,14 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
     onOpenLessonRequestHandled?.();
   },[isLockedDeepDive,onOpenLessonRequestHandled,openDive,openLessonRequest?.lessonId,openLessonRequest?.mode,openLessonRequest?.nonce,openLessonRequest?.source,promptLockedDeepDive]);
   const openAcronymSet=id=>{
-    setSelectedId(null);
+    if(selectedId)setSelectedId(null,{replace:true});
     setSelectedAcronymSetId(id);
     const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"}));
     capture("concept_deep_dive_acronym_set_opened",{set_id:id});
   };
   const closeAcronymSet=()=>{
-    setSelectedAcronymSetId(null);
-    window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:"auto"}));
+    if(selectedAcronymSetId)setSelectedAcronymSetId(null);
   };
   const scrollToAcronymLibrary=()=>{
     const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
@@ -29143,7 +29153,6 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
   };
   const closeDive=()=>{
     setSelectedId(null);
-    window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:"auto"}));
   };
   const toggleComplete=id=>{
     const next=completedIds.includes(id)?completedIds.filter(item=>item!==id):[...completedIds,id];
@@ -29655,10 +29664,11 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   const canSync=Boolean(user?.authProvider==="supabase"&&user?.id&&supabase);
   const [mastered,setMastered]=useState(()=>user?[]:readLocalMasteredFlashcardIds());
   const [savedSets,setSavedSets]=useState(()=>readSavedRandomFlashcardSets(user));
-  const [selected,setSelected]=useState(null);
-  const [domain,setDomain]=useState("all");
-  const [query,setQuery]=useState("");
-  const [count,setCount]=useState(10);
+  const [selected,setSelected]=useDetailState(`flashcards:${owner}`);
+  useListPlace(`flashcards:${owner}`,selected);
+  const [domain,setDomain]=usePlaceState(`flashcards:${owner}:domain`,"all");
+  const [query,setQuery]=usePlaceState(`flashcards:${owner}:query`,"");
+  const [count,setCount]=usePlaceState(`flashcards:${owner}:count`,10);
   const currentOwner=useRef(owner);currentOwner.current=owner;
   const [engineState,setEngineState]=useState(null);
   const [progressStatus,setProgressStatus]=useState(user?"loading":"guest");
@@ -29675,7 +29685,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   },[canSync,owner,user?.id]);
   useEffect(()=>{
     let active=true;
-    setSelected(null);setEngineState(null);setMastered(user?[]:readLocalMasteredFlashcardIds());
+    setEngineState(null);setMastered(user?[]:readLocalMasteredFlashcardIds());
     setSavedSets(readSavedRandomFlashcardSets(user));
     if(canSync){
       loadSupabaseFlashcardMasteredIds(user.id).then(ids=>{if(active&&Array.isArray(ids))setMastered(ids);});
@@ -29686,6 +29696,12 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   useEffect(()=>{refreshPersonal();window.addEventListener("guest-diagnostic-imported",refreshPersonal);return()=>window.removeEventListener("guest-diagnostic-imported",refreshPersonal);},[refreshPersonal]);
   useEffect(()=>{
     if(!initialSetId)return;
+    // Make the list the parent entry, rather than reopening the share link on Back.
+    const sharedParams=new URLSearchParams(window.location.search);
+    if(sharedParams.has("set")){
+      sharedParams.delete("set");
+      window.history.replaceState({...window.history.state},"",`${window.location.pathname}${sharedParams.size?`?${sharedParams}`:""}`);
+    }
     if(initialSetId===RANDOM_FLASHCARD_SET_ID){
       const ids=new URLSearchParams(window.location.search).get("cards")?.split(",").slice(0,30)||[];
       const shared=ids.map(id=>SY0701_ACRONYM_CARDS.find(card=>card.id===id)).filter(Boolean);
@@ -30480,7 +30496,7 @@ export default function App() {
   const [navigating,startNavigation]=useTransition();
   const authReturnFocus=useRef(null);
   const setView=useCallback(next=>{if(next==="auth"&&document.activeElement!==document.body)authReturnFocus.current=document.activeElement;startNavigation(()=>setViewImmediate(next));},[]);
-  const [view,setViewImmediate]=useState(()=>focusAcronymLibrary||urlFlashcardsRequest?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":urlAboutRequest?"about":devCoinPreview?"coins":"dashboard");
+  const [view,setViewImmediate]=useState(()=>focusAcronymLibrary||urlFlashcardsRequest?"flashcards":urlDeepDiveRequest||devDeepDivePreview?"deep-dives":urlPricingRequest?"pricing":urlAboutRequest?"about":devCoinPreview?"coins":readAppHistoryState().view);
   const guestBackgroundView=useRef("dashboard");
   useEffect(()=>{if(view!=="auth")guestBackgroundView.current=view;},[view]);
   const [flashcardsIntroRequested]=useState(()=>urlFlashcardsIntroRequest);
@@ -30501,7 +30517,7 @@ export default function App() {
 
   const [starred,setStarred]=useState([]);
   const [guestStarred,setGuestStarred]=useState([]);
-  const [pbqQ,setPbqQ]=useState(null);
+  const [pbqQ,setPbqQ]=useDetailState(`pbq-question:${starOwner(user)}`,{route:"/?view=pbq"});
   const [showDaily,setShowDaily]=useState(false);
   const [billingLoading,setBillingLoading]=useState(false);
   const [passwordRecovery,setPasswordRecovery]=useState(false);
@@ -30732,10 +30748,11 @@ export default function App() {
     try{window.localStorage?.setItem("secureplus-sidebar-hidden",sidebarHidden?"true":"false");}catch{}
   },[sidebarHidden]);
 
+  const readAppHistoryStateFromView=useRef(view);readAppHistoryStateFromView.current=view;
   useEffect(()=>{
     const handlePopState=()=>{
       const next=readAppHistoryState();
-      suppressNextHistoryPushRef.current=true;
+      if(next.view!==readAppHistoryStateFromView.current)suppressNextHistoryPushRef.current=true;
       setFlashcardSetRequest(next.flashcardSetId);
       setView(next.view);
     };
@@ -30743,20 +30760,26 @@ export default function App() {
     return()=>window.removeEventListener("popstate",handlePopState);
   },[]);
 
-  useEffect(()=>{
+  const previousHistoryView=useRef(view);
+  useLayoutEffect(()=>{
+    const sameView=previousHistoryView.current===view;
+    previousHistoryView.current=view;
     if(typeof window==="undefined"||hasCheckoutReturnParams())return;
     const nextUrl=buildAppHistoryUrl(view,flashcardSetRequest);
     const currentUrl=`${window.location.pathname}${window.location.search}`;
     if(!historyReadyRef.current){
       historyReadyRef.current=true;
-      if(currentUrl!==nextUrl)window.history.replaceState({secureplusView:view},"",nextUrl);
+      if(currentUrl!==nextUrl)window.history.replaceState({...window.history.state,secureplusView:view},"",nextUrl);
       return;
     }
     if(suppressNextHistoryPushRef.current){
       suppressNextHistoryPushRef.current=false;
       return;
     }
-    if(currentUrl!==nextUrl)window.history.pushState({secureplusView:view},"",nextUrl);
+    if(currentUrl!==nextUrl){
+      if(sameView)window.history.replaceState({...window.history.state,secureplusView:view},"",nextUrl);
+      else window.history.pushState({secureplusView:view},"",nextUrl);
+    }
   },[view,flashcardSetRequest]);
 
   useEffect(()=>{
@@ -30840,8 +30863,7 @@ export default function App() {
     setStarred([]);
     setCoinWallet({...emptyCipherWallet(),status:"idle"});
     setCoinRewardToast(null);
-    setPbqQ(null);
-    if(!preserveRoute)setView("dashboard");
+    if(!preserveRoute){setPbqQ(null,{replace:true});setView("dashboard");}
   },[]);
 
   const forceSupabaseSignOut=useCallback(async()=>{
@@ -31482,7 +31504,7 @@ export default function App() {
   const startFlashcardReviewSignup=useCallback(async(reason="flashcard_review_set")=>{
     const count=getFlashcardStarKeys(guestStarred).length;
     await saveFlashcardReviewAuthIntent({source:reason,count});
-    setPbqQ(null);
+    setPbqQ(null,{replace:true});
     setAuthStartMode("review-signup");
     setAuthRequestId(id=>id+1);
     setView("auth");
@@ -31688,8 +31710,8 @@ export default function App() {
         {id:"preview-pbq",amount:-50,balance_after:130,event_type:"pbq_unlock",created_at:new Date(Date.now()-172800000).toISOString()},
       ],
     });
-    const goToSignup=()=>{markGuestDiagnosticAuthOpened();capture("landing_signup_cta_clicked",{source:"guest_diagnostic_funnel"});setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("signup-entry");setAuthRequestId(id=>id+1);setView("auth");};
-    const goToLogin=()=>{markGuestDiagnosticAuthOpened();setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
+    const goToSignup=()=>{markGuestDiagnosticAuthOpened();capture("landing_signup_cta_clicked",{source:"guest_diagnostic_funnel"});setGuestMoreOpen(false);setPbqQ(null,{replace:true});setAuthStartMode("signup-entry");setAuthRequestId(id=>id+1);setView("auth");};
+    const goToLogin=()=>{markGuestDiagnosticAuthOpened();setGuestMoreOpen(false);setPbqQ(null,{replace:true});setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
     const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","why-different","about","objectives","flashcards","deep-dives","privacy","terms",...(devCoinPreview?["coins"]:[])]);
     const guestTopNavItems=[
       {id:"mcq",label:"10Q Diagnostic"},
@@ -31875,7 +31897,7 @@ export default function App() {
       {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <button type="button" onClick={()=>{setPbqQ(null);setView("dashboard");}} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}>
+          <button type="button" onClick={()=>{setPbqQ(null,{replace:true});setView("dashboard");}} style={{display:"flex",alignItems:"center",gap:8,background:"transparent",border:0,padding:0,cursor:"pointer",textAlign:"left"}}>
             <BrandMark size={28}/><span style={{fontWeight:800,fontSize:14,lineHeight:1.2,color:t.text}}>{SITE_BRAND_LOCKUP}</span>
           </button>
         </div>

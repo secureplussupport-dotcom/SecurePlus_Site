@@ -14,7 +14,7 @@
     "audit": "npm run audit:flashcards && npm run audit:access-model && npm run audit:launch && npm run audit:coins && npm run audit:engagement && npm run audit:seo && npm run audit:pwa && npm run audit:deep-dives && npm run audit:editorial && npm run audit:qbank:strict",
     "audit:access-model": "node --test scripts/test-access-model.mjs && node scripts/test-practice-access-database.mjs",
     "audit:editorial": "node scripts/audit-editorial.mjs",
-    "audit:launch": "node --test scripts/test-light-theme.mjs scripts/test-email-access.mjs && node scripts/audit-launch.mjs",
+    "audit:launch": "node --test scripts/test-light-theme.mjs scripts/test-email-access.mjs scripts/test-learner-place.mjs && node scripts/audit-launch.mjs",
     "audit:coins": "node scripts/audit-cipher-welcome.mjs && node scripts/test-archived-systems-database.mjs",
     "audit:engagement": "node scripts/audit-engagement.mjs",
     "audit:pwa": "node scripts/audit-pwa.mjs",
