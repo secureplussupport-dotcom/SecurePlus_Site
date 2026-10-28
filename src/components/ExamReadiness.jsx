@@ -37,13 +37,18 @@ function Legend({slices,total}) {
 
 export function ReadinessBreakdown({profile,chapters}) {
   const {attempted,mastered,unmastered,byChapter,status}=profile;
+  const sampleText = profile.confidenceLabel && profile.confidence !== 'none'
+    ? `${profile.confidenceLabel} · based on ${profile.sampleQuestions} ${profile.distinctQuestionsKnown ? 'distinct questions' : 'answers'}`
+    : 'No estimate yet — complete a set to begin.';
   const masterySlices=[{label:'Mastered',count:mastered,color:'#43c8bb'},{label:'Still growing',count:unmastered,color:'#6b9dff'}];
   const chapterSlices=chapters.map((ch,i)=>({label:`Domain ${ch.id}`,count:byChapter[ch.id] || 0,color:COLORS[i]}));
   if(byChapter.unknown)chapterSlices.push({label:'Domain unavailable',count:byChapter.unknown,color:'#a0aaba'});
   return <section id="exam-readiness-breakdown" className="er-breakdown" aria-label="Exam readiness breakdown">
     <header><div><span className="er-eyebrow">READINESS BREAKDOWN</span><h2>{profile.level}</h2></div><span className="er-milestone">80% · Exam ready</span></header>
     {status==='loading'?<CipherLoader compact label="Loading your progress…"/>:status==='error'?<p role="status">Your readiness couldn’t load. <button type="button" onClick={profile.retry}>Try again</button></p>:<>
-      <p className="er-scope"><span><strong>{attempted}</strong> concepts attempted</span><span>MCQ + Exam</span><span>Unattempted excluded</span></p>
+      <p className="er-scope"><span><strong>{attempted}</strong> concepts attempted</span><span>MCQ + Exam</span><span>Unattempted concepts count as 50</span><span>{sampleText}</span>{profile.accuracy != null && <span>Accuracy {profile.accuracy}% (shown separately, not blended into readiness)</span>}</p>
+      {profile.stale && <p role="status" className="er-history-note">{profile.staleNote}</p>}
+      <p className="er-history-note">{profile.explanation}</p>
       <div className="er-layout">
       <div className="er-chapters">
         <div className="er-card-heading"><h3>Domain accuracy</h3><span>01—05</span></div>
@@ -60,6 +65,18 @@ export function ReadinessBreakdown({profile,chapters}) {
         <article className="er-growth"><div className="er-card-heading"><h3>Where to grow</h3><span>By domain</span></div><div className="er-chart-body"><Donut slices={chapterSlices} total={unmastered} label="Unmastered concepts by domain" center={unmastered || (attempted?'0':'—')}/>{unmastered?<Legend slices={chapterSlices.filter(s=>s.count)} total={unmastered}/>:<p className="er-empty">{attempted?'All attempted concepts mastered.':'Complete a set to begin.'}</p>}</div></article>
       </div>
       </div>
+      {Array.isArray(profile.domains) && <div className="er-chapters" style={{marginTop:16}}>
+        <div className="er-card-heading"><h3>Domain mastery</h3><span>Weighted by exam share</span></div>
+        <p className="er-history-note">Each domain averages all concepts it tests, with unattempted concepts at 50. These figures add up to the headline readiness by exam weight.</p>
+        {profile.domains.map((domain, i) => {
+          const chapter = chapters.find((ch) => ch.id === domain.id);
+          return <div className="er-row" key={domain.id}>
+            <div className="er-row-label"><span style={{color:COLORS[i]}}>0{domain.id}</span><span>{chapter?.title || `Domain ${domain.id}`}</span><strong>{domain.mastery == null ? '—' : `${Math.round(domain.mastery)}%`}</strong></div>
+            <div className="er-track" role="img" aria-label={`${chapter?.title || `Domain ${domain.id}`}: ${domain.mastery == null ? 'No data' : `${Math.round(domain.mastery)}% mastery`}, ${domain.attempted} of ${domain.total} concepts attempted, exam weight ${domain.weight}%`}><span style={{width:`${domain.mastery ?? 0}%`,background:COLORS[i]}}/></div>
+            <small className="er-history-note">{domain.attempted} of {domain.total} concepts attempted · {domain.weight}% of the exam{domain.weakest.length ? ` · Weakest: ${domain.weakest.map((w) => `${w.tag} (${w.score})`).join(', ')}` : ''}</small>
+          </div>;
+        })}
+      </div>}
       {profile.unclassified>0&&<small className="er-history-note">Older answers without an activity label are excluded.</small>}
     </>}
   </section>;
