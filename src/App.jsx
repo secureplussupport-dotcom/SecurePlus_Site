@@ -5,7 +5,7 @@ import {UpgradePage} from "./components/UpgradePage.jsx";
 import {FlashcardDeck} from "./components/FlashcardDeck.jsx";
 import {FlashcardPreview} from "./components/FlashcardPreview.jsx";
 import "./components/FlashcardLibrary.css";
-import {flashcardFaces, personalisedFlashcards, personalisedFlashcardSet, personalisedFlashcardGroups} from "./lib/flashcardConcepts.js";
+import {flashcardFaces, personalisedFlashcards, personalisedFlashcardSet, recommendedFlashcardSets} from "./lib/flashcardConcepts.js";
 import {PersonalisedFlashcardGroups} from "./components/PersonalisedFlashcardGroups.jsx";
 import { AuthDialog } from "./components/AuthDialog.jsx";
 import { GuestLanding } from "./components/GuestLanding.jsx";
@@ -30001,7 +30001,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   const chapterGroups=useMemo(()=>groupSy0701AcronymSetsByChapter(),[]);
   const starCards=useMemo(()=>getStarredFlashcards(starred),[starred]);
   const personalCards=useMemo(()=>personalisedFlashcards(engineState),[engineState]);
-  const personalSets=useMemo(()=>personalisedFlashcardGroups(personalCards),[personalCards]);
+  const personalSets=useMemo(()=>recommendedFlashcardSets(engineState),[engineState]);
   const refreshPersonal=useCallback(()=>{
     if(!canSync||!mcqEngineEnabled){setProgressStatus(user?"unavailable":"guest");return;}
     setProgressStatus("loading");
@@ -30094,8 +30094,8 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     </header>
     <section className={`fc-personal fc-personal-feature ${personalCards.length?"has-review":""}`} aria-labelledby="fc-personal-title">
       <div className="fc-personal-copy"><span className="fc-personal-badge"><Sparkles size={14}/> MADE FOR YOUR NEXT BREAKTHROUGH</span>
-      <h2 id="fc-personal-title">Your personalised topics.<br/><span>A little more “I’ve got this.”</span></h2>
-      {progressStatus!=="loading"&&<p>{progressStatus==="guest"?"Turn tricky concepts into familiar ones. After two misses on the same concept, every linked flashcard comes here for another look.":progressStatus==="loading"?"Finding your next useful review…":progressStatus==="error"||progressStatus==="unavailable"?"We couldn’t load your practice signals. Refresh to find the cards that need another look.":personalCards.length?`${personalCards.length} cards across ${personalSets.length} topic${personalSets.length===1?"":"s"}. Choose what to review.`:"Nothing needs a repeat review right now. Your next set will take shape as you practise."}</p>}
+      <h2 id="fc-personal-title">Your next review.</h2>
+      {progressStatus!=="loading"&&<p>{progressStatus==="guest"?"Turn tricky concepts into familiar ones. After two misses on the same concept, every linked flashcard comes here for another look.":progressStatus==="loading"?"Finding your next useful review…":progressStatus==="error"||progressStatus==="unavailable"?"We couldn’t load your practice signals. Refresh to find the cards that need another look.":personalCards.length?"Focused on the concepts that need another look.":"Nothing needs a repeat review right now. Your next set will take shape as you practise."}</p>}
       {personalSets.length>0&&<PersonalisedFlashcardGroups sets={personalSets} onOpen={openSet}/>}
       {progressStatus==="loading"&&<CipherLoader t={t} compact label="Finding your review…"/>}
       {(progressStatus==="error"||progressStatus==="unavailable")&&<button className="btn btn-primary fc-personal-cta" onClick={refreshPersonal}>Refresh my review <RotateCcw size={16}/></button>}

@@ -7,7 +7,7 @@ import schema from '../src/data/sy0701_flashcard_seed.schema.json' with {type:'j
 import vocabulary from '../src/data/mcqConceptTagVocabulary.json' with {type:'json'};
 import groups from '../src/data/mcqConceptTagGroups.json' with {type:'json'};
 import {SY0701_ACRONYM_CARDS as cards,SY0701_ACRONYM_SETS as decks,getSy0701AcronymSet} from '../src/data/sy0701AcronymFlashcards.js';
-import {flashcardFaces,personalisedFlashcards,partitionFlashcards,personalisedFlashcardGroups,personalisedFlashcardSet} from '../src/lib/flashcardConcepts.js';
+import {flashcardFaces,personalisedFlashcards,partitionFlashcards,personalisedFlashcardGroups,personalisedFlashcardSet,recommendedFlashcardSets} from '../src/lib/flashcardConcepts.js';
 import {advanceConceptStreak} from '../src/lib/mcqResultSummary.js';
 
 // A small validator for the JSON-schema constructs used by this static bank.
@@ -108,7 +108,7 @@ test('published UI uses one term-first flow and no editable card backend',()=>{
   assert.ok(!page.includes('FlashcardModeChooser'));
   assert.ok(page.includes('mcqEngineRequest("state")'));
   assert.ok(page.includes('personalisedFlashcards(engineState)'));
-  assert.ok(page.includes('personalisedFlashcardGroups(personalCards)'));
+  assert.ok(page.includes('recommendedFlashcardSets(engineState)'));
   assert.ok(app.includes('disabled={!answerCopy}'));
 });
 
@@ -137,13 +137,30 @@ test('an oversized topic stays named and retains every card in bounded batches',
   assert(parts.every(set=>set.title.startsWith(cards[0].setTitle)&&set.cards.length<=20));
 });
 
-test('dashboard review metadata names one topic or offers a choice without changing selected cards',()=>{
+test('dashboard review metadata matches the two recommended topic sets',()=>{
  const oneState={concept_streaks:[{concept_tag:'sec.cia-triad',wrong_streak:2}]};
  const one=personalisedFlashcardSet(oneState);
  assert.equal(one.topicCount,1);assert.equal(one.title,one.cards[0].setTitle);
  const multiState={concept_streaks:[{concept_tag:'risk.bia-rto-rpo',wrong_streak:2},{concept_tag:'ops.siem',wrong_streak:2}]};
  const multi=personalisedFlashcardSet(multiState);
  assert(multi.topicCount>1);assert.equal(multi.title,'Your personalised topics');
- assert.deepEqual(multi.cards,personalisedFlashcards(multiState));
+ assert.deepEqual(multi.cards,recommendedFlashcardSets(multiState).flatMap(set=>set.cards));
  assert.equal(personalisedFlashcardSet({}),null);
+});
+
+test('recommendations show at most two relevant 15-card sets without duplicates or cross-domain padding',()=>{
+ const state={concept_streaks:[{concept_tag:'risk.bia-rto-rpo',wrong_streak:4},{concept_tag:'ops.siem',wrong_streak:3},{concept_tag:'iam.mfa',wrong_streak:2},{concept_tag:'att.phishing',wrong_streak:2}]};
+ const sets=recommendedFlashcardSets(state);
+ assert.equal(sets.length,2);
+ assert(sets[0].cards.some(card=>card.concept_tags.includes('risk.bia-rto-rpo')));
+ assert(sets[1].cards.some(card=>card.concept_tags.includes('ops.siem')));
+ for(const set of sets){assert.equal(set.cards.length,15);assert(set.cards.every(card=>card.chapterId===set.chapterId));}
+ assert.equal(new Set(sets.flatMap(set=>set.cards).map(card=>card.id)).size,30);
+ assert.deepEqual(recommendedFlashcardSets({}),[]);
+ assert.equal(recommendedFlashcardSets({diagnostic_weak_tags:['iam.mfa']})[0].cards.length,15);
+ assert.equal(recommendedFlashcardSets({concept_streaks:[{concept_tag:'iam.mfa',wrong_streak:0}]}).length,0);
+ const limited=cards.filter(card=>card.concept_tags.includes('iam.mfa')).slice(0,1);
+ assert.equal(recommendedFlashcardSets({diagnostic_weak_tags:['iam.mfa']},limited)[0].cards.length,1);
+ const sameDomain=recommendedFlashcardSets({concept_streaks:[{concept_tag:'ops.siem',wrong_streak:3},{concept_tag:'ir.lifecycle-nist',wrong_streak:2}]});
+ assert.equal(new Set(sameDomain.flatMap(set=>set.cards).map(card=>card.id)).size,sameDomain.flatMap(set=>set.cards).length);
 });

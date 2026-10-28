@@ -162,27 +162,23 @@
 @media(max-width:460px){.fc-cipher-host{justify-content:flex-end;margin-top:-8px}.fc-cipher-host strong{font-size:12px}.fc-hero-right .fc-preview-deck{max-width:240px}.fc-personal-feature{grid-template-columns:1fr;padding:26px 22px}.fc-personal-visual{display:none}.fc-personal-feature h2{font-size:27px}.fc-personal-feature h2>span{font-size:22px}.fc-personal-feature p{font-size:14px}.fc-personal-badge{font-size:9px}.fc-personal-feature .btn-primary{width:100%;justify-content:center;padding:14px 12px}.fc-personal-note{text-align:center}.fc-personal-feature::before{left:22px;right:22px}.fc-library .fc-deck-terms>span{font-size:14px}.fc-domain-tab-copy strong{font-size:11px}}
 .fc-personal-feature.has-review{grid-template-columns:minmax(0,1fr)}
 .fc-personal-feature.has-review .fc-personal-visual{display:none}
-.fc-personal-topics{margin-top:26px;display:grid;gap:26px}
-.fc-personal-domain>h3{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:18px;line-height:1.5;letter-spacing:-.02em;margin:0 0 12px;font-weight:700;color:var(--fc-text)}
-.fc-personal-domain>h3>span{border:1px solid var(--fc-line);border-radius:6px;padding:5px 8px;font-size:12px;letter-spacing:.06em;color:var(--fc-text);font-weight:700}
-.fc-personal-topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.fc-personal-topic{display:flex;flex-direction:column;gap:13px;padding:20px;border:1px solid var(--fc-line);border-radius:16px;background:var(--fc-panel);color:var(--fc-text);font:inherit;text-align:left;cursor:pointer;transition:transform .16s,border-color .16s}
+.fc-personal-topics{margin-top:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.fc-personal-topic{display:flex;flex-direction:column;gap:12px;padding:20px;border:1px solid var(--fc-line);border-radius:14px;background:var(--fc-panel);color:var(--fc-text);font:inherit;text-align:left;cursor:pointer;transition:transform .16s,border-color .16s}
 .fc-personal-topic:hover{transform:translateY(-2px);border-color:var(--fc-accent)}
-.fc-personal-topic-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--fc-muted)}
-.fc-personal-topic>strong{font-size:22px;line-height:1.4;letter-spacing:-.025em;font-weight:650}
-.fc-personal-term-preview{font-size:16px;line-height:1.6;color:var(--fc-muted)}
-.fc-personal-topic-action{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:13px;border-top:1px solid var(--fc-line);font-size:16px;font-weight:700;color:var(--fc-accent)}
-@media(max-width:650px){.fc-personal-topic-grid{grid-template-columns:1fr}.fc-personal-topic{padding:18px}.fc-personal-topic>strong{font-size:20px}.fc-personal-domain>h3{font-size:18px}}
+.fc-personal-topic-top{display:flex;justify-content:space-between;gap:12px;font-size:14px;font-weight:600;color:var(--fc-muted)}
+.fc-personal-topic>strong{font-size:20px;line-height:1.35;letter-spacing:-.025em;font-weight:700}
+.fc-personal-topic-action{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;font-size:16px;font-weight:700;color:var(--fc-accent)}
+.fc-personal-feature.has-review{padding:26px 28px}
+.fc-personal-feature.has-review h2{font-size:28px;margin:10px 0 8px}
+.fc-personal-feature.has-review .fc-personal-badge{font-size:11px}
+@media(max-width:650px){.fc-personal-topics{grid-template-columns:1fr;gap:10px;margin-top:16px}.fc-personal-topic{padding:16px}.fc-personal-feature.has-review{padding:22px}.fc-personal-feature.has-review h2{font-size:26px}}
 @media(prefers-reduced-motion:reduce){.fc-personal-topic{transition:none}}
-.fc-personal-domain{display:grid;grid-template-columns:190px minmax(0,1fr);gap:24px;align-items:start}.fc-personal-domain>h3{flex-direction:column;align-items:flex-start;margin:13px 0 0;gap:10px}.fc-personal-topic:only-child{grid-column:1/-1}@media(max-width:950px){.fc-personal-domain{grid-template-columns:150px minmax(0,1fr);gap:18px}.fc-personal-topic-grid{grid-template-columns:1fr}}@media(max-width:650px){.fc-personal-domain{display:block}.fc-personal-domain>h3{flex-direction:row;align-items:center;margin:0 0 12px}}
-
 /* Keep personalised review labels readable at every viewport size. */
 .fc-personal-feature .fc-personal-badge{font-size:12px}
 .fc-personal-feature p{font-size:16px;opacity:1}
 html[data-theme="light"] .fc-personal-feature{--fc-text:#263b35;--fc-muted:#475b53;--fc-accent:#17634f;--fc-line:#9bad9f;--fc-panel:#fffefa;background:#edf3ec;border-color:#739382}
 html[data-theme="light"] .fc-personal-feature::before{background:#17634f}
 html[data-theme="light"] .fc-personal-badge svg{color:var(--fc-accent)}
-html[data-theme="light"] .fc-personal-domain>h3>span{background:#dce9df;color:#254b3a;border-color:#8ba894}
 html[data-theme="light"] .fc-personal-topic{border-color:#9bad9f;box-shadow:0 2px 6px #263b3509}
 html[data-theme="light"] .fc-personal-topic:hover{border-color:#17634f;background:#f5f9f3}
 .fc-personal-topic:focus-visible{outline:3px solid var(--fc-accent);outline-offset:3px}
