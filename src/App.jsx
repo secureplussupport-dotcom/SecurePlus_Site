@@ -42,6 +42,7 @@ import { buildMcqExam, formatExamTime, EXAM_SECONDS_PER_QUESTION } from "./lib/m
 import { useQuestionPacing } from "./lib/useQuestionPacing.js";
 import { DashboardMetrics } from "./components/DashboardMetrics.jsx";
 import "./components/DashboardHome.css";
+import "./components/LearningWorkspace.css";
 import { useExamReadiness, ReadinessBreakdown } from "./components/ExamReadiness.jsx";
 import { McqSetResults } from "./components/McqSetResults.jsx";
 import { buildMcqResultSummary, advanceConceptStreak } from "./lib/mcqResultSummary.js";
@@ -23664,11 +23665,10 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
         <div className="dh-cipher"><MascotAnimation animation={questionsDone?"scan":"wave"} size={88} interactive={false} label="Cipher, your study companion"/></div>
       </header>
 
-      <StudyPlanWidget study={study} onNavigate={onNav} onOpenLesson={onOpenDeepDive}/>
       <section className="dh-launch-row" aria-label="Practice and exam readiness">
         <article className="dh-practice">
           <span className="dh-eyebrow"><BookOpenCheck size={15}/> MCQ PRACTICE</span>
-          <h2>Small steps.<br/><span>Stronger instincts.</span></h2>
+          <h2>Your next<br/><span>breakthrough.</span></h2>
           <div className="dh-practice-actions"><button className="btn dh-primary" onClick={()=>onNav("mcq")}>Start practice <ArrowRight size={18}/></button><button className="dh-text-button" onClick={()=>onNav("exam")}>Exam mode <ArrowUpRight size={15}/></button></div>
           <div className="dh-practice-art" aria-hidden="true"><span/><span/><span/><ShieldCheck size={46} strokeWidth={1.2}/></div>
         </article>
@@ -23696,11 +23696,12 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
       {readinessProfile.status==="loading"&&<CipherLoader t={t} compact label="Updating your progress…"/>}
       <DashboardMetrics quota={practiceAccess} profile={readinessProfile} streak={streakInfo} tier={user.tier} t={t}/>
 
-      <div className="dh-section-title"><h2>For you</h2></div>
+      <StudyPlanWidget study={study} onNavigate={onNav} onOpenLesson={onOpenDeepDive}/>
+      <div className="dh-section-title"><h2>Made for your next step</h2></div>
       <section className="dh-next-grid" aria-label="Dashboard action recommendations">
         <article className={`dh-personal dh-widget ${showAssistantDashboardSet?"has-review":""}`}>
           <div className="dh-widget-top"><span className="dh-eyebrow"><Sparkles size={14}/> PERSONALISED FLASHCARDS</span><span className="dh-widget-icon"><Layers3 size={20}/></span></div>
-          <div className="dh-personal-body"><div><h3>{showAssistantDashboardSet?assistantFlashcardSet.title:"Make tricky\nterms click."}</h3><p>{showAssistantDashboardSet?"Grouped by your review topics.":"Built from your practice."}</p></div><div className="dh-card-fan" aria-hidden="true"><i/><i/><i>{showAssistantDashboardSet?<><strong>{assistantFlashcardSet.cards.length}</strong><small>cards</small></>:<Brain size={36} strokeWidth={1.5}/>}</i></div></div>
+          <div className="dh-personal-body"><div><h3>{showAssistantDashboardSet?assistantFlashcardSet.title:"Your recall studio."}</h3></div><div className="dh-card-fan" aria-hidden="true"><i/><i/><i>{showAssistantDashboardSet?<><strong>{assistantFlashcardSet.cards.length}</strong><small>cards</small></>:<Brain size={36} strokeWidth={1.5}/>}</i></div></div>
           {weakFlashcardPreview.length>0&&<div className="dh-term-chips">{weakFlashcardPreview.map((term,index)=><span key={`${term}-${index}`}>{term}</span>)}</div>}
           <button className="dh-widget-cta" onClick={()=>showAssistantDashboardSet?onOpenFlashcards?.(assistantFlashcardSet):onNav("flashcards")}>{showAssistantDashboardSet?(assistantFlashcardSet.topicCount>1?"Choose a topic":"Review my cards"):"Explore flashcards"}<ArrowRight size={18}/></button>
         </article>
@@ -24624,14 +24625,14 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
   if(starredView)return <BookmarkOrganiser questions={starredMcqs} pro={isPro} onToggle={onToggleStar} onPractise={startStarredQuiz} onBack={()=>setStarredView(false)} t={t}/>;
 
   if(!started) return(
-    <div className="mcq-setup-screen mcq-hub-screen fu" style={{...examThemeVars(t),"--practice-accent":examMode?t.accent:reviewMode==="smart"?t.green:t.accent}}>
+    <div className="mcq-setup-screen mcq-hub-screen lw-mcq fu" style={{"--lw-text":t.text,"--lw-muted":t.textSec,"--lw-panel":t.panel,"--lw-surface":t.surface,"--lw-line":t.border,...examThemeVars(t),"--practice-accent":examMode?t.accent:reviewMode==="smart"?t.green:t.accent}}>
       {missedBatch!==null&&<ModalFrame className="streak-overlay" aria-label="Choose missed-question batch" onClose={()=>setMissedBatch(null)}><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Practise previously missed questions. Correct answers clear those questions from your missed queue; incorrect answers stay queued. Your allowance is spent only when you start this new batch.</p><label>Questions <select className="input" value={missedBatch} disabled={!missedBatchSizes.length} onChange={e=>setMissedBatch(Number(e.target.value))}>{!missedBatchSizes.length&&<option value={0}>No batch available</option>}{missedBatchSizes.map(size=><option key={size} value={size}>{size} questions</option>)}</select></label>{isPro&&!missedBatchSizes.length&&<p role="status">You have {missedQuestions.length} missed questions. A Pro batch starts at 10.</p>}<p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!missedBatchSizes.includes(missedBatch)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>{missedBatchSizes.length?`Practise ${missedBatch} missed questions`:"No batch available"}</button></div></div></ModalFrame>}
       <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h1>MCQ Practice</h1></div></header>
-      {!isGuest&&!examMode&&<section className="sr-preview" aria-label="Smart Review status"><div className="sr-preview-metrics"><div><strong>{reviewPreview.next===0?'Now':reviewPreview.next??'—'}</strong><span>{reviewPreview.next===0?'Next retest available':'Answers until next retest'}</span></div><div><strong>{reviewPreview.weakest?`#${reviewPreview.weakest.concept_tag}`:'—'}</strong><span>{engineStateError?'Progress unavailable':!engineState?'Weakest concept · loading…':reviewPreview.weakest?`Weakest concept · ${reviewPreview.weakest.score} points`:'Weakest concept · no current weakness'}</span></div></div><details><summary>How Smart Review works</summary><ol><li>A missed question waits for 30 more answers before its retest is due.</li><li>Two misses in a row on a concept prioritise a Core question next time that concept is tested, if one is available.</li><li>A correct answer clears that question from the missed queue.</li><li>Concepts at 80+ mastery are excluded from concept remediation. A due question retest can still appear.</li></ol></details></section>}
-      <div className="card" role="status" style={{padding:"12px 16px",marginBottom:16,color:t.textSec}}>{isGuest?"Try 10 questions total, then create a free account to keep practising.":isPro?"Unlimited generation · Pro":"50 questions every rolling 12 hours"}<strong style={{marginLeft:10,color:t.text}}>{isPro?"∞":access?`${access.remaining} remaining`:"Loading allowance…"}</strong>{accessError&&<span> {accessError}</span>}{!isPro&&choices.remainder&&<button className="btn btn-outline" style={{marginLeft:12}} disabled={engineBusy} onClick={()=>startEngineQuiz({},choices.remainder,examMode?"exam":reviewMode)}>Practice remaining {choices.remainder}</button>}{isGuest&&access?.remaining===0&&<button className="btn btn-primary" onClick={requestSignup}>Create free account</button>}</div>
+
+      <div className="mcq-allowance-line" role="status" style={{color:t.textSec}}>{isGuest?"Try 10 questions total, then create a free account to keep practising.":isPro?"Pro practice":"12-hour allowance"}<strong style={{marginLeft:10,color:t.text}}>{isPro?"∞":access?`${access.remaining} remaining`:"Loading allowance…"}</strong>{accessError&&<span> {accessError}</span>}{!isPro&&choices.remainder&&<button className="btn btn-outline" style={{marginLeft:12}} disabled={engineBusy} onClick={()=>startEngineQuiz({},choices.remainder,examMode?"exam":reviewMode)}>Practice remaining {choices.remainder}</button>}{isGuest&&access?.remaining===0&&<button className="btn btn-primary" onClick={requestSignup}>Create free account</button>}</div>
       <div hidden={isGuest} className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
         <button type="button" role="switch" aria-checked={examMode} className="mcq-exam-toggle" onClick={()=>{setExamMode(value=>!value);setEngineError("");setModeInfo(null);}}>
-          <Clock3 size={22}/><span className="mcq-exam-toggle-copy"><strong>Exam mode</strong><small>A timed run. Your answers, revealed at the finish.</small></span><span className="mcq-exam-switch-track" aria-hidden="true"><i/></span>
+          <Clock3 size={22}/><span className="mcq-exam-toggle-copy"><strong>Exam mode</strong><small>Timed · marked at the finish.</small></span><span className="mcq-exam-switch-track" aria-hidden="true"><i/></span>
         </button>
         {examMode&&<button type="button" className="btn btn-ghost mcq-exam-help" onClick={()=>setShowExamGuide(true)}><BookOpenCheck size={16}/>Exam guide</button>}
       </div>
@@ -24653,8 +24654,8 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
       {examMode?<section className="mcq-launch-pad mcq-practice-hub mcq-exam-setup" aria-label="Start timed MCQ exam">
         <div className="mcq-hub-overview">
           <p className="mcq-exam-eyebrow"><Clock3 size={15}/> MAKE ROOM TO FOCUS</p>
-          <h3>Find your exam rhythm.</h3>
-          <p className="mcq-hub-description">A fresh mix, a running clock, and a clear picture at the finish.</p>
+          <h3>Focus. Finish. Reflect.</h3>
+
           <div className="mcq-exam-budget"><strong>{formatExamTime(examCount*EXAM_SECONDS_PER_QUESTION)}</strong><span>time allowance<small>60 seconds per question</small></span></div>
           <div className="mcq-exam-rules"><span><Check size={14}/>Marked at the end</span><span><Check size={14}/>No definitions or hints</span><span><Check size={14}/>Balanced random mix</span></div>
         </div>
@@ -24697,6 +24698,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
 
       </>}
       {!examMode&&<>
+      {!isGuest&&!examMode&&<section className="sr-preview" aria-label="Smart Review status"><div className="sr-preview-metrics"><div><strong>{reviewPreview.next===0?'Now':reviewPreview.next??'—'}</strong><span>{reviewPreview.next===0?'Next retest available':'Answers until next retest'}</span></div><div><strong>{reviewPreview.weakest?`#${reviewPreview.weakest.concept_tag}`:'—'}</strong><span>{engineStateError?'Progress unavailable':!engineState?'Weakest concept · loading…':reviewPreview.weakest?`Weakest concept · ${reviewPreview.weakest.score} points`:'Weakest concept · no current weakness'}</span></div></div><details><summary>How Smart Review works</summary><ol><li>A missed question waits for 30 more answers before its retest is due.</li><li>Two misses in a row on a concept prioritise a Core question next time that concept is tested, if one is available.</li><li>A correct answer clears that question from the missed queue.</li><li>Concepts at 80+ mastery are excluded from concept remediation. A due question retest can still appear.</li></ol></details></section>}
       <section className="mcq-review-queue-row" aria-label="MCQ review queues">
         <button className={`mcq-review-queue-card unfinished ${resumeAvailable?"is-ready":""}`} type="button" disabled={!resumeAvailable} onClick={continueQuiz}>
           <span className="mcq-review-queue-icon"><Clock3 size={21} aria-hidden="true"/></span>
@@ -24717,7 +24719,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
 
       <PracticeSetupDisclosure>
         <div className="practice-filter-card" style={{padding:"4px 6px 0"}}>
-          <p className="mcq-customise-description">Narrow your next set to the areas you want to work on.</p>
+
           {(chFilter!=="all"||diffFilter!=="all"||topicFilter!=="all")&&<button className="btn btn-ghost" type="button" style={{fontSize:12,marginBottom:12}} onClick={()=>{setChFilter("all");setDiffFilter("all");setTopicFilter("all");}}><X size={14} aria-hidden="true"/> Reset filters</button>}
           <div className="practice-filter-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
             <div>

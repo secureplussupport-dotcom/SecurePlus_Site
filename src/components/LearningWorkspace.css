@@ -1,0 +1,169 @@
+/* Learning workspace: clear actions, generous type, restrained surfaces. */
+.dashboard-shell.dh-home{max-width:1120px;margin:auto;padding-top:12px}
+
+.dh-home .dh-heading{margin-bottom:30px}
+.dh-home .dh-heading h1{font-size:clamp(30px,3.5vw,46px);letter-spacing:-.045em}
+.dh-home .dh-eyebrow{font-size:12px;letter-spacing:.09em}
+
+.dh-home .dh-launch-row{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;margin-bottom:24px}
+
+.dh-home .dh-practice{border-radius:28px;padding:38px;background:linear-gradient(125deg,#123e35,#205a4e);min-height:340px}
+
+.dh-home .dh-practice h2{font-size:clamp(38px,4.5vw,62px);margin:30px 0;letter-spacing:-.055em}
+.dh-home .dh-primary{font-size:16px;padding:16px 22px}
+.dh-home .dh-text-button{font-size:15px}
+
+.dh-home .dh-practice-art{width:270px;height:270px;right:-140px;bottom:50px;opacity:.35}
+
+.dh-home .dh-readiness{display:grid;grid-template-columns:180px minmax(0,1fr);gap:12px 18px;padding:26px;border-radius:28px;background:var(--dh-surface)}
+
+.dh-home .dh-readiness-top{grid-column:1/-1}
+.dh-home .dh-score{width:180px}
+.dh-home .dh-score strong{font-size:49px}
+.dh-home .dh-score>div>span{font-size:12px;max-width:124px;border:0;background:none;padding:0}
+
+.dh-home .readiness-evidence{margin:0;display:grid;gap:7px;min-width:0;text-align:left}
+.dh-home .readiness-evidence strong{font-size:15px}
+.dh-home .readiness-evidence span,.dh-home .readiness-evidence p{font-size:14px;line-height:1.5;margin:0;color:var(--dh-muted)}
+
+.dh-home .dh-breakdown{grid-column:1/-1;font-size:15px;border-radius:12px;background:var(--dh-panel)}
+
+.dh-home .dh-section-title{margin:26px 0 14px}
+.dh-home .dh-section-title h2{font-size:22px}
+.dh-home .dashboard-metrics{gap:0;border:1px solid var(--dh-line);border-radius:22px;overflow:hidden;background:var(--dh-surface)}
+
+.dh-home .dm-card{border:0;border-radius:0;box-shadow:none;background:none;padding:22px}
+.dh-home .dm-card+.dm-card{border-left:1px solid var(--dh-line)}
+.dh-home .dm-card:after{display:none}
+.dh-home .dm-card h3{font-size:14px}
+.dh-home .dm-card footer{font-size:13px;line-height:1.5}
+.dh-home .dm-card p{font-size:13px}
+.dh-home .dm-week span{font-size:11px}
+.dh-home .dm-main{min-height:92px}
+.dh-home .dm-number{font-size:46px}
+.dh-home .dm-ring{width:46px;height:46px}
+
+.dh-home .sp-start,.dh-home .sp-widget{background:var(--dh-panel);border-color:var(--dh-line);border-radius:22px;margin:26px 0;padding:22px}
+.dh-home .sp-start>header{display:flex;align-items:center;gap:18px;margin-bottom:16px}
+.dh-home .sp-start h2{font-size:22px;margin:0}
+.dh-home .sp-start>header>span{font-size:12px;color:var(--dh-muted)}
+
+.dh-home .sp-step-grid button{background:var(--dh-surface);border-color:var(--dh-line);padding:16px;font-size:15px}
+.dh-home .sp-step-grid strong{font-size:26px;color:var(--dh-green)}
+
+.dh-home .dh-widget{border-radius:22px;box-shadow:none;padding:26px;background:var(--dh-surface)}
+.dh-home .dh-widget h3{font-size:28px}
+.dh-home .dh-widget .dh-eyebrow{font-size:12px}
+.dh-home .dh-term-chips>span{font-size:14px}
+.dh-home .dh-widget p,.dh-home .dh-lesson-links button>span{font-size:15px}
+.dh-home .dh-widget-cta{font-size:15px}
+.dh-home .dh-widget-icon{width:44px;height:44px}
+.dh-home .dh-shortcut strong{font-size:17px}
+.dh-home .dh-shortcut>span>span{font-size:14px}
+.dh-home .dh-chapter{font-size:12px}
+
+/* Setup keeps the mode and launch controls together; secondary signals follow. */
+.lw-mcq.mcq-hub-screen{max-width:1080px;padding:30px 24px 44px}
+
+.lw-mcq.mcq-hub-screen .mcq-hub-heading{margin-bottom:18px}
+.lw-mcq.mcq-hub-screen .mcq-hub-heading h1{font-size:clamp(32px,4vw,46px);letter-spacing:-.05em;margin:0}
+.lw-mcq.mcq-hub-screen .mcq-page-mark{border-radius:16px;width:54px;height:54px}
+
+.lw-mcq.mcq-hub-screen .mcq-allowance-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;margin:0 0 20px;padding:0 0 16px;border-bottom:1px solid var(--lw-line)}
+
+.lw-mcq.mcq-hub-screen .mcq-exam-toggle-row{margin-bottom:16px}
+.lw-mcq.mcq-hub-screen .mcq-exam-toggle{padding:14px 18px;min-height:68px;border-radius:16px}
+.lw-mcq.mcq-hub-screen .mcq-exam-toggle-copy small{font-size:14px}
+
+.lw-mcq.mcq-hub-screen .mcq-top-modes{padding:5px;margin-bottom:18px;border-radius:17px}
+.lw-mcq.mcq-hub-screen .practice-mode-card{min-height:72px;padding:16px;border-radius:12px}
+.lw-mcq.mcq-hub-screen .mcq-mode-title strong{font-size:18px}
+.lw-mcq.mcq-hub-screen .mcq-mode-recommended{font-size:12px}
+.lw-mcq.mcq-hub-screen .mcq-mode-description{font-size:15px}
+
+.lw-mcq.mcq-hub-screen .mcq-practice-hub{border-radius:24px;box-shadow:none;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
+
+.lw-mcq.mcq-hub-screen .mcq-hub-overview{background:linear-gradient(135deg,#123e35,#205a4e);padding:32px}
+.lw-mcq.mcq-hub-screen .mcq-hub-number{font-size:64px}
+.lw-mcq.mcq-hub-screen .mcq-hub-stats .setup-stat>span{font-size:15px;color:#e0efe8}
+.lw-mcq.mcq-hub-screen .mcq-session-controls{padding:30px;background:var(--lw-surface)}
+
+.lw-mcq.mcq-hub-screen .mcq-session-size legend{font-size:16px}
+.lw-mcq.mcq-hub-screen .mcq-primary-count{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.lw-mcq.mcq-hub-screen .mcq-primary-count button{font-size:25px;min-height:54px;border-radius:10px}
+.lw-mcq.mcq-hub-screen .mcq-hub-start{min-height:60px;font-size:18px;margin-top:20px;border-radius:12px}
+
+.lw-mcq.mcq-hub-screen .sr-preview{border:1px solid var(--lw-line);background:var(--lw-panel);border-radius:18px;padding:18px 22px;margin:0 0 20px}
+.lw-mcq.mcq-hub-screen .sr-preview-metrics{grid-template-columns:minmax(120px,.5fr) minmax(0,1fr);gap:22px}
+.lw-mcq.mcq-hub-screen .sr-preview-metrics>div{display:flex;align-items:center;gap:14px}
+.lw-mcq.mcq-hub-screen .sr-preview-metrics strong{font-size:28px}
+.lw-mcq.mcq-hub-screen .sr-preview-metrics>div:last-child strong{font-size:17px}
+.lw-mcq.mcq-hub-screen .sr-preview-metrics span{font-size:14px;line-height:1.45}
+.lw-mcq.mcq-hub-screen .sr-preview summary{font-size:14px;margin:8px 0 0;color:var(--lw-text)}
+.lw-mcq.mcq-hub-screen .sr-preview ol{padding-left:22px;margin:6px 0}
+.lw-mcq.mcq-hub-screen .sr-preview li{font-size:15px}
+
+.lw-mcq.mcq-hub-screen .mcq-review-queue-row{border:0;background:none;gap:12px;overflow:visible}
+.lw-mcq.mcq-hub-screen .mcq-review-queue-card{border:1px solid var(--lw-line);border-radius:16px;padding:20px 16px;background:var(--lw-surface)}
+.lw-mcq.mcq-hub-screen .mcq-review-queue-card+.mcq-review-queue-card{border-left:1px solid var(--lw-line)}
+.lw-mcq.mcq-hub-screen .mcq-review-queue-card strong{font-size:16px}
+.lw-mcq.mcq-hub-screen .mcq-review-queue-card small{font-size:14px;font-weight:500;line-height:1.45}
+.lw-mcq.mcq-hub-screen .mcq-exam-setup-note{font-size:14px}
+.lw-mcq.mcq-hub-screen .mcq-exam-rules{font-size:14px}
+
+@media(max-width:1000px){.dh-home .dh-readiness{grid-template-columns:150px minmax(0,1fr);padding:20px;gap:12px}
+.dh-home .dh-score{width:150px}
+.dh-home .dh-score strong{font-size:40px}
+.dh-home .dh-score::before{inset:25px}
+.dh-home .dh-score>div{gap:5px}
+.dh-home .dh-score>div>span{font-size:11px;max-width:95px}
+.dh-home .dh-score .dh-dial-emblem{display:none}
+.dh-home .dm-card:nth-child(3){border-left:0}
+.dh-home .dm-card:nth-child(n+3){border-top:1px solid var(--dh-line)}
+}
+
+@media(max-width:760px){.dh-home .dh-launch-row{grid-template-columns:1fr}
+.dh-home .dh-practice{min-height:290px;padding:28px}
+.dh-home .dh-practice h2{font-size:49px;margin:20px 0}
+.dh-home .dh-readiness{grid-template-columns:160px minmax(0,1fr);padding:22px}
+.dh-home .dh-score{width:160px}
+.dh-home .sp-start>header{display:block}
+.dh-home .sp-start h2{margin-top:6px}
+.dh-home .dm-number{font-size:38px}
+.dh-home .dm-card{padding:16px}
+.dh-home .dm-card h3{font-size:13px}
+.dh-home .dm-icon{display:none}
+.dh-home .dm-number small{font-size:13px}
+.dh-home .dm-card footer{font-size:12px}
+.dh-home .dm-ring{width:38px;height:38px}
+.lw-mcq.mcq-hub-screen{padding:22px 14px}
+.lw-mcq.mcq-hub-screen .mcq-practice-hub{grid-template-columns:1fr}
+.lw-mcq.mcq-hub-screen .mcq-hub-overview,.lw-mcq.mcq-hub-screen .mcq-session-controls{padding:24px}
+.lw-mcq.mcq-hub-screen .mcq-hub-number{font-size:48px}
+.lw-mcq.mcq-hub-screen .sr-preview-metrics{grid-template-columns:1fr}
+.lw-mcq.mcq-hub-screen .sr-preview-metrics>div:last-child{grid-column:auto}
+.lw-mcq.mcq-hub-screen .mcq-review-queue-row{grid-template-columns:1fr}
+.lw-mcq.mcq-hub-screen .mcq-mode-title strong{font-size:16px}
+.lw-mcq.mcq-hub-screen .practice-mode-card{gap:8px;padding:12px}
+.lw-mcq.mcq-hub-screen .mcq-mode-recommended{font-size:11px}
+}
+
+@media(max-width:390px){.dh-home .dh-readiness{grid-template-columns:130px minmax(0,1fr);padding:16px;gap:8px}
+.dh-home .dh-score{width:130px}
+.dh-home .dh-score strong{font-size:34px}
+.dh-home .readiness-evidence p{font-size:13px}
+.dh-home .dm-ring{display:none}
+.lw-mcq.mcq-hub-screen .mcq-mode-title{gap:4px}
+.lw-mcq.mcq-hub-screen .practice-mode-icon{display:none}
+}
+
+.dh-home .dh-practice .dh-primary,.lw-plan .sp-focus>.btn-primary{background:#e2efda!important;color:#153f35!important;border:1px solid #e2efda!important;box-shadow:none}
+
+.lw-mcq.mcq-hub-screen .mcq-hub-stats .setup-stat:first-child .mcq-metric-top{color:#ebd499}
+.lw-mcq.mcq-hub-screen .mcq-hub-stats .setup-stat:last-child .mcq-metric-top{color:#d5ece0}
+
+.lw-mcq.mcq-hub-screen .mcq-hub-stats .mcq-hub-number{color:inherit!important}
+
+.dh-home .dh-personal-body{flex:0;margin:12px 0 24px}.dh-home .dh-card-fan{height:120px}.dh-home .dh-personal .dh-widget-cta{margin-top:auto}
+.lw-mcq.mcq-hub-screen .mcq-exam-toggle-copy strong{font-size:16px}.lw-mcq.mcq-hub-screen .mcq-exam-toggle-row{margin:0 0 14px}.lw-mcq.mcq-hub-screen .mcq-exam-toggle{min-height:66px;padding:12px 18px}.lw-mcq.mcq-hub-screen .mcq-primary-count button{min-height:54px;font-size:25px}.lw-mcq.mcq-hub-screen .mcq-mode-choice .practice-mode-card{min-height:70px;padding:14px 16px}.lw-mcq.mcq-hub-screen .mcq-review-queue-row{gap:12px;border:0;border-radius:0;background:none;overflow:visible}
+@media(min-width:761px){.dh-home .dh-shortcuts{grid-template-columns:repeat(3,minmax(0,1fr))}.dh-home .dh-shortcut{padding:18px 16px}.dh-home .dh-shortcut strong{font-size:15px}}
