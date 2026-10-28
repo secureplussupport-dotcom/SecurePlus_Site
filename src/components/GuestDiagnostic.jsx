@@ -1,19 +1,16 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowRight, Maximize2, Minimize2, Check, BookOpenCheck, Layers3, RotateCcw, Target, Sparkles, ShieldCheck, Fingerprint, Network, Radar } from 'lucide-react';
+import { ArrowRight, Maximize2, Minimize2, Check, BookOpenCheck, Layers3, RotateCcw, Target, Save, X, Sparkles, ShieldCheck, Fingerprint, Network, Radar } from 'lucide-react';
 import { CipherLoader } from './CipherLoader.jsx';
 import { MascotAnimation } from '../lib/MascotAnimation.jsx';
 import { mcqEngineRequest, prepareGuestDiagnostic } from '../lib/mcqEngineClient.js';
 import { diagnosticRows } from '../lib/guestDiagnosticProgress.js';
+import {subscribeGuestDiagnostic as subscribe,guestDiagnosticSnapshot as snapshot,publishGuestDiagnostic as publish,isDiagnosticBrowserSaved,diagnosticImportable,diagnosticComplete,DIAGNOSTIC_IMPORT_WINDOW} from '../lib/guestDiagnosticStore.js';
 import { conceptDeepDive } from '../lib/mcqResultSummary.js';
 import './GuestLanding.css';
 
-// Tab memory only: navigation/expansion keeps the set; reload starts fresh.
-let current=null, generating=null;
-const listeners=new Set();
-const subscribe=fn=>{listeners.add(fn);return()=>listeners.delete(fn);};
-const publish=value=>{current=value;listeners.forEach(fn=>fn());};
-const snapshot=()=>current;
+// The browser draft survives navigation, reload and reopening this device.
+let generating=null;
 export const clearGuestDiagnostic=()=>publish(null);
 const conceptName=tag=>String(tag || '').split('.').at(-1).replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 const domains=['Security concepts','Threats & mitigations','Security architecture','Security operations','Security management'];
@@ -24,13 +21,13 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[expanded,setExpanded]=useState(false),[saving,setSaving]=useState(false),[transitioning,setTransitioning]=useState(false);
  const host=useRef(null),questionBody=useRef(null),dialog=useRef(null),expandButton=useRef(null),heading=useRef(null),seenSignal=useRef(0);
  const start=async()=>{
-  if(current?.questions?.length)return;
+  if(snapshot()?.questions?.length)return;
   setBusy(true);setError('');
   try{
    if(!generating)generating=(async()=>{
     // Establish the signed browser cookie before requesting a snapshot.
     await prepareGuestDiagnostic();
-    const request=current?.request_id || crypto.randomUUID();publish({request_id:request});
+    const request=snapshot()?.request_id || crypto.randomUUID();publish({request_id:request});
     const plan=await mcqEngineRequest('generate',{mode:'diagnostic',set_size:10,request_id:request});
     publish({request_id:request,questions:plan.questions,answers:{},checked:{},skipped:{},index:0,startedAt:Date.now()});
    })().finally(()=>{generating=null;});
@@ -38,7 +35,6 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
   }catch(e){setError(e.message);}finally{setBusy(false);}
  };
  useEffect(()=>{prepareGuestDiagnostic().catch(()=>{});},[]);
- useEffect(()=>{try{localStorage.removeItem('secureplus-guest-diagnostic-v1');}catch{}},[]);
  useEffect(()=>{if(startSignal>seenSignal.current){seenSignal.current=startSignal;start();}},[startSignal]);
  useEffect(()=>{
   if(!expanded)return;
@@ -59,9 +55,11 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
  const rows=diagnosticRows(draft);
  const misses=[...new Map(rows.filter(r=>r.correct!==true).map(r=>[r.conceptTag,r])).values()];
  const skip=()=>publish({...draft,answers:{...answers,[index]:null},skipped:{...draft.skipped,[index]:true},checked:{...checked,[index]:true}});
+ const importable=diagnosticImportable(draft);
+ const importDeadline=new Date((draft?.startedAt||Date.now())+DIAGNOSTIC_IMPORT_WINDOW).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
  const signup=async()=>{
   setSaving(true);setError('');
-  try{await onSave?.(rows);setExpanded(false);onSignup();}catch{setError('Your result could not be carried forward. Please try again.');}finally{setSaving(false);}
+  try{publish({...draft,savePromptOpened:true});if(importable&&isDiagnosticBrowserSaved())await onSave?.(rows);setExpanded(false);onSignup();}catch{setError('Your result could not be carried forward. Please try again.');}finally{setSaving(false);}
  };
  const nextQuestion=async()=>{
   if(transitioning)return;
@@ -69,7 +67,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
   if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&questionBody.current?.animate){
    await questionBody.current.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-8px)'}],{duration:80,easing:'cubic-bezier(.23,1,.32,1)',fill:'forwards'}).finished.catch(()=>{});
   }
-  if(current===draft)publish({...draft,index:index+1});
+  if(snapshot()===draft)publish({...draft,index:index+1});
   setTransitioning(false);
  };
  const content=<section ref={host} id={expanded?undefined:'guest-diagnostic'} className={`guest-diagnostic ${expanded?'is-expanded':''} ${fullFormat?'is-full-format':''} ${fullPage?'is-full-page':''}`} style={guestPalette(t)} aria-label="10-question Core diagnostic">
@@ -89,6 +87,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
    <button className="btn btn-primary" onClick={start}>Start my 10 Q diagnostic <ArrowRight size={18}/></button><small>No experience needed · No timer · No pressure</small>
   </div>:done?<div className="gd-results">
    <div className="gd-path-ready"><MascotAnimation animation="wave" size={64} label="Cipher welcomes you to your learning path"/><span className="guest-eyebrow">A STARTING POINT, NOT A SCORE</span><h2 ref={heading} tabIndex={-1}>Your next steps are ready.</h2><p>You don’t need to know it all. That’s what we’re here for.</p></div>
+   {!draft.noticeDismissed&&<div className="gd-save-notice" role="status"><Save size={21}/><div><strong>Not saved to an account yet.</strong><p>{!isDiagnosticBrowserSaved()?"Browser saving is unavailable. Keep this tab open and save to a free account before leaving.":!importable?"Your result is still in this browser. The seven-day account import window has ended.":`Saved only in this browser. Create a free account or log in here by ${importDeadline} to import this exact diagnostic, including your weak topics and retests. Save to your account before switching devices.`}</p><button className="gd-save-action" onClick={signup} disabled={saving}>{importable?'Save my results to a free account':'Create a free account'}<ArrowRight size={17}/></button></div><button className="gd-save-dismiss" onClick={()=>publish({...draft,noticeDismissed:true})} aria-label="Dismiss save reminder"><X size={18}/></button></div>}
    <div className="gd-focus gd-next-step">
     <span className="guest-eyebrow"><Sparkles size={15}/> YOUR NEXT STEP</span>
     {misses.length>0&&<div className="gd-topic-preview" aria-label="Topics to work on"><span>A few things to explore</span><div>{misses.slice(0,3).map(row=><span key={row.conceptTag}>{row.topic||conceptName(row.conceptTag)}</span>)}</div></div>}
@@ -100,7 +99,7 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
      <button className="gd-resource gd-resource-cards" onClick={signup} disabled={saving}><Layers3 size={24}/><span><strong>Flashcards</strong><small>Remember the essentials</small></span><ArrowRight size={20}/></button>
      <button className="gd-resource gd-resource-lesson" onClick={signup} disabled={saving}><BookOpenCheck size={24}/><span><strong>Concept Deep Dive</strong><small>Make the idea click</small></span><ArrowRight size={20}/></button>
     </div>}
-    <div className="gd-plan-signup"><span className="gd-plan-promise"><Sparkles size={17}/> Your topics. Your practice. Your pace.</span><button className="btn btn-primary gd-plan-cta" onClick={signup} disabled={saving}><span>{saving?'Saving your path…':'Build my free study plan'}</span><ArrowRight size={23}/></button><small>Create a free account to open your resources and keep your learning path.</small></div>
+    <div className="gd-plan-signup"><span className="gd-plan-promise"><Sparkles size={17}/> Your topics. Your practice. Your pace.</span><button className="btn btn-primary gd-plan-cta" onClick={signup} disabled={saving}><span>{saving?'Saving your path…':'Build my free study plan'}</span><ArrowRight size={23}/></button><small>{importable?"Create a free account or log in here to import this exact diagnostic automatically. Your result stays in this browser until the import succeeds.":"Create a free account for new practice. This older diagnostic remains available in this browser."}</small></div>
    </div>
    <div className="gd-preview-counts"><div><strong>10</strong><span>Concepts explored</span></div><div><strong>{misses.length}</strong><span>To learn together</span></div><div><strong>5</strong><span>Domains discovered</span></div></div>
    <div className="gd-domain-results">{domains.map((name,i)=>{const result=rows.filter(r=>Number(r.ch)===i+1);return <article key={name} style={{'--domain-tint':['#5c91f5','#b88af4','#e2a743','#33b7a3','#d487b5'][i]}}><span>0{i+1}</span><strong>{result.length}<em> explored</em></strong><small>{name}</small><i><b style={{width:'100%'}}/></i></article>;})}</div>
@@ -121,4 +120,13 @@ export function GuestDiagnostic({t,onSignup,onSave,renderDefinitions=text=>text,
   {error&&<p className="gd-error" role="alert">{error}</p>}
  </section>;
  return <>{expanded?<div className="gd-collapsed"><span>Your diagnostic is open in full format.</span><button className="btn btn-outline" onClick={()=>dialog.current?.focus()}>Return to diagnostic</button></div>:content}{expanded&&createPortal(<dialog ref={dialog} className="gd-dialog" aria-label="Diagnostic full format" onCancel={()=>setExpanded(false)} onClick={e=>{if(e.target===e.currentTarget)setExpanded(false);}}>{content}</dialog>,document.body)}</>;
+}
+
+// Mounted once in the guest shell, so dismissing the prompt or auth dialog never loses the reminder.
+export function GuestDiagnosticSaveBanner({t,onSignup,onViewResults}){
+ const draft=useSyncExternalStore(subscribe,snapshot,snapshot);
+ if(!diagnosticComplete(draft)||!(draft.noticeDismissed||draft.savePromptOpened))return null;
+ const importable=diagnosticImportable(draft);
+ const deadline=new Date(draft.startedAt+DIAGNOSTIC_IMPORT_WINDOW).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
+ return <aside className="gd-save-banner" style={guestPalette(t)} aria-label="Save your diagnostic results"><Save size={22}/><div><strong>{importable?'Save your diagnostic results':'Your diagnostic is still in this browser'}</strong><span>{!isDiagnosticBrowserSaved()?'Browser saving unavailable. Save before closing this tab.':importable?`Browser only · save to a free account by ${deadline} for access on other devices.`:'The account import window has ended. You can still view this result.'}</span></div><button className="gd-save-view" onClick={()=>{publish({...draft,index:10});onViewResults();}}>View results</button>{importable&&<button className="gd-save-action" onClick={onSignup}>Save results<ArrowRight size={17}/></button>}</aside>;
 }

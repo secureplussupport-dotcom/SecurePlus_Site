@@ -10,7 +10,7 @@ import {PersonalisedFlashcardGroups} from "./components/PersonalisedFlashcardGro
 import { AuthDialog } from "./components/AuthDialog.jsx";
 import { GuestLanding } from "./components/GuestLanding.jsx";
 import { AboutUs } from "./components/AboutUs.jsx";
-import { GuestDiagnostic, clearGuestDiagnostic } from "./components/GuestDiagnostic.jsx";
+import { GuestDiagnostic, GuestDiagnosticSaveBanner, clearGuestDiagnostic } from "./components/GuestDiagnostic.jsx";
 import { BookmarkOrganiser } from "./components/BookmarkOrganiser.jsx";
 import {CipherLoader} from "./components/CipherLoader.jsx";
 import {useLiveSnapshot} from "./lib/useLiveSnapshot.js";
@@ -143,6 +143,8 @@ import {
   getDeepDiveRecommendations,
 } from "./lib/deepDiveRecommendations.js";
 import { getActiveDailyStreak } from "./lib/dailyStreak.js";
+
+import {completedGuestDiagnosticRows,markGuestDiagnosticAuthOpened} from "./lib/guestDiagnosticStore.js";
 
 const SITE_BRAND_LOCKUP = "SecurePlus | CompTIA Security+™ Prep";
 const SITE_TAGLINE = "Clear study paths. Real scenarios. Pass Security+ with confidence.";
@@ -821,6 +823,8 @@ async function savePendingGuestSmartReview(attempts=[]) {
 }
 
 async function takePendingGuestSmartReview() {
+  const diagnostic=completedGuestDiagnosticRows();
+  if(diagnostic.length)return diagnostic;
   try{
     const stored=await storageGet(GUEST_SMART_REVIEW_BRIDGE_KEY);
     if(!stored?.value)return [];
@@ -23317,7 +23321,7 @@ function AuthView({onLogin,t,onDaily,onNavigate,onPracticeMcq,onPreviewPbq,initi
 
   if(mode==="signup"&&!showSignupJourney&&initialMode!=="review-signup")return <div className="auth-welcome">
     <div className="auth-welcome-art"><span className="auth-mini-brand"><BrandMark size={27}/> SecurePlus</span><div className="auth-cipher-halo"><MascotAnimation animation="wave" size={152} label="Cipher welcomes you"/></div><span className="auth-art-caption">Your next chapter<br/><strong>starts with you.</strong></span><div className="auth-connected-tools" aria-label="Connected study tools"><span><Target size={20}/></span><i/><span><Layers3 size={20}/></span><i/><span><BookOpenCheck size={20}/></span></div></div>
-    <div className="auth-welcome-copy"><span className="auth-free-badge"><Sparkles size={14}/> YOUR FREE STUDY SPACE</span><h1>Make your next<br/>{" "}step count.</h1><p>Your weak spots become a clear path forward.</p><ul><li><Target size={19}/><span>Practice that targets your gaps</span></li><li><Layers3 size={19}/><span>Flashcards that make it stick</span></li><li><BookOpenCheck size={19}/><span>Deep Dives that make it click</span></li></ul><button className="btn btn-primary auth-create-cta" data-auth-primary onClick={()=>jumpToAuth("signup")}>Create my free account <ArrowRight size={20}/></button><small>No credit card needed. Your progress comes with you.</small><button className="auth-login-switch" onClick={openLogin}>Already have an account? <strong>Log in</strong> <ArrowRight size={14}/></button></div>
+    <div className="auth-welcome-copy"><span className="auth-free-badge"><Sparkles size={14}/> YOUR FREE STUDY SPACE</span><h1>Make your next<br/>{" "}step count.</h1><p>Your weak spots become a clear path forward.</p><ul><li><Target size={19}/><span>Practice that targets your gaps</span></li><li><Layers3 size={19}/><span>Flashcards that make it stick</span></li><li><BookOpenCheck size={19}/><span>Deep Dives that make it click</span></li></ul><button className="btn btn-primary auth-create-cta" data-auth-primary onClick={()=>jumpToAuth("signup")}>Create my free account <ArrowRight size={20}/></button><small>{completedGuestDiagnosticRows().length?"Your exact diagnostic will import automatically after signup or login in this browser. No credit card needed.":"No credit card needed. Your progress comes with you."}</small><button className="auth-login-switch" onClick={openLogin}>Already have an account? <strong>Log in</strong> <ArrowRight size={14}/></button></div>
   </div>;
 
   return(
@@ -32034,8 +32038,8 @@ export default function App() {
         {id:"preview-pbq",amount:-50,balance_after:130,event_type:"pbq_unlock",created_at:new Date(Date.now()-172800000).toISOString()},
       ],
     });
-    const goToSignup=()=>{capture("landing_signup_cta_clicked",{source:"guest_diagnostic_funnel"});setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("signup-entry");setAuthRequestId(id=>id+1);setView("auth");};
-    const goToLogin=()=>{setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
+    const goToSignup=()=>{markGuestDiagnosticAuthOpened();capture("landing_signup_cta_clicked",{source:"guest_diagnostic_funnel"});setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("signup-entry");setAuthRequestId(id=>id+1);setView("auth");};
+    const goToLogin=()=>{markGuestDiagnosticAuthOpened();setGuestMoreOpen(false);setPbqQ(null);setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
     const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","why-different","about","objectives","flashcards","deep-dives","privacy","terms",...(devCoinPreview?["coins"]:[])]);
     const guestTopNavItems=[
       {id:"mcq",label:"10Q Diagnostic"},
@@ -32120,6 +32124,7 @@ export default function App() {
               <button className="btn btn-ghost" type="button" onClick={goToLogin}>Log In</button>
             </div>
           </header>
+          <GuestDiagnosticSaveBanner t={t} onSignup={goToSignup} onViewResults={()=>setView("mcq")}/>
           <main id="secureplus-main" className="app-main guest-main fu">
             <div className="mobile-topbar">
               <div>

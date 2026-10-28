@@ -132,3 +132,35 @@ test('beginner preview skips persist as learning priorities, not grades; isolati
  for(const role of ['anon','authenticated']){await db.exec(`set role ${role}`);await assert.rejects(claim(),/permission denied/);await assert.rejects(scalar('select public.guest_diagnostic_focus($1)',[u]),/permission denied/);await db.exec('reset role');}
  }finally{await db.close();}
 });
+
+test('browser draft survives reload with exact shuffled questions, checked answers and skipped choices',async()=>{
+ const {GUEST_DIAGNOSTIC_KEY,validDiagnosticDraft,readGuestDiagnostic,writeGuestDiagnostic,diagnosticImportable,diagnosticComplete,DIAGNOSTIC_IMPORT_WINDOW}=await import('../src/lib/guestDiagnosticStore.js');
+ const values=new Map(),storage={getItem:key=>values.get(key)||null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
+ const questions=diagnosticSet().map(diagnosticQuestion);
+ const draft={request_id:randomUUID(),questions,answers:{0:1,1:null},checked:{0:true,1:true},skipped:{1:true},index:2,startedAt:Date.now(),noticeDismissed:true};
+ assert(validDiagnosticDraft(draft));assert(writeGuestDiagnostic(draft,storage));
+ const restored=readGuestDiagnostic(storage);assert.deepEqual(restored,draft);assert.deepEqual(diagnosticRows(restored),diagnosticRows(draft));
+ assert(!diagnosticComplete(restored));assert(diagnosticImportable(restored));
+ const completed={...draft,index:10,answers:Object.fromEntries(questions.map((_,i)=>[i,0])),checked:Object.fromEntries(questions.map((_,i)=>[i,true])),skipped:{}};
+ assert(writeGuestDiagnostic(completed,storage));assert(diagnosticComplete(readGuestDiagnostic(storage)));
+ const original=Object.getOwnPropertyDescriptor(globalThis,'localStorage');
+ try{
+  Object.defineProperty(globalThis,'localStorage',{configurable:true,value:storage});
+  const reloaded=await import('../src/lib/guestDiagnosticStore.js?reload-test');
+  assert.deepEqual(reloaded.completedGuestDiagnosticRows(),diagnosticRows(completed));
+  reloaded.publishGuestDiagnostic({...completed,index:0,reviewing:true});
+  assert.deepEqual(reloaded.completedGuestDiagnosticRows(),diagnosticRows(completed));
+  reloaded.markGuestDiagnosticAuthOpened();assert.equal(readGuestDiagnostic(storage).savePromptOpened,true);assert.deepEqual(reloaded.completedGuestDiagnosticRows(),diagnosticRows(completed));
+  reloaded.publishGuestDiagnostic(null);assert.equal(readGuestDiagnostic(storage),null);
+ }finally{if(original)Object.defineProperty(globalThis,'localStorage',original);else delete globalThis.localStorage;}
+
+ assert(diagnosticComplete({...completed,index:0,reviewing:true}));
+ const old={...completed,startedAt:Date.now()-DIAGNOSTIC_IMPORT_WINDOW-1000};assert(writeGuestDiagnostic(old,storage));assert(readGuestDiagnostic(storage));assert(!diagnosticImportable(old));
+ assert(writeGuestDiagnostic(null,storage));assert.equal(readGuestDiagnostic(storage),null);
+ for(const mutate of [d=>d.index=11,d=>d.questions[0].correct=99,d=>d.answers[0]=99,d=>d.request_id='invalid',d=>d.questions[0].topic={},d=>d.checked[9]=false,d=>d.questions[1].id=d.questions[0].id]){
+  const bad=structuredClone(completed);mutate(bad);values.set(GUEST_DIAGNOSTIC_KEY,JSON.stringify({version:2,draft:bad}));assert.equal(readGuestDiagnostic(storage),null);
+ }
+ values.set(GUEST_DIAGNOSTIC_KEY,'{bad json');assert.equal(readGuestDiagnostic(storage),null);
+ const denied={getItem(){throw Error('blocked')},setItem(){throw Error('quota')},removeItem(){throw Error('blocked')}};
+ assert.equal(readGuestDiagnostic(denied),null);assert.equal(writeGuestDiagnostic(completed,denied),false);
+});

@@ -205,3 +205,17 @@
 .gs-hero:has(.gd-results) .gs-stage-note{display:none}
 .guest-diagnostic:has(>.gd-results)>.gd-header{padding:10px 18px;min-height:48px}
 .guest-diagnostic:has(>.gd-results) .gd-expand{width:32px;height:32px}
+/* Guest results stay local until the account import is confirmed. */
+.gd-save-notice{display:flex;align-items:flex-start;gap:12px;padding:18px;margin-bottom:16px;border:1px solid var(--guest-blue);border-radius:14px;background:color-mix(in srgb,var(--guest-blue) 6%,var(--guest-panel));color:var(--guest-text)}
+.gd-save-notice>svg{flex:none;color:var(--guest-blue)}
+.gd-save-notice strong{font-size:17px;line-height:1.4}
+.gd-save-notice p{margin:8px 0 12px;font-size:14px;line-height:1.65;color:var(--guest-muted)}
+.gd-save-action{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:11px 16px;border:1px solid var(--guest-text);border-radius:10px;background:var(--guest-text);color:var(--guest-panel);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.gd-save-dismiss{display:grid;place-items:center;flex:none;min-width:36px;min-height:36px;border:0;border-radius:8px;background:transparent;color:var(--guest-text);cursor:pointer}
+.gd-save-banner{position:fixed;bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:110;display:flex;align-items:center;gap:16px;width:min(940px,calc(100% - 32px));padding:16px 20px;border:1px solid var(--guest-line);border-radius:16px;background:var(--guest-panel);color:var(--guest-text);box-shadow:0 6px 28px #00000030}
+.gd-save-banner>svg{flex:none;color:var(--guest-accent)}
+.gd-save-banner>div{flex:1}.gd-save-banner strong{display:block;font-size:16px;line-height:1.4}.gd-save-banner span{display:block;font-size:13px;line-height:1.6;color:var(--guest-muted);margin-top:3px}
+.gd-save-view{min-height:44px;background:none;border:0;color:var(--guest-text);font:inherit;font-size:14px;font-weight:600;text-decoration:underline;cursor:pointer;flex:none}
+body:has(.gd-save-banner) .guest-main{padding-bottom:160px}
+.gd-save-banner button:focus-visible{outline:3px solid var(--guest-blue);outline-offset:3px}
+@media(max-width:650px){.gd-save-banner{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}.gd-save-banner>svg{display:none}.gd-save-banner>div{grid-column:1/-1}.gd-save-banner .gd-save-action{width:100%}.gd-save-notice{gap:9px;padding:14px}.gd-save-notice>svg{display:none}body:has(.gd-save-banner) .guest-main{padding-bottom:210px}}
