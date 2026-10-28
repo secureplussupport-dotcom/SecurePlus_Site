@@ -32,10 +32,11 @@ export function DashboardMetrics({profile,streak,tier,t,quota=null}) {
       <footer>MCQs · repeats included</footer>
     </article>
     <article className={`dm-card dm-streak ${!streak?'dm-is-loading':''}`} style={{'--dm-accent':t.amber}}>
-      <header><span className="dm-icon"><Flame size={18}/></span><h3>Daily streak</h3></header>
+      <header><span className="dm-icon"><Flame size={18}/></span><h3>Study streak</h3></header>
       <div className="dm-main"><strong className="dm-number">{streak?.streak ?? '—'}<small>{streak?.streak===1?'day':'days'}</small></strong><Flame className="dm-flame" size={44} strokeWidth={1.4} aria-hidden="true"/></div>
-      <div className="dm-week" aria-label="Daily Challenge streak over the last seven days">{week.map((day,i)=><span key={i} data-active={day.active} data-today={day.today} aria-label={`${day.today?'Today':`${6-i} day${6-i===1?'':'s'} ago`}: ${day.active?'streak completed':'not completed'}`}><i/>{day.label}</span>)}</div>
+      <div className="dm-week" aria-label="Study streak over the last seven days">{week.map((day,i)=><span key={i} data-active={day.active} data-today={day.today} aria-label={`${day.today?'Today':`${6-i} day${6-i===1?'':'s'} ago`}: ${day.active?'streak completed':'not completed'}`}><i/>{day.label}</span>)}</div>
       <footer>{streak?<>{streak.completedToday&&'Completed today · '}Best {streak.best}</>:'Loading streak…'}</footer>
+      <p>{streak ? (streak.reasonsToday?.length ? `Today: ${streak.reasonsToday.join(' · ')}` : 'No qualifying study today yet — 10 MCQs, a lesson section, 10 flashcards, or Daily Challenge counts.') : 'Any meaningful study day counts, not just Daily Challenge.'}</p>
     </article>
     <article className={`dm-card dm-allowance ${isPro?'dm-pro':''}`} style={{'--dm-accent':t.purple || '#a58aff'}}>
       <header><span className="dm-icon">{isPro?<InfinityIcon size={18}/>:<Clock3 size={18}/>}</span><h3>Practice allowance</h3>{isPro&&<span className="dm-tier">PRO</span>}</header>

@@ -151,6 +151,10 @@ import {
   getDeepDiveRecommendations,
 } from "./lib/deepDiveRecommendations.js";
 import { getActiveDailyStreak } from "./lib/dailyStreak.js";
+import { evaluateMeaningfulDay, recordMeaningfulActivity as applyMeaningfulActivity, computeMeaningfulStreak } from "./lib/meaningfulStudy.js";
+import { computeFirstSteps, recordFirstStep } from "./lib/firstSteps.js";
+import { summarizeSmartReview } from "./lib/smartReviewSummary.js";
+import { readPlace } from "./lib/learnerPlace.js";
 
 import {sendEmailAccessLink} from "./lib/emailAccess.js";
 import {completedGuestDiagnosticRows,markGuestDiagnosticAuthOpened,guestDiagnosticSnapshot,diagnosticComplete} from "./lib/guestDiagnosticStore.js";
@@ -195,6 +199,10 @@ const DB = {
   async saveReferralOwner(code,email) { try { if(code&&email)await storageSet(`refowner:${String(code).trim().toUpperCase()}`,normalizeEmail(email)); } catch {}},
   async getDailyStreak(key) { try { const r=await storageGet(`daily-streak:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
   async saveDailyStreak(key,data) { try { await storageSet(`daily-streak:${key}`,JSON.stringify(data)); } catch {}},
+  async getMeaningfulStudy(key) { try { const r=await storageGet(`meaningful-study:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
+  async saveMeaningfulStudy(key,data) { try { await storageSet(`meaningful-study:${key}`,JSON.stringify(data)); } catch {}},
+  async getFirstSteps(key) { try { const r=await storageGet(`first-steps:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
+  async saveFirstSteps(key,data) { try { await storageSet(`first-steps:${key}`,JSON.stringify(data)); } catch {}},
   async getPracticeSession(key) { try { const r=await storageGet(`practice-session:${key}`); return r?JSON.parse(r.value):null; } catch { return null; }},
   async savePracticeSession(key,data) { try { await storageSet(`practice-session:${key}`,JSON.stringify(data)); } catch {}},
   async clearPracticeSession(key) { try { await storageDelete(`practice-session:${key}`); } catch {}},
@@ -1141,6 +1149,72 @@ async function loadDailyStreak(user) {
   }
   return snapshot;
 }
+const MEANINGFUL_STUDY_CHANGED_EVENT = "meaningful-study-changed";
+const FIRST_STEPS_CHANGED_EVENT = "first-steps-changed";
+async function recordMeaningfulStudyActivity(user, activity) {
+  if (!user) return;
+  try {
+    const owner = dailyStreakOwner(user);
+    const current = (await DB.getMeaningfulStudy(owner)) || { days: {}, seed: null, best: 0 };
+    const today = localDateKey();
+    const days = applyMeaningfulActivity(current.days || {}, today, activity);
+    const summary = computeMeaningfulStreak({ days, seed: current.seed || null, today, yesterday: previousDateKey(today) });
+    await DB.saveMeaningfulStudy(owner, { days, seed: current.seed || null, best: Math.max(Number(current.best) || 0, summary.streak), updatedAt: new Date().toISOString() });
+    window.dispatchEvent(new Event(MEANINGFUL_STUDY_CHANGED_EVENT));
+  } catch {}
+}
+async function loadMeaningfulStreak(user) {
+  const fallback = { streak: 0, best: 0, lastQualifiedDate: null, completedToday: false, qualifiedToday: false, reasonsToday: [], countsToday: { mcq: 0, lessonSections: 0, flashcards: 0, dailyChallenge: false } };
+  if (!user) return fallback;
+  try {
+    const owner = dailyStreakOwner(user);
+    let log = await DB.getMeaningfulStudy(owner);
+    if (!log && owner !== "guest") {
+      const guestLog = await DB.getMeaningfulStudy("guest");
+      if (guestLog) { log = guestLog; await DB.saveMeaningfulStudy(owner, guestLog); }
+    }
+    let seed = log?.seed || null;
+    // One-time seed from an active Daily Challenge streak: every day in it
+    // was a qualifying day, so it is provable, not backfilled. Stored in the
+    // log so it is applied exactly once.
+    if (!log && !seed) {
+      const challenge = await DB.getDailyStreak(owner);
+      const today = localDateKey();
+      const yesterday = previousDateKey(today);
+      if (challenge && Number(challenge.streak) > 0 && (challenge.lastCompletedDate === today || challenge.lastCompletedDate === yesterday)) {
+        seed = { streak: Number(challenge.streak), lastQualifiedDate: challenge.lastCompletedDate, best: Number(challenge.best) || Number(challenge.streak) };
+        log = { days: {}, seed, best: seed.best };
+        await DB.saveMeaningfulStudy(owner, { ...log, updatedAt: new Date().toISOString() });
+      }
+    }
+    const today = localDateKey();
+    const summary = computeMeaningfulStreak({ days: log?.days || {}, seed, today, yesterday: previousDateKey(today) });
+    return { ...summary, best: Math.max(summary.best, Number(log?.best) || 0), todayInfo: evaluateMeaningfulDay((log?.days || {})[today] || {}) };
+  } catch { return fallback; }
+}
+async function recordFirstStepProgress(user, stepId) {
+  if (!user) return;
+  try {
+    const owner = dailyStreakOwner(user);
+    const current = (await DB.getFirstSteps(owner)) || {};
+    const next = recordFirstStep(current, stepId);
+    if (next === current) return;
+    await DB.saveFirstSteps(owner, next);
+    window.dispatchEvent(new Event(FIRST_STEPS_CHANGED_EVENT));
+  } catch {}
+}
+async function loadFirstSteps(user) {
+  if (!user) return computeFirstSteps({});
+  try {
+    const owner = dailyStreakOwner(user);
+    let record = await DB.getFirstSteps(owner);
+    if (!record && owner !== "guest") {
+      const guestRecord = await DB.getFirstSteps("guest");
+      if (guestRecord) { record = guestRecord; await DB.saveFirstSteps(owner, guestRecord); }
+    }
+    return computeFirstSteps({ record: record || {} });
+  } catch { return computeFirstSteps({}); }
+}
 function dailyEncouragementForDate(dateKey=localDateKey()) {
   const messages=[
     "Congratulations!",
@@ -1322,6 +1396,7 @@ async function completeDailyStreak(user) {
   const next={streak,best,lastCompletedDate:today,updatedAt:new Date().toISOString()};
   await DB.saveDailyStreak(key,next);
   window.dispatchEvent(new Event("daily-streak-changed"));
+  await recordMeaningfulStudyActivity(user, { dailyChallenge: true });
   return {...next,completedToday:true,alreadyCompleted,previousStreak:Number(current.streak)||0};
 }
 function getStreakRecoveryMessage(info={}) {
@@ -23614,7 +23689,7 @@ function SmartReviewLessonPath({recommendations=[],onOpenDeepDive,source="smart_
 
 const DAILY_STREAK_EVENTS=["daily-streak-changed"];
 
-function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOpenFlashcards,coinWallet,t,starred=[],assistantFlashcardSet=null,readinessProfile,practiceAccess,streakInfo}) {
+function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOpenFlashcards,coinWallet,t,starred=[],assistantFlashcardSet=null,readinessProfile,practiceAccess,streakInfo,meaningfulStreak=null,firstSteps=null}) {
   const [showReadinessLab,setShowReadinessLab]=useState(false);
   const activityProfile=getActivityProfile(attempts);
   const questionsDone=readinessProfile.activity?.total ?? activityProfile.uniqueQuestions;
@@ -23622,6 +23697,17 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   const readinessColor=readiness>=80&&!readinessProfile.stale&&(readinessProfile.confidence==="medium"||readinessProfile.confidence==="high")?t.green:t.accent;
   const isPro = user.tier==="pro";
   const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
+  const firstStepsResult=useMemo(()=>{
+    const recorded = firstSteps?.steps ? Object.fromEntries(firstSteps.steps.filter(step=>step.done).map(step=>[step.id,true])) : {};
+    let lessonCompletions = [];
+    try { lessonCompletions = readPlace(`lessons:${starOwner(user)}:confirmed-completions-v1`, [], window.localStorage); } catch {}
+    return computeFirstSteps({
+      record: recorded,
+      hasMcqAttempt: attempts.some(attempt=>attempt?.mcq && (attempt.readinessSource==="mcq-set" || attempt.readinessSource==="exam")) || (readinessProfile.attempted || 0) > 0,
+      hasLessonCompletion: Array.isArray(lessonCompletions) && lessonCompletions.length > 0,
+      hasDeckActivity: starredFlashcards.length > 0 || readLocalMasteredFlashcardIds().length > 0,
+    });
+  },[firstSteps,attempts,readinessProfile.attempted,starredFlashcards,user]);
   const showStarredDashboardSet=starredFlashcards.length>=5;
   const showAssistantDashboardSet=Boolean(assistantFlashcardSet?.cards?.length);
 
@@ -23682,9 +23768,21 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
       {showReadinessLab&&<ReadinessBreakdown profile={readinessProfile} chapters={CHAPTERS}/>}
 
       {readinessProfile.refreshError&&<p className="dh-progress-notice" role="status">Showing the last update. <button onClick={readinessProfile.retry}>Retry refresh</button></p>}
+      {!firstStepsResult.allDone && <section aria-label="Your first 3 steps" style={{marginBottom:18,padding:18,border:`1px solid ${t.border}`,borderRadius:18,background:t.surface}}>
+        <h2 style={{margin:"0 0 4px",color:t.text,fontSize:18}}>Your first 3 steps</h2>
+        <p style={{margin:"0 0 12px",color:t.textSec,fontSize:13}}>{firstStepsResult.doneCount} of 3 done. Finish these to get started — this card disappears when all three are done.</p>
+        <ul style={{listStyle:"none",margin:0,padding:0,display:"grid",gap:10}}>
+          {firstStepsResult.steps.map(step=>(
+            <li key={step.id} style={{display:"flex",alignItems:"center",gap:10,justifyContent:"space-between"}}>
+              <span style={{color:step.done?t.textSec:t.text,fontSize:14}}>{step.done?"✓":"○"} <span style={{textDecoration:step.done?"line-through":"none"}}>{step.title}</span></span>
+              {!step.done && <button className="btn btn-primary" type="button" style={{fontSize:12,minHeight:34,padding:"7px 12px"}} onClick={()=>onNav(step.action)}>Start</button>}
+            </li>
+          ))}
+        </ul>
+      </section>}
       <div className="dh-section-title"><h2>Your progress</h2></div>
       {readinessProfile.status==="loading"&&<CipherLoader t={t} compact label="Updating your progress…"/>}
-      <DashboardMetrics quota={practiceAccess} profile={readinessProfile} streak={streakInfo} tier={user.tier} t={t}/>
+      <DashboardMetrics quota={practiceAccess} profile={readinessProfile} streak={meaningfulStreak || streakInfo} tier={user.tier} t={t}/>
 
       <div className="dh-section-title"><h2>For you</h2></div>
       <section className="dh-next-grid" aria-label="Dashboard action recommendations">
@@ -24341,6 +24439,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
     due:engineState?.failed?.filter(row=>row.cooldown_counter<=0).length??"—",
     weak:engineState?new Set([...(engineState.mastery||[]).filter(row=>row.score<80).map(row=>row.concept_tag),...(engineState.diagnostic_weak_tags||[])]).size:"—",
   };
+  const smartReview = summarizeSmartReview({ engineState: isGuest ? null : engineState, bank });
   const quizSizes = isGuest?[10]:choices.sizes.map(option=>option.size);
   const latestMcqAttempts=getLatestMcqAttempts(attempts);
   const missedMcqIds=[...latestMcqAttempts.entries()].filter(([,attempt])=>attempt.correct===false).map(([questionId])=>questionId);
@@ -24467,6 +24566,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
   useEffect(()=>{if(allAnswered&&sessionContext?.engineSessionId)mcqEngineRequest("complete",{session_id:sessionContext.engineSessionId}).catch(()=>{});},[allAnswered,sessionContext?.engineSessionId]);
   const reportPracticeSession=useCallback(()=>{
     if(isGuest||!questions.length)return;
+    recordFirstStepProgress(user, "mcq-set");
     const answered=results.filter(Boolean);
     if(answered.length!==questions.length)return;
     const correct=answered.filter(r=>r.correct).length;
@@ -24614,7 +24714,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
 
   if(!started) return(
     <div className="mcq-setup-screen mcq-hub-screen fu" style={{...examThemeVars(t),"--practice-accent":examMode?t.accent:reviewMode==="smart"?t.green:t.accent}}>
-      {missedBatch!==null&&<ModalFrame className="streak-overlay" aria-label="Choose missed-question batch" onClose={()=>setMissedBatch(null)}><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Choose a batch before using your allowance.</p><label>Questions <select className="input" value={missedBatch} disabled={!missedBatchSizes.length} onChange={e=>setMissedBatch(Number(e.target.value))}>{!missedBatchSizes.length&&<option value={0}>No batch available</option>}{missedBatchSizes.map(size=><option key={size} value={size}>{size} questions</option>)}</select></label>{isPro&&!missedBatchSizes.length&&<p role="status">You have {missedQuestions.length} missed questions. A Pro batch starts at 10.</p>}<p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!missedBatchSizes.includes(missedBatch)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>{missedBatchSizes.length?`Practise ${missedBatch} missed questions`:"No batch available"}</button></div></div></ModalFrame>}
+      {missedBatch!==null&&<ModalFrame className="streak-overlay" aria-label="Choose missed-question batch" onClose={()=>setMissedBatch(null)}><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Choose a batch before using your allowance.</p><label>Questions <select className="input" value={missedBatch} disabled={!missedBatchSizes.length} onChange={e=>setMissedBatch(Number(e.target.value))}>{!missedBatchSizes.length&&<option value={0}>No batch available</option>}{missedBatchSizes.map(size=><option key={size} value={size}>{size} questions</option>)}</select></label>{isPro&&!missedBatchSizes.length&&<p role="status">You have {missedQuestions.length} missed questions. A Pro batch starts at 10.</p>}<p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your allowance · ${availableQuota??0} remaining before · ${Math.max(0,(availableQuota??0)-missedBatch)} remaining after`}</p><p>Opening this preview does not use allowance. Allowance is used only when you start the repair set. If you answer a missed question correctly, it leaves your missed queue. If you miss it again, it returns to a 30-answer cooldown.</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!missedBatchSizes.includes(missedBatch)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>{missedBatchSizes.length?`Practise ${missedBatch} missed questions`:"No batch available"}</button></div></div></ModalFrame>}
       <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h1>MCQ Practice</h1></div></header>
       <div className="card" role="status" style={{padding:"12px 16px",marginBottom:16,color:t.textSec}}>{isGuest?"Try 10 questions total, then create a free account to keep practising.":isPro?"Unlimited generation · Pro":"50 questions every rolling 12 hours"}<strong style={{marginLeft:10,color:t.text}}>{isPro?"∞":access?`${access.remaining} remaining`:"Loading allowance…"}</strong>{accessError&&<span> {accessError}</span>}{!isPro&&choices.remainder&&<button className="btn btn-outline" style={{marginLeft:12}} disabled={engineBusy} onClick={()=>startEngineQuiz({},choices.remainder,examMode?"exam":reviewMode)}>Practice remaining {choices.remainder}</button>}{isGuest&&access?.remaining===0&&<button className="btn btn-primary" onClick={requestSignup}>Create free account</button>}</div>
       <div hidden={isGuest} className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
@@ -24668,6 +24768,21 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
             </div>
           </div>
         </div>
+        <section aria-label="How Smart Review works" style={{marginTop:16,padding:"14px 16px",border:`1px solid ${t.border}`,borderRadius:14,background:t.surface}}>
+          <h3 style={{margin:"0 0 8px",color:t.text,fontSize:15}}>How Smart Review works</h3>
+          <ul style={{margin:"0 0 10px",paddingLeft:18,color:t.textSec,fontSize:13,lineHeight:1.6}}>
+            {smartReview.rules.map(rule=><li key={rule}>{rule}</li>)}
+          </ul>
+          {smartReview.available ? (
+            <p style={{margin:0,color:t.textSec,fontSize:13}}>
+              {smartReview.nextRetestIn==null ? "No missed questions are cooling down right now." : `Next retest in ${smartReview.nextRetestIn} more MCQ answer${smartReview.nextRetestIn===1?"":"s"}.`}
+              {smartReview.weakest ? ` Weakest concept: ${smartReview.weakest.tag} (${smartReview.weakest.score})${smartReview.weakest.domain?` — Domain ${smartReview.weakest.domain}`:""}.` : " No concepts attempted yet."}
+              {` ${smartReview.coolingDown} cooling down · ${smartReview.conceptsToReview} concepts to review.`}
+            </p>
+          ) : (
+            <p style={{margin:0,color:t.textSec,fontSize:13}}>Sign in to see your live review state: retests due, next retest timing, and your weakest concept.</p>
+          )}
+        </section>
         <div className="mcq-session-controls">
           <fieldset className="mcq-session-size">
             <legend>Questions</legend>
@@ -29073,6 +29188,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
   const activeLessonStep=lessonSteps[lessonStep]||lessonSteps[0]||null;
   useEffect(()=>{
     if(!selectedDive||studyMode!=="learn"||!activeLessonStep)return;
+    if(activeLessonStep.kind==="section") recordMeaningfulStudyActivity(user, { lessonSections: 1 });
     const sectionId=lessonSectionIds(selectedDive)[lessonStep]||lessonSectionIds(selectedDive)[0];
     setSectionViews(current=>{
       const seen=Array.isArray(current[selectedDive.id])?current[selectedDive.id]:[];
@@ -29165,6 +29281,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
     setSelectedId(null);
   };
   const updateMasteredAcronyms=(cardId,mastered)=>{
+    recordMeaningfulStudyActivity(user, { flashcards: 1 });
     const next=mastered
       ?Array.from(new Set([...masteredAcronymIds,cardId]))
       :masteredAcronymIds.filter(id=>id!==cardId);
@@ -29505,6 +29622,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
           <button className="btn btn-primary" type="button" disabled={isComplete} onClick={()=>{
             if(!confirmLessonCompletion(lessonViewed,message=>window.confirm(message)))return;
             setCompletedIds(current=>current.includes(selectedDive.id)?current:[...current,selectedDive.id]);
+            recordFirstStepProgress(user, "lesson");
           }}>{isComplete?"Marked complete":"Mark complete"}</button>
           <div className="deep-dive-lesson-action-grid">
             <button className="btn deep-dive-lesson-btn-checkpoint" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>Checkpoint</button>
@@ -29725,8 +29843,9 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     if(set?.cards?.length){setSelected(set);onInitialSetHandled?.();}
     else if(initialSetId!==ASSISTANT_FLASHCARD_SET_ID||progressStatus!=="loading")onInitialSetHandled?.();
   },[initialSetId,personalSets,progressStatus]);
-  const openSet=set=>{if(!set?.cards?.length)return;setSelected(set);setNotice("");scrollSecurePlusPageToTop({behavior:"auto"});capture("flashcards_set_opened",{set_id:set.id,mode:"term"});};
+  const openSet=set=>{if(!set?.cards?.length)return;setSelected(set);setNotice("");scrollSecurePlusPageToTop({behavior:"auto"});recordFirstStepProgress(user, "deck");capture("flashcards_set_opened",{set_id:set.id,mode:"term"});};
   const rate=(id,remembered)=>{
+    recordMeaningfulStudyActivity(user, { flashcards: 1 });
     setMastered(current=>{
       const next=remembered?[...new Set([...current,id])]:current.filter(item=>item!==id);
       if(!user)try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
@@ -30515,6 +30634,10 @@ export default function App() {
   const practiceAccessState=usePracticeAccess(user,!loading);
   const loadHomeStreak=useCallback(()=>loadDailyStreak(user),[user?.id,user?.email,user?.authProvider]);
   const homeStreak=useLiveSnapshot({owner:progressOwner(user),load:loadHomeStreak,enabled:Boolean(user)&&!loading,revision:attempts.length,events:DAILY_STREAK_EVENTS});
+  const loadHomeMeaningfulStreak=useCallback(()=>loadMeaningfulStreak(user),[user?.id,user?.email,user?.authProvider]);
+  const homeMeaningfulStreak=useLiveSnapshot({owner:progressOwner(user),load:loadHomeMeaningfulStreak,enabled:Boolean(user)&&!loading,revision:attempts.length,events:[MEANINGFUL_STUDY_CHANGED_EVENT]});
+  const loadHomeFirstSteps=useCallback(()=>loadFirstSteps(user),[user?.id,user?.email,user?.authProvider]);
+  const homeFirstSteps=useLiveSnapshot({owner:progressOwner(user),load:loadHomeFirstSteps,enabled:Boolean(user)&&!loading,revision:attempts.length,events:[FIRST_STEPS_CHANGED_EVENT]});
   const previousMetricsView=useRef(view);
   useEffect(()=>{
     const changed=previousMetricsView.current!==view;
@@ -30523,6 +30646,8 @@ export default function App() {
     if(readinessProfile.status==="ready")readinessProfile.retry?.();
     if(practiceAccessState.status==="ready")practiceAccessState.refresh();
     if(homeStreak.status==="ready")homeStreak.refresh();
+    if(homeMeaningfulStreak.status==="ready")homeMeaningfulStreak.refresh();
+    if(homeFirstSteps.status==="ready")homeFirstSteps.refresh();
   },[view,loading]);
 
   const [starred,setStarred]=useState([]);
@@ -31443,6 +31568,7 @@ export default function App() {
   },[user]);
   const handleSaveAttempt=useCallback(async r=>{
     if(!user)return;
+    if(r?.mcq && typeof r.correct==="boolean") recordMeaningfulStudyActivity(user, { mcq: 1 });
     setAttempts(a=>[r,...a]);
     try{
       if(user.authProvider==="supabase") await saveSupabaseAttempt(user.id,r);
@@ -32030,7 +32156,7 @@ export default function App() {
           </div>
           {guestImportError&&<div className="card" role="status" style={{padding:18,marginBottom:18}}>{guestImportError} <button className="btn btn-outline" onClick={async()=>setAttempts(await importPendingGuestSmartReview(user,attempts))}>Retry diagnostic sync</button></div>}
           {["about","why-different"].includes(view)&&<AboutUs t={t} isGuest={false} onStart={()=>setView("mcq")} onExplore={setView} feedbackHref={`mailto:${SUPPORT_EMAIL}?subject=SecurePlus%20feedback`}/>}
-          {view==="dashboard"&&<Dashboard readinessProfile={readinessProfile} practiceAccess={practiceAccessState.access} streakInfo={homeStreak.value} user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
+          {view==="dashboard"&&<Dashboard readinessProfile={readinessProfile} practiceAccess={practiceAccessState.access} streakInfo={homeStreak.value} meaningfulStreak={homeMeaningfulStreak.value} firstSteps={homeFirstSteps.value} user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
             <MCQPractice practiceAccessState={practiceAccessState} examRequest={examEntryRequest} user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
           </div>
