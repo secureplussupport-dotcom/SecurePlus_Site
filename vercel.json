@@ -98,6 +98,10 @@
       "destination": "/api/stripe?operation=portal"
     },
     {
+      "source": "/api/stripe/history",
+      "destination": "/api/stripe?operation=history"
+    },
+    {
       "source": "/api/stripe/sync",
       "destination": "/api/stripe?operation=sync"
     },

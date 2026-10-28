@@ -18,6 +18,8 @@ export function createBillingHistoryHandler({admin=getSupabaseAdmin,stripe=getSt
    if(profileError)throw profileError;
    const {data:rows,error}=await db.from('pro_pass_purchases').select('checkout_session_id,plan,amount,currency,starts_at,expires_at,created_at').eq('user_id',userId).order('created_at',{ascending:false}).order('checkout_session_id',{ascending:false}).range(page*20,page*20+20);
    if(error)throw error;
+   const {data:activePass,error:activeError}=await db.from('pro_pass_purchases').select('plan,starts_at,expires_at').eq('user_id',userId).lte('starts_at',new Date().toISOString()).gt('expires_at',new Date().toISOString()).order('starts_at',{ascending:false}).limit(1).maybeSingle();
+   if(activeError)throw activeError;
    const payments=stripe();
    const purchases=await Promise.all((rows||[]).slice(0,20).map(async row=>{
     let receiptUrl=null;
@@ -38,7 +40,7 @@ export function createBillingHistoryHandler({admin=getSupabaseAdmin,stripe=getSt
      invoiceCursor=result.has_more?result.data.at(-1)?.id:null;
     }catch{invoiceError=true;}
    }
-   return json(res,200,{purchases:[...purchases,...invoices],hasMore:(rows?.length||0)>20,invoiceCursor,invoiceError,access:{expiry:profile?.pro_pass_expires_at||profile?.subscription_current_period_end||null,type:profile?.pro_pass_expires_at?'Pro pass':['active','trialing'].includes(profile?.subscription_status)?'Existing subscription':'Free'}});
+   return json(res,200,{purchases:[...purchases,...invoices],activePass:activePass?{kind:'pass',plan:activePass.plan,start:activePass.starts_at,expiry:activePass.expires_at}:null,hasMore:(rows?.length||0)>20,invoiceCursor,invoiceError,access:{expiry:profile?.pro_pass_expires_at||profile?.subscription_current_period_end||null,type:profile?.pro_pass_expires_at?'Pro pass':['active','trialing'].includes(profile?.subscription_status)?'Existing subscription':'Free'}});
   }catch{return json(res,503,{error:'Billing history is temporarily unavailable. Try again.'});}
  };
 }

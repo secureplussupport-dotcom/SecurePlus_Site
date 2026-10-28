@@ -1,3 +1,4 @@
+import {readFileSync} from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createBillingHistoryHandler,safeReceipt} from '../server/stripe/history.js';
@@ -7,7 +8,7 @@ const owner='owner-account';
 function setup({token=true,valid=true,stripeOwner=owner,customer='cus_owner',receipt='https://pay.stripe.com/receipts/test',failReceipt=false}={}){
  const queries=[];
  const admin={auth:{getUser:async value=>({data:{user:valid&&value==='valid'?{id:owner}:null},error:null})},from:table=>{
-  const query={select:()=>query,eq:(key,value)=>{queries.push({table,key,value});return query;},order:()=>query,range:async()=>({data:[{checkout_session_id:'cs_test',plan:'sprint',amount:1199,currency:'usd',starts_at:'2026-10-01',expires_at:'2026-10-31',created_at:'2026-10-01'}],error:null}),maybeSingle:async()=>({data:{stripe_customer_id:'cus_owner',pro_pass_expires_at:'2026-10-31'},error:null})};return query;
+  const query={select:()=>query,eq:(key,value)=>{queries.push({table,key,value});return query;},order:()=>query,lte:()=>query,gt:()=>query,limit:()=>query,range:async()=>({data:[{checkout_session_id:'cs_test',plan:'sprint',amount:1199,currency:'usd',starts_at:'2026-10-01',expires_at:'2026-10-31',created_at:'2026-10-01'}],error:null}),maybeSingle:async()=>({data:table==='profiles'?{stripe_customer_id:'cus_owner',pro_pass_expires_at:'2026-10-31'}:{plan:'sprint',starts_at:'2026-10-01',expires_at:'2026-10-31'},error:null})};return query;
  }};
  const stripe={checkout:{sessions:{retrieve:async()=>{if(failReceipt)throw Error('offline');return{client_reference_id:stripeOwner,customer,payment_intent:{latest_charge:{receipt_url:receipt}}};}}},invoices:{list:async()=>({data:[],has_more:false})}};
  const invoke=async(body={},method='POST')=>{
@@ -17,7 +18,7 @@ function setup({token=true,valid=true,stripeOwner=owner,customer='cus_owner',rec
 }
 test('billing requires server-verified identity; caller-supplied owner is ignored',async()=>{
  assert.equal((await setup({token:false}).invoke()).statusCode,401);assert.equal((await setup({valid:false}).invoke()).statusCode,401);
- const {invoke,queries}=setup();const r=await invoke({user_id:'victim'});assert.equal(r.statusCode,200);assert.equal(r.headers['cache-control'],'no-store, private');assert(queries.some(q=>q.table==='pro_pass_purchases'&&q.key==='user_id'&&q.value===owner));assert(!JSON.stringify(queries).includes('victim'));assert.equal(r.body.purchases[0].receiptUrl,'https://pay.stripe.com/receipts/test');assert(!JSON.stringify(r.body).includes('cus_owner'));
+ const {invoke,queries}=setup();const r=await invoke({user_id:'victim'});assert.equal(r.statusCode,200);assert.equal(r.body.activePass.start,'2026-10-01');assert.equal(r.headers['cache-control'],'no-store, private');assert(queries.some(q=>q.table==='pro_pass_purchases'&&q.key==='user_id'&&q.value===owner));assert(!JSON.stringify(queries).includes('victim'));assert.equal(r.body.purchases[0].receiptUrl,'https://pay.stripe.com/receipts/test');assert(!JSON.stringify(r.body).includes('cus_owner'));
 });
 test('foreign or unsafe Stripe receipt never leaks; purchase survives receipt outage',async()=>{
  for(const options of [{stripeOwner:'victim'},{customer:'cus_victim'},{receipt:'https://evil.test/pay'},{failReceipt:true}]){const r=await setup(options).invoke();assert.equal(r.statusCode,200);assert.equal(r.body.purchases[0].receiptUrl,null);assert.equal(r.body.purchases[0].plan,'sprint');}
@@ -25,8 +26,10 @@ test('foreign or unsafe Stripe receipt never leaks; purchase survives receipt ou
 });
 test('billing pagination and HTTP method are bounded',async()=>{assert.equal((await setup().invoke({page:-1})).statusCode,400);assert.equal((await setup().invoke({invoiceCursor:'../../secret'})).statusCode,400);assert.equal((await setup().invoke({},'GET')).statusCode,405);});
 test('Smart Review preview derives due, shortest cooldown and weakest under-80 concept',()=>{
- assert.deepEqual(smartReviewPreview(null),{due:null,next:null,weakest:null});const s=smartReviewPreview({failed:[{cooldown_counter:0},{cooldown_counter:12},{cooldown_counter:3}],mastery:[{concept_tag:'a',score:80},{concept_tag:'b',score:20},{concept_tag:'c',score:5}]});assert.equal(s.due,1);assert.equal(s.next,3);assert.equal(s.weakest.concept_tag,'c');
+ assert.deepEqual(smartReviewPreview(null),{due:null,next:null,weakest:null});const s=smartReviewPreview({failed:[{cooldown_counter:0},{cooldown_counter:12},{cooldown_counter:3}],mastery:[{concept_tag:'a',score:80},{concept_tag:'b',score:20},{concept_tag:'c',score:5}]});assert.equal(s.due,1);assert.equal(s.next,0);assert.equal(smartReviewPreview({failed:[{cooldown_counter:12},{cooldown_counter:3}]}).next,3);assert.equal(s.weakest.concept_tag,'c');
 });
 test('flashcard search provides a literal highlight and match reason without HTML interpretation',()=>{
  const set={title:'Recovery',cards:[{term:'Recovery time objective',acronym:'RTO',concept_tags:['risk.bia-rto-rpo']}]};assert.equal(flashcardMatch(set,'#risk.bia').reason,'Concept tag');assert.equal(flashcardMatch(set,'time objective').reason,'Term');assert.equal(flashcardMatch(set,'zzz'),null);assert.deepEqual(textSegments('<script>','script'),[{text:'<',match:false},{text:'script',match:true},{text:'>',match:false}]);
 });
+
+test('production routes billing history to the authenticated API, before the SPA fallback',()=>{const {rewrites}=JSON.parse(readFileSync('vercel.json','utf8'));const i=rewrites.findIndex(r=>r.source==='/api/stripe/history');assert(i>=0);assert.equal(rewrites[i].destination,'/api/stripe?operation=history');const fallback=rewrites.findIndex(r=>r.destination==='/index.html');if(fallback>=0)assert(i<fallback);});

@@ -17,7 +17,7 @@ await db.exec(readFileSync('supabase/migrations/20261022060000_mcq_exam_readines
 await db.exec(readFileSync('supabase/migrations/20261022090000_mcq_core_recovery.sql','utf8'));
 await db.exec('create table public.attempts(user_id uuid,question_type text,correct boolean,created_at timestamptz);grant select on public.attempts to service_role;');
 await db.exec(readFileSync('supabase/migrations/20261022110000_dashboard_practice_metrics.sql','utf8'));
-await db.exec(readFileSync('supabase/migrations/20261028121852_readiness_confidence_evidence.sql','utf8'));
+await db.exec(readFileSync('supabase/migrations/20261028125448_readiness_confidence_evidence.sql','utf8'));
 await db.exec(`create function auth.uid() returns uuid language sql as $$select null::uuid$$;create table public.profiles(id uuid primary key references auth.users(id),email text,tier text default 'free',subscription_status text,pro_trial_until timestamptz,updated_at timestamptz);create table public.app_admins(email text);create table public.pbqs(id text);create table public.starred_questions(user_id uuid,question_key text,question_type text,question_id text,created_at timestamptz default now(),primary key(user_id,question_key));grant all on public.profiles,public.app_admins,public.pbqs,public.starred_questions to service_role;`);
 await db.exec(readFileSync('supabase/migrations/20261022150000_practice_access_model.sql','utf8'));
 const user = '00000000-0000-4000-8000-000000000001', other = '00000000-0000-4000-8000-000000000002';

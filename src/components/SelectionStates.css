@@ -28,3 +28,5 @@ body :is(.dh-primary,.as-button,.sp-dialog button[type="submit"]){background:#17
 :is(.practice-mode-grid,.deep-dive-lesson-nav) button:is([aria-pressed="true"],[aria-current="step"]) :is(span,small,strong,svg){color:inherit!important;opacity:1}
 body :is(.flashcard-star,.fc-search-clear,.modal-close,.streak-close,.deep-dive-star-button){min-width:44px;min-height:44px}
 body :is(.deep-dive-locked-card,.deep-dive-card.is-locked){opacity:1;color:inherit;border-style:dashed}
+
+body button{min-height:44px}body :is(.flashcard-share-btn,.deep-dive-floating-star,.diagnostic-close,.diagnostic-expand){min-width:44px;min-height:44px}

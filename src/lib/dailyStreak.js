@@ -19,7 +19,7 @@ export function meaningfulDailyStreak({attempts=[],days={},today=localDay(Date.n
  const evidence={};
  for(const [date,value]of Object.entries(days)){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date))||new Date(date).toISOString().slice(0,10)!==date||date>today)continue;
-  evidence[date]={mcqs:0,sections:new Set(value.sections||[]).size,cards:new Set(value.cards||[]).size,challenge:Boolean(value.challenge)};
+  evidence[date]={mcqs:0,sections:new Set(Array.isArray(value?.sections)?value.sections:[]).size,cards:new Set(Array.isArray(value?.cards)?value.cards:[]).size,challenge:value?.challenge===true};
  }
  const questionEvents=new Set();
  for(const row of attempts){

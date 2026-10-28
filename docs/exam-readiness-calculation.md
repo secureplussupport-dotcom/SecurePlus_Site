@@ -7,7 +7,12 @@ reporting domain. The catalogue completeness test rejects missing or extra tags.
 These are reporting assignments, not relationships between concepts or new tags.
 Security/cryptography tags belong to D1; attacks/vulnerabilities to D2;
 architecture/network/data-protection tags to D3; IAM/operations/response to D4;
-governance/risk to D5. This explicit mapping can be reviewed independently.
+governance/risk to D5. Explicit operations exceptions are threat feeds, CVSS/CVE
+(objective 4.3), input validation and WPA settings (4.1), sanitization (4.2),
+and DLP (4.4/4.5). 802.1X remains architecture under port security (3.2).
+These primary reporting assignments follow the [official objectives](https://lecbyo.files.cmp.optimizely.com/download/cf25ec24b8a511ef9ecbb69c0f9687be),
+not the tag prefix alone. Cross-domain concepts still have exactly one reporting
+home, so they never receive duplicate weight.
 
 Unattempted concepts start at 50. MCQ-set/exam history is replayed in timestamp,
 event-ID order using the unchanged +20/-35, clamped 0–100 rule. Daily Challenge,

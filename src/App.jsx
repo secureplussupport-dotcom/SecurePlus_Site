@@ -23662,7 +23662,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
         <div className="dh-cipher"><MascotAnimation animation={questionsDone?"scan":"wave"} size={88} interactive={false} label="Cipher, your study companion"/></div>
       </header>
 
-      <StudyPlanWidget study={study} onNavigate={onNav}/>
+      <StudyPlanWidget study={study} onNavigate={onNav} onOpenLesson={onOpenDeepDive}/>
       <section className="dh-launch-row" aria-label="Practice and exam readiness">
         <article className="dh-practice">
           <span className="dh-eyebrow"><BookOpenCheck size={15}/> MCQ PRACTICE</span>
@@ -23681,9 +23681,9 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
               <circle className="dh-score-fill" style={{opacity:readinessProfile.status==="ready"&&readiness!=null&&readiness>0?1:0}} cx="100" cy="100" r="78" pathLength="100" strokeDasharray={`${readinessProfile.status==="ready"?(readiness ?? 0):0} 100`} transform="rotate(-90 100 100)"/>
               {readinessProfile.status==="ready"&&readiness!=null&&readiness>0&&<circle className="dh-dial-tip" cx="100" cy="22" r="4" transform={`rotate(${readiness*3.6} 100 100)`}/>}
             </svg>
-            <div><Sparkles className="dh-dial-emblem" size={18} aria-hidden="true"/><strong>{readinessProfile.status==="ready"&&readiness!=null?<>{readiness}<small>%</small></>:"—"}</strong><span role="status">{readinessProfile.status==="loading"?"Loading your progress…":readinessProfile.status==="error"?"Progress unavailable":readinessProfile.level}</span></div>
+            <div><Sparkles className="dh-dial-emblem" size={18} aria-hidden="true"/><strong>{readinessProfile.status==="ready"&&readiness!=null?<>{readiness}<small>%</small></>:"—"}</strong><span role="status">{readinessProfile.status==="loading"?"Loading your progress…":readinessProfile.status==="error"?"Progress unavailable":readiness!=null&&readinessProfile.confidence==="Low"?"Early estimate":readinessProfile.level}</span></div>
           </div>
-          <div className="readiness-evidence"><strong>{readinessProfile.confidence} confidence</strong><span>{readinessProfile.distinctQuestions} distinct questions</span><p>{readinessProfile.explanation}</p>{readinessProfile.stale&&<p role="status">{readinessProfile.staleNotice}</p>}</div>
+          <div className="readiness-evidence"><strong>{readinessProfile.confidence} confidence</strong><span>{readinessProfile.distinctQuestions} distinct questions</span><p>{readinessProfile.explanation}</p>{readinessProfile.confidence==="Low"&&readinessProfile.mean>=80&&<p role="status">{readinessProfile.level}</p>}{readinessProfile.stale&&<p role="status">{readinessProfile.staleNotice}</p>}</div>
           <button className="dh-breakdown" type="button" aria-expanded={showReadinessLab} aria-controls="exam-readiness-breakdown" onClick={()=>setShowReadinessLab(value=>!value)}>{showReadinessLab?"Hide breakdown":"Break it down"}<ChevronDown size={16}/></button>
         </article>
       </section>
@@ -23713,7 +23713,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
       </section>
 
       <section className="dh-shortcuts" aria-label="More ways to learn">
-        <button className="dh-shortcut dh-daily" onClick={()=>onNav("daily")}><span className="dh-shortcut-icon"><Flame size={23}/></span><span><strong>Daily challenge</strong>{streakInfo?.completedToday&&<span>Completed today</span>}</span><ArrowUpRight size={19}/></button>
+        <button className="dh-shortcut dh-daily" onClick={()=>onNav("daily")}><span className="dh-shortcut-icon"><Flame size={23}/></span><span><strong>Daily challenge</strong>{streakInfo?.activity?.challenge&&<span>Completed today</span>}</span><ArrowUpRight size={19}/></button>
         <button className="dh-shortcut dh-lessons" onClick={()=>onNav("deep-dives")}><span className="dh-shortcut-icon"><BookOpenCheck size={23}/></span><span><strong>Concept Deep Dives</strong></span><ArrowUpRight size={19}/></button>
         {showStarredDashboardSet?<button className="dh-shortcut dh-saved" onClick={()=>onOpenFlashcards?.(STARRED_FLASHCARD_SET_ID)}><span className="dh-shortcut-icon"><Star size={23}/></span><span><strong>{starredFlashcards.length} saved flashcards</strong></span><ArrowUpRight size={19}/></button>:<button className="dh-shortcut dh-saved" onClick={()=>onNav("flashcards")}><span className="dh-shortcut-icon"><Layers3 size={23}/></span><span><strong>Browse the decks</strong></span><ArrowUpRight size={19}/></button>}
       </section>
@@ -24625,7 +24625,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
     <div className="mcq-setup-screen mcq-hub-screen fu" style={{...examThemeVars(t),"--practice-accent":examMode?t.accent:reviewMode==="smart"?t.green:t.accent}}>
       {missedBatch!==null&&<ModalFrame className="streak-overlay" aria-label="Choose missed-question batch" onClose={()=>setMissedBatch(null)}><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Practise previously missed questions. Correct answers clear those questions from your missed queue; incorrect answers stay queued. Your allowance is spent only when you start this new batch.</p><label>Questions <select className="input" value={missedBatch} disabled={!missedBatchSizes.length} onChange={e=>setMissedBatch(Number(e.target.value))}>{!missedBatchSizes.length&&<option value={0}>No batch available</option>}{missedBatchSizes.map(size=><option key={size} value={size}>{size} questions</option>)}</select></label>{isPro&&!missedBatchSizes.length&&<p role="status">You have {missedQuestions.length} missed questions. A Pro batch starts at 10.</p>}<p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!missedBatchSizes.includes(missedBatch)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>{missedBatchSizes.length?`Practise ${missedBatch} missed questions`:"No batch available"}</button></div></div></ModalFrame>}
       <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h1>MCQ Practice</h1></div></header>
-      {!isGuest&&!examMode&&<section className="sr-preview" aria-label="Smart Review status"><div className="sr-preview-metrics"><div><strong>{reviewPreview.due??'—'}</strong><span>Retests due</span></div><div><strong>{reviewPreview.next??(reviewPreview.due?'Now':'—')}</strong><span>{reviewPreview.next?'Next retest in this many answers':'Next retest'}</span></div><div><strong>{reviewPreview.weakest?`#${reviewPreview.weakest.concept_tag}`:'—'}</strong><span>{engineStateError?'Progress unavailable':reviewPreview.weakest?`Weakest concept · ${reviewPreview.weakest.score} points`:'Weakest concept · no current weakness'}</span></div></div><details><summary>How Smart Review works</summary><ol><li>A missed question waits for 30 more answers before its retest is due.</li><li>Two misses in a row on a concept prioritise a Core question next time that concept is tested, if one is available.</li><li>A correct answer clears that question from the missed queue.</li><li>Concepts at 80+ mastery are excluded from concept remediation. A due question retest can still appear.</li></ol></details></section>}
+      {!isGuest&&!examMode&&<section className="sr-preview" aria-label="Smart Review status"><div className="sr-preview-metrics"><div><strong>{reviewPreview.next===0?'Now':reviewPreview.next??'—'}</strong><span>{reviewPreview.next===0?'Next retest available':'Answers until next retest'}</span></div><div><strong>{reviewPreview.weakest?`#${reviewPreview.weakest.concept_tag}`:'—'}</strong><span>{engineStateError?'Progress unavailable':!engineState?'Weakest concept · loading…':reviewPreview.weakest?`Weakest concept · ${reviewPreview.weakest.score} points`:'Weakest concept · no current weakness'}</span></div></div><details><summary>How Smart Review works</summary><ol><li>A missed question waits for 30 more answers before its retest is due.</li><li>Two misses in a row on a concept prioritise a Core question next time that concept is tested, if one is available.</li><li>A correct answer clears that question from the missed queue.</li><li>Concepts at 80+ mastery are excluded from concept remediation. A due question retest can still appear.</li></ol></details></section>}
       <div className="card" role="status" style={{padding:"12px 16px",marginBottom:16,color:t.textSec}}>{isGuest?"Try 10 questions total, then create a free account to keep practising.":isPro?"Unlimited generation · Pro":"50 questions every rolling 12 hours"}<strong style={{marginLeft:10,color:t.text}}>{isPro?"∞":access?`${access.remaining} remaining`:"Loading allowance…"}</strong>{accessError&&<span> {accessError}</span>}{!isPro&&choices.remainder&&<button className="btn btn-outline" style={{marginLeft:12}} disabled={engineBusy} onClick={()=>startEngineQuiz({},choices.remainder,examMode?"exam":reviewMode)}>Practice remaining {choices.remainder}</button>}{isGuest&&access?.remaining===0&&<button className="btn btn-primary" onClick={requestSignup}>Create free account</button>}</div>
       <div hidden={isGuest} className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
         <button type="button" role="switch" aria-checked={examMode} className="mcq-exam-toggle" onClick={()=>{setExamMode(value=>!value);setEngineError("");setModeInfo(null);}}>
@@ -25042,7 +25042,6 @@ function PBQBank({user,attempts,onStart,onUpgrade,onOpenWallet,onUnlockPbq,coinW
         </div>
       </header>
       <div style={{marginBottom:16}}>
-        <TrustBadge t={t}/>
       </div>
 
       <MascotGuide
@@ -25323,7 +25322,6 @@ function PBQSim({q,onDone,onNext,nextQuestion,t,starred=[],onToggleStar,previewM
             <BeyondTextbookTag question={q} t={t}/>
           </div>
           <div style={{marginTop:8}}>
-            <TrustBadge t={t} compact/>
           </div>
         </div>
         <StarButton capacity={user&&user.tier!=="pro"&&user.authProvider!=="guest"?starred.filter(k=>/^(mcq|pbq):/.test(k)).length:null} active={starredSet.has(starKey("pbq",q.id))} onToggle={()=>onToggleStar?.("pbq",q.id)} label="Star PBQ"/>
@@ -28797,7 +28795,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
       return;
     }
     onRate(activeCard.id,mastered);
-    recordStudyActivity(user,{type:"card-rated",id:crypto.randomUUID()});
+    recordStudyActivity(user,{type:"card-rated",id:activeCard.id});
     const nextRated=new Set(ratedCardsThisPass);
     nextRated.add(activeCard.id);
     const completed=studyCardCount>0&&nextRated.size>=studyCardCount;
@@ -29239,7 +29237,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
   };
 
   if(selectedAcronymSet){
-    return <AcronymFlashcardLab acronymSet={selectedAcronymSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={closeAcronymSet} t={t}/>;
+    return <AcronymFlashcardLab acronymSet={selectedAcronymSet} masteredIds={masteredAcronymIds} onRate={updateMasteredAcronyms} onClose={closeAcronymSet} t={t} user={user}/>;
   }
 
   if(selectedDive){
@@ -29521,6 +29519,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
           <button className="btn btn-primary" type="button" disabled={isComplete} onClick={()=>{
             if(!confirmLessonCompletion(lessonViewed,message=>window.confirm(message)))return;
             setCompletedIds(current=>current.includes(selectedDive.id)?current:[...current,selectedDive.id]);
+            recordStudyActivity(user,{type:"lesson-section",id:`${selectedDive.id}:${lessonStep}`});
           }}>{isComplete?"Marked complete":"Mark complete"}</button>
           <div className="deep-dive-lesson-action-grid">
             <button className="btn deep-dive-lesson-btn-checkpoint" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>Checkpoint</button>
