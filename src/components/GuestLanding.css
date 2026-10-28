@@ -226,3 +226,9 @@ body:has(.gd-save-banner) .guest-main{padding-bottom:160px}
 .gd-resume strong{display:block}.gd-resume button{white-space:nowrap}
 .gd-question-navigation{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:8px 0}.gd-question-navigation button:disabled{opacity:.45}
 @media(max-width:480px){.gd-resume{align-items:flex-start;flex-direction:column}.gd-header{gap:8px}.gd-header>span{font-size:11px}.gd-question-navigation .btn{font-size:13px;padding:9px}}
+.gd-attempt-summary{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px;font-size:14px;color:var(--guest-text)}
+.gd-attempt-summary>span{color:var(--guest-muted)}
+.gd-progress>i.is-skipped{background:transparent;border:1px dashed var(--guest-muted);box-sizing:border-box;opacity:.7}
+.gd-progress-copy>strong{white-space:nowrap}
+.gd-progress-copy>strong>small{font-size:13px}
+@media(max-width:480px){.gd-progress-copy{gap:10px}.gd-progress-copy>span{max-width:50%}}

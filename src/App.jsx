@@ -1,3 +1,4 @@
+import {lessonSectionIds,viewedSections,answeredLabQuestions,flashcardProgress} from "./lib/surfaceProgress.js";
 import {usePlaceState,useDetailState,useListPlace,writePlace} from "./lib/learnerPlace.js";
 import {AccountSupport} from "./components/AccountSupport.jsx";
 import {THEMES} from "./lib/themes.js";
@@ -22837,11 +22838,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
           <div className="card" style={{padding:"16px 20px",marginBottom:14,borderColor:selected===current.correct?t.green:t.red}}>
             <div style={{marginBottom:8}}><MCQFeedbackVerdict correct={selected===current.correct} t={t}/></div>
             <p style={{fontSize:13,color:t.textSec,lineHeight:1.7}}><GlossaryText text={current.exp} t={t}/></p>
-            {selected!==current.correct&&(
-              <div style={{marginTop:10,padding:"10px 12px",background:`${t.red}08`,borderRadius:6,fontSize:12,color:t.red}}>
-                <strong>Why your answer was wrong:</strong> {getWrongOptionFeedback(current, selected)}
-              </div>
-            )}
+            {current.opts.map((option,index)=>index!==current.correct&&<div key={index} style={{marginTop:10,padding:"10px 12px",border:`1px solid ${t.border}`,borderRadius:6,fontSize:13,color:t.textSec}}><strong>Option {String.fromCharCode(65+index)}: </strong><GlossaryText text={getWrongOptionFeedback(current,index)} t={t}/></div>)}
           </div>
           <button className="btn btn-primary" style={{width:"100%",justifyContent:"center"}} onClick={nextQ}>
             {qIndex<questions.length-1?"Next Question →":"See Results →"}
@@ -24432,7 +24429,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
           const i=saved.questions.findIndex(q=>q.id===answer.question_id);
           if(i<0)continue;
           const evaluation=answer.response;
-          saved.questions[i]={...saved.questions[i],correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:{[answer.selected_option_id]:evaluation.selected_feedback}};
+          saved.questions[i]={...saved.questions[i],correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:evaluation.option_feedback||{[answer.selected_option_id]:evaluation.selected_feedback}};
           saved.results[i]={qid:answer.question_id,correct:evaluation.is_correct,selected:answer.selected_option_id,mcq:true,ch:saved.questions[i].ch,conceptTag:evaluation.concept_tag,elapsedMs:evaluation.elapsed_ms??null};
         }
         saved.submitted=Boolean(saved.results[saved.qi||0]);
@@ -24506,7 +24503,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
         evaluation=await mcqEngineRequest("answer",{session_id:current.engineSessionId,event_id:event,question_id:current.id,selected_option_id:selected,elapsed_ms:elapsedMs,practice_source:"mcq-set"});
         setQuestions(prev=>{
           const updated=evaluation.session_questions?.map(q=>({...prev.find(old=>old.id===q.id),...practiceQuestion(q,current.engineSessionId)})) || prev;
-          return updated.map(q=>q.id===current.id?{...q,correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:{[selected]:evaluation.selected_feedback}}:q);
+          return updated.map(q=>q.id===current.id?{...q,correct:evaluation.correct_option_id,exp:evaluation.explanation,wrongFeedback:evaluation.option_feedback||{[selected]:evaluation.selected_feedback}}:q);
         });
         if(evaluation.session_questions)setDraftSelections(prev=>evaluation.session_questions.map((q,i)=>questions[i]?.id===q.id?prev[i]??null:null));
       }else if(!isGuest){evaluation=await recordStandaloneMcq(current,selected,elapsedMs,"mcq-set");}
@@ -24544,7 +24541,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
   };
 
   const correctCount=results.filter(r=>r?.correct).length;
-  const canSeeFeedback = user.tier === "pro" || finishedReviewMode;
+  const canSeeFeedback = !isGuest || finishedReviewMode;
   const chapterEvaluation=CHAPTERS.map(ch=>{
     const chapterResults=results.map((r,index)=>r?{...r,question:questions[index]}:null).filter(r=>r&&r.ch===ch.id);
     const missed=chapterResults.filter(r=>!r.correct);
@@ -24736,7 +24733,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
           <div className="practice-session-name"><span>{finishedReviewMode?<CheckCircle2 size={16}/>:sessionContext?.kind==="weak-area"?<Brain size={16}/>:<BookOpenCheck size={16}/>}</span>{finishedReviewMode?"Answered Set Review":sessionContext?.label||"MCQ Practice"}</div>
           <div className="practice-session-count">Question {qi+1} of {questions.length} · {answeredCount} answered</div>
         </div>
-        <div className="practice-session-progress" aria-label={`${Math.round(((qi+1)/questions.length)*100)}% through this practice set`}><span style={{width:`${((qi+1)/questions.length)*100}%`}}/></div>
+        <div className="practice-session-progress" role="progressbar" aria-label="MCQ questions answered" aria-valuemin={0} aria-valuemax={questions.length} aria-valuenow={answeredCount}><span style={{width:`${(answeredCount/questions.length)*100}%`}}/></div>
         <nav className="practice-question-nav" aria-label="Questions in this practice set">
           {questions.map((_,i)=>(
             <button
@@ -24782,7 +24779,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
           let cls="opt";
           if(submitted){cls+=" done"; if(optionValue===current.correct)cls+=" ok"; else if(optionValue===selected&&optionValue!==current.correct)cls+=" bad";}
           else if(selected===optionValue)cls+=" sel";
-          const showSelectedWrongFeedback=submitted&&canSeeFeedback&&optionValue===selected&&optionValue!==current.correct;
+          const showWrongOptionFeedback=submitted&&canSeeFeedback&&optionValue!==current.correct;
           return(
             <button
               type="button"
@@ -24795,9 +24792,9 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
               <div className="opt-ltr">{String.fromCharCode(65+i)}</div>
               <div className="option-body">
                 <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
-                {showSelectedWrongFeedback&&(
+                {showWrongOptionFeedback&&(
                   <div className="option-inline-feedback">
-                    <strong>Why this choice is wrong:</strong>
+                    <strong>Why this option is incorrect:</strong>
                     <GlossaryText text={current.engineSessionId?current.wrongFeedback?.[optionValue]:getWrongOptionFeedback(current, i)} t={t}/>
                   </div>
                 )}
@@ -24825,10 +24822,10 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
             ):(
               <div>
                 <p style={{fontSize:13,color:t.textSec,lineHeight:1.75,marginBottom:10}}>
-                  Detailed explanations and per-question feedback are available with Pro.
+                  Create a free account for explanations of every answer option.
                 </p>
                 <button className="btn btn-outline" style={{fontSize:12}} onClick={isGuest?requestSignup:onUpgrade}>
-                  {isGuest?"Create free account":"Unlock feedback"}
+                  Create free account
                 </button>
               </div>
             )}
@@ -28744,7 +28741,8 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   const answerMain=faces.fullForm||faces.front;
   const answerCopy=faces.definition;
   const masteredCount=acronymSet.cards.filter(card=>card.cardType!=="divider"&&masteredIds.includes(card.id)).length;
-  const progress=studyCards.length?Math.round(((cardIndex+1)/studyCards.length)*100):0;
+  const recallProgress=flashcardProgress(acronymSet.cards,masteredIds,starred||[]);
+  const progress=recallProgress.total?Math.round(recallProgress.remembered/recallProgress.total*100):0;
   const flashcardStarredSet=useMemo(()=>new Set(starred||[]),[starred]);
   const activeStarKey=activeCard?starKey(FLASHCARD_STAR_TYPE,activeCard.id):"";
   const activeCardStarred=Boolean(activeStarKey&&flashcardStarredSet.has(activeStarKey));
@@ -28833,18 +28831,20 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
           <div><span className="deep-dive-eyebrow">A LITTLE RECALL, EVERY DAY</span><h2>What does it mean?</h2><p>Read the term or abbreviation. Recall its meaning, then turn the card.</p></div>
           <div className="deep-dive-flashcard-side">
             {acronymSet.id!==STARRED_FLASHCARD_SET_ID&&acronymSet.id!==ASSISTANT_FLASHCARD_SET_ID&&!String(acronymSet.id||"").startsWith(SAVED_RANDOM_FLASHCARD_PREFIX)&&<FlashcardShareActions set={acronymSet} t={t}/>}
-            <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {totalCardCount}<br/>mastered</span></div>
+            <div className="deep-dive-flashcard-score"><strong>{masteredCount}</strong><span>of {totalCardCount}<br/>remembered</span></div>
           </div>
         </div>
+        <p className="flashcard-progress-key">Saved for later = bookmarked. Remembered = you chose “Got it”.</p>
         <div className="deep-dive-flashcard-toolbar">
           <span>{isDividerCard?"Section marker":`Card ${Math.min(studyCards.slice(0,cardIndex+1).filter(card=>card.cardType!=="divider").length||1,studyCardCount)} of ${studyCardCount}`}</span>
-          <div className="deep-dives-progress-track"><span style={{width:`${progress}%`}}/></div>
+          <span>{savedCardsInSetCount} saved for later</span>
+          <div className="deep-dives-progress-track" role="progressbar" aria-label="Flashcards remembered" aria-valuemin={0} aria-valuemax={totalCardCount} aria-valuenow={masteredCount}><span style={{width:`${progress}%`}}/></div>
 
           <button className="btn btn-ghost" type="button" onClick={shuffleCards}><RotateCcw size={15}/>Shuffle</button>
         </div>
         {showCompletion&&(
           <div className="flashcard-completion-card card" role="status" aria-live="polite">
-            <span className="deep-dive-preview-badge"><CheckCircle2 size={13}/>Set complete</span>
+            <span className="deep-dive-preview-badge"><CheckCircle2 size={13}/>All cards reviewed</span>
             {savedCardsInSetCount>0?(
               <>
                 <h2>{savedCardsInSetCount} card{savedCardsInSetCount===1?"":"s"} saved for review.</h2>
@@ -28869,6 +28869,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
           </div>
         )}
         {!showCompletion&&activeCard&&<>
+          {activeCardStarred&&<p className="flashcard-saved-note" role="status">This card is already in your saved-for-later list. Saving does not mark it remembered.</p>}
           <div className="deep-dive-flashcard-stage">
             {!isDividerCard&&(onToggleStar||onRequireSignup)&&<StarButton active={activeCardStarred} onToggle={toggleActiveFlashcardStar} label="Save flashcard for review" activeLabel="Remove flashcard from review set" showText text="Save for review" activeText="Saved"/>}
             <button type="button" className={`deep-dive-flashcard ${isFlipped?"flipped":""}`} aria-label={isFlipped?"Showing answer. Tap to show question.":"Showing question. Tap to reveal answer."} aria-pressed={isFlipped} onClick={()=>setIsFlipped(value=>!value)}>
@@ -28901,7 +28902,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
 	              <div className="deep-dive-flashcard-rating" aria-label="Rate this card">
 	                <button className="btn btn-outline" type="button" onClick={()=>rateCard(false)}><RotateCcw size={16}/>Again</button>
 	                <button className="btn btn-primary" type="button" disabled={!answerCopy} title={!answerCopy?"A definition must be added before marking this card remembered.":undefined} onClick={()=>rateCard(true)}><CheckCircle2 size={16}/>Got it</button>
-                    {acronymSet.id===STARRED_FLASHCARD_SET_ID&&activeCardStarred&&<button className="btn btn-ghost" type="button" onClick={()=>{toggleActiveFlashcardStar();rateCard(true);}}>Remove from review set</button>}
+                    {acronymSet.id===STARRED_FLASHCARD_SET_ID&&activeCardStarred&&<button className="btn btn-ghost" type="button" onClick={toggleActiveFlashcardStar}>Remove from review set</button>}
 	              </div>
             )}
             <button className="btn btn-outline" type="button" onClick={()=>moveCard(1)}>Next<ChevronRight size={16}/></button>
@@ -29012,17 +29013,13 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
   const [isAnswerVisible,setIsAnswerVisible]=useState(false);
   const [selectedKeyword,setSelectedKeyword]=useState(0);
   const [comparisonIndex,setComparisonIndex]=useState(0);
-  const [practiceIndex,setPracticeIndex]=useState(0);
-  const [practiceChoice,setPracticeChoice]=useState("");
-  const [practiceSubmitted,setPracticeSubmitted]=useState(false);
-  const [practiceResults,setPracticeResults]=useState([]);
+  const [practiceIndex,setPracticeIndex]=usePlaceState(`${placeKey}:${selectedId}:practiceIndex`,0);
+  const [practiceChoice,setPracticeChoice]=usePlaceState(`${placeKey}:${selectedId}:practiceChoice`,"");
+  const [practiceSubmitted,setPracticeSubmitted]=usePlaceState(`${placeKey}:${selectedId}:practiceSubmitted`,false);
+  const [practiceResults,setPracticeResults]=usePlaceState(`${placeKey}:${selectedId}:practiceResults`,[]);
   const handledLessonRequest=useRef(null);
-  const [completedIds,setCompletedIds]=useState(()=>{
-    try{
-      const stored=JSON.parse(window.localStorage?.getItem("secureplus-deep-dives-read")||"[]");
-      return Array.isArray(stored)?stored.filter(id=>CONCEPT_DEEP_DIVES.some(dive=>dive.id===id)):[];
-    }catch{return [];}
-  });
+  const [sectionViews,setSectionViews]=usePlaceState(`${placeKey}:viewed-sections-v1`,{});
+  const completedIds=CONCEPT_DEEP_DIVES.filter(dive=>{const p=viewedSections(dive,sectionViews[dive.id]);return p.total>0&&p.viewed===p.total;}).map(dive=>dive.id);
   const [masteredAcronymIds,setMasteredAcronymIds]=useState(()=>{
     try{
       const stored=JSON.parse(window.localStorage?.getItem("secureplus-acronym-mastered")||"[]");
@@ -29067,6 +29064,16 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
     {kind:"check",title:"Quick check"},
   ]:[],[selectedDive]);
   const activeLessonStep=lessonSteps[lessonStep]||lessonSteps[0]||null;
+  useEffect(()=>{
+    if(!selectedDive||studyMode!=="learn"||!activeLessonStep)return;
+    const sectionId=lessonSectionIds(selectedDive)[lessonStep]||lessonSectionIds(selectedDive)[0];
+    setSectionViews(current=>{
+      const seen=Array.isArray(current[selectedDive.id])?current[selectedDive.id]:[];
+      return seen.includes(sectionId)?current:{...current,[selectedDive.id]:[...seen,sectionId]};
+    });
+  },[selectedId,lessonStep,studyMode]);
+  const labAnswered=answeredLabQuestions(practiceQuestions,practiceResults);
+
   const filteredDives=useMemo(()=>{
     const needle=query.trim().toLowerCase();
     return sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES.filter(dive=>{
@@ -29115,10 +29122,6 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
     setIsAnswerVisible(false);
     setSelectedKeyword(0);
     setComparisonIndex(0);
-    setPracticeIndex(0);
-    setPracticeChoice("");
-    setPracticeSubmitted(false);
-    setPracticeResults([]);
     const reduceMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     window.requestAnimationFrame(()=>document.querySelector(".app-main")?.scrollTo({top:0,behavior:reduceMotion?"auto":"smooth"}));
     capture("concept_deep_dive_opened",{deep_dive_id:id,study_mode:mode,source:"library"});
@@ -29153,12 +29156,6 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
   };
   const closeDive=()=>{
     setSelectedId(null);
-  };
-  const toggleComplete=id=>{
-    const next=completedIds.includes(id)?completedIds.filter(item=>item!==id):[...completedIds,id];
-    setCompletedIds(next);
-    try{window.localStorage?.setItem("secureplus-deep-dives-read",JSON.stringify(next));}catch{}
-    capture("concept_deep_dive_completion_toggled",{deep_dive_id:id,completed:next.includes(id)});
   };
   const updateMasteredAcronyms=(cardId,mastered)=>{
     const next=mastered
@@ -29223,7 +29220,8 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
 
   if(selectedDive){
     const isComplete=completedIds.includes(selectedDive.id);
-    const lessonProgress=lessonSteps.length?Math.round(((lessonStep+1)/lessonSteps.length)*100):0;
+    const lessonViewed=viewedSections(selectedDive,sectionViews[selectedDive.id]);
+    const lessonProgress=lessonViewed.total?Math.round(lessonViewed.viewed/lessonViewed.total*100):0;
     const activeSection=activeLessonStep?.kind==="section"?selectedDive.sections[activeLessonStep.index]:null;
     const isBeyondSection=activeLessonStep?.kind==="section"&&selectedProfile?.beyondSections.includes(activeLessonStep.index);
     const activeComparisonRow=activeSection?.table?.rows?.[comparisonIndex]||activeSection?.table?.rows?.[0]||null;
@@ -29291,18 +29289,16 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
         {studyMode==="learn"?(
           <div className="deep-dive-reader-layout">
             <aside className="deep-dive-learning-card">
-              <div className="deep-dive-lesson-progress-head"><span>Lesson path</span><strong>{lessonStep+1}/{lessonSteps.length}</strong></div>
-              <div className="deep-dive-lesson-progress" aria-label={`${lessonProgress}% through this lesson`}><span style={{width:`${lessonProgress}%`}}/></div>
+              <div className="deep-dive-lesson-progress-head"><span>Sections viewed</span><strong>{lessonViewed.viewed}/{lessonViewed.total}</strong></div>
+              <div className="deep-dive-lesson-progress" role="progressbar" aria-label="Lesson sections viewed" aria-valuemin={0} aria-valuemax={lessonViewed.total} aria-valuenow={lessonViewed.viewed}><span style={{width:`${lessonProgress}%`}}/></div>
               <nav aria-label="Lesson sections">
                 {lessonSteps.map((step,index)=>{
                   const beyond=step.kind==="section"&&selectedProfile.beyondSections.includes(step.index);
                   return <button key={`${step.kind}-${step.title}`} type="button" className={`${lessonStep===index?"active":""} ${beyond?"beyond":""}`} aria-current={lessonStep===index?"step":undefined} onClick={()=>changeLessonStep(index)}><span>{index+1}</span><span>{step.title}{beyond&&<small>Beyond the textbook</small>}</span></button>;
                 })}
               </nav>
-              <button className={`btn ${isComplete?"btn-ghost":"btn-primary"}`} type="button" onClick={()=>toggleComplete(selectedDive.id)}>
-                {isComplete?<><CheckCircle2 size={16}/>Lesson complete</>:<><BookOpenCheck size={16}/>Mark complete</>}
-              </button>
-              <small>Lesson progress stays on this device.</small>
+              <span className="btn btn-ghost">{isComplete?<><CheckCircle2 size={16}/>All sections viewed</>:<><BookOpenCheck size={16}/>{lessonViewed.viewed}/{lessonViewed.total} sections viewed</>}</span>
+              <small>Each section counts once when opened. Viewing is not a mastery score.</small>
             </aside>
 
             <div className="deep-dive-article-body">
@@ -29403,8 +29399,9 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
                     <span>correct<br/>so far</span>
                   </div>
                 </div>
-                <div className="deep-dives-progress-track" aria-label={`${Math.round((practiceIndex/practiceQuestions.length)*100)}% through the practice lab`}>
-                  <span style={{width:`${(practiceIndex/practiceQuestions.length)*100}%`}}/>
+                <p>{labAnswered} of {practiceQuestions.length} answered · updates after checking your answer</p>
+                <div className="deep-dives-progress-track" role="progressbar" aria-label="Lab questions answered" aria-valuemin={0} aria-valuemax={practiceQuestions.length} aria-valuenow={labAnswered}>
+                  <span style={{width:`${(labAnswered/practiceQuestions.length)*100}%`}}/>
                 </div>
                 <div className="deep-dive-practice-question">
                   <span>{activePracticeQuestion.prompt}</span>
@@ -29463,7 +29460,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
                   <MascotAnimation animation={practiceResults.filter(result=>result.correct).length===practiceQuestions.length?"cheer":"wave"} size={118} interactive hoverAnimation="dance" label="Cipher celebrates the completed practice lab"/>
                   <span><Trophy size={18}/> Lab complete</span>
                 </div>
-                <h2>{practiceResults.filter(result=>result.correct).length}/{practiceQuestions.length} correct</h2>
+                <h2>{practiceResults.filter(result=>result.correct).length}/{practiceQuestions.length} correct</h2><p>{labAnswered} of {practiceQuestions.length} answered</p>
                 <p>{practiceResults.every(result=>result.correct)?"Excellent recall. You can recognise these ideas without relying on a wall of notes.":"Good attempt. Review the missed terms, then retry—the choices are drawn only from this lesson."}</p>
                 <div className="deep-dive-practice-summary">
                   {practiceQuestions.map(question=>{
@@ -29507,7 +29504,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
         </section>
 
         <div className="deep-dive-reader-actions">
-          <button className={`btn ${isComplete?"btn-ghost":"btn-primary"}`} type="button" onClick={()=>toggleComplete(selectedDive.id)}>{isComplete?<><CheckCircle2 size={16}/>Lesson complete</>:<><BookOpenCheck size={16}/>Mark complete</>}</button>
+          <span className="btn btn-ghost">{isComplete?<><CheckCircle2 size={16}/>All sections viewed</>:<><BookOpenCheck size={16}/>{lessonViewed.viewed}/{lessonViewed.total} sections viewed</>}</span>
           <button className="btn btn-outline" type="button" onClick={closeDive}>Choose another topic</button>
         </div>
       </article>
@@ -29516,7 +29513,9 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
 
   const visibleCompletedIds=isPro?completedIds:completedIds.filter(id=>id===freePreviewDive?.id);
   const visibleLessonTotal=isPro?CONCEPT_DEEP_DIVES.length:1;
-  const progressPercent=Math.round((visibleCompletedIds.length/visibleLessonTotal)*100);
+  const visibleLessonProgress=(isPro?CONCEPT_DEEP_DIVES:[freePreviewDive]).map(dive=>viewedSections(dive,sectionViews[dive.id]));
+  const viewedTotal=visibleLessonProgress.reduce((sum,p)=>sum+p.viewed,0),sectionTotal=visibleLessonProgress.reduce((sum,p)=>sum+p.total,0);
+  const progressPercent=sectionTotal?Math.round(viewedTotal/sectionTotal*100):0;
   const continueDive=isPro
     ? sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES).find(dive=>!completedIds.includes(dive.id))||sortDeepDivesBySy0701(CONCEPT_DEEP_DIVES)[0]
     : freePreviewDive;
@@ -29538,7 +29537,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
           <a className="deep-dives-blueprint-link" href={SY0701_BLUEPRINT.sourceUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Mapped to the official {SY0701_BLUEPRINT.exam} objectives · document v{SY0701_BLUEPRINT.documentVersion}<ChevronRight size={14}/></a>
         </div>
         <div className="deep-dives-progress-card">
-          <div><span>{isPro?"Study progress":"Preview progress"}</span><strong>{visibleCompletedIds.length}/{visibleLessonTotal}</strong></div>
+          <div><span>Sections viewed</span><strong>{viewedTotal}/{sectionTotal}</strong></div>
           <div className="deep-dives-progress-track"><span style={{width:`${progressPercent}%`}}/></div>
           <p>{isPro?(completedIds.length?"Continue with one short concept or open Flashcards from the main menu.":"Choose a lesson, learn one idea at a time, then practise it."):"Start with the free attacks lesson, then create a free account for the full guided path."}</p>
           <div className="deep-dives-card-progress"><BookOpenCheck size={16}/><span><strong>{Math.max(0,visibleLessonTotal-visibleCompletedIds.length)}</strong> lesson{visibleLessonTotal-visibleCompletedIds.length===1?"":"s"} left in this {isPro?"path":"preview"}</span></div>
@@ -29595,6 +29594,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
               {group.dives.map(dive=>{
                 const syllabus=getSy0701DeepDiveProfile(dive);
                 const isComplete=completedIds.includes(dive.id);
+                const sectionProgress=viewedSections(dive,sectionViews[dive.id]);
                 const locked=isLockedDeepDive(dive.id);
                 const isFreePreview=!isPro&&dive.id===freePreviewDive?.id;
                 const isNextUnread=isPro&&dive.id===nextUnreadDiveId;
@@ -29614,7 +29614,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
                     {isNextUnread&&<span className="deep-dive-next-read-banner"><BookOpenCheck size={13}/>Your next read</span>}
                     <div className="deep-dive-card-top">
                       <span className="deep-dive-card-index">Objective {syllabus.objectiveCodes.join(" · ")}</span>
-                      {isComplete&&<span className="deep-dive-card-read"><CheckCircle2 size={14}/>Read</span>}
+                      <span className="deep-dive-card-read">{isComplete&&<CheckCircle2 size={14}/>} {sectionProgress.viewed}/{sectionProgress.total} sections viewed</span>
                     </div>
                     <div className="deep-dive-card-chapter"><ChapterIcon id={syllabus.domainId} size={26}/>Domain {syllabus.domainId} · Exam focus</div>
                     <span className="deep-dive-card-title">{syllabus.title}</span>
@@ -29797,7 +29797,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
         })}</div></div>)}
       </section>)}</div>
     </section>
-    <section className="fc-toolbox"><div><span className="fc-eyebrow">MAKE IT YOURS</span><h2>A different way in.</h2><p>Keep favourites close, or change up your recall.</p></div><div className="fc-tool-actions"><button className="btn btn-outline" disabled={!starCards.length} onClick={()=>openSet(buildStarredFlashcardSet(starCards))}><Star size={17}/>Saved cards · {starCards.length}</button><label>Mix size <select value={count} onChange={event=>setCount(Number(event.target.value))}><option value={10}>10 cards</option><option value={15}>15 cards</option><option value={20}>20 cards</option></select></label><button className="btn btn-primary" onClick={randomSet}><Shuffle size={17}/>Shuffle a set</button></div>
+    <section className="fc-toolbox"><div><span className="fc-eyebrow">MAKE IT YOURS</span><h2>A different way in.</h2><p>Saved = bookmarked for later. Remembered = marked “Got it”.</p></div><div className="fc-tool-actions"><button className="btn btn-outline" disabled={!starCards.length} onClick={()=>openSet(buildStarredFlashcardSet(starCards))}><Star size={17}/>Saved cards · {starCards.length}</button><label>Mix size <select value={count} onChange={event=>setCount(Number(event.target.value))}><option value={10}>10 cards</option><option value={15}>15 cards</option><option value={20}>20 cards</option></select></label><button className="btn btn-primary" onClick={randomSet}><Shuffle size={17}/>Shuffle a set</button></div>
       {savedSets.length>0&&<details className="fc-saved"><summary>Your saved mixes · {savedSets.length}</summary><div>{savedSets.map(set=><div className="fc-saved-mix" key={set.id}><button className="btn btn-outline" onClick={()=>openSet(set)}>{set.title}<ArrowRight size={14}/></button><button className="icon-btn" aria-label={`Rename ${set.title}`} onClick={()=>renameMix(set)}><PenLine size={14}/></button><button className="icon-btn" aria-label={`Remove ${set.title}`} onClick={()=>deleteMix(set)}><Trash2 size={14}/></button></div>)}</div></details>}
     </section>
     <footer className="fc-footer"><ShieldCheck size={16}/><span>Organised under the five official SY0-701 domains. Study sections are custom groupings.</span><a href={SY0701_ACRONYM_SOURCE.officialUrl} target="_blank" rel="noreferrer">Exam blueprint <ArrowUpRight size={13}/></a></footer>
@@ -30311,7 +30311,7 @@ function DiagnosticQuiz({user,t,onComplete}) {
                   <span className="option-text" style={{fontSize:14,flex:1,lineHeight:1.55,color:t.text}}><GlossaryText text={opt} t={t}/></span>
                   {showSelectedWrongFeedback&&(
                     <div className="option-inline-feedback">
-                      <strong>Why this choice is wrong:</strong>
+                      <strong>Why this option is incorrect:</strong>
                       <GlossaryText text={getWrongOptionFeedback(current, i)} t={t}/>
                     </div>
                   )}

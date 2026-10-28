@@ -35,3 +35,6 @@ export async function ownedSet(client,userId,id){
  return plan;
 }
 export const guestQuestion=q=>({...learnerQuestion(q),correct:q.options.findIndex(o=>o.is_correct),explanation:q.explanation,feedback:q.options.map(o=>o.feedback||'')});
+
+// Reveal only the graded question's pinned option explanations.
+export const optionExplanations=q=>Object.fromEntries((q?.options||[]).map(o=>[o.id,o.is_correct?q.explanation||'':o.feedback||'']));

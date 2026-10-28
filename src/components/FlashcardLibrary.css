@@ -182,3 +182,5 @@ html[data-theme="light"] .fc-personal-badge svg{color:var(--fc-accent)}
 html[data-theme="light"] .fc-personal-topic{border-color:#9bad9f;box-shadow:0 2px 6px #263b3509}
 html[data-theme="light"] .fc-personal-topic:hover{border-color:#17634f;background:#f5f9f3}
 .fc-personal-topic:focus-visible{outline:3px solid var(--fc-accent);outline-offset:3px}
+.flashcard-progress-key,.flashcard-saved-note{font-size:15px;line-height:1.6;color:var(--deep-text);margin:12px 0}
+.flashcard-saved-note{padding:10px 14px;border:1px solid var(--deep-border);border-radius:12px;background:var(--deep-surface)}

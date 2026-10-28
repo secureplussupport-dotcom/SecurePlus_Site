@@ -208,3 +208,22 @@ test('only the MCQ endpoint is placed beside the Singapore database',()=>{
   assert.deepEqual(config.functions,{'api/sessions.js':{regions:['sin1']}});
   assert.equal(config.regions,undefined);
 });
+
+test('Free accounts receive every option explanation only after grading, including resumed answers',async()=>{
+ const q=effectiveCatalogue().find(q=>q.id==='m032'),correct=q.options.find(o=>o.is_correct),selected=q.options.find(o=>!o.is_correct);
+ const evaluation={is_correct:false,correct_option_id:correct.id,explanation:q.explanation,selected_feedback:selected.feedback};
+ const client={auth:{getUser:async()=>({data:{user:{id:user}}})},rpc:async(name)=>{
+  if(name==='practice_owned_set')return {data:{questions:[q],mode:'random',completed:false}};
+  if(name==='mcq_engine_session')return {data:{questions:[q],answers:[{question_id:q.id,selected_option_id:selected.id,response:evaluation}]}};
+  if(name==='mcq_engine_answer')return {data:{...evaluation}};
+  throw Error(name);
+ }};
+ const handler=createMcqHandler({enabled:()=>true,admin:()=>client});
+ const answer=await invoke(handler,'answer',{event_id:id,session_id:id,question_id:q.id,selected_option_id:selected.id});
+ assert.equal(answer.status,200);assert.equal(Object.keys(answer.output.option_feedback).length,q.options.length);
+ for(const option of q.options)assert.equal(answer.output.option_feedback[option.id],option.is_correct?q.explanation:option.feedback);
+ const resumed=await invoke(handler,'resume',{session_id:id});assert.equal(resumed.status,200);
+ assert.deepEqual(resumed.output.answers[0].response.option_feedback,answer.output.option_feedback);
+ assert(!JSON.stringify(resumed.output.questions).includes('is_correct'));
+ assert(!Object.hasOwn(resumed.output.questions[0],'explanation'),'unanswered projection still hides explanations');
+});

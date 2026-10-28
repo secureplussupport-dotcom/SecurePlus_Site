@@ -1,5 +1,5 @@
 import { diagnosticSet, diagnosticQuestion } from './diagnostic.mjs';
-import { guestOwner, accessRpc, chooseAccessSet, ownedSet, guestQuestion } from './access.mjs';
+import { guestOwner, accessRpc, chooseAccessSet, ownedSet, guestQuestion, optionExplanations } from './access.mjs';
 import { randomUUID } from 'node:crypto';
 import { getBearerToken, getJsonBody, getSupabaseAdmin, json, requireJsonContentType } from '../../api/_utils.js';
 import { ENGINE_VERSION, EngineError, generateSet, learnerQuestion, prioritizeCoreRecovery } from './engine.mjs';
@@ -101,7 +101,7 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
         const allocation=await ownedSet(client,userId,body.session_id);
         const plan = await rpc(client, 'mcq_engine_session', { p_user_id: userId, p_session_id: body.session_id });
         if (!plan) throw new EngineError('Saved set not found.', 404);
-        return json(res, 200, { session_id: body.session_id, version: ENGINE_VERSION, questions: plan.questions.map(learnerQuestion), answers: plan.answers,mode:allocation.mode,createdAt:allocation.createdAt });
+        return json(res, 200, { session_id: body.session_id, version: ENGINE_VERSION, questions: plan.questions.map(learnerQuestion), answers: plan.answers.map(answer=>({...answer,response:{...answer.response,option_feedback:optionExplanations(plan.questions.find(q=>q.id===answer.question_id))}})),mode:allocation.mode,createdAt:allocation.createdAt });
       }
       if (operation === 'generate') {
         const count=body.set_size,mode=body.mode||'smart';
@@ -150,6 +150,7 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
         }
         const evaluation = await rpc(client, body.practice_source != null ? 'mcq_engine_answer_sourced' : body.elapsed_ms == null ? 'mcq_engine_answer' : 'mcq_engine_answer_paced', { p_user_id: userId, p_event_id: body.event_id,
           p_session_id: body.session_id || null, p_question_id: body.question_id, p_option_id: body.selected_option_id, p_standalone: standalone, ...(body.practice_source != null ? { p_elapsed_ms: body.elapsed_ms ?? null, p_source: body.practice_source } : body.elapsed_ms == null ? {} : { p_elapsed_ms: body.elapsed_ms }) });
+        evaluation.option_feedback=optionExplanations(standalone||allocation?.questions?.find(q=>q.id===body.question_id));
         if(body.session_id && allocation?.mode==='smart')evaluation.session_questions=(await recoverPendingQuestions(client,userId,body.session_id,body.question_id,catalogue)).map(learnerQuestion);
         return json(res,200,evaluation);
       }

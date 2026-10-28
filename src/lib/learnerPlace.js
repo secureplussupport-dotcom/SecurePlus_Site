@@ -12,13 +12,14 @@ export function writePlace(key,value,storage){
   try{(storage??globalThis.sessionStorage)?.setItem(`secureplus-place:${key}`,JSON.stringify(value));}catch{}
 }
 export function usePlaceState(key,initial){
-  const [value,setValue]=useState(()=>readPlace(key,initial));
+  const [state,setState]=useState(()=>({key,value:readPlace(key,initial)}));
+  // A new lesson/account must never render the preceding key's progress.
+  const value=state.key===key?state.value:readPlace(key,initial);
   const latest=useRef(value);latest.current=value;
   const update=useCallback(next=>{
     const value=typeof next==='function'?next(latest.current):next;
-    latest.current=value;writePlace(key,value);setValue(value);
+    latest.current=value;writePlace(key,value);setState(current=>current.key===key&&current.value===value?current:{key,value});
   },[key]);
-  useEffect(()=>{const value=readPlace(key,initial);latest.current=value;setValue(value);},[key]);
   return [value,update];
 }
 
