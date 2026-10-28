@@ -23619,7 +23619,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
   const activityProfile=getActivityProfile(attempts);
   const questionsDone=readinessProfile.activity?.total ?? activityProfile.uniqueQuestions;
   const readiness=readinessProfile.score;
-  const readinessColor=readiness>=80?t.green:t.accent;
+  const readinessColor=readiness>=80&&!readinessProfile.stale&&(readinessProfile.confidence==="medium"||readinessProfile.confidence==="high")?t.green:t.accent;
   const isPro = user.tier==="pro";
   const starredFlashcards=useMemo(()=>getStarredFlashcards(starred),[starred]);
   const showStarredDashboardSet=starredFlashcards.length>=5;
@@ -23674,7 +23674,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
               <circle className="dh-score-fill" style={{opacity:readinessProfile.status==="ready"&&readiness!=null&&readiness>0?1:0}} cx="100" cy="100" r="78" pathLength="100" strokeDasharray={`${readinessProfile.status==="ready"?(readiness ?? 0):0} 100`} transform="rotate(-90 100 100)"/>
               {readinessProfile.status==="ready"&&readiness!=null&&readiness>0&&<circle className="dh-dial-tip" cx="100" cy="22" r="4" transform={`rotate(${readiness*3.6} 100 100)`}/>}
             </svg>
-            <div><Sparkles className="dh-dial-emblem" size={18} aria-hidden="true"/><strong>{readinessProfile.status==="ready"&&readiness!=null?<>{readiness}<small>%</small></>:"—"}</strong><span role="status">{readinessProfile.status==="loading"?"Loading your progress…":readinessProfile.status==="error"?"Progress unavailable":readinessProfile.level}</span></div>
+            <div><Sparkles className="dh-dial-emblem" size={18} aria-hidden="true"/><strong>{readinessProfile.status==="ready"&&readiness!=null?<>{readiness}<small>%</small></>:"—"}</strong><span role="status">{readinessProfile.status==="loading"?"Loading your progress…":readinessProfile.status==="error"?"Progress unavailable":readinessProfile.level}</span>{readinessProfile.status==="ready"&&readinessProfile.confidence&&readinessProfile.confidence!=="none"&&<span style={{display:"block",marginTop:6,fontSize:11,fontWeight:700,color:t.textSec}}>{readinessProfile.confidenceLabel} · {readinessProfile.sampleQuestions} {readinessProfile.distinctQuestionsKnown?"distinct questions":"answers"}</span>}{readinessProfile.stale&&<span style={{display:"block",marginTop:4,fontSize:11,fontWeight:700,color:t.amber}}>{readinessProfile.staleNote}</span>}</div>
           </div>
           <button className="dh-breakdown" type="button" aria-expanded={showReadinessLab} aria-controls="exam-readiness-breakdown" onClick={()=>setShowReadinessLab(value=>!value)}>{showReadinessLab?"Hide breakdown":"Break it down"}<ChevronDown size={16}/></button>
         </article>
