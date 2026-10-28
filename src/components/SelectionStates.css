@@ -21,3 +21,10 @@ body .fc-search input::-webkit-search-cancel-button{display:none}
 body .fc-search button{display:grid;place-items:center;flex-shrink:0;border:0;border-radius:8px;background:transparent;color:var(--fc-text);cursor:pointer}
 .fc-filter-count{font-size:15px;font-weight:650;color:var(--fc-text);margin:16px 0}
 .fc-domain-tabs .fc-tab-number{white-space:nowrap;flex-shrink:0}
+
+/* Shared study controls: page-specific illustrations keep their own accents. */
+body :is(.dh-primary,.as-button,.sp-dialog button[type="submit"]){background:#174f42!important;color:white!important;border-color:#174f42!important;min-height:44px}
+:is(.practice-mode-grid,.deep-dive-lesson-nav,.sp-choices) button:is([aria-pressed="true"],[aria-current="step"]){background:var(--study-selected-bg)!important;color:var(--study-selected-text)!important;border-color:var(--study-selected-border)!important}
+:is(.practice-mode-grid,.deep-dive-lesson-nav) button:is([aria-pressed="true"],[aria-current="step"]) :is(span,small,strong,svg){color:inherit!important;opacity:1}
+body :is(.flashcard-star,.fc-search-clear,.modal-close,.streak-close,.deep-dive-star-button){min-width:44px;min-height:44px}
+body :is(.deep-dive-locked-card,.deep-dive-card.is-locked){opacity:1;color:inherit;border-style:dashed}

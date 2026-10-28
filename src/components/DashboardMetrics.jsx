@@ -18,7 +18,7 @@ export function DashboardMetrics({profile,streak,tier,t,quota=null}) {
   },[isPro,quota?.resetAt]);
   const activity=profile.status==='ready'?profile.activity:null;
   const accuracy=activityAccuracy(activity), allowance=quotaDisplay(quota,now);
-  const week=streakWeek(streak?.streak || 0,Boolean(streak?.completedToday));
+  const week=streakWeek(streak?.streak || 0,Boolean(streak?.completedToday)).map((day,i)=>{if(!streak?.dates)return day;const date=new Date();date.setDate(date.getDate()-(6-i));const key=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;return {...day,active:streak.dates.includes(key)};});
   return <section className="dashboard-metrics" aria-busy={profile.status==='loading'} aria-label="Your practice metrics" style={{'--dm-text':t.text,'--dm-muted':t.textSec,'--dm-panel':t.panel,'--dm-surface':t.surface,'--dm-border':t.border}}>
     <article className="dm-card dm-accuracy" style={{'--dm-accent':t.accent}}>
       <header><span className="dm-icon"><Target size={18}/></span><h3>Accuracy</h3></header>
@@ -34,8 +34,8 @@ export function DashboardMetrics({profile,streak,tier,t,quota=null}) {
     <article className={`dm-card dm-streak ${!streak?'dm-is-loading':''}`} style={{'--dm-accent':t.amber}}>
       <header><span className="dm-icon"><Flame size={18}/></span><h3>Daily streak</h3></header>
       <div className="dm-main"><strong className="dm-number">{streak?.streak ?? '—'}<small>{streak?.streak===1?'day':'days'}</small></strong><Flame className="dm-flame" size={44} strokeWidth={1.4} aria-hidden="true"/></div>
-      <div className="dm-week" aria-label="Daily Challenge streak over the last seven days">{week.map((day,i)=><span key={i} data-active={day.active} data-today={day.today} aria-label={`${day.today?'Today':`${6-i} day${6-i===1?'':'s'} ago`}: ${day.active?'streak completed':'not completed'}`}><i/>{day.label}</span>)}</div>
-      <footer>{streak?<>{streak.completedToday&&'Completed today · '}Best {streak.best}</>:'Loading streak…'}</footer>
+      <div className="dm-week" aria-label="Meaningful study days over the last seven days">{week.map((day,i)=><span key={i} data-active={day.active} data-today={day.today} aria-label={`${day.today?'Today':`${6-i} day${6-i===1?'':'s'} ago`}: ${day.active?'streak completed':'not completed'}`}><i/>{day.label}</span>)}</div>
+      <footer>{streak?<>{streak.reasons?.length?`Today: ${streak.reasons.join(' · ')}. `:'Today: answer 10 MCQs, complete a section, rate 10 cards or finish Daily Challenge. '}Best {streak.best}</>:'Loading streak…'}</footer>
     </article>
     <article className={`dm-card dm-allowance ${isPro?'dm-pro':''}`} style={{'--dm-accent':t.purple || '#a58aff'}}>
       <header><span className="dm-icon">{isPro?<InfinityIcon size={18}/>:<Clock3 size={18}/>}</span><h3>Practice allowance</h3>{isPro&&<span className="dm-tier">PRO</span>}</header>

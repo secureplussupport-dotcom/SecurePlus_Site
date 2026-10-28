@@ -1,3 +1,4 @@
+import history from '../server/stripe/history.js';
 import cancelMembership from "../server/stripe/cancel.js";
 import checkout from "../server/stripe/checkout.js";
 import portal from "../server/stripe/portal.js";
@@ -6,6 +7,7 @@ import webhook from "../server/stripe/webhook.js";
 import { json } from "./_utils.js";
 
 const ROUTES = {
+  history,
   cancel: cancelMembership,
   checkout,
   portal,

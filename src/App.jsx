@@ -1,3 +1,8 @@
+import {PageSkeleton} from './components/PageSkeleton.jsx';
+import {smartReviewPreview} from './lib/smartReviewPreview.js';
+import {flashcardMatch} from './lib/flashcardSearch.js';
+import {StudyGoalPopup, StudyPlanPage, StudyPlanWidget, useStudyPlan} from './components/StudyPlan.jsx';
+import {recordStudyActivity, readStudyProgress} from './lib/studyProgress.js';
 import "./components/SelectionStates.css";
 import {ViewBreadcrumb} from "./components/ViewBreadcrumb.jsx";
 import {areaName,canonicalArea,domainName} from "./lib/navigationLabels.js";
@@ -1444,6 +1449,7 @@ function appUserFromProfile(authUser, profile) {
   const pendingReferralCode = String(authUser?.user_metadata?.pending_referral_code || "").trim().toUpperCase();
 
   return applyAdminEntitlements({
+    accountCreatedAt: authUser.created_at,
     id: authUser.id,
     email: profile?.email || authUser.email,
     name: profile?.full_name || profileName(authUser),
@@ -22641,6 +22647,7 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
     const correctInChallenge=results.filter(r=>r.correct).length;
     streakRecordedRef.current=true;
     if(user) onCoinReward?.({score:correctInChallenge,total:5});
+    recordStudyActivity(user,{type:"daily-challenge"});
     if(correctInChallenge<3)return;
     completeDailyStreak(user).then(info=>{
       setStreakInfo(info);
@@ -22728,7 +22735,6 @@ function DailyChallenge({t,onLogin,user=null,showQuestionCodes=false,onCoinRewar
       </details>
 
       <div style={{display:"flex",justifyContent:"center",marginTop:12}}>
-        <TrustBadge t={t} compact/>
       </div>
       {!user&&<div style={{marginTop:16,color:t.textDim,fontSize:13}}>
         Want unlimited practice?{" "}
@@ -23609,7 +23615,7 @@ function SmartReviewLessonPath({recommendations=[],onOpenDeepDive,source="smart_
 
 const DAILY_STREAK_EVENTS=["daily-streak-changed"];
 
-function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOpenFlashcards,coinWallet,t,starred=[],assistantFlashcardSet=null,readinessProfile,practiceAccess,streakInfo}) {
+function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOpenFlashcards,coinWallet,t,starred=[],assistantFlashcardSet=null,readinessProfile,practiceAccess,streakInfo,study}) {
   const [showReadinessLab,setShowReadinessLab]=useState(false);
   const activityProfile=getActivityProfile(attempts);
   const questionsDone=readinessProfile.activity?.total ?? activityProfile.uniqueQuestions;
@@ -23651,6 +23657,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
         <div className="dh-cipher"><MascotAnimation animation={questionsDone?"scan":"wave"} size={88} interactive={false} label="Cipher, your study companion"/></div>
       </header>
 
+      <StudyPlanWidget study={study} onNavigate={onNav}/>
       <section className="dh-launch-row" aria-label="Practice and exam readiness">
         <article className="dh-practice">
           <span className="dh-eyebrow"><BookOpenCheck size={15}/> MCQ PRACTICE</span>
@@ -23671,6 +23678,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
             </svg>
             <div><Sparkles className="dh-dial-emblem" size={18} aria-hidden="true"/><strong>{readinessProfile.status==="ready"&&readiness!=null?<>{readiness}<small>%</small></>:"—"}</strong><span role="status">{readinessProfile.status==="loading"?"Loading your progress…":readinessProfile.status==="error"?"Progress unavailable":readinessProfile.level}</span></div>
           </div>
+          <div className="readiness-evidence"><strong>{readinessProfile.confidence} confidence</strong><span>{readinessProfile.distinctQuestions} distinct questions</span><p>{readinessProfile.explanation}</p>{readinessProfile.stale&&<p role="status">{readinessProfile.staleNotice}</p>}</div>
           <button className="dh-breakdown" type="button" aria-expanded={showReadinessLab} aria-controls="exam-readiness-breakdown" onClick={()=>setShowReadinessLab(value=>!value)}>{showReadinessLab?"Hide breakdown":"Break it down"}<ChevronDown size={16}/></button>
         </article>
       </section>
@@ -24332,6 +24340,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
     if(activeTopicFilter!=="all"&&q.topic!==activeTopicFilter)return false;
     return true;
   });
+  const reviewPreview=smartReviewPreview(engineState);
   const reviewSummary = {
     due:engineState?.failed?.filter(row=>row.cooldown_counter<=0).length??"—",
     weak:engineState?new Set([...(engineState.mastery||[]).filter(row=>row.score<80).map(row=>row.concept_tag),...(engineState.diagnostic_weak_tags||[])]).size:"—",
@@ -24609,8 +24618,9 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
 
   if(!started) return(
     <div className="mcq-setup-screen mcq-hub-screen fu" style={{...examThemeVars(t),"--practice-accent":examMode?t.accent:reviewMode==="smart"?t.green:t.accent}}>
-      {missedBatch!==null&&<div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Choose missed-question batch"><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Choose a batch before using your allowance.</p><label>Questions <select className="input" value={missedBatch} disabled={!missedBatchSizes.length} onChange={e=>setMissedBatch(Number(e.target.value))}>{!missedBatchSizes.length&&<option value={0}>No batch available</option>}{missedBatchSizes.map(size=><option key={size} value={size}>{size} questions</option>)}</select></label>{isPro&&!missedBatchSizes.length&&<p role="status">You have {missedQuestions.length} missed questions. A Pro batch starts at 10.</p>}<p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!missedBatchSizes.includes(missedBatch)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>{missedBatchSizes.length?`Practise ${missedBatch} missed questions`:"No batch available"}</button></div></div></div>}
+      {missedBatch!==null&&<div className="streak-overlay" role="dialog" aria-modal="true" aria-label="Choose missed-question batch"><div className="card" style={{padding:24,maxWidth:480,width:"90%"}}><h3>Repair missed questions</h3><p>Practise previously missed questions. Correct answers clear those questions from your missed queue; incorrect answers stay queued. Your allowance is spent only when you start this new batch.</p><label>Questions <select className="input" value={missedBatch} disabled={!missedBatchSizes.length} onChange={e=>setMissedBatch(Number(e.target.value))}>{!missedBatchSizes.length&&<option value={0}>No batch available</option>}{missedBatchSizes.map(size=><option key={size} value={size}>{size} questions</option>)}</select></label>{isPro&&!missedBatchSizes.length&&<p role="status">You have {missedQuestions.length} missed questions. A Pro batch starts at 10.</p>}<p>{isPro?"Unlimited with Pro":`Uses ${missedBatch} of your 50-question allowance · ${availableQuota??0} remaining`}</p><div style={{display:"flex",gap:10}}><button className="btn btn-ghost" onClick={()=>setMissedBatch(null)}>Cancel</button><button className="btn btn-primary" disabled={!missedBatchSizes.includes(missedBatch)} onClick={()=>{const count=missedBatch;setMissedBatch(null);startEngineQuiz({},count,"missed");}}>{missedBatchSizes.length?`Practise ${missedBatch} missed questions`:"No batch available"}</button></div></div></div>}
       <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h1>MCQ Practice</h1></div></header>
+      {!isGuest&&!examMode&&<section className="sr-preview" aria-label="Smart Review status"><div className="sr-preview-metrics"><div><strong>{reviewPreview.due??'—'}</strong><span>Retests due</span></div><div><strong>{reviewPreview.next??(reviewPreview.due?'Now':'—')}</strong><span>{reviewPreview.next?'Next retest in this many answers':'Next retest'}</span></div><div><strong>{reviewPreview.weakest?`#${reviewPreview.weakest.concept_tag}`:'—'}</strong><span>{engineStateError?'Progress unavailable':reviewPreview.weakest?`Weakest concept · ${reviewPreview.weakest.score} points`:'Weakest concept · no current weakness'}</span></div></div><details><summary>How Smart Review works</summary><ol><li>A missed question waits for 30 more answers before its retest is due.</li><li>Two misses in a row on a concept prioritise a Core question next time that concept is tested, if one is available.</li><li>A correct answer clears that question from the missed queue.</li><li>Concepts at 80+ mastery are excluded from concept remediation. A due question retest can still appear.</li></ol></details></section>}
       <div className="card" role="status" style={{padding:"12px 16px",marginBottom:16,color:t.textSec}}>{isGuest?"Try 10 questions total, then create a free account to keep practising.":isPro?"Unlimited generation · Pro":"50 questions every rolling 12 hours"}<strong style={{marginLeft:10,color:t.text}}>{isPro?"∞":access?`${access.remaining} remaining`:"Loading allowance…"}</strong>{accessError&&<span> {accessError}</span>}{!isPro&&choices.remainder&&<button className="btn btn-outline" style={{marginLeft:12}} disabled={engineBusy} onClick={()=>startEngineQuiz({},choices.remainder,examMode?"exam":reviewMode)}>Practice remaining {choices.remainder}</button>}{isGuest&&access?.remaining===0&&<button className="btn btn-primary" onClick={requestSignup}>Create free account</button>}</div>
       <div hidden={isGuest} className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
         <button type="button" role="switch" aria-checked={examMode} className="mcq-exam-toggle" onClick={()=>{setExamMode(value=>!value);setEngineError("");setModeInfo(null);}}>
@@ -28719,8 +28729,8 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   const setType=flashcardSetType(acronymSet);
   const setKindLabel=setType==="term"?"Term":"Acronym";
   const readerKey=`reader:${starOwner(user)}:${acronymSet.id}`;
-  const [cardIndex,setCardIndex]=usePlaceState(`${readerKey}:index`,0);
-  const [cardOrder,setCardOrder]=usePlaceState(`${readerKey}:order`,acronymSet.cards.map(card=>card.id));
+  const [cardIndex,setCardIndex]=usePlaceState(`${readerKey}:index`,0,true);
+  const [cardOrder,setCardOrder]=usePlaceState(`${readerKey}:order`,acronymSet.cards.map(card=>card.id),true);
   const [isFlipped,setIsFlipped]=usePlaceState(`${readerKey}:flipped`,false);
   const [ratedCardsThisPass,setRatedCardsThisPass]=useState(()=>new Set());
   const [showCompletion,setShowCompletion]=useState(false);
@@ -28769,6 +28779,10 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
     setLearnMoreNotice("");
   },[acronymSet.id,initialMode]);
 
+  useEffect(()=>{
+    recordStudyActivity(user,{type:"deck-resume",deckId:acronymSet.id,title:acronymSet.title,index:cardIndex,order:cardOrder});
+  },[user?.id,user?.email,acronymSet.id,cardIndex,cardOrder]);
+  const startDeckOver=()=>{setCardIndex(0);setCardOrder(acronymSet.cards.map(card=>card.id));setIsFlipped(false);setRatedCardsThisPass(new Set());setShowCompletion(false);};
   const moveCard=directionStep=>{
     const total=Math.max(studyCards.length,1);
     setCardIndex(current=>(current+directionStep+total)%total);
@@ -28781,11 +28795,13 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
       return;
     }
     onRate(activeCard.id,mastered);
+    recordStudyActivity(user,{type:"card-rated",id:crypto.randomUUID()});
     const nextRated=new Set(ratedCardsThisPass);
     nextRated.add(activeCard.id);
     const completed=studyCardCount>0&&nextRated.size>=studyCardCount;
     setRatedCardsThisPass(nextRated);
     if(completed){
+      recordStudyActivity(user,{type:"deck-complete",deckId:acronymSet.id});
       setShowCompletion(true);
       setIsFlipped(false);
       return;
@@ -28816,7 +28832,7 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
     <article className="deep-dive-acronym-reader fc-term-reader" style={{"--set-color":acronymSet.color,"--deep-accent":t.accent,"--deep-amber":t.amber,"--deep-green":t.green,"--deep-border":t.border,"--deep-panel":t.panel,"--deep-surface":t.surface,"--deep-text":t.text,"--deep-muted":t.textSec}}>
       <div className="deep-dive-reader-topbar">
         <a className="btn btn-ghost deep-dive-back" href="/security-plus-flashcards/" onClick={event=>{event.preventDefault();onClose();}}><ArrowLeft size={17}/> All Security+ flashcards</a>
-        <span className="deep-dive-preview-badge"><Brain size={13}/> Active recall lab</span>
+        <button className="btn btn-outline" type="button" onClick={startDeckOver}>Start over</button>
       </div>
 
       <header className="deep-dive-acronym-reader-hero">
@@ -29170,6 +29186,7 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
     try{window.localStorage?.setItem("secureplus-acronym-mastered",JSON.stringify(next));}catch{}
     capture("concept_deep_dive_acronym_rated",{set_id:selectedAcronymSet?.id,card_id:cardId,mastered});
   };
+  useEffect(()=>{for(const id of completedIds)if(!readStudyProgress(user).completedLessons.includes(id))recordStudyActivity(user,{type:"lesson-complete",lessonId:id});},[user?.id,completedIds.join("|")]);
   const changeLessonStep=nextStep=>{
     setLessonStep(Math.max(0,Math.min(nextStep,lessonSteps.length-1)));
     setIsAnswerVisible(false);
@@ -29257,7 +29274,6 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
             {selectedProfile.objectiveLabels.map(objective=><span key={objective.code}><ListChecks size={14}/>Objective {objective.code}</span>)}
             <span><BadgeCheck size={14}/>Reviewed {formatDeepDiveReviewDate(CONCEPT_DEEP_DIVE_REVIEWED_AT)}</span>
           </div>
-          <TrustBadge t={t} compact style={{marginBottom:14}}/>
           <div className="deep-dive-summary"><Lightbulb size={19}/><p><strong>Exam focus:</strong> {selectedProfile.objectiveLabels.map(item=>item.title).join(" · ")}</p></div>
           {selectedProfile.includesBeyondTextbook&&<div className="deep-dive-beyond-notice"><GraduationCap size={18}/><span><strong>Beyond the textbook is optional.</strong> Advanced steps are clearly marked and do not count as required SY0-701 study.</span></div>}
           <div className="deep-dive-objective-strip" aria-label="Learning goals">
@@ -29374,9 +29390,9 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
               <div className="deep-dive-step-actions">
                 <button className="btn btn-outline" type="button" disabled={lessonStep===0} onClick={()=>changeLessonStep(lessonStep-1)}><ArrowLeft size={16}/>Previous</button>
                 {lessonStep<lessonSteps.length-1?(
-                  <button className="btn btn-primary" type="button" onClick={()=>changeLessonStep(lessonStep+1)}>Continue<ChevronRight size={16}/></button>
+                  <button className="btn btn-primary" type="button" onClick={()=>{recordStudyActivity(user,{type:"lesson-section",id:`${selectedDive.id}:${lessonStep}`});changeLessonStep(lessonStep+1);}}>Continue<ChevronRight size={16}/></button>
                 ):(
-                  <button className="btn btn-primary" type="button" onClick={()=>{setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>Try the lab</button>
+                  <button className="btn btn-primary" type="button" onClick={()=>{recordStudyActivity(user,{type:"lesson-section",id:`${selectedDive.id}:${lessonStep}`});setStudyMode("practice");resetPracticeLab();}}><Puzzle size={16}/>Try the lab</button>
                 )}
               </div>
 
@@ -29542,7 +29558,6 @@ function ConceptDeepDivesPage({t,user=null,openLessonRequest=null,onOpenLessonRe
             <span><Crosshair size={15}/>5 official exam domains</span>
             <span><Brain size={15}/>Flashcards moved to their own page</span>
           </div>
-          <TrustBadge t={t} style={{marginTop:12}}/>
           <a className="deep-dives-blueprint-link" href={SY0701_BLUEPRINT.sourceUrl} target="_blank" rel="noreferrer"><ShieldCheck size={14}/>Mapped to the official {SY0701_BLUEPRINT.exam} objectives · document v{SY0701_BLUEPRINT.documentVersion}<ChevronRight size={14}/></a>
         </div>
         <div className="deep-dives-progress-card">
@@ -29764,9 +29779,11 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     if(canSync)deleteSupabaseGeneratedFlashcardSet(user.id,set.id);
   };
   const domainNames=Object.fromEntries(SY0701_DOMAINS.map(domain=>[domain.id,domain.name]));
+  const savedResume=readStudyProgress(user).resume;
+  const resumeDeck=savedResume&&[...SY0701_ACRONYM_SETS,...savedSets,...personalSets,buildStarredFlashcardSet(starCards)].find(set=>set?.id===savedResume.setId);
   const previewCard=SY0701_ACRONYM_CARDS.find(card=>card.acronym==="RTO");
   const term=query.trim().replace(/^#/,"").toLowerCase();
-  const matches=set=>!term||[set.title,set.sectionTitle,...set.cards.flatMap(card=>[...card.keywords,...card.concept_tags])].join(" ").toLowerCase().includes(term);
+  const matches=set=>!term||Boolean(flashcardMatch(set,term));
   const groups=chapterGroups.filter(group=>domain==="all"||String(group.chapterId)===domain).map(group=>({...group,sets:group.sets.filter(matches)})).filter(group=>group.sets.length);
   const visibleSets=groups.flatMap(group=>group.sets);
   const visibleCardIds=new Set(visibleSets.flatMap(set=>set.cards.filter(card=>card.cardType!=="divider").map(card=>card.id)));
@@ -29777,6 +29794,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
   if(selected)return <div className="fc-reader" style={palette}>{confirmation}{notice&&<p role="status">{notice}</p>}<AcronymFlashcardLab acronymSet={selected} masteredIds={mastered} onRate={rate} onClose={()=>{setSelected(null);refreshPersonal();}} t={t} user={user} starred={starred} onToggleStar={onToggleStar} onRequireSignup={onRequireSignup} onOpenDeepDive={onOpenDeepDive} onUpgrade={onUpgrade} onSaveGeneratedSet={saveSet} onSaveReviewSet={()=>starCards.length?openSet(buildStarredFlashcardSet(starCards)):onRequireSignup?.("flashcard_review_set")} recommendedSet={getNextFlashcardSet(selected)} onOpenRecommendedSet={()=>openSet(getNextFlashcardSet(selected))}/></div>;
   return <div className="fc-library" style={palette}>
     {confirmation}
+    {resumeDeck&&<div className="fc-notice"><strong>Continue {resumeDeck.title} · card {Math.min(savedResume.index+1,resumeDeck.cards.length)} of {resumeDeck.cards.length}</strong><button className="btn btn-primary" onClick={()=>openSet(resumeDeck)}>Resume deck</button><button className="btn btn-outline" onClick={()=>{writePlace(`reader:${starOwner(user)}:${resumeDeck.id}:index`,0,window.localStorage);writePlace(`reader:${starOwner(user)}:${resumeDeck.id}:order`,resumeDeck.cards.map(card=>card.id),window.localStorage);writePlace(`reader:${starOwner(user)}:${resumeDeck.id}:flipped`,false);openSet(resumeDeck);}}>Start over</button></div>}
     <header className="fc-hero">
       <div className="fc-hero-copy"><span className="fc-eyebrow"><NavGlyph type="flashcards" active/> FLASHCARDS / SY0-701</span>
         <h1>Recall<br/><span>Security+ terms.</span></h1><p>Term or acronym on the front.<br/>Full form and definition on the back.</p>
@@ -29789,8 +29807,9 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
       <div className="fc-personal-copy"><span className="fc-personal-badge"><Sparkles size={14}/> PERSONALISED FLASHCARDS</span>
       <h2 id="fc-personal-title">Your next review.</h2>
       {progressStatus!=="loading"&&<p>{progressStatus==="guest"?"Two topic-based sets of 15 cards, prioritised by the concepts you miss twice.":progressStatus==="loading"?"Finding your next useful review…":progressStatus==="error"||progressStatus==="unavailable"?"We couldn’t load your practice signals. Refresh to find the cards that need another look.":personalCards.length?"Focused on the concepts that need another look.":"Nothing needs a repeat review right now. Your next set will take shape as you practise."}</p>}
+      {progressStatus==="ready"&&personalCards.length>0&&<p className="fc-personal-counts">{personalCards.length} matching cards · {personalSets.length} recommended sets · {new Set(personalSets.flatMap(set=>set.cards.map(card=>card.id))).size} cards selected. {CHAPTERS.map(ch=>{const n=personalCards.filter(card=>String(card.chapterId??card.domain_id)===String(ch.id)).length;return n?`Domain ${ch.id}: ${n}`:null;}).filter(Boolean).join(" · ")}</p>}
       {personalSets.length>0&&<PersonalisedFlashcardGroups sets={personalSets} onOpen={openSet}/>}
-      {progressStatus==="loading"&&<CipherLoader t={t} compact label="Finding your review…"/>}
+      {progressStatus==="loading"&&<PageSkeleton view="flashcards"/>}
       {(progressStatus==="error"||progressStatus==="unavailable")&&<button className="btn btn-primary fc-personal-cta" onClick={refreshPersonal}>Refresh my review <RotateCcw size={16}/></button>}
       {!user&&<><button className="btn btn-primary fc-personal-cta" onClick={()=>onRequireSignup?.("flashcard_personalised")}>Build my personalised set <ArrowRight size={17}/></button><small className="fc-personal-note">Included with your free account.</small></>}
       {progressStatus==="ready"&&!personalCards.length&&<span className="fc-personal-clear"><CheckCircle2 size={15}/> No concepts currently need a repeat review.</span>}
@@ -29805,7 +29824,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
         <header className="fc-domain-heading"><span className="fc-domain-number">0{group.chapterId}</span><div><span className="fc-eyebrow">DOMAIN {group.chapterId}.0</span><h2>{group.chapterTitle}</h2></div><span className="fc-domain-count">{group.sets.length} {group.sets.length===1?"deck":"decks"}</span></header>
         {[...new Set(group.sets.map(set=>set.sectionId))].map(sectionId=><div className="fc-section" key={sectionId}><h3><span>{sectionId}</span>{group.sets.find(set=>set.sectionId===sectionId).sectionTitle}</h3><div className="fc-deck-grid">{group.sets.filter(set=>set.sectionId===sectionId).map(set=>{
           const remembered=set.cards.filter(card=>mastered.includes(card.id)).length;
-          return <FlashcardDeck key={set.id} set={set} remembered={remembered} index={SY0701_ACRONYM_SETS.findIndex(item=>item.id===set.id)} onOpen={()=>openSet(set)}/>;
+          return <FlashcardDeck key={set.id} set={set} query={query} match={flashcardMatch(set,query)} remembered={remembered} index={SY0701_ACRONYM_SETS.findIndex(item=>item.id===set.id)} onOpen={()=>openSet(set)}/>;
 
         })}</div></div>)}
       </section>)}</div>
@@ -29831,7 +29850,6 @@ function ObjectivesPage({t}) {
         See how SecurePlus practice is grouped across the five current exam domains. Use the official CompTIA page below when you need the latest certification blueprint.
       </p>
       <div style={{marginBottom:20}}>
-        <TrustBadge t={t}/>
       </div>
       <a
         className="btn btn-primary"
@@ -30408,6 +30426,7 @@ function PasswordUpdateView({t,onDone}) {
 // ═══════════════════════════════════════════════════════════════
 const APP_HISTORY_VIEWS = Object.freeze(new Set([
   "dashboard",
+  "study-plan",
   "why-different",
   "about",
   "mcq",
@@ -30515,9 +30534,8 @@ export default function App() {
   const [flashcardsIntroRequested]=useState(()=>urlFlashcardsIntroRequest);
   const [attempts,setAttempts]=useState([]);
   const readinessProfile=useExamReadiness(user,attempts);
+  const study=useStudyPlan(user,attempts,readinessProfile);
   const practiceAccessState=usePracticeAccess(user,!loading);
-  const loadHomeStreak=useCallback(()=>loadDailyStreak(user),[user?.id,user?.email,user?.authProvider]);
-  const homeStreak=useLiveSnapshot({owner:progressOwner(user),load:loadHomeStreak,enabled:Boolean(user)&&!loading,revision:attempts.length,events:DAILY_STREAK_EVENTS});
   const previousMetricsView=useRef(view);
   useEffect(()=>{
     const changed=previousMetricsView.current!==view;
@@ -30525,7 +30543,6 @@ export default function App() {
     if(!changed||view!=="dashboard"||loading)return;
     if(readinessProfile.status==="ready")readinessProfile.retry?.();
     if(practiceAccessState.status==="ready")practiceAccessState.refresh();
-    if(homeStreak.status==="ready")homeStreak.refresh();
   },[view,loading]);
 
   const [starred,setStarred]=useState([]);
@@ -31592,6 +31609,7 @@ export default function App() {
   },[livePbqBank,view]);
   const handleAchievementSessionComplete=useCallback(async payload=>{
     if(!user)return;
+    if(["practice","exam"].includes(payload?.session_type)&&Number(payload?.questions_count)>0)recordStudyActivity(user,{type:"mcq-set"});
     if(user.authProvider!=="supabase"){
       if(payload?.session_type==="practice"&&Number(payload?.score)===100&&Number(payload?.questions_count)>=5){
         const reward=await runCipherAction("perfect_mcq",{questionsCount:Number(payload.questions_count)});
@@ -31652,15 +31670,15 @@ export default function App() {
   if(loading) return(
     <>
       <style>{CSS}</style>
-      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
-      <LoadingScreen t={t}/>
+      {navigating?<PageSkeleton view={view} t={t} overlay/>:billingLoading?<CipherLoader t={t} overlay label="Updating your account…"/>:null}
+      <PageSkeleton view={view} t={t}/>
     </>
   );
 
   if(passwordRecovery) return(
     <>
       <style>{CSS}</style>
-      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
+      {navigating?<PageSkeleton view={view} t={t} overlay/>:billingLoading?<CipherLoader t={t} overlay label="Updating your account…"/>:null}
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <PasswordUpdateView t={t} onDone={()=>{setPasswordRecovery(false);setView("dashboard");}}/>
       </div>
@@ -31670,7 +31688,7 @@ export default function App() {
   if(user&&accountDeletion.stage==="confirm") return(
     <>
       <style>{CSS}</style>
-      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
+      {navigating?<PageSkeleton view={view} t={t} overlay/>:billingLoading?<CipherLoader t={t} overlay label="Updating your account…"/>:null}
       <div style={{minHeight:"100vh",background:t.bg}}>
         <div style={{padding:"16px 22px",display:"flex",alignItems:"center",gap:9,borderBottom:`1px solid ${t.border}`,background:t.surface}}>
           <BrandMark size={32}/><strong style={{color:t.text}}>{SITE_BRAND_LOCKUP}</strong>
@@ -31691,7 +31709,7 @@ export default function App() {
   if(showDaily&&!user) return(
     <>
       <style>{CSS}</style>
-      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
+      {navigating?<PageSkeleton view={view} t={t} overlay/>:billingLoading?<CipherLoader t={t} overlay label="Updating your account…"/>:null}
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <ViewBreadcrumb view="pbq" onNavigate={next=>{setPbqQ(null,{replace:true});setView(next);}} t={t}/>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
@@ -31757,7 +31775,7 @@ export default function App() {
     return(
       <>
         <style>{CSS}</style>
-      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
+      {navigating?<PageSkeleton view={view} t={t} overlay/>:billingLoading?<CipherLoader t={t} overlay label="Updating your account…"/>:null}
         {view==="auth"&&<AuthDialog t={t} returnFocus={authReturnFocus.current} onClose={()=>setView(guestView)}><AuthView key={`auth-${authStartMode}-${authRequestId}`} onLogin={handleLogin} t={t} onDaily={()=>setView("daily")} onNavigate={next=>setView(next==="dashboard"?guestView:next)} onPracticeMcq={()=>setView("mcq")} onPreviewPbq={handleGuestPbqPreview} initialMode={authStartMode} securityNotice={accountDeletion.stage==="confirm"}/></AuthDialog>}
         <div className={`app-shell guest-app-shell ${practiceFocusMode?"practice-focus-mode":""}`} onFocusCapture={event=>{authReturnFocus.current=event.target;}}>
           <a className="skip-link" href="#secureplus-main">Skip to study content</a>
@@ -31894,7 +31912,7 @@ export default function App() {
   if(user&&showDiagnostic) return(
     <>
       <style>{CSS}</style>
-      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
+      {navigating?<PageSkeleton view={view} t={t} overlay/>:billingLoading?<CipherLoader t={t} overlay label="Updating your account…"/>:null}
       <DiagnosticQuiz user={user} t={t} onComplete={handleDiagnosticComplete}/>
     </>
   );
@@ -31911,7 +31929,7 @@ export default function App() {
   if(pbqQ) return(
     <>
       <style>{CSS}</style>
-      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
+      {navigating?<PageSkeleton view={view} t={t} overlay/>:billingLoading?<CipherLoader t={t} overlay label="Updating your account…"/>:null}
       <div style={{background:t.bg,minHeight:"100vh"}}>
         <ViewBreadcrumb view="pbq" onNavigate={next=>{setPbqQ(null,{replace:true});setView(next);}} t={t}/>
         <div style={{background:t.surface,borderBottom:`1px solid ${t.border}`,padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
@@ -31947,6 +31965,7 @@ export default function App() {
 
   const navItems=[
     {id:"dashboard",icon:"dashboard",label:areaName("dashboard"),mobileLabel:areaName("dashboard")},
+    {id:"study-plan",icon:"objectives",label:"Study Plan",mobileLabel:"Study Plan"},
     {id:"mcq",icon:"mcq",label:areaName("mcq"),mobileLabel:areaName("mcq")},
     {id:"pbq",icon:"pbq",label:areaName("pbq"),mobileLabel:areaName("pbq")},
     {id:"daily",icon:"daily",label:areaName("daily"),mobileLabel:areaName("daily")},
@@ -31965,7 +31984,8 @@ export default function App() {
   return(
     <>
       <style>{CSS}</style>
-      {(navigating||billingLoading)&&<CipherLoader t={t} overlay label={billingLoading?"Updating your account…":"Opening your study space…"}/>}
+      {study.showPopup&&<StudyGoalPopup key={user?.id||user?.email} study={study}/>}
+      {navigating?<PageSkeleton view={view} t={t} overlay/>:billingLoading?<CipherLoader t={t} overlay label="Updating your account…"/>:null}
       <div className={`app-shell ${practiceFocusMode?"practice-focus-mode":""}`}>
         <a className="skip-link" href="#secureplus-main">Skip to study content</a>
         {sidebarHidden&&(
@@ -32033,7 +32053,8 @@ export default function App() {
           </div>
           {guestImportError&&<div className="card" role="status" style={{padding:18,marginBottom:18}}>{guestImportError} <button className="btn btn-outline" onClick={async()=>setAttempts(await importPendingGuestSmartReview(user,attempts))}>Retry diagnostic sync</button></div>}
           {["about","why-different"].includes(view)&&<AboutUs t={t} isGuest={false} onStart={()=>setView("mcq")} onExplore={setView} feedbackHref={`mailto:${SUPPORT_EMAIL}?subject=SecurePlus%20feedback`}/>}
-          {view==="dashboard"&&<Dashboard readinessProfile={readinessProfile} practiceAccess={practiceAccessState.access} streakInfo={homeStreak.value} user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
+          {view==="study-plan"&&<StudyPlanPage study={study} onNavigate={setView} onOpenLesson={handleOpenDeepDive} onOpenDeck={handleOpenFlashcards}/>}
+          {view==="dashboard"&&<Dashboard readinessProfile={readinessProfile} practiceAccess={practiceAccessState.access} streakInfo={study.streak} study={study} user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
             <MCQPractice practiceAccessState={practiceAccessState} examRequest={examEntryRequest} user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
           </div>
@@ -32046,7 +32067,7 @@ export default function App() {
           {view==="pricing"&&<Pricing user={user} onUpgrade={handleUpgrade} onSyncBilling={handleSyncBilling} onCancelMembership={handleCancelMembership} onDeleteAccount={handleDeleteAccount} onNavigate={setView} t={t} billingLoading={billingLoading}/>}
           {CIPHER_COINS_ACTIVE&&view==="referrals"&&<ReferralPage user={user} t={t}/>}
           {view==="objectives"&&<ObjectivesPage t={t}/>}
-          {view==="account"&&<AccountSupportPage user={user} t={t} onDeleteAccount={handleDeleteAccount} onCancelMembership={handleCancelMembership} onNavigate={setView} billingLoading={billingLoading}/>}
+          {view==="account"&&<AccountSupportPage user={user} t={t} onSyncBilling={handleSyncBilling} onDeleteAccount={handleDeleteAccount} onCancelMembership={handleCancelMembership} onNavigate={setView} billingLoading={billingLoading}/>}
           {view==="privacy"&&<LegalPage type="privacy" t={t}/>}
           {view==="terms"&&<LegalPage type="terms" t={t}/>}
           {view==="deep-dives"&&<ConceptDeepDivesPage t={t} user={user} openLessonRequest={deepDiveRequest} onOpenLessonRequestHandled={()=>setDeepDiveRequest(null)} focusAcronyms={focusAcronymLibrary} onAddWeakTopicToReview={handleAddDeepDiveWeakTopicToReview} onTryRelatedPbq={handleTryRelatedDeepDivePbq} onOpenFlashcards={handleOpenFlashcards} onUpgrade={()=>setView("pricing")}/>}
