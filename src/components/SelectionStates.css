@@ -20,3 +20,4 @@ body .fc-search input{min-width:0}
 body .fc-search input::-webkit-search-cancel-button{display:none}
 body .fc-search button{display:grid;place-items:center;flex-shrink:0;border:0;border-radius:8px;background:transparent;color:var(--fc-text);cursor:pointer}
 .fc-filter-count{font-size:15px;font-weight:650;color:var(--fc-text);margin:16px 0}
+.fc-domain-tabs .fc-tab-number{white-space:nowrap;flex-shrink:0}
