@@ -28775,11 +28775,12 @@ function AcronymFlashcardLab({acronymSet,masteredIds,onRate,onClose,t,user=null,
   };
 
   useEffect(()=>{
+    recordStudyActivity(user,{type:"deck-open",deckId:acronymSet.id});
     setRatedCardsThisPass(new Set());
     setShowCompletion(false);
     setLearnMoreOpen(false);
     setLearnMoreNotice("");
-  },[acronymSet.id,initialMode]);
+  },[acronymSet.id,initialMode,user?.id,user?.email]);
 
   useEffect(()=>{
     recordStudyActivity(user,{type:"deck-resume",deckId:acronymSet.id,title:acronymSet.title,index:cardIndex,order:cardOrder});
@@ -29741,7 +29742,7 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     if(set?.cards?.length){setSelected(set);onInitialSetHandled?.();}
     else if(initialSetId!==ASSISTANT_FLASHCARD_SET_ID||progressStatus!=="loading")onInitialSetHandled?.();
   },[initialSetId,personalSets,progressStatus]);
-  const openSet=set=>{if(!set?.cards?.length)return;recordStudyActivity(user,{type:"deck-open",deckId:set.id});setSelected(set);setNotice("");scrollSecurePlusPageToTop({behavior:"auto"});capture("flashcards_set_opened",{set_id:set.id,mode:"term"});};
+  const openSet=set=>{if(!set?.cards?.length)return;setSelected(set);setNotice("");scrollSecurePlusPageToTop({behavior:"auto"});capture("flashcards_set_opened",{set_id:set.id,mode:"term"});};
   const rate=(id,remembered)=>{
     setMastered(current=>{
       const next=remembered?[...new Set([...current,id])]:current.filter(item=>item!==id);
