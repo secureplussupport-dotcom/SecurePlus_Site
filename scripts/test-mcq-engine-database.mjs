@@ -17,6 +17,7 @@ await db.exec(readFileSync('supabase/migrations/20261022060000_mcq_exam_readines
 await db.exec(readFileSync('supabase/migrations/20261022090000_mcq_core_recovery.sql','utf8'));
 await db.exec('create table public.attempts(user_id uuid,question_type text,correct boolean,created_at timestamptz);grant select on public.attempts to service_role;');
 await db.exec(readFileSync('supabase/migrations/20261022110000_dashboard_practice_metrics.sql','utf8'));
+await db.exec(readFileSync('supabase/migrations/20261028121852_readiness_confidence_evidence.sql','utf8'));
 await db.exec(`create function auth.uid() returns uuid language sql as $$select null::uuid$$;create table public.profiles(id uuid primary key references auth.users(id),email text,tier text default 'free',subscription_status text,pro_trial_until timestamptz,updated_at timestamptz);create table public.app_admins(email text);create table public.pbqs(id text);create table public.starred_questions(user_id uuid,question_key text,question_type text,question_id text,created_at timestamptz default now(),primary key(user_id,question_key));grant all on public.profiles,public.app_admins,public.pbqs,public.starred_questions to service_role;`);
 await db.exec(readFileSync('supabase/migrations/20261022150000_practice_access_model.sql','utf8'));
 const user = '00000000-0000-4000-8000-000000000001', other = '00000000-0000-4000-8000-000000000002';
@@ -178,7 +179,7 @@ for(const role of ['anon','authenticated']){
 await assert.rejects(sourced('a',true,'invented'),/Invalid activity source/);
 assert.equal((await readiness()).total,4);
 actor=readinessUser;
-const apiReadiness=await call('readiness',{user_id:user});assert.equal(apiReadiness.status,200);assert.deepEqual(apiReadiness.output,await readiness());
+const apiReadiness=await call('readiness',{user_id:user});assert.equal(apiReadiness.status,200);assert.deepEqual(apiReadiness.output,await scalar('select public.mcq_engine_readiness_evidence($1)',[readinessUser]));
 actor=other;assert.notDeepEqual((await call('readiness',{user_id:readinessUser})).output,await readiness());
 console.log('PASS readiness: scoped mastery replay, chapter evidence, legacy exclusion, owned legacy sets, immutable source, auth ownership and restricted grants.');
 
@@ -244,5 +245,23 @@ const totals=(await readiness()).activity;
 assert.equal(totals.total,countsBefore.total+1);assert.equal(totals.correct,countsBefore.correct+1);
 assert.equal((await readiness()).concepts.length,3); // Metrics do not alter readiness.
 console.log('PASS dashboard metrics: all MCQ event sources, repeats, legacy cutover, no PBQs or mirrored double credit.');
+const confidenceEvidence=await scalar('select public.mcq_engine_readiness_evidence($1)',[readinessUser]);
+assert.equal(confidenceEvidence.evidenceVersion,2);
+assert.equal(confidenceEvidence.metrics.distinctQuestions,1);
+assert.equal(confidenceEvidence.metrics.distinctConcepts,3);
+assert.equal(confidenceEvidence.total,(await readiness()).total);
+assert.equal(confidenceEvidence.correct,Object.values(confidenceEvidence.chapters).reduce((sum,c)=>sum+c.correct,0));
+assert.equal((await scalar('select public.mcq_engine_readiness_evidence($1)',[other])).metrics.distinctQuestions>0,true);
+const emptyUser='00000000-0000-4000-8000-000000000099';
+assert.equal((await scalar('select public.mcq_engine_readiness_evidence($1)',[emptyUser])).metrics.distinctQuestions,0);
+for(const role of ['anon','authenticated']){
+ await db.exec(`set role ${role}`);
+ await assert.rejects(scalar('select public.mcq_engine_readiness_evidence($1)',[readinessUser]),/permission denied/);
+ await db.exec('reset role');
+}
+await db.exec('set role service_role');
+assert.equal((await scalar('select public.mcq_engine_readiness_evidence($1)',[readinessUser])).evidenceVersion,2);
+await db.exec('reset role');
+console.log('PASS readiness confidence: owned evidence, distinct sample, empty user and service-only permissions.');
 await db.close();
 console.log('PASS disposable PostgreSQL: migration, scores, 30-answer delay, idempotency, rollback, owner isolation, stale plan rejection, snapshot grading, RLS/grants.');

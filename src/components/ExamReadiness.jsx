@@ -43,7 +43,8 @@ export function ReadinessBreakdown({profile,chapters}) {
   return <section id="exam-readiness-breakdown" className="er-breakdown" aria-label="Exam readiness breakdown">
     <header><div><span className="er-eyebrow">READINESS BREAKDOWN</span><h2>{profile.level}</h2></div><span className="er-milestone">80% · Exam ready</span></header>
     {status==='loading'?<CipherLoader compact label="Loading your progress…"/>:status==='error'?<p role="status">Your readiness couldn’t load. <button type="button" onClick={profile.retry}>Try again</button></p>:<>
-      <p className="er-scope"><span><strong>{attempted}</strong> concepts attempted</span><span>MCQ + Exam</span><span>Unattempted excluded</span></p>
+      <p className="er-scope"><span><strong>{attempted}</strong> concepts attempted</span><span>MCQ + Exam</span><span>All concepts included · unseen = 50</span></p>
+      <div className="er-weighted-domains"><h3>How your readiness adds up</h3><p>Domain mastery includes every concept. Accuracy is shown separately.</p><div className="er-domain-grid">{profile.domains?.map(domain=><article key={domain.id}><header><strong>Domain {domain.id}</strong><span>{domain.weight}% weight</span></header><h4>{domain.name}</h4><strong className="er-domain-score">{domain.mastery}% <small>mastery</small></strong><p>{domain.attempted}/{domain.total} concepts attempted · {domain.accuracy==null?'No accuracy yet':`${domain.accuracy}% accuracy`}</p><span>Two weakest concepts</span><ul>{domain.weakest.map(c=><li key={c.tag}>#{c.tag} · {c.score}{!c.attempted?' · not attempted':''}</li>)}</ul></article>)}</div><small>Whole-number display: weighted domain values reconcile to the headline within 1 point; calculation uses unrounded mastery.</small></div>
       <div className="er-layout">
       <div className="er-chapters">
         <div className="er-card-heading"><h3>Domain accuracy</h3><span>01—05</span></div>
@@ -56,7 +57,7 @@ export function ReadinessBreakdown({profile,chapters}) {
         </div><div className="er-axis"><span>0%</span><span>100%</span></div>
       </div>
       <div className="er-chart-grid">
-        <article className="er-mastery"><div className="er-card-heading"><h3>Concept mastery</h3><span>80+ points</span></div><div className="er-chart-body"><Donut slices={masterySlices} total={attempted} label="Attempted concept mastery" centerLabel="mastered" center={attempted?`${percentage(mastered,attempted)}%`:'—'}/><Legend slices={masterySlices} total={attempted}/></div></article>
+        <article className="er-mastery"><div className="er-card-heading"><h3>Concept mastery</h3><span>80+ points</span></div><div className="er-chart-body"><Donut slices={masterySlices} total={profile.totalConcepts} label="All concept mastery" centerLabel="mastered" center={attempted?`${percentage(mastered,profile.totalConcepts)}%`:'—'}/><Legend slices={masterySlices} total={profile.totalConcepts}/></div></article>
         <article className="er-growth"><div className="er-card-heading"><h3>Where to grow</h3><span>By domain</span></div><div className="er-chart-body"><Donut slices={chapterSlices} total={unmastered} label="Unmastered concepts by domain" center={unmastered || (attempted?'0':'—')}/>{unmastered?<Legend slices={chapterSlices.filter(s=>s.count)} total={unmastered}/>:<p className="er-empty">{attempted?'All attempted concepts mastered.':'Complete a set to begin.'}</p>}</div></article>
       </div>
       </div>

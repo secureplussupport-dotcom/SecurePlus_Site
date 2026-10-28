@@ -91,7 +91,7 @@ export function createMcqHandler({ admin = getSupabaseAdmin, enabled = () => pro
         await accessRpc(client,'practice_list_stars',{p_user_id:userId});
         return json(res,200,await accessRpc(client,'practice_save_star',{p_user_id:userId,p_key:body.key,p_type:body.type,p_id:body.id,p_replace:body.replace||null,p_label:body.label||'',p_tags:body.tags||[]}));
       }
-      if (operation === 'readiness') return json(res, 200, await rpc(client, 'mcq_engine_readiness', { p_user_id: userId }));
+      if (operation === 'readiness') return json(res, 200, await rpc(client, 'mcq_engine_readiness_evidence', { p_user_id: userId }));
       if (operation === 'state') {
         const state=await rpc(client,'mcq_engine_state',{p_user_id:userId});
         return json(res,200,state);
