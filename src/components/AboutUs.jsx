@@ -1,6 +1,4 @@
 import { ArrowDown, ArrowRight, BookOpenCheck, Heart, Layers3, MessageCircle, ShieldCheck, Sparkles, Target, UsersRound } from 'lucide-react';
-import { PracticeComparison } from './PracticeComparison.jsx';
-import { SmartReviewStory } from './SmartReviewStory.jsx';
 import { MascotAnimation } from '../lib/MascotAnimation.jsx';
 import { FREE_GENERATION_LIMIT, GENERATION_WINDOW_MS } from '../lib/accessModel.js';
 import { guestPalette } from './GuestDiagnostic.jsx';
@@ -24,9 +22,9 @@ export function AboutUs({t,onStart,onExplore,feedbackHref,isGuest=true}) {
     <header className="about-hero">
       <div className="about-hero-copy">
         <span className="guest-eyebrow"><span className="about-small-dot"/> WHY WE’RE DIFFERENT</span>
-        <h1>Your effort.<br/><em>A clearer direction.</em></h1>
-        <p>A clear path from your first question to stronger concepts. Learn, recall and practise—all in one place.</p>
-        <button className="btn btn-primary about-primary" onClick={onStart}>{isGuest?'Find my starting point':'Open my practice hub'}<ArrowRight size={18}/></button>
+        <h1>What happens after<br/><em>a wrong answer?</em></h1>
+        <p>A missed concept leads to a lesson, matching flashcards and targeted questions. Here’s a result from an actual diagnostic run.</p>
+        <button className="btn btn-primary about-primary" onClick={onStart}>{isGuest?'Try the diagnostic':'Open my practice hub'}<ArrowRight size={18}/></button>
         <span className="about-hero-note">{isGuest?'Start with 10 Core questions. No account needed.':'Build on what you know. Focus on what needs work.'}</span>
         <div className="about-hero-signature"><ShieldCheck size={17}/> Built for CompTIA Security+ · SY0-701</div>
         <button type="button" className="about-scroll-cue" onClick={explore} aria-label="Explore how Deep Dives, flashcards and MCQs connect">
@@ -34,23 +32,17 @@ export function AboutUs({t,onStart,onExplore,feedbackHref,isGuest=true}) {
           <span>See how it connects</span><span className="about-scroll-arrow" aria-hidden="true"><ArrowDown size={19}/></span>
         </button>
       </div>
-      <PracticeComparison/>
+      <figure className="about-product-proof"><a href="/images/product/diagnostic-result.webp" target="_blank" rel="noreferrer" aria-label="Open the full diagnostic result screenshot"><img src="/images/product/diagnostic-result.webp" width="676" height="769" alt="Actual SecurePlus diagnostic result: reducing risk is highlighted, with Flashcards, Concept Deep Dive and Build my free study plan actions." fetchPriority="high"/></a><figcaption>Actual product screenshot · sample guest run · no personal data</figcaption></figure>
     </header>
 
     <section id="about-hub" className="about-hub" tabIndex={-1} data-reveal aria-labelledby="about-hub-title">
-      <div className="about-section-heading"><span className="guest-eyebrow">ONE CONNECTED STUDY HUB</span><h2 id="about-hub-title">Understand. Recall. Apply.</h2><p>Your resources belong together. Your study time should, too.</p></div>
+      <div className="about-section-heading"><span className="guest-eyebrow">ONE CONNECTED STUDY HUB</span><h2 id="about-hub-title">Understand. Recall. Apply.</h2><p>Three resources, linked by the same concept tags.</p></div>
       <div className="about-tools">{tools.map(({view,icon:Icon,title,name,copy,color,action},i)=><article key={view} style={{'--tool-color':color}}><div className="about-tool-art" aria-hidden="true"><span>0{i+1}</span><Icon size={49} strokeWidth={1.3}/><i/><i/></div><div className="about-tool-content"><span>{name}</span><h3>{title}</h3><p>{copy}</p><button onClick={()=>onExplore(view)}>{action}<ArrowRight size={17}/></button></div></article>)}</div>
     </section>
 
     <section className="about-personal" data-reveal aria-labelledby="about-personal-title">
-      <div className="about-section-heading"><span className="guest-eyebrow">PERSONAL TO YOUR PROGRESS</span><h2 id="about-personal-title">Your answers shape your path.</h2><p>A realistic workplan starts with what you need, rather than another random test.</p></div>
-      <div className="about-personal-points"><div><span>01</span><h3>Find your focus.</h3><p>The diagnostic gives you a starting point. Concept mastery tracks where your understanding needs attention.</p></div><div><span>02</span><h3>Practise with purpose.</h3><p>Smart Review targets weak concepts, brings missed questions back when due, and mixes in new ground.</p></div><div><span>03</span><h3>Keep it connected.</h3><p>Lessons explain. Flashcards reinforce. Further practice helps you check whether the concept is sticking.</p></div></div>
-      <details className="about-adapts"><summary>How does my practice adapt?<ArrowRight size={18}/></summary><dl>
-        <div><dt>A concept needs attention.</dt><dd>Smart Review uses your concept mastery to target further practice, alongside new topics.</dd></div>
-        <div><dt>The same concept trips you up twice.</dt><dd>The next time that topic is tested, Smart Review selects a Core question if one is available.</dd></div>
-        <div><dt>A missed question comes back.</dt><dd>The original becomes eligible after 30 other MCQ answers. Answer it correctly to clear it from your missed queue.</dd></div>
-      </dl></details>
-      <SmartReviewStory/>
+      <div className="about-section-heading"><span className="guest-eyebrow">THE REVIEW RULES</span><h2 id="about-personal-title">What changes in your next set.</h2><p>Specific rules you can see working as you practise.</p></div>
+      <div className="about-personal-points"><div><span>DIFFICULTY</span><h3>Two consecutive misses.</h3><p>Next time that concept is tested, you get a Core question if one is available.</p></div><div><span>RETEST TIMING</span><h3>30 other MCQ answers.</h3><p>That’s the cooldown before the original missed question becomes eligible to return.</p></div><div><span>MISSED QUEUE</span><h3>A correct answer clears it.</h3><p>Answer the original question correctly to remove it from your missed queue.</p></div></div>
     </section>
 
     <section className="about-access" data-reveal aria-labelledby="about-access-title">
@@ -64,6 +56,6 @@ export function AboutUs({t,onStart,onExplore,feedbackHref,isGuest=true}) {
     </section>
 
     <section className="about-feedback" data-reveal aria-labelledby="about-feedback-title"><div><span className="guest-eyebrow"><MessageCircle size={16}/> BUILT WITH YOUR FEEDBACK</span><h2 id="about-feedback-title">Help shape the next step.</h2><p>An unclear explanation? A missing topic? Something that could work better? We’re listening.</p></div><a className="about-feedback-link" href={feedbackHref}>Share your feedback<ArrowRight size={19}/></a></section>
-    <footer className="about-final"><span>One concept. A little more confidence.</span><button className="btn btn-primary about-primary" onClick={onStart}>{isGuest?'Try the 10 Q diagnostic':'Start my next set'}<ArrowRight size={18}/></button></footer>
+    <footer className="about-final"><span>See your own result in 10 questions.</span><button className="btn btn-primary about-primary" onClick={onStart}>{isGuest?'Try the 10 Q diagnostic':'Start my next set'}<ArrowRight size={18}/></button></footer>
   </div>;
 }

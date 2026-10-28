@@ -4,10 +4,10 @@ import { MascotAnimation } from '../lib/MascotAnimation.jsx';
 import './SmartReviewStory.css';
 
 const scenes = [
-  {label:'Spot the gap',title:'A miss is a starting point.',copy:'Smart Review records the missed question and the concept behind it.',animation:'thinking'},
-  {label:'Make it click',title:'One concept. Two ways in.',copy:'Explore the idea in a Deep Dive. Recall it with matching flashcards.',animation:'flashcards'},
-  {label:'Build your next set',title:'Your next set has a purpose.',copy:'Fresh questions target weak concepts, alongside new topics and retests when due.',animation:'scan'},
-  {label:'Come back stronger',title:'See it again. Know it better.',copy:'The original missed question becomes eligible for a retest after 30 other MCQ answers.',animation:'cheer'},
+  {label:'Spot the gap',title:'Track more than a score.',copy:'The missed question enters your review queue, alongside the concept it tests.',animation:'thinking'},
+  {label:'Study the concept',title:'Open the lesson or matching cards.',copy:'Explore the idea in a Deep Dive. Recall it with matching flashcards.',animation:'flashcards'},
+  {label:'Build your next set',title:'Three kinds of question. One set.',copy:'Fresh questions target weak concepts, alongside new topics and retests when due.',animation:'scan'},
+  {label:'Come back stronger',title:'Clear it from your missed queue.',copy:'The original missed question becomes eligible for a retest after 30 other MCQ answers.',animation:'cheer'},
 ];
 
 function QuestionArtwork({retest=false}) {
@@ -25,7 +25,7 @@ function LearningArtwork() {
     <div className="sr-concept-anchor"><Target size={18}/> Recovery time <span>RTO</span></div>
     <div className="sr-branch-art" aria-hidden="true"><i/><i/><b/><b/></div>
     <div className="sr-learning-tools">
-      <article className="sr-lesson-art"><BookOpenCheck size={27}/><small>CONCEPT DEEP DIVE</small><h3>Make the idea click.</h3><div className="sr-mini-timeline"><span>Outage</span><i><b/></i><span>Restored</span></div><p>RTO is your target time to restore a service.</p></article>
+      <article className="sr-lesson-art"><BookOpenCheck size={27}/><small>CONCEPT DEEP DIVE</small><h3>Service recovery</h3><div className="sr-mini-timeline"><span>Outage</span><i><b/></i><span>Restored</span></div><p>RTO is your target time to restore a service.</p></article>
       <div className="sr-flashcard-art"><div className="sr-flashcard-turn"><article className="sr-flashcard-front"><Layers3 size={24}/><small>FLASHCARD</small><strong>RTO</strong><span>Can you recall it?</span></article><article className="sr-flashcard-back"><Check size={24}/><small>RECALL</small><strong>Recovery time<br/>objective</strong><span>Target time to restore a service.</span></article></div></div>
     </div>
   </div>;
@@ -36,7 +36,7 @@ function SetArtwork() {
     <article className="sr-set-card sr-remediation"><span><Target size={19}/> WEAK CONCEPT</span><strong>RTO</strong><p>A fresh question. Same concept.</p><small>Targeted practice <ArrowRight size={15}/></small></article>
     <article className="sr-set-card sr-discovery"><span><Sparkles size={19}/> DISCOVERY</span><strong>New ground.</strong><p>Keep building your coverage.</p><small>New topics <ArrowRight size={15}/></small></article>
     <article className="sr-set-card sr-retest"><span><RotateCcw size={19}/> RETEST</span><strong>Seen before.</strong><p>Missed questions return when due.</p><small>After the cooldown <ArrowRight size={15}/></small></article>
-  </div><div className="sr-set-foot"><i/><span>Your answers shape the mix.</span></div></div>;
+  </div><div className="sr-set-foot"><i/><span>Weak concepts, new topics and due retests.</span></div></div>;
 }
 
 export function SmartReviewStory() {

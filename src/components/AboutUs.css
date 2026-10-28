@@ -4,7 +4,7 @@
 .about-hero::before{content:"";position:absolute;inset:-25px -20px 0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 95% 35%,color-mix(in srgb,var(--guest-violet) 9%,transparent),transparent 52%)}
 .about-small-dot{width:7px;height:7px;border-radius:50%;background:var(--guest-blue);box-shadow:0 0 0 5px color-mix(in srgb,var(--guest-blue) 10%,transparent)}
 .about-hero h1{font-size:clamp(42px,4.8vw,66px);line-height:1.06;font-weight:650;margin:22px 0 20px}
-.about-hero h1 em{font-style:normal;font-weight:750;background:linear-gradient(110deg,var(--guest-blue),var(--guest-violet));background-clip:text;-webkit-background-clip:text;color:transparent}
+.about-hero h1 em{font-style:normal;font-weight:750;color:var(--guest-blue)}
 .about-hero-copy>p{font-size:19px;line-height:1.75;color:var(--guest-muted);max-width:475px;margin:0 0 25px}
 .about-page .about-primary{display:inline-flex;align-items:center;justify-content:center;gap:17px;min-height:54px;background:#315dd0;border:1px solid #315dd0;color:white;box-shadow:0 8px 25px #315dd022;transition:transform 160ms var(--about-ease),background 160ms ease}
 .about-hero-note{display:block;font-size:13px;line-height:1.6;color:var(--guest-muted);margin-top:13px}
@@ -100,3 +100,10 @@
 .about-adapts dd{font-size:14px;color:var(--guest-muted);line-height:1.8;margin:0}
 @media(max-width:720px){.about-adapts dl{grid-template-columns:1fr;gap:20px}.about-adapts summary{font-size:15px}}
 @media(prefers-reduced-motion:reduce){.about-adapts summary>svg{transition:none}}
+
+.about-product-proof{margin:0;max-width:510px;justify-self:center;min-width:0}
+.about-product-proof>a{display:block;border:1px solid var(--guest-line);border-radius:18px;overflow:hidden;background:#fffefa;box-shadow:0 8px 24px #0000000a}
+.about-product-proof img{display:block;width:100%;height:auto}
+.about-product-proof figcaption{margin-top:10px;font-size:13px;line-height:1.6;color:var(--guest-muted)}
+.about-product-proof>a:focus-visible{outline:3px solid var(--guest-blue);outline-offset:4px}
+@media(max-width:720px){.about-product-proof{max-width:510px;width:100%}}

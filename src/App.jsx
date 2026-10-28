@@ -30086,22 +30086,22 @@ function FlashcardsPage({t,initialSetId=null,onInitialSetHandled,user=null,starr
     {confirmation}
     <header className="fc-hero">
       <div className="fc-hero-copy"><span className="fc-eyebrow"><NavGlyph type="flashcards" active/> FLASHCARDS / SY0-701</span>
-        <h1>Make it<br/><span>second nature.</span></h1><p>One term. A moment of recall.<br/>A little more confidence for exam day.</p>
+        <h1>Recall<br/><span>Security+ terms.</span></h1><p>Term or acronym on the front.<br/>Full form and definition on the back.</p>
         <div className="fc-hero-actions"><button className="btn btn-primary" onClick={()=>openSet(groups[0]?.sets[0]||SY0701_ACRONYM_SETS[0])}>Find my first deck <ArrowRight size={17}/></button><FlashcardShareActions t={t} compact/></div>
       </div>
-      <div className="fc-hero-right"><div className="fc-cipher-host"><div><span>YOUR RECALL COMPANION</span><strong>A little practice.<br/>A stronger memory.</strong></div><MascotAnimation animation="flashcards" size={92} interactive={false} label="Cipher, your flashcard companion"/></div><FlashcardPreview card={previewCard}/></div>
+      <div className="fc-hero-right"><div className="fc-cipher-host"><div><span>YOUR RECALL COMPANION</span><strong>Browse by domain.<br/>Save terms for review.</strong></div><MascotAnimation animation="flashcards" size={92} interactive={false} label="Cipher, your flashcard companion"/></div><FlashcardPreview card={previewCard}/></div>
       <div className="fc-hero-stats"><span><strong>{SY0701_ACRONYM_SETS.length}</strong> focused decks</span><span><strong>{SY0701_ACRONYM_CARDS.length}</strong> terms to explore</span><span className="fc-recall-progress"><span className="fc-mini-track"><i style={{width:`${totalMastered/SY0701_ACRONYM_CARDS.length*100}%`}}/></span><strong>{totalMastered}</strong> remembered</span></div>
     </header>
     <section className={`fc-personal fc-personal-feature ${personalCards.length?"has-review":""}`} aria-labelledby="fc-personal-title">
-      <div className="fc-personal-copy"><span className="fc-personal-badge"><Sparkles size={14}/> MADE FOR YOUR NEXT BREAKTHROUGH</span>
+      <div className="fc-personal-copy"><span className="fc-personal-badge"><Sparkles size={14}/> PERSONALISED FLASHCARDS</span>
       <h2 id="fc-personal-title">Your next review.</h2>
-      {progressStatus!=="loading"&&<p>{progressStatus==="guest"?"Turn tricky concepts into familiar ones. After two misses on the same concept, every linked flashcard comes here for another look.":progressStatus==="loading"?"Finding your next useful review…":progressStatus==="error"||progressStatus==="unavailable"?"We couldn’t load your practice signals. Refresh to find the cards that need another look.":personalCards.length?"Focused on the concepts that need another look.":"Nothing needs a repeat review right now. Your next set will take shape as you practise."}</p>}
+      {progressStatus!=="loading"&&<p>{progressStatus==="guest"?"Two topic-based sets of 15 cards, prioritised by the concepts you miss twice.":progressStatus==="loading"?"Finding your next useful review…":progressStatus==="error"||progressStatus==="unavailable"?"We couldn’t load your practice signals. Refresh to find the cards that need another look.":personalCards.length?"Focused on the concepts that need another look.":"Nothing needs a repeat review right now. Your next set will take shape as you practise."}</p>}
       {personalSets.length>0&&<PersonalisedFlashcardGroups sets={personalSets} onOpen={openSet}/>}
       {progressStatus==="loading"&&<CipherLoader t={t} compact label="Finding your review…"/>}
       {(progressStatus==="error"||progressStatus==="unavailable")&&<button className="btn btn-primary fc-personal-cta" onClick={refreshPersonal}>Refresh my review <RotateCcw size={16}/></button>}
       {!user&&<><button className="btn btn-primary fc-personal-cta" onClick={()=>onRequireSignup?.("flashcard_personalised")}>Build my personalised set <ArrowRight size={17}/></button><small className="fc-personal-note">Included with your free account.</small></>}
-      {progressStatus==="ready"&&!personalCards.length&&<span className="fc-personal-clear"><CheckCircle2 size={15}/> You’re keeping things moving.</span>}
-      </div><div className="fc-personal-visual" aria-hidden="true"><div className="fc-personal-halo"/><div className="fc-focus-slip fc-focus-slip-back"/><div className="fc-focus-slip fc-focus-slip-mid"/><div className="fc-focus-slip"><span><Sparkles size={14}/> YOUR NEXT CHAPTER</span><Brain size={45} strokeWidth={1.5}/><strong>Understand it.<br/>Remember it.</strong><i>ONE CONCEPT AT A TIME</i></div></div>
+      {progressStatus==="ready"&&!personalCards.length&&<span className="fc-personal-clear"><CheckCircle2 size={15}/> No concepts currently need a repeat review.</span>}
+      </div><div className="fc-personal-visual" aria-hidden="true"><div className="fc-personal-halo"/><div className="fc-focus-slip fc-focus-slip-back"/><div className="fc-focus-slip fc-focus-slip-mid"/><div className="fc-focus-slip"><span><Sparkles size={14}/> YOUR NEXT CHAPTER</span><Brain size={45} strokeWidth={1.5}/><strong>Term first.<br/>Definition next.</strong><i>TERM-FIRST RECALL</i></div></div>
     </section>
     <section className="fc-browse" aria-label="Browse flashcards by domain">
       <div className="fc-browse-heading"><div><span className="fc-eyebrow">YOUR STUDY SHELF</span><h2>A place for every concept.</h2></div><label className="fc-search"><Search size={17}/><input type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Find a term, deck or #tag" aria-label="Search flashcards"/></label></div>
