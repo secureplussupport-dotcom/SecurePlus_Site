@@ -18137,6 +18137,10 @@ select.input option{background:${t.surface};color:${t.text};font-family:'Montser
 .guest-top-nav-more-item:hover,.guest-top-nav-more-item:focus-visible{background:${t.accent}12;color:${t.text};transform:translateX(2px);outline:none;}
 .guest-top-nav-more-item.active{background:linear-gradient(135deg,${t.accent}16,${t.green}0c);color:${t.accent};}
 .guest-top-nav-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;}
+.guest-login-link{border:0;background:transparent;color:${t.text};font:inherit;font-size:14px;font-weight:650;min-height:48px;padding:10px;cursor:pointer;white-space:nowrap;}
+.guest-top-nav .guest-signup-button{min-height:48px;padding:12px 18px;font-size:14px;white-space:nowrap;}
+@media(max-width:1200px){.guest-top-nav-brand>span{font-size:0;}.guest-top-nav-brand>span::after{content:"SecurePlus";font-size:16px;}}
+
 .auth-layout{width:100%;max-width:980px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);gap:24px;align-items:stretch;}
 .auth-only-page{min-height:100vh;padding:24px;display:grid;place-items:center;background:
   radial-gradient(circle at 50% 0%, ${t.accent}12, transparent 34%),
@@ -19002,6 +19006,7 @@ body{background:
   .nav-lnk .nav-glyph{width:24px;height:24px;}
   .nav-lnk span:first-child{font-size:15px!important;}
   .mobile-topbar{display:flex;position:sticky;top:0;z-index:130;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px;background:${t.bg}e8;backdrop-filter:blur(18px);border-bottom:1px solid ${t.border};box-shadow:0 8px 24px rgba(80,52,22,.1);}
+  html:has(.guest-app-shell),body:has(.guest-app-shell),#root:has(.guest-app-shell){overflow-x:clip;}
   .guest-app-shell{padding-bottom:0!important;}
   .guest-app-shell .mobile-topbar{display:none!important;}
   .guest-top-nav{grid-template-columns:1fr!important;gap:10px!important;padding:10px 14px!important;}
@@ -19012,6 +19017,11 @@ body{background:
   .guest-top-nav-actions{position:absolute;right:12px;top:10px;gap:6px!important;}
   .guest-top-nav-actions .btn{min-height:31px!important;padding:6px 9px!important;font-size:11px!important;}
   .guest-top-nav-actions .btn-ghost:first-child{display:none!important;}
+  .guest-top-nav .guest-top-nav-actions .guest-signup-button{min-height:48px!important;padding:10px 12px!important;font-size:14px!important;}
+  .guest-app-shell .guest-top-nav{min-height:68px;}
+  .guest-app-shell .guest-top-nav-brand{max-width:110px;}
+  .guest-top-nav .guest-top-nav-actions{top:10px;gap:2px!important;}
+
   main > div{padding-left:16px!important;padding-right:16px!important;max-width:100%!important;}
   .dashboard-shell{padding:18px 16px 108px!important;}
   .home-hero{grid-template-columns:minmax(0,1fr)!important;padding:22px!important;border-radius:22px!important;gap:18px!important;}
@@ -31753,15 +31763,15 @@ export default function App() {
         {id:"preview-pbq",amount:-50,balance_after:130,event_type:"pbq_unlock",created_at:new Date(Date.now()-172800000).toISOString()},
       ],
     });
-    const goToSignup=()=>{markGuestDiagnosticAuthOpened();capture("landing_signup_cta_clicked",{source:"guest_diagnostic_funnel"});setGuestMoreOpen(false);setPbqQ(null,{replace:true});setAuthStartMode("signup-entry");setAuthRequestId(id=>id+1);setView("auth");};
+    const goToSignup=placement=>{markGuestDiagnosticAuthOpened();capture("landing_signup_cta_clicked",{source:"guest_diagnostic_funnel",...(["header","hero","closing-block"].includes(placement)?{placement}:{})});setGuestMoreOpen(false);setPbqQ(null,{replace:true});setAuthStartMode("signup-entry");setAuthRequestId(id=>id+1);setView("auth");};
     const goToLogin=()=>{markGuestDiagnosticAuthOpened();setGuestMoreOpen(false);setPbqQ(null,{replace:true});setAuthStartMode("login");setAuthRequestId(id=>id+1);setView("auth");};
     const allowedGuestViews=new Set(["dashboard","mcq","pbq","daily","why-different","about","objectives","flashcards","deep-dives","privacy","terms",...(devCoinPreview?["coins"]:[])]);
     const guestTopNavItems=[
       {id:"mcq",label:areaName("mcq",true)},
-      {id:"pbq",label:areaName("pbq",true)},
       {id:"flashcards",label:areaName("flashcards",true)},
     ];
     const guestMoreItems=[
+      {id:"pbq",label:areaName("pbq",true)},
       {id:"objectives",label:areaName("objectives",true)},
       {id:"about",label:areaName("about",true)},
       {id:"deep-dives",label:areaName("deep-dives",true)},
@@ -31838,7 +31848,8 @@ export default function App() {
               <button className="btn btn-ghost" type="button" onClick={()=>{setGuestMoreOpen(false);setDarkMode(d=>!d);}}>
                 {darkMode?<><Sun size={15}/> Light</>:<><Moon size={15}/> Dark</>}
               </button>
-              <button className="btn btn-ghost" type="button" onClick={goToLogin}>Log In</button>
+              <button className="guest-login-link" type="button" onClick={goToLogin}>Log In</button>
+              <button className="btn btn-primary guest-signup-button" type="button" data-signup-placement="header" onClick={()=>goToSignup("header")}>Create free account</button>
             </div>
           </header>
           <GuestDiagnosticSaveBanner t={t} onSignup={goToSignup} onViewResults={()=>setView("mcq")}/>

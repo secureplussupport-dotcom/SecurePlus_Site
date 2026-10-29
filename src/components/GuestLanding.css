@@ -236,3 +236,30 @@ body:has(.gd-save-banner) .guest-main{padding-bottom:160px}
 .gd-start-link:focus-visible{outline:3px solid var(--guest-blue);outline-offset:5px;border-radius:4px}
 .gs-path{padding:15px 0;margin-top:22px;color:var(--guest-text)}.gs-path span{font-size:15px;font-weight:650}.gs-path i{background:var(--guest-muted)}
 .gd-page-title{padding:20px 24px 0;color:inherit;margin-bottom:0}
+
+/* Guest conversion: keep the diagnostic first and account access always findable. */
+.guest-studio .gs-signup-secondary{background:transparent;border:1px solid var(--guest-line);color:var(--guest-text);font-weight:700;box-shadow:none;min-height:48px;font-size:15px;padding:11px 16px}
+.gs-account-promise{display:block;line-height:1.6}
+.gs-hero-copy>.gs-why{margin-top:14px;min-height:44px}
+.gs-decided-link{position:relative;display:block;margin:10px auto 0;padding:10px 4px;min-height:44px;border:0;background:none;color:var(--guest-text);font-size:14px;text-decoration:underline;text-underline-offset:4px}
+.gs-closing{margin-top:50px;padding:36px 24px;border:1px solid var(--guest-line);border-radius:24px;background:var(--guest-panel);text-align:center}
+.gs-closing h2{margin:0 0 22px;font-size:clamp(26px,4vw,38px);letter-spacing:-.04em;line-height:1.2}
+.gs-closing .gs-actions{justify-content:center}
+.gs-closing p{margin:18px 0 0;color:var(--guest-muted);font-size:14px;line-height:1.6}
+@media(max-width:380px){
+ .guest-app-shell .guest-top-nav{padding-top:8px!important;gap:6px!important}
+ .guest-app-shell .guest-top-nav-actions{position:static;justify-content:flex-end}
+ .guest-app-shell .guest-top-nav-brand{max-width:100%;min-height:32px}
+}
+.gs-diagnostic-stage:has(.gs-decided-link)::before{bottom:90px}
+.gs-diagnostic-stage:has(.gs-decided-link) .gs-stage-foot{position:relative}
+@media(min-width:381px) and (max-width:720px){
+ .guest-app-shell .guest-top-nav-brand{gap:6px}
+ .guest-app-shell .guest-top-nav-brand>img{width:24px;height:24px;flex-shrink:0}
+ .guest-app-shell .guest-top-nav-brand>span::after{font-size:14px}
+}
+@media(min-width:861px) and (max-width:1200px){
+ .guest-app-shell .guest-top-nav{padding-inline:16px;gap:10px}
+ .guest-app-shell .guest-top-nav-links{gap:4px}
+ .guest-app-shell .guest-top-nav-link{padding-inline:8px}
+}
