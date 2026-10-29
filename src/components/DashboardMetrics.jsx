@@ -1,5 +1,5 @@
-import { useEffect, useId, useState } from 'react';
-import { Target, Layers3, Flame, Infinity as InfinityIcon, Clock3, ChevronDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Target, Layers3, Flame, Infinity as InfinityIcon, Clock3 } from 'lucide-react';
 import { activityAccuracy, quotaDisplay, streakWeek } from '../lib/dashboardMetrics.js';
 import './DashboardMetrics.css';
 
@@ -11,8 +11,6 @@ function Ring({value,color,children,pending=false}) {
 }
 export function DashboardMetrics({profile,streak,tier,t,quota=null}) {
   const isPro=tier==='pro';
-  const [expanded,setExpanded]=useState(false);
-  const detailsId=useId();
   const [now,setNow]=useState(Date.now());
   useEffect(()=>{
     if(isPro || !quota?.resetAt)return;
@@ -21,30 +19,27 @@ export function DashboardMetrics({profile,streak,tier,t,quota=null}) {
   const activity=profile.status==='ready'?profile.activity:null;
   const accuracy=activityAccuracy(activity), allowance=quotaDisplay(quota,now);
   const week=streakWeek(streak?.streak || 0,Boolean(streak?.completedToday)).map((day,i)=>{if(!streak?.dates)return day;const date=new Date();date.setDate(date.getDate()-(6-i));const key=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;return {...day,active:streak.dates.includes(key)};});
-  return <section className={`dm-widget ${expanded?'is-expanded':'is-compact'}`} style={{'--dm-text':t.text,'--dm-muted':t.textSec,'--dm-panel':t.panel,'--dm-surface':t.surface,'--dm-border':t.border}}><header className="dm-widget-heading"><h2>Your progress</h2><button type="button" aria-expanded={expanded} aria-controls={detailsId} onClick={()=>setExpanded(value=>!value)}>{expanded?'Less detail':'More detail'}<ChevronDown size={18}/></button></header><div className="dashboard-metrics" id={detailsId} aria-busy={profile.status==='loading'} aria-label="Your practice metrics">
+  return <section className="dm-widget" style={{'--dm-text':t.text,'--dm-muted':t.textSec,'--dm-panel':t.panel,'--dm-surface':t.surface,'--dm-border':t.border}}><header className="dm-widget-heading"><h2>Your progress</h2></header><div className="dashboard-metrics" aria-busy={profile.status==='loading'} aria-label="Your practice metrics">
     <article className="dm-card dm-accuracy" style={{'--dm-accent':t.blue || t.accent}}>
       <header><span className="dm-icon"><Target size={18}/></span><h3>Accuracy</h3></header>
-      <div className="dm-main"><strong className="dm-number">{accuracy==null?'—':accuracy}<small>{accuracy==null?'':'%'}</small></strong><Ring value={(accuracy || 0)/100} color={t.blue || t.accent}><Target size={21}/></Ring></div>
-      <p>MCQ · Exam · Daily</p>
-      <footer>{activity?.total?`${activity.correct.toLocaleString()} correct / ${activity.total.toLocaleString()} answered`:profile.status==='loading'?'Loading…':profile.status==='error'?'Progress unavailable':'No answers yet.'}</footer>
+      <div className="dm-main" title={activity?.total?`${activity.correct} correct / ${activity.total} answered · MCQ, Exam and Daily Challenge`:undefined}><strong className="dm-number">{accuracy==null?'—':accuracy}<small>{accuracy==null?'':'%'}</small></strong><Ring value={(accuracy || 0)/100} color={t.blue || t.accent}><Target size={21}/></Ring></div>
+
     </article>
     <article className="dm-card dm-completed" style={{'--dm-accent':t.green}}>
       <header><span className="dm-icon"><Layers3 size={18}/></span><h3>Questions completed</h3></header>
       <div className="dm-main"><strong className="dm-number">{activity?activity.total.toLocaleString():'—'}</strong><div className="dm-card-stack" aria-hidden="true"><i/><i/><i><Layers3 size={25}/></i></div></div>
-      <footer>MCQs · repeats included</footer>
     </article>
     <article className={`dm-card dm-streak ${!streak?'dm-is-loading':''}`} style={{'--dm-accent':t.amber}}>
       <header><span className="dm-icon"><Flame size={18}/></span><h3>Daily streak</h3></header>
       <div className="dm-main"><strong className="dm-number">{streak?.streak ?? '—'}<small>{streak?.streak===1?'day':'days'}</small></strong><Flame className="dm-flame" size={44} strokeWidth={1.4} aria-hidden="true"/></div>
-      <div className="dm-week" aria-label="Meaningful study days over the last seven days">{week.map((day,i)=><span key={i} data-active={day.active} data-today={day.today} aria-label={`${day.today?'Today':`${6-i} day${6-i===1?'':'s'} ago`}: ${day.active?'streak completed':'not completed'}`}><i/>{day.label}</span>)}</div>
-      <footer>{streak?<>{streak.reasons?.length?`Today: ${streak.reasons.join(' · ')}. `:'Today: answer 10 MCQs, complete a section, rate 10 cards or finish Daily Challenge. '}Best {streak.best}</>:'Loading streak…'}</footer>
+      <div className="dm-week" aria-label={`Meaningful study days over the last seven days. ${streak?.reasons?.length?`Today: ${streak.reasons.join(', ')}`:'No qualifying activity today yet.'}`}>{week.map((day,i)=><span key={i} data-active={day.active} data-today={day.today} aria-label={`${day.today?'Today':`${6-i} day${6-i===1?'':'s'} ago`}: ${day.active?'streak completed':'not completed'}`}><i/>{day.label}</span>)}</div>
+
     </article>
     <article className={`dm-card dm-allowance ${isPro?'dm-pro':''}`} style={{'--dm-accent':t.purple || '#a58aff'}}>
       <header><span className="dm-icon">{isPro?<InfinityIcon size={18}/>:<Clock3 size={18}/>}</span><h3>Practice allowance</h3>{isPro&&<span className="dm-tier">PRO</span>}</header>
-      {isPro?<><div className="dm-main"><strong className="dm-infinity" aria-label="Unlimited">∞</strong><div className="dm-infinity-halo" aria-hidden="true"><InfinityIcon size={40}/></div></div><footer>Unlimited MCQs</footer></>:<>
+      {isPro?<><div className="dm-main"><strong className="dm-infinity" aria-label="Unlimited">∞</strong><div className="dm-infinity-halo" aria-hidden="true"><InfinityIcon size={40}/></div></div></>:<>
         <div className="dm-main"><strong className="dm-number">{allowance&&!allowance.refreshing?allowance.remaining:'—'}<small>MCQs left</small></strong><Ring value={allowance?.fill || 0} color={t.purple || '#a58aff'} pending={!allowance||allowance.refreshing}><Clock3 size={20}/></Ring></div>
-        <p>{allowance?`${allowance.limit} questions · rolling 12 hours`:'12-hour quota coming soon'}</p>
-        <footer className="dm-reset"><Clock3 size={13}/>{allowance?(allowance.refreshing||allowance.idle?allowance.timer:<>Next release in <strong>{allowance.timer}</strong></>):'Countdown unavailable.'}</footer>
+        <div className="dm-reset" aria-label="Practice allowance reset"><Clock3 size={13}/>{allowance?(allowance.refreshing||allowance.idle?allowance.timer:<strong>{allowance.timer}</strong>):'Countdown unavailable.'}</div>
       </>}
     </article>
   </div></section>;
