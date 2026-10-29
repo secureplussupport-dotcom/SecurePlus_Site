@@ -7,6 +7,7 @@ dist
 *.png
 !public/mascots/
 !public/mascots/*.png
+!android/app/src/main/res/**/*.png
 securityplus-FINAL.html
 
 # Local secrets and private operational exports are never portfolio material.
