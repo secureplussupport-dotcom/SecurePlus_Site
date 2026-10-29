@@ -23,6 +23,8 @@ export function localReadinessEvidence(attempts=[]){
 export function summarizeReadiness(evidence={},catalogue=READINESS_CATALOGUE,now=Date.now()){
  const scores=new Map((evidence.concepts||[]).filter(c=>c.tag&&Number.isFinite(c.score)&&c.score>=0&&c.score<=100).map(c=>[c.tag,c.score]));
  const unique=new Map(catalogue.filter(c=>c.tag&&/^[1-5]$/.test(String(c.chapter))).map(c=>[c.tag,{...c,chapter:String(c.chapter)}]));
+ // One canonical concept array feeds every domain and breakdown count.
+ const concepts=[...unique.values()].map(c=>({...c,score:scores.get(c.tag)??50,attempted:scores.has(c.tag)}));
  const metrics=evidence.metrics||{},distinctQuestions=Number(metrics.distinctQuestions)||0;
  const total=Number(evidence.total)||0;
  const first=Date.parse(metrics.firstAttemptAt),last=Date.parse(metrics.lastPracticeAt);
@@ -32,19 +34,20 @@ export function summarizeReadiness(evidence={},catalogue=READINESS_CATALOGUE,now
  const age=Number.isFinite(first)&&Number.isFinite(last)?Math.max(0,(last-first)/day):0;
  const confidence=distinctQuestions>=150&&domainsAttempted===5&&age>=7&&practiceDays>=3?'High':distinctQuestions>=50&&domainsAttempted===5&&practiceDays>=2?'Medium':'Low';
  const domains=SY0701_DOMAINS.map(domain=>{
-  const concepts=[...unique.values()].filter(c=>c.chapter===String(domain.id)).map(c=>({...c,score:scores.get(c.tag)??50,attempted:scores.has(c.tag)}));
-  const mean=concepts.length?concepts.reduce((sum,c)=>sum+c.score,0)/concepts.length:50;
+  const domainConcepts=concepts.filter(c=>c.chapter===String(domain.id));
+  const attemptedConcepts=domainConcepts.filter(c=>c.attempted);
+  const mastered=domainConcepts.filter(c=>c.score>=80).length;
+  const mean=domainConcepts.length?domainConcepts.reduce((sum,c)=>sum+c.score,0)/domainConcepts.length:50;
   const stats=evidence.chapters?.[domain.id];
-  return{...domain,mean,mastery:Math.round(mean),attempted:concepts.filter(c=>c.attempted).length,total:concepts.length,accuracy:stats?.total?Math.round(stats.correct/stats.total*100):null,weakest:[...concepts].sort((a,b)=>a.score-b.score||a.tag.localeCompare(b.tag)).slice(0,2),contribution:mean*domain.weight/100};
+  return{...domain,mean,mastery:Math.round(mean),attempted:attemptedConcepts.length,total:domainConcepts.length,mastered,unmastered:domainConcepts.length-mastered,accuracy:stats?.total?Math.round(stats.correct/stats.total*100):null,weakestAttempted:[...attemptedConcepts].sort((a,b)=>a.score-b.score||a.tag.localeCompare(b.tag)).slice(0,2),newToCover:domainConcepts.filter(c=>!c.attempted).sort((a,b)=>a.tag.localeCompare(b.tag)).slice(0,2),contribution:mean*domain.weight/100};
  });
  const mean=domains.reduce((sum,d)=>sum+d.contribution,0),hasEvidence=total>0&&distinctQuestions>0;
  const score=hasEvidence?Math.round(mean):null;
  const performanceLevel=mean<50?'Building foundations':mean<70?'Growing confidence':mean<80?'Nearly ready':'Exam ready';
  const level=!hasEvidence?'No estimate yet':confidence==='Low'?(mean>=80?'Above 80 on early evidence — keep covering the exam':'Early estimate'):performanceLevel;
  const stale=hasEvidence&&Number.isFinite(last)&&now-last>14*day;
- const concepts=[...unique.values()].map(c=>({...c,score:scores.get(c.tag)??50,attempted:scores.has(c.tag)}));
- const mastered=concepts.filter(c=>c.score>=80).length,unmastered=concepts.filter(c=>c.score<80),byChapter={};
- for(const c of unmastered)byChapter[c.chapter]=(byChapter[c.chapter]||0)+1;
+ const mastered=concepts.filter(c=>c.score>=80).length,unmastered=concepts.length-mastered;
+ const byChapter=Object.fromEntries(domains.map(domain=>[domain.id,domain.unmastered]));
  const correct=Number.isFinite(evidence.correct)?evidence.correct:Object.values(evidence.chapters||{}).reduce((sum,s)=>sum+(s.correct||0),0);
- return{score,mean:hasEvidence?mean:null,level,performanceLevel,confidence,distinctQuestions,domainsAttempted,practiceDays,firstAttemptAt:metrics.firstAttemptAt||null,lastPracticeAt:metrics.lastPracticeAt||null,stale,staleNotice:stale?'Stale — complete a new set to refresh your estimate':'',explanation:!hasEvidence?'Complete a set to get your first estimate.':'Concept mastery, weighted to the exam. Unseen concepts start at 50.',accuracy:total?Math.round(correct/total*100):null,domains,concepts,attempted:concepts.filter(c=>c.attempted).length,totalConcepts:concepts.length,mastered,unmastered:unmastered.length,byChapter,chapters:evidence.chapters||{},activity:evidence.activity||null,unclassified:evidence.unclassified||0,metrics};
+ return{score,mean:hasEvidence?mean:null,level,performanceLevel,confidence,distinctQuestions,domainsAttempted,practiceDays,firstAttemptAt:metrics.firstAttemptAt||null,lastPracticeAt:metrics.lastPracticeAt||null,stale,staleNotice:stale?'Stale — complete a new set to refresh your estimate':'',explanation:!hasEvidence?'Complete a set to get your first estimate.':'Concept mastery, weighted to the exam. Unseen concepts start at 50.',accuracy:total?Math.round(correct/total*100):null,domains,concepts,attempted:concepts.filter(c=>c.attempted).length,totalConcepts:concepts.length,mastered,unmastered,byChapter,chapters:evidence.chapters||{},activity:evidence.activity||null,unclassified:evidence.unclassified||0,metrics};
 }

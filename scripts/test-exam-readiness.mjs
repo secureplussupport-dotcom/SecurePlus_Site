@@ -34,3 +34,60 @@ test('mastery updates retain +20/-35 clamping and all canonical concepts have on
  const e=localReadinessEvidence([false,false,true].map((correct,i)=>({qid:`q${i}`,conceptTag:'d1.0',correct,ch:'1',readinessSource:'exam',createdAt:`2026-10-${10+i}`})));assert.equal(e.concepts[0].score,20);
  assert.deepEqual(READINESS_CATALOGUE.map(c=>c.tag).sort(),CONCEPT_TAGS.map(c=>c.id).sort());assert.equal(new Set(READINESS_CATALOGUE.map(c=>c.tag)).size,READINESS_CATALOGUE.length);assert(READINESS_CATALOGUE.every(c=>/^[1-5]$/.test(c.chapter)));
 });
+
+function assertBreakdownCounts(profile) {
+ const sum=key=>profile.domains.reduce((total,domain)=>total+domain[key],0);
+ assert.equal(profile.totalConcepts,sum('total'));
+ assert.equal(profile.totalConcepts,profile.mastered+profile.unmastered);
+ assert.equal(profile.mastered,sum('mastered'));
+ assert.equal(profile.unmastered,sum('unmastered'));
+ assert.equal(profile.unmastered,Object.values(profile.byChapter).reduce((a,b)=>a+b,0));
+ assert.equal(profile.attempted,sum('attempted'));
+ for(const domain of profile.domains){
+  const concepts=profile.concepts.filter(c=>c.chapter===String(domain.id));
+  assert.equal(domain.total,concepts.length);
+  assert.equal(domain.attempted,concepts.filter(c=>c.attempted).length);
+  assert.equal(domain.mastered,concepts.filter(c=>c.score>=80).length);
+  assert.equal(domain.unmastered,domain.total-domain.mastered);
+  assert.equal(profile.byChapter[domain.id],domain.unmastered);
+  assert(domain.weakestAttempted.every(c=>c.attempted));
+  assert(domain.newToCover.every(c=>!c.attempted));
+  assert.deepEqual(domain.weakestAttempted,[...concepts].filter(c=>c.attempted).sort((a,b)=>a.score-b.score||a.tag.localeCompare(b.tag)).slice(0,2));
+ }
+}
+
+test('29 Oct account: attempted, mastered and remaining counts reconcile across all 179 concepts',()=>{
+ const scoresByDomain={1:[70,70],2:[70,70],3:[70,35],4:[90],5:[70]};
+ const concepts=Object.entries(scoresByDomain).flatMap(([chapter,scores])=>READINESS_CATALOGUE.filter(c=>c.chapter===chapter).slice(0,scores.length).map((c,i)=>({...c,score:scores[i]})));
+ const profile=summarizeReadiness({concepts,total:10,correct:9,metrics:{...metrics(10),practiceDays:1}},READINESS_CATALOGUE,now);
+ assertBreakdownCounts(profile);
+ assert.equal(profile.score,51);assert.equal(profile.confidence,'Low');assert.equal(profile.level,'Early estimate');
+ assert.equal(profile.attempted,8);assert.equal(profile.mastered,1);assert.equal(profile.unmastered,178);assert.equal(profile.totalConcepts,179);
+ assert.deepEqual(profile.domains.map(d=>[d.attempted,d.total]),[[2,36],[2,48],[2,34],[1,41],[1,20]]);
+ assert.deepEqual(profile.domains.map(d=>d.unmastered),[36,48,34,40,20]);
+ assert.equal(profile.domains[3].mastered,1);
+});
+
+test('zero attempts: every concept remains to grow and no attempted weakness is invented',()=>{
+ const profile=summarizeReadiness({},READINESS_CATALOGUE,now);
+ assertBreakdownCounts(profile);
+ assert.equal(profile.score,null);assert.equal(profile.mastered,0);assert.equal(profile.unmastered,179);assert.equal(profile.attempted,0);
+ for(const domain of profile.domains){assert.deepEqual(domain.weakestAttempted,[]);assert(domain.newToCover.length>0);}
+});
+
+test('fully mastered domain has zero still to grow without changing attempted counts',()=>{
+ const concepts=READINESS_CATALOGUE.filter(c=>c.chapter==='4').map(c=>({...c,score:85}));
+ const profile=summarizeReadiness({concepts,total:82,correct:82,metrics:metrics(82)},READINESS_CATALOGUE,now);
+ assertBreakdownCounts(profile);
+ const domain=profile.domains.find(d=>d.id===4);
+ assert.equal(domain.total,41);assert.equal(domain.attempted,41);assert.equal(domain.mastered,41);assert.equal(domain.unmastered,0);
+ assert.deepEqual(domain.newToCover,[]);
+});
+
+test('count invariants hold for varied mastery and ignore evidence outside the catalogue',()=>{
+ for(let seed=0;seed<12;seed++){
+  const concepts=READINESS_CATALOGUE.filter((_,i)=>(i+seed)%3!==0).map((c,i)=>({...c,score:[0,35,50,70,79,80,100][(i+seed)%7]}));
+  concepts.push({tag:'unknown.concept',score:100});
+  assertBreakdownCounts(summarizeReadiness({concepts,total:200,correct:100,metrics:metrics(200)},READINESS_CATALOGUE,now));
+ }
+});
