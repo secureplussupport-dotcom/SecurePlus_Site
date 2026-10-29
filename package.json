@@ -42,7 +42,7 @@
     "audit:mcq-engine:database": "node scripts/test-mcq-engine-database.mjs",
     "prebuild": "npm run audit:flashcards && node scripts/build-mcq-engine-catalogue.mjs --check",
     "audit:flashcards": "node --test scripts/test-flashcard-bank.mjs",
-    "audit:improvements": "node --test scripts/test-study-plan.mjs scripts/test-improvement-pack.mjs scripts/test-exam-readiness.mjs && node --test scripts/test-first-steps.mjs scripts/test-meaningful-study.mjs scripts/test-smart-review-summary.mjs && node scripts/build-readiness-catalogue.mjs --check"
+    "audit:improvements": "node --test scripts/test-review-launch.mjs scripts/test-study-plan.mjs scripts/test-improvement-pack.mjs scripts/test-exam-readiness.mjs && node --test scripts/test-first-steps.mjs scripts/test-meaningful-study.mjs scripts/test-smart-review-summary.mjs && node scripts/build-readiness-catalogue.mjs --check"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.105.3",

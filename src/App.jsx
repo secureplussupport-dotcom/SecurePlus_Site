@@ -40,6 +40,7 @@ import { CONCEPT_TAGS, MCQ_TAGGING_VERSION, inferMcqConceptTagIds, searchMcqConc
 import { McqExam, ExamModeGuide, examThemeVars } from "./components/McqExam.jsx";
 import { buildMcqExam, formatExamTime, EXAM_SECONDS_PER_QUESTION } from "./lib/mcqExam.js";
 import { useQuestionPacing } from "./lib/useQuestionPacing.js";
+import {createReviewLaunchGate} from "./lib/reviewLaunch.js";
 import { DashboardMetrics } from "./components/DashboardMetrics.jsx";
 import "./components/DashboardHome.css";
 import "./components/LearningWorkspace.css";
@@ -24311,6 +24312,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
   const pacing=useQuestionPacing(questions[qi]?.id, isVisible&&started&&!done&&!finishedReviewMode&&!submitted&&!engineBusy);
   const answerInFlight=useRef(false);
   const generationRequest=useRef(null);
+  const claimChapterReview=useRef(createReviewLaunchGate());
   const answerEvents=useRef(new Map());
   const refreshEngineState=useCallback(()=>{
     if(isGuest||!mcqEngineEnabled)return Promise.resolve(null);
@@ -24414,9 +24416,9 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
   const startStarredQuiz=()=>startEngineQuiz({},Math.max(1,Math.min(isPro?90:30,starredMcqs.length,availableQuota??0)),"starred");
 
   useEffect(()=>{
-    if(!smartReviewRequest?.chapterId||!smartReviewRequest?.nonce)return;
+    if(!claimChapterReview.current(smartReviewRequest,engineBusy))return;
     startChapterSmartReview(smartReviewRequest.chapterId,smartReviewRequest.count,smartReviewRequest.source);
-  },[smartReviewRequest?.chapterId,smartReviewRequest?.count,smartReviewRequest?.nonce,smartReviewRequest?.source,startChapterSmartReview]);
+  },[smartReviewRequest?.chapterId,smartReviewRequest?.count,smartReviewRequest?.nonce,smartReviewRequest?.source,engineBusy,startChapterSmartReview]);
 
   useEffect(()=>{
     if(isGuest){setResumeAvailable(false);return;}
