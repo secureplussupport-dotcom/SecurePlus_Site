@@ -22,9 +22,9 @@ export function DashboardMetrics({profile,streak,tier,t,quota=null}) {
   const accuracy=activityAccuracy(activity), allowance=quotaDisplay(quota,now);
   const week=streakWeek(streak?.streak || 0,Boolean(streak?.completedToday)).map((day,i)=>{if(!streak?.dates)return day;const date=new Date();date.setDate(date.getDate()-(6-i));const key=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;return {...day,active:streak.dates.includes(key)};});
   return <section className={`dm-widget ${expanded?'is-expanded':'is-compact'}`} style={{'--dm-text':t.text,'--dm-muted':t.textSec,'--dm-panel':t.panel,'--dm-surface':t.surface,'--dm-border':t.border}}><header className="dm-widget-heading"><h2>Your progress</h2><button type="button" aria-expanded={expanded} aria-controls={detailsId} onClick={()=>setExpanded(value=>!value)}>{expanded?'Less detail':'More detail'}<ChevronDown size={18}/></button></header><div className="dashboard-metrics" id={detailsId} aria-busy={profile.status==='loading'} aria-label="Your practice metrics">
-    <article className="dm-card dm-accuracy" style={{'--dm-accent':t.accent}}>
+    <article className="dm-card dm-accuracy" style={{'--dm-accent':t.blue || t.accent}}>
       <header><span className="dm-icon"><Target size={18}/></span><h3>Accuracy</h3></header>
-      <div className="dm-main"><strong className="dm-number">{accuracy==null?'—':accuracy}<small>{accuracy==null?'':'%'}</small></strong><Ring value={(accuracy || 0)/100} color={t.accent}><Target size={21}/></Ring></div>
+      <div className="dm-main"><strong className="dm-number">{accuracy==null?'—':accuracy}<small>{accuracy==null?'':'%'}</small></strong><Ring value={(accuracy || 0)/100} color={t.blue || t.accent}><Target size={21}/></Ring></div>
       <p>MCQ · Exam · Daily</p>
       <footer>{activity?.total?`${activity.correct.toLocaleString()} correct / ${activity.total.toLocaleString()} answered`:profile.status==='loading'?'Loading…':profile.status==='error'?'Progress unavailable':'No answers yet.'}</footer>
     </article>
