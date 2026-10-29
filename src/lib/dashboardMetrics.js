@@ -26,3 +26,30 @@ export function streakWeek(streak, completedToday, now = new Date()) {
       active:completedToday?offset<streak:offset>=1 && offset<=streak};
   });
 }
+
+// Milestones are additional returning slots, not a new fixed-window reset.
+// Never credit elapsed releases locally: refresh the server snapshot first.
+export function allowanceTimeline(quota, now = Date.now()) {
+  const unavailable = {status:'unavailable'};
+  const display = quotaDisplay(quota,now);
+  if (!display) return unavailable;
+  if (display.refreshing) return {status:'refreshing'};
+  if (!Number.isInteger(quota.used) || quota.used<0 || !Array.isArray(quota.releases) ||
+      !Number.isFinite(Date.parse(quota.asOf)) || quota.remaining!==Math.max(0,quota.limit-quota.used)) return unavailable;
+  const releases=quota.releases.map(row=>({at:row.at,time:Date.parse(row.at),questions:row.questions}));
+  if (releases.some(row=>!Number.isFinite(row.time)||!Number.isInteger(row.questions)||row.questions<=0) ||
+      releases.reduce((sum,row)=>sum+row.questions,0)!==quota.used) return unavailable;
+  releases.sort((a,b)=>a.time-b.time);
+  if (releases.some(row=>row.time<=now)) return {status:'refreshing'};
+  if ((releases[0]?.time??null)!==(quota.resetAt===null?null:Date.parse(quota.resetAt))) return unavailable;
+  const pending=quota.limit-quota.remaining;
+  const excess=Math.max(0,quota.used-quota.limit);
+  const returnsAt=additional=>{
+    if(additional<=0)return null;
+    let returned=0;
+    return releases.find(row=>(returned+=row.questions)>=excess+additional)?.at??null;
+  };
+  return {status:'ready',remaining:quota.remaining,limit:quota.limit,pending,canPracticeNow:quota.remaining>0,
+    nextOneAt:returnsAt(1),nextTenAt:returnsAt(10),fullAt:returnsAt(pending),
+    nextSetAt:returnsAt(Math.max(0,10-quota.remaining))};
+}

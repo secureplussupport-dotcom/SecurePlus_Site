@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Target, Layers3, Flame, Infinity as InfinityIcon, Clock3 } from 'lucide-react';
 import { activityAccuracy, quotaDisplay, streakWeek } from '../lib/dashboardMetrics.js';
 import './DashboardMetrics.css';
+import {AllowanceTimeline} from './AllowanceTimeline.jsx';
 
 function Ring({value,color,children,pending=false}) {
   return <div className={`dm-ring ${pending?'dm-ring-pending':''}`} aria-hidden="true">
@@ -9,8 +10,8 @@ function Ring({value,color,children,pending=false}) {
     <span>{children}</span>
   </div>;
 }
-export function DashboardMetrics({profile,streak,tier,t,quota=null}) {
-  const isPro=tier==='pro';
+export function DashboardMetrics({profile,streak,tier,t,quota=null,onUpgrade,onRefresh}) {
+  const isPro=quota?.isPro??(tier==='pro');
   const [now,setNow]=useState(Date.now());
   useEffect(()=>{
     if(isPro || !quota?.resetAt)return;
@@ -38,9 +39,9 @@ export function DashboardMetrics({profile,streak,tier,t,quota=null}) {
     <article className={`dm-card dm-allowance ${isPro?'dm-pro':''}`} style={{'--dm-accent':t.purple || '#a58aff'}}>
       <header><span className="dm-icon">{isPro?<InfinityIcon size={18}/>:<Clock3 size={18}/>}</span><h3>Practice allowance</h3>{isPro&&<span className="dm-tier">PRO</span>}</header>
       {isPro?<><div className="dm-main"><strong className="dm-infinity" aria-label="Unlimited">∞</strong><div className="dm-infinity-halo" aria-hidden="true"><InfinityIcon size={40}/></div></div></>:<>
-        <div className="dm-main"><strong className="dm-number">{allowance&&!allowance.refreshing?allowance.remaining:'—'}<small>MCQs left</small></strong><Ring value={allowance?.fill || 0} color={t.purple || '#a58aff'} pending={!allowance||allowance.refreshing}><Clock3 size={20}/></Ring></div>
-        <div className="dm-reset" aria-label="Practice allowance reset"><Clock3 size={13}/>{allowance?(allowance.refreshing||allowance.idle?allowance.timer:<strong>{allowance.timer}</strong>):'Countdown unavailable.'}</div>
+        <div className="dm-main"><strong className="dm-number">{allowance&&!allowance.refreshing?allowance.remaining:'—'}<small>of {quota?.limit??50} available</small></strong><Ring value={allowance?.fill || 0} color={t.purple || '#a58aff'} pending={!allowance||allowance.refreshing}><Clock3 size={20}/></Ring></div>
+
       </>}
     </article>
-  </div></section>;
+  </div>{!isPro&&<AllowanceTimeline quota={quota} t={t} onUpgrade={onUpgrade} onRefresh={onRefresh}/>}</section>;
 }

@@ -11,6 +11,7 @@ create table public.starred_questions(user_id uuid references auth.users(id),que
 grant all on public.profiles,public.app_admins,public.starred_questions,public.pbqs to service_role;`);
 await db.exec(readFileSync('supabase/migrations/20261019163949_mcq_three_deck_engine.sql','utf8'));
 await db.exec(readFileSync('supabase/migrations/20261022150000_practice_access_model.sql','utf8'));
+await db.exec(readFileSync('supabase/migrations/20261029023808_allowance_release_timeline.sql','utf8'));
 const u=randomUUID(),v=randomUUID(),pro=randomUUID();
 await db.query('insert into auth.users values($1),($2),($3)',[u,v,pro]);await db.query("insert into public.profiles(id,email) values($1,'a@example.test'),($2,'b@example.test'),($3,'p@example.test')",[u,v,pro]);
 const scalar=async(sql,args=[])=>Object.values((await db.query(sql,args)).rows[0])[0];
@@ -55,4 +56,31 @@ await db.query("update public.profiles set subscription_status=null,pro_pass_exp
 await db.query('delete from mcq_engine.access_allocations where user_id=$1',[pro]);
 const parallel=await Promise.all(Array.from({length:8},()=>create(pro,10)));
 assert.equal(parallel.filter(r=>r.created).length,5);assert.equal((await status(pro)).remaining,0);
-await db.close();console.log('Practice access DB passed: rolling quotas, remainder, idempotence, expiry, ownership, guest lifetime cap, passes, grandfathered subscriptions, bookmark replacement and API grants.');
+
+// Refill metadata uses the same owner and active allocations as enforcement.
+await db.query('delete from mcq_engine.access_allocations where user_id=$1',[u]);
+const recentSet=randomUUID();
+await create(u,10,'random',recentSet);
+await scalar('select public.practice_complete_set($1,$2)',[u,recentSet]);
+await db.query("update mcq_engine.access_allocations set created_at=now()-interval '2 minutes' where user_id=$1",[u]);
+let timeline=await status(u);
+assert.equal(timeline.remaining,40);assert.equal(timeline.used,10);assert.equal(timeline.windowHours,12);
+assert.equal(timeline.releases.length,1);assert.equal(timeline.releases[0].questions,10);
+assert.equal(Date.parse(timeline.releases[0].at),Date.parse(timeline.resetAt));
+assert(Math.abs(Date.parse(timeline.resetAt)-Date.parse(timeline.asOf)-718*60000)<2000);
+await create(u,20);await create(u,20);
+timeline=await status(u);assert.equal(timeline.remaining,0);assert.equal(timeline.releases.reduce((n,r)=>n+r.questions,0),50);
+assert(timeline.releases.every((r,i,rows)=>!i||Date.parse(rows[i-1].at)<=Date.parse(r.at)));
+assert.equal((await status(null,'guest:test-key')).releases.length,0);
+assert.equal((await status(null,'guest:test-key')).windowHours,null);
+await db.query("update mcq_engine.access_allocations set created_at=now()-interval '12 hours' where user_id=$1",[u]);
+timeline=await status(u);assert.equal(timeline.remaining,50);assert.deepEqual(timeline.releases,[]);assert.equal(timeline.resetAt,null);
+// Another learner's active usage cannot affect this timeline.
+assert.equal((await status(v)).used,0);
+await db.query("update public.profiles set subscription_status='active' where id=$1",[pro]);
+assert.deepEqual((await status(pro)).releases,[]);
+assert.equal(await scalar("select has_function_privilege('anon','public.practice_access_status(uuid,text)','execute')"),false);
+assert.equal(await scalar("select has_function_privilege('authenticated','public.practice_access_status(uuid,text)','execute')"),false);
+assert.equal(await scalar("select has_function_privilege('service_role','public.practice_access_status(uuid,text)','execute')"),true);
+
+await db.close();console.log('Practice access DB passed: rolling quotas, remainder, idempotence, expiry, ownership, guest lifetime cap, passes, grandfathered subscriptions, bookmark replacement, exact refill timeline and API grants.');

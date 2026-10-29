@@ -41,6 +41,7 @@ import { McqExam, ExamModeGuide, examThemeVars } from "./components/McqExam.jsx"
 import { buildMcqExam, formatExamTime, EXAM_SECONDS_PER_QUESTION } from "./lib/mcqExam.js";
 import { useQuestionPacing } from "./lib/useQuestionPacing.js";
 import {createReviewLaunchGate} from "./lib/reviewLaunch.js";
+import {AllowanceTimeline} from "./components/AllowanceTimeline.jsx";
 import { DashboardMetrics } from "./components/DashboardMetrics.jsx";
 import "./components/DashboardHome.css";
 import "./components/LearningWorkspace.css";
@@ -23624,7 +23625,7 @@ function SmartReviewLessonPath({recommendations=[],onOpenDeepDive,source="smart_
 
 const DAILY_STREAK_EVENTS=["daily-streak-changed"];
 
-function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOpenFlashcards,coinWallet,t,starred=[],assistantFlashcardSet=null,readinessProfile,practiceAccess,streakInfo,study}) {
+function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOpenFlashcards,coinWallet,t,starred=[],assistantFlashcardSet=null,readinessProfile,practiceAccess,streakInfo,study,onRefreshAllowance}) {
   const [showReadinessLab,setShowReadinessLab]=useState(false);
   const activityProfile=getActivityProfile(attempts);
   const questionsDone=readinessProfile.activity?.total ?? activityProfile.uniqueQuestions;
@@ -23694,7 +23695,7 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
 
       {readinessProfile.refreshError&&<p className="dh-progress-notice" role="status">Showing the last update. <button onClick={readinessProfile.retry}>Retry refresh</button></p>}
       {readinessProfile.status==="loading"&&<CipherLoader t={t} compact label="Updating your progress…"/>}
-      <DashboardMetrics quota={practiceAccess} profile={readinessProfile} streak={streakInfo} tier={user.tier} t={t}/>
+      <DashboardMetrics onUpgrade={()=>onNav("pricing")} onRefresh={onRefreshAllowance} quota={practiceAccess} profile={readinessProfile} streak={streakInfo} tier={user.tier} t={t}/>
 
       <StudyPlanWidget study={study} onNavigate={onNav} onOpenLesson={onOpenDeepDive}/>
       <div className="dh-section-title"><h2>Made for your next step</h2></div>
@@ -24631,6 +24632,7 @@ function MCQPractice({practiceAccessState,user,attempts,onSave,onUpgrade,onOpenD
       <header className="mcq-hub-heading"><span className="mcq-page-mark"><BookOpenCheck size={28} aria-hidden="true"/></span><div><h1>MCQ Practice</h1></div></header>
 
       <div className="mcq-allowance-line" role="status" style={{color:t.textSec}}>{isGuest?"Try 10 questions total, then create a free account to keep practising.":isPro?"Pro practice":"12-hour allowance"}<strong style={{marginLeft:10,color:t.text}}>{isPro?"∞":access?`${access.remaining} remaining`:"Loading allowance…"}</strong>{accessError&&<span> {accessError}</span>}{!isPro&&choices.remainder&&<button className="btn btn-outline" style={{marginLeft:12}} disabled={engineBusy} onClick={()=>startEngineQuiz({},choices.remainder,examMode?"exam":reviewMode)}>Practice remaining {choices.remainder}</button>}{isGuest&&access?.remaining===0&&<button className="btn btn-primary" onClick={requestSignup}>Create free account</button>}</div>
+      {!isGuest&&!isPro&&access&&(examMode?examCount:quizCount)>access.remaining&&<AllowanceTimeline quota={access} t={t} onUpgrade={onUpgrade} onRefresh={refreshAccess}/>}
       <div hidden={isGuest} className={`mcq-exam-toggle-row ${examMode?"is-on":""}`}>
         <button type="button" role="switch" aria-checked={examMode} className="mcq-exam-toggle" onClick={()=>{setExamMode(value=>!value);setEngineError("");setModeInfo(null);}}>
           <Clock3 size={22}/><span className="mcq-exam-toggle-copy"><strong>Exam mode</strong><small>Timed · marked at the finish.</small></span><span className="mcq-exam-switch-track" aria-hidden="true"><i/></span>
@@ -32063,7 +32065,7 @@ export default function App() {
           {guestImportError&&<div className="card" role="status" style={{padding:18,marginBottom:18}}>{guestImportError} <button className="btn btn-outline" onClick={async()=>setAttempts(await importPendingGuestSmartReview(user,attempts))}>Retry diagnostic sync</button></div>}
           {["about","why-different"].includes(view)&&<AboutUs t={t} isGuest={false} onStart={()=>setView("mcq")} onExplore={setView} feedbackHref={`mailto:${SUPPORT_EMAIL}?subject=SecurePlus%20feedback`}/>}
           {view==="study-plan"&&<StudyPlanPage study={study} onNavigate={setView} onOpenLesson={handleOpenDeepDive} onOpenDeck={handleOpenFlashcards}/>}
-          {view==="dashboard"&&<Dashboard readinessProfile={readinessProfile} practiceAccess={practiceAccessState.access} streakInfo={study.streak} study={study} user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
+          {view==="dashboard"&&<Dashboard readinessProfile={readinessProfile} onRefreshAllowance={practiceAccessState.refresh} practiceAccess={practiceAccessState.access} streakInfo={study.streak} study={study} user={user} attempts={attempts} onNav={setView} onStartChapterReview={handleStartChapterReview} onOpenDeepDive={handleOpenDeepDive} onOpenFlashcards={handleOpenFlashcards} coinWallet={coinWallet} t={t} starred={starred} assistantFlashcardSet={effectiveAssistantFlashcardSet}/>}
           <div style={{display:view==="mcq"?"block":"none"}} aria-hidden={view!=="mcq"}>
             <MCQPractice practiceAccessState={practiceAccessState} examRequest={examEntryRequest} user={user} attempts={attempts} onSave={handleSaveAttempt} onUpgrade={()=>setView("pricing")} onOpenDeepDive={handleOpenDeepDive} onFocusModeChange={setPracticeFocusMode} isVisible={view==="mcq"} t={t} starred={starred} onToggleStar={handleToggleStar} onReportQuestion={handleReportQuestion} showQuestionCodes={isRootUser} smartReviewRequest={smartReviewRequest} onSessionComplete={handleAchievementSessionComplete} mcqBank={liveMcqBank}/>
           </div>
