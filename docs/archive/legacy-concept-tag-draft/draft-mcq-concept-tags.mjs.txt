@@ -1,0 +1,91 @@
+import assert from 'node:assert/strict';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { readLearningPilotBank, contentSignature } from './lib/read-learning-pilot-bank.mjs';
+import { publicationPipeline } from './lib/content-mapping/publication.mjs';
+import { CONCEPT_TAGS } from '../src/data/sy0701ConceptWeb.js';
+import { QUESTION_MAPPINGS } from '../src/data/learningMappings.js';
+
+const proof = JSON.parse(readFileSync('docs/evidence/phase-2b5/private-catalogue-read.json'));
+const reconciliation = JSON.parse(readFileSync('docs/evidence/phase-2b5/private-reconciliation.json'));
+const safeOverrides = proof.overrides.filter(row => reconciliation.overrides.some(x =>
+  x.id === row.question_id && x.kind === row.question_kind && x.capturedSignatureMatches && x.payloadMatches));
+const base = readLearningPilotBank();
+const questions = publicationPipeline(base).overrides(safeOverrides).mcqs;
+const pilot = new Map(QUESTION_MAPPINGS.map(row => [row.questionId, row]));
+const byId = new Map(CONCEPT_TAGS.map(tag => [tag.id, tag]));
+// shortcut: these reviewed answers mention a broader tag while testing a narrower or compound concept; revisit if their source revision changes.
+const manualHoldIds = new Set(['m432','m443','m706','m708','m050','m112','m138','m140','m148','m157','m194','m292','m299','m318','m411','m441','m451','m502']);
+const escape = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const match = (text, term, exactCase = false) => {
+  if (!term || term.length < 3) return false;
+  const pattern = new RegExp(`(^|[^A-Za-z0-9])${escape(term)}(?=$|[^A-Za-z0-9])`, exactCase ? '' : 'i');
+  return pattern.test(String(text || ''));
+};
+assert(!match('CSRF', 'CSR', true));
+assert(!match('MOST', 'OS', true));
+assert(match('RTO and RPO', 'RTO', true));
+const locations = (question, tag) => {
+  const terms = [tag.acronym, tag.name];
+  const has = text => terms.some(term => match(text, term, term.length <= 3 && term === term.toUpperCase()));
+  return [has(question.q) && 'stem', has(question.opts?.[question.correct]) && 'correct answer', has(question.exp) && 'explanation'].filter(Boolean);
+};
+
+const rows = questions.map(question => {
+  const local = base.mcqs.find(row => row.id === question.id);
+  const mapped = pilot.get(question.id);
+  const supportedPilot = mapped && mapped.questionRevision === contentSignature(local);
+  const hits = CONCEPT_TAGS.map(tag => ({ tag, where: locations(question, tag) })).filter(hit => hit.where.length);
+  const strong = hits.filter(hit => hit.where.includes('correct answer'));
+  const candidates = supportedPilot
+    ? [mapped.primaryConceptId, ...mapped.secondaryConceptIds].map(id => ({ tag: byId.get(id), where: ['existing source-bound pilot'] }))
+    : strong;
+  const ambiguous = !supportedPilot && (manualHoldIds.has(question.id) || candidates.length !== 1 || hits.length > candidates.length ||
+    candidates.some(hit => ['mac-access-control', 'mac-address', 'rbac-role', 'rbac-rule', 'soc-operations', 'soc-chip']
+      .some(suffix => hit.tag.id.endsWith(suffix))));
+  return {
+    id: question.id, difficulty: question.difficulty, objective: question.objective,
+    sourceSignature: contentSignature(question),
+    question: question.q,
+    draftTags: candidates.map(hit => hit.tag.tag),
+    draftTagIds: candidates.map(hit => hit.tag.id),
+    status: !candidates.length ? 'missing_concept_tag' : ambiguous ? 'ambiguous_match' : 'clear_draft',
+    evidence: candidates.map(hit => `${hit.tag.tag}: ${hit.where.join(' + ')}`),
+    otherMatches: hits.filter(hit => !candidates.some(candidate => candidate.tag.id === hit.tag.id))
+      .map(hit => hit.tag.tag),
+    note: supportedPilot ? 'Existing source-bound local pilot; owner has not approved concept tagging.'
+      : !candidates.length ? 'No reliable concept-web tag from the stem and correct answer.'
+        : ambiguous ? 'Multiple, broader, or weaker concept matches; owner should choose the tested concept.' : '',
+  };
+});
+assert.equal(rows.length, 395);
+assert.equal(new Set(rows.map(row => row.id)).size, rows.length);
+assert(rows.every(row => row.draftTagIds.every(id => byId.has(id))));
+assert(rows.every(row => row.draftTags.length === row.draftTagIds.length));
+const clear = rows.filter(row => row.status === 'clear_draft');
+const missing = rows.filter(row => row.status === 'missing_concept_tag');
+const ambiguous = rows.filter(row => row.status === 'ambiguous_match');
+const payload = {
+  scope: 'local effective MCQs only; captured overrides reconciled; no live/private-only claim',
+  status: 'draft_only_uncommitted_not_published',
+  total: rows.length, clearDrafts: clear.length, missingConceptTag: missing.length,
+  ambiguousMatches: ambiguous.length,
+  rows,
+};
+writeFileSync('docs/drafts/mcq-concept-tag-draft.json', `${JSON.stringify(payload, null, 2)}\n`);
+writeFileSync('docs/drafts/mcq-concept-tag-review.md', [
+  '# MCQ concept-tag draft',
+  '',
+  `Local effective MCQs: ${rows.length}. Clear draft matches: ${clear.length}. Missing concept-web tag: ${missing.length}. Ambiguous matches: ${ambiguous.length}.`,
+  'These are suggestions only. No tags were saved to Question Manager or published; PBQs are excluded.',
+  'The Question Manager field is a local, uncommitted change. Missing concepts must be added to the shared web before that menu can select them.',
+  '',
+  'Ambiguous matches (question ID, difficulty, proposed tags, question):',
+  '',
+  ...ambiguous.map(row => `- ${row.id} (${row.difficulty}): ${row.draftTags.join(', ')}; ${row.question.slice(0, 140)}${row.question.length > 140 ? '…' : ''}`),
+  '',
+  'Questions whose tested concept needs a new web tag or more review:',
+  '',
+  ...missing.map(row => `- ${row.id} (${row.difficulty}): ${row.question.slice(0, 140)}${row.question.length > 140 ? '…' : ''}`),
+  '',
+].join('\n'));
+console.log(`MCQs ${rows.length}; clear drafts ${clear.length}; missing web tag ${missing.length}; ambiguous ${ambiguous.length}`);
