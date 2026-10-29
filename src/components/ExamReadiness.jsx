@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import {conceptDisplayName} from '../data/conceptDisplayNames.js';
 import {useLiveSnapshot} from '../lib/useLiveSnapshot.js';
 import {progressOwner} from '../lib/liveRefresh.js';
 import { mcqEngineEnabled, mcqEngineRequest } from '../lib/mcqEngineClient.js';
@@ -44,7 +45,19 @@ export function ReadinessBreakdown({profile,chapters}) {
     <header><div><span className="er-eyebrow">READINESS BREAKDOWN</span><h2>{profile.level}</h2></div></header>
     {status==='loading'?<CipherLoader compact label="Loading your progress…"/>:status==='error'?<p role="status">Your readiness couldn’t load. <button type="button" onClick={profile.retry}>Try again</button></p>:<>
       <p className="er-scope"><span><strong>{attempted}</strong> concepts attempted</span><span>MCQ + Exam</span><span>All concepts included · unseen = 50</span></p>
-      <div className="er-weighted-domains"><h3>How your readiness adds up</h3><p>Domain mastery includes every concept. Accuracy is shown separately.</p><div className="er-domain-grid">{profile.domains?.map(domain=><article key={domain.id}><header><strong>Domain {domain.id}</strong><span>{domain.weight}% weight</span></header><h4>{domain.name}</h4><strong className="er-domain-score">{domain.mastery}% <small>mastery</small></strong><p>{domain.attempted}/{domain.total} concepts attempted · {domain.accuracy==null?'No accuracy yet':`${domain.accuracy}% accuracy`}</p><span>Two weakest concepts</span><ul>{domain.weakest.map(c=><li key={c.tag}>#{c.tag} · {c.score}{!c.attempted?' · not attempted':''}</li>)}</ul></article>)}</div><small>Whole-number display: weighted domain values reconcile to the headline within 1 point; calculation uses unrounded mastery.</small></div>
+      <div className="er-calculation">
+        <div className="er-card-heading"><h3>Five domains. One estimate.</h3><span>Mastery × exam weight</span></div>
+        <div className="er-weighted-total" role="img" aria-label={`Weighted readiness ${profile.score??'not estimated'}${profile.score==null?'':' percent'}. ${profile.domains?.map(d=>`Domain ${d.id}: ${d.contribution.toFixed(1)} points`).join(', ')}`}>
+          <div className="er-contribution-track">{profile.domains?.map((d,i)=><span key={d.id} style={{width:`${d.contribution}%`,background:COLORS[i]}}/>)}</div><strong>{profile.score==null?'—':`${profile.score}%`}</strong>
+        </div>
+        <div className="er-formula-rows">{profile.domains?.map((domain,i)=><article key={domain.id} style={{'--domain-color':COLORS[i]}}>
+          <header><span className="er-domain-index">0{domain.id}</span><h4>{domain.name}</h4></header>
+          <div className="er-mastery-formula"><div className="er-domain-meter"><span style={{width:`${domain.mastery}%`}}/></div><strong>{domain.mastery}%</strong><span className="er-weight">× {domain.weight}%</span><span className="er-contribution">= <b>{domain.contribution.toFixed(1)}</b> pts</span></div>
+          <div className="er-domain-evidence"><span>{domain.attempted}/{domain.total} concepts attempted</span><span>{domain.accuracy==null?'Accuracy —':`${domain.accuracy}% accuracy`}</span></div>
+          <div className="er-weak-concepts"><span>Build next</span>{domain.weakest.map(c=><div key={c.tag}><span>{conceptDisplayName(c.tag)}</span><strong>{c.score}<small>{c.attempted?' pts':' · new'}</small></strong></div>)}</div>
+        </article>)}</div>
+        <small className="er-rounding">Rounded for display. Total uses full precision; accuracy stays separate.</small>
+      </div>
       <div className="er-layout">
       <div className="er-chapters">
         <div className="er-card-heading"><h3>Domain accuracy</h3><span>01—05</span></div>

@@ -13,3 +13,9 @@ Dashboard, MCQ setup and Study Plan share larger type, stronger contrast and a q
 - Browser fixture: all three pages in light/dark at desktop and 390px, no horizontal overflow; automated WCAG A/AA checks found zero violations in the checked states.
 - Manually exercised: readiness breakdown, target editor open/focus, future week disclosure, question count, Randomised/Smart Review, exam guide and Pro 90-question option, missed-question preview and cancel.
 - Fixture uses fictional data and mocked APIs. It validates rendering and interaction, not production account data or payments.
+
+## Readiness and progress refinement
+
+Readiness now uses a short summary, a color-coded contribution bar and per-domain mastery × weight diagrams. Weak concepts use learner-facing names for all 179 current tags; IDs, taxonomy and calculations are unchanged. The progress widget defaults to four numbers; More detail restores its supporting activity and allowance information.
+
+Validation: readiness/planner and MCQ-engine tests, production build, plus eight browser states (light/dark × 1100/390px × progress collapsed/expanded, readiness breakdown open). No automated accessibility violations or horizontal overflow in those states. Verified expansion changes presentation only.

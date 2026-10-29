@@ -23692,7 +23692,6 @@ function Dashboard({user,attempts,onNav,onStartChapterReview,onOpenDeepDive,onOp
       {showReadinessLab&&<ReadinessBreakdown profile={readinessProfile} chapters={CHAPTERS}/>}
 
       {readinessProfile.refreshError&&<p className="dh-progress-notice" role="status">Showing the last update. <button onClick={readinessProfile.retry}>Retry refresh</button></p>}
-      <div className="dh-section-title"><h2>Your progress</h2></div>
       {readinessProfile.status==="loading"&&<CipherLoader t={t} compact label="Updating your progress…"/>}
       <DashboardMetrics quota={practiceAccess} profile={readinessProfile} streak={streakInfo} tier={user.tier} t={t}/>
 
